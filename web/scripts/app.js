@@ -56,7 +56,7 @@ angular.module('risevision.apps', [
 
       .state('apps.launcher', {
         abstract: true,
-        template: '<div class="website" ui-view></div>'
+        template: '<div class="app-launcher" ui-view></div>'
       })
 
       .state('apps.launcher.home', {
@@ -66,6 +66,14 @@ angular.module('risevision.apps', [
             'partials/launcher/app-launcher.html');
         }],
         controller: 'HomeCtrl'
+      })
+
+      .state('apps.launcher.login', {
+        url: '/login',
+        templateProvider: ['$templateCache', function ($templateCache) {
+          return $templateCache.get(
+            'partials/launcher/login.html');
+        }]
       })
 
       .state('apps.launcher.signup', {

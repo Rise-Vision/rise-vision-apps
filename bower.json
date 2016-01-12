@@ -23,7 +23,7 @@
     "common-header": "https://github.com/Rise-Vision/common-header.git#v1.8.2",
     "component-storage-selector": "https://github.com/Rise-Vision/component-storage-selector.git",
     "rv-common-i18n": "https://github.com/Rise-Vision/common-i18n.git",
-    "rv-common-style": "https://github.com/Rise-Vision/common-style.git#v1.3.43",
+    "rv-common-style": "https://github.com/Rise-Vision/common-style.git#feature/app-launcher",
     "rv-common-app-components": "https://github.com/Rise-Vision/common-app-components.git",
     "rv-loading": "https://github.com/Rise-Vision/rv-loading.git",
     "widget-settings-ui-components": "https://github.com/Rise-Vision/widget-settings-ui-components.git#1.0.4",
@@ -42,7 +42,7 @@
     "angular-bootstrap": "^0.13.0",
     "angular-touch": "^1.4.1",
     "angular-mocks": "~1.3.0",
-    "rv-common-style": "v1.3.43",
+    "rv-common-style": "feature/app-launcher",
     "angular-sanitize": "~1.3.0"
   }
 }

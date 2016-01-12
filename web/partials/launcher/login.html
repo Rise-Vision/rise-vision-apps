@@ -1,0 +1,89 @@
+<style type="text/css">
+	body {
+		background: url('https://s3.amazonaws.com/Rise-Images/UI/triangles.svg');
+		background-size: cover;
+	}
+	.navbar {
+		display: none;
+	}
+</style>
+
+<div class="app-launcher-login">
+	<div class="container">
+
+		<div class="content-box" ng-hide="registerStep">
+			<div class="row">
+				<div class="col-sm-4 col-xs-12">
+					<div class="rise-logo"><img src="https://www.risevision.com/images/logo.svg"></div>
+				</div>
+				<div class="col-sm-8 col-xs-12">
+
+					<h1 class="add-top">Sign Up</h1>
+					<p class="lead text-muted">Create a Free Account</p>
+					<button ng-click="registerStep = !registerStep" class="btn btn-primary btn-hg">Sign Up with Google <i class="fa fa-google icon-right"></i></button>
+					<p><a href="#">I don't have a google account.</a></p>
+
+					<br>
+
+					<p class="text-muted">Have an Account? <a href="#">Sign In</a></p>
+
+				</div><!--col-->
+			</div><!--row-->
+			
+			
+		</div><!--content-box-->
+
+
+		<div class="content-box" ng-show="registerStep">
+			<div class="row">
+				<div class="col-sm-4 col-xs-12">
+					<div class="rise-logo"><img src="https://www.risevision.com/images/logo.svg"></div>
+				</div>
+				<div class="col-sm-8 col-xs-12">
+
+					<h1 class="add-bottom">Welcome, Adrian</h1>
+					
+					<form>
+						<div class="form-group">
+							<label class="control-label">First Name</label>
+							<input class="form-control" type="text" value="Adrian">
+						</div>
+
+						<div class="form-group">
+							<label class="control-label">Last Name</label>
+							<input class="form-control" type="text" value="D'Alimonte">
+						</div>
+
+						<div class="form-group">
+							<label class="control-label">Email <span class="text-muted">(We'll only send you system notices and other critical information)</span></label>
+							<input class="form-control" type="text" value="adrian.dalimonte@risevision.com">
+						</div>
+
+						<div class="checkbox">
+							<label class="control-label"><input type="checkbox">
+							I Accept the Terms of Service and Privacy</label>
+						</div>
+
+						<div class="checkbox">
+							<label class="control-label"><input type="checkbox">
+							Sign Up For Our Newsletter</label>
+
+							
+
+						</div>
+					</form>
+
+					<button class="btn btn-primary btn-hg">Create Account</button>
+					
+
+				</div><!--col-->
+			</div><!--row-->
+			
+			
+		</div><!--content-box-->
+
+
+	</div><!--container-->
+</div><!--app-launcher-login-->
+
+
