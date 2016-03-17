@@ -6,7 +6,8 @@ angular.module('risevision.schedules.services')
   ])
   .factory('scheduleTracker', ['userState', 'segmentAnalytics',
     'bigQueryLogging', 'SCHEDULE_EVENTS_TO_BQ',
-    function (userState, segmentAnalytics, bigQueryLogging, SCHEDULE_EVENTS_TO_BQ) {
+    function (userState, segmentAnalytics, bigQueryLogging,
+      SCHEDULE_EVENTS_TO_BQ) {
       return function (eventName, scheduleId, scheduleName) {
         if (eventName) {
           segmentAnalytics.track(eventName, {
