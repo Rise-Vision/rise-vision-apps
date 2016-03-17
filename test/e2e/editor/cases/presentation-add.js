@@ -58,7 +58,7 @@ var PresentationAddScenarios = function() {
       expect(workspacePage.getCancelButton().isPresent()).to.eventually.be.true;
     });
 
-    it('should add presentation', function () {
+    it('should rename presentation', function () {
       var presentationName = 'TEST_E2E_PRESENTATION';
 
       helper.wait(presentationPropertiesModalPage.getNameInput(), 'Waiting for Name Input');
@@ -66,18 +66,22 @@ var PresentationAddScenarios = function() {
       presentationPropertiesModalPage.getNameInput().clear();
       presentationPropertiesModalPage.getNameInput().sendKeys(presentationName);
       helper.clickWhenClickable(presentationPropertiesModalPage.getApplyButton(), 'Apply Button');
+    });
 
-      workspacePage.getSaveButton().click();
+    it('should save presentation', function() {  
+      helper.clickWhenClickable(workspacePage.getSaveButton(), 'Save Button');
       helper.wait(workspacePage.getSaveStatus(), 'Save Status');
       expect(workspacePage.getPreviewButton().isEnabled()).to.eventually.be.true;
     });
 
-    after(function () {
+    it('should delete presentation and return to list', function(done) {
       workspacePage.getPresentationPropertiesButton().click();
       helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
       helper.clickWhenClickable(presentationPropertiesModalPage.getDeleteButton(), "Presentation Delete Button").then(function () {
         helper.clickWhenClickable(presentationPropertiesModalPage.getDeleteForeverButton(), "Presentation Delete Forever Button").then(function () {
           helper.wait(presentationsListPage.getTitle(), 'Presentation List');
+          
+          done();
         });
       });
     });

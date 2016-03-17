@@ -7,7 +7,8 @@ angular.module('risevision.displays.services')
   ])
   .factory('displayTracker', ['userState', 'segmentAnalytics',
     'bigQueryLogging', 'DISPLAY_EVENTS_TO_BQ',
-    function (userState, segmentAnalytics, bigQueryLogging, DISPLAY_EVENTS_TO_BQ) {
+    function (userState, segmentAnalytics, bigQueryLogging,
+      DISPLAY_EVENTS_TO_BQ) {
       return function (eventName, displayId, displayName, downloadType) {
         if (eventName) {
           segmentAnalytics.track(eventName, {

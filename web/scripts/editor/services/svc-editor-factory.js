@@ -365,7 +365,7 @@ angular.module('risevision.editor.services')
         goToStoreModalInstance.result.then(function () {
           $modalInstance.dismiss();
         });
-      }
+      };
 
       factory.copyTemplate = function (productDetails, rvaEntityId) {
         rvaEntityId = productDetails ? productDetails.rvaEntityId :

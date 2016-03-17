@@ -21,5 +21,6 @@
   "globals": {
     "sinon": false
   },
-  "predef":["angular","_"]
+  "predef":["angular","_"],
+  "latedef": false
 }

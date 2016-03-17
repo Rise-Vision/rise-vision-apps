@@ -15,7 +15,6 @@ angular.module('risevision.apps', [
     'risevision.common.components.analytics',
     'risevision.common.components.distribution-selector',
     'risevision.common.components.presentation-selector',
-    'risevision.widget.common.storage-selector',
     'risevision.common.components.background-image-setting',
     'risevision.widget.common',
     'ui.codemirror',
@@ -39,7 +38,11 @@ angular.module('risevision.apps', [
     'risevision.editor.services',
     'risevision.editor.controllers',
     'risevision.editor.filters',
-    'risevision.editor.directives'
+    'risevision.editor.directives',
+    'risevision.storage.services',
+    'risevision.storage.controllers',
+    'risevision.storage.directives',
+    'risevision.storage.filters',
   ])
   // Set up our mappings between URLs, templates, and controllers
   .config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
@@ -413,35 +416,45 @@ angular.module('risevision.apps.controllers', []);
 angular.module('risevision.apps.launcher.controllers', []);
 angular.module('risevision.apps.launcher.services', []);
 
+
 angular.module('risevision.schedules.services', [
   'risevision.common.header',
   'risevision.common.gapi'
 ]);
-
 angular.module('risevision.schedules.filters', []);
 angular.module('risevision.schedules.directives', [
   'risevision.schedules.filters'
 ]);
 angular.module('risevision.schedules.controllers', []);
 
+
 angular.module('risevision.displays.services', [
   'risevision.common.header',
   'risevision.common.gapi'
 ]);
-
 angular.module('risevision.displays.filters', []);
 angular.module('risevision.displays.directives', [
   'risevision.displays.filters'
 ]);
 angular.module('risevision.displays.controllers', []);
 
+
 angular.module('risevision.editor.services', [
   'risevision.common.header',
   'risevision.common.gapi'
 ]);
-
 angular.module('risevision.editor.filters', []);
 angular.module('risevision.editor.directives', [
   'risevision.editor.filters'
 ]);
 angular.module('risevision.editor.controllers', []);
+
+angular.module('risevision.storage.services', [
+  'risevision.common.header',
+  'risevision.common.gapi'
+]);
+angular.module('risevision.storage.directives', [
+  'ui.bootstrap'
+]);
+angular.module('risevision.storage.controllers', []);
+angular.module('risevision.storage.filters', []);

@@ -18,6 +18,11 @@ var PresentationPropertiesModalPage = function() {
   var backgroundLabel = element(by.id('backgroundLabel'));
   var backgroundImageSettings = element(by.id('backgroundImageSettings'));
   var backgroundColorInput = element(by.css('#backgroundImageSettings input'));
+  
+  // Due to CSS issue Checkbox is not clickable; use Label instead
+  var backgroundImageCheckbox = element(by.css('#backgroundImageSettings .checkbox label'));
+  var backgroundImageURLInput = element(by.css('#backgroundImageUrl input'));
+  var backgroundImageStorageButton = element(by.css('.input-url-addon button'));
 
   var playUntilDonePlaceholderLabel = element(by.id('playUntilDonePlaceholderLabel'));
   var playUntilDonePlaceholderSelect = element(by.id('playUntilDonePlaceholderSelect'));
@@ -29,7 +34,6 @@ var PresentationPropertiesModalPage = function() {
 
   var deleteButton = element(by.id('deleteButton'));
   var deleteForeverButton = element(by.buttonText('Delete Forever'));
-
 
 
   this.getWorkspaceContainer = function() {
@@ -78,6 +82,18 @@ var PresentationPropertiesModalPage = function() {
 
   this.getBackgroundImageSettings = function() {
     return backgroundImageSettings;
+  };
+  
+  this.getBackgroundImageCheckbox = function() {
+    return backgroundImageCheckbox;
+  };
+  
+  this.getBackgroundImageURLInput = function() {
+    return backgroundImageURLInput;
+  };
+    
+  this.getBackgroundImageStorageButton = function() {
+    return backgroundImageStorageButton;
   };
 
   this.getPlayUntilDonePlaceholderLabel = function() {

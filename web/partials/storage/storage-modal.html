@@ -1,0 +1,113 @@
+
+<div class="modal-body storage-full" stop-event="touchend" id="storageSelectorModal">
+  <button type="button" id="closeButton" class="close" ng-click="dismiss()" aria-hidden="true">
+    <i class="fa fa-times"></i>
+  </button>
+
+  <div style="clear: both" class="visible-xs"></div>
+  <div ng-controller="SubscriptionStatusController" class="visible-xs">
+    <div id="subscription-status" subscription-status
+         product-id="{{productId}}" product-code="{{productCode}}" company-id="{{companyId}}"
+         ng-model="subscriptionStatus.result" show-store-modal="showStoreModal" expanded-format="true">
+    </div>
+  </div>
+
+	<div class="padding-large-horizontal padding-large-bottom">
+	<div class="app-header half-top">
+	  <div class="title-block">
+	    <!-- App Title -->
+	    <h1 id="title" translate="storage-client.select-{{storageFactory.selectorType}}"></h1>
+    </div>
+
+	  <div class="global-actions">
+	  	<button id="newFolderButton" class="btn btn-lg btn-default" ng-click="storageFactory.addFolder()" ng-disabled="isTrashFolder()">
+        <span translate>storage-client.new-folder</span>
+        <svg-icon p="iconNewFolder"></svg-icon>
+	  	</button>
+	    <label id="uploadButton" for="upload-files" class="btn btn-lg btn-default" ng-hide="statusDetails.code!==200 || fileListStatus.code===404" ng-disabled="isTrashFolder()">
+        <span translate>storage-client.upload-files</span> 
+	      <i class="fa fa-cloud-upload fa-lg icon-right"></i> 
+	    </label>
+	  </div>
+
+    <ng-include src="'partials/storage/upload-panel.html'"></ng-include>
+
+	</div><!--app-header-->
+
+  <search-filter filter-config="filterConfig" search="search" do-search="search.doSearch" ng-show="!trialAvailable"></search-filter>
+
+	<div class="icon-nav half-top text-right">
+		
+	</div>
+  <div ng-controller="SubscriptionStatusController" class="hidden-xs">
+    <div id="subscription-status" subscription-status
+         product-id="{{productId}}" product-code="{{productCode}}" company-id="{{companyId}}"
+         ng-model="subscriptionStatus.result" show-store-modal="showStoreModal" expanded-format="true">
+    </div>
+  </div>
+
+	<div class="content-box half-top">
+    <div class="scrollable-list" 
+      rv-spinner rv-spinner-key="storage-selector-loader"
+      rv-spinner-start-active="1"
+      ng-show="!trialAvailable">
+      <table id="storageFileList" class="table-2 table-hover table-selector" ng-class="storageFactory.storageFull || storageFactory.isMultipleFileSelector() ? 'multiple-selector' : 'single-selector'" ng-show="statusDetails.code!==202 && statusDetails.code!==404 && isFileListVisible()">
+        <thead>
+          <tr>
+            <th class="col-sm-6">
+              <input type="checkbox" class="add-right" ng-model="selectAll">
+              <label ng-click="fileSelectorFactory.selectAllCheckboxes(query)" ng-show="storageFactory.storageFull || storageFactory.isMultipleFileSelector()"></label>
+              <a href="" ng-click="orderByAttribute = fileNameOrderFunction; reverseSort = !reverseSort">
+                <span translate="common.file-name" ></span>
+                <span ng-show="orderByAttribute==fileNameOrderFunction">
+                  <span ng-show="reverseSort">
+                    <i class="fa fa-long-arrow-up"></i>
+                  </span>
+                  <span ng-show="!reverseSort">
+                    <i class="fa fa-long-arrow-down"></i>
+                  </span>
+                </span>
+              </a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="clickable-row"
+              ng-click="fileClick(file);"
+              ng-class="{'active': file.isChecked, 'blocked-file': file.isThrottled, 'back-btn': file.currentFolder, 'no-select-row': file.currentFolder || storageFactory.fileIsTrash(file) || (storageFactory.fileIsFolder(file) && !storageFactory.storageFull) }"
+              ng-repeat="file in filesDetails.files | filter:search.query | orderBy:orderByAttribute:reverseSort track by $index">
+            <td colspan="{{storageFactory.storageFull ? 5 : 4}}" ng-if="storageFactory.fileIsFolder(file) && (!storageFactory.fileIsTrash(file) || storageFactory.storageFull)">
+              <span class="folder">{{file.name | fileNameFilter:storageFactory.folderPath}}</span>
+            </td>
+            <td ng-if="!storageFactory.fileIsFolder(file)" class="col-sm-6">
+              <span class="file" ng-class='{"throttled-type": file.isThrottled && !storageFactory.fileIsFolder(file)}'>
+                <a style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;" href="" data-toggle="tooltip" title="{{file.name | fileNameFilter:currentDecodedFolder}}">
+                  <i class="fa" ng-class='{"fa-exclamation": file.isThrottled && !storageFactory.fileIsFolder(file), "icon-red": file.isThrottled && !storageFactory.fileIsFolder(file)}'></i>
+                  {{file.name | fileNameFilter:storageFactory.folderPath}}
+                </a>
+              </span>
+              <div ng-show="file.showThrottledCallout && !storageFactory.fileIsFolder(file)" class="callout callout-red" ng-click="file.showThrottledCallout=false">
+                <span class="arrow"></span>
+                <strong>File Is Blocked</strong>
+                <p>This file is being requested too many times and is blocked. If you have a <a href="http://support.risevision.com" target="_blank">support subscription</a> please open a ticket for assistance with resolving this.  Otherwise, please post in the <a href="http://community.risevision.com" target="_blank">community</a> for help.</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+		</div>	
+    <div ng-show="trialAvailable">
+      <ng-include src="'partials/storage/start-trial.html'" ng-show="trialAvailable"></ng-include>
+    </div>
+
+    <div ng-show="storageFactory.isMultipleFileSelector() && !trialAvailable">
+      <button type="button" title="select" class="btn btn-primary" ng-click="fileSelectorFactory.sendFiles()" ng-disabled="filesDetails.checkedCount < 1 && filesDetails.folderCheckedCount < 1">
+        <span translate="common.select"></span> <span class="fa fa-check icon-right"></span>
+      </button>
+      <button class="btn btn-default" ng-click="dismiss()">
+        <span translate="common.cancel"></span> <span class="fa fa-times icon-right"></span>
+      </button>
+    </div>
+
+	</div><!--padding-->
+</div><!--modal-body-->

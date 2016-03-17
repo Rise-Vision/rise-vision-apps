@@ -19,7 +19,7 @@
     "angular-bootstrap-colorpicker": "~3.0.19",
     "angular-ui-codemirror": "~0.3.0",
     "angular-vertilize": "~1.0.1",
-    "common-header": "https://github.com/Rise-Vision/common-header.git#v1.9.5",
+    "common-header": "https://github.com/Rise-Vision/common-header.git#v1.9.7",
     "component-storage-selector": "https://github.com/Rise-Vision/component-storage-selector.git",
     "rv-common-i18n": "https://github.com/Rise-Vision/common-i18n.git",
     "rv-common-style": "https://github.com/Rise-Vision/common-style.git#v1.3.57",

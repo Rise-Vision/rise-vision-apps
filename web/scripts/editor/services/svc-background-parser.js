@@ -66,7 +66,7 @@ angular.module('risevision.editor.services')
               }
             }
 
-            for (var i = 0; i < REPEAT_OPTIONS.length; i++) {
+            for (i = 0; i < REPEAT_OPTIONS.length; i++) {
               if (backgroundStyle.indexOf(REPEAT_OPTIONS[i]) !== -1) {
                 background.image.repeat = REPEAT_OPTIONS[i];
               }

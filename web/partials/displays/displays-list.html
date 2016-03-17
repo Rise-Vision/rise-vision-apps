@@ -59,7 +59,6 @@
           <td class="nowrap display-address visible-lg visible-md"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="text-muted ellipsis">{{display.address}}</span></a></td>
           <td class="col-sm-2 text-center"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="add-left"><i class="fa {{display | status}} fa-circle"></i></span></a></td>
           <td class="col-sm-1 hidden-xs nowrap text-right"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="text-muted">{{display.lastActivityDate | date:'d-MMM-yyyy h:mm a'}}</span></a></td>
-          
         </tr>
         <!-- If no displays available -->
         <tr ng-show="displays.list.length === 0 && !search.query">

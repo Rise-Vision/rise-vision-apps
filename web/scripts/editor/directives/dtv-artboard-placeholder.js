@@ -28,7 +28,7 @@ angular.module('risevision.editor.directives')
               element.css('z-index', $scope.placeholder.zIndex);
               widgetRenderer.notifyChanges($scope.placeholder, element);
               if (newValue.items && newValue.items[0] && oldValue.items &&
-                oldValue.items[0] && newValue.items[0].additionalParams !=
+                oldValue.items[0] && newValue.items[0].additionalParams !==
                 oldValue.items[0].additionalParams) {
                 widgetRenderer.forceReload($scope.placeholder, element);
               }
