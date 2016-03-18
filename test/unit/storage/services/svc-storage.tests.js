@@ -11,7 +11,7 @@ describe('service: storage:', function() {
         _restoreState:function(){}
       }
     });
-
+    
     $provide.service('storageAPILoader',function () {
       return function(){
         var deferred = Q.defer();
@@ -70,12 +70,14 @@ describe('service: storage:', function() {
     });
 
   }));
-  var storage, returnResult, folderPath, folderName;
+  var storage, returnResult, folderPath, folderName, $rootScope;
   beforeEach(function(){
     returnResult = true;
     folderPath = '';
     
     inject(function($injector){
+      $rootScope = $injector.get('$rootScope');
+      
       storage = $injector.get('storage');
     });
   });
@@ -126,10 +128,14 @@ describe('service: storage:', function() {
 
   describe('startTrial:',function(){
     it('should start trial',function(done){
+      var $emitSpy = sinon.spy($rootScope, '$emit');
+
       storage.startTrial()
         .then(function(result){
           expect(result).to.be.truely;
           expect(result.item).to.be.truely;
+
+          $emitSpy.should.have.been.calledWith('refreshSubscriptionStatus');
 
           done();
         })

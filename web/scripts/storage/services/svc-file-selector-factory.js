@@ -114,20 +114,40 @@ angular.module('risevision.storage.services')
       factory.fileIsTrash = function (file) {
         return file.name === '--TRASH--/';
       };
-      
-      var _getFileUrl = function(file) {
+
+      var _getFileUrl = function (file) {
         var bucketName = 'risemedialibrary-' + userState.getSelectedCompanyId();
         var folderSelfLinkUrl = STORAGE_CLIENT_API + bucketName +
           '/o?prefix=';
         var fileUrl = file.kind === 'folder' ? folderSelfLinkUrl +
           encodeURIComponent(file.name) :
           STORAGE_FILE_URL + bucketName + '/' + encodeURIComponent(file.name);
-        
+
         return fileUrl;
       };
 
+      var _getSelectedFiles = function () {
+        return factory.filesDetails.files.filter(function (e) {
+          return e.isChecked;
+        });
+      };
+
+      factory.sendFiles = function () {
+        var fileUrls = [],
+          data = {};
+        data.params = [];
+        _getSelectedFiles().forEach(function (file) {
+          var copyUrl = _getFileUrl(file);
+          fileUrls.push(copyUrl);
+          data.params.push(copyUrl);
+        });
+        console.log('Message posted to parent window', fileUrls);
+        $window.parent.postMessage(fileUrls, '*');
+        gadgetsApi.rpc.call('', 'rscmd_saveSettings', null, data);
+      };
+
       factory.postFileToParent = function (file) {
-        var fileUrl = getFileUrl(file);
+        var fileUrl = _getFileUrl(file);
         var data = {
           params: fileUrl
         };

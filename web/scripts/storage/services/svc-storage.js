@@ -3,8 +3,9 @@
 /*jshint camelcase: false */
 
 angular.module('risevision.storage.services')
-  .service('storage', ['$q', '$log', 'storageAPILoader', 'userState',
-    function ($q, $log, storageAPILoader, userState) {
+  .service('storage', ['$rootScope', '$q', '$log', 'storageAPILoader',
+    'userState',
+    function ($rootScope, $q, $log, storageAPILoader, userState) {
       var service = {
         files: {
           get: function (search) {
@@ -49,6 +50,9 @@ angular.module('risevision.storage.services')
               return storageApi.startTrial(obj);
             })
             .then(function (resp) {
+              $rootScope.$emit('refreshSubscriptionStatus',
+                'trial-available');
+
               $log.debug('Trial Started', resp);
 
               deferred.resolve(resp.result);
