@@ -49,6 +49,20 @@ describe('service: storage:', function() {
               def.reject("API Failed");
             }
             return def.promise;
+          },
+          createFolder: function(obj) {
+            expect(obj).to.be.ok;
+            folderName = obj.folder;
+            
+            var def = Q.defer();
+            if (returnResult) {
+              def.resolve({
+                result: {}
+              });
+            } else {
+              def.reject("API Failed");
+            }
+            return def.promise;
           }
         });
         return deferred.promise;
@@ -56,7 +70,7 @@ describe('service: storage:', function() {
     });
 
   }));
-  var storage, returnResult, folderPath;
+  var storage, returnResult, folderPath, folderName;
   beforeEach(function(){
     returnResult = true;
     folderPath = '';
@@ -70,6 +84,7 @@ describe('service: storage:', function() {
     expect(storage).to.be.truely;
     expect(storage.files.get).to.be.a('function');
     expect(storage.startTrial).to.be.a('function');
+    expect(storage.createFolder).to.be.a('function');
   });
   
   describe('files.get:',function(){
@@ -125,6 +140,34 @@ describe('service: storage:', function() {
       returnResult = false;
 
       storage.startTrial()
+        .then(function(result) {
+          done(result);
+        })
+        .then(null, function(error) {
+          expect(error).to.deep.equal('API Failed');
+          done();
+        })
+        .then(null,done);
+    });
+  });
+
+  describe('createFolder:',function(){
+    it('should create folder',function(done){
+      storage.createFolder("newFolder")
+        .then(function(result){
+          expect(result).to.be.truely;
+          expect(result.item).to.be.truely;
+          expect(folderName).to.equal('newFolder');
+
+          done();
+        })
+        .then(null,done);
+    });
+
+    it("should handle failure to create folder",function(done){
+      returnResult = false;
+
+      storage.createFolder()
         .then(function(result) {
           done(result);
         })

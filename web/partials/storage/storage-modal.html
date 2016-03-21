@@ -1,5 +1,5 @@
 
-<div class="modal-body storage-full" id="storageSelectorModal">
+<div class="modal-body storage-full" stop-event="touchend" id="storageSelectorModal">
   <button type="button" id="closeButton" class="close" ng-click="dismiss()" aria-hidden="true">
     <i class="fa fa-times"></i>
   </button>
@@ -11,13 +11,12 @@
 	    <h1 id="title">Select a File</h1>
 	  </div>
 
-	  <div class="global-actions" ng-hide="true">
-	  	<button class="btn btn-lg btn-default">
-	  		Add Folder
-	  		<i class="fa fa-folder fa-lg icon-right"></i>
-	  		<i class="fa fa-plus fa-mini"></i>
+	  <div class="global-actions">
+	  	<button id="newFolderButton" class="btn btn-lg btn-default" ng-click="fileSelectorFactory.addFolder()" ng-disabled="isTrashFolder()">
+        <span translate="storage-client.new-folder"></span>
+        <svg-icon p="iconNewFolder"></svg-icon>
 	  	</button>
-	    <button class="btn btn-lg btn-primary">
+	    <button class="btn btn-lg btn-primary" ng-hide="true">
 	      Upload
 	      <i class="fa fa-cloud-upload fa-lg icon-right"></i> 
 	    </button>

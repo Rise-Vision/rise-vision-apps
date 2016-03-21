@@ -59,9 +59,35 @@ angular.module('risevision.storage.services')
             });
 
           return deferred.promise;
-        }
-      };
+        },
 
+        createFolder: function(folder) {
+          var deferred = $q.defer();
+
+          var obj = {
+            'companyId': userState.getSelectedCompanyId(),
+            'folder': folder
+          };
+
+          $log.debug('Creating folder: ', obj);
+
+          storageAPILoader().then(function (storageApi) {
+              return storageApi.createFolder(obj);
+            })
+            .then(function (resp) {
+              $log.debug('Folder created', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              $log.error('Failed to create folder', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        }
+
+      };      
       return service;
     }
   ]);

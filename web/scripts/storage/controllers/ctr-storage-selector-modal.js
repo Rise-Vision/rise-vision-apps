@@ -10,6 +10,7 @@ angular.module('risevision.storage.controllers')
         doSearch: function () {}
       };
       $scope.filesFactory = filesFactory;
+      $scope.fileSelectorFactory = fileSelectorFactory;
 
       fileSelectorFactory.type = filesFactory.type = SELECTOR_TYPE;
       filesFactory.folderPath = undefined;
