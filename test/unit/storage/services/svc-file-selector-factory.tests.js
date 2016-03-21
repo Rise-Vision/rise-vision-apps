@@ -7,6 +7,12 @@ describe('service: fileSelectorFactory:', function() {
       return filesFactory;
     });
 
+    $provide.service('$modal', function() {
+      return {
+        open: function(){}
+      };
+    });
+
     $provide.service('gadgetsApi',function(){
       return {
         rpc: {
@@ -16,7 +22,7 @@ describe('service: fileSelectorFactory:', function() {
     });
 
   }));
-  var filesResponse, fileSelectorFactory, returnFiles, filesFactory;
+  var filesResponse, fileSelectorFactory, returnFiles, filesFactory, $modal;
   beforeEach(function(){
     returnFiles = true;
     filesFactory = {
@@ -34,6 +40,7 @@ describe('service: fileSelectorFactory:', function() {
     
     inject(function($injector){  
       fileSelectorFactory = $injector.get('fileSelectorFactory');
+      $modal = $injector.get('$modal');
       
       fileSelectorFactory.type = 'single-file';
       
@@ -58,6 +65,7 @@ describe('service: fileSelectorFactory:', function() {
     expect(fileSelectorFactory.fileIsTrash).to.be.a('function');
     expect(fileSelectorFactory.postFileToParent).to.be.a('function');
     expect(fileSelectorFactory.onFileSelect).to.be.a('function');
+    expect(fileSelectorFactory.addFolder).to.be.a('function');
   });
   
   
@@ -122,6 +130,20 @@ describe('service: fileSelectorFactory:', function() {
   it('fileIsTrash: ', function() {
     expect(fileSelectorFactory.fileIsTrash({name: '--TRASH--/'})).to.be.true;
     expect(fileSelectorFactory.fileIsTrash({name: 'image.jpg'})).to.be.false;
+  });
+
+  describe('addFolder:', function(){
+    it('should open modal', function(){
+      var modalOpenSpy = sinon.spy($modal,'open');
+      fileSelectorFactory.addFolder();
+
+      modalOpenSpy.should.have.been.calledWith({
+        templateUrl: "partials/storage/new-folder-modal.html",
+        controller: "NewFolderModalCtrl",
+        size: 'md'
+      });
+
+    });
   });
 
 });

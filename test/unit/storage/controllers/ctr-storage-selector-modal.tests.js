@@ -96,6 +96,7 @@ describe('controller: Storage Selector Modal', function() {
     expect($scope).to.be.ok;
     
     expect($scope.filesFactory).to.be.ok;
+    expect($scope.fileSelectorFactory).to.be.ok;
     expect($scope.filterConfig).to.be.ok;
     
     expect($scope.select).to.be.a('function');

@@ -3,6 +3,7 @@ var StorageSelectorModalPage = function() {
   var storageSelectorModal = element(by.id('storageSelectorModal'));
   var modalTitle = element(by.css('.modal-title'));
 
+  var newFolderButton = element(by.id('newFolderButton'));
   var closeButton = element(by.id('closeButton'));
 
   this.getStorageSelectorModal = function() {
@@ -16,6 +17,10 @@ var StorageSelectorModalPage = function() {
   this.getCloseButton = function() {
     return closeButton;
   };
+
+  this.getNewFolderButton = function() {
+    return newFolderButton;
+  };  
   
 };
 

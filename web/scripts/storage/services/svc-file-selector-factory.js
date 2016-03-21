@@ -10,10 +10,10 @@ angular.module('risevision.storage.services')
   .factory('fileSelectorFactory', ['$rootScope', '$window', 'filesFactory',
     'userState', 'gadgetsApi',
     '$loading', 'filterFilter', 'STORAGE_CLIENT_API', 'STORAGE_FILE_URL',
-    'SELECTOR_TYPES',
+    'SELECTOR_TYPES', '$modal',
     function ($rootScope, $window, filesFactory, userState, gadgetsApi,
       $loading, filterFilter, STORAGE_CLIENT_API, STORAGE_FILE_URL,
-      SELECTOR_TYPES) {
+      SELECTOR_TYPES, $modal) {
       var factory = {};
 
       factory.storageFull = false;
@@ -166,6 +166,14 @@ angular.module('risevision.storage.services')
 
           factory.postFileToParent(file);
         }
+      };
+
+      factory.addFolder = function() {
+        $modal.open({
+          templateUrl: "partials/storage/new-folder-modal.html",
+          controller: "NewFolderModalCtrl",
+          size: 'md'
+        });
       };
 
       return factory;
