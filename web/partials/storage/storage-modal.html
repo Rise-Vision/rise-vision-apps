@@ -4,12 +4,20 @@
     <i class="fa fa-times"></i>
   </button>
 
+  <div style="clear: both" class="visible-xs"></div>
+  <div ng-controller="SubscriptionStatusController" class="visible-xs">
+    <div id="subscription-status" subscription-status
+         product-id="{{productId}}" product-code="{{productCode}}" company-id="{{companyId}}"
+         ng-model="subscriptionStatus.result" show-store-modal="showStoreModal" expanded-format="true">
+    </div>
+  </div>
+
 	<div class="padding-large-horizontal padding-large-bottom">
 	<div class="app-header half-top">
 	  <div class="title-block">
 	    <!-- App Title -->
-	    <h1 id="title">Select a File</h1>
-	  </div>
+	    <h1 id="title" translate="storage-client.select-{{filesFactory.type}}"></h1>
+    </div>
 
 	  <div class="global-actions">
 	  	<button id="newFolderButton" class="btn btn-lg btn-default" ng-click="fileSelectorFactory.addFolder()" ng-disabled="isTrashFolder()">
@@ -23,17 +31,23 @@
 	  </div>
 	</div><!--app-header-->
 
-  <search-filter filter-config="filterConfig" search="search" do-search="search.doSearch"></search-filter>
+  <search-filter filter-config="filterConfig" search="search" do-search="search.doSearch" ng-show="!trialAvailable"></search-filter>
 
 	<div class="icon-nav half-top text-right">
 		
 	</div>
+  <div ng-controller="SubscriptionStatusController" class="hidden-xs">
+    <div id="subscription-status" subscription-status
+         product-id="{{productId}}" product-code="{{productCode}}" company-id="{{companyId}}"
+         ng-model="subscriptionStatus.result" show-store-modal="showStoreModal" expanded-format="true">
+    </div>
+  </div>
 
 	<div class="content-box half-top">
     <div class="scrollable-list" 
       rv-spinner rv-spinner-key="storage-selector-loader"
       rv-spinner-start-active="1"
-      >
+      ng-show="!trialAvailable">
       <table class="table-2 table-hover table-selector" ng-class="storageFull || multipleFileSelector ? 'multiple-selector' : 'single-selector'" ng-show="statusDetails.code!==202 && statusDetails.code!==404 && isFileListVisible()">
         <thead>
           <tr>
@@ -79,5 +93,18 @@
         </tbody>
       </table>
 		</div>	
+    <div ng-show="trialAvailable">
+      <ng-include src="'partials/storage/start-trial.html'" ng-show="trialAvailable"></ng-include>
+    </div>
+
+    <div ng-show="multipleFileSelector && !trialAvailable">
+      <button type="button" title="select" class="btn btn-primary" ng-click="fileSelectorFactory.sendFiles()" ng-disabled="filesDetails.checkedCount < 1 && filesDetails.folderCheckedCount < 1">
+        <span translate="common.select"></span> <span class="fa fa-check icon-right"></span>
+      </button>
+      <button class="btn btn-default" ng-click="dismiss()">
+        <span translate="common.cancel"></span> <span class="fa fa-times icon-right"></span>
+      </button>
+    </div>
+
 	</div><!--padding-->
 </div><!--modal-body-->

@@ -1,14 +1,15 @@
 'use strict';
 angular.module('risevision.storage.controllers')
-  .controller('StorageSelectorModalController', ['$scope',
+  .controller('StorageSelectorModalController', ['$scope', '$rootScope',
     'fileSelectorFactory', 'filesFactory', '$modalInstance', '$loading',
     '$filter', '$translate', '$timeout', 'SELECTOR_TYPE', 'SELECTOR_TYPES',
-    function ($scope, fileSelectorFactory, filesFactory, $modalInstance,
-      $loading, $filter, $translate, $timeout, SELECTOR_TYPE, 
-      SELECTOR_TYPES) {
+    function ($scope, $rootScope, fileSelectorFactory, filesFactory,
+      $modalInstance, $loading, $filter, $translate, $timeout, 
+      SELECTOR_TYPE, SELECTOR_TYPES) {
       $scope.search = {
         doSearch: function () {}
       };
+      $scope.fileSelectorFactory = fileSelectorFactory;
       $scope.filesFactory = filesFactory;
       $scope.fileSelectorFactory = fileSelectorFactory;
 
@@ -27,6 +28,13 @@ angular.module('risevision.storage.controllers')
           $loading.stop('storage-selector-loader');
         }
       });
+
+      $rootScope.$on('subscription-status:changed',
+        function (e, subscriptionStatus) {
+          $scope.subscriptionStatus = subscriptionStatus;
+          $scope.trialAvailable =
+            subscriptionStatus.statusCode === 'trial-available';
+        });
 
       $scope.select = function (files) {
         $modalInstance.close(files);
@@ -48,9 +56,9 @@ angular.module('risevision.storage.controllers')
 
       $scope.selectorType = SELECTOR_TYPE;
       $scope.singleFileSelector = SELECTOR_TYPE === SELECTOR_TYPES.SINGLE_FILE;
-      $scope.multipleFileSelector = 
+      $scope.multipleFileSelector =
         SELECTOR_TYPE === SELECTOR_TYPES.MULTIPLE_FILE;
-      $scope.singleFolderSelector = 
+      $scope.singleFolderSelector =
         SELECTOR_TYPE === SELECTOR_TYPES.SINGLE_FOLDER;
 
       filesFactory.refreshFilesList();
@@ -64,7 +72,7 @@ angular.module('risevision.storage.controllers')
           $scope.select(file);
         }
       });
-      
+
       $scope.fileClick = function (file) {
         if (fileSelectorFactory.fileIsFolder(file)) {
           var dblClickDelay = 300;
@@ -84,7 +92,7 @@ angular.module('risevision.storage.controllers')
               var currentTime = (new Date()).getTime();
 
               if (lastClickTime !== 0 && currentTime - lastClickTime >=
-                dblClickDelay && !file.currentFolder && 
+                dblClickDelay && !file.currentFolder &&
                 !fileSelectorFactory.fileIsTrash(file)) {
                 fileSelectorFactory.folderSelect(file);
               }
@@ -134,8 +142,8 @@ angular.module('risevision.storage.controllers')
         if (!fileSelectorFactory.storageFull && (!$scope.currentDecodedFolder() ||
             $scope.currentDecodedFolder() === '/')) {
           return $scope.filesDetails.files.filter(function (f) {
-            return !fileSelectorFactory.fileIsTrash(f) && 
-            !fileSelectorFactory.fileIsCurrentFolder(f);
+            return !fileSelectorFactory.fileIsTrash(f) &&
+              !fileSelectorFactory.fileIsCurrentFolder(f);
           }).length > 0;
         } else {
           return true;

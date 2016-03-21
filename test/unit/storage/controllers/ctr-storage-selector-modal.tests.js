@@ -123,6 +123,22 @@ describe('controller: Storage Selector Modal', function() {
     expect($scope.isFileListVisible).to.be.a('function');
   });
 
+  it('should watch loading variable', function() {
+    expect($scope.$$watchers[0].exp).to.equal('filesFactory.loadingItems');
+  });
+  
+  it('should update subscription status', function(done) {
+    var subscriptionStatus = {statusCode: 'trial-available'};
+    $scope.$emit('subscription-status:changed', subscriptionStatus);
+    
+    setTimeout(function() {
+      expect($scope.subscriptionStatus).to.equal(subscriptionStatus);
+      expect($scope.trialAvailable).to.be.true;
+      
+      done();
+    }, 10);
+  })
+
   it('select: should close modal',function(){
     var file = {name: 'file1.jpg'};
     $scope.select(file);

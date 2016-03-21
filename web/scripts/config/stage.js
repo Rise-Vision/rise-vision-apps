@@ -22,6 +22,7 @@
     .value('CORE_URL', 'https://rvacore-test.appspot.com/_ah/api') // override default core value
     .value('STORE_ENDPOINT_URL',
       'https://store-dot-rvacore-test.appspot.com/_ah/api') // override default Store server value
+    .value('STORE_SERVER_URL', 'https://store-dot-rvacore-test.appspot.com/')
     .value('RVA_URL', 'http://rva-test.appspot.com')
     .value('VIEWER_URL', 'http://rvaviewer-test.appspot.com')
     .value('ALERTS_WS_URL',

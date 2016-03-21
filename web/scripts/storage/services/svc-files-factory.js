@@ -120,7 +120,7 @@ angular.module('risevision.storage.services')
               updated: null
             });
           }
-          
+
           return resp;
         }
 
