@@ -1,20 +1,17 @@
 'use strict';
 angular.module('risevision.storage.controllers')
   .controller('StorageSelectorModalController', ['$scope', '$rootScope',
-    'fileSelectorFactory', 'filesFactory', '$modalInstance', '$loading',
-    '$filter', '$translate', '$timeout', 'SELECTOR_TYPE', 'SELECTOR_TYPES',
-    function ($scope, $rootScope, fileSelectorFactory, filesFactory,
-      $modalInstance, $loading, $filter, $translate, $timeout, 
-      SELECTOR_TYPE, SELECTOR_TYPES) {
+    'storageFactory', 'fileSelectorFactory', 'filesFactory', '$modalInstance',
+    '$loading', '$filter', '$translate', '$timeout',
+    function ($scope, $rootScope, storageFactory, fileSelectorFactory,
+      filesFactory, $modalInstance, $loading, $filter, $translate,
+      $timeout) {
       $scope.search = {
         doSearch: function () {}
       };
+      $scope.storageFactory = storageFactory;
       $scope.fileSelectorFactory = fileSelectorFactory;
       $scope.filesFactory = filesFactory;
-      $scope.fileSelectorFactory = fileSelectorFactory;
-
-      fileSelectorFactory.type = filesFactory.type = SELECTOR_TYPE;
-      filesFactory.folderPath = undefined;
 
       $scope.filterConfig = {
         placeholder: 'Search for files or folders',
@@ -54,13 +51,6 @@ angular.module('risevision.storage.controllers')
       };
       // $scope.activeFolderDownloads = DownloadService.activeFolderDownloads;
 
-      $scope.selectorType = SELECTOR_TYPE;
-      $scope.singleFileSelector = SELECTOR_TYPE === SELECTOR_TYPES.SINGLE_FILE;
-      $scope.multipleFileSelector =
-        SELECTOR_TYPE === SELECTOR_TYPES.MULTIPLE_FILE;
-      $scope.singleFolderSelector =
-        SELECTOR_TYPE === SELECTOR_TYPES.SINGLE_FOLDER;
-
       filesFactory.refreshFilesList();
 
       $translate('storage-client.trash').then(function (value) {
@@ -74,14 +64,14 @@ angular.module('risevision.storage.controllers')
       });
 
       $scope.fileClick = function (file) {
-        if (fileSelectorFactory.fileIsFolder(file)) {
+        if (storageFactory.fileIsFolder(file)) {
           var dblClickDelay = 300;
           var currentTime = (new Date()).getTime();
 
           if (currentTime - lastClickTime < dblClickDelay) {
             lastClickTime = 0;
 
-            if (fileSelectorFactory.fileIsFolder(file)) {
+            if (storageFactory.fileIsFolder(file)) {
               fileSelectorFactory.onFileSelect(file);
             }
           } else {
@@ -93,13 +83,13 @@ angular.module('risevision.storage.controllers')
 
               if (lastClickTime !== 0 && currentTime - lastClickTime >=
                 dblClickDelay && !file.currentFolder &&
-                !fileSelectorFactory.fileIsTrash(file)) {
+                !storageFactory.fileIsTrash(file)) {
                 fileSelectorFactory.folderSelect(file);
               }
             }, dblClickDelay);
           }
         } else {
-          if (fileSelectorFactory.isSingleFileSelector()) {
+          if (storageFactory.isSingleFileSelector()) {
             fileSelectorFactory.onFileSelect(file);
           } else {
             fileSelectorFactory.fileCheckToggled(file);
@@ -108,8 +98,8 @@ angular.module('risevision.storage.controllers')
       };
 
       $scope.currentDecodedFolder = function () {
-        return filesFactory.folderPath ?
-          decodeURIComponent(filesFactory.folderPath) : undefined;
+        return storageFactory.folderPath ?
+          decodeURIComponent(storageFactory.folderPath) : undefined;
       };
 
       $scope.dateModifiedOrderFunction = function (file) {
@@ -117,7 +107,7 @@ angular.module('risevision.storage.controllers')
       };
 
       $scope.isTrashFolder = function () {
-        return filesFactory.folderPath === '--TRASH--/';
+        return storageFactory.folderPath === '--TRASH--/';
       };
 
       $scope.fileNameOrderFunction = function (file) {
@@ -139,11 +129,11 @@ angular.module('risevision.storage.controllers')
 
       // Hide file list for in app selector when no files and folders exist in root
       $scope.isFileListVisible = function () {
-        if (!fileSelectorFactory.storageFull && (!$scope.currentDecodedFolder() ||
+        if (!storageFactory.storageFull && (!$scope.currentDecodedFolder() ||
             $scope.currentDecodedFolder() === '/')) {
           return $scope.filesDetails.files.filter(function (f) {
-            return !fileSelectorFactory.fileIsTrash(f) &&
-              !fileSelectorFactory.fileIsCurrentFolder(f);
+            return !storageFactory.fileIsTrash(f) &&
+              !storageFactory.fileIsCurrentFolder(f);
           }).length > 0;
         } else {
           return true;

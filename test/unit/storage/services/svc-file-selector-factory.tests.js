@@ -7,12 +7,6 @@ describe('service: fileSelectorFactory:', function() {
       return filesFactory;
     });
 
-    $provide.service('$modal', function() {
-      return {
-        open: function(){}
-      };
-    });
-
     $provide.service('gadgetsApi',function(){
       return {
         rpc: {
@@ -22,7 +16,7 @@ describe('service: fileSelectorFactory:', function() {
     });
 
   }));
-  var filesResponse, fileSelectorFactory, returnFiles, filesFactory, $modal;
+  var filesResponse, fileSelectorFactory, returnFiles, filesFactory, storageFactory;
   beforeEach(function(){
     returnFiles = true;
     filesFactory = {
@@ -39,11 +33,11 @@ describe('service: fileSelectorFactory:', function() {
     };
     
     inject(function($injector){  
+      storageFactory = $injector.get('storageFactory');
       fileSelectorFactory = $injector.get('fileSelectorFactory');
-      $modal = $injector.get('$modal');
       
-      fileSelectorFactory.type = 'single-file';
-      
+      storageFactory.selectorType = 'single-file';
+      storageFactory.storageFull = true;
     });
   });
 
@@ -51,21 +45,13 @@ describe('service: fileSelectorFactory:', function() {
     expect(fileSelectorFactory).to.be.ok;
     
     // Hardcoded
-    expect(fileSelectorFactory.storageFull).to.be.false;
-    expect(fileSelectorFactory.isSingleFileSelector()).to.be.true;
-    expect(fileSelectorFactory.isMultipleFileSelector()).to.be.false;
-    expect(fileSelectorFactory.isSingleFolderSelector()).to.be.false;
     
     expect(fileSelectorFactory.resetSelections).to.be.a('function');
     expect(fileSelectorFactory.folderSelect).to.be.a('function');    
     expect(fileSelectorFactory.fileCheckToggled).to.be.a('function');    
     expect(fileSelectorFactory.selectAllCheckboxes).to.be.a('function');
-    expect(fileSelectorFactory.fileIsCurrentFolder).to.be.a('function');
-    expect(fileSelectorFactory.fileIsFolder).to.be.a('function');
-    expect(fileSelectorFactory.fileIsTrash).to.be.a('function');
     expect(fileSelectorFactory.postFileToParent).to.be.a('function');
     expect(fileSelectorFactory.onFileSelect).to.be.a('function');
-    expect(fileSelectorFactory.addFolder).to.be.a('function');
   });
   
   
@@ -73,7 +59,7 @@ describe('service: fileSelectorFactory:', function() {
     var file = filesFactory.filesDetails.files[0];
     var call = sinon.spy(gadgets.rpc, 'call');
 
-    fileSelectorFactory.storageFull = false;
+    storageFactory.storageFull = false;
     scope.$emit('FileSelectAction', file);
 
     scope.$apply();
@@ -86,7 +72,6 @@ describe('service: fileSelectorFactory:', function() {
 
   describe('selectAllCheckboxes: ', function() {
     it('should select all files and folders in storage full', function() {
-      fileSelectorFactory.storageFull = true;
       fileSelectorFactory.selectAll = false;
       fileSelectorFactory.selectAllCheckboxes();
 
@@ -95,7 +80,9 @@ describe('service: fileSelectorFactory:', function() {
     });
 
     it('should select all files in multiple file selector', function() {
-      fileSelectorFactory.singleFileSelector = true;
+      storageFactory.selectorType = 'multiple-file';
+      storageFactory.storageFull = false;
+
       fileSelectorFactory.selectAll = false;
       fileSelectorFactory.selectAllCheckboxes();
 
@@ -109,40 +96,6 @@ describe('service: fileSelectorFactory:', function() {
 
       expect(filesFactory.filesDetails.checkedCount).to.be.equal(0);
       expect(filesFactory.filesDetails.folderCheckedCount).to.be.equal(0);
-    });
-  });
-
-  it('fileIsCurrentFolder: ', function() {
-    filesFactory.folderPath = '';
-    expect(fileSelectorFactory.fileIsCurrentFolder({name: 'someFolder/'})).to.be.false;
-    
-    filesFactory.folderPath = 'someFolder/';
-    expect(fileSelectorFactory.fileIsCurrentFolder({name: 'someFolder/'})).to.be.true;
-  });
-
-  it('fileIsFolder: ', function() {
-    expect(fileSelectorFactory.fileIsFolder({name: '--TRASH--/'})).to.be.true;
-    expect(fileSelectorFactory.fileIsFolder({name: 'someFolder/'})).to.be.true;
-    expect(fileSelectorFactory.fileIsFolder({name: 'someFolder/image.jpg'})).to.be.false;
-    expect(fileSelectorFactory.fileIsFolder({name: 'image.jpg'})).to.be.false;
-  });
-  
-  it('fileIsTrash: ', function() {
-    expect(fileSelectorFactory.fileIsTrash({name: '--TRASH--/'})).to.be.true;
-    expect(fileSelectorFactory.fileIsTrash({name: 'image.jpg'})).to.be.false;
-  });
-
-  describe('addFolder:', function(){
-    it('should open modal', function(){
-      var modalOpenSpy = sinon.spy($modal,'open');
-      fileSelectorFactory.addFolder();
-
-      modalOpenSpy.should.have.been.calledWith({
-        templateUrl: "partials/storage/new-folder-modal.html",
-        controller: "NewFolderModalCtrl",
-        size: 'md'
-      });
-
     });
   });
 

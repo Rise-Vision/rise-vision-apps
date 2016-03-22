@@ -32,20 +32,11 @@ describe('controller: Storage Selector Modal', function() {
         }
       }
     });
-    $provide.service('fileSelectorFactory',function(){
+    $provide.service('storageFactory', function() {
       return {
         storageFull: true,
         isSingleFileSelector: function() {
           return isSingleFileSelector;
-        },
-        onFileSelect: function() {
-          onFileSelect = true;
-        },
-        folderSelect: function() {
-          folderSelect = true;
-        },
-        fileCheckToggled: function() {
-          fileCheckToggled = true;
         },
         fileIsCurrentFolder: function (file) {
           return file.name === '';
@@ -56,18 +47,31 @@ describe('controller: Storage Selector Modal', function() {
         fileIsTrash: function (file) {
           return file.name === '--TRASH--/';
         }
-      }
+      };
+    });
+    $provide.service('fileSelectorFactory',function(){
+      return {
+        onFileSelect: function() {
+          onFileSelect = true;
+        },
+        folderSelect: function() {
+          folderSelect = true;
+        },
+        fileCheckToggled: function() {
+          fileCheckToggled = true;
+        }
+      };
     });
     $provide.service('filesFactory',function(){
       return {
         refreshFilesList : function(){
         },
-        filesDetails: [],
-        statusDetails: {},
-        folderPath: ''
+        filesDetails: {
+          files: []
+        },
+        statusDetails: {}
       }
     });
-    $provide.value('SELECTOR_TYPE', 'single-file');
     $provide.value('SELECTOR_TYPES', {SINGLE_FILE: 'single-file'});
   }));
   var $scope, $modalInstance, $modalInstanceDismissSpy, $modalInstanceCloseSpy, isSingleFileSelector, onFileSelect, folderSelect, fileCheckToggled;
@@ -86,7 +90,6 @@ describe('controller: Storage Selector Modal', function() {
         $modalInstance : $modalInstance,
         fileSelectorFactory: $injector.get('fileSelectorFactory'),
         filesFactory: $injector.get('filesFactory'),
-        SELECTOR_TYPE: $injector.get('SELECTOR_TYPE'),
       });
       $scope.$digest();
     });
@@ -95,6 +98,7 @@ describe('controller: Storage Selector Modal', function() {
   it('should exist',function(){
     expect($scope).to.be.ok;
     
+    expect($scope.storageFactory).to.be.ok;
     expect($scope.filesFactory).to.be.ok;
     expect($scope.fileSelectorFactory).to.be.ok;
     expect($scope.filterConfig).to.be.ok;
@@ -105,12 +109,6 @@ describe('controller: Storage Selector Modal', function() {
     expect($scope.filesDetails).to.be.ok;
     expect($scope.statusDetails).to.be.ok;
     expect($scope.bucketCreationStatus).to.be.ok;
-
-    expect($scope.selectorType).to.equal('single-file');
-
-    expect($scope.singleFileSelector).to.be.true;
-    expect($scope.multipleFileSelector).to.be.false;
-    expect($scope.singleFolderSelector).to.be.false;
 
     expect($scope.fileClick).to.be.a('function');
     expect($scope.currentDecodedFolder).to.be.a('function');
@@ -211,13 +209,13 @@ describe('controller: Storage Selector Modal', function() {
   });
   
   it('currentDecodedFolder: ', function() {
-    $scope.filesFactory.folderPath = '';
+    $scope.storageFactory.folderPath = '';
     expect($scope.currentDecodedFolder()).to.be.undefined;
     
-    $scope.filesFactory.folderPath = 'someFolder/';
+    $scope.storageFactory.folderPath = 'someFolder/';
     expect($scope.currentDecodedFolder()).to.equal('someFolder/');
 
-    $scope.filesFactory.folderPath = 'my%20test/';
+    $scope.storageFactory.folderPath = 'my%20test/';
     expect($scope.currentDecodedFolder()).to.equal('my test/');
   });
   
@@ -228,13 +226,13 @@ describe('controller: Storage Selector Modal', function() {
   });
   
   it('isTrashFolder: ', function() {
-    $scope.filesFactory.folderPath = '';
+    $scope.storageFactory.folderPath = '';
     expect($scope.isTrashFolder()).to.be.false;
     
-    $scope.filesFactory.folderPath = 'someFolder/';
+    $scope.storageFactory.folderPath = 'someFolder/';
     expect($scope.isTrashFolder()).to.be.false;
 
-    $scope.filesFactory.folderPath = '--TRASH--/';
+    $scope.storageFactory.folderPath = '--TRASH--/';
     expect($scope.isTrashFolder()).to.be.true;
   });
   
@@ -262,10 +260,27 @@ describe('controller: Storage Selector Modal', function() {
   })
 
   describe('isFileListVisible: ', function() {
-    // Other usecases currently don't apply
+    beforeEach(function() {
+      $scope.storageFactory.folderPath = '';
+      $scope.storageFactory.storageFull = false;
+    });
+
+    it('hidden for no files', function() {
+      expect($scope.isFileListVisible()).to.be.false;
+    });
+
     it('always visible for full screen storage', function() {
+      $scope.storageFactory.storageFull = true;
+
       expect($scope.isFileListVisible()).to.be.true;
     });
+
+    it('show for subfolders', function() {
+      $scope.storageFactory.folderPath = 'someFolder/';
+
+      expect($scope.isFileListVisible()).to.be.true;
+    });
+
   });
 
 });

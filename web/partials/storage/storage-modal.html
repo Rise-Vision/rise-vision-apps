@@ -16,11 +16,11 @@
 	<div class="app-header half-top">
 	  <div class="title-block">
 	    <!-- App Title -->
-	    <h1 id="title" translate="storage-client.select-{{filesFactory.type}}"></h1>
+	    <h1 id="title" translate="storage-client.select-{{storageFactory.selectorType}}"></h1>
     </div>
 
 	  <div class="global-actions">
-	  	<button id="newFolderButton" class="btn btn-lg btn-default" ng-click="fileSelectorFactory.addFolder()" ng-disabled="isTrashFolder()">
+	  	<button id="newFolderButton" class="btn btn-lg btn-default" ng-click="storageFactory.addFolder()" ng-disabled="isTrashFolder()">
         <span translate="storage-client.new-folder"></span>
         <svg-icon p="iconNewFolder"></svg-icon>
 	  	</button>
@@ -48,12 +48,12 @@
       rv-spinner rv-spinner-key="storage-selector-loader"
       rv-spinner-start-active="1"
       ng-show="!trialAvailable">
-      <table class="table-2 table-hover table-selector" ng-class="storageFull || multipleFileSelector ? 'multiple-selector' : 'single-selector'" ng-show="statusDetails.code!==202 && statusDetails.code!==404 && isFileListVisible()">
+      <table class="table-2 table-hover table-selector" ng-class="storageFactory.storageFull || storageFactory.isMultipleFileSelector() ? 'multiple-selector' : 'single-selector'" ng-show="statusDetails.code!==202 && statusDetails.code!==404 && isFileListVisible()">
         <thead>
           <tr>
             <th class="col-sm-6">
               <input type="checkbox" class="add-right" ng-model="selectAll">
-              <label ng-click="selectAllCheckboxes(query)" ng-show="storageFull || multipleFileSelector"></label>
+              <label ng-click="selectAllCheckboxes(query)" ng-show="storageFactory.storageFull || storageFactory.isMultipleFileSelector()"></label>
               <a href="" ng-click="orderByAttribute = fileNameOrderFunction; reverseSort = !reverseSort">
                 <span translate="common.file-name" ></span>
                 <span ng-show="orderByAttribute==fileNameOrderFunction">
@@ -71,9 +71,9 @@
         <tbody>
           <tr class="clickable-row"
               ng-click="fileClick(file);"
-              ng-class="{'active': file.isChecked, 'blocked-file': file.isThrottled, 'back-btn': file.currentFolder, 'no-select-row': file.currentFolder || fileIsTrash(file) || (fileIsFolder(file) && !storageFull) }"
+              ng-class="{'active': file.isChecked, 'blocked-file': file.isThrottled, 'back-btn': file.currentFolder, 'no-select-row': file.currentFolder || fileIsTrash(file) || (fileIsFolder(file) && !storageFactory.storageFull) }"
               ng-repeat="file in filesDetails.files | filter:search.query | orderBy:orderByAttribute:reverseSort track by $index">
-            <td colspan="{{storageFull ? 5 : 4}}" ng-if="fileIsFolder(file) && (!fileIsTrash(file) || storageFull)">
+            <td colspan="{{storageFactory.storageFull ? 5 : 4}}" ng-if="fileIsFolder(file) && (!fileIsTrash(file) || storageFactory.storageFull)">
               <span class="folder">{{file.name | fileNameFilter:filesFactory.folderPath}}</span>
             </td>
             <td ng-if="!fileIsFolder(file)" class="col-sm-6">
@@ -97,7 +97,7 @@
       <ng-include src="'partials/storage/start-trial.html'" ng-show="trialAvailable"></ng-include>
     </div>
 
-    <div ng-show="multipleFileSelector && !trialAvailable">
+    <div ng-show="storageFactory.isMultipleFileSelector() && !trialAvailable">
       <button type="button" title="select" class="btn btn-primary" ng-click="fileSelectorFactory.sendFiles()" ng-disabled="filesDetails.checkedCount < 1 && filesDetails.folderCheckedCount < 1">
         <span translate="common.select"></span> <span class="fa fa-check icon-right"></span>
       </button>

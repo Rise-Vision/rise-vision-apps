@@ -5,8 +5,8 @@ describe('service: filesFactory:', function() {
   beforeEach(module(function ($provide) {
     filesResponse = {
       code: 200,
-      files: [{"name":"test1", "size": 5}
-                      ,{"name":"test1", "size": 3}]}
+      files: [{'name':'test1', 'size': 5}
+                      ,{'name':'test1', 'size': 3}]}
 
     $provide.service('storage', function() {
       return {
@@ -26,12 +26,13 @@ describe('service: filesFactory:', function() {
     });
 
   }));
-  var filesResponse, filesFactory, returnFiles;
+  var filesResponse, filesFactory, storageFactory, returnFiles;
   beforeEach(function(){
     returnFiles = true;
     
     inject(function($injector){  
       filesFactory = $injector.get('filesFactory');
+      storageFactory = $injector.get('storageFactory');
     });
   });
 
@@ -40,7 +41,6 @@ describe('service: filesFactory:', function() {
     
     expect(filesFactory.startTrial).to.be.ok;
     expect(filesFactory.filesDetails).to.be.ok;
-    expect(filesFactory.singleFolderSelector).to.be.false;
     
     expect(filesFactory.addFile).to.be.a('function');
     expect(filesFactory.getFileNameIndex).to.be.a('function');    
@@ -57,39 +57,39 @@ describe('service: filesFactory:', function() {
         done();
       })
       .then(null, function() {
-        done("error");
+        done('error');
       })
       .then(null,done);
     });
   });
   
   describe('addFile: ', function() {
-    it("should add two files", function () {
+    it('should add two files', function () {
       return filesFactory.refreshFilesList().then(function() {
-        filesFactory.addFile({ name: "file1.txt" });
-        filesFactory.addFile({ name: "file2.txt" });
-        filesFactory.addFile({ name: "file2.txt" });
+        filesFactory.addFile({ name: 'file1.txt' });
+        filesFactory.addFile({ name: 'file2.txt' });
+        filesFactory.addFile({ name: 'file2.txt' });
 
         expect(filesFactory.filesDetails.files.length).to.equal(5);
       });
     });
   
-    it("should add one folder", function () {
+    it('should add one folder', function () {
       return filesFactory.refreshFilesList().then(function() {
-        filesFactory.addFile({ name: "folder/file1.txt" });
-        filesFactory.addFile({ name: "folder/file2.txt" });
-        filesFactory.addFile({ name: "folder/subFolder/file2.txt" });
+        filesFactory.addFile({ name: 'folder/file1.txt' });
+        filesFactory.addFile({ name: 'folder/file2.txt' });
+        filesFactory.addFile({ name: 'folder/subFolder/file2.txt' });
 
         expect(filesFactory.filesDetails.files.length).to.equal(4);
       });
     });
 
-    it("should add one folder inside the current folder", function () {
-      filesFactory.folderPath = "test/";
-      filesFactory.addFile({ name: "test/folder/file1.txt" });
+    it('should add one folder inside the current folder', function () {
+      storageFactory.folderPath = 'test/';
+      filesFactory.addFile({ name: 'test/folder/file1.txt' });
 
       expect(filesFactory.filesDetails.files.length).to.equal(1);
-      expect(filesFactory.filesDetails.files[0].name).to.equal("test/folder/");
+      expect(filesFactory.filesDetails.files[0].name).to.equal('test/folder/');
     });
   });
   
