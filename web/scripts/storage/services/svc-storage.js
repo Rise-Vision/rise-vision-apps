@@ -65,7 +65,7 @@ angular.module('risevision.storage.services')
           return deferred.promise;
         },
 
-        createFolder: function(folder) {
+        createFolder: function (folder) {
           var deferred = $q.defer();
 
           var obj = {
@@ -91,7 +91,7 @@ angular.module('risevision.storage.services')
           return deferred.promise;
         }
 
-      };      
+      };
       return service;
     }
   ]);

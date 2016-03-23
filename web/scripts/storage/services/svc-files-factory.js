@@ -1,10 +1,9 @@
 'use strict';
 angular.module('risevision.storage.services')
-  .factory('filesFactory', ['storage',
-    function (storage) {
+  .factory('filesFactory', ['storage', 'storageFactory',
+    function (storage, storageFactory) {
       var svc = {
-        startTrial: storage.startTrial,
-        folderPath: ''
+        startTrial: storage.startTrial
       };
 
       svc.filesDetails = {
@@ -14,10 +13,9 @@ angular.module('risevision.storage.services')
       svc.statusDetails = {
         code: 202
       };
-      svc.singleFolderSelector = svc.type === 'single-folder';
 
       svc.addFile = function (newFile) {
-        var idx = newFile.name.indexOf('/', svc.folderPath.length);
+        var idx = newFile.name.indexOf('/', storageFactory.folderPath.length);
         // Handles the case where a file inside a folder was added (since files are not visible, only adds the folder)
         var fileName = idx >= 0 ? newFile.name.substring(0, idx + 1) :
           newFile.name;
@@ -74,7 +72,7 @@ angular.module('risevision.storage.services')
 
         function processFilesResponse(resp) {
           var TRASH = '--TRASH--/';
-          var parentFolder = decodeURIComponent(svc.folderPath);
+          var parentFolder = decodeURIComponent(storageFactory.folderPath);
           var parentFolderFound = false;
 
           resp.files = resp.files || [];
@@ -92,7 +90,7 @@ angular.module('risevision.storage.services')
             }
           }
 
-          if (!parentFolderFound && svc.folderPath) {
+          if (!parentFolderFound && storageFactory.folderPath) {
             resp.files.unshift({
               name: parentFolder,
               currentFolder: true,
@@ -105,14 +103,14 @@ angular.module('risevision.storage.services')
           svc.filesDetails.files = resp.files || [];
           svc.statusDetails.code = resp.code;
 
-          if (svc.singleFolderSelector) {
+          if (storageFactory.isSingleFolderSelector()) {
             svc.filesDetails.files = svc.filesDetails.files.filter(
               function (f) {
                 return fileIsFolder(f);
               });
           }
 
-          if (!svc.folderPath || !parentFolder || parentFolder ===
+          if (!storageFactory.folderPath || !parentFolder || parentFolder ===
             '/') {
             svc.filesDetails.files.splice(1, 0, {
               name: TRASH,
@@ -125,8 +123,8 @@ angular.module('risevision.storage.services')
         }
 
         var params = {};
-        if (svc.folderPath) {
-          params.folderPath = decodeURIComponent(svc.folderPath);
+        if (storageFactory.folderPath) {
+          params.folderPath = decodeURIComponent(storageFactory.folderPath);
           svc.statusDetails.folder = params.folderPath;
         } else {
           params.folderPath = undefined;

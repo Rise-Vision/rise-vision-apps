@@ -1,31 +1,14 @@
 'use strict';
 angular.module('risevision.storage.services')
-  .value('SELECTOR_TYPES', {
-    SINGLE_FILE: 'single-file',
-    MULTIPLE_FILE: 'multiple-file',
-    SINGLE_FOLDER: 'single-folder'
-  })
   .value('STORAGE_FILE_URL', 'https://storage.googleapis.com/')
   .value('STORAGE_CLIENT_API', 'https://www.googleapis.com/storage/v1/b/')
-  .factory('fileSelectorFactory', ['$rootScope', '$window', 'filesFactory',
-    'userState', 'gadgetsApi',
-    '$loading', 'filterFilter', 'STORAGE_CLIENT_API', 'STORAGE_FILE_URL',
-    'SELECTOR_TYPES', '$modal',
-    function ($rootScope, $window, filesFactory, userState, gadgetsApi,
-      $loading, filterFilter, STORAGE_CLIENT_API, STORAGE_FILE_URL,
-      SELECTOR_TYPES, $modal) {
+  .factory('fileSelectorFactory', ['$rootScope', '$window', 'storageFactory',
+    'filesFactory', 'userState', 'gadgetsApi', '$loading', 'filterFilter',
+    'STORAGE_CLIENT_API', 'STORAGE_FILE_URL',
+    function ($rootScope, $window, storageFactory, filesFactory, userState,
+      gadgetsApi, $loading, filterFilter,
+      STORAGE_CLIENT_API, STORAGE_FILE_URL) {
       var factory = {};
-
-      factory.storageFull = false;
-      factory.isSingleFileSelector = function () {
-        return factory.type === SELECTOR_TYPES.SINGLE_FILE;
-      };
-      factory.isMultipleFileSelector = function () {
-        return factory.type === SELECTOR_TYPES.MULTIPLE_FILE;
-      };
-      factory.isSingleFolderSelector = function () {
-        return factory.type === SELECTOR_TYPES.SINGLE_FOLDER;
-      };
 
       //on all state Changes do not hold onto checkedFiles list
       $rootScope.$on('$stateChangeStart', function () {
@@ -43,10 +26,11 @@ angular.module('risevision.storage.services')
       };
 
       factory.folderSelect = function (folder) {
-        if (factory.fileIsFolder(folder)) {
-          if (factory.isSingleFolderSelector()) {
+        if (storageFactory.fileIsFolder(folder)) {
+          if (storageFactory.isSingleFolderSelector()) {
             factory.postFileToParent(folder);
-          } else if (!factory.isSingleFileSelector() && !factory.isMultipleFileSelector()) {
+          } else if (!storageFactory.isSingleFileSelector() && !
+            storageFactory.isMultipleFileSelector()) {
             factory.fileCheckToggled(folder);
           }
         }
@@ -80,10 +64,10 @@ angular.module('risevision.storage.services')
         for (var i = 0; i < filesFactory.filesDetails.files.length; ++i) {
           var file = filesFactory.filesDetails.files[i];
 
-          if (factory.fileIsCurrentFolder(file) ||
-            factory.fileIsTrash(file) ||
-            (factory.fileIsFolder(file) && !(factory.storageFull ||
-              factory.isSingleFolderSelector()))) {
+          if (storageFactory.fileIsCurrentFolder(file) ||
+            storageFactory.fileIsTrash(file) ||
+            (storageFactory.fileIsFolder(file) && !(storageFactory.storageFull ||
+              storageFactory.isSingleFolderSelector()))) {
             continue;
           }
 
@@ -101,18 +85,6 @@ angular.module('risevision.storage.services')
           filesFactory.filesDetails.checkedItemsCount += file.isChecked ? 1 :
             0;
         }
-      };
-
-      factory.fileIsCurrentFolder = function (file) {
-        return file.name === filesFactory.folderPath;
-      };
-
-      factory.fileIsFolder = function (file) {
-        return file.name.substr(-1) === '/';
-      };
-
-      factory.fileIsTrash = function (file) {
-        return file.name === '--TRASH--/';
       };
 
       var _getFileUrl = function (file) {
@@ -152,7 +124,7 @@ angular.module('risevision.storage.services')
           params: fileUrl
         };
 
-        if (!factory.storageFull) {
+        if (storageFactory.storageIFrame) {
           console.log('Message posted to parent window', [fileUrl]);
           $window.parent.postMessage([fileUrl], '*');
           gadgetsApi.rpc.call('', 'rscmd_saveSettings', null, data);
@@ -162,17 +134,17 @@ angular.module('risevision.storage.services')
       };
 
       factory.onFileSelect = function (file) {
-        if (factory.fileIsFolder(file)) {
+        if (storageFactory.fileIsFolder(file)) {
           factory.resetSelections();
 
-          if (factory.fileIsCurrentFolder(file)) {
-            var folderPath = filesFactory.folderPath.split('/');
+          if (storageFactory.fileIsCurrentFolder(file)) {
+            var folderPath = storageFactory.folderPath.split('/');
             folderPath = folderPath.length > 2 ?
               folderPath.slice(0, -2).join('/') + '/' : '';
 
-            filesFactory.folderPath = folderPath;
+            storageFactory.folderPath = folderPath;
           } else {
-            filesFactory.folderPath = file.name;
+            storageFactory.folderPath = file.name;
           }
 
           filesFactory.refreshFilesList();
@@ -186,14 +158,6 @@ angular.module('risevision.storage.services')
 
           factory.postFileToParent(file);
         }
-      };
-
-      factory.addFolder = function() {
-        $modal.open({
-          templateUrl: "partials/storage/new-folder-modal.html",
-          controller: "NewFolderModalCtrl",
-          size: 'md'
-        });
       };
 
       return factory;

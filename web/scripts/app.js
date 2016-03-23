@@ -453,6 +453,8 @@ angular.module('risevision.storage.services', [
   'risevision.common.header',
   'risevision.common.gapi'
 ]);
-angular.module('risevision.storage.directives', []);
+angular.module('risevision.storage.directives', [
+  'ui.bootstrap'
+]);
 angular.module('risevision.storage.controllers', []);
 angular.module('risevision.storage.filters', []);
