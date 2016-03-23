@@ -28,7 +28,7 @@ angular.module('risevision.storage.services')
       factory.folderSelect = function (folder) {
         if (storageFactory.fileIsFolder(folder)) {
           if (storageFactory.isSingleFolderSelector()) {
-            factory.postFileToParent(folder);
+            _postFileToParent(folder);
           } else if (!storageFactory.isSingleFileSelector() && !
             storageFactory.isMultipleFileSelector()) {
             factory.fileCheckToggled(folder);
@@ -99,38 +99,40 @@ angular.module('risevision.storage.services')
       };
 
       var _getSelectedFiles = function () {
-        return factory.filesDetails.files.filter(function (e) {
+        return filesFactory.filesDetails.files.filter(function (e) {
           return e.isChecked;
         });
       };
+      
+      var _sendMessage = function(fileUrls) {
+        if (storageFactory.storageIFrame) {
+          var data = {
+            params: fileUrls
+          };
+
+          console.log('Message posted to parent window', fileUrls);
+          $window.parent.postMessage(fileUrls, '*');
+          gadgetsApi.rpc.call('', 'rscmd_saveSettings', null, data);
+        } else {
+          $rootScope.$broadcast('FileSelectAction', fileUrls);
+        }
+      }
 
       factory.sendFiles = function () {
-        var fileUrls = [],
-          data = {};
-        data.params = [];
+        var fileUrls = [];
+
         _getSelectedFiles().forEach(function (file) {
           var copyUrl = _getFileUrl(file);
           fileUrls.push(copyUrl);
-          data.params.push(copyUrl);
         });
-        console.log('Message posted to parent window', fileUrls);
-        $window.parent.postMessage(fileUrls, '*');
-        gadgetsApi.rpc.call('', 'rscmd_saveSettings', null, data);
+
+        _sendMessage(fileUrls);
       };
 
-      factory.postFileToParent = function (file) {
+      var _postFileToParent = function (file) {
         var fileUrl = _getFileUrl(file);
-        var data = {
-          params: fileUrl
-        };
 
-        if (storageFactory.storageIFrame) {
-          console.log('Message posted to parent window', [fileUrl]);
-          $window.parent.postMessage([fileUrl], '*');
-          gadgetsApi.rpc.call('', 'rscmd_saveSettings', null, data);
-        } else {
-          $rootScope.$broadcast('FileSelectAction', [fileUrl]);
-        }
+        _sendMessage([fileUrl]);
       };
 
       factory.onFileSelect = function (file) {
@@ -156,7 +158,7 @@ angular.module('risevision.storage.services')
             return;
           }
 
-          factory.postFileToParent(file);
+          _postFileToParent(file);
         }
       };
 
