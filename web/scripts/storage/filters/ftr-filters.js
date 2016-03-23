@@ -42,7 +42,7 @@ angular.module('risevision.storage.filters', ['risevision.common.i18n'])
         if (filename === currentFolder) {
           returnValue = filename.substr(0, filename.lastIndexOf('/',
             filename.length - 2) + 1);
-        } else {
+        } else if (filename.indexOf(currentFolder) !== -1) {
           returnValue = filename.substr(currentFolder.length);
         }
       } else if (filename === trash) {
@@ -78,8 +78,8 @@ angular.module('risevision.storage.filters', ['risevision.common.i18n'])
       return sizeString;
     };
   })
-  .filter('bandwidthUseFilter', ['fileSizeFilterFilter', '$translate', function (
-    fileSizeFilter, $translate) {
+  .filter('bandwidthUseFilter', ['fileSizeFilterFilter', '$translate', 
+    function (fileSizeFilter, $translate) {
     var lessThan1MB = '';
 
     $translate('storage-client.lessThan1MB').then(function (value) {
@@ -91,7 +91,7 @@ angular.module('risevision.storage.filters', ['risevision.common.i18n'])
         return bytes;
       }
 
-      return parseInt(bytes, 10) / 1000000 < 1 ? lessThan1MB :
+      return parseInt(bytes, 10) / Math.pow(1024, 2) < 1 ? lessThan1MB :
         fileSizeFilter(bytes);
     };
   }])

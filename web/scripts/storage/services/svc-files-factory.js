@@ -45,7 +45,7 @@ angular.module('risevision.storage.services')
       };
 
       svc.getFileNameIndex = function (fileName) {
-        for (var i = 0, j = svc.filesDetails.files.length; i < j; i += 1) {
+        for (var i = 0; i < svc.filesDetails.files.length; i++) {
           if (svc.filesDetails.files[i].name === fileName) {
             return i;
           }
@@ -55,21 +55,15 @@ angular.module('risevision.storage.services')
 
       svc.removeFiles = function (files) {
         var oldFiles = svc.filesDetails.files;
-        var removedSize = 0;
 
         for (var i = oldFiles.length - 1; i >= 0; i--) {
           if (files.indexOf(oldFiles[i]) >= 0) {
-            removedSize += parseInt(oldFiles[i].size);
             oldFiles.splice(i, 1);
           }
         }
       };
 
       svc.refreshFilesList = function () {
-        function fileIsFolder(file) {
-          return file.name.substr(-1) === '/';
-        }
-
         function processFilesResponse(resp) {
           var TRASH = '--TRASH--/';
           var parentFolder = decodeURIComponent(storageFactory.folderPath);
@@ -105,13 +99,13 @@ angular.module('risevision.storage.services')
 
           if (storageFactory.isSingleFolderSelector()) {
             svc.filesDetails.files = svc.filesDetails.files.filter(
-              function (f) {
-                return fileIsFolder(f);
-              });
+                storageFactory.fileIsFolder);
           }
 
           if (!storageFactory.folderPath || !parentFolder || parentFolder ===
             '/') {
+            // [AD] There may be a reason why the trash folder is added in 
+            // the second position; from legacy Storage
             svc.filesDetails.files.splice(1, 0, {
               name: TRASH,
               size: '',

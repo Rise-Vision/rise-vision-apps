@@ -5,8 +5,9 @@ describe('service: filesFactory:', function() {
   beforeEach(module(function ($provide) {
     filesResponse = {
       code: 200,
-      files: [{'name':'test1', 'size': 5}
-                      ,{'name':'test1', 'size': 3}]}
+      files: [{'name':'test1', 'size': 5},
+      {'name':'test2', 'size': 3},
+      {'name':'folder1/'}]}
 
     $provide.service('storage', function() {
       return {
@@ -49,28 +50,83 @@ describe('service: filesFactory:', function() {
   });
   
   describe('refreshFilesList: ', function() {
-    it('should load files', function(done) {
+    it('should load files; second (?) file is trash folder', function(done) {
+      filesFactory.refreshFilesList();
+      
+      setTimeout(function() {
+        expect(filesFactory.filesDetails.files.length).to.equal(4);
+        expect(storageFactory.fileIsTrash(filesFactory.filesDetails.files[1])).to.be.true;
+
+        done();
+        
+      });
+    });
+    
+    it('should just load folders', function(done) {
+      storageFactory.selectorType = 'single-folder';
+
       filesFactory.refreshFilesList()
-      .then(function() {
-        expect(filesFactory.filesDetails.files.length).to.equal(3);
+      setTimeout(function() {
+        expect(filesFactory.filesDetails.files.length).to.equal(2);
+        
+        done();
+      });
+    });
+    
+    it('should load sub-folder files', function(done) {
+      storageFactory.folderPath = 'folder/';
+      filesResponse.files = [{name: 'folder/'},
+        { name: 'folder/file1.txt' },
+        { name: 'folder/file2.txt' },
+        { name: 'folder/subFolder/file2.txt' }];
+
+      filesFactory.refreshFilesList();
+
+      setTimeout(function() {
+        expect(filesFactory.filesDetails.files.length).to.equal(4);
+        expect(filesFactory.filesDetails.files[0].name).to.equal('folder/');
+        expect(filesFactory.filesDetails.files[0].currentFolder).to.be.true;
         
         done();
       })
-      .then(null, function() {
-        done('error');
+    });
+    
+    it('should add parent folder to sub-folder files', function(done) {
+      storageFactory.folderPath = 'folder/';
+      filesResponse.files = [{ name: 'folder/file1.txt' },
+        { name: 'folder/file2.txt' },
+        { name: 'folder/subFolder/file2.txt' }];
+
+      filesFactory.refreshFilesList();
+
+      setTimeout(function() {
+        expect(filesFactory.filesDetails.files.length).to.equal(4);
+        expect(filesFactory.filesDetails.files[0].name).to.equal('folder/');
+        expect(filesFactory.filesDetails.files[0].currentFolder).to.be.true;
+        
+        done();
       })
-      .then(null,done);
+    });
+
+  });
+  
+  it('getFileNameIndex: ', function() {
+    return filesFactory.refreshFilesList().then(function() {
+      expect(filesFactory.getFileNameIndex('test1')).to.equal(0);
+      expect(filesFactory.getFileNameIndex('test2')).to.equal(2);
+
+      expect(filesFactory.getFileNameIndex('notfound')).to.equal(-1);
     });
   });
   
   describe('addFile: ', function() {
-    it('should add two files', function () {
+    it('should add two files, no duplicates', function () {
       return filesFactory.refreshFilesList().then(function() {
         filesFactory.addFile({ name: 'file1.txt' });
         filesFactory.addFile({ name: 'file2.txt' });
         filesFactory.addFile({ name: 'file2.txt' });
 
-        expect(filesFactory.filesDetails.files.length).to.equal(5);
+        expect(filesFactory.filesDetails.files.length).to.equal(6);
       });
     });
   
@@ -80,7 +136,7 @@ describe('service: filesFactory:', function() {
         filesFactory.addFile({ name: 'folder/file2.txt' });
         filesFactory.addFile({ name: 'folder/subFolder/file2.txt' });
 
-        expect(filesFactory.filesDetails.files.length).to.equal(4);
+        expect(filesFactory.filesDetails.files.length).to.equal(5);
       });
     });
 
@@ -91,6 +147,19 @@ describe('service: filesFactory:', function() {
       expect(filesFactory.filesDetails.files.length).to.equal(1);
       expect(filesFactory.filesDetails.files[0].name).to.equal('test/folder/');
     });
+  });
+  
+  it('removeFiles: ', function() {
+    return filesFactory.refreshFilesList().then(function() {
+      var newFile = { name: 'newFile.txt' };
+      filesFactory.addFile(newFile);
+
+      expect(filesFactory.filesDetails.files.length).to.equal(5);
+      
+      filesFactory.removeFiles([newFile]);
+      
+      expect(filesFactory.filesDetails.files.length).to.equal(4);
+    });    
   });
   
 
