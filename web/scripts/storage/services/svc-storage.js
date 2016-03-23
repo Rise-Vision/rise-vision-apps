@@ -4,8 +4,8 @@
 
 angular.module('risevision.storage.services')
   .service('storage', ['$rootScope', '$q', '$log', 'storageAPILoader',
-    'userState',
-    function ($rootScope, $q, $log, storageAPILoader, userState) {
+    'userState', '$window',
+    function ($rootScope, $q, $log, storageAPILoader, userState, $window) {
       var service = {
         files: {
           get: function (search) {
@@ -85,6 +85,60 @@ angular.module('risevision.storage.services')
             })
             .then(null, function (e) {
               $log.error('Failed to create folder', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
+
+        getResumableUploadURI: function (fileName, fileType) {
+          var deferred = $q.defer();
+
+          var obj = {
+            'companyId': userState.getSelectedCompanyId(),
+            'fileName': fileName,
+            'fileType': fileType,
+            'origin': $window.location.origin
+          };
+
+          $log.debug('getting resumable upload URI: ', obj);
+
+          storageAPILoader().then(function (storageApi) {
+              return storageApi.getResumableUploadURI(obj);
+            })
+            .then(function (resp) {
+              $log.debug('getting resumable upload URI finished', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              $log.error('Error getting resumable upload URI', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
+
+        notifyGCMTargetsChanged: function (files) {
+          var deferred = $q.defer();
+
+          var obj = {
+            companyId: userState.getSelectedCompanyId(),
+            targets: files
+          };
+
+          $log.debug('notifying GCM Targets Changed: ', obj);
+
+          storageAPILoader().then(function (storageApi) {
+              return storageApi.notifyGCMTargetsChanged(obj);
+            })
+            .then(function (resp) {
+              $log.debug('notifying GCM Targets Changed finished', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              $log.error('Error notifying GCM Targets Changed', e);
               deferred.reject(e);
             });
 

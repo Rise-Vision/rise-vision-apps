@@ -15,7 +15,9 @@ angular.module('risevision.storage.services')
       };
 
       svc.addFile = function (newFile) {
-        var idx = newFile.name.indexOf('/', storageFactory.folderPath.length);
+        var currentFolder = storageFactory.folderPath ? storageFactory.folderPath :
+          '';
+        var idx = newFile.name.indexOf('/', currentFolder.length);
         // Handles the case where a file inside a folder was added (since files are not visible, only adds the folder)
         var fileName = idx >= 0 ? newFile.name.substring(0, idx + 1) :
           newFile.name;
@@ -99,7 +101,7 @@ angular.module('risevision.storage.services')
 
           if (storageFactory.isSingleFolderSelector()) {
             svc.filesDetails.files = svc.filesDetails.files.filter(
-                storageFactory.fileIsFolder);
+              storageFactory.fileIsFolder);
           }
 
           if (!storageFactory.folderPath || !parentFolder || parentFolder ===

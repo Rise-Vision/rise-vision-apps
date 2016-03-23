@@ -78,23 +78,24 @@ angular.module('risevision.storage.filters', ['risevision.common.i18n'])
       return sizeString;
     };
   })
-  .filter('bandwidthUseFilter', ['fileSizeFilterFilter', '$translate', 
+  .filter('bandwidthUseFilter', ['fileSizeFilterFilter', '$translate',
     function (fileSizeFilter, $translate) {
-    var lessThan1MB = '';
+      var lessThan1MB = '';
 
-    $translate('storage-client.lessThan1MB').then(function (value) {
-      lessThan1MB = value;
-    });
+      $translate('storage-client.lessThan1MB').then(function (value) {
+        lessThan1MB = value;
+      });
 
-    return function bandwidthUseFilter(bytes) {
-      if (isNaN(bytes)) {
-        return bytes;
-      }
+      return function bandwidthUseFilter(bytes) {
+        if (isNaN(bytes)) {
+          return bytes;
+        }
 
-      return parseInt(bytes, 10) / Math.pow(1024, 2) < 1 ? lessThan1MB :
-        fileSizeFilter(bytes);
-    };
-  }])
+        return parseInt(bytes, 10) / Math.pow(1024, 2) < 1 ? lessThan1MB :
+          fileSizeFilter(bytes);
+      };
+    }
+  ])
   .filter('groupBy', function () {
     return function (items, groupedBy) {
       if (items) {

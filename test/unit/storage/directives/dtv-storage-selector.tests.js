@@ -60,16 +60,13 @@ describe('directive: storage-selector', function() {
       });
     });
 
-    it('should open modal and emit "picked"', function(done) {
-      var $emitSpy = sinon.spy(element.isolateScope(), '$emit');
+    it('should open modal and emit "picked"', function() {
+      var isolateScope = element.isolateScope();
+      var $emitSpy = sinon.spy(isolateScope, '$emit');
 
-      element.isolateScope().open();
+      isolateScope.open();
 
-      setTimeout(function() {
-        $emitSpy.should.have.been.calledWith('picked', testitem, 'single-file');
-        
-        done();
-      }, 10);
+      $emitSpy.should.have.been.calledWith('picked', testitem, 'single-file');
     });
   });
   
