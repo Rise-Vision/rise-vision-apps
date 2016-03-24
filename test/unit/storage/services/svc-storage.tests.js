@@ -63,6 +63,34 @@ describe('service: storage:', function() {
               def.reject("API Failed");
             }
             return def.promise;
+          },
+          getResumableUploadURI: function(obj) {
+            expect(obj).to.be.ok;
+            storageApiRequestObj = obj;
+            
+            var def = Q.defer();
+            if (returnResult) {
+              def.resolve({
+                result: {}
+              });
+            } else {
+              def.reject("API Failed");
+            }
+            return def.promise;
+          },
+          notifyGCMTargetsChanged: function(obj) {
+            expect(obj).to.be.ok;
+            storageApiRequestObj = obj;
+            
+            var def = Q.defer();
+            if (returnResult) {
+              def.resolve({
+                result: {}
+              });
+            } else {
+              def.reject("API Failed");
+            }
+            return def.promise;
           }
         });
         return deferred.promise;
@@ -70,7 +98,7 @@ describe('service: storage:', function() {
     });
 
   }));
-  var storage, returnResult, folderPath, folderName, $rootScope;
+  var storage, returnResult, folderPath, folderName, $rootScope, storageApiRequestObj;
   beforeEach(function(){
     returnResult = true;
     folderPath = '';
@@ -174,6 +202,67 @@ describe('service: storage:', function() {
       returnResult = false;
 
       storage.createFolder()
+        .then(function(result) {
+          done(result);
+        })
+        .then(null, function(error) {
+          expect(error).to.deep.equal('API Failed');
+          done();
+        })
+        .then(null,done);
+    });
+  });
+
+  describe('getResumableUploadURI:',function(){
+    it('should get Resumable Upload URI',function(done){
+      storage.getResumableUploadURI("fileName","fileType")
+        .then(function(result){
+          expect(result).to.be.truely;
+          expect(result.item).to.be.truely;
+          expect(storageApiRequestObj.fileName).to.equal('fileName');
+          expect(storageApiRequestObj.fileType).to.equal('fileType');
+          expect(storageApiRequestObj.companyId).to.equal('TEST_COMP_ID');
+
+          done();
+        })
+        .then(null,done);
+    });
+
+    it("should handle failure to get Resumable Upload URI",function(done){
+      returnResult = false;
+
+      storage.getResumableUploadURI("fileName","fileType")
+        .then(function(result) {
+          done(result);
+        })
+        .then(null, function(error) {
+          expect(error).to.deep.equal('API Failed');
+          done();
+        })
+        .then(null,done);
+    });
+  });
+
+  
+  describe('notifyGCMTargetsChanged:',function(){
+    it('should notify GCM Targets Changed',function(done){
+      var files = ["file1","file2"]
+      storage.notifyGCMTargetsChanged(files)
+        .then(function(result){
+          expect(result).to.be.truely;
+          expect(result.item).to.be.truely;
+          expect(storageApiRequestObj.targets).to.equal(files);
+          expect(storageApiRequestObj.companyId).to.equal('TEST_COMP_ID');
+
+          done();
+        })
+        .then(null,done);
+    });
+
+    it("should handle failure to notify GCM Targets Changed",function(done){
+      returnResult = false;
+      var files = ["file1","file2"]
+      storage.notifyGCMTargetsChanged(files)
         .then(function(result) {
           done(result);
         })

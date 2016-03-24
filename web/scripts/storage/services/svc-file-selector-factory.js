@@ -103,8 +103,8 @@ angular.module('risevision.storage.services')
           return e.isChecked;
         });
       };
-      
-      var _sendMessage = function(fileUrls) {
+
+      var _sendMessage = function (fileUrls) {
         if (storageFactory.storageIFrame) {
           var data = {
             params: fileUrls
@@ -116,7 +116,7 @@ angular.module('risevision.storage.services')
         } else {
           $rootScope.$broadcast('FileSelectAction', fileUrls);
         }
-      }
+      };
 
       factory.sendFiles = function () {
         var fileUrls = [];
