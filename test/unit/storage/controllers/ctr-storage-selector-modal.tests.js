@@ -33,8 +33,9 @@ describe('controller: Storage Selector Modal', function() {
       }
     });
     $provide.service('storageFactory', function() {
-      return {
+      return storageFactory = {
         storageFull: true,
+        folderPath: 'folder/',
         isSingleFileSelector: function() {
           return isSingleFileSelector;
         },
@@ -74,7 +75,7 @@ describe('controller: Storage Selector Modal', function() {
     });
     $provide.value('SELECTOR_TYPES', {SINGLE_FILE: 'single-file'});
   }));
-  var $scope, $modalInstance, $modalInstanceDismissSpy, $modalInstanceCloseSpy, isSingleFileSelector, onFileSelect, folderSelect, fileCheckToggled;
+  var $scope, $modalInstance, $modalInstanceDismissSpy, $modalInstanceCloseSpy, isSingleFileSelector, onFileSelect, folderSelect, fileCheckToggled, storageFactory;
   beforeEach(function(){
     isSingleFileSelector = true;
     onFileSelect = folderSelect = fileCheckToggled = false;
@@ -119,6 +120,10 @@ describe('controller: Storage Selector Modal', function() {
     expect($scope.fileExtOrderFunction).to.be.a('function');
     expect($scope.fileSizeOrderFunction).to.be.a('function');
     expect($scope.isFileListVisible).to.be.a('function');
+  });
+  
+  it('should reset folderPath on startup', function() {
+    expect(storageFactory.folderPath).to.equal('');
   });
 
   it('should watch loading variable', function() {

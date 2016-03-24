@@ -51,6 +51,7 @@ angular.module('risevision.storage.controllers')
       };
       // $scope.activeFolderDownloads = DownloadService.activeFolderDownloads;
 
+      storageFactory.folderPath = '';
       filesFactory.refreshFilesList();
 
       $translate('storage-client.trash').then(function (value) {

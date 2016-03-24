@@ -56,7 +56,7 @@
           <tr>
             <th class="col-sm-6">
               <input type="checkbox" class="add-right" ng-model="selectAll">
-              <label ng-click="selectAllCheckboxes(query)" ng-show="storageFactory.storageFull || storageFactory.isMultipleFileSelector()"></label>
+              <label ng-click="fileSelectorFactory.selectAllCheckboxes(query)" ng-show="storageFactory.storageFull || storageFactory.isMultipleFileSelector()"></label>
               <a href="" ng-click="orderByAttribute = fileNameOrderFunction; reverseSort = !reverseSort">
                 <span translate="common.file-name" ></span>
                 <span ng-show="orderByAttribute==fileNameOrderFunction">
@@ -74,19 +74,19 @@
         <tbody>
           <tr class="clickable-row"
               ng-click="fileClick(file);"
-              ng-class="{'active': file.isChecked, 'blocked-file': file.isThrottled, 'back-btn': file.currentFolder, 'no-select-row': file.currentFolder || fileIsTrash(file) || (fileIsFolder(file) && !storageFactory.storageFull) }"
+              ng-class="{'active': file.isChecked, 'blocked-file': file.isThrottled, 'back-btn': file.currentFolder, 'no-select-row': file.currentFolder || storageFactory.fileIsTrash(file) || (storageFactory.fileIsFolder(file) && !storageFactory.storageFull) }"
               ng-repeat="file in filesDetails.files | filter:search.query | orderBy:orderByAttribute:reverseSort track by $index">
-            <td colspan="{{storageFactory.storageFull ? 5 : 4}}" ng-if="fileIsFolder(file) && (!fileIsTrash(file) || storageFactory.storageFull)">
-              <span class="folder">{{file.name | fileNameFilter:filesFactory.folderPath}}</span>
+            <td colspan="{{storageFactory.storageFull ? 5 : 4}}" ng-if="storageFactory.fileIsFolder(file) && (!storageFactory.fileIsTrash(file) || storageFactory.storageFull)">
+              <span class="folder">{{file.name | fileNameFilter:storageFactory.folderPath}}</span>
             </td>
-            <td ng-if="!fileIsFolder(file)" class="col-sm-6">
-              <span class="file" ng-class='{"throttled-type": file.isThrottled && !fileIsFolder(file)}'>
+            <td ng-if="!storageFactory.fileIsFolder(file)" class="col-sm-6">
+              <span class="file" ng-class='{"throttled-type": file.isThrottled && !storageFactory.fileIsFolder(file)}'>
                 <a style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;" href="" data-toggle="tooltip" title="{{file.name | fileNameFilter:currentDecodedFolder}}">
-                  <i class="fa" ng-class='{"fa-exclamation": file.isThrottled && !fileIsFolder(file), "icon-red": file.isThrottled && !fileIsFolder(file)}'></i>
-                  {{file.name | fileNameFilter:filesFactory.folderPath}}
+                  <i class="fa" ng-class='{"fa-exclamation": file.isThrottled && !storageFactory.fileIsFolder(file), "icon-red": file.isThrottled && !storageFactory.fileIsFolder(file)}'></i>
+                  {{file.name | fileNameFilter:storageFactory.folderPath}}
                 </a>
               </span>
-              <div ng-show="file.showThrottledCallout && !fileIsFolder(file)" class="callout callout-red" ng-click="file.showThrottledCallout=false">
+              <div ng-show="file.showThrottledCallout && !storageFactory.fileIsFolder(file)" class="callout callout-red" ng-click="file.showThrottledCallout=false">
                 <span class="arrow"></span>
                 <strong>File Is Blocked</strong>
                 <p>This file is being requested too many times and is blocked. If you have a <a href="http://support.risevision.com" target="_blank">support subscription</a> please open a ticket for assistance with resolving this.  Otherwise, please post in the <a href="http://community.risevision.com" target="_blank">community</a> for help.</p>

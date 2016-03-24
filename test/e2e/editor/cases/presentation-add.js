@@ -74,12 +74,14 @@ var PresentationAddScenarios = function() {
       expect(workspacePage.getPreviewButton().isEnabled()).to.eventually.be.true;
     });
 
-    after(function () {
+    it('should delete presentation and return to list', function(done) {
       workspacePage.getPresentationPropertiesButton().click();
       helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
       helper.clickWhenClickable(presentationPropertiesModalPage.getDeleteButton(), "Presentation Delete Button").then(function () {
         helper.clickWhenClickable(presentationPropertiesModalPage.getDeleteForeverButton(), "Presentation Delete Forever Button").then(function () {
           helper.wait(presentationsListPage.getTitle(), 'Presentation List');
+          
+          done();
         });
       });
     });
