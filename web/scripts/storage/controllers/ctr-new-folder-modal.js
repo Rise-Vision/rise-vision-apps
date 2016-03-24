@@ -27,14 +27,13 @@ angular.module('risevision.storage.controllers')
           storage.createFolder(decodeURIComponent(storageFactory.folderPath ||
             '') + $scope.folderName).then(function (resp) {
 
-            $rootScope.$emit('refreshSubscriptionStatus',
-              'trial-available');
-            filesFactory.refreshFilesList();
-            $modalInstance.close($scope.folderName);
+            if (resp.code === 200) {
+              $rootScope.$emit('refreshSubscriptionStatus',
+                'trial-available');
+              filesFactory.refreshFilesList();
+              $modalInstance.close($scope.folderName);
 
-          }, function (resp) {
-
-            if (resp.code === 403 && resp.message.indexOf(
+            } else if (resp.code === 403 && resp.message.indexOf(
                 'restricted-role') === -1) {
               $translate('storage-client.' + resp.message, {
                 username: resp.userEmail

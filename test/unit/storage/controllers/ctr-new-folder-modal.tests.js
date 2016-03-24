@@ -10,11 +10,10 @@ describe('controller: NewFolderModalCtrl', function() {
         return {
           createFolder: function () {
             var deferred = Q.defer();
-            if(result.code !== 200){
-              deferred.reject(result);             
-            }else{
-              deferred.resolve(result);
-            }
+
+            // Always resolve, result contains error code
+            deferred.resolve(result);
+            
             return deferred.promise;            
           }
         };
