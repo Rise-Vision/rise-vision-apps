@@ -24,10 +24,25 @@
         <span translate>storage-client.new-folder</span>
         <svg-icon p="iconNewFolder"></svg-icon>
 	  	</button>
-	    <label id="uploadButton" for="upload-files" class="btn btn-lg btn-default" ng-hide="statusDetails.code!==200 || fileListStatus.code===404" ng-disabled="isTrashFolder()">
-        <span translate>storage-client.upload-files</span> 
-	      <i class="fa fa-cloud-upload fa-lg icon-right"></i> 
-	    </label>
+      
+      <!-- Simple dropdown -->
+      <div id="uploadDropdown" class="btn-group" dropdown on-toggle="toggled(open)">
+        <label class="btn btn-primary btn-lg dropdown-toggle" dropdown-toggle ng-hide="statusDetails.code!==200 || fileListStatus.code===404" ng-disabled="isTrashFolder()">
+          <span translate="storage-client.upload"></span> <i class="fa fa-cloud-upload fa-lg icon-right"></i>
+        </label>
+        <ul class="dropdown-menu">
+          <li>
+            <label id="uploadButton" for="upload-files">
+              <span translate="storage-client.upload-files"></span>
+            </label>
+          </li>
+          <li>
+            <label id="uploadFolderButton" for="upload-folder">
+              <span translate="storage-client.upload-folder"></span>
+            </label>
+          </li>
+        </ul>
+      </div>
 	  </div>
 
     <ng-include src="'partials/storage/upload-panel.html'"></ng-include>

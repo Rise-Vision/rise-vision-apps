@@ -66,6 +66,17 @@ var UploadScenarios = function() {
           expect(storageSelectorModalPage.getStorageSelectorModal().isDisplayed()).to.eventually.be.true;
           expect(storageSelectorModalPage.getCloseButton().isDisplayed()).to.eventually.be.true;
         });
+        
+        it('should show upload dropdown', function() {
+          storageSelectorModalPage.getUploadDropdown().click();
+          
+          helper.wait(storageSelectorModalPage.getUploadButton(), 'Upload Button');
+          
+          expect(storageSelectorModalPage.getUploadButton().isDisplayed()).to.eventually.be.true;
+          expect(storageSelectorModalPage.getUploadFolderButton().isDisplayed()).to.eventually.be.true;
+          
+          storageSelectorModalPage.getUploadDropdown().click();
+        });
 
         it('should upload file', function(){
           var uploadFilePath = process.cwd() + "/package.json";
