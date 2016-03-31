@@ -7,6 +7,8 @@ var StorageHomePage = function() {
   var uploadButton = element(by.id('uploadButton'));
   var uploadInput = element(by.id('upload-files'));
   var uploadPanel = element(by.css('.upload-panel'));
+  
+  var copyUrlButton = element(by.id('fileCopyUrlButton'));
 
   var searchInput = element(by.id('storageSelectorSearchInput'));  
 
@@ -37,6 +39,10 @@ var StorageHomePage = function() {
   this.getUploadPanel = function() {
     return uploadPanel;
   };
+  
+  this.getCopyUrlButton = function() {
+    return copyUrlButton;
+  }
 
   this.getSearchInput = function(){
     return searchInput;

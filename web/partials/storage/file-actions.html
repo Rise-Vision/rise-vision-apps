@@ -5,10 +5,10 @@
         <span ng-show="filesDetails.checkedItemsCount > 0">
           <span translate="storage-client.selected-items" translate-values="{ count: filesDetails.checkedItemsCount }"></span>
         </span>
-				<button type="button" class="btn btn-link" title="Download" ng-click="factory.downloadButtonClick()" ng-disabled="isDisabledDownloadButton()">
+				<button id="fileDownloadButton" type="button" class="btn btn-link" title="Download" ng-click="factory.downloadButtonClick()" ng-disabled="isDisabledDownloadButton()">
           <i class="fa fa-cloud-download fa-2x" ng-class="{ 'icon-gray': isDisabledDownloadButton() }"></i>
         </button>
-        <button type="button" class="btn btn-link" title="Copy Url" ng-click="factory.copyUrlButtonClick()" ng-hide="storageFactory.isTrashFolder()" ng-disabled="isDisabledCopyUrlButton()">
+        <button id="fileCopyUrlButton" type="button" class="btn btn-link" title="Copy Url" ng-click="factory.copyUrlButtonClick()" ng-hide="storageFactory.isTrashFolder()" ng-disabled="isDisabledCopyUrlButton()">
           <i class="fa fa-link fa-2x" ng-class="{ 'icon-gray': isDisabledCopyUrlButton() }"></i>
         </button>
 				<button type="button" class="btn btn-link" title="Move To Trash" ng-click="factory.trashButtonClick()" ng-show="!storageFactory.isTrashFolder()" ng-disabled="isDisabledTrashButton()">

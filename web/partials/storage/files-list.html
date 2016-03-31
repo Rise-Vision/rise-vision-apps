@@ -8,7 +8,7 @@
         <th class="col-sm-6">
           <input type="checkbox" class="add-right" ng-model="selectAll">
           <label ng-click="fileSelectorFactory.selectAllCheckboxes(query)" ng-show="storageFactory.storageFull || storageFactory.isMultipleFileSelector()"></label>
-          <a href="" ng-click="orderByAttribute = fileNameOrderFunction; reverseSort = !reverseSort">
+          <a id="tableHeaderName" href="" ng-click="orderByAttribute = fileNameOrderFunction; reverseSort = !reverseSort">
             <span translate="common.file-name" ></span>
             <span ng-show="orderByAttribute==fileNameOrderFunction">
               <span ng-show="reverseSort">
