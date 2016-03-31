@@ -93,10 +93,6 @@ angular.module('risevision.storage.controllers')
         return file.updated ? file.updated.value : '';
       };
 
-      $scope.isTrashFolder = function () {
-        return storageFactory.folderPath === '--TRASH--/';
-      };
-
       $scope.fileNameOrderFunction = function (file) {
         return file.name.replace('--TRASH--/', trashLabel).toLowerCase();
       };
@@ -111,7 +107,7 @@ angular.module('risevision.storage.controllers')
       };
 
       $scope.fileSizeOrderFunction = function (file) {
-        return file.size? Number(file.size): 0;
+        return file.size ? Number(file.size) : 0;
       };
 
       // Hide file list for in app selector when no files and folders exist in root

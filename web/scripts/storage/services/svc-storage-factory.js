@@ -5,8 +5,10 @@ angular.module('risevision.storage.services')
     MULTIPLE_FILE: 'multiple-file',
     SINGLE_FOLDER: 'single-folder'
   })
-  .factory('storageFactory', ['$modal', 'SELECTOR_TYPES',
-    function ($modal, SELECTOR_TYPES) {
+  .value('STORAGE_CLIENT_API', 'https://www.googleapis.com/storage/v1/b/')
+  .factory('storageFactory', ['userState', '$modal', 'SELECTOR_TYPES',
+    'STORAGE_CLIENT_API',
+    function (userState, $modal, SELECTOR_TYPES, STORAGE_CLIENT_API) {
       var factory = {
         storageIFrame: false,
         storageFull: true,
@@ -14,12 +16,22 @@ angular.module('risevision.storage.services')
         folderPath: ''
       };
 
+      factory.getBucketName = function () {
+        return 'risemedialibrary-' + userState.getSelectedCompanyId();
+      };
+
+      factory.getFolderSelfLinkUrl = function () {
+        return STORAGE_CLIENT_API + factory.getBucketName() + '/o?prefix=';
+      };
+
       factory.isSingleFileSelector = function () {
         return factory.selectorType === SELECTOR_TYPES.SINGLE_FILE;
       };
+
       factory.isMultipleFileSelector = function () {
         return factory.selectorType === SELECTOR_TYPES.MULTIPLE_FILE;
       };
+
       factory.isSingleFolderSelector = function () {
         return factory.selectorType === SELECTOR_TYPES.SINGLE_FOLDER;
       };
@@ -34,6 +46,10 @@ angular.module('risevision.storage.services')
 
       factory.fileIsTrash = function (file) {
         return file.name === '--TRASH--/';
+      };
+
+      factory.isTrashFolder = function () {
+        return factory.folderPath === '--TRASH--/';
       };
 
       factory.addFolder = function () {

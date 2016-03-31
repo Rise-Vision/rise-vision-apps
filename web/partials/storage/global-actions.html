@@ -1,12 +1,12 @@
 <div class="global-actions" ng-show="!trialAvailable">
-  <button id="newFolderButton" class="btn btn-lg btn-default" ng-click="storageFactory.addFolder()" ng-disabled="isTrashFolder()">
+  <button id="newFolderButton" class="btn btn-lg btn-default" ng-click="storageFactory.addFolder()" ng-disabled="storageFactory.isTrashFolder()">
     <span translate>storage-client.new-folder</span>
     <svg-icon p="iconNewFolder"></svg-icon>
   </button>
   
   <!-- Simple dropdown -->
   <div id="uploadDropdown" class="btn-group" dropdown on-toggle="toggled(open)">
-    <label class="btn btn-primary btn-lg dropdown-toggle" dropdown-toggle ng-hide="statusDetails.code!==200 || fileListStatus.code===404" ng-disabled="isTrashFolder()">
+    <label class="btn btn-primary btn-lg dropdown-toggle" dropdown-toggle ng-hide="statusDetails.code!==200 || fileListStatus.code===404" ng-disabled="storageFactory.isTrashFolder()">
       <span translate="storage-client.upload"></span> <i class="fa fa-cloud-upload fa-lg icon-right"></i>
     </label>
     <ul class="dropdown-menu">

@@ -35,6 +35,83 @@ angular.module('risevision.storage.services')
               });
 
             return deferred.promise;
+          },
+          delete: function (selectedFileNames) {
+            var deferred = $q.defer();
+
+            var obj = {
+              'companyId': userState.getSelectedCompanyId(),
+              'files': selectedFileNames
+            };
+
+            $log.debug('Storage delete called with', obj);
+
+            storageAPILoader().then(function (storageApi) {
+                return storageApi.trash.move(obj);
+              })
+              .then(function (resp) {
+                $log.debug('status storage delete resp', resp);
+
+                deferred.resolve(resp.result);
+              })
+              .then(null, function (e) {
+                $log.error('Failed to delete files', e);
+                deferred.reject(e);
+              });
+
+            return deferred.promise;
+          }
+        },
+        trash: {
+          move: function (selectedFileNames) {
+            var deferred = $q.defer();
+
+            var obj = {
+              'companyId': userState.getSelectedCompanyId(),
+              'files': selectedFileNames
+            };
+
+            $log.debug('Storage trash move called with', obj);
+
+            storageAPILoader().then(function (storageApi) {
+                return storageApi.trash.move(obj);
+              })
+              .then(function (resp) {
+                $log.debug('status storage trash move resp', resp);
+
+                deferred.resolve(resp.result);
+              })
+              .then(null, function (e) {
+                $log.error('Failed to move files to trash', e);
+                deferred.reject(e);
+              });
+
+            return deferred.promise;
+          },
+          restore: function (selectedFileNames) {
+            var deferred = $q.defer();
+
+            var obj = {
+              'companyId': userState.getSelectedCompanyId(),
+              'files': selectedFileNames
+            };
+
+            $log.debug('Storage trash restore called with', obj);
+
+            storageAPILoader().then(function (storageApi) {
+                return storageApi.trash.restore(obj);
+              })
+              .then(function (resp) {
+                $log.debug('status storage trash restore resp', resp);
+
+                deferred.resolve(resp.result);
+              })
+              .then(null, function (e) {
+                $log.error('Failed to restore files from trash', e);
+                deferred.reject(e);
+              });
+
+            return deferred.promise;
           }
         },
         startTrial: function () {
@@ -113,6 +190,33 @@ angular.module('risevision.storage.services')
             })
             .then(null, function (e) {
               $log.error('Error getting resumable upload URI', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
+
+        getSignedDownloadURI: function (file) {
+          var deferred = $q.defer();
+
+          var obj = {
+            companyId: userState.getSelectedCompanyId(),
+            fileName: encodeURIComponent(file.name),
+            fileType: file.type
+          };
+
+          $log.debug('getting signed download URI: ', obj);
+
+          storageAPILoader().then(function (storageApi) {
+              return storageApi.getSignedDownloadURI(obj);
+            })
+            .then(function (resp) {
+              $log.debug('getting signed download URI finished', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              $log.error('Error getting signed download URI', e);
               deferred.reject(e);
             });
 

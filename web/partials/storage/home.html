@@ -20,6 +20,10 @@
 
 	<search-filter filter-config="filterConfig" search="search" do-search="search.doSearch" ng-show="!trialAvailable"></search-filter>
 
+	<div ng-show="filesDetails.bucketExists">
+    <ng-include src="'partials/storage/file-actions.html'"></ng-include>
+  </div>
+
 	<ng-include src="'partials/storage/files-list.html'"></ng-include>
 
 	<div ng-show="trialAvailable">

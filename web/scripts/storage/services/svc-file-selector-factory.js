@@ -1,13 +1,10 @@
 'use strict';
 angular.module('risevision.storage.services')
   .value('STORAGE_FILE_URL', 'https://storage.googleapis.com/')
-  .value('STORAGE_CLIENT_API', 'https://www.googleapis.com/storage/v1/b/')
   .factory('fileSelectorFactory', ['$rootScope', '$window', 'storageFactory',
-    'filesFactory', 'userState', 'gadgetsApi', '$loading', 'filterFilter',
-    'STORAGE_CLIENT_API', 'STORAGE_FILE_URL',
-    function ($rootScope, $window, storageFactory, filesFactory, userState,
-      gadgetsApi, $loading, filterFilter,
-      STORAGE_CLIENT_API, STORAGE_FILE_URL) {
+    'filesFactory', 'gadgetsApi', 'filterFilter', 'STORAGE_FILE_URL',
+    function ($rootScope, $window, storageFactory, filesFactory,
+      gadgetsApi, filterFilter, STORAGE_FILE_URL) {
       var factory = {};
 
       //on all state Changes do not hold onto checkedFiles list
@@ -24,6 +21,8 @@ angular.module('risevision.storage.services')
         filesFactory.filesDetails.folderCheckedCount = 0;
         filesFactory.filesDetails.checkedItemsCount = 0;
       };
+
+      factory.resetSelections();
 
       factory.folderSelect = function (folder) {
         if (storageFactory.fileIsFolder(folder)) {
@@ -88,17 +87,16 @@ angular.module('risevision.storage.services')
       };
 
       var _getFileUrl = function (file) {
-        var bucketName = 'risemedialibrary-' + userState.getSelectedCompanyId();
-        var folderSelfLinkUrl = STORAGE_CLIENT_API + bucketName +
-          '/o?prefix=';
-        var fileUrl = file.kind === 'folder' ? folderSelfLinkUrl +
+        var fileUrl = file.kind === 'folder' ?
+          storageFactory.getFolderSelfLinkUrl() +
           encodeURIComponent(file.name) :
-          STORAGE_FILE_URL + bucketName + '/' + encodeURIComponent(file.name);
+          STORAGE_FILE_URL + storageFactory.getBucketName() + '/' +
+          encodeURIComponent(file.name);
 
         return fileUrl;
       };
 
-      var _getSelectedFiles = function () {
+      factory.getSelectedFiles = function () {
         return filesFactory.filesDetails.files.filter(function (e) {
           return e.isChecked;
         });
@@ -121,7 +119,7 @@ angular.module('risevision.storage.services')
       factory.sendFiles = function () {
         var fileUrls = [];
 
-        _getSelectedFiles().forEach(function (file) {
+        factory.getSelectedFiles().forEach(function (file) {
           var copyUrl = _getFileUrl(file);
           fileUrls.push(copyUrl);
         });

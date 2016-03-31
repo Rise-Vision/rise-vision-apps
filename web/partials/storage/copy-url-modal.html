@@ -1,0 +1,10 @@
+<form>
+  <div class="modal-body" stop-event="touchend" autofocus="autofocus">
+    <input id="okCopyButton" type="submit" value="x" class="close" ng-click="ok()" ng-hide="true"/>
+    <button type="button" class="close" ng-click="cancel()" aria-hidden="true"><i class="fa fa-times"></i></button>
+    <h5 class="ellipsed span12 text-left">Link To "{{copyFile.name}}"</h5>
+    <input type="text" class="ellipsed form-control" id="copyUrlInput" value="{{copyUrl}}" autofocus="autofocus">
+  </div>
+  <div class="modal-footer">
+  </div>
+</form>

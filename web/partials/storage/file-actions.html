@@ -1,0 +1,57 @@
+<div ng-controller="FileActionsController">
+	<div id="files-toolbar" ng-hide="fileListStatus.code === 404">
+		<div class="toolbar">
+			<div class="icon-nav">
+        <span ng-show="filesDetails.checkedItemsCount > 0">
+          <span translate="storage-client.selected-items" translate-values="{ count: filesDetails.checkedItemsCount }"></span>
+        </span>
+				<button type="button" class="btn btn-link" title="Download" ng-click="factory.downloadButtonClick()" ng-disabled="isDisabledDownloadButton()">
+          <i class="fa fa-cloud-download fa-2x" ng-class="{ 'icon-gray': isDisabledDownloadButton() }"></i>
+        </button>
+        <button type="button" class="btn btn-link" title="Copy Url" ng-click="factory.copyUrlButtonClick()" ng-hide="storageFactory.isTrashFolder()" ng-disabled="isDisabledCopyUrlButton()">
+          <i class="fa fa-link fa-2x" ng-class="{ 'icon-gray': isDisabledCopyUrlButton() }"></i>
+        </button>
+				<button type="button" class="btn btn-link" title="Move To Trash" ng-click="factory.trashButtonClick()" ng-show="!storageFactory.isTrashFolder()" ng-disabled="isDisabledTrashButton()">
+          <i class="fa fa-trash-o fa-2x" ng-class="{ 'icon-gray': isDisabledTrashButton() }"></i>
+        </button>
+        <button type="button" class="btn btn-link" title="Restore From Trash" ng-click="factory.restoreButtonClick()" ng-show="storageFactory.isTrashFolder()" ng-disabled="isDisabledRestoreButton()">
+          <i class="fa fa-trash-o fa-2x" ng-class="{ 'icon-gray': isDisabledRestoreButton() }"></i>
+          <i class="fa fa-share" ng-class="{ 'icon-gray': isDisabledRestoreButton() }"></i>
+        </button>
+				<button type="button" class="btn btn-link" title="Delete"  ng-click="factory.deleteButtonClick()" ng-show="storageFactory.isTrashFolder()" ng-disabled="isDisabledDeleteButton()">
+          <i class="fa fa-trash-o fa-2x" ng-class="{ 'icon-gray': isDisabledDeleteButton() }"></i>
+        </button>
+      </div>
+    </div>
+	</div>
+
+  <div ng-show="factory.pendingOperations.length > 0">
+    <div>
+      <div class="panel panel-info animated fadeInDown">
+        <div class="panel-heading" ng-click="factory.isPOCollapsed = !factory.isPOCollapsed">
+          <h3 class="panel-title">
+            <span ng-hide="factory.pendingOperations[0].actionFailed">{{'storage-client.pending-' + factory.pendingOperations[0].action | translate}}...</span>
+            <span ng-hide="!factory.pendingOperations[0].actionFailed">{{factory.statusDetails.message}}</span>
+            <span class="collapse-control"><i class="fa" ng-class="{false: 'fa-chevron-up', true:'fa-chevron-down'}[!factory.isPOCollapsed]"></i></span>
+          </h3>
+        </div>
+        <div class="panel-body" ng-show="!factory.isPOCollapsed">
+          <table class="table">
+            <tbody>
+              <tr ng-repeat="item in factory.pendingOperations">
+                <td ng-show="!item.actionFailed">{{'storage-client.pending-' + item.action | translate}}</td>
+                <td ng-show="item.actionFailed">{{'storage-client.failed-' + item.action | translate}}</td>
+                <td>{{item.name | trashItemFilter}}</td>
+                <td>
+                  <span class="text-danger" ng-click="factory.removePendingOperation(item)">
+                    <i class="fa fa-times-circle-o"></i> <span translate="common.lremove"></span>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
