@@ -2,11 +2,10 @@
 angular.module('risevision.storage.services')
   .factory('fileActionsFactory', ['$rootScope',
     'fileSelectorFactory', 'storageFactory', 'filesFactory', 'storage',
-    'download', 'userState', '$modal', '$translate',
+    'download', '$modal', '$translate',
     'STORAGE_FILE_URL',
     function ($rootScope, fileSelectorFactory, storageFactory, filesFactory,
-      storage, download, userState, $modal, $translate,
-      STORAGE_FILE_URL) {
+      storage, download, $modal, $translate, STORAGE_FILE_URL) {
       var factory = {};
 
       factory.statusDetails = {
@@ -72,34 +71,31 @@ angular.module('risevision.storage.services')
           (filesFactory.filesDetails.checkedItemsCount === 1 ?
             'singular' : 'plural');
 
-        $translate(message, {
-          count: filesFactory.filesDetails.checkedItemsCount
-        }).then(function (confirmationMessage) {
-          var modalInstance = $modal.open({
-            templateUrl: 'confirm-instance/confirm-modal.html',
-            controller: 'confirmInstance',
-            windowClass: 'modal-custom',
-            resolve: {
-              confirmationTitle: function () {
-                return '';
-              },
-              confirmationMessage: function () {
-                return confirmationMessage;
-              },
-              confirmationButton: function () {
-                return 'common.delete-forever';
-              },
-              cancelButton: null
-            }
-          });
-
-          modalInstance.result.then(function () {
-            // do what you need if user presses ok
-            factory.processFilesAction('delete');
-          }, function () {
-            // do what you need to do if user cancels
-          });
+        var modalInstance = $modal.open({
+          templateUrl: 'confirm-instance/confirm-modal.html',
+          controller: 'confirmInstance',
+          windowClass: 'modal-custom',
+          resolve: {
+            confirmationTitle: function () {
+              return '';
+            },
+            confirmationMessage: function () {
+              return $translate(message, {count: filesFactory.filesDetails.checkedItemsCount});
+            },
+            confirmationButton: function () {
+              return 'common.delete-forever';
+            },
+            cancelButton: null
+          }
         });
+
+        modalInstance.result.then(function () {
+          // do what you need if user presses ok
+          factory.processFilesAction('delete');
+        }, function () {
+          // do what you need to do if user cancels
+        });
+
       };
 
       var _getAPIMethod = function (action) {
@@ -171,9 +167,9 @@ angular.module('risevision.storage.services')
           });
       };
 
-      function getActivePendingOperations() {
+      factory.getActivePendingOperations = function() {
         return factory.pendingOperations.filter(function (op) {
-          return !op.failed;
+          return !op.actionFailed;
         });
       }
 

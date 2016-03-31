@@ -47,7 +47,7 @@ angular.module('risevision.storage.services')
             $log.debug('Storage delete called with', obj);
 
             storageAPILoader().then(function (storageApi) {
-                return storageApi.trash.move(obj);
+                return storageApi.files.delete(obj);
               })
               .then(function (resp) {
                 $log.debug('status storage delete resp', resp);

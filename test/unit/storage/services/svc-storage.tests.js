@@ -35,6 +35,50 @@ describe('service: storage:', function() {
                 def.reject("API Failed");
               }
               return def.promise;
+            },
+            delete: function(obj) {
+              expect(obj).to.be.ok;
+              storageApiRequestObj = obj;
+            
+              var def = Q.defer();
+              if (returnResult) {
+                def.resolve({
+                  result: {}
+                });
+              } else {
+                def.reject("API Failed");
+              }
+              return def.promise;
+            }
+          },
+          trash: {
+            move: function(obj) {
+              expect(obj).to.be.ok;
+              storageApiRequestObj = obj;
+            
+              var def = Q.defer();
+              if (returnResult) {
+                def.resolve({
+                  result: {}
+                });
+              } else {
+                def.reject("API Failed");
+              }
+              return def.promise;
+            },
+            restore: function(obj) {
+              expect(obj).to.be.ok;
+              storageApiRequestObj = obj;
+            
+              var def = Q.defer();
+              if (returnResult) {
+                def.resolve({
+                  result: {}
+                });
+              } else {
+                def.reject("API Failed");
+              }
+              return def.promise;
             }
           },
           startTrial: function(obj) {
@@ -143,6 +187,90 @@ describe('service: storage:', function() {
       returnResult = false;
       
       storage.files.get({})
+        .then(function(result) {
+          done(result);
+        })
+        .then(null, function(error) {
+          expect(error).to.deep.equal('API Failed');
+          done();
+        })
+        .then(null,done);
+    });
+  });
+
+  describe('files.delete:',function(){
+    it('should delete files',function(done){
+      storage.files.delete(['file1','file2'])
+      .then(function(result){
+        expect(result).to.be.truely;
+        expect(storageApiRequestObj.files).to.deep.equal(['file1','file2']);
+        expect(storageApiRequestObj.companyId).to.equal('TEST_COMP_ID');
+
+        done();
+      })
+      .then(null,done);
+    });
+
+    it('should handle failure',function(done){
+      returnResult = false;
+      
+      storage.files.delete({})
+        .then(function(result) {
+          done(result);
+        })
+        .then(null, function(error) {
+          expect(error).to.deep.equal('API Failed');
+          done();
+        })
+        .then(null,done);
+    });
+  });
+
+  describe('trash.move:',function(){
+    it('should move files to trash',function(done){
+      storage.trash.move(['file1','file2'])
+      .then(function(result){
+        expect(result).to.be.truely;
+        expect(storageApiRequestObj.files).to.deep.equal(['file1','file2']);
+        expect(storageApiRequestObj.companyId).to.equal('TEST_COMP_ID');
+
+        done();
+      })
+      .then(null,done);
+    });
+
+    it('should handle failure',function(done){
+      returnResult = false;
+      
+      storage.trash.move({})
+        .then(function(result) {
+          done(result);
+        })
+        .then(null, function(error) {
+          expect(error).to.deep.equal('API Failed');
+          done();
+        })
+        .then(null,done);
+    });
+  });
+
+  describe('trash.restore:',function(){
+    it('should restore files from trash',function(done){
+      storage.trash.restore(['file1','file2'])
+      .then(function(result){
+        expect(result).to.be.truely;
+        expect(storageApiRequestObj.files).to.deep.equal(['file1','file2']);
+        expect(storageApiRequestObj.companyId).to.equal('TEST_COMP_ID');
+
+        done();
+      })
+      .then(null,done);
+    });
+
+    it('should handle failure',function(done){
+      returnResult = false;
+      
+      storage.trash.restore({})
         .then(function(result) {
           done(result);
         })

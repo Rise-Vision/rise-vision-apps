@@ -9,6 +9,10 @@ var StorageHomePage = function() {
   var uploadPanel = element(by.css('.upload-panel'));
   
   var copyUrlButton = element(by.id('fileCopyUrlButton'));
+  var moveToTrashButton = element(by.id('moveToTrashButton'));
+  var restoreFromTrashButton = element(by.id('restoreFromTrashButton'));
+  var deleteForeverButton = element(by.id('deleteForeverButton'));
+  var confirmDeleteButton = element(by.id('confirmForm')).element(by.buttonText('Delete Forever'));
 
   var searchInput = element(by.id('storageSelectorSearchInput'));  
 
@@ -16,8 +20,19 @@ var StorageHomePage = function() {
   var storageFileList = element(by.css('.storage-app .scrollable-list'));
   var fileListRows = element.all(by.css('#storageFileList > tbody > tr'));
 
+  var pendingOperationsPanel = element(by.id('pendingOperationsPanel'));
+
+  this.filterFileList = function(query) {
+    this.getSearchInput().clear();
+    this.getSearchInput().sendKeys(query);
+  }
+
   this.getStorageAppContainer = function() {
     return storageAppContainer;
+  };
+
+  this.getPendingOperationsPanel = function() {
+    return pendingOperationsPanel;
   };
 
   this.getNewFolderButton = function() {
@@ -42,6 +57,22 @@ var StorageHomePage = function() {
   
   this.getCopyUrlButton = function() {
     return copyUrlButton;
+  }
+
+  this.getMoveToTrashButton = function() {
+    return moveToTrashButton;
+  }
+
+  this.getRestoreFromTrashButton = function() {
+    return restoreFromTrashButton;
+  }
+
+  this.getDeleteForeverButton = function() {
+    return deleteForeverButton;
+  }
+
+  this.getConfirmDeleteButton = function() {
+    return confirmDeleteButton;
   }
 
   this.getSearchInput = function(){
