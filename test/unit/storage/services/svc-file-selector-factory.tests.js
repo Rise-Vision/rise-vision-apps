@@ -54,8 +54,6 @@ describe('service: fileSelectorFactory:', function() {
     storageFactory.selectorType = 'single-file';
     storageFactory.storageFull = true;
     
-    fileSelectorFactory.resetSelections();
-    
     $broadcastSpy = sinon.spy($rootScope, '$broadcast');
   });
 
@@ -66,13 +64,19 @@ describe('service: fileSelectorFactory:', function() {
     expect(fileSelectorFactory.folderSelect).to.be.a('function');    
     expect(fileSelectorFactory.fileCheckToggled).to.be.a('function');    
     expect(fileSelectorFactory.selectAllCheckboxes).to.be.a('function');
+    expect(fileSelectorFactory.getSelectedFiles).to.be.a('function');
     expect(fileSelectorFactory.sendFiles).to.be.a('function');
     expect(fileSelectorFactory.onFileSelect).to.be.a('function');
   });
   
+  it('selections should be initialized', function() {
+    expect(filesFactory.filesDetails.checkedCount).to.be.equal(0);
+    expect(filesFactory.filesDetails.folderCheckedCount).to.be.equal(0);
+    expect(filesFactory.filesDetails.checkedItemsCount).to.be.equal(0);
+  });
+  
   it('should resetSelections on $state change', function(done) {
     var resetSelectionsSpy = sinon.spy(fileSelectorFactory, 'resetSelections');
-
     $rootScope.$broadcast('$stateChangeStart');
     
     setTimeout(function() {
@@ -208,6 +212,16 @@ describe('service: fileSelectorFactory:', function() {
       expect(filesFactory.filesDetails.checkedItemsCount).to.be.equal(0);
     });
   });
+  
+  it('getSelectedFiles: ', function() {
+    fileSelectorFactory.fileCheckToggled(filesFactory.filesDetails.files[1]);
+    fileSelectorFactory.fileCheckToggled(filesFactory.filesDetails.files[2]);
+
+    expect(fileSelectorFactory.getSelectedFiles()).to.deep.equal([
+      filesFactory.filesDetails.files[1], 
+      filesFactory.filesDetails.files[2]
+    ]);
+  })
   
   it('sendFiles: ', function() {
     storageFactory.selectorType = 'multiple-file';

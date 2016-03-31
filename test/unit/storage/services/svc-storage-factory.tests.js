@@ -9,7 +9,16 @@ describe('service: storageFactory:', function() {
         open: function(){}
       };
     });
+    $provide.service('userState', function() {
+      return {
+        getSelectedCompanyId: function() {
+          return 'companyId';
+        },
+        _restoreState: function() {}
+      };
+    });
   }));
+
   beforeEach(function(){
     
     inject(function($injector){  
@@ -30,9 +39,22 @@ describe('service: storageFactory:', function() {
     expect(storageFactory.isMultipleFileSelector()).to.be.false;
     expect(storageFactory.isSingleFolderSelector()).to.be.false;
     
+    expect(storageFactory.getBucketName).to.be.a('function');
+    expect(storageFactory.getFolderSelfLinkUrl).to.be.a('function');
+    
     expect(storageFactory.fileIsCurrentFolder).to.be.a('function');
     expect(storageFactory.fileIsFolder).to.be.a('function');
     expect(storageFactory.fileIsTrash).to.be.a('function');
+    
+    expect(storageFactory.isTrashFolder).to.be.a('function');
+  });
+  
+  it('getBucketName: ', function() {
+    expect(storageFactory.getBucketName()).to.equal('risemedialibrary-companyId');
+  });
+  
+  it('getFolderSelfLinkUrl: ', function() {
+    expect(storageFactory.getFolderSelfLinkUrl()).to.equal('https://www.googleapis.com/storage/v1/b/risemedialibrary-companyId/o?prefix=');
   });
 
   it('fileIsCurrentFolder: ', function() {
@@ -53,6 +75,17 @@ describe('service: storageFactory:', function() {
   it('fileIsTrash: ', function() {
     expect(storageFactory.fileIsTrash({name: '--TRASH--/'})).to.be.true;
     expect(storageFactory.fileIsTrash({name: 'image.jpg'})).to.be.false;
+  });
+  
+  it('isTrashFolder: ', function() {
+    storageFactory.folderPath = '';
+    expect(storageFactory.isTrashFolder()).to.be.false;
+    
+    storageFactory.folderPath = 'someFolder/';
+    expect(storageFactory.isTrashFolder()).to.be.false;
+
+    storageFactory.folderPath = '--TRASH--/';
+    expect(storageFactory.isTrashFolder()).to.be.true;
   });
 
   describe('addFolder:', function(){

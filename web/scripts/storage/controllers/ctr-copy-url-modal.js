@@ -2,8 +2,7 @@
 
 angular.module('risevision.storage.controllers')
   .controller('CopyUrlModalController', ['$scope', 'storageFactory',
-    '$modalInstance', '$timeout', 'STORAGE_FILE_URL',
-    'copyFile',
+    '$modalInstance', '$timeout', 'STORAGE_FILE_URL', 'copyFile',
     function ($scope, storageFactory, $modalInstance, $timeout,
       STORAGE_FILE_URL, copyFile) {
       $scope.copyFile = copyFile;
@@ -25,12 +24,8 @@ angular.module('risevision.storage.controllers')
         angular.element('#copyUrlInput').focus();
       }, 0);
 
-      $scope.ok = function () {
-        $modalInstance.close();
-      };
-
       $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $modalInstance.close();
       };
     }
   ]);

@@ -37,6 +37,9 @@ describe('controller: Files List', function() {
         },
         fileIsTrash: function (file) {
           return file.name === '--TRASH--/';
+        },
+        isTrashFolder: function() {
+          return false;
         }
       };
     });
@@ -97,7 +100,6 @@ describe('controller: Files List', function() {
     expect($scope.fileClick).to.be.a('function');
     expect($scope.currentDecodedFolder).to.be.a('function');
     expect($scope.dateModifiedOrderFunction).to.be.a('function');
-    expect($scope.isTrashFolder).to.be.a('function');
     expect($scope.fileNameOrderFunction).to.be.a('function');
     expect($scope.orderByAttribute).to.be.a('function');
     expect($scope.fileExtOrderFunction).to.be.a('function');
@@ -186,17 +188,6 @@ describe('controller: Files List', function() {
     expect($scope.dateModifiedOrderFunction({})).to.equal('');
     expect($scope.dateModifiedOrderFunction({updated: {value: undefined}})).to.be.undefined;
     expect($scope.dateModifiedOrderFunction({updated: {value: 'timestamp'}})).to.equal('timestamp');
-  });
-  
-  it('isTrashFolder: ', function() {
-    $scope.storageFactory.folderPath = '';
-    expect($scope.isTrashFolder()).to.be.false;
-    
-    $scope.storageFactory.folderPath = 'someFolder/';
-    expect($scope.isTrashFolder()).to.be.false;
-
-    $scope.storageFactory.folderPath = '--TRASH--/';
-    expect($scope.isTrashFolder()).to.be.true;
   });
   
   it('fileNameOrderFunction: ', function() {
