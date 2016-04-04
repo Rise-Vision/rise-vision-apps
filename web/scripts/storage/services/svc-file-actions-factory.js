@@ -1,11 +1,11 @@
 'use strict';
 angular.module('risevision.storage.services')
   .factory('fileActionsFactory', ['$rootScope',
-    'fileSelectorFactory', 'storageFactory', 'filesFactory', 'storage',
-    'download', '$modal', '$translate',
+    'fileSelectorFactory', 'filesFactory', 'storage',
+    'downloadFactory', '$modal', '$translate',
     'STORAGE_FILE_URL',
-    function ($rootScope, fileSelectorFactory, storageFactory, filesFactory,
-      storage, download, $modal, $translate, STORAGE_FILE_URL) {
+    function ($rootScope, fileSelectorFactory, filesFactory,
+      storage, downloadFactory, $modal, $translate, STORAGE_FILE_URL) {
       var factory = {};
 
       factory.statusDetails = {
@@ -16,8 +16,8 @@ angular.module('risevision.storage.services')
       factory.isPOCollapsed = true;
 
       factory.downloadButtonClick = function () {
-        download.downloadFiles(fileSelectorFactory.getSelectedFiles(),
-          storageFactory.getBucketName(), 100);
+        downloadFactory.downloadFiles(fileSelectorFactory.getSelectedFiles(),
+          100);
       };
 
       factory.deleteButtonClick = function () {

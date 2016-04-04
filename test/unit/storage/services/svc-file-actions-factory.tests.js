@@ -13,14 +13,6 @@ describe('service: fileActionsFactory', function() {
       };
     });
 
-    $provide.factory('storageFactory',function () {
-      return storageFactory = {
-        getBucketName: function() {
-          return 'bucketName';
-        }
-      };
-    });
-
     $provide.factory('filesFactory',function () {
       return filesFactory = {
         filesDetails: {
@@ -44,8 +36,8 @@ describe('service: fileActionsFactory', function() {
       };
     });
 
-    $provide.factory('download',function () {
-      return download = {
+    $provide.factory('downloadFactory',function () {
+      return downloadFactory = {
         downloadFiles: function(){}
       };
     });
@@ -57,8 +49,8 @@ describe('service: fileActionsFactory', function() {
     });
 
   }));
-  var fileActionsFactory, fileSelectorFactory, storageFactory, storage, filesFactory, 
-    download, $modal, $rootScope, selectedFiles, apiResponse;
+  var fileActionsFactory, fileSelectorFactory, storage, filesFactory, 
+    downloadFactory, $modal, $rootScope, selectedFiles, apiResponse;
   beforeEach(function(){        
     inject(function($injector){
       selectedFiles = null;
@@ -87,11 +79,11 @@ describe('service: fileActionsFactory', function() {
 
   describe('downloadButtonClick:', function(){
     it('should download selected files',function(){
-      var spy = sinon.spy(download,'downloadFiles');
+      var spy = sinon.spy(downloadFactory,'downloadFiles');
       selectedFiles = ['file1', 'file2']
       fileActionsFactory.downloadButtonClick();
 
-      spy.should.have.been.calledWith(selectedFiles,'bucketName',100);
+      spy.should.have.been.calledWith(selectedFiles,100);
     });
   });
 

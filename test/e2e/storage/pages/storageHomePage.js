@@ -8,6 +8,7 @@ var StorageHomePage = function() {
   var uploadInput = element(by.id('upload-files'));
   var uploadPanel = element(by.css('.upload-panel'));
   
+  var downloadButton = element(by.id('fileDownloadButton'));
   var copyUrlButton = element(by.id('fileCopyUrlButton'));
   var moveToTrashButton = element(by.id('moveToTrashButton'));
   var restoreFromTrashButton = element(by.id('restoreFromTrashButton'));
@@ -53,6 +54,10 @@ var StorageHomePage = function() {
 
   this.getUploadPanel = function() {
     return uploadPanel;
+  };
+  
+  this.getDownloadButton = function() {
+    return downloadButton;
   };
   
   this.getCopyUrlButton = function() {

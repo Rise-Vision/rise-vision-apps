@@ -168,6 +168,32 @@ angular.module('risevision.storage.services')
           return deferred.promise;
         },
 
+        getFolderContents: function (folderName) {
+          var deferred = $q.defer();
+
+          var obj = {
+            'companyId': userState.getSelectedCompanyId(),
+            'folderName': folderName
+          };
+
+          $log.debug('Retrieving folder contents: ', obj);
+
+          storageAPILoader().then(function (storageApi) {
+              return storageApi.getFolderContents(obj);
+            })
+            .then(function (resp) {
+              $log.debug('Folder contents retrieved', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              $log.error('Failed to retrieve folder contents', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
+
         getResumableUploadURI: function (fileName, fileType) {
           var deferred = $q.defer();
 

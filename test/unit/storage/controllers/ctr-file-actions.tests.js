@@ -21,6 +21,9 @@ describe('controller: File Actions', function() {
         }
       }
     });
+    $provide.service('downloadFactory', function() {
+      return {};
+    });
     $provide.service('$window',function(){
       return $window = {
           addEventListener: function() {}

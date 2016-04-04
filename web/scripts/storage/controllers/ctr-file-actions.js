@@ -2,11 +2,13 @@
 
 angular.module('risevision.storage.controllers')
   .controller('FileActionsController', ['$scope', 'fileActionsFactory',
-    'filesFactory', 'storageFactory', '$window', '$translate',
+    'filesFactory', 'storageFactory', 'downloadFactory', 
+    '$window', '$translate',
     function ($scope, fileActionsFactory, filesFactory, storageFactory,
-      $window, $translate) {
+      downloadFactory, $window, $translate) {
       $scope.factory = fileActionsFactory;
       $scope.storageFactory = storageFactory;
+      $scope.downloadFactory = downloadFactory;
 
       $scope.filesDetails = filesFactory.filesDetails;
       $scope.fileListStatus = filesFactory.statusDetails;

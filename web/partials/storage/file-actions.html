@@ -54,4 +54,19 @@
       </div>
     </div>
   </div>
+	<div class="content-box" ng-show="downloadFactory.activeFolderDownloads.length > 0">
+	  <div class="content-box-body">
+	    <div class="row" ng-repeat="folder in downloadFactory.activeFolderDownloads">
+	      <div class="col-sm-12">
+	        <span>
+	          <i class="fa fa-file-archive-o"></i> {{folder.name}}
+	        </span>
+	        <a class="add-left" href="#" ng-click="downloadFactory.cancelFolderDownload(folder)"><span translate="common.cancel"></span></a>
+	        <span class="text-muted add-left">
+	          <i class="fa fa-spinner fa-spin fa-lg"></i> {{folder.currentFile}}
+	        </span> 
+	      </div>
+	    </div>
+	  </div>
+	</div>
 </div>
