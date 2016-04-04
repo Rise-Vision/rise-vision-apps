@@ -20,7 +20,6 @@ angular.module('risevision.storage.controllers')
       $window.addEventListener('beforeunload', function (e) {
         if (fileActionsFactory.getActivePendingOperations().length > 0) {
           (e || window.event).returnValue = $scope.leavePageMessage;
-
           return $scope.leavePageMessage;
         }
       });
@@ -35,11 +34,5 @@ angular.module('risevision.storage.controllers')
         function () {
           return filesFactory.filesDetails.checkedItemsCount < 1;
         };
-
-      angular.element('#deleteForm').submit(function (event) {
-        event.preventDefault();
-        $scope.deleteButtonClick();
-      });
-
     }
   ]);

@@ -11,21 +11,21 @@
         <button id="fileCopyUrlButton" type="button" class="btn btn-link" title="Copy Url" ng-click="factory.copyUrlButtonClick()" ng-hide="storageFactory.isTrashFolder()" ng-disabled="isDisabledCopyUrlButton()">
           <i class="fa fa-link fa-2x" ng-class="{ 'icon-gray': isDisabledCopyUrlButton() }"></i>
         </button>
-				<button type="button" class="btn btn-link" title="Move To Trash" ng-click="factory.trashButtonClick()" ng-show="!storageFactory.isTrashFolder()" ng-disabled="isDisabledTrashButton()">
+				<button id="moveToTrashButton" type="button" class="btn btn-link" title="Move To Trash" ng-click="factory.trashButtonClick()" ng-show="!storageFactory.isTrashFolder()" ng-disabled="isDisabledTrashButton()">
           <i class="fa fa-trash-o fa-2x" ng-class="{ 'icon-gray': isDisabledTrashButton() }"></i>
         </button>
-        <button type="button" class="btn btn-link" title="Restore From Trash" ng-click="factory.restoreButtonClick()" ng-show="storageFactory.isTrashFolder()" ng-disabled="isDisabledRestoreButton()">
+        <button id="restoreFromTrashButton" type="button" class="btn btn-link" title="Restore From Trash" ng-click="factory.restoreButtonClick()" ng-show="storageFactory.isTrashFolder()" ng-disabled="isDisabledRestoreButton()">
           <i class="fa fa-trash-o fa-2x" ng-class="{ 'icon-gray': isDisabledRestoreButton() }"></i>
           <i class="fa fa-share" ng-class="{ 'icon-gray': isDisabledRestoreButton() }"></i>
         </button>
-				<button type="button" class="btn btn-link" title="Delete"  ng-click="factory.deleteButtonClick()" ng-show="storageFactory.isTrashFolder()" ng-disabled="isDisabledDeleteButton()">
+				<button id="deleteForeverButton" type="button" class="btn btn-link" title="Delete"  ng-click="factory.deleteButtonClick()" ng-show="storageFactory.isTrashFolder()" ng-disabled="isDisabledDeleteButton()">
           <i class="fa fa-trash-o fa-2x" ng-class="{ 'icon-gray': isDisabledDeleteButton() }"></i>
         </button>
       </div>
     </div>
 	</div>
 
-  <div ng-show="factory.pendingOperations.length > 0">
+  <div id="pendingOperationsPanel" ng-show="factory.pendingOperations.length > 0">
     <div>
       <div class="panel panel-info animated fadeInDown">
         <div class="panel-heading" ng-click="factory.isPOCollapsed = !factory.isPOCollapsed">
