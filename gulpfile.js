@@ -47,6 +47,7 @@ var unitTestFiles = [
   "web/bower_components/rv-common-app-components/dist/js/stop-event.js",
   "node_modules/widget-tester/mocks/translate-mock.js",
   "node_modules/widget-tester/mocks/segment-analytics-mock.js",
+  "web/scripts/storage-selector-app.js",
   "web/scripts/app.js",
   "web/scripts/**/*.js",
   "test/unit/**/*.tests.js"
@@ -150,19 +151,18 @@ gulp.task("lint", function() {
 });
 
 gulp.task("html", ["lint"], function () {
-  return gulp.src(['./web/index.html'])
+  return gulp.src(['./web/index.html', './web/storage-selector.html'])
     .pipe(usemin({
-      css: [minifyCss(), 'concat'],
-      html: [minifyHtml({empty: true})],
-      js: [uglify({
+      css: [minifyCss, 'concat'],
+      html: [function() {return minifyHtml({empty: true})} ],
+      js: [function(){ return uglify({
         mangle:true,
         outSourceMap: false // source map generation doesn't seem to function correctly
-      })]
+      })}]
     }))
     .pipe(gulp.dest("dist/"))
     .on('error',function(e){
       console.error(String(e));
-
     })
 });
 

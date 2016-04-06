@@ -67,6 +67,7 @@ describe('service: fileSelectorFactory:', function() {
     expect(fileSelectorFactory.getSelectedFiles).to.be.a('function');
     expect(fileSelectorFactory.sendFiles).to.be.a('function');
     expect(fileSelectorFactory.onFileSelect).to.be.a('function');
+    expect(fileSelectorFactory.cancel).to.be.a('function');
   });
   
   it('selections should be initialized', function() {
@@ -299,6 +300,28 @@ describe('service: fileSelectorFactory:', function() {
           
         // postMessage receives an array of file paths and a '*' as second parameter
         postMessageSpy.should.have.been.calledWith(['https://storage.googleapis.com/risemedialibrary-companyId/test%2Ffile2'], '*');
+        postMessageSpy.restore();
+      });
+    });
+
+    describe('cancel:',function(){
+      it('should broadcast cancel action',function(){
+        fileSelectorFactory.cancel();
+
+        $broadcastSpy.should.have.been.calledWith('CancelFileSelect');
+      });
+
+      it('should postMessage/send rpc',function(){
+        storageFactory.storageIFrame = true;
+        var rpcCallSpy = sinon.spy(gadgetsApi.rpc, 'call');
+        var postMessageSpy = sinon.spy($window.parent, "postMessage");
+
+        fileSelectorFactory.cancel();
+
+        rpcCallSpy.should.have.been.calledWith('', 'rscmd_closeSettings', null);
+          
+        postMessageSpy.should.have.been.calledWith("close", "*");
+        postMessageSpy.restore();
       });
     });
 

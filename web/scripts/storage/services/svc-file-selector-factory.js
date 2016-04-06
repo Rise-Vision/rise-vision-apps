@@ -116,6 +116,15 @@ angular.module('risevision.storage.services')
         }
       };
 
+      factory.cancel = function() {
+        if (storageFactory.storageIFrame) {
+          gadgetsApi.rpc.call("", "rscmd_closeSettings", null);
+          $window.parent.postMessage("close", "*");
+        } else {
+          $rootScope.$broadcast('CancelFileSelect');
+        }
+      }
+
       factory.sendFiles = function () {
         var fileUrls = [];
 

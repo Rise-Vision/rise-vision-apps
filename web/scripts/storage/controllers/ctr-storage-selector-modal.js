@@ -17,5 +17,9 @@ angular.module('risevision.storage.controllers')
         }
       });
 
+      $scope.$on('CancelFileSelect', function (event) {
+        $scope.dismiss();
+      });
+
     }
   ]);

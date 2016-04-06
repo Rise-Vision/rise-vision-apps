@@ -14,7 +14,13 @@ var StorageSelectorModalPage = function() {
   var searchInput = element(by.id('storageSelectorSearchInput'));  
 
   var loader = element(by.xpath('//div[@spinner-key="_rv-global-spinner"]'));
+  var storageFileList = element(by.css('.storage-app .scrollable-list'));
   var fileListRows = element.all(by.css('#storageFileList > tbody > tr'));
+
+  this.filterFileList = function(query) {
+    this.getSearchInput().clear();
+    this.getSearchInput().sendKeys(query);
+  }
 
   this.getStorageSelectorModal = function() {
     return storageSelectorModal;
@@ -58,6 +64,10 @@ var StorageSelectorModalPage = function() {
 
   this.getFileListRows = function() {
     return fileListRows;
+  }
+
+  this.getStorageFileList = function() {
+    return storageFileList;
   }
 
   this.getLoader = function() {

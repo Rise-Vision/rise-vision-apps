@@ -80,7 +80,9 @@ angular.module('risevision.storage.services')
               return '';
             },
             confirmationMessage: function () {
-              return $translate(message, {count: filesFactory.filesDetails.checkedItemsCount});
+              return $translate(message, {
+                count: filesFactory.filesDetails.checkedItemsCount
+              });
             },
             confirmationButton: function () {
               return 'common.delete-forever';
@@ -167,11 +169,11 @@ angular.module('risevision.storage.services')
           });
       };
 
-      factory.getActivePendingOperations = function() {
+      factory.getActivePendingOperations = function () {
         return factory.pendingOperations.filter(function (op) {
           return !op.actionFailed;
         });
-      }
+      };
 
       return factory;
     }

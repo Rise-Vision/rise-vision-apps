@@ -48,6 +48,8 @@ var HomeScenarios = function() {
       it('should enable button when a file is clicked',function(){
         expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
         
+        storageHomePage.filterFileList("package.json");
+        
         filesListPage.getFileItems().get(0).click();
         
         expect(filesListPage.getFileItems().get(0).getAttribute('class')).to.eventually.contain('active');

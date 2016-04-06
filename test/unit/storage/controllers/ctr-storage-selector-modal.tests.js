@@ -62,4 +62,14 @@ describe('controller: Storage Selector Modal', function() {
     }, 10);
   });
 
+  it('CancelFileSelect should dismiss modal', function(done) {
+    
+    $scope.$broadcast('CancelFileSelect');
+    
+    setTimeout(function() {
+      $modalInstanceDismissSpy.should.have.been.called;      
+      done()
+    }, 10);
+  });
+
 });

@@ -17,10 +17,12 @@
       'bower_components/rv-common-i18n/dist/locales/translation_')
     .constant('LOCALES_SUFIX', '.json');
 
+  angular.module('risevision.common.config')
+    .value('CORE_URL', 'https://rvacore-test.appspot.com/_ah/api'); // override default core value   
+
   angular.module('risevision.apps.config', [])
     .value('STORAGE_API_ROOT',
       'https://storage-dot-rvacore-test.appspot.com/_ah/api')
-    .value('CORE_URL', 'https://rvacore-test.appspot.com/_ah/api') // override default core value
     .value('STORE_ENDPOINT_URL',
       'https://store-dot-rvacore-test.appspot.com/_ah/api') // override default Store server value
     .value('STORE_SERVER_URL', 'https://store-dot-rvacore-test.appspot.com/')

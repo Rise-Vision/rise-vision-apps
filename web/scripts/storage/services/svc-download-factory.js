@@ -1,7 +1,7 @@
 /* globals JSZip */
 'use strict';
 angular.module('risevision.storage.services')
-  .factory('downloadFactory', ['storageFactory', 'storage', 'fileRetriever', 
+  .factory('downloadFactory', ['storageFactory', 'storage', 'fileRetriever',
     '$q', '$log', '$timeout', '$window', '$stateParams',
     function (storageFactory, storage, fileRetriever,
       $q, $log, $timeout, $window, $stateParams) {
@@ -42,7 +42,7 @@ angular.module('risevision.storage.services')
           }
         });
       };
-      
+
       var downloadBlob = function (blob, fileName) {
         var a = $window.document.createElement('a');
         a.href = $window.URL.createObjectURL(blob);
@@ -58,50 +58,50 @@ angular.module('risevision.storage.services')
         svc.activeFolderDownloads.push(folder);
 
         storage.getFolderContents(folder.name).then(function (resp) {
-          var zip = new $window.JSZip();
-          var promises = [];
+            var zip = new $window.JSZip();
+            var promises = [];
 
-          resp.items.forEach(function (file) {
-            if (!folder.cancelled) {
-              if (file.folder) {
-                zip.folder(file.objectId);
-              } else {
-                promises.push(fileRetriever.retrieveFile(
-                  file.signedURL, file).then(function (response) {
-                  folder.currentFile = file.objectId;
+            resp.items.forEach(function (file) {
+              if (!folder.cancelled) {
+                if (file.folder) {
+                  zip.folder(file.objectId);
+                } else {
+                  promises.push(fileRetriever.retrieveFile(
+                    file.signedURL, file).then(function (response) {
+                    folder.currentFile = file.objectId;
 
-                  return $q.when(response);
-                }));
+                    return $q.when(response);
+                  }));
+                }
               }
-            }
-          });
+            });
 
-          return $q.all(promises).then(function (responses) {
-            if (!folder.cancelled) {
-              responses.forEach(function (response) {
-                zip.file(response.userData.objectId, response.data, {
-                  binary: true
+            return $q.all(promises).then(function (responses) {
+              if (!folder.cancelled) {
+                responses.forEach(function (response) {
+                  zip.file(response.userData.objectId, response.data, {
+                    binary: true
+                  });
                 });
-              });
 
-              var blob = zip.generate({
-                type: 'blob'
-              });
+                var blob = zip.generate({
+                  type: 'blob'
+                });
 
-              svc.activeFolderDownloads.splice(svc.activeFolderDownloads
-                .indexOf(folder), 1);
+                svc.activeFolderDownloads.splice(svc.activeFolderDownloads
+                  .indexOf(folder), 1);
 
-              downloadBlob(blob, folder.name.substr(0, folder.name
-                .length - 1) + '.zip');
-            }
+                downloadBlob(blob, folder.name.substr(0, folder.name
+                  .length - 1) + '.zip');
+              }
+            });
+          })
+          .then(null, function (e) {
+            $log.error('Failed to download folder', e);
+
+            svc.activeFolderDownloads.splice(svc.activeFolderDownloads
+              .indexOf(folder), 1);
           });
-        })
-        .then(null, function (e) {
-          $log.error('Failed to download folder', e);
-
-          svc.activeFolderDownloads.splice(svc.activeFolderDownloads
-            .indexOf(folder), 1);
-        });
       };
 
       svc.downloadFiles = function (files, delay) {
