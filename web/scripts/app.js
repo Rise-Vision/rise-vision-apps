@@ -406,8 +406,8 @@ angular.module('risevision.apps', [
 
     }
   ])
-  .run(['$rootScope', '$state', 'userState',
-    function ($rootScope, $state, userState) {
+  .run(['$rootScope', '$state',
+    function ($rootScope, $state) {
 
       $rootScope.$on('risevision.user.signedOut', function () {
         $state.go('apps.launcher.unauthorized');

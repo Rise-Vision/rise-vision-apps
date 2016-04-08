@@ -164,7 +164,7 @@ describe('service: downloadFactory:', function() {
           expect(downloadFactory.activeFolderDownloads.length).to.equal(0);
 
           done();
-        }, 30);
+        }, 100);
       });
       
       it('should catch download failure', function(done) {

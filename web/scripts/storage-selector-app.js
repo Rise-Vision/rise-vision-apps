@@ -13,6 +13,7 @@ angular.module('risevision.apps.storage.storage-selector', [
     'risevision.widget.common',
     'risevision.common.loading',
     'risevision.common.i18n',
+    'risevision.apps.partials',
     'risevision.apps.config',
     'risevision.apps.services',
     'risevision.apps.controllers',
@@ -40,12 +41,11 @@ angular.module('risevision.apps.storage.storage-selector', [
         template: '<div class="website" ui-view></div>'
       })
 
-      .state('apps.launcher.unauthorized', {
-        templateUrl: 'partials/launcher/login.html'
-      })
-
       .state('apps.launcher.unregistered', {
-        templateUrl: 'partials/launcher/signup.html'
+        templateProvider: ['$templateCache', function ($templateCache) {
+          return $templateCache.get(
+            'partials/launcher/signup.html');
+        }]
       })
 
       // storage
@@ -56,9 +56,19 @@ angular.module('risevision.apps.storage.storage-selector', [
           'off-canvas-content></div>'
       })
 
+      .state('apps.storage.unauthorized', {
+        templateProvider: ['$templateCache', function ($templateCache) {
+          return $templateCache.get(
+            'partials/storage/login.html');
+        }]
+      })
+
       .state('apps.storage.home', {
         url: '/',
-        templateUrl: 'partials/storage/storage-modal.html',
+        templateProvider: ['$templateCache', function ($templateCache) {
+          return $templateCache.get(
+            'partials/storage/storage-modal.html');
+        }],
         controller: 'StorageSelectorModalController',
         resolve: {
           '$modalInstance': [function () {
@@ -67,14 +77,23 @@ angular.module('risevision.apps.storage.storage-selector', [
               dismiss: function () {}
             };
           }],
-          canAccessApps: ['canAccessApps',
-            function (canAccessApps) {
-              return canAccessApps();
+          canAccessStorage: ['canAccessStorage',
+            function (canAccessStorage) {
+              return canAccessStorage();
             }
           ]
         }
       });
 
+    }
+  ])
+  .run(['$rootScope', '$state',
+    function ($rootScope, $state) {
+      $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
+        $state.go('apps.storage.home', null, {
+          reload: true
+        });
+      });
     }
   ])
   .run(['storageFactory', 'SELECTOR_TYPES', '$location',
