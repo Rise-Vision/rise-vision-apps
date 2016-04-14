@@ -1,12 +1,9 @@
 <div class="modal-header">
-	<button class="close"><i class="fa fa-times"></i></button>
-	<h3 class="modal-title">Google Spreadsheet Settings</h3>
+    <button class="close"><i class="fa fa-times"></i></button>
+    <h3 class="modal-title">Google Spreadsheet Settings</h3>
 </div>
 
 <div class="modal-body">
-
-
-
 
   <h4>Spreadsheet</h4>
   <div class="form-group">
@@ -119,9 +116,174 @@
   </div><!--row-->
   <hr>
 
-</div><!--modal-body-->
+   <div class="form-group">
+        <div class="input-group">
+            <input class="form-control" type="text" placeholder="No Spreadsheet Selected"></input>
+            <a href="#" class="btn btn-primary input-group-addon">Select Spreadsheet</a>
+        </div>
+    </div>
+    <div class="section">
+        <h5>Columns</h5>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="columns" class="control-label ng-binding">Select Columns To Format</label>
+                    <select id="column-selector" class="form-control">
+                    <option value="" selected="selected" label="">Select A Column</option>
+                        <option value="" label="">Column A</option>
+                         <option value="" label="">Column B</option>
+                          <option value="" label="">Column C</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel-group" id="accordion" role="tablist">
+                    <!-- ngRepeat: column in columns -->
+                    <column-setting column="column">
+                        <div class="panel panel-default">
+                            <div class="collapse-panel panel-heading">
+                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed"> Key </a>
+                                <a href="" class="fa fa-minus-circle fa-lg remove-column-button"></a>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                <div class="panel-body">
+                                    <div class="checkbox">
+                                      <label>
+                                        <input name="layoutDefault" type="checkbox"> Column contains Numeric data
+                                      </label>
+                                    </div>
 
+                                    <!-- header -->
+                                    <div class="row">
+                                        <div class="col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="column-header-text">
+                                                    Header Text
+                                                </label>
+                                                <input id="column-header-text" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                   
+                                    <!-- width -->
+                                    
+                                        <div class="col-sm-3 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="column-width">
+                                                    Width
+                                                </label>
+                                                <div class="input-group">
+                                                    <input id="column-width" type="number" class="form-control">
+                                                    <span class="input-group-addon">px</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                   
+                                    <!-- align -->
+                                   
+                                        <div class="col-sm-3 col-xs-12">
+                                            <div class="form-group">
+                                                <label>
+                                                    Alignment
+                                                </label>
+                                                <br>
+                                                <alignment align="column.align">
+                                                    <div class="btn-group alignment">
+                                                        <button type="button" class="btn btn-default btn-sm btn-alignment dropdown-toggle" data-toggle="dropdown" data-wysihtml5-command-value="left">
+                                                            <i class="fa fa-align-left"></i>
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <div class="dropdown-menu" role="menu">
+                                                            <div class="btn-group">
+                                                                <button type="button" class="btn btn-default btn-sm" data-wysihtml5-command="alignment" data-wysihtml5-command-value="left" tabindex="-1">
+                                                                    <i class="fa fa-align-left"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-default btn-sm" data-wysihtml5-command="alignment" data-wysihtml5-command-value="center" tabindex="-1">
+                                                                    <i class="fa fa-align-center"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-default btn-sm" data-wysihtml5-command="alignment" data-wysihtml5-command-value="right" tabindex="-1">
+                                                                    <i class="fa fa-align-right"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-default btn-sm" data-wysihtml5-command="alignment" data-wysihtml5-command-value="justify" tabindex="-1">
+                                                                    <i class="fa fa-align-justify"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </alignment>
+                                            </div>
+                                        </div>
+                                   
+                                  </div><!--  end row -->
+                                  <!--  start row2 -->
+                                   <div class="row">
+                                        <div class="col-sm-4 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="column-header-text">
+                                                    Decimals
+                                                </label>
+                                                <select class="form-control" disabled="disabled">
+                                                  <option value="" selected="selected" label="">0</option>
+                                                    <option value="" label="">- A</option>
+                                                     <option value="" label="">- B</option>
+                                                      <option value="" label="">- C</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                   
+                                    <!-- width -->
+                                    
+                                        <div class="col-sm-4 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="column-width">
+                                                    Sign
+                                                </label>
+                                               <select class="form-control" disabled="disabled">
+                                                  <option value="" selected="selected" label="">None</option>
+                                                    <option value="" label="">- A</option>
+                                                     <option value="" label="">- B</option>
+                                                      <option value="" label="">- C</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                   
+                                    <!-- align -->
+                                   
+                                        <div class="col-sm-4 col-xs-12">
+                                            <div class="form-group">
+                                                <label>
+                                                    Color Conditions
+                                                </label>
+                                               <select class="form-control" disabled="disabled">
+                                                  <option value="" selected="selected" label="">None</option>
+                                                    <option value="" label="">- A</option>
+                                                     <option value="" label="">- B</option>
+                                                      <option value="" label="">- C</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                   
+                                  </div><!--  end row -->
+
+
+                                 </div>
+                            </div>
+                        </div>
+                    </column-setting>
+                    <!-- end ngRepeat: column in columns -->
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+<!--modal-body-->
 <div class="modal-footer">
-	<button class="btn btn-default">Cancel <i class="fa fa-times icon-right"></i></button>
-	<button class="btn btn-primary">Save <i class="fa fa-check icon-right"></i></button>
+    <button class="btn btn-default">Cancel <i class="fa fa-times icon-right"></i></button>
+    <button class="btn btn-primary">Save <i class="fa fa-check icon-right"></i></button>
 </div>
