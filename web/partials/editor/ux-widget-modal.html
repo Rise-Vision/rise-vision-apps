@@ -9,17 +9,130 @@
             <a href="#" class="btn btn-primary input-group-addon">Select Spreadsheet</a>
         </div>
     </div>
+
+    <!-- 
+    SPREADSHEET LAYOUT LAYOUT
+     -->
+
+    <hr>
+    <h5> Spreadsheet Format </h5>
     <div class="section">
-        <h5>Columns</h5>
+        <div class="row">
+            <div class="col-sm-6 col-xs-12">
+                <div class="form-group">
+                    <label for="column-header-text">
+                        Row Padding
+                    </label>
+                    <input id="column-header-text" type="text" class="form-control">
+                </div>
+            </div>
+            <!-- width -->
+            <div class="col-sm-3 col-xs-12">
+                <div class="form-group">
+                    <label for="column-width">
+                        Odd
+                    </label>
+                    <div class="input-group">
+                        <input id="column-width" type="number" class="form-control">
+                        <span class="input-group-addon">px</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-xs-12">
+                <div class="form-group">
+                    <label for="column-width">
+                        Even
+                    </label>
+                    <div class="input-group">
+                        <input id="column-width" type="number" class="form-control">
+                        <span class="input-group-addon">px</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <hr>
+                <h5> Header Format </h5>
+                <style type="text/css">
+                .font-settings-demo p {
+                    display: inline-block;
+                    padding: 0 6px;
+                    margin-right: 10px;
+                }
+                </style>
+                <div class="font-settings-demo add-padding" style="background: #f2f2f2; border: 1px solid #bcbcbc;    margin-bottom: 12px;">
+                    <p style="width: 150px" class="remove-bottom">Verdana <i class="fa fa-caret-down"></i></p>
+                    <p style="width: 150px" class="remove-bottom">18px <i class="fa fa-caret-down"></i></p>
+                    <span class="text-muted">|</span>
+                    <p class="remove-bottom"><i class="fa fa-align-left"></i></p>
+                    <p class="remove-bottom"><i class="fa fa-align-center"></i></p>
+                    <p class="remove-bottom"><i class="fa fa-align-right"></i></p>
+                    <p class="remove-bottom"><i class="fa fa-align-justified"></i></p>
+                    <span class="text-muted">|</span>
+                    <p class="remove-bottom"><i class="fa fa-font"></i><i class="fa fa-caret-down"></i></p>
+                    <p class="remove-bottom"><i class="fa fa-font"></i><i class="fa fa-caret-down"></i></p>
+                    <span class="text-muted">|</span>
+                    <p class="remove-bottom"><i class="fa fa-bold"></i></p>
+                    <p class="remove-bottom"><i class="fa fa-italic"></i></p>
+                    <p class="remove-bottom"><i class="fa fa-underline"></i></p>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="font-picker-text form-group">
+                    <span style="font-family: Verdana; font-size: 20px; font-weight: normal; font-style: normal; text-decoration: none; color: black; background-color: transparent;">Column Header Sample Text</span>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <hr>
+                <h5> Data Format </h5>
+                <style type="text/css">
+                .font-settings-demo p {
+                    display: inline-block;
+                    padding: 0 6px;
+                    margin-right: 10px;
+                }
+                </style>
+                <div class="font-settings-demo add-padding" style="background: #f2f2f2; border: 1px solid #bcbcbc;    margin-bottom: 12px;">
+                    <p style="width: 150px" class="remove-bottom">Verdana <i class="fa fa-caret-down"></i></p>
+                    <p style="width: 150px" class="remove-bottom">18px <i class="fa fa-caret-down"></i></p>
+                    <span class="text-muted">|</span>
+                    <p class="remove-bottom"><i class="fa fa-align-left"></i></p>
+                    <p class="remove-bottom"><i class="fa fa-align-center"></i></p>
+                    <p class="remove-bottom"><i class="fa fa-align-right"></i></p>
+                    <p class="remove-bottom"><i class="fa fa-align-justified"></i></p>
+                    <span class="text-muted">|</span>
+                    <p class="remove-bottom"><i class="fa fa-font"></i><i class="fa fa-caret-down"></i></p>
+                    <p class="remove-bottom"><i class="fa fa-font"></i><i class="fa fa-caret-down"></i></p>
+                    <span class="text-muted">|</span>
+                    <p class="remove-bottom"><i class="fa fa-bold"></i></p>
+                    <p class="remove-bottom"><i class="fa fa-italic"></i></p>
+                    <p class="remove-bottom"><i class="fa fa-underline"></i></p>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="font-picker-text form-group">
+                    <span style="font-family: Verdana; font-size: 20px; font-weight: normal; font-style: normal; text-decoration: none; color: black; background-color: transparent;">Data Sample Text</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- 
+    COLUMN LAYOUT
+     -->
+
+    <hr>
+    <div class="section">
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="columns" class="control-label ng-binding">Select Columns To Format</label>
+                    <label for="columns" class="control-label ng-binding">Per Column Format</label>
                     <select id="column-selector" class="form-control">
-                    <option value="" selected="selected" label="">Select A Column</option>
+                        <option value="" selected="selected" label="">Select A Column</option>
                         <option value="" label="">Column A</option>
-                         <option value="" label="">Column B</option>
-                          <option value="" label="">Column C</option>
+                        <option value="" label="">Column B</option>
+                        <option value="" label="">Column C</option>
                     </select>
                 </div>
             </div>
@@ -31,17 +144,55 @@
                     <column-setting column="column">
                         <div class="panel panel-default">
                             <div class="collapse-panel panel-heading">
-                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed"> Key </a>
+                                <a role="button" data-toggle="collapse" data-parent="#" href="#" aria-expanded="false" aria-controls="collapseOne" class="collapsed"> <i class="fa fa-chevron-down"></i> Column A </a>
+                                <a href="" class="fa fa-minus-circle fa-lg remove-column-button"></a>
+                            </div>
+                        </div>
+                    </column-setting>
+                    <column-setting column="column">
+                        <div class="panel panel-default">
+                            <div class="collapse-panel panel-heading">
+                                <a role="button" data-toggle="collapse" data-parent="#" href="#" aria-expanded="false" aria-controls="collapseOne" class="collapsed"> <i class="fa fa-chevron-down"></i> Column B </a>
+                                <a href="" class="fa fa-minus-circle fa-lg remove-column-button"></a>
+                            </div>
+                        </div>
+                    </column-setting>
+                    <column-setting column="column">
+                        <div class="panel panel-default">
+                            <div class="collapse-panel panel-heading">
+                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed"> <i class="fa fa-chevron-down"></i> Key </a>
                                 <a href="" class="fa fa-minus-circle fa-lg remove-column-button"></a>
                             </div>
                             <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                                 <div class="panel-body">
                                     <div class="checkbox">
-                                      <label>
-                                        <input name="layoutDefault" type="checkbox"> Column contains Numeric data
-                                      </label>
+                                        <label>
+                                            <input name="layoutDefault" type="checkbox"> Column contains Numeric data
+                                        </label>
                                     </div>
-
+                                    <style type="text/css">
+                                    .font-settings-demo p {
+                                        display: inline-block;
+                                        padding: 0 6px;
+                                        margin-right: 10px;
+                                    }
+                                    </style>
+                                    <div class="font-settings-demo add-padding" style="background: #f2f2f2; border: 1px solid #bcbcbc;    margin-bottom: 12px;">
+                                        <p style="width: 150px" class="remove-bottom">Verdana <i class="fa fa-caret-down"></i></p>
+                                        <p style="width: 150px" class="remove-bottom">18px <i class="fa fa-caret-down"></i></p>
+                                        <span class="text-muted">|</span>
+                                        <p class="remove-bottom"><i class="fa fa-align-left"></i></p>
+                                        <p class="remove-bottom"><i class="fa fa-align-center"></i></p>
+                                        <p class="remove-bottom"><i class="fa fa-align-right"></i></p>
+                                        <p class="remove-bottom"><i class="fa fa-align-justified"></i></p>
+                                        <span class="text-muted">|</span>
+                                        <p class="remove-bottom"><i class="fa fa-font"></i><i class="fa fa-caret-down"></i></p>
+                                        <p class="remove-bottom"><i class="fa fa-font"></i><i class="fa fa-caret-down"></i></p>
+                                        <span class="text-muted">|</span>
+                                        <p class="remove-bottom"><i class="fa fa-bold"></i></p>
+                                        <p class="remove-bottom"><i class="fa fa-italic"></i></p>
+                                        <p class="remove-bottom"><i class="fa fa-underline"></i></p>
+                                    </div>
                                     <!-- header -->
                                     <div class="row">
                                         <div class="col-sm-6 col-xs-12">
@@ -52,9 +203,7 @@
                                                 <input id="column-header-text" type="text" class="form-control">
                                             </div>
                                         </div>
-                                   
-                                    <!-- width -->
-                                    
+                                        <!-- width -->
                                         <div class="col-sm-3 col-xs-12">
                                             <div class="form-group">
                                                 <label for="column-width">
@@ -66,9 +215,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                   
-                                    <!-- align -->
-                                   
+                                        <!-- align -->
                                         <div class="col-sm-3 col-xs-12">
                                             <div class="form-group">
                                                 <label>
@@ -101,75 +248,92 @@
                                                 </alignment>
                                             </div>
                                         </div>
-                                   
-                                  </div><!--  end row -->
-                                  <!--  start row2 -->
-                                   <div class="row">
+                                    </div>
+                                    <!--  end row -->
+                                    <!--  start row2 -->
+                                    <div class="row">
                                         <div class="col-sm-4 col-xs-12">
                                             <div class="form-group">
                                                 <label for="column-header-text">
                                                     Decimals
                                                 </label>
                                                 <select class="form-control" disabled="disabled">
-                                                  <option value="" selected="selected" label="">0</option>
+                                                    <option value="" selected="selected" label="">0</option>
                                                     <option value="" label="">- A</option>
-                                                     <option value="" label="">- B</option>
-                                                      <option value="" label="">- C</option>
+                                                    <option value="" label="">- B</option>
+                                                    <option value="" label="">- C</option>
                                                 </select>
                                             </div>
                                         </div>
-                                   
-                                    <!-- width -->
-                                    
+                                        <!-- width -->
                                         <div class="col-sm-4 col-xs-12">
                                             <div class="form-group">
                                                 <label for="column-width">
                                                     Sign
                                                 </label>
-                                               <select class="form-control" disabled="disabled">
-                                                  <option value="" selected="selected" label="">None</option>
+                                                <select class="form-control" disabled="disabled">
+                                                    <option value="" selected="selected" label="">None</option>
                                                     <option value="" label="">- A</option>
-                                                     <option value="" label="">- B</option>
-                                                      <option value="" label="">- C</option>
+                                                    <option value="" label="">- B</option>
+                                                    <option value="" label="">- C</option>
                                                 </select>
                                             </div>
                                         </div>
-                                   
-                                    <!-- align -->
-                                   
+                                        <!-- align -->
                                         <div class="col-sm-4 col-xs-12">
                                             <div class="form-group">
                                                 <label>
                                                     Color Conditions
                                                 </label>
-                                               <select class="form-control" disabled="disabled">
-                                                  <option value="" selected="selected" label="">None</option>
+                                                <select class="form-control" disabled="disabled">
+                                                    <option value="" selected="selected" label="">None</option>
                                                     <option value="" label="">- A</option>
-                                                     <option value="" label="">- B</option>
-                                                      <option value="" label="">- C</option>
+                                                    <option value="" label="">- B</option>
+                                                    <option value="" label="">- C</option>
                                                 </select>
                                             </div>
                                         </div>
-                                   
-                                  </div><!--  end row -->
-
-
-                                 </div>
+                                    </div>
+                                    <!--  end row -->
+                                </div>
                             </div>
                         </div>
                     </column-setting>
                     <!-- end ngRepeat: column in columns -->
-                   
                 </div>
             </div>
         </div>
     </div>
+    <!-- 
+    END COLUMN LAYOUT
+     -->
 
+    <!-- 
+    START CUSTOM LAYOUT
+     -->
+     <hr>
+    <h5> Custom Layout
+    <span style="float:right;margin-left: 8px;">Custom Layout Example</span>
+    <span style="float: right;" class="fa fa-question-circle fa-lg"></span>
+    </h5>
+    <div class="row">
+    <div class="col-xs-12">
+       <div class="form-group">
+          <div class="input-group">
+              <input class="form-control" type="text" placeholder="Paste an URL"></input>
+              <a href="#" class="btn btn-primary input-group-addon">Select HTML File</a>
+          </div>
+      </div>
+    </div>
+    </div>
+    <!-- 
+    END CUSTOM LAYOUT
+     -->
 
 
 
 </div>
-<!--modal-body-->
+<!--END modal-body-->
 <div class="modal-footer">
     <button class="btn btn-default">Cancel <i class="fa fa-times icon-right"></i></button>
     <button class="btn btn-primary">Save <i class="fa fa-check icon-right"></i></button>
