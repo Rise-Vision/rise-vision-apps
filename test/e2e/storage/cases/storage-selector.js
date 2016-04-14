@@ -42,8 +42,6 @@ var StorageSelectorScenarios = function() {
       });
 
       it('should load the properties modal', function () {
-        helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
-        
         expect(presentationPropertiesModalPage.getBackgroundImageCheckbox().isDisplayed()).to.eventually.be.true;
       });
 

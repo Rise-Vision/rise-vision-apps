@@ -51,7 +51,7 @@ var UploadScenarios = function() {
       describe("Upload File:", describeUpload);
     });
 
-    describe("And he is using Apps Single Folder Selector:",function(){
+    describe("And he is using Apps Single File Selector:",function(){
       before(function () { StorageHelper.setupAppsSingleFileSelector(); });
       describe("Upload File:", describeUpload);
     });

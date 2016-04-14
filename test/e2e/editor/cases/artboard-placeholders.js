@@ -42,7 +42,6 @@ var ArtboardPlaceholdersScenarios = function() {
           loginPage.signIn();
         });
         presentationsListPage.openNewPresentation();
-        helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
         presentationPropertiesModalPage.getCancelButton().click();
 
         helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');

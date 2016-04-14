@@ -2,6 +2,7 @@
 
 var helper = require('rv-common-e2e').helper;
 var StoreProductsModalPage = require('./storeProductsModalPage.js');
+var PresentationPropertiesModalPage = require('./presentationPropertiesModalPage.js');
 
 var PresentationListPage = function() {
   var editorAppContainer = element(by.css('.editor-app'));
@@ -19,10 +20,15 @@ var PresentationListPage = function() {
 
   this.openNewPresentation = function() {
     var storeProductsModalPage = new StoreProductsModalPage();
+    var presentationPropertiesModalPage = new PresentationPropertiesModalPage();
+
     presentationAddButton.click();
     helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
     helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader());
     storeProductsModalPage.getAddBlankPresentation().click();
+    
+    helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
+    browser.sleep(500);
   }
 
   this.getEditorAppContainer = function() {

@@ -40,7 +40,6 @@ var PlaceholdersListScenarios = function() {
     describe(' Given a user is adding a new presentation and a few placeholders', function () {
       before(function () {
         presentationsListPage.openNewPresentation();
-        helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
         presentationPropertiesModalPage.getCancelButton().click();
 
         workspacePage.getAddPlaceholderButton().click();
@@ -87,4 +86,3 @@ var PlaceholdersListScenarios = function() {
   });
 };
 module.exports = PlaceholdersListScenarios;
-

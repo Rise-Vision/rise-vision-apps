@@ -57,7 +57,6 @@ var PlaylistScenarios = function() {
 
     before('Add Presentation & Placeholder: ', function () {
       presentationsListPage.openNewPresentation();
-      helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
       presentationPropertiesModalPage.getCancelButton().click();
 
       workspacePage.getAddPlaceholderButton().click();

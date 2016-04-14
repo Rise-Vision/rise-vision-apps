@@ -41,7 +41,6 @@ var HtmlEditorScenarios = function() {
     describe(' Given a user is adding a new presentation and selecting Html Editor', function () {
       before(function () {
         presentationsListPage.openNewPresentation();
-        helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
         presentationPropertiesModalPage.getCancelButton().click();
 
         workspacePage.getAddPlaceholderButton().click();

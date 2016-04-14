@@ -55,7 +55,6 @@
         loginPage.signIn();
       });
       presentationListPage.openNewPresentation();
-      helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
       presentationPropertiesModalPage.getBackgroundImageCheckbox().click();
       helper.wait(presentationPropertiesModalPage.getBackgroundImageURLInput(), 'Background Image URL Input');
       presentationPropertiesModalPage.getBackgroundImageStorageButton().click();
@@ -66,4 +65,3 @@
   module.exports = factory;
 
 })(module);
-
