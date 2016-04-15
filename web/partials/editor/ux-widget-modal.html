@@ -1,7 +1,16 @@
 <div class="modal-header">
-    <button class="close"><i class="fa fa-times"></i></button>
-    <h3 class="modal-title">Google Spreadsheet Settings</h3>
-</div>
+          <button type="button" class="close" ng-click="closeSettings()">
+            <i class="fa fa-times half-top"></i>
+          </button>
+          <h2 class="modal-title ng-binding">
+            Google Spreadsheet Settings
+            <a class="btn btn-link" href="https://github.com/Rise-Vision/widget-google-spreadsheet/" target="_blank">
+              <i class="fa fa-github fa-2x icon-gray"></i>
+            </a>
+          </h2>
+ </div>
+
+
 
 <div class="modal-body">
 
@@ -11,8 +20,9 @@
       <input class="form-control" type="text" placeholder="No Spreadsheet Selected"></input>
       <a href="#" class="btn btn-primary input-group-addon" ng-model="showerror" ng-click="showerror = true">
       <span ng-show="!showerror">Select Spreadsheet</span>
-      <span ng-show="showerror">Open Spreadsheet</span>
+      <span ng-show="showerror">Open Spreadsheet in New Tab</span>
       <img src="https://s3.amazonaws.com/Rise-Images/Icons/drive-icon.png" style="padding-left: 10px;"></a>
+       <a href="#" style="position: relative; top: -11px; left: 14px; float: left;" class="fa fa-minus-circle fa-lg remove-column-button"></a>
     </div>
 
      <div class="" ng-show="showerror">
@@ -44,7 +54,7 @@
   </div>
   
   <div class="radio">
-    <label>
+     <label>
       <input type="radio" ng-model="content" value="first" ng-value="first"> <strong>Show Entire Sheet</strong>
     </label>
   </div>
@@ -56,9 +66,13 @@
   <div class="add-top">
     <div class="form-group">
       <div class="row">
+        
         <div class="col-sm-3">
           <label class="control-label-secondary">Starting Cell (Top Left)</label>
           <input type="text" ng-disabled="content != 'other'" class="form-control">
+        </div>
+        <div class="col-xs-1" style="position: relative;top: 25px;left: 11px;">
+        <img src="../../images/range.svg" style="width:30px">
         </div>
         <div class="col-sm-3">
           <label class="control-label-secondary">Ending Cell (Bottom Right)</label>
@@ -157,23 +171,21 @@
             <div class="col-sm-2">
                 <div class="form-group">
                     <label for="column-width">
-                        Odd
+                        Odd Row Color 
                     </label>
-                    <div class="input-group">
-                        <input id="" type="number" class="form-control">
-                        <span class="input-group-addon">px</span>
-                    </div>
+                  <div>
+                    <input color-picker="" id="alt-row-color" color="table.altRowColor" type="background" class="ng-isolate-scope" style="display: none;"><div class="sp-replacer background-color-picker sp-light"><div class="sp-preview"><div class="sp-preview-inner" style="background-color: rgba(0, 0, 0, 0);"></div></div><b class="caret"></b></div>
+                  </div>
                 </div>
             </div>
             <div class="col-sm-2">
                 <div class="form-group">
                     <label for="column-width">
-                        Even
+                        Even Row Color
                     </label>
-                    <div class="input-group">
-                        <input id="" type="number" class="form-control">
-                        <span class="input-group-addon">px</span>
-                    </div>
+                     <div>
+                    <input color-picker="" id="alt-row-color" color="table.altRowColor" type="background" class="ng-isolate-scope" style="display: none;"><div class="sp-replacer background-color-picker sp-light"><div class="sp-preview"><div class="sp-preview-inner" style="background-color: rgba(0, 0, 0, 0);"></div></div><b class="caret"></b></div>
+                  </div>
                 </div>
             </div>
             <div class="col-xs-12">
@@ -292,7 +304,7 @@
                                 <div class="panel-body">
                                     <div class="checkbox">
                                         <label>
-                                            <input name="layoutDefault" type="checkbox"> Column contains Numeric data
+                                            <input name="layoutDefault" type="checkbox" ng-model="numeric" > Column contains Numeric data
                                         </label>
                                     </div>
                                     <style type="text/css">
@@ -382,7 +394,7 @@
                                                 <label for="column-header-text">
                                                     Decimals
                                                 </label>
-                                                <select class="form-control" disabled="disabled">
+                                                <select class="form-control" ng-disabled="!numeric">
                                                     <option value="" selected="selected" label="">0</option>
                                                     <option value="" label="">- A</option>
                                                     <option value="" label="">- B</option>
@@ -396,7 +408,7 @@
                                                 <label for="column-width">
                                                     Sign
                                                 </label>
-                                                <select class="form-control" disabled="disabled">
+                                                <select class="form-control" ng-disabled="!numeric">
                                                     <option value="" selected="selected" label="">None</option>
                                                     <option value="" label="">- A</option>
                                                     <option value="" label="">- B</option>
@@ -410,7 +422,7 @@
                                                 <label>
                                                     Color Conditions
                                                 </label>
-                                                <select class="form-control" disabled="disabled">
+                                                <select class="form-control" ng-disabled="!numeric">
                                                     <option value="" selected="selected" label="">None</option>
                                                     <option value="" label="">- A</option>
                                                     <option value="" label="">- B</option>
@@ -420,13 +432,16 @@
                                         </div>
                                     </div>
                                     <!--  end row -->
+                                      <label class="text-danger"> Note: Column formatting overrides Data Format options (above). </label>
                                 </div>
                             </div>
                         </div>
+
                     </column-setting>
                     <!-- end ngRepeat: column in columns -->
                 </div>
             </div>
+
         </div>
     </div>
     <!-- 
@@ -446,7 +461,10 @@
        <div class="form-group">
           <div class="input-group">
               <input class="form-control" type="text" placeholder="Paste an URL"></input>
-              <a href="#" class="btn btn-primary input-group-addon">Select HTML File</a>
+              <a href="#" class="btn btn-primary input-group-addon">Select HTML File
+               <img src="https://s3.amazonaws.com/Rise-Images/Icons/drive-icon.png" style="padding-left: 10px;">
+               </a>
+              <a href="#" style="position: relative; top: -11px; left: 14px; float: left;" class="fa fa-minus-circle fa-lg remove-column-button"></a>
           </div>
       </div>
     </div>
