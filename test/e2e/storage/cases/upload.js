@@ -2,6 +2,7 @@
 var expect = require('rv-common-e2e').expect;
 var helper = require('rv-common-e2e').helper;
 var StorageSelectorModalPage = require('./../pages/storageSelectorModalPage.js');
+var FilesListPage = require('./../pages/filesListPage.js');
 var StorageHelper = require('./../pages/helper.js');
 
 var UploadScenarios = function() {
@@ -9,6 +10,7 @@ var UploadScenarios = function() {
   browser.driver.manage().window().setSize(1400, 900);
   describe("Given the user wants to upload a file", function () {  
     var storageSelectorModalPage = new StorageSelectorModalPage();
+    var filesListPage = new FilesListPage();
   
     var describeUpload = function () {
 
@@ -36,8 +38,8 @@ var UploadScenarios = function() {
       });
 
       it('should list uploaded file',function(){
-        storageSelectorModalPage.getSearchInput().sendKeys('package.json');
-        expect(storageSelectorModalPage.getFileListRows().count()).to.eventually.be.at.least(1);
+        filesListPage.filterFileList('package.json');
+        expect(filesListPage.getFileItems().count()).to.eventually.be.at.least(1);
       });
     };
 

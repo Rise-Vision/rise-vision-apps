@@ -39,7 +39,7 @@ var HomeScenarios = function() {
       });
 
       it('should show copy url button', function() {
-        helper.waitDisappear(storageHomePage.getLoader(), 'Storage Files Loader');
+        helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
         
         expect(storageHomePage.getCopyUrlButton().isDisplayed()).to.eventually.be.true;
         expect(storageHomePage.getCopyUrlButton().isEnabled()).to.eventually.be.false;
@@ -48,7 +48,7 @@ var HomeScenarios = function() {
       it('should enable button when a file is clicked',function(){
         expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
         
-        storageHomePage.filterFileList("package.json");
+        filesListPage.filterFileList("package.json");
         
         filesListPage.getFileItems().get(0).click();
         

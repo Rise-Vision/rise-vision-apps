@@ -35,7 +35,7 @@ var DownloadScenarios = function() {
         });
 
         helper.wait(storageHomePage.getStorageAppContainer(), 'Storage Apps Container');
-        helper.waitDisappear(storageHomePage.getLoader(), 'Storage Files Loader');
+        helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
       });
 
       it('should show Download button', function () {
@@ -44,7 +44,7 @@ var DownloadScenarios = function() {
       });
 
       it('should enable Download after file is selected',function(){
-        storageHomePage.filterFileList("package.json");
+        filesListPage.filterFileList("package.json");
 
         expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
 

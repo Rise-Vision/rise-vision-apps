@@ -25,12 +25,12 @@ var IframeScenarios = function() {
         });
 
         it('should list files',function(){
-          helper.waitDisappear(storageSelectorModalPage.getLoader(), 'Storage Files Loader');
-          expect(storageSelectorModalPage.getStorageFileList().isDisplayed()).to.eventually.be.true;
+          helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
+          expect(filesListPage.getFilesListTable().isDisplayed()).to.eventually.be.true;
         });
 
         it('should filter files',function(){
-          storageSelectorModalPage.filterFileList("package.json");
+          filesListPage.filterFileList("package.json");
           expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
         });
       });
@@ -51,12 +51,12 @@ var IframeScenarios = function() {
         });
 
         it('should list folders',function(){
-          helper.waitDisappear(storageSelectorModalPage.getLoader(), 'Storage Files Loader');
-          expect(storageSelectorModalPage.getStorageFileList().isDisplayed()).to.eventually.be.true;
+          helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
+          expect(filesListPage.getFilesListTable().isDisplayed()).to.eventually.be.true;
         });
 
         it('should filter folders',function(){
-          storageSelectorModalPage.filterFileList("E2E_TEST_FOLDER");
+          filesListPage.filterFileList("E2E_TEST_FOLDER");
           expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
         });
       });

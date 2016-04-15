@@ -5,6 +5,7 @@ var LoginPage = require('./../../launcher/pages/loginPage.js');
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var helper = require('rv-common-e2e').helper;
 var StorageHomePage = require('./../pages/storageHomePage.js');
+var FilesListPage = require('./../pages/filesListPage.js');
 
 var HomeScenarios = function() {
 
@@ -14,12 +15,14 @@ var HomeScenarios = function() {
     var loginPage;
     var commonHeaderPage;
     var storageHomePage;
+    var filesListPage;
 
     before(function () {
       homepage = new HomePage();
       loginPage = new LoginPage();
       commonHeaderPage = new CommonHeaderPage();
       storageHomePage = new StorageHomePage();
+      filesListPage = new FilesListPage();
     });
 
     describe("Given a user who want see a list of her files", function () {
@@ -39,8 +42,8 @@ var HomeScenarios = function() {
       });
 
       it('should load files',function(){
-        helper.waitDisappear(storageHomePage.getLoader(), 'Storage Files Loader');
-        expect(storageHomePage.getStorageFileList().isDisplayed()).to.eventually.be.true;
+        helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
+        expect(filesListPage.getFilesListTable().isDisplayed()).to.eventually.be.true;
       });
 
       it('should show action buttons',function(){
@@ -49,7 +52,7 @@ var HomeScenarios = function() {
       });
 
       it('should show search input',function(){
-        expect(storageHomePage.getSearchInput().isDisplayed()).to.eventually.be.true;       
+        expect(filesListPage.getSearchInput().isDisplayed()).to.eventually.be.true;       
       });
 
     });
