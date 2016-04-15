@@ -9,8 +9,25 @@
   <div class="form-group">
     <div class="input-group">
       <input class="form-control" type="text" placeholder="No Spreadsheet Selected"></input>
-      <a href="#" class="btn btn-primary input-group-addon"><img src="https://s3.amazonaws.com/Rise-Images/Icons/drive-icon.png"> Select Spreadsheet</a>
+      <a href="#" class="btn btn-primary input-group-addon" ng-model="showerror" ng-click="showerror = true">
+      <span ng-show="!showerror">Select Spreadsheet</span>
+      <span ng-show="showerror">Open Spreadsheet</span>
+      <img src="https://s3.amazonaws.com/Rise-Images/Icons/drive-icon.png" style="padding-left: 10px;"></a>
     </div>
+
+     <div class="" ng-show="showerror">
+     <br/>
+     <div class="col-xs-12">
+      <div class="col-xs-10">
+          <div class="text-danger"> To use this Google Spreadsheet it must be published to the web. To publish, open the Google Spreadsheet and select '<b>File &gt; Publish to the web</b>', then click '<b>Publish</b>'. 
+          </div><br/>
+      </div> 
+      <a href="#" class="btn btn-default btn-inline" ng-click="showerror = false">Check Again</a>
+      </div>
+      <br/>
+    </div>
+
+
   </div><!--form-group-->
   
   <div class="form-group">
@@ -20,6 +37,12 @@
     </select>
   </div>
 
+  <div class="checkbox">
+    <label class="control-label">
+      <input type="checkbox"><strong>Use First Row as Header</strong></input>
+    </label>
+  </div>
+  
   <div class="radio">
     <label>
       <input type="radio" ng-model="content" value="first" ng-value="first"> <strong>Show Entire Sheet</strong>
@@ -30,28 +53,22 @@
       <input type="radio" ng-model="content" value="other"> <strong>Show Range</strong>
     </label>
   </div>
-  <div class="add-top" ng-show="content == 'other'">
+  <div class="add-top">
     <div class="form-group">
       <div class="row">
         <div class="col-sm-3">
           <label class="control-label-secondary">Starting Cell (Top Left)</label>
-          <input type="text" class="form-control">
+          <input type="text" ng-disabled="content != 'other'" class="form-control">
         </div>
         <div class="col-sm-3">
           <label class="control-label-secondary">Ending Cell (Bottom Right)</label>
-          <input type="text" class="form-control">
+          <input type="text" ng-disabled="content != 'other'" class="form-control">
         </div><!--col-->
       </div><!--row-->
     </div><!--form-group-->
 
   </div><!--other-->
-  <hr>
-  <div class="checkbox">
-    <label class="control-label">
-      <input type="checkbox"><strong>Use First Row as Header</strong></input>
-    </label>
-  </div>
-
+  
   <hr>
     <div class="form-group">
       <div class="row">
@@ -114,50 +131,47 @@
       </div><!--form-group-->
     </div><!--col-->
   </div><!--row-->
-  <hr>
 
-   <div class="form-group">
-        <div class="input-group">
-            <input class="form-control" type="text" placeholder="No Spreadsheet Selected"></input>
-            <a href="#" class="btn btn-primary input-group-addon">Select Spreadsheet</a>
-        </div>
-    </div>
 
     <!-- 
     SPREADSHEET LAYOUT LAYOUT
      -->
 
     <hr>
+    <h4>Format</h4>
     <h5> Spreadsheet Format </h5>
     <div class="section">
         <div class="row">
-            <div class="col-sm-6 col-xs-12">
+            <div class="col-sm-2">
                 <div class="form-group">
                     <label for="column-header-text">
                         Row Padding
                     </label>
-                    <input id="column-header-text" type="text" class="form-control">
+                   <div class="input-group">
+                        <input id="" type="number" class="form-control">
+                        <span class="input-group-addon">px</span>
+                    </div>
                 </div>
             </div>
             <!-- width -->
-            <div class="col-sm-3 col-xs-12">
+            <div class="col-sm-2">
                 <div class="form-group">
                     <label for="column-width">
                         Odd
                     </label>
                     <div class="input-group">
-                        <input id="column-width" type="number" class="form-control">
+                        <input id="" type="number" class="form-control">
                         <span class="input-group-addon">px</span>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-3 col-xs-12">
+            <div class="col-sm-2">
                 <div class="form-group">
                     <label for="column-width">
                         Even
                     </label>
                     <div class="input-group">
-                        <input id="column-width" type="number" class="form-control">
+                        <input id="" type="number" class="form-control">
                         <span class="input-group-addon">px</span>
                     </div>
                 </div>
@@ -426,7 +440,7 @@
      -->
      <hr>
     <h5> Custom Layout
-    <span style="float:right;margin-left: 8px;">Custom Layout Example</span>
+    <a href="https://github.com/Rise-Vision/widget-google-spreadsheet/blob/master/examples/list.md" target="_blank" style="float:right;margin-left: 8px;">Custom Layout Example</a>
     <span style="float: right;" class="fa fa-question-circle fa-lg"></span>
     </h5>
     <div class="row">
