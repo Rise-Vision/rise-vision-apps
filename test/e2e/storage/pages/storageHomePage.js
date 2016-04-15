@@ -17,7 +17,7 @@ var StorageHomePage = function() {
 
   var searchInput = element(by.id('storageSelectorSearchInput'));  
 
-  var loader = element(by.xpath('//div[@spinner-key="_rv-global-spinner"]'));
+  var loader = element(by.xpath('//div[@spinner-key="storage-selector-loader"]'));
   var storageFileList = element(by.css('.storage-app .scrollable-list'));
   var fileListRows = element.all(by.css('#storageFileList > tbody > tr'));
 
