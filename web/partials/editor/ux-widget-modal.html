@@ -1,3 +1,20 @@
+<!-- CUSTOM CSS
+ -->
+
+ <style>
+ .clear-selection {
+    position: absolute;
+    top: 8px;
+    right: 13px;
+    z-index: 3;
+    cursor: pointer;
+    width: 17px;
+    text-align: center;
+ }
+ </style>
+
+
+
 <div class="modal-header">
           <button type="button" class="close" ng-click="closeSettings()">
             <i class="fa fa-times half-top"></i>
@@ -15,31 +32,77 @@
 <div class="modal-body">
 
   <h4>Spreadsheet</h4>
-  <div class="form-group">
-    <div class="input-group">
-      <input class="form-control" type="text" placeholder="No Spreadsheet Selected"></input>
-      <a href="#" class="btn btn-primary input-group-addon" ng-model="showerror" ng-click="showerror = true">
-      <span ng-show="!showerror">Select Spreadsheet</span>
-      <span ng-show="showerror">Open Spreadsheet in New Tab</span>
-      <img src="https://s3.amazonaws.com/Rise-Images/Icons/drive-icon.png" style="padding-left: 10px;"></a>
-       <a href="#" style="position: relative; top: -11px; left: 14px; float: left;" class="fa fa-minus-circle fa-lg remove-column-button"></a>
+  
+  <!-- FILE SELECTOR -->
+<div class="form-group file-selector">
+    <div class="row half-top half-bottom">
+        <div class="col-md-12">
+            <!-- Storage Single File - Button -->
+            <button class="btn btn-default" ng-click="showFile=true" type="button">
+                Select Spreadsheet
+                <img src="../../images/drive-icon-gray.png" class="icon-right">
+            </button>
+            <!-- URL -->
+            <button name="customBtn" type="button" class="btn btn-default" ng-click="showFile=false">ID Key
+                <i class="fa fa-link fa-large"></i>
+            </button>
+        </div>
     </div>
 
-     <div class="" ng-show="showerror">
-     <br/>
-     <div class="col-xs-12">
+   <!--  FILE SELECTOR -->
+    <div class="form-group" ng-show="showFile === true" > 
+        <div class="input-group custom-addon">
+            <div style="position: relative">
+            <input name="storage-file-name" type="text" class="form-control" value="../RandomSpreadsheet.xls" readonly="">
+            <span class="clear-selection"><i class="fa fa-times-circle" aria-hidden="true"></i></span>
+            </div>
+      <span class="input-group-addon">
+      <button name="previewBtn" class="btn btn-default" ng-click="">Preview File
+        <img src="http://s3.amazonaws.com/Rise-Images/Icons/newtab-icon.png" class="storage-selector-icon icon-right">
+      </button>
+    </span>
+        </div>
+    </div>
+
+     <!--  URL SELECTOR -->
+     <div class="form-group" ng-show="showFile === false">
+      <div class="input-group custom-addon">
+          <div style="position: relative">
+              <input name="storage-file-name" type="text" class="form-control" placeholder="Enter your Key">
+              <span class="clear-selection"><i class="fa fa-times-circle" aria-hidden="true"></i></span>
+          </div>
+          <span class="input-group-addon">
+        <button name="previewBtn" class="btn btn-default" ng-click="">Preview File
+          <img src="http://s3.amazonaws.com/Rise-Images/Icons/newtab-icon.png" class="storage-selector-icon icon-right">
+        </button>
+      </span>
+      </div>
+  </div>
+</div>
+<!-- END FILE SELECTOR -->
+
+
+    <div class="" ng-show="showFile === true">
+     <div class="col-xs-12" ng-hide="hideError === true">
       <div class="col-xs-10">
           <div class="text-danger"> To use this Google Spreadsheet it must be published to the web. To publish, open the Google Spreadsheet and select '<b>File &gt; Publish to the web</b>', then click '<b>Publish</b>'. 
           </div><br/>
       </div> 
-      <a href="#" class="btn btn-default btn-inline" ng-click="showerror = false">Check Again</a>
+      <a href="#" class="btn btn-default btn-inline" ng-click="hideError = true">Check Again</a>
       </div>
       <br/>
     </div>
 
 
-  </div><!--form-group-->
+<!-- END GROUP -->
+
+
+
   
+
+  <!-- END FILE SELECTOR  -->
+
+
   <div class="form-group">
     <label class="control-label">Select Worksheet</label>
     <select class="form-control">
@@ -64,19 +127,17 @@
     </label>
   </div>
   <div class="add-top">
-    <div class="form-group">
+    <div class="form-group" ng-hide="content != 'other'">
       <div class="row">
         
         <div class="col-sm-3">
           <label class="control-label-secondary">Starting Cell (Top Left)</label>
-          <input type="text" ng-disabled="content != 'other'" class="form-control">
+          <input type="text"  class="form-control">
         </div>
-        <div class="col-xs-1" style="position: relative;top: 25px;left: 11px;">
-        <img src="../../images/range.svg" style="width:30px">
-        </div>
+        
         <div class="col-sm-3">
           <label class="control-label-secondary">Ending Cell (Bottom Right)</label>
-          <input type="text" ng-disabled="content != 'other'" class="form-control">
+          <input type="text"  class="form-control">
         </div><!--col-->
       </div><!--row-->
     </div><!--form-group-->
@@ -90,7 +151,7 @@
           <label class="control-label">Data Refresh Interval</label>
           <div class="input-group">
             <input type="text" class="form-control">
-            <span class="input-group-addon">sec</span>
+            <span class="input-group-addon">min</span>
           </div>
         </div>
       </div><!--row-->
@@ -222,7 +283,7 @@
             </div>
             <div class="col-xs-12">
                 <hr>
-                <h5> Data Format </h5>
+                <h5> Body Format </h5>
                 <style type="text/css">
                 .font-settings-demo p {
                     display: inline-block;
@@ -264,7 +325,9 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="columns" class="control-label ng-binding">Per Column Format</label>
+                    <label for="columns" class="control-label ng-binding">Per Column Format 
+                    </label>
+
                     <select id="column-selector" class="form-control">
                         <option value="" selected="selected" label="">Select A Column</option>
                         <option value="" label="">Column A</option>
@@ -304,8 +367,9 @@
                                 <div class="panel-body">
                                     <div class="checkbox">
                                         <label>
-                                            <input name="layoutDefault" type="checkbox" ng-model="numeric" > Column contains Numeric data
+                                            <input name="layoutDefault" type="checkbox" ng-model="numeric" > Numeric data column
                                         </label>
+                                         <span class="text-danger" style="float:right"> Note: Column formatting overrides Body Format options (above)</span>
                                     </div>
                                     <style type="text/css">
                                     .font-settings-demo p {
@@ -432,7 +496,7 @@
                                         </div>
                                     </div>
                                     <!--  end row -->
-                                      <label class="text-danger"> Note: Column formatting overrides Data Format options (above). </label>
+                                      
                                 </div>
                             </div>
                         </div>
@@ -456,19 +520,52 @@
     <a href="https://github.com/Rise-Vision/widget-google-spreadsheet/blob/master/examples/list.md" target="_blank" style="float:right;margin-left: 8px;">Custom Layout Example</a>
     <span style="float: right;" class="fa fa-question-circle fa-lg"></span>
     </h5>
-    <div class="row">
-    <div class="col-xs-12">
-       <div class="form-group">
-          <div class="input-group">
-              <input class="form-control" type="text" placeholder="Paste an URL"></input>
-              <a href="#" class="btn btn-primary input-group-addon">Select HTML File
-               <img src="https://s3.amazonaws.com/Rise-Images/Icons/drive-icon.png" style="padding-left: 10px;">
-               </a>
-              <a href="#" style="position: relative; top: -11px; left: 14px; float: left;" class="fa fa-minus-circle fa-lg remove-column-button"></a>
+ 
+    
+  <!-- FILE SELECTOR -->
+<div class="form-group file-selector">
+    <div class="row half-top half-bottom">
+        <div class="col-md-12">
+            <!-- Storage Single File - Button -->
+            <button class="btn btn-default" ng-click="showHTML=true" type="button">
+                Select HTML File
+                <img src="http://s3.amazonaws.com/Rise-Images/Icons/storage.png" class="storage-selector-icon icon-right">
+            </button>
+            <!-- URL -->
+            <button name="customBtn" type="button" class="btn btn-default" ng-click="showHTML=false">Custom URL
+                <i class="fa fa-link fa-large"></i>
+            </button>
+        </div>
+    </div>
+
+   <!--  FILE SELECTOR -->
+    <div class="form-group" ng-show="showHTML === true" > 
+        <div class="input-group custom-addon">
+            <div style="position: relative">
+            <input name="storage-file-name" type="text" class="form-control" value="../RandomSpreadsheet.xls" readonly="">
+            <span class="clear-selection"><i class="fa fa-times-circle" aria-hidden="true"></i></span>
+            </div>
+      <span class="input-group-addon">
+     
+    </span>
+        </div>
+    </div>
+
+     <!--  URL SELECTOR -->
+     <div class="form-group" ng-show="showHTML === false">
+      <div class="input-group custom-addon">
+          <div style="position: relative">
+              <input name="storage-file-name" type="text" class="form-control" placeholder="http://">
+              <span class="clear-selection"><i class="fa fa-times-circle" aria-hidden="true"></i></span>
           </div>
+          <span class="input-group-addon">
+        
+      </span>
       </div>
-    </div>
-    </div>
+  </div>
+</div>
+<!-- END FILE SELECTOR -->
+
     <!-- 
     END CUSTOM LAYOUT
      -->
