@@ -10,41 +10,40 @@
     cursor: pointer;
     width: 17px;
     text-align: center;
+    display: block;
+    height: 17px;
  }
  </style>
 
 
 
 <div class="modal-header">
-          <button type="button" class="close" ng-click="closeSettings()">
-            <i class="fa fa-times half-top"></i>
-          </button>
-          <h2 class="modal-title ng-binding">
-            Google Spreadsheet Settings
-            <a class="btn btn-link" href="https://github.com/Rise-Vision/widget-google-spreadsheet/" target="_blank">
-              <i class="fa fa-github fa-2x icon-gray"></i>
-            </a>
-          </h2>
- </div>
-
+  <button type="button" class="close" ng-click="closeSettings()">
+    <i class="fa fa-times half-top"></i>
+  </button>
+  <h2 class="modal-title ng-binding">
+    Google Spreadsheet Settings
+    <a class="btn btn-link btn-xs" href="https://github.com/Rise-Vision/widget-google-spreadsheet/" target="_blank">
+      <i class="fa fa-github fa-2x icon-gray"></i>
+    </a>
+  </h2>
+</div>
 
 
 <div class="modal-body">
-
-  <h4>Spreadsheet</h4>
-  
+  <h4>Spreadsheet</h4>  
   <!-- FILE SELECTOR -->
-<div class="form-group file-selector">
+  <div class="form-group file-selector">
     <div class="row half-top half-bottom">
         <div class="col-md-12">
             <!-- Storage Single File - Button -->
             <button class="btn btn-default" ng-click="showFile=true" type="button">
                 Select Spreadsheet
-                <img src="../../images/drive-icon-gray.png" class="icon-right">
+                <img style="height: 16px" src="https://s3.amazonaws.com/Rise-Images/Icons/drive.svg" class="icon-right">
             </button>
+            <span class="add-left add-right text-muted">or</span>
             <!-- URL -->
-            <button name="customBtn" type="button" class="btn btn-default" ng-click="showFile=false">ID Key
-                <i class="fa fa-link fa-large"></i>
+            <button name="customBtn" type="button" class="btn btn-default" ng-click="showFile=false">Enter Spreadsheet Key
             </button>
         </div>
     </div>
@@ -82,16 +81,14 @@
 <!-- END FILE SELECTOR -->
 
 
-    <div class="" ng-show="showFile === true">
-     <div class="col-xs-12" ng-hide="hideError === true">
-      <div class="col-xs-10">
-          <div class="text-danger"> To use this Google Spreadsheet it must be published to the web. To publish, open the Google Spreadsheet and select '<b>File &gt; Publish to the web</b>', then click '<b>Publish</b>'. 
-          </div><br/>
-      </div> 
-      <a href="#" class="btn btn-default btn-inline" ng-click="hideError = true">Check Again</a>
-      </div>
-      <br/>
+  <div class="" ng-show="showFile === true">
+    <div class="content-box add-bottom" ng-hide="hideError === true">
+      <div class="bg-danger add-padding">
+        <a href="#" class="btn btn-default pull-right" ng-click="hideError = true">Check Again</a>
+         To use this Google Spreadsheet it must be published to the web. To publish, open the Google Spreadsheet and select '<b>File &gt; Publish to the web</b>', then click '<b>Publish</b>'. 
+      </div>    
     </div>
+  </div>
 
 
 <!-- END GROUP -->
@@ -115,6 +112,7 @@
       <input type="checkbox"><strong>Use First Row as Header</strong></input>
     </label>
   </div>
+
   
   <div class="radio">
      <label>
@@ -516,16 +514,15 @@
     START CUSTOM LAYOUT
      -->
      <hr>
-    <h5> Custom Layout
-    <a href="https://github.com/Rise-Vision/widget-google-spreadsheet/blob/master/examples/list.md" target="_blank" style="float:right;margin-left: 8px;">Custom Layout Example</a>
-    <span style="float: right;" class="fa fa-question-circle fa-lg"></span>
+    <h5>Custom Layout <a href="https://github.com/Rise-Vision/widget-google-spreadsheet/blob/master/examples/list.md" target="_blank" class="add-left text-small"><span class="fa fa-question-circle fa-lg icon-left"></span> <span>Example</span></a>
+    
     </h5>
  
     
   <!-- FILE SELECTOR -->
 <div class="form-group file-selector">
-    <div class="row half-top half-bottom">
-        <div class="col-md-12">
+  <div class="row half-top half-bottom">
+    <div class="col-md-12">
             <!-- Storage Single File - Button -->
             <button class="btn btn-default" ng-click="showHTML=true" type="button">
                 Select HTML File
@@ -540,29 +537,19 @@
 
    <!--  FILE SELECTOR -->
     <div class="form-group" ng-show="showHTML === true" > 
-        <div class="input-group custom-addon">
-            <div style="position: relative">
-            <input name="storage-file-name" type="text" class="form-control" value="../RandomSpreadsheet.xls" readonly="">
-            <span class="clear-selection"><i class="fa fa-times-circle" aria-hidden="true"></i></span>
-            </div>
-      <span class="input-group-addon">
-     
-    </span>
-        </div>
+      <div style="position: relative">
+        <span class="clear-selection"><i class="fa fa-times-circle" aria-hidden="true"></i></span>
+        <input name="storage-file-name" type="text" class="form-control" value="../RandomSpreadsheet.xls" readonly="">
+      </div>
     </div>
 
      <!--  URL SELECTOR -->
-     <div class="form-group" ng-show="showHTML === false">
-      <div class="input-group custom-addon">
-          <div style="position: relative">
-              <input name="storage-file-name" type="text" class="form-control" placeholder="http://">
-              <span class="clear-selection"><i class="fa fa-times-circle" aria-hidden="true"></i></span>
-          </div>
-          <span class="input-group-addon">
-        
-      </span>
-      </div>
-  </div>
+    <div class="form-group" ng-show="showHTML === false">
+      <div style="position: relative">
+        <span class="clear-selection"><i class="fa fa-times-circle" aria-hidden="true"></i></span>
+        <input name="storage-file-name" type="text" class="form-control" placeholder="http://"> 
+      </div>       
+    </div>
 </div>
 <!-- END FILE SELECTOR -->
 
