@@ -24,29 +24,66 @@
           rv-spinner-start-active="1">
 
       <li class="blank-template" ng-if="factory.search.category == 'Templates' && !factory.loadingItems">
-        <a class="clickable" id="newPresentationButton" ui-sref="apps.editor.workspace.artboard" ng-click="dismiss();">
-          <p><span><i class="fa fa-plus fa-2x"></i></span> {{'editor-app.storeProduct.templates.blank' | translate}}</p>
-        </a>
+        <div class="template-image">
+          <a class="clickable" id="newPresentationButton" ui-sref="apps.editor.workspace.artboard" ng-click="dismiss();">
+            <p><span><i class="fa fa-plus fa-2x"></i></span> {{'editor-app.storeProduct.templates.blank' | translate}}</p>
+          </a>
+        </div><!--template-image-->
       </li>
+
+      <li>
+        <div class="template-image">
+          <img src="" class="img-responsive clickable">
+        </div><!--template-image-->
+          <div class="template-info">
+            <!--<a href="#" class="btn btn-default btn-sm pull-right">
+              <i class="fa fa-info"></i>
+            </a>-->
+            <a href="#" class="btn btn-primary btn-sm pull-right">
+              <i class="fa fa-shopping-cart"></i>
+            </a>
+            <h3>Product Name</h3>
+            <p>Status 2</p>
+        </div>
+      </li>
+
+      <li>
+        <div class="template-image clickable">
+          <img src="" class="img-responsive">
+        </div><!--template-image-->
+        <div class="template-info">
+            <!--<a href="#" class="btn btn-default btn-sm pull-right">
+              <i class="fa fa-info"></i>
+            </a>-->
+          <a href="#" class="btn btn-primary btn-sm pull-right">
+            <i class="fa fa-plus"></i>
+          </a>
+          <h3>Product Name</h3>
+          <p>Status</p>
+        </div>
+      </li>
+
      
       <ng-repeat ng-repeat="product in factory.items.list">
       <li class="storeProduct" ng-click="select(product)">
-        <a href="">
-          <img ng-src="{{product.imageUrl}}" class="img-responsive">        
+          <div class="template-image clickable">
+            <img ng-src="{{product.imageUrl}}" class="img-responsive">
+          </div>        
           <div class="template-info">
-            <a class="btn btn-default btn-sm pull-right" ng-href="{{storeUrl}}/product/{{product.productId}}/" target="_blank" ng-click="$event.stopPropagation()"><i class="fa fa-info"></i></a>
+            <a class="btn btn-primary btn-sm pull-right" ng-href="{{storeUrl}}/product/{{product.productId}}/" target="_blank" ng-click="$event.stopPropagation()"><i class="fa fa-plus"></i></a>
             <h3 id="productName">{{product.name}}</h3>
             <p id="status">{{product.paymentTerms.toLowerCase() === 'free'? 'Free' : 'Premium'}} {{product.trialPeriod > 0 ? ' - '+product.trialPeriod+' Days Trial' : ''}}</p>
           </div>
-        </a>
       </li>
       </ng-repeat>
 
       <li class="suggest-template" ng-if="factory.search.category == 'Templates' && !factory.loadingItems">
-        <a href="https://docs.google.com/forms/d/1slHKxGxywkiSakMukDr4dMGLmhzhYhoU0F2BHP8FSd4/viewform" target="_blank">
-          <h3 translate>editor-app.storeProduct.templates.cantFind</h3>
-          <p translate>editor-app.storeProduct.templates.suggest</p>
-        </a>
+        <div class="template-image">
+          <a href="https://docs.google.com/forms/d/1slHKxGxywkiSakMukDr4dMGLmhzhYhoU0F2BHP8FSd4/viewform" target="_blank">
+            <h3 translate>editor-app.storeProduct.templates.cantFind</h3>
+            <p translate>editor-app.storeProduct.templates.suggest</p>
+          </a>
+        </div>
       </li>
       </ul>
 
