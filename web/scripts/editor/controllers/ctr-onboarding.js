@@ -20,5 +20,12 @@ angular.module('risevision.editor.controllers')
       });
     };
 
+     $scope.previewTemplate = function () {
+      $modal.open({
+        templateUrl: "partials/ux-modal3.html",
+        size: "lg"
+      });
+    };
+
   }
 ]);
