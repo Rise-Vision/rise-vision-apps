@@ -6,29 +6,11 @@
     <h3 id="storeModalTitle" class="modal-title">{{ 'editor-app.storeProduct.' + (factory.search.category === 'Content' ? 'content' : 'templates') + '.title' | translate }}</h3>
   </div>
 
- <!-- PROTOTYPE CSS -->
- <style>
-.grow {
-  width: 100%;
-  -webkit-transition: all 5s ease;
-     -moz-transition: all 5s ease;
-       -o-transition: all 5s ease;
-      -ms-transition: all 5s ease;
-          transition: all 5s ease;
-}
-.grow:hover {
-   -webkit-transform: scale3d(1.05, 1.05, 1.05);
-            transform: scale3d(1.05, 1.05, 1.05);
-}
-
-</style>
-
-
 
 <!-- FREE TEMPLATE -->
-<div class="modal-body" style="padding: 30px;" ng-controller="UxCtrl" ng-show="showDetailsFree">
- <button class="btn btn-default half-top" style="float:left" ng-click="showDetailsFree = !showDetailsFree"> <i class="fa fa-reply icon-left"></i> Back To All Templates</button>
-    <button style="margin-top: -30px; margin-right: -30px" class="close"><i class="fa fa-times"></i></button>
+<div class="modal-body" style="padding: 30px;" ng-show="showDetailsFree">
+
+  <button class="btn btn-default pull-left" ng-click=""> <i class="fa fa-reply icon-left"></i> Back To All Templates</button>
    
     <div class="row">
       <div class="col-xs-12">
@@ -37,30 +19,22 @@
     </div>
    
     <div class="row">
-        <div class="col-xs-9">
-            <p>It's always lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum </p>
-        </div>
-        <div class="col-xs-3">
-           <a href="#" target="">
-           <button class="btn btn-primary btn-lg pull-right">Start with this Template<i class="fa fa-plus icon-right"></i></button>
-           </a>
-        </div>
-
-       
+      <div class="col-md-9 col-xs-12">
+        <p>It's always lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum </p>
+      </div>
+      <div class="col-md-3 col-xs-12">
+        <a href="#" target="" class="btn btn-primary btn-lg btn-block">Start with this Template<i class="fa fa-plus icon-right"></i></a>
+      </div>
     </div>
 
-   <div class="content-box" style="overflow:hidden">
-      <div class="grow">
-          <img class="animated pulse" style="width:100%" src="https://s3.amazonaws.com/Store-Products/Rise-Vision/presentation_template_rva_college2_landscape.jpg">
-      </div>
+    <div class="video-box add-top">
+      <img class="img-responsive" src="https://s3.amazonaws.com/Store-Products/Rise-Vision/presentation_template_rva_college2_landscape.jpg">
+    </div>
   </div>
-</div>
 
-
-<!-- PREMIUM TEMPLATE -->
-<div class="modal-body" style="padding: 30px" ng-controller="UxCtrl" ng-show="showDetailsPremium">
- <button class="btn btn-default half-top" style="float:left" ng-click="showDetailsPremium = !showDetailsPremium" > <i class="fa fa-reply icon-left"></i> Back To All Templates</button>
-    <button style="margin-top: -30px; margin-right: -30px" class="close"><i class="fa fa-times"></i></button>
+  <!-- PREMIUM TEMPLATE -->
+  <div class="modal-body" style="padding: 30px" ng-show="showDetailsPremium">
+    <button class="btn btn-default pull-left"> <i class="fa fa-reply icon-left"></i> Back To All Templates</button>
    
     <div class="row">
       <div class="col-xs-12">
@@ -69,29 +43,25 @@
     </div>
    
     <div class="row">
-        <div class="col-xs-9">
-            <p>It's always lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum </p>
-        </div>
-        <div class="col-xs-3"><!-- 
-           <button class="btn btn-primary pull-right"><i class="fa fa-info-circle icon-left icon-white"></i>Details</button> -->
-           <a href="https://store.risevision.com/product/166/restaurant-menu-board" target="_blank">
-           <button class="btn btn-primary btn-lg pull-right"><i class="fa fa-shopping-cart icon-left"></i>$10 USD per Company</button>
-           </a>
-        </div> 
-       
+      <div class="col-md-9 col-xs-12">
+        <p>It's always lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum </p>
+      </div>
+      <div class="col-md-3 col-xs-12"><!-- 
+        <button class="btn btn-primary pull-right"><i class="fa fa-info-circle icon-left icon-white"></i>Details</button> -->
+        <a class="btn btn-primary btn-lg btn-block" href="https://store.risevision.com/product/166/restaurant-menu-board" target="_blank">
+          <i class="fa fa-shopping-cart icon-left"></i>$10 USD per Company
+        </a>
+      </div>   
     </div>
 
-   <div class="content-box" style="overflow:hidden">
-      <div class="grow">
-          <img class="animated pulse" style="width:100%" src="https://s3.amazonaws.com/Store-Products/Rise-Vision/presentation_template_rva_restaurant_menu_board.png">
-      </div>
+    <div class="video-box add-top">
+      <img class="img-responsive" src="https://s3.amazonaws.com/Store-Products/Rise-Vision/presentation_template_rva_restaurant_menu_board.png">
+    </div>
   </div>
-</div>
-
 
 <!-- SELECTOR LIST
  -->
- <div class="modal-body padding-large" stop-event="touchend" ng-hide="showDetailsFree || showDetailsPremium">
+ <div class="modal-body padding-large" stop-event="touchend" ng-hide="showDetailsFree || showDetailsPremium" ng-show="!showDetailsFree || !showDetailsPremium">
     
     <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>  
 
