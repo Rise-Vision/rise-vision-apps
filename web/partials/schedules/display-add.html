@@ -1,0 +1,66 @@
+<div id="protoModal">
+    <div class="modal-header">
+        <button id="dismissButton" type="button" class="close" ng-click="dismiss()">
+            <i class="fa fa-times"></i>
+        </button>
+        <h3 id="" class="modal-title">Add a Display</h3>
+    </div>
+    <div class="modal-body" ng-controller="modalCtrl">
+        <div class="video-box add-bottom">
+            <video class="display-video img-responsive" style="margin: 0 auto" autoplay loop preload="auto" poster="https://s3.amazonaws.com/Rise-Images/Animations/loader.png">
+                <source src="https://s3.amazonaws.com/Rise-Images/Animations/addadisplay.mp4" type="video/mp4"> Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="form-group text-center add-top" ng-init="displayType = 'showStart'" ng-hide="displayType == 'showID' || displayType == 'showEmail'" >
+            <label class="control-label"> Name Your Display</label>
+            <input type="text" class="form-control" placeholder="Display Name" id="name" name="name">
+            <button class="btn btn-primary add-top" ng-click="displayType = 'showID'">Next</span>
+                </i>
+            </button>
+        </div> 
+        <div ng-show="displayType == 'showID'" ng-hide="displayType == 'showEmail' || displayType == 'showStart'" class="text-center add-top">
+            <h4>Complete 'Front Office' Display by installing Rise Player</h4>
+            <p>1. Install Rise Player on your Media Player</p>
+            <div class="row sm-gutter">
+                <div class="col-xs-6">
+                    <a href="http://install-versions.risevision.com/installer-win-32.exe" target="_blank">
+                        <button class="btn btn-sm btn-primary btn-block" ng-click="documentationTracker('Player Download')">Download Windows 10 [32-bit]</button>
+                    </a>
+                    <a href="http://install-versions.risevision.com/installer-win-64.exe" target="_blank">
+                        <button class="btn btn-sm btn-primary btn-block half-top" ng-click="documentationTracker('Player Download')">Download Windows 10 [64-bit]</button>
+                    </a>
+                </div>
+                <div class="col-xs-6">
+                    <a href="http://install-versions.risevision.com/installer-lnx-32.sh" target="_blank">
+                        <button class="btn btn-sm btn-primary btn-block" ng-click="documentationTracker('Player Download')">Download Ubuntu 14.04 LTS [32-bit]</button>
+                    </a>
+                    <a href="http://install-versions.risevision.com/installer-lnx-64.sh" target="_blank">
+                        <button class="btn btn-sm btn-primary btn-block half-top" ng-click="documentationTracker('Player Download')">Download Ubuntu 14.04 LTS [64-bit]</button>
+                    </a>
+                </div>
+            </div>
+            <p class="half-top text-center">2. When prompted, enter this Display ID to complete the installation</p>
+            <div class="panel panel-success display-panel">
+                <div class="panel-body ng-binding">DS9XN5UBDBV7</div>
+            </div>
+            <p class="half-top text-center">
+                <p>We’ve also emailed these instructions to <b>miranda@flowershop.com<</b></p>
+                <button class="btn btn-default half-top" ng-click="displayType = 'showEmail'">
+                Send To Another E-Mail
+                <i class="fa fa-paper-plane icon-right"></i>
+                </button>
+                <button class="btn btn-default half-top" onclick="$('#protoModal').fadeOut();$('#emptyDisplayModal').fadeOut();$('.modal-backdrop').hide();$('#btnThreeDisplaysSelected').show();$('#btnNoDisplaysSelected').hide();" ng-click="openFull()">
+                <i class="fa fa-reply icon-left"></i>
+                Back To Display List</button>
+            </p>
+        </div>
+        <div class="add-top" ng-hide="displayType == 'showID' || displayType == 'showStart'" ng-show="displayType == 'showEmail'">
+            <h4 class="text-center">Send To Another E-Mail</h4>
+            <div class="form-group text-center">
+                <input type="email" class="form-control" placeholder="Enter Email Address" id="name" name="name">
+                <button class="btn btn-default add-top" ng-click="displayType = 'showID'">Cancel</button>
+                <button class="btn btn-primary add-top" ng-click="displayType = 'showID'">Send</button>
+            </div>
+        </div> <!-- MODAL BODY -->
+    </div> <!-- PROTO MODAL -->
+

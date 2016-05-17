@@ -4,9 +4,9 @@
     <h1 id="title" translate>displays-app.title</h1>
   </div> 
 
-  <div class="global-actions" require-role="da">
-    <a id="displayAddButton" ui-sref="apps.displays.add" class="btn btn-lg btn-primary" ng-click="displayTracker('Add Display')">
-      {{ 'displays-app.actions.new' | translate }}
+  <div class="global-actions" ng-controller="modalCtrl">
+    <a id="displayAddButton" class="btn btn-lg btn-primary" ng-click="openShared()">
+      Add Display
       <i class="fa fa-plus icon-right"></i> 
     </a>
   </div>
