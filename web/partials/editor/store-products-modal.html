@@ -5,9 +5,66 @@
     </button>
     <h3 id="storeModalTitle" class="modal-title">{{ 'editor-app.storeProduct.' + (factory.search.category === 'Content' ? 'content' : 'templates') + '.title' | translate }}</h3>
   </div>
-  <div class="modal-body padding-large" stop-event="touchend">
+
+
+<!-- FREE TEMPLATE -->
+<div class="modal-body" style="padding: 30px;" ng-show="showDetailsFree">
+
+  <button class="btn btn-default pull-left" ng-click=""> <i class="fa fa-reply icon-left"></i> Back to all Templates</button>
+   
+    <div class="row">
+      <div class="col-xs-12">
+          <h3> Education Landscape 2 </h3>
+      </div>
+    </div>
+   
+    <div class="row">
+      <div class="col-md-9 col-xs-12">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+      </div>
+      <div class="col-md-3 col-xs-12">
+        <a href="#" target="" class="btn btn-primary btn-lg btn-block">Start with this Template<i class="fa fa-plus icon-right"></i></a>
+      </div>
+    </div>
+
+    <div class="video-box add-top">
+      <img class="img-responsive" src="https://s3.amazonaws.com/Store-Products/Rise-Vision/presentation_template_rva_college2_landscape.jpg">
+    </div>
+  </div>
+
+  <!-- PREMIUM TEMPLATE -->
+  <div class="modal-body" style="padding: 30px" ng-show="showDetailsPremium">
+    <button class="btn btn-default pull-left"> <i class="fa fa-reply icon-left"></i> Back To All Templates</button>
+   
+    <div class="row">
+      <div class="col-xs-12">
+          <h3> Restaurant Menu Board </h3>
+      </div>
+    </div>
+   
+    <div class="row">
+      <div class="col-md-9 col-xs-12">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+      </div>
+      <div class="col-md-3 col-xs-12"><!-- 
+        <button class="btn btn-primary pull-right"><i class="fa fa-info-circle icon-left icon-white"></i>Details</button> -->
+        <p class="template-pricing"><span>$10</span> USD per Company</p>
+        <a class="btn btn-primary btn-lg btn-block" href="https://store.risevision.com/product/166/restaurant-menu-board" target="_blank">
+          View in Store <i class="fa fa-shopping-cart icon-right"></i>
+        </a>
+      </div>   
+    </div>
+
+    <div class="video-box add-top">
+      <img class="img-responsive" src="https://s3.amazonaws.com/Store-Products/Rise-Vision/presentation_template_rva_restaurant_menu_board.png">
+    </div>
+  </div>
+
+<!-- SELECTOR LIST
+ -->
+ <div class="modal-body padding-large" stop-event="touchend" ng-hide="showDetailsFree || showDetailsPremium" ng-show="!showDetailsFree || !showDetailsPremium">
     
-    <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>
+    <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>  
 
     <div class="templates">
 
@@ -32,34 +89,33 @@
       </li>
 
       <li>
-        <div class="template-image">
-          <img src="" class="img-responsive clickable">
+        <div ng-click="showDetailsFree = !showDetailsFree" class="template-image clickable">
+          <span class="show-details"></span>
+          <img src="https://s3.amazonaws.com/Store-Products/Rise-Vision/presentation_template_rva_college2_landscape.jpg" class="img-responsive">
         </div><!--template-image-->
           <div class="template-info">
-            <!--<a href="#" class="btn btn-default btn-sm pull-right">
-              <i class="fa fa-info"></i>
-            </a>-->
             <a href="#" class="btn btn-primary btn-sm pull-right">
-              <i class="fa fa-shopping-cart"></i>
+              <i class="fa fa-plus"></i>
             </a>
-            <h3>Product Name</h3>
-            <p>Status 2</p>
+            <h3>Education Landscape 2</h3>
+            <p>Free</p>
         </div>
       </li>
 
       <li>
-        <div class="template-image clickable">
-          <img src="" class="img-responsive">
+        <div ng-click="showDetailsPremium = !showDetailsPremium" class="template-image clickable">
+          <span class="show-details"></span>
+          <img src="https://s3.amazonaws.com/Store-Products/Rise-Vision/presentation_template_rva_restaurant_menu_board.png" class="img-responsive">
         </div><!--template-image-->
         <div class="template-info">
             <!--<a href="#" class="btn btn-default btn-sm pull-right">
               <i class="fa fa-info"></i>
             </a>-->
           <a href="#" class="btn btn-primary btn-sm pull-right">
-            <i class="fa fa-plus"></i>
+            <i class="fa fa-shopping-cart"></i>
           </a>
-          <h3>Product Name</h3>
-          <p>Status</p>
+          <h3>Restaurant Menu Board</h3>
+          <p>Premium</p>
         </div>
       </li>
 
@@ -67,6 +123,7 @@
       <ng-repeat ng-repeat="product in factory.items.list">
       <li class="storeProduct" ng-click="select(product)">
           <div class="template-image clickable">
+            <span class="show-details"></span>
             <img ng-src="{{product.imageUrl}}" class="img-responsive">
           </div>        
           <div class="template-info">
