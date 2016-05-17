@@ -1,18 +1,31 @@
 <div id="workspaceToolbar" class="workspace-toolbar">
      
       <button id="compressArtboardButton" class="btn btn-default animated pulse ng-hide" ng-click="fullArtboard = false" ng-show="designMode && fullArtboard && !placeholderFactory.placeholder"><i class="fa fa-compress"></i></button>
+
       <button id="expandArtboardButton" class="btn btn-default" ng-show="designMode && (!fullArtboard || placeholderFactory.placeholder)" ng-click="fullArtboard = true; placeholderFactory.clearPlaceholder()"><i class="fa fa-expand"></i></button>
+
       <button id="presentationPropertiesButton" class="btn btn-default add-right" ng-show="designMode" ng-click="openProperties()"><i class="fa fa-cog"></i></button>
-      <h2 id="presentationName" class="presentation-name">{{factory.presentation.name}}</h2>
+
+      <h2 id="presentationName" class="presentation-name">{{factory.presentation.name}}</h2> 
+
+      <span ng-init="designMode = true">
+
+        <button id="designButton" ui-sref="apps.editor.workspace.artboard" class="btn btn-link" ng-class="{'hidden' : designMode}" ng-disabled="designMode" ng-click="designMode = true"> View Design</button>
+
+        <button id="htmlButton" ui-sref="apps.editor.workspace.htmleditor" class="btn btn-link" ng-class="{'hidden' : !designMode}" ng-disabled="!designMode" ng-click="designMode = false"> View HTML <i class="fa fa-code"></i></button>
+
+      </span><!--btn-group-->
+
 
       <button id="addPlaceholderButton" class="btn btn-primary pull-left" ng-show="designMode" ng-click="addNewPlaceholder()">{{'editor-app.workspace.toolbar.addPlaceholder' | translate}}<i class="fa fa-plus icon-right"></i></button>
 
-      <button class="btn btn-primary pull-right" id="previewButton" ng-click="factory.saveAndPreview()">Save & Preview <i class="fa fa-play icon-right"></i></button>
+      <div class="pull-right" ng-controller="UxCtrl">
+        <button class="btn btn-default" ng-click="open2()">Change Template <i class="fa fa-th icon-right"></i></button>
+        <span style="font-weight: 500" class="text-muted add-left">or</span>
+          <button class="btn btn-primary" id="previewButton" ng-click="open()">Save & Preview <i class="fa fa-play icon-right"></i></button>
+      </div>
 
-      <div ng-init="designMode = true" class="btn-group pull-right">
-        <button id="designButton" ui-sref="apps.editor.workspace.artboard" class="btn btn-default" ng-class="{'active' : designMode}" ng-disabled="designMode" ng-click="designMode = true"  >{{'editor-app.workspace.toolbar.mode.design' | translate}}</button>
-        <button id="htmlButton" ui-sref="apps.editor.workspace.htmleditor" class="btn btn-default" ng-class="{'active' : !designMode}" ng-disabled="!designMode" ng-click="designMode = false" >{{'editor-app.workspace.toolbar.mode.html' | translate}}</button>
-      </div><!--btn-group-->
+      
 
 </div><!--presentation-toolbar-->
 

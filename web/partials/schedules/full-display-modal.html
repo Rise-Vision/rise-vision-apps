@@ -1,0 +1,72 @@
+<div id="fullDisplayModal" >
+
+
+
+<div class="modal-header">
+  <button id="dismissButton" type="button" class="close" ng-click="myClickEvent()">
+    <i class="fa fa-times"></i>
+  </button>
+  <h3 id="" class="modal-title">Select Display(s)</h3>
+</div>
+
+<div class="modal-body" ng-controller="distributionListController">
+   
+
+  
+
+<!--     BEGIN FULL  DISPLAY LIST
+ -->
+<div id="fullDisplayList">
+    <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch" class="ng-isolate-scope">
+        <div class="input-group"><span class="input-group-addon" ng-click="doSearch()"><i class="fa fa-search"></i></span>
+            <input id="templateSearchInput" type="text" class="form-control ng-pristine ng-untouched ng-valid" placeholder="Search for Shared Templates" ng-model="search.query" ng-enter="delay(doSearch, 0)" ng-change="delay(doSearch, 1000)"> <span class="input-group-addon" ng-click="reset()"><i class="fa fa-times"></i></span></div>
+    </search-filter>
+    <div class="content-box half-top">
+        <div class="scrollable-list" rv-scroll-event="handleScroll($event, isEndEvent)">
+
+<table id="displayListTable" class="table-2 table-hover table-selector multiple-selector animated fadeIn">
+    <thead>
+        <tr>
+            <th id="tableHeaderName" class="clickable">Name
+               <i class="fa fa-long-arrow-up"></i>
+            </th>
+            <th id="tableHeaderAddress" class="hidden-xs">Address</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="clickable-row display ng-click-active" ng-click="toggleDisplay(this);" ng-class="{'active' : isSelected(display.id) }" >
+            <td id="displayName-KQGG7DCQXWH6" class="display-name"><span>A display</span></td>
+            <td id="displayAddress-KQGG7DCQXWH6" class="display-address hidden-xs"><span class="text-muted">10000 Marshall Dr, Lenexa, KS, US, 66215-1244</span></td>
+        </tr>
+
+        <tr class="clickable-row display">
+            <td id="displayName-KQGG7DCQXWH6" class="display-name"><span>A display</span></td>
+            <td id="displayAddress-KQGG7DCQXWH6" class="display-address hidden-xs"><span class="text-muted">10000 Marshall Dr, Lenexa, KS, US, 66215-1244</span></td>
+        </tr>
+        <tr class="clickable-row display">
+            <td id="displayName-KQGG7DCQXWH6" class="display-name"><span>A display</span></td>
+            <td id="displayAddress-KQGG7DCQXWH6" class="display-address hidden-xs"><span class="text-muted">10000 Marshall Dr, Lenexa, KS, US, 66215-1244</span></td>
+        </tr>
+        <tr class="clickable-row display">
+            <td id="displayName-KQGG7DCQXWH6" class="display-name"><span>A display</span></td>
+            <td id="displayAddress-KQGG7DCQXWH6" class="display-address hidden-xs"><span class="text-muted">10000 Marshall Dr, Lenexa, KS, US, 66215-1244</span></td>
+        </tr>
+    </tbody>
+</table>
+
+        </div>
+    </div>
+</div>
+
+<!--     END FULL  DISPLAY LIST
+ -->
+ </div>
+
+
+<div class="modal-footer">
+    <button id="applyButton" class="btn-primary btn ng-click-active" onclick="$('.modal').modal('hide')">Apply <i class="fa fa-check icon-right"></i></button>
+    <button id="" class="btn btn-default" onclick="$('#fullDisplayModal').fadeOut();$('.modal-backdrop').hide();$('#textTarget').text( '3 Displays Selected' );">Cancel <i class="fa fa-times icon-right"></i></button>
+</div>
+
+
+</div>
