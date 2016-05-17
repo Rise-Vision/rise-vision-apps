@@ -1,123 +1,90 @@
 <div id="appLauncherContainer">
-  <div class="page-content apps-launcher">
-    <div class="apps-launcher-tour">
-      <div class="container">
-      <div class="headline add-bottom">
-        <h2 id="welcome-text" class="remove-bottom half-top">Welcome to Rise Vision!</h2>
-        <span class"text-muted">You’re three steps away from amazing digital signage. Ready to get started?</span>
-      </div><!--headline-->
-      <div class="row">
-        <div class="col-sm-4"> 
-          <div class="content-box half-bottom">
-            <div class="image">
-              <img src="https://s3.amazonaws.com/Rise-Images/Experimental/create.png" class="img-responsive">
-            </div><!--image-->
-            <div class="padding-large-horizontal padding-small-vertical">  
-              <h4>1. Create</h4>
-              <p class="text-muted add-left add-right">Create your first Presentation with our easy to use Editor.</p><br>
-              <button id="presentationAddButton" class="btn btn-hg btn-primary add-bottom btn-block" ng-click="editorFactory.addPresentationModal()">Add Presentation</button>
-            </div>
-          </div><!--content-box-->
-        </div><!--col-->
-        <div class="col-sm-4">
-          <div class="content-box half-bottom">
-            <div class="image">
-              <img src="https://s3.amazonaws.com/Rise-Images/Experimental/show.png" class="img-responsive">
-            </div><!--image-->
-            <div class="padding-large-horizontal padding-small-vertical">  
-              <h4>2. Display</h4>
-              <p class="text-muted add-left add-right">Add your displays to Rise Vision and start sharing content with your audience.</p>
-              <a ui-sref="apps.displays.add" class="btn btn-hg btn-primary add-bottom btn-block" ng-click="launcherTracker('Add Display')">Add Display</a>
-            </div>
-          </div><!--content-box-->
-        </div>
-        <div class="col-sm-4">
-          <div class="content-box half-bottom">
-            <div class="image">
-              <img src="https://s3.amazonaws.com/Rise-Images/Experimental/organize.png" class="img-responsive">
-            </div><!--image-->
-            <div class="padding-large-horizontal padding-small-vertical">  
-              <h4>3. Manage</h4>
-              <p class="text-muted add-left add-right">Create a Schedule to choose when and where you’d like your content to show.</p>
-              <a ui-sref="apps.schedules.add" class="btn btn-hg btn-primary add-bottom btn-block">Add Schedule</a>
-            </div>
-          </div><!--content-box-->
-        </div>           
-      </div><!--row-->
+  <div class="container">
+    <div class="create-presentation-cta text-center" ng-hide="addPresentation">
+
+      <h1>How simple is digital signage with Rise Vision?</h1>
+      <h3>Start with a <span>Presentation</span> and then <span>Schedule</span> it with your <span>Display</span></h3>
+
+      <div class="add-bottom add-top">
+        <img src="https://s3.amazonaws.com/Rise-Images/Icons/diagram@2x.png">
       </div>
+      <button class="btn btn-hg btn-primary add-top" ng-click="addPresentation = !addPresentation">Add Presentation <i class="fa fa-plus icon-right"></i></button>
+
     </div>
-  </div>
 
-  <div class="website">
-    <div class="page-content">
-    <div class="home-features">
-      <div class="container" vertilize-container>
-        <div class="row">
-          <div class="col-sm-4">
-            <a href="http://rva.risevision.com/#PRESENTATIONS" class="feature" vertilize>
-              <div class="content-box-body">
-                <div class="image"><img src="images/editor-image.png"></div>
-                <h3>Editor</h3>
-                <p>Create and manage HTML content for your digital signage displays.</p>
-              </div>
-            </a>
-          </div><!--col-->
+        <div class="priority-trial-cta" ng-hide="hideHelp">
+          <span ng-click="hideHelp = !hideHelp" class="half-top add-right fa fa-times fa-lg pull-right clickable"></span>
+          <div class="content-box-body">
+            <img class="pull-left" src="https://s3.amazonaws.com/Rise-Images/Icons/support.png">
+            <h3>Need Help?</h3>
+            <p>Get 10 days of Priority Support for FREE!</p>
+            <button class="btn btn-lg btn-primary">Get Priority Support</button>
+          </div>
+        </div><!--context-box-->
 
-          <div class="col-sm-4">
-            <a href="http://store.risevision.com" class="feature" vertilize>
-              <div class="content-box-body">
-                <div class="image"><img src="images/store-image.png"></div>
-                <h3>Store</h3>
-                <p>A digital signage store full of content, services, applications and hardware for Rise Vision.</p>
-              </div>
-            </a>
-          </div><!--col-->
+    
+  
+    <div ng-show="addPresentation">
+    <div class="text-right add-top add-bottom">
+      <button class="btn btn-link" ng-click="showHelp = !showHelp">How do I show Presentations and Web Pages?</button>
+    </div>
 
-          <div class="col-sm-4">
-            <a href="http://apps.risevision.com/storage" class="feature" vertilize>
-              <div class="content-box-body">
-                <div class="image"><img src="images/storage-image.png"></div>
-                <h3>Storage</h3>
-                <p>Manage and deliver media to your digital signage displays.</p>
-              </div>
-            </a>
-          </div><!--col-->  
-          </div><!--row-->
 
-          <div class="row">
+    <div class="video-box add-bottom" ng-show="showHelp">
+        <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/Animations/howitworks.gif">
+    </div>
 
-            <div class="col-sm-4">
-            <a href="http://rva.risevision.com/#DISPLAYS" class="feature" vertilize>
-              <div class="content-box-body">
-                <div class="image"><img src="images/displays-image.png"></div>
-                <h3>Displays</h3>
-                <p>Manage and monitor your digital signage displays.</p>
-              </div>
-            </a>
-            </div><!--col-->
-
-            <div class="col-sm-4">
-            <a href="http://rva.risevision.com/#SCHEDULES" class="feature" vertilize>
-              <div class="content-box-body">
-                <div class="image"><img src="images/schedule-image.png"></div>
-                <h3>Schedules</h3>
-                <p>Schedule delivery of HTML content to your digital signage displays.</p>
-              </div>
-            </a>
+    <div class="row">
+      <div class="col-sm-4">
+        <button class="btn btn-link pull-right visible-lg">Add Presentation <i class="fa fa-plus icon-right"></i></button>
+        <h3><a href="https://apps.risevision.com/editor" link-cid><img src="https://s3.amazonaws.com/Rise-Images/Icons/presentations-icon.png" class="add-right"> Presentations</a></h3>
+        <button class="btn btn-default btn-sm btn-block hidden-lg">Add Presentation <i class="fa fa-plus icon-right"></i></button>
+          <div class="scrollable-list"> 
+            <div class="list" ng-class="{'help-active' : showHelp}">
+              <div class="list-item clickable">
+                <h4>My First Presentation</h4>
+              </div><!--list-item-->
+              <div class="list-item clickable">
+                <h4>Another Presentation</h4>
+              </div><!--list-item-->
+              <div class="list-item clickable">
+                <h4>Another Presentation</h4>
+              </div><!--list-item-->
+              <div class="list-item clickable">
+                <h4>Another Presentation</h4>
+              </div><!--list-item-->
+              
             </div>
+          </div><!--scrollable-list-->
+          <a class="add-top add-bottom btn btn-default btn-block" href="#">View All Presentations</a>
+      </div><!--col-->
 
-            <div class="col-sm-4">
-            <a href="https://community.risevision.com" class="feature" vertilize>
-              <div class="content-box-body">
-                <div class="image"><img src="images/community-image.png"></div>
-                <h3>Community</h3>
-                <p>Ask questions, share ideas and connect with other people who are passionate about digital signage.</p>
-              </div>
-            </a>
+      <div class="col-sm-4">
+        <button class="btn btn-link pull-right visible-lg">Add Schedule <i class="fa fa-plus icon-right"></i></button>
+        <h3><a href="https://apps.risevision.com/schedules" link-cid><img src="https://s3.amazonaws.com/Rise-Images/Icons/schedules-icon.png" class="add-right"> Schedules</a></h3>
+        <button class="btn btn-default btn-sm btn-block hidden-lg">Add Schedule <i class="fa fa-plus icon-right"></i></button>
+          <div class="scrollable-list"> 
+            <div class="list" ng-class="{'help-active' : showHelp}">
+              <div class="list-item clickable">
+                <h4>My First Schedule</h4>
+              </div><!--list-item-->
             </div>
-          </div><!--row-->
-        </div>
-      </div><!--home-features-->
-    </div><!--page-content-->
-  </div><!--website-->
+          </div><!--scrollable-list-->
+          <a class="add-top add-bottom btn btn-default btn-block" href="#">View All Schedules</a>
+      </div><!--col-->
+
+      <div class="col-sm-4">
+        <button class="btn btn-link pull-right visible-lg">Add Display <i class="fa fa-plus icon-right"></i></button>
+        <h3><a href="https://apps.risevision.com/displays" link-cid><img src="https://s3.amazonaws.com/Rise-Images/Icons/displays-icon.png" class="add-right"> Displays</a></h3>
+        <button class="btn btn-default btn-sm btn-block hidden-lg">Add Display <i class="fa fa-plus icon-right"></i></button>
+          <div class="scrollable-list text-center"> 
+                <h4 class="text-muted add-bottom add-top">No Displays</h4>
+                <button class="btn btn-primary btn-lg">Add Display <i class="fa fa-plus icon-right"></i></button>
+          </div><!--scrollable-list-->
+      </div><!--col-->
+
+
+    </div><!--row-->
+  </div><!--page-content-->
+  </div><!--hidden-->
 </div><!--appLauncherContainer-->

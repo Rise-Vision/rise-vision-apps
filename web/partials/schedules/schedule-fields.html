@@ -26,7 +26,19 @@
   ></timeline-textbox>
 </div><!--form-group-->
 
-<distribution-selector distribution="schedule.distribution" distribute-to-all="schedule.distributeToAll"></distribution-selector>
+<div class="form-group" ng-controller="modalCtrl">
+  <label class="control-label add-right">Distribution</label>
+  <label class="control-label control-label-secondary">
+    <input type="checkbox" ng-model="distributeToAll" ng-checked="distributeToAll" class="ng-valid ng-dirty" checked="checked">
+    <span id="distributeToAllText">Select All Displays</span>
+  </label>
+
+  <div class="content-box-editable clickable input-group" ng-if="!distributeToAll"> 
+    <div id="btnNoDisplaysSelected" ng-click="openEmpty()" class="label label-tag">No Displays Selected </div>
+    <div id="btnThreeDisplaysSelected" ng-click="openFull()" class="label label-tag" style="display:none;">3 Displays Selected </div>
+    <span class="input-group-addon btn btn-primary" ng-click="openEmpty()">Select Display(s)</span>
+  </div>
+</div>
 
 <div class="add-top text-right">
   <div class="pull-left">

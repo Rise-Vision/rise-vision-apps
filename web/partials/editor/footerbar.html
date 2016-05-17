@@ -20,7 +20,7 @@
     <button id="publishButton" require-role="cp" class="btn btn-primary" ng-show="factory.isRevised()" ng-click="factory.publishPresentation()" >{{'common.publish' | translate}}</button>
 
     <!-- Indicates cancel or non-destructive action -->
-    <button id="cancelButton" ui-sref="apps.editor.list" class="btn btn-default btn-fixed-width">
+    <button id="cancelButton" ui-sref="apps.editor.list" class="btn btn-default btn-fixed-width hidden">
       {{'common.cancel' | translate}}
       <i class="fa fa-times icon-right"></i>
     </button>
