@@ -72,4 +72,64 @@ describe('service: subscriptionStatusFactory:', function() {
     })    
   });
 
+  describe('checkProductCode:',function(){
+    var pc = "pc1";
+
+    it('should forward call to checkProductCodes',function(){
+      var spy = sinon.spy(subscriptionStatusFactory,'checkProductCodes');
+      subscriptionStatusFactory.checkProductCode(pc);
+      spy.should.have.been.calledWith([pc])
+    });
+
+    it('should return first result of checkProductCodes',function(done){
+      var status1 = 'status1';
+      var status2 = 'status2';
+
+      sinon.stub(subscriptionStatusFactory,'checkProductCodes',function(){
+        return Q.resolve([status1,status2]);
+      });
+
+      subscriptionStatusFactory.checkProductCode(pc).then(function(status){
+        expect(status).to.equal(status1);
+        done();
+      });     
+    });
+
+    it('should handle empty result',function(done){
+      sinon.stub(subscriptionStatusFactory,'checkProductCodes',function(){
+        return Q.resolve([]);
+      });
+      
+      subscriptionStatusFactory.checkProductCode(pc).then(function(status){
+        expect(status).to.be.null;
+        done();
+      }); 
+    });
+
+    it('should handle null result',function(done){
+      sinon.stub(subscriptionStatusFactory,'checkProductCodes',function(){
+        return Q.resolve(null);
+      });
+      
+      subscriptionStatusFactory.checkProductCode(pc).then(function(status){
+        expect(status).to.be.null;
+        done();
+      }); 
+    });
+
+    it('should handle null result',function(done){
+      sinon.stub(subscriptionStatusFactory,'checkProductCodes',function(){
+        return Q.reject("Failure");
+      });
+      
+      subscriptionStatusFactory.checkProductCode(pc).then(function(status){
+        done('Should not resolve on failure');
+      },function(err){
+        expect(err).to.be.equal("Failure");
+        done();
+      }); 
+    });
+
+  });
+
 });

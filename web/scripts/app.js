@@ -26,6 +26,7 @@ angular.module('risevision.apps', [
     'risevision.apps.services',
     'risevision.apps.controllers',
     'risevision.apps.launcher.controllers',
+    'risevision.apps.launcher.directives',
     'risevision.apps.launcher.services',
     'risevision.schedules.services',
     'risevision.schedules.controllers',
@@ -95,9 +96,9 @@ angular.module('risevision.apps', [
 
       .state('apps.launcher.support', {
         url: '/support',
-        controller: ['$state', 'canAccessApps', 'supportFactory', 
+        controller: ['$state', 'canAccessApps', 'supportFactory',
           function ($state, canAccessApps, supportFactory) {
-            canAccessApps().then(function(){
+            canAccessApps().then(function () {
               supportFactory.handlePrioritySupportAction();
               $state.go('apps.launcher.home');
             });
@@ -107,9 +108,9 @@ angular.module('risevision.apps', [
 
       .state('apps.launcher.sendnote', {
         url: '/send-note',
-        controller: ['$state', 'canAccessApps', 'supportFactory', 
+        controller: ['$state', 'canAccessApps', 'supportFactory',
           function ($state, canAccessApps, supportFactory) {
-            canAccessApps().then(function(){
+            canAccessApps().then(function () {
               supportFactory.handleSendUsANote();
               $state.go('apps.launcher.home');
             });
@@ -433,7 +434,7 @@ angular.module('risevision.apps', [
   .run(['$rootScope', '$state', '$modalStack',
     function ($rootScope, $state, $modalStack) {
 
-      $rootScope.$on('$stateChangeStart', function() {
+      $rootScope.$on('$stateChangeStart', function () {
         $modalStack.dismissAll();
       });
 
@@ -467,6 +468,7 @@ angular.module('risevision.apps.services', []);
 angular.module('risevision.apps.controllers', []);
 
 angular.module('risevision.apps.launcher.controllers', []);
+angular.module('risevision.apps.launcher.directives', []);
 angular.module('risevision.apps.launcher.services', []);
 
 

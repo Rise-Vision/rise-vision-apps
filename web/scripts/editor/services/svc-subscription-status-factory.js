@@ -20,6 +20,15 @@ angular.module('risevision.editor.services')
         }
       };
 
+      factory.checkProductCode = function(productCode) {
+        return factory.checkProductCodes([productCode]).then(function(statusItems){
+          if (statusItems && statusItems[0]) {
+            return statusItems[0]; 
+          }
+          return null;
+        });
+      }
+
       factory.checkProductCodes = function (productCodes) {
         var deferred = $q.defer();
 
