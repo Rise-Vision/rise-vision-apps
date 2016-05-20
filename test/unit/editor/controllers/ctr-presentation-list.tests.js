@@ -70,6 +70,10 @@ describe('controller: Presentation List', function() {
     expect($scope.search).to.have.property('reverse');
     expect($scope.search.count).to.equal(5);
   });
+
+  it('should attach presentation list to editorFactory',function(){
+    expect($scope.editorFactory.presentations).to.be.ok;
+  });
   
   describe('$loading: ', function() {
     it('should stop spinner', function() {

@@ -1,6 +1,9 @@
 <div id="appLauncherContainer">
   <div class="container">
+
+  <ng-include ng-show="!editorFactory.presentations.loadingItems && editorFactory.presentations.items.list.length === 0" src="'partials/launcher/add-presentation-cta.html'"></ng-include>
   
+  <div ng-show="editorFactory.presentations.items.list.length > 0">
     <div class="text-right add-top add-bottom">
       <button id="helpToggleButton" class="btn btn-link" ng-click="toggleHelp()">{{'launcher.howToShow'|translate}}</button>
     </div>
@@ -69,9 +72,10 @@
           </div><!--scrollable-list-->
           <a id="displaysViewAll" class="add-top add-bottom btn btn-default btn-block" ui-sref="apps.displays.list" ng-hide="displays.list.length == 0" translate>displays-app.list.viewAll</a>
       </div><!--col-->
-
-
     </div><!--row-->    
-    <priority-support-banner></priority-support-banner>
+  </div>
+
+  <priority-support-banner></priority-support-banner>
+
   </div><!--container-->
 </div><!--appLauncherContainer-->

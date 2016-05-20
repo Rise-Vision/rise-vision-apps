@@ -11,8 +11,9 @@ angular.module('risevision.editor.controllers')
         count: $scope.listLimit
       };
 
-      $scope.factory = new ScrollingListService(presentation.list,
+      editorFactory.presentations = new ScrollingListService(presentation.list,
         $scope.search);
+      $scope.factory = editorFactory.presentations;
       $scope.editorFactory = editorFactory;
 
       $scope.filterConfig = {
