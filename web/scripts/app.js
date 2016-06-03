@@ -342,6 +342,18 @@ angular.module('risevision.apps', [
         }
       })
 
+      .state('apps.editor.add', {
+        url: '/editor/add',
+        controller: ['$state', 'canAccessApps', 'editorFactory',
+          function ($state, canAccessApps, editorFactory) {
+            canAccessApps().then(function () {
+              editorFactory.addPresentationModal();
+              $state.go('apps.editor.list');
+            });
+          }
+        ]
+      })
+
       .state('apps.editor.workspace', {
         url: '/editor/workspace/:presentationId/:copyPresentation',
         abstract: true,

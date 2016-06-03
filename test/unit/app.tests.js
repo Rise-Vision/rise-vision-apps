@@ -20,11 +20,12 @@ describe('app:', function() {
         $state = $injector.get('$state');
         supportFactory = $injector.get('supportFactory');
         canAccessApps = $injector.get('canAccessApps');
+        editorFactory = $injector.get('editorFactory');
       });
   });
 
   
-  var $state, supportFactory, canAccessApps;
+  var $state, supportFactory, canAccessApps, editorFactory;
 
   describe('state apps.launcher.support:',function(){
     
@@ -57,6 +58,25 @@ describe('app:', function() {
     it('should init Send Us a Note modal',function(done){
       var spy = sinon.spy(supportFactory,'handleSendUsANote') 
       $state.get('apps.launcher.sendnote').controller[3]($state, canAccessApps, supportFactory);
+      setTimeout(function() {
+        spy.should.have.been.called;
+        done();
+      }, 10);
+    });
+  });
+
+  describe('state apps.editor.add:',function(){
+    
+    it('should register state',function(){
+      var state = $state.get('apps.editor.add')
+      expect(state).to.be.ok;
+      expect(state.url).to.equal('/editor/add');
+      expect(state.controller).to.be.ok;
+    });
+
+    it('should init add presentation modal',function(done){
+      var spy = sinon.spy(editorFactory,'addPresentationModal') 
+      $state.get('apps.editor.add').controller[3]($state, canAccessApps, editorFactory);
       setTimeout(function() {
         spy.should.have.been.called;
         done();

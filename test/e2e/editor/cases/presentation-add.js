@@ -41,6 +41,10 @@ var PresentationAddScenarios = function() {
       expect(workspacePage.getAddPlaceholderButton().isPresent()).to.eventually.be.true;
     });
 
+    it('should show Change Template Button', function () {
+      expect(workspacePage.getChangeTemplateButton().isDisplayed()).to.eventually.be.true;
+    });
+
     it('should show Preview Button', function () {
       expect(workspacePage.getPreviewButton().isDisplayed()).to.eventually.be.true;
     });
@@ -70,8 +74,13 @@ var PresentationAddScenarios = function() {
 
     it('should save presentation', function() {  
       helper.clickWhenClickable(workspacePage.getSaveButton(), 'Save Button');
+      browser.sleep(500);
       helper.wait(workspacePage.getSaveStatus(), 'Save Status');
       expect(workspacePage.getPreviewButton().isEnabled()).to.eventually.be.true;
+    });
+
+    it('should hide Change Template Button', function () {
+      expect(workspacePage.getChangeTemplateButton().isPresent()).to.eventually.be.false;
     });
 
     it('should delete presentation and return to list', function(done) {
