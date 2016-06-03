@@ -9,12 +9,12 @@
   </div>
 
   <div class="row">
-    <div class="col-md-9 col-xs-12">
+    <div class="col-md-7 col-xs-12">
       <p>{{ product.descriptionShort}}</p>
     </div>
 
 
-    <div class="col-md-3 col-xs-12" rv-spinner rv-spinner-key="loading-price" rv-spinner-start-active="1">
+    <div class="col-md-5 col-xs-12" rv-spinner rv-spinner-key="loading-price" rv-spinner-start-active="1">
       <a id="useProductButton" ng-if="canUseProduct" href="" class="btn btn-primary btn-lg btn-block" ng-click="select()">
       {{'editor-app.storeProduct.templates.start' | translate}} <i class="fa fa-plus icon-right"></i></a>
       <p id="pricingInfo" ng-if="!canUseProduct" class="template-pricing"><span>${{price}}</span> {{currencyName}} {{product.pricing[0].unit}}</p>
