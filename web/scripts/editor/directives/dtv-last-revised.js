@@ -25,8 +25,13 @@
                     'editor-app.details.saved');
                 }
               });
+              var _initializing = true;
               $scope.$watch('changedBy', function (newVal) {
-                $scope.changedBy = newVal ? newVal : 'N/A';
+                if (_initializing) {
+                  _initializing = false;
+                } else {
+                  $scope.changedBy = newVal ? newVal : 'N/A';
+                }
               });
             } //link()
         };

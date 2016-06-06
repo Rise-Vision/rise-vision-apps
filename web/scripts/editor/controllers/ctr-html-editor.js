@@ -18,8 +18,6 @@ angular.module('risevision.editor.controllers')
       $scope.$on('$destroy', function () {
         presentationParser.parsePresentation(editorFactory.presentation);
         distributionParser.parseDistribution(editorFactory.presentation);
-
-        $scope.$apply();
       });
     }
   ]); //ctr

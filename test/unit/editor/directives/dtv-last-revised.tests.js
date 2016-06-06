@@ -71,7 +71,7 @@ describe('directive: last revised', function() {
   it('directive scope: ', function() {
     compileDirective();
     
-    expect(elm.isolateScope().changedBy).to.equal('N/A');
+    expect(elm.isolateScope().changedBy).to.equal(undefined);
     expect(elm.isolateScope().status).to.equal('Saved');
   });
 });

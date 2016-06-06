@@ -7,6 +7,7 @@ var helper = require('rv-common-e2e').helper;
 var WorkspacePage = require('./../pages/workspacePage.js');
 var PresentationListPage = require('./../pages/presentationListPage.js');
 var PresentationPropertiesModalPage = require('./../pages/presentationPropertiesModalPage.js');
+var UnsavedChangesModalPage = require('./../pages/unsavedChangesModalPage.js');
 
 var ArtboardScenarios = function() {
 
@@ -21,6 +22,7 @@ var ArtboardScenarios = function() {
     var workspacePage;
     var presentationListPage;
     var presentationPropertiesModalPage;
+    var unsavedChangesModalPage;
     before(function () {
       homepage = new HomePage();
       loginPage = new LoginPage();
@@ -28,6 +30,7 @@ var ArtboardScenarios = function() {
       workspacePage = new WorkspacePage();
       presentationListPage = new PresentationListPage();
       presentationPropertiesModalPage = new PresentationPropertiesModalPage();
+      unsavedChangesModalPage = new UnsavedChangesModalPage();
     });
 
     describe("Given a user who wants to set presentation properties of a new presentation", function () {
@@ -54,9 +57,38 @@ var ArtboardScenarios = function() {
 
           expect(workspacePage.getArtboardContainer().getCssValue('background')).to.eventually.equal('rgb(201, 34, 34) none repeat scroll 0% 0% / auto padding-box border-box');
           expect(workspacePage.getArtboardContainer().getSize()).to.eventually.have.property('width', 1048);
-          expect(workspacePage.getArtboardContainer().getSize()).to.eventually.have.property('height', 840);
+          expect(workspacePage.getArtboardContainer().getSize()).to.eventually.have.property('height', 840);          
         });
       });
+
+      describe("Given the user has unsaved changes", function () {
+        it('should notify when navigating away from the editor', function () {
+          commonHeaderPage.getCommonHeaderMenuItems().get(0).click(); //Navigating to Launcher
+          helper.wait(unsavedChangesModalPage.getUnsavedChangesModal(),'Unsaved Changed Modal');
+          browser.sleep(500);
+          expect(unsavedChangesModalPage.getUnsavedChangesModal().isDisplayed()).to.eventually.be.true;
+          expect(unsavedChangesModalPage.getDontSaveButton().isDisplayed()).to.eventually.be.true;
+          expect(unsavedChangesModalPage.getSaveButton().isDisplayed()).to.eventually.be.true;
+          expect(unsavedChangesModalPage.getCancelButton().isDisplayed()).to.eventually.be.true;
+        });
+
+        it('should be able to Cancel and go back to Editor',function(){
+          unsavedChangesModalPage.getCancelButton().click();
+          expect(unsavedChangesModalPage.getUnsavedChangesModal().isPresent()).to.eventually.be.false;
+          expect(workspacePage.getArtboardContainer().isDisplayed()).to.eventually.be.true;
+        });
+
+        it('should be able to leave without saving',function(){
+          workspacePage.getAddPlaceholderButton().click();
+          commonHeaderPage.getCommonHeaderMenuItems().get(0).click();
+          helper.wait(unsavedChangesModalPage.getUnsavedChangesModal(),'Unsaved Changed Modal');
+          browser.sleep(500);
+          unsavedChangesModalPage.getDontSaveButton().click();
+          expect(workspacePage.getArtboardContainer().isPresent()).to.eventually.be.false;
+        });
+
+      });
+
     });
   });
 };

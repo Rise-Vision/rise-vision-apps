@@ -29,29 +29,37 @@ var HomePage = function() {
   var signUpLink = element(by.id('sign-up-link'));
   var signInLink = element(by.id('sign-in-link'));  
 
+  this.confirmGet = function(url) {
+    return browser.get(url).then(null,function () {
+      return browser.switchTo().alert().then(function (alert) {
+        alert.accept();
+        return browser.get(url)
+      });
+    });
+  };
 
   this.get = function() {
-    browser.get(url);
+    this.confirmGet(url);
   };
 
   this.getProtectedPage = function() {
-    browser.get(displaysUrl);
+    this.confirmGet(displaysUrl);
   };
 
   this.getDisplays = function() {
-    browser.get(displaysUrl);
+    this.confirmGet(displaysUrl);
   };
 
   this.getEditor = function() {
-    browser.get(editorUrl);
+    this.confirmGet(editorUrl)
   };
 
   this.getSchedules = function() {
-    browser.get(schedulesUrl);
+    this.confirmGet(schedulesUrl);
   };
 
   this.getStorage = function() {
-    browser.get(storageUrl);
+    this.confirmGet(storageUrl);
   };
 
   this.getUrl = function() {

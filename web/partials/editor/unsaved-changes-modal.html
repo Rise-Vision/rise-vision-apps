@@ -1,0 +1,16 @@
+<div id="unsavedChangesModal">
+<div class="modal-body padding-large">
+	<button id="closeButton" class="close button-badge" ng-click="dismiss()" aria-hidden="true">
+    	<i class="fa fa-times"></i>
+  	</button>
+	<h3 translate>common.saveBeforeLeave</h3>
+	<p translate>common.changesWillBeLost</p>
+</div>
+<div class="modal-footer padding-large">
+	<button id="unsavedChangesDontSaveButton" class="btn btn-danger pull-left" ng-click="dontSave()" translate>common.dontSave</button>
+
+	<button id="unsavedChangesSaveButton" class="btn btn-primary" ng-click="save()">
+	{{ editorFactory.savingPresentation ? ('common.saving' | translate) : ('common.save' | translate)}} <i class="fa fa-check icon-right"></i></button>
+	<button id="unsavedChangesCancelButton" class="btn btn-default" ng-click="dismiss()">{{'common.cancel' | translate}} <i class="fa fa-times icon-right"></i></button>
+</div>
+</div>

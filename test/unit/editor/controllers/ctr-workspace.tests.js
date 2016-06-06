@@ -5,7 +5,11 @@ describe('controller: Workspace', function() {
   beforeEach(module(mockTranlate()));
   beforeEach(module(function ($provide) {
     $provide.factory('editorFactory',function(){
-      return { };
+      return { 
+        presentation: {
+          name: 'New Presentation'
+        }
+      };
     });
     $provide.factory('$stateParams',function(){
       return { };
@@ -30,17 +34,23 @@ describe('controller: Workspace', function() {
       };
     });
   }));
-  var $scope, editorFactory, modalOpenCalled;
+  var $scope, editorFactory, modalOpenCalled, $rootScope, $timeout, $modal, $window;
   beforeEach(function(){
-    inject(function($injector,$rootScope, $controller){
+    inject(function($injector,$controller){
+      $rootScope = $injector.get('$rootScope');
+      $timeout = $injector.get('$timeout');
+      $modal = $injector.get('$modal');
+      $window = $injector.get('$window');
       modalOpenCalled = false;
       $scope = $rootScope.$new();
       editorFactory = $injector.get('editorFactory');
 
       $controller('WorkspaceController', {
-        $scope : $scope
+        $scope : $scope,
+        editorFactory: editorFactory
       });
       $scope.$digest();
+      $timeout.flush();
     });
   });
 
@@ -51,13 +61,86 @@ describe('controller: Workspace', function() {
 
     expect($scope.factory).to.be.truely;
     expect($scope.presentationTracker).to.be.truely;
-    expect($scope.factory).to.deep.equal({});    
+    expect($scope.factory).to.deep.equal(editorFactory);    
   });
 
   it('should show warning if presentation has deprecated items',function(){
     editorFactory.hasLegacyItems = true;
     $scope.$digest();
     expect(modalOpenCalled).to.be.true;
+  });
+
+  it('should flag unsaved changes to presentation',function(){
+    expect($scope.hasUnsavedChanges).to.be.false;
+    editorFactory.presentation.name = "New Name";
+    $scope.$apply();
+
+    expect($scope.hasUnsavedChanges).to.be.true;
+  });
+
+  it('should clear unsaved changes flag after saving presentation',function(){
+    editorFactory.presentation.name = "New Name";
+    $scope.$apply();
+    $rootScope.$broadcast('presentationUpdated');
+    $scope.$apply();
+    $timeout.flush();
+    expect($scope.hasUnsavedChanges).to.be.false;
+  });
+
+  it('should notify unsaved changes when changing URL',function(){
+    editorFactory.presentation.name = "New Name";
+    $scope.$apply();
+    var modalOpenStub = sinon.stub($modal, 'open',function(){return {result:{then:function(){}}}});
+
+    $rootScope.$broadcast('$stateChangeStart',{});
+    $scope.$apply();
+
+    modalOpenStub.should.have.been.called;
+  });
+
+  it('should not notify unsaved changes when changing URL if there are no changes',function(){
+    var modalOpenStub = sinon.stub($modal, 'open',function(){return {result:{then:function(){}}}});
+
+    $rootScope.$broadcast('$stateChangeStart',{});
+    $scope.$apply();
+
+    modalOpenStub.should.not.have.been.called;
+  });
+
+  it('should not notify unsaved changes when changing URL if state is artboard or htmleditor',function(){
+    editorFactory.presentation.name = "New Name";
+    $scope.$apply();
+    var modalOpenStub = sinon.stub($modal, 'open',function(){return {result:{then:function(){}}}});
+    
+    $rootScope.$broadcast('$stateChangeStart',{name:'apps.editor.workspace.artboard'});
+    $scope.$apply();
+
+    modalOpenStub.should.not.have.been.called;
+
+    $rootScope.$broadcast('$stateChangeStart',{name:'apps.editor.workspace.htmleditor'});
+    $scope.$apply();
+
+    modalOpenStub.should.not.have.been.called;
+  });
+
+  it('should notify unsaved changes when closing window',function(){
+    editorFactory.presentation.name = "New Name";
+    $scope.$apply();
+
+    var result = $window.onbeforeunload();
+    expect(result).to.equal("common.saveBeforeLeave");
+  });
+
+  it('should not notify unsaved changes when closing window if there are no changes',function(){    
+    var result = $window.onbeforeunload();
+    expect(result).to.equal(undefined);
+  });
+
+  it('should stop listening for window close on $destroy',function(){
+    expect($window.onbeforeunload).to.be.a('function');
+    $rootScope.$broadcast('$destroy');
+    $scope.$apply();
+    expect($window.onbeforeunload).to.equal(null);
   });
 
 });

@@ -15,7 +15,7 @@ angular.module('risevision.editor.services')
     'recurrenceDaysOfWeek',
     'recurrenceDayOfMonth', 'recurrenceWeekOfMonth',
     'recurrenceMonthOfYear', 'visibility',
-    'transition', 'items'
+    'transition', 'items', 'distributeToAll'
   ])
   .constant('PLAYLIST_ITEM_JSON_FIELDS', [
     'name', 'duration', 'type', 'objectReference',
