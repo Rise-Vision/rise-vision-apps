@@ -14,7 +14,7 @@
       <button id="addPlaceholderButton" class="btn btn-primary pull-left" ng-show="designMode" ng-click="addNewPlaceholder()">{{'editor-app.workspace.toolbar.addPlaceholder' | translate}}<i class="fa fa-plus icon-right"></i></button>
 
       <div class="pull-right">
-        <a id="changeTemplateButton" ng-if="!factory.presentation.id" class="btn btn-default" ui-sref="apps.editor.add">{{'editor-app.workspace.toolbar.changeTemplate' | translate}} <i class="fa fa-th icon-right"></i></a>
+        <button id="changeTemplateButton" ng-if="!factory.presentation.id" class="btn btn-default" ng-click="changeTemplate()">{{'editor-app.workspace.toolbar.changeTemplate' | translate}} <i class="fa fa-th icon-right"></i></button>
         <span ng-if="!factory.presentation.id" class="text-muted add-left" translate>editor-app.workspace.toolbar.or</span>
         <button class="btn btn-primary" id="previewButton" ng-click="factory.saveAndPreview()">{{'editor-app.workspace.toolbar.saveAndPreview' | translate}} <i class="fa fa-play icon-right"></i></button>
       </div>

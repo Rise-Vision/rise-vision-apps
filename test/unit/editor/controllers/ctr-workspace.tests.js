@@ -34,13 +34,14 @@ describe('controller: Workspace', function() {
       };
     });
   }));
-  var $scope, editorFactory, modalOpenCalled, $rootScope, $timeout, $modal, $window;
+  var $scope, editorFactory, modalOpenCalled, $rootScope, $timeout, $modal, $window, $state;
   beforeEach(function(){
     inject(function($injector,$controller){
       $rootScope = $injector.get('$rootScope');
       $timeout = $injector.get('$timeout');
       $modal = $injector.get('$modal');
       $window = $injector.get('$window');
+      $state = $injector.get('$state');
       modalOpenCalled = false;
       $scope = $rootScope.$new();
       editorFactory = $injector.get('editorFactory');
@@ -141,6 +142,18 @@ describe('controller: Workspace', function() {
     $rootScope.$broadcast('$destroy');
     $scope.$apply();
     expect($window.onbeforeunload).to.equal(null);
+  });
+
+  describe('changeTemplate',function(){
+    it('should not flag unsaved changes and go to editor add',function(){
+      $scope.hasUnsavedChanges = true;
+      var stub = sinon.stub($state,'go',function(){});
+
+      $scope.changeTemplate();      
+      
+      expect($scope.hasUnsavedChanges).to.be.false;
+      stub.should.have.been.calledWith('apps.editor.add');
+    });
   });
 
 });

@@ -63,6 +63,11 @@ angular.module('risevision.editor.controllers')
         $window.onbeforeunload = undefined;
       });
 
+      $scope.changeTemplate = function() {
+        $scope.hasUnsavedChanges = false;
+        $state.go('apps.editor.add');
+      };
+
       $scope.$watch('factory.hasLegacyItems', function (newValue) {
         if (newValue) {
           $scope.modalInstance = $modal.open({
