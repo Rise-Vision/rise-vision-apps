@@ -2,19 +2,6 @@
 
 angular.module('risevision.editor.services')
   .value('IFRAME_PREFIX', 'if_')
-  .value('RENDER_WIDGETS', {
-    'TEXT_WIDGET_PROD': '32d460d1-a727-4765-a8e9-587f7915ab05',
-    'TEXT_WIDGET_PROD_OLD': 'ba0da120-7c67-437f-9caf-73585bd30c74',
-    'TEXT_WIDGET_TEST': '64cc543c-c2c6-49ab-a4e9-40ceba48a253',
-    'IMAGE_WIDGET_PROD': '5233a598-35ce-41a4-805c-fd2147f144a3',
-    'IMAGE_WIDGET_TEST': '2707fc05-5051-4d7b-bcde-01fafd6eaa5e',
-    'TIME_AND_DATE_WIDGET_PROD': '8b984369-f83c-4eca-add6-e431d338eaff',
-    'TIME_AND_DATE_WIDGET_TEST': '23e390be-8abb-4569-9084-e89722038895',
-    'RSS_WIDGET_TEST': 'b656647d-757e-448d-ab3d-b819b4244dcf',
-    'RSS_WIDGET_PROD': '82e64a53-c863-4c69-b8a2-add30580ff53',
-    'WEB_PAGE_WIDGET_TEST': 'aab933d7-ec65-499d-8c6f-e0081b8ea2ee',
-    'WEB_PAGE_WIDGET_PROD': 'df887785-3614-4f05-86c7-fce07b8745dc'
-  })
   .value('CUSTOM_WIDGET_ICONS', {
     '2d407395-d1ae-452c-bc27-78124a47132b': 'ph-video-item', // Video Widget - Prod
     '4bf6fb3d-1ead-4bfb-b66f-ae1fcfa3c0c6': 'ph-video-item' // Video Widget - Test
@@ -31,8 +18,7 @@ angular.module('risevision.editor.services')
         var objectReference = playlistItem.objectReference;
         for (var k in RENDER_WIDGETS) {
           if (RENDER_WIDGETS[k] === objectReference) {
-            if (objectReference === RENDER_WIDGETS.WEB_PAGE_WIDGET_PROD ||
-              objectReference === RENDER_WIDGETS.WEB_PAGE_WIDGET_TEST) {
+            if (objectReference === RENDER_WIDGETS.WEB_PAGE_WIDGET) {
               var params = JSON.parse(playlistItem.additionalParams);
               return params && ((params.url && params.url.slice(0, 8) ===
                 'https://') || (params.selector && params.selector.url &&

@@ -33,6 +33,7 @@ describe('service: storageFactory:', function() {
   it('should exist',function(){
     expect(storageFactory).to.be.ok;
         
+    expect(storageFactory.setSelectorType).to.be.a('function');
     expect(storageFactory.getBucketName).to.be.a('function');
     expect(storageFactory.getFolderSelfLinkUrl).to.be.a('function');
     expect(storageFactory.isMultipleSelector).to.be.a('function');
@@ -53,6 +54,14 @@ describe('service: storageFactory:', function() {
     expect(storageFactory.isMultipleSelector()).to.be.true;
     expect(storageFactory.isFileSelector()).to.be.true;
     expect(storageFactory.isFolderSelector()).to.be.true;
+  });
+  
+  it('setSelectorType: ', function() {
+    storageFactory.setSelectorType('invalid');
+    expect(storageFactory.selectorType).to.equal('single-file');
+    
+    storageFactory.setSelectorType('single-folder');
+    expect(storageFactory.selectorType).to.equal('single-folder');
   });
   
   describe('canSelect: ', function() {

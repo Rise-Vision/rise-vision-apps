@@ -16,6 +16,18 @@ angular.module('risevision.storage.services')
         selectorType: '',
         folderPath: ''
       };
+      
+      factory.setSelectorType = function (type) {
+        factory.selectorType = SELECTOR_TYPES.SINGLE_FILE;
+
+        for (var k in SELECTOR_TYPES) {
+          if (type === SELECTOR_TYPES[k]) {
+            factory.selectorType = SELECTOR_TYPES[k];
+            
+            break;
+          }
+        }
+      };
 
       factory.getBucketName = function () {
         return 'risemedialibrary-' + userState.getSelectedCompanyId();

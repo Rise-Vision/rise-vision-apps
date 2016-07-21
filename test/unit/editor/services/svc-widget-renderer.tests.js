@@ -1,5 +1,6 @@
 'use strict';
 describe('service: widgetRenderer:', function() {
+  beforeEach(module('risevision.apps.config'));
   beforeEach(module('risevision.editor.services'));
   beforeEach(module(function ($provide) {
     $provide.service('gadgetsApi',function(){
@@ -115,7 +116,7 @@ describe('service: widgetRenderer:', function() {
     });
 
     it('should not render Web Page Widget if url is not https',function(){
-      placeholder.items[0].objectReference = 'df887785-3614-4f05-86c7-fce07b8745dc';
+      placeholder.items[0].objectReference = 'aab933d7-ec65-499d-8c6f-e0081b8ea2ee';
       placeholder.items[0].additionalParams = '{\"selector\":{\"url\":\"http://www.risevision.com\"}}';
 
       widgetRenderer.register(placeholder,element);
@@ -125,7 +126,7 @@ describe('service: widgetRenderer:', function() {
     });
 
     it('should not render Web Page Widget if additionalParams are not set',function(){
-      placeholder.items[0].objectReference = 'df887785-3614-4f05-86c7-fce07b8745dc';
+      placeholder.items[0].objectReference = 'aab933d7-ec65-499d-8c6f-e0081b8ea2ee';
       placeholder.items[0].additionalParams = null;
 
       widgetRenderer.register(placeholder,element);

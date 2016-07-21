@@ -1,43 +1,35 @@
-<div>
-  <a class="btn btn-primary btn-block" id="addContentButton" ng-click="playlistItemFactory.addContent()">
-    {{'editor-app.playlistItem.add' | translate}} <i class="fa fa-plus icon-right"></i>
+<div class="btn-group btn-group-justified">
+  <a href="#" id="addImageButton" class="btn btn-default" ng-click="playlistItemFactory.selectFiles('image')">
+    <image src="https://s3.amazonaws.com/ux-design/sprint_prototype/noun_18307_cc.svg"></image>
+    <span style="
+    font-size: 13px;
+    display: block;
+    text-align: center;
+    line-height: 15px;">Image</span>
   </a>
-</div>
-<div require-role="sa">
-  <br />
-  <div class="btn-group btn-group-justified">
-    <a href="#" class="btn btn-default" ng-click="addItemShortcut('image')">
-      <image src="https://s3.amazonaws.com/ux-design/sprint_prototype/noun_18307_cc.svg"></image>
-      <span style="
-      font-size: 13px;
-      display: block;
-      text-align: center;
-      line-height: 15px;">Image</span>
-    </a>
-    <a href="#" class="btn btn-default" ng-click="addItemShortcut('video')">
-      <image src="https://s3.amazonaws.com/ux-design/sprint_prototype/noun_14211_cc.svg"></image>
-      <span style="
-      font-size: 13px;
-      display: block;
-      text-align: center;
-      line-height: 15px;">Video</span></a></a>
-    <a href="#" class="btn btn-default" ng-click="playlistItemFactory.addTextWidget()">
-      <image src="https://s3.amazonaws.com/ux-design/sprint_prototype/noun_508199_cc.svg"></image>
-      <span style="
-      font-size: 13px;
-      display: block;
-      text-align: center;
-      line-height: 15px;">Text</span>
-    </a>
-    <a href="#" class="btn btn-default" ng-click="playlistItemFactory.addContent()">
-      <image src="https://s3.amazonaws.com/ux-design/sprint_prototype/noun_309406_cc.svg"></image>
-      <span style="
-      font-size: 13px;
-      display: block;
-      text-align: center;
-      line-height: 15px;">More</span>
-    </a>
-  </div>
+  <a href="#" id="addVideoButton" class="btn btn-default" ng-click="playlistItemFactory.selectFiles('video')">
+    <image src="https://s3.amazonaws.com/ux-design/sprint_prototype/noun_14211_cc.svg"></image>
+    <span style="
+    font-size: 13px;
+    display: block;
+    text-align: center;
+    line-height: 15px;">Video</span></a></a>
+  <a href="#" id="addTextButton" class="btn btn-default" ng-click="playlistItemFactory.addTextWidget()">
+    <image src="https://s3.amazonaws.com/ux-design/sprint_prototype/noun_508199_cc.svg"></image>
+    <span style="
+    font-size: 13px;
+    display: block;
+    text-align: center;
+    line-height: 15px;">Text</span>
+  </a>
+  <a href="#" id="addContentButton" class="btn btn-default" ng-click="playlistItemFactory.addContent()">
+    <image src="https://s3.amazonaws.com/ux-design/sprint_prototype/noun_309406_cc.svg"></image>
+    <span style="
+    font-size: 13px;
+    display: block;
+    text-align: center;
+    line-height: 15px;">More</span>
+  </a>
 </div>
 
 <div class="editor-playlist scrollable-list add-top">
