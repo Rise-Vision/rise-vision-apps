@@ -2,12 +2,12 @@
   <div class="scrollable-list" 
   rv-spinner rv-spinner-key="storage-selector-loader"
   rv-spinner-start-active="1" >
-    <table id="storageFileList" class="table-2 table-hover table-selector" ng-class="storageFactory.storageFull || storageFactory.isMultipleFileSelector() ? 'multiple-selector' : 'single-selector'" ng-show="statusDetails.code!==202 && statusDetails.code!==404 && isFileListVisible()">
+    <table id="storageFileList" class="table-2 table-hover table-selector" ng-class="storageFactory.isMultipleSelector() ? 'multiple-selector' : 'single-selector'" ng-show="statusDetails.code!==202 && statusDetails.code!==404 && isFileListVisible()">
       <thead>
         <tr>
           <th class="col-sm-6">
             <input type="checkbox" class="add-right" ng-model="selectAll">
-            <label ng-click="fileSelectorFactory.selectAllCheckboxes(query)" ng-show="storageFactory.storageFull || storageFactory.isMultipleFileSelector()"></label>
+            <label ng-click="fileSelectorFactory.selectAllCheckboxes(query)" ng-show="storageFactory.isMultipleSelector()"></label>
             <a id="tableHeaderName" href="" ng-click="orderByAttribute = fileNameOrderFunction; reverseSort = !reverseSort">
               <span translate="common.file-name" ></span>
               <span ng-show="orderByAttribute==fileNameOrderFunction">
@@ -61,7 +61,7 @@
       <tbody>
         <tr class="clickable-row"
         ng-click="fileClick(file);"
-        ng-class="{'active': file.isChecked, 'blocked-file': file.isThrottled, 'back-btn': file.currentFolder, 'no-select-row': isNoSelectRow(file), 'disabled-row': !storageFactory.fileIsFolder(file) && storageFactory.isSingleFolderSelector() }"
+        ng-class="{'active': file.isChecked, 'blocked-file': file.isThrottled, 'back-btn': file.currentFolder, 'no-select-row': !storageFactory.canSelect(file), 'disabled-row': !storageFactory.fileIsFolder(file) && !storageFactory.isFileSelector() }"
         ng-repeat="file in filesDetails.files | filter:search.query | orderBy:orderByAttribute:reverseSort track by $index" ng-if="!storageFactory.fileIsTrash(file) || storageFactory.storageFull">
           <td ng-if="storageFactory.fileIsFolder(file)">
             <span class="folder">{{file.name | fileNameFilter:storageFactory.folderPath}}</span>

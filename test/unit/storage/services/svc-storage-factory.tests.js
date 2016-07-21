@@ -6,7 +6,8 @@ describe('service: storageFactory:', function() {
   beforeEach(module(function ($provide) {
     $provide.service('$modal', function() {
       return {
-        open: function(){}
+        open: function(){
+        }      
       };
     });
     $provide.service('userState', function() {
@@ -20,7 +21,6 @@ describe('service: storageFactory:', function() {
   }));
 
   beforeEach(function(){
-    
     inject(function($injector){  
       storageFactory = $injector.get('storageFactory');
       $modal = $injector.get('$modal');
@@ -32,21 +32,67 @@ describe('service: storageFactory:', function() {
 
   it('should exist',function(){
     expect(storageFactory).to.be.ok;
-    
-    // Hardcoded
-    expect(storageFactory.storageFull).to.be.true;
-    expect(storageFactory.isSingleFileSelector()).to.be.true;
-    expect(storageFactory.isMultipleFileSelector()).to.be.false;
-    expect(storageFactory.isSingleFolderSelector()).to.be.false;
-    
+        
     expect(storageFactory.getBucketName).to.be.a('function');
     expect(storageFactory.getFolderSelfLinkUrl).to.be.a('function');
-    
+    expect(storageFactory.isMultipleSelector).to.be.a('function');
+    expect(storageFactory.isFileSelector).to.be.a('function');
+    expect(storageFactory.isFolderSelector).to.be.a('function');
+    expect(storageFactory.canSelect).to.be.a('function');
     expect(storageFactory.fileIsCurrentFolder).to.be.a('function');
     expect(storageFactory.fileIsFolder).to.be.a('function');
     expect(storageFactory.fileIsTrash).to.be.a('function');
-    
     expect(storageFactory.isTrashFolder).to.be.a('function');
+    
+    expect(storageFactory.addFolder).to.be.a('function');
+  });
+  
+  it('should initialize values', function() {
+    // Hardcoded
+    expect(storageFactory.storageFull).to.be.true;
+    expect(storageFactory.isMultipleSelector()).to.be.true;
+    expect(storageFactory.isFileSelector()).to.be.true;
+    expect(storageFactory.isFolderSelector()).to.be.true;
+  });
+  
+  describe('canSelect: ', function() {
+    beforeEach(function() {
+      storageFactory.storageFull = false;
+    });
+
+    it('false for file is currentFolder', function() {
+      expect(storageFactory.canSelect({name: 'folder/', currentFolder: true})).to.be.false;
+    });
+
+    it('false for file is trash', function() {
+      expect(storageFactory.canSelect({name: '--TRASH--/'})).to.be.false;
+    });
+
+    it('false for files in singleFolderSelector', function() {
+      storageFactory.selectorType = 'single-folder';
+
+      expect(storageFactory.canSelect({name: 'file.jpg'})).to.be.false;
+    });
+    
+    it('true for files in singleFileSelector', function() {
+      expect(storageFactory.canSelect({name: 'file.jpg'})).to.be.true;
+    });
+    
+    it('true for folders in singleFolderSelector', function() {
+      storageFactory.selectorType = 'single-folder';
+
+      expect(storageFactory.canSelect({name: 'folder/'})).to.be.true;
+    });
+    
+    it('false for folders in non singleFolderSelector', function() {
+      expect(storageFactory.canSelect({name: 'folder/'})).to.be.false;
+    });
+    
+    it('true for folders in fullScreen', function() {
+      storageFactory.storageFull = true;
+
+      expect(storageFactory.canSelect({name: 'folder/'})).to.be.true;
+    });
   });
   
   it('getBucketName: ', function() {

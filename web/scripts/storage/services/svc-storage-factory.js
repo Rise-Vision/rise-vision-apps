@@ -3,7 +3,8 @@ angular.module('risevision.storage.services')
   .value('SELECTOR_TYPES', {
     SINGLE_FILE: 'single-file',
     MULTIPLE_FILE: 'multiple-file',
-    SINGLE_FOLDER: 'single-folder'
+    SINGLE_FOLDER: 'single-folder',
+    MULTIPLE_FILES_FOLDERS: 'multiple-files-folders'
   })
   .value('STORAGE_CLIENT_API', 'https://www.googleapis.com/storage/v1/b/')
   .factory('storageFactory', ['userState', '$modal', 'SELECTOR_TYPES',
@@ -24,16 +25,29 @@ angular.module('risevision.storage.services')
         return STORAGE_CLIENT_API + factory.getBucketName() + '/o?prefix=';
       };
 
-      factory.isSingleFileSelector = function () {
-        return factory.selectorType === SELECTOR_TYPES.SINGLE_FILE;
+      factory.isMultipleSelector = function () {
+        return factory.storageFull ||
+          factory.selectorType === SELECTOR_TYPES.MULTIPLE_FILE ||
+          factory.selectorType === SELECTOR_TYPES.MULTIPLE_FILES_FOLDERS;
       };
 
-      factory.isMultipleFileSelector = function () {
-        return factory.selectorType === SELECTOR_TYPES.MULTIPLE_FILE;
+      factory.isFileSelector = function () {
+        return factory.storageFull ||
+          factory.selectorType === SELECTOR_TYPES.SINGLE_FILE ||
+          factory.selectorType === SELECTOR_TYPES.MULTIPLE_FILE ||
+          factory.selectorType === SELECTOR_TYPES.MULTIPLE_FILES_FOLDERS;
       };
 
-      factory.isSingleFolderSelector = function () {
-        return factory.selectorType === SELECTOR_TYPES.SINGLE_FOLDER;
+      factory.isFolderSelector = function () {
+        return factory.storageFull ||
+          factory.selectorType === SELECTOR_TYPES.SINGLE_FOLDER ||
+          factory.selectorType === SELECTOR_TYPES.MULTIPLE_FILES_FOLDERS;
+      };
+
+      factory.canSelect = function (file) {
+        return !file.currentFolder && !factory.fileIsTrash(file) &&
+          (factory.fileIsFolder(file) && factory.isFolderSelector() ||
+            !factory.fileIsFolder(file) && factory.isFileSelector());
       };
 
       factory.fileIsCurrentFolder = function (file) {

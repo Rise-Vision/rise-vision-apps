@@ -26,12 +26,6 @@ describe('controller: Files List', function() {
       return storageFactory = {
         storageFull: true,
         folderPath: 'folder/',
-        isSingleFileSelector: function() {
-          return isSingleFileSelector;
-        },
-        isSingleFolderSelector: function() {
-          return isSingleFolderSelector;
-        },
         fileIsCurrentFolder: function (file) {
           return file.name === '';
         },
@@ -40,9 +34,6 @@ describe('controller: Files List', function() {
         },
         fileIsTrash: function (file) {
           return file.name === '--TRASH--/';
-        },
-        isTrashFolder: function() {
-          return false;
         }
       };
     });
@@ -51,11 +42,8 @@ describe('controller: Files List', function() {
         onFileSelect: function() {
           onFileSelect = true;
         },
-        folderSelect: function() {
-          folderSelect = true;
-        },
-        fileCheckToggled: function() {
-          fileCheckToggled = true;
+        changeFolder: function() {
+          changeFolder = true;
         }
       };
     });
@@ -74,11 +62,9 @@ describe('controller: Files List', function() {
     });
     $provide.value('SELECTOR_TYPES', {SINGLE_FILE: 'single-file'});
   }));
-  var $scope, isSingleFileSelector, isSingleFolderSelector, onFileSelect, folderSelect, fileCheckToggled, storageFactory;
+  var $scope, onFileSelect, changeFolder, storageFactory;
   beforeEach(function(){
-    isSingleFileSelector = true;
-    isSingleFolderSelector = false;
-    onFileSelect = folderSelect = fileCheckToggled = false;
+    onFileSelect = changeFolder = false;
     
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
@@ -113,7 +99,6 @@ describe('controller: Files List', function() {
     expect($scope.fileExtOrderFunction).to.be.a('function');
     expect($scope.fileSizeOrderFunction).to.be.a('function');
     expect($scope.isFileListVisible).to.be.a('function');
-    expect($scope.isNoSelectRow).to.be.a('function');
   });
   
   it('should reset folderPath on startup', function() {
@@ -141,18 +126,7 @@ describe('controller: Files List', function() {
       $scope.fileClick({name: 'someFolder/image.jpg'});
       
       expect(onFileSelect).to.be.true;
-      expect(folderSelect).to.be.false;
-      expect(fileCheckToggled).to.be.false;
-    });
-    
-    it('should check file', function() {
-      isSingleFileSelector = false;
-      
-      $scope.fileClick({name: 'someFolder/image.jpg'});
-      
-      expect(onFileSelect).to.be.false;
-      expect(folderSelect).to.be.false;
-      expect(fileCheckToggled).to.be.true;
+      expect(changeFolder).to.be.false;
     });
     
     it('should post throttle warning, and not select file', function() {
@@ -161,8 +135,7 @@ describe('controller: Files List', function() {
       
       expect(file.showThrottledCallout).to.be.true;
       expect(onFileSelect).to.be.false;
-      expect(folderSelect).to.be.false;
-      expect(fileCheckToggled).to.be.false;
+      expect(changeFolder).to.be.false;
     });
     
     it('two clicks should close throttle warning', function() {
@@ -172,35 +145,15 @@ describe('controller: Files List', function() {
 
       expect(file.showThrottledCallout).to.be.false;
       expect(onFileSelect).to.be.false;
-      expect(folderSelect).to.be.false;
-      expect(fileCheckToggled).to.be.false;
+      expect(changeFolder).to.be.false;
     });
     
     it('should select folder with one click', function(done) {
-      isSingleFileSelector = false;
-      isSingleFolderSelector = true;
-
       $scope.fileClick({name: 'someFolder/'});
       
       setTimeout(function() {
-        expect(onFileSelect).to.be.false;
-        expect(folderSelect).to.be.true;
-        expect(fileCheckToggled).to.be.false;
-        
-        done();        
-      }, 500);
-    });
-    
-    it('should not select file for folder selector', function(done) {
-      isSingleFileSelector = false;
-      isSingleFolderSelector = true;
-
-      $scope.fileClick({name: 'someFolder/image.jpg'});
-      
-      setTimeout(function() {
-        expect(onFileSelect).to.be.false;
-        expect(folderSelect).to.be.false;
-        expect(fileCheckToggled).to.be.false;
+        expect(onFileSelect).to.be.true;
+        expect(changeFolder).to.be.false;
         
         done();        
       }, 500);
@@ -212,9 +165,8 @@ describe('controller: Files List', function() {
       setTimeout(function() {
         $scope.fileClick({name: 'someFolder/'});
         
-        expect(onFileSelect).to.be.true;
-        expect(folderSelect).to.be.false;
-        expect(fileCheckToggled).to.be.false;
+        expect(onFileSelect).to.be.false;
+        expect(changeFolder).to.be.true;
 
         done();        
       }, 200);
@@ -271,6 +223,12 @@ describe('controller: Files List', function() {
     it('hidden for no files', function() {
       expect($scope.isFileListVisible()).to.be.false;
     });
+    
+    it('hidden if Trash & current folder are only files', function() {
+      $scope.filesDetails.files.push({name: '--TRASH--/'});
+      $scope.filesDetails.files.push({name: ''});
+      expect($scope.isFileListVisible()).to.be.false;
+    });
 
     it('always visible for full screen storage', function() {
       $scope.storageFactory.storageFull = true;
@@ -284,46 +242,6 @@ describe('controller: Files List', function() {
       expect($scope.isFileListVisible()).to.be.true;
     });
 
-  });
-  
-  describe('isNoSelectRow: ', function() {
-    beforeEach(function() {
-      storageFactory.storageFull = false;
-    });
-
-    it('hidden for file is currentFolder', function() {
-      expect($scope.isNoSelectRow({name: 'folder/', currentFolder: true})).to.be.true;
-    });
-
-    it('hidden for file is trash', function() {
-      expect($scope.isNoSelectRow({name: '--TRASH--/'})).to.be.true;
-    });
-
-    it('hidden for files in singleFolderSelector', function() {
-      isSingleFolderSelector = true;
-
-      expect($scope.isNoSelectRow({name: 'file.jpg'})).to.be.true;
-    });
-    
-    it('show for files in singleFileSelector', function() {
-      expect($scope.isNoSelectRow({name: 'file.jpg'})).to.be.false;
-    });
-    
-    it('show for folders in singleFolderSelector', function() {
-      isSingleFolderSelector = true;
-
-      expect($scope.isNoSelectRow({name: 'folder/'})).to.be.false;
-    });
-    
-    it('hide for folders in non singleFolderSelector', function() {
-      expect($scope.isNoSelectRow({name: 'folder/'})).to.be.true;
-    });
-    
-    it('show for folders in fullScreen', function() {
-      storageFactory.storageFull = true;
-
-      expect($scope.isNoSelectRow({name: 'folder/'})).to.be.false;
-    });
   });
 
 });

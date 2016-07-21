@@ -1,31 +1,25 @@
 'use strict';
 describe('directive: storage-selector', function() {
-  var $rootScope, element, storageFactory, $modal;
+  var $rootScope, element, fileSelectorFactory;
   var testitem = {name: 'image.jpg'};
 
   beforeEach(module('risevision.storage.directives'));
   beforeEach(module(function ($provide) {
-    $provide.service('$modal', function() {
-      return $modal = {
-        open: function() {
-          return {
-            result:{
-              then:function(func){
-                  expect(func).to.be.a('function');
-                  func(testitem);
-              }
-            }
-          };
-        }
-      };
-    });
     $provide.service('storageFactory', function() {
-        return storageFactory = {};
+      return {selectorType: 'single-file'};
     });
-    $provide.value('SELECTOR_TYPES', {SINGLE_FILE: 'single-file'});
+    $provide.service('fileSelectorFactory', function() {
+      return fileSelectorFactory;
+    });
   }));
 
   beforeEach(inject(function(_$compile_, _$rootScope_, $templateCache){
+    fileSelectorFactory = {
+      openSelector: function() {
+        return Q.resolve(testitem);
+      }
+    };
+
     $templateCache.put('partials/storage/storage-selector.html', '<p>mock</p>');
     var $compile = _$compile_;
     $rootScope = _$rootScope_;
@@ -37,36 +31,30 @@ describe('directive: storage-selector', function() {
   it('should replace the element with the appropriate content', function() {
     expect(element.html()).to.equal('<p>mock</p>');
   });
-  
-  it('should initialize constants', function() {
-    expect(storageFactory.selectorType).to.equal('single-file');
-    expect(storageFactory.storageFull).to.be.false;
-  });
-  
+
   describe('open:', function(){
     it('should have open function in scope', function() {
       expect(element.isolateScope().open).to.be.a('function');
     });
     
-    it('should open modal', function() {
-      var $modalSpy = sinon.spy($modal, 'open');
-      
-      element.isolateScope().open();      
-      
-      $modalSpy.should.have.been.calledWith({
-        templateUrl: 'partials/storage/storage-modal.html',
-        controller: 'StorageSelectorModalController',
-        size: 'lg'
-      });
+    it('should have open function in scope', function() {
+      var openSelectorSpy = sinon.spy(fileSelectorFactory, 'openSelector');
+
+      element.isolateScope().open();
+
+      openSelectorSpy.should.have.been.called;
     });
 
-    it('should open modal and emit "picked"', function() {
+    it('should open modal and emit "picked"', function(done) {
       var isolateScope = element.isolateScope();
       var $emitSpy = sinon.spy(isolateScope, '$emit');
 
-      isolateScope.open();
+      isolateScope.open();    
+      setTimeout(function() {
+        $emitSpy.should.have.been.calledWith('picked', testitem, 'single-file');
 
-      $emitSpy.should.have.been.calledWith('picked', testitem, 'single-file');
+        done();        
+      }, 10);
     });
   });
   
