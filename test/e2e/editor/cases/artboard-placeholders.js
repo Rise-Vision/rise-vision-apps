@@ -64,32 +64,45 @@ var ArtboardPlaceholdersScenarios = function() {
         });
       });
       
-      it('should not overlap placeholders', function(done) {
-        workspacePage.getAddPlaceholderButton().click();
-        
-        artboardPage.getPlaceholderContainers().get(1).getLocation().then(function (location) {
-          expect(location.x).to.be.equal(left + 20);
-          expect(location.y).to.be.equal(top + 20);
-
-          // remove extra placeholder
-          workspacePage.getBackToListButton().click();
-          browser.sleep(500); //wait for transition
-          placeholdersListPage.getRemoveButtons().get(0).click();
-
-          helper.clickWhenClickable(placeholdersListPage.getRemoveItemButton(), "Remove Item Confirm Button").then(function () {
-            expect(placeholdersListPage.getPlaceholders().count()).to.eventually.equal(1);
-
-            done();
-          });
-        });
-      });
-
       it('should deselect by clicking outside the placeholder', function (done) {
         artboardPage.getPlaceholderContainers().get(0).getSize().then(function (size) {
           browser.actions().mouseMove(artboardPage.getPlaceholderContainers().get(0), {x: size.width - 10, y: size.height + 20}).click().perform();
           expect(artboardPage.getPlaceholderContainers().get(0).getAttribute('class')).to.eventually.not.contain('edit-mode');
           done();
         });
+      });
+      
+      it('should not overlap new placeholder', function(done) {
+        workspacePage.getAddPlaceholderButton().click();
+        browser.sleep(500); //wait for transition
+
+        artboardPage.getPlaceholderContainer('ph1').getLocation().then(function (location) {
+          expect(location.x).to.be.equal(left + 20);
+          expect(location.y).to.be.equal(top + 20);
+          
+          done();
+        });
+      });
+      
+      it('should remove extra placeholder', function(done) {
+        workspacePage.getBackToListButton().click();
+        browser.sleep(500); //wait for transition
+        placeholdersListPage.getRemoveButtons().get(0).click();
+        
+        helper.wait(placeholdersListPage.getRemoveItemButton(), 'Remove Item Confirm Button');
+
+        helper.clickWhenClickable(placeholdersListPage.getRemoveItemButton(), "Remove Item Confirm Button").then(function () {
+          expect(placeholdersListPage.getPlaceholders().count()).to.eventually.equal(1);
+
+          done();
+        });
+      });
+
+      it('should re-select the placeholder', function () {
+        artboardPage.getPlaceholderContainers().get(0).click();
+        browser.sleep(500); //wait for transition
+
+        expect(artboardPage.getPlaceholderContainers().get(0).getAttribute('class')).to.eventually.contain('edit-mode');
       });
 
       it('should not deselect by clicking the placeholder', function (done) {
@@ -102,7 +115,7 @@ var ArtboardPlaceholdersScenarios = function() {
         });
       });
 
-      it('should move placeholder', function () {
+      it('should move placeholder', function (done) {
         artboardPage.getPlaceholderContainers().get(0).getLocation().then(function (initialLocation) {
           artboardPage.getPlaceholderContainers().get(0).getSize().then(function (size) {
             browser.actions().mouseMove(artboardPage.getPlaceholderContainers().get(0), {x: size.width - 100, y: size.height - 100})
@@ -111,11 +124,13 @@ var ArtboardPlaceholdersScenarios = function() {
               .mouseUp()
               .perform();
             expect(artboardPage.getPlaceholderContainers().get(0).getLocation()).to.eventually.include({x: initialLocation.x + 50, y: initialLocation.y + 50});
+            
+            done()
           });
         });
       });
 
-      it('should resize placeholder', function () {
+      it('should resize placeholder', function (done) {
         artboardPage.getPlaceholderContainers().get(0).getSize().then(function (initialSize) {
           browser.actions().mouseMove(artboardPage.getPlaceholderContainers().get(0), {x: initialSize.width, y: initialSize.height / 2})
             .mouseDown()
@@ -123,10 +138,12 @@ var ArtboardPlaceholdersScenarios = function() {
             .mouseUp()
             .perform();
           expect(artboardPage.getPlaceholderContainers().get(0).getSize()).to.eventually.include({width: initialSize.width - 50, height: initialSize.height});
+          
+          done();
         });
       });
 
-      it('should resize placeholder from the corner', function () {
+      it('should resize placeholder from the corner', function (done) {
         artboardPage.getPlaceholderContainers().get(0).getSize().then(function (initialSize) {
           browser.actions().mouseMove(artboardPage.getPlaceholderContainers().get(0), {x: initialSize.width, y: initialSize.height})
             .mouseDown()
@@ -134,14 +151,18 @@ var ArtboardPlaceholdersScenarios = function() {
             .mouseUp()
             .perform();
           expect(artboardPage.getPlaceholderContainers().get(0).getSize()).to.eventually.include({width: initialSize.width + 20, height: initialSize.height + 20});
+          
+          done();
         });
       });
 
-      it('should reveal hidden sidebar when selecting placeholder', function () {
+      it('should reveal hidden sidebar when selecting placeholder', function (done) {
         workspacePage.getExpandArtboardButton().click();
         artboardPage.getPlaceholderContainers().get(0).getSize().then(function (size) {
           browser.actions().mouseMove(artboardPage.getPlaceholderContainers().get(0), {x: size.width - 100, y: size.height - 100}).click().perform();
           expect(workspacePage.getWorkspaceContainer().getAttribute('class')).to.not.eventually.contain('hide-sidebar');
+          
+          done();
         });
       });
     });

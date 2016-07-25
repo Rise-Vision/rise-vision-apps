@@ -15,6 +15,10 @@ var ArtboardPage = function() {
   this.getPlaceholderContainers = function() {
   	return this.getArtboardContainer().all(by.css('artboard-placeholder'));
   };
+  
+  this.getPlaceholderContainer = function(id) {
+    return this.getArtboardContainer().element(by.id(id));
+  };
 
 };
 

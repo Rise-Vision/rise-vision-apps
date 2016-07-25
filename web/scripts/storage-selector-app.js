@@ -100,11 +100,7 @@ angular.module('risevision.apps.storage.storage-selector', [
   ])
   .run(['storageFactory', 'SELECTOR_TYPES', '$location',
     function (storageFactory, SELECTOR_TYPES, $location) {
-      storageFactory.selectorType = SELECTOR_TYPES.SINGLE_FILE;
-      if ($location.search()['selector-type'] === SELECTOR_TYPES.SINGLE_FOLDER ||
-        $location.search()['selector-type'] === SELECTOR_TYPES.MULTIPLE_FILE) {
-        storageFactory.selectorType = $location.search()['selector-type'];
-      }
+      storageFactory.setSelectorType($location.search()['selector-type']);
       storageFactory.storageIFrame = true;
       storageFactory.storageFull = false;
     }

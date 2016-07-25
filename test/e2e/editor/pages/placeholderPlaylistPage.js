@@ -1,6 +1,9 @@
 'use strict';
 var PlaceholderPlaylistPage = function() {
   var addContentButton = element(by.id('addContentButton'));
+  var addImageButton = element(by.id('addImageButton'));
+  var addVideoButton = element(by.id('addVideoButton'));
+  var addTextButton = element(by.id('addTextButton'));
 
   var playlistItems = element.all(by.css('.ph-playlist .editor-playlist-item'));
   var moveUpButtons = element.all(by.id('moveUpButton'));
@@ -15,6 +18,18 @@ var PlaceholderPlaylistPage = function() {
 
   this.getAddContentButton = function() {
     return addContentButton;
+  };
+
+  this.getAddImageButton = function() {
+    return addImageButton;
+  };
+  
+  this.getAddVideoButton = function() {
+    return addVideoButton;
+  };
+  
+  this.getAddTextButton = function() {
+    return addTextButton;
   };
 
   this.getPlaylistItems = function() {
