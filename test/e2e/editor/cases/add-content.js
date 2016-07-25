@@ -114,25 +114,17 @@ var AddContentScenarios = function() {
       });
 
       it('should open Widget Settings', function () {
-        helper.wait(playlistItemModalPage.getPlaylistItemModal(), 'Playlist Item Settings Page');
+        helper.wait(widgetSettingsPage.getWidgetModal(), 'Widget Settings Modal');
         browser.switchTo().frame('widget-modal-frame');
         
         expect(widgetSettingsPage.getCloseButton().isDisplayed()).to.eventually.be.true;
         expect(widgetSettingsPage.getTitle().getText()).to.eventually.equal('Text Settings');        
       });
 
-      it('should display Playlist Item Settings Page after closing Widget Settings',function(){
+      it('should not display Playlist Item Settings Page after closing Widget Settings',function(){
         widgetSettingsPage.getCloseButton().click();
         browser.switchTo().defaultContent();
         browser.waitForAngular();
-
-        expect(playlistItemModalPage.getPlaylistItemModal().isDisplayed()).to.eventually.be.true;
-        expect(playlistItemModalPage.getModalTitle().getText()).to.eventually.equal('Edit Playlist Item');
-        expect(playlistItemModalPage.getNameTextbox().getAttribute('value')).to.eventually.equal('Text Widget');
-      });
-      
-      it('should save Item and add it to the list', function () {
-        playlistItemModalPage.getSaveButton().click();
 
         expect(playlistItemModalPage.getPlaylistItemModal().isPresent()).to.eventually.be.false;
       });
