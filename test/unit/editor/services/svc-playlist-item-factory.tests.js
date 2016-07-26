@@ -108,10 +108,17 @@ describe('service: playlistItemFactory:', function() {
         items: items
       };
     });
+    
+    $provide.service('widgetModalFactory', function() {
+      return widgetModalFactory = {
+        showWidgetModal: function() {}
+      };
+    });
+
     $provide.value('SELECTOR_TYPES', {});    
 
   }));
-  var item, playlistItemFactory, placeholderPlaylistFactory, fileSelectorFactory, openModal, currentItem, trackedEvent;
+  var item, playlistItemFactory, placeholderPlaylistFactory, fileSelectorFactory, widgetModalFactory, openModal, currentItem, trackedEvent;
 
   beforeEach(function(){
     openModal = null;
@@ -167,28 +174,38 @@ describe('service: playlistItemFactory:', function() {
     });
   });
   
-  it('addTextWidget:', function(done) {
-    playlistItemFactory.addTextWidget();
+  describe('addTextWidget: ', function() {
+    it('should add the Text Widget to the playlist', function(done) {
+      playlistItemFactory.addTextWidget();
 
-    expect(trackedEvent).to.equal('Add Text Widget');
-    expect(currentItem).to.not.be.ok;
+      expect(trackedEvent).to.equal('Add Text Widget');
+      expect(currentItem).to.not.be.ok;
 
-    setTimeout(function() {
-      expect(openModal).to.equal('PlaylistItemModalController');
-      expect(currentItem).to.deep.equal({
-        duration: 10,
-        distributeToAll: true,
-        timeDefined: false,
-        additionalParams: null,
-        type: 'widget',
-        objectReference: '64cc543c-c2c6-49ab-a4e9-40ceba48a253',
-        name: 'gadgetName',
-        objectData: 'http://someurl.com/gadget.html',
-        settingsUrl: undefined
-      });
-      
-      done();
-    }, 10);
+      setTimeout(function() {
+        expect(placeholderPlaylistFactory.items).to.have.length(1);
+        expect(placeholderPlaylistFactory.items[0]).to.have.property('name');
+        expect(placeholderPlaylistFactory.items[0]).to.have.property('objectData');
+        expect(placeholderPlaylistFactory.items[0]).to.have.property('objectReference');
+
+        expect(placeholderPlaylistFactory.items[0].name).to.equal('gadgetName');
+        expect(placeholderPlaylistFactory.items[0].objectData).to.equal('http://someurl.com/gadget.html');
+        expect(placeholderPlaylistFactory.items[0].objectReference).to.equal('64cc543c-c2c6-49ab-a4e9-40ceba48a253');
+        
+        done();
+      }, 10);
+    });
+    
+    it('should open the Widget settings', function(done) {
+      var showWidgetModalSpy = sinon.spy(widgetModalFactory, 'showWidgetModal');
+
+      playlistItemFactory.addTextWidget();
+
+      setTimeout(function() {
+        showWidgetModalSpy.should.have.been.called;
+
+        done();
+      }, 10);
+    });
   });
   
   describe('selectFiles: ', function() {

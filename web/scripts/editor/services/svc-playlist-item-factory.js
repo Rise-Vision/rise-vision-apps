@@ -44,12 +44,12 @@ angular.module('risevision.editor.services')
   })
   .factory('playlistItemFactory', ['$modal', '$log', 'userState',
     'gadgetFactory', 'editorFactory', 'placeholderPlaylistFactory',
-    'fileSelectorFactory', 'presentationTracker', 'RENDER_WIDGETS',
-    'VIDEO_WIDGET', 'SELECTOR_TYPES', 'IMAGE_ADDITIONAL_PARAMS',
-    'VIDEO_ADDITIONAL_PARAMS',
+    'widgetModalFactory', 'fileSelectorFactory', 'presentationTracker', 
+    'RENDER_WIDGETS', 'VIDEO_WIDGET', 'SELECTOR_TYPES', 
+    'IMAGE_ADDITIONAL_PARAMS', 'VIDEO_ADDITIONAL_PARAMS',
     function ($modal, $log, userState, gadgetFactory, editorFactory,
-      placeholderPlaylistFactory, fileSelectorFactory, presentationTracker,
-      RENDER_WIDGETS, VIDEO_WIDGET, SELECTOR_TYPES,
+      placeholderPlaylistFactory, widgetModalFactory, fileSelectorFactory, 
+      presentationTracker, RENDER_WIDGETS, VIDEO_WIDGET, SELECTOR_TYPES,
       IMAGE_ADDITIONAL_PARAMS, VIDEO_ADDITIONAL_PARAMS) {
       var factory = {};
 
@@ -117,7 +117,9 @@ angular.module('risevision.editor.services')
 
         _getItemByWidgetId(RENDER_WIDGETS.TEXT_WIDGET)
           .then(function (item) {
-            factory.edit(item, true);
+            placeholderPlaylistFactory.updateItem(item);
+
+            widgetModalFactory.showWidgetModal(item);
           });
       };
 
