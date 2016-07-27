@@ -25,19 +25,22 @@ describe('service: fileSelectorFactory:', function() {
     });
     $provide.service('$modal', function() {
       return {
-        open: function(func){
+        open: function(obj){
+          var deferred = Q.defer();
+
+          if (obj.resolve) {
+            obj.resolve.enableByURL ? obj.resolve.enableByURL() : undefined;
+          }
+
+          if(modalSuccess) {
+            deferred.resolve('success');  
+          }
+          else {
+            deferred.reject();
+          }
+
           return {
-            result:{
-              then:function(func, failure){
-                expect(func).to.be.a('function');
-                if(modalSuccess) {
-                  func('success');  
-                }
-                else {
-                  failure();
-                }  
-              }
-            }
+            result: deferred.promise
           }
         }
       };
@@ -472,13 +475,9 @@ describe('service: fileSelectorFactory:', function() {
     it('should open modal', function() {
       var $modalSpy = sinon.spy($modal, 'open');
       
-      fileSelectorFactory.openSelector();      
+      fileSelectorFactory.openSelector('', true);      
       
-      $modalSpy.should.have.been.calledWith({
-        templateUrl: 'partials/storage/storage-modal.html',
-        controller: 'StorageSelectorModalController',
-        size: 'lg'
-      });
+      $modalSpy.should.have.been.called;
     });
 
     it('should resolve promise', function(done) {

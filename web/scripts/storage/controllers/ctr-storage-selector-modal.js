@@ -1,7 +1,9 @@
 'use strict';
 angular.module('risevision.storage.controllers')
   .controller('StorageSelectorModalController', ['$scope', '$modalInstance',
-    function ($scope, $modalInstance) {
+    'enableByURL',
+    function ($scope, $modalInstance, enableByURL) {
+      $scope.enableByURL = enableByURL;
 
       $scope.select = function (files) {
         $modalInstance.close(files);

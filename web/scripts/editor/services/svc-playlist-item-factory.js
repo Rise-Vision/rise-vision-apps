@@ -117,8 +117,6 @@ angular.module('risevision.editor.services')
 
         _getItemByWidgetId(RENDER_WIDGETS.TEXT_WIDGET)
           .then(function (item) {
-            placeholderPlaylistFactory.updateItem(item);
-
             widgetModalFactory.showWidgetModal(item);
           });
       };
@@ -127,15 +125,21 @@ angular.module('risevision.editor.services')
         file) {
         additionalParams = angular.copy(additionalParams);
 
-        additionalParams.selector.storageName = file.name;
-        additionalParams.selector.url = fileUrl;
-        additionalParams.storage.companyId = userState.getSelectedCompanyId();
-        if (file.kind === 'folder') {
-          additionalParams.selector.selection = SELECTOR_TYPES.SINGLE_FOLDER;
-          additionalParams.storage.folder = file.name;
-        } else {
-          additionalParams.selector.selection = SELECTOR_TYPES.SINGLE_FILE;
-          additionalParams.storage.fileName = file.name;
+        if (fileUrl && file) {
+          additionalParams.selector.storageName = file.name;
+          additionalParams.selector.url = fileUrl;
+          additionalParams.storage.companyId = userState.getSelectedCompanyId();
+          if (file.kind === 'folder') {
+            additionalParams.selector.selection = SELECTOR_TYPES.SINGLE_FOLDER;
+            additionalParams.storage.folder = file.name;
+          } else {
+            additionalParams.selector.selection = SELECTOR_TYPES.SINGLE_FILE;
+            additionalParams.storage.fileName = file.name;
+          }
+        }
+        else {
+          additionalParams.selector.selection = 'custom';
+          additionalParams.storage = {};
         }
 
         return JSON.stringify(additionalParams);
@@ -145,13 +149,14 @@ angular.module('risevision.editor.services')
         presentationTracker('Add Image Widget', editorFactory.presentation.id,
           editorFactory.presentation.name);
 
-        _getItemByWidgetId(RENDER_WIDGETS.IMAGE_WIDGET)
+        return _getItemByWidgetId(RENDER_WIDGETS.IMAGE_WIDGET)
           .then(function (item) {
-            item.name = file.name;
+            item.name = file ? file.name : item.name;
 
             item.additionalParams = _populateAdditionalParams(
               IMAGE_ADDITIONAL_PARAMS, fileUrl, file);
-            placeholderPlaylistFactory.updateItem(item);
+            
+            return item;
           });
       };
 
@@ -159,26 +164,38 @@ angular.module('risevision.editor.services')
         presentationTracker('Add Video Widget', editorFactory.presentation.id,
           editorFactory.presentation.name);
 
-        _getItemByWidgetId(VIDEO_WIDGET)
+        return _getItemByWidgetId(VIDEO_WIDGET)
           .then(function (item) {
-            item.name = file.name;
+            item.name = file ? file.name : item.name;
             item.playUntilDone = true;
 
             item.additionalParams = _populateAdditionalParams(
               VIDEO_ADDITIONAL_PARAMS, fileUrl, file);
-            placeholderPlaylistFactory.updateItem(item);
+            
+            return item;
           });
       };
 
       factory.selectFiles = function (type) {
-        fileSelectorFactory.openSelector(SELECTOR_TYPES.MULTIPLE_FILES_FOLDERS)
+        fileSelectorFactory.openSelector(SELECTOR_TYPES.MULTIPLE_FILES_FOLDERS, true)
           .then(function (files) {
-            var fileObjects = fileSelectorFactory.getSelectedFiles();
-            for (var i = 0; i < files.length; i++) {
-              if (type === 'image') {
-                _addImage(files[i], fileObjects[i]);
+            if (files) {
+              var fileObjects = fileSelectorFactory.getSelectedFiles();
+              for (var i = 0; i < files.length; i++) {
+                if (type === 'image') {
+                  _addImage(files[i], fileObjects[i])
+                    .then(placeholderPlaylistFactory.updateItem);
+                } else if (type === 'video') {
+                  _addVideo(files[i], fileObjects[i])
+                    .then(placeholderPlaylistFactory.updateItem);
+                }
+              }
+            }
+            else {
+              if (type === 'image') {                
+                _addImage().then(widgetModalFactory.showWidgetModal);
               } else if (type === 'video') {
-                _addVideo(files[i], fileObjects[i]);
+                _addVideo().then(widgetModalFactory.showWidgetModal);
               }
             }
           });
