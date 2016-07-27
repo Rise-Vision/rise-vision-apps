@@ -86,6 +86,64 @@ var AddContentScenarios = function() {
       
     });
     
+    describe('Should Add an Image Item by URL', function() {
+      before('Click Add Image: ', function () {
+        placeholderPlaylistPage.getAddImageButton().click();
+      });
+      
+      it('should open Storage Selector modal', function() {
+        helper.wait(storageSelectorModalPage.getStorageSelectorModal(), 'Storage Selector Modal');
+        helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
+
+        storageSelectorModalPage.getByURLButton().click();
+        
+        helper.waitDisappear(storageSelectorModalPage.getStorageSelectorModal(), 'Storage Selector Modal');
+      });
+      
+      it('should open Widget Settings', function () {
+        helper.wait(widgetSettingsPage.getWidgetModal(), 'Widget Settings Modal');
+        browser.switchTo().frame('widget-modal-frame');
+        
+        expect(widgetSettingsPage.getCloseButton().isDisplayed()).to.eventually.be.true;
+        expect(widgetSettingsPage.getTitle().getText()).to.eventually.equal('Image Settings');        
+      });
+
+      it('should select Custom URL Option and update URL',function(){
+        expect(widgetSettingsPage.getImageWidgetCustomButton().getAttribute('class')).to.eventually.contain('active');
+        
+        expect(widgetSettingsPage.getImageWidgetURLTextbox().isDisplayed()).to.eventually.be.true;
+        
+        widgetSettingsPage.getImageWidgetURLTextbox().clear();
+        widgetSettingsPage.getImageWidgetURLTextbox().sendKeys('https://s3.amazonaws.com/Rise-Images/UI/logo.svg');
+      });
+
+      it('should add Image Widget to playlist', function() {
+        helper.clickWhenClickable(widgetSettingsPage.getSaveButton(), 'Widget Save Button');
+        browser.switchTo().defaultContent();
+        browser.waitForAngular();
+
+        expect(playlistItemModalPage.getPlaylistItemModal().isPresent()).to.eventually.be.false;
+      });
+      
+      it('Should not add Image Widget if cancelled: ', function () {
+        placeholderPlaylistPage.getAddImageButton().click();
+
+        helper.wait(storageSelectorModalPage.getStorageSelectorModal(), 'Storage Selector Modal');
+        helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
+
+        storageSelectorModalPage.getByURLButton().click();
+        
+        helper.waitDisappear(storageSelectorModalPage.getStorageSelectorModal(), 'Storage Selector Modal');
+
+        helper.wait(widgetSettingsPage.getWidgetModal(), 'Widget Settings Modal');
+        browser.switchTo().frame('widget-modal-frame');
+
+        helper.clickWhenClickable(widgetSettingsPage.getCloseButton(), 'Widget Close Button');
+        browser.switchTo().defaultContent();
+        browser.waitForAngular();
+      });
+    });
+    
     describe('Should Add a Video item: ', function () {
       before('Click Add Video: ', function () {
         placeholderPlaylistPage.getAddVideoButton().click();
@@ -121,22 +179,37 @@ var AddContentScenarios = function() {
         expect(widgetSettingsPage.getTitle().getText()).to.eventually.equal('Text Settings');        
       });
 
-      it('should not display Playlist Item Settings Page after closing Widget Settings',function(){
-        widgetSettingsPage.getCloseButton().click();
+      it('should not display Playlist Item Settings Page after Saving Widget Settings',function(){
+        helper.clickWhenClickable(widgetSettingsPage.getSaveButton(), 'Widget Save Button');
+        browser.switchTo().defaultContent();
+        browser.waitForAngular();
+
+        expect(playlistItemModalPage.getPlaylistItemModal().isPresent()).to.eventually.be.false;
+        
+        expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(4);
+      });
+      
+      it('should not add Text Item if user Cancels Widget Settings', function() {
+        placeholderPlaylistPage.getAddTextButton().click();
+
+        helper.wait(widgetSettingsPage.getWidgetModal(), 'Widget Settings Modal');
+        browser.switchTo().frame('widget-modal-frame');
+
+        helper.clickWhenClickable(widgetSettingsPage.getCloseButton(), 'Widget Close Button');
         browser.switchTo().defaultContent();
         browser.waitForAngular();
 
         expect(playlistItemModalPage.getPlaylistItemModal().isPresent()).to.eventually.be.false;
       });
-
     });
     
     describe('Playlist: ', function() {
       it('Should have 3 items in the playlist', function() {
-        expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(3);
+        expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(4);
         expect(placeholderPlaylistPage.getItemNameCells().get(0).getText()).to.eventually.contain('package.json');
-        expect(placeholderPlaylistPage.getItemNameCells().get(1).getText()).to.eventually.contain('package.json');
-        expect(placeholderPlaylistPage.getItemNameCells().get(2).getText()).to.eventually.contain('Text Widget');
+        expect(placeholderPlaylistPage.getItemNameCells().get(1).getText()).to.eventually.contain('Image');
+        expect(placeholderPlaylistPage.getItemNameCells().get(2).getText()).to.eventually.contain('package.json');
+        expect(placeholderPlaylistPage.getItemNameCells().get(3).getText()).to.eventually.contain('Text Widget');
       });
     });
     

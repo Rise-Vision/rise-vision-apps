@@ -156,7 +156,7 @@ angular.module('risevision.storage.services')
         }
       };
 
-      factory.openSelector = function (type) {
+      factory.openSelector = function (type, enableByURL) {
         storageFactory.storageFull = false;
         storageFactory.selectorType = type || SELECTOR_TYPES.SINGLE_FILE;
 
@@ -165,7 +165,12 @@ angular.module('risevision.storage.services')
         var modalInstance = $modal.open({
           templateUrl: 'partials/storage/storage-modal.html',
           controller: 'StorageSelectorModalController',
-          size: 'lg'
+          size: 'lg',
+          resolve: {
+            enableByURL: function() {
+              return enableByURL || false;
+            }
+          }
         });
 
         modalInstance.result.then(function (files) {

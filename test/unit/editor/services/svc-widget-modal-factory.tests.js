@@ -34,7 +34,7 @@ describe('service: widgetModalFactory:', function() {
       }
     });
     $provide.service('$modal',function(){
-      return {
+      return $modal = {
         open : function(obj){
           var deferred = Q.defer();
 
@@ -53,6 +53,16 @@ describe('service: widgetModalFactory:', function() {
         }
       }
     });
+    $provide.service('placeholderPlaylistFactory', function() {
+      var items = [];
+      
+      return placeholderPlaylistFactory = {
+        updateItem: function(item) {
+          placeholderPlaylistFactory.items.push(item);
+        },
+        items: items
+      };
+    });
     $provide.service('$sce', function() {
       return {
         trustAsResourceUrl: function(url) {return url;}
@@ -60,7 +70,7 @@ describe('service: widgetModalFactory:', function() {
     });
   }));
   
-  var widgetModalFactory, item, updateParams, widgetObj, returnedParams;
+  var widgetModalFactory, $modal, placeholderPlaylistFactory, item, updateParams, widgetObj, returnedParams;
   beforeEach(function(){
     item = {
       objectData: 'http://www.risevision.com/widget.html',
@@ -79,7 +89,20 @@ describe('service: widgetModalFactory:', function() {
     expect(widgetModalFactory).to.be.truely;
     expect(widgetModalFactory.showWidgetModal).to.be.a('function');
   });
-  
+
+  it('should return if item is null or missing parameters', function(done) {
+    var $modalSpy = sinon.spy($modal, 'open');
+
+    widgetModalFactory.showWidgetModal();
+    widgetModalFactory.showWidgetModal({});
+    
+    setTimeout(function() {
+      $modalSpy.should.not.have.been.called;
+
+      done();        
+    }, 10);
+  });
+
   describe('settings url: ', function() {
     it('should initialize url correctly and remove protocol (http)', function(done) {
       widgetModalFactory.showWidgetModal(item);
@@ -126,11 +149,16 @@ describe('service: widgetModalFactory:', function() {
     });
   });
   
-  it('should update additionalParams',function(done){
+  it('should update additionalParams and add item',function(done){
     widgetModalFactory.showWidgetModal(item);
     
     setTimeout(function() {
-      expect(item.additionalParams).to.equal('updatedParams')
+      expect(item.additionalParams).to.equal('updatedParams');
+      
+      expect(placeholderPlaylistFactory.items).to.have.length(1);
+      expect(placeholderPlaylistFactory.items[0]).to.have.property('additionalParams');
+      expect(placeholderPlaylistFactory.items[0].additionalParams).to.equal('updatedParams');
+      
       done();
     }, 10);
   });

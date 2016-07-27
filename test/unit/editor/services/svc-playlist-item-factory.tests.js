@@ -87,7 +87,12 @@ describe('service: playlistItemFactory:', function() {
     $provide.service('fileSelectorFactory', function() {
       return fileSelectorFactory = {
         openSelector: function(type) {
-          return Q.resolve(['file1', 'file2']);
+          if (returnFiles) {
+            return Q.resolve(['file1', 'file2']);
+          }
+          else {
+            return Q.resolve();
+          }
         },
         getSelectedFiles: function() {
           return [
@@ -118,12 +123,13 @@ describe('service: playlistItemFactory:', function() {
     $provide.value('SELECTOR_TYPES', {});    
 
   }));
-  var item, playlistItemFactory, placeholderPlaylistFactory, fileSelectorFactory, widgetModalFactory, openModal, currentItem, trackedEvent;
+  var item, playlistItemFactory, placeholderPlaylistFactory, fileSelectorFactory, widgetModalFactory, openModal, currentItem, trackedEvent, returnFiles;
 
   beforeEach(function(){
     openModal = null;
     currentItem = null;
     trackedEvent = null;
+    returnFiles = true;
     
     inject(function($injector){  
       playlistItemFactory = $injector.get('playlistItemFactory');
@@ -175,26 +181,6 @@ describe('service: playlistItemFactory:', function() {
   });
   
   describe('addTextWidget: ', function() {
-    it('should add the Text Widget to the playlist', function(done) {
-      playlistItemFactory.addTextWidget();
-
-      expect(trackedEvent).to.equal('Add Text Widget');
-      expect(currentItem).to.not.be.ok;
-
-      setTimeout(function() {
-        expect(placeholderPlaylistFactory.items).to.have.length(1);
-        expect(placeholderPlaylistFactory.items[0]).to.have.property('name');
-        expect(placeholderPlaylistFactory.items[0]).to.have.property('objectData');
-        expect(placeholderPlaylistFactory.items[0]).to.have.property('objectReference');
-
-        expect(placeholderPlaylistFactory.items[0].name).to.equal('gadgetName');
-        expect(placeholderPlaylistFactory.items[0].objectData).to.equal('http://someurl.com/gadget.html');
-        expect(placeholderPlaylistFactory.items[0].objectReference).to.equal('64cc543c-c2c6-49ab-a4e9-40ceba48a253');
-        
-        done();
-      }, 10);
-    });
-    
     it('should open the Widget settings', function(done) {
       var showWidgetModalSpy = sinon.spy(widgetModalFactory, 'showWidgetModal');
 
@@ -202,6 +188,17 @@ describe('service: playlistItemFactory:', function() {
 
       setTimeout(function() {
         showWidgetModalSpy.should.have.been.called;
+        showWidgetModalSpy.should.have.been.calledWith({
+      	  additionalParams: null,
+      	  distributeToAll: true,
+      	  duration: 10,
+      	  name: "gadgetName",
+      	  objectData: "http://someurl.com/gadget.html",
+      	  objectReference: "64cc543c-c2c6-49ab-a4e9-40ceba48a253",
+      	  settingsUrl: undefined,
+      	  timeDefined: false,
+      	  type: "widget"
+      	});
 
         done();
       }, 10);
@@ -262,6 +259,30 @@ describe('service: playlistItemFactory:', function() {
       }, 10);
     });
     
+    it('Image URL option should open widget settings', function(done) {
+      var showWidgetModalSpy = sinon.spy(widgetModalFactory, 'showWidgetModal');
+      returnFiles = false;
+
+      playlistItemFactory.selectFiles('image');
+
+      setTimeout(function() {
+        showWidgetModalSpy.should.have.been.called;
+        showWidgetModalSpy.should.have.been.calledWith({
+	        additionalParams: '{"selector":{"selection":"custom"},"storage":{},"resume":true,"scaleToFit":true,"position":"middle-center","duration":10,"pause":10,"autoHide":false,"url":"","background":{}}',
+      	  distributeToAll: true,
+      	  duration: 10,
+      	  name: "gadgetName",
+      	  objectData: "http://someurl.com/gadget.html",
+      	  objectReference: "2707fc05-5051-4d7b-bcde-01fafd6eaa5e",
+      	  settingsUrl: undefined,
+      	  timeDefined: false,
+      	  type: "widget"
+      	});
+
+        done();
+      }, 10);
+    });
+    
     it('should add 2 videos', function(done) {
       playlistItemFactory.selectFiles('video');
       
@@ -279,6 +300,31 @@ describe('service: playlistItemFactory:', function() {
         expect(placeholderPlaylistFactory.items[0].additionalParams).to.equal('{"selector":{"storageName":"name1","url":"file1"},"url":"","storage":{"companyId":null,"fileName":"name1"},"video":{"scaleToFit":true,"volume":50,"controls":true,"autoplay":true,"resume":true,"pause":5}}');
         expect(placeholderPlaylistFactory.items[0].objectData).to.equal('http://someurl.com/gadget.html');
         expect(placeholderPlaylistFactory.items[0].objectReference).to.equal('4bf6fb3d-1ead-4bfb-b66f-ae1fcfa3c0c6');
+
+        done();
+      }, 10);
+    });
+    
+    it('Video URL option should open widget settings', function(done) {
+      var showWidgetModalSpy = sinon.spy(widgetModalFactory, 'showWidgetModal');
+      returnFiles = false;
+
+      playlistItemFactory.selectFiles('video');
+
+      setTimeout(function() {
+        showWidgetModalSpy.should.have.been.called;
+        showWidgetModalSpy.should.have.been.calledWith({
+      	  additionalParams: '{"selector":{"selection":"custom"},"url":"","storage":{},"video":{"scaleToFit":true,"volume":50,"controls":true,"autoplay":true,"resume":true,"pause":5}}',
+      	  distributeToAll: true,
+      	  duration: 10,
+      	  name: "gadgetName",
+      	  objectData: "http://someurl.com/gadget.html",
+      	  objectReference: "4bf6fb3d-1ead-4bfb-b66f-ae1fcfa3c0c6",
+      	  playUntilDone: true,
+      	  settingsUrl: undefined,
+      	  timeDefined: false,
+      	  type: "widget"
+      	});
 
         done();
       }, 10);

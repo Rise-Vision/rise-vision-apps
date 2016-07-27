@@ -12,6 +12,7 @@ describe('controller: Storage Selector Modal', function() {
         }
       }
     });
+    $provide.value('enableByURL', false);
   }));
   var $scope, $modalInstance, $modalInstanceDismissSpy, $modalInstanceCloseSpy;
   beforeEach(function(){
@@ -32,6 +33,8 @@ describe('controller: Storage Selector Modal', function() {
   it('should exist',function(){
     expect($scope).to.be.ok;
     
+    expect($scope.enableByURL).to.be.false;
+
     expect($scope.select).to.be.a('function');
     expect($scope.dismiss).to.be.a('function');
   });

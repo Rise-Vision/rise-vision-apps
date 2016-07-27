@@ -50,16 +50,19 @@
       <ng-include src="'partials/storage/files-list.html'" ng-show="isFileListVisible()"></ng-include>
     	
       <ng-include src="'partials/storage/start-trial.html'" ng-show="trialAvailable"></ng-include>
-
-      <div ng-show="storageFactory.isMultipleSelector() && !trialAvailable">
-        <button type="button" id="selectFilesButton" title="select" class="btn btn-primary" ng-click="fileSelectorFactory.sendFiles()" ng-disabled="filesDetails.checkedCount < 1 && filesDetails.folderCheckedCount < 1">
-          <span translate="common.select"></span> <span class="fa fa-check icon-right"></span>
-        </button>
-        <button class="btn btn-default" ng-click="fileSelectorFactory.cancel()">
-          <span translate="common.cancel"></span> <span class="fa fa-times icon-right"></span>
-        </button>
-      </div>
-
   	</div><!--padding-->
   </div><!--modal-body-->
+  <div class="modal-footer padding-large">
+    <div ng-show="storageFactory.isMultipleSelector()">
+      <button type="button" id="byURLButton" title="select" class="btn btn-primary pull-left" ng-show="enableByURL" ng-click="select()">
+        <span translate="storage-client.add-by-url"></span> <i class="fa fa-link icon-right"></i>
+      </button>
+      <button type="button" id="selectFilesButton" title="select" class="btn btn-primary" ng-click="fileSelectorFactory.sendFiles()" ng-show="!trialAvailable" ng-disabled="filesDetails.checkedCount < 1 && filesDetails.folderCheckedCount < 1">
+        <span translate="common.select"></span> <span class="fa fa-check icon-right"></span>
+      </button>
+      <button class="btn btn-default" ng-click="fileSelectorFactory.cancel()" ng-show="enableByURL || !trialAvailable">
+        <span translate="common.cancel"></span> <span class="fa fa-times icon-right"></span>
+      </button>
+    </div>
+  </div>
 </div>

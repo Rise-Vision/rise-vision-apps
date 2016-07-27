@@ -4,11 +4,12 @@ angular.module('risevision.editor.services')
   .value('WIDGET_PARAMS',
     'up_id=iframeId&parent=parentUrl&up_rsW=width&up_rsH=height&up_companyId=cid'
   )
-  .factory('widgetModalFactory', ['$rootScope', 'placeholderFactory',
-    'gadgetFactory', 'userState', '$q', '$modal', '$location', '$sce',
-    '$log', 'WIDGET_PARAMS',
-    function ($rootScope, placeholderFactory, gadgetFactory, userState, $q,
-      $modal, $location, $sce, $log, WIDGET_PARAMS) {
+  .factory('widgetModalFactory', ['$rootScope', 'placeholderFactory', 
+    'placeholderPlaylistFactory', 'gadgetFactory', 'userState', '$q', 
+    '$modal', '$location', '$sce', '$log', 'WIDGET_PARAMS',
+    function ($rootScope, placeholderFactory, placeholderPlaylistFactory, 
+      gadgetFactory, userState, $q, $modal, $location, $sce, $log, 
+      WIDGET_PARAMS) {
       var factory = {};
 
       var _getUrlParams = function (widgetUrl) {
@@ -82,7 +83,7 @@ angular.module('risevision.editor.services')
       };
 
       factory.showWidgetModal = function (item) {
-        if (!item.objectReference && !item.settingsUrl) {
+        if (!item || !item.objectReference && !item.settingsUrl) {
           return;
         }
 
@@ -125,6 +126,8 @@ angular.module('risevision.editor.services')
           if (widgetData) {
             _updateItemObjectData(item, widgetData.params);
             item.additionalParams = widgetData.additionalParams;
+            
+            placeholderPlaylistFactory.updateItem(item);
           }
 
           $log.info('Widget saved:', widgetData);

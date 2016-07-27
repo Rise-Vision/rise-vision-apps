@@ -25,7 +25,7 @@ angular.module('risevision.editor.controllers')
       }
 
       if (showWidgetModal && item.type === 'widget') {
-        widgetModalFactory.showWidgetModal($scope.item);
+        widgetModalFactory.showWidgetModal(item);
       }
 
       $scope.save = function () {

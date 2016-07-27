@@ -268,6 +268,7 @@ describe('controller: playlist item modal', function() {
     it('should open widget modal on init if requested', function() {
       _createController(true);
       showWidgetModalSpy.should.have.been.called;
+      showWidgetModalSpy.should.have.been.calledWith(itemProperties);
     });
 
     it('should not open widget modal if not requested', function() {
