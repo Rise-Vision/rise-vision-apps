@@ -64,7 +64,7 @@ describe('service: playlistItemFactory:', function() {
             id: 'gadgetId',
             name: 'gadgetName',
             url: 'http://someurl.com/gadget.html',
-            gadgetType: 'Widget'
+            gadgetType: returnWidget ? 'Widget' : 'Gadget'
           });
           
           return deferred.promise;
@@ -123,17 +123,21 @@ describe('service: playlistItemFactory:', function() {
     $provide.value('SELECTOR_TYPES', {});    
 
   }));
-  var item, playlistItemFactory, placeholderPlaylistFactory, fileSelectorFactory, widgetModalFactory, openModal, currentItem, trackedEvent, returnFiles;
+  var item, playlistItemFactory, placeholderPlaylistFactory, fileSelectorFactory, 
+  widgetModalFactory, showWidgetModalSpy, openModal, currentItem, trackedEvent, returnFiles, returnWidget;
 
   beforeEach(function(){
     openModal = null;
     currentItem = null;
     trackedEvent = null;
     returnFiles = true;
+    returnWidget = true;
     
-    inject(function($injector){  
+    inject(function($injector){
       playlistItemFactory = $injector.get('playlistItemFactory');
       playlistItemFactory.item = item;
+
+      showWidgetModalSpy = sinon.spy(widgetModalFactory, 'showWidgetModal');
     });
   });
 
@@ -143,7 +147,6 @@ describe('service: playlistItemFactory:', function() {
     expect(playlistItemFactory.addContent).to.be.a('function');
     expect(playlistItemFactory.addTextWidget).to.be.a('function');
     expect(playlistItemFactory.edit).to.be.a('function');
-
   });
   
   it('edit: ', function() {
@@ -154,7 +157,7 @@ describe('service: playlistItemFactory:', function() {
   });
   
   describe('add widget: ', function() {
-    it('should add new widget', function(done) {
+    it('should add new widget and open widget settings', function(done) {
       playlistItemFactory.addContent();
 
       expect(trackedEvent).to.equal('Add Content');
@@ -162,8 +165,8 @@ describe('service: playlistItemFactory:', function() {
       expect(currentItem).to.not.be.ok;
 
       setTimeout(function() {
-        expect(openModal).to.equal('PlaylistItemModalController');
-        expect(currentItem).to.deep.equal({
+        showWidgetModalSpy.should.have.been.called;
+        showWidgetModalSpy.should.have.been.calledWith({
           duration: 10,
           distributeToAll: true,
           timeDefined: false,
@@ -178,12 +181,33 @@ describe('service: playlistItemFactory:', function() {
         done();
       }, 10);
     });
+    
+    it('should open playlist item properties for non-widgets', function(done) {
+      returnWidget = false;
+
+      playlistItemFactory.addContent();
+
+      setTimeout(function() {
+        expect(openModal).to.equal('PlaylistItemModalController');
+        expect(currentItem).to.deep.equal({
+          duration: 10,
+          distributeToAll: true,
+          timeDefined: false,
+          additionalParams: null,
+          type: 'gadget',
+          objectReference: 'gadgetId',
+          name: 'gadgetName',
+          objectData: 'http://someurl.com/gadget.html',
+          settingsUrl: undefined
+        });
+        
+        done();
+      }, 10);
+    });
   });
   
   describe('addTextWidget: ', function() {
     it('should open the Widget settings', function(done) {
-      var showWidgetModalSpy = sinon.spy(widgetModalFactory, 'showWidgetModal');
-
       playlistItemFactory.addTextWidget();
 
       setTimeout(function() {
@@ -260,7 +284,6 @@ describe('service: playlistItemFactory:', function() {
     });
     
     it('Image URL option should open widget settings', function(done) {
-      var showWidgetModalSpy = sinon.spy(widgetModalFactory, 'showWidgetModal');
       returnFiles = false;
 
       playlistItemFactory.selectFiles('image');
@@ -306,7 +329,6 @@ describe('service: playlistItemFactory:', function() {
     });
     
     it('Video URL option should open widget settings', function(done) {
-      var showWidgetModalSpy = sinon.spy(widgetModalFactory, 'showWidgetModal');
       returnFiles = false;
 
       playlistItemFactory.selectFiles('video');

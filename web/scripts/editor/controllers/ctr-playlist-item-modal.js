@@ -3,11 +3,10 @@
 angular.module('risevision.editor.controllers')
   .controller('PlaylistItemModalController', ['$scope',
     'placeholderPlaylistFactory', 'widgetModalFactory', 'gadgetFactory',
-    '$modalInstance', 'placeholderFactory', 'item', 'editorFactory',
-    'userState', 'RVA_URL', 'showWidgetModal',
+    '$modalInstance', 'item', 'editorFactory', 'userState', 'RVA_URL',
     function ($scope, placeholderPlaylistFactory, widgetModalFactory,
-      gadgetFactory, $modalInstance, placeholderFactory,
-      item, editorFactory, userState, RVA_URL, showWidgetModal) {
+      gadgetFactory, $modalInstance, item, editorFactory, userState, 
+      RVA_URL) {
       $scope.PREVIOUS_EDITOR_URL = RVA_URL + '/#/PRESENTATION_MANAGE' + ((
           editorFactory.presentation.id) ? '/id=' + editorFactory.presentation
         .id : '') + '?cid=' + userState.getSelectedCompanyId();
@@ -24,16 +23,10 @@ angular.module('risevision.editor.controllers')
         }
       }
 
-      if (showWidgetModal && item.type === 'widget') {
-        widgetModalFactory.showWidgetModal(item);
-      }
-
       $scope.save = function () {
         angular.copy($scope.item, item);
 
         placeholderPlaylistFactory.updateItem(item);
-
-        placeholderFactory.updateSubscriptionStatus();
 
         $scope.dismiss();
       };
