@@ -1,34 +1,18 @@
 <div class="btn-group btn-group-justified">
   <a href="#" id="addImageButton" class="btn btn-default" ng-click="playlistItemFactory.selectFiles('image')">
-    <image src="https://s3.amazonaws.com/ux-design/sprint_prototype/noun_18307_cc.svg"></image>
-    <span style="
-    font-size: 13px;
-    display: block;
-    text-align: center;
-    line-height: 15px;">Image</span>
+    <svg-icon p="riseWidgetImageMulti"></svg-icon>
+    <span translate="editor-app.playlistItem.add-image"></span>
   </a>
   <a href="#" id="addVideoButton" class="btn btn-default" ng-click="playlistItemFactory.selectFiles('video')">
-    <image src="https://s3.amazonaws.com/ux-design/sprint_prototype/noun_14211_cc.svg"></image>
-    <span style="
-    font-size: 13px;
-    display: block;
-    text-align: center;
-    line-height: 15px;">Video</span></a></a>
+    <svg-icon p="riseWidgetVideo"></svg-icon>
+    <span translate="editor-app.playlistItem.add-video"></span></a></a>
   <a href="#" id="addTextButton" class="btn btn-default" ng-click="playlistItemFactory.addTextWidget()">
-    <image src="https://s3.amazonaws.com/ux-design/sprint_prototype/noun_508199_cc.svg"></image>
-    <span style="
-    font-size: 13px;
-    display: block;
-    text-align: center;
-    line-height: 15px;">Text</span>
+    <svg-icon p="riseWidgetText"></svg-icon>
+    <span translate="editor-app.playlistItem.add-text"></span>
   </a>
   <a href="#" id="addContentButton" class="btn btn-default" ng-click="playlistItemFactory.addContent()">
-    <image src="https://s3.amazonaws.com/ux-design/sprint_prototype/noun_309406_cc.svg"></image>
-    <span style="
-    font-size: 13px;
-    display: block;
-    text-align: center;
-    line-height: 15px;">More</span>
+    <svg-icon p="riseWidgetMore"></svg-icon>
+    <span translate="editor-app.playlistItem.add-more"></span>
   </a>
 </div>
 
@@ -64,7 +48,7 @@
     </div>
 
     <div ng-hide="factory.getItems().length">
-      <p class="text-center text-muted" translate>editor-app.playlistItem.no-playlistItem</p>
+      <p class="text-center text-muted" translate="editor-app.playlistItem.no-playlistItem"></p>
     </div>
   </div><!--playlist-->
 </div><!--editor-playlist-->
