@@ -115,15 +115,15 @@ var PlaylistScenarios = function() {
       });
 
       it('should search products',function(){
-        storeProductsModalPage.getSearchInput().sendKeys('video');
+        storeProductsModalPage.getSearchInput().sendKeys('image widget');
         storeProductsModalPage.getSearchInput().sendKeys(protractor.Key.ENTER);
         helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader()).then(function () {
           expect(storeProductsModalPage.getStoreProducts().count()).to.eventually.be.above(0);
         });
       });
 
-      it('first products should be Video Widget', function () {
-        expect(storeProductsModalPage.getProductNameFields().get(0).getText()).to.eventually.equal('Video Widget');
+      it('first products should be Image Widget', function () {
+        expect(storeProductsModalPage.getProductNameFields().get(0).getText()).to.eventually.equal('Image Widget');
 
       });
 
@@ -133,37 +133,68 @@ var PlaylistScenarios = function() {
 
       it('should add a Product and open Widget Settings', function () {
         storeProductsModalPage.getStoreProducts().get(0).click();
-        helper.wait(playlistItemModalPage.getPlaylistItemModal(), 'Playlist Item Settings Page');
+        helper.wait(widgetSettingsPage.getWidgetModal(), 'Widget Settings Modal');
         browser.switchTo().frame('widget-modal-frame');
         
         expect(widgetSettingsPage.getCloseButton().isDisplayed()).to.eventually.be.true;
-        expect(widgetSettingsPage.getTitle().getText()).to.eventually.equal('Video Settings');        
+        expect(widgetSettingsPage.getTitle().getText()).to.eventually.equal('Image Settings');           
       });
 
-      it('should display Playlist Item Settings Page after closing Widget Settings',function(){
-        widgetSettingsPage.getCloseButton().click();
-        browser.switchTo().defaultContent();
-        browser.waitForAngular();
-
-        expect(playlistItemModalPage.getPlaylistItemModal().isDisplayed()).to.eventually.be.true;
-        expect(playlistItemModalPage.getModalTitle().getText()).to.eventually.equal('Edit Playlist Item');
-        expect(playlistItemModalPage.getNameTextbox().getAttribute('value')).to.eventually.equal('Video Widget');
-      });
-
-      it('should display store status in modal', function () {
-        helper.wait(playlistItemModalPage.getStatusMessage(), 'Free');
-        expect(playlistItemModalPage.getStatusMessage().getText()).to.eventually.equal('Free');
+      it('should select Custom URL Option and update URL',function(){
+        helper.clickWhenClickable(widgetSettingsPage.getImageWidgetCustomButton(), 'Custom URL');
+        expect(widgetSettingsPage.getImageWidgetCustomButton().getAttribute('class')).to.eventually.contain('active');
+        
+        expect(widgetSettingsPage.getImageWidgetURLTextbox().isDisplayed()).to.eventually.be.true;
+        
+        widgetSettingsPage.getImageWidgetURLTextbox().clear();
+        widgetSettingsPage.getImageWidgetURLTextbox().sendKeys('https://s3.amazonaws.com/Rise-Images/UI/logo.svg');
       });
 
       it('should save Item and add it to the list', function () {
-        playlistItemModalPage.getSaveButton().click();
+        helper.clickWhenClickable(widgetSettingsPage.getSaveButton(), 'Widget Save Button');
+        browser.switchTo().defaultContent();
+        browser.waitForAngular();
 
-        expect(playlistItemModalPage.getPlaylistItemModal().isPresent()).to.eventually.be.false;
+        helper.waitDisappear(widgetSettingsPage.getWidgetModal(), 'Widget Settings Modal');
+
         expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(1);
       });
 
       it('should display store status in playlist', function () {
         expect(placeholderPlaylistPage.getItemStatusCells().get(0).getText()).to.eventually.equal('Free');
+      });
+
+    });
+    
+    describe('Should not Add a content playlist item if the user Cancels: ', function () {
+      before('Click Add Widget: ', function () {
+        placeholderPlaylistPage.getAddContentButton().click();
+        helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
+
+        helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader()).then(function () {
+          expect(storeProductsModalPage.getStoreProducts().count()).to.eventually.be.above(0);
+        });
+        storeProductsModalPage.getSearchInput().sendKeys('image widget');
+        storeProductsModalPage.getSearchInput().sendKeys(protractor.Key.ENTER);
+        helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader()).then(function () {
+          expect(storeProductsModalPage.getStoreProducts().count()).to.eventually.be.above(0);
+        });
+
+        storeProductsModalPage.getStoreProducts().get(0).click();
+        helper.wait(widgetSettingsPage.getWidgetModal(), 'Widget Settings Modal');
+        browser.switchTo().frame('widget-modal-frame');        
+      });
+
+      it('should Close Widget Settings',function(){
+        helper.clickWhenClickable(widgetSettingsPage.getCloseButton(), 'Widget Close Button');
+        browser.switchTo().defaultContent();
+        browser.waitForAngular();
+
+        helper.waitDisappear(widgetSettingsPage.getWidgetModal(), 'Widget Settings Modal');
+      });
+
+      it('should not add item to playlist', function () {
+        expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(1);
       });
 
     });
@@ -250,8 +281,8 @@ var PlaylistScenarios = function() {
         placeholderPlaylistPage.getDuplicateButtons().get(0).click();
 
         expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(3);
-        expect(placeholderPlaylistPage.getItemNameCells().get(0).getText()).to.eventually.contain('Video Widget');
-        expect(placeholderPlaylistPage.getItemNameCells().get(1).getText()).to.eventually.contain('Video Widget (1)');
+        expect(placeholderPlaylistPage.getItemNameCells().get(0).getText()).to.eventually.contain('Image Widget');
+        expect(placeholderPlaylistPage.getItemNameCells().get(1).getText()).to.eventually.contain('Image Widget (1)');
       });
       
       it('should display store status for both items', function () {
@@ -274,13 +305,13 @@ var PlaylistScenarios = function() {
       it('items should move up and down', function () {
         placeholderPlaylistPage.getMoveUpButtons().get(1).click();
 
-        expect(placeholderPlaylistPage.getItemNameCells().get(0).getText()).to.eventually.contain('Video Widget (1)');
-        expect(placeholderPlaylistPage.getItemNameCells().get(1).getText()).to.eventually.contain('Video Widget');
+        expect(placeholderPlaylistPage.getItemNameCells().get(0).getText()).to.eventually.contain('Image Widget (1)');
+        expect(placeholderPlaylistPage.getItemNameCells().get(1).getText()).to.eventually.contain('Image Widget');
 
         placeholderPlaylistPage.getMoveDownButtons().get(0).click();
 
-        expect(placeholderPlaylistPage.getItemNameCells().get(0).getText()).to.eventually.contain('Video Widget');
-        expect(placeholderPlaylistPage.getItemNameCells().get(1).getText()).to.eventually.contain('Video Widget (1)');
+        expect(placeholderPlaylistPage.getItemNameCells().get(0).getText()).to.eventually.contain('Image Widget');
+        expect(placeholderPlaylistPage.getItemNameCells().get(1).getText()).to.eventually.contain('Image Widget (1)');
       });
 
       it('should remove item', function (done) {
@@ -300,6 +331,12 @@ var PlaylistScenarios = function() {
 
         expect(playlistItemModalPage.getPlaylistItemModal().isDisplayed()).to.eventually.be.true;
         expect(playlistItemModalPage.getModalTitle().getText()).to.eventually.equal('Edit Playlist Item');
+        expect(playlistItemModalPage.getNameTextbox().getAttribute('value')).to.eventually.contain('Image Widget');
+      });
+      
+      it('should display store status in modal', function () {
+        helper.wait(playlistItemModalPage.getStatusMessage(), 'Free');
+        expect(playlistItemModalPage.getStatusMessage().getText()).to.eventually.equal('Free');
       });
 
       it('should close properties', function () {

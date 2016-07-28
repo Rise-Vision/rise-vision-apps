@@ -22,6 +22,9 @@ describe('service: placeholderPlaylistFactory:', function() {
     placeholderFactory = {
       placeholder: {
         items: items
+      },
+      updateSubscriptionStatus: function() {
+        updateSubscriptionStatusCalled = true;
       }
     };
     
@@ -30,10 +33,11 @@ describe('service: placeholderPlaylistFactory:', function() {
     });
 
   }));
-  var items, item, item0, item2, placeholderPlaylistFactory, trackerCalled, placeholderFactory;
+  var items, item, item0, item2, placeholderPlaylistFactory, trackerCalled, placeholderFactory, updateSubscriptionStatusCalled;
 
   beforeEach(function(){
     trackerCalled = undefined;
+    updateSubscriptionStatusCalled = false;
 
     inject(function($injector){  
       placeholderPlaylistFactory = $injector.get('placeholderPlaylistFactory');
@@ -93,21 +97,34 @@ describe('service: placeholderPlaylistFactory:', function() {
   });
   
   describe('updateItem: ',function(){
-    it('should add the item',function(){
-      var newItem = {
-        name: 'Item 2'
-      };
-      placeholderPlaylistFactory.updateItem(newItem);
+    var newItem = {
+      name: 'Item 2'
+    };
 
+    it('should add the item',function(){
+      placeholderPlaylistFactory.updateItem(newItem);
+      
       expect(items.length).to.equal(4);
       expect(items[3]).to.equal(newItem);    
     });
     
+    it('should update Subscription Status for new items', function() {
+      placeholderPlaylistFactory.updateItem(newItem);
+
+      expect(updateSubscriptionStatusCalled).to.be.true;      
+    })
+
     it('should not add duplicate item',function(){
       placeholderPlaylistFactory.updateItem(item);
 
       expect(items.length).to.equal(3);
       expect(items[1]).to.equal(item);    
+    });
+    
+    it('should not update Subscription Status for duplicate item',function(){
+      placeholderPlaylistFactory.updateItem(item);
+
+      expect(updateSubscriptionStatusCalled).to.be.false;      
     });
   });
   
