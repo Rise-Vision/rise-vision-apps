@@ -73,7 +73,7 @@ angular.module('risevision.apps.storage.storage-selector', [
         }],
         controller: 'StorageSelectorModalController',
         resolve: {
-          enableByURL: function() {
+          enableByURL: function () {
             return false;
           },
           '$modalInstance': [function () {

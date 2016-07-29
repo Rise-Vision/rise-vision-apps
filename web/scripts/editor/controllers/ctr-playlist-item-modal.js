@@ -5,7 +5,7 @@ angular.module('risevision.editor.controllers')
     'placeholderPlaylistFactory', 'widgetModalFactory', 'gadgetFactory',
     '$modalInstance', 'item', 'editorFactory', 'userState', 'RVA_URL',
     function ($scope, placeholderPlaylistFactory, widgetModalFactory,
-      gadgetFactory, $modalInstance, item, editorFactory, userState, 
+      gadgetFactory, $modalInstance, item, editorFactory, userState,
       RVA_URL) {
       $scope.PREVIOUS_EDITOR_URL = RVA_URL + '/#/PRESENTATION_MANAGE' + ((
           editorFactory.presentation.id) ? '/id=' + editorFactory.presentation

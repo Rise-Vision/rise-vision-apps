@@ -73,7 +73,19 @@ var AddContentScenarios = function() {
         helper.wait(storageSelectorModalPage.getStorageSelectorModal(), 'Storage Selector Modal');
         helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
 
+        expect(storageSelectorModalPage.getModalTitle().getText()).to.eventually.equal('Select Images and/or Folders of Images');
+      });
+      
+      it('should only allow user to select images', function() {
         filesListPage.filterFileList("package.json");
+
+        expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
+
+        expect(filesListPage.getFileItems().get(0).getAttribute('class')).to.eventually.contain('no-select-row disabled-row');
+      })
+      
+      it('should select the file and add to the playlist', function() {
+        filesListPage.filterFileList("logo.gif");
 
         expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
 
@@ -152,8 +164,20 @@ var AddContentScenarios = function() {
       it('should open Storage Selector modal', function() {
         helper.wait(storageSelectorModalPage.getStorageSelectorModal(), 'Storage Selector Modal');
         helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
-
+        
+        expect(storageSelectorModalPage.getModalTitle().getText()).to.eventually.equal('Select Videos and/or Folders of Videos');
+      });
+      
+      it('should only allow user to select images', function() {
         filesListPage.filterFileList("package.json");
+
+        expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
+
+        expect(filesListPage.getFileItems().get(0).getAttribute('class')).to.eventually.contain('no-select-row disabled-row');
+      })
+
+      it('should select the file and add to the playlist', function() {
+        filesListPage.filterFileList("samplevideo.mp4");
 
         expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
 
@@ -206,9 +230,9 @@ var AddContentScenarios = function() {
     describe('Playlist: ', function() {
       it('Should have 3 items in the playlist', function() {
         expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(4);
-        expect(placeholderPlaylistPage.getItemNameCells().get(0).getText()).to.eventually.contain('package.json');
+        expect(placeholderPlaylistPage.getItemNameCells().get(0).getText()).to.eventually.contain('logo.gif');
         expect(placeholderPlaylistPage.getItemNameCells().get(1).getText()).to.eventually.contain('Image');
-        expect(placeholderPlaylistPage.getItemNameCells().get(2).getText()).to.eventually.contain('package.json');
+        expect(placeholderPlaylistPage.getItemNameCells().get(2).getText()).to.eventually.contain('samplevideo.mp4');
         expect(placeholderPlaylistPage.getItemNameCells().get(3).getText()).to.eventually.contain('Text Widget');
       });
     });

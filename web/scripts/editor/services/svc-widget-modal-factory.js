@@ -4,11 +4,11 @@ angular.module('risevision.editor.services')
   .value('WIDGET_PARAMS',
     'up_id=iframeId&parent=parentUrl&up_rsW=width&up_rsH=height&up_companyId=cid'
   )
-  .factory('widgetModalFactory', ['$rootScope', 'placeholderFactory', 
-    'placeholderPlaylistFactory', 'gadgetFactory', 'userState', '$q', 
+  .factory('widgetModalFactory', ['$rootScope', 'placeholderFactory',
+    'placeholderPlaylistFactory', 'gadgetFactory', 'userState', '$q',
     '$modal', '$location', '$sce', '$log', 'WIDGET_PARAMS',
-    function ($rootScope, placeholderFactory, placeholderPlaylistFactory, 
-      gadgetFactory, userState, $q, $modal, $location, $sce, $log, 
+    function ($rootScope, placeholderFactory, placeholderPlaylistFactory,
+      gadgetFactory, userState, $q, $modal, $location, $sce, $log,
       WIDGET_PARAMS) {
       var factory = {};
 
@@ -126,7 +126,7 @@ angular.module('risevision.editor.services')
           if (widgetData) {
             _updateItemObjectData(item, widgetData.params);
             item.additionalParams = widgetData.additionalParams;
-            
+
             placeholderPlaylistFactory.updateItem(item);
           }
 

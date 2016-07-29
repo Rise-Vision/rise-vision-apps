@@ -156,9 +156,9 @@ angular.module('risevision.storage.services')
         }
       };
 
-      factory.openSelector = function (type, enableByURL) {
+      factory.openSelector = function (type, filter, enableByURL) {
         storageFactory.storageFull = false;
-        storageFactory.selectorType = type || SELECTOR_TYPES.SINGLE_FILE;
+        storageFactory.setSelectorType(type, filter);
 
         var deferred = $q.defer();
 
@@ -167,7 +167,7 @@ angular.module('risevision.storage.services')
           controller: 'StorageSelectorModalController',
           size: 'lg',
           resolve: {
-            enableByURL: function() {
+            enableByURL: function () {
               return enableByURL || false;
             }
           }

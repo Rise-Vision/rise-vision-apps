@@ -120,7 +120,9 @@ describe('service: playlistItemFactory:', function() {
       };
     });
 
-    $provide.value('SELECTOR_TYPES', {});    
+    $provide.value('SELECTOR_TYPES', {
+      MULTIPLE_FILES_FOLDERS: 'multiple-files-folders'
+    });    
 
   }));
   var item, playlistItemFactory, placeholderPlaylistFactory, fileSelectorFactory, 
@@ -230,16 +232,20 @@ describe('service: playlistItemFactory:', function() {
   });
   
   describe('selectFiles: ', function() {
-    it('should open selector', function() {
+    it('should open selector', function(done) {
       var openSelectorSpy = sinon.spy(fileSelectorFactory, 'openSelector');
       
-      playlistItemFactory.selectFiles();
+      playlistItemFactory.selectFiles('images');
       
-      openSelectorSpy.should.have.been.called;
+      setTimeout(function() {
+        openSelectorSpy.should.have.been.calledWith('multiple-files-folders', 'images', true);
+
+        done();
+      }, 10);
     });
     
     it('should add 2 images', function(done) {
-      playlistItemFactory.selectFiles('image');
+      playlistItemFactory.selectFiles('images');
       
       setTimeout(function() {
         expect(trackedEvent).to.equal('Add Image Widget');
@@ -263,7 +269,7 @@ describe('service: playlistItemFactory:', function() {
       fileSelectorFactory.getSelectedFiles = function() {
         return [{name: 'folder', kind: 'folder'}, {}];
       };
-      playlistItemFactory.selectFiles('image');
+      playlistItemFactory.selectFiles('images');
       
       setTimeout(function() {
         expect(trackedEvent).to.equal('Add Image Widget');
@@ -286,7 +292,7 @@ describe('service: playlistItemFactory:', function() {
     it('Image URL option should open widget settings', function(done) {
       returnFiles = false;
 
-      playlistItemFactory.selectFiles('image');
+      playlistItemFactory.selectFiles('images');
 
       setTimeout(function() {
         showWidgetModalSpy.should.have.been.called;
@@ -307,7 +313,7 @@ describe('service: playlistItemFactory:', function() {
     });
     
     it('should add 2 videos', function(done) {
-      playlistItemFactory.selectFiles('video');
+      playlistItemFactory.selectFiles('videos');
       
       setTimeout(function() {
         expect(trackedEvent).to.equal('Add Video Widget');
@@ -331,7 +337,7 @@ describe('service: playlistItemFactory:', function() {
     it('Video URL option should open widget settings', function(done) {
       returnFiles = false;
 
-      playlistItemFactory.selectFiles('video');
+      playlistItemFactory.selectFiles('videos');
 
       setTimeout(function() {
         showWidgetModalSpy.should.have.been.called;

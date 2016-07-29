@@ -6,24 +6,53 @@ angular.module('risevision.storage.services')
     SINGLE_FOLDER: 'single-folder',
     MULTIPLE_FILES_FOLDERS: 'multiple-files-folders'
   })
+  .value('SELECTOR_FILTERS', {
+    ALL: {
+      name: '',
+      extensions: null
+    },
+    IMAGES: {
+      name: 'images',
+      extensions: [
+        'jpg', 'jpeg', 'png', 'bmp', 'svg', 'gif', 'webp'
+      ]
+    },
+    VIDEOS: {
+      name: 'videos',
+      extensions: [
+        'webm', 'mp4', 'ogg', 'ogv'
+      ]
+    }
+  })
   .value('STORAGE_CLIENT_API', 'https://www.googleapis.com/storage/v1/b/')
-  .factory('storageFactory', ['userState', '$modal', 'SELECTOR_TYPES',
-    'STORAGE_CLIENT_API',
-    function (userState, $modal, SELECTOR_TYPES, STORAGE_CLIENT_API) {
+  .factory('storageFactory', ['userState', '$filter', '$modal',
+    'SELECTOR_TYPES', 'SELECTOR_FILTERS', 'STORAGE_CLIENT_API',
+    function (userState, $filter, $modal, SELECTOR_TYPES, SELECTOR_FILTERS,
+      STORAGE_CLIENT_API) {
       var factory = {
         storageIFrame: false,
         storageFull: true,
         selectorType: '',
+        selectorFilter: SELECTOR_FILTERS.ALL,
         folderPath: ''
       };
-      
-      factory.setSelectorType = function (type) {
-        factory.selectorType = SELECTOR_TYPES.SINGLE_FILE;
 
-        for (var k in SELECTOR_TYPES) {
-          if (type === SELECTOR_TYPES[k]) {
-            factory.selectorType = SELECTOR_TYPES[k];
-            
+      factory.setSelectorType = function (type, filter) {
+        factory.selectorType = SELECTOR_TYPES.SINGLE_FILE;
+        factory.selectorFilter = SELECTOR_FILTERS.ALL;
+
+        for (var j in SELECTOR_TYPES) {
+          if (type === SELECTOR_TYPES[j]) {
+            factory.selectorType = SELECTOR_TYPES[j];
+
+            break;
+          }
+        }
+
+        for (var k in SELECTOR_FILTERS) {
+          if (filter === SELECTOR_FILTERS[k].name) {
+            factory.selectorFilter = SELECTOR_FILTERS[k];
+
             break;
           }
         }
@@ -56,10 +85,33 @@ angular.module('risevision.storage.services')
           factory.selectorType === SELECTOR_TYPES.MULTIPLE_FILES_FOLDERS;
       };
 
+      var _isFilteredFile = function (file) {
+        if (factory.fileIsFolder(file)) {
+          return false;
+        }
+
+        var filtered = false;
+
+        if (factory.selectorFilter.extensions) {
+          var fileType = $filter('fileTypeFilter')(file.name);
+
+          filtered = factory.selectorFilter.extensions.indexOf(fileType.toLowerCase()) ===
+            -1;
+        }
+
+        return filtered;
+      };
+
       factory.canSelect = function (file) {
         return !file.currentFolder && !factory.fileIsTrash(file) &&
           (factory.fileIsFolder(file) && factory.isFolderSelector() ||
-            !factory.fileIsFolder(file) && factory.isFileSelector());
+            !factory.fileIsFolder(file) && factory.isFileSelector()) &&
+          !_isFilteredFile(file);
+      };
+
+      factory.isDisabled = function (file) {
+        return _isFilteredFile(file) ||
+          !factory.fileIsFolder(file) && !factory.isFileSelector();
       };
 
       factory.fileIsCurrentFolder = function (file) {

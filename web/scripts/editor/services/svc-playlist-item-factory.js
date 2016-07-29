@@ -44,11 +44,11 @@ angular.module('risevision.editor.services')
   })
   .factory('playlistItemFactory', ['$modal', '$log', 'userState',
     'gadgetFactory', 'editorFactory', 'placeholderPlaylistFactory',
-    'widgetModalFactory', 'fileSelectorFactory', 'presentationTracker', 
-    'RENDER_WIDGETS', 'VIDEO_WIDGET', 'SELECTOR_TYPES', 
+    'widgetModalFactory', 'fileSelectorFactory', 'presentationTracker',
+    'RENDER_WIDGETS', 'VIDEO_WIDGET', 'SELECTOR_TYPES',
     'IMAGE_ADDITIONAL_PARAMS', 'VIDEO_ADDITIONAL_PARAMS',
     function ($modal, $log, userState, gadgetFactory, editorFactory,
-      placeholderPlaylistFactory, widgetModalFactory, fileSelectorFactory, 
+      placeholderPlaylistFactory, widgetModalFactory, fileSelectorFactory,
       presentationTracker, RENDER_WIDGETS, VIDEO_WIDGET, SELECTOR_TYPES,
       IMAGE_ADDITIONAL_PARAMS, VIDEO_ADDITIONAL_PARAMS) {
       var factory = {};
@@ -85,8 +85,7 @@ angular.module('risevision.editor.services')
 
             if (item.type === 'widget') {
               widgetModalFactory.showWidgetModal(item);
-            }
-            else {
+            } else {
               factory.edit(item);
             }
           });
@@ -141,8 +140,7 @@ angular.module('risevision.editor.services')
             additionalParams.selector.selection = SELECTOR_TYPES.SINGLE_FILE;
             additionalParams.storage.fileName = file.name;
           }
-        }
-        else {
+        } else {
           additionalParams.selector.selection = 'custom';
           additionalParams.storage = {};
         }
@@ -160,7 +158,7 @@ angular.module('risevision.editor.services')
 
             item.additionalParams = _populateAdditionalParams(
               IMAGE_ADDITIONAL_PARAMS, fileUrl, file);
-            
+
             return item;
           });
       };
@@ -176,30 +174,30 @@ angular.module('risevision.editor.services')
 
             item.additionalParams = _populateAdditionalParams(
               VIDEO_ADDITIONAL_PARAMS, fileUrl, file);
-            
+
             return item;
           });
       };
 
       factory.selectFiles = function (type) {
-        fileSelectorFactory.openSelector(SELECTOR_TYPES.MULTIPLE_FILES_FOLDERS, true)
+        fileSelectorFactory.openSelector(SELECTOR_TYPES.MULTIPLE_FILES_FOLDERS,
+            type, true)
           .then(function (files) {
             if (files) {
               var fileObjects = fileSelectorFactory.getSelectedFiles();
               for (var i = 0; i < files.length; i++) {
-                if (type === 'image') {
+                if (type === 'images') {
                   _addImage(files[i], fileObjects[i])
                     .then(placeholderPlaylistFactory.updateItem);
-                } else if (type === 'video') {
+                } else if (type === 'videos') {
                   _addVideo(files[i], fileObjects[i])
                     .then(placeholderPlaylistFactory.updateItem);
                 }
               }
-            }
-            else {
-              if (type === 'image') {                
+            } else {
+              if (type === 'images') {
                 _addImage().then(widgetModalFactory.showWidgetModal);
-              } else if (type === 'video') {
+              } else if (type === 'videos') {
                 _addVideo().then(widgetModalFactory.showWidgetModal);
               }
             }

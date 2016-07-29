@@ -61,7 +61,7 @@
       <tbody>
         <tr class="clickable-row"
         ng-click="fileClick(file);"
-        ng-class="{'active': file.isChecked, 'blocked-file': file.isThrottled, 'back-btn': file.currentFolder, 'no-select-row': !storageFactory.canSelect(file), 'disabled-row': !storageFactory.fileIsFolder(file) && !storageFactory.isFileSelector() }"
+        ng-class="{'active': file.isChecked, 'blocked-file': file.isThrottled, 'back-btn': file.currentFolder, 'no-select-row': !storageFactory.canSelect(file), 'disabled-row': storageFactory.isDisabled(file) }"
         ng-repeat="file in filesDetails.files | filter:search.query | orderBy:orderByAttribute:reverseSort track by $index" ng-if="!storageFactory.fileIsTrash(file) || storageFactory.storageFull">
           <td ng-if="storageFactory.fileIsFolder(file)">
             <span class="folder">{{file.name | fileNameFilter:storageFactory.folderPath}}</span>

@@ -475,9 +475,17 @@ describe('service: fileSelectorFactory:', function() {
     it('should open modal', function() {
       var $modalSpy = sinon.spy($modal, 'open');
       
-      fileSelectorFactory.openSelector('', true);      
+      fileSelectorFactory.openSelector();      
       
       $modalSpy.should.have.been.called;
+    });
+    
+    it('should initialize selectorType', function() {
+      var setSelectorTypeSpy = sinon.spy(storageFactory, 'setSelectorType');
+
+      fileSelectorFactory.openSelector('multiple-files-folders', 'images');
+
+      setSelectorTypeSpy.should.have.been.calledWith('multiple-files-folders', 'images');
     });
 
     it('should resolve promise', function(done) {

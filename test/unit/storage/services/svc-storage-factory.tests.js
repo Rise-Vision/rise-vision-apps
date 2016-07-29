@@ -1,8 +1,10 @@
 'use strict';
   
 describe('service: storageFactory:', function() {
+  beforeEach(module('risevision.storage.filters'));
   beforeEach(module('risevision.storage.services'));
-  var storageFactory, $modal;
+  var storageFactory, $modal, SELECTOR_FILTERS;
+
   beforeEach(module(function ($provide) {
     $provide.service('$modal', function() {
       return {
@@ -24,6 +26,7 @@ describe('service: storageFactory:', function() {
     inject(function($injector){  
       storageFactory = $injector.get('storageFactory');
       $modal = $injector.get('$modal');
+      SELECTOR_FILTERS = $injector.get('SELECTOR_FILTERS');
       
       storageFactory.selectorType = 'single-file';
       storageFactory.storageFull = true;
@@ -40,6 +43,7 @@ describe('service: storageFactory:', function() {
     expect(storageFactory.isFileSelector).to.be.a('function');
     expect(storageFactory.isFolderSelector).to.be.a('function');
     expect(storageFactory.canSelect).to.be.a('function');
+    expect(storageFactory.isDisabled).to.be.a('function');
     expect(storageFactory.fileIsCurrentFolder).to.be.a('function');
     expect(storageFactory.fileIsFolder).to.be.a('function');
     expect(storageFactory.fileIsTrash).to.be.a('function');
@@ -54,14 +58,68 @@ describe('service: storageFactory:', function() {
     expect(storageFactory.isMultipleSelector()).to.be.true;
     expect(storageFactory.isFileSelector()).to.be.true;
     expect(storageFactory.isFolderSelector()).to.be.true;
+    
+    expect(storageFactory.selectorFilter).to.equal(SELECTOR_FILTERS.ALL);
   });
   
-  it('setSelectorType: ', function() {
-    storageFactory.setSelectorType('invalid');
-    expect(storageFactory.selectorType).to.equal('single-file');
+  describe('setSelectorType: ', function() {
+    it('should initialize selectorType', function() {
+      storageFactory.setSelectorType('invalid');
+      expect(storageFactory.selectorType).to.equal('single-file');
+      
+      storageFactory.setSelectorType('single-folder');
+      expect(storageFactory.selectorType).to.equal('single-folder');
+    });
     
-    storageFactory.setSelectorType('single-folder');
-    expect(storageFactory.selectorType).to.equal('single-folder');
+    it('should initialize selectorFilter', function() {
+      storageFactory.setSelectorType('', 'invalid');
+      expect(storageFactory.selectorFilter).to.equal(SELECTOR_FILTERS.ALL);
+      
+      storageFactory.setSelectorType('', 'images');
+      expect(storageFactory.selectorFilter).to.equal(SELECTOR_FILTERS.IMAGES);
+
+      storageFactory.setSelectorType('', 'videos');
+      expect(storageFactory.selectorFilter).to.equal(SELECTOR_FILTERS.VIDEOS);
+    });
+  });
+  
+  describe('isDisabled: ', function() {
+    beforeEach(function() {
+      storageFactory.storageFull = false;
+    });
+
+    it('false for folders', function() {
+      expect(storageFactory.isDisabled({name: 'folder/'})).to.be.false;
+      
+      storageFactory.selectorType = 'single-folder';
+      expect(storageFactory.isDisabled({name: 'folder/'})).to.be.false;
+    });
+
+    it('true for files in singleFolderSelector', function() {
+      storageFactory.setSelectorType('single-folder', 'images');
+
+      expect(storageFactory.isDisabled({name: 'file.jpg'})).to.be.true;
+    });
+
+    it('false for files if no filter is selected', function() {
+      expect(storageFactory.isDisabled({name: 'file.jpg'})).to.be.false;
+    });
+    
+    it('should filter non Image files', function() {
+      storageFactory.setSelectorType('', 'images');
+
+      expect(storageFactory.isDisabled({name: 'file.jpg'})).to.be.false;
+      expect(storageFactory.isDisabled({name: 'file.mp4'})).to.be.true;
+      expect(storageFactory.isDisabled({name: 'file.html'})).to.be.true;
+    });
+    
+    it('should filter non Video files', function() {
+      storageFactory.setSelectorType('', 'videos');
+
+      expect(storageFactory.isDisabled({name: 'file.mp4'})).to.be.false;
+      expect(storageFactory.isDisabled({name: 'file.jpg'})).to.be.true;
+      expect(storageFactory.isDisabled({name: 'file.html'})).to.be.true;
+    });
   });
   
   describe('canSelect: ', function() {
@@ -101,6 +159,14 @@ describe('service: storageFactory:', function() {
       storageFactory.storageFull = true;
 
       expect(storageFactory.canSelect({name: 'folder/'})).to.be.true;
+    });
+    
+    it('should not select filtered files', function() {
+      storageFactory.setSelectorType('', 'videos');
+
+      expect(storageFactory.canSelect({name: 'file.mp4'})).to.be.true;
+      expect(storageFactory.canSelect({name: 'file.jpg'})).to.be.false;
+      expect(storageFactory.canSelect({name: 'file.html'})).to.be.false;
     });
   });
   
