@@ -24,7 +24,7 @@ describe('directive: placeholder-playlist', function() {
     });
 
     $provide.service('widgetModalFactory', function() {
-      
+
     });
     $provide.service('$modal', function() {
       return {
@@ -69,5 +69,5 @@ describe('directive: placeholder-playlist', function() {
       expect(items).to.not.include(testitem);
     });
   });
-  
+
 });

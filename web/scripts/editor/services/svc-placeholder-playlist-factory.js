@@ -32,7 +32,7 @@ angular.module('risevision.editor.services')
         if (index !== -1) {
           factory.getItems().splice(index, 1);
         }
-      };
+    };
 
       var _setItemCopyName = function (item, index) {
         var items = factory.getItems();
@@ -72,22 +72,24 @@ angular.module('risevision.editor.services')
         return _getItemIndex(item) > 0;
       };
 
-      var _moveItem = function (item, newIndex) {
+      var moveItem = function (item, newIndex) {
         var index = _getItemIndex(item);
         var items = factory.getItems();
 
         items.splice(newIndex, 0, items.splice(index, 1)[0]);
       };
 
+      factory.moveItem = moveItem;
+
       factory.movePlaylistItemDown = function (item) {
         if (factory.canPlaylistItemMoveDown(item)) {
-          _moveItem(item, _getItemIndex(item) + 1);
+          moveItem(item, _getItemIndex(item) + 1);
         }
       };
 
       factory.movePlaylistItemUp = function (item) {
         if (factory.canPlaylistItemMoveUp(item)) {
-          _moveItem(item, _getItemIndex(item) - 1);
+          moveItem(item, _getItemIndex(item) - 1);
         }
       };
 
