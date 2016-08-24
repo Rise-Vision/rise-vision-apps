@@ -27,7 +27,8 @@
     "rv-loading": "https://github.com/Rise-Vision/rv-loading.git",
     "widget-settings-ui-components": "https://github.com/Rise-Vision/widget-settings-ui-components.git#1.0.4",
     "widget-settings-ui-core": "https://github.com/Rise-Vision/widget-settings-ui-core.git",
-    "jszip": "2.5.0"
+    "jszip": "2.5.0",
+    "Sortable": "^1.4.2"
   },
   "homepage": "https://github.com/Rise-Vision/rise-vision-app-launcher",
   "authors": [

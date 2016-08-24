@@ -42,6 +42,7 @@ var unitTestFiles = [
   "web/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js",
   "web/bower_components/angular-ui-codemirror/ui-codemirror.js",
   "web/bower_components/angular-vertilize/angular-vertilize.js",
+  'web/bower_components/Sortable/Sortable.js',
   "web/bower_components/rv-common-i18n/dist/i18n.js",
   "web/bower_components/rv-common-app-components/dist/js/focus-me.js",
   "web/bower_components/rv-common-app-components/dist/js/confirm-instance.js",

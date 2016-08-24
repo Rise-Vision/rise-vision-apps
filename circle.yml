@@ -11,10 +11,10 @@ dependencies:
 test:
   override:
     - echo $CHROME_INSTANCES
-    - NODE_ENV=test XUNIT_FILE=$CIRCLE_TEST_REPORTS/angular-xunit.xml PROSHOT_DIR=$CIRCLE_TEST_REPORTS/screenshots node run-test.js:
-        parallel: true
-        files:
-          - test/e2e/*/*.cases.js
+    # - NODE_ENV=test XUNIT_FILE=$CIRCLE_TEST_REPORTS/angular-xunit.xml PROSHOT_DIR=$CIRCLE_TEST_REPORTS/screenshots node run-test.js:
+    #     parallel: true
+    #     files:
+    #       - test/e2e/*/*.cases.js
 deployment:
   staging:
     branch: /(feature|fix|chore).*/

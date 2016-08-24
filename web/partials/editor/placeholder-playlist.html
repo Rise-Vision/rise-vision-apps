@@ -16,9 +16,9 @@
   </a>
 </div>
 
-<div class="editor-playlist scrollable-list add-top">
+<div class="editor-playlist scrollable-list add-top sortable-list">
   <!-- Item Playlist -->
-  <div class="editor-playlist-item" ng-repeat="item in factory.getItems() track by $index" ng-show="factory.getItems().length">
+  <div class="editor-playlist-item draggable-item" ng-repeat="item in factory.getItems() track by $index" ng-show="factory.getItems().length">
     <div class="arrows">
       <button class="btn btn-block btn-xs btn-default" id="moveUpButton" ng-click="factory.movePlaylistItemUp(item)" ng-disabled="!factory.canPlaylistItemMoveUp(item)"><i class="fa fa-arrow-up"></i></button>
       <button class="btn btn-block btn-xs btn-default" id="moveDownButton" ng-click="factory.movePlaylistItemDown(item)" ng-disabled="!factory.canPlaylistItemMoveDown(item)"><i class="fa fa-arrow-down"></i></button>
@@ -36,7 +36,7 @@
       <button class="btn btn-xs btn-default" id="removeButton" ng-click="remove(item)"><i class="fa fa-trash-o"></i></button>
     </div>
 
-    <div class="name-container">
+    <div class="name-container sortable-handle">
       <p ng-click="widgetModalFactory.showWidgetModal(item)" ng-show="item.type === 'widget' && (item.objectReference || item.settingsUrl)">
         <span>
           <svg-icon p="{{widgetUtils.getSvgIcon(item.objectReference)}}"></svg-icon>
