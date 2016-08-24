@@ -10,7 +10,7 @@ angular.module('risevision.editor.directives')
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/editor/placeholder-playlist.html',
-        link: function ($scope) {
+        link: function ($scope, $elem) {
           $scope.factory = placeholderPlaylistFactory;
           $scope.widgetModalFactory = widgetModalFactory;
           $scope.widgetUtils = widgetUtils;
@@ -19,7 +19,7 @@ angular.module('risevision.editor.directives')
           $scope.remove = function (item) {
             var modalInstance = $modal.open({
               template: $templateCache.get(
-                'confirm-instance/confirm-modal.html'),
+              'confirm-instance/confirm-modal.html'),
               controller: 'confirmInstance',
               windowClass: 'modal-custom',
               resolve: {
@@ -42,6 +42,27 @@ angular.module('risevision.editor.directives')
             });
           };
 
+          applySortable();
+
+          function applySortable() {
+            var el = $elem.find('.sortable-list')[0];
+
+            if(el) {
+              var sortable = new Sortable(el, {
+                sort: true,
+                animation: 150,
+                hande: '.sortable-handle',
+                draggable: '.draggable-item',
+                onEnd: function applyChanges(evt) {
+                  var oldIndex = evt.oldIndex;
+                  var newIndex = evt.newIndex;
+                  var item = placeholderPlaylistFactory.getItems()[oldIndex];
+                  placeholderPlaylistFactory.moveItem(item, newIndex);
+                  $scope.$apply();
+                }
+              });
+            }
+          }
         }
       };
     }
