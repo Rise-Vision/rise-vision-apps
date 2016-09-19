@@ -52,7 +52,7 @@
       </thead>
       <tbody>
         <tr class="clickable-row" ng-class="{ 'bg-warning' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
-          <td class="col-sm-5 display-name"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="ellipsis">{{display.name}}</span></a></td>
+          <td class="col-sm-5 display-name"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="ellipsis"><strong>{{display.name}}</strong></span></a></td>
           <td class="nowrap display-address visible-lg visible-md"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="text-muted ellipsis">{{display.address}}</span></a></td>
           <td class="col-sm-2 text-center"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="add-left"><i class="fa {{display | status}} fa-circle"></i></span></a></td>
           <td class="col-sm-1 hidden-xs nowrap text-right"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="text-muted">{{display.lastActivityDate | date:'d-MMM-yyyy h:mm a'}}</span></a></td>

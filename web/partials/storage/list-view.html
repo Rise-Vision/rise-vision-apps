@@ -1,10 +1,10 @@
 <table id="storageFileList" class="table-2 table-hover table-selector" ng-class="storageFactory.isMultipleSelector() ? 'multiple-selector' : 'single-selector'" ng-show="filesDetails.code!==202 && filesDetails.code!==404 && isFileListVisible()">
   <thead>
     <tr>
-      <th class="col-sm-6">
+      <th class="col-sm-6 clickable">
         <input type="checkbox" class="add-right" ng-model="selectAll">
         <label ng-click="fileSelectorFactory.selectAllCheckboxes(query)" ng-show="storageFactory.isMultipleSelector()"></label>
-        <a id="tableHeaderName" href="" ng-click="orderByAttribute = fileNameOrderFunction; reverseSort = !reverseSort">
+        <span id="tableHeaderName" ng-click="orderByAttribute = fileNameOrderFunction; reverseSort = !reverseSort">
           <span translate="common.file-name" ></span>
           <span ng-show="orderByAttribute==fileNameOrderFunction">
             <span ng-show="reverseSort">
@@ -14,10 +14,10 @@
               <i class="fa fa-long-arrow-down"></i>
             </span>
           </span>
-        </a>
+        </span>
       </th>
-      <th class="col-sm-2 hidden-xs" ng-click="orderByAttribute = fileExtOrderFunction; reverseSort = !reverseSort">
-        <a href=""><span translate="common.file-type"></span>
+      <th class="col-sm-2 hidden-xs clickable" ng-click="orderByAttribute = fileExtOrderFunction; reverseSort = !reverseSort">
+        <span translate="common.file-type"></span>
           <span ng-show="orderByAttribute==fileExtOrderFunction">
             <span ng-show="reverseSort">
               <i class="fa fa-long-arrow-up"></i>
@@ -26,10 +26,9 @@
               <i class="fa fa-long-arrow-down"></i>
             </span>
           </span>
-        </a>
       </th>
-      <th class="col-sm-2 visible-lg" ng-click="orderByAttribute = fileSizeOrderFunction; reverseSort = !reverseSort">
-        <a href=""><span translate="common.file-size"></span>
+      <th class="col-sm-2 visible-lg clickable" ng-click="orderByAttribute = fileSizeOrderFunction; reverseSort = !reverseSort">
+        <span translate="common.file-size"></span>
           <span ng-show="orderByAttribute==fileSizeOrderFunction">
             <span ng-show="reverseSort">
               <i class="fa fa-long-arrow-up"></i>
@@ -38,10 +37,9 @@
               <i class="fa fa-long-arrow-down"></i>
             </span>
           </span>
-        </a>
       </th>
-      <th class="col-sm-2 visible-lg" ng-click="orderByAttribute = dateModifiedOrderFunction; reverseSort = !reverseSort">
-        <a href=""><span translate="common.file-date-mod"></span>
+      <th class="col-sm-2 visible-lg clickable" ng-click="orderByAttribute = dateModifiedOrderFunction; reverseSort = !reverseSort">
+        <span translate="common.file-date-mod"></span>
           <span ng-show="orderByAttribute==dateModifiedOrderFunction">
             <span ng-show="reverseSort">
               <i class="fa fa-long-arrow-up"></i>
@@ -50,7 +48,6 @@
               <i class="fa fa-long-arrow-down"></i>
             </span>
           </span>
-        </a>
       </th>
     </tr>
   </thead>
@@ -61,14 +58,14 @@
     ng-repeat="file in filesDetails.files | filter:search.query | orderBy:orderByAttribute:reverseSort track by $index" 
     ng-if="!storageFactory.fileIsTrash(file) || storageFactory.storageFull">
       <td ng-if="storageFactory.fileIsFolder(file)">
-        <span class="folder">{{file.name | fileNameFilter:storageFactory.folderPath}}</span>
+        <span class="folder"><strong>{{file.name | fileNameFilter:storageFactory.folderPath}}</strong></span>
       </td>
       <td ng-if="!storageFactory.fileIsFolder(file)" class="col-sm-6">
         <span class="file" ng-class='{"throttled-type": file.isThrottled && !storageFactory.fileIsFolder(file)}'>
-          <a style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;" href="" data-toggle="tooltip" title="{{file.name | fileNameFilter:storageFactory.folderPath}}">
+          <span style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;" data-toggle="tooltip" title="{{file.name | fileNameFilter:storageFactory.folderPath}}">
             <i class="fa" ng-class='{"fa-exclamation": file.isThrottled && !storageFactory.fileIsFolder(file), "icon-red": file.isThrottled && !storageFactory.fileIsFolder(file)}'></i>
-            {{file.name | fileNameFilter:storageFactory.folderPath}}
-          </a>
+            <strong>{{file.name | fileNameFilter:storageFactory.folderPath}}</strong>
+          </span>
         </span>
         <div ng-show="file.showThrottledCallout && !storageFactory.fileIsFolder(file)" class="callout callout-red" ng-click="$event.stopPropagation();file.showThrottledCallout=false;">
           <span class="arrow"></span>

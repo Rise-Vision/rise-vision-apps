@@ -46,7 +46,7 @@
         <tbody>
           <tr class="clickable-row" ng-repeat="presentation in factory.items.list" ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})">
             <td class="col-sm-9"><a ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})"><strong>{{presentation.name}}</strong></a></td>
-            <td class="col-sm-9 hidden-xs"><a ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})"><strong ng-class="{'text-danger': presentation.revisionStatusName==='Revised'}">{{presentation.revisionStatusName | presentationStatus}}</strong></a></td>
+            <td class="col-sm-9 hidden-xs"><a ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})"><span ng-class="{'text-danger': presentation.revisionStatusName==='Revised'}">{{presentation.revisionStatusName | presentationStatus}}</span></a></td>
             <td class="col-sm-2 hidden-xs text-right nowrap" ><a ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})">{{presentation.changeDate | date:'d-MMM-yyyy h:mm a'}}</a></td>
           </tr>
           <!-- If no presentation available -->

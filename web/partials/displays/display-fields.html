@@ -22,16 +22,18 @@
     <button class="btn btn-link" ng-click="showHelp = !showHelp" ng-show="showHelp">{{ 'launcher.hideAnimation' | translate }}</button>
   </div>
 
-  <div class="video-box add-bottom text-center col-xs-12 col-md-6 col-md-offset-3" ng-show="showHelp">
+  <div class="row">
+    <div class="video-box add-bottom text-center col-xs-12 col-md-6 col-md-offset-3" ng-show="showHelp">
       <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/Animations/addadisplay.gif">
   </div>
+  </div>
 
-  <div class="panel panel-success display-panel"> 
+  <div class="panel panel-default text-center"> 
     <div class="panel-heading"> 
       <h3 class="panel-title" translate>displays-app.fields.player.install.id</h3>
     </div>
     
-    <div class="panel-body">{{display.id}}</div> 
+    <div class="panel-body"><span class="lead">{{display.id}}</span></div> 
   </div>
 
   <br />
@@ -60,7 +62,7 @@
     <label class="control-label" translate>displays-app.fields.id</label>
     <div class="form-control-static">{{display.id}}</div>
 
-    <div class="video-box add-bottom" ng-show="showHelp">
+    <div class="video-box add-bottom clear-row" ng-show="showHelp">
        <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/Animations/howitworks.gif">
     </div>
   </div>
