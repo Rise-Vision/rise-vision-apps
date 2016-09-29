@@ -1,14 +1,21 @@
 <div class="app-header">
   <div class="title-block">
-    <!-- App Title -->
-    <h1 translate>displays-app.title</h1>
+      <!-- App Title -->
+      <h1 translate>displays-app.title</h1>
   </div>
-
   <div class="global-actions" require-role="da">
-    <button ng-click="addDisplay()" class="btn btn-lg btn-primary">     
-      {{ 'displays-app.actions.new' | translate }}
-      <i class="fa fa-plus icon-right"></i> 
-    </button>
+      <button ng-click="addDisplay()" class="btn btn-lg btn-primary">
+          {{ 'displays-app.actions.new' | translate }}
+          <i class="fa fa-plus icon-right"></i>
+      </button>
+  </div>
+  <div id="protoHideHowItWorks">
+   <button class="btn btn-link pull-right half-top" ng-click="showHelp = !showHelp">{{ 'displays-app.fields.controls.howto' | translate }} </button>
+      <div class="col-xs-12">
+          <div class="video-box add-bottom" ng-show="showHelp">
+              <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/Animations/howitworks.gif">
+          </div>
+      </div>
   </div>
 </div>
 
@@ -24,7 +31,9 @@
     </div> 
     
     <div class="button-row text-right">
-      <p class="visible-xs"><last-modified change-date="display.changeDate" changed-by="display.changedBy"></last-modified></p>
+      <p class="visible-xs">
+      <last-modified change-date="display.changeDate" changed-by="display.changedBy"></last-modified>
+      </p>
       <!-- Indicates delete or destructive action -->
       <button id="deleteButton" type="button" class="btn btn-danger pull-left" ng-click="confirmDelete()" require-role="da">
         {{'common.delete' | translate}}
