@@ -32,12 +32,12 @@ describe('service: display:', function() {
     $provide.service('coreAPILoader',function () {
       return function(){
         var deferred = Q.defer();
-                
+
         deferred.resolve({
           display: {
             list: function(obj){
               expect(obj).to.be.ok;
-              
+
               searchString = obj.search;
               sortString = obj.sort;
 
@@ -56,7 +56,7 @@ describe('service: display:', function() {
             },
             get: function(obj){
               expect(obj).to.be.ok;
-              
+
               var def = Q.defer();
               if (obj.id) {
                 def.resolve({
@@ -84,14 +84,14 @@ describe('service: display:', function() {
               expect(obj).to.be.ok;
               expect(obj.companyId).to.equal('TEST_COMP_ID');
               expect(obj).to.have.property("data");
-              
+
               var def = Q.defer();
               if (obj.data.name) {
                 expect(obj.data).to.have.property("name");
                 expect(obj.data).to.not.have.property("id");
-                
+
                 obj.data.id = "display1"
-                
+
                 def.resolve({
                   result: {
                     item: obj.data
@@ -106,11 +106,11 @@ describe('service: display:', function() {
               expect(obj).to.be.ok;
               expect(obj.id).to.equal('display1');
               expect(obj.data).to.be.ok;
-              
+
               var def = Q.defer();
               if (obj.data.name) {
                 expect(obj.data).to.have.property("name");
-                
+
                 def.resolve({
                   result: {
                     item: obj.data
@@ -165,15 +165,14 @@ describe('service: display:', function() {
         return deferred.promise;
       };
     });
-
   }));
   var display, returnList, searchString, sortString;
   beforeEach(function(){
     returnList = true;
     searchString = '';
     sortString='';
-    
-    inject(function($injector){  
+
+    inject(function($injector){
       display = $injector.get('display');
     });
   });
@@ -188,7 +187,7 @@ describe('service: display:', function() {
     expect(display.restart).to.be.a('function');
     expect(display.reboot).to.be.a('function');
   });
-  
+
   describe('list:',function(){
     it('should return a list of displays',function(done){
       display.list({})
@@ -200,7 +199,7 @@ describe('service: display:', function() {
       })
       .then(null,done);
     });
-    
+
     it('should create an empty searchString if query is empty',function(done){
       display.list({})
       .then(function(result){
@@ -240,10 +239,10 @@ describe('service: display:', function() {
         })
         .then(null,done);
     });
-    
+
     it("should handle failure to get list correctly",function(done){
       returnList = false;
-      
+
       display.list({})
       .then(function(displays) {
         done(displays);
@@ -255,7 +254,7 @@ describe('service: display:', function() {
       .then(null,done);
     });
   });
-  
+
   describe('get:',function(){
     it('should return a display',function(done){
       display.get('display1')
@@ -263,12 +262,12 @@ describe('service: display:', function() {
         expect(result).to.be.truely;
         expect(result.item).to.be.truely;
         expect(result.item).to.have.property("name");
-        
+
         done();
       })
       .then(null,done);
     });
-    
+
     it("should handle failure to get display correctly",function(done){
       display.get()
       .then(function(result) {
@@ -281,7 +280,7 @@ describe('service: display:', function() {
       .then(null,done);
     });
   });
-  
+
   describe('add:',function(){
     var displayObject = {
       "name": "Test Display",
@@ -291,7 +290,7 @@ describe('service: display:', function() {
       "restartEnabled": true,
       "restartTime": "02:45",
     };
-    
+
     it('should add a display',function(done){
       display.add(displayObject)
       .then(function(result){
@@ -300,12 +299,12 @@ describe('service: display:', function() {
         expect(result.item).to.have.property("name");
         expect(result.item).to.have.property("id");
         expect(result.item.id).to.equal("display1");
-        
+
         done();
       })
       .then(null,done);
     });
-    
+
     it("should handle failure to add display",function(done){
       display.add({})
       .then(function(result) {
@@ -318,7 +317,7 @@ describe('service: display:', function() {
       .then(null,done);
     });
   });
-  
+
   describe('update:',function(){
     var displayObject = {
       "name": "Test Display",
@@ -330,30 +329,30 @@ describe('service: display:', function() {
       "restartEnabled": true,
       "restartTime": "02:45",
     };
-    
+
     it('should update a display',function(done){
       display.update(displayObject.id, displayObject)
       .then(function(result){
         expect(result).to.be.truely;
         expect(result.item).to.be.truely;
-        
+
         done();
       })
       .then(null,done);
     });
-    
+
     it('should remove extra properties',function(done){
       display.update(displayObject.id, displayObject)
       .then(function(result){
         expect(result).to.be.truely;
         expect(result.item).to.be.truely;
         expect(result.item).to.not.have.property("connected");
-        
+
         done();
       })
       .then(null,done);
     });
-    
+
     it("should handle failure to update display",function(done){
       display.update(displayObject.id, {})
       .then(function(result) {
