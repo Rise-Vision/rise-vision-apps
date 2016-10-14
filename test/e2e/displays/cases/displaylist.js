@@ -65,11 +65,6 @@ var DisplayListScenarios = function() {
         expect(displaysListPage.getTableHeaderStatus().isPresent()).to.eventually.be.true;
         expect(displaysListPage.getTableHeaderStatus().getText()).to.eventually.equal('Status');
       });
-
-      it('should show display list table header Activity', function () {
-        expect(displaysListPage.getTableHeaderActivity().isPresent()).to.eventually.be.true;
-        expect(displaysListPage.getTableHeaderActivity().getText()).to.eventually.equal('Last Connection');
-      });
     });
   });
 };

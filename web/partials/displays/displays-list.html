@@ -2,12 +2,12 @@
   <div class="title-block">
     <!-- App Title -->
     <h1 id="title" translate>displays-app.title</h1>
-  </div> 
+  </div>
 
   <div class="global-actions" require-role="da">
     <a id="displayAddButton" class="btn btn-lg btn-primary" ng-click="displayFactory.addDisplayModal()">
       {{ 'displays-app.actions.new' | translate }}
-      <i class="fa fa-plus icon-right"></i> 
+      <i class="fa fa-plus icon-right"></i>
     </a>
   </div>
 </div>
@@ -17,7 +17,7 @@
 <div class="add-padding half-top half-bottom bg-warning" ng-show="search.query">
   <span translate>displays-app.list.searchNotification</span>
 </div>
-  
+
 <div class="content-box half-top">
   <div class="scrollable-list"
   scrolling-list="displays.load()"
@@ -42,20 +42,22 @@
             <i ng-if="search.sortBy == 'onlineStatus'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
             <!-- end ngIf: search.sortBy == 'onlineStatus' -->
           </th>
-          <th id="tableHeaderActivity" class="col-sm-1 hidden-xs text-right clickable" ng-click="displays.sortBy('lastActivityDate')">
-            {{ 'displays-app.list.heading.lastConnection' | translate }}
-            <!-- ngIf: search.sortBy == 'lastActivityDate' -->
-            <i ng-if="search.sortBy == 'lastActivityDate'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
-            <!-- end ngIf: search.sortBy == 'lastActivityDate' -->
-          </th>
         </tr>
       </thead>
       <tbody>
         <tr class="clickable-row" ng-class="{ 'bg-warning' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
           <td class="col-sm-5 display-name"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="ellipsis"><strong>{{display.name}}</strong></span></a></td>
           <td class="nowrap display-address visible-lg visible-md"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="text-muted ellipsis">{{display.address}}</span></a></td>
-          <td class="col-sm-2 text-center"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="add-left"><i class="fa {{display | status}} fa-circle"></i></span></a></td>
-          <td class="col-sm-1 hidden-xs nowrap text-right"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="text-muted">{{display.lastActivityDate | date:'d-MMM-yyyy h:mm a'}}</span></a></td>
+          <td class="col-sm-2 text-center">
+            <div>
+              <a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
+                <span class="add-left">
+                  <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
+                  <i ng-if="!displayService.statusLoading" class="fa {{display | status}} fa-circle"></i>
+                </span>
+              </a>
+            </div>
+          </td>
         </tr>
         <!-- If no displays available -->
         <tr ng-show="displays.items.list.length === 0 && !search.query">
@@ -65,7 +67,7 @@
         <tr ng-show="displays.items.list.length === 0 && search.query">
           <td colspan="4" class="text-center"><span translate>displays-app.list.no-results</span></td>
         </tr>
-        
+
       </tbody>
     </table>
   </div>

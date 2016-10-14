@@ -17,6 +17,7 @@ angular.module('risevision.displays.controllers')
       $scope.selectedCompayId = userState.getSelectedCompanyId();
       $scope.displayTracker = displayTracker;
       $scope.displayFactory = displayFactory;
+      $scope.displayService = display;
 
       $scope.filterConfig = {
         placeholder: $filter('translate')(

@@ -7,7 +7,6 @@ var DisplaysListPage = function() {
   var displaysListTable = element(by.id('displaysListTable'));
   var tableHeaderName = element(by.id('tableHeaderName'));
   var tableHeaderStatus = element(by.id('tableHeaderStatus'));
-  var tableHeaderActivity = element(by.id('tableHeaderActivity'));
   var displayItems = element.all(by.repeater('display in displays.items.list'));
   var displaysLoader = element(by.xpath('//div[@spinner-key="displays-list-loader"]'));
 
@@ -37,10 +36,6 @@ var DisplaysListPage = function() {
 
   this.getTableHeaderStatus = function() {
     return tableHeaderStatus;
-  };
-
-  this.getTableHeaderActivity = function() {
-    return tableHeaderActivity;
   };
 
   this.getDisplayItems = function() {

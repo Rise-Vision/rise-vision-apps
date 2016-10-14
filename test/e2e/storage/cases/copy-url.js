@@ -49,34 +49,35 @@ var HomeScenarios = function() {
 
       it('should enable button when a file is clicked',function(){
         expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
-        
+
         filesListPage.filterFileList("package.json");
-        
+
         filesListPage.getFileItems().get(0).click();
-        
+
         expect(filesListPage.getFileItems().get(0).getAttribute('class')).to.eventually.contain('active');
-        
+
         expect(storageHomePage.getCopyUrlButton().isEnabled()).to.eventually.be.true;
       });
-      
+
       it('should show copy url modal',function(){
         storageHomePage.getCopyUrlButton().click();
-        
+
         helper.wait(copyUrlModalPage.getCopyUrlModal(), 'Copy URL Modal');
-        
+
         expect(copyUrlModalPage.getCopyUrlModal().isDisplayed()).to.eventually.be.true;
         expect(copyUrlModalPage.getCopyUrlInput().isDisplayed()).to.eventually.be.true;
-        
-        expect(copyUrlModalPage.getCopyUrlInput().getAttribute('value')).to.eventually.equal('https://storage.googleapis.com/risemedialibrary-17289e40-fd72-45b8-be96-095c168e0ef4/package.json');
+
+        expect(copyUrlModalPage.getCopyUrlInput().getAttribute('value')).to.eventually.match(
+          /https:\/\/storage\.googleapis\.com\/risemedialibrary\-(.+)\/package\.json/);
       });
-      
+
       it('should close modal', function() {
         expect(copyUrlModalPage.getCloseButton().isDisplayed()).to.eventually.be.true;
-        
+
         copyUrlModalPage.getCloseButton().click();
-        
+
         helper.waitDisappear(copyUrlModalPage.getCopyUrlModal(), 'Copy URL Modal');
-        
+
         expect(copyUrlModalPage.getCopyUrlModal().isPresent()).to.eventually.be.false;
       });
 

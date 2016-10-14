@@ -4,8 +4,8 @@
     <input type="text" class="form-control" placeholder="Display Name" id="name" name="name" ng-model="display.name" required>
     <span class="input-group-addon" ng-show="display.lastActivityDate">
       <div class="form-control-static nowrap" ng-if="display.id">
-        <i class="fa {{display | status}} fa-circle icon-left"></i>
-        {{display.lastActivityDate | date:'d-MMM-yyyy h:mm a'}}
+        <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
+        <i ng-if="!displayService.statusLoading" class="fa {{display | status}} fa-circle icon-left"></i>
       </div>
     </span>
   </div>
@@ -28,12 +28,12 @@
   </div>
   </div>
 
-  <div class="panel panel-default text-center"> 
-    <div class="panel-heading"> 
+  <div class="panel panel-default text-center">
+    <div class="panel-heading">
       <h3 class="panel-title" translate>displays-app.fields.player.install.id</h3>
     </div>
-    
-    <div class="panel-body"><span class="lead">{{display.id}}</span></div> 
+
+    <div class="panel-body"><span class="lead">{{display.id}}</span></div>
   </div>
 
   <br />
@@ -66,15 +66,15 @@
        <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/Animations/howitworks.gif">
     </div>
   </div>
-  
+
   <!--      BUTTONS       -->
   <div class="add-bottom hidden-xs">
     <button type="button" class="btn btn-default" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" require-role="da">
-      <i class="fa fa-refresh"></i> 
+      <i class="fa fa-refresh"></i>
       {{ 'displays-app.fields.controls.restart.name' | translate }}
     </button>
     <button type="button" class="btn btn-default" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" require-role="da">
-      <i class="fa fa-power-off"></i> 
+      <i class="fa fa-power-off"></i>
       {{ 'displays-app.fields.controls.reboot.name' | translate }}
     </button>
      <button type="button" class="btn btn-default" ng-click="showDownloadButtons = true">
@@ -88,41 +88,41 @@
     <download-player></download-player>
   </div>
 
-  <div class="add-bottom visible-xs">    
+  <div class="add-bottom visible-xs">
     <button type="button" class="btn btn-default btn-block half-bottom" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')">
-      <i class="fa fa-refresh"></i> 
+      <i class="fa fa-refresh"></i>
       {{ 'displays-app.fields.controls.restart.name' | translate }}
     </button>
     <button type="button" class="btn btn-default btn-block half-bottom" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')">
-      <i class="fa fa-power-off"></i> 
+      <i class="fa fa-power-off"></i>
       {{ 'displays-app.fields.controls.reboot.name' | translate }}
     </button>
   </div>
   <div ng-show="controlsError" class="alert alert-danger" role="alert">
     <strong translate>displays-app.fields.controls.error </strong>{{controlsError}}
-  </div> 
+  </div>
   <div class="panel panel-info animated fadeIn" ng-show="controlsInfo">
     <div class="panel-body">
       <strong>{{ controlsInfo | translate }}</strong>
     </div>
-  </div> 
+  </div>
 
   <!--      STATS       -->
   <div class="form-group form-inline">
     <label class="control-label" translate>displays-app.fields.player.resolution</label>
     <div class="form-control-static">{{display.width | resolution: display.height}}</div>
   </div>
-  
+
   <div class="form-group form-inline">
     <label class="control-label" translate>displays-app.fields.player.ipAddress</label>
     <div class="form-control-static">{{display.playerLocalIpAddress}}</div>
   </div>
-  
+
   <div class="form-group form-inline">
     <label class="control-label" translate>displays-app.fields.player.operatingSystem</label>
     <div class="form-control-static">{{display.os}}</div>
   </div>
-  
+
   <div class="form-group form-inline" ng-show="isChromeOs(display)">
     <label class="control-label" translate>displays-app.fields.player.orientation.name</label>
     <select class="form-control" ng-model="display.orientation" integer-parser>
@@ -132,17 +132,17 @@
       <option value="270" translate>displays-app.fields.player.orientation.270</option>
     </select>
   </div>
-  
+
   <div class="form-group form-inline">
     <label class="control-label" translate>displays-app.fields.player.playerVersion</label>
     <div class="form-control-static">{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}}</div>
   </div>
-  
+
   <div class="form-group form-inline">
     <label class="control-label" translate>displays-app.fields.player.viewerVersion</label>
     <div class="form-control-static">{{display.viewerVersion}}</div>
   </div>
-  
+
   <div class="form-group form-inline" ng-show="factory.showBrowserUpgradeMode">
     <label class="control-label" translate>displays-app.fields.player.browser.upgrade.name</label>
     <select class="form-control" ng-model="display.browserUpgradeMode" integer-parser ng-disabled="!display.playerName && !display.playerVersion">
@@ -150,17 +150,17 @@
       <option value="1" translate>displays-app.fields.player.browser.upgrade.userManaged</option>
     </select>
   </div>
-  
+
   <div class="form-group form-inline" ng-show="display.browserUpgradeMode !== 0">
     <label class="control-label" translate>displays-app.fields.player.browser.recommended</label>
     <div class="form-control-static">{{display.recommendedBrowserVersion}}</div>
   </div>
-  
+
   <div class="form-group form-inline">
     <label class="control-label" translate>displays-app.fields.player.browser.installed</label>
     <div class="form-control-static">{{(display.browserName ? display.browserName + " " : "") + (display.browserVersion ? display.browserVersion : "")}}</div>
-  </div>      
-</div>  
+  </div>
+</div>
 
 <!--      SETTINGS       -->
 <hr ng-show="display.id" />
@@ -178,7 +178,7 @@
     <label class="control-label" translate>displays-app.fields.address.description</label>
     <input type="text" class="form-control" ng-model="display.addressDescription">
   </div>
-  
+
   <div class="row">
     <div class="col-md-6">
       <div class="form-group">
@@ -193,7 +193,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="row">
     <div class="col-md-3">
       <div class="form-group">
@@ -228,7 +228,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="form-group">
     <label class="control-label" translate>displays-app.fields.address.timezone.name</label>
     <select class="form-control" ng-model="display.timeZoneOffset" integer-parser>
@@ -241,7 +241,7 @@
 
 <div class="form-group reboot-time">
   <div class="checkbox">
-    <label class="control-label"><input type="checkbox" ng-model="display.restartEnabled"> <strong translate>displays-app.fields.reboot</strong></label> 
+    <label class="control-label"><input type="checkbox" ng-model="display.restartEnabled"> <strong translate>displays-app.fields.reboot</strong></label>
   </div>
-  <time-picker ng-model="display.restartTime" ng-disabled="!display.restartEnabled"></time-picker> 
+  <time-picker ng-model="display.restartTime" ng-disabled="!display.restartEnabled"></time-picker>
 </div>
