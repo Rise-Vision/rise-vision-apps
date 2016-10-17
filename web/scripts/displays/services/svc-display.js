@@ -14,8 +14,8 @@ angular.module('risevision.displays.services')
     'postalCode'
   ])
   .service('display', ['$q', '$log', 'coreAPILoader', 'userState',
-    'pick', 'DISPLAY_WRITABLE_FIELDS', 'DISPLAY_SEARCH_FIELDS',
-    function ($q, $log, coreAPILoader, userState, pick,
+    'getDisplayStatus', 'pick', 'DISPLAY_WRITABLE_FIELDS', 'DISPLAY_SEARCH_FIELDS',
+    function ($q, $log, coreAPILoader, userState, getDisplayStatus, pick,
       DISPLAY_WRITABLE_FIELDS, DISPLAY_SEARCH_FIELDS) {
 
       var createSearchQuery = function (fields, search) {
@@ -49,6 +49,16 @@ angular.module('risevision.displays.services')
               return coreApi.display.list(obj);
             })
             .then(function (resp) {
+              //TODO: this is temporary
+              try {
+                var displayIds = resp.result.items.map(function(item) {
+                  return item.id;
+                });
+
+                getDisplayStatus(displayIds).then(function(r) {
+                  $log.debug('Display status from Messaging API', r);
+                })
+              } catch(e) {}
               deferred.resolve(resp.result);
             })
             .then(null, function (e) {
