@@ -8,14 +8,14 @@ angular.module('risevision.displays.services')
     };
   }])
 
-.factory('getDisplayStatus', ['loadPrimus', '$q', '$timeout', function (
-  loadPrimus, $q, $timeout) {
+.factory('getDisplayStatus', ['loadPrimus', '$q', '$timeout', 'MESSAGING_URL', function (
+  loadPrimus, $q, $timeout, MESSAGING_URL) {
   return function (displayIds) {
     var deferred = $q.defer();
     loadPrimus()
       .then(function (Primus) {
         var primus = new Primus(
-          'https://display-messaging.risevision.com:3000', {
+          MESSAGING_URL, {
             reconnect: {
               retries: 0,
             },
