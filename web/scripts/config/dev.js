@@ -31,8 +31,9 @@
     .value('VIEWER_URL', 'http://rvaviewer-test.appspot.com')
     .value('ALERTS_WS_URL',
       'https://rvacore-test.appspot.com/alerts/cap')
-
-  .value('STORAGE_ENDPOINT_URL',
-    'https://storage-dot-rvacore-test.appspot.com/_ah/api');
+    .value('STORAGE_ENDPOINT_URL',
+       'https://storage-dot-rvacore-test.appspot.com/_ah/api')
+    .value('MESSAGING_URL',
+       'https://display-messaging-staging.risevision.com');
 
 })(angular);
