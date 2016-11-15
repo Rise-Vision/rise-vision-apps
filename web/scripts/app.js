@@ -496,7 +496,8 @@ angular.module('risevision.schedules.controllers', []);
 
 angular.module('risevision.displays.services', [
   'risevision.common.header',
-  'risevision.common.gapi'
+  'risevision.common.gapi',
+  'risevision.apps.config'
 ]);
 angular.module('risevision.displays.filters', []);
 angular.module('risevision.displays.directives', [
