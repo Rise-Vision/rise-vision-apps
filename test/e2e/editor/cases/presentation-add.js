@@ -113,7 +113,8 @@ var PresentationAddScenarios = function() {
     });
 
     it('should enable Restore after changes', function () {
-      workspacePage.getAddPlaceholderButton().click();
+      helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
+
       expect(workspacePage.getPublishButton().isEnabled()).to.eventually.be.false;
       expect(workspacePage.getRestoreButton().isEnabled()).to.eventually.be.true;
     });    

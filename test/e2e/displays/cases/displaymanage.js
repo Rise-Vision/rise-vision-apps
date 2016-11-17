@@ -100,7 +100,7 @@ var DisplayAddScenarios = function() {
     it('should show correct timezone after reload',function(){
       browser.refresh();
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-      browser.sleep(1000);
+      helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
       expect(displayManagePage.getDisplayTimeZoneSelect().$('option:checked').getText()).to.eventually.contain('Buenos Aires');
     });
 

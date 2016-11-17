@@ -42,8 +42,9 @@ var PlaceholdersListScenarios = function() {
         presentationsListPage.openNewPresentation();
         presentationPropertiesModalPage.getCancelButton().click();
 
-        workspacePage.getAddPlaceholderButton().click();
-        workspacePage.getAddPlaceholderButton().click();
+        helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
+        helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
+
         browser.sleep(500); //wait for transition
         workspacePage.getBackToListButton().click();
         browser.sleep(500); //wait for transition

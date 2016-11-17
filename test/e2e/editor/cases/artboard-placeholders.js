@@ -73,7 +73,8 @@ var ArtboardPlaceholdersScenarios = function() {
       });
       
       it('should not overlap new placeholder', function(done) {
-        workspacePage.getAddPlaceholderButton().click();
+        helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
+
         browser.sleep(500); //wait for transition
 
         artboardPage.getPlaceholderContainer('ph1').getLocation().then(function (location) {

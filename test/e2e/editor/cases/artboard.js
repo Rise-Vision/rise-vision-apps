@@ -79,7 +79,8 @@ var ArtboardScenarios = function() {
         });
 
         it('should be able to leave without saving',function(){
-          workspacePage.getAddPlaceholderButton().click();
+          helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
+
           commonHeaderPage.getCommonHeaderMenuItems().get(0).click();
           helper.wait(unsavedChangesModalPage.getUnsavedChangesModal(),'Unsaved Changed Modal');
           browser.sleep(500);

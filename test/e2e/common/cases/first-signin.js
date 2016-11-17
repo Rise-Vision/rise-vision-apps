@@ -73,7 +73,7 @@ var FirstSigninScenarios = function() {
       });      
 
       it('should auto create Schedule when saving first Presentation', function () {
-        workspacePage.getAddPlaceholderButton().click();
+        helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
         workspacePage.getSaveButton().click();
 
         helper.wait(autoScheduleModalPage.getAutoScheduleModal());

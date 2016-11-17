@@ -43,7 +43,8 @@ var HtmlEditorScenarios = function() {
         presentationsListPage.openNewPresentation();
         presentationPropertiesModalPage.getCancelButton().click();
 
-        workspacePage.getAddPlaceholderButton().click();
+        helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
+
         workspacePage.getHtmlButton().click();
 
       });

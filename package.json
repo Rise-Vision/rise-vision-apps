@@ -30,7 +30,7 @@
       "gulp-rename": "^1.2.2",
       "jshint-stylish": "^2.0.1",
       "run-sequence": "^1.1.1",
-      "rv-common-e2e": "git://github.com/Rise-Vision/rv-common-e2e.git#0.0.7",
+      "rv-common-e2e": "git://github.com/Rise-Vision/rv-common-e2e.git#0.0.13",
       "widget-tester": "git://github.com/Rise-Vision/widget-tester.git"
     },
     "repository": {
