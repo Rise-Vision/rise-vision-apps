@@ -15,7 +15,7 @@
 </div>
 
 <!--      INSTALL PLAYER      -->
-<div ng-show="display.id && !display.playerVersion">
+<div ng-show="display.id && !display.playerVersion && display.onlineStatus !== 'online'">
 
   <div class="text-right add-top add-bottom">
     <button class="btn btn-link" ng-click="showHelp = !showHelp" ng-hide="showHelp">{{ 'displays-app.fields.controls.howtoInstall' | translate }}</button>
@@ -51,7 +51,7 @@
 
 </div>
 
-<div class="form-group" ng-show="display.playerVersion" ng-controller="displayControls">
+<div class="form-group" ng-show="display.playerVersion || display.onlineStatus === 'online'" ng-controller="displayControls">
   <hr />
 
   <div class="form-group form-inline">
