@@ -25,6 +25,7 @@
     .value('STORAGE_ENDPOINT_URL',
       'https://storage-dot-rvaserver2.appspot.com/_ah/api')
     .value('MESSAGING_URL',
-      'https://display-messaging.risevision.com');
+      'https://display-messaging.risevision.com')
+    .value('APPS_URL', '');
 
 })(angular);

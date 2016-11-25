@@ -42,7 +42,7 @@ var DismissModalScenarios = function() {
         StorageHelper.setupStorageHome();
         commonHeaderPage.getCommonHeaderMenuItems().get(0).click(); //Launcher
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-        commonHeaderPage.getCommonHeaderMenuItems().get(5).click(); //Storage
+        commonHeaderPage.getCommonHeaderMenuItems().get(4).click(); //Storage
         helper.wait(storageHomePage.getStorageAppContainer(), 'Storage Apps Container');
         helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
       });

@@ -475,7 +475,9 @@ angular.module('risevision.apps', [
 ;
 
 angular.module('risevision.apps.services', []);
-angular.module('risevision.apps.controllers', []);
+angular.module('risevision.apps.controllers', [
+  'risevision.common.config'
+]);
 angular.module('risevision.apps.directives', []);
 
 angular.module('risevision.apps.launcher.controllers', []);

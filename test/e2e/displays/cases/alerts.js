@@ -41,7 +41,7 @@ var AlertsScenarios = function() {
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
           loginPage.signIn();
         });
-        commonHeaderPage.getCommonHeaderMenuItems().get(4).click();
+        commonHeaderPage.selectAlerts();
       });
 
       it('should show alerts page', function () {
