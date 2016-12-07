@@ -50,7 +50,8 @@ angular.module('risevision.apps.controllers')
       }, {
         title: 'Store',
         link: STORE_URL,
-        cid: true
+        cid: true,
+        target: '_blank',
       }];
       $scope.navSelected = 'apps.launcher.home';
       $scope.hideCH = false;
