@@ -1,5 +1,7 @@
 'use strict';
 describe('service: display:', function() {
+  var CONNECTION_TIME = Date.now();
+
   beforeEach(module('risevision.displays.services'));
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
@@ -9,7 +11,13 @@ describe('service: display:', function() {
 
         $timeout(function() {
           var statuses = ids.map(function(id) {
-            var o = {}; o[id] = true;
+            var o = {};
+
+            if(id !== 'display1') {
+              o[id] = true;
+              o.lastConnectionTime = CONNECTION_TIME;
+            }
+
             return o;
           });
           deferred.resolve(statuses);
@@ -61,7 +69,7 @@ describe('service: display:', function() {
                 def.resolve({
                   result : {
                     nextPageToken : 1,
-                    items : [{id: 'abc'}]
+                    items : [{id: 'abc', lastActivityDate: new Date("2012-04-02T14:19:36.000Z") }]
                   }
                 });
               } else {
@@ -86,7 +94,9 @@ describe('service: display:', function() {
                       "height": 768,
                       "restartEnabled": true,
                       "restartTime": "02:45",
-                      "connected": false
+                      "connected": false,
+                      "onlineStatus": "online",
+                      "lastActivityDate": new Date("2012-04-02T14:19:36.000Z")
                     }
                   }
                 });
@@ -217,6 +227,7 @@ describe('service: display:', function() {
         setTimeout(function() {
           items.forEach(function(item) {
             expect(item.onlineStatus).to.equal('online');
+            expect(item.lastConnectionTime.getTime()).to.equal(CONNECTION_TIME);
           });
           done();
         });
@@ -291,6 +302,7 @@ describe('service: display:', function() {
         $timeout.flush();
         setTimeout(function() {
           expect(item.onlineStatus).to.equal('online');
+          expect(item.lastConnectionTime.getTime()).to.not.equal(CONNECTION_TIME);
           done();
         });
       })

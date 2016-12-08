@@ -6,6 +6,7 @@ var DisplaysListPage = function() {
   var displayAddButton = element(by.id('displayAddButton'));
   var displaysListTable = element(by.id('displaysListTable'));
   var tableHeaderName = element(by.id('tableHeaderName'));
+  var tableHeaderLastConnection = element(by.id('tableHeaderLastConnection'));
   var tableHeaderStatus = element(by.id('tableHeaderStatus'));
   var displayItems = element.all(by.repeater('display in displays.items.list'));
   var displaysLoader = element(by.xpath('//div[@spinner-key="displays-list-loader"]'));
@@ -32,6 +33,10 @@ var DisplaysListPage = function() {
 
   this.getTableHeaderName = function() {
     return tableHeaderName;
+  };
+
+  this.getTableHeaderLastConnection = function() {
+    return tableHeaderLastConnection;
   };
 
   this.getTableHeaderStatus = function() {

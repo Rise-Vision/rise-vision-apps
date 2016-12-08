@@ -17,7 +17,7 @@
     "angular-vertilize": "~1.0.1",
     "common-header": "https://github.com/Rise-Vision/common-header.git#v1.11.8",
     "component-storage-selector": "https://github.com/Rise-Vision/component-storage-selector.git",
-    "rv-common-i18n": "https://github.com/Rise-Vision/common-i18n.git#1.4.1",
+    "rv-common-i18n": "https://github.com/Rise-Vision/common-i18n.git",
     "rv-common-style": "https://github.com/Rise-Vision/common-style.git#v1.3.88",
     "rv-common-app-components": "https://github.com/Rise-Vision/common-app-components.git",
     "rv-loading": "https://github.com/Rise-Vision/rv-loading.git",

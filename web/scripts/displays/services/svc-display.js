@@ -237,23 +237,27 @@
     ]);
 
   function _mergeStatuses(items, statuses) {
-    var lookup = {};
-
-    statuses.forEach(function (s) {
-      for (var key in s) {
-        lookup[key] = s[key];
-      }
+    items.forEach(function(item) {
+      item.lastConnectionTime = item.lastActivityDate;
     });
 
-    items.forEach(function (item) {
-      _mergeStatus(item, lookup);
+    statuses.forEach(function (s) {
+      for(var i = 0; i < items.length; i++) {
+        var item = items[i];
+
+        if(s[item.id] !== undefined) {
+          _mergeStatus(item, s);
+          break;
+        }
+      }
     });
   }
 
   function _mergeStatus(item, lookup) {
-    if (lookup[item.id] === true) {
+    if(lookup[item.id] === true) {
       item.onlineStatus = 'online';
     }
-  }
 
+    item.lastConnectionTime = !isNaN(lookup.lastConnectionTime) ? new Date(lookup.lastConnectionTime) : (item.lastActivityDate || '');
+  }
 })();

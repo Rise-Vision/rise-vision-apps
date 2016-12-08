@@ -36,11 +36,11 @@
           <th class="visible-lg visible-md" translate>
             displays-app.list.heading.address
           </th>
-          <th id="tableHeaderStatus" class="col-sm-2 text-center clickable" ng-click="displays.sortBy('onlineStatus')">
+          <th id="tableHeaderLastConnection" class="col-sm-2 text-center">
+            {{ 'displays-app.list.heading.lastConnection' | translate }}
+          </th>
+          <th id="tableHeaderStatus" class="col-sm-2 text-center">
             {{ 'displays-app.list.heading.status' | translate }}
-            <!-- ngIf: search.sortBy == 'onlineStatus' -->
-            <i ng-if="search.sortBy == 'onlineStatus'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
-            <!-- end ngIf: search.sortBy == 'onlineStatus' -->
           </th>
         </tr>
       </thead>
@@ -48,6 +48,7 @@
         <tr class="clickable-row" ng-class="{ 'bg-warning' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
           <td class="col-sm-5 display-name"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="ellipsis"><strong>{{display.name}}</strong></span></a></td>
           <td class="nowrap display-address visible-lg visible-md"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="text-muted ellipsis">{{display.address}}</span></a></td>
+          <td class="nowrap display-last-connection visible-lg visible-md"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="text-muted ellipsis">{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span></a></td>
           <td class="col-sm-2 text-center">
             <div>
               <a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
