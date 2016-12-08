@@ -57,7 +57,7 @@ describe('service: scheduleFactory:', function() {
         }
       };
     });
-    $provide.service('scheduleTracker', function() { 
+    $provide.service('scheduleTracker', function() {
       return function(name) {
         trackerCalled = name;
       };
@@ -92,37 +92,37 @@ describe('service: scheduleFactory:', function() {
 
   it('should exist',function(){
     expect(scheduleFactory).to.be.truely;
-    
+
     expect(scheduleFactory.schedule).to.be.truely;
     expect(scheduleFactory.loadingSchedule).to.be.false;
     expect(scheduleFactory.savingSchedule).to.be.false;
     expect(scheduleFactory.apiError).to.not.be.truely;
-    
+
     expect(scheduleFactory.newSchedule).to.be.a('function');
     expect(scheduleFactory.getSchedule).to.be.a('function');
     expect(scheduleFactory.addSchedule).to.be.a('function');
     expect(scheduleFactory.updateSchedule).to.be.a('function');
-    expect(scheduleFactory.deleteSchedule).to.be.a('function'); 
+    expect(scheduleFactory.deleteSchedule).to.be.a('function');
     expect(scheduleFactory.getPreviewUrl).to.be.a('function');
   });
-  
+
   it('should initialize',function(){
     expect(scheduleFactory.schedule).to.deep.equal({content: [], distributeToAll: false, distribution: []});
     expect(scheduleFactory.scheduleId).to.not.be.truely;
   });
-  
+
   it('newSchedule: should reset the schedule',function(){
     scheduleFactory.schedule.id = 'scheduleId';
     scheduleFactory.scheduleId = 'scheduleId';
-    
+
     scheduleFactory.newSchedule();
-    
+
     expect(trackerCalled).to.equal('Add Schedule');
-    
+
     expect(scheduleFactory.schedule).to.deep.equal({content: [], distributeToAll: false, distribution: []});
     expect(scheduleFactory.scheduleId).to.not.be.truely;
   });
-    
+
   describe('getSchedule:',function(){
     it("should get the schedule",function(done){
       scheduleFactory.getSchedule("scheduleId")
@@ -141,10 +141,10 @@ describe('service: scheduleFactory:', function() {
       })
       .then(null,done);
     });
-    
+
     it("should handle failure to get schedule correctly",function(done){
       updateSchedule = false;
-      
+
       scheduleFactory.getSchedule()
       .then(function(result) {
         done(result);
@@ -164,13 +164,13 @@ describe('service: scheduleFactory:', function() {
       .then(null,done);
     });
   });
-  
+
   describe('addSchedule:',function(){
     it('should add the schedule',function(done){
       updateSchedule = true;
 
       scheduleFactory.addSchedule();
-      
+
       expect(scheduleFactory.savingSchedule).to.be.true;
       expect(scheduleFactory.loadingSchedule).to.be.true;
 
@@ -181,7 +181,7 @@ describe('service: scheduleFactory:', function() {
         expect(scheduleFactory.loadingSchedule).to.be.false;
         expect(scheduleFactory.errorMessage).to.not.be.ok;
         expect(scheduleFactory.apiError).to.not.be.ok;
-        
+
         done();
       },10);
     });
@@ -190,7 +190,7 @@ describe('service: scheduleFactory:', function() {
       updateSchedule = false;
 
       scheduleFactory.addSchedule();
-      
+
       expect(scheduleFactory.savingSchedule).to.be.true;
       expect(scheduleFactory.loadingSchedule).to.be.true;
 
@@ -206,13 +206,13 @@ describe('service: scheduleFactory:', function() {
       },10);
     });
   });
-  
+
   describe('updateSchedule: ',function(){
     it('should update the schedule',function(done){
       updateSchedule = true;
 
       scheduleFactory.updateSchedule();
-      
+
       expect(scheduleFactory.savingSchedule).to.be.true;
       expect(scheduleFactory.loadingSchedule).to.be.true;
 
@@ -245,13 +245,13 @@ describe('service: scheduleFactory:', function() {
       },10);
     });
   });
-  
+
   describe('deleteSchedule: ',function(){
     it('should delete the schedule',function(done){
       updateSchedule = true;
-      
+
       scheduleFactory.deleteSchedule();
-      
+
       expect(scheduleFactory.loadingSchedule).to.be.true;
 
       setTimeout(function(){
@@ -263,19 +263,19 @@ describe('service: scheduleFactory:', function() {
         done();
       },10);
     });
-    
+
     it('should show an error if fails to delete the schedule',function(done){
       updateSchedule = false;
-      
+
       scheduleFactory.deleteSchedule();
-      
+
       expect(scheduleFactory.loadingSchedule).to.be.true;
 
       setTimeout(function(){
         expect(currentState).to.be.empty;
         expect(trackerCalled).to.not.be.ok;
         expect(scheduleFactory.loadingSchedule).to.be.false;
-        
+
         expect(scheduleFactory.errorMessage).to.be.ok;
         expect(scheduleFactory.apiError).to.be.ok;
         done();
@@ -285,11 +285,11 @@ describe('service: scheduleFactory:', function() {
 
   it('getPreviewUrl: ', function(done) {
     expect(scheduleFactory.getPreviewUrl()).to.not.be.ok;
-    
+
     scheduleFactory.getSchedule("scheduleId")
       .then(function() {
         expect(scheduleFactory.getPreviewUrl()).to.be.ok;
-        expect(scheduleFactory.getPreviewUrl()).to.equal('http://rvaviewer-test.appspot.com/?type=schedule&id=scheduleId&showui=false');
+        expect(scheduleFactory.getPreviewUrl()).to.equal('http://rvaviewer-test.appspot.com/?type=schedule&id=scheduleId');
 
         done();
       })
@@ -320,7 +320,7 @@ describe('service: scheduleFactory:', function() {
         scheduleListSpy.should.have.been.calledWith({count:1});
 
         scheduleAddSpy.should.have.been.calledWith(firstScheduleSample);
-        
+
         expect(trackerCalled).to.equal('Schedule Created');
 
         done();
@@ -334,16 +334,16 @@ describe('service: scheduleFactory:', function() {
         scheduleListSpy.should.have.been.calledWith({count:1});
 
         scheduleAddSpy.should.have.been.calledWith(firstScheduleSample);
-        
+
         expect(trackerCalled).to.equal('Schedule Created');
 
         scheduleFactory.createFirstSchedule('presentationId','presentationName').then(function(){
           done("Error: schedule created again");
         },function(){
-          scheduleListSpy.should.have.been.calledOnce;          
+          scheduleListSpy.should.have.been.calledOnce;
           scheduleAddSpy.should.have.been.calledOnce
-          done();  
-        });        
+          done();
+        });
       });
     });
 
@@ -351,7 +351,7 @@ describe('service: scheduleFactory:', function() {
       returnList = false;
       scheduleFactory.createFirstSchedule('presentationId','presentationName')
       .then(null,function(){
-        scheduleListSpy.should.have.been.calledOnce; 
+        scheduleListSpy.should.have.been.calledOnce;
         done();
       });
     });
@@ -361,7 +361,7 @@ describe('service: scheduleFactory:', function() {
       updateSchedule = false;
       scheduleFactory.createFirstSchedule('presentationId','presentationName')
       .then(null,function(){
-        scheduleListSpy.should.have.been.calledOnce; 
+        scheduleListSpy.should.have.been.calledOnce;
         done();
       });
     });
@@ -373,7 +373,7 @@ describe('service: scheduleFactory:', function() {
         scheduleListSpy.should.have.been.calledWith({count:1});
 
         scheduleAddSpy.should.not.have.been.called;
-        
+
         expect(trackerCalled).to.not.be.ok;
 
         done();
@@ -385,17 +385,17 @@ describe('service: scheduleFactory:', function() {
       scheduleFactory.createFirstSchedule('presentationId','presentationName')
       .then(null, function(){
         scheduleListSpy.should.have.been.calledWith({count:1});
-        scheduleAddSpy.should.not.have.been.called;        
+        scheduleAddSpy.should.not.have.been.called;
         expect(trackerCalled).to.not.be.ok;
 
         scheduleFactory.createFirstSchedule('presentationId','presentationName').then(function(){
           done("Error: schedule created again");
         },function(){
-          scheduleListSpy.should.have.been.calledOnce;          
+          scheduleListSpy.should.have.been.calledOnce;
           scheduleAddSpy.should.not.have.been.called;
           expect(trackerCalled).to.not.be.ok;
-          done();  
-        }); 
+          done();
+        });
       });
     });
 
