@@ -11,7 +11,7 @@
   ],
   "dependencies": {
     "jquery": "^2",
-    "angular": "^1.4.1",
+    "angular": "1.5.9",
     "angular-animate": "^1.4.1",
     "angular-touch": "^1.4.1",
     "angular-bootstrap": "^0.13.0",
@@ -37,7 +37,7 @@
   "description": "RiseVision App Launcher",
   "license": "GNU",
   "resolutions": {
-    "angular": "^1.4.1",
+    "angular": "1.5.9",
     "jquery": "^2",
     "angular-animate": "^1.4.1",
     "angular-bootstrap": "^0.13.0",
