@@ -97,11 +97,16 @@ var DisplayAddScenarios = function() {
       expect(displayManagePage.getSaveButton().getText()).to.eventually.equal('Save');
     });
 
-    it('should show correct timezone after reload',function(){
+    it('should show correct timezone after reload',function(done){
       browser.refresh();
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
-      expect(displayManagePage.getDisplayTimeZoneSelect().$('option:checked').getText()).to.eventually.contain('Buenos Aires');
+      
+      browser.driver.executeScript('window.scrollTo(0,500);').then(function() {
+        expect(displayManagePage.getDisplayTimeZoneSelect().$('option:checked').getText()).to.eventually.contain('Buenos Aires');
+        
+        done();
+      });
     });
 
     it('should delete the display', function (done) {
