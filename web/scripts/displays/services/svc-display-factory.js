@@ -34,7 +34,7 @@ angular.module('risevision.displays.services')
 
       _init();
 
-      factory.addDisplayModal = function () {
+      factory.addDisplayModal = function (downloadOnly) {
         displayTracker('Add Display');
 
         _init();
@@ -42,7 +42,10 @@ angular.module('risevision.displays.services')
         $modal.open({
           templateUrl: 'partials/displays/display-add-modal.html',
           size: 'md',
-          controller: 'displayAddModal'
+          controller: 'displayAddModal',
+          resolve: {
+            downloadOnly: function() { return downloadOnly || false; }
+          }
         });
       };
 

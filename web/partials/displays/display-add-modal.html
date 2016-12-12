@@ -3,7 +3,8 @@
     <button id="dismissButton" type="button" class="close" ng-click="dismiss()">
       <i class="fa fa-times"></i>
     </button>
-    <h3 class="modal-title" translate="displays-app.add.title"></h3>
+    <h3 class="modal-title" translate="displays-app.add.title" ng-show="!downloadOnly"></h3>
+    <h3 class="modal-title" translate="displays-app.download.player" ng-show="downloadOnly"></h3>
   </div>
   <div class="modal-body text-center">
   	<div class="video-box add-bottom">
@@ -20,11 +21,11 @@
             displays-app.fields.name.required
           </p>
         </div>
-      
+
         <div ng-show="factory.apiError" class="alert alert-danger" role="alert">
           <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
         </div>
-        
+
         <button id="nextButton" class="btn btn-primary add-top" ng-click="save()" translate="displays-app.add.next" ng-disabled="displayAdd.$invalid || factory.savingDisplay" require-role="da"></button>
       </div>
     </form>
@@ -32,7 +33,7 @@
     <div ng-show="display.id && !showEmailForm" class="text-center add-top" >
       <h4 translate="displays-app.add.instructions.title" translate-values='{ displayName: display.name}'></h4>
       <p translate="displays-app.add.instructions.step1"></p>
-      
+
       <div class="row sm-gutter">
         <div class="col-xs-6">
             <a class="btn btn-sm btn-primary btn-block" href="http://install-versions.risevision.com/installer-win-32.exe" target="_blank" ng-click="displayTracker('Player Download', display.id, display.name, 'Windows 32bit')" translate="displays-app.download.win32"></a>
@@ -48,11 +49,12 @@
       <div class="panel panel-success display-panel">
           <div class="panel-body ng-binding">{{display.id}}</div>
       </div>
-    
-      <p class="half-top text-center"> 
-        <p>{{'displays-app.add.instructions.emailInfo' | translate}} <b>{{userEmail}}</b></p>
-        <button class="btn btn-default half-top" ng-click="toggleEmailForm()" translate="displays-app.add.instructions.anotherEmail"></button>
-      </p>
+      <div ng-show="!downloadOnly">
+        <p class="half-top text-center">
+          <p>{{'displays-app.add.instructions.emailInfo' | translate}} <b>{{userEmail}}</b></p>
+          <button class="btn btn-default half-top" ng-click="toggleEmailForm()" translate="displays-app.add.instructions.anotherEmail"></button>
+        </p>
+      </div>
     </div>
 
     <form id="anotherEmailForm" role="form" name="anotherEmailForm" novalidate>
@@ -60,7 +62,7 @@
 
         <h4 class="text-center" translate="displays-app.add.instructions.anotherEmail"></h4>
         <div class="form-group text-center" ng-class="{'has-error': !anotherEmailForm.anotherEmail.$pristine && anotherEmailForm.anotherEmail.$invalid}" show-errors>
-         
+
           <input type="email" class="form-control" placeholder="{{ 'displays-app.add.instructions.emailPlaceholder' | translate}}" id="anotherEmail" name="anotherEmail" ng-model="anotherEmail" required focus-me="true">
           <p class="text-danger" ng-show="!anotherEmailForm.anotherEmail.$pristine && anotherEmailForm.anotherEmail.$invalid" translate>
             displays-app.fields.email.invalid

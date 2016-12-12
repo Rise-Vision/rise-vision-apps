@@ -134,7 +134,7 @@ describe('service: displayFactory:', function() {
       
       displayFactory.addDisplayModal();      
       
-      $modalSpy.should.have.been.calledWith({
+      $modalSpy.should.have.been.calledWithMatch({
     	  controller: "displayAddModal",
     	  size: "md",
     	  templateUrl: "partials/displays/display-add-modal.html"

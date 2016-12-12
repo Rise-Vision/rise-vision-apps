@@ -54,7 +54,8 @@ describe('controller: display add modal', function() {
         $scope : $scope,
         displayFactory: displayFactory,
         $modalInstance: $modalInstance,
-        $log: $injector.get('$log')
+        $log: $injector.get('$log'),
+        downloadOnly: false
       });
       $scope.$digest();
     });
