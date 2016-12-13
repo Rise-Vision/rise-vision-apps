@@ -90,6 +90,8 @@ var PresentationAddScenarios = function() {
     it('should enable "Save" and "Save & Preview" ',function(){
       expect(workspacePage.getSaveButton().isEnabled()).to.eventually.be.true;
       expect(workspacePage.getSaveAndPreviewButton().isDisplayed()).to.eventually.be.true;
+      
+      expect(workspacePage.getSaveAndPreviewButton().getText()).to.eventually.equal('Save & Preview');
 
       expect(workspacePage.getPreviewButton().isPresent()).to.eventually.be.false;      
     });
