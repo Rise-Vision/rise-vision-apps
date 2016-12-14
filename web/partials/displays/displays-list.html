@@ -36,7 +36,7 @@
           <th class="visible-lg visible-md" translate>
             displays-app.list.heading.address
           </th>
-          <th id="tableHeaderLastConnection" class="col-sm-2 text-center">
+          <th id="tableHeaderLastConnection" class="col-sm-2 text-right">
             {{ 'displays-app.list.heading.lastConnection' | translate }}
           </th>
           <th id="tableHeaderStatus" class="col-sm-2 text-center">
@@ -48,7 +48,7 @@
         <tr class="clickable-row" ng-class="{ 'bg-warning' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
           <td class="col-sm-5 display-name"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="ellipsis"><strong>{{display.name}}</strong></span></a></td>
           <td class="nowrap display-address visible-lg visible-md"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="text-muted ellipsis">{{display.address}}</span></a></td>
-          <td class="nowrap display-last-connection visible-lg visible-md"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="text-muted ellipsis">{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span></a></td>
+          <td class="nowrap display-last-connection text-right visible-lg visible-md"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="text-muted ellipsis">{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span></a></td>
           <td class="col-sm-2 text-center">
             <div>
               <a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
