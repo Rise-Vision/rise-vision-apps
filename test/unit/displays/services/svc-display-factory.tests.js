@@ -139,6 +139,24 @@ describe('service: displayFactory:', function() {
     	  size: "md",
     	  templateUrl: "partials/displays/display-add-modal.html"
     	});
+
+      expect($modalSpy.lastCall.args[0].resolve.downloadOnly()).to.be.falsey;
+    });
+
+    it('should open modal on download only mode', function() {
+      var $modalSpy = sinon.spy($modal, 'open');
+      var testDisplay = { id: 'test', name: 'test' };
+
+      displayFactory.addDisplayModal(testDisplay);
+
+      $modalSpy.should.have.been.calledWithMatch({
+    	  controller: "displayAddModal",
+    	  size: "md",
+    	  templateUrl: "partials/displays/display-add-modal.html"
+    	});
+
+      expect($modalSpy.lastCall.args[0].resolve.downloadOnly()).to.be.truely;
+      expect(displayFactory.display).to.deep.equal(testDisplay);
     });
 
     it('should reset the display',function(){

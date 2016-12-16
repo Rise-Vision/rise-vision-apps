@@ -50,6 +50,14 @@ var DisplaysListPage = function() {
   this.getDisplaysLoader = function() {
     return displaysLoader;
   };
+
+  this.getFirstRowSchedule = function() {
+    return displayItems.first().element(by.css(".display-schedule .schedule-view"));
+  };
+
+  this.getFirstRowStatus = function() {
+    return displayItems.first().element(by.css(".display-status .btn-install-player"));
+  };
 };
 
 module.exports = DisplaysListPage;

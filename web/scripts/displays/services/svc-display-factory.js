@@ -34,17 +34,21 @@ angular.module('risevision.displays.services')
 
       _init();
 
-      factory.addDisplayModal = function (downloadOnly) {
+      factory.addDisplayModal = function (display) {
         displayTracker('Add Display');
 
         _init();
+
+        if(display) {
+          factory.display = display;
+        }
 
         $modal.open({
           templateUrl: 'partials/displays/display-add-modal.html',
           size: 'md',
           controller: 'displayAddModal',
           resolve: {
-            downloadOnly: function() { return downloadOnly || false; }
+            downloadOnly: function() { return display || false; }
           }
         });
       };

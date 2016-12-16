@@ -32,7 +32,7 @@ var DisplayAddScenarios = function() {
         loginPage.signIn();
       });
       helper.waitDisappear(displaysListPage.getDisplaysLoader(), 'Displays loader');
-      displaysListPage.getDisplayItems().get(0).click();
+      displaysListPage.getDisplayItems().first().element(by.tagName("td")).click();
     });
 
     it('should load display', function () {

@@ -70,6 +70,16 @@ var DisplayListScenarios = function() {
         expect(displaysListPage.getTableHeaderStatus().isPresent()).to.eventually.be.true;
         expect(displaysListPage.getTableHeaderStatus().getText()).to.eventually.equal('Status');
       });
+
+      it('should show display list Schedule View button', function () {
+        helper.wait(displaysListPage.getFirstRowSchedule(), 'Schedule View Button');
+        expect(displaysListPage.getFirstRowSchedule().getAttribute('href')).to.eventually.match(/.*\/schedules\/details\/.*\?cid=.*/);
+      });
+
+      it('should show display list Install Player button', function () {
+        helper.wait(displaysListPage.getFirstRowStatus(), 'Install Player Button');
+        expect(displaysListPage.getFirstRowStatus().getAttribute('ng-click')).to.eventually.equal('displayFactory.addDisplayModal(display)');
+      });
     });
   });
 };

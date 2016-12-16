@@ -229,6 +229,9 @@
               });
 
             return deferred.promise;
+          },
+          hasSchedule: function(display) {
+            return display.scheduleId && display.scheduleId !== 'DEMO';
           }
         };
 

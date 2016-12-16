@@ -24,40 +24,66 @@
   rv-spinner rv-spinner-key="displays-list-loader"
   rv-spinner-start-active="1"
   >
-    <table id="displaysListTable" class="table-2 table-hover">
-      <thead>
-        <tr>
-          <th class="col-sm-5 clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
+    <table id="displaysListTable" class="table">
+      <thead class="table-header">
+        <tr class="table-header__row">
+          <th class="table-header__cell clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
+            <span>
             {{ 'displays-app.list.heading.name' | translate }}
             <!-- ngIf: search.sortBy == 'name' -->
             <i ng-if="search.sortBy == 'name'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
             <!-- end ngIf: search.sortBy == 'name' -->
+            </span>
           </th>
-          <th class="visible-lg visible-md" translate>
-            displays-app.list.heading.address
+          <th class="table-header__cell visible-lg" translate>
+            <span>displays-app.list.heading.address</span>
           </th>
-          <th id="tableHeaderLastConnection" class="col-sm-2 text-right">
-            {{ 'displays-app.list.heading.lastConnection' | translate }}
+          <th class="table-header__cell col-sm-1 hidden-xs" translate>
+            <span>displays-app.list.heading.schedule</span>
           </th>
-          <th id="tableHeaderStatus" class="col-sm-2 text-center">
-            {{ 'displays-app.list.heading.status' | translate }}
+          <th id="tableHeaderStatus" class="table-header__cell col-sm-2">
+            <span>{{ 'displays-app.list.heading.status' | translate }}</span>
+          </th>
+          <th id="tableHeaderLastConnection" class="table-header__cell hidden-xs">
+            <span>{{ 'displays-app.list.heading.lastConnection' | translate }}</span>
           </th>
         </tr>
       </thead>
-      <tbody>
-        <tr class="clickable-row" ng-class="{ 'bg-warning' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
-          <td class="col-sm-5 display-name"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="ellipsis"><strong>{{display.name}}</strong></span></a></td>
-          <td class="nowrap display-address visible-lg visible-md"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="text-muted ellipsis">{{display.address}}</span></a></td>
-          <td class="nowrap display-last-connection text-right visible-lg visible-md"><a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"><span class="text-muted ellipsis">{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span></a></td>
-          <td class="col-sm-2 text-center">
-            <div>
-              <a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
-                <span class="add-left">
-                  <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
-                  <i ng-if="!displayService.statusLoading" class="fa {{display | status}} fa-circle"></i>
-                </span>
-              </a>
-            </div>
+      <tbody class="table-body">
+        <tr class="table-body__row" ng-class="{ 'bg-warning' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list">
+          <td class="table-body__cell">
+            <a class="u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
+            <span class=""><strong>{{display.name}}</strong></span>
+            </a>
+          </td>
+          <td class="table-body__cell visible-lg">
+            <!-- <a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"> -->
+            <span class="u_ellipsis-lg">{{display.address}}</span>
+            <!-- </a> -->
+          </td>
+          <td class="table-body__cell hidden-xs display-schedule">
+            <a class="u_ellipsis-md u_icon-hover schedule-view" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
+              {{display.scheduleName}}<i class="fa fa-external-link icon-sm-right"></i>
+            </a>
+            <a ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" cid target="_blank">
+              <button class="btn btn-primary btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
+            </a>
+          </td>
+          <td class="table-body__cell display-status">
+            <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
+            <span class="text-danger" ng-if="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline</span>
+
+            <span class="text-success" ng-if="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
+
+            <button class="btn btn-xs btn-primary pt-status btn-install-player"
+                    ng-if="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="displayFactory.addDisplayModal(display)">
+              {{ 'displays-app.list.status.install' | translate }}
+            </button>
+          </td>
+          <td class="table-body__cell nowrap hidden-xs">
+            <span>
+              <span>{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span>
+            </span>
           </td>
         </tr>
         <!-- If no displays available -->

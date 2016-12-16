@@ -457,7 +457,6 @@ describe('service: display:', function() {
     });
   });
 
-
   describe('reboot', function(){
     it('should reboot a display',function(done){
       display.reboot('display1')
@@ -480,6 +479,14 @@ describe('service: display:', function() {
           done();
         })
         .then(null,done);
+    });
+  });
+
+  describe('hasSchedule', function() {
+    it('should validate if a display has an associated schedule', function() {
+      expect(display.hasSchedule({ scheduleId: "1" })).to.be.truely;
+      expect(display.hasSchedule({ scheduleId: "" })).to.be.falsey;
+      expect(display.hasSchedule({ scheduleId: "DEMO" })).to.be.falsey;
     });
   });
 });

@@ -35,7 +35,7 @@
               <i ng-if="search.sortBy == 'revisionStatusName'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
               <!-- end ngIf: search.sortBy == 'revisionStatusName' -->
             </th>
-            <th id="tableHeaderChangeDate" class="text-right hidden-xs" ng-click="factory.sortBy('changeDate')">
+            <th id="tableHeaderChangeDate" class="hidden-xs" ng-click="factory.sortBy('changeDate')">
               {{'editor-app.list.heading.changeDate' | translate}}
               <!-- ngIf: search.sortBy == 'changeDate' -->
               <i ng-if="search.sortBy == 'changeDate'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
@@ -46,8 +46,8 @@
         <tbody>
           <tr class="clickable-row" ng-repeat="presentation in factory.items.list" ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})">
             <td class="col-sm-9"><a ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})"><strong>{{presentation.name}}</strong></a></td>
-            <td class="col-sm-9 hidden-xs"><a ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})"><span ng-class="{'text-danger': presentation.revisionStatusName==='Revised'}">{{presentation.revisionStatusName | presentationStatus}}</span></a></td>
-            <td class="col-sm-2 hidden-xs text-right nowrap" ><a ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})">{{presentation.changeDate | date:'d-MMM-yyyy h:mm a'}}</a></td>
+            <td class="col-sm-9 hidden-xs"><span ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})"><span ng-class="{'text-danger': presentation.revisionStatusName==='Revised'}">{{presentation.revisionStatusName | presentationStatus}}</span></span></td>
+            <td class="col-sm-2 hidden-xs nowrap" ><span ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})">{{presentation.changeDate | date:'d-MMM-yyyy h:mm a'}}</span></td>
           </tr>
           <!-- If no presentation available -->
           <tr ng-show="factory.items.list.length === 0 && !search.query">

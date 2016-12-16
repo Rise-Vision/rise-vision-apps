@@ -28,7 +28,7 @@
             <i ng-if="search.sortBy == 'name'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
             <!-- end ngIf: search.sortBy == 'name' -->
           </th>
-          <th id="tableHeaderChangeDate" class="text-right hidden-xs" ng-click="sortBy('changeDate')">
+          <th id="tableHeaderChangeDate" class="hidden-xs" ng-click="sortBy('changeDate')">
             {{ 'schedules-app.list.heading.changeDate' | translate }}
             <!-- ngIf: search.sortBy == 'changeDate' -->
             <i ng-if="search.sortBy == 'changeDate'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
@@ -39,7 +39,7 @@
       <tbody>
         <tr class="clickable-row" ng-repeat="schedule in schedules.list" ui-sref="apps.schedules.details({scheduleId: schedule.id})">
           <td class="col-sm-9"><a ui-sref="apps.schedules.details({scheduleId: schedule.id})"><strong>{{schedule.name}}</strong></a></td>
-          <td class="col-sm-2 hidden-xs text-right nowrap"><a ui-sref="apps.schedules.details({scheduleId: schedule.id})">{{schedule.changeDate | date:'d-MMM-yyyy h:mm a'}}</a></td>
+          <td class="col-sm-2 hidden-xs nowrap"><span ui-sref="apps.schedules.details({scheduleId: schedule.id})">{{schedule.changeDate | date:'d-MMM-yyyy h:mm a'}}</span></td>
         </tr>
         <!-- If no schedules available -->
         <tr ng-show="schedules.list.length === 0 && !search.query">
