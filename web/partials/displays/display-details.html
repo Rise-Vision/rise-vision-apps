@@ -5,10 +5,19 @@
   </div>
 
   <div class="global-actions" require-role="da">
-    <button ng-click="addDisplay()" class="btn btn-lg btn-primary">     
+    <button ng-click="addDisplay()" class="btn btn-lg btn-primary">
       {{ 'displays-app.actions.new' | translate }}
-      <i class="fa fa-plus icon-right"></i> 
+      <i class="fa fa-plus icon-right"></i>
     </button>
+  </div>
+
+  <div>
+    <button class="btn btn-link pull-right half-top" ng-click="showHelp = !showHelp">{{ 'displays-app.fields.controls.howto' | translate }} </button>
+      <div class="col-xs-12">
+        <div class="video-box add-bottom" ng-show="showHelp">
+          <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/Animations/howitworks.gif">
+        </div>
+      </div>
   </div>
 </div>
 
@@ -16,13 +25,13 @@
 
 <div>
   <form role="form" name="displayDetails">
-    
+
     <display-fields></display-fields>
 
     <div id="errorBox" ng-show="factory.apiError" class="alert alert-danger" role="alert">
       <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
-    </div> 
-    
+    </div>
+
     <div class="button-row text-right">
       <p class="visible-xs"><last-modified change-date="display.changeDate" changed-by="display.changedBy"></last-modified></p>
       <!-- Indicates delete or destructive action -->
@@ -33,7 +42,7 @@
       <span class="hidden-xs add-right"><last-modified change-date="display.changeDate" changed-by="display.changedBy"></last-modified></span>
       <!-- Indicates a successful or positive action -->
       <button id="saveButton" type="submit" class="btn btn-primary" ng-click="save()" ng-disabled="displayDetails.$invalid || factory.savingDisplay" require-role="da">
-        {{ factory.savingDisplay ? ('common.saving' | translate) : ('common.save' | translate)}} 
+        {{ factory.savingDisplay ? ('common.saving' | translate) : ('common.save' | translate)}}
         <i class="fa fa-check icon-right"></i>
       </button>
       <!-- Indicates cancel or non-destructive action -->

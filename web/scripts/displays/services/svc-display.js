@@ -231,7 +231,7 @@
             return deferred.promise;
           },
           hasSchedule: function(display) {
-            return display.scheduleId && display.scheduleId !== 'DEMO';
+            return display && display.scheduleId && display.scheduleId !== 'DEMO';
           }
         };
 
