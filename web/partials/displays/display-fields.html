@@ -24,7 +24,7 @@
         </button>
       </div>
       <div class="col-sm-4">
-        <button type="button" class="btn btn-default btn-block half-bottom" ng-click="showDownloadButtons = true">
+        <button id="downloadPlayer" type="button" class="btn btn-default btn-block half-bottom" ng-click="showDownloadButtons = true">
           {{ 'displays-app.fields.controls.download' | translate }}
           <i class="fa fa-cloud-download icon-right"></i>
         </button>
@@ -97,7 +97,7 @@
   <a class="btn btn-primary btn-xs" ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
     {{ 'displays-app.fields.player.schedule.addToSchedule' | translate }} <i class="fa fa-external-link icon-right" aria-hidden="true"></i>
   </a>
-  <a ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
+  <a id="viewSchedule" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
     <span class="table-link ellipsis">{{display.scheduleName}} <i class="fa fa-external-link" aria-hidden="true"></i></span>
   </a>
 </div>

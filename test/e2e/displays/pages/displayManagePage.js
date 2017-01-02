@@ -3,9 +3,12 @@ var DisplayManagePage = function() {
   var displaysAppContainer = element(by.css('.displays-app'));
   var title = element(by.id('title'));
   var displayNameField = element(by.model('display.name'));
+  var downloadPlayerButton = element(by.id('downloadPlayer'));
   var downloadWindows64Button = element(by.id('downloadWindows64'));
+  var installPlayerButton = element(by.css('.btn-install-player'));
   var displayUseCompanyAddressCheckbox = element(by.model('display.useCompanyAddress'));
   var displayRebootCheckbox = element(by.model('display.restartEnabled'));
+  var viewScheduleLink = element(by.id('viewSchedule'));
 
   var displayTimeZoneSelect = element(by.model('display.timeZoneOffset'));  
 
@@ -32,10 +35,18 @@ var DisplayManagePage = function() {
   this.getDisplayNameField = function() {
     return displayNameField;
   };
-  
+
+  this.getDownloadPlayerButton = function() {
+    return downloadPlayerButton;
+  };
+
   this.getDownloadWindows64Button = function() {
     return downloadWindows64Button;
-  }
+  };
+
+  this.getInstallPlayerButton = function() {
+    return installPlayerButton;
+  };
 
   this.getDisplayUseCompanyAddressCheckbox = function() {
     return displayUseCompanyAddressCheckbox;
@@ -43,6 +54,10 @@ var DisplayManagePage = function() {
 
   this.getDisplayRebootCheckbox = function() {
     return displayRebootCheckbox;
+  };
+
+  this.getViewScheduleLink = function() {
+    return viewScheduleLink;
   };
 
   this.getDisplayTimeZoneSelect = function() {
