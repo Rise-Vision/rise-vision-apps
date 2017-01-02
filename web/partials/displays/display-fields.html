@@ -76,12 +76,12 @@
           <td class="table-body__cell hidden-xs hidden-sm hidden-md"><span>{{display.browserVersion}}</span></td>
           <td class="table-body__cell">
             <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
-            <span class="text-danger" ng-if="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline</span>
+            <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline</span>
 
-            <span class="text-success" ng-if="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
+            <span class="text-success" ng-show="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
 
             <button class="btn btn-xs btn-primary pt-status btn-install-player"
-                    ng-if="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="displayFactory.addDisplayModal(display)">
+                    ng-show="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="factory.addDisplayModal(display)">
               {{ 'displays-app.list.status.install' | translate }}
             </button>
           </td>
