@@ -7,51 +7,51 @@
    <!-- PROTOTYPE - SCREENSHOT STATUSES -->
   <div class="panel panel-default half-bottom text-center">
     
-    <div class="panel-body">
+    <div class="panel-body display-screenshot proto-shot-state">
       <p class="text-muted">Screenshot not available.</p>
       <p class="text-muted">This Display is not scheduled.</p>
       <button class="btn btn-primary btn-xs" onclick="window.open('https://apps.risevision.com/schedules/list','_blank')">Add To Schedule  <i class="fa fa-external-link icon-right" aria-hidden="true"></i></button>
     </div>
 
-    <div class="panel-body" style="display:none">
+    <div class="panel-body display-screenshot proto-shot-state" style="display:none">
       <p>Screenshot not available.</p>
       <p>Rise Player software must be upgraded.</p>
       <button class="btn btn-xs btn-primary" ng-click="addDisplay()"> Upgrade Rise Player </button>
     </div>
 
-    <div class="panel-body" style="display:none">
+    <div class="panel-body display-screenshot proto-shot-state" style="display:none">
       <p>Screenshot not available.</p>
       <p>Media Player operating system not supported.</p>
       <button class="btn btn-link" onclick="window.open('https://help.risevision.com/user/create-a-display','_blank')"> Learn more about supported <br/> operating systems. </button>
     </div>
 
-    <div class="panel-body" style="display:none">
+    <div class="panel-body display-screenshot proto-shot-state" style="display:none">
       <p>Screenshot not available.</p>
       <p class="text-danger">This Display is Offline.</p>
     </div>
 
-    <div class="panel-body" style="display:none">
+    <div class="panel-body display-screenshot proto-shot-state proto-shot-state-offline" style="display:none">
       <!-- <span class="display-screenshot-tag text-muted ellipsis">Captured 12-Sep-2016 at 9:10am by byron.darlison@gmail.com</span> -->
     </div>
 
-    <div class="panel-body" style="display:none">
+    <div class="panel-body proto-shot-state proto-shot-state-not-installed " style="display:none">
       <p class="text-muted">Screenshot not available.</p>
       <p class="text-muted">Rise Player not installed.</p>
       <button class="btn btn-xs btn-primary" ng-click="addDisplay()"> Install Rise Player </button>
     </div>
 
-    <div class="panel-body" style="display:none">
+    <div class="panel-body proto-shot-state proto-shot-state-ready " style="display:none">
       <p>No Screenshot to show.</p>
       <p>Click 'Update' above.</p>
     </div>
 
-    <div class="panel-body" style="display:none;">
+    <div class="panel-body display-screenshot proto-shot-state proto-shot-state-loading" style="display:none;">
       <div class="app-loading-dots">
         <p>SPINNER HERE</p>
       </div>
     </div>
 
-    <div class="panel-body" style="display:none;">
+    <div class="panel-body display-screenshot proto-shot-state proto-shot-state-loaded" style="display:none;">
          
     </div>
     <!-- END PROTOTYPE - SCREENSHOT STATUSES -->
