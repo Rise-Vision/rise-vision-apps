@@ -6,45 +6,46 @@
   </p>
 </div>
 
-<!-- DESKTOP BUTTONS -->
-<div class="row">
-  <div class="col-sm-12 col-md-10 col-lg-8">
-    <div class="row">
-      <!-- Update translation to Restart Rise Player, Reboot Media Player and Download Rise Player -->
-      <div class="col-sm-4">
-        <button type="button" class="btn btn-default btn-block half-bottom" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')">
-          {{ 'displays-app.fields.controls.restart.name' | translate }}
-          <i class="fa fa-refresh icon-right"></i>
-        </button>
-      </div>
-      <div class="col-sm-4">
-        <button type="button" class="btn btn-default btn-block half-bottom" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')">
-          {{ 'displays-app.fields.controls.reboot.name' | translate }}
-          <i class="fa fa-power-off icon-right"></i>
-        </button>
-      </div>
-      <div class="col-sm-4">
-        <button id="downloadPlayer" type="button" class="btn btn-default btn-block half-bottom" ng-click="showDownloadButtons = true">
-          {{ 'displays-app.fields.controls.download' | translate }}
-          <i class="fa fa-cloud-download icon-right"></i>
-        </button>
+<div ng-controller="displayControls">
+  <!-- DESKTOP BUTTONS -->
+  <div class="row">
+    <div class="col-sm-12 col-md-10 col-lg-8">
+      <div class="row">
+        <div class="col-sm-4">
+          <button type="button" class="btn btn-default btn-block half-bottom" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" required-role="da">
+            {{ 'displays-app.fields.controls.restart.name' | translate }}
+            <i class="fa fa-refresh icon-right"></i>
+          </button>
+        </div>
+        <div class="col-sm-4">
+          <button type="button" class="btn btn-default btn-block half-bottom" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" required-role="da">
+            {{ 'displays-app.fields.controls.reboot.name' | translate }}
+            <i class="fa fa-power-off icon-right"></i>
+          </button>
+        </div>
+        <div class="col-sm-4">
+          <button id="downloadPlayer" type="button" class="btn btn-default btn-block half-bottom" ng-click="showDownloadButtons = true">
+            {{ 'displays-app.fields.controls.download' | translate }}
+            <i class="fa fa-cloud-download icon-right"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- DOWNLOAD PLAYER BUTTONS -->
-<div class="half-top animated fadeIn" ng-show="showDownloadButtons">
-  <download-player></download-player>
-</div>
+  <!-- DOWNLOAD PLAYER BUTTONS -->
+  <div class="half-top animated fadeIn" ng-show="showDownloadButtons">
+    <download-player></download-player>
+  </div>
 
-<div ng-show="controlsError" class="alert alert-danger" role="alert">
-  <strong translate>displays-app.fields.controls.error </strong>{{controlsError}}
-</div>
+  <div ng-show="controlsError" class="alert alert-danger" role="alert">
+    <strong translate>displays-app.fields.controls.error </strong>{{controlsError}}
+  </div>
 
-<div class="panel panel-info animated fadeIn" ng-show="controlsInfo">
-  <div class="panel-body">
-    <strong>{{ controlsInfo | translate }}</strong>
+  <div class="panel panel-info animated fadeIn" ng-show="controlsInfo">
+    <div class="panel-body">
+      <strong>{{ controlsInfo | translate }}</strong>
+    </div>
   </div>
 </div>
 
