@@ -1,5 +1,5 @@
-<label class="control-label">{{'displays-app.fields.name.name' | translate}} *</label>
 <div class="form-group" ng-class="{'has-error': !displayDetails.name.$pristine && displayDetails.name.$invalid}" show-errors>
+  <label class="control-label">{{'displays-app.fields.name.name' | translate}} *</label>
   <input type="text" class="form-control" placeholder="Display Name" id="name" name="name" ng-model="display.name" required>
   <p class="text-danger" ng-show="!displayDetails.name.$pristine && displayDetails.name.$error.required" translate>
     displays-app.fields.name.required
@@ -73,7 +73,7 @@
           <td class="table-body__cell hidden-xs hidden-sm hidden-md"><span>{{display.os}}</span></td>
           <td class="table-body__cell hidden-xs hidden-sm"><span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}}</span></td>
           <td class="table-body__cell hidden-xs hidden-sm"><span>{{display.viewerVersion}}</span></td>
-          <td class="table-body__cell hidden-xs hidden-sm hidden-md"><span>{{display.browserVersion}}</span></td>
+          <td class="table-body__cell hidden-xs hidden-sm hidden-md"><span>{{(display.browserName ? display.browserName + " " : "") + (display.browserVersion ? display.browserVersion : "")}}</span></td>
           <td class="table-body__cell">
             <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
             <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline</span>
@@ -105,7 +105,7 @@
 
 <!--      SETTINGS       -->
 
-<div class="form-group" ng-show="display.playerVersion || display.onlineStatus === 'online'" ng-controller="displayControls">
+<div class="form-group" ng-show="display.playerVersion || display.onlineStatus === 'online'">
   <div class="form-group form-inline" ng-show="isChromeOs(display)">
     <label class="control-label" translate>displays-app.fields.player.orientation.name</label>
     <select class="form-control" ng-model="display.orientation" integer-parser>
@@ -114,6 +114,19 @@
       <option value="180" translate>displays-app.fields.player.orientation.180</option>
       <option value="270" translate>displays-app.fields.player.orientation.270</option>
     </select>
+  </div>
+
+  <div class="form-group form-inline" ng-show="factory.showBrowserUpgradeMode">
+    <label class="control-label" translate>displays-app.fields.player.browser.upgrade.name</label>
+    <select class="form-control" ng-model="display.browserUpgradeMode" integer-parser ng-disabled="!display.playerName && !display.playerVersion">
+      <option value="0" translate>displays-app.fields.player.browser.upgrade.autoUpgrade</option>
+      <option value="1" translate>displays-app.fields.player.browser.upgrade.userManaged</option>
+    </select>
+  </div>
+
+  <div class="form-group form-inline" ng-show="display.browserUpgradeMode !== 0">
+    <label class="control-label" translate>displays-app.fields.player.browser.recommended</label>
+    <div class="form-control-static">{{display.recommendedBrowserVersion}}</div>
   </div>
 </div>
 
