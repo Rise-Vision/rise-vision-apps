@@ -79,24 +79,28 @@ function protoCycleStatus() {
 //LOOP THROUGH SCREENSHOT STATUS TYPES
 function cycleScreenshotState() {
   //ENABLE BUTTON
-  if ( $(".proto-shot-state-not-installed").is(":visible") ) {
+  if ( $(".proto-shot-state-setoffline").is(":visible") ) {
            var showNext = $(".proto-shot-state:visible").next('.proto-shot-state');
+           var mainShot = $(".l_display-screenshot");
            $('.proto-shot-state').hide();
            $(showNext).show();
-           $('#btnUpdateScreenshot').removeAttr('disabled');
+           $(mainShot).addClass('l_display-screenshot-offline');
   }
   //LOAD FAKE SCREENSHOT
-  else if ( $(".proto-shot-state-ready").is(":visible") ) {
-           $('.proto-shot-state').hide();
-           $('.proto-shot-state-loading').show().delay(4000).queue(function () {
-                 $('.proto-shot-state-loading').hide();
-                 $('.proto-shot-state-loaded').show();
-           });
+  else if ( $(".proto-shot-state-setready").is(":visible") ) {
+            var showNext = $(".proto-shot-state:visible").next('.proto-shot-state');
+            var mainShot = $(".l_display-screenshot");
+            $('.proto-shot-state').hide();
+            $(showNext).show();
+            $(mainShot).removeClass('l_display-screenshot-offline');
+            $('#btnUpdateScreenshot').removeAttr('disabled');
   }
   else {
      var showNext = $(".proto-shot-state:visible").next('.proto-shot-state');
+     var mainShot = $(".l_display-screenshot");
      $('.proto-shot-state').hide();
      $(showNext).show();
+     $(mainShot).removeClass('l_display-screenshot-offline');
   }
 }
 
