@@ -1,8 +1,8 @@
 <div ng-controller="UploadController">
-  <div class="content-box animated fadeInDown upload-panel add-bottom" ng-show="uploader.queue.length > 0">
+  <div class="panel animated fadeInDown upload-panel add-bottom" ng-show="uploader.queue.length > 0">
     
       <div ng-click="isCollapsed = !isCollapsed">
-        <div class="content-box-header">
+        <div class="content-box-header"> <!-- //TODO: IS this a needed class? -->
           <span class="collapse-control">
             <i class="fa" ng-class="{false: 'fa-chevron-up', true:'fa-chevron-down'}[!isCollapsed]"></i>
           </span>
@@ -21,11 +21,11 @@
             </button>
           </div>
           
-        </div><!--content-box-header-->
+        </div><!--content-box-header--> <!-- //TODO: IS this a needed class? -->
 
       </div>
       <div ng-show="!isCollapsed">
-      <div class="content-box-body">
+      <div class="panel-body">
         <div class="half-top" ng-repeat="item in uploader.queue">
           <p>
             <span class="ellipsed">{{item.file.name}}</span>

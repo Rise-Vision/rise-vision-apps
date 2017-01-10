@@ -1,5 +1,4 @@
-<div id="pendingOperationsPanel" ng-show="factory.pendingOperations.length > 0">
-  <div>
+<div id="pendingOperationsPanel" class="add-top" ng-show="factory.pendingOperations.length > 0">
     <div class="panel panel-info animated fadeInDown">
       <div class="panel-heading" ng-click="factory.isPOCollapsed = !factory.isPOCollapsed">
         <h3 class="panel-title">
@@ -25,10 +24,10 @@
         </table>
       </div>
     </div>
-  </div>
 </div>
-<div class="content-box" ng-show="downloadFactory.activeFolderDownloads.length > 0">
-  <div class="content-box-body">
+
+<div class="panel add-top" ng-show="downloadFactory.activeFolderDownloads.length > 0">
+  <div class="panel-body">
     <div class="row" ng-repeat="folder in downloadFactory.activeFolderDownloads">
       <div class="col-sm-12">
         <span>
