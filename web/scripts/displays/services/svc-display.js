@@ -230,8 +230,9 @@
 
             return deferred.promise;
           },
-          hasSchedule: function(display) {
-            return display && display.scheduleId && display.scheduleId !== 'DEMO';
+          hasSchedule: function (display) {
+            return display && display.scheduleId && display.scheduleId !==
+              'DEMO';
           }
         };
 
@@ -240,15 +241,15 @@
     ]);
 
   function _mergeStatuses(items, statuses) {
-    items.forEach(function(item) {
+    items.forEach(function (item) {
       item.lastConnectionTime = item.lastActivityDate;
     });
 
     statuses.forEach(function (s) {
-      for(var i = 0; i < items.length; i++) {
+      for (var i = 0; i < items.length; i++) {
         var item = items[i];
 
-        if(s[item.id] !== undefined) {
+        if (s[item.id] !== undefined) {
           _mergeStatus(item, s);
           break;
         }
@@ -257,10 +258,11 @@
   }
 
   function _mergeStatus(item, lookup) {
-    if(lookup[item.id] === true) {
+    if (lookup[item.id] === true) {
       item.onlineStatus = 'online';
     }
 
-    item.lastConnectionTime = !isNaN(lookup.lastConnectionTime) ? new Date(lookup.lastConnectionTime) : (item.lastActivityDate || '');
+    item.lastConnectionTime = !isNaN(lookup.lastConnectionTime) ? new Date(
+      lookup.lastConnectionTime) : (item.lastActivityDate || '');
   }
 })();

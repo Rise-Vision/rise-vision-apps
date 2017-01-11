@@ -30,6 +30,7 @@ angular.module('risevision.editor.services')
             }
           }
           gadgetFactory.updateSubscriptionStatus(Object.keys(gadgetsMap)).then(
+
             function (gadgets) {
               for (var i = 0; i < gadgets.length; i++) {
                 var gadget = gadgets[i];

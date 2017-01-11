@@ -39,7 +39,7 @@ angular.module('risevision.displays.services')
 
         _init();
 
-        if(display) {
+        if (display) {
           factory.display = display;
         }
 
@@ -48,7 +48,9 @@ angular.module('risevision.displays.services')
           size: 'md',
           controller: 'displayAddModal',
           resolve: {
-            downloadOnly: function() { return display || false; }
+            downloadOnly: function () {
+              return display || false;
+            }
           }
         });
       };
