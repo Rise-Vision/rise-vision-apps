@@ -39,6 +39,6 @@
     "angular-mocks": "^1.5.5",
     "angular-bootstrap": "^0.13.0",
     "rv-common-style": "fix/container-testing",
-    "common-header": "fix/header-state-2"
+    "common-header": "fix/container-testing"
   }
 }
