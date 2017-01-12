@@ -15,8 +15,8 @@
 		</div>
 	</div>
 
-	<div class="content-box">
-		<div class="content-box-body bg-warning">
+	<div class="panel">
+		<div class="panel-body bg-warning">
 			<div class="form-group remove-bottom">
 				<input id="termsAcceptedCheckbox" type="checkbox" ng-model="termsAccepted" ng-checked="termsAccepted" class="pull-left add-right"><label id="iAcceptLabel" class="control-label" translate>displays-app.alerts.iAccept</label>
 			</div>
@@ -25,8 +25,8 @@
 			</div>
 		</div><!--warning-->
 
-		<div class="content-box" ng-hide="alertsOn" id="alertsOffWarningContainer">
-			<div class="content-box-body bg-danger">
+		<div class="panel" ng-hide="alertsOn" id="alertsOffWarningContainer">
+			<div class="panel-body bg-danger">
 				<p class="remove-bottom"><i class="fa fa-warning icon-left"></i><span translate>displays-app.alerts.turnedOffWarning</span> <a href="" ng-click="$parent.alertsOn = true" translate>displays-app.alerts.turnOnShort</a></p>
 			</div>
 		</div><!--warning-->
@@ -57,8 +57,8 @@
 			<span ng-show="!showFilters" translate>displays-app.alerts.showFilters</span>
 			<span ng-show="showFilters" translate>displays-app.alerts.hideFilters</span></button>
 
-		<div class="content-box" ng-show="showFilters" id="filtersContainer">
-			<div class="content-box-body">
+		<div class="panel" ng-show="showFilters" id="filtersContainer">
+			<div class="panel-body">
 				<div class="form-group" id="senderContainer">
 					<label class="control-label" translate>displays-app.alerts.sender</label>
 					<input type="text" class="form-control" ng-model="factory.alertSettings.allowedSenders" ng-list>
@@ -150,8 +150,8 @@
 
 
 
-		<div class="content-box" ng-hide="alertsOn">
-			<div class="content-box-body bg-danger">
+		<div class="panel" ng-hide="alertsOn">
+			<div class="panel-body bg-danger">
 				<p class="remove-bottom"><i class="fa fa-warning icon-left"></i><span translate>displays-app.alerts.turnedOffWarning</span> <a href="" ng-click="$parent.alertsOn = true" translate>displays-app.alerts.turnOnShort</a></p>
 			</div>
 		</div><!--warning-->
