@@ -152,7 +152,7 @@ angular.module('risevision.schedules.services')
 
         //show loading spinner
         factory.loadingSchedule = true;
-        factory.savingSchedule = true;
+        factory.savinxgSchedule = true;
 
         schedule.update(_scheduleId, factory.schedule)
           .then(function (scheduleId) {

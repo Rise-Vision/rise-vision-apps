@@ -2,7 +2,7 @@
   <div class="panel animated fadeInDown upload-panel add-bottom" ng-show="uploader.queue.length > 0">
     
       <div ng-click="isCollapsed = !isCollapsed">
-        <div class="content-box-header"> <!-- //TODO: IS this a needed class? -->
+        <div class="panel-header"> <!-- //TODO: IS this a needed class? -->
           <span class="collapse-control">
             <i class="fa" ng-class="{false: 'fa-chevron-up', true:'fa-chevron-down'}[!isCollapsed]"></i>
           </span>
@@ -21,7 +21,7 @@
             </button>
           </div>
           
-        </div><!--content-box-header--> <!-- //TODO: IS this a needed class? -->
+        </div><!--panel-header--> 
 
       </div>
       <div ng-show="!isCollapsed">
