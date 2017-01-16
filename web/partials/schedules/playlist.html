@@ -2,7 +2,7 @@
   <div class="scrollable-list">
     <table class="table-2 table-hover table-middle">
       <tbody>
-        <tr class="clickable-row" ng-repeat="playlistItem in playlistItems track by $index">
+        <tr class="clickable" ng-repeat="playlistItem in playlistItems track by $index">
           <td ng-click="manage(playlistItem)">
             <p class="playlist-item-name remove-bottom"><strong>{{playlistItem.name}}</strong></p>
           </td>
