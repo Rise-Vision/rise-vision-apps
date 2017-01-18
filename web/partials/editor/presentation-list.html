@@ -7,7 +7,7 @@
 
     <div class="global-actions">
         <button id="presentationAddButton" ng-click="editorFactory.addPresentationModal()" class="btn btn-primary btn-lg">
-          {{'editor-app.list.actions.add' |translate}} <i class="fa fa-plus icon-right"></i>
+          {{'editor-app.list.actions.add' | translate}} <i class="fa fa-plus icon-right"></i>
         </button>
         <button id="sharedTemplatesButton" ng-click="editorFactory.addFromSharedTemplateModal()" class="dropdown-toggle btn btn-default btn-lg" translate>editor-app.sharedTemplates.title</button>
     </div>
@@ -23,19 +23,19 @@
       <table id="presentationListTable" class="table table--hover">
         <thead class="table-header">
           <tr class="table-header__row clickable">
-            <th id="tableHeaderName" class="table-header__cell clickable" ng-click="factory.sortBy('name')">
+            <th id="tableHeaderName" class="table-header__cell" ng-click="factory.sortBy('name')">
               {{'editor-app.list.heading.name' | translate}}
               <!-- ngIf: search.sortBy == 'name' -->
               <i ng-if="search.sortBy == 'name'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
               <!-- end ngIf: search.sortBy == 'name' -->
             </th>
-            <th id="tableHeaderStatus" class="table-header__cell clickable hidden-xs"  ng-click="factory.sortBy('revisionStatusName')">
+            <th id="tableHeaderStatus" class="table-header__cell hidden-xs"  ng-click="factory.sortBy('revisionStatusName')">
               {{'editor-app.list.heading.status'  | translate}}
               <!-- ngIf: search.sortBy == 'revisionStatusName' -->
               <i ng-if="search.sortBy == 'revisionStatusName'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
               <!-- end ngIf: search.sortBy == 'revisionStatusName' -->
             </th>
-            <th id="tableHeaderChangeDate" class="table-header__cell clickable hidden-xs" ng-click="factory.sortBy('changeDate')">
+            <th id="tableHeaderChangeDate" class="table-header__cell hidden-xs" ng-click="factory.sortBy('changeDate')">
               {{'editor-app.list.heading.changeDate' | translate}}
               <!-- ngIf: search.sortBy == 'changeDate' -->
               <i ng-if="search.sortBy == 'changeDate'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
