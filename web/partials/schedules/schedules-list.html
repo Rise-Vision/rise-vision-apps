@@ -21,14 +21,14 @@
     >
     <table id="schedulesListTable" class="table table--hover">
       <thead class="table-header">
-        <tr class="table-header__row">
-          <th id="tableHeaderName" class="table-header__cell clickable" ng-click="sortBy('name')">
+        <tr class="table-header__row clickable">
+          <th id="tableHeaderName" class="table-header__cell" ng-click="sortBy('name')">
             {{ 'schedules-app.list.heading.name' | translate }}
             <!-- ngIf: search.sortBy == 'name' -->
             <i ng-if="search.sortBy == 'name'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
             <!-- end ngIf: search.sortBy == 'name' -->
           </th>
-          <th id="tableHeaderChangeDate" class="table-header__cell clickable hidden-xs" ng-click="sortBy('changeDate')">
+          <th id="tableHeaderChangeDate" class="table-header__cell hidden-xs" ng-click="sortBy('changeDate')">
             {{ 'schedules-app.list.heading.changeDate' | translate }}
             <!-- ngIf: search.sortBy == 'changeDate' -->
             <i ng-if="search.sortBy == 'changeDate'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>

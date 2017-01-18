@@ -1,7 +1,7 @@
 <table id="storageFileList" class="table table--hover table--selector" ng-class="storageFactory.isMultipleSelector() ? 'table--multiple-selector' : 'table--single-selector'" ng-show="filesDetails.code!==202 && filesDetails.code!==404 && isFileListVisible()">
     <thead class="table-header">
-        <tr class="table-header__row">
-            <th class="col-sm-6 table-header__cell clickable">
+        <tr class="table-header__row clickable">
+            <th class="col-sm-6 table-header__cell">
                 <input type="checkbox" class="add-right" ng-model="selectAll">
                 <label ng-click="fileSelectorFactory.selectAllCheckboxes(query)" ng-show="storageFactory.isMultipleSelector()"></label>
                 <span id="tableHeaderName" ng-click="orderByAttribute = fileNameOrderFunction; reverseSort = !reverseSort">
@@ -16,7 +16,7 @@
                 </span>
                 </span>
             </th>
-            <th class="col-sm-2 table-header__cell clickable hidden-xs" ng-click="orderByAttribute = fileExtOrderFunction; reverseSort = !reverseSort">
+            <th class="col-sm-2 table-header__cell hidden-xs" ng-click="orderByAttribute = fileExtOrderFunction; reverseSort = !reverseSort">
                 <span translate="common.file-type"></span>
                 <span ng-show="orderByAttribute==fileExtOrderFunction">
             <span ng-show="reverseSort">
@@ -27,7 +27,7 @@
             </span>
                 </span>
             </th>
-            <th class="col-sm-2 table-header__cell clickable visible-lg" ng-click="orderByAttribute = fileSizeOrderFunction; reverseSort = !reverseSort">
+            <th class="col-sm-2 table-header__cell visible-lg" ng-click="orderByAttribute = fileSizeOrderFunction; reverseSort = !reverseSort">
                 <span translate="common.file-size"></span>
                 <span ng-show="orderByAttribute==fileSizeOrderFunction">
             <span ng-show="reverseSort">
@@ -38,7 +38,7 @@
             </span>
                 </span>
             </th>
-            <th class="col-sm-2 table-header__cell clickable visible-lg" ng-click="orderByAttribute = dateModifiedOrderFunction; reverseSort = !reverseSort">
+            <th class="col-sm-2 table-header__cell visible-lg" ng-click="orderByAttribute = dateModifiedOrderFunction; reverseSort = !reverseSort">
                 <span translate="common.file-date-mod"></span>
                 <span ng-show="orderByAttribute==dateModifiedOrderFunction">
             <span ng-show="reverseSort">
