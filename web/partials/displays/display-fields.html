@@ -1,193 +1,212 @@
 <div class="form-group" ng-class="{'has-error': !displayDetails.name.$pristine && displayDetails.name.$invalid}" show-errors>
-    <label class="control-label">{{'displays-app.fields.name.name' | translate}} *</label>
-    <input type="text" class="form-control" placeholder="Display Name" id="name" name="name" ng-model="display.name" required>
-    <p class="text-danger" ng-show="!displayDetails.name.$pristine && displayDetails.name.$error.required" translate>
-        displays-app.fields.name.required
-    </p>
+  <label class="control-label">{{'displays-app.fields.name.name' | translate}} *</label>
+  <input type="text" class="form-control" placeholder="Display Name" id="name" name="name" ng-model="display.name" required>
+  <p class="text-danger" ng-show="!displayDetails.name.$pristine && displayDetails.name.$error.required" translate>
+    displays-app.fields.name.required
+  </p>
 </div>
+
 <div ng-controller="displayControls">
-    <!-- DESKTOP BUTTONS -->
-    <div class="row">
-        <div class="col-sm-12 col-md-10 col-lg-8">
-            <div class="row">
-                <div class="col-sm-4">
-                    <button type="button" class="btn btn-default btn-block half-bottom" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" required-role="da">
-                        {{ 'displays-app.fields.controls.restart.name' | translate }}
-                        <i class="fa fa-refresh icon-right"></i>
-                    </button>
-                </div>
-                <div class="col-sm-4">
-                    <button type="button" class="btn btn-default btn-block half-bottom" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" required-role="da">
-                        {{ 'displays-app.fields.controls.reboot.name' | translate }}
-                        <i class="fa fa-power-off icon-right"></i>
-                    </button>
-                </div>
-                <div class="col-sm-4">
-                    <button id="downloadPlayer" type="button" class="btn btn-default btn-block half-bottom" ng-click="showDownloadButtons = true">
-                        {{ 'displays-app.fields.controls.download' | translate }}
-                        <i class="fa fa-cloud-download icon-right"></i>
-                    </button>
-                </div>
-            </div>
+  <!-- DESKTOP BUTTONS -->
+  <div class="row">
+    <div class="col-sm-12 col-md-10 col-lg-8">
+      <div class="row">
+        <div class="col-sm-4">
+          <button type="button" class="btn btn-default btn-block half-bottom" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" required-role="da">
+            {{ 'displays-app.fields.controls.restart.name' | translate }}
+            <i class="fa fa-refresh icon-right"></i>
+          </button>
         </div>
-    </div>
-    <!-- DOWNLOAD PLAYER BUTTONS -->
-    <div class="half-top animated fadeIn" ng-show="showDownloadButtons">
-        <download-player></download-player>
-    </div>
-    <div ng-show="controlsError" class="alert alert-danger" role="alert">
-        <strong translate>displays-app.fields.controls.error </strong>{{controlsError}}
-    </div>
-    <div class="panel panel-info animated fadeIn" ng-show="controlsInfo">
-        <div class="panel-body">
-            <strong>{{ controlsInfo | translate }}</strong>
+        <div class="col-sm-4">
+          <button type="button" class="btn btn-default btn-block half-bottom" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" required-role="da">
+            {{ 'displays-app.fields.controls.reboot.name' | translate }}
+            <i class="fa fa-power-off icon-right"></i>
+          </button>
         </div>
+        <div class="col-sm-4">
+          <button id="downloadPlayer" type="button" class="btn btn-default btn-block half-bottom" ng-click="showDownloadButtons = true">
+            {{ 'displays-app.fields.controls.download' | translate }}
+            <i class="fa fa-cloud-download icon-right"></i>
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- DOWNLOAD PLAYER BUTTONS -->
+  <div class="half-top animated fadeIn" ng-show="showDownloadButtons">
+    <download-player></download-player>
+  </div>
+
+  <div ng-show="controlsError" class="alert alert-danger" role="alert">
+    <strong translate>displays-app.fields.controls.error </strong>{{controlsError}}
+  </div>
+
+  <div class="panel panel-info animated fadeIn" ng-show="controlsInfo">
+    <div class="panel-body">
+      <strong>{{ controlsInfo | translate }}</strong>
+    </div>
+  </div>
 </div>
-<div class="panel panel-default half-top">
+
+<div>
+  <div class="panel panel-default half-top">
     <table class="table">
-        <thead class="table-header">
-            <tr class="table-header__row">
-                <th class="table-header__cell"><span translate>displays-app.fields.player.id</span></th>
-                <th class="table-header__cell hidden-xs"><span translate>displays-app.fields.player.resolution</span></th>
-                <th class="table-header__cell hidden-xs hidden-sm"><span translate>displays-app.fields.player.ipAddress</span></th>
-                <th class="table-header__cell hidden-xs hidden-sm hidden-md"><span translate>displays-app.fields.player.operatingSystem</span></th>
-                <th class="table-header__cell hidden-xs hidden-sm"><span translate>displays-app.fields.player.playerVersion</span></th>
-                <th class="table-header__cell hidden-xs hidden-sm"><span translate>displays-app.fields.player.viewerVersion</span></th>
-                <th class="table-header__cell hidden-xs hidden-sm hidden-md"><span translate>displays-app.fields.player.browserVersion</span></th>
-                <th class="table-header__cell"><span translate>displays-app.fields.player.status</span></th>
-                <th class="table-header__cell hidden-xs"><span translate>displays-app.fields.player.lastConnection</span></th>
-            </tr>
-        </thead>
-        <tbody class="table-body">
-            <tr class="table-body__row">
-                <td class="table-body__cell"><span>{{display.id}}</span></td>
-                <td class="table-body__cell hidden-xs"><span>{{display.width | resolution: display.height}}</span></td>
-                <td class="table-body__cell hidden-xs hidden-sm"><span>{{display.playerLocalIpAddress}}</span></td>
-                <td class="table-body__cell hidden-xs hidden-sm hidden-md"><span>{{display.os}}</span></td>
-                <td class="table-body__cell hidden-xs hidden-sm"><span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}}</span></td>
-                <td class="table-body__cell hidden-xs hidden-sm"><span>{{display.viewerVersion}}</span></td>
-                <td class="table-body__cell hidden-xs hidden-sm hidden-md"><span>{{(display.browserName ? display.browserName + " " : "") + (display.browserVersion ? display.browserVersion : "")}}</span></td>
-                <td class="table-body__cell">
-                    <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
-                    <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline</span>
-                    <span class="text-success" ng-show="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
-                    <button class="btn btn-xs btn-primary pt-status btn-install-player" ng-show="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="factory.addDisplayModal(display)">
-                        {{ 'displays-app.list.status.install' | translate }}
-                    </button>
-                </td>
-                <td class="table-body__cell hidden-xs"><span>{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span></td>
-            </tr>
-        </tbody>
+      <thead class="table-header">
+        <tr class="table-header__row">
+          <th class="table-header__cell"><span translate>displays-app.fields.player.id</span></th>
+          <th class="table-header__cell hidden-xs"><span translate>displays-app.fields.player.resolution</span></th>
+          <th class="table-header__cell hidden-xs hidden-sm"><span translate>displays-app.fields.player.ipAddress</span></th>
+          <th class="table-header__cell hidden-xs hidden-sm hidden-md"><span translate>displays-app.fields.player.operatingSystem</span></th>
+          <th class="table-header__cell hidden-xs hidden-sm"><span translate>displays-app.fields.player.playerVersion</span></th>
+          <th class="table-header__cell hidden-xs hidden-sm"><span translate>displays-app.fields.player.viewerVersion</span></th>
+          <th class="table-header__cell hidden-xs hidden-sm hidden-md"><span translate>displays-app.fields.player.browserVersion</span></th>
+          <th class="table-header__cell"><span translate>displays-app.fields.player.status</span></th>
+          <th class="table-header__cell hidden-xs"><span translate>displays-app.fields.player.lastConnection</span></th>
+        </tr>
+      </thead>
+      <tbody class="table-body">
+        <tr class="table-body__row">
+          <td class="table-body__cell"><span>{{display.id}}</span></td>
+          <td class="table-body__cell hidden-xs"><span>{{display.width | resolution: display.height}}</span></td>
+          <td class="table-body__cell hidden-xs hidden-sm"><span>{{display.playerLocalIpAddress}}</span></td>
+          <td class="table-body__cell hidden-xs hidden-sm hidden-md"><span>{{display.os}}</span></td>
+          <td class="table-body__cell hidden-xs hidden-sm"><span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}}</span></td>
+          <td class="table-body__cell hidden-xs hidden-sm"><span>{{display.viewerVersion}}</span></td>
+          <td class="table-body__cell hidden-xs hidden-sm hidden-md"><span>{{(display.browserName ? display.browserName + " " : "") + (display.browserVersion ? display.browserVersion : "")}}</span></td>
+          <td class="table-body__cell">
+            <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
+            <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline</span>
+
+            <span class="text-success" ng-show="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
+
+            <button class="btn btn-xs btn-primary pt-status btn-install-player"
+                    ng-show="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="factory.addDisplayModal(display)">
+              {{ 'displays-app.list.status.install' | translate }}
+            </button>
+          </td>
+          <td class="table-body__cell hidden-xs"><span>{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span></td>
+        </tr>
+      </tbody>
     </table>
+  </div>
 </div>
+
 <div class="add-top u_lh-normal">
-    <label class="control-label add-right">{{ 'displays-app.fields.player.schedule.label' | translate }}</label>
-    <span ng-if="!displayService.hasSchedule(display)" class="add-right">{{ 'displays-app.fields.player.schedule.notScheduled' | translate }} </span>
-    <a class="btn btn-primary btn-xs" ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
+  <label class="control-label add-right">{{ 'displays-app.fields.player.schedule.label' | translate }}</label>
+  <span ng-if="!displayService.hasSchedule(display)" class="add-right">{{ 'displays-app.fields.player.schedule.notScheduled' | translate }} </span>
+  <a class="btn btn-primary btn-xs" ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
     {{ 'displays-app.fields.player.schedule.addToSchedule' | translate }} <i class="fa fa-external-link icon-right" aria-hidden="true"></i>
   </a>
-    <a id="viewSchedule" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
-        <span class="table-link ellipsis">{{display.scheduleName}} <i class="fa fa-external-link" aria-hidden="true"></i></span>
-    </a>
+  <a id="viewSchedule" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
+    <span class="table-link ellipsis">{{display.scheduleName}} <i class="fa fa-external-link" aria-hidden="true"></i></span>
+  </a>
 </div>
+
 <!--      SETTINGS       -->
+
 <div class="form-group" ng-show="display.playerVersion || display.onlineStatus === 'online'">
-    <div class="form-group form-inline" ng-show="isChromeOs(display)">
-        <label class="control-label" translate>displays-app.fields.player.orientation.name</label>
-        <select class="form-control" ng-model="display.orientation" integer-parser>
-            <option value="0" translate>displays-app.fields.player.orientation.0</option>
-            <option value="90" translate>displays-app.fields.player.orientation.90</option>
-            <option value="180" translate>displays-app.fields.player.orientation.180</option>
-            <option value="270" translate>displays-app.fields.player.orientation.270</option>
-        </select>
-    </div>
-    <div class="form-group form-inline" ng-show="factory.showBrowserUpgradeMode">
-        <label class="control-label" translate>displays-app.fields.player.browser.upgrade.name</label>
-        <select class="form-control" ng-model="display.browserUpgradeMode" integer-parser ng-disabled="!display.playerName && !display.playerVersion">
-            <option value="0" translate>displays-app.fields.player.browser.upgrade.autoUpgrade</option>
-            <option value="1" translate>displays-app.fields.player.browser.upgrade.userManaged</option>
-        </select>
-    </div>
-    <div class="form-group form-inline" ng-show="display.browserUpgradeMode !== 0">
-        <label class="control-label" translate>displays-app.fields.player.browser.recommended</label>
-        <div class="form-control-static">{{display.recommendedBrowserVersion}}</div>
-    </div>
+  <div class="form-group form-inline" ng-show="isChromeOs(display)">
+    <label class="control-label" translate>displays-app.fields.player.orientation.name</label>
+    <select class="form-control" ng-model="display.orientation" integer-parser>
+      <option value="0" translate>displays-app.fields.player.orientation.0</option>
+      <option value="90" translate>displays-app.fields.player.orientation.90</option>
+      <option value="180" translate>displays-app.fields.player.orientation.180</option>
+      <option value="270" translate>displays-app.fields.player.orientation.270</option>
+    </select>
+  </div>
+
+  <div class="form-group form-inline" ng-show="factory.showBrowserUpgradeMode">
+    <label class="control-label" translate>displays-app.fields.player.browser.upgrade.name</label>
+    <select class="form-control" ng-model="display.browserUpgradeMode" integer-parser ng-disabled="!display.playerName && !display.playerVersion">
+      <option value="0" translate>displays-app.fields.player.browser.upgrade.autoUpgrade</option>
+      <option value="1" translate>displays-app.fields.player.browser.upgrade.userManaged</option>
+    </select>
+  </div>
+
+  <div class="form-group form-inline" ng-show="display.browserUpgradeMode !== 0">
+    <label class="control-label" translate>displays-app.fields.player.browser.recommended</label>
+    <div class="form-control-static">{{display.recommendedBrowserVersion}}</div>
+  </div>
 </div>
+
 <div class="form-group">
-    <div class="checkbox">
-        <label class="control-label">
-            <input type="checkbox" ng-model="display.useCompanyAddress"> <strong translate>displays-app.fields.address.useCompany</strong>
-        </label>
-    </div>
+  <div class="checkbox">
+    <label class="control-label">
+      <input type="checkbox" ng-model="display.useCompanyAddress"> <strong translate>displays-app.fields.address.useCompany</strong>
+    </label>
+  </div>
 </div>
+
 <div ng-hide="display.useCompanyAddress" class="add-top add-bottom">
-    <div class="form-group">
-        <label class="control-label" translate>displays-app.fields.address.description</label>
-        <input type="text" class="form-control" ng-model="display.addressDescription">
+  <div class="form-group">
+    <label class="control-label" translate>displays-app.fields.address.description</label>
+    <input type="text" class="form-control" ng-model="display.addressDescription">
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" translate>displays-app.fields.address.street</label>
+        <input type="text" class="form-control" ng-model="display.street">
+      </div>
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label class="control-label" translate>displays-app.fields.address.street</label>
-                <input type="text" class="form-control" ng-model="display.street">
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label class="control-label" translate>displays-app.fields.address.unit</label>
-                <input type="text" class="form-control" ng-model="display.unit">
-            </div>
-        </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" translate>displays-app.fields.address.unit</label>
+        <input type="text" class="form-control" ng-model="display.unit">
+      </div>
     </div>
-    <div class="row">
-        <div class="col-md-3">
-            <div class="form-group">
-                <label class="control-label" translate>displays-app.fields.address.city</label>
-                <input type="text" class="form-control" ng-model="display.city">
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label class="control-label" translate>displays-app.fields.address.country.name</label>
-                <select class="form-control" ng-model="display.country" ng-options="c.code as c.name for c in countries" empty-select-parser>
-                    <option value="" ng-show="false" translate>displays-app.fields.address.country.placeholder</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label class="control-label" translate>displays-app.fields.address.province.name</label>
-                <input type="text" class="form-control" ng-model="display.province" ng-hide="display.country == 'US' || display.country == 'CA'" />
-                <select class="form-control selectpicker" ng-model="display.province" ng-options="c[1] as c[0] for c in regionsCA" ng-show="display.country == 'CA'" empty-select-parser>
-                    <option value="" ng-show="false" translate>displays-app.fields.address.province.provincePlaceholder</option>
-                </select>
-                <select class="form-control selectpicker" ng-model="display.province" ng-options="c[1] as c[0] for c in regionsUS" ng-show="display.country == 'US'" empty-select-parser>
-                    <option value="" ng-show="false" translate>displays-app.fields.address.province.statePlaceholder</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label class="control-label" translate>displays-app.fields.address.postalCode</label>
-                <input type="text" class="form-control" ng-model="display.postalCode">
-            </div>
-        </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+      <div class="form-group">
+        <label class="control-label" translate>displays-app.fields.address.city</label>
+        <input type="text" class="form-control" ng-model="display.city">
+      </div>
     </div>
-    <div class="form-group">
-        <label class="control-label" translate>displays-app.fields.address.timezone.name</label>
-        <select class="form-control" ng-model="display.timeZoneOffset" integer-parser>
-            <option value="" ng-show="false" translate>displays-app.fields.address.timezone.placeholder</option>
-            <option value="{{c[1]}}" ng-repeat="c in timezones">{{c[0]}}</option>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label class="control-label" translate>displays-app.fields.address.country.name</label>
+        <select class="form-control" ng-model="display.country" ng-options="c.code as c.name for c in countries" empty-select-parser>
+          <option value="" ng-show="false" translate>displays-app.fields.address.country.placeholder</option>
         </select>
+      </div>
     </div>
-    <hr>
-</div>
-<!--display address-->
+    <div class="col-md-3">
+      <div class="form-group">
+        <label class="control-label" translate>displays-app.fields.address.province.name</label>
+        <input type="text" class="form-control" ng-model="display.province" ng-hide="display.country == 'US' || display.country == 'CA'" />
+        <select class="form-control selectpicker" ng-model="display.province" ng-options="c[1] as c[0] for c in regionsCA" ng-show="display.country == 'CA'" empty-select-parser>
+          <option value="" ng-show="false" translate>displays-app.fields.address.province.provincePlaceholder</option>
+        </select>
+        <select class="form-control selectpicker" ng-model="display.province" ng-options="c[1] as c[0] for c in regionsUS" ng-show="display.country == 'US'" empty-select-parser>
+          <option value="" ng-show="false" translate>displays-app.fields.address.province.statePlaceholder</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label class="control-label" translate>displays-app.fields.address.postalCode</label>
+        <input type="text" class="form-control" ng-model="display.postalCode">
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label" translate>displays-app.fields.address.timezone.name</label>
+    <select class="form-control" ng-model="display.timeZoneOffset" integer-parser>
+      <option value="" ng-show="false" translate>displays-app.fields.address.timezone.placeholder</option>
+      <option value="{{c[1]}}" ng-repeat="c in timezones">{{c[0]}}</option>
+    </select>
+  </div>
+  <hr>
+</div><!--display address-->
+
 <div class="form-group reboot-time">
-    <div class="checkbox">
-        <label class="control-label">
-            <input type="checkbox" ng-model="display.restartEnabled"> <strong translate>displays-app.fields.reboot</strong></label>
-    </div>
-    <time-picker ng-model="display.restartTime" ng-disabled="!display.restartEnabled"></time-picker>
+  <div class="checkbox">
+    <label class="control-label"><input type="checkbox" ng-model="display.restartEnabled"> <strong translate>displays-app.fields.reboot</strong></label>
+  </div>
+  <time-picker ng-model="display.restartTime" ng-disabled="!display.restartEnabled"></time-picker>
 </div>
