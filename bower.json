@@ -15,11 +15,11 @@
     "angular-bootstrap-colorpicker": "~3.0.19",
     "angular-ui-codemirror": "~0.3.0",
     "angular-vertilize": "~1.0.1",
-    "common-header": "https://github.com/Rise-Vision/common-header.git#v1.11.9",
+    "common-header": "https://github.com/Rise-Vision/common-header.git#fix/padding-utility",
     "component-storage-selector": "https://github.com/Rise-Vision/component-storage-selector.git",
     "rv-common-i18n": "https://github.com/Rise-Vision/common-i18n.git",
     "rv-common-style": "https://github.com/Rise-Vision/common-style.git#fix/padding-utility",
-    "rv-common-app-components": "https://github.com/Rise-Vision/common-app-components.git#fix/padding-utility",
+    "rv-common-app-components": "https://github.com/Rise-Vision/common-app-components.git/#0.1.1",
     "rv-loading": "https://github.com/Rise-Vision/rv-loading.git",
     "widget-settings-ui-components": "https://github.com/Rise-Vision/widget-settings-ui-components.git#1.0.4",
     "widget-settings-ui-core": "https://github.com/Rise-Vision/widget-settings-ui-core.git",
@@ -39,6 +39,7 @@
     "angular-mocks": "^1.5.5",
     "angular-bootstrap": "^0.13.0",
     "rv-common-style": "fix/padding-utility",
-    "rv-common-app-components":"fix/padding-utility"
+    "common-header":"fix/padding-utility",
+    "rv-common-app-components": "0.1.1"
   }
 }
