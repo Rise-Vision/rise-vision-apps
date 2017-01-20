@@ -14,20 +14,20 @@
       rv-spinner rv-spinner-key="template-list-loader"
       rv-spinner-start-active="1"
       >
-      <table class="table-2 table-hover" id="templatesTable">
-        <thead>
-          <tr class="clickable" ng-click="factory.sortBy('name')">
-            <th id="tableHeaderName">
+      <table class="table table--hover" id="templatesTable">
+        <thead class="table-header">
+          <tr class="table-header__row clickable" ng-click="factory.sortBy('name')">
+            <th class="table-header__cell" id="tableHeaderName">
               {{'editor-app.sharedTemplates.name' | translate}}
               <i ng-if="search.sortBy == 'name'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
             </th>
-            <th></th>
+            <th class="table-header__cell"></th>
           </tr>
         </thead>
-        <tbody>
-        <tr class="text-clickable-row" data-ng-class="{'active' : toggleObject.item == $index}" ng-repeat="template in factory.items.list">
-            <td id="templateName"><a href="" ng-click="toggleObject.item = $index; select(template.id)">{{template.name}}</a></td>
-            <td class="text-right"><a id="templatePreview" href="" ng-click="editorFactory.preview(template.id); $event.stopPropagation()" translate>editor-app.sharedTemplates.preview</a></td>
+        <tbody class="table-body">
+        <tr class="table-body__row text-clickable-row" data-ng-class="{'active' : toggleObject.item == $index}" ng-repeat="template in factory.items.list">
+            <td class="table-body__cell" id="templateName"><a href="" ng-click="toggleObject.item = $index; select(template.id)">{{template.name}}</a></td>
+            <td class="table-body__cell text-right"><a id="templatePreview" href="" ng-click="editorFactory.preview(template.id); $event.stopPropagation()" translate>editor-app.sharedTemplates.preview</a></td>
         </tr>
         </tbody>
       </table>
