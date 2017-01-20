@@ -7,7 +7,7 @@
   </div>
 
   <div class="modal-body storage-full" stop-event="touchend">
-    <div class="padding-large-horizontal padding-large-bottom">
+    <div class="u_padding-lg-horizontal">
 
       <ng-include src="'partials/storage/global-actions.html'" class="pull-right" ng-show="!trialAvailable"></ng-include>
 
@@ -38,7 +38,7 @@
   	</div><!--padding-->
   </div><!--modal-body-->
 
-  <div class="modal-footer padding-large">
+  <div class="modal-footer u_padding-lg">
     <div ng-show="storageFactory.isMultipleSelector()">
       <button type="button" id="byURLButton" title="select" class="btn btn-primary pull-left" ng-show="enableByURL" ng-click="select()">
         <span translate="storage-client.add-by-url"></span> <i class="fa fa-link icon-right"></i>
