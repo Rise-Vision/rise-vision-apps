@@ -136,7 +136,7 @@ angular.module('risevision.displays.controllers')
         if (!display || $scope.displayService.statusLoading || $scope.displayService
           .screenshotLoading) {
           return 'loading';
-        } else if (display.os && display.os.indexOf('cros') >= 0) {
+        } else if (display.os && display.os.indexOf('cros') === 0) {
           return 'os-not-supported';
         } else if (statusFilter(display) === 'notinstalled') {
           return 'not-installed';
