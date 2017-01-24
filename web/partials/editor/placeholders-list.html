@@ -1,5 +1,5 @@
 <div class="editor-playlist scrollable-list">
-  <div class="editor-playlist-item clickable placeholderFromSideBar" 
+  <div class="editor-playlist-item u_clickable placeholderFromSideBar" 
     ng-repeat="placeholder in factory.getPlaceholders() track by $index"
     tooltip="{{'editor-app.workspace.sidebar.placeholderTooltip' | translate}}" 
     tooltip-placement="bottom" 
@@ -14,12 +14,12 @@
       <button class="btn btn-xs btn-default" id="removeButton" ng-click="remove(placeholder)"><i class="fa fa-trash-o"></i></button>
     </div>
     <div id="manageLink" ng-click="manage(placeholder)">
-      <p class="remove-bottom placeholder-item-name">{{placeholder.id}}</p>
+      <p class="u_remove-bottom placeholder-item-name">{{placeholder.id}}</p>
     </div>
   </div><!--editor-playlist-item-->
   <div ng-hide="factory.getPlaceholders().length">
     <div class="panel-body">
-      <p class="text-muted text-center remove-bottom" translate>editor-app.workspace.sidebar.no-placeholder</p>
+      <p class="text-muted text-center u_remove-bottom" translate>editor-app.workspace.sidebar.no-placeholder</p>
     </div>
   </div>
 </div>

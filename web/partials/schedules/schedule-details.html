@@ -30,7 +30,7 @@
         {{'common.delete' | translate}} <i class="fa fa-white fa-trash-o icon-right"></i>
       </button>
       <div>
-      <span class="hidden-xs add-right"><last-modified change-date="schedule.changeDate" changed-by="schedule.changedBy"></last-modified></span>
+      <span class="hidden-xs u_margin-right"><last-modified change-date="schedule.changeDate" changed-by="schedule.changedBy"></last-modified></span>
         <!-- Indicates a successful or positive action -->
         <button type="submit" class="btn btn-primary" ng-click="save()" ng-disabled="scheduleDetails.$invalid || factory.savingSchedule" require-role="cp">
           {{ factory.savingSchedule ? ('common.saving' | translate) : ('common.save' | translate)}} 

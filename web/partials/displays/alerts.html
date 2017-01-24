@@ -6,7 +6,7 @@
 		</div>
 
 		<div class="global-actions">
-			<span class="add-right text-muted" ng-if="!termsAccepted" translate>displays-app.alerts.acceptTerms</span>
+			<span class="u_margin-right text-muted" ng-if="!termsAccepted" translate>displays-app.alerts.acceptTerms</span>
 			<button id="alertsToggleButton" ng-click="alertsOn = !alertsOn" class="btn btn-lg" ng-class="{'btn-primary' : alertsOn, 'btn-default' : !alertsOn, 'disabled' : !termsAccepted, 'animated bounceIn' : termsAccepted}">
 			<span ng-if="alertsOn" translate>displays-app.alerts.turnOff</span>
 			<span ng-if="!alertsOn" translate>displays-app.alerts.turnOn</span>
@@ -17,17 +17,17 @@
 
 	<div class="panel">
 		<div class="panel-body bg-warning">
-			<div class="form-group remove-bottom">
-				<input id="termsAcceptedCheckbox" type="checkbox" ng-model="termsAccepted" ng-checked="termsAccepted" class="pull-left add-right"><label id="iAcceptLabel" class="control-label" translate>displays-app.alerts.iAccept</label>
+			<div class="form-group u_remove-bottom">
+				<input id="termsAcceptedCheckbox" type="checkbox" ng-model="termsAccepted" ng-checked="termsAccepted" class="pull-left u_margin-right"><label id="iAcceptLabel" class="control-label" translate>displays-app.alerts.iAccept</label>
 			</div>
 			<a id="toggleShowTerms" href="#" ng-click="$parent.showTerms = !$parent.showTerms" translate>displays-app.alerts.viewTerms</a>
-			<p id="termsText" ng-show="showTerms" class="add-top text-muted" translate>displays-app.alerts.terms</p>
+			<p id="termsText" ng-show="showTerms" class="u_margin-md-top text-muted" translate>displays-app.alerts.terms</p>
 			</div>
 		</div><!--warning-->
 
 		<div class="panel" ng-hide="alertsOn" id="alertsOffWarningContainer">
 			<div class="panel-body bg-danger">
-				<p class="remove-bottom"><i class="fa fa-warning icon-left"></i><span translate>displays-app.alerts.turnedOffWarning</span> <a href="" ng-click="$parent.alertsOn = true" translate>displays-app.alerts.turnOnShort</a></p>
+				<p class="u_remove-bottom"><i class="fa fa-warning icon-left"></i><span translate>displays-app.alerts.turnedOffWarning</span> <a href="" ng-click="$parent.alertsOn = true" translate>displays-app.alerts.turnOnShort</a></p>
 			</div>
 		</div><!--warning-->
 
@@ -53,7 +53,7 @@
 			<input id="passwordInput" type="password" class="form-control" ng-model="factory.alertSettings.password">
 		</div>
 		<hr>
-		<button id="toggleFilters" class="btn btn-default btn-block add-bottom" ng-click="showFilters = !showFilters">
+		<button id="toggleFilters" class="btn btn-default btn-block u_margin-md-bottom" ng-click="showFilters = !showFilters">
 			<span ng-show="!showFilters" translate>displays-app.alerts.showFilters</span>
 			<span ng-show="showFilters" translate>displays-app.alerts.hideFilters</span></button>
 
@@ -127,7 +127,7 @@
 
 		<div class="form-group">
 			<label class="control-label" translate>displays-app.alerts.presentation</label>
-			<div id="presentationField" class="panel-editable clickable" ng-click="factory.changePresentation()">
+			<div id="presentationField" class="panel-editable u_clickable" ng-click="factory.changePresentation()">
 				<div class="label label-tag" presentation-name="factory.alertSettings.presentationId"></div>
 			</div>
 		</div>
@@ -152,14 +152,14 @@
 
 		<div class="panel" ng-hide="alertsOn">
 			<div class="panel-body bg-danger">
-				<p class="remove-bottom"><i class="fa fa-warning icon-left"></i><span translate>displays-app.alerts.turnedOffWarning</span> <a href="" ng-click="$parent.alertsOn = true" translate>displays-app.alerts.turnOnShort</a></p>
+				<p class="u_remove-bottom"><i class="fa fa-warning icon-left"></i><span translate>displays-app.alerts.turnedOffWarning</span> <a href="" ng-click="$parent.alertsOn = true" translate>displays-app.alerts.turnOnShort</a></p>
 			</div>
 		</div><!--warning-->
 
 		<div class="button-row text-right">
 	      <p class="visible-xs"><last-modified change-date="factory.changeDate" changed-by="factory.changedBy"></last-modified></p>
 
-	      <span class="hidden-xs add-right"><last-modified change-date="factory.changeDate" changed-by="factory.changedBy"></last-modified></span>
+	      <span class="hidden-xs u_margin-right"><last-modified change-date="factory.changeDate" changed-by="factory.changedBy"></last-modified></span>
 
 	      <button id="saveButton" type="submit" class="btn btn-primary" ng-click="factory.save()" ng-disabled="factory.savingAlerts">
 	        {{ factory.savingAlerts ? ('common.saving' | translate) : ('common.save' | translate)}} 

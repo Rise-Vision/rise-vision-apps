@@ -3,7 +3,7 @@
   <form role="form" name="placeholderFields" novalidate>
     <div class="form-group" ng-hide="editingName">
       <label class="control-label" translate>editor-app.properties.labels.name</label>
-      <a id="editPlaceholderName" class="link add-left" href="" ng-click="editingName = true; placeholder.newId = placeholder.id">
+      <a id="editPlaceholderName" class="link u_margin-left" href="" ng-click="editingName = true; placeholder.newId = placeholder.id">
         {{ 'common.edit' | translate }}
       </a>
       <div class="input-group">
@@ -13,10 +13,10 @@
     
     <div class="form-group" ng-show="editingName">
       <label class="control-label" translate>editor-app.properties.labels.name</label>
-      <a id="savePlaceholderName" class="link add-left" href="" ng-click="updatePlaceholderName()">
+      <a id="savePlaceholderName" class="link u_margin-left" href="" ng-click="updatePlaceholderName()">
         {{'common.apply' | translate}}
       </a>
-      <a id="cancelPlaceholderName" class="link add-left" href="" ng-click="editingName = false">
+      <a id="cancelPlaceholderName" class="link u_margin-left" href="" ng-click="editingName = false">
         {{'common.cancel' | translate}}
       </a>
 
@@ -56,7 +56,7 @@
         </div></div>
       </div>
 
-      <div class="row sm-gutter half-top">
+      <div class="row sm-gutter u_margin-sm-top">
         <div class="col-sm-6">  <div class="input-group">
           <label class="control-label input-group-addon" translate>editor-app.workspace.sidebar.edit.settings.height</label>
           <input class="form-control" type="number" ng-model="placeholder.height">
@@ -73,7 +73,7 @@
 
 
     <div class="form-group">
-      <label class="control-label add-right" translate>editor-app.workspace.sidebar.edit.settings.zOrder</label>
+      <label class="control-label u_margin-right" translate>editor-app.workspace.sidebar.edit.settings.zOrder</label>
       <div class="row sm-gutter">
         <div class="col-sm-6">
           <input type="number" class="form-control" ng-model="placeholder.zIndex">
@@ -104,7 +104,7 @@
 
 
     <div class="form-group">
-      <label class="control-label add-right" translate>schedules-app.fields.timeline</label>
+      <label class="control-label u_margin-right" translate>schedules-app.fields.timeline</label>
       <timeline-textbox
       time-defined = "placeholder.timeDefined"
       start-date = "placeholder.startDate"

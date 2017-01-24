@@ -1,4 +1,4 @@
-<div id="pendingOperationsPanel" class="add-top" ng-show="factory.pendingOperations.length > 0">
+<div id="pendingOperationsPanel" class="u_margin-md-top" ng-show="factory.pendingOperations.length > 0">
     <div class="panel panel-info animated fadeInDown">
       <div class="panel-heading" ng-click="factory.isPOCollapsed = !factory.isPOCollapsed">
         <h3 class="panel-title">
@@ -26,15 +26,15 @@
     </div>
 </div>
 
-<div class="panel add-top" ng-show="downloadFactory.activeFolderDownloads.length > 0">
+<div class="panel u_margin-md-top" ng-show="downloadFactory.activeFolderDownloads.length > 0">
   <div class="panel-body">
     <div class="row" ng-repeat="folder in downloadFactory.activeFolderDownloads">
       <div class="col-sm-12">
         <span>
           <i class="fa fa-file-archive-o"></i> {{folder.name}}
         </span>
-        <a class="add-left" href="#" ng-click="downloadFactory.cancelFolderDownload(folder)"><span translate="common.cancel"></span></a>
-        <span class="text-muted add-left">
+        <a class="u_margin-left" href="#" ng-click="downloadFactory.cancelFolderDownload(folder)"><span translate="common.cancel"></span></a>
+        <span class="text-muted u_margin-left">
           <i class="fa fa-spinner fa-spin fa-lg"></i> {{folder.currentFile}}
         </span> 
       </div>

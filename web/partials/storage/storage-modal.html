@@ -13,7 +13,7 @@
 
       <div class="clearfix"></div>
 
-      <div ng-controller="SubscriptionStatusController" class="add-top">
+      <div ng-controller="SubscriptionStatusController" class="u_margin-md-top">
         <div id="subscription-status" subscription-status
              product-id="{{productId}}" product-code="{{productCode}}" company-id="{{companyId}}"
              ng-model="subscriptionStatus.result" show-store-modal="showStoreModal" expanded-format="true">
@@ -22,7 +22,7 @@
 
       <ng-include src="'partials/storage/upload-panel.html'"></ng-include>
       
-      <div class="row add-top" ng-show="isFileListVisible()">
+      <div class="row u_margin-md-top" ng-show="isFileListVisible()">
         <div class="col-xs-12 col-md-8">
           <ng-include src="'partials/storage/list-grid-toggle.html'"></ng-include>
           <storage-breadcrumb></storage-breadcrumb>

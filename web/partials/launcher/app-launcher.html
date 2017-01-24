@@ -4,12 +4,12 @@
   <ng-include ng-show="!editorFactory.presentations.loadingItems && editorFactory.presentations.items.list.length === 0" src="'partials/launcher/add-presentation-cta.html'"></ng-include>
   
   <div ng-show="editorFactory.presentations.items.list.length > 0">
-    <div class="text-right add-top add-bottom">
+    <div class="text-right u_margin-md-top u_margin-md-bottom">
       <button id="showHelpButton" class="btn btn-link" ng-click="toggleHelp()" ng-hide="showHelp">{{'launcher.howToShow'|translate}}</button>
       <button id="hideHelpButton" class="btn btn-link" ng-click="toggleHelp()" ng-show="showHelp">{{'launcher.hideAnimation'|translate}}</button>
     </div>
 
-    <div id="helpContainer" class="video-box add-bottom" ng-show="showHelp">
+    <div id="helpContainer" class="video-box u_margin-md-bottom" ng-show="showHelp">
         <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/Animations/howitworks.gif">
     </div>
 
@@ -22,17 +22,17 @@
           <div id="presentationsList" class="scrollable-list" rv-spinner rv-spinner-key="presentation-list-loader" rv-spinner-start-active="1"> 
 
             <div class="text-center" ng-hide="factory.loadingItems || factory.items.list.length > 0">
-            <h4 class="text-muted add-bottom add-top" translate>editor-app.list.noPresentations</h4>
+            <h4 class="text-muted u_margin-md-bottom u_margin-md-top" translate>editor-app.list.noPresentations</h4>
                 <button class="btn btn-primary btn-lg" ng-click="editorFactory.addPresentationModal()">{{'editor-app.list.actions.add' |translate}} <i class="fa fa-plus icon-right"></i></button>
             </div>
 
             <div class="list" ng-class="{'help-active' : showHelp}" ng-hide="factory.items.list.length == 0">
-              <div class="list-item clickable" ng-repeat="presentation in factory.items.list" ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})">
+              <div class="list-item u_clickable" ng-repeat="presentation in factory.items.list" ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})">
                 <h4>{{presentation.name}}</h4>
               </div><!--list-item-->
             </div>
           </div><!--scrollable-list-->
-          <a id="presentationsViewAll" class="add-top add-bottom btn btn-default btn-block" ui-sref="apps.editor.list" ng-hide="factory.items.list.length == 0" translate>editor-app.list.viewAll</a>
+          <a id="presentationsViewAll" class="u_margin-md-top u_margin-md-bottom btn btn-default btn-block" ui-sref="apps.editor.list" ng-hide="factory.items.list.length == 0" translate>editor-app.list.viewAll</a>
       </div><!--col-->
 
       <div class="col-sm-4" ng-controller="schedulesList">
@@ -42,17 +42,17 @@
           <div id="schedulesList" class="scrollable-list" rv-spinner rv-spinner-key="schedules-list-loader" rv-spinner-start-active="1"> 
 
             <div class="text-center" ng-hide="loadingSchedules || schedules.list.length > 0">
-              <h4 class="text-muted add-bottom add-top" translate>schedules-app.list.noSchedules</h4>
+              <h4 class="text-muted u_margin-md-bottom u_margin-md-top" translate>schedules-app.list.noSchedules</h4>
               <button class="btn btn-primary btn-lg" ui-sref="apps.schedules.add">{{ 'schedules-app.actions.new' | translate }} <i class="fa fa-plus icon-right"></i></button>
             </div>
 
             <div class="list" ng-class="{'help-active' : showHelp}" ng-hide="schedules.list.length == 0">
-              <div class="list-item clickable" ng-repeat="schedule in schedules.list" ui-sref="apps.schedules.details({scheduleId: schedule.id})">
+              <div class="list-item u_clickable" ng-repeat="schedule in schedules.list" ui-sref="apps.schedules.details({scheduleId: schedule.id})">
                 <h4>{{schedule.name}}</h4>
               </div><!--list-item-->
             </div>
           </div><!--scrollable-list-->
-          <a id="schedulesViewAll" class="add-top add-bottom btn btn-default btn-block" ui-sref="apps.schedules.list" ng-hide="schedules.list.length == 0" translate>schedules-app.list.viewAll</a>
+          <a id="schedulesViewAll" class="u_margin-md-top u_margin-md-bottom btn btn-default btn-block" ui-sref="apps.schedules.list" ng-hide="schedules.list.length == 0" translate>schedules-app.list.viewAll</a>
       </div><!--col-->
 
       <div class="col-sm-4" ng-controller="displaysList">
@@ -61,17 +61,17 @@
         <a class="btn btn-default btn-sm btn-block hidden-lg" ng-click="displayFactory.addDisplayModal()">{{ 'displays-app.actions.new' | translate }} <i class="fa fa-plus icon-right"></i></a>
           <div id="displaysList" class="scrollable-list" rv-spinner rv-spinner-key="displays-list-loader" rv-spinner-start-active="1"> 
             <div class="text-center" ng-hide="loadingDisplays || displays.items.list.length > 0">
-              <h4 class="text-muted add-bottom add-top" translate>displays-app.list.noDisplays</h4>
+              <h4 class="text-muted u_margin-md-bottom u_margin-md-top" translate>displays-app.list.noDisplays</h4>
               <button class="btn btn-primary btn-lg" ng-click="displayFactory.addDisplayModal()">{{ 'displays-app.actions.new' | translate }} <i class="fa fa-plus icon-right"></i></button>
             </div>
 
             <div class="list" ng-class="{'help-active' : showHelp}" ng-hide="displays.items.list.length == 0">
-              <div class="list-item clickable" ng-repeat="display in displays.items.list" ui-sref="apps.displays.details({displayId: display.id})">
+              <div class="list-item u_clickable" ng-repeat="display in displays.items.list" ui-sref="apps.displays.details({displayId: display.id})">
                 <h4>{{display.name}}</h4>
               </div><!--list-item-->
             </div>
           </div><!--scrollable-list-->
-          <a id="displaysViewAll" class="add-top add-bottom btn btn-default btn-block" ui-sref="apps.displays.list" ng-hide="displays.items.list.length == 0" translate>displays-app.list.viewAll</a>
+          <a id="displaysViewAll" class="u_margin-md-top u_margin-md-bottom btn btn-default btn-block" ui-sref="apps.displays.list" ng-hide="displays.items.list.length == 0" translate>displays-app.list.viewAll</a>
       </div><!--col-->
     </div><!--row-->    
   </div>

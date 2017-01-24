@@ -1,5 +1,5 @@
 <div ng-controller="UploadController">
-  <div class="panel animated fadeInDown upload-panel add-bottom" ng-show="uploader.queue.length > 0">
+  <div class="panel animated fadeInDown upload-panel u_margin-md-bottom" ng-show="uploader.queue.length > 0">
     
       <div ng-click="isCollapsed = !isCollapsed">
         <div class="panel-header"> <!-- //TODO: IS this a needed class? -->
@@ -26,10 +26,10 @@
       </div>
       <div ng-show="!isCollapsed">
       <div class="panel-body">
-        <div class="half-top" ng-repeat="item in uploader.queue">
+        <div class="u_margin-sm-top" ng-repeat="item in uploader.queue">
           <p>
             <span class="ellipsed">{{item.file.name}}</span>
-            <span class="text-muted add-left add-right"> {{ item.file.size|fileSizeFilter }}</span>
+            <span class="text-muted u_margin-left u_margin-right"> {{ item.file.size|fileSizeFilter }}</span>
             <a href="#" ng-click="removeItem(item)">
               <span translate="common.lremove"></span>
             </a>

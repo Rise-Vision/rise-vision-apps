@@ -16,7 +16,7 @@
   </a>
 </div>
 
-<div rv-sortable on-sort="sortItem(evt)" class="editor-playlist scrollable-list add-top sortable-list">
+<div rv-sortable on-sort="sortItem(evt)" class="editor-playlist scrollable-list u_margin-md-top sortable-list">
   <!-- Item Playlist -->
   <div class="editor-playlist-item rv-sortable-item" ng-repeat="item in factory.getItems() track by $index" ng-show="factory.getItems().length">
     <div class="list-grip rv-sortable-handle">
@@ -42,7 +42,7 @@
       <p class="playlist-item-name" ng-hide="item.type === 'widget' && (item.objectReference || item.settingsUrl)">{{item.name}}</p>
       <p>
 
-        <span class="text-small text-muted remove-bottom" ng-if="item.isSubscribed">
+        <span class="text-small text-muted u_remove-bottom" ng-if="item.isSubscribed">
           <span class="playlist-item-status" ng-click="playlistItemFactory.edit(item)">{{item.statusMessage}}</span>
         </span>
       </p>
@@ -50,7 +50,7 @@
 
     <!-- Empty State -->
     <div ng-hide="factory.getItems().length">
-      <p class="text-muted text-center remove-bottom" translate="editor-app.playlistItem.no-playlistItem"></p>
+      <p class="text-muted text-center u_remove-bottom" translate="editor-app.playlistItem.no-playlistItem"></p>
     </div>
   </div>
   <!-- End Item Playlist-->

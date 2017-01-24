@@ -18,11 +18,11 @@
 
 <search-filter filter-config="filterConfig" search="search" do-search="displays.doSearch"></search-filter>
 
-<div class="bg-warning u_padding-sm half-top half-bottom" ng-show="search.query">
+<div class="bg-warning u_padding-sm u_margin-sm-top u_margin-sm-bottom" ng-show="search.query">
   <span translate>displays-app.list.searchNotification</span>
 </div>
 
-<div class="panel half-top">
+<div class="panel u_margin-sm-top">
   <div class="scrollable-list"
   scrolling-list="displays.load()"
   rv-spinner rv-spinner-key="displays-list-loader"
@@ -31,7 +31,7 @@
     <table id="displaysListTable" class="table">
       <thead class="table-header">
         <tr class="table-header__row">
-          <th class="table-header__cell clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
+          <th class="table-header__cell u_clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
             <span>
             {{ 'displays-app.list.heading.name' | translate }}
             <!-- ngIf: search.sortBy == 'name' -->

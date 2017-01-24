@@ -8,7 +8,7 @@
   <div class="modal-body" stop-event="touchend">
     <div class="panel" ng-show="item.type === 'gadget'">
       <div class="panel-body bg-warning">
-        <p class="remove-bottom"><span translate>editor-app.playlistItem.legacyWarningPart1</span> <a  href="{{PREVIOUS_EDITOR_URL}}" target="_blank"><span translate>editor-app.playlistItem.legacyWarningPart2</span></a> <span translate>editor-app.playlistItem.legacyWarningPart3</span></p>
+        <p class="u_remove-bottom"><span translate>editor-app.playlistItem.legacyWarningPart1</span> <a  href="{{PREVIOUS_EDITOR_URL}}" target="_blank"><span translate>editor-app.playlistItem.legacyWarningPart2</span></a> <span translate>editor-app.playlistItem.legacyWarningPart3</span></p>
       </div>
     </div>
     <div class="form-group">
@@ -19,16 +19,16 @@
     <gadget-subscription-status item="item"></gadget-subscription-status>
 
     <p ng-show="widgetName"><strong>{{'editor-app.playlistItem.content' | translate}}:</strong>
-      <a id="widgetName" class="link add-left" href="" ng-click="widgetModalFactory.showWidgetModal(item,true)">
+      <a id="widgetName" class="link u_margin-left" href="" ng-click="widgetModalFactory.showWidgetModal(item,true)">
         {{widgetName}} <i class="fa fa-cog icon-right"></i>
       </a>
     </p>
     <hr>
 
-    <div class="form-group half-top">
+    <div class="form-group u_margin-sm-top">
 
-      <label class="control-label add-right" translate>editor-app.playlistItem.duration</label>
-      <label class="control-label control-label-secondary add-left">
+      <label class="control-label u_margin-right" translate>editor-app.playlistItem.duration</label>
+      <label class="control-label control-label-secondary u_margin-left">
         <input type="checkbox" ng-model="item.playUntilDone" />
         <span translate>editor-app.playlistItem.playUntilDone</span>
       </label>
@@ -43,7 +43,7 @@
     </div>
 
     <div class="form-group">
-      <label class="control-label add-right" translate>schedules-app.fields.timeline</label>
+      <label class="control-label u_margin-right" translate>schedules-app.fields.timeline</label>
       <timeline-textbox
       time-defined = "item.timeDefined"
       start-date = "item.startDate"

@@ -7,13 +7,13 @@
     <h3 class="modal-title" translate="displays-app.download.player" ng-show="downloadOnly"></h3>
   </div>
   <div class="modal-body text-center">
-  	<div class="video-box add-bottom">
+  	<div class="video-box u_margin-md-bottom">
       <img style="width: auto" src="https://s3.amazonaws.com/Rise-Images/Animations/addadisplay.gif">
     </div>
 
     <form id="displayAdd" role="form" name="displayAdd" novalidate>
 
-      <div class="add-top" ng-hide="display.id">
+      <div class="u_margin-md-top" ng-hide="display.id">
         <div class="form-group" ng-class="{'has-error': !displayAdd.name.$pristine && displayAdd.name.$invalid}" show-errors>
           <label class="control-label">{{'displays-app.add.name.name' | translate}} *</label>
           <input type="text" class="form-control" placeholder="{{ 'displays-app.add.name.name' | translate}}" id="name" name="name" ng-model="display.name" required focus-me="true">
@@ -26,39 +26,39 @@
           <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
         </div>
 
-        <button id="nextButton" class="btn btn-primary add-top" ng-click="save()" translate="displays-app.add.next" ng-disabled="displayAdd.$invalid || factory.savingDisplay" require-role="da"></button>
+        <button id="nextButton" class="btn btn-primary u_margin-md-top" ng-click="save()" translate="displays-app.add.next" ng-disabled="displayAdd.$invalid || factory.savingDisplay" require-role="da"></button>
       </div>
     </form>
 
-    <div ng-show="display.id && !showEmailForm" class="text-center add-top" >
+    <div ng-show="display.id && !showEmailForm" class="text-center u_margin-md-top" >
       <h4 translate="displays-app.add.instructions.title" translate-values='{ displayName: display.name}'></h4>
       <p translate="displays-app.add.instructions.step1"></p>
 
       <div class="row sm-gutter">
         <div class="col-xs-6">
             <a class="btn btn-sm btn-primary btn-block" href="http://install-versions.risevision.com/installer-win-32.exe" target="_blank" ng-click="displayTracker('Player Download', display.id, display.name, 'Windows 32bit')" translate="displays-app.download.win32"></a>
-            <a id="downloadWindows64" class="btn btn-sm btn-primary btn-block half-top" href="http://install-versions.risevision.com/installer-win-64.exe" target="_blank" ng-click="displayTracker('Player Download', display.id, display.name, 'Windows 64bit')" translate="displays-app.download.win64"></a>
+            <a id="downloadWindows64" class="btn btn-sm btn-primary btn-block u_margin-sm-top" href="http://install-versions.risevision.com/installer-win-64.exe" target="_blank" ng-click="displayTracker('Player Download', display.id, display.name, 'Windows 64bit')" translate="displays-app.download.win64"></a>
         </div>
         <div class="col-xs-6">
           <a class="btn btn-sm btn-primary btn-block" href="http://install-versions.risevision.com/installer-lnx-32.sh" target="_blank" ng-click="displayTracker('Player Download', display.id, display.name, 'Linux 32bit')" translate="displays-app.download.linux32"></a>
-          <a class="btn btn-sm btn-primary btn-block half-top" href="http://install-versions.risevision.com/installer-lnx-64.sh" target="_blank" ng-click="displayTracker('Player Download', display.id, display.name, 'Linux 64bit')" translate="displays-app.download.linux64"></a>
+          <a class="btn btn-sm btn-primary btn-block u_margin-sm-top" href="http://install-versions.risevision.com/installer-lnx-64.sh" target="_blank" ng-click="displayTracker('Player Download', display.id, display.name, 'Linux 64bit')" translate="displays-app.download.linux64"></a>
         </div>
       </div>
 
-      <p class="half-top text-center" translate="displays-app.add.instructions.step2"></p>
+      <p class="u_margin-sm-top text-center" translate="displays-app.add.instructions.step2"></p>
       <div class="panel panel-success display-panel">
           <div class="panel-body ng-binding">{{display.id}}</div>
       </div>
       <div ng-show="!downloadOnly">
-        <p class="half-top text-center">
+        <p class="u_margin-sm-top text-center">
           <p>{{'displays-app.add.instructions.emailInfo' | translate}} <b>{{userEmail}}</b></p>
-          <button class="btn btn-default half-top" ng-click="toggleEmailForm()" translate="displays-app.add.instructions.anotherEmail"></button>
+          <button class="btn btn-default u_margin-sm-top" ng-click="toggleEmailForm()" translate="displays-app.add.instructions.anotherEmail"></button>
         </p>
       </div>
     </div>
 
     <form id="anotherEmailForm" role="form" name="anotherEmailForm" novalidate>
-      <div class="add-top" ng-show="display.id && showEmailForm" >
+      <div class="u_margin-md-top" ng-show="display.id && showEmailForm" >
 
         <h4 class="text-center" translate="displays-app.add.instructions.anotherEmail"></h4>
         <div class="form-group text-center" ng-class="{'has-error': !anotherEmailForm.anotherEmail.$pristine && anotherEmailForm.anotherEmail.$invalid}" show-errors>
@@ -72,8 +72,8 @@
             <strong>{{errorMessage}}</strong>
           </div>
 
-          <button class="btn btn-default add-top" ng-click="toggleEmailForm()" translate="common.cancel"></button>
-          <button class="btn btn-primary add-top" ng-click="sendToAnotherEmail()" ng-disabled="anotherEmailForm.$invalid || displayEmail.sendingEmail" translate="common.send"></button>
+          <button class="btn btn-default u_margin-md-top" ng-click="toggleEmailForm()" translate="common.cancel"></button>
+          <button class="btn btn-primary u_margin-md-top" ng-click="sendToAnotherEmail()" ng-disabled="anotherEmailForm.$invalid || displayEmail.sendingEmail" translate="common.send"></button>
         </div>
       </div>
     </form>

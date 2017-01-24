@@ -17,7 +17,7 @@
 </div>
 
 <search-filter filter-config="filterConfig" search="search" do-search="doSearch"></search-filter> 
-<div class="panel half-top">
+<div class="panel u_margin-sm-top">
   <div class="scrollable-list"
     scrolling-list="load()"
     rv-spinner rv-spinner-key="schedules-list-loader"
@@ -25,7 +25,7 @@
     >
     <table id="schedulesListTable" class="table table--hover">
       <thead class="table-header">
-        <tr class="table-header__row clickable">
+        <tr class="table-header__row u_clickable">
           <th id="tableHeaderName" class="table-header__cell" ng-click="sortBy('name')">
             {{ 'schedules-app.list.heading.name' | translate }}
             <!-- ngIf: search.sortBy == 'name' -->

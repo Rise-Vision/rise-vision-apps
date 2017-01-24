@@ -27,15 +27,15 @@
       </div>
 
       <div class="form-group" ng-if="playlistItem.type === 'presentation'">
-        <label class="control-label add-right" >{{'schedules-app.playlist.item.presentation' | translate}}:</label>
-        <a class="clickable" id="presentationName" ng-click="selectPresentation()" presentation-name="playlistItem.objectReference"></a>
+        <label class="control-label u_margin-right" >{{'schedules-app.playlist.item.presentation' | translate}}:</label>
+        <a class="u_clickable" id="presentationName" ng-click="selectPresentation()" presentation-name="playlistItem.objectReference"></a>
       </div>
 
       <hr>
-      <div class="form-group half-top">
+      <div class="form-group u_margin-sm-top">
 
-        <label class="control-label add-right" translate>editor-app.playlistItem.duration</label>
-        <label class="control-label control-label-secondary add-left" ng-if="playlistItem.type === 'presentation'">
+        <label class="control-label u_margin-right" translate>editor-app.playlistItem.duration</label>
+        <label class="control-label control-label-secondary u_margin-left" ng-if="playlistItem.type === 'presentation'">
           <input type="checkbox" ng-model="playlistItem.playUntilDone" />
           <span translate>editor-app.playlistItem.playUntilDone</span>
         </label>

@@ -13,7 +13,7 @@
       <p class="text-danger" ng-show="!presentationPropertiesDetails.name.$pristine && presentationPropertiesDetails.name.$error.required" translate>
         editor-app.playlistItem.required
       </p>
-      <p id="presentationId" class="remove-top text-muted half-top" ng-show="presentationProperties.id"><small>{{'editor-app.properties.labels.id' | translate}}: {{presentationProperties.id}}</small></p>
+      <p id="presentationId" class="u_remove-top text-muted u_margin-sm-top" ng-show="presentationProperties.id"><small>{{'editor-app.properties.labels.id' | translate}}: {{presentationProperties.id}}</small></p>
     </div><!--form-control-->
 
     <button id="copyPresentationButton" class="btn btn-default" ng-show="presentationProperties.id" ng-click="copy()">{{'editor-app.properties.labels.copy' | translate}} <i class="fa fa-copy icon-right"></i></button>

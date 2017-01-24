@@ -18,7 +18,7 @@
   </div>
 
   <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>
-  <div class="panel half-top">
+  <div class="panel u_margin-sm-top">
     <div class="scrollable-list"
       scrolling-list="factory.load()"
       rv-spinner rv-spinner-key="presentation-list-loader"
@@ -26,7 +26,7 @@
       >
       <table id="presentationListTable" class="table table--hover">
         <thead class="table-header">
-          <tr class="table-header__row clickable">
+          <tr class="table-header__row u_clickable">
             <th id="tableHeaderName" class="table-header__cell" ng-click="factory.sortBy('name')">
               {{'editor-app.list.heading.name' | translate}}
               <!-- ngIf: search.sortBy == 'name' -->

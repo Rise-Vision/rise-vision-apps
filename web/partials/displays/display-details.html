@@ -12,9 +12,9 @@
   </div>
 
   <div>
-    <button class="btn btn-link pull-right half-top" ng-click="showHelp = !showHelp">{{ 'displays-app.fields.controls.howto' | translate }} </button>
+    <button class="btn btn-link pull-right u_margin-sm-top" ng-click="showHelp = !showHelp">{{ 'displays-app.fields.controls.howto' | translate }} </button>
       <div class="col-xs-12">
-        <div class="video-box add-bottom" ng-show="showHelp">
+        <div class="video-box u_margin-md-bottom" ng-show="showHelp">
           <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/Animations/howitworks.gif">
         </div>
       </div>
@@ -39,7 +39,7 @@
         {{'common.delete' | translate}}
         <i class="fa fa-white fa-trash-o icon-right"></i>
       </button>
-      <span class="hidden-xs add-right"><last-modified change-date="display.changeDate" changed-by="display.changedBy"></last-modified></span>
+      <span class="hidden-xs u_margin-right"><last-modified change-date="display.changeDate" changed-by="display.changedBy"></last-modified></span>
       <!-- Indicates a successful or positive action -->
       <button id="saveButton" type="submit" class="btn btn-primary" ng-click="save()" ng-disabled="displayDetails.$invalid || factory.savingDisplay" require-role="da">
         {{ factory.savingDisplay ? ('common.saving' | translate) : ('common.save' | translate)}}

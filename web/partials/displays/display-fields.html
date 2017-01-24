@@ -12,19 +12,19 @@
     <div class="col-sm-12 col-md-10 col-lg-8">
       <div class="row">
         <div class="col-sm-4">
-          <button type="button" class="btn btn-default btn-block half-bottom" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" required-role="da">
+          <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" required-role="da">
             {{ 'displays-app.fields.controls.restart.name' | translate }}
             <i class="fa fa-refresh icon-right"></i>
           </button>
         </div>
         <div class="col-sm-4">
-          <button type="button" class="btn btn-default btn-block half-bottom" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" required-role="da">
+          <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" required-role="da">
             {{ 'displays-app.fields.controls.reboot.name' | translate }}
             <i class="fa fa-power-off icon-right"></i>
           </button>
         </div>
         <div class="col-sm-4">
-          <button id="downloadPlayer" type="button" class="btn btn-default btn-block half-bottom" ng-click="showDownloadButtons = true">
+          <button id="downloadPlayer" type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-click="showDownloadButtons = true">
             {{ 'displays-app.fields.controls.download' | translate }}
             <i class="fa fa-cloud-download icon-right"></i>
           </button>
@@ -34,7 +34,7 @@
   </div>
 
   <!-- DOWNLOAD PLAYER BUTTONS -->
-  <div class="half-top animated fadeIn" ng-show="showDownloadButtons">
+  <div class="u_margin-sm-top animated fadeIn" ng-show="showDownloadButtons">
     <download-player></download-player>
   </div>
 
@@ -50,7 +50,7 @@
 </div>
 
 <div>
-  <div class="panel panel-default half-top">
+  <div class="panel panel-default u_margin-sm-top">
     <table class="table">
       <thead class="table-header">
         <tr class="table-header__row">
@@ -92,9 +92,9 @@
   </div>
 </div>
 
-<div class="add-top u_lh-normal">
-  <label class="control-label add-right">{{ 'displays-app.fields.player.schedule.label' | translate }}</label>
-  <span ng-if="!displayService.hasSchedule(display)" class="add-right">{{ 'displays-app.fields.player.schedule.notScheduled' | translate }} </span>
+<div class="u_margin-md-top u_lh-normal">
+  <label class="control-label u_margin-right">{{ 'displays-app.fields.player.schedule.label' | translate }}</label>
+  <span ng-if="!displayService.hasSchedule(display)" class="u_margin-right">{{ 'displays-app.fields.player.schedule.notScheduled' | translate }} </span>
   <a class="btn btn-primary btn-xs" ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
     {{ 'displays-app.fields.player.schedule.addToSchedule' | translate }} <i class="fa fa-external-link icon-right" aria-hidden="true"></i>
   </a>
@@ -202,7 +202,7 @@
   </div>
 </div>
 
-<div ng-hide="display.useCompanyAddress" class="add-top add-bottom">
+<div ng-hide="display.useCompanyAddress" class="u_margin-md-top u_margin-md-bottom">
   <div class="form-group">
     <label class="control-label" translate>displays-app.fields.address.description</label>
     <input type="text" class="form-control" ng-model="display.addressDescription">

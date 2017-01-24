@@ -1,8 +1,8 @@
 <table id="storageFileList" class="table table--hover table--selector" ng-class="storageFactory.isMultipleSelector() ? 'table--multiple-selector' : 'table--single-selector'" ng-show="filesDetails.code!==202 && filesDetails.code!==404 && isFileListVisible()">
   <thead class="table-header">
-    <tr class="table-header__row clickable">
+    <tr class="table-header__row u_clickable">
       <th class="col-sm-6 table-header__cell">
-        <input type="checkbox" class="add-right" ng-model="selectAll">
+        <input type="checkbox" class="u_margin-right" ng-model="selectAll">
         <label ng-click="fileSelectorFactory.selectAllCheckboxes(query)" ng-show="storageFactory.isMultipleSelector()"></label>
         <span id="tableHeaderName" ng-click="orderByAttribute = fileNameOrderFunction; reverseSort = !reverseSort">
           <span translate="common.file-name" ></span>
@@ -63,7 +63,7 @@
       <td ng-if="!storageFactory.fileIsFolder(file)" class="col-sm-6 table-body__cell">
         <span class="file" ng-class='{"throttled-type": file.isThrottled && !storageFactory.fileIsFolder(file)}'>
           <span style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;" data-toggle="tooltip" title="{{file.name | fileNameFilter:storageFactory.folderPath}}">
-            <i class="fa" ng-class='{"fa-exclamation": file.isThrottled && !storageFactory.fileIsFolder(file), "icon-red": file.isThrottled && !storageFactory.fileIsFolder(file)}'></i>
+            <i class="fa" ng-class='{"fa-exclamation": file.isThrottled && !storageFactory.fileIsFolder(file), "u_icon-red": file.isThrottled && !storageFactory.fileIsFolder(file)}'></i>
             <strong>{{file.name | fileNameFilter:storageFactory.folderPath}}</strong>
           </span>
         </span>

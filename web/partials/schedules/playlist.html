@@ -1,14 +1,14 @@
-<div class="panel half-top">
+<div class="panel u_margin-sm-top">
   <div class="scrollable-list">
     <table class="table table--hover">
       <tbody class="table-body">
-        <tr class="table-body__row clickable" ng-repeat="playlistItem in playlistItems track by $index">
+        <tr class="table-body__row u_clickable" ng-repeat="playlistItem in playlistItems track by $index">
           <td ng-click="manage(playlistItem)" class="table-body__cell">
-            <p class="playlist-item-name remove-bottom"><strong>{{playlistItem.name}}</strong></p>
+            <p class="playlist-item-name u_remove-bottom"><strong>{{playlistItem.name}}</strong></p>
           </td>
           <td class="table-body__cell hidden-xs" ng-click="manage(playlistItem)">
-            <p class="playlist-item-reference text-muted remove-bottom" id="presentationNameCell" ng-if="playlistItem.type === 'presentation'" presentation-name="playlistItem.objectReference"></p>
-            <p class="playlist-item-reference text-muted remove-bottom" ng-if="playlistItem.type === 'url'">{{playlistItem.objectReference}}</p>
+            <p class="playlist-item-reference text-muted u_remove-bottom" id="presentationNameCell" ng-if="playlistItem.type === 'presentation'" presentation-name="playlistItem.objectReference"></p>
+            <p class="playlist-item-reference text-muted u_remove-bottom" ng-if="playlistItem.type === 'url'">{{playlistItem.objectReference}}</p>
           </td>
           <td class="table-body__cell text-right">
             <div class="table-actions">
@@ -29,7 +29,7 @@
     </table>
     <div ng-hide="playlistItems.length">
       <div class="panel-body">
-        <p class="text-muted text-center remove-bottom" translate>schedules-app.playlist.empty</p>
+        <p class="text-muted text-center u_remove-bottom" translate>schedules-app.playlist.empty</p>
       </div>
     </div>
   </div>
