@@ -231,6 +231,7 @@ describe('controller: display details', function() {
 
       expect($scope.screenshotState({})).to.equal('not-installed');
       expect($scope.screenshotState({ playerVersion: 1, os: 'cros-x64' })).to.equal('os-not-supported');
+      expect($scope.screenshotState({ playerVersion: 1, os: 'Microsoft' })).to.equal('upgrade-player');
       expect($scope.screenshotState({ playerVersion: 1, playerName: 'test' })).to.equal('upgrade-player');
       expect($scope.screenshotState({ playerVersion: '2016', playerName: 'RisePlayerElectron' })).to.equal('upgrade-player');
       expect($scope.screenshotState({ playerVersion: '2018', playerErrorCode: 0, playerName: 'RisePlayerElectron' })).to.equal('no-schedule');
