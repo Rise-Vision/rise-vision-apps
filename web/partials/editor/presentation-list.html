@@ -51,7 +51,7 @@
           <tr class="table-body__row" ng-repeat="presentation in factory.items.list" ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})">
             <td class="table-body__cell col-sm-9"><a ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})"><strong>{{presentation.name}}</strong></a></td>
             <td class="table-body__cell col-sm-9 hidden-xs"><span ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})"><span ng-class="{'text-danger': presentation.revisionStatusName==='Revised'}">{{presentation.revisionStatusName | presentationStatus}}</span></span></td>
-            <td class="table-body__cell col-sm-2 hidden-xs nowrap" ><span ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})">{{presentation.changeDate | date:'d-MMM-yyyy h:mm a'}}</span></td>
+            <td class="table-body__cell col-sm-2 hidden-xs u_nowrap" ><span ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})">{{presentation.changeDate | date:'d-MMM-yyyy h:mm a'}}</span></td>
           </tr>
           <!-- If no presentation available -->
           <tr class="table-body__row" ng-show="factory.items.list.length === 0 && !search.query">

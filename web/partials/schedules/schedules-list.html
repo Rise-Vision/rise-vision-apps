@@ -43,7 +43,7 @@
       <tbody class="table-body">
         <tr class="table-body__row" ng-repeat="schedule in schedules.list" ui-sref="apps.schedules.details({scheduleId: schedule.id})">
           <td class="table-body__cell col-sm-9"><a ui-sref="apps.schedules.details({scheduleId: schedule.id})"><strong>{{schedule.name}}</strong></a></td>
-          <td class="table-body__cell col-sm-2 hidden-xs nowrap"><span ui-sref="apps.schedules.details({scheduleId: schedule.id})">{{schedule.changeDate | date:'d-MMM-yyyy h:mm a'}}</span></td>
+          <td class="table-body__cell col-sm-2 hidden-xs u_nowrap"><span ui-sref="apps.schedules.details({scheduleId: schedule.id})">{{schedule.changeDate | date:'d-MMM-yyyy h:mm a'}}</span></td>
         </tr>
         <!-- If no schedules available -->
         <tr class="table-body__row" ng-show="schedules.list.length === 0 && !search.query">
