@@ -106,13 +106,13 @@
 <div class="row half-top">
   <div class="col-sm-6 col-xs-12">
     <div class="l_display-screenshot" ng-class="{ 'l_display-screenshot-offline': (screenshotState(display).indexOf('offline') >= 0) }">
-      <div class="u_lh-normal half-bottom">
+      <div class="u_lh-normal u_margin-sm-bottom">
         <label class="control-label">{{ 'displays-app.fields.screenshot.title' | translate }}</label>
         <button id="btnUpdateScreenshot" class="btn btn-default pull-right" ng-click="requestScreenshot()" ng-disabled="reloadScreenshotDisabled(display)">
           <i class="fa fa-refresh fa-white half-left"></i> {{ 'displays-app.fields.screenshot.updateScreenshot' | translate }}
         </button>
       </div>
-      <div class="panel panel-default half-bottom text-center">
+      <div class="panel panel-default u_margin-sm-bottom text-center">
         <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'no-schedule'"">
           <p class="text-muted">{{ 'displays-app.fields.screenshot.notAvailable' | translate }}</p>
           <p class="text-muted">{{ 'displays-app.fields.screenshot.notScheduled' | translate }}</p>
