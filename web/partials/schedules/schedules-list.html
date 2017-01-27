@@ -2,12 +2,13 @@
     <div class="banner-block"> Can't get your content showing at the right time?
         <br/>
         <a ng-click="scheduleTracker('Clicked Ad Experiment Schedule')"  href="https://store.risevision.com/product/30/rise-training" target="_blank">Sign up for Rise Training!</a></div>
-    <div class="title-block">
-        <!-- App Title -->
-        <h1 id="title" translate>schedules-app.title</h1>
-    </div>
-    <div class="global-actions" require-role="cp">
-        <a id="scheduleAddButton" ui-sref="apps.schedules.add" class="btn btn-lg btn-primary">
+  <div class="title-block">
+    <!-- App Title -->
+    <h1 id="title" translate>schedules-app.title</h1>
+  </div>
+
+  <div class="global-actions" require-role="cp">
+    <a id="scheduleAddButton" ui-sref="apps.schedules.add" class="btn btn-lg btn-primary">
       {{ 'schedules-app.actions.new' | translate }}
       <i class="fa fa-plus icon-right"></i> 
     </a>
