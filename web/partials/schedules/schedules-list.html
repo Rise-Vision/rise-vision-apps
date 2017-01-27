@@ -1,16 +1,19 @@
 <div class="app-header">
-  <div class="title-block">
-    <!-- App Title -->
-    <h1 id="title" translate>schedules-app.title</h1>
-  </div>
-
-  <div class="global-actions" require-role="cp">
-    <a id="scheduleAddButton" ui-sref="apps.schedules.add" class="btn btn-lg btn-primary">
+    <div class="banner-block"> Need a Media Player for your Display?
+        <br/>
+        <a href="#">Check out our Store!</a></div>
+    <div class="title-block">
+        <!-- App Title -->
+        <h1 id="title" translate>schedules-app.title</h1>
+    </div>
+    <div class="global-actions" require-role="cp">
+        <a id="scheduleAddButton" ui-sref="apps.schedules.add" class="btn btn-lg btn-primary">
       {{ 'schedules-app.actions.new' | translate }}
       <i class="fa fa-plus icon-right"></i> 
     </a>
-  </div>
+    </div>
 </div>
+
 
 <search-filter filter-config="filterConfig" search="search" do-search="doSearch"></search-filter> 
 <div class="panel half-top">
