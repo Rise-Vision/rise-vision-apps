@@ -2,17 +2,16 @@
   <div class="banner-block"></div>
   <div class="title-block">
     <!-- App Title -->
-   <h1 translate>schedules-app.title</h1>
- </div>
+  <h1 translate>schedules-app.title</h1>
+</div>
 
   <div class="global-actions" require-role="cp">
-    <button ng-click="addSchedule()" class="btn btn-lg btn-primary">   
+    <button ng-click="addSchedule()" class="btn btn-lg btn-primary">    
       {{ 'schedules-app.actions.new' | translate }}
       <i class="fa fa-plus icon-right"></i> 
     </button>
   </div>
 </div>
-
 
 <div rv-spinner rv-spinner-key="schedule-loader" rv-spinner-start-active="0"></div>
 

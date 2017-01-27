@@ -3,8 +3,7 @@
 angular.module('risevision.displays.services')
   .value('DISPLAY_EVENTS_TO_BQ', [
     'Display Created',
-    'Player Download',
-    'Clicked Experiment Jan2017'
+    'Player Download'
   ])
   .factory('displayTracker', ['userState', 'segmentAnalytics',
     'bigQueryLogging', 'DISPLAY_EVENTS_TO_BQ',
