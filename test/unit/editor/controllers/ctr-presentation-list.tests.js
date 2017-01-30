@@ -61,6 +61,7 @@ describe('controller: Presentation List', function() {
     expect($scope.factory.loadingItems).to.be.false;
     expect($scope.search).to.be.ok;
     expect($scope.filterConfig).to.be.ok;
+    expect($scope.presentationTracker).to.be.ok;
     
   });
   

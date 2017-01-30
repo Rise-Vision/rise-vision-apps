@@ -120,6 +120,7 @@ describe('controller: schedules list', function() {
     expect($scope.search).to.have.property('count');
     expect($scope.search).to.have.property('reverse');
     expect($scope.search.count).to.equal(5);
+    expect($scope.scheduleTracker).to.be.truely;
   });
   
   beforeEach(function(done) {
