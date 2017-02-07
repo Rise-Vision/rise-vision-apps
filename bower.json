@@ -15,6 +15,7 @@
     "angular-bootstrap-colorpicker": "~3.0.19",
     "angular-ui-codemirror": "~0.3.0",
     "angular-vertilize": "~1.0.1",
+    "angular-mocks": "1.5.0",
     "common-header": "https://github.com/Rise-Vision/common-header.git#v1.12.4",
     "component-storage-selector": "https://github.com/Rise-Vision/component-storage-selector.git",
     "rv-common-i18n": "https://github.com/Rise-Vision/common-i18n.git",
@@ -36,7 +37,7 @@
     "jquery": "^2",
     "angular": "~1.5.0",
     "angular-sanitize": "~1.5.0",
-    "angular-mocks": "^1.5.5",
+    "angular-mocks": "~1.5.0",
     "angular-bootstrap": "^0.13.0",
     "rv-common-style": "v1.4.0"
   }
