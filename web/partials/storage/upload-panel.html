@@ -28,7 +28,7 @@
       <div class="panel-body">
         <div class="u_margin-sm-top" ng-repeat="item in uploader.queue">
           <p>
-            <span class="ellipsed">{{item.file.name}}</span>
+            <span class="u_ellipsis-lg">{{item.file.name}}</span>
             <span class="text-muted u_margin-left u_margin-right"> {{ item.file.size|fileSizeFilter }}</span>
             <a href="#" ng-click="removeItem(item)">
               <span translate="common.lremove"></span>
