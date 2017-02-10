@@ -11,7 +11,7 @@
 <button id="" type="button" class="btn btn-link" title="Copy" ng-click="factory.()" ng-hide="storageFactory.isTrashFolder()" ng-disabled="isDisabledCopyUrlButton()">
   <i class="fa fa-files-o fa-2x" ng-class="{ 'icon-gray': isDisabledCopyUrlButton() }"></i>
 </button>
-<button id="fileDownloadButton" type="button" class="btn btn-link" title="Download" ng-click="factory.downloadButtonClick()" ng-disabled="isDisabledDownloadButton()">
+<button id="fileDownloadButton" type="button" class="btn btn-link hidden-xs" title="Download" ng-click="factory.downloadButtonClick()" ng-disabled="isDisabledDownloadButton()">
   <i class="fa fa-cloud-download fa-2x" ng-class="{ 'icon-gray': isDisabledDownloadButton() }"></i>
 </button>
 <button id="fileCopyUrlButton" type="button" class="btn btn-link" title="Copy Url" ng-click="factory.copyUrlButtonClick()" ng-hide="storageFactory.isTrashFolder()" ng-disabled="isDisabledCopyUrlButton()">

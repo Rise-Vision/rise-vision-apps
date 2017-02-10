@@ -62,7 +62,7 @@
       </td>
       <td ng-if="!storageFactory.fileIsFolder(file)" class="col-sm-6 table-body__cell">
         <span class="file" ng-class='{"throttled-type": file.isThrottled && !storageFactory.fileIsFolder(file)}'>
-          <span class="u_ellipsis" data-toggle="tooltip" title="{{file.name | fileNameFilter:storageFactory.folderPath}}">
+          <span class="u_ellipsis-lg" data-toggle="tooltip" title="{{file.name | fileNameFilter:storageFactory.folderPath}}">
             <i class="fa" ng-class='{"fa-exclamation": file.isThrottled && !storageFactory.fileIsFolder(file), "u_icon-red": file.isThrottled && !storageFactory.fileIsFolder(file)}'></i>
             <strong>{{file.name | fileNameFilter:storageFactory.folderPath}}</strong>
           </span>

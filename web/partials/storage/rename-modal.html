@@ -7,7 +7,8 @@
   </div>
   <div class="modal-body" stop-event="touchend" autofocus="autofocus">
     <div class="form-group">
-      <input id="renameFileFolderInput" type="text" class="form-control" ng-model="folderName" placeholder="image001.jpg" ng-focus="duplicateFolderSpecified=false" autofocus="autofocus">
+      <input id="renameFileFolderInput" type="text" class="form-control" value="image001.jpg" onFocus="this.select()">
+     <!-- TODO -ERROR STATES - NEXT CARD -->
      <!--  <br>
       <div ng-show="duplicateFolderSpecified">
         <div class="alert alert-warning" role="alert">{{"storage-client.duplicate-folder" | translate}}</div>
