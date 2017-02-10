@@ -132,7 +132,6 @@ angular.module('risevision.storage.services')
         return _fileHasExtension(file, SELECTOR_FILTERS.VIDEOS.extensions);
       }
 
-
       factory.isTrashFolder = function () {
         return factory.folderPath === '--TRASH--/';
       };
@@ -148,6 +147,14 @@ angular.module('risevision.storage.services')
       factory.renameFileFolder = function () {
         $modal.open({
           templateUrl: 'partials/storage/rename-modal.html',
+          controller: 'NewFolderModalCtrl',
+          size: 'md'
+        });
+      };
+
+      factory.breakLinkWarning = function () {
+        $modal.open({
+          templateUrl: 'partials/storage/break-link-warning.html',
           controller: 'NewFolderModalCtrl',
           size: 'md'
         });
