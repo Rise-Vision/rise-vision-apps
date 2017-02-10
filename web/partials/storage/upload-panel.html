@@ -28,11 +28,11 @@
       <div class="panel-body">
         <div class="u_margin-sm-top" ng-repeat="item in uploader.queue">
           <p>
-            <span class="u_ellipsis-lg">{{item.file.name}}</span>
-            <span class="text-muted u_margin-left u_margin-right"> {{ item.file.size|fileSizeFilter }}</span>
-            <a href="#" ng-click="removeItem(item)">
+            <a class="pull-right" href="#" ng-click="removeItem(item)">
               <span translate="common.lremove"></span>
             </a>
+            <span class="pull-right text-muted u_margin-left u_margin-right"> {{ item.file.size|fileSizeFilter }}</span>
+            <span class="u_ellipsis-lg">{{item.file.name}}</span>
           </p>
           <div class="progress inline-progress">
             <div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar"
