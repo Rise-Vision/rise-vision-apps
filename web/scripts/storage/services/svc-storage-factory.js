@@ -145,6 +145,14 @@ angular.module('risevision.storage.services')
         });
       };
 
+      factory.renameFileFolder = function () {
+        $modal.open({
+          templateUrl: 'partials/storage/rename-modal.html',
+          controller: 'NewFolderModalCtrl',
+          size: 'md'
+        });
+      };
+
       return factory;
     }
   ]);
