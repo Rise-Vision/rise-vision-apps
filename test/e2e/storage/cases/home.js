@@ -56,20 +56,20 @@ var HomeScenarios = function() {
         expect(filesListPage.getSearchInput().isDisplayed()).to.eventually.be.true;       
       });
 
-      it('should show grid and list selectors',function(){
-        expect(filesListPage.getGridViewSelector().isDisplayed()).to.eventually.be.true;
-        expect(filesListPage.getListViewSelector().isDisplayed()).to.eventually.be.true;
-      });
+      // it('should show grid and list selectors',function(){
+      //   expect(filesListPage.getGridViewSelector().isDisplayed()).to.eventually.be.true;
+      //   expect(filesListPage.getListViewSelector().isDisplayed()).to.eventually.be.true;
+      // });
 
-      it('should switcch between grid and list views',function(){
-        expect(filesListPage.getFilesGrid().isDisplayed()).to.eventually.be.true;
+      // it('should switcch between grid and list views',function(){
+      //   expect(filesListPage.getFilesGrid().isDisplayed()).to.eventually.be.true;
 
-        filesListPage.getListViewSelector().click();
-        expect(filesListPage.getFilesListTable().isDisplayed()).to.eventually.be.true;
+      //   filesListPage.getListViewSelector().click();
+      //   expect(filesListPage.getFilesListTable().isDisplayed()).to.eventually.be.true;
 
-        filesListPage.getGridViewSelector().click();
-        expect(filesListPage.getFilesGrid().isDisplayed()).to.eventually.be.true;
-      });
+      //   filesListPage.getGridViewSelector().click();
+      //   expect(filesListPage.getFilesGrid().isDisplayed()).to.eventually.be.true;
+      // });
 
       it('should show thumbnails',function(){
         filesListPage.filterFileList("logo.gif");
