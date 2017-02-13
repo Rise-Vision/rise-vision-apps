@@ -8,8 +8,7 @@
   <div class="modal-body" stop-event="touchend" autofocus="autofocus">
     <div class="form-group">
       <input id="renameFileFolderInput" type="text" class="form-control" value="image001.jpg" onFocus="this.select()">
-     <!-- TODO -ERROR STATES - NEXT CARD -->
-     <!--  <br>
+      <br>
       <div ng-show="duplicateFolderSpecified">
         <div class="alert alert-warning" role="alert">{{"storage-client.duplicate-folder" | translate}}</div>
       </div>
@@ -21,11 +20,11 @@
       </div>
       <div ng-show="serverError">
         <div class="alert alert-danger" role="alert">{{"storage-client.server-error" | translate}} {{respCode}}</div>
-      </div> -->
+      </div>
     </div>
   </div>
   <div class="modal-footer">
-      <button id="renameFileFolderModalSaveButton" class="btn btn-primary btn-fixed-width" ng-click="ok()">
+      <button id="renameFileFolderModalSaveButton" class="btn btn-primary btn-fixed-width" onclick="$('#renameFileFolderModal .alert').show();">
         <span translate="common.save"></span> <i class="fa fa-white fa-check icon-right"></i>
       </button>
       <button id="renameFileFolderModalCancelButton" class="btn btn-default btn-fixed-width" ng-click="cancel()">
