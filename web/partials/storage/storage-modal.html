@@ -23,12 +23,14 @@
       <ng-include src="'partials/storage/upload-panel.html'"></ng-include>
       
       <div class="row u_margin-md-top" ng-show="isFileListVisible()">
-        <div class="col-xs-12 col-md-8">
-          <ng-include src="'partials/storage/list-grid-toggle.html'"></ng-include>
+        <div class="col-xs-12 col-md-6">
           <storage-breadcrumb></storage-breadcrumb>
         </div>
-        <div class="col-xs-12 col-md-4">
+        <div class="col-xs-11 col-md-5">
           <search-filter filter-config="filterConfig" search="search" do-search="search.doSearch"></search-filter>
+        </div>
+        <div class="col-xs-1 col-md-1">
+        <ng-include src="'partials/storage/list-grid-toggle.html'"></ng-include>
         </div>
       </div>
 
