@@ -154,6 +154,11 @@ angular.module('risevision.storage.services')
 
       factory.breakLinkWarning = function () {
         $modal.open({
+          templateUrl: 'partials/storage/rename-modal.html',
+          controller: 'NewFolderModalCtrl',
+          size: 'md'
+        });
+        $modal.open({
           templateUrl: 'partials/storage/break-link-warning.html',
           controller: 'NewFolderModalCtrl',
           size: 'md'
