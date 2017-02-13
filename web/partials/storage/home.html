@@ -33,6 +33,9 @@
 				<ng-include src="'partials/storage/list-grid-toggle.html'"></ng-include>
 				<div id="files-toolbar" ng-hide="fileListStatus.code === 404">
 					<div class="pull-right">
+						<span class="selected-count" ng-show="filesDetails.checkedItemsCount > 0">
+  							<span translate="storage-client.selected-items" translate-values="{ count: filesDetails.checkedItemsCount }"></span>
+						</span>
 						<div class="icon-nav">
 					        <ng-include src="'partials/storage/file-actions.html'"></ng-include>
 			      		</div>
