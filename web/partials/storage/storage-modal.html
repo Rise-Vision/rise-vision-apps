@@ -7,8 +7,6 @@
   </div>
 
   <div class="modal-body storage-full" stop-event="touchend">
-    <div class="u_padding-lg-horizontal">
-
       <ng-include src="'partials/storage/global-actions.html'" class="pull-right" ng-show="!trialAvailable"></ng-include>
 
       <div class="clearfix"></div>
@@ -25,10 +23,10 @@
        <search-filter filter-config="filterConfig" search="search" do-search="search.doSearch"></search-filter>
       
       <div class="row u_margin-md-top" ng-show="isFileListVisible()">
-        <div class="col-md-6">
+        <div class="col-xs-10">
           <storage-breadcrumb></storage-breadcrumb>
         </div>
-        <div class="col-md-6">
+        <div class="col-xs-2">
          <ng-include src="'partials/storage/list-grid-toggle.html'"></ng-include>
         </div>
       </div>
@@ -36,7 +34,6 @@
       <ng-include src="'partials/storage/files-list.html'"></ng-include>
    	
       <ng-include src="'partials/storage/start-trial.html'" ng-show="trialAvailable"></ng-include>
-  	</div><!--padding-->
   </div><!--modal-body-->
 
   <div class="modal-footer u_padding-lg">

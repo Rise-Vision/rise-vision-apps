@@ -1,7 +1,3 @@
-<span class="selected-count" ng-show="filesDetails.checkedItemsCount > 0">
-  <span translate="storage-client.selected-items" translate-values="{ count: filesDetails.checkedItemsCount }"></span>
-</span>
-
 <button id="" type="button" class="btn btn-link" title="Rename" ng-click="storageFactory.renameFileFolder()" ng-hide="storageFactory.isTrashFolder()" ng-disabled="isDisabledCopyUrlButton()">
   <i class="fa fa-pencil fa-2x" ng-class="{ 'icon-gray': isDisabledCopyUrlButton() }"></i>
 </button>
