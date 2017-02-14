@@ -10,7 +10,7 @@
       <input id="renameFileFolderInput" type="text" class="form-control" value="image001.jpg" onFocus="this.select()">
       <br>
       <div ng-show="duplicateFolderSpecified">
-        <div class="alert alert-warning" role="alert">{{"storage-client.duplicate-folder" | translate}}</div>
+        <div class="alert alert-warning" role="alert">Name is in use, please choose another.</div>
       </div>
       <div ng-show="accessDenied && accessDeniedMessage">
         <div class="alert alert-danger" role="alert">{{accessDeniedMessage}}</div>
@@ -24,7 +24,7 @@
     </div>
   </div>
   <div class="modal-footer">
-      <button id="renameFileFolderModalSaveButton" class="btn btn-primary btn-fixed-width" ng-click="!alertsOn = alertsOn">
+      <button id="renameFileFolderModalSaveButton" class="btn btn-primary btn-fixed-width" ng-click="duplicateFolderSpecified=true">
         <span translate="common.save"></span> <i class="fa fa-white fa-check icon-right"></i>
       </button>
       <button id="renameFileFolderModalCancelButton" class="btn btn-default btn-fixed-width" ng-click="cancel()">

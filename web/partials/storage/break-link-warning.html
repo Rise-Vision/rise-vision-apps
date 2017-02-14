@@ -12,7 +12,14 @@
    </div>
   </div>
   <div class="modal-footer">
-      <label type="checkbox"></label>
+      <div class="col-sm-6 col-xs-12">
+        <div class="checkbox text-left">
+          <label>
+          <input name="choice" type="checkbox" ng-model="background.useImage" class="ng-pristine ng-untouched ng-valid ng-empty">
+          Do not show warnings again <!-- //translate -->
+          </label>
+        </div>
+      </div>
       <button id="renameFileFolderModalSaveButton" class="btn btn-primary btn-fixed-width" ng-click="cancel()"> 
         <span>Proceed</span> <i class="fa fa-white fa-check icon-right"></i>
       </button>
