@@ -45,10 +45,6 @@ var FirstSigninScenarios = function() {
         commonHeaderPage.selectSubCompany(subCompanyName);   
       });
 
-      it('should show Priority Support Banner', function () {
-        expect(homepage.getPrioritySupportBanner().isDisplayed()).to.eventually.be.true;
-      });
-
       it('should show Add Presentation CTA home page', function () {
         helper.wait(homepage.getPresentationCTA(), 'Presentation Call to Action');
         expect(homepage.getPresentationCTA().isDisplayed()).to.eventually.be.true;
