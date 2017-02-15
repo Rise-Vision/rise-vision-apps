@@ -1,0 +1,34 @@
+<div id="renameFileFolderModal">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-hidden="true">
+      <i class="fa fa-times"></i>
+    </button>
+    <h3 class="modal-title"> Rename File or Folder </h3> <!-- translate -->
+  </div>
+  <div class="modal-body" stop-event="touchend" autofocus="autofocus">
+    <div class="form-group">
+      <input id="renameFileFolderInput" type="text" class="form-control" value="image001.jpg" onFocus="this.select()">
+      <br>
+      <div ng-show="duplicateFolderSpecified">
+        <div class="alert alert-warning" role="alert">Name is in use, please choose another.</div>
+      </div>
+      <div ng-show="accessDenied && accessDeniedMessage">
+        <div class="alert alert-danger" role="alert">{{accessDeniedMessage}}</div>
+      </div>
+      <div ng-show="accessDenied && !accessDeniedMessage">
+        <div class="alert alert-danger" role="alert">{{"storage-client.access-denied" | translate}}</div>
+      </div>
+      <div ng-show="serverError">
+        <div class="alert alert-danger" role="alert">{{"storage-client.server-error" | translate}} {{respCode}}</div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+      <button id="renameFileFolderModalSaveButton" class="btn btn-primary btn-fixed-width" ng-click="duplicateFolderSpecified=true">
+        <span translate="common.save"></span> <i class="fa fa-white fa-check icon-right"></i>
+      </button>
+      <button id="renameFileFolderModalCancelButton" class="btn btn-default btn-fixed-width" ng-click="cancel()">
+        <span translate="common.cancel"></span> <i class="fa fa-white fa-times icon-right"></i>
+      </button>
+  </div>
+</div>
