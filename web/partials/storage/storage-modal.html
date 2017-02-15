@@ -7,6 +7,8 @@
   </div>
 
   <div class="modal-body storage-full" stop-event="touchend">
+    <div class="u_padding-lg-horizontal">
+
       <ng-include src="'partials/storage/global-actions.html'" class="pull-right" ng-show="!trialAvailable"></ng-include>
 
       <div class="clearfix"></div>
@@ -34,6 +36,7 @@
       <ng-include src="'partials/storage/files-list.html'"></ng-include>
    	
       <ng-include src="'partials/storage/start-trial.html'" ng-show="trialAvailable"></ng-include>
+       </div><!--padding-->
   </div><!--modal-body-->
 
   <div class="modal-footer u_padding-lg">
