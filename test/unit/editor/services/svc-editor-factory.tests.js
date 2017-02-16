@@ -115,7 +115,7 @@ describe('service: editorFactory:', function() {
           return Q.resolve();
         },
         is: function(state) {
-          return currentState;
+          return state === currentState;
         }
       }
     });
@@ -396,6 +396,9 @@ describe('service: editorFactory:', function() {
   describe('updatePresentation: ',function(){
     it('should update the presentation',function(done){
       updatePresentation = true;
+      currentState = 'apps.editor.workspace.artboard';
+
+      editorFactory.presentation.updated = false;
 
       editorFactory.updatePresentation();
 
@@ -417,6 +420,8 @@ describe('service: editorFactory:', function() {
     it('should parse and update the presentation when $state is html-editor',function(done){
       updatePresentation = true;
       currentState = 'apps.editor.workspace.htmleditor';
+
+      editorFactory.presentation.parsed = false;
 
       editorFactory.updatePresentation();
 
