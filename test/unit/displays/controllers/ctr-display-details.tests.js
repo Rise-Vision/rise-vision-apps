@@ -53,12 +53,36 @@ describe('controller: display details', function() {
         }
       };
     });
+    $provide.service('display', function() {
+      return {
+        loadScreenshot: sinon.spy(function() {
+          if (resolveLoadScreenshot) {
+            return Q.resolve({});    
+          } else {
+            return Q.reject({});
+          }
+        }),
+        requestScreenshot: sinon.spy(function() {
+          if (resolveRequestScreenshot) {
+            return Q.resolve({});    
+          } else {
+            return Q.reject({});
+          }
+        }),
+        hasSchedule: function(display) {
+          return display.scheduleId;
+        }
+      }
+    });
     $provide.value('displayId', '1234');
   }));
   var $scope, $state, updateCalled, deleteCalled, confirmDelete;
+  var resolveLoadScreenshot, resolveRequestScreenshot;
   beforeEach(function(){
     updateCalled = false;
     deleteCalled = false;
+    resolveRequestScreenshot = true;
+    resolveLoadScreenshot = true;
 
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
@@ -158,19 +182,7 @@ describe('controller: display details', function() {
   });
 
   describe('requestScreenshot', function() {
-    var sandbox = sinon.sandbox.create();
-
-    beforeEach(function() {
-      sandbox.stub($scope.displayService, "loadScreenshot").returns(Q.resolve({}));
-    });
-
-    afterEach(function() {
-      sandbox.restore();
-    });
-
     it('should request a screenshot successfully', function(done) {
-      sandbox.stub($scope.displayService, "requestScreenshot").returns(Q.resolve());
-
       $scope.requestScreenshot().then(function() {
         expect($scope.displayService.requestScreenshot).to.be.called;
         expect($scope.displayService.loadScreenshot).to.be.calledTwice;
@@ -180,7 +192,7 @@ describe('controller: display details', function() {
     });
 
     it('should fail to request a screenshot', function(done) {
-      sandbox.stub($scope.displayService, "requestScreenshot").returns(Q.reject());
+      resolveRequestScreenshot = false;
 
       $scope.requestScreenshot().then(function() {
         expect($scope.displayService.requestScreenshot).to.be.calledOnce;
@@ -192,18 +204,7 @@ describe('controller: display details', function() {
   });
 
   describe('loadScreenshot', function() {
-    var sandbox = sinon.sandbox.create();
-
-    beforeEach(function() {
-    });
-
-    afterEach(function() {
-      sandbox.restore();
-    });
-
     it('should load a screenshot successfully', function(done) {
-      sandbox.stub($scope.displayService, "loadScreenshot").returns(Q.resolve({}));
-
       $scope.loadScreenshot().then(function() {
         expect($scope.displayService.loadScreenshot).to.be.calledTwice;
         expect($scope.screenshot.error).to.be.undefined;
@@ -212,7 +213,7 @@ describe('controller: display details', function() {
     });
 
     it('should fail to request a screenshot', function(done) {
-      sandbox.stub($scope.displayService, "loadScreenshot").returns(Q.reject());
+      resolveLoadScreenshot = false;
 
       $scope.loadScreenshot().then(function() {
         expect($scope.displayService.loadScreenshot).to.be.calledTwice;
