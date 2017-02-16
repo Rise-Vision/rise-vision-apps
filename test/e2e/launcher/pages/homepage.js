@@ -13,7 +13,6 @@ var HomePage = function() {
   var showHelpButton = element(by.id('showHelpButton'));
   var hideHelpButton = element(by.id('hideHelpButton'));
 
-  var prioritySupportBanner = element(by.id('prioritySupportBanner'));
   var presentationCTA = element(by.id('presentationCTA'));
   var presentationCTAButton = element(by.id('presentationCTAButton'));
 
@@ -89,10 +88,6 @@ var HomePage = function() {
 
   this.getHideHelpButton = function() {
     return hideHelpButton;
-  };
-
-  this.getPrioritySupportBanner = function() {
-    return prioritySupportBanner;
   };
 
   this.getPresentationCTA = function() {
