@@ -14,6 +14,7 @@ var ngHtml2Js   = require("gulp-ng-html2js");
 var concat      = require("gulp-concat");
 var gutil       = require("gulp-util");
 var rename      = require('gulp-rename');
+var sourcemaps  = require('gulp-sourcemaps');
 var runSequence = require('run-sequence');
 var factory     = require("widget-tester").gulpTaskFactory;
 var fs          = require('fs');
@@ -159,21 +160,53 @@ gulp.task("lint", function() {
     .pipe(jshint.reporter("jshint-stylish"));
 });
 
-gulp.task("html", ["lint"], function () {
-  return gulp.src(['./web/index.html', './web/storage-selector.html'])
+function buildHtml(path) {
+  return gulp.src([path])
     .pipe(usemin({
       css: [minifyCss, 'concat'],
       html: [function() {return minifyHtml({empty: true})} ],
-      js: [function(){ return uglify({
-        mangle:true,
-        outSourceMap: false // source map generation doesn't seem to function correctly
-      })}]
+      js: [
+        sourcemaps.init({largeFile: true}),
+        'concat',
+        uglify({ compress: {
+          sequences     : false,  //-- join consecutive statemets with the “comma operator”
+          properties    : true,   // optimize property access: a["foo"] → a.foo
+          dead_code     : true,   // discard unreachable code
+          drop_debugger : true,   // discard “debugger” statements
+          unsafe        : false,  // some unsafe optimizations (see below)
+          conditionals  : false,  //-- optimize if-s and conditional expressions
+          comparisons   : true,   // optimize comparisons
+          evaluate      : false,  //-- evaluate constant expressions
+          booleans      : false,  //-- optimize boolean expressions
+          loops         : true,   // optimize loops
+          unused        : false,  //-- drop unused variables/functions
+          hoist_funs    : true,   // hoist function declarations
+          hoist_vars    : false,  // hoist variable declarations
+          if_return     : true,   // optimize if-s followed by return/continue
+          join_vars     : true,   // join var declarations
+          cascade       : true,   // try to cascade `right` into `left` in sequences
+          side_effects  : false,  // drop side-effect-free statements
+          warnings      : true,   // warn about potentially dangerous optimizations/code
+          global_defs   : {}      // global definitions
+        }}),
+        sourcemaps.write('.')
+      ]
     }))
     .pipe(gulp.dest("dist/"))
     .on('error',function(e){
       console.error(String(e));
-    })
+    });
+}
+
+gulp.task("html-index", function () {
+  return buildHtml("./web/index.html");
 });
+
+gulp.task("html-selector", function () {
+  return buildHtml("./web/storage-selector.html");
+});
+
+gulp.task("html", ["lint", "html-index", "html-selector"]);
 
 gulp.task("html2js", function() {
   return gulp.src(partialsHTMLFiles)

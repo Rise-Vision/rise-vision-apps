@@ -99,7 +99,7 @@
     {{ 'displays-app.fields.player.schedule.addToSchedule' | translate }} <i class="fa fa-external-link icon-right" aria-hidden="true"></i>
   </a>
   <a id="viewSchedule" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
-    <span class="table-link u_ellipsis-md">{{display.scheduleName}} <i class="fa fa-external-link" aria-hidden="true"></i></span>
+    <span class="table-link u_ellipsis-md-top">{{display.scheduleName}} <i class="fa fa-external-link" aria-hidden="true"></i></span>
   </a>
 </div>
 
