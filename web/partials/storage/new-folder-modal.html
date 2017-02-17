@@ -6,11 +6,14 @@
     <h3 class="modal-title">{{'storage-client.new-folder' | translate}}</h3>
   </div>
   <div class="modal-body" stop-event="touchend" autofocus="autofocus">
-    <div class="form-group">
+    <div class="form-group has-error">
       <input id="newFolderInput" type="text" class="form-control" ng-model="folderName" placeholder="Enter Folder Name" ng-focus="duplicateFolderSpecified=false" autofocus="autofocus">
+       <p class="text-danger" translate>
+            Name is in use, please choose another.
+          </p>
       <br>
-      <div ng-show="duplicateFolderSpecified">
-        <div class="alert alert-warning" role="alert">{{"storage-client.duplicate-folder" | translate}}</div>
+      <div ng-show="duplicateFolderSpecified" > <!-- -->
+        <div class="alert alert-danger" role="alert">{{"storage-client.duplicate-folder" | translate}}</div>
       </div>
       <div ng-show="accessDenied && accessDeniedMessage">
         <div class="alert alert-danger" role="alert">{{accessDeniedMessage}}</div>

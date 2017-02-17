@@ -1,16 +1,11 @@
 <div class="row">
-  <div class="col-xs-12 u_margin-sm-top">
-	<div class="alert alert-warning u_margin-xs-bottom">
-  <button type="button" class="close" style="padding: 0;
-    cursor: pointer;
-    background: 0 0;
-    border: 0;
-    -webkit-appearance: none;
-    font-size: 21px;
-    position: relative;
-    top: -21px;
-    right: -10px;" close="closeAlert($index)" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-  Duplication unsuccessful.  Please try again.</div>
+  <div class="col-xs-12 u_margin-sm-top u_margin-sm-bottom">
+  	<div class="alert alert-danger u_margin-xs-bottom" ng-show="!flipHide" ng-click="flipHide=true">
+    Duplication unsuccessful.  Please try again.
+    </div>
+    <div class="alert alert-danger u_margin-xs-bottom" ng-show="flipHide" ng-click="flipHide=false">
+    <strong>API Error:</strong>
+    </div>
   </div>
 </div>
 
