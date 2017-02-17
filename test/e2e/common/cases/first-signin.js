@@ -53,10 +53,6 @@ var FirstSigninScenarios = function() {
 
       it('should start a new presentation', function () {
         homepage.getPresentationCTAButton().click();
-
-        helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
-        helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader());
-        storeProductsModalPage.getAddBlankPresentation().click();
         
         helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
         browser.sleep(500);
