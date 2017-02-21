@@ -26,6 +26,11 @@ angular.module('risevision.editor.directives')
               $scope.placeholder.backgroundScaleToFit ? 'contain' :
               '');
             element.css('z-index', $scope.placeholder.zIndex);
+
+            if(newValue.id !== oldValue.id) {
+              widgetRenderer.unregister(oldValue, element);
+            }
+
             widgetRenderer.notifyChanges($scope.placeholder, element);
             if (newValue.items && newValue.items[0] && oldValue.items &&
               oldValue.items[0] && newValue.items[0].additionalParams !==

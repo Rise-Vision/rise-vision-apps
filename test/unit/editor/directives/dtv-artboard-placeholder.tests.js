@@ -74,7 +74,7 @@ describe('directive: artboard-placeholder', function() {
       expect(parseInt(element.css('z-index'))).to.equal(placeholder.zIndex);    
     });
 
-    it('should apply placeholder properties when they cahnge',function(){
+    it('should apply placeholder properties when they change',function(){
       var element = $compile('<artboard-placeholder placeholder="placeholder"></artboard-placeholder>')($scope);
       $scope.$apply();
       placeholder.width = 100;
@@ -130,6 +130,31 @@ describe('directive: artboard-placeholder', function() {
       $scope.placeholder.items[0].additionalParams = "changed";
       $scope.$apply();
       spy.should.have.been.calledWith($scope.placeholder);
+    });
+
+    it('should not unregister previous element if id is unchanged',function(){
+      var register = sinon.spy(widgetRenderer, "register");
+      var unregister = sinon.spy(widgetRenderer, "unregister");
+
+      var element = $compile('<artboard-placeholder placeholder="placeholder"></artboard-placeholder>')($scope);
+      $scope.placeholder.id = "id1";
+      $scope.$apply();
+      unregister.should.not.have.been.called;
+      $scope.$apply();
+      unregister.should.not.have.been.called;
+    });
+
+    it('should unregister previous element if id changed',function(){
+      var register = sinon.spy(widgetRenderer, "register");
+      var unregister = sinon.spy(widgetRenderer, "unregister");
+
+      var element = $compile('<artboard-placeholder placeholder="placeholder"></artboard-placeholder>')($scope);
+      $scope.placeholder.id = "id1";
+      $scope.$apply();
+      unregister.should.not.have.been.called;
+      $scope.placeholder.id = "id2";
+      $scope.$apply();
+      unregister.should.have.been.called;
     });
   })
 });
