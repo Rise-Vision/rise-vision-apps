@@ -133,7 +133,6 @@ describe('directive: artboard-placeholder', function() {
     });
 
     it('should not unregister previous element if id is unchanged',function(){
-      var register = sinon.spy(widgetRenderer, "register");
       var unregister = sinon.spy(widgetRenderer, "unregister");
 
       var element = $compile('<artboard-placeholder placeholder="placeholder"></artboard-placeholder>')($scope);
@@ -145,7 +144,6 @@ describe('directive: artboard-placeholder', function() {
     });
 
     it('should unregister previous element if id changed',function(){
-      var register = sinon.spy(widgetRenderer, "register");
       var unregister = sinon.spy(widgetRenderer, "unregister");
 
       var element = $compile('<artboard-placeholder placeholder="placeholder"></artboard-placeholder>')($scope);
