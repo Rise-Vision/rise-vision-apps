@@ -7,8 +7,12 @@
       <h2 id="presentationName" class="presentation-name">{{factory.presentation.name}}</h2> 
 
       <span ng-init="designMode = true">
-        <button id="designButton" ui-sref="apps.editor.workspace.artboard" class="btn btn-link" ng-class="{'hidden' : designMode}" ng-disabled="designMode" ng-click="designMode = true"> {{'editor-app.workspace.toolbar.mode.design' | translate}}</button>
-        <button id="htmlButton" ui-sref="apps.editor.workspace.htmleditor" class="btn btn-link" ng-class="{'hidden' : !designMode}" ng-disabled="!designMode" ng-click="designMode = false"> {{'editor-app.workspace.toolbar.mode.html' | translate}} <i class="fa fa-code"></i></button>
+        <button id="designButton" class="btn btn-link" ng-class="{'hidden' : designMode}" ng-disabled="designMode" ng-click="showArtboard()">
+          {{'editor-app.workspace.toolbar.mode.design' | translate}}
+        </button>
+        <button id="htmlButton" class="btn btn-link" ng-class="{'hidden' : !designMode}" ng-disabled="!designMode" ng-click="showHtmlEditor()">
+          {{'editor-app.workspace.toolbar.mode.html' | translate}} <i class="fa fa-code"></i>
+        </button>
       </span><!--btn-group-->
 
       <button id="addPlaceholderButton" 
