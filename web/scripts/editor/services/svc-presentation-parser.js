@@ -205,15 +205,23 @@ angular.module('risevision.editor.services')
 
           if (end !== -1) {
             var json = htmlString.substring(start, end);
+            var dataObject = null;
 
             json = json.replace('\\\'', '\'');
 
-            var dataObject = JSON.parse(json);
+            try {
+              dataObject = JSON.parse(json);
+            }
+            catch (err) {
+              $log.error('parse presentation error', err);
+              $log.error('failing json', json);
+              return { jsonParseError: true };
+            }
 
             dataObject = dataObject && dataObject.presentationData;
 
             if (!dataObject) {
-              return;
+              return {};
             }
 
             presentation.hidePointer =
@@ -225,6 +233,8 @@ angular.module('risevision.editor.services')
             presentation.placeholders = dataObject.placeholders;
           }
         }
+
+        return {};
       };
 
       factory.parseStyle = function (placeholder, htmlString) {
@@ -357,13 +367,13 @@ angular.module('risevision.editor.services')
         factory.hasLegacyItems = false;
 
         if (!htmlString) {
-          return;
+          return {};
         }
 
         start = htmlString.toLowerCase().indexOf(htmlTag);
         end = htmlString.toLowerCase().indexOf(htmlEndTag, start);
         if (start === -1 || end === -1) {
-          return;
+          return {};
         }
 
         // process head for help link
@@ -371,7 +381,7 @@ angular.module('risevision.editor.services')
         end = htmlString.toLowerCase().indexOf(headEndTag, start);
 
         if (start === -1 || end < start) {
-          return;
+          return {};
         }
 
         presentation.helpURL = factory.parseHelpLink(htmlString.substring(
@@ -382,7 +392,7 @@ angular.module('risevision.editor.services')
         end = htmlString.indexOf('>', start);
 
         if (start === -1 || end < start) {
-          return;
+          return {};
         }
 
         factory.parseBodyStyle(presentation, htmlParser.stripOuterGarbage(
@@ -391,16 +401,21 @@ angular.module('risevision.editor.services')
 
         end = htmlString.toLowerCase().indexOf(bodyEndTag, start);
         if (start === -1 || end === -1) {
-          return;
+          return {};
         }
 
         // process data
-        factory.parsePresentationData(presentation);
+        if(factory.parsePresentationData(presentation).jsonParseError) {
+          $log.debug('error parsing presentation', presentation);
+          return { jsonParseError: true };
+        };
 
         factory.parsePlaceholders(presentation, htmlString.substring(
           start, end + bodyEndTag.length));
 
         $log.debug('parse presentation result', presentation);
+
+        return {};
       };
 
       // ======================================================================
