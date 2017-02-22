@@ -74,6 +74,7 @@ describe('service: editorFactory:', function() {
       return {
         parsePresentation: function(presentation) {
           presentation.parsed = true;
+          return {};
         },
 
         updatePresentation: function(presentation) {

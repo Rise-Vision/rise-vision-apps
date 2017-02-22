@@ -128,8 +128,10 @@ angular.module('risevision.editor.services')
       };
 
       var _parseOrUpdatePresentation = function () {
+        var parseResult = {};
+
         if ($state.is('apps.editor.workspace.htmleditor')) {
-          presentationParser.parsePresentation(factory.presentation);
+          parseResult = presentationParser.parsePresentation(factory.presentation);
         } else {
           presentationParser.updatePresentation(factory.presentation);
         }
@@ -137,10 +139,17 @@ angular.module('risevision.editor.services')
         distributionParser.updateDistribution(factory.presentation);
 
         _updateEmbeddedIds(factory.presentation);
+
+        return parseResult;
+      };
+
+      factory.validatePresentation = function () {
+        return presentationParser.parsePresentation(factory.presentation);
       };
 
       factory.addPresentation = function () {
         var deferred = $q.defer();
+        var validation = $q.resolve();
 
         _clearMessages();
 
@@ -148,9 +157,13 @@ angular.module('risevision.editor.services')
         factory.loadingPresentation = true;
         factory.savingPresentation = true;
 
-        _parseOrUpdatePresentation();
+        if(_parseOrUpdatePresentation().jsonParseError) {
+          validation = $q.reject('JSON parse error');
+        }
 
-        presentation.add(factory.presentation)
+        validation.then(function () {
+          return presentation.add(factory.presentation);
+        })
           .then(function (resp) {
             if (resp && resp.item && resp.item.id) {
               presentationTracker('Presentation Created', resp.item.id,
@@ -192,6 +205,7 @@ angular.module('risevision.editor.services')
 
       factory.updatePresentation = function () {
         var deferred = $q.defer();
+        var validation = $q.resolve();
 
         _clearMessages();
 
@@ -199,9 +213,13 @@ angular.module('risevision.editor.services')
         factory.loadingPresentation = true;
         factory.savingPresentation = true;
 
-        _parseOrUpdatePresentation();
+        if(_parseOrUpdatePresentation().jsonParseError) {
+          validation = $q.reject({ result: { error: { message: 'JSON parse error' } } });
+        }
 
-        presentation.update(factory.presentation.id, factory.presentation)
+        validation.then(function () {
+          return presentation.update(factory.presentation.id, factory.presentation);
+        })
           .then(function (resp) {
             presentationTracker('Presentation Updated', resp.item.id,
               resp.item.name);
