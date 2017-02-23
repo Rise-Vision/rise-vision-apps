@@ -51,6 +51,7 @@ var unitTestFiles = [
   "web/bower_components/rv-common-app-components/dist/js/distribution-selector.js",
   "web/bower_components/rv-common-app-components/dist/js/presentation-selector.js",
   "web/bower_components/rv-common-app-components/dist/js/timeline.js",
+  "web/bower_components/rv-common-app-components/dist/js/message-box.js",
   "web/bower_components/rv-angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js",
   "web/bower_components/component-storage-selector/dist/storage-selector.js",  
   "web/bower_components/widget-settings-ui-components/dist/js/angular/*.js",
