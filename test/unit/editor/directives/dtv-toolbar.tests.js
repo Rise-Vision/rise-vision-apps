@@ -35,7 +35,11 @@ describe('directive: toolbar', function() {
         }
       };
     });
+    $provide.factory('messageBox', function() {
+      return function() {
 
+      };
+    });
   }));
 
   beforeEach(inject(function(_$compile_, _$rootScope_, $templateCache){

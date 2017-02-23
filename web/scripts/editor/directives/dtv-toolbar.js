@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.editor.directives')
-  .directive('toolbar', ['editorFactory', 'placeholdersFactory', '$modal', '$state',
-    function (editorFactory, placeholdersFactory, $modal, $state) {
+  .directive('toolbar', ['editorFactory', 'placeholdersFactory', '$modal', '$state', 'messageBox',
+    function (editorFactory, placeholdersFactory, $modal, $state, messageBox) {
       return {
         restrict: 'E',
         templateUrl: 'partials/editor/toolbar.html',
@@ -17,7 +17,7 @@ angular.module('risevision.editor.directives')
 
           $scope.showArtboard = function () {
             if(editorFactory.validatePresentation().jsonParseError) {
-              alert('JSON validation failed');
+              messageBox('editor-app.json-error.title', 'editor-app.json-error.message');
             }
             else {
               $scope.designMode = true;

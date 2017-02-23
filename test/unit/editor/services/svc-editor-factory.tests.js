@@ -104,7 +104,7 @@ describe('service: editorFactory:', function() {
             return Q.resolve({items:[{productCode: 'test'}]});
           }
         }
-      }
+      };
     });
     $provide.service('$state',function(){
       return {
@@ -118,10 +118,10 @@ describe('service: editorFactory:', function() {
         is: function(state) {
           return state === currentState;
         }
-      }
+      };
     });
     $provide.service('userState', function() { 
-      return {        
+      return {
         getUsername : function() {
           return 'testusername';
         },
@@ -136,12 +136,12 @@ describe('service: editorFactory:', function() {
           var deferred = Q.defer();
 
           deferred.resolve({rvaEntityId: 'id1'});
-          
+
           return {
             result: deferred.promise
           };
         }
-      }
+      };
     });
     $provide.service('scheduleFactory', function() { 
       return {
@@ -155,9 +155,14 @@ describe('service: editorFactory:', function() {
         open: function(url, target) {
         }
       };
-    })
+    });
     $provide.value('VIEWER_URL', 'http://rvaviewer-test.appspot.com');
     $provide.value('TEMPLATES_CATEGORY', 'Templates');
+    $provide.factory('messageBox', function() {
+      return function() {
+
+      };
+    });
   }));
   var editorFactory, trackerCalled, updatePresentation, currentState, stateParams, 
     presentationParser, $window, $modal, scheduleFactory, userState, $rootScope;

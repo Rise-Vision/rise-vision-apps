@@ -10,12 +10,13 @@ angular.module('risevision.editor.services')
     'presentationParser', 'distributionParser', 'presentationTracker',
     'store', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
     'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT', 'TEMPLATES_CATEGORY',
-    '$modal', '$rootScope', '$window', 'scheduleFactory',
+    '$modal', '$rootScope', '$window', 'scheduleFactory', 'messageBox',
     function ($q, $state, userState, presentation, presentationParser,
       distributionParser, presentationTracker, store, VIEWER_URL,
       REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED, DEFAULT_LAYOUT,
-      TEMPLATES_CATEGORY, $modal, $rootScope, $window, scheduleFactory) {
+      TEMPLATES_CATEGORY, $modal, $rootScope, $window, scheduleFactory, messageBox) {
       var factory = {};
+      var JSON_PARSE_ERROR = 'JSON parse error';
 
       factory.openPresentationProperties = function () {
         $modal.open({
@@ -158,7 +159,7 @@ angular.module('risevision.editor.services')
         factory.savingPresentation = true;
 
         if(_parseOrUpdatePresentation().jsonParseError) {
-          validation = $q.reject('JSON parse error');
+          validation = $q.reject({ result: { error: { message: JSON_PARSE_ERROR } } });
         }
 
         validation.then(function () {
@@ -193,6 +194,10 @@ angular.module('risevision.editor.services')
           .then(null, function (e) {
             _showErrorMessage('add', e);
 
+            if(e.result.error.message === JSON_PARSE_ERROR) {
+              messageBox('editor-app.json-error.title', 'editor-app.json-error.message');
+            }
+
             deferred.reject();
           })
           .finally(function () {
@@ -214,7 +219,7 @@ angular.module('risevision.editor.services')
         factory.savingPresentation = true;
 
         if(_parseOrUpdatePresentation().jsonParseError) {
-          validation = $q.reject({ result: { error: { message: 'JSON parse error' } } });
+          validation = $q.reject({ result: { error: { message: JSON_PARSE_ERROR } } });
         }
 
         validation.then(function () {
@@ -230,6 +235,10 @@ angular.module('risevision.editor.services')
           })
           .then(null, function (e) {
             _showErrorMessage('update', e);
+
+            if(e.result.error.message === JSON_PARSE_ERROR) {
+              messageBox('editor-app.json-error.title', 'editor-app.json-error.message');
+            }
 
             deferred.reject();
           })
@@ -463,6 +472,11 @@ angular.module('risevision.editor.services')
       };
 
       factory.saveAndPreview = function () {
+        if(factory.validatePresentation().jsonParseError) {
+          messageBox('editor-app.json-error.title', 'editor-app.json-error.message');
+          return;
+        }
+
         userState.removeEventListenerVisibilityAPI();
         $window.open('/loading-preview.html', 'rvPresentationPreview');
 
