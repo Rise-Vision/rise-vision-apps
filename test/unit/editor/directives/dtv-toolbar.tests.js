@@ -6,7 +6,11 @@ describe('directive: toolbar', function() {
       element,
       addNewPlaceholderCalled,
       currentState,
-      openPresentationPropertiesCalled;
+      openPresentationPropertiesCalled,
+      messageBoxStub,
+      validatePresentationResp;
+
+  messageBoxStub = sinon.stub();
 
   beforeEach(module('risevision.editor.controllers'));
   beforeEach(module('risevision.editor.services'));
@@ -18,6 +22,9 @@ describe('directive: toolbar', function() {
         presentation: {},
         openPresentationProperties: function() {
           openPresentationPropertiesCalled = true;
+        },
+        validatePresentation: function() {
+          return validatePresentationResp;
         }
       };
     });
@@ -36,9 +43,7 @@ describe('directive: toolbar', function() {
       };
     });
     $provide.factory('messageBox', function() {
-      return function() {
-
-      };
+      return messageBoxStub;
     });
   }));
 
@@ -49,7 +54,13 @@ describe('directive: toolbar', function() {
     $scope = $rootScope.$new();
     element = $compile("<toolbar></toolbar>")($scope);
     $scope.$digest();
+
+    validatePresentationResp = {};
   }));
+
+  afterEach(function() {
+    messageBoxStub.reset();
+  });
 
   it('should exist', function() {
     expect($scope).to.be.truely;
@@ -75,4 +86,28 @@ describe('directive: toolbar', function() {
     });
   });
 
+  describe('showArtboard:',function(){
+    it('should show artboard',function(){
+      $scope.showArtboard();
+      expect(messageBoxStub).to.not.be.called;
+      expect($scope.designMode).to.be.true;
+    });
+
+    it('should not show artboard because JSON is not valid',function(){
+      validatePresentationResp = { jsonParseError: true };
+
+      $scope.showArtboard();
+      expect(messageBoxStub).to.be.called;
+      expect($scope.designMode).to.be.falsey;
+    });
+  });
+
+  describe('showHtmlEditor:',function(){
+    it('should show html editor',function(){
+      $scope.designMode = true;
+      $scope.showHtmlEditor();
+      expect(messageBoxStub).to.not.be.called;
+      expect($scope.designMode).to.be.false;
+    });
+  });
 });

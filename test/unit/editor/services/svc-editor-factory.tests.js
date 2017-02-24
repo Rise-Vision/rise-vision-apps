@@ -1,5 +1,7 @@
 'use strict';
 describe('service: editorFactory:', function() {
+  var sandbox = sinon.sandbox.create();
+
   beforeEach(module('risevision.editor.services'));
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
@@ -706,6 +708,10 @@ describe('service: editorFactory:', function() {
   });
 
   describe('saveAndPreview: ', function() {
+    afterEach(function() {
+      sandbox.restore();
+    });
+
     it('should add and preview new presentation', function(done) {
       var $windowOpenSpy = sinon.spy($window, 'open');
       var addEventSpy = sinon.spy(userState, 'addEventListenerVisibilityAPI');
@@ -736,6 +742,14 @@ describe('service: editorFactory:', function() {
           done();
         }, 10);
       });
+    });
+
+    it('should fail to preview a presentation because of validation errors', function() {
+      var removeEventSpy = sinon.spy(userState, 'removeEventListenerVisibilityAPI');
+
+      sandbox.stub(editorFactory, "validatePresentation").returns({ jsonParseError: true });
+      editorFactory.saveAndPreview();
+      removeEventSpy.should.not.have.been.called;
     });
 
   });
