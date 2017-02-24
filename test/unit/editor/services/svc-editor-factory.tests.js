@@ -184,6 +184,10 @@ describe('service: editorFactory:', function() {
     });
   });
 
+  afterEach(function() {
+    sandbox.restore();
+  });
+
   it('should exist',function(){
     expect(editorFactory).to.be.truely;
     
@@ -310,6 +314,17 @@ describe('service: editorFactory:', function() {
       },10);
     });
 
+    it('should fail to add the presentation because of validation errors',function(done){
+      currentState = 'apps.editor.workspace.htmleditor';
+
+      sandbox.stub(presentationParser, "parsePresentation").returns({ jsonParseError: true });
+
+      editorFactory.addPresentation().
+        catch(function() {
+          done();
+        });
+    });
+
     it('should create first Schedule when adding first presentation and show modal',function(done){
       updatePresentation = true;
 
@@ -423,6 +438,17 @@ describe('service: editorFactory:', function() {
         expect(editorFactory.apiError).to.not.be.ok;
         done();
       },10);
+    });
+
+    it('should fail to update the presentation because of validation errors',function(done){
+      currentState = 'apps.editor.workspace.htmleditor';
+
+      sandbox.stub(presentationParser, "parsePresentation").returns({ jsonParseError: true });
+
+      editorFactory.updatePresentation().
+        catch(function() {
+          done();
+        });
     });
 
     it('should parse and update the presentation when $state is html-editor',function(done){
