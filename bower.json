@@ -16,7 +16,7 @@
     "angular-ui-codemirror": "~0.3.0",
     "angular-vertilize": "~1.0.1",
     "angular-mocks": "1.5.0",
-    "common-header": "https://github.com/Rise-Vision/common-header.git#v1.12.7",
+    "common-header": "https://github.com/Rise-Vision/common-header.git#fix/store-url",
     "component-storage-selector": "https://github.com/Rise-Vision/component-storage-selector.git",
     "rv-common-i18n": "https://github.com/Rise-Vision/common-i18n.git",
     "rv-common-style": "https://github.com/Rise-Vision/common-style.git#v1.4.3",
@@ -39,6 +39,7 @@
     "angular-sanitize": "~1.5.0",
     "angular-mocks": "~1.5.0",
     "angular-bootstrap": "^0.13.0",
-    "rv-common-style": "v1.4.3"
+    "rv-common-style": "v1.4.3",
+    "common-header": "fix/store-url"
   }
 }
