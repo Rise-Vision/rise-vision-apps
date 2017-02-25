@@ -756,40 +756,51 @@ describe('service: editorFactory:', function() {
       var $windowOpenSpy = sinon.spy($window, 'open');
       var addEventSpy = sinon.spy(userState, 'addEventListenerVisibilityAPI');
       var removeEventSpy = sinon.spy(userState, 'removeEventListenerVisibilityAPI');
-      
-      editorFactory.saveAndPreview();
-      removeEventSpy.should.have.been.called;
-      
-      setTimeout(function() {
-        $windowOpenSpy.should.have.been.called.twice;
-        $windowOpenSpy.should.have.been.calledWith('http://rvaviewer-test.appspot.com/?type=presentation&id=presentationId', 'rvPresentationPreview');
-        addEventSpy.should.have.been.called;
 
-        done();
-      }, 10);
+      sandbox.stub(presentationParser, "parsePresentation").returns(true);
+
+      editorFactory.saveAndPreview()
+        .then(function() {
+          removeEventSpy.should.have.been.called;
+
+          setTimeout(function() {
+            $windowOpenSpy.should.have.been.called.twice;
+            $windowOpenSpy.should.have.been.calledWith('http://rvaviewer-test.appspot.com/?type=presentation&id=presentationId', 'rvPresentationPreview');
+            addEventSpy.should.have.been.called;
+
+            done();
+          }, 10);
+        });
     });
-    
+
     it('should save and preview existing presentation', function(done) {
       var $windowOpenSpy = sinon.spy($window, 'open');
-      
-      editorFactory.getPresentation("presentationId").then(function() {
-        editorFactory.saveAndPreview();
-        
-        setTimeout(function() {
-          $windowOpenSpy.should.have.been.called.twice;
-          $windowOpenSpy.should.have.been.calledWith('http://rvaviewer-test.appspot.com/?type=presentation&id=presentationId', 'rvPresentationPreview');
 
-          done();
-        }, 10);
+      sandbox.stub(presentationParser, "parsePresentation").returns(true);
+
+      editorFactory.getPresentation("presentationId").then(function() {
+        editorFactory.saveAndPreview()
+          .then(function() {
+            setTimeout(function() {
+              $windowOpenSpy.should.have.been.called.twice;
+              $windowOpenSpy.should.have.been.calledWith('http://rvaviewer-test.appspot.com/?type=presentation&id=presentationId', 'rvPresentationPreview');
+
+              done();
+            }, 10);
+          });
       });
     });
 
-    it('should fail to preview a presentation because of validation errors', function() {
+    it('should fail to preview a presentation because of validation errors', function(done) {
       var removeEventSpy = sinon.spy(userState, 'removeEventListenerVisibilityAPI');
 
-      sandbox.stub(editorFactory, "validatePresentation").returns({ jsonParseError: true });
-      editorFactory.saveAndPreview();
-      removeEventSpy.should.not.have.been.called;
+      sandbox.stub(presentationParser, "parsePresentation").returns(false);
+
+      editorFactory.saveAndPreview()
+        .catch(function() {
+          removeEventSpy.should.not.have.been.called;
+          done();
+        });
     });
 
   });

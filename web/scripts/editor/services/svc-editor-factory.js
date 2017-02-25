@@ -463,19 +463,17 @@ angular.module('risevision.editor.services')
       };
 
       factory.saveAndPreview = function () {
-        if(factory.validatePresentation().jsonParseError) {
-          messageBox('editor-app.json-error.title', 'editor-app.json-error.message');
-          return;
-        }
+        return factory.validatePresentation()
+          .then(function() {
+            userState.removeEventListenerVisibilityAPI();
+            $window.open('/loading-preview.html', 'rvPresentationPreview');
 
-        userState.removeEventListenerVisibilityAPI();
-        $window.open('/loading-preview.html', 'rvPresentationPreview');
-
-        factory.save().then(function (presentationId) {
-          factory.preview(presentationId);
-        }).finally(function () {
-          userState.addEventListenerVisibilityAPI();
-        });
+            return factory.save().then(function (presentationId) {
+              factory.preview(presentationId);
+            }).finally(function () {
+              userState.addEventListenerVisibilityAPI();
+            });
+          });
       };
 
       var _showErrorMessage = function (action, e) {
