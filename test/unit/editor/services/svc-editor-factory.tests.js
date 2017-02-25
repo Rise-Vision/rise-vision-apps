@@ -299,6 +299,7 @@ describe('service: editorFactory:', function() {
 
       editorFactory.addPresentation()
         .then(function() {
+          expect(messageBoxStub).to.not.have.been.called;
           expect(editorFactory.presentation.updated).to.be.true;
           expect(editorFactory.presentation.distributionUpdated).to.be.true;
           expect(editorFactory.savingPresentation).to.be.true;
@@ -324,6 +325,7 @@ describe('service: editorFactory:', function() {
 
       editorFactory.addPresentation()
         .catch(function() {
+          expect(messageBoxStub).to.have.been.called;
           done();
         });
     });
@@ -439,6 +441,7 @@ describe('service: editorFactory:', function() {
 
       editorFactory.updatePresentation()
         .then(function() {
+          expect(messageBoxStub).to.not.have.been.called;
           expect(editorFactory.presentation.updated).to.be.true;
           expect(editorFactory.presentation.distributionUpdated).to.be.true;
           expect(editorFactory.savingPresentation).to.be.true;
@@ -462,6 +465,7 @@ describe('service: editorFactory:', function() {
 
       editorFactory.updatePresentation().
         catch(function() {
+          expect(messageBoxStub).to.have.been.called;
           done();
         });
     });
@@ -761,6 +765,7 @@ describe('service: editorFactory:', function() {
 
       editorFactory.saveAndPreview()
         .then(function() {
+          expect(messageBoxStub).to.not.have.been.called;
           removeEventSpy.should.have.been.called;
 
           setTimeout(function() {
@@ -798,6 +803,7 @@ describe('service: editorFactory:', function() {
 
       editorFactory.saveAndPreview()
         .catch(function() {
+          expect(messageBoxStub).to.have.been.called;
           removeEventSpy.should.not.have.been.called;
           done();
         });
