@@ -3,14 +3,12 @@ describe('directive: toolbar', function() {
   var $compile,
       $rootScope,
       $scope,
+      $q,
       element,
       addNewPlaceholderCalled,
       currentState,
       openPresentationPropertiesCalled,
-      messageBoxStub,
       validatePresentationResp;
-
-  messageBoxStub = sinon.stub();
 
   beforeEach(module('risevision.editor.controllers'));
   beforeEach(module('risevision.editor.services'));
@@ -42,25 +40,19 @@ describe('directive: toolbar', function() {
         }
       };
     });
-    $provide.factory('messageBox', function() {
-      return messageBoxStub;
-    });
   }));
 
-  beforeEach(inject(function(_$compile_, _$rootScope_, $templateCache){
+  beforeEach(inject(function(_$compile_, _$rootScope_, $templateCache, _$q_){
     $templateCache.put('partials/editor/toolbar.html', '<p>mock</p>');
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
+    $q = _$q_;
     element = $compile("<toolbar></toolbar>")($scope);
     $scope.$digest();
 
-    validatePresentationResp = {};
+    validatePresentationResp = $q.resolve();
   }));
-
-  afterEach(function() {
-    messageBoxStub.reset();
-  });
 
   it('should exist', function() {
     expect($scope).to.be.truely;
@@ -87,18 +79,26 @@ describe('directive: toolbar', function() {
   });
 
   describe('showArtboard:',function(){
-    it('should show artboard',function(){
-      $scope.showArtboard();
-      expect(messageBoxStub).to.not.be.called;
-      expect($scope.designMode).to.be.true;
+    it('should show artboard',function(done){
+      $scope.showArtboard()
+        .then(function() {
+          expect($scope.designMode).to.be.true;
+          done();
+        });
+
+      $scope.$digest();
     });
 
-    it('should not show artboard because JSON is not valid',function(){
-      validatePresentationResp = { jsonParseError: true };
+    it('should not show artboard because JSON is not valid',function(done){
+      validatePresentationResp = $q.reject();
 
-      $scope.showArtboard();
-      expect(messageBoxStub).to.be.called;
-      expect($scope.designMode).to.be.falsey;
+      $scope.showArtboard()
+        .catch(function() {
+          expect($scope.designMode).to.be.falsey;
+          done();
+        });
+
+      $scope.$digest();
     });
   });
 
@@ -106,7 +106,6 @@ describe('directive: toolbar', function() {
     it('should show html editor',function(){
       $scope.designMode = true;
       $scope.showHtmlEditor();
-      expect(messageBoxStub).to.not.be.called;
       expect($scope.designMode).to.be.false;
     });
   });

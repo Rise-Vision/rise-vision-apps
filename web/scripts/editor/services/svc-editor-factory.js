@@ -129,10 +129,8 @@ angular.module('risevision.editor.services')
       };
 
       var _parseOrUpdatePresentation = function () {
-        var parseResult = {};
-
         if ($state.is('apps.editor.workspace.htmleditor')) {
-          parseResult = presentationParser.parsePresentation(factory.presentation);
+          presentationParser.parsePresentation(factory.presentation);
         } else {
           presentationParser.updatePresentation(factory.presentation);
         }
@@ -140,17 +138,21 @@ angular.module('risevision.editor.services')
         distributionParser.updateDistribution(factory.presentation);
 
         _updateEmbeddedIds(factory.presentation);
-
-        return parseResult;
       };
 
       factory.validatePresentation = function () {
-        return presentationParser.parsePresentation(factory.presentation);
+        if(presentationParser.parsePresentation(factory.presentation)) {
+          return $q.resolve();
+        }
+        else {
+          messageBox('editor-app.json-error.title', 'editor-app.json-error.message');
+
+          return $q.reject({ result: { error: { message: JSON_PARSE_ERROR } } });
+        }
       };
 
       factory.addPresentation = function () {
         var deferred = $q.defer();
-        var validation = $q.resolve();
 
         _clearMessages();
 
@@ -158,13 +160,12 @@ angular.module('risevision.editor.services')
         factory.loadingPresentation = true;
         factory.savingPresentation = true;
 
-        if(_parseOrUpdatePresentation().jsonParseError) {
-          validation = $q.reject({ result: { error: { message: JSON_PARSE_ERROR } } });
-        }
+        factory.validatePresentation()
+          .then(function () {
+            _parseOrUpdatePresentation();
 
-        validation.then(function () {
-          return presentation.add(factory.presentation);
-        })
+            return presentation.add(factory.presentation);
+          })
           .then(function (resp) {
             if (resp && resp.item && resp.item.id) {
               presentationTracker('Presentation Created', resp.item.id,
@@ -194,10 +195,6 @@ angular.module('risevision.editor.services')
           .then(null, function (e) {
             _showErrorMessage('add', e);
 
-            if(e.result.error.message === JSON_PARSE_ERROR) {
-              messageBox('editor-app.json-error.title', 'editor-app.json-error.message');
-            }
-
             deferred.reject();
           })
           .finally(function () {
@@ -210,7 +207,6 @@ angular.module('risevision.editor.services')
 
       factory.updatePresentation = function () {
         var deferred = $q.defer();
-        var validation = $q.resolve();
 
         _clearMessages();
 
@@ -218,13 +214,12 @@ angular.module('risevision.editor.services')
         factory.loadingPresentation = true;
         factory.savingPresentation = true;
 
-        if(_parseOrUpdatePresentation().jsonParseError) {
-          validation = $q.reject({ result: { error: { message: JSON_PARSE_ERROR } } });
-        }
+        factory.validatePresentation()
+          .then(function () {
+            _parseOrUpdatePresentation();
 
-        validation.then(function () {
-          return presentation.update(factory.presentation.id, factory.presentation);
-        })
+            return presentation.update(factory.presentation.id, factory.presentation);
+          })
           .then(function (resp) {
             presentationTracker('Presentation Updated', resp.item.id,
               resp.item.name);
@@ -235,10 +230,6 @@ angular.module('risevision.editor.services')
           })
           .then(null, function (e) {
             _showErrorMessage('update', e);
-
-            if(e.result.error.message === JSON_PARSE_ERROR) {
-              messageBox('editor-app.json-error.title', 'editor-app.json-error.message');
-            }
 
             deferred.reject();
           })

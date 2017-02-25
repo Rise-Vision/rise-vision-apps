@@ -1,6 +1,7 @@
 'use strict';
 describe('service: editorFactory:', function() {
   var sandbox = sinon.sandbox.create();
+  var messageBoxStub = sinon.stub();
 
   beforeEach(module('risevision.editor.services'));
   beforeEach(module(function ($provide) {
@@ -161,9 +162,7 @@ describe('service: editorFactory:', function() {
     $provide.value('VIEWER_URL', 'http://rvaviewer-test.appspot.com');
     $provide.value('TEMPLATES_CATEGORY', 'Templates');
     $provide.factory('messageBox', function() {
-      return function() {
-
-      };
+      return messageBoxStub;
     });
   }));
   var editorFactory, trackerCalled, updatePresentation, currentState, stateParams, 
@@ -186,6 +185,7 @@ describe('service: editorFactory:', function() {
 
   afterEach(function() {
     sandbox.restore();
+    messageBoxStub.reset();
   });
 
   it('should exist',function(){
@@ -295,32 +295,35 @@ describe('service: editorFactory:', function() {
     it('should add the presentation',function(done){
       updatePresentation = true;
 
-      editorFactory.addPresentation();
+      sandbox.stub(presentationParser, "parsePresentation").returns(true);
 
-      expect(editorFactory.presentation.updated).to.be.true;
-      expect(editorFactory.presentation.distributionUpdated).to.be.true;
-      expect(editorFactory.savingPresentation).to.be.true;
-      expect(editorFactory.loadingPresentation).to.be.true;
+      editorFactory.addPresentation()
+        .then(function() {
+          expect(editorFactory.presentation.updated).to.be.true;
+          expect(editorFactory.presentation.distributionUpdated).to.be.true;
+          expect(editorFactory.savingPresentation).to.be.true;
+          expect(editorFactory.loadingPresentation).to.be.true;
 
-      setTimeout(function(){
-        expect(currentState).to.equal('apps.editor.workspace.artboard');
-        expect(trackerCalled).to.equal('Presentation Created');
-        expect(editorFactory.savingPresentation).to.be.false;
-        expect(editorFactory.loadingPresentation).to.be.false;
-        expect(editorFactory.errorMessage).to.not.be.ok;
-        expect(editorFactory.apiError).to.not.be.ok;
-        
-        done();
-      },10);
+          setTimeout(function(){
+            expect(currentState).to.equal('apps.editor.workspace.artboard');
+            expect(trackerCalled).to.equal('Presentation Created');
+            expect(editorFactory.savingPresentation).to.be.false;
+            expect(editorFactory.loadingPresentation).to.be.false;
+            expect(editorFactory.errorMessage).to.not.be.ok;
+            expect(editorFactory.apiError).to.not.be.ok;
+
+            done();
+          },10);
+        });
     });
 
     it('should fail to add the presentation because of validation errors',function(done){
       currentState = 'apps.editor.workspace.htmleditor';
 
-      sandbox.stub(presentationParser, "parsePresentation").returns({ jsonParseError: true });
+      sandbox.stub(presentationParser, "parsePresentation").returns(false);
 
-      editorFactory.addPresentation().
-        catch(function() {
+      editorFactory.addPresentation()
+        .catch(function() {
           done();
         });
     });
@@ -331,6 +334,8 @@ describe('service: editorFactory:', function() {
       var createFirstScheduleSpy = sinon.spy(scheduleFactory,'createFirstSchedule');
       var $modalOpenSpy = sinon.spy($modal, 'open');
 
+      sandbox.stub(presentationParser, "parsePresentation").returns(true);
+
       editorFactory.addPresentation();
 
       setTimeout(function(){
@@ -338,7 +343,7 @@ describe('service: editorFactory:', function() {
         $modalOpenSpy.should.have.been.called;
         expect($modalOpenSpy.getCall(0).args[0].templateUrl).to.equal('partials/editor/auto-schedule-modal.html');
         expect($modalOpenSpy.getCall(0).args[0].controller).to.equal('AutoScheduleModalController');  
-        
+
         done();
       },100);
     });
@@ -347,13 +352,16 @@ describe('service: editorFactory:', function() {
       updatePresentation = true;
       currentState = 'apps.editor.workspace.htmleditor';
 
-      editorFactory.addPresentation();
+      sandbox.stub(presentationParser, "parsePresentation").returns(true);
 
-      expect(editorFactory.presentation.parsed).to.be.true;
-      expect(editorFactory.presentation.distributionUpdated).to.be.true;
+      editorFactory.addPresentation()
+        .then(function() {
+          expect(editorFactory.presentation.parsed).to.be.true;
+          expect(editorFactory.presentation.distributionUpdated).to.be.true;
 
-      expect(editorFactory.savingPresentation).to.be.true;
-      expect(editorFactory.loadingPresentation).to.be.true;
+          expect(editorFactory.savingPresentation).to.be.true;
+          expect(editorFactory.loadingPresentation).to.be.true;
+        });
 
       setTimeout(function(){
         expect(currentState).to.equal('apps.editor.workspace.artboard');
@@ -410,9 +418,13 @@ describe('service: editorFactory:', function() {
           ]
         }
       ];
-      editorFactory.addPresentation();
 
-      expect(editorFactory.presentation.embeddedIds).to.deep.equal(['presentation2', 'presentation1']);
+      sandbox.stub(presentationParser, "parsePresentation").returns(true);
+
+      editorFactory.addPresentation()
+        .then(function() {
+          expect(editorFactory.presentation.embeddedIds).to.deep.equal(['presentation2', 'presentation1']);
+        });
     });
   });
   
@@ -423,12 +435,15 @@ describe('service: editorFactory:', function() {
 
       editorFactory.presentation.updated = false;
 
-      editorFactory.updatePresentation();
+      sandbox.stub(presentationParser, "parsePresentation").returns(true);
 
-      expect(editorFactory.presentation.updated).to.be.true;
-      expect(editorFactory.presentation.distributionUpdated).to.be.true;
-      expect(editorFactory.savingPresentation).to.be.true;
-      expect(editorFactory.loadingPresentation).to.be.true;
+      editorFactory.updatePresentation()
+        .then(function() {
+          expect(editorFactory.presentation.updated).to.be.true;
+          expect(editorFactory.presentation.distributionUpdated).to.be.true;
+          expect(editorFactory.savingPresentation).to.be.true;
+          expect(editorFactory.loadingPresentation).to.be.true;
+        });
 
       setTimeout(function(){
         expect(trackerCalled).to.equal('Presentation Updated');
@@ -443,7 +458,7 @@ describe('service: editorFactory:', function() {
     it('should fail to update the presentation because of validation errors',function(done){
       currentState = 'apps.editor.workspace.htmleditor';
 
-      sandbox.stub(presentationParser, "parsePresentation").returns({ jsonParseError: true });
+      sandbox.stub(presentationParser, "parsePresentation").returns(false);
 
       editorFactory.updatePresentation().
         catch(function() {
@@ -457,13 +472,16 @@ describe('service: editorFactory:', function() {
 
       editorFactory.presentation.parsed = false;
 
-      editorFactory.updatePresentation();
+      sandbox.stub(presentationParser, "parsePresentation").returns(true);
 
-      expect(editorFactory.presentation.parsed).to.be.true;
-      expect(editorFactory.presentation.distributionUpdated).to.be.true;
+      editorFactory.updatePresentation()
+        .then(function() {
+          expect(editorFactory.presentation.parsed).to.be.true;
+          expect(editorFactory.presentation.distributionUpdated).to.be.true;
 
-      expect(editorFactory.savingPresentation).to.be.true;
-      expect(editorFactory.loadingPresentation).to.be.true;
+          expect(editorFactory.savingPresentation).to.be.true;
+          expect(editorFactory.loadingPresentation).to.be.true;
+        });
 
       setTimeout(function(){
         expect(trackerCalled).to.equal('Presentation Updated');
@@ -734,10 +752,6 @@ describe('service: editorFactory:', function() {
   });
 
   describe('saveAndPreview: ', function() {
-    afterEach(function() {
-      sandbox.restore();
-    });
-
     it('should add and preview new presentation', function(done) {
       var $windowOpenSpy = sinon.spy($window, 'open');
       var addEventSpy = sinon.spy(userState, 'addEventListenerVisibilityAPI');

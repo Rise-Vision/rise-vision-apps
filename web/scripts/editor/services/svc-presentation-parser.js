@@ -214,14 +214,13 @@ angular.module('risevision.editor.services')
             }
             catch (err) {
               $log.error('parse presentation error', err);
-              $log.error('failing json', json);
-              return { jsonParseError: true };
+              return false;
             }
 
             dataObject = dataObject && dataObject.presentationData;
 
             if (!dataObject) {
-              return {};
+              return true;
             }
 
             presentation.hidePointer =
@@ -234,7 +233,7 @@ angular.module('risevision.editor.services')
           }
         }
 
-        return {};
+        return true;
       };
 
       factory.parseStyle = function (placeholder, htmlString) {
@@ -367,13 +366,13 @@ angular.module('risevision.editor.services')
         factory.hasLegacyItems = false;
 
         if (!htmlString) {
-          return {};
+          return true;
         }
 
         start = htmlString.toLowerCase().indexOf(htmlTag);
         end = htmlString.toLowerCase().indexOf(htmlEndTag, start);
         if (start === -1 || end === -1) {
-          return {};
+          return true;
         }
 
         // process head for help link
@@ -381,7 +380,7 @@ angular.module('risevision.editor.services')
         end = htmlString.toLowerCase().indexOf(headEndTag, start);
 
         if (start === -1 || end < start) {
-          return {};
+          return true;
         }
 
         presentation.helpURL = factory.parseHelpLink(htmlString.substring(
@@ -392,7 +391,7 @@ angular.module('risevision.editor.services')
         end = htmlString.indexOf('>', start);
 
         if (start === -1 || end < start) {
-          return {};
+          return true;
         }
 
         factory.parseBodyStyle(presentation, htmlParser.stripOuterGarbage(
@@ -401,13 +400,12 @@ angular.module('risevision.editor.services')
 
         end = htmlString.toLowerCase().indexOf(bodyEndTag, start);
         if (start === -1 || end === -1) {
-          return {};
+          return true;
         }
 
         // process data
-        if(factory.parsePresentationData(presentation).jsonParseError) {
-          $log.debug('error parsing presentation', presentation);
-          return { jsonParseError: true };
+        if(!factory.parsePresentationData(presentation)) {
+          return false;
         };
 
         factory.parsePlaceholders(presentation, htmlString.substring(
@@ -415,7 +413,7 @@ angular.module('risevision.editor.services')
 
         $log.debug('parse presentation result', presentation);
 
-        return {};
+        return true;
       };
 
       // ======================================================================

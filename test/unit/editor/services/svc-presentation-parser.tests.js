@@ -225,7 +225,7 @@ describe('service: PresentationParser ', function() {
 
     var result = presentationParser.parsePresentationData(presentationObj);
 
-    expect(result.jsonParseError).to.be.true;
+    expect(result).to.be.false;
   });
 
   it('parsePresentationData, cleanPlaceholderData and flag legacy items', function() {
