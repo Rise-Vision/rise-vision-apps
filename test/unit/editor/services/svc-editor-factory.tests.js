@@ -75,6 +75,9 @@ describe('service: editorFactory:', function() {
     });
     $provide.service('presentationParser', function() {
       return {
+        validatePresentation: function(presentation) {
+          return true;
+        },
         parsePresentation: function(presentation) {
           presentation.parsed = true;
           return {};
@@ -321,7 +324,7 @@ describe('service: editorFactory:', function() {
     it('should fail to add the presentation because of validation errors',function(done){
       currentState = 'apps.editor.workspace.htmleditor';
 
-      sandbox.stub(presentationParser, "parsePresentation").returns(false);
+      sandbox.stub(presentationParser, "validatePresentation").returns(false);
 
       editorFactory.addPresentation()
         .catch(function() {
@@ -461,7 +464,7 @@ describe('service: editorFactory:', function() {
     it('should fail to update the presentation because of validation errors',function(done){
       currentState = 'apps.editor.workspace.htmleditor';
 
-      sandbox.stub(presentationParser, "parsePresentation").returns(false);
+      sandbox.stub(presentationParser, "validatePresentation").returns(false);
 
       editorFactory.updatePresentation().
         catch(function() {
@@ -799,7 +802,7 @@ describe('service: editorFactory:', function() {
     it('should fail to preview a presentation because of validation errors', function(done) {
       var removeEventSpy = sinon.spy(userState, 'removeEventListenerVisibilityAPI');
 
-      sandbox.stub(presentationParser, "parsePresentation").returns(false);
+      sandbox.stub(presentationParser, "validatePresentation").returns(false);
 
       editorFactory.saveAndPreview()
         .catch(function() {

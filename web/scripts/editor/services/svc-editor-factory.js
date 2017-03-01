@@ -141,7 +141,7 @@ angular.module('risevision.editor.services')
       };
 
       factory.validatePresentation = function () {
-        if(presentationParser.parsePresentation(factory.presentation)) {
+        if(presentationParser.validatePresentation(factory.presentation)) {
           return $q.resolve();
         }
         else {
