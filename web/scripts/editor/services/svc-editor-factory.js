@@ -10,13 +10,12 @@ angular.module('risevision.editor.services')
     'presentationParser', 'distributionParser', 'presentationTracker',
     'store', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
     'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT', 'TEMPLATES_CATEGORY',
-    '$modal', '$rootScope', '$window', 'scheduleFactory', 'messageBox',
+    '$modal', '$rootScope', '$window', 'scheduleFactory',
     function ($q, $state, userState, presentation, presentationParser,
       distributionParser, presentationTracker, store, VIEWER_URL,
       REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED, DEFAULT_LAYOUT,
-      TEMPLATES_CATEGORY, $modal, $rootScope, $window, scheduleFactory, messageBox) {
+      TEMPLATES_CATEGORY, $modal, $rootScope, $window, scheduleFactory) {
       var factory = {};
-      var JSON_PARSE_ERROR = 'JSON parse error';
 
       factory.openPresentationProperties = function () {
         $modal.open({
@@ -140,17 +139,6 @@ angular.module('risevision.editor.services')
         _updateEmbeddedIds(factory.presentation);
       };
 
-      factory.validatePresentation = function () {
-        if(presentationParser.parsePresentation(factory.presentation)) {
-          return $q.resolve();
-        }
-        else {
-          messageBox('editor-app.json-error.title', 'editor-app.json-error.message');
-
-          return $q.reject({ result: { error: { message: JSON_PARSE_ERROR } } });
-        }
-      };
-
       factory.addPresentation = function () {
         var deferred = $q.defer();
 
@@ -160,12 +148,9 @@ angular.module('risevision.editor.services')
         factory.loadingPresentation = true;
         factory.savingPresentation = true;
 
-        factory.validatePresentation()
-          .then(function () {
-            _parseOrUpdatePresentation();
+        _parseOrUpdatePresentation();
 
-            return presentation.add(factory.presentation);
-          })
+        presentation.add(factory.presentation)
           .then(function (resp) {
             if (resp && resp.item && resp.item.id) {
               presentationTracker('Presentation Created', resp.item.id,
@@ -214,12 +199,9 @@ angular.module('risevision.editor.services')
         factory.loadingPresentation = true;
         factory.savingPresentation = true;
 
-        factory.validatePresentation()
-          .then(function () {
-            _parseOrUpdatePresentation();
+        _parseOrUpdatePresentation();
 
-            return presentation.update(factory.presentation.id, factory.presentation);
-          })
+        presentation.update(factory.presentation.id, factory.presentation)
           .then(function (resp) {
             presentationTracker('Presentation Updated', resp.item.id,
               resp.item.name);
@@ -463,17 +445,14 @@ angular.module('risevision.editor.services')
       };
 
       factory.saveAndPreview = function () {
-        return factory.validatePresentation()
-          .then(function() {
-            userState.removeEventListenerVisibilityAPI();
-            $window.open('/loading-preview.html', 'rvPresentationPreview');
+        userState.removeEventListenerVisibilityAPI();
+        $window.open('/loading-preview.html', 'rvPresentationPreview');
 
-            return factory.save().then(function (presentationId) {
-              factory.preview(presentationId);
-            }).finally(function () {
-              userState.addEventListenerVisibilityAPI();
-            });
-          });
+        factory.save().then(function (presentationId) {
+          factory.preview(presentationId);
+        }).finally(function () {
+          userState.addEventListenerVisibilityAPI();
+        });
       };
 
       var _showErrorMessage = function (action, e) {

@@ -16,7 +16,6 @@ angular.module('risevision.apps', [
     'risevision.common.components.distribution-selector',
     'risevision.common.components.presentation-selector',
     'risevision.common.components.background-image-setting',
-    'risevision.common.components.message-box',
     'risevision.common.currency',
     'risevision.widget.common',
     'ui.codemirror',
