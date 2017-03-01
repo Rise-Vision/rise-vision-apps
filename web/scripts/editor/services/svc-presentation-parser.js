@@ -174,11 +174,11 @@ angular.module('risevision.editor.services')
         }
       };
 
-      factory.parsePresentationData = function (presentation) {
+      var _processLayout = function(htmlString) {
         var start, end;
-        var htmlString = presentation.layout;
 
         start = htmlString.toLowerCase().indexOf(dataVariableParam);
+
         if (start !== -1) {
           // find if the next character is a quote or a bracket
           if (htmlString.indexOf('\'', start) === -1 ||
@@ -214,14 +214,26 @@ angular.module('risevision.editor.services')
             }
             catch (err) {
               $log.error('parse presentation error', err);
-              return false;
+              return { valid: false };
             }
 
-            dataObject = dataObject && dataObject.presentationData;
+            return { valid: true, dataObject: dataObject && dataObject.presentationData };
+          }
+        }
 
-            if (!dataObject) {
-              return true;
-            }
+        return { valid: true };
+      };
+
+      factory.validatePresentation = function (presentation) {
+        return _processLayout(presentation.layout).valid;
+      };
+
+      factory.parsePresentationData = function (presentation) {
+        var start, end;
+        var layout = _processLayout(presentation.layout);
+
+        if(layout.valid && layout.dataObject) {
+            var dataObject = layout.dataObject;
 
             presentation.hidePointer =
               htmlParser.getBooleanValue(dataObject.hidePointer);
@@ -230,10 +242,9 @@ angular.module('risevision.editor.services')
             _cleanPlaceholderData(dataObject.placeholders);
 
             presentation.placeholders = dataObject.placeholders;
-          }
         }
 
-        return true;
+        return layout.valid;
       };
 
       factory.parseStyle = function (placeholder, htmlString) {
