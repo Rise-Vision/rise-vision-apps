@@ -1,8 +1,5 @@
 'use strict';
 describe('service: editorFactory:', function() {
-  var sandbox = sinon.sandbox.create();
-  var messageBoxStub = sinon.stub();
-
   beforeEach(module('risevision.editor.services'));
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
@@ -77,7 +74,6 @@ describe('service: editorFactory:', function() {
       return {
         parsePresentation: function(presentation) {
           presentation.parsed = true;
-          return {};
         },
 
         updatePresentation: function(presentation) {
@@ -107,7 +103,7 @@ describe('service: editorFactory:', function() {
             return Q.resolve({items:[{productCode: 'test'}]});
           }
         }
-      };
+      }
     });
     $provide.service('$state',function(){
       return {
@@ -121,10 +117,10 @@ describe('service: editorFactory:', function() {
         is: function(state) {
           return state === currentState;
         }
-      };
+      }
     });
     $provide.service('userState', function() { 
-      return {
+      return {        
         getUsername : function() {
           return 'testusername';
         },
@@ -139,12 +135,12 @@ describe('service: editorFactory:', function() {
           var deferred = Q.defer();
 
           deferred.resolve({rvaEntityId: 'id1'});
-
+          
           return {
             result: deferred.promise
           };
         }
-      };
+      }
     });
     $provide.service('scheduleFactory', function() { 
       return {
@@ -158,12 +154,9 @@ describe('service: editorFactory:', function() {
         open: function(url, target) {
         }
       };
-    });
+    })
     $provide.value('VIEWER_URL', 'http://rvaviewer-test.appspot.com');
     $provide.value('TEMPLATES_CATEGORY', 'Templates');
-    $provide.factory('messageBox', function() {
-      return messageBoxStub;
-    });
   }));
   var editorFactory, trackerCalled, updatePresentation, currentState, stateParams, 
     presentationParser, $window, $modal, scheduleFactory, userState, $rootScope;
@@ -181,11 +174,6 @@ describe('service: editorFactory:', function() {
       userState = $injector.get('userState');
       $rootScope = $injector.get('$rootScope');
     });
-  });
-
-  afterEach(function() {
-    sandbox.restore();
-    messageBoxStub.reset();
   });
 
   it('should exist',function(){
@@ -295,39 +283,23 @@ describe('service: editorFactory:', function() {
     it('should add the presentation',function(done){
       updatePresentation = true;
 
-      sandbox.stub(presentationParser, "parsePresentation").returns(true);
+      editorFactory.addPresentation();
 
-      editorFactory.addPresentation()
-        .then(function() {
-          expect(messageBoxStub).to.not.have.been.called;
-          expect(editorFactory.presentation.updated).to.be.true;
-          expect(editorFactory.presentation.distributionUpdated).to.be.true;
-          expect(editorFactory.savingPresentation).to.be.true;
-          expect(editorFactory.loadingPresentation).to.be.true;
+      expect(editorFactory.presentation.updated).to.be.true;
+      expect(editorFactory.presentation.distributionUpdated).to.be.true;
+      expect(editorFactory.savingPresentation).to.be.true;
+      expect(editorFactory.loadingPresentation).to.be.true;
 
-          setTimeout(function(){
-            expect(currentState).to.equal('apps.editor.workspace.artboard');
-            expect(trackerCalled).to.equal('Presentation Created');
-            expect(editorFactory.savingPresentation).to.be.false;
-            expect(editorFactory.loadingPresentation).to.be.false;
-            expect(editorFactory.errorMessage).to.not.be.ok;
-            expect(editorFactory.apiError).to.not.be.ok;
-
-            done();
-          },10);
-        });
-    });
-
-    it('should fail to add the presentation because of validation errors',function(done){
-      currentState = 'apps.editor.workspace.htmleditor';
-
-      sandbox.stub(presentationParser, "parsePresentation").returns(false);
-
-      editorFactory.addPresentation()
-        .catch(function() {
-          expect(messageBoxStub).to.have.been.called;
-          done();
-        });
+      setTimeout(function(){
+        expect(currentState).to.equal('apps.editor.workspace.artboard');
+        expect(trackerCalled).to.equal('Presentation Created');
+        expect(editorFactory.savingPresentation).to.be.false;
+        expect(editorFactory.loadingPresentation).to.be.false;
+        expect(editorFactory.errorMessage).to.not.be.ok;
+        expect(editorFactory.apiError).to.not.be.ok;
+        
+        done();
+      },10);
     });
 
     it('should create first Schedule when adding first presentation and show modal',function(done){
@@ -336,8 +308,6 @@ describe('service: editorFactory:', function() {
       var createFirstScheduleSpy = sinon.spy(scheduleFactory,'createFirstSchedule');
       var $modalOpenSpy = sinon.spy($modal, 'open');
 
-      sandbox.stub(presentationParser, "parsePresentation").returns(true);
-
       editorFactory.addPresentation();
 
       setTimeout(function(){
@@ -345,7 +315,7 @@ describe('service: editorFactory:', function() {
         $modalOpenSpy.should.have.been.called;
         expect($modalOpenSpy.getCall(0).args[0].templateUrl).to.equal('partials/editor/auto-schedule-modal.html');
         expect($modalOpenSpy.getCall(0).args[0].controller).to.equal('AutoScheduleModalController');  
-
+        
         done();
       },100);
     });
@@ -354,16 +324,13 @@ describe('service: editorFactory:', function() {
       updatePresentation = true;
       currentState = 'apps.editor.workspace.htmleditor';
 
-      sandbox.stub(presentationParser, "parsePresentation").returns(true);
+      editorFactory.addPresentation();
 
-      editorFactory.addPresentation()
-        .then(function() {
-          expect(editorFactory.presentation.parsed).to.be.true;
-          expect(editorFactory.presentation.distributionUpdated).to.be.true;
+      expect(editorFactory.presentation.parsed).to.be.true;
+      expect(editorFactory.presentation.distributionUpdated).to.be.true;
 
-          expect(editorFactory.savingPresentation).to.be.true;
-          expect(editorFactory.loadingPresentation).to.be.true;
-        });
+      expect(editorFactory.savingPresentation).to.be.true;
+      expect(editorFactory.loadingPresentation).to.be.true;
 
       setTimeout(function(){
         expect(currentState).to.equal('apps.editor.workspace.artboard');
@@ -420,13 +387,9 @@ describe('service: editorFactory:', function() {
           ]
         }
       ];
+      editorFactory.addPresentation();
 
-      sandbox.stub(presentationParser, "parsePresentation").returns(true);
-
-      editorFactory.addPresentation()
-        .then(function() {
-          expect(editorFactory.presentation.embeddedIds).to.deep.equal(['presentation2', 'presentation1']);
-        });
+      expect(editorFactory.presentation.embeddedIds).to.deep.equal(['presentation2', 'presentation1']);
     });
   });
   
@@ -437,16 +400,12 @@ describe('service: editorFactory:', function() {
 
       editorFactory.presentation.updated = false;
 
-      sandbox.stub(presentationParser, "parsePresentation").returns(true);
+      editorFactory.updatePresentation();
 
-      editorFactory.updatePresentation()
-        .then(function() {
-          expect(messageBoxStub).to.not.have.been.called;
-          expect(editorFactory.presentation.updated).to.be.true;
-          expect(editorFactory.presentation.distributionUpdated).to.be.true;
-          expect(editorFactory.savingPresentation).to.be.true;
-          expect(editorFactory.loadingPresentation).to.be.true;
-        });
+      expect(editorFactory.presentation.updated).to.be.true;
+      expect(editorFactory.presentation.distributionUpdated).to.be.true;
+      expect(editorFactory.savingPresentation).to.be.true;
+      expect(editorFactory.loadingPresentation).to.be.true;
 
       setTimeout(function(){
         expect(trackerCalled).to.equal('Presentation Updated');
@@ -458,34 +417,19 @@ describe('service: editorFactory:', function() {
       },10);
     });
 
-    it('should fail to update the presentation because of validation errors',function(done){
-      currentState = 'apps.editor.workspace.htmleditor';
-
-      sandbox.stub(presentationParser, "parsePresentation").returns(false);
-
-      editorFactory.updatePresentation().
-        catch(function() {
-          expect(messageBoxStub).to.have.been.called;
-          done();
-        });
-    });
-
     it('should parse and update the presentation when $state is html-editor',function(done){
       updatePresentation = true;
       currentState = 'apps.editor.workspace.htmleditor';
 
       editorFactory.presentation.parsed = false;
 
-      sandbox.stub(presentationParser, "parsePresentation").returns(true);
+      editorFactory.updatePresentation();
 
-      editorFactory.updatePresentation()
-        .then(function() {
-          expect(editorFactory.presentation.parsed).to.be.true;
-          expect(editorFactory.presentation.distributionUpdated).to.be.true;
+      expect(editorFactory.presentation.parsed).to.be.true;
+      expect(editorFactory.presentation.distributionUpdated).to.be.true;
 
-          expect(editorFactory.savingPresentation).to.be.true;
-          expect(editorFactory.loadingPresentation).to.be.true;
-        });
+      expect(editorFactory.savingPresentation).to.be.true;
+      expect(editorFactory.loadingPresentation).to.be.true;
 
       setTimeout(function(){
         expect(trackerCalled).to.equal('Presentation Updated');
@@ -760,53 +704,32 @@ describe('service: editorFactory:', function() {
       var $windowOpenSpy = sinon.spy($window, 'open');
       var addEventSpy = sinon.spy(userState, 'addEventListenerVisibilityAPI');
       var removeEventSpy = sinon.spy(userState, 'removeEventListenerVisibilityAPI');
+      
+      editorFactory.saveAndPreview();
+      removeEventSpy.should.have.been.called;
+      
+      setTimeout(function() {
+        $windowOpenSpy.should.have.been.called.twice;
+        $windowOpenSpy.should.have.been.calledWith('http://rvaviewer-test.appspot.com/?type=presentation&id=presentationId', 'rvPresentationPreview');
+        addEventSpy.should.have.been.called;
 
-      sandbox.stub(presentationParser, "parsePresentation").returns(true);
-
-      editorFactory.saveAndPreview()
-        .then(function() {
-          expect(messageBoxStub).to.not.have.been.called;
-          removeEventSpy.should.have.been.called;
-
-          setTimeout(function() {
-            $windowOpenSpy.should.have.been.called.twice;
-            $windowOpenSpy.should.have.been.calledWith('http://rvaviewer-test.appspot.com/?type=presentation&id=presentationId', 'rvPresentationPreview');
-            addEventSpy.should.have.been.called;
-
-            done();
-          }, 10);
-        });
+        done();
+      }, 10);
     });
-
+    
     it('should save and preview existing presentation', function(done) {
       var $windowOpenSpy = sinon.spy($window, 'open');
-
-      sandbox.stub(presentationParser, "parsePresentation").returns(true);
-
+      
       editorFactory.getPresentation("presentationId").then(function() {
-        editorFactory.saveAndPreview()
-          .then(function() {
-            setTimeout(function() {
-              $windowOpenSpy.should.have.been.called.twice;
-              $windowOpenSpy.should.have.been.calledWith('http://rvaviewer-test.appspot.com/?type=presentation&id=presentationId', 'rvPresentationPreview');
+        editorFactory.saveAndPreview();
+        
+        setTimeout(function() {
+          $windowOpenSpy.should.have.been.called.twice;
+          $windowOpenSpy.should.have.been.calledWith('http://rvaviewer-test.appspot.com/?type=presentation&id=presentationId', 'rvPresentationPreview');
 
-              done();
-            }, 10);
-          });
-      });
-    });
-
-    it('should fail to preview a presentation because of validation errors', function(done) {
-      var removeEventSpy = sinon.spy(userState, 'removeEventListenerVisibilityAPI');
-
-      sandbox.stub(presentationParser, "parsePresentation").returns(false);
-
-      editorFactory.saveAndPreview()
-        .catch(function() {
-          expect(messageBoxStub).to.have.been.called;
-          removeEventSpy.should.not.have.been.called;
           done();
-        });
+        }, 10);
+      });
     });
 
   });

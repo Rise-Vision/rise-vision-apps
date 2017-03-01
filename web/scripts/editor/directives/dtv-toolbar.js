@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.editor.directives')
-  .directive('toolbar', ['editorFactory', 'placeholdersFactory', '$modal', '$state',
-    function (editorFactory, placeholdersFactory, $modal, $state) {
+  .directive('toolbar', ['editorFactory', 'placeholdersFactory', '$modal',
+    function (editorFactory, placeholdersFactory, $modal) {
       return {
         restrict: 'E',
         templateUrl: 'partials/editor/toolbar.html',
@@ -13,19 +13,6 @@ angular.module('risevision.editor.directives')
 
           $scope.openProperties = function () {
             editorFactory.openPresentationProperties();
-          };
-
-          $scope.showArtboard = function () {
-            return editorFactory.validatePresentation()
-              .then(function() {
-                $scope.designMode = true;
-                $state.go('apps.editor.workspace.artboard');
-              });
-          };
-
-          $scope.showHtmlEditor = function () {
-            $scope.designMode = false;
-            $state.go('apps.editor.workspace.htmleditor');
           };
         } //link()
       };

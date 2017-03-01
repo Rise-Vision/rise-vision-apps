@@ -218,16 +218,6 @@ describe('service: PresentationParser ', function() {
     expect(presentationObj.placeholders[0].visibility).to.be.true;
   });
 
-  it('fails to parse invalid JSON parsePresentationData', function() {
-    var presentationObj = {
-      layout: presentationHtml.replace('"presentationData": {', '"presentationData": {\'')
-    };
-
-    var result = presentationParser.parsePresentationData(presentationObj);
-
-    expect(result).to.be.false;
-  });
-
   it('parsePresentationData, cleanPlaceholderData and flag legacy items', function() {
     var presentationObj = {
       layout: presentationHtmlLegacyItems
