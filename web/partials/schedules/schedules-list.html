@@ -47,11 +47,11 @@
         </tr>
         <!-- If no schedules available -->
         <tr class="table-body__row" ng-show="schedules.list.length === 0 && !search.query">
-          <td colspan="3" class="table-body__cell text-center"><a ui-sref="apps.schedules.details({scheduleId: schedule.id})"><span translate>schedules-app.list.empty</span></a></td>
+          <td colspan="3" class="table-body__cell text-center"><span translate>schedules-app.list.empty</span></td>
         </tr>
         <!-- If no search results -->
         <tr class="table-body__row" ng-show="schedules.list.length === 0 && search.query">
-          <td colspan="3" class="table-body__cell text-center"><a ui-sref="apps.schedules.details({scheduleId: schedule.id})"><span translate>schedules-app.list.no-results</span></a></td>
+          <td colspan="3" class="table-body__cell text-center"><span translate>schedules-app.list.no-results</span></td>
         </tr>
         
       </tbody>
