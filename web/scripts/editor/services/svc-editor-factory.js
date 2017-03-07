@@ -364,12 +364,6 @@ angular.module('risevision.editor.services')
           .then(factory.copyPresentation);
       };
 
-      factory.addBlankPresentation = function () {
-        presentationTracker('Add Presentation');
-
-        $state.go('apps.editor.workspace.artboard', {});
-      };
-
       factory.addPresentationModal = function () {
         presentationTracker('Add Presentation');
 
