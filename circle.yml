@@ -30,7 +30,7 @@ deployment:
       # To deploy to one of these environments a tag must be added to the commit message. For instance, [stage-0] for apps-stage-0.risevision.com.
       # If tag is missing, the [stage-0] is used.
       - >
-        STAGE_ENV="$(git log master.. --oneline | grep -m 1 '\[.*\]' | sed -e 's/.*\[\(.*\)\].*/\1/g')";
+        STAGE_ENV="$(git log master.. --pretty=%B | grep -m 1 '\[.*\]' | sed -e 's/.*\[\(.*\)\].*/\1/g')";
         if [ "$STAGE_ENV" != '' ]; then
           echo "Deploying to $STAGE_ENV";
         fi;
