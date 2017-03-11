@@ -7,6 +7,9 @@
 <button id="fileCopyUrlButton" type="button" class="btn btn-link" title="Copy Url" ng-click="factory.copyUrlButtonClick()" ng-hide="storageFactory.isTrashFolder()" ng-disabled="isDisabledCopyUrlButton()">
   <i class="fa fa-link fa-2x" ng-class="{ 'icon-gray': isDisabledCopyUrlButton() }"></i>
 </button>
+<button id="fileRenameButton" type="button" class="btn btn-link" title="Rename" ng-click="factory.renameButtonClick()" ng-hide="storageFactory.isTrashFolder()" ng-disabled="isDisabledRenameButton()">
+  <i class="fa fa-pencil fa-2x" ng-class="{ 'icon-gray': isDisabledRenameUrlButton() }"></i>
+</button>
 <button id="moveToTrashButton" type="button" class="btn btn-link" title="Move To Trash" ng-click="factory.trashButtonClick()" ng-show="!storageFactory.isTrashFolder()" ng-disabled="isDisabledTrashButton()">
   <i class="fa fa-trash-o fa-2x" ng-class="{ 'icon-gray': isDisabledTrashButton() }"></i>
 </button>

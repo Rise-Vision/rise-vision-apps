@@ -175,6 +175,29 @@ angular.module('risevision.storage.services')
         });
       };
 
+      factory.showBreakLinkWarning = function () {
+        return $modal.open({
+          templateUrl: 'partials/storage/break-link-warning-modal.html',
+          controller: 'BreakLinkWarningModalCtrl',
+          size: 'md'
+        });
+      };
+
+      factory.renameButtonClick = function (sourceName) {
+        factory.showBreakLinkWarning().result.then(function () {
+          var renameModal = $modal.open({
+            templateUrl: 'partials/storage/rename-modal.html',
+            controller: 'RenameModalCtrl',
+            size: 'md',
+            resolve: {
+              sourceName: function () {
+                return fileSelectorFactory.getSelectedFiles()[0];
+              }
+            }
+          });
+        });
+      };
+
       return factory;
     }
   ]);

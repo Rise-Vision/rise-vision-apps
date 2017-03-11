@@ -26,7 +26,7 @@ angular.module('risevision.storage.controllers')
         }
       });
 
-      $scope.isDisabledCopyUrlButton = function () {
+      $scope.isDisabledCopyUrlButton = $scope.isDisabledRenameButton = function () {
         return storageFactory.isTrashFolder() ||
           filesFactory.filesDetails.checkedItemsCount !== 1;
       };

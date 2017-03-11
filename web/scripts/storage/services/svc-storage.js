@@ -276,7 +276,35 @@ angular.module('risevision.storage.services')
             });
 
           return deferred.promise;
+        },
+
+        rename: function (sourceName, destinationName) {
+          var deferred = $q.defer();
+
+          var obj = {
+            'companyId': userState.getSelectedCompanyId(),
+            'sourceName': sourceName,
+            'destinationName': destinationName
+          };
+
+          $log.debug('Storage rename called with', obj);
+
+          storageAPILoader().then(function (storageApi) {
+            return storageApi.files.rename(obj);
+          })
+              .then(function (resp) {
+                $log.debug('status storage rename resp', resp);
+
+                deferred.resolve(resp.result);
+              })
+              .then(null, function (e) {
+                $log.error('Failed to rename storage objects', e);
+                deferred.reject(e);
+              });
+
+          return deferred.promise;
         }
+
 
       };
       return service;
