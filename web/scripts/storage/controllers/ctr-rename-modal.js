@@ -7,17 +7,22 @@ angular.module('risevision.storage.controllers')
 
       $scope.ok = function () {
         var suffix = source.name.endsWith("/") ? "/" : "";
+        var renameName = $scope.renameName + suffix;
+        var newFile = JSON.parse(JSON.stringify(source));
 
         $scope.errorKey = null;
 
-        storage.rename(source.name, $scope.renameName + suffix)
+        storage.rename(source.name, renameName)
           .then(function(resp) {
             if(resp.code !== 200) {
               $scope.errorKey = resp.message;
             }
             else {
               console.log('Storage rename processed succesfully');
-              filesFactory.refreshFilesList();
+
+              newFile.name = renameName;
+              filesFactory.addFile(newFile);
+              filesFactory.removeFiles([source]);
               $modalInstance.close();
             }
           }, function(e) {
