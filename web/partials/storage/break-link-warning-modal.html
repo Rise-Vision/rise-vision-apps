@@ -7,20 +7,18 @@
   </div>
   <div class="modal-body" stop-event="touchend" autofocus="autofocus">
     <div>
-      <p>{{ 'storage-client.rename.breakingLink1' | translate }}</p>
-      <p>{{ 'storage-client.rename.breakingLink2' | translate }}</p>
+      <p>{{ 'storage-client.rename.breaking-link1' | translate }}</p>
+      <p>{{ 'storage-client.rename.breaking-link2' | translate }}</p>
     </div>
   </div>
   <div class="modal-footer">
     <div class="col-sm-6 col-xs-12">
-      <!--
       <div class="checkbox text-left">
         <label>
-          <input name="choice" type="checkbox" ng-model="background.useImage" class="ng-pristine ng-untouched ng-valid ng-empty">
-          Do not show this warning again
+          <input type="checkbox" ng-model="hideWarning">
+          {{ 'storage-client.rename.breaking-link-hide-warning' | translate }}
         </label>
       </div>
-      -->
     </div>
     <button id="renameFileFolderModalSaveButton" class="btn btn-primary" ng-click="ok()">
       <span>{{ 'common.proceed' | translate }}</span> <i class="fa fa-white fa-check icon-right"></i>

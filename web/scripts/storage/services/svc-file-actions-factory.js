@@ -2,10 +2,10 @@
 angular.module('risevision.storage.services')
   .factory('fileActionsFactory', ['$rootScope',
     'fileSelectorFactory', 'filesFactory', 'storage',
-    'downloadFactory', '$modal', '$translate',
+    'downloadFactory', '$modal', '$translate', 'localStorageService', '$q',
     'STORAGE_FILE_URL',
     function ($rootScope, fileSelectorFactory, filesFactory,
-      storage, downloadFactory, $modal, $translate, STORAGE_FILE_URL) {
+      storage, downloadFactory, $modal, $translate, localStorageService, $q, STORAGE_FILE_URL) {
       var factory = {};
 
       factory.statusDetails = {
@@ -176,15 +176,21 @@ angular.module('risevision.storage.services')
       };
 
       factory.showBreakLinkWarning = function () {
+        var hideWarning = localStorageService.get('breakingLinkWarning.hideWarning') === 'true';
+
+        if(hideWarning) {
+          return $q.resolve();
+        }
+
         return $modal.open({
           templateUrl: 'partials/storage/break-link-warning-modal.html',
           controller: 'BreakLinkWarningModalCtrl',
           size: 'md'
-        });
+        }).result;
       };
 
       factory.renameButtonClick = function (sourceName) {
-        factory.showBreakLinkWarning().result.then(function () {
+        factory.showBreakLinkWarning().then(function () {
           var renameModal = $modal.open({
             templateUrl: 'partials/storage/rename-modal.html',
             controller: 'RenameModalCtrl',
