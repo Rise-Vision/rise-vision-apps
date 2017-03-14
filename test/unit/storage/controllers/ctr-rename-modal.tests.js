@@ -1,7 +1,8 @@
 'use strict';
 
 describe('controller: RenameModalCtrl', function() {
-  var $scope, $modalInstance, $q, storage, filesFactory, getResponse, renameResponse, controller;
+  var $rootScope, $scope, $modalInstance, $q, storage, filesFactory, fileSelectorFactory,
+      getResponse, renameResponse, source, controller;
   var sandbox = sinon.sandbox.create();
 
   beforeEach(module('risevision.storage.controllers'));
@@ -44,22 +45,31 @@ describe('controller: RenameModalCtrl', function() {
           removeFiles: function() {}
         };
       });
+
+      $provide.service('fileSelectorFactory', function() {
+        return {
+          resetSelections: function() {}
+        };
+      });
     });
   });
 
   beforeEach(function() {
-    inject(function ($controller, $rootScope, $injector) {
+    inject(function ($controller, _$rootScope_, $injector) {
+      $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
       $modalInstance = $injector.get('$modalInstance');
       storage = $injector.get('storage');
       filesFactory = $injector.get('filesFactory');
+      fileSelectorFactory = $injector.get('fileSelectorFactory');
+      source = { name: "test.jpg" };
 
       controller = $controller('RenameModalCtrl', {
         $scope: $scope,
         $modalInstance: $modalInstance,
         storage: storage,
         filesFactory: filesFactory,
-        sourceName: { name: "test.jpg" }
+        sourceName: source
       });
 
       $scope.$digest();
@@ -79,12 +89,13 @@ describe('controller: RenameModalCtrl', function() {
   });
 
   describe('rename: ', function() {
-    it('should rename the file', function(done) {
+    it('should rename a file', function(done) {
       sandbox.spy($modalInstance, 'close');
       sandbox.spy(storage.files, 'get');
       sandbox.spy(storage, 'rename');
       sandbox.spy(filesFactory, 'addFile');
       sandbox.spy(filesFactory, 'removeFiles');
+      sandbox.spy(fileSelectorFactory, 'resetSelections');
 
       getResponse = { files: [{ name: "test2.jpg" }] };
       renameResponse = { code: 200 };
@@ -97,6 +108,7 @@ describe('controller: RenameModalCtrl', function() {
           storage.files.get.should.have.been.called;
           filesFactory.addFile.should.have.been.called;
           filesFactory.removeFiles.should.have.been.called;
+          fileSelectorFactory.resetSelections.should.have.been.called;
           $modalInstance.close.should.have.been.called;
 
           expect(storage.rename.getCall(0).args[0]).to.equal('test.jpg');
@@ -106,6 +118,38 @@ describe('controller: RenameModalCtrl', function() {
           expect(filesFactory.addFile.getCall(0).args[0].name).to.equal('test2.jpg');
           done();
         });
+    });
+
+    it('should rename a folder', function(done) {
+      sandbox.spy($modalInstance, 'close');
+      sandbox.spy(storage.files, 'get');
+      sandbox.spy(storage, 'rename');
+      sandbox.spy(filesFactory, 'addFile');
+      sandbox.spy(filesFactory, 'removeFiles');
+      sandbox.spy(fileSelectorFactory, 'resetSelections');
+
+      source.name = "folder1/";
+      renameResponse = { code: 200 };
+
+      $scope.renameName = "folder2"; // Slashes are not allowed in the input field
+
+      $scope.ok();
+
+      setTimeout(function() {
+        $rootScope.$digest();
+        storage.rename.should.have.been.called;
+        storage.files.get.should.not.have.been.called;
+        filesFactory.addFile.should.have.been.called;
+        filesFactory.removeFiles.should.have.been.called;
+        fileSelectorFactory.resetSelections.should.have.been.called;
+        $modalInstance.close.should.have.been.called;
+
+        expect(storage.rename.getCall(0).args[0]).to.equal('folder1/');
+        expect(storage.rename.getCall(0).args[1]).to.equal('folder2/');
+        expect(filesFactory.removeFiles.getCall(0).args[0][0].name).to.equal('folder1/');
+        expect(filesFactory.addFile.getCall(0).args[0].name).to.equal('folder2/');
+        done();
+      }, 0);
     });
 
     it('should fail to rename the file because of business logic error', function(done) {
