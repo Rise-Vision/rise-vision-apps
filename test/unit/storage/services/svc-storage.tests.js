@@ -50,6 +50,20 @@ describe('service: storage:', function() {
                 def.reject("API Failed");
               }
               return def.promise;
+            },
+            rename: function(obj) {
+              expect(obj).to.be.ok;
+              storageApiRequestObj = obj;
+
+              var def = Q.defer();
+              if (returnResult) {
+                def.resolve({
+                  result: {}
+                });
+              } else {
+                def.reject("API Failed");
+              }
+              return def.promise;
             }
           },
           trash: {
@@ -520,6 +534,35 @@ describe('service: storage:', function() {
       returnResult = false;
       var files = ["file1","file2"]
       storage.notifyGCMTargetsChanged(files)
+        .then(function(result) {
+          done(result);
+        })
+        .then(null, function(error) {
+          expect(error).to.deep.equal('API Failed');
+          done();
+        })
+        .then(null,done);
+    });
+  });
+
+  describe('rename',function(){
+    it('should rename files',function(done){
+      storage.rename('file1', 'file2')
+        .then(function(result){
+          expect(result).to.be.truely;
+          expect(storageApiRequestObj.companyId).to.equal('TEST_COMP_ID');
+          expect(storageApiRequestObj.sourceName).to.equal('file1');
+          expect(storageApiRequestObj.destinationName).to.equal('file2');
+
+          done();
+        })
+        .then(null,done);
+    });
+
+    it('should handle failure',function(done){
+      returnResult = false;
+
+      storage.rename()
         .then(function(result) {
           done(result);
         })

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.storage.controllers')
-  .controller('BreakLinkWarningModalCtrl', ['$scope', '$modalInstance', '$rootScope', '$translate', 'localStorageService',
-    function ($scope, $modalInstance, $rootScope, $translate, localStorageService) {
+  .controller('BreakLinkWarningModalCtrl', ['$scope', '$modalInstance', 'localStorageService',
+    function ($scope, $modalInstance, localStorageService) {
       $scope.hideWarning = false;
 
       $scope.ok = function () {

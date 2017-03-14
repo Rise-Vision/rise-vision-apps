@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('risevision.storage.controllers')
-  .controller('RenameModalCtrl', ['$scope', '$modalInstance', '$rootScope', '$translate', '$q', 'storage', 'filesFactory', 'sourceName',
-    function ($scope, $modalInstance, $rootScope, $translate, $q, storage, filesFactory, source) {
+  .controller('RenameModalCtrl', ['$scope', '$modalInstance', '$q', 'storage', 'filesFactory', 'sourceName',
+    function ($scope, $modalInstance, $q, storage, filesFactory, source) {
       $scope.renameName = source.name.replace("/", "");
       $scope.isProcessing = false;
 
       function isFile(name) {
-        return name.endsWith("/");
+        return name.lastIndexOf("/") !== name.length - 1;
       }
 
       function loadSingleFile(file) {
@@ -25,7 +25,7 @@ angular.module('risevision.storage.controllers')
       }
 
       $scope.ok = function () {
-        var suffix = isFile(source.name) ? "/" : "";
+        var suffix = isFile(source.name) ? "" : "/";
         var renameName = $scope.renameName + suffix;
         var newFile = JSON.parse(JSON.stringify(source));
 
@@ -44,17 +44,17 @@ angular.module('risevision.storage.controllers')
 
               return loadSingleFile(newFile)
                 .then(function(file) {
-                  filesFactory.addFile(newFile);
                   filesFactory.removeFiles([source]);
+                  filesFactory.addFile(newFile);
                 }, function(e) {
-                  console.log("Error loading after renaming '" + sourceName + "' to '" + $scope.renameName + "'", e);
+                  console.log("Error loading after renaming '" + source.name + "' to '" + $scope.renameName + "'", e);
                 })
                 .finally(function() {
                   $modalInstance.close();
                 });
             }
           }, function(e) {
-            console.log("Error renaming '" + sourceName + "' to '" + $scope.renameName + "'", e);
+            console.log("Error renaming '" + source.name + "' to '" + $scope.renameName + "'", e);
             $scope.errorKey = "unknown";
           })
           .finally(function() {

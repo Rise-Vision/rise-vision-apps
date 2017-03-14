@@ -190,7 +190,7 @@ angular.module('risevision.storage.services')
       };
 
       factory.renameButtonClick = function (sourceName) {
-        factory.showBreakLinkWarning().then(function () {
+        return factory.showBreakLinkWarning().then(function () {
           var renameModal = $modal.open({
             templateUrl: 'partials/storage/rename-modal.html',
             controller: 'RenameModalCtrl',
