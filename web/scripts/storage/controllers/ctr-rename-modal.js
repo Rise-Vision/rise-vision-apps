@@ -4,6 +4,7 @@ angular.module('risevision.storage.controllers')
   .controller('RenameModalCtrl', ['$scope', '$modalInstance', '$rootScope', '$translate', '$q', 'storage', 'filesFactory', 'sourceName',
     function ($scope, $modalInstance, $rootScope, $translate, $q, storage, filesFactory, source) {
       $scope.renameName = source.name.replace("/", "");
+      $scope.isProcessing = false;
 
       function isFile(name) {
         return name.endsWith("/");
@@ -29,28 +30,35 @@ angular.module('risevision.storage.controllers')
         var newFile = JSON.parse(JSON.stringify(source));
 
         $scope.errorKey = null;
+        $scope.isProcessing = true;
 
-        storage.rename(source.name, renameName)
+        return storage.rename(source.name, renameName)
           .then(function(resp) {
             if(resp.code !== 200) {
               $scope.errorKey = resp.message;
+              return resp;
             }
             else {
               console.log('Storage rename processed succesfully');
               newFile.name = renameName;
 
-              loadSingleFile(newFile)
+              return loadSingleFile(newFile)
                 .then(function(file) {
                   filesFactory.addFile(newFile);
                   filesFactory.removeFiles([source]);
-                  $modalInstance.close();
                 }, function(e) {
-                  console.log("Error loading files after renaming '" + sourceName + "' to '" + $scope.renameName + "'", e);
+                  console.log("Error loading after renaming '" + sourceName + "' to '" + $scope.renameName + "'", e);
+                })
+                .finally(function() {
+                  $modalInstance.close();
                 });
             }
           }, function(e) {
             console.log("Error renaming '" + sourceName + "' to '" + $scope.renameName + "'", e);
             $scope.errorKey = "unknown";
+          })
+          .finally(function() {
+            $scope.isProcessing = false;
           });
       };
 
