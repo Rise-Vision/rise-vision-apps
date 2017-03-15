@@ -212,8 +212,8 @@ angular.module('risevision.storage.services')
           });
       };
 
-      factory.showBreakLinkWarning = function () {
-        var hideWarning = localStorageService.get('breakingLinkWarning.hideWarning') === 'true';
+      factory.showBreakLinkWarning = function (infoLine1Key, infoLine2Key, warningKey, confirmKey, cancelKey, localStorageKey) {
+        var hideWarning = localStorageService.get(localStorageKey) === 'true';
 
         if(hideWarning) {
           return $q.resolve();
@@ -222,12 +222,31 @@ angular.module('risevision.storage.services')
         return $modal.open({
           templateUrl: 'partials/storage/break-link-warning-modal.html',
           controller: 'BreakLinkWarningModalCtrl',
-          size: 'md'
+          size: 'md',
+          resolve: {
+            infoLine1Key: function() { return infoLine1Key; },
+            infoLine2Key: function() { return infoLine2Key; },
+            warningKey: function() { return warningKey; },
+            confirmKey: function() { return confirmKey; },
+            cancelKey: function() { return cancelKey; },
+            localStorageKey: function() { return localStorageKey; }
+          }
         }).result;
       };
 
+      factory.showRenameBreakLinkWarning = function() {
+        var prefix = 'storage-client.rename.';
+
+        return factory.showBreakLinkWarning(prefix + 'breaking-link1',
+                                            prefix + 'breaking-link2',
+                                            prefix + 'breaking-link-hide-warning',
+                                            'common.proceed',
+                                            'common.cancel',
+                                            prefix + 'breakingLinkWarning.hideWarning');
+      };
+
       factory.renameButtonClick = function (sourceName) {
-        return factory.showBreakLinkWarning().then(function () {
+        return factory.showRenameBreakLinkWarning().then(function () {
           var renameModal = $modal.open({
             templateUrl: 'partials/storage/rename-modal.html',
             controller: 'RenameModalCtrl',

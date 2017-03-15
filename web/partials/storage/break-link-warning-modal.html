@@ -7,8 +7,8 @@
   </div>
   <div class="modal-body" stop-event="touchend" autofocus="autofocus">
     <div>
-      <p>{{ 'storage-client.rename.breaking-link1' | translate }}</p>
-      <p>{{ 'storage-client.rename.breaking-link2' | translate }}</p>
+      <p>{{ infoLine1Key | translate }}</p>
+      <p>{{ infoLine2Key | translate }}</p>
     </div>
   </div>
   <div class="modal-footer">
@@ -16,15 +16,15 @@
       <div class="checkbox text-left">
         <label>
           <input type="checkbox" ng-model="hideWarning">
-          {{ 'storage-client.rename.breaking-link-hide-warning' | translate }}
+          {{ warningKey | translate }}
         </label>
       </div>
     </div>
     <button id="renameFileFolderModalSaveButton" class="btn btn-primary" ng-click="ok()">
-      <span>{{ 'common.proceed' | translate }}</span> <i class="fa fa-white fa-check icon-right"></i>
+      <span>{{ confirmKey | translate }}</span> <i class="fa fa-white fa-check icon-right"></i>
     </button>
     <button id="renameFileFolderModalCancelButton" class="btn btn-default" ng-click="cancel()">
-      <span>{{ 'common.cancel' | translate }}</span> <i class="fa fa-white fa-times icon-right"></i>
+      <span>{{ cancelKey | translate }}</span> <i class="fa fa-white fa-times icon-right"></i>
     </button>
   </div>
 </div>

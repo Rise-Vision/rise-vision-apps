@@ -33,7 +33,13 @@ describe('controller: BreakLinkWarningModalCtrl', function() {
       controller = $controller('BreakLinkWarningModalCtrl', {
         $scope: $scope,
         $modalInstance: $modalInstance,
-        localStorageService: localStorageService
+        localStorageService: localStorageService,
+        infoLine1Key: '',
+        infoLine2Key: '',
+        warningKey: '',
+        confirmKey: '',
+        cancelKey: '',
+        localStorageKey: 'breakingLinkWarning.hideWarning'
       });
 
       $scope.$digest();
@@ -48,7 +54,6 @@ describe('controller: BreakLinkWarningModalCtrl', function() {
     expect($scope).to.be.ok;
     expect($scope.ok).to.be.a('function');
     expect($scope.cancel).to.be.a('function');
-    expect($scope.dismiss).to.be.a('function');
   });
 
   describe('proceed: ', function() {
