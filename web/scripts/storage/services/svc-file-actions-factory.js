@@ -1,11 +1,11 @@
 'use strict';
 angular.module('risevision.storage.services')
   .factory('fileActionsFactory', ['$rootScope',
-    'fileSelectorFactory', 'filesFactory', 'storage',
+    'fileSelectorFactory', 'filesFactory', 'storage', 'storageFactory',
     'downloadFactory', '$modal', '$translate', 'localStorageService', '$q',
     'STORAGE_FILE_URL',
-    function ($rootScope, fileSelectorFactory, filesFactory,
-      storage, downloadFactory, $modal, $translate, localStorageService, $q, STORAGE_FILE_URL) {
+    function ($rootScope, fileSelectorFactory, filesFactory, storage, storageFactory,
+      downloadFactory, $modal, $translate, localStorageService, $q, STORAGE_FILE_URL) {
       var factory = {};
 
       factory.statusDetails = {
@@ -175,6 +175,43 @@ angular.module('risevision.storage.services')
         });
       };
 
+      factory.refreshThumbnail = function(file) {
+        if(!storageFactory.fileIsFolder(file)) {
+          return storage.files.get({ file: file.name })
+            .then(function (resp) {
+              return resp && resp.files && resp.files[0] ? resp.files[0] : file;
+            });
+        }
+        else {
+          return $q.resolve(angular.copy(file));
+        }
+      };
+
+      factory.renameObject = function(sourceObject, newName) {
+        var suffix = storageFactory.fileIsFolder(sourceObject) ? "/" : "";
+        var renameName = newName + suffix;
+        var newObject = angular.copy(sourceObject);
+
+        return storage.rename(sourceObject.name, renameName)
+          .then(function(resp) {
+            if(resp.code !== 200) {
+              return resp;
+            }
+            else {
+              newObject.name = renameName;
+
+              return factory.refreshThumbnail(newObject)
+                .then(function(file) {
+                  filesFactory.removeFiles([sourceObject]);
+                  filesFactory.addFile(newObject);
+                  fileSelectorFactory.resetSelections();
+
+                  return resp;
+                });
+            }
+          });
+      };
+
       factory.showBreakLinkWarning = function () {
         var hideWarning = localStorageService.get('breakingLinkWarning.hideWarning') === 'true';
 
@@ -196,7 +233,7 @@ angular.module('risevision.storage.services')
             controller: 'RenameModalCtrl',
             size: 'md',
             resolve: {
-              sourceName: function () {
+              sourceObject: function () {
                 return fileSelectorFactory.getSelectedFiles()[0];
               }
             }
