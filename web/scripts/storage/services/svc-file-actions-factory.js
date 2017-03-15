@@ -242,7 +242,7 @@ angular.module('risevision.storage.services')
                                             prefix + 'breaking-link-hide-warning',
                                             'common.proceed',
                                             'common.cancel',
-                                            prefix + 'breakingLinkWarning.hideWarning');
+                                            'breakingLinkWarning.hideWarning');
       };
 
       factory.renameButtonClick = function (sourceName) {
