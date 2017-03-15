@@ -9,6 +9,7 @@
     <div class="form-group">
       <input type="text" class="form-control" value="" required id="name" name="name" ng-model="renameName" onFocus="this.select()" focus-me="true">
       <br>
+      <div class="alert alert-danger" role="alert" ng-show="!validDestination()" translate>storage-client.rename.error.invalid-name</div>
       <div ng-show="errorKey">
         <div class="alert alert-danger" role="alert">
           {{ 'storage-client.rename.error.' + errorKey | translate }}
