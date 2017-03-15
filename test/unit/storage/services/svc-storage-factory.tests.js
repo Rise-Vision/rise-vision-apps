@@ -193,7 +193,27 @@ describe('service: storageFactory:', function() {
     expect(storageFactory.fileIsTrash({name: '--TRASH--/'})).to.be.true;
     expect(storageFactory.fileIsTrash({name: 'image.jpg'})).to.be.false;
   });
-  
+
+  it('fileName: ', function() {
+    expect(storageFactory.fileName({name: 'image.jpg'})).to.equal('image.jpg');
+    expect(storageFactory.fileName({name: 'folder/image.jpg'})).to.equal('image.jpg');
+    expect(storageFactory.fileName({name: 'folder/subfolder/image.jpg'})).to.equal('image.jpg');
+    expect(storageFactory.fileName({name: 'folder/'})).to.equal('folder/');
+    expect(storageFactory.fileName({name: 'folder/subfolder/folder1/'})).to.equal('folder1/');
+    expect(storageFactory.fileName({name: '--TRASH--/'})).to.equal('--TRASH--/');
+    expect(storageFactory.fileName({name: '--TRASH--/image.jpg'})).to.equal('image.jpg');
+  });
+
+  it('fileParent: ', function() {
+    expect(storageFactory.fileParent({name: 'image.jpg'})).to.equal('');
+    expect(storageFactory.fileParent({name: 'folder/image.jpg'})).to.equal('folder/');
+    expect(storageFactory.fileParent({name: 'folder/subfolder/image.jpg'})).to.equal('folder/subfolder/');
+    expect(storageFactory.fileParent({name: 'folder/'})).to.equal('');
+    expect(storageFactory.fileParent({name: 'folder/subfolder/folder1/'})).to.equal('folder/subfolder/');
+    expect(storageFactory.fileParent({name: '--TRASH--/'})).to.equal('');
+    expect(storageFactory.fileParent({name: '--TRASH--/image.jpg'})).to.equal('--TRASH--/');
+  });
+
   it('isTrashFolder: ', function() {
     storageFactory.folderPath = '';
     expect(storageFactory.isTrashFolder()).to.be.false;

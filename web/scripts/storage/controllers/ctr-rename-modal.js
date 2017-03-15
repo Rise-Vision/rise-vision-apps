@@ -1,16 +1,17 @@
 'use strict';
 
 angular.module('risevision.storage.controllers')
-  .controller('RenameModalCtrl', ['$scope', '$modalInstance', 'fileActionsFactory', 'sourceObject',
-    function ($scope, $modalInstance, fileActionsFactory, sourceObject) {
-      $scope.renameName = sourceObject.name.replace("/", "");
+  .controller('RenameModalCtrl', ['$scope', '$modalInstance', 'fileActionsFactory', 'storageFactory', 'sourceObject',
+    function ($scope, $modalInstance, fileActionsFactory, storageFactory, sourceObject) {
+      $scope.parentPath = storageFactory.fileParent(sourceObject);
+      $scope.renameName = storageFactory.fileName(sourceObject).replace('/', '');
       $scope.isProcessing = false;
 
       $scope.ok = function () {
         $scope.errorKey = null;
         $scope.isProcessing = true;
 
-        return fileActionsFactory.renameObject(sourceObject, $scope.renameName)
+        return fileActionsFactory.renameObject(sourceObject, $scope.parentPath + $scope.renameName)
           .then(function(resp) {
             if(resp.code !== 200) {
               $scope.errorKey = resp.message;

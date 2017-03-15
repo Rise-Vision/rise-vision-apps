@@ -188,7 +188,7 @@ angular.module('risevision.storage.services')
       };
 
       factory.renameObject = function(sourceObject, newName) {
-        var suffix = storageFactory.fileIsFolder(sourceObject) ? "/" : "";
+        var suffix = storageFactory.fileIsFolder(sourceObject) && !storageFactory.fileIsFolder({ name: newName }) ? "/" : "";
         var renameName = newName + suffix;
         var newObject = angular.copy(sourceObject);
 

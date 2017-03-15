@@ -1,7 +1,7 @@
 'use strict';
 
 describe('controller: RenameModalCtrl', function() {
-  var $rootScope, $scope, $modalInstance, fileActionsFactory, sourceObject, renameResp, controller;
+  var $rootScope, $scope, $modalInstance, fileActionsFactory, storageFactory, sourceObject, renameResp, controller;
   var sandbox = sinon.sandbox.create();
 
   beforeEach(module('risevision.storage.controllers'));
@@ -12,6 +12,17 @@ describe('controller: RenameModalCtrl', function() {
         return {
           close : function(action){},
           dismiss : function(action){}
+        };
+      });
+
+      $provide.service('storageFactory', function() {
+        return {
+          fileParent: function(file) {
+            return '';
+          },
+          fileName: function(file) {
+            return file.name;
+          }
         };
       });
 
@@ -36,6 +47,7 @@ describe('controller: RenameModalCtrl', function() {
       $scope = $rootScope.$new();
       $modalInstance = $injector.get('$modalInstance');
       fileActionsFactory = $injector.get('fileActionsFactory');
+      storageFactory = $injector.get('storageFactory');
       sourceObject = { name: "test.jpg" };
       renameResp = {};
 
@@ -43,6 +55,7 @@ describe('controller: RenameModalCtrl', function() {
         $scope: $scope,
         $modalInstance: $modalInstance,
         filesActionsFactory: fileActionsFactory,
+        storageFactory: storageFactory,
         sourceObject: sourceObject
       });
 
