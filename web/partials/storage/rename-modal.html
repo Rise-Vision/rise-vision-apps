@@ -7,7 +7,7 @@
   </div>
   <div class="modal-body" stop-event="touchend" autofocus="autofocus">
     <div class="form-group">
-      <input type="text" class="form-control" value="" required id="name" name="name" ng-model="renameName" onFocus="this.select()">
+      <input type="text" class="form-control" value="" required id="name" name="name" ng-model="renameName" onFocus="this.select()" focus-me="true">
       <br>
       <div ng-show="errorKey">
         <div class="alert alert-danger" role="alert">
