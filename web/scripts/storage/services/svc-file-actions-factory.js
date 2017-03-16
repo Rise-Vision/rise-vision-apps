@@ -240,7 +240,7 @@ angular.module('risevision.storage.services')
         return factory.showBreakLinkWarning(prefix + 'breaking-link1',
                                             prefix + 'breaking-link2',
                                             prefix + 'breaking-link-hide-warning',
-                                            'common.proceed',
+                                            'common.ok',
                                             'common.cancel',
                                             'breakingLinkWarning.hideWarning');
       };
