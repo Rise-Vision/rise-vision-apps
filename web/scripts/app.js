@@ -106,7 +106,7 @@ angular.module('risevision.apps', [
           controller: ['$state', 'canAccessApps', 'supportFactory',
             function ($state, canAccessApps, supportFactory) {
               canAccessApps().then(function () {
-                supportFactory.handlePrioritySupportAction();
+                supportFactory.handleGetSupportAction();
                 $state.go('apps.launcher.home');
               });
             }

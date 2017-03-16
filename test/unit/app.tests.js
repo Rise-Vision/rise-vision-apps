@@ -1,7 +1,7 @@
 'use strict';
-  
+
 describe('app:', function() {
-  beforeEach(function () {    
+  beforeEach(function () {
       angular.module('risevision.apps.partials',[]);
 
       module('risevision.apps');
@@ -31,11 +31,11 @@ describe('app:', function() {
       });
   });
 
-  
+
   var $state, supportFactory, canAccessApps, editorFactory, displayFactory, $rootScope;
 
   describe('state apps.launcher.support:',function(){
-    
+
     it('should register state',function(){
       var supportState = $state.get('apps.launcher.support')
       expect(supportState).to.be.ok;
@@ -44,7 +44,7 @@ describe('app:', function() {
     });
 
     it('should init support modal',function(done){
-      var spy = sinon.spy(supportFactory,'handlePrioritySupportAction') 
+      var spy = sinon.spy(supportFactory,'handleGetSupportAction')
       $state.get('apps.launcher.support').controller[3]($state, canAccessApps, supportFactory);
       setTimeout(function() {
         spy.should.have.been.called;
@@ -52,28 +52,9 @@ describe('app:', function() {
       }, 10);
     });
   });
-
-  describe('state apps.launcher.sendnote:',function(){
-    
-    it('should register state',function(){
-      var supportState = $state.get('apps.launcher.sendnote')
-      expect(supportState).to.be.ok;
-      expect(supportState.url).to.equal('/send-note');
-      expect(supportState.controller).to.be.ok;
-    });
-
-    it('should init Send Us a Note modal',function(done){
-      var spy = sinon.spy(supportFactory,'handleSendUsANote') 
-      $state.get('apps.launcher.sendnote').controller[3]($state, canAccessApps, supportFactory);
-      setTimeout(function() {
-        spy.should.have.been.called;
-        done();
-      }, 10);
-    });
-  });
-
+  
   describe('state apps.editor.add:',function(){
-    
+
     it('should register state',function(){
       var state = $state.get('apps.editor.add')
       expect(state).to.be.ok;
@@ -82,7 +63,7 @@ describe('app:', function() {
     });
 
     it('should init add presentation modal',function(done){
-      var spy = sinon.spy(editorFactory,'addPresentationModal') 
+      var spy = sinon.spy(editorFactory,'addPresentationModal')
       $state.get('apps.editor.add').controller[3]($state, canAccessApps, editorFactory);
       setTimeout(function() {
         spy.should.have.been.called;
@@ -97,10 +78,10 @@ describe('app:', function() {
       expect(state).to.be.ok;
       expect(state.url).to.equal('');
       expect(state.controller).to.be.ok;
-      expect(state.reloadOnSearch).to.be.false;      
+      expect(state.reloadOnSearch).to.be.false;
     });
   });
-  
+
 
   describe('state apps.editor.workspace.htmleditor:',function(){
     it('should register state',function(){
@@ -108,7 +89,7 @@ describe('app:', function() {
       expect(state).to.be.ok;
       expect(state.url).to.equal('/htmleditor');
       expect(state.controller).to.be.ok;
-      expect(state.reloadOnSearch).to.be.false;      
+      expect(state.reloadOnSearch).to.be.false;
     });
   });
 
