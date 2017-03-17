@@ -1,4 +1,4 @@
-<div id="presentationCTA2" class="text-center">
+<div id="presentationCTA2" class="text-center" ng-if="presentationTemplateCtaExperiment">
 
     <h1 class="u_margin-lg-top">Let's Get Started</h1>
 
@@ -40,7 +40,7 @@
                         <p class="text-muted u_margin-md-bottom u_margin-md-top">
                             Blank Presentation
                         </p>
-                        <a id="blankFromLauncher" href="https://editor.risevision.com/#/editor/workspace/new/" class="btn btn-block btn-primary">
+                        <a id="blankFromLauncher" ui-sref="apps.editor.workspace.artboard" class="btn btn-block btn-primary">
                             Start from Scratch
                         </a>
                     </div>
@@ -75,7 +75,7 @@
     </div>
 </div>
 
-<div id="presentationCTA" class="create-presentation-cta text-center">
+<div id="presentationCTA" class="create-presentation-cta text-center" ng-if="!presentationTemplateCtaExperiment">
     <h1>How Simple is Rise Vision?</h1>
     <h3 class="u_margin-sm-bottom">Just a 3 minute introduction to show you how easy Digital Signage can be!</h3>
     <div class="col-sm-6 col-sm-offset-3" id="experiment_VideoTutorial">
