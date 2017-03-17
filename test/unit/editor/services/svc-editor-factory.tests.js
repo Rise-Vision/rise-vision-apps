@@ -266,6 +266,8 @@ describe('service: editorFactory:', function() {
         expect(editorFactory.apiError).to.be.ok;
         expect(editorFactory.apiError).to.equal("ERROR; could not get presentation");
 
+        expect(messageBoxStub).to.have.been.called;
+
         setTimeout(function() {
           expect(editorFactory.loadingPresentation).to.be.false;
 
@@ -396,6 +398,8 @@ describe('service: editorFactory:', function() {
 
         expect(editorFactory.errorMessage).to.be.ok;
         expect(editorFactory.apiError).to.be.ok;
+        expect(messageBoxStub).to.have.been.called;
+
         done();
       },10);
     });
@@ -515,6 +519,8 @@ describe('service: editorFactory:', function() {
 
         expect(editorFactory.errorMessage).to.be.ok;
         expect(editorFactory.apiError).to.be.ok;
+        expect(messageBoxStub).to.have.been.called;
+
         done();
       },10);
     });
@@ -577,6 +583,8 @@ describe('service: editorFactory:', function() {
         
         expect(editorFactory.errorMessage).to.be.ok;
         expect(editorFactory.apiError).to.be.ok;
+        expect(messageBoxStub).to.have.been.called;
+
         done();
       },10);
     });
@@ -863,6 +871,8 @@ describe('service: editorFactory:', function() {
         expect(editorFactory.loadingPresentation).to.be.false;
         expect(editorFactory.errorMessage).to.be.ok;
         expect(editorFactory.apiError).to.be.ok;
+        expect(messageBoxStub).to.have.been.called;
+
         done();
       },10);
     });
@@ -925,6 +935,8 @@ describe('service: editorFactory:', function() {
         expect(editorFactory.loadingPresentation).to.be.false;
         expect(editorFactory.errorMessage).to.be.ok;
         expect(editorFactory.apiError).to.be.ok;
+        expect(messageBoxStub).to.have.been.called;
+
         done();
       },10);
     });
