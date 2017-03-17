@@ -474,6 +474,8 @@ angular.module('risevision.editor.services')
         factory.errorMessage = 'Failed to ' + action + ' Presentation!';
         factory.apiError = e.result.error.message ? e.result.error.message :
           e.result.error.toString();
+          
+        messageBox(factory.errorMessage, factory.apiError);
       };
 
       return factory;
