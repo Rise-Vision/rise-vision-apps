@@ -289,9 +289,13 @@ angular.module('risevision.storage.services')
 
           $log.debug('Storage rename called with', obj);
 
-          storageAPILoader().then(function (storageApi) {
-            return storageApi.files.rename(obj);
-          })
+          if(sourceName === destinationName) {
+            deferred.resolve({ code: 400, message: 'must-be-different' });
+          }
+          else {
+            storageAPILoader().then(function (storageApi) {
+              return storageApi.files.rename(obj);
+            })
               .then(function (resp) {
                 $log.debug('status storage rename resp', resp);
 
@@ -301,6 +305,7 @@ angular.module('risevision.storage.services')
                 $log.error('Failed to rename storage objects', e);
                 deferred.reject(e);
               });
+          }
 
           return deferred.promise;
         }
