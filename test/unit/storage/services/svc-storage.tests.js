@@ -555,22 +555,30 @@ describe('service: storage:', function() {
           expect(storageApiRequestObj.destinationName).to.equal('file2');
 
           done();
-        })
-        .then(null,done);
+        });
+    });
+
+    it('should not call the server when provided the same source and destination',function(done){
+      storageApiRequestObj = null;
+
+      storage.rename('file1', 'file1')
+        .then(function(result) {
+          expect(result).to.be.truely;
+          expect(result.code).to.equal(400);
+          expect(storageApiRequestObj).to.be.null;
+          done();
+        });
     });
 
     it('should handle failure',function(done){
       returnResult = false;
 
-      storage.rename()
-        .then(function(result) {
-          done(result);
-        })
+      storage.rename('file1', 'file2')
         .then(null, function(error) {
           expect(error).to.deep.equal('API Failed');
+          expect(storageApiRequestObj).to.not.be.null;
           done();
-        })
-        .then(null,done);
+        });
     });
   });
 
