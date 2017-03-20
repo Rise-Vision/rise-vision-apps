@@ -205,7 +205,7 @@ angular.module('risevision.schedules.services')
       };
 
       var _showErrorMessage = function (action, e) {
-        factory.errorMessage = 'Failed to ' + action + ' Schedule!';
+        factory.errorMessage = 'Failed to ' + action + ' Schedule.';
         factory.apiError = e.result && e.result.error.message ? e.result.error.message :
           e.toString();
       };

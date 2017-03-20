@@ -262,7 +262,7 @@ describe('service: editorFactory:', function() {
       .then(null, function(e) {
         expect(e).to.be.ok;
         expect(editorFactory.errorMessage).to.be.ok;
-        expect(editorFactory.errorMessage).to.equal("Failed to Get Presentation!");
+        expect(editorFactory.errorMessage).to.equal("Failed to Get Presentation.");
         expect(editorFactory.apiError).to.be.ok;
         expect(editorFactory.apiError).to.equal("ERROR; could not get presentation");
 

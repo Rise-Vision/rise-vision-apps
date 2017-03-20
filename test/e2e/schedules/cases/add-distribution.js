@@ -142,7 +142,7 @@ var AddDistributionScenarios = function() {
             });
           });
           it('should show an error saying another user has already set a display to a schedule', function () {
-            var expectResultPart1 = "Failed to Add Schedule! Another schedule (";
+            var expectResultPart1 = "Failed to Add Schedule. Another schedule (";
             var expectResultPart2 = ") is also set to be distributed to"
             helper.wait(scheduleAddPage.getErrorBox(), 'Error box').then(function () {
               expect(scheduleAddPage.getErrorBox().getText()).to.eventually.string(expectResultPart1);

@@ -180,7 +180,7 @@ angular.module('risevision.displays.services')
       };
 
       var _showErrorMessage = function (action, e) {
-        factory.errorMessage = 'Failed to ' + action + ' Display!';
+        factory.errorMessage = 'Failed to ' + action + ' Display.';
         factory.apiError = e.result && e.result.error.message ? e.result.error.message :
           e.toString();
       };
