@@ -151,7 +151,7 @@ describe('service: scheduleFactory:', function() {
       })
       .then(null, function() {
         expect(scheduleFactory.errorMessage).to.be.ok;
-        expect(scheduleFactory.errorMessage).to.equal("Failed to get Schedule!");
+        expect(scheduleFactory.errorMessage).to.equal("Failed to Get Schedule!");
         expect(scheduleFactory.apiError).to.be.ok;
         expect(scheduleFactory.apiError).to.equal("ERROR; could not get schedule");
 

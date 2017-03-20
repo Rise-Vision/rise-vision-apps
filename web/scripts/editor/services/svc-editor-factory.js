@@ -90,7 +90,7 @@ angular.module('risevision.editor.services')
             deferred.resolve();
           })
           .then(null, function (e) {
-            _showErrorMessage('get', e);
+            _showErrorMessage('Get', e);
 
             deferred.reject(e);
           })
@@ -193,7 +193,7 @@ angular.module('risevision.editor.services')
             }
           })
           .then(null, function (e) {
-            _showErrorMessage('add', e);
+            _showErrorMessage('Add', e);
 
             deferred.reject();
           })
@@ -229,7 +229,7 @@ angular.module('risevision.editor.services')
             deferred.resolve(resp.item.id);
           })
           .then(null, function (e) {
-            _showErrorMessage('update', e);
+            _showErrorMessage('Update', e);
 
             deferred.reject();
           })
@@ -267,7 +267,7 @@ angular.module('risevision.editor.services')
             $state.go('apps.editor.list');
           })
           .then(null, function (e) {
-            _showErrorMessage('delete', e);
+            _showErrorMessage('Delete', e);
           })
           .finally(function () {
             factory.loadingPresentation = false;
@@ -301,7 +301,7 @@ angular.module('risevision.editor.services')
             deferred.resolve();
           })
           .then(null, function (e) {
-            _showErrorMessage('publish', e);
+            _showErrorMessage('Publish', e);
 
             deferred.reject();
           })
@@ -331,7 +331,7 @@ angular.module('risevision.editor.services')
             deferred.resolve();
           })
           .then(null, function (e) {
-            _showErrorMessage('restore', e);
+            _showErrorMessage('Restore', e);
 
             deferred.reject();
           })
