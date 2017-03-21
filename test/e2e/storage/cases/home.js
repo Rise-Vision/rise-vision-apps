@@ -61,7 +61,7 @@ var HomeScenarios = function() {
         expect(filesListPage.getListViewSelector().isDisplayed()).to.eventually.be.false;
       });
 
-      it('should switcch between grid and list views',function(){
+      it('should switch between grid and list views',function(){
         expect(filesListPage.getFilesGrid().isDisplayed()).to.eventually.be.true;
 
         filesListPage.getGridViewSelector().click();
@@ -70,7 +70,7 @@ var HomeScenarios = function() {
         expect(filesListPage.getGridViewSelector().isDisplayed()).to.eventually.be.false;
         expect(filesListPage.getListViewSelector().isDisplayed()).to.eventually.be.true;
 
-        filesListPage.getGridViewSelector().click();
+        filesListPage.getListViewSelector().click();
         expect(filesListPage.getFilesGrid().isDisplayed()).to.eventually.be.true;
 
         expect(filesListPage.getGridViewSelector().isDisplayed()).to.eventually.be.true;
