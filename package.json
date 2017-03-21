@@ -32,7 +32,7 @@
       "jshint-stylish": "^2.0.1",
       "run-sequence": "^1.1.1",
       "rv-common-e2e": "git://github.com/Rise-Vision/rv-common-e2e.git#0.0.14",
-      "widget-tester": "git://github.com/Rise-Vision/widget-tester.git"
+      "widget-tester": "git://github.com/Rise-Vision/widget-tester.git#1.7.1"
     },
     "repository": {
         "type": "git",
