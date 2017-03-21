@@ -2,7 +2,7 @@
 
 	<div class="app-header row" ng-show="!trialAvailable">
 		<div class="col-sm-5">
-			<div class="title-block">
+			<div class="title-block u_margin-sm-bottom">
 				<h1 id="title" translate>storage-client.header</h1>
 			</div>	
 		</div>
@@ -26,18 +26,21 @@
 
 	<div ng-controller="FileActionsController">
 		<div class="row u_margin-md-top" ng-show="isFileListVisible()">
-			<div class="col-sm-8">
-			  <ng-include src="'partials/storage/list-grid-toggle.html'"></ng-include>
-          	  <storage-breadcrumb></storage-breadcrumb>
+			<div class="col-md-6">
+				<storage-breadcrumb></storage-breadcrumb>
 			</div>
-			<div class="col-sm-4" ng-show="filesDetails.bucketExists">
+			<div class="col-md-6" ng-show="filesDetails.bucketExists">
+				<ng-include src="'partials/storage/list-grid-toggle.html'"></ng-include>
 				<div id="files-toolbar" ng-hide="fileListStatus.code === 404">
 					<div class="pull-right">
+						<span class="selected-count" ng-show="filesDetails.checkedItemsCount > 0">
+							<span translate="storage-client.selected-items" translate-values="{ count: filesDetails.checkedItemsCount }"></span>
+						</span>
 						<div class="icon-nav">
-					        <ng-include src="'partials/storage/file-actions.html'"></ng-include>
-			      		</div>
-			   	 	</div>
-			  	</div>
+							<ng-include src="'partials/storage/file-actions.html'"></ng-include>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<ng-include src="'partials/storage/pending-operations-panel.html'"></ng-include>

@@ -21,14 +21,22 @@
       </div>
 
       <ng-include src="'partials/storage/upload-panel.html'"></ng-include>
-      
+
+      <search-filter filter-config="filterConfig" search="search" do-search="search.doSearch"></search-filter>
+
       <div class="row u_margin-md-top" ng-show="isFileListVisible()">
-        <div class="col-xs-12 col-md-8">
-          <ng-include src="'partials/storage/list-grid-toggle.html'"></ng-include>
+        <div class="col-md-6 col-xs-12">
           <storage-breadcrumb></storage-breadcrumb>
         </div>
-        <div class="col-xs-12 col-md-4">
-          <search-filter filter-config="filterConfig" search="search" do-search="search.doSearch"></search-filter>
+        <div class="col-md-6 col-xs-12">
+          <ng-include src="'partials/storage/list-grid-toggle.html'"></ng-include>
+          <div id="files-toolbar" ng-hide="fileListStatus.code === 404">
+            <div class="pull-right">
+              <span class="selected-count" ng-show="filesDetails.checkedItemsCount > 0">
+                <span translate="storage-client.selected-items" translate-values="{ count: filesDetails.checkedItemsCount }"></span>
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
