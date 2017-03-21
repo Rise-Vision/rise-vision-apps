@@ -27,7 +27,7 @@ var IframeScenarios = function() {
         it('should list files',function(){
           helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
           expect(filesListPage.getFilesGrid().isDisplayed()).to.eventually.be.true;
-          filesListPage.getListViewSelector().click();
+          filesListPage.getGridViewSelector().click();
           expect(filesListPage.getFilesListTable().isDisplayed()).to.eventually.be.true;
         });
 
@@ -55,7 +55,7 @@ var IframeScenarios = function() {
         it('should list folders',function(){
           helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
           expect(filesListPage.getFilesGrid().isDisplayed()).to.eventually.be.true;
-          filesListPage.getListViewSelector().click();
+          filesListPage.getGridViewSelector().click();
           expect(filesListPage.getFilesListTable().isDisplayed()).to.eventually.be.true;
         });
 
