@@ -19,31 +19,26 @@
 		ng-model="subscriptionStatus.result" show-store-modal="showStoreModal" expanded-format="true"></div>
 	</div>
 
-	<ng-include src="'partials/storage/upload-panel.html'"></ng-include>
+	<upload files-factory="filesFactory"></upload>
 	
 	<search-filter filter-config="filterConfig" search="search" do-search="search.doSearch" ng-show="isFileListVisible()"></search-filter>
 
-
-	<div ng-controller="FileActionsController">
+	<div>
 		<div class="row u_margin-md-top" ng-show="isFileListVisible()">
 			<div class="col-md-6">
-				<storage-breadcrumb></storage-breadcrumb>
+				<storage-breadcrumb files-factory="filesFactory"></storage-breadcrumb>
 			</div>
 			<div class="col-md-6" ng-show="filesDetails.bucketExists">
 				<ng-include src="'partials/storage/list-grid-toggle.html'"></ng-include>
 				<div id="files-toolbar" ng-hide="fileListStatus.code === 404">
 					<div class="pull-right">
-						<span class="selected-count" ng-show="filesDetails.checkedItemsCount > 0">
-							<span translate="storage-client.selected-items" translate-values="{ count: filesDetails.checkedItemsCount }"></span>
-						</span>
-						<div class="icon-nav">
-							<ng-include src="'partials/storage/file-actions.html'"></ng-include>
-						</div>
+						<selected-files-count checked-items-count="filesDetails.checkedItemsCount"></selected-files-count>
+						<file-actions files-factory="filesFactory"></file-actions>
 					</div>
 				</div>
 			</div>
 		</div>
-		<ng-include src="'partials/storage/pending-operations-panel.html'"></ng-include>
+		<pending-operations></pending-operations>
 	</div>
 
 

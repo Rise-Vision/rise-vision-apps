@@ -1,9 +1,9 @@
 /* globals JSZip */
 'use strict';
 angular.module('risevision.storage.services')
-  .factory('downloadFactory', ['storageFactory', 'storage', 'fileRetriever',
+  .factory('downloadFactory', ['storageUtils', 'storage', 'fileRetriever',
     '$q', '$log', '$timeout', '$window', '$stateParams',
-    function (storageFactory, storage, fileRetriever,
+    function (storageUtils, storage, fileRetriever,
       $q, $log, $timeout, $window, $stateParams) {
       var svc = {};
       var downloadCount = 0;
@@ -117,7 +117,7 @@ angular.module('risevision.storage.services')
           var file = files.shift();
           var fileName = file.name;
 
-          if (!storageFactory.fileIsFolder(file)) {
+          if (!storageUtils.fileIsFolder(file)) {
             downloadFile(file);
           } else {
             downloadFolder(file);

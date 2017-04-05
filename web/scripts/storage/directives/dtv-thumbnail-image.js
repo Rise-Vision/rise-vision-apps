@@ -3,12 +3,11 @@
   'use strict';
 
   angular.module('risevision.storage.directives')
-    .directive('thumbnailImage', ['storageFactory',
-      function (storageFactory) {
+    .directive('thumbnailImage', ['storageUtils',
+      function (storageUtils) {
         return {
           restrict: 'A',
-          link: function (scope, element, attributes) {
-
+          link: function (scope) {
             scope.$watch('file', function (file) {
               var classes = [];
               var isDisabled = false;
@@ -20,7 +19,7 @@
                 classes.push('selected-border');
               }
 
-              if (storageFactory.fileIsFolder(file)) {
+              if (storageUtils.fileIsFolder(file)) {
                 isSvg = true;
                 imgSrc = 'riseWidgetFolder';
                 classes.push('folder');
@@ -34,8 +33,8 @@
                   imgSrc =
                     'http://s3.amazonaws.com/Rise-Images/Icons/file_throttled.png';
                 } else {
-                  if (!storageFactory.canSelect(file) ||
-                    storageFactory.isDisabled(file)) {
+                  if (!scope.storageFactory.canSelect(file) ||
+                    scope.storageFactory.isDisabled(file)) {
                     classes.push('disabled-item');
                     isDisabled = true;
                   } else {
@@ -45,10 +44,10 @@
                     imgSrc = scope.file.metadata.thumbnail +
                       '=s100-ci' + '?_=' + scope.file.timeCreated;
                   } else {
-                    if (storageFactory.fileIsImage(scope.file)) {
+                    if (scope.storageFactory.fileIsImage(scope.file)) {
                       isSvg = true;
                       imgSrc = 'riseWidgetImage';
-                    } else if (storageFactory.fileIsVideo(scope.file)) {
+                    } else if (scope.storageFactory.fileIsVideo(scope.file)) {
                       isSvg = true;
                       imgSrc = 'riseWidgetVideo';
                     }

@@ -1,19 +1,21 @@
-<button id="fileDownloadButton" type="button" class="btn btn-link" title="Download" ng-click="factory.downloadButtonClick()" ng-disabled="isDisabledDownloadButton()">
-  <i class="fa fa-cloud-download fa-2x" ng-class="{ 'icon-gray': isDisabledDownloadButton() }"></i>
-</button>
-<button id="fileCopyUrlButton" type="button" class="btn btn-link" title="Copy Url" ng-click="factory.copyUrlButtonClick()" ng-hide="storageFactory.isTrashFolder()" ng-disabled="isDisabledCopyUrlButton()">
-  <i class="fa fa-link fa-2x" ng-class="{ 'icon-gray': isDisabledCopyUrlButton() }"></i>
-</button>
-<button id="fileRenameButton" type="button" class="btn btn-link" title="Rename" ng-click="factory.renameButtonClick()" ng-hide="storageFactory.isTrashFolder()" ng-disabled="isDisabledRenameButton()">
-  <i class="fa fa-pencil fa-2x" ng-class="{ 'icon-gray': isDisabledRenameUrlButton() }"></i>
-</button>
-<button id="moveToTrashButton" type="button" class="btn btn-link" title="Move To Trash" ng-click="factory.trashButtonClick()" ng-show="!storageFactory.isTrashFolder()" ng-disabled="isDisabledTrashButton()">
-  <i class="fa fa-trash-o fa-2x" ng-class="{ 'icon-gray': isDisabledTrashButton() }"></i>
-</button>
-<button id="restoreFromTrashButton" type="button" class="btn btn-link" title="Restore From Trash" ng-click="factory.restoreButtonClick()" ng-show="storageFactory.isTrashFolder()" ng-disabled="isDisabledRestoreButton()">
-  <i class="fa fa-trash-o fa-2x" ng-class="{ 'icon-gray': isDisabledRestoreButton() }"></i>
-  <i class="fa fa-share" ng-class="{ 'icon-gray': isDisabledRestoreButton() }"></i>
-</button>
-<button id="deleteForeverButton" type="button" class="btn btn-link" title="Delete"  ng-click="factory.deleteButtonClick()" ng-show="storageFactory.isTrashFolder()" ng-disabled="isDisabledDeleteButton()">
-  <i class="fa fa-trash-o fa-2x" ng-class="{ 'icon-gray': isDisabledDeleteButton() }"></i>
-</button>
+<div class="icon-nav">
+  <button id="fileDownloadButton" type="button" class="btn btn-link" title="Download" ng-click="factory.downloadButtonClick()" ng-disabled="isDisabledDownloadButton()">
+    <i class="fa fa-cloud-download fa-2x" ng-class="{ 'icon-gray': isDisabledDownloadButton() }"></i>
+  </button>
+  <button id="fileCopyUrlButton" type="button" class="btn btn-link" title="Copy Url" ng-click="factory.copyUrlButtonClick()" ng-hide="filesFactory.isTrashFolder()" ng-disabled="isDisabledCopyUrlButton()">
+    <i class="fa fa-link fa-2x" ng-class="{ 'icon-gray': isDisabledCopyUrlButton() }"></i>
+  </button>
+  <button id="fileRenameButton" type="button" class="btn btn-link" title="Rename" ng-click="factory.renameButtonClick()" ng-hide="filesFactory.isTrashFolder()" ng-disabled="isDisabledRenameButton()">
+    <i class="fa fa-pencil fa-2x" ng-class="{ 'icon-gray': isDisabledRenameUrlButton() }"></i>
+  </button>
+  <button id="moveToTrashButton" type="button" class="btn btn-link" title="Move To Trash" ng-click="factory.trashButtonClick()" ng-show="!filesFactory.isTrashFolder()" ng-disabled="isDisabledTrashButton()">
+    <i class="fa fa-trash-o fa-2x" ng-class="{ 'icon-gray': isDisabledTrashButton() }"></i>
+  </button>
+  <button id="restoreFromTrashButton" type="button" class="btn btn-link" title="Restore From Trash" ng-click="factory.restoreButtonClick()" ng-show="filesFactory.isTrashFolder()" ng-disabled="isDisabledRestoreButton()">
+    <i class="fa fa-trash-o fa-2x" ng-class="{ 'icon-gray': isDisabledRestoreButton() }"></i>
+    <i class="fa fa-share" ng-class="{ 'icon-gray': isDisabledRestoreButton() }"></i>
+  </button>
+  <button id="deleteForeverButton" type="button" class="btn btn-link" title="Delete"  ng-click="factory.deleteButtonClick()" ng-show="filesFactory.isTrashFolder()" ng-disabled="isDisabledDeleteButton()">
+    <i class="fa fa-trash-o fa-2x" ng-class="{ 'icon-gray': isDisabledDeleteButton() }"></i>
+  </button>
+</div>

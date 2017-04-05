@@ -3,7 +3,7 @@
     <tr class="table-header__row u_clickable">
       <th class="col-sm-6 table-header__cell">
         <input type="checkbox" class="u_margin-right" ng-model="selectAll">
-        <label ng-click="fileSelectorFactory.selectAllCheckboxes(query)" ng-show="storageFactory.isMultipleSelector()"></label>
+        <label ng-click="filesFactory.selectAllCheckboxes(query)" ng-show="storageFactory.isMultipleSelector()"></label>
         <span id="tableHeaderName" ng-click="orderByAttribute = fileNameOrderFunction; reverseSort = !reverseSort">
           <span translate="common.file-name" ></span>
           <span ng-show="orderByAttribute==fileNameOrderFunction">
@@ -56,18 +56,18 @@
     ng-click="fileClick(file);"
     ng-class="{'active': file.isChecked, 'table-body__row--blocked-file': file.isThrottled, 'table-body__row--no-select': !storageFactory.canSelect(file), 'table-body__row--disabled': storageFactory.isDisabled(file) }"
     ng-repeat="file in filesDetails.files | filter:search.query | orderBy:orderByAttribute:reverseSort track by $index" 
-    ng-if="!storageFactory.fileIsTrash(file) || storageFactory.storageFull">
-      <td ng-if="storageFactory.fileIsFolder(file)" class="table-body__cell">
-        <span class="folder"><strong>{{file.name | fileNameFilter:storageFactory.folderPath}}</strong></span>
+    ng-if="!storageUtils.fileIsTrash(file) || storageFactory.storageFull">
+      <td ng-if="storageUtils.fileIsFolder(file)" class="table-body__cell">
+        <span class="folder"><strong>{{file.name | fileNameFilter:filesFactory.folderPath}}</strong></span>
       </td>
-      <td ng-if="!storageFactory.fileIsFolder(file)" class="col-sm-6 table-body__cell">
-        <span class="file" ng-class='{"throttled-type": file.isThrottled && !storageFactory.fileIsFolder(file)}'>
-          <span class="u_ellipsis-lg" data-toggle="tooltip" title="{{file.name | fileNameFilter:storageFactory.folderPath}}">
-            <i class="fa" ng-class='{"fa-exclamation": file.isThrottled && !storageFactory.fileIsFolder(file), "u_icon-red": file.isThrottled && !storageFactory.fileIsFolder(file)}'></i>
-            <strong>{{file.name | fileNameFilter:storageFactory.folderPath}}</strong>
+      <td ng-if="!storageUtils.fileIsFolder(file)" class="col-sm-6 table-body__cell">
+        <span class="file" ng-class='{"throttled-type": file.isThrottled && !storageUtils.fileIsFolder(file)}'>
+          <span class="u_ellipsis-lg" data-toggle="tooltip" title="{{file.name | fileNameFilter:filesFactory.folderPath}}">
+            <i class="fa" ng-class='{"fa-exclamation": file.isThrottled && !storageUtils.fileIsFolder(file), "u_icon-red": file.isThrottled && !storageUtils.fileIsFolder(file)}'></i>
+            <strong>{{file.name | fileNameFilter:filesFactory.folderPath}}</strong>
           </span>
         </span>
-        <div ng-show="file.showThrottledCallout && !storageFactory.fileIsFolder(file)" class="callout callout-red" ng-click="$event.stopPropagation();file.showThrottledCallout=false;">
+        <div ng-show="file.showThrottledCallout && !storageUtils.fileIsFolder(file)" class="callout callout-red" ng-click="$event.stopPropagation();file.showThrottledCallout=false;">
           <span class="arrow"></span>
           <p translate="storage-client.blocked-file"></p>
           <p translate="common.need-help"></p>

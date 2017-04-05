@@ -2,9 +2,8 @@
 
 angular.module('risevision.storage.controllers')
   .controller('NewFolderModalCtrl', ['$scope', '$modalInstance',
-    'storageFactory',
     'filesFactory', 'storage', '$rootScope', '$translate',
-    function ($scope, $modalInstance, storageFactory, filesFactory, storage,
+    function ($scope, $modalInstance, filesFactory, storage,
       $rootScope, $translate) {
       $scope.duplicateFolderSpecified = false;
       $scope.accessDenied = false;
@@ -24,7 +23,7 @@ angular.module('risevision.storage.controllers')
         if ($scope.folderName !== '') {
           $scope.waitingForResponse = true;
 
-          storage.createFolder(storageFactory.folderPath + $scope.folderName)
+          storage.createFolder(filesFactory.folderPath + $scope.folderName)
             .then(function (resp) {
 
               if (resp.code === 200) {

@@ -44,12 +44,12 @@ angular.module('risevision.editor.services')
   })
   .factory('playlistItemFactory', ['$modal', '$log', 'userState',
     'gadgetFactory', 'editorFactory', 'placeholderPlaylistFactory',
-    'widgetModalFactory', 'widgetUtils', 'fileSelectorFactory',
+    'widgetModalFactory', 'widgetUtils', 'storageUtils',
     'presentationTracker',
     'SELECTOR_TYPES', 'IMAGE_ADDITIONAL_PARAMS', 'VIDEO_ADDITIONAL_PARAMS',
     function ($modal, $log, userState, gadgetFactory, editorFactory,
       placeholderPlaylistFactory, widgetModalFactory, widgetUtils,
-      fileSelectorFactory, presentationTracker, SELECTOR_TYPES,
+      storageUtils, presentationTracker, SELECTOR_TYPES,
       IMAGE_ADDITIONAL_PARAMS, VIDEO_ADDITIONAL_PARAMS) {
       var factory = {};
 
@@ -195,11 +195,11 @@ angular.module('risevision.editor.services')
       };
 
       factory.selectFiles = function (type) {
-        fileSelectorFactory.openSelector(SELECTOR_TYPES.MULTIPLE_FILES_FOLDERS,
+        storageUtils.openSelector(SELECTOR_TYPES.MULTIPLE_FILES_FOLDERS,
             type, true)
-          .then(function (files) {
-            if (files) {
-              var fileObjects = fileSelectorFactory.getSelectedFiles();
+          .then(function (fileObjects) {
+            if (fileObjects) {
+              var files = storageUtils.getFileUrls(fileObjects);
               for (var i = 0; i < files.length; i++) {
                 if (type === 'images') {
                   _addImage(files[i], fileObjects[i])

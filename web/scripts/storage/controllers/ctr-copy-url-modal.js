@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.storage.controllers')
-  .controller('CopyUrlModalController', ['$scope', 'storageFactory',
+  .controller('CopyUrlModalController', ['$scope', 'storageUtils',
     '$modalInstance', '$timeout', 'STORAGE_FILE_URL', 'copyFile',
-    function ($scope, storageFactory, $modalInstance, $timeout,
+    function ($scope, storageUtils, $modalInstance, $timeout,
       STORAGE_FILE_URL, copyFile) {
       $scope.copyFile = copyFile;
 
@@ -12,9 +12,9 @@ angular.module('risevision.storage.controllers')
       };
 
       $scope.copyUrl = copyFile.kind === 'folder' ?
-        storageFactory.getFolderSelfLinkUrl() +
+        storageUtils.getFolderSelfLinkUrl() +
         _encodeURIKeepForwardSlash(copyFile.name) :
-        STORAGE_FILE_URL + storageFactory.getBucketName() + '/' +
+        STORAGE_FILE_URL + storageUtils.getBucketName() + '/' +
         _encodeURIKeepForwardSlash(copyFile.name);
 
       $timeout(function () {

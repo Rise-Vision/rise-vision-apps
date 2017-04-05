@@ -3,17 +3,16 @@
   'use strict';
 
   angular.module('risevision.storage.directives')
-    .directive('storageBreadcrumb', ['fileSelectorFactory', 'storageFactory',
-      '$filter', '$window',
-      function (fileSelectorFactory, storageFactory, $filter, $window) {
+    .directive('storageBreadcrumb', ['$filter', '$window',
+      function ($filter, $window) {
         return {
           restrict: 'E',
-          scope: true,
+          scope: {
+            filesFactory: '='
+          },
           templateUrl: 'partials/storage/breadcrumb.html',
           link: function ($scope, element) {
             var _originalTree = [];
-            $scope.fileSelectorFactory = fileSelectorFactory;
-            $scope.storageFactory = storageFactory;
 
             angular.element($window).bind('resize', function () {
               _fitToWidth();
@@ -42,12 +41,12 @@
               }
             };
 
-            $scope.$watch('storageFactory.folderPath', function () {
+            $scope.$watch('filesFactory.folderPath', function () {
               _originalTree = [{
                 path: '',
                 name: 'My Storage'
               }];
-              var folders = storageFactory.folderPath.split('/');
+              var folders = $scope.filesFactory.folderPath.split('/');
               var path = '';
               for (var i = 0; i < folders.length; i++) {
                 var folder = folders[i];

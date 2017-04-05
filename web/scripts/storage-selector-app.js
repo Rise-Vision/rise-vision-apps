@@ -71,20 +71,21 @@ angular.module('risevision.apps.storage.storage-selector', [
             return $templateCache.get(
               'partials/storage/storage-modal.html');
           }],
-          controller: 'StorageSelectorModalController',
+          controller: 'StorageSelectorIFrameController',
           resolve: {
-            enableByURL: function () {
-              return false;
-            },
-            '$modalInstance': [function () {
-              return {
-                close: function () {},
-                dismiss: function () {}
-              };
-            }],
             canAccessStorage: ['canAccessStorage',
               function (canAccessStorage) {
                 return canAccessStorage();
+              }
+            ],
+            selectorType: ['$location', 
+              function($location) {
+                return $location.search()['selector-type'];
+              }
+            ],
+            selectorFilter: ['$location', 
+              function($location) {
+                return $location.search()['selector-filter'];
               }
             ]
           }
@@ -99,13 +100,6 @@ angular.module('risevision.apps.storage.storage-selector', [
           reload: true
         });
       });
-    }
-  ])
-  .run(['storageFactory', 'SELECTOR_TYPES', '$location',
-    function (storageFactory, SELECTOR_TYPES, $location) {
-      storageFactory.setSelectorType($location.search()['selector-type']);
-      storageFactory.storageIFrame = true;
-      storageFactory.storageFull = false;
     }
   ]);
 

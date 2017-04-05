@@ -1,19 +1,28 @@
 'use strict';
 angular.module('risevision.storage.controllers')
   .controller('FilesListController', ['$scope', '$rootScope',
-    'storageFactory', 'fileSelectorFactory', 'filesFactory',
+    'StorageFactory', 'FilesFactory', 'storageUtils',
     'FileUploader', '$loading', '$filter', '$translate', '$timeout',
-    function ($scope, $rootScope, storageFactory, fileSelectorFactory,
-      filesFactory, FileUploader, $loading, $filter, $translate,
+    function ($scope, $rootScope, StorageFactory,
+      FilesFactory, storageUtils, FileUploader, $loading, $filter, $translate,
       $timeout) {
       $scope.search = {
         doSearch: function () {}
       };
+      var storageFactory = new StorageFactory();
+      var filesFactory = new FilesFactory(storageFactory);
+
       $scope.storageFactory = storageFactory;
-      $scope.fileSelectorFactory = fileSelectorFactory;
       $scope.filesFactory = filesFactory;
+      $scope.storageUtils = storageUtils;
       $scope.fileUploader = FileUploader;
       $scope.isListView = false;
+
+      $scope.setSelectorType = function (type, filter) {
+        storageFactory.setSelectorType(type, filter);
+        // if the init function is called, we're NOT in full mode
+        storageFactory.storageFull = false;
+      };
 
       $scope.toggleListView = function () {
         $scope.isListView = !$scope.isListView;
@@ -48,7 +57,7 @@ angular.module('risevision.storage.controllers')
       };
       // $scope.activeFolderDownloads = DownloadService.activeFolderDownloads;
 
-      storageFactory.folderPath = '';
+      filesFactory.folderPath = '';
       filesFactory.refreshFilesList();
 
       $translate('storage-client.trash').then(function (value) {
@@ -56,14 +65,14 @@ angular.module('risevision.storage.controllers')
       });
 
       $scope.fileClick = function (file) {
-        if (storageFactory.fileIsFolder(file)) {
+        if (storageUtils.fileIsFolder(file)) {
           var dblClickDelay = 300;
           var currentTime = (new Date()).getTime();
 
           if (currentTime - lastClickTime < dblClickDelay) {
             lastClickTime = 0;
 
-            fileSelectorFactory.changeFolder(file);
+            filesFactory.changeFolder(file);
           } else {
             lastClickTime = currentTime;
 
@@ -73,7 +82,7 @@ angular.module('risevision.storage.controllers')
 
               if (lastClickTime !== 0 && currentTime - lastClickTime >=
                 dblClickDelay) {
-                fileSelectorFactory.onFileSelect(file);
+                filesFactory.onFileSelect(file);
               }
             }, dblClickDelay);
           }
@@ -84,7 +93,7 @@ angular.module('risevision.storage.controllers')
             return;
           }
 
-          fileSelectorFactory.onFileSelect(file);
+          filesFactory.onFileSelect(file);
         }
       };
 
@@ -116,11 +125,11 @@ angular.module('risevision.storage.controllers')
       };
 
       $scope.isEmptyState = function () {
-        return !storageFactory.folderPath &&
-          storageFactory.folderPath !== '/' &&
+        return !filesFactory.folderPath &&
+          filesFactory.folderPath !== '/' &&
           $scope.fileUploader.queue.length === 0 &&
           $scope.filesDetails.files.filter(function (f) {
-            return !storageFactory.fileIsTrash(f);
+            return !storageUtils.fileIsTrash(f);
           }).length === 0;
       };
 

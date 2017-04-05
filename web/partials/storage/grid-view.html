@@ -7,14 +7,14 @@
    ng-click="fileClick(file)" 
    class="no-select" 
    ng-class="gridItemClasses"
-   ng-if="storageFactory.storageFull || !storageFactory.fileIsTrash(file)" 
-   title="{{file.name | fileNameFilter:storageFactory.folderPath}}{{ file.isThrottled? ' - '+('storage-client.blocked-file' | translate) : '' }}" data-toggle="tooltip" data-placement="top" tooltip> 
+   ng-if="storageFactory.storageFull || !storageUtils.fileIsTrash(file)" 
+   title="{{file.name | fileNameFilter:filesFactory.folderPath}}{{ file.isThrottled? ' - '+('storage-client.blocked-file' | translate) : '' }}" data-toggle="tooltip" data-placement="top" tooltip> 
     <svg-icon ng-if="isSvg" p="{{imgSrc}}"></svg-icon>
     <img ng-if="!isSvg" class="{{imgClasses}}" ng-src="{{imgSrc}}"/>
     <input ng-if="storageFactory.canSelect(file)" type="checkbox" ng-checked="file.isChecked" ng-click="fileClick(file)"  onclick="event.stopPropagation();" class="checkbox" />
     <span ng-if="!file.metadata.thumbnail || file.isThrottled" class="u_ellipsis-md">
-      {{file.name | fileNameFilter:storageFactory.folderPath}}
+      {{file.name | fileNameFilter:filesFactory.folderPath}}
     </span>
-    <span ng-if="storageFactory.fileIsFolder(file) && file.isChecked" class="image-folder-info" translate>storage-client.select-folder-to-update</span>
+    <span ng-if="storageUtils.fileIsFolder(file) && file.isChecked" class="image-folder-info" translate>storage-client.select-folder-to-update</span>
   </li>
 </ul>

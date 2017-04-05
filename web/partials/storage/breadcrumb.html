@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
 	<li class="active" ng-repeat="folder in tree">
-		<a ng-if="!$last && folder.path !== undefined" href="" ng-click="fileSelectorFactory.changeFolder({name:folder.path})">{{folder.name}}</a>
+		<a ng-if="!$last && folder.path !== undefined" href="" ng-click="filesFactory.changeFolder({name:folder.path})">{{folder.name}}</a>
 		<span ng-if="$last || folder.path === undefined">{{folder.name}}</span>
 	</li>
 </o>

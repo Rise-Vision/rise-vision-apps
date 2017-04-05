@@ -1,126 +1,238 @@
 'use strict';
 angular.module('risevision.storage.services')
-  .factory('filesFactory', ['storage', 'storageFactory',
-    function (storage, storageFactory) {
-      var svc = {
-        startTrial: storage.startTrial,
-        filesDetails: {
-          files: [],
-          code: 202
-        }
-      };
+  .factory('FilesFactory', ['$rootScope', 'storage', 'storageUtils', 
+    'filterFilter',
+    function ($rootScope, storage, storageUtils, filterFilter) {
+      return function(storageFactory) {
 
-      svc.addFile = function (newFile) {
-        var currentFolder = storageFactory.folderPath ? storageFactory.folderPath :
-          '';
-        var idx = newFile.name.indexOf('/', currentFolder.length);
-        // Handles the case where a file inside a folder was added (since files are not visible, only adds the folder)
-        var fileName = idx >= 0 ? newFile.name.substring(0, idx + 1) :
-          newFile.name;
-        var existingFileNameIndex = -1;
+        // filesFactory functionality ~~~~~~~~~~
 
-        for (var i = 0, j = svc.filesDetails.files.length; i < j; i += 1) {
-          if (svc.filesDetails.files[i].name === fileName) {
-            existingFileNameIndex = i;
-            break;
-          }
-        }
+        var factory = {
+          startTrial: storage.startTrial,
+          filesDetails: {
+            files: [],
+            code: 202
+          },
+          folderPath: ''
+        };
+        
+        factory.addFile = function (newFile) {
+          var currentFolder = factory.folderPath ? factory.folderPath :
+            '';
+          var idx = newFile.name.indexOf('/', currentFolder.length);
+          // Handles the case where a file inside a folder was added (since files are not visible, only adds the folder)
+          var fileName = idx >= 0 ? newFile.name.substring(0, idx + 1) :
+            newFile.name;
+          var existingFileNameIndex = -1;
 
-        if (idx >= 0) {
-          if (existingFileNameIndex === -1) {
-            svc.filesDetails.files.push({
-              name: fileName,
-              kind: 'folder'
-            });
-          }
-        } else if (existingFileNameIndex !== -1) {
-          svc.filesDetails.files.splice(existingFileNameIndex, 1, newFile);
-        } else {
-          svc.filesDetails.files.push(newFile);
-        }
-
-        // Needed because file upload does not refresh the list with a server call
-        svc.filesDetails.bucketExists = true;
-      };
-
-      svc.getFileNameIndex = function (fileName) {
-        for (var i = 0; i < svc.filesDetails.files.length; i++) {
-          if (svc.filesDetails.files[i].name === fileName) {
-            return i;
-          }
-        }
-        return -1;
-      };
-
-      svc.removeFiles = function (files) {
-        var oldFiles = svc.filesDetails.files;
-
-        for (var i = oldFiles.length - 1; i >= 0; i--) {
-          if (files.indexOf(oldFiles[i]) >= 0) {
-            oldFiles.splice(i, 1);
-          }
-        }
-      };
-
-      svc.refreshFilesList = function () {
-        function processFilesResponse(resp) {
-          var TRASH = '--TRASH--/';
-          var parentFolder = storageFactory.folderPath;
-          var parentFolderIndex = null;
-
-          resp.files = resp.files || [];
-
-          for (var i = 0; i < resp.files.length; i++) {
-            var file = resp.files[i];
-
-            if (file.name === parentFolder) {
-              parentFolderIndex = i;
+          for (var i = 0, j = factory.filesDetails.files.length; i < j; i += 1) {
+            if (factory.filesDetails.files[i].name === fileName) {
+              existingFileNameIndex = i;
               break;
             }
           }
-          if (parentFolderIndex !== null) {
-            resp.files.splice(parentFolderIndex, 1);
+
+          if (idx >= 0) {
+            if (existingFileNameIndex === -1) {
+              factory.filesDetails.files.push({
+                name: fileName,
+                kind: 'folder'
+              });
+            }
+          } else if (existingFileNameIndex !== -1) {
+            factory.filesDetails.files.splice(existingFileNameIndex, 1, newFile);
+          } else {
+            factory.filesDetails.files.push(newFile);
           }
 
-          svc.filesDetails.bucketExists = resp.bucketExists;
-          svc.filesDetails.files = resp.files || [];
-          svc.filesDetails.code = resp.code;
+          // Needed because file upload does not refresh the list with a server call
+          factory.filesDetails.bucketExists = true;
+        };
 
-          if (!storageFactory.folderPath || !parentFolder || parentFolder ===
-            '/') {
-            // [AD] There may be a reason why the trash folder is added in 
-            // the second position; from legacy Storage
-            svc.filesDetails.files.splice(1, 0, {
-              name: TRASH,
-              size: '',
-              updated: null
+        factory.getFileNameIndex = function (fileName) {
+          for (var i = 0; i < factory.filesDetails.files.length; i++) {
+            if (factory.filesDetails.files[i].name === fileName) {
+              return i;
+            }
+          }
+          return -1;
+        };
+
+        factory.removeFiles = function (files) {
+          var oldFiles = factory.filesDetails.files;
+
+          for (var i = oldFiles.length - 1; i >= 0; i--) {
+            if (files.indexOf(oldFiles[i]) >= 0) {
+              oldFiles.splice(i, 1);
+            }
+          }
+        };
+
+        factory.refreshFilesList = function () {
+          function processFilesResponse(resp) {
+            var TRASH = '--TRASH--/';
+            var parentFolder = factory.folderPath;
+            var parentFolderIndex = null;
+
+            resp.files = resp.files || [];
+
+            for (var i = 0; i < resp.files.length; i++) {
+              var file = resp.files[i];
+
+              if (file.name === parentFolder) {
+                parentFolderIndex = i;
+                break;
+              }
+            }
+            if (parentFolderIndex !== null) {
+              resp.files.splice(parentFolderIndex, 1);
+            }
+
+            factory.filesDetails.bucketExists = resp.bucketExists;
+            factory.filesDetails.files = resp.files || [];
+            factory.filesDetails.code = resp.code;
+
+            if (!factory.folderPath || !parentFolder || parentFolder ===
+              '/') {
+              // [AD] There may be a reason why the trash folder is added in 
+              // the second position; from legacy Storage
+              factory.filesDetails.files.splice(1, 0, {
+                name: TRASH,
+                size: '',
+                updated: null
+              });
+            }
+
+            return resp;
+          }
+
+          var params = {};
+          if (factory.folderPath) {
+            params.folderPath = factory.folderPath;
+          } else {
+            params.folderPath = undefined;
+          }
+
+          factory.filesDetails.code = 202;
+          factory.loadingItems = true;
+
+          return storage.files.get(params)
+            .then(function (resp) {
+              return processFilesResponse(resp);
+            }, function () {
+              // TODO: show error message
+            })
+            .finally(function () {
+              factory.loadingItems = false;
             });
+        };
+        
+        // fileSelectorFactory functionality ~~~~~~~~~~
+        
+        //on all state Changes do not hold onto checkedFiles list
+        $rootScope.$on('$stateChangeStart', function () {
+          factory.resetSelections();
+        });
+
+        factory.resetSelections = function () {
+          factory.filesDetails.files.forEach(function (val) {
+            val.isChecked = false;
+          });
+
+          factory.filesDetails.checkedCount = 0;
+          factory.filesDetails.folderCheckedCount = 0;
+          factory.filesDetails.checkedItemsCount = 0;
+        };
+
+        factory.resetSelections();
+
+        factory.selectAllCheckboxes = function (query) {
+          var filteredFiles = filterFilter(factory.filesDetails.files,
+            query);
+
+          factory.selectAll = !factory.selectAll;
+
+          factory.filesDetails.checkedCount = 0;
+          factory.filesDetails.folderCheckedCount = 0;
+          factory.filesDetails.checkedItemsCount = 0;
+          for (var i = 0; i < factory.filesDetails.files.length; ++i) {
+            var file = factory.filesDetails.files[i];
+
+            if (storageUtils.fileIsTrash(file) ||
+              (storageUtils.fileIsFolder(file) &&
+                !storageFactory.isFolderSelector())) {
+              continue;
+            }
+
+            file.isChecked = factory.selectAll && filteredFiles.indexOf(file) >=
+              0;
+
+            if (file.name.substr(-1) !== '/') {
+              factory.filesDetails.checkedCount += file.isChecked ? 1 :
+                0;
+            } else {
+              factory.filesDetails.folderCheckedCount += file.isChecked ?
+                1 : 0;
+            }
+
+            factory.filesDetails.checkedItemsCount += file.isChecked ? 1 :
+              0;
+          }
+        };
+
+        factory.getSelectedFiles = function () {
+          return factory.filesDetails.files.filter(function (e) {
+            return e.isChecked;
+          });
+        };
+
+        var _fileCheckToggled = function (file) {
+          // ng-click is processed before btn-checkbox updates the model
+          var checkValue = !file.isChecked;
+
+          file.isChecked = checkValue;
+
+          if (file.name.substr(-1) !== '/') {
+            factory.filesDetails.checkedCount += checkValue ? 1 : -1;
+          } else {
+            factory.filesDetails.folderCheckedCount += checkValue ? 1 :
+              -1;
           }
 
-          return resp;
-        }
+          factory.filesDetails.checkedItemsCount += checkValue ? 1 : -1;
+        };
+        
+        factory.sendFiles = function () {
+          var files = factory.getSelectedFiles();
+          
+          $rootScope.$broadcast('FileSelectAction', files);
+        };
 
-        var params = {};
-        if (storageFactory.folderPath) {
-          params.folderPath = storageFactory.folderPath;
-        } else {
-          params.folderPath = undefined;
-        }
+        factory.onFileSelect = function (file) {
+          if (storageFactory.canSelect(file)) {
+            if (!storageFactory.isMultipleSelector()) {
+              $rootScope.$broadcast('FileSelectAction', [file]);
+            } else {
+              _fileCheckToggled(file);
+            }
+          }
+        };
+        
+        factory.changeFolder = function (folder) {
+          if (storageUtils.fileIsFolder(folder)) {
+            factory.resetSelections();
 
-        svc.filesDetails.code = 202;
-        svc.loadingItems = true;
+            factory.folderPath = folder.name;
 
-        return storage.files.get(params)
-          .then(function (resp) {
-            return processFilesResponse(resp);
-          }, function () {
-            // TODO: show error message
-          })
-          .finally(function () {
-            svc.loadingItems = false;
-          });
-      };
+            factory.refreshFilesList();
+          }
+        };
+        
+        factory.isTrashFolder = function () {
+          return factory.folderPath.lastIndexOf('--TRASH--/', 0) === 0;
+        };
 
-      return svc;
+        return factory;
+      }
     }
   ]);

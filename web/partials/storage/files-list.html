@@ -5,6 +5,6 @@
     <ng-include src="'partials/storage/list-view.html'" ng-if="isListView"></ng-include>
     <ng-include src="'partials/storage/grid-view.html'" ng-if="!isListView"></ng-include>
     
-    <ng-include src="'partials/storage/empty-state.html'" ng-show="!filesFactory.loadingItems && isEmptyState()"></ng-include>
+    <empty-state ng-show="!filesFactory.loadingItems && isEmptyState()"></empty-state>
   </div>	
 </div>

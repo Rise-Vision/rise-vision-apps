@@ -5,11 +5,12 @@
   angular.module('risevision.storage.directives')
     .directive('storageFileSelect', [function () {
       return {
-        link: function (scope, element, attributes) {
-          var uploader = scope.$eval(attributes.uploader);
-
+        scope: {
+          uploader: '='
+        },
+        link: function ($scope, element) {
           element.bind('change', function () {
-            uploader.addToQueue(this.files).then(function () {
+            $scope.uploader.addToQueue(this.files).then(function () {
               element.prop('value', null);
             });
           });
