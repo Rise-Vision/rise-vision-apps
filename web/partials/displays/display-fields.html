@@ -1,4 +1,4 @@
-<div class="form-group" ng-class="{'has-error': !displayDetails.name.$pristine && displayDetails.name.$invalid}" show-errors>
+<div class="form-group u_margin-sm-bottom" ng-class="{'has-error': !displayDetails.name.$pristine && displayDetails.name.$invalid}" show-errors>
   <label class="control-label">{{'displays-app.fields.name.name' | translate}} *</label>
   <input type="text" class="form-control" placeholder="Display Name" id="name" name="name" ng-model="display.name" required>
   <p class="text-danger" ng-show="!displayDetails.name.$pristine && displayDetails.name.$error.required" translate>
@@ -9,101 +9,128 @@
 <div ng-controller="displayControls">
   <!-- DESKTOP BUTTONS -->
   <div class="row">
-    <div class="col-sm-12 col-md-10 col-lg-8">
-      <div class="row">
-        <div class="col-sm-4">
-          <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" required-role="da">
-            {{ 'displays-app.fields.controls.restart.name' | translate }}
-            <i class="fa fa-refresh icon-right"></i>
-          </button>
-        </div>
-        <div class="col-sm-4">
-          <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" required-role="da">
-            {{ 'displays-app.fields.controls.reboot.name' | translate }}
-            <i class="fa fa-power-off icon-right"></i>
-          </button>
-        </div>
-        <div class="col-sm-4">
-          <button id="downloadPlayer" type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-click="showDownloadButtons = true">
-            {{ 'displays-app.fields.controls.download' | translate }}
-            <i class="fa fa-cloud-download icon-right"></i>
-          </button>
-        </div>
-      </div>
+    <div class="col-sm-4 col-md-3 col-md-offset-3">
+      <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" required-role="da">
+        {{ 'displays-app.fields.controls.restart.name' | translate }}
+        <i class="fa fa-refresh icon-right"></i>
+      </button>
+    </div>
+    <div class="col-sm-4 col-md-3">
+      <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" required-role="da">
+        {{ 'displays-app.fields.controls.reboot.name' | translate }}
+        <i class="fa fa-power-off icon-right"></i>
+      </button>
+    </div>
+    <div class="col-sm-4 col-md-3">
+      <button id="downloadPlayer" type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-click="showDownloadButtons = true">
+        {{ 'displays-app.fields.controls.download' | translate }}
+        <i class="fa fa-cloud-download icon-right"></i>
+      </button>
     </div>
   </div>
 
   <!-- DOWNLOAD PLAYER BUTTONS -->
-  <div class="u_margin-sm-top animated fadeIn" ng-show="showDownloadButtons">
-    <download-player></download-player>
-  </div>
-
-  <div ng-show="controlsError" class="alert alert-danger" role="alert">
-    <strong translate>displays-app.fields.controls.error </strong>{{controlsError}}
-  </div>
-
-  <div class="panel panel-info animated fadeIn" ng-show="controlsInfo">
-    <div class="panel-body">
-      <strong>{{ controlsInfo | translate }}</strong>
+  <div class="row">
+    <div class="col-sm-12 col-md-9 col-md-offset-3">
+      <div class="u_margin-sm-top animated fadeIn" ng-show="showDownloadButtons">
+        <download-player></download-player>
+      </div>
+      <div ng-show="controlsError" class="alert alert-danger" role="alert">
+        <strong translate>displays-app.fields.controls.error </strong>{{controlsError}}
+      </div>
+      <div class="panel panel-info animated fadeIn" ng-show="controlsInfo">
+        <div class="panel-body">
+          <strong>{{ controlsInfo | translate }}</strong>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-
-<div>
-  <div class="panel panel-default u_margin-sm-top">
-    <table class="table">
-      <thead class="table-header">
-        <tr class="table-header__row">
-          <th class="table-header__cell"><span translate>displays-app.fields.player.id</span></th>
-          <th class="table-header__cell hidden-xs"><span translate>displays-app.fields.player.resolution</span></th>
-          <th class="table-header__cell hidden-xs hidden-sm"><span translate>displays-app.fields.player.ipAddress</span></th>
-          <th class="table-header__cell hidden-xs hidden-sm hidden-md"><span translate>displays-app.fields.player.operatingSystem</span></th>
-          <th class="table-header__cell hidden-xs hidden-sm"><span translate>displays-app.fields.player.playerVersion</span></th>
-          <th class="table-header__cell hidden-xs hidden-sm"><span translate>displays-app.fields.player.viewerVersion</span></th>
-          <th class="table-header__cell hidden-xs hidden-sm hidden-md"><span translate>displays-app.fields.player.browserVersion</span></th>
-          <th class="table-header__cell"><span translate>displays-app.fields.player.status</span></th>
-          <th class="table-header__cell hidden-xs"><span translate>displays-app.fields.player.lastConnection</span></th>
-        </tr>
-      </thead>
-      <tbody class="table-body">
-        <tr class="table-body__row">
-          <td class="table-body__cell table-body__cell-text-select"><span>{{display.id}}</span></td>
-          <td class="table-body__cell hidden-xs"><span>{{display.width | resolution: display.height}}</span></td>
-          <td class="table-body__cell hidden-xs hidden-sm"><span>{{display.playerLocalIpAddress}}</span></td>
-          <td class="table-body__cell hidden-xs hidden-sm hidden-md"><span>{{display.os}}</span></td>
-          <td class="table-body__cell hidden-xs hidden-sm"><span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}}</span></td>
-          <td class="table-body__cell hidden-xs hidden-sm"><span>{{display.viewerVersion}}</span></td>
-          <td class="table-body__cell hidden-xs hidden-sm hidden-md"><span>{{(display.browserName ? display.browserName + " " : "") + (display.browserVersion ? display.browserVersion : "")}}</span></td>
-          <td class="table-body__cell">
-            <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
-            <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline</span>
-
-            <span class="text-success" ng-show="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
-
-            <button class="btn btn-xs btn-primary pt-status btn-install-player"
-                    ng-show="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="factory.addDisplayModal(display)">
-              {{ 'displays-app.list.status.install' | translate }}
-            </button>
-          </td>
-          <td class="table-body__cell hidden-xs"><span>{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<div class="u_margin-md-top u_lh-normal">
-  <label class="control-label u_margin-right">{{ 'displays-app.fields.player.schedule.label' | translate }}</label>
-  <span ng-if="!displayService.hasSchedule(display)" class="u_margin-right">{{ 'displays-app.fields.player.schedule.notScheduled' | translate }} </span>
-  <a class="btn btn-primary btn-xs" ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
-    {{ 'displays-app.fields.player.schedule.addToSchedule' | translate }} <i class="fa fa-external-link icon-right" aria-hidden="true"></i>
-  </a>
-  <a id="viewSchedule" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
-    <span class="table-link u_ellipsis-md-top">{{display.scheduleName}} <i class="fa fa-external-link" aria-hidden="true"></i></span>
-  </a>
-</div>
+<hr>
 
 <div class="row half-top">
+  <!-- VERTICAL DISPLAY DETAILS -->
+  <div class="col-sm-6 col-xs-12">
+    <div class="u_lh-normal u_margin-sm-bottom">
+      <label class="control-label" translate>displays-app.displayDetails</label>
+    </div>
+    <div class="panel panel-default">
+      <table class="table">
+        <tbody class="table-body">
+          <tr class="table-body__row">
+            <td class="table-body__cell" translate><span>displays-app.fields.player.id</span></td>
+            <td class="table-body__cell"><span> {{display.id}} </span></td>
+          </tr>
+          <tr class="table-body__row">
+            <td class="table-body__cell" translate><span>displays-app.fields.player.status</span></td>
+            <td class="table-body__cell">
+              <span>
+                <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
+                <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline</span>
+                <span class="text-success" ng-show="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
+                <button class="btn btn-xs btn-primary pt-status btn-install-player"
+                        ng-show="!displayService.statusLoading && (display | status) === 'notinstalled'"
+                        ng-click="factory.addDisplayModal(display)">
+                  {{ 'displays-app.list.status.install' | translate }}
+                </button>
+              </span>
+            </td>
+          </tr>
+          <tr class="table-body__row">
+            <td class="table-body__cell"><span translate>displays-app.fields.player.schedule.label</span></td>
+            <td class="table-body__cell">
+              <span>
+                <button class="btn btn-primary btn-xs" ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
+                  {{ 'displays-app.fields.player.schedule.addToSchedule' | translate }} <i class="fa fa-external-link icon-right" aria-hidden="true"></i>
+                </button>
+                <a id="viewSchedule" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
+                  <span class="table-link u_ellipsis-md-top">{{display.scheduleName}} <i class="fa fa-external-link" aria-hidden="true"></i></span>
+                </a>
+              </span>
+            </td>
+          </tr>
+          <tr class="table-body__row">
+            <td class="table-body__cell"><span translate>displays-app.fields.player.lastConnection</span></td>
+            <td class="table-body__cell"><span>{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span></td>
+          </tr>
+          <tr class="table-body__row">
+            <td class="table-body__cell"><span translate>displays-app.fields.player.resolution</span></td>
+            <td class="table-body__cell"><span>{{display.width | resolution: display.height}}</span></td>
+          </tr>
+          <tr class="table-body__row">
+            <td class="table-body__cell"><span translate>displays-app.fields.player.ipAddress</span></td>
+            <td class="table-body__cell"><span>{{display.playerLocalIpAddress}}</span></td>
+          </tr>
+          <tr class="table-body__row">
+            <td class="table-body__cell"><span translate>displays-app.fields.player.operatingSystem</span></td>
+            <td class="table-body__cell"><span>{{display.os}}</span></td>
+          </tr>
+          <tr class="table-body__row">
+            <td class="table-body__cell"><span translate>displays-app.fields.player.macAddress</span></td>
+            <td class="table-body__cell"><span>{{display.macAddress}}</span></td>
+          </tr>
+          <tr class="table-body__row">
+            <td class="table-body__cell"><span translate>displays-app.fields.player.playerVersion</span></td>
+            <td class="table-body__cell"><span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}}</span></td>
+          </tr>
+          <tr class="table-body__row">
+            <td class="table-body__cell"><span translate>displays-app.fields.player.viewerVersion</span></td>
+            <td class="table-body__cell"><span>{{display.viewerVersion}}</span></td>
+          </tr>
+          <tr class="table-body__row">
+            <td class="table-body__cell"><span translate>displays-app.fields.player.browserVersion</span></td>
+            <td class="table-body__cell"><span>{{(display.browserName ? display.browserName + " " : "") + (display.browserVersion ? display.browserVersion : "")}}</span></td>
+          </tr>
+          <tr class="table-body__row">
+            <td class="table-body__cell"><span translate>displays-app.fields.player.serialNumber</span></td>
+            <td class="table-body__cell"><span>{{display.serialNumber}}</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SCREENSHOT  -->
   <div class="col-sm-6 col-xs-12">
     <div class="l_display-screenshot" ng-class="{ 'l_display-screenshot-offline': (screenshotState(display).indexOf('offline') >= 0) }">
       <div class="u_lh-normal u_margin-sm-bottom">
@@ -113,7 +140,7 @@
         </button>
       </div>
       <div class="panel panel-default u_margin-sm-bottom text-center">
-        <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'no-schedule'"">
+        <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'no-schedule'">
           <p class="text-muted">{{ 'displays-app.fields.screenshot.notAvailable' | translate }}</p>
           <p class="text-muted">{{ 'displays-app.fields.screenshot.notScheduled' | translate }}</p>
           <a class="btn btn-primary btn-xs" ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
@@ -166,6 +193,7 @@
     </div>
   </div>
 </div>
+
 
 <!--      SETTINGS       -->
 
