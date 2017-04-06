@@ -105,7 +105,7 @@
             <td class="table-body__cell"><span translate>displays-app.fields.player.operatingSystem</span></td>
             <td class="table-body__cell"><span>{{display.os}}</span></td>
           </tr>
-          <tr class="table-body__row">
+          <tr class="table-body__row" ng-show="display.macAddress">
             <td class="table-body__cell"><span translate>displays-app.fields.player.macAddress</span></td>
             <td class="table-body__cell"><span>{{display.macAddress}}</span></td>
           </tr>
@@ -121,7 +121,7 @@
             <td class="table-body__cell"><span translate>displays-app.fields.player.browserVersion</span></td>
             <td class="table-body__cell"><span>{{(display.browserName ? display.browserName + " " : "") + (display.browserVersion ? display.browserVersion : "")}}</span></td>
           </tr>
-          <tr class="table-body__row">
+          <tr class="table-body__row" ng-show="display.serialNumber">
             <td class="table-body__cell"><span translate>displays-app.fields.player.serialNumber</span></td>
             <td class="table-body__cell"><span>{{display.serialNumber}}</span></td>
           </tr>
