@@ -424,7 +424,6 @@ angular.module('risevision.apps', [
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get('partials/storage/home.html');
           }],
-          controller: 'StorageController',
           resolve: {
             canAccessApps: ['canAccessApps',
               function (canAccessApps) {

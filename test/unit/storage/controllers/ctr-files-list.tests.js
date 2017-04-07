@@ -22,13 +22,8 @@ describe('controller: Files List', function() {
         }
       }
     });
-    $provide.service('storageFactory', function() {
-      return storageFactory = {
-        storageFull: true,
-        folderPath: 'folder/',
-        fileIsCurrentFolder: function (file) {
-          return file.name === '';
-        },
+    $provide.service('storageUtils', function () {
+      return {
         fileIsFolder: function (file) {
           return file.name.substr(-1) === '/';
         },
@@ -37,24 +32,31 @@ describe('controller: Files List', function() {
         }
       };
     });
-    $provide.service('fileSelectorFactory',function(){
-      return {
-        onFileSelect: function() {
-          onFileSelect = true;
-        },
-        changeFolder: function() {
-          changeFolder = true;
-        }
+    $provide.service('StorageFactory', function() {
+      return function() {
+        return storageFactory = {
+          storageFull: true,
+          setSelectorType: sinon.stub()
+        };
       };
     });
-    $provide.service('filesFactory',function(){
-      return {
-        refreshFilesList : function(){
-        },
-        filesDetails: {
-          files: []
-        }
-      }
+    $provide.service('FilesFactory',function(){
+      return function () {
+        return {
+          refreshFilesList : function(){
+          },
+          filesDetails: {
+            files: []
+          },
+          onFileSelect: function() {
+            onFileSelect = true;
+          },
+          changeFolder: function() {
+            changeFolder = true;
+          },
+          folderPath: 'folder/'
+        };
+      };
     });
     $provide.service('FileUploader',function(){
       return {}
@@ -70,8 +72,7 @@ describe('controller: Files List', function() {
       $controller('FilesListController', {
         $scope : $scope,
         $rootScope: $rootScope,
-        fileSelectorFactory: $injector.get('fileSelectorFactory'),
-        filesFactory: $injector.get('filesFactory'),
+        filesFactory: $injector.get('FilesFactory'),
       });
       $scope.$digest();
     });
@@ -82,7 +83,7 @@ describe('controller: Files List', function() {
     
     expect($scope.storageFactory).to.be.ok;
     expect($scope.filesFactory).to.be.ok;
-    expect($scope.fileSelectorFactory).to.be.ok;
+    expect($scope.storageUtils).to.be.ok;
     expect($scope.filterConfig).to.be.ok;
     expect($scope.fileUploader).to.be.ok;    
     expect($scope.isListView).to.be.false;
@@ -90,6 +91,7 @@ describe('controller: Files List', function() {
     expect($scope.filesDetails).to.be.ok;
     expect($scope.bucketCreationStatus).to.be.ok;
 
+    expect($scope.setSelectorType).to.be.a('function');
     expect($scope.fileClick).to.be.a('function');
     expect($scope.dateModifiedOrderFunction).to.be.a('function');
     expect($scope.fileNameOrderFunction).to.be.a('function');
@@ -100,7 +102,7 @@ describe('controller: Files List', function() {
   });
   
   it('should reset folderPath on startup', function() {
-    expect(storageFactory.folderPath).to.equal('');
+    expect($scope.filesFactory.folderPath).to.equal('');
   });
 
   it('should watch loading variable', function() {
@@ -118,6 +120,14 @@ describe('controller: Files List', function() {
       done();
     }, 10);
   });  
+  
+  it('setSelectorType: ', function() {
+    expect(storageFactory.storageFull).to.be.true;
+    $scope.setSelectorType('type', 'filter');
+    
+    expect(storageFactory.setSelectorType).to.have.been.calledWith('type', 'filter');
+    expect(storageFactory.storageFull).to.be.false;
+  });
   
   describe('fileClick: ', function() {
     it('should select file', function() {
@@ -211,7 +221,7 @@ describe('controller: Files List', function() {
 
   describe('isFileListVisible: ', function() {
     beforeEach(function() {
-      $scope.storageFactory.folderPath = '';
+      $scope.filesFactory.folderPath = '';
       $scope.trialAvailable = false;
       $scope.fileUploader.queue = [];
     });
@@ -239,7 +249,7 @@ describe('controller: Files List', function() {
 
   describe('isEmptyState:', function(){
     beforeEach(function() {
-      $scope.storageFactory.folderPath = '';
+      $scope.filesFactory.folderPath = '';
       $scope.fileUploader.queue = [];
     });
 
@@ -253,7 +263,7 @@ describe('controller: Files List', function() {
     });
     
     it('show be false for subfolders', function() {
-      $scope.storageFactory.folderPath = 'someFolder/';
+      $scope.filesFactory.folderPath = 'someFolder/';
       expect($scope.isEmptyState()).to.be.false;
     });
 

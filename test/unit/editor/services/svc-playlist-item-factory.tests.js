@@ -84,21 +84,18 @@ describe('service: playlistItemFactory:', function() {
       };
     });
     
-    $provide.service('fileSelectorFactory', function() {
+    $provide.service('storageUtils', function() {
       return fileSelectorFactory = {
         openSelector: function(type) {
           if (returnFiles) {
-            return Q.resolve(['folder/file1', 'file2']);
+            return Q.resolve(returnFiles);
           }
           else {
             return Q.resolve();
           }
         },
-        getSelectedFiles: function() {
-          return [
-            {name:'folder/file1'},
-            {name:'file2'}
-          ];
+        getFileUrls: function() {
+          return ['folder/file1', 'file2'];
         }
       };
     });
@@ -132,7 +129,10 @@ describe('service: playlistItemFactory:', function() {
     openModal = null;
     currentItem = null;
     trackedEvent = null;
-    returnFiles = true;
+    returnFiles = [
+      {name:'folder/file1'},
+      {name:'file2'}
+    ];
     returnWidget = true;
     
     inject(function($injector){
@@ -267,9 +267,7 @@ describe('service: playlistItemFactory:', function() {
     });
     
     it('should add a folder of images', function(done) {
-      fileSelectorFactory.getSelectedFiles = function() {
-        return [{name: 'folder/folder1/', kind: 'folder'}, {}];
-      };
+      returnFiles = [{name: 'folder/folder1/', kind: 'folder'}, {}];
       playlistItemFactory.selectFiles('images');
       
       setTimeout(function() {

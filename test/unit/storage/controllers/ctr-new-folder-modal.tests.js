@@ -26,11 +26,6 @@ describe('controller: NewFolderModalCtrl', function() {
         }
       });
 
-      $provide.service('storageFactory', function() {
-        return storageFactory = {
-          folderPath: ''
-        };
-      });
       $provide.service('filesFactory',function(){
         return {
           getFileNameIndex : function(){
@@ -40,7 +35,8 @@ describe('controller: NewFolderModalCtrl', function() {
               return -1;
             }            
           },
-          refreshFilesList : function(){}
+          refreshFilesList : function(){},
+          folderPath: ''
         }
       });
 
@@ -57,7 +53,7 @@ describe('controller: NewFolderModalCtrl', function() {
   });
 
   var $scope, storage, $modalInstance, $modalInstanceCloseSpy, createFolderSpy, 
-    duplicatedName, storageFactory, filesFactory, refreshFilesListSpy, emitSpy, result;
+    duplicatedName, filesFactory, refreshFilesListSpy, emitSpy, result;
   beforeEach(function(){
     duplicatedName = false;
     result = { code: 200 };
@@ -119,7 +115,7 @@ describe('controller: NewFolderModalCtrl', function() {
   });
   
   it('should correctly create sub-folder of folder with % in name',function(done){
-    storageFactory.folderPath = 'some % folder/';
+    filesFactory.folderPath = 'some % folder/';
 
     $scope.folderName = 'newFolder';
     $scope.ok();

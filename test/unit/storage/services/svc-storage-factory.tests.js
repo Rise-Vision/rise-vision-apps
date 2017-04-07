@@ -1,31 +1,15 @@
 'use strict';
   
-describe('service: storageFactory:', function() {
+describe('service: StorageFactory:', function() {
   beforeEach(module('risevision.storage.filters'));
   beforeEach(module('risevision.storage.services'));
   var storageFactory, $modal, SELECTOR_FILTERS;
 
-  beforeEach(module(function ($provide) {
-    $provide.service('$modal', function() {
-      return {
-        open: function(){
-        }      
-      };
-    });
-    $provide.service('userState', function() {
-      return {
-        getSelectedCompanyId: function() {
-          return 'companyId';
-        },
-        _restoreState: function() {}
-      };
-    });
-  }));
-
   beforeEach(function(){
     inject(function($injector){  
-      storageFactory = $injector.get('storageFactory');
-      $modal = $injector.get('$modal');
+      var StorageFactory = $injector.get('StorageFactory');
+      storageFactory = new StorageFactory();
+
       SELECTOR_FILTERS = $injector.get('SELECTOR_FILTERS');
       
       storageFactory.selectorType = 'single-file';
@@ -37,18 +21,13 @@ describe('service: storageFactory:', function() {
     expect(storageFactory).to.be.ok;
         
     expect(storageFactory.setSelectorType).to.be.a('function');
-    expect(storageFactory.getBucketName).to.be.a('function');
-    expect(storageFactory.getFolderSelfLinkUrl).to.be.a('function');
     expect(storageFactory.isMultipleSelector).to.be.a('function');
     expect(storageFactory.isFileSelector).to.be.a('function');
     expect(storageFactory.isFolderSelector).to.be.a('function');
     expect(storageFactory.canSelect).to.be.a('function');
     expect(storageFactory.isDisabled).to.be.a('function');
-    expect(storageFactory.fileIsFolder).to.be.a('function');
-    expect(storageFactory.fileIsTrash).to.be.a('function');
-    expect(storageFactory.isTrashFolder).to.be.a('function');
-    
-    expect(storageFactory.addFolder).to.be.a('function');
+    expect(storageFactory.fileIsImage).to.be.a('function');    
+    expect(storageFactory.fileIsVideo).to.be.a('function');    
   });
   
   it('should initialize values', function() {
@@ -172,61 +151,6 @@ describe('service: storageFactory:', function() {
       expect(storageFactory.canSelect({name: 'file.html'})).to.be.false;
     });
   });
-  
-  it('getBucketName: ', function() {
-    expect(storageFactory.getBucketName()).to.equal('risemedialibrary-companyId');
-  });
-  
-  it('getFolderSelfLinkUrl: ', function() {
-    expect(storageFactory.getFolderSelfLinkUrl()).to.equal('https://www.googleapis.com/storage/v1/b/risemedialibrary-companyId/o?prefix=');
-  });
-
-  it('fileIsFolder: ', function() {
-    expect(storageFactory.fileIsFolder({name: '--TRASH--/'})).to.be.true;
-    expect(storageFactory.fileIsFolder({name: 'someFolder/'})).to.be.true;
-    expect(storageFactory.fileIsFolder({name: 'someFolder/image.jpg'})).to.be.false;
-    expect(storageFactory.fileIsFolder({name: 'image.jpg'})).to.be.false;
-    expect(storageFactory.fileIsFolder({name: ''})).to.be.true;
-  });
-  
-  it('fileIsTrash: ', function() {
-    expect(storageFactory.fileIsTrash({name: '--TRASH--/'})).to.be.true;
-    expect(storageFactory.fileIsTrash({name: 'image.jpg'})).to.be.false;
-  });
-
-  it('fileName: ', function() {
-    expect(storageFactory.fileName({name: 'image.jpg'})).to.equal('image.jpg');
-    expect(storageFactory.fileName({name: 'folder/image.jpg'})).to.equal('image.jpg');
-    expect(storageFactory.fileName({name: 'folder/subfolder/image.jpg'})).to.equal('image.jpg');
-    expect(storageFactory.fileName({name: 'folder/'})).to.equal('folder/');
-    expect(storageFactory.fileName({name: 'folder/subfolder/folder1/'})).to.equal('folder1/');
-    expect(storageFactory.fileName({name: '--TRASH--/'})).to.equal('--TRASH--/');
-    expect(storageFactory.fileName({name: '--TRASH--/image.jpg'})).to.equal('image.jpg');
-  });
-
-  it('fileParent: ', function() {
-    expect(storageFactory.fileParent({name: 'image.jpg'})).to.equal('');
-    expect(storageFactory.fileParent({name: 'folder/image.jpg'})).to.equal('folder/');
-    expect(storageFactory.fileParent({name: 'folder/subfolder/image.jpg'})).to.equal('folder/subfolder/');
-    expect(storageFactory.fileParent({name: 'folder/'})).to.equal('');
-    expect(storageFactory.fileParent({name: 'folder/subfolder/folder1/'})).to.equal('folder/subfolder/');
-    expect(storageFactory.fileParent({name: '--TRASH--/'})).to.equal('');
-    expect(storageFactory.fileParent({name: '--TRASH--/image.jpg'})).to.equal('--TRASH--/');
-  });
-
-  it('isTrashFolder: ', function() {
-    storageFactory.folderPath = '';
-    expect(storageFactory.isTrashFolder()).to.be.false;
-    
-    storageFactory.folderPath = 'someFolder/';
-    expect(storageFactory.isTrashFolder()).to.be.false;
-
-    storageFactory.folderPath = '--TRASH--/';
-    expect(storageFactory.isTrashFolder()).to.be.true;
-
-    storageFactory.folderPath = '--TRASH--/subfolder/';
-    expect(storageFactory.isTrashFolder()).to.be.true;
-  });
 
   it('fileIsImage:',function(){
     expect(storageFactory.fileIsImage({name: 'f.jpg'})).to.be.true;
@@ -251,20 +175,6 @@ describe('service: storageFactory:', function() {
     expect(storageFactory.fileIsVideo({name: 'f.txt'})).to.be.false;
     expect(storageFactory.fileIsVideo({name: 'f.mp3'})).to.be.false;
     expect(storageFactory.fileIsVideo({name: 'f.jpg'})).to.be.false;
-  });
-
-  describe('addFolder:', function(){
-    it('should open modal', function(){
-      var modalOpenSpy = sinon.spy($modal,'open');
-      storageFactory.addFolder();
-
-      modalOpenSpy.should.have.been.calledWith({
-        templateUrl: "partials/storage/new-folder-modal.html",
-        controller: "NewFolderModalCtrl",
-        size: 'md'
-      });
-
-    });
   });
 
 });

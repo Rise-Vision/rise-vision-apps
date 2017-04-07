@@ -1,22 +1,22 @@
 'use strict';
 describe('directive: storage-selector', function() {
-  var $rootScope, element, fileSelectorFactory;
+  var $rootScope, element, storageUtils;
   var testitem = {name: 'image.jpg'};
 
   beforeEach(module('risevision.storage.directives'));
   beforeEach(module(function ($provide) {
-    $provide.service('storageFactory', function() {
-      return {selectorType: 'single-file'};
-    });
-    $provide.service('fileSelectorFactory', function() {
-      return fileSelectorFactory;
+    $provide.service('storageUtils', function() {
+      return storageUtils;
     });
   }));
 
   beforeEach(inject(function(_$compile_, _$rootScope_, $templateCache){
-    fileSelectorFactory = {
+    storageUtils = {
       openSelector: function() {
-        return Q.resolve(testitem);
+        return Q.resolve();
+      },
+      getFileUrls: function() {
+        return testitem;
       }
     };
 
@@ -38,7 +38,7 @@ describe('directive: storage-selector', function() {
     });
     
     it('should have open function in scope', function() {
-      var openSelectorSpy = sinon.spy(fileSelectorFactory, 'openSelector');
+      var openSelectorSpy = sinon.spy(storageUtils, 'openSelector');
 
       element.isolateScope().open();
 

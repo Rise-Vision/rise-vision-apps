@@ -1,82 +1,34 @@
 'use strict';
   
-describe('service: fileSelectorFactory:', function() {
+describe('service: FileSelectorFactory (aka FilesFactory):', function() {
   beforeEach(module('risevision.storage.services'));
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
-    $provide.service('filesFactory', function() {
-      return filesFactory;
-    });
-
-    $provide.service('gadgetsApi',function(){
-      return gadgetsApi = {
-        rpc: {
-          call: function() {}
-        }
-      };
-    });
-    $provide.service('userState', function() {
-      return {
-        getSelectedCompanyId: function() {
-          return 'companyId';
-        },
-        _restoreState: function() {}
-      };
-    });
-    $provide.service('$modal', function() {
-      return {
-        open: function(obj){
-          var deferred = Q.defer();
-
-          if (obj.resolve) {
-            obj.resolve.enableByURL ? obj.resolve.enableByURL() : undefined;
-          }
-
-          if(modalSuccess) {
-            deferred.resolve('success');  
-          }
-          else {
-            deferred.reject();
-          }
-
-          return {
-            result: deferred.promise
-          }
-        }
-      };
-    });
   }));
-  var filesResponse, fileSelectorFactory, returnFiles, filesFactory, storageFactory, gadgetsApi, $rootScope, $broadcastSpy, $window;
-  var $modal, modalSuccess;
+  var filesResponse, returnFiles, filesFactory, storageFactory, storageUtils, $rootScope, $broadcastSpy;
   beforeEach(function(){
     returnFiles = true;
-    filesFactory = {
-      filesDetails: {
-        files: [{ 'name': 'test/file1', 'size': 5 }, 
-          { 'name': 'test/file2', 'size': 3 },
-          { 'name': 'test/file3', 'size': 8 },
-          { 'name': 'test/', 'size': 0 }]
-        ,localFiles: false
-        ,checkedCount: 0
-        ,folderCheckedCount: 0
-        ,folderPath: ''
-      },
-      refreshFilesList: function() {
-      }
-    };
-    modalSuccess = true;
     
     inject(function($injector){  
       $rootScope = $injector.get('$rootScope');
-      $window = $injector.get('$window');
-      $modal = $injector.get('$modal');
-      storageFactory = $injector.get('storageFactory');
-      fileSelectorFactory = $injector.get('fileSelectorFactory');
+
+      storageUtils = $injector.get('storageUtils');
+      var StorageFactory = $injector.get('StorageFactory');
+      storageFactory = new StorageFactory();
+
+      var FilesFactory = $injector.get('FilesFactory');
+      filesFactory = new FilesFactory(storageFactory);
     });
   });
   
   beforeEach(function() {
-    storageFactory.storageIFrame = false;
+    filesFactory.filesDetails.files = [
+      { 'name': 'test/file1', 'size': 5 }, 
+      { 'name': 'test/file2', 'size': 3 },
+      { 'name': 'test/file3', 'size': 8 },
+      { 'name': 'test/', 'size': 0 }
+    ];
+
     storageFactory.selectorType = 'single-file';
     storageFactory.storageFull = true;
     
@@ -84,15 +36,15 @@ describe('service: fileSelectorFactory:', function() {
   });
 
   it('should exist',function(){
-    expect(fileSelectorFactory).to.be.ok;
+    expect(filesFactory).to.be.ok;
 
-    expect(fileSelectorFactory.resetSelections).to.be.a('function');
-    expect(fileSelectorFactory.selectAllCheckboxes).to.be.a('function');
-    expect(fileSelectorFactory.getSelectedFiles).to.be.a('function');
-    expect(fileSelectorFactory.sendFiles).to.be.a('function');
-    expect(fileSelectorFactory.onFileSelect).to.be.a('function');
-    expect(fileSelectorFactory.changeFolder).to.be.a('function');    
-    expect(fileSelectorFactory.cancel).to.be.a('function');
+    expect(filesFactory.resetSelections).to.be.a('function');
+    expect(filesFactory.selectAllCheckboxes).to.be.a('function');
+    expect(filesFactory.getSelectedFiles).to.be.a('function');
+    expect(filesFactory.sendFiles).to.be.a('function');
+    expect(filesFactory.onFileSelect).to.be.a('function');
+    expect(filesFactory.changeFolder).to.be.a('function');    
+    expect(filesFactory.isTrashFolder).to.be.a('function');
   });
   
   it('selections should be initialized', function() {
@@ -102,7 +54,7 @@ describe('service: fileSelectorFactory:', function() {
   });
   
   it('should resetSelections on $state change', function(done) {
-    var resetSelectionsSpy = sinon.spy(fileSelectorFactory, 'resetSelections');
+    var resetSelectionsSpy = sinon.spy(filesFactory, 'resetSelections');
     $rootScope.$broadcast('$stateChangeStart');
     
     setTimeout(function() {
@@ -113,10 +65,10 @@ describe('service: fileSelectorFactory:', function() {
   });
 
   it('resetSelections: ', function() {
-    fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[1]);
-    fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[3]);
+    filesFactory.onFileSelect(filesFactory.filesDetails.files[1]);
+    filesFactory.onFileSelect(filesFactory.filesDetails.files[3]);
     
-    fileSelectorFactory.resetSelections();
+    filesFactory.resetSelections();
     
     expect(filesFactory.filesDetails.files[1].isChecked).to.be.false;
     expect(filesFactory.filesDetails.files[3].isChecked).to.be.false;
@@ -127,8 +79,8 @@ describe('service: fileSelectorFactory:', function() {
 
   describe('selectAllCheckboxes: ', function() {
     it('should select all files and folders in storage full', function() {
-      fileSelectorFactory.selectAll = false;
-      fileSelectorFactory.selectAllCheckboxes();
+      filesFactory.selectAll = false;
+      filesFactory.selectAllCheckboxes();
 
       expect(filesFactory.filesDetails.checkedCount).to.be.equal(3);
       expect(filesFactory.filesDetails.folderCheckedCount).to.be.equal(1);
@@ -137,8 +89,8 @@ describe('service: fileSelectorFactory:', function() {
     });
     
     it('should select all filtered files and folders', function() {
-      fileSelectorFactory.selectAll = false;
-      fileSelectorFactory.selectAllCheckboxes('file');
+      filesFactory.selectAll = false;
+      filesFactory.selectAllCheckboxes('file');
 
       expect(filesFactory.filesDetails.checkedCount).to.be.equal(3);
       expect(filesFactory.filesDetails.folderCheckedCount).to.be.equal(0);
@@ -150,8 +102,8 @@ describe('service: fileSelectorFactory:', function() {
       storageFactory.selectorType = 'multiple-file';
       storageFactory.storageFull = false;
 
-      fileSelectorFactory.selectAll = false;
-      fileSelectorFactory.selectAllCheckboxes();
+      filesFactory.selectAll = false;
+      filesFactory.selectAllCheckboxes();
 
       expect(filesFactory.filesDetails.checkedCount).to.be.equal(3);
       expect(filesFactory.filesDetails.folderCheckedCount).to.be.equal(0);
@@ -159,8 +111,8 @@ describe('service: fileSelectorFactory:', function() {
     });
 
     it('should deselect all files and folders', function() {
-      fileSelectorFactory.selectAll = true;
-      fileSelectorFactory.selectAllCheckboxes();
+      filesFactory.selectAll = true;
+      filesFactory.selectAllCheckboxes();
 
       expect(filesFactory.filesDetails.checkedCount).to.be.equal(0);
       expect(filesFactory.filesDetails.folderCheckedCount).to.be.equal(0);
@@ -169,10 +121,10 @@ describe('service: fileSelectorFactory:', function() {
   });
   
   it('getSelectedFiles: ', function() {
-    fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[1]);
-    fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[2]);
+    filesFactory.onFileSelect(filesFactory.filesDetails.files[1]);
+    filesFactory.onFileSelect(filesFactory.filesDetails.files[2]);
 
-    expect(fileSelectorFactory.getSelectedFiles()).to.deep.equal([
+    expect(filesFactory.getSelectedFiles()).to.deep.equal([
       filesFactory.filesDetails.files[1], 
       filesFactory.filesDetails.files[2]
     ]);
@@ -181,23 +133,23 @@ describe('service: fileSelectorFactory:', function() {
   it('sendFiles: ', function() {
     storageFactory.selectorType = 'multiple-file';
     
-    fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[1]);
-    fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[2]);
+    filesFactory.onFileSelect(filesFactory.filesDetails.files[1]);
+    filesFactory.onFileSelect(filesFactory.filesDetails.files[2]);
 
-      expect(filesFactory.filesDetails.checkedCount).to.be.equal(2);
-    fileSelectorFactory.sendFiles();
+    expect(filesFactory.filesDetails.checkedCount).to.be.equal(2);
+    filesFactory.sendFiles();
 
     $broadcastSpy.should.have.been.calledWith('FileSelectAction', [
-      'https://storage.googleapis.com/risemedialibrary-companyId/test%2Ffile2', 
-      'https://storage.googleapis.com/risemedialibrary-companyId/test%2Ffile3'
+      filesFactory.filesDetails.files[1], 
+      filesFactory.filesDetails.files[2]
     ]);
   });
   
   describe('changeFolder: ', function() {
     it('should not do anything if a file is selected', function() {
-      fileSelectorFactory.changeFolder(filesFactory.filesDetails.files[1]);
+      filesFactory.changeFolder(filesFactory.filesDetails.files[1]);
       
-      expect(filesFactory.filesDetails.files[1].isChecked).to.be.false;
+      expect(filesFactory.filesDetails.files[1].isChecked).to.not.be.true;
       expect(filesFactory.filesDetails.checkedCount).to.be.equal(0);
       expect(filesFactory.filesDetails.folderCheckedCount).to.be.equal(0);
       expect(filesFactory.filesDetails.checkedItemsCount).to.be.equal(0);
@@ -206,9 +158,9 @@ describe('service: fileSelectorFactory:', function() {
     it('should reset selections and refreshFilesList', function() {
       var refreshFilesListSpy = sinon.spy(filesFactory, 'refreshFilesList');
 
-      fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[1]);
+      filesFactory.onFileSelect(filesFactory.filesDetails.files[1]);
 
-      fileSelectorFactory.changeFolder(filesFactory.filesDetails.files[3]);
+      filesFactory.changeFolder(filesFactory.filesDetails.files[3]);
 
       expect(filesFactory.filesDetails.checkedCount).to.be.equal(0);
       expect(filesFactory.filesDetails.folderCheckedCount).to.be.equal(0);
@@ -218,23 +170,37 @@ describe('service: fileSelectorFactory:', function() {
     });
 
     it('should update folderPath', function() {
-      fileSelectorFactory.changeFolder(filesFactory.filesDetails.files[3]);
+      filesFactory.changeFolder(filesFactory.filesDetails.files[3]);
 
-      expect(storageFactory.folderPath).to.be.equal(filesFactory.filesDetails.files[3].name);
+      expect(filesFactory.folderPath).to.be.equal(filesFactory.filesDetails.files[3].name);
     });
     
     it('should navigate to parent folder', function() {
-      storageFactory.folderPath = filesFactory.filesDetails.files[3].name;
-      fileSelectorFactory.changeFolder({name:''});
+      filesFactory.folderPath = filesFactory.filesDetails.files[3].name;
+      filesFactory.changeFolder({name:''});
 
-      expect(storageFactory.folderPath).to.be.equal('');
+      expect(filesFactory.folderPath).to.be.equal('');
     });
+  });
+  
+  it('isTrashFolder: ', function() {
+    filesFactory.folderPath = '';
+    expect(filesFactory.isTrashFolder()).to.be.false;
+    
+    filesFactory.folderPath = 'someFolder/';
+    expect(filesFactory.isTrashFolder()).to.be.false;
+
+    filesFactory.folderPath = '--TRASH--/';
+    expect(filesFactory.isTrashFolder()).to.be.true;
+
+    filesFactory.folderPath = '--TRASH--/subfolder/';
+    expect(filesFactory.isTrashFolder()).to.be.true;
   });
 
   describe('onFileSelect: ', function() {
     describe('storageFull: ', function() {
       it('should select a file', function() {
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[1]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[1]);
         
         expect(filesFactory.filesDetails.files[1].isChecked).to.be.true;
         expect(filesFactory.filesDetails.checkedCount).to.be.equal(1);
@@ -243,7 +209,7 @@ describe('service: fileSelectorFactory:', function() {
       });
       
       it('should select a folder', function() {
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[3]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[3]);
         
         expect(filesFactory.filesDetails.files[3].isChecked).to.be.true;
         expect(filesFactory.filesDetails.checkedCount).to.be.equal(0);
@@ -252,8 +218,8 @@ describe('service: fileSelectorFactory:', function() {
       });
       
       it('should select multiple files/folders', function() {
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[1]);
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[3]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[1]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[3]);
         
         expect(filesFactory.filesDetails.files[1].isChecked).to.be.true;
         expect(filesFactory.filesDetails.files[3].isChecked).to.be.true;
@@ -263,8 +229,8 @@ describe('service: fileSelectorFactory:', function() {
       });
       
       it('should toggle selection', function() {
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[1]);
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[1]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[1]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[1]);
         
         expect(filesFactory.filesDetails.files[1].isChecked).to.be.false;
         expect(filesFactory.filesDetails.checkedCount).to.be.equal(0);
@@ -279,38 +245,23 @@ describe('service: fileSelectorFactory:', function() {
       });
 
       it('should select file', function() {
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[1]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[1]);
 
         $broadcastSpy.should.have.been.calledWith('FileSelectAction',
-          ['https://storage.googleapis.com/risemedialibrary-companyId/test%2Ffile2']);
-      });
-      
-      it('should select file and postMessage/send rpc', function() {
-        storageFactory.storageIFrame = true;
-        var rpcCallSpy = sinon.spy(gadgetsApi.rpc, 'call');
-        var postMessageSpy = sinon.spy($window.parent, "postMessage");
-
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[1]);
-
-        rpcCallSpy.should.have.been.calledWith('', 'rscmd_saveSettings', null,
-          {params: 'https://storage.googleapis.com/risemedialibrary-companyId/test%2Ffile2'});
-          
-        // postMessage receives an array of file paths and a '*' as second parameter
-        postMessageSpy.should.have.been.calledWith(['https://storage.googleapis.com/risemedialibrary-companyId/test%2Ffile2'], '*');
-        postMessageSpy.restore();
+          [filesFactory.filesDetails.files[1]]);
       });
       
       it('should clear selections', function() {
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[1]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[1]);
         
-        expect(filesFactory.filesDetails.files[1].isChecked).to.be.false;
+        expect(filesFactory.filesDetails.files[1].isChecked).to.not.be.true;
         expect(filesFactory.filesDetails.checkedCount).to.be.equal(0);
         expect(filesFactory.filesDetails.folderCheckedCount).to.be.equal(0);
         expect(filesFactory.filesDetails.checkedItemsCount).to.be.equal(0);
       });
 
       it('should not select folder', function() {
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[3]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[3]);
         
         $broadcastSpy.should.not.have.been.called;
       });
@@ -323,38 +274,23 @@ describe('service: fileSelectorFactory:', function() {
       });
       
       it('should select folder', function() {
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[3]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[3]);
 
         $broadcastSpy.should.have.been.calledWith('FileSelectAction',
-          ['https://storage.googleapis.com/risemedialibrary-companyId/test%2F']);
+          [filesFactory.filesDetails.files[3]]);
       });
-      
-      it('should select folder and postMessage/send rpc', function() {
-        storageFactory.storageIFrame = true;
-        var rpcCallSpy = sinon.spy(gadgetsApi.rpc, 'call');
-        var postMessageSpy = sinon.spy($window.parent, "postMessage");
 
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[3]);
-
-        rpcCallSpy.should.have.been.calledWith('', 'rscmd_saveSettings', null,
-          {params: 'https://storage.googleapis.com/risemedialibrary-companyId/test%2F'});
-          
-        // postMessage receives an array of file paths and a '*' as second parameter
-        postMessageSpy.should.have.been.calledWith(['https://storage.googleapis.com/risemedialibrary-companyId/test%2F'], '*');
-        postMessageSpy.restore();
-      });
-      
       it('should clear selections', function() {
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[3]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[3]);
         
-        expect(filesFactory.filesDetails.files[3].isChecked).to.be.false;
+        expect(filesFactory.filesDetails.files[3].isChecked).to.not.be.true;
         expect(filesFactory.filesDetails.checkedCount).to.be.equal(0);
         expect(filesFactory.filesDetails.folderCheckedCount).to.be.equal(0);
         expect(filesFactory.filesDetails.checkedItemsCount).to.be.equal(0);
       });
 
       it('should not select a file', function() {
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[1]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[1]);
 
         $broadcastSpy.should.not.have.been.called;
       });
@@ -367,7 +303,7 @@ describe('service: fileSelectorFactory:', function() {
       });
 
       it('should select a file', function() {
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[1]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[1]);
         
         expect(filesFactory.filesDetails.files[1].isChecked).to.be.true;
         expect(filesFactory.filesDetails.checkedCount).to.be.equal(1);
@@ -376,17 +312,17 @@ describe('service: fileSelectorFactory:', function() {
       });
 
       it('should not select a folder', function() {
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[3]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[3]);
         
-        expect(filesFactory.filesDetails.files[3].isChecked).to.be.false;
+        expect(filesFactory.filesDetails.files[3].isChecked).to.not.be.true;
         expect(filesFactory.filesDetails.checkedCount).to.be.equal(0);
         expect(filesFactory.filesDetails.folderCheckedCount).to.be.equal(0);
         expect(filesFactory.filesDetails.checkedItemsCount).to.be.equal(0);
       });
       
       it('should select multiple files', function() {
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[1]);
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[2]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[1]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[2]);
         
         expect(filesFactory.filesDetails.files[1].isChecked).to.be.true;
         expect(filesFactory.filesDetails.files[2].isChecked).to.be.true;
@@ -403,7 +339,7 @@ describe('service: fileSelectorFactory:', function() {
       });
 
       it('should select a file', function() {
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[1]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[1]);
         
         expect(filesFactory.filesDetails.files[1].isChecked).to.be.true;
         expect(filesFactory.filesDetails.checkedCount).to.be.equal(1);
@@ -412,7 +348,7 @@ describe('service: fileSelectorFactory:', function() {
       });
       
       it('should select a folder', function() {
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[3]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[3]);
         
         expect(filesFactory.filesDetails.files[3].isChecked).to.be.true;
         expect(filesFactory.filesDetails.checkedCount).to.be.equal(0);
@@ -421,8 +357,8 @@ describe('service: fileSelectorFactory:', function() {
       });
       
       it('should select multiple files/folders', function() {
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[1]);
-        fileSelectorFactory.onFileSelect(filesFactory.filesDetails.files[3]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[1]);
+        filesFactory.onFileSelect(filesFactory.filesDetails.files[3]);
         
         expect(filesFactory.filesDetails.files[1].isChecked).to.be.true;
         expect(filesFactory.filesDetails.files[3].isChecked).to.be.true;
@@ -430,78 +366,6 @@ describe('service: fileSelectorFactory:', function() {
         expect(filesFactory.filesDetails.folderCheckedCount).to.be.equal(1);
         expect(filesFactory.filesDetails.checkedItemsCount).to.be.equal(2);
       });
-    });
-
-    describe('cancel:',function(){
-      it('should broadcast cancel action',function(){
-        fileSelectorFactory.cancel();
-
-        $broadcastSpy.should.have.been.calledWith('CancelFileSelect');
-      });
-
-      it('should postMessage/send rpc',function(){
-        storageFactory.storageIFrame = true;
-        var rpcCallSpy = sinon.spy(gadgetsApi.rpc, 'call');
-        var postMessageSpy = sinon.spy($window.parent, "postMessage");
-
-        fileSelectorFactory.cancel();
-
-        rpcCallSpy.should.have.been.calledWith('', 'rscmd_closeSettings', null);
-          
-        postMessageSpy.should.have.been.calledWith("close", "*");
-        postMessageSpy.restore();
-      });
-    });
-
-  });  
-
-  describe('openSelector:', function(){
-    it('should return a promise', function() {
-      expect(fileSelectorFactory.openSelector().then).to.be.a('function');
-    });
-    
-    it('should initialize default selection', function() {
-      fileSelectorFactory.openSelector();
-
-      expect(storageFactory.selectorType).to.equal('single-file');
-    });
-
-    it('should open modal', function() {
-      var $modalSpy = sinon.spy($modal, 'open');
-      
-      fileSelectorFactory.openSelector();      
-      
-      $modalSpy.should.have.been.called;
-    });
-    
-    it('should initialize selectorType', function() {
-      var setSelectorTypeSpy = sinon.spy(storageFactory, 'setSelectorType');
-
-      fileSelectorFactory.openSelector('multiple-files-folders', 'images');
-
-      setSelectorTypeSpy.should.have.been.calledWith('multiple-files-folders', 'images');
-    });
-
-    it('should resolve promise', function(done) {
-      fileSelectorFactory.openSelector()
-      .then(function(result){
-        expect(result).to.equal('success');
-
-        done();
-      })
-      .then(null,done);
-    });
-    
-    it('should reject promise on cancel', function(done) {
-      modalSuccess = false;
-      fileSelectorFactory.openSelector()
-      .then(function(result) {
-        done('failed');
-      })
-      .then(null, function() {
-        done();
-      })
-      .then(null,done);
     });
 
   });

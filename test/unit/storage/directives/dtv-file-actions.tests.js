@@ -1,32 +1,30 @@
 'use strict';
-describe('controller: File Actions', function() {
-  beforeEach(module('risevision.storage.controllers'));
+describe('directive: file-actions', function() {
+  beforeEach(module('risevision.storage.directives'));
+
   beforeEach(module(function ($provide) {
-    $provide.service('fileActionsFactory',function(){
-      return fileActionsFactory = {
+    $provide.service('FileActionsFactory',function(){
+      return function(newFilesFactory) {
+        expect(newFilesFactory).to.equal(filesFactory);
+
+        return fileActionsFactory = {
+        };
+      };
+    });
+
+    filesFactory = {
+      filesDetails: {
+        checkedItemsCount: 0
+      },
+      statusDetails: {},
+      isTrashFolder: function() {
+        return isTrashFolder;
       }
-    });
-    $provide.service('filesFactory',function(){
-      return filesFactory = {
-        filesDetails: {
-          checkedItemsCount: 0
-        },
-        statusDetails: {}
-      }
-    });
-    $provide.service('storageFactory',function(){
-      return storageFactory = {
-        isTrashFolder: function() {
-          return isTrashFolder;
-        }
-      }
-    });
-    $provide.service('downloadFactory', function() {
-      return {};
-    });
+    };
+
     $provide.service('$window',function(){
       return $window = {
-          addEventListener: function() {}
+        addEventListener: function() {}
       }
     });
     $provide.service('$translate',function(){
@@ -39,25 +37,28 @@ describe('controller: File Actions', function() {
       }
     });
   }));
-  var $scope, fileActionsFactory, filesFactory, storageFactory, $window, $translate, isTrashFolder, addEventListenerSpy;
-  beforeEach(function(){
-    isTrashFolder = false;
-    inject(function($injector,$rootScope, $controller){
-      addEventListenerSpy = sinon.spy($window,'addEventListener');
+  var element;
+  var $scope, fileActionsFactory, filesFactory, $window, $translate, isTrashFolder, addEventListenerSpy;
+  beforeEach(inject(function($compile, $rootScope, $templateCache){
+    addEventListenerSpy = sinon.spy($window,'addEventListener');
+    $rootScope.filesFactory = filesFactory;
 
-      $scope = $rootScope.$new();
-      $controller('FileActionsController', {
-        $scope : $scope
-      });
-      $scope.$digest();
-    });
+    $templateCache.put('partials/storage/file-actions.html', '<p>mock</p>');
+
+    element = $compile('<file-actions files-factory="filesFactory"></file-actions>')($rootScope);
+    $rootScope.$apply();
+    
+    $scope = element.isolateScope();
+  }));
+
+  it('should render directive', function() {
+    expect(element.html()).to.equal('<p>mock</p>');
   });
   
   it('should exist',function(){
     expect($scope).to.be.ok;
 
     expect($scope.factory).to.be.ok;
-    expect($scope.storageFactory).to.be.ok;
     expect($scope.filesDetails).to.be.ok;
     expect($scope.fileListStatus).to.be.ok;
     expect($scope.leavePageMessage).to.be.ok;

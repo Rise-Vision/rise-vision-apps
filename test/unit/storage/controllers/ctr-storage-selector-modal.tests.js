@@ -7,12 +7,14 @@ describe('controller: Storage Selector Modal', function() {
         close : function(){
           return;
         },
-        dismiss : function(action){
+        dismiss : function(){
           return;
         }
       }
     });
     $provide.value('enableByURL', false);
+    $provide.value('selectorType', 'type');
+    $provide.value('selectorFilter', 'filter');
   }));
   var $scope, $modalInstance, $modalInstanceDismissSpy, $modalInstanceCloseSpy;
   beforeEach(function(){
@@ -34,17 +36,11 @@ describe('controller: Storage Selector Modal', function() {
     expect($scope).to.be.ok;
     
     expect($scope.enableByURL).to.be.false;
+    expect($scope.selectorType).to.equal('type');
+    expect($scope.selectorFilter).to.equal('filter');
 
-    expect($scope.select).to.be.a('function');
+    expect($scope.selectByUrl).to.be.a('function');
     expect($scope.dismiss).to.be.a('function');
-  });
-  
-
-  it('select: should close modal',function(){
-    var file = {name: 'file1.jpg'};
-    $scope.select(file);
-
-    $modalInstanceCloseSpy.should.have.been.calledWith(file);
   });
 
   it('dismiss: should dismiss modal',function(){
@@ -65,12 +61,12 @@ describe('controller: Storage Selector Modal', function() {
     }, 10);
   });
 
-  it('CancelFileSelect should dismiss modal', function(done) {
+  it('selectByUrl should close modal', function(done) {
     
-    $scope.$broadcast('CancelFileSelect');
+    $scope.selectByUrl();
     
     setTimeout(function() {
-      $modalInstanceDismissSpy.should.have.been.called;      
+      $modalInstanceCloseSpy.should.have.been.called;      
       done()
     }, 10);
   });

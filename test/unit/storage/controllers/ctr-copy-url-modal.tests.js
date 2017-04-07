@@ -13,7 +13,7 @@ describe('controller: CopyUrlModalController', function() {
         }
       });
 
-      $provide.service('storageFactory', function() {
+      $provide.service('storageUtils', function() {
         return {
           getFolderSelfLinkUrl: function() {
             return 'folderSelfLinkUrl';

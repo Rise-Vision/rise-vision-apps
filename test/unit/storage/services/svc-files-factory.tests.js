@@ -1,6 +1,6 @@
 'use strict';
   
-describe('service: filesFactory:', function() {
+describe('service: FilesFactory:', function() {
   beforeEach(module('risevision.storage.services'));
   beforeEach(module(function ($provide) {
     filesResponse = {
@@ -27,13 +27,18 @@ describe('service: filesFactory:', function() {
     });
 
   }));
-  var filesResponse, filesFactory, storageFactory, returnFiles;
+  var filesResponse, filesFactory, storageFactory, storageUtils, returnFiles;
   beforeEach(function(){
     returnFiles = true;
     
     inject(function($injector){  
-      filesFactory = $injector.get('filesFactory');
-      storageFactory = $injector.get('storageFactory');
+      storageUtils = $injector.get('storageUtils');
+      var StorageFactory = $injector.get('StorageFactory');
+      storageFactory = new StorageFactory();
+
+      var FilesFactory = $injector.get('FilesFactory');
+      filesFactory = new FilesFactory(storageFactory);
+      
     });
   });
 
@@ -55,7 +60,7 @@ describe('service: filesFactory:', function() {
       
       setTimeout(function() {
         expect(filesFactory.filesDetails.files.length).to.equal(4);
-        expect(storageFactory.fileIsTrash(filesFactory.filesDetails.files[1])).to.be.true;
+        expect(storageUtils.fileIsTrash(filesFactory.filesDetails.files[1])).to.be.true;
 
         done();
         
@@ -75,7 +80,7 @@ describe('service: filesFactory:', function() {
     });
     
     it('should load sub-folder files and not list current folder', function(done) {
-      storageFactory.folderPath = 'folder/';
+      filesFactory.folderPath = 'folder/';
       filesResponse.files = [{name: 'folder/'},
         { name: 'folder/file1.txt' },
         { name: 'folder/file2.txt' },
@@ -93,7 +98,7 @@ describe('service: filesFactory:', function() {
     });
     
     it('should not add parent folder to sub-folder files', function(done) {
-      storageFactory.folderPath = 'folder/';
+      filesFactory.folderPath = 'folder/';
       filesResponse.files = [{ name: 'folder/file1.txt' },
         { name: 'folder/file2.txt' },
         { name: 'folder/subFolder/file2.txt' }];
@@ -110,7 +115,7 @@ describe('service: filesFactory:', function() {
     });
     
     it('should handle % in folderPath', function(done) {
-      storageFactory.folderPath = 'folder % name/';
+      filesFactory.folderPath = 'folder % name/';
       filesResponse.files = [{ name: 'folder % name/file1.txt' }];
 
       filesFactory.refreshFilesList();
@@ -166,7 +171,7 @@ describe('service: filesFactory:', function() {
     });
 
     it('should add one folder inside the current folder', function () {
-      storageFactory.folderPath = 'test/';
+      filesFactory.folderPath = 'test/';
       filesFactory.addFile({ name: 'test/folder/file1.txt' });
 
       expect(filesFactory.filesDetails.files.length).to.equal(1);

@@ -1,27 +1,12 @@
 'use strict';
-describe('directive: storage-file-select', function() {
-  var $rootScope, element, $compile, storageFactory;
+describe('directive: thumbnail-image', function() {
+  var $rootScope, element, $compile, storageFactory, storageUtils;
 
   beforeEach(module('risevision.storage.directives'));
   beforeEach(module(function ($provide) {
-    $provide.service('storageFactory', function() {
+    $provide.service('storageUtils', function() {
       return {
-        fileIsVideo: function() {
-          return false;
-        },
-        fileIsImage: function() {
-          return true;
-        },
         fileIsFolder: function() {
-          return false;
-        },
-        canSelect: function() {
-          return true;
-        },
-        isDisabled: function() {
-          return false;
-        },
-        fileIsTrash: function() {
           return false;
         }
       };
@@ -31,7 +16,24 @@ describe('directive: storage-file-select', function() {
   beforeEach(inject(function(_$compile_, _$rootScope_, $injector){    
     $compile = _$compile_;
     $rootScope = _$rootScope_;
-    storageFactory = $injector.get('storageFactory');
+    storageUtils = $injector.get('storageUtils');
+    storageFactory = {
+      fileIsVideo: function() {
+        return false;
+      },
+      fileIsImage: function() {
+        return true;
+      },
+      canSelect: function() {
+        return true;
+      },
+      isDisabled: function() {
+        return false;
+      },
+      fileIsTrash: function() {
+        return false;
+      }
+    };
 
     $rootScope.file = {
       name: "file1.jpg",
@@ -43,6 +45,7 @@ describe('directive: storage-file-select', function() {
   }));
 
   var _compile = function() {
+    $rootScope.storageFactory = storageFactory;
     element = $compile('<li thumbnail-image></li>')($rootScope);
     $rootScope.$apply();
   }
@@ -63,7 +66,7 @@ describe('directive: storage-file-select', function() {
   });
 
   it('should render folders',function() {
-    storageFactory.fileIsFolder = function() {return true};
+    storageUtils.fileIsFolder = function() {return true};
     _compile();
     expect(element.scope().isSvg).to.be.true;
     expect(element.scope().imgSrc).to.equal('riseWidgetFolder');
@@ -104,7 +107,7 @@ describe('directive: storage-file-select', function() {
     });
 
     it('should add class for folder',function(){
-      storageFactory.fileIsFolder = function() {return true};
+      storageUtils.fileIsFolder = function() {return true};
       _compile();
       expect(element.scope().gridItemClasses).to.not.contain('single-item');
       expect(element.scope().gridItemClasses).to.contain('folder');
@@ -132,7 +135,7 @@ describe('directive: storage-file-select', function() {
     });
 
     it('should flag checked folders',function(){
-      storageFactory.fileIsFolder = function() {return true};
+      storageUtils.fileIsFolder = function() {return true};
       $rootScope.file.isChecked = true;
       _compile();
       expect(element.scope().gridItemClasses).to.contain('folder');

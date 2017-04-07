@@ -1,6 +1,6 @@
 'use strict';
 describe('service: fileActionsFactory', function() {
-  var fileActionsFactory, fileSelectorFactory, storage, filesFactory,
+  var fileActionsFactory, filesFactory, storage,
       downloadFactory, $modal, $rootScope, selectedFiles, apiResponse, localStorageService;
   var getResponse, renameResponse;
   var sandbox = sinon.sandbox.create();
@@ -17,24 +17,17 @@ describe('service: fileActionsFactory', function() {
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
 
-    $provide.factory('fileSelectorFactory',function () {
-      return fileSelectorFactory = {
-        getSelectedFiles: function() {
-          return selectedFiles;
-        },
-        resetSelections: function(){}
-      };
-    });
-
-    $provide.factory('filesFactory',function () {
-      return filesFactory = {
-        filesDetails: {
-          files: []
-        },
-        addFile: function(){},
-        removeFiles: function(){}
-      };
-    });
+    filesFactory = {
+      filesDetails: {
+        files: []
+      },
+      addFile: function(){},
+      removeFiles: function(){},
+      getSelectedFiles: function() {
+        return selectedFiles;
+      },
+      resetSelections: function(){}
+    };
 
     $provide.factory('storage',function () {
       return storage = {
@@ -94,7 +87,8 @@ describe('service: fileActionsFactory', function() {
       selectedFiles = null;
       apiResponse = null;
       $rootScope = $injector.get('$rootScope');
-      fileActionsFactory = $injector.get('fileActionsFactory');
+      var FileActionsFactory = $injector.get('FileActionsFactory');
+      fileActionsFactory = new FileActionsFactory(filesFactory);
     });
   });
 
@@ -302,7 +296,7 @@ describe('service: fileActionsFactory', function() {
       sandbox.spy(storage, 'rename');
       sandbox.spy(filesFactory, 'addFile');
       sandbox.spy(filesFactory, 'removeFiles');
-      sandbox.spy(fileSelectorFactory, 'resetSelections');
+      sandbox.spy(filesFactory, 'resetSelections');
 
       getResponse = { files: [{ name: "test2.jpg" }] };
       renameResponse = { code: 200 };
@@ -313,7 +307,7 @@ describe('service: fileActionsFactory', function() {
           storage.files.get.should.have.been.called;
           filesFactory.addFile.should.have.been.called;
           filesFactory.removeFiles.should.have.been.called;
-          fileSelectorFactory.resetSelections.should.have.been.called;
+          filesFactory.resetSelections.should.have.been.called;
 
           expect(storage.rename.getCall(0).args[0]).to.equal('test.jpg');
           expect(storage.rename.getCall(0).args[1]).to.equal('test2.jpg');
@@ -329,7 +323,7 @@ describe('service: fileActionsFactory', function() {
       sandbox.spy(storage, 'rename');
       sandbox.spy(filesFactory, 'addFile');
       sandbox.spy(filesFactory, 'removeFiles');
-      sandbox.spy(fileSelectorFactory, 'resetSelections');
+      sandbox.spy(filesFactory, 'resetSelections');
 
       renameResponse = { code: 200 };
 
@@ -339,7 +333,7 @@ describe('service: fileActionsFactory', function() {
           storage.files.get.should.not.have.been.called;
           filesFactory.addFile.should.have.been.called;
           filesFactory.removeFiles.should.have.been.called;
-          fileSelectorFactory.resetSelections.should.have.been.called;
+          filesFactory.resetSelections.should.have.been.called;
 
           expect(storage.rename.getCall(0).args[0]).to.equal('folder1/');
           expect(storage.rename.getCall(0).args[1]).to.equal('folder2/');
