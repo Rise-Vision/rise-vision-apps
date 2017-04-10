@@ -7,11 +7,10 @@
       var GOOGLES_REQUIRED_CHUNK_MULTIPLE = 256 * 1024;  
       return GOOGLES_REQUIRED_CHUNK_MULTIPLE * 4 * 25;
     }()))
-    .directive('upload', ['$rootScope', '$q', 'FileUploader',
-      'UploadURIService',
-      '$translate', 'STORAGE_UPLOAD_CHUNK_SIZE', 'storage',
-      function ($rootScope, $q, uploader, uriSvc, 
-        $translate, chunkSize, storage) {
+    .directive('upload', ['$rootScope', '$q', '$translate', 'storage',
+      'FileUploader', 'UploadURIService', 'STORAGE_UPLOAD_CHUNK_SIZE',
+      function ($rootScope, $q, $translate, storage, FileUploader,
+        UploadURIService, STORAGE_UPLOAD_CHUNK_SIZE) {
         return {
           restrict: 'E',
           scope: {
@@ -19,48 +18,48 @@
           },
           templateUrl: 'partials/storage/upload-panel.html',
           link: function ($scope) {
-            $scope.uploader = uploader;
+            $scope.uploader = FileUploader;
             $scope.status = {};
             $scope.completed = [];
 
             $scope.removeItem = function (item) {
-              uploader.removeFromQueue(item);
+              FileUploader.removeFromQueue(item);
             };
 
             $scope.activeUploadCount = function () {
-              return uploader.queue.filter(function (file) {
+              return FileUploader.queue.filter(function (file) {
                 return file.isUploading;
               }).length;
             };
 
             $scope.getErrorCount = function () {
-              return uploader.getErrorCount();
+              return FileUploader.getErrorCount();
             };
 
             $scope.getNotErrorCount = function () {
-              return uploader.getNotErrorCount();
+              return FileUploader.getNotErrorCount();
             };
 
             $scope.retryFailedUploads = function () {
-              uploader.queue.forEach(function (f) {
+              FileUploader.queue.forEach(function (f) {
                 if (f.isError) {
-                  uploader.retryItem(f);
+                  FileUploader.retryItem(f);
                 }
               });
             };
 
             $scope.cancelAllUploads = function () {
-              uploader.removeAll();
+              FileUploader.removeAll();
             };
 
-            uploader.onAfterAddingFile = function (fileItem) {
+            FileUploader.onAfterAddingFile = function (fileItem) {
               var deferred = $q.defer();
 
               console.info('onAfterAddingFile', fileItem.file.name);
 
               if (!fileItem.isRetrying) {
-                fileItem.file.name = ($scope.filesFactory.folderPath || '') + fileItem
-                  .file.name;
+                fileItem.file.name = ($scope.filesFactory.folderPath ||
+                    '') + fileItem.file.name;
               }
 
               $translate('storage-client.uploading', {
@@ -69,18 +68,19 @@
                 $scope.status.message = msg;
               });
 
-              uriSvc.getURI(fileItem.file)
+              UploadURIService.getURI(fileItem.file)
                 .then(function (resp) {
                   $rootScope.$emit('refreshSubscriptionStatus',
                     'trial-available');
 
                   fileItem.url = resp;
-                  fileItem.chunkSize = chunkSize;
-                  uploader.uploadItem(fileItem);
+                  fileItem.chunkSize =
+                    STORAGE_UPLOAD_CHUNK_SIZE;
+                  FileUploader.uploadItem(fileItem);
                 })
                 .then(null, function (resp) {
                   console.log('getURI error', resp);
-                  $scope.uploader.notifyErrorItem(fileItem);
+                  FileUploader.notifyErrorItem(fileItem);
                   $scope.status.message = resp;
                 })
                 .finally(function () {
@@ -90,7 +90,7 @@
               return deferred.promise;
             };
 
-            uploader.onBeforeUploadItem = function (item) {
+            FileUploader.onBeforeUploadItem = function (item) {
               $translate('storage-client.uploading', {
                 filename: item.file.name
               }).then(function (msg) {
@@ -98,30 +98,32 @@
               });
             };
 
-            uploader.onCancelItem = function (item) {
-              uploader.removeFromQueue(item);
+            FileUploader.onCancelItem = function (item) {
+              FileUploader.removeFromQueue(item);
             };
 
-            uploader.onCompleteItem = function (item) {
+            FileUploader.onCompleteItem = function (item) {
               console.log('onCompleteItem', item);
               if (item.isSuccess) {
                 $scope.completed.push(item.file.name);
               }
 
               if ($scope.activeUploadCount() === 0) {
-                uriSvc.notifyGCMTargetsChanged($scope.completed).then(function (
-                  resp) {
-                  console.log('uriSvc.notifyGCMTargetsChanged', resp);
-                  $scope.completed = [];
-                });
+                UploadURIService.notifyGCMTargetsChanged($scope.completed)
+                  .then(function (resp) {
+                    console.log(
+                      'UploadURIService.notifyGCMTargetsChanged', resp);
+                    $scope.completed = [];
+                  });
               }
 
               if (item.isCancel) {
                 return;
               } else if (!item.isSuccess) {
-                $translate('storage-client.upload-failed').then(function (msg) {
-                  $scope.status.message = msg;
-                });
+                $translate('storage-client.upload-failed').then(
+                  function (msg) {
+                    $scope.status.message = msg;
+                  });
                 return;
               }
 
@@ -139,14 +141,14 @@
                   file: item.file.name
                 })
                 .then(function (resp) {
-                  var file = resp && resp.files && resp.files[0] ? resp.files[0] :
-                    baseFile;
+                  var file = resp && resp.files && resp.files[0] ?
+                    resp.files[0] : baseFile;
                   $scope.filesFactory.addFile(file);
                 }, function (err) {
                   $scope.filesFactory.addFile(baseFile);
                 })
                 .finally(function () {
-                  uploader.removeFromQueue(item);
+                  FileUploader.removeFromQueue(item);
                 });
             };
           }

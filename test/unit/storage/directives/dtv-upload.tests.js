@@ -2,15 +2,7 @@
 describe('directive: upload', function() {
   beforeEach(module('risevision.storage.directives'));
 
-  var element;
-  var UploadController, $scope, filesFactory, storage;
-  var FileUploader, UploadURIService;
-
   beforeEach(module(function ($provide) {
-    $provide.service('$q', function() {
-      return Q;
-    });
-    
     $provide.factory('FileUploader', function() {
       return FileUploader = {
         addToQueue: function(files){
@@ -19,13 +11,11 @@ describe('directive: upload', function() {
         uploadItem: function(){},
         queue: [],
         removeFromQueue: function(){}
-      }
+      };
     });
 
-    filesFactory = function() {
-      return {
-        addFile: function(){}
-      }
+    filesFactory = {
+      addFile: function(){}
     };
 
     $provide.factory('storage', function() {
@@ -35,7 +25,7 @@ describe('directive: upload', function() {
             return Q.when({file:'file.jpg'})
           }
         }
-      }
+      };
     });
 
     $provide.factory('UploadURIService', function() {
@@ -97,8 +87,12 @@ describe('directive: upload', function() {
         }
       };
     });
-  }));
-  
+  }));  
+
+  var element;
+  var UploadController, $scope, filesFactory, storage;
+  var FileUploader, UploadURIService;
+
   beforeEach(inject(function($injector){
     var $httpBackend = $injector.get('$httpBackend');
 
