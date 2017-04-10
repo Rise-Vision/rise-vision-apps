@@ -61,7 +61,7 @@ angular.module('risevision.editor.directives')
 
             placeholderPlaylistFactory.moveItem(oldIndex, newIndex);
             $scope.$apply();
-          }
+          };
         }
       };
     }

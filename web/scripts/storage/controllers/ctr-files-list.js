@@ -26,7 +26,7 @@ angular.module('risevision.storage.controllers')
 
       $scope.toggleListView = function () {
         $scope.isListView = !$scope.isListView;
-      }
+      };
 
       $scope.filterConfig = {
         placeholder: 'Search for files or folders',

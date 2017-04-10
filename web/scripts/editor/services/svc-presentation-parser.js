@@ -174,7 +174,7 @@ angular.module('risevision.editor.services')
         }
       };
 
-      var _processLayout = function(htmlString) {
+      var _processLayout = function (htmlString) {
         var start, end;
 
         start = htmlString.toLowerCase().indexOf(dataVariableParam);
@@ -211,17 +211,23 @@ angular.module('risevision.editor.services')
 
             try {
               dataObject = JSON.parse(json);
-            }
-            catch (err) {
+            } catch (err) {
               $log.error('parse presentation error', err);
-              return { valid: false };
+              return {
+                valid: false
+              };
             }
 
-            return { valid: true, dataObject: dataObject && dataObject.presentationData };
+            return {
+              valid: true,
+              dataObject: dataObject && dataObject.presentationData
+            };
           }
         }
 
-        return { valid: true };
+        return {
+          valid: true
+        };
       };
 
       factory.validatePresentation = function (presentation) {
@@ -232,16 +238,16 @@ angular.module('risevision.editor.services')
         var start, end;
         var layout = _processLayout(presentation.layout);
 
-        if(layout.valid && layout.dataObject) {
-            var dataObject = layout.dataObject;
+        if (layout.valid && layout.dataObject) {
+          var dataObject = layout.dataObject;
 
-            presentation.hidePointer =
-              htmlParser.getBooleanValue(dataObject.hidePointer);
-            presentation.donePlaceholder = dataObject.donePlaceholder;
+          presentation.hidePointer =
+            htmlParser.getBooleanValue(dataObject.hidePointer);
+          presentation.donePlaceholder = dataObject.donePlaceholder;
 
-            _cleanPlaceholderData(dataObject.placeholders);
+          _cleanPlaceholderData(dataObject.placeholders);
 
-            presentation.placeholders = dataObject.placeholders;
+          presentation.placeholders = dataObject.placeholders;
         }
 
         return layout.valid;
@@ -415,9 +421,9 @@ angular.module('risevision.editor.services')
         }
 
         // process data
-        if(!factory.parsePresentationData(presentation)) {
+        if (!factory.parsePresentationData(presentation)) {
           return false;
-        };
+        }
 
         factory.parsePlaceholders(presentation, htmlString.substring(
           start, end + bodyEndTag.length));

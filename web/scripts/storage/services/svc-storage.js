@@ -289,13 +289,15 @@ angular.module('risevision.storage.services')
 
           $log.debug('Storage rename called with', obj);
 
-          if(sourceName === destinationName) {
-            deferred.resolve({ code: 400, message: 'must-be-different' });
-          }
-          else {
+          if (sourceName === destinationName) {
+            deferred.resolve({
+              code: 400,
+              message: 'must-be-different'
+            });
+          } else {
             storageAPILoader().then(function (storageApi) {
-              return storageApi.files.rename(obj);
-            })
+                return storageApi.files.rename(obj);
+              })
               .then(function (resp) {
                 $log.debug('status storage rename resp', resp);
 

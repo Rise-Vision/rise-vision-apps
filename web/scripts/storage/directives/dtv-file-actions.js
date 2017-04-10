@@ -18,28 +18,31 @@
             $scope.fileListStatus = $scope.filesFactory.statusDetails;
             $scope.leavePageMessage = '';
 
-            $translate('storage-client.pending-ops-leave-page').then(function (
-              value) {
-              $scope.leavePageMessage = value;
-            });
+            $translate('storage-client.pending-ops-leave-page').then(
+              function (
+                value) {
+                $scope.leavePageMessage = value;
+              });
 
             $window.addEventListener('beforeunload', function (e) {
-              if (fileActionsFactory.getActivePendingOperations().length > 0) {
+              if ($scope.factory.getActivePendingOperations().length >
+                0) {
                 (e || window.event).returnValue = $scope.leavePageMessage;
                 return $scope.leavePageMessage;
               }
             });
 
-            $scope.isDisabledCopyUrlButton = $scope.isDisabledRenameButton = function () {
-              return $scope.filesFactory.isTrashFolder() ||
-                $scope.filesDetails.checkedItemsCount !== 1;
-            };
+            $scope.isDisabledCopyUrlButton = $scope.isDisabledRenameButton =
+              function () {
+                return $scope.filesFactory.isTrashFolder() ||
+                  $scope.filesDetails.checkedItemsCount !== 1;
+              };
 
             $scope.isDisabledDownloadButton = $scope.isDisabledTrashButton =
               $scope.isDisabledRestoreButton = $scope.isDisabledDeleteButton =
               function () {
                 return $scope.filesDetails.checkedItemsCount < 1;
-              };          
+              };
           }
         };
       }

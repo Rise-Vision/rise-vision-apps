@@ -2,16 +2,16 @@
 angular.module('risevision.storage.services')
   .value('STORAGE_CLIENT_API', 'https://www.googleapis.com/storage/v1/b/')
   .value('STORAGE_FILE_URL', 'https://storage.googleapis.com/')
-  .factory('storageUtils', ['userState', '$log', '$q', '$modal', 
+  .factory('storageUtils', ['userState', '$log', '$q', '$modal',
     'STORAGE_CLIENT_API', 'STORAGE_FILE_URL',
-    function (userState, $log, $q, $modal, 
+    function (userState, $log, $q, $modal,
       STORAGE_CLIENT_API, STORAGE_FILE_URL) {
       var factory = {};
 
       factory.fileIsFolder = function (file) {
         return file.name.substr(-1) === '/' || file.name === '';
       };
-      
+
       factory.fileIsTrash = function (file) {
         return file.name === '--TRASH--/';
       };
@@ -43,15 +43,15 @@ angular.module('risevision.storage.services')
 
         return fileUrl;
       };
-      
+
       factory.getFileUrls = function (files) {
         var fileUrls = [];
-        
+
         if (files) {
           files.forEach(function (file) {
             var copyUrl = _getFileUrl(file);
             fileUrls.push(copyUrl);
-          });          
+          });
         }
 
         return fileUrls;
@@ -87,7 +87,7 @@ angular.module('risevision.storage.services')
 
         return deferred.promise;
       };
-      
+
       factory.addFolder = function (filesFactory) {
         $modal.open({
           templateUrl: 'partials/storage/new-folder-modal.html',

@@ -47,7 +47,8 @@
                     if (scope.storageFactory.fileIsImage(scope.file)) {
                       isSvg = true;
                       imgSrc = 'riseWidgetImage';
-                    } else if (scope.storageFactory.fileIsVideo(scope.file)) {
+                    } else if (scope.storageFactory.fileIsVideo(scope
+                        .file)) {
                       isSvg = true;
                       imgSrc = 'riseWidgetVideo';
                     }

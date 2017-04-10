@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('risevision.editor.directives')
-  .directive('toolbar', ['editorFactory', 'placeholdersFactory', '$modal', '$state',
+  .directive('toolbar', ['editorFactory', 'placeholdersFactory', '$modal',
+    '$state',
     function (editorFactory, placeholdersFactory, $modal, $state) {
       return {
         restrict: 'E',
@@ -17,7 +18,7 @@ angular.module('risevision.editor.directives')
 
           $scope.showArtboard = function () {
             return editorFactory.validatePresentation()
-              .then(function() {
+              .then(function () {
                 $scope.designMode = true;
                 $state.go('apps.editor.workspace.artboard');
               });

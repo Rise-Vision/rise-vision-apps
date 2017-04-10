@@ -27,7 +27,7 @@ angular.module('risevision.editor.directives')
               '');
             element.css('z-index', $scope.placeholder.zIndex);
 
-            if(newValue.id !== oldValue.id) {
+            if (newValue.id !== oldValue.id) {
               widgetRenderer.unregister(oldValue, element);
             }
 

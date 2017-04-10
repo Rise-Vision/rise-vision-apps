@@ -1,8 +1,8 @@
 'use strict';
 angular.module('risevision.storage.controllers')
-  .controller('StorageSelectorIFrameController', ['$scope', '$window', 
-  'storageUtils', 'gadgetsApi', 'selectorType', 'selectorFilter',
-    function ($scope, $window, storageUtils, gadgetsApi, 
+  .controller('StorageSelectorIFrameController', ['$scope', '$window',
+    'storageUtils', 'gadgetsApi', 'selectorType', 'selectorFilter',
+    function ($scope, $window, storageUtils, gadgetsApi,
       selectorType, selectorFilter) {
       $scope.selectorType = selectorType;
       $scope.selectorFilter = selectorFilter;

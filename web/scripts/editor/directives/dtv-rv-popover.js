@@ -10,11 +10,11 @@ angular.module('risevision.editor.directives')
         restrict: 'A',
         link: function (scope, element) {
           if (!editorFactory.presentation.id && scope.popOnEventEnabled) {
-              scope.$parent.tooltipClasses = 'animated bounce'
-              $timeout(function () {
-                element.trigger('show');
-                scope.$parent.tooltipClasses = ''
-              });
+            scope.$parent.tooltipClasses = 'animated bounce';
+            $timeout(function () {
+              element.trigger('show');
+              scope.$parent.tooltipClasses = '';
+            });
           }
 
           element.on('mouseenter', function () {

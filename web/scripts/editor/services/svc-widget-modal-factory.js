@@ -96,7 +96,7 @@ angular.module('risevision.editor.services')
               item.name = newFilename;
             }
           } catch (err) {
-            $log.debug('Error updating item name:', item.name)
+            $log.debug('Error updating item name:', item.name);
           }
         }
       };

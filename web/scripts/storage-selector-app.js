@@ -78,13 +78,13 @@ angular.module('risevision.apps.storage.storage-selector', [
                 return canAccessStorage();
               }
             ],
-            selectorType: ['$location', 
-              function($location) {
+            selectorType: ['$location',
+              function ($location) {
                 return $location.search()['selector-type'];
               }
             ],
-            selectorFilter: ['$location', 
-              function($location) {
+            selectorFilter: ['$location',
+              function ($location) {
                 return $location.search()['selector-filter'];
               }
             ]

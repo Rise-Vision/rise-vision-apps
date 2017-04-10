@@ -14,7 +14,8 @@ angular.module('risevision.editor.services')
     function ($q, $state, userState, presentation, presentationParser,
       distributionParser, presentationTracker, store, VIEWER_URL,
       REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED, DEFAULT_LAYOUT,
-      TEMPLATES_CATEGORY, $modal, $rootScope, $window, scheduleFactory, messageBox) {
+      TEMPLATES_CATEGORY, $modal, $rootScope, $window, scheduleFactory,
+      messageBox) {
       var factory = {};
       var JSON_PARSE_ERROR = 'JSON parse error';
 
@@ -141,13 +142,19 @@ angular.module('risevision.editor.services')
       };
 
       factory.validatePresentation = function () {
-        if(presentationParser.validatePresentation(factory.presentation)) {
+        if (presentationParser.validatePresentation(factory.presentation)) {
           return $q.resolve();
-        }
-        else {
-          messageBox('editor-app.json-error.title', 'editor-app.json-error.message');
+        } else {
+          messageBox('editor-app.json-error.title',
+            'editor-app.json-error.message');
 
-          return $q.reject({ result: { error: { message: JSON_PARSE_ERROR } } });
+          return $q.reject({
+            result: {
+              error: {
+                message: JSON_PARSE_ERROR
+              }
+            }
+          });
         }
       };
 
@@ -458,7 +465,7 @@ angular.module('risevision.editor.services')
 
       factory.saveAndPreview = function () {
         return factory.validatePresentation()
-          .then(function() {
+          .then(function () {
             userState.removeEventListenerVisibilityAPI();
             $window.open('/loading-preview.html', 'rvPresentationPreview');
 
@@ -472,9 +479,9 @@ angular.module('risevision.editor.services')
 
       var _showErrorMessage = function (action, e) {
         factory.errorMessage = 'Failed to ' + action + ' Presentation.';
-        factory.apiError = e.result && e.result.error.message ? e.result.error.message :
-          e.toString();
-          
+        factory.apiError = e.result && e.result.error.message ?
+          e.result.error.message : e.toString();
+
         messageBox(factory.errorMessage, factory.apiError);
       };
 

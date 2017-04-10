@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('risevision.displays.services')
   .factory('loadPrimus', ['$q', '$window', 'MESSAGING_URL', function ($q,
     $window, MESSAGING_URL) {

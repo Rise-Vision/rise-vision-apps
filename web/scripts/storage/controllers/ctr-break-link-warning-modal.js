@@ -1,9 +1,11 @@
 'use strict';
 
 angular.module('risevision.storage.controllers')
-  .controller('BreakLinkWarningModalCtrl', ['$scope', '$modalInstance', 'localStorageService',
-                                            'infoLine1Key', 'infoLine2Key', 'warningKey', 'confirmKey', 'cancelKey', 'localStorageKey',
-    function ($scope, $modalInstance, localStorageService, infoLine1Key, infoLine2Key, warningKey, confirmKey, cancelKey, localStorageKey) {
+  .controller('BreakLinkWarningModalCtrl', ['$scope', '$modalInstance',
+    'localStorageService', 'infoLine1Key', 'infoLine2Key', 'warningKey',
+    'confirmKey', 'cancelKey', 'localStorageKey',
+    function ($scope, $modalInstance, localStorageService, infoLine1Key,
+      infoLine2Key, warningKey, confirmKey, cancelKey, localStorageKey) {
       $scope.infoLine1Key = infoLine1Key;
       $scope.infoLine2Key = infoLine2Key;
       $scope.warningKey = warningKey;

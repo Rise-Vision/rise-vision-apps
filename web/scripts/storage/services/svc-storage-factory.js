@@ -26,9 +26,9 @@ angular.module('risevision.storage.services')
   })
   .service('StorageFactory', ['storageUtils', '$filter', '$modal',
     'SELECTOR_TYPES', 'SELECTOR_FILTERS',
-    function (storageUtils, $filter, $modal, 
+    function (storageUtils, $filter, $modal,
       SELECTOR_TYPES, SELECTOR_FILTERS) {
-      return function() {
+      return function () {
         var factory = {
           storageFull: true,
           selectorType: '',
@@ -97,7 +97,8 @@ angular.module('risevision.storage.services')
         factory.canSelect = function (file) {
           return !storageUtils.fileIsTrash(file) && !file.isThrottled &&
             (storageUtils.fileIsFolder(file) && factory.isFolderSelector() ||
-              !storageUtils.fileIsFolder(file) && factory.isFileSelector()) &&
+              !storageUtils.fileIsFolder(file) && factory.isFileSelector()
+            ) &&
             !_isFilteredFile(file);
         };
 

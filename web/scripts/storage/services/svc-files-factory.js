@@ -1,9 +1,9 @@
 'use strict';
 angular.module('risevision.storage.services')
-  .factory('FilesFactory', ['$rootScope', 'storage', 'storageUtils', 
+  .factory('FilesFactory', ['$rootScope', 'storage', 'storageUtils',
     'filterFilter',
     function ($rootScope, storage, storageUtils, filterFilter) {
-      return function(storageFactory) {
+      return function (storageFactory) {
 
         // filesFactory functionality ~~~~~~~~~~
 
@@ -15,7 +15,7 @@ angular.module('risevision.storage.services')
           },
           folderPath: ''
         };
-        
+
         factory.addFile = function (newFile) {
           var currentFolder = factory.folderPath ? factory.folderPath :
             '';
@@ -25,7 +25,8 @@ angular.module('risevision.storage.services')
             newFile.name;
           var existingFileNameIndex = -1;
 
-          for (var i = 0, j = factory.filesDetails.files.length; i < j; i += 1) {
+          for (var i = 0, j = factory.filesDetails.files.length; i < j; i +=
+            1) {
             if (factory.filesDetails.files[i].name === fileName) {
               existingFileNameIndex = i;
               break;
@@ -40,7 +41,8 @@ angular.module('risevision.storage.services')
               });
             }
           } else if (existingFileNameIndex !== -1) {
-            factory.filesDetails.files.splice(existingFileNameIndex, 1, newFile);
+            factory.filesDetails.files.splice(existingFileNameIndex, 1,
+              newFile);
           } else {
             factory.filesDetails.files.push(newFile);
           }
@@ -126,9 +128,9 @@ angular.module('risevision.storage.services')
               factory.loadingItems = false;
             });
         };
-        
+
         // fileSelectorFactory functionality ~~~~~~~~~~
-        
+
         //on all state Changes do not hold onto checkedFiles list
         $rootScope.$on('$stateChangeStart', function () {
           factory.resetSelections();
@@ -164,7 +166,8 @@ angular.module('risevision.storage.services')
               continue;
             }
 
-            file.isChecked = factory.selectAll && filteredFiles.indexOf(file) >=
+            file.isChecked = factory.selectAll && filteredFiles.indexOf(
+                file) >=
               0;
 
             if (file.name.substr(-1) !== '/') {
@@ -201,10 +204,10 @@ angular.module('risevision.storage.services')
 
           factory.filesDetails.checkedItemsCount += checkValue ? 1 : -1;
         };
-        
+
         factory.sendFiles = function () {
           var files = factory.getSelectedFiles();
-          
+
           $rootScope.$broadcast('FileSelectAction', files);
         };
 
@@ -217,7 +220,7 @@ angular.module('risevision.storage.services')
             }
           }
         };
-        
+
         factory.changeFolder = function (folder) {
           if (storageUtils.fileIsFolder(folder)) {
             factory.resetSelections();
@@ -227,12 +230,12 @@ angular.module('risevision.storage.services')
             factory.refreshFilesList();
           }
         };
-        
+
         factory.isTrashFolder = function () {
           return factory.folderPath.lastIndexOf('--TRASH--/', 0) === 0;
         };
 
         return factory;
-      }
+      };
     }
   ]);

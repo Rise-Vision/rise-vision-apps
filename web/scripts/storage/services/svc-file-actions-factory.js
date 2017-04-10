@@ -1,9 +1,9 @@
 'use strict';
 angular.module('risevision.storage.services')
-  .factory('FileActionsFactory', ['$rootScope', '$q', '$modal', '$translate', 
-    'storage', 'storageUtils', 'downloadFactory', 'localStorageService', 
+  .factory('FileActionsFactory', ['$rootScope', '$q', '$modal', '$translate',
+    'storage', 'storageUtils', 'downloadFactory', 'localStorageService',
     'STORAGE_FILE_URL',
-    function ($rootScope, $q, $modal, $translate, storage, storageUtils, 
+    function ($rootScope, $q, $modal, $translate, storage, storageUtils,
       downloadFactory, localStorageService, STORAGE_FILE_URL) {
       return function (filesFactory) {
         var factory = {};
@@ -118,10 +118,11 @@ angular.module('risevision.storage.services')
 
           selectedFiles.forEach(function (file) {
             file.action = action;
-            var pendingFileNames = factory.pendingOperations.map(function (
-              i) {
-              return i.name;
-            });
+            var pendingFileNames = factory.pendingOperations.map(
+              function (
+                i) {
+                return i.name;
+              });
             if (pendingFileNames.indexOf(file.name) === -1) {
               factory.pendingOperations.push(file);
             }
@@ -138,10 +139,11 @@ angular.module('risevision.storage.services')
 
                 if (resp.code === 403 && resp.message.indexOf(
                     'restricted-role') >= 0) {
-                  $translate('storage-client.access-denied').then(function (
-                    msg) {
-                    factory.statusDetails.message = msg;
-                  });
+                  $translate('storage-client.access-denied').then(
+                    function (
+                      msg) {
+                      factory.statusDetails.message = msg;
+                    });
                 } else {
                   $translate('storage-client.' + resp.message, {
                     username: resp.userEmail
@@ -158,7 +160,8 @@ angular.module('risevision.storage.services')
                 filesFactory.resetSelections();
               } else {
                 // Removed completed pending operations
-                for (var i = factory.pendingOperations.length - 1; i >= 0; i--) {
+                for (var i = factory.pendingOperations.length - 1; i >=
+                  0; i--) {
                   var file = factory.pendingOperations[i];
 
                   if (selectedFiles.indexOf(file) >= 0) {
@@ -175,33 +178,37 @@ angular.module('risevision.storage.services')
           });
         };
 
-        factory.refreshThumbnail = function(file) {
-          if(!storageUtils.fileIsFolder(file)) {
-            return storage.files.get({ file: file.name })
+        factory.refreshThumbnail = function (file) {
+          if (!storageUtils.fileIsFolder(file)) {
+            return storage.files.get({
+                file: file.name
+              })
               .then(function (resp) {
-                return resp && resp.files && resp.files[0] ? resp.files[0] : file;
+                return resp && resp.files && resp.files[0] ? resp.files[
+                  0] : file;
               });
-          }
-          else {
+          } else {
             return $q.resolve(angular.copy(file));
           }
         };
 
-        factory.renameObject = function(sourceObject, newName) {
-          var suffix = storageUtils.fileIsFolder(sourceObject) && !storageUtils.fileIsFolder({ name: newName }) ? "/" : "";
+        factory.renameObject = function (sourceObject, newName) {
+          var suffix = storageUtils.fileIsFolder(sourceObject) && !
+            storageUtils.fileIsFolder({
+              name: newName
+            }) ? '/' : '';
           var renameName = newName + suffix;
           var newObject = angular.copy(sourceObject);
 
           return storage.rename(sourceObject.name, renameName)
-            .then(function(resp) {
-              if(resp.code !== 200) {
+            .then(function (resp) {
+              if (resp.code !== 200) {
                 return resp;
-              }
-              else {
+              } else {
                 newObject.name = renameName;
 
                 return factory.refreshThumbnail(newObject)
-                  .then(function(file) {
+                  .then(function (file) {
                     filesFactory.removeFiles([sourceObject]);
                     filesFactory.addFile(newObject);
                     filesFactory.resetSelections();
@@ -212,10 +219,12 @@ angular.module('risevision.storage.services')
             });
         };
 
-        factory.showBreakLinkWarning = function (infoLine1Key, infoLine2Key, warningKey, confirmKey, cancelKey, localStorageKey) {
-          var hideWarning = localStorageService.get(localStorageKey) === 'true';
+        factory.showBreakLinkWarning = function (infoLine1Key, infoLine2Key,
+          warningKey, confirmKey, cancelKey, localStorageKey) {
+          var hideWarning = localStorageService.get(localStorageKey) ===
+            'true';
 
-          if(hideWarning) {
+          if (hideWarning) {
             return $q.resolve();
           }
 
@@ -224,25 +233,37 @@ angular.module('risevision.storage.services')
             controller: 'BreakLinkWarningModalCtrl',
             size: 'md',
             resolve: {
-              infoLine1Key: function() { return infoLine1Key; },
-              infoLine2Key: function() { return infoLine2Key; },
-              warningKey: function() { return warningKey; },
-              confirmKey: function() { return confirmKey; },
-              cancelKey: function() { return cancelKey; },
-              localStorageKey: function() { return localStorageKey; }
+              infoLine1Key: function () {
+                return infoLine1Key;
+              },
+              infoLine2Key: function () {
+                return infoLine2Key;
+              },
+              warningKey: function () {
+                return warningKey;
+              },
+              confirmKey: function () {
+                return confirmKey;
+              },
+              cancelKey: function () {
+                return cancelKey;
+              },
+              localStorageKey: function () {
+                return localStorageKey;
+              }
             }
           }).result;
         };
 
-        factory.showRenameBreakLinkWarning = function() {
+        factory.showRenameBreakLinkWarning = function () {
           var prefix = 'storage-client.rename.';
 
           return factory.showBreakLinkWarning(prefix + 'breaking-link1',
-                                              prefix + 'breaking-link2',
-                                              prefix + 'breaking-link-hide-warning',
-                                              'common.ok',
-                                              'common.cancel',
-                                              'breakingLinkWarning.hideWarning');
+            prefix + 'breaking-link2',
+            prefix + 'breaking-link-hide-warning',
+            'common.ok',
+            'common.cancel',
+            'breakingLinkWarning.hideWarning');
         };
 
         factory.renameButtonClick = function (sourceName) {
@@ -255,7 +276,7 @@ angular.module('risevision.storage.services')
                 sourceObject: function () {
                   return filesFactory.getSelectedFiles()[0];
                 },
-                fileActionsFactory: function() {
+                fileActionsFactory: function () {
                   return factory;
                 }
               }
