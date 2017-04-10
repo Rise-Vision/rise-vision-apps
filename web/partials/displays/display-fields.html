@@ -80,9 +80,12 @@
             <td class="table-body__cell"><span translate>displays-app.fields.player.schedule.label</span></td>
             <td class="table-body__cell">
               <span>
-                <button class="btn btn-primary btn-xs" ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
-                  {{ 'displays-app.fields.player.schedule.addToSchedule' | translate }} <i class="fa fa-external-link icon-right" aria-hidden="true"></i>
-                </button>
+                <a id="addToSchedule" ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
+                  <span class="btn btn-primary btn-xs">
+                    {{ 'displays-app.fields.player.schedule.addToSchedule' | translate }} 
+                    <i class="fa fa-external-link icon-right" aria-hidden="true"></i>
+                  </span>
+                </a>
                 <a id="viewSchedule" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
                   <span class="table-link u_ellipsis-md-top">{{display.scheduleName}} <i class="fa fa-external-link" aria-hidden="true"></i></span>
                 </a>
