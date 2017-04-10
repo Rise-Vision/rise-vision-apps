@@ -16,8 +16,9 @@ describe('service: pendingOperationsFactory', function() {
 
   it('should exist',function(){
     expect(pendingOperationsFactory).to.be.truely;
-    expect(pendingOperationsFactory.pendingOperations).to.be.truely;
-    expect(pendingOperationsFactory.isPOCollapsed).to.be.truely;
+    expect(pendingOperationsFactory.pendingOperations).to.be.ok;
+    expect(pendingOperationsFactory.statusDetails).to.be.ok;
+    expect(pendingOperationsFactory.isPOCollapsed).to.be.ok;
     expect(pendingOperationsFactory.addPendingOperation).to.be.a('function');
     expect(pendingOperationsFactory.addPendingOperations).to.be.a('function');
     expect(pendingOperationsFactory.removePendingOperation).to.be.a('function');

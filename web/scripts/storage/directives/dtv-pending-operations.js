@@ -3,7 +3,8 @@
   'use strict';
 
   angular.module('risevision.storage.directives')
-    .directive('pendingOperations', ['downloadFactory', 'pendingOperationsFactory',
+    .directive('pendingOperations', ['downloadFactory',
+      'pendingOperationsFactory',
       function (downloadFactory, pendingOperationsFactory) {
         return {
           restrict: 'E',

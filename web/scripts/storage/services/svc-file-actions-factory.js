@@ -4,14 +4,10 @@ angular.module('risevision.storage.services')
     'storage', 'storageUtils', 'downloadFactory', 'localStorageService',
     'pendingOperationsFactory', 'STORAGE_FILE_URL',
     function ($rootScope, $q, $modal, $translate, storage, storageUtils,
-    downloadFactory, localStorageService, pendingOperationsFactory, STORAGE_FILE_URL) {
+      downloadFactory, localStorageService, pendingOperationsFactory,
+      STORAGE_FILE_URL) {
       return function (filesFactory) {
         var factory = {};
-
-        factory.statusDetails = {
-          code: 200,
-          message: ''
-        };
 
         factory.downloadButtonClick = function () {
           downloadFactory.downloadFiles(filesFactory.getSelectedFiles(),
@@ -100,13 +96,42 @@ angular.module('risevision.storage.services')
           }
         };
 
+        var _handleOperationResponse = function (resp) {
+          var deferred = $q.defer();
+
+          if (!resp.result) {
+            pendingOperationsFactory.statusDetails.code = resp.code;
+
+            if (resp.code === 403 && resp.message.indexOf(
+                'restricted-role') >= 0) {
+              $translate('storage-client.access-denied')
+                .then(function (msg) {
+                  pendingOperationsFactory.statusDetails.message = msg;
+                });
+            } else {
+              $translate('storage-client.' + resp.message, {
+                username: resp.userEmail
+              }).then(function (msg) {
+                pendingOperationsFactory.statusDetails.message = msg;
+              });
+            }
+
+            deferred.reject();
+          } else {
+            deferred.resolve();
+          }
+
+          return deferred.promise;
+        };
+
         factory.processFilesAction = function (action) {
           var selectedFiles = filesFactory.getSelectedFiles();
           var selectedFileNames = selectedFiles.map(function (file) {
             return file.name;
           });
 
-          pendingOperationsFactory.addPendingOperations(selectedFiles, action);
+          pendingOperationsFactory.addPendingOperations(selectedFiles,
+            action);
 
           filesFactory.removeFiles(selectedFiles);
           filesFactory.resetSelections();
@@ -114,33 +139,20 @@ angular.module('risevision.storage.services')
 
           _getAPIMethod(action)(selectedFileNames)
             .then(function (resp) {
-              if (!resp.result) {
-                factory.statusDetails.code = resp.code;
+              return _handleOperationResponse(resp);
+            })
+            .then(function () {
+              pendingOperationsFactory.removePendingOperations(
+                selectedFiles);
+            })
+            .then(null, function () {
+              selectedFiles.forEach(function (file) {
+                file.actionFailed = true;
 
-                if (resp.code === 403 && resp.message.indexOf(
-                    'restricted-role') >= 0) {
-                  $translate('storage-client.access-denied').then(
-                    function (
-                      msg) {
-                      factory.statusDetails.message = msg;
-                    });
-                } else {
-                  $translate('storage-client.' + resp.message, {
-                    username: resp.userEmail
-                  }).then(function (msg) {
-                    factory.statusDetails.message = msg;
-                  });
-                }
-                selectedFiles.forEach(function (file) {
-                  pendingOperationsFactory.markPendingOperationFailed(file);
+                filesFactory.filesDetails.files.push(file);
+              });
 
-                  filesFactory.filesDetails.files.push(file);
-                });
-
-                filesFactory.resetSelections();
-              } else {
-                pendingOperationsFactory.removePendingOperations(selectedFiles);
-              }
+              filesFactory.resetSelections();
             });
         };
 
@@ -212,8 +224,9 @@ angular.module('risevision.storage.services')
             });
         };
 
-        factory.showBreakLinkWarning = function (infoLine1Key, infoLine2Key,
-          warningKey, confirmKey, cancelKey, localStorageKey) {
+        var _showBreakLinkWarning = function (action) {
+          var localStorageKey = 'breakingLinkWarning.hideWarning';
+          var prefix = 'storage-client.' + action + '.';
           var hideWarning = localStorageService.get(localStorageKey) ===
             'true';
 
@@ -227,19 +240,19 @@ angular.module('risevision.storage.services')
             size: 'md',
             resolve: {
               infoLine1Key: function () {
-                return infoLine1Key;
+                return prefix + 'breaking-link1';
               },
               infoLine2Key: function () {
-                return infoLine2Key;
+                return prefix + 'breaking-link2';
               },
               warningKey: function () {
-                return warningKey;
+                return prefix + 'breaking-link-hide-warning';
               },
               confirmKey: function () {
-                return confirmKey;
+                return 'common.ok';
               },
               cancelKey: function () {
-                return cancelKey;
+                return 'common.cancel';
               },
               localStorageKey: function () {
                 return localStorageKey;
@@ -248,19 +261,8 @@ angular.module('risevision.storage.services')
           }).result;
         };
 
-        factory.showRenameBreakLinkWarning = function () {
-          var prefix = 'storage-client.rename.';
-
-          return factory.showBreakLinkWarning(prefix + 'breaking-link1',
-            prefix + 'breaking-link2',
-            prefix + 'breaking-link-hide-warning',
-            'common.ok',
-            'common.cancel',
-            'breakingLinkWarning.hideWarning');
-        };
-
-        factory.renameButtonClick = function () {
-          return factory.showRenameBreakLinkWarning().then(function () {
+        factory.renameButtonClick = function (sourceName) {
+          return _showBreakLinkWarning('rename').then(function () {
             var renameModal = $modal.open({
               templateUrl: 'partials/storage/rename-modal.html',
               controller: 'RenameModalCtrl',
@@ -281,6 +283,67 @@ angular.module('risevision.storage.services')
           return $q.all(filesFactory.getSelectedFiles().map(function(file) {
             return factory.duplicateObject(file);
           }));
+        };
+
+        var _moveObjects = function (selectedFiles, destinationFolder) {
+          if (!selectedFiles.length) {
+            return;
+          }
+
+          var sourceObject = selectedFiles[0];
+          var destinationFolderName = destinationFolder.name === '/' ?
+            '' : destinationFolder.name;
+          var renameName = destinationFolderName +
+            storageUtils.fileName(sourceObject);
+
+          storage.rename(sourceObject.name, renameName)
+            .then(function (resp) {
+              return _handleOperationResponse(resp);
+            })
+            .then(function () {
+              filesFactory.removeFiles([sourceObject]);
+              pendingOperationsFactory.removePendingOperation(
+                sourceObject);
+              selectedFiles.shift();
+
+              _moveObjects(selectedFiles, destinationFolder);
+            })
+            .then(null, function () {
+              selectedFiles.forEach(function (file) {
+                file.actionFailed = true;
+              });
+            });
+        };
+
+        factory.moveButtonClick = function () {
+          return _showBreakLinkWarning('move').then(function () {
+            var modalInstance = $modal.open({
+              templateUrl: 'partials/storage/folder-selector-modal.html',
+              controller: 'FolderSelectorModalController',
+              size: 'md',
+              resolve: {
+                excludedFiles: function () {
+                  return filesFactory.getSelectedFiles().map(
+                    function (file) {
+                      return file.name;
+                    });
+                }
+              }
+            });
+
+            modalInstance.result.then(function (destinationFolder) {
+              destinationFolder = destinationFolder[0];
+              var selectedFiles = filesFactory.getSelectedFiles();
+
+              pendingOperationsFactory.addPendingOperations(
+                selectedFiles, 'move');
+
+              filesFactory.resetSelections();
+              factory.isPOCollapsed = true;
+
+              _moveObjects(selectedFiles, destinationFolder);
+            });
+          });
         };
 
         return factory;

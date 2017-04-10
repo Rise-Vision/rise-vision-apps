@@ -72,6 +72,8 @@ describe('directive: file-actions', function() {
     expect($scope.isDisabledDeleteButton).to.be.a('function');
     
     expect($scope.isDisabledCopyUrlButton).to.be.a('function');
+    expect($scope.isDisabledRenameButton).to.be.a('function');
+    expect($scope.isDisabledMoveButton).to.be.a('function');
   });
 
   it('should initialize correct values',function(){
@@ -79,6 +81,10 @@ describe('directive: file-actions', function() {
     expect($scope.isDisabledTrashButton()).to.be.true;
     expect($scope.isDisabledRestoreButton()).to.be.true;
     expect($scope.isDisabledDeleteButton()).to.be.true;
+    
+    expect($scope.isDisabledCopyUrlButton()).to.be.true;
+    expect($scope.isDisabledRenameButton()).to.be.true;
+    expect($scope.isDisabledMoveButton()).to.be.true;    
 
     expect($scope.leavePageMessage).to.equal('translated message');
   });
@@ -90,6 +96,23 @@ describe('directive: file-actions', function() {
     expect($scope.isDisabledTrashButton()).to.be.false;
     expect($scope.isDisabledRestoreButton()).to.be.false;
     expect($scope.isDisabledDeleteButton()).to.be.false;
+    
+    expect($scope.isDisabledCopyUrlButton()).to.be.false;
+    expect($scope.isDisabledRenameButton()).to.be.false;
+    expect($scope.isDisabledMoveButton()).to.be.false;
+  });
+  
+  it('should enable buttons when file is selected',function(){
+    filesFactory.filesDetails.checkedItemsCount = 5;
+
+    expect($scope.isDisabledDownloadButton()).to.be.false;
+    expect($scope.isDisabledTrashButton()).to.be.false;
+    expect($scope.isDisabledRestoreButton()).to.be.false;
+    expect($scope.isDisabledDeleteButton()).to.be.false;
+    
+    expect($scope.isDisabledCopyUrlButton()).to.be.true;
+    expect($scope.isDisabledRenameButton()).to.be.true;
+    expect($scope.isDisabledMoveButton()).to.be.false;
   });
 
   it('should disable Copy URL if is trash folder',function(){

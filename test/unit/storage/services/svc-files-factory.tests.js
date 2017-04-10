@@ -114,6 +114,53 @@ describe('service: FilesFactory:', function() {
       })
     });
     
+    it('should filter out files when isFolderFilter=true', function(done) {
+      storageFactory.storageFull = false;
+      storageFactory.setSelectorType('single-folder', 'folders');
+      filesFactory.folderPath = 'folder/';
+      filesResponse.files = [{ name: 'folder/file1.txt' },
+        { name: 'folder/file2.txt' },
+        { name: 'folder/subFolder/' }];
+
+      filesFactory.refreshFilesList();
+      setTimeout(function() {
+        expect(filesFactory.filesDetails.files.length).to.equal(1);
+        expect(filesFactory.filesDetails.files[0]).to.deep.equal({
+          name: 'folder/subFolder/'
+        });
+        done();
+      });
+    })
+    
+    it('should add parent folder to root folder when isFolderFilter=true', function(done) {
+      storageFactory.storageFull = false;
+      storageFactory.setSelectorType('single-folder', 'folders');
+      filesResponse.files = [{'name':'folder1/'}];
+
+      filesFactory.refreshFilesList();
+      setTimeout(function() {
+        expect(filesFactory.filesDetails.files.length).to.equal(3);
+        expect(filesFactory.filesDetails.files[1]).to.deep.equal({
+          name: '/',
+          size: '',
+          updated: null
+        });
+        done();
+      });
+    });
+    
+    it('should excludedFiles from the list', function(done) {
+      storageFactory.storageFull = false;
+      storageFactory.setSelectorType('single-folder');
+      filesFactory.excludedFiles = ['test2', 'folder1/'];
+
+      filesFactory.refreshFilesList();
+      setTimeout(function() {
+        expect(filesFactory.filesDetails.files.length).to.equal(2);
+        done();
+      });
+    });
+    
     it('should handle % in folderPath', function(done) {
       filesFactory.folderPath = 'folder % name/';
       filesResponse.files = [{ name: 'folder % name/file1.txt' }];

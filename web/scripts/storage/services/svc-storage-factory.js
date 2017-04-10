@@ -22,6 +22,12 @@ angular.module('risevision.storage.services')
       extensions: [
         'webm', 'mp4', 'ogg', 'ogv'
       ]
+    },
+    FOLDERS: {
+      name: 'folders',
+      extensions: [
+        '/'
+      ]
     }
   })
   .service('StorageFactory', ['storageUtils', '$filter', '$modal',
@@ -73,6 +79,10 @@ angular.module('risevision.storage.services')
           return factory.storageFull ||
             factory.selectorType === SELECTOR_TYPES.SINGLE_FOLDER ||
             factory.selectorType === SELECTOR_TYPES.MULTIPLE_FILES_FOLDERS;
+        };
+
+        factory.isFolderFilter = function () {
+          return factory.selectorFilter === SELECTOR_FILTERS.FOLDERS;
         };
 
         var _isFilteredFile = function (file) {

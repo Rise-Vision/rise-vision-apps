@@ -24,6 +24,10 @@ angular.module('risevision.storage.controllers')
         storageFactory.storageFull = false;
       };
 
+      $scope.setExcludedFiles = function (excludedFiles) {
+        filesFactory.excludedFiles = excludedFiles;
+      };
+
       $scope.toggleListView = function () {
         $scope.isListView = !$scope.isListView;
       };

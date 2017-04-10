@@ -3,8 +3,10 @@
   'use strict';
 
   angular.module('risevision.storage.directives')
-    .directive('fileActions', ['$window', '$translate', 'FileActionsFactory', 'pendingOperationsFactory',
-      function ($window, $translate, FileActionsFactory, pendingOperationsFactory) {
+    .directive('fileActions', ['$window', '$translate', 'FileActionsFactory',
+      'pendingOperationsFactory',
+      function ($window, $translate, FileActionsFactory,
+        pendingOperationsFactory) {
         return {
           restrict: 'E',
           scope: {
@@ -24,7 +26,8 @@
               });
 
             $window.addEventListener('beforeunload', function (e) {
-              if (pendingOperationsFactory.getActivePendingOperations().length > 0) {
+              if (pendingOperationsFactory.getActivePendingOperations()
+                .length > 0) {
                 (e || window.event).returnValue = $scope.leavePageMessage;
                 return $scope.leavePageMessage;
               }
@@ -38,7 +41,7 @@
 
             $scope.isDisabledDownloadButton = $scope.isDisabledTrashButton =
               $scope.isDisabledRestoreButton = $scope.isDisabledDeleteButton =
-              $scope.isDisabledDuplicateButton =
+              $scope.isDisabledDuplicateButton = $scope.isDisabledMoveButton =
               function () {
                 return $scope.filesDetails.checkedItemsCount < 1;
               };

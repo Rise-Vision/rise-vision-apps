@@ -16,7 +16,7 @@
           </span>
         </span>
       </th>
-      <th class="col-sm-2 table-header__cell hidden-xs" ng-click="orderByAttribute = fileExtOrderFunction; reverseSort = !reverseSort">
+      <th class="col-sm-2 table-header__cell hidden-xs" ng-click="orderByAttribute = fileExtOrderFunction; reverseSort = !reverseSort" ng-if="!storageFactory.isFolderFilter()">
         <span translate="common.file-type"></span>
           <span ng-show="orderByAttribute==fileExtOrderFunction">
             <span ng-show="reverseSort">
@@ -27,7 +27,7 @@
             </span>
           </span>
       </th>
-      <th class="col-sm-2 table-header__cell visible-lg" ng-click="orderByAttribute = fileSizeOrderFunction; reverseSort = !reverseSort">
+      <th class="col-sm-2 table-header__cell visible-lg" ng-click="orderByAttribute = fileSizeOrderFunction; reverseSort = !reverseSort" ng-if="!storageFactory.isFolderFilter()">
         <span translate="common.file-size"></span>
           <span ng-show="orderByAttribute==fileSizeOrderFunction">
             <span ng-show="reverseSort">
@@ -38,7 +38,7 @@
             </span>
           </span>
       </th>
-      <th class="col-sm-2 table-header__cell visible-lg" ng-click="orderByAttribute = dateModifiedOrderFunction; reverseSort = !reverseSort">
+      <th class="col-sm-2 table-header__cell visible-lg" ng-click="orderByAttribute = dateModifiedOrderFunction; reverseSort = !reverseSort" ng-if="!storageFactory.isFolderFilter()">
         <span translate="common.file-date-mod"></span>
           <span ng-show="orderByAttribute==dateModifiedOrderFunction">
             <span ng-show="reverseSort">
@@ -73,13 +73,13 @@
           <p translate="common.need-help"></p>
         </div>
       </td>
-      <td class="col-sm-2 table-body__cell hidden-xs">
+      <td class="col-sm-2 table-body__cell hidden-xs" ng-if="!storageFactory.isFolderFilter()">
         <span> {{file.name | fileTypeFilter}}</span>
       </td>
-      <td class="col-sm-2 table-body__cell visible-lg">
+      <td class="col-sm-2 table-body__cell visible-lg" ng-if="!storageFactory.isFolderFilter()">
         <span> {{file.size | fileSizeFilter}}</span>
       </td>
-      <td class="col-sm-2 table-body__cell visible-lg">
+      <td class="col-sm-2 table-body__cell visible-lg" ng-if="!storageFactory.isFolderFilter()">
         <span> {{file.updated.value | date:'d-MMM-yyyy h:mm a'}}</span>
       </td>
     </tr>

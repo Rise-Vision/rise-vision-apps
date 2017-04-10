@@ -59,7 +59,7 @@
 
               if (!fileItem.isRetrying) {
                 fileItem.file.name = ($scope.filesFactory.folderPath ||
-                    '') + fileItem.file.name;
+                  '') + fileItem.file.name;
               }
 
               $translate('storage-client.uploading', {
@@ -112,7 +112,8 @@
                 UploadURIService.notifyGCMTargetsChanged($scope.completed)
                   .then(function (resp) {
                     console.log(
-                      'UploadURIService.notifyGCMTargetsChanged', resp);
+                      'UploadURIService.notifyGCMTargetsChanged',
+                      resp);
                     $scope.completed = [];
                   });
               }

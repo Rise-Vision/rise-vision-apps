@@ -13,6 +13,7 @@ angular.module('risevision.storage.services')
             files: [],
             code: 202
           },
+          excludedFiles: [],
           folderPath: ''
         };
 
@@ -78,20 +79,28 @@ angular.module('risevision.storage.services')
 
             resp.files = resp.files || [];
 
-            for (var i = 0; i < resp.files.length; i++) {
-              var file = resp.files[i];
+            factory.filesDetails.files = resp.files.filter(
+              function (f) {
+                var include = true;
 
-              if (file.name === parentFolder) {
-                parentFolderIndex = i;
-                break;
+                if (factory.excludedFiles.indexOf(f.name) !== -1) {
+                  include = false;
+                }
+
+                if (f.name === parentFolder) {
+                  include = false;
+                }
+
+                if (storageFactory.isFolderFilter() &&
+                  !storageUtils.fileIsFolder(f)) {
+                  include = false;
+                }
+
+                return include;
               }
-            }
-            if (parentFolderIndex !== null) {
-              resp.files.splice(parentFolderIndex, 1);
-            }
+            );
 
             factory.filesDetails.bucketExists = resp.bucketExists;
-            factory.filesDetails.files = resp.files || [];
             factory.filesDetails.code = resp.code;
 
             if (!factory.folderPath || !parentFolder || parentFolder ===
@@ -103,6 +112,14 @@ angular.module('risevision.storage.services')
                 size: '',
                 updated: null
               });
+
+              if (storageFactory.isFolderFilter()) {
+                factory.filesDetails.files.splice(1, 0, {
+                  name: '/',
+                  size: '',
+                  updated: null
+                });
+              }
             }
 
             return resp;

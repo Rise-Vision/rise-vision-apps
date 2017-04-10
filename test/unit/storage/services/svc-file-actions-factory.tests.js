@@ -33,11 +33,11 @@ describe('service: fileActionsFactory', function() {
       return storage = {
         trash: {
           move: function(){
-            return {
-              then:function(cb){
-                if (apiResponse) cb(apiResponse);
-              }
-            };
+            if (apiResponse) {
+              return Q.resolve(apiResponse);
+            } else {
+              return Q.reject();
+            }
           }
         },
         files: {
@@ -206,7 +206,7 @@ describe('service: fileActionsFactory', function() {
       expect(pendingFileNames).to.contain('file2');
     });
 
-    it('should process the action and remove files from pending',function(){
+    it('should process the action and remove files from pending',function(done) {
       selectedFiles = [{name:'file1'}, {name:'file2'}];
       apiResponse = {result:{}};
       var storageSpy = sinon.spy(storage.trash,'move');
@@ -214,14 +214,19 @@ describe('service: fileActionsFactory', function() {
       fileActionsFactory.processFilesAction('trash');
 
       storageSpy.should.have.been.calledWith(['file1','file2']);
-      var pendingFileNames = pendingOperationsFactory.pendingOperations.map(function (i) {
-        return i.name;
+      
+      setTimeout(function() {
+        var pendingFileNames = pendingOperationsFactory.pendingOperations.map(function (i) {
+          return i.name;
+        });
+        expect(pendingFileNames).to.not.contain('file1');
+        expect(pendingFileNames).to.not.contain('file2');
+        
+        done();
       });
-      expect(pendingFileNames).to.not.contain('file1');
-      expect(pendingFileNames).to.not.contain('file2');
     });
 
-    it('should notify storage failures',function(){
+    it('should notify storage failures',function(done){
       selectedFiles = [{name:'file1'}, {name:'file2'}];
       apiResponse = {};
       var storageSpy = sinon.spy(storage.trash,'move');
@@ -229,14 +234,19 @@ describe('service: fileActionsFactory', function() {
       fileActionsFactory.processFilesAction('trash');
 
       storageSpy.should.have.been.calledWith(['file1','file2']);
-      var pendingFileNames = pendingOperationsFactory.pendingOperations.map(function (i) {
-        return i.name;
-      });
-      expect(pendingFileNames).to.contain('file1');
-      expect(pendingFileNames).to.contain('file2');
+      
+      setTimeout(function() {
+        var pendingFileNames = pendingOperationsFactory.pendingOperations.map(function (i) {
+          return i.name;
+        });
+        expect(pendingFileNames).to.contain('file1');
+        expect(pendingFileNames).to.contain('file2');
 
-      expect(selectedFiles[0].actionFailed).to.be.true;
-      expect(selectedFiles[1].actionFailed).to.be.true;
+        expect(selectedFiles[0].actionFailed).to.be.true;
+        expect(selectedFiles[1].actionFailed).to.be.true;
+        
+        done();
+      });
     });    
   });
 
@@ -356,6 +366,56 @@ describe('service: fileActionsFactory', function() {
       }, 0);
     });
   });
+  
+  describe('renameButtonClick:', function(){
+    beforeEach(function() {
+      sandbox.stub($modal, 'open', modalOpenMock);
+    });
+    
+    it('should open warning modal',function(done){
+      sandbox.stub(localStorageService, "get").returns('false');
+
+      fileActionsFactory.renameButtonClick();
+      
+      setTimeout(function() {
+        $modal.open.should.have.been.calledTwice;
+        expect($modal.open.getCall(0).args[0].templateUrl).to.equal('partials/storage/break-link-warning-modal.html');
+        expect($modal.open.getCall(0).args[0].controller).to.equal('BreakLinkWarningModalCtrl');
+        expect($modal.open.getCall(0).args[0].resolve).to.be.ok;
+        expect($modal.open.getCall(0).args[0].resolve.infoLine1Key()).to.equal('storage-client.rename.breaking-link1');
+        
+        done();
+      }, 10);
+    });
+
+    it('should not open warning modal',function(done){
+      sandbox.stub(localStorageService, "get").returns('true');
+
+      fileActionsFactory.renameButtonClick();
+      
+      setTimeout(function() {
+        $modal.open.should.have.been.calledOnce;
+        
+        done();
+      }, 10);
+    });
+
+    it('should open rename modal',function(done){
+      sandbox.stub(localStorageService, "get").returns('true');
+      selectedFiles = ['file1'];
+
+      fileActionsFactory.renameButtonClick();
+
+      setTimeout(function() {
+        $modal.open.should.have.been.calledOnce;
+        expect($modal.open.getCall(0).args[0].templateUrl).to.equal('partials/storage/rename-modal.html');
+        expect($modal.open.getCall(0).args[0].controller).to.equal('RenameModalCtrl');
+        expect($modal.open.getCall(0).args[0].resolve.sourceObject()).to.equal('file1');
+        
+        done();
+      }, 10);
+    });
+  });
 
   describe('duplicate: ', function() {
     it('should duplicate a file', function(done) {
@@ -419,43 +479,146 @@ describe('service: fileActionsFactory', function() {
     });
   });
 
-  describe('showBreakLinkWarning:', function(){
-    it('should open warning modal',function(){
+  describe('moveButtonClick: ', function() {
+    var destinationFolder, excludedFiles;
+
+    beforeEach(function() {
+      renameResponse = { result: { code: 200 } };
+      destinationFolder = [{name: 'folder1/'}];
+      modalOpenMock = function(obj) {
+        if (obj.resolve && obj.resolve.excludedFiles) {
+          excludedFiles = obj.resolve.excludedFiles();
+        }
+        return {
+          result: {
+            then: function(cb){ cb(destinationFolder); }
+          }
+        };
+      };
+      
+      sandbox.stub($modal, 'open', modalOpenMock);
+      
+      selectedFiles = [{name: 'file1'}, {name: 'file2'}];
+    });
+    
+    it('should open warning modal', function(done) {
       sandbox.stub(localStorageService, "get").returns('false');
-      sandbox.stub($modal, 'open', modalOpenMock);
 
-      return fileActionsFactory.showBreakLinkWarning()
-        .then(function() {
-          $modal.open.should.have.been.called;
-          expect($modal.open.getCall(0).args[0].templateUrl).to.equal('partials/storage/break-link-warning-modal.html');
-          expect($modal.open.getCall(0).args[0].controller).to.equal('BreakLinkWarningModalCtrl');
-        });
+      fileActionsFactory.moveButtonClick();
+      
+      setTimeout(function() {
+        $modal.open.should.have.been.calledTwice;
+        expect($modal.open.getCall(0).args[0].templateUrl).to.equal('partials/storage/break-link-warning-modal.html');
+        expect($modal.open.getCall(0).args[0].controller).to.equal('BreakLinkWarningModalCtrl');
+        expect($modal.open.getCall(0).args[0].resolve).to.be.ok;
+        expect($modal.open.getCall(0).args[0].resolve.infoLine1Key()).to.equal('storage-client.move.breaking-link1');
+        
+        done();
+      }, 10);
     });
-
-    it('should not open warning modal',function(){
+    
+    it('should exclude selected files from folder modal', function(done) {
       sandbox.stub(localStorageService, "get").returns('true');
-      sandbox.stub($modal, 'open', modalOpenMock);
 
-      return fileActionsFactory.showBreakLinkWarning()
-        .then(function() {
-          $modal.open.should.not.have.been.called;
-        });
+      fileActionsFactory.moveButtonClick();
+      
+      setTimeout(function() {
+        $modal.open.should.have.been.calledOnce;
+        expect($modal.open.getCall(0).args[0].templateUrl).to.equal('partials/storage/folder-selector-modal.html');
+        expect($modal.open.getCall(0).args[0].controller).to.equal('FolderSelectorModalController');
+        expect($modal.open.getCall(0).args[0].resolve).to.be.ok;
+        expect(excludedFiles).to.deep.equal(['file1', 'file2']);
+        
+        done();
+      }, 10);
     });
-  });
+    
+    it('should list files in pending operations', function() {
+      fileActionsFactory.moveButtonClick();
 
-  describe('renameButtonClick:', function(){
-    it('should open rename modal',function(){
-      sandbox.stub(localStorageService, "get").returns('true');
-      sandbox.stub($modal, 'open', modalOpenMock);
-      selectedFiles = ['file1'];
+      var pendingFileNames = pendingOperationsFactory.pendingOperations.map(function (i) {
+        return i.name;
+      });
+      expect(pendingFileNames).to.contain('file1');
+      expect(pendingFileNames).to.contain('file2');
+    });
+    
+    it('should move two files', function(done) {
+      sandbox.spy(storage, 'rename');
+      sandbox.spy(filesFactory, 'removeFiles');
+      sandbox.spy(filesFactory, 'resetSelections');
 
-      return fileActionsFactory.renameButtonClick()
-        .then(function() {
-          $modal.open.should.have.been.calledOnce;
-          expect($modal.open.getCall(0).args[0].templateUrl).to.equal('partials/storage/rename-modal.html');
-          expect($modal.open.getCall(0).args[0].controller).to.equal('RenameModalCtrl');
-          expect($modal.open.getCall(0).args[0].resolve.sourceObject()).to.equal('file1');
+      fileActionsFactory.moveButtonClick();
+
+      filesFactory.resetSelections.should.have.been.called;
+
+      setTimeout(function() {
+        storage.rename.should.have.been.calledTwice;
+        filesFactory.removeFiles.should.have.been.calledTwice;
+
+        expect(storage.rename.getCall(0).args[0]).to.equal('file1');
+        expect(storage.rename.getCall(0).args[1]).to.equal('folder1/file1');
+
+        expect(storage.rename.getCall(1).args[0]).to.equal('file2');
+        expect(storage.rename.getCall(1).args[1]).to.equal('folder1/file2');
+
+        expect(filesFactory.removeFiles.getCall(0).args[0][0].name).to.equal('file1');
+        expect(filesFactory.removeFiles.getCall(1).args[0][0].name).to.equal('file2');
+
+        done();
+      }, 10);
+    });
+    
+    it('should move two to the root folder', function(done) {
+      destinationFolder = [{name: '/'}];
+      selectedFiles = [{name: 'folder1/file1'}, {name: 'folder1/file2'}];
+
+      sandbox.spy(storage, 'rename');
+
+      fileActionsFactory.moveButtonClick();
+
+      setTimeout(function() {
+        storage.rename.should.have.been.calledTwice;
+
+        expect(storage.rename.getCall(0).args[0]).to.equal('folder1/file1');
+        expect(storage.rename.getCall(0).args[1]).to.equal('file1');
+
+        expect(storage.rename.getCall(1).args[0]).to.equal('folder1/file2');
+        expect(storage.rename.getCall(1).args[1]).to.equal('file2');
+
+        done();
+      }, 10);
+    });
+    
+    it('should fail to move files', function(done) {
+      renameResponse = { code: 404, message: "not-found" };
+
+      sandbox.spy(storage, 'rename');
+
+      fileActionsFactory.moveButtonClick();
+
+      setTimeout(function() {
+        storage.rename.should.have.been.calledOnce;
+
+        expect(pendingOperationsFactory.pendingOperations[0].actionFailed).to.be.true;
+        expect(pendingOperationsFactory.pendingOperations[1].actionFailed).to.be.true;
+
+        done();
+      }, 10);
+    });
+    
+    it('should remove pending operations', function(done) {
+      fileActionsFactory.moveButtonClick();
+
+      setTimeout(function() {
+        var pendingFileNames = pendingOperationsFactory.pendingOperations.map(function (i) {
+          return i.name;
         });
+        expect(pendingFileNames).to.not.contain('file1');
+        expect(pendingFileNames).to.not.contain('file2');
+        
+        done();
+      }, 10);
     });
   });
 });

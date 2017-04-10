@@ -92,6 +92,7 @@ describe('controller: Files List', function() {
     expect($scope.bucketCreationStatus).to.be.ok;
 
     expect($scope.setSelectorType).to.be.a('function');
+    expect($scope.setExcludedFiles).to.be.a('function');
     expect($scope.fileClick).to.be.a('function');
     expect($scope.dateModifiedOrderFunction).to.be.a('function');
     expect($scope.fileNameOrderFunction).to.be.a('function');
@@ -127,6 +128,13 @@ describe('controller: Files List', function() {
     
     expect(storageFactory.setSelectorType).to.have.been.calledWith('type', 'filter');
     expect(storageFactory.storageFull).to.be.false;
+  });
+  
+  it('setExcludedFiles: ', function() {
+    expect($scope.filesFactory.excludedFiles).to.not.be.ok;
+    $scope.setExcludedFiles(['file1', 'file2']);
+    
+    expect($scope.filesFactory.excludedFiles).to.deep.equal(['file1', 'file2']);
   });
   
   describe('fileClick: ', function() {

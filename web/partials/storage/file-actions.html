@@ -10,6 +10,8 @@
   </button>
   <button id="fileDuplicateButton" type="button" class="btn btn-link" title="Duplicate" ng-click="factory.duplicateButtonClick()" ng-hide="filesFactory.isTrashFolder()" ng-disabled="isDisabledDuplicateButton()">
     <i class="fa fa-copy fa-2x" ng-class="{ 'icon-gray': isDisabledDuplicateButton() }"></i>
+  <button id="fileMoveButton" type="button" class="btn btn-link" title="Move" ng-click="factory.moveButtonClick()" ng-hide="storageFactory.isTrashFolder()" ng-disabled="isDisabledMoveButton()">
+    <i class="fa fa-arrow-circle-o-right fa-2x" ng-class="{ 'icon-gray': isDisabledMoveButton() }"></i>
   </button>
   <button id="moveToTrashButton" type="button" class="btn btn-link" title="Move To Trash" ng-click="factory.trashButtonClick()" ng-show="!filesFactory.isTrashFolder()" ng-disabled="isDisabledTrashButton()">
     <i class="fa fa-trash-o fa-2x" ng-class="{ 'icon-gray': isDisabledTrashButton() }"></i>

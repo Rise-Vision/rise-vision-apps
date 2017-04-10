@@ -24,6 +24,7 @@ describe('service: StorageFactory:', function() {
     expect(storageFactory.isMultipleSelector).to.be.a('function');
     expect(storageFactory.isFileSelector).to.be.a('function');
     expect(storageFactory.isFolderSelector).to.be.a('function');
+    expect(storageFactory.isFolderFilter).to.be.a('function');
     expect(storageFactory.canSelect).to.be.a('function');
     expect(storageFactory.isDisabled).to.be.a('function');
     expect(storageFactory.fileIsImage).to.be.a('function');    
@@ -59,6 +60,12 @@ describe('service: StorageFactory:', function() {
       storageFactory.setSelectorType('', 'videos');
       expect(storageFactory.selectorFilter).to.equal(SELECTOR_FILTERS.VIDEOS);
     });
+  });
+  
+  it('isFolderFilter: ', function() {
+    expect(storageFactory.isFolderFilter()).to.be.false;
+    storageFactory.setSelectorType('', 'folders');
+    expect(storageFactory.isFolderFilter()).to.be.true;
   });
   
   describe('isDisabled: ', function() {

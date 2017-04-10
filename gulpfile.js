@@ -299,7 +299,7 @@ gulp.task("test:e2e", function (cb) {
 gulp.task("metrics", factory.metrics());
 
 gulp.task("test",  function (cb) {
-  runSequence(["config", "html2js"], ["test:unit", "test:e2e"], cb);
+  runSequence(["config", "html2js"], ["test:unit", "test:e2e"], "coveralls", cb);
 });
 
 gulp.task("test:ci",  function (cb) {
