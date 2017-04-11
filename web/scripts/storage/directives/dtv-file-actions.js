@@ -31,6 +31,7 @@
             });
 
             $scope.isDisabledCopyUrlButton = $scope.isDisabledRenameButton =
+              $scope.isDisabledDuplicateButton =
               function () {
                 return $scope.filesFactory.isTrashFolder() ||
                   $scope.filesDetails.checkedItemsCount !== 1;

@@ -185,6 +185,31 @@ angular.module('risevision.storage.services')
             });
         };
 
+        factory.duplicateObject = function (sourceObject) {
+          var newObject = angular.copy(sourceObject);
+
+          pendingOperationsFactory.addPendingOperation(sourceObject, 'duplicate');
+
+          return storage.duplicate(sourceObject.name)
+            .then(function (resp) {
+              if (resp.code !== 200) {
+                return resp;
+              } else {
+                newObject.name = resp.message;
+
+                return factory.refreshThumbnail(newObject)
+                  .then(function (file) {
+                    pendingOperationsFactory.removePendingOperation(sourceObject);
+
+                    filesFactory.addFile(newObject);
+                    filesFactory.resetSelections();
+
+                    return resp;
+                  });
+              }
+            });
+        };
+
         factory.showBreakLinkWarning = function (infoLine1Key, infoLine2Key,
           warningKey, confirmKey, cancelKey, localStorageKey) {
           var hideWarning = localStorageService.get(localStorageKey) ===
@@ -232,7 +257,7 @@ angular.module('risevision.storage.services')
             'breakingLinkWarning.hideWarning');
         };
 
-        factory.renameButtonClick = function (sourceName) {
+        factory.renameButtonClick = function () {
           return factory.showRenameBreakLinkWarning().then(function () {
             var renameModal = $modal.open({
               templateUrl: 'partials/storage/rename-modal.html',
@@ -248,6 +273,10 @@ angular.module('risevision.storage.services')
               }
             });
           });
+        };
+
+        factory.duplicateButtonClick = function () {
+          return factory.duplicateObject(filesFactory.getSelectedFiles()[0]);
         };
 
         return factory;

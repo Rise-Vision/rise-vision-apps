@@ -310,6 +310,32 @@ angular.module('risevision.storage.services')
           }
 
           return deferred.promise;
+        },
+
+        duplicate: function (sourceName) {
+          var deferred = $q.defer();
+
+          var obj = {
+            'companyId': userState.getSelectedCompanyId(),
+            'sourceName': sourceName
+          };
+
+          $log.debug('Storage duplicate called with', obj);
+
+          storageAPILoader().then(function (storageApi) {
+            return storageApi.files.duplicate(obj);
+          })
+          .then(function (resp) {
+            $log.debug('status storage duplicate resp', resp);
+
+            deferred.resolve(resp.result);
+          })
+          .then(null, function (e) {
+            $log.error('Failed to duplicate storage objects', e);
+            deferred.reject(e);
+          });
+
+          return deferred.promise;
         }
 
 

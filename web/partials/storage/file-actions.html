@@ -8,6 +8,9 @@
   <button id="fileRenameButton" type="button" class="btn btn-link" title="Rename" ng-click="factory.renameButtonClick()" ng-hide="filesFactory.isTrashFolder()" ng-disabled="isDisabledRenameButton()">
     <i class="fa fa-pencil fa-2x" ng-class="{ 'icon-gray': isDisabledRenameUrlButton() }"></i>
   </button>
+  <button id="fileDuplicateButton" type="button" class="btn btn-link" title="Duplicate" ng-click="factory.duplicateButtonClick()" ng-hide="filesFactory.isTrashFolder()" ng-disabled="isDisabledDuplicateButton()">
+    <i class="fa fa-copy fa-2x" ng-class="{ 'icon-gray': isDisabledDuplicateButton() }"></i>
+  </button>
   <button id="moveToTrashButton" type="button" class="btn btn-link" title="Move To Trash" ng-click="factory.trashButtonClick()" ng-show="!filesFactory.isTrashFolder()" ng-disabled="isDisabledTrashButton()">
     <i class="fa fa-trash-o fa-2x" ng-class="{ 'icon-gray': isDisabledTrashButton() }"></i>
   </button>
