@@ -2,9 +2,9 @@
 angular.module('risevision.storage.services')
   .factory('FileActionsFactory', ['$rootScope', '$q', '$modal', '$translate',
     'storage', 'storageUtils', 'downloadFactory', 'localStorageService',
-    'pendingOperationsSvc', 'STORAGE_FILE_URL',
+    'pendingOperationsFactory', 'STORAGE_FILE_URL',
     function ($rootScope, $q, $modal, $translate, storage, storageUtils,
-    downloadFactory, localStorageService, pendingOperationsSvc, STORAGE_FILE_URL) {
+    downloadFactory, localStorageService, pendingOperationsFactory, STORAGE_FILE_URL) {
       return function (filesFactory) {
         var factory = {};
 
@@ -106,11 +106,11 @@ angular.module('risevision.storage.services')
             return file.name;
           });
 
-          pendingOperationsSvc.addPendingOperations(selectedFiles, action);
+          pendingOperationsFactory.addPendingOperations(selectedFiles, action);
 
           filesFactory.removeFiles(selectedFiles);
           filesFactory.resetSelections();
-          pendingOperationsSvc.isPOCollapsed = true;
+          pendingOperationsFactory.isPOCollapsed = true;
 
           _getAPIMethod(action)(selectedFileNames)
             .then(function (resp) {
@@ -139,7 +139,7 @@ angular.module('risevision.storage.services')
 
                 filesFactory.resetSelections();
               } else {
-                pendingOperationsSvc.removePendingOperations(selectedFiles);
+                pendingOperationsFactory.removePendingOperations(selectedFiles);
               }
             });
         };

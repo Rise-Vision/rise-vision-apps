@@ -1,6 +1,6 @@
 'use strict';
 angular.module('risevision.storage.services')
-  .factory('pendingOperationsSvc', [
+  .factory('pendingOperationsFactory', [
     function () {
       var factory = {};
 
