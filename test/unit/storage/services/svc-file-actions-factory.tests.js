@@ -1,6 +1,6 @@
 'use strict';
 describe('service: fileActionsFactory', function() {
-  var fileActionsFactory, filesFactory, storage,
+  var fileActionsFactory, filesFactory, storage, pendingOperationsFactory,
       downloadFactory, $modal, $rootScope, selectedFiles, apiResponse, localStorageService;
   var getResponse, renameResponse;
   var sandbox = sinon.sandbox.create();
@@ -87,6 +87,7 @@ describe('service: fileActionsFactory', function() {
       selectedFiles = null;
       apiResponse = null;
       $rootScope = $injector.get('$rootScope');
+      pendingOperationsFactory = $injector.get('pendingOperationsFactory');
       var FileActionsFactory = $injector.get('FileActionsFactory');
       fileActionsFactory = new FileActionsFactory(filesFactory);
     });
@@ -107,10 +108,8 @@ describe('service: fileActionsFactory', function() {
     expect(fileActionsFactory.deleteButtonClick).to.be.a('function');
     expect(fileActionsFactory.trashButtonClick).to.be.a('function');
     expect(fileActionsFactory.restoreButtonClick).to.be.a('function');
-    expect(fileActionsFactory.removePendingOperation).to.be.a('function');
     expect(fileActionsFactory.copyUrlButtonClick).to.be.a('function');
     expect(fileActionsFactory.processFilesAction).to.be.a('function');
-    expect(fileActionsFactory.getActivePendingOperations).to.be.a('function');
   });
 
   describe('downloadButtonClick:', function(){
@@ -147,19 +146,6 @@ describe('service: fileActionsFactory', function() {
       fileActionsFactory.restoreButtonClick();
 
       stub.should.have.been.calledWith('restore');
-    });
-  });
-
-  describe('removePendingOperation:',function(){
-    it('should remove pending operation',function(){
-      fileActionsFactory.pendingOperations = ['file1', 'file2'];
-      fileActionsFactory.removePendingOperation('file2');
-      expect(fileActionsFactory.pendingOperations.length).to.equal(1);
-      expect(fileActionsFactory.pendingOperations.indexOf('file2')).to.equal(-1);
-    });
-
-    it('should handle not found',function () {
-      fileActionsFactory.removePendingOperation('file3');
     });
   });
 
@@ -205,7 +191,7 @@ describe('service: fileActionsFactory', function() {
 
       fileActionsFactory.processFilesAction('trash');
 
-      var pendingFileNames = fileActionsFactory.pendingOperations.map(function (i) {
+      var pendingFileNames = pendingOperationsFactory.pendingOperations.map(function (i) {
         return i.name;
       });
       expect(pendingFileNames).to.contain('file1');
@@ -220,7 +206,7 @@ describe('service: fileActionsFactory', function() {
       fileActionsFactory.processFilesAction('trash');
 
       storageSpy.should.have.been.calledWith(['file1','file2']);
-      var pendingFileNames = fileActionsFactory.pendingOperations.map(function (i) {
+      var pendingFileNames = pendingOperationsFactory.pendingOperations.map(function (i) {
         return i.name;
       });
       expect(pendingFileNames).to.not.contain('file1');
@@ -235,7 +221,7 @@ describe('service: fileActionsFactory', function() {
       fileActionsFactory.processFilesAction('trash');
 
       storageSpy.should.have.been.calledWith(['file1','file2']);
-      var pendingFileNames = fileActionsFactory.pendingOperations.map(function (i) {
+      var pendingFileNames = pendingOperationsFactory.pendingOperations.map(function (i) {
         return i.name;
       });
       expect(pendingFileNames).to.contain('file1');
@@ -244,24 +230,6 @@ describe('service: fileActionsFactory', function() {
       expect(selectedFiles[0].actionFailed).to.be.true;
       expect(selectedFiles[1].actionFailed).to.be.true;
     });    
-  });
-
-  describe('getActivePendingOperations:',function(){
-    it('should return pending operations',function(){
-      fileActionsFactory.pendingOperations = [{name:'file1'}, {name:'file2'}];
-
-      expect(fileActionsFactory.getActivePendingOperations())
-        .to.deep.equal(fileActionsFactory.pendingOperations);
-    });
-
-    it('should not return failed operations',function(){
-      fileActionsFactory.pendingOperations = [{name:'file1'}, {name:'file2', actionFailed: true}];
-
-      expect(fileActionsFactory.getActivePendingOperations())
-        .to.contain(fileActionsFactory.pendingOperations[0]);
-      expect(fileActionsFactory.getActivePendingOperations())
-        .to.not.contain(fileActionsFactory.pendingOperations[1]);
-    });
   });
 
   describe('refreshThumbnail: ', function() {

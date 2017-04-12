@@ -42,7 +42,6 @@ angular.module('risevision.storage.services')
       };
 
       factory.getActivePendingOperations = function () {
-        console.log("Getting active blah", factory.pendingOperations);
         return factory.pendingOperations.filter(function (op) {
           return !op.actionFailed;
         });

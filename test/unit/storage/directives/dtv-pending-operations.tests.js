@@ -8,6 +8,9 @@ describe('directive: pending-operations', function() {
     $provide.service('downloadFactory', function() {
       return {};
     });
+    $provide.service('pendingOperationsFactory',function(){
+      return {};
+    });
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache){

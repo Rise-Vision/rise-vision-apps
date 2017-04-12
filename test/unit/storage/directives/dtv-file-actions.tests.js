@@ -22,10 +22,13 @@ describe('directive: file-actions', function() {
       }
     };
 
+    $provide.service('pendingOperationsFactory',function(){
+      return {};
+    });
     $provide.service('$window',function(){
       return $window = {
         addEventListener: function() {}
-      }
+      };
     });
     $provide.service('$translate',function(){
       return $translate = function() {
@@ -33,8 +36,8 @@ describe('directive: file-actions', function() {
           then: function(callback){
             callback('translated message');
           }
-        }
-      }
+        };
+      };
     });
   }));
   var element;
