@@ -64,6 +64,20 @@ describe('service: storage:', function() {
                 def.reject("API Failed");
               }
               return def.promise;
+            },
+            duplicate: function(obj) {
+              expect(obj).to.be.ok;
+              storageApiRequestObj = obj;
+
+              var def = Q.defer();
+              if (returnResult) {
+                def.resolve({
+                  result: {}
+                });
+              } else {
+                def.reject("API Failed");
+              }
+              return def.promise;
             }
           },
           trash: {
@@ -574,6 +588,30 @@ describe('service: storage:', function() {
       returnResult = false;
 
       storage.rename('file1', 'file2')
+        .then(null, function(error) {
+          expect(error).to.deep.equal('API Failed');
+          expect(storageApiRequestObj).to.not.be.null;
+          done();
+        });
+    });
+  });
+
+  describe('duplicate',function(){
+    it('should duplicate files',function(done){
+      storage.duplicate('file1')
+        .then(function(result){
+          expect(result).to.be.truely;
+          expect(storageApiRequestObj.companyId).to.equal('TEST_COMP_ID');
+          expect(storageApiRequestObj.sourceName).to.equal('file1');
+
+          done();
+        });
+    });
+
+    it('should handle failure',function(done){
+      returnResult = false;
+
+      storage.duplicate('file1')
         .then(null, function(error) {
           expect(error).to.deep.equal('API Failed');
           expect(storageApiRequestObj).to.not.be.null;

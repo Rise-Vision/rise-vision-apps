@@ -2,7 +2,7 @@
 describe('service: fileActionsFactory', function() {
   var fileActionsFactory, filesFactory, storage, pendingOperationsFactory,
       downloadFactory, $modal, $rootScope, selectedFiles, apiResponse, localStorageService;
-  var getResponse, renameResponse;
+  var getResponse, renameResponse, duplicateResponse;
   var sandbox = sinon.sandbox.create();
 
   var modalOpenMock = function() {
@@ -56,6 +56,14 @@ describe('service: fileActionsFactory', function() {
           }
           else {
             return Q.resolve(renameResponse);
+          }
+        },
+        duplicate: function() {
+          if(duplicateResponse && duplicateResponse.error) {
+            return Q.reject(duplicateResponse);
+          }
+          else {
+            return Q.resolve(duplicateResponse);
           }
         }
       };
@@ -342,6 +350,68 @@ describe('service: fileActionsFactory', function() {
 
       setTimeout(function() {
         storage.rename.should.have.been.called;
+        storage.files.get.should.not.have.been.called;
+
+        done();
+      }, 0);
+    });
+  });
+
+  describe('duplicate: ', function() {
+    it('should duplicate a file', function(done) {
+      sandbox.spy(storage.files, 'get');
+      sandbox.spy(storage, 'duplicate');
+      sandbox.spy(filesFactory, 'addFile');
+      sandbox.spy(filesFactory, 'removeFiles');
+      sandbox.spy(filesFactory, 'resetSelections');
+
+      getResponse = { files: [{ name: "test (1).jpg" }] };
+      duplicateResponse = { code: 200, message: "test (1).jpg" };
+
+      fileActionsFactory.duplicateObject({ name: "test.jpg" })
+        .then(function() {
+          storage.duplicate.should.have.been.called;
+          storage.files.get.should.have.been.called;
+          filesFactory.addFile.should.have.been.called;
+          filesFactory.resetSelections.should.have.been.called;
+
+          expect(storage.duplicate.getCall(0).args[0]).to.equal('test.jpg');
+          expect(storage.files.get.getCall(0).args[0].file).to.equal('test (1).jpg');
+          expect(filesFactory.addFile.getCall(0).args[0].name).to.equal('test (1).jpg');
+          done();
+        });
+    });
+
+    it('should fail to duplicate the file because of business logic error', function(done) {
+      sandbox.spy(storage.files, 'get');
+      sandbox.spy(storage, 'duplicate');
+      sandbox.spy(filesFactory, 'addFile');
+
+      getResponse = { files: [{ name: "test2.jpg" }] };
+      duplicateResponse = { code: 404, message: "not-found" };
+
+      fileActionsFactory.duplicateObject({ name: "test.jpg" })
+        .then(function() {
+          storage.duplicate.should.have.been.called;
+          storage.files.get.should.not.have.been.called;
+
+          done();
+        });
+    });
+
+    it('should fail to duplicate the file because of server error', function(done) {
+      sandbox.spy(storage.files, 'get');
+      sandbox.spy(storage, 'duplicate');
+      sandbox.spy(filesFactory, 'addFile');
+      sandbox.spy(filesFactory, 'removeFiles');
+
+      getResponse = { files: [{ name: "test2.jpg" }] };
+      duplicateResponse = { error: true };
+
+      fileActionsFactory.duplicateObject({ name: "test.jpg" });
+
+      setTimeout(function() {
+        storage.duplicate.should.have.been.called;
         storage.files.get.should.not.have.been.called;
 
         done();
