@@ -2,9 +2,9 @@
 angular.module('risevision.storage.services')
   .factory('FileActionsFactory', ['$rootScope', '$q', '$modal', '$translate',
     'storage', 'storageUtils', 'downloadFactory', 'localStorageService',
-    'STORAGE_FILE_URL',
+    'pendingOperationsSvc', 'STORAGE_FILE_URL',
     function ($rootScope, $q, $modal, $translate, storage, storageUtils,
-      downloadFactory, localStorageService, STORAGE_FILE_URL) {
+    downloadFactory, localStorageService, pendingOperationsSvc, STORAGE_FILE_URL) {
       return function (filesFactory) {
         var factory = {};
 
@@ -12,8 +12,6 @@ angular.module('risevision.storage.services')
           code: 200,
           message: ''
         };
-        factory.pendingOperations = [];
-        factory.isPOCollapsed = true;
 
         factory.downloadButtonClick = function () {
           downloadFactory.downloadFiles(filesFactory.getSelectedFiles(),
@@ -30,14 +28,6 @@ angular.module('risevision.storage.services')
 
         factory.restoreButtonClick = function () {
           factory.processFilesAction('restore');
-        };
-
-        factory.removePendingOperation = function (file) {
-          var position = factory.pendingOperations.indexOf(file);
-
-          if (position >= 0) {
-            factory.pendingOperations.splice(position, 1);
-          }
         };
 
         factory.copyUrlButtonClick = function () {
@@ -117,20 +107,12 @@ angular.module('risevision.storage.services')
           });
 
           selectedFiles.forEach(function (file) {
-            file.action = action;
-            var pendingFileNames = factory.pendingOperations.map(
-              function (
-                i) {
-                return i.name;
-              });
-            if (pendingFileNames.indexOf(file.name) === -1) {
-              factory.pendingOperations.push(file);
-            }
+            pendingOperationsSvc.addPendingOperation(file, action);
           });
 
           filesFactory.removeFiles(selectedFiles);
           filesFactory.resetSelections();
-          factory.isPOCollapsed = true;
+          pendingOperationsSvc.isPOCollapsed = true;
 
           _getAPIMethod(action)(selectedFileNames)
             .then(function (resp) {
@@ -159,23 +141,9 @@ angular.module('risevision.storage.services')
 
                 filesFactory.resetSelections();
               } else {
-                // Removed completed pending operations
-                for (var i = factory.pendingOperations.length - 1; i >=
-                  0; i--) {
-                  var file = factory.pendingOperations[i];
-
-                  if (selectedFiles.indexOf(file) >= 0) {
-                    factory.pendingOperations.splice(i, 1);
-                  }
-                }
+                pendingOperationsSvc.removePendingOperations(selectedFiles);
               }
             });
-        };
-
-        factory.getActivePendingOperations = function () {
-          return factory.pendingOperations.filter(function (op) {
-            return !op.actionFailed;
-          });
         };
 
         factory.refreshThumbnail = function (file) {

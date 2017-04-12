@@ -3,8 +3,8 @@
   'use strict';
 
   angular.module('risevision.storage.directives')
-    .directive('fileActions', ['$window', '$translate', 'FileActionsFactory',
-      function ($window, $translate, FileActionsFactory) {
+    .directive('fileActions', ['$window', '$translate', 'FileActionsFactory', 'pendingOperationsSvc',
+      function ($window, $translate, FileActionsFactory, pendingOperationsSvc) {
         return {
           restrict: 'E',
           scope: {
@@ -19,14 +19,12 @@
             $scope.leavePageMessage = '';
 
             $translate('storage-client.pending-ops-leave-page').then(
-              function (
-                value) {
+              function (value) {
                 $scope.leavePageMessage = value;
               });
 
             $window.addEventListener('beforeunload', function (e) {
-              if ($scope.factory.getActivePendingOperations().length >
-                0) {
+              if (pendingOperationsSvc.getActivePendingOperations().length > 0) {
                 (e || window.event).returnValue = $scope.leavePageMessage;
                 return $scope.leavePageMessage;
               }
