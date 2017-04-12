@@ -8,13 +8,17 @@ angular.module('risevision.storage.services')
       factory.isPOCollapsed = true;
 
       factory.addPendingOperation = function (file, action) {
-        console.log("Adding", file, action);
         if(!findByFileName(file.name)) {
-          console.log("Added!!!", file, action);
           file.action = action;
 
           factory.pendingOperations.push(file);
         }
+      };
+
+      factory.addPendingOperations = function (files, action) {
+        files.forEach(function(file) {
+          factory.addPendingOperation(file, action);
+        });
       };
 
       factory.removePendingOperation = function (file) {

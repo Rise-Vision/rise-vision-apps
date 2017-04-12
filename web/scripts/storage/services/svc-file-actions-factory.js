@@ -106,9 +106,7 @@ angular.module('risevision.storage.services')
             return file.name;
           });
 
-          selectedFiles.forEach(function (file) {
-            pendingOperationsSvc.addPendingOperation(file, action);
-          });
+          pendingOperationsSvc.addPendingOperations(selectedFiles, action);
 
           filesFactory.removeFiles(selectedFiles);
           filesFactory.resetSelections();
