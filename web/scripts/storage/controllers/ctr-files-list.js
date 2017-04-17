@@ -102,7 +102,7 @@ angular.module('risevision.storage.controllers')
       };
 
       $scope.fileNameOrderFunction = function (file) {
-        return file.name.replace('--TRASH--/', trashLabel).toLowerCase();
+        return file.name.replace('--TRASH--/', trashLabel).toLowerCase().split(" (").join("/(");
       };
 
       $scope.orderByAttribute = $scope.fileNameOrderFunction;
