@@ -10,6 +10,7 @@ angular.module('risevision.storage.services')
       factory.addPendingOperation = function (file, action) {
         if(!findByFileName(file.name)) {
           file.action = action;
+          file.actionFailed = false;
 
           factory.pendingOperations.push(file);
         }
@@ -45,6 +46,14 @@ angular.module('risevision.storage.services')
         return factory.pendingOperations.filter(function (op) {
           return !op.actionFailed;
         });
+      };
+
+      factory.markPendingOperationFailed = function (file) {
+        var existing = findByFileName(file.name);
+
+        if(existing) {
+          file.actionFailed = true;
+        }
       };
 
       function findByFileName(fileName) {

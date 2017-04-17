@@ -132,7 +132,7 @@ angular.module('risevision.storage.services')
                   });
                 }
                 selectedFiles.forEach(function (file) {
-                  file.actionFailed = true;
+                  pendingOperationsFactory.markPendingOperationFailed(file);
 
                   filesFactory.filesDetails.files.push(file);
                 });
@@ -193,6 +193,8 @@ angular.module('risevision.storage.services')
           return storage.duplicate(sourceObject.name)
             .then(function (resp) {
               if (resp.code !== 200) {
+                pendingOperationsFactory.markPendingOperationFailed(sourceObject);
+
                 return resp;
               } else {
                 newObject.name = resp.message;
