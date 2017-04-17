@@ -278,7 +278,9 @@ angular.module('risevision.storage.services')
         };
 
         factory.duplicateButtonClick = function () {
-          return factory.duplicateObject(filesFactory.getSelectedFiles()[0]);
+          return $q.all(filesFactory.getSelectedFiles().map(function(file) {
+            return factory.duplicateObject(file);
+          }));
         };
 
         return factory;
