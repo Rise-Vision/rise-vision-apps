@@ -34,7 +34,7 @@ angular.module('risevision.storage.controllers')
 
               } else if (resp.code === 403 && resp.message.indexOf(
                   'restricted-role') === -1) {
-                $translate('storage-client.' + resp.message, {
+                $translate('storage-client.error.' + resp.message, {
                   username: resp.userEmail
                 }).then(function (msg) {
                   $scope.accessDenied = true;

@@ -96,7 +96,7 @@ angular.module('risevision.storage.services')
           }
         };
 
-        var _handleOperationResponse = function (resp) {
+        var _handleOperationResponse = function (resp, action) {
           var deferred = $q.defer();
 
           if (!resp.result) {
@@ -104,12 +104,13 @@ angular.module('risevision.storage.services')
 
             if (resp.code === 403 && resp.message.indexOf(
                 'restricted-role') >= 0) {
-              $translate('storage-client.access-denied')
+              $translate('storage-client.error.access-denied')
                 .then(function (msg) {
                   pendingOperationsFactory.statusDetails.message = msg;
                 });
             } else {
-              $translate('storage-client.' + resp.message, {
+              var key = (action ? action + '.' : '') + resp.message;
+              $translate('storage-client.error.' + key, {
                 username: resp.userEmail
               }).then(function (msg) {
                 pendingOperationsFactory.statusDetails.message = msg;
@@ -224,9 +225,8 @@ angular.module('risevision.storage.services')
             });
         };
 
-        var _showBreakLinkWarning = function (action) {
+        var _showBreakLinkWarning = function () {
           var localStorageKey = 'breakingLinkWarning.hideWarning';
-          var prefix = 'storage-client.' + action + '.';
           var hideWarning = localStorageService.get(localStorageKey) ===
             'true';
 
@@ -240,19 +240,10 @@ angular.module('risevision.storage.services')
             size: 'md',
             resolve: {
               infoLine1Key: function () {
-                return prefix + 'breaking-link1';
+                return 'storage-client.breaking-link-warning.text1';
               },
               infoLine2Key: function () {
-                return prefix + 'breaking-link2';
-              },
-              warningKey: function () {
-                return prefix + 'breaking-link-hide-warning';
-              },
-              confirmKey: function () {
-                return 'common.ok';
-              },
-              cancelKey: function () {
-                return 'common.cancel';
+                return 'storage-client.breaking-link-warning.text2';
               },
               localStorageKey: function () {
                 return localStorageKey;
@@ -262,7 +253,7 @@ angular.module('risevision.storage.services')
         };
 
         factory.renameButtonClick = function (sourceName) {
-          return _showBreakLinkWarning('rename').then(function () {
+          return _showBreakLinkWarning().then(function () {
             var renameModal = $modal.open({
               templateUrl: 'partials/storage/rename-modal.html',
               controller: 'RenameModalCtrl',
@@ -298,7 +289,7 @@ angular.module('risevision.storage.services')
 
           storage.rename(sourceObject.name, renameName)
             .then(function (resp) {
-              return _handleOperationResponse(resp);
+              return _handleOperationResponse(resp, 'move');
             })
             .then(function () {
               filesFactory.removeFiles([sourceObject]);
@@ -316,7 +307,7 @@ angular.module('risevision.storage.services')
         };
 
         factory.moveButtonClick = function () {
-          return _showBreakLinkWarning('move').then(function () {
+          return _showBreakLinkWarning().then(function () {
             var modalInstance = $modal.open({
               templateUrl: 'partials/storage/folder-selector-modal.html',
               controller: 'FolderSelectorModalController',

@@ -2,7 +2,7 @@
     <div class="panel panel-info animated fadeInDown">
       <div class="panel-heading" ng-click="factory.isPOCollapsed = !factory.isPOCollapsed">
         <h3 class="panel-title">
-          <span ng-hide="factory.pendingOperations[0].actionFailed">{{'storage-client.pending-' + factory.pendingOperations[0].action | translate}}...</span>
+          <span ng-hide="factory.pendingOperations[0].actionFailed">{{'storage-client.pending-operation.' + factory.pendingOperations[0].action | translate}}...</span>
           <span ng-hide="!factory.pendingOperations[0].actionFailed">{{factory.statusDetails.message}}</span>
           <span class="collapse-control"><i class="fa" ng-class="{false: 'fa-chevron-up', true:'fa-chevron-down'}[!factory.isPOCollapsed]"></i></span>
         </h3>
@@ -11,8 +11,8 @@
         <table class="table">
           <tbody>
             <tr ng-repeat="item in factory.pendingOperations">
-              <td ng-show="!item.actionFailed">{{'storage-client.pending-' + item.action | translate}}</td>
-              <td ng-show="item.actionFailed">{{'storage-client.failed-' + item.action | translate}}</td>
+              <td ng-show="!item.actionFailed">{{'storage-client.pending-operation.' + item.action | translate}}</td>
+              <td ng-show="item.actionFailed">{{'storage-client.pending-operation.failed.' + item.action | translate}}</td>
               <td>{{item.name | trashItemFilter}}</td>
               <td>
                 <span class="text-danger" ng-click="factory.removePendingOperation(item)">

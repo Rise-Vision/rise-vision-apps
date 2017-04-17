@@ -8,7 +8,7 @@
    class="no-select" 
    ng-class="gridItemClasses"
    ng-if="storageFactory.storageFull || !storageUtils.fileIsTrash(file)" 
-   title="{{file.name | fileNameFilter:filesFactory.folderPath}}{{ file.isThrottled? ' - '+('storage-client.blocked-file' | translate) : '' }}" data-toggle="tooltip" data-placement="top" tooltip> 
+   title="{{file.name | fileNameFilter:filesFactory.folderPath}}{{ file.isThrottled? ' - '+('storage-client.error.blocked-file' | translate) : '' }}" data-toggle="tooltip" data-placement="top" tooltip> 
     <svg-icon ng-if="isSvg" p="{{imgSrc}}"></svg-icon>
     <img ng-if="!isSvg" class="{{imgClasses}}" ng-src="{{imgSrc}}"/>
     <input ng-if="storageFactory.canSelect(file)" type="checkbox" ng-checked="file.isChecked" ng-click="fileClick(file)"  onclick="event.stopPropagation();" class="checkbox" />

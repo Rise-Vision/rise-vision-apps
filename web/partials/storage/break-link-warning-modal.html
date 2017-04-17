@@ -3,7 +3,7 @@
     <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-hidden="true">
       <i class="fa fa-times"></i>
     </button>
-    <h3 class="modal-title" translate>storage-client.rename.warning</h3>
+    <h3 class="modal-title" translate="common.warning.title"></h3>
   </div>
   <div class="modal-body" stop-event="touchend" autofocus="autofocus">
     <div>
@@ -16,15 +16,15 @@
       <div class="checkbox text-left">
         <label>
           <input type="checkbox" ng-model="hideWarning">
-          <span translate>{{ warningKey }}</span>
+          <span translate="common.warning.hide-warning">{{ warningKey }}</span>
         </label>
       </div>
     </div>
     <button id="renameFileFolderModalSaveButton" class="btn btn-primary" ng-click="ok()">
-      <span translate>{{ confirmKey }}</span> <i class="fa fa-white fa-check icon-right"></i>
+      <span translate="common.ok"></span> <i class="fa fa-white fa-check icon-right"></i>
     </button>
     <button id="renameFileFolderModalCancelButton" class="btn btn-default" ng-click="cancel()">
-      <span translate>{{ cancelKey }}</span> <i class="fa fa-white fa-times icon-right"></i>
+      <span translate="common.cancel"></span> <i class="fa fa-white fa-times icon-right"></i>
     </button>
   </div>
 </div>

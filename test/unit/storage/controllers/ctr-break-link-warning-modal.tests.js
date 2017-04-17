@@ -36,9 +36,6 @@ describe('controller: BreakLinkWarningModalCtrl', function() {
         localStorageService: localStorageService,
         infoLine1Key: '',
         infoLine2Key: '',
-        warningKey: '',
-        confirmKey: '',
-        cancelKey: '',
         localStorageKey: 'breakingLinkWarning.hideWarning'
       });
 

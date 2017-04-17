@@ -10,16 +10,16 @@
       <input id="newFolderInput" type="text" class="form-control" ng-model="folderName" placeholder="Enter Folder Name" ng-focus="duplicateFolderSpecified=false" focus-me="true">
       <br>
       <div ng-show="duplicateFolderSpecified">
-        <div class="alert alert-danger" role="alert">{{"storage-client.duplicate-folder" | translate}}</div>
+        <div class="alert alert-danger" role="alert">{{"storage-client.error.duplicate-folder" | translate}}</div>
       </div>
       <div ng-show="accessDenied && accessDeniedMessage">
         <div class="alert alert-danger" role="alert">{{accessDeniedMessage}}</div>
       </div>
       <div ng-show="accessDenied && !accessDeniedMessage">
-        <div class="alert alert-danger" role="alert">{{"storage-client.access-denied" | translate}}</div>
+        <div class="alert alert-danger" role="alert">{{"storage-client.error.access-denied" | translate}}</div>
       </div>
       <div ng-show="serverError">
-        <div class="alert alert-danger" role="alert">{{"storage-client.server-error" | translate}} {{respCode}}</div>
+        <div class="alert alert-danger" role="alert">{{"storage-client.error.server-error" | translate}} {{respCode}}</div>
       </div>
     </div>
   </div>

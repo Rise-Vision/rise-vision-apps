@@ -20,7 +20,7 @@
             $scope.fileListStatus = $scope.filesFactory.statusDetails;
             $scope.leavePageMessage = '';
 
-            $translate('storage-client.pending-ops-leave-page').then(
+            $translate('storage-client.pending-operation.leave-page').then(
               function (value) {
                 $scope.leavePageMessage = value;
               });

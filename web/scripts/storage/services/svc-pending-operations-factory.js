@@ -10,8 +10,20 @@ angular.module('risevision.storage.services')
         code: 200,
         message: ''
       };
+      
+      var _clearFailedOperations = function() {
+        for (var i = factory.pendingOperations.length - 1; i >= 0; i--) {
+          if (factory.pendingOperations[i].actionFailed) {
+            factory.pendingOperations[i].actionFailed = false;
+
+            factory.pendingOperations.splice(i, 1);
+          }
+        }
+      };
 
       factory.addPendingOperation = function (file, action) {
+        _clearFailedOperations();
+
         if (!findByFileName(file.name)) {
           file.action = action;
           file.actionFailed = false;
@@ -32,6 +44,8 @@ angular.module('risevision.storage.services')
           existing) : -1;
 
         if (position >= 0) {
+          factory.pendingOperations[position].actionFailed = false;
+
           factory.pendingOperations.splice(position, 1);
         }
       };

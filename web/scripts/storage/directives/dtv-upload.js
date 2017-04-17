@@ -121,7 +121,7 @@
               if (item.isCancel) {
                 return;
               } else if (!item.isSuccess) {
-                $translate('storage-client.upload-failed').then(
+                $translate('storage-client.error.upload-failed').then(
                   function (msg) {
                     $scope.status.message = msg;
                   });

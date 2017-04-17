@@ -382,7 +382,7 @@ describe('service: fileActionsFactory', function() {
         expect($modal.open.getCall(0).args[0].templateUrl).to.equal('partials/storage/break-link-warning-modal.html');
         expect($modal.open.getCall(0).args[0].controller).to.equal('BreakLinkWarningModalCtrl');
         expect($modal.open.getCall(0).args[0].resolve).to.be.ok;
-        expect($modal.open.getCall(0).args[0].resolve.infoLine1Key()).to.equal('storage-client.rename.breaking-link1');
+        expect($modal.open.getCall(0).args[0].resolve.infoLine1Key()).to.equal('storage-client.breaking-link-warning.text1');
         
         done();
       }, 10);
@@ -511,7 +511,7 @@ describe('service: fileActionsFactory', function() {
         expect($modal.open.getCall(0).args[0].templateUrl).to.equal('partials/storage/break-link-warning-modal.html');
         expect($modal.open.getCall(0).args[0].controller).to.equal('BreakLinkWarningModalCtrl');
         expect($modal.open.getCall(0).args[0].resolve).to.be.ok;
-        expect($modal.open.getCall(0).args[0].resolve.infoLine1Key()).to.equal('storage-client.move.breaking-link1');
+        expect($modal.open.getCall(0).args[0].resolve.infoLine1Key()).to.equal('storage-client.breaking-link-warning.text1');
         
         done();
       }, 10);
