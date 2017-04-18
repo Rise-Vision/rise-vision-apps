@@ -64,6 +64,8 @@ var unitTestFiles = [
   "test/unit/**/*.tests.js"
 ];
 
+var commonStyleLink = fs.realpathSync('web/bower_components/rv-common-style') + '/**/*.js';
+
 //------------------------- Browser Sync --------------------------------
 
 gulp.task('browser-sync', function() {
@@ -122,7 +124,7 @@ gulp.task('bower-clean-install', ['bower-rm', 'bower-install']);
  */
 gulp.task('watch', function () {
   gulp.watch(partialsHTMLFiles, ['html2js']);
-  gulp.watch(['./tmp/partials.js', './web/scripts/**/*.js', './web/bower_components/rv-common-style/**/*', './web/index.html'], ['browser-sync-reload']);
+  gulp.watch(['./tmp/partials.js', './web/scripts/**/*.js', commonStyleLink, './web/index.html'], ['browser-sync-reload']);
   gulp.watch(unitTestFiles, ['test:unit']);
 });
 
