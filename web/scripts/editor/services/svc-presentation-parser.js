@@ -5,7 +5,7 @@ angular.module('risevision.editor.services')
     'id', 'hidePointer', 'donePlaceholder', 'embeddedIds'
   ])
   .constant('SUPPORTED_PLACEHOLDER_ITEMS', [
-    'widget'
+    'widget', 'presentation'
   ])
   .constant('PLACEHOLDER_JSON_FIELDS', [
     'id', 'type', 'timeDefined', 'startDate',

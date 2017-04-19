@@ -48,6 +48,53 @@ describe('service: PresentationParser ', function() {
     </script> \
   <!-- No scripts after this point --> \
   </html>';
+  
+  var presentationHtmlPresentationItem = '\
+  <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"> \
+  <html> \
+    <head> \
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8"> \
+    </head> \
+    \
+    <body style="width:1920px;height:1080px; margin: 0; overflow: hidden;" > \
+    <div  id="image_Logo" placeholder="true" style="width:842px;height:134px;left:34px;top:60px;z-index:0;position:absolute;"></div> \
+    </body> \
+    \
+  <!-- Warning - Editing the Presentation Data Object incorrectly may result in the Presentation not functioning correctly --> \
+    <script language="javascript"> \
+    <!-- \
+    var presentationData = {\
+          "presentationData": {\
+            "id": "c66fc03d-5047-4c74-9c51-0d135353957f",\
+            "hidePointer": "true",\
+            "donePlaceholder": "image_Logo",\
+            "embeddedIds": ["123"],\
+            "placeholders": [\
+              {\
+                "id": "image_Logo",\
+                "type": "playlist",\
+                "timeDefined": "false",\
+                "visibility": "true", \
+                "transition": "none", \
+                "items": [ \
+                  { \
+                    "name": "Presentation Item", \
+                    "duration": 10, \
+                    "type": "presentation", \
+                    "objectReference": null, \
+                    "index": 0, \
+                    "playUntilDone": false, \
+                    "objectData": "d111298f-05d1-4cf5-a80b-ed087cf7fd78", \
+                  } \
+                ] \
+              } \
+            ] \
+          } \
+        }; \
+    //--> \
+    </script> \
+  <!-- No scripts after this point --> \
+  </html>';
 
   var presentationHtmlLegacyItems = '\
   <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"> \
@@ -228,20 +275,39 @@ describe('service: PresentationParser ', function() {
     expect(result).to.be.false;
   });
 
-  it('parsePresentationData, cleanPlaceholderData and flag legacy items', function() {
-    var presentationObj = {
-      layout: presentationHtmlLegacyItems
-    };
+  describe('Flag legacy items', function() {
+    it('should not flag widgets as legacy items', function() {
+      var presentationObj = {
+        layout: presentationHtml
+      };
 
-    presentationParser.parsePresentationData(presentationObj);
+      presentationParser.parsePresentationData(presentationObj);
+      
+      expect(presentationParser.hasLegacyItems).to.not.be.true;
+      expect(presentationObj).to.be.ok;
+    });
     
-    expect(presentationParser.hasLegacyItems).to.be.true;
-    expect(presentationObj).to.be.ok;
-    expect(presentationObj.donePlaceholder).to.equal('image_Logo');
-    expect(presentationObj.hidePointer).to.be.true;
-    expect(presentationObj.placeholders).to.be.a('array');
-    expect(presentationObj.placeholders[0].id).to.equal('image_Logo');
-    expect(presentationObj.placeholders[0].visibility).to.be.true;
+    it('should not flag presentations as legacy items', function() {
+      var presentationObj = {
+        layout: presentationHtmlPresentationItem
+      };
+
+      presentationParser.parsePresentationData(presentationObj);
+      
+      expect(presentationParser.hasLegacyItems).to.not.be.true;
+      expect(presentationObj).to.be.ok;
+    });
+
+    it('should flag legacy items', function() {
+      var presentationObj = {
+        layout: presentationHtmlLegacyItems
+      };
+
+      presentationParser.parsePresentationData(presentationObj);
+      
+      expect(presentationParser.hasLegacyItems).to.be.true;
+      expect(presentationObj).to.be.ok;
+    });    
   });
   
   describe('parseStyle: ', function() {
