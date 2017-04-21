@@ -90,7 +90,7 @@ angular.module('risevision.displays.controllers')
 
       $scope.save = function () {
         if (!$scope.displayDetails.$valid) {
-          $log.info('form not valid: ', $scope.displayDetails.$error);
+          console.info('form not valid: ', $scope.displayDetails.$error);
 
           return $q.reject();
         } else {

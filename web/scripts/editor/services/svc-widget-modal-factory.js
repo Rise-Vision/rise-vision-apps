@@ -154,7 +154,7 @@ angular.module('risevision.editor.services')
             }
           }
 
-          $log.info('Widget saved:', widgetData);
+          console.info('Widget saved:', widgetData);
 
         }, function () {
           // for unit test purposes

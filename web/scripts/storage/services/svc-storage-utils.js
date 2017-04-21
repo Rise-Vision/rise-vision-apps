@@ -78,7 +78,7 @@ angular.module('risevision.storage.services')
         });
 
         modalInstance.result.then(function (files) {
-          $log.info('Files selected: ' + files);
+          console.info('Files selected: ' + files);
 
           deferred.resolve(files);
         }, function () {
