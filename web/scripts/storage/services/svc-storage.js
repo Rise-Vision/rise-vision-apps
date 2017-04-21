@@ -33,7 +33,7 @@ angular.module('risevision.storage.services')
                 deferred.resolve(resp.result);
               })
               .then(null, function (e) {
-                $log.error('Failed to get storage files', e);
+                console.error('Failed to get storage files', e);
                 deferred.reject(e);
               });
 
@@ -58,7 +58,7 @@ angular.module('risevision.storage.services')
                 deferred.resolve(resp.result);
               })
               .then(null, function (e) {
-                $log.error('Failed to delete files', e);
+                console.error('Failed to delete files', e);
                 deferred.reject(e);
               });
 
@@ -85,7 +85,7 @@ angular.module('risevision.storage.services')
                 deferred.resolve(resp.result);
               })
               .then(null, function (e) {
-                $log.error('Failed to move files to trash', e);
+                console.error('Failed to move files to trash', e);
                 deferred.reject(e);
               });
 
@@ -110,7 +110,7 @@ angular.module('risevision.storage.services')
                 deferred.resolve(resp.result);
               })
               .then(null, function (e) {
-                $log.error('Failed to restore files from trash', e);
+                console.error('Failed to restore files from trash', e);
                 deferred.reject(e);
               });
 
@@ -138,7 +138,7 @@ angular.module('risevision.storage.services')
               deferred.resolve(resp.result);
             })
             .then(null, function (e) {
-              $log.error('Failed to start trial', e);
+              console.error('Failed to start trial', e);
               deferred.reject(e);
             });
 
@@ -164,7 +164,7 @@ angular.module('risevision.storage.services')
               deferred.resolve(resp.result);
             })
             .then(null, function (e) {
-              $log.error('Failed to create folder', e);
+              console.error('Failed to create folder', e);
               deferred.reject(e);
             });
 
@@ -190,7 +190,7 @@ angular.module('risevision.storage.services')
               deferred.resolve(resp.result);
             })
             .then(null, function (e) {
-              $log.error('Failed to retrieve folder contents', e);
+              console.error('Failed to retrieve folder contents', e);
               deferred.reject(e);
             });
 
@@ -218,7 +218,7 @@ angular.module('risevision.storage.services')
               deferred.resolve(resp.result);
             })
             .then(null, function (e) {
-              $log.error('Error getting resumable upload URI', e);
+              console.error('Error getting resumable upload URI', e);
               deferred.reject(e);
             });
 
@@ -245,7 +245,7 @@ angular.module('risevision.storage.services')
               deferred.resolve(resp.result);
             })
             .then(null, function (e) {
-              $log.error('Error getting signed download URI', e);
+              console.error('Error getting signed download URI', e);
               deferred.reject(e);
             });
 
@@ -271,7 +271,7 @@ angular.module('risevision.storage.services')
               deferred.resolve(resp.result);
             })
             .then(null, function (e) {
-              $log.error('Error notifying GCM Targets Changed', e);
+              console.error('Error notifying GCM Targets Changed', e);
               deferred.reject(e);
             });
 
@@ -304,7 +304,7 @@ angular.module('risevision.storage.services')
                 deferred.resolve(resp.result);
               })
               .then(null, function (e) {
-                $log.error('Failed to rename storage objects', e);
+                console.error('Failed to rename storage objects', e);
                 deferred.reject(e);
               });
           }
@@ -331,7 +331,7 @@ angular.module('risevision.storage.services')
               deferred.resolve(resp.result);
             })
             .then(null, function (e) {
-              $log.error('Failed to duplicate storage objects', e);
+              console.error('Failed to duplicate storage objects', e);
               deferred.reject(e);
             });
 

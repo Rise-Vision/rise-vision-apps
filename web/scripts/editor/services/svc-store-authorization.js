@@ -23,7 +23,7 @@ angular.module('risevision.editor.services')
             deferred.reject(false);
           }
         }, function (e) {
-          $log.error('Failed to check store authorization.', e);
+          console.error('Failed to check store authorization.', e);
           deferred.reject(e);
         });
 

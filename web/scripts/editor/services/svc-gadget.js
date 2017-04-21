@@ -67,7 +67,7 @@ angular.module('risevision.editor.services')
               deferred.resolve(resp.result);
             })
             .then(null, function (e) {
-              $log.error('Failed to get list of gadgets.', e);
+              console.error('Failed to get list of gadgets.', e);
               deferred.reject(e);
             });
 
@@ -89,7 +89,7 @@ angular.module('risevision.editor.services')
               deferred.resolve(resp.result);
             })
             .then(null, function (e) {
-              $log.error('Failed to get gadget.', e);
+              console.error('Failed to get gadget.', e);
               deferred.reject(e);
             });
 

@@ -82,7 +82,7 @@
             }
 
             function onFailure(e) {
-              $log.error('Failed to get list of displays.', e);
+              console.error('Failed to get list of displays.', e);
               deferred.reject(e);
             }
           },
@@ -113,7 +113,7 @@
                 }
               })
               .then(null, function (e) {
-                $log.error('Failed to get display.', e);
+                console.error('Failed to get display.', e);
                 deferred.reject(e);
               });
 
@@ -136,7 +136,7 @@
                 deferred.resolve(resp.result);
               })
               .then(null, function (e) {
-                $log.error('Failed to add display.', e);
+                console.error('Failed to add display.', e);
                 deferred.reject(e);
               });
             return deferred.promise;
@@ -160,7 +160,7 @@
                 deferred.resolve(resp.result);
               })
               .then(null, function (e) {
-                $log.error('Failed to update display.', e);
+                console.error('Failed to update display.', e);
                 deferred.reject(e);
               });
 
@@ -182,7 +182,7 @@
                 deferred.resolve(resp);
               })
               .then(null, function (e) {
-                $log.error('Failed to delete display.', e);
+                console.error('Failed to delete display.', e);
                 deferred.reject(e);
               });
 
@@ -204,7 +204,7 @@
                 deferred.resolve(resp);
               })
               .then(null, function (e) {
-                $log.error('Failed to restart display.', e);
+                console.error('Failed to restart display.', e);
                 deferred.reject(e);
               });
 
@@ -226,7 +226,7 @@
                 deferred.resolve(resp);
               })
               .then(null, function (e) {
-                $log.error('Failed to reboot display.', e);
+                console.error('Failed to reboot display.', e);
                 deferred.reject(e);
               });
 
@@ -252,7 +252,7 @@
                 return resp;
               })
               .then(null, function (e) {
-                $log.error('Failed screenshot request', e);
+                console.error('Failed screenshot request', e);
                 return $q.reject(e);
               });
           },

@@ -43,7 +43,7 @@ angular.module('risevision.editor.services')
               deferred.resolve(resp.result);
             })
             .then(null, function (e) {
-              $log.error('Failed to get list of templates.', e);
+              console.error('Failed to get list of templates.', e);
               deferred.reject(e);
             });
 

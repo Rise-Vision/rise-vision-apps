@@ -75,7 +75,7 @@ angular.module('risevision.editor.services')
               }
             })
             .then(null, function (e) {
-              $log.error('Failed to get status of products.', e);
+              console.error('Failed to get status of products.', e);
               deferred.reject(e);
             });
         }

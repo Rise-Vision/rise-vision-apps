@@ -187,7 +187,7 @@ angular.module('risevision.displays.services')
         }, function (error) {
           factory.savingAlerts = false;
           factory.errorSaving = true;
-          $log.error('Error updating Alerts', error);
+          console.error('Error updating Alerts', error);
         });
       };
 
@@ -196,7 +196,7 @@ angular.module('risevision.displays.services')
           result) {
           factory.alertKey = result.item;
         }, function (error) {
-          $log.error('Error regenerating alertKey', error);
+          console.error('Error regenerating alertKey', error);
         });
       };
 

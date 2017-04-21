@@ -16,7 +16,7 @@ angular.module('risevision.schedules.controllers')
 
       $scope.save = function () {
         if (!$scope.scheduleDetails.$valid) {
-          $log.error('form not valid: ', $scope.scheduleDetails.errors);
+          console.error('form not valid: ', $scope.scheduleDetails.errors);
           return;
         }
 

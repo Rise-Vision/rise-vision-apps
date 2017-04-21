@@ -97,7 +97,7 @@ angular.module('risevision.storage.services')
             });
           })
           .then(null, function (e) {
-            $log.error('Failed to download folder', e);
+            console.error('Failed to download folder', e);
 
             svc.activeFolderDownloads.splice(svc.activeFolderDownloads
               .indexOf(folder), 1);

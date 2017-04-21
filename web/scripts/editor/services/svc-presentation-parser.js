@@ -212,7 +212,7 @@ angular.module('risevision.editor.services')
             try {
               dataObject = JSON.parse(json);
             } catch (err) {
-              $log.error('parse presentation error', err);
+              console.error('parse presentation error', err);
               return {
                 valid: false
               };

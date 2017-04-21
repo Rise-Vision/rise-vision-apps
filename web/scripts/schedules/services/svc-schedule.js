@@ -52,7 +52,7 @@ angular.module('risevision.schedules.services')
               deferred.resolve(resp.result);
             })
             .then(null, function (e) {
-              $log.error('Failed to get list of schedules.', e);
+              console.error('Failed to get list of schedules.', e);
               deferred.reject(e);
             });
 
@@ -74,7 +74,7 @@ angular.module('risevision.schedules.services')
               deferred.resolve(resp.result);
             })
             .then(null, function (e) {
-              $log.error('Failed to get schedule.', e);
+              console.error('Failed to get schedule.', e);
               deferred.reject(e);
             });
 
@@ -97,7 +97,7 @@ angular.module('risevision.schedules.services')
               deferred.resolve(resp.result);
             })
             .then(null, function (e) {
-              $log.error('Failed to add schedule.', e);
+              console.error('Failed to add schedule.', e);
               deferred.reject(e);
             });
           return deferred.promise;
@@ -121,7 +121,7 @@ angular.module('risevision.schedules.services')
               deferred.resolve(resp.result);
             })
             .then(null, function (e) {
-              $log.error('Failed to update schedule.', e);
+              console.error('Failed to update schedule.', e);
               deferred.reject(e);
             });
 
@@ -143,7 +143,7 @@ angular.module('risevision.schedules.services')
               deferred.resolve(resp);
             })
             .then(null, function (e) {
-              $log.error('Failed to delete schedule.', e);
+              console.error('Failed to delete schedule.', e);
               deferred.reject(e);
             });
 

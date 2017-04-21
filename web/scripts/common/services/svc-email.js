@@ -28,7 +28,7 @@ angular.module('risevision.apps.services')
               deferred.resolve(resp.result);
             })
             .then(null, function (e) {
-              $log.error('Failed to send email.', e);
+              console.error('Failed to send email.', e);
               deferred.reject(e);
             });
           return deferred.promise;
