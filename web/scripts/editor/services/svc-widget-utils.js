@@ -48,6 +48,13 @@ angular.module('risevision.editor.services')
         PROD: 'df887785-3614-4f05-86c7-fce07b8745dc',
         TEST: 'aab933d7-ec65-499d-8c6f-e0081b8ea2ee'
       }
+    },
+    PRESENTATION: {
+      svgIcon: 'iconPresentation',
+      iconClass: 'ph-embedded-item',
+      ids: {
+        PROD: 'presentation'
+      }
     }
   })
   .factory('widgetUtils', ['WIDGETS_INFO', 'APPS_ENV',
@@ -83,6 +90,16 @@ angular.module('risevision.editor.services')
       };
 
       _init();
+      
+      var _getWidgetId = function (item) {
+        if (item && item.type === 'presentation') {
+          return item.type;
+        } else if (item) {
+          return item.objectReference;
+        } else {
+          return '';
+        }
+      };
 
       factory.isRenderingAllowed = function (widgetId) {
         for (var i = 0; i < RENDER_WIDGETS.length; i++) {
@@ -102,7 +119,8 @@ angular.module('risevision.editor.services')
         return false;
       };
 
-      factory.getIconClass = function (widgetId) {
+      factory.getIconClass = function (item) {
+        var widgetId = _getWidgetId(item);
         if (ICON_CLASSES[widgetId]) {
           return 'ph-item-icon ' + ICON_CLASSES[widgetId];
         } else {
@@ -110,7 +128,8 @@ angular.module('risevision.editor.services')
         }
       };
 
-      factory.getSvgIcon = function (widgetId) {
+      factory.getSvgIcon = function (item) {
+        var widgetId = _getWidgetId(item);
         if (SVG_ICONS[widgetId]) {
           return SVG_ICONS[widgetId];
         } else {

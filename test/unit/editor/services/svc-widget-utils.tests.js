@@ -3,7 +3,9 @@ describe('service: widgetUtils:', function() {
   beforeEach(module('risevision.editor.services'));
 
   var widgetUtils, WIDGETS_INFO;
-  beforeEach(function(){  
+  var item;
+  beforeEach(function(){
+    item = {};
     inject(function($injector){
       widgetUtils = $injector.get('widgetUtils');
       WIDGETS_INFO = $injector.get('WIDGETS_INFO');
@@ -32,15 +34,27 @@ describe('service: widgetUtils:', function() {
   });
   
   it('getIconClass: ', function() {
-    expect(widgetUtils.getIconClass(WIDGETS_INFO.VIDEO.ids.PROD)).to.equal('ph-item-icon ph-video-item');    
-    expect(widgetUtils.getIconClass(WIDGETS_INFO.WEB_PAGE.ids.PROD)).to.equal('ph-item-icon');
-    expect(widgetUtils.getIconClass('1234')).to.equal('ph-item-icon');
+    item.objectReference = WIDGETS_INFO.VIDEO.ids.PROD;
+    expect(widgetUtils.getIconClass(item)).to.equal('ph-item-icon ph-video-item');    
+    item.objectReference = WIDGETS_INFO.WEB_PAGE.ids.PROD;
+    expect(widgetUtils.getIconClass(item)).to.equal('ph-item-icon');
+    item.objectReference = '1234';
+    expect(widgetUtils.getIconClass(item)).to.equal('ph-item-icon');
+    expect(widgetUtils.getIconClass()).to.equal('ph-item-icon');
+    item.type = 'presentation';
+    expect(widgetUtils.getIconClass(item)).to.equal('ph-item-icon ph-embedded-item');
   });
   
   it('getSvgIcon: ', function() {
-    expect(widgetUtils.getSvgIcon(WIDGETS_INFO.VIDEO.ids.PROD)).to.equal('riseWidgetVideo');    
-    expect(widgetUtils.getSvgIcon(WIDGETS_INFO.WEB_PAGE.ids.PROD)).to.equal('riseWidgetMore');
-    expect(widgetUtils.getSvgIcon('1234')).to.equal('riseWidgetMore');
+    item.objectReference = WIDGETS_INFO.VIDEO.ids.PROD;
+    expect(widgetUtils.getSvgIcon(item)).to.equal('riseWidgetVideo');    
+    item.objectReference = WIDGETS_INFO.WEB_PAGE.ids.PROD;
+    expect(widgetUtils.getSvgIcon(item)).to.equal('riseWidgetMore');
+    item.objectReference = '1234';
+    expect(widgetUtils.getSvgIcon(item)).to.equal('riseWidgetMore');
+    expect(widgetUtils.getSvgIcon()).to.equal('riseWidgetMore');
+    item.type = 'presentation';
+    expect(widgetUtils.getSvgIcon(item)).to.equal('iconPresentation');
   });
 
   it('getWidgetId: ', function() {

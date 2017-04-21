@@ -31,9 +31,7 @@ angular.module('risevision.editor.services')
         placeholder.className = '';
 
         if (placeholder.items && placeholder.items[0]) {
-          var objectReference = placeholder.items[0].objectReference;
-
-          placeholder.className = widgetUtils.getIconClass(objectReference);
+          placeholder.className = widgetUtils.getIconClass(placeholder.items[0]);
         }
       };
 

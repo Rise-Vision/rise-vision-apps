@@ -33,15 +33,14 @@
     </div>
 
     <div class="name-container">
-      <p ng-click="widgetModalFactory.showWidgetModal(item)" ng-show="item.type === 'widget' && (item.objectReference || item.settingsUrl)">
+      <p ng-click="showSettingsModal(item)" ng-if="isEditable(item)">
         <span>
-          <svg-icon p="{{widgetUtils.getSvgIcon(item.objectReference)}}"></svg-icon>
+          <svg-icon p="{{widgetUtils.getSvgIcon(item)}}"></svg-icon>
         </span>
         <span class="playlist-item-name">{{item.name}}</span>
       </p>
-      <p class="playlist-item-name" ng-hide="item.type === 'widget' && (item.objectReference || item.settingsUrl)">{{item.name}}</p>
+      <p class="playlist-item-name" ng-if="!isEditable(item)">{{item.name}}</p>
       <p>
-
         <span class="text-small text-muted u_remove-bottom" ng-if="item.statusMessage !== 'Free' && item.statusMessage !== 'Subscribed'">
           <span class="playlist-item-status" ng-click="playlistItemFactory.edit(item)">{{item.statusMessage}}</span>
         </span>

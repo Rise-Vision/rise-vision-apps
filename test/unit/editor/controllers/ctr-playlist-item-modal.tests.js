@@ -41,7 +41,13 @@ describe('controller: playlist item modal', function() {
 
     $provide.service('widgetModalFactory',function(){
       return {
-        showWidgetModal: function() {}
+        showWidgetModal: sinon.stub()
+      }
+    });
+    
+    $provide.service('presentationItemFactory',function(){
+      return {
+        showSettingsModal: sinon.stub()
       }
     });
 
@@ -127,6 +133,71 @@ describe('controller: playlist item modal', function() {
       $scope.$digest();
       expect($scope.PREVIOUS_EDITOR_URL).to.equal('http://rva.risevision.com' + '/#/PRESENTATION_MANAGE?cid=123456');
     });
+    
+    describe('showSettingsModal: ', function() {
+      var widgetModalFactory, presentationItemFactory;
+      beforeEach(function() {
+        inject(function($injector){
+          widgetModalFactory = $injector.get('widgetModalFactory');
+          presentationItemFactory = $injector.get('presentationItemFactory');
+        });
+      });
+      
+      it('should open widget settings', function() {
+        $scope.showSettingsModal();
+        
+        expect(widgetModalFactory.showWidgetModal).to.have.been.calledWith($scope.item, true);
+      });
+
+      it('should open presentation settings', function() {
+        itemProperties.type = 'presentation';
+        
+        $scope.showSettingsModal();
+        
+        expect(presentationItemFactory.showSettingsModal).to.have.been.calledWith($scope.item, true);
+      });
+
+      it('should not open any modal', function() {
+        itemProperties.type = 'asdf';
+        
+        $scope.showSettingsModal();
+        
+        expect(widgetModalFactory.showWidgetModal).to.not.have.been.called;
+        expect(presentationItemFactory.showSettingsModal).to.not.have.been.called;
+      });
+    })
+  });
+  
+  describe('Presentation Item checks', function () {
+    beforeEach(function(){
+      presentation = {
+        id : ''
+      };
+
+      inject(function($injector,$rootScope, $controller){
+        itemUpdated = null;
+        itemProperties.type = 'presentation';
+        $scope = $rootScope.$new();
+
+        $controller('PlaylistItemModalController', {
+          $scope: $scope,
+          $modalInstance : $modalInstance,
+          item: itemProperties,
+          showWidgetModal: false,
+          editorFactory: $injector.get('editorFactory')
+        });
+        $scope.$digest();
+      });
+    });
+
+    it('should not load widget name for Presentation Item', function(done) {
+      setTimeout(function() {
+        expect($scope.widgetName).to.equal('editor-app.playlistItem.presentation.name');
+
+        done();
+      }, 10);
+    });
+
   });
 
   describe('Gadget checks', function () {

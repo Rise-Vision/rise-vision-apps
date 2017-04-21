@@ -1,18 +1,18 @@
 'use strict';
 
 angular.module('risevision.editor.directives')
-  .directive('placeholderPlaylist', ['placeholderPlaylistFactory',
-    'playlistItemFactory', 'widgetModalFactory', 'widgetUtils', '$modal',
-    '$templateCache', '$filter',
-    function (placeholderPlaylistFactory, playlistItemFactory,
-      widgetModalFactory, widgetUtils, $modal, $templateCache, $filter) {
+  .directive('placeholderPlaylist', ['$modal', '$templateCache', '$filter',
+    'placeholderPlaylistFactory', 'playlistItemFactory', 'widgetModalFactory',
+    'widgetUtils', 'presentationItemFactory',
+    function ($modal, $templateCache, $filter, placeholderPlaylistFactory, 
+      playlistItemFactory, widgetModalFactory, widgetUtils, 
+      presentationItemFactory) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/editor/placeholder-playlist.html',
         link: function ($scope, $elem) {
           $scope.factory = placeholderPlaylistFactory;
-          $scope.widgetModalFactory = widgetModalFactory;
           $scope.widgetUtils = widgetUtils;
           $scope.playlistItemFactory = playlistItemFactory;
 
@@ -61,6 +61,25 @@ angular.module('risevision.editor.directives')
 
             placeholderPlaylistFactory.moveItem(oldIndex, newIndex);
             $scope.$apply();
+          };
+          
+          $scope.showSettingsModal = function (item) {
+            if (item.type === 'widget') {
+              widgetModalFactory.showWidgetModal(item);          
+            } else if (item.type === 'presentation') {
+              presentationItemFactory.showSettingsModal(item);
+            }
+          }
+          
+          $scope.isEditable = function(item) {
+            if (item.type === 'widget' && 
+              (item.objectReference || item.settingsUrl)) {
+              return true;
+            } else if (item.type === 'presentation') {
+              return true;
+            } else {
+              return false;
+            }
           };
         }
       };

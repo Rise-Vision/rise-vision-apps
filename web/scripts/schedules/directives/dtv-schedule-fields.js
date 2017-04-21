@@ -29,10 +29,7 @@ angular.module('risevision.schedules.directives')
           $scope.addPresentationItem = function () {
             var modalInstance = $modal.open({
               templateUrl: 'presentation-selector/presentation-modal.html',
-              controller: 'selectPresentationModal',
-              resolve: {
-                playlistItem: playlistFactory.getNewPresentationItem
-              }
+              controller: 'selectPresentationModal'
             });
 
             modalInstance.result.then(function (presentationDetails) {

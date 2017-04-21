@@ -3,6 +3,7 @@ describe('directive: placeholder-playlist', function() {
   var $compile, $rootScope;
   var testitem = {name: 'testitem'};
   var items = [testitem,{name:'item2'}];
+  var element;
 
   beforeEach(module('risevision.editor.controllers'));
   beforeEach(module('risevision.editor.services'));
@@ -25,7 +26,14 @@ describe('directive: placeholder-playlist', function() {
     });
 
     $provide.service('widgetModalFactory', function() {
-
+      return {
+        showWidgetModal: sinon.stub()
+      }
+    });
+    $provide.service('presentationItemFactory', function() {
+      return {
+        showSettingsModal: sinon.stub()
+      }
     });
     $provide.service('$modal', function() {
       return {
@@ -44,10 +52,12 @@ describe('directive: placeholder-playlist', function() {
     });
   }));
 
-  beforeEach(inject(function(_$compile_, _$rootScope_, $templateCache, placeholderPlaylistFactory){
+  beforeEach(inject(function($compile, _$rootScope_, $templateCache, placeholderPlaylistFactory){
     $templateCache.put('partials/editor/placeholder-playlist.html', '<p>mock</p>');
-    $compile = _$compile_;
     $rootScope = _$rootScope_;
+    
+    element = $compile("<placeholder-playlist></placeholder-playlist>")($rootScope);
+    $rootScope.$digest();
   }));
 
   afterEach(inject(function(placeholderPlaylistFactory) {
@@ -55,21 +65,15 @@ describe('directive: placeholder-playlist', function() {
   }));
 
   it('should replace the element with the appropriate content', function() {
-    var element = $compile("<placeholder-playlist></placeholder-playlist>")($rootScope);
-    $rootScope.$digest();
     expect(element.html()).to.equal('<p>mock</p>');
   });
 
   describe('remove:', function(){
     it('should have remove function in scope', function() {
-      var element = $compile("<placeholder-playlist></placeholder-playlist>")($rootScope);
-      $rootScope.$digest();
       expect(element.scope().remove).to.be.a('function');
     });
 
     it('should open modal and remove item on confirm', function() {
-      var element = $compile("<placeholder-playlist></placeholder-playlist>")($rootScope);
-      $rootScope.$digest();
       element.scope().remove(testitem);
       expect(items).to.not.include(testitem);
     });
@@ -77,15 +81,11 @@ describe('directive: placeholder-playlist', function() {
 
   describe('getDurationTooltip:',function(){
     it('should return Play Until Done for PUD',function(){
-      var element = $compile("<placeholder-playlist></placeholder-playlist>")($rootScope);
-      $rootScope.$digest();
       var item = {playUntilDone: true};
       expect(element.scope().getDurationTooltip(item)).to.be.equal('editor-app.playlistItem.duration: editor-app.playlistItem.playUntilDone');
     });
 
     it('should return Duration in seconds when not PUD',function() {
-      var element = $compile("<placeholder-playlist></placeholder-playlist>")($rootScope);
-      $rootScope.$digest();
       var item = {playUntilDone: false, duration: 33};
       expect(element.scope().getDurationTooltip(item)).to.be.equal('editor-app.playlistItem.duration: 33 editor-app.playlistItem.seconds');
     })
@@ -93,19 +93,55 @@ describe('directive: placeholder-playlist', function() {
 
   describe('sortItem:', function() {
     it('should initialize the function', function() {
-      var element = $compile("<placeholder-playlist></placeholder-playlist>")($rootScope);
-      $rootScope.$digest();
       expect(element.scope().sortItem).to.be.a('function');
     });
 
     it('should call moveItem upon invocation', inject(function(placeholderPlaylistFactory) {
-      var element = $compile("<placeholder-playlist></placeholder-playlist>")($rootScope);
-      $rootScope.$digest();
       expect(placeholderPlaylistFactory.moveItem).not.to.have.been.called;
       element.scope().sortItem({oldIndex: 0, newIndex: 2});
       $rootScope.$digest();
       expect(placeholderPlaylistFactory.moveItem).to.have.been.calledWith(0, 2);
     }));
+  });
+  
+  describe('showSettingsModal: ', function() {
+    var widgetModalFactory, presentationItemFactory;
+    beforeEach(function() {
+      inject(function($injector){
+        widgetModalFactory = $injector.get('widgetModalFactory');
+        presentationItemFactory = $injector.get('presentationItemFactory');
+      });
+    });
+    
+    it('should open widget settings', function() {
+      var item = {type: 'widget'};
+      element.scope().showSettingsModal(item);
+      
+      expect(widgetModalFactory.showWidgetModal).to.have.been.calledWith(item);
+    });
+
+    it('should open presentation settings', function() {
+      var item = {type: 'presentation'};
+      element.scope().showSettingsModal(item);
+      
+      expect(presentationItemFactory.showSettingsModal).to.have.been.calledWith(item);
+    });
+
+    it('should not open any modal', function() {
+      var item = {type: 'asdf'};
+      element.scope().showSettingsModal(item);
+      
+      expect(widgetModalFactory.showWidgetModal).to.not.have.been.called;
+      expect(presentationItemFactory.showSettingsModal).to.not.have.been.called;
+    });
+    
+    it('isEditable: ', function() {
+      expect(element.scope().isEditable({})).to.be.false;
+      expect(element.scope().isEditable({type:'presentation'})).to.be.true;
+      expect(element.scope().isEditable({type:'widget'})).to.be.false;
+      expect(element.scope().isEditable({type:'widget', objectReference:'widgetId'})).to.be.true;
+      expect(element.scope().isEditable({type:'widget', settingsUrl:'settingsUrl'})).to.be.true;
+    });
   });
 
 });
