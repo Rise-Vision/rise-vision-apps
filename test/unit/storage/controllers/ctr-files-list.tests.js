@@ -87,6 +87,7 @@ describe('controller: Files List', function() {
     expect($scope.filterConfig).to.be.ok;
     expect($scope.fileUploader).to.be.ok;    
     expect($scope.isListView).to.be.false;
+    expect($scope.search).to.be.ok;
 
     expect($scope.filesDetails).to.be.ok;
     expect($scope.bucketCreationStatus).to.be.ok;
@@ -96,11 +97,17 @@ describe('controller: Files List', function() {
     expect($scope.fileClick).to.be.a('function');
     expect($scope.dateModifiedOrderFunction).to.be.a('function');
     expect($scope.fileNameOrderFunction).to.be.a('function');
-    expect($scope.orderByAttribute).to.be.a('function');
     expect($scope.fileExtOrderFunction).to.be.a('function');
     expect($scope.fileSizeOrderFunction).to.be.a('function');
     expect($scope.isFileListVisible).to.be.a('function');
   });
+  
+  it('should initialize search', function() {
+    expect($scope.search).to.be.a('object');
+    expect($scope.search.sortBy).to.equal($scope.fileNameOrderFunction);
+    expect($scope.search.reverse).to.be.false;
+    expect($scope.search.doSearch).to.be.a('function');
+  })
   
   it('should reset folderPath on startup', function() {
     expect($scope.filesFactory.folderPath).to.equal('');
@@ -201,10 +208,6 @@ describe('controller: Files List', function() {
     expect($scope.fileNameOrderFunction({name: 'someFolder/Image.jpg'})).to.equal('somefolder/image.jpg');
   });
   
-  it('orderByAttribute: ', function() {
-    expect($scope.orderByAttribute).to.equal($scope.fileNameOrderFunction);
-  })
-  
   it('fileExtOrderFunction: ', function() {
     expect($scope.fileExtOrderFunction({name: 'someFolder/'})).to.equal('Folder');
     expect($scope.fileExtOrderFunction({name: 'someFolder/image.jpg'})).to.equal('jpg');
@@ -225,6 +228,22 @@ describe('controller: Files List', function() {
     expect($scope.isListView).to.be.true;
     $scope.toggleListView();
     expect($scope.isListView).to.be.false;
+  });
+  
+  describe('sortBy: ',function(){
+    it('should reverse sort',function(){
+      $scope.sortBy($scope.fileNameOrderFunction);
+
+      expect($scope.search.sortBy).to.equal($scope.fileNameOrderFunction);
+      expect($scope.search.reverse).to.be.true;
+    });
+    
+    it('should should sort by file ext',function(){
+      $scope.sortBy($scope.fileExtOrderFunction);
+
+      expect($scope.search.sortBy).to.equal($scope.fileExtOrderFunction);
+      expect($scope.search.reverse).to.be.false;
+    });
   });
 
   describe('isFileListVisible: ', function() {

@@ -4,50 +4,30 @@
       <th class="col-sm-6 table-header__cell">
         <input type="checkbox" class="u_margin-right" ng-model="selectAll">
         <label ng-click="filesFactory.selectAllCheckboxes(query)" ng-show="storageFactory.isMultipleSelector()"></label>
-        <span id="tableHeaderName" ng-click="orderByAttribute = fileNameOrderFunction; reverseSort = !reverseSort">
-          <span translate="common.file-name" ></span>
-          <span ng-show="orderByAttribute==fileNameOrderFunction">
-            <span ng-show="reverseSort">
-              <i class="fa fa-long-arrow-up"></i>
-            </span>
-            <span ng-show="!reverseSort">
-              <i class="fa fa-long-arrow-down"></i>
-            </span>
-          </span>
+        <span id="tableHeaderName" ng-click="sortBy(fileNameOrderFunction)">
+          <span translate="common.file-name"></span>
+          <!-- ngIf: search.sortBy = fileNameOrderFunction -->
+          <i ng-if="search.sortBy === fileNameOrderFunction" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
+          <!-- end ngIf: search.sortBy = fileNameOrderFunction -->
         </span>
       </th>
-      <th class="col-sm-2 table-header__cell hidden-xs" ng-click="orderByAttribute = fileExtOrderFunction; reverseSort = !reverseSort" ng-if="!storageFactory.isFolderFilter()">
+      <th class="col-sm-2 table-header__cell hidden-xs" ng-click="sortBy(fileExtOrderFunction)" ng-if="!storageFactory.isFolderFilter()">
         <span translate="common.file-type"></span>
-          <span ng-show="orderByAttribute==fileExtOrderFunction">
-            <span ng-show="reverseSort">
-              <i class="fa fa-long-arrow-up"></i>
-            </span>
-            <span ng-show="!reverseSort">
-              <i class="fa fa-long-arrow-down"></i>
-            </span>
-          </span>
+        <!-- ngIf: search.sortBy = fileExtOrderFunction -->
+        <i ng-if="search.sortBy === fileExtOrderFunction" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
+        <!-- end ngIf: search.sortBy = fileExtOrderFunction -->
       </th>
-      <th class="col-sm-2 table-header__cell visible-lg" ng-click="orderByAttribute = fileSizeOrderFunction; reverseSort = !reverseSort" ng-if="!storageFactory.isFolderFilter()">
+      <th class="col-sm-2 table-header__cell visible-lg" ng-click="sortBy(fileSizeOrderFunction)" ng-if="!storageFactory.isFolderFilter()">
         <span translate="common.file-size"></span>
-          <span ng-show="orderByAttribute==fileSizeOrderFunction">
-            <span ng-show="reverseSort">
-              <i class="fa fa-long-arrow-up"></i>
-            </span>
-            <span ng-show="!reverseSort">
-              <i class="fa fa-long-arrow-down"></i>
-            </span>
-          </span>
+        <!-- ngIf: search.sortBy = fileSizeOrderFunction -->
+        <i ng-if="search.sortBy === fileSizeOrderFunction" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
+        <!-- end ngIf: search.sortBy = fileSizeOrderFunction -->
       </th>
-      <th class="col-sm-2 table-header__cell visible-lg" ng-click="orderByAttribute = dateModifiedOrderFunction; reverseSort = !reverseSort" ng-if="!storageFactory.isFolderFilter()">
+      <th class="col-sm-2 table-header__cell visible-lg" ng-click="sortBy(dateModifiedOrderFunction)" ng-if="!storageFactory.isFolderFilter()">
         <span translate="common.file-date-mod"></span>
-          <span ng-show="orderByAttribute==dateModifiedOrderFunction">
-            <span ng-show="reverseSort">
-              <i class="fa fa-long-arrow-up"></i>
-            </span>
-            <span ng-show="!reverseSort">
-              <i class="fa fa-long-arrow-down"></i>
-            </span>
-          </span>
+        <!-- ngIf: search.sortBy = dateModifiedOrderFunction -->
+        <i ng-if="search.sortBy === dateModifiedOrderFunction" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
+        <!-- end ngIf: search.sortBy = dateModifiedOrderFunction -->
       </th>
     </tr>
   </thead>
@@ -55,7 +35,7 @@
     <tr class="table-body__row"
     ng-click="fileClick(file);"
     ng-class="{'active': file.isChecked, 'table-body__row--blocked-file': file.isThrottled, 'table-body__row--no-select': !storageFactory.canSelect(file), 'table-body__row--disabled': storageFactory.isDisabled(file) }"
-    ng-repeat="file in filesDetails.files | filter:search.query | orderBy:orderByAttribute:reverseSort track by $index" 
+    ng-repeat="file in filesDetails.files | filter:search.query | orderBy:search.sortBy:search.reverse track by $index" 
     ng-if="!storageUtils.fileIsTrash(file) || storageFactory.storageFull">
       <td ng-if="storageUtils.fileIsFolder(file)" class="table-body__cell">
         <span class="folder"><strong>{{file.name | fileNameFilter:filesFactory.folderPath}}</strong></span>

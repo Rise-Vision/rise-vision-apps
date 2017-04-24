@@ -3,7 +3,7 @@
 <ul id="storageFilesGrid" class="list-unstyled pt-media-list" ng-if="filesDetails.files.length > 0 && statusDetails.code!==202 && statusDetails.code!==404 && isFileListVisible()">
 
   <li thumbnail-image
-   ng-repeat="file in filesDetails.files | filter:search.query | orderBy:orderByAttribute:reverseSort track by $index"
+   ng-repeat="file in filesDetails.files | filter:search.query | orderBy:search.sortBy:search.reverse track by $index"
    ng-click="fileClick(file)" 
    class="no-select" 
    ng-class="gridItemClasses"
