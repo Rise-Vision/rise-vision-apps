@@ -201,12 +201,14 @@ angular.module('risevision.storage.services')
         factory.duplicateObject = function (sourceObject) {
           var newObject = angular.copy(sourceObject);
 
-          pendingOperationsFactory.addPendingOperation(sourceObject, 'duplicate');
+          pendingOperationsFactory.addPendingOperation(sourceObject,
+            'duplicate');
 
           return storage.duplicate(sourceObject.name)
             .then(function (resp) {
               if (resp.code !== 200) {
-                pendingOperationsFactory.markPendingOperationFailed(sourceObject);
+                pendingOperationsFactory.markPendingOperationFailed(
+                  sourceObject);
 
                 return resp;
               } else {
@@ -214,7 +216,8 @@ angular.module('risevision.storage.services')
 
                 return factory.refreshThumbnail(newObject)
                   .then(function (file) {
-                    pendingOperationsFactory.removePendingOperation(sourceObject);
+                    pendingOperationsFactory.removePendingOperation(
+                      sourceObject);
 
                     filesFactory.addFile(newObject);
                     filesFactory.resetSelections();
@@ -271,7 +274,8 @@ angular.module('risevision.storage.services')
         };
 
         factory.duplicateButtonClick = function () {
-          return $q.all(filesFactory.getSelectedFiles().map(function(file) {
+          return $q.all(filesFactory.getSelectedFiles().map(function (
+            file) {
             return factory.duplicateObject(file);
           }));
         };

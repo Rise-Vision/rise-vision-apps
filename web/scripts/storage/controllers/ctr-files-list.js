@@ -102,7 +102,7 @@ angular.module('risevision.storage.controllers')
           filesFactory.onFileSelect(file);
         }
       };
-      
+
       $scope.sortBy = function (cat) {
         if (cat !== $scope.search.sortBy) {
           $scope.search.sortBy = cat;
@@ -116,9 +116,10 @@ angular.module('risevision.storage.controllers')
       };
 
       $scope.fileNameOrderFunction = function (file) {
-        return file.name.replace('--TRASH--/', trashLabel).toLowerCase().split(" (").join("/(");
+        return file.name.replace('--TRASH--/', trashLabel).toLowerCase().split(
+          ' (').join('/(');
       };
-      
+
       $scope.search.sortBy = $scope.fileNameOrderFunction;
 
       $scope.fileExtOrderFunction = function (file) {

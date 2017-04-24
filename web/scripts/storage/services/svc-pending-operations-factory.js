@@ -10,8 +10,8 @@ angular.module('risevision.storage.services')
         code: 200,
         message: ''
       };
-      
-      var _clearFailedOperations = function() {
+
+      var _clearFailedOperations = function () {
         for (var i = factory.pendingOperations.length - 1; i >= 0; i--) {
           if (factory.pendingOperations[i].actionFailed) {
             factory.pendingOperations[i].actionFailed = false;
@@ -70,7 +70,7 @@ angular.module('risevision.storage.services')
       factory.markPendingOperationFailed = function (file) {
         var existing = findByFileName(file.name);
 
-        if(existing) {
+        if (existing) {
           file.actionFailed = true;
         }
       };

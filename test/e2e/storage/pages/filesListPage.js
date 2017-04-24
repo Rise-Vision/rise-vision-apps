@@ -5,7 +5,7 @@ var FilesListPage = function() {
   var filesListTable = element(by.id('storageFileList'));
   var filesGrid = element(by.id('storageFilesGrid'));
   var tableHeaderName = element(by.id('tableHeaderName'));
-  var fileItems = element.all(by.repeater('file in filesDetails.files | filter:search.query | orderBy:orderByAttribute:reverseSort track by $index'));
+  var fileItems = element.all(by.repeater('file in filesDetails.files | filter:search.query | orderBy:search.sortBy:search.reverse track by $index'));
   var gridViewSelector = element(by.id('gridViewSelector'));
   var listViewSelector = element(by.id('listViewSelector'));
   

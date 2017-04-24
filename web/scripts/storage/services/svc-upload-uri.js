@@ -6,7 +6,8 @@ angular.module('risevision.storage.services')
       var svc = {};
 
       var uriFailed = 'storage-client.error.upload-uri-request-failed';
-      var uriFailedMail = 'storage-client.error.upload-uri-request-failed-mail';
+      var uriFailedMail =
+        'storage-client.error.upload-uri-request-failed-mail';
       var accessDenied = 'storage-client.error.access-denied';
       var inactiveSubscription =
         'storage-client.error.upload-inactive-subscription';

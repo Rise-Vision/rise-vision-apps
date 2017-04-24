@@ -323,17 +323,17 @@ angular.module('risevision.storage.services')
           $log.debug('Storage duplicate called with', obj);
 
           storageAPILoader().then(function (storageApi) {
-            return storageApi.files.duplicate(obj);
-          })
-          .then(function (resp) {
-            $log.debug('status storage duplicate resp', resp);
+              return storageApi.files.duplicate(obj);
+            })
+            .then(function (resp) {
+              $log.debug('status storage duplicate resp', resp);
 
-            deferred.resolve(resp.result);
-          })
-          .then(null, function (e) {
-            $log.error('Failed to duplicate storage objects', e);
-            deferred.reject(e);
-          });
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              $log.error('Failed to duplicate storage objects', e);
+              deferred.reject(e);
+            });
 
           return deferred.promise;
         }
