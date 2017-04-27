@@ -61,6 +61,18 @@ describe('service: widgetRenderer:', function() {
       var spyCall = element.append.getCall(0);
       expect(spyCall.args[0].nodeName).to.equal('IFRAME');
       expect(spyCall.args[0].getAttribute('src')).to.not.contain('http://');
+      expect(spyCall.args[0].getAttribute('src')).to.contain('html?up_id=');
+    });
+    
+    it('should not have two question marks (?) in queryString',function(){
+      var spy = sinon.spy(element,'append');
+      placeholder.items[0].objectData += '?param1=something';
+      widgetRenderer.register(placeholder,element);
+      spy.should.have.been.called;
+
+      var spyCall = element.append.getCall(0);
+      expect(spyCall.args[0].nodeName).to.equal('IFRAME');
+      expect(spyCall.args[0].getAttribute('src')).to.contain('html?param1=something&up_id=');
     });
 
     it('should not register if it is not render enabled Widget',function(){

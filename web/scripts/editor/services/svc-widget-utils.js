@@ -32,7 +32,8 @@ angular.module('risevision.editor.services')
     TIME_AND_DATE: {
       render: true,
       ids: {
-        PROD: '23e390be-8abb-4569-9084-e89722038895'
+        PROD: '8b984369-f83c-4eca-add6-e431d338eaff',
+        TEST: '23e390be-8abb-4569-9084-e89722038895'
       }
     },
     RSS_WIDGET: {
@@ -47,6 +48,25 @@ angular.module('risevision.editor.services')
       ids: {
         PROD: 'df887785-3614-4f05-86c7-fce07b8745dc',
         TEST: 'aab933d7-ec65-499d-8c6f-e0081b8ea2ee'
+      }
+    },
+    HTML_WIDGET: {
+      render: true,
+      ids: {
+        PROD: 'c187c76a-c85b-4bd9-91fa-6f2748c8189c',
+        TEST: '87284652-711a-4621-8220-22942114a5a1'
+      }
+    },
+    SPREADSHEET_WIDGET: {
+      render: true,
+      ids: {
+        PROD: '3132a345-9246-49df-854f-16455b833abf'
+      }
+    },
+    CALENDAR_WIDGET: {
+      render: true,
+      ids: {
+        PROD: 'e2223213-cdaa-44be-b9d3-7a01211f63f7'
       }
     },
     PRESENTATION: {

@@ -78,7 +78,8 @@ angular.module('risevision.editor.services')
       var _createIframe = function (placeholder, element) {
         var renderId = placeholder.id;
         var widgetUrl = placeholder.items[0].objectData +
-          '?up_id=' + renderId +
+          (placeholder.items[0].objectData.indexOf('?') > -1 ? '&' : '?') +
+          'up_id=' + renderId +
           '&up_companyId=' + userState.getSelectedCompanyId() +
           '&up_rsW=' + placeholder.width +
           '&up_rsH=' + placeholder.height +
