@@ -163,5 +163,19 @@ describe('service: playlistFactory:', function() {
     expect(playlist.indexOf(playlistItem0)).to.equal(2);
   }); 
 
+  describe('moveItem: ', function() {
+    it('movePlaylistItemUp/Down: ', function() {
+      playlistFactory.moveItem(0, 1);
 
+      expect(playlist.indexOf(playlistItem0)).to.equal(1);
+
+      playlistFactory.moveItem(2, 1);
+
+      expect(playlist.indexOf(playlistItem2)).to.equal(1);
+      expect(playlist.indexOf(playlistItem0)).to.equal(2);
+
+      playlistFactory.moveItem(2, 0);
+      expect(playlist.indexOf(playlistItem0)).to.equal(0);
+    });
+  });
 });

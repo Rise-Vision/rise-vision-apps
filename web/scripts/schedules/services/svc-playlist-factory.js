@@ -85,7 +85,7 @@ angular.module('risevision.schedules.services')
 
         playlist.splice(newIndex, 0, playlist.splice(index, 1)[0]);
       };
-
+      
       factory.movePlaylistItemDown = function (playlistItem) {
         if (factory.canPlaylistItemMoveDown(playlistItem)) {
           _moveItem(playlistItem, _getItemIndex(playlistItem) + 1);
@@ -96,6 +96,12 @@ angular.module('risevision.schedules.services')
         if (factory.canPlaylistItemMoveUp(playlistItem)) {
           _moveItem(playlistItem, _getItemIndex(playlistItem) - 1);
         }
+      };
+      
+      factory.moveItem = function (currIndex, newIndex) {
+        var playlist = factory.getPlaylist();
+
+        playlist.splice(newIndex, 0, playlist.splice(currIndex, 1)[0]);
       };
 
       return factory;
