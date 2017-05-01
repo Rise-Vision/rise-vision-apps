@@ -5,8 +5,8 @@ var LoginPage = require('./../../launcher/pages/loginPage.js');
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var AlertsPage = require('./../pages/alertsPage.js');
 var DisplaysListPage = require('./../pages/displaysListPage.js');
-var PresentationModalPage = require('./../pages/presentationModalPage.js');
-var DistributionModalPage = require('./../pages/distributionModalPage.js');
+var PresentationModalPage = require('./../../schedules/pages/presentationModalPage.js');
+var DistributionModalPage = require('./../../schedules/pages/distributionModalPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var AlertsScenarios = function() {
@@ -145,7 +145,11 @@ var AlertsScenarios = function() {
         helper.wait(distributionModalPage.getEditDistributionModal(), 'Edit Distribution Modal');
         expect(distributionModalPage.getEditDistributionModal().isDisplayed()).to.eventually.be.true;
         expect(distributionModalPage.getModalTitle().getText()).to.eventually.equal('Edit Distribution');
-        distributionModalPage.getCancelButton().click();
+        helper.waitDisappear(distributionModalPage.getDistributionListLoader()).then(function () {
+          distributionModalPage.getCancelButton().click();
+        });
+        
+        helper.waitDisappear(distributionModalPage.getEditDistributionModal(), 'Edit Distribution Modal');
       });
 
       it('should show Save Button', function () {

@@ -7,6 +7,7 @@ var PresentationModalPage = function() {
   var presentationItems = element.all(by.repeater('presentation in presentations.list'));
   var presentationListLoader = element(by.css('#addPresentationModal .spinner-backdrop'));
   var presentationNames = element.all(by.css('#addPresentationModal #presentationName'));
+  var closeButton = element(by.css('#addPresentationModal > div.modal-header > button'));
 
   this.getAddPresentationModal = function() {
     return addPresentationModal;
@@ -34,6 +35,10 @@ var PresentationModalPage = function() {
   
   this.getPresentationNames = function() {
     return presentationNames;
+  };
+  
+  this.getCloseButton = function() {
+    return closeButton;
   };
 
 };
