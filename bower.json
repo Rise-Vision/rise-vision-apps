@@ -39,6 +39,6 @@
     "angular-sanitize": "~1.5.0",
     "angular-mocks": "~1.5.0",
     "angular-bootstrap": "^0.13.0",
-    "rv-common-style": "fix/modal-height"
+    "rv-common-style": "fix/modal-height" 
   }
 }
