@@ -40,6 +40,6 @@
     "angular-mocks": "~1.5.0",
     "angular-bootstrap": "^0.13.0",
     "rv-common-style": "fix/sticky-mobile-nav",
-    "common-header": "fix/sticky-mobile-nav"
+    "common-header": "fix/sticky-mobile-nav" 
   }
 }
