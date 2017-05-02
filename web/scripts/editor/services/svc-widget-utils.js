@@ -60,13 +60,15 @@ angular.module('risevision.editor.services')
     SPREADSHEET_WIDGET: {
       render: true,
       ids: {
-        PROD: '3132a345-9246-49df-854f-16455b833abf'
+        PROD: '3132a345-9246-49df-854f-16455b833abf',
+        TEST: 'b172714a-d753-475e-bb38-281f2aff594c'
       }
     },
     CALENDAR_WIDGET: {
       render: true,
       ids: {
-        PROD: 'e2223213-cdaa-44be-b9d3-7a01211f63f7'
+        PROD: 'e2223213-cdaa-44be-b9d3-7a01211f63f7',
+        TEST: '570012a1-54cc-4926-acb6-f9873588eddf'
       }
     },
     PRESENTATION: {
