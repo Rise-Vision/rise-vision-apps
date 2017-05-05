@@ -13,14 +13,13 @@
           link: function ($scope) {
             $scope.storeUrl = STORE_URL;
 
-            gadgetFactory.getGadgetWithStatus($scope.item.objectReference)
-              .then(function (gadget) {
-                $scope.gadget = gadget;
+            gadgetFactory.updateItemsStatus([$scope.item])
+              .then(function () {
                 $scope.showBuyButton = false;
                 $scope.showAccountButton = false;
                 $scope.className = 'trial';
 
-                switch ($scope.gadget.subscriptionStatus) {
+                switch ($scope.item.gadget.subscriptionStatus) {
                 case 'Not Subscribed':
                   $scope.showBuyButton = true;
                   break;

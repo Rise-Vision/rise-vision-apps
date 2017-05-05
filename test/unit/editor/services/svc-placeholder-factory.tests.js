@@ -24,14 +24,14 @@ describe('service: placeholderFactory:', function() {
 
     $provide.service('gadgetFactory',function(){
       return {
-        updateSubscriptionStatus: function(gadgetIds){
+        updateItemsStatus: function(items){
           var deferred = Q.defer();                
           if (forceError) {
+            items[0].gadget = {};
             deferred.reject();
           } else {
-            deferred.resolve([
-              {id:'widget1', productCode:'pc1', statusMessage: 'Free'}
-            ]);
+            items[0].gadget = {id:'widget1', productCode:'pc1', statusMessage: 'Free'};
+            deferred.resolve();
           }          
           return deferred.promise;
         }
@@ -72,9 +72,7 @@ describe('service: placeholderFactory:', function() {
     it('should update the status', function(done) {      
       placeholderFactory.updateSubscriptionStatus();
       setTimeout(function() {
-        expect(placeholder.items[0].statusMessage).to.equal('Free');  
-        expect(placeholder.items[1].statusMessage).to.equal(''); 
-        expect(placeholder.items[2].statusMessage).to.equal('Free'); 
+        expect(placeholder.items[0].gadget.statusMessage).to.equal('Free');  
         done();
       }, 10);      
     });
@@ -83,9 +81,7 @@ describe('service: placeholderFactory:', function() {
       forceError = true;
       placeholderFactory.updateSubscriptionStatus();
       setTimeout(function() {
-        expect(placeholder.items[0].statusMessage).to.equal('');  
-        expect(placeholder.items[1].statusMessage).to.equal(''); 
-        expect(placeholder.items[2].statusMessage).to.equal(''); 
+        expect(placeholder.items[0].gadget.statusMessage).to.not.be.ok;  
         done();
       }, 10);      
     });

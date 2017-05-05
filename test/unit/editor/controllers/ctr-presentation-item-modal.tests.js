@@ -73,6 +73,7 @@ describe('controller: presentation item modal', function() {
           presentationFactory: presentationFactory
         });
         $scope.$digest();
+        sinon.spy($scope, 'selectPresentation');
       });
     });
     it('should exist',function(){
@@ -154,9 +155,7 @@ describe('controller: presentation item modal', function() {
       }, 10);
     });
     
-    it('selectPresentation: ', function(done) {
-      $scope.selectPresentation();
-
+    it('should open presentation selector on open', function(done) {
       $modal.open.should.have.been.called;
       expect($modal.open.getCall(0).args[0].templateUrl).to.equal('presentation-selector/presentation-modal.html');
       expect($modal.open.getCall(0).args[0].controller).to.equal('selectPresentationModal');
@@ -190,7 +189,7 @@ describe('controller: presentation item modal', function() {
 
       expect($scope.item).to.deep.equal(itemProperties);
 
-      $modalInstance.dismiss.should.have.been.called;
+      $modalInstance.close.should.have.been.called;
     });
 
     it('should dismiss modal when cancel',function(){
@@ -226,6 +225,21 @@ describe('controller: presentation item modal', function() {
       setTimeout(function() {
         expect($scope.presentationName).to.equal('presentationName');
 
+        done();
+      }, 10);
+    });
+    
+    it('selectPresentation: ', function(done) {
+      $scope.selectPresentation();
+
+      $modal.open.should.have.been.called;
+      expect($modal.open.getCall(0).args[0].templateUrl).to.equal('presentation-selector/presentation-modal.html');
+      expect($modal.open.getCall(0).args[0].controller).to.equal('selectPresentationModal');
+      
+      setTimeout(function() {
+        expect($scope.presentationId).to.equal('newId');
+        expect($scope.presentationName).to.equal('presentationName');
+        
         done();
       }, 10);
     });

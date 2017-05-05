@@ -84,13 +84,14 @@ describe('service: gadgetFactory: ', function() {
     
     expect(gadgetFactory.loadingGadget).to.be.false;
 
-    expect(gadgetFactory.getGadget).to.be.a('function');
+    expect(gadgetFactory.getGadgetById).to.be.a('function');
     expect(gadgetFactory.getGadgetByProduct).to.be.a('function');
+    expect(gadgetFactory.updateItemsStatus).to.be.a('function');
   });
     
-  describe('getGadget: ', function(){
+  describe('getGadgetById: ', function(){
     it('should get the gadget',function(done){
-      gadgetFactory.getGadget('gadgetId')
+      gadgetFactory.getGadgetById('gadgetId')
       .then(function(gadget) {
         expect(gadget).to.be.truely;
         expect(gadget.name).to.equal('some gadget');
@@ -110,7 +111,7 @@ describe('service: gadgetFactory: ', function() {
     it('should handle failure to get gadget correctly',function(done){
       returnGadget = false;
       
-      gadgetFactory.getGadget()
+      gadgetFactory.getGadgetById()
       .then(function(result) {
         done(result);
       })
@@ -128,10 +129,10 @@ describe('service: gadgetFactory: ', function() {
     });
 
     it('should only call API once', function(done) {
-      gadgetFactory.getGadget('gadgetId');
+      gadgetFactory.getGadgetById('gadgetId');
       
       setTimeout(function() {
-        gadgetFactory.getGadget('gadgetId');
+        gadgetFactory.getGadgetById('gadgetId');
         
         setTimeout(function() {
           expect(apiCalls).to.equal(1);
@@ -161,10 +162,28 @@ describe('service: gadgetFactory: ', function() {
       .then(null,done);
     });
     
+    it('should return the Presentation item',function(done){
+      gadgetFactory.getGadgetByProduct('d3a418f1a3acaed42cf452fefb1eaed198a1c620')
+      .then(function(gadget) {
+        expect(gadget).to.be.ok;
+        expect(gadget.name).to.equal('Presentation Item');
+
+        setTimeout(function() {
+          expect(gadgetFactory.loadingGadget).to.be.false;
+
+          done();
+        }, 10);
+      })
+      .then(null, function() {
+        done('error');
+      })
+      .then(null,done);
+    });
+    
     it('should handle failure to get gadget correctly',function(done){
       returnGadget = false;
       
-      gadgetFactory.getGadget()
+      gadgetFactory.getGadgetByProduct('productCode')
       .then(function(result) {
         done(result);
       })
@@ -196,147 +215,152 @@ describe('service: gadgetFactory: ', function() {
     });
   });
 
-describe('getGadgets: ', function(){
-    it('should get the gadgets',function(done){
-      gadgetFactory.getGadgets(['gadgetId'])
-      .then(function(gadgets) {
-        expect(gadgets).to.be.truely;
-        expect(gadgets.length).to.equal(1);
-        expect(gadgets[0].name).to.equal('some gadget');
-
-        setTimeout(function() {
-          expect(gadgetFactory.loadingGadget).to.be.false;
-
-          done();
-        }, 10);
-      })
-      .then(null, function() {
-        done('error');
-      })
-      .then(null,done);
-    });
-    
-    it('should handle failure to get gadgets correctly',function(done){
-      returnGadget = false;
-      
-      gadgetFactory.getGadgets(['gadgetId'])
-      .then(function(result) {
-        done(result);
-      })
-      .then(null, function() {
-        expect(gadgetFactory.apiError).to.be.truely;
-        expect(gadgetFactory.apiError).to.equal('ERROR; could not get gadget');
-
-        setTimeout(function() {
-          expect(gadgetFactory.loadingGadget).to.be.false;
-
-          done();
-        }, 10);
-      })
-      .then(null,done);
+  describe('updateItemsStatus:', function(){  
+    var items;
+    beforeEach(function() {
+      items = [{
+        type: 'gadget',
+        objectReference: 'gadgetId'
+      }];    
     });
 
-    it('should cache API calls', function(done) {
-      gadgetFactory.getGadgets(['gadgetId']);
+    describe('_getGadgets: ', function(){
+      it('should get the gadgets',function(done){
+        gadgetFactory.updateItemsStatus(items)
+        .then(function() {
+          expect(items).to.be.okay;
+          expect(items.length).to.equal(1);
+          expect(items[0].gadget).to.be.okay;
+          expect(items[0].gadget.name).to.equal('some gadget');
+
+          setTimeout(function() {
+            expect(gadgetFactory.loadingGadget).to.be.false;
+
+            done();
+          }, 10);
+        })
+        .then(null, function() {
+          done('error');
+        })
+        .then(null,done);
+      });
       
-      setTimeout(function() {
-        gadgetFactory.getGadgets(['gadgetId']);
+      it('should handle failure to get gadgets correctly',function(done){
+        returnGadget = false;
+        
+        gadgetFactory.updateItemsStatus(items)
+        .then(function() {
+          expect(items).to.be.okay;
+          expect(items.length).to.equal(1);
+          expect(items[0].gadget).to.be.okay;
+          expect(items[0].gadget.name).to.not.be.ok;
+
+          expect(gadgetFactory.apiError).to.be.ok;
+          expect(gadgetFactory.apiError).to.equal('ERROR; could not get gadget');
+
+          setTimeout(function() {
+            expect(gadgetFactory.loadingGadget).to.be.false;
+
+            done();
+          }, 10);
+        })
+        .then(null,done);
+      });
+
+      it('should cache API calls', function(done) {
+        gadgetFactory.updateItemsStatus(items);
         
         setTimeout(function() {
-          expect(apiCalls).to.equal(1);
+          gadgetFactory.updateItemsStatus(items);
           
-          done();
+          setTimeout(function() {
+            expect(apiCalls).to.equal(1);
+            
+            done();
+          }, 10);
         }, 10);
-      }, 10);
-    });
-  });
-
-describe('updateSubscriptionStatus:', function(){  
-  it('should return the gadgets with updated subscriptionStatus',function(done){
-    gadgetFactory.updateSubscriptionStatus(['gadgetId']).then(function(gadgets){
-      expect(gadgets.length).to.equal(1);
-      expect(gadgets[0].id).to.equal('gadgetId');
-      expect(gadgets[0].subscriptionStatus).to.equal('Free');
-      expect(gadgets[0].statusMessage).to.equal('Free');
-      done();
-    });  
-  });
-
-  describe('statusMessage:',function(){
-    it('should handle On Trial',function(done){
-      statusResponse.status = 'On Trial';
-      statusResponse.expiry = new Date().setDate(new Date().getDate() + 3);
-      gadgetFactory.updateSubscriptionStatus(['gadgetId']).then(function(gadgets){
-        expect(gadgets[0].subscriptionStatus).to.equal('On Trial');
-        expect(gadgets[0].statusMessage).to.equal('On Trial - 3 Days Remaining');
-        done();
-      }); 
+      });
     });
 
-    it('should handle Not Subscribed',function(done){
-      statusResponse.status = 'Not Subscribed';
-      gadgetFactory.updateSubscriptionStatus(['gadgetId']).then(function(gadgets){
-        expect(gadgets[0].subscriptionStatus).to.equal('Not Subscribed');
-        expect(gadgets[0].statusMessage).to.equal('Premium');
+    it('should return the Presentation item',function(done){
+      statusResponse.pc = 'd3a418f1a3acaed42cf452fefb1eaed198a1c620';
+      items = [{
+        type: 'presentation'
+      }];    
+
+      gadgetFactory.updateItemsStatus(items).then(function() {
+        expect(items[0].gadget).to.be.ok;
+        expect(items[0].gadget.name).to.equal('Presentation Item');
+        expect(items[0].gadget.subscriptionStatus).to.equal('Free');
+        expect(items[0].gadget.statusMessage).to.equal('Free');
+
         done();
-      }); 
-    })
+      });
+    });
 
-    it('should handle Not Subscribed with trial',function(done){
-      statusResponse.status = 'Not Subscribed';
-      statusResponse.trialPeriod = 7
-      gadgetFactory.updateSubscriptionStatus(['gadgetId']).then(function(gadgets){
-        expect(gadgets[0].subscriptionStatus).to.equal('Not Subscribed');
-        expect(gadgets[0].statusMessage).to.equal('Premium - 7 Days Trial');
+    it('should return the items with updated gadget/subscriptionStatus',function(done){
+      gadgetFactory.updateItemsStatus(items).then(function(){
+        expect(items[0].gadget).to.be.an('object');
+        expect(items[0].gadget.id).to.equal('gadgetId');
+        expect(items[0].gadget.subscriptionStatus).to.equal('Free');
+        expect(items[0].gadget.statusMessage).to.equal('Free');
         done();
-      }); 
-    })
+      });  
+    });
 
-  });
+    describe('statusMessage:',function(){
+      it('should handle On Trial',function(done){
+        statusResponse.status = 'On Trial';
+        statusResponse.expiry = new Date().setDate(new Date().getDate() + 3);
 
-  it('should handle gadget API errors',function(done){
-    returnGadget = false;
-    gadgetFactory.updateSubscriptionStatus(['gadgetId'])
-      .then(null,function(error){
-        expect(gadgetFactory.apiError).to.be.truely;
-        expect(gadgetFactory.apiError).to.equal('ERROR; could not get gadget');
+        gadgetFactory.updateItemsStatus(items).then(function(){
+          expect(items[0].gadget.subscriptionStatus).to.equal('On Trial');
+          expect(items[0].gadget.statusMessage).to.equal('On Trial - 3 Days Remaining');
+          done();
+        }); 
+      });
+
+      it('should handle Not Subscribed',function(done){
+        statusResponse.status = 'Not Subscribed';
+
+        gadgetFactory.updateItemsStatus(items).then(function(){
+          expect(items[0].gadget.subscriptionStatus).to.equal('Not Subscribed');
+          expect(items[0].gadget.statusMessage).to.equal('Premium');
+          done();
+        }); 
+      })
+
+      it('should handle Not Subscribed with trial',function(done){
+        statusResponse.status = 'Not Subscribed';
+        statusResponse.trialPeriod = 7
+
+        gadgetFactory.updateItemsStatus(items).then(function(){
+          expect(items[0].gadget.subscriptionStatus).to.equal('Not Subscribed');
+          expect(items[0].gadget.statusMessage).to.equal('Premium - 7 Days Trial');
+          done();
+        }); 
+      })
+
+    });
+
+    it('should still resolve promise on gadget API errors',function(done){
+      returnGadget = false;
+      gadgetFactory.updateItemsStatus(items)
+        .then(function(){
+          expect(gadgetFactory.apiError).to.be.okay;
+          expect(gadgetFactory.apiError).to.equal('ERROR; could not get gadget');
+          done();
+        });    
+    });
+
+    it('should handle subscription Status API errors',function(done){
+      statusError = true;
+      gadgetFactory.updateItemsStatus(items).then(null,function(error){
+        expect(gadgetFactory.apiError).to.be.okay;
+        expect(gadgetFactory.apiError).to.equal('ERROR; could not get subscription status');
         done();
       });    
-  });
-
-  it('should handle subscription Status API errors',function(done){
-    statusError = true;
-    gadgetFactory.updateSubscriptionStatus(['gadgetId']).then(null,function(error){
-      expect(gadgetFactory.apiError).to.be.truely;
-      expect(gadgetFactory.apiError).to.equal('ERROR; could not get subscription status');
-      done();
-    });    
-  });
-})
-
-describe('getGadgetWithStatus:', function(){
-  it('should call updateSubscriptionStatus for the gadget',function(){
-    var statusSpy = sinon.spy(gadgetFactory, 'updateSubscriptionStatus');
-    gadgetFactory.getGadgetWithStatus('gadgetId');
-    statusSpy.should.have.been.calledWith(['gadgetId']);
-  });
-
-  it('should return the gadget', function(done){
-    gadgetFactory.getGadgetWithStatus('gadgetId').then(function(gadget){
-      expect(gadget).to.be.truely;
-      expect(gadget.subscriptionStatus).to.equal('Free');
-      expect(gadget.statusMessage).to.equal('Free');
-      done();
     });
   });
-
-  it('should handle errors', function(done){
-    returnGadget = false;
-    gadgetFactory.getGadgetWithStatus('gadgetId').then(null,function(){
-      expect(gadgetFactory.apiError).to.be.truely;
-      done();
-    });
-  });
-})
 
 });

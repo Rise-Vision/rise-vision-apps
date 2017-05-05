@@ -8,9 +8,10 @@ describe('directive: subscription status', function() {
     $provide.service('$q', function() {return Q;});
     $provide.service('gadgetFactory', function() {
       return {
-        getGadgetWithStatus: function(gadgetId){
+        updateItemsStatus: function(items){
           var deferred = Q.defer();
-          deferred.resolve(gadget);
+          items[0].gadget = gadget;
+          deferred.resolve();
           return deferred.promise;
         }
       };
@@ -23,7 +24,7 @@ describe('directive: subscription status', function() {
       id: 'gadgetId',
       subscriptionStatus: 'Subscribed'      
     }
-    $templateCache.put('partials/editor/subscription-status.html', '<p>{{gadget.subscriptionStatus}}</p>');
+    $templateCache.put('partials/editor/subscription-status.html', '<p>{{item.gadget.subscriptionStatus}}</p>');
     $scope = $rootScope.$new();
     $scope.item = item;
     $compile = _$compile_;
@@ -49,29 +50,14 @@ describe('directive: subscription status', function() {
     compileDirective();
    
     setTimeout(function() {
-      expect(elm.isolateScope().gadget).to.equal(gadget);
-      expect(elm.isolateScope().showBuyButton).to.be.truely;
-      expect(elm.isolateScope().showAccountButton).to.be.truely;
-      expect(elm.isolateScope().className).to.be.truely;     
+      expect(elm.isolateScope().item.gadget).to.equal(gadget);
+      expect(elm.isolateScope().showBuyButton).to.be.false;
+      expect(elm.isolateScope().showAccountButton).to.be.false;
+      expect(elm.isolateScope().className).to.equal('trial');
       done()
     }, 10);
     
   });
-
-  describe('On Trial:', function(){
-    it('should show buy button and days remaining',function(done){
-      gadget.subscriptionStatus = 'On Trial';
-      compileDirective();
-   
-      setTimeout(function() {
-        expect(elm.isolateScope().gadget).to.equal(gadget); 
-        expect(elm.isolateScope().showBuyButton).to.be.true;
-        expect(elm.isolateScope().showAccountButton).to.be.false;
-        expect(elm.isolateScope().className).to.equal('trial');     
-        done()
-      }, 10);
-    })
-  })
 
   describe('Not Subscribed:', function(){
     it('should show buy button and trial period',function(done){
@@ -79,28 +65,73 @@ describe('directive: subscription status', function() {
       compileDirective();
    
       setTimeout(function() {
-        expect(elm.isolateScope().gadget).to.equal(gadget);
+        expect(elm.isolateScope().item.gadget).to.equal(gadget);
         expect(elm.isolateScope().showBuyButton).to.be.true;
         expect(elm.isolateScope().showAccountButton).to.be.false;
         expect(elm.isolateScope().className).to.equal('trial');     
         done()
       }, 10);
     })
-  })
+  });
   
+  describe('On Trial:', function(){
+    it('should show buy button and days remaining',function(done){
+      gadget.subscriptionStatus = 'On Trial';
+      compileDirective();
+   
+      setTimeout(function() {
+        expect(elm.isolateScope().item.gadget).to.equal(gadget); 
+        expect(elm.isolateScope().showBuyButton).to.be.true;
+        expect(elm.isolateScope().showAccountButton).to.be.false;
+        expect(elm.isolateScope().className).to.equal('trial');     
+        done()
+      }, 10);
+    })
+  });
+  
+  describe('Trial Expired:', function(){
+    it('should show buy button and expired',function(done){
+      gadget.subscriptionStatus = 'Trial Expired';
+      compileDirective();
+   
+      setTimeout(function() {
+        expect(elm.isolateScope().item.gadget).to.equal(gadget); 
+        expect(elm.isolateScope().showBuyButton).to.be.true;
+        expect(elm.isolateScope().showAccountButton).to.be.false;
+        expect(elm.isolateScope().className).to.equal('expired');     
+        done()
+      }, 10);
+    })
+  });
+
+  describe('Cancelled:', function(){
+    it('should show buy button and days remaining',function(done){
+      gadget.subscriptionStatus = 'Cancelled';
+      compileDirective();
+   
+      setTimeout(function() {
+        expect(elm.isolateScope().item.gadget).to.equal(gadget); 
+        expect(elm.isolateScope().showBuyButton).to.be.true;
+        expect(elm.isolateScope().showAccountButton).to.be.false;
+        expect(elm.isolateScope().className).to.equal('cancelled');     
+        done()
+      }, 10);
+    })
+  });
+
   describe('Suspended:', function(){
     it('should show asccount button',function(done){
       gadget.subscriptionStatus = 'Suspended';
       compileDirective();
    
       setTimeout(function() {
-        expect(elm.isolateScope().gadget).to.equal(gadget);
+        expect(elm.isolateScope().item.gadget).to.equal(gadget);
         expect(elm.isolateScope().showBuyButton).to.be.false;
         expect(elm.isolateScope().showAccountButton).to.be.true;
         expect(elm.isolateScope().className).to.equal('suspended');     
         done()
       }, 10);
     })
-  })  
+  }); 
   
 });

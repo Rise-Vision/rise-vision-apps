@@ -19,9 +19,10 @@ angular.module('risevision.editor.controllers')
         $scope.widgetName = item.name;
       } else {
         if (item.objectReference && item.type === 'widget') {
-          gadgetFactory.getGadget(item.objectReference).then(function (gadget) {
-            $scope.widgetName = gadget.name;
-          });
+          gadgetFactory.getGadgetById(item.objectReference)
+            .then(function (gadget) {
+              $scope.widgetName = gadget.name;
+            });
         }
       }
 

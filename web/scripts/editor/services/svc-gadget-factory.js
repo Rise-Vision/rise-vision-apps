@@ -6,11 +6,16 @@ angular.module('risevision.editor.services')
     function ($q, gadget, BaseList, subscriptionStatusFactory, $filter) {
       var factory = {};
 
-      var _gadgets = [];
+      var _gadgets = [{
+        gadgetType: 'presentation',
+        id: 'presentation',
+        name: 'Presentation Item',
+        productCode: 'd3a418f1a3acaed42cf452fefb1eaed198a1c620'
+      }];
       factory.loadingGadget = false;
       factory.apiError = '';
 
-      var _getGadgetCached = function (gadgetId) {
+      var _getGadgetByIdCached = function (gadgetId) {
         var cachedGadget = _.find(_gadgets, {
           id: gadgetId
         });
@@ -19,14 +24,14 @@ angular.module('risevision.editor.services')
       };
 
       var _updateGadgetCache = function (newGadget) {
-        if (!_getGadgetCached(gadget.id)) {
+        if (!_getGadgetByIdCached(gadget.id)) {
           _gadgets.push(newGadget);
         }
       };
 
-      factory.getGadget = function (gadgetId) {
+      factory.getGadgetById = function (gadgetId) {
         var deferred = $q.defer();
-        var cachedGadget = _getGadgetCached(gadgetId);
+        var cachedGadget = _getGadgetByIdCached(gadgetId);
 
         if (cachedGadget) {
           deferred.resolve(cachedGadget);
@@ -100,83 +105,104 @@ angular.module('risevision.editor.services')
         return deferred.promise;
       };
 
-      factory.getGadgets = function (gadgetIds) {
+      var _getGadgetByItemCached = function (item) {
+        var gadgetId;
+        if (item.type === 'presentation') {
+          gadgetId = 'presentation'
+        } else {
+          gadgetId = item.objectReference;
+        }
+
+        return _getGadgetByIdCached(gadgetId);
+      };
+
+      var _getGadgets = function (items) {
         var deferred = $q.defer();
 
-        var cachedGadgets = [];
-        for (var i = 0; i < gadgetIds.length; i++) {
-          var cachedGadget = _getGadgetCached(gadgetIds[i]);
+        var nonCachedIds = [];
+        for (var i = 0; i < items.length; i++) {
+          var cachedGadget = _getGadgetByItemCached(items[i]);
           if (cachedGadget) {
-            cachedGadgets.push(cachedGadget);
+            items[i].gadget = cachedGadget;
+          } else {
+            nonCachedIds.push(items[i].objectReference);
           }
         }
-        if (cachedGadgets.length === gadgetIds.length) {
-          deferred.resolve(cachedGadgets);
+        if (nonCachedIds.length === 0) {
+          deferred.resolve();
         } else {
           //show loading spinner
           factory.loadingGadget = true;
 
           gadget.list({
-              ids: gadgetIds
+              ids: nonCachedIds
             })
             .then(function (result) {
               if (result.items) {
                 for (var i = 0; i < result.items.length; i++) {
                   _updateGadgetCache(result.items[i]);
                 }
-                deferred.resolve(result.items);
-              } else {
-                deferred.resolve([]);
               }
             })
             .then(null, function (e) {
               factory.apiError = e.message ? e.message : e.toString();
-              deferred.reject();
             })
             .finally(function () {
+              for (var i = 0; i < items.length; i++) {
+                if (!items[i].gadget) {
+                  items[i].gadget = _getGadgetByItemCached(items[i]);
+                  
+                  // resolve potential NPE
+                  if (!items[i].gadget) {
+                    items[i].gadget = {};
+                  }
+                }
+              }
+
               factory.loadingGadget = false;
+
+              // Always resolve to return (even impartial) list
+              deferred.resolve();
             });
         }
 
         return deferred.promise;
       };
 
-      factory.updateSubscriptionStatus = function (gadgetIds) {
+      factory.updateItemsStatus = function (items) {
         var deferred = $q.defer();
 
-        factory.getGadgets(gadgetIds).then(function (gadgets) {
-          var productCodeGadgetMap = {};
-          for (var i = 0; i < gadgets.length; i++) {
-            var gadget = gadgets[i];
+        _getGadgets(items).then(function () {
+          var productCodeItemMap = {};
+          for (var i = 0; i < items.length; i++) {
+            var gadget = items[i].gadget;
             gadget.statusMessage = '';
             if (gadget.productCode) {
-              productCodeGadgetMap[gadget.productCode] = gadget;
+              productCodeItemMap[gadget.productCode] = items[i];
             }
           }
-          var productCodeGadgetMapKeys = Object.keys(
-            productCodeGadgetMap);
-          if (productCodeGadgetMapKeys.length > 0) {
-            subscriptionStatusFactory.checkProductCodes(
-              productCodeGadgetMapKeys).then(function (statusItems) {
+          var productCodes = Object.keys(productCodeItemMap);
+          if (productCodes.length > 0) {
+            subscriptionStatusFactory.checkProductCodes(productCodes)
+            .then(function (statusItems) {
               for (var i = 0; i < statusItems.length; i++) {
                 var statusItem = statusItems[i];
-                var gadget = productCodeGadgetMap[statusItem.pc];
+                var gadget = productCodeItemMap[statusItem.pc].gadget;
                 gadget.subscriptionStatus = statusItem.status;
                 gadget.expiry = statusItem.expiry;
                 gadget.trialPeriod = statusItem.trialPeriod;
                 gadget.statusMessage = _getMessage(gadget);
               }
-              deferred.resolve(gadgets);
+              deferred.resolve();
             }, function (e) {
               factory.apiError = e.message ? e.message : e.toString();
               deferred.reject();
             });
           } else {
-            deferred.resolve(gadgets);
+            deferred.resolve();
           }
-        }, function () {
-          deferred.reject();
         });
+
         return deferred.promise;
       };
 
@@ -204,20 +230,6 @@ angular.module('risevision.editor.services')
             'editor-app.subscription.status.daysRemaining');
         }
         return statusMessage;
-      };
-
-      factory.getGadgetWithStatus = function (gadgetId) {
-        var deferred = $q.defer();
-        factory.updateSubscriptionStatus([gadgetId]).then(function (gadgets) {
-          if (gadgets && gadgets.length > 0) {
-            deferred.resolve(gadgets[0]);
-          } else {
-            deferred.reject();
-          }
-        }, function () {
-          deferred.reject();
-        });
-        return deferred.promise;
       };
 
       return factory;

@@ -45,7 +45,7 @@ describe('service: playlistItemFactory:', function() {
     
     $provide.service('gadgetFactory', function() {
       return {
-        getGadget: function(gadgetId) {
+        getGadgetById: function(gadgetId) {
           var deferred = Q.defer();
 
           deferred.resolve({
@@ -64,7 +64,7 @@ describe('service: playlistItemFactory:', function() {
             id: 'gadgetId',
             name: 'gadgetName',
             url: 'http://someurl.com/gadget.html',
-            gadgetType: returnWidget ? 'Widget' : 'Gadget'
+            gadgetType: returnWidget
           });
           
           return deferred.promise;
@@ -113,7 +113,13 @@ describe('service: playlistItemFactory:', function() {
     
     $provide.service('widgetModalFactory', function() {
       return widgetModalFactory = {
-        showWidgetModal: function() {}
+        showWidgetModal: sinon.stub()
+      };
+    });
+    
+    $provide.service('presentationItemFactory', function() {
+      return presentationItemFactory = {
+        showSettingsModal: sinon.stub()
       };
     });
 
@@ -123,7 +129,7 @@ describe('service: playlistItemFactory:', function() {
 
   }));
   var item, playlistItemFactory, placeholderPlaylistFactory, fileSelectorFactory, 
-  widgetModalFactory, showWidgetModalSpy, openModal, currentItem, trackedEvent, returnFiles, returnWidget;
+  widgetModalFactory, presentationItemFactory, openModal, currentItem, trackedEvent, returnFiles, returnWidget;
 
   beforeEach(function(){
     openModal = null;
@@ -133,13 +139,11 @@ describe('service: playlistItemFactory:', function() {
       {name:'folder/file1'},
       {name:'file2'}
     ];
-    returnWidget = true;
+    returnWidget = 'Widget';
     
     inject(function($injector){
       playlistItemFactory = $injector.get('playlistItemFactory');
       playlistItemFactory.item = item;
-
-      showWidgetModalSpy = sinon.spy(widgetModalFactory, 'showWidgetModal');
     });
   });
 
@@ -167,8 +171,8 @@ describe('service: playlistItemFactory:', function() {
       expect(currentItem).to.not.be.ok;
 
       setTimeout(function() {
-        showWidgetModalSpy.should.have.been.called;
-        showWidgetModalSpy.should.have.been.calledWith({
+        widgetModalFactory.showWidgetModal.should.have.been.called;
+        widgetModalFactory.showWidgetModal.should.have.been.calledWith({
           duration: 10,
           distributeToAll: true,
           timeDefined: false,
@@ -183,9 +187,31 @@ describe('service: playlistItemFactory:', function() {
         done();
       }, 10);
     });
-    
+
+    it('should add new presentation item and open settings', function(done) {
+      returnWidget = 'presentation';
+      playlistItemFactory.addContent();
+
+      expect(trackedEvent).to.equal('Add Content');
+      expect(openModal).to.equal('storeProductsModal');
+      expect(currentItem).to.not.be.ok;
+
+      setTimeout(function() {
+        presentationItemFactory.showSettingsModal.should.have.been.called;
+        presentationItemFactory.showSettingsModal.should.have.been.calledWith({
+          duration: 10,
+          distributeToAll: true,
+          timeDefined: false,
+          additionalParams: null,
+          type: 'presentation'
+        });
+        
+        done();
+      }, 10);
+    });    
+
     it('should open playlist item properties for non-widgets', function(done) {
-      returnWidget = false;
+      returnWidget = 'Gadget';
 
       playlistItemFactory.addContent();
 
@@ -213,8 +239,8 @@ describe('service: playlistItemFactory:', function() {
       playlistItemFactory.addTextWidget();
 
       setTimeout(function() {
-        showWidgetModalSpy.should.have.been.called;
-        showWidgetModalSpy.should.have.been.calledWith({
+        widgetModalFactory.showWidgetModal.should.have.been.called;
+        widgetModalFactory.showWidgetModal.should.have.been.calledWith({
       	  additionalParams: null,
       	  distributeToAll: true,
       	  duration: 10,
@@ -294,8 +320,8 @@ describe('service: playlistItemFactory:', function() {
       playlistItemFactory.selectFiles('images');
 
       setTimeout(function() {
-        showWidgetModalSpy.should.have.been.called;
-        showWidgetModalSpy.should.have.been.calledWith({
+        widgetModalFactory.showWidgetModal.should.have.been.called;
+        widgetModalFactory.showWidgetModal.should.have.been.calledWith({
 	        additionalParams: '{"selector":{"selection":"custom"},"storage":{},"resume":true,"scaleToFit":true,"position":"middle-center","duration":10,"pause":10,"autoHide":false,"url":"","background":{}}',
       	  distributeToAll: true,
       	  duration: 10,
@@ -341,8 +367,8 @@ describe('service: playlistItemFactory:', function() {
       playlistItemFactory.selectFiles('videos');
 
       setTimeout(function() {
-        showWidgetModalSpy.should.have.been.called;
-        showWidgetModalSpy.should.have.been.calledWith({
+        widgetModalFactory.showWidgetModal.should.have.been.called;
+        widgetModalFactory.showWidgetModal.should.have.been.calledWith({
       	  additionalParams: '{"selector":{"selection":"custom"},"url":"","storage":{},"video":{"scaleToFit":true,"volume":50,"controls":true,"autoplay":true,"resume":true,"pause":5}}',
       	  distributeToAll: true,
       	  duration: 10,

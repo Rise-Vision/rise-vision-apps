@@ -44,13 +44,13 @@ angular.module('risevision.editor.services')
   })
   .factory('playlistItemFactory', ['$modal', '$log', 'userState',
     'gadgetFactory', 'editorFactory', 'placeholderPlaylistFactory',
-    'widgetModalFactory', 'widgetUtils', 'storageUtils',
-    'presentationTracker',
+    'widgetModalFactory', 'widgetUtils', 'presentationItemFactory',
+    'storageUtils', 'presentationTracker',
     'SELECTOR_TYPES', 'IMAGE_ADDITIONAL_PARAMS', 'VIDEO_ADDITIONAL_PARAMS',
     function ($modal, $log, userState, gadgetFactory, editorFactory,
       placeholderPlaylistFactory, widgetModalFactory, widgetUtils,
-      storageUtils, presentationTracker, SELECTOR_TYPES,
-      IMAGE_ADDITIONAL_PARAMS, VIDEO_ADDITIONAL_PARAMS) {
+      presentationItemFactory, storageUtils, presentationTracker, 
+      SELECTOR_TYPES, IMAGE_ADDITIONAL_PARAMS, VIDEO_ADDITIONAL_PARAMS) {
       var factory = {};
 
       var _newPlaylistItem = function () {
@@ -67,11 +67,14 @@ angular.module('risevision.editor.services')
 
         item.type = widget.gadgetType ?
           widget.gadgetType.toLowerCase() : 'widget';
-        item.name = widget.name ? widget.name : 'Widget Item';
 
-        item.objectData = widget.url;
-        item.objectReference = widget.id;
-        item.settingsUrl = widget.settingsUrl;
+        if (item.type !== 'presentation') {
+          item.name = widget.name ? widget.name : 'Widget Item';
+
+          item.objectData = widget.url;
+          item.objectReference = widget.id;
+          item.settingsUrl = widget.settingsUrl;          
+        }
 
         return item;
       };
@@ -85,6 +88,8 @@ angular.module('risevision.editor.services')
 
             if (item.type === 'widget') {
               widgetModalFactory.showWidgetModal(item);
+            } else if (item.type === 'presentation') {
+              presentationItemFactory.showSettingsModal(item);
             } else {
               factory.edit(item);
             }
@@ -109,7 +114,7 @@ angular.module('risevision.editor.services')
       };
 
       var _getItemByWidgetId = function (widgetId) {
-        return gadgetFactory.getGadget(widgetId)
+        return gadgetFactory.getGadgetById(widgetId)
           .then(function (gadget) {
             return (_newWidget(gadget));
           });

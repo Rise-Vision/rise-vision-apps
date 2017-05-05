@@ -21,7 +21,7 @@ describe('service: widgetModalFactory:', function() {
     });
     $provide.service('gadgetFactory', function() {
       return {
-        getGadget: function() {
+        getGadgetById: function() {
           var deferred = Q.defer();
                     
           deferred.resolve({

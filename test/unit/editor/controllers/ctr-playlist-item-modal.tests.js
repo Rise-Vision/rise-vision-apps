@@ -21,7 +21,7 @@ describe('controller: playlist item modal', function() {
     
     $provide.service('gadgetFactory', function() {
       return {
-        getGadget: function() {
+        getGadgetById: function() {
           var deferred = Q.defer();
                     
           deferred.resolve({name: 'Widget'});

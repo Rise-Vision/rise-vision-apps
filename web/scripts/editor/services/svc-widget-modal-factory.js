@@ -123,7 +123,7 @@ angular.module('risevision.editor.services')
                   additionalParams: item.additionalParams
                 });
               } else {
-                gadgetFactory.getGadget(item.objectReference)
+                gadgetFactory.getGadgetById(item.objectReference)
                   .then(function (gadget) {
                     if (!item.objectData) {
                       item.objectData = gadget.url;

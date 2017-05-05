@@ -41,8 +41,8 @@
       </p>
       <p class="playlist-item-name" ng-if="!isEditable(item)">{{item.name}}</p>
       <p>
-        <span class="text-small text-muted u_remove-bottom" ng-if="item.statusMessage !== 'Free' && item.statusMessage !== 'Subscribed'">
-          <span class="playlist-item-status" ng-click="playlistItemFactory.edit(item)">{{item.statusMessage}}</span>
+        <span class="text-small text-muted u_remove-bottom" ng-if="item.gadget.statusMessage !== 'Free' && item.gadget.statusMessage !== 'Subscribed'">
+          <span class="playlist-item-status" ng-click="playlistItemFactory.edit(item)">{{item.gadget.statusMessage}}</span>
         </span>
       </p>
     </div>

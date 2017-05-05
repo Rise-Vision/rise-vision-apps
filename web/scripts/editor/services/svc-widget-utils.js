@@ -113,7 +113,7 @@ angular.module('risevision.editor.services')
 
       _init();
       
-      var _getWidgetId = function (item) {
+      var _getItemId = function (item) {
         if (item && item.type === 'presentation') {
           return item.type;
         } else if (item) {
@@ -142,7 +142,7 @@ angular.module('risevision.editor.services')
       };
 
       factory.getIconClass = function (item) {
-        var widgetId = _getWidgetId(item);
+        var widgetId = _getItemId(item);
         if (ICON_CLASSES[widgetId]) {
           return 'ph-item-icon ' + ICON_CLASSES[widgetId];
         } else {
@@ -151,7 +151,7 @@ angular.module('risevision.editor.services')
       };
 
       factory.getSvgIcon = function (item) {
-        var widgetId = _getWidgetId(item);
+        var widgetId = _getItemId(item);
         if (SVG_ICONS[widgetId]) {
           return SVG_ICONS[widgetId];
         } else {
