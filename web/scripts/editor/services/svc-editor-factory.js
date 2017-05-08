@@ -498,13 +498,15 @@ angular.module('risevision.editor.services')
         }        
       };
 
-       factory.zoomFit = function (argument) {
+      factory.zoomFit = function (argument) {
           var fitWidth =  document.getElementsByClassName("workspace-board")[0].clientWidth / factory.presentation.width * 0.94;
           var fitHeight =  document.getElementsByClassName("workspace-board")[0].clientHeight / factory.presentation.height * 0.90;  
           var fitRatio = Math.min(fitWidth, fitHeight);
-          factory.zoomLevel = fitRatio;
-          console.log(fitRatio); 
-          // console.log(document.getElementsByClassName("workspace-board")[0].offsetWidth)   
+          factory.zoomLevel = fitRatio;  
+      };
+
+      factory.zoomPercent = function (argument) {
+          factory.zoomLevel = argument / 100 ;  
       };
 
       var _showErrorMessage = function (action, e) {
