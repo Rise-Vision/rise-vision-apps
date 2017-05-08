@@ -53,7 +53,7 @@ angular.module('risevision.editor.services')
           isStoreProduct: false
         };
         factory.hasLegacyItems = false;
-        factory.zoomLevel = 0.5;
+        factory.zoomLevel = 0.5;  //CALCULATE FIT
         presentationParser.parsePresentation(factory.presentation);
 
         _clearMessages();
@@ -490,13 +490,21 @@ angular.module('risevision.editor.services')
         if (factory.canZoomIn()) {
           factory.zoomLevel += 0.1;
         }
-        
       };
 
       factory.zoomOut = function (argument) {
         if (factory.canZoomOut()) {
           factory.zoomLevel -= 0.1;  
         }        
+      };
+
+       factory.zoomFit = function (argument) {
+          var fitWidth =  document.getElementsByClassName("workspace-board")[0].clientWidth / factory.presentation.width * 0.94;
+          var fitHeight =  document.getElementsByClassName("workspace-board")[0].clientHeight / factory.presentation.height * 0.90;  
+          var fitRatio = Math.min(fitWidth, fitHeight);
+          factory.zoomLevel = fitRatio;
+          console.log(fitRatio); 
+          // console.log(document.getElementsByClassName("workspace-board")[0].offsetWidth)   
       };
 
       var _showErrorMessage = function (action, e) {

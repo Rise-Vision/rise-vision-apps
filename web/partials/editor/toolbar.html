@@ -11,19 +11,23 @@
         </button>
     </div>
     <div class="column fixed-toolset text-right">
-         <div class="zoom-selector u_bordered u_margin-right">
+         <div class="zoom-selector u_bordered u_margin-right" style="cursor: pointer">
             <button class="btn btn-default u_margin-right" ng-disabled="!factory.canZoomOut()" ng-click="factory.zoomOut()"> <i class="fa fa-minus"></i></button>
 
 <!-- <button id=""  class="dropdown-toggle btn btn-primary" > -->
 <span dropdown-toggle data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{factory.zoomLevel*100 | number:0 }}% <span class="caret"></span></span>
 <!-- </button> -->
 
-       <ul class="dropdown-menu" style="left: initial; width: 100px; margin: 2px 47px 0;">
-        <li><a href="#">10%</a></li>
-        <li><a href="#">10%</a></li>
-        <li><a href="#">10%</a></li>
+       <ul class="dropdown-menu" style="left: initial; margin: -5px 30px 0; min-width: 78px;">
+        <li><a href="#" ng-click="factory.zoomFit()">Fit</a></li>
+        <li><a href="#">Full</a></li>
         <li role="separator" class="divider"></li>
-        <li><a href="#">Fit</a></li>
+        <li><a href="#">20%</a></li>
+        <li><a href="#">50%</a></li>
+        <li><a href="#">80%</a></li>
+        <li><a href="#">130%</a></li>
+        <li><a href="#">150%</a></li>
+        <li><a href="#">200%</a></li>
       </ul>
   
                
