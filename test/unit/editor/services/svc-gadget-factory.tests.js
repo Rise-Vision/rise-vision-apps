@@ -166,7 +166,7 @@ describe('service: gadgetFactory: ', function() {
       gadgetFactory.getGadgetByProduct('d3a418f1a3acaed42cf452fefb1eaed198a1c620')
       .then(function(gadget) {
         expect(gadget).to.be.ok;
-        expect(gadget.name).to.equal('Presentation Item');
+        expect(gadget.name).to.equal('Embedded Presentation');
 
         setTimeout(function() {
           expect(gadgetFactory.loadingGadget).to.be.false;
@@ -290,7 +290,7 @@ describe('service: gadgetFactory: ', function() {
 
       gadgetFactory.updateItemsStatus(items).then(function() {
         expect(items[0].gadget).to.be.ok;
-        expect(items[0].gadget.name).to.equal('Presentation Item');
+        expect(items[0].gadget.name).to.equal('Embedded Presentation');
         expect(items[0].gadget.subscriptionStatus).to.equal('Free');
         expect(items[0].gadget.statusMessage).to.equal('Free');
 

@@ -9,7 +9,7 @@ angular.module('risevision.editor.services')
       var _gadgets = [{
         gadgetType: 'presentation',
         id: 'presentation',
-        name: 'Presentation Item',
+        name: 'Embedded Presentation',
         productCode: 'd3a418f1a3acaed42cf452fefb1eaed198a1c620'
       }];
       factory.loadingGadget = false;

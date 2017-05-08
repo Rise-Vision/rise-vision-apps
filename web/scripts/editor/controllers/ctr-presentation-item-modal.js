@@ -38,7 +38,7 @@ angular.module('risevision.editor.controllers')
       $scope.$watch("presentationName", function (name) {
         if (name) {
           if (!$scope.item.name || 
-              $scope.item.name === 'Presentation Item' ||
+              $scope.item.name === 'Embedded Presentation' ||
               initialPresentationName === $scope.item.name) {
                 
             $scope.item.name = name;

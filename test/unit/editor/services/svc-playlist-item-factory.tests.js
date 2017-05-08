@@ -203,7 +203,8 @@ describe('service: playlistItemFactory:', function() {
           distributeToAll: true,
           timeDefined: false,
           additionalParams: null,
-          type: 'presentation'
+          type: 'presentation',
+          name: 'gadgetName'
         });
         
         done();

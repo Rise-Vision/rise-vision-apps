@@ -67,10 +67,9 @@ angular.module('risevision.editor.services')
 
         item.type = widget.gadgetType ?
           widget.gadgetType.toLowerCase() : 'widget';
+        item.name = widget.name ? widget.name : 'Widget Item';
 
         if (item.type !== 'presentation') {
-          item.name = widget.name ? widget.name : 'Widget Item';
-
           item.objectData = widget.url;
           item.objectReference = widget.id;
           item.settingsUrl = widget.settingsUrl;          
