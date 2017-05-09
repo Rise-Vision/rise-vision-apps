@@ -112,6 +112,8 @@ var AddContentScenarios = function() {
       
       it('should open Widget Settings', function () {
         helper.wait(widgetSettingsPage.getWidgetModal(), 'Widget Settings Modal');
+        helper.waitDisappear(widgetSettingsPage.getWidgetLoader(), 'Widget Settings Loader');
+
         browser.switchTo().frame('widget-modal-frame');
         
         expect(widgetSettingsPage.getCloseButton().isDisplayed()).to.eventually.be.true;
@@ -146,6 +148,8 @@ var AddContentScenarios = function() {
         helper.waitDisappear(storageSelectorModalPage.getStorageSelectorModal(), 'Storage Selector Modal');
 
         helper.wait(widgetSettingsPage.getWidgetModal(), 'Widget Settings Modal');
+        helper.waitDisappear(widgetSettingsPage.getWidgetLoader(), 'Widget Settings Loader');
+
         browser.switchTo().frame('widget-modal-frame');
 
         helper.clickWhenClickable(widgetSettingsPage.getCloseButton(), 'Widget Close Button');
@@ -196,6 +200,8 @@ var AddContentScenarios = function() {
 
       it('should open Widget Settings', function () {
         helper.wait(widgetSettingsPage.getWidgetModal(), 'Widget Settings Modal');
+        helper.waitDisappear(widgetSettingsPage.getWidgetLoader(), 'Widget Settings Loader');
+
         browser.switchTo().frame('widget-modal-frame');
         
         expect(widgetSettingsPage.getCloseButton().isDisplayed()).to.eventually.be.true;
@@ -216,6 +222,8 @@ var AddContentScenarios = function() {
         placeholderPlaylistPage.getAddTextButton().click();
 
         helper.wait(widgetSettingsPage.getWidgetModal(), 'Widget Settings Modal');
+        helper.waitDisappear(widgetSettingsPage.getWidgetLoader(), 'Widget Settings Loader');
+
         browser.switchTo().frame('widget-modal-frame');
 
         helper.clickWhenClickable(widgetSettingsPage.getCloseButton(), 'Widget Close Button');

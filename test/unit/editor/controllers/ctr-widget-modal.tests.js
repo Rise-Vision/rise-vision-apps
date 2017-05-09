@@ -8,20 +8,21 @@ describe('controller: widget modal', function() {
     };
     $provide.service('$modalInstance',function(){
       return {
-        close : function(){
-          return;
-        },
-        dismiss : function(action){
-          return;
-        }
+        close : sinon.stub(),
+        dismiss : sinon.stub()
       }
+    });
+    $provide.service('$loading', function() {
+      return {
+        stop: sinon.stub()
+      };
     });
     $provide.service('gadgetsApi',function(){
       return gadgetsApi;
     });
     
   }));
-  var $scope, $timeout, $modalInstance, $modalInstanceDismissSpy, $modalInstanceCloseSpy, widget, gadgetsApi;
+  var $scope, $timeout, $modalInstance, $loading, widget, gadgetsApi;
 
   beforeEach(function(){
 
@@ -40,9 +41,7 @@ describe('controller: widget modal', function() {
       
       $scope = $rootScope.$new();
       $modalInstance = $injector.get('$modalInstance');
-      
-      $modalInstanceDismissSpy = sinon.spy($modalInstance, 'dismiss');
-      $modalInstanceCloseSpy = sinon.spy($modalInstance, 'close');
+      $loading = $injector.get('$loading');
 
       $timeout = $injector.get('$timeout');
 
@@ -58,7 +57,7 @@ describe('controller: widget modal', function() {
   });
   
   beforeEach(function() {
-    $timeout.flush();
+    $timeout.flush(1);
   })
   
   it('should exist',function(){
@@ -79,20 +78,34 @@ describe('controller: widget modal', function() {
   });
   
   it('should load additionalParams', function() {
-    expect(gadgetsApi.functions['rscmd_getAdditionalParams']()).to.equal('test');
-  })
-  
+    expect(gadgetsApi.functions['rscmd_getAdditionalParams']()).to.equal('test');  
+  });
+
+  it('should stop spinner after 3 seconds', function() {
+    $timeout.flush(3000);
+
+    $loading.stop.should.have.been.calledOnce;
+    $loading.stop.should.have.been.calledWith('widget-modal-loader');
+  });
+
+  it('should stop spinner on additionalParams', function() {
+    gadgetsApi.functions['rscmd_getAdditionalParams']();
+    
+    $loading.stop.should.have.been.calledOnce;
+    $loading.stop.should.have.been.calledWith('widget-modal-loader');
+  });
+
   it('should close settings', function() {
     gadgetsApi.functions['rscmd_closeSettings']();
     
-    $modalInstanceDismissSpy.should.have.been.called;
+    $modalInstance.dismiss.should.have.been.called;
   });
   
   it('should save settings', function() {
     gadgetsApi.functions['rscmd_saveSettings']('params');
     
-    $modalInstanceCloseSpy.should.have.been.called;
-    $modalInstanceCloseSpy.should.have.been.calledWith('params');
+    $modalInstance.close.should.have.been.called;
+    $modalInstance.close.should.have.been.calledWith('params');
   });
 
 });

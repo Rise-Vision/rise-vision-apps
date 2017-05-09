@@ -2,6 +2,8 @@
 var WidgetSettingsPage = function() {
   var widgetModal = element(by.id('widget-modal-frame'));
 
+  var widgetLoader = element(by.css('#widget-modal .spinner-backdrop'));
+
   var title = element(by.css('.modal-header h2'));
   var saveButton = element(by.id('save'));
   var closeButton = element(by.css('.close'));
@@ -11,6 +13,10 @@ var WidgetSettingsPage = function() {
   
   this.getWidgetModal = function() {
     return widgetModal;
+  };
+  
+  this.getWidgetLoader = function() {
+    return widgetLoader;
   };
   
   this.getTitle = function() {

@@ -137,6 +137,8 @@ var PlaylistScenarios = function() {
       it('should add a Product and open Widget Settings', function () {
         storeProductsModalPage.getStoreProducts().get(0).click();
         helper.wait(widgetSettingsPage.getWidgetModal(), 'Widget Settings Modal');
+        helper.waitDisappear(widgetSettingsPage.getWidgetLoader(), 'Widget Settings Loader');
+
         browser.switchTo().frame('widget-modal-frame');
 
         expect(widgetSettingsPage.getCloseButton().isDisplayed()).to.eventually.be.true;
@@ -185,6 +187,8 @@ var PlaylistScenarios = function() {
 
         storeProductsModalPage.getStoreProducts().get(0).click();
         helper.wait(widgetSettingsPage.getWidgetModal(), 'Widget Settings Modal');
+        helper.waitDisappear(widgetSettingsPage.getWidgetLoader(), 'Widget Settings Loader');
+
         browser.switchTo().frame('widget-modal-frame');
       });
 
