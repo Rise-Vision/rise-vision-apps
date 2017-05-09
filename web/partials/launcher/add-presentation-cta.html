@@ -1,4 +1,4 @@
-<div id="presentationCTA2" class="text-center" ng-if="presentationTemplateCtaExperiment">
+<div id="presentationCTA" class="text-center">
 
     <h1 class="u_margin-lg-top">Let's Get Started</h1>
 
@@ -72,26 +72,5 @@
                 </a>
             </li>
         </ul>
-    </div>
-</div>
-
-<div id="presentationCTA" class="create-presentation-cta text-center" ng-if="!presentationTemplateCtaExperiment">
-    <h1>How Simple is Rise Vision?</h1>
-    <h3 class="u_margin-sm-bottom">Just a 3 minute introduction to show you how easy Digital Signage can be!</h3>
-    <div class="col-sm-6 col-sm-offset-3" id="experiment_VideoTutorial">
-        <video track-play controls poster="https://s3.amazonaws.com/Rise-Images/Videos/video_thumbnail_app_003.png" class="panel" width="100%">
-            <source src="https://s3.amazonaws.com/Rise-Images/Videos/Rise+Start+Page+Demo.mp4" type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"' />
-        </video>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <h4 class="u_margin-lg-top">
-        Ready to go?  Start with a Presentation, and then Schedule it on your Display.
-		</h4>
-		<button id="presentationCTAButton" class="btn btn-lg btn-primary u_margin-md-top" ng-click="editorFactory.addPresentationModal()">
-                {{'editor-app.list.actions.add' |translate}} <i class="fa fa-plus icon-right"></i>
-            </button>
-        </div>
     </div>
 </div>
