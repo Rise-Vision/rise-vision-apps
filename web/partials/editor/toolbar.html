@@ -11,11 +11,30 @@
         </button>
     </div>
     <div class="column fixed-toolset text-right">
-         <div class="zoom-selector u_bordered u_margin-right">
+       <div class="zoom-selector u_bordered u_margin-right">
             <button class="btn btn-default u_margin-right" ng-disabled="!factory.canZoomOut()" ng-click="factory.zoomOut()"> <i class="fa fa-minus"></i></button>
-                {{factory.zoomLevel*100 | number:0 }}%
+            <!-- <button id=""  class="dropdown-toggle btn btn-primary" > -->
+            <span dropdown-toggle data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{factory.zoomLevel*100 | number:0 }}% <span class="caret"></span></span>
+            <!-- </button> -->
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#" ng-click="factory.zoomFit()">Fit To Screen</a></li>
+                    <li><a href="#" ng-click="factory.zoomPercent(100)">Full Size</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#" ng-click="factory.zoomPercent(20)">20%</a></li>
+                    <li><a href="#" ng-click="factory.zoomPercent(50)">50%</a></li>
+                    <li><a href="#" ng-click="factory.zoomPercent(80)">80%</a></li>
+                    <li><a href="#" ng-click="factory.zoomPercent(100)">100%</a></li>
+                    <li><a href="#" ng-click="factory.zoomPercent(130)">130%</a></li>
+                    <li><a href="#" ng-click="factory.zoomPercent(150)">150%</a></li>
+                    <li><a href="#" ng-click="factory.zoomPercent(200)">200%</a></li>
+                </ul>
             <button class="btn btn-default u_margin-left" ng-disabled="!factory.canZoomIn()" ng-click="factory.zoomIn()"> <i class="fa fa-plus"></i></button>
         </div>
+
+     
+
+
+
         <button ng-if="!factory.presentation.id" id="changeTemplateButton" class="btn btn-default" ng-click="changeTemplate()">{{'editor-app.workspace.toolbar.changeTemplate' | translate}} <i class="fa fa-th icon-right"></i></button>
         <span ng-if="!factory.presentation.id" class="text-muted u_margin-left" translate>editor-app.workspace.toolbar.or</span>
         <button ng-if="!hasUnsavedChanges" class="btn btn-primary" id="previewButton" ng-click="factory.preview(factory.presentation.id)" ng-disabled="!factory.presentation.id">{{'editor-app.workspace.toolbar.preview' | translate}} <i class="fa fa-play icon-right"></i></button>
