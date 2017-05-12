@@ -8,8 +8,8 @@ angular.module('risevision.storage.services')
       }
     };
   }])
-  .factory('FileUploader', ['$rootScope', '$q', 'XHRFactory',
-    function ($rootScope, $q, XHRFactory) {
+  .factory('FileUploader', ['$rootScope', '$q', 'XHRFactory', '$timeout',
+    function ($rootScope, $q, XHRFactory, $timeout) {
       var svc = {};
 
       svc.url = '/';
@@ -45,7 +45,7 @@ angular.module('risevision.storage.services')
               enqueue(files[currItem++]);
             }
 
-            setTimeout(loadBatch, 500);
+            $timeout(loadBatch, 500);
           }
           else {
             deferred.resolve();

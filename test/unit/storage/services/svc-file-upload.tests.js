@@ -11,7 +11,7 @@ describe("Services: uploader", function() {
     });
   }));
   
-  var uploader, lastAddedFileItem;
+  var uploader, lastAddedFileItem, $timeout;
 
   beforeEach(function() {
   	inject(function($injector) {
@@ -27,6 +27,8 @@ describe("Services: uploader", function() {
       uploader.onBeforeUploadItem = function() {};
       uploader.onCancelItem = function() {};
       uploader.onCompleteItem = function() {};
+
+      $timeout = $injector.get("$timeout");
   	});
   });
 
@@ -49,7 +51,7 @@ describe("Services: uploader", function() {
       expect(uploader.queue[0].file.name).to.equal("folder/test1.txt");
     });
 
-    it("multiple files should be enqueued asynchronously after the first batch", function (done) {
+    it("multiple files should be enqueued asynchronously after the first batch", function () {
       var files = [];
 
       for(var i = 1; i <= uploader.queueLimit + 5; i++) {
@@ -65,12 +67,10 @@ describe("Services: uploader", function() {
         uploader.removeFromQueue(j);
       }
 
-      setTimeout(function() {
-        expect(uploader.queue.length).to.equal(5);
-        expect(uploader.queue[0].file.name).to.equal("folder/test" + (uploader.queueLimit + 1) + ".txt");
+      $timeout.flush(500);
 
-        done();
-      }, 500);
+      expect(uploader.queue.length).to.equal(5);
+      expect(uploader.queue[0].file.name).to.equal("folder/test" + (uploader.queueLimit + 1) + ".txt");
     });
 
     it("should invoke onAfterAddingFile", function() {
