@@ -19,45 +19,45 @@ angular.module('risevision.storage.services')
       svc.progress = 0;
       svc.method = 'PUT'; //'POST';
       svc.formData = [];
-      svc.queueLimit = Number.MAX_VALUE;
+      svc.queueLimit = 10;
       svc.withCredentials = false;
       svc.isUploading = false;
       svc.nextIndex = 0;
 
       svc.addToQueue = function (files, options) {
         var deferred = $q.defer();
-        var counter = 0;
+        var currItem = 0;
 
         var enqueue = function (file) {
-          var deferred = $q.defer();
-
-          // Checks it's a file and queue size is not exceeded
-          if ((file.size || file.type) && svc.queue.length < svc.queueLimit) {
+          // Checks it's a file
+          if (file.size || file.type) {
             var fileItem = new FileItem(svc, file, options);
             svc.queue.push(fileItem);
-            svc.onAfterAddingFile(fileItem).then(deferred.resolve);
+            svc.onAfterAddingFile(fileItem);
           } else {
             console.log('File not added to queue: ', file);
+          }
+        };
 
+        var loadBatch = function() {
+          if (currItem < files.length) {
+            console.log("Queuing files starting from " + currItem + " of a total of " + files.length);
+
+            while (svc.queue.length < svc.queueLimit && currItem < files.length) {
+              enqueue(files[currItem++]);
+            }
+
+            setTimeout(loadBatch, 500);
+          }
+          else {
             deferred.resolve();
           }
 
-          return deferred.promise;
+          svc.progress = svc.getTotalProgress();
+          svc.render();
         };
 
-        if (counter < files.length) {
-          enqueue(files[counter++])
-            .then(function () {
-              for (; counter < files.length; counter++) {
-                enqueue(files[counter]);
-              }
-
-              svc.progress = svc.getTotalProgress();
-              svc.render();
-
-              deferred.resolve();
-            });
-        }
+        loadBatch();
 
         return deferred.promise;
       };
