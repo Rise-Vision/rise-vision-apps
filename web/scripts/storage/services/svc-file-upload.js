@@ -41,8 +41,6 @@ angular.module('risevision.storage.services')
 
         var loadBatch = function() {
           if (currItem < files.length) {
-            console.log("Queuing files starting from " + currItem + " of a total of " + files.length);
-
             while (svc.queue.length < svc.queueLimit && currItem < files.length) {
               enqueue(files[currItem++]);
             }
