@@ -114,14 +114,6 @@ describe('directive: upload', function() {
 
     expect(UploadURIService.getURI).to.exist;
   });
-  
-  it('Uploader onAfterAddingFile should return a promise', function() {
-    var file1 = { name: 'test1.jpg', size: 200, slice: function() {} };
-    var fileItem = { file: file1 };
-
-    expect(FileUploader.onAfterAddingFile(fileItem).then).to.exist;
-    expect(FileUploader.onAfterAddingFile(fileItem).then).to.be.a.function;
-  });
 
   it('should invoke onAfterAddingFile', function() {
     var file1 = { name: 'test1.jpg', size: 200, slice: function() {} };

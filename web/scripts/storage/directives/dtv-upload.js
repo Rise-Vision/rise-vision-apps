@@ -52,8 +52,6 @@
             };
 
             FileUploader.onAfterAddingFile = function (fileItem) {
-              var deferred = $q.defer();
-
               console.info('onAfterAddingFile', fileItem.file.name);
 
               if (!fileItem.isRetrying) {
@@ -81,12 +79,7 @@
                   console.log('getURI error', resp);
                   FileUploader.notifyErrorItem(fileItem);
                   $scope.status.message = resp;
-                })
-                .finally(function () {
-                  deferred.resolve();
                 });
-
-              return deferred.promise;
             };
 
             FileUploader.onBeforeUploadItem = function (item) {
