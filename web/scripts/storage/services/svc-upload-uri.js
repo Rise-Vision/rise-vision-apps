@@ -64,10 +64,6 @@ angular.module('risevision.storage.services')
           });
       };
 
-      svc.notifyGCMTargetsChanged = function (files) {
-        return storage.notifyGCMTargetsChanged(files);
-      };
-
       return svc;
     }
   ]);

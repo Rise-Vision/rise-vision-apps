@@ -252,32 +252,6 @@ angular.module('risevision.storage.services')
           return deferred.promise;
         },
 
-        notifyGCMTargetsChanged: function (files) {
-          var deferred = $q.defer();
-
-          var obj = {
-            companyId: userState.getSelectedCompanyId(),
-            targets: files
-          };
-
-          $log.debug('notifying GCM Targets Changed: ', obj);
-
-          storageAPILoader().then(function (storageApi) {
-              return storageApi.notifyGCMTargetsChanged(obj);
-            })
-            .then(function (resp) {
-              $log.debug('notifying GCM Targets Changed finished', resp);
-
-              deferred.resolve(resp.result);
-            })
-            .then(null, function (e) {
-              console.error('Error notifying GCM Targets Changed', e);
-              deferred.reject(e);
-            });
-
-          return deferred.promise;
-        },
-
         rename: function (sourceName, destinationName) {
           var deferred = $q.defer();
 

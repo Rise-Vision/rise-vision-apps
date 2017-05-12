@@ -16,18 +16,6 @@ describe('service: UploadURIService', function() {
             def.reject("API Failed");
           }
           return def.promise;
-        },
-
-        notifyGCMTargetsChanged: function(files) {            
-          var def = Q.defer();
-          if (returnResult) {
-            def.resolve({
-              result: {}
-            });
-          } else {
-            def.reject("API Failed");
-          }
-          return def.promise;
         }
       };
     }); 
@@ -46,7 +34,6 @@ describe('service: UploadURIService', function() {
   it('should exist',function(){
     expect(uploadURIService).to.be.truely;
     expect(uploadURIService.getURI).to.be.a('function');
-    expect(uploadURIService.notifyGCMTargetsChanged).to.be.a('function');
   });
   
   describe('getURI:',function(){
@@ -77,35 +64,4 @@ describe('service: UploadURIService', function() {
       .then(null,done);
     });
   });
-
-  
-  describe('notifyGCMTargetsChanged:',function(){
-    it('should call storage GCM Targets Changed',function(done){
-      var spy = sinon.spy(storage,'notifyGCMTargetsChanged');
-      var files = ["file1","file2"]
-      uploadURIService.notifyGCMTargetsChanged(files)
-        .then(function(result){
-          expect(result).to.be.truely;
-          spy.should.have.been.calledWith(files);
-
-          done();
-        })
-        .then(null,done);
-    });
-
-    it("should handle failure to notify GCM Targets Changed",function(done){
-      returnResult = false;
-      var files = ["file1","file2"]
-      uploadURIService.notifyGCMTargetsChanged(files)
-        .then(function(result) {
-          done(result);
-        })
-        .then(null, function(error) {
-          expect(error).to.deep.equal('API Failed');
-          done();
-        })
-        .then(null,done);
-    });
-  });
-
 });

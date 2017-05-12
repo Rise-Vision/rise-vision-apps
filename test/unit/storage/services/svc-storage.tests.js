@@ -178,20 +178,6 @@ describe('service: storage:', function() {
               def.reject("API Failed");
             }
             return def.promise;
-          },
-          notifyGCMTargetsChanged: function(obj) {
-            expect(obj).to.be.ok;
-            storageApiRequestObj = obj;
-            
-            var def = Q.defer();
-            if (returnResult) {
-              def.resolve({
-                result: {}
-              });
-            } else {
-              def.reject("API Failed");
-            }
-            return def.promise;
           }
         });
         return deferred.promise;
@@ -220,7 +206,6 @@ describe('service: storage:', function() {
     expect(storage.getFolderContents).to.be.a('function');
     expect(storage.getResumableUploadURI).to.be.a('function');
     expect(storage.getSignedDownloadURI).to.be.a('function');
-    expect(storage.notifyGCMTargetsChanged).to.be.a('function');
   });
   
   describe('files.get:',function(){
@@ -518,36 +503,6 @@ describe('service: storage:', function() {
       returnResult = false;
 
       storage.getSignedDownloadURI("fileName","fileType")
-        .then(function(result) {
-          done(result);
-        })
-        .then(null, function(error) {
-          expect(error).to.deep.equal('API Failed');
-          done();
-        })
-        .then(null,done);
-    });
-  });
-  
-  describe('notifyGCMTargetsChanged:',function(){
-    it('should notify GCM Targets Changed',function(done){
-      var files = ["file1","file2"]
-      storage.notifyGCMTargetsChanged(files)
-        .then(function(result){
-          expect(result).to.be.truely;
-          expect(result.item).to.be.truely;
-          expect(storageApiRequestObj.targets).to.equal(files);
-          expect(storageApiRequestObj.companyId).to.equal('TEST_COMP_ID');
-
-          done();
-        })
-        .then(null,done);
-    });
-
-    it("should handle failure to notify GCM Targets Changed",function(done){
-      returnResult = false;
-      var files = ["file1","file2"]
-      storage.notifyGCMTargetsChanged(files)
         .then(function(result) {
           done(result);
         })

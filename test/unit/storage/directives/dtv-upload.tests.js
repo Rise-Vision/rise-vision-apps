@@ -36,13 +36,6 @@ describe('directive: upload', function() {
           deferred.resolve(file.name);
           
           return deferred.promise;
-        },
-        notifyGCMTargetsChanged: function() {
-          return {
-            then: function(cb) {
-              cb();
-            }
-          };
         }
       };
     });
@@ -207,7 +200,6 @@ describe('directive: upload', function() {
 
       setTimeout(function() {
         spy.should.have.been.calledWith(item);
-        expect($scope.completed).to.contain(item.file.name); 
         done();
       }, 10);               
     });      
