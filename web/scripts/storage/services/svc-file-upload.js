@@ -11,6 +11,7 @@ angular.module('risevision.storage.services')
   .factory('FileUploader', ['$rootScope', '$q', 'XHRFactory', '$timeout',
     function ($rootScope, $q, XHRFactory, $timeout) {
       var svc = {};
+      var loadBatchTimer = null;
 
       svc.url = '/';
       svc.alias = 'file';
@@ -45,9 +46,11 @@ angular.module('risevision.storage.services')
               enqueue(files[currItem++]);
             }
 
-            $timeout(loadBatch, 500);
+            loadBatchTimer = $timeout(loadBatch, 500);
           }
           else {
+            loadBatchTimer = null;
+
             deferred.resolve();
           }
 
@@ -76,6 +79,11 @@ angular.module('risevision.storage.services')
       };
 
       svc.removeAll = function () {
+        if (loadBatchTimer) {
+          $timeout.cancel(loadBatchTimer);
+          loadBatchTimer = null;
+        }
+
         for (var i = svc.queue.length - 1; i >= 0; i--) {
           svc.removeFromQueue(svc.queue[i]);
         }
@@ -162,8 +170,7 @@ angular.module('risevision.storage.services')
 
       svc.getTotalProgress = function (value) {
         var notUploaded = svc.getNotUploadedItems().length;
-        var uploaded = notUploaded ? svc.queue.length - notUploaded : svc.queue
-          .length;
+        var uploaded = notUploaded ? svc.queue.length - notUploaded : svc.queue.length;
         var ratio = 100 / svc.queue.length;
         var current = (value || 0) * ratio / 100;
 
