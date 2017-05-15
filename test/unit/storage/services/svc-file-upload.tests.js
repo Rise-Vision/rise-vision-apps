@@ -83,7 +83,27 @@ describe("Services: uploader", function() {
 
     });
   });
-  
+
+  it("removeAll: ", function () {
+    var files = [];
+
+    for(var i = 1; i <= uploader.queueLimit + 5; i++) {
+      files.push({ name: "test" + i + ".txt", webkitRelativePath: "folder/test" + i + ".txt", size: 200, type: "text" });
+    }
+
+    uploader.addToQueue(files);
+
+    expect(uploader.queue.length).to.equal(uploader.queueLimit);
+    expect(uploader.queue[0].file.name).to.equal("folder/test1.txt");
+    
+    uploader.removeAll();
+
+    expect(uploader.queue.length).to.equal(0);
+
+    $timeout.flush(500);
+
+    expect(uploader.queue.length).to.equal(0);
+  });
 
   describe('uploadItem:',function(){
     it("should invoke onBeforeUploadItem", function(done) {
