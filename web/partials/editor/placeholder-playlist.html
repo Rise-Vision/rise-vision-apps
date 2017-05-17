@@ -20,7 +20,7 @@
   <!-- Item Playlist -->
   <div class="editor-playlist-item rv-sortable-item" ng-repeat="item in factory.getItems() track by $index" ng-show="factory.getItems().length">
     <div class="list-grip rv-sortable-handle">
-      <i class="fa fa-grip-large fa-rotate-90 grip-indicator"></i>
+      <i class="fa fa-grip-large fa-rotate-grip grip-indicator"></i>
     </div>
     <div class="actions">
       <button type="button" class="btn btn-xs btn-default editPlaylistItem" ng-click="playlistItemFactory.edit(item)" tooltip-placement="left" tooltip-append-to-body="true" tooltip="{{getDurationTooltip(item)}}">
@@ -40,7 +40,7 @@
         <span class="playlist-item-name">{{item.name}}</span>
       </p>
       <p class="playlist-item-name" ng-if="!isEditable(item)">{{item.name}}</p>
-      <p>
+      <p class="u_ellipsis-sm">
         <span class="text-small text-muted u_remove-bottom" ng-if="item.gadget.statusMessage !== 'Free' && item.gadget.statusMessage !== 'Subscribed'">
           <span class="playlist-item-status" ng-click="playlistItemFactory.edit(item)">{{item.gadget.statusMessage}}</span>
         </span>
