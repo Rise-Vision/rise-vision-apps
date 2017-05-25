@@ -260,6 +260,15 @@ describe('controller: display details', function() {
         scheduleId: 1,
         onlineStatus: 'online'
       })).to.equal('no-screenshot-available');
+      
+      $scope.screenshot = { status: 403 };
+      expect($scope.screenshotState({
+        playerVersion: '2018',
+        playerErrorCode: 0,
+        playerName: 'RisePlayerElectron',
+        scheduleId: 1,
+        onlineStatus: 'online'
+      })).to.equal('no-screenshot-available');
 
       $scope.screenshot = { error: 'error' };
       expect($scope.screenshotState({
