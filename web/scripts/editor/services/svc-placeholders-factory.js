@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('risevision.editor.services')
-  .factory('placeholdersFactory', ['editorFactory', 'presentationParser',
-    'presentationTracker', 'placeholderFactory',
-    function (editorFactory, presentationParser, presentationTracker,
-      placeholderFactory) {
+  .factory('placeholdersFactory', ['editorFactory', 'artboardFactory',
+    'presentationParser', 'presentationTracker', 'placeholderFactory',
+    function (editorFactory, artboardFactory, presentationParser, 
+      presentationTracker, placeholderFactory) {
       var factory = {};
 
       factory.getPlaceholders = function () {
@@ -79,13 +79,13 @@ angular.module('risevision.editor.services')
       };
 
       var _centerPlaceholder = function (placeholder) {
-        if (!factory.getWorkspaceElement) {
+        if (!artboardFactory.getWorkspaceElement) {
           return;
         }
 
         var leftPadding = 12;
         var topPadding = 60 + 12;
-        var workspaceElement = factory.getWorkspaceElement();
+        var workspaceElement = artboardFactory.getWorkspaceElement();
         var width = editorFactory.presentation.width;
         var height = editorFactory.presentation.height;
         if (placeholder.width > width) {

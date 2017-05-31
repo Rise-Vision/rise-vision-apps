@@ -198,7 +198,6 @@ describe('service: editorFactory:', function() {
     expect(editorFactory.loadingPresentation).to.be.false;
     expect(editorFactory.savingPresentation).to.be.false;
     expect(editorFactory.apiError).to.not.be.truely;
-    expect(editorFactory.zoomLevel).to.be.truely;
     
     expect(editorFactory.newPresentation).to.be.a('function');
     expect(editorFactory.getPresentation).to.be.a('function');
@@ -211,10 +210,6 @@ describe('service: editorFactory:', function() {
     expect(editorFactory.saveAndPreview).to.be.a('function');
     expect(editorFactory.preview).to.be.a('function');
     expect(editorFactory.addFromSharedTemplateModal).to.be.a('function');
-    expect(editorFactory.zoomIn).to.be.a('function');
-    expect(editorFactory.zoomOut).to.be.a('function');
-    expect(editorFactory.canZoomIn).to.be.a('function');
-    expect(editorFactory.canZoomOut).to.be.a('function');
   });
 
   it('should initialize',function(){
@@ -946,47 +941,5 @@ describe('service: editorFactory:', function() {
       },10);
     });
   });
-
-  describe('zoom',function(){
-    it('should zoom in',function(){
-      editorFactory.zoomIn()
-      expect(editorFactory.zoomLevel).to.equal(0.6);
-    });
-
-    it('should zoom out',function(){
-      editorFactory.zoomOut()
-      expect(editorFactory.zoomLevel).to.equal(0.4);
-    });
-
-    it('should limit zoom in',function(){
-      editorFactory.zoomLevel = 2;
-      editorFactory.zoomIn()
-      expect(editorFactory.zoomLevel).to.equal(2);
-    });
-
-    it('should limit zoom out',function(){
-      editorFactory.zoomLevel = 0.1;
-      editorFactory.zoomOut()
-      expect(editorFactory.zoomLevel).to.equal(0.1);
-    });
-
-    it('canZoomIn',function(){
-      editorFactory.zoomLevel = 0.1;
-      expect(editorFactory.canZoomIn()).to.be.true;
-      editorFactory.zoomLevel = 1;
-      expect(editorFactory.canZoomIn()).to.be.true;
-      editorFactory.zoomLevel = 2;
-      expect(editorFactory.canZoomIn()).to.be.false;
-    });
-
-    it('canZoomOut',function(){
-      editorFactory.zoomLevel = 0.1;
-      expect(editorFactory.canZoomOut()).to.be.false;
-      editorFactory.zoomLevel = 1;
-      expect(editorFactory.canZoomOut()).to.be.true;
-      editorFactory.zoomLevel = 2;
-      expect(editorFactory.canZoomOut()).to.be.true;
-    });
-  })
 
 });

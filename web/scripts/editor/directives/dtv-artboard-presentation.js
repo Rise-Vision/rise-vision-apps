@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('risevision.editor.directives')
-  .constant('PRESENTATION_BORDER_SIZE', 12)
-  .directive('artboardPresentation', ['editorFactory', 'placeholderFactory',
-    'PRESENTATION_BORDER_SIZE', '$stateParams',
-    function (editorFactory, placeholderFactory, PRESENTATION_BORDER_SIZE, $stateParams) {
+  .directive('artboardPresentation', ['editorFactory', 'artboardFactory', 
+    'placeholderFactory', 'PRESENTATION_BORDER_SIZE', '$stateParams',
+    function (editorFactory, artboardFactory, placeholderFactory, 
+      PRESENTATION_BORDER_SIZE, $stateParams) {
       return {
         scope: true,
         restrict: 'E',
@@ -16,6 +16,7 @@ angular.module('risevision.editor.directives')
           $scope.editorFactory = editorFactory;
           $scope.placeholderFactory = placeholderFactory;
           element.addClass('artboard-presentation');
+          artboardFactory.zoomFit();
 
           $scope.$watch('editorFactory.presentation', function () {
             $scope.presentation = editorFactory.presentation;
@@ -29,11 +30,15 @@ angular.module('risevision.editor.directives')
             element.css('backgroundSize',
               $scope.presentation.backgroundScaleToFit ? 'contain' :
               '');
+            element.css('transition', 'all 0s');
           }, true);
 
-          $scope.$watch('editorFactory.zoomLevel', function () {
-            element.css('transform', 'scale('+editorFactory.zoomLevel+')');
+          $scope.$watch(function() {
+            return artboardFactory.zoomLevel;
+          }, function () {
+            element.css('transform', 'scale(' + artboardFactory.zoomLevel + ')');
             element.css('transform-origin', '0% 0%');
+            element.css('transition', 'all .4s');
           });
 
           element.on('mousewheel DOMMouseScroll', function(e){    
@@ -41,9 +46,9 @@ angular.module('risevision.editor.directives')
                 e.preventDefault();
                 $scope.$apply(function(){
                   if (e.originalEvent.detail < 0 || e.originalEvent.wheelDelta > 0) {
-                    editorFactory.zoomOut();
+                    artboardFactory.zoomOut();
                   } else {
-                    editorFactory.zoomIn();
+                    artboardFactory.zoomIn();
                   }
                 });  
               }

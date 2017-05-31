@@ -1,41 +1,35 @@
 <div id="workspaceToolbar" class="workspace-toolbar">
     <div class="column flex-title">
-        <button id="compressArtboardButton" class="btn btn-default animated pulse u_margin-right ng-hide" ng-click="fullArtboard = false" ng-show="designMode && fullArtboard && !placeholderFactory.placeholder"><i class="fa fa-compress"></i></button>
-        <button id="expandArtboardButton" class="btn btn-default u_margin-right" ng-show="designMode && (!fullArtboard || placeholderFactory.placeholder)" ng-click="fullArtboard = true; placeholderFactory.clearPlaceholder()"><i class="fa fa-expand"></i></button>
-        <button id="presentationPropertiesButton" class="btn btn-default u_margin-right" ng-show="designMode" ng-click="openProperties()"><i class="fa fa-cog"></i></button>
+        <button id="compressArtboardButton" class="btn btn-default animated pulse u_margin-right ng-hide" ng-click="artboardFactory.compressArtboard()" ng-show="artboardFactory.designMode && artboardFactory.isFullArtboard()"><i class="fa fa-compress"></i></button>
+        <button id="expandArtboardButton" class="btn btn-default u_margin-right" ng-click="artboardFactory.expandArtboard()" ng-show="artboardFactory.designMode && !artboardFactory.isFullArtboard()"><i class="fa fa-expand"></i></button>
+        <button id="presentationPropertiesButton" class="btn btn-default u_margin-right" ng-click="openProperties()" ng-show="artboardFactory.designMode"><i class="fa fa-cog"></i></button>
         <h2 id="presentationName" class="presentation-name" ng-click="openProperties()">{{factory.presentation.name}}</h2>
     </div>
     <div class="column fixed-toolset add-placeholder">
-        <button id="addPlaceholderButton" class="btn btn-primary pull-left" ng-show="designMode" ng-click="addNewPlaceholder()" tooltip="{{'editor-app.workspace.toolbar.addPlaceholderTooltip' | translate}}" tooltip-class="cta-tooltip add-placeholder-tooltip {{tooltipClasses}}" tooltip-append-to-body="true" tooltip-placement="bottom" tooltip-trigger="show" pop-on-event-enabled="factory.presentation.placeholders.length === 0" rv-popover>
+        <button id="addPlaceholderButton" class="btn btn-primary pull-left" ng-click="addNewPlaceholder()" ng-show="artboardFactory.designMode" tooltip="{{'editor-app.workspace.toolbar.addPlaceholderTooltip' | translate}}" tooltip-class="cta-tooltip add-placeholder-tooltip {{tooltipClasses}}" tooltip-append-to-body="true" tooltip-placement="bottom" tooltip-trigger="show" pop-on-event-enabled="factory.presentation.placeholders.length === 0" rv-popover>
             {{'editor-app.workspace.toolbar.addPlaceholder' | translate}}<i class="fa fa-plus icon-right"></i>
         </button>
     </div>
     <div class="column fixed-toolset text-right">
-       <div class="zoom-selector u_bordered u_margin-right dropdown" onclick="event.stopPropagation()" dropdown>
-            <button class="btn btn-default u_margin-right" ng-disabled="!factory.canZoomOut()" ng-click="factory.zoomOut()"> <i class="fa fa-minus"></i></button>
-            <!-- <button id=""  class="dropdown-toggle btn btn-primary" > -->
-            <div dropdown-toggle class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{factory.zoomLevel*100 | number:0 }}%
-            <span class="caret"></span>
+       <div class="zoom-selector u_bordered u_margin-right dropdown" dropdown ng-show="artboardFactory.designMode">
+            <button class="btn btn-default u_margin-right" ng-disabled="!artboardFactory.canZoomOut()" ng-click="artboardFactory.zoomOut()"> <i class="fa fa-minus"></i></button>
+            <div dropdown-toggle class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{artboardFactory.zoomLevel*100 | number:0 }}%
+                <span class="caret"></span>
             </div>
-            <!-- </button> -->
-                <ul class="dropdown-menu" role="menu">
-                    <li><a ng-click="factory.zoomFit()">Fit To Screen</a></li>
-                    <li><a ng-click="factory.zoomPercent(100)">Full Size</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a ng-click="factory.zoomPercent(20)">20%</a></li>
-                    <li><a ng-click="factory.zoomPercent(50)">50%</a></li>
-                    <li><a ng-click="factory.zoomPercent(80)">80%</a></li>
-                    <li><a ng-click="factory.zoomPercent(100)">100%</a></li>
-                    <li><a ng-click="factory.zoomPercent(130)">130%</a></li>
-                    <li><a ng-click="factory.zoomPercent(150)">150%</a></li>
-                    <li><a ng-click="factory.zoomPercent(200)">200%</a></li>
-                </ul>
-            <button class="btn btn-default u_margin-left" ng-disabled="!factory.canZoomIn()" ng-click="factory.zoomIn()"> <i class="fa fa-plus"></i></button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a ng-click="artboardFactory.zoomFit()">Fit To Screen</a></li>
+                <li><a ng-click="artboardFactory.zoomPercent(100)">Full Size</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a ng-click="artboardFactory.zoomPercent(20)">20%</a></li>
+                <li><a ng-click="artboardFactory.zoomPercent(50)">50%</a></li>
+                <li><a ng-click="artboardFactory.zoomPercent(80)">80%</a></li>
+                <li><a ng-click="artboardFactory.zoomPercent(100)">100%</a></li>
+                <li><a ng-click="artboardFactory.zoomPercent(130)">130%</a></li>
+                <li><a ng-click="artboardFactory.zoomPercent(150)">150%</a></li>
+                <li><a ng-click="artboardFactory.zoomPercent(200)">200%</a></li>
+            </ul>
+            <button class="btn btn-default u_margin-left" ng-disabled="!artboardFactory.canZoomIn()" ng-click="artboardFactory.zoomIn()"> <i class="fa fa-plus"></i></button>
         </div>
-
-     
-
-
 
         <button ng-if="!factory.presentation.id" id="changeTemplateButton" class="btn btn-default" ng-click="changeTemplate()">{{'editor-app.workspace.toolbar.changeTemplate' | translate}} <i class="fa fa-th icon-right"></i></button>
         <span ng-if="!factory.presentation.id" class="text-muted u_margin-left" translate>editor-app.workspace.toolbar.or</span>

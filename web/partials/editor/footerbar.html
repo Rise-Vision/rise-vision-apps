@@ -1,10 +1,10 @@
 <div class="container-fluid text-right editor-footer">
   <div class="footer-content">
-    <div class="pull-left" ng-init="designMode = true">
-        <button id="designButton" class="btn btn-link" ng-class="{'hidden' : designMode}" ng-disabled="designMode" ng-click="showArtboard()">
+    <div class="pull-left">
+        <button id="designButton" class="btn btn-link" ng-if="!artboardFactory.designMode" ng-click="artboardFactory.showArtboard()">
           {{'editor-app.workspace.toolbar.mode.design' | translate}}
         </button>
-        <button id="htmlButton" class="btn btn-link" ng-class="{'hidden' : !designMode}" ng-disabled="!designMode" ng-click="showHtmlEditor()">
+        <button id="htmlButton" class="btn btn-link" ng-if="artboardFactory.designMode" ng-click="artboardFactory.showHtmlEditor()">
           {{'editor-app.workspace.toolbar.mode.html' | translate}} <i class="fa fa-code"></i>
         </button>
     </div>

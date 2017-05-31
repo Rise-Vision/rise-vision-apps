@@ -21,6 +21,9 @@ describe('directive: toolbar', function() {
         }
       };
     });
+    $provide.service('artboardFactory', function() {
+      return {}
+    });
     $provide.service('placeholdersFactory', function() {
       return {
         addNewPlaceholder: function(){
@@ -41,7 +44,8 @@ describe('directive: toolbar', function() {
   }));
 
   it('should exist', function() {
-    expect($scope).to.be.truely;
+    expect($scope).to.be.ok;
+    expect($scope.artboardFactory).to.be.ok;
     expect($scope.addNewPlaceholder).to.be.a('function');
     expect($scope.openProperties).to.be.a('function');
   });

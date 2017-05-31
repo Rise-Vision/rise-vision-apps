@@ -5,24 +5,24 @@ describe('directive: placeholder-drag', function() {
       $document,
       $scope,
       placeholder,
-      editorFactory,
+      artboardFactory,
       element;
 
   beforeEach(module('risevision.editor.services'));
   beforeEach(module('risevision.editor.directives'));
   beforeEach(module(function ($provide) {
-    $provide.service('editorFactory', function(){
+    $provide.service('artboardFactory', function(){
       return {
         zoomLevel: 1
       };
     });
   }));
   beforeEach(module(mockTranlate()));
-  beforeEach(inject(function(_$compile_, _$rootScope_,_$document_,_editorFactory_){
+  beforeEach(inject(function(_$compile_, _$rootScope_,_$document_,_artboardFactory_){
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     $document = _$document_;
-    editorFactory = _editorFactory_;
+    artboardFactory = _artboardFactory_;
     $scope = $rootScope.$new();
     placeholder = {
       "width": 294,
@@ -67,7 +67,7 @@ describe('directive: placeholder-drag', function() {
     });
 
     it('should consider zoomLevel',function(){
-      editorFactory.zoomLevel = 0.1;
+      artboardFactory.zoomLevel = 0.1;
       $scope.$apply();
       element.triggerHandler({type:'mousedown',pageX:10,pageY:10});
       $document.triggerHandler({type:'mousemove',pageX:30,pageY:30});

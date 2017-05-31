@@ -30,6 +30,10 @@ describe('service: placeholdersFactory:', function() {
     $provide.service('editorFactory',function () {
       return editorFactory;
     });
+    
+    $provide.service('artboardFactory',function () {
+      return artboardFactory = {};
+    });
 
     $provide.service('presentationParser',function () {
       return {
@@ -63,7 +67,7 @@ describe('service: placeholdersFactory:', function() {
 
   }));
   var placeholders, placeholder, placeholder0, placeholder2, placeholdersFactory, trackerCalled, updateSchedule, currentState;
-  var editorFactory, trackedEvent, setPlaceholderSpy;
+  var editorFactory, artboardFactory, trackedEvent, setPlaceholderSpy;
   beforeEach(function(){
     trackerCalled = undefined;
     currentState = undefined;
@@ -135,7 +139,7 @@ describe('service: placeholdersFactory:', function() {
     });
     
     it('should center placeholder', function() {
-      placeholdersFactory.getWorkspaceElement = function() {
+      artboardFactory.getWorkspaceElement = function() {
         return {
           clientWidth: 1000,
           clientHeight: 1000,
@@ -150,7 +154,7 @@ describe('service: placeholdersFactory:', function() {
     });
     
     it('should take scroll into account and center placeholder', function() {
-      placeholdersFactory.getWorkspaceElement = function() {
+      artboardFactory.getWorkspaceElement = function() {
         return {
           clientWidth: 1000,
           clientHeight: 1000,
@@ -167,7 +171,7 @@ describe('service: placeholdersFactory:', function() {
     it('should use presentation resolution values if smaller than artboard', function() {
       editorFactory.presentation.height = 1000;
       editorFactory.presentation.width = 1000;
-      placeholdersFactory.getWorkspaceElement = function() {
+      artboardFactory.getWorkspaceElement = function() {
         return {
           clientWidth: 2000,
           clientHeight: 2000,
@@ -182,7 +186,7 @@ describe('service: placeholdersFactory:', function() {
     });
     
     it('should not place placeholder past edge of artboard', function() {
-      placeholdersFactory.getWorkspaceElement = function() {
+      artboardFactory.getWorkspaceElement = function() {
         return {
           clientWidth: 500,
           clientHeight: 500,
@@ -197,7 +201,7 @@ describe('service: placeholdersFactory:', function() {
     });
     
     it('should place placeholder at top left corner for small artboard', function() {
-      placeholdersFactory.getWorkspaceElement = function() {
+      artboardFactory.getWorkspaceElement = function() {
         return {
           clientWidth: 200,
           clientHeight: 200,
@@ -212,7 +216,7 @@ describe('service: placeholdersFactory:', function() {
     });
     
     it('should reposition and readjust size of full screen placeholder', function() {
-      placeholdersFactory.getWorkspaceElement = function() {
+      artboardFactory.getWorkspaceElement = function() {
         return {
         };
       };
@@ -233,7 +237,7 @@ describe('service: placeholdersFactory:', function() {
       describe('bottom first: ', function() {
         var top, left;
         beforeEach(function() {
-          placeholdersFactory.getWorkspaceElement = function() {
+          artboardFactory.getWorkspaceElement = function() {
             return {
               clientWidth: 600,
               clientHeight: 335,
@@ -294,7 +298,7 @@ describe('service: placeholdersFactory:', function() {
       describe('right first: ', function() {
         var top, left;
         beforeEach(function() {
-          placeholdersFactory.getWorkspaceElement = function() {
+          artboardFactory.getWorkspaceElement = function() {
             return {
               clientWidth: 485,
               clientHeight: 1000,

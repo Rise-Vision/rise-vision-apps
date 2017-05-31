@@ -18,6 +18,7 @@ var WorkspacePage = function() {
   var codemirrorHtmlEditor = element(by.id('codemirrorHtmlEditor'));
   var presentationNameContainer = element(by.id('presentationName'));
   var backToListButton = element(by.id('backToListButton'));
+  var zoomDropdown = element(by.css('.zoom-selector .dropdown-toggle'));
 
   var saveStatus = element(by.css(".save-status"));
 
@@ -104,6 +105,10 @@ var WorkspacePage = function() {
 
   this.getBackToListButton = function () {
     return backToListButton;
+  }
+  
+  this.getZoomDropdown = function() {
+    return zoomDropdown;
   }
 
 

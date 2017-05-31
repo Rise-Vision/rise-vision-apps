@@ -20,7 +20,7 @@ var ArtboardPlaceholdersScenarios = function() {
     var workspacePage;
     var artboardPage;
     var placeholdersListPage;
-    var initialZoom = 0.5;
+    var initialZoom;
 
     before(function () {
       homepage = new HomePage();
@@ -42,6 +42,15 @@ var ArtboardPlaceholdersScenarios = function() {
         presentationsListPage.openNewPresentation();
 
         helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
+      });
+      
+      it('should zoom to fit', function(done) {
+        workspacePage.getZoomDropdown().getText().then(function(text) {
+          initialZoom = parseInt(text.substring(0, text.indexOf('%'))) / 100;
+          expect(initialZoom).to.be.greaterThan(0);
+
+          done();
+        });        
       });
 
       it('should show the placeholder', function () {
@@ -121,7 +130,7 @@ var ArtboardPlaceholdersScenarios = function() {
               .mouseMove(artboardPage.getPlaceholderContainers().get(0), {x: size.width*initialZoom - 50*initialZoom, y: size.height*initialZoom - 50*initialZoom})
               .mouseUp()
               .perform();
-            expect(artboardPage.getPlaceholderContainers().get(0).getLocation()).to.eventually.include({x: initialLocation.x + 50*initialZoom, y: initialLocation.y + 50*initialZoom});
+            expect(artboardPage.getPlaceholderContainers().get(0).getLocation()).to.eventually.include({x: Math.floor(initialLocation.x + 50*initialZoom), y: Math.floor(initialLocation.y + 50*initialZoom)});
             
             done()
           });

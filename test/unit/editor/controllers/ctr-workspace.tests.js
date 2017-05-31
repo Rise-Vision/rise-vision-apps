@@ -11,6 +11,9 @@ describe('controller: Workspace', function() {
         }
       };
     });
+    $provide.factory('artboardFactory', function() {
+      return {};
+    });
     $provide.factory('$stateParams',function(){
       return { };
     });
@@ -60,9 +63,9 @@ describe('controller: Workspace', function() {
     expect($scope.isSubcompanySelected).to.be.a('function');
     expect($scope.isTestCompanySelected).to.be.a('function');
 
-    expect($scope.factory).to.be.truely;
-    expect($scope.presentationTracker).to.be.truely;
-    expect($scope.factory).to.deep.equal(editorFactory);    
+    expect($scope.factory).to.be.ok;
+    expect($scope.artboardFactory).to.be.ok;
+    expect($scope.factory).to.deep.equal(editorFactory);
   });
 
   it('should show warning if presentation has deprecated items',function(){

@@ -45,8 +45,9 @@ var HtmlEditorScenarios = function() {
 
       });
 
-      it('Should disable HTML button', function () {
-        expect(workspacePage.getHtmlButton().getAttribute("disabled")).to.eventually.equal('true');
+      it('Should hide HTML button', function () {
+        expect(workspacePage.getHtmlButton().isPresent()).to.eventually.be.false;
+        expect(workspacePage.getDesignButton().isDisplayed()).to.eventually.be.true;
       });
 
       describe('Should allow HTML editing', function () {

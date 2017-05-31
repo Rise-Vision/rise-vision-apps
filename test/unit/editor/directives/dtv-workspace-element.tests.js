@@ -2,12 +2,12 @@
 describe('directive: workspace-element', function() {
   var $scope,
       element,
-      placeholdersFactory;
+      artboardFactory;
 
   beforeEach(module('risevision.editor.directives'));
   beforeEach(module(function ($provide) {
-    $provide.service('placeholdersFactory', function() {
-      return placeholdersFactory = {};
+    $provide.service('artboardFactory', function() {
+      return artboardFactory = {};
     });
   }));
 
@@ -21,13 +21,13 @@ describe('directive: workspace-element', function() {
     expect($scope).to.be.ok;
   });
 
-  it('Should inject function to placeholdersFactory', function() {
-    expect(placeholdersFactory.getWorkspaceElement).to.be.ok;
-    expect(placeholdersFactory.getWorkspaceElement).to.be.a('function');
+  it('Should inject function to artboardFactory', function() {
+    expect(artboardFactory.getWorkspaceElement).to.be.ok;
+    expect(artboardFactory.getWorkspaceElement).to.be.a('function');
   });
 
   it('should return element',function(){
-    expect(placeholdersFactory.getWorkspaceElement()).to.be.ok;
+    expect(artboardFactory.getWorkspaceElement()).to.be.ok;
   });
 
 });

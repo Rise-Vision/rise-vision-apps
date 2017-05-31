@@ -7,6 +7,7 @@ describe('directive: artboard-presentation', function() {
       $scope,
       presentation,
       editorFactory,
+      artboardFactory,
       $stateParams;
 
   presentation = {
@@ -24,21 +25,29 @@ describe('directive: artboard-presentation', function() {
   beforeEach(module(function ($provide) {
     $provide.service('editorFactory', function() {
       return {
+        presentation: presentation
+      };
+    });
+    $provide.service('artboardFactory', function() {
+      return {
         zoomLevel: 0.5,
         zoomIn: function(){},
         zoomOut: function(){},
-        presentation: presentation
-      };
+        zoomFit: function(){
+          artboardFactory.zoomLevel = 0.5;
+        }
+      };      
     });
   }));
 
   beforeEach(inject(function(_$compile_, _$rootScope_, $templateCache,
-    PRESENTATION_BORDER_SIZE, _$stateParams_, _editorFactory_){
+    PRESENTATION_BORDER_SIZE, _$stateParams_, _editorFactory_, _artboardFactory_){
     $templateCache.put('partials/editor/artboard-presentation.html', '<p>mock</p>');
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     $stateParams = _$stateParams_;
     editorFactory = _editorFactory_;
+    artboardFactory = _artboardFactory_;
     heightIncrement = PRESENTATION_BORDER_SIZE;
     widthIncrement = 2 * PRESENTATION_BORDER_SIZE;
     $scope = $rootScope.$new();
@@ -51,11 +60,11 @@ describe('directive: artboard-presentation', function() {
   });
 
   describe('zoom:', function () {
-    it('should watch editorFactory zoomLevel',function() {
+    it('should watch artboardFactory zoomLevel',function() {
       var scopeWatchSpy = sinon.spy($scope, '$watch');
       var element = $compile("<artboard-presentation></artboard-presentation>")($scope);
       $scope.$digest();
-      scopeWatchSpy.should.have.been.calledWith('editorFactory.zoomLevel');
+      scopeWatchSpy.should.have.been.called;
     });
 
     it('should scale',function(){
@@ -63,19 +72,20 @@ describe('directive: artboard-presentation', function() {
       $scope.$apply();
       expect(element.css('transform')).to.equal('scale(0.5)');
       expect(element.css('transform-origin')).to.equal('0% 0%');
+      expect(element.css('transition')).to.equal('all 0.4s');
     });
 
     it('should re-scale when zoom changes',function(){
       var element = $compile("<artboard-presentation></artboard-presentation>")($scope);
       $scope.$apply();
-      editorFactory.zoomLevel = 0.1
+      artboardFactory.zoomLevel = 0.1;
       $scope.$apply();
       expect(element.css('transform')).to.equal('scale(0.1)');
       expect(element.css('transform-origin')).to.equal('0% 0%');
     });
 
     it('should zoom out on mouse wheel+CTRL',function(){
-      var zoomOutSpy = sinon.spy(editorFactory,'zoomOut')
+      var zoomOutSpy = sinon.spy(artboardFactory,'zoomOut')
       var element = $compile("<artboard-presentation></artboard-presentation>")($scope);
       $scope.$apply();
       element.triggerHandler({type:'mousewheel',ctrlKey:true,pageX:30,pageY:30, originalEvent: {detail:-130}});
@@ -84,7 +94,7 @@ describe('directive: artboard-presentation', function() {
     });
 
     it('should zoom in on mouse wheel+CTRL',function(){
-      var zoomInSpy = sinon.spy(editorFactory,'zoomIn')
+      var zoomInSpy = sinon.spy(artboardFactory,'zoomIn')
       var element = $compile("<artboard-presentation></artboard-presentation>")($scope);
       $scope.$apply();
       element.triggerHandler({type:'mousewheel',ctrlKey:true,pageX:30,pageY:30, originalEvent: {detail:0}});
@@ -94,7 +104,7 @@ describe('directive: artboard-presentation', function() {
   });
 
   describe('presentation:', function () {
-    it('should watch editorFactory presentation',function(){
+    it('should watch artboardFactory presentation',function(){
       var scopeWatchSpy = sinon.spy($scope, '$watch');
       var element = $compile("<artboard-presentation></artboard-presentation>")($scope);
       $scope.$digest();
@@ -104,7 +114,7 @@ describe('directive: artboard-presentation', function() {
     it('should add class',function(){
       var element = $compile("<artboard-presentation></artboard-presentation>")($scope);
       $scope.$digest();
-      expect(element.hasClass('artboard-presentation')).to.be.truely;
+      expect(element.hasClass('artboard-presentation')).to.be.ok;
     });
 
     it('should apply presentation properties',function(){
@@ -113,7 +123,7 @@ describe('directive: artboard-presentation', function() {
       expect(element.css('width')).to.equal((presentation.width + widthIncrement)+presentation.widthUnits);
       expect(element.css('height')).to.equal((presentation.height + heightIncrement)+presentation.heightUnits);
       expect(element.css('background')).to.equal(presentation.backgroundStyle);
-      expect(element.css('backgroundSize')).to.equal('contain');    
+      expect(element.css('backgroundSize')).to.equal('contain');
     });
 
     it('should apply presentation properties when they cahnge',function(){

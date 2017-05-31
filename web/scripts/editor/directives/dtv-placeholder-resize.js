@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.editor.directives')
-  .directive('placeholderResize', ['$document', 'widgetRenderer', 'editorFactory',
-    function ($document, widgetRenderer, editorFactory) {
+  .directive('placeholderResize', ['$document', 'widgetRenderer', 'artboardFactory',
+    function ($document, widgetRenderer, artboardFactory) {
       return {
         restrict: 'A',
         link: function ($scope, $element, attrs) {
@@ -10,7 +10,7 @@ angular.module('risevision.editor.directives')
 
           var resizeUp = function ($event) {
             var lowest = $mouseDown.top + $mouseDown.height;
-            var top = $mouseDown.top + ($event.pageY - $mouseDown.pageY)/editorFactory.zoomLevel;
+            var top = $mouseDown.top + ($event.pageY - $mouseDown.pageY)/artboardFactory.zoomLevel;
             top = top > lowest ? lowest : top;
             var height = $mouseDown.top - top + $mouseDown.height;
             $scope.$apply(function () {
@@ -20,7 +20,7 @@ angular.module('risevision.editor.directives')
           };
 
           var resizeRight = function ($event) {
-            var width = $mouseDown.width + ($event.pageX - $mouseDown.pageX)/editorFactory.zoomLevel;
+            var width = $mouseDown.width + ($event.pageX - $mouseDown.pageX)/artboardFactory.zoomLevel;
             width = width > 0 ? width : 0;
             $scope.$apply(function () {
               $scope.placeholder.width = width;
@@ -28,7 +28,7 @@ angular.module('risevision.editor.directives')
           };
 
           var resizeDown = function ($event) {
-            var height = $mouseDown.height + ($event.pageY - $mouseDown.pageY)/editorFactory.zoomLevel;
+            var height = $mouseDown.height + ($event.pageY - $mouseDown.pageY)/artboardFactory.zoomLevel;
             height = height > 0 ? height : 0;
             $scope.$apply(function () {
               $scope.placeholder.height = height;
@@ -37,7 +37,7 @@ angular.module('risevision.editor.directives')
 
           var resizeLeft = function ($event) {
             var rightest = $mouseDown.left + $mouseDown.width;
-            var left = $mouseDown.left + ($event.pageX - $mouseDown.pageX)/editorFactory.zoomLevel;
+            var left = $mouseDown.left + ($event.pageX - $mouseDown.pageX)/artboardFactory.zoomLevel;
             left = left > rightest ? rightest : left;
             var width = $mouseDown.left - left + $mouseDown.width;
             $scope.$apply(function () {
