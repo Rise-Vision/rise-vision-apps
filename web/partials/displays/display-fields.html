@@ -35,16 +35,24 @@
       <div class="u_margin-sm-top animated fadeIn" ng-show="showDownloadButtons">
         <download-player></download-player>
       </div>
-      <div ng-show="controlsError" class="alert alert-danger" role="alert">
-        <strong translate>displays-app.fields.controls.error </strong>{{controlsError}}
-      </div>
-      <div class="panel panel-info animated fadeIn" ng-show="controlsInfo">
-        <div class="panel-body">
-          <strong>{{ controlsInfo | translate }}</strong>
-        </div>
-      </div>
+     
     </div>
   </div>
+  <!-- DISPLAY ERRORS AND ALERTS -->
+  <div class="row">
+      <div class="col-sm-12">
+          <div ng-show="controlsError" class="alert alert-danger" role="alert">
+              <strong translate>displays-app.fields.controls.error </strong>{{controlsError}}
+          </div>
+          <div class="panel animated fadeIn" ng-show="controlsInfo">
+              <div class="panel-body bg-warning">
+                  <strong>{{ controlsInfo | translate }}</strong>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
 </div>
 <hr>
 
