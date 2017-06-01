@@ -6,7 +6,7 @@ var StorageHomePage = function() {
   var uploadButton = element(by.id('uploadButton'));
   var uploadFolderButton = element(by.id('uploadFolderButton'));
   var uploadInput = element(by.id('upload-files'));
-  var uploadPanel = element(by.css('.upload-panel'));
+  var uploadPanel = element(by.id('uploadPanel'));
   
   var downloadButton = element(by.id('fileDownloadButton'));
   var copyUrlButton = element(by.id('fileCopyUrlButton'));
