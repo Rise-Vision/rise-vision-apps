@@ -3,7 +3,7 @@
   <artboard-placeholder ng-repeat="placeholder in presentation.placeholders" id="{{placeholder.id}}" 
     placeholder="placeholder" placeholder-drag placeholder-resize
     ng-mouseDown="placeholderFactory.setPlaceholder(placeholder)" stop-event="mousedown">
-    <span class="{{placeholder.className}}"></span>
+    <span class="{{placeholder.className}}" data-before="{{placeholder.items[0].name}}"></span>
     <span class="ph-name">{{placeholder.id}}</span>
   </artboard-placeholder>
 </div>
