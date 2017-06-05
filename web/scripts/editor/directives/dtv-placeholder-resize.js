@@ -48,7 +48,7 @@ angular.module('risevision.editor.directives')
 
           var createResizer = function (className, handlers) {
             var newElement = angular.element('<div class="' + className +
-              '"></div>');
+              ' resize"></div>');
             $element.append(newElement);
             newElement.on('mousedown', function ($event) {
               $event.preventDefault();
