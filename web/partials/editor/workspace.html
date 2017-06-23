@@ -1,3 +1,90 @@
+  <div class="container">
+    <div class="arrow-steps hidden-xs" style="border: 1px solid #d6d6d6;">
+        <div class="step completed">
+            <span> Sign Up </span>
+            <span class="completed-tag"> Completed! </span>
+        </div>
+        <div class="step current">
+            <span> Create a Presentation </span>
+            <span class="onboard-actions">
+              <button class="btn btn-sm btn-primary">
+                Go Now
+              </button>
+              <button class="btn btn-sm btn-primary">
+                <i class="fa fa-question u_icon-white"></i>
+              </button>
+          </span>
+            <span class="completed-tag" style="display:none"> Completed! </span>
+        </div>
+        <div class="step">
+            <span> Add a Display </span>
+            <span class="onboard-actions" style="display:none;">
+              <button class="btn btn-sm btn-primary">
+                Go Now
+              </button>
+              <button class="btn btn-sm btn-primary">
+                <i class="fa fa-question u_icon-white"></i>
+              </button>
+            </span>
+            <span class="completed-tag" style="display:none"> Completed! </span>
+        </div>
+        <div class="step">
+            <span> Activate a Display</span>
+            <span class="onboard-actions" style="display:none;">
+              <button class="btn btn-sm btn-primary">
+                Go Now
+              </button>
+              <button class="btn btn-sm btn-primary">
+                <i class="fa fa-question u_icon-white"></i>
+              </button>
+            </span>
+            <span class="completed-tag" style="display:none"> Completed! </span>
+        </div>
+        <div class="step">
+            <span> <b id="step-count">3</b> Steps To Go! </span>
+        </div>
+    </div>
+    <div class="proto-nav">
+        <a href="#" id="next-step" class="pull-right"></a>
+    </div>
+</div>
+
+
+<!-- PROTOTYPE CODE - REFERENCE ONLY -->
+<script>
+// $(document).on("click", "#prev-step", function() {
+//          $( ".arrow-steps" ).find( ".step.current" ).removeClass( "current" ).addClass( "completed" ).hide(" .onboard-actions ").show( " .completed-tag ");
+// });
+$(document).on("click", "#next-step", function() {
+    var currentStep = $(".arrow-steps").find(".step.current");
+    $(currentStep).removeClass("current").addClass("completed");
+
+    var currentActions = $(currentStep).find(" .onboard-actions ");
+    $(currentActions).hide();
+
+    var currentTag = $(currentStep).find(" .completed-tag ");
+    $(currentTag).show();
+
+    var nextStep = $(currentStep).next();
+    $(nextStep).addClass("current");
+
+    var nextActions = $(nextStep).find(" .onboard-actions ");
+    $(nextActions).show();
+
+    if ($("#step-count").text() === '1') {
+        $("#step-count").parent().html("<span>All Done!</span>");
+    } else {
+        $("#step-count").text(function(i, t) {
+            return Number(t) - 1;
+        });
+    }
+});
+</script>
+
+
+
+
+
 <style type="text/css">
 	.navbar .container {width: 100%;}
 </style>
@@ -6,7 +93,7 @@
   <sidebar></sidebar>
   <toolbar></toolbar>
 
-  <div class="workspace-board" workspace-element>
+  <div class="workspace-board" workspace-element style="height: calc(100vh - 185px);">
     <div id="editingModeView" ui-view></div>
   </div><!--editor-bg-->
 
