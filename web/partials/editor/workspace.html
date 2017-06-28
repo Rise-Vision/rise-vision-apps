@@ -1,5 +1,5 @@
   <div class="container">
-    <div class="arrow-steps hidden-xs" style="border: 1px solid #d6d6d6;">
+    <div class="arrow-steps u_bordered hidden-xs">
         <div class="step completed">
             <span> Sign Up </span>
             <span class="completed-tag"> Completed! </span>
@@ -44,17 +44,32 @@
             <span> <b id="step-count">3</b> Steps To Go! </span>
         </div>
     </div>
+
+    <!-- PROTOTYPE USE ONLY -->
     <div class="proto-nav">
         <a href="#" id="next-step" class="pull-right"></a>
     </div>
+    
+</div>
+
+<style type="text/css">
+	.navbar .container {width: 100%;}
+</style>
+
+<div id="workspace" class="workspace" ng-class="{'hide-sidebar' : artboardFactory.hideSidebar(), 'active-banner-mode' : isSubcompanySelected() || isTestCompanySelected(), 'active-banner-mode-double' : isSubcompanySelected() && isTestCompanySelected()}">
+  <sidebar></sidebar>
+  <toolbar></toolbar>
+
+  <div class="workspace-board" workspace-element >
+    <div id="editingModeView" ui-view></div>
+  </div><!--editor-bg-->
+
+  <footer></footer>
 </div>
 
 
 <!-- PROTOTYPE CODE - REFERENCE ONLY -->
 <script>
-// $(document).on("click", "#prev-step", function() {
-//          $( ".arrow-steps" ).find( ".step.current" ).removeClass( "current" ).addClass( "completed" ).hide(" .onboard-actions ").show( " .completed-tag ");
-// });
 $(document).on("click", "#next-step", function() {
     var currentStep = $(".arrow-steps").find(".step.current");
     $(currentStep).removeClass("current").addClass("completed");
@@ -80,22 +95,3 @@ $(document).on("click", "#next-step", function() {
     }
 });
 </script>
-
-
-
-
-
-<style type="text/css">
-	.navbar .container {width: 100%;}
-</style>
-
-<div id="workspace" class="workspace" ng-class="{'hide-sidebar' : artboardFactory.hideSidebar(), 'active-banner-mode' : isSubcompanySelected() || isTestCompanySelected(), 'active-banner-mode-double' : isSubcompanySelected() && isTestCompanySelected()}">
-  <sidebar></sidebar>
-  <toolbar></toolbar>
-
-  <div class="workspace-board" workspace-element style="height: calc(100vh - 185px);">
-    <div id="editingModeView" ui-view></div>
-  </div><!--editor-bg-->
-
-  <footer></footer>
-</div>
