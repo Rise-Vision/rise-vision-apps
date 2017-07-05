@@ -9,25 +9,32 @@
 <div ng-controller="displayControls">
   <!-- DESKTOP BUTTONS -->
   <div class="row">
-    <div class="col-sm-4 col-md-3 col-md-offset-3">
+    <div class="col-md-3">
       <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" required-role="da">
         {{ 'displays-app.fields.controls.restart.name' | translate }}
         <i class="fa fa-refresh icon-right"></i>
       </button>
     </div>
-    <div class="col-sm-4 col-md-3">
+    <div class="col-md-3">
       <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" required-role="da">
         {{ 'displays-app.fields.controls.reboot.name' | translate }}
         <i class="fa fa-power-off icon-right"></i>
       </button>
     </div>
-    <div class="col-sm-4 col-md-3">
+    <div class="col-md-3">
       <button id="downloadPlayer" type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-click="showDownloadButtons = true">
         {{ 'displays-app.fields.controls.download' | translate }}
         <i class="fa fa-cloud-download icon-right"></i>
       </button>
     </div>
+    <div class="col-md-3">
+      <button id="downloadPlayer" type="button" class="btn btn-primary btn-block u_margin-sm-bottom" ng-click="showDownloadButtons = true">
+        Subscribe to Rise Player Professional 
+      </button>
+    </div>
   </div>
+
+ <!--  <div class="subscription-status trial prototype-show prototype-show-ready" rel="mode1" style="display: block;"> <span>14 days remaining on your Rise Player Professional trial!</span> <a type="button" class="btn btn-primary u_margin-left" ng-href="https://www.risevision.com/pricing?utm_campaign=apps" target="_blank" href="https://www.risevision.com/pricing?utm_campaign=apps"> <span translate="subscription-status.subscribe-now" class="ng-scope">Subscribe Now!</span> </a> </div> -->
 
   <!-- DOWNLOAD PLAYER BUTTONS -->
   <div class="row">
@@ -71,10 +78,12 @@
           </tr>
           <tr class="table-body__row">
             <td class="table-body__cell" translate><span>displays-app.fields.player.status</span></td>
-            <td class="table-body__cell">
+            <td class="table-body__cell" style="padding: 4px 8px;">
               <span>
                 <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
-                <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline</span>
+                <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline
+                <a href="#" style="font-size: 12px; display: block;">Why is my Display offline?</a>
+                </span>
                 <span class="text-success" ng-show="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
                 <button class="btn btn-xs btn-primary pt-status btn-install-player"
                         ng-show="!displayService.statusLoading && (display | status) === 'notinstalled'"
@@ -104,6 +113,11 @@
             <td class="table-body__cell"><span translate>displays-app.fields.player.lastConnection</span></td>
             <td class="table-body__cell"><span>{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span></td>
           </tr>
+           <tr class="table-body__row">
+            <td class="table-body__cell "><span translate>displays-app.fields.player.playerVersion</span></td>
+            <td class="table-body__cell "><span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}}</span> 
+            </td>
+          </tr>
           <tr class="table-body__row">
             <td class="table-body__cell"><span translate>displays-app.fields.player.resolution</span></td>
             <td class="table-body__cell"><span>{{display.width | resolution: display.height}}</span></td>
@@ -120,10 +134,7 @@
             <td class="table-body__cell"><span translate>displays-app.fields.player.macAddress</span></td>
             <td class="table-body__cell"><span>{{display.macAddress}}</span></td>
           </tr>
-          <tr class="table-body__row">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.playerVersion</span></td>
-            <td class="table-body__cell"><span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}}</span></td>
-          </tr>
+         
           <tr class="table-body__row">
             <td class="table-body__cell"><span translate>displays-app.fields.player.viewerVersion</span></td>
             <td class="table-body__cell"><span>{{display.viewerVersion}}</span></td>
@@ -310,7 +321,7 @@
 
 <div class="form-group reboot-time">
   <div class="checkbox">
-    <label class="control-label"><input type="checkbox" ng-model="display.restartEnabled"> <strong translate>displays-app.fields.reboot</strong></label>
+    <label class="control-label"><input type="checkbox" ng-model="display.restartEnabled"> <strong translate>Restart Media Player at: </strong></label>
   </div>
   <time-picker ng-model="display.restartTime" ng-disabled="!display.restartEnabled"></time-picker>
 </div>
