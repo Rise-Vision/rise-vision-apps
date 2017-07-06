@@ -9,7 +9,7 @@
 <div ng-controller="displayControls">
   <!-- DESKTOP BUTTONS -->
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-offset-3 col-md-3">
       <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" required-role="da">
         {{ 'displays-app.fields.controls.restart.name' | translate }}
         <i class="fa fa-refresh icon-right"></i>
@@ -27,14 +27,14 @@
         <i class="fa fa-cloud-download icon-right"></i>
       </button>
     </div>
-    <div class="col-md-3">
+    <!-- <div class="col-md-3">
       <button id="downloadPlayer" type="button" class="btn btn-primary btn-block u_margin-sm-bottom" ng-click="showDownloadButtons = true">
         Subscribe to Rise Player Professional 
       </button>
-    </div>
+    </div> -->
   </div>
 
- <!--  <div class="subscription-status trial prototype-show prototype-show-ready" rel="mode1" style="display: block;"> <span>14 days remaining on your Rise Player Professional trial!</span> <a type="button" class="btn btn-primary u_margin-left" ng-href="https://www.risevision.com/pricing?utm_campaign=apps" target="_blank" href="https://www.risevision.com/pricing?utm_campaign=apps"> <span translate="subscription-status.subscribe-now" class="ng-scope">Subscribe Now!</span> </a> </div> -->
+ 
 
   <!-- DOWNLOAD PLAYER BUTTONS -->
   <div class="row">
@@ -115,7 +115,9 @@
           </tr>
            <tr class="table-body__row">
             <td class="table-body__cell "><span translate>displays-app.fields.player.playerVersion</span></td>
-            <td class="table-body__cell "><span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}}</span> 
+            <td class="table-body__cell "><a href="#" style="display:block">Professional <i class="fa fa-question-circle" aria-hidden="true"></i>
+</a>
+            <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}} </span> 
             </td>
           </tr>
           <tr class="table-body__row">
