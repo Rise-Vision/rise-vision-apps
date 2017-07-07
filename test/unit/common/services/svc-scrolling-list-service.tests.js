@@ -1,6 +1,6 @@
 'use strict';
 describe('service: ScrollingListService:', function() {
-  beforeEach(module('risevision.editor.services'));
+  beforeEach(module('risevision.apps.services'));
   beforeEach(module(function ($provide) {
     $provide.service('listService',function(){
       return {};

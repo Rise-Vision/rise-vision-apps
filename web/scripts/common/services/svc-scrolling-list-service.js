@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('risevision.editor.services')
+angular.module('risevision.apps.services')
   .service('ScrollingListService', ['BaseList',
     function (BaseList) {
       return function (listService, search) {

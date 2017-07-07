@@ -14,7 +14,6 @@ angular.module('risevision.apps', [
     'risevision.common.components.timeline',
     'risevision.common.components.analytics',
     'risevision.common.components.distribution-selector',
-    'risevision.common.components.presentation-selector',
     'risevision.common.components.background-image-setting',
     'risevision.common.components.message-box',
     'risevision.common.currency',
@@ -469,7 +468,9 @@ angular.module('risevision.apps', [
 // ])
 ;
 
-angular.module('risevision.apps.services', []);
+angular.module('risevision.apps.services', [
+  'risevision.common.header'
+]);
 angular.module('risevision.apps.controllers', [
   'risevision.common.config'
 ]);

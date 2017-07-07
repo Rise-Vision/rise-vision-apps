@@ -75,7 +75,6 @@
   <script src="bower_components/rv-common-app-components/dist/js/stop-event.js"></script>
   <script src="bower_components/rv-common-app-components/dist/js/timeline.js"></script>
   <script src="bower_components/rv-common-app-components/dist/js/distribution-selector.js"></script>
-  <script src="bower_components/rv-common-app-components/dist/js/presentation-selector.js"></script>
   <script src="bower_components/rv-common-app-components/dist/js/background-image-setting.js"></script>
 
   <script src="bower_components/widget-settings-ui-core/dist/widget-settings-ui-core.js"></script>
@@ -114,6 +113,7 @@
   <script src="scripts/common/services/svc-access.js"></script>
   <script src="scripts/common/services/svc-email.js"></script>
   <script src="scripts/common/services/svc-resource-loader.js"></script>
+  <script src="scripts/common/services/svc-scrolling-list-service.js"></script>
 
   <!-- launcher -->
   <script src="scripts/launcher/controllers/ctr-home.js"></script>
@@ -159,6 +159,8 @@
   <script src="scripts/displays/controllers/ctr-alerts.js"></script>
 
   <!-- editor -->
+  <script src="scripts/editor/services/svc-presentation.js"></script>
+  <script src="scripts/editor/services/svc-presentation-factory.js"></script>
   <script src="scripts/editor/services/svc-html-parser.js"></script>
   <script src="scripts/editor/services/svc-presentation-parser.js"></script>
   <script src="scripts/editor/services/svc-distribution-parser.js"></script>
@@ -166,10 +168,10 @@
 
   <script src="scripts/editor/controllers/ctr-presentation-list.js"></script>
   <script src="scripts/editor/controllers/ctr-shared-templates-modal.js"></script>
+  <script src="scripts/editor/controllers/ctr-presentation-selector-modal.js"></script>
 
   <script src="scripts/editor/services/svc-artboard-factory.js"></script>
   <script src="scripts/editor/services/svc-editor-factory.js"></script>
-  <script src="scripts/editor/services/svc-scrolling-list-service.js"></script>
   <script src="scripts/editor/services/svc-placeholder-playlist-factory.js"></script>
   <script src="scripts/editor/services/svc-placeholders-factory.js"></script>
   <script src="scripts/editor/services/svc-placeholder-factory.js"></script>
@@ -202,6 +204,8 @@
   <script src="scripts/editor/controllers/ctr-presentation-item-modal.js"></script>
   <script src="scripts/editor/services/svc-presentation-item-factory.js"></script>
 
+  <script src="scripts/editor/filters/ftr-presentation-status.js"></script>
+
   <script src="scripts/editor/directives/dtv-toolbar.js"></script>
   <script src="scripts/editor/directives/dtv-sidebar.js"></script>
   <script src="scripts/editor/directives/dtv-footer.js"></script>
@@ -217,6 +221,7 @@
   <script src="scripts/editor/directives/dtv-subscription-status.js"></script>
   <script src="scripts/editor/directives/dtv-placeholder-drag.js"></script>
   <script src="scripts/editor/directives/dtv-placeholder-resize.js"></script>
+  <script src="scripts/editor/directives/dtv-presentation-name.js"></script>
   <script src="scripts/editor/directives/dtv-rv-popover.js"></script>
 
   <!-- storage -->

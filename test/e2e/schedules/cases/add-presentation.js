@@ -13,9 +13,7 @@ var PlaylistPage = require('./../pages/playlistPage.js');
 var AddPresentationScenarios = function() {
 
 
-  describe("In order to have presentation on a schedule " +
-    "As a user signed in " +
-    "I would like to add presentations to a schedule ", function () {
+  describe("Add presentations to a schedule ", function () {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
     var loginPage;
@@ -41,7 +39,7 @@ var AddPresentationScenarios = function() {
       helper.waitDisappear(schedulesListPage.getLoader(),'Schedules loader');
     });
 
-    describe(" Given a user is adding a new schedule ", function () {
+    describe("Add a new schedule ", function () {
       before(function () {
         schedulesListPage.getScheduleAddButton().click();
       });
@@ -83,15 +81,10 @@ var AddPresentationScenarios = function() {
 
           it('should show presentations', function () {
             //wait for spinner to go away.
-            browser.wait(function () {
-              return presentationModalPage.getPresentationListLoader().isDisplayed().then(function (result) {
-                return !result
-              });
-            }, 20000);
+            helper.waitDisappear(presentationModalPage.getPresentationListLoader(), 'Presentations List Loader');
 
             expect(presentationModalPage.getPresentationItems().get(0).isPresent()).to.eventually.be.true;
             expect(presentationModalPage.getPresentationItems().count()).to.eventually.be.above(0);
-
           });
 
           describe('Given the user chooses a presentation', function () {

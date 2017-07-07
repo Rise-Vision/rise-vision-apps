@@ -49,8 +49,8 @@ angular.module('risevision.editor.controllers')
 
       $scope.selectPresentation = function() {
         var modalInstance = $modal.open({
-          templateUrl: 'presentation-selector/presentation-modal.html',
-          controller: 'selectPresentationModal'
+          templateUrl: 'partials/editor/presentation-selector-modal.html',
+          controller: 'PresentationSelectorModal'
         });
 
         modalInstance.result.then(function (presentationDetails) {

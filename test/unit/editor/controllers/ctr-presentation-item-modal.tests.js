@@ -157,8 +157,8 @@ describe('controller: presentation item modal', function() {
     
     it('should open presentation selector on open', function(done) {
       $modal.open.should.have.been.called;
-      expect($modal.open.getCall(0).args[0].templateUrl).to.equal('presentation-selector/presentation-modal.html');
-      expect($modal.open.getCall(0).args[0].controller).to.equal('selectPresentationModal');
+      expect($modal.open.getCall(0).args[0].templateUrl).to.equal('partials/editor/presentation-selector-modal.html');
+      expect($modal.open.getCall(0).args[0].controller).to.equal('PresentationSelectorModal');
       
       setTimeout(function() {
         expect($scope.presentationId).to.equal('newId');
@@ -233,8 +233,8 @@ describe('controller: presentation item modal', function() {
       $scope.selectPresentation();
 
       $modal.open.should.have.been.called;
-      expect($modal.open.getCall(0).args[0].templateUrl).to.equal('presentation-selector/presentation-modal.html');
-      expect($modal.open.getCall(0).args[0].controller).to.equal('selectPresentationModal');
+      expect($modal.open.getCall(0).args[0].templateUrl).to.equal('partials/editor/presentation-selector-modal.html');
+      expect($modal.open.getCall(0).args[0].controller).to.equal('PresentationSelectorModal');
       
       setTimeout(function() {
         expect($scope.presentationId).to.equal('newId');

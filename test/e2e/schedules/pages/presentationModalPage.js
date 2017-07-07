@@ -4,8 +4,8 @@ var PresentationModalPage = function() {
   var modalTitle = element(by.css('#addPresentationModal .modal-title'));
   var presentationSearchInput = element(by.id('presentationSearchInput'));
   var presentationListTable = element(by.id('presentationListTable'));
-  var presentationItems = element.all(by.repeater('presentation in presentations.list'));
-  var presentationListLoader = element(by.css('#addPresentationModal .spinner-backdrop'));
+  var presentationItems = element.all(by.repeater('presentation in factory.items.list'));
+  var presentationListLoader = element(by.xpath('//div[@spinner-key="presentation-list-loader"]'));
   var presentationNames = element.all(by.css('#addPresentationModal #presentationName'));
   var closeButton = element(by.css('#addPresentationModal > div.modal-header > button'));
 
