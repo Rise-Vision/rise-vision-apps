@@ -1,77 +1,77 @@
 <div id="appLauncherContainer">
-  <div class="container">
+  <div class="container u_margin-md-top">
 
-  <ng-include ng-show="!editorFactory.presentations.loadingItems && editorFactory.presentations.items.list.length === 0" src="'partials/launcher/add-presentation-cta.html'"></ng-include>
+  <ng-include ng-show="!launcherFactory.presentations.loadingItems && launcherFactory.presentations.list.length === 0" src="'partials/launcher/add-presentation-cta.html'"></ng-include>
   
-  <div ng-show="editorFactory.presentations.items.list.length > 0">
-    <div class="text-right u_margin-md-top u_margin-md-bottom">
+  <div ng-show="launcherFactory.presentations.list.length > 0">
+    <!-- <div class="text-right u_margin-md-top u_margin-md-bottom">
       <button id="showHelpButton" class="btn btn-link" ng-click="toggleHelp()" ng-hide="showHelp">{{'launcher.howToShow'|translate}}</button>
       <button id="hideHelpButton" class="btn btn-link" ng-click="toggleHelp()" ng-show="showHelp">{{'launcher.hideAnimation'|translate}}</button>
     </div>
 
     <div id="helpContainer" class="video-box u_margin-md-bottom" ng-show="showHelp">
         <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/Animations/howitworks.gif">
-    </div>
+    </div> -->
 
-    <div class="row" ng-init="listLimit=20">
+    <div class="row">
 
-      <div class="col-sm-4" ng-controller="PresentationListController">
+      <div class="col-sm-4">
         <button id="presentationAddButton" class="btn btn-link pull-right visible-lg" ng-click="editorFactory.addPresentationModal()">{{'editor-app.list.actions.add' |translate}} <i class="fa fa-plus icon-right"></i></button>
         <h3><a ui-sref="apps.editor.list"><img src="https://s3.amazonaws.com/Rise-Images/Icons/presentations-icon.png" class="u_margin-right">{{'editor-app.list.title' |translate}}</a></h3>
         <button class="btn btn-default btn-sm btn-block hidden-lg" ng-click="editorFactory.addPresentationModal()">{{'editor-app.list.actions.add' |translate}} <i class="fa fa-plus icon-right"></i></button>
           <div id="presentationsList" class="scrollable-list" rv-spinner rv-spinner-key="presentation-list-loader" rv-spinner-start-active="1"> 
 
-            <div class="text-center" ng-hide="factory.loadingItems || factory.items.list.length > 0">
+            <div class="text-center" ng-hide="launcherFactory.presentations.loadingItems || launcherFactory.presentations.list.length > 0">
             <h4 class="text-muted u_margin-md-bottom u_margin-md-top" translate>editor-app.list.noPresentations</h4>
                 <button class="btn btn-primary btn-lg" ng-click="editorFactory.addPresentationModal()">{{'editor-app.list.actions.add' |translate}} <i class="fa fa-plus icon-right"></i></button>
             </div>
 
-            <div class="list" ng-class="{'help-active' : showHelp}" ng-hide="factory.items.list.length == 0">
-              <div class="list-item u_clickable" ng-repeat="presentation in factory.items.list" ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})">
+            <div class="list" ng-class="{'help-active' : showHelp}" ng-hide="launcherFactory.presentations.list.length == 0">
+              <div class="list-item u_clickable" ng-repeat="presentation in launcherFactory.presentations.list" ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})">
                 <h4>{{presentation.name}}</h4>
               </div><!--list-item-->
             </div>
           </div><!--scrollable-list-->
-          <a id="presentationsViewAll" class="u_margin-md-top u_margin-md-bottom btn btn-default btn-block" ui-sref="apps.editor.list" ng-hide="factory.items.list.length == 0" translate>editor-app.list.viewAll</a>
+          <a id="presentationsViewAll" class="u_margin-md-top u_margin-md-bottom btn btn-default btn-block" ui-sref="apps.editor.list" ng-hide="launcherFactory.presentations.list.length == 0" translate>editor-app.list.viewAll</a>
       </div><!--col-->
 
-      <div class="col-sm-4" ng-controller="schedulesList">
+      <div class="col-sm-4">
         <a id="scheduleAddButton" class="btn btn-link pull-right visible-lg" ui-sref="apps.schedules.add">{{ 'schedules-app.actions.new' | translate }} <i class="fa fa-plus icon-right"></i></a>
         <h3><a ui-sref="apps.schedules.list"><img src="https://s3.amazonaws.com/Rise-Images/Icons/schedules-icon.png" class="u_margin-right">{{'schedules-app.title' | translate}}</a></h3>
         <a class="btn btn-default btn-sm btn-block hidden-lg" ui-sref="apps.schedules.add">{{ 'schedules-app.actions.new' | translate }} <i class="fa fa-plus icon-right"></i></a>
           <div id="schedulesList" class="scrollable-list" rv-spinner rv-spinner-key="schedules-list-loader" rv-spinner-start-active="1"> 
 
-            <div class="text-center" ng-hide="loadingSchedules || schedules.list.length > 0">
+            <div class="text-center" ng-hide="launcherFactory.schedules.loadingItems || launcherFactory.schedules.list.length > 0">
               <h4 class="text-muted u_margin-md-bottom u_margin-md-top" translate>schedules-app.list.noSchedules</h4>
               <button class="btn btn-primary btn-lg" ui-sref="apps.schedules.add">{{ 'schedules-app.actions.new' | translate }} <i class="fa fa-plus icon-right"></i></button>
             </div>
 
-            <div class="list" ng-class="{'help-active' : showHelp}" ng-hide="schedules.list.length == 0">
-              <div class="list-item u_clickable" ng-repeat="schedule in schedules.list" ui-sref="apps.schedules.details({scheduleId: schedule.id})">
+            <div class="list" ng-class="{'help-active' : showHelp}" ng-hide="launcherFactory.schedules.list.length == 0">
+              <div class="list-item u_clickable" ng-repeat="schedule in launcherFactory.schedules.list" ui-sref="apps.schedules.details({scheduleId: schedule.id})">
                 <h4>{{schedule.name}}</h4>
               </div><!--list-item-->
             </div>
           </div><!--scrollable-list-->
-          <a id="schedulesViewAll" class="u_margin-md-top u_margin-md-bottom btn btn-default btn-block" ui-sref="apps.schedules.list" ng-hide="schedules.list.length == 0" translate>schedules-app.list.viewAll</a>
+          <a id="schedulesViewAll" class="u_margin-md-top u_margin-md-bottom btn btn-default btn-block" ui-sref="apps.schedules.list" ng-hide="launcherFactory.schedules.list.length == 0" translate>schedules-app.list.viewAll</a>
       </div><!--col-->
 
-      <div class="col-sm-4" ng-controller="displaysList">
+      <div class="col-sm-4">
         <a id="displayAddButton" class="btn btn-link pull-right visible-lg" ng-click="displayFactory.addDisplayModal()">{{ 'displays-app.actions.new' | translate }} <i class="fa fa-plus icon-right"></i></a>
         <h3><a ui-sref="apps.displays.list"><img src="https://s3.amazonaws.com/Rise-Images/Icons/displays-icon.png" class="u_margin-right">{{ 'displays-app.title' | translate}}</a></h3>
         <a class="btn btn-default btn-sm btn-block hidden-lg" ng-click="displayFactory.addDisplayModal()">{{ 'displays-app.actions.new' | translate }} <i class="fa fa-plus icon-right"></i></a>
           <div id="displaysList" class="scrollable-list" rv-spinner rv-spinner-key="displays-list-loader" rv-spinner-start-active="1"> 
-            <div class="text-center" ng-hide="loadingDisplays || displays.items.list.length > 0">
+            <div class="text-center" ng-hide="launcherFactory.displays.loadingitems || launcherFactory.displays.list.length > 0">
               <h4 class="text-muted u_margin-md-bottom u_margin-md-top" translate>displays-app.list.noDisplays</h4>
               <button class="btn btn-primary btn-lg" ng-click="displayFactory.addDisplayModal()">{{ 'displays-app.actions.new' | translate }} <i class="fa fa-plus icon-right"></i></button>
             </div>
 
-            <div class="list" ng-class="{'help-active' : showHelp}" ng-hide="displays.items.list.length == 0">
-              <div class="list-item u_clickable" ng-repeat="display in displays.items.list" ui-sref="apps.displays.details({displayId: display.id})">
+            <div class="list" ng-class="{'help-active' : showHelp}" ng-hide="launcherFactory.displays.list.length == 0">
+              <div class="list-item u_clickable" ng-repeat="display in launcherFactory.displays.list" ui-sref="apps.displays.details({displayId: display.id})">
                 <h4>{{display.name}}</h4>
               </div><!--list-item-->
             </div>
           </div><!--scrollable-list-->
-          <a id="displaysViewAll" class="u_margin-md-top u_margin-md-bottom btn btn-default btn-block" ui-sref="apps.displays.list" ng-hide="displays.items.list.length == 0" translate>displays-app.list.viewAll</a>
+          <a id="displaysViewAll" class="u_margin-md-top u_margin-md-bottom btn btn-default btn-block" ui-sref="apps.displays.list" ng-hide="launcherFactory.displays.list.length == 0" translate>displays-app.list.viewAll</a>
       </div><!--col-->
     </div><!--row-->    
   </div>

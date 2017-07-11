@@ -1,0 +1,49 @@
+<div class="container" ng-show="showOnboarding">
+  <div class="arrow-steps hidden-xs u_margin-sm-top u_margin-sm-bottom">
+    <div class="step completed">
+      <span>Sign Up</span>
+      <span class="completed-tag">Completed!</span>
+    </div>
+    <div class="step" ng-class="{'current' : currentStep('addPresentation'), 'completed': addPresentationCompleted}">
+      <span>Create a Presentation</span>
+      <span class="onboard-actions" ng-if="currentStep('addPresentation')">
+        <button class="btn btn-sm btn-primary" ng-click="editorFactory.addPresentationModal()">
+          Create
+        </button>
+        <a class="btn btn-sm btn-primary" href="https://help.risevision.com/hc/en-us/articles/115002841803-Create-a-Presentation" target="_blank">
+          <i class="fa fa-question u_icon-white"></i>
+        </a>
+      </span>
+      <span class="completed-tag" ng-if="addPresentationCompleted">Completed!</span>
+    </div>
+    <div class="step" ng-class="{'current' : currentStep('addDisplay'), 'completed': addDisplayCompleted}">
+      <span>Add a Display</span>
+      <span class="onboard-actions" ng-if="currentStep('addDisplay')">
+        <button class="btn btn-sm btn-primary" ng-click="displayFactory.addDisplayModal()">
+          Add
+        </button>
+        <a class="btn btn-sm btn-primary" href="https://help.risevision.com/hc/en-us/articles/115002841943-Add-a-Display" target="_blank">
+          <i class="fa fa-question u_icon-white"></i>
+        </a>
+      </span>
+      <span class="completed-tag" ng-if="addDisplayCompleted">Completed!</span>
+    </div>
+    <div class="step" ng-class="{'current' : currentStep('activateDisplay'), 'completed': activateDisplayCompleted}">
+      <span>Activate a Display</span>
+      <span class="onboard-actions" ng-if="currentStep('activateDisplay')">
+        <button class="btn btn-sm btn-primary" ng-click="displayFactory.addDisplayModal(launcherFactory.displays.list[0])">
+          Activate
+        </button>
+        <a class="btn btn-sm btn-primary" href="https://help.risevision.com/hc/en-us/articles/115002841943-Add-a-Display" target="_blank">
+          <i class="fa fa-question u_icon-white"></i>
+        </a>
+      </span>
+      <span class="completed-tag" ng-if="activateDisplayCompleted">Completed!</span>
+    </div>
+    <div class="step">
+      <span>
+        <b id="step-count">{{stepCount}}</b> Step{{stepCount === 1 ? '' : 's'}} To Go!
+      </span>
+    </div>
+  </div>
+</div>

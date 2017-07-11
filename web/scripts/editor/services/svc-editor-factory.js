@@ -177,6 +177,8 @@ angular.module('risevision.editor.services')
             if (resp && resp.item && resp.item.id) {
               presentationTracker('Presentation Created', resp.item.id,
                 resp.item.name);
+  
+              $rootScope.$broadcast('presentationCreated');
 
               $state.go('apps.editor.workspace.artboard', {
                 presentationId: resp.item.id

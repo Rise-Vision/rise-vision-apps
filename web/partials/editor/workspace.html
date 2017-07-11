@@ -2,7 +2,7 @@
 	.navbar .container {width: 100%;}
 </style>
 
-<div id="workspace" class="workspace" ng-class="{'hide-sidebar' : artboardFactory.hideSidebar(), 'active-banner-mode' : isSubcompanySelected() || isTestCompanySelected(), 'active-banner-mode-double' : isSubcompanySelected() && isTestCompanySelected()}">
+<div id="workspace" class="workspace" ng-class="{'hide-sidebar' : artboardFactory.hideSidebar(), 'active-banner-mode' : isSubcompanySelected() || isTestCompanySelected(), 'active-banner-mode-double' : isSubcompanySelected() && isTestCompanySelected(), 'active-onboard-mode' : showOnboarding}">
   <sidebar></sidebar>
   <toolbar></toolbar>
 

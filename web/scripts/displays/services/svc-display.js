@@ -15,12 +15,12 @@
       'name', 'id', 'street', 'unit', 'city', 'province', 'country',
       'postalCode'
     ])
-    .service('display', ['$q', '$log', 'coreAPILoader', 'userState',
-      'getDisplayStatus', 'screenshotRequester', 'imageBlobLoader', 'pick',
-      'DISPLAY_WRITABLE_FIELDS',
+    .service('display', ['$rootScope', '$q', '$log', 'coreAPILoader', 
+      'userState', 'getDisplayStatus', 'screenshotRequester', 
+      'imageBlobLoader', 'pick', 'DISPLAY_WRITABLE_FIELDS',
       'DISPLAY_SEARCH_FIELDS',
-      function ($q, $log, coreAPILoader, userState, getDisplayStatus,
-        screenshotRequester, imageBlobLoader, pick,
+      function ($rootScope, $q, $log, coreAPILoader, userState, 
+        getDisplayStatus, screenshotRequester, imageBlobLoader, pick,
         DISPLAY_WRITABLE_FIELDS, DISPLAY_SEARCH_FIELDS) {
 
         var createSearchQuery = function (fields, search) {
@@ -33,6 +33,32 @@
           query = query.substring(3);
 
           return query.trim();
+        };
+        
+        var _mergeStatuses = function(items, statuses) {
+          items.forEach(function (item) {
+            item.lastConnectionTime = item.lastActivityDate;
+          });
+
+          statuses.forEach(function (s) {
+            for (var i = 0; i < items.length; i++) {
+              var item = items[i];
+
+              if (s[item.id] !== undefined) {
+                _mergeStatus(item, s);
+                break;
+              }
+            }
+          });
+        };
+
+        var _mergeStatus =  function(item, lookup) {
+          if (lookup[item.id] === true) {
+            item.onlineStatus = 'online';
+          }
+
+          item.lastConnectionTime = !isNaN(lookup.lastConnectionTime) ? new Date(
+            lookup.lastConnectionTime) : (item.lastActivityDate || '');
         };
 
         var service = {
@@ -75,6 +101,8 @@
 
                 getDisplayStatus(displayIds).then(function (statuses) {
                   _mergeStatuses(result.items, statuses);
+                  
+                  $rootScope.$broadcast('displaysLoaded', result.items);
                 }).finally(function () {
                   service.statusLoading = false;
                 });
@@ -107,6 +135,8 @@
 
                   getDisplayStatus([item.id]).then(function (statuses) {
                     _mergeStatus(item, statuses[0]);
+
+                    $rootScope.$broadcast('displaysLoaded', [item]);
                   }).finally(function () {
                     service.statusLoading = false;
                   });
@@ -268,30 +298,4 @@
         return service;
       }
     ]);
-
-  function _mergeStatuses(items, statuses) {
-    items.forEach(function (item) {
-      item.lastConnectionTime = item.lastActivityDate;
-    });
-
-    statuses.forEach(function (s) {
-      for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-
-        if (s[item.id] !== undefined) {
-          _mergeStatus(item, s);
-          break;
-        }
-      }
-    });
-  }
-
-  function _mergeStatus(item, lookup) {
-    if (lookup[item.id] === true) {
-      item.onlineStatus = 'online';
-    }
-
-    item.lastConnectionTime = !isNaN(lookup.lastConnectionTime) ? new Date(
-      lookup.lastConnectionTime) : (item.lastActivityDate || '');
-  }
 })();
