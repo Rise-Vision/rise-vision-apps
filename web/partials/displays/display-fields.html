@@ -5,7 +5,6 @@
     displays-app.fields.name.required
   </p>
 </div>
-
 <div ng-controller="displayControls">
   <!-- DESKTOP BUTTONS -->
   <div class="row">
@@ -27,15 +26,7 @@
         <i class="fa fa-cloud-download icon-right"></i>
       </button>
     </div>
-    <!-- <div class="col-md-3">
-      <button id="downloadPlayer" type="button" class="btn btn-primary btn-block u_margin-sm-bottom" ng-click="showDownloadButtons = true">
-        Subscribe to Rise Player Professional 
-      </button>
-    </div> -->
   </div>
-
- 
-
   <!-- DOWNLOAD PLAYER BUTTONS -->
   <div class="row">
     <div class="col-sm-12 col-md-9 col-md-offset-3">
@@ -58,11 +49,8 @@
           </div>
       </div>
   </div>
-
-
 </div>
 <hr>
-
 <div class="row half-top">
   <!-- VERTICAL DISPLAY DETAILS -->
   <div class="col-sm-6 col-xs-12">
@@ -78,11 +66,11 @@
           </tr>
           <tr class="table-body__row">
             <td class="table-body__cell" translate><span>displays-app.fields.player.status</span></td>
-            <td class="table-body__cell" style="padding: 4px 8px;">
+            <td class="table-body__cell display-status">
               <span>
                 <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
                 <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline
-                <a href="#" style="font-size: 12px; display: block;">Why is my Display offline?</a>
+                <a href="#">Why is my Display offline?</a>
                 </span>
                 <span class="text-success" ng-show="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
                 <button class="btn btn-xs btn-primary pt-status btn-install-player"
