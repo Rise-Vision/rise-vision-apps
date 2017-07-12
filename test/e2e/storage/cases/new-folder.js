@@ -14,7 +14,7 @@ var NewFolderScenarios = function() {
 
     var describeNewFolder = function() {
 
-      it('should open New Folder modal', function(){
+      xit('should open New Folder modal', function(){
         storageSelectorModalPage.getNewFolderButton().click();
         helper.wait(newFolderModalPage.getNewFolderModal(), 'New Folder Modal');
 
@@ -22,13 +22,13 @@ var NewFolderScenarios = function() {
         expect(newFolderModalPage.getModalTitle().getText()).to.eventually.equal('Create Folder');
       });
 
-      it('should contain new folder form', function(){
+      xit('should contain new folder form', function(){
         expect(newFolderModalPage.getNewFolderInput().isDisplayed()).to.eventually.be.true;
         expect(newFolderModalPage.getSaveButton().isDisplayed()).to.eventually.be.true;
         expect(newFolderModalPage.getCancelButton().isDisplayed()).to.eventually.be.true;
       });
 
-      it('should enable save after enterign folder name',function(){
+      xit('should enable save after enterign folder name',function(){
         expect(newFolderModalPage.getSaveButton().isEnabled()).to.eventually.be.false;
 
         newFolderModalPage.getNewFolderInput().sendKeys("newFolder");
@@ -36,7 +36,7 @@ var NewFolderScenarios = function() {
         expect(newFolderModalPage.getSaveButton().isEnabled()).to.eventually.be.true;
       });
 
-      it('should close modal', function () {
+      xit('should close modal', function () {
         newFolderModalPage.getCancelButton().click();
         
         helper.waitDisappear(newFolderModalPage.getNewFolderModal(), 'New Folder Modal');
