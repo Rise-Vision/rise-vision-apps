@@ -107,7 +107,7 @@ angular.module('risevision.displays.services')
 
               displayEmail.send(resp.item.id, resp.item.name);
 
-              $rootScope.$broadcast('displayCreated');
+              $rootScope.$broadcast('displayCreated', resp.item);
 
               deferred.resolve();
             } else {

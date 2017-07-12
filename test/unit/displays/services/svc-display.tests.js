@@ -202,7 +202,7 @@ describe('service: display:', function() {
       };
     });
   }));
-  var display, returnList, searchString, sortString, $timeout;
+  var display, returnList, searchString, sortString, $timeout, $rootScope;
   beforeEach(function(){
     returnList = true;
     searchString = '';
@@ -210,6 +210,7 @@ describe('service: display:', function() {
 
     inject(function($injector, _$timeout_){
       display = $injector.get('display');
+      $rootScope = $injector.get('$rootScope');
       $timeout = _$timeout_;
     });
   });
@@ -228,6 +229,8 @@ describe('service: display:', function() {
   describe('list:',function(){
     it('should return a list of displays',function(done){
       var items;
+      var broadcastSpy = sinon.spy($rootScope,'$broadcast');
+
       display.list({})
       .then(function(result){
         expect(result).to.be.truely;
@@ -240,6 +243,9 @@ describe('service: display:', function() {
             expect(item.onlineStatus).to.equal('online');
             expect(item.lastConnectionTime.getTime()).to.equal(CONNECTION_TIME);
           });
+          
+          broadcastSpy.should.have.been.calledWith('displaysLoaded', items);
+
           done();
         });
       })
@@ -304,6 +310,8 @@ describe('service: display:', function() {
   describe('get:',function(){
     var item;
     it('should return a display',function(done){
+      var broadcastSpy = sinon.spy($rootScope,'$broadcast');
+
       display.get('display1')
       .then(function(result){
         expect(result).to.be.truely;
@@ -314,6 +322,9 @@ describe('service: display:', function() {
         setTimeout(function() {
           expect(item.onlineStatus).to.equal('online');
           expect(item.lastConnectionTime.getTime()).to.not.equal(CONNECTION_TIME);
+
+          broadcastSpy.should.have.been.calledWith('displaysLoaded', [item]);
+
           done();
         });
       })

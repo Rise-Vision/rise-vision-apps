@@ -5,6 +5,8 @@ var DisplayAddModalPage = function() {
   var displayNameField = element(by.model('display.name'));
   var downloadWindows64Button = element(by.id('downloadWindows64'));
 
+  var displayIdField = element(by.id('displayIdField'));
+
   var nextButton = element(by.id('nextButton'));
   var dismissButton = element(by.id('dismissButton'));
 
@@ -22,7 +24,11 @@ var DisplayAddModalPage = function() {
   
   this.getDownloadWindows64Button = function() {
     return downloadWindows64Button;
-  }
+  };
+  
+  this.getDisplayIdField = function() {
+    return displayIdField;
+  };
 
   this.getNextButton = function() {
     return nextButton;

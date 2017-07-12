@@ -9,23 +9,23 @@ var HomePage = function() {
   var storageUrl = config.rootUrl + '/storage';
 
   var appLauncherContainer = element(by.id('appLauncherContainer'));
-  var helpContainer = element(by.id('helpContainer'));
-  var showHelpButton = element(by.id('showHelpButton'));
-  var hideHelpButton = element(by.id('hideHelpButton'));
 
   var presentationCTA = element(by.id('presentationCTA'));
   var presentationCTAButton = element(by.id('presentationCTAButton'));
 
   var presentationAddButton = element(by.id('presentationAddButton'));
   var presentationsList = element(by.id('presentationsList'));
+  var presentationsListLoader = element(by.xpath('//div[@spinner-key="presentation-list-loader"]'));
   var presentationsViewAll = element(by.id('presentationsViewAll'));
 
   var scheduleAddButton = element(by.id('scheduleAddButton'));
   var schedulesList = element(by.id('schedulesList'));
+  var schedulesListLoader = element(by.xpath('//div[@spinner-key="schedules-list-loader"]'));
   var schedulesViewAll = element(by.id('schedulesViewAll'));
 
   var displayAddButton = element(by.id('displayAddButton'));
   var displaysList = element(by.id('displaysList'));
+  var displaysListLoader = element(by.xpath('//div[@spinner-key="displays-list-loader"]'));
   var displaysViewAll = element(by.id('displaysViewAll'));
 
   var signUpText = element(by.id('sign-up-text'));
@@ -78,18 +78,6 @@ var HomePage = function() {
     return appLauncherContainer;
   };
 
-  this.getHelpContainer = function() {
-    return helpContainer;
-  };
-
-  this.getShowHelpButton = function() {
-    return showHelpButton;
-  };
-
-  this.getHideHelpButton = function() {
-    return hideHelpButton;
-  };
-
   this.getPresentationCTA = function() {
     return presentationCTA;
   };
@@ -105,6 +93,10 @@ var HomePage = function() {
   this.getPresentationsList = function() {
     return presentationsList;
   };
+  
+  this.getPresentationsListLoader = function() {
+    return presentationsListLoader;
+  };
 
   this.getPresentationsViewAll = function() {
     return presentationsViewAll;
@@ -118,6 +110,10 @@ var HomePage = function() {
     return schedulesList;
   };
 
+  this.getSchedulesListLoader = function() {
+    return schedulesListLoader;
+  };
+
   this.getSchedulesViewAll = function() {
     return schedulesViewAll;
   };
@@ -128,6 +124,10 @@ var HomePage = function() {
 
   this.getDisplaysList = function() {
     return displaysList;
+  };
+
+  this.getDisplaysListLoader = function() {
+    return displaysListLoader;
   };
 
   this.getDisplaysViewAll = function() {

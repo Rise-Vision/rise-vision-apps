@@ -1,112 +1,82 @@
 'use strict';
 describe('controller: Home', function() {
   beforeEach(module('risevision.apps.launcher.controllers'));
-  var $scope, localStorageService, localStorageGetSpy, startGlobalSpy, stopGlobalSpy, lsGetReturn;
+  var $scope, $loading, launcherFactory;
   beforeEach(function(){
     module(function ($provide) {
       $provide.service('$loading', function() {
-        return {
-          startGlobal: function() {},
-          stopGlobal: function(){}
+        return $loading = {
+          startGlobal: sinon.spy(),
+          stopGlobal: sinon.spy(),
+          stop: sinon.spy()
         };
       });    
-      $provide.service('localStorageService', function() {
-        return localStorageService = {
-          get: function() { return lsGetReturn; },
-          set: function(){}
+      $provide.service('launcherFactory', function() {
+        return launcherFactory = {
+          load: sinon.spy(),
+          presentations: { loadingItems: true , items: { list: [ ] } },
+          schedules: { loadingItems: true , items: { list: [ ] } },
+          displays: { loadingItems: true , items: { list: [ ] } }
         };
       }); 
       $provide.service('editorFactory', function() {
-        return {
-          presentations: { loadingItems: true , items: { list: [ ] } }
-        };
+        return {};
       });      
       $provide.service('displayFactory', function() {
         return {};
       });
     })
-    inject(function($injector,$rootScope, $controller, localStorageService, $loading) {
-      lsGetReturn = false;
-      localStorageGetSpy = sinon.spy(localStorageService,'get');
-      startGlobalSpy = sinon.spy($loading,'startGlobal');
-      stopGlobalSpy = sinon.spy($loading,'stopGlobal');
+    inject(function($injector,$rootScope, $controller) {
       $scope = $rootScope.$new();
       $controller('HomeCtrl', {
-        $scope: $scope,
-        launcherTracker: function(){}
+        $scope: $scope
       });
       $scope.$digest();
     });
   });
   it('should exist',function(){
     expect($scope).to.be.ok;
-    expect($scope.launcherTracker).to.be.ok;
+    expect($scope.launcherFactory).to.be.ok;
     expect($scope.editorFactory).to.be.ok;
     expect($scope.displayFactory).to.be.ok;
-    expect($scope.showHelp).to.be.false;
-
-    expect($scope.toggleHelp).to.be.a('function');
-  });
-
-  it("should init showHelp from localstorage",function(){
-    localStorageGetSpy.should.have.been.calledWith("launcher.showHelp");
   });
 
   describe("loading:",function(){
+    it("should load launcher lists",function(){
+      launcherFactory.load.should.have.been.called;
+    });
+
     it("should show spinner on init",function(){
-      startGlobalSpy.should.have.been.calledWith("launcher.loading");
+      $loading.startGlobal.should.have.been.calledWith("launcher.loading");
     });
 
-    it("should watch loadingPresentations",function(){
-      expect($scope.$$watchers[0].exp).to.equal('editorFactory.presentations.loadingItems');
+    it("should add watchers",function(){
+      expect($scope.$$watchers[0].exp).to.equal('launcherFactory.displays.loadingItems');
+      expect($scope.$$watchers[1].exp).to.equal('launcherFactory.schedules.loadingItems');
+      expect($scope.$$watchers[2].exp).to.equal('launcherFactory.presentations.loadingItems');
     });
 
-    it("should hide spinner after loading presentations",function(){
-      $scope.editorFactory.presentations.loadingItems = false;
+    it("should hide spinner and global spinner after loading presentations",function(){
+      $scope.launcherFactory.presentations.loadingItems = false;
       $scope.$apply();
-      stopGlobalSpy.should.have.been.calledWith("launcher.loading");
+      $loading.stopGlobal.should.have.been.calledWith("launcher.loading");
+      $loading.stop.should.have.been.calledWith("presentation-list-loader");
     });
 
-    it("should not flag help if user has presentations",function(){
-      var spy = sinon.spy(localStorageService,'set');
-
-      $scope.editorFactory.presentations.loadingItems = false;
-      $scope.editorFactory.presentations.items.list = [{id:'id'}];
-
+    it("should hide spinner after loading schedules",function(){
+      $scope.launcherFactory.schedules.loadingItems = false;
       $scope.$apply();
-
-      spy.should.not.have.been.called;
+      $loading.stopGlobal.should.not.have.been.calledWith("launcher.loading");
+      $loading.stop.should.have.been.calledWith("schedules-list-loader");
     });
 
-    it("should flag help if user has 0 presentations and has not set visbility of Help",function(){
-      var spy = sinon.spy(localStorageService,'set');
-
-      $scope.editorFactory.presentations.loadingItems = false;
-      $scope.editorFactory.presentations.items.list = [];
-      lsGetReturn = null
-
+    it("should hide spinner after loading displays",function(){
+      $scope.launcherFactory.displays.loadingItems = false;
       $scope.$apply();
-      
-      spy.should.have.been.calledWith("launcher.showHelp",true);
+      $loading.stopGlobal.should.not.have.been.calledWith("launcher.loading");
+      $loading.stop.should.have.been.calledWith("displays-list-loader");
     });
 
-    
   });
 
-  describe("toggleHelp:",function(){
-    it("should toggle showHelp",function(){
-      $scope.toggleHelp();
-      expect($scope.showHelp).to.be.true;
-      $scope.toggleHelp();
-      expect($scope.showHelp).to.be.false;
-    });
-
-    it("should persist showHelp value",function(){
-      var spy = sinon.spy(localStorageService,'set');
-      $scope.toggleHelp();
-      spy.should.have.been.calledWith("launcher.showHelp",true);
-      $scope.toggleHelp();
-      spy.should.have.been.calledWith("launcher.showHelp",false);
-    });
-  });
 });

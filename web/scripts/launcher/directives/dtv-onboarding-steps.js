@@ -6,13 +6,14 @@ angular.module('risevision.apps.launcher.directives')
     function ($rootScope, launcherFactory, editorFactory, displayFactory) {
       return {
         restrict: 'E',
+        scope: true,
         templateUrl: 'partials/launcher/onboarding-steps.html',
         link: function ($scope, element) {
           $scope.launcherFactory = launcherFactory;
           $scope.editorFactory = editorFactory;
           $scope.displayFactory = displayFactory;
           $rootScope.showOnboarding = false;
-          var addPresentationListener, displaysListener;
+          var addPresentationListener, addDisplayListener, displaysListener;
 
           var _checkPresentationCreated = function() {
             if (addPresentationListener) { 
@@ -24,49 +25,73 @@ angular.module('risevision.apps.launcher.directives')
                 launcherFactory.presentations.list && 
                 launcherFactory.presentations.list.length > 0;
 
-            if ($scope.addPresentationCompleted) { return; }
+            if (!$scope.addPresentationCompleted) {
+              addPresentationListener = $scope.$on('presentationCreated', 
+                function (event) {
+                  $scope.addPresentationCompleted = true;
 
-            addPresentationListener = $rootScope.$on('presentationCreated', 
-              function (event) {
-                $scope.addPresentationCompleted = true;
-
-                _stepCount();
-                addPresentationListener();
-              });
+                  _stepCount();
+                  addPresentationListener();
+                });
+            }
           };
 
-          var _checkDisplaysHandler = function() {
-            if (displaysListener) { 
+          var _validateActiveDisplay = function(displays) {
+            var activeDisplayFound = false;
+
+            displays.forEach(function(display) {
+              if (display.playerVersion || display.lastConnectionTime ||
+                display.onlineStatus === 'online') {
+                activeDisplayFound = true;
+              }
+            });
+            
+            if (activeDisplayFound) {
+              $scope.activateDisplayCompleted = true;
+
               displaysListener();
-              displaysListener = null;
+              
+              _stepCount();
+            }
+          }
+          
+          var _checkDisplayCreated = function() {
+            if (addDisplayListener) { 
+              addDisplayListener();
+              addDisplayListener = null;
             }
 
-            displaysListener = $rootScope.$on('displaysLoaded', 
-              function (event, displays) {
-                var activeDisplayFound = false;
+            $scope.addDisplayCompleted = 
+                launcherFactory.displays.list && 
+                launcherFactory.displays.list.length > 0;
 
-                displays.forEach(function(display) {
-                  $scope.addDisplayCompleted = true;
-
+            if (!$scope.addDisplayCompleted) {
+              addDisplayListener = $scope.$on('displayCreated', 
+                function (event, display) {
                   // Add first display if list is empty
                   if (!launcherFactory.displays.list.length) {
-                    $scope.launcherFactory.displays.list.push(display);                    
+                    launcherFactory.displays.list.push(display);                    
                   }
 
-                  if (display.playerVersion || display.lastConnectionTime ||
-                    display.onlineStatus === 'online') {
-                    activeDisplayFound = true;
-                  }
-                });
-                
-                if (activeDisplayFound) {
-                  $scope.activateDisplayCompleted = true;
+                  $scope.addDisplayCompleted = true;
 
-                  displaysListener();
-                }
+                  _stepCount();
+                  addDisplayListener();
+                });  
+            } else {
+              _validateActiveDisplay(launcherFactory.displays.list);
+            }
+          };
 
-                _stepCount();
-              });       
+          var _checkDisplaysLoaded = function() {
+            if (displaysListener) { 
+              displaysListener();
+            }
+
+            displaysListener = $scope.$on('displaysLoaded', 
+              function (event, displays) {
+                _validateActiveDisplay(displays);
+              });
           };
 
           var _stepCount = function() {
@@ -77,18 +102,23 @@ angular.module('risevision.apps.launcher.directives')
             count -= $scope.activateDisplayCompleted ? 1 : 0;
 
             $scope.stepCount = count;
+
+            $rootScope.showOnboarding = !$scope.activateDisplayCompleted;              
           };
 
-          $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
+          $scope.$on('risevision.company.selectedCompanyChanged', function () {
+            $scope.addPresentationCompleted = false;
+            $scope.addDisplayCompleted = false;
+            $scope.activateDisplayCompleted = false;
+
             $rootScope.showOnboarding = false;
-            _checkDisplaysHandler();
+            _checkDisplaysLoaded();
 
             launcherFactory.load().then(function() {
               _checkPresentationCreated();
+              _checkDisplayCreated();
 
               _stepCount();
-
-              $rootScope.showOnboarding = !$scope.activateDisplayCompleted;              
             });
           });
 

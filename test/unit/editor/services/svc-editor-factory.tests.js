@@ -880,11 +880,14 @@ describe('service: editorFactory:', function() {
 
   describe('save: ',function(){
     it('should add presentation', function(done){
+      var broadcastSpy = sinon.spy($rootScope,'$broadcast');
+
       editorFactory.save();
       
       setTimeout(function(){
         expect(trackerCalled).to.equal("Presentation Created");
-        
+        broadcastSpy.should.have.been.calledWith('presentationCreated');
+
         done();
       }, 10);
     });

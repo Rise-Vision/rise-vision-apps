@@ -9,7 +9,7 @@ var StoreProductsModalPage = require('./../../editor/pages/storeProductsModalPag
 
 var HomepageScenarios = function() {
   
-  browser.driver.manage().window().setSize(1920, 1080);
+  browser.driver.manage().window().setSize(1400, 900);
   describe("In order to access Rise Vison apps " +
            "As a user " +
            "I would like to have access to the homepage of the apps launcher", function() {
@@ -86,24 +86,10 @@ var HomepageScenarios = function() {
       });
     });
 
-    describe("Help Animation:",function(){
-      it("should be closed on init",function(){
-        expect(homepage.getHelpContainer().isDisplayed()).to.eventually.be.false;
-      });
-
-      it("should show animation when clicking help text",function(){
-        homepage.getShowHelpButton().click();
-        expect(homepage.getHelpContainer().isDisplayed()).to.eventually.be.true;
-      });
-
-      it("should hide animation when clicking Hide Animation",function(){
-        homepage.getHideHelpButton().click();
-        expect(homepage.getHelpContainer().isDisplayed()).to.eventually.be.false;
-      });
-    });
-
     describe("Presentations:",function(){
       it("should show Presentations list",function(){
+        helper.waitDisappear(homepage.getPresentationsListLoader(), 'Presentations list loader');
+
         expect(homepage.getPresentationsList().isDisplayed()).to.eventually.be.true;
       });
 
@@ -120,12 +106,13 @@ var HomepageScenarios = function() {
         helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
         expect(storeProductsModalPage.getStoreProductsModal().isDisplayed()).to.eventually.be.true;
         storeProductsModalPage.getCloseButton().click();
-        helper.waitDisappear(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
       });
     });
 
     describe("Schedules:",function(){
       it("should show Schedules list",function(){
+        helper.waitDisappear(homepage.getSchedulesListLoader(), 'Schedules list loader');
+
         expect(homepage.getSchedulesList().isDisplayed()).to.eventually.be.true;
       });
 
@@ -140,6 +127,8 @@ var HomepageScenarios = function() {
 
     describe("Displays:",function(){
       it("should show Displays list",function(){
+        helper.waitDisappear(homepage.getDisplaysListLoader(), 'Displays list loader');
+
         expect(homepage.getDisplaysList().isDisplayed()).to.eventually.be.true;
       });
 
