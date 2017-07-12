@@ -31,8 +31,8 @@
       "gulp-sourcemaps": "2.4.1",
       "jshint-stylish": "^2.0.1",
       "run-sequence": "^1.1.1",
-      "rv-common-e2e": "git://github.com/Rise-Vision/rv-common-e2e.git#0.2.2",
-      "widget-tester": "git://github.com/Rise-Vision/widget-tester.git#1.7.1"
+      "rv-common-e2e": "git://github.com/Rise-Vision/rv-common-e2e.git#chore/enter-on-login-field",
+      "widget-tester": "git://github.com/Rise-Vision/widget-tester.git#chore/apps-testing"
     },
     "repository": {
         "type": "git",
