@@ -137,7 +137,7 @@ var ArtboardPlaceholdersScenarios = function() {
         });
       });
 
-      it('should resize placeholder', function (done) {
+      xit('should resize placeholder', function (done) {
         artboardPage.getPlaceholderContainers().get(0).getSize().then(function (initialSize) {
           browser.actions().mouseMove(artboardPage.getPlaceholderContainers().get(0), {x: initialSize.width*initialZoom, y: initialSize.height*initialZoom / 2})
             .mouseDown()
@@ -150,7 +150,7 @@ var ArtboardPlaceholdersScenarios = function() {
         });
       });
 
-      it('should resize placeholder from the corner', function (done) {
+      xit('should resize placeholder from the corner', function (done) {
         artboardPage.getPlaceholderContainers().get(0).getSize().then(function (initialSize) {
           browser.actions().mouseMove(artboardPage.getPlaceholderContainers().get(0), {x: initialSize.width*initialZoom, y: initialSize.height*initialZoom})
             .mouseDown()
