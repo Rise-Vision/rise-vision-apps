@@ -19,6 +19,7 @@ var WorkspacePage = function() {
   var presentationNameContainer = element(by.id('presentationName'));
   var backToListButton = element(by.id('backToListButton'));
   var zoomDropdown = element(by.css('.zoom-selector .dropdown-toggle'));
+  var zoomFullSizeDropdownItem = element(by.cssContainingText('a', 'Full Size'));
 
   var saveStatus = element(by.css(".save-status"));
 
@@ -109,6 +110,10 @@ var WorkspacePage = function() {
   
   this.getZoomDropdown = function() {
     return zoomDropdown;
+  }
+
+  this.getZoomFullSizeDropdownItem = function() {
+    return zoomFullSizeDropdownItem;
   }
 
 

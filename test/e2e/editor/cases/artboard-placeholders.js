@@ -32,25 +32,33 @@ var ArtboardPlaceholdersScenarios = function() {
       commonHeaderPage = new CommonHeaderPage();
     });
 
-    describe(' Given a user is adding a new presentation and a new placeholder', function () {
-      before(function () {
-        homepage.getEditor();
-        //wait for spinner to go away.
-        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-          loginPage.signIn();
-        });
-        presentationsListPage.openNewPresentation();
-
-        helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
+    before(function () {
+      homepage.getEditor();
+      //wait for spinner to go away.
+      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
+        loginPage.signIn();
       });
-      
+      presentationsListPage.openNewPresentation();
+    });
+
+    describe(' Given a user is adding a new presentation', function () {
       it('should zoom to fit', function(done) {
         workspacePage.getZoomDropdown().getText().then(function(text) {
-          initialZoom = parseInt(text.substring(0, text.indexOf('%'))) / 100;
-          expect(initialZoom).to.be.greaterThan(0);
+          let zoom = parseInt(text.substring(0, text.indexOf('%'))) / 100;
+          expect(zoom).to.be.greaterThan(0);
 
           done();
         });        
+      });
+    });
+
+    describe(' Given a user is adding a new presentation and a new placeholder', function () {
+      before(function () {
+        workspacePage.getZoomDropdown().click();
+        workspacePage.getZoomFullSizeDropdownItem().click();
+        initialZoom = 1;
+
+        helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
       });
 
       it('should show the placeholder', function () {
@@ -158,7 +166,7 @@ var ArtboardPlaceholdersScenarios = function() {
         });
       });
 
-      xit('should resize placeholder from the corner', function (done) {
+      it('should resize placeholder from the corner', function (done) {
         artboardPage.getPlaceholderContainers().get(0).getSize().then(function (initialSize) {
           browser.actions().mouseMove(artboardPage.getPlaceholderContainers().get(0), {x: initialSize.width*initialZoom, y: initialSize.height*initialZoom})
             .mouseDown()
