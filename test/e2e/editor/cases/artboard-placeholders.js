@@ -122,31 +122,39 @@ var ArtboardPlaceholdersScenarios = function() {
         });
       });
 
-      xit('should move placeholder', function (done) {
+      it('should move placeholder', function (done) {
         artboardPage.getPlaceholderContainers().get(0).getLocation().then(function (initialLocation) {
           artboardPage.getPlaceholderContainers().get(0).getSize().then(function (size) {
             browser.actions().mouseMove(artboardPage.getPlaceholderContainers().get(0), {x: size.width*initialZoom - 100*initialZoom, y: size.height*initialZoom - 100*initialZoom})
               .mouseDown()
               .mouseMove(artboardPage.getPlaceholderContainers().get(0), {x: size.width*initialZoom - 50*initialZoom, y: size.height*initialZoom - 50*initialZoom})
               .mouseUp()
-              .perform();
-            //expect(artboardPage.getPlaceholderContainers().get(0).getLocation()).to.eventually.include({x: Math.floor(initialLocation.x + 50*initialZoom), y: Math.floor(initialLocation.y + 50*initialZoom)});
-            
-            done()
+              .perform()
+              .then(function() {
+                artboardPage.getPlaceholderContainers().get(0).getLocation().then(function(loc) {
+                  expect(Math.floor(loc.x)).to.equal(Math.floor(initialLocation.x + 50*initialZoom));
+                  expect(Math.floor(loc.y)).to.equal(Math.floor(initialLocation.y + 50*initialZoom));
+                  done();
+                });
+              });
           });
         });
       });
 
-      xit('should resize placeholder', function (done) {
+      it('should resize placeholder', function (done) {
         artboardPage.getPlaceholderContainers().get(0).getSize().then(function (initialSize) {
           browser.actions().mouseMove(artboardPage.getPlaceholderContainers().get(0), {x: initialSize.width*initialZoom, y: initialSize.height*initialZoom / 2})
             .mouseDown()
             .mouseMove(artboardPage.getPlaceholderContainers().get(0), {x: initialSize.width*initialZoom - 50*initialZoom, y: initialSize.height*initialZoom / 2})
             .mouseUp()
-            .perform();
-          expect(artboardPage.getPlaceholderContainers().get(0).getSize()).to.eventually.include({width: initialSize.width - 50, height: initialSize.height});
-          
-          done();
+            .perform()
+            .then(function() {
+              artboardPage.getPlaceholderContainers().get(0).getSize().then(function(sz) {
+                expect(Math.floor(sz.width)).to.equal(Math.floor(initialSize.width - 50));
+                expect(Math.floor(sz.height)).to.equal(Math.floor(initialSize.height));
+                done();
+              });
+            });
         });
       });
 
@@ -156,10 +164,14 @@ var ArtboardPlaceholdersScenarios = function() {
             .mouseDown()
             .mouseMove(artboardPage.getPlaceholderContainers().get(0), {x: initialSize.width*initialZoom + 20*initialZoom, y: initialSize.height*initialZoom + 20*initialZoom})
             .mouseUp()
-            .perform();
-          expect(artboardPage.getPlaceholderContainers().get(0).getSize()).to.eventually.include({width: initialSize.width + 20, height: initialSize.height + 20});
-          
-          done();
+            .perform()
+            .then(function() {
+              artboardPage.getPlaceholderContainers().get(0).getSize().then(function(sz) {
+                expect(Math.floor(sz.width)).to.equal(Math.floor(initialSize.width + 20));
+                expect(Math.floor(sz.height)).to.equal(Math.floor(initialSize.height + 20));
+                done();
+              });
+            });
         });
       });
 
