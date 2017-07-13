@@ -1,15 +1,59 @@
 <div class="app-header">
+  <span>
   <div class="title-block">
     <!-- App Title -->
     <h1 translate>Display Settings</h1>
   </div>
-  <div class="global-actions" require-role="da">
-        <button id="downloadPlayer" type="button" class="btn btn-primary btn-lg">
-        Subscribe to Rise Player Professional 
-      </button>
+  </span>
+  <!-- START -->
+  <div class="prototype-show prototype-show-ready">
+    <div class="global-actions" require-role="da">
+          <button id="downloadPlayer" type="button" class="btn btn-primary btn-lg">
+          Start Rise Player Professional Trial
+        </button>
+    </div>
+    <a class="info-link" href="https://help.risevision.com/hc/en-us" target="_blank"><i class="fa fa-question-circle icon-left" aria-hidden="true"></i>What is Rise Player Professional?</a>
   </div>
-  <a class="info-link" href="https://help.risevision.com/hc/en-us" target="_blank"><i class="fa fa-question-circle icon-left" aria-hidden="true"></i>What is Rise Player Professional?</a>
+  <div class="prototype-show">
+    <div class="subscription-status trial" style="display: inline-block;
+    margin-top: 12px;">
+    <span id="statusMessage">14 days remaining on your Rise Player Professional trial.</span>
+    <a class="btn btn-primary u_margin-left" href="#">Subscribe Now!</a>
+    </div>
+  </div>
+  <div class="prototype-show">
+    <!-- <div class="subscription-status expired">
+    <span id="statusMessage">Rise Player Professional has expired.</span>
+    <a class="btn btn-primary u_margin-left" href="#">Subscribe Now!</a>
+    </div> -->
+    <div class="global-actions" require-role="da">
+          <button id="downloadPlayer" type="button" class="btn btn-primary btn-lg">
+          Subscribe to Rise Player Professional 
+        </button>
+    </div>
+    <a class="info-link" href="https://help.risevision.com/hc/en-us" target="_blank"><i class="fa fa-question-circle icon-left" aria-hidden="true"></i>What is Rise Player Professional?</a>
+  </div>
+  <!-- ALERT -->
 </div>
+
+<!-- PROTOTYPE CODE  -->
+<script>
+
+$(document).ready(function() { 
+  $(".prototype-show").hide();
+  $(".prototype-show-ready").show();
+  
+});
+
+$(document).on("click", ".prototype-show", function() {
+   var target = $(this);
+   $(target).hide().siblings("div").hide();
+   $(target).next("div").show();
+});
+
+</script>
+
+
 <div id="display-loader" rv-spinner rv-spinner-key="display-loader" rv-spinner-start-active="0"></div>
 <div>
   <form role="form" name="displayDetails">

@@ -104,7 +104,7 @@
            <tr class="table-body__row">
             <td class="table-body__cell "><span translate>displays-app.fields.player.playerVersion</span></td>
             <td class="table-body__cell ">
-            <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}} </span> <b>Professional</b>
+            <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}} Professional </span>
             </td>
           </tr>
           <tr class="table-body__row">
@@ -161,7 +161,7 @@
         <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'upgrade-player'">
           <p>{{ 'displays-app.fields.screenshot.notAvailable' | translate }}</p>
           <p>{{ 'displays-app.fields.screenshot.upgradeRequired' | translate }}</p>
-          <button class="btn btn-xs btn-primary" ng-click="factory.addDisplayModal(display)">{{ 'displays-app.fields.screenshot.upgradePlayer' | translate }}</button>
+          <button class="btn btn-xs btn-link" style="text-decoration: underline;" ng-click="factory.addDisplayModal(display)">{{ 'displays-app.fields.screenshot.upgradePlayer' | translate }}</button>
         </div>
         <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'os-not-supported'">
           <p>{{ 'displays-app.fields.screenshot.notAvailable' | translate }}</p>
