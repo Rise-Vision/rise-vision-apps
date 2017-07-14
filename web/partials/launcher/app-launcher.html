@@ -4,13 +4,55 @@
   <ng-include ng-show="!editorFactory.presentations.loadingItems && editorFactory.presentations.items.list.length === 0" src="'partials/launcher/add-presentation-cta.html'"></ng-include>
   
   <div ng-show="editorFactory.presentations.items.list.length > 0">
-    <div class="text-right u_margin-md-top u_margin-md-bottom">
-      <button id="showHelpButton" class="btn btn-link" ng-click="toggleHelp()" ng-hide="showHelp">{{'launcher.howToShow'|translate}}</button>
-      <button id="hideHelpButton" class="btn btn-link" ng-click="toggleHelp()" ng-show="showHelp">{{'launcher.hideAnimation'|translate}}</button>
+     <div class="arrow-steps hidden-xs u_margin-sm-top u_margin-sm-bottom">
+        <div class="step completed">
+            <span> Sign Up </span>
+            <span class="completed-tag"> Completed! </span>
+        </div>
+        <div class="step current">
+            <span> Create a Presentation </span>
+            <span class="onboard-actions">
+                  <button class="btn btn-sm btn-primary">
+                    Create
+                  </button>
+                  <button class="btn btn-sm btn-primary">
+                    <i class="fa fa-question u_icon-white"></i>
+                  </button>
+              </span>
+            <span class="completed-tag" style="display:none"> Completed! </span>
+        </div>
+        <div class="step">
+            <span> Add a Display </span>
+            <span class="onboard-actions" style="display:none;">
+                  <button class="btn btn-sm btn-primary">
+                    Add
+                  </button>
+                  <button class="btn btn-sm btn-primary">
+                    <i class="fa fa-question u_icon-white"></i>
+                  </button>
+                </span>
+            <span class="completed-tag" style="display:none"> Completed! </span>
+        </div>
+        <div class="step">
+            <span> Activate a Display</span>
+            <span class="onboard-actions" style="display:none;">
+                  <button class="btn btn-sm btn-primary">
+                    Activate
+                  </button>
+                  <button class="btn btn-sm btn-primary">
+                    <i class="fa fa-question u_icon-white"></i>
+                  </button>
+                </span>
+            <span class="completed-tag" style="display:none"> Completed! </span>
+        </div>
+        <div class="step">
+            <span> <b id="step-count">3</b> Steps To Go! </span>
+        </div>
     </div>
 
-    <div id="helpContainer" class="video-box u_margin-md-bottom" ng-show="showHelp">
-        <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/Animations/howitworks.gif">
+    <!-- PROTOTYPE USE ONLY -->
+    <div class="proto-nav">
+    <a href="#" id="next-step" class="pull-right"></a>
     </div>
 
     <div class="row" ng-init="listLimit=20">
@@ -78,3 +120,34 @@
 
   </div><!--container-->
 </div><!--appLauncherContainer-->
+
+
+
+<!-- PROTOTYPE CODE - REFERENCE ONLY -->
+<script>
+$(document).on("click", "#next-step", function() {
+    var currentStep = $(".arrow-steps").find(".step.current");
+    $(currentStep).removeClass("current").addClass("completed");
+
+    var currentActions = $(currentStep).find(" .onboard-actions ");
+    $(currentActions).hide();
+
+    var currentTag = $(currentStep).find(" .completed-tag ");
+    $(currentTag).show();
+
+    var nextStep = $(currentStep).next();
+    $(nextStep).addClass("current");
+
+    var nextActions = $(nextStep).find(" .onboard-actions ");
+    $(nextActions).show();
+
+    if ($("#step-count").text() === '1') {
+        $("#step-count").parent().html("<span>All Done!</span>");
+    } else {
+        $("#step-count").text(function(i, t) {
+            return Number(t) - 1;
+        });
+    }
+});
+</script>
+
