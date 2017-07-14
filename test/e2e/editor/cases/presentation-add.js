@@ -95,17 +95,16 @@ var PresentationAddScenarios = function() {
       expect(workspacePage.getPreviewButton().isPresent()).to.eventually.be.false;      
     });
 
-    it('should save presentation and enable Preview button', function() {  
+    it('should save presentation hide Change Template Button and enable Preview button', function() {  
       helper.clickWhenClickable(workspacePage.getSaveButton(), 'Save Button');
-      browser.sleep(500);
+
+      helper.waitDisappear(workspacePage.getChangeTemplateButton(), "Change Template Button");
+      expect(workspacePage.getChangeTemplateButton().isPresent()).to.eventually.be.false;
+
       helper.wait(workspacePage.getSaveStatus(), 'Save Status');
       expect(workspacePage.getSaveButton().isEnabled()).to.eventually.be.false;
       expect(workspacePage.getPreviewButton().isEnabled()).to.eventually.be.true;
       expect(workspacePage.getSaveAndPreviewButton().isPresent()).to.eventually.be.false;
-    });
-
-    it('should hide Change Template Button', function () {
-      expect(workspacePage.getChangeTemplateButton().isPresent()).to.eventually.be.false;
     });
 
     it('should keep Publish/Restore Buttons disabled', function () {
