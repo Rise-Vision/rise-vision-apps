@@ -102,7 +102,7 @@ describe('controller: Store Products Modal', function() {
     expect($scope.factory.loadingItems).to.be.false;
     expect($scope.search).to.be.ok;
     expect($scope.filterConfig).to.be.ok;
-    expect($scope.selectProductTag).to.be.ok;
+    expect($scope.paymentCategories).to.be.ok;
 
     expect($scope.select).to.be.a('function');
     expect($scope.dismiss).to.be.a('function');
@@ -131,47 +131,6 @@ describe('controller: Store Products Modal', function() {
       }, 10);
     });
   });
-
-  describe('selectProductTag', function() {
-    var doSearchSpy;
-    beforeEach(function() {
-      doSearchSpy = sinon.spy(scrollingListService, 'doSearch');
-    });
-    
-    it('should select appropriate tag', function() {
-      $scope.selectProductTag('education');
-      
-      expect($scope.search.productTag).to.equal('education');
-      doSearchSpy.should.have.been.called;
-    });
-    
-    it('should select all tag', function() {
-      $scope.search.productTag = 'education';
-      
-      $scope.selectProductTag('all');
-      
-      expect($scope.search.productTag).to.be.undefined;
-      doSearchSpy.should.have.been.called;
-    });
-    
-    it('should not call API twice for all', function() {
-      $scope.search.productTag = undefined;
-
-      $scope.selectProductTag('all');
-      
-      expect($scope.search.productTag).to.be.undefined;
-      doSearchSpy.should.not.have.been.called;
-    });
-    
-    it('should not call API twice for the same category', function() {
-      $scope.search.productTag = 'education';
-
-      $scope.selectProductTag('education');
-      
-      expect($scope.search.productTag).to.equal('education');
-      doSearchSpy.should.not.have.been.called;
-    });
-  })
 
   describe('$modalInstance functionality: ', function() {
     it('should exist',function(){

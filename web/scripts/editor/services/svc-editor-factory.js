@@ -9,12 +9,12 @@ angular.module('risevision.editor.services')
   .factory('editorFactory', ['$q', '$state', 'userState', 'presentation',
     'presentationParser', 'distributionParser', 'presentationTracker',
     'store', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
-    'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT', 'TEMPLATES_CATEGORY',
+    'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT', 'TEMPLATES_TYPE',
     '$modal', '$rootScope', '$window', 'scheduleFactory', 'messageBox',
     function ($q, $state, userState, presentation, presentationParser,
       distributionParser, presentationTracker, store, VIEWER_URL,
       REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED, DEFAULT_LAYOUT,
-      TEMPLATES_CATEGORY, $modal, $rootScope, $window, scheduleFactory,
+      TEMPLATES_TYPE, $modal, $rootScope, $window, scheduleFactory,
       messageBox) {
       var factory = {};
       var JSON_PARSE_ERROR = 'JSON parse error';
@@ -421,7 +421,7 @@ angular.module('risevision.editor.services')
                 _goToStoreModal(productDetails);
               } else {
                 return store.product.list({
-                    category: TEMPLATES_CATEGORY,
+                    category: TEMPLATES_TYPE,
                     rvaEntityId: rvaEntityId
                   })
                   .then(function (products) {

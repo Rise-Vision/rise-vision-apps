@@ -121,16 +121,6 @@ describe('service: store:', function() {
         .then(null,done);
     });
     
-    it('should select proper category',function(done){
-      store.product.list({query: 'str',category:'Content',productTag:'education'})
-        .then(function(result){
-          expect(searchString).to.equal('(visibleTo:ALL OR visibleTo:TEST_COMP_ID) AND (productTag:Content) AND (productTag:education) AND str');
-
-          done();
-        })
-        .then(null,done);
-    });
-    
     it('should search by rvaEntityId',function(done){
       store.product.list({category:'Presentations',rvaEntityId:'presentationId'})
         .then(function(result){

@@ -4,7 +4,7 @@ var StoreProductsModalPage = function() {
   var modalTitle = element(by.id('storeModalTitle'));
   var searchFilter = element(by.tagName('search-filter'));
   var searchInput = element(by.id('storeProductsSearchInput'));
-  var searchCategories = element.all(by.repeater('tag in productTags'));
+  var searchCategories = element.all(by.repeater('category in paymentCategories'));
 
   var storeProductsLoader = element(by.css('#addStoreProductModal .spinner-backdrop'));
 

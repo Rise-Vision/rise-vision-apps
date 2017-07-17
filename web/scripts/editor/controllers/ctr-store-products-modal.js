@@ -1,27 +1,21 @@
 'use strict';
 angular.module('risevision.editor.controllers')
-  .constant('TEMPLATES_CATEGORY', 'Templates')
-  .constant('TEMPLATE_PRODUCT_TAGS', [
+  .constant('TEMPLATES_TYPE', 'Templates')
+  .constant('PAYMENT_CATEGORIES', [
     'all',
-    'education',
-    'business',
-    'lifestyle',
-    'worship',
-    'healthcare',
-    'hospitality',
-    'retail',
-    'other'
+    'free',
+    'premium'
   ])
   .controller('storeProductsModal', ['$scope', 'ScrollingListService',
     'store', '$modalInstance', '$loading', '$filter', 'STORE_URL', 'category',
-    '$modal', 'playlistItemFactory', 'TEMPLATE_PRODUCT_TAGS',
-    'TEMPLATES_CATEGORY',
+    '$modal', 'playlistItemFactory', 'PAYMENT_CATEGORIES',
+    'TEMPLATES_TYPE',
     function ($scope, ScrollingListService, store, $modalInstance, $loading,
       $filter, STORE_URL, category, $modal, playlistItemFactory,
-      TEMPLATE_PRODUCT_TAGS, TEMPLATES_CATEGORY) {
+      PAYMENT_CATEGORIES, TEMPLATES_TYPE) {
       var defaultCount = 1000;
 
-      $scope.productTags = TEMPLATE_PRODUCT_TAGS;
+      $scope.paymentCategories = PAYMENT_CATEGORIES;
 
       $scope.search = {
         category: category,
@@ -34,7 +28,7 @@ angular.module('risevision.editor.controllers')
 
       $scope.filterConfig = {
         placeholder: $filter('translate')(
-          'editor-app.storeProduct.' + (category === TEMPLATES_CATEGORY ?
+          'editor-app.storeProduct.' + (category === TEMPLATES_TYPE ?
             'templates' : 'content') + '.search'),
         id: 'storeProductsSearchInput'
       };
@@ -47,17 +41,8 @@ angular.module('risevision.editor.controllers')
         }
       });
 
-      $scope.selectProductTag = function (tag) {
-        if (tag !== $scope.search.productTag && !(!$scope.search.productTag &&
-            tag === 'all')) {
-          $scope.search.productTag = tag === 'all' ? undefined : tag;
-
-          $scope.factory.doSearch();
-        }
-      };
-
       $scope.select = function (product) {
-        if (category === TEMPLATES_CATEGORY) {
+        if (category === TEMPLATES_TYPE) {
           var productDetailsModal = $modal.open({
             templateUrl: 'partials/editor/product-details-modal.html',
             size: 'lg',

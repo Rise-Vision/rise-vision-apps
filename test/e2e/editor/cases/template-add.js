@@ -57,18 +57,23 @@ var TemplateAddScenarios = function() {
     });
 
     it('should show search categories', function() {
-      expect(storeProductsModalPage.getSearchCategories().count()).to.eventually.equal(9);
-      expect(storeProductsModalPage.getSearchCategories().get(0).getText()).to.eventually.equal("ALL");
-    })
+      expect(storeProductsModalPage.getSearchCategories().count()).to.eventually.equal(3);
+      expect(storeProductsModalPage.getSearchCategories().get(0).getText()).to.eventually.equal('ALL');
+      expect(storeProductsModalPage.getSearchCategories().get(1).getText()).to.eventually.equal('FREE');
+      expect(storeProductsModalPage.getSearchCategories().get(2).getText()).to.eventually.equal('PREMIUM');
+    });
 
     it('should show a list of templates', function () {
       expect(storeProductsModalPage.getStoreProductsList().isDisplayed()).to.eventually.be.true;
     });
 
-    it('should show templates', function () {
-      helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader()).then(function () {
-        expect(storeProductsModalPage.getStoreProducts().count()).to.eventually.be.above(0);
-      });
+    it('should show templates, free and premium', function () {
+      helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader(), 'Store products loader');
+
+      expect(storeProductsModalPage.getStoreProducts().count()).to.eventually.be.above(0);
+      
+      expect(storeProductsModalPage.getFreeProducts().count()).to.eventually.be.above(0);
+      expect(storeProductsModalPage.getPremiumProducts().count()).to.eventually.be.above(0);
     });
 
     it('should show Add Blank Presentation',function(){
@@ -77,6 +82,27 @@ var TemplateAddScenarios = function() {
 
     it('should show a link to Missing Template form',function(){
       expect(storeProductsModalPage.getSuggestTemplate().isDisplayed()).to.eventually.be.true;
+    });
+    
+    it('should filter Free templates', function() {
+      storeProductsModalPage.getSearchCategories().get(1).click();
+
+      expect(storeProductsModalPage.getFreeProducts().count()).to.eventually.be.above(0);
+      expect(storeProductsModalPage.getPremiumProducts().count()).to.eventually.equal(0);
+    });
+
+    it('should filter Premium templates', function() {
+      storeProductsModalPage.getSearchCategories().get(2).click();
+
+      expect(storeProductsModalPage.getFreeProducts().count()).to.eventually.equal(0);
+      expect(storeProductsModalPage.getPremiumProducts().count()).to.eventually.be.above(0);
+    });
+    
+    it('should show all templates again', function () {
+      storeProductsModalPage.getSearchCategories().get(0).click();
+
+      expect(storeProductsModalPage.getFreeProducts().count()).to.eventually.be.above(0);
+      expect(storeProductsModalPage.getPremiumProducts().count()).to.eventually.be.above(0);
     });
 
     it('should show preview modal when seleting a free template',function(){

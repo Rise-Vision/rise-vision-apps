@@ -12,8 +12,8 @@
     <div class="templates">
 
       <div class="template-filters u_margin-sm-bottom">
-        <ul class="list-unstyled" ng-if="factory.search.category === 'Templates'">
-          <li ng-repeat="tag in productTags" ng-class="{ active : search.productTag === tag || !search.productTag && tag === 'all' }" ng-click="selectProductTag(tag)"><span>{{tag}}</span></li>
+        <ul class="list-unstyled">
+          <li ng-repeat="category in paymentCategories" ng-class="{ active : search.paymentCategory === category || !search.paymentCategory && category === 'all' }" ng-click="search.paymentCategory = category"><span>{{category}}</span></li>
         </ul>
       </div><!--template-filters-->
 
@@ -31,7 +31,7 @@
         </div><!--template-image-->
       </li>
      
-      <ng-repeat ng-repeat="product in factory.items.list">
+      <ng-repeat ng-repeat="product in factory.items.list | storePaymentCategory:search.paymentCategory">
       <li class="storeProduct" ng-click="select(product)">
           <div class="template-image u_clickable">
             <span class="show-details"></span>
