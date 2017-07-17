@@ -25,10 +25,7 @@ var PresentationListScenarios = function() {
       commonHeaderPage = new CommonHeaderPage();
 
       homepage.getEditor();
-      //wait for spinner to go away.
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-        loginPage.signIn();
-      });
+      loginPage.signIn();
     });
 
     it('should show presentations list page', function () {

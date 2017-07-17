@@ -31,10 +31,7 @@ var PlaceholderSettingsScenarios = function() {
       commonHeaderPage = new CommonHeaderPage();
 
       homepage.getEditor();
-      //wait for spinner to go away.
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-        loginPage.signIn();
-      });
+      loginPage.signIn();
     });
 
     describe(' Given a user is adding a new presentation and a few placeholders', function () {

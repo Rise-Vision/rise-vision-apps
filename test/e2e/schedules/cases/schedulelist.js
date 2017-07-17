@@ -24,10 +24,7 @@ var ScheduleListScenarios = function() {
       commonHeaderPage = new CommonHeaderPage();
 
       homepage.getSchedules();
-      //wait for spinner to go away.
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-        loginPage.signIn();
-      });
+      loginPage.signIn();
     });
 
     it('should show schedules list page', function () {

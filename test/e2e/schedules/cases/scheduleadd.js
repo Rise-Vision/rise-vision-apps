@@ -28,10 +28,7 @@ var ScheduleAddScenarios = function() {
       commonHeaderPage = new CommonHeaderPage();
 
       homepage.getSchedules();
-      //wait for spinner to go away.
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-        loginPage.signIn();
-      });
+      loginPage.signIn();
       helper.waitDisappear(schedulesListPage.getLoader(),'Schedules loader');
       schedulesListPage.getScheduleAddButton().click();
     });
@@ -70,4 +67,3 @@ var ScheduleAddScenarios = function() {
   });
 };
 module.exports = ScheduleAddScenarios;
-

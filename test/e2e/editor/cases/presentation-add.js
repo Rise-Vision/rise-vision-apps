@@ -33,10 +33,7 @@ var PresentationAddScenarios = function() {
       artboardPage = new ArtboardPage();
 
       homepage.getEditor();
-      //wait for spinner to go away.
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-        loginPage.signIn();
-      });
+      loginPage.signIn();
       presentationsListPage.openNewPresentation();
     });
 

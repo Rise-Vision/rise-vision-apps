@@ -27,10 +27,7 @@ var DisplayAddScenarios = function() {
       commonHeaderPage = new CommonHeaderPage();
 
       homepage.getDisplays();
-      //wait for spinner to go away.
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-        loginPage.signIn();
-      });
+      loginPage.signIn();
       helper.waitDisappear(displaysListPage.getDisplaysLoader(), 'Displays loader');
       displaysListPage.getDisplayAddButton().click();
     });

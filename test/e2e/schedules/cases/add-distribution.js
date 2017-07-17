@@ -30,10 +30,7 @@ var AddDistributionScenarios = function() {
       distributionModalPage = new DistributionModalPage();
 
       homepage.getSchedules();
-      //wait for spinner to go away.
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-        loginPage.signIn();
-      });
+      loginPage.signIn();
       helper.waitDisappear(schedulesListPage.getLoader(),'Schedules loader');
     });
 

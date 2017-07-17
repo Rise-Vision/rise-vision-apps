@@ -295,17 +295,11 @@ gulp.task("test:e2e:core", ["test:webdrive_update"],factory.testE2EAngular({
   }()
 }));
 gulp.task("test:e2e", function (cb) { 
-  runSequence("config-e2e", "html2js", "server", "test:e2e:core", "server-close", cb);
+  runSequence(["config", "config-e2e", "html2js"], "server", "test:e2e:core", "server-close", cb);
 });
-
-gulp.task("metrics", factory.metrics());
 
 gulp.task("test",  function (cb) {
-  runSequence(["config", "html2js"], "test:unit", "test:e2e", "coveralls", cb);
-});
-
-gulp.task("test:ci",  function (cb) {
-  runSequence("test:unit", "metrics", cb);
+  runSequence(["config", "html2js"], "test:unit", "coveralls", cb);
 });
 
 //------------------------ Global ---------------------------------
@@ -313,7 +307,8 @@ gulp.task("test:ci",  function (cb) {
 gulp.task('default', [], function() {
   console.log('***********************'.yellow);
   console.log('  gulp dev: start a server in the  root folder and watch dev files'.yellow);
-  console.log('  gulp test: run unit and e2e tests'.yellow);
+  console.log('  gulp test: run unit tests'.yellow);
+  console.log('  gulp test:e2e: run e2e tests'.yellow);
   console.log('  gulp build: hint, lint, and minify files into ./dist '.yellow);
   console.log('  gulp bower-clean-install: clean bower install'.yellow);
   console.log('***********************'.yellow);
