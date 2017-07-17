@@ -37,9 +37,7 @@ var FirstSigninScenarios = function() {
 
       before(function () {
         homepage.getStorage();
-        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-          loginPage.signIn();
-        });
+        loginPage.signIn();
         var subCompanyName = 'E2E TEST SUBCOMPANY';
         commonHeaderPage.createSubCompany(subCompanyName);
         commonHeaderPage.selectSubCompany(subCompanyName);   

@@ -27,9 +27,7 @@
   var factory = {
     setupIframeSingleFolderSelector: function(){
       homepage.getStorage();
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-        loginPage.signIn();
-      });
+      loginPage.signIn();
       iframePage.getSingleFolderSelector();
       helper.wait(storageSelectorModalPage.getStorageSelectorModal(), 'Storage Selector Modal');
       helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
@@ -37,9 +35,7 @@
 
     setupIframeSingleFileSelector: function(){
       homepage.getStorage();
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-        loginPage.signIn();
-      });
+      loginPage.signIn();
       iframePage.getSingleFileSelector();
       helper.wait(storageSelectorModalPage.getStorageSelectorModal(), 'Storage Selector Modal');
       helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
@@ -47,18 +43,14 @@
 
     setupStorageHome: function(){
       homepage.getStorage();
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-        loginPage.signIn();
-      });
+      loginPage.signIn();
       helper.wait(storageHomePage.getStorageAppContainer(), 'Storage Apps Container');
       helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
     },
 
     setupAppsSingleFileSelector: function(){
       homepage.getEditor();
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-        loginPage.signIn();
-      });
+      loginPage.signIn();
       presentationListPage.openNewPresentation();
       workspacePage.getPresentationPropertiesButton().click();
       helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');

@@ -21,6 +21,9 @@ var LoginPage = function() {
   	var commonHeaderPage = new CommonHeaderPage();
     var googleAuthPage = new GoogleAuthPage();
 
+    //wait for spinner to go away.
+    helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+
     signInLink.isPresent().then(function (state) {
       if (state) {
         signInLink.click().then(function () {

@@ -29,10 +29,7 @@ var HomeScenarios = function() {
 
       before(function () {
         homepage.getStorage();
-        //wait for spinner to go away.
-        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-          loginPage.signIn();
-        });
+        loginPage.signIn();
       });
 
       it('should load Storage Home', function () {

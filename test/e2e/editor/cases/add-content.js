@@ -46,10 +46,7 @@ var AddContentScenarios = function() {
       filesListPage = new FilesListPage();
 
       homepage.getEditor();
-      //wait for spinner to go away.
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-        loginPage.signIn();
-      });
+      loginPage.signIn();
     });
 
     before('Add Presentation & Placeholder: ', function () {

@@ -36,10 +36,7 @@ var TemplateAddScenarios = function() {
       productDetailsModalPage = new ProductDetailsModalPage();
 
       homepage.getEditor();
-      //wait for spinner to go away.
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-        loginPage.signIn();
-      });
+      loginPage.signIn();
       helper.waitDisappear(presentationsListPage.getPresentationsLoader(),'Presentation loader');
       presentationsListPage.getPresentationAddButton().click();
 

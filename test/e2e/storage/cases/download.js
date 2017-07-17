@@ -29,10 +29,7 @@ var DownloadScenarios = function() {
 
       before(function () {
         homepage.getStorage();
-        //wait for spinner to go away.
-        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-          loginPage.signIn();
-        });
+        loginPage.signIn();
 
         helper.wait(storageHomePage.getStorageAppContainer(), 'Storage Apps Container');
         helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');

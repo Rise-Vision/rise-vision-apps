@@ -28,10 +28,7 @@ var DisplayListScenarios = function() {
 
       before(function () {
         homepage.getDisplays();
-        //wait for spinner to go away.
-        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-          loginPage.signIn();
-        });
+        loginPage.signIn();
       });
 
       it('should show displays list page', function () {
