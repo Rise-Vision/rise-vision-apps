@@ -2,6 +2,7 @@
 
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var GoogleAuthPage = require('rv-common-e2e').googleAuthPage;
+var OnboardingPage = require('./../../common/pages/onboarding.js');
 var helper = require('rv-common-e2e').helper;
 
 var LoginPage = function() {
@@ -20,6 +21,7 @@ var LoginPage = function() {
   this.signIn = function() {
   	var commonHeaderPage = new CommonHeaderPage();
     var googleAuthPage = new GoogleAuthPage();
+    var onboardingPage = new OnboardingPage();
 
     //wait for spinner to go away.
     helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
@@ -31,7 +33,9 @@ var LoginPage = function() {
           helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
         });
       }
-    });  	
+    });
+    
+    helper.wait(onboardingPage.getOnboardingBar(), 'Onboarding bar');
   }
 
 };
