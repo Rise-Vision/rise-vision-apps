@@ -29,15 +29,16 @@
     <table id="displaysListTable" class="table">
       <thead class="table-header">
         <tr class="table-header__row">
-          <th class="table-header__cell">
-          </th>
-          <th class="table-header__cell u_clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
+          
+          <th class="table-header__cell col-sm-1 u_clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
             <span>
             {{ 'displays-app.list.heading.name' | translate }}
             <!-- ngIf: search.sortBy == 'name' -->
             <i ng-if="search.sortBy == 'name'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
             <!-- end ngIf: search.sortBy == 'name' -->
             </span>
+          </th>
+          <th class="table-header__cell">
           </th>
           <th id="tableHeaderStatus" class="table-header__cell col-sm-2">
             <span>{{ 'displays-app.list.heading.status' | translate }}</span>
@@ -54,15 +55,16 @@
 
         <!-- START A TRIAL -->
         <tr class="table-body__row">
-           <td class="table-body__cell display-product">
-           <!-- <span>Pro Trial</span> -->
-           <button class="btn btn-xs btn-link">Try Professional</button>
-           </td>
+        
           <td class="table-body__cell">
             <a class="u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
-            <span class=""><strong>{{display.name}}</strong></span>
+            <span class=""><strong>Alex's Demo Display #1</strong></span>
             </a>
           </td>
+             <td class="table-body__cell display-product">
+           <!-- <span>Pro Trial</span> -->
+           <button class="btn btn-xs btn-primary">Try Professional</button>
+           </td>
            <td class="table-body__cell display-status">
             <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
             <span class="text-danger" ng-if="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline
@@ -70,7 +72,7 @@
 
             <span class="text-success" ng-if="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
 
-            <button class="btn btn-xs btn-link pt-status btn-install-player"
+            <button class="btn btn-xs btn-primary pt-status btn-install-player"
                     ng-if="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="displayFactory.addDisplayModal(display)">
               {{ 'displays-app.list.status.install' | translate }}
             </button>
@@ -80,7 +82,7 @@
               {{display.scheduleName}}<i class="fa fa-external-link icon-sm-right"></i>
             </a>
             <a ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
-              <button class="btn btn-link btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
+              <button class="btn btn-primary btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
             </a>
           </td>
           <td class="table-body__cell u_nowrap hidden-xs">
@@ -92,15 +94,16 @@
 
          <!-- ON TRIAL -->
         <tr class="table-body__row">
-           <td class="table-body__cell display-product">
-           <span>Professional Trial</span>
-           <button class="btn btn-xs btn-link">Subscribe Now</button>
-           </td>
+          
           <td class="table-body__cell">
             <a class="u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
-            <span class=""><strong>{{display.name}}</strong></span>
+            <span class=""><strong>Alex's Demo Display #2</strong></span>
             </a>
           </td>
+           <td class="table-body__cell display-product">
+           <span>Professional Trial</span>
+           <button class="btn btn-xs btn-primary">Subscribe Now</button>
+           </td>
            <td class="table-body__cell display-status">
             <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
             <span class="text-danger" ng-if="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline
@@ -108,7 +111,7 @@
 
             <span class="text-success" ng-if="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
 
-            <button class="btn btn-xs btn-link pt-status btn-install-player"
+            <button class="btn btn-xs btn-primary pt-status btn-install-player"
                     ng-if="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="displayFactory.addDisplayModal(display)">
               {{ 'displays-app.list.status.install' | translate }}
             </button>
@@ -118,7 +121,7 @@
               {{display.scheduleName}}<i class="fa fa-external-link icon-sm-right"></i>
             </a>
             <a ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
-              <button class="btn btn-link btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
+              <button class="btn btn-primary btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
             </a>
           </td>
           <td class="table-body__cell u_nowrap hidden-xs">
@@ -130,15 +133,16 @@
 
         <!-- SUBSCRIBED -->
         <tr class="table-body__row">
-           <td class="table-body__cell display-product">
+           
+          <td class="table-body__cell">
+            <a class="u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
+            <span class=""><strong>Alex's Demo Display #3</strong></span>
+            </a>
+          </td>
+          <td class="table-body__cell display-product">
            <span>Professional</span>
            <!-- <a href="#">Subscribe Now</a> -->
            </td>
-          <td class="table-body__cell">
-            <a class="u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
-            <span class=""><strong>{{display.name}}</strong></span>
-            </a>
-          </td>
            <td class="table-body__cell display-status">
             <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
             <span class="text-danger" ng-if="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline
@@ -146,7 +150,7 @@
 
             <span class="text-success" ng-if="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
 
-            <button class="btn btn-xs btn-link pt-status btn-install-player"
+            <button class="btn btn-xs btn-primary pt-status btn-install-player"
                     ng-if="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="displayFactory.addDisplayModal(display)">
               {{ 'displays-app.list.status.install' | translate }}
             </button>
@@ -156,7 +160,7 @@
               {{display.scheduleName}}<i class="fa fa-external-link icon-sm-right"></i>
             </a>
             <a ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
-              <button class="btn btn-link btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
+              <button class="btn btn-primary btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
             </a>
           </td>
           <td class="table-body__cell u_nowrap hidden-xs">
@@ -168,15 +172,16 @@
 
         <!-- EXPIRED -->
         <tr class="table-body__row">
-           <td class="table-body__cell display-product">
-           <!-- <span>Pro Trial</span> -->
-           <button class="btn btn-xs btn-link">Subscribe To Professional</button>
-           </td>
+           
           <td class="table-body__cell">
             <a class="u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
-            <span class=""><strong>{{display.name}}</strong></span>
+            <span class=""><strong>Alex's Demo Display #4</strong></span>
             </a>
           </td>
+          <td class="table-body__cell display-product">
+           <!-- <span>Pro Trial</span> -->
+           <button class="btn btn-xs btn-primary">Subscribe To Professional</button>
+           </td>
            <td class="table-body__cell display-status">
             <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
             <span class="text-danger" ng-if="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline
@@ -184,7 +189,7 @@
 
             <span class="text-success" ng-if="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
 
-            <button class="btn btn-xs btn-link pt-status btn-install-player"
+            <button class="btn btn-xs btn-primary pt-status btn-install-player"
                     ng-if="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="displayFactory.addDisplayModal(display)">
               {{ 'displays-app.list.status.install' | translate }}
             </button>
@@ -194,7 +199,7 @@
               {{display.scheduleName}}<i class="fa fa-external-link icon-sm-right"></i>
             </a>
             <a ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
-              <button class="btn btn-link btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
+              <button class="btn btn-primary btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
             </a>
           </td>
           <td class="table-body__cell u_nowrap hidden-xs">
@@ -206,15 +211,16 @@
 
         <!-- UNSUPPORTED -->
         <tr class="table-body__row">
-           <td class="table-body__cell display-product">
-           <span class="text-danger">Unsupported</span>
-           <button class="btn btn-xs btn-link">Upgrade</button>
-           </td>
+         
           <td class="table-body__cell">
             <a class="u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
-            <span class=""><strong>{{display.name}}</strong></span>
+            <span class=""><strong>Alex's Demo Display #5</strong></span>
             </a>
           </td>
+            <td class="table-body__cell display-product">
+           <span class="text-danger">Unsupported</span>
+           <button class="btn btn-xs btn-primary">Upgrade</button>
+           </td>
            <td class="table-body__cell display-status">
             <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
             <span class="text-danger" ng-if="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline
@@ -222,7 +228,7 @@
 
             <span class="text-success" ng-if="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
 
-            <button class="btn btn-xs btn-link pt-status btn-install-player"
+            <button class="btn btn-xs btn-primary pt-status btn-install-player"
                     ng-if="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="displayFactory.addDisplayModal(display)">
               {{ 'displays-app.list.status.install' | translate }}
             </button>
@@ -232,7 +238,7 @@
               {{display.scheduleName}}<i class="fa fa-external-link icon-sm-right"></i>
             </a>
             <a ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
-              <button class="btn btn-link btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
+              <button class="btn btn-primary btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
             </a>
           </td>
           <td class="table-body__cell u_nowrap hidden-xs">
@@ -246,15 +252,16 @@
 
         <!-- REPEAT -->
         <tr class="table-body__row" ng-class="{ 'bg-warning' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list">
-           <td class="table-body__cell display-product">
-           <span>Professional Trial</span>
-           <a href="#">Subscribe Now</a>
-           </td>
+           
           <td class="table-body__cell">
             <a class="u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
             <span class=""><strong>{{display.name}}</strong></span>
             </a>
           </td>
+          <td class="table-body__cell display-product">
+           <span>Professional Trial</span>
+           <a href="#">Subscribe Now</a>
+           </td>
            <td class="table-body__cell display-status">
             <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
             <span class="text-danger" ng-if="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline
@@ -262,7 +269,7 @@
 
             <span class="text-success" ng-if="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
 
-            <button class="btn btn-xs btn-link pt-status btn-install-player"
+            <button class="btn btn-xs btn-primary pt-status btn-install-player"
                     ng-if="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="displayFactory.addDisplayModal(display)">
               {{ 'displays-app.list.status.install' | translate }}
             </button>
@@ -272,7 +279,7 @@
               {{display.scheduleName}}<i class="fa fa-external-link icon-sm-right"></i>
             </a>
             <a ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
-              <button class="btn btn-link btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
+              <button class="btn btn-primary btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
             </a>
           </td>
           <td class="table-body__cell u_nowrap hidden-xs">
