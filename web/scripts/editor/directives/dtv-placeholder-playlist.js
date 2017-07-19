@@ -4,8 +4,8 @@ angular.module('risevision.editor.directives')
   .directive('placeholderPlaylist', ['$modal', '$templateCache', '$filter',
     'placeholderPlaylistFactory', 'playlistItemFactory', 'widgetModalFactory',
     'widgetUtils', 'presentationItemFactory',
-    function ($modal, $templateCache, $filter, placeholderPlaylistFactory, 
-      playlistItemFactory, widgetModalFactory, widgetUtils, 
+    function ($modal, $templateCache, $filter, placeholderPlaylistFactory,
+      playlistItemFactory, widgetModalFactory, widgetUtils,
       presentationItemFactory) {
       return {
         restrict: 'E',
@@ -62,17 +62,17 @@ angular.module('risevision.editor.directives')
             placeholderPlaylistFactory.moveItem(oldIndex, newIndex);
             $scope.$apply();
           };
-          
+
           $scope.showSettingsModal = function (item) {
             if (item.type === 'widget') {
-              widgetModalFactory.showWidgetModal(item);          
+              widgetModalFactory.showWidgetModal(item);
             } else if (item.type === 'presentation') {
               presentationItemFactory.showSettingsModal(item);
             }
           }
-          
-          $scope.isEditable = function(item) {
-            if (item.type === 'widget' && 
+
+          $scope.isEditable = function (item) {
+            if (item.type === 'widget' &&
               (item.objectReference || item.settingsUrl)) {
               return true;
             } else if (item.type === 'presentation') {

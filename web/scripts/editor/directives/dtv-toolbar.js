@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.editor.directives')
-  .directive('toolbar', ['artboardFactory', 'editorFactory', 
+  .directive('toolbar', ['artboardFactory', 'editorFactory',
     'placeholdersFactory',
     function (artboardFactory, editorFactory, placeholdersFactory) {
       return {

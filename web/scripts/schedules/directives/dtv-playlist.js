@@ -50,7 +50,7 @@ angular.module('risevision.schedules.directives')
               playlistFactory.removePlaylistItem(playlistItem);
             });
           };
-          
+
           $scope.sortItem = function (evt) {
             var oldIndex = evt.oldIndex;
             var newIndex = evt.newIndex;

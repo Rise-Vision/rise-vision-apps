@@ -6,7 +6,7 @@ angular.module('risevision.editor.controllers')
     'presentationItemFactory', '$modalInstance', 'item', 'editorFactory',
     'userState', 'RVA_URL',
     function ($scope, placeholderPlaylistFactory, widgetModalFactory,
-      gadgetFactory, presentationItemFactory, $modalInstance, item, 
+      gadgetFactory, presentationItemFactory, $modalInstance, item,
       editorFactory, userState, RVA_URL) {
       $scope.PREVIOUS_EDITOR_URL = RVA_URL + '/#/PRESENTATION_MANAGE' + ((
           editorFactory.presentation.id) ? '/id=' + editorFactory.presentation
@@ -28,7 +28,7 @@ angular.module('risevision.editor.controllers')
 
       $scope.showSettingsModal = function () {
         if (item.type === 'widget') {
-          widgetModalFactory.showWidgetModal($scope.item, true);          
+          widgetModalFactory.showWidgetModal($scope.item, true);
         } else if (item.type === 'presentation') {
           presentationItemFactory.showSettingsModal($scope.item, true);
         }

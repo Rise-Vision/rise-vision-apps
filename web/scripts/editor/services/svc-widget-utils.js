@@ -112,7 +112,7 @@ angular.module('risevision.editor.services')
       };
 
       _init();
-      
+
       var _getItemId = function (item) {
         if (item && item.type === 'presentation') {
           return item.type;

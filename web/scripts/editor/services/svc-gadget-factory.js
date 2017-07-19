@@ -151,7 +151,7 @@ angular.module('risevision.editor.services')
               for (var i = 0; i < items.length; i++) {
                 if (!items[i].gadget) {
                   items[i].gadget = _getGadgetByItemCached(items[i]);
-                  
+
                   // resolve potential NPE
                   if (!items[i].gadget) {
                     items[i].gadget = {};
@@ -184,20 +184,20 @@ angular.module('risevision.editor.services')
           var productCodes = Object.keys(productCodeItemMap);
           if (productCodes.length > 0) {
             subscriptionStatusFactory.checkProductCodes(productCodes)
-            .then(function (statusItems) {
-              for (var i = 0; i < statusItems.length; i++) {
-                var statusItem = statusItems[i];
-                var gadget = productCodeItemMap[statusItem.pc].gadget;
-                gadget.subscriptionStatus = statusItem.status;
-                gadget.expiry = statusItem.expiry;
-                gadget.trialPeriod = statusItem.trialPeriod;
-                gadget.statusMessage = _getMessage(gadget);
-              }
-              deferred.resolve();
-            }, function (e) {
-              factory.apiError = e.message ? e.message : e.toString();
-              deferred.reject();
-            });
+              .then(function (statusItems) {
+                for (var i = 0; i < statusItems.length; i++) {
+                  var statusItem = statusItems[i];
+                  var gadget = productCodeItemMap[statusItem.pc].gadget;
+                  gadget.subscriptionStatus = statusItem.status;
+                  gadget.expiry = statusItem.expiry;
+                  gadget.trialPeriod = statusItem.trialPeriod;
+                  gadget.statusMessage = _getMessage(gadget);
+                }
+                deferred.resolve();
+              }, function (e) {
+                factory.apiError = e.message ? e.message : e.toString();
+                deferred.reject();
+              });
           } else {
             deferred.resolve();
           }

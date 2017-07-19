@@ -13,9 +13,9 @@ angular.module('risevision.apps.directives')
             if (!value || GUID_REGEXP.test(value)) {
               ngModel.$setValidity('guid', true);
             } else {
-              ngModel.$setValidity('guid', false);              
+              ngModel.$setValidity('guid', false);
             }
-            
+
             return value;
           };
 

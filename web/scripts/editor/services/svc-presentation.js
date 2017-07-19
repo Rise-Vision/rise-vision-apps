@@ -43,8 +43,8 @@ angular.module("risevision.editor.services")
           };
           $log.debug("list presentations called with", obj);
           coreAPILoader().then(function (coreApi) {
-            return coreApi.presentation.list(obj);
-          })
+              return coreApi.presentation.list(obj);
+            })
             .then(function (resp) {
               $log.debug("list presentations resp", resp);
 
@@ -67,8 +67,8 @@ angular.module("risevision.editor.services")
 
           $log.debug("get presentation called with", presentationId);
           coreAPILoader().then(function (coreApi) {
-            return coreApi.presentation.get(obj);
-          })
+              return coreApi.presentation.get(obj);
+            })
             .then(function (resp) {
               $log.debug("get presentation resp", resp);
               deferred.resolve(resp.result);
@@ -94,8 +94,8 @@ angular.module("risevision.editor.services")
             "data": fields
           };
           coreAPILoader().then(function (coreApi) {
-            return coreApi.presentation.add(obj);
-          })
+              return coreApi.presentation.add(obj);
+            })
             .then(function (resp) {
               $log.debug("added presentation", resp);
               deferred.resolve(resp.result);
@@ -122,8 +122,8 @@ angular.module("risevision.editor.services")
 
           $log.debug("update presentation called with", presentationId);
           coreAPILoader().then(function (coreApi) {
-            return coreApi.presentation.patch(obj);
-          })
+              return coreApi.presentation.patch(obj);
+            })
             .then(function (resp) {
               $log.debug("update presentation resp", resp);
               deferred.resolve(resp.result);
@@ -144,8 +144,8 @@ angular.module("risevision.editor.services")
 
           $log.debug("delete presentation called with", presentationId);
           coreAPILoader().then(function (coreApi) {
-            return coreApi.presentation.delete(obj);
-          })
+              return coreApi.presentation.delete(obj);
+            })
             .then(function (resp) {
               $log.debug("delete presentation resp", resp);
               deferred.resolve(resp);
@@ -166,8 +166,8 @@ angular.module("risevision.editor.services")
 
           $log.debug("publish presentation called with", presentationId);
           coreAPILoader().then(function (coreApi) {
-            return coreApi.presentation.publish(obj);
-          })
+              return coreApi.presentation.publish(obj);
+            })
             .then(function (resp) {
               $log.debug("publish presentation resp", resp);
               deferred.resolve(resp);
@@ -188,8 +188,8 @@ angular.module("risevision.editor.services")
 
           $log.debug("restore presentation called with", presentationId);
           coreAPILoader().then(function (coreApi) {
-            return coreApi.presentation.restore(obj);
-          })
+              return coreApi.presentation.restore(obj);
+            })
             .then(function (resp) {
               $log.debug("restore presentation resp", resp);
               deferred.resolve(resp.result);

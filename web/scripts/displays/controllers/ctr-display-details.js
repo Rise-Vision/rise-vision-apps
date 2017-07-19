@@ -153,7 +153,7 @@ angular.module('risevision.displays.controllers')
         } else if ($scope.screenshot && $scope.screenshot.lastModified) {
           return 'screenshot-loaded';
         } else if ($scope.screenshot && ($scope.screenshot.status === 404 ||
-          $scope.screenshot.status === 403)) {
+            $scope.screenshot.status === 403)) {
           return 'no-screenshot-available';
         } else if ($scope.screenshot && $scope.screenshot.error) {
           return 'screenshot-error';

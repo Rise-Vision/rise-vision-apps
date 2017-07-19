@@ -3,11 +3,11 @@
 angular.module('risevision.editor.controllers')
   .controller('PresentationItemModalController', ['$scope', '$log', '$modal',
     '$modalInstance', 'presentationFactory', 'item',
-    function ($scope, $log, $modal, $modalInstance, presentationFactory, 
+    function ($scope, $log, $modal, $modalInstance, presentationFactory,
       item) {
       var initialPresentationName;
       $scope.item = angular.copy(item);
-      
+
       var _init = function () {
         if ($scope.item.objectData) {
           $scope.presentationId = $scope.item.objectData;
@@ -15,39 +15,39 @@ angular.module('risevision.editor.controllers')
           $scope.selectPresentation();
         }
       };
-      
+
       $scope.$watch('presentationId', function (id) {
         $scope.apiWarning = false;
 
         if (id && !$scope.presentationItemFields.presentationId.$error.guid) {
           $scope.item.objectData = id;
           presentationFactory.getPresentationCached(id)
-          .then(function(presentation) {
-            if (presentation && presentation.name) {
-              $scope.presentationName = presentation.name;
-            }
-          })
-          .then(null, function() {
-            $scope.showPresentationId = true;
-            $scope.presentationName = '';
-            $scope.apiWarning = true;
-          });
+            .then(function (presentation) {
+              if (presentation && presentation.name) {
+                $scope.presentationName = presentation.name;
+              }
+            })
+            .then(null, function () {
+              $scope.showPresentationId = true;
+              $scope.presentationName = '';
+              $scope.apiWarning = true;
+            });
         }
       });
 
       $scope.$watch("presentationName", function (name) {
         if (name) {
-          if (!$scope.item.name || 
-              $scope.item.name === 'Embedded Presentation' ||
-              initialPresentationName === $scope.item.name) {
-                
+          if (!$scope.item.name ||
+            $scope.item.name === 'Embedded Presentation' ||
+            initialPresentationName === $scope.item.name) {
+
             $scope.item.name = name;
           }
           initialPresentationName = name;
         }
       });
 
-      $scope.selectPresentation = function() {
+      $scope.selectPresentation = function () {
         var modalInstance = $modal.open({
           templateUrl: 'partials/editor/presentation-selector-modal.html',
           controller: 'PresentationSelectorModal'
@@ -58,8 +58,8 @@ angular.module('risevision.editor.controllers')
           $scope.presentationName = presentationDetails[1];
         });
       };
-      
-      $scope.clearSelection = function() {
+
+      $scope.clearSelection = function () {
         $scope.item.objectData = '';
         $scope.presentationId = '';
         $scope.presentationName = '';
@@ -77,7 +77,7 @@ angular.module('risevision.editor.controllers')
       $scope.dismiss = function () {
         $modalInstance.dismiss();
       };
-      
+
       _init();
     }
   ]); //ctr

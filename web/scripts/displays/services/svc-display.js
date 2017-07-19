@@ -15,11 +15,11 @@
       'name', 'id', 'street', 'unit', 'city', 'province', 'country',
       'postalCode'
     ])
-    .service('display', ['$rootScope', '$q', '$log', 'coreAPILoader', 
-      'userState', 'getDisplayStatus', 'screenshotRequester', 
+    .service('display', ['$rootScope', '$q', '$log', 'coreAPILoader',
+      'userState', 'getDisplayStatus', 'screenshotRequester',
       'imageBlobLoader', 'pick', 'DISPLAY_WRITABLE_FIELDS',
       'DISPLAY_SEARCH_FIELDS',
-      function ($rootScope, $q, $log, coreAPILoader, userState, 
+      function ($rootScope, $q, $log, coreAPILoader, userState,
         getDisplayStatus, screenshotRequester, imageBlobLoader, pick,
         DISPLAY_WRITABLE_FIELDS, DISPLAY_SEARCH_FIELDS) {
 
@@ -34,8 +34,8 @@
 
           return query.trim();
         };
-        
-        var _mergeStatuses = function(items, statuses) {
+
+        var _mergeStatuses = function (items, statuses) {
           items.forEach(function (item) {
             item.lastConnectionTime = item.lastActivityDate;
           });
@@ -52,7 +52,7 @@
           });
         };
 
-        var _mergeStatus =  function(item, lookup) {
+        var _mergeStatus = function (item, lookup) {
           if (lookup[item.id] === true) {
             item.onlineStatus = 'online';
           }
@@ -101,7 +101,7 @@
 
                 getDisplayStatus(displayIds).then(function (statuses) {
                   _mergeStatuses(result.items, statuses);
-                  
+
                   $rootScope.$broadcast('displaysLoaded', result.items);
                 }).finally(function () {
                   service.statusLoading = false;

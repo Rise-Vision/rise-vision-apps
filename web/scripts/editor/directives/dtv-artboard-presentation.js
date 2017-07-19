@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.editor.directives')
-  .directive('artboardPresentation', ['editorFactory', 'artboardFactory', 
+  .directive('artboardPresentation', ['editorFactory', 'artboardFactory',
     'placeholderFactory', 'PRESENTATION_BORDER_SIZE', '$stateParams',
-    function (editorFactory, artboardFactory, placeholderFactory, 
+    function (editorFactory, artboardFactory, placeholderFactory,
       PRESENTATION_BORDER_SIZE, $stateParams) {
       return {
         scope: true,
@@ -33,7 +33,7 @@ angular.module('risevision.editor.directives')
             element.css('transition', 'all 0s');
           }, true);
 
-          $scope.$watch(function() {
+          $scope.$watch(function () {
             return artboardFactory.zoomLevel;
           }, function () {
             element.css('transform', 'scale(' + artboardFactory.zoomLevel + ')');
@@ -41,17 +41,17 @@ angular.module('risevision.editor.directives')
             element.css('transition', 'all .4s');
           });
 
-          element.on('mousewheel DOMMouseScroll', function(e){    
-              if (e.ctrlKey) {
-                e.preventDefault();
-                $scope.$apply(function(){
-                  if (e.originalEvent.detail < 0 || e.originalEvent.wheelDelta > 0) {
-                    artboardFactory.zoomOut();
-                  } else {
-                    artboardFactory.zoomIn();
-                  }
-                });  
-              }
+          element.on('mousewheel DOMMouseScroll', function (e) {
+            if (e.ctrlKey) {
+              e.preventDefault();
+              $scope.$apply(function () {
+                if (e.originalEvent.detail < 0 || e.originalEvent.wheelDelta > 0) {
+                  artboardFactory.zoomOut();
+                } else {
+                  artboardFactory.zoomIn();
+                }
+              });
+            }
           });
 
           $scope.showEmptyState = function () {

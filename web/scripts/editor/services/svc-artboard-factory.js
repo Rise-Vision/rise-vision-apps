@@ -5,10 +5,10 @@ angular.module('risevision.editor.services')
   .constant('PRESENTATION_MARGIN_TOP', 60)
   .constant('PRESENTATION_SIDEBAR_SIZE', 290)
   .factory('artboardFactory', ['$state', 'editorFactory', 'placeholderFactory',
-    'PRESENTATION_BORDER_SIZE', 'PRESENTATION_MARGIN_TOP', 
+    'PRESENTATION_BORDER_SIZE', 'PRESENTATION_MARGIN_TOP',
     'PRESENTATION_SIDEBAR_SIZE',
     function ($state, editorFactory, placeholderFactory,
-      PRESENTATION_BORDER_SIZE, PRESENTATION_MARGIN_TOP, 
+      PRESENTATION_BORDER_SIZE, PRESENTATION_MARGIN_TOP,
       PRESENTATION_SIDEBAR_SIZE) {
       var factory = {};
       // Need to account for sidebar size when switching from 
@@ -36,30 +36,30 @@ angular.module('risevision.editor.services')
         factory.designMode = false;
         $state.go('apps.editor.workspace.htmleditor');
       };
-      
-      factory.compressArtboard = function() {
+
+      factory.compressArtboard = function () {
         factory.fullArtboard = false;
       };
-      
-      factory.expandArtboard = function() {
-        factory.fullArtboard = true; 
-        
+
+      factory.expandArtboard = function () {
+        factory.fullArtboard = true;
+
         placeholderFactory.clearPlaceholder();
       };
 
-      factory.isFullArtboard = function() {
+      factory.isFullArtboard = function () {
         return factory.fullArtboard && !placeholderFactory.placeholder;
       };
-      
-      factory.hideSidebar = function() {
+
+      factory.hideSidebar = function () {
         return !factory.designMode || factory.isFullArtboard();
       };
 
-      factory.canZoomIn = function() {
+      factory.canZoomIn = function () {
         return factory.zoomLevel <= 1.99;
       }
 
-      factory.canZoomOut = function() {
+      factory.canZoomOut = function () {
         return factory.zoomLevel >= 0.21;
       }
 
@@ -72,7 +72,7 @@ angular.module('risevision.editor.services')
       factory.zoomOut = function () {
         if (factory.canZoomOut()) {
           factory.zoomLevel = Math.ceil(factory.zoomLevel * 10 - 1) / 10;
-        }        
+        }
       };
 
       factory.zoomFit = function () {
@@ -80,8 +80,8 @@ angular.module('risevision.editor.services')
           return;
         }
 
-        var workspaceElement = factory.getWorkspaceElement();        
-        var workspaceWidth = workspaceElement.clientWidth - 
+        var workspaceElement = factory.getWorkspaceElement();
+        var workspaceWidth = workspaceElement.clientWidth -
           (sidebarTransition ? PRESENTATION_SIDEBAR_SIZE : 0);
         var workspaceHeight = workspaceElement.clientHeight - PRESENTATION_MARGIN_TOP;
         var artboardWidth = editorFactory.presentation.width + 2 * PRESENTATION_BORDER_SIZE;
@@ -98,7 +98,7 @@ angular.module('risevision.editor.services')
       };
 
       factory.zoomPercent = function (argument) {
-        factory.zoomLevel = argument / 100;  
+        factory.zoomLevel = argument / 100;
       };
 
       return factory;

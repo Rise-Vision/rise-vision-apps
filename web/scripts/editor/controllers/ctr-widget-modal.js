@@ -4,7 +4,7 @@
   angular.module('risevision.editor.controllers')
     .controller('widgetModal', ['$scope', '$timeout', '$modalInstance',
       '$loading', 'gadgetsApi', 'widget',
-      function ($scope, $timeout, $modalInstance, $loading, gadgetsApi, 
+      function ($scope, $timeout, $modalInstance, $loading, gadgetsApi,
         widget) {
         $scope.widgetUrl = widget.url;
 
@@ -22,19 +22,19 @@
             });
           }
         };
-        
-        var _stopLoader = function() {
+
+        var _stopLoader = function () {
           $loading.stop('widget-modal-loader');
 
           $scope.$digest();
         };
-        
-        var _init = function() {
+
+        var _init = function () {
           $timeout(_stopLoader, 3000);
-          
+
           _registerRpc();
         };
-        
+
         var _getAdditionalParams = function () {
           _stopLoader();
 

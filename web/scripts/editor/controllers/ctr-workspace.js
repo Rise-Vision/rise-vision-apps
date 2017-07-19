@@ -8,12 +8,12 @@ angular.module('risevision.editor.controllers')
     'statusMessage',
     'subscriptionStatus'
   ])
-  .controller('WorkspaceController', ['$scope', 'editorFactory', 
-    'artboardFactory', 'placeholderFactory', 'userState', '$modal', 
-    '$templateCache', '$location', '$stateParams', '$window', 'RVA_URL', 
+  .controller('WorkspaceController', ['$scope', 'editorFactory',
+    'artboardFactory', 'placeholderFactory', 'userState', '$modal',
+    '$templateCache', '$location', '$stateParams', '$window', 'RVA_URL',
     'IGNORE_FIELDS', '$timeout', '$state', '$filter',
-    function ($scope, editorFactory, artboardFactory, placeholderFactory, 
-      userState, $modal, $templateCache, $location, $stateParams, $window, 
+    function ($scope, editorFactory, artboardFactory, placeholderFactory,
+      userState, $modal, $templateCache, $location, $stateParams, $window,
       RVA_URL, IGNORE_FIELDS, $timeout, $state, $filter) {
       $scope.factory = editorFactory;
       $scope.artboardFactory = artboardFactory;

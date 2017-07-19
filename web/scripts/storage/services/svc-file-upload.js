@@ -40,15 +40,14 @@ angular.module('risevision.storage.services')
           }
         };
 
-        var loadBatch = function() {
+        var loadBatch = function () {
           if (currItem < files.length) {
             while (svc.queue.length < svc.queueLimit && currItem < files.length) {
               enqueue(files[currItem++]);
             }
 
             loadBatchTimer = $timeout(loadBatch, 500);
-          }
-          else {
+          } else {
             loadBatchTimer = null;
 
             deferred.resolve();

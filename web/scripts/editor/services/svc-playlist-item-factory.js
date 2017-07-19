@@ -49,7 +49,7 @@ angular.module('risevision.editor.services')
     'SELECTOR_TYPES', 'IMAGE_ADDITIONAL_PARAMS', 'VIDEO_ADDITIONAL_PARAMS',
     function ($modal, $log, userState, gadgetFactory, editorFactory,
       placeholderPlaylistFactory, widgetModalFactory, widgetUtils,
-      presentationItemFactory, storageUtils, presentationTracker, 
+      presentationItemFactory, storageUtils, presentationTracker,
       SELECTOR_TYPES, IMAGE_ADDITIONAL_PARAMS, VIDEO_ADDITIONAL_PARAMS) {
       var factory = {};
 
@@ -72,7 +72,7 @@ angular.module('risevision.editor.services')
         if (item.type !== 'presentation') {
           item.objectData = widget.url;
           item.objectReference = widget.id;
-          item.settingsUrl = widget.settingsUrl;          
+          item.settingsUrl = widget.settingsUrl;
         }
 
         return item;
