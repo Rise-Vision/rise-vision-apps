@@ -55,7 +55,7 @@ angular.module('risevision.apps.launcher.services')
             .then(function () {
               deferred = undefined;
             });
-        };
+        }
 
         return deferred;
       };

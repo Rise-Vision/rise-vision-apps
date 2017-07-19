@@ -108,7 +108,7 @@ angular.module('risevision.editor.services')
       var _getGadgetByItemCached = function (item) {
         var gadgetId;
         if (item.type === 'presentation') {
-          gadgetId = 'presentation'
+          gadgetId = 'presentation';
         } else {
           gadgetId = item.objectReference;
         }

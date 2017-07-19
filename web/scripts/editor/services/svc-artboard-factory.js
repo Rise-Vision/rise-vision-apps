@@ -57,11 +57,11 @@ angular.module('risevision.editor.services')
 
       factory.canZoomIn = function () {
         return factory.zoomLevel <= 1.99;
-      }
+      };
 
       factory.canZoomOut = function () {
         return factory.zoomLevel >= 0.21;
-      }
+      };
 
       factory.zoomIn = function () {
         if (factory.canZoomIn()) {

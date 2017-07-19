@@ -35,7 +35,7 @@ angular.module('risevision.editor.controllers')
         }
       });
 
-      $scope.$watch("presentationName", function (name) {
+      $scope.$watch('presentationName', function (name) {
         if (name) {
           if (!$scope.item.name ||
             $scope.item.name === 'Embedded Presentation' ||
@@ -64,7 +64,7 @@ angular.module('risevision.editor.controllers')
         $scope.presentationId = '';
         $scope.presentationName = '';
         $scope.apiWarning = false;
-      }
+      };
 
       $scope.save = function () {
         angular.copy($scope.item, item);

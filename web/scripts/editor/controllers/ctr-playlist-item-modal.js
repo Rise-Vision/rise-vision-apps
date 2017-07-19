@@ -32,7 +32,7 @@ angular.module('risevision.editor.controllers')
         } else if (item.type === 'presentation') {
           presentationItemFactory.showSettingsModal($scope.item, true);
         }
-      }
+      };
 
       $scope.save = function () {
         angular.copy($scope.item, item);

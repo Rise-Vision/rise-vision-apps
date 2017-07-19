@@ -69,7 +69,7 @@ angular.module('risevision.editor.directives')
             } else if (item.type === 'presentation') {
               presentationItemFactory.showSettingsModal(item);
             }
-          }
+          };
 
           $scope.isEditable = function (item) {
             if (item.type === 'widget' &&

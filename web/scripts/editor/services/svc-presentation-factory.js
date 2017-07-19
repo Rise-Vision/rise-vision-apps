@@ -1,13 +1,13 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.editor.services")
-  .factory("presentationFactory", ["$q", "presentation",
+angular.module('risevision.editor.services')
+  .factory('presentationFactory', ['$q', 'presentation',
     function ($q, presentation) {
       var factory = {};
 
       var _presentations = [];
       factory.loadingPresentation = false;
-      factory.apiError = "";
+      factory.apiError = '';
 
       factory.getPresentationCached = function (presentationId) {
         var presentation = _.find(_presentations, {

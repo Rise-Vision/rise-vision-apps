@@ -53,7 +53,7 @@ angular.module('risevision.apps.launcher.directives')
 
               _stepCount();
             }
-          }
+          };
 
           var _checkDisplayCreated = function () {
             if (addDisplayListener) {

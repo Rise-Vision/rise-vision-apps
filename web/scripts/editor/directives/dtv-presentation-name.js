@@ -1,17 +1,17 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.editor.directives")
-  .directive("presentationName", ["presentationFactory",
+angular.module('risevision.editor.directives')
+  .directive('presentationName', ['presentationFactory',
     function (presentationFactory) {
       return {
-        restrict: "A",
-        require: "?ngModel",
+        restrict: 'A',
+        require: '?ngModel',
         scope: {
-          id: "=presentationName",
-          ngModel: "=?"
+          id: '=presentationName',
+          ngModel: '=?'
         },
         link: function ($scope, element, attr, ngModel) {
-          $scope.$watch("id", function (id) {
+          $scope.$watch('id', function (id) {
             if (id) {
               presentationFactory.getPresentationCached(id)
                 .then(function (presentation) {
