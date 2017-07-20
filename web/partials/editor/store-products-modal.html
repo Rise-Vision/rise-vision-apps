@@ -6,6 +6,19 @@
     <h3 id="storeModalTitle" class="modal-title">{{ 'editor-app.storeProduct.' + (factory.search.category === 'Content' ? 'content' : 'templates') + '.title' | translate }}</h3>
   </div>
   <div class="modal-body u_padding-lg" stop-event="touchend">
+    <div class="align-center hidden-sm hidden-xs u_margin-md-bottom" ng-show="factory.search.category === 'Templates'">
+      <div ng-controller="TemplateLibrarySubscriptionStatusController">
+        <div ng-show="displayBanner">
+            <a href="#">
+                <img style="width: 900px; margin: 0 auto;" class="img-responsive" src="https://s3.amazonaws.com/Store-Products/Featured+Products/template_library/featured_1140x95.jpg">
+            </a>
+        </div>
+        <div id="subscription-status" subscription-status custom-messages="editor-app.templatesLibrary.subscription"
+            product-id="{{productId}}" product-code="{{productCode}}" company-id="{{companyId}}"
+            ng-model="subscriptionStatus.result" show-store-modal="showStoreModal" expanded-format="true" custom-product-link="{{productLink}}">
+        </div>
+      </div>
+    </div>
 
     <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>
 
@@ -59,8 +72,8 @@
     </div>
 
     <a id="addWidgetByUrl" class="btn btn-default" href="#" ng-click="addWidgetByUrl()" ng-if="factory.search.category == 'Content'">
-            {{'editor-app.addWidget.title' | translate}} <i class="fa fa-code icon-right"></i>
-        </a>
+      {{'editor-app.addWidget.title' | translate}} <i class="fa fa-code icon-right"></i>
+    </a>    
     
   </div>
 </div>
