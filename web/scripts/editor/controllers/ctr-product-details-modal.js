@@ -10,6 +10,7 @@
         $scope.storeUrl = STORE_URL;
         $scope.product = product;
         $scope.canUseProduct = product.paymentTerms === 'free';
+        $scope.detailsOpen = false;
 
         if ($scope.canUseProduct) {
           $timeout(function () {
@@ -33,6 +34,10 @@
             });
           });
         }
+
+        $scope.toggleDetails = function() {
+          $scope.detailsOpen = !$scope.detailsOpen;
+        };
 
         $scope.select = function () {
           $modalInstance.close(product);
