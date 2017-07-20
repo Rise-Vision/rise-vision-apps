@@ -45,7 +45,7 @@ angular.module('risevision.editor.controllers')
         if (category === TEMPLATES_TYPE) {
           console.log("Product", product);
           var productDetailsModal = $modal.open({
-            templateUrl: 'partials/editor/template-details-modal.html',
+            templateUrl: 'partials/editor/product-details-modal.html',
             size: 'lg',
             windowClass: 'product-preview-modal',
             controller: 'ProductDetailsModalController',
