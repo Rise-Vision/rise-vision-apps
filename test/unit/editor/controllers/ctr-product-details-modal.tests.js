@@ -52,13 +52,14 @@ describe('controller: ProductDetailsModalController', function() {
     $provide.value('STORE_URL',STORE_URL);
   }));
   var $scope, $modalInstance, $modalInstanceDismissSpy, $modalInstanceCloseSpy, product,
-    $loadingStopSpy, $timeout, storeCheckSpy, storeAuthorize;
+    $loadingStopSpy, $timeout, storeCheckSpy, storeAuthorize, TEMPLATE_LIBRARY_PRODUCT_CODE;
   
   function initController(paymentTerms) {
-    inject(function($injector,$rootScope, $controller, $loading, storeAuthorization){      
+    inject(function($injector,$rootScope, $controller, $loading, storeAuthorization){
       $scope = $rootScope.$new();
       $modalInstance = $injector.get('$modalInstance');
       $timeout = $injector.get('$timeout');
+      TEMPLATE_LIBRARY_PRODUCT_CODE = $injector.get('TEMPLATE_LIBRARY_PRODUCT_CODE');
 
       $loadingStopSpy = sinon.spy($loading,'stop');
 
@@ -120,14 +121,14 @@ describe('controller: ProductDetailsModalController', function() {
     initController('premium');
     
     expect($scope.canUseProduct).to.be.false;
-    storeCheckSpy.should.have.been.calledWith(product.productCode);    
+    storeCheckSpy.should.have.been.calledWith(TEMPLATE_LIBRARY_PRODUCT_CODE);
   });
 
   it('should allow owned products',function(done){
     storeAuthorize = true;
     initController('premium');
-      
-    storeCheckSpy.should.have.been.calledWith(product.productCode);
+    
+    storeCheckSpy.should.have.been.calledWith(TEMPLATE_LIBRARY_PRODUCT_CODE);
     setTimeout(function() {
       expect($scope.canUseProduct).to.be.true;
       $loadingStopSpy.should.have.been.calledWith('loading-price');

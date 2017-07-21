@@ -4,7 +4,7 @@
   </div>
 
   <div class="row modal-body u_padding-lg">
-    <div class="align-center hidden-sm hidden-xs u_margin-md-bottom" ng-show="factory.search.category === 'Templates'">
+    <div class="align-center hidden-sm hidden-xs u_margin-md-bottom" ng-show="showSubscriptionStatus">
       <div ng-controller="TemplateLibrarySubscriptionStatusController">
         <div id="subscription-status" subscription-status custom-messages="editor-app.templatesLibrary.subscription"
           product-id="{{productId}}" product-code="{{productCode}}" company-id="{{companyId}}"
@@ -26,7 +26,8 @@
           </a>
         </div>
         <div ng-if="!canUseProduct" class="u_padding-sm u_bordered">
-          <a id="useProductButton" href="" class="btn btn-primary btn-lg btn-block" ng-click="select()">
+          <a id="useProductButton" href="" class="btn btn-primary btn-lg btn-block" ng-click="startTemplateTrial()"
+            rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0">
             <span style="display: block; font-weight: bold; font-size: 18px;" translate>editor-app.templatesLibrary.details.free</span>
             <span style="word-break: break-word; display: block; white-space: normal;" translate>editor-app.templatesLibrary.details.freeWithTrial</span>
           </a>

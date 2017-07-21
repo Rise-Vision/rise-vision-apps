@@ -14,7 +14,8 @@ angular.module('risevision.editor.services')
           method: 'GET',
           params: {
             cid: userState.getSelectedCompanyId(),
-            pc: productCode
+            pc: productCode,
+            startTrial: false
           }
         }).then(function (response) {
           if (response.data.authorized) {
@@ -24,6 +25,26 @@ angular.module('risevision.editor.services')
           }
         }, function (e) {
           console.error('Failed to check store authorization.', e);
+          deferred.reject(e);
+        });
+
+        return deferred.promise;
+      };
+
+      factory.startTrial = function (productCode) {
+        var deferred = $q.defer();
+        var companyId = userState.getSelectedCompanyId();
+        var startTrialUrl = '/v1/product/' + productCode + '/company/' + companyId + '/trial/start';
+
+        $http.get(STORE_SERVER_URL + startTrialUrl)
+        .then(function (response) {
+          if (!response.error) {
+            deferred.resolve(true);
+          } else {
+            deferred.reject(response);
+          }
+        }, function (e) {
+          console.error('Failed to start trial.', e);
           deferred.reject(e);
         });
 
