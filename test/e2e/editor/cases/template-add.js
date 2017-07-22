@@ -121,12 +121,7 @@ var TemplateAddScenarios = function() {
       browser.sleep(1000);
       expect(productDetailsModalPage.getProductDetailsModal().isDisplayed()).to.eventually.be.true;
       expect(productDetailsModalPage.getViewInStoreButton().isDisplayed()).to.eventually.be.true;
-      expect(productDetailsModalPage.getViewInStoreButton().getText()).to.eventually.equal('View In Store');
-    });
-
-    it('should show pricing for premium template',function(){
-      helper.waitDisappear(productDetailsModalPage.getPricingLoader());
-      expect(productDetailsModalPage.getPricingInfo().getText()).to.eventually.equal('$10 USD Per Company');
+      expect(productDetailsModalPage.getViewInStoreButton().getText()).to.eventually.equal('USD 10 Purchase in Store');
     });
 
     // The Store Templates are not yet released to sub-companies

@@ -1,5 +1,5 @@
 <div id="productDetailsModal" class="">
-  <div class="modal-header"> <button id="dismissButton" type="button" class="close" ng-click="dismiss()"> <i class="fa fa-times"></i> </button> 
+  <div class="modal-header"> <button id="closeButton" type="button" class="close" ng-click="dismiss()"> <i class="fa fa-times"></i> </button> 
     <h3 class="modal-title">{{product.name}}</h3>
   </div>
 
@@ -13,7 +13,7 @@
       </div>
     </div>
     
-     <div class="row">
+    <div class="row">
       <div class="col-md-8 col-xs-12">
         <img class="img-responsive" ng-src="{{product.imageUrl}}">
         <p class="u_margin-md-top">{{product.descriptionShort}}</p>
