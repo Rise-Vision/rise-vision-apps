@@ -16,6 +16,7 @@ var StoreProductsModalPage = function() {
   var statusFields = element.all(by.id('status'));
   var freeProducts = element.all(by.cssContainingText('p#status', 'Free'));
   var premiumProducts = element.all(by.cssContainingText('p#status', 'Premium'));
+  var displayBanner = element(by.id('displayBanner'));
 
   var addWidgetByUrlButton = element(by.id('addWidgetByUrl'));
   var closeButton = element(by.css('.close'));
@@ -79,6 +80,10 @@ var StoreProductsModalPage = function() {
   this.getStatusFields = function() {
     return statusFields;
   };
+
+  this.getDisplayBanner = function() {
+    return displayBanner;
+  }
 
   this.getAddWidgetByUrlButton = function() {
     return addWidgetByUrlButton;

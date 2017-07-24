@@ -25,6 +25,24 @@ var TemplateAddScenarios = function() {
     var storeProductsModalPage;
     var productDetailsModalPage;
 
+    function loadEditor() {
+      homepage.getEditor();
+      loginPage.signIn();
+    }
+
+    function openContentModal() {
+      helper.waitDisappear(presentationsListPage.getPresentationsLoader(),'Presentation loader');
+      presentationsListPage.getPresentationAddButton().click();
+
+      helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
+    }
+
+    function createSubCompany() {
+      var subCompanyName = 'E2E TEST SUBCOMPANY';
+      commonHeaderPage.createSubCompany(subCompanyName);
+      commonHeaderPage.selectSubCompany(subCompanyName);
+    }
+
     before(function () {
       homepage = new HomePage();
       loginPage = new LoginPage();
@@ -35,12 +53,14 @@ var TemplateAddScenarios = function() {
       storeProductsModalPage = new StoreProductsModalPage();
       productDetailsModalPage = new ProductDetailsModalPage();
 
-      homepage.getEditor();
-      loginPage.signIn();
-      helper.waitDisappear(presentationsListPage.getPresentationsLoader(),'Presentation loader');
-      presentationsListPage.getPresentationAddButton().click();
+      loadEditor();
+      createSubCompany();
+      openContentModal();
+    });
 
-      helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
+    after(function() {
+      loadEditor();
+      commonHeaderPage.deleteAllSubCompanies();
     });
 
     it('should open the Store Templates Modal', function () {
@@ -54,6 +74,11 @@ var TemplateAddScenarios = function() {
     it('should show a search box', function () {
       expect(storeProductsModalPage.getSearchFilter().isDisplayed()).to.eventually.be.true;
       expect(storeProductsModalPage.getSearchInput().getAttribute('placeholder')).to.eventually.equal('Search for Templates');
+    });
+
+    it('should show a banner for Templates Library', function () {
+      expect(storeProductsModalPage.getDisplayBanner().isDisplayed()).to.eventually.be.true;
+      expect(storeProductsModalPage.getDisplayBanner().getAttribute('href')).to.eventually.equal("https://store.risevision.com/product/300/template-library-subscription");
     });
 
     it('should show search categories', function() {
@@ -105,7 +130,7 @@ var TemplateAddScenarios = function() {
       expect(storeProductsModalPage.getPremiumProducts().count()).to.eventually.be.above(0);
     });
 
-    it('should show preview modal when seleting a free template',function(){
+    it('should show preview modal when selecting a free template',function(){
       storeProductsModalPage.getFreeProducts().get(0).click();
       browser.sleep(1000);
       expect(productDetailsModalPage.getProductDetailsModal().isDisplayed()).to.eventually.be.true;
@@ -119,6 +144,7 @@ var TemplateAddScenarios = function() {
     it('should show preview modal selecting a premium template',function(){
       storeProductsModalPage.getPremiumProducts().get(0).click();
       browser.sleep(1000);
+      helper.waitDisappear(productDetailsModalPage.getPricingLoader(), "Pricing loader");
       expect(productDetailsModalPage.getProductDetailsModal().isDisplayed()).to.eventually.be.true;
       expect(productDetailsModalPage.getViewInStoreButton().isDisplayed()).to.eventually.be.true;
       expect(productDetailsModalPage.getViewInStoreButton().getText()).to.eventually.equal('USD 10 Purchase in Store');
