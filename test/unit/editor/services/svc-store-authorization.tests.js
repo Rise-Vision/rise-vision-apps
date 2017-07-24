@@ -31,7 +31,7 @@ describe('service: storeAuthorization:', function() {
   });
   
   it('should validate product code',function(done){
-    $httpBackend.expect('GET', STORE_AUTHORIZATION_URL+'?cid=cid&pc=pc').respond(200, {authorized: true});
+    $httpBackend.expect('GET', STORE_AUTHORIZATION_URL+'?cid=cid&pc=pc&startTrial=false').respond(200, {authorized: true});
     storeAuthorization.check('pc').then(function(authorized){
       expect(authorized).to.be.true;
       done();
@@ -42,7 +42,7 @@ describe('service: storeAuthorization:', function() {
   });
 
   it('should reject not authorized product',function(done){
-    $httpBackend.expect('GET', STORE_AUTHORIZATION_URL+'?cid=cid&pc=pc').respond(200, {authorized: false});
+    $httpBackend.expect('GET', STORE_AUTHORIZATION_URL+'?cid=cid&pc=pc&startTrial=false').respond(200, {authorized: false});
     storeAuthorization.check('pc').then(null,function(authorized){
       expect(authorized).to.be.false;
       done();
