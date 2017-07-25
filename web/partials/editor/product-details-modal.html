@@ -26,10 +26,10 @@
           </a>
         </div>
         <div ng-if="!canUseProduct" class="u_padding-sm u_bordered">
-          <a id="startTrialButton" href="" class="btn btn-primary btn-lg btn-block" ng-click="startTemplateTrial()"
+          <a id="startTrialButton" href="" class="btn btn-primary btn-lg btn-block btn-multi-line" ng-click="startTemplateTrial()"
             rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0">
-            <span style="display: block; font-weight: bold; font-size: 18px;" translate>editor-app.templatesLibrary.details.free</span>
-            <span style="word-break: break-word; display: block; white-space: normal;" translate>editor-app.templatesLibrary.details.freeWithTrial</span>
+            <span translate>editor-app.templatesLibrary.details.free</span>
+            <span translate>editor-app.templatesLibrary.details.freeWithTrial</span>
           </a>
           <span class="btn btn-link btn-block" ng-click="toggleDetails()" id="reveal-product" translate>editor-app.templatesLibrary.details.details-list-title</span>
           <ul id="details-list" ng-show="detailsOpen" class="u_padding-sm " style="list-style-type: square; padding-left: 40px;">
