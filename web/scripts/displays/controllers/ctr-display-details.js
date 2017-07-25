@@ -1,15 +1,24 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
+  .value('PLAYER_PRO_PRODUCT_CODE','c4b368be86245bf9501baaa6e0b00df9719869fd')
+  .value('PLAYER_PRO_PRODUCT_ID', '2048')
+  // .value('PLAYER_PRO_PRODUCT_LINK', 'https://www.risevision.com/pricing?utm_campaign=apps')
   .controller('displayDetails', ['$scope', '$q', '$state',
     'displayFactory', 'display', '$loading', '$log', '$modal',
-    '$templateCache', '$filter',
-    'displayId',
+    '$templateCache', '$filter', 'displayId', 'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', '$rootScope', 'storeAuthorization', 'userState',
     function ($scope, $q, $state, displayFactory, display, $loading, $log,
-      $modal,
-      $templateCache, $filter, displayId) {
+      $modal, $templateCache, $filter, displayId, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, $rootScope, storeAuthorization, userState) {
       $scope.factory = displayFactory;
       $scope.displayService = display;
+      $scope.companyId = userState.getSelectedCompanyId();
+      $scope.productCode = PLAYER_PRO_PRODUCT_CODE;
+      $scope.productId = PLAYER_PRO_PRODUCT_ID;
+      // $scope.productLink = PLAYER_PRO_PRODUCT_LINK;
+      $scope.subscriptionStatus = {};
+      $scope.showTrialButton = false;
+      $scope.showTrialStatus = false;
+      $scope.showSubscribeButton = false;
 
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
@@ -168,6 +177,51 @@ angular.module('risevision.displays.controllers')
             'no-screenshot-available', 'screenshot-loaded'
           ].indexOf($scope.screenshotState(display)) === -1;
       };
+
+      $scope.startPlayerProTrial = function() {
+        $loading.start('loading-trial');
+        storeAuthorization.startTrial(PLAYER_PRO_PRODUCT_CODE)
+        .then(function() {
+          $scope.showTrialButton = false;
+          $scope.showTrialStatus = true;
+          $scope.showSubscribeButton = true;
+          $rootScope.$emit('refreshSubscriptionStatus',$scope.subscriptionStatus.statusCode);
+          $loading.stop('loading-trial');
+        })
+        .catch(function(e) {
+          $loading.stop('loading-trial');
+        });
+      };
+
+      var subscriptionStatusListener = $rootScope.$on('subscription-status:changed',
+        function (e, subscriptionStatus) {
+          $scope.subscriptionStatus = subscriptionStatus;
+
+          $scope.showTrialButton = false;
+          $scope.showTrialStatus = false;
+          $scope.showSubscribeButton = false;
+          switch (subscriptionStatus.statusCode) {
+            case 'trial-available' :
+              $scope.showTrialButton = true;
+              break;
+            case 'on-trial':
+            case 'suspended':
+              $scope.showTrialStatus = true;
+              $scope.showSubscribeButton = true;
+              break;
+            case 'trial-expired':
+            case 'cancelled':
+            case 'not-subscribed': 
+              $scope.showSubscribeButton = true;
+              break;
+            default:
+              break;
+          }          
+        });
+
+      $scope.$on('$destroy', function () {
+        subscriptionStatusListener();
+      });
 
       $scope.$watch('display.browserUpgradeMode', function () {
         if ($scope.display && $scope.display.browserUpgradeMode !== 0) {

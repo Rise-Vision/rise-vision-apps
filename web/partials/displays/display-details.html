@@ -1,25 +1,33 @@
 <div class="app-header">
   <div class="title-block">
     <!-- App Title -->
-    <h1 translate>displays-app.title</h1>
+    <h1 translate>Display Settings</h1>
   </div>
 
   <div class="global-actions" require-role="da">
-    <button ng-click="addDisplay()" class="btn btn-lg btn-primary">
-      {{ 'displays-app.actions.new' | translate }}
-      <i class="fa fa-plus icon-right"></i>
-    </button>
+    <div>
+      <button ng-if="showTrialButton" ng-click="startPlayerProTrial()" class="btn btn-lg btn-primary" rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0">
+        Start Rise Player Professional Trial
+      </button>
+      <a ng-if="showSubscribeButton" href="{{productLink}}" class="btn btn-lg btn-primary">
+        Subscribe to Rise Player Professional
+      </button>
+    </div>
+    <br/>
+    <a ng-if="showTrialButton || showSubscribeButton" class="info-link" href="https://help.risevision.com/hc/en-us" target="_blank">
+      <i class="fa fa-question-circle icon-left" aria-hidden="true"></i>
+      What is Rise Player Professional?
+    </a>
   </div>
-
-  <div>
-    <button class="btn btn-link pull-right u_margin-sm-top" ng-click="showHelp = !showHelp">{{ 'displays-app.fields.controls.howto' | translate }} </button>
-      <div class="col-xs-12">
-        <div class="video-box u_margin-md-bottom" ng-show="showHelp">
-          <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/Animations/howitworks.gif">
-        </div>
-      </div>
-  </div>
+  
 </div>
+
+<!-- <div ng-show="showTrialStatus"> -->
+<div id="subscription-status" subscription-status ng-if="display.id" ng-show="showTrialStatus"
+    product-id="{{productId}}" product-code="{{productCode}}" display-id="{{display.id}}" company-id="{{companyId}}"
+    ng-model="subscriptionStatus.result" show-store-modal="showStoreModal" expanded-format="true"></div>
+
+<!-- </div> -->
 
 <div id="display-loader" rv-spinner rv-spinner-key="display-loader" rv-spinner-start-active="0"></div>
 

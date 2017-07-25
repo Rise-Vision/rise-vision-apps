@@ -51,6 +51,24 @@ angular.module('risevision.editor.services')
         return deferred.promise;
       };
 
+      factory.startTrial = function (productCode) {
+        var deferred = $q.defer();
+        var companyId = userState.getSelectedCompanyId();
+        var startTrialUrl = '/v1/product/' + productCode + '/company/' + companyId + '/trial/start';
+        $http.get(STORE_SERVER_URL + startTrialUrl)
+        .then(function (response) {
+          if (!response.error) {
+            deferred.resolve(true);
+          } else {
+            deferred.reject(response);
+          }
+        }, function (e) {
+          console.error('Failed to start trial.', e);
+          deferred.reject(e);
+        });
+        return deferred.promise;
+      };
+
       return factory;
     }
   ]);

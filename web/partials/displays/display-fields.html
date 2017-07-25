@@ -122,7 +122,7 @@
           </tr>
           <tr class="table-body__row">
             <td class="table-body__cell"><span translate>displays-app.fields.player.playerVersion</span></td>
-            <td class="table-body__cell"><span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}}</span></td>
+            <td class="table-body__cell"><span>{{display.playerName | playerVersionName: display.playerVersion : display.offlineSubscription}}</span></td>
           </tr>
           <tr class="table-body__row">
             <td class="table-body__cell"><span translate>displays-app.fields.player.viewerVersion</span></td>
