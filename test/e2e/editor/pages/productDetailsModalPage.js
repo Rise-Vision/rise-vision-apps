@@ -2,12 +2,17 @@
 var ProductDetailsModalPage = function() {
   var productDetailsModal = element(by.id('productDetailsModal'));
   var useProductButton = element(by.id('useProductButton'));
+  var startTrialButton = element(by.id('startTrialButton'));
   var viewInStoreButton = element(by.id('viewInStoreButton'));  
 
   var pricingLoader = element(by.xpath('//div[@spinner-key="loading-price"]'));
+  var trialLoader = element(by.xpath('//a[@spinner-key="loading-trial"]'));
+  var previewTemplate = element(by.id('previewTemplate'));
 
   var pricingInfo = element(by.id('pricingInfo'));
   var closeButton = element(by.id('closeButton'));
+
+  var errorDialogCloseButton = element(by.css('#messageForm button[class="close"]'));
 
   this.getProductDetailsModal = function(){
     return productDetailsModal;
@@ -15,6 +20,10 @@ var ProductDetailsModalPage = function() {
 
   this.getUseProductButton = function(){
     return useProductButton;
+  };
+
+  this.getStartTrialButton = function(){
+    return startTrialButton;
   };
 
   this.getViewInStoreButton = function(){
@@ -25,12 +34,24 @@ var ProductDetailsModalPage = function() {
     return pricingLoader;
   }
 
+  this.getTrialLoader = function(){
+    return trialLoader;
+  }
+
   this.getPricingInfo = function(){
     return pricingInfo;
   }
 
   this.getCloseButton = function() {
     return closeButton;
+  };
+
+  this.getPreviewTemplate = function() {
+    return previewTemplate;
+  };
+
+  this.getErrorDialogCloseButton = function() {
+    return errorDialogCloseButton;
   };
 };
 

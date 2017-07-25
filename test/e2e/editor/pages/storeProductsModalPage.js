@@ -7,7 +7,8 @@ var StoreProductsModalPage = function() {
   var searchCategories = element.all(by.repeater('category in paymentCategories'));
 
   var storeProductsLoader = element(by.css('#addStoreProductModal .spinner-backdrop'));
-
+  var productListLoader = element(by.xpath('//ul[@spinner-key="product-list-loader"]'));
+  
   var storeProductsList = element(by.id('productList'));
   var storeProducts = element.all(by.css('.storeProduct'));
   var addBlankPresentation = element(by.css('.blank-template'));
@@ -31,6 +32,10 @@ var StoreProductsModalPage = function() {
 
   this.getStoreProductsModal = function () {
     return storeProductsModal;
+  };
+
+  this.getProductListLoader = function () {
+    return productListLoader;
   };
 
   this.getModalTitle = function () {
