@@ -1,14 +1,16 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .value('PLAYER_PRO_PRODUCT_CODE','c4b368be86245bf9501baaa6e0b00df9719869fd')
+  .value('PLAYER_PRO_PRODUCT_CODE', 'c4b368be86245bf9501baaa6e0b00df9719869fd')
   .value('PLAYER_PRO_PRODUCT_ID', '2048')
   // .value('PLAYER_PRO_PRODUCT_LINK', 'https://www.risevision.com/pricing?utm_campaign=apps')
   .controller('displayDetails', ['$scope', '$q', '$state',
     'displayFactory', 'display', '$loading', '$log', '$modal',
-    '$templateCache', '$filter', 'displayId', 'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', '$rootScope', 'storeAuthorization', 'userState',
+    '$templateCache', '$filter', 'displayId', 'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', '$rootScope',
+    'storeAuthorization', 'userState',
     function ($scope, $q, $state, displayFactory, display, $loading, $log,
-      $modal, $templateCache, $filter, displayId, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, $rootScope, storeAuthorization, userState) {
+      $modal, $templateCache, $filter, displayId, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, $rootScope,
+      storeAuthorization, userState) {
       $scope.factory = displayFactory;
       $scope.displayService = display;
       $scope.companyId = userState.getSelectedCompanyId();
@@ -178,19 +180,19 @@ angular.module('risevision.displays.controllers')
           ].indexOf($scope.screenshotState(display)) === -1;
       };
 
-      $scope.startPlayerProTrial = function() {
+      $scope.startPlayerProTrial = function () {
         $loading.start('loading-trial');
         storeAuthorization.startTrial(PLAYER_PRO_PRODUCT_CODE)
-        .then(function() {
-          $scope.showTrialButton = false;
-          $scope.showTrialStatus = true;
-          $scope.showSubscribeButton = true;
-          $rootScope.$emit('refreshSubscriptionStatus',$scope.subscriptionStatus.statusCode);
-          $loading.stop('loading-trial');
-        })
-        .catch(function(e) {
-          $loading.stop('loading-trial');
-        });
+          .then(function () {
+            $scope.showTrialButton = false;
+            $scope.showTrialStatus = true;
+            $scope.showSubscribeButton = true;
+            $rootScope.$emit('refreshSubscriptionStatus', $scope.subscriptionStatus.statusCode);
+            $loading.stop('loading-trial');
+          })
+          .catch(function (e) {
+            $loading.stop('loading-trial');
+          });
       };
 
       var subscriptionStatusListener = $rootScope.$on('subscription-status:changed',
@@ -200,24 +202,25 @@ angular.module('risevision.displays.controllers')
           $scope.showTrialButton = false;
           $scope.showTrialStatus = false;
           $scope.showSubscribeButton = false;
-          if ($scope.display && !displayFactory.is3rdPartyPlayer($scope.display) && !displayFactory.isOutdatedPlayer($scope.display)) {
+          if ($scope.display && !displayFactory.is3rdPartyPlayer($scope.display) && !displayFactory.isOutdatedPlayer(
+              $scope.display)) {
             switch (subscriptionStatus.statusCode) {
-              case 'trial-available' :
-                $scope.showTrialButton = true;
-                break;
-              case 'on-trial':
-              case 'suspended':
-                $scope.showTrialStatus = true;
-                $scope.showSubscribeButton = true;
-                break;
-              case 'trial-expired':
-              case 'cancelled':
-              case 'not-subscribed': 
-                $scope.showSubscribeButton = true;
-                break;
-              default:
-                break;
-            }          
+            case 'trial-available':
+              $scope.showTrialButton = true;
+              break;
+            case 'on-trial':
+            case 'suspended':
+              $scope.showTrialStatus = true;
+              $scope.showSubscribeButton = true;
+              break;
+            case 'trial-expired':
+            case 'cancelled':
+            case 'not-subscribed':
+              $scope.showSubscribeButton = true;
+              break;
+            default:
+              break;
+            }
           }
         });
 
