@@ -53,6 +53,11 @@ describe('controller: display details', function() {
         }
       };
     });
+    $provide.service('storeAuthorization',function(){
+      return {
+        
+      };
+    });
     $provide.service('display', function() {
       return {
         loadScreenshot: sinon.spy(function() {
