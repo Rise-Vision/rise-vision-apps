@@ -1,13 +1,12 @@
 <div class="app-header">
-  <div class="row text-center" ng-if="!showOnboarding"> Need a Media Player for your Display? 
+  <!-- <div class="row text-center" ng-if="!showOnboarding"> Need a Media Player for your Display? 
     <br/>
     <a ng-click="displayTracker('Clicked Ad Experiment Display')" href="https://store.risevision.com" target="_blank">Check out our Store!</a>
-  </div>
+  </div>  -->
   <div class="title-block">
     <!-- App Title -->
     <h1 id="title" translate>displays-app.title</h1>
   </div>
-
   <div class="global-actions" require-role="da">
     <a id="displayAddButton" class="btn btn-lg btn-primary" ng-click="displayFactory.addDisplayModal()">
       {{ 'displays-app.actions.new' | translate }}
@@ -21,7 +20,6 @@
 <div class="bg-warning u_padding-sm u_margin-sm-top u_margin-sm-bottom" ng-show="search.query">
   <span translate>displays-app.list.searchNotification</span>
 </div>
-
 <div class="panel u_margin-sm-top">
   <div class="scrollable-list"
   scrolling-list="displays.load()"
@@ -31,7 +29,8 @@
     <table id="displaysListTable" class="table">
       <thead class="table-header">
         <tr class="table-header__row">
-          <th class="table-header__cell u_clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
+          
+          <th class="table-header__cell col-sm-1 u_clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
             <span>
             {{ 'displays-app.list.heading.name' | translate }}
             <!-- ngIf: search.sortBy == 'name' -->
@@ -39,9 +38,10 @@
             <!-- end ngIf: search.sortBy == 'name' -->
             </span>
           </th>
-          <th class="table-header__cell visible-lg" translate>
-            <span>displays-app.list.heading.address</span>
+          <th class="table-header__cell">
+          Player Type
           </th>
+          
           <th class="table-header__cell col-sm-1 hidden-xs" translate>
             <span>displays-app.list.heading.schedule</span>
           </th>
@@ -54,17 +54,205 @@
         </tr>
       </thead>
       <tbody class="table-body">
+
+        <!-- START A TRIAL -->
+        <tr class="table-body__row">
+        
+          <td class="table-body__cell">
+            <a class="u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
+            <span class=""><strong>Alex's Demo Display #1</strong></span>
+            </a>
+          </td>
+             <td class="table-body__cell display-product">
+           <span>Standard</span>
+           <button class="btn btn-xs btn-link" ng-click="displayFactory.startProTrial()"> Try Professional</button>
+           </td>
+          
+          <td class="table-body__cell hidden-xs display-schedule">
+            <a class="u_ellipsis-md u_icon-hover schedule-view ng-binding ng-scope" target="_blank" href="/schedules/details/4bd52520-a862-46e7-9773-4048ba57a936?cid=b428b4e8-c8b9-41d5-8a10-b4193c789443"> Uptime Demo<i class="fa fa-external-link icon-sm-right"></i> </a>
+           <!--  <a ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
+              <button class="btn btn-primary btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
+            </a> -->
+          </td>
+           <td class="table-body__cell display-status">
+            <!-- <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
+            <span class="text-danger" ng-if="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline
+            <a href="#">Why is my Display offline?</a></span>
+
+            <span class="text-success" ng-if="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
+
+            <button class="btn btn-xs btn-primary pt-status btn-install-player"
+                    ng-if="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="displayFactory.addDisplayModal(display)">
+              {{ 'displays-app.list.status.install' | translate }}
+            </button> -->
+            <span class="text-success"> <i class="fa fa-check"></i> Online</span>
+          </td>
+          <td class="table-body__cell u_nowrap hidden-xs">
+            <span>
+              <span>{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span>
+            </span>
+          </td>
+        </tr>
+
+         <!-- ON TRIAL -->
+        <tr class="table-body__row">
+          
+          <td class="table-body__cell">
+            <a class="u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
+            <span class=""><strong>Alex's Demo Display #2</strong></span>
+            </a>
+          </td>
+           <td class="table-body__cell display-product">
+           <span>Professional Trial</span>
+           <button class="btn btn-xs btn-link">Subscribe Now</button>
+           </td>
+          
+          <td class="table-body__cell hidden-xs display-schedule">
+            <a class="u_ellipsis-md u_icon-hover schedule-view ng-binding ng-scope" target="_blank" href="/schedules/details/4bd52520-a862-46e7-9773-4048ba57a936?cid=b428b4e8-c8b9-41d5-8a10-b4193c789443"> Uptime Demo<i class="fa fa-external-link icon-sm-right"></i> </a>
+          </td>
+           <td class="table-body__cell display-status">
+            <span class="text-success"> <i class="fa fa-check"></i> Online</span>
+          </td>
+          <td class="table-body__cell u_nowrap hidden-xs">
+            <span>
+              <span>{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span>
+            </span>
+          </td>
+        </tr>
+
+        <!-- SUBSCRIBED -->
+        <tr class="table-body__row">
+           
+          <td class="table-body__cell">
+            <a class="u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
+            <span class=""><strong>Alex's Demo Display #3</strong></span>
+            </a>
+          </td>
+          <td class="table-body__cell display-product">
+           <span>Professional</span>
+           <!-- <a href="#">Subscribe Now</a> -->
+           </td>
+           
+          <td class="table-body__cell hidden-xs display-schedule">
+            <a class="u_ellipsis-md u_icon-hover schedule-view ng-binding ng-scope" target="_blank" href="/schedules/details/4bd52520-a862-46e7-9773-4048ba57a936?cid=b428b4e8-c8b9-41d5-8a10-b4193c789443"> Uptime Demo<i class="fa fa-external-link icon-sm-right"></i> </a>
+          </td>
+          <td class="table-body__cell display-status">
+            <span class="text-success"> <i class="fa fa-check"></i> Online</span>
+          </td>
+          <td class="table-body__cell u_nowrap hidden-xs">
+            <span>
+              <span>{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span>
+            </span>
+          </td>
+        </tr>
+
+        <!-- EXPIRED -->
+        <tr class="table-body__row">
+           
+          <td class="table-body__cell">
+            <a class="u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
+            <span class=""><strong>Alex's Demo Display #4</strong></span>
+            </a>
+          </td>
+          <td class="table-body__cell display-product">
+           <span>Standard</span>
+           <button class="btn btn-xs btn-link">Subscribe To Professional</button>
+           </td>
+          
+          <td class="table-body__cell hidden-xs display-schedule">
+            <a class="u_ellipsis-md u_icon-hover schedule-view ng-binding ng-scope" target="_blank" href="/schedules/details/4bd52520-a862-46e7-9773-4048ba57a936?cid=b428b4e8-c8b9-41d5-8a10-b4193c789443"> Uptime Demo<i class="fa fa-external-link icon-sm-right"></i> </a>
+          </td>
+           <td class="table-body__cell display-status">
+            <span class="text-success"> <i class="fa fa-check"></i> Online</span>
+          </td>
+          <td class="table-body__cell u_nowrap hidden-xs">
+            <span>
+              <span>{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span>
+            </span>
+          </td>
+        </tr>
+
+        <!-- EXPIRED -->
+        <tr class="table-body__row">
+           
+          <td class="table-body__cell">
+            <a class="u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
+            <span class=""><strong>Alex's Demo Display #4</strong></span>
+            </a>
+          </td>
+          <td class="table-body__cell display-product">
+            <span class="text-danger"> <i class="fa fa-times"></i> Cancelled </span>
+           <button class="btn btn-xs btn-link">Subscribe To Professional</button>
+           </td>
+          
+          <td class="table-body__cell hidden-xs display-schedule">
+            <a class="u_ellipsis-md u_icon-hover schedule-view ng-binding ng-scope" target="_blank" href="/schedules/details/4bd52520-a862-46e7-9773-4048ba57a936?cid=b428b4e8-c8b9-41d5-8a10-b4193c789443"> Uptime Demo<i class="fa fa-external-link icon-sm-right"></i> </a>
+          </td>
+           <td class="table-body__cell display-status">
+            <span class="text-success"> <i class="fa fa-check"></i> Online</span>
+          </td>
+          <td class="table-body__cell u_nowrap hidden-xs">
+            <span>
+              <span>{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span>
+            </span>
+          </td>
+        </tr>
+
+        <!-- UNSUPPORTED -->
+        <tr class="table-body__row">
+         
+          <td class="table-body__cell">
+            <a class="u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
+            <span class=""><strong>Alex's Demo Display #5</strong></span>
+            </a>
+          </td>
+            <td class="table-body__cell display-product">
+           <span class="text-danger">Unsupported</span>
+           <button class="btn btn-xs btn-primary">Upgrade</button>
+           </td>
+          
+          <td class="table-body__cell hidden-xs display-schedule">
+            <a class="u_ellipsis-md u_icon-hover schedule-view" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
+              {{display.scheduleName}}<i class="fa fa-external-link icon-sm-right"></i>
+            </a>
+            <a ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
+              <button class="btn btn-primary btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
+            </a>
+          </td>
+           <td class="table-body__cell display-status">
+            <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
+            <span class="text-danger" ng-if="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline
+            <a href="#">Why is my Display offline?</a></span>
+
+            <span class="text-success" ng-if="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
+
+            <button class="btn btn-xs btn-primary pt-status btn-install-player"
+                    ng-if="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="displayFactory.addDisplayModal(display)">
+              {{ 'displays-app.list.status.install' | translate }}
+            </button>
+          </td>
+          <td class="table-body__cell u_nowrap hidden-xs">
+            <span>
+              <span>{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span>
+            </span>
+          </td>
+        </tr>
+
+
+
+        <!-- REPEAT -->
         <tr class="table-body__row" ng-class="{ 'bg-warning' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list">
+           
           <td class="table-body__cell">
             <a class="u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
             <span class=""><strong>{{display.name}}</strong></span>
             </a>
           </td>
-          <td class="table-body__cell visible-lg">
-            <!-- <a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"> -->
-            <span class="u_ellipsis-lg">{{display.address}}</span>
-            <!-- </a> -->
-          </td>
+          <td class="table-body__cell display-product">
+           <span>Professional Trial</span>
+           <a href="#">Subscribe Now</a>
+           </td>
+           
           <td class="table-body__cell hidden-xs display-schedule">
             <a class="u_ellipsis-md u_icon-hover schedule-view" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
               {{display.scheduleName}}<i class="fa fa-external-link icon-sm-right"></i>
@@ -75,7 +263,8 @@
           </td>
           <td class="table-body__cell display-status">
             <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
-            <span class="text-danger" ng-if="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline</span>
+            <span class="text-danger" ng-if="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline
+            <a href="#">Why is my Display offline?</a></span>
 
             <span class="text-success" ng-if="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
 
@@ -98,7 +287,6 @@
         <tr ng-show="displays.items.list.length === 0 && search.query">
           <td colspan="4" class="text-center"><span translate>displays-app.list.no-results</span></td>
         </tr>
-
       </tbody>
     </table>
   </div>

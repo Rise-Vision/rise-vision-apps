@@ -55,6 +55,27 @@ angular.module('risevision.displays.services')
         });
       };
 
+      factory.startProTrial = function (display) {
+        displayTracker('Add Display');
+
+        _init();
+
+        if (display) {
+          factory.display = display;
+        }
+
+        $modal.open({
+          templateUrl: 'partials/displays/start-pro-trial.html',
+          size: 'lg',
+          controller: 'displayAddModal',
+          resolve: {
+            downloadOnly: function () {
+              return display || false;
+            }
+          }
+        });
+      };
+
       factory.getDisplay = function (displayId) {
         var deferred = $q.defer();
 

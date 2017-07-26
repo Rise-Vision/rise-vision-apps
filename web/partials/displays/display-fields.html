@@ -5,30 +5,28 @@
     displays-app.fields.name.required
   </p>
 </div>
-
 <div ng-controller="displayControls">
   <!-- DESKTOP BUTTONS -->
   <div class="row">
-    <div class="col-sm-4 col-md-3 col-md-offset-3">
+    <div class="col-md-offset-3 col-md-3">
       <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" required-role="da">
         {{ 'displays-app.fields.controls.restart.name' | translate }}
         <i class="fa fa-refresh icon-right"></i>
       </button>
     </div>
-    <div class="col-sm-4 col-md-3">
+    <div class="col-md-3">
       <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" required-role="da">
         {{ 'displays-app.fields.controls.reboot.name' | translate }}
         <i class="fa fa-power-off icon-right"></i>
       </button>
     </div>
-    <div class="col-sm-4 col-md-3">
+    <div class="col-md-3">
       <button id="downloadPlayer" type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-click="showDownloadButtons = true">
         {{ 'displays-app.fields.controls.download' | translate }}
         <i class="fa fa-cloud-download icon-right"></i>
       </button>
     </div>
   </div>
-
   <!-- DOWNLOAD PLAYER BUTTONS -->
   <div class="row">
     <div class="col-sm-12 col-md-9 col-md-offset-3">
@@ -51,11 +49,8 @@
           </div>
       </div>
   </div>
-
-
 </div>
 <hr>
-
 <div class="row half-top">
   <!-- VERTICAL DISPLAY DETAILS -->
   <div class="col-sm-6 col-xs-12">
@@ -71,10 +66,12 @@
           </tr>
           <tr class="table-body__row">
             <td class="table-body__cell" translate><span>displays-app.fields.player.status</span></td>
-            <td class="table-body__cell">
+            <td class="table-body__cell display-status">
               <span>
                 <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
-                <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline</span>
+                <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline
+                <a href="#">Why is my Display offline?</a>
+                </span>
                 <span class="text-success" ng-show="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
                 <button class="btn btn-xs btn-primary pt-status btn-install-player"
                         ng-show="!displayService.statusLoading && (display | status) === 'notinstalled'"
@@ -104,6 +101,15 @@
             <td class="table-body__cell"><span translate>displays-app.fields.player.lastConnection</span></td>
             <td class="table-body__cell"><span>{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span></td>
           </tr>
+         <!--   <tr class="table-body__row">
+            <td class="table-body__cell "><span translate>displays-app.fields.player.playerVersion</span></td>
+            <td class="table-body__cell ">
+            <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}} Professional </span>
+            </td>
+          </tr> -->
+          <tr class="table-body__row alert-danger"> <td class="table-body__cell"><span translate="" class="ng-scope">Player Version</span></td> <td class="table-body__cell display-status"> <span class="ng-binding">RisePlayerElectron 2016.09.27.13.37 </span>
+
+<a href="#"> <span class="text-danger"> Unsupported  </span> - Upgrade</a> </td> </tr>
           <tr class="table-body__row">
             <td class="table-body__cell"><span translate>displays-app.fields.player.resolution</span></td>
             <td class="table-body__cell"><span>{{display.width | resolution: display.height}}</span></td>
@@ -120,10 +126,7 @@
             <td class="table-body__cell"><span translate>displays-app.fields.player.macAddress</span></td>
             <td class="table-body__cell"><span>{{display.macAddress}}</span></td>
           </tr>
-          <tr class="table-body__row">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.playerVersion</span></td>
-            <td class="table-body__cell"><span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}}</span></td>
-          </tr>
+         
           <tr class="table-body__row">
             <td class="table-body__cell"><span translate>displays-app.fields.player.viewerVersion</span></td>
             <td class="table-body__cell"><span>{{display.viewerVersion}}</span></td>
@@ -161,7 +164,7 @@
         <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'upgrade-player'">
           <p>{{ 'displays-app.fields.screenshot.notAvailable' | translate }}</p>
           <p>{{ 'displays-app.fields.screenshot.upgradeRequired' | translate }}</p>
-          <button class="btn btn-xs btn-primary" ng-click="factory.addDisplayModal(display)">{{ 'displays-app.fields.screenshot.upgradePlayer' | translate }}</button>
+          <button class="btn btn-xs btn-link" style="text-decoration: underline;" ng-click="factory.addDisplayModal(display)">{{ 'displays-app.fields.screenshot.upgradePlayer' | translate }}</button>
         </div>
         <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'os-not-supported'">
           <p>{{ 'displays-app.fields.screenshot.notAvailable' | translate }}</p>
@@ -310,7 +313,7 @@
 
 <div class="form-group reboot-time">
   <div class="checkbox">
-    <label class="control-label"><input type="checkbox" ng-model="display.restartEnabled"> <strong translate>displays-app.fields.reboot</strong></label>
+    <label class="control-label"><input type="checkbox" ng-model="display.restartEnabled"> <strong translate>Restart Media Player at: </strong></label>
   </div>
   <time-picker ng-model="display.restartTime" ng-disabled="!display.restartEnabled"></time-picker>
 </div>
