@@ -69,7 +69,12 @@ describe('service: displayFactory:', function() {
           emailSent = true;
         }
       }
-    })
+    });
+    $provide.service('storeAuthorization',function(){
+      return {
+      };
+    });
+    $provide.value('PLAYER_PRO_PRODUCT_CODE','PLAYER_PRO_PRODUCT_CODE');
     $provide.service('$state',function(){
       return {
         go : function(state, params){
