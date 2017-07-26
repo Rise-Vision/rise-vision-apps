@@ -3,20 +3,21 @@
 angular.module('risevision.displays.controllers')
   .value('PLAYER_PRO_PRODUCT_CODE', 'c4b368be86245bf9501baaa6e0b00df9719869fd')
   .value('PLAYER_PRO_PRODUCT_ID', '2048')
-  // .value('PLAYER_PRO_PRODUCT_LINK', 'https://www.risevision.com/pricing?utm_campaign=apps')
   .controller('displayDetails', ['$scope', '$q', '$state',
     'displayFactory', 'display', '$loading', '$log', '$modal',
     '$templateCache', '$filter', 'displayId', 'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', '$rootScope',
-    'storeAuthorization', 'userState',
+    'storeAuthorization', 'userState', 'STORE_URL', 'IN_RVA_PATH',
     function ($scope, $q, $state, displayFactory, display, $loading, $log,
       $modal, $templateCache, $filter, displayId, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, $rootScope,
-      storeAuthorization, userState) {
+      storeAuthorization, userState, STORE_URL, IN_RVA_PATH) {
       $scope.factory = displayFactory;
       $scope.displayService = display;
       $scope.companyId = userState.getSelectedCompanyId();
       $scope.productCode = PLAYER_PRO_PRODUCT_CODE;
       $scope.productId = PLAYER_PRO_PRODUCT_ID;
-      // $scope.productLink = PLAYER_PRO_PRODUCT_LINK;
+      $scope.productLink = STORE_URL + IN_RVA_PATH
+        .replace("productId", $scope.productId)
+        .replace("companyId", userState.getSelectedCompanyId());
       $scope.subscriptionStatus = {};
       $scope.showTrialButton = false;
       $scope.showTrialStatus = false;

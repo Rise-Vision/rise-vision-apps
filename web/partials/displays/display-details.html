@@ -9,11 +9,10 @@
       <button ng-if="showTrialButton" ng-click="startPlayerProTrial()" class="btn btn-lg btn-primary" rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0">
         Start Rise Player Professional Trial
       </button>
-      <a ng-if="showSubscribeButton" href="{{productLink}}" class="btn btn-lg btn-primary">
+      <a ng-if="showSubscribeButton" class="btn btn-lg btn-primary" href="{{productLink}}" target="_blank" >
         Subscribe to Rise Player Professional
       </button>
     </div>
-    <br/>
     <a ng-if="showTrialButton || showSubscribeButton" class="info-link" href="https://help.risevision.com/hc/en-us/articles/115003626863" target="_blank">
       <i class="fa fa-question-circle icon-left" aria-hidden="true"></i>
       What is Rise Player Professional?
