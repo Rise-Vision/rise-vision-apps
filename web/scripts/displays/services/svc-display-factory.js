@@ -34,6 +34,15 @@ angular.module('risevision.displays.services')
 
       _init();
 
+      factory.is3rdPartyPlayer = function(display) {
+        return display && display.playerName && (display.playerName === 'RisePlayerPackagedApp' || display.playerName.indexOf('RisePlayer') === -1);
+      };
+
+
+      factory.isOutdatedPlayer = function(display) {
+        return !factory.is3rdPartyPlayer(display) && (display && (display.playerName !== 'RisePlayerElectron' || display.playerVersion <= '2017.01.01.00.00'));
+      }
+
       factory.addDisplayModal = function (display) {
         displayTracker('Add Display');
 

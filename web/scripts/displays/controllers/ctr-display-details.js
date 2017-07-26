@@ -200,23 +200,25 @@ angular.module('risevision.displays.controllers')
           $scope.showTrialButton = false;
           $scope.showTrialStatus = false;
           $scope.showSubscribeButton = false;
-          switch (subscriptionStatus.statusCode) {
-            case 'trial-available' :
-              $scope.showTrialButton = true;
-              break;
-            case 'on-trial':
-            case 'suspended':
-              $scope.showTrialStatus = true;
-              $scope.showSubscribeButton = true;
-              break;
-            case 'trial-expired':
-            case 'cancelled':
-            case 'not-subscribed': 
-              $scope.showSubscribeButton = true;
-              break;
-            default:
-              break;
-          }          
+          if ($scope.display && !displayFactory.is3rdPartyPlayer($scope.display) && !displayFactory.isOutdatedPlayer($scope.display)) {
+            switch (subscriptionStatus.statusCode) {
+              case 'trial-available' :
+                $scope.showTrialButton = true;
+                break;
+              case 'on-trial':
+              case 'suspended':
+                $scope.showTrialStatus = true;
+                $scope.showSubscribeButton = true;
+                break;
+              case 'trial-expired':
+              case 'cancelled':
+              case 'not-subscribed': 
+                $scope.showSubscribeButton = true;
+                break;
+              default:
+                break;
+            }          
+          }
         });
 
       $scope.$on('$destroy', function () {
