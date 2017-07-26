@@ -101,12 +101,15 @@
             <td class="table-body__cell"><span translate>displays-app.fields.player.lastConnection</span></td>
             <td class="table-body__cell"><span>{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span></td>
           </tr>
-           <tr class="table-body__row">
+         <!--   <tr class="table-body__row">
             <td class="table-body__cell "><span translate>displays-app.fields.player.playerVersion</span></td>
             <td class="table-body__cell ">
             <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}} Professional </span>
             </td>
-          </tr>
+          </tr> -->
+          <tr class="table-body__row alert-danger"> <td class="table-body__cell"><span translate="" class="ng-scope">Player Version</span></td> <td class="table-body__cell display-status"> <span class="ng-binding">RisePlayerElectron 2016.09.27.13.37 </span>
+
+<a href="#"> <span class="text-danger"> Unsupported  </span> - Upgrade</a> </td> </tr>
           <tr class="table-body__row">
             <td class="table-body__cell"><span translate>displays-app.fields.player.resolution</span></td>
             <td class="table-body__cell"><span>{{display.width | resolution: display.height}}</span></td>
