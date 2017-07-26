@@ -1,0 +1,31 @@
+<div id="display-add-modal">
+  <div class="modal-header">
+    <button id="dismissButton" type="button" class="close" ng-click="dismiss()">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body text-center" rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0">
+  	 
+     <div id="pitchdeck">
+      <div>&nbsp;</div>
+      <div class="u_margin-md-bottom blank-state">
+        <div class="product-graphic">
+          <img itemprop="image" class="img-responsive" src="https://s3.amazonaws.com/Store-Products/Rise-Vision/rise_pro_image.png">
+        </div>
+
+        <div class="panel-body ng-scope">
+          <div class="product-intro">
+            <h1> Rise Player Professional </h1>
+            <p class="lead"><strong >Rise Player Professional is a self-contained application that elimates having to be connected to the internet in order to start and show your content.</strong></p>
+            <p class="lead" >30 days <b>FREE</b> trial for all Displays in your Company. No credit card required.</p>
+            <p class="lead" >$9 USD/CAD Per Display Per Month</p>
+            <button id="startTrialButton" type="button" class="btn btn-hg btn-primary" ng-click="startTrial()">{{ 'storage-client.start-trial.cta' | translate}}</button>
+          </div>
+        </div>    
+      </div>
+    </div>
+
+
+
+  </div>
+</div>

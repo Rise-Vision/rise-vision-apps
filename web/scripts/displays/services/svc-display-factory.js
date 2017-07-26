@@ -2,9 +2,9 @@
 
 angular.module('risevision.displays.services')
   .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal',
-    'display', 'displayTracker', 'displayEmail',
+    'display', 'displayTracker', 'displayEmail', 'storeAuthorization' ,'PLAYER_PRO_PRODUCT_CODE',
     function ($rootScope, $q, $state, $modal, display, displayTracker,
-      displayEmail) {
+      displayEmail, storeAuthorization, PLAYER_PRO_PRODUCT_CODE) {
       var factory = {};
       var _displayId;
 
@@ -44,6 +44,32 @@ angular.module('risevision.displays.services')
         return !factory.is3rdPartyPlayer(display) && (display && display.playerName && (display.playerName !== 'RisePlayerElectron' ||
           display.playerVersion <= '2017.07.04.14.40'));
       };
+
+      factory.startPlayerProTrialModal = function () {
+        displayTracker('Start Player Pro Trial Modal');
+
+        var modalInstance = $modal.open({
+          templateUrl: 'partials/displays/player-pro-trial-modal.html',
+          size: 'lg',
+          controller: 'PlayerProTrialModalCtrl'
+        });
+      };
+
+      factory.startPlayerProTrial = function () {
+        displayTracker('Starting Player Pro Trial');
+
+        $loading.start('loading-trial');
+        return storeAuthorization.startTrial(PLAYER_PRO_PRODUCT_CODE)
+          .then(function () {
+            displayTracker('Started Trial Player Pro');
+            $loading.stop('loading-trial');
+            $rootScope.$emit('refreshSubscriptionStatus', 'trial-available');
+          },function (e) {
+            $loading.stop('loading-trial');
+            return $q.reject();
+          });
+      };
+      
 
       factory.addDisplayModal = function (display) {
         displayTracker('Add Display');

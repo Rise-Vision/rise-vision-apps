@@ -181,23 +181,13 @@ angular.module('risevision.displays.controllers')
           ].indexOf($scope.screenshotState(display)) === -1;
       };
 
-      $scope.startPlayerProTrial = function () {
+      var refreshSubscriptionStatusListener = $rootScope.$on('refreshSubscriptionStatus', function(){
         $loading.start('loading-trial');
-        storeAuthorization.startTrial(PLAYER_PRO_PRODUCT_CODE)
-          .then(function () {
-            $scope.showTrialButton = false;
-            $scope.showTrialStatus = true;
-            $scope.showSubscribeButton = true;
-            $rootScope.$emit('refreshSubscriptionStatus', $scope.subscriptionStatus.statusCode);
-            $loading.stop('loading-trial');
-          })
-          .catch(function (e) {
-            $loading.stop('loading-trial');
-          });
-      };
+      });
 
       var subscriptionStatusListener = $rootScope.$on('subscription-status:changed',
         function (e, subscriptionStatus) {
+          $loading.stop('loading-trial');
           $scope.subscriptionStatus = subscriptionStatus;
 
           $scope.showTrialButton = false;
@@ -227,6 +217,7 @@ angular.module('risevision.displays.controllers')
 
       $scope.$on('$destroy', function () {
         subscriptionStatusListener();
+        refreshSubscriptionStatusListener();
       });
 
       $scope.$watch('display.browserUpgradeMode', function () {
