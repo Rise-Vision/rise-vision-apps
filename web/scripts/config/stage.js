@@ -16,16 +16,24 @@
     .constant('LOCALES_PREFIX', 'locales/translation_')
     .constant('LOCALES_SUFIX', '.json');
 
+  angular.module('risevision.common.config')
+    .value('CORE_URL', 'https://rvacore-test.appspot.com/_ah/api'); // override default core value
+
   angular.module('risevision.apps.config', [])
-    .value('APPS_ENV', 'PROD')
-    .value('RVA_URL', 'http://rva.risevision.com')
-    .value('VIEWER_URL', 'http://preview.risevision.com')
+    .value('APPS_ENV', 'TEST')
+    .value('STORAGE_API_ROOT',
+      'https://storage-dot-rvacore-test.appspot.com/_ah/api')
+    .value('STORE_ENDPOINT_URL',
+      'https://store-dot-rvacore-test.appspot.com/_ah/api') // override default Store server value
+    .value('STORE_SERVER_URL', 'https://store-dot-rvacore-test.appspot.com/')
+    .value('RVA_URL', 'http://rva-test.appspot.com')
+    .value('VIEWER_URL', 'http://rvaviewer-test.appspot.com')
     .value('ALERTS_WS_URL',
-      'https://rvaserver2.appspot.com/alerts/cap')
+      'https://rvacore-test.appspot.com/alerts/cap')
     .value('STORAGE_ENDPOINT_URL',
-      'https://storage-dot-rvaserver2.appspot.com/_ah/api')
+      'https://storage-dot-rvacore-test.appspot.com/_ah/api')
     .value('MESSAGING_URL',
-      'https://display-messaging.risevision.com')
+      'https://display-messaging-staging.risevision.com')
     .value('APPS_URL', '');
 
 })(angular);
