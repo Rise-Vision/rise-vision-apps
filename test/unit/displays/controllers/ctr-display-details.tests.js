@@ -122,6 +122,7 @@ describe('controller: display details', function() {
 
   it('should exist',function() {
     expect($scope).to.be.ok;
+    expect($scope.displayId).to.be.ok;
     expect($scope.factory).to.be.ok;
     expect($scope.companyId).to.be.ok;
     expect($scope.productCode).to.be.ok;

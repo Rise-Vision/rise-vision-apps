@@ -10,6 +10,7 @@ angular.module('risevision.displays.controllers')
     function ($scope, $q, $state, displayFactory, display, $loading, $log,
       $modal, $templateCache, $filter, displayId, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, $rootScope,
       storeAuthorization, userState, STORE_URL, IN_RVA_PATH) {
+      $scope.displayId = displayId
       $scope.factory = displayFactory;
       $scope.displayService = display;
       $scope.companyId = userState.getSelectedCompanyId();
