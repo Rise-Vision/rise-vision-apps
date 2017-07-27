@@ -72,6 +72,7 @@ describe('service: displayFactory:', function() {
     });
     $provide.service('storeAuthorization',function(){
       return {
+        startTrial: function(){}
       };
     });
     $provide.value('PLAYER_PRO_PRODUCT_CODE','PLAYER_PRO_PRODUCT_CODE');
@@ -87,7 +88,8 @@ describe('service: displayFactory:', function() {
     });
 
   }));
-  var displayFactory, $rootScope, $modal, trackerCalled, emailSent, updateDisplay, currentState, returnList, displayListSpy, displayAddSpy;
+  var displayFactory, $rootScope, $modal, trackerCalled, emailSent, updateDisplay, currentState, returnList, displayListSpy, displayAddSpy,
+    storeAuthorization;
   beforeEach(function(){
     trackerCalled = undefined;
     emailSent = undefined;
@@ -97,6 +99,7 @@ describe('service: displayFactory:', function() {
 
     inject(function($injector){
       displayFactory = $injector.get('displayFactory');
+      storeAuthorization = $injector.get('storeAuthorization');
       var display = $injector.get('display');
       $modal = $injector.get('$modal');
       $rootScope = $injector.get('$rootScope');
@@ -380,4 +383,69 @@ describe('service: displayFactory:', function() {
     });
   });
 
+  it('is3rdPartyPlayer:',function(){
+    expect(displayFactory.is3rdPartyPlayer({playerName:'RisePlayer'})).to.be.false;
+    expect(displayFactory.is3rdPartyPlayer({playerName:'RisePlayerPackagedApp'})).to.be.true;
+    expect(displayFactory.is3rdPartyPlayer({playerName:'Cenique'})).to.be.true;
+  });
+
+  it('isOutdatedPlayer:',function(){
+    expect(displayFactory.isOutdatedPlayer({playerName:'Cenique', playerVersion: '2017.07.04.14.40'})).to.be.false;
+    expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerPackagedApp', playerVersion: '2017.07.04.14.40'})).to.be.false;
+
+    expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayer', playerVersion: '2017.07.04.14.40'})).to.be.true;
+    expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayer', playerVersion: '2017.01.04.14.40'})).to.be.true;
+
+    expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.07.04.14.40'})).to.be.false;
+    expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.08.04.14.40'})).to.be.false;
+    expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.01.04.14.40'})).to.be.true;   
+  });
+
+  describe('startPlayerProTrialModal: ', function() {
+    it('should open modal', function() {
+      var $modalSpy = sinon.spy($modal, 'open');
+      
+      displayFactory.startPlayerProTrialModal(); 
+
+      expect(trackerCalled).to.equal('Start Player Pro Trial Modal');     
+      
+      $modalSpy.should.have.been.calledWithMatch({
+        controller: "PlayerProTrialModalCtrl",
+        size: "lg",
+        templateUrl: "partials/displays/player-pro-trial-modal.html"
+      });
+    });
+  });
+
+  describe('startPlayerProTrial: ', function() {
+    it('should start trial', function(done) {
+      var storeTrialSpy = sinon.stub(storeAuthorization, 'startTrial',function(){return Q.resolve()});
+      var emitSpy = sinon.spy($rootScope,'$emit');
+      
+      displayFactory.startPlayerProTrial(); 
+
+      expect(trackerCalled).to.equal('Starting Player Pro Trial');  
+      storeTrialSpy.should.have.been.calledWith('PLAYER_PRO_PRODUCT_CODE');
+      setTimeout(function(){
+        expect(trackerCalled).to.equal('Started Trial Player Pro'); 
+        emitSpy.should.have.been.calledWith('refreshSubscriptionStatus', 'trial-available')
+        done();
+      },10);      
+    });
+
+    it('should handle start trial fail', function(done) {
+      var storeTrialSpy = sinon.stub(storeAuthorization, 'startTrial',function(){return Q.reject()});
+      var emitSpy = sinon.spy($rootScope,'$emit');
+      
+      displayFactory.startPlayerProTrial(); 
+
+      expect(trackerCalled).to.equal('Starting Player Pro Trial');  
+      storeTrialSpy.should.have.been.calledWith('PLAYER_PRO_PRODUCT_CODE');
+      setTimeout(function(){
+        expect(trackerCalled).to.not.equal('Started Trial Player Pro'); 
+        emitSpy.should.not.have.been.calledWith('refreshSubscriptionStatus', 'trial-available')
+        done();
+      },10);      
+    });
+  });
 });

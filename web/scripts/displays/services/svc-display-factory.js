@@ -2,9 +2,9 @@
 
 angular.module('risevision.displays.services')
   .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal',
-    'display', 'displayTracker', 'displayEmail', 'storeAuthorization' ,'PLAYER_PRO_PRODUCT_CODE',
+    'display', 'displayTracker', 'displayEmail', 'storeAuthorization' ,'PLAYER_PRO_PRODUCT_CODE', '$loading',
     function ($rootScope, $q, $state, $modal, display, displayTracker,
-      displayEmail, storeAuthorization, PLAYER_PRO_PRODUCT_CODE) {
+      displayEmail, storeAuthorization, PLAYER_PRO_PRODUCT_CODE, $loading) {
       var factory = {};
       var _displayId;
 
@@ -42,7 +42,7 @@ angular.module('risevision.displays.services')
 
       factory.isOutdatedPlayer = function (display) {
         return !factory.is3rdPartyPlayer(display) && (display && display.playerName && (display.playerName !== 'RisePlayerElectron' ||
-          display.playerVersion <= '2017.07.04.14.40'));
+          display.playerVersion < '2017.07.04.14.40'));
       };
 
       factory.startPlayerProTrialModal = function () {
