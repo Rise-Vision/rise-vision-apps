@@ -125,7 +125,7 @@
             <td class="table-body__cell display-status" ng-if="factory.isOutdatedPlayer(display)" ><span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}}</span>
             <a href="" ng-click="factory.addDisplayModal(display)"><span class="text-danger">Unsupported</span> - Upgrade</a>
             </td>
-            <td class="table-body__cell" ng-if="!factory.is3rdPartyPlayer(display) && !factory.isOutdatedPlayer(display)"><span>{{display.playerName | playerVersionName: display.playerVersion : display.offlineSubscription}}</span></td>
+            <td class="table-body__cell" ng-if="!factory.is3rdPartyPlayer(display) && !factory.isOutdatedPlayer(display)"><span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "") + (display.offlineSubscription ? 'Professional' : 'Standard')}}</span></td>
           </tr>
           <tr class="table-body__row">
             <td class="table-body__cell"><span translate>displays-app.fields.player.viewerVersion</span></td>
