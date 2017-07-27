@@ -16,6 +16,11 @@ var DisplayManagePage = function() {
   var displayMinutesField = element(by.model('minutes'));
   var displayMeridianButton = element(by.id('meridianButton'));
 
+  var playerProTrialButton = element(by.id('playerProTrialButton'));
+  var subscribePlayerProButton = element(by.id('subscribePlayerProButton'));
+
+  var subscriptionStatusBar = element(by.id('subscription-status'));
+
   var saveButton = element(by.id('saveButton'));
   var cancelButton = element(by.id('cancelButton'));
 
@@ -74,6 +79,18 @@ var DisplayManagePage = function() {
 
   this.getDisplayMeridianButton = function() {
     return displayMeridianButton;
+  };
+
+  this.getPlayerProTrialButton = function() {
+    return playerProTrialButton;
+  };
+
+  this.getSubscribePlayerProButton = function() {
+    return subscribePlayerProButton;
+  };
+
+  this.getSubscriptionStatusBar = function() {
+    return subscriptionStatusBar;
   };
 
   this.getSaveButton = function() {

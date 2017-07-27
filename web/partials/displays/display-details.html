@@ -6,10 +6,10 @@
 
   <div class="global-actions" require-role="da">
     <div>
-      <button ng-if="showTrialButton" ng-click="factory.startPlayerProTrialModal()" class="btn btn-lg btn-primary" rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0">
+      <button id="playerProTrialButton" ng-if="showTrialButton" ng-click="factory.startPlayerProTrialModal()" class="btn btn-lg btn-primary" rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0">
         Start Rise Player Professional Trial
       </button>
-      <a ng-if="showSubscribeButton" class="btn btn-lg btn-primary" href="{{productLink}}" target="_blank" >
+      <a id="subscribePlayerProButton" ng-if="showSubscribeButton" class="btn btn-lg btn-primary" href="{{productLink}}" target="_blank" >
         Subscribe to Rise Player Professional
       </button>
     </div>
