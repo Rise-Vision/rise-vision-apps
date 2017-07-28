@@ -20,8 +20,6 @@
     .value('APPS_ENV', 'PROD')
     .value('RVA_URL', 'http://rva.risevision.com')
     .value('VIEWER_URL', 'http://preview.risevision.com')
-    .value('STORE_SERVER_URL', 'https://store-dot-rvaserver2.appspot.com/')
-    .value('STORE_URL', 'https://store.risevision.com/')
     .value('ALERTS_WS_URL',
       'https://rvaserver2.appspot.com/alerts/cap')
     .value('STORAGE_ENDPOINT_URL',
