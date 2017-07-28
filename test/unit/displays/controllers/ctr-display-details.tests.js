@@ -2,8 +2,8 @@
 describe('controller: display details', function() {
   var displayId = 1234;
 
-  beforeEach(module('risevision.displays.controllers'));
   beforeEach(module('risevision.displays.services'));
+  beforeEach(module('risevision.displays.controllers'));
   beforeEach(module('risevision.displays.filters'));
   beforeEach(module(mockTranlate()));
   beforeEach(module(function ($provide) {

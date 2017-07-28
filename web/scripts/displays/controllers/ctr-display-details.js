@@ -1,8 +1,6 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .value('PLAYER_PRO_PRODUCT_CODE', 'c4b368be86245bf9501baaa6e0b00df9719869fd')
-  .value('PLAYER_PRO_PRODUCT_ID', '2048')
   .controller('displayDetails', ['$scope', '$q', '$state',
     'displayFactory', 'display', '$loading', '$log', '$modal',
     '$templateCache', '$filter', 'displayId', 'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', '$rootScope',

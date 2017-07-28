@@ -31,7 +31,7 @@
     <table id="displaysListTable" class="table">
       <thead class="table-header">
         <tr class="table-header__row">
-          <th class="table-header__cell u_clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
+          <th class="table-header__cell col-sm-1 u_clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
             <span>
             {{ 'displays-app.list.heading.name' | translate }}
             <!-- ngIf: search.sortBy == 'name' -->
@@ -39,8 +39,8 @@
             <!-- end ngIf: search.sortBy == 'name' -->
             </span>
           </th>
-          <th class="table-header__cell visible-lg" translate>
-            <span>displays-app.list.heading.address</span>
+          <th class="table-header__cell" translate>
+            <span>displays-app.list.heading.playerType</span>
           </th>
           <th class="table-header__cell col-sm-1 hidden-xs" translate>
             <span>displays-app.list.heading.schedule</span>
@@ -61,9 +61,54 @@
             </a>
           </td>
           <td class="table-body__cell visible-lg">
-            <!-- <a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"> -->
-            <span class="u_ellipsis-lg">{{display.address}}</span>
-            <!-- </a> -->
+            <div ng-show="getDisplayType(display) === 'subscribed'">
+              <span translate>displays-app.list.player.type.professional</span>
+            </div>
+            <div ng-show="getDisplayType(display) === 'not-subscribed'">
+              <span translate>displays-app.list.player.type.standard</span>
+              <button class="btn btn-xs btn-link" ng-click="displayFactory.startProTrial()" translate>
+                displays-app.list.player.cta.tryPro
+              </button>
+            </div>
+            <div ng-show="getDisplayType(display) === 'on-trial'">
+              <span translate>displays-app.list.player.type.professionalTrial</span>
+              <button class="btn btn-xs btn-link" translate>
+                displays-app.list.player.cta.subscribeNow
+              </button>
+            </div>
+            <div ng-show="getDisplayType(display) === 'trial-expired'">
+              <span translate>displays-app.list.player.type.standard</span>
+              <button class="btn btn-xs btn-link" translate>
+                displays-app.list.player.cta.subscribePro
+              </button>
+            </div>
+            <div ng-show="getDisplayType(display) === 'suspended'">
+              <span translate>displays-app.list.player.type.standard</span>
+              <button class="btn btn-xs btn-link" translate>
+                displays-app.list.player.cta.subscribePro
+              </button>
+            </div>
+            <div ng-show="getDisplayType(display) === 'cancelled'">
+              <span translate>displays-app.list.player.type.cancelled</span>
+              <button class="btn btn-xs btn-link" translate>
+                displays-app.list.player.cta.subscribePro
+              </button>
+            </div>
+            <div ng-show="getDisplayType(display) === 'unsupported'">
+              <span class="text-danger">
+                <i class="fa fa-times"></i>
+                <span class="text-danger" translate>displays-app.list.player.type.unsupported</span>
+              </span>
+              <button class="btn btn-xs btn-primary" translate>
+                displays-app.list.player.cta.upgrade
+              </button>
+            </div>
+            <div ng-show="getDisplayType(display) === '3rd-party'">
+              <span translate>displays-app.list.player.type.3rdParty</span>
+              <button class="btn btn-xs btn-link" translate>
+                displays-app.list.player.cta.getSupport
+              </button>
+            </div>
           </td>
           <td class="table-body__cell hidden-xs display-schedule">
             <a class="u_ellipsis-md u_icon-hover schedule-view" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
