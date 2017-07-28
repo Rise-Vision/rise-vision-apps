@@ -42,7 +42,7 @@ angular.module('risevision.displays.services')
 
       factory.isOutdatedPlayer = function (display) {
         return !factory.is3rdPartyPlayer(display) && (display && display.playerName && (display.playerName !== 'RisePlayerElectron' ||
-          display.playerVersion < '2017.07.04.14.40'));
+          display.playerVersion < '2017.07.17.20.21'));
       };
 
       factory.startPlayerProTrialModal = function () {

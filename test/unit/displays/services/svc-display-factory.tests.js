@@ -390,13 +390,13 @@ describe('service: displayFactory:', function() {
   });
 
   it('isOutdatedPlayer:',function(){
-    expect(displayFactory.isOutdatedPlayer({playerName:'Cenique', playerVersion: '2017.07.04.14.40'})).to.be.false;
-    expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerPackagedApp', playerVersion: '2017.07.04.14.40'})).to.be.false;
+    expect(displayFactory.isOutdatedPlayer({playerName:'Cenique', playerVersion: '2017.07.17.20.21'})).to.be.false;
+    expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerPackagedApp', playerVersion: '2017.07.17.20.21'})).to.be.false;
 
-    expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayer', playerVersion: '2017.07.04.14.40'})).to.be.true;
+    expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayer', playerVersion: '2017.07.17.20.21'})).to.be.true;
     expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayer', playerVersion: '2017.01.04.14.40'})).to.be.true;
 
-    expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.07.04.14.40'})).to.be.false;
+    expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.07.17.20.21'})).to.be.false;
     expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.08.04.14.40'})).to.be.false;
     expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.01.04.14.40'})).to.be.true;   
   });
