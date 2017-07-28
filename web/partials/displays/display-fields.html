@@ -121,7 +121,9 @@
           </tr>
           <tr class="table-body__row" ng-class="{'alert-danger':factory.isOutdatedPlayer(display)}">
             <td class="table-body__cell"><span translate>displays-app.fields.player.playerVersion</span></td>
-            <td class="table-body__cell" ng-if="factory.is3rdPartyPlayer(display)" ><span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}} (3rd Party Player)</span></td>
+            <td class="table-body__cell  display-status" ng-if="factory.is3rdPartyPlayer(display)" ><span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}} (3rd Party Player)</span>
+            <a href="https://risevision.zendesk.com/hc/en-us/articles/115003786306" target="_blank">How do I get help?</a>
+            </td>
             <td class="table-body__cell display-status" ng-if="factory.isOutdatedPlayer(display)" ><span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}}</span>
             <a href="" ng-click="factory.addDisplayModal(display)"><span class="text-danger">Unsupported</span> - Upgrade</a>
             </td>
