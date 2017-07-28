@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .controller('displaysList', ['$scope', 'userState', 'display',
+  .controller('displaysList', ['$scope', '$window', 'userState', 'display',
     'ScrollingListService', '$loading', '$filter', 'displayFactory',
-    'displayTracker',
-    function ($scope, userState, display, ScrollingListService, $loading,
-      $filter, displayFactory, displayTracker) {
+    'displayTracker', 'STORE_URL', 'PLAYER_PRO_PRODUCT_ID',
+    function ($scope, $window, userState, display, ScrollingListService, $loading,
+      $filter, displayFactory, displayTracker, STORE_URL, PLAYER_PRO_PRODUCT_ID) {
       $scope.search = {
         sortBy: 'name',
         count: $scope.listLimit,
@@ -37,9 +37,18 @@ angular.module('risevision.displays.controllers')
         $scope.displays.doSearch();
       });
 
+      $scope.openRiseProStoreLink = function() {
+        $window.open(STORE_URL + '/product/' + PLAYER_PRO_PRODUCT_ID, '_blank');
+      };
+
+      $scope.openUnsupportedHelpLink = function() {
+        $window.open('https://risevision.zendesk.com/hc/en-us/articles/115003786306', '_blank');
+      };
+
       $scope.getDisplayType = function(display) {
         var status = display.proSubscription && display.proSubscription.status;
-        //status = "3rdParty";
+
+        //return "unsupported";
 
         if (!status) {
           // Status not loaded yet
