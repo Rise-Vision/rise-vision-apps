@@ -1,21 +1,21 @@
 <div class="app-header">
   <div class="title-block">
     <!-- App Title -->
-    <h1 translate>Display Settings</h1>
+    <h1 translate>displays-app.details.title</h1>
   </div>
 
   <div class="global-actions" require-role="da">
     <div>
       <button id="playerProTrialButton" ng-if="showTrialButton" ng-click="factory.startPlayerProTrialModal()" class="btn btn-lg btn-primary" rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0">
-        Start Rise Player Professional Trial
+        {{'displays-app.details.startPlayerProTrial' | translate}} 
       </button>
-      <a id="subscribePlayerProButton" ng-if="showSubscribeButton" class="btn btn-lg btn-primary" href="{{productLink}}" target="_blank" >
-        Subscribe to Rise Player Professional
-      </button>
+      <a id="subscribePlayerProButton" ng-if="showSubscribeButton" class="btn btn-lg btn-primary" href="{{productLink}}" target="_blank" translate="">
+        displays-app.details.subscribePlayerPro
+      </a>
     </div>
     <a ng-if="showTrialButton || showSubscribeButton" class="info-link" href="https://help.risevision.com/hc/en-us/articles/115003626863" target="_blank">
       <i class="fa fa-question-circle icon-left" aria-hidden="true"></i>
-      What is Rise Player Professional?
+      <span translate>displays-app.details.whatIsPlayerPro</span>
     </a>
   </div>
   
