@@ -60,54 +60,54 @@
             <span class=""><strong>{{display.name}}</strong></span>
             </a>
           </td>
-          <td class="table-body__cell visible-lg">
+          <td class="table-body__cell display-product visible-lg">
             <div ng-show="getDisplayType(display) === 'subscribed'">
               <span translate>displays-app.list.player.type.professional</span>
             </div>
             <div ng-show="getDisplayType(display) === 'not-subscribed'">
               <span translate>displays-app.list.player.type.standard</span>
-              <button class="btn btn-xs btn-link" ng-click="displayFactory.startProTrial()" translate>
+              <a ng-click="displayFactory.startProTrial()" translate>
                 displays-app.list.player.cta.tryPro
-              </button>
+              </a>
             </div>
             <div ng-show="getDisplayType(display) === 'on-trial'">
               <span translate>displays-app.list.player.type.professionalTrial</span>
-              <button class="btn btn-xs btn-link" ng-click="openRiseProStoreLink()" translate>
+              <a ng-click="openRiseProStoreLink()" translate>
                 displays-app.list.player.cta.subscribeNow
-              </button>
+              </a>
             </div>
             <div ng-show="getDisplayType(display) === 'trial-expired'">
               <span translate>displays-app.list.player.type.standard</span>
-              <button class="btn btn-xs btn-link" ng-click="openRiseProStoreLink()" translate>
+              <a ng-click="openRiseProStoreLink()" translate>
                 displays-app.list.player.cta.subscribePro
-              </button>
+              </a>
             </div>
             <div ng-show="getDisplayType(display) === 'suspended'">
-              <span translate>displays-app.list.player.type.standard</span>
-              <button class="btn btn-xs btn-link" ng-click="openRiseProStoreLink()" translate>
-                displays-app.list.player.cta.subscribePro
-              </button>
+              <span translate>displays-app.list.player.type.professionalSuspended</span>
+              <a ng-click="openRiseProStoreLink()" translate>
+                displays-app.list.player.cta.checkStore
+              </a>
             </div>
             <div ng-show="getDisplayType(display) === 'cancelled'">
               <span translate>displays-app.list.player.type.cancelled</span>
-              <button class="btn btn-xs btn-link" ng-click="openRiseProStoreLink()" translate>
+              <a ng-click="openRiseProStoreLink()" translate>
                 displays-app.list.player.cta.subscribePro
-              </button>
+              </a>
             </div>
             <div ng-show="getDisplayType(display) === 'unsupported'">
               <span class="text-danger">
                 <i class="fa fa-times"></i>
                 <span translate>displays-app.list.player.type.unsupported</span>
               </span>
-              <button class="btn btn-xs btn-primary" ng-click="displayFactory.addDisplayModal(display)" translate>
+              <a ng-click="displayFactory.addDisplayModal(display)" translate>
                 displays-app.list.player.cta.upgrade
-              </button>
+              </a>
             </div>
             <div ng-show="getDisplayType(display) === '3rd-party'">
               <span translate>displays-app.list.player.type.3rdParty</span>
-              <button class="btn btn-xs btn-link" ng-click="openUnsupportedHelpLink()" translate>
+              <a ng-click="openUnsupportedHelpLink()" translate>
                 displays-app.list.player.cta.getSupport
-              </button>
+              </a>
             </div>
           </td>
           <td class="table-body__cell hidden-xs display-schedule">
