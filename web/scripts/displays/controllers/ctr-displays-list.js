@@ -45,6 +45,18 @@ angular.module('risevision.displays.controllers')
         $window.open('https://risevision.zendesk.com/hc/en-us/articles/115003786306', '_blank');
       };
 
+      $scope.showStartTrial = function() {
+        var modalInstance = displayFactory.startPlayerProTrialModal();
+
+        modalInstance.result
+        .then(function() {
+          console.log("Refresh search list");
+          $scope.displays.doSearch();
+        }, function() {
+          console.log("Start Trial modal closed");
+        });
+      };
+
       $scope.getDisplayType = function(display) {
         var status = display.proSubscription && display.proSubscription.status;
 

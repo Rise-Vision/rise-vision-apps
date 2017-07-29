@@ -48,7 +48,7 @@ angular.module('risevision.displays.services')
       factory.startPlayerProTrialModal = function () {
         displayTracker('Start Player Pro Trial Modal');
 
-        var modalInstance = $modal.open({
+        return $modal.open({
           templateUrl: 'partials/displays/player-pro-trial-modal.html',
           size: 'lg',
           controller: 'PlayerProTrialModalCtrl'
