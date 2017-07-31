@@ -120,7 +120,12 @@
           </td>
           <td class="table-body__cell display-status">
             <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
-            <span class="text-danger" ng-if="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline</span>
+            <span class="text-danger" ng-if="!displayService.statusLoading && (display | status) === 'offline'">
+              <i class="fa fa-times"></i> Offline
+              <a href="https://help.risevision.com/hc/en-us/articles/115002694906-Why-is-my-Display-status-offline-" target="_blank" translate>
+                displays-app.list.status.whyOffline
+              </a>
+            </span>
 
             <span class="text-success" ng-if="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
 
