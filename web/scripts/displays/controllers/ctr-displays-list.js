@@ -38,7 +38,7 @@ angular.module('risevision.displays.controllers')
       });
 
       $scope.openRiseProStoreLink = function() {
-        $window.open(STORE_URL + '/product/' + PLAYER_PRO_PRODUCT_ID, '_blank');
+        $window.open(STORE_URL + '/product/' + PLAYER_PRO_PRODUCT_ID + '?cid=' + $scope.selectedCompayId, '_blank');
       };
 
       $scope.openUnsupportedHelpLink = function() {
