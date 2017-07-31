@@ -106,19 +106,22 @@
                 });
 
                 service.statusLoading = true;
+                service.susbscriptionLoading = true;
 
-                $q.all([
-                  getDisplayStatus(displayIds).then(function (statuses) {
-                    _mergeConnectionStatuses(result.items, statuses);
+                getDisplayStatus(displayIds).then(function (statuses) {
+                  _mergeConnectionStatuses(result.items, statuses);
 
-                    $rootScope.$broadcast('displaysLoaded', result.items);
-                  }),
-                  getProductSubscriptionStatus(PLAYER_PRO_PRODUCT_CODE, displayIds).then(function (statusMap) {
-                    _mergeProSubscriptionStatus(result.items, statusMap);
-                  })
-                ])
+                  $rootScope.$broadcast('displaysLoaded', result.items);
+                })
                 .finally(function () {
                   service.statusLoading = false;
+                });
+
+                getProductSubscriptionStatus(PLAYER_PRO_PRODUCT_CODE, displayIds).then(function (statusMap) {
+                  _mergeProSubscriptionStatus(result.items, statusMap);
+                })
+                .finally(function () {
+                  service.susbscriptionLoading = false;
                 });
               }
             }

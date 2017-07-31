@@ -61,6 +61,8 @@
             </a>
           </td>
           <td class="table-body__cell display-product">
+            <i ng-if="displayService.susbscriptionLoading" class="fa fa-spinner fa-spin fa-fw"></i>
+
             <div ng-show="getDisplayType(display) === 'subscribed'">
               <span translate>displays-app.list.player.type.professional</span>
             </div>
