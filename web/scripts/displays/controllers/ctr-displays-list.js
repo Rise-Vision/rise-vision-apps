@@ -57,6 +57,18 @@ angular.module('risevision.displays.controllers')
         });
       };
 
+      $scope.playerNotInstalled = function(display) {
+        return $filter('status')(display) === 'notinstalled';
+      };
+
+      $scope.playerOnline = function(display) {
+        return $filter('status')(display) === 'online';
+      };
+
+      $scope.playerOffline = function(display) {
+        return $filter('status')(display) === 'offline';
+      };
+
       $scope.getDisplayType = function(display) {
         var status = display.proSubscription && display.proSubscription.status;
 
@@ -65,7 +77,7 @@ angular.module('risevision.displays.controllers')
         if (!status) {
           // Status not loaded yet
         }
-        else if(!$filter('status')(display) === 'notinstalled') {
+        else if($scope.playerNotInstalled(display)) {
           // Player has not been installed yet
         }
         else if(!$scope.displayService.hasSchedule(display)) {

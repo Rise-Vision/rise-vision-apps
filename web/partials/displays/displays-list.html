@@ -111,26 +111,26 @@
             </div>
           </td>
           <td class="table-body__cell hidden-xs display-schedule">
-            <a class="u_ellipsis-md u_icon-hover schedule-view" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
+            <a class="u_ellipsis-md u_icon-hover schedule-view" ng-if="!playerNotInstalled(display) && displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
               {{display.scheduleName}}<i class="fa fa-external-link icon-sm-right"></i>
             </a>
-            <a ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
+            <a ng-if="!playerNotInstalled(display) && !displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
               <button class="btn btn-primary btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
             </a>
           </td>
           <td class="table-body__cell display-status">
             <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
-            <span class="text-danger" ng-if="!displayService.statusLoading && (display | status) === 'offline'">
+            <span class="text-danger" ng-if="!displayService.statusLoading && playerOffline(display)">
               <i class="fa fa-times"></i> Offline
               <a href="https://help.risevision.com/hc/en-us/articles/115002694906-Why-is-my-Display-status-offline-" target="_blank" translate>
                 displays-app.list.status.whyOffline
               </a>
             </span>
 
-            <span class="text-success" ng-if="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
+            <span class="text-success" ng-if="!displayService.statusLoading && playerOnline(display)"> <i class="fa fa-check"></i> Online</span>
 
             <button class="btn btn-xs btn-primary pt-status btn-install-player"
-                    ng-if="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="displayFactory.addDisplayModal(display)">
+                    ng-if="!displayService.statusLoading && playerNotInstalled(display)" ng-click="displayFactory.addDisplayModal(display)">
               {{ 'displays-app.list.status.install' | translate }}
             </button>
           </td>
