@@ -31,7 +31,7 @@
     <table id="displaysListTable" class="table">
       <thead class="table-header">
         <tr class="table-header__row">
-          <th class="table-header__cell u_clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
+          <th class="table-header__cell col-sm-1 u_clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
             <span>
             {{ 'displays-app.list.heading.name' | translate }}
             <!-- ngIf: search.sortBy == 'name' -->
@@ -39,8 +39,8 @@
             <!-- end ngIf: search.sortBy == 'name' -->
             </span>
           </th>
-          <th class="table-header__cell visible-lg" translate>
-            <span>displays-app.list.heading.address</span>
+          <th class="table-header__cell" translate>
+            <span>displays-app.list.heading.playerType</span>
           </th>
           <th class="table-header__cell col-sm-1 hidden-xs" translate>
             <span>displays-app.list.heading.schedule</span>
@@ -48,7 +48,7 @@
           <th id="tableHeaderStatus" class="table-header__cell col-sm-2">
             <span>{{ 'displays-app.list.heading.status' | translate }}</span>
           </th>
-          <th id="tableHeaderLastConnection" class="table-header__cell hidden-xs">
+          <th id="tableHeaderLastConnection" class="table-header__cell hidden-xs hidden-sm">
             <span>{{ 'displays-app.list.heading.lastConnection' | translate }}</span>
           </th>
         </tr>
@@ -60,31 +60,83 @@
             <span class=""><strong>{{display.name}}</strong></span>
             </a>
           </td>
-          <td class="table-body__cell visible-lg">
-            <!-- <a ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})"> -->
-            <span class="u_ellipsis-lg">{{display.address}}</span>
-            <!-- </a> -->
+          <td class="table-body__cell display-product">
+            <i ng-if="displayService.susbscriptionLoading" class="fa fa-spinner fa-spin fa-fw"></i>
+
+            <div ng-show="getDisplayType(display) === 'subscribed'">
+              <span translate>displays-app.list.player.type.professional</span>
+            </div>
+            <div ng-show="getDisplayType(display) === 'not-subscribed'">
+              <span translate>displays-app.list.player.type.standard</span>
+              <a ng-click="showStartTrial()" translate>
+                displays-app.list.player.cta.tryPro
+              </a>
+            </div>
+            <div ng-show="getDisplayType(display) === 'on-trial'">
+              <span translate>displays-app.list.player.type.professionalTrial</span>
+              <a ng-click="openRiseProStoreLink()" translate>
+                displays-app.list.player.cta.subscribeNow
+              </a>
+            </div>
+            <div ng-show="getDisplayType(display) === 'trial-expired'">
+              <span translate>displays-app.list.player.type.standard</span>
+              <a ng-click="openRiseProStoreLink()" translate>
+                displays-app.list.player.cta.subscribePro
+              </a>
+            </div>
+            <div ng-show="getDisplayType(display) === 'suspended'">
+              <span translate>displays-app.list.player.type.professionalSuspended</span>
+              <a ng-click="openRiseProStoreLink()" translate>
+                displays-app.list.player.cta.checkStore
+              </a>
+            </div>
+            <div ng-show="getDisplayType(display) === 'cancelled'">
+              <span translate>displays-app.list.player.type.cancelled</span>
+              <a ng-click="openRiseProStoreLink()" translate>
+                displays-app.list.player.cta.subscribePro
+              </a>
+            </div>
+            <div ng-show="getDisplayType(display) === 'unsupported'">
+              <span class="text-danger">
+                <i class="fa fa-times"></i>
+                <span translate>displays-app.list.player.type.unsupported</span>
+              </span>
+              <a ng-click="displayFactory.addDisplayModal(display)" translate>
+                displays-app.list.player.cta.upgrade
+              </a>
+            </div>
+            <div ng-show="getDisplayType(display) === '3rd-party'">
+              <span translate>displays-app.list.player.type.3rdParty</span>
+              <a ng-click="openUnsupportedHelpLink()" translate>
+                displays-app.list.player.cta.getSupport
+              </a>
+            </div>
           </td>
           <td class="table-body__cell hidden-xs display-schedule">
-            <a class="u_ellipsis-md u_icon-hover schedule-view" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
+            <a class="u_ellipsis-md u_icon-hover schedule-view" ng-if="!playerNotInstalled(display) && displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
               {{display.scheduleName}}<i class="fa fa-external-link icon-sm-right"></i>
             </a>
-            <a ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
+            <a ng-if="!playerNotInstalled(display) && !displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
               <button class="btn btn-primary btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
             </a>
           </td>
           <td class="table-body__cell display-status">
             <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
-            <span class="text-danger" ng-if="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline</span>
+            <span class="text-danger" ng-if="!displayService.statusLoading && playerOffline(display)">
+              <i class="fa fa-times"></i> Offline
+              <a href="https://help.risevision.com/hc/en-us/articles/115002694906-Why-is-my-Display-status-offline-" target="_blank" translate>
+                displays-app.list.status.whyOffline
+              </a>
+            </span>
 
-            <span class="text-success" ng-if="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
+            <span class="text-success" ng-if="!displayService.statusLoading && playerOnline(display)"> <i class="fa fa-check"></i> Online</span>
 
             <button class="btn btn-xs btn-primary pt-status btn-install-player"
-                    ng-if="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="displayFactory.addDisplayModal(display)">
+                    ng-if="!displayService.statusLoading && playerNotInstalled(display)" ng-click="displayFactory.addDisplayModal(display)">
               {{ 'displays-app.list.status.install' | translate }}
             </button>
           </td>
-          <td class="table-body__cell u_nowrap hidden-xs">
+          <td class="table-body__cell u_nowrap hidden-xs hidden-sm">
             <span>
               <span>{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span>
             </span>

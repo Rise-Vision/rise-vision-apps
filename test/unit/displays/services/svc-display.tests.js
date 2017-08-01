@@ -27,6 +27,34 @@ describe('service: display:', function() {
         return deferred.promise;
       };
     });
+    $provide.factory('getProductSubscriptionStatus', function($q) {
+      return function(productCode, ids) {
+        var deferred = $q.defer();
+
+        $timeout(function() {
+          var statuses = ids.map(function(id) {
+            var o = { displayId: id };
+
+            if(id !== 'display1') {
+              o.status = 'Subscribed';
+            }
+            else {
+              o.status = 'On Trial';
+            }
+
+            return o;
+          });
+
+          var statusMap = statuses.reduce(function(map, status) {
+            map[status.displayId] = status;
+            return map;
+          }, {});
+          deferred.resolve(statusMap);
+        });
+
+        return deferred.promise;
+      };
+    });
     $provide.factory('screenshotRequester', function($q) {
       return function(ids) {
         return screenshotRequesterMock($q);
@@ -242,6 +270,7 @@ describe('service: display:', function() {
           items.forEach(function(item) {
             expect(item.onlineStatus).to.equal('online');
             expect(item.lastConnectionTime.getTime()).to.equal(CONNECTION_TIME);
+            expect(item.proSubscription.status).to.equal('Subscribed');
           });
           
           broadcastSpy.should.have.been.calledWith('displaysLoaded', items);

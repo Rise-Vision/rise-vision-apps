@@ -4,6 +4,8 @@
   /*jshint camelcase: false */
 
   angular.module('risevision.displays.services')
+    .value('PLAYER_PRO_PRODUCT_CODE', 'c4b368be86245bf9501baaa6e0b00df9719869fd')
+    .value('PLAYER_PRO_PRODUCT_ID', '2048')
     .constant('DISPLAY_WRITABLE_FIELDS', [
       'name', 'status', 'useCompanyAddress', 'addressDescription', 'street',
       'unit', 'city', 'province', 'country', 'postalCode', 'timeZoneOffset',
@@ -17,11 +19,11 @@
     ])
     .service('display', ['$rootScope', '$q', '$log', 'coreAPILoader',
       'userState', 'getDisplayStatus', 'screenshotRequester',
-      'imageBlobLoader', 'pick', 'DISPLAY_WRITABLE_FIELDS',
-      'DISPLAY_SEARCH_FIELDS',
+      'imageBlobLoader', 'pick', 'getProductSubscriptionStatus', 'DISPLAY_WRITABLE_FIELDS',
+      'DISPLAY_SEARCH_FIELDS', 'PLAYER_PRO_PRODUCT_CODE',
       function ($rootScope, $q, $log, coreAPILoader, userState,
         getDisplayStatus, screenshotRequester, imageBlobLoader, pick,
-        DISPLAY_WRITABLE_FIELDS, DISPLAY_SEARCH_FIELDS) {
+        getProductSubscriptionStatus, DISPLAY_WRITABLE_FIELDS, DISPLAY_SEARCH_FIELDS, PLAYER_PRO_PRODUCT_CODE) {
 
         var createSearchQuery = function (fields, search) {
           var query = '';
@@ -35,7 +37,7 @@
           return query.trim();
         };
 
-        var _mergeStatuses = function (items, statuses) {
+        var _mergeConnectionStatuses = function (items, statuses) {
           items.forEach(function (item) {
             item.lastConnectionTime = item.lastActivityDate;
           });
@@ -45,20 +47,26 @@
               var item = items[i];
 
               if (s[item.id] !== undefined) {
-                _mergeStatus(item, s);
+                _mergeConnectionStatus(item, s);
                 break;
               }
             }
           });
         };
 
-        var _mergeStatus = function (item, lookup) {
+        var _mergeConnectionStatus = function (item, lookup) {
           if (lookup[item.id] === true) {
             item.onlineStatus = 'online';
           }
 
           item.lastConnectionTime = !isNaN(lookup.lastConnectionTime) ? new Date(
             lookup.lastConnectionTime) : (item.lastActivityDate || '');
+        };
+
+        var _mergeProSubscriptionStatus = function(items, statusMap) {
+          items.forEach(function(item) {
+            item.proSubscription = statusMap[item.id];
+          });
         };
 
         var service = {
@@ -98,13 +106,22 @@
                 });
 
                 service.statusLoading = true;
+                service.susbscriptionLoading = true;
 
                 getDisplayStatus(displayIds).then(function (statuses) {
-                  _mergeStatuses(result.items, statuses);
+                  _mergeConnectionStatuses(result.items, statuses);
 
                   $rootScope.$broadcast('displaysLoaded', result.items);
-                }).finally(function () {
+                })
+                .finally(function () {
                   service.statusLoading = false;
+                });
+
+                getProductSubscriptionStatus(PLAYER_PRO_PRODUCT_CODE, displayIds).then(function (statusMap) {
+                  _mergeProSubscriptionStatus(result.items, statusMap);
+                })
+                .finally(function () {
+                  service.susbscriptionLoading = false;
                 });
               }
             }
@@ -134,7 +151,7 @@
                   service.statusLoading = true;
 
                   getDisplayStatus([item.id]).then(function (statuses) {
-                    _mergeStatus(item, statuses[0]);
+                    _mergeConnectionStatus(item, statuses[0]);
 
                     $rootScope.$broadcast('displaysLoaded', [item]);
                   }).finally(function () {
