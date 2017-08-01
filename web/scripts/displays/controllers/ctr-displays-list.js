@@ -75,13 +75,13 @@ angular.module('risevision.displays.controllers')
         //return "unsupported";
 
         if (!status) {
-          // Status not loaded yet
+          return "subscription-not-loaded";
         }
         else if($scope.playerNotInstalled(display)) {
-          // Player has not been installed yet
+          return "player-not-installed";
         }
         else if(!$scope.displayService.hasSchedule(display)) {
-          // No schedule defined
+          return "schedule-not-created"
         }
         else if (displayFactory.isOutdatedPlayer(display)) {
           return 'unsupported';
@@ -109,6 +109,7 @@ angular.module('risevision.displays.controllers')
         }
         else {
           console.log("Unexpected status for display: ", display.id, status);
+          return 'unexpected';
         }
       };
     }
