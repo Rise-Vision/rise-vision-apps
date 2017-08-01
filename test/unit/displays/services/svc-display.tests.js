@@ -1,5 +1,5 @@
 'use strict';
-describe.only('service: display:', function() {
+describe('service: display:', function() {
   var CONNECTION_TIME = Date.now();
   var screenshotRequesterMock, imageBlobLoaderMock;
 
