@@ -68,6 +68,7 @@ var FirstSigninScenarios = function() {
       });
 
       it('should show Start Player Pro Trial button',function(){
+        helper.wait(displayManagePage.getPlayerProTrialButton(), 'Player Pro Trial Button');
         expect(displayManagePage.getPlayerProTrialButton().isDisplayed()).to.eventually.be.true;
       });
 

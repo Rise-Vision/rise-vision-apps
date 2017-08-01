@@ -68,9 +68,8 @@ var DisplayListScenarios = function() {
         expect(displaysListPage.getTableHeaderStatus().getText()).to.eventually.equal('Status');
       });
 
-      it('should show display list Schedule View button', function () {
-        helper.wait(displaysListPage.getFirstRowSchedule(), 'Schedule View Button');
-        expect(displaysListPage.getFirstRowSchedule().getAttribute('href')).to.eventually.match(/.*\/schedules\/details\/.*\?cid=.*/);
+      it('should not show display list Schedule View button', function () {
+        expect(displaysListPage.getFirstRowSchedule().isPresent()).to.eventually.be.false;
       });
 
       it('should show display list Install Player button', function () {
