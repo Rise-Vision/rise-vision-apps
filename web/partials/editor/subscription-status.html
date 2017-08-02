@@ -1,5 +1,5 @@
 <div ng-if="item.gadget.productCode" class="subscription-status {{className}}">
 	<span id="statusMessage">{{item.gadget.statusMessage}}</span>
-	<a ng-if="showBuyButton" class="btn btn-primary u_margin-left" href="{{storeUrl}}/product-status/{{item.gadget.productCode}}" target="_blank">{{'editor-app.subscription.buy' | translate}} <i class="fa fa-shopping-cart"></i></a>
-	<a ng-if="showAccountButton" class="btn btn-primary" href="{{storeUrl}}/account" target="_blank" >{{'editor-app.subscription.viewAccount' | translate}}</a>
+	<a ng-if="showBuyButton" class="btn btn-primary u_margin-left" href="{{storeUrl}}/product-status/{{item.gadget.productCode}}?cid={{companyId}}" target="_blank">{{'editor-app.subscription.buy' | translate}} <i class="fa fa-shopping-cart"></i></a>
+	<a ng-if="showAccountButton" class="btn btn-primary" href="{{storeUrl}}/account?cid={{companyId}}" target="_blank" >{{'editor-app.subscription.viewAccount' | translate}}</a>
 </div>

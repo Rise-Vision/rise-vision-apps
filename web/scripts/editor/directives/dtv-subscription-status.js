@@ -2,8 +2,8 @@
   'use strict';
 
   angular.module('risevision.editor.directives')
-    .directive('gadgetSubscriptionStatus', ['gadgetFactory', 'STORE_URL',
-      function (gadgetFactory, STORE_URL) {
+    .directive('gadgetSubscriptionStatus', ['gadgetFactory', 'userState', 'STORE_URL',
+      function (gadgetFactory, userState, STORE_URL) {
         return {
           restrict: 'E',
           scope: {
@@ -12,6 +12,7 @@
           templateUrl: 'partials/editor/subscription-status.html',
           link: function ($scope) {
             $scope.storeUrl = STORE_URL;
+            $scope.companyId = userState.getSelectedCompanyId();
 
             gadgetFactory.updateItemsStatus([$scope.item])
               .then(function () {
