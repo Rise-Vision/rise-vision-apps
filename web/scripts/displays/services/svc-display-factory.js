@@ -35,10 +35,17 @@ angular.module('risevision.displays.services')
       _init();
 
       factory.is3rdPartyPlayer = function (display) {
-        return display && display.playerName && (display.playerName === 'RisePlayerPackagedApp' || display.playerName
-          .indexOf('RisePlayer') === -1);
-      };
+        var playerName = (display.playerName || "").toLowerCase();
+        var playerVersion = (display.playerVersion || "").toLowerCase();
+        var os = (display.os || "").toLowerCase();
+        var isCAP = playerName === 'riseplayerpackagedapp';
+        var isRisePlayer = playerName.indexOf('riseplayer') !== -1;
+        var isCenique = (playerName + playerVersion).indexOf('cenique') !== -1;
+        var isAndroid = os.indexOf('android') !== -1;
+        var isCROS = os.indexOf('cros') !== -1;
 
+        return isCAP || isCROS || isAndroid || isCenique || !isRisePlayer;
+      };
 
       factory.isOutdatedPlayer = function (display) {
         return !factory.is3rdPartyPlayer(display) && (display && display.playerName && (display.playerName !== 'RisePlayerElectron' ||
