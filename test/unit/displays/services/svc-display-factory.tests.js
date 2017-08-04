@@ -387,6 +387,8 @@ describe('service: displayFactory:', function() {
     expect(displayFactory.is3rdPartyPlayer()).to.be.false;
     expect(displayFactory.is3rdPartyPlayer({playerName:''})).to.be.false;
     expect(displayFactory.is3rdPartyPlayer({playerName:'RisePlayer'})).to.be.false;
+    expect(displayFactory.is3rdPartyPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.07.17.20.21'})).to.be.false;
+    expect(displayFactory.is3rdPartyPlayer({playerName:'RisePlayerElectron', os: 'Microsoft', playerVersion: '2017.07.17.20.21'})).to.be.false;
     expect(displayFactory.is3rdPartyPlayer({playerName:'RisePlayerPackagedApp'})).to.be.true;
     expect(displayFactory.is3rdPartyPlayer({playerName:'Cenique'})).to.be.true;
     expect(displayFactory.is3rdPartyPlayer({playerName:'Other', playerVersion: 'Cenique 2.0'})).to.be.true;
