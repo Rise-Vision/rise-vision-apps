@@ -35,6 +35,7 @@ angular.module('risevision.displays.services')
       _init();
 
       factory.is3rdPartyPlayer = function (display) {
+        var display = display || {};
         var playerName = (display.playerName || "").toLowerCase();
         var playerVersion = (display.playerVersion || "").toLowerCase();
         var os = (display.os || "").toLowerCase();
@@ -44,7 +45,7 @@ angular.module('risevision.displays.services')
         var isAndroid = os.indexOf('android') !== -1;
         var isCROS = os.indexOf('cros') !== -1;
 
-        return isCAP || isCROS || isAndroid || isCenique || !isRisePlayer;
+        return !!playerName && (isCAP || isCROS || isAndroid || isCenique || !isRisePlayer);
       };
 
       factory.isOutdatedPlayer = function (display) {

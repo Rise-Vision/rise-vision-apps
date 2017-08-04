@@ -384,6 +384,8 @@ describe('service: displayFactory:', function() {
   });
 
   it('is3rdPartyPlayer:',function(){
+    expect(displayFactory.is3rdPartyPlayer()).to.be.false;
+    expect(displayFactory.is3rdPartyPlayer({playerName:''})).to.be.false;
     expect(displayFactory.is3rdPartyPlayer({playerName:'RisePlayer'})).to.be.false;
     expect(displayFactory.is3rdPartyPlayer({playerName:'RisePlayerPackagedApp'})).to.be.true;
     expect(displayFactory.is3rdPartyPlayer({playerName:'Cenique'})).to.be.true;
