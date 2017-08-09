@@ -182,7 +182,7 @@ angular.module('risevision.displays.controllers')
           ].indexOf($scope.screenshotState(display)) === -1;
       };
 
-      var refreshSubscriptionStatusListener = $rootScope.$on('refreshSubscriptionStatus', function(){
+      var refreshSubscriptionStatusListener = $rootScope.$on('refreshSubscriptionStatus', function () {
         $loading.start('loading-trial');
       });
 
@@ -195,7 +195,7 @@ angular.module('risevision.displays.controllers')
           $scope.showTrialStatus = false;
           $scope.showSubscribeButton = false;
 
-          $scope.deferredDisplay.promise.then(function(display){
+          $scope.deferredDisplay.promise.then(function (display) {
             if (!displayFactory.is3rdPartyPlayer(display) && !displayFactory.isOutdatedPlayer(display)) {
               switch (subscriptionStatus.statusCode) {
               case 'trial-available':
@@ -215,7 +215,7 @@ angular.module('risevision.displays.controllers')
                 break;
               }
             }
-          });          
+          });
         });
 
       $scope.$on('$destroy', function () {
