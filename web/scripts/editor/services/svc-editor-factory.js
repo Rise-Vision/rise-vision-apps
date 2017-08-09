@@ -396,16 +396,21 @@ angular.module('risevision.editor.services')
         });
       };
 
-      var _goToStoreModal = function (product) {
-        var goToStoreModalInstance = $modal.open({
-          templateUrl: 'partials/editor/go-to-store-modal.html',
-          size: 'md',
-          controller: 'GoToStoreModalController',
+      var _goToProducDetail = function(product) {
+        var productDetailsModal = $modal.open({
+          templateUrl: 'partials/editor/product-details-modal.html',
+          size: 'lg',
+          windowClass: 'product-preview-modal',
+          controller: 'ProductDetailsModalController',
           resolve: {
             product: function () {
               return product;
             }
           }
+        });
+
+        productDetailsModal.result.then(function () {
+          $modalInstance.close(product);
         });
       };
 
@@ -418,7 +423,7 @@ angular.module('risevision.editor.services')
             // 403 Status indicates Premium Template needs purchase
             if (e && e.status === 403) {
               if (productDetails) {
-                _goToStoreModal(productDetails);
+                _goToProducDetail(productDetails);
               } else {
                 return store.product.list({
                     category: TEMPLATES_TYPE,
@@ -426,7 +431,7 @@ angular.module('risevision.editor.services')
                   })
                   .then(function (products) {
                     if (products && products.items && products.items[0]) {
-                      _goToStoreModal(products.items[0]);
+                      _goToProducDetail(products.items[0]);
                     }
                   });
               }
