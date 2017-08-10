@@ -8,15 +8,15 @@ angular.module('risevision.displays.controllers')
     function ($scope, $q, $state, displayFactory, display, $loading, $log,
       $modal, $templateCache, $filter, displayId, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, $rootScope,
       storeAuthorization, userState, STORE_URL, IN_RVA_PATH) {
-      $scope.displayId = displayId
+      $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
       $scope.companyId = userState.getSelectedCompanyId();
       $scope.productCode = PLAYER_PRO_PRODUCT_CODE;
       $scope.productId = PLAYER_PRO_PRODUCT_ID;
       $scope.productLink = STORE_URL + IN_RVA_PATH
-        .replace("productId", $scope.productId)
-        .replace("companyId", userState.getSelectedCompanyId());
+        .replace('productId', $scope.productId)
+        .replace('companyId', userState.getSelectedCompanyId());
       $scope.subscriptionStatus = {};
       $scope.showTrialButton = false;
       $scope.showTrialStatus = false;
@@ -182,7 +182,7 @@ angular.module('risevision.displays.controllers')
           ].indexOf($scope.screenshotState(display)) === -1;
       };
 
-      var refreshSubscriptionStatusListener = $rootScope.$on('refreshSubscriptionStatus', function(){
+      var refreshSubscriptionStatusListener = $rootScope.$on('refreshSubscriptionStatus', function () {
         $loading.start('loading-trial');
       });
 
@@ -195,7 +195,7 @@ angular.module('risevision.displays.controllers')
           $scope.showTrialStatus = false;
           $scope.showSubscribeButton = false;
 
-          $scope.deferredDisplay.promise.then(function(display){
+          $scope.deferredDisplay.promise.then(function (display) {
             if (!displayFactory.is3rdPartyPlayer(display) && !displayFactory.isOutdatedPlayer(display)) {
               switch (subscriptionStatus.statusCode) {
               case 'trial-available':
@@ -215,7 +215,7 @@ angular.module('risevision.displays.controllers')
                 break;
               }
             }
-          });          
+          });
         });
 
       $scope.$on('$destroy', function () {

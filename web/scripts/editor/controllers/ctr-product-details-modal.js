@@ -15,9 +15,9 @@
 
         function checkTemplateAccess(templateCode) {
           return storeAuthorization.check(TEMPLATE_LIBRARY_PRODUCT_CODE)
-          .catch(function() {
-            return storeAuthorization.check(templateCode);
-          });
+            .catch(function () {
+              return storeAuthorization.check(templateCode);
+            });
         }
 
         if ($scope.canUseProduct) {
@@ -26,38 +26,38 @@
           });
         } else {
           checkTemplateAccess(product.productCode)
-          .then(function () {
-            $scope.canUseProduct = true;
-            $loading.stop('loading-price');
-          }, function () {
-            currencyService().then(function (currency) {
-              var company = userState.getCopyOfUserCompany();
-              var country = (company && company.country) ? company.country :
-                '';
-              var selectedCurrency = currency.getByCountry(country);
-              $scope.currencyName = selectedCurrency.getName();
-              $scope.price = selectedCurrency.pickPrice(product.pricing[
-                0].priceUSD, product.pricing[0].priceCAD);
-            }).finally(function () {
+            .then(function () {
+              $scope.canUseProduct = true;
               $loading.stop('loading-price');
+            }, function () {
+              currencyService().then(function (currency) {
+                var company = userState.getCopyOfUserCompany();
+                var country = (company && company.country) ? company.country :
+                  '';
+                var selectedCurrency = currency.getByCountry(country);
+                $scope.currencyName = selectedCurrency.getName();
+                $scope.price = selectedCurrency.pickPrice(product.pricing[
+                  0].priceUSD, product.pricing[0].priceCAD);
+              }).finally(function () {
+                $loading.stop('loading-price');
+              });
             });
-          });
         }
 
-        $scope.startTemplateTrial = function() {
+        $scope.startTemplateTrial = function () {
           $loading.start('loading-trial');
           storeAuthorization.startTrial(TEMPLATE_LIBRARY_PRODUCT_CODE)
-          .then(function() {
-            $rootScope.$emit('refreshSubscriptionStatus');
-            $loading.stop('loading-trial');
-            $scope.select();
-          })
-          .catch(function(e) {
-            $loading.stop('loading-trial');
-          });
+            .then(function () {
+              $rootScope.$emit('refreshSubscriptionStatus');
+              $loading.stop('loading-trial');
+              $scope.select();
+            })
+            .catch(function (e) {
+              $loading.stop('loading-trial');
+            });
         };
 
-        $scope.toggleDetails = function() {
+        $scope.toggleDetails = function () {
           $scope.detailsOpen = !$scope.detailsOpen;
         };
 

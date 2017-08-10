@@ -14,7 +14,7 @@ angular.module('risevision.editor.controllers')
       $scope.productLink = TEMPLATE_LIBRARY_PRODUCT_LINK;
       $scope.subscriptionStatus = {};
 
-      $rootScope.$on("subscription-status:changed", function(evt, newStatus) {
+      $rootScope.$on('subscription-status:changed', function (evt, newStatus) {
         $scope.displayBanner = (newStatus.status === 'Not Subscribed');
       });
     }

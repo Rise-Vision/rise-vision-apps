@@ -2,7 +2,7 @@
 
 angular.module('risevision.displays.services')
   .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal',
-    'display', 'displayTracker', 'displayEmail', 'storeAuthorization' ,'PLAYER_PRO_PRODUCT_CODE', '$loading',
+    'display', 'displayTracker', 'displayEmail', 'storeAuthorization', 'PLAYER_PRO_PRODUCT_CODE', '$loading',
     function ($rootScope, $q, $state, $modal, display, displayTracker,
       displayEmail, storeAuthorization, PLAYER_PRO_PRODUCT_CODE, $loading) {
       var factory = {};
@@ -35,10 +35,10 @@ angular.module('risevision.displays.services')
       _init();
 
       factory.is3rdPartyPlayer = function (display) {
-        var display = display || {};
-        var playerName = (display.playerName || "").toLowerCase();
-        var playerVersion = (display.playerVersion || "").toLowerCase();
-        var os = (display.os || "").toLowerCase();
+        display = display || {};
+        var playerName = (display.playerName || '').toLowerCase();
+        var playerVersion = (display.playerVersion || '').toLowerCase();
+        var os = (display.os || '').toLowerCase();
         var isCAP = playerName === 'riseplayerpackagedapp';
         var isRisePlayer = playerName.indexOf('riseplayer') !== -1;
         var isCenique = (playerName + playerVersion).indexOf('cenique') !== -1;
@@ -49,7 +49,8 @@ angular.module('risevision.displays.services')
       };
 
       factory.isOutdatedPlayer = function (display) {
-        return !factory.is3rdPartyPlayer(display) && (display && display.playerName && (display.playerName !== 'RisePlayerElectron' ||
+        return !factory.is3rdPartyPlayer(display) && (display && display.playerName && (display.playerName !==
+          'RisePlayerElectron' ||
           display.playerVersion < '2017.07.17.20.21'));
       };
 
@@ -72,12 +73,12 @@ angular.module('risevision.displays.services')
             displayTracker('Started Trial Player Pro');
             $loading.stop('loading-trial');
             $rootScope.$emit('refreshSubscriptionStatus', 'trial-available');
-          },function (e) {
+          }, function (e) {
             $loading.stop('loading-trial');
             return $q.reject();
           });
       };
-      
+
 
       factory.addDisplayModal = function (display) {
         displayTracker('Add Display');

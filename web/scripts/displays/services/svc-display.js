@@ -63,8 +63,8 @@
             lookup.lastConnectionTime) : (item.lastActivityDate || '');
         };
 
-        var _mergeProSubscriptionStatus = function(items, statusMap) {
-          items.forEach(function(item) {
+        var _mergeProSubscriptionStatus = function (items, statusMap) {
+          items.forEach(function (item) {
             item.proSubscription = statusMap[item.id];
           });
         };
@@ -109,20 +109,20 @@
                 service.susbscriptionLoading = true;
 
                 getDisplayStatus(displayIds).then(function (statuses) {
-                  _mergeConnectionStatuses(result.items, statuses);
+                    _mergeConnectionStatuses(result.items, statuses);
 
-                  $rootScope.$broadcast('displaysLoaded', result.items);
-                })
-                .finally(function () {
-                  service.statusLoading = false;
-                });
+                    $rootScope.$broadcast('displaysLoaded', result.items);
+                  })
+                  .finally(function () {
+                    service.statusLoading = false;
+                  });
 
                 getProductSubscriptionStatus(PLAYER_PRO_PRODUCT_CODE, displayIds).then(function (statusMap) {
-                  _mergeProSubscriptionStatus(result.items, statusMap);
-                })
-                .finally(function () {
-                  service.susbscriptionLoading = false;
-                });
+                    _mergeProSubscriptionStatus(result.items, statusMap);
+                  })
+                  .finally(function () {
+                    service.susbscriptionLoading = false;
+                  });
               }
             }
 
