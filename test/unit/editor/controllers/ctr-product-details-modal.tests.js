@@ -44,11 +44,6 @@ describe('controller: ProductDetailsModalController', function() {
         }
       };
     });
-    $provide.service('storeAuthorize',function(){
-      return {
-
-      };
-    });
     $provide.service('checkTemplateAccess',function(){
       return sinon.spy(function () {
         return storeAuthorize ? Q.resolve() : Q.reject();
@@ -69,7 +64,6 @@ describe('controller: ProductDetailsModalController', function() {
       $scope = $rootScope.$new();
       $modalInstance = $injector.get('$modalInstance');
       $timeout = $injector.get('$timeout');
-      checkTemplateAccess = $injector.get('checkTemplateAccess');
       TEMPLATE_LIBRARY_PRODUCT_CODE = $injector.get('TEMPLATE_LIBRARY_PRODUCT_CODE');
 
       $loadingStopSpy = sinon.spy($loading,'stop');
