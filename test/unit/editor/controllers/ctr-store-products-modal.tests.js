@@ -58,12 +58,10 @@ describe('controller: Store Products Modal', function() {
         addWidgetByUrl : function(){}
       }
     });
-    $provide.service('storeAuthorization',function(){
-      return {
-        check: function() {
-          return productAuthorized ? Q.resolve() : Q.reject();
-        }
-      }
+    $provide.service('checkTemplateAccess',function(){
+      return function () {
+        return productAuthorized ? Q.resolve() : Q.reject();
+      };
     });
   }));
   

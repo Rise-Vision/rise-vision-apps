@@ -71,4 +71,14 @@ angular.module('risevision.editor.services')
 
       return factory;
     }
+  ])
+  .factory('checkTemplateAccess', ['storeAuthorization', 'TEMPLATE_LIBRARY_PRODUCT_CODE',
+    function(storeAuthorization, TEMPLATE_LIBRARY_PRODUCT_CODE) {
+      return function(templateCode) {
+        return storeAuthorization.check(TEMPLATE_LIBRARY_PRODUCT_CODE)
+        .catch(function() {
+          return storeAuthorization.check(templateCode);
+        });
+      }
+    }
   ]);

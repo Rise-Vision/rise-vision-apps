@@ -8,19 +8,12 @@ angular.module('risevision.editor.controllers')
   ])
   .controller('storeProductsModal', ['$scope', 'ScrollingListService',
     'store', '$modalInstance', '$loading', '$filter', 'STORE_URL', 'category',
-    '$modal', 'playlistItemFactory', 'storeAuthorization', 'PAYMENT_CATEGORIES',
+    '$modal', 'playlistItemFactory', 'checkTemplateAccess', 'PAYMENT_CATEGORIES',
     'TEMPLATES_TYPE', 'TEMPLATE_LIBRARY_PRODUCT_CODE',
     function ($scope, ScrollingListService, store, $modalInstance, $loading,
-      $filter, STORE_URL, category, $modal, playlistItemFactory, storeAuthorization,
-      PAYMENT_CATEGORIES, TEMPLATES_TYPE, TEMPLATE_LIBRARY_PRODUCT_CODE) {
+      $filter, STORE_URL, category, $modal, playlistItemFactory, checkTemplateAccess,
+      PAYMENT_CATEGORIES, TEMPLATES_TYPE) {
       var defaultCount = 1000;
-
-      function checkTemplateAccess(templateCode) {
-        return storeAuthorization.check(TEMPLATE_LIBRARY_PRODUCT_CODE)
-        .catch(function() {
-          return storeAuthorization.check(templateCode);
-        });
-      }
 
       $scope.paymentCategories = PAYMENT_CATEGORIES;
 
