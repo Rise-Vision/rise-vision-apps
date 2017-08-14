@@ -58,12 +58,23 @@ describe('controller: Store Products Modal', function() {
         addWidgetByUrl : function(){}
       }
     });
+    $provide.service('storeAuthorization',function(){
+      return {
+        check: function() {
+          return productAuthorized ? Q.resolve() : Q.reject();
+        }
+      }
+    });
   }));
   
   var $scope, $loading, $loadingStartSpy, $loadingStopSpy;
   var $modalInstance, $modalInstanceDismissSpy, $modalInstanceCloseSpy, $q;
   var $modal, playlistItemAddWidgetByUrlSpy, scrollingListService;
+  var productAuthorized;
+
   beforeEach(function(){
+    productAuthorized = true;
+
     scrollingListService = {
       search: {},
       loadingItems: false,
@@ -140,11 +151,30 @@ describe('controller: Store Products Modal', function() {
       expect($scope.dismiss).to.be.a('function');
     });
 
-    it('quickSelect: should close modal when clicked',function(){
+    it('quickSelect: should close modal when clicked',function(done){
       var product = {paymentTerms: 'free'};
       $scope.quickSelect(product);
 
-      $modalInstanceCloseSpy.should.have.been.calledWith(product);
+      setTimeout(function() {
+        $modalInstanceCloseSpy.should.have.been.calledWith(product);
+        done();
+      }, 0);
+    });
+
+    it('quickSelect: should show product details when clicked and not authorized',function(done){
+      var modalOpenSpy = sinon.spy($modal, 'open');
+      var product = {paymentTerms: 'premium'};
+
+      productAuthorized = false;
+      $scope.quickSelect(product);
+
+      setTimeout(function() {
+        modalOpenSpy.should.have.been.called;
+        expect(modalOpenSpy.getCall(0).args[0].templateUrl).to.equal('partials/editor/product-details-modal.html');
+        expect(modalOpenSpy.getCall(0).args[0].controller).to.equal('ProductDetailsModalController');
+
+        done();
+      }, 0);
     });
 
     it('select: should show Template details',function(){

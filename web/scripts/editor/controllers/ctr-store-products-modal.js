@@ -8,12 +8,19 @@ angular.module('risevision.editor.controllers')
   ])
   .controller('storeProductsModal', ['$scope', 'ScrollingListService',
     'store', '$modalInstance', '$loading', '$filter', 'STORE_URL', 'category',
-    '$modal', 'playlistItemFactory', 'PAYMENT_CATEGORIES',
-    'TEMPLATES_TYPE',
+    '$modal', 'playlistItemFactory', 'storeAuthorization', 'PAYMENT_CATEGORIES',
+    'TEMPLATES_TYPE', 'TEMPLATE_LIBRARY_PRODUCT_CODE',
     function ($scope, ScrollingListService, store, $modalInstance, $loading,
-      $filter, STORE_URL, category, $modal, playlistItemFactory,
-      PAYMENT_CATEGORIES, TEMPLATES_TYPE) {
+      $filter, STORE_URL, category, $modal, playlistItemFactory, storeAuthorization,
+      PAYMENT_CATEGORIES, TEMPLATES_TYPE, TEMPLATE_LIBRARY_PRODUCT_CODE) {
       var defaultCount = 1000;
+
+      function checkTemplateAccess(templateCode) {
+        return storeAuthorization.check(TEMPLATE_LIBRARY_PRODUCT_CODE)
+        .catch(function() {
+          return storeAuthorization.check(templateCode);
+        });
+      }
 
       $scope.paymentCategories = PAYMENT_CATEGORIES;
 
@@ -63,7 +70,18 @@ angular.module('risevision.editor.controllers')
       };
 
       $scope.quickSelect = function (product) {
-        $modalInstance.close(product);
+        if (category === TEMPLATES_TYPE) {
+          return checkTemplateAccess(product.productCode)
+            .then(function() {
+              $modalInstance.close(product);
+            })
+            .catch(function() {
+              $scope.select(product);
+            });
+        }
+        else {
+          $modalInstance.close(product);
+        }
       };
 
       $scope.addWidgetByUrl = function () {
