@@ -4,9 +4,9 @@
   angular.module('risevision.editor.controllers')
     .controller('ProductDetailsModalController', ['$scope', '$rootScope', '$modalInstance',
       'product', 'userState', 'currencyService', 'storeAuthorization', 'checkTemplateAccess',
-      '$loading', '$timeout', 'STORE_URL',
+      '$loading', '$timeout', 'STORE_URL', 'TEMPLATE_LIBRARY_PRODUCT_CODE',
       function ($scope, $rootScope, $modalInstance, product, userState, currencyService,
-        storeAuthorization, checkTemplateAccess, $loading, $timeout, STORE_URL) {
+        storeAuthorization, checkTemplateAccess, $loading, $timeout, STORE_URL, TEMPLATE_LIBRARY_PRODUCT_CODE) {
         $scope.storeUrl = STORE_URL;
         $scope.product = product;
         $scope.canUseProduct = product.paymentTerms === 'free';
