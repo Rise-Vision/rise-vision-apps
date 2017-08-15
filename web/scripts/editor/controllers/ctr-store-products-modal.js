@@ -9,7 +9,7 @@ angular.module('risevision.editor.controllers')
   .controller('storeProductsModal', ['$scope', 'ScrollingListService',
     'store', '$modalInstance', '$loading', '$filter', 'STORE_URL', 'category',
     '$modal', 'playlistItemFactory', 'checkTemplateAccess', 'PAYMENT_CATEGORIES',
-    'TEMPLATES_TYPE', 'TEMPLATE_LIBRARY_PRODUCT_CODE',
+    'TEMPLATES_TYPE',
     function ($scope, ScrollingListService, store, $modalInstance, $loading,
       $filter, STORE_URL, category, $modal, playlistItemFactory, checkTemplateAccess,
       PAYMENT_CATEGORIES, TEMPLATES_TYPE) {

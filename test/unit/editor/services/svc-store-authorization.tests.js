@@ -68,53 +68,54 @@ describe('service: storeAuthorization:', function() {
     },10);   
   });
 
-  it('should give access to premium templates if subscribed to Templates Library', function(done) {
-    $httpBackend.expect('GET', STORE_AUTHORIZATION_URL+'?cid=cid&pc=' + TEMPLATE_LIBRARY_PRODUCT_CODE + '&startTrial=false').respond(200, {authorized: true});
+  describe('checkTemplateAccess:', function() {
+    it('should give access to premium templates if subscribed to Templates Library', function(done) {
+      $httpBackend.expect('GET', STORE_AUTHORIZATION_URL+'?cid=cid&pc=' + TEMPLATE_LIBRARY_PRODUCT_CODE + '&startTrial=false').respond(200, {authorized: true});
 
-    checkTemplateAccess(TEMPLATE_TEST_CODE)
-    .then(function() {
-      done();
-    });
-
-    setTimeout(function(){
-      $httpBackend.flush();
-    }, 0);
-  });
-
-  it('should give access to premium templates if subscribed to the template', function(done) {
-    $httpBackend.when('GET', STORE_AUTHORIZATION_URL+'?cid=cid&pc=' + TEMPLATE_LIBRARY_PRODUCT_CODE + '&startTrial=false').respond(200, {authorized: false});
-
-    checkTemplateAccess(TEMPLATE_TEST_CODE)
-    .then(function() {
-      done();
-    });
-
-    setTimeout(function(){
-      $httpBackend.flush();
-      $httpBackend.when('GET', STORE_AUTHORIZATION_URL+'?cid=cid&pc=' + TEMPLATE_TEST_CODE + '&startTrial=false').respond(200, {authorized: true});
+      checkTemplateAccess(TEMPLATE_TEST_CODE)
+      .then(function() {
+        done();
+      });
 
       setTimeout(function(){
         $httpBackend.flush();
       }, 0);
-    }, 0);
-  });
-
-  it('should reject access to premium templates if not subscribed to Templates Library or to the template', function(done) {
-    $httpBackend.when('GET', STORE_AUTHORIZATION_URL+'?cid=cid&pc=' + TEMPLATE_LIBRARY_PRODUCT_CODE + '&startTrial=false').respond(200, {authorized: false});
-
-    checkTemplateAccess(TEMPLATE_TEST_CODE)
-    .then(null, function() {
-      done();
     });
 
-    setTimeout(function(){
-      $httpBackend.flush();
-      $httpBackend.when('GET', STORE_AUTHORIZATION_URL+'?cid=cid&pc=' + TEMPLATE_TEST_CODE + '&startTrial=false').respond(200, {authorized: false});
+    it('should give access to premium templates if subscribed to the template', function(done) {
+      $httpBackend.when('GET', STORE_AUTHORIZATION_URL+'?cid=cid&pc=' + TEMPLATE_LIBRARY_PRODUCT_CODE + '&startTrial=false').respond(200, {authorized: false});
+
+      checkTemplateAccess(TEMPLATE_TEST_CODE)
+      .then(function() {
+        done();
+      });
 
       setTimeout(function(){
         $httpBackend.flush();
-      }, 0);
-    }, 0);
-  });
+        $httpBackend.when('GET', STORE_AUTHORIZATION_URL+'?cid=cid&pc=' + TEMPLATE_TEST_CODE + '&startTrial=false').respond(200, {authorized: true});
 
+        setTimeout(function(){
+          $httpBackend.flush();
+        }, 0);
+      }, 0);
+    });
+
+    it('should reject access to premium templates if not subscribed to Templates Library or to the template', function(done) {
+      $httpBackend.when('GET', STORE_AUTHORIZATION_URL+'?cid=cid&pc=' + TEMPLATE_LIBRARY_PRODUCT_CODE + '&startTrial=false').respond(200, {authorized: false});
+
+      checkTemplateAccess(TEMPLATE_TEST_CODE)
+      .then(null, function() {
+        done();
+      });
+
+      setTimeout(function(){
+        $httpBackend.flush();
+        $httpBackend.when('GET', STORE_AUTHORIZATION_URL+'?cid=cid&pc=' + TEMPLATE_TEST_CODE + '&startTrial=false').respond(200, {authorized: false});
+
+        setTimeout(function(){
+          $httpBackend.flush();
+        }, 0);
+      }, 0);
+    });
+  });
 });
