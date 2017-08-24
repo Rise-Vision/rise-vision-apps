@@ -1,5 +1,7 @@
 'use strict';
 describe('service: displayFactory:', function() {
+  var latestPlayerVersion = null;
+
   beforeEach(module('risevision.displays.services'));
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
@@ -86,6 +88,11 @@ describe('service: displayFactory:', function() {
         }
       }
     });
+    $provide.factory('getLatestPlayerVersion', function() {
+      return function() {
+        return Q.resolve(latestPlayerVersion);
+      };
+    });
 
   }));
   var displayFactory, $rootScope, $modal, trackerCalled, emailSent, updateDisplay, currentState, returnList, displayListSpy, displayAddSpy,
@@ -96,6 +103,7 @@ describe('service: displayFactory:', function() {
     currentState = undefined;
     updateDisplay = true;
     returnList = null;
+    latestPlayerVersion = new Date(2017, 6, 15, 0, 0);
 
     inject(function($injector){
       displayFactory = $injector.get('displayFactory');
@@ -396,16 +404,20 @@ describe('service: displayFactory:', function() {
     expect(displayFactory.is3rdPartyPlayer({playerName:'Other', os: 'cros', playerVersion: '1.0'})).to.be.true;
   });
 
-  it('isOutdatedPlayer:',function(){
-    expect(displayFactory.isOutdatedPlayer({playerName:'Cenique', playerVersion: '2017.07.17.20.21'})).to.be.false;
-    expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerPackagedApp', playerVersion: '2017.07.17.20.21'})).to.be.false;
+  it('isOutdatedPlayer:',function(done){
+    setTimeout(function() {
+      expect(displayFactory.isOutdatedPlayer({playerName:'Cenique', playerVersion: '2017.07.17.20.21'})).to.be.false;
+      expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerPackagedApp', playerVersion: '2017.07.17.20.21'})).to.be.false;
 
-    expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayer', playerVersion: '2017.07.17.20.21'})).to.be.true;
-    expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayer', playerVersion: '2017.01.04.14.40'})).to.be.true;
+      expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayer', playerVersion: '2017.07.17.20.21'})).to.be.true;
+      expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayer', playerVersion: '2017.01.04.14.40'})).to.be.true;
 
-    expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.07.17.20.21'})).to.be.false;
-    expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.08.04.14.40'})).to.be.false;
-    expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.01.04.14.40'})).to.be.true;   
+      expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.07.17.20.21'})).to.be.false;
+      expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.08.04.14.40'})).to.be.false;
+      expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.01.04.14.40'})).to.be.true;
+
+      done();
+    }, 10);
   });
 
   describe('startPlayerProTrialModal: ', function() {

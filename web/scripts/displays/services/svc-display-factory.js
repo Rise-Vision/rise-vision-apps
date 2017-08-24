@@ -2,11 +2,14 @@
 
 angular.module('risevision.displays.services')
   .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal',
-    'display', 'displayTracker', 'displayEmail', 'storeAuthorization', 'PLAYER_PRO_PRODUCT_CODE', '$loading',
+    'display', 'displayTracker', 'displayEmail', 'storeAuthorization',
+    '$loading', 'parsePlayerDate', 'getLatestPlayerVersion', 'PLAYER_PRO_PRODUCT_CODE',
     function ($rootScope, $q, $state, $modal, display, displayTracker,
-      displayEmail, storeAuthorization, PLAYER_PRO_PRODUCT_CODE, $loading) {
+      displayEmail, storeAuthorization, $loading, parsePlayerDate,
+      getLatestPlayerVersion, PLAYER_PRO_PRODUCT_CODE) {
       var factory = {};
       var _displayId;
+      var _latestPlayerVersion;
 
       var _clearMessages = function () {
         factory.loadingDisplay = false;
@@ -32,7 +35,18 @@ angular.module('risevision.displays.services')
         _clearMessages();
       };
 
+      var _loadPlayerVersion = function () {
+        getLatestPlayerVersion()
+        .then(function(date) {
+          _latestPlayerVersion = date;
+        })
+        .catch(function(err) {
+          console.log("Error retrieving Player Version", err);
+        });
+      };
+
       _init();
+      _loadPlayerVersion();
 
       factory.is3rdPartyPlayer = function (display) {
         display = display || {};
@@ -49,9 +63,13 @@ angular.module('risevision.displays.services')
       };
 
       factory.isOutdatedPlayer = function (display) {
-        return !factory.is3rdPartyPlayer(display) && (display && display.playerName && (display.playerName !==
-          'RisePlayerElectron' ||
-          display.playerVersion < '2017.07.17.20.21'));
+        var MONTH_IN_MS = 30 * 24 * 60 * 60 * 1000;
+        var displayPlayerVersion = display && parsePlayerDate(display.playerVersion);
+        var minimumVersion = _latestPlayerVersion && new Date(_latestPlayerVersion.getTime() - MONTH_IN_MS);
+        var upToDate = displayPlayerVersion && minimumVersion && displayPlayerVersion >= minimumVersion;
+
+        return !factory.is3rdPartyPlayer(display) && (display && display.playerName &&
+          (display.playerName !== 'RisePlayerElectron' || !upToDate));
       };
 
       factory.startPlayerProTrialModal = function () {
