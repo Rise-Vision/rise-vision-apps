@@ -420,6 +420,14 @@ describe('service: displayFactory:', function() {
     }, 10);
   });
 
+  it('isProCompatiblePlayer:',function(){
+    expect(displayFactory.isProCompatiblePlayer()).to.be.false;
+    expect(displayFactory.isProCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:''})).to.be.false;
+    expect(displayFactory.isProCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2017.06.27.05.15'})).to.be.false;
+    expect(displayFactory.isProCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2017.07.31.15.31'})).to.be.true;
+    expect(displayFactory.isProCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2018.09.45.06.49'})).to.be.true;
+  });
+
   describe('startPlayerProTrialModal: ', function() {
     it('should open modal', function() {
       var $modalSpy = sinon.spy($modal, 'open');

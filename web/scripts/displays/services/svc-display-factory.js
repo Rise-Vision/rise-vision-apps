@@ -72,6 +72,10 @@ angular.module('risevision.displays.services')
           (display.playerName !== 'RisePlayerElectron' || !upToDate));
       };
 
+      factory.isProCompatiblePlayer = function (display) {
+        return !!(display && display.playerName === 'RisePlayerElectron' && display.playerVersion >= '2017.07.31.15.31');
+      };
+
       factory.startPlayerProTrialModal = function () {
         displayTracker('Start Player Pro Trial Modal');
 
