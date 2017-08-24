@@ -57,6 +57,9 @@ describe('controller: displays list', function() {
         is3rdPartyPlayer: function(display) {
           return display.thirdParty;
         },
+        isProCompatiblePlayer: function(display) {
+          return !display.notProCompatiblePlayer;
+        },
         startPlayerProTrialModal: function() {
           if(cancelProTrialModal) {
             return { result: Q.reject() };
@@ -169,8 +172,8 @@ describe('controller: displays list', function() {
       expect($scope.getDisplayType({ proSubscription: { status: "test" }, onlineStatus: "online", noSchedule: true })).to.equal("schedule-not-created");
     });
 
-    it('should return unsupported', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "test" }, onlineStatus: "online", outdated: true })).to.equal("unsupported");
+    it('should return not-pro-compatible', function() {
+      expect($scope.getDisplayType({ proSubscription: { status: "test" }, onlineStatus: "online", notProCompatiblePlayer: true })).to.equal("not-pro-compatible");
     });
 
     it('should return 3rd-party', function() {
