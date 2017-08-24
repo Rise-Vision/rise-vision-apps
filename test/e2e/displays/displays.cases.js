@@ -1,11 +1,18 @@
-AlertsScenarios = require('./cases/alerts.js');
-DisplayListScenarios = require('./cases/displaylist.js');
-DisplayAddScenarios = require('./cases/displayadd.js');
-DisplayManageScenarios = require('./cases/displaymanage.js');
-PlayerProScenarios = require('./cases/playerpro.js');
+(function() {
+  "use strict";
 
-alertsScenarios = new AlertsScenarios();
-displayListScenarios = new DisplayListScenarios();
-displayAddScenarios = new DisplayAddScenarios();
-displayManageScenarios = new DisplayManageScenarios();
-playerProScenarios = new PlayerProScenarios();
+  var AlertsScenarios = require('./cases/alerts.js');
+  var DisplayListScenarios = require('./cases/displaylist.js');
+  var DisplayAddScenarios = require('./cases/displayadd.js');
+  var DisplayManageScenarios = require('./cases/displaymanage.js');
+  var PlayerProScenarios = require('./cases/playerpro.js');
+
+  describe("Displays", function() {
+    var alertsScenarios = new AlertsScenarios();
+    var displayListScenarios = new DisplayListScenarios();
+    var displayAddScenarios = new DisplayAddScenarios();
+    var displayManageScenarios = new DisplayManageScenarios();
+    var playerProScenarios = new PlayerProScenarios();
+  });
+
+})();

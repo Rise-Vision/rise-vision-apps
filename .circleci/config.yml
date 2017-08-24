@@ -1,0 +1,152 @@
+version: 2
+
+jobs:
+  dependencies:
+    working_directory: ~/rise-vision-apps
+    docker:
+      - image: circleci/node:8.1.4
+    steps:
+      - checkout
+      - run:
+          name: Install npm
+          command: npm install
+      - run: sudo npm install -g bower
+      - run: bower cache clean
+      - run: 
+          name: install bower
+          command: bower install
+      - run:
+          name: save SHA to a file
+          command: echo $CIRCLE_SHA1 > .circle-sha
+      - save_cache:
+          key: repo-with-deps-{{ checksum ".circle-sha" }}
+          paths:
+            - ~/rise-vision-apps
+  test_unit:
+    working_directory: ~/rise-vision-apps
+    docker:
+      - image: circleci/node:8.1.4
+    steps:
+      - run:
+          name: save SHA to a file
+          command: echo $CIRCLE_SHA1 > .circle-sha
+      - restore_cache:
+          keys:
+            - repo-with-deps-{{ checksum ".circle-sha" }}
+      - run: 
+          name: unit_tests
+          command: NODE_ENV=test npm run test
+      - store_test_results:
+          path: ~/rise-vision-apps/reports
+      - store_artifacts:
+          path: ~/rise-vision-apps/reports
+  test_e2e:
+    working_directory: ~/rise-vision-apps
+    docker:
+      - image: circleci/node:8.1.4
+    parallelism: 2
+    steps:
+      - run:
+          name: save SHA to a file
+          command: echo $CIRCLE_SHA1 > .circle-sha
+      - restore_cache:
+          keys:
+            - repo-with-deps-{{ checksum ".circle-sha" }}
+      - run: echo $CHROME_INSTANCES
+      # Install latest chrome
+      - run: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+      - run: echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee -a /etc/apt/sources.list
+      - run: sudo apt-get update -qq
+      - run: sudo apt-get install -y google-chrome-stable
+      - run:
+          name: e2e_tests
+          command: |
+            # TEST_FILES=$(circleci tests glob "test/e2e/*/*.cases.js" | circleci tests split)
+            TEST_FILES=$(circleci tests glob "test/e2e/apps.scenarios*.js" | circleci tests split)
+            NODE_ENV=test XUNIT_FILE=~/rise-vision-apps/reports/angular-xunit.xml PROSHOT_DIR=~/rise-vision-apps/reports/screenshots DBUS_SESSION_BUS_ADDRESS=/dev/null xvfb-run node run-test.js $TEST_FILES
+      - store_test_results:
+          path: ~/rise-vision-apps/reports
+      - store_artifacts:
+          path: ~/rise-vision-apps/reports
+  deploy_staging:
+    working_directory: ~/rise-vision-apps
+    docker:
+      - image: circleci/node:8.1.4
+    steps:
+      - run:
+          name: save SHA to a file
+          command: echo $CIRCLE_SHA1 > .circle-sha
+      - restore_cache:
+          keys:
+            - repo-with-deps-{{ checksum ".circle-sha" }}
+      - run: NODE_ENV=stage npm run ci-build
+      - run: sudo apt-get -y install rsync
+      - run: ssh -o StrictHostKeyChecking=no apps@webserver-stage.risevision.com 'mkdir -p /rise-front-end/apps';
+      # We have 5 stage environments, apps-stage-0.risevision.com to apps-stage-4.risevision.com
+      # To deploy to one of these environments a tag must be added to the commit message. For instance, [stage-0] for apps-stage-0.risevision.com.
+      # If tag is missing, the [stage-0] is used.
+      - run: 
+          name: Deploy to stage
+          command: |
+            STAGE_ENV="$(git log -1 --pretty=%B | grep '\[.*\]' |sed -e 's/.*\[\(.*\)\].*/\1/g')";
+            if [ "$STAGE_ENV" != '' ]; then
+              echo "Deploying to $STAGE_ENV";
+            fi;
+            if [ "$STAGE_ENV" == '' ]; then
+              echo "stage deployment environment missing. Deploying to [stage-0].";
+              STAGE_ENV='stage-0';
+            fi;
+            rsync -rptz -e ssh --delete dist apps@webserver-stage.risevision.com:/rise-front-end/apps/$STAGE_ENV;
+      - run: tar czvf dist.tar.gz dist
+      - store_artifacts:
+          path: ~/rise-vision-apps/dist.tar.gz
+  deploy_production:
+    working_directory: ~/rise-vision-apps
+    docker:
+      - image: circleci/node:8.1.4
+    steps:
+      - run:
+          name: save SHA to a file
+          command: echo $CIRCLE_SHA1 > .circle-sha
+      - restore_cache:
+          keys:
+            - repo-with-deps-{{ checksum ".circle-sha" }}
+      - run: NODE_ENV=prod npm run ci-build
+      - run: sudo apt-get -y install rsync
+      # It deploys to production server 2.
+      - run: echo "deploying to production webserver1.risevision.com";
+      - run: ssh -o StrictHostKeyChecking=no apps@webserver1.risevision.com 'mkdir -p /rise-front-end/apps';
+      - run: rsync -rptz -e ssh --delete dist apps@webserver1.risevision.com:/rise-front-end/apps;
+      # It deploys to production server 1.
+      - run: echo "deploying to production webserver.risevision.com";
+      - run: ssh -o StrictHostKeyChecking=no apps@webserver.risevision.com 'mkdir -p /rise-front-end/apps';
+      - run: rsync -rptz -e ssh --delete dist apps@webserver.risevision.com:/rise-front-end/apps;
+      - run: tar czvf dist.tar.gz dist
+      - store_artifacts:
+          path: ~/rise-vision-apps/dist.tar.gz
+
+workflows:
+  version: 2
+  test_and_deploy:
+    jobs: 
+      - dependencies
+      - test_unit:
+          requires:
+            - dependencies
+      - test_e2e:
+          requires:
+            - dependencies
+      - deploy_production:
+          requires:
+            - test_unit
+            - test_e2e
+          filters:
+            branches:
+              only: master
+      - deploy_staging:
+          requires:
+            - test_unit
+            - test_e2e
+          filters:
+            branches:
+              only: /(feature|fix|chore).*/
