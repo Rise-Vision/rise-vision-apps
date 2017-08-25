@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.displays.services')
-  .value('LATEST_PLAYER_URL', 'https://install-versions.risevision.com/latest-version')
+  .value('LATEST_PLAYER_URL', 'https://storage.googleapis.com/install-versions.risevision.com/latest-version')
   .factory('parsePlayerDate', function() {
     return function (dateString) {
       var dt = (dateString || '').split(".");
