@@ -17,6 +17,8 @@ angular.module('risevision.displays.services')
   .factory('getLatestPlayerVersion', ['$http', '$q', 'parsePlayerDate', 'LATEST_PLAYER_URL',
     function ($http, $q, parsePlayerDate, LATEST_PLAYER_URL) {
       return function () {
+        return $q.resolve(parsePlayerDate('2017.08.11.12.04'));
+        /*
         var deferred = $q.defer();
         
         $http.get(LATEST_PLAYER_URL)
@@ -42,6 +44,7 @@ angular.module('risevision.displays.services')
         });
   
         return deferred.promise;
+        */
       };
     }
   ]);
