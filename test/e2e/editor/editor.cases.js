@@ -1,26 +1,32 @@
+(function() {
+  "use strict";
 
-PresentationListScenarios = require('./cases/presentation-list.js');
-ArtboardScenarios = require('./cases/artboard.js');
-PresentationPropertiesScenarios = require('./cases/presentation-properties.js');
-ArtboardPlaceholdersScenarios = require('./cases/artboard-placeholders.js');
-PlaceholdersListScenarios = require('./cases/placeholdersList.js');
-PlaceholderSettingsScenarios = require('./cases/placeholder-settings.js');
-PlaylistScenarios = require('./cases/playlist.js');
-AddContentScenarios = require('./cases/add-content.js');
-TemplateAddScenarios = require('./cases/template-add.js');
-HtmlEditorScenarios = require('./cases/html-editor.js');
-PresentationAddScenarios = require('./cases/presentation-add.js');
-SharedTemplatesScenarios = require('./cases/shared-templates.js');
+  var PresentationListScenarios = require('./cases/presentation-list.js');
+  var ArtboardScenarios = require('./cases/artboard.js');
+  var PresentationPropertiesScenarios = require('./cases/presentation-properties.js');
+  var ArtboardPlaceholdersScenarios = require('./cases/artboard-placeholders.js');
+  var PlaceholdersListScenarios = require('./cases/placeholdersList.js');
+  var PlaceholderSettingsScenarios = require('./cases/placeholder-settings.js');
+  var PlaylistScenarios = require('./cases/playlist.js');
+  var AddContentScenarios = require('./cases/add-content.js');
+  var TemplateAddScenarios = require('./cases/template-add.js');
+  var HtmlEditorScenarios = require('./cases/html-editor.js');
+  var PresentationAddScenarios = require('./cases/presentation-add.js');
+  var SharedTemplatesScenarios = require('./cases/shared-templates.js');
 
-presentationListScenarios = new PresentationListScenarios();
-artboardScenarios = new ArtboardScenarios();
-presentationPropertiesScenarios = new PresentationPropertiesScenarios();
-artboardPlaceholdersScenarios = new ArtboardPlaceholdersScenarios();
-placeholdersListScenarios = new PlaceholdersListScenarios();
-placeholderSettingsScenarios = new PlaceholderSettingsScenarios();
-playlistScenarios = new PlaylistScenarios();
-addContentScenarios = new AddContentScenarios();
-templateAddScenarios = new TemplateAddScenarios();
-htmlEditorScenarios = new HtmlEditorScenarios();
-presentationAddScenarios = new PresentationAddScenarios();
-sharedTemplatesScenarios = new SharedTemplatesScenarios();
+  describe("Editor", function() {
+    var presentationListScenarios = new PresentationListScenarios();
+    var artboardScenarios = new ArtboardScenarios();
+    var presentationPropertiesScenarios = new PresentationPropertiesScenarios();
+    var artboardPlaceholdersScenarios = new ArtboardPlaceholdersScenarios();
+    var placeholdersListScenarios = new PlaceholdersListScenarios();
+    var placeholderSettingsScenarios = new PlaceholderSettingsScenarios();
+    var playlistScenarios = new PlaylistScenarios();
+    var addContentScenarios = new AddContentScenarios();
+    var templateAddScenarios = new TemplateAddScenarios();
+    var htmlEditorScenarios = new HtmlEditorScenarios();
+    var presentationAddScenarios = new PresentationAddScenarios();
+    var sharedTemplatesScenarios = new SharedTemplatesScenarios();
+  });
+
+})();

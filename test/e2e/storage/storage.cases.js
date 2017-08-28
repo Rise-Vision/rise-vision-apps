@@ -1,21 +1,28 @@
-StorageSelectorScenarios = require('./cases/storage-selector.js');
-NewFolderModalScenarios = require('./cases/new-folder.js');
-UploadScenarios = require('./cases/upload.js');
-HomeScenarios = require('./cases/home.js');
-CopyUrlScenarios = require('./cases/copy-url.js');
-DownloadScenarios = require('./cases/download.js');
-TrashScenarios = require('./cases/trash.js');
-IframeScenarios = require('./cases/iframe.js');
-DismissModalScenarios = require('./cases/dismiss-modal.js');
-TrialScenarios = require('./cases/trial.js');
+(function() {
+  "use strict";
 
-storageSelectorScenarios = new StorageSelectorScenarios();
-newFolderModalScenarios = new NewFolderModalScenarios();
-uploadScenarios = new UploadScenarios();
-homeScenarios = new HomeScenarios();
-copyUrlScenarios = new CopyUrlScenarios();
-downloadScenarios = new DownloadScenarios();
-trashScenarios = new TrashScenarios();
-iframeScenarios = new IframeScenarios();
-dismissModalScenarios = new DismissModalScenarios();
-trialScenarios = new TrialScenarios();
+  var StorageSelectorScenarios = require('./cases/storage-selector.js');
+  var NewFolderModalScenarios = require('./cases/new-folder.js');
+  var UploadScenarios = require('./cases/upload.js');
+  var HomeScenarios = require('./cases/home.js');
+  var CopyUrlScenarios = require('./cases/copy-url.js');
+  var DownloadScenarios = require('./cases/download.js');
+  var TrashScenarios = require('./cases/trash.js');
+  var IframeScenarios = require('./cases/iframe.js');
+  var DismissModalScenarios = require('./cases/dismiss-modal.js');
+  var TrialScenarios = require('./cases/trial.js');
+
+  describe("Storage", function() {
+    var storageSelectorScenarios = new StorageSelectorScenarios();
+    var newFolderModalScenarios = new NewFolderModalScenarios();
+    var uploadScenarios = new UploadScenarios();
+    var homeScenarios = new HomeScenarios();
+    var copyUrlScenarios = new CopyUrlScenarios();
+    var downloadScenarios = new DownloadScenarios();
+    var trashScenarios = new TrashScenarios();
+    var iframeScenarios = new IframeScenarios();
+    var dismissModalScenarios = new DismissModalScenarios();
+    var trialScenarios = new TrialScenarios();
+  });
+
+})();
