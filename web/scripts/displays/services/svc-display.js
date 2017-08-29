@@ -19,19 +19,12 @@
     ])
     .service('display', ['$rootScope', '$q', '$log', 'coreAPILoader',
       'userState', 'getDisplayStatus', 'screenshotRequester',
-      'imageBlobLoader', 'pick', 'getProductSubscriptionStatus', 'getLatestPlayerVersion',
-      'DISPLAY_WRITABLE_FIELDS', 'DISPLAY_SEARCH_FIELDS', 'PLAYER_PRO_PRODUCT_CODE',
+      'imageBlobLoader', 'pick', 'getProductSubscriptionStatus', 'DISPLAY_WRITABLE_FIELDS',
+      'DISPLAY_SEARCH_FIELDS', 'PLAYER_PRO_PRODUCT_CODE',
       function ($rootScope, $q, $log, coreAPILoader, userState,
         getDisplayStatus, screenshotRequester, imageBlobLoader, pick,
-        getProductSubscriptionStatus, getLatestPlayerVersion, DISPLAY_WRITABLE_FIELDS,
+        getProductSubscriptionStatus, DISPLAY_WRITABLE_FIELDS,
         DISPLAY_SEARCH_FIELDS, PLAYER_PRO_PRODUCT_CODE) {
-
-        var latestPlayerVersion = null;
-
-        getLatestPlayerVersion()
-        .then(function(date) {
-          latestPlayerVersion = date;
-        });
 
         var createSearchQuery = function (fields, search) {
           var query = '';
