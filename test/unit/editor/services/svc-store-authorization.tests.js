@@ -58,7 +58,7 @@ describe('service: storeAuthorization:', function() {
   });
 
   it('should reject on http error',function(done){
-    $httpBackend.expect('GET', STORE_AUTHORIZATION_URL+'?cid=cid&pc=pc').respond(500, {error: 'Error'});
+    $httpBackend.expect('GET', STORE_AUTHORIZATION_URL+'?cid=cid&pc=pc&startTrial=false').respond(500, {error: 'Error'});
     storeAuthorization.check('pc').then(null,function(error){
       expect(error).be.ok;
       done();

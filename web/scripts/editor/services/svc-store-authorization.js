@@ -24,7 +24,7 @@ angular.module('risevision.editor.services')
             deferred.reject(false);
           }
         }, function (e) {
-          console.error('Failed to check store authorization.', e);
+          $log.error('Failed to check store authorization.', e);
           deferred.reject(e);
         });
 
@@ -44,28 +44,10 @@ angular.module('risevision.editor.services')
               deferred.reject(response);
             }
           }, function (e) {
-            console.error('Failed to start trial.', e);
+            $log.error('Failed to start trial.', e);
             deferred.reject(e);
           });
 
-        return deferred.promise;
-      };
-
-      factory.startTrial = function (productCode) {
-        var deferred = $q.defer();
-        var companyId = userState.getSelectedCompanyId();
-        var startTrialUrl = '/v1/product/' + productCode + '/company/' + companyId + '/trial/start';
-        $http.get(STORE_SERVER_URL + startTrialUrl)
-          .then(function (response) {
-            if (!response.error) {
-              deferred.resolve(true);
-            } else {
-              deferred.reject(response);
-            }
-          }, function (e) {
-            console.error('Failed to start trial.', e);
-            deferred.reject(e);
-          });
         return deferred.promise;
       };
 
