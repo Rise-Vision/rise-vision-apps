@@ -70,7 +70,7 @@ describe('service: storeAuthorization:', function() {
 
   describe('checkTemplateAccess:', function() {
     it('should give access to premium templates if subscribed to Templates Library', function(done) {
-      $httpBackend.expect('GET', STORE_AUTHORIZATION_URL+'?cid=cid&pc=' + TEMPLATE_LIBRARY_PRODUCT_CODE + '&startTrial=false').respond(200, {authorized: true});
+      $httpBackend.when('GET', STORE_AUTHORIZATION_URL+'?cid=cid&pc=' + TEMPLATE_LIBRARY_PRODUCT_CODE + '&startTrial=false').respond(200, {authorized: true});
 
       checkTemplateAccess(TEMPLATE_TEST_CODE)
       .then(function() {
