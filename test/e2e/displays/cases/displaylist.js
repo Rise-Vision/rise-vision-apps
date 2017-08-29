@@ -68,8 +68,8 @@ var DisplayListScenarios = function() {
         expect(displaysListPage.getTableHeaderStatus().getText()).to.eventually.equal('Status');
       });
 
-      it('should not show display list Schedule View button', function () {
-        expect(displaysListPage.getFirstRowSchedule().isPresent()).to.eventually.be.false;
+      it('should show display list Schedule View button (All Displays - 24/7)', function () {
+        expect(displaysListPage.getFirstRowSchedule().isPresent()).to.eventually.be.true;
       });
 
       it('should show display list Install Player button', function () {
