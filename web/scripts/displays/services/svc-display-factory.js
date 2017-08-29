@@ -63,9 +63,8 @@ angular.module('risevision.displays.services')
       };
 
       factory.isOutdatedPlayer = function (display) {
-        var MONTH_IN_MS = 30 * 24 * 60 * 60 * 1000;
         var displayPlayerVersion = display && parsePlayerDate(display.playerVersion);
-        var minimumVersion = _latestPlayerVersion && new Date(_latestPlayerVersion.getTime() - MONTH_IN_MS);
+        var minimumVersion = _latestPlayerVersion && (new Date()).setMonth(_latestPlayerVersion.getMonth() - 1);
         var upToDate = displayPlayerVersion && minimumVersion && displayPlayerVersion >= minimumVersion;
 
         return !factory.is3rdPartyPlayer(display) && (display && display.playerName &&
