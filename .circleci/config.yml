@@ -62,7 +62,7 @@ jobs:
           name: e2e_tests
           command: |
             # TEST_FILES=$(circleci tests glob "test/e2e/*/*.cases.js" | circleci tests split)
-            TEST_FILES=$(circleci tests glob "test/e2e/apps.scenarios*.js" | circleci tests split)
+            TEST_FILES=$(circleci tests glob "test/e2e/circle.container*.js" | circleci tests split)
             NODE_ENV=test XUNIT_FILE=~/rise-vision-apps/reports/angular-xunit.xml PROSHOT_DIR=~/rise-vision-apps/reports/screenshots DBUS_SESSION_BUS_ADDRESS=/dev/null xvfb-run node run-test.js $TEST_FILES
       - store_test_results:
           path: ~/rise-vision-apps/reports
