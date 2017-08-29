@@ -88,6 +88,8 @@ jobs:
       - run: 
           name: Deploy to stage
           command: |
+            # Set +e flag to fix issue where no stage environment is specified
+            set +e
             STAGE_ENV="$(git log -1 --pretty=%B | grep '\[.*\]' |sed -e 's/.*\[\(.*\)\].*/\1/g')";
             if [ "$STAGE_ENV" != '' ]; then
               echo "Deploying to $STAGE_ENV";
