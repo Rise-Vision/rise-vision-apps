@@ -96,6 +96,15 @@
                 displays-app.list.player.cta.subscribePro
               </a>
             </div>
+            <div ng-show="getDisplayType(display) === 'unsupported'">
+              <span class="text-danger">
+                <i class="fa fa-times"></i>
+                <span translate>displays-app.list.player.type.unsupported</span>
+              </span>
+              <a ng-click="displayFactory.addDisplayModal(display)" translate>
+                displays-app.list.player.cta.upgrade
+              </a>
+            </div>
             <div ng-show="getDisplayType(display) === 'not-pro-compatible'">
               <span translate>displays-app.list.player.type.standard</span>
             </div>

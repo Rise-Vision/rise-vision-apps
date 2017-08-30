@@ -54,6 +54,9 @@ describe('controller: displays list', function() {
         isOutdatedPlayer: function(display) {
           return display.outdated;
         },
+        isUnsupportedPlayer: function(display) {
+          return display.unsupported;
+        },
         is3rdPartyPlayer: function(display) {
           return display.thirdParty;
         },

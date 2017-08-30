@@ -76,6 +76,8 @@ angular.module('risevision.displays.controllers')
           return 'schedule-not-created';
         } else if (displayFactory.is3rdPartyPlayer(display)) {
           return '3rd-party';
+        } else if (displayFactory.isUnsupportedPlayer(display)) {
+          return 'unsupported';
         } else if (!displayFactory.isProCompatiblePlayer(display)) {
           return 'not-pro-compatible';
         } else if (status === 'Subscribed') {

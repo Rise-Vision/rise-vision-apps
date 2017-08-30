@@ -62,12 +62,16 @@ angular.module('risevision.displays.services')
         return !!playerName && (isCAP || isCROS || isAndroid || isCenique || !isRisePlayer);
       };
 
+      factory.isUnsupportedPlayer = function (display) {
+        return !!(display && !factory.is3rdPartyPlayer(display) && display.playerName && display.playerName !== 'RisePlayerElectron');
+      };
+
       factory.isOutdatedPlayer = function (display) {
         var displayPlayerVersion = display && parsePlayerDate(display.playerVersion);
         var minimumVersion = _latestPlayerVersion && (new Date()).setMonth(_latestPlayerVersion.getMonth() - 1);
         var upToDate = displayPlayerVersion && minimumVersion && displayPlayerVersion >= minimumVersion;
 
-        return !factory.is3rdPartyPlayer(display) && (display && display.playerName &&
+        return !factory.is3rdPartyPlayer(display) && !factory.isUnsupportedPlayer(display) && (display && display.playerName &&
           (display.playerName !== 'RisePlayerElectron' || !upToDate));
       };
 

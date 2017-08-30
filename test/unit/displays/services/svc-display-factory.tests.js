@@ -409,8 +409,8 @@ describe('service: displayFactory:', function() {
       expect(displayFactory.isOutdatedPlayer({playerName:'Cenique', playerVersion: '2017.07.17.20.21'})).to.be.false;
       expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerPackagedApp', playerVersion: '2017.07.17.20.21'})).to.be.false;
 
-      expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayer', playerVersion: '2017.07.17.20.21'})).to.be.true;
-      expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayer', playerVersion: '2017.01.04.14.40'})).to.be.true;
+      expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayer', playerVersion: '2017.07.17.20.21'})).to.be.false;
+      expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayer', playerVersion: '2017.01.04.14.40'})).to.be.false;
 
       expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.07.17.20.21'})).to.be.false;
       expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.08.04.14.40'})).to.be.false;
@@ -418,6 +418,14 @@ describe('service: displayFactory:', function() {
 
       done();
     }, 10);
+  });
+
+  it('isUnsupportedPlayer:',function(){
+    expect(displayFactory.isUnsupportedPlayer()).to.be.false;
+    expect(displayFactory.isUnsupportedPlayer({playerName: 'RisePlayerElectron', playerVersion:''})).to.be.false;
+    expect(displayFactory.isUnsupportedPlayer({playerName: 'Cenique', playerVersion:'2017.06.27.05.15'})).to.be.false;
+    expect(displayFactory.isUnsupportedPlayer({playerName: 'RisePlayerPackagedApp', playerVersion:'2017.07.31.15.31'})).to.be.false;
+    expect(displayFactory.isUnsupportedPlayer({playerName: 'RisePlayer', playerVersion:'2018.09.45.06.49'})).to.be.true;
   });
 
   it('isProCompatiblePlayer:',function(){
