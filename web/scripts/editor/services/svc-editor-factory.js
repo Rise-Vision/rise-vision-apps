@@ -11,11 +11,12 @@ angular.module('risevision.editor.services')
     'store', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
     'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT', 'TEMPLATES_TYPE',
     '$modal', '$rootScope', '$window', 'scheduleFactory', 'messageBox',
+    '$templateCache',
     function ($q, $state, userState, presentation, presentationParser,
       distributionParser, presentationTracker, store, VIEWER_URL,
       REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED, DEFAULT_LAYOUT,
       TEMPLATES_TYPE, $modal, $rootScope, $window, scheduleFactory,
-      messageBox) {
+      messageBox, $templateCache) {
       var factory = {};
       var JSON_PARSE_ERROR = 'JSON parse error';
 
@@ -321,8 +322,31 @@ angular.module('risevision.editor.services')
 
         return deferred.promise;
       };
+      
+      factory.confirmRestorePresentation = function () {
+        var modalInstance = $modal.open({
+          template: $templateCache.get(
+            'confirm-instance/confirm-modal.html'),
+          controller: 'confirmInstance',
+          windowClass: 'modal-custom',
+          resolve: {
+            confirmationTitle: function () {
+              return 'Restoring Presentation';
+            },
+            confirmationMessage: function () {
+              return 'Are you sure you want to Restore this Presentation to it\'s Published version? All changes will be lost.';
+            },
+            confirmationButton: null,
+            cancelButton: null
+          }
+        });
 
-      factory.restorePresentation = function (presentationId) {
+        modalInstance.result.then(function () {
+          factory.restorePresentation();
+        });
+      };
+
+      factory.restorePresentation = function () {
         var deferred = $q.defer();
 
         _clearMessages();
