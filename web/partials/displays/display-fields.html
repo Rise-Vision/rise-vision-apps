@@ -119,7 +119,7 @@
             <td class="table-body__cell"><span translate>displays-app.fields.player.macAddress</span></td>
             <td class="table-body__cell"><span>{{display.macAddress}}</span></td>
           </tr>
-          <tr class="table-body__row" ng-class="{'alert-warning':factory.isOutdatedPlayer(display)}">
+          <tr class="table-body__row" ng-class="{'alert-warning':factory.isOutdatedPlayer(display), 'alert-danger':factory.isUnsupportedPlayer(display)}">
             <td class="table-body__cell"><span translate>displays-app.fields.player.playerVersion</span></td>
             <td class="table-body__cell" ng-if="factory.is3rdPartyPlayer(display)">
               <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}} {{'displays-app.fields.player.version.thirdParty' | translate}}</span>
