@@ -56,35 +56,8 @@ angular.module('risevision.apps', [
         'show': 'hide'
       });
 
-      $locationProvider.html5Mode(true);
-
-      $urlRouterProvider.otherwise('/');
-
       // Use $stateProvider to configure states.
-      $stateProvider.state('apps', {
-        template: '<div ui-view></div>'
-      })
-
-      .state('apps.launcher', {
-        abstract: true,
-        template: '<div class="app-launcher" ui-view></div>'
-      })
-
-      .state('apps.launcher.unauthorized', {
-        templateProvider: ['$templateCache', function ($templateCache) {
-          return $templateCache.get(
-            'partials/launcher/login.html');
-        }]
-      })
-
-      .state('apps.launcher.unregistered', {
-        templateProvider: ['$templateCache', function ($templateCache) {
-          return $templateCache.get(
-            'partials/launcher/signup.html');
-        }]
-      })
-
-      .state('apps.launcher.home', {
+      $stateProvider.state('apps.launcher.home', {
         url: '/',
         templateProvider: ['$templateCache', function ($templateCache) {
           return $templateCache.get(
@@ -140,11 +113,6 @@ angular.module('risevision.apps', [
             });
           }
         ]
-      })
-
-      .state('apps.launcher.signin', {
-        url: '/signin',
-        controller: 'SignInCtrl'
       })
 
       // schedules
