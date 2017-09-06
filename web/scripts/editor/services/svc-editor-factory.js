@@ -344,6 +344,8 @@ angular.module('risevision.editor.services')
         modalInstance.result.then(function () {
           factory.restorePresentation();
         });
+
+        return modalInstance;
       };
 
       factory.restorePresentation = function () {

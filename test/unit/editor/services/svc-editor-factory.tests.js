@@ -138,14 +138,10 @@ describe('service: editorFactory:', function() {
     });
     $provide.service('$modal',function(){
       return {
-        open : function(obj){
-          var deferred = Q.defer();
-
-          deferred.resolve({rvaEntityId: 'id1'});
-
+        open: function() {
           return {
-            result: deferred.promise
-          };
+            result: Q.resolve({rvaEntityId: 'id1'})
+          }
         }
       };
     });
@@ -945,4 +941,50 @@ describe('service: editorFactory:', function() {
     });
   });
 
+  describe('confirmRestorePresentation: ',function(){
+    beforeEach(function() {
+      $modal.open = function(obj) {
+        return {
+          result: {
+            then: function(confirmCallback, cancelCallback) {
+              this.confirmCallBack = confirmCallback || function() {};
+              this.cancelCallback = cancelCallback || function() {};
+            }
+          },
+          close: function(item) {
+            this.result.confirmCallBack(item);
+          },
+          dismiss: function( type ) {
+            this.result.cancelCallback(type);
+          }
+        };
+      };
+    });
+
+    it('should restore the presentation',function(done){
+      sandbox.stub(editorFactory, "restorePresentation");
+
+      var modal = editorFactory.confirmRestorePresentation();
+
+      modal.close();
+
+      setTimeout(function(){
+        expect(editorFactory.restorePresentation).to.be.called;
+        done();
+      },10);
+    });
+
+    it('should not restore the presentation',function(done){
+      sandbox.stub(editorFactory, "restorePresentation");
+
+      var modal = editorFactory.confirmRestorePresentation();
+
+      modal.dismiss();
+
+      setTimeout(function(){
+        expect(editorFactory.restorePresentation).to.not.be.called;
+        done();
+      },10);
+    });
+  });
 });
