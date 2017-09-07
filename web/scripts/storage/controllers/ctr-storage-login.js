@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('risevision.storage.controllers')
-  .controller('StorageLoginCtrl', ['$scope', 'userState', 'uiFlowManager',
-    function ($scope, userState, uiFlowManager) {
+  .controller('StorageLoginCtrl', ['$scope', 'userAuthFactory', 'uiFlowManager',
+    function ($scope, userAuthFactory, uiFlowManager) {
 
       // Login Modal
       $scope.login = function () {
-        return userState.authenticatePopup().finally(function () {
+        return userAuthFactory.authenticatePopup().finally(function () {
           uiFlowManager.invalidateStatus('registrationComplete');
         });
       };

@@ -99,9 +99,11 @@ angular.module('risevision.apps', [
 
       .state('apps.launcher.signup', {
         url: '/signup',
-        controller: ['userState', '$state', '$window', '$location', 'STORE_URL', 'IN_RVA_PATH',
-          function (userState, $state, $window, $location, STORE_URL, IN_RVA_PATH) {
-            userState.authenticate(false).then(function () {
+        controller: ['userState', 'userAuthFactory', '$state', '$window', 
+          '$location', 'STORE_URL', 'IN_RVA_PATH',
+          function (userState, userAuthFactory, $state, $window, $location, 
+            STORE_URL, IN_RVA_PATH) {
+            userAuthFactory.authenticate(false).then(function () {
               if (userState.isLoggedIn() && $location.search().show_product) {
                 $window.location.href = STORE_URL + IN_RVA_PATH
                   .replace('productId', $location.search().show_product)

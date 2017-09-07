@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('risevision.apps.launcher.controllers')
-  .controller('SignInCtrl', ['userState', '$state',
-    function (userState, $state) {
+  .controller('SignInCtrl', ['userAuthFactory', '$state',
+    function (userAuthFactory, $state) {
 
-      userState.authenticate(false).then(function () {
+      userAuthFactory.authenticate(false).then(function () {
         $state.go('apps.launcher.home');
       }).then(null, function () {
-        userState.authenticate(true);
+        userAuthFactory.authenticate(true);
       });
     }
   ]);
