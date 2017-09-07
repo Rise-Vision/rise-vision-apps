@@ -331,10 +331,10 @@ angular.module('risevision.editor.services')
           windowClass: 'modal-custom',
           resolve: {
             confirmationTitle: function () {
-              return 'Restoring Presentation';
+              return 'editor-app.restore.confirm.title';
             },
             confirmationMessage: function () {
-              return 'Are you sure you want to Restore this Presentation to it\'s Published version? All changes will be lost.';
+              return 'editor-app.restore.confirm.message';
             },
             confirmationButton: null,
             cancelButton: null
