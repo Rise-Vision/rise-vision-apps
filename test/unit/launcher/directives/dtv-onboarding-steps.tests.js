@@ -413,4 +413,14 @@ describe('directive: onboarding steps', function() {
     });
   });
 
+  describe('on logout: ', function() {
+    it('should reset showOnboarding', function() {
+      $rootScope.showOnboarding = true;
+
+      $rootScope.$broadcast('risevision.user.signedOut');
+      $scope.$digest();
+
+      expect($rootScope.showOnboarding).to.be.false;
+    });
+  });
 });
