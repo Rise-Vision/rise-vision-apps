@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('risevision.apps.services')
-  .factory('canAccessApps', ['$q', 'userState', '$state',
-    function ($q, userState, $state) {
+  .factory('canAccessApps', ['$q', 'userState', 'userAuthFactory', '$state',
+    function ($q, userState, userAuthFactory, $state) {
       return function () {
         var deferred = $q.defer();
-        userState.authenticate(false).then(function () {
+        userAuthFactory.authenticate(false).then(function () {
             if (userState.isRiseVisionUser()) {
               deferred.resolve();
             } else {
