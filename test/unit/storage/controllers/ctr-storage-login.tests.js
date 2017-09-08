@@ -4,7 +4,7 @@ describe('controller: StorageLoginCtrl', function() {
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
 
-    $provide.service('userState',function(){
+    $provide.service('userAuthFactory',function(){
       return {
         authenticatePopup: function() {
           return Q.resolve();

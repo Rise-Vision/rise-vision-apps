@@ -2,7 +2,7 @@
 describe('controller: Sign In', function() {
   beforeEach(module('risevision.apps.launcher.controllers'));
   beforeEach(module(function ($provide) {
-    $provide.service('userState', function() {
+    $provide.service('userAuthFactory', function() {
       return {
         authenticate: function(forceAuth) {
 
@@ -48,7 +48,6 @@ describe('controller: Sign In', function() {
       $scope = $rootScope.$new();
 
       $controller('SignInCtrl', {
-        userState: $injector.get('userState'),
         $state: $injector.get('$state')
       });
       $scope.$digest();
@@ -67,7 +66,6 @@ describe('controller: Sign In', function() {
       $scope = $rootScope.$new();
 
       $controller('SignInCtrl', {
-        userState: $injector.get('userState'),
         $state: $injector.get('$state')
       });
       $scope.$digest();

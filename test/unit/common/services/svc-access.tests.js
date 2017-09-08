@@ -4,7 +4,7 @@ describe('service: access:', function() {
 
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
-    $provide.service('userState',function(){
+    $provide.service('userAuthFactory', function() {
       return {
         authenticate : function(){
           var deferred = Q.defer();
@@ -17,14 +17,19 @@ describe('service: access:', function() {
           }
           
           return deferred.promise
-        },
+        }        
+      };
+    });
+    $provide.service('userState',function(){
+      return {
         isRiseVisionUser : function(){
           return isRiseVisionUser;
         },
         isLoggedIn: function() {
           return isLoggedIn;
         },
-        _restoreState: function(){}
+        _restoreState: function(){},
+        _state: {}
       }
     });
     $provide.service('$state', function() {

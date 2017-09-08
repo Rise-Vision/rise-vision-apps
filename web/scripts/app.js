@@ -412,8 +412,8 @@ angular.module('risevision.apps', [
 
     }
   ])
-  .run(['$rootScope', '$state', '$modalStack', 'displayFactory',
-    function ($rootScope, $state, $modalStack, displayFactory) {
+  .run(['$rootScope', '$state', '$modalStack', 'displayFactory', '$location',
+    function ($rootScope, $state, $modalStack, displayFactory, $location) {
 
       $rootScope.$on('distributionSelector.addDisplay', function () {
         displayFactory.addDisplayModal();
@@ -425,6 +425,19 @@ angular.module('risevision.apps', [
 
       $rootScope.$on('risevision.user.signedOut', function () {
         $state.go('apps.launcher.unauthorized');
+      });
+      
+      var returnState;
+      $rootScope.$on('$stateChangeStart', function(event, next, current) {
+        if (next.name.indexOf('apps.launcher.un') === -1) {
+          returnState = next;          
+        }
+      });
+      
+      $rootScope.$on('risevision.user.authorized', function () {
+        if (returnState && $state.current.name.indexOf('apps.launcher.un') !== -1) {
+          $state.go(returnState);          
+        }
       });
 
       $rootScope.$on('risevision.company.selectedCompanyChanged', function () {

@@ -1,6 +1,6 @@
 'use strict';
   
-describe('app: storage-selector-app:', function() {
+xdescribe('app: storage-selector-app:', function() {
   beforeEach(function () {
     angular.module('risevision.apps.partials',[]);
 
