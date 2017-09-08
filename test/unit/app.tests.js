@@ -111,13 +111,14 @@ describe('app:', function() {
     });
 
     it('should remove show_product param and go to home',function(done){
-      var userState = {authenticate: function(){return Q.reject()}};
+      var userState = {};
+      var userAuthFactory = {authenticate: function(){return Q.reject()}};
       var $location = {search: function() {}};
 
       var goSpy = sinon.spy($state,'go');
       var searchSpy = sinon.spy($location,'search');
       
-      $state.get('apps.launcher.signup').controller[6](userState, $state, null, $location, null, null);
+      $state.get('apps.launcher.signup').controller[7](userState, userAuthFactory, $state, null, $location, null, null);
       setTimeout(function() {
         goSpy.should.have.been.called;
         searchSpy.should.have.been.called;
@@ -129,16 +130,17 @@ describe('app:', function() {
       var STORE_URL = "https://store.risevision.com/";
       var IN_RVA_PATH = "product/productId/?cid=companyId";
 
-
       var userState = {
         isLoggedIn: function() {return true;},
-        authenticate: function(){return Q.resolve()}, 
         getSelectedCompanyId:function(){return 'cid123'}
+      };
+      var userAuthFactory = {
+        authenticate: function(){return Q.resolve()}        
       };
       var $location = {search: function() {return {show_product:123}}};
       var $window = {location:{}}
 
-      $state.get('apps.launcher.signup').controller[6](userState, $state, $window, $location, STORE_URL, IN_RVA_PATH);
+      $state.get('apps.launcher.signup').controller[7](userState, userAuthFactory, $state, $window, $location, STORE_URL, IN_RVA_PATH);
       setTimeout(function() {
         expect($window.location.href).to.equal('https://store.risevision.com/product/123/?cid=cid123')
         done();
@@ -151,8 +153,10 @@ describe('app:', function() {
 
       var userState = {
         isLoggedIn: function() {return false;},
-        authenticate: function(){return Q.resolve()}, 
         getSelectedCompanyId:function(){return 'cid123'}
+      };
+      var userAuthFactory = {
+        authenticate: function(){return Q.resolve()}
       };
       var $location = {search: function() {return {show_product:123}}};
       var $window = {location:{}}
@@ -160,7 +164,7 @@ describe('app:', function() {
       var goSpy = sinon.spy($state,'go')
       var searchSpy = sinon.spy($location,'search')
 
-      $state.get('apps.launcher.signup').controller[6](userState, $state, $window, $location, STORE_URL, IN_RVA_PATH);
+      $state.get('apps.launcher.signup').controller[7](userState, userAuthFactory, $state, $window, $location, STORE_URL, IN_RVA_PATH);
       setTimeout(function() {
         expect($window.location.href).to.not.equal('https://store.risevision.com/product/123/?cid=cid123');
         goSpy.should.have.been.called;
