@@ -24,40 +24,24 @@ angular.module('risevision.apps.storage.storage-selector', [
     'risevision.storage.directives',
     'risevision.storage.filters',
   ])
+  
   // Set up our mappings between URLs, templates, and controllers
   .config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
     function storeRouteConfig($urlRouterProvider, $stateProvider,
       $locationProvider) {
 
-      // $locationProvider.html5Mode(true);
+      $locationProvider.html5Mode(false);
 
       $urlRouterProvider.otherwise('/');
 
       // Use $stateProvider to configure states.
-      $stateProvider.state('apps.launcher', {
-          abstract: true,
-          template: '<div class="website" ui-view></div>'
-        })
-
-        .state('apps.launcher.unregistered', {
-          templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get(
-              'partials/launcher/signup.html');
-          }]
-        })
+      $stateProvider
 
         // storage
         .state('apps.storage', {
           url: '?cid',
           abstract: true,
           template: '<div class="storage-app" ui-view></div>'
-        })
-
-        .state('apps.storage.unauthorized', {
-          templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get(
-              'partials/storage/login.html');
-          }]
         })
 
         .state('apps.storage.home', {
@@ -68,9 +52,9 @@ angular.module('risevision.apps.storage.storage-selector', [
           }],
           controller: 'StorageSelectorIFrameController',
           resolve: {
-            canAccessStorage: ['canAccessStorage',
-              function (canAccessStorage) {
-                return canAccessStorage();
+            canAccessApps: ['canAccessApps',
+              function (canAccessApps) {
+                return canAccessApps();
               }
             ],
             selectorType: ['$location',
