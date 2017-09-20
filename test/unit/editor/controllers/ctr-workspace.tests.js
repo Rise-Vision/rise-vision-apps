@@ -164,7 +164,7 @@ describe('controller: Workspace', function() {
     $scope.$apply();
     var modalOpenStub = sinon.stub($modal, 'open',function(){return {result:{then:function(){}}}});
 
-    $rootScope.$broadcast('$stateChangeStart',{});
+    $rootScope.$broadcast('$stateChangeStart',{name:'newState'});
     $scope.$apply();
 
     modalOpenStub.should.have.been.called;
@@ -173,7 +173,7 @@ describe('controller: Workspace', function() {
   it('should not notify unsaved changes when changing URL if there are no changes',function(){
     var modalOpenStub = sinon.stub($modal, 'open',function(){return {result:{then:function(){}}}});
 
-    $rootScope.$broadcast('$stateChangeStart',{});
+    $rootScope.$broadcast('$stateChangeStart',{name:'newState'});
     $scope.$apply();
 
     modalOpenStub.should.not.have.been.called;

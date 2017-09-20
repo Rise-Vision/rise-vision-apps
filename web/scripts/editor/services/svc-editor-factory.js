@@ -6,17 +6,17 @@ angular.module('risevision.editor.services')
   .value('DEFAULT_LAYOUT',
     '<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\r\n<html>\r\n\t<head>\r\n\t\t<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">\r\n\t\t<title></title>\r\n\t</head>\r\n\r\n\t<body style=\"width:1920px;height:1080px; margin: 0; overflow: hidden;\" >\r\n\t</body>\r\n\r\n<!-- Warning - Editing the Presentation Data Object incorrectly may result in the Presentation not functioning correctly -->\r\n\t<script language=\"javascript\">\n\t<!--\n\tvar presentationData = {\n\t\"presentationData\": {\n\t\t\"id\": \"\",\n\t\t\"hidePointer\": true,\n\t\t\"donePlaceholder\": \"\",\n\t\t\"placeholders\": []\n\t}\n};\n\t//-->\n\t</script>\r\n<!-- No scripts after this point -->\r\n</html>'
   )
-  .factory('editorFactory', ['$q', '$state', 'userState', 'presentation',
-    'presentationParser', 'distributionParser', 'presentationTracker',
-    'store', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
+  .factory('editorFactory', ['$q', '$state', 'userState', 'userAuthFactory', 
+    'presentation', 'presentationParser', 'distributionParser', 
+    'presentationTracker', 'store', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
     'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT', 'TEMPLATES_TYPE',
     '$modal', '$rootScope', '$window', 'scheduleFactory', 'messageBox',
     '$templateCache',
-    function ($q, $state, userState, presentation, presentationParser,
-      distributionParser, presentationTracker, store, VIEWER_URL,
-      REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED, DEFAULT_LAYOUT,
-      TEMPLATES_TYPE, $modal, $rootScope, $window, scheduleFactory,
-      messageBox, $templateCache) {
+    function ($q, $state, userState, userAuthFactory, presentation, 
+      presentationParser, distributionParser, presentationTracker, store, 
+      VIEWER_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED, 
+      DEFAULT_LAYOUT, TEMPLATES_TYPE, $modal, $rootScope, $window, 
+      scheduleFactory, messageBox, $templateCache) {
       var factory = {};
       var JSON_PARSE_ERROR = 'JSON parse error';
 
@@ -494,13 +494,13 @@ angular.module('risevision.editor.services')
       factory.saveAndPreview = function () {
         return factory.validatePresentation()
           .then(function () {
-            userState.removeEventListenerVisibilityAPI();
+            userAuthFactory.removeEventListenerVisibilityAPI();
             $window.open('/loading-preview.html', 'rvPresentationPreview');
 
             return factory.save().then(function (presentationId) {
               factory.preview(presentationId);
             }).finally(function () {
-              userState.addEventListenerVisibilityAPI();
+              userAuthFactory.addEventListenerVisibilityAPI();
             });
           });
       };

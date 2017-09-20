@@ -131,7 +131,11 @@ describe('service: editorFactory:', function() {
         getUsername : function() {
           return 'testusername';
         },
-        _restoreState : function() {},
+        _restoreState : function() {}
+      };
+    });
+    $provide.service('userAuthFactory', function() { 
+      return {
         addEventListenerVisibilityAPI : function() {},
         removeEventListenerVisibilityAPI : function() {}
       };
@@ -165,7 +169,7 @@ describe('service: editorFactory:', function() {
     });
   }));
   var editorFactory, trackerCalled, updatePresentation, currentState, stateParams, 
-    presentationParser, $window, $modal, scheduleFactory, userState, $rootScope;
+    presentationParser, $window, $modal, scheduleFactory, userAuthFactory, $rootScope;
   beforeEach(function(){
     trackerCalled = undefined;
     currentState = undefined;
@@ -177,7 +181,7 @@ describe('service: editorFactory:', function() {
       $window = $injector.get('$window');
       $modal = $injector.get('$modal');
       scheduleFactory = $injector.get('scheduleFactory');
-      userState = $injector.get('userState');
+      userAuthFactory = $injector.get('userAuthFactory');
       $rootScope = $injector.get('$rootScope');
     });
   });
@@ -765,8 +769,8 @@ describe('service: editorFactory:', function() {
   describe('saveAndPreview: ', function() {
     it('should add and preview new presentation', function(done) {
       var $windowOpenSpy = sinon.spy($window, 'open');
-      var addEventSpy = sinon.spy(userState, 'addEventListenerVisibilityAPI');
-      var removeEventSpy = sinon.spy(userState, 'removeEventListenerVisibilityAPI');
+      var addEventSpy = sinon.spy(userAuthFactory, 'addEventListenerVisibilityAPI');
+      var removeEventSpy = sinon.spy(userAuthFactory, 'removeEventListenerVisibilityAPI');
 
       sandbox.stub(presentationParser, "parsePresentation").returns(true);
 
@@ -804,7 +808,7 @@ describe('service: editorFactory:', function() {
     });
 
     it('should fail to preview a presentation because of validation errors', function(done) {
-      var removeEventSpy = sinon.spy(userState, 'removeEventListenerVisibilityAPI');
+      var removeEventSpy = sinon.spy(userAuthFactory, 'removeEventListenerVisibilityAPI');
 
       sandbox.stub(presentationParser, "validatePresentation").returns(false);
 
