@@ -1,11 +1,11 @@
 'use strict';
   
-xdescribe('app: storage-selector-app:', function() {
+describe('app: storage-selector-app:', function() {
   beforeEach(function () {
     angular.module('risevision.apps.partials',[]);
 
     module('risevision.apps.storage.storage-selector', function ($provide) {
-      $provide.service('canAccessStorage',function(){
+      $provide.service('canAccessApps',function(){
         return function() {
           var deferred = Q.defer();
           deferred.resolve("auth");

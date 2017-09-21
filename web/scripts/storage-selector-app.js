@@ -35,7 +35,9 @@ angular.module('risevision.apps.storage.storage-selector', [
       $urlRouterProvider.otherwise('/');
 
       // Use $stateProvider to configure states.
-      $stateProvider
+      $stateProvider.state("apps", {
+          template: "<div ui-view></div>"
+        })
 
         // storage
         .state('apps.storage', {

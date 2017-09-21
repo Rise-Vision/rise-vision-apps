@@ -58,11 +58,9 @@ angular.module('risevision.apps.controllers')
 
       $rootScope.$on('$stateChangeSuccess', function () {
         $scope.navSelected = $state.current.name;
-        $scope.hideCH = $state.current.name ===
-          'apps.launcher.unauthorized' ||
-          $state.current.name === 'apps.launcher.unregistered' ||
+        $scope.hideCH = $state.current.name === 'apps.launcher.signup' ||
           $state.current.name === 'apps.launcher.signin' ||
-          $state.current.name === 'apps.launcher.signup';
+          $state.current.name.indexOf("common.auth") !== -1;
       });
     }
   ]); //ctr
