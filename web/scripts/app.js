@@ -57,7 +57,16 @@ angular.module('risevision.apps', [
       });
 
       // Use $stateProvider to configure states.
-      $stateProvider.state('apps.launcher.home', {
+      $stateProvider.state("apps", {
+        template: "<div ui-view></div>"
+      })
+
+      .state("apps.launcher", {
+        abstract: true,
+        template: "<div class=\"app-launcher\" ui-view></div>"
+      })
+
+      .state('apps.launcher.home', {
         url: '/',
         templateProvider: ['$templateCache', function ($templateCache) {
           return $templateCache.get(
@@ -115,6 +124,11 @@ angular.module('risevision.apps', [
             });
           }
         ]
+      })
+
+      .state("apps.launcher.signin", {
+        url: "/signin",
+        controller: "SignInCtrl"
       })
 
       // schedules
