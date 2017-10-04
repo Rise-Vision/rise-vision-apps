@@ -23,16 +23,16 @@
   angular.module('risevision.apps.config', [])
     .value('APPS_ENV', 'TEST')
     .value('STORAGE_API_ROOT',
-      'https://storage-dot-rvacore-test.appspot.com/_ah/api')
+      'https://custom-auth-dot-storage-dot-rvacore-test.appspot.com/_ah/api')
     .value('STORE_ENDPOINT_URL',
-      'https://store-dot-rvacore-test.appspot.com/_ah/api') // override default Store server value
-    .value('STORE_SERVER_URL', 'https://store-dot-rvacore-test.appspot.com/')
+      'https://custom-auth-dot-store-dot-rvacore-test.appspot.com/_ah/api') // override default Store server value
+    .value('STORE_SERVER_URL', 'https://custom-auth-dot-store-dot-rvacore-test.appspot.com/')
     .value('RVA_URL', 'http://rva-test.appspot.com')
     .value('VIEWER_URL', 'http://rvaviewer-test.appspot.com')
     .value('ALERTS_WS_URL',
       'https://rvacore-test.appspot.com/alerts/cap')
     .value('STORAGE_ENDPOINT_URL',
-      'https://storage-dot-rvacore-test.appspot.com/_ah/api')
+      'https://custom-auth-dot-storage-dot-rvacore-test.appspot.com/_ah/api')
     .value('MESSAGING_URL',
       'https://display-messaging-staging.risevision.com')
     .value('APPS_URL', '');
