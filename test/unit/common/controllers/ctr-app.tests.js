@@ -9,7 +9,14 @@ describe('controller: app', function() {
         },
         href: function() {}
       };
-    });      
+    });
+    $provide.factory('userState',function(){
+      return {
+        isRiseVisionUser: function() {
+          return true;
+        }
+      };
+    });
   }));
 
   var $scope,$state,rootScope;
@@ -21,7 +28,8 @@ describe('controller: app', function() {
       $controller('AppCtrl', {
         $scope: $scope,
         $rootScope : $rootScope,
-        $state: $injector.get('$state')
+        $state: $injector.get('$state'),
+        userState: $injector.get('userState')
       });
       $scope.$digest();
     });
