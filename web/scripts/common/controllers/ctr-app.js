@@ -60,22 +60,29 @@ angular.module('risevision.apps.controllers')
         }
         else {
           $scope.navOptions = [];
-          //$scope.navSelected = null;
           $scope.hideCH = false;
         }
       }
 
       showAppsMenu('apps.launcher.home');
 
+      $rootScope.$on('risevision.user.registration.completed', function() {
+        $state.go('apps.launcher.home');
+      });
+
       $rootScope.$on('risevision.profile.refreshed', function() {
-        showAppsMenu($state.current.name);
+        showAppsMenu(isAuthRelatedState() ? 'apps.launcher.home' : $state.current.name);
       });
 
       $rootScope.$on('$stateChangeSuccess', function () {
         $scope.navSelected = $state.current.name;
-        $scope.hideCH = $state.current.name === 'apps.launcher.signup' ||
-          $state.current.name === 'apps.launcher.signin' ||
-          $state.current.name.indexOf("common.auth") !== -1;
+        $scope.hideCH = isAuthRelatedState();
       });
+
+      function isAuthRelatedState() {
+        return $state.current.name === 'apps.launcher.signup' ||
+               $state.current.name === 'apps.launcher.signin' ||
+               $state.current.name.indexOf("common.auth") !== -1;
+      }
     }
   ]); //ctr
