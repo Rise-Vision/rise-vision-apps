@@ -25,13 +25,6 @@ describe('controller: Home', function() {
       $provide.service('displayFactory', function() {
         return {};
       });
-      $provide.factory('userState',function(){
-        return {
-          isRiseVisionUser: function() {
-            return true;
-          }
-        };
-      });
     })
     inject(function($injector,$rootScope, $controller) {
       $scope = $rootScope.$new();

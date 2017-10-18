@@ -442,7 +442,7 @@ angular.module('risevision.apps', [
       });
 
       $rootScope.$on('$stateChangeStart', function (event, toState) {
-        if ((toState.name !== "common.auth.unregistered") {
+        if (toState.name !== "common.auth.unregistered") {
           $modalStack.dismissAll();
         }
       });
