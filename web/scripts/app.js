@@ -434,15 +434,15 @@ angular.module('risevision.apps', [
 
     }
   ])
-  .run(['$rootScope', '$state', '$modalStack', 'displayFactory',
-    function ($rootScope, $state, $modalStack, displayFactory) {
+  .run(['$rootScope', '$state', '$modalStack', 'userState', 'displayFactory',
+    function ($rootScope, $state, $modalStack, userState, displayFactory) {
 
       $rootScope.$on('distributionSelector.addDisplay', function () {
         displayFactory.addDisplayModal();
       });
 
-      $rootScope.$on('$stateChangeStart', function (event, toState) {
-        if (toState.name !== "common.auth.unregistered") {
+      $rootScope.$on('$stateChangeStart', function (event) {
+        if (userState.isRiseVisionUser()) {
           $modalStack.dismissAll();
         }
       });
