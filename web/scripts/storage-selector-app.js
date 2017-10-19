@@ -46,6 +46,14 @@ angular.module('risevision.apps.storage.storage-selector', [
           template: '<div class="storage-app" ui-view></div>'
         })
 
+        .state("common.auth.unregistered", {
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get(
+              'partials/launcher/signup.html');
+            }],
+            url: "/unregistered/:state"
+        })
+
         .state('apps.storage.home', {
           url: '/',
           templateProvider: ['$templateCache', function ($templateCache) {
