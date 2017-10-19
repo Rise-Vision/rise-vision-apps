@@ -126,17 +126,17 @@ angular.module('risevision.apps', [
         ]
       })
 
-      .state("apps.launcher.signin", {
-        url: "/signin",
-        controller: "SignInCtrl"
+      .state('apps.launcher.signin', {
+        url: '/signin',
+        controller: 'SignInCtrl'
       })
       
-      .state("common.auth.unregistered", {
+      .state('common.auth.unregistered', {
         templateProvider: ['$templateCache', function ($templateCache) {
           return $templateCache.get(
             'partials/launcher/signup.html');
           }],
-          url: "/unregistered/:state"
+          url: '/unregistered/:state'
       })
 
       // schedules
