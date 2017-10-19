@@ -24,7 +24,7 @@ angular.module('risevision.apps.storage.storage-selector', [
     'risevision.storage.directives',
     'risevision.storage.filters',
   ])
-  
+
   // Set up our mappings between URLs, templates, and controllers
   .config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
     function storeRouteConfig($urlRouterProvider, $stateProvider,
@@ -35,8 +35,8 @@ angular.module('risevision.apps.storage.storage-selector', [
       $urlRouterProvider.otherwise('/');
 
       // Use $stateProvider to configure states.
-      $stateProvider.state("apps", {
-          template: "<div ui-view></div>"
+      $stateProvider.state('apps', {
+          template: '<div ui-view></div>'
         })
 
         // storage
@@ -44,6 +44,14 @@ angular.module('risevision.apps.storage.storage-selector', [
           url: '?cid',
           abstract: true,
           template: '<div class="storage-app" ui-view></div>'
+        })
+
+        .state('common.auth.unregistered', {
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get(
+              'partials/launcher/signup.html');
+          }],
+          url: '/unregistered/:state'
         })
 
         .state('apps.storage.home', {

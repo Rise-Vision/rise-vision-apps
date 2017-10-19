@@ -57,13 +57,13 @@ angular.module('risevision.apps', [
       });
 
       // Use $stateProvider to configure states.
-      $stateProvider.state("apps", {
-        template: "<div ui-view></div>"
+      $stateProvider.state('apps', {
+        template: '<div ui-view></div>'
       })
 
-      .state("apps.launcher", {
+      .state('apps.launcher', {
         abstract: true,
-        template: "<div class=\"app-launcher\" ui-view></div>"
+        template: '<div class="app-launcher" ui-view></div>'
       })
 
       .state('apps.launcher.home', {
@@ -126,9 +126,17 @@ angular.module('risevision.apps', [
         ]
       })
 
-      .state("apps.launcher.signin", {
-        url: "/signin",
-        controller: "SignInCtrl"
+      .state('apps.launcher.signin', {
+        url: '/signin',
+        controller: 'SignInCtrl'
+      })
+      
+      .state('common.auth.unregistered', {
+        templateProvider: ['$templateCache', function ($templateCache) {
+          return $templateCache.get(
+            'partials/launcher/signup.html');
+          }],
+          url: '/unregistered/:state'
       })
 
       // schedules
@@ -426,15 +434,17 @@ angular.module('risevision.apps', [
 
     }
   ])
-  .run(['$rootScope', '$state', '$modalStack', 'displayFactory',
-    function ($rootScope, $state, $modalStack, displayFactory) {
+  .run(['$rootScope', '$state', '$modalStack', 'userState', 'displayFactory',
+    function ($rootScope, $state, $modalStack, userState, displayFactory) {
 
       $rootScope.$on('distributionSelector.addDisplay', function () {
         displayFactory.addDisplayModal();
       });
 
-      $rootScope.$on('$stateChangeStart', function () {
-        $modalStack.dismissAll();
+      $rootScope.$on('$stateChangeStart', function (event) {
+        if (userState.isRiseVisionUser()) {
+          $modalStack.dismissAll();
+        }
       });
 
       $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
