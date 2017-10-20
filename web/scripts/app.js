@@ -437,6 +437,10 @@ angular.module('risevision.apps', [
   .run(['$rootScope', '$state', '$modalStack', 'userState', 'displayFactory',
     function ($rootScope, $state, $modalStack, userState, displayFactory) {
 
+      $rootScope.$on('risevision.user.signedOut', function () {
+        $state.go('common.auth.unauthorized');
+      });
+
       $rootScope.$on('distributionSelector.addDisplay', function () {
         displayFactory.addDisplayModal();
       });
