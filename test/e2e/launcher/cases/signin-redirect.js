@@ -28,7 +28,8 @@ var SigninRedirectScenarios = function() {
 
     it('should sign in the user through google',function(){
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-        commonHeaderPage.signin();
+        signInPage.getGoogleLogin();
+        googleAuthPage.signin();
       });
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       expect(browser.getCurrentUrl()).to.eventually.have.string(homepage.getProtectedPageUrl());

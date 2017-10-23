@@ -27,11 +27,11 @@ var SigninScenarios = function() {
     });
 
     it('should sign in the user through google',function(){
+      signInPage.getGoogleLogin();
       googleAuthPage.signin();
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       expect(homepage.getAppLauncherContainer().isPresent()).to.eventually.be.true;
     });
-
 
     it('should not sign in the user through google when it is already signed in',function(){
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
