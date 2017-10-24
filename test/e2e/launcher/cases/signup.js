@@ -26,6 +26,7 @@ var SignupScenarios = function() {
 
     it('should not sign in the user through google when it is already signed in',function(){
       signInPage.get();
+      signInPage.getGoogleLogin();
       googleAuthPage.signin();
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       signUpPage.get();
