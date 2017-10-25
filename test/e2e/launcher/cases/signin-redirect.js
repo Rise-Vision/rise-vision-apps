@@ -1,6 +1,6 @@
 'use strict';
 var expect = require('rv-common-e2e').expect;
-var SignInPage = require('./../pages/signInPage.js');
+var SignUpPage = require('./../pages/signUpPage.js');
 var GoogleAuthPage = require('rv-common-e2e').googleAuthPage;
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var HomePage = require('./../pages/homepage.js');
@@ -14,12 +14,12 @@ var SigninRedirectScenarios = function() {
            "I would like to authenticate and be redirected to the original url", function() {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
-    var signInPage;
+    var signUpPage;
     var googleAuthPage;
     var commonHeaderPage;
     before(function (){
       homepage = new HomePage();
-      signInPage = new SignInPage();
+      signUpPage = new SignUpPage();
       googleAuthPage = new GoogleAuthPage();
       commonHeaderPage = new CommonHeaderPage();
       homepage.getProtectedPage();
@@ -28,7 +28,7 @@ var SigninRedirectScenarios = function() {
 
     it('should sign in the user through google',function(){
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-        signInPage.getGoogleLogin();
+        signUpPage.getGoogleLogin();
         googleAuthPage.signin();
       });
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
