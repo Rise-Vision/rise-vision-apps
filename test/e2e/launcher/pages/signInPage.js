@@ -16,7 +16,6 @@ var SignInPage = function() {
 
   this.getGoogleLogin = function() {
     helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-    loginPage.getSignInLink().click();
     helper.wait(loginPage.getSignInGoogleLink(), 'Sign In Google Link', 1000);
     loginPage.getSignInGoogleLink().click();
   };
