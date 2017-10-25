@@ -58,379 +58,379 @@ angular.module('risevision.apps', [
 
       // Use $stateProvider to configure states.
       $stateProvider.state('apps', {
-        template: '<div ui-view></div>'
-      })
+          template: '<div ui-view></div>'
+        })
 
-      .state('apps.launcher', {
-        abstract: true,
-        template: '<div class="app-launcher" ui-view></div>'
-      })
+        .state('apps.launcher', {
+          abstract: true,
+          template: '<div class="app-launcher" ui-view></div>'
+        })
 
-      .state('apps.launcher.home', {
-        url: '/',
-        templateProvider: ['$templateCache', function ($templateCache) {
-          return $templateCache.get(
-            'partials/launcher/app-launcher.html');
-        }],
-        controller: 'HomeCtrl',
-        resolve: {
-          canAccessApps: ['canAccessApps',
-            function (canAccessApps) {
-              return canAccessApps();
+        .state('apps.launcher.home', {
+          url: '/',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get(
+              'partials/launcher/app-launcher.html');
+          }],
+          controller: 'HomeCtrl',
+          resolve: {
+            canAccessApps: ['canAccessApps',
+              function (canAccessApps) {
+                return canAccessApps();
+              }
+            ]
+          }
+        })
+
+        .state('apps.launcher.support', {
+          url: '/support',
+          controller: ['$state', 'canAccessApps', 'supportFactory',
+            function ($state, canAccessApps, supportFactory) {
+              canAccessApps().then(function () {
+                supportFactory.handleGetSupportAction();
+                $state.go('apps.launcher.home');
+              });
             }
           ]
-        }
-      })
+        })
 
-      .state('apps.launcher.support', {
-        url: '/support',
-        controller: ['$state', 'canAccessApps', 'supportFactory',
-          function ($state, canAccessApps, supportFactory) {
-            canAccessApps().then(function () {
-              supportFactory.handleGetSupportAction();
-              $state.go('apps.launcher.home');
-            });
-          }
-        ]
-      })
+        .state('apps.launcher.sendnote', {
+          url: '/send-note',
+          controller: ['$state', 'canAccessApps', 'supportFactory',
+            function ($state, canAccessApps, supportFactory) {
+              canAccessApps().then(function () {
+                supportFactory.handleSendUsANote();
+                $state.go('apps.launcher.home');
+              });
+            }
+          ]
+        })
 
-      .state('apps.launcher.sendnote', {
-        url: '/send-note',
-        controller: ['$state', 'canAccessApps', 'supportFactory',
-          function ($state, canAccessApps, supportFactory) {
-            canAccessApps().then(function () {
-              supportFactory.handleSendUsANote();
-              $state.go('apps.launcher.home');
-            });
-          }
-        ]
-      })
+        .state('apps.launcher.signup', {
+          url: '/signup',
+          controller: ['userState', 'userAuthFactory', '$state', '$window',
+            '$location', 'STORE_URL', 'IN_RVA_PATH',
+            function (userState, userAuthFactory, $state, $window, $location,
+              STORE_URL, IN_RVA_PATH) {
+              userAuthFactory.authenticate(false).then(function () {
+                if (userState.isLoggedIn() && $location.search().show_product) {
+                  $window.location.href = STORE_URL + IN_RVA_PATH
+                    .replace('productId', $location.search().show_product)
+                    .replace('companyId', userState.getSelectedCompanyId());
+                }
+              }).finally(function () {
+                $location.search('show_product', null);
+                $state.go('apps.launcher.home');
+              });
+            }
+          ]
+        })
 
-      .state('apps.launcher.signup', {
-        url: '/signup',
-        controller: ['userState', 'userAuthFactory', '$state', '$window', 
-          '$location', 'STORE_URL', 'IN_RVA_PATH',
-          function (userState, userAuthFactory, $state, $window, $location, 
-            STORE_URL, IN_RVA_PATH) {
-            userAuthFactory.authenticate(false).then(function () {
-              if (userState.isLoggedIn() && $location.search().show_product) {
-                $window.location.href = STORE_URL + IN_RVA_PATH
-                  .replace('productId', $location.search().show_product)
-                  .replace('companyId', userState.getSelectedCompanyId());
-              }
-            }).finally(function () {
-              $location.search('show_product', null);
-              $state.go('apps.launcher.home');
-            });
-          }
-        ]
-      })
+        .state('apps.launcher.signin', {
+          url: '/signin',
+          controller: 'SignInCtrl'
+        })
 
-      .state('apps.launcher.signin', {
-        url: '/signin',
-        controller: 'SignInCtrl'
-      })
-      
-      .state('common.auth.unregistered', {
-        templateProvider: ['$templateCache', function ($templateCache) {
-          return $templateCache.get(
-            'partials/launcher/signup.html');
+        .state('common.auth.unregistered', {
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get(
+              'partials/launcher/signup.html');
           }],
           url: '/unregistered/:state'
-      })
+        })
 
-      // schedules
-      .state('apps.schedules', {
-        url: '?cid',
-        abstract: true,
-        template: '<div class="container schedules-app" ui-view></div>'
-      })
+        // schedules
+        .state('apps.schedules', {
+          url: '?cid',
+          abstract: true,
+          template: '<div class="container schedules-app" ui-view></div>'
+        })
 
-      .state('apps.schedules.home', {
-        url: '/schedules',
-        controller: ['canAccessApps', '$state',
-          function (canAccessApps, $state) {
-            canAccessApps().then(function () {
-              $state.go('apps.schedules.list');
-            });
-          }
-        ]
-      })
-
-      .state('apps.schedules.list', {
-        url: '/schedules/list',
-        templateProvider: ['$templateCache', function ($templateCache) {
-          return $templateCache.get(
-            'partials/schedules/schedules-list.html');
-        }],
-        controller: 'schedulesList',
-        resolve: {
-          canAccessApps: ['canAccessApps',
-            function (canAccessApps) {
-              return canAccessApps();
-            }
-          ]
-        }
-      })
-
-      .state('apps.schedules.details', {
-        url: '/schedules/details/:scheduleId',
-        templateProvider: ['$templateCache', function ($templateCache) {
-          return $templateCache.get(
-            'partials/schedules/schedule-details.html');
-        }],
-        controller: 'scheduleDetails',
-        resolve: {
-          scheduleInfo: ['canAccessApps', 'scheduleFactory',
-            '$stateParams',
-            function (canAccessApps, scheduleFactory, $stateParams) {
-              return canAccessApps().then(function () {
-                //load the schedule based on the url param
-                return scheduleFactory.getSchedule($stateParams.scheduleId);
+        .state('apps.schedules.home', {
+          url: '/schedules',
+          controller: ['canAccessApps', '$state',
+            function (canAccessApps, $state) {
+              canAccessApps().then(function () {
+                $state.go('apps.schedules.list');
               });
             }
           ]
-        }
-      })
+        })
 
-      .state('apps.schedules.add', {
-        url: '/schedules/add',
-        templateProvider: ['$templateCache', function ($templateCache) {
-          return $templateCache.get(
-            'partials/schedules/schedule-add.html');
-        }],
-        controller: 'scheduleAdd',
-        resolve: {
-          scheduleInfo: ['canAccessApps', 'scheduleFactory',
-            function (canAccessApps, scheduleFactory) {
-              return canAccessApps().then(scheduleFactory.newSchedule);
-            }
-          ]
-        }
-      })
-
-      // displays
-      .state('apps.displays', {
-        url: '?cid',
-        abstract: true,
-        template: '<div class="container displays-app" ui-view></div>'
-      })
-
-      .state('apps.displays.home', {
-        url: '/displays',
-        controller: ['canAccessApps', '$state',
-          function (canAccessApps, $state) {
-            canAccessApps().then(function () {
-              $state.go('apps.displays.list');
-            });
+        .state('apps.schedules.list', {
+          url: '/schedules/list',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get(
+              'partials/schedules/schedules-list.html');
+          }],
+          controller: 'schedulesList',
+          resolve: {
+            canAccessApps: ['canAccessApps',
+              function (canAccessApps) {
+                return canAccessApps();
+              }
+            ]
           }
-        ]
-      })
+        })
 
-      .state('apps.displays.list', {
-        url: '/displays/list',
-        templateProvider: ['$templateCache', function ($templateCache) {
-          return $templateCache.get(
-            'partials/displays/displays-list.html');
-        }],
-        controller: 'displaysList',
-        resolve: {
-          canAccessApps: ['canAccessApps',
-            function (canAccessApps) {
-              return canAccessApps();
-            }
-          ]
-        }
-      })
-
-      .state('apps.displays.change', {
-        url: '/displays/change/:displayId/:companyId',
-        controller: ['canAccessApps', 'userState', '$stateParams',
-          '$state', '$location',
-          function (canAccessApps, userState, $stateParams, $state,
-            $location) {
-            return canAccessApps().then(function () {
-                if (userState.getSelectedCompanyId() !== $stateParams
-                  .companyId) {
-                  return userState.switchCompany($stateParams.companyId);
-                } else {
-                  return true;
-                }
-              })
-              .then(function () {
-                $location.replace();
-                $state.go('apps.displays.details', {
-                  displayId: $stateParams.displayId
+        .state('apps.schedules.details', {
+          url: '/schedules/details/:scheduleId',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get(
+              'partials/schedules/schedule-details.html');
+          }],
+          controller: 'scheduleDetails',
+          resolve: {
+            scheduleInfo: ['canAccessApps', 'scheduleFactory',
+              '$stateParams',
+              function (canAccessApps, scheduleFactory, $stateParams) {
+                return canAccessApps().then(function () {
+                  //load the schedule based on the url param
+                  return scheduleFactory.getSchedule($stateParams.scheduleId);
                 });
+              }
+            ]
+          }
+        })
+
+        .state('apps.schedules.add', {
+          url: '/schedules/add',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get(
+              'partials/schedules/schedule-add.html');
+          }],
+          controller: 'scheduleAdd',
+          resolve: {
+            scheduleInfo: ['canAccessApps', 'scheduleFactory',
+              function (canAccessApps, scheduleFactory) {
+                return canAccessApps().then(scheduleFactory.newSchedule);
+              }
+            ]
+          }
+        })
+
+        // displays
+        .state('apps.displays', {
+          url: '?cid',
+          abstract: true,
+          template: '<div class="container displays-app" ui-view></div>'
+        })
+
+        .state('apps.displays.home', {
+          url: '/displays',
+          controller: ['canAccessApps', '$state',
+            function (canAccessApps, $state) {
+              canAccessApps().then(function () {
+                $state.go('apps.displays.list');
               });
-          }
-        ]
-      })
-
-      .state('apps.displays.details', {
-        url: '/displays/details/:displayId',
-        templateProvider: ['$templateCache', function ($templateCache) {
-          return $templateCache.get(
-            'partials/displays/display-details.html');
-        }],
-        controller: 'displayDetails',
-        resolve: {
-          displayId: ['canAccessApps', '$stateParams',
-            function (canAccessApps, $stateParams) {
-              return canAccessApps().then(function () {
-                return $stateParams.displayId;
-              });
             }
           ]
-        }
-      })
+        })
 
-      .state('apps.displays.alerts', {
-        url: '/alerts',
-        templateProvider: ['$templateCache', function ($templateCache) {
-          return $templateCache.get('partials/displays/alerts.html');
-        }],
-        controller: 'AlertsCtrl',
-        resolve: {
-          canAccessApps: ['canAccessApps',
-            function (canAccessApps) {
-              return canAccessApps();
-            }
-          ]
-        }
-      })
-
-      // editor
-      .state('apps.editor', {
-        url: '?cid',
-        abstract: true,
-        template: '<div class="editor-app" ui-view></div>'
-      })
-
-      .state('apps.editor.home', {
-        url: '/editor',
-        controller: ['canAccessApps', '$state',
-          function (canAccessApps, $state) {
-            canAccessApps().then(function () {
-              $state.go('apps.editor.list');
-            });
+        .state('apps.displays.list', {
+          url: '/displays/list',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get(
+              'partials/displays/displays-list.html');
+          }],
+          controller: 'displaysList',
+          resolve: {
+            canAccessApps: ['canAccessApps',
+              function (canAccessApps) {
+                return canAccessApps();
+              }
+            ]
           }
-        ]
-      })
+        })
 
-      .state('apps.editor.list', {
-        url: '/editor/list',
-        templateProvider: ['$templateCache', function ($templateCache) {
-          return $templateCache.get(
-            'partials/editor/presentation-list.html');
-        }],
-        controller: 'PresentationListController',
-        resolve: {
-          canAccess: ['canAccessApps',
-            function (canAccessApps) {
-              return canAccessApps();
-            }
-          ]
-        }
-      })
-
-      .state('apps.editor.add', {
-        url: '/editor/add',
-        controller: ['$state', 'canAccessApps', 'editorFactory',
-          function ($state, canAccessApps, editorFactory) {
-            canAccessApps().then(function () {
-              editorFactory.addPresentationModal();
-              $state.go('apps.editor.list');
-            });
-          }
-        ]
-      })
-
-      .state('apps.editor.workspace', {
-        url: '/editor/workspace/:presentationId/:copyPresentation',
-        abstract: true,
-        templateProvider: ['$templateCache', function ($templateCache) {
-          return $templateCache.get('partials/editor/workspace.html');
-        }],
-        controller: 'WorkspaceController',
-        resolve: {
-          presentationInfo: ['canAccessApps', 'editorFactory',
-            '$stateParams', '$location',
-            function (canAccessApps, editorFactory, $stateParams,
+        .state('apps.displays.change', {
+          url: '/displays/change/:displayId/:companyId',
+          controller: ['canAccessApps', 'userState', '$stateParams',
+            '$state', '$location',
+            function (canAccessApps, userState, $stateParams, $state,
               $location) {
               return canAccessApps().then(function () {
-                if ($stateParams.presentationId && $stateParams.presentationId !==
-                  'new') {
-                  return editorFactory.getPresentation($stateParams
-                    .presentationId);
-                } else if (!$stateParams.copyPresentation) {
-                  var copyOf = $location.search().copyOf;
-                  if (copyOf) {
-                    return editorFactory.copyTemplate(null, copyOf);
+                  if (userState.getSelectedCompanyId() !== $stateParams
+                    .companyId) {
+                    return userState.switchCompany($stateParams.companyId);
+                  } else {
+                    return true;
                   }
-                  return editorFactory.newPresentation();
-                } else {
-                  return editorFactory.presentation;
-                }
+                })
+                .then(function () {
+                  $location.replace();
+                  $state.go('apps.displays.details', {
+                    displayId: $stateParams.displayId
+                  });
+                });
+            }
+          ]
+        })
+
+        .state('apps.displays.details', {
+          url: '/displays/details/:displayId',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get(
+              'partials/displays/display-details.html');
+          }],
+          controller: 'displayDetails',
+          resolve: {
+            displayId: ['canAccessApps', '$stateParams',
+              function (canAccessApps, $stateParams) {
+                return canAccessApps().then(function () {
+                  return $stateParams.displayId;
+                });
+              }
+            ]
+          }
+        })
+
+        .state('apps.displays.alerts', {
+          url: '/alerts',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get('partials/displays/alerts.html');
+          }],
+          controller: 'AlertsCtrl',
+          resolve: {
+            canAccessApps: ['canAccessApps',
+              function (canAccessApps) {
+                return canAccessApps();
+              }
+            ]
+          }
+        })
+
+        // editor
+        .state('apps.editor', {
+          url: '?cid',
+          abstract: true,
+          template: '<div class="editor-app" ui-view></div>'
+        })
+
+        .state('apps.editor.home', {
+          url: '/editor',
+          controller: ['canAccessApps', '$state',
+            function (canAccessApps, $state) {
+              canAccessApps().then(function () {
+                $state.go('apps.editor.list');
               });
             }
           ]
-        }
-      })
+        })
 
-      .state('apps.editor.workspace.artboard', {
-        url: '',
-        templateProvider: ['$templateCache', function ($templateCache) {
-          return $templateCache.get('partials/editor/artboard.html');
-        }],
-        reloadOnSearch: false,
-        controller: 'ArtboardController',
-        resolve: {
-          canAccess: ['canAccessApps',
-            function (canAccessApps) {
-              return canAccessApps();
+        .state('apps.editor.list', {
+          url: '/editor/list',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get(
+              'partials/editor/presentation-list.html');
+          }],
+          controller: 'PresentationListController',
+          resolve: {
+            canAccess: ['canAccessApps',
+              function (canAccessApps) {
+                return canAccessApps();
+              }
+            ]
+          }
+        })
+
+        .state('apps.editor.add', {
+          url: '/editor/add',
+          controller: ['$state', 'canAccessApps', 'editorFactory',
+            function ($state, canAccessApps, editorFactory) {
+              canAccessApps().then(function () {
+                editorFactory.addPresentationModal();
+                $state.go('apps.editor.list');
+              });
             }
           ]
-        }
-      })
+        })
 
-      .state('apps.editor.workspace.htmleditor', {
-        url: '/htmleditor',
-        templateProvider: ['$templateCache', function ($templateCache) {
-          return $templateCache.get(
-            'partials/editor/html-editor.html');
-        }],
-        reloadOnSearch: false,
-        controller: 'HtmlEditorController',
-        resolve: {
-          canAccess: ['canAccessApps',
-            function (canAccessApps) {
-              return canAccessApps();
-            }
-          ]
-        }
-      })
+        .state('apps.editor.workspace', {
+          url: '/editor/workspace/:presentationId/:copyPresentation',
+          abstract: true,
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get('partials/editor/workspace.html');
+          }],
+          controller: 'WorkspaceController',
+          resolve: {
+            presentationInfo: ['canAccessApps', 'editorFactory',
+              '$stateParams', '$location',
+              function (canAccessApps, editorFactory, $stateParams,
+                $location) {
+                return canAccessApps().then(function () {
+                  if ($stateParams.presentationId && $stateParams.presentationId !==
+                    'new') {
+                    return editorFactory.getPresentation($stateParams
+                      .presentationId);
+                  } else if (!$stateParams.copyPresentation) {
+                    var copyOf = $location.search().copyOf;
+                    if (copyOf) {
+                      return editorFactory.copyTemplate(null, copyOf);
+                    }
+                    return editorFactory.newPresentation();
+                  } else {
+                    return editorFactory.presentation;
+                  }
+                });
+              }
+            ]
+          }
+        })
 
-      // storage
-      .state('apps.storage', {
-        url: '?cid',
-        abstract: true,
-        template: '<div class="storage-app" ui-view></div>'
-      })
+        .state('apps.editor.workspace.artboard', {
+          url: '',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get('partials/editor/artboard.html');
+          }],
+          reloadOnSearch: false,
+          controller: 'ArtboardController',
+          resolve: {
+            canAccess: ['canAccessApps',
+              function (canAccessApps) {
+                return canAccessApps();
+              }
+            ]
+          }
+        })
 
-      .state('apps.storage.home', {
-        url: '/storage',
-        templateProvider: ['$templateCache', function ($templateCache) {
-          return $templateCache.get('partials/storage/home.html');
-        }],
-        resolve: {
-          canAccessApps: ['canAccessApps',
-            function (canAccessApps) {
-              return canAccessApps();
-            }
-          ]
-        }
-      });
+        .state('apps.editor.workspace.htmleditor', {
+          url: '/htmleditor',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get(
+              'partials/editor/html-editor.html');
+          }],
+          reloadOnSearch: false,
+          controller: 'HtmlEditorController',
+          resolve: {
+            canAccess: ['canAccessApps',
+              function (canAccessApps) {
+                return canAccessApps();
+              }
+            ]
+          }
+        })
+
+        // storage
+        .state('apps.storage', {
+          url: '?cid',
+          abstract: true,
+          template: '<div class="storage-app" ui-view></div>'
+        })
+
+        .state('apps.storage.home', {
+          url: '/storage',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get('partials/storage/home.html');
+          }],
+          resolve: {
+            canAccessApps: ['canAccessApps',
+              function (canAccessApps) {
+                return canAccessApps();
+              }
+            ]
+          }
+        });
 
     }
   ])
@@ -466,11 +466,11 @@ angular.module('risevision.apps', [
       });
     }
   ])
-  // .config(['showErrorsConfigProvider',
-  //   function (showErrorsConfigProvider) {
-  //     showErrorsConfigProvider.trigger('keypress');
-  //   }
-  // ])
+// .config(['showErrorsConfigProvider',
+//   function (showErrorsConfigProvider) {
+//     showErrorsConfigProvider.trigger('keypress');
+//   }
+// ])
 ;
 
 angular.module('risevision.apps.services', [

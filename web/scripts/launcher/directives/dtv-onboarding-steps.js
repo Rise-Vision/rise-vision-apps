@@ -134,7 +134,7 @@ angular.module('risevision.apps.launcher.directives')
             return false;
           };
 
-          $rootScope.$on('risevision.user.signedOut', function() {
+          $rootScope.$on('risevision.user.signedOut', function () {
             $rootScope.showOnboarding = false;
           });
         }
