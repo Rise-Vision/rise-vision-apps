@@ -36,6 +36,8 @@ var TemplateAddScenarios = function() {
       presentationsListPage.getPresentationAddButton().click();
 
       helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
+      
+      helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader(), 'Store products loader');
     }
 
     function createSubCompany() {
@@ -136,18 +138,23 @@ var TemplateAddScenarios = function() {
 
     it('should show preview modal when selecting a free template',function(){
       storeProductsModalPage.getFreeProducts().get(0).click();
-      browser.sleep(1000);
+
+      helper.wait(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
+
       expect(productDetailsModalPage.getProductDetailsModal().isDisplayed()).to.eventually.be.true;
       expect(productDetailsModalPage.getUseProductButton().isDisplayed()).to.eventually.be.true;
       expect(productDetailsModalPage.getUseProductButton().getText()).to.eventually.equal('Start with this Template');
       expect(productDetailsModalPage.getCloseButton().isDisplayed()).to.eventually.be.true;
       productDetailsModalPage.getCloseButton().click();
-      browser.sleep(1000);
+
+      helper.waitDisappear(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
     });
 
     it('should show preview modal selecting a premium template',function(){
       storeProductsModalPage.getPremiumProducts().get(0).click();
-      browser.sleep(1000);
+
+      helper.wait(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
+
       helper.waitDisappear(productDetailsModalPage.getPricingLoader(), 'Pricing loader');
       expect(productDetailsModalPage.getProductDetailsModal().isDisplayed()).to.eventually.be.true;
       expect(productDetailsModalPage.getViewInStoreButton().isDisplayed()).to.eventually.be.true;
@@ -155,48 +162,46 @@ var TemplateAddScenarios = function() {
       expect(productDetailsModalPage.getPreviewTemplate().isDisplayed()).to.eventually.be.true;
       expect(productDetailsModalPage.getPreviewTemplate().getAttribute('href')).to.eventually.contain('http://preview.risevision.com');
       productDetailsModalPage.getCloseButton().click();
-      browser.sleep(1000);
+
+      helper.waitDisappear(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
     });
 
-    it('should start a trial and, next time product details is open, Select Template button will be shown',function(done){
+    it('should start a trial',function(){
       storeProductsModalPage.getPremiumProducts().get(0).click();
-      browser.sleep(1000);
+
+      helper.wait(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
+
       helper.waitDisappear(productDetailsModalPage.getPricingLoader(), 'Pricing loader');
       expect(productDetailsModalPage.getProductDetailsModal().isDisplayed()).to.eventually.be.true;
       expect(productDetailsModalPage.getStartTrialButton().isDisplayed()).to.eventually.be.true;
       productDetailsModalPage.getStartTrialButton().click();
-      helper.waitDisappear(productDetailsModalPage.getProductDetailsModal(), 'Storage Selector Modal');
-      browser.sleep(1000);
+      helper.waitDisappear(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
 
-      // Hack to account for error when selecting a product on staging
-      productDetailsModalPage.getErrorDialogCloseButton().isDisplayed()
-      .then(function(displayed) {
-        return displayed;
-      }, function (err) {
-        return false;
-      })
-      .then(function (displayed) {
-        if(displayed) {
-          productDetailsModalPage.getErrorDialogCloseButton().click();
-          browser.sleep(1000);
-        }
+      helper.wait(productDetailsModalPage.getErrorDialogCloseButton(), 'Presentation Error Dialog');
 
-        // Reload page and select company whose trial has just started
-        loadEditor();
-        selectSubCompany();
-        openContentModal();
-        browser.sleep(2000);
-        // Validate buttons are updated as expected
-        storeProductsModalPage.getPremiumProducts().get(0).click();
-        browser.sleep(1000);
-        helper.waitDisappear(productDetailsModalPage.getPricingLoader(), 'Pricing loader');
-        expect(productDetailsModalPage.getProductDetailsModal().isDisplayed()).to.eventually.be.true;
-        helper.wait(productDetailsModalPage.getUseProductButton(),'Use Product Button');
-        expect(productDetailsModalPage.getUseProductButton().isDisplayed()).to.eventually.be.true;
-        productDetailsModalPage.getCloseButton().click();
-        browser.sleep(1000);
-        done();
-      });
+      productDetailsModalPage.getErrorDialogCloseButton().click();
+
+      helper.waitDisappear(productDetailsModalPage.getErrorDialogCloseButton(), 'Presentation Error Dialog');
+    });
+    
+    it('should show Select Template button', function() {
+      // Reload page and select company whose trial has just started
+      loadEditor();
+      selectSubCompany();
+      openContentModal();
+
+      // Validate buttons are updated as expected
+      storeProductsModalPage.getPremiumProducts().get(0).click();
+
+      helper.wait(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
+
+      helper.waitDisappear(productDetailsModalPage.getPricingLoader(), 'Pricing loader');
+      expect(productDetailsModalPage.getProductDetailsModal().isDisplayed()).to.eventually.be.true;
+      helper.wait(productDetailsModalPage.getUseProductButton(),'Use Product Button');
+      expect(productDetailsModalPage.getUseProductButton().isDisplayed()).to.eventually.be.true;
+      productDetailsModalPage.getCloseButton().click();
+      
+      helper.waitDisappear(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
     });
 
     // The Store Templates are not yet released to sub-companies
