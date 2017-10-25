@@ -9,9 +9,7 @@ var helper = require('rv-common-e2e').helper;
 var SigninRedirectScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe("In order to access a protected link " +
-           "As a user " +
-           "I would like to authenticate and be redirected to the original url", function() {
+  describe('Signin Redirect', function() {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
     var signInPage;
@@ -35,7 +33,7 @@ var SigninRedirectScenarios = function() {
       expect(browser.getCurrentUrl()).to.eventually.have.string(homepage.getProtectedPageUrl());
     });
 
-    after("Should sign out user", function() {
+    after('Should sign out user', function() {
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       commonHeaderPage.signOut();
     });

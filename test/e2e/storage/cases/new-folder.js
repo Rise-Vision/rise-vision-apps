@@ -8,7 +8,7 @@ var StorageHelper = require('./../pages/helper.js');
 var NewFolderScenarios = function() {
 
   browser.driver.manage().window().setSize(1400, 900);
-  describe("Given a user who wants to add a folder to Storage", function () {
+  describe('New Folder', function () {
     var storageSelectorModalPage = new StorageSelectorModalPage();
     var newFolderModalPage = new NewFolderModalPage();
 
@@ -31,7 +31,7 @@ var NewFolderScenarios = function() {
       it('should enable save after enterign folder name',function(){
         expect(newFolderModalPage.getSaveButton().isEnabled()).to.eventually.be.false;
 
-        newFolderModalPage.getNewFolderInput().sendKeys("newFolder");
+        newFolderModalPage.getNewFolderInput().sendKeys('newFolder');
 
         expect(newFolderModalPage.getSaveButton().isEnabled()).to.eventually.be.true;
       });
@@ -45,19 +45,19 @@ var NewFolderScenarios = function() {
       });
     };
 
-    describe("And he is using Iframe Single File Selector:",function(){
+    describe('And he is using Iframe Single File Selector:',function(){
       before(function () { StorageHelper.setupIframeSingleFileSelector(); });
-      describe("New Folder:", describeNewFolder);
+      describe('New Folder:', describeNewFolder);
     });
 
-    describe("And he is using Storage Home:",function(){
+    describe('And he is using Storage Home:',function(){
       before(function () { StorageHelper.setupStorageHome(); });
-      describe("New Folder:", describeNewFolder);
+      describe('New Folder:', describeNewFolder);
     });
 
-    describe("And he is using Apps Single File Selector:",function(){
+    describe('And he is using Apps Single File Selector:',function(){
       before(function () { StorageHelper.setupAppsSingleFileSelector(); });
-      describe("New Folder:", describeNewFolder);
+      describe('New Folder:', describeNewFolder);
     });
   });
 };

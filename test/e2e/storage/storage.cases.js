@@ -1,5 +1,5 @@
 (function() {
-  "use strict";
+  'use strict';
 
   var StorageSelectorScenarios = require('./cases/storage-selector.js');
   var NewFolderModalScenarios = require('./cases/new-folder.js');
@@ -12,7 +12,7 @@
   var DismissModalScenarios = require('./cases/dismiss-modal.js');
   var TrialScenarios = require('./cases/trial.js');
 
-  describe("Storage", function() {
+  describe('Storage', function() {
     var storageSelectorScenarios = new StorageSelectorScenarios();
     var newFolderModalScenarios = new NewFolderModalScenarios();
     var uploadScenarios = new UploadScenarios();

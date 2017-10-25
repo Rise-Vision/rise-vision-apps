@@ -11,9 +11,7 @@ var PresentationPropertiesModalPage = require('./../pages/presentationProperties
 var PresentationPropertiesScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe("In order to manage presentations " +
-    "As a user " +
-    "I would like to set or edit presentation properties", function () {
+  describe('Presentation Properties', function () {
     var homepage;
     var loginPage;
     var commonHeaderPage;
@@ -29,7 +27,7 @@ var PresentationPropertiesScenarios = function() {
       presentationPropertiesModalPage = new PresentationPropertiesModalPage();
     });
 
-    describe("Given a user who wants to set presentation properties of a new presentation", function () {
+    describe('Given a user who wants to set presentation properties of a new presentation', function () {
 
       before(function () {
         homepage.getEditor();
@@ -41,7 +39,7 @@ var PresentationPropertiesScenarios = function() {
         expect(workspacePage.getWorkspaceContainer().isDisplayed()).to.eventually.be.true;
       });
 
-      describe("Given a user clicks on the presentation properties cog icon", function () {
+      describe('Given a user clicks on the presentation properties cog icon', function () {
         it('should open the properties modal when clicking cog', function () {
           workspacePage.getPresentationPropertiesButton().click();
           helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
@@ -63,12 +61,12 @@ var PresentationPropertiesScenarios = function() {
 
         it('should show Presentation Properties as title ', function () {
           expect(presentationPropertiesModalPage.getModalTitle().isDisplayed()).to.eventually.be.true;
-          expect(presentationPropertiesModalPage.getModalTitle().getText()).to.eventually.equal("Presentation Properties");
+          expect(presentationPropertiesModalPage.getModalTitle().getText()).to.eventually.equal('Presentation Properties');
         });
 
         it('should show Name label and input ', function () {
           expect(presentationPropertiesModalPage.getNameLabel().isDisplayed()).to.eventually.be.true;
-          expect(presentationPropertiesModalPage.getNameLabel().getText()).to.eventually.equal("Name *");
+          expect(presentationPropertiesModalPage.getNameLabel().getText()).to.eventually.equal('Name *');
           expect(presentationPropertiesModalPage.getNameInput().isDisplayed()).to.eventually.be.true;
         });
 
@@ -82,13 +80,13 @@ var PresentationPropertiesScenarios = function() {
 
         it('should show Resolution Label and Select', function () {
           expect(presentationPropertiesModalPage.getResolutionLabel().isDisplayed()).to.eventually.be.true;
-          expect(presentationPropertiesModalPage.getResolutionLabel().getText()).to.eventually.equal("Resolution");
+          expect(presentationPropertiesModalPage.getResolutionLabel().getText()).to.eventually.equal('Resolution');
           expect(presentationPropertiesModalPage.getResolutionSelect().isDisplayed()).to.eventually.be.true;
         });
 
         it('should show background label ', function () {
           expect(presentationPropertiesModalPage.getBackgroundLabel().isDisplayed()).to.eventually.be.true;
-          expect(presentationPropertiesModalPage.getBackgroundLabel().getText()).to.eventually.equal("Background");
+          expect(presentationPropertiesModalPage.getBackgroundLabel().getText()).to.eventually.equal('Background');
         });
 
         it('should show background settings ', function () {
@@ -98,14 +96,14 @@ var PresentationPropertiesScenarios = function() {
 
         it('should show play until done', function () {
           expect(presentationPropertiesModalPage.getPlayUntilDonePlaceholderLabel().isDisplayed()).to.eventually.be.true;
-          expect(presentationPropertiesModalPage.getPlayUntilDonePlaceholderLabel().getText()).to.eventually.equal("Play Until Done Placeholder");
+          expect(presentationPropertiesModalPage.getPlayUntilDonePlaceholderLabel().getText()).to.eventually.equal('Play Until Done Placeholder');
           expect(presentationPropertiesModalPage.getPlayUntilDonePlaceholderSelect().isDisplayed()).to.eventually.be.true;
         });
 
         it('should show Hide Mouse Pointer', function () {
           expect(presentationPropertiesModalPage.getHideMousePointerCheckbox().isDisplayed()).to.eventually.be.true;
           expect(presentationPropertiesModalPage.getHideMousePointerCheckboxLabel().isDisplayed()).to.eventually.be.true;
-          expect(presentationPropertiesModalPage.getHideMousePointerCheckboxLabel().getText()).to.eventually.equal("Hide Mouse Pointer");
+          expect(presentationPropertiesModalPage.getHideMousePointerCheckboxLabel().getText()).to.eventually.equal('Hide Mouse Pointer');
         });
 
         it('should show apply button', function () {
@@ -118,7 +116,7 @@ var PresentationPropertiesScenarios = function() {
 
         it('should save properties', function () {
           presentationPropertiesModalPage.getNameInput().clear();
-          presentationPropertiesModalPage.getNameInput().sendKeys("E2E Test Presentation");
+          presentationPropertiesModalPage.getNameInput().sendKeys('E2E Test Presentation');
           helper.clickWhenClickable(presentationPropertiesModalPage.getApplyButton(), 'Apply Button');
 
           expect(presentationPropertiesModalPage.getPresentationPropertiesModal().isPresent()).to.eventually.be.false;
@@ -128,11 +126,11 @@ var PresentationPropertiesScenarios = function() {
           workspacePage.getPresentationPropertiesButton().click();
           helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
           presentationPropertiesModalPage.getNameInput().clear();
-          presentationPropertiesModalPage.getNameInput().sendKeys("Presentation Enter");
+          presentationPropertiesModalPage.getNameInput().sendKeys('Presentation Enter');
           presentationPropertiesModalPage.getNameInput().sendKeys(protractor.Key.ENTER);
 
           expect(presentationPropertiesModalPage.getPresentationPropertiesModal().isPresent()).to.eventually.be.false;
-          expect(workspacePage.getPresentationNameContainer().getText()).to.eventually.equal("Presentation Enter");
+          expect(workspacePage.getPresentationNameContainer().getText()).to.eventually.equal('Presentation Enter');
         });
 
       });

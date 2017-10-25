@@ -10,7 +10,7 @@ var FilesListPage = require('./../pages/filesListPage.js');
 var DownloadScenarios = function() {
 
   browser.driver.manage().window().setSize(1400, 900);
-  describe("Download", function () {
+  describe('Download', function () {
     var homepage;
     var loginPage;
     var commonHeaderPage;
@@ -25,7 +25,7 @@ var DownloadScenarios = function() {
       filesListPage = new FilesListPage();
     });
 
-    describe("Given a user who wants to download a file", function () {
+    describe('Given a user who wants to download a file', function () {
 
       before(function () {
         homepage.getStorage();
@@ -41,7 +41,7 @@ var DownloadScenarios = function() {
       });
 
       it('should enable Download after file is selected',function(){
-        filesListPage.filterFileList("package.json");
+        filesListPage.filterFileList('package.json');
 
         expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
 

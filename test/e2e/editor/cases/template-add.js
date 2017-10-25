@@ -13,9 +13,7 @@ var ProductDetailsModalPage = require('./../pages/productDetailsModalPage.js');
 var TemplateAddScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe("In order to manage presentations " +
-    "As a user signed in " +
-    "I would like to add presentations", function () {
+  describe('Template Add', function () {
     var subCompanyName = 'E2E TEST SUBCOMPANY';
     var homepage;
     var loginPage;

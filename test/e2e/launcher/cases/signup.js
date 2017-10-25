@@ -9,9 +9,7 @@ var helper = require('rv-common-e2e').helper;
 var SignupScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe("In order to sign up with Rise Vision " +
-           "As a user " +
-           "I would like to have access to the sign up process", function() {
+  describe('Signup', function() {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var signInPage;
     var signUpPage;
@@ -34,7 +32,7 @@ var SignupScenarios = function() {
       expect(signUpPage.getModalTitle().isPresent()).to.eventually.be.false;
     });
 
-    after("Should sign out user", function() {
+    after('Should sign out user', function() {
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       commonHeaderPage.signOut();
     });

@@ -12,9 +12,7 @@ var helper = require('rv-common-e2e').helper;
 var AlertsScenarios = function() {
 
   browser.driver.manage().window().setSize(1024, 768);
-  describe("In order to manage alerts " +
-    "As a user signed in " +
-    "I would like to view and save Alerts", function () {
+  describe('Alerts', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
     var loginPage;

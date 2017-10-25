@@ -10,8 +10,7 @@ var helper = require('rv-common-e2e').helper;
 var DisplayAddScenarios = function() {
 
   browser.driver.manage().window().setSize(1280, 960);
-  describe("As a user signed in " +
-    "I would like to add a display", function () {
+  describe('Display Add', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
     var loginPage;

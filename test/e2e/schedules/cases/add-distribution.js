@@ -10,9 +10,7 @@ var DistributionModalPage = require('./../pages/distributionModalPage.js');
 
 var AddDistributionScenarios = function() {
 
-  describe("In order to have distribution on a schedule " +
-    "As a user signed in " +
-    "I would like to add distribution to a schedule ", function () {
+  describe('Add Distribution', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
     var loginPage;
@@ -34,7 +32,7 @@ var AddDistributionScenarios = function() {
       helper.waitDisappear(schedulesListPage.getLoader(),'Schedules loader');
     });
 
-    describe(" Given a user is adding a new schedule ", function () {
+    describe(' Given a user is adding a new schedule ', function () {
       before(function () {
         schedulesListPage.getScheduleAddButton().click();
       });
@@ -82,7 +80,7 @@ var AddDistributionScenarios = function() {
             distributionModalPage.getApplyButton().click();
           });
           it('should add the display item to the distribution', function () {
-            var expectResult = "1 Display Selected";
+            var expectResult = '1 Display Selected';
             expect(scheduleAddPage.getDistributionFieldText().getText()).to.eventually.equal(expectResult);
           });
         });
@@ -100,7 +98,7 @@ var AddDistributionScenarios = function() {
             });
           });
           it('should add two display items to the distribution', function () {
-            var expectResult = "2 Displays Selected";
+            var expectResult = '2 Displays Selected';
             expect(scheduleAddPage.getDistributionFieldText().getText()).to.eventually.equal(expectResult);
           });
         });
@@ -117,7 +115,7 @@ var AddDistributionScenarios = function() {
             });
           });
           it('should not add any display items to the distribution', function () {
-            var expectResult = "2 Displays Selected";
+            var expectResult = '2 Displays Selected';
             expect(scheduleAddPage.getDistributionFieldText().getText()).to.eventually.equal(expectResult);
           });
         });
@@ -139,8 +137,8 @@ var AddDistributionScenarios = function() {
             });
           });
           it('should show an error saying another user has already set a display to a schedule', function () {
-            var expectResultPart1 = "Failed to Add Schedule. Another schedule (";
-            var expectResultPart2 = ") is also set to be distributed to"
+            var expectResultPart1 = 'Failed to Add Schedule. Another schedule (';
+            var expectResultPart2 = ') is also set to be distributed to'
             helper.wait(scheduleAddPage.getErrorBox(), 'Error box').then(function () {
               expect(scheduleAddPage.getErrorBox().getText()).to.eventually.string(expectResultPart1);
               expect(scheduleAddPage.getErrorBox().getText()).to.eventually.string(expectResultPart2);

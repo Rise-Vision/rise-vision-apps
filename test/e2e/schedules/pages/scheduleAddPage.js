@@ -9,7 +9,7 @@ var ScheduleAddPage = function() {
   var timelineField = element(by.id('timelineTextbox'));
 
 
-  var distributionAllDisplaysCheckbox = element(by.model("distributeToAll"));
+  var distributionAllDisplaysCheckbox = element(by.model('distributeToAll'));
   var distributionField = element(by.id('distributionField'));
   var distributionFieldText = element(by.id('distributionFieldText'));
 

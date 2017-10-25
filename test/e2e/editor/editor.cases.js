@@ -1,5 +1,5 @@
 (function() {
-  "use strict";
+  'use strict';
 
   var PresentationListScenarios = require('./cases/presentation-list.js');
   var ArtboardScenarios = require('./cases/artboard.js');
@@ -14,7 +14,7 @@
   var PresentationAddScenarios = require('./cases/presentation-add.js');
   var SharedTemplatesScenarios = require('./cases/shared-templates.js');
 
-  describe("Editor", function() {
+  describe('Editor', function() {
     var presentationListScenarios = new PresentationListScenarios();
     var artboardScenarios = new ArtboardScenarios();
     var presentationPropertiesScenarios = new PresentationPropertiesScenarios();

@@ -1,5 +1,5 @@
 (function (module) {
-  "use strict";
+  'use strict';
 
   var HomePage = require('./../../launcher/pages/homepage.js');
   var LoginPage = require('./../../launcher/pages/loginPage.js');

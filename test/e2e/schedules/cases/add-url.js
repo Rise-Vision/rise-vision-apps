@@ -11,9 +11,7 @@ var PlaylistItemModalPage = require('./../pages/playlistItemModalPage.js');
 var AddUrlScenarios = function() {
 
 
-  describe("Add URL to a schedule " +
-    "As a user signed in " +
-    "I would like to add URLs to a schedule ", function () {
+  describe('Add URL', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
     var loginPage;
@@ -35,7 +33,7 @@ var AddUrlScenarios = function() {
       helper.waitDisappear(schedulesListPage.getLoader(),'Schedules loader');
     });
 
-    describe(" Given a user is adding a new schedule ", function () {
+    describe(' Given a user is adding a new schedule ', function () {
       before(function () {
         schedulesListPage.getScheduleAddButton().click();
       });

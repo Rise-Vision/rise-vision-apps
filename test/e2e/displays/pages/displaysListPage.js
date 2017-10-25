@@ -52,11 +52,11 @@ var DisplaysListPage = function() {
   };
 
   this.getFirstRowSchedule = function() {
-    return displayItems.first().element(by.css(".display-schedule .schedule-view"));
+    return displayItems.first().element(by.css('.display-schedule .schedule-view'));
   };
 
   this.getFirstRowStatus = function() {
-    return displayItems.first().element(by.css(".display-status .btn-install-player"));
+    return displayItems.first().element(by.css('.display-status .btn-install-player'));
   };
 };
 

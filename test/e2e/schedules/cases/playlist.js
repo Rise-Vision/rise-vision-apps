@@ -12,9 +12,7 @@ var PlaylistItemModalPage = require('./../pages/playlistItemModalPage.js');
 var PlaylistScenarios = function() {
 
 
-  describe('Add URL to a schedule ' +
-    'As a user signed in ' +
-    'I would like to add URLs to a schedule ', function () {
+  describe('Playlist', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
     var loginPage;
@@ -89,7 +87,7 @@ var PlaylistScenarios = function() {
         it('should remove item', function (done) {
           playlistPage.getRemoveButtons().get(0).click();
 
-          helper.clickWhenClickable(playlistPage.getRemoveItemButton(), "Remove Item Confirm Button").then(function () {
+          helper.clickWhenClickable(playlistPage.getRemoveItemButton(), 'Remove Item Confirm Button').then(function () {
             expect(scheduleAddPage.getPlaylistItems().count()).to.eventually.equal(1);
 
             done();

@@ -11,9 +11,7 @@ var SharedTemplatesModalPage = require('./../pages/sharedTemplatesModalPage.js')
 var SharedTemplatesScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe("In order to manage presentations " +
-    "As a user signed in " +
-    "I would like to add presentations from shared templates", function () {
+  describe('Shared Templates', function () {
     var homepage;
     var loginPage;
     var commonHeaderPage;
@@ -67,7 +65,7 @@ var SharedTemplatesScenarios = function() {
       });
     });
 
-    it("should preview template in a new tab", function (done) {
+    it('should preview template in a new tab', function (done) {
       var newWindowHandle, oldWindowHandle;
       sharedTemplatesModalPage.getPreviewLinks().get(0).click();
       browser.sleep(1000);
@@ -76,7 +74,7 @@ var SharedTemplatesScenarios = function() {
         oldWindowHandle = handles[0];
         newWindowHandle = handles[1];
         browser.switchTo().window(newWindowHandle).then(function () {
-          expect(browser.driver.getCurrentUrl()).to.eventually.contain("http://rvaviewer-test.appspot.com/?type=presentation&id=ebbb1b89-166e-41fb-9adb-d0052132b0df");
+          expect(browser.driver.getCurrentUrl()).to.eventually.contain('http://rvaviewer-test.appspot.com/?type=presentation&id=ebbb1b89-166e-41fb-9adb-d0052132b0df');
 
           browser.driver.close();
           browser.switchTo().window(oldWindowHandle);

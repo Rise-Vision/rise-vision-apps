@@ -10,9 +10,7 @@ var TimelineModalPage = require('./../pages/timelineModalPage.js');
 
 var AddTimelineScenarios = function() {
 
-describe("In order to have timeline on a schedule " +
-  "As a user signed in " +
-  "I would like to add timeline to a schedule ", function() {
+describe('Add Timeline', function() {
   this.timeout(2000);// to allow for protactor to load the seperate page
   var homepage;
   var loginPage;
@@ -34,7 +32,7 @@ describe("In order to have timeline on a schedule " +
     helper.waitDisappear(schedulesListPage.getLoader(),'Schedules loader');
   });
 
-  describe(" Given a user is adding a new schedule ", function() {
+  describe(' Given a user is adding a new schedule ', function() {
     before(function () {
       schedulesListPage.getScheduleAddButton().click();
     });
@@ -102,8 +100,8 @@ describe("In order to have timeline on a schedule " +
         it('should show recurrence options', function () {
           expect(timelineModalPage.getDailyRecurrenceFrequency().isDisplayed())
             .to.eventually.be.true;
-          expect(timelineModalPage.getDailyRecurrenceFrequency().getAttribute("value"))
-            .to.eventually.equal("1");            
+          expect(timelineModalPage.getDailyRecurrenceFrequency().getAttribute('value'))
+            .to.eventually.equal('1');            
 
           expect(timelineModalPage.getWeeklyRecurrenceFrequency().isPresent())
             .to.eventually.be.false;
@@ -117,16 +115,16 @@ describe("In order to have timeline on a schedule " +
           
           expect(timelineModalPage.getWeeklyRecurrenceFrequency().isDisplayed())
             .to.eventually.be.true;
-          expect(timelineModalPage.getWeeklyRecurrenceFrequency().getAttribute("value"))
-            .to.eventually.equal("1");
+          expect(timelineModalPage.getWeeklyRecurrenceFrequency().getAttribute('value'))
+            .to.eventually.equal('1');
         });
         
         it('save should update timeline correctly', function(done) {
           timelineModalPage.getWeeklyRecurrenceRadio().click();
-          timelineModalPage.getWeeklyRecurrenceFrequency().sendKeys("0");
+          timelineModalPage.getWeeklyRecurrenceFrequency().sendKeys('0');
           timelineModalPage.getApplyButton().click();
           
-          helper.clickWhenClickable(scheduleAddPage.getTimelineField(), "Re-open timeline").then(function() {
+          helper.clickWhenClickable(scheduleAddPage.getTimelineField(), 'Re-open timeline').then(function() {
             helper.wait(timelineModalPage.getEditTimelineModal(), 'Edit Timeline Modal');
 
             expect(timelineModalPage.getWeeklyRecurrenceRadio().isSelected())
@@ -134,8 +132,8 @@ describe("In order to have timeline on a schedule " +
             expect(timelineModalPage.getWeeklyRecurrenceFrequency().isPresent())
               .to.eventually.be.true;
 
-            expect(timelineModalPage.getWeeklyRecurrenceFrequency().getAttribute("value"))
-              .to.eventually.equal("10");
+            expect(timelineModalPage.getWeeklyRecurrenceFrequency().getAttribute('value'))
+              .to.eventually.equal('10');
               
             done();        
           });
