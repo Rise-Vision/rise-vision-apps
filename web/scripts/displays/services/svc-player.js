@@ -4,7 +4,7 @@ angular.module('risevision.displays.services')
   .value('LATEST_PLAYER_URL', 'https://storage.googleapis.com/install-versions.risevision.com/latest-version')
   .factory('parsePlayerDate', function () {
     return function (dateString) {
-      var dt = (dateString || '').split(".");
+      var dt = (dateString || '').split('.');
 
       if (dt.length === 5) {
         return new Date(dt[0], Number(dt[1]) - 1, dt[2], dt[3], dt[4], 0, 0);
@@ -28,10 +28,10 @@ angular.module('risevision.displays.services')
               if (date) {
                 deferred.resolve(date);
               } else {
-                deferred.reject("Invalid date format" + tokens[1]);
+                deferred.reject('Invalid date format' + tokens[1]);
               }
             } else {
-              deferred.reject("Missing fields: " + resp.data);
+              deferred.reject('Missing fields: ' + resp.data);
             }
           })
           .catch(function (err) {

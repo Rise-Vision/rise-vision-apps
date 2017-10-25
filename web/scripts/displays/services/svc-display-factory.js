@@ -41,7 +41,7 @@ angular.module('risevision.displays.services')
             _latestPlayerVersion = date;
           })
           .catch(function (err) {
-            console.log("Error retrieving Player Version", err);
+            console.log('Error retrieving Player Version', err);
           });
       };
 
@@ -63,7 +63,7 @@ angular.module('risevision.displays.services')
       };
 
       factory.isUnsupportedPlayer = function (display) {
-        return !!(display && !factory.is3rdPartyPlayer(display) && 
+        return !!(display && !factory.is3rdPartyPlayer(display) &&
           display.playerName && display.playerName !== 'RisePlayerElectron');
       };
 
@@ -72,13 +72,13 @@ angular.module('risevision.displays.services')
         var minimumVersion = _latestPlayerVersion && (new Date()).setMonth(_latestPlayerVersion.getMonth() - 1);
         var upToDate = displayPlayerVersion && minimumVersion && displayPlayerVersion >= minimumVersion;
 
-        return !factory.is3rdPartyPlayer(display) && 
-          !factory.isUnsupportedPlayer(display) && 
+        return !factory.is3rdPartyPlayer(display) &&
+          !factory.isUnsupportedPlayer(display) &&
           (display && display.playerName && (display.playerName !== 'RisePlayerElectron' || !upToDate));
       };
 
       factory.isProCompatiblePlayer = function (display) {
-        return !!(display && display.playerName === 'RisePlayerElectron' && 
+        return !!(display && display.playerName === 'RisePlayerElectron' &&
           display.playerVersion >= '2017.07.31.15.31');
       };
 

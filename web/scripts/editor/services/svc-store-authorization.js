@@ -61,6 +61,6 @@ angular.module('risevision.editor.services')
           .catch(function () {
             return storeAuthorization.check(templateCode);
           });
-      }
+      };
     }
   ]);
