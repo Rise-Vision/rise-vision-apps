@@ -4,7 +4,7 @@ angular.module('risevision.apps.launcher.controllers')
   .controller('SignInCtrl', ['canAccessApps', '$state',
     function (canAccessApps, $state) {
 
-      canAccessApps().then(function () {
+      canAccessApps(true).then(function () {
         $state.go('apps.launcher.home');
       });
     }
