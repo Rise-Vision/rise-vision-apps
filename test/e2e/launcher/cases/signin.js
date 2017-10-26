@@ -15,7 +15,7 @@ var SigninScenarios = function() {
     var signInPage;
     var googleAuthPage;
     var commonHeaderPage;
-    beforeEach(function (){
+    before(function (){
       homepage = new HomePage();
       signInPage = new SignInPage();
       googleAuthPage = new GoogleAuthPage();
@@ -32,6 +32,8 @@ var SigninScenarios = function() {
     });
 
     it('should not sign in the user through google when it is already signed in',function(){
+      signInPage.get();
+
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       expect(homepage.getAppLauncherContainer().isPresent()).to.eventually.be.true;
     });
