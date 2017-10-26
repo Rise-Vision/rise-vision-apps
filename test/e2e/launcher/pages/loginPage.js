@@ -8,15 +8,10 @@ var helper = require('rv-common-e2e').helper;
 var LoginPage = function() {
 
   var loginPageContainer = element(by.css('.app-launcher-login'));
-  var signInLink = element(by.id('sign-in-link'));
   var signInGoogleLink = element(by.id('sign-in-google-link'));
 
   this.getLoginPageContainer = function() {
     return loginPageContainer;
-  };
-
-  this.getSignInLink = function() {
-    return signInLink;
   };
 
   this.getSignInGoogleLink = function() {
@@ -31,19 +26,11 @@ var LoginPage = function() {
     //wait for spinner to go away.
     helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
-    signInLink.isPresent().then(function (state) {
+    signInGoogleLink.isPresent().then(function (state) {
       if (state) {
-        signInLink.click().then(function () {
-          helper.wait(signInGoogleLink, 'Sign In Google Link', 1000);
-
-          signInGoogleLink.isPresent().then(function (state) {
-            if (state) {
-              signInGoogleLink.click().then(function () {
-                googleAuthPage.signin();
-                helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-              });
-            }
-          });
+        signInGoogleLink.click().then(function () {
+          googleAuthPage.signin();
+          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
         });
       }
     });

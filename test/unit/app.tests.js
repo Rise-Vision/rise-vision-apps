@@ -110,18 +110,22 @@ describe('app:', function() {
       expect(state.controller).to.be.ok;
     });
 
-    it('should remove show_product param and go to home',function(done){
-      var userState = {};
-      var userAuthFactory = {authenticate: function(){return Q.reject()}};
-      var $location = {search: function() {}};
+    it('should redirect to home',function(done){
+      var canAccessApps = function() {
+        return Q.resolve();
+      };
+      var $location = {
+        search: function() { 
+          return {};
+        }
+      };
 
-      var goSpy = sinon.spy($state,'go');
-      var searchSpy = sinon.spy($location,'search');
+      sinon.spy($state,'go');
       
-      $state.get('apps.launcher.signup').controller[7](userState, userAuthFactory, $state, null, $location, null, null);
+      $state.get('apps.launcher.signup').controller[7](null, $location, $state, null, canAccessApps, null, null);
       setTimeout(function() {
-        goSpy.should.have.been.called;
-        searchSpy.should.have.been.called;
+        $state.go.should.have.been.calledWith('apps.launcher.home');
+
         done();
       }, 10);
     });
@@ -131,16 +135,17 @@ describe('app:', function() {
       var IN_RVA_PATH = "product/productId/?cid=companyId";
 
       var userState = {
-        isLoggedIn: function() {return true;},
-        getSelectedCompanyId:function(){return 'cid123'}
+        getSelectedCompanyId: function() {
+          return 'cid123'
+        }
       };
-      var userAuthFactory = {
-        authenticate: function(){return Q.resolve()}        
+      var canAccessApps = function() {
+        return Q.resolve()
       };
       var $location = {search: function() {return {show_product:123}}};
       var $window = {location:{}}
 
-      $state.get('apps.launcher.signup').controller[7](userState, userAuthFactory, $state, $window, $location, STORE_URL, IN_RVA_PATH);
+      $state.get('apps.launcher.signup').controller[7]($window, $location, $state, userState, canAccessApps, STORE_URL, IN_RVA_PATH);
       setTimeout(function() {
         expect($window.location.href).to.equal('https://store.risevision.com/product/123/?cid=cid123')
         done();
@@ -148,27 +153,22 @@ describe('app:', function() {
     });
 
     it('should not redirect to store product if not signed in',function(done){
-      var STORE_URL = "https://store.risevision.com/";
-      var IN_RVA_PATH = "product/productId/?cid=companyId";
-
-      var userState = {
-        isLoggedIn: function() {return false;},
-        getSelectedCompanyId:function(){return 'cid123'}
+      var canAccessApps = function() {
+        return Q.reject();
       };
-      var userAuthFactory = {
-        authenticate: function(){return Q.resolve()}
+
+      var $location = {
+        search: sinon.spy()
       };
-      var $location = {search: function() {return {show_product:123}}};
-      var $window = {location:{}}
 
-      var goSpy = sinon.spy($state,'go')
-      var searchSpy = sinon.spy($location,'search')
+      var goSpy = sinon.spy($state,'go');
+      
+      $state.get('apps.launcher.signup').controller[7](null, $location, $state, null, canAccessApps, null, null);
 
-      $state.get('apps.launcher.signup').controller[7](userState, userAuthFactory, $state, $window, $location, STORE_URL, IN_RVA_PATH);
       setTimeout(function() {
-        expect($window.location.href).to.not.equal('https://store.risevision.com/product/123/?cid=cid123');
-        goSpy.should.have.been.called;
-        searchSpy.should.have.been.called;
+        $location.search.should.not.have.been.called;
+        $state.go.should.not.have.been.called;
+
         done();
       }, 10);
     });

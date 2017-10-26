@@ -9,6 +9,7 @@ var SignUpPage = function() {
   var homepage = new HomePage();
   var loginPage = new LoginPage();
   var url = homepage.getUrl() + 'signup';
+  var signInLink = element(by.id('sign-in-link'));
   var modalDialog = element(by.css('.modal-dialog'));
   var modalTitle = element(by.css('.modal-title'));
 
@@ -18,6 +19,10 @@ var SignUpPage = function() {
 
   this.getUrl = function() {
     return url;
+  };
+
+  this.getSignInLink = function() {
+    return signInLink;
   };
 
   this.getModalDialog = function () {
@@ -30,7 +35,9 @@ var SignUpPage = function() {
 
   this.getGoogleLogin = function() {
     helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-    loginPage.getSignInLink().click();
+
+    signInLink.click();
+
     helper.wait(loginPage.getSignInGoogleLink(), 'Sign In Google Link', 1000);
     loginPage.getSignInGoogleLink().click();
   };

@@ -34,13 +34,12 @@ var HomepageScenarios = function() {
     });
 
     it('should sign in the user through google and load launch page',function(){
-      loginPage.getSignInLink().click().then(function () {
-        helper.wait(loginPage.getSignInGoogleLink(), 'Sign In Google Link');
-        loginPage.getSignInGoogleLink().click().then(function () {
-          googleAuthPage.signin();
-          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-        });
+      helper.wait(loginPage.getSignInGoogleLink(), 'Sign In Google Link');
+      loginPage.getSignInGoogleLink().click().then(function () {
+        googleAuthPage.signin();
+        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       });
+
       expect(homepage.getAppLauncherContainer().isDisplayed()).to.eventually.be.true;
     });
 

@@ -86,7 +86,7 @@ angular.module('risevision.apps', [
           url: '/support',
           controller: ['$state', 'canAccessApps', 'supportFactory',
             function ($state, canAccessApps, supportFactory) {
-              canAccessApps(true).then(function () {
+              canAccessApps().then(function () {
                 supportFactory.handleGetSupportAction();
                 $state.go('apps.launcher.home');
               });
@@ -98,7 +98,7 @@ angular.module('risevision.apps', [
           url: '/send-note',
           controller: ['$state', 'canAccessApps', 'supportFactory',
             function ($state, canAccessApps, supportFactory) {
-              canAccessApps(true).then(function () {
+              canAccessApps().then(function () {
                 supportFactory.handleSendUsANote();
                 $state.go('apps.launcher.home');
               });
@@ -108,19 +108,18 @@ angular.module('risevision.apps', [
 
         .state('apps.launcher.signup', {
           url: '/signup',
-          controller: ['userState', 'userAuthFactory', '$state', '$window',
-            '$location', 'STORE_URL', 'IN_RVA_PATH',
-            function (userState, userAuthFactory, $state, $window, $location,
+          controller: ['$window', '$location', '$state', 'userState', 
+            'canAccessApps', 'STORE_URL', 'IN_RVA_PATH',
+            function ($window, $location, $state, userState, canAccessApps,
               STORE_URL, IN_RVA_PATH) {
-              userAuthFactory.authenticate(false).then(function () {
-                if (userState.isLoggedIn() && $location.search().show_product) {
+              canAccessApps(true).then(function () {
+                if ($location.search().show_product) {
                   $window.location.href = STORE_URL + IN_RVA_PATH
                     .replace('productId', $location.search().show_product)
                     .replace('companyId', userState.getSelectedCompanyId());
+                } else {
+                  $state.go('apps.launcher.home');
                 }
-              }).finally(function () {
-                $location.search('show_product', null);
-                $state.go('apps.launcher.home');
               });
             }
           ]
