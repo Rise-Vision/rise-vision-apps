@@ -21,7 +21,7 @@ var WorkspacePage = function() {
   var zoomDropdown = element(by.css('.zoom-selector .dropdown-toggle'));
   var zoomFullSizeDropdownItem = element(by.cssContainingText('a', 'Full Size'));
 
-  var saveStatus = element(by.css(".save-status"));
+  var saveStatus = element(by.css('.save-status'));
 
 
   var errorBox = element(by.id('errorBox'));

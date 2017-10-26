@@ -8,7 +8,7 @@ var StorageHelper = require('./../pages/helper.js');
 var UploadScenarios = function() {
 
   browser.driver.manage().window().setSize(1400, 900);
-  describe("Given the user wants to upload a file", function () {  
+  describe('Upload', function () {  
     var storageSelectorModalPage = new StorageSelectorModalPage();
     var filesListPage = new FilesListPage();
   
@@ -20,7 +20,7 @@ var UploadScenarios = function() {
       });
 
       it('should upload file', function(){
-        var uploadFilePath = process.cwd() + "/package.json";
+        var uploadFilePath = process.cwd() + '/package.json';
         storageSelectorModalPage.getUploadInput().sendKeys(uploadFilePath);
 
         expect(storageSelectorModalPage.getUploadPanel().isDisplayed()).to.eventually.be.true;
@@ -37,19 +37,19 @@ var UploadScenarios = function() {
       });
     };
 
-    describe("And he is using Iframe Single File Selector:",function(){
+    describe('And he is using Iframe Single File Selector:',function(){
       before(function () { StorageHelper.setupIframeSingleFileSelector(); });
-      describe("Upload File:", describeUpload);
+      describe('Upload File:', describeUpload);
     });
 
-    describe("And he is using Storage Home:",function(){
+    describe('And he is using Storage Home:',function(){
       before(function () { StorageHelper.setupStorageHome(); });
-      describe("Upload File:", describeUpload);
+      describe('Upload File:', describeUpload);
     });
 
-    describe("And he is using Apps Single File Selector:",function(){
+    describe('And he is using Apps Single File Selector:',function(){
       before(function () { StorageHelper.setupAppsSingleFileSelector(); });
-      describe("Upload File:", describeUpload);
+      describe('Upload File:', describeUpload);
     });
     
   });

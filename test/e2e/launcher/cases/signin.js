@@ -9,9 +9,7 @@ var helper = require('rv-common-e2e').helper;
 var SigninScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe("In order to sign in with Rise Vision " +
-           "As a user " +
-           "I would like to authenticate with google", function() {
+  describe('Signin', function() {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
     var signInPage;
@@ -38,7 +36,7 @@ var SigninScenarios = function() {
       expect(homepage.getAppLauncherContainer().isPresent()).to.eventually.be.true;
     });
 
-    after("Should sign out user", function() {
+    after('Should sign out user', function() {
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       commonHeaderPage.signOut();
     });

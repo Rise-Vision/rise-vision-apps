@@ -9,9 +9,7 @@ var helper = require('rv-common-e2e').helper;
 var DisplayListScenarios = function() {
 
   browser.driver.manage().window().setSize(1024, 768);
-  describe("In order to manage displays " +
-    "As a user signed in " +
-    "I would like to see a list of my displays", function () {
+  describe('Display List', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
     var loginPage;

@@ -13,7 +13,7 @@ var PlaylistPage = require('./../pages/playlistPage.js');
 var AddPresentationScenarios = function() {
 
 
-  describe("Add presentations to a schedule ", function () {
+  describe('Add Presentation', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
     var loginPage;
@@ -39,7 +39,7 @@ var AddPresentationScenarios = function() {
       helper.waitDisappear(schedulesListPage.getLoader(),'Schedules loader');
     });
 
-    describe("Add a new schedule ", function () {
+    describe('Add a new schedule ', function () {
       before(function () {
         schedulesListPage.getScheduleAddButton().click();
       });

@@ -11,7 +11,7 @@ var CopyUrlModalPage = require('./../pages/copyUrlModalPage.js');
 var HomeScenarios = function() {
 
   browser.driver.manage().window().setSize(1400, 900);
-  describe("Storage Home", function () {
+  describe('Copy Url', function () {
     var homepage;
     var loginPage;
     var commonHeaderPage;
@@ -28,7 +28,7 @@ var HomeScenarios = function() {
       copyUrlModalPage = new CopyUrlModalPage();
     });
 
-    describe("Given a user who want see a list of her files", function () {
+    describe('Given a user who want see a list of her files', function () {
 
       before(function () {
         homepage.getStorage();
@@ -47,7 +47,7 @@ var HomeScenarios = function() {
       it('should enable button when a file is clicked',function(){
         expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
 
-        filesListPage.filterFileList("package.json");
+        filesListPage.filterFileList('package.json');
 
         filesListPage.getFileItems().get(0).click();
 

@@ -17,7 +17,7 @@ var helper = require('rv-common-e2e').helper;
 var AddContentScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe('Add Image/Video/Text Scenarios: ', function () {
+  describe('Add Content', function () {
     var homepage;
     var loginPage;
     var commonHeaderPage;
@@ -71,7 +71,7 @@ var AddContentScenarios = function() {
       });
       
       it('should only allow user to select images', function() {
-        filesListPage.filterFileList("package.json");
+        filesListPage.filterFileList('package.json');
 
         expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
 
@@ -80,7 +80,7 @@ var AddContentScenarios = function() {
       })
       
       it('should select the file and add to the playlist', function() {
-        filesListPage.filterFileList("logo.gif");
+        filesListPage.filterFileList('logo.gif');
 
         expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
 
@@ -168,7 +168,7 @@ var AddContentScenarios = function() {
       });
       
       it('should only allow user to select images', function() {
-        filesListPage.filterFileList("package.json");
+        filesListPage.filterFileList('package.json');
 
         expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
 
@@ -177,7 +177,7 @@ var AddContentScenarios = function() {
       })
 
       it('should select the file and add to the playlist', function() {
-        filesListPage.filterFileList("samplevideo.mp4");
+        filesListPage.filterFileList('samplevideo.mp4');
 
         expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
 

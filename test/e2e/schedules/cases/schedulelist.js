@@ -8,9 +8,7 @@ var helper = require('rv-common-e2e').helper;
 
 var ScheduleListScenarios = function() {
 
-  describe("In order to manage schedules " +
-    "As a user signed in " +
-    "I would like to see a list of my schedules", function () {
+  describe('Schedule List', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
     var loginPage;

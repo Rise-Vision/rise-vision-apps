@@ -12,9 +12,7 @@ var ArtboardPage = require('./../pages/artboardPage.js');
 var PresentationAddScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe("In order to manage presentations " +
-    "As a user signed in " +
-    "I would like to add presentations", function () {
+  describe('Presentation Add', function () {
     var homepage;
     var loginPage;
     var commonHeaderPage;
@@ -77,7 +75,7 @@ var PresentationAddScenarios = function() {
       var presentationName = 'TEST_E2E_PRESENTATION';
 
       helper.wait(presentationPropertiesModalPage.getNameInput(), 'Waiting for Name Input');
-      presentationPropertiesModalPage.getNameInput().sendKeys("workaround"); // clear() fails sometimes
+      presentationPropertiesModalPage.getNameInput().sendKeys('workaround'); // clear() fails sometimes
       presentationPropertiesModalPage.getNameInput().clear();
       presentationPropertiesModalPage.getNameInput().sendKeys(presentationName);
       helper.clickWhenClickable(presentationPropertiesModalPage.getApplyButton(), 'Apply Button');
@@ -95,7 +93,7 @@ var PresentationAddScenarios = function() {
     it('should save presentation hide Change Template Button and enable Preview button', function() {  
       helper.clickWhenClickable(workspacePage.getSaveButton(), 'Save Button');
 
-      helper.waitDisappear(workspacePage.getChangeTemplateButton(), "Change Template Button");
+      helper.waitDisappear(workspacePage.getChangeTemplateButton(), 'Change Template Button');
       expect(workspacePage.getChangeTemplateButton().isPresent()).to.eventually.be.false;
 
       helper.wait(workspacePage.getSaveStatus(), 'Save Status');
@@ -128,8 +126,8 @@ var PresentationAddScenarios = function() {
     it('should delete presentation and return to list', function(done) {
       workspacePage.getPresentationPropertiesButton().click();
       helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
-      helper.clickWhenClickable(presentationPropertiesModalPage.getDeleteButton(), "Presentation Delete Button").then(function () {
-        helper.clickWhenClickable(presentationPropertiesModalPage.getDeleteForeverButton(), "Presentation Delete Forever Button").then(function () {
+      helper.clickWhenClickable(presentationPropertiesModalPage.getDeleteButton(), 'Presentation Delete Button').then(function () {
+        helper.clickWhenClickable(presentationPropertiesModalPage.getDeleteForeverButton(), 'Presentation Delete Forever Button').then(function () {
           helper.wait(presentationsListPage.getTitle(), 'Presentation List');
           
           done();

@@ -65,14 +65,13 @@ angular.module('risevision.editor.controllers')
       $scope.quickSelect = function (product) {
         if (category === TEMPLATES_TYPE) {
           return checkTemplateAccess(product.productCode)
-            .then(function() {
+            .then(function () {
               $modalInstance.close(product);
             })
-            .catch(function() {
+            .catch(function () {
               $scope.select(product);
             });
-        }
-        else {
+        } else {
           $modalInstance.close(product);
         }
       };

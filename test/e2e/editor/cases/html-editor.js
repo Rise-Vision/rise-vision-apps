@@ -12,7 +12,7 @@ var HtmlEditorScenarios = function() {
 
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe('Show HTML Editor: ', function () {
+  describe('HTML Editor', function () {
     var homepage;
     var loginPage;
     var commonHeaderPage;

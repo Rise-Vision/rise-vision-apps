@@ -10,9 +10,7 @@ var helper = require('rv-common-e2e').helper;
 var ScheduleAddScenarios = function() {
 
 
-  describe("In order to manage schedules " +
-    "As a user signed in " +
-    "I would like to add schedules", function () {
+  describe('Schedule Add', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
     var loginPage;
@@ -59,8 +57,8 @@ var ScheduleAddScenarios = function() {
     });
 
     after(function () {
-      helper.clickWhenClickable(scheduleAddPage.getDeleteButton(), "Display Delete Button").then(function () {
-        helper.clickWhenClickable(scheduleAddPage.getDeleteForeverButton(), "Display Delete Forever Button").then(function () {
+      helper.clickWhenClickable(scheduleAddPage.getDeleteButton(), 'Display Delete Button').then(function () {
+        helper.clickWhenClickable(scheduleAddPage.getDeleteForeverButton(), 'Display Delete Forever Button').then(function () {
         });
       });
     });

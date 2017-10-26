@@ -11,7 +11,7 @@ var helper = require('rv-common-e2e').helper;
 var PlaceholdersListScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe('Add placeholder to presentation: ', function () {
+  describe('Placeholders List', function () {
     var homepage;
     var loginPage;
     var commonHeaderPage;
@@ -54,7 +54,7 @@ var PlaceholdersListScenarios = function() {
         it('should remove item', function (done) {
           placeholdersListPage.getRemoveButtons().get(0).click();
 
-          helper.clickWhenClickable(placeholdersListPage.getRemoveItemButton(), "Remove Item Confirm Button").then(function () {
+          helper.clickWhenClickable(placeholdersListPage.getRemoveItemButton(), 'Remove Item Confirm Button').then(function () {
             expect(placeholdersListPage.getPlaceholders().count()).to.eventually.equal(1);
 
             done();

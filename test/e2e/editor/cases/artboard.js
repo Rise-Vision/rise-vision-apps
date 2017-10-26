@@ -13,9 +13,7 @@ var ArtboardScenarios = function() {
 
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe("In order to manage presentations " +
-    "As a user " +
-    "I would like to edit presentation properties and preview on artboard", function () {
+  describe('Artboard', function () {
     var homepage;
     var loginPage;
     var commonHeaderPage;
@@ -33,7 +31,7 @@ var ArtboardScenarios = function() {
       unsavedChangesModalPage = new UnsavedChangesModalPage();
     });
 
-    describe("Given a user who wants to set presentation properties of a new presentation", function () {
+    describe('Given a user who wants to set presentation properties of a new presentation', function () {
 
       before(function () {
         homepage.getEditor();
@@ -45,7 +43,7 @@ var ArtboardScenarios = function() {
         expect(workspacePage.getWorkspaceContainer().isDisplayed()).to.eventually.be.true;
       });
 
-      describe("Given a user clicks on the presentation properties cog icon", function () {
+      describe('Given a user clicks on the presentation properties cog icon', function () {
         it('should represent the selected properties size', function () {
           workspacePage.getPresentationPropertiesButton().click();
           helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
@@ -63,7 +61,7 @@ var ArtboardScenarios = function() {
         });
       });
 
-      describe("Given the user has unsaved changes", function () {
+      describe('Given the user has unsaved changes', function () {
         it('should notify when navigating away from the editor', function () {
           commonHeaderPage.getCommonHeaderMenuItems().get(0).click(); //Navigating to Launcher
           helper.wait(unsavedChangesModalPage.getUnsavedChangesModal(),'Unsaved Changed Modal');

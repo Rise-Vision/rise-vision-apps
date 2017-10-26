@@ -13,7 +13,7 @@ var FilesListPage = require('./../pages/filesListPage.js');
 var FirstSigninScenarios = function() {
 
   browser.driver.manage().window().setSize(1400, 900);
-  describe("Storage Trial", function () {
+  describe('Trial', function () {
     var homepage;
     var loginPage;
     var commonHeaderPage;
@@ -33,7 +33,7 @@ var FirstSigninScenarios = function() {
       filesListPage = new FilesListPage();
     });
 
-    describe("Given a user that just signed up for Rise Vision", function () {
+    describe('Given a user that just signed up for Rise Vision', function () {
 
       before(function () {
         homepage.getStorage();

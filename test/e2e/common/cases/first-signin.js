@@ -15,7 +15,7 @@ var DisplayAddModalPage = require('./../../displays/pages/displayAddModalPage.js
 var FirstSigninScenarios = function() {
 
   browser.driver.manage().window().setSize(1400, 900);
-  describe("First Signin", function () {
+  describe('First Signin', function () {
     var homepage;
     var loginPage;
     var commonHeaderPage;
@@ -39,7 +39,7 @@ var FirstSigninScenarios = function() {
       displayAddModalPage = new DisplayAddModalPage();
     });
 
-    describe("Given a user that just signed up for Rise Vision", function () {
+    describe('Given a user that just signed up for Rise Vision', function () {
       var displayId;
 
       before(function () {
@@ -135,7 +135,7 @@ var FirstSigninScenarios = function() {
       });
 
       it('should close modal', function() {
-        helper.clickWhenClickable(displayAddModalPage.getDismissButton(), "Close modal button");
+        helper.clickWhenClickable(displayAddModalPage.getDismissButton(), 'Close modal button');
         
         helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
       });
@@ -164,7 +164,7 @@ var FirstSigninScenarios = function() {
       });  
       
       it('should close modal', function() {
-        helper.clickWhenClickable(displayAddModalPage.getDismissButton(), "Close modal button");
+        helper.clickWhenClickable(displayAddModalPage.getDismissButton(), 'Close modal button');
         
         helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
       });

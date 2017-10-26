@@ -9,9 +9,7 @@ var helper = require('rv-common-e2e').helper;
 var PresentationListScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe("In order to manage presentations " +
-    "As a user signed in " +
-    "I would like to see a list of my presentations", function () {
+  describe('Presentation List', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
     var loginPage;

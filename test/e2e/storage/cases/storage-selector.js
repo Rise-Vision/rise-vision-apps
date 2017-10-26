@@ -12,7 +12,7 @@ var StorageSelectorModalPage = require('./../pages/storageSelectorModalPage.js')
 var StorageSelectorScenarios = function() {
 
   browser.driver.manage().window().setSize(1400, 900);
-  describe("Storage Selector", function () {
+  describe('Storage Selector', function () {
     var homepage;
     var loginPage;
     var commonHeaderPage;
@@ -30,7 +30,7 @@ var StorageSelectorScenarios = function() {
       storageSelectorModalPage = new StorageSelectorModalPage();
     });
 
-    describe("Given a user who wants to set a Background image", function () {
+    describe('Given a user who wants to set a Background image', function () {
 
       before(function () {
         homepage.getEditor();
@@ -45,7 +45,7 @@ var StorageSelectorScenarios = function() {
         expect(presentationPropertiesModalPage.getBackgroundImageCheckbox().isDisplayed()).to.eventually.be.true;
       });
 
-      describe("Presentation properties modal ", function () {
+      describe('Presentation properties modal ', function () {
         it('should show storage button', function() {
           presentationPropertiesModalPage.getBackgroundImageCheckbox().click();
           

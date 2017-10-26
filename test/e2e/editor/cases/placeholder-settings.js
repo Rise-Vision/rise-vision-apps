@@ -12,7 +12,7 @@ var helper = require('rv-common-e2e').helper;
 var PlaceholderSettingsScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe('Manage a placeholder: ', function () {
+  describe('Placeholder Settings', function () {
     var homepage;
     var loginPage;
     var commonHeaderPage;

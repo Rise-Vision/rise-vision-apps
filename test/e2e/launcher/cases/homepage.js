@@ -10,9 +10,7 @@ var StoreProductsModalPage = require('./../../editor/pages/storeProductsModalPag
 var HomepageScenarios = function() {
   
   browser.driver.manage().window().setSize(1400, 900);
-  describe("In order to access Rise Vison apps " +
-           "As a user " +
-           "I would like to have access to the homepage of the apps launcher", function() {
+  describe('Homepage', function() {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
     var loginPage;
@@ -50,7 +48,7 @@ var HomepageScenarios = function() {
       expect(commonHeaderPage.getCommonHeader().isDisplayed()).to.eventually.be.true;
     });
     
-    describe("Given a user who wants to share the url", function () {
+    describe('Given a user who wants to share the url', function () {
       before(function () {
         homepage.get();
         //wait for spinner to go away.
@@ -89,18 +87,18 @@ var HomepageScenarios = function() {
       });
     });
 
-    describe("Presentations:",function(){
-      it("should show Presentations list",function(){
+    describe('Presentations:',function(){
+      it('should show Presentations list',function(){
         helper.waitDisappear(homepage.getPresentationsListLoader(), 'Presentations list loader');
 
         expect(homepage.getPresentationsList().isDisplayed()).to.eventually.be.true;
       });
 
-      it("should show Add Presentation button",function(){
+      it('should show Add Presentation button',function(){
         expect(homepage.getPresentationAddButton().isDisplayed()).to.eventually.be.true;
       });
 
-      it("should show View All Presentations button",function(){
+      it('should show View All Presentations button',function(){
         expect(homepage.getPresentationsViewAll().isDisplayed()).to.eventually.be.true;
       });
 
@@ -112,39 +110,39 @@ var HomepageScenarios = function() {
       });
     });
 
-    describe("Schedules:",function(){
-      it("should show Schedules list",function(){
+    describe('Schedules:',function(){
+      it('should show Schedules list',function(){
         helper.waitDisappear(homepage.getSchedulesListLoader(), 'Schedules list loader');
 
         expect(homepage.getSchedulesList().isDisplayed()).to.eventually.be.true;
       });
 
-      it("should show Add Schedule button",function(){
+      it('should show Add Schedule button',function(){
         expect(homepage.getScheduleAddButton().isDisplayed()).to.eventually.be.true;
       });
 
-      it("should show View All Schedules button",function(){
+      it('should show View All Schedules button',function(){
         expect(homepage.getSchedulesViewAll().isDisplayed()).to.eventually.be.true;
       });
     });
 
-    describe("Displays:",function(){
-      it("should show Displays list",function(){
+    describe('Displays:',function(){
+      it('should show Displays list',function(){
         helper.waitDisappear(homepage.getDisplaysListLoader(), 'Displays list loader');
 
         expect(homepage.getDisplaysList().isDisplayed()).to.eventually.be.true;
       });
 
-      it("should show Add Display button",function(){
+      it('should show Add Display button',function(){
         expect(homepage.getDisplayAddButton().isDisplayed()).to.eventually.be.true;
       });
 
-      it("should show View All Displays button",function(){
+      it('should show View All Displays button',function(){
         expect(homepage.getDisplaysViewAll().isDisplayed()).to.eventually.be.true;
       });
     });
 
-    after("Should sign out user", function() {
+    after('Should sign out user', function() {
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       commonHeaderPage.signOut();
     });

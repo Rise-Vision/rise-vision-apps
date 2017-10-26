@@ -19,7 +19,7 @@ var helper = require('rv-common-e2e').helper;
 var PlaylistScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe('Playlist Scenarios: ', function () {
+  describe('Playlist', function () {
     var homepage;
     var loginPage;
     var commonHeaderPage;
@@ -399,7 +399,7 @@ var PlaylistScenarios = function() {
       it('should remove item', function (done) {
         placeholderPlaylistPage.getRemoveButtons().get(0).click();
 
-        helper.clickWhenClickable(placeholderPlaylistPage.getRemoveItemButton(), "Remove Item Confirm Button").then(function () {
+        helper.clickWhenClickable(placeholderPlaylistPage.getRemoveItemButton(), 'Remove Item Confirm Button').then(function () {
           expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(3);
 
           done();

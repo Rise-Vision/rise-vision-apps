@@ -10,7 +10,7 @@ var FilesListPage = require('./../pages/filesListPage.js');
 var TrashScenarios = function() {
 
   browser.driver.manage().window().setSize(1400, 900);
-  describe("Trash", function () {
+  describe('Trash', function () {
     var homepage;
     var loginPage;
     var commonHeaderPage;
@@ -25,7 +25,7 @@ var TrashScenarios = function() {
       filesListPage = new FilesListPage();
     });
 
-    describe("Given a user who wants to delete a file forever", function () {
+    describe('Given a user who wants to delete a file forever', function () {
 
       before(function () {
         homepage.getStorage();
@@ -35,7 +35,7 @@ var TrashScenarios = function() {
         helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
 
         //upload sample file       
-        var uploadFilePath = process.cwd() + "/bower.json";
+        var uploadFilePath = process.cwd() + '/bower.json';
         storageHomePage.getUploadInput().sendKeys(uploadFilePath);
 
         //wait upload to finish        
@@ -51,7 +51,7 @@ var TrashScenarios = function() {
       });
 
       it('should enable Trash after file is selected',function(){
-        filesListPage.filterFileList("bower.json");
+        filesListPage.filterFileList('bower.json');
 
         expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
 
@@ -70,7 +70,7 @@ var TrashScenarios = function() {
       });
 
       it('should show deleted file in Trash folder',function(){
-        filesListPage.filterFileList("Trash");
+        filesListPage.filterFileList('Trash');
 
         browser.actions()
         .click(filesListPage.getFileItems().get(0))
@@ -79,7 +79,7 @@ var TrashScenarios = function() {
 
         helper.waitDisappear(filesListPage.getFilesListLoader(), 'Files Loader');
         
-        filesListPage.filterFileList("bower.json");
+        filesListPage.filterFileList('bower.json');
         expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
       });
 
@@ -94,7 +94,7 @@ var TrashScenarios = function() {
         storageHomePage.getRestoreFromTrashButton().click();
 
         helper.waitDisappear(storageHomePage.getPendingOperationsPanel(), 'Pending Operations Panel');
-        filesListPage.filterFileList("bower.json");
+        filesListPage.filterFileList('bower.json');
         expect(filesListPage.getFileItems().count()).to.eventually.equal(0);
       });
 
@@ -105,7 +105,7 @@ var TrashScenarios = function() {
 
         helper.waitDisappear(filesListPage.getFilesListLoader(), 'Files Loader');
 
-        filesListPage.filterFileList("bower.json");
+        filesListPage.filterFileList('bower.json');
         expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
       });
 
@@ -116,7 +116,7 @@ var TrashScenarios = function() {
         helper.waitDisappear(storageHomePage.getPendingOperationsPanel(), 'Pending Operations Panel');
 
         //open Trash
-        filesListPage.filterFileList("Trash");
+        filesListPage.filterFileList('Trash');
         browser.actions()
           .click(filesListPage.getFileItems().get(0))
           .click(filesListPage.getFileItems().get(0))
@@ -127,15 +127,15 @@ var TrashScenarios = function() {
         expect(storageHomePage.getDeleteForeverButton().isEnabled()).to.eventually.be.false;
 
         //delete forever
-        filesListPage.filterFileList("bower.json");
+        filesListPage.filterFileList('bower.json');
         filesListPage.getFileItems().get(0).click();        
         expect(storageHomePage.getDeleteForeverButton().isEnabled()).to.eventually.be.true;       
         storageHomePage.getDeleteForeverButton().click();
         
         //show confirmation modal
-        helper.clickWhenClickable(storageHomePage.getConfirmDeleteButton(), "Delete Forever Confirm Button").then(function () {          
+        helper.clickWhenClickable(storageHomePage.getConfirmDeleteButton(), 'Delete Forever Confirm Button').then(function () {          
           helper.waitDisappear(storageHomePage.getPendingOperationsPanel(), 'Pending Operations Panel');
-          filesListPage.filterFileList("bower.json");
+          filesListPage.filterFileList('bower.json');
           //file is deleted
           expect(filesListPage.getFileItems().count()).to.eventually.equal(0);
           done();

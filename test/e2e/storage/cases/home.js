@@ -10,7 +10,7 @@ var FilesListPage = require('./../pages/filesListPage.js');
 var HomeScenarios = function() {
 
   browser.driver.manage().window().setSize(1400, 900);
-  describe("Storage Home", function () {
+  describe('Home', function () {
     var homepage;
     var loginPage;
     var commonHeaderPage;
@@ -25,7 +25,7 @@ var HomeScenarios = function() {
       filesListPage = new FilesListPage();
     });
 
-    describe("Given a user who want see a list of her files", function () {
+    describe('Given a user who want see a list of her files', function () {
 
       before(function () {
         homepage.getStorage();
@@ -75,13 +75,13 @@ var HomeScenarios = function() {
       });
 
       it('should show thumbnails',function(){
-        filesListPage.filterFileList("logo.gif");
+        filesListPage.filterFileList('logo.gif');
         expect(filesListPage.getFileItems().get(0).element(by.css('img')).isDisplayed()).to.eventually.be.true;
       });
 
       it('should navigate to subfolders',function(){
         filesListPage.getSearchInput().clear();
-        filesListPage.filterFileList("Trash");
+        filesListPage.filterFileList('Trash');
 
         browser.actions()
           .click(filesListPage.getFileItems().get(0))
@@ -90,7 +90,7 @@ var HomeScenarios = function() {
 
         helper.waitDisappear(filesListPage.getFilesListLoader(), 'Files Loader');
         
-        filesListPage.filterFileList("bower.json");
+        filesListPage.filterFileList('bower.json');
         expect(filesListPage.getFileItems().count()).to.eventually.be.equal(0);
         filesListPage.getSearchInput().clear();
       });
@@ -104,7 +104,7 @@ var HomeScenarios = function() {
 
         helper.waitDisappear(filesListPage.getFilesListLoader(), 'Files Loader');
 
-        filesListPage.filterFileList("package.json");
+        filesListPage.filterFileList('package.json');
         expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
       })
 

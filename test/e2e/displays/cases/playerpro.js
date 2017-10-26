@@ -12,7 +12,7 @@ var helper = require('rv-common-e2e').helper;
 var FirstSigninScenarios = function() {
 
   browser.driver.manage().window().setSize(1400, 900);
-  describe("Rise Player Professional", function () {
+  describe('Player Professional', function () {
     var homepage;
     var loginPage;
     var commonHeaderPage;
@@ -30,7 +30,7 @@ var FirstSigninScenarios = function() {
       playerProTrialModalPage = new PlayerProTrialModalPage();
     });
 
-    describe("Given a user that just signed up for Rise Vision", function () {
+    describe('Given a user that just signed up for Rise Vision', function () {
 
       before(function () {
         homepage.getDisplays();
@@ -61,7 +61,7 @@ var FirstSigninScenarios = function() {
       
       it('should select the display',function(){
         helper.waitDisappear(displaysListPage.getDisplaysLoader(), 'Displays loader');
-        displaysListPage.getDisplayItems().first().element(by.tagName("td")).click();
+        displaysListPage.getDisplayItems().first().element(by.tagName('td')).click();
         helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
         expect(displayManagePage.getDisplayNameField().isPresent()).to.eventually.be.true;
         expect(displayManagePage.getDisplayNameField().getAttribute('value')).to.eventually.equal('TEST_E2E_DISPLAY');

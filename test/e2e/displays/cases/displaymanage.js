@@ -10,8 +10,7 @@ var helper = require('rv-common-e2e').helper;
 var DisplayAddScenarios = function() {
 
   browser.driver.manage().window().setSize(1280, 960);
-  describe("As a user signed in " +
-    "I would like to manage a display", function () {
+  describe('Display Manage', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
     var loginPage;
@@ -29,7 +28,7 @@ var DisplayAddScenarios = function() {
       homepage.getDisplays();
       loginPage.signIn();
       helper.waitDisappear(displaysListPage.getDisplaysLoader(), 'Displays loader');
-      displaysListPage.getDisplayItems().first().element(by.tagName("td")).click();
+      displaysListPage.getDisplayItems().first().element(by.tagName('td')).click();
     });
 
     it('should load display', function () {
@@ -121,8 +120,8 @@ var DisplayAddScenarios = function() {
     });
 
     it('should delete the display', function (done) {
-      helper.clickWhenClickable(displayManagePage.getDeleteButton(), "Display Delete Button").then(function () {
-        helper.clickWhenClickable(displayManagePage.getDeleteForeverButton(), "Display Delete Forever Button").then(function () {
+      helper.clickWhenClickable(displayManagePage.getDeleteButton(), 'Display Delete Button').then(function () {
+        helper.clickWhenClickable(displayManagePage.getDeleteForeverButton(), 'Display Delete Forever Button').then(function () {
           helper.wait(displaysListPage.getDisplaysAppContainer(), 'Displays List');
           
           done();

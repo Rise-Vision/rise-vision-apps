@@ -13,7 +13,7 @@ var FilesListPage = require('./../pages/filesListPage.js');
 var DismissModalScenarios = function() {
 
   browser.driver.manage().window().setSize(1400, 900);
-  describe("As a user, I would like modals to be dismissed when going back in history", function () {
+  describe('Dismiss Modal', function () {
     var storageSelectorModalPage = new StorageSelectorModalPage();
     var newFolderModalPage = new NewFolderModalPage();
     var homePage = new HomePage();
@@ -37,7 +37,7 @@ var DismissModalScenarios = function() {
       });
     };
 
-    describe("From Storage Home:",function(){
+    describe('From Storage Home:',function(){
       before(function () {        
         StorageHelper.setupStorageHome();
         commonHeaderPage.getCommonHeaderMenuItems().get(0).click(); //Launcher
@@ -46,7 +46,7 @@ var DismissModalScenarios = function() {
         helper.wait(storageHomePage.getStorageAppContainer(), 'Storage Apps Container');
         helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
       });
-      describe("Dismiss Modal:", describeNewFolder);
+      describe('Dismiss Modal:', describeNewFolder);
     });
 
   });

@@ -27,7 +27,7 @@ var PresentationListPage = function() {
     helper.waitDisappear(presentationsLoader,'Presentation loader');
     presentationAddButton.click();
     helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
-    helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader(), "Store Products Loader");
+    helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader(), 'Store Products Loader');
     storeProductsModalPage.getAddBlankPresentation().click();
     
     helper.wait(workspacePage.getWorkspaceContainer(), 'Workspace Container');

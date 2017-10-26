@@ -11,7 +11,7 @@ var helper = require('rv-common-e2e').helper;
 
 var ArtboardPlaceholdersScenarios = function() {
   browser.driver.manage().window().setSize(1920, 1080);
-  describe('Select placeholders in artboard: ', function () {
+  describe('Artboard Placeholders', function () {
     this.timeout(10000);// to allow for protactor to load the seperate page
     var homepage;
     var loginPage;
@@ -103,7 +103,7 @@ var ArtboardPlaceholdersScenarios = function() {
         
         helper.wait(placeholdersListPage.getRemoveItemButton(), 'Remove Item Confirm Button');
 
-        helper.clickWhenClickable(placeholdersListPage.getRemoveItemButton(), "Remove Item Confirm Button").then(function () {
+        helper.clickWhenClickable(placeholdersListPage.getRemoveItemButton(), 'Remove Item Confirm Button').then(function () {
           expect(placeholdersListPage.getPlaceholders().count()).to.eventually.equal(1);
 
           done();
