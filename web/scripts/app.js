@@ -86,7 +86,7 @@ angular.module('risevision.apps', [
           url: '/support',
           controller: ['$state', 'canAccessApps', 'supportFactory',
             function ($state, canAccessApps, supportFactory) {
-              canAccessApps().then(function () {
+              canAccessApps(true).then(function () {
                 supportFactory.handleGetSupportAction();
                 $state.go('apps.launcher.home');
               });
@@ -98,7 +98,7 @@ angular.module('risevision.apps', [
           url: '/send-note',
           controller: ['$state', 'canAccessApps', 'supportFactory',
             function ($state, canAccessApps, supportFactory) {
-              canAccessApps().then(function () {
+              canAccessApps(true).then(function () {
                 supportFactory.handleSendUsANote();
                 $state.go('apps.launcher.home');
               });
