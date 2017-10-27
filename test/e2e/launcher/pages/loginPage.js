@@ -8,44 +8,14 @@ var helper = require('rv-common-e2e').helper;
 var LoginPage = function() {
 
   var loginPageContainer = element(by.css('.app-launcher-login'));
-  var signInCTA = element(by.cssContainingText('h1', 'Sign In'));
-  var signInLink = element(by.id('sign-in-link'));
   var signInGoogleLink = element(by.id('sign-in-google-link'));
-  var usernameTextBox = element(by.id('username'));
-  var passwordTextBox = element(by.id('password'));
-  var signinButton = element(by.cssContainingText('button.btn-primary', 'Sign In'));
-  var incorrectCredentialsError = element(by.cssContainingText('.bg-danger', 'incorrect'));
 
   this.getLoginPageContainer = function() {
     return loginPageContainer;
   };
 
-  this.getSignInCTA = function() {
-    return signInCTA;
-  };
-
-  this.getSignInLink = function() {
-    return signInLink;
-  };
-
   this.getSignInGoogleLink = function() {
     return signInGoogleLink;
-  };
-
-  this.getUsernameTextBox = function() {
-    return usernameTextBox;
-  };
-
-  this.getPasswordTextBox = function() {
-    return passwordTextBox;
-  };
-
-  this.getSigninButton = function() {
-    return signinButton;
-  };
-
-  this.getIncorrectCredentialsError = function() {
-    return incorrectCredentialsError;
   };
 
   this.signIn = function() {

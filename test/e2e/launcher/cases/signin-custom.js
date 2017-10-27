@@ -1,7 +1,7 @@
 'use strict';
 var expect = require('rv-common-e2e').expect;
-var CreateAccountPage = require('./../pages/createAccountPage.js');
-var LoginPage = require('./../pages/loginPage.js');
+var SignUpPage = require('./../pages/signUpPage.js');
+var SignInPage = require('./../pages/signInPage.js');
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var HomePage = require('./../pages/homepage.js');
 var helper = require('rv-common-e2e').helper;
@@ -14,80 +14,80 @@ var SigninCustomScenarios = function() {
   describe('Signin Custom', function() {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
-    var createAccountPage;
-    var loginPage;
+    var signUpPage;
+    var signInPage;
     var commonHeaderPage;
     before(function (){
       homepage = new HomePage();
-      createAccountPage = new CreateAccountPage();
-      loginPage = new LoginPage();
+      signUpPage = new SignUpPage();
+      signInPage = new SignInPage();
       commonHeaderPage = new CommonHeaderPage();
-      homepage.get();
+      signUpPage.get();
     });
 
     it('should show create account page', function() {
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
-      expect(createAccountPage.getCreateAccountPageContainer().isPresent()).to.eventually.be.true;
-      expect(createAccountPage.getSignUpCTA().isPresent()).to.eventually.be.true;
+      expect(signUpPage.getSignUpPageContainer().isPresent()).to.eventually.be.true;
+      expect(signUpPage.getSignUpCTA().isPresent()).to.eventually.be.true;
     });
     
     it('should show both sign up options', function() {
-      expect(createAccountPage.getSignInGoogleLink().isPresent()).to.eventually.be.true;
-      expect(createAccountPage.getUsernameTextBox().isPresent()).to.eventually.be.true;
-      expect(createAccountPage.getPasswordTextBox().isPresent()).to.eventually.be.true;
+      expect(signUpPage.getSignUpGoogleLink().isPresent()).to.eventually.be.true;
+      expect(signUpPage.getUsernameTextBox().isPresent()).to.eventually.be.true;
+      expect(signUpPage.getPasswordTextBox().isPresent()).to.eventually.be.true;
       
-      expect(createAccountPage.getSignupButton().isPresent()).to.eventually.be.true;
+      expect(signUpPage.getSignupButton().isPresent()).to.eventually.be.true;
     });
 
     it('should show password strength warning', function() {
-      createAccountPage.getUsernameTextBox().sendKeys(USERNAME2);
-      createAccountPage.getPasswordTextBox().sendKeys(PASSWORD2);
+      signUpPage.getUsernameTextBox().sendKeys(USERNAME2);
+      signUpPage.getPasswordTextBox().sendKeys(PASSWORD2);
 
-      expect(createAccountPage.getPasswordStrengthWarning().isPresent()).to.eventually.be.true;
+      expect(signUpPage.getPasswordStrengthWarning().isPresent()).to.eventually.be.true;
     });
 
     it('should show error when trying to signup', function() {
-      createAccountPage.getSignupButton().click();
+      signUpPage.getSignupButton().click();
 
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
-      expect(createAccountPage.getAlreadyRegisteredError().isPresent()).to.eventually.be.true;
+      expect(signUpPage.getAlreadyRegisteredError().isPresent()).to.eventually.be.true;
     });
 
     it('should go to sign in page',function(){
-      createAccountPage.getSignInLink().click();
+      signUpPage.getSignInLink().click();
 
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
-      expect(loginPage.getLoginPageContainer().isPresent()).to.eventually.be.true;
-      expect(loginPage.getSignInCTA().isPresent()).to.eventually.be.true;
+      expect(signInPage.getSignInPageContainer().isPresent()).to.eventually.be.true;
+      expect(signInPage.getSignInCTA().isPresent()).to.eventually.be.true;
     });
     
     it('should show both sign in options', function() {
-      expect(loginPage.getSignInGoogleLink().isPresent()).to.eventually.be.true;
-      expect(loginPage.getUsernameTextBox().isPresent()).to.eventually.be.true;
-      expect(loginPage.getPasswordTextBox().isPresent()).to.eventually.be.true;
+      expect(signInPage.getSignInGoogleLink().isPresent()).to.eventually.be.true;
+      expect(signInPage.getUsernameTextBox().isPresent()).to.eventually.be.true;
+      expect(signInPage.getPasswordTextBox().isPresent()).to.eventually.be.true;
       
-      expect(loginPage.getSigninButton().isPresent()).to.eventually.be.true;
+      expect(signInPage.getSigninButton().isPresent()).to.eventually.be.true;
     });
 
     it('should show incorrect credentials error', function() {
-      loginPage.getUsernameTextBox().sendKeys(USERNAME2);
-      loginPage.getPasswordTextBox().sendKeys('incorrectpassword');
+      signInPage.getUsernameTextBox().sendKeys(USERNAME2);
+      signInPage.getPasswordTextBox().sendKeys('incorrectpassword');
 
-      loginPage.getSigninButton().click();
+      signInPage.getSigninButton().click();
 
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
-      expect(loginPage.getIncorrectCredentialsError().isPresent()).to.eventually.be.true;
+      expect(signInPage.getIncorrectCredentialsError().isPresent()).to.eventually.be.true;
     });
 
     it('should sign in user', function() {
       var enter = "\ue007";
 
-      loginPage.getPasswordTextBox().clear();
-      loginPage.getPasswordTextBox().sendKeys(PASSWORD2 + enter);
+      signInPage.getPasswordTextBox().clear();
+      signInPage.getPasswordTextBox().sendKeys(PASSWORD2 + enter);
     });
     
     it('should go to sign in page',function(){
@@ -109,8 +109,8 @@ var SigninCustomScenarios = function() {
 
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
-      expect(loginPage.getLoginPageContainer().isPresent()).to.eventually.be.true;
-      expect(loginPage.getSignInCTA().isPresent()).to.eventually.be.true;
+      expect(signInPage.getSignInPageContainer().isPresent()).to.eventually.be.true;
+      expect(signInPage.getSignInCTA().isPresent()).to.eventually.be.true;
     });
   });
 };
