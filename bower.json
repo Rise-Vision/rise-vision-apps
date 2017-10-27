@@ -16,8 +16,7 @@
     "angular-ui-codemirror": "~0.3.0",
     "angular-vertilize": "~1.0.1",
     "angular-mocks": "1.5.0",
-    "common-header": "https://github.com/Rise-Vision/common-header.git#fix/iframe",
-    "rv-common-app-components": "https://github.com/Rise-Vision/common-app-components.git#fix/iframe",
+    "common-header": "https://github.com/Rise-Vision/common-header.git#v1.14.3",
     "component-storage-selector": "https://github.com/Rise-Vision/component-storage-selector.git",
     "rv-common-i18n": "https://github.com/Rise-Vision/common-i18n.git",
     "rv-common-style": "https://github.com/Rise-Vision/common-style.git#v1.5.0",
@@ -39,7 +38,6 @@
     "angular-sanitize": "~1.5.0",
     "angular-mocks": "~1.5.0",
     "angular-bootstrap": "^0.13.0",
-    "rv-common-style": "v1.5.0",
-    "rv-common-app-components": "fix/iframe"
+    "rv-common-style": "v1.5.0"
   }
 }
