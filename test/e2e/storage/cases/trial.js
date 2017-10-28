@@ -1,7 +1,7 @@
 'use strict';
 var expect = require('rv-common-e2e').expect;
 var HomePage = require('./../../launcher/pages/homepage.js');
-var LoginPage = require('./../../launcher/pages/loginPage.js');
+var SignInPage = require('./../../launcher/pages/signInPage.js');
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var helper = require('rv-common-e2e').helper;
 var WorkspacePage = require('./../../editor/pages/workspacePage.js');
@@ -15,7 +15,7 @@ var FirstSigninScenarios = function() {
   browser.driver.manage().window().setSize(1400, 900);
   describe('Trial', function () {
     var homepage;
-    var loginPage;
+    var signInPage;
     var commonHeaderPage;
     var workspacePage;
     var storeProductsModalPage;
@@ -24,7 +24,7 @@ var FirstSigninScenarios = function() {
     var filesListPage;
     before(function () {
       homepage = new HomePage();
-      loginPage = new LoginPage();
+      signInPage = new SignInPage();
       commonHeaderPage = new CommonHeaderPage();
       workspacePage = new WorkspacePage();
       storeProductsModalPage = new StoreProductsModalPage()
@@ -37,7 +37,7 @@ var FirstSigninScenarios = function() {
 
       before(function () {
         homepage.getStorage();
-        loginPage.signIn();
+        signInPage.signIn();
         var subCompanyName = 'E2E TEST SUBCOMPANY';
         commonHeaderPage.createSubCompany(subCompanyName);
         commonHeaderPage.selectSubCompany(subCompanyName);   

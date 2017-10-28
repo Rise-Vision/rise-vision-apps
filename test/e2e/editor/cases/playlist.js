@@ -1,7 +1,7 @@
 'use strict';
 var expect = require('rv-common-e2e').expect;
 var HomePage = require('./../../launcher/pages/homepage.js');
-var LoginPage = require('./../../launcher/pages/loginPage.js');
+var SignInPage = require('./../../launcher/pages/signInPage.js');
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var PresentationsListPage = require('./../pages/presentationListPage.js');
 var WorkspacePage = require('./../pages/workspacePage.js');
@@ -21,7 +21,7 @@ var PlaylistScenarios = function() {
   browser.driver.manage().window().setSize(1920, 1080);
   describe('Playlist', function () {
     var homepage;
-    var loginPage;
+    var signInPage;
     var commonHeaderPage;
     var presentationsListPage;
     var workspacePage;
@@ -37,7 +37,7 @@ var PlaylistScenarios = function() {
 
     before(function () {
       homepage = new HomePage();
-      loginPage = new LoginPage();
+      signInPage = new SignInPage();
       presentationsListPage = new PresentationsListPage();
       workspacePage = new WorkspacePage();
       placeholdersListPage = new PlaceholdersListPage();
@@ -52,7 +52,7 @@ var PlaylistScenarios = function() {
       presentationModalPage = new PresentationModalPage();
 
       homepage.getEditor();
-      loginPage.signIn();
+      signInPage.signIn();
     });
 
     before('Add Presentation & Placeholder: ', function () {

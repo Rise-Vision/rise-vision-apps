@@ -1,7 +1,7 @@
 'use strict';
 var expect = require('rv-common-e2e').expect;
 var HomePage = require('./../../launcher/pages/homepage.js');
-var LoginPage = require('./../../launcher/pages/loginPage.js');
+var SignInPage = require('./../../launcher/pages/signInPage.js');
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var helper = require('rv-common-e2e').helper;
 var WorkspacePage = require('./../pages/workspacePage.js');
@@ -13,14 +13,14 @@ var PresentationPropertiesScenarios = function() {
   browser.driver.manage().window().setSize(1920, 1080);
   describe('Presentation Properties', function () {
     var homepage;
-    var loginPage;
+    var signInPage;
     var commonHeaderPage;
     var workspacePage;
     var presentationListPage;
     var presentationPropertiesModalPage;
     before(function () {
       homepage = new HomePage();
-      loginPage = new LoginPage();
+      signInPage = new SignInPage();
       commonHeaderPage = new CommonHeaderPage();
       workspacePage = new WorkspacePage();
       presentationListPage = new PresentationListPage();
@@ -31,7 +31,7 @@ var PresentationPropertiesScenarios = function() {
 
       before(function () {
         homepage.getEditor();
-        loginPage.signIn();
+        signInPage.signIn();
         presentationListPage.openNewPresentation();
       });
 

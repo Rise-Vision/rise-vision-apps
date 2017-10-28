@@ -1,7 +1,7 @@
 'use strict';
 var expect = require('rv-common-e2e').expect;
 var HomePage = require('./../../launcher/pages/homepage.js');
-var LoginPage = require('./../../launcher/pages/loginPage.js');
+var SignInPage = require('./../../launcher/pages/signInPage.js');
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var SchedulesListPage = require('./../pages/schedulesListPage.js');
 var helper = require('rv-common-e2e').helper;
@@ -11,18 +11,18 @@ var ScheduleListScenarios = function() {
   describe('Schedule List', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
-    var loginPage;
+    var signInPage;
     var commonHeaderPage;
     var schedulesListPage;
 
     before(function () {
       homepage = new HomePage();
-      loginPage = new LoginPage();
+      signInPage = new SignInPage();
       schedulesListPage = new SchedulesListPage();
       commonHeaderPage = new CommonHeaderPage();
 
       homepage.getSchedules();
-      loginPage.signIn();
+      signInPage.signIn();
     });
 
     it('should show schedules list page', function () {

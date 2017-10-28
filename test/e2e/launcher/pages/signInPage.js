@@ -1,11 +1,17 @@
 'use strict';
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
+var GoogleAuthPage = require('rv-common-e2e').googleAuthPage;
 var HomePage = require('./homepage.js');
+var OnboardingPage = require('./../../common/pages/onboarding.js');
 var helper = require('rv-common-e2e').helper;
 
 var SignInPage = function() {
   var commonHeaderPage = new CommonHeaderPage();
+  var googleAuthPage = new GoogleAuthPage();
   var homepage = new HomePage();
+  var onboardingPage = new OnboardingPage();
+
+
   var url = homepage.getUrl() + 'signin';
 
   var signInPageContainer = element(by.css('.app-launcher-login'));
@@ -64,10 +70,6 @@ var SignInPage = function() {
   };
 
   this.signIn = function() {
-  	var commonHeaderPage = new CommonHeaderPage();
-    var googleAuthPage = new GoogleAuthPage();
-    var onboardingPage = new OnboardingPage();
-
     //wait for spinner to go away.
     helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 

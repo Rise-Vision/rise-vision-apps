@@ -2,7 +2,7 @@
   'use strict';
 
   var HomePage = require('./../../launcher/pages/homepage.js');
-  var LoginPage = require('./../../launcher/pages/loginPage.js');
+  var SignInPage = require('./../../launcher/pages/signInPage.js');
   var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
   var helper = require('rv-common-e2e').helper;
   var IframePage = require('./iframeStorageSelectorPage.js');
@@ -14,7 +14,7 @@
   var FilesListPage = require('./filesListPage.js');
 
   var homepage = new HomePage();
-  var loginPage = new LoginPage();
+  var signInPage = new SignInPage();
   var commonHeaderPage = new CommonHeaderPage();
   var storageSelectorModalPage = new StorageSelectorModalPage();
   var iframePage = new IframePage();
@@ -27,7 +27,7 @@
   var factory = {
     setupIframeSingleFolderSelector: function(){
       homepage.getStorage();
-      loginPage.signIn();
+      signInPage.signIn();
       iframePage.getSingleFolderSelector();
       helper.wait(storageSelectorModalPage.getStorageSelectorModal(), 'Storage Selector Modal');
       helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
@@ -35,7 +35,7 @@
 
     setupIframeSingleFileSelector: function(){
       homepage.getStorage();
-      loginPage.signIn();
+      signInPage.signIn();
       iframePage.getSingleFileSelector();
       helper.wait(storageSelectorModalPage.getStorageSelectorModal(), 'Storage Selector Modal');
       helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
@@ -43,14 +43,14 @@
 
     setupStorageHome: function(){
       homepage.getStorage();
-      loginPage.signIn();
+      signInPage.signIn();
       helper.wait(storageHomePage.getStorageAppContainer(), 'Storage Apps Container');
       helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
     },
 
     setupAppsSingleFileSelector: function(){
       homepage.getEditor();
-      loginPage.signIn();
+      signInPage.signIn();
       presentationListPage.openNewPresentation();
       workspacePage.getPresentationPropertiesButton().click();
       helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');

@@ -1,7 +1,7 @@
 'use strict';
 var expect = require('rv-common-e2e').expect;
 var HomePage = require('./../../launcher/pages/homepage.js');
-var LoginPage = require('./../../launcher/pages/loginPage.js');
+var SignInPage = require('./../../launcher/pages/signInPage.js');
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var SchedulesListPage = require('./../pages/schedulesListPage.js');
 var ScheduleAddPage = require('./../pages/scheduleAddPage.js');
@@ -13,7 +13,7 @@ var AddTimelineScenarios = function() {
 describe('Add Timeline', function() {
   this.timeout(2000);// to allow for protactor to load the seperate page
   var homepage;
-  var loginPage;
+  var signInPage;
   var commonHeaderPage;
   var schedulesListPage;
   var scheduleAddPage;
@@ -21,14 +21,14 @@ describe('Add Timeline', function() {
 
   before(function (){
     homepage = new HomePage();
-    loginPage = new LoginPage();
+    signInPage = new SignInPage();
     schedulesListPage = new SchedulesListPage();
     scheduleAddPage = new ScheduleAddPage();
     commonHeaderPage = new CommonHeaderPage();
     timelineModalPage = new TimelineModalPage();
 
     homepage.getSchedules();
-    loginPage.signIn();
+    signInPage.signIn();
     helper.waitDisappear(schedulesListPage.getLoader(),'Schedules loader');
   });
 

@@ -2,7 +2,7 @@
 var expect = require('rv-common-e2e').expect;
 var helper = require('rv-common-e2e').helper;
 var HomePage = require('./../../launcher/pages/homepage.js');
-var LoginPage = require('./../../launcher/pages/loginPage.js');
+var SignInPage = require('./../../launcher/pages/signInPage.js');
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var OnboardingPage = require('./../pages/onboarding.js');
 var WorkspacePage = require('./../../editor/pages/workspacePage.js');
@@ -17,7 +17,7 @@ var FirstSigninScenarios = function() {
   browser.driver.manage().window().setSize(1400, 900);
   describe('First Signin', function () {
     var homepage;
-    var loginPage;
+    var signInPage;
     var commonHeaderPage;
     var onboardingPage;
     var workspacePage;
@@ -28,7 +28,7 @@ var FirstSigninScenarios = function() {
     var displayAddModalPage;
     before(function () {
       homepage = new HomePage();
-      loginPage = new LoginPage();
+      signInPage = new SignInPage();
       commonHeaderPage = new CommonHeaderPage();
       onboardingPage = new OnboardingPage();
       workspacePage = new WorkspacePage();
@@ -44,7 +44,7 @@ var FirstSigninScenarios = function() {
 
       before(function () {
         homepage.get();
-        loginPage.signIn();
+        signInPage.signIn();
         var subCompanyName = 'E2E TEST SUBCOMPANY';
         commonHeaderPage.createSubCompany(subCompanyName);
         commonHeaderPage.selectSubCompany(subCompanyName);   
