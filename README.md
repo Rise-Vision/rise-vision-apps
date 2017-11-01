@@ -66,7 +66,7 @@ What you expected to happen.
 What actually happened. (screenshots / video captures always help)
 
 ## Contributing
-All contributions are greatly appreciated and welcome! If you would first like to sound out your contribution ideas please post your thoughts to our [community](http://community.risevision.com), otherwise submit a pull request and we will do our best to incorporate it
+All contributions are greatly appreciated and welcome! If you would first like to sound out your contribution ideas please post your thoughts to our [community](https://help.risevision.com/hc/en-us/community/topics/), otherwise submit a pull request and we will do our best to incorporate it
 
 ### Languages
 
@@ -76,7 +76,7 @@ In order to support languages i18n needs to be added to this repository.  Please
 - We could use i18n Language Support
 
 ## Resources
-If you have any questions or problems please don't hesitate to join our lively and responsive community at http://community.risevision.com.
+If you have any questions or problems please don't hesitate to join our lively and responsive community at https://help.risevision.com/hc/en-us/community/topics/.
 
 If you are looking for user documentation on Rise Vision please see http://www.risevision.com/help/users/
 
