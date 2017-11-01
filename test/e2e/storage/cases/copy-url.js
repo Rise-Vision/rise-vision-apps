@@ -1,7 +1,7 @@
 'use strict';
 var expect = require('rv-common-e2e').expect;
 var HomePage = require('./../../launcher/pages/homepage.js');
-var LoginPage = require('./../../launcher/pages/loginPage.js');
+var SignInPage = require('./../../launcher/pages/signInPage.js');
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var helper = require('rv-common-e2e').helper;
 var StorageHomePage = require('./../pages/storageHomePage.js');
@@ -13,7 +13,7 @@ var HomeScenarios = function() {
   browser.driver.manage().window().setSize(1400, 900);
   describe('Copy Url', function () {
     var homepage;
-    var loginPage;
+    var signInPage;
     var commonHeaderPage;
     var storageHomePage;
     var filesListPage;
@@ -21,7 +21,7 @@ var HomeScenarios = function() {
 
     before(function () {
       homepage = new HomePage();
-      loginPage = new LoginPage();
+      signInPage = new SignInPage();
       commonHeaderPage = new CommonHeaderPage();
       storageHomePage = new StorageHomePage();
       filesListPage = new FilesListPage();
@@ -32,7 +32,7 @@ var HomeScenarios = function() {
 
       before(function () {
         homepage.getStorage();
-        loginPage.signIn();
+        signInPage.signIn();
       });
 
       it('should show copy url button', function() {

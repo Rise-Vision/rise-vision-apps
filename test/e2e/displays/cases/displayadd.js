@@ -1,7 +1,7 @@
 'use strict';
 var expect = require('rv-common-e2e').expect;
 var HomePage = require('./../../launcher/pages/homepage.js');
-var LoginPage = require('./../../launcher/pages/loginPage.js');
+var SignInPage = require('./../../launcher/pages/signInPage.js');
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var DisplaysListPage = require('./../pages/displaysListPage.js');
 var DisplayAddModalPage = require('./../pages/displayAddModalPage.js');
@@ -13,20 +13,20 @@ var DisplayAddScenarios = function() {
   describe('Display Add', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
-    var loginPage;
+    var signInPage;
     var commonHeaderPage;
     var displaysListPage;
     var displayAddModalPage;
 
     before(function () {
       homepage = new HomePage();
-      loginPage = new LoginPage();
+      signInPage = new SignInPage();
       displaysListPage = new DisplaysListPage();
       displayAddModalPage = new DisplayAddModalPage();
       commonHeaderPage = new CommonHeaderPage();
 
       homepage.getDisplays();
-      loginPage.signIn();
+      signInPage.signIn();
       helper.waitDisappear(displaysListPage.getDisplaysLoader(), 'Displays loader');
       displaysListPage.getDisplayAddButton().click();
     });

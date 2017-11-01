@@ -1,7 +1,7 @@
 'use strict';
 var expect = require('rv-common-e2e').expect;
 var HomePage = require('./../pages/homepage.js');
-var LoginPage = require('./../pages/loginPage.js');
+var SignInPage = require('./../pages/signInPage.js');
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var GoogleAuthPage = require('rv-common-e2e').googleAuthPage;
 var helper = require('rv-common-e2e').helper;
@@ -13,13 +13,13 @@ var HomepageScenarios = function() {
   describe('Homepage', function() {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
-    var loginPage;
+    var signInPage;
     var commonHeaderPage;
     var googleAuthPage;
     var storeProductsModalPage;
     before(function (){
       homepage = new HomePage();
-      loginPage = new LoginPage();
+      signInPage = new SignInPage();
       commonHeaderPage = new CommonHeaderPage();
       googleAuthPage = new GoogleAuthPage();
       storeProductsModalPage = new StoreProductsModalPage();
@@ -30,12 +30,12 @@ var HomepageScenarios = function() {
     });
 
     it('should show login page',function(){
-      expect(loginPage.getLoginPageContainer().isPresent()).to.eventually.be.true;
+      expect(signInPage.getSignInPageContainer().isPresent()).to.eventually.be.true;
     });
 
     it('should sign in the user through google and load launch page',function(){
-      helper.wait(loginPage.getSignInGoogleLink(), 'Sign In Google Link');
-      loginPage.getSignInGoogleLink().click().then(function () {
+      helper.wait(signInPage.getSignInGoogleLink(), 'Sign In Google Link');
+      signInPage.getSignInGoogleLink().click().then(function () {
         googleAuthPage.signin();
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       });

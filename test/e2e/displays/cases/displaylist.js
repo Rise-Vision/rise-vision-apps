@@ -1,7 +1,7 @@
 'use strict';
 var expect = require('rv-common-e2e').expect;
 var HomePage = require('./../../launcher/pages/homepage.js');
-var LoginPage = require('./../../launcher/pages/loginPage.js');
+var SignInPage = require('./../../launcher/pages/signInPage.js');
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var DisplaysListPage = require('./../pages/displaysListPage.js');
 var helper = require('rv-common-e2e').helper;
@@ -12,12 +12,12 @@ var DisplayListScenarios = function() {
   describe('Display List', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page
     var homepage;
-    var loginPage;
+    var signInPage;
     var commonHeaderPage;
     var displaysListPage;
     before(function () {
       homepage = new HomePage();
-      loginPage = new LoginPage();
+      signInPage = new SignInPage();
       commonHeaderPage = new CommonHeaderPage();
       displaysListPage = new DisplaysListPage();
     });
@@ -26,7 +26,7 @@ var DisplayListScenarios = function() {
 
       before(function () {
         homepage.getDisplays();
-        loginPage.signIn();
+        signInPage.signIn();
       });
 
       it('should show displays list page', function () {

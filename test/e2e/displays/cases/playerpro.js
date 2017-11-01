@@ -1,7 +1,7 @@
 'use strict';
 var expect = require('rv-common-e2e').expect;
 var HomePage = require('./../../launcher/pages/homepage.js');
-var LoginPage = require('./../../launcher/pages/loginPage.js');
+var SignInPage = require('./../../launcher/pages/signInPage.js');
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var DisplaysListPage = require('./../pages/displaysListPage.js');
 var DisplayManagePage = require('./../pages/displayManagePage.js');
@@ -14,7 +14,7 @@ var FirstSigninScenarios = function() {
   browser.driver.manage().window().setSize(1400, 900);
   describe('Player Professional', function () {
     var homepage;
-    var loginPage;
+    var signInPage;
     var commonHeaderPage;
     var displayAddModalPage;
     var displaysListPage;
@@ -22,7 +22,7 @@ var FirstSigninScenarios = function() {
     var playerProTrialModalPage;
     before(function () {
       homepage = new HomePage();
-      loginPage = new LoginPage();
+      signInPage = new SignInPage();
       commonHeaderPage = new CommonHeaderPage();
       displayAddModalPage = new DisplayAddModalPage();
       displaysListPage = new DisplaysListPage();
@@ -34,7 +34,7 @@ var FirstSigninScenarios = function() {
 
       before(function () {
         homepage.getDisplays();
-        loginPage.signIn();
+        signInPage.signIn();
         var subCompanyName = 'E2E TEST SUBCOMPANY';
         commonHeaderPage.createSubCompany(subCompanyName);
         commonHeaderPage.selectSubCompany(subCompanyName);
