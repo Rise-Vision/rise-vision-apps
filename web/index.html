@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html ng-app="risevision.apps" itemscope itemtype="http://schema.org/WebApplication" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
 <head lang="en">
-  <script src="//cdn.optimizely.com/js/3202500663.js"></script>
   <base href="/">
   <meta name="fragment" content="!">
   <meta charset="UTF-8">
@@ -64,9 +63,6 @@
   <!-- build:js js/website.min.js -->
   <script src="bower_components/common-header/dist/js/dependencies.js"></script>
   <script src="bower_components/common-header/dist/js/common-header.js"></script>
-  <script src="bower_components/rv-loading/loading.js"></script>
-
-  <script type="text/javascript" src="bower_components/angular-vertilize/angular-vertilize.js"></script>
 
   <script type="text/javascript" src="bower_components/Sortable/Sortable.js"></script>
   <script src="bower_components/rv-common-app-components/dist/js/search-filter.js"></script>
@@ -76,8 +72,6 @@
   <script src="bower_components/rv-common-app-components/dist/js/timeline.js"></script>
   <script src="bower_components/rv-common-app-components/dist/js/distribution-selector.js"></script>
   <script src="bower_components/rv-common-app-components/dist/js/background-image-setting.js"></script>
-
-  <script src="bower_components/widget-settings-ui-core/dist/widget-settings-ui-core.js"></script>
 
   <!-- Background image settings widget component -->
   <script src="bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js"></script>
@@ -96,12 +90,6 @@
 
   <script type="text/javascript" src="bower_components/jszip/dist/jszip.js"></script>
 
-<!--
-  Questionable deps:
-  <script src="bower_components/angular-bootstrap-show-errors/src/showErrors.min.js"></script>
-  <script src="bower_components/rv-common-i18n/dist/i18n.js"></script>
- -->
-
   <script src="tmp/partials.js"></script>
 
   <!-- app js -->
@@ -110,6 +98,7 @@
   <script src="scripts/common/controllers/ctr-app.js"></script>
   <script src="scripts/common/directives/dtv-rv-sortable.js"></script>
   <script src="scripts/common/directives/dtv-guid-validator.js"></script>
+  <script src="scripts/common/services/svc-gadgets-api.js"></script>
   <script src="scripts/common/services/svc-resource-loader.js"></script>
   <script src="scripts/common/services/svc-scrolling-list-service.js"></script>
   <script src="scripts/common/services/svc-subscription-status.js"></script>
