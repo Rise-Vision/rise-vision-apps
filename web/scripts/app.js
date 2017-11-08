@@ -3,10 +3,10 @@ angular.module('risevision.apps', [
     'ui.router',
     'ngTouch',
     'ui.bootstrap',
-    // 'ui.bootstrap.showErrors',
     'risevision.common.header',
     'risevision.common.header.templates',
     'risevision.common.components.last-modified',
+    'risevision.common.components.loading',
     'risevision.common.components.search-filter',
     'risevision.common.components.scrolling-list',
     'risevision.common.components.focus-me',
@@ -17,10 +17,7 @@ angular.module('risevision.apps', [
     'risevision.common.components.background-image-setting',
     'risevision.common.components.message-box',
     'risevision.common.currency',
-    'risevision.widget.common',
     'ui.codemirror',
-    'angular.vertilize',
-    'risevision.common.loading',
     'risevision.common.i18n',
     'risevision.apps.partials',
     'risevision.apps.config',
@@ -464,13 +461,7 @@ angular.module('risevision.apps', [
         }
       });
     }
-  ])
-// .config(['showErrorsConfigProvider',
-//   function (showErrorsConfigProvider) {
-//     showErrorsConfigProvider.trigger('keypress');
-//   }
-// ])
-;
+  ]);
 
 angular.module('risevision.apps.services', [
   'risevision.common.header'
