@@ -13,8 +13,7 @@
     "angular-ui-codemirror": "~0.3.0",
     "jszip": "2.5.0",
     "Sortable": "^1.4.2",
-    "common-header": "https://github.com/Rise-Vision/common-header.git#feature/components-merge",
-    "rv-common-style": "https://github.com/Rise-Vision/common-style.git#v1.5.0"
+    "common-header": "https://github.com/Rise-Vision/common-header.git#feature/components-merge"
   },
   "devDependencies": {
     "q": "1.0.1",
@@ -29,7 +28,6 @@
   "resolutions": {
     "angular": "~1.5.0",
     "angular-bootstrap": "~0.13.0",
-    "jquery": "^2",
-    "rv-common-style": "v1.5.0"
+    "jquery": "^2"
   }
 }

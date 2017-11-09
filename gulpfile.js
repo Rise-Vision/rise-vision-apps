@@ -63,7 +63,7 @@ var unitTestFiles = [
   "test/unit/**/*.tests.js"
 ];
 
-var commonStyleLink = fs.realpathSync('web/bower_components/rv-common-style') + '/**/*.js';
+var commonStyleLink = fs.realpathSync('web/bower_components/common-header') + '/**/*.js';
 
 //------------------------- Browser Sync --------------------------------
 
@@ -235,7 +235,7 @@ gulp.task("images", function () {
 });
 
 gulp.task("fonts", function() {
-  return gulp.src("./web/bower_components/rv-common-style/dist/fonts/**/*")
+  return gulp.src("./web/bower_components/common-header/dist/fonts/**/*")
     .pipe(gulp.dest("dist/fonts"));
 });
 
