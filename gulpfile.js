@@ -31,7 +31,7 @@ var partialsHTMLFiles = [
 ];
 
 var localeFiles = [
-  "./web/bower_components/rv-common-i18n/dist/locales/**/*"
+  "./web/bower_components/common-header/dist/locales/**/*"
 ];
 
 var unitTestFiles = [
@@ -44,7 +44,6 @@ var unitTestFiles = [
   "web/bower_components/angular-ui-codemirror/ui-codemirror.js",
   "web/bower_components/angular-vertilize/angular-vertilize.js",
   'web/bower_components/Sortable/Sortable.js',
-  "web/bower_components/rv-common-i18n/dist/i18n.js",
   "web/bower_components/common-header/dist/js/components/focus-me.js",
   "web/bower_components/common-header/dist/js/components/confirm-instance.js",
   "web/bower_components/common-header/dist/js/components/background-image-setting.js",
