@@ -28,6 +28,9 @@
   "resolutions": {
     "angular": "~1.5.0",
     "angular-bootstrap": "~0.13.0",
+    "angular-ui-router": "^0.2.18",
+    "angular-sanitize": "~1.5.0",
+    "angular-mocks": "~1.5.0",
     "jquery": "^2"
   }
 }
