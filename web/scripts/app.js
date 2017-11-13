@@ -20,6 +20,7 @@ angular.module('risevision.apps', [
     'risevision.widget.common',
     'ui.codemirror',
     'angular.vertilize',
+    'truncate',
     'risevision.common.loading',
     'risevision.common.i18n',
     'risevision.apps.partials',

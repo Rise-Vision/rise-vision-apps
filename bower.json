@@ -24,7 +24,8 @@
     "widget-settings-ui-components": "https://github.com/Rise-Vision/widget-settings-ui-components.git#1.0.4",
     "widget-settings-ui-core": "https://github.com/Rise-Vision/widget-settings-ui-core.git",
     "jszip": "2.5.0",
-    "Sortable": "^1.4.2"
+    "Sortable": "^1.4.2",
+    "angular-truncate": "*"
   },
   "homepage": "https://github.com/Rise-Vision/rise-vision-apps",
   "authors": [
@@ -34,7 +35,7 @@
   "license": "GNU",
   "resolutions": {
     "jquery": "^2",
-    "angular": "~1.5.0",
+    "angular": "1.2.18",
     "angular-sanitize": "~1.5.0",
     "angular-mocks": "~1.5.0",
     "angular-bootstrap": "^0.13.0",
