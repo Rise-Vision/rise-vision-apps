@@ -25,7 +25,8 @@
     "widget-settings-ui-core": "https://github.com/Rise-Vision/widget-settings-ui-core.git",
     "jszip": "2.5.0",
     "Sortable": "^1.4.2",
-    "angular-truncate": "*"
+    "angular-truncate": "*",
+    "angular-slugify": "^1.0.1"
   },
   "homepage": "https://github.com/Rise-Vision/rise-vision-apps",
   "authors": [

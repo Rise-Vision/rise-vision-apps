@@ -21,6 +21,7 @@ angular.module('risevision.apps', [
     'ui.codemirror',
     'angular.vertilize',
     'truncate',
+    'slugifier',
     'risevision.common.loading',
     'risevision.common.i18n',
     'risevision.apps.partials',
