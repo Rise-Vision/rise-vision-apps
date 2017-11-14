@@ -31,7 +31,7 @@ var partialsHTMLFiles = [
 ];
 
 var localeFiles = [
-  "./web/bower_components/rv-common-i18n/dist/locales/**/*"
+  "./web/bower_components/common-header/dist/locales/**/*"
 ];
 
 var unitTestFiles = [
@@ -46,18 +46,16 @@ var unitTestFiles = [
   "web/bower_components/angular-truncate/src/truncate.js",
   "web/bower_components/angular-slugify/angular-slugify.js",
   'web/bower_components/Sortable/Sortable.js',
-  "web/bower_components/rv-common-i18n/dist/i18n.js",
-  "web/bower_components/rv-common-app-components/dist/js/focus-me.js",
-  "web/bower_components/rv-common-app-components/dist/js/confirm-instance.js",
-  "web/bower_components/rv-common-app-components/dist/js/background-image-setting.js",
-  "web/bower_components/rv-common-app-components/dist/js/distribution-selector.js",
-  "web/bower_components/rv-common-app-components/dist/js/presentation-selector.js",
-  "web/bower_components/rv-common-app-components/dist/js/timeline.js",
-  "web/bower_components/rv-common-app-components/dist/js/message-box.js",
   "web/bower_components/rv-angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js",
-  "web/bower_components/component-storage-selector/dist/storage-selector.js",  
-  "web/bower_components/widget-settings-ui-components/dist/js/angular/*.js",
-  "web/bower_components/rv-common-app-components/dist/js/stop-event.js",
+  "web/bower_components/widget-settings-ui-components/dist/js/angular/position-setting.js",
+  "web/bower_components/common-header/dist/js/components/focus-me.js",
+  "web/bower_components/common-header/dist/js/components/confirm-instance.js",
+  "web/bower_components/common-header/dist/js/components/background-image-setting.js",
+  "web/bower_components/common-header/dist/js/components/distribution-selector.js",
+  "web/bower_components/common-header/dist/js/components/presentation-selector.js",
+  "web/bower_components/common-header/dist/js/components/timeline.js",
+  "web/bower_components/common-header/dist/js/components/message-box.js",
+  "web/bower_components/common-header/dist/js/components/stop-event.js",
   "node_modules/widget-tester/mocks/translate-mock.js",
   "node_modules/widget-tester/mocks/segment-analytics-mock.js",
   "web/scripts/storage-selector-app.js",
@@ -66,7 +64,7 @@ var unitTestFiles = [
   "test/unit/**/*.tests.js"
 ];
 
-var commonStyleLink = fs.realpathSync('web/bower_components/rv-common-style') + '/**/*.js';
+var commonStyleLink = fs.realpathSync('web/bower_components/common-header') + '/**/*.css';
 
 //------------------------- Browser Sync --------------------------------
 
@@ -238,7 +236,7 @@ gulp.task("images", function () {
 });
 
 gulp.task("fonts", function() {
-  return gulp.src("./web/bower_components/rv-common-style/dist/fonts/**/*")
+  return gulp.src("./web/bower_components/common-header/dist/fonts/**/*")
     .pipe(gulp.dest("dist/fonts"));
 });
 

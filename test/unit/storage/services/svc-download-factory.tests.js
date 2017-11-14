@@ -69,8 +69,8 @@ describe('service: downloadFactory:', function() {
     
     inject(function($injector){  
       var $httpBackend = $injector.get('$httpBackend');
-      $httpBackend.when('GET', 'bower_components/rv-common-i18n/dist/locales/translation_en.json').respond(function() {return ''});
-      $httpBackend.when('GET', 'bower_components/rv-common-i18n/dist/locales/translation_en_ca.json').respond(function() {return ''});
+      $httpBackend.when('GET', 'bower_components/common-header/dist/locales/translation_en.json').respond(function() {return ''});
+      $httpBackend.when('GET', 'bower_components/common-header/dist/locales/translation_en_ca.json').respond(function() {return ''});
 
       $window = $injector.get('$window');
       $window.JSZip = function() {

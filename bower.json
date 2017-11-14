@@ -6,27 +6,20 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "test",
-    "tests"
+    "test"
   ],
   "dependencies": {
-    "jquery": "^2",
-    "angular-bootstrap": "^0.13.0",
     "angular-bootstrap-colorpicker": "~3.0.19",
     "angular-ui-codemirror": "~0.3.0",
-    "angular-vertilize": "~1.0.1",
-    "angular-mocks": "1.5.0",
-    "common-header": "https://github.com/Rise-Vision/common-header.git#v1.14.7",
-    "component-storage-selector": "https://github.com/Rise-Vision/component-storage-selector.git",
-    "rv-common-i18n": "https://github.com/Rise-Vision/common-i18n.git",
-    "rv-common-style": "https://github.com/Rise-Vision/common-style.git#fix/product-grid",
-    "rv-loading": "https://github.com/Rise-Vision/rv-loading.git",
-    "widget-settings-ui-components": "https://github.com/Rise-Vision/widget-settings-ui-components.git#1.0.4",
-    "widget-settings-ui-core": "https://github.com/Rise-Vision/widget-settings-ui-core.git",
     "jszip": "2.5.0",
     "Sortable": "^1.4.2",
     "angular-truncate": "*",
-    "angular-slugify": "^1.0.1"
+    "angular-slugify": "^1.0.1",
+    "common-header": "https://github.com/Rise-Vision/common-header.git#v2.0.0"
+  },
+  "devDependencies": {
+    "q": "1.0.1",
+    "angular-mocks": "~1.5.0"
   },
   "homepage": "https://github.com/Rise-Vision/rise-vision-apps",
   "authors": [
@@ -35,11 +28,11 @@
   "description": "RiseVision App Launcher",
   "license": "GNU",
   "resolutions": {
-    "jquery": "^2",
-    "angular": "1.2.18",
+    "angular": "~1.5.0",
+    "angular-bootstrap": "~0.13.0",
+    "angular-ui-router": "^0.2.18",
     "angular-sanitize": "~1.5.0",
     "angular-mocks": "~1.5.0",
-    "angular-bootstrap": "^0.13.0",
-    "rv-common-style": "fix/product-grid"
+    "jquery": "^2"
   }
 }

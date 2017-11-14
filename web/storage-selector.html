@@ -14,7 +14,7 @@
   <meta name="description" content="We have a couple of apps that will allow you to manage your Digital Signage. Managing from the content creation to its delivery on an unlimited number of displays anywhere in the world.">
 
   <!-- build:css css/storage-selector.min.css -->
-  <link rel="stylesheet" type="text/css" href="bower_components/rv-common-style/dist/css/rise.min.css">
+  <link rel="stylesheet" type="text/css" href="bower_components/common-header/dist/css/rise.min.css">
   <!-- endbuild -->
 
 </head>
@@ -32,39 +32,32 @@
 
   <script src="bower_components/angular-translate/angular-translate.js"></script>
   <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
-  <script src="bower_components/rv-common-i18n/dist/i18n.js"></script>
 
   <script src="bower_components/spin.js/spin.js"></script>
   <script src="bower_components/angular-spinner/angular-spinner.js"></script>
-  <script src="bower_components/rv-loading/loading.js"></script>
   
   <script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
   <script src="bower_components/ng-biscuit/dist/ng-biscuit.js"></script>
 
-  <script src="bower_components/ng-gapi-loader/src/js/svc-gapi.js"></script>
-  <script src="bower_components/ng-core-api-client/src/js/svc-cache.js"></script>
-  <script src="bower_components/ng-core-api-client/src/js/svc-oauth2.js"></script>
-  <script src="bower_components/ng-core-api-client/src/js/svc-company.js"></script>
-  <script src="bower_components/ng-core-api-client/src/js/svc-core-util.js"></script>
-  <script src="bower_components/ng-core-api-client/src/js/svc-user.js"></script>
+  <script src="bower_components/common-header/dist/js/components/i18n.js"></script>
+  <script src="bower_components/common-header/dist/js/components/gapi-loader.js"></script>
+  <script src="bower_components/common-header/dist/js/components/core-api-client.js"></script>
+  <script src="bower_components/common-header/dist/js/components/ui-flow.js"></script>
+  <script src="bower_components/common-header/dist/js/components/segment-analytics.js"></script>
+  <script src="bower_components/common-header/dist/js/components/userstate.js"></script>
+  <script src="bower_components/common-header/dist/js/components/last-modified.js"></script>
+  <script src="bower_components/common-header/dist/js/components/loading.js"></script>
+  <script src="bower_components/common-header/dist/js/components/scrolling-list.js"></script>
+  <script src="bower_components/common-header/dist/js/components/search-filter.js"></script>
+  <script src="bower_components/common-header/dist/js/components/focus-me.js"></script>
+  <script src="bower_components/common-header/dist/js/components/confirm-instance.js"></script>
+  <script src="bower_components/common-header/dist/js/components/stop-event.js"></script>
+  <script src="bower_components/common-header/dist/js/components/message-box.js"></script>
+  <script src="bower_components/common-header/dist/js/components/svg-icon.js"></script>
+  <script src="bower_components/common-header/dist/js/components/subscription-status.js"></script>
 
-  <script src="bower_components/angular-ui-flow-manager/src/js/svc-ui-flow.js"></script>
-
-  <script src="bower_components/rv-common-app-components/dist/js/segment-analytics.js"></script>
-  <script src="bower_components/rv-common-app-components/dist/js/userstate.js"></script>
-  <script src="bower_components/rv-common-app-components/dist/js/last-modified.js"></script>
-  <script src="bower_components/rv-common-app-components/dist/js/scrolling-list.js"></script>
-  <script src="bower_components/rv-common-app-components/dist/js/search-filter.js"></script>
-  <script src="bower_components/rv-common-app-components/dist/js/focus-me.js"></script>
-  <script src="bower_components/rv-common-app-components/dist/js/confirm-instance.js"></script>
-  <script src="bower_components/rv-common-app-components/dist/js/stop-event.js"></script>
-  <script src="bower_components/rv-common-app-components/dist/js/message-box.js"></script>
-  <script src="bower_components/rv-common-app-components/dist/js/svg-icon.js"></script>
-
-  <script src="bower_components/component-subscription-status/dist/js/subscription-status.js"></script>
   <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
 
-  <script src="bower_components/widget-settings-ui-core/dist/widget-settings-ui-core.js"></script>
   <script src="bower_components/angular-md5/angular-md5.min.js"></script>
 
   <script src="tmp/partials.js"></script>
@@ -74,6 +67,8 @@
   <script src="scripts/storage-selector-app.js"></script>
 
   <!-- storage -->
+  <script src="scripts/common/services/svc-gadgets-api.js"></script>
+
   <script src="scripts/storage/services/svc-storage-factory.js"></script>
   <script src="scripts/storage/services/svc-storage-utils.js"></script>
   <script src="scripts/storage/services/svc-file-upload.js"></script>
