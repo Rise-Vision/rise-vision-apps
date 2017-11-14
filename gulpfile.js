@@ -44,6 +44,8 @@ var unitTestFiles = [
   "web/bower_components/angular-ui-codemirror/ui-codemirror.js",
   "web/bower_components/angular-vertilize/angular-vertilize.js",
   'web/bower_components/Sortable/Sortable.js',
+  "web/bower_components/rv-angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js",
+  "web/bower_components/widget-settings-ui-components/dist/js/angular/position-setting.js",
   "web/bower_components/common-header/dist/js/components/focus-me.js",
   "web/bower_components/common-header/dist/js/components/confirm-instance.js",
   "web/bower_components/common-header/dist/js/components/background-image-setting.js",
@@ -51,9 +53,6 @@ var unitTestFiles = [
   "web/bower_components/common-header/dist/js/components/presentation-selector.js",
   "web/bower_components/common-header/dist/js/components/timeline.js",
   "web/bower_components/common-header/dist/js/components/message-box.js",
-  "web/bower_components/rv-angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js",
-  "web/bower_components/component-storage-selector/dist/storage-selector.js",  
-  "web/bower_components/widget-settings-ui-components/dist/js/angular/*.js",
   "web/bower_components/common-header/dist/js/components/stop-event.js",
   "node_modules/widget-tester/mocks/translate-mock.js",
   "node_modules/widget-tester/mocks/segment-analytics-mock.js",
@@ -63,7 +62,7 @@ var unitTestFiles = [
   "test/unit/**/*.tests.js"
 ];
 
-var commonStyleLink = fs.realpathSync('web/bower_components/common-header') + '/**/*.js';
+var commonStyleLink = fs.realpathSync('web/bower_components/common-header') + '/**/*.css';
 
 //------------------------- Browser Sync --------------------------------
 
