@@ -13,7 +13,7 @@
     "angular-ui-codemirror": "~0.3.0",
     "jszip": "2.5.0",
     "Sortable": "^1.4.2",
-    "common-header": "https://github.com/Rise-Vision/common-header.git#feature/components-merge"
+    "common-header": "https://github.com/Rise-Vision/common-header.git#v2.0.0"
   },
   "devDependencies": {
     "q": "1.0.1",
