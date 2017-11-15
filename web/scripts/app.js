@@ -112,6 +112,7 @@ angular.module('risevision.apps', [
             function ($window, $location, $state, userState, canAccessApps,
               STORE_URL, IN_RVA_PATH) {
               canAccessApps(true).then(function () {
+                // jshint camelcase:false
                 if ($location.search().show_product) {
                   $window.location.href = STORE_URL + IN_RVA_PATH
                     .replace('productId', $location.search().show_product)
@@ -119,6 +120,7 @@ angular.module('risevision.apps', [
                 } else {
                   $state.go('apps.launcher.home');
                 }
+                // jshint camelcase:true
               });
             }
           ]
