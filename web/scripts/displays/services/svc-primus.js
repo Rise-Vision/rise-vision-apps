@@ -6,7 +6,7 @@ angular.module('risevision.displays.services')
     return {
       create: function () {
         var deferred = $q.defer();
-        var Primus = $window['Primus'];
+        var Primus = $window.Primus;
         var primus = new Primus(MESSAGING_URL, {
           reconnect: {
             retries: 0
