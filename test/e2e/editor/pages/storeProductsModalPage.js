@@ -10,7 +10,7 @@ var StoreProductsModalPage = function() {
   var productListLoader = element(by.xpath('//ul[@spinner-key="product-list-loader"]'));
   
   var storeProductsList = element(by.id('productList'));
-  var storeProducts = element.all(by.css('storeProduct'));
+  var storeProducts = element.all(by.id('storeProduct'));
   var addBlankPresentation = element(by.id('newPresentationButton'));
   var suggestTemplate = element(by.id('suggestTemplate'));  
   var productNameFields = element.all(by.id('productName'));
