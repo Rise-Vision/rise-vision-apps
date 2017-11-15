@@ -11,13 +11,12 @@
   "author": "rodrigopavezi <rodrigopavezi@gmail.com>",
   "license": "GNU",
   "dependencies": {
-    "bower": "^1.5.3",
-    "gulp-karma": "0.0.5"
+    "bower": "^1.5.3"
   },
   "devDependencies": {
     "browser-sync": "^2.7.13",
     "connect-modrewrite": "0.8.1",
-    "gulp": "^3.9.1",
+    "gulp": "^3.9.0",
     "gulp-bower": "0.0.10",
     "gulp-concat": "^2.4.1",
     "gulp-jsbeautifier": "1.0.0",

@@ -10,9 +10,9 @@ var StoreProductsModalPage = function() {
   var productListLoader = element(by.xpath('//ul[@spinner-key="product-list-loader"]'));
   
   var storeProductsList = element(by.id('productList'));
-  var storeProducts = element.all(by.css('.storeProduct'));
-  var addBlankPresentation = element(by.css('.blank-template'));
-  var suggestTemplate = element(by.css('.suggest-template'));  
+  var storeProducts = element.all(by.css('storeProduct'));
+  var addBlankPresentation = element(by.id('newPresentationButton'));
+  var suggestTemplate = element(by.id('suggestTemplate'));  
   var productNameFields = element.all(by.id('productName'));
   var statusFields = element.all(by.id('status'));
   var freeProducts = element.all(by.cssContainingText('p#status', 'Free'));
