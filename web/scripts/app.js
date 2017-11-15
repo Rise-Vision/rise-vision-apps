@@ -107,7 +107,7 @@ angular.module('risevision.apps', [
 
         .state('apps.launcher.signup', {
           url: '/signup',
-          controller: ['$window', '$location', '$state', 'userState', 
+          controller: ['$window', '$location', '$state', 'userState',
             'canAccessApps', 'STORE_URL', 'IN_RVA_PATH',
             function ($window, $location, $state, userState, canAccessApps,
               STORE_URL, IN_RVA_PATH) {
