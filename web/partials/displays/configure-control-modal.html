@@ -1,0 +1,103 @@
+<div id="configure-control-modal">
+  <div class="modal-header">
+    <button id="dismissButton" type="button" class="close" ng-click="dismiss()">
+      <i class="fa fa-times"></i>
+    </button>
+    <h3 class="modal-title">Configure Display Control</h3>
+  </div>
+  <div class="modal-body">	
+    <div class="alert alert-warning">
+      <b>DISCLAIMER:</b> Display Control is currently provided as beta, and is only supported on Player Version RisePlayerElectron 2017.xx.xx.xx.xx and higher. <br/>
+      Once out of beta, it will only be available to a Display subscribed to Rise Player Professional. 
+    </div>
+
+    <a class="info-link" href="#" target="_blank"> <i class="fa fa-question-circle icon-left" aria-hidden="true"></i> <span>Need help configuring Display Control?</span> </a>
+    
+    <br/>
+
+    <textarea class="form-control" rows="12">
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+README 
+
+Display Control is a feature that allows you to conserve electricity and extend the life of your Screen by automatically turning the Screen attached to your Media Player On and Off according to the Schedule your Display is assigned to. 
+
+When there is no content scheduled to show, your Screen will be turned OFF automatically. And when there is content scheduled to show, your Screen will be turned ON automatically. 
+
+Power On and Power Off commands can be sent to your Screen using either CEC or RS232. 
+
+INSTRUCTIONS FOR CEC
+
+To use CEC, set the interface in the Display Control Settings above to be interface=cec. You can ignore the other parameters. 
+
+INSTRUCTIONS FOR RS232
+
+To use RS232, set the interface to be interface=serial. Then configure the remaining parameters according to your hardware configuration. Refer to the manufacturer's owner's manual for your Screen to confirm what the value for each parameter should be
+
+
+DISPLAY CONTROL SETTINGS [EDIT HERE!]
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+interface=
+serial-port=
+serial-baud-rate=
+serial-data-bits=
+serial-parity=
+serial-stop-bits=
+serial-flow-control=
+serial-screen-on-cmd=
+serial-screen-off-cmd=
+
+----------------------------------------------------------------
+
+Interface: What interface should be used for sending On and Off commands to your Screen? If RS232, define line 1 as rs232 otherwise define line 1 as cec to use CEC.  
+rs232
+
+If the Interface defined on line 1 is cec, the remaining settings can be ignored. These only apply to a Serial Port Connection. 
+
+Serial Port Number: Specify on line 2 what Serial Port on your Media Player should be used for sending the on and off commands? The default is 1.
+--------------------------------------
+1
+
+Bit Rate: Specify on line 3 what Bit Rate value should be used for the Serial Port Connection. The default is 9600. 
+--------------------------------------
+9600
+
+Data Bits: Specify on line 4 the Data Bits value that should be used for the Serial Port Connection. The default is 8.
+-------------------------------------- 
+8
+
+Parity: Specify on line 5 the Parity value that should be used for the Serial Port Connection. The default is none. 
+none
+
+Stop Bits: Specify on line 6 the Stop Bits value that should be used for the Serial Port Connection. The default is 1. 
+1
+
+Flow Control: Specify on line 7 the Stop Bits value that should be used for the Serial Port Connection. The default is none.
+none
+
+Commands to turn a Screen On and Off vary between Manufacturers. If your Screen supports being turned On and Off via a Serial Connection, you can confirm the On and Off commands from the Manufacturer User Manual of your Screen. 
+
+Screen On: Specify the command used to turn your Screen ON. 
+
+
+
+Screen Off: Specify the command used to turn your Screen OFF. 
+
+
+
+
+
+    </textarea>
+  </div>
+
+  <div class="modal-footer">
+    <button id="" class="btn btn-danger pull-left" ng-click="">Reset To Defaults 
+    </button>
+    <button id="" class="btn btn-primary" ng-click="">Save 
+      <i class="fa fa-check icon-right"></i>
+    </button>
+    <button id="" class="btn btn-default" ng-click="">Cancel 
+      <i class="fa fa-times icon-right"></i>
+    </button>
+  </div>
+</div>
