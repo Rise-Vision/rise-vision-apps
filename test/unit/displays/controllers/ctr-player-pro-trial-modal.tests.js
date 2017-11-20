@@ -5,7 +5,7 @@ describe('controller: player pro trial modal', function() {
   beforeEach(module('risevision.displays.services'));
   beforeEach(module(mockTranlate()));
   beforeEach(module(function ($provide) {
-    $provide.service('displayFactory',function(){
+    $provide.service('playerProFactory',function(){
       return {
         startPlayerProTrial : function(){
           return Q.resolve();
@@ -23,18 +23,18 @@ describe('controller: player pro trial modal', function() {
       }
     });
   }));
-  var $scope, displayFactory, $modalInstanceDismissSpy, $modalInstanceCloseSpy;
+  var $scope, playerProFactory, $modalInstanceDismissSpy, $modalInstanceCloseSpy;
   beforeEach(function(){   
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
-      displayFactory = $injector.get('displayFactory');
+      playerProFactory = $injector.get('playerProFactory');
       var $modalInstance = $injector.get('$modalInstance');
       $modalInstanceDismissSpy = sinon.spy($modalInstance, 'dismiss');
       $modalInstanceCloseSpy = sinon.spy($modalInstance, 'close');
 
       $controller('PlayerProTrialModalCtrl', {
         $scope : $scope,
-        displayFactory: displayFactory,
+        playerProFactory: playerProFactory,
         $modalInstance: $modalInstance,
       });
       $scope.$digest();
@@ -55,11 +55,11 @@ describe('controller: player pro trial modal', function() {
 
   describe('startTrial:',function(){
     it('should start trial',function(done){
-      var displayFactorySpy = sinon.spy(displayFactory,'startPlayerProTrial')
+      var playerProFactorySpy = sinon.spy(playerProFactory,'startPlayerProTrial')
 
       $scope.startTrial();
 
-      displayFactorySpy.should.have.been.called;
+      playerProFactorySpy.should.have.been.called;
       setTimeout(function() {
         $modalInstanceCloseSpy.should.have.been.called;
         done();
@@ -67,11 +67,11 @@ describe('controller: player pro trial modal', function() {
     });
 
     it('should start trial',function(done){
-      var displayFactorySpy = sinon.stub(displayFactory,'startPlayerProTrial', function(){return Q.reject();})
+      var playerProFactorySpy = sinon.stub(playerProFactory,'startPlayerProTrial', function(){return Q.reject();})
 
       $scope.startTrial();
 
-      displayFactorySpy.should.have.been.called;
+      playerProFactorySpy.should.have.been.called;
       setTimeout(function() {
         $modalInstanceCloseSpy.should.not.have.been.called;
         done();

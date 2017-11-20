@@ -56,57 +56,61 @@
 </div>
 <hr>
 
-<div class="row half-top" ng-controller="modalCtrl">
- 
+<div class="row half-top">
+
   <!-- DISPLAY SCHEDULE -->
   <div class="col-sm-6 col-xs-12">
     <div class="u_lh-normal u_margin-sm-bottom">
-      <label class="control-label"> Display Schedule </label>
+      <label class="control-label" translate>displays-app.fields.player.schedule.label</label>
     </div>
     <div class="panel panel-default">
       <table class="table">
         <tbody class="table-body">
            <tr class="table-body__row">
-            <td class="table-body__cell"><span> Assigned Schedule </span></td>
+            <td class="table-body__cell"><span translate>displays-app.fields.player.schedule.assigned</span></td>
             <td class="table-body__cell">
               <span>
-                <a id="viewSchedule" target="_blank" href="#">
-                <span class="table-link u_ellipsis-md-top"> DeliveryE2E
-                  <i class="fa fa-external-link"></i>
-                </span>
+                <a id="addToSchedule" ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
+                  <span class="btn btn-primary btn-xs">
+                    {{ 'displays-app.fields.player.schedule.addToSchedule' | translate }} 
+                    <i class="fa fa-external-link icon-right" aria-hidden="true"></i>
+                  </span>
+                </a>
+                <a id="viewSchedule" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
+                  <span class="table-link u_ellipsis-md-top">
+                    {{display.scheduleName}}
+                    <i class="fa fa-external-link" aria-hidden="true"></i>
+                  </span>
                 </a>
               </span>
             </td>
           </tr>
-           <tr class="table-body__row">
-            <td class="table-body__cell" id="clickHandler"><span> Display Control </span></td>
+          <tr class="table-body__row">
+            <td class="table-body__cell"><span translate>displays-app.fields.player.displayControl.label</span></td>
             <!-- ACTIVE -->
-            <td class="table-body__cell" id="targetHide">
+            <td class="table-body__cell">
               <span> 
-                <div class="">
-                  <div class="checkbox u_remove-margin">
-                    <label class="control-label"> 
-                      <input type="checkbox" ng-click="openDisplayControlCTA()"> <span> Turn Screen ON/OFF based on Schedule </span>
-                      <br/>
-                       <a>
-                        <button class="btn btn-primary btn-xs" ng-click="openConfigureDisplayControl()"> Configure </button>
-                       </a>
-                    </label>
+                <div class="checkbox u_remove-margin">
+                  <label class="control-label"> 
+                    <input type="checkbox" ng-click="openDisplayControlCTA()">
+                    <span translate> displays-app.fields.player.displayControl.description </span>
+                    <br/>
+                    <button class="btn btn-primary btn-xs" ng-click="openConfigureDisplayControl()" translate> displays-app.fields.player.displayControl.configure </button>
+                  </label>
 
-                  </div>
                 </div>
               </span>
             </td>
-          <!-- INACTIVE -->
-          <td class="table-body__cell" style="display: none" id="targetShow">
-            <span> 
-              <div class="text-danger">
-               <span>Your Rise Player version doesn't support <b>Display Control</b>. </span>
-              <!--  <br/>
-               <a href="#" ng-click="factory.addDisplayModal(display)"> Please upgrade </a> -->
-              </div>
-            </span>
-          </td>
+            <!-- INACTIVE -->
+            <td class="table-body__cell" ng-hide="true">
+              <span> 
+                <div class="text-danger">
+                  <span translate>
+                    displays-app.fields.player.displayControl.unsupported
+                  </span>
+                </div>
+              </span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -124,22 +128,6 @@
             <td class="table-body__cell" translate><span>displays-app.fields.player.id</span></td>
             <td class="table-body__cell"><span> {{display.id}} </span></td>
           </tr>
-         <!--  <tr class="table-body__row">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.schedule.label</span></td>
-            <td class="table-body__cell">
-              <span>
-                <a id="addToSchedule" ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
-                  <span class="btn btn-primary btn-xs">
-                    {{ 'displays-app.fields.player.schedule.addToSchedule' | translate }} 
-                    <i class="fa fa-external-link icon-right" aria-hidden="true"></i>
-                  </span>
-                </a>
-                <a id="viewSchedule" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
-                  <span class="table-link u_ellipsis-md-top">{{display.scheduleName}} <i class="fa fa-external-link" aria-hidden="true"></i></span>
-                </a>
-              </span>
-            </td>
-          </tr> -->
           <tr class="table-body__row">
             <td class="table-body__cell" translate><span>displays-app.fields.player.status</span></td>
             <td class="table-body__cell">
@@ -174,21 +162,21 @@
             <td class="table-body__cell"><span translate>displays-app.fields.player.macAddress</span></td>
             <td class="table-body__cell"><span>{{display.macAddress}}</span></td>
           </tr>
-          <tr class="table-body__row" ng-class="{'alert-warning':factory.isOutdatedPlayer(display), 'alert-danger':factory.isUnsupportedPlayer(display)}">
+          <tr class="table-body__row" ng-class="{'alert-warning':playerProFactory.isOutdatedPlayer(display), 'alert-danger':playerProFactory.isUnsupportedPlayer(display)}">
             <td class="table-body__cell"><span translate>displays-app.fields.player.playerVersion</span></td>
-            <td class="table-body__cell" ng-if="factory.is3rdPartyPlayer(display)">
+            <td class="table-body__cell" ng-if="playerProFactory.is3rdPartyPlayer(display)">
               <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}} {{'displays-app.fields.player.version.thirdParty' | translate}}</span>
               <a href="https://risevision.zendesk.com/hc/en-us/articles/115003786306" target="_blank" translate>displays-app.fields.player.version.howGetHelp</a>
             </td>
-            <td class="table-body__cell" ng-if="factory.isOutdatedPlayer(display)">
+            <td class="table-body__cell" ng-if="playerProFactory.isOutdatedPlayer(display)">
               <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "") + (display.offlineSubscription ? 'Professional' : 'Standard')}}</span>
               <a href="https://help.risevision.com/hc/en-us/articles/115004250723-Why-is-Rise-Player-version-not-current-" target="_blank" translate>displays-app.fields.player.version.notCurrent</a>
             </td>
-            <td class="table-body__cell" ng-if="factory.isUnsupportedPlayer(display)">
+            <td class="table-body__cell" ng-if="playerProFactory.isUnsupportedPlayer(display)">
               <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "")}}</span>
               <a href="" ng-click="factory.addDisplayModal(display)"><span class="text-danger" translate>displays-app.fields.player.version.unsupported</span> - {{'displays-app.fields.player.version.upgrade' | translate}}</a>
             </td>
-            <td class="table-body__cell" ng-if="!factory.is3rdPartyPlayer(display) && !factory.isOutdatedPlayer(display) && !factory.isUnsupportedPlayer(display)">
+            <td class="table-body__cell" ng-if="!playerProFactory.is3rdPartyPlayer(display) && !playerProFactory.isOutdatedPlayer(display) && !playerProFactory.isUnsupportedPlayer(display)">
               <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "") + (display.offlineSubscription ? 'Professional' : 'Standard')}}</span>
             </td>
           </tr>
@@ -394,15 +382,3 @@
   </div>
   <time-picker ng-model="display.restartTime" ng-disabled="!display.restartEnabled"></time-picker>
 </div>
-
-
-<!-- PROTOTYPE -->
-<script>
-  $(document).ready(function() { 
-    $(document).on("click", "#clickHandler", function() {
-       $('#targetShow').show();
-       $('#targetHide').hide();
-});
-
-  });
-</script>

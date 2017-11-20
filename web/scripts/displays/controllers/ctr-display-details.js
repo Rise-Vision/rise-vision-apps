@@ -1,16 +1,18 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .controller('displayDetails', ['$scope', '$q', '$state',
-    'displayFactory', 'display', '$loading', '$log', '$modal',
-    '$templateCache', '$filter', 'displayId', 'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', '$rootScope',
-    'storeAuthorization', 'userState', 'STORE_URL', 'IN_RVA_PATH',
-    function ($scope, $q, $state, displayFactory, display, $loading, $log,
-      $modal, $templateCache, $filter, displayId, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, $rootScope,
-      storeAuthorization, userState, STORE_URL, IN_RVA_PATH) {
+  .controller('displayDetails', ['$scope', '$rootScope', '$q', '$state',
+    'displayFactory', 'display', 'playerProFactory', '$loading', '$log', '$modal',
+    '$templateCache', '$filter', 'displayId', 'storeAuthorization', 'userState',
+    'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', 'STORE_URL', 'IN_RVA_PATH',
+    function ($scope, $rootScope, $q, $state, displayFactory, display, playerProFactory, 
+      $loading, $log, $modal, $templateCache, $filter, displayId, storeAuthorization, 
+      userState,
+      PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, STORE_URL, IN_RVA_PATH) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
+      $scope.playerProFactory = playerProFactory;
       $scope.companyId = userState.getSelectedCompanyId();
       $scope.productCode = PLAYER_PRO_PRODUCT_CODE;
       $scope.productId = PLAYER_PRO_PRODUCT_ID;
@@ -196,7 +198,7 @@ angular.module('risevision.displays.controllers')
           $scope.showSubscribeButton = false;
 
           $scope.deferredDisplay.promise.then(function (display) {
-            if (!displayFactory.is3rdPartyPlayer(display) && !displayFactory.isOutdatedPlayer(display)) {
+            if (!playerProFactory.is3rdPartyPlayer(display) && !playerProFactory.isOutdatedPlayer(display)) {
               switch (subscriptionStatus.statusCode) {
               case 'trial-available':
                 $scope.showTrialButton = true;

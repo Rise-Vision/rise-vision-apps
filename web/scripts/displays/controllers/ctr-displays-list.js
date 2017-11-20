@@ -3,9 +3,10 @@
 angular.module('risevision.displays.controllers')
   .controller('displaysList', ['$scope', '$window', 'userState', 'display',
     'ScrollingListService', '$loading', '$filter', 'displayFactory',
-    'displayTracker', 'STORE_URL', 'PLAYER_PRO_PRODUCT_ID',
+    'displayTracker', 'playerProFactory', 'STORE_URL', 'PLAYER_PRO_PRODUCT_ID',
     function ($scope, $window, userState, display, ScrollingListService, $loading,
-      $filter, displayFactory, displayTracker, STORE_URL, PLAYER_PRO_PRODUCT_ID) {
+      $filter, displayFactory, displayTracker, playerProFactory, 
+      STORE_URL, PLAYER_PRO_PRODUCT_ID) {
       $scope.search = {
         sortBy: 'name',
         count: $scope.listLimit,
@@ -45,7 +46,7 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.showStartTrial = function () {
-        var modalInstance = displayFactory.startPlayerProTrialModal();
+        var modalInstance = playerProFactory.startPlayerProTrialModal();
 
         modalInstance.result
           .then(function () {
@@ -74,11 +75,11 @@ angular.module('risevision.displays.controllers')
           return 'player-not-installed';
         } else if (!$scope.displayService.hasSchedule(display)) {
           return 'schedule-not-created';
-        } else if (displayFactory.is3rdPartyPlayer(display)) {
+        } else if (playerProFactory.is3rdPartyPlayer(display)) {
           return '3rd-party';
-        } else if (displayFactory.isUnsupportedPlayer(display)) {
+        } else if (playerProFactory.isUnsupportedPlayer(display)) {
           return 'unsupported';
-        } else if (!displayFactory.isProCompatiblePlayer(display)) {
+        } else if (!playerProFactory.isProCompatiblePlayer(display)) {
           return 'not-pro-compatible';
         } else if (status === 'Subscribed') {
           return 'subscribed';

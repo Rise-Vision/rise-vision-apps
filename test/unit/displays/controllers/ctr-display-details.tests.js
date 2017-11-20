@@ -23,7 +23,11 @@ describe('controller: display details', function() {
         },
         deleteDisplay: function() {
           deleteCalled = true;
-        },
+        }
+      };
+    });
+    $provide.service('playerProFactory', function() {
+      return {        
         is3rdPartyPlayer: function(){ return false;},
         isOutdatedPlayer: function(){ return false;}
       };
@@ -97,7 +101,8 @@ describe('controller: display details', function() {
     $provide.value('displayId', '1234');
   }));
   var $scope, $state, updateCalled, deleteCalled, confirmDelete;
-  var resolveLoadScreenshot, resolveRequestScreenshot, $rootScope, $loading, displayFactory;
+  var resolveLoadScreenshot, resolveRequestScreenshot, 
+  $rootScope, $loading, displayFactory, playerProFactory;
   beforeEach(function(){
     updateCalled = false;
     deleteCalled = false;
@@ -106,6 +111,7 @@ describe('controller: display details', function() {
 
     inject(function($injector, $controller){
       displayFactory = $injector.get('displayFactory');
+      playerProFactory = $injector.get('playerProFactory');
       $loading = $injector.get('$loading');
       $rootScope = $injector.get('$rootScope');
       $scope = $rootScope.$new();
@@ -114,6 +120,7 @@ describe('controller: display details', function() {
         $scope : $scope,
         display:$injector.get('display'),
         displayFactory: displayFactory,
+        playerProFactory: playerProFactory,
         $modal:$injector.get('$modal'),
         $state : $state,
         $log : $injector.get('$log')});
@@ -359,7 +366,7 @@ describe('controller: display details', function() {
 
     it('should hide flags for 3rd part players',function(done){
       $scope.deferredDisplay.resolve({playerName:'Cenique', playerVersion: '2017.07.17.20.21'});
-      var spy = sinon.stub(displayFactory,'is3rdPartyPlayer',function() {return true});
+      var spy = sinon.stub(playerProFactory,'is3rdPartyPlayer',function() {return true});
       
       $rootScope.$emit('subscription-status:changed',{});
       
@@ -373,7 +380,7 @@ describe('controller: display details', function() {
 
     it('should hide flags for outdated players',function(done){
       $scope.deferredDisplay.resolve({playerName:'RiseVisionElectron', playerVersion: '2017.01.04.14.40'})
-      var spy = sinon.stub(displayFactory,'isOutdatedPlayer',function() {return true});
+      var spy = sinon.stub(playerProFactory,'isOutdatedPlayer',function() {return true});
       
       $rootScope.$emit('subscription-status:changed',{});
       

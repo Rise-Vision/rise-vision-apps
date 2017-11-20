@@ -1,0 +1,48 @@
+<div id="configure-control-modal">
+  <div class="modal-header">
+    <button id="dismissButton" type="button" class="close" ng-click="dismiss()">
+      <i class="fa fa-times"></i>
+    </button>
+    <h3 class="modal-title" translate>displays-app.fields.player.displayControl.configureModal.title</h3>
+  </div>
+  <div class="modal-body">	
+    <div class="alert alert-warning" translate>
+      displays-app.fields.player.displayControl.configureModal.disclaimer
+    </div>
+
+    <a class="info-link" href="#" target="_blank">
+      <i class="fa fa-question-circle icon-left" aria-hidden="true"></i>
+      <span translate>displays-app.fields.player.displayControl.configureModal.help</span>
+    </a>
+
+    <textarea class="form-control u_margin-md-top" rows="12">
+Select 'Need help configuring Display Control?' above for instructions.
+----------------------------------------------------------------
+interface=
+serial-port=
+serial-baud-rate=
+serial-data-bits=
+serial-parity=
+serial-stop-bits=
+serial-flow-control=
+serial-screen-on-cmd=
+serial-screen-off-cmd=
+    </textarea>
+  </div>
+
+  <div class="modal-footer">
+    <button id="resetButton" class="btn btn-danger pull-left" ng-click="resetForm()" translate>
+      displays-app.fields.player.displayControl.configureModal.reset
+    </button>
+
+    <button id="saveButton" type="submit" class="btn btn-primary" ng-click="save()" ng-disabled="displayDetails.$invalid">
+      {{ factory.savingDisplay ? ('common.saving' | translate) : ('common.save' | translate)}}
+      <i class="fa fa-check icon-right"></i>
+    </button>
+    <!-- Indicates cancel or non-destructive action -->
+    <button id="cancelButton" class="btn btn-default" ng-click="dismiss()">
+      {{'common.cancel' | translate}}
+      <i class="fa fa-times icon-right"></i>
+    </button>
+  </div>
+</div>

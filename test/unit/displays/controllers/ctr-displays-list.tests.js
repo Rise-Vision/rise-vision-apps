@@ -50,6 +50,9 @@ describe('controller: displays list', function() {
     });
     
     $provide.service('displayFactory', function() {
+      return {};
+    });
+    $provide.service('playerProFactory', function() {
       return {
         isOutdatedPlayer: function(display) {
           return display.outdated;
