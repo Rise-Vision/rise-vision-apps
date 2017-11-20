@@ -301,7 +301,7 @@ gulp.task("test:e2e", function (cb) {
 });
 
 gulp.task("test",  function (cb) {
-  runSequence(["config", "html2js"], "test:unit", "coveralls", cb);
+  runSequence(["config", "html2js"], "coveralls", cb);
 });
 
 //------------------------ Global ---------------------------------
