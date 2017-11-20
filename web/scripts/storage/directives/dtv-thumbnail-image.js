@@ -11,18 +11,18 @@
             scope.$watch('file', function (file) {
               var classes = [];
               var isDisabled = false;
-              var isSvg = false;
+              var isSvg = true;
               var imgSrc =
-                'https://s3.amazonaws.com/Rise-Images/Icons/file.png';
+                'https://cdn2.hubspot.net/hubfs/2700250/storage-file-icon@2x.png';
 
               if (file.isChecked) {
-                classes.push('selected-border');
+                classes.push('list-item--selected');
               }
 
               if (storageUtils.fileIsFolder(file)) {
                 isSvg = true;
-                imgSrc = 'riseWidgetFolder';
-                classes.push('folder');
+                imgSrc = 'https://cdn2.hubspot.net/hubfs/2700250/storage-folder-icon@2x.png';
+                classes.push('list-item_folder');
                 if (file.isChecked) {
                   classes.push('folder-extended');
                 }
@@ -38,19 +38,20 @@
                     classes.push('disabled-item');
                     isDisabled = true;
                   } else {
-                    classes.push('placeholder-item');
+                    classes.push('list-type_image');
                   }
                   if (scope.file.metadata && scope.file.metadata.thumbnail) {
+                    isSvg = false;
                     imgSrc = scope.file.metadata.thumbnail +
-                      '=s100-ci' + '?_=' + scope.file.timeCreated;
+                      '' + '?_=' + scope.file.timeCreated;
                   } else {
                     if (scope.storageFactory.fileIsImage(scope.file)) {
                       isSvg = true;
-                      imgSrc = 'riseWidgetImage';
+                      imgSrc = 'https://cdn2.hubspot.net/hubfs/2700250/storage-file-icon@2x.png';
                     } else if (scope.storageFactory.fileIsVideo(scope
                         .file)) {
                       isSvg = true;
-                      imgSrc = 'riseWidgetVideo';
+                      imgSrc = 'https://cdn2.hubspot.net/hubfs/2700250/storage-video-icon@2x.png';
                     }
                   }
                 }
