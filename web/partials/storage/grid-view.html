@@ -15,7 +15,7 @@
     <img ng-if="!isSvg"  ng-src="{{imgSrc}}"/>
 
     <div ng-if="!file.metadata.thumbnail || file.isThrottled" class="list-item-label">
-      abc {{file.name | fileNameFilter:filesFactory.folderPath}}
+      {{file.name | fileNameFilter:filesFactory.folderPath}}
     </div>
 
     
