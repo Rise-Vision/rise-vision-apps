@@ -23,9 +23,6 @@
                 isSvg = true;
                 imgSrc = 'https://s3.amazonaws.com/Rise-Images/UI/storage-folder-icon%402x.png';
                 classes.push('list-item_folder');
-                if (file.isChecked) {
-                  classes.push('folder-extended');
-                }
               } else {
                 classes.push('single-item');
                 if (file.isThrottled) {

@@ -5,7 +5,6 @@
   rv-spinner-start-active="1" >
     <ng-include src="'partials/storage/list-view.html'" ng-if="isListView"></ng-include>
     <ng-include src="'partials/storage/grid-view.html'" ng-if="!isListView"></ng-include>
-    
     <empty-state ng-show="!filesFactory.loadingItems && isEmptyState()"></empty-state>
   </div>
 
