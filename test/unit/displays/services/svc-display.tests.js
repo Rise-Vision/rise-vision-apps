@@ -1,7 +1,7 @@
 'use strict';
 describe('service: display:', function() {
   var CONNECTION_TIME = Date.now();
-  var screenshotRequesterMock, imageBlobLoaderMock;
+  var screenshotRequesterMock;
 
   beforeEach(module('risevision.displays.services'));
   beforeEach(module(function ($provide) {
@@ -58,11 +58,6 @@ describe('service: display:', function() {
     $provide.factory('screenshotRequester', function($q) {
       return function(ids) {
         return screenshotRequesterMock($q);
-      };
-    });
-    $provide.factory('imageBlobLoader', function($q) {
-      return function() {
-        return imageBlobLoaderMock($q);
       };
     });
     $provide.service('userState',function(){
@@ -565,27 +560,4 @@ describe('service: display:', function() {
     });
   });
 
-  describe('loadScreenshot', function() {
-    it('should successfully load a screenshot', function() {
-      imageBlobLoaderMock = function($q) {
-        return $q.resolve({ imageUrl: '' });
-      };
-
-      display.loadScreenshot()
-        .then(function(resp) {
-          expect(resp.imageUrl).to.be.truely;
-        });
-    });
-
-    it('should handle failed screenshot requests', function() {
-      imageBlobLoaderMock = function($q) {
-        return $q.reject({ err: 'timeout' });
-      };
-
-      display.loadScreenshot()
-        .catch(function(resp) {
-          expect(resp.err).to.equal('timeout');
-        });
-    });
-  });
 });

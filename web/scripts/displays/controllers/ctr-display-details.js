@@ -2,11 +2,11 @@
 
 angular.module('risevision.displays.controllers')
   .controller('displayDetails', ['$scope', '$rootScope', '$q', '$state',
-    'displayFactory', 'display', 'playerProFactory', '$loading', '$log', '$modal',
-    '$templateCache', '$filter', 'displayId', 'storeAuthorization', 'userState',
+    'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
+    '$templateCache', 'displayId', 'storeAuthorization', 'userState',
     'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', 'STORE_URL', 'IN_RVA_PATH',
-    function ($scope, $rootScope, $q, $state, displayFactory, display, playerProFactory, 
-      $loading, $log, $modal, $templateCache, $filter, displayId, storeAuthorization, 
+    function ($scope, $rootScope, $q, $state, displayFactory, display, screenshotFactory, playerProFactory, 
+      $loading, $log, $modal, $templateCache, displayId, storeAuthorization, 
       userState,
       PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, STORE_URL, IN_RVA_PATH) {
       $scope.displayId = displayId;
@@ -19,17 +19,13 @@ angular.module('risevision.displays.controllers')
       $scope.productLink = STORE_URL + IN_RVA_PATH
         .replace('productId', $scope.productId)
         .replace('companyId', userState.getSelectedCompanyId());
-      $scope.subscriptionStatus = {};
-      $scope.showTrialButton = false;
-      $scope.showTrialStatus = false;
-      $scope.showSubscribeButton = false;
       $scope.deferredDisplay = $q.defer();
 
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
-        $scope.deferredDisplay.resolve($scope.display);
+        $scope.deferredDisplay.resolve();
 
-        $scope.loadScreenshot();
+        screenshotFactory.loadScreenshot();
       });
 
       $scope.$watch('factory.loadingDisplay', function (loading) {
@@ -113,77 +109,6 @@ angular.module('risevision.displays.controllers')
         }
       };
 
-      $scope.requestScreenshot = function () {
-        display.screenshotLoading = true;
-
-        return display.requestScreenshot(displayId)
-          .then($scope.loadScreenshot)
-          .catch(function (err) {
-            display.screenshotLoading = false;
-
-            $scope.screenshot = {
-              error: 'requesting'
-            };
-            console.log('Error requesting screenshot', err);
-          });
-      };
-
-      $scope.loadScreenshot = function () {
-        display.screenshotLoading = true;
-
-        return display.loadScreenshot(displayId)
-          .then(function (resp) {
-            display.screenshotLoading = false;
-            $scope.screenshot = resp;
-          })
-          .catch(function (err) {
-            display.screenshotLoading = false;
-            $scope.screenshot = {
-              error: 'loading'
-            };
-            console.log('Error loading screenshot', err);
-          });
-      };
-
-      $scope.screenshotState = function (display) {
-        var statusFilter = $filter('status');
-
-        if (!display || $scope.displayService.statusLoading || $scope.displayService
-          .screenshotLoading) {
-          return 'loading';
-        } else if (display.os && display.os.indexOf('cros') === 0) {
-          return 'os-not-supported';
-        } else if (statusFilter(display) === 'notinstalled') {
-          return 'not-installed';
-        } else if (display.playerName !== 'RisePlayerElectron' || display.playerVersion <=
-          '2017.01.10.17.33') {
-          return 'upgrade-player';
-        } else if (!$scope.displayService.hasSchedule(display)) {
-          return 'no-schedule';
-        } else if (statusFilter(display) === 'offline' && $scope.screenshot &&
-          $scope.screenshot.lastModified) {
-          return 'offline-screenshot-loaded';
-        } else if (statusFilter(display) === 'offline') {
-          return 'offline';
-        } else if ($scope.screenshot && $scope.screenshot.lastModified) {
-          return 'screenshot-loaded';
-        } else if ($scope.screenshot && ($scope.screenshot.status === 404 ||
-            $scope.screenshot.status === 403)) {
-          return 'no-screenshot-available';
-        } else if ($scope.screenshot && $scope.screenshot.error) {
-          return 'screenshot-error';
-        }
-
-        return '';
-      };
-
-      $scope.reloadScreenshotDisabled = function (display) {
-        return $scope.displayService.statusLoading ||
-          $scope.displayService.screenshotLoading || [
-            'no-screenshot-available', 'screenshot-loaded'
-          ].indexOf($scope.screenshotState(display)) === -1;
-      };
-
       var refreshSubscriptionStatusListener = $rootScope.$on('refreshSubscriptionStatus', function () {
         $loading.start('loading-trial');
       });
@@ -191,27 +116,28 @@ angular.module('risevision.displays.controllers')
       var subscriptionStatusListener = $rootScope.$on('subscription-status:changed',
         function (e, subscriptionStatus) {
           $loading.stop('loading-trial');
-          $scope.subscriptionStatus = subscriptionStatus;
+          $scope.deferredDisplay.promise.then(function () {
+            $scope.display.subscriptionStatus = subscriptionStatus;
 
-          $scope.showTrialButton = false;
-          $scope.showTrialStatus = false;
-          $scope.showSubscribeButton = false;
-
-          $scope.deferredDisplay.promise.then(function (display) {
-            if (!playerProFactory.is3rdPartyPlayer(display) && !playerProFactory.isOutdatedPlayer(display)) {
+            $scope.display.showTrialButton = false;
+            $scope.display.showTrialStatus = false;
+            $scope.display.showSubscribeButton = false;
+            
+            if (!playerProFactory.is3rdPartyPlayer($scope.display) && 
+              !playerProFactory.isOutdatedPlayer($scope.display)) {
               switch (subscriptionStatus.statusCode) {
               case 'trial-available':
-                $scope.showTrialButton = true;
+                $scope.display.showTrialButton = true;
                 break;
               case 'on-trial':
               case 'suspended':
-                $scope.showTrialStatus = true;
-                $scope.showSubscribeButton = true;
+                $scope.display.showTrialStatus = true;
+                $scope.display.showSubscribeButton = true;
                 break;
               case 'trial-expired':
               case 'cancelled':
               case 'not-subscribed':
-                $scope.showSubscribeButton = true;
+                $scope.display.showSubscribeButton = true;
                 break;
               default:
                 break;

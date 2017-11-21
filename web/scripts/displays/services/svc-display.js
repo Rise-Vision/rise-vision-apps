@@ -18,11 +18,11 @@
       'postalCode'
     ])
     .service('display', ['$rootScope', '$q', '$log', 'coreAPILoader',
-      'userState', 'getDisplayStatus', 'screenshotRequester',
-      'imageBlobLoader', 'pick', 'getProductSubscriptionStatus', 'DISPLAY_WRITABLE_FIELDS',
+      'userState', 'getDisplayStatus', 'screenshotRequester', 'pick', 
+      'getProductSubscriptionStatus', 'DISPLAY_WRITABLE_FIELDS',
       'DISPLAY_SEARCH_FIELDS', 'PLAYER_PRO_PRODUCT_CODE',
       function ($rootScope, $q, $log, coreAPILoader, userState,
-        getDisplayStatus, screenshotRequester, imageBlobLoader, pick,
+        getDisplayStatus, screenshotRequester, pick,
         getProductSubscriptionStatus, DISPLAY_WRITABLE_FIELDS,
         DISPLAY_SEARCH_FIELDS, PLAYER_PRO_PRODUCT_CODE) {
 
@@ -303,13 +303,6 @@
                 console.error('Failed screenshot request', e);
                 return $q.reject(e);
               });
-          },
-          loadScreenshot: function (displayId) {
-            var url =
-              'https://storage.googleapis.com/risevision-display-screenshots/' +
-              displayId + '.jpg';
-
-            return imageBlobLoader(url);
           }
         };
 

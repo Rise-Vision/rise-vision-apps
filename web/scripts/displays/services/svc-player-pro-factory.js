@@ -56,6 +56,11 @@ angular.module('risevision.displays.services')
           display.playerVersion >= '2017.07.31.15.31');
       };
 
+      factory.isDisplayControlCompatiblePlayer = function (display) {
+        return !!(display && display.playerName === 'RisePlayerElectron' &&
+          display.playerVersion >= '2017.07.01.01.01');
+      };
+
       factory.startPlayerProTrialModal = function () {
         displayTracker('Start Player Pro Trial Modal');
 
@@ -80,6 +85,20 @@ angular.module('risevision.displays.services')
             return $q.reject();
           });
       };
+
+      factory.openDisplayControlCTAModal = function (display) {
+        if (!display.useDisplayControl) {
+          return;
+        }
+
+        displayTracker('Display Control CTA Modal');
+
+        return $modal.open({
+          templateUrl: 'partials/displays/display-control-cta-modal.html',
+          size: 'lg',
+          controller: 'PlayerProTrialModalCtrl'
+        });
+      }
 
       return factory;
     }
