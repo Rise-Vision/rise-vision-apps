@@ -1,11 +1,11 @@
 <div class="text-center text-muted u_margin-md-top" ng-if="filesDetails.files.length === 0 && statusDetails.code!==202 && statusDetails.code!==404 && isFileListVisible()" translate>storage-client.empty-state.no-uploads</div>
 
-<div id="storageFilesGrid" class="storage-selector-list" ng-if="filesDetails.files.length > 0 && statusDetails.code!==202 && statusDetails.code!==404 && isFileListVisible()">
+<div id="storageFilesGrid" class="grid-selector-list grid-selector-list_storage" ng-if="filesDetails.files.length > 0 && statusDetails.code!==202 && statusDetails.code!==404 && isFileListVisible()">
 
   <div thumbnail-image
    ng-repeat="file in filesDetails.files | filter:search.query | orderBy:search.sortBy:search.reverse track by $index"
    ng-click="fileClick(file)" 
-   class="storage-selector-list-item" 
+   class="grid-selector-list-item" 
    ng-class="gridItemClasses"
    ng-if="storageFactory.storageFull || !storageUtils.fileIsTrash(file)" 
    title="{{file.name | fileNameFilter:filesFactory.folderPath}}{{ file.isThrottled? ' - '+('storage-client.error.blocked-file' | translate) : '' }}" data-toggle="tooltip" data-placement="top" tooltip>
@@ -19,10 +19,10 @@
     </div>
     
   </div><!--end storage-selector-list-item-->
-  <div class="storage-selector-list-item"></div>
-  <div class="storage-selector-list-item"></div>
-  <div class="storage-selector-list-item"></div>
-  <div class="storage-selector-list-item"></div>
-  <div class="storage-selector-list-item"></div>
+  <div class="grid-selector-list-item list-item-placeholder"></div>
+  <div class="grid-selector-list-item list-item-placeholder"></div>
+  <div class="grid-selector-list-item list-item-placeholder"></div>
+  <div class="grid-selector-list-item list-item-placeholder"></div>
+  <div class="grid-selector-list-item list-item-placeholder"></div>
 
 </div>
