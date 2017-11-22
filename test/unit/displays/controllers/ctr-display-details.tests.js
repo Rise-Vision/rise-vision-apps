@@ -125,7 +125,6 @@ describe('controller: display details', function() {
     expect($scope.companyId).to.be.ok;
     expect($scope.productCode).to.be.ok;
     expect($scope.productId).to.be.ok;
-    expect($scope.productLink).to.be.ok;
 
     expect($scope.save).to.be.a('function');
     expect($scope.confirmDelete).to.be.a('function');
@@ -136,7 +135,6 @@ describe('controller: display details', function() {
     expect($scope.companyId).to.equal("company1");
     expect($scope.productCode).to.equal("c4b368be86245bf9501baaa6e0b00df9719869fd");
     expect($scope.productId).to.equal("2048");
-    expect($scope.productLink).to.equal("https://store.risevision.com/product/2048/?cid=company1");
 
     setTimeout(function() {
       expect($scope.display).to.be.ok;

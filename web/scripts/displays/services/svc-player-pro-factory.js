@@ -61,13 +61,13 @@ angular.module('risevision.displays.services')
           display.playerVersion >= '2017.07.01.01.01');
       };
 
-      factory.startPlayerProTrialModal = function () {
-        displayTracker('Start Player Pro Trial Modal');
+      factory.openPlayerProInfoModal = function () {
+        displayTracker('Player Pro Info Modal');
 
         return $modal.open({
-          templateUrl: 'partials/displays/player-pro-trial-modal.html',
+          templateUrl: 'partials/displays/player-pro-info-modal.html',
           size: 'lg',
-          controller: 'PlayerProTrialModalCtrl'
+          controller: 'PlayerProInfoModalCtrl'
         });
       };
 
@@ -85,20 +85,6 @@ angular.module('risevision.displays.services')
             return $q.reject();
           });
       };
-
-      factory.openDisplayControlCTAModal = function (display) {
-        if (!display.useDisplayControl) {
-          return;
-        }
-
-        displayTracker('Display Control CTA Modal');
-
-        return $modal.open({
-          templateUrl: 'partials/displays/display-control-cta-modal.html',
-          size: 'lg',
-          controller: 'PlayerProTrialModalCtrl'
-        });
-      }
 
       return factory;
     }

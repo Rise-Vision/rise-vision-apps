@@ -4,11 +4,10 @@ angular.module('risevision.displays.controllers')
   .controller('displayDetails', ['$scope', '$rootScope', '$q', '$state',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'storeAuthorization', 'userState',
-    'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', 'STORE_URL', 'IN_RVA_PATH',
+    'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID',
     function ($scope, $rootScope, $q, $state, displayFactory, display, screenshotFactory, playerProFactory, 
-      $loading, $log, $modal, $templateCache, displayId, storeAuthorization, 
-      userState,
-      PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, STORE_URL, IN_RVA_PATH) {
+      $loading, $log, $modal, $templateCache, displayId, storeAuthorization, userState,
+      PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
@@ -16,9 +15,6 @@ angular.module('risevision.displays.controllers')
       $scope.companyId = userState.getSelectedCompanyId();
       $scope.productCode = PLAYER_PRO_PRODUCT_CODE;
       $scope.productId = PLAYER_PRO_PRODUCT_ID;
-      $scope.productLink = STORE_URL + IN_RVA_PATH
-        .replace('productId', $scope.productId)
-        .replace('companyId', userState.getSelectedCompanyId());
       $scope.deferredDisplay = $q.defer();
 
       displayFactory.getDisplay(displayId).then(function () {

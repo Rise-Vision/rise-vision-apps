@@ -6,12 +6,12 @@
 
   <div class="global-actions" require-role="da">
     <div>
-      <button id="playerProTrialButton" ng-if="display.showTrialButton" ng-click="playerProFactory.startPlayerProTrialModal()" class="btn btn-lg btn-primary" rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0">
-        {{'displays-app.details.startPlayerProTrial' | translate}} 
+      <button id="playerProTrialButton" ng-if="display.showTrialButton" ng-click="playerProFactory.openPlayerProInfoModal()" class="btn btn-lg btn-primary" rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0" translate>
+        displays-app.details.startPlayerProTrial
       </button>
-      <a id="subscribePlayerProButton" ng-if="display.showSubscribeButton" class="btn btn-lg btn-primary" href="{{productLink}}" target="_blank" translate="">
+      <button id="subscribePlayerProButton" ng-if="display.showSubscribeButton" ng-click="playerProFactory.openPlayerProInfoModal()" class="btn btn-lg btn-primary" translate>
         displays-app.details.subscribePlayerPro
-      </a>
+      </button>
     </div>
     <a ng-if="display.showTrialButton || display.showSubscribeButton" class="info-link" href="https://help.risevision.com/hc/en-us/articles/115003626863" target="_blank">
       <i class="fa fa-question-circle icon-left" aria-hidden="true"></i>
@@ -23,7 +23,7 @@
 
 <div id="subscription-status" subscription-status ng-show="display.showTrialStatus"
     product-id="{{productId}}" product-code="{{productCode}}" display-id="{{displayId}}" company-id="{{companyId}}"
-    ng-model="subscriptionStatus.result" show-store-modal="showStoreModal" expanded-format="true"></div>
+    ng-model="display.subscriptionStatus.result" show-store-modal="showStoreModal" expanded-format="true"></div>
 
 <div id="display-loader" rv-spinner rv-spinner-key="display-loader" rv-spinner-start-active="0"></div>
 

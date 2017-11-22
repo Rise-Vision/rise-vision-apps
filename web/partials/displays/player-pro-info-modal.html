@@ -1,11 +1,12 @@
-<div id="configure-control-modal">
+<div id="player-pro-info-modal">
   <div class="modal-header">
     <button id="dismissButton" type="button" class="close" ng-click="dismiss()">
       <i class="fa fa-times"></i>
     </button>
-    <h3 class="modal-title">Try Rise Player Professional</h3>
+    <h3 class="modal-title" ng-if="display.showTrialButton">Try Rise Player Professional</h3>
+    <h3 class="modal-title" ng-if="!display.showTrialButton">Rise Player Professional</h3>
   </div>
-  <div class="modal-body">	
+  <div class="modal-body" rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0">	
     <div class="row">
       <div class="col-xs-12 text-center">
         <h4>
@@ -50,19 +51,26 @@
           </ul>
         </div>
       </div>
+      <div class="col-xs-12 u_margin-md-bottom text-center">
+        <p ng-show="display.showTrialButton" translate>displays-app.playerProTrial.description2</p>
+        <p translate>displays-app.playerProTrial.price</p>
+      </div>
     </div>
 
     <div class="text-center u_margin-md-bottom">
-      <button class="btn btn-primary btn-lg u_margin-md-top" ng-click="startTrial()">
-        Subscribe to Rise Player Professional
+      <button id="playerProTrialButton" ng-if="display.showTrialButton" class="btn btn-primary btn-lg" ng-click="startTrial()" translate>
+        displays-app.details.startPlayerProTrial
       </button>
-      <br/><br/>
-      <p>
+      <a id="subscribePlayerProButton" ng-if="!display.showTrialButton" class="btn btn-lg btn-primary" ng-href="{{productLink}}" link-cid target="_blank" translate>
+        displays-app.details.subscribePlayerPro
+      </a>
+
+      <p class="u_margin-md-top">
         If you're already subscribed to Rise Player Professional, please assign your Display in your 
-        <a ng-href="https://store.risevision.com/account" link-cid target="_blank">
+        <a ng-href="{{accountLink}}" link-cid target="_blank">
           Store Account</a>.
-     </p>
-   </div>
+      </p>
+    </div>
 
   </div>
 </div>

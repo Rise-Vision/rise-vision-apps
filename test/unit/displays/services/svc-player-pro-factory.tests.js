@@ -44,7 +44,7 @@ describe('service: playerProFactory:', function() {
     expect(playerProFactory.isOutdatedPlayer).to.be.a('function');
     expect(playerProFactory.isUnsupportedPlayer).to.be.a('function');
     expect(playerProFactory.isProCompatiblePlayer).to.be.a('function');
-    expect(playerProFactory.startPlayerProTrialModal).to.be.a('function'); 
+    expect(playerProFactory.openPlayerProInfoModal).to.be.a('function'); 
     expect(playerProFactory.startPlayerProTrial).to.be.a('function'); 
   });
 
@@ -93,18 +93,18 @@ describe('service: playerProFactory:', function() {
     expect(playerProFactory.isProCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2018.09.45.06.49'})).to.be.true;
   });
 
-  describe('startPlayerProTrialModal: ', function() {
+  describe('openPlayerProInfoModal: ', function() {
     it('should open modal', function() {
       var $modalSpy = sinon.spy($modal, 'open');
       
-      playerProFactory.startPlayerProTrialModal(); 
+      playerProFactory.openPlayerProInfoModal(); 
 
-      expect(trackerCalled).to.equal('Start Player Pro Trial Modal');     
+      expect(trackerCalled).to.equal('Player Pro Info Modal');     
       
       $modalSpy.should.have.been.calledWithMatch({
-        controller: "PlayerProTrialModalCtrl",
+        controller: "PlayerProInfoModalCtrl",
         size: "lg",
-        templateUrl: "partials/displays/player-pro-trial-modal.html"
+        templateUrl: "partials/displays/player-pro-info-modal.html"
       });
     });
   });

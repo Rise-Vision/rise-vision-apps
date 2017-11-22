@@ -32,7 +32,7 @@ describe('controller: player pro trial modal', function() {
       $modalInstanceDismissSpy = sinon.spy($modalInstance, 'dismiss');
       $modalInstanceCloseSpy = sinon.spy($modalInstance, 'close');
 
-      $controller('PlayerProTrialModalCtrl', {
+      $controller('PlayerProInfoModalCtrl', {
         $scope : $scope,
         playerProFactory: playerProFactory,
         $modalInstance: $modalInstance,
@@ -45,6 +45,13 @@ describe('controller: player pro trial modal', function() {
     expect($scope).to.be.truely;
     expect($scope.startTrial).to.be.a('function');
     expect($scope.dismiss).to.be.a('function');
+    expect($scope.productLink).to.be.ok;
+    expect($scope.accountLink).to.be.ok;
+  });
+  
+  it('should initialize', function() {
+    expect($scope.productLink).to.equal("https://store.risevision.com/product/2048/?cid=companyId");
+    expect($scope.accountLink).to.equal("https://store.risevision.com/account?cid=companyId");
   });
 
   it('should dismiss modal when clicked on close with no action',function(){
