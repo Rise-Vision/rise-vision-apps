@@ -6,8 +6,8 @@
 
   <div class="global-actions" require-role="da">
     <div>
-      <button id="playerProTrialButton" ng-if="display.showTrialButton" ng-click="playerProFactory.openPlayerProInfoModal()" class="btn btn-lg btn-primary" rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0" translate>
-        displays-app.details.startPlayerProTrial
+      <button id="playerProTrialButton" ng-if="display.showTrialButton" ng-click="playerProFactory.openPlayerProInfoModal()" class="btn btn-lg btn-primary" rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0">
+        {{'displays-app.details.startPlayerProTrial' | translate}}
       </button>
       <button id="subscribePlayerProButton" ng-if="display.showSubscribeButton" ng-click="playerProFactory.openPlayerProInfoModal()" class="btn btn-lg btn-primary" translate>
         displays-app.details.subscribePlayerPro
