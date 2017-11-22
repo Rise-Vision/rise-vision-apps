@@ -35,7 +35,7 @@ serial-screen-off-cmd=
       displays-app.fields.player.displayControl.configureModal.reset
     </button>
 
-    <button id="saveButton" type="submit" class="btn btn-primary" ng-click="save()" ng-disabled="displayDetails.$invalid">
+    <button id="saveButton" type="submit" class="btn btn-primary" ng-click="save()" ng-disabled="displayDetails.$invalid" require-role="da">
       {{ factory.savingDisplay ? ('common.saving' | translate) : ('common.save' | translate)}}
       <i class="fa fa-check icon-right"></i>
     </button>

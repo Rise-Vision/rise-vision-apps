@@ -22,6 +22,12 @@ describe('controller: player pro trial modal', function() {
         }
       }
     });
+    $provide.service('userState',function(){
+      return {
+          getSelectedCompanyId: function() {return "company1"},
+          _restoreState: function(){}
+      };
+    });
   }));
   var $scope, playerProFactory, $modalInstanceDismissSpy, $modalInstanceCloseSpy;
   beforeEach(function(){   
@@ -50,8 +56,8 @@ describe('controller: player pro trial modal', function() {
   });
   
   it('should initialize', function() {
-    expect($scope.productLink).to.equal("https://store.risevision.com/product/2048/?cid=companyId");
-    expect($scope.accountLink).to.equal("https://store.risevision.com/account?cid=companyId");
+    expect($scope.productLink).to.equal("https://store.risevision.com/product/2048/?cid=company1");
+    expect($scope.accountLink).to.equal("https://store.risevision.com/account?cid=company1");
   });
 
   it('should dismiss modal when clicked on close with no action',function(){
