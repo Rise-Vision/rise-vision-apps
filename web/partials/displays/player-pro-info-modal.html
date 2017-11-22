@@ -55,10 +55,10 @@
     </div>
 
     <div class="text-center u_margin-md-bottom">
-      <button id="playerProTrialButton" ng-if="display.showTrialButton" class="btn btn-primary btn-lg" ng-click="startTrial()" translate>
+      <button id="startTrialButton" ng-if="display.showTrialButton" class="btn btn-primary btn-lg" ng-click="startTrial()" translate>
         displays-app.details.startPlayerProTrial
       </button>
-      <a id="subscribePlayerProButton" ng-if="!display.showTrialButton" class="btn btn-lg btn-primary" ng-href="{{productLink}}" target="_blank" translate>
+      <a id="subscribeButton" ng-if="!display.showTrialButton" class="btn btn-lg btn-primary" ng-href="{{productLink}}" target="_blank" translate>
         displays-app.details.subscribePlayerPro
       </a>
 
