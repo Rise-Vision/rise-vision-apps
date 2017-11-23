@@ -90,11 +90,10 @@
             <td class="table-body__cell" ng-show="playerProFactory.isDisplayControlCompatiblePlayer(display)">
               <span> 
                 <div class="checkbox u_remove-margin">
-                  <label class="control-label"> 
-                    <input type="checkbox" ng-model="display.useDisplayControl" ng-click="display.useDisplayControl && playerProFactory.openPlayerProInfoModal()">
+                  <label class="control-label">
                     <span translate> displays-app.fields.player.displayControl.description </span>
                     <br/>
-                    <button class="btn btn-primary btn-xs" ng-click="openConfigureDisplayControl()" require-role="da" translate> displays-app.fields.player.displayControl.configure </button>
+                    <button class="btn btn-primary btn-xs" ng-click="playerProFactory.openConfigureDisplayControl(display)" require-role="da" translate> displays-app.fields.player.displayControl.configure </button>
                   </label>
 
                 </div>

@@ -1,12 +1,13 @@
 'use strict';
 
 angular.module('risevision.displays.services')
-  .factory('playerProFactory', ['$rootScope', '$q', '$modal', 'displayTracker', 
-    'storeAuthorization', '$loading', 'parsePlayerDate', 
-    'getLatestPlayerVersion', 'PLAYER_PRO_PRODUCT_CODE',
-    function ($rootScope, $q, $modal, displayTracker, storeAuthorization, 
+  .factory('playerProFactory', ['$rootScope', '$q', '$modal', 'userState', 
+    'displayTracker', 'storeAuthorization', '$loading', 'parsePlayerDate', 
+    'getLatestPlayerVersion', 'STORE_URL', 'IN_RVA_PATH', 
+    'PLAYER_PRO_PRODUCT_ID', 'PLAYER_PRO_PRODUCT_CODE', 
+    function ($rootScope, $q, $modal, userState, displayTracker, storeAuthorization, 
       $loading, parsePlayerDate, getLatestPlayerVersion,
-      PLAYER_PRO_PRODUCT_CODE) {
+      STORE_URL, IN_RVA_PATH, PLAYER_PRO_PRODUCT_ID, PLAYER_PRO_PRODUCT_CODE) {
       var factory = {};
       var _latestPlayerVersion;
 
@@ -21,6 +22,12 @@ angular.module('risevision.displays.services')
       };
 
       _loadPlayerVersion();
+
+      factory.getProductLink = function() {
+        return (STORE_URL + IN_RVA_PATH
+          .replace('productId', PLAYER_PRO_PRODUCT_ID)
+          .replace('companyId', userState.getSelectedCompanyId()));
+      };
 
       factory.is3rdPartyPlayer = function (display) {
         display = display || {};
@@ -70,6 +77,22 @@ angular.module('risevision.displays.services')
           controller: 'PlayerProInfoModalCtrl'
         });
       };
+
+      factory.openConfigureDisplayControl = function (display) {
+        var deferred = $q.resolve();
+
+        if (!display.offlineSubscription) {
+          deferred = factory.openPlayerProInfoModal();
+        }
+
+        return deferred.then(function() {
+          return $modal.open({
+            templateUrl: 'partials/displays/display-control-modal.html',
+            size: 'lg',
+            controller: 'DisplayControlModalCtrl'
+          });
+        });
+      }
 
       factory.startPlayerProTrial = function () {
         displayTracker('Starting Player Pro Trial');

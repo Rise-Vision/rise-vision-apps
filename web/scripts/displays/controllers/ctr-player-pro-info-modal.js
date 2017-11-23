@@ -2,13 +2,11 @@
 angular.module('risevision.displays.controllers')
   .controller('PlayerProInfoModalCtrl', ['$scope', '$modalInstance', 
     'displayFactory', 'playerProFactory', 'userState',
-    'STORE_URL', 'IN_RVA_PATH', 'ACCOUNT_PATH', 'PLAYER_PRO_PRODUCT_ID',
+    'STORE_URL', 'ACCOUNT_PATH',
     function ($scope, $modalInstance, displayFactory, playerProFactory, userState,
-      STORE_URL, IN_RVA_PATH, ACCOUNT_PATH, PLAYER_PRO_PRODUCT_ID) {
+      STORE_URL, ACCOUNT_PATH) {
       $scope.display = displayFactory.display;
-      $scope.productLink = STORE_URL + IN_RVA_PATH
-        .replace('productId', PLAYER_PRO_PRODUCT_ID)
-        .replace('companyId', userState.getSelectedCompanyId());
+      $scope.productLink = playerProFactory.getProductLink();
       $scope.accountLink = STORE_URL + ACCOUNT_PATH
         .replace('companyId', userState.getSelectedCompanyId());
 

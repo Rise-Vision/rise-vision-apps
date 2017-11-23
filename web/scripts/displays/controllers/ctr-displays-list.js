@@ -3,10 +3,9 @@
 angular.module('risevision.displays.controllers')
   .controller('displaysList', ['$scope', '$window', 'userState', 'display',
     'ScrollingListService', '$loading', '$filter', 'displayFactory',
-    'displayTracker', 'playerProFactory', 'STORE_URL', 'PLAYER_PRO_PRODUCT_ID',
+    'displayTracker', 'playerProFactory',
     function ($scope, $window, userState, display, ScrollingListService, $loading,
-      $filter, displayFactory, displayTracker, playerProFactory, 
-      STORE_URL, PLAYER_PRO_PRODUCT_ID) {
+      $filter, displayFactory, displayTracker, playerProFactory) {
       $scope.search = {
         sortBy: 'name',
         count: $scope.listLimit,
@@ -38,7 +37,7 @@ angular.module('risevision.displays.controllers')
       });
 
       $scope.openRiseProStoreLink = function () {
-        $window.open(STORE_URL + '/product/' + PLAYER_PRO_PRODUCT_ID + '?cid=' + $scope.selectedCompayId, '_blank');
+        $window.open(playerProFactory.getProductLink(), '_blank');
       };
 
       $scope.openUnsupportedHelpLink = function () {

@@ -9,6 +9,9 @@ describe('controller: player pro trial modal', function() {
       return {
         startPlayerProTrial : function(){
           return Q.resolve();
+        },
+        getProductLink: function() {
+          return 'productLink';
         }
       };
     });    
@@ -56,8 +59,8 @@ describe('controller: player pro trial modal', function() {
   });
   
   it('should initialize', function() {
-    expect($scope.productLink).to.equal("https://store.risevision.com/product/2048/?cid=company1");
-    expect($scope.accountLink).to.equal("https://store.risevision.com/account?cid=company1");
+    expect($scope.productLink).to.equal('productLink');
+    expect($scope.accountLink).to.equal('https://store.risevision.com/account?cid=company1');
   });
 
   it('should dismiss modal when clicked on close with no action',function(){

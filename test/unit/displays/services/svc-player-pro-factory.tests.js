@@ -16,6 +16,12 @@ describe('service: playerProFactory:', function() {
         startTrial: function(){}
       };
     });
+    $provide.service('userState',function(){
+      return {
+          getSelectedCompanyId: function() {return "company1"},
+          _restoreState: function(){}
+      };
+    });
     $provide.value('PLAYER_PRO_PRODUCT_CODE','PLAYER_PRO_PRODUCT_CODE');
     $provide.factory('getLatestPlayerVersion', function() {
       return function() {
@@ -40,6 +46,7 @@ describe('service: playerProFactory:', function() {
   it('should exist',function(){
     expect(playerProFactory).to.be.ok;
     
+    expect(playerProFactory.getProductLink).to.be.a('function');
     expect(playerProFactory.is3rdPartyPlayer).to.be.a('function');
     expect(playerProFactory.isOutdatedPlayer).to.be.a('function');
     expect(playerProFactory.isUnsupportedPlayer).to.be.a('function');
@@ -47,6 +54,10 @@ describe('service: playerProFactory:', function() {
     expect(playerProFactory.openPlayerProInfoModal).to.be.a('function'); 
     expect(playerProFactory.startPlayerProTrial).to.be.a('function'); 
   });
+  
+  it('getProductLink: ', function() {
+    expect(playerProFactory.getProductLink()).to.equal('https://store.risevision.com/product/2048/?cid=company1');
+  })
 
   it('is3rdPartyPlayer:',function(){
     expect(playerProFactory.is3rdPartyPlayer()).to.be.false;
