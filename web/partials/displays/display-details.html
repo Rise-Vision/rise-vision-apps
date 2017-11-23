@@ -9,7 +9,7 @@
       <button id="playerProTrialButton" ng-if="display.showTrialButton" ng-click="playerProFactory.openPlayerProInfoModal()" class="btn btn-lg btn-primary" rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0">
         {{'displays-app.details.startPlayerProTrial' | translate}}
       </button>
-      <a id="subscribePlayerProButton" ng-if="display.showSubscribeButton" class="btn btn-lg btn-primary" ng-href="playerProFactory.getProductLink()" target="blank" translate>
+      <a id="subscribePlayerProButton" ng-if="display.showSubscribeButton" class="btn btn-lg btn-primary" ng-href="{{playerProFactory.getProductLink()}}" target="_blank" translate>
         displays-app.details.subscribePlayerPro
       </a>
     </div>
