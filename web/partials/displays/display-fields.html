@@ -88,16 +88,8 @@
             <td class="table-body__cell"><span translate>displays-app.fields.player.displayControl.label</span></td>
             <!-- ACTIVE -->
             <td class="table-body__cell" ng-show="playerProFactory.isDisplayControlCompatiblePlayer(display)">
-              <span> 
-                <div class="checkbox u_remove-margin">
-                  <label class="control-label">
-                    <span translate> displays-app.fields.player.displayControl.description </span>
-                    <br/>
-                    <button class="btn btn-primary btn-xs" ng-click="playerProFactory.openConfigureDisplayControl(display)" require-role="da" translate> displays-app.fields.player.displayControl.configure </button>
-                  </label>
-
-                </div>
-              </span>
+              <span translate> displays-app.fields.player.displayControl.description </span>
+              <button class="btn btn-primary btn-xs" ng-click="playerProFactory.openConfigureDisplayControl(display)" require-role="da" translate> displays-app.fields.player.displayControl.configure </button>
             </td>
             <!-- INACTIVE -->
             <td class="table-body__cell" ng-hide="playerProFactory.isDisplayControlCompatiblePlayer(display)">

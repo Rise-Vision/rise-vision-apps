@@ -63,10 +63,10 @@ describe('controller: displays list', function() {
         is3rdPartyPlayer: function(display) {
           return display.thirdParty;
         },
-        isProCompatiblePlayer: function(display) {
+        isOfflinePlayCompatiblePayer: function(display) {
           return !display.notProCompatiblePlayer;
         },
-        startPlayerProTrialModal: function() {
+        openPlayerProInfoModal: function() {
           if(cancelProTrialModal) {
             return { result: Q.reject() };
           }

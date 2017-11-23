@@ -50,7 +50,7 @@ describe('service: playerProFactory:', function() {
     expect(playerProFactory.is3rdPartyPlayer).to.be.a('function');
     expect(playerProFactory.isOutdatedPlayer).to.be.a('function');
     expect(playerProFactory.isUnsupportedPlayer).to.be.a('function');
-    expect(playerProFactory.isProCompatiblePlayer).to.be.a('function');
+    expect(playerProFactory.isOfflinePlayCompatiblePayer).to.be.a('function');
     expect(playerProFactory.openPlayerProInfoModal).to.be.a('function'); 
     expect(playerProFactory.startPlayerProTrial).to.be.a('function'); 
   });
@@ -96,12 +96,12 @@ describe('service: playerProFactory:', function() {
     expect(playerProFactory.isUnsupportedPlayer({playerName: 'RisePlayer', playerVersion:'2018.09.45.06.49'})).to.be.true;
   });
 
-  it('isProCompatiblePlayer:',function(){
-    expect(playerProFactory.isProCompatiblePlayer()).to.be.false;
-    expect(playerProFactory.isProCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:''})).to.be.false;
-    expect(playerProFactory.isProCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2017.06.27.05.15'})).to.be.false;
-    expect(playerProFactory.isProCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2017.07.31.15.31'})).to.be.true;
-    expect(playerProFactory.isProCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2018.09.45.06.49'})).to.be.true;
+  it('isOfflinePlayCompatiblePayer:',function(){
+    expect(playerProFactory.isOfflinePlayCompatiblePayer()).to.be.false;
+    expect(playerProFactory.isOfflinePlayCompatiblePayer({playerName: 'RisePlayerElectron', playerVersion:''})).to.be.false;
+    expect(playerProFactory.isOfflinePlayCompatiblePayer({playerName: 'RisePlayerElectron', playerVersion:'2017.06.27.05.15'})).to.be.false;
+    expect(playerProFactory.isOfflinePlayCompatiblePayer({playerName: 'RisePlayerElectron', playerVersion:'2017.07.31.15.31'})).to.be.true;
+    expect(playerProFactory.isOfflinePlayCompatiblePayer({playerName: 'RisePlayerElectron', playerVersion:'2018.09.45.06.49'})).to.be.true;
   });
 
   describe('openPlayerProInfoModal: ', function() {

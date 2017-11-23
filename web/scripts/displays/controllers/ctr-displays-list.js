@@ -45,7 +45,7 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.showStartTrial = function () {
-        var modalInstance = playerProFactory.startPlayerProTrialModal();
+        var modalInstance = playerProFactory.openPlayerProInfoModal();
 
         modalInstance.result
           .then(function () {
@@ -78,7 +78,7 @@ angular.module('risevision.displays.controllers')
           return '3rd-party';
         } else if (playerProFactory.isUnsupportedPlayer(display)) {
           return 'unsupported';
-        } else if (!playerProFactory.isProCompatiblePlayer(display)) {
+        } else if (!playerProFactory.isOfflinePlayCompatiblePayer(display)) {
           return 'not-pro-compatible';
         } else if (status === 'Subscribed') {
           return 'subscribed';
