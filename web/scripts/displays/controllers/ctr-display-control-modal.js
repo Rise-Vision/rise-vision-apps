@@ -1,10 +1,17 @@
 'use strict';
 angular.module('risevision.displays.controllers')
-  .controller('DisplayControlModalCtrl', ['$scope', 'playerProFactory', '$modalInstance',
-    function ($scope, playerProFactory, $modalInstance) {
+  .controller('DisplayControlModalCtrl', ['$scope', '$modalInstance', 
+    'displayControlFactory',
+    function ($scope, $modalInstance, displayControlFactory) {
 
-      $scope.startTrial = function () {
-        playerProFactory.saveDisplayControlConfig()
+      var _loadConfiguration = function() {
+        displayControlFactory.getConfiguration();
+      };
+
+      _loadConfiguration();
+
+      $scope.saveConfiguration = function () {
+        displayControlFactory.updateConfiguration()
           .then(function () {
             $modalInstance.close();
           });
