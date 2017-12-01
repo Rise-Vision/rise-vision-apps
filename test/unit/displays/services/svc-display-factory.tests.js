@@ -430,7 +430,6 @@ describe('service: displayFactory:', function() {
     });
   });
 
-
   it('isUnsupportedPlayer:',function(){
     expect(displayFactory.isUnsupportedPlayer()).to.be.false;
     expect(displayFactory.isUnsupportedPlayer({playerName: 'RisePlayerElectron', playerVersion:''})).to.be.false;
