@@ -57,7 +57,7 @@ var TrashScenarios = function() {
 
         filesListPage.getFileItems().get(0).click();
         
-        expect(filesListPage.getFileItems().get(0).getAttribute('class')).to.eventually.contain('selected-border');
+        expect(filesListPage.getFileItems().get(0).getAttribute('class')).to.eventually.contain('list-item--selected');
         expect(storageHomePage.getMoveToTrashButton().isEnabled()).to.eventually.be.true;
       });
 

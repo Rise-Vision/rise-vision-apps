@@ -20,7 +20,6 @@
               }
 
               if (storageUtils.fileIsFolder(file)) {
-                isSvg = true;
                 imgSrc = 'https://s3.amazonaws.com/Rise-Images/UI/storage-folder-icon%402x.png';
                 classes.push('list-item_folder');
               } else {
@@ -35,19 +34,15 @@
                   } else {
                     classes.push('list-type_image');
                   }
+
                   if (scope.file.metadata && scope.file.metadata.thumbnail) {
                     isSvg = false;
-                    imgSrc = scope.file.metadata.thumbnail +
-                      '' + '?_=' + scope.file.timeCreated;
-                  } else {
-                    if (scope.storageFactory.fileIsImage(scope.file)) {
-                      isSvg = true;
+                    imgSrc = scope.file.metadata.thumbnail + '?_=' +
+                      scope.file.timeCreated;
+                  } else if (scope.storageFactory.fileIsImage(scope.file)) {
                       imgSrc = 'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon%402x.png';
-                    } else if (scope.storageFactory.fileIsVideo(scope
-                        .file)) {
-                      isSvg = true;
-                      imgSrc = 'https://s3.amazonaws.com/Rise-Images/UI/storage-video-icon%402x.png';
-                    }
+                  } else if (scope.storageFactory.fileIsVideo(scope.file)) {
+                    imgSrc = 'https://s3.amazonaws.com/Rise-Images/UI/storage-video-icon%402x.png';
                   }
                 }
               }
