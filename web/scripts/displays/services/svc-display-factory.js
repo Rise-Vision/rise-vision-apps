@@ -69,7 +69,8 @@ angular.module('risevision.displays.services')
 
       factory.isOutdatedPlayer = function (display) {
         var displayPlayerVersion = display && parsePlayerDate(display.playerVersion);
-        var minimumVersion = _latestPlayerVersion && (new Date()).setMonth(_latestPlayerVersion.getMonth() - 1);
+        var minimumVersion = _latestPlayerVersion && 
+          new Date(_latestPlayerVersion).setMonth(_latestPlayerVersion.getMonth() - 3);
         var upToDate = displayPlayerVersion && minimumVersion && displayPlayerVersion >= minimumVersion;
 
         return !factory.is3rdPartyPlayer(display) &&
