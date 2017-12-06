@@ -303,6 +303,27 @@
                 console.error('Failed screenshot request', e);
                 return $q.reject(e);
               });
+          },
+          uploadControlFile: function (displayId, controlFileContents) {
+            var deferred = $q.defer();
+
+            $log.debug('uploadControlFile called with', displayId, controlFileContents);
+            coreAPILoader().then(function (coreApi) {
+                return coreApi.display.uploadControlFile({
+                  'id': displayId,
+                  'controlFileContents': controlFileContents
+                });
+              })
+              .then(function (resp) {
+                $log.debug('uploadControlFile resp', resp);
+                deferred.resolve(resp);
+              })
+              .then(null, function (e) {
+                console.error('Failed to upload control file.', e);
+                deferred.reject(e);
+              });
+
+            return deferred.promise;
           }
         };
 
