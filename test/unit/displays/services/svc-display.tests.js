@@ -218,6 +218,19 @@ describe('service: display:', function() {
                 def.reject("API Failed");
               }
               return def.promise;
+            },
+            uploadControlFile: function(obj) {
+              expect(obj).to.be.ok;
+
+              var def = Q.defer();
+              if (obj.id) {
+                def.resolve({
+                  item: {}
+                });
+              } else {
+                def.reject("API Failed");
+              }
+              return def.promise;
             }
           }
         });
@@ -557,6 +570,31 @@ describe('service: display:', function() {
         .catch(function(resp) {
           expect(resp).to.equal('screenshot-failed');
         });
+    });
+  });
+
+  describe('uploadControlFile', function() {
+    it('should upload the control file', function(done) {
+      display.uploadControlFile('display1', 'contents')
+        .then(function(result) {
+          expect(result).to.be.truely;
+          expect(result.item).to.be.truely;
+
+          done();
+        })
+        .then(null,done);
+    });
+
+    it('should handle failure to upload the control file', function(done) {
+      display.reboot()
+        .then(function(result) {
+          done(result);
+        })
+        .then(null, function(error) {
+          expect(error).to.deep.equal('API Failed');
+          done();
+        })
+        .then(null,done);
     });
   });
 
