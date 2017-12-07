@@ -9,7 +9,7 @@ describe('controller: display control modal', function() {
     $provide.service('displayControlFactory',function() {
       return {
         getConfiguration: function() {
-          return Q.resolve('contents');
+          return Q.resolve('loaded contents');
         },
         updateConfiguration: function() {
           return Q.resolve();
@@ -36,27 +36,29 @@ describe('controller: display control modal', function() {
       };
     });
   }));
-  var $scope, displayControlFactory, $modalInstanceDismissSpy, $modalInstanceCloseSpy, $loading;
+  var $scope, $modalInstance, displayControlFactory, $loading, $controller;
   beforeEach(function() {   
     sandbox = sinon.sandbox.create();
 
-    inject(function($injector,$rootScope, $controller) {
+    inject(function($injector, $rootScope, _$controller_) {
       $scope = $rootScope.$new();
-      displayControlFactory = $injector.get('displayControlFactory');
-      var $modalInstance = $injector.get('$modalInstance');
-      $modalInstanceDismissSpy = sinon.spy($modalInstance, 'dismiss');
-      $modalInstanceCloseSpy = sinon.spy($modalInstance, 'close');
-      $loading = $injector.get('$loading');
 
-      sandbox.spy(displayControlFactory, 'getConfiguration');
+      displayControlFactory = $injector.get('displayControlFactory');
       sandbox.spy(displayControlFactory, 'getDefaultConfiguration');
 
+      $modalInstance = $injector.get('$modalInstance');
+      sinon.spy($modalInstance, 'dismiss');
+      sinon.spy($modalInstance, 'close');
+      $loading = $injector.get('$loading');
+
+      $controller = _$controller_;
       $controller('DisplayControlModalCtrl', {
         $scope : $scope,
         displayControlFactory: displayControlFactory,
         $modalInstance: $modalInstance,
         $loading: $loading
       });
+
       $scope.$digest();
     });
   });
@@ -72,16 +74,47 @@ describe('controller: display control modal', function() {
     expect($scope.dismiss).to.be.a('function');
     expect($scope.formData).to.be.ok;
   });
-  
-  it('should initialize', function() {
-    expect(displayControlFactory.getConfiguration).to.have.been.called;
-    expect(displayControlFactory.getDefaultConfiguration).to.not.have.been.called;
+
+  it('should initialize loading remote content', function(done) {
+    sandbox.spy(displayControlFactory, 'getConfiguration');
+
+    $controller('DisplayControlModalCtrl', {
+      $scope : $scope,
+      displayControlFactory: displayControlFactory,
+      $modalInstance: $modalInstance,
+      $loading: $loading
+    });
+
+    setTimeout(function() {
+      expect(displayControlFactory.getConfiguration).to.have.been.called;
+      expect(displayControlFactory.getDefaultConfiguration).to.not.have.been.called;
+      expect($scope.formData.displayControlContents).to.be.equal('loaded contents');
+      done();
+    }, 0);
+  });
+
+  it('should initialize using default content', function(done) {
+    sandbox.stub(displayControlFactory, 'getConfiguration').returns(Q.reject());
+
+    $controller('DisplayControlModalCtrl', {
+      $scope : $scope,
+      displayControlFactory: displayControlFactory,
+      $modalInstance: $modalInstance,
+      $loading: $loading
+    });
+
+    setTimeout(function() {
+      expect(displayControlFactory.getConfiguration).to.have.been.called;
+      expect(displayControlFactory.getDefaultConfiguration).to.have.been.called;
+      expect($scope.formData.displayControlContents).to.be.equal('default contents');
+      done();
+    }, 0);
   });
 
   it('should dismiss modal when clicked on close with no action', function() {
     $scope.dismiss();
 
-    $modalInstanceDismissSpy.should.have.been.called;
+    $modalInstance.dismiss.should.have.been.called;
   });
 
   describe('saveConfiguration:', function() {
@@ -94,7 +127,7 @@ describe('controller: display control modal', function() {
         displayControlFactory.updateConfiguration.should.have.been.calledWith('contents');
         $loading.start.should.have.been.called;
         $loading.stop.should.have.been.called;
-        $modalInstanceCloseSpy.should.have.been.called;
+        $modalInstance.close.should.have.been.called;
         done();
       }, 10);
     });
@@ -108,7 +141,7 @@ describe('controller: display control modal', function() {
         displayControlFactory.updateConfiguration.should.have.been.calledWith('contents');
         $loading.start.should.have.been.called;
         $loading.stop.should.have.been.called;
-        $modalInstanceCloseSpy.should.not.have.been.called;
+        $modalInstance.close.should.not.have.been.called;
         done();
       }, 10);
     });
@@ -119,7 +152,7 @@ describe('controller: display control modal', function() {
       $scope.formData.displayControlContents = '';
       $scope.resetForm();
 
-      displayControlFactory.getConfiguration.should.have.been.called;
+      displayControlFactory.getDefaultConfiguration.should.have.been.called;
       expect($scope.formData.displayControlContents).to.be.equal('default contents');
     });
   });
