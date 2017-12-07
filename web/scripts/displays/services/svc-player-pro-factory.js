@@ -69,13 +69,18 @@ angular.module('risevision.displays.services')
           display.playerVersion >= '2017.07.01.01.01');
       };
 
-      factory.openPlayerProInfoModal = function () {
+      factory.openPlayerProInfoModal = function (display) {
         displayTracker('Player Pro Info Modal');
 
         return $modal.open({
           templateUrl: 'partials/displays/player-pro-info-modal.html',
           size: 'lg',
-          controller: 'PlayerProInfoModalCtrl'
+          controller: 'PlayerProInfoModalCtrl',
+          resolve: {
+            displayInfo: function() {
+              return display;
+            }
+          }
         });
       };
 

@@ -66,7 +66,8 @@ describe('controller: displays list', function() {
         isOfflinePlayCompatiblePayer: function(display) {
           return !display.notProCompatiblePlayer;
         },
-        openPlayerProInfoModal: function() {
+        openPlayerProInfoModal: function(display) {
+          expect(display).to.be.an('object');
           if(cancelProTrialModal) {
             return { result: Q.reject() };
           }
@@ -143,7 +144,7 @@ describe('controller: displays list', function() {
       var searchSpy = sinon.spy($scope.displays, 'doSearch');
 
       cancelProTrialModal = false;
-      $scope.showStartTrial();
+      $scope.showStartTrial({});
 
       setTimeout(function() {
         searchSpy.should.have.been.called;
@@ -155,7 +156,7 @@ describe('controller: displays list', function() {
       var searchSpy = sinon.spy($scope.displays, 'doSearch');
 
       cancelProTrialModal = true;
-      $scope.showStartTrial();
+      $scope.showStartTrial({});
 
       setTimeout(function() {
         searchSpy.should.not.have.been.called;

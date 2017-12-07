@@ -14,7 +14,14 @@ describe('controller: player pro trial modal', function() {
           return 'productLink';
         }
       };
-    });    
+    });
+    $provide.service('displayFactory', function() {
+      return {
+        display: {
+          id: '123'
+        }
+      };
+    });
     $provide.service('$modalInstance',function(){
       return {
         dismiss : function(action){
@@ -32,9 +39,12 @@ describe('controller: player pro trial modal', function() {
       };
     });
   }));
-  var $scope, playerProFactory, $modalInstanceDismissSpy, $modalInstanceCloseSpy;
-  beforeEach(function(){   
-    inject(function($injector,$rootScope, $controller){
+  var $scope, $rootScope, $controller, playerProFactory, $modalInstanceDismissSpy, $modalInstanceCloseSpy;
+  beforeEach(function(){
+    inject(function($injector, _$rootScope_, _$controller_){
+      $controller = _$controller_;
+      $rootScope = _$rootScope_;
+
       $scope = $rootScope.$new();
       playerProFactory = $injector.get('playerProFactory');
       var $modalInstance = $injector.get('$modalInstance');
@@ -45,6 +55,7 @@ describe('controller: player pro trial modal', function() {
         $scope : $scope,
         playerProFactory: playerProFactory,
         $modalInstance: $modalInstance,
+        displayInfo: { id: '234' }
       });
       $scope.$digest();
     });
@@ -61,6 +72,23 @@ describe('controller: player pro trial modal', function() {
   it('should initialize', function() {
     expect($scope.productLink).to.equal('productLink');
     expect($scope.accountLink).to.equal('https://store.risevision.com/account?cid=company1');
+
+    expect($scope.display).to.be.a('object');
+    expect($scope.display.id).to.equal('234');
+  });
+  
+  it('should use factory display if displayInfo is not provided', function() {
+    var $newScope = $rootScope.$new();
+
+    $controller('PlayerProInfoModalCtrl', {
+      $scope : $newScope,
+      displayInfo: null
+    });
+
+    $newScope.$digest();
+    
+    expect($newScope.display).to.be.a('object');
+    expect($newScope.display.id).to.equal('123');
   });
 
   it('should dismiss modal when clicked on close with no action',function(){
