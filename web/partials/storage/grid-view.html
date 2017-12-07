@@ -1,20 +1,31 @@
-<div class="text-center text-muted u_margin-md-top" ng-if="filesDetails.files.length === 0 && statusDetails.code!==202 && statusDetails.code!==404 && isFileListVisible()" translate>storage-client.empty-state.no-uploads</div>
+<div class="text-center text-muted u_margin-md-top u_margin-md-bottom" ng-if="filesDetails.files.length === 0 && statusDetails.code!==202 && statusDetails.code!==404 && isFileListVisible()" translate>storage-client.empty-state.no-uploads</div>
 
-<ul id="storageFilesGrid" class="list-unstyled pt-media-list" ng-if="filesDetails.files.length > 0 && statusDetails.code!==202 && statusDetails.code!==404 && isFileListVisible()">
+<div id="storageFilesGrid" class="grid-selector-list grid-selector-list_storage" ng-if="filesDetails.files.length > 0 && statusDetails.code!==202 && statusDetails.code!==404 && isFileListVisible()">
 
-  <li thumbnail-image
+  <div thumbnail-image
    ng-repeat="file in filesDetails.files | filter:search.query | orderBy:search.sortBy:search.reverse track by $index"
    ng-click="fileClick(file)" 
-   class="no-select" 
+   class="grid-selector-list-item" 
    ng-class="gridItemClasses"
    ng-if="storageFactory.storageFull || !storageUtils.fileIsTrash(file)" 
-   title="{{file.name | fileNameFilter:filesFactory.folderPath}}{{ file.isThrottled? ' - '+('storage-client.error.blocked-file' | translate) : '' }}" data-toggle="tooltip" data-placement="top" tooltip> 
-    <svg-icon ng-if="isSvg" p="{{imgSrc}}"></svg-icon>
-    <img ng-if="!isSvg" class="{{imgClasses}}" ng-src="{{imgSrc}}"/>
-    <input ng-if="storageFactory.canSelect(file)" type="checkbox" ng-checked="file.isChecked" ng-click="fileClick(file)"  onclick="event.stopPropagation();" class="checkbox" />
-    <span ng-if="!file.metadata.thumbnail || file.isThrottled" class="u_ellipsis-md">
+   title="{{file.name | fileNameFilter:filesFactory.folderPath}}{{ file.isThrottled? ' - '+('storage-client.error.blocked-file' | translate) : '' }}" data-toggle="tooltip" data-placement="top" tooltip>
+
+    <img class="list-item-icon" ng-if="isSvg" ng-src="{{imgSrc}}">
+    
+    <img ng-if="!isSvg"  ng-src="{{imgSrc}}"/>
+
+    <div ng-if="!file.metadata.thumbnail || file.isThrottled" class="list-item-label">
       {{file.name | fileNameFilter:filesFactory.folderPath}}
-    </span>
-    <span ng-if="storageUtils.fileIsFolder(file) && file.isChecked" class="image-folder-info" translate>storage-client.select-folder-to-update</span>
-  </li>
-</ul>
+    </div>
+    
+  </div><!--end grid-selector-list-item-->
+  <div class="grid-selector-list-item list-item-placeholder"></div>
+  <div class="grid-selector-list-item list-item-placeholder"></div>
+  <div class="grid-selector-list-item list-item-placeholder"></div>
+  <div class="grid-selector-list-item list-item-placeholder"></div>
+  <div class="grid-selector-list-item list-item-placeholder"></div>
+  <div class="grid-selector-list-item list-item-placeholder"></div>
+  <div class="grid-selector-list-item list-item-placeholder"></div>
+  <div class="grid-selector-list-item list-item-placeholder"></div>
+
+</div>

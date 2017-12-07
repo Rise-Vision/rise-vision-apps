@@ -1,10 +1,11 @@
-<div class="panel u_margin-sm-top" ng-show="!trialAvailable">
-  <div class="scrollable-list" 
+<div class="u_margin-sm-top" ng-show="!trialAvailable">
+
+  <div class="panel panel-default grid-selector" 
   rv-spinner rv-spinner-key="storage-selector-loader"
   rv-spinner-start-active="1" >
     <ng-include src="'partials/storage/list-view.html'" ng-if="isListView"></ng-include>
     <ng-include src="'partials/storage/grid-view.html'" ng-if="!isListView"></ng-include>
-    
     <empty-state ng-show="!filesFactory.loadingItems && isEmptyState()"></empty-state>
-  </div>	
+  </div>
+
 </div>

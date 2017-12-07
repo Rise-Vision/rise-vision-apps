@@ -53,15 +53,15 @@ describe('directive: thumbnail-image', function() {
   it('should render thumbnail appending timeCreated for cache bursting', function() {
     _compile();
     expect(element.scope().isSvg).to.be.false;
-    expect(element.scope().imgSrc).to.equal('http://example.com/thumb.jpg=s100-ci?_=123');
+    expect(element.scope().imgSrc).to.equal('http://example.com/thumb.jpg?_=123');
     expect(element.scope().imgClasses).to.equal('');
   });
 
   it('should flag thorttled file',function() {
     $rootScope.file.isThrottled = true;
     _compile();
-    expect(element.scope().isSvg).to.be.false;
-    expect(element.scope().imgSrc).to.equal('http://s3.amazonaws.com/Rise-Images/Icons/file_throttled.png');
+    expect(element.scope().isSvg).to.be.true;
+    expect(element.scope().imgSrc).to.equal('https://s3.amazonaws.com/Rise-Images/UI/storage-file-icon%402x.png');
     expect(element.scope().imgClasses).to.equal('');
   });
 
@@ -69,7 +69,7 @@ describe('directive: thumbnail-image', function() {
     storageUtils.fileIsFolder = function() {return true};
     _compile();
     expect(element.scope().isSvg).to.be.true;
-    expect(element.scope().imgSrc).to.equal('riseWidgetFolder');
+    expect(element.scope().imgSrc).to.equal('https://s3.amazonaws.com/Rise-Images/UI/storage-folder-icon%402x.png');
     expect(element.scope().imgClasses).to.equal('');
   });
 
@@ -77,7 +77,7 @@ describe('directive: thumbnail-image', function() {
     $rootScope.file.metadata = {};
     _compile();
     expect(element.scope().isSvg).to.be.true;
-    expect(element.scope().imgSrc).to.equal('riseWidgetImage');
+    expect(element.scope().imgSrc).to.equal('https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon%402x.png');
     expect(element.scope().imgClasses).to.equal('');
   });
 
@@ -87,7 +87,17 @@ describe('directive: thumbnail-image', function() {
     storageFactory.fileIsImage = function() {return false};
     _compile();
     expect(element.scope().isSvg).to.be.true;
-    expect(element.scope().imgSrc).to.equal('riseWidgetVideo');
+    expect(element.scope().imgSrc).to.equal('https://s3.amazonaws.com/Rise-Images/UI/storage-video-icon%402x.png');
+    expect(element.scope().imgClasses).to.equal('');
+  });
+
+  it('should show generic icon for other files', function() {
+    $rootScope.file.metadata = {};
+    storageFactory.fileIsVideo = function() {return false};
+    storageFactory.fileIsImage = function() {return false};
+    _compile();
+    expect(element.scope().isSvg).to.be.true;
+    expect(element.scope().imgSrc).to.equal('https://s3.amazonaws.com/Rise-Images/UI/storage-file-icon%402x.png');
     expect(element.scope().imgClasses).to.equal('');
   });
 
@@ -103,44 +113,43 @@ describe('directive: thumbnail-image', function() {
     it('should add class for file',function(){
       _compile();
       expect(element.scope().gridItemClasses).to.contain('single-item');
-      expect(element.scope().gridItemClasses).to.not.contain('folder');
+      expect(element.scope().gridItemClasses).to.not.contain('list-item_folder');
     });
 
     it('should add class for folder',function(){
       storageUtils.fileIsFolder = function() {return true};
       _compile();
       expect(element.scope().gridItemClasses).to.not.contain('single-item');
-      expect(element.scope().gridItemClasses).to.contain('folder');
+      expect(element.scope().gridItemClasses).to.contain('list-item_folder');
     });
 
     it('should flag throttled files',function(){
       $rootScope.file.isThrottled = true;
       _compile();
       expect(element.scope().gridItemClasses).to.contain('single-item');
-      expect(element.scope().gridItemClasses).to.contain('throttled-item');
+      expect(element.scope().gridItemClasses).to.contain('list-item--throttled');
     });
 
     it('should flag disabled files',function(){
       storageFactory.canSelect = function() {return false};
       _compile();
-      expect(element.scope().gridItemClasses).to.contain('disabled-item');
-      expect(element.scope().gridItemClasses).to.not.contain('throttled-item');
+      expect(element.scope().gridItemClasses).to.contain('single-item');
+      expect(element.scope().gridItemClasses).to.contain('list-item--disabled');
     });
 
     it('should flag checked files',function(){
       $rootScope.file.isChecked = true;
       _compile();
       expect(element.scope().gridItemClasses).to.contain('single-item');
-      expect(element.scope().gridItemClasses).to.contain('selected-border');
+      expect(element.scope().gridItemClasses).to.contain('list-item--selected');
     });
 
     it('should flag checked folders',function(){
       storageUtils.fileIsFolder = function() {return true};
       $rootScope.file.isChecked = true;
       _compile();
-      expect(element.scope().gridItemClasses).to.contain('folder');
-      expect(element.scope().gridItemClasses).to.contain('folder-extended');
-      expect(element.scope().gridItemClasses).to.contain('selected-border');
+      expect(element.scope().gridItemClasses).to.contain('list-item_folder');
+      expect(element.scope().gridItemClasses).to.contain('list-item--selected');
     });
 
   });

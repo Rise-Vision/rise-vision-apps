@@ -75,8 +75,7 @@ var AddContentScenarios = function() {
 
         expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
 
-        expect(filesListPage.getFileItems().get(0).getAttribute('class')).to.eventually.contain('no-select');
-        expect(filesListPage.getFileItems().get(0).getAttribute('class')).to.eventually.contain('disabled-item');
+        expect(filesListPage.getFileItems().get(0).getAttribute('class')).to.eventually.contain('list-item--disabled');
       })
       
       it('should select the file and add to the playlist', function() {
@@ -172,8 +171,7 @@ var AddContentScenarios = function() {
 
         expect(filesListPage.getFileItems().count()).to.eventually.be.greaterThan(0);
 
-        expect(filesListPage.getFileItems().get(0).getAttribute('class')).to.eventually.contain('no-select');
-        expect(filesListPage.getFileItems().get(0).getAttribute('class')).to.eventually.contain('disabled-item');
+        expect(filesListPage.getFileItems().get(0).getAttribute('class')).to.eventually.contain('list-item--disabled');
       })
 
       it('should select the file and add to the playlist', function() {
