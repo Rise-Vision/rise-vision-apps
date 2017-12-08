@@ -51,6 +51,7 @@ describe('service: displayControlFactory:', function() {
       return displayControlFactory.getConfiguration()
       .then(function(data) {
         expect(data).to.equal('contents');
+        expect($http.get.getCall(0).args[0]).to.have.string('testId/screen-control.txt');
       });
     });
 
