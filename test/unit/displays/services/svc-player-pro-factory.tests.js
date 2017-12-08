@@ -125,7 +125,10 @@ describe('service: playerProFactory:', function() {
       $modalSpy.should.have.been.calledWithMatch({
         controller: "PlayerProInfoModalCtrl",
         size: "lg",
-        templateUrl: "partials/displays/player-pro-info-modal.html"
+        templateUrl: "partials/displays/player-pro-info-modal.html",
+        resolve: {
+          displayInfo: sinon.match.func
+        }
       });
     });
   });

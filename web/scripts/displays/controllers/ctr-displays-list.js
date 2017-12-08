@@ -44,8 +44,8 @@ angular.module('risevision.displays.controllers')
         $window.open('https://risevision.zendesk.com/hc/en-us/articles/115003786306', '_blank');
       };
 
-      $scope.showStartTrial = function () {
-        var modalInstance = playerProFactory.openPlayerProInfoModal();
+      $scope.showStartTrial = function (display) {
+        var modalInstance = playerProFactory.openPlayerProInfoModal(display);
 
         modalInstance.result
           .then(function () {
