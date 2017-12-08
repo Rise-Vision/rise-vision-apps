@@ -45,9 +45,7 @@ angular.module('risevision.displays.services')
       };
 
       service.getDefaultConfiguration = function() {
-        return 'Select \'Need help configuring Display Control?\' above for instructions.\n' +
-               '----------------------------------------------------------------\n' +
-               'interface=\n' +
+        return 'interface=\n' +
                'serial-port=\n' +
                'serial-baud-rate=\n' +
                'serial-data-bits=\n' +
