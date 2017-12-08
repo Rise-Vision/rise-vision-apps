@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.displays.services')
-  .value('SCREEN_CONTROL_BUCKET', 'risedisplayconfigurations-displayId')
+  .value('SCREEN_CONTROL_BUCKET', 'risevision-display-notifications')
   .value('SCREEN_CONTROL_FILENAME', 'screen-control.txt')
   .factory('displayControlFactory', ['$q', '$http', 'displayFactory', 'display',
     'STORAGE_FILE_URL', 'SCREEN_CONTROL_BUCKET', 'SCREEN_CONTROL_FILENAME',
@@ -12,8 +12,8 @@ angular.module('risevision.displays.services')
       service.getConfiguration = function() {
         var deferred = $q.defer();
         var display = displayFactory.display;
-        var bucketName = SCREEN_CONTROL_BUCKET.replace('displayId', display.id.toLowerCase());
-        var configUrl = STORAGE_FILE_URL + bucketName + '/' + SCREEN_CONTROL_FILENAME;
+        var bucketName = SCREEN_CONTROL_BUCKET;
+        var configUrl = STORAGE_FILE_URL + bucketName + '/' + display.id + '/' + SCREEN_CONTROL_FILENAME;
 
         $http.get(configUrl)
           .then(function (resp) {
