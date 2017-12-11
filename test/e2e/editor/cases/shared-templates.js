@@ -85,6 +85,12 @@ var SharedTemplatesScenarios = function() {
     });
 
     it('should open a copy of Shared Template when selecting', function(){
+      // Note: closing the preview window and returning to this tab causes
+      // re-authentication. Opening the template right away causes the
+      // Auth token not to be attached to the request
+      // Workaround is to wait for re-authentication to complete via a wait
+      browser.sleep(1000);
+
       sharedTemplatesModalPage.getTemplates().get(0).click();
       helper.wait(workspacePage.getWorkspaceContainer(), 'Workspace Container');
 

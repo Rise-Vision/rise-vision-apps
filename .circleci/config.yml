@@ -102,6 +102,28 @@ jobs:
       - run: tar czvf dist.tar.gz dist
       - store_artifacts:
           path: ~/rise-vision-apps/dist.tar.gz
+  deploy_beta:
+    working_directory: ~/rise-vision-apps
+    docker:
+      - image: circleci/node:8.1.4
+    steps:
+      - run:
+          name: save SHA to a file
+          command: echo $CIRCLE_SHA1 > .circle-sha
+      - restore_cache:
+          keys:
+            - repo-with-deps-{{ checksum ".circle-sha" }}
+      - run: NODE_ENV=prod npm run ci-build
+      - run: sudo apt-get -y install rsync
+      - run: ssh -o StrictHostKeyChecking=no apps@webserver-stage.risevision.com 'mkdir -p /rise-front-end/apps';
+      - run: 
+          name: Deploy to beta
+          command: |
+            echo "Deploying to Beta Environment";
+            rsync -rptz -e ssh --delete dist apps@webserver-stage.risevision.com:/rise-front-end/apps/stage-beta;
+      - run: tar czvf dist.tar.gz dist
+      - store_artifacts:
+          path: ~/rise-vision-apps/dist.tar.gz
   deploy_production:
     working_directory: ~/rise-vision-apps
     docker:
@@ -123,6 +145,20 @@ jobs:
       - run: echo "deploying to production webserver.risevision.com";
       - run: ssh -o StrictHostKeyChecking=no apps@webserver.risevision.com 'mkdir -p /rise-front-end/apps';
       - run: rsync -rptz -e ssh --delete dist apps@webserver.risevision.com:/rise-front-end/apps;
+      - run:
+          name: Check and deploy to beta if needed
+          command: |
+            # Set +e flag in case no branch is found
+            set +e          
+            BETA_BRANCH="$(git branch -a | grep 'beta/')";
+            if [ "$BETA_BRANCH" != '' ]; then
+              echo "Beta branch exists ($BETA_BRANCH), skipping beta deployment";
+            fi;
+            if [ "$BETA_BRANCH" == '' ]; then
+              echo "Beta branch missing, updating beta environment";
+              ssh -o StrictHostKeyChecking=no apps@webserver-stage.risevision.com 'mkdir -p /rise-front-end/apps';
+              rsync -rptz -e ssh --delete dist apps@webserver-stage.risevision.com:/rise-front-end/apps/stage-beta;
+            fi;
       - run: tar czvf dist.tar.gz dist
       - store_artifacts:
           path: ~/rise-vision-apps/dist.tar.gz
@@ -152,3 +188,10 @@ workflows:
           filters:
             branches:
               only: /(feature|fix|chore).*/
+      - deploy_beta:
+          requires:
+            - test_unit
+            - test_e2e
+          filters:
+            branches:
+              only: /(beta).*/
