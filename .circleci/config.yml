@@ -148,9 +148,11 @@ jobs:
       - run:
           name: Check and deploy to beta if needed
           command: |
-            BETA_BRANCH="$(git log -1 --pretty=%B | grep '\[.*\]' |sed -e 's/.*\[\(.*\)\].*/\1/g')";
+            # Set +e flag in case no branch is found
+            set +e          
+            BETA_BRANCH="$(git branch -a | grep 'beta/')";
             if [ "$BETA_BRANCH" != '' ]; then
-              echo "Beta branch exists, skipping beta deployment";
+              echo "Beta branch exists ($BETA_BRANCH), skipping beta deployment";
             fi;
             if [ "$BETA_BRANCH" == '' ]; then
               echo "Beta branch missing, updating beta environment";
