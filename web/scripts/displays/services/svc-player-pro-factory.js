@@ -1,13 +1,17 @@
 'use strict';
 
 angular.module('risevision.displays.services')
+  .value('OFFLINE_PLAY_PLAYER_VERSION', '2017.07.31.15.31')
+  .value('DISPLAY_CONTROL_PLAYER_VERSION', '2017.07.01.01.01')
   .factory('playerProFactory', ['$rootScope', '$q', '$modal', 'userState', 
     'displayTracker', 'storeAuthorization', '$loading', 'parsePlayerDate', 
     'getLatestPlayerVersion', 'STORE_URL', 'IN_RVA_PATH', 
     'PLAYER_PRO_PRODUCT_ID', 'PLAYER_PRO_PRODUCT_CODE', 
+    'OFFLINE_PLAY_PLAYER_VERSION', 'DISPLAY_CONTROL_PLAYER_VERSION',
     function ($rootScope, $q, $modal, userState, displayTracker, storeAuthorization, 
       $loading, parsePlayerDate, getLatestPlayerVersion,
-      STORE_URL, IN_RVA_PATH, PLAYER_PRO_PRODUCT_ID, PLAYER_PRO_PRODUCT_CODE) {
+      STORE_URL, IN_RVA_PATH, PLAYER_PRO_PRODUCT_ID, PLAYER_PRO_PRODUCT_CODE,
+      OFFLINE_PLAY_PLAYER_VERSION, DISPLAY_CONTROL_PLAYER_VERSION) {
       var factory = {};
       var _latestPlayerVersion;
 
@@ -61,12 +65,12 @@ angular.module('risevision.displays.services')
 
       factory.isOfflinePlayCompatiblePayer = function (display) {
         return !!(display && display.playerName === 'RisePlayerElectron' &&
-          display.playerVersion >= '2017.07.31.15.31');
+          display.playerVersion >= OFFLINE_PLAY_PLAYER_VERSION);
       };
 
       factory.isDisplayControlCompatiblePlayer = function (display) {
         return !!(display && display.playerName === 'RisePlayerElectron' &&
-          display.playerVersion >= '2017.07.01.01.01');
+          display.playerVersion >= DISPLAY_CONTROL_PLAYER_VERSION);
       };
 
       factory.openPlayerProInfoModal = function (display) {
