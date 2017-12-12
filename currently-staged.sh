@@ -1,3 +1,4 @@
+#!/bin/bash
 git branch -r \
 | sed '1d' \
 | xargs -n1 git --no-pager log --format="%ct %H %D" --max-count=1 --grep=stage- \
@@ -9,4 +10,5 @@ git branch -r \
 | grep stage- \
 | sed '$!N;s/\n/ - /' \
 | sed 's/- stage-//g' \
-| sed 's/origin\///g'
+| sed 's/origin\///g' \
+| awk '!seen[$1]++'
