@@ -1,4 +1,10 @@
 #!/bin/bash
+echo
+echo This command will show which branch has the latest commit referencing a given staging environment.
+echo If a staging environment is not listed, it means it is not currently in use by any active branch.
+echo -e "\033[1;31mWarning: this command will not show information about stage-0\033[0m"
+echo -e "If you have not ran \033[34mgit pull/git fetch\033[0m in a while, you may want to run: \033[34mgit fetch --all\033[0m"
+echo
 # 1.  Request remote branches only (GitHub)
 # 2.  Remove master from the list (it fails otherwise)
 # 3.  Get date, hash and full branch name of latest commit with [stage-x] tag
