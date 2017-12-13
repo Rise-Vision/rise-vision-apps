@@ -48,6 +48,23 @@ gulp
 
 * If browser hasn't opened, you can open it on http://localhost:8000
 
+### Staging summary
+
+When pushing changes to chore/fix/feature branches, an optional staging environment can be indicated at the end of the commit message. The format is [stage-x], with x ranging from 0 to 4 (defaulting to 0, in case it's not provided). In order to check which staging environment is not currently being used, ```./currently-staged.sh``` can be ran in the root directory of the repository. The command's output is:
+
+```
+This command will show which branch has the latest commit referencing a given staging environment.
+If a staging environment is not listed, it means it is not currently in use by any active branch.
+Warning: this command will not show information about stage-0, unless it appears in the commit message
+If you have not ran git pull/git fetch in a while, you may want to run: git fetch --prune
+
+[stage-3] - 2017-12-13 15:31:54 -0300 - Commit user 1           - chore/branch-name
+[stage-2] - 2017-12-12 17:22:15 -0300 - Commit user 2           - release/branch-name
+
+```
+
+Because of the way git works (mainly, references to remote repositories), it's important to have an up to date copy of the repository. The proposed command, ```git fetch --prune```, will retrieve the latest branches from GitHub and remove no longer existing references to branches. It will NOT remove local branches and it will not merge into working copies, which means unless you are doing something really specific with your repository, it's safe to run.
+
 ## Submitting Issues
 If you encounter problems or find defects we really want to hear about them. If you could take the time to add them as issues to this Repository it would be most appreciated. When reporting issues please use the following format where applicable:
 
