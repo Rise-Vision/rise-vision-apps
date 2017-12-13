@@ -1,12 +1,12 @@
 'use strict';
-var PlayerProTrialModalPage = function() {
-  var playerProTrialModal = element(by.id('player-pro-trial-modal'));
+var PlayerProInfoModalPage = function() {
+  var playerProInfoModal = element(by.id('player-pro-info-modal'));
 
   var startTrialButton = element(by.id('startTrialButton'));
   var dismissButton = element(by.id('dismissButton'));
 
-  this.getPlayerProTrialModal = function() {
-    return playerProTrialModal;
+  this.getPlayerProInfoModal = function() {
+    return playerProInfoModal;
   };
 
   this.getStartTrialButton = function() {
@@ -19,4 +19,4 @@ var PlayerProTrialModalPage = function() {
 
 };
 
-module.exports = PlayerProTrialModalPage;
+module.exports = PlayerProInfoModalPage;

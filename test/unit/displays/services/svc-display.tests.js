@@ -1,7 +1,7 @@
 'use strict';
 describe('service: display:', function() {
   var CONNECTION_TIME = Date.now();
-  var screenshotRequesterMock, imageBlobLoaderMock;
+  var screenshotRequesterMock;
 
   beforeEach(module('risevision.displays.services'));
   beforeEach(module(function ($provide) {
@@ -58,11 +58,6 @@ describe('service: display:', function() {
     $provide.factory('screenshotRequester', function($q) {
       return function(ids) {
         return screenshotRequesterMock($q);
-      };
-    });
-    $provide.factory('imageBlobLoader', function($q) {
-      return function() {
-        return imageBlobLoaderMock($q);
       };
     });
     $provide.service('userState',function(){
@@ -212,6 +207,19 @@ describe('service: display:', function() {
               return def.promise;
             },
             reboot: function(obj) {
+              expect(obj).to.be.ok;
+
+              var def = Q.defer();
+              if (obj.id) {
+                def.resolve({
+                  item: {}
+                });
+              } else {
+                def.reject("API Failed");
+              }
+              return def.promise;
+            },
+            uploadControlFile: function(obj) {
               expect(obj).to.be.ok;
 
               var def = Q.defer();
@@ -565,27 +573,29 @@ describe('service: display:', function() {
     });
   });
 
-  describe('loadScreenshot', function() {
-    it('should successfully load a screenshot', function() {
-      imageBlobLoaderMock = function($q) {
-        return $q.resolve({ imageUrl: '' });
-      };
+  describe('uploadControlFile', function() {
+    it('should upload the control file', function(done) {
+      display.uploadControlFile('display1', 'contents')
+        .then(function(result) {
+          expect(result).to.be.truely;
+          expect(result.item).to.be.truely;
 
-      display.loadScreenshot()
-        .then(function(resp) {
-          expect(resp.imageUrl).to.be.truely;
-        });
+          done();
+        })
+        .then(null,done);
     });
 
-    it('should handle failed screenshot requests', function() {
-      imageBlobLoaderMock = function($q) {
-        return $q.reject({ err: 'timeout' });
-      };
-
-      display.loadScreenshot()
-        .catch(function(resp) {
-          expect(resp.err).to.equal('timeout');
-        });
+    it('should handle failure to upload the control file', function(done) {
+      display.reboot()
+        .then(function(result) {
+          done(result);
+        })
+        .then(null, function(error) {
+          expect(error).to.deep.equal('API Failed');
+          done();
+        })
+        .then(null,done);
     });
   });
+
 });

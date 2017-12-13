@@ -1,7 +1,5 @@
 'use strict';
 describe('service: displayFactory:', function() {
-  var latestPlayerVersion = null;
-
   beforeEach(module('risevision.displays.services'));
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
@@ -72,12 +70,6 @@ describe('service: displayFactory:', function() {
         }
       }
     });
-    $provide.service('storeAuthorization',function(){
-      return {
-        startTrial: function(){}
-      };
-    });
-    $provide.value('PLAYER_PRO_PRODUCT_CODE','PLAYER_PRO_PRODUCT_CODE');
     $provide.service('$state',function(){
       return {
         go : function(state, params){
@@ -88,26 +80,18 @@ describe('service: displayFactory:', function() {
         }
       }
     });
-    $provide.factory('getLatestPlayerVersion', function() {
-      return function() {
-        return Q.resolve(latestPlayerVersion);
-      };
-    });
 
   }));
-  var displayFactory, $rootScope, $modal, trackerCalled, emailSent, updateDisplay, currentState, returnList, displayListSpy, displayAddSpy,
-    storeAuthorization;
+  var displayFactory, $rootScope, $modal, trackerCalled, emailSent, updateDisplay, currentState, returnList, displayListSpy, displayAddSpy;
   beforeEach(function(){
     trackerCalled = undefined;
     emailSent = undefined;
     currentState = undefined;
     updateDisplay = true;
     returnList = null;
-    latestPlayerVersion = new Date(2017, 6, 15, 0, 0);
 
     inject(function($injector){
       displayFactory = $injector.get('displayFactory');
-      storeAuthorization = $injector.get('storeAuthorization');
       var display = $injector.get('display');
       $modal = $injector.get('$modal');
       $rootScope = $injector.get('$rootScope');
@@ -391,106 +375,4 @@ describe('service: displayFactory:', function() {
     });
   });
 
-  it('is3rdPartyPlayer:',function(){
-    expect(displayFactory.is3rdPartyPlayer()).to.be.false;
-    expect(displayFactory.is3rdPartyPlayer({playerName:''})).to.be.false;
-    expect(displayFactory.is3rdPartyPlayer({playerName:'RisePlayer'})).to.be.false;
-    expect(displayFactory.is3rdPartyPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.07.17.20.21'})).to.be.false;
-    expect(displayFactory.is3rdPartyPlayer({playerName:'RisePlayerElectron', os: 'Microsoft', playerVersion: '2017.07.17.20.21'})).to.be.false;
-    expect(displayFactory.is3rdPartyPlayer({playerName:'RisePlayerPackagedApp'})).to.be.true;
-    expect(displayFactory.is3rdPartyPlayer({playerName:'Cenique'})).to.be.true;
-    expect(displayFactory.is3rdPartyPlayer({playerName:'Other', playerVersion: 'Cenique 2.0'})).to.be.true;
-    expect(displayFactory.is3rdPartyPlayer({playerName:'Other', os: 'Android', playerVersion: '1.0'})).to.be.true;
-    expect(displayFactory.is3rdPartyPlayer({playerName:'Other', os: 'cros', playerVersion: '1.0'})).to.be.true;
-  });
-
-  describe('isOutdatedPlayer:', function() {
-    
-    it('should not be out of date for legacy', function(done){
-      setTimeout(function() {
-        expect(displayFactory.isOutdatedPlayer({playerName:'Cenique', playerVersion: '2017.07.17.20.21'})).to.be.false;
-        expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerPackagedApp', playerVersion: '2017.07.17.20.21'})).to.be.false;
-
-        expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayer', playerVersion: '2017.07.17.20.21'})).to.be.false;
-        expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayer', playerVersion: '2017.01.04.14.40'})).to.be.false;
-
-        done();
-      }, 10);
-    });
-
-    it('should be out of date after 3 months for Electron', function(done) {
-      setTimeout(function() {
-        expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.07.17.20.21'})).to.be.false;
-        expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.08.04.14.40'})).to.be.false;
-        expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.04.15.12.40'})).to.be.false;
-        expect(displayFactory.isOutdatedPlayer({playerName:'RisePlayerElectron', playerVersion: '2017.04.14.11.40'})).to.be.true;
-
-        done();
-      }, 10);      
-    });
-  });
-
-  it('isUnsupportedPlayer:',function(){
-    expect(displayFactory.isUnsupportedPlayer()).to.be.false;
-    expect(displayFactory.isUnsupportedPlayer({playerName: 'RisePlayerElectron', playerVersion:''})).to.be.false;
-    expect(displayFactory.isUnsupportedPlayer({playerName: 'Cenique', playerVersion:'2017.06.27.05.15'})).to.be.false;
-    expect(displayFactory.isUnsupportedPlayer({playerName: 'RisePlayerPackagedApp', playerVersion:'2017.07.31.15.31'})).to.be.false;
-    expect(displayFactory.isUnsupportedPlayer({playerName: 'RisePlayer', playerVersion:'2018.09.45.06.49'})).to.be.true;
-  });
-
-  it('isProCompatiblePlayer:',function(){
-    expect(displayFactory.isProCompatiblePlayer()).to.be.false;
-    expect(displayFactory.isProCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:''})).to.be.false;
-    expect(displayFactory.isProCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2017.06.27.05.15'})).to.be.false;
-    expect(displayFactory.isProCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2017.07.31.15.31'})).to.be.true;
-    expect(displayFactory.isProCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2018.09.45.06.49'})).to.be.true;
-  });
-
-  describe('startPlayerProTrialModal: ', function() {
-    it('should open modal', function() {
-      var $modalSpy = sinon.spy($modal, 'open');
-      
-      displayFactory.startPlayerProTrialModal(); 
-
-      expect(trackerCalled).to.equal('Start Player Pro Trial Modal');     
-      
-      $modalSpy.should.have.been.calledWithMatch({
-        controller: "PlayerProTrialModalCtrl",
-        size: "lg",
-        templateUrl: "partials/displays/player-pro-trial-modal.html"
-      });
-    });
-  });
-
-  describe('startPlayerProTrial: ', function() {
-    it('should start trial', function(done) {
-      var storeTrialSpy = sinon.stub(storeAuthorization, 'startTrial',function(){return Q.resolve()});
-      var emitSpy = sinon.spy($rootScope,'$emit');
-      
-      displayFactory.startPlayerProTrial(); 
-
-      expect(trackerCalled).to.equal('Starting Player Pro Trial');  
-      storeTrialSpy.should.have.been.calledWith('PLAYER_PRO_PRODUCT_CODE');
-      setTimeout(function(){
-        expect(trackerCalled).to.equal('Started Trial Player Pro'); 
-        emitSpy.should.have.been.calledWith('refreshSubscriptionStatus', 'trial-available')
-        done();
-      },10);      
-    });
-
-    it('should handle start trial fail', function(done) {
-      var storeTrialSpy = sinon.stub(storeAuthorization, 'startTrial',function(){return Q.reject()});
-      var emitSpy = sinon.spy($rootScope,'$emit');
-      
-      displayFactory.startPlayerProTrial(); 
-
-      expect(trackerCalled).to.equal('Starting Player Pro Trial');  
-      storeTrialSpy.should.have.been.calledWith('PLAYER_PRO_PRODUCT_CODE');
-      setTimeout(function(){
-        expect(trackerCalled).to.not.equal('Started Trial Player Pro'); 
-        emitSpy.should.not.have.been.calledWith('refreshSubscriptionStatus', 'trial-available')
-        done();
-      },10);      
-    });
-  });
 });

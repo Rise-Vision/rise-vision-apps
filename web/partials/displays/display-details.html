@@ -6,14 +6,14 @@
 
   <div class="global-actions" require-role="da">
     <div>
-      <button id="playerProTrialButton" ng-if="showTrialButton" ng-click="factory.startPlayerProTrialModal()" class="btn btn-lg btn-primary" rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0">
-        {{'displays-app.details.startPlayerProTrial' | translate}} 
+      <button id="playerProTrialButton" ng-if="display.showTrialButton" ng-click="playerProFactory.openPlayerProInfoModal()" class="btn btn-lg btn-primary" rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0">
+        {{'displays-app.details.startPlayerProTrial' | translate}}
       </button>
-      <a id="subscribePlayerProButton" ng-if="showSubscribeButton" class="btn btn-lg btn-primary" href="{{productLink}}" target="_blank" translate="">
+      <a id="subscribePlayerProButton" ng-if="display.showSubscribeButton" class="btn btn-lg btn-primary" ng-href="{{playerProFactory.getProductLink()}}" target="_blank" translate>
         displays-app.details.subscribePlayerPro
       </a>
     </div>
-    <a ng-if="showTrialButton || showSubscribeButton" class="info-link" href="https://help.risevision.com/hc/en-us/articles/115003626863" target="_blank">
+    <a ng-if="display.showTrialButton || display.showSubscribeButton" class="info-link" href="https://help.risevision.com/hc/en-us/articles/115003626863" target="_blank">
       <i class="fa fa-question-circle icon-left" aria-hidden="true"></i>
       <span translate>displays-app.details.whatIsPlayerPro</span>
     </a>
@@ -21,9 +21,9 @@
   
 </div>
 
-<div id="subscription-status" subscription-status ng-show="showTrialStatus"
+<div id="subscription-status" subscription-status ng-show="display.showTrialStatus"
     product-id="{{productId}}" product-code="{{productCode}}" display-id="{{displayId}}" company-id="{{companyId}}"
-    ng-model="subscriptionStatus.result" show-store-modal="showStoreModal" expanded-format="true"></div>
+    ng-model="display.subscriptionStatus.result" show-store-modal="showStoreModal" expanded-format="true"></div>
 
 <div id="display-loader" rv-spinner rv-spinner-key="display-loader" rv-spinner-start-active="0"></div>
 

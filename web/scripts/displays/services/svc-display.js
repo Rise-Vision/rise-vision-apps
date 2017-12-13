@@ -18,11 +18,11 @@
       'postalCode'
     ])
     .service('display', ['$rootScope', '$q', '$log', 'coreAPILoader',
-      'userState', 'getDisplayStatus', 'screenshotRequester',
-      'imageBlobLoader', 'pick', 'getProductSubscriptionStatus', 'DISPLAY_WRITABLE_FIELDS',
+      'userState', 'getDisplayStatus', 'screenshotRequester', 'pick', 
+      'getProductSubscriptionStatus', 'DISPLAY_WRITABLE_FIELDS',
       'DISPLAY_SEARCH_FIELDS', 'PLAYER_PRO_PRODUCT_CODE',
       function ($rootScope, $q, $log, coreAPILoader, userState,
-        getDisplayStatus, screenshotRequester, imageBlobLoader, pick,
+        getDisplayStatus, screenshotRequester, pick,
         getProductSubscriptionStatus, DISPLAY_WRITABLE_FIELDS,
         DISPLAY_SEARCH_FIELDS, PLAYER_PRO_PRODUCT_CODE) {
 
@@ -304,12 +304,26 @@
                 return $q.reject(e);
               });
           },
-          loadScreenshot: function (displayId) {
-            var url =
-              'https://storage.googleapis.com/risevision-display-screenshots/' +
-              displayId + '.jpg';
+          uploadControlFile: function (displayId, controlFileContents) {
+            var deferred = $q.defer();
 
-            return imageBlobLoader(url);
+            $log.debug('uploadControlFile called with', displayId, controlFileContents);
+            coreAPILoader().then(function (coreApi) {
+                return coreApi.display.uploadControlFile({
+                  'id': displayId,
+                  'controlFileContents': controlFileContents
+                });
+              })
+              .then(function (resp) {
+                $log.debug('uploadControlFile resp', resp);
+                deferred.resolve(resp);
+              })
+              .then(null, function (e) {
+                console.error('Failed to upload control file.', e);
+                deferred.reject(e);
+              });
+
+            return deferred.promise;
           }
         };
 

@@ -1,0 +1,71 @@
+<div id="player-pro-info-modal">
+  <div class="modal-header">
+    <button id="dismissButton" type="button" class="close" ng-click="dismiss()">
+      <i class="fa fa-times"></i>
+    </button>
+    <h3 class="modal-title" ng-if="display.showTrialButton" translate>displays-app.playerProInfo.title.trial</h3>
+    <h3 class="modal-title" ng-if="!display.showTrialButton" translate>displays-app.playerProInfo.title.noTrial</h3>
+  </div>
+  <div class="modal-body" rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0">	
+    <div class="row">
+      <div class="col-xs-12 text-center">
+        <h4 translate translate-values="{ productLink: productLink}">
+          displays-app.playerProInfo.heading
+        </h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6 col-xs-12 u_padding-lg">
+        <div class="text-center u_margin-md-bottom">
+          <img src="https://s3.amazonaws.com/Rise-Images/store/display_control_icon.png">
+        </div>
+    
+        <div translate>
+          displays-app.playerProInfo.displayControl.title
+        </div>
+        <br/>
+        <div class="bullet-list">
+          <ul>
+            <li translate>displays-app.playerProInfo.displayControl.feature1</li>
+            <li translate>displays-app.playerProInfo.displayControl.feature2</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xs-12 u_padding-lg">
+        <div class="text-center u_margin-md-bottom">
+          <img src="https://s3.amazonaws.com/Rise-Images/store/offline_play_icon.png">
+        </div>
+    
+        <div translate>
+          displays-app.playerProInfo.offlinePlay.title
+        </div>
+        <br/>
+        <div class="bullet-list">
+          <ul>
+            <li translate>displays-app.playerProInfo.offlinePlay.feature1</li>
+            <li translate>displays-app.playerProInfo.offlinePlay.feature2</li>
+            <li translate>displays-app.playerProInfo.offlinePlay.feature3</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-xs-12 u_margin-md-bottom text-center">
+        <p ng-show="display.showTrialButton" translate>displays-app.playerProInfo.trialInfo</p>
+        <p translate>displays-app.playerProInfo.price</p>
+      </div>
+    </div>
+
+    <div class="text-center u_margin-md-bottom">
+      <button id="startTrialButton" ng-if="display.showTrialButton" class="btn btn-primary btn-lg" ng-click="startTrial()" translate>
+        displays-app.details.startPlayerProTrial
+      </button>
+      <a id="subscribeButton" ng-if="!display.showTrialButton" class="btn btn-lg btn-primary" ng-href="{{productLink}}" target="_blank" translate>
+        displays-app.details.subscribePlayerPro
+      </a>
+
+      <p class="u_margin-md-top" translate translate-values="{ accountLink: accountLink}">
+        displays-app.playerProInfo.footer
+      </p>
+    </div>
+
+  </div>
+</div>

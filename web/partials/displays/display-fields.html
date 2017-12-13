@@ -52,25 +52,21 @@
       </div>
   </div>
 
-
 </div>
 <hr>
 
 <div class="row half-top">
-  <!-- VERTICAL DISPLAY DETAILS -->
+
+  <!-- DISPLAY SCHEDULE -->
   <div class="col-sm-6 col-xs-12">
     <div class="u_lh-normal u_margin-sm-bottom">
-      <label class="control-label" translate>displays-app.displayDetails</label>
+      <label class="control-label" translate>displays-app.fields.player.schedule.label</label>
     </div>
     <div class="panel panel-default">
       <table class="table">
         <tbody class="table-body">
-          <tr class="table-body__row">
-            <td class="table-body__cell" translate><span>displays-app.fields.player.id</span></td>
-            <td class="table-body__cell"><span> {{display.id}} </span></td>
-          </tr>
-          <tr class="table-body__row">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.schedule.label</span></td>
+           <tr class="table-body__row">
+            <td class="table-body__cell"><span translate>displays-app.fields.player.schedule.assigned</span></td>
             <td class="table-body__cell">
               <span>
                 <a id="addToSchedule" ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
@@ -80,10 +76,46 @@
                   </span>
                 </a>
                 <a id="viewSchedule" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
-                  <span class="table-link u_ellipsis-md-top">{{display.scheduleName}} <i class="fa fa-external-link" aria-hidden="true"></i></span>
+                  <span class="table-link u_ellipsis-md-top">
+                    {{display.scheduleName}}
+                    <i class="fa fa-external-link" aria-hidden="true"></i>
+                  </span>
                 </a>
               </span>
             </td>
+          </tr>
+          <tr class="table-body__row">
+            <td class="table-body__cell"><span translate>displays-app.fields.player.displayControl.label</span></td>
+            <!-- ACTIVE -->
+            <td class="table-body__cell" ng-show="playerProFactory.isDisplayControlCompatiblePlayer(display)">
+              <span translate> displays-app.fields.player.displayControl.description </span>
+              <button class="btn btn-primary btn-xs" ng-click="playerProFactory.openConfigureDisplayControl(display)" require-role="da" translate> displays-app.fields.player.displayControl.configure </button>
+            </td>
+            <!-- INACTIVE -->
+            <td class="table-body__cell" ng-hide="playerProFactory.isDisplayControlCompatiblePlayer(display)">
+              <span> 
+                <div class="text-danger">
+                  <span translate>
+                    displays-app.fields.player.displayControl.unsupported
+                  </span>
+                </div>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- DISPLAY DETAILS -->
+    <div class="u_lh-normal u_margin-sm-bottom">
+      <label class="control-label" translate>displays-app.displayDetails</label>
+    </div>
+    <div class="panel panel-default">
+      <table class="table">
+        <tbody class="table-body">
+          <tr class="table-body__row">
+            <td class="table-body__cell" translate><span>displays-app.fields.player.id</span></td>
+            <td class="table-body__cell"><span> {{display.id}} </span></td>
           </tr>
           <tr class="table-body__row">
             <td class="table-body__cell" translate><span>displays-app.fields.player.status</span></td>
@@ -119,21 +151,21 @@
             <td class="table-body__cell"><span translate>displays-app.fields.player.macAddress</span></td>
             <td class="table-body__cell"><span>{{display.macAddress}}</span></td>
           </tr>
-          <tr class="table-body__row" ng-class="{'alert-warning':factory.isOutdatedPlayer(display), 'alert-danger':factory.isUnsupportedPlayer(display)}">
+          <tr class="table-body__row" ng-class="{'alert-warning':playerProFactory.isOutdatedPlayer(display), 'alert-danger':playerProFactory.isUnsupportedPlayer(display)}">
             <td class="table-body__cell"><span translate>displays-app.fields.player.playerVersion</span></td>
-            <td class="table-body__cell" ng-if="factory.is3rdPartyPlayer(display)">
+            <td class="table-body__cell" ng-if="playerProFactory.is3rdPartyPlayer(display)">
               <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}} {{'displays-app.fields.player.version.thirdParty' | translate}}</span>
               <a href="https://risevision.zendesk.com/hc/en-us/articles/115003786306" target="_blank" translate>displays-app.fields.player.version.howGetHelp</a>
             </td>
-            <td class="table-body__cell" ng-if="factory.isOutdatedPlayer(display)">
+            <td class="table-body__cell" ng-if="playerProFactory.isOutdatedPlayer(display)">
               <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "") + (display.offlineSubscription ? 'Professional' : 'Standard')}}</span>
               <a href="https://help.risevision.com/hc/en-us/articles/115004250723-Why-is-Rise-Player-version-not-current-" target="_blank" translate>displays-app.fields.player.version.notCurrent</a>
             </td>
-            <td class="table-body__cell" ng-if="factory.isUnsupportedPlayer(display)">
+            <td class="table-body__cell" ng-if="playerProFactory.isUnsupportedPlayer(display)">
               <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "")}}</span>
               <a href="" ng-click="factory.addDisplayModal(display)"><span class="text-danger" translate>displays-app.fields.player.version.unsupported</span> - {{'displays-app.fields.player.version.upgrade' | translate}}</a>
             </td>
-            <td class="table-body__cell" ng-if="!factory.is3rdPartyPlayer(display) && !factory.isOutdatedPlayer(display) && !factory.isUnsupportedPlayer(display)">
+            <td class="table-body__cell" ng-if="!playerProFactory.is3rdPartyPlayer(display) && !playerProFactory.isOutdatedPlayer(display) && !playerProFactory.isUnsupportedPlayer(display)">
               <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "") + (display.offlineSubscription ? 'Professional' : 'Standard')}}</span>
             </td>
           </tr>
@@ -152,73 +184,15 @@
         </tbody>
       </table>
     </div>
+
   </div>
 
-  <!-- SCREENSHOT  -->
+   <!-- SCREENSHOT  -->
   <div class="col-sm-6 col-xs-12">
-    <div class="l_display-screenshot" ng-class="{ 'l_display-screenshot-offline': (screenshotState(display).indexOf('offline') >= 0) }">
-      <div class="u_lh-normal u_margin-sm-bottom">
-        <label class="control-label">{{ 'displays-app.fields.screenshot.title' | translate }}</label>
-        <button id="btnUpdateScreenshot" class="btn btn-default pull-right" ng-click="requestScreenshot()" ng-disabled="reloadScreenshotDisabled(display)">
-          <i class="fa fa-refresh fa-white half-left"></i> {{ 'displays-app.fields.screenshot.updateScreenshot' | translate }}
-        </button>
-      </div>
-      <div class="panel panel-default u_margin-sm-bottom text-center">
-        <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'no-schedule'">
-          <p class="text-muted">{{ 'displays-app.fields.screenshot.notAvailable' | translate }}</p>
-          <p class="text-muted">{{ 'displays-app.fields.screenshot.notScheduled' | translate }}</p>
-          <a class="btn btn-primary btn-xs" ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
-            {{ 'displays-app.fields.player.schedule.addToSchedule' | translate }} <i class="fa fa-external-link icon-right" aria-hidden="true"></i>
-          </a>
-        </div>
-        <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'upgrade-player'">
-          <p>{{ 'displays-app.fields.screenshot.notAvailable' | translate }}</p>
-          <p>{{ 'displays-app.fields.screenshot.upgradeRequired' | translate }}</p>
-          <button class="btn btn-xs btn-primary" ng-click="factory.addDisplayModal(display)">{{ 'displays-app.fields.screenshot.upgradePlayer' | translate }}</button>
-        </div>
-        <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'os-not-supported'">
-          <p>{{ 'displays-app.fields.screenshot.notAvailable' | translate }}</p>
-          <p>{{ 'displays-app.fields.screenshot.osNotSupported' | translate }}</p>
-          <button class="btn btn-link" onclick="window.open('https://help.risevision.com/hc/en-us/articles/115000860926-Displays','_blank')">
-            {{ 'displays-app.fields.screenshot.learnSupportedOS1' | translate }}
-            <br>
-            {{ 'displays-app.fields.screenshot.learnSupportedOS2' | translate }}
-          </button>
-        </div>
-        <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'offline'">
-          <p>{{ 'displays-app.fields.screenshot.notAvailable' | translate }}</p>
-          <p>{{ 'displays-app.fields.screenshot.playerOffline' | translate }}</p>
-        </div>
-        <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'not-installed'">
-          <p class="text-muted">{{ 'displays-app.fields.screenshot.notAvailable' | translate }}</p>
-          <p class="text-muted">{{ 'displays-app.fields.screenshot.playerNotInstalled' | translate }}</p>
-          <button class="btn btn-xs btn-primary" ng-click="factory.addDisplayModal(display)">{{ 'displays-app.fields.screenshot.playerInstall' | translate }}</button>
-        </div>
-        <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'no-screenshot-available'">
-          <p>{{ 'displays-app.fields.screenshot.missing1' | translate }}</p>
-          <p>{{ 'displays-app.fields.screenshot.missing2' | translate }}</p>
-        </div>
-        <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'screenshot-error'">
-          <p>{{ 'displays-app.fields.screenshot.error1' | translate }}</p>
-          <p>{{ 'displays-app.fields.screenshot.error2' | translate }}</p>
-        </div>
-        <div class="panel-body display-screenshot display-screenshot-available" ng-show="screenshotState(display).indexOf('screenshot-loaded') >= 0">
-          <img src="{{screenshot.imageUrl}}">
-        </div>
-        <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'loading'">
-          <div class="app-loading-dots">
-            <i class="fa fa-3x fa-spinner fa-spin fa-fw"></i>
-          </div>
-        </div>
-      </div>
-      <span class="text-muted pull-right" ng-show="screenshotState(display).indexOf('screenshot-loaded') >= 0">
-        <small>Updated {{screenshot.lastModified | date:'d-MMM-yyyy h:mm a'}}</small>
-      </span>
-      
-    </div>
+    <screenshot></screenshot>
   </div>
-</div>
 
+</div>
 
 <!--      SETTINGS       -->
 
