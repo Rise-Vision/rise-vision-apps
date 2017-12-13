@@ -2,8 +2,8 @@
 echo
 echo This command will show which branch has the latest commit referencing a given staging environment.
 echo If a staging environment is not listed, it means it is not currently in use by any active branch.
-echo -e "\033[1;31mWarning: this command will not show information about stage-0\033[0m"
-echo -e "If you have not ran \033[34mgit pull/git fetch\033[0m in a while, you may want to run: \033[34mgit fetch --all\033[0m"
+echo -e "\033[1;31mWarning: this command will not show information about stage-0, unless it appears in the commit message\033[0m"
+echo -e "If you have not ran \033[34mgit pull/git fetch\033[0m in a while, you may want to run: \033[34mgit fetch --prune\033[0m"
 echo
 # 1.  Request remote branches only (GitHub)
 # 2.  Remove master from the list (it fails otherwise)
@@ -25,8 +25,8 @@ git branch -r \
 | grep origin/ \
 | sort -r \
 | cut -d " " -f2 \
-| xargs -n2 git --no-pager log --format="%<(11,ltrunc)%B%+ci - %<(50)%D - %an - stage-" --max-count=1 \
-| sed 's/\.\. //g' \
+| xargs -n2 git --no-pager log --format="%<(11,ltrunc)%B%+ci - %<(30)%an - %D - stage-" --max-count=1 \
+| sed 's/^.*\[stage-\([0-9]\).*/[stage-\1]/' \
 | grep stage- \
 | sed '$!N;s/\n/ - /' \
 | sed 's/- stage-//g' \
