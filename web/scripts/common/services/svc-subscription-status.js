@@ -29,7 +29,7 @@ angular.module('risevision.apps.services')
   function ($http, $q, STORE_SERVER_URL) {
     return function (productCode, companyId) {
       var deferred = $q.defer();
-      var path = 'v1/company/' + companyId + '/status?pc=' + productCode;
+      var path = 'v1/company/' + companyId + '/product/status?pc=' + productCode;
 
       $http.get(STORE_SERVER_URL + path)
         .then(function (resp) {
