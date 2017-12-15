@@ -55,6 +55,17 @@ describe('service: display:', function() {
         return deferred.promise;
       };
     });
+    $provide.factory('getCompanySubscriptionStatus', function($q) {
+      return function(productCode, companyId) {
+        var deferred = $q.defer();
+
+        $timeout(function() {
+          deferred.resolve({ status: 'Subscribed' });
+        });
+
+        return deferred.promise;
+      };
+    });
     $provide.factory('screenshotRequester', function($q) {
       return function(ids) {
         return screenshotRequesterMock($q);
@@ -103,7 +114,7 @@ describe('service: display:', function() {
                 def.resolve({
                   result : {
                     nextPageToken : 1,
-                    items : [{id: 'abc', lastActivityDate: new Date("2012-04-02T14:19:36.000Z") }]
+                    items : [{id: 'abc', companyId: 'comp1', lastActivityDate: new Date("2012-04-02T14:19:36.000Z") }]
                   }
                 });
               } else {
@@ -267,7 +278,7 @@ describe('service: display:', function() {
       var items;
       var broadcastSpy = sinon.spy($rootScope,'$broadcast');
 
-      display.list({})
+      return display.list({})
       .then(function(result){
         expect(result).to.be.truely;
         expect(result.items).to.be.an.array;
@@ -275,18 +286,20 @@ describe('service: display:', function() {
         expect(result.items).to.have.length.above(0);
         $timeout.flush();
         setTimeout(function() {
-          items.forEach(function(item) {
-            expect(item.onlineStatus).to.equal('online');
-            expect(item.lastConnectionTime.getTime()).to.equal(CONNECTION_TIME);
-            expect(item.proSubscription.status).to.equal('Subscribed');
-          });
-          
-          broadcastSpy.should.have.been.calledWith('displaysLoaded', items);
+          $timeout.flush();
+          setTimeout(function() {
+            items.forEach(function(item) {
+              expect(item.onlineStatus).to.equal('online');
+              expect(item.lastConnectionTime.getTime()).to.equal(CONNECTION_TIME);
+              expect(item.proSubscription.status).to.equal('Subscribed');
+            });
 
-          done();
+            broadcastSpy.should.have.been.calledWith('displaysLoaded', items);
+
+            done();
+          });
         });
-      })
-      .then(null,done);
+      });
     });
 
     it('should create an empty searchString if query is empty',function(done){

@@ -24,4 +24,23 @@ angular.module('risevision.apps.services')
         return deferred.promise;
       };
     }
-  ]);
+  ])
+  .factory('getCompanySubscriptionStatus', ['$http', '$q', 'STORE_SERVER_URL',
+  function ($http, $q, STORE_SERVER_URL) {
+    return function (productCode, companyId) {
+      var deferred = $q.defer();
+      var path = 'v1/company/' + companyId + '/status?pc=' + productCode;
+
+      $http.get(STORE_SERVER_URL + path)
+        .then(function (resp) {
+          deferred.resolve(status[0]);
+        })
+        .catch(function (err) {
+          console.log(err);
+          deferred.reject(err);
+        });
+
+      return deferred.promise;
+    };
+  }
+]);

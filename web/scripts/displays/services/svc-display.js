@@ -19,13 +19,14 @@
     ])
     .service('display', ['$rootScope', '$q', '$log', 'coreAPILoader',
       'userState', 'getDisplayStatus', 'screenshotRequester', 'pick', 
-      'getProductSubscriptionStatus', 'DISPLAY_WRITABLE_FIELDS',
-      'DISPLAY_SEARCH_FIELDS', 'PLAYER_PRO_PRODUCT_CODE',
+      'getProductSubscriptionStatus', 'getCompanySubscriptionStatus',
+      'DISPLAY_WRITABLE_FIELDS', 'DISPLAY_SEARCH_FIELDS', 'PLAYER_PRO_PRODUCT_CODE',
       function ($rootScope, $q, $log, coreAPILoader, userState,
         getDisplayStatus, screenshotRequester, pick,
-        getProductSubscriptionStatus, DISPLAY_WRITABLE_FIELDS,
-        DISPLAY_SEARCH_FIELDS, PLAYER_PRO_PRODUCT_CODE) {
+        getProductSubscriptionStatus, getCompanySubscriptionStatus,
+        DISPLAY_WRITABLE_FIELDS, DISPLAY_SEARCH_FIELDS, PLAYER_PRO_PRODUCT_CODE) {
 
+        var companiesStatus = {};
         var createSearchQuery = function (fields, search) {
           var query = '';
 
@@ -36,6 +37,25 @@
           query = query.substring(3);
 
           return query.trim();
+        };
+
+        var _loadCompaniesSubscriptionStatus = function (displays) {
+          var promises = [];
+
+          displays.forEach(function (display) {
+            var companyId = display.companyId;
+
+            if (!companiesStatus[companyId]) {
+              companiesStatus[companyId] = {};
+              promises.push(
+                getCompanySubscriptionStatus(PLAYER_PRO_PRODUCT_CODE, companyId)
+                .then(function(resp) {
+                  companiesStatus[companyId] = resp.status;
+                }));
+            }
+          });
+
+          return $q.all(promises);
         };
 
         var _mergeConnectionStatuses = function (items, statuses) {
@@ -66,7 +86,12 @@
 
         var _mergeProSubscriptionStatus = function (items, statusMap) {
           items.forEach(function (item) {
-            item.proSubscription = statusMap[item.id];
+            if (companiesStatus[item.companyId] === 'Subscribed') {
+              item.proSubscription = statusMap[item.id];
+            }
+            else {
+              item.proSubscription = { status: companiesStatus[item.companyId] };
+            }
           });
         };
 
@@ -118,7 +143,11 @@
                     service.statusLoading = false;
                   });
 
-                getProductSubscriptionStatus(PLAYER_PRO_PRODUCT_CODE, displayIds).then(function (statusMap) {
+                _loadCompaniesSubscriptionStatus(result.items)
+                  .then(function () {
+                    return getProductSubscriptionStatus(PLAYER_PRO_PRODUCT_CODE, displayIds);
+                  })
+                  .then(function (statusMap) {
                     _mergeProSubscriptionStatus(result.items, statusMap);
                   })
                   .finally(function () {
