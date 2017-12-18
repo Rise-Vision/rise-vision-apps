@@ -33,10 +33,10 @@ angular.module('risevision.apps.services')
 
       $http.get(STORE_SERVER_URL + path)
         .then(function (resp) {
-          deferred.resolve(status[0]);
+          deferred.resolve(resp.data[0]);
         })
         .catch(function (err) {
-          console.log(err);
+          console.log('Failed to retrieve company subscription status', err);
           deferred.reject(err);
         });
 
