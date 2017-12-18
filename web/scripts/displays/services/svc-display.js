@@ -39,7 +39,7 @@
           return query.trim();
         };
 
-        var _loadCompaniesSubscriptionStatus = function (displays) {
+        var _loadCompaniesProStatus = function (displays) {
           var promises = [];
 
           displays.forEach(function (display) {
@@ -143,7 +143,7 @@
                     service.statusLoading = false;
                   });
 
-                _loadCompaniesSubscriptionStatus(result.items)
+                _loadCompaniesProStatus(result.items)
                   .then(function () {
                     return getProductSubscriptionStatus(PLAYER_PRO_PRODUCT_CODE, displayIds);
                   })
@@ -262,6 +262,19 @@
                 console.error('Failed to delete display.', e);
                 deferred.reject(e);
               });
+
+            return deferred.promise;
+          },
+          getCompanyProStatus: function (companyId) {
+            var deferred = $q.defer();
+
+            _loadCompaniesProStatus([{ companyId: companyId }])
+            .then(function() {
+              deferred.resolve(companiesStatus[companyId]);
+            })
+            .catch(function(e) {
+              deferred.reject(e);
+            });
 
             return deferred.promise;
           },

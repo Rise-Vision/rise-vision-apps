@@ -12,6 +12,7 @@ describe('controller: display details', function() {
         display: {},
         getDisplay: function(displayId) {
           this.display.id = displayId;
+          this.display.companyId = 'company';
 
           return Q.resolve();
         },
@@ -80,6 +81,9 @@ describe('controller: display details', function() {
       return {
         hasSchedule: function(display) {
           return display.scheduleId;
+        },
+        getCompanyProStatus: function() {
+          return Q.resolve('Subscribed');
         }
       }
     });
