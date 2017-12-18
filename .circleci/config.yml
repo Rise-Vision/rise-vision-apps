@@ -171,13 +171,9 @@ workflows:
       - test_unit:
           requires:
             - dependencies
-      - test_e2e:
-          requires:
-            - dependencies
       - deploy_production:
           requires:
             - test_unit
-            - test_e2e
           filters:
             branches:
               only: master
@@ -190,7 +186,6 @@ workflows:
       - deploy_beta:
           requires:
             - test_unit
-            - test_e2e
           filters:
             branches:
               only: /(beta).*/
