@@ -184,7 +184,6 @@ workflows:
       - deploy_staging:
           requires:
             - test_unit
-            #- test_e2e
           filters:
             branches:
               only: /(feature|fix|chore).*/
