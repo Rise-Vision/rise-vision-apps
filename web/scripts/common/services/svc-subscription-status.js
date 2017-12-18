@@ -1,6 +1,16 @@
 'use strict';
 
 angular.module('risevision.apps.services')
+  .value('SUBSCRIPTION_STATUS_CODE_MAP', { 
+    'on-trial': 'On Trial',
+    'trial-expired': 'Trial Expired',
+    'subscribed': 'Subscribed',
+    'suspended': 'Suspended',
+    'cancelled': 'Cancelled',
+    'free': 'Free',
+    'not-subscribed': 'Not Subscribed',
+    'trial-available': 'Trial available'
+  })
   .factory('getProductSubscriptionStatus', ['$http', '$q', 'STORE_SERVER_URL',
     function ($http, $q, STORE_SERVER_URL) {
       return function (productCode, displayIds) {

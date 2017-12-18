@@ -4,10 +4,10 @@ angular.module('risevision.displays.controllers')
   .controller('displayDetails', ['$scope', '$rootScope', '$q', '$state',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'storeAuthorization', 'userState',
-    'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID',
+    'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', 'SUBSCRIPTION_STATUS_CODE_MAP',
     function ($scope, $rootScope, $q, $state, displayFactory, display, screenshotFactory, playerProFactory, 
       $loading, $log, $modal, $templateCache, displayId, storeAuthorization, userState,
-      PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID) {
+      PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, SUBSCRIPTION_STATUS_CODE_MAP) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
@@ -118,8 +118,10 @@ angular.module('risevision.displays.controllers')
           })
           .then(function (companyProStatus) {
             if (companyProStatus !== 'Subscribed') {
-              subscriptionStatus = companyProStatus;
+              subscriptionStatus = { status: companyProStatus, statusCode: SUBSCRIPTION_STATUS_CODE_MAP[companyProStatus] };
             }
+
+            console.log('Display subscription', companyProStatus, subscriptionStatus);
 
             $scope.display.subscriptionStatus = subscriptionStatus;
 
