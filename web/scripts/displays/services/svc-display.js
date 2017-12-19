@@ -19,11 +19,11 @@
     ])
     .service('display', ['$rootScope', '$q', '$log', 'coreAPILoader',
       'userState', 'getDisplayStatus', 'screenshotRequester', 'pick', 
-      'getProductSubscriptionStatus', 'getCompanySubscriptionStatus',
+      'getProductSubscriptionStatus', 'getCompanySubscriptionStatus', 'SUBSCRIPTION_STATUS_MAP',
       'DISPLAY_WRITABLE_FIELDS', 'DISPLAY_SEARCH_FIELDS', 'PLAYER_PRO_PRODUCT_CODE',
       function ($rootScope, $q, $log, coreAPILoader, userState,
         getDisplayStatus, screenshotRequester, pick,
-        getProductSubscriptionStatus, getCompanySubscriptionStatus,
+        getProductSubscriptionStatus, getCompanySubscriptionStatus, SUBSCRIPTION_STATUS_MAP,
         DISPLAY_WRITABLE_FIELDS, DISPLAY_SEARCH_FIELDS, PLAYER_PRO_PRODUCT_CODE) {
 
         var companiesStatus = {};
@@ -50,7 +50,12 @@
               promises.push(
                 getCompanySubscriptionStatus(PLAYER_PRO_PRODUCT_CODE, companyId)
                 .then(function(resp) {
-                  companiesStatus[companyId] = resp.status;
+                  if (resp.status === 'Not Subscribed' && resp.trialPeriod && Number(resp.trialPeriod) > 0) {
+                    resp.status = 'Trial Available';
+                  }
+
+                  resp.statusCode = SUBSCRIPTION_STATUS_MAP[resp.status];
+                  companiesStatus[companyId] = resp;
                 }));
             }
           });
@@ -86,11 +91,13 @@
 
         var _mergeProSubscriptionStatus = function (items, statusMap) {
           items.forEach(function (item) {
-            if (companiesStatus[item.companyId] === 'Subscribed') {
+            var companyStatus = companiesStatus[item.companyId];
+
+            if (companyStatus.statusCode === 'subscribed') {
               item.proSubscription = statusMap[item.id];
             }
             else {
-              item.proSubscription = { status: companiesStatus[item.companyId] };
+              item.proSubscription = companyStatus;
             }
           });
         };

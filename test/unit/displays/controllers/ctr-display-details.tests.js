@@ -83,7 +83,7 @@ describe('controller: display details', function() {
           return display.scheduleId;
         },
         getCompanyProStatus: function() {
-          return Q.resolve('Subscribed');
+          return Q.resolve({status: 'Subscribed', statusCode: 'subscribed'});
         }
       }
     });

@@ -4,10 +4,10 @@ angular.module('risevision.displays.controllers')
   .controller('displayDetails', ['$scope', '$rootScope', '$q', '$state',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'storeAuthorization', 'userState',
-    'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', 'SUBSCRIPTION_STATUS_CODE_MAP',
+    'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID',
     function ($scope, $rootScope, $q, $state, displayFactory, display, screenshotFactory, playerProFactory, 
       $loading, $log, $modal, $templateCache, displayId, storeAuthorization, userState,
-      PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, SUBSCRIPTION_STATUS_CODE_MAP) {
+      PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
@@ -117,17 +117,21 @@ angular.module('risevision.displays.controllers')
             return $scope.displayService.getCompanyProStatus($scope.companyId);
           })
           .then(function (companyProStatus) {
-            if (companyProStatus !== 'Subscribed') {
-              subscriptionStatus = { status: companyProStatus, statusCode: SUBSCRIPTION_STATUS_CODE_MAP[companyProStatus] };
+            console.log('Display subscription', companyProStatus, subscriptionStatus);
+
+            if (companyProStatus.statusCode !== 'subscribed') {
+              subscriptionStatus = companyProStatus;
             }
 
-            console.log('Display subscription', companyProStatus, subscriptionStatus);
+            console.log('Display new subscription', subscriptionStatus);
 
             $scope.display.subscriptionStatus = subscriptionStatus;
 
             $scope.display.showTrialButton = false;
             $scope.display.showTrialStatus = false;
             $scope.display.showSubscribeButton = false;
+
+            console.log(!playerProFactory.is3rdPartyPlayer($scope.display), !playerProFactory.isOutdatedPlayer($scope.display));
             
             if (!playerProFactory.is3rdPartyPlayer($scope.display) && 
               !playerProFactory.isOutdatedPlayer($scope.display)) {
