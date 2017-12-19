@@ -82,6 +82,8 @@ angular.module('risevision.displays.controllers')
           return 'not-pro-compatible';
         } else if (status === 'Subscribed') {
           return 'subscribed';
+        } else if (status === 'Not Subscribed' && Number(status.trialPeriod) > 0) {
+          return 'trial-available';
         } else if (status === 'Not Subscribed') {
           return 'not-subscribed';
         } else if (status === 'On Trial') {
