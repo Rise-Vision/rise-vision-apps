@@ -120,6 +120,9 @@ angular.module('risevision.displays.controllers')
             if (companyProStatus.statusCode !== 'subscribed') {
               subscriptionStatus = companyProStatus;
             }
+            else if (subscriptionStatus.statusCode === 'trial-available') {
+              subscriptionStatus.statusCode = 'not-subscribed';
+            }
 
             $scope.display.subscriptionStatus = subscriptionStatus;
 
