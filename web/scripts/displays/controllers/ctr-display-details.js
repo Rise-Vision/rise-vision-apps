@@ -117,10 +117,7 @@ angular.module('risevision.displays.controllers')
             return $scope.displayService.getCompanyProStatus($scope.companyId, true);
           })
           .then(function (companyProStatus) {
-            if (companyProStatus.statusCode !== 'subscribed') {
-              subscriptionStatus = companyProStatus;
-            }
-            else if (subscriptionStatus.statusCode === 'trial-available') {
+            if (companyProStatus.statusCode === 'subscribed' && subscriptionStatus.statusCode === 'trial-available') {
               subscriptionStatus.statusCode = 'not-subscribed';
             }
 

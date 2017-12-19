@@ -11,6 +11,7 @@ angular.module('risevision.apps.services')
           .then(function (resp) {
             var statusMap = resp.data.reduce(function (map, status) {
               map[status.displayId] = status;
+              map[status.displayId].statusCode = status.status.toLowerCase().replace(' ', '-');
               return map;
             }, {});
 

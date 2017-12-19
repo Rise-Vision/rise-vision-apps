@@ -88,12 +88,11 @@
           items.forEach(function (item) {
             var companyStatus = companiesStatus[item.companyId];
 
-            if (companyStatus.statusCode === 'subscribed') {
-              item.proSubscription = statusMap[item.id];
+            if (companyStatus.statusCode === 'subscribed' && statusMap[item.id].statusCode === 'not-subscribed') {
+              statusMap[item.id].trialPeriod = 0;
             }
-            else {
-              item.proSubscription = companyStatus;
-            }
+
+            item.proSubscription = statusMap[item.id];
           });
         };
 
