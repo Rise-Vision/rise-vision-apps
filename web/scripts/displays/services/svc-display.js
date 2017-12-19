@@ -39,13 +39,13 @@
           return query.trim();
         };
 
-        var _loadCompaniesProStatus = function (displays) {
+        var _loadCompaniesProStatus = function (displays, forceReload) {
           var promises = [];
 
           displays.forEach(function (display) {
             var companyId = display.companyId;
 
-            if (!companiesStatus[companyId]) {
+            if (!companiesStatus[companyId] || forceReload) {
               companiesStatus[companyId] = {};
               promises.push(
                 getCompanySubscriptionStatus(PLAYER_PRO_PRODUCT_CODE, companyId)
@@ -272,10 +272,10 @@
 
             return deferred.promise;
           },
-          getCompanyProStatus: function (companyId) {
+          getCompanyProStatus: function (companyId, forceReload) {
             var deferred = $q.defer();
 
-            _loadCompaniesProStatus([{ companyId: companyId }])
+            _loadCompaniesProStatus([{ companyId: companyId }], forceReload)
             .then(function() {
               deferred.resolve(companiesStatus[companyId]);
             })

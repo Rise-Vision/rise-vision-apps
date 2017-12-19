@@ -114,16 +114,12 @@ angular.module('risevision.displays.controllers')
           $loading.stop('loading-trial');
           $scope.deferredDisplay.promise
           .then(function () {
-            return $scope.displayService.getCompanyProStatus($scope.companyId);
+            return $scope.displayService.getCompanyProStatus($scope.companyId, true);
           })
           .then(function (companyProStatus) {
-            console.log('Display subscription', companyProStatus, subscriptionStatus);
-
             if (companyProStatus.statusCode !== 'subscribed') {
               subscriptionStatus = companyProStatus;
             }
-
-            console.log('Display new subscription', subscriptionStatus);
 
             $scope.display.subscriptionStatus = subscriptionStatus;
 
@@ -131,8 +127,6 @@ angular.module('risevision.displays.controllers')
             $scope.display.showTrialStatus = false;
             $scope.display.showSubscribeButton = false;
 
-            console.log(!playerProFactory.is3rdPartyPlayer($scope.display), !playerProFactory.isOutdatedPlayer($scope.display));
-            
             if (!playerProFactory.is3rdPartyPlayer($scope.display) && 
               !playerProFactory.isOutdatedPlayer($scope.display)) {
               switch (subscriptionStatus.statusCode) {
