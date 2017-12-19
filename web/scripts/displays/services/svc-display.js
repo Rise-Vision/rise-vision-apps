@@ -19,11 +19,11 @@
     ])
     .service('display', ['$rootScope', '$q', '$log', 'coreAPILoader',
       'userState', 'getDisplayStatus', 'screenshotRequester', 'pick', 
-      'getProductSubscriptionStatus', 'getCompanySubscriptionStatus', 'SUBSCRIPTION_STATUS_MAP',
+      'getProductSubscriptionStatus', 'subscriptionStatusService',
       'DISPLAY_WRITABLE_FIELDS', 'DISPLAY_SEARCH_FIELDS', 'PLAYER_PRO_PRODUCT_CODE',
       function ($rootScope, $q, $log, coreAPILoader, userState,
         getDisplayStatus, screenshotRequester, pick,
-        getProductSubscriptionStatus, getCompanySubscriptionStatus, SUBSCRIPTION_STATUS_MAP,
+        getProductSubscriptionStatus, subscriptionStatusService,
         DISPLAY_WRITABLE_FIELDS, DISPLAY_SEARCH_FIELDS, PLAYER_PRO_PRODUCT_CODE) {
 
         var companiesStatus = {};
@@ -48,13 +48,8 @@
             if (!companiesStatus[companyId] || forceReload) {
               companiesStatus[companyId] = {};
               promises.push(
-                getCompanySubscriptionStatus(PLAYER_PRO_PRODUCT_CODE, companyId)
+                subscriptionStatusService.get(PLAYER_PRO_PRODUCT_CODE, companyId)
                 .then(function(resp) {
-                  if (resp.status === 'Not Subscribed' && resp.trialPeriod && Number(resp.trialPeriod) > 0) {
-                    resp.status = 'Trial Available';
-                  }
-
-                  resp.statusCode = SUBSCRIPTION_STATUS_MAP[resp.status];
                   companiesStatus[companyId] = resp;
                 }));
             }
