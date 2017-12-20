@@ -12,6 +12,7 @@ describe('controller: display details', function() {
         display: {},
         getDisplay: function(displayId) {
           this.display.id = displayId;
+          this.display.companyId = 'company';
 
           return Q.resolve();
         },
@@ -80,6 +81,9 @@ describe('controller: display details', function() {
       return {
         hasSchedule: function(display) {
           return display.scheduleId;
+        },
+        getCompanyProStatus: function() {
+          return Q.resolve({status: 'Subscribed', statusCode: 'subscribed'});
         }
       }
     });
@@ -225,7 +229,7 @@ describe('controller: display details', function() {
     it('should hide spinner and set false to flags when on default state ',function(done){
       var spy = sinon.spy($loading,'stop')
       
-      $rootScope.$emit('subscription-status:changed');
+      $rootScope.$emit('subscription-status:changed', {});
       
       spy.should.have.been.calledWith('loading-trial');
       setTimeout(function(){
@@ -265,6 +269,9 @@ describe('controller: display details', function() {
     });
 
     it('should set correct flags when trial-available',function(done){
+      sinon.stub($scope.displayService, 'getCompanyProStatus')
+        .returns(Q.resolve({status: 'Trial Available', statusCode: 'trial-available'}));
+
       $scope.deferredDisplay.resolve({playerName:'RiseVisionElectron', playerVersion: '2017.07.17.20.21'});
       
       $rootScope.$emit('subscription-status:changed',{statusCode: 'trial-available'});

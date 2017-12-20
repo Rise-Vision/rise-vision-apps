@@ -112,13 +112,21 @@ angular.module('risevision.displays.controllers')
       var subscriptionStatusListener = $rootScope.$on('subscription-status:changed',
         function (e, subscriptionStatus) {
           $loading.stop('loading-trial');
-          $scope.deferredDisplay.promise.then(function () {
+          $scope.deferredDisplay.promise
+          .then(function () {
+            return $scope.displayService.getCompanyProStatus($scope.companyId, true);
+          })
+          .then(function (companyProStatus) {
+            if (companyProStatus.statusCode === 'subscribed' && subscriptionStatus.statusCode === 'trial-available') {
+              subscriptionStatus.statusCode = 'not-subscribed';
+            }
+
             $scope.display.subscriptionStatus = subscriptionStatus;
 
             $scope.display.showTrialButton = false;
             $scope.display.showTrialStatus = false;
             $scope.display.showSubscribeButton = false;
-            
+
             if (!playerProFactory.is3rdPartyPlayer($scope.display) && 
               !playerProFactory.isOutdatedPlayer($scope.display)) {
               switch (subscriptionStatus.statusCode) {
