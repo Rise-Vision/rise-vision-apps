@@ -8,6 +8,7 @@ angular.module('risevision.editor.services')
 
       var BACKGROUND_TOKENS = {
         RGB: 'rgb',
+        HEX: /#([a-f0-9]{3,4}){1,2}\b/i,
         URL: 'url'
       };
 
@@ -43,6 +44,12 @@ angular.module('risevision.editor.services')
               rgbTokenPosition);
             background.color = backgroundStyle.substring(rgbTokenPosition,
               closingParenthesesPosition + 1);
+          }
+
+          var hexTokens = BACKGROUND_TOKENS.HEX.exec(backgroundStyle);
+
+          if (hexTokens) {
+            background.color = hexTokens[0];
           }
 
           var urlTokenPosition = backgroundStyle.indexOf(
