@@ -2,7 +2,7 @@
 
 angular.module('risevision.displays.services')
   .value('OFFLINE_PLAY_PLAYER_VERSION', '2017.07.31.15.31')
-  .value('DISPLAY_CONTROL_PLAYER_VERSION', '2017.07.01.01.01')
+  .value('DISPLAY_CONTROL_PLAYER_VERSION', '2018.01.01.01.01')
   .factory('playerProFactory', ['$rootScope', '$q', '$modal', 'userState', 
     'displayTracker', 'storeAuthorization', '$loading', 'parsePlayerDate', 
     'getLatestPlayerVersion', 'STORE_URL', 'IN_RVA_PATH', 
@@ -91,9 +91,9 @@ angular.module('risevision.displays.services')
       factory.openConfigureDisplayControl = function (display) {
         var deferred = $q.resolve();
 
-        // if (!display.offlineSubscription) {
-        //   deferred = factory.openPlayerProInfoModal();
-        // }
+        if (!display.offlineSubscription) {
+          deferred = factory.openPlayerProInfoModal();
+        }
 
         return deferred.then(function() {
           return $modal.open({
