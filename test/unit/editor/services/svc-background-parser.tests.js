@@ -28,6 +28,15 @@ describe('service: backgroundParser:', function() {
       expect(backgroundParser.parseBackground('rgba(255,255,255,0)')).to.deep.equal({'color':'rgba(255,255,255,0)'});
     });
 
+    it('should parse hex color background', function() {
+      expect(backgroundParser.parseBackground('#FAB')).to.deep.equal({'color':'#FAB'});
+      expect(backgroundParser.parseBackground('#fab')).to.deep.equal({'color':'#fab'});
+      expect(backgroundParser.parseBackground('#FFAABB')).to.deep.equal({'color':'#FFAABB'});
+      expect(backgroundParser.parseBackground('#ffaabb')).to.deep.equal({'color':'#ffaabb'});
+      expect(backgroundParser.parseBackground('#FFAABBFF')).to.deep.equal({'color':'#FFAABBFF'});
+      expect(backgroundParser.parseBackground('#ffaabbff')).to.deep.equal({'color':'#ffaabbff'});
+    });
+
     it('should parse background with image background and scale to fit true', function() {
       var background = {'useImage':true,'image':{'url':'/images/bg.jpg', repeat: 'no-repeat','position':'top-left','scale':true}};
 
@@ -45,7 +54,13 @@ describe('service: backgroundParser:', function() {
       var background = {"color":"rgb(170, 170, 170)","useImage":true,"image":{"url":"https://storage.googleapis.com/risemedialibrary-b428b4e8-c8b9-41d5-8a10-b4193c789443/image-1.png","position":"middle-center","scale":true,repeat: 'no-repeat'}};
       
       expect(backgroundParser.parseBackground(backgroundString, true)).to.deep.equal(background);
+    });
+
+    it('should parse background with image and hex color', function() {
+      var backgroundString = '#FFAABB url(\'https://storage.googleapis.com/risemedialibrary-b428b4e8-c8b9-41d5-8a10-b4193c789443/image-1.png\') no-repeat center center';
+      var background = {"color":"#FFAABB","useImage":true,"image":{"url":"https://storage.googleapis.com/risemedialibrary-b428b4e8-c8b9-41d5-8a10-b4193c789443/image-1.png","position":"middle-center","scale":true,repeat: 'no-repeat'}};
       
+      expect(backgroundParser.parseBackground(backgroundString, true)).to.deep.equal(background);
     });
 
     it('should parse image background and without position', function() {

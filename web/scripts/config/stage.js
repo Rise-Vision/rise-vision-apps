@@ -34,6 +34,7 @@
       'https://storage-dot-rvacore-test.appspot.com/_ah/api')
     .value('MESSAGING_URL',
       'https://display-messaging-staging.risevision.com')
-    .value('APPS_URL', '');
+    .value('APPS_URL', '')
+    .value('ENV_NAME', 'STAGE');
 
 })(angular);
