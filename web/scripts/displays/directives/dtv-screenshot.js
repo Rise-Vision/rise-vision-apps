@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('risevision.displays.directives')
-  .directive('screenshot', ['$filter', 'display', 'screenshotFactory',
-    function ($filter, displayService, screenshotFactory) {
+  .directive('screenshot', ['$filter', 'display', 'screenshotFactory', 
+    'playerProFactory',
+    function ($filter, displayService, screenshotFactory, playerProFactory) {
       return {
         restrict: 'E',
         templateUrl: 'partials/displays/screenshot.html',
@@ -18,8 +19,7 @@ angular.module('risevision.displays.directives')
               return 'os-not-supported';
             } else if (statusFilter(display) === 'notinstalled') {
               return 'not-installed';
-            } else if (display.playerName !== 'RisePlayerElectron' || display.playerVersion <=
-              '2017.01.10.17.33') {
+            } else if (!playerProFactory.isScreenshotCompatiblePlayer(display)) {
               return 'upgrade-player';
             } else if (!displayService.hasSchedule(display)) {
               return 'no-schedule';
