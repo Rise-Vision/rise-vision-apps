@@ -1,17 +1,18 @@
 'use strict';
 
 angular.module('risevision.displays.services')
+  .value('SCREENSHOT_PLAYER_VERSION', '2017.01.10.17.33')
   .value('OFFLINE_PLAY_PLAYER_VERSION', '2017.07.31.15.31')
   .value('DISPLAY_CONTROL_PLAYER_VERSION', '2018.01.01.01.01')
   .factory('playerProFactory', ['$rootScope', '$q', '$modal', 'userState', 
     'displayTracker', 'storeAuthorization', '$loading', 'parsePlayerDate', 
     'getLatestPlayerVersion', 'STORE_URL', 'IN_RVA_PATH', 
-    'PLAYER_PRO_PRODUCT_ID', 'PLAYER_PRO_PRODUCT_CODE', 
-    'OFFLINE_PLAY_PLAYER_VERSION', 'DISPLAY_CONTROL_PLAYER_VERSION',
+    'PLAYER_PRO_PRODUCT_ID', 'PLAYER_PRO_PRODUCT_CODE',
+    'SCREENSHOT_PLAYER_VERSION', 'OFFLINE_PLAY_PLAYER_VERSION', 'DISPLAY_CONTROL_PLAYER_VERSION',
     function ($rootScope, $q, $modal, userState, displayTracker, storeAuthorization, 
       $loading, parsePlayerDate, getLatestPlayerVersion,
       STORE_URL, IN_RVA_PATH, PLAYER_PRO_PRODUCT_ID, PLAYER_PRO_PRODUCT_CODE,
-      OFFLINE_PLAY_PLAYER_VERSION, DISPLAY_CONTROL_PLAYER_VERSION) {
+      SCREENSHOT_PLAYER_VERSION, OFFLINE_PLAY_PLAYER_VERSION, DISPLAY_CONTROL_PLAYER_VERSION) {
       var factory = {};
       var _latestPlayerVersion;
 
@@ -47,9 +48,13 @@ angular.module('risevision.displays.services')
         return !!playerName && (isCAP || isCROS || isAndroid || isCenique || !isRisePlayer);
       };
 
+      factory.isElectronPlayer = function (display) {
+        return !!(display && display.playerName && 
+          display.playerName.indexOf('RisePlayerElectron') !== -1);
+      };
+
       factory.isUnsupportedPlayer = function (display) {
-        return !!(display && !factory.is3rdPartyPlayer(display) &&
-          display.playerName && display.playerName !== 'RisePlayerElectron');
+        return !!(display && !factory.is3rdPartyPlayer(display) && !factory.isElectronPlayer(display));
       };
 
       factory.isOutdatedPlayer = function (display) {
@@ -60,16 +65,21 @@ angular.module('risevision.displays.services')
 
         return !factory.is3rdPartyPlayer(display) &&
           !factory.isUnsupportedPlayer(display) &&
-          (display && display.playerName && (display.playerName !== 'RisePlayerElectron' || !upToDate));
+          (!factory.isElectronPlayer(display) || !upToDate);
+      };
+      
+      factory.isScreenshotCompatiblePlayer = function (display) {
+        return !!(display && factory.isElectronPlayer(display) &&
+          display.playerVersion >= SCREENSHOT_PLAYER_VERSION);
       };
 
       factory.isOfflinePlayCompatiblePayer = function (display) {
-        return !!(display && display.playerName === 'RisePlayerElectron' &&
+        return !!(display && factory.isElectronPlayer(display) &&
           display.playerVersion >= OFFLINE_PLAY_PLAYER_VERSION);
       };
 
       factory.isDisplayControlCompatiblePlayer = function (display) {
-        return !!(display && display.playerName === 'RisePlayerElectron' &&
+        return !!(display && factory.isElectronPlayer(display) &&
           display.playerVersion >= DISPLAY_CONTROL_PLAYER_VERSION);
       };
 

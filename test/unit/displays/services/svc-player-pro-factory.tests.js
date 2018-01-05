@@ -48,9 +48,12 @@ describe('service: playerProFactory:', function() {
     
     expect(playerProFactory.getProductLink).to.be.a('function');
     expect(playerProFactory.is3rdPartyPlayer).to.be.a('function');
+    expect(playerProFactory.isElectronPlayer).to.be.a('function');
     expect(playerProFactory.isOutdatedPlayer).to.be.a('function');
     expect(playerProFactory.isUnsupportedPlayer).to.be.a('function');
+    expect(playerProFactory.isScreenshotCompatiblePlayer).to.be.a('function');
     expect(playerProFactory.isOfflinePlayCompatiblePayer).to.be.a('function');
+    expect(playerProFactory.isDisplayControlCompatiblePlayer).to.be.a('function');
     expect(playerProFactory.openPlayerProInfoModal).to.be.a('function'); 
     expect(playerProFactory.startPlayerProTrial).to.be.a('function'); 
   });
@@ -70,6 +73,14 @@ describe('service: playerProFactory:', function() {
     expect(playerProFactory.is3rdPartyPlayer({playerName:'Other', playerVersion: 'Cenique 2.0'})).to.be.true;
     expect(playerProFactory.is3rdPartyPlayer({playerName:'Other', os: 'Android', playerVersion: '1.0'})).to.be.true;
     expect(playerProFactory.is3rdPartyPlayer({playerName:'Other', os: 'cros', playerVersion: '1.0'})).to.be.true;
+  });
+
+  it('isElectronPlayer:', function() {
+    expect(playerProFactory.isElectronPlayer()).to.be.false;
+    expect(playerProFactory.isElectronPlayer({playerName: null})).to.be.false;
+    expect(playerProFactory.isElectronPlayer({playerName:'RisePlayer'})).to.be.false;
+    expect(playerProFactory.isElectronPlayer({playerName:'RisePlayerElectron'})).to.be.true;
+    expect(playerProFactory.isElectronPlayer({playerName:'RisePlayerElectron (Beta)'})).to.be.true;
   });
 
   describe('isOutdatedPlayer:', function() {
@@ -106,12 +117,26 @@ describe('service: playerProFactory:', function() {
     expect(playerProFactory.isUnsupportedPlayer({playerName: 'RisePlayer', playerVersion:'2018.09.45.06.49'})).to.be.true;
   });
 
+  it('isScreenshotCompatiblePlayer:',function(){
+    expect(playerProFactory.isScreenshotCompatiblePlayer()).to.be.false;
+    expect(playerProFactory.isScreenshotCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:''})).to.be.false;
+    expect(playerProFactory.isScreenshotCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2016.06.27.05.15'})).to.be.false;
+    expect(playerProFactory.isScreenshotCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2017.07.31.15.31'})).to.be.true;
+  });
+
   it('isOfflinePlayCompatiblePayer:',function(){
     expect(playerProFactory.isOfflinePlayCompatiblePayer()).to.be.false;
     expect(playerProFactory.isOfflinePlayCompatiblePayer({playerName: 'RisePlayerElectron', playerVersion:''})).to.be.false;
     expect(playerProFactory.isOfflinePlayCompatiblePayer({playerName: 'RisePlayerElectron', playerVersion:'2017.06.27.05.15'})).to.be.false;
     expect(playerProFactory.isOfflinePlayCompatiblePayer({playerName: 'RisePlayerElectron', playerVersion:'2017.07.31.15.31'})).to.be.true;
     expect(playerProFactory.isOfflinePlayCompatiblePayer({playerName: 'RisePlayerElectron', playerVersion:'2018.09.45.06.49'})).to.be.true;
+  });
+
+  it('isDisplayControlCompatiblePlayer:',function(){
+    expect(playerProFactory.isDisplayControlCompatiblePlayer()).to.be.false;
+    expect(playerProFactory.isDisplayControlCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:''})).to.be.false;
+    expect(playerProFactory.isDisplayControlCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2017.07.31.15.31'})).to.be.false;
+    expect(playerProFactory.isDisplayControlCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2018.09.45.06.49'})).to.be.true;
   });
 
   describe('openPlayerProInfoModal: ', function() {
