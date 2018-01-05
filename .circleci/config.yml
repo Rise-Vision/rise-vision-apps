@@ -15,24 +15,17 @@ jobs:
       - run: 
           name: install bower
           command: bower install
-      - run:
-          name: save SHA to a file
-          command: echo $CIRCLE_SHA1 > .circle-sha
-      - save_cache:
-          key: repo-with-deps-{{ checksum ".circle-sha" }}
+      - persist_to_workspace:
+          root: ~/
           paths:
-            - ~/rise-vision-apps
+            - rise-vision-apps/*
   test_unit:
     working_directory: ~/rise-vision-apps
     docker:
       - image: circleci/node:8.1.4
     steps:
-      - run:
-          name: save SHA to a file
-          command: echo $CIRCLE_SHA1 > .circle-sha
-      - restore_cache:
-          keys:
-            - repo-with-deps-{{ checksum ".circle-sha" }}
+      - attach_workspace:
+          at: ~/
       - run: 
           name: unit_tests
           command: NODE_ENV=test npm run test
@@ -46,12 +39,8 @@ jobs:
       - image: circleci/node:8.1.4
     parallelism: 2
     steps:
-      - run:
-          name: save SHA to a file
-          command: echo $CIRCLE_SHA1 > .circle-sha
-      - restore_cache:
-          keys:
-            - repo-with-deps-{{ checksum ".circle-sha" }}
+      - attach_workspace:
+          at: ~/
       - run: echo $CHROME_INSTANCES
       # Install latest chrome
       - run: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
@@ -73,12 +62,8 @@ jobs:
     docker:
       - image: circleci/node:8.1.4
     steps:
-      - run:
-          name: save SHA to a file
-          command: echo $CIRCLE_SHA1 > .circle-sha
-      - restore_cache:
-          keys:
-            - repo-with-deps-{{ checksum ".circle-sha" }}
+      - attach_workspace:
+          at: ~/
       - run: NODE_ENV=stage npm run ci-build
       - run: sudo apt-get -y install rsync
       - run: ssh -o StrictHostKeyChecking=no apps@webserver-stage.risevision.com 'mkdir -p /rise-front-end/apps';
@@ -107,12 +92,8 @@ jobs:
     docker:
       - image: circleci/node:8.1.4
     steps:
-      - run:
-          name: save SHA to a file
-          command: echo $CIRCLE_SHA1 > .circle-sha
-      - restore_cache:
-          keys:
-            - repo-with-deps-{{ checksum ".circle-sha" }}
+      - attach_workspace:
+          at: ~/
       - run: NODE_ENV=beta npm run ci-build
       - run: sudo apt-get -y install rsync
       - run: ssh -o StrictHostKeyChecking=no apps@webserver-stage.risevision.com 'mkdir -p /rise-front-end/apps';
@@ -129,12 +110,8 @@ jobs:
     docker:
       - image: circleci/node:8.1.4
     steps:
-      - run:
-          name: save SHA to a file
-          command: echo $CIRCLE_SHA1 > .circle-sha
-      - restore_cache:
-          keys:
-            - repo-with-deps-{{ checksum ".circle-sha" }}
+      - attach_workspace:
+          at: ~/
       - run: NODE_ENV=prod npm run ci-build
       - run: sudo apt-get -y install rsync
       # It deploys to production server 2.
@@ -184,8 +161,7 @@ workflows:
               only: master
       - deploy_staging:
           requires:
-            - test_unit
-            - test_e2e
+            - dependencies
           filters:
             branches:
               only: /(feature|fix|chore).*/
