@@ -29,7 +29,8 @@ describe('controller: display details', function() {
     $provide.service('playerProFactory', function() {
       return {        
         is3rdPartyPlayer: function(){ return false;},
-        isOutdatedPlayer: function(){ return false;}
+        isOutdatedPlayer: function(){ return false;},
+        isElectronPlayer: function(){ return true;}
       };
     });
     $provide.service('$state',function(){
