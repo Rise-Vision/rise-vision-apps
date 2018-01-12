@@ -1,16 +1,17 @@
 'use strict';
 
 angular.module('risevision.editor.services')
+  .value('EMBEDDED_PRESENTATIONS_CODE', 'd3a418f1a3acaed42cf452fefb1eaed198a1c620')
   .factory('gadgetFactory', ['$q', 'gadget', 'BaseList',
-    'subscriptionStatusFactory', '$filter',
-    function ($q, gadget, BaseList, subscriptionStatusFactory, $filter) {
+    'subscriptionStatusFactory', '$filter', 'EMBEDDED_PRESENTATIONS_CODE',
+    function ($q, gadget, BaseList, subscriptionStatusFactory, $filter, EMBEDDED_PRESENTATIONS_CODE) {
       var factory = {};
 
       var _gadgets = [{
         gadgetType: 'presentation',
         id: 'presentation',
         name: 'Embedded Presentation',
-        productCode: 'd3a418f1a3acaed42cf452fefb1eaed198a1c620'
+        productCode: EMBEDDED_PRESENTATIONS_CODE
       }];
       factory.loadingGadget = false;
       factory.apiError = '';

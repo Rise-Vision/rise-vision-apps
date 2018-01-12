@@ -2,8 +2,10 @@
   'use strict';
 
   angular.module('risevision.editor.directives')
-    .directive('gadgetSubscriptionStatus', ['gadgetFactory', 'userState', 'STORE_URL',
-      function (gadgetFactory, userState, STORE_URL) {
+    .directive('gadgetSubscriptionStatus', ['gadgetFactory', 'userState', 'planFactory', 'STORE_URL', 'EMBEDDED_PRESENTATIONS_CODE',
+      function (gadgetFactory, userState, planFactory, STORE_URL, EMBEDDED_PRESENTATIONS_CODE) {
+        var plansProductCodes = [EMBEDDED_PRESENTATIONS_CODE];
+
         return {
           restrict: 'E',
           scope: {
@@ -13,26 +15,27 @@
           link: function ($scope) {
             $scope.storeUrl = STORE_URL;
             $scope.companyId = userState.getSelectedCompanyId();
+            $scope.showPlansModal = planFactory.showPlansModal;
 
             gadgetFactory.updateItemsStatus([$scope.item])
               .then(function () {
-                $scope.showBuyButton = false;
+                var showSubscribe = false;
                 $scope.showAccountButton = false;
                 $scope.className = 'trial';
 
                 switch ($scope.item.gadget.subscriptionStatus) {
                 case 'Not Subscribed':
-                  $scope.showBuyButton = true;
+                  showSubscribe = true;
                   break;
                 case 'On Trial':
-                  $scope.showBuyButton = true;
+                  showSubscribe = true;
                   break;
                 case 'Trial Expired':
-                  $scope.showBuyButton = true;
+                  showSubscribe = true;
                   $scope.className = 'expired';
                   break;
                 case 'Cancelled':
-                  $scope.showBuyButton = true;
+                  showSubscribe = true;
                   $scope.className = 'cancelled';
                   break;
                 case 'Suspended':
@@ -42,6 +45,9 @@
                 default:
                   break;
                 }
+
+                $scope.showSubscribeStoreButton = showSubscribe && plansProductCodes.indexOf($scope.item.gadget.productCode) === -1;
+                $scope.showSubscribePlanButton = showSubscribe && !$scope.showSubscribeStoreButton;
               });
           } //link()
         };
