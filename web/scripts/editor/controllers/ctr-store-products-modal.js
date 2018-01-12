@@ -8,13 +8,14 @@ angular.module('risevision.editor.controllers')
   ])
   .controller('storeProductsModal', ['$scope', 'ScrollingListService',
     'store', '$modalInstance', '$loading', '$filter', 'STORE_URL', 'category',
-    '$modal', 'playlistItemFactory', 'checkTemplateAccess', 'PAYMENT_CATEGORIES',
+    '$modal', 'playlistItemFactory', 'checkTemplateAccess', 'planFactory', 'PAYMENT_CATEGORIES',
     'TEMPLATES_TYPE',
     function ($scope, ScrollingListService, store, $modalInstance, $loading,
-      $filter, STORE_URL, category, $modal, playlistItemFactory, checkTemplateAccess,
+      $filter, STORE_URL, category, $modal, playlistItemFactory, checkTemplateAccess, planFactory,
       PAYMENT_CATEGORIES, TEMPLATES_TYPE) {
       var defaultCount = 1000;
 
+      $scope.showPlansModal = planFactory.showPlansModal;
       $scope.paymentCategories = PAYMENT_CATEGORIES;
 
       $scope.search = {
