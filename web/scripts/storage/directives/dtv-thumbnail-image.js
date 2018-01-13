@@ -40,7 +40,7 @@
                     imgSrc = scope.file.metadata.thumbnail + '?_=' +
                       scope.file.timeCreated;
                   } else if (scope.storageFactory.fileIsImage(scope.file)) {
-                      imgSrc = 'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon%402x.png';
+                    imgSrc = 'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon%402x.png';
                   } else if (scope.storageFactory.fileIsVideo(scope.file)) {
                     imgSrc = 'https://s3.amazonaws.com/Rise-Images/UI/storage-video-icon%402x.png';
                   }

@@ -2,7 +2,8 @@
   'use strict';
 
   angular.module('risevision.editor.directives')
-    .directive('gadgetSubscriptionStatus', ['gadgetFactory', 'userState', 'planFactory', 'STORE_URL', 'EMBEDDED_PRESENTATIONS_CODE',
+    .directive('gadgetSubscriptionStatus', ['gadgetFactory', 'userState', 'planFactory', 'STORE_URL',
+      'EMBEDDED_PRESENTATIONS_CODE',
       function (gadgetFactory, userState, planFactory, STORE_URL, EMBEDDED_PRESENTATIONS_CODE) {
         var plansProductCodes = [EMBEDDED_PRESENTATIONS_CODE];
 
@@ -46,8 +47,10 @@
                   break;
                 }
 
-                $scope.showSubscribeStoreButton = showSubscribe && plansProductCodes.indexOf($scope.item.gadget.productCode) === -1;
-                $scope.showSubscribePlanButton = showSubscribe && !$scope.showSubscribeStoreButton;
+                var showPlans = plansProductCodes.indexOf($scope.item.gadget.productCode) >= 0;
+
+                $scope.showSubscribeStoreButton = showSubscribe && !showPlans;
+                $scope.showSubscribePlanButton = showSubscribe && showPlans;
               });
           } //link()
         };
