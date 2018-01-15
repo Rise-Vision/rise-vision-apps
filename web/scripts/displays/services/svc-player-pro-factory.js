@@ -3,7 +3,7 @@
 angular.module('risevision.displays.services')
   .value('SCREENSHOT_PLAYER_VERSION', '2017.01.10.17.33')
   .value('OFFLINE_PLAY_PLAYER_VERSION', '2017.07.31.15.31')
-  .value('DISPLAY_CONTROL_PLAYER_VERSION', '2018.01.01.01.01')
+  .value('DISPLAY_CONTROL_PLAYER_VERSION', '2018.01.15.16.31')
   .factory('playerProFactory', ['$rootScope', '$q', '$modal', 'userState', 
     'displayTracker', 'storeAuthorization', '$loading', 'parsePlayerDate', 
     'getLatestPlayerVersion', 'STORE_URL', 'IN_RVA_PATH', 
