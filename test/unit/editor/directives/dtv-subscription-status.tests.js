@@ -16,11 +16,6 @@ describe('directive: subscription status', function() {
         }
       };
     });
-    $provide.service('planFactory', function() {
-      return {
-        showPlansModal: sinon.stub()
-      };
-    });
   }));
 
   beforeEach(inject(function($rootScope, $injector, _$compile_, $templateCache) {
@@ -41,6 +36,11 @@ describe('directive: subscription status', function() {
     $scope.$digest();
   }
 
+  function compilePlansDirective() {
+    elm = $compile('<gadget-subscription-status item="item" use-custom-on-click="true" custom-on-click="showPlansModal()"></gadget-subscription-status>')($scope);
+    $scope.$digest();
+  }
+
   it('should compile html', function(done) {
     compileDirective();
 
@@ -57,8 +57,7 @@ describe('directive: subscription status', function() {
 
     setTimeout(function() {
       expect(elm.isolateScope().item.gadget).to.equal(gadget);
-      expect(elm.isolateScope().showSubscribeStoreButton).to.be.false;
-      expect(elm.isolateScope().showSubscribePlanButton).to.be.false;
+      expect(elm.isolateScope().showSubscribe).to.be.false;
       expect(elm.isolateScope().showAccountButton).to.be.false;
       expect(elm.isolateScope().className).to.equal('trial');
       done()
@@ -73,8 +72,8 @@ describe('directive: subscription status', function() {
 
       setTimeout(function() {
         expect(elm.isolateScope().item.gadget).to.equal(gadget);
-        expect(elm.isolateScope().showSubscribeStoreButton).to.be.true;
-        expect(elm.isolateScope().showSubscribePlanButton).to.be.false;
+        expect(elm.isolateScope().showSubscribe).to.be.true;
+        expect(elm.isolateScope().useCustomOnClick).to.be.falsey;
         expect(elm.isolateScope().showAccountButton).to.be.false;
         expect(elm.isolateScope().className).to.equal('trial');
         done()
@@ -83,13 +82,12 @@ describe('directive: subscription status', function() {
 
     it('should show subscribe button with Plans modal',function(done){
       gadget.subscriptionStatus = 'Not Subscribed';
-      gadget.productCode = EMBEDDED_PRESENTATIONS_CODE;
-      compileDirective();
+      compilePlansDirective();
 
       setTimeout(function() {
         expect(elm.isolateScope().item.gadget).to.equal(gadget);
-        expect(elm.isolateScope().showSubscribeStoreButton).to.be.false;
-        expect(elm.isolateScope().showSubscribePlanButton).to.be.true;
+        expect(elm.isolateScope().showSubscribe).to.be.true;
+        expect(elm.isolateScope().useCustomOnClick).to.be.truely;
         expect(elm.isolateScope().showAccountButton).to.be.false;
         expect(elm.isolateScope().className).to.equal('trial');
         done()
@@ -104,8 +102,7 @@ describe('directive: subscription status', function() {
 
       setTimeout(function() {
         expect(elm.isolateScope().item.gadget).to.equal(gadget);
-        expect(elm.isolateScope().showSubscribeStoreButton).to.be.true;
-        expect(elm.isolateScope().showSubscribePlanButton).to.be.false;
+        expect(elm.isolateScope().showSubscribe).to.be.true;
         expect(elm.isolateScope().showAccountButton).to.be.false;
         expect(elm.isolateScope().className).to.equal('trial');
         done()
@@ -120,8 +117,7 @@ describe('directive: subscription status', function() {
 
       setTimeout(function() {
         expect(elm.isolateScope().item.gadget).to.equal(gadget);
-        expect(elm.isolateScope().showSubscribeStoreButton).to.be.true;
-        expect(elm.isolateScope().showSubscribePlanButton).to.be.false;
+        expect(elm.isolateScope().showSubscribe).to.be.true;
         expect(elm.isolateScope().showAccountButton).to.be.false;
         expect(elm.isolateScope().className).to.equal('expired');
         done()
@@ -136,8 +132,7 @@ describe('directive: subscription status', function() {
 
       setTimeout(function() {
         expect(elm.isolateScope().item.gadget).to.equal(gadget);
-        expect(elm.isolateScope().showSubscribeStoreButton).to.be.true;
-        expect(elm.isolateScope().showSubscribePlanButton).to.be.false;
+        expect(elm.isolateScope().showSubscribe).to.be.true;
         expect(elm.isolateScope().showAccountButton).to.be.false;
         expect(elm.isolateScope().className).to.equal('cancelled');
         done()
@@ -152,8 +147,7 @@ describe('directive: subscription status', function() {
 
       setTimeout(function() {
         expect(elm.isolateScope().item.gadget).to.equal(gadget);
-        expect(elm.isolateScope().showSubscribeStoreButton).to.be.false;
-        expect(elm.isolateScope().showSubscribePlanButton).to.be.false;
+        expect(elm.isolateScope().showSubscribe).to.be.false;
         expect(elm.isolateScope().showAccountButton).to.be.true;
         expect(elm.isolateScope().className).to.equal('suspended');
         done()

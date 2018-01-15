@@ -2,41 +2,39 @@
   'use strict';
 
   angular.module('risevision.editor.directives')
-    .directive('gadgetSubscriptionStatus', ['gadgetFactory', 'userState', 'planFactory', 'STORE_URL',
-      'EMBEDDED_PRESENTATIONS_CODE',
-      function (gadgetFactory, userState, planFactory, STORE_URL, EMBEDDED_PRESENTATIONS_CODE) {
-        var plansProductCodes = [EMBEDDED_PRESENTATIONS_CODE];
-
+    .directive('gadgetSubscriptionStatus', ['gadgetFactory', 'userState', 'STORE_URL',
+      function (gadgetFactory, userState, STORE_URL) {
         return {
           restrict: 'E',
           scope: {
             item: '=',
+            useCustomOnClick: '@',
+            customOnClick: '&'
           },
           templateUrl: 'partials/editor/subscription-status.html',
           link: function ($scope) {
             $scope.storeUrl = STORE_URL;
             $scope.companyId = userState.getSelectedCompanyId();
-            $scope.showPlansModal = planFactory.showPlansModal;
 
             gadgetFactory.updateItemsStatus([$scope.item])
               .then(function () {
-                var showSubscribe = false;
+                $scope.showSubscribe = false;
                 $scope.showAccountButton = false;
                 $scope.className = 'trial';
 
                 switch ($scope.item.gadget.subscriptionStatus) {
                 case 'Not Subscribed':
-                  showSubscribe = true;
+                  $scope.showSubscribe = true;
                   break;
                 case 'On Trial':
-                  showSubscribe = true;
+                  $scope.showSubscribe = true;
                   break;
                 case 'Trial Expired':
-                  showSubscribe = true;
+                  $scope.showSubscribe = true;
                   $scope.className = 'expired';
                   break;
                 case 'Cancelled':
-                  showSubscribe = true;
+                  $scope.showSubscribe = true;
                   $scope.className = 'cancelled';
                   break;
                 case 'Suspended':
@@ -46,11 +44,6 @@
                 default:
                   break;
                 }
-
-                var showPlans = plansProductCodes.indexOf($scope.item.gadget.productCode) >= 0;
-
-                $scope.showSubscribeStoreButton = showSubscribe && !showPlans;
-                $scope.showSubscribePlanButton = showSubscribe && showPlans;
               });
           } //link()
         };

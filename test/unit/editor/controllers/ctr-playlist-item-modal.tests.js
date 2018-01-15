@@ -57,14 +57,22 @@ describe('controller: playlist item modal', function() {
       }
     });
 
-    $provide.value('RVA_URL',"http://rva.risevision.com");
+    $provide.value('RVA_URL', 'http://rva.risevision.com');
+
+    $provide.value('EMBEDDED_PRESENTATIONS_CODE', 'test-code');
 
     $provide.service('userState',function(){
       return {
         getSelectedCompanyId: function () {
-          return "123456"
+          return '123456';
         }
       }
+    });
+
+    $provide.service('planFactory', function() {
+      return {
+        showPlansModal: sinon.stub()
+      };
     });
 
   }));

@@ -14,6 +14,7 @@ angular.module('risevision.apps.storage.storage-selector', [
     'risevision.common.components.svg',
     'risevision.common.components.subscription-status',
     'risevision.common.i18n',
+    'risevision.common.plan',
     'risevision.apps.partials',
     'risevision.apps.config',
     'risevision.apps.services',

@@ -20,6 +20,7 @@ angular.module('risevision.apps', [
     'risevision.common.components.background-image-setting',
     'risevision.common.components.message-box',
     'risevision.common.currency',
+    'risevision.common.plan',
     'risevision.common.i18n',
     'risevision.apps.partials',
     'risevision.apps.config',
