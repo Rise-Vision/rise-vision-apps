@@ -2,7 +2,7 @@
 describe('directive: subscription status', function() {
   beforeEach(module('risevision.editor.services'));
   beforeEach(module('risevision.editor.directives'));
-  var elm, $scope, $compile, item, gadget, EMBEDDED_PRESENTATIONS_CODE;
+  var elm, $scope, $compile, item, gadget;
 
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
@@ -18,8 +18,7 @@ describe('directive: subscription status', function() {
     });
   }));
 
-  beforeEach(inject(function($rootScope, $injector, _$compile_, $templateCache) {
-    EMBEDDED_PRESENTATIONS_CODE = $injector.get('EMBEDDED_PRESENTATIONS_CODE');
+  beforeEach(inject(function($rootScope, _$compile_, $templateCache) {
     item = { objectReference: 'gadgetId' };
     gadget = {
       id: 'gadgetId',
