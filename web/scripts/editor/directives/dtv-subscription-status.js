@@ -8,6 +8,8 @@
           restrict: 'E',
           scope: {
             item: '=',
+            useCustomOnClick: '@',
+            customOnClick: '&'
           },
           templateUrl: 'partials/editor/subscription-status.html',
           link: function ($scope) {
@@ -16,23 +18,23 @@
 
             gadgetFactory.updateItemsStatus([$scope.item])
               .then(function () {
-                $scope.showBuyButton = false;
+                $scope.showSubscribe = false;
                 $scope.showAccountButton = false;
                 $scope.className = 'trial';
 
                 switch ($scope.item.gadget.subscriptionStatus) {
                 case 'Not Subscribed':
-                  $scope.showBuyButton = true;
+                  $scope.showSubscribe = true;
                   break;
                 case 'On Trial':
-                  $scope.showBuyButton = true;
+                  $scope.showSubscribe = true;
                   break;
                 case 'Trial Expired':
-                  $scope.showBuyButton = true;
+                  $scope.showSubscribe = true;
                   $scope.className = 'expired';
                   break;
                 case 'Cancelled':
-                  $scope.showBuyButton = true;
+                  $scope.showSubscribe = true;
                   $scope.className = 'cancelled';
                   break;
                 case 'Suspended':

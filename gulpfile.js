@@ -56,6 +56,7 @@ var unitTestFiles = [
   "web/bower_components/common-header/dist/js/components/timeline.js",
   "web/bower_components/common-header/dist/js/components/message-box.js",
   "web/bower_components/common-header/dist/js/components/stop-event.js",
+  "web/bower_components/common-header/dist/js/components/plans.js",
   "node_modules/widget-tester/mocks/translate-mock.js",
   "node_modules/widget-tester/mocks/segment-analytics-mock.js",
   "web/scripts/storage-selector-app.js",

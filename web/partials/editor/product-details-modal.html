@@ -8,7 +8,7 @@
       <div ng-controller="TemplateLibrarySubscriptionStatusController">
         <div id="subscription-status" subscription-status custom-messages="editor-app.templatesLibrary.subscription"
           product-id="{{productId}}" product-code="{{productCode}}" company-id="{{companyId}}"
-          ng-model="subscriptionStatus.result" show-store-modal="showStoreModal" expanded-format="true" custom-product-link="{{productLink}}">
+          ng-model="subscriptionStatus.result" show-store-modal="showStoreModal" expanded-format="true" custom-on-click="showPlansModal()" custom-product-link="{{productLink}}">
         </div>
       </div>
     </div>

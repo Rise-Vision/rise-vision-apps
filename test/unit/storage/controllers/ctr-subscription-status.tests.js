@@ -7,7 +7,12 @@ describe('controller: Storage Selector Modal', function() {
         getSelectedCompanyId : function(){
           return companyId;
         }
-      }
+      };
+    });
+    $provide.service('planFactory',function(){
+      return {
+        showPlansModal: sinon.stub()
+      };
     });
   }));
   var $scope, rootScope, companyId;

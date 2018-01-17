@@ -82,7 +82,7 @@ var TemplateAddScenarios = function() {
 
     it('should show a banner for Templates Library', function () {
       expect(storeProductsModalPage.getDisplayBanner().isDisplayed()).to.eventually.be.true;
-      expect(storeProductsModalPage.getDisplayBanner().getAttribute('href')).to.eventually.equal('https://store.risevision.com/product/300/template-library-subscription');
+      expect(storeProductsModalPage.getDisplayBanner().getAttribute('ng-click')).to.eventually.equal('showPlansModal()');
     });
 
     it('should show search categories', function() {
