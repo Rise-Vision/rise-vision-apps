@@ -1,7 +1,7 @@
 'use strict';
 describe('service: display:', function() {
   var CONNECTION_TIME = Date.now();
-  var screenshotRequesterMock, imageBlobLoaderMock;
+  var screenshotRequesterMock;
 
   beforeEach(module('risevision.displays.services'));
   beforeEach(module(function ($provide) {
@@ -55,14 +55,22 @@ describe('service: display:', function() {
         return deferred.promise;
       };
     });
+    $provide.factory('subscriptionStatusService', function($q) {
+      return {
+        get: function(productCode, companyId) {
+          var deferred = $q.defer();
+
+          $timeout(function() {
+            deferred.resolve({ status: 'Subscribed' });
+          });
+
+          return deferred.promise;
+        }
+      };
+    });
     $provide.factory('screenshotRequester', function($q) {
       return function(ids) {
         return screenshotRequesterMock($q);
-      };
-    });
-    $provide.factory('imageBlobLoader', function($q) {
-      return function() {
-        return imageBlobLoaderMock($q);
       };
     });
     $provide.service('userState',function(){
@@ -108,7 +116,7 @@ describe('service: display:', function() {
                 def.resolve({
                   result : {
                     nextPageToken : 1,
-                    items : [{id: 'abc', lastActivityDate: new Date("2012-04-02T14:19:36.000Z") }]
+                    items : [{id: 'abc', companyId: 'comp1', lastActivityDate: new Date("2012-04-02T14:19:36.000Z") }]
                   }
                 });
               } else {
@@ -223,6 +231,19 @@ describe('service: display:', function() {
                 def.reject("API Failed");
               }
               return def.promise;
+            },
+            uploadControlFile: function(obj) {
+              expect(obj).to.be.ok;
+
+              var def = Q.defer();
+              if (obj.id) {
+                def.resolve({
+                  item: {}
+                });
+              } else {
+                def.reject("API Failed");
+              }
+              return def.promise;
             }
           }
         });
@@ -259,7 +280,7 @@ describe('service: display:', function() {
       var items;
       var broadcastSpy = sinon.spy($rootScope,'$broadcast');
 
-      display.list({})
+      return display.list({})
       .then(function(result){
         expect(result).to.be.truely;
         expect(result.items).to.be.an.array;
@@ -267,18 +288,20 @@ describe('service: display:', function() {
         expect(result.items).to.have.length.above(0);
         $timeout.flush();
         setTimeout(function() {
-          items.forEach(function(item) {
-            expect(item.onlineStatus).to.equal('online');
-            expect(item.lastConnectionTime.getTime()).to.equal(CONNECTION_TIME);
-            expect(item.proSubscription.status).to.equal('Subscribed');
-          });
-          
-          broadcastSpy.should.have.been.calledWith('displaysLoaded', items);
+          $timeout.flush();
+          setTimeout(function() {
+            items.forEach(function(item) {
+              expect(item.onlineStatus).to.equal('online');
+              expect(item.lastConnectionTime.getTime()).to.equal(CONNECTION_TIME);
+              expect(item.proSubscription.status).to.equal('Subscribed');
+            });
 
-          done();
+            broadcastSpy.should.have.been.calledWith('displaysLoaded', items);
+
+            done();
+          });
         });
-      })
-      .then(null,done);
+      });
     });
 
     it('should create an empty searchString if query is empty',function(done){
@@ -565,27 +588,29 @@ describe('service: display:', function() {
     });
   });
 
-  describe('loadScreenshot', function() {
-    it('should successfully load a screenshot', function() {
-      imageBlobLoaderMock = function($q) {
-        return $q.resolve({ imageUrl: '' });
-      };
+  describe('uploadControlFile', function() {
+    it('should upload the control file', function(done) {
+      display.uploadControlFile('display1', 'contents')
+        .then(function(result) {
+          expect(result).to.be.truely;
+          expect(result.item).to.be.truely;
 
-      display.loadScreenshot()
-        .then(function(resp) {
-          expect(resp.imageUrl).to.be.truely;
-        });
+          done();
+        })
+        .then(null,done);
     });
 
-    it('should handle failed screenshot requests', function() {
-      imageBlobLoaderMock = function($q) {
-        return $q.reject({ err: 'timeout' });
-      };
-
-      display.loadScreenshot()
-        .catch(function(resp) {
-          expect(resp.err).to.equal('timeout');
-        });
+    it('should handle failure to upload the control file', function(done) {
+      display.reboot()
+        .then(function(result) {
+          done(result);
+        })
+        .then(null, function(error) {
+          expect(error).to.deep.equal('API Failed');
+          done();
+        })
+        .then(null,done);
     });
   });
+
 });

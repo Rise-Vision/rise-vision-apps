@@ -68,7 +68,13 @@
             </div>
             <div ng-show="getDisplayType(display) === 'not-subscribed'">
               <span translate>displays-app.list.player.type.standard</span>
-              <a ng-click="showStartTrial()" translate>
+              <a ng-click="openRiseProStoreLink()" translate>
+                displays-app.list.player.cta.subscribePro
+              </a>
+            </div>
+            <div ng-show="getDisplayType(display) === 'trial-available'">
+              <span translate>displays-app.list.player.type.standard</span>
+              <a ng-click="showStartTrial(display)" translate>
                 displays-app.list.player.cta.tryPro
               </a>
             </div>

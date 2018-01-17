@@ -6,7 +6,7 @@ var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var DisplaysListPage = require('./../pages/displaysListPage.js');
 var DisplayManagePage = require('./../pages/displayManagePage.js');
 var DisplayAddModalPage = require('./../pages/displayAddModalPage.js');
-var PlayerProTrialModalPage = require('./../pages/playerProTrialModalPage.js');
+var PlayerProInfoModalPage = require('./../pages/playerProInfoModalPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var FirstSigninScenarios = function() {
@@ -19,7 +19,7 @@ var FirstSigninScenarios = function() {
     var displayAddModalPage;
     var displaysListPage;
     var displayManagePage;
-    var playerProTrialModalPage;
+    var playerProInfoModalPage;
     before(function () {
       homepage = new HomePage();
       signInPage = new SignInPage();
@@ -27,7 +27,7 @@ var FirstSigninScenarios = function() {
       displayAddModalPage = new DisplayAddModalPage();
       displaysListPage = new DisplaysListPage();
       displayManagePage = new DisplayManagePage();
-      playerProTrialModalPage = new PlayerProTrialModalPage();
+      playerProInfoModalPage = new PlayerProInfoModalPage();
     });
 
     describe('Given a user that just signed up for Rise Vision', function () {
@@ -74,14 +74,14 @@ var FirstSigninScenarios = function() {
 
       it('should show start trial modal',function(){
         displayManagePage.getPlayerProTrialButton().click();
-        helper.wait(playerProTrialModalPage.getPlayerProTrialModal(), 'Player Pro Trial Modal');
-        expect(playerProTrialModalPage.getPlayerProTrialModal().isDisplayed()).to.eventually.be.true;
-        expect(playerProTrialModalPage.getStartTrialButton().isDisplayed()).to.eventually.be.true;
+        helper.wait(playerProInfoModalPage.getPlayerProInfoModal(), 'Player Pro Info Modal');
+        expect(playerProInfoModalPage.getPlayerProInfoModal().isDisplayed()).to.eventually.be.true;
+        expect(playerProInfoModalPage.getStartTrialButton().isDisplayed()).to.eventually.be.true;
       });
 
       it('should start trial and show subscribe button',function(){
-        playerProTrialModalPage.getStartTrialButton().click();
-        helper.waitDisappear(playerProTrialModalPage.getPlayerProTrialModal(), 'Player Pro Trial Modal');
+        playerProInfoModalPage.getStartTrialButton().click();
+        helper.waitDisappear(playerProInfoModalPage.getPlayerProInfoModal(), 'Player Pro Info Modal');
 
         helper.wait(displayManagePage.getSubscribePlayerProButton(), 'Subscribe Player Pro Button');
         expect(displayManagePage.getSubscribePlayerProButton().isDisplayed()).to.eventually.be.true;

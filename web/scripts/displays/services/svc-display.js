@@ -18,14 +18,15 @@
       'postalCode'
     ])
     .service('display', ['$rootScope', '$q', '$log', 'coreAPILoader',
-      'userState', 'getDisplayStatus', 'screenshotRequester',
-      'imageBlobLoader', 'pick', 'getProductSubscriptionStatus', 'DISPLAY_WRITABLE_FIELDS',
-      'DISPLAY_SEARCH_FIELDS', 'PLAYER_PRO_PRODUCT_CODE',
+      'userState', 'getDisplayStatus', 'screenshotRequester', 'pick', 
+      'getProductSubscriptionStatus', 'subscriptionStatusService',
+      'DISPLAY_WRITABLE_FIELDS', 'DISPLAY_SEARCH_FIELDS', 'PLAYER_PRO_PRODUCT_CODE',
       function ($rootScope, $q, $log, coreAPILoader, userState,
-        getDisplayStatus, screenshotRequester, imageBlobLoader, pick,
-        getProductSubscriptionStatus, DISPLAY_WRITABLE_FIELDS,
-        DISPLAY_SEARCH_FIELDS, PLAYER_PRO_PRODUCT_CODE) {
+        getDisplayStatus, screenshotRequester, pick,
+        getProductSubscriptionStatus, subscriptionStatusService,
+        DISPLAY_WRITABLE_FIELDS, DISPLAY_SEARCH_FIELDS, PLAYER_PRO_PRODUCT_CODE) {
 
+        var companiesStatus = {};
         var createSearchQuery = function (fields, search) {
           var query = '';
 
@@ -36,6 +37,25 @@
           query = query.substring(3);
 
           return query.trim();
+        };
+
+        var _loadCompaniesProStatus = function (displays, forceReload) {
+          var promises = [];
+
+          displays.forEach(function (display) {
+            var companyId = display.companyId;
+
+            if (!companiesStatus[companyId] || forceReload) {
+              companiesStatus[companyId] = {};
+              promises.push(
+                subscriptionStatusService.get(PLAYER_PRO_PRODUCT_CODE, companyId)
+                .then(function(resp) {
+                  companiesStatus[companyId] = resp;
+                }));
+            }
+          });
+
+          return $q.all(promises);
         };
 
         var _mergeConnectionStatuses = function (items, statuses) {
@@ -66,6 +86,12 @@
 
         var _mergeProSubscriptionStatus = function (items, statusMap) {
           items.forEach(function (item) {
+            var companyStatus = companiesStatus[item.companyId];
+
+            if (companyStatus.statusCode === 'subscribed' && statusMap[item.id].statusCode === 'not-subscribed') {
+              statusMap[item.id].trialPeriod = 0;
+            }
+
             item.proSubscription = statusMap[item.id];
           });
         };
@@ -118,7 +144,11 @@
                     service.statusLoading = false;
                   });
 
-                getProductSubscriptionStatus(PLAYER_PRO_PRODUCT_CODE, displayIds).then(function (statusMap) {
+                _loadCompaniesProStatus(result.items)
+                  .then(function () {
+                    return getProductSubscriptionStatus(PLAYER_PRO_PRODUCT_CODE, displayIds);
+                  })
+                  .then(function (statusMap) {
                     _mergeProSubscriptionStatus(result.items, statusMap);
                   })
                   .finally(function () {
@@ -236,6 +266,19 @@
 
             return deferred.promise;
           },
+          getCompanyProStatus: function (companyId, forceReload) {
+            var deferred = $q.defer();
+
+            _loadCompaniesProStatus([{ companyId: companyId }], forceReload)
+            .then(function() {
+              deferred.resolve(companiesStatus[companyId]);
+            })
+            .catch(function(e) {
+              deferred.reject(e);
+            });
+
+            return deferred.promise;
+          },
           restart: function (displayId) {
             var deferred = $q.defer();
 
@@ -304,12 +347,26 @@
                 return $q.reject(e);
               });
           },
-          loadScreenshot: function (displayId) {
-            var url =
-              'https://storage.googleapis.com/risevision-display-screenshots/' +
-              displayId + '.jpg';
+          uploadControlFile: function (displayId, controlFileContents) {
+            var deferred = $q.defer();
 
-            return imageBlobLoader(url);
+            $log.debug('uploadControlFile called with', displayId, controlFileContents);
+            coreAPILoader().then(function (coreApi) {
+                return coreApi.display.uploadControlFile({
+                  'id': displayId,
+                  'controlFileContents': controlFileContents
+                });
+              })
+              .then(function (resp) {
+                $log.debug('uploadControlFile resp', resp);
+                deferred.resolve(resp);
+              })
+              .then(null, function (e) {
+                console.error('Failed to upload control file.', e);
+                deferred.reject(e);
+              });
+
+            return deferred.promise;
           }
         };
 

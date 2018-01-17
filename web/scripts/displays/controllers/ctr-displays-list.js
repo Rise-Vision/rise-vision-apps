@@ -3,9 +3,9 @@
 angular.module('risevision.displays.controllers')
   .controller('displaysList', ['$scope', '$window', 'userState', 'display',
     'ScrollingListService', '$loading', '$filter', 'displayFactory',
-    'displayTracker', 'STORE_URL', 'PLAYER_PRO_PRODUCT_ID',
+    'displayTracker', 'playerProFactory',
     function ($scope, $window, userState, display, ScrollingListService, $loading,
-      $filter, displayFactory, displayTracker, STORE_URL, PLAYER_PRO_PRODUCT_ID) {
+      $filter, displayFactory, displayTracker, playerProFactory) {
       $scope.search = {
         sortBy: 'name',
         count: $scope.listLimit,
@@ -37,15 +37,15 @@ angular.module('risevision.displays.controllers')
       });
 
       $scope.openRiseProStoreLink = function () {
-        $window.open(STORE_URL + '/product/' + PLAYER_PRO_PRODUCT_ID + '?cid=' + $scope.selectedCompayId, '_blank');
+        $window.open(playerProFactory.getProductLink(), '_blank');
       };
 
       $scope.openUnsupportedHelpLink = function () {
         $window.open('https://risevision.zendesk.com/hc/en-us/articles/115003786306', '_blank');
       };
 
-      $scope.showStartTrial = function () {
-        var modalInstance = displayFactory.startPlayerProTrialModal();
+      $scope.showStartTrial = function (display) {
+        var modalInstance = playerProFactory.openPlayerProInfoModal(display);
 
         modalInstance.result
           .then(function () {
@@ -74,14 +74,16 @@ angular.module('risevision.displays.controllers')
           return 'player-not-installed';
         } else if (!$scope.displayService.hasSchedule(display)) {
           return 'schedule-not-created';
-        } else if (displayFactory.is3rdPartyPlayer(display)) {
+        } else if (playerProFactory.is3rdPartyPlayer(display)) {
           return '3rd-party';
-        } else if (displayFactory.isUnsupportedPlayer(display)) {
+        } else if (playerProFactory.isUnsupportedPlayer(display)) {
           return 'unsupported';
-        } else if (!displayFactory.isProCompatiblePlayer(display)) {
+        } else if (!playerProFactory.isOfflinePlayCompatiblePayer(display)) {
           return 'not-pro-compatible';
         } else if (status === 'Subscribed') {
           return 'subscribed';
+        } else if (status === 'Not Subscribed' && Number(status.trialPeriod) > 0) {
+          return 'trial-available';
         } else if (status === 'Not Subscribed') {
           return 'not-subscribed';
         } else if (status === 'On Trial') {
