@@ -18,6 +18,8 @@
 
   angular.module('risevision.apps.config', [])
     .value('APPS_ENV', 'PROD')
+    .value('STORE_ENDPOINT_URL',
+      'https://store-dot-rvaserver2.appspot.com/_ah/api')
     .value('RVA_URL', 'http://rva.risevision.com')
     .value('VIEWER_URL', 'http://preview.risevision.com')
     .value('ALERTS_WS_URL',
