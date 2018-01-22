@@ -3,22 +3,14 @@
     <!-- App Title -->
     <h1 translate>displays-app.details.title</h1>
   </div>
-
-  <div class="global-actions" require-role="da">
-    <div>
-      <button id="playerProTrialButton" ng-if="display.showTrialButton" ng-click="playerProFactory.openPlayerProInfoModal()" class="btn btn-lg btn-primary" rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0">
-        {{'displays-app.details.startPlayerProTrial' | translate}}
-      </button>
-      <a id="subscribePlayerProButton" ng-if="display.showSubscribeButton" class="btn btn-lg btn-primary" ng-href="{{playerProFactory.getProductLink()}}" target="_blank" translate>
-        displays-app.details.subscribePlayerPro
-      </a>
-    </div>
-    <a ng-if="display.showTrialButton || display.showSubscribeButton" class="info-link" href="https://help.risevision.com/hc/en-us/articles/115003626863" target="_blank">
-      <i class="fa fa-question-circle icon-left" aria-hidden="true"></i>
-      <span translate>displays-app.details.whatIsPlayerPro</span>
-    </a>
+  <div class="global-actions">
+    <span class="u_margin-right text-muted" ng-if="!alertsOn">Display Type: Standard</span>
+    <span class="u_margin-right text-muted" ng-if="alertsOn">Display Type: Professional</span>
+    <button id="alertsToggleButton" ng-click="alertsOn = !alertsOn" class="btn btn-lg" ng-class="{ 'animated bounceIn btn-default' : alertsOn, 'animated bounceIn btn-primary' : !alertsOn }">
+      <span ng-if="!alertsOn">Activate Rise Player Pro</span>
+      <span ng-if="alertsOn">Disable Rise Player Pro</span>
+    </button>
   </div>
-  
 </div>
 
 <div id="subscription-status" subscription-status ng-show="display.showTrialStatus"

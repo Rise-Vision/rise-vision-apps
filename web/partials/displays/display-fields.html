@@ -1,3 +1,13 @@
+<div class="row">
+      <div class="col-sm-12">
+          <div class="alert alert-warning" role="alert">
+             <span>You're using all <strong>9</strong> of your Rise Player Professional Displays.</span>
+            <!-- <strong>Need more?</strong> -->
+            <a class="u_margin-left" ng-click="showPlans()">Get More Now</a> 
+          </div>
+      </div>
+</div>
+
 <div class="form-group u_margin-sm-bottom" ng-class="{'has-error': !displayDetails.name.$pristine && displayDetails.name.$invalid}" show-errors>
   <label class="control-label">{{'displays-app.fields.name.name' | translate}} *</label>
   <input type="text" class="form-control" placeholder="Display Name" id="name" name="name" ng-model="display.name" required>
