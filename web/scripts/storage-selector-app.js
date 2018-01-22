@@ -31,6 +31,7 @@ angular.module('risevision.apps.storage.storage-selector', [
       $locationProvider) {
 
       $locationProvider.html5Mode(false);
+      $locationProvider.hashPrefix("");
 
       $urlRouterProvider.otherwise('/');
 
