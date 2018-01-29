@@ -1,21 +1,21 @@
 'use strict';
 angular.module('risevision.displays.controllers')
-  .controller('DisplayControlModalCtrl', ['$scope', '$modalInstance', 
+  .controller('DisplayControlModalCtrl', ['$scope', '$modalInstance',
     'displayControlFactory', '$loading', 'DISPLAY_CONTROL_PLAYER_VERSION',
     function ($scope, $modalInstance, displayControlFactory, $loading,
       DISPLAY_CONTROL_PLAYER_VERSION) {
       $scope.playerVersion = DISPLAY_CONTROL_PLAYER_VERSION;
       $scope.formData = {};
 
-      var _loadConfiguration = function() {
+      var _loadConfiguration = function () {
         displayControlFactory.getConfiguration()
-        .then(function(config) {
-          $scope.formData.displayControlContents = config;
-        })
-        .catch(function(err) {
-          console.log('Failed to load config; showing default', err);
-          $scope.resetForm();
-        });
+          .then(function (config) {
+            $scope.formData.displayControlContents = config;
+          })
+          .catch(function (err) {
+            console.log('Failed to load config; showing default', err);
+            $scope.resetForm();
+          });
       };
 
       _loadConfiguration();
@@ -27,10 +27,10 @@ angular.module('risevision.displays.controllers')
           .then(function () {
             $modalInstance.close();
           })
-          .catch(function(err) {
+          .catch(function (err) {
             console.log('Failed to save configuration file', err);
           })
-          .finally(function() {
+          .finally(function () {
             $loading.stop('saving-display-control');
           });
       };
@@ -39,7 +39,7 @@ angular.module('risevision.displays.controllers')
         $modalInstance.dismiss();
       };
 
-      $scope.resetForm = function() {
+      $scope.resetForm = function () {
         $scope.formData.displayControlContents = displayControlFactory.getDefaultConfiguration();
       };
     }

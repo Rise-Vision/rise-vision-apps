@@ -4,12 +4,12 @@ angular.module('risevision.displays.services')
   .value('SCREENSHOT_PLAYER_VERSION', '2017.01.10.17.33')
   .value('OFFLINE_PLAY_PLAYER_VERSION', '2017.07.31.15.31')
   .value('DISPLAY_CONTROL_PLAYER_VERSION', '2018.01.15.16.31')
-  .factory('playerProFactory', ['$rootScope', '$q', '$modal', 'userState', 
-    'displayTracker', 'storeAuthorization', '$loading', 'parsePlayerDate', 
-    'getLatestPlayerVersion', 'STORE_URL', 'IN_RVA_PATH', 
+  .factory('playerProFactory', ['$rootScope', '$q', '$modal', 'userState',
+    'displayTracker', 'storeAuthorization', '$loading', 'parsePlayerDate',
+    'getLatestPlayerVersion', 'STORE_URL', 'IN_RVA_PATH',
     'PLAYER_PRO_PRODUCT_ID', 'PLAYER_PRO_PRODUCT_CODE',
     'SCREENSHOT_PLAYER_VERSION', 'OFFLINE_PLAY_PLAYER_VERSION', 'DISPLAY_CONTROL_PLAYER_VERSION',
-    function ($rootScope, $q, $modal, userState, displayTracker, storeAuthorization, 
+    function ($rootScope, $q, $modal, userState, displayTracker, storeAuthorization,
       $loading, parsePlayerDate, getLatestPlayerVersion,
       STORE_URL, IN_RVA_PATH, PLAYER_PRO_PRODUCT_ID, PLAYER_PRO_PRODUCT_CODE,
       SCREENSHOT_PLAYER_VERSION, OFFLINE_PLAY_PLAYER_VERSION, DISPLAY_CONTROL_PLAYER_VERSION) {
@@ -28,7 +28,7 @@ angular.module('risevision.displays.services')
 
       _loadPlayerVersion();
 
-      factory.getProductLink = function() {
+      factory.getProductLink = function () {
         return (STORE_URL + IN_RVA_PATH
           .replace('productId', PLAYER_PRO_PRODUCT_ID)
           .replace('companyId', userState.getSelectedCompanyId()));
@@ -49,7 +49,7 @@ angular.module('risevision.displays.services')
       };
 
       factory.isElectronPlayer = function (display) {
-        return !!(display && display.playerName && 
+        return !!(display && display.playerName &&
           display.playerName.indexOf('RisePlayerElectron') !== -1);
       };
 
@@ -59,7 +59,7 @@ angular.module('risevision.displays.services')
 
       factory.isOutdatedPlayer = function (display) {
         var displayPlayerVersion = display && parsePlayerDate(display.playerVersion);
-        var minimumVersion = _latestPlayerVersion && 
+        var minimumVersion = _latestPlayerVersion &&
           new Date(_latestPlayerVersion).setMonth(_latestPlayerVersion.getMonth() - 3);
         var upToDate = displayPlayerVersion && minimumVersion && displayPlayerVersion >= minimumVersion;
 
@@ -67,7 +67,7 @@ angular.module('risevision.displays.services')
           !factory.isUnsupportedPlayer(display) &&
           (!factory.isElectronPlayer(display) || !upToDate);
       };
-      
+
       factory.isScreenshotCompatiblePlayer = function (display) {
         return !!(display && factory.isElectronPlayer(display) &&
           display.playerVersion >= SCREENSHOT_PLAYER_VERSION);
@@ -91,7 +91,7 @@ angular.module('risevision.displays.services')
           size: 'lg',
           controller: 'PlayerProInfoModalCtrl',
           resolve: {
-            displayInfo: function() {
+            displayInfo: function () {
               return display;
             }
           }
@@ -105,14 +105,14 @@ angular.module('risevision.displays.services')
           deferred = factory.openPlayerProInfoModal();
         }
 
-        return deferred.then(function() {
+        return deferred.then(function () {
           return $modal.open({
             templateUrl: 'partials/displays/display-control-modal.html',
             size: 'lg',
             controller: 'DisplayControlModalCtrl'
           });
         });
-      }
+      };
 
       factory.startPlayerProTrial = function () {
         displayTracker('Starting Player Pro Trial');

@@ -1,6 +1,6 @@
 'use strict';
 angular.module('risevision.displays.controllers')
-  .controller('PlayerProInfoModalCtrl', ['$scope', '$modalInstance', 
+  .controller('PlayerProInfoModalCtrl', ['$scope', '$modalInstance',
     'displayFactory', 'playerProFactory', 'userState',
     'STORE_URL', 'ACCOUNT_PATH', 'displayInfo',
     function ($scope, $modalInstance, displayFactory, playerProFactory, userState,

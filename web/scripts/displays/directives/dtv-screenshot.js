@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.displays.directives')
-  .directive('screenshot', ['$filter', 'display', 'screenshotFactory', 
+  .directive('screenshot', ['$filter', 'display', 'screenshotFactory',
     'playerProFactory',
     function ($filter, displayService, screenshotFactory, playerProFactory) {
       return {
@@ -9,7 +9,7 @@ angular.module('risevision.displays.directives')
         templateUrl: 'partials/displays/screenshot.html',
         link: function ($scope) {
           $scope.screenshotFactory = screenshotFactory;
-          
+
           $scope.screenshotState = function (display) {
             var statusFilter = $filter('status');
 
@@ -41,8 +41,9 @@ angular.module('risevision.displays.directives')
           };
 
           $scope.reloadScreenshotDisabled = function (display) {
-            return displayService.statusLoading || screenshotFactory.screenshotLoading || 
-              ['no-screenshot-available', 'screenshot-loaded']
+            return displayService.statusLoading || screenshotFactory.screenshotLoading || [
+                'no-screenshot-available', 'screenshot-loaded'
+              ]
               .indexOf($scope.screenshotState(display)) === -1;
           };
 

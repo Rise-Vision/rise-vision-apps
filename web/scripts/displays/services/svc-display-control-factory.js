@@ -9,7 +9,7 @@ angular.module('risevision.displays.services')
       STORAGE_FILE_URL, SCREEN_CONTROL_BUCKET, SCREEN_CONTROL_FILENAME) {
       var service = {};
 
-      service.getConfiguration = function() {
+      service.getConfiguration = function () {
         var deferred = $q.defer();
         var display = displayFactory.display;
         var bucketName = SCREEN_CONTROL_BUCKET;
@@ -29,7 +29,7 @@ angular.module('risevision.displays.services')
             if (err && err.code && err.code === 'InvalidBucketName') {
               deferred.reject(err);
 
-              console.log('Configuration bucket is missing: ' + resp.data);
+              console.log('Configuration bucket is missing: ' + bucketName);
             } else {
               deferred.reject(err);
             }
@@ -38,22 +38,22 @@ angular.module('risevision.displays.services')
         return deferred.promise;
       };
 
-      service.updateConfiguration = function(config) {
+      service.updateConfiguration = function (config) {
         var display = displayFactory.display;
 
         return displayService.uploadControlFile(display.id, config);
       };
 
-      service.getDefaultConfiguration = function() {
+      service.getDefaultConfiguration = function () {
         return 'interface=\n' +
-               'serial-port=\n' +
-               'serial-baud-rate=\n' +
-               'serial-data-bits=\n' +
-               'serial-parity=\n' +
-               'serial-stop-bits=\n' +
-               'serial-flow-control=\n' +
-               'serial-screen-on-cmd=\n' +
-               'serial-screen-off-cmd=';
+          'serial-port=\n' +
+          'serial-baud-rate=\n' +
+          'serial-data-bits=\n' +
+          'serial-parity=\n' +
+          'serial-stop-bits=\n' +
+          'serial-flow-control=\n' +
+          'serial-screen-on-cmd=\n' +
+          'serial-screen-off-cmd=';
       };
 
       return service;

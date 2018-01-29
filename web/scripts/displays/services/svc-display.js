@@ -18,7 +18,7 @@
       'postalCode'
     ])
     .service('display', ['$rootScope', '$q', '$log', 'coreAPILoader',
-      'userState', 'getDisplayStatus', 'screenshotRequester', 'pick', 
+      'userState', 'getDisplayStatus', 'screenshotRequester', 'pick',
       'getProductSubscriptionStatus', 'subscriptionStatusService',
       'DISPLAY_WRITABLE_FIELDS', 'DISPLAY_SEARCH_FIELDS', 'PLAYER_PRO_PRODUCT_CODE',
       function ($rootScope, $q, $log, coreAPILoader, userState,
@@ -49,7 +49,7 @@
               companiesStatus[companyId] = {};
               promises.push(
                 subscriptionStatusService.get(PLAYER_PRO_PRODUCT_CODE, companyId)
-                .then(function(resp) {
+                .then(function (resp) {
                   companiesStatus[companyId] = resp;
                 }));
             }
@@ -88,7 +88,8 @@
           items.forEach(function (item) {
             var companyStatus = companiesStatus[item.companyId];
 
-            if (companyStatus.statusCode === 'subscribed' && statusMap[item.id].statusCode === 'not-subscribed') {
+            if (companyStatus.statusCode === 'subscribed' && statusMap[item.id].statusCode ===
+              'not-subscribed') {
               statusMap[item.id].trialPeriod = 0;
             }
 
@@ -269,13 +270,15 @@
           getCompanyProStatus: function (companyId, forceReload) {
             var deferred = $q.defer();
 
-            _loadCompaniesProStatus([{ companyId: companyId }], forceReload)
-            .then(function() {
-              deferred.resolve(companiesStatus[companyId]);
-            })
-            .catch(function(e) {
-              deferred.reject(e);
-            });
+            _loadCompaniesProStatus([{
+                companyId: companyId
+              }], forceReload)
+              .then(function () {
+                deferred.resolve(companiesStatus[companyId]);
+              })
+              .catch(function (e) {
+                deferred.reject(e);
+              });
 
             return deferred.promise;
           },

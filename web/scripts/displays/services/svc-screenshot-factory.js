@@ -9,7 +9,7 @@ angular.module('risevision.displays.services')
         factory.screenshotLoading = true;
 
         return display.requestScreenshot(displayFactory.display.id)
-          .then(function() {
+          .then(function () {
             return factory.loadScreenshot();
           })
           .catch(function (err) {

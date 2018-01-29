@@ -5,7 +5,7 @@ angular.module('risevision.displays.controllers')
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'storeAuthorization', 'userState',
     'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID',
-    function ($scope, $rootScope, $q, $state, displayFactory, display, screenshotFactory, playerProFactory, 
+    function ($scope, $rootScope, $q, $state, displayFactory, display, screenshotFactory, playerProFactory,
       $loading, $log, $modal, $templateCache, displayId, storeAuthorization, userState,
       PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID) {
       $scope.displayId = displayId;
@@ -113,41 +113,42 @@ angular.module('risevision.displays.controllers')
         function (e, subscriptionStatus) {
           $loading.stop('loading-trial');
           $scope.deferredDisplay.promise
-          .then(function () {
-            return $scope.displayService.getCompanyProStatus($scope.companyId, true);
-          })
-          .then(function (companyProStatus) {
-            if (companyProStatus.statusCode === 'subscribed' && subscriptionStatus.statusCode === 'trial-available') {
-              subscriptionStatus.statusCode = 'not-subscribed';
-            }
-
-            $scope.display.subscriptionStatus = subscriptionStatus;
-
-            $scope.display.showTrialButton = false;
-            $scope.display.showTrialStatus = false;
-            $scope.display.showSubscribeButton = false;
-
-            if (!playerProFactory.is3rdPartyPlayer($scope.display) && 
-              !playerProFactory.isOutdatedPlayer($scope.display)) {
-              switch (subscriptionStatus.statusCode) {
-              case 'trial-available':
-                $scope.display.showTrialButton = true;
-                break;
-              case 'on-trial':
-              case 'suspended':
-                $scope.display.showTrialStatus = true;
-                $scope.display.showSubscribeButton = true;
-                break;
-              case 'trial-expired':
-              case 'cancelled':
-              case 'not-subscribed':
-                $scope.display.showSubscribeButton = true;
-                break;
-              default:
-                break;
+            .then(function () {
+              return $scope.displayService.getCompanyProStatus($scope.companyId, true);
+            })
+            .then(function (companyProStatus) {
+              if (companyProStatus.statusCode === 'subscribed' && subscriptionStatus.statusCode ===
+                'trial-available') {
+                subscriptionStatus.statusCode = 'not-subscribed';
               }
-            }
-          });
+
+              $scope.display.subscriptionStatus = subscriptionStatus;
+
+              $scope.display.showTrialButton = false;
+              $scope.display.showTrialStatus = false;
+              $scope.display.showSubscribeButton = false;
+
+              if (!playerProFactory.is3rdPartyPlayer($scope.display) &&
+                !playerProFactory.isOutdatedPlayer($scope.display)) {
+                switch (subscriptionStatus.statusCode) {
+                case 'trial-available':
+                  $scope.display.showTrialButton = true;
+                  break;
+                case 'on-trial':
+                case 'suspended':
+                  $scope.display.showTrialStatus = true;
+                  $scope.display.showSubscribeButton = true;
+                  break;
+                case 'trial-expired':
+                case 'cancelled':
+                case 'not-subscribed':
+                  $scope.display.showSubscribeButton = true;
+                  break;
+                default:
+                  break;
+                }
+              }
+            });
         });
 
       $scope.$on('$destroy', function () {
