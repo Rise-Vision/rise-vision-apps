@@ -8,7 +8,10 @@
     <input type="checkbox" name="on-off-switch" id="on-off-switch" checked="" tabindex="1">
     <label for="on-off-switch">
         <span class="aural">Rise Player Professional</span>
-        Rise Player Professional is <span class="text-green bold" id="targetStatus"> ACTIVE </span>
+        Rise Player Professional is 
+        <span class="text-green bold" id="targetActive"> ACTIVE </span>
+        <span class="bold" id="targetLoading" style="display: none"> LOADING <i class="fa fa-spinner fa-spin fa-fw"></i></span>
+         <span class="text-error bold" id="targetInactive" style="display: none"> INACTIVE </span>
         <a class="" href="https://help.risevision.com/hc/en-us/articles/115003626863#_ga=2.193387565.1036005128.1516585172-448654264.1459728419" target="_blank">
       <i class="fa fa-question-circle icon-right" aria-hidden="true"></i>
     </a>
@@ -29,9 +32,19 @@
 // $(document).ready(function() { 
 //  alert('dd');
 // });
-$(document).on("click", ".onoffswitch", function() {
-   // $("#targetStatus").text("INACTIVE");
-   alert('dd');
+$(document).on("click", ".toggle-group label", function() {
+
+  function finishLoading(){
+    $("#targetInactive").show();
+    $("#targetActive").hide();
+    $("#targetLoading").hide();
+  }
+
+   $("#targetActive").hide();
+   $("#targetInactive").hide();
+   $("#targetLoading").show();
+   setTimeout(finishLoading, 2000);
+  // alert('dd');
 });
 </script>
 
