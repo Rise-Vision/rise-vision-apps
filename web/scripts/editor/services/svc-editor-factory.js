@@ -422,6 +422,10 @@ angular.module('risevision.editor.services')
         });
       };
 
+      factory.addPresentationOnEditor = function () {
+        $state.go('apps.editor.add');
+      };
+
       var _goToStoreModal = function (product) {
         var goToStoreModalInstance = $modal.open({
           templateUrl: 'partials/editor/go-to-store-modal.html',
