@@ -7,7 +7,7 @@
     <div id="onboardingAddPresentation" class="step" ng-class="{'current' : currentStep('addPresentation'), 'completed': addPresentationCompleted}">
       <span translate="common-header.onboarding.add-presentation"></span>
       <span id="onboardingAddPresentationButton" class="onboard-actions" ng-if="currentStep('addPresentation')">
-        <button class="btn btn-sm btn-primary" ng-click="editorFactory.addPresentationOnEditor()" translate="common-header.onboarding.add-presentation-cta">
+        <button class="btn btn-sm btn-primary" ui-sref="apps.editor.add" translate="common-header.onboarding.add-presentation-cta">
         </button>
         <a class="btn btn-sm btn-primary" href="https://help.risevision.com/hc/en-us/articles/115002841803-Create-a-Presentation" target="_blank">
           <i class="fa fa-question u_icon-white"></i>

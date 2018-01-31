@@ -31,7 +31,7 @@
             <button class="btn btn-default u_margin-left" ng-disabled="!artboardFactory.canZoomIn()" ng-click="artboardFactory.zoomIn()"> <i class="fa fa-plus"></i></button>
         </div>
 
-        <button ng-if="!factory.presentation.id" id="changeTemplateButton" class="btn btn-default" ng-click="changeTemplate()">{{'editor-app.workspace.toolbar.changeTemplate' | translate}} <i class="fa fa-th icon-right"></i></button>
+        <button ng-show="!factory.presentation.id" id="changeTemplateButton" class="btn btn-default" ui-sref="apps.editor.add">{{'editor-app.workspace.toolbar.changeTemplate' | translate}} <i class="fa fa-th icon-right"></i></button>
         <span ng-if="!factory.presentation.id" class="text-muted u_margin-left" translate>editor-app.workspace.toolbar.or</span>
         <button ng-if="!hasUnsavedChanges" class="btn btn-primary" id="previewButton" ng-click="factory.preview(factory.presentation.id)" ng-disabled="!factory.presentation.id">{{'editor-app.workspace.toolbar.preview' | translate}} <i class="fa fa-play icon-right"></i></button>
         <button ng-if="hasUnsavedChanges" class="btn btn-primary u_margin-left" id="saveAndPreviewButton" ng-click="factory.saveAndPreview()">{{'editor-app.workspace.toolbar.saveAndPreview' | translate}} <i class="fa fa-play icon-right"></i></button>
