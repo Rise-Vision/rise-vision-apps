@@ -115,7 +115,6 @@ angular.module('risevision.editor.controllers')
       });
 
       $scope.changeTemplate = function () {
-        $scope.hasUnsavedChanges = false;
         $state.go('apps.editor.add');
       };
 
