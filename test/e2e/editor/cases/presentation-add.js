@@ -94,7 +94,7 @@ var PresentationAddScenarios = function() {
       helper.clickWhenClickable(workspacePage.getSaveButton(), 'Save Button');
 
       helper.waitDisappear(workspacePage.getChangeTemplateButton(), 'Change Template Button');
-      expect(workspacePage.getChangeTemplateButton().isPresent()).to.eventually.be.false;
+      expect(workspacePage.getChangeTemplateButton().isDisplayed()).to.eventually.be.false;
 
       helper.wait(workspacePage.getSaveStatus(), 'Save Status');
       expect(workspacePage.getSaveButton().isEnabled()).to.eventually.be.false;
