@@ -3,23 +3,56 @@
     <!-- App Title -->
     <h1 translate>displays-app.details.title</h1>
   </div>
+  <div class="global-actions">
+   <div class="toggle-group">
+    <input type="checkbox" name="on-off-switch" id="on-off-switch" checked="" tabindex="1">
+   <!--  Prototype Note: Add disabled="disabled" to input for disabled state-->
+    <label for="on-off-switch">
+        <span class="aural">Rise Player Professional</span>
+        Rise Player Professional is 
 
-  <div class="global-actions" require-role="da">
-    <div>
-      <button id="playerProTrialButton" ng-if="display.showTrialButton" ng-click="playerProFactory.openPlayerProInfoModal()" class="btn btn-lg btn-primary" rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0">
-        {{'displays-app.details.startPlayerProTrial' | translate}}
-      </button>
-      <a id="subscribePlayerProButton" ng-if="display.showSubscribeButton" class="btn btn-lg btn-primary" ng-href="{{playerProFactory.getProductLink()}}" target="_blank" translate>
-        displays-app.details.subscribePlayerPro
-      </a>
+        <span class="text-green bold" id="targetActive"> ON <a class="" href="https://help.risevision.com/hc/en-us/articles/115003626863#_ga=2.193387565.1036005128.1516585172-448654264.1459728419" target="_blank">
+      <i class="fa fa-question-circle icon-right" aria-hidden="true"></i>
+    </a></span>
+
+        <span class="bold" id="targetLoading" style="display: none"> LOADING <i class="fa fa-spinner fa-spin fa-fw"></i></span>
+
+         <span class="text-error bold" id="targetInactive" style="display: none"> OFF <a class="" href="https://help.risevision.com/hc/en-us/articles/115003626863#_ga=2.193387565.1036005128.1516585172-448654264.1459728419" target="_blank">
+      <i class="fa fa-question-circle icon-right" aria-hidden="true"></i>
+    </a> </span>
+        
+    </label>
+    <div class="onoffswitch pull-right" aria-hidden="true">
+        <div class="onoffswitch-label">
+            <div class="onoffswitch-inner"></div>
+            <div class="onoffswitch-switch"></div>
+        </div>
     </div>
-    <a ng-if="display.showTrialButton || display.showSubscribeButton" class="info-link" href="https://help.risevision.com/hc/en-us/articles/115003626863" target="_blank">
-      <i class="fa fa-question-circle icon-left" aria-hidden="true"></i>
-      <span translate>displays-app.details.whatIsPlayerPro</span>
-    </a>
-  </div>
-  
 </div>
+  </div>
+</div>
+
+<script>
+//CYCLE
+
+// $(document).ready(function() { 
+//  alert('dd');
+// });
+$(document).on("click", ".toggle-group label", function() {
+
+  function finishLoading(){
+    $("#targetInactive").show();
+    $("#targetActive").hide();
+    $("#targetLoading").hide();
+  }
+
+   $("#targetActive").hide();
+   $("#targetInactive").hide();
+   $("#targetLoading").show();
+   setTimeout(finishLoading, 2000);
+  // alert('dd');
+});
+</script>
 
 <div id="subscription-status" subscription-status ng-show="display.showTrialStatus"
     product-id="{{productId}}" product-code="{{productCode}}" display-id="{{displayId}}" company-id="{{companyId}}"
