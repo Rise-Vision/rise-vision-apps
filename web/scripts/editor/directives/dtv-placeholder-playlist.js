@@ -3,9 +3,9 @@
 angular.module('risevision.editor.directives')
   .directive('placeholderPlaylist', ['$modal', '$templateCache', '$filter',
     'placeholderPlaylistFactory', 'playlistItemFactory', 'widgetModalFactory',
-    'widgetUtils', 'presentationItemFactory',
+    'widgetSettingsFactory', 'widgetUtils', 'presentationItemFactory',
     function ($modal, $templateCache, $filter, placeholderPlaylistFactory,
-      playlistItemFactory, widgetModalFactory, widgetUtils,
+      playlistItemFactory, widgetModalFactory, widgetSettingsFactory, widgetUtils,
       presentationItemFactory) {
       return {
         restrict: 'E',
@@ -64,7 +64,9 @@ angular.module('risevision.editor.directives')
           };
 
           $scope.showSettingsModal = function (item) {
-            if (item.type === 'widget') {
+            if (item.objectReference === '2707fc05-5051-4d7b-bcde-01fafd6eaa5e') {
+              widgetSettingsFactory.showSettingsModal(item);
+            } else if (item.type === 'widget') {
               widgetModalFactory.showWidgetModal(item);
             } else if (item.type === 'presentation') {
               presentationItemFactory.showSettingsModal(item);

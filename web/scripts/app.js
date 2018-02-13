@@ -6,6 +6,7 @@ angular.module('risevision.apps', [
     'ui.codemirror',
     'truncate',
     'slugifier',
+    'risevision.widget.image.settings',
     'risevision.common.header',
     'risevision.common.header.templates',
     'risevision.common.components.last-modified',
@@ -45,6 +46,10 @@ angular.module('risevision.apps', [
     'risevision.storage.controllers',
     'risevision.storage.directives',
     'risevision.storage.filters',
+    'risevision.widgets.services',
+    'risevision.widgets.controllers',
+    'risevision.widgets.directives',
+    'risevision.widgets.filters'
   ])
   // Set up our mappings between URLs, templates, and controllers
   .config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
@@ -523,3 +528,8 @@ angular.module('risevision.storage.services', [
 angular.module('risevision.storage.directives', []);
 angular.module('risevision.storage.controllers', []);
 angular.module('risevision.storage.filters', ['risevision.common.i18n']);
+
+angular.module('risevision.widgets.services', []);
+angular.module('risevision.widgets.directives', []);
+angular.module('risevision.widgets.controllers', []);
+angular.module('risevision.widgets.filters', []);
