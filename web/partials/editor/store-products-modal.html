@@ -22,7 +22,102 @@
 
     <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>
 
-    <div class="template-filters u_margin-sm-bottom">
+    <div ng-hide="factory.search.category === 'Templates'">
+      <h4 class="u_margin-md-top">For Professional Displays Only - <a href="#">Learn More</a></h4>
+
+
+      <div ng-show="planactive" class="professional-content professional-content--unlocked panel panel-default">
+        <div class="panel-body">
+          <div class="product-grid">
+            <div class="row">
+              <div class="col-sm-6 col-md-4 col-lg-3">
+                
+                <div class="product-grid_item panel panel-default" style="margin-bottom: 0;">
+                  <figure class="product-grid_image u_clickable product-grid_image--unlocked">
+                    <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/UI/twitter-widget%402x-100.jpg" alt="add twitter widget"> 
+                  </figure><!--template-image-->
+                  <div class="product-grid_details">
+                    <div class="row">
+                      <div class="col-xs-8">
+                        <h4>Twitter Widget</h4>
+                        
+                      </div><!-- end col -->
+                      <div class="col-xs-4">
+
+                        <button class="btn btn-primary btn-sm btn-block">
+                          Add
+                        </button>
+                      </div><!-- end col -->
+                      <div class="col-xs-12">
+                        <p class="text-muted">Professional Widget</p>
+                      </div>
+                    </div><!-- end row -->
+                  </div>
+                </div><!--product-grid-item-->
+
+              </div><!--col-->
+
+              
+
+              <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="pro-display-promotion">
+                  <h2>Add power and functionality to your presentations with Professional Widgets</h2>
+                  <p>Unlock the power of Professional Widgets, activate your included Professional Displays.</p>
+                  <a href="#" class="btn btn-default btn-lg">Activate your Professional Displays</a>
+                </div>
+              </div><!--col-->
+            </div>
+          </div>
+        </div><!--panel-body-->
+      </div><!--panel-->
+
+
+      <div ng-hide="planactive" class="professional-content professional-content--locked panel panel-default">
+        <div class="panel-body">
+          <div class="product-grid">
+            <div class="row">
+              <div class="col-sm-6 col-md-4 col-lg-3">
+                
+                <div class="product-grid_item panel panel-default" style="margin-bottom: 0;">
+                  <figure class="product-grid_image u_clickable product-grid_image--locked">
+                    <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/UI/twitter-widget%402x-100.jpg" alt="add twitter widget"> 
+                  </figure><!--template-image-->
+                  <div class="product-grid_details">
+                    <div class="row">
+                      <div class="col-xs-8">
+                        <h4>Twitter Widget</h4>
+                        
+                      </div><!-- end col -->
+                      <div class="col-xs-4">
+
+                        <button class="btn btn-default btn-sm btn-block">
+                          Unlock
+                        </button>
+                      </div><!-- end col -->
+                      <div class="col-xs-12">
+                        <p class="text-muted">Professional Widget</p>
+                      </div>
+                    </div><!-- end row -->
+                  </div>
+                </div><!--product-grid-item-->
+
+              </div><!--col-->
+              <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="plan-promotion">
+                  <h2>Add power and functionality to your presentations with Professional Widgets</h2>
+                  <p>Unlock the power of Professional Widgets, start any plan trial for free to get the included Professional Displays.</p>
+                  <button ng-click="planactive = !planactive" class="btn btn-white btn-lg">Start a Plan Trial</button>
+                </div>
+              </div><!--col-->
+            </div>
+          </div>
+        </div><!--panel-body-->
+      </div><!--panel-->
+
+      <h4 class="u_margin-sm-top">For All Displays</h4>
+    </div>
+
+    <div class="template-filters u_margin-sm-bottom hidden">
       <ul class="list-unstyled">
         <li ng-repeat="category in paymentCategories" ng-class="{ active : search.paymentCategory === category || !search.paymentCategory && category === 'all' }" ng-click="search.paymentCategory = category"><span>{{category}}</span></li>
       </ul>
@@ -57,7 +152,7 @@
               </div><!-- end row -->
               
             </div>
-          </div>
+          </div><!--product-grid-item-->
         </div>
        
         <ng-repeat ng-repeat="product in factory.items.list | storePaymentCategory:search.paymentCategory">
