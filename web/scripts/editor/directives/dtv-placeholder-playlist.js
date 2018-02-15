@@ -2,7 +2,7 @@
 
 angular.module('risevision.editor.directives')
   .directive('placeholderPlaylist', ['$modal', '$templateCache', '$filter',
-    'placeholderPlaylistFactory', 'playlistItemFactory', 'settingsFactory', 
+    'placeholderPlaylistFactory', 'playlistItemFactory', 'settingsFactory',
     'widgetUtils',
     function ($modal, $templateCache, $filter, placeholderPlaylistFactory,
       playlistItemFactory, settingsFactory, widgetUtils) {

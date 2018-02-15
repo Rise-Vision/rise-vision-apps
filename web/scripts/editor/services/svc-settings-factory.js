@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.editor.services')
-  .factory('settingsFactory', ['$modal', 'widgetModalFactory', 
+  .factory('settingsFactory', ['$modal', 'widgetModalFactory',
     'placeholderPlaylistFactory',
     function ($modal, widgetModalFactory, placeholderPlaylistFactory) {
       var factory = {};
@@ -30,7 +30,7 @@ angular.module('risevision.editor.services')
         } else if (item.type === 'presentation') {
           deferred = _showPresentationSettingsModal(item);
         }
-        
+
         if (!deferred) {
           return;
         }

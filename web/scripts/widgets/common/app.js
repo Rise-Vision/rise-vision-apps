@@ -1,1 +1,1 @@
-angular.module("risevision.widget.common", []);
+angular.module('risevision.widget.common', []);

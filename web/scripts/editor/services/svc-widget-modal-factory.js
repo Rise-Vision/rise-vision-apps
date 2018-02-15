@@ -3,10 +3,10 @@
 angular.module('risevision.editor.services')
   .value('RPC_PARAMS', 'up_id=iframeId&parent=parentUrl&')
   .value('WIDGET_PARAMS', 'up_rsW=width&up_rsH=height&up_companyId=cid')
-  .factory('widgetModalFactory', ['$q', '$modal', '$location', '$sce', 
+  .factory('widgetModalFactory', ['$q', '$log', '$modal', '$location', '$sce',
     'placeholderFactory', 'gadgetFactory', 'userState', 'widgetUtils',
     'WIDGET_PARAMS', 'RPC_PARAMS',
-    function ($q, $modal, $location, $sce, placeholderFactory,
+    function ($q, $log, $modal, $location, $sce, placeholderFactory,
       gadgetFactory, userState, widgetUtils, WIDGET_PARAMS, RPC_PARAMS) {
       var factory = {};
 
@@ -23,19 +23,19 @@ angular.module('risevision.editor.services')
 
         return res;
       };
-      
-      var _getWidgetParams = function() {
+
+      var _getWidgetParams = function () {
         return WIDGET_PARAMS
           .replace('cid', userState.getSelectedCompanyId())
           .replace('width', placeholderFactory.placeholder.width)
           .replace('height', placeholderFactory.placeholder.height);
       };
-      
-      var _getRpcParams = function() {
+
+      var _getRpcParams = function () {
         return RPC_PARAMS
           .replace('iframeId', 'widget-modal-frame')
           .replace('parentUrl', encodeURIComponent($location.$$absUrl));
-      }
+      };
 
       var _getIFrameUrl = function (widgetUrl, url) {
         var params = _getUrlParams(widgetUrl);
@@ -185,7 +185,7 @@ angular.module('risevision.editor.services')
         } else if (item.type === 'widget') {
           deferred = _showWidgetIFrameModal(item);
         }
-        
+
         return deferred.then(function (widgetData) {
           if (widgetData) {
             _updateItemObjectData(item, widgetData.params);

@@ -47,7 +47,7 @@ angular.module('risevision.editor.services')
     'settingsFactory', 'widgetUtils', 'storageUtils', 'presentationTracker',
     'SELECTOR_TYPES', 'IMAGE_ADDITIONAL_PARAMS', 'VIDEO_ADDITIONAL_PARAMS',
     function ($modal, $log, userState, gadgetFactory, editorFactory,
-      placeholderPlaylistFactory, settingsFactory, widgetUtils, storageUtils, 
+      placeholderPlaylistFactory, settingsFactory, widgetUtils, storageUtils,
       presentationTracker,
       SELECTOR_TYPES, IMAGE_ADDITIONAL_PARAMS, VIDEO_ADDITIONAL_PARAMS) {
       var factory = {};
