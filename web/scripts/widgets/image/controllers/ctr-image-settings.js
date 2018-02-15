@@ -1,5 +1,5 @@
 angular.module( "risevision.widget.image.settings" )
-  .controller( "imageSettingsController", [ "$scope", "$rootScope", "$q", "$log", "commonSettings",
+  .controller( "ImageSettingsController", [ "$scope", "$rootScope", "$q", "$log", "commonSettings",
     function( $scope, $rootScope, $q, $log, commonSettings ) {
       $scope.isFolder = false;
 

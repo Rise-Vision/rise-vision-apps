@@ -68,7 +68,7 @@ angular.module('risevision.widgets.services')
 
       this.getParams = function (params) {
         var defaultParams = defaultSettings.params || {};
-        return angular.extend(defaultParams, params);
+        return angular.extend(defaultParams, settingsParser.parseParams(params));
       };
   }])
 

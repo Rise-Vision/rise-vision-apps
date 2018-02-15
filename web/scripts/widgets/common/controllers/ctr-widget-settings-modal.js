@@ -2,8 +2,8 @@
   'use strict';
 
   angular.module('risevision.widgets.controllers')
-    .controller('widgetSettingsModal', ['$scope', '$timeout', '$modalInstance',
-      '$loading', 'settingsSaver', 'settingsGetter', 'widget',
+    .controller('WidgetSettingsModalController', ['$scope', '$timeout', 
+      '$modalInstance', '$loading', 'settingsSaver', 'settingsGetter', 'widget',
       function ($scope, $timeout, $modalInstance, $loading, 
         settingsSaver, settingsGetter, widget) {
 
