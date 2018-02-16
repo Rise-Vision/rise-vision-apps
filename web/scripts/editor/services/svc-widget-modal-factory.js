@@ -105,14 +105,16 @@ angular.module('risevision.editor.services')
       };
 
       var _showWidgetSettingsModal = function (item) {
+        var inAppDetails = widgetUtils.getInAppSettings(item.objectReference);
         var modalInstance = $modal.open({
-          templateUrl: 'partials/widgets/image-settings.html',
+          templateUrl: inAppDetails.partial,
           controller: 'WidgetSettingsModalController',
           size: 'lg',
           backdrop: true,
           resolve: {
             widget: function () {
               return {
+                type: inAppDetails.type,
                 params: _getSettingsParams(item.objectData),
                 additionalParams: item.additionalParams
               };
@@ -180,7 +182,7 @@ angular.module('risevision.editor.services')
       factory.showSettingsModal = function (item) {
         var deferred = $q.defer();
 
-        if (item.objectReference === '2707fc05-5051-4d7b-bcde-01fafd6eaa5e') {
+        if (widgetUtils.getInAppSettings(item.objectReference)) {
           deferred = _showWidgetSettingsModal(item);
         } else if (item.type === 'widget') {
           deferred = _showWidgetIFrameModal(item);

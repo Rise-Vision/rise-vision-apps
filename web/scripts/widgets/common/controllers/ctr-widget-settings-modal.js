@@ -18,6 +18,8 @@
         };
 
         var _init = function () {
+          settingsGetter.setCurrentWidget(widget.type);
+
           $timeout(_stopLoader, 3000);
         };
 

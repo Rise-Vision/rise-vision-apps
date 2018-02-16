@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('risevision.widget.image.settings')
-  .controller('ImageSettingsController', ['$scope', '$rootScope', '$q', '$log', 'commonSettings',
+  .controller('ImageSettingsController', ['$scope', '$rootScope', '$q', '$log',
+    'commonSettings',
     function ($scope, $rootScope, $q, $log, commonSettings) {
       $scope.isFolder = false;
-
 
       $scope.$on('fileSelectorClick', function (event, type) {
         $scope.isFolder = (type === 'single-folder') ? true : false;
@@ -50,19 +50,4 @@ angular.module('risevision.widget.image.settings')
         }
       });
     }
-  ])
-  .value('defaultSettings', {
-    'params': {},
-    'additionalParams': {
-      'selector': {},
-      'storage': {},
-      'resume': true,
-      'scaleToFit': true,
-      'position': 'middle-center',
-      'duration': 10,
-      'pause': 10,
-      'autoHide': false,
-      'url': '',
-      'background': {}
-    }
-  });
+  ]);

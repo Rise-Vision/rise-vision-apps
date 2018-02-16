@@ -58,9 +58,21 @@ angular.module('risevision.widgets.services')
 
   .service('settingsGetter', ['settingsParser', 'defaultSettings',
     function (settingsParser, defaultSettings) {
+      var currentWidget;
+      this.setCurrentWidget = function(name) {
+        currentWidget = name ? name : null;
+      };
+
+      var _getDefaultSettings = function() {
+        if (currentWidget && defaultSettings[currentWidget]) {
+          return defaultSettings[currentWidget];
+        }
+
+        return {};
+      }
 
       this.getAdditionalParams = function (additionalParams) {
-        var defaultAdditionalParams = defaultSettings.additionalParams || {};
+        var defaultAdditionalParams = _getDefaultSettings().additionalParams || {};
 
         if (additionalParams) {
           additionalParams = settingsParser.parseAdditionalParams(additionalParams);
@@ -72,7 +84,7 @@ angular.module('risevision.widgets.services')
       };
 
       this.getParams = function (params) {
-        var defaultParams = defaultSettings.params || {};
+        var defaultParams = _getDefaultSettings().params || {};
         return angular.extend(defaultParams, settingsParser.parseParams(params));
       };
     }
