@@ -2,10 +2,9 @@
   'use strict';
 
   angular.module('risevision.widgets.controllers')
-    .controller('WidgetSettingsModalController', ['$scope', '$timeout',
-      '$modalInstance', '$loading', 'settingsSaver', 'settingsGetter', 'widget',
-      function ($scope, $timeout, $modalInstance, $loading,
-        settingsSaver, settingsGetter, widget) {
+    .controller('WidgetSettingsModalController', ['$scope', '$modalInstance',
+      'settingsSaver', 'settingsGetter', 'widget',
+      function ($scope, $modalInstance, settingsSaver, settingsGetter, widget) {
 
         $scope.settings = {
           params: {},
@@ -13,14 +12,18 @@
         };
         $scope.alerts = [];
 
-        var _stopLoader = function () {
-          $loading.stop('widget-modal-loader');
+        var _loadAdditionalParams = function () {
+          var additionalParams = settingsGetter.getAdditionalParams(widget.additionalParams);
+
+          $scope.settings.additionalParams = additionalParams;
+          $scope.$broadcast('loadAdditionalParams', additionalParams);
         };
 
         var _init = function () {
           settingsGetter.setCurrentWidget(widget.type);
-
-          $timeout(_stopLoader, 3000);
+          
+          $scope.settings.params = settingsGetter.getParams(widget.params);
+          _loadAdditionalParams();
         };
 
         _init();
@@ -37,19 +40,7 @@
         $scope.setAdditionalParam = function (name, val) {
           $scope.settings.additionalParams[name] = val;
         };
-
-        $scope.loadAdditionalParams = function () {
-          _stopLoader();
-
-          var additionalParams = settingsGetter.getAdditionalParams(widget.additionalParams);
-
-          $scope.settings.additionalParams = additionalParams;
-          $scope.$broadcast('loadAdditionalParams', additionalParams);
-        };
-
-        $scope.setAdditionalParams = function (name, val) {
-          $scope.settings.additionalParams[name] = val;
-        };
+        $scope.setAdditionalParams = $scope.setAdditionalParam;
 
         $scope.saveSettings = function () {
           //clear out previous alerts, if any
@@ -68,25 +59,6 @@
         $scope.closeSettings = function () {
           $modalInstance.dismiss('cancel');
         };
-
-        $scope.settings.params = settingsGetter.getParams(widget.params);
-        $scope.loadAdditionalParams();
       }
-    ])
-
-    .directive('scrollOnAlerts', function () {
-      return {
-        restrict: 'A', //restricts to attributes
-        scope: false,
-        link: function ($scope, $elm) {
-          $scope.$watchCollection('alerts', function (newAlerts, oldAlerts) {
-            if (newAlerts.length > 0 && oldAlerts.length === 0) {
-              $('body').animate({
-                scrollTop: $elm.offset().top
-              }, 'fast');
-            }
-          });
-        }
-      };
-    });
+    ]);
 }());

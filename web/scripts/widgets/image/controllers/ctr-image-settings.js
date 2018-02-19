@@ -1,9 +1,9 @@
 'use strict';
 
-angular.module('risevision.widget.image.settings')
-  .controller('ImageSettingsController', ['$scope', '$rootScope', '$q', '$log',
+angular.module('risevision.widgets.image')
+  .controller('ImageSettingsController', ['$scope', '$rootScope',
     'commonSettings',
-    function ($scope, $rootScope, $q, $log, commonSettings) {
+    function ($scope, $rootScope, commonSettings) {
       $scope.isFolder = false;
 
       $scope.$on('fileSelectorClick', function (event, type) {
@@ -13,12 +13,6 @@ angular.module('risevision.widget.image.settings')
       $scope.$watch('settings.additionalParams.selector.url', function (url) {
         if (typeof url !== 'undefined' && url !== '') {
           $scope.settings.additionalParams.storage = commonSettings.getStorageUrlData(url);
-        }
-      });
-
-      $scope.$watch('settings.additionalParams.resume', function (resume) {
-        if (typeof resume === 'undefined') {
-          $scope.settings.additionalParams.resume = true;
         }
       });
 
@@ -49,5 +43,12 @@ angular.module('risevision.widget.image.settings')
           $scope.settings.additionalParams.url = '';
         }
       });
+      
+      $scope.$watch('settings.additionalParams.resume', function (resume) {
+        if (typeof resume === 'undefined') {
+          $scope.settings.additionalParams.resume = true;
+        }
+      });
+
     }
   ]);

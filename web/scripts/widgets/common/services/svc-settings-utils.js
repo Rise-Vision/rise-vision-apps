@@ -4,22 +4,32 @@ angular.module('risevision.widgets.services')
   .service('settingsSaver', ['$q', '$log', 'settingsParser',
     function ($q, $log, settingsParser) {
 
+      var _processSettings = function(settings) {
+        var newSettings = angular.copy(settings);
+
+        delete newSettings.params.id;
+        delete newSettings.params.companyId;
+        delete newSettings.params.rsW;
+        delete newSettings.params.rsH;
+
+        return newSettings;
+      }
+
       this.saveSettings = function (settings, validator) {
-        var deferred = $q.defer();
         var alerts = [],
           str = '';
 
-        settings = processSettings(settings);
+        settings = _processSettings(settings);
 
         if (validator) {
           alerts = validator(settings);
-        }
 
-        if (alerts.length > 0) {
-          $log.debug('Validation failed.', alerts);
-          deferred.reject({
-            alerts: alerts
-          });
+          if (alerts.length > 0) {
+            $log.debug('Validation failed.', alerts);
+            return $q.reject({
+              alerts: alerts
+            });
+          }
         }
 
         if (settings.params.hasOwnProperty('layoutURL')) {
@@ -34,24 +44,11 @@ angular.module('risevision.widgets.services')
         var additionalParamsStr =
           settingsParser.encodeAdditionalParams(settings.additionalParams);
 
-        deferred.resolve({
+        return $q.resolve({
           params: str,
           additionalParams: additionalParamsStr
         });
-
-        return deferred.promise;
       };
-
-      function processSettings(settings) {
-        var newSettings = angular.copy(settings);
-
-        delete newSettings.params.id;
-        delete newSettings.params.companyId;
-        delete newSettings.params.rsW;
-        delete newSettings.params.rsH;
-
-        return newSettings;
-      }
 
     }
   ])
@@ -59,17 +56,17 @@ angular.module('risevision.widgets.services')
   .service('settingsGetter', ['settingsParser', 'defaultSettings',
     function (settingsParser, defaultSettings) {
       var currentWidget;
-      this.setCurrentWidget = function(name) {
+      this.setCurrentWidget = function (name) {
         currentWidget = name ? name : null;
       };
 
-      var _getDefaultSettings = function() {
+      var _getDefaultSettings = function () {
         if (currentWidget && defaultSettings[currentWidget]) {
-          return defaultSettings[currentWidget];
+          return angular.copy(defaultSettings[currentWidget]);
         }
 
         return {};
-      }
+      };
 
       this.getAdditionalParams = function (additionalParams) {
         var defaultAdditionalParams = _getDefaultSettings().additionalParams || {};
@@ -120,13 +117,13 @@ angular.module('risevision.widgets.services')
       return str.join('&');
     };
 
-    function stripPrefix(name) {
+    var _stripPrefix = function(name) {
       if (name.indexOf('up_') === 0) {
         return name.slice(3);
       } else {
         return null;
       }
-    }
+    };
 
     this.parseParams = function (paramsStr) {
       //get rid of preceeding '?'
@@ -137,7 +134,7 @@ angular.module('risevision.widgets.services')
       var vars = paramsStr.split('&');
       for (var i = 0; i < vars.length; i++) {
         var pair = vars[i].split('=');
-        var name = stripPrefix(decodeURIComponent(pair[0]));
+        var name = _stripPrefix(decodeURIComponent(pair[0]));
         //save settings only if it has up_ prefix. Ignore otherwise
         if (name) {
           try {
