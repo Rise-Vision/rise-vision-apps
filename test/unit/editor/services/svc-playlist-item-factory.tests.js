@@ -111,25 +111,19 @@ describe('service: playlistItemFactory:', function() {
       };
     });
     
-    $provide.service('widgetModalFactory', function() {
-      return widgetModalFactory = {
-        showWidgetModal: sinon.stub()
-      };
-    });
-    
-    $provide.service('presentationItemFactory', function() {
-      return presentationItemFactory = {
+    $provide.service('settingsFactory', function() {
+      return settingsFactory = {
         showSettingsModal: sinon.stub()
       };
     });
-
+    
     $provide.value('SELECTOR_TYPES', {
       MULTIPLE_FILES_FOLDERS: 'multiple-files-folders'
     });    
 
   }));
   var item, playlistItemFactory, placeholderPlaylistFactory, fileSelectorFactory, 
-  widgetModalFactory, presentationItemFactory, openModal, currentItem, trackedEvent, returnFiles, returnWidget;
+  settingsFactory, openModal, currentItem, trackedEvent, returnFiles, returnWidget;
 
   beforeEach(function(){
     openModal = null;
@@ -171,8 +165,8 @@ describe('service: playlistItemFactory:', function() {
       expect(currentItem).to.not.be.ok;
 
       setTimeout(function() {
-        widgetModalFactory.showWidgetModal.should.have.been.called;
-        widgetModalFactory.showWidgetModal.should.have.been.calledWith({
+        settingsFactory.showSettingsModal.should.have.been.called;
+        settingsFactory.showSettingsModal.should.have.been.calledWith({
           duration: 10,
           distributeToAll: true,
           timeDefined: false,
@@ -197,8 +191,8 @@ describe('service: playlistItemFactory:', function() {
       expect(currentItem).to.not.be.ok;
 
       setTimeout(function() {
-        presentationItemFactory.showSettingsModal.should.have.been.called;
-        presentationItemFactory.showSettingsModal.should.have.been.calledWith({
+        settingsFactory.showSettingsModal.should.have.been.called;
+        settingsFactory.showSettingsModal.should.have.been.calledWith({
           duration: 10,
           distributeToAll: true,
           timeDefined: false,
@@ -240,8 +234,8 @@ describe('service: playlistItemFactory:', function() {
       playlistItemFactory.addTextWidget();
 
       setTimeout(function() {
-        widgetModalFactory.showWidgetModal.should.have.been.called;
-        widgetModalFactory.showWidgetModal.should.have.been.calledWith({
+        settingsFactory.showSettingsModal.should.have.been.called;
+        settingsFactory.showSettingsModal.should.have.been.calledWith({
       	  additionalParams: null,
       	  distributeToAll: true,
       	  duration: 10,
@@ -321,8 +315,8 @@ describe('service: playlistItemFactory:', function() {
       playlistItemFactory.selectFiles('images');
 
       setTimeout(function() {
-        widgetModalFactory.showWidgetModal.should.have.been.called;
-        widgetModalFactory.showWidgetModal.should.have.been.calledWith({
+        settingsFactory.showSettingsModal.should.have.been.called;
+        settingsFactory.showSettingsModal.should.have.been.calledWith({
 	        additionalParams: '{"selector":{"selection":"custom"},"storage":{},"resume":true,"scaleToFit":true,"position":"middle-center","duration":10,"pause":10,"autoHide":false,"url":"","background":{}}',
       	  distributeToAll: true,
       	  duration: 10,
@@ -368,8 +362,8 @@ describe('service: playlistItemFactory:', function() {
       playlistItemFactory.selectFiles('videos');
 
       setTimeout(function() {
-        widgetModalFactory.showWidgetModal.should.have.been.called;
-        widgetModalFactory.showWidgetModal.should.have.been.calledWith({
+        settingsFactory.showSettingsModal.should.have.been.called;
+        settingsFactory.showSettingsModal.should.have.been.calledWith({
       	  additionalParams: '{"selector":{"selection":"custom"},"url":"","storage":{},"video":{"scaleToFit":true,"volume":50,"controls":true,"autoplay":true,"resume":true,"pause":5}}',
       	  distributeToAll: true,
       	  duration: 10,

@@ -25,9 +25,9 @@ angular.module('risevision.editor.services')
       factory.showSettingsModal = function (item, softUpdate) {
         var deferred;
 
-        if (item.type === 'widget') {
+        if (item && item.type === 'widget') {
           deferred = widgetModalFactory.showSettingsModal(item);
-        } else if (item.type === 'presentation') {
+        } else if (item && item.type === 'presentation') {
           deferred = _showPresentationSettingsModal(item);
         }
 

@@ -180,11 +180,11 @@ angular.module('risevision.editor.services')
       };
 
       factory.showSettingsModal = function (item) {
-        var deferred = $q.defer();
+        var deferred = $q.reject('Invalid Playlist Item');
 
-        if (widgetUtils.getInAppSettings(item.objectReference)) {
+        if (item && widgetUtils.getInAppSettings(item.objectReference)) {
           deferred = _showWidgetSettingsModal(item);
-        } else if (item.type === 'widget') {
+        } else if (item && item.type === 'widget') {
           deferred = _showWidgetIFrameModal(item);
         }
 
@@ -198,9 +198,6 @@ angular.module('risevision.editor.services')
 
             console.info('Widget saved:', widgetData);
           }
-        }, function () {
-          // for unit test purposes
-          factory.canceled = true;
         });
 
       };

@@ -146,7 +146,7 @@ angular.module('risevision.editor.services')
       };
 
       factory.getInAppSettings = function (widgetId) {
-        if (IN_APP_SETTINGS[widgetId]) {
+        if (widgetId && IN_APP_SETTINGS[widgetId]) {
           return IN_APP_SETTINGS[widgetId];
         }
         return null;
