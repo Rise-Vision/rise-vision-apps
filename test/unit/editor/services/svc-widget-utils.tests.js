@@ -36,7 +36,7 @@ describe('service: widgetUtils:', function() {
 
   it('getInAppSettings: ', function() {
     expect(widgetUtils.getInAppSettings(WIDGETS_INFO.IMAGE.ids.PROD)).to.be.null;
-    expect(widgetUtils.getInAppSettings(WIDGETS_INFO.IMAGE.ids.TEST)).to.equal(WIDGETS_INFO.IMAGE.inAppSettings);
+    expect(widgetUtils.getInAppSettings(WIDGETS_INFO.IMAGE.ids.TEST)).to.be.null;
     expect(widgetUtils.getInAppSettings('1234')).to.be.null;
   });
   

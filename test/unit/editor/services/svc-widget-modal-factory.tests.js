@@ -168,6 +168,20 @@ describe('service: widgetModalFactory:', function() {
   describe('inApp widget settings: ', function() {
     beforeEach(function() {
       item.objectReference = '2707fc05-5051-4d7b-bcde-01fafd6eaa5e';
+
+      sinon.stub(widgetUtils, 'getInAppSettings', function(id) {
+        if (id === item.objectReference) {
+          return {
+            partial: 'partials/widgets/image-settings.html',
+            type: 'imageWidget'
+          };
+        }
+        return null;
+      });
+    });
+    
+    afterEach(function() {
+      widgetUtils.getInAppSettings.restore();
     });
 
     it('should open correct settings modal', function() {

@@ -104,8 +104,8 @@ angular.module('risevision.editor.services')
 
           if (WIDGETS_INFO[i].inAppSettings) {
             for (j in WIDGETS_INFO[i].ids) {
-              // NOTE: For the Image Widget, use inApp Settings only for Staging
-              if (WIDGETS_INFO[i].ids[j] !== WIDGETS_INFO.IMAGE.ids.PROD) {
+              // NOTE: Disable for the Image Widget even though configured
+              if (WIDGETS_INFO[i] !== WIDGETS_INFO.IMAGE) {
                 IN_APP_SETTINGS[WIDGETS_INFO[i].ids[j]] = WIDGETS_INFO[i].inAppSettings;
               }
             }
