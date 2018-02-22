@@ -2,9 +2,9 @@
 
 angular.module('risevision.editor.controllers')
   .controller('PlaylistItemModalController', ['$scope',
-    'placeholderPlaylistFactory', 'widgetModalFactory', 'gadgetFactory', 'presentationItemFactory', '$modalInstance',
+    'placeholderPlaylistFactory', 'settingsFactory', 'gadgetFactory', '$modalInstance',
     'item', 'editorFactory', 'userState', 'planFactory', 'RVA_URL', 'EMBEDDED_PRESENTATIONS_CODE',
-    function ($scope, placeholderPlaylistFactory, widgetModalFactory, gadgetFactory, presentationItemFactory,
+    function ($scope, placeholderPlaylistFactory, settingsFactory, gadgetFactory,
       $modalInstance, item, editorFactory, userState, planFactory, RVA_URL, EMBEDDED_PRESENTATIONS_CODE) {
       var plansProductCodes = [EMBEDDED_PRESENTATIONS_CODE];
 
@@ -32,11 +32,7 @@ angular.module('risevision.editor.controllers')
       }
 
       $scope.showSettingsModal = function () {
-        if (item.type === 'widget') {
-          widgetModalFactory.showWidgetModal($scope.item, true);
-        } else if (item.type === 'presentation') {
-          presentationItemFactory.showSettingsModal($scope.item, true);
-        }
+        settingsFactory.showSettingsModal($scope.item, true);
       };
 
       $scope.save = function () {

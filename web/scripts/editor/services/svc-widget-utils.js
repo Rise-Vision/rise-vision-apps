@@ -13,6 +13,10 @@ angular.module('risevision.editor.services')
     },
     IMAGE: {
       render: true,
+      inAppSettings: {
+        partial: 'partials/widgets/image-settings.html',
+        type: 'imageWidget'
+      },
       ids: {
         PROD: '5233a598-35ce-41a4-805c-fd2147f144a3',
         TEST: '2707fc05-5051-4d7b-bcde-01fafd6eaa5e'
@@ -84,6 +88,7 @@ angular.module('risevision.editor.services')
       var factory = {};
 
       var RENDER_WIDGETS = [];
+      var IN_APP_SETTINGS = {};
       var SVG_ICONS = {};
       var ICON_CLASSES = {};
 
@@ -94,6 +99,15 @@ angular.module('risevision.editor.services')
           if (WIDGETS_INFO[i].render) {
             for (j in WIDGETS_INFO[i].ids) {
               RENDER_WIDGETS.push(WIDGETS_INFO[i].ids[j]);
+            }
+          }
+
+          if (WIDGETS_INFO[i].inAppSettings) {
+            for (j in WIDGETS_INFO[i].ids) {
+              // NOTE: Disable for the Image Widget even though configured
+              if (WIDGETS_INFO[i] !== WIDGETS_INFO.IMAGE) {
+                IN_APP_SETTINGS[WIDGETS_INFO[i].ids[j]] = WIDGETS_INFO[i].inAppSettings;
+              }
             }
           }
 
@@ -130,6 +144,13 @@ angular.module('risevision.editor.services')
           }
         }
         return false;
+      };
+
+      factory.getInAppSettings = function (widgetId) {
+        if (widgetId && IN_APP_SETTINGS[widgetId]) {
+          return IN_APP_SETTINGS[widgetId];
+        }
+        return null;
       };
 
       factory.isWebpageWidget = function (widgetId) {
