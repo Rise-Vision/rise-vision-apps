@@ -3,22 +3,26 @@
 angular.module('risevision.displays.controllers')
   .controller('displayDetails', ['$scope', '$rootScope', '$q', '$state',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
-    '$templateCache', 'displayId', 'storeAuthorization', 'userState',
+    '$templateCache', 'displayId', 'storeAuthorization', 'userState', 'planFactory',
     'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID',
     function ($scope, $rootScope, $q, $state, displayFactory, display, screenshotFactory, playerProFactory,
-      $loading, $log, $modal, $templateCache, displayId, storeAuthorization, userState,
+      $loading, $log, $modal, $templateCache, displayId, storeAuthorization, userState, planFactory,
       PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
       $scope.playerProFactory = playerProFactory;
       $scope.companyId = userState.getSelectedCompanyId();
+      $scope.company = userState.getCopyOfSelectedCompany();
       $scope.productCode = PLAYER_PRO_PRODUCT_CODE;
       $scope.productId = PLAYER_PRO_PRODUCT_ID;
       $scope.deferredDisplay = $q.defer();
+      $scope.formData = { playerProAssigned: false };
+      $scope.showPlansModal = planFactory.showPlansModal;
 
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
+        $scope.formData.playerProAssigned = $scope.display.playerProAssigned;
         $scope.deferredDisplay.resolve();
 
         screenshotFactory.loadScreenshot();
@@ -31,6 +35,22 @@ angular.module('risevision.displays.controllers')
           $loading.stop('display-loader');
         }
       });
+
+      $scope.getProLicenseCount = function() {
+        return ($scope.company.planPlayerProLicenseCount || 0) + ($scope.company.playerProLicenseCount || 0);
+      };
+
+      $scope.areAllProLicensesUsed = function() {
+        var maxProDisplays = $scope.getProLicenseCount();
+        var assignedDisplays = $scope.company.playerProAssignedDisplays || [];
+        var allProLicensesUsed = assignedDisplays.length === maxProDisplays && assignedDisplays.indexOf(displayId) === -1;
+
+        return $scope.getProLicenseCount() > 0 && allProLicensesUsed;
+      };
+
+      $scope.isProAvailable = function() {
+        return $scope.getProLicenseCount() > 0 && !$scope.areAllProLicensesUsed();
+      };
 
       $scope.confirmDelete = function () {
         $scope.modalInstance = $modal.open({
@@ -151,9 +171,14 @@ angular.module('risevision.displays.controllers')
             });
         });
 
+      var refreshPlanListener = $rootScope.$on('risevision.plan.loaded', function () {
+        $scope.company = userState.getCopyOfSelectedCompany();
+      });
+
       $scope.$on('$destroy', function () {
         subscriptionStatusListener();
         refreshSubscriptionStatusListener();
+        refreshPlanListener();
       });
 
       $scope.$watch('display.browserUpgradeMode', function () {
