@@ -16,6 +16,7 @@ describe('service: widgetUtils:', function() {
     expect(widgetUtils).to.be.ok;
     expect(widgetUtils.isRenderingAllowed).to.be.a('function');
     expect(widgetUtils.isWebpageWidget).to.be.a('function');
+    expect(widgetUtils.getInAppSettings).to.be.a('function');
     expect(widgetUtils.getIconClass).to.be.a('function');
     expect(widgetUtils.getSvgIcon).to.be.a('function');
     expect(widgetUtils.getWidgetId).to.be.a('function');
@@ -31,6 +32,12 @@ describe('service: widgetUtils:', function() {
     expect(widgetUtils.isWebpageWidget(WIDGETS_INFO.WEB_PAGE.ids.PROD)).to.be.true;
     expect(widgetUtils.isWebpageWidget(WIDGETS_INFO.VIDEO.ids.PROD)).to.be.false;    
     expect(widgetUtils.isWebpageWidget('1234')).to.be.false;    
+  });
+
+  it('getInAppSettings: ', function() {
+    expect(widgetUtils.getInAppSettings(WIDGETS_INFO.IMAGE.ids.PROD)).to.be.null;
+    expect(widgetUtils.getInAppSettings(WIDGETS_INFO.IMAGE.ids.TEST)).to.be.null;
+    expect(widgetUtils.getInAppSettings('1234')).to.be.null;
   });
   
   it('getIconClass: ', function() {

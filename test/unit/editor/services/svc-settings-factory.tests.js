@@ -1,5 +1,5 @@
 'use strict';
-describe('service: presentationItemFactory:', function() {
+describe('service: settingsFactory:', function() {
   beforeEach(module('risevision.editor.services'));
 
   beforeEach(module(function ($provide) {
@@ -23,6 +23,11 @@ describe('service: presentationItemFactory:', function() {
         })
       }
     });
+    $provide.service('widgetModalFactory',function(){
+      return widgetModalFactory = {
+        showSettingsModal: sinon.spy(function() { return Q.resolve(); })
+      }
+    });
     $provide.service('placeholderPlaylistFactory', function() {
       return placeholderPlaylistFactory = {
         updateItem: sinon.spy()
@@ -30,7 +35,7 @@ describe('service: presentationItemFactory:', function() {
     });
   }));
   
-  var presentationItemFactory, $modal, placeholderPlaylistFactory, item, updateParams;
+  var settingsFactory, $modal, widgetModalFactory, placeholderPlaylistFactory, item, updateParams;
   beforeEach(function(){
     item = {
       type: 'presentation'
@@ -38,18 +43,18 @@ describe('service: presentationItemFactory:', function() {
     updateParams = true;
 
     inject(function($injector){
-      presentationItemFactory = $injector.get('presentationItemFactory');
+      settingsFactory = $injector.get('settingsFactory');
     });
   });
 
   it('should exist',function(){
-    expect(presentationItemFactory).to.be.ok;
-    expect(presentationItemFactory.showSettingsModal).to.be.a('function');
+    expect(settingsFactory).to.be.ok;
+    expect(settingsFactory.showSettingsModal).to.be.a('function');
   });
   
   it('should return if item is null or missing parameters', function(done) {
-    presentationItemFactory.showSettingsModal();
-    presentationItemFactory.showSettingsModal({});
+    settingsFactory.showSettingsModal();
+    settingsFactory.showSettingsModal({});
     
     setTimeout(function() {
       $modal.open.should.not.have.been.called;
@@ -58,8 +63,8 @@ describe('service: presentationItemFactory:', function() {
     }, 10);
   });
 
-  it('should open modal', function(done) {
-    presentationItemFactory.showSettingsModal(item);
+  it('should open presentation settings', function(done) {
+    settingsFactory.showSettingsModal(item);
     
     setTimeout(function() {
       $modal.open.should.have.been.called;
@@ -72,7 +77,7 @@ describe('service: presentationItemFactory:', function() {
   });  
 
   it('should update item',function(done){
-    presentationItemFactory.showSettingsModal(item);
+    settingsFactory.showSettingsModal(item);
     
     setTimeout(function() {
       expect(placeholderPlaylistFactory.updateItem).to.have.been.called;
@@ -82,7 +87,7 @@ describe('service: presentationItemFactory:', function() {
   });
 
   it('should not update item if soft update',function(done){
-    presentationItemFactory.showSettingsModal(item,true);
+    settingsFactory.showSettingsModal(item, true);
     
     setTimeout(function() {
       expect(placeholderPlaylistFactory.updateItem).to.not.have.been.called;
@@ -91,10 +96,51 @@ describe('service: presentationItemFactory:', function() {
     }, 10);
   });
   
+  it('should open widget settings', function() {
+    item.type = 'widget';
+
+    settingsFactory.showSettingsModal(item);
+  
+    expect(widgetModalFactory.showSettingsModal).to.have.been.calledWith(item);
+  });
+
+  it('should update widget settings', function(done) {
+    item.type = 'widget';
+
+    settingsFactory.showSettingsModal(item);
+  
+    setTimeout(function() {
+      expect(placeholderPlaylistFactory.updateItem).to.have.been.called;
+      
+      done();
+    }, 10);
+  });
+
+  it('should not update widget settings if soft update', function(done) {
+    item.type = 'widget';
+
+    settingsFactory.showSettingsModal(item, true);
+  
+    setTimeout(function() {
+      expect(placeholderPlaylistFactory.updateItem).to.not.have.been.called;
+      
+      done();
+    }, 10);
+  });
+
+  it('should not open any modal', function() {
+    item.type = 'asdf';
+    
+    settingsFactory.showSettingsModal(item);
+    
+    expect(widgetModalFactory.showSettingsModal).to.not.have.been.called;
+    expect($modal.open).to.not.have.been.called;
+  });
+  
   it('should cancel',function(done){
     updateParams = false;
     
-    presentationItemFactory.showSettingsModal(item);
+    settingsFactory.showSettingsModal(item);
     
     setTimeout(function() {
       expect(placeholderPlaylistFactory.updateItem).to.not.have.been.called;

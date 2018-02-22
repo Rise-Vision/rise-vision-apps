@@ -25,12 +25,7 @@ describe('directive: placeholder-playlist', function() {
       };
     });
 
-    $provide.service('widgetModalFactory', function() {
-      return {
-        showWidgetModal: sinon.stub()
-      }
-    });
-    $provide.service('presentationItemFactory', function() {
+    $provide.service('settingsFactory', function() {
       return {
         showSettingsModal: sinon.stub()
       }
@@ -105,11 +100,10 @@ describe('directive: placeholder-playlist', function() {
   });
   
   describe('showSettingsModal: ', function() {
-    var widgetModalFactory, presentationItemFactory;
+    var settingsFactory;
     beforeEach(function() {
       inject(function($injector){
-        widgetModalFactory = $injector.get('widgetModalFactory');
-        presentationItemFactory = $injector.get('presentationItemFactory');
+        settingsFactory = $injector.get('settingsFactory');
       });
     });
     
@@ -117,31 +111,16 @@ describe('directive: placeholder-playlist', function() {
       var item = {type: 'widget'};
       element.scope().showSettingsModal(item);
       
-      expect(widgetModalFactory.showWidgetModal).to.have.been.calledWith(item);
+      expect(settingsFactory.showSettingsModal).to.have.been.calledWith(item);
     });
-
-    it('should open presentation settings', function() {
-      var item = {type: 'presentation'};
-      element.scope().showSettingsModal(item);
-      
-      expect(presentationItemFactory.showSettingsModal).to.have.been.calledWith(item);
-    });
-
-    it('should not open any modal', function() {
-      var item = {type: 'asdf'};
-      element.scope().showSettingsModal(item);
-      
-      expect(widgetModalFactory.showWidgetModal).to.not.have.been.called;
-      expect(presentationItemFactory.showSettingsModal).to.not.have.been.called;
-    });
+  });
     
-    it('isEditable: ', function() {
-      expect(element.scope().isEditable({})).to.be.false;
-      expect(element.scope().isEditable({type:'presentation'})).to.be.true;
-      expect(element.scope().isEditable({type:'widget'})).to.be.false;
-      expect(element.scope().isEditable({type:'widget', objectReference:'widgetId'})).to.be.true;
-      expect(element.scope().isEditable({type:'widget', settingsUrl:'settingsUrl'})).to.be.true;
-    });
+  it('isEditable: ', function() {
+    expect(element.scope().isEditable({})).to.be.false;
+    expect(element.scope().isEditable({type:'presentation'})).to.be.true;
+    expect(element.scope().isEditable({type:'widget'})).to.be.false;
+    expect(element.scope().isEditable({type:'widget', objectReference:'widgetId'})).to.be.true;
+    expect(element.scope().isEditable({type:'widget', settingsUrl:'settingsUrl'})).to.be.true;
   });
 
 });

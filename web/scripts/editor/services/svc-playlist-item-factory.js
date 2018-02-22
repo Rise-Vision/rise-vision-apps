@@ -44,12 +44,11 @@ angular.module('risevision.editor.services')
   })
   .factory('playlistItemFactory', ['$modal', '$log', 'userState',
     'gadgetFactory', 'editorFactory', 'placeholderPlaylistFactory',
-    'widgetModalFactory', 'widgetUtils', 'presentationItemFactory',
-    'storageUtils', 'presentationTracker',
+    'settingsFactory', 'widgetUtils', 'storageUtils', 'presentationTracker',
     'SELECTOR_TYPES', 'IMAGE_ADDITIONAL_PARAMS', 'VIDEO_ADDITIONAL_PARAMS',
     function ($modal, $log, userState, gadgetFactory, editorFactory,
-      placeholderPlaylistFactory, widgetModalFactory, widgetUtils,
-      presentationItemFactory, storageUtils, presentationTracker,
+      placeholderPlaylistFactory, settingsFactory, widgetUtils, storageUtils,
+      presentationTracker,
       SELECTOR_TYPES, IMAGE_ADDITIONAL_PARAMS, VIDEO_ADDITIONAL_PARAMS) {
       var factory = {};
 
@@ -85,10 +84,8 @@ angular.module('risevision.editor.services')
           .then(function (gadget) {
             var item = _newWidget(gadget);
 
-            if (item.type === 'widget') {
-              widgetModalFactory.showWidgetModal(item);
-            } else if (item.type === 'presentation') {
-              presentationItemFactory.showSettingsModal(item);
+            if (item.type === 'widget' || item.type === 'presentation') {
+              settingsFactory.showSettingsModal(item);
             } else {
               factory.edit(item);
             }
@@ -125,7 +122,7 @@ angular.module('risevision.editor.services')
 
         _getItemByWidgetId(widgetUtils.getWidgetId('text'))
           .then(function (item) {
-            widgetModalFactory.showWidgetModal(item);
+            settingsFactory.showSettingsModal(item);
           });
       };
 
@@ -215,9 +212,9 @@ angular.module('risevision.editor.services')
               }
             } else {
               if (type === 'images') {
-                _addImage().then(widgetModalFactory.showWidgetModal);
+                _addImage().then(settingsFactory.showSettingsModal);
               } else if (type === 'videos') {
-                _addVideo().then(widgetModalFactory.showWidgetModal);
+                _addVideo().then(settingsFactory.showSettingsModal);
               }
             }
           });
