@@ -151,24 +151,42 @@ module.exports = function emits() {
 },{}],3:[function(_dereq_,module,exports){
 'use strict';
 
-var has = Object.prototype.hasOwnProperty;
-
-//
-// We store our EE objects in a plain object whose properties are event names.
-// If `Object.create(null)` is not supported we prefix the event names with a
-// `~` to make sure that the built-in object properties are not overridden or
-// used as an attack vector.
-// We also assume that `Object.create(null)` is available when the event name
-// is an ES6 Symbol.
-//
-var prefix = typeof Object.create !== 'function' ? '~' : false;
+var has = Object.prototype.hasOwnProperty
+  , prefix = '~';
 
 /**
- * Representation of a single EventEmitter function.
+ * Constructor to create a storage for our `EE` objects.
+ * An `Events` instance is a plain object whose properties are event names.
  *
- * @param {Function} fn Event handler to be called.
- * @param {Mixed} context Context for function execution.
- * @param {Boolean} [once=false] Only emit once
+ * @constructor
+ * @api private
+ */
+function Events() {}
+
+//
+// We try to not inherit from `Object.prototype`. In some engines creating an
+// instance in this way is faster than calling `Object.create(null)` directly.
+// If `Object.create(null)` is not supported we prefix the event names with a
+// character to make sure that the built-in object properties are not
+// overridden or used as an attack vector.
+//
+if (Object.create) {
+  Events.prototype = Object.create(null);
+
+  //
+  // This hack is needed because the `__proto__` property is still inherited in
+  // some old browsers like Android 4, iPhone 5.1, Opera 11 and Safari 5.
+  //
+  if (!new Events().__proto__) prefix = false;
+}
+
+/**
+ * Representation of a single event listener.
+ *
+ * @param {Function} fn The listener function.
+ * @param {Mixed} context The context to invoke the listener with.
+ * @param {Boolean} [once=false] Specify if the listener is a one-time listener.
+ * @constructor
  * @api private
  */
 function EE(fn, context, once) {
@@ -178,21 +196,16 @@ function EE(fn, context, once) {
 }
 
 /**
- * Minimal EventEmitter interface that is molded against the Node.js
- * EventEmitter interface.
+ * Minimal `EventEmitter` interface that is molded against the Node.js
+ * `EventEmitter` interface.
  *
  * @constructor
  * @api public
  */
-function EventEmitter() { /* Nothing to set */ }
-
-/**
- * Hold the assigned EventEmitters by name.
- *
- * @type {Object}
- * @private
- */
-EventEmitter.prototype._events = undefined;
+function EventEmitter() {
+  this._events = new Events();
+  this._eventsCount = 0;
+}
 
 /**
  * Return an array listing the events for which the emitter has registered
@@ -202,13 +215,13 @@ EventEmitter.prototype._events = undefined;
  * @api public
  */
 EventEmitter.prototype.eventNames = function eventNames() {
-  var events = this._events
-    , names = []
+  var names = []
+    , events
     , name;
 
-  if (!events) return names;
+  if (this._eventsCount === 0) return names;
 
-  for (name in events) {
+  for (name in (events = this._events)) {
     if (has.call(events, name)) names.push(prefix ? name.slice(1) : name);
   }
 
@@ -220,16 +233,16 @@ EventEmitter.prototype.eventNames = function eventNames() {
 };
 
 /**
- * Return a list of assigned event listeners.
+ * Return the listeners registered for a given event.
  *
- * @param {String} event The events that should be listed.
- * @param {Boolean} exists We only need to know if there are listeners.
+ * @param {String|Symbol} event The event name.
+ * @param {Boolean} exists Only check if there are listeners.
  * @returns {Array|Boolean}
  * @api public
  */
 EventEmitter.prototype.listeners = function listeners(event, exists) {
   var evt = prefix ? prefix + event : event
-    , available = this._events && this._events[evt];
+    , available = this._events[evt];
 
   if (exists) return !!available;
   if (!available) return [];
@@ -243,23 +256,23 @@ EventEmitter.prototype.listeners = function listeners(event, exists) {
 };
 
 /**
- * Emit an event to all registered event listeners.
+ * Calls each of the listeners registered for a given event.
  *
- * @param {String} event The name of the event.
- * @returns {Boolean} Indication if we've emitted an event.
+ * @param {String|Symbol} event The event name.
+ * @returns {Boolean} `true` if the event had listeners, else `false`.
  * @api public
  */
 EventEmitter.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
   var evt = prefix ? prefix + event : event;
 
-  if (!this._events || !this._events[evt]) return false;
+  if (!this._events[evt]) return false;
 
   var listeners = this._events[evt]
     , len = arguments.length
     , args
     , i;
 
-  if ('function' === typeof listeners.fn) {
+  if (listeners.fn) {
     if (listeners.once) this.removeListener(event, listeners.fn, undefined, true);
 
     switch (len) {
@@ -287,6 +300,7 @@ EventEmitter.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
         case 1: listeners[i].fn.call(listeners[i].context); break;
         case 2: listeners[i].fn.call(listeners[i].context, a1); break;
         case 3: listeners[i].fn.call(listeners[i].context, a1, a2); break;
+        case 4: listeners[i].fn.call(listeners[i].context, a1, a2, a3); break;
         default:
           if (!args) for (j = 1, args = new Array(len -1); j < len; j++) {
             args[j - 1] = arguments[j];
@@ -301,115 +315,118 @@ EventEmitter.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
 };
 
 /**
- * Register a new EventListener for the given event.
+ * Add a listener for a given event.
  *
- * @param {String} event Name of the event.
- * @param {Function} fn Callback function.
- * @param {Mixed} [context=this] The context of the function.
+ * @param {String|Symbol} event The event name.
+ * @param {Function} fn The listener function.
+ * @param {Mixed} [context=this] The context to invoke the listener with.
+ * @returns {EventEmitter} `this`.
  * @api public
  */
 EventEmitter.prototype.on = function on(event, fn, context) {
   var listener = new EE(fn, context || this)
     , evt = prefix ? prefix + event : event;
 
-  if (!this._events) this._events = prefix ? {} : Object.create(null);
-  if (!this._events[evt]) this._events[evt] = listener;
-  else {
-    if (!this._events[evt].fn) this._events[evt].push(listener);
-    else this._events[evt] = [
-      this._events[evt], listener
-    ];
-  }
+  if (!this._events[evt]) this._events[evt] = listener, this._eventsCount++;
+  else if (!this._events[evt].fn) this._events[evt].push(listener);
+  else this._events[evt] = [this._events[evt], listener];
 
   return this;
 };
 
 /**
- * Add an EventListener that's only called once.
+ * Add a one-time listener for a given event.
  *
- * @param {String} event Name of the event.
- * @param {Function} fn Callback function.
- * @param {Mixed} [context=this] The context of the function.
+ * @param {String|Symbol} event The event name.
+ * @param {Function} fn The listener function.
+ * @param {Mixed} [context=this] The context to invoke the listener with.
+ * @returns {EventEmitter} `this`.
  * @api public
  */
 EventEmitter.prototype.once = function once(event, fn, context) {
   var listener = new EE(fn, context || this, true)
     , evt = prefix ? prefix + event : event;
 
-  if (!this._events) this._events = prefix ? {} : Object.create(null);
-  if (!this._events[evt]) this._events[evt] = listener;
-  else {
-    if (!this._events[evt].fn) this._events[evt].push(listener);
-    else this._events[evt] = [
-      this._events[evt], listener
-    ];
-  }
+  if (!this._events[evt]) this._events[evt] = listener, this._eventsCount++;
+  else if (!this._events[evt].fn) this._events[evt].push(listener);
+  else this._events[evt] = [this._events[evt], listener];
 
   return this;
 };
 
 /**
- * Remove event listeners.
+ * Remove the listeners of a given event.
  *
- * @param {String} event The event we want to remove.
- * @param {Function} fn The listener that we need to find.
- * @param {Mixed} context Only remove listeners matching this context.
- * @param {Boolean} once Only remove once listeners.
+ * @param {String|Symbol} event The event name.
+ * @param {Function} fn Only remove the listeners that match this function.
+ * @param {Mixed} context Only remove the listeners that have this context.
+ * @param {Boolean} once Only remove one-time listeners.
+ * @returns {EventEmitter} `this`.
  * @api public
  */
 EventEmitter.prototype.removeListener = function removeListener(event, fn, context, once) {
   var evt = prefix ? prefix + event : event;
 
-  if (!this._events || !this._events[evt]) return this;
-
-  var listeners = this._events[evt]
-    , events = [];
-
-  if (fn) {
-    if (listeners.fn) {
-      if (
-           listeners.fn !== fn
-        || (once && !listeners.once)
-        || (context && listeners.context !== context)
-      ) {
-        events.push(listeners);
-      }
-    } else {
-      for (var i = 0, length = listeners.length; i < length; i++) {
-        if (
-             listeners[i].fn !== fn
-          || (once && !listeners[i].once)
-          || (context && listeners[i].context !== context)
-        ) {
-          events.push(listeners[i]);
-        }
-      }
-    }
+  if (!this._events[evt]) return this;
+  if (!fn) {
+    if (--this._eventsCount === 0) this._events = new Events();
+    else delete this._events[evt];
+    return this;
   }
 
-  //
-  // Reset the array, or remove it completely if we have no more listeners.
-  //
-  if (events.length) {
-    this._events[evt] = events.length === 1 ? events[0] : events;
+  var listeners = this._events[evt];
+
+  if (listeners.fn) {
+    if (
+         listeners.fn === fn
+      && (!once || listeners.once)
+      && (!context || listeners.context === context)
+    ) {
+      if (--this._eventsCount === 0) this._events = new Events();
+      else delete this._events[evt];
+    }
   } else {
-    delete this._events[evt];
+    for (var i = 0, events = [], length = listeners.length; i < length; i++) {
+      if (
+           listeners[i].fn !== fn
+        || (once && !listeners[i].once)
+        || (context && listeners[i].context !== context)
+      ) {
+        events.push(listeners[i]);
+      }
+    }
+
+    //
+    // Reset the array, or remove it completely if we have no more listeners.
+    //
+    if (events.length) this._events[evt] = events.length === 1 ? events[0] : events;
+    else if (--this._eventsCount === 0) this._events = new Events();
+    else delete this._events[evt];
   }
 
   return this;
 };
 
 /**
- * Remove all listeners or only the listeners for the specified event.
+ * Remove all listeners, or those of the specified event.
  *
- * @param {String} event The event want to remove all listeners for.
+ * @param {String|Symbol} [event] The event name.
+ * @returns {EventEmitter} `this`.
  * @api public
  */
 EventEmitter.prototype.removeAllListeners = function removeAllListeners(event) {
-  if (!this._events) return this;
+  var evt;
 
-  if (event) delete this._events[prefix ? prefix + event : event];
-  else this._events = prefix ? {} : Object.create(null);
+  if (event) {
+    evt = prefix ? prefix + event : event;
+    if (this._events[evt]) {
+      if (--this._eventsCount === 0) this._events = new Events();
+      else delete this._events[evt];
+    }
+  } else {
+    this._events = new Events();
+    this._eventsCount = 0;
+  }
 
   return this;
 };
@@ -433,6 +450,11 @@ EventEmitter.prototype.setMaxListeners = function setMaxListeners() {
 EventEmitter.prefixed = prefix;
 
 //
+// Allow `EventEmitter` to be imported as module namespace.
+//
+EventEmitter.EventEmitter = EventEmitter;
+
+//
 // Expose the module.
 //
 if ('undefined' !== typeof module) {
@@ -440,6 +462,31 @@ if ('undefined' !== typeof module) {
 }
 
 },{}],4:[function(_dereq_,module,exports){
+if (typeof Object.create === 'function') {
+  // implementation from standard node.js 'util' module
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    ctor.prototype = Object.create(superCtor.prototype, {
+      constructor: {
+        value: ctor,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+  };
+} else {
+  // old school shim for old browsers
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    var TempCtor = function () {}
+    TempCtor.prototype = superCtor.prototype
+    ctor.prototype = new TempCtor()
+    ctor.prototype.constructor = ctor
+  }
+}
+
+},{}],5:[function(_dereq_,module,exports){
 'use strict';
 
 var regex = new RegExp('^((?:\\d+)?\\.?\\d+) *('+ [
@@ -543,7 +590,7 @@ module.exports = function millisecond(ms) {
   }
 };
 
-},{}],5:[function(_dereq_,module,exports){
+},{}],6:[function(_dereq_,module,exports){
 'use strict';
 
 /**
@@ -582,10 +629,21 @@ module.exports = function one(fn) {
   return onetime;
 };
 
-},{}],6:[function(_dereq_,module,exports){
+},{}],7:[function(_dereq_,module,exports){
 'use strict';
 
 var has = Object.prototype.hasOwnProperty;
+
+/**
+ * Decode a URI encoded string.
+ *
+ * @param {String} input The URI encoded string.
+ * @returns {String} The decoded string.
+ * @api private
+ */
+function decode(input) {
+  return decodeURIComponent(input.replace(/\+/g, ' '));
+}
 
 /**
  * Simple query string parser.
@@ -606,7 +664,7 @@ function querystring(query) {
   //
   for (;
     part = parser.exec(query);
-    result[decodeURIComponent(part[1])] = decodeURIComponent(part[2])
+    result[decode(part[1])] = decode(part[2])
   );
 
   return result;
@@ -645,7 +703,7 @@ function querystringify(obj, prefix) {
 exports.stringify = querystringify;
 exports.parse = querystring;
 
-},{}],7:[function(_dereq_,module,exports){
+},{}],8:[function(_dereq_,module,exports){
 'use strict';
 
 var EventEmitter = _dereq_('eventemitter3')
@@ -867,7 +925,7 @@ Recovery.prototype.destroy = destroy('timers attempt _fn');
 //
 module.exports = Recovery;
 
-},{"demolish":1,"eventemitter3":8,"millisecond":4,"one-time":5,"tick-tock":10}],8:[function(_dereq_,module,exports){
+},{"demolish":1,"eventemitter3":9,"millisecond":5,"one-time":6,"tick-tock":11}],9:[function(_dereq_,module,exports){
 'use strict';
 
 //
@@ -1131,7 +1189,7 @@ if ('undefined' !== typeof module) {
   module.exports = EventEmitter;
 }
 
-},{}],9:[function(_dereq_,module,exports){
+},{}],10:[function(_dereq_,module,exports){
 'use strict';
 
 /**
@@ -1171,7 +1229,7 @@ module.exports = function required(port, protocol) {
   return port !== 0;
 };
 
-},{}],10:[function(_dereq_,module,exports){
+},{}],11:[function(_dereq_,module,exports){
 'use strict';
 
 var has = Object.prototype.hasOwnProperty
@@ -1448,17 +1506,17 @@ Tick.prototype.end = Tick.prototype.destroy = function end() {
 Tick.Timer = Timer;
 module.exports = Tick;
 
-},{"millisecond":4}],11:[function(_dereq_,module,exports){
+},{"millisecond":5}],12:[function(_dereq_,module,exports){
+(function (global){
 'use strict';
 
 var required = _dereq_('requires-port')
-  , lolcation = _dereq_('./lolcation')
   , qs = _dereq_('querystringify')
-  , relativere = /^\/(?!\/)/
-  , protocolre = /^([a-z][a-z0-9.+-]*:)?(\/\/)?([\S\s]*)/i;
+  , protocolre = /^([a-z][a-z0-9.+-]*:)?(\/\/)?([\S\s]*)/i
+  , slashes = /^[A-Za-z][A-Za-z0-9+-.]*:\/\//;
 
 /**
- * These are the parse instructions for the URL parsers, it informs the parser
+ * These are the parse rules for the URL parser, it informs the parser
  * about:
  *
  * 0. The char it Needs to parse, if it's a string it should be done using
@@ -1469,39 +1527,121 @@ var required = _dereq_('requires-port')
  * 3. Inherit from location if non existing in the parser.
  * 4. `toLowerCase` the resulting value.
  */
-var instructions = [
+var rules = [
   ['#', 'hash'],                        // Extract from the back.
   ['?', 'query'],                       // Extract from the back.
   ['/', 'pathname'],                    // Extract from the back.
   ['@', 'auth', 1],                     // Extract from the front.
   [NaN, 'host', undefined, 1, 1],       // Set left over value.
-  [/:(\d+)$/, 'port'],                  // RegExp the back.
+  [/:(\d+)$/, 'port', undefined, 1],    // RegExp the back.
   [NaN, 'hostname', undefined, 1, 1]    // Set left over.
 ];
 
- /**
+/**
+ * These properties should not be copied or inherited from. This is only needed
+ * for all non blob URL's as a blob URL does not include a hash, only the
+ * origin.
+ *
+ * @type {Object}
+ * @private
+ */
+var ignore = { hash: 1, query: 1 };
+
+/**
+ * The location object differs when your code is loaded through a normal page,
+ * Worker or through a worker using a blob. And with the blobble begins the
+ * trouble as the location object will contain the URL of the blob, not the
+ * location of the page where our code is loaded in. The actual origin is
+ * encoded in the `pathname` so we can thankfully generate a good "default"
+ * location from it so we can generate proper relative URL's again.
+ *
+ * @param {Object|String} loc Optional default location object.
+ * @returns {Object} lolcation object.
+ * @api public
+ */
+function lolcation(loc) {
+  loc = loc || global.location || {};
+
+  var finaldestination = {}
+    , type = typeof loc
+    , key;
+
+  if ('blob:' === loc.protocol) {
+    finaldestination = new URL(unescape(loc.pathname), {});
+  } else if ('string' === type) {
+    finaldestination = new URL(loc, {});
+    for (key in ignore) delete finaldestination[key];
+  } else if ('object' === type) {
+    for (key in loc) {
+      if (key in ignore) continue;
+      finaldestination[key] = loc[key];
+    }
+
+    if (finaldestination.slashes === undefined) {
+      finaldestination.slashes = slashes.test(loc.href);
+    }
+  }
+
+  return finaldestination;
+}
+
+/**
  * @typedef ProtocolExtract
  * @type Object
- * @property {String} protocol Protocol matched in the URL, in lowercase
- * @property {Boolean} slashes Indicates whether the protocol is followed by double slash ("//")
- * @property {String} rest     Rest of the URL that is not part of the protocol
+ * @property {String} protocol Protocol matched in the URL, in lowercase.
+ * @property {Boolean} slashes `true` if protocol is followed by "//", else `false`.
+ * @property {String} rest Rest of the URL that is not part of the protocol.
  */
 
- /**
-  * Extract protocol information from a URL with/without double slash ("//")
-  *
-  * @param  {String} address   URL we want to extract from.
-  * @return {ProtocolExtract}  Extracted information
-  * @api private
-  */
+/**
+ * Extract protocol information from a URL with/without double slash ("//").
+ *
+ * @param {String} address URL we want to extract from.
+ * @return {ProtocolExtract} Extracted information.
+ * @api private
+ */
 function extractProtocol(address) {
   var match = protocolre.exec(address);
 
   return {
     protocol: match[1] ? match[1].toLowerCase() : '',
     slashes: !!match[2],
-    rest: match[3] ? match[3] : ''
+    rest: match[3]
   };
+}
+
+/**
+ * Resolve a relative URL pathname against a base URL pathname.
+ *
+ * @param {String} relative Pathname of the relative URL.
+ * @param {String} base Pathname of the base URL.
+ * @return {String} Resolved pathname.
+ * @api private
+ */
+function resolve(relative, base) {
+  var path = (base || '/').split('/').slice(0, -1).concat(relative.split('/'))
+    , i = path.length
+    , last = path[i - 1]
+    , unshift = false
+    , up = 0;
+
+  while (i--) {
+    if (path[i] === '.') {
+      path.splice(i, 1);
+    } else if (path[i] === '..') {
+      path.splice(i, 1);
+      up++;
+    } else if (up) {
+      if (i === 0) unshift = true;
+      path.splice(i, 1);
+      up--;
+    }
+  }
+
+  if (unshift) path.unshift('');
+  if (last === '.' || last === '..') path.push('');
+
+  return path.join('/');
 }
 
 /**
@@ -1520,11 +1660,10 @@ function URL(address, location, parser) {
     return new URL(address, location, parser);
   }
 
-  var relative = relativere.test(address)
-    , parse, instruction, index, key
+  var relative, extracted, parse, instruction, index, key
+    , instructions = rules.slice()
     , type = typeof location
     , url = this
-    , extracted
     , i = 0;
 
   //
@@ -1543,19 +1682,24 @@ function URL(address, location, parser) {
     location = null;
   }
 
-  if (parser && 'function' !== typeof parser) {
-    parser = qs.parse;
-  }
+  if (parser && 'function' !== typeof parser) parser = qs.parse;
 
   location = lolcation(location);
 
   //
-  // extract protocol information before running the instructions
+  // Extract protocol information before running the instructions.
   //
-  extracted = extractProtocol(address);
+  extracted = extractProtocol(address || '');
+  relative = !extracted.protocol && !extracted.slashes;
+  url.slashes = extracted.slashes || relative && location.slashes;
   url.protocol = extracted.protocol || location.protocol || '';
-  url.slashes = extracted.slashes || location.slashes;
   address = extracted.rest;
+
+  //
+  // When the authority component is absent the URL starts with a path
+  // component.
+  //
+  if (!extracted.slashes) instructions[2] = [/(.*)/, 'pathname'];
 
   for (; i < instructions.length; i++) {
     instruction = instructions[i];
@@ -1574,20 +1718,20 @@ function URL(address, location, parser) {
           address = address.slice(0, index);
         }
       }
-    } else if (index = parse.exec(address)) {
+    } else if ((index = parse.exec(address))) {
       url[key] = index[1];
-      address = address.slice(0, address.length - index[0].length);
+      address = address.slice(0, index.index);
     }
 
-    url[key] = url[key] || (instruction[3] || ('port' === key && relative) ? location[key] || '' : '');
+    url[key] = url[key] || (
+      relative && instruction[3] ? location[key] || '' : ''
+    );
 
     //
     // Hostname, host and protocol should be lowercased so they can be used to
     // create a proper `origin`.
     //
-    if (instruction[4]) {
-      url[key] = url[key].toLowerCase();
-    }
+    if (instruction[4]) url[key] = url[key].toLowerCase();
   }
 
   //
@@ -1596,6 +1740,18 @@ function URL(address, location, parser) {
   // parser.
   //
   if (parser) url.query = parser(url.query);
+
+  //
+  // If the URL is relative, resolve the pathname against the base URL.
+  //
+  if (
+      relative
+    && location.slashes
+    && url.pathname.charAt(0) !== '/'
+    && (url.pathname !== '' || location.pathname !== '')
+  ) {
+    url.pathname = resolve(url.pathname, location.pathname);
+  }
 
   //
   // We should not add port numbers if they are already the default port number
@@ -1617,10 +1773,13 @@ function URL(address, location, parser) {
     url.password = instruction[1] || '';
   }
 
+  url.origin = url.protocol && url.host && url.protocol !== 'file:'
+    ? url.protocol +'//'+ url.host
+    : 'null';
+
   //
   // The href is just the compiled result.
   //
-  url.origin = url.protocol && url.host && url.protocol !== 'file:' ? url.protocol +'//'+ url.host : 'null';
   url.href = url.toString();
 }
 
@@ -1630,67 +1789,86 @@ function URL(address, location, parser) {
  *
  * @param {String} part          Property we need to adjust.
  * @param {Mixed} value          The newly assigned value.
- * @param {Boolean|Function} fn  When setting the query, it will be the function used to parse
- *                               the query.
- *                               When setting the protocol, double slash will be removed from
- *                               the final url if it is true.
+ * @param {Boolean|Function} fn  When setting the query, it will be the function
+ *                               used to parse the query.
+ *                               When setting the protocol, double slash will be
+ *                               removed from the final url if it is true.
  * @returns {URL}
  * @api public
  */
-URL.prototype.set = function set(part, value, fn) {
+function set(part, value, fn) {
   var url = this;
 
-  if ('query' === part) {
-    if ('string' === typeof value && value.length) {
-      value = (fn || qs.parse)(value);
-    }
+  switch (part) {
+    case 'query':
+      if ('string' === typeof value && value.length) {
+        value = (fn || qs.parse)(value);
+      }
 
-    url[part] = value;
-  } else if ('port' === part) {
-    url[part] = value;
+      url[part] = value;
+      break;
 
-    if (!required(value, url.protocol)) {
-      url.host = url.hostname;
-      url[part] = '';
-    } else if (value) {
-      url.host = url.hostname +':'+ value;
-    }
-  } else if ('hostname' === part) {
-    url[part] = value;
+    case 'port':
+      url[part] = value;
 
-    if (url.port) value += ':'+ url.port;
-    url.host = value;
-  } else if ('host' === part) {
-    url[part] = value;
+      if (!required(value, url.protocol)) {
+        url.host = url.hostname;
+        url[part] = '';
+      } else if (value) {
+        url.host = url.hostname +':'+ value;
+      }
 
-    if (/:\d+$/.test(value)) {
-      value = value.split(':');
-      url.port = value.pop();
-      url.hostname = value.join(':');
-    } else {
-      url.hostname = value;
-      url.port = '';
-    }
-  } else if ('protocol' === part) {
-    url.protocol = value.toLowerCase();
-    url.slashes = !fn;
-  } else {
-    url[part] = value;
+      break;
+
+    case 'hostname':
+      url[part] = value;
+
+      if (url.port) value += ':'+ url.port;
+      url.host = value;
+      break;
+
+    case 'host':
+      url[part] = value;
+
+      if (/:\d+$/.test(value)) {
+        value = value.split(':');
+        url.port = value.pop();
+        url.hostname = value.join(':');
+      } else {
+        url.hostname = value;
+        url.port = '';
+      }
+
+      break;
+
+    case 'protocol':
+      url.protocol = value.toLowerCase();
+      url.slashes = !fn;
+      break;
+
+    case 'pathname':
+      url.pathname = value.length && value.charAt(0) !== '/' ? '/' + value : value;
+
+      break;
+
+    default:
+      url[part] = value;
   }
 
-  for (var i = 0; i < instructions.length; i++) {
-    var ins = instructions[i];
+  for (var i = 0; i < rules.length; i++) {
+    var ins = rules[i];
 
-    if (ins[4]) {
-      url[ins[1]] = url[ins[1]].toLowerCase();
-    }
+    if (ins[4]) url[ins[1]] = url[ins[1]].toLowerCase();
   }
 
-  url.origin = url.protocol && url.host && url.protocol !== 'file:' ? url.protocol +'//'+ url.host : 'null';
+  url.origin = url.protocol && url.host && url.protocol !== 'file:'
+    ? url.protocol +'//'+ url.host
+    : 'null';
+
   url.href = url.toString();
 
   return url;
-};
+}
 
 /**
  * Transform the properties back in to a valid and full URL string.
@@ -1699,7 +1877,7 @@ URL.prototype.set = function set(part, value, fn) {
  * @returns {String}
  * @api public
  */
-URL.prototype.toString = function toString(stringify) {
+function toString(stringify) {
   if (!stringify || 'function' !== typeof stringify) stringify = qs.stringify;
 
   var query
@@ -1724,7 +1902,9 @@ URL.prototype.toString = function toString(stringify) {
   if (url.hash) result += url.hash;
 
   return result;
-};
+}
+
+URL.prototype = { set: set, toString: toString };
 
 //
 // Expose the URL parser and some additional properties that might be useful for
@@ -1736,64 +1916,8 @@ URL.qs = qs;
 
 module.exports = URL;
 
-},{"./lolcation":12,"querystringify":6,"requires-port":9}],12:[function(_dereq_,module,exports){
-(function (global){
-'use strict';
-
-var slashes = /^[A-Za-z][A-Za-z0-9+-.]*:\/\//;
-
-/**
- * These properties should not be copied or inherited from. This is only needed
- * for all non blob URL's as a blob URL does not include a hash, only the
- * origin.
- *
- * @type {Object}
- * @private
- */
-var ignore = { hash: 1, query: 1 }
-  , URL;
-
-/**
- * The location object differs when your code is loaded through a normal page,
- * Worker or through a worker using a blob. And with the blobble begins the
- * trouble as the location object will contain the URL of the blob, not the
- * location of the page where our code is loaded in. The actual origin is
- * encoded in the `pathname` so we can thankfully generate a good "default"
- * location from it so we can generate proper relative URL's again.
- *
- * @param {Object|String} loc Optional default location object.
- * @returns {Object} lolcation object.
- * @api public
- */
-module.exports = function lolcation(loc) {
-  loc = loc || global.location || {};
-  URL = URL || _dereq_('./');
-
-  var finaldestination = {}
-    , type = typeof loc
-    , key;
-
-  if ('blob:' === loc.protocol) {
-    finaldestination = new URL(unescape(loc.pathname), {});
-  } else if ('string' === type) {
-    finaldestination = new URL(loc, {});
-    for (key in ignore) delete finaldestination[key];
-  } else if ('object' === type) {
-    for (key in loc) {
-      if (key in ignore) continue;
-      finaldestination[key] = loc[key];
-    }
-
-    if (finaldestination.slashes === undefined) {
-      finaldestination.slashes = slashes.test(loc.href);
-    }
-  }
-
-  return finaldestination;
-};
-
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./":11}],13:[function(_dereq_,module,exports){
+},{"querystringify":7,"requires-port":10}],13:[function(_dereq_,module,exports){
 'use strict';
 
 var alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_'.split('')
@@ -1871,6 +1995,7 @@ var EventEmitter = _dereq_('eventemitter3')
   , TickTock = _dereq_('tick-tock')
   , Recovery = _dereq_('recovery')
   , qs = _dereq_('querystringify')
+  , inherits = _dereq_('inherits')
   , destroy = _dereq_('demolish')
   , yeast = _dereq_('yeast')
   , u2028 = /\u2028/g
@@ -1922,8 +2047,7 @@ try {
  * - manual, don't automatically call `.open` to start the connection.
  * - websockets, force the use of WebSockets, even when you should avoid them.
  * - timeout, connect timeout, server didn't respond in a timely manner.
- * - ping, The heartbeat interval for sending a ping packet to the server.
- * - pong, The heartbeat timeout for receiving a response to the ping.
+ * - pingTimeout, The maximum amount of time to wait for the server to send a ping.
  * - network, Use network events as leading method for network connection drops.
  * - strategy, Reconnection strategies.
  * - transport, Transport options.
@@ -1936,10 +2060,14 @@ try {
  */
 function Primus(url, options) {
   if (!(this instanceof Primus)) return new Primus(url, options);
+
+  Primus.Stream.call(this);
+
   if ('function' !== typeof this.client) {
-    var message = 'The client library has not been compiled correctly, ' +
-      'see https://github.com/primus/primus#client-library for more details';
-    return this.critical(new Error(message));
+    return this.critical(new Error(
+      'The client library has not been compiled correctly, see '+
+      'https://github.com/primus/primus#client-library for more details'
+    ));
   }
 
   if ('object' === typeof url) {
@@ -1947,6 +2075,12 @@ function Primus(url, options) {
     url = options.url || options.uri || defaultUrl;
   } else {
     options = options || {};
+  }
+
+  if ('ping' in options || 'pong' in options) {
+    return this.critical(new Error(
+      'The `ping` and `pong` options have been removed'
+    ));
   }
 
   var primus = this;
@@ -1961,10 +2095,7 @@ function Primus(url, options) {
   options.reconnect = 'reconnect' in options ? options.reconnect : {};
 
   // Heartbeat ping interval.
-  options.ping = 'ping' in options ? options.ping : 25000;
-
-  // Heartbeat pong response timeout.
-  options.pong = 'pong' in options ? options.pong : 10e3;
+  options.pingTimeout = 'pingTimeout' in options ? options.pingTimeout : 45000;
 
   // Reconnect strategies.
   options.strategy = 'strategy' in options ? options.strategy : [];
@@ -1980,7 +2111,6 @@ function Primus(url, options) {
   primus.options = options;                     // Reference to the supplied options.
   primus.timers = new TickTock(this);           // Contains all our timers.
   primus.socket = null;                         // Reference to the internal connection.
-  primus.latency = 0;                           // Latency between messages.
   primus.disconnect = false;                    // Did we receive a disconnect packet?
   primus.transport = options.transport;         // Transport options.
   primus.transformers = {                       // Message transformers.
@@ -2001,7 +2131,7 @@ function Primus(url, options) {
   // - online: Reconnect when we're back online.
   //
   if ('string' === typeof options.strategy) {
-    options.strategy = options.strategy.split(/\s?\,\s?/g);
+    options.strategy = options.strategy.split(/\s?,\s?/g);
   }
 
   if (false === options.strategy) {
@@ -2068,26 +2198,15 @@ Primus.requires = Primus.require = function requires(name) {
 
 //
 // It's possible that we're running in Node.js or in a Node.js compatible
-// environment. In this cases we inherit from the Stream base class.
+// environment. In this cases we try to inherit from the Stream base class.
 //
-var Stream;
-
 try {
-  Primus.Stream = Stream = Primus.requires('stream');
+  Primus.Stream = Primus.requires('stream');
+} catch (e) { }
 
-  //
-  // Normally inheritance is done in the same way as we do in our catch
-  // statement. But due to changes to the EventEmitter interface in Node 0.10
-  // this will trigger annoying memory leak warnings and other potential issues
-  // outlined in the issue linked below.
-  //
-  // @see https://github.com/joyent/node/issues/4971
-  //
-  Primus.requires('util').inherits(Primus, Stream);
-} catch (e) {
-  Primus.Stream = EventEmitter;
-  Primus.prototype = new EventEmitter();
-}
+if (!Primus.Stream) Primus.Stream = EventEmitter;
+
+inherits(Primus, Primus.Stream);
 
 /**
  * Primus readyStates, used internally to set the correct ready state.
@@ -2198,6 +2317,7 @@ Primus.prototype.reserved.events = {
   'reconnect': 1,
   'offline': 1,
   'timeout': 1,
+  'destroy': 1,
   'online': 1,
   'error': 1,
   'close': 1,
@@ -2214,8 +2334,7 @@ Primus.prototype.reserved.events = {
  * @api private
  */
 Primus.prototype.initialise = function initialise(options) {
-  var primus = this
-    , start;
+  var primus = this;
 
   primus.recovery
   .on('reconnected', primus.emits('reconnected'))
@@ -2237,8 +2356,6 @@ Primus.prototype.initialise = function initialise(options) {
     if (readyState !== primus.readyState) {
       primus.emit('readyStateChange', 'opening');
     }
-
-    start = +new Date();
   });
 
   primus.on('incoming::open', function opened() {
@@ -2269,8 +2386,6 @@ Primus.prototype.initialise = function initialise(options) {
       primus.emit('readyStateChange', 'open');
     }
 
-    primus.latency = +new Date() - start;
-    primus.timers.clear('ping', 'pong');
     primus.heartbeat();
 
     if (primus.buffer.length) {
@@ -2288,12 +2403,11 @@ Primus.prototype.initialise = function initialise(options) {
     primus.emit('open');
   });
 
-  primus.on('incoming::pong', function pong(time) {
+  primus.on('incoming::ping', function ping(time) {
     primus.online = true;
-    primus.timers.clear('pong');
     primus.heartbeat();
-
-    primus.latency = (+new Date()) - time;
+    primus.emit('outgoing::pong', time);
+    primus._write('primus::pong::'+ time);
   });
 
   primus.on('incoming::error', function error(e) {
@@ -2497,9 +2611,9 @@ Primus.prototype.protocol = function protocol(msg) {
     , value = msg.slice(last + 2);
 
   switch (msg.slice(8,  last)) {
-    case 'pong':
-      this.emit('incoming::pong', +value);
-    break;
+    case 'ping':
+      this.emit('incoming::ping', +value);
+      break;
 
     case 'server':
       //
@@ -2509,11 +2623,11 @@ Primus.prototype.protocol = function protocol(msg) {
       if ('close' === value) {
         this.disconnect = true;
       }
-    break;
+      break;
 
     case 'id':
       this.emit('incoming::id', value);
-    break;
+      break;
 
     //
     // Unknown protocol, somebody is probably sending `primus::` prefixed
@@ -2695,51 +2809,26 @@ Primus.prototype._write = function write(data) {
 };
 
 /**
- * Send a new heartbeat over the connection to ensure that we're still
- * connected and our internet connection didn't drop. We cannot use server side
- * heartbeats for this unfortunately.
+ * Set a timer that, upon expiration, closes the client.
  *
  * @returns {Primus}
  * @api private
  */
 Primus.prototype.heartbeat = function heartbeat() {
-  var primus = this;
+  if (!this.options.pingTimeout) return this;
 
-  if (!primus.options.ping) return primus;
-
-  /**
-   * Exterminate the connection as we've timed out.
-   *
-   * @api private
-   */
-  function pong() {
-    primus.timers.clear('pong');
-
+  this.timers.clear('heartbeat');
+  this.timers.setTimeout('heartbeat', function expired() {
     //
     // The network events already captured the offline event.
     //
-    if (!primus.online) return;
+    if (!this.online) return;
 
-    primus.online = false;
-    primus.emit('offline');
-    primus.emit('incoming::end');
-  }
+    this.online = false;
+    this.emit('offline');
+    this.emit('incoming::end');
+  }, this.options.pingTimeout);
 
-  /**
-   * We should send a ping message to the server.
-   *
-   * @api private
-   */
-  function ping() {
-    var value = +new Date();
-
-    primus.timers.clear('ping');
-    primus._write('primus::ping::'+ value);
-    primus.emit('outgoing::ping', value);
-    primus.timers.setTimeout('pong', pong, primus.options.pong);
-  }
-
-  primus.timers.setTimeout('ping', ping, primus.options.ping);
   return this;
 };
 
@@ -2952,11 +3041,6 @@ Primus.prototype.uri = function uri(options) {
     : +url.port || (options.secure ? 443 : 80);
 
   //
-  // Allow transformation of the options before we construct a full URL from it.
-  //
-  this.emit('outgoing::url', options);
-
-  //
   // We need to make sure that we create a unique connection URL every time to
   // prevent back forward cache from becoming an issue. We're doing this by
   // forcing an cache busting query string in to the URL.
@@ -2964,6 +3048,11 @@ Primus.prototype.uri = function uri(options) {
   var querystring = this.querystring(options.query || '');
   querystring._primuscb = yeast();
   options.query = this.querystringify(querystring);
+
+  //
+  // Allow transformation of the options before we construct a full URL from it.
+  //
+  this.emit('outgoing::url', options);
 
   //
   // Automatically suffix the protocol so we can supply `ws:` and `http:` and
@@ -3019,10 +3108,7 @@ Primus.prototype.transform = function transform(type, fn) {
  * @api private
  */
 Primus.prototype.critical = function critical(err) {
-  if (this.listeners('error').length) {
-    this.emit('error', err);
-    return this;
-  }
+  if (this.emit('error', err)) return this;
 
   throw err;
 };
@@ -3083,25 +3169,26 @@ Primus.prototype.client = function client() {
     // Primus when we connect.
     //
     try {
-      var prot = primus.url.protocol === 'ws+unix:' ? 'ws+unix:' : 'ws:'
-        , qsa = prot === 'ws:';
+      var options = {
+        protocol: primus.url.protocol === 'ws+unix:' ? 'ws+unix:' : 'ws:',
+        query: true
+      };
 
       //
       // Only allow primus.transport object in Node.js, it will throw in
       // browsers with a TypeError if we supply to much arguments.
       //
       if (Factory.length === 3) {
+        if ('ws+unix:' === options.protocol) {
+          options.pathname = primus.url.pathname +':'+ primus.pathname;
+        }
         primus.socket = socket = new Factory(
-          primus.uri({ protocol: prot, query: qsa }),   // URL
-          [],                                           // Sub protocols
-          primus.transport                              // options.
+          primus.uri(options),  // URL
+          [],                   // Sub protocols
+          primus.transport      // options.
         );
       } else {
-        primus.socket = socket = new Factory(primus.uri({
-          protocol: prot,
-          query: qsa
-        }));
-
+        primus.socket = socket = new Factory(primus.uri(options));
         socket.binaryType = 'arraybuffer';
       }
     } catch (e) { return primus.emit('error', e); }
@@ -3146,7 +3233,7 @@ Primus.prototype.client = function client() {
   });
 };
 Primus.prototype.authorization = false;
-Primus.prototype.pathname = "/primus";
+Primus.prototype.pathname = "/messaging/primus";
 Primus.prototype.encoder = function encoder(data, fn) {
   var err;
 
@@ -3165,7 +3252,7 @@ Primus.prototype.decoder = function decoder(data, fn) {
 
   fn(err, data);
 };
-Primus.prototype.version = "6.0.2";
+Primus.prototype.version = "7.1.0";
 
 if (
      'undefined' !== typeof document
@@ -3197,7 +3284,7 @@ if (
   // lower then 5.1.4
   //
   var ua = (navigator.userAgent || '').toLowerCase()
-    , parsed = ua.match(/.+(?:rv|it|ra|ie)[\/: ](\d+)\.(\d+)(?:\.(\d+))?/) || []
+    , parsed = ua.match(/.+(?:rv|it|ra|ie)[/: ](\d+)\.(\d+)(?:\.(\d+))?/) || []
     , version = +[parsed[1], parsed[2]].join('.');
 
   if (
@@ -3214,7 +3301,7 @@ if (
 //
 module.exports = Primus;
 
-},{"demolish":1,"emits":2,"eventemitter3":3,"querystringify":6,"recovery":7,"tick-tock":10,"url-parse":11,"yeast":13}]},{},[14])(14);
+},{"demolish":1,"emits":2,"eventemitter3":3,"inherits":4,"querystringify":7,"recovery":8,"tick-tock":11,"url-parse":12,"yeast":13}]},{},[14])(14);
   return Primus;
 },
 [
