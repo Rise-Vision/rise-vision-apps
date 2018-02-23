@@ -6,8 +6,8 @@ angular.module('risevision.displays.controllers')
     '$templateCache', 'displayId', 'storeAuthorization', 'enableCompanyProduct', 'userState', 'planFactory',
     'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID',
     function ($scope, $rootScope, $q, $state, displayFactory, display, screenshotFactory, playerProFactory,
-      $loading, $log, $modal, $templateCache, displayId, storeAuthorization, enableCompanyProduct, userState, planFactory,
-      PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID) {
+      $loading, $log, $modal, $templateCache, displayId, storeAuthorization, enableCompanyProduct, userState,
+      planFactory, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
@@ -40,47 +40,48 @@ angular.module('risevision.displays.controllers')
         if (!$scope.isProAvailable()) {
           $scope.display.playerProAssigned = false;
           $scope.showPlansModal();
-        }
-        else {
+        } else {
           $scope.updatingRPP = true;
 
-          enableCompanyProduct($scope.display.companyId, PLAYER_PRO_PRODUCT_CODE, { [displayId]: $scope.display.playerProAssigned })
-          .then(function() {
-            var assignedDisplays = $scope.company.playerProAssignedDisplays || [];
+          enableCompanyProduct($scope.display.companyId, PLAYER_PRO_PRODUCT_CODE, {
+              [displayId]: $scope.display.playerProAssigned
+            })
+            .then(function () {
+              var assignedDisplays = $scope.company.playerProAssignedDisplays || [];
 
-            if ($scope.display.playerProAssigned) {
-              assignedDisplays.push(displayId);
-            }
-            else if (assignedDisplays.indexOf(displayId) >= 0) {
-              assignedDisplays.splice(assignedDisplays.indexOf(displayId), 1);
-            }
+              if ($scope.display.playerProAssigned) {
+                assignedDisplays.push(displayId);
+              } else if (assignedDisplays.indexOf(displayId) >= 0) {
+                assignedDisplays.splice(assignedDisplays.indexOf(displayId), 1);
+              }
 
-            $scope.company.playerProAssignedDisplays = assignedDisplays;
-            userState.updateCompanySettings($scope.company);
-          })
-          .catch(function(err) {
-            console.log("Enable company product", err);
-            $scope.display.playerProAssigned = !$scope.display.playerProAssigned;
-          })
-          .finally(function() {
-            $scope.updatingRPP = false;
-          });
+              $scope.company.playerProAssignedDisplays = assignedDisplays;
+              userState.updateCompanySettings($scope.company);
+            })
+            .catch(function (err) {
+              console.log('Enable company product', err);
+              $scope.display.playerProAssigned = !$scope.display.playerProAssigned;
+            })
+            .finally(function () {
+              $scope.updatingRPP = false;
+            });
         }
       };
 
-      $scope.getProLicenseCount = function() {
+      $scope.getProLicenseCount = function () {
         return ($scope.company.planPlayerProLicenseCount || 0) + ($scope.company.playerProLicenseCount || 0);
       };
 
-      $scope.areAllProLicensesUsed = function() {
+      $scope.areAllProLicensesUsed = function () {
         var maxProDisplays = $scope.getProLicenseCount();
         var assignedDisplays = $scope.company.playerProAssignedDisplays || [];
-        var allProLicensesUsed = assignedDisplays.length === maxProDisplays && assignedDisplays.indexOf(displayId) === -1;
+        var allProLicensesUsed = assignedDisplays.length === maxProDisplays && assignedDisplays.indexOf(displayId) ===
+          -1;
 
         return $scope.getProLicenseCount() > 0 && allProLicensesUsed;
       };
 
-      $scope.isProAvailable = function() {
+      $scope.isProAvailable = function () {
         return $scope.getProLicenseCount() > 0 && !$scope.areAllProLicensesUsed();
       };
 
