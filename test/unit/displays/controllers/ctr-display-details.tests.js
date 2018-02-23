@@ -74,6 +74,7 @@ describe('controller: display details', function() {
     $provide.service('userState',function(){
       return {
           getSelectedCompanyId: function() {return "company1"},
+          getCopyOfSelectedCompany: function() {return {};},
           _restoreState: function(){}
       };
     });

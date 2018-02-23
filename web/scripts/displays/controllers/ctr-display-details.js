@@ -41,11 +41,12 @@ angular.module('risevision.displays.controllers')
           $scope.display.playerProAssigned = false;
           $scope.showPlansModal();
         } else {
-          $scope.updatingRPP = true;
+          var apiParams = {};
 
-          enableCompanyProduct($scope.display.companyId, PLAYER_PRO_PRODUCT_CODE, {
-              [displayId]: $scope.display.playerProAssigned
-            })
+          $scope.updatingRPP = true;
+          apiParams[displayId] = $scope.display.playerProAssigned;
+
+          enableCompanyProduct($scope.display.companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
             .then(function () {
               var assignedDisplays = $scope.company.playerProAssignedDisplays || [];
 
