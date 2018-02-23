@@ -3,26 +3,26 @@
 angular.module('risevision.displays.controllers')
   .controller('displayDetails', ['$scope', '$rootScope', '$q', '$state',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
-    '$templateCache', 'displayId', 'storeAuthorization', 'userState', 'planFactory',
+    '$templateCache', 'displayId', 'storeAuthorization', 'enableCompanyProduct', 'userState', 'planFactory',
     'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID',
     function ($scope, $rootScope, $q, $state, displayFactory, display, screenshotFactory, playerProFactory,
-      $loading, $log, $modal, $templateCache, displayId, storeAuthorization, userState, planFactory,
+      $loading, $log, $modal, $templateCache, displayId, storeAuthorization, enableCompanyProduct, userState, planFactory,
       PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
       $scope.playerProFactory = playerProFactory;
       $scope.companyId = userState.getSelectedCompanyId();
-      $scope.company = userState.getCopyOfSelectedCompany();
+      $scope.company = userState.getCopyOfSelectedCompany(true);
       $scope.productCode = PLAYER_PRO_PRODUCT_CODE;
       $scope.productId = PLAYER_PRO_PRODUCT_ID;
       $scope.deferredDisplay = $q.defer();
-      $scope.formData = { playerProAssigned: false };
+      $scope.updatingRPP = false;
       $scope.showPlansModal = planFactory.showPlansModal;
 
+      //$scope.company.planPlayerProLicenseCount = 0;
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
-        $scope.formData.playerProAssigned = $scope.display.playerProAssigned;
         $scope.deferredDisplay.resolve();
 
         screenshotFactory.loadScreenshot();
@@ -35,6 +35,38 @@ angular.module('risevision.displays.controllers')
           $loading.stop('display-loader');
         }
       });
+
+      $scope.toggleProAssigned = function () {
+        if (!$scope.isProAvailable()) {
+          $scope.display.playerProAssigned = false;
+          $scope.showPlansModal();
+        }
+        else {
+          $scope.updatingRPP = true;
+
+          enableCompanyProduct($scope.display.companyId, PLAYER_PRO_PRODUCT_CODE, { [displayId]: $scope.display.playerProAssigned })
+          .then(function() {
+            var assignedDisplays = $scope.company.playerProAssignedDisplays || [];
+
+            if ($scope.display.playerProAssigned) {
+              assignedDisplays.push(displayId);
+            }
+            else if (assignedDisplays.indexOf(displayId) >= 0) {
+              assignedDisplays.splice(assignedDisplays.indexOf(displayId), 1);
+            }
+
+            $scope.company.playerProAssignedDisplays = assignedDisplays;
+            userState.updateCompanySettings($scope.company);
+          })
+          .catch(function(err) {
+            console.log("Enable company product", err);
+            $scope.display.playerProAssigned = !$scope.display.playerProAssigned;
+          })
+          .finally(function() {
+            $scope.updatingRPP = false;
+          });
+        }
+      };
 
       $scope.getProLicenseCount = function() {
         return ($scope.company.planPlayerProLicenseCount || 0) + ($scope.company.playerProLicenseCount || 0);
@@ -171,14 +203,9 @@ angular.module('risevision.displays.controllers')
             });
         });
 
-      var refreshPlanListener = $rootScope.$on('risevision.plan.loaded', function () {
-        $scope.company = userState.getCopyOfSelectedCompany();
-      });
-
       $scope.$on('$destroy', function () {
         subscriptionStatusListener();
         refreshSubscriptionStatusListener();
-        refreshPlanListener();
       });
 
       $scope.$watch('display.browserUpgradeMode', function () {
