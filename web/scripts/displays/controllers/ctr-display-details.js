@@ -36,21 +36,21 @@ angular.module('risevision.displays.controllers')
         }
       });
 
-      $scope.toggleProAssigned = function () {
+      $scope.toggleProAuthorized = function () {
         if (!$scope.isProAvailable()) {
-          $scope.display.playerProAssigned = false;
+          $scope.display.playerProAuthorized = false;
           $scope.showPlansModal();
         } else {
           var apiParams = {};
 
           $scope.updatingRPP = true;
-          apiParams[displayId] = $scope.display.playerProAssigned;
+          apiParams[displayId] = $scope.display.playerProAuthorized;
 
           enableCompanyProduct($scope.display.companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
             .then(function () {
               var assignedDisplays = $scope.company.playerProAssignedDisplays || [];
 
-              if ($scope.display.playerProAssigned) {
+              if ($scope.display.playerProAuthorized) {
                 assignedDisplays.push(displayId);
               } else if (assignedDisplays.indexOf(displayId) >= 0) {
                 assignedDisplays.splice(assignedDisplays.indexOf(displayId), 1);
@@ -61,7 +61,7 @@ angular.module('risevision.displays.controllers')
             })
             .catch(function (err) {
               console.log('Enable company product', err);
-              $scope.display.playerProAssigned = !$scope.display.playerProAssigned;
+              $scope.display.playerProAuthorized = !$scope.display.playerProAuthorized;
             })
             .finally(function () {
               $scope.updatingRPP = false;
