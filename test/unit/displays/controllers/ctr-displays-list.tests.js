@@ -8,7 +8,7 @@ describe('controller: displays list', function() {
     $provide.service('userState',function(){
       return {
         getSelectedCompanyId : function(){
-          return "companyId";
+          return 'companyId';
         },
         _restoreState : function(){
 
@@ -166,53 +166,28 @@ describe('controller: displays list', function() {
   });
 
   describe('getDisplayType: ', function() {
-    it('should return subscription-not-loaded', function() {
-      expect($scope.getDisplayType({})).to.equal("subscription-not-loaded");
-      expect($scope.getDisplayType({ proSubscription: {} })).to.equal("subscription-not-loaded");
-    });
-
     it('should return player-not-installed', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "test" } })).to.equal("player-not-installed");
+      expect($scope.getDisplayType({})).to.equal('player-not-installed');
     });
 
     it('should return schedule-not-created', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "test" }, onlineStatus: "online", noSchedule: true })).to.equal("schedule-not-created");
+      expect($scope.getDisplayType({ onlineStatus: 'online', noSchedule: true })).to.equal('schedule-not-created');
     });
 
     it('should return not-pro-compatible', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "test" }, onlineStatus: "online", notProCompatiblePlayer: true })).to.equal("not-pro-compatible");
+      expect($scope.getDisplayType({ onlineStatus: 'online', notProCompatiblePlayer: true })).to.equal('not-pro-compatible');
     });
 
     it('should return 3rd-party', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "test" }, onlineStatus: "online", thirdParty: true })).to.equal("3rd-party");
+      expect($scope.getDisplayType({ onlineStatus: 'online', thirdParty: true })).to.equal('3rd-party');
     });
 
-    it('should return subscribed', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "Subscribed" }, onlineStatus: "online" })).to.equal("subscribed");
+    it('should return professional', function() {
+      expect($scope.getDisplayType({ onlineStatus: 'online', playerProAuthorized: true })).to.equal('professional');
     });
 
-    it('should return not-subscribed', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "Not Subscribed" }, onlineStatus: "online" })).to.equal("not-subscribed");
-    });
-
-    it('should return on-trial', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "On Trial" }, onlineStatus: "online" })).to.equal("on-trial");
-    });
-
-    it('should return trial-expired', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "Trial Expired" }, onlineStatus: "online" })).to.equal("trial-expired");
-    });
-
-    it('should return suspended', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "Suspended" }, onlineStatus: "online" })).to.equal("suspended");
-    });
-
-    it('should return cancelled', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "Cancelled" }, onlineStatus: "online" })).to.equal("cancelled");
-    });
-
-    it('should return unexpected', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "Invalid" }, onlineStatus: "online" })).to.equal("unexpected");
+    it('should return standard', function() {
+      expect($scope.getDisplayType({ onlineStatus: 'online' })).to.equal('standard');
     });
   });
 });

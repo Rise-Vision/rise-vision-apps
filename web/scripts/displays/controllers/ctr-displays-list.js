@@ -66,11 +66,7 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.getDisplayType = function (display) {
-        var status = display.proSubscription && display.proSubscription.status;
-
-        if (!status) {
-          return 'subscription-not-loaded';
-        } else if ($scope.playerNotInstalled(display)) {
+        if ($scope.playerNotInstalled(display)) {
           return 'player-not-installed';
         } else if (!$scope.displayService.hasSchedule(display)) {
           return 'schedule-not-created';
@@ -80,23 +76,10 @@ angular.module('risevision.displays.controllers')
           return 'unsupported';
         } else if (!playerProFactory.isOfflinePlayCompatiblePayer(display)) {
           return 'not-pro-compatible';
-        } else if (status === 'Subscribed') {
-          return 'subscribed';
-        } else if (status === 'Not Subscribed' && Number(status.trialPeriod) > 0) {
-          return 'trial-available';
-        } else if (status === 'Not Subscribed') {
-          return 'not-subscribed';
-        } else if (status === 'On Trial') {
-          return 'on-trial';
-        } else if (status === 'Trial Expired') {
-          return 'trial-expired';
-        } else if (status === 'Suspended') {
-          return 'suspended';
-        } else if (status === 'Cancelled') {
-          return 'cancelled';
+        } else if (display.playerProAuthorized) {
+          return 'professional';
         } else {
-          console.log('Unexpected status for display: ', display.id, status);
-          return 'unexpected';
+          return 'standard';
         }
       };
     }
