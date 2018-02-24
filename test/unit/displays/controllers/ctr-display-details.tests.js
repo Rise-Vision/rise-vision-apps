@@ -129,8 +129,6 @@ describe('controller: display details', function() {
     expect($scope.displayId).to.be.ok;
     expect($scope.factory).to.be.ok;
     expect($scope.companyId).to.be.ok;
-    expect($scope.productCode).to.be.ok;
-    expect($scope.productId).to.be.ok;
 
     expect($scope.save).to.be.a('function');
     expect($scope.confirmDelete).to.be.a('function');
@@ -139,8 +137,6 @@ describe('controller: display details', function() {
   it('should initialize', function(done) {
 
     expect($scope.companyId).to.equal("company1");
-    expect($scope.productCode).to.equal("c4b368be86245bf9501baaa6e0b00df9719869fd");
-    expect($scope.productId).to.equal("2048");
 
     setTimeout(function() {
       expect($scope.display).to.be.ok;
@@ -220,140 +216,4 @@ describe('controller: display details', function() {
       expect($scope.display.browserUpgradeMode).to.equal(0);
     });
   });
-
-  it('should show spinner on refreshSubscriptionStatus',function(){
-    var spy = sinon.spy($loading,'start')
-    $rootScope.$emit('refreshSubscriptionStatus');
-    spy.should.have.been.calledWith('loading-trial');
-  });
-
-  describe('subscription-status:changed:',function(){
-    it('should hide spinner and set false to flags when on default state ',function(done){
-      var spy = sinon.spy($loading,'stop')
-      
-      $rootScope.$emit('subscription-status:changed', {});
-      
-      spy.should.have.been.calledWith('loading-trial');
-      setTimeout(function(){
-        expect($scope.display.showTrialButton).to.be.false;
-        expect($scope.display.showTrialStatus).to.be.false;
-        expect($scope.display.showSubscribeButton).to.be.false;
-        done();
-      },10);
-    });
-
-    it('should hide flags for 3rd part players',function(done){
-      $scope.deferredDisplay.resolve({playerName:'Cenique', playerVersion: '2017.07.17.20.21'});
-      var spy = sinon.stub(playerProFactory,'is3rdPartyPlayer',function() {return true});
-      
-      $rootScope.$emit('subscription-status:changed',{});
-      
-      setTimeout(function(){
-        expect($scope.display.showTrialButton).to.be.false;
-        expect($scope.display.showTrialStatus).to.be.false;
-        expect($scope.display.showSubscribeButton).to.be.false;
-        done();
-      },10);
-    });
-
-    it('should hide flags for outdated players',function(done){
-      $scope.deferredDisplay.resolve({playerName:'RiseVisionElectron', playerVersion: '2017.01.04.14.40'})
-      var spy = sinon.stub(playerProFactory,'isOutdatedPlayer',function() {return true});
-      
-      $rootScope.$emit('subscription-status:changed',{});
-      
-      setTimeout(function(){
-        expect($scope.display.showTrialButton).to.be.false;
-        expect($scope.display.showTrialStatus).to.be.false;
-        expect($scope.display.showSubscribeButton).to.be.false;
-        done();
-      },10);
-    });
-
-    it('should set correct flags when trial-available',function(done){
-      sinon.stub($scope.displayService, 'getCompanyProStatus')
-        .returns(Q.resolve({status: 'Trial Available', statusCode: 'trial-available'}));
-
-      $scope.deferredDisplay.resolve({playerName:'RiseVisionElectron', playerVersion: '2017.07.17.20.21'});
-      
-      $rootScope.$emit('subscription-status:changed',{statusCode: 'trial-available'});
-      
-      setTimeout(function(){
-        expect($scope.display.showTrialButton).to.be.true;
-        expect($scope.display.showTrialStatus).to.be.false;
-        expect($scope.display.showSubscribeButton).to.be.false;
-        done();
-      },10)     
-    });
-
-    it('should set correct flags when on-trial',function(done){
-      $scope.deferredDisplay.resolve({playerName:'RiseVisionElectron', playerVersion: '2017.07.17.20.21'});      
-      $rootScope.$emit('subscription-status:changed',{statusCode: 'on-trial'});
-      
-      setTimeout(function(){
-        expect($scope.display.showTrialButton).to.be.false;
-        expect($scope.display.showTrialStatus).to.be.true;
-        expect($scope.display.showSubscribeButton).to.be.true;
-        done();
-      },10);
-    });
-
-    it('should set correct flags when suspended',function(done){
-      $scope.deferredDisplay.resolve({playerName:'RiseVisionElectron', playerVersion: '2017.07.17.20.21'});      
-      $rootScope.$emit('subscription-status:changed',{statusCode: 'suspended'});
-      
-      setTimeout(function(){
-        expect($scope.display.showTrialButton).to.be.false;
-        expect($scope.display.showTrialStatus).to.be.true;
-        expect($scope.display.showSubscribeButton).to.be.true;
-        done();
-      },10);
-    });
-
-    it('should set correct flags when trial-expired',function(done){
-      $scope.deferredDisplay.resolve({playerName:'RiseVisionElectron', playerVersion: '2017.07.17.20.21'});      
-      $rootScope.$emit('subscription-status:changed',{statusCode: 'trial-expired'});
-      
-      setTimeout(function(){
-        expect($scope.display.showTrialButton).to.be.false;
-        expect($scope.display.showTrialStatus).to.be.false;
-        expect($scope.display.showSubscribeButton).to.be.true;
-        done();
-      },10);
-    });
-
-    it('should set correct flags when cancelled',function(done){
-      $scope.deferredDisplay.resolve({playerName:'RiseVisionElectron', playerVersion: '2017.07.17.20.21'});      
-      $rootScope.$emit('subscription-status:changed',{statusCode: 'cancelled'});
-      
-      setTimeout(function(){
-        expect($scope.display.showTrialButton).to.be.false;
-        expect($scope.display.showTrialStatus).to.be.false;
-        expect($scope.display.showSubscribeButton).to.be.true;
-        done();
-      },10);
-    });
-
-    it('should set correct flags when not-subscribed',function(done){
-      $scope.deferredDisplay.resolve({playerName:'RiseVisionElectron', playerVersion: '2017.07.17.20.21'});      
-      $rootScope.$emit('subscription-status:changed',{statusCode: 'not-subscribed'});
-      
-      setTimeout(function(){
-        expect($scope.display.showTrialButton).to.be.false;
-        expect($scope.display.showTrialStatus).to.be.false;
-        expect($scope.display.showSubscribeButton).to.be.true;
-        done();
-      },10);
-    });
-  });
-
-  it('should remove listeners on $destroy',function(){
-    expect($rootScope.$$listeners['refreshSubscriptionStatus']).to.be.ok;
-    expect($rootScope.$$listeners['subscription-status:changed']).to.be.ok;
-
-    $rootScope.$destroy();
-
-    expect($rootScope.$$listeners['refreshSubscriptionStatus']).to.not.be.ok;
-    expect($rootScope.$$listeners['subscription-status:changed']).to.not.be.ok;
-  })
 });

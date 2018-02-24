@@ -14,13 +14,10 @@ angular.module('risevision.displays.controllers')
       $scope.playerProFactory = playerProFactory;
       $scope.companyId = userState.getSelectedCompanyId();
       $scope.company = userState.getCopyOfSelectedCompany(true);
-      $scope.productCode = PLAYER_PRO_PRODUCT_CODE;
-      $scope.productId = PLAYER_PRO_PRODUCT_ID;
       $scope.deferredDisplay = $q.defer();
       $scope.updatingRPP = false;
       $scope.showPlansModal = planFactory.showPlansModal;
 
-      //$scope.company.planPlayerProLicenseCount = 0;
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
         $scope.deferredDisplay.resolve();
@@ -76,8 +73,8 @@ angular.module('risevision.displays.controllers')
       $scope.areAllProLicensesUsed = function () {
         var maxProDisplays = $scope.getProLicenseCount();
         var assignedDisplays = $scope.company.playerProAssignedDisplays || [];
-        var allProLicensesUsed = assignedDisplays.length === maxProDisplays && assignedDisplays.indexOf(displayId) ===
-          -1;
+        var allLicensesUsed = assignedDisplays.length === maxProDisplays;
+        var allProLicensesUsed = allLicensesUsed && assignedDisplays.indexOf(displayId) === -1;
 
         return $scope.getProLicenseCount() > 0 && allProLicensesUsed;
       };
@@ -158,57 +155,6 @@ angular.module('risevision.displays.controllers')
           return displayFactory.updateDisplay();
         }
       };
-
-      var refreshSubscriptionStatusListener = $rootScope.$on('refreshSubscriptionStatus', function () {
-        $loading.start('loading-trial');
-      });
-
-      var subscriptionStatusListener = $rootScope.$on('subscription-status:changed',
-        function (e, subscriptionStatus) {
-          $loading.stop('loading-trial');
-          $scope.deferredDisplay.promise
-            .then(function () {
-              return $scope.displayService.getCompanyProStatus($scope.companyId, true);
-            })
-            .then(function (companyProStatus) {
-              if (companyProStatus.statusCode === 'subscribed' && subscriptionStatus.statusCode ===
-                'trial-available') {
-                subscriptionStatus.statusCode = 'not-subscribed';
-              }
-
-              $scope.display.subscriptionStatus = subscriptionStatus;
-
-              $scope.display.showTrialButton = false;
-              $scope.display.showTrialStatus = false;
-              $scope.display.showSubscribeButton = false;
-
-              if (!playerProFactory.is3rdPartyPlayer($scope.display) &&
-                !playerProFactory.isOutdatedPlayer($scope.display)) {
-                switch (subscriptionStatus.statusCode) {
-                case 'trial-available':
-                  $scope.display.showTrialButton = true;
-                  break;
-                case 'on-trial':
-                case 'suspended':
-                  $scope.display.showTrialStatus = true;
-                  $scope.display.showSubscribeButton = true;
-                  break;
-                case 'trial-expired':
-                case 'cancelled':
-                case 'not-subscribed':
-                  $scope.display.showSubscribeButton = true;
-                  break;
-                default:
-                  break;
-                }
-              }
-            });
-        });
-
-      $scope.$on('$destroy', function () {
-        subscriptionStatusListener();
-        refreshSubscriptionStatusListener();
-      });
 
       $scope.$watch('display.browserUpgradeMode', function () {
         if ($scope.display && $scope.display.browserUpgradeMode !== 0) {
