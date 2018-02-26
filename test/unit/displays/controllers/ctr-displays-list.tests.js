@@ -135,32 +135,6 @@ describe('controller: displays list', function() {
     searchSpy.should.have.been.called;
   });
 
-  describe('showStartTrial: ', function() {
-    it('should refresh list when starting trial', function(done) {
-      var searchSpy = sinon.spy($scope.displays, 'doSearch');
-
-      cancelProTrialModal = false;
-      $scope.showStartTrial({});
-
-      setTimeout(function() {
-        searchSpy.should.have.been.called;
-        done();
-      }, 0);
-    });
-
-    it('should not refresh list when cancelling modal', function(done) {
-      var searchSpy = sinon.spy($scope.displays, 'doSearch');
-
-      cancelProTrialModal = true;
-      $scope.showStartTrial({});
-
-      setTimeout(function() {
-        searchSpy.should.not.have.been.called;
-        done();
-      }, 0);
-    });
-  });
-
   describe('getDisplayType: ', function() {
     it('should return standard', function() {
       expect($scope.getDisplayType({})).to.equal('standard');
