@@ -74,13 +74,18 @@ angular.module('risevision.displays.controllers')
         var maxProDisplays = $scope.getProLicenseCount();
         var assignedDisplays = $scope.company.playerProAssignedDisplays || [];
         var allLicensesUsed = assignedDisplays.length === maxProDisplays;
-        var allProLicensesUsed = allLicensesUsed && assignedDisplays.indexOf(displayId) === -1;
+        var allProLicensesUsed = allLicensesUsed && assignedDisplays.indexOf($scope.displayId) === -1;
 
         return $scope.getProLicenseCount() > 0 && allProLicensesUsed;
       };
 
       $scope.isProAvailable = function () {
         return $scope.getProLicenseCount() > 0 && !$scope.areAllProLicensesUsed();
+      };
+
+      $scope.isProApplicable = function () {
+        return !playerProFactory.is3rdPartyPlayer($scope.display) &&
+               !playerProFactory.isUnsupportedPlayer($scope.display);
       };
 
       $scope.confirmDelete = function () {

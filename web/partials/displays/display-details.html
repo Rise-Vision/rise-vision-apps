@@ -4,7 +4,7 @@
     <h1 translate>displays-app.details.title</h1>
   </div>
 
-  <div class="global-actions" require-role="da">
+  <div class="global-actions" require-role="da" ng-show="isProApplicable()">
     <div class="toggle-group">
       <input type="checkbox" id="on-off-switch" ng-model="display.playerProAuthorized" ng-change="toggleProAuthorized()" ng-disabled="updatingRPP">
       <label for="on-off-switch">
