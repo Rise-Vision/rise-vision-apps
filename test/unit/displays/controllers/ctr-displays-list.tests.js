@@ -144,10 +144,6 @@ describe('controller: displays list', function() {
       expect($scope.getDisplayType({ playerProAuthorized: true })).to.equal('professional');
     });
 
-    it('should return not-pro-compatible', function() {
-      expect($scope.getDisplayType({ onlineStatus: 'online', notProCompatiblePlayer: true })).to.equal('not-pro-compatible');
-    });
-
     it('should return 3rd-party', function() {
       expect($scope.getDisplayType({ onlineStatus: 'online', thirdParty: true })).to.equal('3rd-party');
     });
