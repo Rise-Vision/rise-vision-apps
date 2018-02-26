@@ -54,7 +54,8 @@ angular.module('risevision.displays.services')
       };
 
       factory.isUnsupportedPlayer = function (display) {
-        return !!(display && !factory.is3rdPartyPlayer(display) && !factory.isElectronPlayer(display));
+        var newDisplay = !(display && display.playerName && display.playerVersion);
+        return !!(!newDisplay && !factory.is3rdPartyPlayer(display) && !factory.isElectronPlayer(display));
       };
 
       factory.isOutdatedPlayer = function (display) {

@@ -25,11 +25,7 @@ describe('controller: displays list', function() {
       };
     });
     $provide.service('display', function() {
-      return {
-        hasSchedule: function(display) {
-          return !display.noSchedule;
-        }
-      };
+      return {};
     });
 
     $provide.service('$loading',function(){
@@ -166,12 +162,12 @@ describe('controller: displays list', function() {
   });
 
   describe('getDisplayType: ', function() {
-    it('should return player-not-installed', function() {
-      expect($scope.getDisplayType({})).to.equal('player-not-installed');
+    it('should return standard', function() {
+      expect($scope.getDisplayType({})).to.equal('standard');
     });
 
-    it('should return schedule-not-created', function() {
-      expect($scope.getDisplayType({ onlineStatus: 'online', noSchedule: true })).to.equal('schedule-not-created');
+    it('should return professional', function() {
+      expect($scope.getDisplayType({ playerProAuthorized: true })).to.equal('professional');
     });
 
     it('should return not-pro-compatible', function() {

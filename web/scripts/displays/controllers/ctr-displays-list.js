@@ -66,11 +66,7 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.getDisplayType = function (display) {
-        if ($scope.playerNotInstalled(display)) {
-          return 'player-not-installed';
-        } else if (!$scope.displayService.hasSchedule(display)) {
-          return 'schedule-not-created';
-        } else if (playerProFactory.is3rdPartyPlayer(display)) {
+        if (playerProFactory.is3rdPartyPlayer(display)) {
           return '3rd-party';
         } else if (playerProFactory.isUnsupportedPlayer(display)) {
           return 'unsupported';
