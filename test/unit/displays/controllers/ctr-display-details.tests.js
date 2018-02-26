@@ -1,6 +1,7 @@
 'use strict';
 describe('controller: display details', function() {
   var displayId = 1234;
+  var sandbox = sinon.sandbox.create();
 
   beforeEach(module('risevision.displays.services'));
   beforeEach(module('risevision.displays.controllers'));
@@ -29,6 +30,8 @@ describe('controller: display details', function() {
     $provide.service('playerProFactory', function() {
       return {        
         is3rdPartyPlayer: function(){ return false;},
+        isUnsupportedPlayer: function(){ return false;},
+        isOfflinePlayCompatiblePayer: function(){ return true;},
         isOutdatedPlayer: function(){ return false;},
         isElectronPlayer: function(){ return true;}
       };
@@ -124,6 +127,10 @@ describe('controller: display details', function() {
     });
   });
 
+  afterEach(function () {
+    sandbox.restore();
+  });
+
   it('should exist',function() {
     expect($scope).to.be.ok;
     expect($scope.displayId).to.be.ok;
@@ -216,4 +223,89 @@ describe('controller: display details', function() {
       expect($scope.display.browserUpgradeMode).to.equal(0);
     });
   });
+
+  describe('toggleProAuthorized', function () {
+    it('should show the plans modal', function () {
+      $scope.display = {};
+      sandbox.stub($scope, 'isProAvailable').returns(false);
+      sandbox.stub($scope, 'showPlansModal');
+
+      $scope.toggleProAuthorized();
+      expect($scope.showPlansModal).to.have.been.called;
+    });
+  });
+
+  describe('getProLicenseCount:', function() {
+    it('should return zero licenses available', function () {
+      expect($scope.getProLicenseCount()).to.equal(0);
+    });
+
+    it('should return three licenses available', function () {
+      $scope.company.planPlayerProLicenseCount = 2;
+      $scope.company.playerProLicenseCount = 1;
+
+      expect($scope.getProLicenseCount()).to.equal(3);
+    });
+  });
+
+  describe('areAllProLicensesUsed:', function() {
+    it('should return all licenses are used if display is not on the list', function () {
+      $scope.company.playerProAssignedDisplays = ['display1'];
+      sandbox.stub($scope, 'getProLicenseCount').returns(1);
+
+      expect($scope.areAllProLicensesUsed()).to.be.true;
+    });
+
+    it('should return all licenses are used if display is not on the list', function () {
+      $scope.company.playerProAssignedDisplays = ['display1'];
+      $scope.displayId = 'display1';
+      sandbox.stub($scope, 'getProLicenseCount').returns(1);
+
+      expect($scope.areAllProLicensesUsed()).to.be.false;
+    });
+  });
+
+  describe('isProAvailable:', function() {
+    it('should return false if available licenses are zero (Free Plan)', function () {
+      sandbox.stub($scope, 'getProLicenseCount').returns(0);
+
+      expect($scope.isProAvailable()).to.be.false;
+    });
+
+    it('should return false if all available licenses are used', function () {
+      sandbox.stub($scope, 'getProLicenseCount').returns(1);
+      sandbox.stub($scope, 'areAllProLicensesUsed').returns(true);
+
+      expect($scope.isProAvailable()).to.be.false;
+    });
+
+    it('should return true if there are available licenses', function () {
+      sandbox.stub($scope, 'getProLicenseCount').returns(1);
+      sandbox.stub($scope, 'areAllProLicensesUsed').returns(false);
+
+      expect($scope.isProAvailable()).to.be.true;
+    });
+  });
+
+  describe('isProApplicable:', function() {
+    it('should return false if it is a third party player', function () {
+      sandbox.stub(playerProFactory, 'is3rdPartyPlayer').returns(true);
+
+      expect($scope.isProApplicable()).to.be.false;
+    });
+
+    it('should return false if it is an unsupported player', function () {
+      sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(true);
+
+      expect($scope.isProApplicable()).to.be.false;
+    });
+
+    it('should return true if it is a supported player', function () {
+      sandbox.stub(playerProFactory, 'is3rdPartyPlayer').returns(false);
+      sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(false);
+
+      expect($scope.isProApplicable()).to.be.true;
+    });
+  });
+
 });
