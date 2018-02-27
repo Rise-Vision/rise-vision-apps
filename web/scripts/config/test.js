@@ -34,8 +34,12 @@
     .value('SEGMENT_API_KEY', null)
     .value('STORAGE_ENDPOINT_URL',
       'https://storage-dot-rvacore-test.appspot.com/_ah/api')
-    .value('MESSAGING_URL',
+    .value('OLD_MESSAGING_URL',
       'https://display-messaging-staging.risevision.com')
+    .value('MESSAGING_PRIMUS_URL',
+      'https://services-stage.risevision.com/messaging/primus')
+    .value('MESSAGING_PRESENCE_URL',
+      'https://services-stage.risevision.com/messaging/presence')
     .value('APPS_URL', '')
     .value('ENV_NAME', 'TEST')
     .value('OAUTH_TOKEN_PROVIDER_URL', 'https://services-stage.risevision.com/oauthtokenprovider/')
