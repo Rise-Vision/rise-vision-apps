@@ -78,7 +78,8 @@ describe('controller: display details', function() {
       return {
           getSelectedCompanyId: function() {return "company1"},
           getCopyOfSelectedCompany: function() {return {};},
-          _restoreState: function(){}
+          _restoreState: function(){},
+          updateCompanySettings: sandbox.stub()
       };
     });
     
@@ -94,13 +95,16 @@ describe('controller: display details', function() {
     });
     $provide.service('screenshotFactory', function() {
       return {
-        loadScreenshot: sinon.stub()
+        loadScreenshot: sandbox.stub()
       }
+    });
+    $provide.factory('enableCompanyProduct', function() {
+      return sandbox.stub();
     });
     $provide.value('displayId', '1234');
   }));
   var $scope, $state, updateCalled, deleteCalled, confirmDelete;
-  var resolveLoadScreenshot, resolveRequestScreenshot, 
+  var resolveLoadScreenshot, resolveRequestScreenshot, enableCompanyProduct, userState,
   $rootScope, $loading, displayFactory, playerProFactory;
   beforeEach(function(){
     updateCalled = false;
@@ -111,6 +115,8 @@ describe('controller: display details', function() {
     inject(function($injector, $controller){
       displayFactory = $injector.get('displayFactory');
       playerProFactory = $injector.get('playerProFactory');
+      enableCompanyProduct = $injector.get('enableCompanyProduct');
+      userState = $injector.get('userState');
       $loading = $injector.get('$loading');
       $rootScope = $injector.get('$rootScope');
       $scope = $rootScope.$new();
@@ -232,6 +238,24 @@ describe('controller: display details', function() {
 
       $scope.toggleProAuthorized();
       expect($scope.showPlansModal).to.have.been.called;
+      expect(enableCompanyProduct).to.not.have.been.called;
+    });
+
+    it('should toggle the Pro status', function (done) {
+      $scope.company = {};
+      $scope.display = {};
+      sandbox.stub($scope, 'isProAvailable').returns(true);
+      sandbox.stub($scope, 'showPlansModal');
+      enableCompanyProduct.returns(Q.resolve());
+
+      $scope.toggleProAuthorized();
+
+      setTimeout(function () {
+        expect(enableCompanyProduct).to.have.been.called;
+        expect(userState.updateCompanySettings).to.have.been.called;
+        expect($scope.showPlansModal).to.have.not.been.called;
+        done();
+      }, 0);
     });
   });
 

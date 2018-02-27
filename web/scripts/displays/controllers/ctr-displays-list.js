@@ -36,10 +36,6 @@ angular.module('risevision.displays.controllers')
         $scope.displays.doSearch();
       });
 
-      $scope.openRiseProStoreLink = function () {
-        $window.open(playerProFactory.getProductLink(), '_blank');
-      };
-
       $scope.openUnsupportedHelpLink = function () {
         $window.open('https://risevision.zendesk.com/hc/en-us/articles/115003786306', '_blank');
       };
