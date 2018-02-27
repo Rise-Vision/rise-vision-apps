@@ -37,14 +37,13 @@ angular.module('risevision.displays.controllers')
         if (!$scope.isProAvailable()) {
           $scope.display.playerProAuthorized = false;
           $scope.showPlansModal();
-          return $q.resolve();
         } else {
           var apiParams = {};
 
           $scope.updatingRPP = true;
           apiParams[displayId] = $scope.display.playerProAuthorized;
 
-          return enableCompanyProduct($scope.display.companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
+          enableCompanyProduct($scope.display.companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
             .then(function () {
               var assignedDisplays = $scope.company.playerProAssignedDisplays || [];
 
@@ -58,7 +57,6 @@ angular.module('risevision.displays.controllers')
               userState.updateCompanySettings($scope.company);
             })
             .catch(function (err) {
-              console.log('Enable company product', err);
               $scope.display.playerProAuthorized = !$scope.display.playerProAuthorized;
             })
             .finally(function () {

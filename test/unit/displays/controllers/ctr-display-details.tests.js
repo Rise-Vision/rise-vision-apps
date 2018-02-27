@@ -1,7 +1,6 @@
 'use strict';
 describe('controller: display details', function() {
   var displayId = '1234';
-  var playerProAuthorized = false;
   var sandbox = sinon.sandbox.create();
 
   beforeEach(module('risevision.displays.services'));
@@ -15,7 +14,6 @@ describe('controller: display details', function() {
         getDisplay: function(displayId) {
           this.display.id = displayId;
           this.display.companyId = 'company';
-          this.display.playerProAuthorized = playerProAuthorized;
 
           return Q.resolve();
         },
@@ -232,70 +230,78 @@ describe('controller: display details', function() {
     });
   });
 
-  describe.only('toggleProAuthorized', function () {
+  describe('toggleProAuthorized', function () {
     it('should show the plans modal', function () {
       $scope.display = {};
       sandbox.stub($scope, 'isProAvailable').returns(false);
       sandbox.stub($scope, 'showPlansModal');
 
-      $scope.toggleProAuthorized()
-      .then(function() {
-        expect($scope.showPlansModal).to.have.been.called;
-        expect(enableCompanyProduct).to.not.have.been.called;
-      });
+      $scope.toggleProAuthorized();
+      expect($scope.showPlansModal).to.have.been.called;
+      expect(enableCompanyProduct).to.not.have.been.called;
     });
 
-    it('should activate Pro status', function () {
-      $scope.company = {};
-      // The mocked value of playerProAuthorized AFTER ng-change
-      $scope.display = { id: displayId, playerProAuthorized: true };
-
+    it('should activate Pro status', function (done) {
       sandbox.stub($scope, 'isProAvailable').returns(true);
       sandbox.stub($scope, 'showPlansModal');
       enableCompanyProduct.returns(Q.resolve());
 
-      return $scope.toggleProAuthorized()
-      .then(function() {
-        expect(enableCompanyProduct).to.have.been.called;
-        expect(userState.updateCompanySettings).to.have.been.called;
-        expect($scope.showPlansModal).to.have.not.been.called;
-        expect($scope.company.playerProAssignedDisplays).to.have.members([$scope.display.id]);
-      });
+      // Needed because display object gets overwritten at controller initialization
+      setTimeout(function () {
+        // The mocked value of playerProAuthorized AFTER ng-change
+        $scope.display = { id: displayId, playerProAuthorized: true };
+        $scope.company = { playerProAssignedDisplays: [] };
+        $scope.toggleProAuthorized();
+
+        setTimeout(function () {
+          expect(enableCompanyProduct).to.have.been.called;
+          expect(userState.updateCompanySettings).to.have.been.called;
+          expect($scope.showPlansModal).to.have.not.been.called;
+          expect($scope.company.playerProAssignedDisplays).to.have.members([$scope.display.id]);
+          done();        
+        }, 0);
+      }, 0);
     });
 
-    it('should deactivate Pro status', function () {
-      $scope.company = { playerProAssignedDisplays: [displayId] };
-      // The mocked value of playerProAuthorized AFTER ng-change
-      $scope.display = { id: displayId, playerProAuthorized: false };
-
+    it('should deactivate Pro status', function (done) {
       sandbox.stub($scope, 'isProAvailable').returns(true);
       sandbox.stub($scope, 'showPlansModal');
       enableCompanyProduct.returns(Q.resolve());
 
-      return $scope.toggleProAuthorized()
-      .then(function() {
-        expect(enableCompanyProduct).to.have.been.called;
-        expect(userState.updateCompanySettings).to.have.been.called;
-        expect($scope.showPlansModal).to.have.not.been.called;
-        expect($scope.company.playerProAssignedDisplays).to.be.empty;
-      });
+      setTimeout(function () {
+        $scope.company = { playerProAssignedDisplays: [displayId] };
+        // The mocked value of playerProAuthorized AFTER ng-change
+        $scope.display = { id: displayId, playerProAuthorized: false };
+        $scope.toggleProAuthorized();
+
+        setTimeout(function () {
+          expect(enableCompanyProduct).to.have.been.called;
+          expect(userState.updateCompanySettings).to.have.been.called;
+          expect($scope.showPlansModal).to.have.not.been.called;
+          expect($scope.company.playerProAssignedDisplays).to.be.empty;
+          done();
+        }, 0);
+      }, 0);
     });
 
-    it('should fail to activate Pro status', function () {
-      $scope.company = { playerProAssignedDisplays: [] };
-      // The mocked value of playerProAuthorized AFTER ng-change
-      $scope.display = { id: displayId, playerProAuthorized: false };
-
+    it('should fail to activate Pro status', function (done) {
       sandbox.stub($scope, 'isProAvailable').returns(true);
       sandbox.stub($scope, 'showPlansModal');
       enableCompanyProduct.returns(Q.reject());
 
-      return $scope.toggleProAuthorized()
-      .then(function() {
-        expect(enableCompanyProduct).to.have.been.called;
-        expect(userState.updateCompanySettings).to.not.have.been.called;
-        expect($scope.showPlansModal).to.have.not.been.called;
-        expect($scope.company.playerProAssignedDisplays).to.be.empty;
+      setTimeout(function () {
+        $scope.company = { playerProAssignedDisplays: [] };
+        // The mocked value of playerProAuthorized AFTER ng-change
+        $scope.display = { id: displayId, playerProAuthorized: false };
+        $scope.toggleProAuthorized();
+
+        setTimeout(function () {
+          expect(enableCompanyProduct).to.have.been.called;
+          expect(userState.updateCompanySettings).to.not.have.been.called;
+          expect($scope.showPlansModal).to.have.not.been.called;
+          expect($scope.company.playerProAssignedDisplays).to.be.empty;
+          done();
+        }, 0);
       });
     });
   });
