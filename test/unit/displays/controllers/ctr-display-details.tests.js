@@ -1,6 +1,7 @@
 'use strict';
 describe('controller: display details', function() {
-  var displayId = 1234;
+  var displayId = '1234';
+  var playerProAuthorized = false;
   var sandbox = sinon.sandbox.create();
 
   beforeEach(module('risevision.displays.services'));
@@ -14,6 +15,7 @@ describe('controller: display details', function() {
         getDisplay: function(displayId) {
           this.display.id = displayId;
           this.display.companyId = 'company';
+          this.display.playerProAuthorized = playerProAuthorized;
 
           return Q.resolve();
         },
@@ -101,7 +103,7 @@ describe('controller: display details', function() {
     $provide.factory('enableCompanyProduct', function() {
       return sandbox.stub();
     });
-    $provide.value('displayId', '1234');
+    $provide.value('displayId', displayId);
   }));
   var $scope, $state, updateCalled, deleteCalled, confirmDelete;
   var resolveLoadScreenshot, resolveRequestScreenshot, enableCompanyProduct, userState,
@@ -230,32 +232,71 @@ describe('controller: display details', function() {
     });
   });
 
-  describe('toggleProAuthorized', function () {
+  describe.only('toggleProAuthorized', function () {
     it('should show the plans modal', function () {
       $scope.display = {};
       sandbox.stub($scope, 'isProAvailable').returns(false);
       sandbox.stub($scope, 'showPlansModal');
 
-      $scope.toggleProAuthorized();
-      expect($scope.showPlansModal).to.have.been.called;
-      expect(enableCompanyProduct).to.not.have.been.called;
+      $scope.toggleProAuthorized()
+      .then(function() {
+        expect($scope.showPlansModal).to.have.been.called;
+        expect(enableCompanyProduct).to.not.have.been.called;
+      });
     });
 
-    it('should toggle the Pro status', function (done) {
+    it('should activate Pro status', function () {
       $scope.company = {};
-      $scope.display = {};
+      // The mocked value of playerProAuthorized AFTER ng-change
+      $scope.display = { id: displayId, playerProAuthorized: true };
+
       sandbox.stub($scope, 'isProAvailable').returns(true);
       sandbox.stub($scope, 'showPlansModal');
       enableCompanyProduct.returns(Q.resolve());
 
-      $scope.toggleProAuthorized();
-
-      setTimeout(function () {
+      return $scope.toggleProAuthorized()
+      .then(function() {
         expect(enableCompanyProduct).to.have.been.called;
         expect(userState.updateCompanySettings).to.have.been.called;
         expect($scope.showPlansModal).to.have.not.been.called;
-        done();
-      }, 0);
+        expect($scope.company.playerProAssignedDisplays).to.have.members([$scope.display.id]);
+      });
+    });
+
+    it('should deactivate Pro status', function () {
+      $scope.company = { playerProAssignedDisplays: [displayId] };
+      // The mocked value of playerProAuthorized AFTER ng-change
+      $scope.display = { id: displayId, playerProAuthorized: false };
+
+      sandbox.stub($scope, 'isProAvailable').returns(true);
+      sandbox.stub($scope, 'showPlansModal');
+      enableCompanyProduct.returns(Q.resolve());
+
+      return $scope.toggleProAuthorized()
+      .then(function() {
+        expect(enableCompanyProduct).to.have.been.called;
+        expect(userState.updateCompanySettings).to.have.been.called;
+        expect($scope.showPlansModal).to.have.not.been.called;
+        expect($scope.company.playerProAssignedDisplays).to.be.empty;
+      });
+    });
+
+    it('should fail to activate Pro status', function () {
+      $scope.company = { playerProAssignedDisplays: [] };
+      // The mocked value of playerProAuthorized AFTER ng-change
+      $scope.display = { id: displayId, playerProAuthorized: false };
+
+      sandbox.stub($scope, 'isProAvailable').returns(true);
+      sandbox.stub($scope, 'showPlansModal');
+      enableCompanyProduct.returns(Q.reject());
+
+      return $scope.toggleProAuthorized()
+      .then(function() {
+        expect(enableCompanyProduct).to.have.been.called;
+        expect(userState.updateCompanySettings).to.not.have.been.called;
+        expect($scope.showPlansModal).to.have.not.been.called;
+        expect($scope.company.playerProAssignedDisplays).to.be.empty;
+      });
     });
   });
 
