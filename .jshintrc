@@ -20,7 +20,13 @@
   "smarttabs": true,
   "globals": {
     "sinon": false,
-    "Sortable": false
+    "Sortable": false,
+    "beforeEach": false,
+    "afterEach": false,
+    "describe": false,
+    "expect": false,
+    "it": false,
+    "inject": false
   },
   "predef":["angular","_"]
 }

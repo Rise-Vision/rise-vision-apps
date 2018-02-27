@@ -1,6 +1,7 @@
 'use strict';
 describe('controller: display details', function() {
-  var displayId = 1234;
+  var displayId = '1234';
+  var sandbox = sinon.sandbox.create();
 
   beforeEach(module('risevision.displays.services'));
   beforeEach(module('risevision.displays.controllers'));
@@ -29,6 +30,8 @@ describe('controller: display details', function() {
     $provide.service('playerProFactory', function() {
       return {        
         is3rdPartyPlayer: function(){ return false;},
+        isUnsupportedPlayer: function(){ return false;},
+        isOfflinePlayCompatiblePayer: function(){ return true;},
         isOutdatedPlayer: function(){ return false;},
         isElectronPlayer: function(){ return true;}
       };
@@ -74,7 +77,9 @@ describe('controller: display details', function() {
     $provide.service('userState',function(){
       return {
           getSelectedCompanyId: function() {return "company1"},
-          _restoreState: function(){}
+          getCopyOfSelectedCompany: function() {return {};},
+          _restoreState: function(){},
+          updateCompanySettings: sandbox.stub()
       };
     });
     
@@ -90,13 +95,16 @@ describe('controller: display details', function() {
     });
     $provide.service('screenshotFactory', function() {
       return {
-        loadScreenshot: sinon.stub()
+        loadScreenshot: sandbox.stub()
       }
     });
-    $provide.value('displayId', '1234');
+    $provide.factory('enableCompanyProduct', function() {
+      return sandbox.stub();
+    });
+    $provide.value('displayId', displayId);
   }));
   var $scope, $state, updateCalled, deleteCalled, confirmDelete;
-  var resolveLoadScreenshot, resolveRequestScreenshot, 
+  var resolveLoadScreenshot, resolveRequestScreenshot, enableCompanyProduct, userState,
   $rootScope, $loading, displayFactory, playerProFactory;
   beforeEach(function(){
     updateCalled = false;
@@ -107,6 +115,8 @@ describe('controller: display details', function() {
     inject(function($injector, $controller){
       displayFactory = $injector.get('displayFactory');
       playerProFactory = $injector.get('playerProFactory');
+      enableCompanyProduct = $injector.get('enableCompanyProduct');
+      userState = $injector.get('userState');
       $loading = $injector.get('$loading');
       $rootScope = $injector.get('$rootScope');
       $scope = $rootScope.$new();
@@ -123,13 +133,15 @@ describe('controller: display details', function() {
     });
   });
 
+  afterEach(function () {
+    sandbox.restore();
+  });
+
   it('should exist',function() {
     expect($scope).to.be.ok;
     expect($scope.displayId).to.be.ok;
     expect($scope.factory).to.be.ok;
     expect($scope.companyId).to.be.ok;
-    expect($scope.productCode).to.be.ok;
-    expect($scope.productId).to.be.ok;
 
     expect($scope.save).to.be.a('function');
     expect($scope.confirmDelete).to.be.a('function');
@@ -138,8 +150,6 @@ describe('controller: display details', function() {
   it('should initialize', function(done) {
 
     expect($scope.companyId).to.equal("company1");
-    expect($scope.productCode).to.equal("c4b368be86245bf9501baaa6e0b00df9719869fd");
-    expect($scope.productId).to.equal("2048");
 
     setTimeout(function() {
       expect($scope.display).to.be.ok;
@@ -220,139 +230,153 @@ describe('controller: display details', function() {
     });
   });
 
-  it('should show spinner on refreshSubscriptionStatus',function(){
-    var spy = sinon.spy($loading,'start')
-    $rootScope.$emit('refreshSubscriptionStatus');
-    spy.should.have.been.calledWith('loading-trial');
-  });
+  describe('toggleProAuthorized', function () {
+    it('should show the plans modal', function () {
+      $scope.display = {};
+      sandbox.stub($scope, 'isProAvailable').returns(false);
+      sandbox.stub($scope, 'showPlansModal');
 
-  describe('subscription-status:changed:',function(){
-    it('should hide spinner and set false to flags when on default state ',function(done){
-      var spy = sinon.spy($loading,'stop')
-      
-      $rootScope.$emit('subscription-status:changed', {});
-      
-      spy.should.have.been.calledWith('loading-trial');
-      setTimeout(function(){
-        expect($scope.display.showTrialButton).to.be.false;
-        expect($scope.display.showTrialStatus).to.be.false;
-        expect($scope.display.showSubscribeButton).to.be.false;
-        done();
-      },10);
+      $scope.toggleProAuthorized();
+      expect($scope.showPlansModal).to.have.been.called;
+      expect(enableCompanyProduct).to.not.have.been.called;
     });
 
-    it('should hide flags for 3rd part players',function(done){
-      $scope.deferredDisplay.resolve({playerName:'Cenique', playerVersion: '2017.07.17.20.21'});
-      var spy = sinon.stub(playerProFactory,'is3rdPartyPlayer',function() {return true});
-      
-      $rootScope.$emit('subscription-status:changed',{});
-      
-      setTimeout(function(){
-        expect($scope.display.showTrialButton).to.be.false;
-        expect($scope.display.showTrialStatus).to.be.false;
-        expect($scope.display.showSubscribeButton).to.be.false;
-        done();
-      },10);
+    it('should activate Pro status', function (done) {
+      sandbox.stub($scope, 'isProAvailable').returns(true);
+      sandbox.stub($scope, 'showPlansModal');
+      enableCompanyProduct.returns(Q.resolve());
+
+      // Needed because display object gets overwritten at controller initialization
+      setTimeout(function () {
+        // The mocked value of playerProAuthorized AFTER ng-change
+        $scope.display = { id: displayId, playerProAuthorized: true };
+        $scope.company = { playerProAssignedDisplays: [] };
+        $scope.toggleProAuthorized();
+
+        setTimeout(function () {
+          expect(enableCompanyProduct).to.have.been.called;
+          expect(userState.updateCompanySettings).to.have.been.called;
+          expect($scope.showPlansModal).to.have.not.been.called;
+          expect($scope.company.playerProAssignedDisplays).to.have.members([$scope.display.id]);
+          done();        
+        }, 0);
+      }, 0);
     });
 
-    it('should hide flags for outdated players',function(done){
-      $scope.deferredDisplay.resolve({playerName:'RiseVisionElectron', playerVersion: '2017.01.04.14.40'})
-      var spy = sinon.stub(playerProFactory,'isOutdatedPlayer',function() {return true});
-      
-      $rootScope.$emit('subscription-status:changed',{});
-      
-      setTimeout(function(){
-        expect($scope.display.showTrialButton).to.be.false;
-        expect($scope.display.showTrialStatus).to.be.false;
-        expect($scope.display.showSubscribeButton).to.be.false;
-        done();
-      },10);
+    it('should deactivate Pro status', function (done) {
+      sandbox.stub($scope, 'isProAvailable').returns(true);
+      sandbox.stub($scope, 'showPlansModal');
+      enableCompanyProduct.returns(Q.resolve());
+
+      setTimeout(function () {
+        $scope.company = { playerProAssignedDisplays: [displayId] };
+        // The mocked value of playerProAuthorized AFTER ng-change
+        $scope.display = { id: displayId, playerProAuthorized: false };
+        $scope.toggleProAuthorized();
+
+        setTimeout(function () {
+          expect(enableCompanyProduct).to.have.been.called;
+          expect(userState.updateCompanySettings).to.have.been.called;
+          expect($scope.showPlansModal).to.have.not.been.called;
+          expect($scope.company.playerProAssignedDisplays).to.be.empty;
+          done();
+        }, 0);
+      }, 0);
     });
 
-    it('should set correct flags when trial-available',function(done){
-      sinon.stub($scope.displayService, 'getCompanyProStatus')
-        .returns(Q.resolve({status: 'Trial Available', statusCode: 'trial-available'}));
+    it('should fail to activate Pro status', function (done) {
+      sandbox.stub($scope, 'isProAvailable').returns(true);
+      sandbox.stub($scope, 'showPlansModal');
+      enableCompanyProduct.returns(Q.reject());
 
-      $scope.deferredDisplay.resolve({playerName:'RiseVisionElectron', playerVersion: '2017.07.17.20.21'});
-      
-      $rootScope.$emit('subscription-status:changed',{statusCode: 'trial-available'});
-      
-      setTimeout(function(){
-        expect($scope.display.showTrialButton).to.be.true;
-        expect($scope.display.showTrialStatus).to.be.false;
-        expect($scope.display.showSubscribeButton).to.be.false;
-        done();
-      },10)     
-    });
+      setTimeout(function () {
+        $scope.company = { playerProAssignedDisplays: [] };
+        // The mocked value of playerProAuthorized AFTER ng-change
+        $scope.display = { id: displayId, playerProAuthorized: false };
+        $scope.toggleProAuthorized();
 
-    it('should set correct flags when on-trial',function(done){
-      $scope.deferredDisplay.resolve({playerName:'RiseVisionElectron', playerVersion: '2017.07.17.20.21'});      
-      $rootScope.$emit('subscription-status:changed',{statusCode: 'on-trial'});
-      
-      setTimeout(function(){
-        expect($scope.display.showTrialButton).to.be.false;
-        expect($scope.display.showTrialStatus).to.be.true;
-        expect($scope.display.showSubscribeButton).to.be.true;
-        done();
-      },10);
-    });
-
-    it('should set correct flags when suspended',function(done){
-      $scope.deferredDisplay.resolve({playerName:'RiseVisionElectron', playerVersion: '2017.07.17.20.21'});      
-      $rootScope.$emit('subscription-status:changed',{statusCode: 'suspended'});
-      
-      setTimeout(function(){
-        expect($scope.display.showTrialButton).to.be.false;
-        expect($scope.display.showTrialStatus).to.be.true;
-        expect($scope.display.showSubscribeButton).to.be.true;
-        done();
-      },10);
-    });
-
-    it('should set correct flags when trial-expired',function(done){
-      $scope.deferredDisplay.resolve({playerName:'RiseVisionElectron', playerVersion: '2017.07.17.20.21'});      
-      $rootScope.$emit('subscription-status:changed',{statusCode: 'trial-expired'});
-      
-      setTimeout(function(){
-        expect($scope.display.showTrialButton).to.be.false;
-        expect($scope.display.showTrialStatus).to.be.false;
-        expect($scope.display.showSubscribeButton).to.be.true;
-        done();
-      },10);
-    });
-
-    it('should set correct flags when cancelled',function(done){
-      $scope.deferredDisplay.resolve({playerName:'RiseVisionElectron', playerVersion: '2017.07.17.20.21'});      
-      $rootScope.$emit('subscription-status:changed',{statusCode: 'cancelled'});
-      
-      setTimeout(function(){
-        expect($scope.display.showTrialButton).to.be.false;
-        expect($scope.display.showTrialStatus).to.be.false;
-        expect($scope.display.showSubscribeButton).to.be.true;
-        done();
-      },10);
-    });
-
-    it('should set correct flags when not-subscribed',function(done){
-      $scope.deferredDisplay.resolve({playerName:'RiseVisionElectron', playerVersion: '2017.07.17.20.21'});      
-      $rootScope.$emit('subscription-status:changed',{statusCode: 'not-subscribed'});
-      
-      setTimeout(function(){
-        expect($scope.display.showTrialButton).to.be.false;
-        expect($scope.display.showTrialStatus).to.be.false;
-        expect($scope.display.showSubscribeButton).to.be.true;
-        done();
-      },10);
+        setTimeout(function () {
+          expect(enableCompanyProduct).to.have.been.called;
+          expect(userState.updateCompanySettings).to.not.have.been.called;
+          expect($scope.showPlansModal).to.have.not.been.called;
+          expect($scope.company.playerProAssignedDisplays).to.be.empty;
+          done();
+        }, 0);
+      });
     });
   });
 
-  it('should remove listeners on $destroy',function(){
-    expect($rootScope.$$listeners['refreshSubscriptionStatus']).to.be.ok;
-    expect($rootScope.$$listeners['subscription-status:changed']).to.be.ok;
+  describe('getProLicenseCount:', function() {
+    it('should return zero licenses available', function () {
+      expect($scope.getProLicenseCount()).to.equal(0);
+    });
 
-    $rootScope.$destroy();
+    it('should return three licenses available', function () {
+      $scope.company.planPlayerProLicenseCount = 2;
+      $scope.company.playerProLicenseCount = 1;
 
-    expect($rootScope.$$listeners['refreshSubscriptionStatus']).to.not.be.ok;
-    expect($rootScope.$$listeners['subscription-status:changed']).to.not.be.ok;
-  })
+      expect($scope.getProLicenseCount()).to.equal(3);
+    });
+  });
+
+  describe('areAllProLicensesUsed:', function() {
+    it('should return all licenses are used if display is not on the list', function () {
+      $scope.company.playerProAssignedDisplays = ['display1'];
+      sandbox.stub($scope, 'getProLicenseCount').returns(1);
+
+      expect($scope.areAllProLicensesUsed()).to.be.true;
+    });
+
+    it('should return all licenses are used if display is not on the list', function () {
+      $scope.company.playerProAssignedDisplays = ['display1'];
+      $scope.displayId = 'display1';
+      sandbox.stub($scope, 'getProLicenseCount').returns(1);
+
+      expect($scope.areAllProLicensesUsed()).to.be.false;
+    });
+  });
+
+  describe('isProAvailable:', function() {
+    it('should return false if available licenses are zero (Free Plan)', function () {
+      sandbox.stub($scope, 'getProLicenseCount').returns(0);
+
+      expect($scope.isProAvailable()).to.be.false;
+    });
+
+    it('should return false if all available licenses are used', function () {
+      sandbox.stub($scope, 'getProLicenseCount').returns(1);
+      sandbox.stub($scope, 'areAllProLicensesUsed').returns(true);
+
+      expect($scope.isProAvailable()).to.be.false;
+    });
+
+    it('should return true if there are available licenses', function () {
+      sandbox.stub($scope, 'getProLicenseCount').returns(1);
+      sandbox.stub($scope, 'areAllProLicensesUsed').returns(false);
+
+      expect($scope.isProAvailable()).to.be.true;
+    });
+  });
+
+  describe('isProApplicable:', function() {
+    it('should return false if it is a third party player', function () {
+      sandbox.stub(playerProFactory, 'is3rdPartyPlayer').returns(true);
+
+      expect($scope.isProApplicable()).to.be.false;
+    });
+
+    it('should return false if it is an unsupported player', function () {
+      sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(true);
+
+      expect($scope.isProApplicable()).to.be.false;
+    });
+
+    it('should return true if it is a supported player', function () {
+      sandbox.stub(playerProFactory, 'is3rdPartyPlayer').returns(false);
+      sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(false);
+
+      expect($scope.isProApplicable()).to.be.true;
+    });
+  });
+
 });

@@ -54,7 +54,8 @@ angular.module('risevision.displays.services')
       };
 
       factory.isUnsupportedPlayer = function (display) {
-        return !!(display && !factory.is3rdPartyPlayer(display) && !factory.isElectronPlayer(display));
+        var newDisplay = !(display && display.playerName && display.playerVersion);
+        return !!(!newDisplay && !factory.is3rdPartyPlayer(display) && !factory.isElectronPlayer(display));
       };
 
       factory.isOutdatedPlayer = function (display) {
@@ -83,21 +84,6 @@ angular.module('risevision.displays.services')
           display.playerVersion >= DISPLAY_CONTROL_PLAYER_VERSION);
       };
 
-      factory.openPlayerProInfoModal = function (display) {
-        displayTracker('Player Pro Info Modal');
-
-        return $modal.open({
-          templateUrl: 'partials/displays/player-pro-info-modal.html',
-          size: 'lg',
-          controller: 'PlayerProInfoModalCtrl',
-          resolve: {
-            displayInfo: function () {
-              return display;
-            }
-          }
-        });
-      };
-
       factory.openConfigureDisplayControl = function (display) {
         var deferred = $q.resolve();
 
@@ -112,21 +98,6 @@ angular.module('risevision.displays.services')
             controller: 'DisplayControlModalCtrl'
           });
         });
-      };
-
-      factory.startPlayerProTrial = function () {
-        displayTracker('Starting Player Pro Trial');
-
-        $loading.start('loading-trial');
-        return storeAuthorization.startTrial(PLAYER_PRO_PRODUCT_CODE)
-          .then(function () {
-            displayTracker('Started Trial Player Pro');
-            $loading.stop('loading-trial');
-            $rootScope.$emit('refreshSubscriptionStatus', 'trial-available');
-          }, function (e) {
-            $loading.stop('loading-trial');
-            return $q.reject();
-          });
       };
 
       return factory;

@@ -61,46 +61,11 @@
             </a>
           </td>
           <td class="table-body__cell display-product">
-            <i ng-if="displayService.susbscriptionLoading" class="fa fa-spinner fa-spin fa-fw"></i>
-
-            <div ng-show="getDisplayType(display) === 'subscribed'">
+            <div ng-show="getDisplayType(display) === 'professional'">
               <span translate>displays-app.list.player.type.professional</span>
             </div>
-            <div ng-show="getDisplayType(display) === 'not-subscribed'">
+            <div ng-show="getDisplayType(display) === 'standard'">
               <span translate>displays-app.list.player.type.standard</span>
-              <a ng-click="openRiseProStoreLink()" translate>
-                displays-app.list.player.cta.subscribePro
-              </a>
-            </div>
-            <div ng-show="getDisplayType(display) === 'trial-available'">
-              <span translate>displays-app.list.player.type.standard</span>
-              <a ng-click="showStartTrial(display)" translate>
-                displays-app.list.player.cta.tryPro
-              </a>
-            </div>
-            <div ng-show="getDisplayType(display) === 'on-trial'">
-              <span translate>displays-app.list.player.type.professionalTrial</span>
-              <a ng-click="openRiseProStoreLink()" translate>
-                displays-app.list.player.cta.subscribeNow
-              </a>
-            </div>
-            <div ng-show="getDisplayType(display) === 'trial-expired'">
-              <span translate>displays-app.list.player.type.standard</span>
-              <a ng-click="openRiseProStoreLink()" translate>
-                displays-app.list.player.cta.subscribePro
-              </a>
-            </div>
-            <div ng-show="getDisplayType(display) === 'suspended'">
-              <span translate>displays-app.list.player.type.professionalSuspended</span>
-              <a ng-click="openRiseProStoreLink()" translate>
-                displays-app.list.player.cta.checkStore
-              </a>
-            </div>
-            <div ng-show="getDisplayType(display) === 'cancelled'">
-              <span translate>displays-app.list.player.type.cancelled</span>
-              <a ng-click="openRiseProStoreLink()" translate>
-                displays-app.list.player.cta.subscribePro
-              </a>
             </div>
             <div ng-show="getDisplayType(display) === 'unsupported'">
               <span class="text-danger">
@@ -110,9 +75,6 @@
               <a ng-click="displayFactory.addDisplayModal(display)" translate>
                 displays-app.list.player.cta.upgrade
               </a>
-            </div>
-            <div ng-show="getDisplayType(display) === 'not-pro-compatible'">
-              <span translate>displays-app.list.player.type.standard</span>
             </div>
             <div ng-show="getDisplayType(display) === '3rd-party'">
               <span translate>displays-app.list.player.type.3rdParty</span>

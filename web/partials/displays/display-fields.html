@@ -35,7 +35,7 @@
       <div class="u_margin-sm-top animated fadeIn" ng-show="showDownloadButtons">
         <download-player></download-player>
       </div>
-     
+
     </div>
   </div>
   <!-- DISPLAY ERRORS AND ALERTS -->
@@ -71,7 +71,7 @@
               <span>
                 <a id="addToSchedule" ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
                   <span class="btn btn-primary btn-xs">
-                    {{ 'displays-app.fields.player.schedule.addToSchedule' | translate }} 
+                    {{ 'displays-app.fields.player.schedule.addToSchedule' | translate }}
                     <i class="fa fa-external-link icon-right" aria-hidden="true"></i>
                   </span>
                 </a>
@@ -93,7 +93,7 @@
             </td>
             <!-- INACTIVE -->
             <td class="table-body__cell" ng-hide="playerProFactory.isDisplayControlCompatiblePlayer(display)">
-              <span> 
+              <span>
                 <div class="text-danger">
                   <span translate>
                     displays-app.fields.player.displayControl.unsupported

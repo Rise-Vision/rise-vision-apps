@@ -286,14 +286,12 @@ describe('service: display:', function() {
         expect(result.items).to.be.an.array;
         items = result.items;
         expect(result.items).to.have.length.above(0);
-        $timeout.flush();
         setTimeout(function() {
           $timeout.flush();
           setTimeout(function() {
             items.forEach(function(item) {
               expect(item.onlineStatus).to.equal('online');
               expect(item.lastConnectionTime.getTime()).to.equal(CONNECTION_TIME);
-              expect(item.proSubscription.status).to.equal('Subscribed');
             });
 
             broadcastSpy.should.have.been.calledWith('displaysLoaded', items);

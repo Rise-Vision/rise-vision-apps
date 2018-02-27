@@ -54,8 +54,6 @@ describe('service: playerProFactory:', function() {
     expect(playerProFactory.isScreenshotCompatiblePlayer).to.be.a('function');
     expect(playerProFactory.isOfflinePlayCompatiblePayer).to.be.a('function');
     expect(playerProFactory.isDisplayControlCompatiblePlayer).to.be.a('function');
-    expect(playerProFactory.openPlayerProInfoModal).to.be.a('function'); 
-    expect(playerProFactory.startPlayerProTrial).to.be.a('function'); 
   });
   
   it('getProductLink: ', function() {
@@ -137,56 +135,5 @@ describe('service: playerProFactory:', function() {
     expect(playerProFactory.isDisplayControlCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:''})).to.be.false;
     expect(playerProFactory.isDisplayControlCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2017.07.31.15.31'})).to.be.false;
     expect(playerProFactory.isDisplayControlCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2018.09.45.06.49'})).to.be.true;
-  });
-
-  describe('openPlayerProInfoModal: ', function() {
-    it('should open modal', function() {
-      var $modalSpy = sinon.spy($modal, 'open');
-      
-      playerProFactory.openPlayerProInfoModal(); 
-
-      expect(trackerCalled).to.equal('Player Pro Info Modal');     
-      
-      $modalSpy.should.have.been.calledWithMatch({
-        controller: "PlayerProInfoModalCtrl",
-        size: "lg",
-        templateUrl: "partials/displays/player-pro-info-modal.html",
-        resolve: {
-          displayInfo: sinon.match.func
-        }
-      });
-    });
-  });
-
-  describe('startPlayerProTrial: ', function() {
-    it('should start trial', function(done) {
-      var storeTrialSpy = sinon.stub(storeAuthorization, 'startTrial',function(){return Q.resolve()});
-      var emitSpy = sinon.spy($rootScope,'$emit');
-      
-      playerProFactory.startPlayerProTrial(); 
-
-      expect(trackerCalled).to.equal('Starting Player Pro Trial');  
-      storeTrialSpy.should.have.been.calledWith('PLAYER_PRO_PRODUCT_CODE');
-      setTimeout(function(){
-        expect(trackerCalled).to.equal('Started Trial Player Pro'); 
-        emitSpy.should.have.been.calledWith('refreshSubscriptionStatus', 'trial-available')
-        done();
-      },10);      
-    });
-
-    it('should handle start trial fail', function(done) {
-      var storeTrialSpy = sinon.stub(storeAuthorization, 'startTrial',function(){return Q.reject()});
-      var emitSpy = sinon.spy($rootScope,'$emit');
-      
-      playerProFactory.startPlayerProTrial(); 
-
-      expect(trackerCalled).to.equal('Starting Player Pro Trial');  
-      storeTrialSpy.should.have.been.calledWith('PLAYER_PRO_PRODUCT_CODE');
-      setTimeout(function(){
-        expect(trackerCalled).to.not.equal('Started Trial Player Pro'); 
-        emitSpy.should.not.have.been.calledWith('refreshSubscriptionStatus', 'trial-available')
-        done();
-      },10);      
-    });
   });
 });
