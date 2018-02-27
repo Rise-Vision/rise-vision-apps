@@ -161,6 +161,14 @@ angular.module('risevision.displays.controllers')
         }
       };
 
+      var startTrialListener = $rootScope.$on('risevision.company.updated', function () {
+        $scope.company = userState.getCopyOfSelectedCompany(true);
+      });
+
+      $scope.$on('$destroy', function () {
+        startTrialListener();
+      });
+
       $scope.$watch('display.browserUpgradeMode', function () {
         if ($scope.display && $scope.display.browserUpgradeMode !== 0) {
           $scope.display.browserUpgradeMode = 1;
