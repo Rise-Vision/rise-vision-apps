@@ -80,11 +80,6 @@ var TemplateAddScenarios = function() {
       expect(storeProductsModalPage.getSearchInput().getAttribute('placeholder')).to.eventually.equal('Search for Templates');
     });
 
-    it('should show a banner for Templates Library', function () {
-      expect(storeProductsModalPage.getDisplayBanner().isDisplayed()).to.eventually.be.true;
-      expect(storeProductsModalPage.getDisplayBanner().getAttribute('ng-click')).to.eventually.equal('showPlansModal()');
-    });
-
     it('should show search categories', function() {
       expect(storeProductsModalPage.getSearchCategories().count()).to.eventually.equal(3);
       expect(storeProductsModalPage.getSearchCategories().get(0).getText()).to.eventually.equal('ALL');
@@ -164,7 +159,7 @@ var TemplateAddScenarios = function() {
       helper.waitDisappear(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
     });
 
-    it('should start a trial',function(){
+    xit('should start a trial',function(){
       storeProductsModalPage.getPremiumProducts().get(0).click();
 
       helper.wait(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
@@ -182,7 +177,7 @@ var TemplateAddScenarios = function() {
       helper.waitDisappear(productDetailsModalPage.getErrorDialogCloseButton(), 'Presentation Error Dialog');
     });
     
-    it('should show Select Template button', function() {
+    xit('should show Select Template button', function() {
       // Reload page and select company whose trial has just started
       loadEditor();
       selectSubCompany();
