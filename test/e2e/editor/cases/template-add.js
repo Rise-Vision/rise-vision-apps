@@ -9,6 +9,7 @@ var helper = require('rv-common-e2e').helper;
 var PresentationPropertiesModalPage = require('./../pages/presentationPropertiesModalPage.js');
 var StoreProductsModalPage = require('./../pages/storeProductsModalPage.js');
 var ProductDetailsModalPage = require('./../pages/productDetailsModalPage.js');
+var PlansModalPage = require('./../../common/pages/plansModalPage.js');
 
 var TemplateAddScenarios = function() {
 
@@ -23,6 +24,7 @@ var TemplateAddScenarios = function() {
     var presentationPropertiesModalPage;
     var storeProductsModalPage;
     var productDetailsModalPage;
+    var plansModalPage;
 
     function loadEditor() {
       homepage.getEditor();
@@ -55,6 +57,7 @@ var TemplateAddScenarios = function() {
       presentationPropertiesModalPage = new PresentationPropertiesModalPage();
       storeProductsModalPage = new StoreProductsModalPage();
       productDetailsModalPage = new ProductDetailsModalPage();
+      plansModalPage = new PlansModalPage();
 
       loadEditor();
       createSubCompany();
@@ -159,7 +162,7 @@ var TemplateAddScenarios = function() {
       helper.waitDisappear(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
     });
 
-    xit('should start a trial',function(){
+    it('should start a trial',function(){
       storeProductsModalPage.getPremiumProducts().get(0).click();
 
       helper.wait(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
@@ -168,16 +171,16 @@ var TemplateAddScenarios = function() {
       expect(productDetailsModalPage.getProductDetailsModal().isDisplayed()).to.eventually.be.true;
       expect(productDetailsModalPage.getStartTrialButton().isDisplayed()).to.eventually.be.true;
       productDetailsModalPage.getStartTrialButton().click();
-      helper.waitDisappear(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
 
-      helper.wait(productDetailsModalPage.getErrorDialogCloseButton(), 'Presentation Error Dialog');
+      helper.wait(plansModalPage.getPlansModal(), 'Plans Modal');
+      helper.wait(plansModalPage.getStartTrialBasicButton(), 'Basic Plan Start Trial');
 
-      productDetailsModalPage.getErrorDialogCloseButton().click();
+      plansModalPage.getStartTrialBasicButton().click();
 
-      helper.waitDisappear(productDetailsModalPage.getErrorDialogCloseButton(), 'Presentation Error Dialog');
+      helper.waitDisappear(plansModalPage.getPlansModal(), 'Plans Modal');
     });
     
-    xit('should show Select Template button', function() {
+    it('should show Select Template button', function() {
       // Reload page and select company whose trial has just started
       loadEditor();
       selectSubCompany();
