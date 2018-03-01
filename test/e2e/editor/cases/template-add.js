@@ -9,6 +9,7 @@ var helper = require('rv-common-e2e').helper;
 var PresentationPropertiesModalPage = require('./../pages/presentationPropertiesModalPage.js');
 var StoreProductsModalPage = require('./../pages/storeProductsModalPage.js');
 var ProductDetailsModalPage = require('./../pages/productDetailsModalPage.js');
+var PlansModalPage = require('./../../common/pages/plansModalPage.js');
 
 var TemplateAddScenarios = function() {
 
@@ -23,6 +24,7 @@ var TemplateAddScenarios = function() {
     var presentationPropertiesModalPage;
     var storeProductsModalPage;
     var productDetailsModalPage;
+    var plansModalPage;
 
     function loadEditor() {
       homepage.getEditor();
@@ -55,6 +57,7 @@ var TemplateAddScenarios = function() {
       presentationPropertiesModalPage = new PresentationPropertiesModalPage();
       storeProductsModalPage = new StoreProductsModalPage();
       productDetailsModalPage = new ProductDetailsModalPage();
+      plansModalPage = new PlansModalPage();
 
       loadEditor();
       createSubCompany();
@@ -78,11 +81,6 @@ var TemplateAddScenarios = function() {
     it('should show a search box', function () {
       expect(storeProductsModalPage.getSearchFilter().isDisplayed()).to.eventually.be.true;
       expect(storeProductsModalPage.getSearchInput().getAttribute('placeholder')).to.eventually.equal('Search for Templates');
-    });
-
-    it('should show a banner for Templates Library', function () {
-      expect(storeProductsModalPage.getDisplayBanner().isDisplayed()).to.eventually.be.true;
-      expect(storeProductsModalPage.getDisplayBanner().getAttribute('ng-click')).to.eventually.equal('showPlansModal()');
     });
 
     it('should show search categories', function() {
@@ -173,13 +171,13 @@ var TemplateAddScenarios = function() {
       expect(productDetailsModalPage.getProductDetailsModal().isDisplayed()).to.eventually.be.true;
       expect(productDetailsModalPage.getStartTrialButton().isDisplayed()).to.eventually.be.true;
       productDetailsModalPage.getStartTrialButton().click();
-      helper.waitDisappear(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
 
-      helper.wait(productDetailsModalPage.getErrorDialogCloseButton(), 'Presentation Error Dialog');
+      helper.wait(plansModalPage.getPlansModal(), 'Plans Modal');
+      helper.wait(plansModalPage.getStartTrialBasicButton(), 'Basic Plan Start Trial');
 
-      productDetailsModalPage.getErrorDialogCloseButton().click();
+      plansModalPage.getStartTrialBasicButton().click();
 
-      helper.waitDisappear(productDetailsModalPage.getErrorDialogCloseButton(), 'Presentation Error Dialog');
+      helper.waitDisappear(plansModalPage.getPlansModal(), 'Plans Modal');
     });
     
     it('should show Select Template button', function() {
