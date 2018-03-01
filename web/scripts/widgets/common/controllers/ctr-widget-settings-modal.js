@@ -21,7 +21,7 @@
 
         var _init = function () {
           settingsGetter.setCurrentWidget(widget.type);
-          
+
           $scope.settings.params = settingsGetter.getParams(widget.params);
           _loadAdditionalParams();
         };

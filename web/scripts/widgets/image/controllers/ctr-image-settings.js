@@ -43,7 +43,7 @@ angular.module('risevision.widgets.image')
           $scope.settings.additionalParams.url = '';
         }
       });
-      
+
       $scope.$watch('settings.additionalParams.resume', function (resume) {
         if (typeof resume === 'undefined') {
           $scope.settings.additionalParams.resume = true;

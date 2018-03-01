@@ -49,7 +49,8 @@ angular.module('risevision.apps', [
     'risevision.widgets.controllers',
     'risevision.widgets.directives',
     'risevision.widgets.filters',
-    'risevision.widgets.image'
+    'risevision.widgets.image',
+    'risevision.widgets.twitter',
   ])
   // Set up our mappings between URLs, templates, and controllers
   .config(['$urlRouterProvider', '$stateProvider', '$locationProvider',

@@ -4,7 +4,7 @@ angular.module('risevision.widgets.services')
   .service('settingsSaver', ['$q', '$log', 'settingsParser',
     function ($q, $log, settingsParser) {
 
-      var _processSettings = function(settings) {
+      var _processSettings = function (settings) {
         var newSettings = angular.copy(settings);
 
         delete newSettings.params.id;
@@ -117,7 +117,7 @@ angular.module('risevision.widgets.services')
       return str.join('&');
     };
 
-    var _stripPrefix = function(name) {
+    var _stripPrefix = function (name) {
       if (name.indexOf('up_') === 0) {
         return name.slice(3);
       } else {

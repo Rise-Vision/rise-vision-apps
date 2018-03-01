@@ -75,6 +75,17 @@ angular.module('risevision.editor.services')
         TEST: '570012a1-54cc-4926-acb6-f9873588eddf'
       }
     },
+    TWITTER: {
+      render: true,
+      inAppSettings: {
+        partial: 'partials/widgets/twitter-settings-modal.html',
+        type: 'twitterWidget'
+      },
+      ids: {
+        PROD: '67e511ae-62b5-4a44-9551-077f63596079',
+        TEST: '83850b51-9040-445d-aa3b-d25946a725c5'
+      }
+    },
     PRESENTATION: {
       svgIcon: 'iconPresentation',
       iconClass: 'ph-embedded-item',

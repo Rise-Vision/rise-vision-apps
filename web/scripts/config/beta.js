@@ -29,6 +29,8 @@
     .value('MESSAGING_URL',
       'https://display-messaging.risevision.com')
     .value('APPS_URL', '')
-    .value('ENV_NAME', 'BETA');
+    .value('ENV_NAME', 'BETA')
+    .value('OAUTH_TOKEN_PROVIDER_URL', 'https://services-stage.risevision.com/oauthtokenprovider/')
+    .value('OAUTH_PUBLIC_KEY', 'EJMI-lB9hB55OYEsYmjXDNfRGoY');
 
 })(angular);

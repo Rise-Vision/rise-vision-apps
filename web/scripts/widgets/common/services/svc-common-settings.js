@@ -7,8 +7,8 @@ angular.module('risevision.widgets.services')
     function (STORAGE_FILE_URL_BASE, STORAGE_FOLDER_URL_BASE) {
 
       var factory = {};
-      
-      var _getStorageType = function(storageUrl) {
+
+      var _getStorageType = function (storageUrl) {
         if (storageUrl.indexOf(STORAGE_FILE_URL_BASE) !== -1) {
           return 'file';
         }
@@ -20,7 +20,7 @@ angular.module('risevision.widgets.services')
         return null;
       };
 
-      var _getCompanyId = function(storageUrl) {
+      var _getCompanyId = function (storageUrl) {
         var p = storageUrl.split('risemedialibrary-');
 
         return p[1].slice(0, p[1].indexOf('/'));

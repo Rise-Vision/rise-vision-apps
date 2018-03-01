@@ -18,7 +18,7 @@
     .constant('LOCALES_SUFIX', '.json');
 
   angular.module('risevision.common.config')
-    .value('CORE_URL', 'https://rvacore-test.appspot.com/_ah/api'); // override default core value   
+    .value('CORE_URL', 'https://rvacore-test.appspot.com/_ah/api'); // override default core value
 
   angular.module('risevision.apps.config', [])
     .value('APPS_ENV', 'TEST')
@@ -37,6 +37,8 @@
     .value('MESSAGING_URL',
       'https://display-messaging-staging.risevision.com')
     .value('APPS_URL', '')
-    .value('ENV_NAME', 'TEST');
+    .value('ENV_NAME', 'TEST')
+    .value('OAUTH_TOKEN_PROVIDER_URL', 'https://services-stage.risevision.com/oauthtokenprovider/')
+    .value('OAUTH_PUBLIC_KEY', 'EJMI-lB9hB55OYEsYmjXDNfRGoY');
 
 })(angular);
