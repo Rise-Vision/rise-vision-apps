@@ -120,7 +120,7 @@ angular.module('risevision.editor.services')
                 return storeApi.product.list(obj);
               })
               .then(function (resp) {
-                // Hardcoding twitter widget product here so it only show for RVA Users
+                // Hardcoding twitter widget product here so it only show on apps and not on RVA
                 // Trello card https://trello.com/c/ncK9K9if/4878-add-twitter-widget-to-app-store-products-list-2
                 if (category === 'Content' && resp && resp.result && resp.result.items && Array.isArray(resp.result.items)) {
                   resp.result.items.push(TWITTER_WIDGET_PRODUCT);
