@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .controller('displaysList', ['$scope', '$window', 'userState', 'display',
+  .controller('displaysList', ['$scope', '$rootScope', '$window', 'userState', 'display',
     'ScrollingListService', '$loading', '$filter', 'displayFactory',
     'displayTracker', 'playerProFactory',
-    function ($scope, $window, userState, display, ScrollingListService, $loading,
+    function ($scope, $rootScope, $window, userState, display, ScrollingListService, $loading,
       $filter, displayFactory, displayTracker, playerProFactory) {
       $scope.search = {
         sortBy: 'name',
@@ -33,6 +33,10 @@ angular.module('risevision.displays.controllers')
 
       $scope.$on('displayCreated', function () {
         // use doSearch because it clears the list
+        $scope.displays.doSearch();
+      });
+
+      $rootScope.$on('risevision.company.updated', function () {
         $scope.displays.doSearch();
       });
 

@@ -153,6 +153,9 @@ angular.module('risevision.displays.controllers')
 
       var startTrialListener = $rootScope.$on('risevision.company.updated', function () {
         $scope.company = userState.getCopyOfSelectedCompany(true);
+
+        var assignedDisplays = $scope.company.playerProAssignedDisplays || [];
+        $scope.display.playerProAuthorized = assignedDisplays.indexOf($scope.displayId) >= 0;
       });
 
       $scope.$on('$destroy', function () {
