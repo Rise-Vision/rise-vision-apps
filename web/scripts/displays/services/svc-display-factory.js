@@ -2,9 +2,9 @@
 
 angular.module('risevision.displays.services')
   .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal',
-    'display', 'displayTracker', 'displayEmail', '$loading',
+    'display', 'displayTracker', 'displayEmail', '$loading', 'planFactory',
     function ($rootScope, $q, $state, $modal, display, displayTracker,
-      displayEmail, $loading) {
+      displayEmail, $loading, planFactory) {
       var factory = {};
       var _displayId;
 
@@ -102,6 +102,8 @@ angular.module('risevision.displays.services')
             if (resp && resp.item && resp.item.id) {
               factory.display = resp.item;
 
+              planFactory.toggleDisplayLicenseLocal(resp.item.id, !planFactory.areAllProLicensesUsed());
+
               displayTracker('Display Created', resp.item.id, resp.item
                 .name);
 
@@ -168,6 +170,7 @@ angular.module('risevision.displays.services')
               factory.display.name);
 
             factory.display = {};
+            planFactory.toggleDisplayLicenseLocal(_displayId, false);
 
             $state.go('apps.displays.list');
           })

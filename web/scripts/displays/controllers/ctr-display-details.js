@@ -39,25 +39,17 @@ angular.module('risevision.displays.controllers')
           $scope.showPlansModal();
         } else {
           var apiParams = {};
+          var playerProAuthorized = $scope.display.playerProAuthorized;
 
           $scope.updatingRPP = true;
-          apiParams[displayId] = $scope.display.playerProAuthorized;
+          apiParams[displayId] = playerProAuthorized;
 
           enableCompanyProduct($scope.display.companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
             .then(function () {
-              var assignedDisplays = $scope.company.playerProAssignedDisplays || [];
-
-              if ($scope.display.playerProAuthorized) {
-                assignedDisplays.push(displayId);
-              } else if (assignedDisplays.indexOf(displayId) >= 0) {
-                assignedDisplays.splice(assignedDisplays.indexOf(displayId), 1);
-              }
-
-              $scope.company.playerProAssignedDisplays = assignedDisplays;
-              userState.updateCompanySettings($scope.company);
+              planFactory.toggleDisplayLicenseLocal(displayId, playerProAuthorized);
             })
             .catch(function (err) {
-              $scope.display.playerProAuthorized = !$scope.display.playerProAuthorized;
+              $scope.display.playerProAuthorized = !playerProAuthorized;
             })
             .finally(function () {
               $scope.updatingRPP = false;
@@ -66,13 +58,12 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.getProLicenseCount = function () {
-        return ($scope.company.planPlayerProLicenseCount || 0) + ($scope.company.playerProLicenseCount || 0);
+        return planFactory.getProLicenseCount($scope.company);
       };
 
       $scope.areAllProLicensesUsed = function () {
-        var maxProDisplays = $scope.getProLicenseCount();
         var assignedDisplays = $scope.company.playerProAssignedDisplays || [];
-        var allLicensesUsed = assignedDisplays.length === maxProDisplays;
+        var allLicensesUsed = planFactory.areAllProLicensesUsed();
         var allProLicensesUsed = allLicensesUsed && assignedDisplays.indexOf($scope.displayId) === -1;
 
         return $scope.getProLicenseCount() > 0 && allProLicensesUsed;

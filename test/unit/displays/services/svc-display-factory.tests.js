@@ -1,5 +1,7 @@
 'use strict';
 describe('service: displayFactory:', function() {
+  var sandbox = sinon.sandbox.create();
+
   beforeEach(module('risevision.displays.services'));
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
@@ -80,9 +82,15 @@ describe('service: displayFactory:', function() {
         }
       }
     });
+    $provide.factory('planFactory', function() {
+      return {
+        toggleDisplayLicenseLocal: function () {},
+        areAllProLicensesUsed: function () {}
+      };
+    });
 
   }));
-  var displayFactory, $rootScope, $modal, trackerCalled, emailSent, updateDisplay, currentState, returnList, displayListSpy, displayAddSpy;
+  var displayFactory, $rootScope, $modal, trackerCalled, emailSent, updateDisplay, currentState, returnList, displayListSpy, displayAddSpy, planFactory, display;
   beforeEach(function(){
     trackerCalled = undefined;
     emailSent = undefined;
@@ -92,12 +100,17 @@ describe('service: displayFactory:', function() {
 
     inject(function($injector){
       displayFactory = $injector.get('displayFactory');
-      var display = $injector.get('display');
+      planFactory = $injector.get('planFactory');
+      display = $injector.get('display');
       $modal = $injector.get('$modal');
       $rootScope = $injector.get('$rootScope');
       displayListSpy = sinon.spy(display,'list');
       displayAddSpy = sinon.spy(display,'add');
     });
+  });
+
+  afterEach(function () {
+    sandbox.restore();
   });
 
   it('should exist',function(){
@@ -239,9 +252,12 @@ describe('service: displayFactory:', function() {
     it('should add the display',function(done){
       updateDisplay = true;
       var broadcastSpy = sinon.spy($rootScope,'$broadcast');
+      sandbox.stub(planFactory, 'toggleDisplayLicenseLocal');
+      sandbox.stub(planFactory, 'areAllProLicensesUsed').returns(false);
+      display._display.playerProAuthorized = true;
 
       displayFactory.addDisplay();
-      
+
       expect(displayFactory.savingDisplay).to.be.true;
       expect(displayFactory.loadingDisplay).to.be.true;
 
@@ -254,6 +270,7 @@ describe('service: displayFactory:', function() {
         expect(displayFactory.loadingDisplay).to.be.false;
         expect(displayFactory.errorMessage).to.not.be.ok;
         expect(displayFactory.apiError).to.not.be.ok;
+        expect(planFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(display._display.id, true);
         
         done();
       },10);
@@ -341,7 +358,8 @@ describe('service: displayFactory:', function() {
   describe('deleteDisplay: ',function(){
     it('should delete the display',function(done){
       updateDisplay = true;
-      
+      sandbox.stub(planFactory, 'toggleDisplayLicenseLocal');
+
       displayFactory.deleteDisplay();
       
       expect(displayFactory.loadingDisplay).to.be.true;
@@ -352,6 +370,7 @@ describe('service: displayFactory:', function() {
         expect(displayFactory.apiError).to.not.be.ok;
         expect(trackerCalled).to.equal('Display Deleted');
         expect(currentState).to.equal('apps.displays.list');
+        expect(planFactory.toggleDisplayLicenseLocal).to.have.been.called;
         done();
       },10);
     });
