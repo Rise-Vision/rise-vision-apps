@@ -36,7 +36,7 @@ angular.module('risevision.displays.controllers')
         $scope.displays.doSearch();
       });
 
-      $rootScope.$on('risevision.company.updated', function () {
+      $rootScope.$on('risevision.company.trial.started', function () {
         $scope.displays.doSearch();
       });
 
