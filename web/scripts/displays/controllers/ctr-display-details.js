@@ -16,10 +16,13 @@ angular.module('risevision.displays.controllers')
       $scope.company = userState.getCopyOfSelectedCompany(true);
       $scope.deferredDisplay = $q.defer();
       $scope.updatingRPP = false;
+      $scope.monitoringEmailsString = '';
       $scope.showPlansModal = planFactory.showPlansModal;
 
-      displayFactory.getDisplay(displayId).then(function () {
-        $scope.display = displayFactory.display;
+      displayFactory.getDisplay(displayId).then(function (display) {
+        $scope.display = display;
+        $scope.monitoringEmailsString = (display.monitoringEmails || []).join(';');
+        $scope.monitoringAlways = true;
         $scope.deferredDisplay.resolve();
 
         screenshotFactory.loadScreenshot();
@@ -67,6 +70,10 @@ angular.module('risevision.displays.controllers')
         var allProLicensesUsed = allLicensesUsed && assignedDisplays.indexOf($scope.displayId) === -1;
 
         return $scope.getProLicenseCount() > 0 && allProLicensesUsed;
+      };
+
+      $scope.isPlanActive = function () {
+        return planFactory.isSubscribed() || planFactory.isOnTrial();
       };
 
       $scope.isProAvailable = function () {
@@ -142,6 +149,12 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.save = function () {
+        $scope.display.monitoringEmails = $scope.monitoringEmailsString.split(';');
+
+        console.log('Monitoring emails', $scope.display.monitoringEmails);
+
+        return $q.reject();
+
         if (!$scope.displayDetails.$valid) {
           console.info('form not valid: ', $scope.displayDetails.$error);
 

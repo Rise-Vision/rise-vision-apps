@@ -57,55 +57,7 @@
 
 <div class="row half-top">
 
-  <!-- DISPLAY SCHEDULE -->
   <div class="col-sm-6 col-xs-12">
-    <div class="u_lh-normal u_margin-sm-bottom">
-      <label class="control-label" translate>displays-app.fields.player.schedule.label</label>
-    </div>
-    <div class="panel panel-default">
-      <table class="table">
-        <tbody class="table-body">
-           <tr class="table-body__row">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.schedule.assigned</span></td>
-            <td class="table-body__cell">
-              <span>
-                <a id="addToSchedule" ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
-                  <span class="btn btn-primary btn-xs">
-                    {{ 'displays-app.fields.player.schedule.addToSchedule' | translate }}
-                    <i class="fa fa-external-link icon-right" aria-hidden="true"></i>
-                  </span>
-                </a>
-                <a id="viewSchedule" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
-                  <span class="table-link u_ellipsis-md-top">
-                    {{display.scheduleName}}
-                    <i class="fa fa-external-link" aria-hidden="true"></i>
-                  </span>
-                </a>
-              </span>
-            </td>
-          </tr>
-          <tr class="table-body__row">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.displayControl.label</span></td>
-            <!-- ACTIVE -->
-            <td class="table-body__cell" ng-show="playerProFactory.isDisplayControlCompatiblePlayer(display)">
-              <span translate> displays-app.fields.player.displayControl.description </span>
-              <button class="btn btn-primary btn-xs" ng-click="playerProFactory.openConfigureDisplayControl(display)" require-role="da" translate> displays-app.fields.player.displayControl.configure </button>
-            </td>
-            <!-- INACTIVE -->
-            <td class="table-body__cell" ng-hide="playerProFactory.isDisplayControlCompatiblePlayer(display)">
-              <span>
-                <div class="text-danger">
-                  <span translate>
-                    displays-app.fields.player.displayControl.unsupported
-                  </span>
-                </div>
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
     <!-- DISPLAY DETAILS -->
     <div class="u_lh-normal u_margin-sm-bottom">
       <label class="control-label" translate>displays-app.displayDetails</label>
@@ -129,6 +81,25 @@
                         ng-click="factory.addDisplayModal(display)">
                   {{ 'displays-app.list.status.install' | translate }}
                 </button>
+            </td>
+          </tr>
+          <tr class="table-body__row">
+            <td class="table-body__cell"><span translate>displays-app.fields.player.schedule.assigned</span></td>
+            <td class="table-body__cell">
+              <span>
+                <a id="addToSchedule" ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
+                  <span class="btn btn-primary btn-xs">
+                    {{ 'displays-app.fields.player.schedule.addToSchedule' | translate }}
+                    <i class="fa fa-external-link icon-right" aria-hidden="true"></i>
+                  </span>
+                </a>
+                <a id="viewSchedule" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
+                  <span class="table-link u_ellipsis-md-top">
+                    {{display.scheduleName}}
+                    <i class="fa fa-external-link" aria-hidden="true"></i>
+                  </span>
+                </a>
+              </span>
             </td>
           </tr>
           <tr class="table-body__row">
@@ -187,8 +158,98 @@
 
   </div>
 
-   <!-- SCREENSHOT  -->
   <div class="col-sm-6 col-xs-12">
+    <!-- PROFESSIONAL FEATURES -->
+    <div class="u_lh-normal u_margin-sm-bottom">
+      <label class="control-label">Rise Player Professional Features</label>
+      <a href="#" ng-click="showPlansModal()"><i class="fa fa-question-circle icon-right" aria-hidden="true"></i></a>
+    </div>
+    <div class="panel panel-default">
+      <table class="table table--pro-features" ng-class="{ 'table--disabled': !display.monitoringEnabled }">
+        <tbody class="table-body">
+          <tr class="table-body__row" ng-show="!isPlanActive()" style="text-align: center; padding: 22px;">
+            <td colspan="2">
+              Unlock Rise Professional Features with any plan! <br/>
+              <button ng-click="showPlansModal()" class="btn btn-xs btn-primary u_margin-sm-top">Start a Plan Trial</button>
+            </td>
+          </tr>
+
+          <tr class="table-body__row" >
+            <td class="table-body__cell" style="white-space: nowrap; border-top: 0;">
+               <div class="checkbox" id="enableInputs" style="margin:0">
+                <label class="">
+                  <input type="checkbox" ng-model="display.monitoringEnabled">
+                  <span class="no-select">Display Monitoring</span>
+                </label>
+              </div></td>
+              <td class="table-body__cell" style="border-top: 0;">
+              <span>Send email notifications when your Display goes offline</span>
+            </td>
+          </tr>
+
+          <tr class="table-body__row" >
+            <td class="table-body__cell" style="white-space: nowrap; vertical-align: top; border-top: 0;">
+              <span class="">Email Recipients</span>
+            </td> 
+            <td class="table-body__cell has-error" style="border-top: 0;">
+              <input type="text" class="form-control" name="email" ng-model="monitoringEmailsString" ng-disabled="!display.monitoringEnabled">
+              <p id="proto_errorMessage" class="help-block validation-error-message-email hide">A valid email address is required.</p>
+            </td>
+          </tr>
+
+          <tr class="table-body__row">
+            <td class="table-body__cell" style="white-space: nowrap; vertical-align: top; border-top: 0;">
+              <span class="">Monitoring Timeline</span>
+            </td>
+            <td class="table-body__cell" style="border-top: 0;">
+              <div class="checkbox" style="margin:0"> 
+                <label class="control-label">
+                  <input type="checkbox" ng-model="monitoringAlways" ng-disabled="!display.monitoringEnabled">
+                  <span>Always</span>
+                </label>
+              </div>
+              <div id="timelineTextbox" class="panel-editable u_remove-bottom u_clickable" ng-click="openModal()" ng-show="!monitoringAlways" ng-disabled="!display.monitoringEnabled">
+                <div class="label label-tag">
+                  <span id="timelineLabel" timeline="timeline" class="ng-binding">19-Feb-2018 08:00 AM to 05:00 PM Weekly Every 1 Week(s) Monday Tuesday Wednesday Thursday Friday</span>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr class="table-body__row">
+            <td class="table-body__cell">
+              <span translate>displays-app.fields.player.displayControl.label</span>
+            </td>
+            <!-- ACTIVE -->
+            <td class="table-body__cell" ng-show="playerProFactory.isDisplayControlCompatiblePlayer(display)">
+              <span translate> displays-app.fields.player.displayControl.description </span>
+              <button class="btn btn-primary btn-xs" ng-click="playerProFactory.openConfigureDisplayControl(display)" require-role="da" translate>
+                displays-app.fields.player.displayControl.configure
+              </button>
+            </td>
+            <!-- INACTIVE -->
+            <td class="table-body__cell" ng-hide="playerProFactory.isDisplayControlCompatiblePlayer(display)">
+              <span>
+                <div class="text-danger">
+                  <span translate>
+                    displays-app.fields.player.displayControl.unsupported
+                  </span>
+                </div>
+              </span>
+            </td>
+          </tr>
+
+          <tr class="table-body__row">
+            <td class="table-body__cell"><span>Offline Play</span></td> 
+            <td class="table-body__cell">
+              <span>Play your Display content without a network connection</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SCREENSHOT  -->
     <screenshot></screenshot>
   </div>
 
