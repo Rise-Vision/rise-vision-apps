@@ -162,7 +162,7 @@
     <!-- PROFESSIONAL FEATURES -->
     <div class="u_lh-normal u_margin-sm-bottom">
       <label class="control-label">Rise Player Professional Features</label>
-      <a href="#" ng-click="showPlansModal()"><i class="fa fa-question-circle icon-right" aria-hidden="true"></i></a>
+      <a href="https://help.risevision.com/hc/en-us/articles/115003626863" target="_blank"><i class="fa fa-question-circle icon-right" aria-hidden="true"></i></a>
     </div>
     <div class="panel panel-default">
       <table class="table table--pro-features" ng-class="{ 'table--disabled': !display.monitoringEnabled }">
@@ -174,7 +174,7 @@
             </td>
           </tr>
 
-          <tr class="table-body__row" >
+          <tr class="table-body__row">
             <td class="table-body__cell" style="white-space: nowrap; border-top: 0;">
                <div class="checkbox" id="enableInputs" style="margin:0">
                 <label class="">
@@ -187,7 +187,7 @@
             </td>
           </tr>
 
-          <tr class="table-body__row" >
+          <tr class="table-body__row">
             <td class="table-body__cell" style="white-space: nowrap; vertical-align: top; border-top: 0;">
               <span class="">Email Recipients</span>
             </td> 
@@ -212,14 +212,14 @@
             </td>
           </tr>
 
-          <tr class="table-body__row">
+          <tr class="table-body__row" ng-class="{ 'table--disabled': !display.playerProAuthorized }">
             <td class="table-body__cell">
               <span translate>displays-app.fields.player.displayControl.label</span>
             </td>
             <!-- ACTIVE -->
             <td class="table-body__cell" ng-show="playerProFactory.isDisplayControlCompatiblePlayer(display)">
               <span translate> displays-app.fields.player.displayControl.description </span>
-              <button class="btn btn-primary btn-xs" ng-click="playerProFactory.openConfigureDisplayControl(display)" ng-disabled="!display.monitoringEnabled" require-role="da" translate>
+              <button class="btn btn-primary btn-xs" ng-click="playerProFactory.openConfigureDisplayControl(display)" ng-disabled="!display.playerProAuthorized" require-role="da" translate>
                 displays-app.fields.player.displayControl.configure
               </button>
             </td>

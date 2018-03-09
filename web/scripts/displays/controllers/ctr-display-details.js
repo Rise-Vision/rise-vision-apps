@@ -2,13 +2,14 @@
 
 angular.module('risevision.displays.controllers')
   .value('TL_EMAIL_DELIMITER', ',')
+  .value('EMAIL_REGEX', /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)
   .controller('displayDetails', ['$scope', '$rootScope', '$q', '$state', '$filter',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'storeAuthorization', 'enableCompanyProduct', 'userState', 'planFactory',
-    'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', 'TL_EMAIL_DELIMITER',
+    'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', 'TL_EMAIL_DELIMITER', 'EMAIL_REGEX',
     function ($scope, $rootScope, $q, $state, $filter, displayFactory, display, screenshotFactory, playerProFactory,
       $loading, $log, $modal, $templateCache, displayId, storeAuthorization, enableCompanyProduct, userState,
-      planFactory, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, EMAIL_DELIMITER) {
+      planFactory, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, EMAIL_DELIMITER, EMAIL_REGEX) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
@@ -98,12 +99,11 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.areEmailsValid = function () {
-        var regex = /.*@.*\..*\w+/;
         var emails = $scope.monitoringEmailsString.split(EMAIL_DELIMITER);
         var allValid = true;
 
         for(var i = 0; i < emails.length; i++) {
-          allValid = allValid && (!emails[i] || regex.test(emails[i]));
+          allValid = allValid && (!emails[i] || EMAIL_REGEX.test(emails[i]));
         }
 
         return allValid;
@@ -176,7 +176,7 @@ angular.module('risevision.displays.controllers')
         $scope.display.monitoringEmails = $scope.monitoringEmailsString.split(EMAIL_DELIMITER);
         $scope.display.monitoringSchedule = _formatTimeline($scope.monitoringSchedule);
 
-        if (!$scope.displayDetails.$valid) {
+        if (!$scope.displayDetails.$valid || !$scope.areEmailsValid()) {
           console.info('form not valid: ', $scope.displayDetails.$error);
 
           return $q.reject();
