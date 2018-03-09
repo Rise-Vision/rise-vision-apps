@@ -1,13 +1,14 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .controller('displayDetails', ['$scope', '$rootScope', '$q', '$state',
+  .value('TL_EMAIL_DELIMITER', ',')
+  .controller('displayDetails', ['$scope', '$rootScope', '$q', '$state', '$filter',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'storeAuthorization', 'enableCompanyProduct', 'userState', 'planFactory',
-    'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID',
-    function ($scope, $rootScope, $q, $state, displayFactory, display, screenshotFactory, playerProFactory,
+    'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', 'TL_EMAIL_DELIMITER',
+    function ($scope, $rootScope, $q, $state, $filter, displayFactory, display, screenshotFactory, playerProFactory,
       $loading, $log, $modal, $templateCache, displayId, storeAuthorization, enableCompanyProduct, userState,
-      planFactory, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID) {
+      planFactory, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, EMAIL_DELIMITER) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
@@ -17,12 +18,15 @@ angular.module('risevision.displays.controllers')
       $scope.deferredDisplay = $q.defer();
       $scope.updatingRPP = false;
       $scope.monitoringEmailsString = '';
+      $scope.monitoringSchedule = {};
       $scope.playlistItem = {};
       $scope.showPlansModal = planFactory.showPlansModal;
 
       displayFactory.getDisplay(displayId).then(function (display) {
         $scope.display = display;
-        $scope.monitoringEmailsString = (display.monitoringEmails || []).join(';');
+        $scope.monitoringEmailsString = (display.monitoringEmails || []).join(EMAIL_DELIMITER);
+        $scope.monitoringSchedule = _parseTimeline(display.monitoringSchedule);
+
         if (!$scope.display.playerProAuthorized) {
           $scope.display.monitoringEnabled = false;
         }
@@ -93,6 +97,18 @@ angular.module('risevision.displays.controllers')
                !playerProFactory.isUnsupportedPlayer($scope.display);
       };
 
+      $scope.areEmailsValid = function () {
+        var regex = /.*@.*\..*\w+/;
+        var emails = $scope.monitoringEmailsString.split(EMAIL_DELIMITER);
+        var allValid = true;
+
+        for(var i = 0; i < emails.length; i++) {
+          allValid = allValid && (!emails[i] || regex.test(emails[i]));
+        }
+
+        return allValid;
+      };
+
       $scope.confirmDelete = function () {
         $scope.modalInstance = $modal.open({
           template: $templateCache.get(
@@ -157,9 +173,8 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.save = function () {
-        $scope.display.monitoringEmails = $scope.monitoringEmailsString.split(';');
-
-        return $q.reject();
+        $scope.display.monitoringEmails = $scope.monitoringEmailsString.split(EMAIL_DELIMITER);
+        $scope.display.monitoringSchedule = _formatTimeline($scope.monitoringSchedule);
 
         if (!$scope.displayDetails.$valid) {
           console.info('form not valid: ', $scope.displayDetails.$error);
@@ -169,6 +184,64 @@ angular.module('risevision.displays.controllers')
           return displayFactory.updateDisplay();
         }
       };
+
+      function _formatTimeline(timeline) {
+        var resp = {};
+
+        if (!timeline.timeDefined) {
+          return null;
+        }
+
+        if (timeline.startTime || timeline.endTime) {
+          resp.time = {};
+          resp.time.start = timeline.startTime ? $filter('date')(new Date(timeline.startTime), 'HH:mm') : null;
+          resp.time.end = timeline.endTime ? $filter('date')(new Date(timeline.endTime), 'HH:mm') : null;
+        }
+
+        if (timeline.recurrenceDaysOfWeek && timeline.recurrenceDaysOfWeek.length > 0) {
+          resp.week = timeline.recurrenceDaysOfWeek.map(function (day) {
+            return {
+              day: day,
+              active: true
+            };
+          });
+        }
+
+        resp = JSON.stringify(resp);
+
+        return resp !== '{}' ? resp : null;
+      }
+
+      function _parseTimeline(tl) {
+        var timeline = {};
+
+        if (tl) {
+          tl = JSON.parse(tl);
+
+          if (tl.time) {
+            timeline.startTime = tl.time.start ? _reformatTime(tl.time.start) : null;
+            timeline.endTime = tl.time.end ? _reformatTime(tl.time.end) : null;
+          }
+
+          if (tl.week) {
+            timeline.recurrenceDaysOfWeek = [];
+
+            tl.week.forEach(function(d) {
+              if (d.active) {
+                timeline.recurrenceDaysOfWeek.push(d.day);
+              }
+            });
+          }
+        }
+
+        return timeline;
+      }
+
+      function _reformatTime(timeString) {
+        var today = $filter('date')(new Date(), 'dd-MMM-yyyy');
+        var fullDate = new Date(today + ' ' + timeString);
+        return $filter('date')(fullDate, 'dd-MMM-yyyy hh:mm a');
+      }
 
       var startTrialListener = $rootScope.$on('risevision.company.updated', function () {
         $scope.company = userState.getCopyOfSelectedCompany(true);

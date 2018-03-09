@@ -191,9 +191,9 @@
             <td class="table-body__cell" style="white-space: nowrap; vertical-align: top; border-top: 0;">
               <span class="">Email Recipients</span>
             </td> 
-            <td class="table-body__cell has-error" style="border-top: 0;">
+            <td class="table-body__cell" style="border-top: 0;" ng-class="{ 'has-error': !areEmailsValid() }">
               <input type="text" class="form-control" name="email" ng-model="monitoringEmailsString" ng-disabled="!display.monitoringEnabled">
-              <p id="proto_errorMessage" class="help-block validation-error-message-email hide">A valid email address is required.</p>
+              <p id="proto_errorMessage" class="help-block validation-error-message-email" ng-show="!areEmailsValid()">A valid email address is required.</p>
             </td>
           </tr>
 
@@ -203,10 +203,11 @@
             </td>
             <td class="table-body__cell" style="border-top: 0;">
               <timeline-basic-textbox
-                time-defined = "playlistItem.timeDefined"
-                start-time = "playlistItem.startTime"
-                end-time = "playlistItem.endTime"
-                recurrence-days-of-week = "playlistItem.recurrenceDaysOfWeek">
+                time-defined = "monitoringSchedule.timeDefined"
+                start-time = "monitoringSchedule.startTime"
+                end-time = "monitoringSchedule.endTime"
+                recurrence-days-of-week = "monitoringSchedule.recurrenceDaysOfWeek"
+                ng-disabled="!display.monitoringEnabled">
               </timeline-basic-textbox>
             </td>
           </tr>
