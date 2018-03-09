@@ -15,6 +15,7 @@ angular.module('risevision.apps', [
     'risevision.common.components.focus-me',
     'risevision.common.components.confirm-instance',
     'risevision.common.components.timeline',
+    'risevision.common.components.timeline-basic',
     'risevision.common.components.analytics',
     'risevision.common.components.distribution-selector',
     'risevision.common.components.background-image-setting',

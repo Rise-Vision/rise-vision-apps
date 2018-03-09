@@ -17,12 +17,16 @@ angular.module('risevision.displays.controllers')
       $scope.deferredDisplay = $q.defer();
       $scope.updatingRPP = false;
       $scope.monitoringEmailsString = '';
+      $scope.playlistItem = {};
       $scope.showPlansModal = planFactory.showPlansModal;
 
       displayFactory.getDisplay(displayId).then(function (display) {
         $scope.display = display;
         $scope.monitoringEmailsString = (display.monitoringEmails || []).join(';');
-        $scope.monitoringAlways = true;
+        if (!$scope.display.playerProAuthorized) {
+          $scope.display.monitoringEnabled = false;
+        }
+
         $scope.deferredDisplay.resolve();
 
         screenshotFactory.loadScreenshot();
@@ -55,6 +59,10 @@ angular.module('risevision.displays.controllers')
               $scope.display.playerProAuthorized = !playerProAuthorized;
             })
             .finally(function () {
+              if (!playerProAuthorized) {
+                $scope.display.monitoringEnabled = false;
+              }
+
               $scope.updatingRPP = false;
             });
         }
@@ -150,8 +158,6 @@ angular.module('risevision.displays.controllers')
 
       $scope.save = function () {
         $scope.display.monitoringEmails = $scope.monitoringEmailsString.split(';');
-
-        console.log('Monitoring emails', $scope.display.monitoringEmails);
 
         return $q.reject();
 

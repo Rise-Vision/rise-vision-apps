@@ -202,17 +202,12 @@
               <span class="">Monitoring Timeline</span>
             </td>
             <td class="table-body__cell" style="border-top: 0;">
-              <div class="checkbox" style="margin:0"> 
-                <label class="control-label">
-                  <input type="checkbox" ng-model="monitoringAlways" ng-disabled="!display.monitoringEnabled">
-                  <span>Always</span>
-                </label>
-              </div>
-              <div id="timelineTextbox" class="panel-editable u_remove-bottom u_clickable" ng-click="openModal()" ng-show="!monitoringAlways" ng-disabled="!display.monitoringEnabled">
-                <div class="label label-tag">
-                  <span id="timelineLabel" timeline="timeline" class="ng-binding">19-Feb-2018 08:00 AM to 05:00 PM Weekly Every 1 Week(s) Monday Tuesday Wednesday Thursday Friday</span>
-                </div>
-              </div>
+              <timeline-basic-textbox
+                time-defined = "playlistItem.timeDefined"
+                start-time = "playlistItem.startTime"
+                end-time = "playlistItem.endTime"
+                recurrence-days-of-week = "playlistItem.recurrenceDaysOfWeek">
+              </timeline-basic-textbox>
             </td>
           </tr>
 
@@ -223,7 +218,7 @@
             <!-- ACTIVE -->
             <td class="table-body__cell" ng-show="playerProFactory.isDisplayControlCompatiblePlayer(display)">
               <span translate> displays-app.fields.player.displayControl.description </span>
-              <button class="btn btn-primary btn-xs" ng-click="playerProFactory.openConfigureDisplayControl(display)" require-role="da" translate>
+              <button class="btn btn-primary btn-xs" ng-click="playerProFactory.openConfigureDisplayControl(display)" ng-disabled="!display.monitoringEnabled" require-role="da" translate>
                 displays-app.fields.player.displayControl.configure
               </button>
             </td>
