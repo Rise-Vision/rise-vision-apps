@@ -54,6 +54,7 @@ var unitTestFiles = [
   "web/bower_components/common-header/dist/js/components/distribution-selector.js",
   "web/bower_components/common-header/dist/js/components/presentation-selector.js",
   "web/bower_components/common-header/dist/js/components/timeline.js",
+  "web/bower_components/common-header/dist/js/components/timeline-basic.js",
   "web/bower_components/common-header/dist/js/components/message-box.js",
   "web/bower_components/common-header/dist/js/components/stop-event.js",
   "web/bower_components/widget-settings-ui-components/dist/js/angular/tooltip.js",

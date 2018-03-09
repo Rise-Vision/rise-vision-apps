@@ -22,10 +22,10 @@ angular.module('risevision.displays.controllers')
       $scope.playlistItem = {};
       $scope.showPlansModal = planFactory.showPlansModal;
 
-      displayFactory.getDisplay(displayId).then(function (display) {
-        $scope.display = display;
-        $scope.monitoringEmailsString = (display.monitoringEmails || []).join(EMAIL_DELIMITER);
-        $scope.monitoringSchedule = _parseTimeline(display.monitoringSchedule);
+      displayFactory.getDisplay(displayId).then(function () {
+        $scope.display = displayFactory.display;
+        $scope.monitoringEmailsString = ($scope.display.monitoringEmails || []).join(EMAIL_DELIMITER);
+        $scope.monitoringSchedule = _parseTimeline($scope.display.monitoringSchedule);
 
         if (!$scope.display.playerProAuthorized) {
           $scope.display.monitoringEnabled = false;
