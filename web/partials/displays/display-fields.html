@@ -178,7 +178,7 @@
             <td class="table-body__cell" style="white-space: nowrap; border-top: 0;">
                <div class="checkbox" id="enableInputs" style="margin:0">
                 <label class="">
-                  <input type="checkbox" ng-model="display.monitoringEnabled">
+                  <input type="checkbox" ng-model="display.monitoringEnabled" ng-disabled="!display.playerProAuthorized">
                   <span class="no-select">Display Monitoring</span>
                 </label>
               </div></td>
