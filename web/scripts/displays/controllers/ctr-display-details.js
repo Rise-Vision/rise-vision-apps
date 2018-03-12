@@ -26,7 +26,7 @@ angular.module('risevision.displays.controllers')
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
         $scope.monitoringEmailsString = ($scope.display.monitoringEmails || []).join(EMAIL_DELIMITER);
-        $scope.monitoringSchedule = _parseTimeline($scope.display.monitoringSchedule);
+        $scope.monitoringSchedule = $scope.parseTimeline($scope.display.monitoringSchedule);
 
         if (!$scope.display.playerProAuthorized) {
           $scope.display.monitoringEnabled = false;
@@ -174,7 +174,7 @@ angular.module('risevision.displays.controllers')
 
       $scope.save = function () {
         $scope.display.monitoringEmails = $scope.monitoringEmailsString.split(EMAIL_DELIMITER);
-        $scope.display.monitoringSchedule = _formatTimeline($scope.monitoringSchedule);
+        $scope.display.monitoringSchedule = $scope.formatTimeline($scope.monitoringSchedule);
 
         if (!$scope.displayDetails.$valid || !$scope.areEmailsValid()) {
           console.info('form not valid: ', $scope.displayDetails.$error);
@@ -185,10 +185,10 @@ angular.module('risevision.displays.controllers')
         }
       };
 
-      function _formatTimeline(timeline) {
+      $scope.formatTimeline = function (timeline) {
         var resp = {};
 
-        if (!timeline.timeDefined) {
+        if (!timeline || !timeline.timeDefined) {
           return null;
         }
 
@@ -210,17 +210,17 @@ angular.module('risevision.displays.controllers')
         resp = JSON.stringify(resp);
 
         return resp !== '{}' ? resp : null;
-      }
+      };
 
-      function _parseTimeline(tl) {
+      $scope.parseTimeline = function (tl) {
         var timeline = {};
 
         if (tl) {
           tl = JSON.parse(tl);
 
           if (tl.time) {
-            timeline.startTime = tl.time.start ? _reformatTime(tl.time.start) : null;
-            timeline.endTime = tl.time.end ? _reformatTime(tl.time.end) : null;
+            timeline.startTime = tl.time.start ? $scope.reformatTime(tl.time.start) : null;
+            timeline.endTime = tl.time.end ? $scope.reformatTime(tl.time.end) : null;
           }
 
           if (tl.week) {
@@ -235,13 +235,13 @@ angular.module('risevision.displays.controllers')
         }
 
         return timeline;
-      }
+      };
 
-      function _reformatTime(timeString) {
+      $scope.reformatTime = function (timeString) {
         var today = $filter('date')(new Date(), 'dd-MMM-yyyy');
         var fullDate = new Date(today + ' ' + timeString);
         return $filter('date')(fullDate, 'dd-MMM-yyyy hh:mm a');
-      }
+      };
 
       var startTrialListener = $rootScope.$on('risevision.company.updated', function () {
         $scope.company = userState.getCopyOfSelectedCompany(true);
