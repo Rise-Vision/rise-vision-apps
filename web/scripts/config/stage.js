@@ -35,7 +35,7 @@
     .value('OLD_MESSAGING_URL',
       'https://display-messaging-staging.risevision.com')
     .value('MESSAGING_PRIMUS_URL',
-      'https://services-stage.risevision.com/messaging/primus')
+      'https://services-stage.risevision.com/messaging/primus?displayId=apps&machineId=1')
     .value('MESSAGING_PRESENCE_URL', 'https://services-stage.risevision.com/messaging/presence')
     .value('APPS_URL', '')
     .value('ENV_NAME', 'STAGE')

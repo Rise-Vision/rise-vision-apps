@@ -81,7 +81,8 @@ angular.module('risevision.displays.services')
 
       factory.isDisplayControlCompatiblePlayer = function (display) {
         return !!(display && factory.isElectronPlayer(display) &&
-          display.playerVersion >= DISPLAY_CONTROL_PLAYER_VERSION);
+          display.playerVersion >= DISPLAY_CONTROL_PLAYER_VERSION &&
+          display.playerProAuthorized);
       };
 
       factory.openConfigureDisplayControl = function (display) {
