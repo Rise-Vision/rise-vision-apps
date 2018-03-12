@@ -56,16 +56,24 @@ describe('service: primus:', function() {
         },
         end: function() {
 
+        },
+        emit: function(eName, data) {
+          if (eName !== 'data') { return; }
+          primus.dataCb(data);
         }
       };
-      var Primus = function() {
-        return primus;
-      };
+
+      var newPrimusHandler;
 
       return {
-        Primus: function() { return primus; },
+        Primus: function() { return {
+          open: function() {},
+          on: function(eName, cb) {if (eName === 'data') {newPrimusHandler = cb; }},
+          end: function() {}
+        }; },
         PrimusOldMS: function() { return primus; },
-        primus: primus
+        primus: primus,
+        triggerNewPrimus: function(data) { newPrimusHandler(data); }
       };
     });
 
@@ -106,7 +114,8 @@ describe('service: primus:', function() {
         done();
       });
 
-      setTimeout($httpBackend.flush, 100);
+      setTimeout(primus.open, 50);
+      setTimeout($httpBackend.flush, 200);
     });
 
     it('should handle a timeout', function(done) {
@@ -126,21 +135,14 @@ describe('service: primus:', function() {
   var screenshotRequester;
   describe('screenshotRequester', function() {
     var $timeout;
+    var triggerNewPrimus;
 
     beforeEach(function() {
       inject(function($injector){
         primus = $injector.get('$window').primus;
+        triggerNewPrimus = $injector.get('$window').triggerNewPrimus;
         screenshotRequester = $injector.get('screenshotRequester');
         $timeout = $injector.get('$timeout');
-
-        primus.open = function() {
-          setTimeout(function() {
-            primus.dataCb({
-              msg: 'client-connected',
-              clientId: 1
-            });
-          });
-        };
       });
     });
 
@@ -163,6 +165,35 @@ describe('service: primus:', function() {
         expect(data.msg).to.equal("screenshot-saved");
         done();
       });
+
+      setTimeout(function() {
+        primus.dataCb({ msg: 'client-connected', clientId: 1 });
+      }, 50);
+    });
+
+    it('should wait for a successful screenshot response from new MS', function(done) {
+      var coreCall = sinon.stub();
+
+      coreCall.returns({
+        then: function() {
+          setTimeout(function() {
+            triggerNewPrimus({
+              msg: 'screenshot-saved',
+              clientId: 1
+            });
+          });
+        }
+      });
+
+      screenshotRequester(coreCall).then(function(data) {
+        expect(coreCall).to.be.calledOnce;
+        expect(data.msg).to.equal("screenshot-saved");
+        done();
+      });
+
+      setTimeout(function() {
+        primus.dataCb({ msg: 'client-connected', clientId: 1 });
+      }, 50);
     });
 
     it('should wait for a failed screenshot response', function(done) {
@@ -186,6 +217,10 @@ describe('service: primus:', function() {
         expect(err).to.equal('screenshot-failed');
         done();
       });
+
+      setTimeout(function() {
+        primus.dataCb({ msg: 'client-connected', clientId: 1 });
+      }, 50);
     });
 
     it('should wait for a failed Core request', function(done) {
@@ -203,6 +238,10 @@ describe('service: primus:', function() {
         expect(err).to.equal('core-failed');
         done();
       });
+
+      setTimeout(function() {
+        primus.dataCb({ msg: 'client-connected', clientId: 1 });
+      }, 50);
     });
 
     it('should handle a timeout', function(done) {
@@ -219,6 +258,10 @@ describe('service: primus:', function() {
         expect(err).to.equal('timeout');
         done();
       });
+
+      setTimeout(function() {
+        primus.dataCb({ msg: 'client-connected', clientId: 1 });
+      }, 50);
     });
   });
 });

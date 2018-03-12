@@ -18,6 +18,24 @@ angular.module('risevision.displays.services')
     };
   }])
 
+  .factory('loadPrimus', ['$q', '$window', 'MESSAGING_PRIMUS_URL', function ($q,
+    $window, MESSAGING_PRIMUS_URL) {
+    return {
+      create: function () {
+        var deferred = $q.defer();
+        debugger;
+        var primus = new $window.Primus(MESSAGING_PRIMUS_URL, {
+          reconnect: {
+            retries: 0
+          }
+        });
+
+        deferred.resolve(primus);
+        return deferred.promise;
+      }
+    };
+  }])
+
   .factory('getDisplayStatus', ['loadOldPrimus', '$q', '$timeout', 'checkNewMSPresence', function (
     loadOldPrimus, $q, $timeout, checkNewMSPresence) {
     return function (displayIds) {
@@ -49,8 +67,6 @@ angular.module('risevision.displays.services')
               'displayIds': displayIds
             });
           });
-
-          primus.open();
         });
 
       return deferred.promise.then(checkNewMSPresence.bind(null, displayIds));
@@ -112,41 +128,57 @@ angular.module('risevision.displays.services')
     };
   }])
 
-  .factory('screenshotRequester', ['loadOldPrimus', '$q', '$timeout', function (
-    loadOldPrimus, $q, $timeout) {
+  .factory('screenshotRequester', ['loadOldPrimus', 'loadPrimus', '$q', '$timeout', function (
+    loadOldPrimus, loadPrimus, $q, $timeout) {
     return function (coreRequester) {
       var deferred = $q.defer();
 
       loadOldPrimus.create()
-        .then(function (primus) {
-          var timer = $timeout(function () {
-            primus.end();
-            deferred.reject('timeout');
-          }, 10000);
+        .then(function (oldPrimus) {
+          loadPrimus.create()
+            .then(function (primus) {
+              var timer = $timeout(function () {
+                oldPrimus.end();
+                primus.end();
+                deferred.reject('timeout');
+              }, 10000);
 
-          primus.on('data', function (data) {
-            if (data.msg === 'client-connected') {
-              coreRequester(data.clientId)
-                .then(null, function (err) {
+              oldPrimus.on('data', function (data) {
+                if (data.msg === 'client-connected') {
+                  coreRequester(data.clientId)
+                    .then(null, function (err) {
+                      oldPrimus.end();
+                      primus.end();
+                      deferred.reject(err);
+                    });
+                } else if (data.msg === 'screenshot-saved') {
+                  $timeout.cancel(timer);
+                  oldPrimus.end();
                   primus.end();
-                  deferred.reject(err);
-                });
-            } else if (data.msg === 'screenshot-saved') {
-              $timeout.cancel(timer);
-              primus.end();
-              deferred.resolve(data);
-            } else if (data.msg === 'screenshot-failed') {
-              primus.end();
-              deferred.reject('screenshot-failed');
-            }
-          });
+                  deferred.resolve(data);
+                } else if (data.msg === 'screenshot-failed') {
+                  oldPrimus.end();
+                  primus.end();
+                  deferred.reject('screenshot-failed');
+                }
+              });
 
-          primus.on('error', function rej(err) {
-            primus.end();
-            deferred.reject(err);
-          });
+              primus.on('data', function (data) {
+                if (data.msg !== 'screenshot-saved' &&
+                  data.msg !== 'screenshot-failed' &&
+                  data.msg !== "client-connected") { return; }
+                oldPrimus.emit('data', data);
+              });
 
-          primus.open();
+              oldPrimus.on('error', function rej(err) {
+                oldPrimus.end();
+                deferred.reject(err);
+              });
+
+              primus.on('error', function rej(err) {
+                primus.end();
+              });
+            })
         });
 
       return deferred.promise;
