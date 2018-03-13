@@ -18,14 +18,14 @@ angular.module('risevision.displays.controllers')
       $scope.company = userState.getCopyOfSelectedCompany(true);
       $scope.deferredDisplay = $q.defer();
       $scope.updatingRPP = false;
-      $scope.monitoringEmailsString = '';
+      $scope.monitoringEmailsList = [];
       $scope.monitoringSchedule = {};
       $scope.playlistItem = {};
       $scope.showPlansModal = planFactory.showPlansModal;
 
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
-        $scope.monitoringEmailsString = ($scope.display.monitoringEmails || []).join(EMAIL_DELIMITER);
+        $scope.monitoringEmailsList = ($scope.display.monitoringEmails || []).map(function(e) { return { text: e }; });
         $scope.monitoringSchedule = _parseTimeline($scope.display.monitoringSchedule);
 
         if (!$scope.display.playerProAuthorized) {
@@ -98,12 +98,16 @@ angular.module('risevision.displays.controllers')
                !playerProFactory.isUnsupportedPlayer($scope.display);
       };
 
+      $scope.isValidEmail = function (email) {
+        return email && email.text && EMAIL_REGEX.test(email.text);
+      };
+
       $scope.areEmailsValid = function () {
-        var emails = $scope.monitoringEmailsString.split(EMAIL_DELIMITER);
+        var emails = $scope.monitoringEmailsList;
         var allValid = true;
 
         for(var i = 0; i < emails.length; i++) {
-          allValid = allValid && (!emails[i] || EMAIL_REGEX.test(emails[i]));
+          allValid = allValid && $scope.isValidEmail(emails[i]);
         }
 
         return allValid;
@@ -173,7 +177,7 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.save = function () {
-        $scope.display.monitoringEmails = $scope.monitoringEmailsString.split(EMAIL_DELIMITER);
+        $scope.display.monitoringEmails = $scope.monitoringEmailsList.map(function(t) { return t.text; });
         $scope.display.monitoringSchedule = _formatTimeline($scope.monitoringSchedule);
 
         if (!$scope.displayDetails.$valid || !$scope.areEmailsValid()) {
