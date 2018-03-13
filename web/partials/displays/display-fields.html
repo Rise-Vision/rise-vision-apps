@@ -191,11 +191,12 @@
             <td class="table-body__cell" style="white-space: nowrap; vertical-align: top; border-top: 0;">
               <span class="">Email Recipients</span>
             </td>
-            <td class="table-body__cell" style="border-top: 0;" ng-class="{ 'has-error': !areEmailsValid() }">
-              <tags-input ng-model="monitoringEmailsList"
-                          ng-disabled="!display.monitoringEnabled"
+            <td class="table-body__cell" style="border-top: 0;" ng-class="{ 'has-error': !displayDetails.monitoringEmails.$valid }">
+              <tags-input name="monitoringEmails"
                           type="email"
                           placeholder="Add an email"
+                          ng-model="monitoringEmailsList"
+                          ng-disabled="!display.monitoringEnabled"
                           add-on-enter="true"
                           add-on-space="true"
                           add-on-comma="true"
@@ -203,7 +204,9 @@
                           add-on-paste="true"
                           on-tag-adding="isValidEmail($tag)">
               </tags-input>
-              <p id="proto_errorMessage" class="help-block validation-error-message-email" ng-show="!areEmailsValid()">A valid email address is required.</p>
+              <p class="help-block validation-error-message-email" ng-show="!displayDetails.monitoringEmails.$valid">
+                A valid email address is required.
+              </p>
             </td>
           </tr>
 

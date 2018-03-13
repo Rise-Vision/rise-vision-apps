@@ -102,17 +102,6 @@ angular.module('risevision.displays.controllers')
         return email && email.text && EMAIL_REGEX.test(email.text);
       };
 
-      $scope.areEmailsValid = function () {
-        var emails = $scope.monitoringEmailsList;
-        var allValid = true;
-
-        for(var i = 0; i < emails.length; i++) {
-          allValid = allValid && $scope.isValidEmail(emails[i]);
-        }
-
-        return allValid;
-      };
-
       $scope.confirmDelete = function () {
         $scope.modalInstance = $modal.open({
           template: $templateCache.get(
@@ -180,7 +169,7 @@ angular.module('risevision.displays.controllers')
         $scope.display.monitoringEmails = $scope.monitoringEmailsList.map(function(t) { return t.text; });
         $scope.display.monitoringSchedule = _formatTimeline($scope.monitoringSchedule);
 
-        if (!$scope.displayDetails.$valid || !$scope.areEmailsValid()) {
+        if (!$scope.displayDetails.$valid) {
           console.info('form not valid: ', $scope.displayDetails.$error);
 
           return $q.reject();
