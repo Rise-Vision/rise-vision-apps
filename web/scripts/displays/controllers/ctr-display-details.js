@@ -1,15 +1,14 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .value('TL_EMAIL_DELIMITER', ',')
   .value('EMAIL_REGEX', /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)
   .controller('displayDetails', ['$scope', '$rootScope', '$q', '$state', '$filter',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'storeAuthorization', 'enableCompanyProduct', 'userState', 'planFactory',
-    'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', 'TL_EMAIL_DELIMITER', 'EMAIL_REGEX',
+    'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', 'EMAIL_REGEX',
     function ($scope, $rootScope, $q, $state, $filter, displayFactory, display, screenshotFactory, playerProFactory,
       $loading, $log, $modal, $templateCache, displayId, storeAuthorization, enableCompanyProduct, userState,
-      planFactory, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, EMAIL_DELIMITER, EMAIL_REGEX) {
+      planFactory, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, EMAIL_REGEX) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
@@ -99,7 +98,7 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.isValidEmail = function (email) {
-        return email && email.text && EMAIL_REGEX.test(email.text);
+        return !!(email && email.text && EMAIL_REGEX.test(email.text));
       };
 
       $scope.confirmDelete = function () {
