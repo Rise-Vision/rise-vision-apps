@@ -191,7 +191,7 @@
             <td class="table-body__cell" style="white-space: nowrap; vertical-align: top; border-top: 0;">
               <span class="">Email Recipients</span>
             </td>
-            <td class="table-body__cell" ng-class="{ 'has-error': !areEmailsValid() }" style="padding: 0">
+            <td class="table-body__cell" style="border-top: 0;" ng-class="{ 'has-error': !areEmailsValid() }">
               <tags-input ng-model="monitoringEmailsList"
                           ng-disabled="!display.monitoringEnabled"
                           type="email"
