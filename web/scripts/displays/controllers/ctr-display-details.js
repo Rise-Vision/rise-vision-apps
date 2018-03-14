@@ -1,15 +1,14 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .value('TL_EMAIL_DELIMITER', ',')
   .value('EMAIL_REGEX', /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)
   .controller('displayDetails', ['$scope', '$rootScope', '$q', '$state', '$filter',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'storeAuthorization', 'enableCompanyProduct', 'userState', 'planFactory',
-    'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', 'TL_EMAIL_DELIMITER', 'EMAIL_REGEX',
+    'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', 'EMAIL_REGEX',
     function ($scope, $rootScope, $q, $state, $filter, displayFactory, display, screenshotFactory, playerProFactory,
       $loading, $log, $modal, $templateCache, displayId, storeAuthorization, enableCompanyProduct, userState,
-      planFactory, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, EMAIL_DELIMITER, EMAIL_REGEX) {
+      planFactory, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, EMAIL_REGEX) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
@@ -18,14 +17,14 @@ angular.module('risevision.displays.controllers')
       $scope.company = userState.getCopyOfSelectedCompany(true);
       $scope.deferredDisplay = $q.defer();
       $scope.updatingRPP = false;
-      $scope.monitoringEmailsString = '';
+      $scope.monitoringEmailsList = [];
       $scope.monitoringSchedule = {};
       $scope.playlistItem = {};
       $scope.showPlansModal = planFactory.showPlansModal;
 
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
-        $scope.monitoringEmailsString = ($scope.display.monitoringEmails || []).join(EMAIL_DELIMITER);
+        $scope.monitoringEmailsList = ($scope.display.monitoringEmails || []).map(function(e) { return { text: e }; });
         $scope.monitoringSchedule = _parseTimeline($scope.display.monitoringSchedule);
 
         if (!$scope.display.playerProAuthorized) {
@@ -98,15 +97,8 @@ angular.module('risevision.displays.controllers')
                !playerProFactory.isUnsupportedPlayer($scope.display);
       };
 
-      $scope.areEmailsValid = function () {
-        var emails = $scope.monitoringEmailsString.split(EMAIL_DELIMITER);
-        var allValid = true;
-
-        for(var i = 0; i < emails.length; i++) {
-          allValid = allValid && (!emails[i] || EMAIL_REGEX.test(emails[i]));
-        }
-
-        return allValid;
+      $scope.isValidEmail = function (email) {
+        return !!(email && email.text && EMAIL_REGEX.test(email.text));
       };
 
       $scope.confirmDelete = function () {
@@ -173,10 +165,10 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.save = function () {
-        $scope.display.monitoringEmails = $scope.monitoringEmailsString.split(EMAIL_DELIMITER);
+        $scope.display.monitoringEmails = $scope.monitoringEmailsList.map(function(t) { return t.text; });
         $scope.display.monitoringSchedule = _formatTimeline($scope.monitoringSchedule);
 
-        if (!$scope.displayDetails.$valid || !$scope.areEmailsValid()) {
+        if (!$scope.displayDetails.$valid) {
           console.info('form not valid: ', $scope.displayDetails.$error);
 
           return $q.reject();

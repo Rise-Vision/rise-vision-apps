@@ -6,6 +6,7 @@ angular.module('risevision.apps', [
     'ui.codemirror',
     'truncate',
     'slugifier',
+    'ngTagsInput',
     'risevision.common.header',
     'risevision.common.header.templates',
     'risevision.common.components.last-modified',

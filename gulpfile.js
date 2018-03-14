@@ -46,6 +46,7 @@ var unitTestFiles = [
   "web/bower_components/angular-truncate/src/truncate.js",
   "web/bower_components/angular-slugify/angular-slugify.js",
   'web/bower_components/Sortable/Sortable.js',
+  'web/bower_components/ng-tags-input/ng-tags-input.js',
   "web/bower_components/rv-angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js",
   "web/bower_components/widget-settings-ui-components/dist/js/angular/position-setting.js",
   "web/bower_components/common-header/dist/js/components/focus-me.js",
