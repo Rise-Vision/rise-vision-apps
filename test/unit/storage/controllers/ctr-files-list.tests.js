@@ -61,6 +61,11 @@ describe('controller: Files List', function() {
     $provide.service('FileUploader',function(){
       return {}
     });
+    $provide.service('userState',function(){
+      return {
+          getCopyOfSelectedCompany: function() {return {};}
+      };
+    });
     $provide.value('SELECTOR_TYPES', {SINGLE_FILE: 'single-file'});
   }));
   var $scope, onFileSelect, changeFolder, storageFactory;

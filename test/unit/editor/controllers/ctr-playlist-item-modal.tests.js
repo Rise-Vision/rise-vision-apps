@@ -39,18 +39,12 @@ describe('controller: playlist item modal', function() {
       }
     });
 
-    $provide.service('widgetModalFactory',function(){
-      return {
-        showWidgetModal: sinon.stub()
-      }
-    });
-    
-    $provide.service('presentationItemFactory',function(){
+    $provide.service('settingsFactory',function(){
       return {
         showSettingsModal: sinon.stub()
       }
     });
-
+    
     $provide.service('editorFactory',function(){
       return {
         presentation: presentation
@@ -143,35 +137,17 @@ describe('controller: playlist item modal', function() {
     });
     
     describe('showSettingsModal: ', function() {
-      var widgetModalFactory, presentationItemFactory;
+      var settingsFactory;
       beforeEach(function() {
         inject(function($injector){
-          widgetModalFactory = $injector.get('widgetModalFactory');
-          presentationItemFactory = $injector.get('presentationItemFactory');
+          settingsFactory = $injector.get('settingsFactory');
         });
       });
       
-      it('should open widget settings', function() {
+      it('should open settings', function() {
         $scope.showSettingsModal();
         
-        expect(widgetModalFactory.showWidgetModal).to.have.been.calledWith($scope.item, true);
-      });
-
-      it('should open presentation settings', function() {
-        itemProperties.type = 'presentation';
-        
-        $scope.showSettingsModal();
-        
-        expect(presentationItemFactory.showSettingsModal).to.have.been.calledWith($scope.item, true);
-      });
-
-      it('should not open any modal', function() {
-        itemProperties.type = 'asdf';
-        
-        $scope.showSettingsModal();
-        
-        expect(widgetModalFactory.showWidgetModal).to.not.have.been.called;
-        expect(presentationItemFactory.showSettingsModal).to.not.have.been.called;
+        expect(settingsFactory.showSettingsModal).to.have.been.calledWith($scope.item, true);
       });
     })
   });

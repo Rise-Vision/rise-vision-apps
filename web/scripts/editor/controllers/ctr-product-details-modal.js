@@ -4,9 +4,10 @@
   angular.module('risevision.editor.controllers')
     .controller('ProductDetailsModalController', ['$scope', '$rootScope', '$modalInstance',
       'product', 'userState', 'currencyService', 'storeAuthorization', 'checkTemplateAccess',
-      '$loading', '$timeout', 'STORE_URL', 'TEMPLATE_LIBRARY_PRODUCT_CODE',
+      '$loading', '$timeout', 'STORE_URL', 'TEMPLATE_LIBRARY_PRODUCT_CODE', "planFactory",
       function ($scope, $rootScope, $modalInstance, product, userState, currencyService,
-        storeAuthorization, checkTemplateAccess, $loading, $timeout, STORE_URL, TEMPLATE_LIBRARY_PRODUCT_CODE) {
+        storeAuthorization, checkTemplateAccess, $loading, $timeout, STORE_URL, TEMPLATE_LIBRARY_PRODUCT_CODE,
+        planFactory) {
         $scope.storeUrl = STORE_URL;
         $scope.product = product;
         $scope.canUseProduct = product.paymentTerms === 'free';
@@ -38,17 +39,16 @@
         }
 
         $scope.startTemplateTrial = function () {
-          $loading.start('loading-trial');
-          storeAuthorization.startTrial(TEMPLATE_LIBRARY_PRODUCT_CODE)
-            .then(function () {
-              $rootScope.$emit('refreshSubscriptionStatus');
-              $loading.stop('loading-trial');
-              $scope.select();
-            })
-            .catch(function (e) {
-              $loading.stop('loading-trial');
-            });
+          planFactory.showPlansModal();
         };
+
+        $rootScope.$on('risevision.company.updated', function () {
+          var company = userState.getCopyOfSelectedCompany();
+  
+          if (company.planSubscriptionStatus === 'Trial') {
+            $modalInstance.close(product);
+          }
+        });
 
         $scope.toggleDetails = function () {
           $scope.detailsOpen = !$scope.detailsOpen;

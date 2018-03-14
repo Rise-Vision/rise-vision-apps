@@ -56,37 +56,66 @@ describe('service: primus:', function() {
         },
         end: function() {
 
+        },
+        emit: function(eName, data) {
+          if (eName !== 'data') { return; }
+          primus.dataCb(data);
         }
       };
-      var Primus = function() {
-        return primus;
+
+      var newPrimusHandler;
+
+      return {
+        Primus: function() { return {
+          open: function() {},
+          on: function(eName, cb) {if (eName === 'data') {newPrimusHandler = cb; }},
+          end: function() {}
+        }; },
+        PrimusOldMS: function() { return primus; },
+        primus: primus,
+        triggerNewPrimus: function(data) { newPrimusHandler(data); }
       };
-
-      var window = { Primus: function() { return primus; }, primus: primus };
-
-      return window;
     });
 
   }));
 
   var primus;
   var getDisplayStatus;
+
   describe('getDisplayStatus', function() {
     var $timeout;
+    var $httpBackend;
 
     beforeEach(function(){
       inject(function($injector){
         primus = $injector.get('$window').primus;
         getDisplayStatus = $injector.get('getDisplayStatus');
         $timeout = $injector.get('$timeout');
+        $httpBackend = $injector.get('$httpBackend');
       });
     });
 
-    it('should call primus and load status', function(done) {
+    it('should call both messaging services and load status', function(done) {
+      $httpBackend.when('POST', /.*/).respond(function(method, url, data) {
+        var ids = JSON.parse(data);
+        return [
+          200,
+          ids.reduce(function(obj, id) {
+            obj[id] = { connected: id === "b" ? true : false };
+            return obj;
+          }, {}),
+        ];
+      });
+
       getDisplayStatus(['a', 'b', 'c']).then(function(msg) {
-        expect(msg).to.deep.equal( [{'a': true}, {'b': false}, {'c': true},]);
+        expect(msg[0].a).to.be.true;
+        expect(msg[1].b).to.be.true;
+        expect(msg[2].c).to.be.true;
         done();
       });
+
+      setTimeout(primus.open, 50);
+      setTimeout($httpBackend.flush, 200);
     });
 
     it('should handle a timeout', function(done) {
@@ -106,21 +135,14 @@ describe('service: primus:', function() {
   var screenshotRequester;
   describe('screenshotRequester', function() {
     var $timeout;
+    var triggerNewPrimus;
 
     beforeEach(function() {
       inject(function($injector){
         primus = $injector.get('$window').primus;
+        triggerNewPrimus = $injector.get('$window').triggerNewPrimus;
         screenshotRequester = $injector.get('screenshotRequester');
         $timeout = $injector.get('$timeout');
-
-        primus.open = function() {
-          setTimeout(function() {
-            primus.dataCb({
-              msg: 'client-connected',
-              clientId: 1
-            });
-          });
-        };
       });
     });
 
@@ -143,6 +165,35 @@ describe('service: primus:', function() {
         expect(data.msg).to.equal("screenshot-saved");
         done();
       });
+
+      setTimeout(function() {
+        primus.dataCb({ msg: 'client-connected', clientId: 1 });
+      }, 50);
+    });
+
+    it('should wait for a successful screenshot response from new MS', function(done) {
+      var coreCall = sinon.stub();
+
+      coreCall.returns({
+        then: function() {
+          setTimeout(function() {
+            triggerNewPrimus({
+              msg: 'screenshot-saved',
+              clientId: 1
+            });
+          });
+        }
+      });
+
+      screenshotRequester(coreCall).then(function(data) {
+        expect(coreCall).to.be.calledOnce;
+        expect(data.msg).to.equal("screenshot-saved");
+        done();
+      });
+
+      setTimeout(function() {
+        primus.dataCb({ msg: 'client-connected', clientId: 1 });
+      }, 50);
     });
 
     it('should wait for a failed screenshot response', function(done) {
@@ -166,6 +217,10 @@ describe('service: primus:', function() {
         expect(err).to.equal('screenshot-failed');
         done();
       });
+
+      setTimeout(function() {
+        primus.dataCb({ msg: 'client-connected', clientId: 1 });
+      }, 50);
     });
 
     it('should wait for a failed Core request', function(done) {
@@ -183,6 +238,10 @@ describe('service: primus:', function() {
         expect(err).to.equal('core-failed');
         done();
       });
+
+      setTimeout(function() {
+        primus.dataCb({ msg: 'client-connected', clientId: 1 });
+      }, 50);
     });
 
     it('should handle a timeout', function(done) {
@@ -199,6 +258,10 @@ describe('service: primus:', function() {
         expect(err).to.equal('timeout');
         done();
       });
+
+      setTimeout(function() {
+        primus.dataCb({ msg: 'client-connected', clientId: 1 });
+      }, 50);
     });
   });
 });

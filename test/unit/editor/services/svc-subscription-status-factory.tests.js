@@ -1,8 +1,12 @@
 'use strict';
 describe('service: subscriptionStatusFactory:', function() {
+  var TEMPLATE_LIBRARY_PRODUCT_CODE = "templates-library";
+  var TEMPLATE_TEST_CODE = "template-test";
+
   beforeEach(module('risevision.editor.services'));
 
   beforeEach(module(function ($provide) {
+    $provide.value("TEMPLATE_LIBRARY_PRODUCT_CODE", TEMPLATE_LIBRARY_PRODUCT_CODE);
     $provide.service('$q', function() {return Q;});
     $provide.service('store', function() {
       return {
@@ -20,11 +24,28 @@ describe('service: subscriptionStatusFactory:', function() {
         }
       };
     });
+    $provide.service('storeAuthorization', function() {
+      return {
+        check: function(templateCode) {
+          var deferred = Q.defer();
+          var status = returnStatusArray[0];
+          returnStatusArray = returnStatusArray.slice(1);
+          if(status) {
+            deferred.resolve(response);
+          } else {
+            deferred.reject('API Error');
+          }            
+          return deferred.promise;
+        }
+      };
+    });
+    
     
   }));
   
 
   var subscriptionStatusFactory, response, requestedUrl, apiCalls, returnStatus;
+  var checkTemplateAccess, returnStatusArray;
 
   beforeEach(function(){
     returnStatus = true;
@@ -34,15 +55,18 @@ describe('service: subscriptionStatusFactory:', function() {
       {"pc":"pc1","status":"Subscribed"}
       ]
     };
+    returnStatusArray = [];
 
     inject(function($injector){
       subscriptionStatusFactory = $injector.get('subscriptionStatusFactory');
+      checkTemplateAccess = $injector.get('checkTemplateAccess');
     });
   });
 
   it('should exist',function(){
     expect(subscriptionStatusFactory).to.be.truely;
     expect(subscriptionStatusFactory.checkProductCodes).to.be.a('function');
+    expect(checkTemplateAccess).to.be.a('function');
   });
 
   it('should request productCodes',function(){
@@ -291,6 +315,38 @@ describe('service: subscriptionStatusFactory:', function() {
           expect(status.isSubscribed).to.be.false;
           done();
         });
+      });
+    });
+  });
+
+  describe('checkTemplateAccess:', function() {
+    it('should give access to premium templates if subscribed to Templates Library', function(done) {
+      
+      returnStatusArray = [true];
+
+      checkTemplateAccess(TEMPLATE_TEST_CODE)
+      .then(function() {
+        done();
+      });
+    });
+
+    it('should give access to premium templates if subscribed to the template', function(done) {
+      
+      returnStatusArray = [false, true];
+
+      checkTemplateAccess(TEMPLATE_TEST_CODE)
+      .then(function() {
+        done();
+      });
+    });
+
+    it('should reject access to premium templates if not subscribed to Templates Library or to the template', function(done) {
+      
+      returnStatusArray = [false, false];
+
+      checkTemplateAccess(TEMPLATE_TEST_CODE)
+      .then(null, function() {
+        done();
       });
     });
   });

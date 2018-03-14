@@ -54,10 +54,16 @@ describe('controller: ProductDetailsModalController', function() {
         stop: function(){}
       };
     });
+    $provide.service('planFactory', function(){
+      return {
+        showPlansModal: function() {}
+      }
+    })
     $provide.value('STORE_URL',STORE_URL);
   }));
   var $scope, $modalInstance, $modalInstanceDismissSpy, $modalInstanceCloseSpy, product,
-    $loadingStopSpy, $timeout, storeCheckSpy, checkTemplateAccessSpy, storeAuthorize, TEMPLATE_LIBRARY_PRODUCT_CODE;
+    $loadingStopSpy, $timeout, storeCheckSpy, checkTemplateAccessSpy, storeAuthorize, TEMPLATE_LIBRARY_PRODUCT_CODE,
+    planFactory;
   
   function initController(paymentTerms) {
     inject(function($injector,$rootScope, $controller, $loading, storeAuthorization, checkTemplateAccess){
@@ -65,6 +71,7 @@ describe('controller: ProductDetailsModalController', function() {
       $modalInstance = $injector.get('$modalInstance');
       $timeout = $injector.get('$timeout');
       TEMPLATE_LIBRARY_PRODUCT_CODE = $injector.get('TEMPLATE_LIBRARY_PRODUCT_CODE');
+      planFactory = $injector.get('planFactory');
 
       $loadingStopSpy = sinon.spy($loading,'stop');
 

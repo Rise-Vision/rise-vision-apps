@@ -13,6 +13,10 @@ angular.module('risevision.editor.services')
     },
     IMAGE: {
       render: true,
+      inAppSettings: {
+        partial: 'partials/widgets/image-settings.html',
+        type: 'imageWidget'
+      },
       ids: {
         PROD: '5233a598-35ce-41a4-805c-fd2147f144a3',
         TEST: '2707fc05-5051-4d7b-bcde-01fafd6eaa5e'
@@ -71,6 +75,17 @@ angular.module('risevision.editor.services')
         TEST: '570012a1-54cc-4926-acb6-f9873588eddf'
       }
     },
+    TWITTER: {
+      render: true,
+      inAppSettings: {
+        partial: 'partials/widgets/twitter-settings-modal.html',
+        type: 'twitterWidget'
+      },
+      ids: {
+        PROD: '67e511ae-62b5-4a44-9551-077f63596079',
+        TEST: '83850b51-9040-445d-aa3b-d25946a725c5'
+      }
+    },
     PRESENTATION: {
       svgIcon: 'iconPresentation',
       iconClass: 'ph-embedded-item',
@@ -84,6 +99,7 @@ angular.module('risevision.editor.services')
       var factory = {};
 
       var RENDER_WIDGETS = [];
+      var IN_APP_SETTINGS = {};
       var SVG_ICONS = {};
       var ICON_CLASSES = {};
 
@@ -94,6 +110,15 @@ angular.module('risevision.editor.services')
           if (WIDGETS_INFO[i].render) {
             for (j in WIDGETS_INFO[i].ids) {
               RENDER_WIDGETS.push(WIDGETS_INFO[i].ids[j]);
+            }
+          }
+
+          if (WIDGETS_INFO[i].inAppSettings) {
+            for (j in WIDGETS_INFO[i].ids) {
+              // NOTE: Disable for the Image Widget even though configured
+              if (WIDGETS_INFO[i] !== WIDGETS_INFO.IMAGE) {
+                IN_APP_SETTINGS[WIDGETS_INFO[i].ids[j]] = WIDGETS_INFO[i].inAppSettings;
+              }
             }
           }
 
@@ -130,6 +155,13 @@ angular.module('risevision.editor.services')
           }
         }
         return false;
+      };
+
+      factory.getInAppSettings = function (widgetId) {
+        if (widgetId && IN_APP_SETTINGS[widgetId]) {
+          return IN_APP_SETTINGS[widgetId];
+        }
+        return null;
       };
 
       factory.isWebpageWidget = function (widgetId) {

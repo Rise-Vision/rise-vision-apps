@@ -19,11 +19,9 @@
     ])
     .service('display', ['$rootScope', '$q', '$log', 'coreAPILoader',
       'userState', 'getDisplayStatus', 'screenshotRequester', 'pick',
-      'getProductSubscriptionStatus', 'subscriptionStatusService',
       'DISPLAY_WRITABLE_FIELDS', 'DISPLAY_SEARCH_FIELDS', 'PLAYER_PRO_PRODUCT_CODE',
       function ($rootScope, $q, $log, coreAPILoader, userState,
         getDisplayStatus, screenshotRequester, pick,
-        getProductSubscriptionStatus, subscriptionStatusService,
         DISPLAY_WRITABLE_FIELDS, DISPLAY_SEARCH_FIELDS, PLAYER_PRO_PRODUCT_CODE) {
 
         var companiesStatus = {};
@@ -37,25 +35,6 @@
           query = query.substring(3);
 
           return query.trim();
-        };
-
-        var _loadCompaniesProStatus = function (displays, forceReload) {
-          var promises = [];
-
-          displays.forEach(function (display) {
-            var companyId = display.companyId;
-
-            if (!companiesStatus[companyId] || forceReload) {
-              companiesStatus[companyId] = {};
-              promises.push(
-                subscriptionStatusService.get(PLAYER_PRO_PRODUCT_CODE, companyId)
-                .then(function (resp) {
-                  companiesStatus[companyId] = resp;
-                }));
-            }
-          });
-
-          return $q.all(promises);
         };
 
         var _mergeConnectionStatuses = function (items, statuses) {
@@ -82,19 +61,6 @@
 
           item.lastConnectionTime = !isNaN(lookup.lastConnectionTime) ? new Date(
             lookup.lastConnectionTime) : (item.lastActivityDate || '');
-        };
-
-        var _mergeProSubscriptionStatus = function (items, statusMap) {
-          items.forEach(function (item) {
-            var companyStatus = companiesStatus[item.companyId];
-
-            if (companyStatus.statusCode === 'subscribed' && statusMap[item.id].statusCode ===
-              'not-subscribed') {
-              statusMap[item.id].trialPeriod = 0;
-            }
-
-            item.proSubscription = statusMap[item.id];
-          });
         };
 
         var service = {
@@ -134,7 +100,6 @@
                 });
 
                 service.statusLoading = true;
-                service.susbscriptionLoading = true;
 
                 getDisplayStatus(displayIds).then(function (statuses) {
                     _mergeConnectionStatuses(result.items, statuses);
@@ -143,17 +108,6 @@
                   })
                   .finally(function () {
                     service.statusLoading = false;
-                  });
-
-                _loadCompaniesProStatus(result.items)
-                  .then(function () {
-                    return getProductSubscriptionStatus(PLAYER_PRO_PRODUCT_CODE, displayIds);
-                  })
-                  .then(function (statusMap) {
-                    _mergeProSubscriptionStatus(result.items, statusMap);
-                  })
-                  .finally(function () {
-                    service.susbscriptionLoading = false;
                   });
               }
             }
@@ -262,21 +216,6 @@
               })
               .then(null, function (e) {
                 console.error('Failed to delete display.', e);
-                deferred.reject(e);
-              });
-
-            return deferred.promise;
-          },
-          getCompanyProStatus: function (companyId, forceReload) {
-            var deferred = $q.defer();
-
-            _loadCompaniesProStatus([{
-                companyId: companyId
-              }], forceReload)
-              .then(function () {
-                deferred.resolve(companiesStatus[companyId]);
-              })
-              .catch(function (e) {
                 deferred.reject(e);
               });
 

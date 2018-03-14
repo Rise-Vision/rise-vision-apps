@@ -1,5 +1,7 @@
 'use strict';
 describe('controller: displays list', function() {
+  var sandbox = sinon.sandbox.create();
+
   beforeEach(module('risevision.displays.filters'));
   beforeEach(module('risevision.displays.controllers'));
   beforeEach(module('risevision.displays.services'));
@@ -8,7 +10,7 @@ describe('controller: displays list', function() {
     $provide.service('userState',function(){
       return {
         getSelectedCompanyId : function(){
-          return "companyId";
+          return 'companyId';
         },
         _restoreState : function(){
 
@@ -25,11 +27,7 @@ describe('controller: displays list', function() {
       };
     });
     $provide.service('display', function() {
-      return {
-        hasSchedule: function(display) {
-          return !display.noSchedule;
-        }
-      };
+      return {};
     });
 
     $provide.service('$loading',function(){
@@ -65,20 +63,11 @@ describe('controller: displays list', function() {
         },
         isOfflinePlayCompatiblePayer: function(display) {
           return !display.notProCompatiblePlayer;
-        },
-        openPlayerProInfoModal: function(display) {
-          expect(display).to.be.an('object');
-          if(cancelProTrialModal) {
-            return { result: Q.reject() };
-          }
-          else {
-            return { result: Q.resolve() };
-          }
         }
       };
     });
   }));
-  var $scope, $loading, $filter, $loadingStartSpy, $loadingStopSpy, cancelProTrialModal;
+  var $scope, $loading, $filter, $loadingStartSpy, $loadingStopSpy, $window;
   beforeEach(function(){
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
@@ -87,13 +76,19 @@ describe('controller: displays list', function() {
       $loading = $injector.get('$loading');
       $loadingStartSpy = sinon.spy($loading, 'start');
       $loadingStopSpy = sinon.spy($loading, 'stop');
+      $window = $injector.get('$window');
       $controller('displaysList', {
         $scope : $scope,
         $loading: $loading,
-        $filter: $filter
+        $filter: $filter,
+        $window: $window
       });
       $scope.$digest();  
     });
+  });
+
+  afterEach(function () {
+    sandbox.restore();
   });
 
   it('should exist',function(){
@@ -139,80 +134,42 @@ describe('controller: displays list', function() {
     searchSpy.should.have.been.called;
   });
 
-  describe('showStartTrial: ', function() {
-    it('should refresh list when starting trial', function(done) {
-      var searchSpy = sinon.spy($scope.displays, 'doSearch');
+  it('should open Unsupported link', function() {
+    sandbox.stub($window, "open");
 
-      cancelProTrialModal = false;
-      $scope.showStartTrial({});
+    $scope.openUnsupportedHelpLink();
+    expect($window.open).to.have.been.called;
+  });
 
-      setTimeout(function() {
-        searchSpy.should.have.been.called;
-        done();
-      }, 0);
-    });
-
-    it('should not refresh list when cancelling modal', function(done) {
-      var searchSpy = sinon.spy($scope.displays, 'doSearch');
-
-      cancelProTrialModal = true;
-      $scope.showStartTrial({});
-
-      setTimeout(function() {
-        searchSpy.should.not.have.been.called;
-        done();
-      }, 0);
-    });
+  it('should return correct statuses', function () {
+    expect($scope.playerNotInstalled()).to.be.true;
+    expect($scope.playerOnline({ onlineStatus: 'online' })).to.be.true;
+    expect($scope.playerOffline({ playerVersion: 'version' })).to.be.true;
   });
 
   describe('getDisplayType: ', function() {
-    it('should return subscription-not-loaded', function() {
-      expect($scope.getDisplayType({})).to.equal("subscription-not-loaded");
-      expect($scope.getDisplayType({ proSubscription: {} })).to.equal("subscription-not-loaded");
+    it('should return standard', function() {
+      expect($scope.getDisplayType({})).to.equal('standard');
     });
 
-    it('should return player-not-installed', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "test" } })).to.equal("player-not-installed");
-    });
-
-    it('should return schedule-not-created', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "test" }, onlineStatus: "online", noSchedule: true })).to.equal("schedule-not-created");
-    });
-
-    it('should return not-pro-compatible', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "test" }, onlineStatus: "online", notProCompatiblePlayer: true })).to.equal("not-pro-compatible");
+    it('should return professional', function() {
+      expect($scope.getDisplayType({ playerProAuthorized: true })).to.equal('professional');
     });
 
     it('should return 3rd-party', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "test" }, onlineStatus: "online", thirdParty: true })).to.equal("3rd-party");
+      expect($scope.getDisplayType({ onlineStatus: 'online', thirdParty: true })).to.equal('3rd-party');
     });
 
-    it('should return subscribed', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "Subscribed" }, onlineStatus: "online" })).to.equal("subscribed");
+    it('should return unsupported', function() {
+      expect($scope.getDisplayType({ onlineStatus: 'online', unsupported: true })).to.equal('unsupported');
     });
 
-    it('should return not-subscribed', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "Not Subscribed" }, onlineStatus: "online" })).to.equal("not-subscribed");
+    it('should return professional', function() {
+      expect($scope.getDisplayType({ onlineStatus: 'online', playerProAuthorized: true })).to.equal('professional');
     });
 
-    it('should return on-trial', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "On Trial" }, onlineStatus: "online" })).to.equal("on-trial");
-    });
-
-    it('should return trial-expired', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "Trial Expired" }, onlineStatus: "online" })).to.equal("trial-expired");
-    });
-
-    it('should return suspended', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "Suspended" }, onlineStatus: "online" })).to.equal("suspended");
-    });
-
-    it('should return cancelled', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "Cancelled" }, onlineStatus: "online" })).to.equal("cancelled");
-    });
-
-    it('should return unexpected', function() {
-      expect($scope.getDisplayType({ proSubscription: { status: "Invalid" }, onlineStatus: "online" })).to.equal("unexpected");
+    it('should return standard', function() {
+      expect($scope.getDisplayType({ onlineStatus: 'online' })).to.equal('standard');
     });
   });
 });

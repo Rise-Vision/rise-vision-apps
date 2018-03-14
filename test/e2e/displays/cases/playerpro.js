@@ -67,32 +67,6 @@ var FirstSigninScenarios = function() {
         expect(displayManagePage.getDisplayNameField().getAttribute('value')).to.eventually.equal('TEST_E2E_DISPLAY');
       });
 
-      it('should show Start Player Pro Trial button',function(){
-        helper.wait(displayManagePage.getPlayerProTrialButton(), 'Player Pro Trial Button');
-        expect(displayManagePage.getPlayerProTrialButton().isDisplayed()).to.eventually.be.true;
-      });
-
-      it('should show start trial modal',function(){
-        displayManagePage.getPlayerProTrialButton().click();
-        helper.wait(playerProInfoModalPage.getPlayerProInfoModal(), 'Player Pro Info Modal');
-        expect(playerProInfoModalPage.getPlayerProInfoModal().isDisplayed()).to.eventually.be.true;
-        expect(playerProInfoModalPage.getStartTrialButton().isDisplayed()).to.eventually.be.true;
-      });
-
-      it('should start trial and show subscribe button',function(){
-        playerProInfoModalPage.getStartTrialButton().click();
-        helper.waitDisappear(playerProInfoModalPage.getPlayerProInfoModal(), 'Player Pro Info Modal');
-
-        helper.wait(displayManagePage.getSubscribePlayerProButton(), 'Subscribe Player Pro Button');
-        expect(displayManagePage.getSubscribePlayerProButton().isDisplayed()).to.eventually.be.true;
-        expect(displayManagePage.getSubscribePlayerProButton().getAttribute('href')).to.eventually.contain('https://store.risevision.com/product/2048/?cid=');
-      });
-
-      it('should show correct subscription status',function(){
-        expect(displayManagePage.getSubscriptionStatusBar().isDisplayed()).to.eventually.be.true;
-        expect(displayManagePage.getSubscriptionStatusBar().getText()).to.eventually.equal('29 days remaining on your trial Subscribe Now!');
-      });
-
       it('removes current SubCompany',function(){
         commonHeaderPage.deleteCurrentCompany();
       });

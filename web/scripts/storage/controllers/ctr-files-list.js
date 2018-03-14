@@ -2,10 +2,10 @@
 angular.module('risevision.storage.controllers')
   .controller('FilesListController', ['$scope', '$rootScope',
     'StorageFactory', 'FilesFactory', 'storageUtils',
-    'FileUploader', '$loading', '$filter', '$translate', '$timeout',
+    'FileUploader', '$loading', '$filter', '$translate', '$timeout', 'userState',
     function ($scope, $rootScope, StorageFactory,
       FilesFactory, storageUtils, FileUploader, $loading, $filter, $translate,
-      $timeout) {
+      $timeout, userState) {
       $scope.search = {
         doSearch: function () {},
         reverse: false
@@ -44,6 +44,22 @@ angular.module('risevision.storage.controllers')
           $loading.start('storage-selector-loader');
         } else {
           $loading.stop('storage-selector-loader');
+        }
+      });
+
+      $rootScope.$on('risevision.company.updated', function () {
+        var company = userState.getCopyOfSelectedCompany();
+
+        if (company.planSubscriptionStatus === 'Trial') {
+          var subscriptionStatus = {
+            status: 'On Trial',
+            statusCode: 'on-trial',
+            subscribed: true,
+            trialPeriod: company.planTrialPeriod
+          };
+
+          $scope.subscriptionStatus = subscriptionStatus;
+          $scope.trialAvailable = false;
         }
       });
 

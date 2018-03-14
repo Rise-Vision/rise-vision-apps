@@ -16,8 +16,5 @@ angular.module('risevision.editor.controllers')
       $scope.subscriptionStatus = {};
       $scope.showPlansModal = planFactory.showPlansModal;
 
-      $rootScope.$on('subscription-status:changed', function (evt, newStatus) {
-        $scope.displayBanner = (newStatus.status === 'Not Subscribed');
-      });
     }
   ]);
