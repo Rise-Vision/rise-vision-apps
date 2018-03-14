@@ -133,7 +133,8 @@ describe('service: playerProFactory:', function() {
   it('isDisplayControlCompatiblePlayer:',function(){
     expect(playerProFactory.isDisplayControlCompatiblePlayer()).to.be.false;
     expect(playerProFactory.isDisplayControlCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:''})).to.be.false;
-    expect(playerProFactory.isDisplayControlCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2017.07.31.15.31'})).to.be.false;
-    expect(playerProFactory.isDisplayControlCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2018.09.45.06.49'})).to.be.true;
+    expect(playerProFactory.isDisplayControlCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2017.07.31.15.31', playerProAuthorized: true})).to.be.false;
+    expect(playerProFactory.isDisplayControlCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2018.09.45.06.49', playerProAuthorized: false})).to.be.false;
+    expect(playerProFactory.isDisplayControlCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2018.09.45.06.49', playerProAuthorized: true})).to.be.true;
   });
 });

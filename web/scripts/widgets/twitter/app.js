@@ -7,7 +7,8 @@ angular.module('risevision.widgets.twitter', [
     defaultSettings.twitterWidget = {
       'params': {},
       'additionalParams': {
-        'screenName': ''
+        'screenName': '',
+        'componentId': ''
       }
     };
   }]);

@@ -25,7 +25,8 @@ describe('Twitter app:', function() {
       expect(defaultSettings.twitterWidget).to.deep.equal({
         'params': {},
         'additionalParams': {
-          'screenName': ''
+          'screenName': '',
+          'componentId': ''
         }
       });
     });

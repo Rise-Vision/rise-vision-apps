@@ -107,8 +107,8 @@ angular.module('risevision.widgets.services')
 
       svc.authenticate = function () {
         return _getStateToken()
-                .then(_authenticateWithOauthIO)
-                .then(_authenticateWithOauthTokenProvider)
+          .then(_authenticateWithOauthIO)
+          .then(_authenticateWithOauthTokenProvider)
       };
 
       svc.revoke = function () {
