@@ -216,13 +216,7 @@
               <span class="">Monitoring Timeline</span>
             </td>
             <td class="table-body__cell" style="border-top: 0;">
-              <timeline-basic-textbox
-                time-defined = "monitoringSchedule.timeDefined"
-                start-time = "monitoringSchedule.startTime"
-                end-time = "monitoringSchedule.endTime"
-                recurrence-days-of-week = "monitoringSchedule.recurrenceDaysOfWeek"
-                ng-disabled="!display.monitoringEnabled">
-              </timeline-basic-textbox>
+              <timeline-basic-textbox timeline-string="display.monitoringSchedule" ng-disabled="!display.monitoringEnabled" />
             </td>
           </tr>
 

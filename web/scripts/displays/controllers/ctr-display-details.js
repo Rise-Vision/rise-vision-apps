@@ -25,7 +25,6 @@ angular.module('risevision.displays.controllers')
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
         $scope.monitoringEmailsList = ($scope.display.monitoringEmails || []).map(function(e) { return { text: e }; });
-        $scope.monitoringSchedule = _parseTimeline($scope.display.monitoringSchedule);
 
         if (!$scope.display.playerProAuthorized) {
           $scope.display.monitoringEnabled = false;
@@ -166,7 +165,6 @@ angular.module('risevision.displays.controllers')
 
       $scope.save = function () {
         $scope.display.monitoringEmails = $scope.monitoringEmailsList.map(function(t) { return t.text; });
-        $scope.display.monitoringSchedule = _formatTimeline($scope.monitoringSchedule);
 
         if (!$scope.displayDetails.$valid) {
           console.info('form not valid: ', $scope.displayDetails.$error);
@@ -176,64 +174,6 @@ angular.module('risevision.displays.controllers')
           return displayFactory.updateDisplay();
         }
       };
-
-      function _formatTimeline(timeline) {
-        var resp = {};
-
-        if (!timeline.timeDefined) {
-          return null;
-        }
-
-        if (timeline.startTime || timeline.endTime) {
-          resp.time = {};
-          resp.time.start = timeline.startTime ? $filter('date')(new Date(timeline.startTime), 'HH:mm') : null;
-          resp.time.end = timeline.endTime ? $filter('date')(new Date(timeline.endTime), 'HH:mm') : null;
-        }
-
-        if (timeline.recurrenceDaysOfWeek && timeline.recurrenceDaysOfWeek.length > 0) {
-          resp.week = timeline.recurrenceDaysOfWeek.map(function (day) {
-            return {
-              day: day,
-              active: true
-            };
-          });
-        }
-
-        resp = JSON.stringify(resp);
-
-        return resp !== '{}' ? resp : null;
-      }
-
-      function _parseTimeline(tl) {
-        var timeline = {};
-
-        if (tl) {
-          tl = JSON.parse(tl);
-
-          if (tl.time) {
-            timeline.startTime = tl.time.start ? _reformatTime(tl.time.start) : null;
-            timeline.endTime = tl.time.end ? _reformatTime(tl.time.end) : null;
-          }
-
-          if (tl.week) {
-            timeline.recurrenceDaysOfWeek = [];
-
-            tl.week.forEach(function(d) {
-              if (d.active) {
-                timeline.recurrenceDaysOfWeek.push(d.day);
-              }
-            });
-          }
-        }
-
-        return timeline;
-      }
-
-      function _reformatTime(timeString) {
-        var today = $filter('date')(new Date(), 'dd-MMM-yyyy');
-        var fullDate = new Date(today + ' ' + timeString);
-        return $filter('date')(fullDate, 'dd-MMM-yyyy hh:mm a');
-      }
 
       var startTrialListener = $rootScope.$on('risevision.company.updated', function () {
         $scope.company = userState.getCopyOfSelectedCompany(true);
