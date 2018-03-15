@@ -19,7 +19,6 @@ angular.module('risevision.displays.controllers')
       $scope.updatingRPP = false;
       $scope.monitoringEmailsList = [];
       $scope.monitoringSchedule = {};
-      $scope.playlistItem = {};
       $scope.showPlansModal = planFactory.showPlansModal;
 
       displayFactory.getDisplay(displayId).then(function () {
