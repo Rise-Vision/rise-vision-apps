@@ -6,9 +6,11 @@ angular.module('risevision.displays.directives')
       return {
         restrict: 'E',
         template: '<timeline-basic-textbox ' +
+        '            time-defined = "monitoringSchedule.timeDefined" ' +
         '            start-time = "monitoringSchedule.startTime" ' +
         '            end-time = "monitoringSchedule.endTime" ' +
         '            recurrence-days-of-week = "monitoringSchedule.recurrenceDaysOfWeek" ' +
+        '            latest-update = "monitoringSchedule.latestUpdate" ' +
         '            ng-disabled="ngDisabled"> ' +
         '          </timeline-basic-textbox>',
         scope: {
@@ -17,17 +19,30 @@ angular.module('risevision.displays.directives')
         },
         link: function ($scope) {
           $scope.$watch('timelineString', function () {
-            $scope.monitoringSchedule = $scope.parseTimeline($scope.timelineString);
+            if (!$scope.updating) {
+              $scope.updating = true;
+              $scope.monitoringSchedule = $scope.parseTimeline($scope.timelineString);
+              $scope.monitoringSchedule.latestUpdate = Date.now();
+            }
+            else {
+              $scope.updating = false;
+            }
           });
 
-          $scope.$watch('monitoringSchedule.recurrenceDaysOfWeek', function () {
-            $scope.timelineString = $scope.formatTimeline($scope.monitoringSchedule);
+          $scope.$watch('monitoringSchedule.latestUpdate', function () {
+            if (!$scope.updating) {
+              $scope.updating = true;
+              $scope.timelineString = $scope.formatTimeline($scope.monitoringSchedule);
+            }
+            else {
+              $scope.updating = false;
+            }
           });
 
           $scope.formatTimeline = function (timeline) {
             var resp = {};
     
-            if (!timeline) {
+            if (!timeline || !timeline.timeDefined) {
               return null;
             }
     
@@ -56,6 +71,8 @@ angular.module('risevision.displays.directives')
     
             if (tl && tl !== '{}') {
               tl = JSON.parse(tl);
+
+              timeline.timeDefined = true;
 
               if (tl.time) {
                 timeline.startTime = tl.time.start ? $scope.reformatTime(tl.time.start) : null;

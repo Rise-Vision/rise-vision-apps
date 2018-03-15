@@ -44,7 +44,7 @@
 
         $rootScope.$on('risevision.company.updated', function () {
           var company = userState.getCopyOfSelectedCompany();
-  
+
           if (company.planSubscriptionStatus === 'Trial') {
             $modalInstance.close(product);
           }

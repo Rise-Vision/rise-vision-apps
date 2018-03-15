@@ -25,7 +25,6 @@ angular.module('risevision.displays.controllers')
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
         $scope.monitoringEmailsList = ($scope.display.monitoringEmails || []).map(function(e) { return { text: e }; });
-        $scope.monitoringSchedule = $scope.parseTimeline($scope.display.monitoringSchedule);
 
         if (!$scope.display.playerProAuthorized) {
           $scope.display.monitoringEnabled = false;
@@ -166,7 +165,6 @@ angular.module('risevision.displays.controllers')
 
       $scope.save = function () {
         $scope.display.monitoringEmails = $scope.monitoringEmailsList.map(function(t) { return t.text; });
-        $scope.display.monitoringSchedule = $scope.formatTimeline($scope.monitoringSchedule);
 
         if (!$scope.displayDetails.$valid) {
           console.info('form not valid: ', $scope.displayDetails.$error);

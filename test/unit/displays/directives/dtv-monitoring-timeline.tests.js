@@ -1,5 +1,5 @@
 'use strict';
-describe('directive: monitoring-timeline', function() {
+describe.only('directive: monitoring-timeline', function() {
   beforeEach(module('risevision.displays.directives'));
   beforeEach(module('risevision.displays.filters'));
 
@@ -44,6 +44,7 @@ describe('directive: monitoring-timeline', function() {
   });
 
   it('should update model with internal fields', function() {
+    $scope.monitoringSchedule.timeDefined = true;
     $scope.monitoringSchedule.startTime = '23-Mar-2018 06:00 AM';
     $scope.monitoringSchedule.endTime = '23-Mar-2018 11:30 PM';
     $scope.monitoringSchedule.recurrenceDaysOfWeek = ['Sat'];
