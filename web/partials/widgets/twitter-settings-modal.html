@@ -1,4 +1,4 @@
-<div ng-controller="TwitterSettingsController" ng-cloak>
+<div id="twitterSettingsModal" ng-controller="TwitterSettingsController" ng-cloak>
 	<div class="modal-header">
 		<button id="dismissButton" type="button" class="close" ng-click="closeSettings()">
 			<i class="fa fa-times"></i>
@@ -9,13 +9,13 @@
 		<div class="alert alert-warning" ng-show="!twitterConnected">
 			<div class="alert-body text-center">
 				<p>{{"widget-twitter.authentication.connectText" | translate }}</p>
-				<button class="btn btn-primary" ng-click="connect()">{{"widget-twitter.authentication.connectButtonText" | translate }}</button>
+				<button id="connectButton" class="btn btn-primary" ng-click="connect()">{{"widget-twitter.authentication.connectButtonText" | translate }}</button>
 			</div>
 		</div>
 
 		<div class="alert alert-info" ng-show="twitterConnected">
 			<div class="alert-body text-center">
-				<span>{{"widget-twitter.authentication.connectedText" | translate }} <a href="#" ng-click="revoke()">{{"widget-twitter.authentication.revokeLinkText" | translate }}</a></span>
+				<span>{{"widget-twitter.authentication.connectedText" | translate }} <a id="revokeLink" href="#" ng-click="revoke()">{{"widget-twitter.authentication.revokeLinkText" | translate }}</a></span>
 			</div>
 		</div>
 
@@ -26,7 +26,7 @@
 	      <label class="control-label">{{"widget-twitter.screenNameText" | translate }}</label>
 		    <div class="input-group">
 		      <span class="input-group-addon" id="basic-addon1">@</span>
-		      <input type="text" class="form-control" placeholder="username" ng-model="settings.additionalParams.screenName">
+		      <input id="twitterScreenName" type="text" class="form-control" placeholder="username" ng-model="settings.additionalParams.screenName">
 		    </div>
 		  </div><!--form-inline-->
 
