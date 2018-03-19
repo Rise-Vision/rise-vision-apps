@@ -110,7 +110,7 @@ angular.module('risevision.displays.services')
         }
 
         function lastConnectionNew(id) {
-          return presenceData[id].lastConnectionTime;
+          return Number(presenceData[id].lastConnection);
         }
 
         function lastConnectionOld(id) {
