@@ -7,7 +7,7 @@ var PresentationsListPage = require('./../pages/presentationListPage.js');
 var WorkspacePage = require('./../pages/workspacePage.js');
 var PlaceholderPlaylistPage = require('./../pages/placeholderPlaylistPage.js');
 var StoreProductsModalPage = require('./../pages/storeProductsModalPage.js');
-var PlansModalPage = require('./../pages/plansModalPage.js');
+var PlansModalPage = require('./../../common/pages/plansModalPage.js');
 var TwitterSettingsPage = require('./../pages/twitterSettingsPage.js');
 
 var helper = require('rv-common-e2e').helper;
