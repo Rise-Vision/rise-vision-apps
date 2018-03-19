@@ -16,6 +16,12 @@ describe('service: playlistItemFactory:', function() {
       'timeDefined': 'false'
     };
 
+    selectedWidget = {
+      additionalParams: 'updatedParams',
+      productCode: '123'
+    };
+
+    $provide.service('$q', function() {return Q;});
     $provide.service('$modal',function(){
       return {
         open : function(obj){
@@ -33,7 +39,7 @@ describe('service: playlistItemFactory:', function() {
               settingsUrl:'http://www.risevision.com/settings.html'
             });
           } else {
-            deferred.resolve({additionalParams: 'updatedParams'});
+            deferred.resolve(selectedWidget);
           }
          
           return {
@@ -44,7 +50,7 @@ describe('service: playlistItemFactory:', function() {
     });
     
     $provide.service('gadgetFactory', function() {
-      return {
+      return gadgetFactory = {
         getGadgetById: function(gadgetId) {
           var deferred = Q.defer();
 
@@ -57,7 +63,7 @@ describe('service: playlistItemFactory:', function() {
           
           return deferred.promise;
         },
-        getGadgetByProduct: function() {
+        getGadgetByProduct: sinon.spy(function() {
           var deferred = Q.defer();
 
           deferred.resolve({
@@ -68,7 +74,7 @@ describe('service: playlistItemFactory:', function() {
           });
           
           return deferred.promise;
-        }
+        })
       };
     });
 
@@ -122,8 +128,8 @@ describe('service: playlistItemFactory:', function() {
     });    
 
   }));
-  var item, playlistItemFactory, placeholderPlaylistFactory, fileSelectorFactory, 
-  settingsFactory, openModal, currentItem, trackedEvent, returnFiles, returnWidget;
+  var item, selectedWidget, playlistItemFactory, placeholderPlaylistFactory, fileSelectorFactory, 
+  settingsFactory, gadgetFactory, openModal, currentItem, trackedEvent, returnFiles, returnWidget;
 
   beforeEach(function(){
     openModal = null;
@@ -165,6 +171,8 @@ describe('service: playlistItemFactory:', function() {
       expect(currentItem).to.not.be.ok;
 
       setTimeout(function() {
+        gadgetFactory.getGadgetByProduct.should.have.been.calledWith('123');
+
         settingsFactory.showSettingsModal.should.have.been.called;
         settingsFactory.showSettingsModal.should.have.been.calledWith({
           duration: 10,
@@ -182,6 +190,39 @@ describe('service: playlistItemFactory:', function() {
       }, 10);
     });
 
+    it('should add in App widget and open widget settings', function(done) {
+      selectedWidget = {
+        name: 'InApp',
+        id: 'widgetId',
+        url: 'widgetUrl'
+      };
+
+      playlistItemFactory.addContent();
+
+      expect(trackedEvent).to.equal('Add Content');
+      expect(openModal).to.equal('storeProductsModal');
+      expect(currentItem).to.not.be.ok;
+
+      setTimeout(function() {
+        gadgetFactory.getGadgetByProduct.should.not.have.been.called;
+
+        settingsFactory.showSettingsModal.should.have.been.called;
+        settingsFactory.showSettingsModal.should.have.been.calledWith({
+          duration: 10,
+          distributeToAll: true,
+          timeDefined: false,
+          additionalParams: null,
+          type:'widget',
+          name:'InApp',
+          objectReference: 'widgetId',
+          objectData: 'widgetUrl',
+          settingsUrl: undefined
+        });
+        
+        done();
+      }, 10);
+    });
+
     it('should add new presentation item and open settings', function(done) {
       returnWidget = 'presentation';
       playlistItemFactory.addContent();
@@ -191,6 +232,8 @@ describe('service: playlistItemFactory:', function() {
       expect(currentItem).to.not.be.ok;
 
       setTimeout(function() {
+        gadgetFactory.getGadgetByProduct.should.have.been.calledWith('123');
+
         settingsFactory.showSettingsModal.should.have.been.called;
         settingsFactory.showSettingsModal.should.have.been.calledWith({
           duration: 10,
@@ -211,6 +254,8 @@ describe('service: playlistItemFactory:', function() {
       playlistItemFactory.addContent();
 
       setTimeout(function() {
+        gadgetFactory.getGadgetByProduct.should.have.been.calledWith('123');
+
         expect(openModal).to.equal('PlaylistItemModalController');
         expect(currentItem).to.deep.equal({
           duration: 10,
