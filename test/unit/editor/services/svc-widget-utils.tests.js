@@ -20,6 +20,7 @@ describe('service: widgetUtils:', function() {
     expect(widgetUtils.getIconClass).to.be.a('function');
     expect(widgetUtils.getSvgIcon).to.be.a('function');
     expect(widgetUtils.getWidgetId).to.be.a('function');
+    expect(widgetUtils.getProfessionalWidgets).to.be.a('function');
   });
   
   it('isRenderingAllowed: ', function() {
@@ -80,5 +81,18 @@ describe('service: widgetUtils:', function() {
     expect(widgetUtils.getFileName()).to.equal('');
   });
 
+  it('getProfessionalWidgets: ', function() {
+    var widgets = widgetUtils.getProfessionalWidgets();
+    
+    widgets.forEach(function(widget) {
+      expect(widget.env).to.equal('TEST');
+      expect(widget.name).to.be.a('string');
+      expect(widget.imageUrl).to.be.a('string');
+      expect(widget.imageAlt).to.be.a('string');
+      expect(widget.gadgetType).to.be.a('string');
+      expect(widget.id).to.be.a('string');
+      expect(widget.url).to.be.a('string');
+    });
+  });
 
 });

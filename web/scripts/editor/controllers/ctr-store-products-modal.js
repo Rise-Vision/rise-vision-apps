@@ -6,15 +6,15 @@ angular.module('risevision.editor.controllers')
     'free',
     'premium'
   ])
-  .controller('storeProductsModal', ['$scope', 'ScrollingListService',
-    'store', '$modalInstance', '$loading', '$filter', 'STORE_URL', 'category',
-    '$modal', 'playlistItemFactory', 'checkTemplateAccess', 'planFactory', 'PAYMENT_CATEGORIES',
-    'TEMPLATES_TYPE',
-    function ($scope, ScrollingListService, store, $modalInstance, $loading,
-      $filter, STORE_URL, category, $modal, playlistItemFactory, checkTemplateAccess, planFactory,
-      PAYMENT_CATEGORIES, TEMPLATES_TYPE) {
+  .controller('storeProductsModal', ['$scope', '$loading', '$filter', '$modal', '$modalInstance',
+    'ScrollingListService', 'store', 'playlistItemFactory', 'widgetUtils', 'checkTemplateAccess', 'planFactory',
+    'category', 'STORE_URL', 'PAYMENT_CATEGORIES', 'TEMPLATES_TYPE',
+    function ($scope, $loading, $filter, $modal, $modalInstance,
+      ScrollingListService, store, playlistItemFactory, widgetUtils, checkTemplateAccess, planFactory,
+      category, STORE_URL, PAYMENT_CATEGORIES, TEMPLATES_TYPE) {
       var defaultCount = 1000;
 
+      $scope.planFactory = planFactory;
       $scope.showPlansModal = planFactory.showPlansModal;
       $scope.paymentCategories = PAYMENT_CATEGORIES;
 
@@ -22,6 +22,8 @@ angular.module('risevision.editor.controllers')
         category: category,
         count: defaultCount
       };
+
+      $scope.professionalWidgets = widgetUtils.getProfessionalWidgets();
 
       $scope.storeUrl = STORE_URL;
       $scope.factory = new ScrollingListService(store.product.list,

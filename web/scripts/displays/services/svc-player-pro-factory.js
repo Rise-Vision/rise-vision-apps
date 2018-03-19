@@ -88,10 +88,6 @@ angular.module('risevision.displays.services')
       factory.openConfigureDisplayControl = function (display) {
         var deferred = $q.resolve();
 
-        if (!display.offlineSubscription) {
-          deferred = factory.openPlayerProInfoModal();
-        }
-
         return deferred.then(function () {
           return $modal.open({
             templateUrl: 'partials/displays/display-control-modal.html',

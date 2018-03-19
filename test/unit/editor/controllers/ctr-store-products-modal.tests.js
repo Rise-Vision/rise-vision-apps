@@ -58,6 +58,11 @@ describe('controller: Store Products Modal', function() {
         addWidgetByUrl : function(){}
       }
     });
+    $provide.service('widgetUtils',function(){
+      return {
+        getProfessionalWidgets : function(){ return 'professionalWidgets'; }
+      }
+    });
     $provide.service('checkTemplateAccess',function(){
       return function () {
         return productAuthorized ? Q.resolve() : Q.reject();
@@ -122,8 +127,9 @@ describe('controller: Store Products Modal', function() {
     expect($scope.search).to.be.ok;
     expect($scope.search).to.have.property('category');
     expect($scope.search.count).to.equal(1000);
-  });
 
+    expect($scope.professionalWidgets).to.equal('professionalWidgets');
+  });
 
   describe('$loading: ', function() {
     it('should stop spinner', function() {
