@@ -77,7 +77,7 @@
       <h4 class="u_margin-sm-top" translate="editor-app.storeProduct.content.otherWidgets"></h4>
     </div>
 
-    <div class="template-filters u_margin-sm-bottom" ng-show="factory.search.category === 'Templates'">
+    <div class="template-filters u_margin-sm-bottom" ng-if="factory.search.category === 'Templates'">
       <ul class="list-unstyled">
         <li ng-repeat="category in paymentCategories" ng-class="{ active : search.paymentCategory === category || !search.paymentCategory && category === 'all' }" ng-click="search.paymentCategory = category"><span>{{category}}</span></li>
       </ul>
@@ -98,7 +98,7 @@
               <div class="row">
                 <div class="col-xs-8">
                   <h4>{{'editor-app.storeProduct.templates.blank' | translate}}</h4>
-                  
+                  &nbsp;
                 </div><!-- end col -->
                 <div class="col-xs-4">
 
@@ -127,12 +127,10 @@
                 <div class="row">
                   <div class="col-xs-8">
                     <h4 id="productName">{{product.name | characters: 25}}</h4>
-                    <a href="#">View in Store</a>
+                    <a ng-href="{{storeUrl}}/product/{{product.productId}}/" target="_blank" ng-click="$event.stopPropagation()">View in Store</a>
                   </div><!--end col-->
                   <div class="col-xs-4">
-                    <button ng-if="factory.search.category == 'Templates'" class="btn btn-primary btn-block btn-sm" id="{{product.name | slugify}}" ng-click="quickSelect(product); $event.stopPropagation()">Add</button>
-
-                    <a ng-if="factory.search.category == 'Content'" class="btn btn-primary btn-sm btn-block" ng-href="{{storeUrl}}/product/{{product.productId}}/" target="_blank" ng-click="$event.stopPropagation()">Add</a>
+                    <button class="btn btn-primary btn-block btn-sm" id="{{product.name | slugify}}" ng-click="quickSelect(product); $event.stopPropagation()">Add</button>
                   </div><!--end col-->
                   <div class="col-xs-12">
                     <p id="status" class="text-muted">{{product.paymentTerms.toLowerCase() === 'free'? 'Free' : 'Premium'}} {{product.trialPeriod > 0 ? ' - '+product.trialPeriod+' Days Trial' : ''}}</p>
