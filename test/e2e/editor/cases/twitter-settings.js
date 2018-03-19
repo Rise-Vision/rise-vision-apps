@@ -27,6 +27,11 @@ var TwitterSettingsScenarios = function() {
     var plansModalPage;
     var twitterSettingsPage;
 
+    function loadEditor() {
+      homepage.getEditor();
+      signInPage.signIn();
+    }
+
     function createSubCompany() {
       commonHeaderPage.createSubCompany(subCompanyName);
     }
@@ -45,9 +50,6 @@ var TwitterSettingsScenarios = function() {
       storeProductsModalPage = new StoreProductsModalPage();
       plansModalPage = new PlansModalPage();
       twitterSettingsPage = new TwitterSettingsPage();
-
-      homepage.getEditor();
-      signInPage.signIn();
 
       loadEditor();
       createSubCompany();
