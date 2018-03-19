@@ -22,7 +22,7 @@ var StoreProductsModalPage = function() {
   var professionalWidgets = element.all(by.repeater('widget in professionalWidgets'));
   var unlockButton = element.all(by.id('unlockButton'));
   var addProfessionalWidgetButton = element.all(by.id('addProfessionalWidgetButton'));
-  var startTrialButton = element.all(by.id('startTrialButton'));
+  var promotionTrialButton = element.all(by.id('promotionTrialButton'));
   var displaysListLink = element.all(by.id('displaysListLink'));
 
   var addWidgetByUrlButton = element(by.id('addWidgetByUrl'));
@@ -108,8 +108,8 @@ var StoreProductsModalPage = function() {
     return addProfessionalWidgetButton;
   };
 
-  this.getStartTrialButton = function() {
-    return startTrialButton;
+  this.getPromotionTrialButton = function() {
+    return promotionTrialButton;
   };
 
   this.getDisplaysListLink = function() {

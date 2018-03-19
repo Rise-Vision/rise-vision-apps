@@ -85,7 +85,7 @@ var TwitterSettingsScenarios = function() {
       it('should show Locked Widget', function() {
         expect(storeProductsModalPage.getUnlockButton().count()).to.eventually.be.above(0);
         expect(storeProductsModalPage.getAddProfessionalWidgetButton().count()).to.eventually.be(0);
-        expect(storeProductsModalPage.getStartTrialButton().count()).to.eventually.be.above(0);
+        expect(storeProductsModalPage.getPromotionTrialButton().count()).to.eventually.be.above(0);
         expect(storeProductsModalPage.getDisplaysListLink().count()).to.eventually.be(0);
       });
 
@@ -105,7 +105,7 @@ var TwitterSettingsScenarios = function() {
       it('should unlock Professional Widgets', function() {
         expect(storeProductsModalPage.getUnlockButton().count()).to.eventually.be(0);
         expect(storeProductsModalPage.getAddProfessionalWidgetButton().count()).to.eventually.be.above(0);
-        expect(storeProductsModalPage.getStartTrialButton().count()).to.eventually.be(0);
+        expect(storeProductsModalPage.getPromotionTrialButton().count()).to.eventually.be(0);
         expect(storeProductsModalPage.getDisplaysListLink().count()).to.eventually.be.above(0);
       });
     });
