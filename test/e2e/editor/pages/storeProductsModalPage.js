@@ -118,7 +118,7 @@ var StoreProductsModalPage = function() {
 
   this.getAddWidgetByUrlButton = function() {
     return addWidgetByUrlButton;
-  }
+  };
 
   this.getCloseButton = function() {
     return closeButton;
