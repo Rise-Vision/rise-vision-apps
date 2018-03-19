@@ -108,17 +108,20 @@ var PlaylistScenarios = function() {
         expect(storeProductsModalPage.getStoreProductsList().isDisplayed()).to.eventually.be.true;
       });
 
+      it('should show Professional widgets', function () {
+        helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader()).then(function () {
+          expect(storeProductsModalPage.getProfessionalWidgets().count()).to.eventually.be.above(0);
+        });
+      });
+
       it('should show products', function () {
         helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader()).then(function () {
           expect(storeProductsModalPage.getStoreProducts().count()).to.eventually.be.above(0);
         });
       });
       
-      it('should show search categories', function() {
-        expect(storeProductsModalPage.getSearchCategories().count()).to.eventually.equal(3);
-        expect(storeProductsModalPage.getSearchCategories().get(0).getText()).to.eventually.equal('ALL');
-        expect(storeProductsModalPage.getSearchCategories().get(1).getText()).to.eventually.equal('FREE');
-        expect(storeProductsModalPage.getSearchCategories().get(2).getText()).to.eventually.equal('PREMIUM');
+      it('should hide search categories', function() {
+        expect(storeProductsModalPage.getSearchCategories().count()).to.eventually.equal(0);
       });
 
       it('should search products',function(){

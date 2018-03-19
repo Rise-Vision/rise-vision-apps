@@ -2,10 +2,12 @@
 var expect = require('rv-common-e2e').expect;
 var HomePage = require('./../../launcher/pages/homepage.js');
 var SignInPage = require('./../../launcher/pages/signInPage.js');
+var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var PresentationsListPage = require('./../pages/presentationListPage.js');
 var WorkspacePage = require('./../pages/workspacePage.js');
 var PlaceholderPlaylistPage = require('./../pages/placeholderPlaylistPage.js');
 var StoreProductsModalPage = require('./../pages/storeProductsModalPage.js');
+var PlansModalPage = require('./../pages/plansModalPage.js');
 var TwitterSettingsPage = require('./../pages/twitterSettingsPage.js');
 
 var helper = require('rv-common-e2e').helper;
@@ -14,25 +16,47 @@ var TwitterSettingsScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
   describe('Twitter Settings', function () {
+    var subCompanyName = 'E2E TEST SUBCOMPANY';
     var homepage;
     var signInPage;
+    var commonHeaderPage;
     var presentationsListPage;
     var workspacePage;
     var placeholderPlaylistPage;
     var storeProductsModalPage;
+    var plansModalPage;
     var twitterSettingsPage;
+
+    function createSubCompany() {
+      commonHeaderPage.createSubCompany(subCompanyName);
+    }
+
+    function selectSubCompany() {
+      commonHeaderPage.selectSubCompany(subCompanyName);
+    }
 
     before(function () {
       homepage = new HomePage();
       signInPage = new SignInPage();
+      commonHeaderPage = new CommonHeaderPage();
       presentationsListPage = new PresentationsListPage();
       workspacePage = new WorkspacePage();
       placeholderPlaylistPage = new PlaceholderPlaylistPage();
       storeProductsModalPage = new StoreProductsModalPage();
+      plansModalPage = new PlansModalPage();
       twitterSettingsPage = new TwitterSettingsPage();
 
       homepage.getEditor();
       signInPage.signIn();
+
+      loadEditor();
+      createSubCompany();
+      selectSubCompany();
+    });
+
+    after(function() {
+      loadEditor();
+      commonHeaderPage.deleteAllSubCompanies();
     });
 
     before('Add Presentation & Placeholder: ', function () {
@@ -44,22 +68,52 @@ var TwitterSettingsScenarios = function() {
 
     });
 
+    describe('Should only Twitter Widget when on a Plan Trial: ', function() {
+      before(function () {
+        placeholderPlaylistPage.getAddContentButton().click();
+        helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
+      });
+
+      it('should show Professional widgets', function () {
+        helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader());
+
+        expect(storeProductsModalPage.getProfessionalWidgets().count()).to.eventually.be.above(0);
+      });
+
+      it('should show Locked Widget', function() {
+        expect(storeProductsModalPage.getUnlockButton().count()).to.eventually.be.above(0);
+        expect(storeProductsModalPage.getAddProfessionalWidgetButton().count()).to.eventually.be(0);
+        expect(storeProductsModalPage.getStartTrialButton().count()).to.eventually.be.above(0);
+        expect(storeProductsModalPage.getDisplaysListLink().count()).to.eventually.be(0);
+      });
+
+      it('should show Plans Modal', function() {
+        storeProductsModalPage.getUnlockButton().get(0).click();
+
+        helper.wait(plansModalPage.getPlansModal(), 'Plans Modal');
+        helper.wait(plansModalPage.getStartTrialBasicButton(), 'Basic Plan Start Trial');
+      });
+
+      it('should start a Trial',function(){
+        plansModalPage.getStartTrialBasicButton().click();
+
+        helper.waitDisappear(plansModalPage.getPlansModal(), 'Plans Modal');
+      });
+
+      it('should unlock Professional Widgets', function() {
+        expect(storeProductsModalPage.getUnlockButton().count()).to.eventually.be(0);
+        expect(storeProductsModalPage.getAddProfessionalWidgetButton().count()).to.eventually.be.above(0);
+        expect(storeProductsModalPage.getStartTrialButton().count()).to.eventually.be(0);
+        expect(storeProductsModalPage.getDisplaysListLink().count()).to.eventually.be.above(0);
+      });
+    });
+
     describe('Should Add a Twitter widget: ', function () {
 
       before('Click Add Twitter Widget: ', function () {
-        placeholderPlaylistPage.getAddContentButton().click();
         helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
 
-        helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader()).then(function () {
-          expect(storeProductsModalPage.getStoreProducts().count()).to.eventually.be.above(0);
-        });
-        storeProductsModalPage.getSearchInput().sendKeys('twitter');
-        storeProductsModalPage.getSearchInput().sendKeys(protractor.Key.ENTER);
-        helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader()).then(function () {
-          expect(storeProductsModalPage.getStoreProducts().count()).to.eventually.be.above(0);
-        });
-
-        storeProductsModalPage.getStoreProducts().get(0).click();
+        storeProductsModalPage.getAddProfessionalWidgetButton().get(0).click();
 
         helper.wait(twitterSettingsPage.getTwitterSettingsModal(), 'Twitter Settings Modal');
       });
