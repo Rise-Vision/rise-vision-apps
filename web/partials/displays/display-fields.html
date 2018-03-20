@@ -167,7 +167,7 @@
     <div class="panel panel-default">
       <table class="table table--pro-features" ng-class="{ 'table--disabled': !display.playerProAuthorized }">
         <tbody class="table-body">
-          <tr class="table-body__row" ng-show="!planFactory.isPlanActive() && !display.playerProAuthorized" style="text-align: center; padding: 22px;">
+          <tr class="table-body__row text-center u_padding-md" ng-show="!planFactory.isPlanActive() && !display.playerProAuthorized">
             <td colspan="2">
               <span translate>displays-app.fields.player.rpp.unlock</span><br/>
               <button ng-click="showPlansModal()" class="btn btn-xs btn-primary u_margin-sm-top" translate>
@@ -177,23 +177,23 @@
           </tr>
 
           <tr class="table-body__row">
-            <td class="table-body__cell" style="white-space: nowrap; border-top: 0;">
-               <div class="checkbox" id="enableInputs" style="margin:0">
+            <td class="table-body__cell text-nowrap u_no-border">
+               <div class="checkbox u_remove-margin" id="enableInputs">
                 <label class="">
                   <input type="checkbox" ng-model="display.monitoringEnabled" ng-disabled="!display.playerProAuthorized">
                   <span class="no-select" translate>displays-app.fields.player.rpp.monitoring</span>
                 </label>
               </div></td>
-              <td class="table-body__cell" style="border-top: 0;">
+              <td class="table-body__cell u_no-border">
               <span translate>displays-app.fields.player.rpp.send-email-offline</span>
             </td>
           </tr>
 
           <tr class="table-body__row">
-            <td class="table-body__cell" style="white-space: nowrap; vertical-align: top; border-top: 0;">
+            <td class="table-body__cell text-nowrap u_no-border u_align-top">
               <span translate>displays-app.fields.player.rpp.email-recipients</span>
             </td>
-            <td class="table-body__cell" style="border-top: 0;" ng-class="{ 'has-error': !displayDetails.monitoringEmails.$valid }">
+            <td class="table-body__cell u_no-border" ng-class="{ 'has-error': !displayDetails.monitoringEmails.$valid }">
               <tags-input name="monitoringEmails"
                           type="email"
                           placeholder="Add an email"
@@ -214,10 +214,10 @@
           </tr>
 
           <tr class="table-body__row">
-            <td class="table-body__cell" style="white-space: nowrap; vertical-align: top; border-top: 0;">
+            <td class="table-body__cell text-nowrap u_align-top u_no-border">
               <span translate>displays-app.fields.player.rpp.monitoring-timeline</span>
             </td>
-            <td class="table-body__cell" style="border-top: 0;">
+            <td class="table-body__cell u_no-border">
               <timeline-basic-textbox timeline-string="display.monitoringSchedule" ng-disabled="!display.monitoringEnabled" />
             </td>
           </tr>
