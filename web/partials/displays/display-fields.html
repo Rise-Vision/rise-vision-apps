@@ -167,7 +167,7 @@
     <div class="panel panel-default">
       <table class="table table--pro-features" ng-class="{ 'table--disabled': !display.playerProAuthorized }">
         <tbody class="table-body">
-          <tr class="table-body__row" ng-show="!isPlanActive() && !display.playerProAuthorized" style="text-align: center; padding: 22px;">
+          <tr class="table-body__row" ng-show="!planFactory.isPlanActive() && !display.playerProAuthorized" style="text-align: center; padding: 22px;">
             <td colspan="2">
               Unlock Rise Professional Features with any plan! <br/>
               <button ng-click="showPlansModal()" class="btn btn-xs btn-primary u_margin-sm-top">Start a Plan Trial</button>
