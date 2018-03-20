@@ -123,9 +123,9 @@ var TwitterSettingsScenarios = function() {
       it('should open the Twitter Settings Modal and show screen name and buttons', function () {
         expect(twitterSettingsPage.getTwitterSettingsModal().isDisplayed()).to.eventually.be.true;
 
-        expect(twitterSettingsPage.getTwitterScreenName().isPresent()).to.eventually.be.true;
-        expect(twitterSettingsPage.getSaveButton().isPresent()).to.eventually.be.true;
-        expect(twitterSettingsPage.getCancelButton().isPresent()).to.eventually.be.true;
+        expect(twitterSettingsPage.getTwitterScreenName().isDisplayed()).to.eventually.be.true;
+        expect(twitterSettingsPage.getSaveButton().isDisplayed()).to.eventually.be.true;
+        expect(twitterSettingsPage.getCancelButton().isDisplayed()).to.eventually.be.true;
       });
 
       it('should set a twitter screen name and save closes the modal', function() {
@@ -147,12 +147,12 @@ var TwitterSettingsScenarios = function() {
         expect(twitterSettingsPage.getTwitterScreenName().getAttribute('value')).to.eventually.equal('risevision');
       });
 
-      it('should authenticate user', function() {
+      it('should authenticate user', function(done) {
 
         twitterSettingsPage.getRevokeLink().click().then(function(present) {
-          expect(twitterSettingsPage.getConnectButton().isPresent()).to.eventually.be.equal(true);
+          expect(twitterSettingsPage.getConnectButton().isDisplayed()).to.eventually.be.equal(true);
         }, function(err) {
-          expect(twitterSettingsPage.getConnectButton().isPresent()).to.eventually.be.equal(true);
+          expect(twitterSettingsPage.getConnectButton().isDisplayed()).to.eventually.be.equal(true);
         });
 
         twitterSettingsPage.getConnectButton().click().then(function () {
@@ -180,7 +180,9 @@ var TwitterSettingsScenarios = function() {
 
               return browser.switchTo().window(mainWindowHandle);
             }).then(function (){
-              expect(twitterSettingsPage.getRevokeLink().isPresent()).to.eventually.be.equal(true);
+              expect(twitterSettingsPage.getRevokeLink().isDisplayed()).to.eventually.be.equal(true);
+              
+              done();
             });
           });
         });
@@ -189,7 +191,9 @@ var TwitterSettingsScenarios = function() {
       it('should revoke user authentication', function() {
         twitterSettingsPage.getRevokeLink().click();
 
-        expect(twitterSettingsPage.getConnectButton().isPresent()).to.eventually.be.equal(true);
+        helper.wait(twitterSettingsPage.getConnectButton(), 'Connect Button');
+
+        expect(twitterSettingsPage.getConnectButton().isDisplayed()).to.eventually.be.equal(true);
       });
     });
   });
