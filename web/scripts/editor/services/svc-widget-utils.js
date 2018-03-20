@@ -102,7 +102,7 @@ angular.module('risevision.editor.services')
       imageAlt: 'add twitter widget',
       gadgetType: 'Widget',
       id: '83850b51-9040-445d-aa3b-d25946a725c5',
-      url: 'https://storage.googleapis.com/rise-content/stable/components/rise-twitter/rise-twitter-widget.html'
+      url: 'https://widgets.risevision.com/stable/components/rise-twitter/rise-twitter-widget.html'
     },
     {
       env: 'PROD',
@@ -111,7 +111,7 @@ angular.module('risevision.editor.services')
       imageAlt: 'add twitter widget',
       gadgetType: 'Widget',
       id: '67e511ae-62b5-4a44-9551-077f63596079',
-      url: 'https://storage.googleapis.com/rise-content/stable/components/rise-twitter/rise-twitter-widget.html'
+      url: 'https://widgets.risevision.com/stable/components/rise-twitter/rise-twitter-widget.html'
     }
   ])
   .factory('widgetUtils', ['WIDGETS_INFO', 'PROFESSIONAL_WIDGETS', 'APPS_ENV',
