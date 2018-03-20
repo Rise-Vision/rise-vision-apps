@@ -165,15 +165,15 @@ var TwitterSettingsScenarios = function() {
           browser.getAllWindowHandles().then(function (handles) {
             expect(handles).to.have.length(2);
 
-            var mainWindowHandle = handles[0];
-            var newWindowHandle = handles[1]; // this is the twitter login window
+            mainWindowHandle = handles[0];
+            newWindowHandle = handles[1]; // this is the twitter login window
 
             done();
           });
         });
       });
       
-      it('should wait for window to load', function() {
+      it('should wait for window to load', function(done) {
         browser.switchTo().window(newWindowHandle).then(function () {
           
           // this wait until the twitter login window finishs loading completely.
@@ -181,7 +181,9 @@ var TwitterSettingsScenarios = function() {
             return browser.executeScript('return jQuery.active;').then(function (text) {
               return text == 0;
             });          
-          });              
+          });
+
+          done();
         });
       });
 
