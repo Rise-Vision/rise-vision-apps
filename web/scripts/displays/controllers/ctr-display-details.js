@@ -1,13 +1,14 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .controller('displayDetails', ['$scope', '$rootScope', '$q', '$state',
+  .value('EMAIL_REGEX', /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)
+  .controller('displayDetails', ['$scope', '$rootScope', '$q', '$state', '$filter',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'storeAuthorization', 'enableCompanyProduct', 'userState', 'planFactory',
-    'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID',
-    function ($scope, $rootScope, $q, $state, displayFactory, display, screenshotFactory, playerProFactory,
+    'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', 'EMAIL_REGEX',
+    function ($scope, $rootScope, $q, $state, $filter, displayFactory, display, screenshotFactory, playerProFactory,
       $loading, $log, $modal, $templateCache, displayId, storeAuthorization, enableCompanyProduct, userState,
-      planFactory, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID) {
+      planFactory, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, EMAIL_REGEX) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
@@ -16,10 +17,18 @@ angular.module('risevision.displays.controllers')
       $scope.company = userState.getCopyOfSelectedCompany(true);
       $scope.deferredDisplay = $q.defer();
       $scope.updatingRPP = false;
+      $scope.monitoringEmailsList = [];
+      $scope.monitoringSchedule = {};
       $scope.showPlansModal = planFactory.showPlansModal;
 
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
+        $scope.monitoringEmailsList = ($scope.display.monitoringEmails || []).map(function(e) { return { text: e }; });
+
+        if (!$scope.display.playerProAuthorized) {
+          $scope.display.monitoringEnabled = false;
+        }
+
         $scope.deferredDisplay.resolve();
 
         screenshotFactory.loadScreenshot();
@@ -52,6 +61,10 @@ angular.module('risevision.displays.controllers')
               $scope.display.playerProAuthorized = !playerProAuthorized;
             })
             .finally(function () {
+              if (!playerProAuthorized) {
+                $scope.display.monitoringEnabled = false;
+              }
+
               $scope.updatingRPP = false;
             });
         }
@@ -69,6 +82,10 @@ angular.module('risevision.displays.controllers')
         return $scope.getProLicenseCount() > 0 && allProLicensesUsed;
       };
 
+      $scope.isPlanActive = function () {
+        return planFactory.isSubscribed() || planFactory.isOnTrial();
+      };
+
       $scope.isProAvailable = function () {
         return $scope.getProLicenseCount() > 0 && !$scope.areAllProLicensesUsed();
       };
@@ -76,6 +93,10 @@ angular.module('risevision.displays.controllers')
       $scope.isProApplicable = function () {
         return !playerProFactory.is3rdPartyPlayer($scope.display) &&
                !playerProFactory.isUnsupportedPlayer($scope.display);
+      };
+
+      $scope.isValidEmail = function (email) {
+        return !!(email && email.text && EMAIL_REGEX.test(email.text));
       };
 
       $scope.confirmDelete = function () {
@@ -142,6 +163,8 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.save = function () {
+        $scope.display.monitoringEmails = $scope.monitoringEmailsList.map(function(t) { return t.text; });
+
         if (!$scope.displayDetails.$valid) {
           console.info('form not valid: ', $scope.displayDetails.$error);
 

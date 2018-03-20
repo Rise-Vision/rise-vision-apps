@@ -26,6 +26,9 @@ describe('directive: onboarding steps', function() {
     $provide.service('displayFactory', function() {
       return {};
     });
+    $provide.service('$state', function() {
+      return { current: { name: 'home' } };
+    });
   }));
   beforeEach(inject(function($compile, _$rootScope_, $templateCache){
     $rootScope = _$rootScope_;
@@ -417,7 +420,7 @@ describe('directive: onboarding steps', function() {
     it('should reset showOnboarding', function() {
       $rootScope.showOnboarding = true;
 
-      $rootScope.$broadcast('risevision.user.signedOut');
+      $rootScope.$broadcast('$stateChangeStart', { name: 'common.auth.logout' });
       $scope.$digest();
 
       expect($rootScope.showOnboarding).to.be.false;

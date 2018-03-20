@@ -70,8 +70,7 @@ angular.module('risevision.displays.services')
             factory.display = result.item;
 
             if (factory.display) {
-              factory.showBrowserUpgradeMode = factory.display.browserUpgradeMode !==
-                0;
+              factory.showBrowserUpgradeMode = factory.display.browserUpgradeMode !== 0;
             }
 
             deferred.resolve();

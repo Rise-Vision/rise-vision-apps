@@ -10,8 +10,7 @@
       'name', 'status', 'useCompanyAddress', 'addressDescription', 'street',
       'unit', 'city', 'province', 'country', 'postalCode', 'timeZoneOffset',
       'restartEnabled', 'restartTime', 'browserUpgradeMode', 'width',
-      'height',
-      'orientation'
+      'height', 'orientation', 'monitoringEnabled', 'monitoringEmails', 'monitoringSchedule'
     ])
     .constant('DISPLAY_SEARCH_FIELDS', [
       'name', 'id', 'street', 'unit', 'city', 'province', 'country',

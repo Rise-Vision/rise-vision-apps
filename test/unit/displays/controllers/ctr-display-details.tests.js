@@ -15,7 +15,7 @@ describe('controller: display details', function() {
           this.display.id = displayId;
           this.display.companyId = 'company';
 
-          return Q.resolve();
+          return Q.resolve({});
         },
         updateDisplay : function(){
           updateCalled = true;
@@ -164,17 +164,13 @@ describe('controller: display details', function() {
       expect($scope.display).to.be.ok;
       expect($scope.display.id).to.equal('1234');
 
-      expect($scope.display.subscriptionStatus).to.not.be.ok;
-      expect($scope.display.showTrialButton).to.not.be.ok;
-      expect($scope.display.showTrialStatus).to.not.be.ok;
-      expect($scope.display.showSubscribeButton).to.not.be.ok;
-
       done();
     }, 10);
   });
 
   describe('submit: ',function() {
     it('should return early if the form is invalid',function(){
+      $scope.display = {};
       $scope.displayDetails = {};
       $scope.displayDetails.$valid = false;
       $scope.save();
@@ -377,4 +373,15 @@ describe('controller: display details', function() {
     });
   });
 
+  describe('isValidEmail:', function() {
+    it('should return true if it is a valid email', function () {
+      expect($scope.isValidEmail()).to.be.false;
+      expect($scope.isValidEmail({})).to.be.false;
+      expect($scope.isValidEmail({ text: '' })).to.be.false;
+      expect($scope.isValidEmail({ text: 'aaaa' })).to.be.false;
+      expect($scope.isValidEmail({ text: 'aaaa@' })).to.be.false;
+      expect($scope.isValidEmail({ text: 'aaaa@a' })).to.be.true;
+      expect($scope.isValidEmail({ text: 'aaaa@a.com' })).to.be.true;
+    });
+  });
 });

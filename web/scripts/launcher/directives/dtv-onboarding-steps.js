@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.apps.launcher.directives')
-  .directive('onboardingSteps', ['$rootScope', 'launcherFactory',
+  .directive('onboardingSteps', ['$rootScope', '$state', 'launcherFactory',
     'editorFactory', 'displayFactory',
-    function ($rootScope, launcherFactory, editorFactory, displayFactory) {
+    function ($rootScope, $state, launcherFactory, editorFactory, displayFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -103,7 +103,7 @@ angular.module('risevision.apps.launcher.directives')
 
             $scope.stepCount = count;
 
-            $rootScope.showOnboarding = !$scope.activateDisplayCompleted;
+            $rootScope.showOnboarding = _shouldShowOnboarding($state.current.name);
           };
 
           $scope.$on('risevision.company.selectedCompanyChanged', function () {
@@ -134,8 +134,12 @@ angular.module('risevision.apps.launcher.directives')
             return false;
           };
 
-          $rootScope.$on('risevision.user.signedOut', function () {
-            $rootScope.showOnboarding = false;
+          function _shouldShowOnboarding(state) {
+            return !$scope.activateDisplayCompleted && state.indexOf('common.auth.') === -1;
+          }
+
+          $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+            $rootScope.showOnboarding = _shouldShowOnboarding(toState.name);
           });
         }
       };
