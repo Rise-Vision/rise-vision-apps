@@ -180,8 +180,10 @@ var TwitterSettingsScenarios = function() {
 
               return browser.switchTo().window(mainWindowHandle);
             }).then(function (){
+              helper.wait(twitterSettingsPage.getRevokeLink(), 'Revoke Button');
+
               expect(twitterSettingsPage.getRevokeLink().isDisplayed()).to.eventually.be.equal(true);
-              
+
               done();
             });
           });
