@@ -146,47 +146,61 @@ var TwitterSettingsScenarios = function() {
 
         expect(twitterSettingsPage.getTwitterScreenName().getAttribute('value')).to.eventually.equal('risevision');
       });
+    });
 
-      it('should authenticate user', function(done) {
-
+    describe('should authenticate user: ', function() {
+      var mainWindowHandle, newWindowHandle;
+      it('should check if revoke is active', function() {
         twitterSettingsPage.getRevokeLink().click().then(function(present) {
           expect(twitterSettingsPage.getConnectButton().isDisplayed()).to.eventually.be.equal(true);
         }, function(err) {
           expect(twitterSettingsPage.getConnectButton().isDisplayed()).to.eventually.be.equal(true);
-        });
+        });        
+      });
 
+      it('should click connect button', function(done) {
         twitterSettingsPage.getConnectButton().click().then(function () {
           browser.sleep(2000);
 
           browser.getAllWindowHandles().then(function (handles) {
+            expect(handles).to.have.length(2);
 
             var mainWindowHandle = handles[0];
             var newWindowHandle = handles[1]; // this is the twitter login window
 
-            browser.switchTo().window(newWindowHandle).then(function () {
-              
-              // this wait until the twitter login window finishs loading completely.
-              browser.wait(function(){
-                return browser.executeScript('return jQuery.active;').then(function (text) {
-                  return text == 0;
-                });          
-              });              
-              
-              browser.driver.findElement(by.id('username_or_email')).sendKeys(browser.params.twitter.user);
-              browser.driver.findElement(by.id('password')).sendKeys(browser.params.twitter.pass);
-              browser.driver.findElement(by.id('allow')).click();
-              
-              browser.sleep(2000);
-
-              return browser.switchTo().window(mainWindowHandle);
-            }).then(function (){
-              helper.wait(twitterSettingsPage.getRevokeLink(), 'Revoke Button');
-
-              expect(twitterSettingsPage.getRevokeLink().isDisplayed()).to.eventually.be.equal(true);
-
-              done();
-            });
+            done();
           });
+        });
+      });
+      
+      it('should wait for window to load', function() {
+        browser.switchTo().window(newWindowHandle).then(function () {
+          
+          // this wait until the twitter login window finishs loading completely.
+          browser.wait(function(){
+            return browser.executeScript('return jQuery.active;').then(function (text) {
+              return text == 0;
+            });          
+          });              
+        });
+      });
+
+      it('should log in user to Twitter', function() {
+        browser.driver.findElement(by.id('username_or_email')).sendKeys(browser.params.twitter.user);
+        browser.driver.findElement(by.id('password')).sendKeys(browser.params.twitter.pass);
+        browser.driver.findElement(by.id('allow')).click();
+        
+        browser.sleep(2000);
+
+      });
+      
+      it('should show Revoke button', function(done) {
+        browser.switchTo().window(mainWindowHandle).then(function() {
+          helper.wait(twitterSettingsPage.getRevokeLink(), 'Revoke Button');
+
+          expect(twitterSettingsPage.getRevokeLink().isDisplayed()).to.eventually.be.equal(true);
+
+          done();
         });
       });
 
