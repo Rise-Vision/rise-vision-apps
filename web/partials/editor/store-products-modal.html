@@ -18,7 +18,7 @@
     <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>
 
     <div ng-hide="factory.search.category === 'Templates'">
-      <h4 class="u_margin-md-top">{{ 'editor-app.storeProduct.professional.title' | translate }} - <a href="#" translate="editor-app.storeProduct.professional.learnMore"></a></h4>
+      <h4 class="u_margin-md-top">{{ 'editor-app.storeProduct.professional.title' | translate }} - <a href="https://help.risevision.com/hc/en-us/articles/115003830563" target="_blank" translate="editor-app.storeProduct.professional.learnMore"></a></h4>
 
       <div class="professional-content panel panel-default" ng-class="{ 'professional-content--locked' : !planFactory.hasProfessionalLicenses(), 'professional-content--unlocked' : planFactory.hasProfessionalLicenses() }">
         <div class="panel-body">
@@ -127,7 +127,7 @@
                 <div class="row">
                   <div class="col-xs-8">
                     <h4 id="productName">{{product.name | characters: 25}}</h4>
-                    <a ng-href="{{storeUrl}}/product/{{product.productId}}/" target="_blank" ng-click="$event.stopPropagation()">View in Store</a>
+                    <a ng-href="{{storeUrl}}/product/{{product.productId}}/" target="_blank" ng-click="$event.stopPropagation()" translate="editor-app.storeProduct.viewInStore"></a>
                   </div><!--end col-->
                   <div class="col-xs-4">
                     <button class="btn btn-primary btn-block btn-sm" id="{{product.name | slugify}}" ng-click="quickSelect(product); $event.stopPropagation()">Add</button>
