@@ -148,7 +148,7 @@ var TwitterSettingsScenarios = function() {
       });
     });
 
-    describe('should authenticate user: ', function() {
+    xdescribe('should authenticate user: ', function() {
       var mainWindowHandle, newWindowHandle;
       it('should check if revoke is active', function() {
         twitterSettingsPage.getRevokeLink().click().then(function(present) {
@@ -191,12 +191,13 @@ var TwitterSettingsScenarios = function() {
         browser.driver.findElement(by.id('username_or_email')).sendKeys(browser.params.twitter.user);
         browser.driver.findElement(by.id('password')).sendKeys(browser.params.twitter.pass);
         browser.driver.findElement(by.id('allow')).click();
-        
+
+        // NOTE: Window will not close if 'Verify your Identity' page shows
         browser.wait(function() {
           return browser.getAllWindowHandles().then(function (handles) {
             return handles.length === 1;
           });
-        });
+        }, 5000);
 
         browser.switchTo().window(mainWindowHandle).then(done);
       });
@@ -217,6 +218,7 @@ var TwitterSettingsScenarios = function() {
         expect(twitterSettingsPage.getConnectButton().isDisplayed()).to.eventually.be.equal(true);
       });
     });
+
   });
 };
 module.exports = TwitterSettingsScenarios;
