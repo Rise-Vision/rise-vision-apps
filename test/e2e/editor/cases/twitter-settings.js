@@ -179,7 +179,7 @@ var TwitterSettingsScenarios = function() {
           // this wait until the twitter login window finishs loading completely.
           browser.wait(function(){
             return browser.executeScript('return jQuery.active;').then(function (text) {
-              return text == 0;
+              return text === 0;
             });          
           });
 
@@ -187,28 +187,31 @@ var TwitterSettingsScenarios = function() {
         });
       });
 
-      it('should log in user to Twitter', function() {
+      it('should log in user to Twitter', function(done) {
         browser.driver.findElement(by.id('username_or_email')).sendKeys(browser.params.twitter.user);
         browser.driver.findElement(by.id('password')).sendKeys(browser.params.twitter.pass);
         browser.driver.findElement(by.id('allow')).click();
         
-        browser.sleep(2000);
+        browser.wait(function() {
+          return browser.getAllWindowHandles().then(function (handles) {
+            return handles.length === 1;
+          });
+        });
 
+        browser.switchTo().window(mainWindowHandle).then(done);
       });
       
       it('should show Revoke button', function(done) {
-        browser.switchTo().window(mainWindowHandle).then(function() {
-          helper.wait(twitterSettingsPage.getRevokeLink(), 'Revoke Button');
+        helper.waitDisappear(twitterSettingsPage.getConnectButton(), 'Connect Button');
+        helper.wait(twitterSettingsPage.getRevokeLink(), 'Revoke Button');
 
-          expect(twitterSettingsPage.getRevokeLink().isDisplayed()).to.eventually.be.equal(true);
-
-          done();
-        });
+        expect(twitterSettingsPage.getRevokeLink().isDisplayed()).to.eventually.be.equal(true);
       });
 
       it('should revoke user authentication', function() {
         twitterSettingsPage.getRevokeLink().click();
 
+        helper.waitDisappear(twitterSettingsPage.getRevokeLink(), 'Revoke Button');
         helper.wait(twitterSettingsPage.getConnectButton(), 'Connect Button');
 
         expect(twitterSettingsPage.getConnectButton().isDisplayed()).to.eventually.be.equal(true);
