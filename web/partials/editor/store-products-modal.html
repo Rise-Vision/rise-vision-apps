@@ -28,8 +28,8 @@
               <ng-repeat ng-repeat="widget in professionalWidgets">
                 <div class="col-sm-6 col-md-4 col-lg-3">
 
-                  <div class="product-grid_item panel panel-default" style="margin-bottom: 0;">
-                    <figure class="product-grid_image u_clickable" ng-class="{ 'product-grid_image--locked' : !planFactory.hasProfessionalLicenses(), 'product-grid_image--unlocked' : planFactory.hasProfessionalLicenses() }">
+                  <div class="product-grid_item panel panel-default" style="margin-bottom: 0;" ng-if="!planFactory.hasProfessionalLicenses()" ng-click="planFactory.showPlansModal()">
+                    <figure class="product-grid_image u_clickable product-grid_image--locked">
                       <img class="img-responsive" ng-src={{widget.imageUrl}} alt="{{widget.imageAlt}}"> 
                     </figure><!--template-image-->
                     <div class="product-grid_details">
@@ -39,11 +39,29 @@
                           
                         </div><!-- end col -->
                         <div class="col-xs-4">
-                          <button id="unlockButton" ng-click="planFactory.showPlansModal()" class="btn btn-default btn-sm btn-block" ng-if="!planFactory.hasProfessionalLicenses()">
+                          <button id="unlockButton" ng-click="planFactory.showPlansModal()" class="btn btn-default btn-sm btn-block">
                             {{ 'editor-app.storeProduct.professional.unlock' | translate }}
                           </button>
+                        </div><!-- end col -->
+                        <div class="col-xs-12">
+                          <p class="text-muted" translate="editor-app.storeProduct.professional.widgetType"></p>
+                        </div>
+                      </div><!-- end row -->
+                    </div>
+                  </div><!--product-grid-item-->
 
-                          <button id="addProfessionalWidgetButton" ng-click="quickSelect(widget); $event.stopPropagation()" class="btn btn-primary btn-sm btn-block" ng-if="planFactory.hasProfessionalLicenses()">
+                  <div class="product-grid_item panel panel-default" style="margin-bottom: 0;" ng-if="planFactory.hasProfessionalLicenses()" ng-click="quickSelect(widget)">
+                    <figure class="product-grid_image u_clickable product-grid_image--unlocked">
+                      <img class="img-responsive" ng-src={{widget.imageUrl}} alt="{{widget.imageAlt}}"> 
+                    </figure><!--template-image-->
+                    <div class="product-grid_details">
+                      <div class="row">
+                        <div class="col-xs-8">
+                          <h4>{{widget.name | characters: 25}}</h4>
+                          
+                        </div><!-- end col -->
+                        <div class="col-xs-4">
+                          <button id="addProfessionalWidgetButton" class="btn btn-primary btn-sm btn-block">
                             {{ 'editor-app.storeProduct.add' | translate }}
                           </button>
                         </div><!-- end col -->
