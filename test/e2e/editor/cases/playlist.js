@@ -133,7 +133,7 @@ var PlaylistScenarios = function() {
       });
 
       it('first products should be Image Widget', function () {
-        expect(storeProductsModalPage.getProductNameFields().get(0).getText()).to.eventually.equal('Image Widget');
+        expect(storeProductsModalPage.getProductNameFields().get(1).getText()).to.eventually.equal('Image Widget');
 
       });
 
