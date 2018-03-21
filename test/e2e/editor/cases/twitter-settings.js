@@ -70,7 +70,7 @@ var TwitterSettingsScenarios = function() {
 
     });
 
-    describe('Should only Twitter Widget when on a Plan Trial: ', function() {
+    describe('Should lock Twitter Widget when not on a Plan: ', function() {
       before(function () {
         placeholderPlaylistPage.getAddContentButton().click();
         helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
