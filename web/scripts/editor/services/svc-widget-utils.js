@@ -102,7 +102,7 @@ angular.module('risevision.editor.services')
       imageAlt: 'add twitter widget',
       gadgetType: 'Widget',
       id: '83850b51-9040-445d-aa3b-d25946a725c5',
-      url: 'https://widgets.risevision.com/stable/components/rise-twitter/rise-twitter-widget.html'
+      url: 'https://widgets.risevision.com/beta/components/rise-twitter/rise-twitter-widget.html'
     },
     {
       env: 'PROD',
