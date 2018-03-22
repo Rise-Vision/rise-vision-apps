@@ -19,6 +19,12 @@ var StoreProductsModalPage = function() {
   var premiumProducts = element.all(by.cssContainingText('p#status', 'Premium'));
   var displayBanner = element(by.id('displayBanner'));
 
+  var professionalWidgets = element.all(by.repeater('widget in professionalWidgets'));
+  var unlockButton = element.all(by.id('unlockButton'));
+  var addProfessionalWidgetButton = element.all(by.id('addProfessionalWidgetButton'));
+  var promotionTrialButton = element.all(by.id('promotionTrialButton'));
+  var displaysListLink = element.all(by.id('displaysListLink'));
+
   var addWidgetByUrlButton = element(by.id('addWidgetByUrl'));
   var closeButton = element(by.css('.close'));
 
@@ -89,6 +95,26 @@ var StoreProductsModalPage = function() {
   this.getDisplayBanner = function() {
     return displayBanner;
   }
+  
+  this.getProfessionalWidgets = function() {
+    return professionalWidgets;
+  }
+  
+  this.getUnlockButton = function() {
+    return unlockButton;
+  };
+
+  this.getAddProfessionalWidgetButton = function() {
+    return addProfessionalWidgetButton;
+  };
+
+  this.getPromotionTrialButton = function() {
+    return promotionTrialButton;
+  };
+
+  this.getDisplaysListLink = function() {
+    return displaysListLink;
+  };
 
   this.getAddWidgetByUrlButton = function() {
     return addWidgetByUrlButton;

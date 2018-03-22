@@ -17,7 +17,85 @@
 
     <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>
 
-    <div class="template-filters u_margin-sm-bottom">
+    <div ng-hide="factory.search.category === 'Templates'">
+      <h4 class="u_margin-md-top">{{ 'editor-app.storeProduct.professional.title' | translate }} - <a href="https://help.risevision.com/hc/en-us/articles/115003830563" target="_blank" translate="editor-app.storeProduct.professional.learnMore"></a></h4>
+
+      <div class="professional-content panel panel-default" ng-class="{ 'professional-content--locked' : !planFactory.hasProfessionalLicenses(), 'professional-content--unlocked' : planFactory.hasProfessionalLicenses() }">
+        <div class="panel-body">
+          <div class="product-grid">
+            <div class="row">
+
+              <ng-repeat ng-repeat="widget in professionalWidgets">
+                <div class="col-sm-6 col-md-4 col-lg-3">
+
+                  <div class="product-grid_item panel panel-default" style="margin-bottom: 0;" ng-if="!planFactory.hasProfessionalLicenses()" ng-click="planFactory.showPlansModal()">
+                    <figure class="product-grid_image u_clickable product-grid_image--locked">
+                      <img class="img-responsive" ng-src={{widget.imageUrl}} alt="{{widget.imageAlt}}"> 
+                    </figure><!--template-image-->
+                    <div class="product-grid_details">
+                      <div class="row">
+                        <div class="col-xs-8">
+                          <h4>{{widget.name | characters: 25}}</h4>
+                          
+                        </div><!-- end col -->
+                        <div class="col-xs-4">
+                          <button id="unlockButton" class="btn btn-default btn-sm btn-block">
+                            {{ 'editor-app.storeProduct.professional.unlock' | translate }}
+                          </button>
+                        </div><!-- end col -->
+                        <div class="col-xs-12">
+                          <p class="text-muted" translate="editor-app.storeProduct.professional.widgetType"></p>
+                        </div>
+                      </div><!-- end row -->
+                    </div>
+                  </div><!--product-grid-item-->
+
+                  <div class="product-grid_item panel panel-default" style="margin-bottom: 0;" ng-if="planFactory.hasProfessionalLicenses()" ng-click="quickSelect(widget)">
+                    <figure class="product-grid_image u_clickable product-grid_image--unlocked">
+                      <img class="img-responsive" ng-src={{widget.imageUrl}} alt="{{widget.imageAlt}}"> 
+                    </figure><!--template-image-->
+                    <div class="product-grid_details">
+                      <div class="row">
+                        <div class="col-xs-8">
+                          <h4>{{widget.name | characters: 25}}</h4>
+                          
+                        </div><!-- end col -->
+                        <div class="col-xs-4">
+                          <button id="addProfessionalWidgetButton" class="btn btn-primary btn-sm btn-block">
+                            {{ 'editor-app.storeProduct.add' | translate }}
+                          </button>
+                        </div><!-- end col -->
+                        <div class="col-xs-12">
+                          <p class="text-muted" translate="editor-app.storeProduct.professional.widgetType"></p>
+                        </div>
+                      </div><!-- end row -->
+                    </div>
+                  </div><!--product-grid-item-->
+
+                </div><!--col-->
+              </ng-repeat>
+
+              <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="plan-promotion" ng-if="!planFactory.hasProfessionalLicenses()">
+                  <h2 translate="editor-app.storeProduct.professional.promotion"></h2>
+                  <p translate="editor-app.storeProduct.professional.promotionTrial"></p>
+                  <button id="promotionTrialButton" ng-click="planFactory.showPlansModal()" class="btn btn-white btn-lg" translate="editor-app.storeProduct.professional.promotionTrialButton"></button>
+                </div>
+                <div class="pro-display-promotion" ng-if="planFactory.hasProfessionalLicenses()">
+                  <h2 translate="editor-app.storeProduct.professional.promotion"></h2>
+                  <p translate="editor-app.storeProduct.professional.promotionPlan"></p>
+                  <a id="displaysListLink" ui-sref="apps.displays.list" link-cid target="_blank" class="btn btn-default btn-lg" translate="editor-app.storeProduct.professional.promotionDisplaysButton"></a>
+                </div>
+              </div><!--col-->
+            </div>
+          </div>
+        </div><!--panel-body-->
+      </div><!--panel-->
+
+      <h4 class="u_margin-sm-top" translate="editor-app.storeProduct.content.otherWidgets"></h4>
+    </div>
+
+    <div class="template-filters u_margin-sm-bottom" ng-if="factory.search.category === 'Templates'">
       <ul class="list-unstyled">
         <li ng-repeat="category in paymentCategories" ng-class="{ active : search.paymentCategory === category || !search.paymentCategory && category === 'all' }" ng-click="search.paymentCategory = category"><span>{{category}}</span></li>
       </ul>
@@ -38,7 +116,7 @@
               <div class="row">
                 <div class="col-xs-8">
                   <h4>{{'editor-app.storeProduct.templates.blank' | translate}}</h4>
-                  
+                  &nbsp;
                 </div><!-- end col -->
                 <div class="col-xs-4">
 
@@ -52,7 +130,7 @@
               </div><!-- end row -->
               
             </div>
-          </div>
+          </div><!--product-grid-item-->
         </div>
        
         <ng-repeat ng-repeat="product in factory.items.list | storePaymentCategory:search.paymentCategory">
@@ -67,12 +145,10 @@
                 <div class="row">
                   <div class="col-xs-8">
                     <h4 id="productName">{{product.name | characters: 25}}</h4>
-                    
+                    <a ng-href="{{storeUrl}}/product/{{product.productId}}/" target="_blank" ng-click="$event.stopPropagation()" translate="editor-app.storeProduct.viewInStore"></a>
                   </div><!--end col-->
                   <div class="col-xs-4">
-                    <button ng-if="factory.search.category == 'Templates'" class="btn btn-primary btn-block btn-sm" id="{{product.name | slugify}}" ng-click="quickSelect(product); $event.stopPropagation()">Add</button>
-
-                    <a ng-if="factory.search.category == 'Content'" class="btn btn-default btn-sm btn-block" ng-href="{{storeUrl}}/product/{{product.productId}}/" target="_blank" ng-click="$event.stopPropagation()"><i class="fa fa-info"></i></a>
+                    <button class="btn btn-primary btn-block btn-sm" id="{{product.name | slugify}}" ng-click="quickSelect(product); $event.stopPropagation()">Add</button>
                   </div><!--end col-->
                   <div class="col-xs-12">
                     <p id="status" class="text-muted">{{product.paymentTerms.toLowerCase() === 'free'? 'Free' : 'Premium'}} {{product.trialPeriod > 0 ? ' - '+product.trialPeriod+' Days Trial' : ''}}</p>

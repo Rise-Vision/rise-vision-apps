@@ -42,11 +42,11 @@ angular.module('risevision.editor.services')
       pause: 5
     }
   })
-  .factory('playlistItemFactory', ['$modal', '$log', 'userState',
+  .factory('playlistItemFactory', ['$q', '$modal', '$log', 'userState',
     'gadgetFactory', 'editorFactory', 'placeholderPlaylistFactory',
     'settingsFactory', 'widgetUtils', 'storageUtils', 'presentationTracker',
     'SELECTOR_TYPES', 'IMAGE_ADDITIONAL_PARAMS', 'VIDEO_ADDITIONAL_PARAMS',
-    function ($modal, $log, userState, gadgetFactory, editorFactory,
+    function ($q, $modal, $log, userState, gadgetFactory, editorFactory,
       placeholderPlaylistFactory, settingsFactory, widgetUtils, storageUtils,
       presentationTracker,
       SELECTOR_TYPES, IMAGE_ADDITIONAL_PARAMS, VIDEO_ADDITIONAL_PARAMS) {
@@ -80,7 +80,16 @@ angular.module('risevision.editor.services')
       var _addProduct = function (productDetails) {
         presentationTracker('Content Selected', editorFactory.presentation.id,
           editorFactory.presentation.name);
-        gadgetFactory.getGadgetByProduct(productDetails.productCode)
+
+        var promise;
+
+        if (productDetails.productCode) {
+          promise = gadgetFactory.getGadgetByProduct(productDetails.productCode);
+        } else {
+          promise = $q.resolve(productDetails);
+        }
+
+        promise
           .then(function (gadget) {
             var item = _newWidget(gadget);
 

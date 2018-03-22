@@ -94,8 +94,28 @@ angular.module('risevision.editor.services')
       }
     }
   })
-  .factory('widgetUtils', ['WIDGETS_INFO', 'APPS_ENV',
-    function (WIDGETS_INFO, APPS_ENV) {
+  .constant('PROFESSIONAL_WIDGETS', [
+    {
+      env: 'TEST',
+      name: 'Twitter Widget Test',
+      imageUrl: 'https://s3.amazonaws.com/Rise-Images/UI/twitter-widget%402x-100.jpg',
+      imageAlt: 'add twitter widget',
+      gadgetType: 'Widget',
+      id: '83850b51-9040-445d-aa3b-d25946a725c5',
+      url: 'https://widgets.risevision.com/beta/components/rise-twitter/rise-twitter-widget.html'
+    },
+    {
+      env: 'PROD',
+      name: 'Twitter Widget',
+      imageUrl: 'https://s3.amazonaws.com/Rise-Images/UI/twitter-widget%402x-100.jpg',
+      imageAlt: 'add twitter widget',
+      gadgetType: 'Widget',
+      id: '67e511ae-62b5-4a44-9551-077f63596079',
+      url: 'https://widgets.risevision.com/stable/components/rise-twitter/rise-twitter-widget.html'
+    }
+  ])
+  .factory('widgetUtils', ['WIDGETS_INFO', 'PROFESSIONAL_WIDGETS', 'APPS_ENV',
+    function (WIDGETS_INFO, PROFESSIONAL_WIDGETS, APPS_ENV) {
       var factory = {};
 
       var RENDER_WIDGETS = [];
@@ -214,6 +234,12 @@ angular.module('risevision.editor.services')
         } else {
           return file.substr(index + 1, file.length);
         }
+      };
+
+      factory.getProfessionalWidgets = function() {
+        return _.filter(PROFESSIONAL_WIDGETS, {
+          env: APPS_ENV
+        });
       };
 
       return factory;

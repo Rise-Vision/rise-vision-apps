@@ -13,6 +13,7 @@
   var HtmlEditorScenarios = require('./cases/html-editor.js');
   var PresentationAddScenarios = require('./cases/presentation-add.js');
   var SharedTemplatesScenarios = require('./cases/shared-templates.js');
+  var TwitterSettingsScenarios = require('./cases/twitter-settings.js');
 
   describe('Editor', function() {
     var presentationListScenarios = new PresentationListScenarios();
@@ -27,6 +28,7 @@
     var htmlEditorScenarios = new HtmlEditorScenarios();
     var presentationAddScenarios = new PresentationAddScenarios();
     var sharedTemplatesScenarios = new SharedTemplatesScenarios();
+    var twitterSettingsScenarios = new TwitterSettingsScenarios();
   });
 
 })();
