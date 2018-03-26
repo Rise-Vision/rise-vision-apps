@@ -8,7 +8,7 @@
     <div class="toggle-group">
       <input type="checkbox" id="on-off-switch" ng-model="display.playerProAuthorized" ng-change="toggleProAuthorized()" ng-disabled="updatingRPP">
       <label for="on-off-switch">
-        <span>Rise Player Professional is</span>
+        <span translate>displays-app.details.rpp-is</span>
         <span class="bold" ng-class="display.playerProAuthorized ? 'text-green' : 'text-error'" ng-show="!updatingRPP">
           <span>{{ display.playerProAuthorized ? 'ON' : 'OFF' }}</span>
           <a class="" href="https://help.risevision.com/hc/en-us/articles/115003626863#_ga=2.193387565.1036005128.1516585172-448654264.1459728419" target="_blank">
@@ -17,7 +17,7 @@
         </span>
 
         <span class="bold" ng-show="updatingRPP">
-          LOADING <i class="fa fa-spinner fa-spin fa-fw"></i>
+          <span translate>displays-app.details.rpp-loading</span> <i class="fa fa-spinner fa-spin fa-fw"></i>
         </span>
       </label>
       <div class="onoffswitch pull-right" aria-hidden="true">
@@ -37,8 +37,8 @@
     <div class="row" ng-show="areAllProLicensesUsed()">
       <div class="col-sm-12">
         <div class="alert alert-warning" role="alert">
-          <span>You're using all <strong>{{getProLicenseCount()}}</strong> of your Rise Player Professional Displays.</span>
-          <a href="#" class="u_margin-left" ng-click="showPlansModal(true)">Get More Now</a>
+          <span translate translate-values="{ count: getProLicenseCount() }">displays-app.details.all-licenses-used</span>
+          <a href="#" class="u_margin-left" ng-click="showPlansModal(true)" translate>displays-app.details.get-more</a>
         </div>
       </div>
     </div>

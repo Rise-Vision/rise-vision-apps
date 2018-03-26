@@ -13,6 +13,7 @@ angular.module('risevision.displays.controllers')
       $scope.factory = displayFactory;
       $scope.displayService = display;
       $scope.playerProFactory = playerProFactory;
+      $scope.planFactory = planFactory;
       $scope.companyId = userState.getSelectedCompanyId();
       $scope.company = userState.getCopyOfSelectedCompany(true);
       $scope.deferredDisplay = $q.defer();
@@ -82,12 +83,8 @@ angular.module('risevision.displays.controllers')
         return $scope.getProLicenseCount() > 0 && allProLicensesUsed;
       };
 
-      $scope.isPlanActive = function () {
-        return planFactory.isSubscribed() || planFactory.isOnTrial();
-      };
-
       $scope.isProAvailable = function () {
-        return $scope.getProLicenseCount() > 0 && !$scope.areAllProLicensesUsed();
+        return planFactory.isPlanActive() && $scope.getProLicenseCount() > 0 && !$scope.areAllProLicensesUsed();
       };
 
       $scope.isProApplicable = function () {
