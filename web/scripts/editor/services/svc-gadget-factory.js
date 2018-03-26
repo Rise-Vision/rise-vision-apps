@@ -2,9 +2,10 @@
 
 angular.module('risevision.editor.services')
   .value('EMBEDDED_PRESENTATIONS_CODE', 'd3a418f1a3acaed42cf452fefb1eaed198a1c620')
-  .factory('gadgetFactory', ['$q', 'gadget', 'BaseList',
-    'subscriptionStatusFactory', '$filter', 'EMBEDDED_PRESENTATIONS_CODE',
-    function ($q, gadget, BaseList, subscriptionStatusFactory, $filter, EMBEDDED_PRESENTATIONS_CODE) {
+  .factory('gadgetFactory', ['$q', '$filter', 'gadget', 'BaseList',
+    'subscriptionStatusFactory', 'widgetUtils', 'EMBEDDED_PRESENTATIONS_CODE',
+    function ($q, $filter, gadget, BaseList, subscriptionStatusFactory, widgetUtils,
+      EMBEDDED_PRESENTATIONS_CODE) {
       var factory = {};
 
       var _gadgets = [{
@@ -189,6 +190,7 @@ angular.module('risevision.editor.services')
                 for (var i = 0; i < statusItems.length; i++) {
                   var statusItem = statusItems[i];
                   var gadget = productCodeItemMap[statusItem.pc].gadget;
+                  gadget.isSubscribed = statusItem.isSubscribed;
                   gadget.subscriptionStatus = statusItem.status;
                   gadget.expiry = statusItem.expiry;
                   gadget.trialPeriod = statusItem.trialPeriod;
@@ -214,9 +216,27 @@ angular.module('risevision.editor.services')
           oneDay)));
       };
 
+      factory.isUnlistedProduct = function(productCode) {
+        var unlistedProducts = [EMBEDDED_PRESENTATIONS_CODE];
+
+        return unlistedProducts.indexOf(productCode) !== -1;
+      };
+
+      var _showAsProfessional = function(gadget) {
+        if (widgetUtils.isProfessionalWidget(gadget.id)) {
+          if (factory.isUnlistedProduct(gadget.productCode) && gadget.isSubscribed) {
+            return false;
+          }
+          return true;
+        }
+        return false;
+      }
+
       var _getMessage = function (gadget) {
         var statusMessage = gadget.subscriptionStatus;
-        if (gadget.subscriptionStatus === 'Not Subscribed') {
+        if (_showAsProfessional(gadget)) {
+          statusMessage = 'Professional Widget';
+        } else if (gadget.subscriptionStatus === 'Not Subscribed') {
           statusMessage = $filter('translate')(
             'editor-app.subscription.status.premium');
           if (gadget.trialPeriod > 0) {
