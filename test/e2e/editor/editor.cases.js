@@ -5,7 +5,7 @@
   var ArtboardScenarios = require('./cases/artboard.js');
   var PresentationPropertiesScenarios = require('./cases/presentation-properties.js');
   var ArtboardPlaceholdersScenarios = require('./cases/artboard-placeholders.js');
-  var PlaceholdersListScenarios = require('./cases/placeholdersList.js');
+  var PlaceholdersListScenarios = require('./cases/placeholders-list.js');
   var PlaceholderSettingsScenarios = require('./cases/placeholder-settings.js');
   var PlaylistScenarios = require('./cases/playlist.js');
   var AddContentScenarios = require('./cases/add-content.js');
@@ -13,7 +13,7 @@
   var HtmlEditorScenarios = require('./cases/html-editor.js');
   var PresentationAddScenarios = require('./cases/presentation-add.js');
   var SharedTemplatesScenarios = require('./cases/shared-templates.js');
-  var TwitterSettingsScenarios = require('./cases/twitter-settings.js');
+  var ProfessionalWidgetsScenarios = require('./cases/professional-widgets.js');
 
   describe('Editor', function() {
     var presentationListScenarios = new PresentationListScenarios();
@@ -28,7 +28,7 @@
     var htmlEditorScenarios = new HtmlEditorScenarios();
     var presentationAddScenarios = new PresentationAddScenarios();
     var sharedTemplatesScenarios = new SharedTemplatesScenarios();
-    var twitterSettingsScenarios = new TwitterSettingsScenarios();
+    var professionalWidgetsScenarios = new ProfessionalWidgetsScenarios();
   });
 
 })();

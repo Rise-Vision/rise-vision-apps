@@ -235,7 +235,8 @@ angular.module('risevision.editor.services')
       var _getMessage = function (gadget) {
         var statusMessage = gadget.subscriptionStatus;
         if (_showAsProfessional(gadget)) {
-          statusMessage = 'Professional Widget';
+          statusMessage = $filter('translate')
+            ('editor-app.subscription.status.professional');
         } else if (gadget.subscriptionStatus === 'Not Subscribed') {
           statusMessage = $filter('translate')(
             'editor-app.subscription.status.premium');
