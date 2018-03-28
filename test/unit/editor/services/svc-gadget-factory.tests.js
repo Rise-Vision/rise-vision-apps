@@ -53,6 +53,9 @@ describe('service: gadgetFactory: ', function() {
       return function(key){
         var status = '';
         switch (key) {
+          case 'editor-app.subscription.status.professional':
+            status = 'Professional';
+            break;
           case 'editor-app.subscription.status.premium':
             status = 'Premium';
             break;
@@ -314,7 +317,7 @@ describe('service: gadgetFactory: ', function() {
           expect(items[0].gadget.name).to.equal('Embedded Presentation');
           expect(items[0].gadget.subscriptionStatus).to.equal('Free');
           expect(items[0].gadget.isSubscribed).to.be.false;
-          expect(items[0].gadget.statusMessage).to.equal('Professional Widget');
+          expect(items[0].gadget.statusMessage).to.equal('Professional');
 
           done();
         });
