@@ -274,8 +274,7 @@ var ProfessionalWidgetsScenarios = function() {
         storeProductsModalPage.getSearchInput().sendKeys(protractor.Key.ENTER);
         helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader());
         
-        expect(storeProductsModalPage.getStoreProducts().count()).to.eventually.equal(1);
-        expect(storeProductsModalPage.getStoreProducts().get(0).isDisplayed()).to.eventually.be.false;
+        expect(storeProductsModalPage.getStoreProducts().count()).to.eventually.be.equal(0);
       });
 
       it('should add Embedded Presentation as a Professional Widget', function() {        

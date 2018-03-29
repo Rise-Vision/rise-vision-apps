@@ -35,6 +35,14 @@ describe('service: gadgetFactory: ', function() {
       };
     });
 
+    $provide.service('productsFactory', function() {
+      return {
+        isUnlistedProduct: function() {
+          return true;
+        }
+      };
+    });
+
     $provide.service('subscriptionStatusFactory',function () {
       return {
         checkProductCodes: function(productCodes) {
@@ -90,7 +98,6 @@ describe('service: gadgetFactory: ', function() {
     expect(gadgetFactory.getGadgetById).to.be.a('function');
     expect(gadgetFactory.getGadgetByProduct).to.be.a('function');
     expect(gadgetFactory.updateItemsStatus).to.be.a('function');
-    expect(gadgetFactory.isUnlistedProduct).to.be.a('function');
   });
     
   describe('getGadgetById: ', function(){
@@ -388,13 +395,6 @@ describe('service: gadgetFactory: ', function() {
         done();
       });    
     });
-  });
-
-  it('isUnlistedProduct: ',function () {
-    // Embedded Presentation
-    expect(gadgetFactory.isUnlistedProduct('d3a418f1a3acaed42cf452fefb1eaed198a1c620')).to.be.true;
-
-    expect(gadgetFactory.isUnlistedProduct('67e511ae')).to.be.false;
   });
 
 });
