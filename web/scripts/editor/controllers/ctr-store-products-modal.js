@@ -10,7 +10,7 @@ angular.module('risevision.editor.controllers')
     'ScrollingListService', 'productsFactory', 'playlistItemFactory', 'widgetUtils', 'checkTemplateAccess',
     'planFactory', 'category', 'STORE_URL', 'PAYMENT_CATEGORIES', 'TEMPLATES_TYPE',
     function ($scope, $loading, $filter, $modal, $modalInstance,
-      ScrollingListService, productsFactory, playlistItemFactory, widgetUtils, checkTemplateAccess, 
+      ScrollingListService, productsFactory, playlistItemFactory, widgetUtils, checkTemplateAccess,
       planFactory, category, STORE_URL, PAYMENT_CATEGORIES, TEMPLATES_TYPE) {
       var defaultCount = 1000;
 
