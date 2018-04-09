@@ -1,4 +1,6 @@
+/*jshint camelcase: false */
 /* globals OAuth */
+
 'use strict';
 angular.module('risevision.widgets.services')
   .factory('OAuthService', ['$http', 'OAUTH_TOKEN_PROVIDER_URL', 'OAuthio', '$q', '$log', 'userState',
@@ -19,7 +21,7 @@ angular.module('risevision.widgets.services')
         };
 
         return requestOptions;
-      }
+      };
 
       svc.initialize = function (newProvider) {
         provider = newProvider;
@@ -64,7 +66,7 @@ angular.module('risevision.widgets.services')
             if (response.data && response.data.token) {
               deferred.resolve(response.data.token);
             } else {
-              deferred.reject(new Error("No Token"));
+              deferred.reject(new Error('No Token'));
             }
           }, function (error) {
             deferred.reject(error);
@@ -96,7 +98,7 @@ angular.module('risevision.widgets.services')
               key = response.data.key;
               deferred.resolve(response.data.key);
             } else {
-              deferred.reject(new Error("No Key"));
+              deferred.reject(new Error('No Key'));
             }
           }, function (error) {
             deferred.reject(error);
@@ -108,7 +110,7 @@ angular.module('risevision.widgets.services')
       svc.authenticate = function () {
         return _getStateToken()
           .then(_authenticateWithOauthIO)
-          .then(_authenticateWithOauthTokenProvider)
+          .then(_authenticateWithOauthTokenProvider);
       };
 
       svc.revoke = function () {
