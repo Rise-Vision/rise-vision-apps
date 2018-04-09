@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .value('EMAIL_REGEX', /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)
+  .value('EMAIL_REGEX',
+    /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+  )
   .controller('displayDetails', ['$scope', '$rootScope', '$q', '$state', '$filter',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'storeAuthorization', 'enableCompanyProduct', 'userState', 'planFactory',
@@ -24,7 +26,11 @@ angular.module('risevision.displays.controllers')
 
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
-        $scope.monitoringEmailsList = ($scope.display.monitoringEmails || []).map(function(e) { return { text: e }; });
+        $scope.monitoringEmailsList = ($scope.display.monitoringEmails || []).map(function (e) {
+          return {
+            text: e
+          };
+        });
 
         if (!$scope.display.playerProAuthorized) {
           $scope.display.monitoringEnabled = false;
@@ -89,7 +95,7 @@ angular.module('risevision.displays.controllers')
 
       $scope.isProApplicable = function () {
         return !playerProFactory.is3rdPartyPlayer($scope.display) &&
-               !playerProFactory.isUnsupportedPlayer($scope.display);
+          !playerProFactory.isUnsupportedPlayer($scope.display);
       };
 
       $scope.isValidEmail = function (email) {
@@ -160,7 +166,9 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.save = function () {
-        $scope.display.monitoringEmails = $scope.monitoringEmailsList.map(function(t) { return t.text; });
+        $scope.display.monitoringEmails = $scope.monitoringEmailsList.map(function (t) {
+          return t.text;
+        });
 
         if (!$scope.displayDetails.$valid) {
           console.info('form not valid: ', $scope.displayDetails.$error);

@@ -4,7 +4,7 @@
   angular.module('risevision.editor.controllers')
     .controller('ProductDetailsModalController', ['$scope', '$rootScope', '$modalInstance',
       'product', 'userState', 'currencyService', 'storeAuthorization', 'checkTemplateAccess',
-      '$loading', '$timeout', 'STORE_URL', 'TEMPLATE_LIBRARY_PRODUCT_CODE', "planFactory",
+      '$loading', '$timeout', 'STORE_URL', 'TEMPLATE_LIBRARY_PRODUCT_CODE', 'planFactory',
       function ($scope, $rootScope, $modalInstance, product, userState, currencyService,
         storeAuthorization, checkTemplateAccess, $loading, $timeout, STORE_URL, TEMPLATE_LIBRARY_PRODUCT_CODE,
         planFactory) {

@@ -29,7 +29,7 @@ angular.module('risevision.widgets.twitter')
           });
       };
 
-      $scope.$watch( 'settings.additionalParams.screenName', function(screenName) {
+      $scope.$watch('settings.additionalParams.screenName', function (screenName) {
         if (screenName) {
           $scope.settings.additionalParams.componentId = 'rise-twitter-' + Math.random().toString().substring(2);
         }

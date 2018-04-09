@@ -23,7 +23,6 @@ angular.module('risevision.displays.services')
     return {
       create: function () {
         var deferred = $q.defer();
-        debugger;
         var primus = new $window.Primus(MESSAGING_PRIMUS_URL, {
           reconnect: {
             retries: 0
@@ -79,50 +78,54 @@ angular.module('risevision.displays.services')
       var deferred = $q.defer();
 
       $http.post(presenceUrl, displayIds)
-      .then(function (resp) {
-        var presenceData = resp.data;
+        .then(function (resp) {
+          var presenceData = resp.data;
 
-        var merge = displayIds.map(function(id) {
-          var idStatus = {};
-          idStatus[id] = isConnectedToNew(id) || isConnectedToOld(id);
+          var merge = displayIds.map(function (id) {
+            var idStatus = {};
+            idStatus[id] = isConnectedToNew(id) || isConnectedToOld(id);
 
-          if (idStatus[id]) {
-            idStatus.lastConnectionTime = Date.now();
-          } else {
-            idStatus.lastConnectionTime = lastConnectionNew(id) || lastConnectionOld(id);
+            if (idStatus[id]) {
+              idStatus.lastConnectionTime = Date.now();
+            } else {
+              idStatus.lastConnectionTime = lastConnectionNew(id) || lastConnectionOld(id);
+            }
+
+            return idStatus;
+          });
+
+          deferred.resolve(merge);
+
+          function isConnectedToNew(id) {
+            return presenceData[id] && presenceData[id].connected === true;
           }
 
-          return idStatus;
+          function isConnectedToOld(id) {
+            for (var i = 0; i < oldMSResults.length; i++) {
+              if (oldMSResults[i][id]) {
+                return true;
+              }
+            }
+
+            return false;
+          }
+
+          function lastConnectionNew(id) {
+            return Number(presenceData[id].lastConnection);
+          }
+
+          function lastConnectionOld(id) {
+            for (var i = 0; i < oldMSResults.length; i++) {
+              if (oldMSResults[i][id] !== undefined) {
+                return oldMSResults[i].lastConnectionTime;
+              }
+            }
+          }
+        })
+        .catch(function (err) {
+          console.log(err);
+          deferred.reject(err);
         });
-
-        deferred.resolve(merge);
-
-        function isConnectedToNew(id) {
-          return presenceData[id] && presenceData[id].connected === true;
-        }
-
-        function isConnectedToOld(id) {
-          for (var i = 0; i < oldMSResults.length; i++) {
-            if (oldMSResults[i][id]) {return true;}
-          }
-
-          return false;
-        }
-
-        function lastConnectionNew(id) {
-          return Number(presenceData[id].lastConnection);
-        }
-
-        function lastConnectionOld(id) {
-          for (var i = 0; i < oldMSResults.length; i++) {
-            if (oldMSResults[i][id] !== undefined) {return oldMSResults[i].lastConnectionTime;}
-          }
-        }
-      })
-      .catch(function (err) {
-        console.log(err);
-        deferred.reject(err);
-      });
 
       return deferred.promise;
     };
@@ -166,7 +169,9 @@ angular.module('risevision.displays.services')
               primus.on('data', function (data) {
                 if (data.msg !== 'screenshot-saved' &&
                   data.msg !== 'screenshot-failed' &&
-                  data.msg !== "client-connected") { return; }
+                  data.msg !== 'client-connected') {
+                  return;
+                }
                 oldPrimus.emit('data', data);
               });
 
@@ -178,7 +183,7 @@ angular.module('risevision.displays.services')
               primus.on('error', function rej(err) {
                 primus.end();
               });
-            })
+            });
         });
 
       return deferred.promise;

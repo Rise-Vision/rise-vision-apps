@@ -217,7 +217,7 @@ angular.module('risevision.editor.services')
           oneDay)));
       };
 
-      var _showAsProfessional = function(gadget) {
+      var _showAsProfessional = function (gadget) {
         if (widgetUtils.isProfessionalWidget(gadget.id)) {
           if (productsFactory.isUnlistedProduct(gadget.productCode) && gadget.isSubscribed) {
             return false;
