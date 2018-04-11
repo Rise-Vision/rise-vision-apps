@@ -94,8 +94,7 @@ angular.module('risevision.editor.services')
       }
     }
   })
-  .constant('PROFESSIONAL_WIDGETS', [
-    {
+  .constant('PROFESSIONAL_WIDGETS', [{
       env: 'TEST',
       name: 'Twitter Widget Test',
       imageUrl: 'https://s3.amazonaws.com/Rise-Images/UI/twitter-widget%402x-100.jpg',
@@ -236,7 +235,7 @@ angular.module('risevision.editor.services')
         }
       };
 
-      factory.getProfessionalWidgets = function() {
+      factory.getProfessionalWidgets = function () {
         return _.filter(PROFESSIONAL_WIDGETS, {
           env: APPS_ENV
         });

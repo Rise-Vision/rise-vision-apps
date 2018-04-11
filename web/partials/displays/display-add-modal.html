@@ -3,20 +3,22 @@
     <button id="dismissButton" type="button" class="close" ng-click="dismiss()">
       <i class="fa fa-times"></i>
     </button>
-    <h3 class="modal-title" translate="displays-app.add.title" ng-show="!downloadOnly"></h3>
-    <h3 class="modal-title" translate="displays-app.download.player" ng-show="downloadOnly"></h3>
+    <h3 class="modal-title" ng-show="!downloadOnly"> Add a Display </h3>
+    <h3 class="modal-title" ng-show="downloadOnly"> Activate your Display </h3>
   </div>
-  <div class="modal-body text-center">
-  	<div class="video-box u_margin-md-bottom">
+  <div class="modal-body">
+    <div class="video-box u_margin-md-bottom" ng-hide="display.id">
       <img style="width: auto" src="https://s3.amazonaws.com/Rise-Images/Animations/addadisplay.gif">
     </div>
+
 
     <form id="displayAdd" role="form" name="displayAdd" novalidate>
 
       <div class="u_margin-md-top" ng-hide="display.id">
         <div class="form-group" ng-class="{'has-error': !displayAdd.name.$pristine && displayAdd.name.$invalid}" show-errors>
           <label class="control-label">{{'displays-app.add.name.name' | translate}} *</label>
-          <input type="text" class="form-control" placeholder="{{ 'displays-app.add.name.name' | translate}}" id="name" name="name" ng-model="display.name" required focus-me="true">
+          <input type="text" class="form-control" placeholder="{{ 'displays-app.add.name.name' | translate}}" id="name" name="name"
+            ng-model="display.name" required focus-me="true">
           <p class="text-danger" ng-show="!displayAdd.name.$pristine && displayAdd.name.$error.required" translate>
             displays-app.fields.name.required
           </p>
@@ -26,45 +28,228 @@
           <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
         </div>
 
-        <button id="nextButton" class="btn btn-primary u_margin-md-top" ng-click="save()" translate="displays-app.add.next" ng-disabled="displayAdd.$invalid || factory.savingDisplay" require-role="da"></button>
+        <button id="nextButton" class="btn btn-primary u_margin-md-top" ng-click="save()" translate="displays-app.add.next" ng-disabled="displayAdd.$invalid || factory.savingDisplay"
+          require-role="da"></button>
       </div>
     </form>
 
-    <div ng-show="display.id && !showEmailForm" class="text-center u_margin-md-top" >
-      <h4 translate="displays-app.add.instructions.title" translate-values='{ displayName: display.name}'></h4>
-      <p translate="displays-app.add.instructions.step1"></p>
+    <script>
 
-      <div class="row sm-gutter">
-        <div class="col-xs-6">
-          <a class="btn btn-sm btn-primary btn-block" href="http://install-versions.risevision.com/installer-lnx-32.sh" target="_blank" ng-click="displayTracker('Player Download', display.id, display.name, 'Linux 32bit')" translate="displays-app.download.linux32"></a>
-          <a class="btn btn-sm btn-primary btn-block u_margin-sm-top" href="http://install-versions.risevision.com/installer-lnx-64.sh" target="_blank" ng-click="displayTracker('Player Download', display.id, display.name, 'Linux 64bit')" translate="displays-app.download.linux64"></a>
-          <a class="btn btn-sm btn-primary btn-block u_margin-sm-top" href="http://install-versions.risevision.com/installer-lnx-armv7l.sh" target="_blank" ng-click="displayTracker('Player Download', display.id, display.name, 'Raspbian ARMv7')" translate="displays-app.add.download.armv7l"></a>
+      $(document).ready(function () {
+        $(".download-content").hide();
+        $("#page0-content").show();
+      });
+
+      $(document).on("click", ".nav.nav-tabs li", function () {
+        //TAB UI ACTIVE
+        var currentSelection = $(this);
+        $(".nav.nav-tabs li").removeClass("active");
+        $(currentSelection).addClass("active");
+
+        //HIDE ALL ONTENT
+        $(".download-content").hide();
+
+        // SHOW SPECIFIC CONTENT
+        if (currentSelection.is("#page0")) {
+          $("#page0-content").show();
+        }
+        else if (currentSelection.is("#page1")) {
+          $("#page1-content").show();
+        }
+        else if (currentSelection.is("#page2")) {
+          $("#page2-content").show();
+        }
+        else if (currentSelection.is("#page3")) {
+          $("#page3-content").show();
+        }
+      });
+    </script>
+
+    <style>
+      .nav-tabs.nav-justified>li>a {
+        background-color: #fcfcfc;
+        border: 0;
+        border-bottom: 3px solid #DDD;
+      }
+
+      .nav-tabs.nav-justified>.active>a {
+        background-color: #fcfcfc;
+        border: 0;
+        border-bottom: 3px solid #0081ba;
+      }
+
+      .nav-tabs.nav-justified>li>a:hover,
+      .nav-tabs.nav-justified>li>a:focus {
+        background-color: #fcfcfc;
+        border: 0;
+        border-bottom: 3px solid #BBB;
+      }
+
+      .nav-tabs.nav-justified>.active>a:hover,
+      .nav-tabs.nav-justified>.active>a:focus {
+        background-color: #fcfcfc;
+        border: 0;
+        border-bottom: 3px solid #0081ba;
+      }
+    </style>
+
+
+    <div ng-show="display.id && !showEmailForm">
+      <p>You've added a Display named
+        <b>'Front Lobby'</b>. Now activate this Display by following these steps:</p>
+      <hr>
+      <p>
+        <b>Step 1</b> Download and install Rise Player on your Media Player.</p>
+      <ul class="nav nav-tabs nav-justified">
+        <li data-toggle="tab" id="page0" class="active">
+          <a href="#">Windows 10</a>
+        </li>
+        <li data-toggle="tab" id="page1">
+          <a href="#">Linux</a>
+        </li>
+        <li data-toggle="tab" id="page2">
+          <a href="#">Rasperry PI</a>
+        </li>
+        <li data-toggle="tab" id="page3">
+          <a href="#">Chrome OS</a>
+        </li>
+      </ul>
+
+      <div id="page0-content" class="download-content row u_margin-md">
+        <div class="col-xs-6 text-center">
+          <div class="u_bordered u_clickable">
+            <img src="../images/win.svg" class="u_margin-sm-top" width="60">
+            <p>
+              <a href="#">Download
+                <br/> for Windows 10 [32-Bit]</a>
+            </p>
+          </div>
         </div>
-        <div class="col-xs-6">
-            <a class="btn btn-sm btn-primary btn-block" href="http://install-versions.risevision.com/installer-win-32.exe" target="_blank" ng-click="displayTracker('Player Download', display.id, display.name, 'Windows 32bit')" translate="displays-app.download.win32"></a>
-            <a id="downloadWindows64" class="btn btn-sm btn-primary btn-block u_margin-sm-top" href="http://install-versions.risevision.com/installer-win-64.exe" target="_blank" ng-click="displayTracker('Player Download', display.id, display.name, 'Windows 64bit')" translate="displays-app.download.win64"></a>
+        <div class="col-xs-6 text-center">
+          <div class="u_bordered u_clickable">
+            <img src="../images/win.svg" class="u_margin-sm-top" width="60">
+            <p>
+              <a href="#">Download
+                <br/> for Windows 10 [64-Bit]</a>
+            </p>
+          </div>
         </div>
       </div>
 
-      <p class="u_margin-sm-top text-center" translate="displays-app.add.instructions.step2"></p>
-      <div class="panel panel-success display-panel">
-          <div id="displayIdField" class="panel-body ng-binding">{{display.id}}</div>
+      <div id="page1-content" class="download-content row u_margin-md">
+        <div class="col-xs-6 text-center">
+          <img src="../images/linux.svg" width="60">
+          <p>
+            <a href="#">Download
+              <br/> for Ubuntu 16.04 LTS [32-bit]</a>
+          </p>
+        </div>
+        <div class="col-xs-6 text-center">
+          <img src="../images/linux.svg" width="60">
+          <p>
+            <a href="#">Download
+              <br/> for Ubuntu 16.04 LTS [64-bit]</a>
+          </p>
+        </div>
       </div>
-      <div ng-show="!downloadOnly">
-        <p class="u_margin-sm-top text-center">
-          <p>{{'displays-app.add.instructions.emailInfo' | translate}} <b>{{userEmail}}</b></p>
-          <button class="btn btn-default u_margin-sm-top" ng-click="toggleEmailForm()" translate="displays-app.add.instructions.anotherEmail"></button>
-        </p>
+
+      <div id="page2-content" class="download-content row u_margin-md">
+
+        <div class="col-xs-12 text-center">
+          <img src="../images/pi.svg" width="60">
+          <p>
+            <a href="#">Download
+              <br/> for Raspbian 8.0 [ARMv7]</a>
+          </p>
+        </div>
       </div>
+
+      <div id="page3-content" class="download-content row u_margin-md">
+
+        <div class="col-xs-12 text-center">
+          <img src="../images/chrome.svg" width="60">
+          <p>
+            <a href="#">Download
+              <br/> for Chrome OS</a>
+          </p>
+        </div>
+      </div>
+      <hr>
+      <p class="u_margin-sm-top">
+        <b>Step 2</b> When prompted by Rise Player, enter the
+        <a href="#" target="_blank">
+          <i class="fa fa-question-circle" aria-hidden="true"></i> Display ID </a>to complete your installation.</p>
+
+      <!-- MATCH STYLE HERE -->
+
+      <!-- <div class="panel panel-success display-panel">
+        <div id="displayIdField" class="panel-body ng-binding">{{display.id}}</div>
+      </div> -->
+      <div class="col-xs-12 u_margin-md-bottom">
+        <input type="text" class="form-control id-form" maxlength="12" autocorrect="off" autocapitalize="off" spellcheck="false"
+          id="id1" value="VH3CKAHZQ5P7" readonly="readonly" style="cursor: default;
+              font-family: "Lucida Console", Monaco, monospace;
+              text-indent: 66px;
+              letter-spacing: 19px;
+              background: none;
+              text-transform: uppercase;
+              display: block;
+              width: 100%;
+              height: 34px;
+              padding: 6px 12px;
+              font-size: 24px;
+              line-height: 1.42857;
+              color: #5b5b5b;
+              background-color: #FFF;
+              background-image: none;
+              border: 1px solid #dad7d4;
+              border-radius: 4px;
+              -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+              -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+              -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+              transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;">
+      </div>
+
+      <p>
+        <a class="" href="#" target="_blank">
+          <i class="fa fa-question-circle" aria-hidden="true"></i> Claim IDs </a>can quickly deploy a large number of Displays.
+      </p>
+
+      <hr>
+
+      <p>Once activated, the Display will show your
+        <a class="" href="#" target="_blank">
+          <i class="fa fa-question-circle" aria-hidden="true"></i> Presentations</a>.
+      </p>
+
+      <p class="u_margin-md-top">Need a
+        <a class="" href="#" target="_blank">
+          <i class="fa fa-question-circle" aria-hidden="true"></i> Media Player</a> ?
+      </p>
+
+
+      <hr>
     </div>
 
+    <div>
+      <p class="u_margin-sm-top text-center">
+        <p>{{'displays-app.add.instructions.emailInfo' | translate}}
+          <b>{{userEmail}}</b>
+        </p>
+        <button class="btn btn-default u_margin-sm-top" ng-click="toggleEmailForm()" translate="displays-app.add.instructions.anotherEmail"></button>
+      </p>
+    </div>
+
+
     <form id="anotherEmailForm" role="form" name="anotherEmailForm" novalidate>
-      <div class="u_margin-md-top" ng-show="display.id && showEmailForm" >
+      <div class="u_margin-md-top" ng-show="display.id && showEmailForm">
 
         <h4 class="text-center" translate="displays-app.add.instructions.anotherEmail"></h4>
-        <div class="form-group text-center" ng-class="{'has-error': !anotherEmailForm.anotherEmail.$pristine && anotherEmailForm.anotherEmail.$invalid}" show-errors>
+        <div class="form-group text-center" ng-class="{'has-error': !anotherEmailForm.anotherEmail.$pristine && anotherEmailForm.anotherEmail.$invalid}"
+          show-errors>
 
-          <input type="email" class="form-control" placeholder="{{ 'displays-app.add.instructions.emailPlaceholder' | translate}}" id="anotherEmail" name="anotherEmail" ng-model="anotherEmail" required focus-me="true">
+          <input type="email" class="form-control" placeholder="{{ 'displays-app.add.instructions.emailPlaceholder' | translate}}"
+            id="anotherEmail" name="anotherEmail" ng-model="anotherEmail" required focus-me="true">
           <p class="text-danger" ng-show="!anotherEmailForm.anotherEmail.$pristine && anotherEmailForm.anotherEmail.$invalid" translate>
             displays-app.fields.email.invalid
           </p>
@@ -74,7 +259,8 @@
           </div>
 
           <button class="btn btn-default u_margin-md-top" ng-click="toggleEmailForm()" translate="common.cancel"></button>
-          <button class="btn btn-primary u_margin-md-top" ng-click="sendToAnotherEmail()" ng-disabled="anotherEmailForm.$invalid || displayEmail.sendingEmail" translate="common.send"></button>
+          <button class="btn btn-primary u_margin-md-top" ng-click="sendToAnotherEmail()" ng-disabled="anotherEmailForm.$invalid || displayEmail.sendingEmail"
+            translate="common.send"></button>
         </div>
       </div>
     </form>
