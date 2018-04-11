@@ -1,4 +1,96 @@
-<div id="presentationCTA" class="text-center">
+<script type="text/javascript">
+  jQuery(function(){
+          jQuery('.app-launcher-wizard_step').hide();
+          jQuery('.welcome-step').show();
+          jQuery('#showall').click(function(){
+                 jQuery('.app-launcher-wizard_step').hide();
+          });
+          jQuery('.showSingle').click(function(){
+                jQuery('.app-launcher-wizard_step').hide();
+                jQuery('#div'+$(this).attr('target')).show();
+          });
+  });
+</script>
+
+<div class="menu" style="position: fixed;bottom: 0; background-color: red; z-index: 9999; font-size: 15px">
+<a  id="showall">All</a>
+<a  class="showSingle" target="1">STEP 1</a>
+<a  class="showSingle" target="2">STEP 2</a>
+<a  class="showSingle" target="3">STEP 3</a>
+<a  class="showSingle" target="4">STEP 4</a>
+</div>
+
+
+<div class="app-launcher-wizard panel panel-default">
+  <div class="app-launcher-wizard_progress-bar">
+    <div class="progress-bar-step progress-bar-step--active"></div>
+    <div class="progress-bar-step"></div>
+    <div class="progress-bar-step"></div>
+    <div class="progress-bar-step"></div>
+  </div>
+
+  <div class="panel-body aligner">
+
+    <div class="aligner-item" style="max-width: 100%">
+        
+        <div id="div1" class="app-launcher-wizard_step welcome-step aligner animated fadeIn">
+          <div class="app-launcher-wizard_image aligner-item">
+            <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/UI/apps-wizard-ilustration-1.svg">
+          </div><!--wizard-image-->
+          <div class="app-launcher-wizard_text aligner-item">
+            <h1>Welcome to Rise Vision</h1>
+            <h2 class="u_margin-md-bottom">Get Started with Digital Signage in Minutes</h2>
+            <button class="btn btn-lg btn-primary"><span class="h4">Show Me How</span></button>
+          </div>
+        </div>
+
+        <div id="div2" class="app-launcher-wizard_step aligner animated fadeIn">
+          <div class="app-launcher-wizard_image aligner-item">
+            <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/UI/apps-wizard-ilustration-2.svg">
+          </div>
+          <div class="app-launcher-wizard_text aligner-item">  
+            <h4>Step 1:</h4>
+            <h1>Create Your Content</h1>
+            <h2>The first step is creating what you will show. We call this a presentation.</h2>
+            <button class="btn btn-lg btn-primary">Next</button>
+          </div>
+        </div>
+
+        <div id="div3" class="app-launcher-wizard_step aligner animated fadeIn">
+          <div class="app-launcher-wizard_image aligner-item">
+            <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/UI/apps-wizard-ilustration-3.svg">
+          </div>
+          <div class="app-launcher-wizard_text aligner-item">  
+            <h4>Step 2:</h4>
+            <h1>Setup Your Display(s)</h1>
+            <h2>Your presentation will go to a TV or monitor that is connected to a media player, with our Rise Player Software installed.</h2>
+            <button class="btn btn-lg btn-primary">Next</button>
+          </div>
+        </div>
+
+        <div id="div4" class="app-launcher-wizard_step aligner animated fadeIn">
+          <div class="app-launcher-wizard_image aligner-item">
+            <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/UI/apps-wizard-ilustration-4.svg">
+          </div>
+          <div class="app-launcher-wizard_text aligner-item"> 
+            <h1>Ready to get started?</h1>
+            <h2>Add Your First Presentation</h2>
+            <a class="btn btn-lg btn-primary" href="#">Add Presentation</a>
+            <h2>Or read further into how Rise Vision works.</h2>
+            <a class="btn btn-lg btn-default" target="_blank" href="https://help.risevision.com/hc/en-us/articles/115002868706-The-overview-how-does-this-work-">Learn More</a>
+          </div>
+        </div>
+
+    </div><!--row-->
+
+    
+  
+  </div><!--panel-body-->
+</div>
+
+
+
+<div id="presentationCTA" class="text-center" style="display: none;">
 
     <h1 class="u_margin-lg-top">Let's Get Started</h1>
 
