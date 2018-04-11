@@ -8,10 +8,10 @@
 	var SigninCustomScenarios = require('./cases/signin-custom.js');
 
 	describe('Apps Launcher', function() {
-		var homepageScenarios = new HomepageScenarios();
-		var signupScenarios = new SignupScenarios();
-		var signinScenarios = new SigninScenarios();	
-		var signinRedirectScenarios = new SigninRedirectScenarios();
+		// var homepageScenarios = new HomepageScenarios();
+		// var signupScenarios = new SignupScenarios();
+		// var signinScenarios = new SigninScenarios();	
+		// var signinRedirectScenarios = new SigninRedirectScenarios();
 		var signinCustomScenarios = new SigninCustomScenarios();
 	});
 

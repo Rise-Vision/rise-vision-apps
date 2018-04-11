@@ -44,7 +44,21 @@ var SigninCustomScenarios = function() {
       signUpPage.getUsernameTextBox().sendKeys(USERNAME2);
       signUpPage.getPasswordTextBox().sendKeys(PASSWORD2);
 
-      expect(signUpPage.getPasswordStrengthWarning().isPresent()).to.eventually.be.true;
+      expect(signUpPage.getPasswordStrengthWarning().isDisplayed()).to.eventually.be.true;
+    });
+
+    it('should ensure passwords match', function() {
+      expect(signUpPage.getMatchingPasswordsError().isDisplayed()).to.eventually.be.false;
+
+      signUpPage.getConfirmPasswordTextBox().sendKeys('invalidpassword');
+      signUpPage.getSignupButton().click();
+
+      expect(signUpPage.getMatchingPasswordsError().isDisplayed()).to.eventually.be.true;
+
+      signInPage.getPasswordTextBox().clear();
+      signUpPage.getConfirmPasswordTextBox().sendKeys('PASSWORD2');
+
+      expect(signUpPage.getMatchingPasswordsError().isDisplayed()).to.eventually.be.false;
     });
 
     it('should show error when trying to signup', function() {
