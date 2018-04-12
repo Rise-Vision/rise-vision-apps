@@ -91,6 +91,15 @@
         border: 0;
         border-bottom: 3px solid #0081ba;
       }
+
+      .u_bordered-highlight:hover {
+        border: 1px solid #4ab766;
+        -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        ">
+
+      }
     </style>
 
 
@@ -104,32 +113,32 @@
         <li data-toggle="tab" id="page0" class="active">
           <a href="#">Windows 10</a>
         </li>
+        <li data-toggle="tab" id="page3">
+          <a href="#">Chrome OS</a>
+        </li>
         <li data-toggle="tab" id="page1">
           <a href="#">Linux</a>
         </li>
         <li data-toggle="tab" id="page2">
-          <a href="#">Rasperry PI</a>
-        </li>
-        <li data-toggle="tab" id="page3">
-          <a href="#">Chrome OS</a>
+          <a href="#">Rasperry Pi</a>
         </li>
       </ul>
 
       <div id="page0-content" class="download-content row u_margin-md">
         <div class="col-xs-6 text-center">
-          <div class="u_bordered u_clickable">
-            <img src="../images/win.svg" class="u_margin-sm-top" width="60">
+          <div class="u_bordered u_bordered-highlight u_clickable">
+            <img src="../images/win-b.svg" class="u_margin-sm-top" width="60">
             <p>
-              <a href="#">Download
+              <a href="http://install-versions.risevision.com/installer-win-32.exe#_ga=2.127839630.200841446.1523456923-448654264.1459728419">Download
                 <br/> for Windows 10 [32-Bit]</a>
             </p>
           </div>
         </div>
         <div class="col-xs-6 text-center">
-          <div class="u_bordered u_clickable">
-            <img src="../images/win.svg" class="u_margin-sm-top" width="60">
+          <div class="u_bordered u_bordered-highlight u_clickable">
+            <img src="../images/win-b.svg" class="u_margin-sm-top" width="60">
             <p>
-              <a href="#">Download
+              <a href="http://install-versions.risevision.com/installer-win-64.exe#_ga=2.127839630.200841446.1523456923-448654264.1459728419">Download
                 <br/> for Windows 10 [64-Bit]</a>
             </p>
           </div>
@@ -138,40 +147,48 @@
 
       <div id="page1-content" class="download-content row u_margin-md">
         <div class="col-xs-6 text-center">
-          <img src="../images/linux.svg" width="60">
-          <p>
-            <a href="#">Download
-              <br/> for Ubuntu 16.04 LTS [32-bit]</a>
-          </p>
+          <div class="u_bordered u_bordered-highlight u_clickable">
+            <img src="../images/linux-b.svg" class="u_margin-sm-top" width="60">
+            <p>
+              <a href="http://install-versions.risevision.com/installer-lnx-32.sh#_ga=2.18179386.200841446.1523456923-448654264.1459728419">Download
+                <br/> for Ubuntu 16.04 LTS [32-bit]</a>
+            </p>
+          </div>
         </div>
         <div class="col-xs-6 text-center">
-          <img src="../images/linux.svg" width="60">
-          <p>
-            <a href="#">Download
-              <br/> for Ubuntu 16.04 LTS [64-bit]</a>
-          </p>
+          <div class="u_bordered u_bordered-highlight u_clickable">
+            <img src="../images/linux-b.svg" class="u_margin-sm-top" width="60">
+            <p>
+              <a href="http://install-versions.risevision.com/installer-lnx-64.sh#_ga=2.18179386.200841446.1523456923-448654264.1459728419">Download
+                <br/> for Ubuntu 16.04 LTS [64-bit]</a>
+            </p>
+          </div>
         </div>
       </div>
 
       <div id="page2-content" class="download-content row u_margin-md">
 
-        <div class="col-xs-12 text-center">
-          <img src="../images/pi.svg" width="60">
-          <p>
-            <a href="#">Download
-              <br/> for Raspbian 8.0 [ARMv7]</a>
-          </p>
+        <div class="col-xs-6 col-xs-offset-3 text-center">
+          <div class="u_bordered u_bordered-highlight u_clickable">
+            <img src="../images/pi-b.svg" class="u_margin-sm-top" width="60">
+            <p>
+              <a href="http://install-versions.risevision.com/installer-lnx-armv7l.sh#_ga=2.127839630.200841446.1523456923-448654264.1459728419">Download
+                <br/> for Raspbian 8.0 [ARMv7]</a>
+            </p>
+          </div>
         </div>
       </div>
 
       <div id="page3-content" class="download-content row u_margin-md">
 
-        <div class="col-xs-12 text-center">
-          <img src="../images/chrome.svg" width="60">
-          <p>
-            <a href="#">Download
-              <br/> for Chrome OS</a>
-          </p>
+        <div class="col-xs-6 col-xs-offset-3 text-center">
+          <div class="u_bordered u_bordered-highlight u_clickable">
+            <img src="../images/chrome-b.svg" class="u_margin-sm-top" width="60">
+            <p>
+              <a href="#">Download
+                <br/> for Chrome OS</a>
+            </p>
+          </div>
         </div>
       </div>
       <hr>
@@ -188,7 +205,7 @@
       <div class="col-xs-12 u_margin-md-bottom">
         <input type="text" class="form-control id-form" maxlength="12" autocorrect="off" autocapitalize="off" spellcheck="false"
           id="id1" value="VH3CKAHZQ5P7" readonly="readonly" style="cursor: default;
-              font-family: "Lucida Console", Monaco, monospace;
+              font-family: 'Lucida Console', Monaco, monospace;
               text-indent: 66px;
               letter-spacing: 19px;
               background: none;
@@ -231,8 +248,8 @@
       <hr>
     </div>
 
-    <div>
-      <p class="u_margin-sm-top text-center">
+    <div class="text-center">
+      <p class="u_margin-sm-top">
         <p>{{'displays-app.add.instructions.emailInfo' | translate}}
           <b>{{userEmail}}</b>
         </p>
