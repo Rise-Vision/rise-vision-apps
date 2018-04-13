@@ -101,11 +101,18 @@
             </span>
 
             <span class="text-success" ng-if="!displayService.statusLoading && playerOnline(display)"> <i class="fa fa-check"></i> Online</span>
-
-            <button class="btn btn-xs btn-primary pt-status btn-install-player"
+           
+            <!-- PROTOTYPE CHANGE -->
+            <!-- <button class="btn btn-xs btn-primary pt-status btn-install-player"
                     ng-if="!displayService.statusLoading && playerNotInstalled(display)" ng-click="displayFactory.addDisplayModal(display)">
               {{ 'displays-app.list.status.install' | translate }}
-            </button>
+            </button> -->
+
+            <a class="u_icon-hover" ng-if="!displayService.statusLoading && playerNotInstalled(display)" ng-click="displayFactory.addDisplayModal(display)">
+                Not Activated
+              </a>
+
+
           </td>
           <td class="table-body__cell u_nowrap hidden-xs hidden-sm">
             <span>

@@ -38,6 +38,8 @@
       $(document).ready(function () {
         $(".download-content").hide();
         $("#page0-content").show();
+
+
       });
 
       $(document).on("click", ".nav.nav-tabs li", function () {
@@ -97,9 +99,16 @@
         -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
         -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
         transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-        ">
-
       }
+
+       @media only screen and (min-width: 768px) {
+          #select-player-os-desktop {
+            display: block !important;
+          }
+          #select-player-os-mobile {
+            display: none !important;
+          }
+        }
     </style>
 
 
@@ -108,8 +117,8 @@
         <b>'Front Lobby'</b>. Now activate this Display by following these steps:</p>
       <hr>
       <p>
-        <b>Step 1</b> Download and install Rise Player on your Media Player.</p>
-      <ul class="nav nav-tabs nav-justified">
+        <b class="text-pill">Step 1</b> Download and install Rise Player on your Media Player.</p>
+      <ul id="select-player-os-desktop" class="nav nav-tabs nav-justified" style="display:none">
         <li data-toggle="tab" id="page0" class="active">
           <a href="#">Windows 10</a>
         </li>
@@ -124,76 +133,107 @@
         </li>
       </ul>
 
+      <select id="select-player-os-mobile" class="form-control">
+        <option>Windows 10</option>
+        <option>Chrome OS</option>
+        <option>Linux</option>
+        <option>Raspberry Pi</option>
+      </select>
+
       <div id="page0-content" class="download-content row u_margin-md">
         <div class="col-xs-6 text-center">
-          <div class="u_bordered u_bordered-highlight u_clickable">
-            <img src="../images/win-b.svg" class="u_margin-sm-top" width="60">
-            <p>
-              <a href="http://install-versions.risevision.com/installer-win-32.exe#_ga=2.127839630.200841446.1523456923-448654264.1459728419">Download
-                <br/> for Windows 10 [32-Bit]</a>
-            </p>
-          </div>
+          <a href="http://install-versions.risevision.com/installer-win-32.exe#_ga=2.127839630.200841446.1523456923-448654264.1459728419">
+            <div class="u_bordered u_bordered-highlight u_clickable">
+              <img src="../images/win-b.svg" width="60">
+              <p>
+                <span>Download
+                  <br/> for Windows 10 [32-Bit]</span>
+              </p>
+            </div>
+          </a>
         </div>
         <div class="col-xs-6 text-center">
-          <div class="u_bordered u_bordered-highlight u_clickable">
-            <img src="../images/win-b.svg" class="u_margin-sm-top" width="60">
-            <p>
-              <a href="http://install-versions.risevision.com/installer-win-64.exe#_ga=2.127839630.200841446.1523456923-448654264.1459728419">Download
-                <br/> for Windows 10 [64-Bit]</a>
-            </p>
-          </div>
+          <a href="http://install-versions.risevision.com/installer-win-64.exe#_ga=2.127839630.200841446.1523456923-448654264.1459728419">
+            <div class="u_bordered u_bordered-highlight u_clickable">
+              <img src="../images/win-b.svg" width="60">
+              <p>
+                Download
+                <br/> for Windows 10 [64-Bit]
+              </p>
+            </div>
+          </a>
+        </div>
+        <div class="col-xs-12">
+          <p class="u_margin-sm-top u_margin-xs-bottom">
+            <a href="https://help.risevision.com/hc/en-us/articles/115001519126-Install-Rise-Player-on-Windows#%E2%80%9COS%20Version%E2%80%9D"
+              target="_blank">
+              <i class="fa fa-question-circle" aria-hidden="true"></i> How can I tell if I need the 32-bit or 64-bit version?</a>
+          </p>
         </div>
       </div>
 
       <div id="page1-content" class="download-content row u_margin-md">
         <div class="col-xs-6 text-center">
-          <div class="u_bordered u_bordered-highlight u_clickable">
-            <img src="../images/linux-b.svg" class="u_margin-sm-top" width="60">
-            <p>
-              <a href="http://install-versions.risevision.com/installer-lnx-32.sh#_ga=2.18179386.200841446.1523456923-448654264.1459728419">Download
-                <br/> for Ubuntu 16.04 LTS [32-bit]</a>
-            </p>
-          </div>
+          <a href="http://install-versions.risevision.com/installer-lnx-32.sh#_ga=2.18179386.200841446.1523456923-448654264.1459728419">
+            <div class="u_bordered u_bordered-highlight u_clickable">
+              <img src="../images/linux-b.svg" width="60">
+              <p>
+                Download
+                <br/> for Ubuntu 16.04 LTS [32-bit]
+              </p>
+            </div>
+          </a>
         </div>
         <div class="col-xs-6 text-center">
-          <div class="u_bordered u_bordered-highlight u_clickable">
-            <img src="../images/linux-b.svg" class="u_margin-sm-top" width="60">
-            <p>
-              <a href="http://install-versions.risevision.com/installer-lnx-64.sh#_ga=2.18179386.200841446.1523456923-448654264.1459728419">Download
-                <br/> for Ubuntu 16.04 LTS [64-bit]</a>
-            </p>
-          </div>
+          <a href="http://install-versions.risevision.com/installer-lnx-64.sh#_ga=2.18179386.200841446.1523456923-448654264.1459728419">
+            <div class="u_bordered u_bordered-highlight u_clickable">
+              <img src="../images/linux-b.svg" width="60">
+              <p>
+                Download
+                <br/> for Ubuntu 16.04 LTS [64-bit]
+              </p>
+            </div>
+          </a>
+        </div>
+        <div class="col-xs-12">
+          <p class="u_margin-sm-top u_margin-xs-bottom">
+            <a href="https://help.risevision.com/hc/en-us/articles/115001872283-Install-Rise-Player-on-Linux#%E2%80%9COS%20Version%E2%80%9D"
+              target="_blank">
+              <i class="fa fa-question-circle" aria-hidden="true"></i> How can I tell if I need the 32-bit or 64-bit version?</a>
+          </p>
         </div>
       </div>
 
       <div id="page2-content" class="download-content row u_margin-md">
-
         <div class="col-xs-6 col-xs-offset-3 text-center">
-          <div class="u_bordered u_bordered-highlight u_clickable">
-            <img src="../images/pi-b.svg" class="u_margin-sm-top" width="60">
-            <p>
-              <a href="http://install-versions.risevision.com/installer-lnx-armv7l.sh#_ga=2.127839630.200841446.1523456923-448654264.1459728419">Download
-                <br/> for Raspbian 8.0 [ARMv7]</a>
-            </p>
-          </div>
+          <a href="http://install-versions.risevision.com/installer-lnx-armv7l.sh#_ga=2.127839630.200841446.1523456923-448654264.1459728419">
+            <div class="u_bordered u_bordered-highlight u_clickable">
+              <img src="../images/pi-b.svg" width="60">
+              <p>
+                Download
+                <br/> for Raspbian 8.0 [ARMv7]
+              </p>
+            </div>
+          </a>
         </div>
       </div>
 
       <div id="page3-content" class="download-content row u_margin-md">
-
         <div class="col-xs-6 col-xs-offset-3 text-center">
-          <div class="u_bordered u_bordered-highlight u_clickable">
-            <img src="../images/chrome-b.svg" class="u_margin-sm-top" width="60">
-            <p>
-              <a href="#">Download
-                <br/> for Chrome OS</a>
-            </p>
-          </div>
+          <a href="#">
+            <div class="u_bordered u_bordered-highlight u_clickable">
+              <img src="../images/chrome-b.svg" width="60">
+              <p>
+                Download
+                <br/> for Chrome OS
+              </p>
+            </div>
+          </a>
         </div>
       </div>
       <hr>
       <p class="u_margin-sm-top">
-        <b>Step 2</b> When prompted by Rise Player, enter the
+        <b class="text-pill">Step 2</b> When prompted by Rise Player, enter the
         <a href="#" target="_blank">
           <i class="fa fa-question-circle" aria-hidden="true"></i> Display ID </a>to complete your installation.</p>
 

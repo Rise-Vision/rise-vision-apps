@@ -222,41 +222,13 @@
             </td>
           </tr>
 
-          <tr class="table-body__row" ng-class="{ 'table--disabled': !display.playerProAuthorized }">
-            <td class="table-body__cell">
-              <span translate>displays-app.fields.player.displayControl.label</span>
-            </td>
-            <!-- ACTIVE -->
-            <td class="table-body__cell" ng-show="playerProFactory.isDisplayControlCompatiblePlayer(display)">
-              <span translate> displays-app.fields.player.displayControl.description </span>
-              <button class="btn btn-primary btn-xs" ng-click="playerProFactory.openConfigureDisplayControl(display)" ng-disabled="!display.playerProAuthorized" require-role="da" translate>
-                displays-app.fields.player.displayControl.configure
-              </button>
-            </td>
-            <!-- INACTIVE -->
-            <td class="table-body__cell" ng-hide="playerProFactory.isDisplayControlCompatiblePlayer(display)">
-              <span>
-                <div class="text-danger">
-                  <span translate>
-                    displays-app.fields.player.displayControl.unsupported
-                  </span>
-                </div>
-              </span>
-            </td>
-          </tr>
-
-          <tr class="table-body__row">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.rpp.offline-play</span></td>
-            <td class="table-body__cell">
-              <span translate>displays-app.fields.player.rpp.offline-play-desc</span>
-            </td>
-          </tr>
+          
         </tbody>
       </table>
     </div>
 
     <!-- SCREENSHOT  -->
-    <screenshot></screenshot>
+    <!-- <screenshot></screenshot> -->
   </div>
 
 </div>
