@@ -21,8 +21,9 @@ angular.module('risevision.storage.services')
         iframe.id = hiddenIFrameID;
         iframe.style.display = 'none';
         iframeContainer.appendChild(iframe);
-        iframe.src = url +
-          '&response-content-disposition=attachment;filename=' + fileName;
+        // Using character encoding for the filename
+        // (https://tools.ietf.org/html/rfc8187#section-3.2.3)
+        iframe.src = url + '&response-content-disposition=attachment;filename*=UTF-8\'\'' + fileName;
       };
 
       var downloadFile = function (file) {
