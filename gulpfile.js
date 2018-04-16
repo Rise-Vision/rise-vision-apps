@@ -324,7 +324,7 @@ gulp.task('default', [], function() {
   return true;
 });
 
-gulp.task('dev', ['config', 'html2js', 'browser-sync', 'watch']);
+gulp.task('dev', ['config', 'html2js', 'browser-sync']);
 
 /**
  * Default task, running just `gulp` will compile the sass,
