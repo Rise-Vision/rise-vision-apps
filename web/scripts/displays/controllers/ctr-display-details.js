@@ -101,7 +101,7 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.isProToggleEnabled = function () {
-        return $scope.display.playerProAuthorized || $scope.isProSupported();
+        return ($scope.display && $scope.display.playerProAuthorized) || $scope.isProSupported();
       };
 
       $scope.isValidEmail = function (email) {
