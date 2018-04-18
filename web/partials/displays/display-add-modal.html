@@ -33,6 +33,7 @@
       </div>
     </form>
 
+    <!-- PROTOTYPE ONLY -->
     <script>
 
       $(document).ready(function () {
@@ -66,51 +67,17 @@
         }
       });
     </script>
-
     <style>
-      .nav-tabs.nav-justified>li>a {
-        background-color: #fcfcfc;
-        border: 0;
-        border-bottom: 5px solid #e6e6e6;
-      }
-
-      .nav-tabs.nav-justified>.active>a {
-        background-color: #fcfcfc;
-        border: 0;
-        border-bottom: 5px solid #1ebb53;
-      }
-
-      .nav-tabs.nav-justified>li>a:hover,
-      .nav-tabs.nav-justified>li>a:focus {
-        background-color: #fcfcfc;
-        border: 0;
-        border-bottom: 5px solid #BBB;
-      }
-
-      .nav-tabs.nav-justified>.active>a:hover,
-      .nav-tabs.nav-justified>.active>a:focus {
-        background-color: #fcfcfc;
-        border: 0;
-        border-bottom: 5px solid #1ebb53;
-      }
-
-      .u_bordered-highlight:hover {
-        border: 1px solid #4ab766;
-        -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-      }
-
-       @media only screen and (min-width: 768px) {
-          #select-player-os-desktop {
-            display: block !important;
-          }
-          #select-player-os-mobile {
-            display: none !important;
-          }
+      @media only screen and (min-width: 768px) {
+        #select-rise-player-os-desktop {
+          display: block !important;
         }
+        #select-rise-player-os-mobile {
+          display: none !important;
+        }
+      }
     </style>
-
+    <!-- PROTOTYPE ONLY - END  -->
 
     <div ng-show="display.id && !showEmailForm">
       <p>You've added a Display named
@@ -118,7 +85,7 @@
       <hr>
       <p>
         <b class="text-pill">Step 1</b> Download and install Rise Player on your Media Player.</p>
-      <ul id="select-player-os-desktop" class="nav nav-tabs nav-justified" style="display:none">
+      <ul id="select-rise-player-os-desktop" class="nav nav-tabs nav-justified" style="display:none">
         <li data-toggle="tab" id="page0" class="active">
           <a href="#">Windows 10</a>
         </li>
@@ -133,7 +100,7 @@
         </li>
       </ul>
 
-      <select id="select-player-os-mobile" class="form-control">
+      <select id="select-rise-player-os-mobile" class="form-control">
         <option>Windows 10</option>
         <option>Chrome OS</option>
         <option>Linux</option>
@@ -142,25 +109,27 @@
 
       <div id="page0-content" class="download-content row u_margin-md">
         <div class="col-xs-6 text-center">
-          <a href="http://install-versions.risevision.com/installer-win-32.exe#_ga=2.127839630.200841446.1523456923-448654264.1459728419" class="btn btn-block btn-default">
-           
-              <img src="../images/win-b.svg" width="60">
-              <h5>
-                Download
-                  <br/> for Windows 10 [32-Bit]
-              </h5>
-            
+          <a href="http://install-versions.risevision.com/installer-win-32.exe#_ga=2.127839630.200841446.1523456923-448654264.1459728419"
+            class="btn btn-block btn-default">
+
+            <img src="../images/win-b.svg" width="60">
+            <h5>
+              Download
+              <br/> for Windows 10 [32-Bit]
+            </h5>
+
           </a>
         </div>
         <div class="col-xs-6 text-center">
-          <a href="http://install-versions.risevision.com/installer-win-64.exe#_ga=2.127839630.200841446.1523456923-448654264.1459728419" class="btn btn-block btn-default">
-           
-              <img src="../images/win-b.svg" width="60">
-              <h5>
-                Download
-                <br/> for Windows 10 [64-Bit]
-              </h5>
-           
+          <a href="http://install-versions.risevision.com/installer-win-64.exe#_ga=2.127839630.200841446.1523456923-448654264.1459728419"
+            class="btn btn-block btn-default">
+
+            <img src="../images/win-b.svg" width="60">
+            <h5>
+              Download
+              <br/> for Windows 10 [64-Bit]
+            </h5>
+
           </a>
         </div>
         <div class="col-xs-12">
@@ -175,7 +144,7 @@
       <div id="page1-content" class="download-content row u_margin-md">
         <div class="col-xs-6 text-center">
           <a href="http://install-versions.risevision.com/installer-lnx-32.sh#_ga=2.18179386.200841446.1523456923-448654264.1459728419">
-            <div class="u_bordered u_bordered-highlight u_clickable">
+            <div class="u_bordered u_bordered-hover u_clickable">
               <img src="../images/linux-b.svg" width="60">
               <h5>
                 Download
@@ -186,7 +155,7 @@
         </div>
         <div class="col-xs-6 text-center">
           <a href="http://install-versions.risevision.com/installer-lnx-64.sh#_ga=2.18179386.200841446.1523456923-448654264.1459728419">
-            <div class="u_bordered u_bordered-highlight u_clickable">
+            <div class="u_bordered u_bordered-hover u_clickable">
               <img src="../images/linux-b.svg" width="60">
               <h5>
                 Download
@@ -207,7 +176,7 @@
       <div id="page2-content" class="download-content row u_margin-md">
         <div class="col-xs-6 col-xs-offset-3 text-center">
           <a href="http://install-versions.risevision.com/installer-lnx-armv7l.sh#_ga=2.127839630.200841446.1523456923-448654264.1459728419">
-            <div class="u_bordered u_bordered-highlight u_clickable">
+            <div class="u_bordered u_bordered-hover u_clickable">
               <img src="../images/pi-b.svg" width="60">
               <h5>
                 Download
@@ -221,7 +190,7 @@
       <div id="page3-content" class="download-content row u_margin-md">
         <div class="col-xs-6 col-xs-offset-3 text-center">
           <a href="#">
-            <div class="u_bordered u_bordered-highlight u_clickable">
+            <div class="u_bordered u_bordered-hover u_clickable">
               <img src="../images/chrome-b.svg" width="60">
               <h5>
                 Download
