@@ -21,9 +21,8 @@ angular.module('risevision.storage.services')
         iframe.id = hiddenIFrameID;
         iframe.style.display = 'none';
         iframeContainer.appendChild(iframe);
-        // Using character encoding for the filename
-        // (https://tools.ietf.org/html/rfc8187#section-3.2.3)
-        iframe.src = url + '&response-content-disposition=attachment;filename*=UTF-8' + fileName;
+        // https://cloud.google.com/storage/docs/xml-api/reference-headers#responsecontentdisposition
+        iframe.src = url + '&response-content-disposition=attachment%3B%20filename%3D%22' + fileName + '%22';
       };
 
       var downloadFile = function (file) {
@@ -36,7 +35,7 @@ angular.module('risevision.storage.services')
                 '/') + 1);
             }
 
-            downloadURL(resp.message, encodeURIComponent(downloadName));
+            downloadURL(resp.message, encodeURIComponent(downloadName.replace(/\"/g, '\\"')));
           } else {
             file.rejectedUploadMessage = resp.message;
             svc.rejectedUploads.push(file);
