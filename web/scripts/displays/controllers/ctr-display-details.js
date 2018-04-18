@@ -93,9 +93,15 @@ angular.module('risevision.displays.controllers')
         return planFactory.isPlanActive() && $scope.getProLicenseCount() > 0 && !$scope.areAllProLicensesUsed();
       };
 
-      $scope.isProApplicable = function () {
-        return !playerProFactory.is3rdPartyPlayer($scope.display) &&
-          !playerProFactory.isUnsupportedPlayer($scope.display);
+      $scope.isProSupported = function () {
+        var thirdParty = playerProFactory.is3rdPartyPlayer($scope.display);
+        var unsupported = playerProFactory.isUnsupportedPlayer($scope.display);
+
+        return !thirdParty && !unsupported;
+      };
+
+      $scope.isProToggleEnabled = function () {
+        return ($scope.display && $scope.display.playerProAuthorized) || $scope.isProSupported();
       };
 
       $scope.isValidEmail = function (email) {

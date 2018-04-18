@@ -4,9 +4,9 @@
     <h1 translate>displays-app.details.title</h1>
   </div>
 
-  <div class="global-actions" require-role="da" ng-show="isProApplicable()">
+  <div class="global-actions" require-role="da">
     <div class="toggle-group">
-      <input type="checkbox" id="on-off-switch" ng-model="display.playerProAuthorized" ng-change="toggleProAuthorized()" ng-disabled="updatingRPP">
+      <input type="checkbox" id="on-off-switch" ng-model="display.playerProAuthorized" ng-change="toggleProAuthorized()" ng-disabled="updatingRPP || !isProToggleEnabled()">
       <label for="on-off-switch">
         <span translate>displays-app.details.rpp-is</span>
         <span class="bold" ng-class="display.playerProAuthorized ? 'text-green' : 'text-error'" ng-show="!updatingRPP">
@@ -39,6 +39,13 @@
         <div class="alert alert-warning" role="alert">
           <span translate translate-values="{ count: getProLicenseCount() }">displays-app.details.all-licenses-used</span>
           <a href="#" class="u_margin-left" ng-click="showPlansModal(true)" translate>displays-app.details.get-more</a>
+        </div>
+      </div>
+    </div>
+    <div class="row" ng-show="!isProSupported()">
+      <div class="col-sm-12">
+        <div class="alert alert-warning" role="alert">
+          <span translate>displays-app.details.rpp-not-supported</span>
         </div>
       </div>
     </div>
