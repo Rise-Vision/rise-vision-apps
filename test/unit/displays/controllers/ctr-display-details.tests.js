@@ -104,7 +104,7 @@ describe('controller: display details', function() {
         showPlansModal: function () {},
         getProLicenseCount: function () {},
         areAllProLicensesUsed: function () {},
-        isPlanActive: function () {}
+        hasProfessionalLicenses: function () {}
       };
     });
     $provide.factory('enableCompanyProduct', function() {
@@ -333,14 +333,14 @@ describe('controller: display details', function() {
 
   describe('isProAvailable:', function() {
     it('should return false if available licenses are zero (Free Plan)', function () {
-      sandbox.stub(planFactory, 'isPlanActive').returns(false);
+      sandbox.stub(planFactory, 'hasProfessionalLicenses').returns(false);
       sandbox.stub($scope, 'getProLicenseCount').returns(0);
 
       expect($scope.isProAvailable()).to.be.false;
     });
 
     it('should return false if all available licenses are used', function () {
-      sandbox.stub(planFactory, 'isPlanActive').returns(true);
+      sandbox.stub(planFactory, 'hasProfessionalLicenses').returns(true);
       sandbox.stub($scope, 'getProLicenseCount').returns(1);
       sandbox.stub($scope, 'areAllProLicensesUsed').returns(true);
 
@@ -348,7 +348,7 @@ describe('controller: display details', function() {
     });
 
     it('should return true if there are available licenses', function () {
-      sandbox.stub(planFactory, 'isPlanActive').returns(true);
+      sandbox.stub(planFactory, 'hasProfessionalLicenses').returns(true);
       sandbox.stub($scope, 'getProLicenseCount').returns(1);
       sandbox.stub($scope, 'areAllProLicensesUsed').returns(false);
 
