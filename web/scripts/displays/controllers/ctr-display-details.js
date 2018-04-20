@@ -90,7 +90,7 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.isProAvailable = function () {
-        return planFactory.isPlanActive() && $scope.getProLicenseCount() > 0 && !$scope.areAllProLicensesUsed();
+        return planFactory.hasProfessionalLicenses() && $scope.getProLicenseCount() > 0 && !$scope.areAllProLicensesUsed();
       };
 
       $scope.isProSupported = function () {
