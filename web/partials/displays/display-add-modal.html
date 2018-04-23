@@ -33,56 +33,47 @@
       </div>
     </form>
 
-    <!-- PROTOTYPE ONLY -->
-    <script>
+<!-- PROTOTYPE ONLY -->
+<script>
+  $(document).ready(function () {
+    $(".prototype-download-content").hide();
+    $("#page0-content").show();
+  });
+  $(document).on("click", ".nav.nav-tabs li", function () {
+    //TAB UI ACTIVE
+    var currentSelection = $(this);
+    $(".nav.nav-tabs li").removeClass("active");
+    $(currentSelection).addClass("active");
 
-      $(document).ready(function () {
-        $(".download-content").hide();
-        $("#page0-content").show();
+    //HIDE ALL ONTENT
+    $(".prototype-download-content").hide();
 
-
-      });
-
-      $(document).on("click", ".nav.nav-tabs li", function () {
-        //TAB UI ACTIVE
-        var currentSelection = $(this);
-        $(".nav.nav-tabs li").removeClass("active");
-        $(currentSelection).addClass("active");
-
-        //HIDE ALL ONTENT
-        $(".download-content").hide();
-
-        // SHOW SPECIFIC CONTENT
-        if (currentSelection.is("#page0")) {
-          $("#page0-content").show();
-        }
-        else if (currentSelection.is("#page1")) {
-          $("#page1-content").show();
-        }
-        else if (currentSelection.is("#page2")) {
-          $("#page2-content").show();
-        }
-        else if (currentSelection.is("#page3")) {
-          $("#page3-content").show();
-        }
-      });
-    </script>
-    <style>
-      @media only screen and (min-width: 768px) {
-        #select-rise-player-os-desktop {
-          display: block !important;
-        }
-        #select-rise-player-os-mobile {
-          display: none !important;
-        }
-      }
-    /* //TEMP */
-      .nav-tabs-justified>li>a {
-    
-        border-radius: $border-radius-base2 !important;
-      }
-    </style>
-    <!-- PROTOTYPE ONLY - END  -->
+    // SHOW SPECIFIC CONTENT
+    if (currentSelection.is("#page0")) {
+      $("#page0-content").show();
+    }
+    else if (currentSelection.is("#page1")) {
+      $("#page1-content").show();
+    }
+    else if (currentSelection.is("#page2")) {
+      $("#page2-content").show();
+    }
+    else if (currentSelection.is("#page3")) {
+      $("#page3-content").show();
+    }
+  });
+</script>
+<style>
+  @media only screen and (min-width: 768px) {
+    #select-rise-player-os-desktop {
+      display: block !important;
+    }
+    #select-rise-player-os-mobile {
+      display: none !important;
+    }
+  }
+</style>
+<!-- PROTOTYPE ONLY - END  -->
 
     <div ng-show="display.id && !showEmailForm">
       <p>You've added a Display named
@@ -112,9 +103,9 @@
         <option>Raspberry Pi</option>
       </select>
 
-      <div id="page0-content" class="download-content row u_margin-md">
+      <div id="page0-content" class="prototype-download-content row u_margin-md">
         <div class="col-xs-6 text-center">
-          <a href="http://install-versions.risevision.com/installer-win-32.exe#_ga=2.127839630.200841446.1523456923-448654264.1459728419">
+          <a href="http://install-versions.risevision.com/installer-win-32.exe#_ga=2.127839630.200841446.1523456923-448654264.1459728419" class="u_link-no-underline">
             <div class="u_bordered u_bordered-hover u_clickable">
             <img src="../images/win-b.svg" width="60">
             <h5>
@@ -125,7 +116,7 @@
           </a>
         </div>
         <div class="col-xs-6 text-center">
-          <a href="http://install-versions.risevision.com/installer-win-64.exe#_ga=2.127839630.200841446.1523456923-448654264.1459728419">
+          <a href="http://install-versions.risevision.com/installer-win-64.exe#_ga=2.127839630.200841446.1523456923-448654264.1459728419" class="u_link-no-underline">
             <div class="u_bordered u_bordered-hover u_clickable">
             <img src="../images/win-b.svg" width="60">
             <h5>
@@ -137,16 +128,16 @@
         </div>
         <div class="col-xs-12">
           <p class="u_margin-sm-top u_margin-xs-bottom">
-            <a href="https://help.risevision.com/hc/en-us/articles/115001519126-Install-Rise-Player-on-Windows#%E2%80%9COS%20Version%E2%80%9D"
-              target="_blank">
-              <i class="fa fa-question-circle" aria-hidden="true"></i> How can I tell if I need the 32-bit or 64-bit version?</a>
+            <a href="https://help.risevision.com/hc/en-us/articles/115001519126-Install-Rise-Player-on-Windows#%E2%80%9COS%20Version%E2%80%9D" target="_blank">
+              <i class="fa fa-question-circle" aria-hidden="true"></i> How can I tell if I need the 32-bit or 64-bit version?
+            </a>
           </p>
         </div>
       </div>
 
-      <div id="page1-content" class="download-content row u_margin-md">
+      <div id="page1-content" class="prototype-download-content row u_margin-md">
         <div class="col-xs-6 text-center">
-          <a href="http://install-versions.risevision.com/installer-lnx-32.sh#_ga=2.18179386.200841446.1523456923-448654264.1459728419">
+          <a href="http://install-versions.risevision.com/installer-lnx-32.sh#_ga=2.18179386.200841446.1523456923-448654264.1459728419" class="u_link-no-underline">
             <div class="u_bordered u_bordered-hover u_clickable">
               <img src="../images/linux-b.svg" width="60">
               <h5>
@@ -157,7 +148,7 @@
           </a>
         </div>
         <div class="col-xs-6 text-center">
-          <a href="http://install-versions.risevision.com/installer-lnx-64.sh#_ga=2.18179386.200841446.1523456923-448654264.1459728419">
+          <a href="http://install-versions.risevision.com/installer-lnx-64.sh#_ga=2.18179386.200841446.1523456923-448654264.1459728419" class="u_link-no-underline">
             <div class="u_bordered u_bordered-hover u_clickable">
               <img src="../images/linux-b.svg" width="60">
               <h5>
@@ -176,9 +167,9 @@
         </div>
       </div>
 
-      <div id="page2-content" class="download-content row u_margin-md">
+      <div id="page2-content" class="prototype-download-content row u_margin-md">
         <div class="col-xs-6 col-xs-offset-3 text-center">
-          <a href="http://install-versions.risevision.com/installer-lnx-armv7l.sh#_ga=2.127839630.200841446.1523456923-448654264.1459728419">
+          <a href="http://install-versions.risevision.com/installer-lnx-armv7l.sh#_ga=2.127839630.200841446.1523456923-448654264.1459728419" class="u_link-no-underline">
             <div class="u_bordered u_bordered-hover u_clickable">
               <img src="../images/pi-b.svg" width="60">
               <h5>
@@ -190,9 +181,10 @@
         </div>
       </div>
 
-      <div id="page3-content" class="download-content row u_margin-md">
+      <div id="page3-content" class="prototype-download-content row u_margin-md">
         <div class="col-xs-6 col-xs-offset-3 text-center">
-          <a href="#">
+          <!-- LINK PENDING FROM DELIVERY -->
+          <a href="#" class="u_link-no-underline">
             <div class="u_bordered u_bordered-hover u_clickable">
               <img src="../images/chrome-b.svg" width="60">
               <h5>
@@ -210,12 +202,8 @@
           <i class="fa fa-question-circle" aria-hidden="true"></i> Display ID </a>to complete your installation.</p>
 
       <!-- MATCH STYLE HERE -->
-
-      <!-- <div class="panel panel-success display-panel">
-        <div id="displayIdField" class="panel-body ng-binding">{{display.id}}</div>
-      </div> -->
       <div class="col-xs-12 u_margin-md-bottom">
-        <input type="text" class="form-control id-form" maxlength="12" autocorrect="off" autocapitalize="off" spellcheck="false"
+        <input type="text" class="id-form form-control" maxlength="12" autocorrect="off" autocapitalize="off" spellcheck="false"
           id="id1" value="VH3CKAHZQ5P7" readonly="readonly">
       </div>
 

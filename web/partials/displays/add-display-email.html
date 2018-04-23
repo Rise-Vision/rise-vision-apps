@@ -4,6 +4,48 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width"/>
 </head>
+<!-- INLINE THIS -->
+<style>
+   
+    .id-form {
+        background-color: #FFF!important;
+        font-family: 'Lucida Console',Monaco,monospace;
+        text-indent: 46px;
+        letter-spacing: 19px;
+        background: 0 0;
+        display: block;
+        width: 100%;
+        height: 44px;
+        padding: 0;
+        font-size: 24px;
+        line-height: 1.42857;
+        color: #5b5b5b;
+        border: 1px solid #dad7d4;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        cursor: default!important;
+        box-shadow: none;
+        text-transform: uppercase;
+        }
+
+    .help-icon:before {
+        content: "?";
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 16px;
+        text-align: center;
+        color: #fff;
+        background: #2385BA;
+        -webkit-border-radius: 16px;
+        -moz-border-radius: 16px;
+        border-radius: 16px;
+        }
+</style>
 <body>
   <div style="background:#f9f9f9;margin:0px;padding:20px" bgcolor="f9f9f9">
       <table cellspacing="0" border="0" cellpadding="0" align="center" width="595" bgcolor="white" style="border-collapse:separate;border-spacing:0;font-family:Helvetica,Arial,sans-serif;letter-spacing:0;table-layout:fixed">
@@ -14,7 +56,7 @@
                           <tbody>
                               <tr>
                                   <td style="font-family:Helvetica,Arial,sans-serif;font-size:16px;padding:0;text-align:center" align="left">
-                                      <img src="https://ci4.googleusercontent.com/proxy/tIn39Uu_-8P30B-NjHrQ6M6cn10CNDo8yKsbzHxTVxQDdshB0RN9KmjFHpgXqGvxfJy7jhFQFRMnvpkBo-cGxyTaPHX-YnB8cvvmC5v4FbYHFSbiRAgMRCOGqol3psI81bf9vVzerfYrewyW=s0-d-e1-ft#http://s3.amazonaws.com/Rise-Images/UI/logo.svg" width="165" height="62" style="padding:15px 0 30px;text-align:left" class="CToWUd">
+                                      <img src="https://s3.amazonaws.com/Rise-Images/UI/logo.png" style="padding:15px 0 30px" class="CToWUd">
                                   </td>
                               </tr>
                           </tbody>
@@ -24,57 +66,36 @@
                               <tr>
                                   <td style="color:#525252;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:22px;padding:0">
                                       <p style="line-height:1.5;margin:0 0 17px;text-align:left!important" align="left">Hi there,</p>
-                                      <p style="line-height:1.5;margin:0 0 17px;text-align:left!important" align="left">To complete the setup of ‘{{display.name}}’ Display, &nbsp;you need to install Rise Player on your Media Player hardware.&nbsp;</p>
-                                      <p style="line-height:1.5;margin:0 0 17px;text-align:left!important" align="left">Find your operating system below, download the applicable installer, and copy it to the Media Player that you intend to use.</p>
+                                      <p style="line-height:1.5;margin:0 0 17px;text-align:left!important" align="left">You've added a Display named <b>‘{{display.name}}’</b>. &nbsp;Now activate this Display by following these steps:&nbsp;</p>
+                                   <hr>
+                                      <p> <b class="text-pill">Step 1</b> Download and install Rise Player on your Media Player. Go to  <a href="http://www.risevision.com/riseplayer" target="_blank">http://www.risevision.com/riseplayer</a> and select your Media Player operating system.</p>
 
-                                       <div style="width: 100%;
-                      display: inline-block;
-                      padding: 10px;
-                      background-color: #f5f5f5; text-align:center;">
-                                          <p><span>Your Display ID is:</span>
-                                          <p><b style="border: none;
-                      outline: none!important;
-                      font-size: 26px;
-                      line-height: 18px;
-                      padding: 0;
-                      margin: 0 18px;">{{display.id}}</b></p>
-                                             </p>
-                                      </div>
+                                      <div style="margin-bottom:16px;text-align:center!important" align="center"><a href="http://install-versions.risevision.com/installer-win-32.exe" style="background:#47b767;border:none;border-radius:3px;color:#fff;display:inline-block;font-size:14px;font-weight:bold;outline:none!important;padding:12px 35px;text-decoration:none" target="_blank">Download Rise Player</a></div>
+                                      <br/>
+                                      <hr>
+                                      <p> <b class="text-pill">Step 2</b> When prompted by Rise Player, enter the <a href="https://help.risevision.com/hc/en-us/articles/360000325886-Activate-a-Display-using-a-Display-ID" target="_blank"><span class="help-icon"></span>Display ID </a> to complete your installation.</p>
+                                      
+                                     <input type="text" class="id-form" maxlength="12" autocorrect="off" autocapitalize="off" spellcheck="false" id="id1" value="VH3CKAHZQ5P7" readonly="readonly">
+                                     <p>If you want to quickly deploy a large number of Displays, check out Claim IDs.</p>
+                                     <a href="https://help.risevision.com/hc/en-us/articles/360000463883-Activate-a-Display-using-a-Claim-ID" target="_blank" ><span class="help-icon"></span>How to use Claim IDs</a>
 
-                                      <p></p>
-                                      <p style="line-height:1.5;margin:0 0 17px;text-align:left!important" align="left"><b>Windows Installation</b>
-                                          <br>Run the Rise Player installer on your dedicated Media Player, and follow the on-screen setup instructions.
-                                          <br>
-                                      </p>
-                                      <div style="margin-bottom:16px;text-align:center!important" align="center"><a href="http://install-versions.risevision.com/installer-win-32.exe" style="background:#47b767;border:none;border-radius:3px;color:#fff;display:inline-block;font-size:14px;font-weight:bold;outline:none!important;padding:12px 35px;text-decoration:none" target="_blank">Download for Windows 10 [32-bit]</a></div>
-                                      <p style="line-height:1.5;margin:0 0 17px;text-align:left!important" align="left"></p>
-                                      <div style="margin-bottom:16px;text-align:center!important" align="center"><a href="http://install-versions.risevision.com/installer-win-64.exe" style="background:#47b767;border:none;border-radius:3px;color:#fff;display:inline-block;font-size:14px;font-weight:bold;outline:none!important;padding:12px 35px;text-decoration:none" target="_blank">Download for Windows 10 [64-bit]</a></div>
-                                      <p style="line-height:1.5;margin:0 0 17px;text-align:left!important" align="left">
-                                          <br><b>Ubuntu/Raspbian Installation</b></p>
-                                      <p style="line-height:1.5;margin:0 0 17px;text-align:left!important" align="left">Open a terminal window, navigate to the directory that contains the Rise Player installer, and run the following commands (do not run the installer as root or via sudo):</p>
-                                      <p style="line-height:1.5;margin:0 0 17px;text-align:left!important" align="left">    <i>chmod +x installer-lnx-32.sh<br>./installer-lnx-32.sh</i>
-                                          <br>
-                                          <b><i>OR</i></b>
-                                          <br>
-                                          <i>chmod +x installer-lnx-64.sh<br>./installer-lnx-64.sh</i>
-                                          <br>
-                                          <b><i>OR</i></b>
-                                          <br>
-                                          <i>chmod +x installer-lnx-armv7l.sh<br>./installer-lnx-armv7l.sh
+                                     <br/><br/><br/>
+                                      <hr>
+                                      
+                                      
+                                      <p>Once activated, your Display will begin showing your scheduled Presentation.</p>
+                                      <a href="https://help.risevision.com/hc/en-us/articles/115000860686" target="_blank" > <span class="help-icon"></span>What's a Presentation?</a>
+                                      
+                                      <p>Need a Media Player?</p>
+                                      <a href="https://help.risevision.com/hc/en-us/articles/115001817143-Choose-a-Media-Player" target="_blank" > <span class="help-icon"></span>See our Media Player Selector </a>
+                                      
 
-                                          <br><br>
-                                          Once entered, follow the on-screen setup instructions.
-                                          <br>
-                                      </p>
-                                      <div style="margin-bottom:16px;text-align:center!important" align="center"><a href="http://install-versions.risevision.com/installer-lnx-32.sh" style="background:#47b767;border:none;border-radius:3px;color:#fff;display:inline-block;font-size:14px;font-weight:bold;outline:none!important;padding:12px 35px;text-decoration:none" target="_blank">Download for Ubuntu 16.04 LTS [32-bit]</a></div>
-                                      <p style="line-height:1.5;margin:0 0 17px;text-align:left!important" align="left"></p>
-                                      <div style="margin-bottom:16px;text-align:center!important" align="center"><a href="http://install-versions.risevision.com/installer-lnx-64.sh" style="background:#47b767;border:none;border-radius:3px;color:#fff;display:inline-block;font-size:14px;font-weight:bold;outline:none!important;padding:12px 35px;text-decoration:none" target="_blank">Download for Ubuntu 16.04 LTS [64-bit]</a></div>
-                                      <p style="line-height:1.5;margin:0 0 17px;text-align:left!important" align="left"></p>
-                                       <div style="margin-bottom:16px;text-align:center!important" align="center"><a href="http://install-versions.risevision.com/installer-lnx-armv7l.sh" style="background:#47b767;border:none;border-radius:3px;color:#fff;display:inline-block;font-size:14px;font-weight:bold;outline:none!important;padding:12px 35px;text-decoration:none" target="_blank">Download for Raspbian 8.0 [ARMv7]</a></div>
-                                        <p style="line-height:1.5;margin:0 0 17px;text-align:left!important" align="left"></p>
-                                     <p style="line-height:1.5;margin:0 0 17px;text-align:left!important" align="left">
-                                     You can find more details about adding and managing your Displays in our <a href="https://help.risevision.com/hc/en-us/articles/115000860926-About-Displays" target="_blank">Help Center</a>.
-                                     </p>
+                                      <br/> <br/><br/>
+                                      <hr>
+                                      
+                                      
+                                      
+
                                       <p style="line-height:1.5;margin:0 0 17px;text-align:left!important" align="left">If you have any questions at all, just reply to this email. &nbsp;We’re here to help!</p>
                                        <p style="line-height:1.5;margin:0 0 17px;text-align:left!important" align="left">Thank you,
                                           <br>Rise Vision Support Team</p>
