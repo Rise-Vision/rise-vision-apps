@@ -1,4 +1,4 @@
-<div class="app-launcher-wizard panel panel-default" ng-init="currentStep = 1">
+<div class="app-launcher-wizard panel panel-default" ng-controller="GetStartedCtrl">
   <wizard-progress-bar number-of-steps="4" current-step="currentStep"></wizard-progress-bar>
 
   <div class="panel-body aligner">
@@ -12,7 +12,7 @@
           <div class="app-launcher-wizard_text aligner-item">
             <h1>Welcome to Rise Vision</h1>
             <h2 class="u_margin-md-bottom">Professional Digital Signage in less than 5 minutes</h2>
-            <button id="getStartedButton1" class="btn btn-lg btn-primary" ng-click="currentStep = 2"><span class="h4">Start Now</span></button>
+            <button id="getStartedButton1" class="btn btn-lg btn-primary" ng-click="nextStep()"><span class="h4">Start Now</span></button>
           </div>
         </div>
 
@@ -24,7 +24,7 @@
             <h4>Step 1:</h4>
             <h1>Create Your Content</h1>
             <h2>The first step is creating the content you will show. This content is called a Presentation. You can design it from scratch or use one of our 100+ templates.</h2>
-            <button id="getStartedButton2" class="btn btn-lg btn-primary" ng-click="currentStep = 3">Next</button>
+            <button id="getStartedButton2" class="btn btn-lg btn-primary" ng-click="nextStep()">Next</button>
           </div>
         </div>
 
@@ -36,7 +36,7 @@
             <h4>Step 2:</h4>
             <h1>Set Up Your Display(s)</h1>
             <h2>Your Presentation will display on a TV or monitor that is connected to a Media Player that is running our free Rise Player software.</h2>
-            <button id="getStartedButton3" class="btn btn-lg btn-primary" ng-click="currentStep = 4">Next</button>
+            <button id="getStartedButton3" class="btn btn-lg btn-primary" ng-click="nextStep()">Next</button>
           </div>
         </div>
 

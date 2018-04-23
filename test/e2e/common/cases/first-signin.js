@@ -89,6 +89,15 @@ var FirstSigninScenarios = function() {
         expect(getStartedPage.getGetStartedAddPresentation().isDisplayed()).to.eventually.be.true;
       });
 
+      it('should show last step after reload',function(){
+        browser.refresh();
+        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+        
+        expect(getStartedPage.getWizardStep4().isDisplayed()).to.eventually.be.true;
+        
+        expect(getStartedPage.getGetStartedAddPresentation().isDisplayed()).to.eventually.be.true;
+      });
+
       it('should start a new presentation', function () {
         getStartedPage.getGetStartedAddPresentation().click();
 
