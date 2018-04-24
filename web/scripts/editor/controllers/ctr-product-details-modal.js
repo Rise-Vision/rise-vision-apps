@@ -2,39 +2,25 @@
   'use strict';
 
   angular.module('risevision.editor.controllers')
-    .controller('ProductDetailsModalController', ['$scope', '$rootScope', '$modalInstance',
-      'product', 'userState', 'currencyService', 'storeAuthorization', 'checkTemplateAccess',
-      '$loading', '$timeout', 'STORE_URL', 'TEMPLATE_LIBRARY_PRODUCT_CODE', 'planFactory',
-      function ($scope, $rootScope, $modalInstance, product, userState, currencyService,
-        storeAuthorization, checkTemplateAccess, $loading, $timeout, STORE_URL, TEMPLATE_LIBRARY_PRODUCT_CODE,
-        planFactory) {
-        $scope.storeUrl = STORE_URL;
+    .controller('ProductDetailsModalController', ['$scope', '$rootScope', 
+      '$loading', '$modalInstance', 'userState', 
+      'checkTemplateAccess', 'planFactory', 'product',
+      function ($scope, $rootScope, $loading, $modalInstance, userState, 
+        checkTemplateAccess, planFactory, product) {
         $scope.product = product;
         $scope.canUseProduct = product.paymentTerms === 'free';
         $scope.showSubscriptionStatus = product.paymentTerms !== 'free';
         $scope.detailsOpen = false;
 
-        if ($scope.canUseProduct) {
-          $timeout(function () {
-            $loading.stop('loading-price');
-          });
-        } else {
+        if (!$scope.canUseProduct) {
+          $loading.start('loading-price');
+
           checkTemplateAccess(product.productCode)
             .then(function () {
               $scope.canUseProduct = true;
+            })
+            .finally(function () {
               $loading.stop('loading-price');
-            }, function () {
-              currencyService().then(function (currency) {
-                var company = userState.getCopyOfUserCompany();
-                var country = (company && company.country) ? company.country :
-                  '';
-                var selectedCurrency = currency.getByCountry(country);
-                $scope.currencyName = selectedCurrency.getName();
-                $scope.price = selectedCurrency.pickPrice(product.pricing[
-                  0].priceUSD, product.pricing[0].priceCAD);
-              }).finally(function () {
-                $loading.stop('loading-price');
-              });
             });
         }
 
