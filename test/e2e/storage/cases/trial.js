@@ -4,6 +4,7 @@ var HomePage = require('./../../launcher/pages/homepage.js');
 var SignInPage = require('./../../launcher/pages/signInPage.js');
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var helper = require('rv-common-e2e').helper;
+var PresentationListPage = require('./../../editor/pages/presentationListPage.js');
 var WorkspacePage = require('./../../editor/pages/workspacePage.js');
 var StoreProductsModalPage = require('./../../editor/pages/storeProductsModalPage.js');
 var PlaceholderPlaylistPage = require('./../../editor/pages/placeholderPlaylistPage.js');
@@ -17,6 +18,7 @@ var FirstSigninScenarios = function() {
     var homepage;
     var signInPage;
     var commonHeaderPage;
+    var presentationListPage;
     var workspacePage;
     var storeProductsModalPage;
     var placeholderPlaylistPage;
@@ -26,6 +28,7 @@ var FirstSigninScenarios = function() {
       homepage = new HomePage();
       signInPage = new SignInPage();
       commonHeaderPage = new CommonHeaderPage();
+      presentationListPage = new PresentationListPage();
       workspacePage = new WorkspacePage();
       storeProductsModalPage = new StoreProductsModalPage()
       placeholderPlaylistPage = new PlaceholderPlaylistPage();
@@ -50,15 +53,13 @@ var FirstSigninScenarios = function() {
         expect(filesListPage.getSearchInput().isDisplayed()).to.eventually.be.false;
       });
 
-      it('should show navigate to launcher page', function () {
-        commonHeaderPage.getCommonHeaderMenuItems().get(0).click();
-        helper.wait(homepage.getPresentationCTA(), 'Presentation Call to Action');
+      it('should open a new Presentation', function () {
+        commonHeaderPage.getCommonHeaderMenuItems().get(1).click();
 
-        expect(homepage.getPresentationCTA().isDisplayed()).to.eventually.be.true;
-        expect(homepage.getPresentationCTAButton().isDisplayed()).to.eventually.be.true;
+        presentationListPage.openNewPresentation();
       });
 
-      it('should start a new presentation', function () {
+      xit('should start a new presentation', function () {
         homepage.getPresentationCTAButton().click();
 
         helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');

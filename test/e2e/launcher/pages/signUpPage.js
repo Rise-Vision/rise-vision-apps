@@ -16,8 +16,10 @@ var SignUpPage = function() {
   var signUpGoogleLink = element(by.id('sign-up-google-link'));
   var usernameTextBox = element(by.id('username'));
   var passwordTextBox = element(by.id('password'));
+  var confirmPasswordTextBox = element(by.id('confirmPassword'));
   var signupButton = element(by.id('sign-up-button'));
   var passwordStrengthWarning = element(by.cssContainingText('.text-warning', 'strong password'));
+  var matchingPasswordsError = element(by.cssContainingText('.text-danger', 'must match'));
   var alreadyRegisteredError = element(by.id('already-registered-warning'));
 
   var modalDialog = element(by.css('.modal-dialog'));
@@ -54,6 +56,10 @@ var SignUpPage = function() {
   this.getPasswordTextBox = function() {
     return passwordTextBox;
   };
+  
+  this.getConfirmPasswordTextBox = function() {
+    return confirmPasswordTextBox;
+  };
 
   this.getSignupButton = function() {
     return signupButton;
@@ -61,6 +67,10 @@ var SignUpPage = function() {
 
   this.getPasswordStrengthWarning = function() {
     return passwordStrengthWarning;
+  };
+
+  this.getMatchingPasswordsError = function() {
+    return matchingPasswordsError;
   };
 
   this.getAlreadyRegisteredError = function() {

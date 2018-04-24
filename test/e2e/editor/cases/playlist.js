@@ -12,8 +12,6 @@ var PlaylistItemModalPage = require('./../pages/playlistItemModalPage.js');
 var StoreProductsModalPage = require('./../pages/storeProductsModalPage.js');
 var WidgetByUrlModalPage = require('./../pages/widgetByUrlModalPage.js');
 var WidgetSettingsPage = require('./../pages/widgetSettingsPage.js');
-var PresentationItemModalPage = require('./../pages/presentationItemModalPage.js');
-var PresentationModalPage = require('./../../schedules/pages/presentationModalPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var PlaylistScenarios = function() {
@@ -32,8 +30,6 @@ var PlaylistScenarios = function() {
     var storeProductsModalPage;
     var widgetByUrlModalPage;
     var widgetSettingsPage;
-    var presentationItemModalPage;
-    var presentationModalPage;
 
     before(function () {
       homepage = new HomePage();
@@ -48,8 +44,6 @@ var PlaylistScenarios = function() {
       storeProductsModalPage = new StoreProductsModalPage();
       widgetByUrlModalPage = new WidgetByUrlModalPage();
       widgetSettingsPage = new WidgetSettingsPage();
-      presentationItemModalPage = new PresentationItemModalPage();
-      presentationModalPage = new PresentationModalPage();
 
       homepage.getEditor();
       signInPage.signIn();
@@ -213,76 +207,6 @@ var PlaylistScenarios = function() {
 
     });
 
-    describe('Should Add a Embedded Presentation: ', function () {
-      var presentationItemName;
-
-      before('Click Add Embedded Presentation: ', function () {
-        placeholderPlaylistPage.getAddContentButton().click();
-        helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
-
-        helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader()).then(function () {
-          expect(storeProductsModalPage.getStoreProducts().count()).to.eventually.be.above(0);
-        });
-        storeProductsModalPage.getSearchInput().sendKeys('embedded presentation');
-        storeProductsModalPage.getSearchInput().sendKeys(protractor.Key.ENTER);
-        helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader()).then(function () {
-          expect(storeProductsModalPage.getStoreProducts().count()).to.eventually.be.above(0);
-        });
-
-        storeProductsModalPage.getStoreProducts().get(0).click();
-
-        helper.wait(presentationModalPage.getAddPresentationModal(), 'Add Presentation Modal');
-      });
-
-      it('should open the Add Presentation Modal and show presentations', function () {
-        expect(presentationModalPage.getAddPresentationModal().isDisplayed()).to.eventually.be.true;
-
-        //wait for spinner to go away.
-        browser.wait(function () {
-          return presentationModalPage.getPresentationListLoader().isDisplayed().then(function (result) {
-            return !result
-          });
-        }, 20000);
-
-        expect(presentationModalPage.getPresentationItems().get(0).isPresent()).to.eventually.be.true;
-        expect(presentationModalPage.getPresentationItems().count()).to.eventually.be.above(0);
-      });
-
-      it('should select the first Presentation and remember the name', function () {
-        presentationModalPage.getPresentationNames().get(0).getText().then(function (text) {
-          presentationItemName = text;
-          presentationModalPage.getPresentationItems().get(0).click();
-          
-          helper.waitDisappear(presentationModalPage.getAddPresentationModal(), 'Add Presentation Modal');
-        });
-      });
-
-      it('should show the Presentation item settings dialog', function () {
-        helper.wait(presentationItemModalPage.getPresentationItemModal(), 'Presentation Settings Modal').then(function () {
-          expect(presentationItemModalPage.getPresentationItemModal().isDisplayed()).to.eventually.be.true;
-          expect(presentationItemModalPage.getModalTitle().getText()).to.eventually.equal('Embedded Presentation Settings');
-        });
-      });
-      
-      it('should toggle to Presentation Id text box', function() {
-        expect(presentationItemModalPage.getPresentationIdTextBox().isDisplayed()).to.eventually.be.false;
-        
-        presentationItemModalPage.getEnterPresentationIdButton().click().then(function() {
-          expect(presentationItemModalPage.getPresentationIdTextBox().isDisplayed()).to.eventually.be.true;
-        });
-      });
-
-      it('should Close Presentation Settings and add Item',function(){
-        helper.clickWhenClickable(presentationItemModalPage.getSaveButton(), 'Presentation Seetings Save Button');
-
-        helper.waitDisappear(presentationItemModalPage.getPresentationItemModal(), 'Presentation Settings Modal');
-        
-        expect(presentationItemModalPage.getPresentationItemModal().isPresent()).to.eventually.be.false;
-        expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(2);
-        expect(placeholderPlaylistPage.getItemNameCells().get(1).getText()).to.eventually.contain(presentationItemName);
-      });
-    });
-
     describe('Should Add a Custom Rise Widget: ', function () {
       before('Click Add a Custom Rise Widget: ', function () {
         helper.wait(placeholderPlaylistPage.getAddContentButton(), 'Placeholder Playlist Page');
@@ -354,7 +278,7 @@ var PlaylistScenarios = function() {
           playlistItemModalPage.getSaveButton().click();
 
           expect(playlistItemModalPage.getPlaylistItemModal().isPresent()).to.eventually.be.false;
-          expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(3);
+          expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(2);
         });
       });
 
@@ -364,7 +288,7 @@ var PlaylistScenarios = function() {
       it('should duplicate first item', function() {
         placeholderPlaylistPage.getDuplicateButtons().get(0).click();
 
-        expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(4);
+        expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(3);
         expect(placeholderPlaylistPage.getItemNameCells().get(0).getText()).to.eventually.contain('Image Widget');
         expect(placeholderPlaylistPage.getItemNameCells().get(1).getText()).to.eventually.contain('Image Widget (1)');
       });
@@ -403,7 +327,7 @@ var PlaylistScenarios = function() {
         placeholderPlaylistPage.getRemoveButtons().get(0).click();
 
         helper.clickWhenClickable(placeholderPlaylistPage.getRemoveItemButton(), 'Remove Item Confirm Button').then(function () {
-          expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(3);
+          expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(2);
 
           done();
         });

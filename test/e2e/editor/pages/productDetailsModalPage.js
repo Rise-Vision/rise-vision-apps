@@ -3,7 +3,6 @@ var ProductDetailsModalPage = function() {
   var productDetailsModal = element(by.id('productDetailsModal'));
   var useProductButton = element(by.id('useProductButton'));
   var startTrialButton = element(by.id('startTrialButton'));
-  var viewInStoreButton = element(by.id('viewInStoreButton'));  
 
   var pricingLoader = element(by.xpath('//div[@spinner-key="loading-price"]'));
   var trialLoader = element(by.xpath('//a[@spinner-key="loading-trial"]'));
@@ -25,10 +24,6 @@ var ProductDetailsModalPage = function() {
   this.getStartTrialButton = function(){
     return startTrialButton;
   };
-
-  this.getViewInStoreButton = function(){
-    return viewInStoreButton;
-  };  
 
   this.getPricingLoader = function(){
     return pricingLoader;

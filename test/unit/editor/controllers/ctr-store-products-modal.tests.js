@@ -1,4 +1,5 @@
 'use strict';
+
 describe('controller: Store Products Modal', function() {
   beforeEach(module('risevision.editor.controllers'));
   beforeEach(module('risevision.editor.services'));
@@ -10,11 +11,9 @@ describe('controller: Store Products Modal', function() {
         return scrollingListService
       };
     });
-    $provide.service('store',function(){
+    $provide.service('productsFactory',function(){
       return {
-        product: {
-          list : function(){
-          }
+        loadProducts: function(){
         }
       }
     });
@@ -100,7 +99,7 @@ describe('controller: Store Products Modal', function() {
         $scope : $scope,
         $rootScope: $rootScope,
         $modalInstance : $modalInstance,
-        store: $injector.get('store'),
+        productsFactory: $injector.get('productsFactory'),
         category: $injector.get('category'),
         ScrollingListService: $injector.get('ScrollingListService'),
         $loading: $loading

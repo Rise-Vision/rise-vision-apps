@@ -35,6 +35,14 @@ describe('service: gadgetFactory: ', function() {
       };
     });
 
+    $provide.service('productsFactory', function() {
+      return {
+        isUnlistedProduct: function() {
+          return true;
+        }
+      };
+    });
+
     $provide.service('subscriptionStatusFactory',function () {
       return {
         checkProductCodes: function(productCodes) {
@@ -53,6 +61,9 @@ describe('service: gadgetFactory: ', function() {
       return function(key){
         var status = '';
         switch (key) {
+          case 'editor-app.subscription.status.professional':
+            status = 'Professional';
+            break;
           case 'editor-app.subscription.status.premium':
             status = 'Premium';
             break;
@@ -282,20 +293,43 @@ describe('service: gadgetFactory: ', function() {
       });
     });
 
-    it('should return the Presentation item',function(done){
-      statusResponse.pc = 'd3a418f1a3acaed42cf452fefb1eaed198a1c620';
-      items = [{
-        type: 'presentation'
-      }];    
+    describe('Embedded Presentations: ', function() {
+      it('should return the Presentation item if Subscribed',function(done){
+        statusResponse.pc = 'd3a418f1a3acaed42cf452fefb1eaed198a1c620';
+        statusResponse.isSubscribed = true;
+        items = [{
+          type: 'presentation'
+        }];    
 
-      gadgetFactory.updateItemsStatus(items).then(function() {
-        expect(items[0].gadget).to.be.ok;
-        expect(items[0].gadget.name).to.equal('Embedded Presentation');
-        expect(items[0].gadget.subscriptionStatus).to.equal('Free');
-        expect(items[0].gadget.statusMessage).to.equal('Free');
+        gadgetFactory.updateItemsStatus(items).then(function() {
+          expect(items[0].gadget).to.be.ok;
+          expect(items[0].gadget.name).to.equal('Embedded Presentation');
+          expect(items[0].gadget.subscriptionStatus).to.equal('Free');
+          expect(items[0].gadget.isSubscribed).to.be.true;
+          expect(items[0].gadget.statusMessage).to.equal('Free');
 
-        done();
+          done();
+        });
       });
+
+      it('should return the Presentation item as Professional Widget if unsubscribed',function(done){
+        statusResponse.pc = 'd3a418f1a3acaed42cf452fefb1eaed198a1c620';
+        statusResponse.isSubscribed = false;
+        items = [{
+          type: 'presentation'
+        }];    
+
+        gadgetFactory.updateItemsStatus(items).then(function() {
+          expect(items[0].gadget).to.be.ok;
+          expect(items[0].gadget.name).to.equal('Embedded Presentation');
+          expect(items[0].gadget.subscriptionStatus).to.equal('Free');
+          expect(items[0].gadget.isSubscribed).to.be.false;
+          expect(items[0].gadget.statusMessage).to.equal('Professional');
+
+          done();
+        });
+      });
+
     });
 
     it('should return the items with updated gadget/subscriptionStatus',function(done){
