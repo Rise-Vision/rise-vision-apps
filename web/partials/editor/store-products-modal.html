@@ -116,7 +116,7 @@
               <div class="row">
                 <div class="col-xs-8">
                   <h4>{{'editor-app.storeProduct.templates.blank' | translate}}</h4>
-                  &nbsp;
+                  
                 </div><!-- end col -->
                 <div class="col-xs-4">
 
@@ -145,7 +145,7 @@
                 <div class="row">
                   <div class="col-xs-8">
                     <h4 id="productName">{{product.name | characters: 25}}</h4>
-                    <a ng-href="{{storeUrl}}/product/{{product.productId}}/" target="_blank" ng-click="$event.stopPropagation()" translate="editor-app.storeProduct.viewInStore"></a>
+                    <a ng-hide="factory.search.category === 'Templates'" ng-href="{{storeUrl}}/product/{{product.productId}}/" target="_blank" ng-click="$event.stopPropagation()" translate="editor-app.storeProduct.viewInStore"></a>
                   </div><!--end col-->
                   <div class="col-xs-4">
                     <button class="btn btn-primary btn-block btn-sm" id="{{product.name | slugify}}" ng-click="quickSelect(product); $event.stopPropagation()">Add</button>
