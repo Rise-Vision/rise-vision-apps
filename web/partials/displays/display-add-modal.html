@@ -60,16 +60,6 @@
     }
   });
 </script>
-<style>
-  @media only screen and (min-width: 768px) {
-    #select-rise-player-os-desktop {
-      display: block !important;
-    }
-    #select-rise-player-os-mobile {
-      display: none !important;
-    }
-  }
-</style>
 <!-- PROTOTYPE ONLY - END  -->
 
     <div ng-show="display.id && !showEmailForm">
@@ -78,7 +68,7 @@
       <hr>
       <p>
         <b class="text-pill">Step 1</b> Download and install Rise Player on your Media Player.</p>
-      <ul id="select-rise-player-os-desktop" class="nav nav-tabs nav-justified" style="display:none">
+      <ul id="select-rise-player-os-desktop" class="nav nav-tabs nav-justified hidden-xs">
         <li data-toggle="tab" id="page0" class="active">
           <a href="#">Windows 10</a>
         </li>
@@ -93,7 +83,7 @@
         </li>
       </ul>
 
-      <select id="select-rise-player-os-mobile" class="form-control">
+      <select id="select-rise-player-os-mobile" class="form-control visible-xs">
         <option>Windows 10</option>
         <option>Chrome OS</option>
         <option>Linux</option>
