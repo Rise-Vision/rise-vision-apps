@@ -23,7 +23,6 @@ angular.module('risevision.displays.services')
     return {
       create: function () {
         var deferred = $q.defer();
-        debugger;
         var primus = new $window.Primus(MESSAGING_PRIMUS_URL, {
           reconnect: {
             retries: 0
@@ -170,7 +169,7 @@ angular.module('risevision.displays.services')
               primus.on('data', function (data) {
                 if (data.msg !== 'screenshot-saved' &&
                   data.msg !== 'screenshot-failed' &&
-                  data.msg !== "client-connected") {
+                  data.msg !== 'client-connected') {
                   return;
                 }
                 oldPrimus.emit('data', data);
@@ -184,7 +183,7 @@ angular.module('risevision.displays.services')
               primus.on('error', function rej(err) {
                 primus.end();
               });
-            })
+            });
         });
 
       return deferred.promise;

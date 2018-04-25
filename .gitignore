@@ -12,3 +12,4 @@ web/scripts/config/config.js
 test/e2e/config/config.json
 .DS_Store
 package-lock.json
+.project

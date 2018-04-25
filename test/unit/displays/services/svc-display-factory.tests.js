@@ -65,13 +65,6 @@ describe('service: displayFactory:', function() {
         trackerCalled = name;
       };
     });
-    $provide.service('displayEmail', function() {
-      return {
-        send: function() {
-          emailSent = true;
-        }
-      }
-    });
     $provide.service('$state',function(){
       return {
         go : function(state, params){
@@ -90,10 +83,9 @@ describe('service: displayFactory:', function() {
     });
 
   }));
-  var displayFactory, $rootScope, $modal, trackerCalled, emailSent, updateDisplay, currentState, returnList, displayListSpy, displayAddSpy, planFactory, display;
+  var displayFactory, $rootScope, $modal, trackerCalled, updateDisplay, currentState, returnList, displayListSpy, displayAddSpy, planFactory, display;
   beforeEach(function(){
     trackerCalled = undefined;
-    emailSent = undefined;
     currentState = undefined;
     updateDisplay = true;
     returnList = null;
@@ -263,7 +255,6 @@ describe('service: displayFactory:', function() {
 
       setTimeout(function(){
         expect(trackerCalled).to.equal('Display Created');
-        expect(emailSent).to.be.true;
         broadcastSpy.should.have.been.calledWith('displayCreated', sinon.match.object);
 
         expect(displayFactory.savingDisplay).to.be.false;
@@ -303,7 +294,6 @@ describe('service: displayFactory:', function() {
         setTimeout(function(){
           expect(currentState).to.be.empty;
           expect(trackerCalled).to.not.be.ok;
-          expect(emailSent).to.not.be.ok;
           expect(displayFactory.savingDisplay).to.be.false;
           expect(displayFactory.loadingDisplay).to.be.false;
 

@@ -20,6 +20,7 @@ var StoreProductsModalPage = function() {
   var displayBanner = element(by.id('displayBanner'));
 
   var professionalWidgets = element.all(by.repeater('widget in professionalWidgets'));
+  var professionalWidgetNames = element.all(by.css('.professional-content .product-grid_details h4'));
   var unlockButton = element.all(by.id('unlockButton'));
   var addProfessionalWidgetButton = element.all(by.id('addProfessionalWidgetButton'));
   var promotionTrialButton = element.all(by.id('promotionTrialButton'));
@@ -94,12 +95,16 @@ var StoreProductsModalPage = function() {
 
   this.getDisplayBanner = function() {
     return displayBanner;
-  }
+  };
   
   this.getProfessionalWidgets = function() {
     return professionalWidgets;
-  }
-  
+  };
+
+  this.getProfessionalWidgetNames = function() {
+    return professionalWidgetNames;
+  };
+
   this.getUnlockButton = function() {
     return unlockButton;
   };

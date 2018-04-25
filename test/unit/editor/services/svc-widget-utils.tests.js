@@ -21,6 +21,7 @@ describe('service: widgetUtils:', function() {
     expect(widgetUtils.getSvgIcon).to.be.a('function');
     expect(widgetUtils.getWidgetId).to.be.a('function');
     expect(widgetUtils.getProfessionalWidgets).to.be.a('function');
+    expect(widgetUtils.isProfessionalWidget).to.be.a('function');
   });
   
   it('isRenderingAllowed: ', function() {
@@ -36,8 +37,11 @@ describe('service: widgetUtils:', function() {
   });
 
   it('getInAppSettings: ', function() {
+    expect(widgetUtils.getInAppSettings(WIDGETS_INFO.TWITTER.ids.TEST)).to.be.an('object');
+    expect(widgetUtils.getInAppSettings(WIDGETS_INFO.TWITTER.ids.TEST)).to.have.property('partial');
+    expect(widgetUtils.getInAppSettings(WIDGETS_INFO.TWITTER.ids.TEST)).to.have.property('type');
+
     expect(widgetUtils.getInAppSettings(WIDGETS_INFO.IMAGE.ids.PROD)).to.be.null;
-    expect(widgetUtils.getInAppSettings(WIDGETS_INFO.IMAGE.ids.TEST)).to.be.null;
     expect(widgetUtils.getInAppSettings('1234')).to.be.null;
   });
   
@@ -81,18 +85,38 @@ describe('service: widgetUtils:', function() {
     expect(widgetUtils.getFileName()).to.equal('');
   });
 
-  it('getProfessionalWidgets: ', function() {
-    var widgets = widgetUtils.getProfessionalWidgets();
-    
-    widgets.forEach(function(widget) {
-      expect(widget.env).to.equal('TEST');
-      expect(widget.name).to.be.a('string');
-      expect(widget.imageUrl).to.be.a('string');
-      expect(widget.imageAlt).to.be.a('string');
-      expect(widget.gadgetType).to.be.a('string');
-      expect(widget.id).to.be.a('string');
-      expect(widget.url).to.be.a('string');
+  describe('getProfessionalWidgets: ', function() {
+    it('should have expected properties', function() {
+      var widgets = widgetUtils.getProfessionalWidgets();
+      
+      widgets.forEach(function(widget) {
+        expect(widget.name).to.be.a('string');
+        expect(widget.imageUrl).to.be.a('string');
+        expect(widget.imageAlt).to.be.a('string');
+        expect(widget.gadgetType).to.be.a('string');
+        expect(widget.id).to.be.a('string');
+      });      
     });
+
+    it('should contain all Pro widgets', function() {
+      var widgets = widgetUtils.getProfessionalWidgets();
+
+      expect(widgets[0].name).to.contain('Twitter');
+      expect(widgets[0].env).to.be.equal('TEST');
+
+      expect(widgets[1].name).to.contain('Embedded');
+      expect(widgets[1].env).to.be.undefined;
+    });
+  });
+
+  it('isProfessionalWidget: ',function () {
+    // Twitter Test
+    expect(widgetUtils.isProfessionalWidget('83850b51-9040-445d-aa3b-d25946a725c5')).to.be.true;
+    // Twitter Prod
+    expect(widgetUtils.isProfessionalWidget('67e511ae-62b5-4a44-9551-077f63596079')).to.be.true;
+    
+    expect(widgetUtils.isProfessionalWidget('presentation')).to.be.true;
+    expect(widgetUtils.isProfessionalWidget('67e511ae')).to.be.false;
   });
 
 });

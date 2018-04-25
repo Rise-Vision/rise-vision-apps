@@ -8,14 +8,17 @@ var WorkspacePage = require('./../pages/workspacePage.js');
 var PlaceholderPlaylistPage = require('./../pages/placeholderPlaylistPage.js');
 var StoreProductsModalPage = require('./../pages/storeProductsModalPage.js');
 var PlansModalPage = require('./../../common/pages/plansModalPage.js');
+var PresentationItemModalPage = require('./../pages/presentationItemModalPage.js');
+var PresentationModalPage = require('./../../schedules/pages/presentationModalPage.js');
 var TwitterSettingsPage = require('./../pages/twitterSettingsPage.js');
+var AutoScheduleModalPage = require('./../../editor/pages/autoScheduleModalPage.js');
 
 var helper = require('rv-common-e2e').helper;
 
-var TwitterSettingsScenarios = function() {
+var ProfessionalWidgetsScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe('Twitter Settings', function () {
+  describe('Professional Widgets', function () {
     var subCompanyName = 'E2E TEST SUBCOMPANY';
     var homepage;
     var signInPage;
@@ -25,7 +28,10 @@ var TwitterSettingsScenarios = function() {
     var placeholderPlaylistPage;
     var storeProductsModalPage;
     var plansModalPage;
+    var presentationItemModalPage;
+    var presentationModalPage;
     var twitterSettingsPage;
+    var autoScheduleModalPage;
 
     function loadEditor() {
       homepage.getEditor();
@@ -49,7 +55,10 @@ var TwitterSettingsScenarios = function() {
       placeholderPlaylistPage = new PlaceholderPlaylistPage();
       storeProductsModalPage = new StoreProductsModalPage();
       plansModalPage = new PlansModalPage();
+      presentationItemModalPage = new PresentationItemModalPage();
+      presentationModalPage = new PresentationModalPage();
       twitterSettingsPage = new TwitterSettingsPage();
+      autoScheduleModalPage = new AutoScheduleModalPage();
 
       loadEditor();
       createSubCompany();
@@ -61,16 +70,33 @@ var TwitterSettingsScenarios = function() {
       commonHeaderPage.deleteAllSubCompanies();
     });
 
-    before('Add Presentation & Placeholder: ', function () {
+    before('Add a Blank Presentation: ', function() {
       presentationsListPage.openNewPresentation();
 
       helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
 
       browser.sleep(500);
 
+      helper.clickWhenClickable(workspacePage.getSaveButton(), 'Save Button');
+
+      helper.wait(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
+
+      autoScheduleModalPage.getCloseButton().click();
+
+      helper.waitDisappear(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
+
+      commonHeaderPage.getCommonHeaderMenuItems().get(1).click();
     });
 
-    describe('Should lock Twitter Widget when not on a Plan: ', function() {
+    before('Open New Presentation & Add Placeholder: ', function () {
+      presentationsListPage.openNewPresentation();
+
+      helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
+
+      browser.sleep(500);
+    });
+
+    describe('Should lock Professional Widgets when not on a Plan: ', function() {
       before(function () {
         placeholderPlaylistPage.getAddContentButton().click();
         helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
@@ -80,6 +106,9 @@ var TwitterSettingsScenarios = function() {
         helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader());
 
         expect(storeProductsModalPage.getProfessionalWidgets().count()).to.eventually.be.above(0);
+        
+        expect(storeProductsModalPage.getProfessionalWidgetNames().get(0).getText()).to.eventually.contain('Twitter Widget');
+        expect(storeProductsModalPage.getProfessionalWidgetNames().get(1).getText()).to.eventually.contain('Embedded Presentation');
       });
 
       it('should show Locked Widget', function() {
@@ -109,7 +138,7 @@ var TwitterSettingsScenarios = function() {
         expect(storeProductsModalPage.getDisplaysListLink().count()).to.eventually.be.above(0);
       });
     });
-
+    
     describe('Should Add a Twitter widget: ', function () {
 
       before('Click Add Twitter Widget: ', function () {
@@ -137,6 +166,7 @@ var TwitterSettingsScenarios = function() {
 
       it('should be visible on the placeholder list', function() {
         expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(1);
+        expect(placeholderPlaylistPage.getItemNameCells().get(0).getText()).to.eventually.contain('Twitter Widget');
       });
 
       it('should display the current screen name', function() {
@@ -145,6 +175,14 @@ var TwitterSettingsScenarios = function() {
         helper.wait(twitterSettingsPage.getTwitterSettingsModal(), 'Twitter Settings Modal');
 
         expect(twitterSettingsPage.getTwitterScreenName().getAttribute('value')).to.eventually.equal('risevision');
+      });
+
+      it('should Close Twitter Settings',function() {
+        twitterSettingsPage.getCancelButton().click();
+
+        helper.waitDisappear(twitterSettingsPage.getTwitterSettingsModal());
+        
+        expect(twitterSettingsPage.getTwitterSettingsModal().isPresent()).to.eventually.be.false;
       });
     });
 
@@ -219,6 +257,81 @@ var TwitterSettingsScenarios = function() {
       });
     });
 
+    describe('Should Add a Embedded Presentation: ', function () {
+      var presentationItemName;
+
+      before('Click Add Embedded Presentation: ', function () {
+        placeholderPlaylistPage.getAddContentButton().click();
+        helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
+
+        helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader()).then(function () {
+          expect(storeProductsModalPage.getStoreProducts().count()).to.eventually.be.above(0);
+        });
+      });
+
+      it('should not show Embedded Presentation as a Store Product', function() {
+        storeProductsModalPage.getSearchInput().sendKeys('embedded presentation');
+        storeProductsModalPage.getSearchInput().sendKeys(protractor.Key.ENTER);
+        helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader());
+        
+        expect(storeProductsModalPage.getStoreProducts().count()).to.eventually.be.equal(0);
+      });
+
+      it('should add Embedded Presentation as a Professional Widget', function() {        
+        storeProductsModalPage.getAddProfessionalWidgetButton().get(1).click();
+
+        helper.wait(presentationModalPage.getAddPresentationModal(), 'Add Presentation Modal');
+      });
+
+      it('should open the Add Presentation Modal and show presentations', function () {
+        expect(presentationModalPage.getAddPresentationModal().isDisplayed()).to.eventually.be.true;
+
+        //wait for spinner to go away.
+        browser.wait(function () {
+          return presentationModalPage.getPresentationListLoader().isDisplayed().then(function (result) {
+            return !result;
+          });
+        }, 20000);
+
+        expect(presentationModalPage.getPresentationItems().get(0).isPresent()).to.eventually.be.true;
+        expect(presentationModalPage.getPresentationItems().count()).to.eventually.be.above(0);
+      });
+
+      it('should select the first Presentation and remember the name', function () {
+        presentationModalPage.getPresentationNames().get(0).getText().then(function (text) {
+          presentationItemName = text;
+          presentationModalPage.getPresentationItems().get(0).click();
+          
+          helper.waitDisappear(presentationModalPage.getAddPresentationModal(), 'Add Presentation Modal');
+        });
+      });
+
+      it('should show the Presentation item settings dialog', function () {
+        helper.wait(presentationItemModalPage.getPresentationItemModal(), 'Presentation Settings Modal').then(function () {
+          expect(presentationItemModalPage.getPresentationItemModal().isDisplayed()).to.eventually.be.true;
+          expect(presentationItemModalPage.getModalTitle().getText()).to.eventually.equal('Embedded Presentation Settings');
+        });
+      });
+      
+      it('should toggle to Presentation Id text box', function() {
+        expect(presentationItemModalPage.getPresentationIdTextBox().isDisplayed()).to.eventually.be.false;
+        
+        presentationItemModalPage.getEnterPresentationIdButton().click().then(function() {
+          expect(presentationItemModalPage.getPresentationIdTextBox().isDisplayed()).to.eventually.be.true;
+        });
+      });
+
+      it('should Close Presentation Settings and add Item',function(){
+        helper.clickWhenClickable(presentationItemModalPage.getSaveButton(), 'Presentation Seetings Save Button');
+
+        helper.waitDisappear(presentationItemModalPage.getPresentationItemModal(), 'Presentation Settings Modal');
+        
+        expect(presentationItemModalPage.getPresentationItemModal().isPresent()).to.eventually.be.false;
+        expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(2);
+        expect(placeholderPlaylistPage.getItemNameCells().get(1).getText()).to.eventually.contain(presentationItemName);
+      });
+    });
+
   });
 };
-module.exports = TwitterSettingsScenarios;
+module.exports = ProfessionalWidgetsScenarios;

@@ -54,7 +54,7 @@
   <!-- Common Header -->
   <common-header nav-options="navOptions" nav-selected="navSelected" ng-controller="AppCtrl" ng-hide="hideCH"></common-header>
 
-  <onboarding-steps></onboarding-steps>
+  <!-- <onboarding-steps></onboarding-steps> -->
 
   <div ui-view></div>
 
@@ -110,9 +110,11 @@
 
   <!-- launcher -->
   <script src="scripts/launcher/controllers/ctr-home.js"></script>
+  <script src="scripts/launcher/controllers/ctr-get-started.js"></script>
   <script src="scripts/launcher/controllers/ctr-signin.js"></script>
   <script src="scripts/launcher/directives/dtv-track-play.js"></script>
   <script src="scripts/launcher/directives/dtv-onboarding-steps.js"></script>
+  <script src="scripts/launcher/directives/dtv-wizard-progress-bar.js"></script>
   <script src="scripts/launcher/services/svc-launcher-tracker.js"></script>
   <script src="scripts/launcher/services/svc-launcher-factory.js"></script>
 
@@ -192,6 +194,7 @@
   <script src="scripts/editor/services/svc-gadget.js"></script>
   <script src="scripts/editor/services/svc-gadget-factory.js"></script>
   <script src="scripts/editor/services/svc-store.js"></script>
+  <script src="scripts/editor/services/svc-products-factory.js"></script>
   <script src="scripts/editor/filters/ftr-store-payment-category.js"></script>
   <script src="scripts/editor/controllers/ctr-store-products-modal.js"></script>
   <script src="scripts/editor/services/svc-settings-factory.js"></script>

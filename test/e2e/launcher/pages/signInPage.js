@@ -82,7 +82,7 @@ var SignInPage = function() {
       }
     });
     
-    helper.wait(onboardingPage.getOnboardingBar(), 'Onboarding bar');
+    // helper.wait(onboardingPage.getOnboardingBar(), 'Onboarding bar');
   };
 
 };

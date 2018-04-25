@@ -104,7 +104,7 @@ describe('controller: display details', function() {
         showPlansModal: function () {},
         getProLicenseCount: function () {},
         areAllProLicensesUsed: function () {},
-        isPlanActive: function () {}
+        hasProfessionalLicenses: function () {}
       };
     });
     $provide.factory('enableCompanyProduct', function() {
@@ -333,14 +333,14 @@ describe('controller: display details', function() {
 
   describe('isProAvailable:', function() {
     it('should return false if available licenses are zero (Free Plan)', function () {
-      sandbox.stub(planFactory, 'isPlanActive').returns(false);
+      sandbox.stub(planFactory, 'hasProfessionalLicenses').returns(false);
       sandbox.stub($scope, 'getProLicenseCount').returns(0);
 
       expect($scope.isProAvailable()).to.be.false;
     });
 
     it('should return false if all available licenses are used', function () {
-      sandbox.stub(planFactory, 'isPlanActive').returns(true);
+      sandbox.stub(planFactory, 'hasProfessionalLicenses').returns(true);
       sandbox.stub($scope, 'getProLicenseCount').returns(1);
       sandbox.stub($scope, 'areAllProLicensesUsed').returns(true);
 
@@ -348,7 +348,7 @@ describe('controller: display details', function() {
     });
 
     it('should return true if there are available licenses', function () {
-      sandbox.stub(planFactory, 'isPlanActive').returns(true);
+      sandbox.stub(planFactory, 'hasProfessionalLicenses').returns(true);
       sandbox.stub($scope, 'getProLicenseCount').returns(1);
       sandbox.stub($scope, 'areAllProLicensesUsed').returns(false);
 
@@ -356,24 +356,36 @@ describe('controller: display details', function() {
     });
   });
 
-  describe('isProApplicable:', function() {
+  describe('isProToggleEnabled:', function() {
+    beforeEach(function() {
+      $scope.display = { playerProAuthorized: false };
+    });
+
     it('should return false if it is a third party player', function () {
       sandbox.stub(playerProFactory, 'is3rdPartyPlayer').returns(true);
 
-      expect($scope.isProApplicable()).to.be.false;
+      expect($scope.isProToggleEnabled()).to.be.false;
     });
 
     it('should return false if it is an unsupported player', function () {
       sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(true);
 
-      expect($scope.isProApplicable()).to.be.false;
+      expect($scope.isProToggleEnabled()).to.be.false;
     });
 
     it('should return true if it is a supported player', function () {
       sandbox.stub(playerProFactory, 'is3rdPartyPlayer').returns(false);
       sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(false);
 
-      expect($scope.isProApplicable()).to.be.true;
+      expect($scope.isProToggleEnabled()).to.be.true;
+    });
+
+    it('should return true if playerProAuthorized = true', function () {
+      $scope.display = { playerProAuthorized: true };
+      sandbox.stub(playerProFactory, 'is3rdPartyPlayer').returns(true);
+      sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(true);
+
+      expect($scope.isProToggleEnabled()).to.be.true;
     });
   });
 

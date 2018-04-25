@@ -19,7 +19,7 @@
         <p class="u_margin-md-top">{{product.descriptionShort}}</p>
         <p><a id="previewTemplate" href="http://preview.risevision.com/?type=presentation&id={{product.rvaEntityId}}&showui=false" target="_blank" translate>editor-app.templatesLibrary.details.preview</a></p>
       </div>
-      <div class="col-md-4 col-xs-12" rv-spinner rv-spinner-key="loading-price" rv-spinner-start-active="1">
+      <div class="col-md-4 col-xs-12" rv-spinner rv-spinner-key="loading-price">
         <div ng-if="canUseProduct">
           <a id="useProductButton" ng-if="canUseProduct" href="" class="btn btn-primary btn-lg btn-block" ng-click="select()">
             {{'editor-app.storeProduct.templates.start' | translate}} <i class="fa fa-plus icon-right"></i>
@@ -38,10 +38,7 @@
             <li translate>editor-app.templatesLibrary.details.details-list-3</li>
             <li translate>editor-app.templatesLibrary.details.details-list-4</li>
           </ul>
-          <p class="text-center"> - or - </p>
-          <a id="viewInStoreButton" class="btn btn-default btn-lg btn-block" href="{{storeUrl}}/product/{{product.productId}}/" target="_blank">
-            {{currencyName}} {{price}} <span translate>editor-app.templatesLibrary.details.purchase</span>
-          </a>
+
         </div>
       </div>
     </div>

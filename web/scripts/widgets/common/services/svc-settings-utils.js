@@ -1,3 +1,5 @@
+/* globals $ */
+
 'use strict';
 
 angular.module('risevision.widgets.services')
@@ -13,7 +15,7 @@ angular.module('risevision.widgets.services')
         delete newSettings.params.rsH;
 
         return newSettings;
-      }
+      };
 
       this.saveSettings = function (settings, validator) {
         var alerts = [],

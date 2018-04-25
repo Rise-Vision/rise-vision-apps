@@ -153,8 +153,6 @@ var TemplateAddScenarios = function() {
 
       helper.waitDisappear(productDetailsModalPage.getPricingLoader(), 'Pricing loader');
       expect(productDetailsModalPage.getProductDetailsModal().isDisplayed()).to.eventually.be.true;
-      expect(productDetailsModalPage.getViewInStoreButton().isDisplayed()).to.eventually.be.true;
-      expect(productDetailsModalPage.getViewInStoreButton().getText()).to.eventually.contain('Purchase in Store');
       expect(productDetailsModalPage.getPreviewTemplate().isDisplayed()).to.eventually.be.true;
       expect(productDetailsModalPage.getPreviewTemplate().getAttribute('href')).to.eventually.contain('http://preview.risevision.com');
       productDetailsModalPage.getCloseButton().click();
