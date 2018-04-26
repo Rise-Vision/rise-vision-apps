@@ -2,13 +2,13 @@
 
 angular.module('risevision.displays.controllers')
   .controller('displayAddModal', ['$scope', '$modalInstance', 'displayFactory',
-    'userState', '$log', 'displayEmail', '$filter', 'downloadOnly',
+    'userState', '$log', 'display', '$filter', 'downloadOnly',
     function ($scope, $modalInstance, displayFactory, userState, $log,
-      displayEmail, $filter, downloadOnly) {
+      displayService, $filter, downloadOnly) {
       $scope.factory = displayFactory;
       $scope.display = displayFactory.display;
       $scope.userEmail = userState.getUserEmail();
-      $scope.displayEmail = displayEmail;
+      $scope.displayService = displayService;
       $scope.showEmailForm = false;
       $scope.anotherEmail = null;
       $scope.errorMessage = null;
@@ -31,7 +31,7 @@ angular.module('risevision.displays.controllers')
 
       $scope.sendToAnotherEmail = function () {
         $scope.errorMessage = null;
-        displayEmail.send($scope.display.id, $scope.display.name, $scope.anotherEmail)
+        displayService.sendSetupEmail($scope.display.id, $scope.anotherEmail)
           .then(function () {
             $modalInstance.dismiss();
           }, function (error) {
