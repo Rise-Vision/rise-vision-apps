@@ -54,7 +54,35 @@ var DisplayAddScenarios = function() {
       expect(displayManagePage.getDisplayMeridianButton().isPresent()).to.eventually.be.true;
     });
 
-    xit('should show the Not Activated Display link, which opens the Display Modal', function() {
+    it('should show the schedule link', function() {
+      helper.wait(displayManagePage.getViewScheduleLink(), 'View Schedule Link');
+      expect(displayManagePage.getViewScheduleLink().isDisplayed()).to.eventually.be.true;
+    });
+
+    it('should show address options', function(done) {
+      displayManagePage.getDisplayUseCompanyAddressCheckbox().click();
+      displayManagePage.getDisplayTimeZoneSelect().isDisplayed().then(function (isDisplayed) {
+        if (!isDisplayed) {
+          displayManagePage.getDisplayUseCompanyAddressCheckbox().click();
+        }
+
+        expect(displayManagePage.getDisplayTimeZoneSelect().isDisplayed()).to.eventually.be.true;
+
+        done();
+      });
+
+    });
+
+    it('should select timezone',function(done){
+      browser.driver.executeScript('window.scrollTo(0,500);').then(function() {
+        displayManagePage.getDisplayTimeZoneSelect().element(by.cssContainingText('option', 'Buenos Aires')).click();
+        expect(displayManagePage.getDisplayTimeZoneSelect().$('option:checked').getText()).to.eventually.contain('Buenos Aires');
+
+        done();
+      })
+    });
+
+    it('should show the Not Activated Display link, which opens the Display Modal', function() {
       helper.wait(displayManagePage.getNotActivatedPlayerLink(), 'Not Activated Display link');
       expect(displayManagePage.getNotActivatedPlayerLink().isDisplayed()).to.eventually.be.true;
 
@@ -71,7 +99,7 @@ var DisplayAddScenarios = function() {
       helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
     });
 
-    xit('should show the Install Player button, which opens the Display Modal', function() {
+    it('should show the Install Player button, which opens the Display Modal', function() {
       helper.wait(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
       expect(displayManagePage.getInstallPlayerButton().isDisplayed()).to.eventually.be.true;
 
@@ -86,34 +114,6 @@ var DisplayAddScenarios = function() {
       displayAddModalPage.getDismissButton().click();
 
       helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
-    });
-
-    it('should show the schedule link', function() {
-      helper.wait(displayManagePage.getViewScheduleLink(), 'View Schedule Link');
-      expect(displayManagePage.getViewScheduleLink().isDisplayed()).to.eventually.be.true;
-    });
-
-    it('should show address options', function(done) {
-      displayManagePage.getDisplayUseCompanyAddressCheckbox().click();
-      displayManagePage.getDisplayTimeZoneSelect().isDisplayed().then(function (isDisplayed) {
-        if (!isDisplayed) {
-          displayManagePage.getDisplayUseCompanyAddressCheckbox().click();
-        }
-        
-        expect(displayManagePage.getDisplayTimeZoneSelect().isDisplayed()).to.eventually.be.true;
-        
-        done();
-      });      
-
-    });
-    
-    it('should select timezone',function(done){
-      browser.driver.executeScript('window.scrollTo(0,500);').then(function() {
-        displayManagePage.getDisplayTimeZoneSelect().element(by.cssContainingText('option', 'Buenos Aires')).click();
-        expect(displayManagePage.getDisplayTimeZoneSelect().$('option:checked').getText()).to.eventually.contain('Buenos Aires');
-        
-        done();        
-      })
     });
 
     it('should show Save Button', function () {
@@ -134,10 +134,10 @@ var DisplayAddScenarios = function() {
       browser.refresh();
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
-      
+
       browser.driver.executeScript('window.scrollTo(0,500);').then(function() {
         expect(displayManagePage.getDisplayTimeZoneSelect().$('option:checked').getText()).to.eventually.contain('Buenos Aires');
-        
+
         done();
       });
     });
@@ -146,7 +146,7 @@ var DisplayAddScenarios = function() {
       helper.clickWhenClickable(displayManagePage.getDeleteButton(), 'Display Delete Button').then(function () {
         helper.clickWhenClickable(displayManagePage.getDeleteForeverButton(), 'Display Delete Forever Button').then(function () {
           helper.wait(displaysListPage.getDisplaysAppContainer(), 'Displays List');
-          
+
           done();
         });
       });
