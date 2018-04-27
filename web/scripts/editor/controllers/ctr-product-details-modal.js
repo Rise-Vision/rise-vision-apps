@@ -2,10 +2,10 @@
   'use strict';
 
   angular.module('risevision.editor.controllers')
-    .controller('ProductDetailsModalController', ['$scope', '$rootScope', 
-      '$loading', '$modalInstance', 'userState', 
+    .controller('ProductDetailsModalController', ['$scope', '$rootScope',
+      '$loading', '$modalInstance', 'userState',
       'checkTemplateAccess', 'planFactory', 'product',
-      function ($scope, $rootScope, $loading, $modalInstance, userState, 
+      function ($scope, $rootScope, $loading, $modalInstance, userState,
         checkTemplateAccess, planFactory, product) {
         $scope.product = product;
         $scope.canUseProduct = product.paymentTerms === 'free';

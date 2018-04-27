@@ -8,7 +8,7 @@ angular.module('risevision.apps.launcher.controllers')
 
       $scope.currentStep = completed ? 4 : 1;
 
-      $scope.nextStep = function() {
+      $scope.nextStep = function () {
         $scope.currentStep++;
 
         if ($scope.currentStep === 4) {

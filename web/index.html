@@ -48,6 +48,13 @@
   <link rel="stylesheet" type="text/css" href="bower_components/ng-tags-input/ng-tags-input.min.css">
   <link rel="stylesheet" type="text/css" href="bower_components/ng-tags-input/ng-tags-input.bootstrap.min.css">
   <!-- endbuild -->
+
+<!-- Start of risevision Zendesk Widget script -->
+<script>/*<![CDATA[*/window.zE||(function(e,t,s){var n=window.zE=window.zEmbed=function(){n._.push(arguments)}, a=n.s=e.createElement(t),r=e.getElementsByTagName(t)[0];n.set=function(e){ n.set._.push(e)},n._=[],n.set._=[],a.async=true,a.setAttribute("charset","utf-8"), a.src="https://static.zdassets.com/ekr/asset_composer.js?key="+s, n.t=+new Date,a.type="text/javascript",r.parentNode.insertBefore(a,r)})(document,"script","b8d6bdba-10ea-4b88-b96c-9d3905b85d8f");/*]]>*/</script>
+<!-- End of risevision Zendesk Widget script -->
+
+
+
 </head>
 <body>
 
@@ -284,6 +291,28 @@
   <script src="scripts/widgets/twitter/controllers/ctr-twitter-settings.js"></script>
 
   <!-- endbuild -->
+
+<!-- PROTOTYPE REFERENCE CODE -->
+<script>
+    $(document).ready(function() { 
+    // $(window).on('load', function() {
+      if ( $('.editor-app[ui-view]') ) {
+        setTimeout(function() {
+          // alert('ddd');
+          $('.zEWidget-launcher').css('bottom', '50px');
+          // $('.zEWidget-launcher').css('opacity', '1');
+          $('.zEWidget-launcher').css('top', 'unset');
+          // $('.zEWidget-launcher').css('border', '1px solid red');
+          // $('.zEWidget-webWidget').css('bottom', '50px !important');
+          // $('.zEWidget-webWidget').css('opacity', '1 !important');
+          // $('.zEWidget-webWidget').css('top', 'unset !important');
+          // $('.zEWidget-webWidget').addClass('zEWidget-webWidget--editor');
+          // $('.zEWidget-launcher').addClass('zEWidget-launcher--editor');
+        }, 1000);
+      }
+      });
+  </script>
+<!-- END PROTOTYPE REFERENCE CODE -->
 
 </body>
 </html>
