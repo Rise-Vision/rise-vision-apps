@@ -82,6 +82,32 @@ var DisplayAddScenarios = function() {
       })
     });
 
+    it('should show Save Button', function () {
+      expect(displayManagePage.getSaveButton().isPresent()).to.eventually.be.true;
+    });
+
+    it('should show Cancel Button', function () {
+      expect(displayManagePage.getCancelButton().isPresent()).to.eventually.be.true;
+    });
+
+    it('should save the display', function () {
+      displayManagePage.getSaveButton().click();
+      helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
+      expect(displayManagePage.getSaveButton().getText()).to.eventually.equal('Save');
+    });
+
+    it('should show correct timezone after reload',function(done){
+      browser.refresh();
+      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+      helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
+
+      browser.driver.executeScript('window.scrollTo(0,500);').then(function() {
+        expect(displayManagePage.getDisplayTimeZoneSelect().$('option:checked').getText()).to.eventually.contain('Buenos Aires');
+
+        done();
+      });
+    });
+
     it('should show the Not Activated Display link, which opens the Display Modal', function() {
       helper.wait(displayManagePage.getNotActivatedPlayerLink(), 'Not Activated Display link');
       expect(displayManagePage.getNotActivatedPlayerLink().isDisplayed()).to.eventually.be.true;
@@ -114,32 +140,6 @@ var DisplayAddScenarios = function() {
       displayAddModalPage.getDismissButton().click();
 
       helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
-    });
-
-    it('should show Save Button', function () {
-      expect(displayManagePage.getSaveButton().isPresent()).to.eventually.be.true;
-    });
-
-    it('should show Cancel Button', function () {
-      expect(displayManagePage.getCancelButton().isPresent()).to.eventually.be.true;
-    });
-
-    it('should save the display', function () {
-      displayManagePage.getSaveButton().click();
-      helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
-      expect(displayManagePage.getSaveButton().getText()).to.eventually.equal('Save');
-    });
-
-    it('should show correct timezone after reload',function(done){
-      browser.refresh();
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-      helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
-
-      browser.driver.executeScript('window.scrollTo(0,500);').then(function() {
-        expect(displayManagePage.getDisplayTimeZoneSelect().$('option:checked').getText()).to.eventually.contain('Buenos Aires');
-
-        done();
-      });
     });
 
     it('should delete the display', function (done) {
