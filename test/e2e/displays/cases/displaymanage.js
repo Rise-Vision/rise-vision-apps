@@ -54,7 +54,7 @@ var DisplayAddScenarios = function() {
       expect(displayManagePage.getDisplayMeridianButton().isPresent()).to.eventually.be.true;
     });
 
-    it('should show the Not Activated Display link, which opens the Display Modal', function() {
+    xit('should show the Not Activated Display link, which opens the Display Modal', function() {
       helper.wait(displayManagePage.getNotActivatedPlayerLink(), 'Not Activated Display link');
       expect(displayManagePage.getNotActivatedPlayerLink().isDisplayed()).to.eventually.be.true;
 
@@ -71,7 +71,7 @@ var DisplayAddScenarios = function() {
       helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
     });
 
-    it('should show the Install Player button, which opens the Display Modal', function() {
+    xit('should show the Install Player button, which opens the Display Modal', function() {
       helper.wait(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
       expect(displayManagePage.getInstallPlayerButton().isDisplayed()).to.eventually.be.true;
 
