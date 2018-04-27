@@ -5,6 +5,7 @@ var SignInPage = require('./../../launcher/pages/signInPage.js');
 var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
 var DisplaysListPage = require('./../pages/displaysListPage.js');
 var DisplayManagePage = require('./../pages/displayManagePage.js');
+var DisplayAddModalPage = require('./../pages/displayAddModalPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var DisplayAddScenarios = function() {
@@ -17,12 +18,14 @@ var DisplayAddScenarios = function() {
     var commonHeaderPage;
     var displaysListPage;
     var displayManagePage;
+    var displayAddModalPage;
 
     before(function () {
       homepage = new HomePage();
       signInPage = new SignInPage();
       displaysListPage = new DisplaysListPage();
       displayManagePage = new DisplayManagePage();
+      displayAddModalPage = new DisplayAddModalPage();
       commonHeaderPage = new CommonHeaderPage();
 
       homepage.getDisplays();
@@ -51,18 +54,26 @@ var DisplayAddScenarios = function() {
       expect(displayManagePage.getDisplayMeridianButton().isPresent()).to.eventually.be.true;
     });
 
-    it('should show download buttons', function() {
-      helper.wait(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
-      expect(displayManagePage.getInstallPlayerButton().isDisplayed()).to.eventually.be.true;
-      displayManagePage.getInstallPlayerButton().click();
+    it('should show the Not Activated Display link, which opens the Display Modal', function() {
+      helper.wait(displayManagePage.getNotActivatedPlayerLink(), 'Not Activated Display link');
+      expect(displayManagePage.getNotActivatedPlayerLink().isDisplayed()).to.eventually.be.true;
 
-      helper.wait(displayManagePage.getDownloadWindows64Button(), 'Download Windows 64 Button');
-      expect(displayManagePage.getDownloadWindows64Button().isDisplayed()).to.eventually.be.true;
+      displayManagePage.getNotActivatedPlayerLink().click();
+
+      helper.wait(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
+      helper.wait(displayAddModalPage.getDownloadWindows64Button(), 'Download Windows 64 Button');
+      expect(displayAddModalPage.getDownloadWindows64Button().isDisplayed()).to.eventually.be.true;
     });
 
-    it('should show the Install Player button', function() {
-      helper.wait(displayManagePage.getNotActivatedPlayerLink(), 'Install Player Button');
-      expect(displayManagePage.getNotActivatedPlayerLink().isDisplayed()).to.eventually.be.true;
+    it('should show the Install Player button, which opens the Display Modal', function() {
+      helper.wait(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
+      expect(displayManagePage.getInstallPlayerButton().isDisplayed()).to.eventually.be.true;
+
+      displayManagePage.getInstallPlayerButton().click();
+
+      helper.wait(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
+      helper.wait(displayAddModalPage.getDownloadWindows64Button(), 'Download Windows 64 Button');
+      expect(displayAddModalPage.getDownloadWindows64Button().isDisplayed()).to.eventually.be.true;
     });
 
     it('should show the schedule link', function() {

@@ -4,8 +4,7 @@ var DisplayManagePage = function() {
   var title = element(by.id('title'));
   var displayNameField = element(by.model('display.name'));
   var notActivatedPlayerLink = element(by.id('notActivatedLink'));
-  var downloadWindows64Button = element(by.id('downloadWindows64'));
-  var installPlayerButton = element(by.css('.btn-install-player'));
+  var installPlayerButton = element(by.id('installPlayer'));
   var displayUseCompanyAddressCheckbox = element(by.model('display.useCompanyAddress'));
   var displayRebootCheckbox = element(by.model('display.restartEnabled'));
   var viewScheduleLink = element(by.id('viewSchedule'));
@@ -38,10 +37,6 @@ var DisplayManagePage = function() {
 
   this.getNotActivatedPlayerLink = function() {
     return notActivatedPlayerLink;
-  };
-
-  this.getDownloadWindows64Button = function() {
-    return downloadWindows64Button;
   };
 
   this.getInstallPlayerButton = function() {
