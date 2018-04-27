@@ -6,7 +6,7 @@
     <h3 class="modal-title" translate="displays-app.add.title" ng-show="!downloadOnly"></h3>
     <h3 class="modal-title" translate="displays-app.add.activate" ng-show="downloadOnly"></h3>
   </div>
-  <div class="modal-body">
+  <div class="modal-body text-center">
     <div class="video-box u_margin-md-bottom" ng-hide="display.id">
       <img style="width: auto" src="https://s3.amazonaws.com/Rise-Images/Animations/addadisplay.gif">
     </div>
@@ -201,24 +201,22 @@
         </a>?
       </p>
       <hr>
-    </div>
 
-    <div class="text-center">
-      <p class="u_margin-sm-top">
-        <p>{{'displays-app.add.instructions.emailInfo' | translate}}
-          <b>{{userEmail}}</b>
+      <div ng-show="!downloadOnly" class="text-center">
+        <p class="u_margin-sm-top">
+          <p>{{'displays-app.add.instructions.emailInfo' | translate}}
+            <b>{{userEmail}}</b>
+          </p>
+          <button class="btn btn-default u_margin-sm-top" ng-click="toggleEmailForm()" translate="displays-app.add.instructions.anotherEmail"></button>
         </p>
-        <button class="btn btn-default u_margin-sm-top" ng-click="toggleEmailForm()" translate="displays-app.add.instructions.anotherEmail"></button>
-      </p>
+      </div>
     </div>
 
     <form id="anotherEmailForm" role="form" name="anotherEmailForm" novalidate>
       <div class="u_margin-md-top" ng-show="display.id && showEmailForm">
 
         <h4 class="text-center" translate="displays-app.add.instructions.anotherEmail"></h4>
-        <div class="form-group text-center" ng-class="{'has-error': !anotherEmailForm.anotherEmail.$pristine && anotherEmailForm.anotherEmail.$invalid}"
-          show-errors>
-
+        <div class="form-group text-center" ng-class="{'has-error': !anotherEmailForm.anotherEmail.$pristine && anotherEmailForm.anotherEmail.$invalid}" show-errors>
           <input type="email" class="form-control" placeholder="{{ 'displays-app.add.instructions.emailPlaceholder' | translate}}"
             id="anotherEmail" name="anotherEmail" ng-model="anotherEmail" required focus-me="true">
           <p class="text-danger" ng-show="!anotherEmailForm.anotherEmail.$pristine && anotherEmailForm.anotherEmail.$invalid" translate>
@@ -230,8 +228,7 @@
           </div>
 
           <button class="btn btn-default u_margin-md-top" ng-click="toggleEmailForm()" translate="common.cancel"></button>
-          <button class="btn btn-primary u_margin-md-top" ng-click="sendToAnotherEmail()" ng-disabled="anotherEmailForm.$invalid || displayEmail.sendingEmail"
-            translate="common.send"></button>
+          <button class="btn btn-primary u_margin-md-top" ng-click="sendToAnotherEmail()" ng-disabled="anotherEmailForm.$invalid || displayEmail.sendingEmail" translate="common.send"></button>
         </div>
       </div>
     </form>
