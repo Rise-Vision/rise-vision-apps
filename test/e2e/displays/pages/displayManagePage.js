@@ -3,7 +3,7 @@ var DisplayManagePage = function() {
   var displaysAppContainer = element(by.css('.displays-app'));
   var title = element(by.id('title'));
   var displayNameField = element(by.model('display.name'));
-  var downloadPlayerButton = element(by.id('downloadPlayer'));
+  var notActivatedPlayerLink = element(by.id('notActivatedLink'));
   var downloadWindows64Button = element(by.id('downloadWindows64'));
   var installPlayerButton = element(by.css('.btn-install-player'));
   var displayUseCompanyAddressCheckbox = element(by.model('display.useCompanyAddress'));
@@ -36,8 +36,8 @@ var DisplayManagePage = function() {
     return displayNameField;
   };
 
-  this.getDownloadPlayerButton = function() {
-    return downloadPlayerButton;
+  this.getNotActivatedPlayerLink = function() {
+    return notActivatedPlayerLink;
   };
 
   this.getDownloadWindows64Button = function() {

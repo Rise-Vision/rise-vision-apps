@@ -56,7 +56,7 @@ var DisplaysListPage = function() {
   };
 
   this.getFirstRowStatus = function() {
-    return displayItems.first().element(by.css('.display-status .btn-install-player'));
+    return displayItems.first().element(by.css('.display-status .u_icon-hover'));
   };
 };
 

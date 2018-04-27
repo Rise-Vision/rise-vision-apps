@@ -52,17 +52,17 @@ var DisplayAddScenarios = function() {
     });
 
     it('should show download buttons', function() {
-      helper.wait(displayManagePage.getDownloadPlayerButton(), 'Download Player Button');
-      expect(displayManagePage.getDownloadPlayerButton().isDisplayed()).to.eventually.be.true;
-      displayManagePage.getDownloadPlayerButton().click();
+      helper.wait(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
+      expect(displayManagePage.getInstallPlayerButton().isDisplayed()).to.eventually.be.true;
+      displayManagePage.getInstallPlayerButton().click();
 
       helper.wait(displayManagePage.getDownloadWindows64Button(), 'Download Windows 64 Button');
       expect(displayManagePage.getDownloadWindows64Button().isDisplayed()).to.eventually.be.true;
     });
 
     it('should show the Install Player button', function() {
-      helper.wait(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
-      expect(displayManagePage.getInstallPlayerButton().isDisplayed()).to.eventually.be.true;
+      helper.wait(displayManagePage.getNotActivatedPlayerLink(), 'Install Player Button');
+      expect(displayManagePage.getNotActivatedPlayerLink().isDisplayed()).to.eventually.be.true;
     });
 
     it('should show the schedule link', function() {
