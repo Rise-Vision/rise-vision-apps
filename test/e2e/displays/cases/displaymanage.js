@@ -58,22 +58,34 @@ var DisplayAddScenarios = function() {
       helper.wait(displayManagePage.getNotActivatedPlayerLink(), 'Not Activated Display link');
       expect(displayManagePage.getNotActivatedPlayerLink().isDisplayed()).to.eventually.be.true;
 
+      // Display modal and validate download button
       displayManagePage.getNotActivatedPlayerLink().click();
 
       helper.wait(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
       helper.wait(displayAddModalPage.getDownloadWindows64Button(), 'Download Windows 64 Button');
       expect(displayAddModalPage.getDownloadWindows64Button().isDisplayed()).to.eventually.be.true;
+
+      // Close the modal
+      displayAddModalPage.getDismissButton().click();
+
+      helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
     });
 
     it('should show the Install Player button, which opens the Display Modal', function() {
       helper.wait(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
       expect(displayManagePage.getInstallPlayerButton().isDisplayed()).to.eventually.be.true;
 
+      // Display modal and validate download button
       displayManagePage.getInstallPlayerButton().click();
 
       helper.wait(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
       helper.wait(displayAddModalPage.getDownloadWindows64Button(), 'Download Windows 64 Button');
       expect(displayAddModalPage.getDownloadWindows64Button().isDisplayed()).to.eventually.be.true;
+
+      // Close the modal
+      displayAddModalPage.getDismissButton().click();
+
+      helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
     });
 
     it('should show the schedule link', function() {
