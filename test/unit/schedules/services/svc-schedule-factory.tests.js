@@ -151,7 +151,7 @@ describe('service: scheduleFactory:', function() {
       })
       .then(null, function() {
         expect(scheduleFactory.errorMessage).to.be.ok;
-        expect(scheduleFactory.errorMessage).to.equal("Failed to Get Schedule.");
+        expect(scheduleFactory.errorMessage).to.equal("Failed to get Schedule. Please confirm you have the \'Content Publisher\' role in your user settings.");
         expect(scheduleFactory.apiError).to.be.ok;
         expect(scheduleFactory.apiError).to.equal("ERROR; could not get schedule");
 
