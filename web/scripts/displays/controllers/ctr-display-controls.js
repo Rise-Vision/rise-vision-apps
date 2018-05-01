@@ -23,7 +23,7 @@ angular.module('risevision.displays.controllers')
               'displays-app.fields.controls.restart.success';
           })
           .then(null, function (e) {
-            $scope.controlsError = e.message ? e.message : e.toString();
+            $scope.controlsError = " Failed to restart Display. Please confirm you have the 'Display Administrator' role in your user settings.";
           });
       };
 
@@ -43,7 +43,7 @@ angular.module('risevision.displays.controllers')
               'displays-app.fields.controls.reboot.success';
           })
           .then(null, function (e) {
-            $scope.controlsError = e.message ? e.message : e.toString();
+            $scope.controlsError = " Failed to reboot Display. Please confirm you have the 'Display Administrator' role in your user settings.";
           });
       };
 
