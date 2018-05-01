@@ -213,7 +213,7 @@ describe('service: displayFactory:', function() {
       })
       .then(null, function() {
         expect(displayFactory.errorMessage).to.be.ok;
-        expect(displayFactory.errorMessage).to.equal("Failed to Get Display.");
+        expect(displayFactory.errorMessage).to.equal("Failed to get Display! Please confirm you have the \'Display Administrator\' role in your user settings.' to equal 'Failed to Get Display.");
         expect(displayFactory.apiError).to.be.ok;
         expect(displayFactory.apiError).to.equal("ERROR; could not get display");
 
