@@ -25,7 +25,7 @@ angular.module('risevision.displays.controllers')
 
         displayControlFactory.updateConfiguration($scope.formData.displayControlContents)
           .then(function () {
-            $modalInstance.close();
+            // Previously, it closed the modal after sending and email
           })
           .catch(function (err) {
             console.log('Failed to save configuration file', err);
