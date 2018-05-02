@@ -304,11 +304,11 @@ gulp.task("test:e2e:core", ["test:webdrive_update"],factory.testE2EAngular({
   }()
 }));
 gulp.task("test:e2e", function (cb) { 
-  runSequence(["config", "config-e2e", "html2js"], "server", "server-close", cb);
+  runSequence(["config", "config-e2e", "html2js"], "server", "test:e2e:core", "server-close", cb);
 });
 
 gulp.task("test",  function (cb) {
-  runSequence(["config", "html2js"], "coveralls", cb);
+  runSequence(["config", "html2js"], "test:unit", "coveralls", cb);
 });
 
 //------------------------ Global ---------------------------------
@@ -324,7 +324,7 @@ gulp.task('default', [], function() {
   return true;
 });
 
-gulp.task('dev', ['config', 'html2js', 'browser-sync']);
+gulp.task('dev', ['config', 'html2js', 'browser-sync', 'watch']);
 
 /**
  * Default task, running just `gulp` will compile the sass,
