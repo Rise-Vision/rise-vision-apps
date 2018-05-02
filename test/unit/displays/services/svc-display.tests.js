@@ -244,7 +244,20 @@ describe('service: display:', function() {
                 def.reject("API Failed");
               }
               return def.promise;
-            }
+            },
+            sendSetupEmail: function(obj) {
+                expect(obj).to.be.ok;
+
+                var def = Q.defer();
+                if (obj.id) {
+                  def.resolve({
+                    item: {}
+                  });
+                } else {
+                  def.reject("API Failed");
+                }
+                return def.promise;
+              }
           }
         });
         return deferred.promise;
@@ -610,5 +623,30 @@ describe('service: display:', function() {
         .then(null,done);
     });
   });
+  
+  describe('sendSetupEmail', function() {
+	it('should send setup email', function(done) {
+	  display.sendSetupEmail('display1', 'email@company.com')
+	    .then(function(result) {
+	      expect(result).to.be.truely;
+	      expect(result.item).to.be.truely;
+
+	      done();
+	    })
+	    .then(null,done);
+	});
+
+	it('should handle failure to send setup email', function(done) {
+	  display.sendSetupEmail()
+	    .then(function(result) {
+	      done(result);
+	    })
+	    .then(null, function(error) {
+	      expect(error).to.deep.equal('API Failed');
+	      done();
+	    })
+	    .then(null,done);
+	    });
+	});
 
 });

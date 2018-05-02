@@ -308,6 +308,27 @@
               });
 
             return deferred.promise;
+          },
+          sendSetupEmail: function (displayId, emailTo) {
+            var deferred = $q.defer();
+
+            $log.debug('sendSetupEmail called with', displayId, emailTo);
+            coreAPILoader().then(function (coreApi) {
+                return coreApi.display.sendSetupEmail({
+                  'id': displayId,
+                  'emailTo': emailTo
+                });
+              })
+              .then(function (resp) {
+                $log.debug('sendSetupEmail resp', resp);
+                deferred.resolve(resp);
+              })
+              .then(null, function (e) {
+                console.error('Failed to send setup email.', e);
+                deferred.reject(e);
+              });
+
+            return deferred.promise;
           }
         };
 

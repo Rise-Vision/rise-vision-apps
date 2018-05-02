@@ -157,33 +157,10 @@ var ProfessionalWidgetsScenarios = function() {
         expect(twitterSettingsPage.getCancelButton().isDisplayed()).to.eventually.be.true;
       });
 
-      it('should set a twitter screen name and save closes the modal', function() {
-        twitterSettingsPage.getTwitterScreenName().sendKeys('risevision');
-        twitterSettingsPage.getSaveButton().click();
-
-        helper.waitDisappear(twitterSettingsPage.getTwitterSettingsModal());
+      it('should have save button disabled', function(){
+        expect(twitterSettingsPage.getSaveButton().isEnabled()).to.eventually.be.false;
       });
-
-      it('should be visible on the placeholder list', function() {
-        expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(1);
-        expect(placeholderPlaylistPage.getItemNameCells().get(0).getText()).to.eventually.contain('Twitter Widget');
-      });
-
-      it('should display the current screen name', function() {
-        placeholderPlaylistPage.getItemNameCells().get(0).click();
-        
-        helper.wait(twitterSettingsPage.getTwitterSettingsModal(), 'Twitter Settings Modal');
-
-        expect(twitterSettingsPage.getTwitterScreenName().getAttribute('value')).to.eventually.equal('risevision');
-      });
-
-      it('should Close Twitter Settings',function() {
-        twitterSettingsPage.getCancelButton().click();
-
-        helper.waitDisappear(twitterSettingsPage.getTwitterSettingsModal());
-        
-        expect(twitterSettingsPage.getTwitterSettingsModal().isPresent()).to.eventually.be.false;
-      });
+      
     });
 
     xdescribe('should authenticate user: ', function() {
@@ -247,6 +224,34 @@ var ProfessionalWidgetsScenarios = function() {
         expect(twitterSettingsPage.getRevokeLink().isDisplayed()).to.eventually.be.equal(true);
       });
 
+    });
+
+    xdescribe('Should save twitter settings: ', function() {
+
+      it('should set a twitter screen name and save closes the modal', function() {
+        twitterSettingsPage.getTwitterScreenName().sendKeys('risevision');
+        twitterSettingsPage.getSaveButton().click();
+
+        helper.waitDisappear(twitterSettingsPage.getTwitterSettingsModal());
+      });
+
+      it('should be visible on the placeholder list', function() {
+        expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(1);
+        expect(placeholderPlaylistPage.getItemNameCells().get(0).getText()).to.eventually.contain('Twitter Widget');
+      });
+
+      it('should display the current screen name', function() {
+        placeholderPlaylistPage.getItemNameCells().get(0).click();
+        
+        helper.wait(twitterSettingsPage.getTwitterSettingsModal(), 'Twitter Settings Modal');
+
+        expect(twitterSettingsPage.getTwitterScreenName().getAttribute('value')).to.eventually.equal('risevision');
+      });
+
+    });
+
+    xdescribe('Should revoke auth: ', function() {
+
       it('should revoke user authentication', function() {
         twitterSettingsPage.getRevokeLink().click();
 
@@ -255,6 +260,19 @@ var ProfessionalWidgetsScenarios = function() {
 
         expect(twitterSettingsPage.getConnectButton().isDisplayed()).to.eventually.be.equal(true);
       });
+
+    });
+
+    describe('Should close Twitter Settings: ', function() {
+
+      it('Cancel should Close Twitter Settings',function() {
+        twitterSettingsPage.getCancelButton().click();
+
+        helper.waitDisappear(twitterSettingsPage.getTwitterSettingsModal());
+        
+        expect(twitterSettingsPage.getTwitterSettingsModal().isPresent()).to.eventually.be.false;
+      });
+
     });
 
     describe('Should Add a Embedded Presentation: ', function () {
@@ -327,8 +345,10 @@ var ProfessionalWidgetsScenarios = function() {
         helper.waitDisappear(presentationItemModalPage.getPresentationItemModal(), 'Presentation Settings Modal');
         
         expect(presentationItemModalPage.getPresentationItemModal().isPresent()).to.eventually.be.false;
-        expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(2);
-        expect(placeholderPlaylistPage.getItemNameCells().get(1).getText()).to.eventually.contain(presentationItemName);
+
+        // if we re-enable the Twitter Settings e2e the playListItem count should be 2.
+        expect(placeholderPlaylistPage.getPlaylistItems().count()).to.eventually.equal(1);
+        expect(placeholderPlaylistPage.getItemNameCells().get(0).getText()).to.eventually.contain(presentationItemName);
       });
     });
 

@@ -59,7 +59,7 @@ angular.module('risevision.editor.services')
             if (placeholder.distributeToAll === false) {
               presentation.distribution.push({
                 itemId: placeholder.id,
-                displayIds: placeholder.distribution
+                displayIds: placeholder.distribution || []
               });
             }
 
@@ -69,7 +69,7 @@ angular.module('risevision.editor.services')
                 if (placeholder.items[j].distributeToAll === false) {
                   presentation.distribution.push({
                     itemId: id,
-                    displayIds: placeholder.items[j].distribution
+                    displayIds: placeholder.items[j].distribution || []
                   });
                 }
               }
