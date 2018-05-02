@@ -34,7 +34,7 @@ angular.module('risevision.displays.controllers')
         $scope.errorMessage = null;
         displayEmail.send($scope.display.id, $scope.anotherEmail)
           .then(function () {
-            $modalInstance.dismiss();
+            $scope.anotherEmail = '';
           }, function (error) {
             $scope.errorMessage = $filter('translate')(
               'displays-app.fields.email.failed');
