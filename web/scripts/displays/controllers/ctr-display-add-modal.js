@@ -32,7 +32,7 @@ angular.module('risevision.displays.controllers')
 
       $scope.sendToAnotherEmail = function () {
         $scope.errorMessage = null;
-        displayEmail.send($scope.display.id, $scope.display.name, $scope.anotherEmail)
+        displayEmail.send($scope.display.id, $scope.anotherEmail)
           .then(function () {
             $modalInstance.dismiss();
           }, function (error) {

@@ -116,11 +116,10 @@ describe('controller: display add modal', function() {
     it('should send instructions to another email address',function(done){
       var spy = sinon.spy(displayEmail,'send')
       $scope.display.id = 'ID';
-      $scope.display.name = 'Name';
       $scope.anotherEmail = 'another@email.com';
       $scope.sendToAnotherEmail();
 
-      spy.should.have.been.calledWith('ID','Name','another@email.com');
+      spy.should.have.been.calledWith('ID', 'another@email.com');
       setTimeout(function() {
         expect($scope.errorMessage).to.be.null;
         done();

@@ -19,6 +19,7 @@ angular.module('risevision.apps.directives')
             animation: 150,
             handle: '.rv-sortable-handle',
             draggable: '.rv-sortable-item',
+            forceFallback: true,
             onEnd: function (evt) {
               if ($scope.onSort) {
                 $scope.onSort({

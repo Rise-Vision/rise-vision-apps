@@ -501,7 +501,6 @@ angular.module('risevision.schedules.controllers', []);
 angular.module('risevision.displays.services', [
   'risevision.common.header',
   'risevision.common.gapi',
-  'risevision.common.email',
   'risevision.apps.config',
   'risevision.apps.services'
 ]);

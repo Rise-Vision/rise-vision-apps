@@ -101,7 +101,7 @@ describe('service: distributionParser:', function() {
       placeholder.distributeToAll = false;
       distributionParser.updateDistribution(presentation);
       
-      expect(presentation.distribution).to.deep.equal([{itemId:'ph1',displayIds:undefined}]);
+      expect(presentation.distribution).to.deep.equal([{itemId:'ph1',displayIds: []}]);
     });
 
     it('should update distribution', function() {
@@ -111,8 +111,15 @@ describe('service: distributionParser:', function() {
       
       expect(presentation.distribution).to.deep.equal([{itemId:'ph1',displayIds:['display1', 'display2']}]);
     });
+
+    it('should update playlist item distribution to all false', function() {
+      placeholder2.items[0].distributeToAll = false;
+      distributionParser.updateDistribution(presentation);
+      
+      expect(presentation.distribution).to.deep.equal([{itemId:'ph2#0',displayIds:[]}]);
+    });
     
-    it('should parse playlist item distribution', function() {
+    it('should update playlist item distribution', function() {
       placeholder2.items[0].distributeToAll = false;
       placeholder2.items[0].distribution = ['display1', 'display2'];
       distributionParser.updateDistribution(presentation);
