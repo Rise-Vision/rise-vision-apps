@@ -211,7 +211,7 @@
             </td>
           </tr>
 
-          <tr class="table-body__row" ng-class="{ 'table--disabled': !display.playerProAuthorized }" ng-show="!playerProFactory.isCROS(display)">
+          <tr class="table-body__row" ng-class="{ 'table--disabled': !display.playerProAuthorized }" ng-if="!playerProFactory.isCROS(display)">
             <td class="table-body__cell">
               <span translate>displays-app.fields.player.displayControl.label</span>
             </td>
@@ -234,7 +234,7 @@
             </td>
           </tr>
 
-          <tr class="table-body__row" ng-show="!playerProFactory.isCROS(display)">
+          <tr class="table-body__row" ng-if="!playerProFactory.isCROS(display)">
             <td class="table-body__cell"><span translate>displays-app.fields.player.rpp.offline-play</span></td>
             <td class="table-body__cell">
               <span translate>displays-app.fields.player.rpp.offline-play-desc</span>
@@ -246,7 +246,7 @@
     </div>
 
     <!-- SCREENSHOT  -->
-    <div ng-show="!playerProFactory.isCROS(display)">
+    <div ng-if="!playerProFactory.isCROS(display)">
       <screenshot></screenshot>
     </div>
   </div>
