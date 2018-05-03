@@ -11,7 +11,7 @@
       <img style="width: auto" src="https://s3.amazonaws.com/Rise-Images/Animations/addadisplay.gif">
     </div>
     <form id="displayAdd" role="form" name="displayAdd" novalidate>
-      <div class="u_margin-md-top" ng-hide="display.id">
+      <div class="u_margin-md-top text-center" ng-hide="display.id">
         <div class="form-group" ng-class="{'has-error': !displayAdd.name.$pristine && displayAdd.name.$invalid}" show-errors>
           <label class="control-label">{{'displays-app.add.name.name' | translate}} *</label>
           <input type="text" class="form-control" placeholder="{{ 'displays-app.add.name.name' | translate}}" id="name" name="name" ng-model="display.name" required focus-me="true">
