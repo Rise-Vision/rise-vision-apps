@@ -67,6 +67,7 @@ var DisplayListScenarios = function() {
       });
 
       it('should show display list Schedule View button (All Displays - 24/7)', function () {
+        helper.wait(displaysListPage.getFirstRowSchedule(), 'Schedule Link');
         expect(displaysListPage.getFirstRowSchedule().isPresent()).to.eventually.be.true;
       });
 
