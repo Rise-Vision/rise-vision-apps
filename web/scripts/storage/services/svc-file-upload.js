@@ -272,14 +272,22 @@ angular.module('risevision.storage.services')
           var method = 'notify' + gist + 'Item';
 
           if (xhr.status === 308) {
-            try {
-              var range = xhr.getResponseHeader('Range');
+            var range = xhr.getResponseHeader('Range');
 
-              this.sendChunk(parseInt(range.split('-')[1], 10) + 1);              
-            } catch (e) {
-              console.log('Resumable upload - failed to parse Range header', item, e);
+            if (range) {
+              range = parseInt(range.split('-')[1], 10) + 1;
 
-              xhr.onerror();
+              if (!isNaN(range)) {
+                this.sendChunk(range);
+              } else {
+                console.log('Resumable upload - Failed to parse Range header', item);
+
+                this.onerror();
+              }
+            } else {
+              console.log('Resumable upload - Range header not present, restarting', item);
+
+              this.sendChunk(0);
             }
           } else if (xhr.status === 503) {
             xhr.requestNextStartByte();
