@@ -270,14 +270,17 @@ angular.module('risevision.storage.services')
         xhr.onload = function () {
           var gist = svc.isSuccessCode(xhr.status) ? 'Success' : 'Error';
           var method = 'notify' + gist + 'Item';
-          var range;
 
           if (xhr.status === 308) {
             try {
-              range = xhr.getResponseHeader('Range');
-            } catch (e) {}
+              var range = xhr.getResponseHeader('Range');
 
-            this.sendChunk(parseInt(range.split('-')[1], 10) + 1);
+              this.sendChunk(parseInt(range.split('-')[1], 10) + 1);              
+            } catch (e) {
+              console.log('Resumable upload - failed to parse Range header', item, e);
+
+              xhr.onerror();
+            }
           } else if (xhr.status === 503) {
             xhr.requestNextStartByte();
           } else {
@@ -305,11 +308,17 @@ angular.module('risevision.storage.services')
 
         xhr.sendChunk = function (startByte) {
           var endByte = startByte + item.chunkSize - 1;
-          var range = 'bytes ' + startByte + '-' +
-            Math.min(endByte, item.file.size - 1) +
-            '/' + item.file.size;
-          item.currentChunk = item.currentChunk ? item.currentChunk + 1 :
-            1;
+          var length = item.file.size;
+          var range = 'bytes ';
+
+          if (length === 0) {
+            range += '*';
+          } else {
+            range += startByte + '-' + Math.min(endByte, length - 1);
+          }
+          range += '/' + item.file.size;
+
+          item.currentChunk = item.currentChunk ? item.currentChunk + 1 : 1;
 
           xhr.open(item.method, item.url, true);
           xhr.withCredentials = item.withCredentials;
