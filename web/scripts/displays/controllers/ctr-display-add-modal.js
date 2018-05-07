@@ -13,6 +13,7 @@ angular.module('risevision.displays.controllers')
       $scope.anotherEmail = null;
       $scope.errorMessage = null;
       $scope.downloadOnly = downloadOnly;
+      $scope.currentTab = 'windows';
 
       $scope.toggleEmailForm = function () {
         $scope.showEmailForm = !$scope.showEmailForm;
@@ -33,11 +34,16 @@ angular.module('risevision.displays.controllers')
         $scope.errorMessage = null;
         displayEmail.send($scope.display.id, $scope.anotherEmail)
           .then(function () {
-            $modalInstance.dismiss();
+            $scope.anotherEmail = '';
+            $scope.anotherEmailForm.$setPristine(true);
           }, function (error) {
             $scope.errorMessage = $filter('translate')(
               'displays-app.fields.email.failed');
           });
+      };
+
+      $scope.setCurrentTab = function (tabName) {
+        $scope.currentTab = tabName;
       };
 
       $scope.dismiss = function () {

@@ -4,16 +4,14 @@
       <i class="fa fa-times"></i>
     </button>
     <h3 class="modal-title" translate="displays-app.add.title" ng-show="!downloadOnly"></h3>
-    <h3 class="modal-title" translate="displays-app.download.player" ng-show="downloadOnly"></h3>
+    <h3 class="modal-title" translate="displays-app.add.activate" ng-show="downloadOnly"></h3>
   </div>
-  <div class="modal-body text-center">
-  	<div class="video-box u_margin-md-bottom">
+  <div class="modal-body">
+    <div class="video-box u_margin-md-bottom" ng-hide="display.id">
       <img style="width: auto" src="https://s3.amazonaws.com/Rise-Images/Animations/addadisplay.gif">
     </div>
-
     <form id="displayAdd" role="form" name="displayAdd" novalidate>
-
-      <div class="u_margin-md-top" ng-hide="display.id">
+      <div class="u_margin-md-top text-center" ng-hide="display.id">
         <div class="form-group" ng-class="{'has-error': !displayAdd.name.$pristine && displayAdd.name.$invalid}" show-errors>
           <label class="control-label">{{'displays-app.add.name.name' | translate}} *</label>
           <input type="text" class="form-control" placeholder="{{ 'displays-app.add.name.name' | translate}}" id="name" name="name" ng-model="display.name" required focus-me="true">
@@ -30,41 +28,199 @@
       </div>
     </form>
 
-    <div ng-show="display.id && !showEmailForm" class="text-center u_margin-md-top" >
-      <h4 translate="displays-app.add.instructions.title" translate-values='{ displayName: display.name}'></h4>
-      <p translate="displays-app.add.instructions.step1"></p>
+    <div ng-show="display.id && !showEmailForm">
+      <p translate="displays-app.add.added-activate" translate-values="{ displayName: display.name }"></p>
+      <hr>
+      <p>
+        <b class="text-pill" translate="displays-app.add.instructions.step1"></b>
+        <span translate="displays-app.add.instructions.step1-desc"></span>
+      </p>
+      <ul id="select-rise-player-os-desktop" class="nav nav-tabs nav-justified hidden-xs">
+        <li data-toggle="tab" ng-class="{ active: currentTab == 'windows' }">
+          <a href="#" ng-click="setCurrentTab('windows');" translate="displays-app.add.instructions.os.windows10"></a>
+        </li>
+        <!-- Hide until Chrome Player is released
+        <li data-toggle="tab" ng-class="{ active: currentTab == 'chromeos' }">
+          <a href="#" ng-click="setCurrentTab('chromeos');" translate="displays-app.add.instructions.os.chromeos"></a>
+        </li>
+        -->
+        <li data-toggle="tab" ng-class="{ active: currentTab == 'linux' }">
+          <a href="#" ng-click="setCurrentTab('linux');" translate="displays-app.add.instructions.os.linux"></a>
+        </li>
+        <li data-toggle="tab" ng-class="{ active: currentTab == 'pi' }">
+          <a href="#" ng-click="setCurrentTab('pi');" translate="displays-app.add.instructions.os.pi"></a>
+        </li>
+      </ul>
 
-      <div class="row sm-gutter">
-        <div class="col-xs-6">
-          <a class="btn btn-sm btn-primary btn-block" href="http://install-versions.risevision.com/installer-lnx-32.sh" target="_blank" ng-click="displayTracker('Player Download', display.id, display.name, 'Linux 32bit')" translate="displays-app.download.linux32"></a>
-          <a class="btn btn-sm btn-primary btn-block u_margin-sm-top" href="http://install-versions.risevision.com/installer-lnx-64.sh" target="_blank" ng-click="displayTracker('Player Download', display.id, display.name, 'Linux 64bit')" translate="displays-app.download.linux64"></a>
-          <a class="btn btn-sm btn-primary btn-block u_margin-sm-top" href="http://install-versions.risevision.com/installer-lnx-armv7l.sh" target="_blank" ng-click="displayTracker('Player Download', display.id, display.name, 'Raspbian ARMv7')" translate="displays-app.add.download.armv7l"></a>
+      <select id="select-rise-player-os-mobile" ng-model="currentTab" class="form-control visible-xs">
+        <option translate="displays-app.add.instructions.os.windows10" value="windows"></option>
+        <option translate="displays-app.add.instructions.os.chromeos" value="chromeos"></option>
+        <option translate="displays-app.add.instructions.os.linux" value="linux"></option>
+        <option translate="displays-app.add.instructions.os.pi" value="pi"></option>
+      </select>
+
+      <div ng-show="currentTab == 'windows'" class="prototype-download-content row u_margin-md">
+        <div class="col-xs-6 text-center">
+          <a href="http://install-versions.risevision.com/installer-win-32.exe" class="u_link-no-underline">
+            <div class="u_bordered u_bordered-hover u_clickable">
+            <img src="../images/win-b.svg" width="60">
+            <h5>
+              <span translate="displays-app.add.download.label"></span>
+              <br/>
+              <span translate="displays-app.add.download.win32"></span>
+            </h5>
+            </div>
+          </a>
         </div>
-        <div class="col-xs-6">
-            <a class="btn btn-sm btn-primary btn-block" href="http://install-versions.risevision.com/installer-win-32.exe" target="_blank" ng-click="displayTracker('Player Download', display.id, display.name, 'Windows 32bit')" translate="displays-app.download.win32"></a>
-            <a id="downloadWindows64" class="btn btn-sm btn-primary btn-block u_margin-sm-top" href="http://install-versions.risevision.com/installer-win-64.exe" target="_blank" ng-click="displayTracker('Player Download', display.id, display.name, 'Windows 64bit')" translate="displays-app.download.win64"></a>
+        <div class="col-xs-6 text-center">
+          <a href="http://install-versions.risevision.com/installer-win-64.exe" class="u_link-no-underline" id="downloadWindows64">
+            <div class="u_bordered u_bordered-hover u_clickable">
+            <img src="../images/win-b.svg" width="60">
+            <h5>
+              <span translate="displays-app.add.download.label"></span>
+              <br/>
+              <span translate="displays-app.add.download.win64"></span>
+            </h5>
+          </div>
+          </a>
+        </div>
+        <div class="col-xs-12">
+          <p class="u_margin-sm-top u_margin-xs-bottom">
+            <a href="https://help.risevision.com/hc/en-us/articles/115001519126-Install-Rise-Player-on-Windows#%E2%80%9COS%20Version%E2%80%9D" target="_blank">
+              <i class="fa fa-question-circle" aria-hidden="true"></i>
+              {{ 'displays-app.add.download.diff-32-64' | translate }}
+            </a>
+          </p>
         </div>
       </div>
 
-      <p class="u_margin-sm-top text-center" translate="displays-app.add.instructions.step2"></p>
-      <div class="panel panel-success display-panel">
-          <div id="displayIdField" class="panel-body ng-binding">{{display.id}}</div>
+      <div ng-show="currentTab == 'linux'" class="prototype-download-content row u_margin-md">
+        <div class="col-xs-6 text-center">
+          <a href="http://install-versions.risevision.com/installer-lnx-32.sh" class="u_link-no-underline">
+            <div class="u_bordered u_bordered-hover u_clickable">
+              <img src="../images/linux-b.svg" width="60">
+              <h5>
+                <span translate="displays-app.add.download.label"></span>
+                <br/>
+                <span translate="displays-app.add.download.linux32"></span>
+              </h5>
+            </div>
+          </a>
+        </div>
+        <div class="col-xs-6 text-center">
+          <a href="http://install-versions.risevision.com/installer-lnx-64.sh" class="u_link-no-underline">
+            <div class="u_bordered u_bordered-hover u_clickable">
+              <img src="../images/linux-b.svg" width="60">
+              <h5>
+                <span translate="displays-app.add.download.label"></span>
+                <br/>
+                <span translate="displays-app.add.download.linux64"></span>
+              </h5>
+            </div>
+          </a>
+        </div>
+        <div class="col-xs-12">
+          <h5 class="u_margin-sm-top u_margin-xs-bottom">
+            <a href="https://help.risevision.com/hc/en-us/articles/115001872283-Install-Rise-Player-on-Linux#%E2%80%9COS%20Version%E2%80%9D"
+              target="_blank">
+              <i class="fa fa-question-circle" aria-hidden="true"></i>
+              {{ 'displays-app.add.download.diff-32-64' | translate }}
+            </a>
+          </h5>
+        </div>
       </div>
-      <div ng-show="!downloadOnly">
-        <p class="u_margin-sm-top text-center">
-          <p>{{'displays-app.add.instructions.emailInfo' | translate}} <b>{{userEmail}}</b></p>
+
+      <div ng-show="currentTab == 'pi'" class="prototype-download-content row u_margin-md">
+        <div class="col-xs-6 col-xs-offset-3 text-center">
+          <a href="http://install-versions.risevision.com/installer-lnx-armv7l.sh" class="u_link-no-underline">
+            <div class="u_bordered u_bordered-hover u_clickable">
+              <img src="../images/pi-b.svg" width="60">
+              <h5>
+                <span translate="displays-app.add.download.label"></span>
+                <br/>
+                <span translate="displays-app.add.download.armv7l"></span>
+              </h5>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div ng-show="currentTab == 'chromeos'" class="prototype-download-content row u_margin-md">
+        <div class="col-xs-6 col-xs-offset-3 text-center">
+          <!-- LINK PENDING FROM DELIVERY -->
+          <a href="#" class="u_link-no-underline">
+            <div class="u_bordered u_bordered-hover u_clickable">
+              <img src="../images/chrome-b.svg" width="60">
+              <h5>
+                <span translate="displays-app.add.download.label"></span>
+                <br/>
+                <span translate="displays-app.add.download.chromeos"></span>
+              </h5>
+            </div>
+          </a>
+        </div>
+      </div>
+      <hr>
+      <p class="u_margin-sm-top">
+        <b class="text-pill" translate="displays-app.add.instructions.step2"></b>
+        <span translate="displays-app.add.instructions.step2-a"></span>
+
+        <a href="https://help.risevision.com/hc/en-us/articles/360000325886-Activate-a-Display-using-a-Display-ID" target="_blank">
+          <i class="fa fa-question-circle" aria-hidden="true"></i>
+          <span translate="displays-app.add.instructions.displayId"></span>
+        </a>
+        <span translate="displays-app.add.instructions.step2-b"></span>
+      </p>
+
+      <!-- MATCH STYLE HERE -->
+      <div class="col-xs-12 u_margin-md-bottom">
+        <input type="text" class="id-form form-control" value="{{display.id}}" readonly="readonly" select-on-focus>
+      </div>
+
+      <p>
+        <a class="" href="https://help.risevision.com/hc/en-us/articles/360000463883-Activate-a-Display-using-a-Claim-ID" target="_blank">
+          <i class="fa fa-question-circle" aria-hidden="true"></i>
+          <span translate="displays-app.add.instructions.claimIds"></span>
+        </a>
+        <span translate="displays-app.add.instructions.claimIdsDesc"></span>
+      </p>
+
+      <hr>
+
+      <p>
+        <span translate="displays-app.add.instructions.once-activated"></span>
+        <a class="" href="https://help.risevision.com/hc/en-us/articles/115000860686" target="_blank">
+          <i class="fa fa-question-circle" aria-hidden="true"></i>
+          {{ 'displays-app.add.instructions.presentations' | translate }}
+        </a>.
+      </p>
+
+      <p class="u_margin-md-top">
+        <span translate="displays-app.add.instructions.needMediaPlayer"></span>
+        <a class="" href="https://help.risevision.com/hc/en-us/articles/115001817143-Choose-a-Media-Player" target="_blank">
+          <i class="fa fa-question-circle" aria-hidden="true"></i>
+          {{ 'displays-app.add.instructions.mediaPlayer' | translate }}
+        </a>?
+      </p>
+      <hr>
+
+      <div ng-show="!downloadOnly" class="text-center">
+        <p class="u_margin-sm-top">
+          <p>{{'displays-app.add.instructions.emailInfo' | translate}}
+            <b>{{userEmail}}</b>
+          </p>
           <button class="btn btn-default u_margin-sm-top" ng-click="toggleEmailForm()" translate="displays-app.add.instructions.anotherEmail"></button>
         </p>
       </div>
     </div>
 
     <form id="anotherEmailForm" role="form" name="anotherEmailForm" novalidate>
-      <div class="u_margin-md-top" ng-show="display.id && showEmailForm" >
+      <div class="u_margin-md-top" ng-show="display.id && showEmailForm">
 
         <h4 class="text-center" translate="displays-app.add.instructions.anotherEmail"></h4>
         <div class="form-group text-center" ng-class="{'has-error': !anotherEmailForm.anotherEmail.$pristine && anotherEmailForm.anotherEmail.$invalid}" show-errors>
-
-          <input type="email" class="form-control" placeholder="{{ 'displays-app.add.instructions.emailPlaceholder' | translate}}" id="anotherEmail" name="anotherEmail" ng-model="anotherEmail" required focus-me="true">
+          <input type="email" class="form-control" placeholder="{{ 'displays-app.add.instructions.emailPlaceholder' | translate}}"
+            id="anotherEmail" name="anotherEmail" ng-model="anotherEmail" required focus-me="true">
           <p class="text-danger" ng-show="!anotherEmailForm.anotherEmail.$pristine && anotherEmailForm.anotherEmail.$invalid" translate>
             displays-app.fields.email.invalid
           </p>
@@ -78,6 +234,5 @@
         </div>
       </div>
     </form>
-
   </div>
 </div>
