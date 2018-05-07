@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.displays.directives')
-  .directive('selectOnFocus', function ($timeout) {
+  .directive('selectOnFocus', ['$timeout', function ($timeout) {
     return {
       restrict: 'A',
       link: function (scope, element, attrs) {
@@ -22,4 +22,4 @@ angular.module('risevision.displays.directives')
         });
       }
     };
-  });
+  }]);
