@@ -275,7 +275,7 @@ angular.module('risevision.storage.services')
             try {
               var range = xhr.getResponseHeader('Range');
 
-              this.sendChunk(parseInt(range.split('-')[1], 10) + 1);              
+              this.sendChunk(parseInt(range.split('-')[1], 10) + 1);
             } catch (e) {
               console.log('Resumable upload - failed to parse Range header', item, e);
 
