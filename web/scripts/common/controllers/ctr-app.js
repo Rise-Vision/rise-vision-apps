@@ -54,11 +54,11 @@ angular.module('risevision.apps.controllers')
         target: '_blank',
       }];
       $scope.navSelected = 'apps.launcher.home';
-      $scope.hideCH = false;
+      $scope.hideCommonHeader = false;
 
       $rootScope.$on('$stateChangeSuccess', function () {
         $scope.navSelected = $state.current.name;
-        $scope.hideCH = $state.current.name === 'apps.launcher.signup' ||
+        $scope.hideCommonHeader = $state.current.name === 'apps.launcher.signup' ||
           $state.current.name === 'apps.launcher.signin' ||
           $state.current.name.indexOf('common.auth') !== -1;
       });

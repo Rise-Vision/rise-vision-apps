@@ -29,7 +29,7 @@ describe('controller: app', function() {
 
   it('should exist',function(){
     expect($scope).to.be.truely;
-    expect($scope.hideCH).to.be.false;
+    expect($scope.hideCommonHeader).to.be.false;
     expect($scope.navOptions).to.be.truely;
     expect($scope.navSelected).to.be.truely;
   });
@@ -43,14 +43,14 @@ describe('controller: app', function() {
   it('should hide CH on login page',function(){
     $state.current.name = 'common.auth.unauthorized';
     rootScope.$broadcast('$stateChangeSuccess');
-    expect($scope.hideCH).to.be.true;
+    expect($scope.hideCommonHeader).to.be.true;
     
     $state.current.name = 'apps.launcher.signup';
     rootScope.$broadcast('$stateChangeSuccess');
-    expect($scope.hideCH).to.be.true;
+    expect($scope.hideCommonHeader).to.be.true;
 
     $state.current.name = 'apps.launcher.home';
     rootScope.$broadcast('$stateChangeSuccess');
-    expect($scope.hideCH).to.be.false;
+    expect($scope.hideCommonHeader).to.be.false;
   });
 });
