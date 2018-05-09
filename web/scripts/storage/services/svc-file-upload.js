@@ -21,6 +21,8 @@ angular.module('risevision.storage.services')
       svc.method = 'PUT'; //'POST';
       svc.formData = [];
       svc.queueLimit = 10;
+      // Tentative tracking for total remaining files
+      svc.remainingFileCount = 0;
       svc.withCredentials = false;
       svc.isUploading = false;
       svc.nextIndex = 0;
@@ -28,6 +30,7 @@ angular.module('risevision.storage.services')
       svc.addToQueue = function (files, options) {
         var deferred = $q.defer();
         var currItem = 0;
+        svc.remainingFileCount += files.length;
 
         var enqueue = function (file) {
           // Checks it's a file
@@ -72,6 +75,7 @@ angular.module('risevision.storage.services')
 
         if (index >= 0 && index < svc.queue.length) {
           svc.queue.splice(index, 1);
+          svc.remainingFileCount--;
         }
 
         svc.progress = svc.getTotalProgress();
