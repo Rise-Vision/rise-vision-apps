@@ -31,6 +31,9 @@
             <a class="pull-right" href="#" ng-click="removeItem(item)">
               <span translate="common.lremove"></span>
             </a>
+            <a class="pull-right u_margin-right" href="#" ng-click="retryFailedUpload(item)" ng-show="item.isError">
+              <span translate="common.lretry"></span>
+            </a>
             <span class="pull-right text-muted u_margin-left u_margin-right"> {{ item.file.size|fileSizeFilter }}</span>
             <span class="u_ellipsis-lg">{{item.file.name}}</span>
           </p>

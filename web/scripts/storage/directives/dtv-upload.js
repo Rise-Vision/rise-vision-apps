@@ -39,6 +39,12 @@
               return FileUploader.getNotErrorCount();
             };
 
+            $scope.retryFailedUpload = function (file) {
+              if (file.isError) {
+                FileUploader.retryItem(file);                
+              }
+            };
+
             $scope.retryFailedUploads = function () {
               FileUploader.queue.forEach(function (f) {
                 if (f.isError) {
