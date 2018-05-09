@@ -26,9 +26,7 @@
             };
 
             $scope.activeUploadCount = function () {
-              return FileUploader.queue.filter(function (file) {
-                return file.isUploading;
-              }).length;
+              return FileUploader.queue.length;
             };
 
             $scope.getErrorCount = function () {
