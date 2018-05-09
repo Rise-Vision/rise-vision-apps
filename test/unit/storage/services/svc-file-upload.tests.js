@@ -165,12 +165,14 @@ describe('Services: uploader', function() {
     });
 
     describe('xhr.onload: ', function() {
+      var file1;
+
       beforeEach(function() {
         uploader.notifyErrorItem = sinon.spy();
         uploader.notifySuccessItem = sinon.spy();
         uploader.notifyCompleteItem = sinon.spy();
 
-        var file1 = { name: 'test1.jpg', size: 200, slice: function() {} };
+        file1 = { name: 'test1.jpg', size: 200, slice: function() {} };
         uploader.addToQueue([ file1 ]);
 
         lastAddedFileItem.chunkSize = 10000;
@@ -240,7 +242,10 @@ describe('Services: uploader', function() {
           };
 
           XHRFactory.status = 308;
+          lastAddedFileItem.progress = 30;
           XHRFactory.onload();
+
+          expect(lastAddedFileItem.progress).to.equal(0);
 
           XHRFactory.sendChunk.should.have.been.calledWith(0);
 

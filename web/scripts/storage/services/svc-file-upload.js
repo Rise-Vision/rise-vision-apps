@@ -287,6 +287,8 @@ angular.module('risevision.storage.services')
             } else {
               console.log('Resumable upload - Range header not present, restarting', item);
 
+              item.progress = 0;
+
               this.sendChunk(0);
             }
           } else if (xhr.status === 503) {
