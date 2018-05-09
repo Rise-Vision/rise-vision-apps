@@ -35,7 +35,10 @@
               <span translate="common.lretry"></span>
             </a>
             <span class="pull-right text-muted u_margin-left u_margin-right"> {{ item.file.size|fileSizeFilter }}</span>
-            <span class="u_ellipsis-lg">{{item.file.name}}</span>
+            <span class="u_ellipsis-lg" ng-class="{'text-danger': item.isError }">
+              <i class="fa fa-exclamation u_icon-red icon-left" ng-show="item.isError"></i>
+              {{item.file.name}}
+            </span>
           </p>
           <div class="progress inline-progress">
             <div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar"
