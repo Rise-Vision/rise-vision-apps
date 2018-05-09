@@ -27,7 +27,7 @@
 
             $scope.activeUploadCount = function () {
               return FileUploader.queue.filter(function (file) {
-                return file.isUploading;
+                return !file.isUploaded || file.isError;
               }).length;
             };
 

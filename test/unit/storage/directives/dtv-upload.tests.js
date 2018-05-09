@@ -106,6 +106,10 @@ describe('directive: upload', function() {
     expect(element.html()).to.equal('<p>mock</p>');
   });
 
+  it('should add utility functions to scope', function() {
+    expect($scope.activeUploadCount).to.be.a('function');
+  });
+
   it('should add uploader callbacks', function() {
     expect(FileUploader.onAfterAddingFile).to.exist;
     expect(FileUploader.onBeforeUploadItem).to.exist;
@@ -157,6 +161,28 @@ describe('directive: upload', function() {
     
     expect(getURI.called).to.be.true;
     expect(args[0].name).to.be.equal('test/test1.jpg');
+  });
+
+  it('activeUploadCount: ', function() {
+    FileUploader.queue = [
+      {
+        name: 'file1.pending',
+        isUploaded: false,
+        isError: false
+      },
+      {
+        name: 'file1.error',
+        isUploaded: true,
+        isError: true
+      },
+      {
+        name: 'file1.complete',
+        isUploaded: true,
+        isError: false
+      }
+    ];
+
+    expect($scope.activeUploadCount()).to.equal(2);
   });
 
   describe('removeItem:',function(){
