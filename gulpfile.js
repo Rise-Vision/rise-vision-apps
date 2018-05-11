@@ -66,7 +66,8 @@ var unitTestFiles = [
   "web/scripts/storage-selector-app.js",
   "web/scripts/app.js",
   "web/scripts/**/*.js",
-  "test/unit/**/*.tests.js"
+  "test/unit/**/*.tests.js",
+  "test/unit/common/services/svc-zendesk-override.js"
 ];
 
 var commonStyleLink = fs.realpathSync('web/bower_components/common-header') + '/**/*.css';
