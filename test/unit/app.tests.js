@@ -23,7 +23,6 @@ describe('app:', function() {
 
       inject(function ($injector) {
         $state = $injector.get('$state');
-        supportFactory = $injector.get('supportFactory');
         canAccessApps = $injector.get('canAccessApps');
         editorFactory = $injector.get('editorFactory');
         displayFactory = $injector.get('displayFactory');
@@ -32,27 +31,8 @@ describe('app:', function() {
   });
 
 
-  var $state, supportFactory, canAccessApps, editorFactory, displayFactory, $rootScope;
+  var $state, canAccessApps, editorFactory, displayFactory, $rootScope;
 
-  describe('state apps.launcher.support:',function(){
-
-    it('should register state',function(){
-      var supportState = $state.get('apps.launcher.support')
-      expect(supportState).to.be.ok;
-      expect(supportState.url).to.equal('/support');
-      expect(supportState.controller).to.be.ok;
-    });
-
-    it('should init support modal',function(done){
-      var spy = sinon.spy(supportFactory,'handleGetSupportAction')
-      $state.get('apps.launcher.support').controller[3]($state, canAccessApps, supportFactory);
-      setTimeout(function() {
-        spy.should.have.been.called;
-        done();
-      }, 10);
-    });
-  });
-  
   describe('state apps.editor.add:',function(){
 
     it('should register state',function(){
