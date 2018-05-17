@@ -264,7 +264,7 @@ describe('service: editorFactory:', function() {
         expect(editorFactory.errorMessage).to.be.ok;
         expect(editorFactory.errorMessage).to.equal("Failed to Get Presentation.");
         expect(editorFactory.apiError).to.be.ok;
-        expect(editorFactory.apiError).to.equal("ERROR; could not get presentation");
+        expect(editorFactory.apiError).to.contain("The Presentation could not be loaded.");
 
         expect(messageBoxStub).to.have.been.called;
 

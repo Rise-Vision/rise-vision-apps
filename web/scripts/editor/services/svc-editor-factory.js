@@ -507,10 +507,61 @@ angular.module('risevision.editor.services')
 
       var _showErrorMessage = function (action, e) {
         factory.errorMessage = 'Failed to ' + action + ' Presentation.';
-        factory.apiError = e.result && e.result.error.message ?
-          e.result.error.message : e.toString();
+        factory.apiError = _processErrorCode('Presentation', action, e);
 
         messageBox(factory.errorMessage, factory.apiError);
+      };
+
+      var _processErrorCode = function (itemName, action, e) {
+        var error = e.result && e.result.error;
+        var errorString = error.message ? error.message : error.message.toString();
+        var actionName = { Get: 'loaded', Add: 'added', Update: 'updated', Delete: 'deleted', Publish: 'published', Restore: 'restored' }[action];
+        var messagePrefix = 'The ' + itemName + ' could not be ' + actionName + '.';
+        var tryAgainMessage = 'Please try again; you may need to reload the page.';
+
+        if (e.status === 400) {
+          if (errorString.indexOf('is not editable') >= 0) {
+            return messagePrefix + ' ' + errorString;
+          }
+          else if (errorString.indexOf('is required') >= 0) {
+            return messagePrefix + ' ' + errorString;
+          }
+          else {
+            return messagePrefix + ' ' + tryAgainMessage;
+          }
+        }
+        else if(e.status === 401) {
+          return 'You do not have permissions to ' + actionName + ' this ' + itemName + ', because you are not authenticated. Please, sign in.';
+        }
+        else if(e.status === 403) {
+          if (errorString.indexOf('User is not allowed access') >= 0) {
+            return messagePrefix + ' You do not belong to the owner Company.';
+          }
+          else if (errorString.indexOf('User does not have the necessary rights') >= 0) {
+            return messagePrefix + ' You do not have the required permissions.';
+          }
+          else if (errorString.indexOf('Premium Template requires Purchase') >= 0) {
+            return messagePrefix + ' You need to be subscribed to a Plan to use the Template Library.';
+          }
+          else {
+            return messagePrefix + ' You may have not have the required permissions, or you don\'t belong to the owner Company.';
+          }
+        }
+        else if(e.status === 404) {
+          return 'The ' + itemName + ' could not be found. Please validate it still exists.';
+        }
+        else if(e.status === 409) {
+          return errorString;
+        }
+        else if(e.status === 500) {
+          return 'An error occurred while trying to ' + action.toLowerCase() + ' the ' + itemName + '. ' + tryAgainMessage;
+        }
+        else if(e.status === 503) {
+          return 'An error occurred while trying to ' + action.toLowerCase() + ' the ' + itemName + '. ' + tryAgainMessage;
+        }
+        else {
+          return errorString;
+        }
       };
 
       return factory;
