@@ -337,15 +337,11 @@ angular.module('risevision.apps', [
           }],
           controller: 'WorkspaceController',
           resolve: {
-            presentationInfo: ['canAccessApps', 'editorFactory',
-              '$stateParams', '$location',
-              function (canAccessApps, editorFactory, $stateParams,
-                $location) {
+            presentationInfo: ['canAccessApps', 'editorFactory', '$stateParams', '$location',
+              function (canAccessApps, editorFactory, $stateParams, $location) {
                 return canAccessApps().then(function () {
-                  if ($stateParams.presentationId && $stateParams.presentationId !==
-                    'new') {
-                    return editorFactory.getPresentation($stateParams
-                      .presentationId);
+                  if ($stateParams.presentationId && $stateParams.presentationId !== 'new') {
+                    return editorFactory.getPresentation($stateParams.presentationId);
                   } else if (!$stateParams.copyPresentation) {
                     var copyOf = $location.search().copyOf;
                     if (copyOf) {
