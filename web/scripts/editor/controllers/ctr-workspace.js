@@ -20,7 +20,7 @@ angular.module('risevision.editor.controllers')
       $scope.placeholderFactory = placeholderFactory;
       $scope.isSubcompanySelected = userState.isSubcompanySelected;
       $scope.isTestCompanySelected = userState.isTestCompanySelected;
-      $scope.hasUnsavedChanges = editorFactory.presentation.name.indexOf('Copy of ') === 0;
+      $scope.hasUnsavedChanges = false;
 
       var _isEqualIgnoringFields = function (o1, o2) {
         if (typeof o1 === 'object') {

@@ -37,18 +37,9 @@ describe('controller: Workspace', function() {
       };
     });
   }));
-  var $scope, editorFactory, modalOpenCalled, $rootScope, $timeout, $modal, $window, $state, $controller;
-
-  function _createWorkspaceController() {
-    $controller('WorkspaceController', {
-      $scope : $scope,
-      editorFactory: editorFactory
-    });
-  }
-
+  var $scope, editorFactory, modalOpenCalled, $rootScope, $timeout, $modal, $window, $state;
   beforeEach(function(){
-    inject(function($injector, _$controller_) {
-      $controller = _$controller_;
+    inject(function($injector,$controller){
       $rootScope = $injector.get('$rootScope');
       $timeout = $injector.get('$timeout');
       $modal = $injector.get('$modal');
@@ -58,11 +49,13 @@ describe('controller: Workspace', function() {
       $scope = $rootScope.$new();
       editorFactory = $injector.get('editorFactory');
 
-      _createWorkspaceController();
-
+      $controller('WorkspaceController', {
+        $scope : $scope,
+        editorFactory: editorFactory
+      });
       $scope.$digest();
       $timeout.flush();
-      });
+    });
   });
 
   it('should exist',function(){
@@ -73,18 +66,6 @@ describe('controller: Workspace', function() {
     expect($scope.factory).to.be.ok;
     expect($scope.artboardFactory).to.be.ok;
     expect($scope.factory).to.deep.equal(editorFactory);
-  });
-
-  it('should now allow saving an empty presentation directly', function() {
-    editorFactory.presentation = { name: 'Test Presentation' };
-    _createWorkspaceController();
-    expect($scope.hasUnsavedChanges).to.be.false;
-  });
-
-  it('should allow saving a template copy directly', function() {
-    editorFactory.presentation = { name: 'Copy of Test Presentation' };
-    _createWorkspaceController();
-    expect($scope.hasUnsavedChanges).to.be.true;
   });
 
   it('should show warning if presentation has deprecated items',function(){
