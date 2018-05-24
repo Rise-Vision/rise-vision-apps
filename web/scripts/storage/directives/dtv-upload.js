@@ -41,7 +41,7 @@
 
             $scope.retryFailedUpload = function (file) {
               if (file.isError) {
-                FileUploader.retryItem(file);                
+                FileUploader.retryItem(file);
               }
             };
 

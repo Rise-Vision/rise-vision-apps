@@ -78,7 +78,7 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.getProLicenseCount = function () {
-        return planFactory.getProLicenseCount($scope.company);
+        return planFactory.getProLicenseCount();
       };
 
       $scope.areAllProLicensesUsed = function () {

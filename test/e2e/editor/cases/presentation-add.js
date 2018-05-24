@@ -63,9 +63,9 @@ var PresentationAddScenarios = function() {
       expect(workspacePage.getRestoreButton().isEnabled()).to.eventually.be.false;
     });
 
-    it('should show disabled Save Button', function () {
+    it('should show enabled Save Button', function () {
       expect(workspacePage.getSaveButton().isPresent()).to.eventually.be.true;
-      expect(workspacePage.getSaveButton().isEnabled()).to.eventually.be.false;
+      expect(workspacePage.getSaveButton().isEnabled()).to.eventually.be.true;
     });
 
     it('should rename presentation', function () {
@@ -97,7 +97,7 @@ var PresentationAddScenarios = function() {
       expect(workspacePage.getChangeTemplateButton().isDisplayed()).to.eventually.be.false;
 
       helper.wait(workspacePage.getSaveStatus(), 'Save Status');
-      expect(workspacePage.getSaveButton().isEnabled()).to.eventually.be.false;
+      expect(workspacePage.getSaveButton().isEnabled()).to.eventually.be.true;
       expect(workspacePage.getPreviewButton().isEnabled()).to.eventually.be.true;
       expect(workspacePage.getSaveAndPreviewButton().isPresent()).to.eventually.be.false;
     });
