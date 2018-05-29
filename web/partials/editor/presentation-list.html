@@ -13,6 +13,10 @@
     </div>
   </div>
 
+  <div id="errorBox" ng-show="factory.apiError" class="alert alert-danger" role="alert">
+    <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
+  </div> 
+
   <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>
   <div class="panel u_margin-sm-top">
     <div class="scrollable-list"

@@ -10,13 +10,13 @@ angular.module('risevision.editor.services')
     'presentation', 'presentationParser', 'distributionParser',
     'presentationTracker', 'store', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
     'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT', 'TEMPLATES_TYPE',
-    '$modal', '$rootScope', '$window', 'scheduleFactory', 'messageBox',
+    '$modal', '$rootScope', '$window', 'scheduleFactory', 'processErrorCode', 'messageBox',
     '$templateCache', '$log',
     function ($q, $state, userState, userAuthFactory, presentation,
       presentationParser, distributionParser, presentationTracker, store,
       VIEWER_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED,
       DEFAULT_LAYOUT, TEMPLATES_TYPE, $modal, $rootScope, $window,
-      scheduleFactory, messageBox, $templateCache, $log) {
+      scheduleFactory, processErrorCode, messageBox, $templateCache, $log) {
       var factory = {};
       var JSON_PARSE_ERROR = 'JSON parse error';
 
@@ -507,78 +507,11 @@ angular.module('risevision.editor.services')
 
       var _showErrorMessage = function (action, e) {
         factory.errorMessage = 'Failed to ' + action + ' Presentation.';
-        factory.apiError = factory.processErrorCode('Presentation', action, e);
+        factory.apiError = processErrorCode('Presentation', action, e);
 
-        $log.error('Failed to ' + action + ' Presentation.', e);
+        $log.error(factory.errorMessage, e);
 
         messageBox(factory.errorMessage, factory.apiError);
-      };
-
-      factory.processErrorCode = function (itemName, action, e) {
-        var actionsMap = {
-          Get: 'loaded',
-          Add: 'added',
-          Update: 'updated',
-          Delete: 'deleted',
-          Publish: 'published',
-          Restore: 'restored'
-        };
-        var actionName = actionsMap[action];
-        var error = (e && e.result && e.result.error) || {};
-        var errorString = error.message ? error.message : 'An Error has Occurred';
-        var messagePrefix = 'The ' + itemName + ' could not be ' + actionName + '.';
-        var tryAgainMessage = 'Please try again; you may need to reload the page.';
-
-        if (!e) {
-          return errorString;
-        }
-        else if (e.status === 400) {
-          if (errorString.indexOf('is not editable') >= 0) {
-            return messagePrefix + ' ' + errorString;
-          }
-          else if (errorString.indexOf('is required') >= 0) {
-            return messagePrefix + ' ' + errorString;
-          }
-          else {
-            return messagePrefix + ' ' + tryAgainMessage;
-          }
-        }
-        else if(e.status === 401) {
-          return 'You do not have permissions to ' + action.toLowerCase() +
-                 ' this ' + itemName + ', because you are not authenticated. Please, sign in.';
-        }
-        else if(e.status === 403) {
-          if (errorString.indexOf('User is not allowed access') >= 0) {
-            return messagePrefix + ' Action required by parent Company.';
-          }
-          else if (errorString.indexOf('User does not have the necessary rights') >= 0) {
-            return messagePrefix + ' You do not have the required permissions.';
-          }
-          else if (errorString.indexOf('Premium Template requires Purchase') >= 0) {
-            return messagePrefix + ' You need to be subscribed to a Plan to use the Template Library.';
-          }
-          else {
-            return messagePrefix + ' You may have not have the required permissions, ' +
-                   'or an action is required by parent Company.';
-          }
-        }
-        else if(e.status === 404) {
-          return 'The ' + itemName + ' could not be found. Please validate it still exists.';
-        }
-        else if(e.status === 409) {
-          return messagePrefix + ' ' + errorString;
-        }
-        else if(e.status === 500) {
-          return 'An error occurred while trying to ' + action.toLowerCase() + ' the ' +
-                 itemName + '. ' + tryAgainMessage;
-        }
-        else if(e.status === 503) {
-          return 'An error occurred while trying to ' + action.toLowerCase() + ' the ' +
-                 itemName + '. ' + tryAgainMessage;
-        }
-        else {
-          return errorString;
-        }
       };
 
       return factory;

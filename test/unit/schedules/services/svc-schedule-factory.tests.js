@@ -72,10 +72,13 @@ describe('service: scheduleFactory:', function() {
         }
       }
     });
+    $provide.service('processErrorCode', function() {
+      return processErrorCode = sinon.spy(function() { return 'error'; });
+    });
     $provide.value('VIEWER_URL', 'http://rvaviewer-test.appspot.com');
 
   }));
-  var scheduleFactory, trackerCalled, updateSchedule, currentState, returnList, scheduleListSpy, scheduleAddSpy;
+  var scheduleFactory, trackerCalled, updateSchedule, currentState, returnList, scheduleListSpy, scheduleAddSpy, processErrorCode;
   beforeEach(function(){
     trackerCalled = undefined;
     currentState = undefined;
@@ -152,8 +155,8 @@ describe('service: scheduleFactory:', function() {
       .then(null, function() {
         expect(scheduleFactory.errorMessage).to.be.ok;
         expect(scheduleFactory.errorMessage).to.equal("Failed to Get Schedule.");
+        processErrorCode.should.have.been.calledWith('Schedule', 'Get', sinon.match.object);
         expect(scheduleFactory.apiError).to.be.ok;
-        expect(scheduleFactory.apiError).to.equal("ERROR; could not get schedule");
 
         setTimeout(function() {
           expect(scheduleFactory.loadingSchedule).to.be.false;

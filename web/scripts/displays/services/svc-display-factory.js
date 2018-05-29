@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('risevision.displays.services')
-  .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal',
-    'display', 'displayTracker', '$loading', 'planFactory',
-    function ($rootScope, $q, $state, $modal, display, displayTracker,
-      $loading, planFactory) {
+  .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal', '$loading', '$log',
+    'display', 'displayTracker', 'planFactory', 'processErrorCode',
+    function ($rootScope, $q, $state, $modal, $loading, $log, display, displayTracker,
+      planFactory, processErrorCode) {
       var factory = {};
       var _displayId;
 
@@ -181,8 +181,9 @@ angular.module('risevision.displays.services')
 
       var _showErrorMessage = function (action, e) {
         factory.errorMessage = 'Failed to ' + action + ' Display.';
-        factory.apiError = e.result && e.result.error.message ?
-          e.result.error.message : e.toString();
+        factory.apiError = processErrorCode('Display', action, e);
+        
+        $log.error(factory.errorMessage, e);
       };
 
       return factory;

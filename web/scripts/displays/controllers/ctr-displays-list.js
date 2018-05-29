@@ -10,6 +10,7 @@ angular.module('risevision.displays.controllers')
         sortBy: 'name',
         count: $scope.listLimit,
         reverse: false,
+        name: 'Displays'
       };
 
       $scope.displays = new ScrollingListService(display.list, $scope.search);

@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.schedules.services')
-  .factory('scheduleFactory', ['$q', '$state', 'schedule', 'scheduleTracker',
+  .factory('scheduleFactory', ['$q', '$state', '$log', 'schedule', 'scheduleTracker', 'processErrorCode',
     'VIEWER_URL',
-    function ($q, $state, schedule, scheduleTracker, VIEWER_URL) {
+    function ($q, $state, $log, schedule, scheduleTracker, processErrorCode, VIEWER_URL) {
       var factory = {};
       var _hasSchedules = false;
       var _scheduleId;
@@ -206,8 +206,9 @@ angular.module('risevision.schedules.services')
 
       var _showErrorMessage = function (action, e) {
         factory.errorMessage = 'Failed to ' + action + ' Schedule.';
-        factory.apiError = e.result && e.result.error.message ?
-          e.result.error.message : e.toString();
+        factory.apiError = processErrorCode('Schedule', action, e);
+        
+        $log.error(factory.errorMessage, e);
       };
 
       return factory;

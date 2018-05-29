@@ -13,7 +13,7 @@ describe('controller: schedules list', function() {
           if(returnSchedules){
             deferred.resolve(result);
           }else{
-            deferred.reject('ERROR; could not retrieve list');
+            deferred.reject({result: {error: { message: 'ERROR; could not load list'}}});
           }
           return deferred.promise;
         }
@@ -47,14 +47,18 @@ describe('controller: schedules list', function() {
         }
       }
     });
-    
+    $provide.service('processErrorCode', function() {
+      return processErrorCode = sinon.spy(function() { return 'error'; });
+    });
+
     $provide.value('translateFilter', function(){
       return function(key){
         return key;
       };
     });
   }));
-  var $scope, userState, $location, returnSchedules, companyId, apiCount, scrollEvent, result, $loading,$loadingStartSpy, $loadingStopSpy;
+  var $scope, userState, $location, returnSchedules, companyId, apiCount, scrollEvent, 
+    result, $loading,$loadingStartSpy, $loadingStopSpy, processErrorCode;
   beforeEach(function(){
     scrollEvent = {target: {scrollHeight: 0, clientHeight: 0, scrollTop: 0}};
     result = {
@@ -255,9 +259,29 @@ describe('controller: schedules list', function() {
       expect($scope.loadingSchedules).to.be.true;
       setTimeout(function(){
         expect($scope.loadingSchedules).to.be.false;
-        expect($scope.error).to.be.ok;
+        expect($scope.errorMessage).to.be.ok;
+        processErrorCode.should.have.been.calledWith('Schedules', 'Get', sinon.match.object);
+        expect($scope.apiError).to.be.ok;
         expect(apiCount).to.equal(2);
         expect($scope.schedules.list).to.have.length(0);
+        
+        done();
+      },10);
+    });
+
+    it('should clear error messages',function(done){
+      $scope.errorMessage = 'errorMessage';
+      $scope.apiError = 'apiError';
+
+      $scope.doSearch();
+      $scope.$digest();
+      
+      expect($scope.loadingSchedules).to.be.true;
+      setTimeout(function(){
+        expect($scope.loadingSchedules).to.be.false;
+
+        expect($scope.errorMessage).to.not.be.ok;
+        expect($scope.apiError).to.not.be.ok;
         
         done();
       },10);

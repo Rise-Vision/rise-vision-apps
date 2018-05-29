@@ -149,6 +149,9 @@ describe('service: editorFactory:', function() {
         }
       };
     });
+    $provide.service('processErrorCode', function() {
+      return processErrorCode = sinon.spy(function() { return 'error'; });
+    });
     $provide.service('scheduleFactory', function() { 
       return {
         createFirstSchedule: function(){
@@ -169,7 +172,8 @@ describe('service: editorFactory:', function() {
     });
   }));
   var editorFactory, trackerCalled, updatePresentation, currentState, stateParams, 
-    presentationParser, $window, $modal, scheduleFactory, userAuthFactory, $rootScope;
+    presentationParser, $window, $modal, processErrorCode, scheduleFactory, userAuthFactory,
+    $rootScope;
   beforeEach(function(){
     trackerCalled = undefined;
     currentState = undefined;
@@ -263,9 +267,9 @@ describe('service: editorFactory:', function() {
         expect(e).to.be.ok;
         expect(editorFactory.errorMessage).to.be.ok;
         expect(editorFactory.errorMessage).to.equal("Failed to Get Presentation.");
-        expect(editorFactory.apiError).to.be.ok;
-        expect(editorFactory.apiError).to.contain("The Presentation could not be loaded.");
 
+        processErrorCode.should.have.been.calledWith('Presentation', 'Get', e);
+        expect(editorFactory.apiError).to.be.ok;
         expect(messageBoxStub).to.have.been.called;
 
         setTimeout(function() {
@@ -989,84 +993,6 @@ describe('service: editorFactory:', function() {
         expect(editorFactory.restorePresentation).to.not.be.called;
         done();
       },10);
-    });
-  });
-
-  describe('processErrorCode: ', function() {
-    var itemName = 'Presentation';
-    var action = 'Add';
-
-    it('should process empty error objects', function() {
-      expect(editorFactory.processErrorCode(itemName, action)).to.equal('An Error has Occurred');
-      expect(editorFactory.processErrorCode(itemName, action, {})).to.equal('An Error has Occurred');
-    });
-
-    it('should process 400 error codes', function() {
-      expect(editorFactory.processErrorCode(itemName, action, {
-        status: 400
-      })).to.equal('The Presentation could not be added. Please try again; you may need to reload the page.');
-
-      expect(editorFactory.processErrorCode(itemName, action, {
-        status: 400,
-        result: { error: { message: 'Field name is not editable.' } }
-      })).to.equal('The Presentation could not be added. Field name is not editable.');
-
-      expect(editorFactory.processErrorCode(itemName, action, {
-        status: 400,
-        result: { error: { message: 'Field name is required.' } }
-      })).to.equal('The Presentation could not be added. Field name is required.');
-    });
-
-    it('should process 401 error codes', function() {
-      expect(editorFactory.processErrorCode(itemName, action, {
-        status: 401
-      })).to.equal('You do not have permissions to add this Presentation, because you are not authenticated. Please, sign in.');
-    });
-
-    it('should process 403 error codes', function() {
-      expect(editorFactory.processErrorCode(itemName, action, {
-        status: 403
-      })).to.equal('The Presentation could not be added. You may have not have the required permissions, or an action is required by parent Company.');
-
-      expect(editorFactory.processErrorCode(itemName, action, {
-        status: 403,
-        result: { error: { message: 'User is not allowed access' } }
-      })).to.equal('The Presentation could not be added. Action required by parent Company.');
-
-      expect(editorFactory.processErrorCode(itemName, action, {
-        status: 403,
-        result: { error: { message: 'User does not have the necessary rights' } }
-      })).to.equal('The Presentation could not be added. You do not have the required permissions.');
-
-      expect(editorFactory.processErrorCode(itemName, action, {
-        status: 403,
-        result: { error: { message: 'Premium Template requires Purchase' } }
-      })).to.equal('The Presentation could not be added. You need to be subscribed to a Plan to use the Template Library.');
-    });
-
-    it('should process 404 error codes', function() {
-      expect(editorFactory.processErrorCode(itemName, action, {
-        status: 404
-      })).to.equal('The Presentation could not be found. Please validate it still exists.');
-    });
-
-    it('should process 409 error codes', function() {
-      expect(editorFactory.processErrorCode(itemName, action, {
-        status: 409,
-        result: { error: { message: 'The Schedule is not valid.' } }
-      })).to.equal('The Presentation could not be added. The Schedule is not valid.');
-    });
-
-    it('should process 500 error codes', function() {
-      expect(editorFactory.processErrorCode(itemName, action, {
-        status: 500
-      })).to.equal('An error occurred while trying to add the Presentation. Please try again; you may need to reload the page.');
-    });
-
-    it('should process 503 error codes', function() {
-      expect(editorFactory.processErrorCode(itemName, action, {
-        status: 503
-      })).to.equal('An error occurred while trying to add the Presentation. Please try again; you may need to reload the page.');
     });
   });
 

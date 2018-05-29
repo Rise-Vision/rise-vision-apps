@@ -12,6 +12,10 @@
   </div>
 </div>
 
+<div id="errorBox" ng-show="apiError" class="alert alert-danger" role="alert">
+  <strong>{{errorMessage}}</strong> {{apiError}}
+</div> 
+
 <search-filter filter-config="filterConfig" search="search" do-search="doSearch"></search-filter> 
 <div class="panel u_margin-sm-top">
   <div class="scrollable-list"

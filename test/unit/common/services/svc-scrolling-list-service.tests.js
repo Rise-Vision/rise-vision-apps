@@ -5,8 +5,12 @@ describe('service: ScrollingListService:', function() {
     $provide.service('listService',function(){
       return {};
     });
+    $provide.service('processErrorCode', function() {
+      return processErrorCode = sinon.spy(function() { return 'error'; });
+    });
+
   }));
-  var scrollingListService, returnItems, apiCount, result;
+  var scrollingListService, returnItems, apiCount, result, processErrorCode;
   beforeEach(function(){
     var listService = function(search, cursor) {
       apiCount++;
@@ -14,7 +18,7 @@ describe('service: ScrollingListService:', function() {
       if(returnItems){
         deferred.resolve(result);
       }else{
-        deferred.reject('ERROR; could not retrieve list');
+        deferred.reject({result: {error: { message: 'ERROR; could not load list'}}});
       }
       return deferred.promise;
     };
@@ -187,9 +191,26 @@ describe('service: ScrollingListService:', function() {
       expect(scrollingListService.loadingItems).to.be.true;
       setTimeout(function(){
         expect(scrollingListService.loadingItems).to.be.false;
-        expect(scrollingListService.error).to.be.ok;
+        expect(scrollingListService.errorMessage).to.be.ok;
+        processErrorCode.should.have.been.calledWith('Items', 'Get', sinon.match.object);
+        expect(scrollingListService.apiError).to.be.ok;
+
         expect(apiCount).to.equal(2);
         expect(scrollingListService.items.list).to.have.length(0);
+
+        done();
+      },10);
+    });
+    
+    it('should clear error messages',function(done){
+      scrollingListService.errorMessage = 'errorMessage';
+      scrollingListService.apiError = 'apiError';
+      scrollingListService.doSearch();
+
+      expect(scrollingListService.loadingItems).to.be.true;
+      setTimeout(function(){
+        expect(scrollingListService.errorMessage).to.not.be.ok;
+        expect(scrollingListService.apiError).to.not.be.ok;
 
         done();
       },10);

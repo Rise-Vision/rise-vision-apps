@@ -81,9 +81,13 @@ describe('service: displayFactory:', function() {
         areAllProLicensesUsed: function () {}
       };
     });
+    $provide.service('processErrorCode', function() {
+      return processErrorCode = sinon.spy(function() { return 'error'; });
+    });
 
   }));
-  var displayFactory, $rootScope, $modal, trackerCalled, updateDisplay, currentState, returnList, displayListSpy, displayAddSpy, planFactory, display;
+  var displayFactory, $rootScope, $modal, trackerCalled, updateDisplay, currentState, returnList, 
+  displayListSpy, displayAddSpy, planFactory, display, processErrorCode;
   beforeEach(function(){
     trackerCalled = undefined;
     currentState = undefined;
@@ -214,8 +218,8 @@ describe('service: displayFactory:', function() {
       .then(null, function() {
         expect(displayFactory.errorMessage).to.be.ok;
         expect(displayFactory.errorMessage).to.equal("Failed to Get Display.");
+        processErrorCode.should.have.been.calledWith('Display', 'Get', sinon.match.object);
         expect(displayFactory.apiError).to.be.ok;
-        expect(displayFactory.apiError).to.equal("ERROR; could not get display");
 
         setTimeout(function() {
           expect(displayFactory.loadingDisplay).to.be.false;
