@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.apps.services')
-  .service('ScrollingListService', ['BaseList', 'processErrorCode',
-    function (BaseList, processErrorCode) {
+  .service('ScrollingListService', ['$log', 'BaseList', 'processErrorCode',
+    function ($log, BaseList, processErrorCode) {
       return function (listService, search) {
         var DB_MAX_COUNT = 40; //number of records to load at a time
         var factory = {};

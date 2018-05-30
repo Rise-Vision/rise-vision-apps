@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('risevision.schedules.controllers')
-  .controller('schedulesList', ['$scope', 'userState', 'schedule', 'BaseList',
-    '$location', '$loading', '$filter', 'scheduleTracker', 'processErrorCode',
-    function ($scope, userState, schedule, BaseList, $location, $loading,
-      $filter, scheduleTracker, processErrorCode) {
+  .controller('schedulesList', ['$scope', '$log', '$location', '$loading', '$filter',
+  'userState', 'schedule', 'BaseList', 'scheduleTracker', 'processErrorCode',
+    function ($scope, $log, $location, $loading, $filter, userState, schedule, BaseList, 
+      scheduleTracker, processErrorCode) {
       var DB_MAX_COUNT = 40; //number of records to load at a time
 
       $scope.scheduleTracker = scheduleTracker;
