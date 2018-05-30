@@ -19,7 +19,7 @@ angular.module('risevision.apps.directives')
             animation: 150,
             handle: '.rv-sortable-handle',
             draggable: '.rv-sortable-item',
-            forceFallback: true,
+            forceFallback: isFirefox(),
             onEnd: function (evt) {
               if ($scope.onSort) {
                 $scope.onSort({
@@ -32,6 +32,10 @@ angular.module('risevision.apps.directives')
           $scope.$on('$destroy', function () {
             sortable.destroy();
           });
+        }
+
+        function isFirefox () {
+          return navigator.userAgent.indexOf('Firefox') >= 0;
         }
       }
     };
