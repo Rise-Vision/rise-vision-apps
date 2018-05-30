@@ -18,7 +18,7 @@ angular.module('risevision.apps.services')
       var errorString = error.message ? error.message : 'An Error has Occurred';
       var messagePrefix = $filter('translate')('apps-common.errors.actionFailed', {
         itemName: itemName,
-        actionName: action
+        actionName: actionName
       });
 
       if (!e) {
