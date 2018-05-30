@@ -32,7 +32,7 @@ var AddDistributionScenarios = function() {
       helper.waitDisappear(schedulesListPage.getLoader(),'Schedules loader');
     });
 
-    describe(' Given a user is adding a new schedule ', function () {
+    describe(' Add a new schedule ', function () {
       before(function () {
         schedulesListPage.getScheduleAddButton().click();
       });
@@ -43,7 +43,7 @@ var AddDistributionScenarios = function() {
           .to.eventually.be.false;
       });
 
-      describe('Given a user clicks on the Distribution field', function () {
+      describe('Click on the Distribution field', function () {
         before(function () {
           scheduleAddPage.getDistributionField().click();
           helper.wait(distributionModalPage.getEditDistributionModal(), 'Edit Distribution Modal');
@@ -73,7 +73,7 @@ var AddDistributionScenarios = function() {
           expect(distributionModalPage.getDistributionItems().count()).to.eventually.be.above(0);
         });
 
-        describe('Given the user chooses a display', function () {
+        describe('Choose one display', function () {
           before(function () {
             var distributionItem = distributionModalPage.getDistributionItems().get(0);
             distributionItem.click();
@@ -85,7 +85,7 @@ var AddDistributionScenarios = function() {
           });
         });
 
-        describe('Given the user chooses two displays', function () {
+        describe('Choose two displays', function () {
           before(function () {
             helper.clickWhenClickable(scheduleAddPage.getDistributionField(), 'Click On Distribution Field').then(function () {
               helper.wait(distributionModalPage.getEditDistributionModal(), 'Edit Distribution Modal').then(function () {
@@ -104,7 +104,7 @@ var AddDistributionScenarios = function() {
         });
 
 
-        describe('Given the user does not choose any display', function () {
+        describe('Do not choose any display', function () {
           before(function () {
             helper.clickWhenClickable(scheduleAddPage.getDistributionField(), 'Click On Distribution Field').then(function () {
               helper.wait(distributionModalPage.getEditDistributionModal(), 'Edit Distribution Modal').then(function () {
@@ -120,7 +120,7 @@ var AddDistributionScenarios = function() {
           });
         });
 
-        describe('Given the user chooses all displays', function () {
+        describe('Choose all displays', function () {
           before(function () {
             scheduleAddPage.getDistributionAllDisplaysCheckbox().click();
           });
@@ -129,15 +129,16 @@ var AddDistributionScenarios = function() {
           });
         });
 
-        describe('Given the a display from the company is already set to a schedule and the user chooses all displays', function () {
+        describe('Choose all displays given a display is already set to a schedule', function () {
           before(function () {
             var scheduleName = 'TEST_E2E_SCHEDULE_WITH_DISTRIBUTION';
             scheduleAddPage.getScheduleNameField().sendKeys(scheduleName);
             helper.clickWhenClickable(scheduleAddPage.getSaveButton()).then(function () {
             });
           });
+
           it('should show an error saying another user has already set a display to a schedule', function () {
-            var expectResultPart1 = 'Failed to Add Schedule. Another schedule (';
+            var expectResultPart1 = 'Failed to Add Schedule. The Schedule could not be added. Another schedule (';
             var expectResultPart2 = ') is also set to be distributed to'
             helper.wait(scheduleAddPage.getErrorBox(), 'Error box').then(function () {
               expect(scheduleAddPage.getErrorBox().getText()).to.eventually.string(expectResultPart1);
