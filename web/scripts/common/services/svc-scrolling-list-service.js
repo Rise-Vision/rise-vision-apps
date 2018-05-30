@@ -39,8 +39,8 @@ angular.module('risevision.apps.services')
               .then(null, function (e) {
                 factory.errorMessage = 'Failed to load ' + factory.search.name + '.';
                 factory.apiError = processErrorCode(factory.search.name, 'Get', e);
-                
-                $log.error($scope.errorMessage, e);
+
+                $log.error(factory.errorMessage, e);
               })
               .finally(function () {
                 factory.loadingItems = false;
