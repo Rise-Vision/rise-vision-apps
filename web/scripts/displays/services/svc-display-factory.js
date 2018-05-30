@@ -182,7 +182,7 @@ angular.module('risevision.displays.services')
       var _showErrorMessage = function (action, e) {
         factory.errorMessage = 'Failed to ' + action + ' Display.';
         factory.apiError = processErrorCode('Display', action, e);
-        
+
         $log.error(factory.errorMessage, e);
       };
 

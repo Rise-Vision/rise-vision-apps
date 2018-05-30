@@ -2,7 +2,7 @@
 angular.module('risevision.storage.services')
   .factory('FilesFactory', ['$rootScope', 'storage', 'storageUtils', 'pendingOperationsFactory',
     'filterFilter', 'planFactory',
-    function ($rootScope, storage, storageUtils, pendingOperationsFactory, 
+    function ($rootScope, storage, storageUtils, pendingOperationsFactory,
       filterFilter, planFactory) {
       return function (storageFactory) {
 
