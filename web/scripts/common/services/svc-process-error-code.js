@@ -53,7 +53,7 @@ angular.module('risevision.apps.services')
       } else if (e.status === 409) {
         return messagePrefix + ' ' + errorString;
       } else if (e.status === 500 || e.status === 503) {
-        return $filter('translate')('apps-common.errors.notAuthenticated', {
+        return $filter('translate')('apps-common.errors.serverError', {
           itemName: itemName,
           actionName: action.toLowerCase()
         }) + ' ' + tryAgainMessage;
