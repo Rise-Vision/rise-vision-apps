@@ -82,13 +82,13 @@ describe('service: process error code:', function() {
   it('should process 500 error codes', function() {
     expect(processErrorCode(itemName, action, {
       status: 500
-    })).to.equal('apps-common.errors.notAuthenticated apps-common.errors.tryAgain');
+    })).to.equal('apps-common.errors.serverError apps-common.errors.tryAgain');
   });
 
   it('should process 503 error codes', function() {
     expect(processErrorCode(itemName, action, {
       status: 503
-    })).to.equal('apps-common.errors.notAuthenticated apps-common.errors.tryAgain');
+    })).to.equal('apps-common.errors.serverError apps-common.errors.tryAgain');
   });
 
 });
