@@ -10,9 +10,9 @@ angular.module('risevision.apps.services')
       Publish: 'published',
       Restore: 'restored'
     };
-    var tryAgainMessage = $filter('translate')('apps-common.errors.tryAgain');
 
     return function (itemName, action, e) {
+      var tryAgainMessage = $filter('translate')('apps-common.errors.tryAgain');
       var actionName = actionsMap[action];
       var error = (e && e.result && e.result.error) || {};
       var errorString = error.message ? error.message : 'An Error has Occurred';
