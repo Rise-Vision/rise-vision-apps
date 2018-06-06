@@ -26,7 +26,7 @@ angular.module('risevision.apps.services')
       });
 
       // Attempt to internationalize Storage error
-      var key = 'storage-client.error.' + (action ? action.toLowerCase() + '.' : '') + error.message;
+      var key = 'storage-client.error.' + (action ? action + '.' : '') + error.message;
       var msg = $filter('translate')(key);
       if (msg !== key) {
         errorString = msg;
@@ -45,7 +45,7 @@ angular.module('risevision.apps.services')
       } else if (e.status === 401) {
         return $filter('translate')('apps-common.errors.notAuthenticated', {
           itemName: itemName,
-          actionName: action.toLowerCase()
+          actionName: action
         });
       } else if (e.status === 403) {
         if (errorString.indexOf('User is not allowed access') >= 0) {
@@ -68,7 +68,7 @@ angular.module('risevision.apps.services')
       } else if (e.status === 500 || e.status === 503) {
         return $filter('translate')('apps-common.errors.serverError', {
           itemName: itemName,
-          actionName: action.toLowerCase()
+          actionName: action
         }) + ' ' + tryAgainMessage;
       } else if (e.status === -1 || error.code === -1 || error.code === 0) {
         return $filter('translate')('apps-common.errors.checkConnection');
