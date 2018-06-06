@@ -147,7 +147,7 @@ angular.module('risevision.storage.services')
 
               return processFilesResponse(resp);
             }, function (e) {
-              pendingOperationsFactory.statusDetails.message = processErrorCode('Files', 'Get', e);
+              pendingOperationsFactory.statusDetails.message = processErrorCode('Files', 'load', e);
               pendingOperationsFactory.markPendingOperationFailed(sourceObject);
             })
             .finally(function () {

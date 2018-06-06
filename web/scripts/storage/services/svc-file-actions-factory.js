@@ -19,11 +19,11 @@ angular.module('risevision.storage.services')
         };
 
         factory.trashButtonClick = function () {
-          factory.processFilesAction(storage.trash.move, 'Delete');
+          factory.processFilesAction(storage.trash.move, 'delete');
         };
 
         factory.restoreButtonClick = function () {
-          factory.processFilesAction(storage.trash.restore, 'Restore');
+          factory.processFilesAction(storage.trash.restore, 'restore');
         };
 
         factory.copyUrlButtonClick = function () {
@@ -79,7 +79,7 @@ angular.module('risevision.storage.services')
 
           modalInstance.result.then(function () {
             // do what you need if user presses ok
-            factory.processFilesAction(storage.files.delete, 'Delete');
+            factory.processFilesAction(storage.files.delete, 'delete');
           }, function () {
             // do what you need to do if user cancels
           });
@@ -115,7 +115,7 @@ angular.module('risevision.storage.services')
                 selectedFiles);
             })
             .catch(function (e) {
-              _handleOperationResponse(e);
+              _handleOperationResponse(e, action);
 
               selectedFiles.forEach(function (file) {
                 file.actionFailed = true;
@@ -266,7 +266,7 @@ angular.module('risevision.storage.services')
               _moveObjects(selectedFiles, destinationFolder);
             })
             .catch(function (e) {
-              _handleOperationResponse(e, 'Move');
+              _handleOperationResponse(e, 'move');
 
               selectedFiles.forEach(function (file) {
                 file.actionFailed = true;

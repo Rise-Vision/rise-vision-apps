@@ -62,7 +62,7 @@ describe('service: UploadURIService', function() {
         done(result);
       })
       .then(null, function(error) {
-        expect(error).to.deep.equal('FileUploadAPI Failed');
+        expect(error).to.deep.equal('FileuploadAPI Failed');
         done();
       })
       .then(null,done);

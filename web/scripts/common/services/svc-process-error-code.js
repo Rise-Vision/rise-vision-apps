@@ -3,15 +3,16 @@
 angular.module('risevision.apps.services')
   .service('processErrorCode', ['$filter', function ($filter) {
     var actionsMap = {
-      Get: 'loaded',
-      Add: 'added',
-      Update: 'updated',
-      Delete: 'deleted',
-      Publish: 'published',
-      Restore: 'restored',
-      Move: 'moved',
-      Rename: 'renamed',
-      Upload: 'uploaded'
+      get: 'loaded',
+      load: 'loaded',
+      add: 'added',
+      update: 'updated',
+      delete: 'deleted',
+      publish: 'published',
+      restore: 'restored',
+      move: 'moved',
+      rename: 'renamed',
+      upload: 'uploaded'
     };
 
     return function (itemName, action, e) {
@@ -25,7 +26,7 @@ angular.module('risevision.apps.services')
       });
 
       // Attempt to internationalize Storage error
-      var key = 'storage-client.error.' + (action ? action + '.' : '') + error.message;
+      var key = 'storage-client.error.' + (action ? action.toLowerCase() + '.' : '') + error.message;
       var msg = $filter('translate')(key);
       if (msg !== key) {
         errorString = msg;
@@ -39,7 +40,7 @@ angular.module('risevision.apps.services')
         } else if (errorString.indexOf('is required') >= 0) {
           return messagePrefix + ' ' + errorString;
         } else {
-          return messagePrefix + ' ' + tryAgainMessage;
+          return messagePrefix + ' ' + errorString;
         }
       } else if (e.status === 401) {
         return $filter('translate')('apps-common.errors.notAuthenticated', {

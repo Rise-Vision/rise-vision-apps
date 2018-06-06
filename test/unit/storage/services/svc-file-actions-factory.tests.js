@@ -147,7 +147,7 @@ describe('service: fileActionsFactory', function() {
       var stub = sinon.stub(fileActionsFactory,'processFilesAction');
       fileActionsFactory.trashButtonClick();
 
-      stub.should.have.been.calledWith(storage.trash.move, 'Delete');
+      stub.should.have.been.calledWith(storage.trash.move, 'delete');
     });
   });
 
@@ -156,7 +156,7 @@ describe('service: fileActionsFactory', function() {
       var stub = sinon.stub(fileActionsFactory,'processFilesAction');
       fileActionsFactory.restoreButtonClick();
 
-      stub.should.have.been.calledWith(storage.trash.restore, 'Restore');
+      stub.should.have.been.calledWith(storage.trash.restore, 'restore');
     });
   });
 
@@ -192,7 +192,7 @@ describe('service: fileActionsFactory', function() {
 
       fileActionsFactory.confirmDeleteFilesAction();
 
-      processFilesActionStub.should.have.been.calledWith(storage.files.delete, 'Delete');       
+      processFilesActionStub.should.have.been.calledWith(storage.files.delete, 'delete');       
     });
   });
 
@@ -200,7 +200,7 @@ describe('service: fileActionsFactory', function() {
     it('should list files in pending operations',function(){
       selectedFiles = [{name:'file1'}, {name:'file2'}];
 
-      fileActionsFactory.processFilesAction(storage.trash.move, 'Delete');
+      fileActionsFactory.processFilesAction(storage.trash.move, 'delete');
 
       var pendingFileNames = pendingOperationsFactory.pendingOperations.map(function (i) {
         return i.name;
@@ -214,7 +214,7 @@ describe('service: fileActionsFactory', function() {
       apiResponse = {result:{}};
       var storageSpy = sinon.spy(storage.trash,'move');
 
-      fileActionsFactory.processFilesAction(storage.trash.move, 'Delete');
+      fileActionsFactory.processFilesAction(storage.trash.move, 'delete');
 
       storageSpy.should.have.been.calledWith(['file1','file2']);
       
@@ -236,7 +236,7 @@ describe('service: fileActionsFactory', function() {
       };
       var storageSpy = sinon.spy(storage.trash,'move');
 
-      fileActionsFactory.processFilesAction(storage.trash.move, 'Delete');
+      fileActionsFactory.processFilesAction(storage.trash.move, 'delete');
 
       storageSpy.should.have.been.calledWith(['file1','file2']);
       

@@ -217,8 +217,8 @@ describe('service: displayFactory:', function() {
       })
       .then(null, function() {
         expect(displayFactory.errorMessage).to.be.ok;
-        expect(displayFactory.errorMessage).to.equal("Failed to Get Display.");
-        processErrorCode.should.have.been.calledWith('Display', 'Get', sinon.match.object);
+        expect(displayFactory.errorMessage).to.equal("Failed to get Display.");
+        processErrorCode.should.have.been.calledWith('Display', 'get', sinon.match.object);
         expect(displayFactory.apiError).to.be.ok;
 
         setTimeout(function() {

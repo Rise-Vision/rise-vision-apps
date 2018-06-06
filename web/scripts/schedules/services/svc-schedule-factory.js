@@ -53,7 +53,7 @@ angular.module('risevision.schedules.services')
             deferred.resolve();
           })
           .then(null, function (e) {
-            _showErrorMessage('Get', e);
+            _showErrorMessage('get', e);
 
             deferred.reject();
           })
@@ -137,7 +137,7 @@ angular.module('risevision.schedules.services')
             }
           })
           .then(null, function (e) {
-            _showErrorMessage('Add', e);
+            _showErrorMessage('add', e);
           })
           .finally(function () {
             factory.loadingSchedule = false;
@@ -162,7 +162,7 @@ angular.module('risevision.schedules.services')
             deferred.resolve();
           })
           .then(null, function (e) {
-            _showErrorMessage('Update', e);
+            _showErrorMessage('update', e);
 
             deferred.reject();
           })
@@ -190,7 +190,7 @@ angular.module('risevision.schedules.services')
             $state.go('apps.schedules.list');
           })
           .then(null, function (e) {
-            _showErrorMessage('Delete', e);
+            _showErrorMessage('delete', e);
           })
           .finally(function () {
             factory.loadingSchedule = false;

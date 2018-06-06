@@ -154,8 +154,8 @@ describe('service: scheduleFactory:', function() {
       })
       .then(null, function() {
         expect(scheduleFactory.errorMessage).to.be.ok;
-        expect(scheduleFactory.errorMessage).to.equal("Failed to Get Schedule.");
-        processErrorCode.should.have.been.calledWith('Schedule', 'Get', sinon.match.object);
+        expect(scheduleFactory.errorMessage).to.equal("Failed to get Schedule.");
+        processErrorCode.should.have.been.calledWith('Schedule', 'get', sinon.match.object);
         expect(scheduleFactory.apiError).to.be.ok;
 
         setTimeout(function() {

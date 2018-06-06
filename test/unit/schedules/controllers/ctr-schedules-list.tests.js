@@ -260,7 +260,7 @@ describe('controller: schedules list', function() {
       setTimeout(function(){
         expect($scope.loadingSchedules).to.be.false;
         expect($scope.errorMessage).to.be.ok;
-        processErrorCode.should.have.been.calledWith('Schedules', 'Get', sinon.match.object);
+        processErrorCode.should.have.been.calledWith('Schedules', 'load', sinon.match.object);
         expect($scope.apiError).to.be.ok;
         expect(apiCount).to.equal(2);
         expect($scope.schedules.list).to.have.length(0);

@@ -17,7 +17,7 @@ describe('service: process error code:', function() {
   });
 
   var itemName = 'Presentation';
-  var action = 'Add';
+  var action = 'add';
   
   it('should process empty error objects', function() {
     expect(processErrorCode(itemName, action)).to.equal('An Error has Occurred');
@@ -38,7 +38,7 @@ describe('service: process error code:', function() {
   it('should process 400 error codes', function() {
     expect(processErrorCode(itemName, action, {
       status: 400
-    })).to.equal('apps-common.errors.actionFailed apps-common.errors.tryAgain');
+    })).to.equal('apps-common.errors.actionFailed An Error has Occurred');
 
     expect(processErrorCode(itemName, action, {
       status: 400,

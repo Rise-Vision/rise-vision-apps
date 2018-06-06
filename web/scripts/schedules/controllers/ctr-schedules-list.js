@@ -44,7 +44,7 @@ angular.module('risevision.schedules.controllers')
             })
             .then(null, function (e) {
               $scope.errorMessage = $filter('translate')('schedules-app.list.error');
-              $scope.apiError = processErrorCode('Schedules', 'Get', e);
+              $scope.apiError = processErrorCode('Schedules', 'load', e);
 
               $log.error($scope.errorMessage, e);
             })
