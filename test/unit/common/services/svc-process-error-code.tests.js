@@ -91,4 +91,14 @@ describe('service: process error code:', function() {
     })).to.equal('apps-common.errors.serverError apps-common.errors.tryAgain');
   });
 
+  it('should process network errors code -1 or 0', function() {
+    expect(processErrorCode(itemName, action, {
+      result: { error: { code: -1 }}
+    })).to.equal('apps-common.errors.checkConnection');
+
+    expect(processErrorCode(itemName, action, {
+      result: { error: { code: 0 }}
+    })).to.equal('apps-common.errors.checkConnection');
+  });
+
 });

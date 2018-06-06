@@ -110,19 +110,6 @@ describe('service: storage:', function() {
               return def.promise;
             }
           },
-          startTrial: function(obj) {
-            expect(obj).to.be.ok;
-            
-            var def = Q.defer();
-            if (returnResult) {
-              def.resolve({
-                result: {}
-              });
-            } else {
-              def.reject("API Failed");
-            }
-            return def.promise;
-          },
           createFolder: function(obj) {
             expect(obj).to.be.ok;
             folderName = obj.folder;
@@ -185,15 +172,13 @@ describe('service: storage:', function() {
     });
 
   }));
-  var storage, returnResult, folderPath, filePath, folderName, $rootScope, storageApiRequestObj;
+  var storage, returnResult, folderPath, filePath, folderName, storageApiRequestObj;
   beforeEach(function(){
     returnResult = true;
     folderPath = '';
     filePath = '';
     
     inject(function($injector){
-      $rootScope = $injector.get('$rootScope');
-      
       storage = $injector.get('storage');
     });
   });
@@ -201,7 +186,6 @@ describe('service: storage:', function() {
   it('should exist',function(){
     expect(storage).to.be.truely;
     expect(storage.files.get).to.be.a('function');
-    expect(storage.startTrial).to.be.a('function');
     expect(storage.createFolder).to.be.a('function');
     expect(storage.getFolderContents).to.be.a('function');
     expect(storage.getResumableUploadURI).to.be.a('function');
@@ -348,37 +332,6 @@ describe('service: storage:', function() {
       returnResult = false;
       
       storage.trash.restore({})
-        .then(function(result) {
-          done(result);
-        })
-        .then(null, function(error) {
-          expect(error).to.deep.equal('API Failed');
-          done();
-        })
-        .then(null,done);
-    });
-  });
-
-  describe('startTrial:',function(){
-    it('should start trial',function(done){
-      var $emitSpy = sinon.spy($rootScope, '$emit');
-
-      storage.startTrial()
-        .then(function(result){
-          expect(result).to.be.truely;
-          expect(result.item).to.be.truely;
-
-          $emitSpy.should.have.been.calledWith('refreshSubscriptionStatus');
-
-          done();
-        })
-        .then(null,done);
-    });
-
-    it("should handle failure to start trial",function(done){
-      returnResult = false;
-
-      storage.startTrial()
         .then(function(result) {
           done(result);
         })

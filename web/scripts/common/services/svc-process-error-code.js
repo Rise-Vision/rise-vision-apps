@@ -8,7 +8,10 @@ angular.module('risevision.apps.services')
       Update: 'updated',
       Delete: 'deleted',
       Publish: 'published',
-      Restore: 'restored'
+      Restore: 'restored',
+      Move: 'moved',
+      Rename: 'renamed',
+      Upload: 'uploaded'
     };
 
     return function (itemName, action, e) {
@@ -20,6 +23,13 @@ angular.module('risevision.apps.services')
         itemName: itemName,
         actionName: actionName
       });
+
+      // Attempt to internationalize Storage error
+      var key = 'storage-client.error.' + (action ? action + '.' : '') + error.message;
+      var msg = $filter('translate')(key);
+      if (msg !== key) {
+        errorString = msg;
+      }
 
       if (!e) {
         return errorString;
@@ -43,8 +53,10 @@ angular.module('risevision.apps.services')
           return messagePrefix + ' ' + $filter('translate')('apps-common.errors.permissionRequired');
         } else if (errorString.indexOf('Premium Template requires Purchase') >= 0) {
           return messagePrefix + ' ' + $filter('translate')('apps-common.errors.premiumTemplate');
+        } else if (errorString.indexOf('Storage requires active subscription') >= 0) {
+          return messagePrefix + ' ' + $filter('translate')('apps-common.errors.storageSubscription');
         } else {
-          return messagePrefix + ' ' + $filter('translate')('apps-common.errors.generalAccess');
+          return messagePrefix + ' ' + errorString;
         }
       } else if (e.status === 404) {
         return $filter('translate')('apps-common.errors.notFound', {
@@ -57,6 +69,8 @@ angular.module('risevision.apps.services')
           itemName: itemName,
           actionName: action.toLowerCase()
         }) + ' ' + tryAgainMessage;
+      } else if (e.status === -1 || error.code === -1 || error.code === 0) {
+        return $filter('translate')('apps-common.errors.checkConnection');
       } else {
         return errorString;
       }
