@@ -15,7 +15,7 @@ angular.module('risevision.storage.services')
           })
           .then(null, function (e) {
             var type = file.type === 'folder' ? 'Folder' : 'File';
-            var message = processErrorCode(type, 'Upload', e);;
+            var message = processErrorCode(type, 'Upload', e);
 
             return $q.reject(message);
           });

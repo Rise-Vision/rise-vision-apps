@@ -34,7 +34,7 @@ angular.module('risevision.apps.directives')
           });
         }
 
-        function isFirefox () {
+        function isFirefox() {
           return navigator.userAgent.indexOf('Firefox') >= 0;
         }
       }

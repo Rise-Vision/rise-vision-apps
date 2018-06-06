@@ -1,8 +1,8 @@
 /* globals JSZip */
 'use strict';
 angular.module('risevision.storage.services')
-  .factory('downloadFactory', ['$q', '$timeout', '$window', 'storageUtils', 
-  'storage', 'fileRetriever',
+  .factory('downloadFactory', ['$q', '$timeout', '$window', 'storageUtils',
+    'storage', 'fileRetriever',
     function ($q, $timeout, $window, storageUtils, storage, fileRetriever) {
       var svc = {};
       var downloadCount = 0;
@@ -36,7 +36,7 @@ angular.module('risevision.storage.services')
 
             downloadURL(resp.message, encodeURIComponent(downloadName.replace(/\"/g, '\\"')));
           })
-          .catch(function(e) {
+          .catch(function (e) {
             var error = (e && e.result && e.result.error) || {};
 
             file.rejectedUploadMessage = error.message;
