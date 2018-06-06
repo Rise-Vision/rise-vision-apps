@@ -23,7 +23,7 @@ angular.module('risevision.storage.controllers')
             $log.error('Error renaming \'' + sourceObject.name + '\' to \'' +
               $scope.renameName + '\'', e);
 
-              $scope.errorKey = (e && e.result && e.result.error && e.result.error.message) || 'unknown';
+            $scope.errorKey = (e && e.result && e.result.error && e.result.error.message) || 'unknown';
           })
           .finally(function () {
             $scope.isProcessing = false;

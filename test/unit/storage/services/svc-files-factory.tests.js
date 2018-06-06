@@ -17,13 +17,17 @@ describe('service: FilesFactory:', function() {
             if(returnFiles){
               deferred.resolve(filesResponse);
             }else{
-              deferred.reject({result: {error: { message: 'ERROR; could not restore presentation'}}});
+              deferred.reject({result: {error: { message: 'ERROR; could not retrieve files'}}});
             }
             return deferred.promise;
           }
         },
         startTrial: function() {}
       };
+    });
+
+    $provide.service('processErrorCode', function() {
+      return function() { return 'error'; };
     });
 
   }));

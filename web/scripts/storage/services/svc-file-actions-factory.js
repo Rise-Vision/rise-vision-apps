@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('risevision.storage.services')
-  .factory('FileActionsFactory', ['$rootScope', '$q', '$modal', '$filter',
-    'storage', 'storageUtils', 'downloadFactory', 'localStorageService',
-    'pendingOperationsFactory',
-    function ($rootScope, $q, $modal, $filter, storage, storageUtils,
-      downloadFactory, localStorageService, pendingOperationsFactory) {
+  .factory('FileActionsFactory', ['$q', '$modal', '$filter', 'storage', 
+    'storageUtils', 'downloadFactory', 'localStorageService',
+    'pendingOperationsFactory', 'processErrorCode',
+    function ($q, $modal, $filter, storage, storageUtils, downloadFactory, 
+      localStorageService, pendingOperationsFactory, processErrorCode) {
       return function (filesFactory) {
         var factory = {};
 
@@ -85,6 +85,12 @@ angular.module('risevision.storage.services')
           });
 
         };
+        
+        var _handleOperationResponse = function (e, action) {
+          pendingOperationsFactory.statusDetails.code = e.status;
+          
+          pendingOperationsFactory.statusDetails.message = processErrorCode('Files/Folders', action, e);
+        };
 
         factory.processFilesAction = function (apiMethod, action) {
           if (!apiMethod) {
@@ -109,7 +115,7 @@ angular.module('risevision.storage.services')
                 selectedFiles);
             })
             .catch(function (e) {
-              pendingOperationsFactory.handleOperationResponse(e);
+              _handleOperationResponse(e);
 
               selectedFiles.forEach(function (file) {
                 file.actionFailed = true;
@@ -260,7 +266,7 @@ angular.module('risevision.storage.services')
               _moveObjects(selectedFiles, destinationFolder);
             })
             .catch(function (e) {
-              pendingOperationsFactory.handleOperationResponse(e, 'Move');
+              _handleOperationResponse(e, 'Move');
 
               selectedFiles.forEach(function (file) {
                 file.actionFailed = true;

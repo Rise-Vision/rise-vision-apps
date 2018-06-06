@@ -4,6 +4,10 @@ describe('service: FileSelectorFactory (aka FilesFactory):', function() {
   beforeEach(module('risevision.storage.services'));
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
+    
+    $provide.service('processErrorCode', function() {
+      return function() { return 'error'; };
+    });
   }));
   var filesResponse, returnFiles, filesFactory, storageFactory, storageUtils, $rootScope, $broadcastSpy;
   beforeEach(function(){

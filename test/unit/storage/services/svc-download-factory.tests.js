@@ -13,7 +13,9 @@ describe('service: downloadFactory:', function() {
           if(returnFiles){
             deferred.resolve({result: 200, message: 'downloadUrl'});
           }else{
-            deferred.resolve({message: 'failed to get downloadUrl'});
+            deferred.reject({
+              result: { error: { message: 'failed to get downloadUrl' } }
+            });
           }
           return deferred.promise;
         },
@@ -22,7 +24,9 @@ describe('service: downloadFactory:', function() {
           if(returnFiles){
             deferred.resolve({result: 200, items: folderResponse});
           }else{
-            deferred.resolve({message: 'failed to get downloadUrl'});
+            deferred.reject({
+              result: { error: { message: 'failed to get downloadUrl' } }
+            });
           }
           return deferred.promise;
         }
