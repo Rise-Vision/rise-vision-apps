@@ -37,7 +37,9 @@ describe('directive: thumbnail-image', function() {
 
     $rootScope.file = {
       name: "file1.jpg",
-      timeCreated: '123',
+      timeCreated: {
+        value: '123'
+      },
       metadata: {
         thumbnail: 'http://example.com/thumb.jpg'
       }
@@ -50,10 +52,10 @@ describe('directive: thumbnail-image', function() {
     $rootScope.$apply();
   }
 
-  it('should render thumbnail appending timeCreated for cache bursting', function() {
+  it('should render thumbnail appending timeCreated for cache bursting and using secure url', function() {
     _compile();
     expect(element.scope().isSvg).to.be.false;
-    expect(element.scope().imgSrc).to.equal('http://example.com/thumb.jpg?_=123');
+    expect(element.scope().imgSrc).to.equal('https://example.com/thumb.jpg?_=123');
     expect(element.scope().imgClasses).to.equal('');
   });
 
