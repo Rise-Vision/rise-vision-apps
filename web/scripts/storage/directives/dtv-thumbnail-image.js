@@ -38,7 +38,10 @@
                   if (scope.file.metadata && scope.file.metadata.thumbnail) {
                     isSvg = false;
                     imgSrc = scope.file.metadata.thumbnail + '?_=' +
-                      scope.file.timeCreated;
+                      (scope.file.timeCreated && scope.file.timeCreated.value);
+                    if (imgSrc.indexOf('http://') === 0) {
+                      imgSrc = imgSrc.replace('http://', 'https://');
+                    }
                   } else if (scope.storageFactory.fileIsImage(scope.file)) {
                     imgSrc = 'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon%402x.png';
                   } else if (scope.storageFactory.fileIsVideo(scope.file)) {
