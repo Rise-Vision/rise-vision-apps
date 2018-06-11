@@ -155,8 +155,11 @@
                     <button class="btn btn-primary btn-block btn-sm" id="{{product.name | slugify}}" ng-click="quickSelect(product); $event.stopPropagation()">Add</button>
                   </div><!--end col-->
                   <div class="col-xs-12">
-                    <p id="status" class="text-muted">
-                      {{'editor-app.storeProduct.category.' + product.paymentTerms.toLowerCase() | translate}} {{product.trialPeriod > 0 ? ' - '+product.trialPeriod+' Days Trial' : ''}}
+                    <p id="status" class="text-muted" ng-show="product.trialPeriod === 0">
+                      {{'editor-app.storeProduct.category.' + product.paymentTerms.toLowerCase() | translate}}
+                    </p>
+                    <p id="status" class="text-muted" ng-show="product.trialPeriod > 0">
+                      {{product.trialPeriod}} Days Trial
                     </p>
                   </div>
                 </div><!--end row-->  
