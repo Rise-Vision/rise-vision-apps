@@ -118,6 +118,30 @@ angular.module('risevision.editor.services')
       imageAlt: 'add embedded presentation',
       gadgetType: 'Presentation',
       id: 'presentation'
+    },
+    {
+      name: 'Google Spreadsheet',
+      imageUrl: 'https://s3.amazonaws.com/Store-Products/Rise-Vision/widget_spreadsheet_image.png',
+      imageAlt: 'add google spreadsheet',
+      gadgetType: 'Widget',
+      id: '3132a345-9246-49df-854f-16455b833abf',
+      url: 'http://s3.amazonaws.com/widget-google-spreadsheet/2.0.0/dist/widget.html'
+    },
+    {
+      name: 'Google Calendar',
+      imageUrl: 'https://s3.amazonaws.com/Store-Products/Rise-Vision/widget_calender_image.png',
+      imageAlt: 'add google calendar',
+      gadgetType: 'Widget',
+      id: 'e2223213-cdaa-44be-b9d3-7a01211f63f7',
+      url: 'http://s3.amazonaws.com/widget-google-calendar/0.1.0/dist/widget.html'
+    },
+    {
+      name: 'Web Page',
+      imageUrl: 'http://s3.amazonaws.com/Store-Products/Rise-Vision/widget_webpage_image.png',
+      imageAlt: 'add web page',
+      gadgetType: 'Widget',
+      id: 'df887785-3614-4f05-86c7-fce07b8745dc',
+      url: 'http://s3.amazonaws.com/widget-web-page/1.0.0/dist/widget.html'
     }
   ])
   .factory('widgetUtils', ['WIDGETS_INFO', 'PROFESSIONAL_WIDGETS', 'APPS_ENV',
