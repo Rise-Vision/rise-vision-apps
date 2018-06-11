@@ -76,7 +76,7 @@ angular.module('risevision.displays.services')
             deferred.resolve();
           })
           .then(null, function (e) {
-            _showErrorMessage('Get', e);
+            _showErrorMessage('get', e);
 
             deferred.reject();
           })
@@ -114,7 +114,7 @@ angular.module('risevision.displays.services')
             }
           })
           .then(null, function (e) {
-            _showErrorMessage('Add', e);
+            _showErrorMessage('add', e);
 
             deferred.reject();
           })
@@ -143,7 +143,7 @@ angular.module('risevision.displays.services')
             deferred.resolve();
           })
           .then(null, function (e) {
-            _showErrorMessage('Update', e);
+            _showErrorMessage('update', e);
 
             deferred.reject();
           })
@@ -172,7 +172,7 @@ angular.module('risevision.displays.services')
             $state.go('apps.displays.list');
           })
           .then(null, function (e) {
-            _showErrorMessage('Delete', e);
+            _showErrorMessage('delete', e);
           })
           .finally(function () {
             factory.loadingDisplay = false;

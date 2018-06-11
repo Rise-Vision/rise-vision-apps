@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.storage.controllers')
-  .controller('RenameModalCtrl', ['$scope', '$modalInstance',
+  .controller('RenameModalCtrl', ['$scope', '$log', '$modalInstance',
     'fileActionsFactory', 'storageUtils', 'sourceObject',
-    function ($scope, $modalInstance, fileActionsFactory, storageUtils,
+    function ($scope, $log, $modalInstance, fileActionsFactory, storageUtils,
       sourceObject) {
       $scope.parentPath = storageUtils.fileParent(sourceObject);
       $scope.renameName = storageUtils.fileName(sourceObject).replace('/', '');
@@ -16,17 +16,14 @@ angular.module('risevision.storage.controllers')
         return fileActionsFactory.renameObject(sourceObject, $scope.parentPath +
             $scope.renameName)
           .then(function (resp) {
-            if (resp.code !== 200) {
-              $scope.errorKey = resp.message;
-            } else {
-              console.log('Storage rename processed succesfully');
-              $modalInstance.close();
-            }
+            $log.debug('Storage rename processed succesfully');
+
+            $modalInstance.close();
           }, function (e) {
-            console.log('Error renaming \'' + sourceObject.name +
-              '\' to \'' +
+            $log.error('Error renaming \'' + sourceObject.name + '\' to \'' +
               $scope.renameName + '\'', e);
-            $scope.errorKey = 'unknown';
+
+            $scope.errorKey = (e && e.result && e.result.error && e.result.error.message) || 'unknown';
           })
           .finally(function () {
             $scope.isProcessing = false;

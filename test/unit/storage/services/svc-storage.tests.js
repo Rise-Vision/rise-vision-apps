@@ -110,19 +110,6 @@ describe('service: storage:', function() {
               return def.promise;
             }
           },
-          startTrial: function(obj) {
-            expect(obj).to.be.ok;
-            
-            var def = Q.defer();
-            if (returnResult) {
-              def.resolve({
-                result: {}
-              });
-            } else {
-              def.reject("API Failed");
-            }
-            return def.promise;
-          },
           createFolder: function(obj) {
             expect(obj).to.be.ok;
             folderName = obj.folder;
@@ -185,23 +172,20 @@ describe('service: storage:', function() {
     });
 
   }));
-  var storage, returnResult, folderPath, filePath, folderName, $rootScope, storageApiRequestObj;
+  var storage, returnResult, folderPath, filePath, folderName, storageApiRequestObj;
   beforeEach(function(){
     returnResult = true;
     folderPath = '';
     filePath = '';
     
     inject(function($injector){
-      $rootScope = $injector.get('$rootScope');
-      
       storage = $injector.get('storage');
     });
   });
 
   it('should exist',function(){
-    expect(storage).to.be.truely;
+    expect(storage).to.be.ok;
     expect(storage.files.get).to.be.a('function');
-    expect(storage.startTrial).to.be.a('function');
     expect(storage.createFolder).to.be.a('function');
     expect(storage.getFolderContents).to.be.a('function');
     expect(storage.getResumableUploadURI).to.be.a('function');
@@ -212,7 +196,7 @@ describe('service: storage:', function() {
     it('should return a list of files',function(done){
       storage.files.get({})
       .then(function(result){
-        expect(result).to.be.truely;
+        expect(result).to.be.ok;
         expect(result.items).to.be.an.array;
         expect(result.items).to.have.length.above(0);
         done();
@@ -279,7 +263,7 @@ describe('service: storage:', function() {
     it('should delete files',function(done){
       storage.files.delete(['file1','file2'])
       .then(function(result){
-        expect(result).to.be.truely;
+        expect(result).to.be.ok;
         expect(storageApiRequestObj.files).to.deep.equal(['file1','file2']);
         expect(storageApiRequestObj.companyId).to.equal('TEST_COMP_ID');
 
@@ -307,7 +291,7 @@ describe('service: storage:', function() {
     it('should move files to trash',function(done){
       storage.trash.move(['file1','file2'])
       .then(function(result){
-        expect(result).to.be.truely;
+        expect(result).to.be.ok;
         expect(storageApiRequestObj.files).to.deep.equal(['file1','file2']);
         expect(storageApiRequestObj.companyId).to.equal('TEST_COMP_ID');
 
@@ -335,7 +319,7 @@ describe('service: storage:', function() {
     it('should restore files from trash',function(done){
       storage.trash.restore(['file1','file2'])
       .then(function(result){
-        expect(result).to.be.truely;
+        expect(result).to.be.ok;
         expect(storageApiRequestObj.files).to.deep.equal(['file1','file2']);
         expect(storageApiRequestObj.companyId).to.equal('TEST_COMP_ID');
 
@@ -359,43 +343,11 @@ describe('service: storage:', function() {
     });
   });
 
-  describe('startTrial:',function(){
-    it('should start trial',function(done){
-      var $emitSpy = sinon.spy($rootScope, '$emit');
-
-      storage.startTrial()
-        .then(function(result){
-          expect(result).to.be.truely;
-          expect(result.item).to.be.truely;
-
-          $emitSpy.should.have.been.calledWith('refreshSubscriptionStatus');
-
-          done();
-        })
-        .then(null,done);
-    });
-
-    it("should handle failure to start trial",function(done){
-      returnResult = false;
-
-      storage.startTrial()
-        .then(function(result) {
-          done(result);
-        })
-        .then(null, function(error) {
-          expect(error).to.deep.equal('API Failed');
-          done();
-        })
-        .then(null,done);
-    });
-  });
-
   describe('createFolder:',function(){
     it('should create folder',function(done){
       storage.createFolder("newFolder")
         .then(function(result){
-          expect(result).to.be.truely;
-          expect(result.item).to.be.truely;
+          expect(result).to.be.ok;
           expect(folderName).to.equal('newFolder');
 
           done();
@@ -449,8 +401,7 @@ describe('service: storage:', function() {
     it('should get Resumable Upload URI',function(done){
       storage.getResumableUploadURI("fileName","fileType")
         .then(function(result){
-          expect(result).to.be.truely;
-          expect(result.item).to.be.truely;
+          expect(result).to.be.ok;
           expect(storageApiRequestObj.fileName).to.equal('fileName');
           expect(storageApiRequestObj.fileType).to.equal('fileType');
           expect(storageApiRequestObj.companyId).to.equal('TEST_COMP_ID');
@@ -518,7 +469,7 @@ describe('service: storage:', function() {
     it('should rename files',function(done){
       storage.rename('file1', 'file2')
         .then(function(result){
-          expect(result).to.be.truely;
+          expect(result).to.be.ok;
           expect(storageApiRequestObj.companyId).to.equal('TEST_COMP_ID');
           expect(storageApiRequestObj.sourceName).to.equal('file1');
           expect(storageApiRequestObj.destinationName).to.equal('file2');
@@ -531,9 +482,9 @@ describe('service: storage:', function() {
       storageApiRequestObj = null;
 
       storage.rename('file1', 'file1')
-        .then(function(result) {
-          expect(result).to.be.truely;
-          expect(result.code).to.equal(400);
+        .then(null, function(error) {
+          expect(error).to.be.ok;
+          expect(error.status).to.equal(400);
           expect(storageApiRequestObj).to.be.null;
           done();
         });
@@ -555,7 +506,7 @@ describe('service: storage:', function() {
     it('should duplicate files',function(done){
       storage.duplicate('file1')
         .then(function(result){
-          expect(result).to.be.truely;
+          expect(result).to.be.ok;
           expect(storageApiRequestObj.companyId).to.equal('TEST_COMP_ID');
           expect(storageApiRequestObj.sourceName).to.equal('file1');
 

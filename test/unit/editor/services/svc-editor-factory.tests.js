@@ -266,9 +266,9 @@ describe('service: editorFactory:', function() {
       .then(null, function(e) {
         expect(e).to.be.ok;
         expect(editorFactory.errorMessage).to.be.ok;
-        expect(editorFactory.errorMessage).to.equal("Failed to Get Presentation.");
+        expect(editorFactory.errorMessage).to.equal("Failed to get Presentation.");
 
-        processErrorCode.should.have.been.calledWith('Presentation', 'Get', e);
+        processErrorCode.should.have.been.calledWith('Presentation', 'get', e);
         expect(editorFactory.apiError).to.be.ok;
         expect(messageBoxStub).to.have.been.called;
 

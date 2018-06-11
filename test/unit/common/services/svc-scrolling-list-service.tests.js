@@ -192,7 +192,7 @@ describe('service: ScrollingListService:', function() {
       setTimeout(function(){
         expect(scrollingListService.loadingItems).to.be.false;
         expect(scrollingListService.errorMessage).to.be.ok;
-        processErrorCode.should.have.been.calledWith('Items', 'Get', sinon.match.object);
+        processErrorCode.should.have.been.calledWith('Items', 'load', sinon.match.object);
         expect(scrollingListService.apiError).to.be.ok;
 
         expect(apiCount).to.equal(2);

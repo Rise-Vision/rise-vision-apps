@@ -29,11 +29,11 @@ describe('controller: RenameModalCtrl', function() {
       $provide.service('fileActionsFactory', function() {
         return {
           renameObject: function() {
-            if(!renameResp.error) {
-              return Q.resolve(renameResp);
+            if(renameResp.result && renameResp.result.error) {
+              return Q.reject(renameResp);
             }
             else {
-              return Q.reject(renameResp);
+              return Q.resolve(renameResp);
             }
           }
         };
@@ -70,6 +70,7 @@ describe('controller: RenameModalCtrl', function() {
     expect($scope).to.be.ok;
     expect($scope.ok).to.be.a('function');
     expect($scope.cancel).to.be.a('function');
+    expect($scope.validDestination).to.be.a('function');
     expect($scope.renameName).to.equal("test.jpg");
   });
 
@@ -79,7 +80,6 @@ describe('controller: RenameModalCtrl', function() {
       sandbox.spy(fileActionsFactory, 'renameObject');
 
       $scope.renameName = "test2.jpg";
-      renameResp.code = 200;
 
       $scope.ok()
         .then(function() {
@@ -98,7 +98,6 @@ describe('controller: RenameModalCtrl', function() {
 
       sourceObject.name = "test/";
       $scope.renameName = "test2";
-      renameResp.code = 200;
 
       $scope.ok()
         .then(function() {
@@ -116,8 +115,7 @@ describe('controller: RenameModalCtrl', function() {
       sandbox.spy(fileActionsFactory, 'renameObject');
 
       $scope.renameName = "test2.jpg";
-      renameResp.code = 404;
-      renameResp.message = "not-found";
+      renameResp.result = { error: { message: 'not-found' } };
 
       $scope.ok()
         .then(function() {
@@ -134,8 +132,7 @@ describe('controller: RenameModalCtrl', function() {
       sandbox.spy(fileActionsFactory, 'renameObject');
 
       $scope.renameName = "test2.jpg";
-      renameResp.error = true;
-      renameResp.code = 500;
+      renameResp.result = { error: { } };
 
       $scope.ok()
         .then(function() {

@@ -3,9 +3,9 @@
 /*jshint camelcase: false */
 
 angular.module('risevision.storage.services')
-  .service('storage', ['$rootScope', '$q', '$log', 'storageAPILoader',
+  .service('storage', ['$q', '$log', 'storageAPILoader',
     'userState', '$window',
-    function ($rootScope, $q, $log, storageAPILoader, userState, $window) {
+    function ($q, $log, storageAPILoader, userState, $window) {
       var service = {
         files: {
           get: function (search) {
@@ -116,33 +116,6 @@ angular.module('risevision.storage.services')
 
             return deferred.promise;
           }
-        },
-        startTrial: function () {
-          var deferred = $q.defer();
-
-          var obj = {
-            'companyId': userState.getSelectedCompanyId()
-          };
-
-          $log.debug('Starting trial for: ', obj);
-
-          storageAPILoader().then(function (storageApi) {
-              return storageApi.startTrial(obj);
-            })
-            .then(function (resp) {
-              $rootScope.$emit('refreshSubscriptionStatus',
-                'trial-available');
-
-              $log.debug('Trial Started', resp);
-
-              deferred.resolve(resp.result);
-            })
-            .then(null, function (e) {
-              console.error('Failed to start trial', e);
-              deferred.reject(e);
-            });
-
-          return deferred.promise;
         },
 
         createFolder: function (folder) {
@@ -264,9 +237,9 @@ angular.module('risevision.storage.services')
           $log.debug('Storage rename called with', obj);
 
           if (sourceName === destinationName) {
-            deferred.resolve({
-              code: 400,
-              message: 'must-be-different'
+            deferred.reject({
+              status: 400,
+              result: { error: { message: 'must-be-different' } }
             });
           } else {
             storageAPILoader().then(function (storageApi) {

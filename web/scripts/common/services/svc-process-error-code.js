@@ -3,12 +3,16 @@
 angular.module('risevision.apps.services')
   .service('processErrorCode', ['$filter', function ($filter) {
     var actionsMap = {
-      Get: 'loaded',
-      Add: 'added',
-      Update: 'updated',
-      Delete: 'deleted',
-      Publish: 'published',
-      Restore: 'restored'
+      get: 'loaded',
+      load: 'loaded',
+      add: 'added',
+      update: 'updated',
+      delete: 'deleted',
+      publish: 'published',
+      restore: 'restored',
+      move: 'moved',
+      rename: 'renamed',
+      upload: 'uploaded'
     };
 
     return function (itemName, action, e) {
@@ -21,6 +25,13 @@ angular.module('risevision.apps.services')
         actionName: actionName
       });
 
+      // Attempt to internationalize Storage error
+      var key = 'storage-client.error.' + (action ? action + '.' : '') + error.message;
+      var msg = $filter('translate')(key);
+      if (msg !== key) {
+        errorString = msg;
+      }
+
       if (!e) {
         return errorString;
       } else if (e.status === 400) {
@@ -29,12 +40,12 @@ angular.module('risevision.apps.services')
         } else if (errorString.indexOf('is required') >= 0) {
           return messagePrefix + ' ' + errorString;
         } else {
-          return messagePrefix + ' ' + tryAgainMessage;
+          return messagePrefix + ' ' + errorString;
         }
       } else if (e.status === 401) {
         return $filter('translate')('apps-common.errors.notAuthenticated', {
           itemName: itemName,
-          actionName: action.toLowerCase()
+          actionName: action
         });
       } else if (e.status === 403) {
         if (errorString.indexOf('User is not allowed access') >= 0) {
@@ -43,8 +54,10 @@ angular.module('risevision.apps.services')
           return messagePrefix + ' ' + $filter('translate')('apps-common.errors.permissionRequired');
         } else if (errorString.indexOf('Premium Template requires Purchase') >= 0) {
           return messagePrefix + ' ' + $filter('translate')('apps-common.errors.premiumTemplate');
+        } else if (errorString.indexOf('Storage requires active subscription') >= 0) {
+          return messagePrefix + ' ' + $filter('translate')('apps-common.errors.storageSubscription');
         } else {
-          return messagePrefix + ' ' + $filter('translate')('apps-common.errors.generalAccess');
+          return messagePrefix + ' ' + errorString;
         }
       } else if (e.status === 404) {
         return $filter('translate')('apps-common.errors.notFound', {
@@ -55,8 +68,10 @@ angular.module('risevision.apps.services')
       } else if (e.status === 500 || e.status === 503) {
         return $filter('translate')('apps-common.errors.serverError', {
           itemName: itemName,
-          actionName: action.toLowerCase()
+          actionName: action
         }) + ' ' + tryAgainMessage;
+      } else if (e.status === -1 || error.code === -1 || error.code === 0) {
+        return $filter('translate')('apps-common.errors.checkConnection');
       } else {
         return errorString;
       }

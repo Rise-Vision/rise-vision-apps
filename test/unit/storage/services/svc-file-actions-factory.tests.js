@@ -1,6 +1,6 @@
 'use strict';
 describe('service: fileActionsFactory', function() {
-  var fileActionsFactory, filesFactory, storage, pendingOperationsFactory,
+  var fileActionsFactory, filesFactory, storage, pendingOperationsFactory, processErrorCode,
       downloadFactory, $modal, $rootScope, selectedFiles, apiResponse, localStorageService;
   var getResponse, renameResponse, duplicateResponse;
   var sandbox = sinon.sandbox.create();
@@ -33,16 +33,16 @@ describe('service: fileActionsFactory', function() {
       return storage = {
         trash: {
           move: function(){
-            if (apiResponse) {
-              return Q.resolve(apiResponse);
+            if (apiResponse && apiResponse.result && apiResponse.result.error) {
+              return Q.reject(apiResponse);
             } else {
-              return Q.reject();
+              return Q.resolve(apiResponse);
             }
           }
         },
         files: {
           get: function() {
-            if(getResponse && getResponse.error) {
+            if (getResponse.result && getResponse.result.error) {
               return Q.reject(getResponse);
             }
             else {
@@ -51,7 +51,7 @@ describe('service: fileActionsFactory', function() {
           }
         },
         rename: function() {
-          if(renameResponse && renameResponse.error) {
+          if (renameResponse.result && renameResponse.result.error) {
             return Q.reject(renameResponse);
           }
           else {
@@ -59,7 +59,7 @@ describe('service: fileActionsFactory', function() {
           }
         },
         duplicate: function() {
-          if(duplicateResponse && duplicateResponse.error) {
+          if (duplicateResponse.result && duplicateResponse.result.error) {
             return Q.reject(duplicateResponse);
           }
           else {
@@ -88,6 +88,9 @@ describe('service: fileActionsFactory', function() {
       };
     });
 
+    $provide.service('processErrorCode', function() {
+      return processErrorCode = sinon.spy(function() { return 'error'; });
+    });
   }));
 
   beforeEach(function(){
@@ -144,7 +147,7 @@ describe('service: fileActionsFactory', function() {
       var stub = sinon.stub(fileActionsFactory,'processFilesAction');
       fileActionsFactory.trashButtonClick();
 
-      stub.should.have.been.calledWith('trash');
+      stub.should.have.been.calledWith(storage.trash.move, 'delete');
     });
   });
 
@@ -153,7 +156,7 @@ describe('service: fileActionsFactory', function() {
       var stub = sinon.stub(fileActionsFactory,'processFilesAction');
       fileActionsFactory.restoreButtonClick();
 
-      stub.should.have.been.calledWith('restore');
+      stub.should.have.been.calledWith(storage.trash.restore, 'restore');
     });
   });
 
@@ -189,7 +192,7 @@ describe('service: fileActionsFactory', function() {
 
       fileActionsFactory.confirmDeleteFilesAction();
 
-      processFilesActionStub.should.have.been.calledWith('delete');       
+      processFilesActionStub.should.have.been.calledWith(storage.files.delete, 'delete');       
     });
   });
 
@@ -197,7 +200,7 @@ describe('service: fileActionsFactory', function() {
     it('should list files in pending operations',function(){
       selectedFiles = [{name:'file1'}, {name:'file2'}];
 
-      fileActionsFactory.processFilesAction('trash');
+      fileActionsFactory.processFilesAction(storage.trash.move, 'delete');
 
       var pendingFileNames = pendingOperationsFactory.pendingOperations.map(function (i) {
         return i.name;
@@ -211,7 +214,7 @@ describe('service: fileActionsFactory', function() {
       apiResponse = {result:{}};
       var storageSpy = sinon.spy(storage.trash,'move');
 
-      fileActionsFactory.processFilesAction('trash');
+      fileActionsFactory.processFilesAction(storage.trash.move, 'delete');
 
       storageSpy.should.have.been.calledWith(['file1','file2']);
       
@@ -228,10 +231,12 @@ describe('service: fileActionsFactory', function() {
 
     it('should notify storage failures',function(done){
       selectedFiles = [{name:'file1'}, {name:'file2'}];
-      apiResponse = {};
+      apiResponse = {
+        result: { error: { message: 'error' } }
+      };
       var storageSpy = sinon.spy(storage.trash,'move');
 
-      fileActionsFactory.processFilesAction('trash');
+      fileActionsFactory.processFilesAction(storage.trash.move, 'delete');
 
       storageSpy.should.have.been.calledWith(['file1','file2']);
       
@@ -329,24 +334,6 @@ describe('service: fileActionsFactory', function() {
       });
     });
 
-    it('should fail to rename the file because of business logic error', function(done) {
-      sandbox.spy(storage.files, 'get');
-      sandbox.spy(storage, 'rename');
-      sandbox.spy(filesFactory, 'addFile');
-      sandbox.spy(filesFactory, 'removeFiles');
-
-      getResponse = { files: [{ name: "test2.jpg" }] };
-      renameResponse = { code: 404, message: "not-found" };
-
-      fileActionsFactory.renameObject({ name: "test.jpg" }, "test2.jpg")
-        .then(function() {
-          storage.rename.should.have.been.called;
-          storage.files.get.should.not.have.been.called;
-
-          done();
-        });
-    });
-
     it('should fail to rename the file because of server error', function(done) {
       sandbox.spy(storage.files, 'get');
       sandbox.spy(storage, 'rename');
@@ -354,16 +341,18 @@ describe('service: fileActionsFactory', function() {
       sandbox.spy(filesFactory, 'removeFiles');
 
       getResponse = { files: [{ name: "test2.jpg" }] };
-      renameResponse = { error: true };
+      renameResponse = {
+        status: 404,
+        result: { error: { message: "not-found" } }
+      };
 
-      fileActionsFactory.renameObject({ name: "test.jpg" }, "test2.jpg");
+      fileActionsFactory.renameObject({ name: "test.jpg" }, "test2.jpg")
+        .then(done, function() {
+          storage.rename.should.have.been.called;
+          storage.files.get.should.not.have.been.called;
 
-      setTimeout(function() {
-        storage.rename.should.have.been.called;
-        storage.files.get.should.not.have.been.called;
-
-        done();
-      }, 0);
+          done();
+        });
     });
   });
   
@@ -442,16 +431,19 @@ describe('service: fileActionsFactory', function() {
         });
     });
 
-    it('should fail to duplicate the file because of business logic error', function(done) {
+    it('should fail to duplicate the file because of server error', function(done) {
       sandbox.spy(storage.files, 'get');
       sandbox.spy(storage, 'duplicate');
       sandbox.spy(filesFactory, 'addFile');
 
       getResponse = { files: [{ name: "test2.jpg" }] };
-      duplicateResponse = { code: 404, message: "not-found" };
+      duplicateResponse = {
+        status: 404,
+        result: { error: { message: "not-found" } }
+      };
 
       fileActionsFactory.duplicateObject({ name: "test.jpg" })
-        .then(function() {
+        .then(done, function() {
           storage.duplicate.should.have.been.called;
           storage.files.get.should.not.have.been.called;
 
@@ -459,24 +451,6 @@ describe('service: fileActionsFactory', function() {
         });
     });
 
-    it('should fail to duplicate the file because of server error', function(done) {
-      sandbox.spy(storage.files, 'get');
-      sandbox.spy(storage, 'duplicate');
-      sandbox.spy(filesFactory, 'addFile');
-      sandbox.spy(filesFactory, 'removeFiles');
-
-      getResponse = { files: [{ name: "test2.jpg" }] };
-      duplicateResponse = { error: true };
-
-      fileActionsFactory.duplicateObject({ name: "test.jpg" });
-
-      setTimeout(function() {
-        storage.duplicate.should.have.been.called;
-        storage.files.get.should.not.have.been.called;
-
-        done();
-      }, 0);
-    });
   });
 
   describe('moveButtonClick: ', function() {
@@ -591,7 +565,10 @@ describe('service: fileActionsFactory', function() {
     });
     
     it('should fail to move files', function(done) {
-      renameResponse = { code: 404, message: "not-found" };
+      renameResponse = {
+        status: 404,
+        result: { error: { message: "not-found" } }
+      };
 
       sandbox.spy(storage, 'rename');
 

@@ -1,9 +1,9 @@
 'use strict';
 angular.module('risevision.storage.services')
   .factory('FilesFactory', ['$rootScope', 'storage', 'storageUtils', 'pendingOperationsFactory',
-    'filterFilter', 'planFactory',
+    'filterFilter', 'planFactory', 'processErrorCode',
     function ($rootScope, storage, storageUtils, pendingOperationsFactory,
-      filterFilter, planFactory) {
+      filterFilter, planFactory, processErrorCode) {
       return function (storageFactory) {
 
         // filesFactory functionality ~~~~~~~~~~
@@ -146,7 +146,8 @@ angular.module('risevision.storage.services')
               pendingOperationsFactory.removePendingOperation(sourceObject);
 
               return processFilesResponse(resp);
-            }, function () {
+            }, function (e) {
+              pendingOperationsFactory.statusDetails.message = processErrorCode('Files', 'load', e);
               pendingOperationsFactory.markPendingOperationFailed(sourceObject);
             })
             .finally(function () {

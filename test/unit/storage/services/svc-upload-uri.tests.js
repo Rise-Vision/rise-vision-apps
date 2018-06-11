@@ -18,7 +18,11 @@ describe('service: UploadURIService', function() {
           return def.promise;
         }
       };
-    }); 
+    });
+    $provide.service('processErrorCode', function() {
+      return function(type, item, error) { return type + item + error; };
+    });
+ 
   }));
   var uploadURIService, storage, returnResult, $rootScope, storageRequestObj;
   beforeEach(function(){
@@ -58,7 +62,7 @@ describe('service: UploadURIService', function() {
         done(result);
       })
       .then(null, function(error) {
-        expect(error).to.deep.equal('API Failed');
+        expect(error).to.deep.equal('FileuploadAPI Failed');
         done();
       })
       .then(null,done);

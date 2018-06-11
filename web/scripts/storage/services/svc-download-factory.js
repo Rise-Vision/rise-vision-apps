@@ -1,10 +1,9 @@
 /* globals JSZip */
 'use strict';
 angular.module('risevision.storage.services')
-  .factory('downloadFactory', ['storageUtils', 'storage', 'fileRetriever',
-    '$q', '$log', '$timeout', '$window', '$stateParams',
-    function (storageUtils, storage, fileRetriever,
-      $q, $log, $timeout, $window, $stateParams) {
+  .factory('downloadFactory', ['$q', '$timeout', '$window', 'storageUtils',
+    'storage', 'fileRetriever',
+    function ($q, $timeout, $window, storageUtils, storage, fileRetriever) {
       var svc = {};
       var downloadCount = 0;
       var iframeContainer = $window.document.createElement('div');
@@ -26,8 +25,8 @@ angular.module('risevision.storage.services')
       };
 
       var downloadFile = function (file) {
-        storage.getSignedDownloadURI(file).then(function (resp) {
-          if (resp.result) {
+        storage.getSignedDownloadURI(file)
+          .then(function (resp) {
             var downloadName = file.name.replace('--TRASH--/', '');
 
             if (downloadName.indexOf('/') >= 0) {
@@ -36,11 +35,13 @@ angular.module('risevision.storage.services')
             }
 
             downloadURL(resp.message, encodeURIComponent(downloadName.replace(/\"/g, '\\"')));
-          } else {
-            file.rejectedUploadMessage = resp.message;
+          })
+          .catch(function (e) {
+            var error = (e && e.result && e.result.error) || {};
+
+            file.rejectedUploadMessage = error.message;
             svc.rejectedUploads.push(file);
-          }
-        });
+          });
       };
 
       var downloadBlob = function (blob, fileName) {
