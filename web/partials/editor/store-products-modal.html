@@ -97,7 +97,11 @@
 
     <div class="template-filters u_margin-sm-bottom" ng-if="factory.search.category === 'Templates'">
       <ul class="list-unstyled">
-        <li ng-repeat="category in paymentCategories" ng-class="{ active : search.paymentCategory === category || !search.paymentCategory && category === 'all' }" ng-click="search.paymentCategory = category"><span>{{category}}</span></li>
+        <li ng-repeat="category in paymentCategories"
+            ng-class="{ active : search.paymentCategory === category || !search.paymentCategory && category === 'all' }"
+            ng-click="search.paymentCategory = category">
+            <span>{{'editor-app.storeProduct.category.' + category | translate}}</span>
+        </li>
       </ul>
     </div><!--template-filters-->
 
@@ -151,7 +155,9 @@
                     <button class="btn btn-primary btn-block btn-sm" id="{{product.name | slugify}}" ng-click="quickSelect(product); $event.stopPropagation()">Add</button>
                   </div><!--end col-->
                   <div class="col-xs-12">
-                    <p id="status" class="text-muted">{{product.paymentTerms.toLowerCase() === 'free'? 'Free' : 'Premium'}} {{product.trialPeriod > 0 ? ' - '+product.trialPeriod+' Days Trial' : ''}}</p>
+                    <p id="status" class="text-muted">
+                      {{'editor-app.storeProduct.category.' + product.paymentTerms.toLowerCase() | translate}} {{product.trialPeriod > 0 ? ' - '+product.trialPeriod+' Days Trial' : ''}}
+                    </p>
                   </div>
                 </div><!--end row-->  
               </div><!-- end product-grid_details -->
