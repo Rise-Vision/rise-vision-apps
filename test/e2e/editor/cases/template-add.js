@@ -87,7 +87,7 @@ var TemplateAddScenarios = function() {
       expect(storeProductsModalPage.getSearchCategories().count()).to.eventually.equal(3);
       expect(storeProductsModalPage.getSearchCategories().get(0).getText()).to.eventually.equal('ALL');
       expect(storeProductsModalPage.getSearchCategories().get(1).getText()).to.eventually.equal('FREE');
-      expect(storeProductsModalPage.getSearchCategories().get(2).getText()).to.eventually.equal('PREMIUM');
+      expect(storeProductsModalPage.getSearchCategories().get(2).getText()).to.eventually.equal('FOR LICENSED DISPLAYS');
     });
 
     it('should show a list of templates', function () {
