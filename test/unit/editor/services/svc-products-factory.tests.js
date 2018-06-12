@@ -53,7 +53,9 @@ describe('service: productsFactory: ', function() {
     });
 
     it('should not add Product if not Subscribed', function(done) {
-      productsFactory.loadProducts().then(function(result) {
+      productsFactory.loadProducts({
+        category: 'Widgets'
+      }).then(function(result) {
         expect(result.items).to.be.an('array');
         expect(result.items).to.have.length(1);
 
@@ -64,9 +66,24 @@ describe('service: productsFactory: ', function() {
     it('should add Product if Subscribed', function(done) {
       statusResponse.isSubscribed = true;
 
-      productsFactory.loadProducts().then(function(result) {
+      productsFactory.loadProducts({
+        category: 'Widgets'
+      }).then(function(result) {
         expect(result.items).to.be.an('array');
         expect(result.items).to.have.length(2);
+
+        done();
+      });      
+    });
+
+    it('should add Product when loading Templates', function(done) {
+      statusResponse.isSubscribed = true;
+
+      productsFactory.loadProducts({
+        category: 'Templates'
+      }).then(function(result) {
+        expect(result.items).to.be.an('array');
+        expect(result.items).to.have.length(1);
 
         done();
       });      
@@ -75,7 +92,9 @@ describe('service: productsFactory: ', function() {
     it('should not add Product if not found', function(done) {
       statusResponse.productCode = 'someProduct';
 
-      productsFactory.loadProducts().then(function(result) {
+      productsFactory.loadProducts({
+        category: 'Widgets'
+      }).then(function(result) {
         expect(result.items).to.be.an('array');
         expect(result.items).to.have.length(1);
 
@@ -126,7 +145,9 @@ describe('service: productsFactory: ', function() {
           storeProducts.items.push({ productCode: 'randomProduct' });
         }
 
-        productsFactory.loadProducts().then(function(result) {
+        productsFactory.loadProducts({
+          category: 'Widgets'
+        }).then(function(result) {
           expect(result.items).to.be.an('array');
           expect(result.items).to.have.length(21);
           expect(result.items[17].productCode).to.equal(productCode);
@@ -136,7 +157,9 @@ describe('service: productsFactory: ', function() {
       });
 
       it('should insert item at the end of the list if smaller', function(done) {
-        productsFactory.loadProducts().then(function(result) {
+        productsFactory.loadProducts({
+          category: 'Widgets'
+        }).then(function(result) {
           expect(result.items).to.be.an('array');
           expect(result.items).to.have.length(2);
           expect(result.items[1].productCode).to.equal(productCode);
@@ -147,7 +170,9 @@ describe('service: productsFactory: ', function() {
 
       it('should create list if item is missing', function(done) {
         storeProducts.items = null;
-        productsFactory.loadProducts().then(function(result) {
+        productsFactory.loadProducts({
+          category: 'Widgets'
+        }).then(function(result) {
           expect(result.items).to.be.an('array');
           expect(result.items).to.have.length(1);
           expect(result.items[0].productCode).to.equal(productCode);

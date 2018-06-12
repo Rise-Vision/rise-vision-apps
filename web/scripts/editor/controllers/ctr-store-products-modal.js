@@ -1,6 +1,5 @@
 'use strict';
 angular.module('risevision.editor.controllers')
-  .constant('TEMPLATES_TYPE', 'Templates')
   .constant('PAYMENT_CATEGORIES', [
     'all',
     'free',
