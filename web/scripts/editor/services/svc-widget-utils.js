@@ -120,6 +120,16 @@ angular.module('risevision.editor.services')
       id: 'presentation'
     },
     {
+      env: 'TEST',
+      name: 'Google Spreadsheet',
+      imageUrl: 'https://s3.amazonaws.com/Store-Products/Rise-Vision/widget_spreadsheet_image.png',
+      imageAlt: 'add google spreadsheet',
+      gadgetType: 'Widget',
+      id: 'b172714a-d753-475e-bb38-281f2aff594c',
+      url: 'http://s3.amazonaws.com/widget-google-spreadsheet/2.0.0/dist/widget.html'
+    },
+    {
+      env: 'PROD',
       name: 'Google Spreadsheet',
       imageUrl: 'https://s3.amazonaws.com/Store-Products/Rise-Vision/widget_spreadsheet_image.png',
       imageAlt: 'add google spreadsheet',
@@ -128,6 +138,16 @@ angular.module('risevision.editor.services')
       url: 'http://s3.amazonaws.com/widget-google-spreadsheet/2.0.0/dist/widget.html'
     },
     {
+      env: 'TEST',
+      name: 'Google Calendar',
+      imageUrl: 'https://s3.amazonaws.com/Store-Products/Rise-Vision/widget_calender_image.png',
+      imageAlt: 'add google calendar',
+      gadgetType: 'Widget',
+      id: '570012a1-54cc-4926-acb6-f9873588eddf',
+      url: 'http://s3.amazonaws.com/widget-google-calendar/0.1.0/dist/widget.html'
+    },
+    {
+      env: 'PROD',
       name: 'Google Calendar',
       imageUrl: 'https://s3.amazonaws.com/Store-Products/Rise-Vision/widget_calender_image.png',
       imageAlt: 'add google calendar',
@@ -136,6 +156,16 @@ angular.module('risevision.editor.services')
       url: 'http://s3.amazonaws.com/widget-google-calendar/0.1.0/dist/widget.html'
     },
     {
+      env: 'TEST',
+      name: 'Web Page',
+      imageUrl: 'http://s3.amazonaws.com/Store-Products/Rise-Vision/widget_webpage_image.png',
+      imageAlt: 'add web page',
+      gadgetType: 'Widget',
+      id: '5e9499c8-c877-4791-95b9-9ae4835030e4',
+      url: 'http://s3.amazonaws.com/widget-web-page/1.0.0/dist/widget.html'
+    },
+    {
+      env: 'PROD',
       name: 'Web Page',
       imageUrl: 'http://s3.amazonaws.com/Store-Products/Rise-Vision/widget_webpage_image.png',
       imageAlt: 'add web page',
