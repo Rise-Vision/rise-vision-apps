@@ -16,7 +16,7 @@ var StoreProductsModalPage = function() {
   var productNameFields = element.all(by.id('productName'));
   var statusFields = element.all(by.id('status'));
   var freeProducts = element.all(by.cssContainingText('p#status', 'Free'));
-  var premiumProducts = element.all(by.cssContainingText('p#status', 'Premium'));
+  var premiumProducts = element.all(by.cssContainingText('p#status', 'For Licensed Displays'));
   var displayBanner = element(by.id('displayBanner'));
 
   var professionalWidgets = element.all(by.repeater('widget in professionalWidgets'));
