@@ -2,9 +2,9 @@
 
 angular.module('risevision.displays.services')
   .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal', '$loading', '$log',
-    'display', 'displayTracker', 'planFactory', 'processErrorCode',
+    'display', 'displayTracker', 'playerLicenseFactory', 'processErrorCode',
     function ($rootScope, $q, $state, $modal, $loading, $log, display, displayTracker,
-      planFactory, processErrorCode) {
+      playerLicenseFactory, processErrorCode) {
       var factory = {};
       var _displayId;
 
@@ -101,7 +101,7 @@ angular.module('risevision.displays.services')
             if (resp && resp.item && resp.item.id) {
               factory.display = resp.item;
 
-              planFactory.toggleDisplayLicenseLocal(resp.item.id, !planFactory.areAllProLicensesUsed());
+              playerLicenseFactory.toggleDisplayLicenseLocal(resp.item.id, !playerLicenseFactory.areAllProLicensesUsed());
 
               displayTracker('Display Created', resp.item.id, resp.item
                 .name);
@@ -167,7 +167,7 @@ angular.module('risevision.displays.services')
               factory.display.name);
 
             factory.display = {};
-            planFactory.toggleDisplayLicenseLocal(_displayId, false);
+            playerLicenseFactory.toggleDisplayLicenseLocal(_displayId, false);
 
             $state.go('apps.displays.list');
           })

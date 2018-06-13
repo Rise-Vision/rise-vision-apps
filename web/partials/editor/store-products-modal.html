@@ -11,7 +11,7 @@
     <div ng-hide="factory.search.category === 'Templates'">
       <h4 class="u_margin-md-top">{{ 'editor-app.storeProduct.professional.title' | translate }} - <a href="https://help.risevision.com/hc/en-us/articles/115003830563" target="_blank" translate="editor-app.storeProduct.professional.learnMore"></a></h4>
 
-      <div class="professional-content panel panel-default" ng-class="{ 'professional-content--locked' : !planFactory.hasProfessionalLicenses(), 'professional-content--unlocked' : planFactory.hasProfessionalLicenses() }">
+      <div class="professional-content panel panel-default" ng-class="{ 'professional-content--locked' : !playerLicenseFactory.hasProfessionalLicenses(), 'professional-content--unlocked' : playerLicenseFactory.hasProfessionalLicenses() }">
         <div class="panel-body">
           <div class="product-grid">
             <div class="row">
@@ -19,7 +19,7 @@
               <ng-repeat ng-repeat="widget in professionalWidgets">
                 <div class="col-sm-6 col-md-4 col-lg-3">
 
-                  <div class="product-grid_item panel panel-default" ng-if="!planFactory.hasProfessionalLicenses()" ng-click="planFactory.showPlansModal()">
+                  <div class="product-grid_item panel panel-default" ng-if="!playerLicenseFactory.hasProfessionalLicenses()" ng-click="showPlansModal()">
                     <figure class="product-grid_image u_clickable product-grid_image--locked">
                       <img class="img-responsive" ng-src={{widget.imageUrl}} alt="{{widget.imageAlt}}"> 
                     </figure><!--template-image-->
@@ -41,7 +41,7 @@
                     </div>
                   </div><!--product-grid-item-->
 
-                  <div class="product-grid_item panel panel-default" ng-if="planFactory.hasProfessionalLicenses()" ng-click="quickSelect(widget)">
+                  <div class="product-grid_item panel panel-default" ng-if="playerLicenseFactory.hasProfessionalLicenses()" ng-click="quickSelect(widget)">
                     <figure class="product-grid_image u_clickable product-grid_image--unlocked">
                       <img class="img-responsive" ng-src={{widget.imageUrl}} alt="{{widget.imageAlt}}"> 
                     </figure><!--template-image-->
@@ -67,12 +67,12 @@
               </ng-repeat>
 
               <div class="col-sm-6 col-md-6 col-lg-6">
-                <div class="plan-promotion" ng-if="!planFactory.hasProfessionalLicenses()">
+                <div class="plan-promotion" ng-if="!playerLicenseFactory.hasProfessionalLicenses()">
                   <h2 translate="editor-app.storeProduct.professional.promotion"></h2>
                   <p translate="editor-app.storeProduct.professional.promotionTrial"></p>
-                  <button id="promotionTrialButton" ng-click="planFactory.showPlansModal()" class="btn btn-white btn-lg" translate="editor-app.storeProduct.professional.promotionTrialButton"></button>
+                  <button id="promotionTrialButton" ng-click="showPlansModal()" class="btn btn-white btn-lg" translate="editor-app.storeProduct.professional.promotionTrialButton"></button>
                 </div>
-                <div class="pro-display-promotion" ng-if="planFactory.hasProfessionalLicenses() && !planFactory.areAllProLicensesUsed()">
+                <div class="pro-display-promotion" ng-if="playerLicenseFactory.hasProfessionalLicenses() && !playerLicenseFactory.areAllProLicensesUsed()">
                   <h2 translate="editor-app.storeProduct.professional.promotion"></h2>
                   <p translate="editor-app.storeProduct.professional.promotionPlan"></p>
                   <a id="displaysListLink" ui-sref="apps.displays.list" link-cid target="_blank" class="btn btn-default btn-lg" translate="editor-app.storeProduct.professional.promotionDisplaysButton"></a>

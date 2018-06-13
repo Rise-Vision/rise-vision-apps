@@ -4,9 +4,9 @@
   angular.module('risevision.editor.controllers')
     .controller('ProductDetailsModalController', ['$scope', '$rootScope',
       '$loading', '$modalInstance', 'userState',
-      'checkTemplateAccess', 'planFactory', 'product',
+      'checkTemplateAccess', 'plansFactory', 'product',
       function ($scope, $rootScope, $loading, $modalInstance, userState,
-        checkTemplateAccess, planFactory, product) {
+        checkTemplateAccess, plansFactory, product) {
         $scope.product = product;
         $scope.canUseProduct = product.paymentTerms === 'free';
         $scope.showSubscriptionStatus = product.paymentTerms !== 'free';
@@ -25,7 +25,7 @@
         }
 
         $scope.startTemplateTrial = function () {
-          planFactory.showPlansModal();
+          plansFactory.showPlansModal();
         };
 
         $rootScope.$on('risevision.company.updated', function () {

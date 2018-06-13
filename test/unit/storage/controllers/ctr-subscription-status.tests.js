@@ -9,7 +9,7 @@ describe('controller: Storage Selector Modal', function() {
         }
       };
     });
-    $provide.service('planFactory',function(){
+    $provide.service('plansFactory',function(){
       return {
         showPlansModal: sinon.stub()
       };

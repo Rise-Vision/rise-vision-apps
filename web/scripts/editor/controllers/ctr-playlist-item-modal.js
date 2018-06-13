@@ -3,16 +3,16 @@
 angular.module('risevision.editor.controllers')
   .controller('PlaylistItemModalController', ['$scope',
     'placeholderPlaylistFactory', 'settingsFactory', 'gadgetFactory', '$modalInstance',
-    'item', 'editorFactory', 'userState', 'planFactory', 'RVA_URL', 'EMBEDDED_PRESENTATIONS_CODE',
+    'item', 'editorFactory', 'userState', 'plansFactory', 'RVA_URL', 'EMBEDDED_PRESENTATIONS_CODE',
     function ($scope, placeholderPlaylistFactory, settingsFactory, gadgetFactory,
-      $modalInstance, item, editorFactory, userState, planFactory, RVA_URL, EMBEDDED_PRESENTATIONS_CODE) {
+      $modalInstance, item, editorFactory, userState, plansFactory, RVA_URL, EMBEDDED_PRESENTATIONS_CODE) {
       var plansProductCodes = [EMBEDDED_PRESENTATIONS_CODE];
 
       $scope.PREVIOUS_EDITOR_URL = RVA_URL + '/#/PRESENTATION_MANAGE' + ((
           editorFactory.presentation.id) ? '/id=' + editorFactory.presentation
         .id : '') + '?cid=' + userState.getSelectedCompanyId();
       $scope.item = angular.copy(item);
-      $scope.showPlansModal = planFactory.showPlansModal;
+      $scope.showPlansModal = plansFactory.showPlansModal;
 
       if (item.type === 'presentation') {
         $scope.widgetName = 'editor-app.playlistItem.presentation.name';

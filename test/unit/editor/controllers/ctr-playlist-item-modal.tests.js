@@ -63,7 +63,7 @@ describe('controller: playlist item modal', function() {
       }
     });
 
-    $provide.service('planFactory', function() {
+    $provide.service('plansFactory', function() {
       return {
         showPlansModal: sinon.stub()
       };

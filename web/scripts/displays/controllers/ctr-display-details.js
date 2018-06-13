@@ -6,23 +6,23 @@ angular.module('risevision.displays.controllers')
   )
   .controller('displayDetails', ['$scope', '$rootScope', '$q', '$state', '$filter',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
-    '$templateCache', 'displayId', 'storeAuthorization', 'enableCompanyProduct', 'userState', 'planFactory',
-    'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', 'EMAIL_REGEX',
+    '$templateCache', 'displayId', 'storeAuthorization', 'enableCompanyProduct', 'userState', 'plansFactory',
+    'playerLicenseFactory', 'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', 'EMAIL_REGEX',
     function ($scope, $rootScope, $q, $state, $filter, displayFactory, display, screenshotFactory, playerProFactory,
       $loading, $log, $modal, $templateCache, displayId, storeAuthorization, enableCompanyProduct, userState,
-      planFactory, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, EMAIL_REGEX) {
+      plansFactory, playerLicenseFactory, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, EMAIL_REGEX) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
       $scope.playerProFactory = playerProFactory;
-      $scope.planFactory = planFactory;
+      $scope.plansFactory = plansFactory;
       $scope.companyId = userState.getSelectedCompanyId();
       $scope.company = userState.getCopyOfSelectedCompany(true);
       $scope.deferredDisplay = $q.defer();
       $scope.updatingRPP = false;
       $scope.monitoringEmailsList = [];
       $scope.monitoringSchedule = {};
-      $scope.showPlansModal = planFactory.showPlansModal;
+      $scope.showPlansModal = plansFactory.showPlansModal;
 
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
@@ -62,7 +62,7 @@ angular.module('risevision.displays.controllers')
 
           enableCompanyProduct($scope.display.companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
             .then(function () {
-              planFactory.toggleDisplayLicenseLocal(displayId, playerProAuthorized);
+              playerLicenseFactory.toggleDisplayLicenseLocal(displayId, playerProAuthorized);
             })
             .catch(function (err) {
               $scope.display.playerProAuthorized = !playerProAuthorized;
@@ -78,19 +78,19 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.getProLicenseCount = function () {
-        return planFactory.getProLicenseCount();
+        return playerLicenseFactory.getProLicenseCount();
       };
 
       $scope.areAllProLicensesUsed = function () {
         var assignedDisplays = $scope.company.playerProAssignedDisplays || [];
-        var allLicensesUsed = planFactory.areAllProLicensesUsed();
+        var allLicensesUsed = playerLicenseFactory.areAllProLicensesUsed();
         var allProLicensesUsed = allLicensesUsed && assignedDisplays.indexOf($scope.displayId) === -1;
 
         return $scope.getProLicenseCount() > 0 && allProLicensesUsed;
       };
 
       $scope.isProAvailable = function () {
-        return planFactory.hasProfessionalLicenses() && $scope.getProLicenseCount() > 0 && !$scope.areAllProLicensesUsed();
+        return playerLicenseFactory.hasProfessionalLicenses() && $scope.getProLicenseCount() > 0 && !$scope.areAllProLicensesUsed();
       };
 
       $scope.isProSupported = function () {
