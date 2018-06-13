@@ -49,9 +49,9 @@ angular.module('risevision.editor.services')
 
         return $q.all([store.product.list(search, cursor), unlistedProducts])
           .then(function (results) {
-            var unlistedProducts = search ? $filter('filter')(results[1], search.query) : results[1];
+            var filteredUnlistedProducts = search ? $filter('filter')(results[1], search.query) : results[1];
 
-            _.each(unlistedProducts, function (product) {
+            _.each(filteredUnlistedProducts, function (product) {
               if (!results[0].items) {
                 results[0].items = [product];
               } else if (results[0].items.length > product.productOrderWeight) {
