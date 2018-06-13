@@ -34,14 +34,13 @@ describe('controller: ProductDetailsModalController', function() {
     })
   }));
   var $scope, $modalInstance, $modalInstanceDismissSpy, $modalInstanceCloseSpy, product,
-    $loading, checkTemplateAccessSpy, storeAuthorize, TEMPLATE_LIBRARY_PRODUCT_CODE,
+    $loading, checkTemplateAccessSpy, storeAuthorize,
     planFactory;
   
   function initController(paymentTerms) {
     inject(function($injector,$rootScope, $controller, checkTemplateAccess){
       $scope = $rootScope.$new();
       $modalInstance = $injector.get('$modalInstance');
-      TEMPLATE_LIBRARY_PRODUCT_CODE = $injector.get('TEMPLATE_LIBRARY_PRODUCT_CODE');
       planFactory = $injector.get('planFactory');
 
       checkTemplateAccessSpy = checkTemplateAccess;

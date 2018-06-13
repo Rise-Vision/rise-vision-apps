@@ -4,15 +4,6 @@
   </div>
 
   <div class="row modal-body u_padding-lg">
-    <div class="align-center hidden-sm hidden-xs u_margin-md-bottom" ng-show="showSubscriptionStatus">
-      <div ng-controller="TemplateLibrarySubscriptionStatusController">
-        <div id="subscription-status" subscription-status custom-messages="editor-app.templatesLibrary.subscription"
-          product-id="{{productId}}" product-code="{{productCode}}" company-id="{{companyId}}"
-          ng-model="subscriptionStatus.result" show-store-modal="showStoreModal" expanded-format="true" custom-on-click="showPlansModal()" custom-product-link="{{productLink}}">
-        </div>
-      </div>
-    </div>
-    
     <div class="row">
       <div class="col-md-8 col-xs-12">
         <img class="img-responsive" ng-src="{{product.imageUrl}}">
