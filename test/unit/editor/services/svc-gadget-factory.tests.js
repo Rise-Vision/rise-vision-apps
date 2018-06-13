@@ -359,7 +359,7 @@ describe('service: gadgetFactory: ', function() {
 
         gadgetFactory.updateItemsStatus(items).then(function(){
           expect(items[0].gadget.subscriptionStatus).to.equal('Not Subscribed');
-          expect(items[0].gadget.statusMessage).to.equal('Premium');
+          expect(items[0].gadget.statusMessage).to.equal('Not Subscribed');
           done();
         }); 
       })
@@ -370,7 +370,7 @@ describe('service: gadgetFactory: ', function() {
 
         gadgetFactory.updateItemsStatus(items).then(function(){
           expect(items[0].gadget.subscriptionStatus).to.equal('Not Subscribed');
-          expect(items[0].gadget.statusMessage).to.equal('Premium - 7 Days Trial');
+          expect(items[0].gadget.statusMessage).to.equal('Not Subscribed - 7 Days Trial');
           done();
         }); 
       })
