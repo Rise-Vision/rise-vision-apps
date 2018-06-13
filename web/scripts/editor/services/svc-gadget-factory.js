@@ -232,19 +232,13 @@ angular.module('risevision.editor.services')
         if (_showAsProfessional(gadget)) {
           statusMessage = $filter('translate')
             ('editor-app.subscription.status.professional');
-        } else if (gadget.subscriptionStatus === 'Not Subscribed') {
-          statusMessage = $filter('translate')(
-            'editor-app.subscription.status.premium');
-          if (gadget.trialPeriod > 0) {
-            statusMessage = $filter('translate')(
-                'editor-app.subscription.status.premium') + ' - ' + gadget.trialPeriod +
-              ' ' + $filter('translate')(
-                'editor-app.subscription.status.daysTrial');
-          }
+        } else if (gadget.subscriptionStatus === 'Not Subscribed' && gadget.trialPeriod > 0) {
+          statusMessage = statusMessage + ' - ' + gadget.trialPeriod +
+            ' ' + $filter('translate')('editor-app.subscription.status.daysTrial');
         } else if (gadget.subscriptionStatus === 'On Trial') {
-          statusMessage = statusMessage + ' - ' + _getRemainingDays(new Date(
-            gadget.expiry)) + ' ' + $filter('translate')(
-            'editor-app.subscription.status.daysRemaining');
+          statusMessage = statusMessage + 
+            ' - ' + _getRemainingDays(new Date(gadget.expiry)) + 
+            ' ' + $filter('translate')('editor-app.subscription.status.daysRemaining');
         }
         return statusMessage;
       };
