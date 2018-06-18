@@ -12,9 +12,10 @@
         <button class="btn btn-default btn-sm btn-block hidden-lg" ng-click="editorFactory.addPresentationModal()">{{'editor-app.list.actions.add' |translate}} <i class="fa fa-plus icon-right"></i></button>
           <div id="presentationsList" class="scrollable-list" rv-spinner rv-spinner-key="presentation-list-loader" rv-spinner-start-active="1"> 
 
-            <div id="errorBox" ng-show="launcherFactory.presentations.apiError" class="alert alert-danger" role="alert">
+            <div id="errorBox" ng-show="launcherFactory.presentations.apiError" class="text-danger u_padding-md" role="alert">
+              <i class="fa fa-times icon-left"></i>
               <strong>{{launcherFactory.presentations.errorMessage}}</strong> {{launcherFactory.presentations.apiError}}
-            </div> 
+            </div>
 
             <div class="text-center" ng-hide="launcherFactory.presentations.loadingItems || launcherFactory.presentations.list.length > 0 || launcherFactory.presentations.apiError">
               <h4 class="text-muted u_margin-md-bottom u_margin-md-top" translate>editor-app.list.noPresentations</h4>
@@ -36,10 +37,9 @@
         <a class="btn btn-default btn-sm btn-block hidden-lg" ui-sref="apps.schedules.add">{{ 'schedules-app.actions.new' | translate }} <i class="fa fa-plus icon-right"></i></a>
           <div id="schedulesList" class="scrollable-list" rv-spinner rv-spinner-key="schedules-list-loader" rv-spinner-start-active="1"> 
 
-            <div class="text-center u_margin-md-bottom u_margin-md-top" ng-show="launcherFactory.schedules.apiError">
-              <div id="errorBox" class="alert alert-danger" role="alert">
-                <strong>{{launcherFactory.schedules.errorMessage}}</strong> {{launcherFactory.schedules.apiError}}
-              </div> 
+            <div id="errorBox" ng-show="launcherFactory.schedules.apiError" class="text-danger u_padding-md" role="alert">
+              <i class="fa fa-times icon-left"></i>
+              <strong>{{launcherFactory.schedules.errorMessage}}</strong> {{launcherFactory.schedules.apiError}}
             </div>
 
             <div class="text-center" ng-hide="launcherFactory.schedules.loadingItems || launcherFactory.schedules.list.length > 0 || launcherFactory.schedules.apiError">
@@ -62,9 +62,10 @@
         <a class="btn btn-default btn-sm btn-block hidden-lg" ng-click="displayFactory.addDisplayModal()">{{ 'displays-app.actions.new' | translate }} <i class="fa fa-plus icon-right"></i></a>
           <div id="displaysList" class="scrollable-list" rv-spinner rv-spinner-key="displays-list-loader" rv-spinner-start-active="1"> 
 
-            <div id="errorBox" ng-show="launcherFactory.displays.apiError" class="alert alert-danger" role="alert">
+            <div id="errorBox" ng-show="launcherFactory.displays.apiError" class="text-danger u_padding-md" role="alert">
+              <i class="fa fa-times icon-left"></i>
               <strong>{{launcherFactory.displays.errorMessage}}</strong> {{launcherFactory.displays.apiError}}
-            </div> 
+            </div>
 
             <div class="text-center" ng-hide="launcherFactory.displays.loadingitems || launcherFactory.displays.list.length > 0 || launcherFactory.displays.apiError">
               <h4 class="text-muted u_margin-md-bottom u_margin-md-top" translate>displays-app.list.noDisplays</h4>
