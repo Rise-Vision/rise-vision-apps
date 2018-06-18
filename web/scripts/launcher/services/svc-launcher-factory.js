@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.apps.launcher.services')
-  .factory('launcherFactory', ['$q', 'canAccessApps', 'presentation',
-    'schedule', 'display',
-    function ($q, canAccessApps, presentation, schedule, display) {
+  .factory('launcherFactory', ['$q', '$log', 'canAccessApps', 'presentation',
+    'schedule', 'display', 'processErrorCode',
+    function ($q, $log, canAccessApps, presentation, schedule, display, processErrorCode) {
       var factory = {};
       var deferred;
       var search = {
@@ -29,11 +29,19 @@ angular.module('risevision.apps.launcher.services')
 
       _setDefaults();
 
-      var _getDeferred = function (object, service) {
+      var _getDeferred = function (object, service, name) {
         var deferred = service.list(search)
           .then(function (result) {
-            object.loadingItems = false;
             object.list = result.items || [];
+          })
+          .catch(function(e) {
+            object.errorMessage = 'Failed to load ' + name + '.';
+            object.apiError = processErrorCode(name, 'load', e);
+
+            $log.error(object.errorMessage, e);
+          })
+          .finally(function() {
+            object.loadingItems = false;
           });
 
         return deferred;
@@ -45,11 +53,10 @@ angular.module('risevision.apps.launcher.services')
 
           deferred = canAccessApps()
             .then(function () {
-
               return $q.all([
-                _getDeferred(factory.presentations, presentation),
-                _getDeferred(factory.schedules, schedule),
-                _getDeferred(factory.displays, display)
+                _getDeferred(factory.presentations, presentation, 'Presentations'),
+                _getDeferred(factory.schedules, schedule, 'Schedules'),
+                _getDeferred(factory.displays, display, 'Displays')
               ]);
             })
             .then(function () {
