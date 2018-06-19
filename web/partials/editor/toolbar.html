@@ -1,4 +1,3 @@
-<div id="workspaceToolbar" class="workspace-toolbar">
     <div class="column flex-title">
         <button id="compressArtboardButton" class="btn btn-default animated pulse u_margin-right ng-hide" ng-click="artboardFactory.compressArtboard()" ng-show="artboardFactory.designMode && artboardFactory.isFullArtboard()"><i class="fa fa-compress"></i></button>
         <button id="expandArtboardButton" class="btn btn-default u_margin-right" ng-click="artboardFactory.expandArtboard()" ng-show="artboardFactory.designMode && !artboardFactory.isFullArtboard()"><i class="fa fa-expand"></i></button>
@@ -37,5 +36,4 @@
         <button ng-if="hasUnsavedChanges" class="btn btn-primary u_margin-left" id="saveAndPreviewButton" ng-click="factory.saveAndPreview()">{{'editor-app.workspace.toolbar.saveAndPreview' | translate}} <i class="fa fa-play icon-right"></i></button>
     </div>
     </div>
-</div>
-<!--presentation-toolbar-->
+
