@@ -15,9 +15,13 @@ describe('service: launcher factory:', function() {
     $provide.service('presentation', function() {
       return presentation = {
         list: sinon.spy(function() {
-          return Q.resolve({
-            items: [{id: '123'}]
-          });
+          if (showError) {
+            return Q.reject({result: {error: { message: 'ERROR; could not load list'}}});
+          } else {
+            return Q.resolve({
+              items: [{id: '123'}]
+            });            
+          }
         })
       };
     });
@@ -39,10 +43,16 @@ describe('service: launcher factory:', function() {
         })
       };
     });
+    $provide.service('processErrorCode', function() {
+      return processErrorCode = sinon.spy(function() { return 'error'; });
+    });
+
   }));
   
-  var launcherFactory, canAccessDeferred, presentation, schedule, display;
+  var launcherFactory, canAccessDeferred, presentation, schedule, display, processErrorCode, showError;
   beforeEach(function() {
+    showError = false;
+
     inject(function($injector) {
       launcherFactory = $injector.get('launcherFactory');
     });
@@ -177,4 +187,19 @@ describe('service: launcher factory:', function() {
       presentationListDeferred.resolve({items: [{id: '234'}]});
     }, 10);
   });
+
+  it('should log errors and return when all calls are completed', function(done) {
+    showError = true;
+
+    launcherFactory.load().then(function() {
+      expect(launcherFactory.presentations).to.deep.equal({loadingItems: false, list: [], errorMessage: 'Failed to load Presentations.', apiError: 'error'});
+      expect(launcherFactory.schedules).to.deep.equal({loadingItems: false, list: [{id: '123'}]});
+      expect(launcherFactory.displays).to.deep.equal({loadingItems: false, list: [{id: '123'}]});
+      
+      done();
+    });
+
+    canAccessDeferred.resolve();
+  });
+
 });
