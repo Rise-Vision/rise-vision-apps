@@ -25,48 +25,53 @@
     </p>
     <hr>
 
-    <div class="form-group u_margin-sm-top">
+    <form role="form" name="playlistItemFields" ng-enter="save()" novalidate>
+      <div class="form-group u_margin-sm-top">
 
-      <label class="control-label u_margin-right" translate>editor-app.playlistItem.duration</label>
-      <label class="control-label control-label-secondary u_margin-left">
-        <input type="checkbox" ng-model="item.playUntilDone" />
-        <span translate>editor-app.playlistItem.playUntilDone</span>
-      </label>
-      <div class="row" ng-if="!item.playUntilDone">
-        <div class="col-sm-4">
-          <div class="input-group">
-            <input type="number" class="form-control" id="itemDuration" ng-model="item.duration" />
-            <span class="input-group-addon" translate>editor-app.playlistItem.seconds</span>
+        <label class="control-label u_margin-right" translate>editor-app.playlistItem.duration</label>
+        <label class="control-label control-label-secondary u_margin-left">
+          <input type="checkbox" ng-model="item.playUntilDone" />
+          <span translate>editor-app.playlistItem.playUntilDone</span>
+        </label>
+        <div class="row" ng-if="!item.playUntilDone">
+          <div class="col-sm-4">
+            <div class="input-group" ng-class="{'has-error': playlistItemFields.itemDuration.$invalid}">
+              <input type="number" class="form-control" id="itemDuration" name="itemDuration" ng-model="item.duration" required min="1" />
+              <span class="input-group-addon" translate>editor-app.playlistItem.seconds</span>
+            </div>
           </div>
-        </div>
-      </div><!--row-->
-    </div>
+        </div><!--row-->
+        <p class="text-danger" ng-show="playlistItemFields.itemDuration.$invalid" translate>
+          editor-app.playlistItem.required
+        </p>
+      </div>
 
-    <div class="form-group">
-      <label class="control-label u_margin-right" translate>schedules-app.fields.timeline</label>
-      <timeline-textbox
-      time-defined = "item.timeDefined"
-      start-date = "item.startDate"
-      end-date = "item.endDate"
-      start-time = "item.startTime"
-      end-time = "item.endTime"
-      recurrence-type = "item.recurrenceType"
-      recurrence-frequency = "item.recurrenceFrequency"
-      recurrence-absolute = "item.recurrenceAbsolute"
-      recurrence-day-of-week = "item.recurrenceDayOfWeek"
-      recurrence-day-of-month = "item.recurrenceDayOfMonth"
-      recurrence-week-of-month = "item.recurrenceWeekOfMonth"
-      recurrence-month-of-year = "item.recurrenceMonthOfYear"
-      recurrence-days-of-week = "item.recurrenceDaysOfWeek">
-      </timeline-textbox>
-    </div><!--form-group-->
+      <div class="form-group">
+        <label class="control-label u_margin-right" translate>schedules-app.fields.timeline</label>
+        <timeline-textbox
+        time-defined = "item.timeDefined"
+        start-date = "item.startDate"
+        end-date = "item.endDate"
+        start-time = "item.startTime"
+        end-time = "item.endTime"
+        recurrence-type = "item.recurrenceType"
+        recurrence-frequency = "item.recurrenceFrequency"
+        recurrence-absolute = "item.recurrenceAbsolute"
+        recurrence-day-of-week = "item.recurrenceDayOfWeek"
+        recurrence-day-of-month = "item.recurrenceDayOfMonth"
+        recurrence-week-of-month = "item.recurrenceWeekOfMonth"
+        recurrence-month-of-year = "item.recurrenceMonthOfYear"
+        recurrence-days-of-week = "item.recurrenceDaysOfWeek">
+        </timeline-textbox>
+      </div><!--form-group-->
 
-    <distribution-selector distribution="item.distribution" distribute-to-all="item.distributeToAll"></distribution-selector>
+      <distribution-selector distribution="item.distribution" distribute-to-all="item.distributeToAll"></distribution-selector>
+    </form>
   </div><!--modal-body-->
 
   <div class="modal-footer">
 
-    <button id="playlistItemSave" class="btn btn-primary" ng-click="save()">{{'common.apply' | translate}} <i class="fa fa-check icon-right"></i></button>
+    <button id="playlistItemSave" class="btn btn-primary" ng-click="save()" ng-disabled="playlistItemFields.$invalid">{{'common.apply' | translate}} <i class="fa fa-check icon-right"></i></button>
     <button class="btn btn-default" ng-click="dismiss()">{{'common.cancel' | translate}} <i class="fa fa-times icon-right"></i></button>
   </div>
 </div>
