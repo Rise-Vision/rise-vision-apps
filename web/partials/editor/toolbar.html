@@ -2,10 +2,10 @@
     {{'editor-app.workspace.toolbar.addPlaceholder' | translate}}
     <i class="fa fa-plus icon-right"></i>
 </button>
-<button id="compressArtboardButton" class="btn btn-default animated pulse u_margin-right ng-hide" ng-click="artboardFactory.compressArtboard()" ng-show="artboardFactory.designMode && artboardFactory.isFullArtboard()">
+<button id="compressArtboardButton" class="btn btn-default animated pulse u_margin-right hidden-xs ng-hide" ng-click="artboardFactory.compressArtboard()" ng-show="artboardFactory.designMode && artboardFactory.isFullArtboard()">
   <i class="fa fa-compress"></i>
 </button>
-<button id="expandArtboardButton" class="btn btn-default u_margin-right" ng-click="artboardFactory.expandArtboard()" ng-show="artboardFactory.designMode && !artboardFactory.isFullArtboard()">
+<button id="expandArtboardButton" class="btn btn-default u_margin-right hidden-xs" ng-click="artboardFactory.expandArtboard()" ng-show="artboardFactory.designMode && !artboardFactory.isFullArtboard()">
   <i class="fa fa-expand"></i>
 </button>
 <button id="presentationPropertiesButton" class="btn btn-default u_margin-right" ng-click="openProperties()" ng-show="artboardFactory.designMode">
