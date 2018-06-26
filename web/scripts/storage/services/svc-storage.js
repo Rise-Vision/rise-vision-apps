@@ -239,7 +239,11 @@ angular.module('risevision.storage.services')
           if (sourceName === destinationName) {
             deferred.reject({
               status: 400,
-              result: { error: { message: 'must-be-different' } }
+              result: {
+                error: {
+                  message: 'must-be-different'
+                }
+              }
             });
           } else {
             storageAPILoader().then(function (storageApi) {
