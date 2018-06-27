@@ -103,6 +103,9 @@ describe('controller: display details', function() {
         showPlansModal: function () {}
       };
     });
+    $provide.factory('currentPlanFactory', function() {
+      return {};
+    });
     $provide.factory('playerLicenseFactory', function() {
       return {
         toggleDisplayLicenseLocal: function () {},

@@ -156,7 +156,7 @@
     <div class="panel panel-default">
       <table class="table table--pro-features" ng-class="{ 'table--disabled': !display.playerProAuthorized }">
         <tbody class="table-body">
-          <tr class="table-body__row text-center u_padding-md" ng-show="!plansFactory.isPlanActive() && !display.playerProAuthorized">
+          <tr class="table-body__row text-center u_padding-md" ng-show="!currentPlanFactory.isPlanActive() && !display.playerProAuthorized">
             <td colspan="2">
               <span translate>displays-app.fields.player.rpp.unlock</span><br/>
               <button ng-click="showPlansModal()" class="btn btn-xs btn-primary u_margin-sm-top" translate>

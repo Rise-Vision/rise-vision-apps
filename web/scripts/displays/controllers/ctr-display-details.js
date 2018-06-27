@@ -7,15 +7,15 @@ angular.module('risevision.displays.controllers')
   .controller('displayDetails', ['$scope', '$rootScope', '$q', '$state', '$filter',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'storeAuthorization', 'enableCompanyProduct', 'userState', 'plansFactory',
-    'playerLicenseFactory', 'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', 'EMAIL_REGEX',
+    'currentPlanFactory', 'playerLicenseFactory', 'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_PRO_PRODUCT_ID', 'EMAIL_REGEX',
     function ($scope, $rootScope, $q, $state, $filter, displayFactory, display, screenshotFactory, playerProFactory,
       $loading, $log, $modal, $templateCache, displayId, storeAuthorization, enableCompanyProduct, userState,
-      plansFactory, playerLicenseFactory, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, EMAIL_REGEX) {
+      plansFactory, currentPlanFactory, playerLicenseFactory, PLAYER_PRO_PRODUCT_CODE, PLAYER_PRO_PRODUCT_ID, EMAIL_REGEX) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
       $scope.playerProFactory = playerProFactory;
-      $scope.plansFactory = plansFactory;
+      $scope.currentPlanFactory = currentPlanFactory;
       $scope.companyId = userState.getSelectedCompanyId();
       $scope.company = userState.getCopyOfSelectedCompany(true);
       $scope.deferredDisplay = $q.defer();
