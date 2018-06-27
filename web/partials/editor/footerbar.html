@@ -1,27 +1,21 @@
-<div class="container-fluid text-right editor-footer">
-  <div class="footer-content">
-    <div class="pull-left">
-        <button id="designButton" class="btn btn-link" ng-if="!artboardFactory.designMode" ng-click="artboardFactory.showArtboard()">
-          {{'editor-app.workspace.toolbar.mode.design' | translate}}
-        </button>
-        <button id="htmlButton" class="btn btn-link" ng-if="artboardFactory.designMode" ng-click="artboardFactory.showHtmlEditor()">
-          {{'editor-app.workspace.toolbar.mode.html' | translate}} <i class="fa fa-code"></i>
-        </button>
-    </div>
-    
-    <span class="save-status u_margin-right" ng-show="factory.presentation.id">
-      <last-revised revision-status-name="factory.presentation.revisionStatusName" change-date="factory.presentation.changeDate" changed-by="factory.presentation.changedBy"></last-revised>
-    </span>
+<button id="designButton" class="btn btn-link" ng-if="!artboardFactory.designMode" ng-click="artboardFactory.showArtboard()">
+  {{'editor-app.workspace.toolbar.mode.design' | translate}}
+</button>
+<button id="htmlButton" class="btn btn-link" ng-if="artboardFactory.designMode" ng-click="artboardFactory.showHtmlEditor()">
+  {{'editor-app.workspace.toolbar.mode.html' | translate}} <i class="fa fa-code"></i>
+</button>
 
-    <button id="restoreButton" require-role="cp" class="btn btn-default" ng-disabled="!factory.presentation.id || (!factory.isRevised() && !hasUnsavedChanges)" ng-click="factory.confirmRestorePresentation()" >{{'common.restore' | translate}}</button>
+<div class="footer-right">
+  <span class="save-status u_margin-right" ng-show="factory.presentation.id">
+    <last-revised revision-status-name="factory.presentation.revisionStatusName" change-date="factory.presentation.changeDate" changed-by="factory.presentation.changedBy"></last-revised>
+  </span>
+  <button id="restoreButton" require-role="cp" class="btn btn-default" ng-disabled="!factory.presentation.id || (!factory.isRevised() && !hasUnsavedChanges)" ng-click="factory.confirmRestorePresentation()" >{{'common.restore' | translate}}</button>
 
-    <!-- Indicates a successful or positive action -->
-    <button id="saveButton" require-role="ce cp" type="submit" class="btn btn-primary btn-fixed-width" ng-click="factory.save()">
-      {{ factory.savingPresentation ? ('common.saving' | translate) : ('common.save' | translate)}}
-      <i class="fa fa-check icon-right"></i>
-    </button>
+  <!-- Indicates a successful or positive action -->
+  <button id="saveButton" require-role="ce cp" type="submit" class="btn btn-primary btn-fixed-width" ng-click="factory.save()">
+    {{ factory.savingPresentation ? ('common.saving' | translate) : ('common.save' | translate)}}
+    <i class="fa fa-check icon-right"></i>
+  </button>
 
-    <button id="publishButton" require-role="cp" class="btn btn-primary" ng-disabled="hasUnsavedChanges || !factory.isRevised()" ng-click="factory.publishPresentation()" >{{'common.publish' | translate}}</button>
-    
-  </div>
-</div><!--container-fluid-->
+  <button id="publishButton" require-role="cp" class="btn btn-primary" ng-disabled="hasUnsavedChanges || !factory.isRevised()" ng-click="factory.publishPresentation()" >{{'common.publish' | translate}}</button>
+</div>

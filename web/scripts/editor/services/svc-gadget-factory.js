@@ -236,8 +236,8 @@ angular.module('risevision.editor.services')
           statusMessage = statusMessage + ' - ' + gadget.trialPeriod +
             ' ' + $filter('translate')('editor-app.subscription.status.daysTrial');
         } else if (gadget.subscriptionStatus === 'On Trial') {
-          statusMessage = statusMessage + 
-            ' - ' + _getRemainingDays(new Date(gadget.expiry)) + 
+          statusMessage = statusMessage +
+            ' - ' + _getRemainingDays(new Date(gadget.expiry)) +
             ' ' + $filter('translate')('editor-app.subscription.status.daysRemaining');
         }
         return statusMessage;

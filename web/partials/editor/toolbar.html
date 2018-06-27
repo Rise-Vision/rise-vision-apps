@@ -1,41 +1,58 @@
-<div id="workspaceToolbar" class="workspace-toolbar">
-    <div class="column flex-title">
-        <button id="compressArtboardButton" class="btn btn-default animated pulse u_margin-right ng-hide" ng-click="artboardFactory.compressArtboard()" ng-show="artboardFactory.designMode && artboardFactory.isFullArtboard()"><i class="fa fa-compress"></i></button>
-        <button id="expandArtboardButton" class="btn btn-default u_margin-right" ng-click="artboardFactory.expandArtboard()" ng-show="artboardFactory.designMode && !artboardFactory.isFullArtboard()"><i class="fa fa-expand"></i></button>
-        <button id="presentationPropertiesButton" class="btn btn-default u_margin-right" ng-click="openProperties()" ng-show="artboardFactory.designMode"><i class="fa fa-cog"></i></button>
-        <h2 id="presentationName" class="presentation-name" ng-click="openProperties()">{{factory.presentation.name}}</h2>
-    </div>
-    <div class="column fixed-toolset add-placeholder">
-        <button id="addPlaceholderButton" class="btn btn-primary pull-left" ng-click="addNewPlaceholder()" ng-show="artboardFactory.designMode" tooltip="{{'editor-app.workspace.toolbar.addPlaceholderTooltip' | translate}}" tooltip-class="cta-tooltip add-placeholder-tooltip {{tooltipClasses}}" tooltip-append-to-body="true" tooltip-placement="bottom" tooltip-trigger="show" pop-on-event-enabled="factory.presentation.placeholders.length === 0" rv-popover>
-            {{'editor-app.workspace.toolbar.addPlaceholder' | translate}}<i class="fa fa-plus icon-right"></i>
-        </button>
-    </div>
-    <div class="column fixed-toolset text-right">
-       <div class="zoom-selector u_bordered u_margin-right dropdown" dropdown ng-show="artboardFactory.designMode">
-            <button class="btn btn-default u_margin-right" ng-disabled="!artboardFactory.canZoomOut()" ng-click="artboardFactory.zoomOut()"> <i class="fa fa-minus"></i></button>
-            <div dropdown-toggle class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{artboardFactory.zoomLevel*100 | number:0 }}%
-                <span class="caret"></span>
-            </div>
-            <ul class="dropdown-menu" role="menu">
-                <li><a ng-click="artboardFactory.zoomFit()">Fit To Screen</a></li>
-                <li><a ng-click="artboardFactory.zoomPercent(100)">Full Size</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a ng-click="artboardFactory.zoomPercent(20)">20%</a></li>
-                <li><a ng-click="artboardFactory.zoomPercent(50)">50%</a></li>
-                <li><a ng-click="artboardFactory.zoomPercent(80)">80%</a></li>
-                <li><a ng-click="artboardFactory.zoomPercent(100)">100%</a></li>
-                <li><a ng-click="artboardFactory.zoomPercent(130)">130%</a></li>
-                <li><a ng-click="artboardFactory.zoomPercent(150)">150%</a></li>
-                <li><a ng-click="artboardFactory.zoomPercent(200)">200%</a></li>
-            </ul>
-            <button class="btn btn-default u_margin-left" ng-disabled="!artboardFactory.canZoomIn()" ng-click="artboardFactory.zoomIn()"> <i class="fa fa-plus"></i></button>
-        </div>
+<button id="addPlaceholderButton" class="btn btn-primary add-placeholder" ng-click="addNewPlaceholder()" ng-show="artboardFactory.designMode" tooltip="{{'editor-app.workspace.toolbar.addPlaceholderTooltip' | translate}}" tooltip-class="cta-tooltip add-placeholder-tooltip {{tooltipClasses}}" tooltip-append-to-body="true" tooltip-placement="bottom" tooltip-trigger="show" pop-on-event-enabled="factory.presentation.placeholders.length === 0" rv-popover>
+    {{'editor-app.workspace.toolbar.addPlaceholder' | translate}}
+    <i class="fa fa-plus icon-right"></i>
+</button>
+<button id="compressArtboardButton" class="btn btn-default animated pulse u_margin-right hidden-xs ng-hide" ng-click="artboardFactory.compressArtboard()" ng-show="artboardFactory.designMode && artboardFactory.isFullArtboard()">
+  <i class="fa fa-compress"></i>
+</button>
+<button id="expandArtboardButton" class="btn btn-default u_margin-right hidden-xs" ng-click="artboardFactory.expandArtboard()" ng-show="artboardFactory.designMode && !artboardFactory.isFullArtboard()">
+  <i class="fa fa-expand"></i>
+</button>
+<button id="presentationPropertiesButton" class="btn btn-default u_margin-right" ng-click="openProperties()" ng-show="artboardFactory.designMode">
+  <i class="fa fa-cog"></i>
+</button>
 
-        <button ng-show="!factory.presentation.id" id="changeTemplateButton" class="btn btn-default" ui-sref="apps.editor.add">{{'editor-app.workspace.toolbar.changeTemplate' | translate}} <i class="fa fa-th icon-right"></i></button>
-        <span ng-if="!factory.presentation.id" class="text-muted u_margin-left" translate>editor-app.workspace.toolbar.or</span>
-        <button ng-if="!hasUnsavedChanges" class="btn btn-primary" id="previewButton" ng-click="factory.preview(factory.presentation.id)" ng-disabled="!factory.presentation.id">{{'editor-app.workspace.toolbar.preview' | translate}} <i class="fa fa-play icon-right"></i></button>
-        <button ng-if="hasUnsavedChanges" class="btn btn-primary u_margin-left" id="saveAndPreviewButton" ng-click="factory.saveAndPreview()">{{'editor-app.workspace.toolbar.saveAndPreview' | translate}} <i class="fa fa-play icon-right"></i></button>
+<h2 id="presentationName" class="presentation-name" ng-click="openProperties()">{{factory.presentation.name}}</h2>    
+
+<div class="toolbar-right">
+  <div class="zoom-selector u_bordered u_margin-right dropdown" dropdown ng-show="artboardFactory.designMode">
+    <button class="btn btn-default u_margin-right" ng-disabled="!artboardFactory.canZoomOut()" ng-click="artboardFactory.zoomOut()">
+      <i class="fa fa-minus"></i>
+    </button>
+    <div dropdown-toggle class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      {{artboardFactory.zoomLevel*100 | number:0 }}%
+      <span class="caret"></span>
     </div>
-    </div>
+    <ul class="dropdown-menu" role="menu">
+      <li><a ng-click="artboardFactory.zoomFit()">Fit To Screen</a></li>
+      <li><a ng-click="artboardFactory.zoomPercent(100)">Full Size</a></li>
+      <li role="separator" class="divider"></li>
+      <li><a ng-click="artboardFactory.zoomPercent(20)">20%</a></li>
+      <li><a ng-click="artboardFactory.zoomPercent(50)">50%</a></li>
+      <li><a ng-click="artboardFactory.zoomPercent(80)">80%</a></li>
+      <li><a ng-click="artboardFactory.zoomPercent(100)">100%</a></li>
+      <li><a ng-click="artboardFactory.zoomPercent(130)">130%</a></li>
+      <li><a ng-click="artboardFactory.zoomPercent(150)">150%</a></li>
+      <li><a ng-click="artboardFactory.zoomPercent(200)">200%</a></li>
+    </ul>
+    <button class="btn btn-default u_margin-left" ng-disabled="!artboardFactory.canZoomIn()" ng-click="artboardFactory.zoomIn()">
+      <i class="fa fa-plus"></i>
+    </button>
+  </div>
+
+  <button id="changeTemplateButton" ng-show="!factory.presentation.id" class="btn btn-default" ui-sref="apps.editor.add">
+    {{'editor-app.workspace.toolbar.changeTemplate' | translate}}
+    <i class="fa fa-th icon-right"></i>
+  </button>
+  <span class="text-muted u_margin-left u_margin-right" ng-if="!factory.presentation.id" translate >editor-app.workspace.toolbar.or</span>
+  <button id="previewButton" ng-if="!hasUnsavedChanges" class="btn btn-primary" ng-click="factory.preview(factory.presentation.id)" ng-disabled="!factory.presentation.id">
+    {{'editor-app.workspace.toolbar.preview' | translate}}
+    <i class="fa fa-play icon-right"></i>
+  </button>
+  <button id="saveAndPreviewButton" class="btn btn-primary u_margin-left" ng-if="hasUnsavedChanges"  ng-click="factory.saveAndPreview()">
+    {{'editor-app.workspace.toolbar.saveAndPreview' | translate}}
+    <i class="fa fa-play icon-right"></i>
+  </button>
+
 </div>
-<!--presentation-toolbar-->
+</div>

@@ -1,14 +1,14 @@
-<style type="text/css">
-	.navbar .container {width: 100%;}
-</style>
-
 <div id="workspace" class="workspace" ng-class="{'hide-sidebar' : artboardFactory.hideSidebar(), 'active-banner-mode' : isSubcompanySelected() || isTestCompanySelected(), 'active-banner-mode-double' : isSubcompanySelected() && isTestCompanySelected(), 'active-onboard-mode' : showOnboarding}">
-  <sidebar></sidebar>
-  <toolbar></toolbar>
 
-  <div class="workspace-board" workspace-element>
-    <div id="editingModeView" ui-view></div>
-  </div><!--editor-bg-->
+  <toolbar class="workspace-toolbar" id="workspaceToolbar"></toolbar>
 
-  <footer></footer>
+  <div class="workspace-wrapper">
+    <sidebar class="workspace-sidebar" ng-class="{'show-ph-properties' : factory.placeholder}"></sidebar>
+    <div class="workspace-board" workspace-element>
+      <div id="editingModeView" ui-view></div>
+    </div><!--editor-bg-->
+  </div><!--workspace-wrapper-->
+
+  <footer class="text-right editor-footer"></footer>
+
 </div>

@@ -34,13 +34,13 @@ angular.module('risevision.apps.launcher.services')
           .then(function (result) {
             object.list = result.items || [];
           })
-          .catch(function(e) {
+          .catch(function (e) {
             object.errorMessage = 'Failed to load ' + name + '.';
             object.apiError = processErrorCode(name, 'load', e);
 
             $log.error(object.errorMessage, e);
           })
-          .finally(function() {
+          .finally(function () {
             object.loadingItems = false;
           });
 

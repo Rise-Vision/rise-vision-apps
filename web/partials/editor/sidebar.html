@@ -1,30 +1,27 @@
-<div class="workspace-sidebar" ng-class="{'show-ph-properties' : factory.placeholder}">
-  <div class="workspace-sidebar-content">
-    <div class="ph-properties">
-      <a id="backToListButton" href="" class="btn btn-default pull-left u_margin-right" ng-click="factory.clearPlaceholder()">
-        <i class="fa fa-angle-left icon-left"></i>
-        {{'common.back' | translate}}
-      </a>
-      <h4 translate>editor-app.workspace.sidebar.edit.title</h4>
-      <div class="btn-group btn-group-justified u_margin-sm-bottom" role="group" aria-label="...">
-        <a id="editPlaylistButton" href="" class="btn btn-default" ng-class="{'active' : showPlaylist}" ng-click="showPlaylist=true" >{{'editor-app.workspace.sidebar.edit.playlist' | translate}}</a>
-        <a id="editPropertiesButton" href="" class="btn btn-default" ng-class="{'active' : !showPlaylist}" ng-click="showPlaylist=false" >{{'editor-app.workspace.sidebar.edit.properties' |translate}}</a>        
-      </div>
-
-      <div class="ph-playlist animated fadeIn" ng-show="factory.placeholder && showPlaylist">
-        <placeholder-playlist></placeholder-playlist>
-      </div>
-
-      <div class="ph-settings animated fadeIn" ng-show="factory.placeholder && !showPlaylist">
-        <placeholder-settings></placeholder-settings>
-      </div>
-      <!--ph-settings-->
+<div class="workspace-sidebar-content">
+  <div class="ph-properties">
+    <a id="backToListButton" href="" class="btn btn-default pull-left u_margin-right" ng-click="factory.clearPlaceholder()">
+      <i class="fa fa-angle-left icon-left"></i>
+      {{'common.back' | translate}}
+    </a>
+    <h4 translate>editor-app.workspace.sidebar.edit.title</h4>
+    <div class="btn-group btn-group-justified u_margin-sm-bottom" role="group" aria-label="...">
+      <a id="editPlaylistButton" href="" class="btn btn-default" ng-class="{'active' : showPlaylist}" ng-click="showPlaylist=true" >{{'editor-app.workspace.sidebar.edit.playlist' | translate}}</a>
+      <a id="editPropertiesButton" href="" class="btn btn-default" ng-class="{'active' : !showPlaylist}" ng-click="showPlaylist=false" >{{'editor-app.workspace.sidebar.edit.properties' |translate}}</a>        
     </div>
 
-    <div class="ph-list">
-      <h4 translate>editor-app.workspace.sidebar.title</h4>
-      <placeholders-list></placeholders-list>
+    <div class="ph-playlist animated fadeIn" ng-show="factory.placeholder && showPlaylist">
+      <placeholder-playlist></placeholder-playlist>
     </div>
 
-  </div><!--panel-body-->
-</div><!--workspaceSidebar-->
+    <div class="ph-settings animated fadeIn" ng-show="factory.placeholder && !showPlaylist">
+      <placeholder-settings></placeholder-settings>
+    </div>
+    <!--ph-settings-->
+  </div>
+
+  <div class="ph-list">
+    <placeholders-list></placeholders-list>
+  </div>
+
+</div>

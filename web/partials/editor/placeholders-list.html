@@ -1,4 +1,8 @@
-<div class="editor-playlist scrollable-list">
+<div class="workspace-sidebar-header">
+  <h4 translate>editor-app.workspace.sidebar.title</h4>
+</div>
+
+<div class="editor-playlist workspace-sidebar-body">
   <div class="editor-playlist-item u_clickable placeholderFromSideBar" 
     ng-repeat="placeholder in factory.getPlaceholders() track by $index"
     tooltip="{{'editor-app.workspace.sidebar.placeholderTooltip' | translate}}" 
