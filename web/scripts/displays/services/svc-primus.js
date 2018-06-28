@@ -78,7 +78,8 @@ angular.module('risevision.displays.services')
         .then(function (oldMSResults) {
           return factory.checkNewMSPresence(displayIds, oldMSResults);
         })
-        .catch(function () {
+        .catch(function (err) {
+          console.log('Error checking presence on the legacy messaging service', err);
           return factory.checkNewMSPresence(displayIds, []);
         });
     };
