@@ -35,10 +35,16 @@ angular.module('risevision.displays.services')
     };
   }])
 
-  .factory('getDisplayStatus', ['loadOldPrimus', '$q', '$timeout', 'checkNewMSPresence', function (
-    loadOldPrimus, $q, $timeout, checkNewMSPresence) {
-    return function (displayIds) {
+  .factory('displayStatusFactory', ['loadOldPrimus', '$q', '$http', '$timeout', 'MESSAGING_PRESENCE_URL', function (
+    loadOldPrimus, $q, $http, $timeout, presenceUrl) {
+    var factory = {
+      apiError: null
+    };
+
+    factory.getDisplayStatus = function (displayIds) {
       var deferred = $q.defer();
+
+      factory.apiError = null;
 
       loadOldPrimus.create()
         .then(function (primus) {
@@ -70,17 +76,14 @@ angular.module('risevision.displays.services')
 
       return deferred.promise
         .then(function (oldMSResults) {
-          return checkNewMSPresence(displayIds, oldMSResults);
+          return factory.checkNewMSPresence(displayIds, oldMSResults);
         })
         .catch(function () {
-          return checkNewMSPresence(displayIds, []);
+          return factory.checkNewMSPresence(displayIds, []);
         });
     };
-  }])
 
-  .factory('checkNewMSPresence', ['$q', '$http', 'MESSAGING_PRESENCE_URL', function (
-    $q, $http, presenceUrl) {
-    return function (displayIds, oldMSResults) {
+    factory.checkNewMSPresence = function (displayIds, oldMSResults) {
       var deferred = $q.defer();
 
       $http.post(presenceUrl, displayIds)
@@ -129,12 +132,14 @@ angular.module('risevision.displays.services')
           }
         })
         .catch(function (err) {
-          console.log(err);
+          factory.apiError = err;
           deferred.reject(err);
         });
 
       return deferred.promise;
     };
+
+    return factory;
   }])
 
   .factory('screenshotRequester', ['loadOldPrimus', 'loadPrimus', '$q', '$timeout', function (

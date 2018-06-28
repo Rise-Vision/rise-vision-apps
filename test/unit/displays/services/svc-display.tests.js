@@ -6,26 +6,28 @@ describe('service: display:', function() {
   beforeEach(module('risevision.displays.services'));
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
-    $provide.factory('getDisplayStatus', function($q) {
-      return function(ids) {
-        var deferred = $q.defer();
+    $provide.factory('displayStatusFactory', function($q) {
+      return {
+        getDisplayStatus: function(ids) {
+          var deferred = $q.defer();
 
-        $timeout(function() {
-          var statuses = ids.map(function(id) {
-            var o = {};
+          $timeout(function() {
+            var statuses = ids.map(function(id) {
+              var o = {};
 
-            if(id !== 'display1') {
-              o[id] = true;
-              o.lastConnectionTime = CONNECTION_TIME;
-            }
+              if(id !== 'display1') {
+                o[id] = true;
+                o.lastConnectionTime = CONNECTION_TIME;
+              }
 
-            return o;
+              return o;
+            });
+            deferred.resolve(statuses);
           });
-          deferred.resolve(statuses);
-        });
 
-        return deferred.promise;
-      };
+          return deferred.promise;
+        }
+      }
     });
     $provide.factory('getProductSubscriptionStatus', function($q) {
       return function(productCode, ids) {

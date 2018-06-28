@@ -22,6 +22,10 @@
   <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
 </div> 
 
+<div id="errorBox" ng-show="displayStatusFactory.apiError" class="alert alert-danger" role="alert">
+  <strong>{{displayStatusFactory.errorMessage}}</strong> {{displayStatusFactory.apiError}}
+</div> 
+
 <search-filter filter-config="filterConfig" search="search" do-search="displays.doSearch"></search-filter>
 
 <div class="bg-warning u_padding-sm u_margin-sm-top u_margin-sm-bottom" ng-show="search.query">

@@ -17,10 +17,10 @@
       'postalCode'
     ])
     .service('display', ['$rootScope', '$q', '$log', 'coreAPILoader',
-      'userState', 'getDisplayStatus', 'screenshotRequester', 'pick',
+      'userState', 'displayStatusFactory', 'screenshotRequester', 'pick',
       'DISPLAY_WRITABLE_FIELDS', 'DISPLAY_SEARCH_FIELDS', 'PLAYER_PRO_PRODUCT_CODE',
       function ($rootScope, $q, $log, coreAPILoader, userState,
-        getDisplayStatus, screenshotRequester, pick,
+        displayStatusFactory, screenshotRequester, pick,
         DISPLAY_WRITABLE_FIELDS, DISPLAY_SEARCH_FIELDS, PLAYER_PRO_PRODUCT_CODE) {
 
         var companiesStatus = {};
@@ -100,7 +100,7 @@
 
                 service.statusLoading = true;
 
-                getDisplayStatus(displayIds).then(function (statuses) {
+                displayStatusFactory.getDisplayStatus(displayIds).then(function (statuses) {
                     _mergeConnectionStatuses(result.items, statuses);
 
                     $rootScope.$broadcast('displaysLoaded', result.items);
@@ -138,7 +138,7 @@
                 if (item) {
                   service.statusLoading = true;
 
-                  getDisplayStatus([item.id]).then(function (statuses) {
+                  displayStatusFactory.getDisplayStatus([item.id]).then(function (statuses) {
                     _mergeConnectionStatus(item, statuses[0]);
 
                     $rootScope.$broadcast('displaysLoaded', [item]);
