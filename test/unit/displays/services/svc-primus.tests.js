@@ -1,6 +1,6 @@
 'use strict';
 
-describe.only('service: primus:', function() {
+describe('service: primus:', function() {
   var sandbox;
 
   beforeEach(module('risevision.displays.services'));

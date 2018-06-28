@@ -35,8 +35,8 @@ angular.module('risevision.displays.services')
     };
   }])
 
-  .factory('displayStatusFactory', ['loadOldPrimus', '$q', '$http', '$timeout', 'MESSAGING_PRESENCE_URL', function (
-    loadOldPrimus, $q, $http, $timeout, presenceUrl) {
+  .factory('displayStatusFactory', ['loadOldPrimus', '$q', '$http', '$timeout', 'processErrorCode', 'MESSAGING_PRESENCE_URL',
+  function (loadOldPrimus, $q, $http, $timeout, processErrorCode, MESSAGING_PRESENCE_URL) {
     var factory = {
       apiError: null
     };
@@ -86,7 +86,7 @@ angular.module('risevision.displays.services')
     factory.checkNewMSPresence = function (displayIds, oldMSResults) {
       var deferred = $q.defer();
 
-      $http.post(presenceUrl, displayIds)
+      $http.post(MESSAGING_PRESENCE_URL, displayIds)
         .then(function (resp) {
           var presenceData = resp.data;
 
@@ -132,7 +132,8 @@ angular.module('risevision.displays.services')
           }
         })
         .catch(function (err) {
-          factory.apiError = err;
+          factory.errorMessage = 'Failed to load displays connection status.';
+          factory.apiError = processErrorCode('Status', 'load', err);
           deferred.reject(err);
         });
 
