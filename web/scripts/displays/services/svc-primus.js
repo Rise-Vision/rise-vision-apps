@@ -68,7 +68,13 @@ angular.module('risevision.displays.services')
           });
         });
 
-      return deferred.promise.then(checkNewMSPresence.bind(null, displayIds));
+      return deferred.promise
+        .then(function (oldMSResults) {
+          return checkNewMSPresence(displayIds, oldMSResults);
+        })
+        .catch(function () {
+          return checkNewMSPresence(displayIds, []);
+        });
     };
   }])
 

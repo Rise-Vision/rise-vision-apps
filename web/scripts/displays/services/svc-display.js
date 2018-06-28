@@ -105,6 +105,9 @@
 
                     $rootScope.$broadcast('displaysLoaded', result.items);
                   })
+                  .catch(function (e) {
+                    console.error('Failed to load status of displays.', e);
+                  })
                   .finally(function () {
                     service.statusLoading = false;
                   });
