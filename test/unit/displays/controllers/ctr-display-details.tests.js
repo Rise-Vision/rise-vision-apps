@@ -98,10 +98,17 @@ describe('controller: display details', function() {
         loadScreenshot: sandbox.stub()
       }
     });
-    $provide.factory('planFactory', function() {
+    $provide.factory('plansFactory', function() {
+      return {
+        showPlansModal: function () {}
+      };
+    });
+    $provide.factory('currentPlanFactory', function() {
+      return {};
+    });
+    $provide.factory('playerLicenseFactory', function() {
       return {
         toggleDisplayLicenseLocal: function () {},
-        showPlansModal: function () {},
         getProLicenseCount: function () {},
         areAllProLicensesUsed: function () {},
         hasProfessionalLicenses: function () {}
@@ -114,7 +121,7 @@ describe('controller: display details', function() {
   }));
   var $scope, $state, updateCalled, deleteCalled, confirmDelete;
   var resolveLoadScreenshot, resolveRequestScreenshot, enableCompanyProduct, userState,
-  $rootScope, $loading, displayFactory, planFactory, playerProFactory;
+  $rootScope, $loading, displayFactory, playerLicenseFactory, playerProFactory;
   beforeEach(function(){
     updateCalled = false;
     deleteCalled = false;
@@ -123,7 +130,7 @@ describe('controller: display details', function() {
 
     inject(function($injector, $controller){
       displayFactory = $injector.get('displayFactory');
-      planFactory = $injector.get('planFactory');
+      playerLicenseFactory = $injector.get('playerLicenseFactory');
       playerProFactory = $injector.get('playerProFactory');
       enableCompanyProduct = $injector.get('enableCompanyProduct');
       userState = $injector.get('userState');
@@ -250,7 +257,7 @@ describe('controller: display details', function() {
     it('should activate Pro status', function (done) {
       sandbox.stub($scope, 'isProAvailable').returns(true);
       sandbox.stub($scope, 'showPlansModal');
-      sandbox.stub(planFactory, 'toggleDisplayLicenseLocal');
+      sandbox.stub(playerLicenseFactory, 'toggleDisplayLicenseLocal');
       enableCompanyProduct.returns(Q.resolve());
 
       // Needed because display object gets overwritten at controller initialization
@@ -262,7 +269,7 @@ describe('controller: display details', function() {
 
         setTimeout(function () {
           expect(enableCompanyProduct).to.have.been.called;
-          expect(planFactory.toggleDisplayLicenseLocal).to.have.been.called;
+          expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.called;
           expect($scope.showPlansModal).to.have.not.been.called;
           done();        
         }, 0);
@@ -272,7 +279,7 @@ describe('controller: display details', function() {
     it('should deactivate Pro status', function (done) {
       sandbox.stub($scope, 'isProAvailable').returns(true);
       sandbox.stub($scope, 'showPlansModal');
-      sandbox.stub(planFactory, 'toggleDisplayLicenseLocal');
+      sandbox.stub(playerLicenseFactory, 'toggleDisplayLicenseLocal');
       enableCompanyProduct.returns(Q.resolve());
 
       setTimeout(function () {
@@ -283,7 +290,7 @@ describe('controller: display details', function() {
 
         setTimeout(function () {
           expect(enableCompanyProduct).to.have.been.called;
-          expect(planFactory.toggleDisplayLicenseLocal).to.have.been.called;
+          expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.called;
           expect($scope.showPlansModal).to.have.not.been.called;
           done();
         }, 0);
@@ -315,8 +322,8 @@ describe('controller: display details', function() {
   describe('areAllProLicensesUsed:', function() {
     it('should return all licenses are used if display is not on the list', function () {
       $scope.company.playerProAssignedDisplays = ['badDisplay'];
-      sandbox.stub(planFactory, 'getProLicenseCount').returns(1);
-      sandbox.stub(planFactory, 'areAllProLicensesUsed').returns(true);
+      sandbox.stub(playerLicenseFactory, 'getProLicenseCount').returns(1);
+      sandbox.stub(playerLicenseFactory, 'areAllProLicensesUsed').returns(true);
 
       expect($scope.areAllProLicensesUsed()).to.be.true;
     });
@@ -324,8 +331,8 @@ describe('controller: display details', function() {
     it('should return all licenses are used if display is on the list', function () {
       $scope.company.playerProAssignedDisplays = ['display1'];
       $scope.displayId = 'display1';
-      sandbox.stub(planFactory, 'getProLicenseCount').returns(1);
-      sandbox.stub(planFactory, 'areAllProLicensesUsed').returns(false);
+      sandbox.stub(playerLicenseFactory, 'getProLicenseCount').returns(1);
+      sandbox.stub(playerLicenseFactory, 'areAllProLicensesUsed').returns(false);
 
       expect($scope.areAllProLicensesUsed()).to.be.false;
     });
@@ -333,14 +340,14 @@ describe('controller: display details', function() {
 
   describe('isProAvailable:', function() {
     it('should return false if available licenses are zero (Free Plan)', function () {
-      sandbox.stub(planFactory, 'hasProfessionalLicenses').returns(false);
+      sandbox.stub(playerLicenseFactory, 'hasProfessionalLicenses').returns(false);
       sandbox.stub($scope, 'getProLicenseCount').returns(0);
 
       expect($scope.isProAvailable()).to.be.false;
     });
 
     it('should return false if all available licenses are used', function () {
-      sandbox.stub(planFactory, 'hasProfessionalLicenses').returns(true);
+      sandbox.stub(playerLicenseFactory, 'hasProfessionalLicenses').returns(true);
       sandbox.stub($scope, 'getProLicenseCount').returns(1);
       sandbox.stub($scope, 'areAllProLicensesUsed').returns(true);
 
@@ -348,7 +355,7 @@ describe('controller: display details', function() {
     });
 
     it('should return true if there are available licenses', function () {
-      sandbox.stub(planFactory, 'hasProfessionalLicenses').returns(true);
+      sandbox.stub(playerLicenseFactory, 'hasProfessionalLicenses').returns(true);
       sandbox.stub($scope, 'getProLicenseCount').returns(1);
       sandbox.stub($scope, 'areAllProLicensesUsed').returns(false);
 

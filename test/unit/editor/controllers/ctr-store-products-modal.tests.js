@@ -67,6 +67,8 @@ describe('controller: Store Products Modal', function() {
         return productAuthorized ? Q.resolve() : Q.reject();
       };
     });
+    
+    $provide.service('playerLicenseFactory', function() {});
   }));
   
   var $scope, $loading, $loadingStartSpy, $loadingStopSpy;

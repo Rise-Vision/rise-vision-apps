@@ -27,21 +27,19 @@ describe('controller: ProductDetailsModalController', function() {
         stop: sinon.spy()
       };
     });
-    $provide.service('planFactory', function(){
+    $provide.service('plansFactory', function(){
       return {
         showPlansModal: function() {}
       }
     })
   }));
   var $scope, $modalInstance, $modalInstanceDismissSpy, $modalInstanceCloseSpy, product,
-    $loading, checkTemplateAccessSpy, storeAuthorize,
-    planFactory;
+    $loading, checkTemplateAccessSpy, storeAuthorize;
   
   function initController(paymentTerms) {
     inject(function($injector,$rootScope, $controller, checkTemplateAccess){
       $scope = $rootScope.$new();
       $modalInstance = $injector.get('$modalInstance');
-      planFactory = $injector.get('planFactory');
 
       checkTemplateAccessSpy = checkTemplateAccess;
       

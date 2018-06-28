@@ -1,15 +1,15 @@
 'use strict';
 angular.module('risevision.storage.services')
   .factory('FilesFactory', ['$rootScope', 'storage', 'storageUtils', 'pendingOperationsFactory',
-    'filterFilter', 'planFactory', 'processErrorCode',
+    'filterFilter', 'plansFactory', 'processErrorCode',
     function ($rootScope, storage, storageUtils, pendingOperationsFactory,
-      filterFilter, planFactory, processErrorCode) {
+      filterFilter, plansFactory, processErrorCode) {
       return function (storageFactory) {
 
         // filesFactory functionality ~~~~~~~~~~
 
         var factory = {
-          startTrial: planFactory.showPlansModal,
+          startTrial: plansFactory.showPlansModal,
           filesDetails: {
             files: [],
             code: 202

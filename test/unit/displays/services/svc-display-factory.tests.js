@@ -75,7 +75,7 @@ describe('service: displayFactory:', function() {
         }
       }
     });
-    $provide.factory('planFactory', function() {
+    $provide.factory('playerLicenseFactory', function() {
       return {
         toggleDisplayLicenseLocal: function () {},
         areAllProLicensesUsed: function () {}
@@ -87,7 +87,7 @@ describe('service: displayFactory:', function() {
 
   }));
   var displayFactory, $rootScope, $modal, trackerCalled, updateDisplay, currentState, returnList, 
-  displayListSpy, displayAddSpy, planFactory, display, processErrorCode;
+  displayListSpy, displayAddSpy, playerLicenseFactory, display, processErrorCode;
   beforeEach(function(){
     trackerCalled = undefined;
     currentState = undefined;
@@ -96,7 +96,7 @@ describe('service: displayFactory:', function() {
 
     inject(function($injector){
       displayFactory = $injector.get('displayFactory');
-      planFactory = $injector.get('planFactory');
+      playerLicenseFactory = $injector.get('playerLicenseFactory');
       display = $injector.get('display');
       $modal = $injector.get('$modal');
       $rootScope = $injector.get('$rootScope');
@@ -248,8 +248,8 @@ describe('service: displayFactory:', function() {
     it('should add the display',function(done){
       updateDisplay = true;
       var broadcastSpy = sinon.spy($rootScope,'$broadcast');
-      sandbox.stub(planFactory, 'toggleDisplayLicenseLocal');
-      sandbox.stub(planFactory, 'areAllProLicensesUsed').returns(false);
+      sandbox.stub(playerLicenseFactory, 'toggleDisplayLicenseLocal');
+      sandbox.stub(playerLicenseFactory, 'areAllProLicensesUsed').returns(false);
       display._display.playerProAuthorized = true;
 
       displayFactory.addDisplay();
@@ -265,7 +265,7 @@ describe('service: displayFactory:', function() {
         expect(displayFactory.loadingDisplay).to.be.false;
         expect(displayFactory.errorMessage).to.not.be.ok;
         expect(displayFactory.apiError).to.not.be.ok;
-        expect(planFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(display._display.id, true);
+        expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(display._display.id, true);
         
         done();
       },10);
@@ -352,7 +352,7 @@ describe('service: displayFactory:', function() {
   describe('deleteDisplay: ',function(){
     it('should delete the display',function(done){
       updateDisplay = true;
-      sandbox.stub(planFactory, 'toggleDisplayLicenseLocal');
+      sandbox.stub(playerLicenseFactory, 'toggleDisplayLicenseLocal');
 
       displayFactory.deleteDisplay();
       
@@ -364,7 +364,7 @@ describe('service: displayFactory:', function() {
         expect(displayFactory.apiError).to.not.be.ok;
         expect(trackerCalled).to.equal('Display Deleted');
         expect(currentState).to.equal('apps.displays.list');
-        expect(planFactory.toggleDisplayLicenseLocal).to.have.been.called;
+        expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.called;
         done();
       },10);
     });
