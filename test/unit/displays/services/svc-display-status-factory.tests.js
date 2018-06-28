@@ -1,6 +1,6 @@
 'use strict';
 
-describe.only('service: display status factory:', function() {
+describe('service: display status factory:', function() {
   var sandbox;
 
   beforeEach(module('risevision.displays.services'));
