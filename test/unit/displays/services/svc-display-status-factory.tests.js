@@ -81,7 +81,7 @@ describe('service: display status factory:', function() {
         return [
           200,
           ids.reduce(function(obj, id) {
-            obj[id] = { connected: id === "b" ? true : false };
+            obj[id] = { connected: id === 'b' ? true : false };
             return obj;
           }, {}),
         ];
@@ -105,7 +105,7 @@ describe('service: display status factory:', function() {
         return [
           200,
           ids.reduce(function(obj, id) {
-            obj[id] = { connected: id === "b" ? true : false };
+            obj[id] = { connected: id === 'b' ? true : false };
             return obj;
           }, {}),
         ];
