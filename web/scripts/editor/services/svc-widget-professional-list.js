@@ -80,8 +80,7 @@ angular.module('risevision.editor.services')
       id: 'df887785-3614-4f05-86c7-fce07b8745dc',
       url: 'http://s3.amazonaws.com/widget-web-page/1.0.0/dist/widget.html'
     },
-
-
+    // Third Party Widgets
     {
       env: 'PROD',
       name: 'Facebook by SMARTplayDS',
