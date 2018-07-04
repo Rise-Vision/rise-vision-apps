@@ -2,7 +2,7 @@
 
 angular.module('risevision.editor.services')
   .constant('PRESENTATION_BORDER_SIZE', 12)
-  .constant('PRESENTATION_MARGIN_TOP', 60)
+  .constant('PRESENTATION_MARGIN_TOP', 0)
   .constant('PRESENTATION_SIDEBAR_SIZE', 290)
   .factory('artboardFactory', ['$state', 'editorFactory', 'placeholderFactory',
     'PRESENTATION_BORDER_SIZE', 'PRESENTATION_MARGIN_TOP',
