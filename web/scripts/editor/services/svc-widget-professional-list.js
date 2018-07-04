@@ -82,98 +82,107 @@ angular.module('risevision.editor.services')
     },
     // Third Party Widgets
     {
-      env: 'PROD',
-      name: 'Facebook by SMARTplayDS',
+      env: 'TEST',
+      name: 'Facebook Feed',
       imageUrl: 'https://s3.amazonaws.com/Store-Products/SMARTplayDS/facebookFeed_ProductTile.png',
-      imageAlt: 'add facebook by smartplayds',
+      imageAlt: 'add facebook feed',
+      gadgetType: 'Widget',
+      id: '674b49a9-4058-4db4-b49a-13c9216b5d11',
+      url: 'http://test.smartplayds.com/plugin/social/facebook-widget/widget.html'
+    },
+    {
+      env: 'PROD',
+      name: 'Facebook Feed',
+      imageUrl: 'https://s3.amazonaws.com/Store-Products/SMARTplayDS/facebookFeed_ProductTile.png',
+      imageAlt: 'add facebook feed',
       gadgetType: 'Widget',
       id: '5dba4bee-b26d-4592-9f22-a7b46b1bd693',
       url: 'http://rep.smartplayds.com/plugin/facebook-widget/widget.html'
     },
     {
       env: 'PROD',
-      name: 'DigiChief Weather',
-      imageUrl: 'https://s3.amazonaws.com/Store-Products/Unified+Brand/widget_horoscope.jpg',
-      imageAlt: 'add digiChief weather',
+      name: 'Weather Forecast and Conditions',
+      imageUrl: 'https://s3.amazonaws.com/Store-Products/Digichief/widget_1001_image_edit3.jpg',
+      imageAlt: 'add weather forecast and conditions',
       gadgetType: 'Widget',
       id: '684ff886-f83d-4e95-9b56-5864c5ec0de5',
       url: 'http://data-feed.digichief.com/risevision/Weather/WeatherWidget.html?up_layout=current&up_address=geolocation&up_custom-address-state=&up_description=service&up_unit=fahrenheit&up_wind-speed-current=mph&up_wind-speed-forecast=kph&up_custom-address-country=&up_custom-address-city=&up_custom-address-zipcode=&up_border-color=&up_Language=en-us&up_show-humidity-current=true&up_show-sky-current=true&up_show-humidity-forecast=true&up_show-sky-forecast=true&up_terms=false&up_show-border=true&up_seperator-char=/&up_current-show-symbol=Yes&up_forecast-show-symbol=Yes'
     },
     {
       env: 'PROD',
-      name: 'Computer Aid - Weather',
+      name: 'Mostly Sunny!',
       imageUrl: 'https://s3.amazonaws.com/Store-Products/Computer-Aid/widget_MostlySunny_image.png',
-      imageAlt: 'add computer aid weather',
+      imageAlt: 'add mostly sunny',
       gadgetType: 'Widget',
       id: 'cf8a8c03-4461-4a9e-8a56-1254384d3b25',
       url: 'https://account.testinseconds.com/WeatherWidget/widget.html'
     },
     {
       env: 'PROD',
-      name: 'Computer Aid - Scrolling Text',
-      imageUrl: '',
-      imageAlt: 'add computer aid scrolling text',
+      name: 'Ticky',
+      imageUrl: 'https://s3.amazonaws.com/Store-Products/Computer-Aid/widget_ticky_image.png',
+      imageAlt: 'add ticky',
       gadgetType: 'Widget',
       id: 'e8fdec6f-bcfb-4102-a91f-77ddc79b73c9',
       url: 'https://account.testinseconds.com/TextMarquee/widget.html'
     },
     {
       env: 'PROD',
-      name: 'Digichief Weather Maps',
+      name: 'Weather Maps',
       imageUrl: 'https://s3.amazonaws.com/Store-Products/Digichief/widget_4000_image_edit3.jpg',
-      imageAlt: 'add digichief weather maps',
+      imageAlt: 'add weather maps',
       gadgetType: 'Widget',
       id: '9e8fb866-0f21-485d-8f68-7529c48ca9d4',
       url: 'https://data-feed.digichief.com/risevision/NewsRadar/NewsRadarWidget.html?up_region=USA&up_SelectedMaps=&up_terms=false&up_show-border=true&up_border-color=&up_Transition=fade&up_ScrollDirection=RIGHT&up_ScrollSpeed=0.15&up_TransitionHold=10&up_MPLeft=0&up_MPTop=0&up_MPBottom=0&up_MPRight=0'
     },
     {
       env: 'PROD',
-      name: 'Digichief News',
+      name: 'News Headlines',
       imageUrl: 'https://s3.amazonaws.com/Store-Products/Digichief/widget_2000_image_edit3.jpg',
-      imageAlt: 'add digichief news',
+      imageAlt: 'add news headlines',
       gadgetType: 'Widget',
       id: '40e35d3d-ed16-4226-b7df-898e717a799d',
       url: 'http://data-feed.digichief.com/risevision/News/NewsWidget.html?up_category=_ALL_&up_show-date=true&up_terms=false&up_show-border=true&up_show-title=true&up_show-items=true&up_border-color=&up_Transition=fade&up_ScrollDirection=RIGHT&up_ScrollSpeed=0.15&up_TransitionHold=10&up_NewsItemCount=1&up_Layout=Layout6&up_QueueLength=&up_SFPLeft=10&up_SFPTop=10&up_SFPBottom=10&up_SFPRight=10&up_STPLeft=10&up_STPTop=10&up_STPBottom=10&up_STPRight=10&up_MPLeft=10&up_MPTop=10&up_MPBottom=10&up_MPRight=10'
     },
     {
       env: 'PROD',
-      name: 'StockTrak - Rankings',
+      name: 'StockTrak Rankings',
       imageUrl: 'https://s3.amazonaws.com/Store-Products/Common/product_default_image.png',
-      imageAlt: 'add stocktrak - rankings',
+      imageAlt: 'add stocktrak rankings',
       gadgetType: 'Widget',
       id: 'c515eabc-801e-4038-888f-7c2716dce1f4',
       url: 'https://risevisionapps.stocktrak.com/apps/rankings'
     },
     {
       env: 'PROD',
-      name: 'StockTrak Real Time Streaming US Stocks',
+      name: 'U.S. Stocks - Streaming Watchlist',
       imageUrl: 'https://s3.amazonaws.com/Store-Products/StockTrak/widget_918_image_edit1.png',
-      imageAlt: 'add stocktrak real time streaming US stocks',
+      imageAlt: 'add u.s. stocks streaming watchlist',
       gadgetType: 'Widget',
       id: 'f50f362f-c392-4644-9c89-6551a1cb56bc',
       url: 'https://www.howpersonalfinanceworks.com/rise_vision/rise-vision-widget-bats.php'
     },
     {
       env: 'PROD',
-      name: 'DigiChief Sports',
+      name: 'Sports Scores',
       imageUrl: 'https://s3.amazonaws.com/Store-Products/Digichief/widget_3000_image_edit3.jpg',
-      imageAlt: 'add digichief sports',
+      imageAlt: 'add sports scores',
       gadgetType: 'Widget',
       id: 'bfa04e64-4eeb-4fcf-9a1b-2a741ce95126',
       url: 'http://data-feed.digichief.com/risevision/Sports/SportsWidget.html?up_Sports=ALL&up_terms=false&up_StackCount=1&up_ShowConference=false&up_ShowCustomHeader=false&up_ShowSeperator=false&up_Duration=undefined&up_BackgroundTransperent=false&up_show-border=true&up_GamePadding=undefined&up_TeamPadding=undefined&up_StatusTextTopPadding=undefined&up_GameNotesTopPadding=undefined&up_Transition=fade&up_ScrollDirection=LEFT&up_ScrollSpeed=0.15&up_TransitionHold=10&up_border-color=&up_seperator-color='
     },
     {
       env: 'PROD',
-      name: 'Computer Aid PhotoFeed Widget',
+      name: 'Photo Feed Widget',
       imageUrl: 'https://s3.amazonaws.com/Store-Products/Computer-Aid/widget_ciaphotofeed_image.png',
-      imageAlt: 'add computer aid photofeed widget',
+      imageAlt: 'add photo feed widget',
       gadgetType: 'Widget',
       id: 'd5198c5e-c3a1-4156-b468-001c9f9ab040',
       url: 'https://account.testinseconds.com/ImageGalleryWidget/widget.html'
     },
     {
       env: 'PROD',
-      name: 'Youtube Widget',
+      name: 'YouTube Widget',
       imageUrl: 'https://s3.amazonaws.com/Store-Products/Scotts-Digital-Signage/YouTube.png',
       imageAlt: 'add youtube widget',
       gadgetType: 'Widget',
@@ -182,12 +191,21 @@ angular.module('risevision.editor.services')
     },
     {
       env: 'PROD',
-      name: 'Vimeo Widget',
+      name: 'Vimeo HTML5 Widget',
       imageUrl: 'https://s3.amazonaws.com/Store-Products/Scotts-Digital-Signage/vimeo.png',
-      imageAlt: 'add vimeo widget',
+      imageAlt: 'add vimeo html5 widget',
       gadgetType: 'Widget',
       id: '17d1c54e-3c56-45f9-ad76-8f7458def71f',
       url: 'http://scottsdigitalsignage.com/widget/vimeo-widget/demo/index.html?up_fileType=50&up_loop=0&up_channel=1&up_auto=1'
+    },
+    {
+      env: 'TEST',
+      name: 'Computer Aid Countdown Widget',
+      imageUrl: 'https://s3.amazonaws.com/Store-Products/Computer-Aid/widget_caicountdown_image.png',
+      imageAlt: 'add computer aid countdown widget',
+      gadgetType: 'Widget',
+      id: '86f806c0-54b4-453c-857a-fe9d09926275',
+      url: 'https://account.testinseconds.com/CountdownWidget/widget.html'
     },
     {
       env: 'PROD',
@@ -200,27 +218,27 @@ angular.module('risevision.editor.services')
     },
     {
       env: 'PROD',
-      name: 'Computer Aid Count Up Widget',
+      name: 'Computer Aid CountUp Widget',
       imageUrl: 'https://s3.amazonaws.com/Store-Products/Computer-Aid/widget_caicountup_image.png',
-      imageAlt: 'add computer aid count up widget',
+      imageAlt: 'add computer aid countup widget',
       gadgetType: 'Widget',
       id: '4290722c-e15c-441e-a243-887dad864ce7',
       url: 'https://account.testinseconds.com/CountUpWidget/widget.html'
     },
     {
       env: 'PROD',
-      name: 'Flight Status Arrivals by Flight Monitor',
+      name: 'Flight Status Arrivals Widget',
       imageUrl: 'https://s3.amazonaws.com/Store-Products/FlightTime-TV/arrivals_image_edit2.png',
-      imageAlt: 'add flight status arrivals by flight monitor',
+      imageAlt: 'add flight status arrivals widget',
       gadgetType: 'Widget',
       id: '007b8e54-074e-40cc-9a27-6d35f56b4df9',
       url: 'http://widget.flighttimetv.com/widget.html'
     },
     {
       env: 'PROD',
-      name: 'Flight Status Departures by Flight Monitor',
+      name: 'Flight Status Departures Widget',
       imageUrl: 'https://s3.amazonaws.com/Store-Products/FlightTime-TV/departures_image_edit2.png',
-      imageAlt: 'add flight status departures by flight monitor',
+      imageAlt: 'add flight status departures widget',
       gadgetType: 'Widget',
       id: '9af58096-ab67-406b-bb39-6297556651e1',
       url: 'http://widget.flighttimetv.com/widget.html'
