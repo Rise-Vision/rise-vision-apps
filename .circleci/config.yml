@@ -4,7 +4,7 @@ jobs:
   dependencies:
     working_directory: ~/rise-vision-apps
     docker:
-      - image: fjvallarino/apps-node:latest
+      - image: jenkinsrise/apps-node:8.1.4
     steps:
       - checkout
       - run:
@@ -20,7 +20,7 @@ jobs:
   test_unit:
     working_directory: ~/rise-vision-apps
     docker:
-      - image: fjvallarino/apps-node:latest
+      - image: jenkinsrise/apps-node:8.1.4
     steps:
       - attach_workspace:
           at: ~/
@@ -34,12 +34,17 @@ jobs:
   test_e2e:
     working_directory: ~/rise-vision-apps
     docker:
-      - image: fjvallarino/apps-node:latest
+      - image: jenkinsrise/apps-node:8.1.4
     parallelism: 2
     steps:
       - attach_workspace:
           at: ~/
       - run: echo $CHROME_INSTANCES
+      # Install latest chrome
+      - run: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+      - run: echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee -a /etc/apt/sources.list
+      - run: sudo apt-get update -qq
+      - run: sudo apt-get install -y google-chrome-stable
       - run:
           name: e2e_tests
           command: |
@@ -53,7 +58,7 @@ jobs:
   deploy_staging:
     working_directory: ~/rise-vision-apps
     docker:
-      - image: fjvallarino/apps-node:latest
+      - image: jenkinsrise/apps-node:8.1.4
     steps:
       - attach_workspace:
           at: ~/
@@ -82,7 +87,7 @@ jobs:
   deploy_beta:
     working_directory: ~/rise-vision-apps
     docker:
-      - image: fjvallarino/apps-node:latest
+      - image: jenkinsrise/apps-node:8.1.4
     steps:
       - attach_workspace:
           at: ~/
@@ -99,7 +104,7 @@ jobs:
   deploy_production:
     working_directory: ~/rise-vision-apps
     docker:
-      - image: fjvallarino/apps-node:latest
+      - image: jenkinsrise/apps-node:8.1.4
     steps:
       - attach_workspace:
           at: ~/
