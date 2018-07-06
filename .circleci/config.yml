@@ -4,14 +4,12 @@ jobs:
   dependencies:
     working_directory: ~/rise-vision-apps
     docker:
-      - image: circleci/node:8.1.4
+      - image: jenkinsrise/apps-node:8.1.4
     steps:
       - checkout
       - run:
           name: Install npm
           command: npm install
-      - run: sudo npm install -g bower
-      - run: bower cache clean
       - run: 
           name: install bower
           command: bower install
@@ -22,7 +20,7 @@ jobs:
   test_unit:
     working_directory: ~/rise-vision-apps
     docker:
-      - image: circleci/node:8.1.4
+      - image: jenkinsrise/apps-node:8.1.4
     steps:
       - attach_workspace:
           at: ~/
@@ -36,7 +34,7 @@ jobs:
   test_e2e:
     working_directory: ~/rise-vision-apps
     docker:
-      - image: circleci/node:8.1.4
+      - image: jenkinsrise/apps-node:8.1.4
     parallelism: 2
     steps:
       - attach_workspace:
@@ -60,12 +58,11 @@ jobs:
   deploy_staging:
     working_directory: ~/rise-vision-apps
     docker:
-      - image: circleci/node:8.1.4
+      - image: jenkinsrise/apps-node:8.1.4
     steps:
       - attach_workspace:
           at: ~/
       - run: NODE_ENV=stage npm run ci-build
-      - run: sudo apt-get -y install rsync
       - run: ssh -o StrictHostKeyChecking=no apps@webserver-stage.risevision.com 'mkdir -p /rise-front-end/apps';
       # We have 5 stage environments, apps-stage-0.risevision.com to apps-stage-4.risevision.com
       # To deploy to one of these environments a tag must be added to the commit message. For instance, [stage-0] for apps-stage-0.risevision.com.
@@ -90,12 +87,11 @@ jobs:
   deploy_beta:
     working_directory: ~/rise-vision-apps
     docker:
-      - image: circleci/node:8.1.4
+      - image: jenkinsrise/apps-node:8.1.4
     steps:
       - attach_workspace:
           at: ~/
       - run: NODE_ENV=beta npm run ci-build
-      - run: sudo apt-get -y install rsync
       - run: ssh -o StrictHostKeyChecking=no apps@webserver-stage.risevision.com 'mkdir -p /rise-front-end/apps';
       - run: 
           name: Deploy to beta
@@ -108,12 +104,11 @@ jobs:
   deploy_production:
     working_directory: ~/rise-vision-apps
     docker:
-      - image: circleci/node:8.1.4
+      - image: jenkinsrise/apps-node:8.1.4
     steps:
       - attach_workspace:
           at: ~/
       - run: NODE_ENV=prod npm run ci-build
-      - run: sudo apt-get -y install rsync
       # It deploys to production server 2.
       - run: echo "deploying to production webserver1.risevision.com";
       - run: ssh -o StrictHostKeyChecking=no apps@webserver1.risevision.com 'mkdir -p /rise-front-end/apps';
