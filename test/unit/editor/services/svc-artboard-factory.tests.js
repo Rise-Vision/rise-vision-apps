@@ -278,7 +278,7 @@ describe('service: artboardFactory:', function() {
         };
         
         artboardFactory.zoomFit();
-        var ratio = (1080 - 60) / (1080 + 12);
+        var ratio = (1080 - 0) / (1080 + 12);
         expect(artboardFactory.zoomLevel).to.equal(ratio);
       });
       
