@@ -94,10 +94,9 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.isProSupported = function () {
-        var thirdParty = playerProFactory.is3rdPartyPlayer($scope.display);
         var unsupported = playerProFactory.isUnsupportedPlayer($scope.display);
 
-        return !thirdParty && !unsupported;
+        return !unsupported;
       };
 
       $scope.isProToggleEnabled = function () {

@@ -69,8 +69,8 @@ angular.module('risevision.displays.services')
 
       factory.isUnsupportedPlayer = function (display) {
         var newDisplay = !(display && display.playerName && display.playerVersion);
-        return !!(!newDisplay && !factory.is3rdPartyPlayer(display) && !factory.isElectronPlayer(display) &&
-          !factory.isChromeOSPlayer(display));
+        return !!(!newDisplay && !factory.isElectronPlayer(display) &&
+          !factory.isChromeOSPlayer(display)) || factory.is3rdPartyPlayer(display);
       };
 
       factory.isOutdatedPlayer = function (display) {
@@ -79,8 +79,7 @@ angular.module('risevision.displays.services')
           new Date(_latestPlayerVersion).setMonth(_latestPlayerVersion.getMonth() - 3);
         var upToDate = displayPlayerVersion && minimumVersion && displayPlayerVersion >= minimumVersion;
 
-        return !factory.is3rdPartyPlayer(display) &&
-          !factory.isUnsupportedPlayer(display) &&
+        return !factory.isUnsupportedPlayer(display) &&
           !factory.isChromeOSPlayer(display) &&
           (!factory.isElectronPlayer(display) || !upToDate);
       };

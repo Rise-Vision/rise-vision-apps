@@ -126,8 +126,8 @@ describe('service: playerProFactory:', function() {
   it('isUnsupportedPlayer:',function(){
     expect(playerProFactory.isUnsupportedPlayer()).to.be.false;
     expect(playerProFactory.isUnsupportedPlayer({playerName: 'RisePlayerElectron', playerVersion:''})).to.be.false;
-    expect(playerProFactory.isUnsupportedPlayer({playerName: 'Cenique', playerVersion:'2017.06.27.05.15'})).to.be.false;
-    expect(playerProFactory.isUnsupportedPlayer({playerName: 'RisePlayerPackagedApp', playerVersion:'2017.07.31.15.31'})).to.be.false;
+    expect(playerProFactory.isUnsupportedPlayer({playerName: 'Cenique', playerVersion:'2017.06.27.05.15'})).to.be.true;
+    expect(playerProFactory.isUnsupportedPlayer({playerName: 'RisePlayerPackagedApp', playerVersion:'2017.07.31.15.31'})).to.be.true;
     expect(playerProFactory.isUnsupportedPlayer({playerName: 'RisePlayer', playerVersion:'2018.09.45.0649'})).to.be.false;
     expect(playerProFactory.isUnsupportedPlayer({playerName: 'RisePlayer', playerVersion:'2017.09.45.0649'})).to.be.true;
   });

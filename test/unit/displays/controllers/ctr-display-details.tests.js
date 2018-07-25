@@ -368,12 +368,6 @@ describe('controller: display details', function() {
       $scope.display = { playerProAuthorized: false };
     });
 
-    it('should return false if it is a third party player', function () {
-      sandbox.stub(playerProFactory, 'is3rdPartyPlayer').returns(true);
-
-      expect($scope.isProToggleEnabled()).to.be.false;
-    });
-
     it('should return false if it is an unsupported player', function () {
       sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(true);
 
@@ -381,7 +375,6 @@ describe('controller: display details', function() {
     });
 
     it('should return true if it is a supported player', function () {
-      sandbox.stub(playerProFactory, 'is3rdPartyPlayer').returns(false);
       sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(false);
 
       expect($scope.isProToggleEnabled()).to.be.true;
@@ -389,7 +382,6 @@ describe('controller: display details', function() {
 
     it('should return true if playerProAuthorized = true', function () {
       $scope.display = { playerProAuthorized: true };
-      sandbox.stub(playerProFactory, 'is3rdPartyPlayer').returns(true);
       sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(true);
 
       expect($scope.isProToggleEnabled()).to.be.true;
