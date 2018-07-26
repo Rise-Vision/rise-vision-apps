@@ -35,7 +35,7 @@
     .value('APPS_URL', '')
     .value('OAUTH_TOKEN_PROVIDER_URL', 'https://services.risevision.com/oauthtokenprovider/')
     .value('OAUTH_PUBLIC_KEY', 'EJMI-lB9hB55OYEsYmjXDNfRGoY')
-    .value('CHARGEBEE_TEST_INSTANCE', 'risevision-test')
-    .value('CHARGEBEE_PROD_INSTANCE', 'risevision');
+    .value('CHARGEBEE_TEST_SITE', 'risevision-test')
+    .value('CHARGEBEE_PROD_SITE', 'risevision');
 
 })(angular);
