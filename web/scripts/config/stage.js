@@ -40,6 +40,7 @@
     .value('APPS_URL', '')
     .value('ENV_NAME', 'STAGE')
     .value('OAUTH_TOKEN_PROVIDER_URL', 'https://services-stage.risevision.com/oauthtokenprovider/')
-    .value('OAUTH_PUBLIC_KEY', 'EJMI-lB9hB55OYEsYmjXDNfRGoY');
+    .value('OAUTH_PUBLIC_KEY', 'EJMI-lB9hB55OYEsYmjXDNfRGoY')
+    .value('CHARGEBEE_INSTANCE', 'risevision-test');
 
 })(angular);

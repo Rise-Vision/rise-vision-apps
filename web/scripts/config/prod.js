@@ -34,6 +34,7 @@
       'https://services.risevision.com/messaging/presence')
     .value('APPS_URL', '')
     .value('OAUTH_TOKEN_PROVIDER_URL', 'https://services.risevision.com/oauthtokenprovider/')
-    .value('OAUTH_PUBLIC_KEY', 'EJMI-lB9hB55OYEsYmjXDNfRGoY');
+    .value('OAUTH_PUBLIC_KEY', 'EJMI-lB9hB55OYEsYmjXDNfRGoY')
+    .value('CHARGEBEE_INSTANCE', 'risevision');
 
 })(angular);
