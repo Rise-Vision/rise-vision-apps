@@ -16,7 +16,7 @@
           <div class="product-grid">
             <div class="row">
 
-              <ng-repeat ng-repeat="widget in professionalWidgets">
+              <ng-repeat ng-repeat="widget in filteredWidgets = (professionalWidgets | filter: search.query)">
                 <div class="col-sm-6 col-md-4 col-lg-3">
 
                   <div class="product-grid_item panel panel-default" ng-if="!playerLicenseFactory.hasProfessionalLicenses()" ng-click="showPlansModal()">
@@ -65,6 +65,10 @@
 
                 </div><!--col-->
               </ng-repeat>
+              <div ng-show="filteredWidgets.length === 0 && search.query">
+                <div colspan="3" class="text-center"><span translate>editor-app.list.no-results</span></div>
+              </div>
+
 
               <div class="col-sm-6 col-md-6 col-lg-6">
                 <div class="plan-promotion" ng-if="!playerLicenseFactory.hasProfessionalLicenses()">
@@ -158,6 +162,10 @@
             </div>
           </div>
         </ng-repeat>
+        <!-- If no search results -->
+        <div ng-show="factory.items.list.length === 0 && search.query && !factory.loadingItems">
+          <div class="text-center"><span translate>editor-app.list.no-results</span></div>
+        </div>
 
       </div><!-- end row -->
 
