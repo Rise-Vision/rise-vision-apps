@@ -296,7 +296,7 @@ var ProfessionalWidgetsScenarios = function() {
       });
 
       it('should add Embedded Presentation as a Professional Widget', function() {        
-        storeProductsModalPage.getAddProfessionalWidgetButton().get(1).click();
+        storeProductsModalPage.getAddProfessionalWidgetButton().get(0).click();
 
         helper.wait(presentationModalPage.getAddPresentationModal(), 'Add Presentation Modal');
       });
