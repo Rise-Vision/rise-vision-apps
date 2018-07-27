@@ -66,7 +66,7 @@
                 </div><!--col-->
               </ng-repeat>
               <div ng-show="filteredProfessionalWidgets.length === 0 && search.query">
-                <div colspan="3" class="text-center"><span translate>editor-app.list.no-results</span></div>
+                <div class="text-muted text-center u_padding-lg"><span translate>editor-app.storeProduct.professional.noResults</span></div>
               </div>
 
 
@@ -164,7 +164,7 @@
         </ng-repeat>
         <!-- If no search results -->
         <div ng-show="factory.items.list.length === 0 && search.query && !factory.loadingItems">
-          <div class="text-center"><span translate>editor-app.list.no-results</span></div>
+          <div class="text-muted text-center u_padding-lg"><span translate>editor-app.storeProduct.content.noResults</span></div>
         </div>
 
       </div><!-- end row -->
