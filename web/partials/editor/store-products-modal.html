@@ -69,8 +69,8 @@
                 <div class="text-muted text-center u_padding-lg"><span translate>editor-app.storeProduct.professional.noResults</span></div>
               </div>
 
-
-              <div class="col-sm-6 col-md-6 col-lg-6">
+              <!-- Hide if there are validation errors -->
+              <div class="col-sm-6 col-md-6 col-lg-6" ng-hide="filteredProfessionalWidgets.length === 0 && search.query">
                 <div class="plan-promotion" ng-if="!playerLicenseFactory.hasProfessionalLicenses()">
                   <h2 translate="editor-app.storeProduct.professional.promotion"></h2>
                   <p translate="editor-app.storeProduct.professional.promotionTrial"></p>
