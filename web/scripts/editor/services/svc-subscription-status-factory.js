@@ -1,11 +1,15 @@
 'use strict';
 
 angular.module('risevision.editor.services')
-  .factory('subscriptionStatusFactory', ['$q', '$log', 'store',
-    function ($q, $log, store) {
+  .factory('subscriptionStatusFactory', ['$rootScope', '$q', '$log', 'store',
+    function ($rootScope, $q, $log, store) {
       var factory = {};
 
       var _statusItems = [];
+
+      $rootScope.$on("risevision.company.selectedCompanyChanged", function () {
+        _statusItems = [];
+      });
 
       var _getStatusItemCached = function (productCode) {
         var cachedItem = _.find(_statusItems, {

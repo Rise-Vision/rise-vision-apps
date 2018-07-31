@@ -59,9 +59,7 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.getDisplayType = function (display) {
-        if (playerProFactory.is3rdPartyPlayer(display)) {
-          return '3rd-party';
-        } else if (playerProFactory.isUnsupportedPlayer(display)) {
+        if (playerProFactory.isUnsupportedPlayer(display)) {
           return 'unsupported';
         } else if (display.playerProAuthorized) {
           return 'professional';

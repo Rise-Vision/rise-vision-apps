@@ -19,7 +19,7 @@ var StoreProductsModalPage = function() {
   var premiumProducts = element.all(by.cssContainingText('p#status', 'For Licensed Displays'));
   var displayBanner = element(by.id('displayBanner'));
 
-  var professionalWidgets = element.all(by.repeater('widget in professionalWidgets'));
+  var professionalWidgets = element.all(by.repeater('widget in filteredProfessionalWidgets = (professionalWidgets | filter: search.query)'));
   var professionalWidgetNames = element.all(by.css('.professional-content .product-grid_details h4'));
   var unlockButton = element.all(by.id('unlockButton'));
   var addProfessionalWidgetButton = element.all(by.id('addProfessionalWidgetButton'));

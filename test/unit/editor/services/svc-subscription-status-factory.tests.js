@@ -44,7 +44,7 @@ describe('service: subscriptionStatusFactory:', function() {
   }));
   
 
-  var subscriptionStatusFactory, response, requestedUrl, apiCalls, returnStatus;
+  var subscriptionStatusFactory, $rootScope, response, requestedUrl, apiCalls, returnStatus;
   var checkTemplateAccess, returnStatusArray;
 
   beforeEach(function(){
@@ -58,6 +58,7 @@ describe('service: subscriptionStatusFactory:', function() {
     returnStatusArray = [];
 
     inject(function($injector){
+      $rootScope = $injector.get('$rootScope');
       subscriptionStatusFactory = $injector.get('subscriptionStatusFactory');
       checkTemplateAccess = $injector.get('checkTemplateAccess');
     });
@@ -75,18 +76,18 @@ describe('service: subscriptionStatusFactory:', function() {
   });
   
   it('should only call API once', function(done) {
+    subscriptionStatusFactory.checkProductCodes(['pc1']);
+    
+    setTimeout(function() {
       subscriptionStatusFactory.checkProductCodes(['pc1']);
       
       setTimeout(function() {
-        subscriptionStatusFactory.checkProductCodes(['pc1']);
+        expect(apiCalls).to.equal(1);
         
-        setTimeout(function() {
-          expect(apiCalls).to.equal(1);
-          
-          done();
-        }, 10);
+        done();
       }, 10);
-    });
+    }, 10);
+  });
 
   it('should handle errors',function(done){
     returnStatus = false;
@@ -94,6 +95,23 @@ describe('service: subscriptionStatusFactory:', function() {
       expect(e).to.equal('API Error');
       done();
     })    
+  });
+
+  it("should reset productCodes when selected company changes", function(done) {
+    subscriptionStatusFactory.checkProductCodes(['pc1']);
+
+    setTimeout(function () {
+      $rootScope.$emit("risevision.company.selectedCompanyChanged");
+      $rootScope.$digest();
+
+      subscriptionStatusFactory.checkProductCodes(['pc1']);
+      
+      setTimeout(function() {
+        expect(apiCalls).to.equal(2);
+        
+        done();
+      }, 10);
+    }, 0);
   });
 
   describe('checkProductCode:',function(){
