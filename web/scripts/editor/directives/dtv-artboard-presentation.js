@@ -10,7 +10,7 @@ angular.module('risevision.editor.directives')
         restrict: 'E',
         templateUrl: 'partials/editor/artboard-presentation.html',
         link: function ($scope, element, attrs) {
-          var heightIncrement = PRESENTATION_BORDER_SIZE;
+          var heightIncrement = 2 * PRESENTATION_BORDER_SIZE;
           var widthIncrement = 2 * PRESENTATION_BORDER_SIZE;
 
           $scope.editorFactory = editorFactory;

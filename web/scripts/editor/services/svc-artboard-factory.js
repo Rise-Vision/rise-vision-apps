@@ -85,7 +85,7 @@ angular.module('risevision.editor.services')
           (sidebarTransition ? PRESENTATION_SIDEBAR_SIZE : 0);
         var workspaceHeight = workspaceElement.clientHeight - PRESENTATION_MARGIN_TOP;
         var artboardWidth = editorFactory.presentation.width + 2 * PRESENTATION_BORDER_SIZE;
-        var artboardHeight = editorFactory.presentation.height + PRESENTATION_BORDER_SIZE;
+        var artboardHeight = editorFactory.presentation.height + 2 * PRESENTATION_BORDER_SIZE;
 
         var fitWidth = workspaceWidth / artboardWidth;
         var fitHeight = workspaceHeight / artboardHeight;
