@@ -88,6 +88,22 @@ angular.module('risevision.apps', [
           }
         })
 
+        .state('apps.billing', {
+          url: '/billing',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get(
+              'partials/launcher/app-billing.html');
+          }],
+          controller: 'HomeCtrl',
+          resolve: {
+            canAccessApps: ['canAccessApps',
+              function (canAccessApps) {
+                return canAccessApps();
+              }
+            ]
+          }
+        })
+
         .state('apps.launcher.signup', {
           url: '/signup',
           controller: ['$window', '$location', '$state', 'userState',
