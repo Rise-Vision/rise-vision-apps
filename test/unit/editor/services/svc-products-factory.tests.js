@@ -57,7 +57,7 @@ describe('service: productsFactory: ', function() {
         category: 'Widgets'
       }).then(function(result) {
         expect(result.items).to.be.an('array');
-        expect(result.items).to.have.length(1);
+        expect(result.items).to.have.length(15);
 
         done();
       });
@@ -70,7 +70,7 @@ describe('service: productsFactory: ', function() {
         category: 'Widgets'
       }).then(function(result) {
         expect(result.items).to.be.an('array');
-        expect(result.items).to.have.length(2);
+        expect(result.items).to.have.length(16);
 
         done();
       });      
@@ -96,7 +96,7 @@ describe('service: productsFactory: ', function() {
         category: 'Widgets'
       }).then(function(result) {
         expect(result.items).to.be.an('array');
-        expect(result.items).to.have.length(1);
+        expect(result.items).to.have.length(15);
 
         done();
       });      
@@ -149,7 +149,7 @@ describe('service: productsFactory: ', function() {
           category: 'Widgets'
         }).then(function(result) {
           expect(result.items).to.be.an('array');
-          expect(result.items).to.have.length(21);
+          expect(result.items).to.have.length(35);
           expect(result.items[17].productCode).to.equal(productCode);
 
           done();
@@ -161,8 +161,8 @@ describe('service: productsFactory: ', function() {
           category: 'Widgets'
         }).then(function(result) {
           expect(result.items).to.be.an('array');
-          expect(result.items).to.have.length(2);
-          expect(result.items[1].productCode).to.equal(productCode);
+          expect(result.items).to.have.length(16);
+          expect(result.items[15].productCode).to.equal(productCode);
 
           done();
         });
@@ -174,8 +174,8 @@ describe('service: productsFactory: ', function() {
           category: 'Widgets'
         }).then(function(result) {
           expect(result.items).to.be.an('array');
-          expect(result.items).to.have.length(1);
-          expect(result.items[0].productCode).to.equal(productCode);
+          expect(result.items).to.have.length(15);
+          expect(result.items[14].productCode).to.equal(productCode);
 
           done();
         });

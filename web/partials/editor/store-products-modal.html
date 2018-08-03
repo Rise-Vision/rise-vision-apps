@@ -16,7 +16,7 @@
           <div class="product-grid">
             <div class="row">
 
-              <ng-repeat ng-repeat="widget in professionalWidgets">
+              <ng-repeat ng-repeat="widget in filteredProfessionalWidgets = (professionalWidgets | filter: search.query)">
                 <div class="col-sm-6 col-md-4 col-lg-3">
 
                   <div class="product-grid_item panel panel-default" ng-if="!playerLicenseFactory.hasProfessionalLicenses()" ng-click="showPlansModal()">
@@ -65,8 +65,12 @@
 
                 </div><!--col-->
               </ng-repeat>
+              <div ng-show="filteredProfessionalWidgets.length === 0 && search.query">
+                <div class="text-muted text-center u_padding-lg"><span translate>editor-app.storeProduct.professional.noResults</span></div>
+              </div>
 
-              <div class="col-sm-6 col-md-6 col-lg-6">
+              <!-- Hide if there are validation errors -->
+              <div class="col-sm-6 col-md-6 col-lg-6" ng-hide="filteredProfessionalWidgets.length === 0 && search.query">
                 <div class="plan-promotion" ng-if="!playerLicenseFactory.hasProfessionalLicenses()">
                   <h2 translate="editor-app.storeProduct.professional.promotion"></h2>
                   <p translate="editor-app.storeProduct.professional.promotionTrial"></p>
@@ -140,7 +144,6 @@
                 <div class="row">
                   <div class="col-xs-8">
                     <h4 id="productName">{{product.name | characters: 25}}</h4>
-                    <a ng-hide="factory.search.category === 'Templates'" ng-href="{{storeUrl}}/product/{{product.productId}}/" target="_blank" ng-click="$event.stopPropagation()" translate="editor-app.storeProduct.viewInStore"></a>
                   </div><!--end col-->
                   <div class="col-xs-4">
                     <button class="btn btn-primary btn-block btn-sm" id="{{product.name | slugify}}" ng-click="quickSelect(product); $event.stopPropagation()">Add</button>
@@ -158,6 +161,10 @@
             </div>
           </div>
         </ng-repeat>
+        <!-- If no search results -->
+        <div class="col-sm-12" ng-show="factory.items.list.length === 0 && search.query && !factory.loadingItems">
+          <div class="text-muted text-center u_padding-lg"><span translate>editor-app.storeProduct.content.noResults</span></div>
+        </div>
 
       </div><!-- end row -->
 

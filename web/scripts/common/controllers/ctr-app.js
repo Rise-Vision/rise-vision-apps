@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.apps.controllers')
-  .controller('AppCtrl', ['$scope', '$rootScope', '$state', 'STORE_URL',
-    function ($scope, $rootScope, $state, STORE_URL) {
+  .controller('AppCtrl', ['$scope', '$rootScope', '$state',
+    function ($scope, $rootScope, $state) {
       $scope.navOptions = [{
         title: 'Home',
         link: $state.href('apps.launcher.home'),
@@ -47,11 +47,6 @@ angular.module('risevision.apps.controllers')
         link: $state.href('apps.storage.home'),
         cid: true,
         states: ['apps.storage.home']
-      }, {
-        title: 'Store',
-        link: STORE_URL,
-        cid: true,
-        target: '_blank',
       }];
       $scope.navSelected = 'apps.launcher.home';
       $scope.hideCommonHeader = false;

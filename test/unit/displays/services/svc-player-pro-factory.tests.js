@@ -88,6 +88,15 @@ describe('service: playerProFactory:', function() {
     expect(playerProFactory.isElectronPlayer({playerName:'RisePlayerElectron (Beta)'})).to.be.true;
   });
 
+  it('isChromeOSPlayer:', function() {
+    expect(playerProFactory.isChromeOSPlayer()).to.be.false;
+    expect(playerProFactory.isChromeOSPlayer({playerName: null})).to.be.false;
+    expect(playerProFactory.isChromeOSPlayer({playerName:'RisePlayer'})).to.be.false;
+    expect(playerProFactory.isChromeOSPlayer({playerName:'RisePlayer', playerVersion: '2017.07.17.20.21'})).to.be.false;
+    expect(playerProFactory.isChromeOSPlayer({playerName:'RisePlayer', playerVersion: '2018.08.17.20.21'})).to.be.true;
+    expect(playerProFactory.isChromeOSPlayer({playerName:'(Beta) RisePlayer', playerVersion: '2018.08.17.20.21'})).to.be.true;
+  });
+
   describe('isOutdatedPlayer:', function() {
     
     it('should not be out of date for legacy', function(done){
@@ -117,9 +126,10 @@ describe('service: playerProFactory:', function() {
   it('isUnsupportedPlayer:',function(){
     expect(playerProFactory.isUnsupportedPlayer()).to.be.false;
     expect(playerProFactory.isUnsupportedPlayer({playerName: 'RisePlayerElectron', playerVersion:''})).to.be.false;
-    expect(playerProFactory.isUnsupportedPlayer({playerName: 'Cenique', playerVersion:'2017.06.27.05.15'})).to.be.false;
-    expect(playerProFactory.isUnsupportedPlayer({playerName: 'RisePlayerPackagedApp', playerVersion:'2017.07.31.15.31'})).to.be.false;
-    expect(playerProFactory.isUnsupportedPlayer({playerName: 'RisePlayer', playerVersion:'2018.09.45.06.49'})).to.be.true;
+    expect(playerProFactory.isUnsupportedPlayer({playerName: 'Cenique', playerVersion:'2017.06.27.05.15'})).to.be.true;
+    expect(playerProFactory.isUnsupportedPlayer({playerName: 'RisePlayerPackagedApp', playerVersion:'2017.07.31.15.31'})).to.be.true;
+    expect(playerProFactory.isUnsupportedPlayer({playerName: 'RisePlayer', playerVersion:'2018.09.45.0649'})).to.be.false;
+    expect(playerProFactory.isUnsupportedPlayer({playerName: 'RisePlayer', playerVersion:'2017.09.45.0649'})).to.be.true;
   });
 
   it('isScreenshotCompatiblePlayer:',function(){

@@ -113,10 +113,6 @@
           </tr>
           <tr class="table-body__row" ng-class="{'alert-warning':playerProFactory.isOutdatedPlayer(display), 'alert-danger':playerProFactory.isUnsupportedPlayer(display)}">
             <td class="table-body__cell"><span translate>displays-app.fields.player.playerVersion</span></td>
-            <td class="table-body__cell" ng-if="playerProFactory.is3rdPartyPlayer(display)">
-              <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion : "")}} {{'displays-app.fields.player.version.thirdParty' | translate}}</span>
-              <a href="https://risevision.zendesk.com/hc/en-us/articles/115003786306" target="_blank" translate>displays-app.fields.player.version.howGetHelp</a>
-            </td>
             <td class="table-body__cell" ng-if="playerProFactory.isOutdatedPlayer(display)">
               <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "") + (display.offlineSubscription ? 'Licensed' : 'Free')}}</span>
               <a href="https://help.risevision.com/hc/en-us/articles/115004250723-Why-is-Rise-Player-version-not-current-" target="_blank" translate>displays-app.fields.player.version.notCurrent</a>
@@ -125,7 +121,7 @@
               <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "")}}</span>
               <a href="" ng-click="factory.addDisplayModal(display)"><span class="text-danger" translate>displays-app.fields.player.version.unsupported</span> - {{'displays-app.fields.player.version.upgrade' | translate}}</a>
             </td>
-            <td class="table-body__cell" ng-if="!playerProFactory.is3rdPartyPlayer(display) && !playerProFactory.isOutdatedPlayer(display) && !playerProFactory.isUnsupportedPlayer(display)">
+            <td class="table-body__cell" ng-if="!playerProFactory.isOutdatedPlayer(display) && !playerProFactory.isUnsupportedPlayer(display)">
               <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "") + (display.offlineSubscription ? 'Licensed' : 'Free')}}</span>
             </td>
           </tr>
