@@ -43,6 +43,10 @@
     .value('APPS_URL', '')
     .value('ENV_NAME', 'TEST')
     .value('OAUTH_TOKEN_PROVIDER_URL', 'https://services-stage.risevision.com/oauthtokenprovider/')
-    .value('OAUTH_PUBLIC_KEY', 'EJMI-lB9hB55OYEsYmjXDNfRGoY');
+    .value('OAUTH_PUBLIC_KEY', 'EJMI-lB9hB55OYEsYmjXDNfRGoY')
+    .value('CHARGEBEE_TEST_SITE', 'risevision-test')
+    .value('CHARGEBEE_PROD_SITE', 'risevision-test')
+    .value('STRIPE_PROD_KEY', 'pk_test_GrMIAHSoqhaik4tcHepsxjOR')
+    .value('STRIPE_TEST_KEY', 'pk_test_GrMIAHSoqhaik4tcHepsxjOR');
 
 })(angular);
