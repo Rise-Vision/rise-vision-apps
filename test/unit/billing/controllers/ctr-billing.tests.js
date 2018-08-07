@@ -1,7 +1,7 @@
 'use strict';
-describe('controller: Billing', function () {
+describe('controller: BillingCtrl', function () {
   var sandbox = sinon.sandbox.create();
-  var $scope, $window, $loading, chargebeeFactory;
+  var $scope, $window, $loading, $modal, chargebeeFactory;
 
   beforeEach(module('risevision.apps.billing.controllers'));
 
@@ -20,6 +20,21 @@ describe('controller: Billing', function () {
         stop: sandbox.stub()
       };
     });
+    $provide.service('$modal', function () {
+      return {
+        open: sandbox.stub()
+      };
+    });
+    $provide.service('$templateCache', function () {
+      return {
+        get: sandbox.stub()
+      };
+    });
+    $provide.service('getCoreCountries', function () {
+      return function () {
+        return [];
+      };
+    });
     $provide.service('userState', function () {
       return {
         getSelectedCompanyId: function () {
@@ -29,7 +44,8 @@ describe('controller: Billing', function () {
     });
     $provide.service('chargebeeFactory', function () {
       return {
-        openBillingHistory: sandbox.stub()
+        openBillingHistory: sandbox.stub(),
+        openPaymentSources: sandbox.stub()
       };
     });
   }));
@@ -38,6 +54,7 @@ describe('controller: Billing', function () {
     $scope = $rootScope.$new();
     $window = $injector.get('$window');
     $loading = $injector.get('$loading');
+    $modal = $injector.get('$modal');
     chargebeeFactory = $injector.get('chargebeeFactory');
 
     $controller('BillingCtrl', {
@@ -77,6 +94,21 @@ describe('controller: Billing', function () {
       $scope.viewPastInvoicesStore();
       expect($window.open).to.be.calledOnce;
       expect($window.open.getCall(0).args[0]).to.equal('https://store.risevision.com/account/view/invoicesHistory?cid=testId');
+    });
+  });
+
+  describe('payment methods', function () {
+    it('should show Chargebee payment methods', function () {
+      $scope.editPaymentMethods();
+      expect(chargebeeFactory.openPaymentSources).to.be.calledOnce;
+      expect(chargebeeFactory.openPaymentSources.getCall(0).args[0]).to.equal('testId');
+    });
+  });
+
+  describe('account information', function () {
+    it('should show Company Settings modal', function () {
+      $scope.showCompanySettings();
+      expect($modal.open).to.be.calledOnce;
     });
   });
 });
