@@ -134,7 +134,7 @@ angular.module('risevision.apps', [
           url: '/billing',
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get(
-              'partials/launcher/app-billing.html');
+              'partials/billing/app-billing.html');
           }],
           controller: 'BillingCtrl',
           resolve: {
