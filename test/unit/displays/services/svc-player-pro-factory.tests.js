@@ -73,11 +73,11 @@ describe('service: playerProFactory:', function() {
     expect(playerProFactory.is3rdPartyPlayer({playerName:'Other', os: 'cros', playerVersion: '1.0'})).to.be.true;
   });
 
-  it('isCROS:',function(){
-    expect(playerProFactory.isCROS()).to.be.false;
-    expect(playerProFactory.isCROS({os:''})).to.be.false;
-    expect(playerProFactory.isCROS({os: 'Microsoft'})).to.be.false;
-    expect(playerProFactory.isCROS({os:'cros'})).to.be.true;
+  it('isCROSLegacy:',function(){
+    expect(playerProFactory.isCROSLegacy()).to.be.false;
+    expect(playerProFactory.isCROSLegacy({os:''})).to.be.false;
+    expect(playerProFactory.isCROSLegacy({os: 'Microsoft'})).to.be.false;
+    expect(playerProFactory.isCROSLegacy({os:'cros'})).to.be.true;
   });
 
   it('isElectronPlayer:', function() {
