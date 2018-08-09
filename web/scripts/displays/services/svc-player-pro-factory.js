@@ -46,12 +46,12 @@ angular.module('risevision.displays.services')
         var isRisePlayer = playerName.indexOf('riseplayer') !== -1;
         var isCenique = (playerName + playerVersion).indexOf('cenique') !== -1;
         var isAndroid = os.indexOf('android') !== -1;
-        var isCROS = factory.isCROS(display);
+        var isCROSLegacy = factory.isCROSLegacy(display);
 
-        return !!playerName && (isCAP || isCROS || isAndroid || isCenique || !isRisePlayer);
+        return !!playerName && (isCAP || isCROSLegacy || isAndroid || isCenique || !isRisePlayer);
       };
 
-      factory.isCROS = function (display) {
+      factory.isCROSLegacy = function (display) {
         var os = (display && display.os || '').toLowerCase();
 
         return (os.indexOf('cros') !== -1 && os.indexOf('microsoft') === -1);
