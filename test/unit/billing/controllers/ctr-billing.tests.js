@@ -30,6 +30,10 @@ describe('controller: BillingCtrl', function () {
         get: sandbox.stub()
       };
     });
+    $provide.service('ScrollingListService', function () {
+      return function () {
+      };
+    });
     $provide.service('getCoreCountries', function () {
       return function () {
         return [];
@@ -45,7 +49,13 @@ describe('controller: BillingCtrl', function () {
     $provide.service('chargebeeFactory', function () {
       return {
         openBillingHistory: sandbox.stub(),
-        openPaymentSources: sandbox.stub()
+        openPaymentSources: sandbox.stub(),
+        openSubscriptionDetails: sandbox.stub()
+      };
+    });
+    $provide.service('billing', function () {
+      return {
+        getSubscriptions: sandbox.stub()
       };
     });
   }));
@@ -71,16 +81,9 @@ describe('controller: BillingCtrl', function () {
     expect($scope).to.be.ok;
     expect($scope.viewPastInvoices).to.be.a.function;
     expect($scope.viewPastInvoicesStore).to.be.a.function;
-  });
-
-  describe('loading:', function () {
-    it('should show spinner on init', function () {
-      $loading.startGlobal.should.have.been.calledWith('billing.loading');
-    });
-
-    it('should global spinner after loading billing information', function () {
-      $loading.stopGlobal.should.have.been.calledWith('billing.loading');
-    });
+    expect($scope.editPaymentMethods).to.be.a.function;
+    expect($scope.editSubscription).to.be.a.function;
+    expect($scope.showCompanySettings).to.be.a.function;
   });
 
   describe('past invoices', function () {
@@ -105,10 +108,56 @@ describe('controller: BillingCtrl', function () {
     });
   });
 
+  describe('edit subscription', function () {
+    it('should show Chargebee subscription details', function () {
+      $scope.editSubscription({ subscriptionId: 'subs1' });
+      expect(chargebeeFactory.openSubscriptionDetails).to.be.calledOnce;
+      expect(chargebeeFactory.openSubscriptionDetails.getCall(0).args[0]).to.equal('testId');
+      expect(chargebeeFactory.openSubscriptionDetails.getCall(0).args[1]).to.equal('subs1');
+    });
+  });
+
   describe('account information', function () {
     it('should show Company Settings modal', function () {
       $scope.showCompanySettings();
       expect($modal.open).to.be.calledOnce;
+    });
+  });
+
+  describe('data formatting', function () {
+    it('should format subscription name', function () {
+      expect($scope.getSubscriptionDesc({
+        productName: 'Enterprise Plan',
+        unit: 'per Display per Month',
+        currencyCode: 'usd'
+      })).to.equal('Enterprise Plan (Monthly/USD)');
+
+      expect($scope.getSubscriptionDesc({
+        productName: 'Advanced Plan',
+        unit: 'per Display per Year',
+        currencyCode: 'usd'
+      })).to.equal('Advanced Plan (Yearly/USD)');
+
+      expect($scope.getSubscriptionDesc({
+        productName: 'Basic Plan',
+        unit: 'per Display per Year',
+        currencyCode: 'cad'
+      })).to.equal('Basic Plan (Yearly/CAD)');
+    });
+
+    it('should validate Active status type', function () {
+      expect($scope.isActive({ status: 'Active' })).to.be.true;
+      expect($scope.isActive({ status: 'Cancelled' })).to.be.false;
+    });
+
+    it('should validate Cancelled status type', function () {
+      expect($scope.isCancelled({ status: 'Cancelled' })).to.be.true;
+      expect($scope.isCancelled({ status: 'Active' })).to.be.false;
+    });
+
+    it('should validate Suspended status type', function () {
+      expect($scope.isSuspended({ status: 'Suspended' })).to.be.true;
+      expect($scope.isSuspended({ status: 'Active' })).to.be.false;
     });
   });
 });
