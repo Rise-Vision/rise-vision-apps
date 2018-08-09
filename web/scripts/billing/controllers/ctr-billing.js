@@ -2,10 +2,27 @@
 
 angular.module('risevision.apps.billing.controllers')
   .value('INVOICES_PATH', 'account/view/invoicesHistory?cid=companyId')
-  .controller('BillingCtrl', ['$scope', '$loading', '$window', '$modal', '$templateCache',
-    'getCoreCountries', 'userState', 'chargebeeFactory', 'STORE_URL', 'INVOICES_PATH',
-    function ($scope, $loading, $window, $modal, $templateCache,
-      getCoreCountries, userState, chargebeeFactory, STORE_URL, INVOICES_PATH) {
+  .controller('BillingCtrl', ['$scope', '$loading', '$window', '$modal', '$templateCache', 'ScrollingListService',
+    'getCoreCountries', 'userState', 'chargebeeFactory', 'billing', 'STORE_URL', 'INVOICES_PATH',
+    function ($scope, $loading, $window, $modal, $templateCache, ScrollingListService,
+      getCoreCountries, userState, chargebeeFactory, billing, STORE_URL, INVOICES_PATH) {
+
+      $scope.search = {
+        sortBy: 'productName',
+        count: $scope.listLimit,
+        reverse: false,
+        name: 'Subscriptions'
+      };
+
+      $scope.subscriptions = new ScrollingListService(billing.getSubscriptions, $scope.search);
+
+      $scope.$watch('subscriptions.loadingItems', function (loading) {
+        if (loading) {
+          $loading.start('subscriptions-list-loader');
+        } else {
+          $loading.stop('subscriptions-list-loader');
+        }
+      });
 
       $scope.viewPastInvoices = function () {
         chargebeeFactory.openBillingHistory(userState.getSelectedCompanyId());
@@ -17,6 +34,10 @@ angular.module('risevision.apps.billing.controllers')
 
       $scope.editPaymentMethods = function () {
         chargebeeFactory.openPaymentSources(userState.getSelectedCompanyId());
+      };
+
+      $scope.editSubscription = function (subscription) {
+        chargebeeFactory.openSubscriptionDetails(userState.getSelectedCompanyId(), subscription.subscriptionId);
       };
 
       $scope.showCompanySettings = function () {
@@ -35,8 +56,31 @@ angular.module('risevision.apps.billing.controllers')
         });
       };
 
-      $loading.startGlobal('billing.loading');
-      // Will use this when loading billing information from Store
-      $loading.stopGlobal('billing.loading');
+      $scope.getSubscriptionDesc = function (subscription) {
+        var period = _getPeriod(subscription);
+        var currency = _getCurrency(subscription);
+
+        return subscription.productName + ' (' + period + '/' + currency + ')';
+      };
+
+      $scope.isActive = function (subscription) {
+        return subscription.status === 'Active';
+      };
+
+      $scope.isCancelled = function (subscription) {
+        return subscription.status === 'Cancelled';
+      };
+
+      $scope.isSuspended = function (subscription) {
+        return subscription.status === 'Suspended';
+      };
+
+      function _getCurrency (subscription) {
+        return subscription.currencyCode.toUpperCase();
+      }
+
+      function _getPeriod (subscription) {
+        return subscription.unit === 'per Display per Month' ? 'Monthly' : 'Yearly';
+      }
     }
   ]);

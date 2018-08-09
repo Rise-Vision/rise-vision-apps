@@ -21,7 +21,11 @@
       <div class="panel-heading">
         <h3 class="panel-title">Subscriptions</h3>
       </div>
-      <div class="panel-body">
+      <div class="panel-body scrollable-list"
+          scrolling-list="subscriptions.load()"
+          rv-spinner rv-spinner-key="subscriptions-list-loader"
+          rv-spinner-start-active="1">
+
         <div class="table-responsive">
         <table class="table table-hover">
           <thead>
@@ -34,29 +38,17 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>12345</td>
-              <td class="font-weight-bold">Enterprise Plan (Monthly/CAD)</td>
-              <td>Company ABC Inc.</td>
-              <td>$199.00</td>
-              <td><span class="label label-success">Active</span></td>
-              <td><a href="#">Edit</a></td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td class="font-weight-bold">Enterprise Plan (Monthly/CAD)</td>
-              <td>Company ABC Inc.</td>
-              <td>$199.00</td>
-              <td class="text-nowrap"><span class="label label-success">Active</span></td>
-              <td><a href="#">Edit</a></td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td class="font-weight-bold">Enterprise Plan (Monthly/CAD)</td>
-              <td>Company ABC Inc.</td>
-              <td>$199.00</td>
-              <td class="text-nowrap"><span class="label label-warning">Suspended</span></td>
-              <td><a href="#">Edit</a></td>
+            <tr ng-repeat="subs in subscriptions.items.list">
+              <td>{{subs.subscriptionId}}</td>
+              <td class="font-weight-bold">{{getSubscriptionDesc(subs)}}</td>
+              <td>{{subs.shipToName}}</td>
+              <td>${{subs.price}}</td>
+              <td>
+                <span class="label" ng-class="{ 'label-success': isActive(subs), 'label-warning': isSuspended(subs) || isCancelled(subs) }">
+                  {{subs.status}}
+                </span>
+              </td>
+              <td><a href="#" ng-click="editSubscription(subs)">Edit</a></td>
             </tr>
           </tbody>
         </table>

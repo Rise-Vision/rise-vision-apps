@@ -31,6 +31,7 @@ angular.module('risevision.apps', [
     'risevision.apps.launcher.directives',
     'risevision.apps.launcher.services',
     'risevision.apps.billing.controllers',
+    'risevision.apps.billing.services',
     'risevision.schedules.services',
     'risevision.schedules.controllers',
     'risevision.schedules.filters',
