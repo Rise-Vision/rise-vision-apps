@@ -21,7 +21,7 @@
       <div class="panel-heading">
         <h3 class="panel-title">Subscriptions</h3>
       </div>
-      <div class="panel-body scrollable-list"
+      <div class="panel-body"
           scrolling-list="subscriptions.load()"
           rv-spinner rv-spinner-key="subscriptions-list-loader"
           rv-spinner-start-active="1">
@@ -42,7 +42,7 @@
               <td>{{subs.subscriptionId}}</td>
               <td class="font-weight-bold">{{getSubscriptionDesc(subs)}}</td>
               <td>{{subs.shipToName}}</td>
-              <td>${{subs.price}}</td>
+              <td>${{subs.price | number:2}}</td>
               <td>
                 <span class="label" ng-class="{ 'label-success': isActive(subs), 'label-warning': isSuspended(subs) || isCancelled(subs) }">
                   {{subs.status}}
