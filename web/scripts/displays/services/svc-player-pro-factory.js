@@ -64,6 +64,7 @@ angular.module('risevision.displays.services')
 
       factory.isChromeOSPlayer = function (display) {
         return !!(display && display.playerName && display.playerName.indexOf('RisePlayer') !== -1 &&
+          !factory.isElectronPlayer(display) &&
           display.playerVersion >= CHROMEOS_PLAYER_VERSION);
       };
 

@@ -93,6 +93,8 @@ describe('service: playerProFactory:', function() {
     expect(playerProFactory.isChromeOSPlayer({playerName: null})).to.be.false;
     expect(playerProFactory.isChromeOSPlayer({playerName:'RisePlayer'})).to.be.false;
     expect(playerProFactory.isChromeOSPlayer({playerName:'RisePlayer', playerVersion: '2017.07.17.20.21'})).to.be.false;
+    expect(playerProFactory.isChromeOSPlayer({playerName:'RisePlayerElectron'})).to.be.false;
+    expect(playerProFactory.isChromeOSPlayer({playerName:'RisePlayerElectron', playerVersion: '2018.08.17.20.21'})).to.be.false;
     expect(playerProFactory.isChromeOSPlayer({playerName:'RisePlayer', playerVersion: '2018.08.17.20.21'})).to.be.true;
     expect(playerProFactory.isChromeOSPlayer({playerName:'(Beta) RisePlayer', playerVersion: '2018.08.17.20.21'})).to.be.true;
   });
