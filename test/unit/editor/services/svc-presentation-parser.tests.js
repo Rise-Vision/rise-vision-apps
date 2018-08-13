@@ -582,6 +582,21 @@ describe('service: PresentationParser ', function() {
       .to.equal(updatedPlaceholdersString2);
     
   });
+
+  it('should not add extra space after div on updatePlaceholders', function() {
+    var placeholdersString = '\
+<body>\
+</body>';
+    var updatedPlaceholdersString = '\
+<body>\
+<div id="testId" placeholder="true" style="width:0px;height:0px;left:0px;top:0px;z-index:0;position:absolute;"></div>\n\t\
+</body>';
+    var placeholders = [{
+      id: 'testId'
+    }];
+
+    expect(presentationParser.updatePlaceholders(placeholders, placeholdersString)).to.equal(updatedPlaceholdersString);
+  });
   
   it('updatePresentationObject', function() {
     var updatedHtml = '\
