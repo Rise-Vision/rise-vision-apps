@@ -64,6 +64,10 @@ angular.module('risevision.apps.billing.controllers')
         return subscription.productName + ' (' + period + '/' + currency + ')';
       };
 
+      $scope.getSubscriptionPrice = function (subscription) {
+        return subscription.quantity * subscription.price + subscription.shipping;
+      };
+
       $scope.isActive = function (subscription) {
         return subscription.status === 'Active';
       };

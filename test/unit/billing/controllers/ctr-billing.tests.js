@@ -145,6 +145,26 @@ describe('controller: BillingCtrl', function () {
       })).to.equal('Basic Plan (Yearly/CAD)');
     });
 
+    it('should calculate total price', function () {
+      expect($scope.getSubscriptionPrice({
+        quantity: 1,
+        price: 100,
+        shipping: 0
+      })).to.equal(100);
+
+      expect($scope.getSubscriptionPrice({
+        quantity: 5,
+        price: 50,
+        shipping: 0
+      })).to.equal(250);
+
+      expect($scope.getSubscriptionPrice({
+        quantity: 3,
+        price: 200,
+        shipping: 500
+      })).to.equal(1100);
+    });
+
     it('should validate Active status type', function () {
       expect($scope.isActive({ status: 'Active' })).to.be.true;
       expect($scope.isActive({ status: 'Cancelled' })).to.be.false;
