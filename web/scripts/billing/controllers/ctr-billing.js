@@ -2,9 +2,9 @@
 
 angular.module('risevision.apps.billing.controllers')
   .value('INVOICES_PATH', 'account/view/invoicesHistory?cid=companyId')
-  .controller('BillingCtrl', ['$scope', '$loading', '$window', '$modal', '$templateCache', 'ScrollingListService',
-    'getCoreCountries', 'userState', 'chargebeeFactory', 'billing', 'STORE_URL', 'INVOICES_PATH',
-    function ($scope, $loading, $window, $modal, $templateCache, ScrollingListService,
+  .controller('BillingCtrl', ['$rootScope', '$scope', '$loading', '$window', '$modal', '$templateCache', '$timeout',
+    'ScrollingListService', 'getCoreCountries', 'userState', 'chargebeeFactory', 'billing', 'STORE_URL', 'INVOICES_PATH',
+    function ($rootScope, $scope, $loading, $window, $modal, $templateCache, $timeout, ScrollingListService,
       getCoreCountries, userState, chargebeeFactory, billing, STORE_URL, INVOICES_PATH) {
 
       $scope.search = {
@@ -23,6 +23,12 @@ angular.module('risevision.apps.billing.controllers')
         } else {
           $loading.stop('subscriptions-list-loader');
         }
+      });
+
+      $rootScope.$on('chargebee.close', function () {
+        $timeout(function () {
+          $scope.subscriptions.doSearch();
+        }, 5000);
       });
 
       $scope.viewPastInvoices = function () {

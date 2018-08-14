@@ -1,7 +1,7 @@
 'use strict';
 describe('controller: BillingCtrl', function () {
   var sandbox = sinon.sandbox.create();
-  var $scope, $window, $loading, $modal, chargebeeFactory;
+  var $rootScope, $scope, $window, $modal, $timeout, chargebeeFactory, listServiceInstance;
 
   beforeEach(module('risevision.apps.billing.controllers'));
 
@@ -32,6 +32,11 @@ describe('controller: BillingCtrl', function () {
     });
     $provide.service('ScrollingListService', function () {
       return function () {
+        listServiceInstance = {
+          doSearch: sandbox.stub()
+        };
+
+        return listServiceInstance;
       };
     });
     $provide.service('getCoreCountries', function () {
@@ -60,11 +65,12 @@ describe('controller: BillingCtrl', function () {
     });
   }));
 
-  beforeEach(inject(function($injector, $rootScope, $controller) {
+  beforeEach(inject(function($injector, _$rootScope_, $controller) {
+    $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
     $window = $injector.get('$window');
-    $loading = $injector.get('$loading');
     $modal = $injector.get('$modal');
+    $timeout = $injector.get('$timeout');
     chargebeeFactory = $injector.get('chargebeeFactory');
 
     $controller('BillingCtrl', {
@@ -121,6 +127,14 @@ describe('controller: BillingCtrl', function () {
     it('should show Company Settings modal', function () {
       $scope.showCompanySettings();
       expect($modal.open).to.be.calledOnce;
+    });
+  });
+
+  describe('chargebee events', function () {
+    it('should reload Subscriptions when Customer Portal is closed', function () {
+      $rootScope.$emit('chargebee.close');
+      $timeout.flush();
+      expect(listServiceInstance.doSearch).to.be.calledOnce;
     });
   });
 
