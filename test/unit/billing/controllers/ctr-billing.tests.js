@@ -115,11 +115,20 @@ describe('controller: BillingCtrl', function () {
   });
 
   describe('edit subscription', function () {
-    it('should show Chargebee subscription details', function () {
+    it('should show Chargebee subscription details for a Subscription with parentId == null', function () {
       $scope.editSubscription({ subscriptionId: 'subs1' });
       expect(chargebeeFactory.openSubscriptionDetails).to.be.calledOnce;
       expect(chargebeeFactory.openSubscriptionDetails.getCall(0).args[0]).to.equal('testId');
       expect(chargebeeFactory.openSubscriptionDetails.getCall(0).args[1]).to.equal('subs1');
+    });
+  });
+
+  describe('edit parent subscription', function () {
+    it('should show Chargebee parent subscription details for a Subscription with parentId != null', function () {
+      $scope.editSubscription({ subscriptionId: 'subs1', parentId: 'parentId' });
+      expect(chargebeeFactory.openSubscriptionDetails).to.be.calledOnce;
+      expect(chargebeeFactory.openSubscriptionDetails.getCall(0).args[0]).to.equal('testId');
+      expect(chargebeeFactory.openSubscriptionDetails.getCall(0).args[1]).to.equal('parentId');
     });
   });
 

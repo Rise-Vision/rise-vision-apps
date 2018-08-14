@@ -44,7 +44,9 @@ angular.module('risevision.apps.billing.controllers')
       };
 
       $scope.editSubscription = function (subscription) {
-        chargebeeFactory.openSubscriptionDetails(userState.getSelectedCompanyId(), subscription.subscriptionId);
+        var subscriptionId = subscription.parentId || subscription.subscriptionId;
+
+        chargebeeFactory.openSubscriptionDetails(userState.getSelectedCompanyId(), subscriptionId);
       };
 
       $scope.showCompanySettings = function () {

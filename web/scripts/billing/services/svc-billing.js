@@ -2,7 +2,7 @@
 
 angular.module('risevision.apps.billing.services')
   .value('SUBSCRIPTION_SEARCH_FIELDS', [
-    'subscriptionId', 'productName', 'unit', 'currencyCode', 'shipToName', 'price', 'status'
+    'subscriptionId', 'parentId', 'productName', 'unit', 'currencyCode', 'shipToName', 'price', 'status'
   ])
   .service('billing', ['$q', '$log', 'storeAPILoader', 'userState',
     function ($q, $log, storeAPILoader, userState) {
