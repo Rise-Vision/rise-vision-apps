@@ -147,6 +147,12 @@ describe('controller: BillingCtrl', function () {
       })).to.equal('Enterprise Plan (Monthly/USD)');
 
       expect($scope.getSubscriptionDesc({
+        productName: 'Enterprise Plan',
+        unit: 'per Display per month',
+        currencyCode: 'cad'
+      })).to.equal('Enterprise Plan (Monthly/CAD)');
+
+      expect($scope.getSubscriptionDesc({
         productName: 'Advanced Plan',
         unit: 'per Display per Year',
         currencyCode: 'usd'
