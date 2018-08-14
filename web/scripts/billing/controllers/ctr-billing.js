@@ -25,11 +25,8 @@ angular.module('risevision.apps.billing.controllers')
         }
       });
 
-      $rootScope.$on('chargebee.close', function () {
-        $timeout(function () {
-          $scope.subscriptions.doSearch();
-        }, 5000);
-      });
+      $rootScope.$on('chargebee.subscriptionChanged', _reloadSubscriptions);
+      $rootScope.$on('chargebee.subscriptionCancelled', _reloadSubscriptions);
 
       $scope.viewPastInvoices = function () {
         chargebeeFactory.openBillingHistory(userState.getSelectedCompanyId());
@@ -87,6 +84,12 @@ angular.module('risevision.apps.billing.controllers')
       $scope.isSuspended = function (subscription) {
         return subscription.status === 'Suspended';
       };
+
+      function _reloadSubscriptions () {
+        $timeout(function () {
+          $scope.subscriptions.doSearch();
+        }, 5000);
+      }
 
       function _getCurrency (subscription) {
         return subscription.currencyCode.toUpperCase();
