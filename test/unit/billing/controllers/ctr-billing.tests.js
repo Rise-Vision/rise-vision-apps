@@ -141,7 +141,7 @@ describe('controller: BillingCtrl', function () {
 
   describe('chargebee events', function () {
     it('should reload Subscriptions when Customer Portal is closed', function () {
-      $rootScope.$emit('chargebee.close');
+      $rootScope.$emit('chargebee.subscriptionChanged');
       $timeout.flush();
       expect(listServiceInstance.doSearch).to.be.calledOnce;
     });
@@ -151,27 +151,31 @@ describe('controller: BillingCtrl', function () {
     it('should format subscription name', function () {
       expect($scope.getSubscriptionDesc({
         productName: 'Enterprise Plan',
+        quantity: 1,
         unit: 'per Display per Month',
         currencyCode: 'usd'
       })).to.equal('Enterprise Plan (Monthly/USD)');
 
       expect($scope.getSubscriptionDesc({
         productName: 'Enterprise Plan',
+        quantity: 3,
         unit: 'per Display per month',
         currencyCode: 'cad'
-      })).to.equal('Enterprise Plan (Monthly/CAD)');
+      })).to.equal('3 x Enterprise Plan (Monthly/CAD)');
 
       expect($scope.getSubscriptionDesc({
         productName: 'Advanced Plan',
+        quantity: 1,
         unit: 'per Display per Year',
         currencyCode: 'usd'
       })).to.equal('Advanced Plan (Yearly/USD)');
 
       expect($scope.getSubscriptionDesc({
         productName: 'Basic Plan',
+        quantity: 2,
         unit: 'per Display per Year',
         currencyCode: 'cad'
-      })).to.equal('Basic Plan (Yearly/CAD)');
+      })).to.equal('2 x Basic Plan (Yearly/CAD)');
     });
 
     it('should calculate total price', function () {

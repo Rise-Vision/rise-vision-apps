@@ -63,10 +63,11 @@ angular.module('risevision.apps.billing.controllers')
       };
 
       $scope.getSubscriptionDesc = function (subscription) {
+        var prefix = subscription.quantity > 1 ? subscription.quantity + ' x ' : '';
         var period = _getPeriod(subscription);
         var currency = _getCurrency(subscription);
 
-        return subscription.productName + ' (' + period + '/' + currency + ')';
+        return prefix + subscription.productName + ' (' + period + '/' + currency + ')';
       };
 
       $scope.getSubscriptionPrice = function (subscription) {
