@@ -1,0 +1,88 @@
+<div id="appLauncherContainer">
+  <div class="container u_margin-md-top">
+    <h2 class="u_margin-md-bottom">Account & Billing</h2>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Invoices</h3>
+      </div>
+      <div class="panel-body">
+        <h4 style="display:none">Unpaid Invoices</h4>
+        <a style="display:none" href="#">View Unpaid Invoices</a>
+        <h4>Invoice History</h4>
+        <ul class="list-unstyled">
+          <li><a href="#" ng-click="viewPastInvoices()">View Past Invoices</a></li>
+          <li><a href="#" ng-click="viewPastInvoicesStore()">View Past Invoices (Prior to September 2018)</a></li>
+        </ul>
+      </div>
+    </div><!--panel-->
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Subscriptions</h3>
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Subscription ID</th>
+              <th>Subscription</th>
+              <th>Ship To</th>
+              <th>Total</th>
+              <th colspan="2">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>12345</td>
+              <td class="font-weight-bold">Enterprise Plan (Monthly/CAD)</td>
+              <td>Company ABC Inc.</td>
+              <td>$199.00</td>
+              <td><span class="label label-success">Active</span></td>
+              <td><a href="#">Edit</a></td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td class="font-weight-bold">Enterprise Plan (Monthly/CAD)</td>
+              <td>Company ABC Inc.</td>
+              <td>$199.00</td>
+              <td class="text-nowrap"><span class="label label-success">Active</span></td>
+              <td><a href="#">Edit</a></td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td class="font-weight-bold">Enterprise Plan (Monthly/CAD)</td>
+              <td>Company ABC Inc.</td>
+              <td>$199.00</td>
+              <td class="text-nowrap"><span class="label label-warning">Suspended</span></td>
+              <td><a href="#">Edit</a></td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Payment Methods</h3>
+      </div>
+      <div class="panel-body">
+        <a href="#" ng-click="editPaymentMethods()">Edit Payment Methods</a>
+      </div>
+    </div><!--panel-->
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Account Information</h3>
+      </div>
+      <div class="panel-body">
+        <p class="font-weight-bold">Billing Notifications Email</p>
+        <span class="text-muted u_margin-right" ng-show="company.billingContactEmails">{{company.billingContactEmails}}</span>
+        <span class="text-muted u_margin-right" ng-show="!company.billingContactEmails">Not set. Please enter a billing email.</span>
+        <a href="#" ng-click="showCompanySettings()">Edit</a>
+      </div>
+    </div>
+  </div><!--container-->
+</div><!--appLauncherContainer-->

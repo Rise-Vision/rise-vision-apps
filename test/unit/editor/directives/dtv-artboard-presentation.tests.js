@@ -48,7 +48,7 @@ describe('directive: artboard-presentation', function() {
     $stateParams = _$stateParams_;
     editorFactory = _editorFactory_;
     artboardFactory = _artboardFactory_;
-    heightIncrement = PRESENTATION_BORDER_SIZE;
+    heightIncrement = 2 * PRESENTATION_BORDER_SIZE;
     widthIncrement = 2 * PRESENTATION_BORDER_SIZE;
     $scope = $rootScope.$new();
   }));

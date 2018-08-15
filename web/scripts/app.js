@@ -30,6 +30,7 @@ angular.module('risevision.apps', [
     'risevision.apps.launcher.controllers',
     'risevision.apps.launcher.directives',
     'risevision.apps.launcher.services',
+    'risevision.apps.billing.controllers',
     'risevision.schedules.services',
     'risevision.schedules.controllers',
     'risevision.schedules.filters',
@@ -120,6 +121,29 @@ angular.module('risevision.apps', [
               'partials/launcher/signup.html');
           }],
           url: '/unregistered/:state'
+        })
+
+        // billing
+        .state('apps.billing', {
+          url: '?cid',
+          abstract: true,
+          template: '<div class="container billing-app" ui-view></div>'
+        })
+
+        .state('apps.billing.home', {
+          url: '/billing',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get(
+              'partials/billing/app-billing.html');
+          }],
+          controller: 'BillingCtrl',
+          resolve: {
+            canAccessApps: ['canAccessApps',
+              function (canAccessApps) {
+                return canAccessApps();
+              }
+            ]
+          }
         })
 
         // schedules
@@ -458,6 +482,8 @@ angular.module('risevision.apps.launcher.controllers', []);
 angular.module('risevision.apps.launcher.directives', []);
 angular.module('risevision.apps.launcher.services', []);
 
+angular.module('risevision.apps.billing.controllers', []);
+angular.module('risevision.apps.billing.services', []);
 
 angular.module('risevision.schedules.services', [
   'risevision.common.header',

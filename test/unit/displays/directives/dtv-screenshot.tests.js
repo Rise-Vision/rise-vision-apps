@@ -22,15 +22,19 @@ describe('directive: screenshot', function() {
       return {
         isScreenshotCompatiblePlayer: function() {
           return screenshotCompatible;
+        },
+        isChromeOSPlayer: function() {
+          return isChromeOS;
         }
       };
     });
   }));
   
-  var elm, $scope, $compile, screenshotFactory, screenshotCompatible, display;
+  var elm, $scope, $compile, screenshotFactory, screenshotCompatible, isChromeOS, display;
 
   beforeEach(inject(function($rootScope, $injector, _$compile_, $templateCache) {
     screenshotCompatible = true;
+    isChromeOS = false;
     display = $injector.get('display');
     screenshotFactory = $injector.get('screenshotFactory');
 
@@ -83,6 +87,9 @@ describe('directive: screenshot', function() {
       expect($scope.screenshotState({ playerVersion: '2018', os: 'cros-x64' })).to.equal('os-not-supported');
       expect($scope.screenshotState({ playerVersion: '2018', os: 'Microsoft' })).to.equal('upgrade-player');
       expect($scope.screenshotState({ playerVersion: '2018' })).to.equal('upgrade-player');
+      isChromeOS = true;
+      expect($scope.screenshotState({ playerVersion: '2018' })).to.equal('chromeos-soon');
+      isChromeOS = false;
       screenshotCompatible = true;
       expect($scope.screenshotState({ playerVersion: '2018', playerErrorCode: 0 })).to.equal('no-schedule');
       expect($scope.screenshotState({

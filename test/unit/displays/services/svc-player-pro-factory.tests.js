@@ -73,11 +73,11 @@ describe('service: playerProFactory:', function() {
     expect(playerProFactory.is3rdPartyPlayer({playerName:'Other', os: 'cros', playerVersion: '1.0'})).to.be.true;
   });
 
-  it('isCROS:',function(){
-    expect(playerProFactory.isCROS()).to.be.false;
-    expect(playerProFactory.isCROS({os:''})).to.be.false;
-    expect(playerProFactory.isCROS({os: 'Microsoft'})).to.be.false;
-    expect(playerProFactory.isCROS({os:'cros'})).to.be.true;
+  it('isCROSLegacy:',function(){
+    expect(playerProFactory.isCROSLegacy()).to.be.false;
+    expect(playerProFactory.isCROSLegacy({os:''})).to.be.false;
+    expect(playerProFactory.isCROSLegacy({os: 'Microsoft'})).to.be.false;
+    expect(playerProFactory.isCROSLegacy({os:'cros'})).to.be.true;
   });
 
   it('isElectronPlayer:', function() {
@@ -93,6 +93,8 @@ describe('service: playerProFactory:', function() {
     expect(playerProFactory.isChromeOSPlayer({playerName: null})).to.be.false;
     expect(playerProFactory.isChromeOSPlayer({playerName:'RisePlayer'})).to.be.false;
     expect(playerProFactory.isChromeOSPlayer({playerName:'RisePlayer', playerVersion: '2017.07.17.20.21'})).to.be.false;
+    expect(playerProFactory.isChromeOSPlayer({playerName:'RisePlayerElectron'})).to.be.false;
+    expect(playerProFactory.isChromeOSPlayer({playerName:'RisePlayerElectron', playerVersion: '2018.08.17.20.21'})).to.be.false;
     expect(playerProFactory.isChromeOSPlayer({playerName:'RisePlayer', playerVersion: '2018.08.17.20.21'})).to.be.true;
     expect(playerProFactory.isChromeOSPlayer({playerName:'(Beta) RisePlayer', playerVersion: '2018.08.17.20.21'})).to.be.true;
   });
