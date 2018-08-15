@@ -88,8 +88,13 @@ angular.module('risevision.apps.billing.controllers')
 
       function _reloadSubscriptions () {
         $timeout(function () {
+          $loading.startGlobal('subscriptions-changed-loader');
+        });
+
+        $timeout(function () {
+          $loading.stopGlobal('subscriptions-changed-loader');
           $scope.subscriptions.doSearch();
-        }, 5000);
+        }, 10000);
       }
 
       function _getCurrency (subscription) {

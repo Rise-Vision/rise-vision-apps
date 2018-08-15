@@ -1,7 +1,7 @@
 'use strict';
 describe('controller: BillingCtrl', function () {
   var sandbox = sinon.sandbox.create();
-  var $rootScope, $scope, $window, $modal, $timeout, chargebeeFactory, listServiceInstance;
+  var $rootScope, $scope, $window, $loading, $modal, $timeout, chargebeeFactory, listServiceInstance;
 
   beforeEach(module('risevision.apps.billing.controllers'));
 
@@ -70,6 +70,7 @@ describe('controller: BillingCtrl', function () {
     $scope = $rootScope.$new();
     $window = $injector.get('$window');
     $modal = $injector.get('$modal');
+    $loading = $injector.get('$loading');
     $timeout = $injector.get('$timeout');
     chargebeeFactory = $injector.get('chargebeeFactory');
 
@@ -140,9 +141,11 @@ describe('controller: BillingCtrl', function () {
   });
 
   describe('chargebee events', function () {
-    it('should reload Subscriptions when Customer Portal is closed', function () {
+    it('should reload Subscriptions when Subscription is updated on Customer Portal', function () {
       $rootScope.$emit('chargebee.subscriptionChanged');
       $timeout.flush();
+      expect($loading.startGlobal).to.be.calledOnce;
+      expect($loading.stopGlobal).to.be.calledOnce;
       expect(listServiceInstance.doSearch).to.be.calledOnce;
     });
   });
