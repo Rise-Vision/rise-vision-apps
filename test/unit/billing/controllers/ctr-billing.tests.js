@@ -115,16 +115,14 @@ describe('controller: BillingCtrl', function () {
     });
   });
 
-  describe('edit subscription', function () {
+  describe('edit subscriptions', function () {
     it('should show Chargebee subscription details for a Subscription with parentId == null', function () {
       $scope.editSubscription({ subscriptionId: 'subs1' });
       expect(chargebeeFactory.openSubscriptionDetails).to.be.calledOnce;
       expect(chargebeeFactory.openSubscriptionDetails.getCall(0).args[0]).to.equal('testId');
       expect(chargebeeFactory.openSubscriptionDetails.getCall(0).args[1]).to.equal('subs1');
     });
-  });
 
-  describe('edit parent subscription', function () {
     it('should show Chargebee parent subscription details for a Subscription with parentId != null', function () {
       $scope.editSubscription({ subscriptionId: 'subs1', parentId: 'parentId' });
       expect(chargebeeFactory.openSubscriptionDetails).to.be.calledOnce;
@@ -137,6 +135,13 @@ describe('controller: BillingCtrl', function () {
     it('should show Company Settings modal', function () {
       $scope.showCompanySettings();
       expect($modal.open).to.be.calledOnce;
+    });
+
+    it('should reload Subscriptions when selected company changes', function () {
+      $rootScope.$emit('risevision.company.selectedCompanyChanged');
+      expect($loading.startGlobal).to.not.be.called;
+      expect($loading.stopGlobal).to.not.be.called;
+      expect(listServiceInstance.doSearch).to.be.calledOnce;
     });
   });
 
