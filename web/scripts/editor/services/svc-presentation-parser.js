@@ -604,7 +604,7 @@ angular.module('risevision.editor.services')
               placeholder.id = '';
             }
           } else if (!placeholder.deleted) {
-            var newTag = '' + divTag + ' ' +
+            var newTag = '' + divTag + '' +
               factory.updateDiv(placeholder, '') + '>' + divEndTag + '\n\t';
             end = htmlString.indexOf(bodyEndTag);
             htmlString = htmlString.substring(0, end) + newTag +
