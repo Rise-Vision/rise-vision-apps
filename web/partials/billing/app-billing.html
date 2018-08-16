@@ -17,7 +17,11 @@
       </div>
     </div><!--panel-->
 
-    <div id="errorBox" class="alert alert-danger" role="alert" ng-show="chargebeeFactory.apiError">
+    <div id="errorBox" ng-show="subscriptions.apiError" class="alert alert-danger" role="alert">
+      <strong>{{subscriptions.errorMessage}}</strong> {{subscriptions.apiError}}
+    </div>
+
+    <div id="errorBoxChargebee" ng-show="chargebeeFactory.apiError" class="alert alert-danger" role="alert">
       An error has occurred. Please try again.
     </div>
 
