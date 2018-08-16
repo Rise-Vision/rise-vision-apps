@@ -25,10 +25,6 @@ angular.module('risevision.apps.billing.controllers')
         }
       });
 
-      $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
-        $scope.subscriptions.doSearch();
-      });
-
       $rootScope.$on('chargebee.subscriptionChanged', _reloadSubscriptions);
       $rootScope.$on('chargebee.subscriptionCancelled', _reloadSubscriptions);
 

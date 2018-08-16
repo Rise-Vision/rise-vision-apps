@@ -136,13 +136,6 @@ describe('controller: BillingCtrl', function () {
       $scope.showCompanySettings();
       expect($modal.open).to.be.calledOnce;
     });
-
-    it('should reload Subscriptions when selected company changes', function () {
-      $rootScope.$emit('risevision.company.selectedCompanyChanged');
-      expect($loading.startGlobal).to.not.be.called;
-      expect($loading.stopGlobal).to.not.be.called;
-      expect(listServiceInstance.doSearch).to.be.calledOnce;
-    });
   });
 
   describe('chargebee events', function () {
