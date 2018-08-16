@@ -31,6 +31,7 @@ angular.module('risevision.apps', [
     'risevision.apps.launcher.directives',
     'risevision.apps.launcher.services',
     'risevision.apps.billing.controllers',
+    'risevision.apps.billing.services',
     'risevision.schedules.services',
     'risevision.schedules.controllers',
     'risevision.schedules.filters',
@@ -460,7 +461,8 @@ angular.module('risevision.apps', [
           $state.current.name === 'apps.displays.list' ||
           $state.current.name === 'apps.displays.alerts' ||
           $state.current.name === 'apps.storage.home' ||
-          $state.current.name === 'apps.launcher.home') {
+          $state.current.name === 'apps.launcher.home' ||
+          $state.current.name === 'apps.billing.home') {
 
           $state.go($state.current, null, {
             reload: true
