@@ -8,8 +8,8 @@ angular.module('risevision.apps.billing.controllers')
       getCoreCountries, userState, chargebeeFactory, billing, STORE_URL, INVOICES_PATH) {
 
       $scope.search = {
-        sortBy: 'productName',
         count: $scope.listLimit,
+        sortBy: 'status',
         reverse: false,
         name: 'Subscriptions'
       };

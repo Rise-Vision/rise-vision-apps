@@ -11,7 +11,7 @@ angular.module('risevision.apps.billing.services')
             'search': 'origin:Chargebee',
             'cursor': cursor,
             'count': search.count,
-            'sort': 'status asc'
+            'sort': search.sortBy + (search.reverse ? ' desc' : ' asc')
           };
 
           $log.debug('Store subscription.listUser called with', params);
