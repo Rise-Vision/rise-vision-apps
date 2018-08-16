@@ -46,6 +46,12 @@
             </tr>
           </thead>
           <tbody>
+            <tr ng-show="subscriptions.items.list.length === 0">
+              <td colspan="6" class="text-center">
+                <span>You haven't Subscribed to any Products yet.</span>
+              </td>
+            </tr>
+
             <tr ng-repeat="subs in subscriptions.items.list">
               <td>{{subs.subscriptionId}}</td>
               <td class="font-weight-bold">{{getSubscriptionDesc(subs)}}</td>
