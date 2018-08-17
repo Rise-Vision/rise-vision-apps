@@ -10,13 +10,13 @@
   <!-- DESKTOP BUTTONS -->
   <div class="row">
     <div class="col-sm-4 col-md-3 col-md-offset-3">
-      <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" required-role="da">
+      <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" require-role="da">
         {{ 'displays-app.fields.controls.restart.name' | translate }}
         <i class="fa fa-refresh icon-right"></i>
       </button>
     </div>
     <div class="col-sm-4 col-md-3">
-      <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" required-role="da">
+      <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" require-role="da">
         {{ 'displays-app.fields.controls.reboot.name' | translate }}
         <i class="fa fa-power-off icon-right"></i>
       </button>
@@ -33,7 +33,7 @@
   <div class="row">
       <div class="col-sm-12">
           <div ng-show="controlsError" class="alert alert-danger" role="alert">
-              <strong translate>displays-app.fields.controls.error </strong>{{controlsError}}
+              <strong translate>displays-app.fields.controls.error</strong> {{controlsError}}
           </div>
           <div class="panel animated fadeIn" ng-show="controlsInfo">
               <div class="panel-body bg-warning">

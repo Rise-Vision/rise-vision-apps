@@ -50,7 +50,26 @@ gulp
 
 ### Staging summary
 
-When pushing changes to chore/fix/feature branches, an optional staging environment can be indicated at the end of the commit message. The format is [stage-x], with x ranging from 0 to 4 (defaulting to 0, in case it's not provided). In order to check which staging environment is not currently being used, ```./currently-staged.sh``` can be ran in the root directory of the repository. The command's output is:
+When pushing changes to chore/fix/feature branches, an optional staging environment can be indicated at the end of the commit message. The format is [stage-x], with x ranging from 0 to 9 (defaulting to 0, in case it's not provided). 
+
+#### Staging Assignments by Team
+
+| Stage | Team |
+---|---
+| apps-stage-0 |	Reserved - CCI |
+| apps-stage-1 |	Apps |
+| apps-stage-2 |	Apps |
+| apps-stage-3 |	Apps |
+| apps-stage-4 |	Apps |
+| apps-stage-5 |	Apps |
+| apps-stage-6 |	Delivery |
+| apps-stage-7 |	Delivery |
+| apps-stage-8 |	Creative |
+| apps-stage-9 |	Creative |
+
+#### Check which Stage is in Use
+
+In order to check which staging environment is not currently being used, ```./currently-staged.sh``` can be ran in the root directory of the repository. The command's output is:
 
 ```
 This command will show which branch has the latest commit referencing a given staging environment.

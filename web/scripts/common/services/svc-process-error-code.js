@@ -12,7 +12,9 @@ angular.module('risevision.apps.services')
       restore: 'restored',
       move: 'moved',
       rename: 'renamed',
-      upload: 'uploaded'
+      upload: 'uploaded',
+      restart: 'restarted',
+      reboot: 'rebooted'
     };
 
     return function (itemName, action, e) {

@@ -3,8 +3,9 @@
 // controls Restart/Reboot functionality
 angular.module('risevision.displays.controllers')
   .controller('displayControls', ['$scope', 'display',
-    '$log', '$modal', '$templateCache', 'displayTracker',
-    function ($scope, display, $log, $modal, $templateCache, displayTracker) {
+    '$log', '$modal', '$templateCache', 'processErrorCode', 'displayTracker',
+    function ($scope, display, $log, $modal, $templateCache, processErrorCode,
+      displayTracker) {
       $scope.displayTracker = displayTracker;
 
       var _restart = function (displayId, displayName) {
@@ -23,7 +24,7 @@ angular.module('risevision.displays.controllers')
               'displays-app.fields.controls.restart.success';
           })
           .then(null, function (e) {
-            $scope.controlsError = e.message ? e.message : e.toString();
+            $scope.controlsError = processErrorCode('Display', 'restart', e);
           });
       };
 
@@ -43,7 +44,7 @@ angular.module('risevision.displays.controllers')
               'displays-app.fields.controls.reboot.success';
           })
           .then(null, function (e) {
-            $scope.controlsError = e.message ? e.message : e.toString();
+            $scope.controlsError = processErrorCode('Display', 'reboot', e);
           });
       };
 
