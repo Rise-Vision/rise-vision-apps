@@ -17,11 +17,23 @@
       </div>
     </div><!--panel-->
 
+    <div id="errorBox" ng-show="subscriptions.apiError" class="alert alert-danger" role="alert">
+      <strong>{{subscriptions.errorMessage}}</strong> {{subscriptions.apiError}}
+    </div>
+
+    <div id="errorBoxChargebee" ng-show="chargebeeFactory.apiError" class="alert alert-danger" role="alert">
+      An error has occurred. Please try again.
+    </div>
+
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Subscriptions</h3>
       </div>
-      <div class="panel-body">
+      <div class="panel-body"
+          scrolling-list="subscriptions.load()"
+          rv-spinner rv-spinner-key="subscriptions-list-loader"
+          rv-spinner-start-active="1">
+
         <div class="table-responsive">
         <table class="table table-hover">
           <thead>
@@ -29,34 +41,28 @@
               <th>Subscription ID</th>
               <th>Subscription</th>
               <th>Ship To</th>
-              <th>Total</th>
+              <!-- <th>Total</th> -->
               <th colspan="2">Status</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>12345</td>
-              <td class="font-weight-bold">Enterprise Plan (Monthly/CAD)</td>
-              <td>Company ABC Inc.</td>
-              <td>$199.00</td>
-              <td><span class="label label-success">Active</span></td>
-              <td><a href="#">Edit</a></td>
+            <tr ng-show="subscriptions.items.list.length === 0">
+              <td colspan="6" class="text-center">
+                <span>You haven't Subscribed to any Products yet.</span>
+              </td>
             </tr>
-            <tr>
-              <td>12345</td>
-              <td class="font-weight-bold">Enterprise Plan (Monthly/CAD)</td>
-              <td>Company ABC Inc.</td>
-              <td>$199.00</td>
-              <td class="text-nowrap"><span class="label label-success">Active</span></td>
-              <td><a href="#">Edit</a></td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td class="font-weight-bold">Enterprise Plan (Monthly/CAD)</td>
-              <td>Company ABC Inc.</td>
-              <td>$199.00</td>
-              <td class="text-nowrap"><span class="label label-warning">Suspended</span></td>
-              <td><a href="#">Edit</a></td>
+
+            <tr ng-repeat="subs in subscriptions.items.list">
+              <td>{{subs.subscriptionId}}</td>
+              <td class="font-weight-bold">{{getSubscriptionDesc(subs)}}</td>
+              <td>{{subs.shipToName}}</td>
+              <!-- <td>${{getSubscriptionPrice(subs) | number:2}}</td> -->
+              <td>
+                <span class="label" ng-class="{ 'label-success': isActive(subs), 'label-warning': isSuspended(subs) || isCancelled(subs) }">
+                  {{subs.status}}
+                </span>
+              </td>
+              <td><a href="#" ng-click="editSubscription(subs)">Edit</a></td>
             </tr>
           </tbody>
         </table>

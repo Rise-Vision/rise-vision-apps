@@ -1,7 +1,7 @@
 'use strict';
 describe('controller: BillingCtrl', function () {
   var sandbox = sinon.sandbox.create();
-  var $scope, $window, $loading, $modal, chargebeeFactory;
+  var $rootScope, $scope, $window, $loading, $modal, $timeout, chargebeeFactory, listServiceInstance;
 
   beforeEach(module('risevision.apps.billing.controllers'));
 
@@ -30,6 +30,15 @@ describe('controller: BillingCtrl', function () {
         get: sandbox.stub()
       };
     });
+    $provide.service('ScrollingListService', function () {
+      return function () {
+        listServiceInstance = {
+          doSearch: sandbox.stub()
+        };
+
+        return listServiceInstance;
+      };
+    });
     $provide.service('getCoreCountries', function () {
       return function () {
         return [];
@@ -45,16 +54,24 @@ describe('controller: BillingCtrl', function () {
     $provide.service('chargebeeFactory', function () {
       return {
         openBillingHistory: sandbox.stub(),
-        openPaymentSources: sandbox.stub()
+        openPaymentSources: sandbox.stub(),
+        openSubscriptionDetails: sandbox.stub()
+      };
+    });
+    $provide.service('billing', function () {
+      return {
+        getSubscriptions: sandbox.stub()
       };
     });
   }));
 
-  beforeEach(inject(function($injector, $rootScope, $controller) {
+  beforeEach(inject(function($injector, _$rootScope_, $controller) {
+    $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
     $window = $injector.get('$window');
-    $loading = $injector.get('$loading');
     $modal = $injector.get('$modal');
+    $loading = $injector.get('$loading');
+    $timeout = $injector.get('$timeout');
     chargebeeFactory = $injector.get('chargebeeFactory');
 
     $controller('BillingCtrl', {
@@ -71,16 +88,9 @@ describe('controller: BillingCtrl', function () {
     expect($scope).to.be.ok;
     expect($scope.viewPastInvoices).to.be.a.function;
     expect($scope.viewPastInvoicesStore).to.be.a.function;
-  });
-
-  describe('loading:', function () {
-    it('should show spinner on init', function () {
-      $loading.startGlobal.should.have.been.calledWith('billing.loading');
-    });
-
-    it('should global spinner after loading billing information', function () {
-      $loading.stopGlobal.should.have.been.calledWith('billing.loading');
-    });
+    expect($scope.editPaymentMethods).to.be.a.function;
+    expect($scope.editSubscription).to.be.a.function;
+    expect($scope.showCompanySettings).to.be.a.function;
   });
 
   describe('past invoices', function () {
@@ -105,10 +115,103 @@ describe('controller: BillingCtrl', function () {
     });
   });
 
+  describe('edit subscriptions', function () {
+    it('should show Chargebee subscription details for a Subscription with parentId == null', function () {
+      $scope.editSubscription({ subscriptionId: 'subs1' });
+      expect(chargebeeFactory.openSubscriptionDetails).to.be.calledOnce;
+      expect(chargebeeFactory.openSubscriptionDetails.getCall(0).args[0]).to.equal('testId');
+      expect(chargebeeFactory.openSubscriptionDetails.getCall(0).args[1]).to.equal('subs1');
+    });
+
+    it('should show Chargebee parent subscription details for a Subscription with parentId != null', function () {
+      $scope.editSubscription({ subscriptionId: 'subs1', parentId: 'parentId' });
+      expect(chargebeeFactory.openSubscriptionDetails).to.be.calledOnce;
+      expect(chargebeeFactory.openSubscriptionDetails.getCall(0).args[0]).to.equal('testId');
+      expect(chargebeeFactory.openSubscriptionDetails.getCall(0).args[1]).to.equal('parentId');
+    });
+  });
+
   describe('account information', function () {
     it('should show Company Settings modal', function () {
       $scope.showCompanySettings();
       expect($modal.open).to.be.calledOnce;
+    });
+  });
+
+  describe('chargebee events', function () {
+    it('should reload Subscriptions when Subscription is updated on Customer Portal', function () {
+      $rootScope.$emit('chargebee.subscriptionChanged');
+      $timeout.flush();
+      expect($loading.startGlobal).to.be.calledOnce;
+      expect($loading.stopGlobal).to.be.calledOnce;
+      expect(listServiceInstance.doSearch).to.be.calledOnce;
+    });
+  });
+
+  describe('data formatting', function () {
+    it('should format subscription name', function () {
+      expect($scope.getSubscriptionDesc({
+        productName: 'Enterprise Plan',
+        quantity: 1,
+        unit: 'per Display per Month',
+        currencyCode: 'usd'
+      })).to.equal('Enterprise Plan (Monthly/USD)');
+
+      expect($scope.getSubscriptionDesc({
+        productName: 'Enterprise Plan',
+        quantity: 3,
+        unit: 'per Display per month',
+        currencyCode: 'cad'
+      })).to.equal('3 x Enterprise Plan (Monthly/CAD)');
+
+      expect($scope.getSubscriptionDesc({
+        productName: 'Advanced Plan',
+        quantity: 1,
+        unit: 'per Display per Year',
+        currencyCode: 'usd'
+      })).to.equal('Advanced Plan (Yearly/USD)');
+
+      expect($scope.getSubscriptionDesc({
+        productName: 'Basic Plan',
+        quantity: 2,
+        unit: 'per Display per Year',
+        currencyCode: 'cad'
+      })).to.equal('2 x Basic Plan (Yearly/CAD)');
+    });
+
+    it('should calculate total price', function () {
+      expect($scope.getSubscriptionPrice({
+        quantity: 1,
+        price: 100,
+        shipping: 0
+      })).to.equal(100);
+
+      expect($scope.getSubscriptionPrice({
+        quantity: 5,
+        price: 50,
+        shipping: 0
+      })).to.equal(250);
+
+      expect($scope.getSubscriptionPrice({
+        quantity: 3,
+        price: 200,
+        shipping: 500
+      })).to.equal(1100);
+    });
+
+    it('should validate Active status type', function () {
+      expect($scope.isActive({ status: 'Active' })).to.be.true;
+      expect($scope.isActive({ status: 'Cancelled' })).to.be.false;
+    });
+
+    it('should validate Cancelled status type', function () {
+      expect($scope.isCancelled({ status: 'Cancelled' })).to.be.true;
+      expect($scope.isCancelled({ status: 'Active' })).to.be.false;
+    });
+
+    it('should validate Suspended status type', function () {
+      expect($scope.isSuspended({ status: 'Suspended' })).to.be.true;
+      expect($scope.isSuspended({ status: 'Active' })).to.be.false;
     });
   });
 });
