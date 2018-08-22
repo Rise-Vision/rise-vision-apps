@@ -14,6 +14,7 @@ angular.module('risevision.apps.billing.controllers')
         name: 'Subscriptions'
       };
 
+      $scope.company = userState.getCopyOfSelectedCompany();
       $scope.chargebeeFactory = chargebeeFactory;
       $scope.subscriptions = new ScrollingListService(billing.getSubscriptions, $scope.search);
 
