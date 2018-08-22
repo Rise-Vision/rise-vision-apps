@@ -179,19 +179,7 @@
               <span translate>displays-app.fields.player.rpp.email-recipients</span>
             </td>
             <td class="table-body__cell u_no-border" ng-class="{ 'has-error': !displayDetails.monitoringEmails.$valid }">
-              <tags-input name="monitoringEmails"
-                          type="email"
-                          placeholder="Add an email"
-                          class="email-tags"
-                          ng-model="monitoringEmailsList"
-                          ng-disabled="!display.monitoringEnabled"
-                          add-on-enter="true"
-                          add-on-space="true"
-                          add-on-comma="true"
-                          add-on-blur="true"
-                          add-on-paste="true"
-                          on-tag-adding="isValidEmail($tag)">
-              </tags-input>
+              <emails-field name="monitoringEmails" ng-model="display.monitoringEmails"></emails-field>
               <p class="help-block validation-error-message-email" ng-show="!displayDetails.monitoringEmails.$valid" translate>
                 displays-app.fields.player.rpp.invalid-email
               </p>
