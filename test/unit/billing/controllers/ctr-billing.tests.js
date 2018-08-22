@@ -48,6 +48,9 @@ describe('controller: BillingCtrl', function () {
       return {
         getSelectedCompanyId: function () {
           return 'testId';
+        },
+        getCopyOfSelectedCompany: function () {
+          return {};
         }
       };
     });
