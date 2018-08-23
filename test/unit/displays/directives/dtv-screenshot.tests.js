@@ -87,9 +87,6 @@ describe('directive: screenshot', function() {
       expect($scope.screenshotState({ playerVersion: '2018', os: 'cros-x64' })).to.equal('os-not-supported');
       expect($scope.screenshotState({ playerVersion: '2018', os: 'Microsoft' })).to.equal('upgrade-player');
       expect($scope.screenshotState({ playerVersion: '2018' })).to.equal('upgrade-player');
-      isChromeOS = true;
-      expect($scope.screenshotState({ playerVersion: '2018' })).to.equal('chromeos-soon');
-      isChromeOS = false;
       screenshotCompatible = true;
       expect($scope.screenshotState({ playerVersion: '2018', playerErrorCode: 0 })).to.equal('no-schedule');
       expect($scope.screenshotState({

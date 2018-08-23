@@ -19,8 +19,6 @@ angular.module('risevision.displays.directives')
               return 'os-not-supported';
             } else if (statusFilter(display) === 'notinstalled') {
               return 'not-installed';
-            } else if (playerProFactory.isChromeOSPlayer(display)) {
-              return 'chromeos-soon';
             } else if (!playerProFactory.isScreenshotCompatiblePlayer(display)) {
               return 'upgrade-player';
             } else if (!displayService.hasSchedule(display)) {

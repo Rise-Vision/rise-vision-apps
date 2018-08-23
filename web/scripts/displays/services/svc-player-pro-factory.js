@@ -5,17 +5,18 @@ angular.module('risevision.displays.services')
   .value('OFFLINE_PLAY_PLAYER_VERSION', '2017.07.31.15.31')
   .value('DISPLAY_CONTROL_PLAYER_VERSION', '2018.01.15.16.31')
   .value('CHROMEOS_PLAYER_VERSION', '2018.07.20.10229')
+  .value('CHROMEOS_SCREENSHOT_PLAYER_VERSION', '2018.08.17.8388')
   .factory('playerProFactory', ['$rootScope', '$q', '$modal', 'userState',
     'displayTracker', 'storeAuthorization', '$loading', 'parsePlayerDate',
     'getLatestPlayerVersion', 'STORE_URL', 'IN_RVA_PATH',
     'PLAYER_PRO_PRODUCT_ID', 'PLAYER_PRO_PRODUCT_CODE',
     'SCREENSHOT_PLAYER_VERSION', 'OFFLINE_PLAY_PLAYER_VERSION', 'DISPLAY_CONTROL_PLAYER_VERSION',
-    'CHROMEOS_PLAYER_VERSION',
+    'CHROMEOS_PLAYER_VERSION', 'CHROMEOS_SCREENSHOT_PLAYER_VERSION',
     function ($rootScope, $q, $modal, userState, displayTracker, storeAuthorization,
       $loading, parsePlayerDate, getLatestPlayerVersion,
       STORE_URL, IN_RVA_PATH, PLAYER_PRO_PRODUCT_ID, PLAYER_PRO_PRODUCT_CODE,
       SCREENSHOT_PLAYER_VERSION, OFFLINE_PLAY_PLAYER_VERSION, DISPLAY_CONTROL_PLAYER_VERSION,
-      CHROMEOS_PLAYER_VERSION) {
+      CHROMEOS_PLAYER_VERSION, CHROMEOS_SCREENSHOT_PLAYER_VERSION) {
       var factory = {};
       var _latestPlayerVersion;
 
@@ -87,7 +88,8 @@ angular.module('risevision.displays.services')
 
       factory.isScreenshotCompatiblePlayer = function (display) {
         return !!(display && factory.isElectronPlayer(display) &&
-          display.playerVersion >= SCREENSHOT_PLAYER_VERSION);
+          display.playerVersion >= SCREENSHOT_PLAYER_VERSION) || 
+          (factory.isChromeOSPlayer(display) && display.playerVersion >= CHROMEOS_SCREENSHOT_PLAYER_VERSION);
       };
 
       factory.isOfflinePlayCompatiblePayer = function (display) {

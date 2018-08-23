@@ -239,7 +239,7 @@
 <!--      SETTINGS       -->
 
 <div class="form-group" ng-show="display.playerVersion || display.onlineStatus === 'online'">
-  <div class="form-group form-inline" ng-show="isChromeOs(display)">
+  <div class="form-group form-inline" ng-show="playerProFactory.isCROSLegacy(display) || playerProFactory.isChromeOSPlayer(display)">
     <label class="control-label" translate>displays-app.fields.player.orientation.name</label>
     <select class="form-control" ng-model="display.orientation" integer-parser>
       <option value="0" translate>displays-app.fields.player.orientation.0</option>
