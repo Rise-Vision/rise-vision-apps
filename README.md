@@ -36,11 +36,12 @@ npm install
 
 * download components with bower
 ```bash
-bower install```
+bower install
+```
 
 ### Run Local
 
-* under the root directory run gulp default task which will build and watch directories for changes 
+* under the root directory run gulp default task which will build and watch directories for changes
 so building and reloading the browser after a change
 ```bash
 gulp
@@ -50,7 +51,7 @@ gulp
 
 ### Staging summary
 
-When pushing changes to chore/fix/feature branches, an optional staging environment can be indicated at the end of the commit message. The format is [stage-x], with x ranging from 0 to 9 (defaulting to 0, in case it's not provided). 
+When pushing changes to chore/fix/feature branches, an optional staging environment can be indicated at the end of the commit message. The format is [stage-x], with x ranging from 0 to 9 (defaulting to 0, in case it's not provided).
 
 #### Staging Assignments by Team
 
