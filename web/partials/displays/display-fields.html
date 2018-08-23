@@ -10,13 +10,13 @@
   <!-- DESKTOP BUTTONS -->
   <div class="row">
     <div class="col-sm-4 col-md-3 col-md-offset-3">
-      <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" required-role="da">
+      <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" require-role="da">
         {{ 'displays-app.fields.controls.restart.name' | translate }}
         <i class="fa fa-refresh icon-right"></i>
       </button>
     </div>
     <div class="col-sm-4 col-md-3">
-      <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" required-role="da">
+      <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" require-role="da">
         {{ 'displays-app.fields.controls.reboot.name' | translate }}
         <i class="fa fa-power-off icon-right"></i>
       </button>
@@ -33,7 +33,7 @@
   <div class="row">
       <div class="col-sm-12">
           <div ng-show="controlsError" class="alert alert-danger" role="alert">
-              <strong translate>displays-app.fields.controls.error </strong>{{controlsError}}
+              <strong translate>displays-app.fields.controls.error</strong> {{controlsError}}
           </div>
           <div class="panel animated fadeIn" ng-show="controlsInfo">
               <div class="panel-body bg-warning">
@@ -179,19 +179,7 @@
               <span translate>displays-app.fields.player.rpp.email-recipients</span>
             </td>
             <td class="table-body__cell u_no-border" ng-class="{ 'has-error': !displayDetails.monitoringEmails.$valid }">
-              <tags-input name="monitoringEmails"
-                          type="email"
-                          placeholder="Add an email"
-                          class="email-tags"
-                          ng-model="monitoringEmailsList"
-                          ng-disabled="!display.monitoringEnabled"
-                          add-on-enter="true"
-                          add-on-space="true"
-                          add-on-comma="true"
-                          add-on-blur="true"
-                          add-on-paste="true"
-                          on-tag-adding="isValidEmail($tag)">
-              </tags-input>
+              <emails-field name="monitoringEmails" ng-model="display.monitoringEmails"></emails-field>
               <p class="help-block validation-error-message-email" ng-show="!displayDetails.monitoringEmails.$valid" translate>
                 displays-app.fields.player.rpp.invalid-email
               </p>
@@ -251,7 +239,7 @@
 <!--      SETTINGS       -->
 
 <div class="form-group" ng-show="display.playerVersion || display.onlineStatus === 'online'">
-  <div class="form-group form-inline" ng-show="isChromeOs(display)">
+  <div class="form-group form-inline" ng-show="playerProFactory.isCROSLegacy(display) || playerProFactory.isChromeOSPlayer(display)">
     <label class="control-label" translate>displays-app.fields.player.orientation.name</label>
     <select class="form-control" ng-model="display.orientation" integer-parser>
       <option value="0" translate>displays-app.fields.player.orientation.0</option>

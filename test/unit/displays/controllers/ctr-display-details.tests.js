@@ -387,16 +387,4 @@ describe('controller: display details', function() {
       expect($scope.isProToggleEnabled()).to.be.true;
     });
   });
-
-  describe('isValidEmail:', function() {
-    it('should return true if it is a valid email', function () {
-      expect($scope.isValidEmail()).to.be.false;
-      expect($scope.isValidEmail({})).to.be.false;
-      expect($scope.isValidEmail({ text: '' })).to.be.false;
-      expect($scope.isValidEmail({ text: 'aaaa' })).to.be.false;
-      expect($scope.isValidEmail({ text: 'aaaa@' })).to.be.false;
-      expect($scope.isValidEmail({ text: 'aaaa@a' })).to.be.true;
-      expect($scope.isValidEmail({ text: 'aaaa@a.com' })).to.be.true;
-    });
-  });
 });

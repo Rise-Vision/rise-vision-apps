@@ -85,7 +85,7 @@
       </div>
       <div class="panel-body">
         <p class="font-weight-bold">Billing Notifications Email</p>
-        <span class="text-muted u_margin-right" ng-show="company.billingContactEmails">{{company.billingContactEmails}}</span>
+        <span class="text-muted u_margin-right" ng-show="company.billingContactEmails">{{company.billingContactEmails.join(', ')}}</span>
         <span class="text-muted u_margin-right" ng-show="!company.billingContactEmails">Not set. Please enter a billing email.</span>
         <a href="#" ng-click="showCompanySettings()">Edit</a>
       </div>

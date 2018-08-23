@@ -35,6 +35,9 @@ describe('controller: display controls', function() {
         trackerCalled = name;
       };
     });
+    $provide.service('processErrorCode', function() {
+      return processErrorCode = sinon.spy(function() { return 'error'; });
+    });
     $provide.service('$modal',function(){
       return {
         open : function(obj){
@@ -54,7 +57,7 @@ describe('controller: display controls', function() {
     });
   }));
   var $scope, userState, $location, updateDisplay, confirmResponse, functionCalled,
-  trackerCalled;
+  trackerCalled, processErrorCode;
   beforeEach(function(){
     updateDisplay = true;
     confirmResponse = false;
@@ -123,6 +126,7 @@ describe('controller: display controls', function() {
         expect(functionCalled).to.equal('restart');
         expect(trackerCalled).to.not.be.ok;
         expect($scope.controlsInfo).to.not.be.ok;
+        processErrorCode.should.have.been.calledWith('Display', 'restart', sinon.match.any);
         expect($scope.controlsError).to.be.ok;
         done();
       },10);
@@ -159,6 +163,7 @@ describe('controller: display controls', function() {
         expect(functionCalled).to.equal('reboot');
         expect(trackerCalled).to.not.be.ok;
         expect($scope.controlsInfo).to.not.be.ok;
+        processErrorCode.should.have.been.calledWith('Display', 'reboot', sinon.match.any);
         expect($scope.controlsError).to.be.ok;
         done();
       }, 10);

@@ -20,17 +20,20 @@
 		</div>
 
 		<form role="form" name="settingsForm">
-		  <div class="form-group">
+		  <div class="form-group" ng-class="{'has-error': !settingsForm.screenName.$pristine && settingsForm.screenName.$invalid}" show-errors>
 		    <!--label class="control-label">Enter a #hashtag or @handle to display Tweets from any public account</label>
 		    <input type="text" class="form-control" placeholder="#hashtag/@handle"-->
-	      <label class="control-label">{{"widget-twitter.screenNameText" | translate }}</label>
+	      <label class="control-label">{{"widget-twitter.screenName.text" | translate }} *</label>
 		    <div class="input-group">
 		      <span class="input-group-addon" id="basic-addon1">@</span>
-		      <input id="twitterScreenName" type="text" class="form-control" placeholder="username" ng-model="settings.additionalParams.screenName">
+		      <input id="twitterScreenName" name="screenName" type="text" class="form-control" placeholder="username" required ng-model="settings.additionalParams.screenName">
 		    </div>
+				<p class="text-danger" ng-show="!settingsForm.screenName.$pristine && settingsForm.screenName.$invalid" translate>
+					widget-twitter.screenName.error
+			  </p>
 			</div><!--form-inline-->
-			
-		  <h4>{{"widget-twitter.previewLable" | translate }}</h4>
+
+		  <h4>{{"widget-twitter.previewLabel" | translate }}</h4>
 		  <div class="alert alert-info">
 		  	<div class="alert-body">
 		  		{{"widget-twitter.previewText" | translate }}
@@ -45,9 +48,6 @@
 		  		</div>
 		  	</div>
 		  </div>
-
-		  
-		  
 
 		</form>
 	</div>
