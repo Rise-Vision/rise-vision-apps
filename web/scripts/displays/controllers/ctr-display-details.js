@@ -94,10 +94,6 @@ angular.module('risevision.displays.controllers')
         return ($scope.display && $scope.display.playerProAuthorized) || $scope.isProSupported();
       };
 
-      $scope.isValidEmail = function (email) {
-        return !!(email && email.text && EMAIL_REGEX.test(email.text));
-      };
-
       $scope.confirmDelete = function () {
         $scope.modalInstance = $modal.open({
           template: $templateCache.get(
