@@ -1,6 +1,61 @@
 'use strict';
 
 angular.module('risevision.storage.services')
+  .factory('ExifStripper', ['$http', function ($http) {
+
+    /**
+     * Adapted from https://github.com/mshibl/Exif-Stripper
+     */
+    function removeExif(imageArrayBuffer, dv) {
+      var offset = 0, recess = 0;
+      var pieces = [];
+      var i = 0;
+      if (dv.getUint16(offset) == 0xffd8) {
+          offset += 2;
+          var app1 = dv.getUint16(offset);
+          offset += 2;
+          while (offset < dv.byteLength) {
+              if (app1 == 0xffe1) {
+                  pieces[i] = {recess:recess, offset: offset-2};
+                  recess = offset + dv.getUint16(offset);
+                  i++;
+              } else if (app1 == 0xffda){
+                  break;
+              }
+              offset += dv.getUint16(offset);
+              app1 = dv.getUint16(offset);
+              offset += 2;
+          }
+          if (pieces.length > 0){
+              var newPieces = [];
+              pieces.forEach(function (v) {
+                  newPieces.push(imageArrayBuffer.slice(v.recess, v.offset));
+              }, this);
+              newPieces.push(imageArrayBuffer.slice(recess));
+              return newPieces;
+          }
+      }
+    }
+
+    return {
+      strip: function (file) {
+          var objectURL = URL.createObjectURL(file);
+          return $http.get(objectURL, {responseType: 'arraybuffer'})
+              .then(function (response) {
+                var buffer = response.data;
+                var dataView = new DataView(buffer);
+                var fileBits = removeExif(buffer, dataView);
+                if (fileBits) {
+                  return new File(fileBits, file.name, {type: file.type});
+                }
+                return file;
+              })
+              .catch(function () {
+                return file;
+              });
+      }
+    };
+  }])
   .factory('XHRFactory', [function () {
     return {
       get: function () {
@@ -8,8 +63,8 @@ angular.module('risevision.storage.services')
       }
     };
   }])
-  .factory('FileUploader', ['$rootScope', '$q', 'XHRFactory', '$timeout',
-    function ($rootScope, $q, XHRFactory, $timeout) {
+  .factory('FileUploader', ['$rootScope', '$q', 'XHRFactory', 'ExifStripper', '$timeout',
+    function ($rootScope, $q, XHRFactory, ExifStripper, $timeout) {
       var svc = {};
       var loadBatchTimer = null;
 
@@ -26,6 +81,20 @@ angular.module('risevision.storage.services')
       svc.withCredentials = false;
       svc.isUploading = false;
       svc.nextIndex = 0;
+
+      svc.removeExif = function (files) {
+        var promises = [];
+
+        for (var i = 0; i < files.length; i++) {
+          var file = files[i];
+          if (file.type === 'image/jpeg') {
+            promises.push(ExifStripper.strip(file));
+          } else {
+            promises.push($q.resolve(file));
+          }
+        }
+        return $q.all(promises);
+      };
 
       svc.addToQueue = function (files, options) {
         var deferred = $q.defer();

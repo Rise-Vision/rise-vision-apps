@@ -1,7 +1,6 @@
 'use strict';
 describe('directive: storage-file-select', function() {
   var $rootScope, element, uploader;
-  var testitem = {name: 'image.jpg'};
 
   beforeEach(module('risevision.storage.directives'));
 
@@ -10,9 +9,8 @@ describe('directive: storage-file-select', function() {
     $rootScope = _$rootScope_;
 
     uploader = {
-      addToQueue: function() {
-        return { then:function(){} }
-      }
+      removeExif: function() {},
+      addToQueue: function() {}
     }
     $rootScope.uploader = uploader
 
@@ -20,10 +18,21 @@ describe('directive: storage-file-select', function() {
     $rootScope.$digest();
   }));
 
-  it('should addToQueue on "change" ', function() {
-    var addToQueueSpy = sinon.spy(uploader,'addToQueue');    
+  it('should removeExif and addToQueue on "change" ', function() {
+    sinon.stub(uploader, 'removeExif', function() {
+      return Q.resolve();
+    });
+
+    sinon.stub(uploader, 'addToQueue', function() {
+      return Q.resolve();
+    });
+
     element.triggerHandler('change');
-    addToQueueSpy.should.have.been.called;
-  });  
+
+    setTimeout(function () {
+      uploader.removeExif.should.have.been.called;
+      uploader.addToQueue.should.have.been.called;
+    }, 0);
+  });
   
 });

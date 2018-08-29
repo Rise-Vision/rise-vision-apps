@@ -21,10 +21,14 @@ describe('Services: uploader', function() {
           };
         }
       };
+    });
+
+    $provide.service('ExifStripper', function() {
+      return ExifStripper = { strip: sinon.stub() };
     })
   }));
   
-  var uploader, lastAddedFileItem, $timeout, XHRFactory;
+  var uploader, lastAddedFileItem, $timeout, XHRFactory, ExifStripper;
 
   beforeEach(function() {
   	inject(function($injector) {
@@ -269,6 +273,32 @@ describe('Services: uploader', function() {
           uploader.notifyErrorItem.should.have.been.called;
           uploader.notifyCompleteItem.should.have.been.called;
         });
+      });
+
+    });
+
+  });
+
+  describe('removeExif:', function(){
+
+    beforeEach(function () {
+      ExifStripper.strip.reset();
+    });
+
+    it('should remove exif data of JPEG images', function () {
+      var files = [{ name: 'image.jpg', size: 200, type: 'image/jpeg' }];
+      
+      return uploader.removeExif(files).then(function () {
+        ExifStripper.strip.should.have.been.called;
+      });
+    });
+
+    it('should not remove exif data of non JPEG files', function () {
+
+      var files = [{ name: 'image.png', size: 200, type: 'image/png' }];
+
+      return uploader.removeExif(files).then(function () {
+        ExifStripper.strip.should.not.have.been.called;
       });
 
     });
