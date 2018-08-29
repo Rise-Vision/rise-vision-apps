@@ -62,7 +62,10 @@
                   {{subs.status}}
                 </span>
               </td>
-              <td><a href="#" ng-click="editSubscription(subs)">Edit</a></td>
+              <td>
+                <a href="#" ng-click="editSubscription(subs)" ng-if="subs.billToId === company.id">Edit</a>
+                <span ng-if="subs.billToId !== company.id">Managed by Parent</span>
+              </td>
             </tr>
           </tbody>
         </table>
