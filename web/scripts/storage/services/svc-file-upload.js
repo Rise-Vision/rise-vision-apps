@@ -38,20 +38,24 @@ angular.module('risevision.storage.services')
     }
 
     return {
-      strip: function (file) {
-          var objectURL = URL.createObjectURL(file);
+      strip: function (fileItem) {
+          var objectURL = URL.createObjectURL(fileItem.domFileItem);
           return $http.get(objectURL, {responseType: 'arraybuffer'})
               .then(function (response) {
                 var buffer = response.data;
                 var dataView = new DataView(buffer);
                 var fileBits = removeExif(buffer, dataView);
                 if (fileBits) {
-                  return new File(fileBits, file.name, {type: file.type});
+                  fileItem.domFileItem = new File(fileBits, fileItem.file.name, {
+                    type: fileItem.file.type
+                  });
+
+                  fileItem.file.size = fileItem.domFileItem.size;
                 }
-                return file;
+                return fileItem;
               })
               .catch(function () {
-                return file;
+                return fileItem;
               });
       }
     };
@@ -87,24 +91,25 @@ angular.module('risevision.storage.services')
 
         for (var i = 0; i < files.length; i++) {
           var file = files[i];
-          if (file.type === 'image/jpeg') {
-            promises.push(ExifStripper.strip(file));
+          var fileItem = new FileItem(svc, file);
+
+          if (fileItem.file.type === 'image/jpeg') {
+            promises.push(ExifStripper.strip(fileItem));
           } else {
-            promises.push($q.resolve(file));
+            promises.push($q.resolve(fileItem));
           }
         }
         return $q.all(promises);
       };
 
-      svc.addToQueue = function (files, options) {
+      svc.addToQueue = function (fileItems, options) {
         var deferred = $q.defer();
         var currItem = 0;
-        svc.remainingFileCount += files.length;
+        svc.remainingFileCount += fileItems.length;
 
-        var enqueue = function (file) {
+        var enqueue = function (fileItem) {
           // Checks it's a file
-          if (file.size || file.type) {
-            var fileItem = new FileItem(svc, file, options);
+          if (fileItem.file.size || fileItem.file.type) {
             svc.queue.push(fileItem);
             svc.onAfterAddingFile(fileItem);
           } else {
@@ -113,9 +118,9 @@ angular.module('risevision.storage.services')
         };
 
         var loadBatch = function () {
-          if (currItem < files.length) {
-            while (svc.queue.length < svc.queueLimit && currItem < files.length) {
-              enqueue(files[currItem++]);
+          if (currItem < fileItems.length) {
+            while (svc.queue.length < svc.queueLimit && currItem < fileItems.length) {
+              enqueue(fileItems[currItem++]);
             }
 
             loadBatchTimer = $timeout(loadBatch, 500);

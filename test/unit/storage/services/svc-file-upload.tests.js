@@ -24,7 +24,7 @@ describe('Services: uploader', function() {
     });
 
     $provide.service('ExifStripper', function() {
-      return ExifStripper = { strip: sinon.stub() };
+      return ExifStripper = { strip: function() {} };
     })
   }));
   
@@ -53,27 +53,27 @@ describe('Services: uploader', function() {
 
   describe('addToQueue:', function(){
     it('should add two regular files to the queue', function () {
-      uploader.addToQueue([{ name: 'test1.txt', size: 200, type: 'text' }]);
+      uploader.addToQueue([{ file: {name: 'test1.txt', size: 200, type: 'text' }}]);
       expect(uploader.queue.length).to.equal(1);
       expect(uploader.queue[0].file.name).to.equal('test1.txt');
-      uploader.addToQueue([{ name: 'test2.txt', size: 200, type: 'text' }]);
+      uploader.addToQueue([{file: { name: 'test2.txt', size: 200, type: 'text' }}]);
       expect(uploader.queue.length).to.equal(2);
     });
 
     it('should add one file inside a folder to the queue', function () {
-      uploader.addToQueue([{ name: 'test1.txt', webkitRelativePath: 'folder/test1.txt', size: 200, type: 'text' }]);
+      uploader.addToQueue([{file:{name: 'folder/test1.txt', size: 200, type: 'text' }}]);
       expect(uploader.queue.length).to.equal(1);
       expect(uploader.queue[0].file.name).to.equal('folder/test1.txt');
     });
 
     it('multiple files should be enqueued asynchronously after the first batch', function () {
-      var files = [];
+      var fileItems = [];
 
       for(var i = 1; i <= uploader.queueLimit + 5; i++) {
-        files.push({ name: 'test' + i + '.txt', webkitRelativePath: 'folder/test' + i + '.txt', size: 200, type: 'text' });
+        fileItems.push({file:{ name: 'folder/test' + i + '.txt', size: 200, type: 'text' }});
       }
 
-      uploader.addToQueue(files);
+      uploader.addToQueue(fileItems);
 
       expect(uploader.queue.length).to.equal(uploader.queueLimit);
       expect(uploader.queue[0].file.name).to.equal('folder/test1.txt');
@@ -89,10 +89,10 @@ describe('Services: uploader', function() {
     });
 
     it('should invoke onAfterAddingFile', function() {
-      var file1 = { name: 'test1.jpg', size: 200, slice: function() {} };
+      var fileItem = { file: { name: 'test1.jpg', size: 200 }, domFileItem: { slice: function() {} } };
       var spy = sinon.spy(uploader,'onAfterAddingFile');
 
-      uploader.addToQueue([ file1 ]);
+      uploader.addToQueue([ fileItem ]);
 
       spy.should.have.been.called;  
 
@@ -100,13 +100,13 @@ describe('Services: uploader', function() {
   });
 
   it('removeAll: ', function () {
-    var files = [];
+    var fileItems = [];
 
     for(var i = 1; i <= uploader.queueLimit + 5; i++) {
-      files.push({ name: 'test' + i + '.txt', webkitRelativePath: 'folder/test' + i + '.txt', size: 200, type: 'text' });
+      fileItems.push({file: { name: 'folder/test' + i + '.txt', size: 200, type: 'text' }});
     }
 
-    uploader.addToQueue(files);
+    uploader.addToQueue(fileItems);
 
     expect(uploader.queue.length).to.equal(uploader.queueLimit);
     expect(uploader.queue[0].file.name).to.equal('folder/test1.txt');
@@ -122,10 +122,10 @@ describe('Services: uploader', function() {
 
   describe('uploadItem:',function() {
     it('should invoke onBeforeUploadItem', function(done) {
-      var file1 = { name: 'test1.jpg', size: 200, slice: function() {} };
+      var fileItem = { file: { name: 'test1.jpg', size: 200 }, domFileItem: { slice: function() {} } };
       var spy = sinon.spy(uploader,'onBeforeUploadItem');
 
-      uploader.addToQueue([ file1 ]);
+      uploader.addToQueue([ fileItem ]);
       uploader.uploadItem(lastAddedFileItem);
 
       setTimeout(function() {
@@ -137,8 +137,8 @@ describe('Services: uploader', function() {
 
     describe('Content-Range header: ', function() {      
       it('should set correct header', function() {
-        var file1 = { name: 'test1.jpg', size: 200, slice: function() {} };
-        uploader.addToQueue([ file1 ]);
+        var fileItem = { file: { name: 'test1.jpg', size: 200 }, domFileItem: { slice: function() {} } };
+        uploader.addToQueue([ fileItem ]);
         
         lastAddedFileItem.chunkSize = 10000;
         uploader.uploadItem(lastAddedFileItem);
@@ -147,8 +147,8 @@ describe('Services: uploader', function() {
       });
 
       it('should handle 0 byte file', function() {
-        var file1 = { name: 'test1.jpg', size: 0, type: 'JPEG', slice: function() {} };
-        uploader.addToQueue([ file1 ]);
+        var fileItem = { file: { name: 'test1.jpg', size: 0, type: 'JPEG' }, domFileItem: { slice: function() {} } };
+        uploader.addToQueue([ fileItem ]);
         
         lastAddedFileItem.chunkSize = 10000;
         uploader.uploadItem(lastAddedFileItem);
@@ -157,8 +157,8 @@ describe('Services: uploader', function() {
       });
 
       it('should chunk large file', function() {
-        var file1 = { name: 'test1.jpg', size: 10000, type: 'JPEG', slice: function() {} };
-        uploader.addToQueue([ file1 ]);
+        var fileItem = { file: { name: 'test1.jpg', size: 10000, type: 'JPEG'}, domFileItem: { slice: function() {} } };
+        uploader.addToQueue([ fileItem ]);
         
         lastAddedFileItem.chunkSize = 1000;
         uploader.uploadItem(lastAddedFileItem);
@@ -169,15 +169,15 @@ describe('Services: uploader', function() {
     });
 
     describe('xhr.onload: ', function() {
-      var file1;
+      var fileItem;
 
       beforeEach(function() {
         uploader.notifyErrorItem = sinon.spy();
         uploader.notifySuccessItem = sinon.spy();
         uploader.notifyCompleteItem = sinon.spy();
 
-        file1 = { name: 'test1.jpg', size: 200, slice: function() {} };
-        uploader.addToQueue([ file1 ]);
+        fileItem = { file: { name: 'test1.jpg', size: 200}, domFileItem: { slice: function() {} } };
+        uploader.addToQueue([ fileItem ]);
 
         lastAddedFileItem.chunkSize = 10000;
         uploader.uploadItem(lastAddedFileItem);
@@ -282,7 +282,7 @@ describe('Services: uploader', function() {
   describe('removeExif:', function(){
 
     beforeEach(function () {
-      ExifStripper.strip.reset();
+      sinon.stub(ExifStripper, "strip", function(fileItem) {return Q.resolve(fileItem)});
     });
 
     it('should remove exif data of JPEG images', function () {
@@ -301,6 +301,24 @@ describe('Services: uploader', function() {
         ExifStripper.strip.should.not.have.been.called;
       });
 
+    });
+
+    it('should return a fileItem for jpeg files', function () {
+      var files = [{ name: 'image.jpg', webkitRelativePath: 'folder/image.jpg', size: 200, type: 'image/jpeg' }];
+      
+      return uploader.removeExif(files).then(function (fileItems) {
+        ExifStripper.strip.should.have.been.called;
+        expect(fileItems[0].file.name).to.equal('folder/image.jpg');
+      });
+    });
+
+    it('should return a fileItem for non jpeg files', function () {
+      var files = [{ name: 'image.png', webkitRelativePath: 'folder/image.png', size: 200, type: 'image/png' }];
+      
+      return uploader.removeExif(files).then(function (fileItems) {
+        ExifStripper.strip.should.not.have.been.called;
+        expect(fileItems[0].file.name).to.equal('folder/image.png');
+      });
     });
 
   });
