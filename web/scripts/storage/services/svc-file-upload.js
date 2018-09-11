@@ -7,56 +7,62 @@ angular.module('risevision.storage.services')
      * Adapted from https://github.com/mshibl/Exif-Stripper
      */
     function removeExif(imageArrayBuffer, dv) {
-      var offset = 0, recess = 0;
+      var offset = 0,
+        recess = 0;
       var pieces = [];
       var i = 0;
       if (dv.getUint16(offset) == 0xffd8) {
-          offset += 2;
-          var app1 = dv.getUint16(offset);
-          offset += 2;
-          while (offset < dv.byteLength) {
-              if (app1 == 0xffe1) {
-                  pieces[i] = {recess:recess, offset: offset-2};
-                  recess = offset + dv.getUint16(offset);
-                  i++;
-              } else if (app1 == 0xffda){
-                  break;
-              }
-              offset += dv.getUint16(offset);
-              app1 = dv.getUint16(offset);
-              offset += 2;
+        offset += 2;
+        var app1 = dv.getUint16(offset);
+        offset += 2;
+        while (offset < dv.byteLength) {
+          if (app1 == 0xffe1) {
+            pieces[i] = {
+              recess: recess,
+              offset: offset - 2
+            };
+            recess = offset + dv.getUint16(offset);
+            i++;
+          } else if (app1 == 0xffda) {
+            break;
           }
-          if (pieces.length > 0){
-              var newPieces = [];
-              pieces.forEach(function (v) {
-                  newPieces.push(imageArrayBuffer.slice(v.recess, v.offset));
-              }, this);
-              newPieces.push(imageArrayBuffer.slice(recess));
-              return newPieces;
-          }
+          offset += dv.getUint16(offset);
+          app1 = dv.getUint16(offset);
+          offset += 2;
+        }
+        if (pieces.length > 0) {
+          var newPieces = [];
+          pieces.forEach(function (v) {
+            newPieces.push(imageArrayBuffer.slice(v.recess, v.offset));
+          }, this);
+          newPieces.push(imageArrayBuffer.slice(recess));
+          return newPieces;
+        }
       }
     }
 
     return {
       strip: function (fileItem) {
-          var objectURL = URL.createObjectURL(fileItem.domFileItem);
-          return $http.get(objectURL, {responseType: 'arraybuffer'})
-              .then(function (response) {
-                var buffer = response.data;
-                var dataView = new DataView(buffer);
-                var fileBits = removeExif(buffer, dataView);
-                if (fileBits) {
-                  fileItem.domFileItem = new File(fileBits, fileItem.file.name, {
-                    type: fileItem.file.type
-                  });
-
-                  fileItem.file.size = fileItem.domFileItem.size;
-                }
-                return fileItem;
-              })
-              .catch(function () {
-                return fileItem;
+        var objectURL = URL.createObjectURL(fileItem.domFileItem);
+        return $http.get(objectURL, {
+            responseType: 'arraybuffer'
+          })
+          .then(function (response) {
+            var buffer = response.data;
+            var dataView = new DataView(buffer);
+            var fileBits = removeExif(buffer, dataView);
+            if (fileBits) {
+              fileItem.domFileItem = new File(fileBits, fileItem.file.name, {
+                type: fileItem.file.type
               });
+
+              fileItem.file.size = fileItem.domFileItem.size;
+            }
+            return fileItem;
+          })
+          .catch(function () {
+            return fileItem;
+          });
       }
     };
   }])
@@ -113,7 +119,7 @@ angular.module('risevision.storage.services')
             svc.queue.push(fileItem);
             svc.onAfterAddingFile(fileItem);
           } else {
-            console.log('File not added to queue: ', file);
+            console.log('File not added to queue: ', fileItem);
           }
         };
 
