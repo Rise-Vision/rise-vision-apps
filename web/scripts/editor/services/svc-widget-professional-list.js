@@ -215,5 +215,14 @@ angular.module('risevision.editor.services')
       gadgetType: 'Widget',
       id: '9af58096-ab67-406b-bb39-6297556651e1',
       url: 'http://widget.flighttimetv.com/widget.html'
+    },
+    {
+      env: 'PROD',
+      name: 'Fecebook Feed',
+      imageUrl: 'https://s3.amazonaws.com/Store-Products/SMARTplayDS/facebookFeed_ProductTile.png',
+      imageAlt: 'add facebook feed widget',
+      gadgetType: 'Widget',
+      id: '5dba4bee-b26d-4592-9f22-a7b46b1bd693',
+      url: 'http://rep.smartplayds.com/plugin/facebook-widget/widget.html'
     }
   ]);
