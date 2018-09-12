@@ -202,7 +202,7 @@ angular.module('risevision.editor.services')
     },
     {
       'productId': '114',
-      'productWeight': 18,
+      'productOrderWeight': 18,
       'name': 'Facebook Feed',
       'descriptionShort': 'Want a Facebook feed in your Presentations? Now you can!',
       'descriptionLong': 'Half of the online population uses Facebook, and what better way to make your Presentations more engaging and social than by using the Facebook Feed Widget. \n<br>\n<br>\nThe Widget shows the feed of a public Facebook page, and allows you to configure how many stories from that feed to show, how often to move to the next story, and how often to update the feed. You can further customize the appearance of the feed in your presentation with several different options to show or hide.\n<br>\n<br>\nShow your Company\'s social media personality with the Facebook Feed Widget today!\n<br>\n<br>\n<b><a href=\'http://preview.risevision.com/?type=presentation&id=c290ed19-feca-4c53-b481-2a94d4443f3f&showui=false\' target=\'_blank\'>Preview a sample presentation</a></b>\n\nto see how it looks or \n\n<b><a href=\'https://editor.risevision.com/#/editor/workspace/new/?copyOf=c290ed19-feca-4c53-b481-2a94d4443f3f\' target=\'_blank\'> open in Rise Editor to start your trial period and use it.</a></b>',
