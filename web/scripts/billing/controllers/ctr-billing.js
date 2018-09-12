@@ -3,7 +3,8 @@
 angular.module('risevision.apps.billing.controllers')
   .value('INVOICES_PATH', 'account/view/invoicesHistory?cid=companyId')
   .controller('BillingCtrl', ['$rootScope', '$scope', '$loading', '$window', '$modal', '$templateCache', '$timeout',
-    'ScrollingListService', 'getCoreCountries', 'userState', 'chargebeeFactory', 'billing', 'STORE_URL', 'INVOICES_PATH',
+    'ScrollingListService', 'getCoreCountries', 'userState', 'chargebeeFactory', 'billing', 'STORE_URL',
+    'INVOICES_PATH',
     function ($rootScope, $scope, $loading, $window, $modal, $templateCache, $timeout, ScrollingListService,
       getCoreCountries, userState, chargebeeFactory, billing, STORE_URL, INVOICES_PATH) {
 
@@ -87,7 +88,7 @@ angular.module('risevision.apps.billing.controllers')
         return subscription.status === 'Suspended';
       };
 
-      function _reloadSubscriptions () {
+      function _reloadSubscriptions() {
         $timeout(function () {
           $loading.startGlobal('subscriptions-changed-loader');
         });
@@ -98,11 +99,11 @@ angular.module('risevision.apps.billing.controllers')
         }, 10000);
       }
 
-      function _getCurrency (subscription) {
+      function _getCurrency(subscription) {
         return subscription.currencyCode.toUpperCase();
       }
 
-      function _getPeriod (subscription) {
+      function _getPeriod(subscription) {
         return subscription.unit.toLowerCase().indexOf('per month') >= 0 ? 'Monthly' : 'Yearly';
       }
     }

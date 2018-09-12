@@ -88,7 +88,7 @@ angular.module('risevision.displays.services')
 
       factory.isScreenshotCompatiblePlayer = function (display) {
         return !!(display && factory.isElectronPlayer(display) &&
-          display.playerVersion >= SCREENSHOT_PLAYER_VERSION) || 
+            display.playerVersion >= SCREENSHOT_PLAYER_VERSION) ||
           (factory.isChromeOSPlayer(display) && display.playerVersion >= CHROMEOS_SCREENSHOT_PLAYER_VERSION);
       };
 

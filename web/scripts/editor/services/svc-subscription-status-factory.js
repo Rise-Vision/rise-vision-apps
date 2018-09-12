@@ -7,7 +7,7 @@ angular.module('risevision.editor.services')
 
       var _statusItems = [];
 
-      $rootScope.$on("risevision.company.selectedCompanyChanged", function () {
+      $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
         _statusItems = [];
       });
 

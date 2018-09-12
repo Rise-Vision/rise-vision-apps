@@ -126,15 +126,15 @@ angular.module('risevision.editor.services')
       id: '40e35d3d-ed16-4226-b7df-898e717a799d',
       url: 'http://data-feed.digichief.com/risevision/News/NewsWidget.html?up_category=_ALL_&up_show-date=true&up_terms=false&up_show-border=true&up_show-title=true&up_show-items=true&up_border-color=&up_Transition=fade&up_ScrollDirection=RIGHT&up_ScrollSpeed=0.15&up_TransitionHold=10&up_NewsItemCount=1&up_Layout=Layout6&up_QueueLength=&up_SFPLeft=10&up_SFPTop=10&up_SFPBottom=10&up_SFPRight=10&up_STPLeft=10&up_STPTop=10&up_STPBottom=10&up_STPRight=10&up_MPLeft=10&up_MPTop=10&up_MPBottom=10&up_MPRight=10'
     },
-//    {
-//      env: 'PROD',
-//      name: 'U.S. Stocks - Streaming Watchlist',
-//      imageUrl: 'https://s3.amazonaws.com/Store-Products/StockTrak/widget_918_image_edit1.png',
-//      imageAlt: 'add u.s. stocks streaming watchlist',
-//      gadgetType: 'Widget',
-//      id: 'f50f362f-c392-4644-9c89-6551a1cb56bc',
-//      url: 'https://www.howpersonalfinanceworks.com/rise_vision/rise-vision-widget-bats.php'
-//    },
+    //    {
+    //      env: 'PROD',
+    //      name: 'U.S. Stocks - Streaming Watchlist',
+    //      imageUrl: 'https://s3.amazonaws.com/Store-Products/StockTrak/widget_918_image_edit1.png',
+    //      imageAlt: 'add u.s. stocks streaming watchlist',
+    //      gadgetType: 'Widget',
+    //      id: 'f50f362f-c392-4644-9c89-6551a1cb56bc',
+    //      url: 'https://www.howpersonalfinanceworks.com/rise_vision/rise-vision-widget-bats.php'
+    //    },
     {
       env: 'PROD',
       name: 'Sports Scores',
@@ -215,5 +215,14 @@ angular.module('risevision.editor.services')
       gadgetType: 'Widget',
       id: '9af58096-ab67-406b-bb39-6297556651e1',
       url: 'http://widget.flighttimetv.com/widget.html'
+    },
+    {
+      env: 'PROD',
+      name: 'Fecebook Feed',
+      imageUrl: 'https://s3.amazonaws.com/Store-Products/SMARTplayDS/facebookFeed_ProductTile.png',
+      imageAlt: 'add facebook feed widget',
+      gadgetType: 'Widget',
+      id: '5dba4bee-b26d-4592-9f22-a7b46b1bd693',
+      url: 'http://rep.smartplayds.com/plugin/facebook-widget/widget.html'
     }
   ]);

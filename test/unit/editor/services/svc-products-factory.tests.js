@@ -24,7 +24,8 @@ describe('service: productsFactory: ', function() {
 
   }));
   var productCode = 'd3a418f1a3acaed42cf452fefb1eaed198a1c620';
-  var productsFactory, storeProducts, store, statusResponse;
+  var productsFactory, storeProducts, store, statusResponse, UNLISTED_STORE_PRODUCTS;
+
   beforeEach(function(){
     statusResponse = {pc: productCode, isSubscribed: false};
     storeProducts = {items: [
@@ -32,6 +33,7 @@ describe('service: productsFactory: ', function() {
     ]};
 
     inject(function($injector){  
+      UNLISTED_STORE_PRODUCTS = $injector.get('UNLISTED_STORE_PRODUCTS');
       productsFactory = $injector.get('productsFactory');
     });
   });
@@ -57,7 +59,7 @@ describe('service: productsFactory: ', function() {
         category: 'Widgets'
       }).then(function(result) {
         expect(result.items).to.be.an('array');
-        expect(result.items).to.have.length(15);
+        expect(result.items).to.have.length(UNLISTED_STORE_PRODUCTS.length);
 
         done();
       });
@@ -70,7 +72,7 @@ describe('service: productsFactory: ', function() {
         category: 'Widgets'
       }).then(function(result) {
         expect(result.items).to.be.an('array');
-        expect(result.items).to.have.length(16);
+        expect(result.items).to.have.length(UNLISTED_STORE_PRODUCTS.length + 1);
 
         done();
       });      
@@ -96,7 +98,7 @@ describe('service: productsFactory: ', function() {
         category: 'Widgets'
       }).then(function(result) {
         expect(result.items).to.be.an('array');
-        expect(result.items).to.have.length(15);
+        expect(result.items).to.have.length(UNLISTED_STORE_PRODUCTS.length);
 
         done();
       });      
@@ -149,7 +151,7 @@ describe('service: productsFactory: ', function() {
           category: 'Widgets'
         }).then(function(result) {
           expect(result.items).to.be.an('array');
-          expect(result.items).to.have.length(35);
+          expect(result.items).to.have.length(20 + UNLISTED_STORE_PRODUCTS.length);
           expect(result.items[17].productCode).to.equal(productCode);
 
           done();
@@ -161,7 +163,7 @@ describe('service: productsFactory: ', function() {
           category: 'Widgets'
         }).then(function(result) {
           expect(result.items).to.be.an('array');
-          expect(result.items).to.have.length(16);
+          expect(result.items).to.have.length(UNLISTED_STORE_PRODUCTS.length + 1);
           expect(result.items[15].productCode).to.equal(productCode);
 
           done();
@@ -174,7 +176,7 @@ describe('service: productsFactory: ', function() {
           category: 'Widgets'
         }).then(function(result) {
           expect(result.items).to.be.an('array');
-          expect(result.items).to.have.length(15);
+          expect(result.items).to.have.length(UNLISTED_STORE_PRODUCTS.length);
           expect(result.items[14].productCode).to.equal(productCode);
 
           done();
