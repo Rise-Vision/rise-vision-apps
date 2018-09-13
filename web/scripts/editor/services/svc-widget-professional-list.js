@@ -218,7 +218,7 @@ angular.module('risevision.editor.services')
     },
     {
       env: 'PROD',
-      name: 'Fecebook Feed',
+      name: 'Facebook Feed',
       imageUrl: 'https://s3.amazonaws.com/Store-Products/SMARTplayDS/facebookFeed_ProductTile.png',
       imageAlt: 'add facebook feed widget',
       gadgetType: 'Widget',
