@@ -92,19 +92,15 @@ angular.module('risevision.apps', [
 
         .state('apps.launcher.signup', {
           url: '/signup',
-          controller: ['$window', '$location', '$state', 'userState',
-            'canAccessApps', 'STORE_URL', 'IN_RVA_PATH',
-            function ($window, $location, $state, userState, canAccessApps,
-              STORE_URL, IN_RVA_PATH) {
+          controller: ['$location', '$state', 'canAccessApps', 'plansFactory',
+            function ($location, $state, canAccessApps, plansFactory) {
               canAccessApps(true).then(function () {
                 // jshint camelcase:false
                 if ($location.search().show_product) {
-                  $window.location.href = STORE_URL + IN_RVA_PATH
-                    .replace('productId', $location.search().show_product)
-                    .replace('companyId', userState.getSelectedCompanyId());
-                } else {
-                  $state.go('apps.launcher.home');
+                  plansFactory.showPlansModal();
                 }
+
+                $state.go('apps.launcher.home');
                 // jshint camelcase:true
               });
             }
