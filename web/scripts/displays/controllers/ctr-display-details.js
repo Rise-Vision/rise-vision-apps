@@ -13,9 +13,6 @@ angular.module('risevision.displays.controllers')
       $scope.displayService = display;
       $scope.playerProFactory = playerProFactory;
       $scope.currentPlanFactory = currentPlanFactory;
-      $scope.companyId = userState.getSelectedCompanyId();
-      $scope.company = userState.getCopyOfSelectedCompany(true);
-      $scope.deferredDisplay = $q.defer();
       $scope.updatingRPP = false;
       $scope.monitoringSchedule = {};
       $scope.showPlansModal = plansFactory.showPlansModal;
@@ -26,8 +23,6 @@ angular.module('risevision.displays.controllers')
         if (!$scope.display.playerProAuthorized) {
           $scope.display.monitoringEnabled = false;
         }
-
-        $scope.deferredDisplay.resolve();
 
         screenshotFactory.loadScreenshot();
       });
@@ -53,7 +48,7 @@ angular.module('risevision.displays.controllers')
 
           enableCompanyProduct($scope.display.companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
             .then(function () {
-              playerLicenseFactory.toggleDisplayLicenseLocal(displayId, playerProAuthorized);
+              playerLicenseFactory.toggleDisplayLicenseLocal(playerProAuthorized);
             })
             .catch(function (err) {
               $scope.display.playerProAuthorized = !playerProAuthorized;
@@ -73,9 +68,8 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.areAllProLicensesUsed = function () {
-        var assignedDisplays = $scope.company.playerProAssignedDisplays || [];
         var allLicensesUsed = playerLicenseFactory.areAllProLicensesUsed();
-        var allProLicensesUsed = allLicensesUsed && assignedDisplays.indexOf($scope.displayId) === -1;
+        var allProLicensesUsed = allLicensesUsed && !$scope.display.playerProAssigned;
 
         return $scope.getProLicenseCount() > 0 && allProLicensesUsed;
       };
@@ -159,7 +153,7 @@ angular.module('risevision.displays.controllers')
 
       $scope.save = function () {
         if (!$scope.displayDetails.$valid) {
-          console.info('form not valid: ', $scope.displayDetails.$error);
+          $log.info('form not valid: ', $scope.displayDetails.$error);
 
           return $q.reject();
         } else {
@@ -168,10 +162,9 @@ angular.module('risevision.displays.controllers')
       };
 
       var startTrialListener = $rootScope.$on('risevision.company.updated', function () {
-        $scope.company = userState.getCopyOfSelectedCompany(true);
+        var company = userState.getCopyOfSelectedCompany(true);
 
-        var assignedDisplays = $scope.company.playerProAssignedDisplays || [];
-        $scope.display.playerProAuthorized = assignedDisplays.indexOf($scope.displayId) >= 0;
+        $scope.display.playerProAuthorized = company.playerProAvailableLicenseCount && $scope.display.playerProAssigned;
       });
 
       $scope.$on('$destroy', function () {

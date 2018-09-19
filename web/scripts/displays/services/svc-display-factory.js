@@ -101,7 +101,7 @@ angular.module('risevision.displays.services')
             if (resp && resp.item && resp.item.id) {
               factory.display = resp.item;
 
-              playerLicenseFactory.toggleDisplayLicenseLocal(resp.item.id, !playerLicenseFactory.areAllProLicensesUsed());
+              playerLicenseFactory.toggleDisplayLicenseLocal(true);
 
               displayTracker('Display Created', resp.item.id, resp.item
                 .name);
@@ -166,8 +166,10 @@ angular.module('risevision.displays.services')
             displayTracker('Display Deleted', _displayId,
               factory.display.name);
 
+            if (factory.display.playerProAssigned) {
+              playerLicenseFactory.toggleDisplayLicenseLocal(false);              
+            }
             factory.display = {};
-            playerLicenseFactory.toggleDisplayLicenseLocal(_displayId, false);
 
             $state.go('apps.displays.list');
           })

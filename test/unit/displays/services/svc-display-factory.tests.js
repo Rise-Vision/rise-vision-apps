@@ -265,7 +265,7 @@ describe('service: displayFactory:', function() {
         expect(displayFactory.loadingDisplay).to.be.false;
         expect(displayFactory.errorMessage).to.not.be.ok;
         expect(displayFactory.apiError).to.not.be.ok;
-        expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(display._display.id, true);
+        expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(true);
         
         done();
       },10);
@@ -350,7 +350,8 @@ describe('service: displayFactory:', function() {
   });
   
   describe('deleteDisplay: ',function(){
-    it('should delete the display',function(done){
+    it('should delete the display and unassign its license',function(done){
+      displayFactory.display.playerProAssigned = true;
       updateDisplay = true;
       sandbox.stub(playerLicenseFactory, 'toggleDisplayLicenseLocal');
 
@@ -364,7 +365,22 @@ describe('service: displayFactory:', function() {
         expect(displayFactory.apiError).to.not.be.ok;
         expect(trackerCalled).to.equal('Display Deleted');
         expect(currentState).to.equal('apps.displays.list');
-        expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.called;
+        expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(false);
+        done();
+      },10);
+    });
+
+    it('should not unassign its license if not licensed',function(done){
+      displayFactory.display.playerProAssigned = false;
+      updateDisplay = true;
+      sandbox.stub(playerLicenseFactory, 'toggleDisplayLicenseLocal');
+
+      displayFactory.deleteDisplay();
+      
+
+      setTimeout(function(){
+        expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.not.have.been.called;
+
         done();
       },10);
     });
