@@ -1,19 +1,20 @@
 <div class="container">
-	<div class="app-header">
-		<div class="title-block">
-			<!-- App Title -->
-			<h1 id="title" translate>displays-app.alerts.title</h1>
-		</div>
 
-		<div class="global-actions">
-			<span class="u_margin-right text-muted" ng-if="!termsAccepted" translate>displays-app.alerts.acceptTerms</span>
-			<button id="alertsToggleButton" ng-click="alertsOn = !alertsOn" class="btn btn-lg" ng-class="{'btn-primary' : alertsOn, 'btn-default' : !alertsOn, 'disabled' : !termsAccepted, 'animated bounceIn' : termsAccepted}">
-			<span ng-if="alertsOn" translate>displays-app.alerts.turnOff</span>
-			<span ng-if="!alertsOn" translate>displays-app.alerts.turnOn</span>
-			</button>
+	<div class="app-header my-4">
+	  <h1 class="app-header-title" id="title" translate>displays-app.alerts.title</h1>
 
-		</div>
+	  <div class="ml-auto">
+	  	<span class="u_margin-right text-muted" ng-if="!termsAccepted" translate>displays-app.alerts.acceptTerms</span>
+	  	<button id="alertsToggleButton" ng-click="alertsOn = !alertsOn" class="btn btn-lg" ng-class="{'btn-primary' : alertsOn, 'btn-default' : !alertsOn, 'disabled' : !termsAccepted, 'animated bounceIn' : termsAccepted}">
+	  	<span ng-if="alertsOn" translate>displays-app.alerts.turnOff</span>
+	  	<span ng-if="!alertsOn" translate>displays-app.alerts.turnOn</span>
+	  	</button>
+	  </div>
+
 	</div>
+
+
+
 
 	<div class="panel">
 		<div class="panel-body bg-warning">

@@ -1,4 +1,4 @@
-<div class="l_display-screenshot" ng-class="{ 'l_display-screenshot-offline': (screenshotState(display).indexOf('offline') >= 0) }">
+<div>
   <div class="u_lh-normal u_margin-sm-bottom">
     <label class="control-label">{{ 'displays-app.fields.screenshot.title' | translate }}</label>
     <button id="btnUpdateScreenshot" class="btn btn-default pull-right" ng-click="screenshotFactory.requestScreenshot(displayId)" ng-disabled="reloadScreenshotDisabled(display)">
@@ -45,7 +45,7 @@
       <p>{{ 'displays-app.fields.screenshot.error2' | translate }}</p>
     </div>
     <div class="panel-body display-screenshot display-screenshot-available" ng-show="screenshotState(display).indexOf('screenshot-loaded') >= 0">
-      <img src="{{screenshotFactory.screenshot.imageUrl}}">
+      <img class="img-fluid" src="{{screenshotFactory.screenshot.imageUrl}}">
     </div>
     <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'loading'">
       <div class="app-loading-dots">

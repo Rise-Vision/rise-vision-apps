@@ -1,34 +1,35 @@
-<div class="app-header">
-  <div class="title-block">
-    <!-- App Title -->
-    <h1 translate>displays-app.details.title</h1>
-  </div>
+<div class="app-header my-4">
+  <h1 class="app-header-title" translate>displays-app.details.title</h1>
 
-  <div class="global-actions" require-role="da">
-    <div class="toggle-group">
+
+    <div class="toggle-group ml-auto">
+
       <input type="checkbox" id="on-off-switch" ng-model="display.playerProAuthorized" ng-change="toggleProAuthorized()" ng-disabled="updatingRPP || !isProToggleEnabled()">
       <label for="on-off-switch">
         <span translate>displays-app.details.rpp-is</span>
         <span class="bold" ng-class="display.playerProAuthorized ? 'text-green' : 'text-error'" ng-show="!updatingRPP">
           <span>{{ display.playerProAuthorized ? 'ON' : 'OFF' }}</span>
-          <a class="" href="https://help.risevision.com/hc/en-us/articles/115003626863#_ga=2.193387565.1036005128.1516585172-448654264.1459728419" target="_blank">
+
+          <a href="https://help.risevision.com/hc/en-us/articles/115003626863#_ga=2.193387565.1036005128.1516585172-448654264.1459728419" target="_blank" aria-label="Open Help Article">
             <i class="fa fa-question-circle icon-right" aria-hidden="true"></i>
           </a>
+
         </span>
 
-        <span class="bold" ng-show="updatingRPP">
+        <span ng-show="updatingRPP">
           <span translate>displays-app.details.rpp-loading</span> <i class="fa fa-spinner fa-spin fa-fw"></i>
         </span>
       </label>
-      <div class="onoffswitch pull-right" aria-hidden="true">
+
+      <div class="onoffswitch" aria-hidden="true">
           <div class="onoffswitch-label">
               <div class="onoffswitch-inner"></div>
               <div class="onoffswitch-switch"></div>
           </div>
       </div>
     </div>
-  </div>
-</div>
+  
+</div><!--app-header-->
 
 <div id="display-loader" rv-spinner rv-spinner-key="display-loader" rv-spinner-start-active="0"></div>
 

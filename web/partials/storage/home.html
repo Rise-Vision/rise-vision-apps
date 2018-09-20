@@ -1,16 +1,12 @@
 <div class="container storage-full" ng-controller="FilesListController">
 
-	<div class="app-header row" ng-show="!trialAvailable">
-		<div class="col-sm-5">
-			<div class="title-block u_margin-sm-bottom">
-				<h1 id="title" translate>storage-client.header</h1>
-			</div>	
-		</div>
-		<div class="col-sm-7">
-			<div class="pull-right">
+	<div class="app-header my-4" ng-show="!trialAvailable">
+		<h1 class="app-header-title" id="title" translate>storage-client.header</h1>
+		
+			<div class="ml-auto">
 				<ng-include src="'partials/storage/global-actions.html'"></ng-include>	
 			</div>			
-		</div>
+		
 	</div>
 	
 	<div ng-controller="SubscriptionStatusController">

@@ -1,10 +1,8 @@
-<div class="app-header">
-  <div class="title-block">
+<div class="app-header my-4">
     <!-- App Title -->
-    <h1 id="title" translate>schedules-app.title</h1>
-  </div>
+    <h1 class="app-header-title" id="title" translate>schedules-app.title</h1>
 
-  <div class="global-actions" require-role="cp">
+  <div class="ml-auto" require-role="cp">
     <a id="scheduleAddButton" ui-sref="apps.schedules.add" class="btn btn-lg btn-primary">
       {{ 'schedules-app.actions.new' | translate }}
       <i class="fa fa-plus icon-right"></i> 
