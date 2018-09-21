@@ -1,6 +1,6 @@
 'use strict';
 
-describe('controller: display details', function() {
+describe.only('controller: display details', function() {
   var displayId = '1234';
   var sandbox = sinon.sandbox.create();
 
@@ -318,7 +318,36 @@ describe('controller: display details', function() {
   });
 
   describe('areAllProLicensesUsed:', function() {
-    it('should return all licenses are used if display is not playerProAssigned', function () {
+
+    it('should return false if no licenses are available', function () {
+      $scope.display = {
+        playerProAssigned: false
+      };
+      sandbox.stub(playerLicenseFactory, 'getProLicenseCount').returns(0);
+      sandbox.stub(playerLicenseFactory, 'areAllProLicensesUsed').returns(true);
+
+      expect($scope.areAllProLicensesUsed()).to.be.false;
+    });
+
+    it('should return false if not all licenses are used', function () {
+      $scope.display = {
+        playerProAssigned: false
+      };
+      sandbox.stub(playerLicenseFactory, 'getProLicenseCount').returns(1);
+      sandbox.stub(playerLicenseFactory, 'areAllProLicensesUsed').returns(false);
+
+      expect($scope.areAllProLicensesUsed()).to.be.false;
+    });
+
+    it('should handle null display', function () {
+      $scope.display = null;
+      sandbox.stub(playerLicenseFactory, 'getProLicenseCount').returns(1);
+      sandbox.stub(playerLicenseFactory, 'areAllProLicensesUsed').returns(false);
+
+      expect($scope.areAllProLicensesUsed()).to.be.false;
+    });
+
+    it('should return true if display is not playerProAssigned', function () {
       $scope.display = {
         playerProAssigned: false
       };
@@ -328,12 +357,12 @@ describe('controller: display details', function() {
       expect($scope.areAllProLicensesUsed()).to.be.true;
     });
 
-    it('should return all licenses are used if display is playerProAssigned', function () {
+    it('should return false if display is playerProAssigned', function () {
       $scope.display = {
         playerProAssigned: true
       };
       sandbox.stub(playerLicenseFactory, 'getProLicenseCount').returns(1);
-      sandbox.stub(playerLicenseFactory, 'areAllProLicensesUsed').returns(false);
+      sandbox.stub(playerLicenseFactory, 'areAllProLicensesUsed').returns(true);
 
       expect($scope.areAllProLicensesUsed()).to.be.false;
     });
