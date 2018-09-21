@@ -19,6 +19,11 @@ describe('app:', function() {
             addDisplayModal: function(){}
           };
         });
+        $provide.service('plansFactory',function(){
+          return {
+            showPlansModal: sinon.stub()
+          };
+        });
       });
 
       inject(function ($injector) {
@@ -26,12 +31,13 @@ describe('app:', function() {
         canAccessApps = $injector.get('canAccessApps');
         editorFactory = $injector.get('editorFactory');
         displayFactory = $injector.get('displayFactory');
+        plansFactory = $injector.get('plansFactory');
         $rootScope = $injector.get('$rootScope');
       });
   });
 
 
-  var $state, canAccessApps, editorFactory, displayFactory, $rootScope;
+  var $state, canAccessApps, editorFactory, displayFactory, plansFactory, $rootScope;
 
   describe('state apps.editor.add:',function(){
 
@@ -102,7 +108,7 @@ describe('app:', function() {
 
       sinon.spy($state,'go');
       
-      $state.get('apps.launcher.signup').controller[7](null, $location, $state, null, canAccessApps, null, null);
+      $state.get('apps.launcher.signup').controller[4]($location, $state, canAccessApps, plansFactory);
       setTimeout(function() {
         $state.go.should.have.been.calledWith('apps.launcher.home');
 
@@ -125,9 +131,9 @@ describe('app:', function() {
       var $location = {search: function() {return {show_product:123}}};
       var $window = {location:{}}
 
-      $state.get('apps.launcher.signup').controller[7]($window, $location, $state, userState, canAccessApps, STORE_URL, IN_RVA_PATH);
+      $state.get('apps.launcher.signup').controller[4]($location, $state, canAccessApps, plansFactory);
       setTimeout(function() {
-        expect($window.location.href).to.equal('https://store.risevision.com/product/123/?cid=cid123')
+        expect(plansFactory.showPlansModal).to.have.been.called;
         done();
       }, 10);
     });
@@ -141,9 +147,8 @@ describe('app:', function() {
         search: sinon.spy()
       };
 
-      var goSpy = sinon.spy($state,'go');
-      
-      $state.get('apps.launcher.signup').controller[7](null, $location, $state, null, canAccessApps, null, null);
+      sinon.spy($state,'go');
+      $state.get('apps.launcher.signup').controller[4]($location, $state, canAccessApps, plansFactory);
 
       setTimeout(function() {
         $location.search.should.not.have.been.called;
