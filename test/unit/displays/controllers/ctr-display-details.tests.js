@@ -1,6 +1,6 @@
 'use strict';
 
-describe.only('controller: display details', function() {
+describe('controller: display details', function() {
   var displayId = '1234';
   var sandbox = sinon.sandbox.create();
 
