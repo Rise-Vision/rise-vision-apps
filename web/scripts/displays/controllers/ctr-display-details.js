@@ -48,6 +48,11 @@ angular.module('risevision.displays.controllers')
 
           enableCompanyProduct($scope.display.companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
             .then(function () {
+              var company = userState.getCopyOfSelectedCompany(true);
+
+              $scope.display.playerProAssigned = playerProAuthorized;
+              $scope.display.playerProAuthorized = company.playerProAvailableLicenseCount > 0 && playerProAuthorized;
+
               playerLicenseFactory.toggleDisplayLicenseLocal(playerProAuthorized);
             })
             .catch(function (err) {
@@ -164,7 +169,8 @@ angular.module('risevision.displays.controllers')
       var startTrialListener = $rootScope.$on('risevision.company.updated', function () {
         var company = userState.getCopyOfSelectedCompany(true);
 
-        $scope.display.playerProAuthorized = company.playerProAvailableLicenseCount && $scope.display.playerProAssigned;
+        $scope.display.playerProAuthorized = $scope.display.playerProAuthorized ||
+          company.playerProAvailableLicenseCount > 0 && $scope.display.playerProAssigned;
       });
 
       $scope.$on('$destroy', function () {
