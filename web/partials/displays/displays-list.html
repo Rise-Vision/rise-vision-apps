@@ -2,23 +2,32 @@
   <h1 class="app-header-title" id="title" translate>displays-app.title</h1>
 
   <div class="ml-auto">
-    <a id="displayAddButton" class="btn btn-lg btn-primary" ng-click="displayFactory.addDisplayModal()">{{ 'displays-app.actions.new' | translate }} <i class="fa fa-plus icon-right"></i></a>
+    <a id="displayAddButton" class="btn btn-lg btn-primary" ng-click="displayFactory.addDisplayModal()">
+      {{ 'displays-app.actions.new' | translate }}
+      <i class="fa fa-plus icon-right"></i>
+    </a>
   </div>
 </div>
 
-<div ng-show="displays.apiError" class="alert alert-danger my-2" role="alert">
-  <strong>{{displays.errorMessage}}</strong> {{displays.apiError}}
-</div> 
-
-<ul class="display-stats my-4 list-unstyled">
-  <li class="display-stats-item"><span class="font-weight-bold">43</span> Licensed Displays</li>
-  <li class="display-stats-item"><span class="font-weight-bold text-success">7</span> Unused Licenses</li>
-
+<ul class="display-stats my-4 list-unstyled" ng-show="playerLicenseFactory.getProLicenseCount() > 0">
+  <li class="display-stats-item">
+    <span class="font-weight-bold">{{ playerLicenseFactory.getProLicenseCount() }}</span>
+    Licensed Displays
+  </li>
+  <li class="display-stats-item">
+    <span class="font-weight-bold text-success">{{ playerLicenseFactory.getProAvailableLicenseCount() }}</span>
+    Unused Licenses
+  </li>
 </ul>
 
+<div ng-show="displays.apiError" class="alert alert-danger my-2" role="alert">
+  <strong>{{displays.errorMessage}}</strong>
+  {{displays.apiError}}
+</div>
 
 <div id="errorBox" ng-show="displayStatusFactory.apiError" class="alert alert-danger my-2" role="alert">
-  <strong>{{displayStatusFactory.errorMessage}}</strong> {{displayStatusFactory.apiError}}
+  <strong>{{displayStatusFactory.errorMessage}}</strong>
+  {{displayStatusFactory.apiError}}
 </div> 
 
 <search-filter filter-config="filterConfig" search="search" do-search="displays.doSearch"></search-filter>

@@ -33,35 +33,31 @@
 
 <div>
 
-  <ul class="display-stats my-4 list-unstyled">
-    <li class="display-stats-item"><span class="font-weight-bold">50</span> Licensed Displays</li>
-    <li class="display-stats-item"><span class="font-weight-bold text-danger">0</span> Unused Licenses <a href="#" class="ml-2" aria-label="Get More Display Licenses">Get More</a></li>
-  
+  <ul class="display-stats my-4 list-unstyled" ng-show="getProLicenseCount() > 0">
+    <li class="display-stats-item">
+      <span class="font-weight-bold">{{ getProLicenseCount() }}</span>
+      Licensed Displays
+    </li>
+    <li class="display-stats-item">
+      <span class="font-weight-bold text-danger">{{ getProAvailableLicenseCount() }}</span>
+      Unused Licenses
+      <a href="#" class="ml-2" ng-show="areAllProLicensesUsed()" ng-click="showPlansModal(true)" aria-label="Get More Display Licenses" translate>displays-app.details.get-more</a>
+    </li>
   </ul>
 
-
-  <div class="alert alert-danger mt-2 mb-4">
-    <p>You don't have access to purchase Display Licenses. Please contact FirstName LastName at <a href="#">admin@domain.com</a> to request more.</p>
+  <div class="row" ng-show="areAllProLicensesUsed()">
+    <div class="alert alert-danger mt-2 mb-4" ng-show="currentPlanFactory.currentPlan.parentPlan">
+      <p ng-show="currentPlanFactory.currentPlan.parentPlan.administratorEmail" translate translate-values="{ administratorEmail: currentPlanFactory.currentPlan.parentPlan.administratorEmail }">displays-app.details.contact-plan-parent-email</p>
+      <p ng-show="!currentPlanFactory.currentPlan.parentPlan.administratorEmail" translate>displays-app.details.contact-plan-parent-no-email</p>
+    </div>
   </div>
 
 </div>
 
-<div id="display-loader" rv-spinner rv-spinner-key="display-loader" rv-spinner-start-active="0"></div>
-
- 
-
- 
+<div id="display-loader" rv-spinner rv-spinner-key="display-loader" rv-spinner-start-active="0"></div> 
 
 <div>
   <form role="form" name="displayDetails">
-    <div class="row" ng-show="areAllProLicensesUsed()">
-      <div class="col-sm-12">
-        <div class="alert alert-warning" role="alert">
-          <span translate translate-values="{ count: getProLicenseCount() }">displays-app.details.all-licenses-used</span>
-          <a href="#" class="u_margin-left" ng-click="showPlansModal(true)" translate>displays-app.details.get-more</a>
-        </div>
-      </div>
-    </div>
     <div class="row" ng-show="!isProSupported()">
       <div class="col-sm-12">
         <div class="alert alert-warning" role="alert">

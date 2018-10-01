@@ -66,6 +66,9 @@ describe('controller: displays list', function() {
         }
       };
     });
+    $provide.service('playerLicenseFactory', function() {
+      return {};
+    });
   }));
   var $scope, $loading, $filter, $loadingStartSpy, $loadingStopSpy, $window;
   beforeEach(function(){
@@ -101,6 +104,7 @@ describe('controller: displays list', function() {
 
     expect($scope.displayTracker).to.be.ok;
     expect($scope.displayFactory).to.be.ok;
+    expect($scope.playerLicenseFactory).to.be.ok;
   });
 
   it('should init the scope objects',function(){
