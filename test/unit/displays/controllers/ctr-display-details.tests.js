@@ -78,7 +78,7 @@ describe('controller: display details', function() {
     $provide.service('userState',function(){
       return {
           getSelectedCompanyId: function() {return "company1"},
-          getCopyOfSelectedCompany: function() {return {};},
+          getCopyOfSelectedCompany: function() {return company;},
           _restoreState: function(){},
           updateCompanySettings: sandbox.stub()
       };
@@ -123,7 +123,9 @@ describe('controller: display details', function() {
   var $scope, $state, updateCalled, deleteCalled, confirmDelete;
   var resolveLoadScreenshot, resolveRequestScreenshot, enableCompanyProduct, userState,
   $rootScope, $loading, displayFactory, playerLicenseFactory, playerProFactory;
+  var company;
   beforeEach(function(){
+    company = {};
     updateCalled = false;
     deleteCalled = false;
     resolveRequestScreenshot = true;
@@ -261,12 +263,50 @@ describe('controller: display details', function() {
       // Needed because display object gets overwritten at controller initialization
       setTimeout(function () {
         // The mocked value of playerProAuthorized AFTER ng-change
-        $scope.display = { id: displayId, playerProAuthorized: true };
-        $scope.company = { playerProAssignedDisplays: [] };
+        $scope.display = {
+          id: displayId,
+          playerProAssigned: false,
+          playerProAuthorized: true
+        };
+        company.playerProAvailableLicenseCount = 1;
         $scope.toggleProAuthorized();
 
         setTimeout(function () {
           expect(enableCompanyProduct).to.have.been.called;
+
+          expect($scope.display.playerProAssigned).to.be.true;
+          expect($scope.display.playerProAuthorized).to.be.true;
+
+          expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(true);
+          expect($scope.showPlansModal).to.have.not.been.called;
+          done();        
+        }, 0);
+      }, 0);
+    });
+
+    it('should not activate Pro status if licenses are not available', function (done) {
+      sandbox.stub($scope, 'isProAvailable').returns(true);
+      sandbox.stub($scope, 'showPlansModal');
+      sandbox.stub(playerLicenseFactory, 'toggleDisplayLicenseLocal');
+      enableCompanyProduct.returns(Q.resolve());
+
+      // Needed because display object gets overwritten at controller initialization
+      setTimeout(function () {
+        // The mocked value of playerProAuthorized AFTER ng-change
+        $scope.display = {
+          id: displayId,
+          playerProAssigned: false,
+          playerProAuthorized: true
+        };
+        company.playerProAvailableLicenseCount = 0;
+        $scope.toggleProAuthorized();
+
+        setTimeout(function () {
+          expect(enableCompanyProduct).to.have.been.called;
+
+          expect($scope.display.playerProAssigned).to.be.true;
+          expect($scope.display.playerProAuthorized).to.be.false;
+
           expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(true);
           expect($scope.showPlansModal).to.have.not.been.called;
           done();        
@@ -281,13 +321,21 @@ describe('controller: display details', function() {
       enableCompanyProduct.returns(Q.resolve());
 
       setTimeout(function () {
-        $scope.company = { playerProAssignedDisplays: [displayId] };
         // The mocked value of playerProAuthorized AFTER ng-change
-        $scope.display = { id: displayId, playerProAuthorized: false };
+        $scope.display = {
+          id: displayId,
+          playerProAssigned: true,
+          playerProAuthorized: false
+        };
+        company.playerProAvailableLicenseCount = 1;
         $scope.toggleProAuthorized();
 
         setTimeout(function () {
           expect(enableCompanyProduct).to.have.been.called;
+
+          expect($scope.display.playerProAssigned).to.be.false;
+          expect($scope.display.playerProAuthorized).to.be.false;
+
           expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(false);
           expect($scope.showPlansModal).to.have.not.been.called;
           done();
@@ -301,16 +349,23 @@ describe('controller: display details', function() {
       enableCompanyProduct.returns(Q.reject());
 
       setTimeout(function () {
-        $scope.company = { playerProAssignedDisplays: [] };
         // The mocked value of playerProAuthorized AFTER ng-change
-        $scope.display = { id: displayId, playerProAuthorized: false };
+        $scope.display = {
+          id: displayId,
+          playerProAssigned: true,
+          playerProAuthorized: false
+        };
+        company.playerProAvailableLicenseCount = 1;
         $scope.toggleProAuthorized();
 
         setTimeout(function () {
           expect(enableCompanyProduct).to.have.been.called;
+
+          expect($scope.display.playerProAssigned).to.be.true;
+          expect($scope.display.playerProAuthorized).to.be.true;
+
           expect(userState.updateCompanySettings).to.not.have.been.called;
           expect($scope.showPlansModal).to.have.not.been.called;
-          expect($scope.company.playerProAssignedDisplays).to.be.empty;
           done();
         }, 0);
       });
@@ -415,6 +470,53 @@ describe('controller: display details', function() {
       sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(true);
 
       expect($scope.isProToggleEnabled()).to.be.true;
+    });
+  });
+
+  describe('risevision.company.updated: ', function() {
+    it('should set Display as authorized if licenses become available', function() {
+      $scope.display = {
+        id: displayId,
+        playerProAssigned: true,
+        playerProAuthorized: false
+      };
+      company.playerProAvailableLicenseCount = 1;
+
+      $rootScope.$emit('risevision.company.updated');
+      
+      $scope.$digest();
+
+      expect($scope.display.playerProAuthorized).to.be.true;
+    });
+
+    it('should not set an Unassigned Display as authorized', function() {
+      $scope.display = {
+        id: displayId,
+        playerProAssigned: false,
+        playerProAuthorized: false
+      };
+      company.playerProAvailableLicenseCount = 1;
+
+      $rootScope.$emit('risevision.company.updated');
+      
+      $scope.$digest();
+
+      expect($scope.display.playerProAuthorized).to.be.false;
+    });
+
+    it('should not set a Display as authorized if no licenses are available', function() {
+      $scope.display = {
+        id: displayId,
+        playerProAssigned: true,
+        playerProAuthorized: false
+      };
+      company.playerProAvailableLicenseCount = 0;
+
+      $rootScope.$emit('risevision.company.updated');
+      
+      $scope.$digest();
+
+      expect($scope.display.playerProAuthorized).to.be.false;
     });
   });
 });
