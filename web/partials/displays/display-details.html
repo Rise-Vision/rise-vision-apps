@@ -47,8 +47,8 @@
 
   <div class="row" ng-show="areAllProLicensesUsed()">
     <div class="alert alert-danger mt-2 mb-4" ng-show="currentPlanFactory.currentPlan.parentPlan">
-      <p ng-show="currentPlanFactory.currentPlan.parentPlan.administratorEmail" translate translate-values="{ administratorEmail: currentPlanFactory.currentPlan.parentPlan.administratorEmail }">displays-app.details.contact-plan-parent-email</p>
-      <p ng-show="!currentPlanFactory.currentPlan.parentPlan.administratorEmail" translate>displays-app.details.contact-plan-parent-no-email</p>
+      <p ng-show="currentPlanFactory.currentPlan.parentPlan.contactEmail" translate translate-values="{ administratorEmail: currentPlanFactory.currentPlan.parentPlan.contactEmail }">displays-app.details.contact-plan-parent-email</p>
+      <p ng-show="!currentPlanFactory.currentPlan.parentPlan.contactEmail" translate>displays-app.details.contact-plan-parent-no-email</p>
     </div>
   </div>
 
