@@ -23,7 +23,7 @@ angular.module('risevision.displays.services')
 
       factory.toggleDisplayLicenseLocal = function (playerProAuthorized) {
         var company = userState.getCopyOfSelectedCompany(true);
-        var availableLicenseCount = company.playerProAvailableLicenseCount;
+        var availableLicenseCount = company.playerProAvailableLicenseCount || 0;
 
         if (playerProAuthorized) {
           availableLicenseCount--;

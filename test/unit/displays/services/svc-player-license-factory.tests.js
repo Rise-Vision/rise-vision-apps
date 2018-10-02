@@ -160,6 +160,19 @@ describe('Services: playerLicenseFactory', function() {
       });
     });
 
+    it('should handle invalid values', function() {
+      sandbox.stub(userState, 'getCopyOfSelectedCompany').returns({
+        playerProAvailableLicenseCount: null
+      });
+
+      playerLicenseFactory.toggleDisplayLicenseLocal(false);
+
+      expect(userState.updateCompanySettings).to.have.been.calledWith({
+        playerProAvailableLicenseCount: 1
+      });
+    });
+
+
   });
 
 
