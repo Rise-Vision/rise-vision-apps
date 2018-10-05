@@ -76,6 +76,10 @@ angular.module('risevision.displays.controllers')
         return playerLicenseFactory.getProAvailableLicenseCount();
       };
 
+      $scope.getProUsedLicenseCount = function () {
+        return playerLicenseFactory.getProUsedLicenseCount();
+      };
+
       $scope.areAllProLicensesUsed = function () {
         var allLicensesUsed = playerLicenseFactory.areAllProLicensesUsed();
         var allProLicensesUsed = allLicensesUsed && !($scope.display && $scope.display.playerProAssigned);

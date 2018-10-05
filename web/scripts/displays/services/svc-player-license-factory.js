@@ -17,6 +17,10 @@ angular.module('risevision.displays.services')
         return currentPlanFactory.currentPlan.playerProAvailableLicenseCount || 0;
       };
 
+      factory.getProUsedLicenseCount = function () {
+        return factory.getProLicenseCount() - factory.getProAvailableLicenseCount();
+      };
+
       factory.areAllProLicensesUsed = function () {
         return currentPlanFactory.currentPlan.playerProAvailableLicenseCount <= 0;
       };
