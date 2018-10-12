@@ -12,7 +12,7 @@ var ArtboardPage = require('./../pages/artboardPage.js');
 var PresentationAddScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe('Presentation Add', function () {
+  xdescribe('Presentation Add', function () {
     var homepage;
     var signInPage;
     var commonHeaderPage;
