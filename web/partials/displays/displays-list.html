@@ -11,12 +11,14 @@
 
 <ul class="display-stats my-4 list-unstyled" ng-show="playerLicenseFactory.getProLicenseCount() > 0">
   <li class="display-stats-item">
-    <span class="font-weight-bold">{{ playerLicenseFactory.getProLicenseCount() }}</span>
+    <span class="font-weight-bold">{{ playerLicenseFactory.getProUsedLicenseCount() }}</span>
     Licensed Displays
   </li>
   <li class="display-stats-item">
-    <span class="font-weight-bold text-success">{{ playerLicenseFactory.getProAvailableLicenseCount() }}</span>
-    Unused Licenses
+    <span class="font-weight-bold" ng-class="playerLicenseFactory.getProAvailableLicenseCount() ? 'text-success' : 'text-danger'">
+      {{ playerLicenseFactory.getProAvailableLicenseCount() }}
+    </span>
+    Available Licenses
   </li>
 </ul>
 

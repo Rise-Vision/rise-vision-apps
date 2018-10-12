@@ -35,12 +35,14 @@
 
   <ul class="display-stats my-4 list-unstyled" ng-show="getProLicenseCount() > 0">
     <li class="display-stats-item">
-      <span class="font-weight-bold">{{ getProLicenseCount() }}</span>
+      <span class="font-weight-bold">{{ getProUsedLicenseCount() }}</span>
       Licensed Displays
     </li>
     <li class="display-stats-item">
-      <span class="font-weight-bold text-danger">{{ getProAvailableLicenseCount() }}</span>
-      Unused Licenses
+      <span class="font-weight-bold" ng-class="getProAvailableLicenseCount() ? 'text-success' : 'text-danger'">
+        {{ getProAvailableLicenseCount() }}
+      </span>
+      Available Licenses
       <a href="#" class="ml-2" ng-show="areAllProLicensesUsed()" ng-click="showPlansModal(true)" aria-label="Get More Display Licenses" translate>displays-app.details.get-more</a>
     </li>
   </ul>

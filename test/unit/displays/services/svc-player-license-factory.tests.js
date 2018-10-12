@@ -103,6 +103,22 @@ describe('Services: playerLicenseFactory', function() {
 
   });
 
+  describe('getProUsedLicenseCount:', function() {
+    it('should return the number of used licenses', function () {
+      currentPlanFactory.currentPlan.playerProTotalLicenseCount = 5;
+      currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 3;
+
+      expect(playerLicenseFactory.getProUsedLicenseCount()).to.equal(2);
+    });
+
+    it('should return zero licenses (correct handling of null value)', function () {
+      currentPlanFactory.currentPlan = {};
+
+      expect(playerLicenseFactory.getProUsedLicenseCount()).to.equal(0);
+    });
+
+  });
+
   describe('areAllProLicensesUsed:', function() {
     it('should return all licenses are used if no licenses are Available', function () {
       currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 0;

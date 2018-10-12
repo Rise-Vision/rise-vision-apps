@@ -123,16 +123,15 @@ var PresentationAddScenarios = function() {
       expect(workspacePage.getRestoreButton().isEnabled()).to.eventually.be.true;
     });
 
-    it('should delete presentation and return to list', function(done) {
+    it('should delete presentation and return to list', function() {
       workspacePage.getPresentationPropertiesButton().click();
       helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
-      helper.clickWhenClickable(presentationPropertiesModalPage.getDeleteButton(), 'Presentation Delete Button').then(function () {
-        helper.clickWhenClickable(presentationPropertiesModalPage.getDeleteForeverButton(), 'Presentation Delete Forever Button').then(function () {
-          helper.wait(presentationsListPage.getTitle(), 'Presentation List');
-          
-          done();
-        });
-      });
+      helper.clickWhenClickable(presentationPropertiesModalPage.getDeleteButton(), 'Presentation Delete Button');
+
+      helper.wait(presentationPropertiesModalPage.getDeleteForeverButton(), 'Presentation Delete Forever Button');      
+      helper.clickWhenClickable(presentationPropertiesModalPage.getDeleteForeverButton(), 'Presentation Delete Forever Button');
+
+      helper.wait(presentationsListPage.getTitle(), 'Presentation List');
     });
   });
 };

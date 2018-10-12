@@ -114,6 +114,8 @@ var FirstSigninScenarios = function() {
       });      
 
       it('should auto create Schedule when saving first Presentation', function () {
+        browser.sleep(500);
+
         helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
         workspacePage.getSaveButton().click();
 
