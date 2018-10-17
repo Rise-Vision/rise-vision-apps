@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('risevision.displays.services')
+  .value('PLAYER_VERSION_DATE_REGEX', /\d{4}\.\d{2}\.\d{2}\.*/)
   .value('SCREENSHOT_PLAYER_VERSION', '2017.01.10.17.33')
   .value('OFFLINE_PLAY_PLAYER_VERSION', '2017.07.31.15.31')
   .value('DISPLAY_CONTROL_PLAYER_VERSION', '2018.01.15.16.31')
@@ -9,12 +10,12 @@ angular.module('risevision.displays.services')
   .factory('playerProFactory', ['$rootScope', '$q', '$modal', 'userState',
     'displayTracker', 'storeAuthorization', '$loading', 'parsePlayerDate',
     'getLatestPlayerVersion', 'STORE_URL', 'IN_RVA_PATH',
-    'PLAYER_PRO_PRODUCT_ID', 'PLAYER_PRO_PRODUCT_CODE',
+    'PLAYER_PRO_PRODUCT_ID', 'PLAYER_PRO_PRODUCT_CODE', 'PLAYER_VERSION_DATE_REGEX',
     'SCREENSHOT_PLAYER_VERSION', 'OFFLINE_PLAY_PLAYER_VERSION', 'DISPLAY_CONTROL_PLAYER_VERSION',
     'CHROMEOS_PLAYER_VERSION', 'CHROMEOS_SCREENSHOT_PLAYER_VERSION',
     function ($rootScope, $q, $modal, userState, displayTracker, storeAuthorization,
       $loading, parsePlayerDate, getLatestPlayerVersion,
-      STORE_URL, IN_RVA_PATH, PLAYER_PRO_PRODUCT_ID, PLAYER_PRO_PRODUCT_CODE,
+      STORE_URL, IN_RVA_PATH, PLAYER_PRO_PRODUCT_ID, PLAYER_PRO_PRODUCT_CODE, PLAYER_VERSION_DATE_REGEX,
       SCREENSHOT_PLAYER_VERSION, OFFLINE_PLAY_PLAYER_VERSION, DISPLAY_CONTROL_PLAYER_VERSION,
       CHROMEOS_PLAYER_VERSION, CHROMEOS_SCREENSHOT_PLAYER_VERSION) {
       var factory = {};
@@ -65,7 +66,7 @@ angular.module('risevision.displays.services')
 
       factory.isChromeOSPlayer = function (display) {
         return !!(display && display.playerName && display.playerName.indexOf('RisePlayer') !== -1 &&
-          !factory.isElectronPlayer(display) &&
+          !factory.isElectronPlayer(display) && PLAYER_VERSION_DATE_REGEX.test(display.playerVersion) &&
           display.playerVersion >= CHROMEOS_PLAYER_VERSION);
       };
 
