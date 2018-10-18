@@ -17,7 +17,7 @@ var helper = require('rv-common-e2e').helper;
 var PlaylistScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe('Playlist', function () {
+  xdescribe('Playlist', function () {
     var homepage;
     var signInPage;
     var commonHeaderPage;
@@ -284,7 +284,7 @@ var PlaylistScenarios = function() {
 
     });
 
-    xdescribe('Should manage playlist items: ', function () {
+    describe('Should manage playlist items: ', function () {
       it('should duplicate first item', function() {
         placeholderPlaylistPage.getDuplicateButtons().get(0).click();
 
