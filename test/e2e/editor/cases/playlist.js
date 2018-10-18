@@ -284,7 +284,7 @@ var PlaylistScenarios = function() {
 
     });
 
-    describe('Should manage playlist items: ', function () {
+    xdescribe('Should manage playlist items: ', function () {
       it('should duplicate first item', function() {
         placeholderPlaylistPage.getDuplicateButtons().get(0).click();
 
