@@ -17,7 +17,7 @@ var helper = require('rv-common-e2e').helper;
 var AddContentScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe('Add Content', function () {
+  xdescribe('Add Content', function () {
     var homepage;
     var signInPage;
     var commonHeaderPage;
