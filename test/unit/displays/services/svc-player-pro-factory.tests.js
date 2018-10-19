@@ -141,8 +141,10 @@ describe('service: playerProFactory:', function() {
     expect(playerProFactory.isScreenshotCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'1.0'})).to.be.false;
     expect(playerProFactory.isScreenshotCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2016.06.27.05.15'})).to.be.false;
     expect(playerProFactory.isScreenshotCompatiblePlayer({playerName: 'RisePlayerElectron', playerVersion:'2017.07.31.15.31'})).to.be.true;
+    expect(playerProFactory.isScreenshotCompatiblePlayer({playerName: '(Beta) RisePlayer', os: 'Chrome OS 10575.58.0', playerVersion: '2.2'})).to.be.false;
     expect(playerProFactory.isScreenshotCompatiblePlayer({playerName: '(Beta) RisePlayer', os: 'Chrome OS 10575.58.0', playerVersion: '2018.08.15.1111'})).to.be.false;
     expect(playerProFactory.isScreenshotCompatiblePlayer({playerName: '(Beta) RisePlayer', os: 'Chrome OS 10575.58.0', playerVersion: '2018.08.17.8388'})).to.be.true;
+    expect(playerProFactory.isScreenshotCompatiblePlayer({playerName: 'RisePlayer', os: 'Chrome OS 10575.58.0', playerVersion: '2.3'})).to.be.false;
     expect(playerProFactory.isScreenshotCompatiblePlayer({playerName: 'RisePlayer', os: 'Chrome OS 10575.58.0', playerVersion: '2018.08.18.9092'})).to.be.true;
   });
 

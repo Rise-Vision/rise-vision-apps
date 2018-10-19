@@ -91,9 +91,10 @@ angular.module('risevision.displays.services')
       };
 
       factory.isScreenshotCompatiblePlayer = function (display) {
-        return !!(display && factory.isElectronPlayer(display) &&
-            _compareVersion(SCREENSHOT_PLAYER_VERSION, display.playerVersion)) ||
-          (factory.isChromeOSPlayer(display) && _compareVersion(CHROMEOS_SCREENSHOT_PLAYER_VERSION, display.playerVersion));
+        var electronSupported = factory.isElectronPlayer(display) && _compareVersion(SCREENSHOT_PLAYER_VERSION, display.playerVersion);
+        var chromeOSSupported = factory.isChromeOSPlayer(display) && _compareVersion(CHROMEOS_SCREENSHOT_PLAYER_VERSION, display.playerVersion);
+
+        return electronSupported || chromeOSSupported;
       };
 
       factory.isOfflinePlayCompatiblePayer = function (display) {
