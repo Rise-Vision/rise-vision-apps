@@ -39,6 +39,10 @@ angular.module('risevision.displays.services')
           .replace('companyId', userState.getSelectedCompanyId()));
       };
 
+      var _compareVersion = function (minimumVersion, currentVersion) {
+        return PLAYER_VERSION_DATE_REGEX.test(currentVersion) && currentVersion >= minimumVersion;
+      };
+
       factory.is3rdPartyPlayer = function (display) {
         display = display || {};
         var playerName = (display.playerName || '').toLowerCase();
@@ -66,8 +70,7 @@ angular.module('risevision.displays.services')
 
       factory.isChromeOSPlayer = function (display) {
         return !!(display && display.playerName && display.playerName.indexOf('RisePlayer') !== -1 &&
-          !factory.isElectronPlayer(display) && PLAYER_VERSION_DATE_REGEX.test(display.playerVersion) &&
-          display.playerVersion >= CHROMEOS_PLAYER_VERSION);
+          !factory.isElectronPlayer(display) && _compareVersion(CHROMEOS_PLAYER_VERSION, display.playerVersion));
       };
 
       factory.isUnsupportedPlayer = function (display) {
@@ -90,17 +93,17 @@ angular.module('risevision.displays.services')
       factory.isScreenshotCompatiblePlayer = function (display) {
         return !!(display && factory.isElectronPlayer(display) &&
             display.playerVersion >= SCREENSHOT_PLAYER_VERSION) ||
-          (factory.isChromeOSPlayer(display) && display.playerVersion >= CHROMEOS_SCREENSHOT_PLAYER_VERSION);
+          (factory.isChromeOSPlayer(display) && _compareVersion(CHROMEOS_SCREENSHOT_PLAYER_VERSION, display.playerVersion));
       };
 
       factory.isOfflinePlayCompatiblePayer = function (display) {
         return !!(display && factory.isElectronPlayer(display) &&
-          display.playerVersion >= OFFLINE_PLAY_PLAYER_VERSION);
+          _compareVersion(OFFLINE_PLAY_PLAYER_VERSION, display.playerVersion));
       };
 
       factory.isDisplayControlCompatiblePlayer = function (display) {
         return !!(display && factory.isElectronPlayer(display) &&
-          display.playerVersion >= DISPLAY_CONTROL_PLAYER_VERSION &&
+          _compareVersion(DISPLAY_CONTROL_PLAYER_VERSION, display.playerVersion) &&
           display.playerProAuthorized);
       };
 
