@@ -30,7 +30,7 @@ angular.module('risevision.displays.services')
               if (idStatus[id]) {
                 idStatus.lastConnectionTime = Date.now();
               } else {
-                idStatus.lastConnectionTime = lastConnection(id);
+                idStatus.lastConnectionTime = lastConnection(id) || '-';
               }
 
               return idStatus;

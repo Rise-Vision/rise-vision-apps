@@ -138,5 +138,30 @@ describe('service: display status factory:', function() {
         done();
       });
     });
+
+    it('should return "-" if no last connection time', function(done) {
+      $httpBackend.when('POST', /.*/).respond(function(method, url, data) {
+        var ids = JSON.parse(data);
+        return [
+          200,
+          ids.reduce(function(obj, id) {
+            obj[id] = { connected: id === 'b' ? true : false };
+            return obj;
+          }, {}),
+        ];
+      });
+
+      displayStatusFactory.getDisplayStatus(['a', 'b', 'c']).then(function(msg) {
+        expect(msg[0].a).to.be.false;
+        expect(msg[0].lastConnectionTime).to.equal('-');
+        expect(msg[1].b).to.be.true;
+        expect(msg[1].lastConnectionTime).isNotNaN;
+        expect(displayStatusFactory.apiError).to.be.null;
+        done();
+      });
+
+      setTimeout(primus.open, 50);
+      setTimeout($httpBackend.flush, 200);
+    });
   });
 });
