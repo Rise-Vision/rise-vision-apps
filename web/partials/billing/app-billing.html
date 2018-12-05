@@ -53,7 +53,7 @@
               </td>
             </tr>
 
-            <tr ng-repeat="subs in subscriptions.items.list">
+            <tr ng-repeat="subs in subscriptions.items.list" ng-hide="subs.quantity < 1">
               <td>{{subs.subscriptionId}}</td>
               <td class="font-weight-bold">{{getSubscriptionDesc(subs)}}</td>
               <td>{{subs.shipToName}}</td>

@@ -9,6 +9,7 @@ describe('controller: BillingCtrl', function () {
     $provide.value('STORE_URL', 'https://store.risevision.com/');
     $provide.value('PAST_INVOICES_PATH', 'account/view/invoicesHistory?cid=companyId');
     $provide.value('UNPAID_INVOICES_PATH', 'account/view/invoicesDue?cid=companyId');
+    $provide.value('PLAYER_PRO_PRODUCT_CODE', 'pppc');
     $provide.service('$window', function () {
       return {
         open: sandbox.stub()
@@ -220,7 +221,7 @@ describe('controller: BillingCtrl', function () {
       expect($scope.getSubscriptionDesc({
         productName: 'Enterprise Plan',
         quantity: 1,
-        unit: 'per Display per Month',
+        unit: 'per Company per Month',
         currencyCode: 'usd'
       })).to.equal('Enterprise Plan (Monthly/USD)');
 
@@ -234,16 +235,24 @@ describe('controller: BillingCtrl', function () {
       expect($scope.getSubscriptionDesc({
         productName: 'Advanced Plan',
         quantity: 1,
-        unit: 'per Display per Year',
+        unit: 'per Company per Year',
         currencyCode: 'usd'
       })).to.equal('Advanced Plan (Yearly/USD)');
 
       expect($scope.getSubscriptionDesc({
         productName: 'Basic Plan',
         quantity: 2,
-        unit: 'per Display per Year',
+        unit: 'per Company per Year',
         currencyCode: 'cad'
       })).to.equal('2 x Basic Plan (Yearly/CAD)');
+
+      expect($scope.getSubscriptionDesc({
+        productName: 'Additional Licenses',
+        quantity: 1,
+        unit: 'per Display per Year',
+        currencyCode: 'cad',
+        productCode: 'pppc'
+      })).to.equal('1 x Additional Licenses (Yearly/CAD)');
     });
 
     it('should calculate total price', function () {
