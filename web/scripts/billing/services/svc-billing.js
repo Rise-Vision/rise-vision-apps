@@ -30,6 +30,29 @@ angular.module('risevision.apps.billing.services')
             });
 
           return deferred.promise;
+        },
+        getUnpaidInvoices: function() {
+          var deferred = $q.defer();
+          var params = {
+            'companyId': userState.getSelectedCompanyId()
+          };
+
+          $log.debug('Store invoice.listUnpaid called with', params);
+
+          storeAPILoader().then(function (storeApi) {
+              return storeApi.invoice.listUnpaid(params);
+            })
+            .then(function (resp) {
+              $log.debug('invoice.listUnpaid resp', resp);
+
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to get company\'s unpaid invoices.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
         }
       };
 
