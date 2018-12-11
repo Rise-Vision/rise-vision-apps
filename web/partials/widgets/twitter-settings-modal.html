@@ -23,7 +23,7 @@
 		  <div class="form-group" ng-class="{'has-error': !settingsForm.screenName.$pristine && settingsForm.screenName.$invalid}" show-errors>
 		    <!--label class="control-label">Enter a #hashtag or @handle to display Tweets from any public account</label>
 		    <input type="text" class="form-control" placeholder="#hashtag/@handle"-->
-	      <label class="control-label">{{"widget-twitter.screenName.text" | translate }} *</label>
+	      <label class="control-label">{{"widget-twitter.screenName.text" | translate }}</label>
 		    <div class="input-group">
 		      <span class="input-group-addon" id="basic-addon1">@</span>
 		      <input id="twitterScreenName" name="screenName" type="text" class="form-control" placeholder="username" required ng-model="settings.additionalParams.screenName">
@@ -33,19 +33,9 @@
 			  </p>
 			</div><!--form-inline-->
 
-		  <h4>{{"widget-twitter.previewLabel" | translate }}</h4>
 		  <div class="alert alert-info">
 		  	<div class="alert-body">
 		  		{{"widget-twitter.previewText" | translate }}
-		  	</div>
-		  </div>
-		  <div class="row">
-		  	<div class="col-sm-6" style="float: none; margin: 0 auto;">
-		  		<div class="panel panel-default">
-		  			<div class="panel-body">
-		  				<img src="https://s3.amazonaws.com/Rise-Images/UI/twitter-preview%402x-100.jpg" class="img-responsive">
-		  			</div>
-		  		</div>
 		  	</div>
 		  </div>
 
