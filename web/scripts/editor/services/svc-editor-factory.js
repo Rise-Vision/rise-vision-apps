@@ -10,13 +10,13 @@ angular.module('risevision.editor.services')
     'presentation', 'presentationParser', 'distributionParser',
     'presentationTracker', 'store', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
     'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT', 'TEMPLATES_TYPE',
-    '$modal', '$rootScope', '$window', 'scheduleFactory', 'processErrorCode', 'messageBox',
+    '$modal', '$rootScope', '$window', 'scheduleFactory', 'plansFactory', 'processErrorCode', 'messageBox',
     '$templateCache', '$log',
     function ($q, $state, userState, userAuthFactory, presentation,
       presentationParser, distributionParser, presentationTracker, store,
       VIEWER_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED,
       DEFAULT_LAYOUT, TEMPLATES_TYPE, $modal, $rootScope, $window,
-      scheduleFactory, processErrorCode, messageBox, $templateCache, $log) {
+      scheduleFactory, plansFactory, processErrorCode, messageBox, $templateCache, $log) {
       var factory = {};
       var JSON_PARSE_ERROR = 'JSON parse error';
 
@@ -422,19 +422,6 @@ angular.module('risevision.editor.services')
         });
       };
 
-      var _goToStoreModal = function (product) {
-        var goToStoreModalInstance = $modal.open({
-          templateUrl: 'partials/editor/go-to-store-modal.html',
-          size: 'md',
-          controller: 'GoToStoreModalController',
-          resolve: {
-            product: function () {
-              return product;
-            }
-          }
-        });
-      };
-
       factory.copyTemplate = function (productDetails, rvaEntityId) {
         rvaEntityId = productDetails ? productDetails.rvaEntityId :
           rvaEntityId;
@@ -443,19 +430,11 @@ angular.module('risevision.editor.services')
           .then(null, function (e) {
             // 403 Status indicates Premium Template needs purchase
             if (e && e.status === 403) {
-              if (productDetails) {
-                _goToStoreModal(productDetails);
-              } else {
-                return store.product.list({
-                    category: TEMPLATES_TYPE,
-                    rvaEntityId: rvaEntityId
-                  })
-                  .then(function (products) {
-                    if (products && products.items && products.items[0]) {
-                      _goToStoreModal(products.items[0]);
-                    }
-                  });
-              }
+              plansFactory.showPlansModal('editor-app.templatesLibrary.access-warning');
+
+              $rootScope.$on('risevision.company.trial.started', function () {
+                $window.location.reload();
+              });
             }
           });
       };

@@ -159,9 +159,17 @@ describe('service: editorFactory:', function() {
         }
       };
     });
+    $provide.service('plansFactory', function() {
+      return plansFactory = {
+        showPlansModal: sinon.stub()
+      }
+    })
     $provide.service('$window', function() {
       return {
         open: function(url, target) {
+        },
+        location: {
+          reload: sinon.stub()
         }
       };
     });
@@ -173,7 +181,7 @@ describe('service: editorFactory:', function() {
   }));
   var editorFactory, trackerCalled, updatePresentation, currentState, stateParams, 
     presentationParser, $window, $modal, processErrorCode, scheduleFactory, userAuthFactory,
-    $rootScope;
+    $rootScope, plansFactory;
   beforeEach(function(){
     trackerCalled = undefined;
     currentState = undefined;
@@ -686,7 +694,7 @@ describe('service: editorFactory:', function() {
       }, 10);
     });
     
-    it('if API returns 403, and product is available, show goToStoreModal', function(done) {  
+    it('if API returns 403, and product is available, show plans modal', function(done) {  
       var $modalOpenSpy = sinon.spy($modal, 'open');
       
       updatePresentation = false;    
@@ -697,12 +705,12 @@ describe('service: editorFactory:', function() {
       setTimeout(function() {
         copyPresentationSpy.should.not.have.been.called;        
         
-        $modalOpenSpy.should.have.been.called;
+        plansFactory.showPlansModal.should.have.been.calledWith('editor-app.templatesLibrary.access-warning');
         done();
       }, 10);
     });
     
-    it('if API returns 403, and product is not available, show goToStoreModal', function(done) {  
+    it('if API returns 403, and product is not available, show plans modal', function(done) {  
       var $modalOpenSpy = sinon.spy($modal, 'open');
       
       updatePresentation = false;    
@@ -713,11 +721,32 @@ describe('service: editorFactory:', function() {
       setTimeout(function() {
         copyPresentationSpy.should.not.have.been.called;        
         
-        $modalOpenSpy.should.have.been.called;
+        plansFactory.showPlansModal.should.have.been.calledWith('editor-app.templatesLibrary.access-warning');
         
         done();
       }, 10);
     });
+
+    it('if API returns 403, and a trial is started, should reload page', function(done) {  
+      var $modalOpenSpy = sinon.spy($modal, 'open');
+      
+      updatePresentation = false;    
+      editorFactory.copyTemplate(null, 'presentationId');
+      
+      newCopyOfSpy.should.have.been.calledWith('presentationId');
+      
+      setTimeout(function() {
+        plansFactory.showPlansModal.should.have.been.calledWith('editor-app.templatesLibrary.access-warning');
+
+        $rootScope.$emit('risevision.company.trial.started');
+        $rootScope.$digest();
+        
+        $window.location.reload.should.have.been.called;
+        
+        done();
+      }, 10);
+    });
+
   });
 
   it('addFromSharedTemplateModal: ', function(done) {

@@ -34,7 +34,8 @@ angular.module('risevision.apps.billing.services')
         getUnpaidInvoices: function() {
           var deferred = $q.defer();
           var params = {
-            'companyId': userState.getSelectedCompanyId()
+            'companyId': userState.getSelectedCompanyId(),
+            'search': 'origin:Rise',
           };
 
           $log.debug('Store invoice.listUnpaid called with', params);
