@@ -131,7 +131,11 @@ angular.module('risevision.apps.billing.controllers')
       }
 
       function _getPeriod(subscription) {
-        return subscription.unit.toLowerCase().indexOf('per month') >= 0 ? 'Monthly' : 'Yearly';
+        if (subscription.billingPeriod > 1) {
+          return (subscription.billingPeriod + ' ' + (subscription.unit.toLowerCase().indexOf('per month') >= 0 ? 'Month' : 'Year'));
+        } else {
+          return subscription.unit.toLowerCase().indexOf('per month') >= 0 ? 'Monthly' : 'Yearly';
+        }
       }
 
       function _isPerDisplay(subscription) {
