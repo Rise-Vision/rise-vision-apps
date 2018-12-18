@@ -236,6 +236,7 @@ describe('controller: BillingCtrl', function () {
         productName: 'Advanced Plan',
         quantity: 1,
         unit: 'per Company per Year',
+        billingPeriod: 0,
         currencyCode: 'usd'
       })).to.equal('Advanced Plan (Yearly/USD)');
 
@@ -243,8 +244,17 @@ describe('controller: BillingCtrl', function () {
         productName: 'Basic Plan',
         quantity: 2,
         unit: 'per Company per Year',
+        billingPeriod: 1,
         currencyCode: 'cad'
       })).to.equal('2 x Basic Plan (Yearly/CAD)');
+
+      expect($scope.getSubscriptionDesc({
+        productName: 'Basic Plan',
+        quantity: 2,
+        unit: 'per Company per Year',
+        billingPeriod: 3,
+        currencyCode: 'cad'
+      })).to.equal('2 x Basic Plan (3 Year/CAD)');
 
       expect($scope.getSubscriptionDesc({
         productName: 'Additional Licenses',
