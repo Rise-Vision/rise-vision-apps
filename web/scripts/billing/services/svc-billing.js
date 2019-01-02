@@ -35,7 +35,7 @@ angular.module('risevision.apps.billing.services')
           var deferred = $q.defer();
           var params = {
             'companyId': userState.getSelectedCompanyId(),
-            'search': 'origin:Rise',
+            'search': 'NOT origin:Chargebee',
           };
 
           $log.debug('Store invoice.listUnpaid called with', params);
