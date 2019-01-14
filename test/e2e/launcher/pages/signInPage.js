@@ -77,11 +77,7 @@ var SignInPage = function() {
 
   this.googleSignIn = function() {
     //wait for spinner to go away.
-    helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - Before Google Sign In', 5000)
-    .catch(function () {
-      console.log("Failed waiting for spinner to disappear befor Google Sign In");
-      browser.refresh();
-    });
+    helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - Before Google Sign In');
 
     signInGoogleLink.isPresent().then(function (state) {
       if (state) {
@@ -114,8 +110,8 @@ var SignInPage = function() {
     });
   };
 
-  //this.signIn = this.customSignIn;
-  this.signIn = this.googleSignIn;
+  this.signIn = this.customSignIn;
+  //this.signIn = this.googleSignIn;
 
 };
 
