@@ -110,8 +110,8 @@ var SignInPage = function() {
     });
   };
 
-  this.signIn = this.customSignIn;
-  //this.signIn = this.googleSignIn;
+  //this.signIn = this.customSignIn;
+  this.signIn = this.googleSignIn;
 
 };
 
