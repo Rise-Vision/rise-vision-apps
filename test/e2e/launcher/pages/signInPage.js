@@ -70,20 +70,20 @@ var SignInPage = function() {
   };
 
   this.getGoogleLogin = function() {
-    helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+    helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - Get Google Login');
     helper.wait(signInGoogleLink, 'Sign In Google Link', 1000);
     signInGoogleLink.click();
   };
 
   this.googleSignIn = function() {
     //wait for spinner to go away.
-    helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - Before Sign In');
+    helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - Before Google Sign In');
 
     signInGoogleLink.isPresent().then(function (state) {
       if (state) {
         signInGoogleLink.click().then(function () {
           googleAuthPage.signin();
-          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - After Sign In');
+          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - After Google Sign In');
         });
       }
     });
@@ -96,7 +96,7 @@ var SignInPage = function() {
     var password = 'Jenkins1';
 
     //wait for spinner to go away.
-    helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+    helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - Before Custom Sign In');
 
     customAuth.signInButton.isDisplayed().then(function (state) {
       var enter = '\ue007';
@@ -104,7 +104,7 @@ var SignInPage = function() {
       customAuth.usernameField.sendKeys(username);
       customAuth.passwordField.sendKeys(password + enter);
 
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - After Custom Sign In');
     }, function() {
       console.log('Sign In button is not visible, most likely user has already signed in');
     });
