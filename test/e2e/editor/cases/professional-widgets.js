@@ -81,7 +81,7 @@ var ProfessionalWidgetsScenarios = function() {
 
       helper.wait(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
 
-      autoScheduleModalPage.getCloseButton().click();
+      helper.clickWhenClickable(autoScheduleModalPage.getCloseButton(), 'Auto Schedule Modal - Close Button');
 
       helper.waitDisappear(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
 

@@ -49,10 +49,10 @@ var PresentationPropertiesScenarios = function() {
         });
 
         it('should open the properties modal when clicking Presentation name', function () {
-          presentationPropertiesModalPage.getCancelButton().click();
+          helper.clickWhenClickable(presentationPropertiesModalPage.getCancelButton(), 'Cancel Button');
           expect(presentationPropertiesModalPage.getPresentationPropertiesModal().isPresent()).to.eventually.be.false;
         
-          workspacePage.getPresentationNameContainer().click();
+          helper.clickWhenClickable(workspacePage.getPresentationNameContainer(), 'Presentation Name Container');
           helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
           browser.sleep(500);
           
