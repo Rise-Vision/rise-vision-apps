@@ -71,13 +71,13 @@ var SignInPage = function() {
 
   this.signIn = function() {
     //wait for spinner to go away.
-    helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+    helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - Before Sign In');
 
     signInGoogleLink.isPresent().then(function (state) {
       if (state) {
         signInGoogleLink.click().then(function () {
           googleAuthPage.signin();
-          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - After Sign In');
         });
       }
     });

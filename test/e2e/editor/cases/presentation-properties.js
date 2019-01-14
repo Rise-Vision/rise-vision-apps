@@ -41,7 +41,7 @@ var PresentationPropertiesScenarios = function() {
 
       describe('Given a user clicks on the presentation properties cog icon', function () {
         it('should open the properties modal when clicking cog', function () {
-          workspacePage.getPresentationPropertiesButton().click();
+          helper.clickWhenClickable(workspacePage.getPresentationPropertiesButton(), 'Presentation Properties Button');
           helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
           browser.sleep(500);
           
