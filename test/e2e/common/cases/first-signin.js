@@ -16,7 +16,7 @@ var DisplayAddModalPage = require('./../../displays/pages/displayAddModalPage.js
 var FirstSigninScenarios = function() {
 
   browser.driver.manage().window().setSize(1400, 900);
-  describe('First Signin', function () {
+  xdescribe('First Signin', function () {
     var homepage;
     var signInPage;
     var commonHeaderPage;
