@@ -23,12 +23,6 @@ var SignInPage = function() {
   var signinButton = element(by.cssContainingText('button.btn-primary', 'Sign In'));
   var incorrectCredentialsError = element(by.cssContainingText('.bg-danger', 'incorrect'));
 
-  var customAuth = {
-    usernameField: element(by.id('username')),
-    passwordField: element(by.id('password')),
-    signInButton: element(by.id('sign-in-button'))
-  };
-
   this.get = function() {
     browser.get(url);
   };
@@ -91,26 +85,6 @@ var SignInPage = function() {
     // helper.wait(onboardingPage.getOnboardingBar(), 'Onboarding bar');
   };
 
-  this.customSignIn = function () {
-    var username = 'rise.customauth@gmail.com';
-    var password = 'Jenkins1';
-
-    //wait for spinner to go away.
-    helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - Before Custom Sign In');
-
-    customAuth.signInButton.isDisplayed().then(function (state) {
-      var enter = '\ue007';
-
-      customAuth.usernameField.sendKeys(username);
-      customAuth.passwordField.sendKeys(password + enter);
-
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - After Custom Sign In');
-    }, function() {
-      console.log('Sign In button is not visible, most likely user has already signed in');
-    });
-  };
-
-  //this.signIn = this.customSignIn;
   this.signIn = this.googleSignIn;
 
 };
