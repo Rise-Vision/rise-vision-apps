@@ -63,7 +63,7 @@ jobs:
       - image: jenkinsrise/apps-node:8.1.4
     steps:
       - run_e2e_cases:
-          casesfile: "test/e2e/circle.container0.js"
+          casesfile: "test/e2e/circle.launcher-schedules.js"
   e2e_common:
     working_directory: ~/rise-vision-apps
     docker:
@@ -189,7 +189,7 @@ workflows:
             - dependencies
       - e2e_editor:
           requires:
-            - e2e_common
+            - dependencies
       - e2e_displays:
           requires:
             - dependencies
