@@ -60,6 +60,7 @@ var FirstSigninScenarios = function() {
       });
       
       it('should show the First Step', function() {
+        browser.sleep(1000);
         expect(getStartedPage.getWizardStep1().isDisplayed()).to.eventually.be.true;
         
         expect(getStartedPage.getGetStartedButton1().isDisplayed()).to.eventually.be.true;
@@ -67,6 +68,7 @@ var FirstSigninScenarios = function() {
 
       it('should progress to the Second Step', function() {
         helper.clickWhenClickable(getStartedPage.getGetStartedButton1(), 'Get Started Button 1');
+        browser.sleep(1000);
 
         expect(getStartedPage.getWizardStep2().isDisplayed()).to.eventually.be.true;
         
@@ -75,6 +77,7 @@ var FirstSigninScenarios = function() {
 
       it('should progress to the Third Step', function() {
         helper.clickWhenClickable(getStartedPage.getGetStartedButton2(), 'Get Started Button 2');
+        browser.sleep(1000);
 
         expect(getStartedPage.getWizardStep3().isDisplayed()).to.eventually.be.true;
         
@@ -83,6 +86,7 @@ var FirstSigninScenarios = function() {
 
       it('should progress to the Last Step', function() {
         helper.clickWhenClickable(getStartedPage.getGetStartedButton3(), 'Get Started Button 3');
+        browser.sleep(1000);
 
         expect(getStartedPage.getWizardStep4().isDisplayed()).to.eventually.be.true;
         
