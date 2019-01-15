@@ -41,7 +41,7 @@ var FirstSigninScenarios = function() {
       before(function () {
         homepage.getStorage();
         signInPage.signIn();
-        var subCompanyName = 'E2E TEST SUBCOMPANY';
+        var subCompanyName = 'E2E TEST SUBCOMPANY - STORAGE TRIAL';
         commonHeaderPage.createSubCompany(subCompanyName);
         commonHeaderPage.selectSubCompany(subCompanyName);   
       });
@@ -60,7 +60,7 @@ var FirstSigninScenarios = function() {
       });
 
       xit('should start a new presentation', function () {
-        homepage.getPresentationCTAButton().click();
+        helper.clickWhenClickable(homepage.getPresentationCTAButton(), 'Presentation CTA button');
 
         helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
         helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader());
