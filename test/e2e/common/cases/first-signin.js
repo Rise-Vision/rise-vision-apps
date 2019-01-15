@@ -133,6 +133,10 @@ var FirstSigninScenarios = function() {
         expect(getStartedPage.getGetStartedContainer().isDisplayed()).to.eventually.be.false;
       });
 
+      it('removes current SubCompany',function(){
+        commonHeaderPage.deleteCurrentCompany();
+      });
+
       xdescribe('Onboarding Bar: ', function() {
         it('should show Add Presentation CTA home page', function () {
           helper.wait(homepage.getPresentationCTA(), 'Presentation Call to Action');
@@ -255,13 +259,9 @@ var FirstSigninScenarios = function() {
 
       });
 
-      it('removes current SubCompany',function(){
-        commonHeaderPage.deleteCurrentCompany();
-      });
-
-      after(function() {
-        commonHeaderPage.deleteAllSubCompanies();
-      });
+//      after(function() {
+//        commonHeaderPage.deleteAllSubCompanies();
+//      });
     });
   });
 };
