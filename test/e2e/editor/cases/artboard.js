@@ -73,7 +73,8 @@ var ArtboardScenarios = function() {
         });
 
         it('should be able to Cancel and go back to Editor',function(){
-          unsavedChangesModalPage.getCancelButton().click();
+          helper.clickWhenClickable(unsavedChangesModalPage.getCancelButton(), 'Cancel Button');
+          helper.waitDisappear(unsavedChangesModalPage.getUnsavedChangesModal(), 'Unsaved Changed Modal');
           expect(unsavedChangesModalPage.getUnsavedChangesModal().isPresent()).to.eventually.be.false;
           expect(workspacePage.getArtboardContainer().isDisplayed()).to.eventually.be.true;
         });
