@@ -82,7 +82,7 @@ var FirstSigninScenarios = function() {
       });
 
       it('should progress to the Last Step', function() {
-        getStartedPage.getGetStartedButton3().click();
+        helper.clickWhenClickable(getStartedPage.getGetStartedButton3(), 'Get Started Button 3');
 
         expect(getStartedPage.getWizardStep4().isDisplayed()).to.eventually.be.true;
         
@@ -99,11 +99,11 @@ var FirstSigninScenarios = function() {
       });
 
       it('should start a new presentation', function () {
-        getStartedPage.getGetStartedAddPresentation().click();
+        helper.clickWhenClickable(getStartedPage.getGetStartedAddPresentation(), 'Get Started Add Presentation');
 
         helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
         helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader());
-        storeProductsModalPage.getAddBlankPresentation().click();
+        helper.clickWhenClickable(storeProductsModalPage.getAddBlankPresentation(), 'Add Blank Presentation');
         
         helper.wait(workspacePage.getWorkspaceContainer(), 'Workspace Container');
         expect(workspacePage.getWorkspaceContainer().isDisplayed()).to.eventually.be.true;
@@ -117,16 +117,16 @@ var FirstSigninScenarios = function() {
         browser.sleep(500);
 
         helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
-        workspacePage.getSaveButton().click();
+        helper.clickWhenClickable(workspacePage.getSaveButton(), 'Save Button');
 
         helper.wait(autoScheduleModalPage.getAutoScheduleModal());
 
         expect(autoScheduleModalPage.getAutoScheduleModal().isDisplayed()).to.eventually.be.true;
-        autoScheduleModalPage.getCloseButton().click();
+        helper.clickWhenClickable(autoScheduleModalPage.getCloseButton(), 'Close Button');
       });
 
       it('should no longer show the Get Started Page', function () {
-        commonHeaderPage.getCommonHeaderMenuItems().get(0).click();
+        helper.clickWhenClickable(commonHeaderPage.getCommonHeaderMenuItems().get(0), 'First Common Header Menu Item');
 
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
@@ -259,9 +259,9 @@ var FirstSigninScenarios = function() {
 
       });
 
-//      after(function() {
-//        commonHeaderPage.deleteAllSubCompanies();
-//      });
+      after(function() {
+        commonHeaderPage.deleteAllSubCompanies();
+      });
     });
   });
 };
