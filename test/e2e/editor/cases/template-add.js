@@ -15,7 +15,7 @@ var TemplateAddScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
   describe('Template Add', function () {
-    var subCompanyName = 'E2E TEST SUBCOMPANY';
+    var subCompanyName = 'E2E TEST SUBCOMPANY - TEMPLATE ADD';
     var homepage;
     var signInPage;
     var commonHeaderPage;
