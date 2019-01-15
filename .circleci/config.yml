@@ -2,7 +2,7 @@ version: 2.1
 
 commands:
   run_e2e_cases:
-    description: "Runs a specific cases file"
+    description: "Runs a specific cases file as a workflow step"
     parameters:
       casesfile:
         type: string
