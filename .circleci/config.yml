@@ -57,37 +57,48 @@ jobs:
           path: ~/rise-vision-apps/reports
       - store_artifacts:
           path: ~/rise-vision-apps/reports
-#  test_e2e:
-#    working_directory: ~/rise-vision-apps
-#    docker:
-#      - image: jenkinsrise/apps-node:8.1.4
-#    parallelism: 2
-#    steps:
-#      - attach_workspace:
-#          at: ~/
-#      - run: echo $CHROME_INSTANCES
-#      # Install latest chrome
-#      - run: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-#      - run: echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee -a /etc/apt/sources.list
-#      - run: sudo apt-get update -qq
-#      - run: sudo apt-get install -y google-chrome-stable
-#      - run:
-#          name: e2e_tests
-#          command: |
-#            # TEST_FILES=$(circleci tests glob "test/e2e/*/*.cases.js" | circleci tests split)
-#            TEST_FILES=$(circleci tests glob "test/e2e/circle.container*.js" | circleci tests split)
-#            NODE_ENV=test XUNIT_FILE=~/rise-vision-apps/reports/angular-xunit.xml PROSHOT_DIR=~/rise-vision-apps/reports/screenshots DBUS_SESSION_BUS_ADDRESS=/dev/null xvfb-run node run-test.js $TEST_FILES
-#      - store_test_results:
-#          path: ~/rise-vision-apps/reports
-#      - store_artifacts:
-#          path: ~/rise-vision-apps/reports
+  test_e2e_launcher:
+    working_directory: ~/rise-vision-apps
+    docker:
+      - image: jenkinsrise/apps-node:8.1.4
+    steps:
+      - run_e2e_cases:
+          casesfile: "test/e2e/launcher/launcher.cases.js"
+  test_e2e_schedules:
+    working_directory: ~/rise-vision-apps
+    docker:
+      - image: jenkinsrise/apps-node:8.1.4
+    steps:
+      - run_e2e_cases:
+          casesfile: "test/e2e/schedules/schedules.cases.js"
   test_e2e_common:
     working_directory: ~/rise-vision-apps
     docker:
       - image: jenkinsrise/apps-node:8.1.4
     steps:
       - run_e2e_cases:
+          casesfile: "test/e2e/common/common.cases.js"
+  test_e2e_editor:
+    working_directory: ~/rise-vision-apps
+    docker:
+      - image: jenkinsrise/apps-node:8.1.4
+    steps:
+      - run_e2e_cases:
           casesfile: "test/e2e/editor/editor.cases.js"
+  test_e2e_displays:
+    working_directory: ~/rise-vision-apps
+    docker:
+      - image: jenkinsrise/apps-node:8.1.4
+    steps:
+      - run_e2e_cases:
+          casesfile: "test/e2e/displays/displays.cases.js"
+  test_e2e_storage:
+    working_directory: ~/rise-vision-apps
+    docker:
+      - image: jenkinsrise/apps-node:8.1.4
+    steps:
+      - run_e2e_cases:
+          casesfile: "test/e2e/storage/storage.cases.js"
   deploy_staging:
     working_directory: ~/rise-vision-apps
     docker:
@@ -177,12 +188,24 @@ workflows:
       - test_unit:
           requires:
             - dependencies
-#      - test_e2e:
-#          requires:
-#            - dependencies
+      - test_e2e_launcher:
+          requires:
+            - dependencies
+      - test_e2e_schedules:
+          requires:
+            - test_e2e_launcher
       - test_e2e_common:
           requires:
             - dependencies
+      - test_e2e_editor:
+          requires:
+            - test_e2e_common
+      - test_e2e_displays:
+          requires:
+            - test_e2e_editor
+      - test_e2e_storage:
+          requires:
+            - test_e2e_displays
       - deploy_production:
           requires:
             - test_unit
