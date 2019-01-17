@@ -179,6 +179,12 @@ jobs:
       - run: tar czvf dist.tar.gz dist
       - store_artifacts:
           path: ~/rise-vision-apps/dist.tar.gz
+  complete_staging:
+    working_directory: ~/rise-vision-apps
+    docker:
+      - image: jenkinsrise/apps-node:8.1.4
+    steps:
+      - run: echo "Staging process complete"
 
 workflows:
   version: 2
@@ -224,6 +230,12 @@ workflows:
           filters:
             branches:
               only: /(feature|fix|chore).*/
+      - deploy_staging:
+          requires:
+            - dependencies
+          filters:
+            branches:
+              only: /(feature|fix|chore).*/
       - deploy_beta:
           requires:
             - test_unit
@@ -236,3 +248,16 @@ workflows:
           filters:
             branches:
               only: /(beta).*/
+      - complete_staging:
+          requires:
+            - test_unit
+            - e2e_launcher
+            - e2e_schedules
+            - e2e_common
+            - e2e_editor
+            - e2e_displays
+            - e2e_storage
+            - deploy_staging
+          filters:
+            branches:
+              only: /(feature|fix|chore).*/
