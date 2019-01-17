@@ -8,7 +8,7 @@ var ScheduleAddPage = require('./../pages/scheduleAddPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var ScheduleAddScenarios = function() {
-
+  browser.driver.manage().window().setSize(1920, 1080);
 
   describe('Schedule Add', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page

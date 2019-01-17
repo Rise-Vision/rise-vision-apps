@@ -11,7 +11,7 @@ var PlaylistItemModalPage = require('./../pages/playlistItemModalPage.js');
 var PlaylistPage = require('./../pages/playlistPage.js');
 
 var AddPresentationScenarios = function() {
-
+  browser.driver.manage().window().setSize(1920, 1080);
 
   describe('Add Presentation', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page

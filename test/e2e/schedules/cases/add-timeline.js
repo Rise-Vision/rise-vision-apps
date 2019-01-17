@@ -9,6 +9,7 @@ var helper = require('rv-common-e2e').helper;
 var TimelineModalPage = require('./../pages/timelineModalPage.js');
 
 var AddTimelineScenarios = function() {
+browser.driver.manage().window().setSize(1920, 1080);
 
 describe('Add Timeline', function() {
   this.timeout(2000);// to allow for protactor to load the seperate page

@@ -7,6 +7,7 @@ var SchedulesListPage = require('./../pages/schedulesListPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var ScheduleListScenarios = function() {
+  browser.driver.manage().window().setSize(1920, 1080);
 
   describe('Schedule List', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page

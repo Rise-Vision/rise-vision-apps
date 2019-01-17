@@ -9,6 +9,7 @@ var helper = require('rv-common-e2e').helper;
 var DistributionModalPage = require('./../pages/distributionModalPage.js');
 
 var AddDistributionScenarios = function() {
+  browser.driver.manage().window().setSize(1920, 1080);
 
   describe('Add Distribution', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page

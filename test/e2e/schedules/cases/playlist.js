@@ -10,7 +10,7 @@ var helper = require('rv-common-e2e').helper;
 var PlaylistItemModalPage = require('./../pages/playlistItemModalPage.js');
 
 var PlaylistScenarios = function() {
-
+  browser.driver.manage().window().setSize(1920, 1080);
 
   describe('Playlist', function () {
     this.timeout(2000);// to allow for protactor to load the seperate page
