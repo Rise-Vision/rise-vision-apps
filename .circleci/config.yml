@@ -184,6 +184,8 @@ jobs:
     docker:
       - image: jenkinsrise/apps-node:8.1.4
     steps:
+      - attach_workspace:
+          at: ~/
       - run: echo "Staging process complete"
 
 workflows:
@@ -224,12 +226,6 @@ workflows:
           filters:
             branches:
               only: master
-      - deploy_staging:
-          requires:
-            - dependencies
-          filters:
-            branches:
-              only: /(feature|fix|chore).*/
       - deploy_staging:
           requires:
             - dependencies
