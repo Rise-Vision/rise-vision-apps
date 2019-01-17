@@ -99,6 +99,14 @@ jobs:
     steps:
       - run_e2e_cases:
           casesfile: "test/e2e/storage/storage.cases.js"
+  test_e2e:
+    working_directory: ~/rise-vision-apps
+    docker:
+      - image: jenkinsrise/apps-node:8.1.4
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: echo "e2e tests finished"
   deploy_staging:
     working_directory: ~/rise-vision-apps
     docker:
@@ -179,14 +187,6 @@ jobs:
       - run: tar czvf dist.tar.gz dist
       - store_artifacts:
           path: ~/rise-vision-apps/dist.tar.gz
-  complete_staging:
-    working_directory: ~/rise-vision-apps
-    docker:
-      - image: jenkinsrise/apps-node:8.1.4
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run: echo "Staging process complete"
 
 workflows:
   version: 2
@@ -214,15 +214,18 @@ workflows:
       - e2e_storage:
           requires:
             - dependencies
-      - deploy_production:
+      - test_e2e:
           requires:
-            - test_unit
             - e2e_launcher
             - e2e_schedules
             - e2e_common
             - e2e_editor
             - e2e_displays
             - e2e_storage
+      - deploy_production:
+          requires:
+            - test_unit
+            - test_e2e
           filters:
             branches:
               only: master
@@ -235,25 +238,7 @@ workflows:
       - deploy_beta:
           requires:
             - test_unit
-            - e2e_launcher
-            - e2e_schedules
-            - e2e_common
-            - e2e_editor
-            - e2e_displays
-            - e2e_storage
+            - test_e2e
           filters:
             branches:
               only: /(beta).*/
-      - complete_staging:
-          requires:
-            - test_unit
-            - e2e_launcher
-            - e2e_schedules
-            - e2e_common
-            - e2e_editor
-            - e2e_displays
-            - e2e_storage
-            - deploy_staging
-          filters:
-            branches:
-              only: /(feature|fix|chore).*/
