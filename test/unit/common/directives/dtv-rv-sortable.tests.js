@@ -5,6 +5,11 @@ describe('directive: rv-sortable', function() {
   var $compile, $rootScope,
     mockedSortableObj;
 
+  window.Draggable = {
+    Sortable: function () {
+    }
+  };
+
   beforeEach(module('risevision.apps.directives'));
   beforeEach(function() {
     inject(function($injector, _$rootScope_, _$compile_) {
@@ -14,22 +19,23 @@ describe('directive: rv-sortable', function() {
   });
 
   beforeEach(function() {
-    sinon.stub(Sortable, 'create', function() {
+    sinon.stub(Draggable, 'Sortable', function() {
       return mockedSortableObj = {
+        on: sinon.spy(),
         destroy: sinon.spy()
       }
     });
   });
 
   afterEach(function() {
-    Sortable.create.restore();
+    Draggable.Sortable.restore();
   });
 
   it('should load and unload properly', function() {
     var $scope = $rootScope.$new();
-    expect(Sortable.create).not.to.have.been.called;
+    expect(Draggable.Sortable).not.to.have.been.called;
     var element = $compile('<div rv-sortable></div>')($scope);
-    expect(Sortable.create).to.have.been.called;
+    expect(Draggable.Sortable).to.have.been.called;
   });
 
   it('should unload properly', function() {

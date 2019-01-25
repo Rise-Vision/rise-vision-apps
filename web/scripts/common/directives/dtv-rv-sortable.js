@@ -13,29 +13,28 @@ angular.module('risevision.apps.directives')
         applySortable();
 
         function applySortable() {
-          sortable = Sortable.create($element[0], {
-            sort: true,
-            scroll: false,
-            animation: 150,
+          sortable = new Draggable.Sortable($element[0], {
             handle: '.rv-sortable-handle',
             draggable: '.rv-sortable-item',
-            forceFallback: isFirefox(),
-            onEnd: function (evt) {
+            mirror: {
+              constrainDimensions: true,
+              cursorOffsetX: 10,
+              cursorOffsetY: screen.width > 600 ? 200 : 150,
+              xAxis: false
+            }
+          });
+
+          sortable.on('sortable:stop', function (evt) {
               if ($scope.onSort) {
                 $scope.onSort({
                   evt: evt
                 });
               }
-            }
           });
 
           $scope.$on('$destroy', function () {
             sortable.destroy();
           });
-        }
-
-        function isFirefox() {
-          return navigator.userAgent.indexOf('Firefox') >= 0;
         }
       }
     };

@@ -26,7 +26,8 @@
     "describe": false,
     "expect": false,
     "it": false,
-    "inject": false
+    "inject": false,
+    "Draggable": false
   },
   "predef":["angular","_"]
 }

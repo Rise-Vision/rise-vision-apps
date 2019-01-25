@@ -55,11 +55,10 @@ angular.module('risevision.editor.directives')
           };
 
           $scope.sortItem = function (evt) {
-            var oldIndex = evt.oldIndex;
-            var newIndex = evt.newIndex;
+            var oldIndex = evt.data.oldIndex;
+            var newIndex = evt.data.newIndex;
 
             placeholderPlaylistFactory.moveItem(oldIndex, newIndex);
-            $scope.$apply();
           };
 
           $scope.showSettingsModal = function (item) {
