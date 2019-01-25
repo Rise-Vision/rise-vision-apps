@@ -5,7 +5,9 @@ angular.module('risevision.apps.directives')
     return {
       restrict: 'AC',
       scope: {
-        onSort: '&'
+        onSort: '&',
+        draggingOffset: '=',
+        draggingOffsetSm: '='
       },
       link: function ($scope, $element) {
         var sortable;
@@ -19,7 +21,7 @@ angular.module('risevision.apps.directives')
             mirror: {
               constrainDimensions: true,
               cursorOffsetX: 10,
-              cursorOffsetY: screen.width > 600 ? 200 : 150,
+              cursorOffsetY: (!isSmallScreen() && $scope.draggingOffset) || (isSmallScreen() && $scope.draggingOffsetSm) || 0,
               xAxis: false
             }
           });
@@ -35,6 +37,10 @@ angular.module('risevision.apps.directives')
           $scope.$on('$destroy', function () {
             sortable.destroy();
           });
+        }
+
+        function isSmallScreen() {
+          return screen.width < 768;
         }
       }
     };

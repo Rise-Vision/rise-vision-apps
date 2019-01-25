@@ -18,7 +18,7 @@
   </div>
 </div>
 
-<div rv-sortable on-sort="sortItem(evt)" class="editor-playlist sortable-list workspace-sidebar-body">
+<div rv-sortable on-sort="sortItem(evt)" dragging-offset="200" dragging-offset-sm="250" class="editor-playlist sortable-list workspace-sidebar-body">
   <!-- Item Playlist -->
   <div class="editor-playlist-item rv-sortable-item" ng-repeat="item in factory.getItems() track by $index" ng-show="factory.getItems().length">
     <div class="list-grip rv-sortable-handle">
