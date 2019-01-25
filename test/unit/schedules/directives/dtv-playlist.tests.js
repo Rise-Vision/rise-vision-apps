@@ -69,7 +69,7 @@ describe('directive: playlist (schedule)', function() {
 
     it('should call moveItem upon invocation', inject(function(playlistFactory) {
       expect(playlistFactory.moveItem).not.to.have.been.called;
-      element.isolateScope().sortItem({oldIndex: 0, newIndex: 2});
+      element.isolateScope().sortItem({data: {oldIndex: 0, newIndex: 2}});
       $rootScope.$digest();
       expect(playlistFactory.moveItem).to.have.been.calledWith(0, 2);
     }));

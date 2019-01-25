@@ -93,7 +93,7 @@ describe('directive: placeholder-playlist', function() {
 
     it('should call moveItem upon invocation', inject(function(placeholderPlaylistFactory) {
       expect(placeholderPlaylistFactory.moveItem).not.to.have.been.called;
-      element.scope().sortItem({oldIndex: 0, newIndex: 2});
+      element.scope().sortItem({data: {oldIndex: 0, newIndex: 2}});
       $rootScope.$digest();
       expect(placeholderPlaylistFactory.moveItem).to.have.been.calledWith(0, 2);
     }));

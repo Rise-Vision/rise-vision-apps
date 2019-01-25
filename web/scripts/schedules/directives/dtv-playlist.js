@@ -52,8 +52,8 @@ angular.module('risevision.schedules.directives')
           };
 
           $scope.sortItem = function (evt) {
-            var oldIndex = evt.oldIndex;
-            var newIndex = evt.newIndex;
+            var oldIndex = evt.data.oldIndex;
+            var newIndex = evt.data.newIndex;
 
             playlistFactory.moveItem(oldIndex, newIndex);
             $scope.$apply();
