@@ -56,7 +56,6 @@ angular.module('risevision.schedules.directives')
             var newIndex = evt.data.newIndex;
 
             playlistFactory.moveItem(oldIndex, newIndex);
-            $scope.$apply();
           };
         } //link()
       };
