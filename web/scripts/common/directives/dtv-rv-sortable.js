@@ -6,22 +6,20 @@ angular.module('risevision.apps.directives')
       restrict: 'AC',
       scope: {
         onSort: '&',
-        draggingOffset: '=',
-        draggingOffsetSm: '='
+        appendTo: '@',
       },
       link: function ($scope, $element) {
         var sortable;
 
-        applySortable();
-
-        function applySortable() {
+        var _applySortable = function() {
           sortable = new Draggable.Sortable($element[0], {
             handle: '.rv-sortable-handle',
             draggable: '.rv-sortable-item',
             mirror: {
+              appendTo: $scope.appendTo,
               constrainDimensions: true,
               cursorOffsetX: 10,
-              cursorOffsetY: (!isSmallScreen() && $scope.draggingOffset) || (isSmallScreen() && $scope.draggingOffsetSm) || 0,
+              cursorOffsetY: 10,
               xAxis: false
             }
           });
@@ -39,9 +37,7 @@ angular.module('risevision.apps.directives')
           });
         }
 
-        function isSmallScreen() {
-          return screen.width < 768;
-        }
+        _applySortable();
       }
     };
   }]);

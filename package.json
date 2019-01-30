@@ -11,6 +11,7 @@
   "author": "rodrigopavezi <rodrigopavezi@gmail.com>",
   "license": "GNU",
   "dependencies": {
+    "@shopify/draggable": "1.0.0-beta.8",
     "bower": "^1.5.3"
   },
   "devDependencies": {
