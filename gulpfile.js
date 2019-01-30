@@ -6,7 +6,7 @@ var modRewrite  = require('connect-modrewrite');
 var prettify    = require('gulp-jsbeautifier');
 var jshint      = require('gulp-jshint');
 var rimraf      = require("gulp-rimraf");
-var uglify      = require("gulp-uglify");
+var uglify      = require("gulp-uglify-es").default;
 var usemin      = require("gulp-usemin");
 var minifyCss   = require('gulp-minify-css');
 var minifyHtml  = require('gulp-minify-html');
@@ -193,7 +193,6 @@ function buildHtml(path) {
           hoist_vars    : false,  // hoist variable declarations
           if_return     : true,   // optimize if-s followed by return/continue
           join_vars     : true,   // join var declarations
-          cascade       : true,   // try to cascade `right` into `left` in sequences
           side_effects  : false,  // drop side-effect-free statements
           warnings      : true,   // warn about potentially dangerous optimizations/code
           global_defs   : {}      // global definitions
