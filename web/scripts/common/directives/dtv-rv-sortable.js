@@ -35,7 +35,7 @@ angular.module('risevision.apps.directives')
           $scope.$on('$destroy', function () {
             sortable.destroy();
           });
-        }
+        };
 
         _applySortable();
       }
