@@ -3,8 +3,8 @@
   'use strict';
 
   angular.module('risevision.storage.directives')
-    .value('STORAGE_UPLOAD_CHUNK_SIZE', (function () {  
-      var GOOGLES_REQUIRED_CHUNK_MULTIPLE = 256 * 1024;  
+    .value('STORAGE_UPLOAD_CHUNK_SIZE', (function () {
+      var GOOGLES_REQUIRED_CHUNK_MULTIPLE = 256 * 1024;
       return GOOGLES_REQUIRED_CHUNK_MULTIPLE * 4 * 25;
     }()))
     .directive('upload', ['$rootScope', '$timeout', '$translate', 'storage',
@@ -18,7 +18,7 @@
           },
           templateUrl: 'partials/storage/upload-panel.html',
           link: function ($scope) {
-            var videoTypesNotSupported = ['mov', 'wmv', 'm4v', 'flv' , 'avi', 'ogg', 'ogv'];
+            var videoTypesNotSupported = ['mov', 'wmv', 'm4v', 'flv', 'avi', 'ogg', 'ogv'];
             var imageTypesNotSupported = ['tiff', 'tif'];
 
             $scope.warnings = [];
@@ -65,16 +65,26 @@
               var fileName = fileItem.file.name;
               var extension = fileName && fileName.split('.').pop();
               if (videoTypesNotSupported.indexOf(extension) !== -1) {
-                $scope.warnings.push({fileName: fileName, message: 'storage-client.warning.video-not-supported'});
+                $scope.warnings.push({
+                  fileName: fileName,
+                  message: 'storage-client.warning.video-not-supported'
+                });
               } else if (imageTypesNotSupported.indexOf(extension) !== -1) {
-                $scope.warnings.push({fileName: fileName, message: 'storage-client.warning.image-not-supported'});
+                $scope.warnings.push({
+                  fileName: fileName,
+                  message: 'storage-client.warning.image-not-supported'
+                });
               }
             }
 
             function dismissWarning(fileItem) {
-              var warningIndex = _.findIndex($scope.warnings, function (warning) { return warning.fileName === fileItem.file.name; });
+              var warningIndex = _.findIndex($scope.warnings, function (warning) {
+                return warning.fileName === fileItem.file.name;
+              });
               if (warningIndex !== -1) {
-                $timeout(function () { $scope.warnings.splice(warningIndex); }, 5000);
+                $timeout(function () {
+                  $scope.warnings.splice(warningIndex);
+                }, 5000);
               }
             }
 

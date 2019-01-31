@@ -11,7 +11,7 @@ angular.module('risevision.apps.directives')
       link: function ($scope, $element) {
         var sortable;
 
-        var _applySortable = function() {
+        var _applySortable = function () {
           sortable = new Draggable.Sortable($element[0], {
             handle: '.rv-sortable-handle',
             draggable: '.rv-sortable-item',
@@ -25,11 +25,11 @@ angular.module('risevision.apps.directives')
           });
 
           sortable.on('sortable:stop', function (evt) {
-              if ($scope.onSort) {
-                $scope.onSort({
-                  evt: evt
-                });
-              }
+            if ($scope.onSort) {
+              $scope.onSort({
+                evt: evt
+              });
+            }
           });
 
           $scope.$on('$destroy', function () {

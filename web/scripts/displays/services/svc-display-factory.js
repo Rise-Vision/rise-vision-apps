@@ -167,7 +167,7 @@ angular.module('risevision.displays.services')
               factory.display.name);
 
             if (factory.display.playerProAssigned) {
-              playerLicenseFactory.toggleDisplayLicenseLocal(false);              
+              playerLicenseFactory.toggleDisplayLicenseLocal(false);
             }
             factory.display = {};
 

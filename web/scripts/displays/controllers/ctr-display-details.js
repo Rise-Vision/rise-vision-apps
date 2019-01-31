@@ -51,7 +51,8 @@ angular.module('risevision.displays.controllers')
               var company = userState.getCopyOfSelectedCompany(true);
 
               $scope.display.playerProAssigned = playerProAuthorized;
-              $scope.display.playerProAuthorized = company.playerProAvailableLicenseCount > 0 && playerProAuthorized;
+              $scope.display.playerProAuthorized = company.playerProAvailableLicenseCount > 0 &&
+                playerProAuthorized;
 
               playerLicenseFactory.toggleDisplayLicenseLocal(playerProAuthorized);
             })

@@ -38,11 +38,13 @@ angular.module('risevision.apps.billing.controllers')
       };
 
       $scope.viewPastInvoicesStore = function () {
-        $window.open(STORE_URL + PAST_INVOICES_PATH.replace('companyId', userState.getSelectedCompanyId()), '_blank');
+        $window.open(STORE_URL + PAST_INVOICES_PATH.replace('companyId', userState.getSelectedCompanyId()),
+          '_blank');
       };
 
       $scope.viewUnpaidInvoicesStore = function () {
-        $window.open(STORE_URL + UNPAID_INVOICES_PATH.replace('companyId', userState.getSelectedCompanyId()), '_blank');
+        $window.open(STORE_URL + UNPAID_INVOICES_PATH.replace('companyId', userState.getSelectedCompanyId()),
+          '_blank');
       };
 
       var _loadUnpaidInvoices = function () {
@@ -132,7 +134,8 @@ angular.module('risevision.apps.billing.controllers')
 
       function _getPeriod(subscription) {
         if (subscription.billingPeriod > 1) {
-          return (subscription.billingPeriod + ' ' + (subscription.unit.toLowerCase().indexOf('per month') >= 0 ? 'Month' : 'Year'));
+          return (subscription.billingPeriod + ' ' + (subscription.unit.toLowerCase().indexOf('per month') >= 0 ?
+            'Month' : 'Year'));
         } else {
           return subscription.unit.toLowerCase().indexOf('per month') >= 0 ? 'Monthly' : 'Yearly';
         }

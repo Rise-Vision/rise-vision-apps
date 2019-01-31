@@ -31,7 +31,7 @@ angular.module('risevision.apps.billing.services')
 
           return deferred.promise;
         },
-        getUnpaidInvoices: function() {
+        getUnpaidInvoices: function () {
           var deferred = $q.defer();
           var params = {
             'companyId': userState.getSelectedCompanyId(),
