@@ -2,9 +2,9 @@
 angular.module('risevision.editor.controllers')
   .controller('PresentationListController', ['$scope',
     'ScrollingListService', 'presentation', 'editorFactory', '$loading',
-    '$filter', 'presentationTracker',
+    '$filter', 'presentationTracker', '$state',
     function ($scope, ScrollingListService, presentation, editorFactory,
-      $loading, $filter, presentationTracker) {
+      $loading, $filter, presentationTracker, $state) {
       $scope.search = {
         sortBy: 'changeDate',
         reverse: true,
@@ -31,5 +31,13 @@ angular.module('risevision.editor.controllers')
           $loading.stop('presentation-list-loader');
         }
       });
+
+      $scope.openPresentation = function(presentation) {
+        if (presentation.presentationType !== 'HTML Template') {
+          $state.go('apps.editor.workspace.artboard', { presentationId: presentation.id });
+        } else {
+          $state.go('apps.editor.templates.edit', { presentationId: presentation.id });
+        }
+      };
     }
   ]);

@@ -2,6 +2,7 @@
 
 angular.module('risevision.editor.services')
   .constant('TEMPLATES_TYPE', 'Templates')
+  .constant('HTML_TEMPLATE_TYPE', 'HTMLTemplates')
   .factory('productsFactory', ['$q', '$filter', 'store', 'subscriptionStatusFactory', 'TEMPLATES_TYPE',
     'UNLISTED_STORE_PRODUCTS',
     function ($q, $filter, store, subscriptionStatusFactory, TEMPLATES_TYPE, UNLISTED_STORE_PRODUCTS) {

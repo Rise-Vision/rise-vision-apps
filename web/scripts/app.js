@@ -411,6 +411,46 @@ angular.module('risevision.apps', [
           }
         })
 
+        .state('apps.editor.templates', {
+          url: '/templates?cid',
+          abstract: true,
+          template: '<div class="templates-app" ui-view></div>'
+        })
+
+        .state('apps.editor.templates.add', {
+          url: '/add',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get('partials/editor/template-editor.html');
+          }],
+          reloadOnSearch: false,
+          controller: 'TemplateEditorController',
+          resolve: {
+            canAccess: ['canAccessApps',
+              function (canAccessApps) {
+                return canAccessApps();
+              }
+            ]
+          }
+        })
+
+        .state('apps.editor.templates.edit', {
+          url: '/edit/:presentationId',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get('partials/editor/template-editor.html');
+          }],
+          reloadOnSearch: false,
+          controller: 'TemplateEditorController',
+          resolve: {
+            presentationInfo: ['$stateParams', 'canAccessApps', 'templateEditorFactory',
+              function ($stateParams, canAccessApps, templateEditorFactory) {
+                return canAccessApps().then(function() {
+                  return templateEditorFactory.getPresentation($stateParams.presentationId);
+                });
+              }
+            ]
+          }
+        })
+
         // storage
         .state('apps.storage', {
           url: '?cid',

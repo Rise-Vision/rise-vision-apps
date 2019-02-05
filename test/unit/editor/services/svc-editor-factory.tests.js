@@ -178,10 +178,16 @@ describe('service: editorFactory:', function() {
     $provide.factory('messageBox', function() {
       return messageBoxStub;
     });
+    $provide.service('templateEditorFactory', function() {
+      return templateEditorFactory = {
+        addPresentation: sinon.stub(),
+        getPresentation: sinon.stub()
+      };
+    });
   }));
   var editorFactory, trackerCalled, updatePresentation, currentState, stateParams, 
     presentationParser, $window, $modal, processErrorCode, scheduleFactory, userAuthFactory,
-    $rootScope, plansFactory;
+    $rootScope, plansFactory, templateEditorFactory;
   beforeEach(function(){
     trackerCalled = undefined;
     currentState = undefined;
@@ -189,6 +195,7 @@ describe('service: editorFactory:', function() {
 
     inject(function($injector){
       editorFactory = $injector.get('editorFactory');
+      templateEditorFactory = $injector.get('templateEditorFactory');
       presentationParser = $injector.get('presentationParser');
       $window = $injector.get('$window');
       $modal = $injector.get('$modal');
@@ -639,27 +646,46 @@ describe('service: editorFactory:', function() {
       expect(stateParams).to.deep.equal({presentationId: undefined, copyPresentation:true});
     });
   });
-  
-  it('addPresentationModal: ', function(done) {
-    editorFactory.addPresentationModal();
-    expect(trackerCalled).to.equal("Add Presentation");
-    var copyTemplateSpy = sinon.spy(editorFactory, 'copyTemplate');
-    
-    setTimeout(function() {
-      copyTemplateSpy.should.have.been.called;
 
-      expect(editorFactory.loadingPresentation).to.be.false;
+  describe('addPresentationModal:', function() {
+    it('Classic Template: ', function(done) {
+      editorFactory.addPresentationModal();
+      expect(trackerCalled).to.equal("Add Presentation");
+      var copyTemplateSpy = sinon.spy(editorFactory, 'copyTemplate');
 
-      expect(editorFactory.presentation.id).to.not.be.ok;
-      expect(editorFactory.presentation.name).to.equal('Copy of some presentation');
+      setTimeout(function() {
+        copyTemplateSpy.should.have.been.called;
+
+        expect(editorFactory.loadingPresentation).to.be.false;
+
+        expect(editorFactory.presentation.id).to.not.be.ok;
+        expect(editorFactory.presentation.name).to.equal('Copy of some presentation');
+
+        expect(trackerCalled).to.equal('Presentation Copied');
+        expect(currentState).to.equal('apps.editor.workspace.artboard');
+        expect(stateParams).to.deep.equal({presentationId: undefined, copyPresentation:true});
+
+        done();
+      }, 10);
+    });
+
+    it('HTML Template: ', function(done) {
+      sinon.stub($modal, 'open').returns({
+        result: Q.resolve({productTag: ['HTMLTemplates']})
+      });
+
+      editorFactory.addPresentationModal();
+      expect(trackerCalled).to.equal('Add Presentation');
+      var copyTemplateSpy = sinon.spy(editorFactory, 'copyTemplate');
       
-      expect(trackerCalled).to.equal('Presentation Copied');
-      expect(currentState).to.equal('apps.editor.workspace.artboard');
-      expect(stateParams).to.deep.equal({presentationId: undefined, copyPresentation:true});
+      setTimeout(function() {
+        copyTemplateSpy.should.have.not.been.called;
 
-      done();
-    }, 10);
+        expect(templateEditorFactory.addPresentation).to.have.been.called;
 
+        done();
+      }, 10);
+    });
   });
   
   describe('copyTemplate: ', function() {
