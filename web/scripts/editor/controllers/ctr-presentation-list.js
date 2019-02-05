@@ -2,9 +2,9 @@
 angular.module('risevision.editor.controllers')
   .controller('PresentationListController', ['$scope',
     'ScrollingListService', 'presentation', 'editorFactory', '$loading',
-    '$filter', 'presentationTracker', '$state',
+    '$filter', 'presentationTracker', '$state', 'HTML_TEMPLATE_TYPE',
     function ($scope, ScrollingListService, presentation, editorFactory,
-      $loading, $filter, presentationTracker, $state) {
+      $loading, $filter, presentationTracker, $state, HTML_TEMPLATE_TYPE) {
       $scope.search = {
         sortBy: 'changeDate',
         reverse: true,
@@ -33,7 +33,7 @@ angular.module('risevision.editor.controllers')
       });
 
       $scope.openPresentation = function(presentation) {
-        if (presentation.presentationType !== 'HTML Template') {
+        if (presentation.presentationType !== HTML_TEMPLATE_TYPE) {
           $state.go('apps.editor.workspace.artboard', { presentationId: presentation.id });
         } else {
           $state.go('apps.editor.templates.edit', { presentationId: presentation.id });

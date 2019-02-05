@@ -1,6 +1,6 @@
 'use strict';
 
-describe.only('service: templateEditorFactory:', function() {
+describe('service: templateEditorFactory:', function() {
   var sandbox = sinon.sandbox.create();
 
   beforeEach(module('risevision.editor.services'));
@@ -38,7 +38,7 @@ describe.only('service: templateEditorFactory:', function() {
     });
   }));
 
-  var $state, templateEditorFactory, messageBox, presentation, processErrorCode;
+  var $state, templateEditorFactory, messageBox, presentation, processErrorCode, HTML_TEMPLATE_TYPE;
 
   beforeEach(function() {
     inject(function($injector) {
@@ -48,6 +48,7 @@ describe.only('service: templateEditorFactory:', function() {
       presentation = $injector.get('presentation');
       messageBox = $injector.get('messageBox');
       processErrorCode = $injector.get('processErrorCode');
+      HTML_TEMPLATE_TYPE = $injector.get('HTML_TEMPLATE_TYPE');
     });
   });
 
@@ -74,6 +75,7 @@ describe.only('service: templateEditorFactory:', function() {
       expect(templateEditorFactory.presentation.id).to.be.undefined;
       expect(templateEditorFactory.presentation.productId).to.equal('test-id');
       expect(templateEditorFactory.presentation.name).to.equal('Copy of Test HTML Template');
+      expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_TEMPLATE_TYPE);
 
       expect($state.go).to.have.been.calledWith('apps.editor.templates.add');
 

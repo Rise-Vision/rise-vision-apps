@@ -34,14 +34,21 @@ describe('controller: Presentation List', function() {
         return key;
       };
     });
+    $provide.service('$state', function() {
+      return {
+        go: sinon.stub()
+      };
+    });
   }));
-  var $scope, $loading,$loadingStartSpy, $loadingStopSpy;
+  var $scope, $loading, $loadingStartSpy, $loadingStopSpy, $state, HTML_TEMPLATE_TYPE;
   beforeEach(function(){
 
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
       $scope.listLimit = 5;
       $loading = $injector.get('$loading');
+      $state = $injector.get('$state');
+      HTML_TEMPLATE_TYPE = $injector.get('HTML_TEMPLATE_TYPE');
       $loadingStartSpy = sinon.spy($loading, 'start');
       $loadingStopSpy = sinon.spy($loading, 'stop');
       $controller('PresentationListController', {
@@ -92,6 +99,18 @@ describe('controller: Presentation List', function() {
     });
   });
 
+  describe('openPresentation: ', function() {
+    it('should open Classic Presentation', function() {
+      $scope.openPresentation({ id: 'test-id' });
 
+      expect($state.go).to.have.been.calledWith('apps.editor.workspace.artboard', { presentationId: 'test-id' });
+    });
+
+    it('should open HTML Presentation', function() {
+      $scope.openPresentation({ id: 'test-id', presentationType: HTML_TEMPLATE_TYPE });
+
+      expect($state.go).to.have.been.calledWith('apps.editor.templates.edit', { presentationId: 'test-id' });
+    });
+  });
 
 });
