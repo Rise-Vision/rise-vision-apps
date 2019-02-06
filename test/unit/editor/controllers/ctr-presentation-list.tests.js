@@ -40,7 +40,7 @@ describe('controller: Presentation List', function() {
       };
     });
   }));
-  var $scope, $loading, $loadingStartSpy, $loadingStopSpy, $state, HTML_TEMPLATE_TYPE;
+  var $scope, $loading, $loadingStartSpy, $loadingStopSpy, $state, HTML_PRESENTATION_TYPE;
   beforeEach(function(){
 
     inject(function($injector,$rootScope, $controller){
@@ -48,7 +48,7 @@ describe('controller: Presentation List', function() {
       $scope.listLimit = 5;
       $loading = $injector.get('$loading');
       $state = $injector.get('$state');
-      HTML_TEMPLATE_TYPE = $injector.get('HTML_TEMPLATE_TYPE');
+      HTML_PRESENTATION_TYPE = $injector.get('HTML_PRESENTATION_TYPE');
       $loadingStartSpy = sinon.spy($loading, 'start');
       $loadingStopSpy = sinon.spy($loading, 'stop');
       $controller('PresentationListController', {
@@ -107,7 +107,7 @@ describe('controller: Presentation List', function() {
     });
 
     it('should open HTML Presentation', function() {
-      $scope.openPresentation({ id: 'test-id', presentationType: HTML_TEMPLATE_TYPE });
+      $scope.openPresentation({ id: 'test-id', presentationType: HTML_PRESENTATION_TYPE });
 
       expect($state.go).to.have.been.calledWith('apps.editor.templates.edit', { presentationId: 'test-id' });
     });
