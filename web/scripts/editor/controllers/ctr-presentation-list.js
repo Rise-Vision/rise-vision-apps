@@ -1,9 +1,9 @@
 'use strict';
 angular.module('risevision.editor.controllers')
   .controller('PresentationListController', ['$scope',
-    'ScrollingListService', 'presentation', 'editorFactory', '$loading',
+    'ScrollingListService', 'presentation', 'editorFactory', 'templateEditorFactory', '$loading',
     '$filter', 'presentationTracker', '$state', 'HTML_TEMPLATE_TYPE',
-    function ($scope, ScrollingListService, presentation, editorFactory,
+    function ($scope, ScrollingListService, presentation, editorFactory, templateEditorFactory,
       $loading, $filter, presentationTracker, $state, HTML_TEMPLATE_TYPE) {
       $scope.search = {
         sortBy: 'changeDate',
@@ -16,6 +16,7 @@ angular.module('risevision.editor.controllers')
         $scope.search);
       $scope.factory = editorFactory.presentations;
       $scope.editorFactory = editorFactory;
+      $scope.templateEditorFactory = templateEditorFactory;
       $scope.presentationTracker = presentationTracker;
 
       $scope.filterConfig = {
@@ -24,11 +25,14 @@ angular.module('risevision.editor.controllers')
         id: 'presentationSearchInput'
       };
 
-      $scope.$watch('factory.loadingItems', function (loading) {
-        if (loading) {
-          $loading.start('presentation-list-loader');
-        } else {
+      $scope.$watchGroup([
+        'factory.loadingItems',
+        'editorFactory.loadingPresentation',
+        'templateEditorFactory.loadingPresentation'], function (newValues) {
+        if (!newValues[0] && !newValues[1] && !newValues[2]) {
           $loading.stop('presentation-list-loader');
+        } else {
+          $loading.start('presentation-list-loader');
         }
       });
 
