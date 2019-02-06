@@ -648,7 +648,7 @@ describe('service: editorFactory:', function() {
   });
 
   describe('addPresentationModal:', function() {
-    it('Classic Template: ', function(done) {
+    it('should create a presentation using a Classic Template: ', function(done) {
       editorFactory.addPresentationModal();
       expect(trackerCalled).to.equal("Add Presentation");
       var copyTemplateSpy = sinon.spy(editorFactory, 'copyTemplate');
@@ -669,7 +669,7 @@ describe('service: editorFactory:', function() {
       }, 10);
     });
 
-    it('HTML Template: ', function(done) {
+    it('should create a presentation using an HTML Template: ', function(done) {
       sinon.stub($modal, 'open').returns({
         result: Q.resolve({productTag: ['HTMLTemplates']})
       });
