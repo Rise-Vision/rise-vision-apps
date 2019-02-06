@@ -38,7 +38,7 @@ describe('service: templateEditorFactory:', function() {
     });
   }));
 
-  var $state, templateEditorFactory, messageBox, presentation, processErrorCode, HTML_TEMPLATE_TYPE;
+  var $state, templateEditorFactory, messageBox, presentation, processErrorCode, HTML_PRESENTATION_TYPE;
 
   beforeEach(function() {
     inject(function($injector) {
@@ -48,7 +48,7 @@ describe('service: templateEditorFactory:', function() {
       presentation = $injector.get('presentation');
       messageBox = $injector.get('messageBox');
       processErrorCode = $injector.get('processErrorCode');
-      HTML_TEMPLATE_TYPE = $injector.get('HTML_TEMPLATE_TYPE');
+      HTML_PRESENTATION_TYPE = $injector.get('HTML_PRESENTATION_TYPE');
     });
   });
 
@@ -75,7 +75,7 @@ describe('service: templateEditorFactory:', function() {
       expect(templateEditorFactory.presentation.id).to.be.undefined;
       expect(templateEditorFactory.presentation.productId).to.equal('test-id');
       expect(templateEditorFactory.presentation.name).to.equal('Copy of Test HTML Template');
-      expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_TEMPLATE_TYPE);
+      expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_PRESENTATION_TYPE);
 
       expect($state.go).to.have.been.calledWith('apps.editor.templates.add');
 

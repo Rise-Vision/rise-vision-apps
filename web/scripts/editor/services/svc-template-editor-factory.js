@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('risevision.editor.services')
-  .factory('templateEditorFactory', ['$q', '$log', '$state', 'messageBox', 'presentation', 'processErrorCode', 'userState', 'HTML_TEMPLATE_TYPE',
-    function ($q, $log, $state, messageBox, presentation, processErrorCode, userState, HTML_TEMPLATE_TYPE) {
+  .constant('HTML_PRESENTATION_TYPE', 'HTML Template')
+  .factory('templateEditorFactory', ['$q', '$log', '$state', 'messageBox', 'presentation', 'processErrorCode', 'userState', 'HTML_PRESENTATION_TYPE',
+    function ($q, $log, $state, messageBox, presentation, processErrorCode, userState, HTML_PRESENTATION_TYPE) {
       var factory = {};
 
       factory.addPresentation = function (productDetails) {
@@ -12,7 +13,7 @@ angular.module('risevision.editor.services')
           id: undefined,
           productId: productDetails.productId,
           name: 'Copy of ' + productDetails.name,
-          presentationType: HTML_TEMPLATE_TYPE,
+          presentationType: HTML_PRESENTATION_TYPE,
           revisionStatusName: undefined,
           isTemplate: false,
           isStoreProduct: false
