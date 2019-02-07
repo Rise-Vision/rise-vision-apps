@@ -3,7 +3,7 @@
 describe('service: templateEditorFactory:', function() {
   var sandbox = sinon.sandbox.create();
 
-  beforeEach(module('risevision.editor.services'));
+  beforeEach(module('risevision.template-editor.services'));
 
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});

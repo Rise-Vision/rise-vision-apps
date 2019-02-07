@@ -54,6 +54,9 @@ angular.module('risevision.apps', [
     'risevision.widgets.filters',
     'risevision.widgets.image',
     'risevision.widgets.twitter',
+    'risevision.template-editor.services',
+    'risevision.template-editor.directives',
+    'risevision.template-editor.controllers'
   ])
   // Set up our mappings between URLs, templates, and controllers
   .config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
@@ -573,3 +576,12 @@ angular.module('risevision.widgets.services', []);
 angular.module('risevision.widgets.directives', []);
 angular.module('risevision.widgets.controllers', []);
 angular.module('risevision.widgets.filters', []);
+
+// Template Editor
+angular.module('risevision.template-editor.services', [
+  'risevision.common.header',
+  'risevision.common.gapi',
+  'risevision.apps.config'
+]);
+angular.module('risevision.template-editor.directives', []);
+angular.module('risevision.template-editor.controllers', []);
