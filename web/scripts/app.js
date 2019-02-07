@@ -423,7 +423,7 @@ angular.module('risevision.apps', [
         .state('apps.editor.templates.add', {
           url: '/add',
           templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get('partials/editor/template-editor.html');
+            return $templateCache.get('partials/template-editor/template-editor.html');
           }],
           reloadOnSearch: false,
           controller: 'TemplateEditorController',
@@ -439,7 +439,7 @@ angular.module('risevision.apps', [
         .state('apps.editor.templates.edit', {
           url: '/edit/:presentationId',
           templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get('partials/editor/template-editor.html');
+            return $templateCache.get('partials/template-editor/template-editor.html');
           }],
           reloadOnSearch: false,
           controller: 'TemplateEditorController',
