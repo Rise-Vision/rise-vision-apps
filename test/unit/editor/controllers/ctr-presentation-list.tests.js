@@ -41,14 +41,13 @@ describe('controller: Presentation List', function() {
       };
     });
   }));
-  var $scope, $loading, $loadingStartSpy, $loadingStopSpy, $state, HTML_PRESENTATION_TYPE;
+  var $scope, $loading, $loadingStartSpy, $loadingStopSpy, HTML_PRESENTATION_TYPE;
   beforeEach(function(){
 
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
       $scope.listLimit = 5;
       $loading = $injector.get('$loading');
-      $state = $injector.get('$state');
       HTML_PRESENTATION_TYPE = $injector.get('HTML_PRESENTATION_TYPE');
       $loadingStartSpy = sinon.spy($loading, 'start');
       $loadingStopSpy = sinon.spy($loading, 'stop');
@@ -100,17 +99,17 @@ describe('controller: Presentation List', function() {
     });
   });
 
-  describe('openPresentation: ', function() {
-    it('should open Classic Presentation', function() {
-      $scope.openPresentation({ id: 'test-id' });
+  describe('getEditorLink: ', function() {
+    it('should get Classic Presentation link', function() {
+      var link = $scope.getEditorLink({ id: 'test-id' });
 
-      expect($state.go).to.have.been.calledWith('apps.editor.workspace.artboard', { presentationId: 'test-id' });
+      expect(link).to.equal('apps.editor.workspace.artboard({ presentationId: presentation.id })');
     });
 
-    it('should open HTML Presentation', function() {
-      $scope.openPresentation({ id: 'test-id', presentationType: HTML_PRESENTATION_TYPE });
+    it('should get HTML Presentation link', function() {
+      var link = $scope.getEditorLink({ id: 'test-id', presentationType: HTML_PRESENTATION_TYPE });
 
-      expect($state.go).to.have.been.calledWith('apps.editor.templates.edit', { presentationId: 'test-id' });
+      expect(link).to.equal('apps.editor.templates.edit({ presentationId: presentation.id })');
     });
   });
 

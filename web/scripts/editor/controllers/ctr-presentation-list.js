@@ -36,11 +36,11 @@ angular.module('risevision.editor.controllers')
         }
       });
 
-      $scope.openPresentation = function(presentation) {
+      $scope.getEditorLink = function(presentation) {
         if (presentation.presentationType !== HTML_PRESENTATION_TYPE) {
-          $state.go('apps.editor.workspace.artboard', { presentationId: presentation.id });
+          return 'apps.editor.workspace.artboard({ presentationId: presentation.id })';
         } else {
-          $state.go('apps.editor.templates.edit', { presentationId: presentation.id });
+          return 'apps.editor.templates.edit({ presentationId: presentation.id })';
         }
       };
     }
