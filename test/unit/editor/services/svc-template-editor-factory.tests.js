@@ -68,7 +68,7 @@ describe('service: templateEditorFactory:', function() {
     expect(templateEditorFactory.addPresentation).to.be.a('function');
   });
 
-  describe('getPresentation:', function() {
+  describe('addPresentation:', function() {
     it('should create a new presentation', function(done) {
       templateEditorFactory.addPresentation({ productId: 'test-id', name: 'Test HTML Template' });
 
@@ -87,7 +87,8 @@ describe('service: templateEditorFactory:', function() {
     it('should get the presentation', function(done) {
       sandbox.stub(presentation, 'get').returns(Q.resolve({
         item: {
-          name: 'Test Presentation'
+          name: 'Test Presentation',
+          templateAttributeData: '{ "attribute1": "value1" }'
         }
       }));
 
@@ -95,6 +96,7 @@ describe('service: templateEditorFactory:', function() {
       .then(function() {
         expect(templateEditorFactory.presentation).to.be.truely;
         expect(templateEditorFactory.presentation.name).to.equal('Test Presentation');
+        expect(templateEditorFactory.presentation.templateAttributeData.attribute1).to.equal('value1');
 
         setTimeout(function() {
           expect(templateEditorFactory.loadingPresentation).to.be.false;
@@ -103,8 +105,30 @@ describe('service: templateEditorFactory:', function() {
           done();
         }, 10);
       })
-      .then(null, function() {
-        done('error');
+      .then(null, function(err) {
+        done(err);
+      })
+      .then(null, done);
+    });
+
+    it('should get the presentation with invalid JSON data', function(done) {
+      sandbox.stub(presentation, 'get').returns(Q.resolve({
+        item: {
+          templateAttributeData: '\\'
+        }
+      }));
+
+      templateEditorFactory.getPresentation('presentationId')
+      .then(function() {
+        expect(templateEditorFactory.presentation).to.be.truely;
+        expect(templateEditorFactory.presentation.templateAttributeData).to.be.truely;
+
+        setTimeout(function() {
+          done();
+        }, 10);
+      })
+      .then(null, function(err) {
+        done(err);
       })
       .then(null, done);
     });

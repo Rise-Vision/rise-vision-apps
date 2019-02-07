@@ -414,11 +414,11 @@ angular.module('risevision.editor.services')
         });
 
         modalInstance.result.then(function (productDetails) {
-          if (!productDetails || (!productDetails.rvaEntityId && !_isHtmlTemplate(productDetails))) {
+          if (!productDetails || (!productDetails.rvaEntityId && !factory.isHtmlTemplate(productDetails))) {
             return;
           }
 
-          if (!_isHtmlTemplate(productDetails)) {
+          if (!factory.isHtmlTemplate(productDetails)) {
             factory.copyTemplate(productDetails);
           } else {
             templateEditorFactory.addPresentation(productDetails);
@@ -488,6 +488,10 @@ angular.module('risevision.editor.services')
           });
       };
 
+      factory.isHtmlTemplate = function (product) {
+        return product.productTag && product.productTag.indexOf(HTML_TEMPLATE_TYPE) >= 0;
+      };
+
       var _showErrorMessage = function (action, e) {
         factory.errorMessage = 'Failed to ' + action + ' Presentation.';
         factory.apiError = processErrorCode('Presentation', action, e);
@@ -495,10 +499,6 @@ angular.module('risevision.editor.services')
         $log.error(factory.errorMessage, e);
 
         messageBox(factory.errorMessage, factory.apiError);
-      };
-
-      var _isHtmlTemplate = function (product) {
-        return product.productTag && product.productTag.indexOf(HTML_TEMPLATE_TYPE) >= 0;
       };
 
       return factory;

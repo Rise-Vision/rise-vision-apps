@@ -33,6 +33,8 @@ angular.module('risevision.template-editor.services')
 
         presentation.get(presentationId)
           .then(function (result) {
+            result.item.templateAttributeData = _parseJSON(result.item.templateAttributeData) || {};
+
             factory.presentation = result.item;
 
             deferred.resolve();
@@ -47,6 +49,15 @@ angular.module('risevision.template-editor.services')
           });
 
         return deferred.promise;
+      };
+
+      var _parseJSON = function (json) {
+        try {
+          return JSON.parse(json);
+        } catch (err) {
+          $log.error('Invalid JSON: ' + err);
+          return null;
+        }
       };
 
       var _showErrorMessage = function (action, e) {
