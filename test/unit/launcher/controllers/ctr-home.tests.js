@@ -1,7 +1,9 @@
 'use strict';
 describe('controller: Home', function() {
   beforeEach(module('risevision.apps.launcher.controllers'));
-  var $scope, $loading, launcherFactory;
+  beforeEach(module('risevision.template-editor.services'));
+  beforeEach(module(mockTranlate()));
+  var $scope, $loading, launcherFactory, HTML_PRESENTATION_TYPE;
   beforeEach(function(){
     module(function ($provide) {
       $provide.service('$loading', function() {
@@ -28,6 +30,7 @@ describe('controller: Home', function() {
     })
     inject(function($injector,$rootScope, $controller) {
       $scope = $rootScope.$new();
+      HTML_PRESENTATION_TYPE = $injector.get('HTML_PRESENTATION_TYPE');
       $controller('HomeCtrl', {
         $scope: $scope
       });
@@ -77,6 +80,20 @@ describe('controller: Home', function() {
       $loading.stop.should.have.been.calledWith("displays-list-loader");
     });
 
+  });
+
+  describe('getEditorLink: ', function() {
+    it('should get Classic Presentation link', function() {
+      var link = $scope.getEditorLink({ id: 'test-id' });
+
+      expect(link).to.equal('apps.editor.workspace.artboard({ presentationId: presentation.id })');
+    });
+
+    it('should get HTML Presentation link', function() {
+      var link = $scope.getEditorLink({ id: 'test-id', presentationType: HTML_PRESENTATION_TYPE });
+
+      expect(link).to.equal('apps.editor.templates.edit({ presentationId: presentation.id })');
+    });
   });
 
 });

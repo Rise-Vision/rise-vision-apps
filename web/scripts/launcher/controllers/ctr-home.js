@@ -2,9 +2,9 @@
 
 angular.module('risevision.apps.launcher.controllers')
   .controller('HomeCtrl', ['$scope', 'launcherFactory', 'editorFactory',
-    'displayFactory', '$loading',
+    'displayFactory', '$loading', 'HTML_PRESENTATION_TYPE',
     function ($scope, launcherFactory, editorFactory, displayFactory,
-      $loading) {
+      $loading, HTML_PRESENTATION_TYPE) {
       $scope.launcherFactory = launcherFactory;
       $scope.editorFactory = editorFactory;
       $scope.displayFactory = displayFactory;
@@ -29,6 +29,14 @@ angular.module('risevision.apps.launcher.controllers')
           $loading.stop('displays-list-loader');
         }
       });
+
+      $scope.getEditorLink = function(presentation) {
+        if (presentation.presentationType !== HTML_PRESENTATION_TYPE) {
+          return 'apps.editor.workspace.artboard({ presentationId: presentation.id })';
+        } else {
+          return 'apps.editor.templates.edit({ presentationId: presentation.id })';
+        }
+      };
 
       launcherFactory.load();
     }
