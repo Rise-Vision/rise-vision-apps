@@ -1,8 +1,6 @@
 'use strict';
 describe('controller: Home', function() {
   beforeEach(module('risevision.apps.launcher.controllers'));
-  beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module(mockTranlate()));
   var $scope, $loading, launcherFactory;
   beforeEach(function(){
     module(function ($provide) {
