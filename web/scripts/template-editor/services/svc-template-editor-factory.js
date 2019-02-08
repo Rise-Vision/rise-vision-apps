@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .constant('HTML_PRESENTATION_TYPE', 'HTML Template')
   .factory('templateEditorFactory', ['$q', '$log', '$state', 'messageBox', 'presentation', 'processErrorCode', 'userState', 'HTML_PRESENTATION_TYPE',
     function ($q, $log, $state, messageBox, presentation, processErrorCode, userState, HTML_PRESENTATION_TYPE) {
       var factory = {};

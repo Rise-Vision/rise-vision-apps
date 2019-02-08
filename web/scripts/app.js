@@ -581,7 +581,15 @@ angular.module('risevision.widgets.filters', []);
 angular.module('risevision.template-editor.services', [
   'risevision.common.header',
   'risevision.common.gapi',
-  'risevision.apps.config'
+  'risevision.apps.config',
+  'risevision.editor.services'
 ]);
-angular.module('risevision.template-editor.directives', []);
-angular.module('risevision.template-editor.controllers', []);
+angular.module('risevision.template-editor.directives', [
+  'risevision.template-editor.services'
+]);
+angular.module('risevision.template-editor.filters', [
+  'risevision.template-editor.services'
+]);
+angular.module('risevision.template-editor.controllers', [
+  'risevision.template-editor.services'
+]);

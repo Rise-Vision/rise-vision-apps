@@ -1051,14 +1051,4 @@ describe('service: editorFactory:', function() {
     });
   });
 
-  describe('isHtmlTemplate: ',function() {
-    it('should return true for an HTML Template Product', function () {
-      expect(editorFactory.isHtmlTemplate({ productTag: ['HTMLTemplates'] })).to.be.true;
-    });
-
-    it('should return false for a Legacy Template Product', function () {
-      expect(editorFactory.isHtmlTemplate({ productTag: ['Templates'] })).to.be.false;
-    });
-  });
-
 });

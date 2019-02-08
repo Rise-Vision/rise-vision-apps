@@ -9,14 +9,14 @@ angular.module('risevision.editor.services')
   .factory('editorFactory', ['$q', '$state', 'userState', 'userAuthFactory',
     'presentation', 'presentationParser', 'distributionParser',
     'presentationTracker', 'store', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
-    'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT', 'HTML_TEMPLATE_TYPE',
+    'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT',
     '$modal', '$rootScope', '$window', 'scheduleFactory', 'plansFactory', 'processErrorCode', 'messageBox',
-    '$templateCache', '$log', 'templateEditorFactory',
+    '$templateCache', '$log', 'templateEditorFactory', 'presentationUtils',
     function ($q, $state, userState, userAuthFactory, presentation,
       presentationParser, distributionParser, presentationTracker, store,
       VIEWER_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED,
-      DEFAULT_LAYOUT, HTML_TEMPLATE_TYPE, $modal, $rootScope, $window,
-      scheduleFactory, plansFactory, processErrorCode, messageBox, $templateCache, $log, templateEditorFactory) {
+      DEFAULT_LAYOUT, $modal, $rootScope, $window,
+      scheduleFactory, plansFactory, processErrorCode, messageBox, $templateCache, $log, templateEditorFactory, presentationUtils) {
       var factory = {};
       var JSON_PARSE_ERROR = 'JSON parse error';
 
@@ -414,11 +414,11 @@ angular.module('risevision.editor.services')
         });
 
         modalInstance.result.then(function (productDetails) {
-          if (!productDetails || (!productDetails.rvaEntityId && !factory.isHtmlTemplate(productDetails))) {
+          if (!productDetails || (!productDetails.rvaEntityId && !presentationUtils.isHtmlTemplate(productDetails))) {
             return;
           }
 
-          if (!factory.isHtmlTemplate(productDetails)) {
+          if (!presentationUtils.isHtmlTemplate(productDetails)) {
             factory.copyTemplate(productDetails);
           } else {
             templateEditorFactory.addPresentation(productDetails);
@@ -486,10 +486,6 @@ angular.module('risevision.editor.services')
               userAuthFactory.addEventListenerVisibilityAPI();
             });
           });
-      };
-
-      factory.isHtmlTemplate = function (product) {
-        return product.productTag && product.productTag.indexOf(HTML_TEMPLATE_TYPE) >= 0;
       };
 
       var _showErrorMessage = function (action, e) {
