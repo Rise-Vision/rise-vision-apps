@@ -22,7 +22,7 @@
         </thead>
 
         <tbody class="table-body">
-          <tr class="table-body__row u_clickable" data-ng-click="toggleObject.item = $index; select(presentation.id, presentation.name);" data-ng-class="{'active' : toggleObject.item == $index}" ng-repeat="presentation in factory.items.list">
+          <tr class="table-body__row u_clickable" data-ng-click="toggleObject.item = $index; select(presentation.id, presentation.name, presentation.presentationType);" data-ng-class="{'active' : toggleObject.item == $index}" ng-repeat="presentation in factory.items.list">
             <td id="presentationName" class="table-body__cell">{{presentation.name}}</td>
             <td class="table-body__cell text-right"><span ng-class="{'text-danger': presentation.revisionStatus==1}">{{presentation.revisionStatusName | presentationStatus}}</span></td>
           </tr>
