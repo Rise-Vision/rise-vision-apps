@@ -44,11 +44,11 @@ describe('directive: scheduleFields', function() {
       expect($scope.isPreviewAvailable()).to.be.true;
       $scope.schedule.content = [ classicPres1, classicPres2 ];
       expect($scope.isPreviewAvailable()).to.be.true;
-      $scope.schedule.content = [ htmlPres1 ];
-      expect($scope.isPreviewAvailable()).to.be.true;
     });
 
     it('should not have Preview button available', function() {
+      $scope.schedule.content = [ htmlPres1 ];
+      expect($scope.isPreviewAvailable()).to.be.false;
       $scope.schedule.content = [ classicPres1, htmlPres1 ];
       expect($scope.isPreviewAvailable()).to.be.false;
       $scope.schedule.content = [ classicPres1, classicPres2, htmlPres1 ];

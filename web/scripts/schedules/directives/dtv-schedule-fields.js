@@ -47,7 +47,7 @@ angular.module('risevision.schedules.directives')
               return presentationUtils.isHtmlPresentation(presentation);
             });
 
-            return htmlPresentations.length === 0 || htmlPresentations.length === $scope.schedule.content.length;
+            return htmlPresentations.length === 0;
           };
         } //link()
       };
