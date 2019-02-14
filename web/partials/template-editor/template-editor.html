@@ -1,33 +1,14 @@
 <style>
-  .html-template-editor .footer {
+  .template-editor .footer {
     padding: 10px;
   }
 
-  .html-template-editor .footer button {
+  .template-editor .footer button {
   }
 </style>
 
-<div class="container-flow html-template-editor">
-  <div class="workspace-toolbar">
-    <!-- Presentation Name -->
-    <h2 class="presentation-name">
-      {{factory.presentation.name}}
-      <i class="fa fa-pencil u_margin-left"></i>
-      <i class="fa fa-pencil u_margin-left hidden-xs"></i>
-    </h2>
- 
-    <div class="toolbar-right">
-      <button class="btn btn-primary btn-fixed-width u_margin-right hidden-xs">
-        {{ 'common.save' | translate }}
-      </button>
-
-      <button disabled class="btn btn-primary btn-fixed-width u_margin-right hidden-xs">
-        {{'common.publish' | translate}}
-      </button>
-
-      <i class="fa fa-pencil u_margin-left visible-xs"></i>
-    </div>
-  </div>
+<div class="container-flow template-editor">
+  <template-editor-toolbar class="workspace-toolbar"></template-editor-toolbar>
   <div class="row">
     <div class="col-sm-8 col-sm-push-4" style="background-color: #C0C0C0">
       preview
