@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('templateEditorFactory', ['$q', '$log', '$state', 'messageBox', 'presentation', 'processErrorCode', 'userState', 'HTML_PRESENTATION_TYPE',
-    function ($q, $log, $state, messageBox, presentation, processErrorCode, userState, HTML_PRESENTATION_TYPE) {
+  .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', 'messageBox', 'presentation', 'processErrorCode', 'userState', 'HTML_PRESENTATION_TYPE',
+    function ($q, $log, $state, $rootScope, messageBox, presentation, processErrorCode, userState, HTML_PRESENTATION_TYPE) {
       var factory = {};
 
-      factory.addPresentation = function (productDetails) {
+      factory.createFromTemplate = function (productDetails) {
         _clearMessages();
 
         factory.presentation = {
@@ -20,6 +20,43 @@ angular.module('risevision.template-editor.services')
         };
 
         $state.go('apps.editor.templates.add');
+      };
+
+      factory.addPresentation = function () {
+        var deferred = $q.defer(),
+          presentationVal = JSON.parse(JSON.stringify(factory.presentation));
+
+        _clearMessages();
+
+        //show loading spinner
+        factory.loadingPresentation = true;
+        factory.savingPresentation = true;
+
+        presentationVal.templateAttributeData = JSON.stringify(presentationVal.templateAttributeData);
+
+        presentation.add(presentationVal)
+          .then(function (resp) {
+            if (resp && resp.item && resp.item.id) {
+              $rootScope.$broadcast('presentationCreated');
+
+              $state.go('apps.editor.templates.add', {
+                presentationId: resp.item.id
+              });
+
+              deferred.resolve(resp.item.id);
+            }
+          })
+          .then(null, function (e) {
+            _showErrorMessage('add', e);
+
+            deferred.reject(e);
+          })
+          .finally(function () {
+            factory.loadingPresentation = false;
+            factory.savingPresentation = false;
+          });
+
+        return deferred.promise;
       };
 
       factory.getPresentation = function (presentationId) {
