@@ -5,35 +5,10 @@
 
   .html-template-editor .footer button {
   }
-
-  .html-template-editor-toolbar {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    z-index: 100;
-    background-color: #FFF;
-    border-bottom: 1px solid #f2f2f2;
-    border-top: 1px solid #f2f2f2;
-    padding: 8px 10px;
-  }
-
-  .html-template-editor-toolbar .presentation-name {
-    max-width: calc(100vw - 240px);
-    font-size: 16px;
-    margin: 0;
-    padding: 0;
-    line-height: 32px;
-  }
-
-  .html-template-editor-toolbar .toolbar-right {
-      display: flex;
-      margin-left: auto;
-      flex-wrap: nowrap;
-  }
 </style>
 
 <div class="container-flow html-template-editor">
-  <toolbar class="html-template-editor-toolbar">
+  <div class="workspace-toolbar">
     <!-- Presentation Name -->
     <h2 class="presentation-name">
       {{factory.presentation.name}}
@@ -52,16 +27,16 @@
 
       <i class="fa fa-pencil u_margin-left visible-xs"></i>
     </div>
-  </toolbar>
+  </div>
   <div class="row">
     <div class="col-sm-8 col-sm-push-4" style="background-color: #C0C0C0">
       preview
     </div>
-    <sidebar class="col-sm-4 col-sm-pull-8">
+    <div class="col-sm-4 col-sm-pull-8">
       attribute editor
-    </sidebar>
+    </div>
   </div>
-  <footer class="footer navbar-fixed-bottom visible-xs">
+  <div class="footer navbar-fixed-bottom visible-xs">
     <button class="btn btn-primary btn-block">
       {{ 'common.save' | translate }}
     </button>
@@ -69,5 +44,5 @@
     <button disabled class="btn btn-primary btn-block">
       {{'common.publish' | translate}}
     </button>
-  </footer>
+  </div>
 </div>
