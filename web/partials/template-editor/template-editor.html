@@ -8,20 +8,20 @@
 </style>
 
 <div class="container-flow template-editor">
-  <toolbar class="workspace-toolbar" id="workspaceToolbar">
+  <toolbar class="workspace-toolbar">
     <!-- Presentation Name -->
-    <h2 class="presentation-name" id="title">
+    <h2 class="presentation-name">
       {{factory.presentation.name}}
       <i class="fa fa-pencil u_margin-left"></i>
       <i class="fa fa-pencil u_margin-left hidden-xs"></i>
     </h2>
 
     <div class="toolbar-right">
-      <button id="saveButton" class="btn btn-primary btn-fixed-width u_margin-right hidden-xs">
+      <button class="btn btn-primary btn-fixed-width u_margin-right hidden-xs">
         {{ 'common.save' | translate }}
       </button>
 
-      <button id="publishButton" disabled class="btn btn-primary btn-fixed-width u_margin-right hidden-xs">
+      <button disabled class="btn btn-primary btn-fixed-width u_margin-right hidden-xs">
         {{'common.publish' | translate}}
       </button>
 
@@ -37,11 +37,11 @@
     </sidebar>
   </div>
   <footer class="footer navbar-fixed-bottom visible-xs">
-    <button id="saveButtonMobile" class="btn btn-primary btn-block">
+    <button class="btn btn-primary btn-block">
       {{ 'common.save' | translate }}
     </button>
 
-    <button id="publishButtonMobile" disabled class="btn btn-primary btn-block">
+    <button disabled class="btn btn-primary btn-block">
       {{'common.publish' | translate}}
     </button>
   </footer>
