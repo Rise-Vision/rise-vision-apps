@@ -98,7 +98,7 @@ describe('service: editorFactory:', function() {
         }
       };
     });
-    $provide.service('presentationTracker', function() { 
+    $provide.service('presentationTracker', function() {
       return function(name) {
         trackerCalled = name;
       };
@@ -126,7 +126,7 @@ describe('service: editorFactory:', function() {
         }
       };
     });
-    $provide.service('userState', function() { 
+    $provide.service('userState', function() {
       return {
         getUsername : function() {
           return 'testusername';
@@ -134,7 +134,7 @@ describe('service: editorFactory:', function() {
         _restoreState : function() {}
       };
     });
-    $provide.service('userAuthFactory', function() { 
+    $provide.service('userAuthFactory', function() {
       return {
         addEventListenerVisibilityAPI : function() {},
         removeEventListenerVisibilityAPI : function() {}
@@ -152,7 +152,7 @@ describe('service: editorFactory:', function() {
     $provide.service('processErrorCode', function() {
       return processErrorCode = sinon.spy(function() { return 'error'; });
     });
-    $provide.service('scheduleFactory', function() { 
+    $provide.service('scheduleFactory', function() {
       return {
         createFirstSchedule: function(){
           return Q.resolve();
@@ -180,12 +180,12 @@ describe('service: editorFactory:', function() {
     });
     $provide.service('templateEditorFactory', function() {
       return templateEditorFactory = {
-        addPresentation: sinon.stub(),
+        createFromTemplate: sinon.stub(),
         getPresentation: sinon.stub()
       };
     });
   }));
-  var editorFactory, trackerCalled, updatePresentation, currentState, stateParams, 
+  var editorFactory, trackerCalled, updatePresentation, currentState, stateParams,
     presentationParser, $window, $modal, processErrorCode, scheduleFactory, userAuthFactory,
     $rootScope, plansFactory, templateEditorFactory;
   beforeEach(function(){
@@ -212,12 +212,12 @@ describe('service: editorFactory:', function() {
 
   it('should exist',function(){
     expect(editorFactory).to.be.truely;
-    
+
     expect(editorFactory.presentation).to.be.truely;
     expect(editorFactory.loadingPresentation).to.be.false;
     expect(editorFactory.savingPresentation).to.be.false;
     expect(editorFactory.apiError).to.not.be.truely;
-    
+
     expect(editorFactory.newPresentation).to.be.a('function');
     expect(editorFactory.getPresentation).to.be.a('function');
     expect(editorFactory.addPresentation).to.be.a('function');
@@ -237,19 +237,19 @@ describe('service: editorFactory:', function() {
     expect(editorFactory.presentationId).to.not.be.ok;
   });
 
-  
+
   it('newPresentation: should reset the presentation',function(){
     editorFactory.presentation.id = 'presentationId';
-    
+
     editorFactory.newPresentation();
-    
+
     expect(trackerCalled).to.equal('New Presentation');
-    
+
     expect(editorFactory.presentation.layout).to.be.ok;
     expect(editorFactory.presentation.parsed).to.be.true;
     expect(editorFactory.presentationId).to.not.be.ok;
   });
-    
+
   describe('getPresentation:',function(){
     it("should get the presentation",function(done){
       editorFactory.getPresentation("presentationId")
@@ -270,10 +270,10 @@ describe('service: editorFactory:', function() {
       })
       .then(null,done);
     });
-    
+
     it("should handle failure to get presentation correctly",function(done){
       updatePresentation = false;
-      
+
       editorFactory.getPresentation()
       .then(function(result) {
         done(result);
@@ -314,7 +314,7 @@ describe('service: editorFactory:', function() {
       .then(null,done);
     })
   });
-  
+
   describe('addPresentation:',function(){
     it('should add the presentation',function(done){
       updatePresentation = true;
@@ -368,7 +368,7 @@ describe('service: editorFactory:', function() {
         createFirstScheduleSpy.should.have.been.called;
         $modalOpenSpy.should.have.been.called;
         expect($modalOpenSpy.getCall(0).args[0].templateUrl).to.equal('partials/editor/auto-schedule-modal.html');
-        expect($modalOpenSpy.getCall(0).args[0].controller).to.equal('AutoScheduleModalController');  
+        expect($modalOpenSpy.getCall(0).args[0].controller).to.equal('AutoScheduleModalController');
 
         done();
       },100);
@@ -396,7 +396,7 @@ describe('service: editorFactory:', function() {
         expect(editorFactory.loadingPresentation).to.be.false;
         expect(editorFactory.errorMessage).to.not.be.ok;
         expect(editorFactory.apiError).to.not.be.ok;
-        
+
         done();
       },10);
     });
@@ -405,7 +405,7 @@ describe('service: editorFactory:', function() {
       updatePresentation = false;
 
       editorFactory.addPresentation();
-      
+
       expect(editorFactory.savingPresentation).to.be.true;
       expect(editorFactory.loadingPresentation).to.be.true;
 
@@ -422,7 +422,7 @@ describe('service: editorFactory:', function() {
         done();
       },10);
     });
-    
+
     it('should update embedded ids',function(){
       editorFactory.presentation.placeholders = [
         {
@@ -455,7 +455,7 @@ describe('service: editorFactory:', function() {
         });
     });
   });
-  
+
   describe('updatePresentation: ',function(){
     it('should update the presentation',function(done){
       updatePresentation = true;
@@ -544,37 +544,37 @@ describe('service: editorFactory:', function() {
       },10);
     });
   });
-  
+
   describe('isRevised: ', function() {
     beforeEach(function() {
       editorFactory.newPresentation();
     });
-    
+
     it('should default to false', function() {
       expect(editorFactory.isRevised()).to.be.false;
     });
 
     it('should not be revised if published', function() {
       editorFactory.presentation.revisionStatusName = 'Published';
-      
+
       expect(editorFactory.isRevised()).to.be.false;
     });
 
     it('should be revised with revision status Revised', function() {
       editorFactory.presentation.revisionStatusName = 'Revised';
-      
+
       expect(editorFactory.isRevised()).to.be.true;
     });
-    
+
   });
-  
+
   describe('deletePresentation: ',function(){
     it('should delete the presentation',function(done){
       updatePresentation = true;
       var broadcastSpy = sinon.spy($rootScope,'$broadcast');
 
       editorFactory.deletePresentation();
-      
+
       expect(editorFactory.loadingPresentation).to.be.true;
 
       setTimeout(function(){
@@ -587,19 +587,19 @@ describe('service: editorFactory:', function() {
         done();
       },10);
     });
-    
+
     it('should show an error if fails to delete the presentation',function(done){
       updatePresentation = false;
-      
+
       editorFactory.deletePresentation();
-      
+
       expect(editorFactory.loadingPresentation).to.be.true;
 
       setTimeout(function(){
         expect(currentState).to.be.empty;
         expect(trackerCalled).to.not.be.ok;
         expect(editorFactory.loadingPresentation).to.be.false;
-        
+
         expect(editorFactory.errorMessage).to.be.ok;
         expect(editorFactory.apiError).to.be.ok;
         expect(messageBoxStub).to.have.been.called;
@@ -608,7 +608,7 @@ describe('service: editorFactory:', function() {
       },10);
     });
   });
-  
+
   describe('copyPresentation: ', function() {
     it('should copy the presentation',function(){
       editorFactory.presentation = {
@@ -616,17 +616,17 @@ describe('service: editorFactory:', function() {
         name: 'New Presentation',
         revisionStatusname: 'revised'
       };
-      
+
       editorFactory.copyPresentation();
-      
+
       expect(editorFactory.presentation.id).to.not.be.ok;
       expect(editorFactory.presentation.name).to.equal('Copy of New Presentation');
-      
+
       expect(trackerCalled).to.equal('Presentation Copied');
       expect(currentState).to.equal('apps.editor.workspace.artboard');
       expect(stateParams).to.deep.equal({presentationId: undefined, copyPresentation:true});
     });
-  
+
     it('should copy a template',function(){
       editorFactory.presentation = {
         id: 'someId',
@@ -634,13 +634,13 @@ describe('service: editorFactory:', function() {
         revisionStatusname: 'revised',
         isTemplate: true
       };
-      
+
       editorFactory.copyPresentation();
-      
+
       expect(editorFactory.presentation.id).to.not.be.ok;
       expect(editorFactory.presentation.name).to.equal('Copy of New Presentation');
       expect(editorFactory.presentation.isTemplate).to.be.false;
-      
+
       expect(trackerCalled).to.equal('Template Copied');
       expect(currentState).to.equal('apps.editor.workspace.artboard');
       expect(stateParams).to.deep.equal({presentationId: undefined, copyPresentation:true});
@@ -677,20 +677,20 @@ describe('service: editorFactory:', function() {
       editorFactory.addPresentationModal();
       expect(trackerCalled).to.equal('Add Presentation');
       var copyTemplateSpy = sinon.spy(editorFactory, 'copyTemplate');
-      
+
       setTimeout(function() {
         copyTemplateSpy.should.have.not.been.called;
 
-        expect(templateEditorFactory.addPresentation).to.have.been.called;
+        expect(templateEditorFactory.createFromTemplate).to.have.been.called;
 
         done();
       }, 10);
     });
   });
-  
+
   describe('copyTemplate: ', function() {
     var newCopyOfSpy, copyPresentationSpy;
-    
+
     beforeEach(function() {
       newCopyOfSpy = sinon.spy(editorFactory, 'newCopyOf');
       copyPresentationSpy = sinon.spy(editorFactory, 'copyPresentation');
@@ -698,77 +698,77 @@ describe('service: editorFactory:', function() {
 
     it('should copy the template based on productDetails', function(done) {
       editorFactory.copyTemplate({rvaEntityId: 'presentationId'});
-      
-      newCopyOfSpy.should.have.been.calledWith('presentationId');
-      
-      setTimeout(function() {
-        copyPresentationSpy.should.have.been.called;        
-        
-        done();
-      }, 10);
-    });
-    
-    it('should copy the template based on rvaEntityId', function(done) {      
-      editorFactory.copyTemplate(null, 'presentationId');
-      
+
       newCopyOfSpy.should.have.been.calledWith('presentationId');
 
       setTimeout(function() {
-        copyPresentationSpy.should.have.been.called;        
-        
+        copyPresentationSpy.should.have.been.called;
+
         done();
       }, 10);
     });
-    
-    it('if API returns 403, and product is available, show plans modal', function(done) {  
+
+    it('should copy the template based on rvaEntityId', function(done) {
+      editorFactory.copyTemplate(null, 'presentationId');
+
+      newCopyOfSpy.should.have.been.calledWith('presentationId');
+
+      setTimeout(function() {
+        copyPresentationSpy.should.have.been.called;
+
+        done();
+      }, 10);
+    });
+
+    it('if API returns 403, and product is available, show plans modal', function(done) {
       var $modalOpenSpy = sinon.spy($modal, 'open');
-      
-      updatePresentation = false;    
+
+      updatePresentation = false;
       editorFactory.copyTemplate({rvaEntityId: 'presentationId'});
-      
+
       newCopyOfSpy.should.have.been.calledWith('presentationId');
-      
+
       setTimeout(function() {
-        copyPresentationSpy.should.not.have.been.called;        
-        
+        copyPresentationSpy.should.not.have.been.called;
+
         plansFactory.showPlansModal.should.have.been.calledWith('editor-app.templatesLibrary.access-warning');
-        done();
-      }, 10);
-    });
-    
-    it('if API returns 403, and product is not available, show plans modal', function(done) {  
-      var $modalOpenSpy = sinon.spy($modal, 'open');
-      
-      updatePresentation = false;    
-      editorFactory.copyTemplate(null, 'presentationId');
-      
-      newCopyOfSpy.should.have.been.calledWith('presentationId');
-      
-      setTimeout(function() {
-        copyPresentationSpy.should.not.have.been.called;        
-        
-        plansFactory.showPlansModal.should.have.been.calledWith('editor-app.templatesLibrary.access-warning');
-        
         done();
       }, 10);
     });
 
-    it('if API returns 403, and a trial is started, should reload page', function(done) {  
+    it('if API returns 403, and product is not available, show plans modal', function(done) {
       var $modalOpenSpy = sinon.spy($modal, 'open');
-      
-      updatePresentation = false;    
+
+      updatePresentation = false;
       editorFactory.copyTemplate(null, 'presentationId');
-      
+
       newCopyOfSpy.should.have.been.calledWith('presentationId');
-      
+
+      setTimeout(function() {
+        copyPresentationSpy.should.not.have.been.called;
+
+        plansFactory.showPlansModal.should.have.been.calledWith('editor-app.templatesLibrary.access-warning');
+
+        done();
+      }, 10);
+    });
+
+    it('if API returns 403, and a trial is started, should reload page', function(done) {
+      var $modalOpenSpy = sinon.spy($modal, 'open');
+
+      updatePresentation = false;
+      editorFactory.copyTemplate(null, 'presentationId');
+
+      newCopyOfSpy.should.have.been.calledWith('presentationId');
+
       setTimeout(function() {
         plansFactory.showPlansModal.should.have.been.calledWith('editor-app.templatesLibrary.access-warning');
 
         $rootScope.$emit('risevision.company.trial.started');
         $rootScope.$digest();
-        
+
         $window.location.reload.should.have.been.called;
-        
+
         done();
       }, 10);
     });
@@ -786,13 +786,13 @@ describe('service: editorFactory:', function() {
       size: 'md',
       controller: 'SharedTemplatesModalController'
     });
-    
+
     setTimeout(function() {
       expect(editorFactory.loadingPresentation).to.be.false;
 
       expect(editorFactory.presentation.id).to.not.be.ok;
       expect(editorFactory.presentation.name).to.equal('Copy of some presentation');
-      
+
       expect(trackerCalled).to.equal('Presentation Copied');
       expect(currentState).to.equal('apps.editor.workspace.artboard');
       expect(stateParams).to.deep.equal({presentationId: undefined, copyPresentation:true});
@@ -806,16 +806,16 @@ describe('service: editorFactory:', function() {
     it('should return a promise', function() {
       expect(editorFactory.newCopyOf().then).to.be.a.function;
     });
-    
+
     it('should copy Presentation', function(done) {
       editorFactory.newCopyOf("presentationId");
-      
+
       setTimeout(function() {
         expect(editorFactory.loadingPresentation).to.be.false;
 
         expect(editorFactory.presentation.id).to.not.be.ok;
         expect(editorFactory.presentation.name).to.equal('Copy of some presentation');
-        
+
         expect(trackerCalled).to.equal('Presentation Copied');
         expect(currentState).to.equal('apps.editor.workspace.artboard');
         expect(stateParams).to.deep.equal({presentationId: undefined, copyPresentation:true});
@@ -883,9 +883,9 @@ describe('service: editorFactory:', function() {
 
   it('should preview a presentation (or template)', function(done) {
       var $windowOpenSpy = sinon.spy($window, 'open');
-      
+
       editorFactory.preview('presentationId');
-      
+
       setTimeout(function() {
         $windowOpenSpy.should.have.been.calledWith('http://rvaviewer-test.appspot.com/?type=presentation&id=presentationId', 'rvPresentationPreview');
         done();
@@ -899,7 +899,7 @@ describe('service: editorFactory:', function() {
       var timeBeforePublish = new Date();
 
       editorFactory.publishPresentation();
-      
+
       expect(editorFactory.savingPresentation).to.be.true;
       expect(editorFactory.loadingPresentation).to.be.true;
 
@@ -942,7 +942,7 @@ describe('service: editorFactory:', function() {
       var broadcastSpy = sinon.spy($rootScope,'$broadcast');
 
       editorFactory.save();
-      
+
       setTimeout(function(){
         expect(trackerCalled).to.equal("Presentation Created");
         broadcastSpy.should.have.been.calledWith('presentationCreated');
@@ -950,15 +950,15 @@ describe('service: editorFactory:', function() {
         done();
       }, 10);
     });
-    
+
     it('should update presentation', function(done){
       editorFactory.presentation.id = "presentationId";
-      
+
       editorFactory.save();
-      
+
       setTimeout(function(){
         expect(trackerCalled).to.equal("Presentation Updated");
-        
+
         done();
       }, 10);
     });
@@ -969,7 +969,7 @@ describe('service: editorFactory:', function() {
       updatePresentation = true;
 
       editorFactory.restorePresentation();
-      
+
       expect(editorFactory.loadingPresentation).to.be.true;
 
       setTimeout(function(){

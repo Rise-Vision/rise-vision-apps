@@ -3,13 +3,14 @@
 
   angular.module('risevision.editor.controllers')
     .controller('ProductDetailsModalController', ['$scope', '$rootScope',
-      '$loading', '$modalInstance', 'userState',
+      '$loading', '$modalInstance', 'userState', 'presentationUtils',
       'checkTemplateAccess', 'plansFactory', 'product',
       function ($scope, $rootScope, $loading, $modalInstance, userState,
-        checkTemplateAccess, plansFactory, product) {
+        presentationUtils, checkTemplateAccess, plansFactory, product) {
         $scope.product = product;
         $scope.canUseProduct = product.paymentTerms === 'free';
         $scope.showSubscriptionStatus = product.paymentTerms !== 'free';
+        $scope.showPreviewLink = !presentationUtils.isHtmlTemplate(product);
         $scope.detailsOpen = false;
 
         if (!$scope.canUseProduct) {

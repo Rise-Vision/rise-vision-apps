@@ -421,7 +421,7 @@ angular.module('risevision.editor.services')
           if (!presentationUtils.isHtmlTemplate(productDetails)) {
             factory.copyTemplate(productDetails);
           } else {
-            templateEditorFactory.addPresentation(productDetails);
+            templateEditorFactory.createFromTemplate(productDetails);
           }
         });
       };

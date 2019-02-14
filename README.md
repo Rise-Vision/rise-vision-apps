@@ -85,6 +85,18 @@ If you have not ran git pull/git fetch in a while, you may want to run: git fetc
 
 Because of the way git works (mainly, references to remote repositories), it's important to have an up to date copy of the repository. The proposed command, ```git fetch --prune```, will retrieve the latest branches from GitHub and remove no longer existing references to branches. It will NOT remove local branches and it will not merge into working copies, which means unless you are doing something really specific with your repository, it's safe to run.
 
+## Restoring Jenkins company
+
+In case the Jenkins Company gets removed, which causes all e2e tests to fail, the steps to recreate it are:
+
+- Login with jenkins@risevision.com
+- Create a new company
+- Subscribe to a plan (any plan would do). Not a trial, a renewable Subscription. This needs to be done as jenkins@risevision.com
+- Go to Company Settings and uncheck *"Share Company Plan”*
+- Create an empty presentation named *TEST_E2E_PRESENTATION*
+- In Storage, upload an image file named *logo.gif*
+- In Storage, create a folder named *E2E_TEST_FOLDER*
+
 ## Submitting Issues
 If you encounter problems or find defects we really want to hear about them. If you could take the time to add them as issues to this Repository it would be most appreciated. When reporting issues please use the following format where applicable:
 

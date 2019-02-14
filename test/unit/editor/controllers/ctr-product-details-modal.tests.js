@@ -11,7 +11,7 @@ describe('controller: ProductDetailsModalController', function() {
     $provide.service('userState',function(){
       return {
         getCopyOfUserCompany : function(){
-          return {        
+          return {
           };
         }
       }
@@ -31,24 +31,31 @@ describe('controller: ProductDetailsModalController', function() {
       return {
         showPlansModal: function() {}
       }
-    })
+    });
+    $provide.service('presentationUtils',function(){
+      return {
+        isHtmlTemplate : function(){
+          return htmlTemplate;
+        }
+      }
+    });
   }));
   var $scope, $modalInstance, $modalInstanceDismissSpy, $modalInstanceCloseSpy, product,
-    $loading, checkTemplateAccessSpy, storeAuthorize;
-  
+    $loading, checkTemplateAccessSpy, storeAuthorize, htmlTemplate;
+
   function initController(paymentTerms) {
     inject(function($injector,$rootScope, $controller, checkTemplateAccess){
       $scope = $rootScope.$new();
       $modalInstance = $injector.get('$modalInstance');
 
       checkTemplateAccessSpy = checkTemplateAccess;
-      
+
       $modalInstanceDismissSpy = sinon.spy($modalInstance, 'dismiss');
       $modalInstanceCloseSpy = sinon.spy($modalInstance, 'close');
 
       product = {
-        paymentTerms: paymentTerms ? paymentTerms: 'free', 
-        productCode: '1', 
+        paymentTerms: paymentTerms ? paymentTerms: 'free',
+        productCode: '1',
         pricing:[
           {
             priceUSD: '10',
@@ -65,7 +72,7 @@ describe('controller: ProductDetailsModalController', function() {
       $scope.$digest();
     });
   }
-  
+
   it('should exist',function(){
     initController();
     expect($scope).to.be.ok;
@@ -88,9 +95,23 @@ describe('controller: ProductDetailsModalController', function() {
 
   it('should allow free product',function(){
     initController();
-    
+
     expect($scope.canUseProduct).to.be.true;
   });
+
+  it( 'should not show preview link when product is HTML Template', function() {
+    htmlTemplate = true;
+    initController();
+
+    expect($scope.showPreviewLink).to.be.false;
+  } );
+
+  it( 'should show preview link when product is not HTML Template', function() {
+    htmlTemplate = false;
+    initController();
+
+    expect($scope.showPreviewLink).to.be.true;
+  } );
 
   it('should retrieve premium product status',function(){
     initController('premium');
@@ -103,7 +124,7 @@ describe('controller: ProductDetailsModalController', function() {
   it('should allow owned products',function(done){
     storeAuthorize = true;
     initController('premium');
-    
+
     checkTemplateAccessSpy.should.have.been.called;
     setTimeout(function() {
       expect($scope.canUseProduct).to.be.true;
