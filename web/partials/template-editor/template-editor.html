@@ -1,9 +1,34 @@
 <style>
-  .template-editor .footer {
+  .html-template-editor .footer {
     padding: 10px;
   }
 
-  .template-editor .footer button {
+  .html-template-editor .footer button {
+  }
+
+  .html-template-editor-toolbar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    z-index: 100;
+    background-color: #FFF;
+    border-bottom: 1px solid #f2f2f2;
+    border-top: 1px solid #f2f2f2;
+    padding: 8px 10px;
+  }
+
+  .html-template-editor-toolbar .presentation-name {
+    max-width: calc(100vw - 240px);
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    line-height: 32px;
+  }
+
+  .html-template-editor-toolbar .toolbar-right {
+      display: flex;
+      margin-left: auto;
+      flex-wrap: nowrap;
   }
 </style>
 
