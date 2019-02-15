@@ -1,15 +1,80 @@
 <style>
+  .template-editor {
+    background-color: #FFF;
+  }
+
+  .template-editor-toolbar {
+    display: flex;
+    align-items: center;
+    z-index: 100;
+    border-bottom: 2px solid #f2f2f2;
+    border-top: 1px solid #f2f2f2;
+    padding: 18px 0px;
+    margin: 0px 20px;
+    overflow: hidden;
+    text-overflow: clip;
+    white-space: nowrap;
+  }
+
+  .template-editor-toolbar i {
+    font-size: 18px;
+  }
+
+  .template-editor-toolbar .presentation-name {
+      max-width: calc(100vw - 40px);
+      font-size: 20px;
+      margin: 0;
+      padding: 0;
+      line-height: 32px;
+  }
+
+  .template-editor-toolbar .presentation-name div {
+    display: inline-block;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+    margin-right: 40px;
+  }
+
+  .template-editor-toolbar .presentation-name i {
+    font-size: 18px;
+  }
+
+  .template-editor-toolbar .toolbar-right {
+    display: flex;
+    margin-left: auto;
+    flex-wrap: nowrap;
+  }
+
+  .template-editor-toolbar button {
+    width: 152px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
   .template-editor .footer {
     padding: 10px;
   }
 
-  .template-editor .footer button {
+  @media screen and (min-width:768px) {
+    .template-editor-toolbar .presentation-name {
+      max-width: calc(100vw - 390px);
+    }
+
+    .template-editor-toolbar .presentation-name div {
+      max-width: calc(100vw - 490px);
+    }
   }
 </style>
 
 <div class="container-flow template-editor">
 
-  <template-editor-toolbar class="workspace-toolbar"></template-editor-toolbar>
+  <div>
+    <template-editor-toolbar class="template-editor-toolbar">
+    </template-editor-toolbar>
+  </div>
 
   <div class="row">
     <template-editor-preview-holder class="col-sm-8 col-sm-push-4">
