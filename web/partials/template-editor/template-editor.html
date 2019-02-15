@@ -8,22 +8,18 @@
 </style>
 
 <div class="container-flow template-editor">
-  <template-editor-toolbar class="workspace-toolbar"></template-editor-toolbar>
-  <div class="row">
-    <div class="col-sm-8 col-sm-push-4" style="background-color: #C0C0C0">
-      preview
-    </div>
-    <div class="col-sm-4 col-sm-pull-8">
-      attribute editor
-    </div>
-  </div>
-  <div class="footer navbar-fixed-bottom visible-xs">
-    <button class="btn btn-primary btn-block">
-      {{ 'common.save' | translate }}
-    </button>
 
-    <button disabled class="btn btn-primary btn-block">
-      {{'common.publish' | translate}}
-    </button>
+  <template-editor-toolbar class="workspace-toolbar"></template-editor-toolbar>
+
+  <div class="row">
+    <template-editor-preview-holder class="col-sm-8 col-sm-push-4">
+    </template-editor-preview-holder>
+
+    <template-attribute-editor class="col-sm-4 col-sm-pull-8">
+    </template-attribute-editor>
   </div>
+
+  <template-editor-footer class="footer navbar-fixed-bottom visible-xs">
+  </template-editor-footer>
+
 </div>
