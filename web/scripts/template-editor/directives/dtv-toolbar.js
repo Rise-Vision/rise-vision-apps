@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('template-editor-toolbar', ['templateEditorFactory',
+  .directive('templateEditorToolbar', ['templateEditorFactory',
     function (templateEditorFactory) {
       return {
         restrict: 'E',

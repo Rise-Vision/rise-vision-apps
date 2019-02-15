@@ -14,15 +14,4 @@ angular.module('risevision.template-editor.controllers')
         }
       });
     }
-  ])
-  .directive('template-editor-toolbar', ['templateEditorFactory',
-    function (templateEditorFactory) {
-      return {
-        restrict: 'E',
-        templateUrl: 'partials/template-editor/toolbar.html',
-        link: function ($scope) {
-          $scope.factory = templateEditorFactory;
-        }
-      };
-    }
   ]);
