@@ -5,7 +5,7 @@ angular.module('risevision.template-editor.directives')
     function (templateEditorFactory) {
       return {
         restrict: 'E',
-        templateUrl: 'partials/template-editor/toolbar.html',
+        template: 'partials/template-editor/toolbar.html',
         link: function ($scope) {
           $scope.factory = templateEditorFactory;
         }
