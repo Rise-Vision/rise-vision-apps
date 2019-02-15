@@ -14,9 +14,7 @@ angular.module('risevision.template-editor.controllers')
         }
       });
     }
-  ]);
-
-angular.module('risevision.template-editor.directives')
+  ])
   .directive('template-editor-toolbar', ['templateEditorFactory',
     function (templateEditorFactory) {
       return {
