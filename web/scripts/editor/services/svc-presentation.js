@@ -4,7 +4,7 @@
 
 angular.module('risevision.editor.services')
   .constant('PRESENTAION_WRITABLE_FIELDS', [
-    'name', 'layout', 'distribution', 'isTemplate', 'embeddedIds', 'productId',
+    'name', 'layout', 'distribution', 'isTemplate', 'embeddedIds', 'productCode',
     'presentationType', 'templateAttributeData'
   ])
   .constant('PRESENTAION_SEARCH_FIELDS', [

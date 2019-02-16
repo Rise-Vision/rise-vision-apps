@@ -10,7 +10,7 @@ angular.module('risevision.template-editor.services')
 
         factory.presentation = {
           id: undefined,
-          productId: productDetails.productId,
+          productCode: productDetails.productCode,
           name: 'Copy of ' + productDetails.name,
           presentationType: HTML_PRESENTATION_TYPE,
           templateAttributeData: {},
