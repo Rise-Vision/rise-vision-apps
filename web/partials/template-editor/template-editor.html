@@ -21,11 +21,11 @@
   }
 
   .template-editor-toolbar .presentation-name {
-      max-width: calc(100vw - 40px);
-      font-size: 20px;
-      margin: 0;
-      padding: 0;
-      line-height: 32px;
+    max-width: calc(100vw - 40px);
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+    line-height: 32px;
   }
 
   .template-editor-toolbar .presentation-name div {
@@ -62,15 +62,28 @@
 
   .preview-holder {
     padding: 20px;
-    background-image: linear-gradient(rgb(255, 255, 255), rgb(230, 230, 230));
+    background-image: linear-gradient(white, lightgray);
+    min-height: 50px;
   }
 
   .attribute-editor {
     padding: 20px;
+    min-height: 50px;
   }
 
-  .template-editor .footer {
+  .template-editor-footer {
     padding: 10px;
+  }
+
+  .template-editor-footer > div {
+    border-top: 2px solid #f2f2f2;
+    padding-top: 10px;
+  }
+
+  .template-editor-footer button {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: 10px 0px;fs
   }
 
   @media screen and (min-width:768px) {
@@ -80,6 +93,14 @@
 
     .template-editor-toolbar .presentation-name div {
       max-width: calc(100vw - 490px);
+    }
+
+    .preview-holder {
+      min-height: calc(100vh - 80px);
+    }
+
+    .attribute-editor {
+      min-height: calc(100vh - 80px);
     }
   }
 </style>
