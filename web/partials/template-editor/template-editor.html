@@ -29,6 +29,7 @@
   }
 
   .template-editor-toolbar .presentation-name div {
+    max-width: calc(100vw - 140px);
     display: inline-block;
     font-weight: bold;
     overflow: hidden;
@@ -54,6 +55,19 @@
     padding-bottom: 10px;
   }
 
+  .template-editor-body {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+  .preview-holder {
+    padding: 20px;
+  }
+
+  .attribute-editor {
+    padding: 20px;
+  }
+
   .template-editor .footer {
     padding: 10px;
   }
@@ -76,11 +90,12 @@
     </template-editor-toolbar>
   </div>
 
-  <div class="row">
-    <template-editor-preview-holder class="col-sm-8 col-sm-push-4">
+  <div class="row template-editor-body">
+    <template-editor-preview-holder
+      class="col-sm-8 col-sm-push-4 preview-holder">
     </template-editor-preview-holder>
 
-    <template-attribute-editor class="col-sm-4 col-sm-pull-8">
+    <template-attribute-editor class="col-sm-4 col-sm-pull-8 attribute-editor">
     </template-attribute-editor>
   </div>
 
