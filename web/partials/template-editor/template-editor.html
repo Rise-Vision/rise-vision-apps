@@ -8,7 +8,6 @@
     align-items: center;
     z-index: 100;
     border-bottom: 2px solid #f2f2f2;
-    border-top: 1px solid #f2f2f2;
     padding: 18px 0px;
     margin: 0px 20px;
     overflow: hidden;
@@ -68,11 +67,12 @@
 
   .attribute-editor {
     padding: 20px;
-    min-height: 50px;
+    min-height: calc(100vh - 210px);
   }
 
   .template-editor-footer {
-    padding: 10px;
+    padding: 0px 10px 10px;
+    background-color: #FFF;
   }
 
   .template-editor-footer > div {
@@ -96,11 +96,12 @@
     }
 
     .preview-holder {
-      min-height: calc(100vh - 80px);
+      min-height: calc(100vh - 180px);
     }
 
     .attribute-editor {
-      min-height: calc(100vh - 80px);
+      padding: 20px;
+      min-height: calc(100vh - 180px);
     }
   }
 </style>
