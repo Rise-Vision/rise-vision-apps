@@ -1,3 +1,25 @@
-<div>This is the main page of the new HTML Templates Editor</div>
-<div>Presentation name: {{factory.presentation.name}}</div>
-<div>Template Attribute Data: {{factory.presentation.templateAttributeData}}</div>
+<style>
+  .template-editor .footer {
+    padding: 10px;
+  }
+
+  .template-editor .footer button {
+  }
+</style>
+
+<div class="container-flow template-editor">
+
+  <template-editor-toolbar class="workspace-toolbar"></template-editor-toolbar>
+
+  <div class="row">
+    <template-editor-preview-holder class="col-sm-8 col-sm-push-4">
+    </template-editor-preview-holder>
+
+    <template-attribute-editor class="col-sm-4 col-sm-pull-8">
+    </template-attribute-editor>
+  </div>
+
+  <template-editor-footer class="footer navbar-fixed-bottom visible-xs">
+  </template-editor-footer>
+
+</div>

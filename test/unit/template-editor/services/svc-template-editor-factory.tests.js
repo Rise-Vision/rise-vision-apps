@@ -71,10 +71,10 @@ describe('service: templateEditorFactory:', function() {
 
   describe('createFromTemplate:', function() {
     it('should create a new presentation', function(done) {
-      templateEditorFactory.createFromTemplate({ productId: 'test-id', name: 'Test HTML Template' });
+      templateEditorFactory.createFromTemplate({ productCode: 'test-id', name: 'Test HTML Template' });
 
       expect(templateEditorFactory.presentation.id).to.be.undefined;
-      expect(templateEditorFactory.presentation.productId).to.equal('test-id');
+      expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
       expect(templateEditorFactory.presentation.name).to.equal('Copy of Test HTML Template');
       expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_PRESENTATION_TYPE);
 
@@ -93,9 +93,9 @@ describe('service: templateEditorFactory:', function() {
         }
       }));
 
-      templateEditorFactory.createFromTemplate({ productId: 'test-id', name: 'Test HTML Template' });
+      templateEditorFactory.createFromTemplate({ productCode: 'test-id', name: 'Test HTML Template' });
       expect(templateEditorFactory.presentation.id).to.be.undefined;
-      expect(templateEditorFactory.presentation.productId).to.equal('test-id');
+      expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
       expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
 
       templateEditorFactory.addPresentation()
