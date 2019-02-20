@@ -8,6 +8,10 @@ angular.module('risevision.template-editor.directives')
         templateUrl: 'partials/template-editor/attribute-editor.html',
         link: function ($scope) {
           $scope.factory = templateEditorFactory;
+
+          $scope.getAttributeIcon = function (attribute) {
+            return 'fa-line-chart';
+          };
         }
       };
     }
