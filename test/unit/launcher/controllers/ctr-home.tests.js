@@ -10,7 +10,7 @@ describe('controller: Home', function() {
           stopGlobal: sinon.spy(),
           stop: sinon.spy()
         };
-      });    
+      });
       $provide.service('launcherFactory', function() {
         return launcherFactory = {
           load: sinon.spy(),
@@ -18,12 +18,17 @@ describe('controller: Home', function() {
           schedules: { loadingItems: true , items: { list: [ ] } },
           displays: { loadingItems: true , items: { list: [ ] } }
         };
-      }); 
+      });
       $provide.service('editorFactory', function() {
         return {};
-      });      
+      });
       $provide.service('displayFactory', function() {
         return {};
+      });
+      $provide.service('presentationUtils', function() {
+        return {
+          openPresentation: sinon.stub()
+        };
       });
     })
     inject(function($injector,$rootScope, $controller) {

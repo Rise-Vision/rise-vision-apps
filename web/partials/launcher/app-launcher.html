@@ -23,7 +23,7 @@
             </div>
 
             <div class="list" ng-class="{'help-active' : showHelp}" ng-hide="launcherFactory.presentations.list.length == 0">
-              <div class="list-item u_clickable" ng-repeat="presentation in launcherFactory.presentations.list" ui-sref="{{ presentation | presentationLink }}">
+              <div class="list-item u_clickable" ng-repeat="presentation in launcherFactory.presentations.list" ng-click="openPresentation(presentation)">
                 <h4>{{presentation.name}}</h4>
               </div><!--list-item-->
             </div>

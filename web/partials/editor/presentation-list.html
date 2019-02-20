@@ -46,10 +46,10 @@
           </tr>
         </thead>
         <tbody class="table-body">
-          <tr class="table-body__row" ng-repeat="presentation in factory.items.list" ui-sref="{{ presentation | presentationLink }}">
-            <td class="table-body__cell col-sm-9"><a ui-sref="{{ presentation | presentationLink }}"><strong>{{presentation.name}}</strong></a></td>
-            <td class="table-body__cell col-sm-9 hidden-xs"><span ui-sref="{{ presentation | presentationLink }}"><span ng-class="{'text-danger': presentation.revisionStatusName==='Revised'}">{{presentation.revisionStatusName | presentationStatus}}</span></span></td>
-            <td class="table-body__cell col-sm-2 hidden-xs u_nowrap" ><span ui-sref="{{ presentation | presentationLink }}">{{presentation.changeDate | date:'d-MMM-yyyy h:mm a'}}</span></td>
+          <tr class="table-body__row" ng-repeat="presentation in factory.items.list" ng-click="openPresentation(presentation)">
+            <td class="table-body__cell col-sm-9"><a ng-click="openPresentation(presentation); $event.stopPropagation();"><strong>{{presentation.name}}</strong></a></td>
+            <td class="table-body__cell col-sm-9 hidden-xs"><span ng-click="openPresentation(presentation); $event.stopPropagation();"><span ng-class="{'text-danger': presentation.revisionStatusName==='Revised'}">{{presentation.revisionStatusName | presentationStatus}}</span></span></td>
+            <td class="table-body__cell col-sm-2 hidden-xs u_nowrap" ><span ng-click="openPresentation(presentation); $event.stopPropagation();">{{presentation.changeDate | date:'d-MMM-yyyy h:mm a'}}</span></td>
           </tr>
           <!-- If no presentation available -->
           <tr class="table-body__row" ng-show="factory.items.list.length === 0 && !search.query">
