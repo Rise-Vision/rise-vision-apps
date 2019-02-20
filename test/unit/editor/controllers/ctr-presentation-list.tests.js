@@ -2,6 +2,7 @@
 describe('controller: Presentation List', function() {
   beforeEach(module('risevision.editor.controllers'));
   beforeEach(module('risevision.editor.services'));
+  beforeEach(module('risevision.template-editor.services'));
   beforeEach(module(mockTranlate()));
   beforeEach(module(function ($provide) {
     $provide.service('ScrollingListService', function() {
@@ -34,8 +35,18 @@ describe('controller: Presentation List', function() {
         return key;
       };
     });
+    $provide.service('$state', function() {
+      return {
+        go: sinon.stub()
+      };
+    });
+    $provide.service('presentationUtils', function() {
+      return {
+        openPresentation: sinon.stub()
+      };
+    });
   }));
-  var $scope, $loading,$loadingStartSpy, $loadingStopSpy;
+  var $scope, $loading, $loadingStartSpy, $loadingStopSpy;
   beforeEach(function(){
 
     inject(function($injector,$rootScope, $controller){
@@ -56,15 +67,15 @@ describe('controller: Presentation List', function() {
 
   it('should exist',function(){
     expect($scope).to.be.ok;
-    
+
     expect($scope.factory).to.be.ok;
     expect($scope.factory.loadingItems).to.be.false;
     expect($scope.search).to.be.ok;
     expect($scope.filterConfig).to.be.ok;
     expect($scope.presentationTracker).to.be.ok;
-    
+
   });
-  
+
   it('should init the scope objects',function(){
     expect($scope.search).to.be.ok;
     expect($scope.search).to.have.property('sortBy');
@@ -75,23 +86,21 @@ describe('controller: Presentation List', function() {
   it('should attach presentation list to editorFactory',function(){
     expect($scope.editorFactory.presentations).to.be.ok;
   });
-  
+
   describe('$loading: ', function() {
     it('should stop spinner', function() {
       $loadingStopSpy.should.have.been.calledWith('presentation-list-loader');
     });
-    
+
     it('should start spinner', function(done) {
       $scope.factory.loadingItems = true;
       $scope.$digest();
       setTimeout(function() {
         $loadingStartSpy.should.have.been.calledWith('presentation-list-loader');
-        
+
         done();
       }, 10);
     });
   });
-
-
 
 });

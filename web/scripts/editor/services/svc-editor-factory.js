@@ -9,14 +9,14 @@ angular.module('risevision.editor.services')
   .factory('editorFactory', ['$q', '$state', 'userState', 'userAuthFactory',
     'presentation', 'presentationParser', 'distributionParser',
     'presentationTracker', 'store', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
-    'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT', 'TEMPLATES_TYPE',
+    'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT',
     '$modal', '$rootScope', '$window', 'scheduleFactory', 'plansFactory', 'processErrorCode', 'messageBox',
-    '$templateCache', '$log',
+    '$templateCache', '$log', 'templateEditorFactory', 'presentationUtils',
     function ($q, $state, userState, userAuthFactory, presentation,
       presentationParser, distributionParser, presentationTracker, store,
       VIEWER_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED,
-      DEFAULT_LAYOUT, TEMPLATES_TYPE, $modal, $rootScope, $window,
-      scheduleFactory, plansFactory, processErrorCode, messageBox, $templateCache, $log) {
+      DEFAULT_LAYOUT, $modal, $rootScope, $window,
+      scheduleFactory, plansFactory, processErrorCode, messageBox, $templateCache, $log, templateEditorFactory, presentationUtils) {
       var factory = {};
       var JSON_PARSE_ERROR = 'JSON parse error';
 
@@ -414,11 +414,15 @@ angular.module('risevision.editor.services')
         });
 
         modalInstance.result.then(function (productDetails) {
-          if (!productDetails || !productDetails.rvaEntityId) {
+          if (!productDetails || (!productDetails.rvaEntityId && !presentationUtils.isHtmlTemplate(productDetails))) {
             return;
           }
 
-          factory.copyTemplate(productDetails);
+          if (!presentationUtils.isHtmlTemplate(productDetails)) {
+            factory.copyTemplate(productDetails);
+          } else {
+            templateEditorFactory.createFromTemplate(productDetails);
+          }
         });
       };
 

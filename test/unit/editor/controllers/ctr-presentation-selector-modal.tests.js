@@ -32,9 +32,10 @@ describe('controller: Presentation Selector Modal', function() {
   it('should close modal when clicked on a presentation',function(){
     var presentationId = 'presentationId';
     var presentationName = 'presentationName';
-    $scope.select(presentationId, presentationName);
+    var presentationType = 'presentationType';
+    $scope.select(presentationId, presentationName, presentationType);
 
-    $modalInstance.close.should.have.been.calledWith([presentationId, presentationName]);
+    $modalInstance.close.should.have.been.calledWith([presentationId, presentationName, presentationType]);
   });
 
   it('should dismiss modal when clicked on close with no action',function(){

@@ -2,12 +2,13 @@
 
 angular.module('risevision.apps.launcher.controllers')
   .controller('HomeCtrl', ['$scope', 'launcherFactory', 'editorFactory',
-    'displayFactory', '$loading',
+    'displayFactory', '$loading', 'presentationUtils',
     function ($scope, launcherFactory, editorFactory, displayFactory,
-      $loading) {
+      $loading, presentationUtils) {
       $scope.launcherFactory = launcherFactory;
       $scope.editorFactory = editorFactory;
       $scope.displayFactory = displayFactory;
+      $scope.openPresentation = presentationUtils.openPresentation;
 
       $loading.startGlobal('launcher.loading');
 

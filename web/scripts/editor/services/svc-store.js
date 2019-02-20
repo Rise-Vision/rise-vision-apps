@@ -45,8 +45,12 @@ angular.module('risevision.editor.services')
             }
 
             filterString = '(' + filterString + ')';
-            filterString = filterString + ' AND (productTag:' + category +
-              ')';
+
+            if (category === 'Templates') {
+              filterString = filterString + ' AND (productTag: Templates OR productTag: HTMLTemplates)';
+            } else {
+              filterString = filterString + ' AND (productTag:' + category + ')';
+            }
 
             if (search.rvaEntityId) {
               filterString += ' AND (rvaEntityId:' + search.rvaEntityId +

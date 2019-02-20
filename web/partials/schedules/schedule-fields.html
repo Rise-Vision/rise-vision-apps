@@ -49,7 +49,9 @@
       </ul>
     </div>
   </div>
-  <a class="btn btn-default" id="previewButton" target="_blank" ng-href="{{previewUrl}}" ng-show="previewUrl">{{'schedules-app.actions.preview' | translate}} <i class="fa fa-play icon-right"></i></a>
+  <a class="btn btn-default" id="previewButton" target="_blank" ng-href="{{previewUrl}}" ng-show="previewUrl && isPreviewAvailable()">
+    {{'schedules-app.actions.preview' | translate}} <i class="fa fa-play icon-right"></i>
+  </a>
 </div>
 
 <playlist playlist-items="schedule.content"></playlist>
