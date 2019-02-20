@@ -24,8 +24,8 @@
     .value('STORAGE_API_ROOT',
       'https://storage-dot-rvacore-test.appspot.com/_ah/api')
     .value('STORE_ENDPOINT_URL',
-      'https://integrate-certcapture-dot-store-dot-rvacore-test.appspot.com/_ah/api') // override default Store server value
-    .value('STORE_SERVER_URL', 'https://integrate-certcapture-dot-store-dot-rvacore-test.appspot.com/')
+      'https://chargebee-exemption-dot-store-dot-rvacore-test.appspot.com/_ah/api') // override default Store server value
+    .value('STORE_SERVER_URL', 'https://chargebee-exemption-dot-store-dot-rvacore-test.appspot.com/')
     .value('RVA_URL', 'http://rva-test.appspot.com')
     .value('VIEWER_URL', 'http://stage-test-dot-rvaviewer-test.appspot.com')
     .value('ALERTS_WS_URL',
