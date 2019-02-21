@@ -88,13 +88,14 @@ angular.module('risevision.template-editor.services')
             return factory.loadBlueprintData(factory.presentation.productCode);
           })
           .then(function (blueprintData) {
-            console.log('blueprintData', blueprintData);
             factory.blueprintData = blueprintData.data;
 
             deferred.resolve();
           })
           .then(null, function (e) {
             _showErrorMessage('get', e);
+            factory.presentation = null;
+            factory.blueprintData = null;
 
             deferred.reject(e);
           })

@@ -74,7 +74,15 @@ describe('service: templateEditorFactory:', function() {
 
   describe('createFromTemplate:', function() {
     it('should create a new presentation', function(done) {
-      $httpBackend.when('GET', blueprintUrl).respond(200, {});
+      $httpBackend.when('GET', blueprintUrl).respond(200, {
+        components: [
+          {
+            type: 'rise-data-image',
+            id: 'rise-data-image-01',
+            attributes: {}
+          }
+        ]
+      });
 
       setTimeout(function() {
         $httpBackend.flush();
@@ -85,6 +93,7 @@ describe('service: templateEditorFactory:', function() {
         expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
         expect(templateEditorFactory.presentation.name).to.equal('Copy of Test HTML Template');
         expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_PRESENTATION_TYPE);
+        expect(templateEditorFactory.blueprintData.components.length).to.equal(1);
 
         expect($state.go).to.have.been.calledWith('apps.editor.templates.add');
 
@@ -174,7 +183,15 @@ describe('service: templateEditorFactory:', function() {
         }
       }));
 
-      $httpBackend.when('GET', blueprintUrl).respond(200, {});
+      $httpBackend.when('GET', blueprintUrl).respond(200, {
+        components: [
+          {
+            type: 'rise-data-image',
+            id: 'rise-data-image-01',
+            attributes: {}
+          }
+        ]
+      });
       setTimeout(function() {
         $httpBackend.flush();
       });
@@ -184,6 +201,7 @@ describe('service: templateEditorFactory:', function() {
         expect(templateEditorFactory.presentation).to.be.truely;
         expect(templateEditorFactory.presentation.name).to.equal('Test Presentation');
         expect(templateEditorFactory.presentation.templateAttributeData.attribute1).to.equal('value1');
+        expect(templateEditorFactory.blueprintData.components.length).to.equal(1);
 
         setTimeout(function() {
           expect(templateEditorFactory.loadingPresentation).to.be.false;
@@ -250,6 +268,34 @@ describe('service: templateEditorFactory:', function() {
         }, 10);
       })
       .then(null, done);
+    });
+
+    it('should handle failure to load blueprint.json correctly', function(done) {
+      sandbox.stub(presentation, 'get').returns(Q.resolve({
+        item: {
+          name: 'Test Presentation',
+          productCode: 'test-id',
+          templateAttributeData: '{ "attribute1": "value1" }'
+        }
+      }));
+
+      $httpBackend.when('GET', blueprintUrl).respond(500, {});
+      setTimeout(function() {
+        $httpBackend.flush();
+      });
+
+      templateEditorFactory.getPresentation('presentationId')
+      .then(function() {
+        done('Should not succeed');
+      })
+      .then(null, function(err) {
+        setTimeout(function() {
+          expect(templateEditorFactory.presentation).to.be.falsey;
+          expect(templateEditorFactory.blueprintData).to.be.falsey;
+
+          done();
+        });
+      });
     });
   });
 });
