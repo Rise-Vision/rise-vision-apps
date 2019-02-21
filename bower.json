@@ -35,6 +35,7 @@
     "angular-sanitize": "~1.5.0",
     "angular-mocks": "~1.5.0",
     "jquery": "^2",
-    "common-header": "feature/tax-exemption"
+    "common-header": "feature/tax-exemption",
+    "font-awesome": "~4.7.0"
   }
 }

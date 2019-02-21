@@ -1,17 +1,16 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateAttributeEditor', ['templateEditorFactory',
+  .directive('templateAttributeList', ['templateEditorFactory',
     function (templateEditorFactory) {
       return {
         restrict: 'E',
-        templateUrl: 'partials/template-editor/attribute-editor.html',
+        scope: true,
+        templateUrl: 'partials/template-editor/attribute-list.html',
         link: function ($scope) {
           $scope.factory = templateEditorFactory;
 
-          $scope.getAttributeIcon = function (attribute) {
-            return 'fa-line-chart';
-          };
+          $scope.components = templateEditorFactory.blueprintData.components;
         }
       };
     }
