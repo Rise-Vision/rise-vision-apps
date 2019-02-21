@@ -39,17 +39,20 @@ describe('service: templateEditorFactory:', function() {
     });
   }));
 
-  var $state, templateEditorFactory, messageBox, presentation, processErrorCode, HTML_PRESENTATION_TYPE;
+  var $state, $httpBackend, templateEditorFactory, messageBox, presentation, processErrorCode, HTML_PRESENTATION_TYPE, blueprintUrl;
 
   beforeEach(function() {
     inject(function($injector) {
       $state = $injector.get('$state');
+      $httpBackend = $injector.get('$httpBackend');
       templateEditorFactory = $injector.get('templateEditorFactory');
 
       presentation = $injector.get('presentation');
       messageBox = $injector.get('messageBox');
       processErrorCode = $injector.get('processErrorCode');
       HTML_PRESENTATION_TYPE = $injector.get('HTML_PRESENTATION_TYPE');
+
+      blueprintUrl = 'https://storage.googleapis.com/widgets.risevision.com/beta/templates/test-id/blueprint.json';
     });
   });
 
@@ -71,16 +74,22 @@ describe('service: templateEditorFactory:', function() {
 
   describe('createFromTemplate:', function() {
     it('should create a new presentation', function(done) {
-      templateEditorFactory.createFromTemplate({ productCode: 'test-id', name: 'Test HTML Template' });
+      $httpBackend.when('GET', blueprintUrl).respond(200, {});
 
-      expect(templateEditorFactory.presentation.id).to.be.undefined;
-      expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
-      expect(templateEditorFactory.presentation.name).to.equal('Copy of Test HTML Template');
-      expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_PRESENTATION_TYPE);
+      setTimeout(function() {
+        $httpBackend.flush();
+      });
 
-      expect($state.go).to.have.been.calledWith('apps.editor.templates.add');
+      templateEditorFactory.createFromTemplate({ productCode: 'test-id', name: 'Test HTML Template' }).then(function () {
+        expect(templateEditorFactory.presentation.id).to.be.undefined;
+        expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
+        expect(templateEditorFactory.presentation.name).to.equal('Copy of Test HTML Template');
+        expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_PRESENTATION_TYPE);
 
-      done();
+        expect($state.go).to.have.been.calledWith('apps.editor.templates.add');
+
+        done();
+      });
     });
   });
 
@@ -89,9 +98,14 @@ describe('service: templateEditorFactory:', function() {
       sandbox.stub(presentation, 'add').returns(Q.resolve({
         item: {
           name: 'Test Presentation',
-          id: "presentationId",
+          id: 'presentationId'
         }
       }));
+
+      $httpBackend.when('GET', blueprintUrl).respond(200, {});
+      setTimeout(function() {
+        $httpBackend.flush();
+      });
 
       templateEditorFactory.createFromTemplate({ productCode: 'test-id', name: 'Test HTML Template' });
       expect(templateEditorFactory.presentation.id).to.be.undefined;
@@ -155,9 +169,15 @@ describe('service: templateEditorFactory:', function() {
       sandbox.stub(presentation, 'get').returns(Q.resolve({
         item: {
           name: 'Test Presentation',
+          productCode: 'test-id',
           templateAttributeData: '{ "attribute1": "value1" }'
         }
       }));
+
+      $httpBackend.when('GET', blueprintUrl).respond(200, {});
+      setTimeout(function() {
+        $httpBackend.flush();
+      });
 
       templateEditorFactory.getPresentation('presentationId')
       .then(function() {
@@ -181,9 +201,15 @@ describe('service: templateEditorFactory:', function() {
     it('should get the presentation with invalid JSON data', function(done) {
       sandbox.stub(presentation, 'get').returns(Q.resolve({
         item: {
-          templateAttributeData: '\\'
+          templateAttributeData: '\\',
+          productCode: 'test-id'
         }
       }));
+
+      $httpBackend.when('GET', blueprintUrl).respond(200, {});
+      setTimeout(function() {
+        $httpBackend.flush();
+      });
 
       templateEditorFactory.getPresentation('presentationId')
       .then(function() {

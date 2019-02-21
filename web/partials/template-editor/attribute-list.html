@@ -12,21 +12,22 @@
   }
 
   .attribute-desc {
-    color: rgb(77, 77, 77)
+    color: rgb(77, 77, 77);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .attribute-edit {
-    color: rgb(69, 183, 100)
+    color: rgb(69, 183, 100);
   }
 </style>
-<table class="table">
 
-</table>
-<div class="row attribute-row" ng-repeat="attr in attributes">
-  <div class="col-xs-10 pl-0">
-    <i class="mr-2 fa fa-lg {{ getAttributeIcon(attr) }}"></i>
-    <span class="attribute-desc">
-      {{ attr.type + " - " + attr.label }}
+<div class="row attribute-row" ng-repeat="comp in components">
+  <div class="col-xs-10 pl-0 attribute-desc">
+    <i class="mr-2 fa fa-lg {{ getAttributeIcon(comp) }}"></i>
+    <span>
+      {{ comp.type + " - " + comp.id }}
     </span>
   </div>
   <div class="col-xs-2 pr-0 align-right">

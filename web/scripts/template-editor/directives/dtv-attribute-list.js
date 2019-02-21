@@ -10,12 +10,9 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope) {
           $scope.factory = templateEditorFactory;
 
-          $scope.attributes = [
-            { id: '1', type: 'Financial', label: 'Currencies' },
-            { id: '2', type: 'Financial', label: 'Energy & Metals' },
-            { id: '3', type: 'Financial', label: 'Indices' },
-            { id: '4', type: 'Financial', label: 'Currencies' }
-          ];
+          console.log('templateEditorFactory.blueprintData', templateEditorFactory.blueprintData);
+
+          $scope.components = templateEditorFactory.blueprintData.components;
         }
       };
     }

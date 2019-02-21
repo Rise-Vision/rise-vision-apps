@@ -1,8 +1,11 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', 'messageBox', 'presentation', 'processErrorCode', 'userState', 'HTML_PRESENTATION_TYPE',
-    function ($q, $log, $state, $rootScope, messageBox, presentation, processErrorCode, userState, HTML_PRESENTATION_TYPE) {
+  .constant('BLUEPRINT_URL', 'https://storage.googleapis.com/widgets.risevision.com/beta/templates/PRODUCT_CODE/blueprint.json')
+  .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', '$http', 'messageBox', 'presentation', 'processErrorCode', 'userState',
+    'HTML_PRESENTATION_TYPE', 'BLUEPRINT_URL',
+    function ($q, $log, $state, $rootScope, $http, messageBox, presentation, processErrorCode, userState,
+      HTML_PRESENTATION_TYPE, BLUEPRINT_URL) {
       var factory = {};
 
       factory.createFromTemplate = function (productDetails) {
@@ -19,7 +22,16 @@ angular.module('risevision.template-editor.services')
           isStoreProduct: false
         };
 
-        $state.go('apps.editor.templates.add');
+        return factory.loadBlueprintData(factory.presentation.productCode)
+          .then(function (blueprintData) {
+            factory.blueprintData = blueprintData.data;
+
+            $state.go('apps.editor.templates.add');
+          })
+          .then(null, function (e) {
+            _showErrorMessage('add', e);
+            return $q.reject(e);
+          });
       };
 
       factory.addPresentation = function () {
@@ -73,6 +85,12 @@ angular.module('risevision.template-editor.services')
 
             factory.presentation = result.item;
 
+            return factory.loadBlueprintData(factory.presentation.productCode);
+          })
+          .then(function (blueprintData) {
+            console.log('blueprintData', blueprintData);
+            factory.blueprintData = blueprintData.data;
+
             deferred.resolve();
           })
           .then(null, function (e) {
@@ -85,6 +103,12 @@ angular.module('risevision.template-editor.services')
           });
 
         return deferred.promise;
+      };
+
+      factory.loadBlueprintData = function (productCode) {
+        var url = BLUEPRINT_URL.replace('PRODUCT_CODE', productCode);
+
+        return $http.get(url);
       };
 
       var _parseJSON = function (json) {
