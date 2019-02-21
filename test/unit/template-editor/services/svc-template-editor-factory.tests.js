@@ -52,7 +52,7 @@ describe('service: templateEditorFactory:', function() {
       processErrorCode = $injector.get('processErrorCode');
       HTML_PRESENTATION_TYPE = $injector.get('HTML_PRESENTATION_TYPE');
 
-      blueprintUrl = 'https://storage.googleapis.com/widgets.risevision.com/beta/templates/test-id/blueprint.json';
+      blueprintUrl = 'https://widgets.risevision.com/beta/templates/test-id/blueprint.json';
     });
   });
 

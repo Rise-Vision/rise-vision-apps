@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .constant('BLUEPRINT_URL', 'https://storage.googleapis.com/widgets.risevision.com/beta/templates/PRODUCT_CODE/blueprint.json')
+  .constant('BLUEPRINT_URL', 'https://widgets.risevision.com/beta/templates/PRODUCT_CODE/blueprint.json')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', '$http', 'messageBox', 'presentation', 'processErrorCode', 'userState',
     'HTML_PRESENTATION_TYPE', 'BLUEPRINT_URL',
     function ($q, $log, $state, $rootScope, $http, messageBox, presentation, processErrorCode, userState,

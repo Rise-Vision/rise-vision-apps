@@ -10,8 +10,6 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope) {
           $scope.factory = templateEditorFactory;
 
-          console.log('templateEditorFactory.blueprintData', templateEditorFactory.blueprintData);
-
           $scope.components = templateEditorFactory.blueprintData.components;
         }
       };
