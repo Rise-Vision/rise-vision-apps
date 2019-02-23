@@ -1,0 +1,23 @@
+<div class="row component-header">
+  <div class="col-xs-3 col-md-2">
+    <a ng-click="backToList();">
+      <span class="attribute-edit text-nowrap">
+        <i class="fa fa-lg fa-angle-left"></i>
+        Back
+      </span>
+    </a>
+  </div>
+  <div class="col-xs-9 col-md-10 pl-0 attribute-desc">
+    <i class="mr-2 fa fa-lg {{ getComponentIcon(factory.selected) }}"></i>
+    <span>
+      {{ ( "template." + factory.selected.type ) | translate }} -
+      {{ factory.selected.label | translate }}
+    </span>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <template-component-financial ng-if="factory.selected.type === 'rise-data-financial'"></template-component-financial>
+    <template-component-image ng-if="factory.selected.type === 'rise-data-image'"></template-component-image>
+  </div>
+</div>
