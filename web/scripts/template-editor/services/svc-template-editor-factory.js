@@ -112,6 +112,26 @@ angular.module('risevision.template-editor.services')
         return $http.get(url);
       };
 
+      factory.deletePresentation = function () {
+        _clearMessages();
+
+        //show spinner
+        factory.loadingPresentation = true;
+
+        presentation.delete(factory.presentation.id)
+          .then(function () {
+            factory.presentation = {};
+
+            $state.go('apps.editor.list');
+          })
+          .then(null, function (e) {
+            _showErrorMessage('delete', e);
+          })
+          .finally(function () {
+            factory.loadingPresentation = false;
+          });
+      };
+
       var _parseJSON = function (json) {
         try {
           return JSON.parse(json);

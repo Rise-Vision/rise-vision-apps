@@ -1,10 +1,20 @@
+<style>
+  .template-editor-toolbar a {
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+  }
+</style>
+
 <!-- Presentation Name -->
 <h2 class="presentation-name">
   {{factory.presentation.name}}
 </h2>
 <div>
   <i class="fa fa-pencil u_margin-left"></i>
-  <i class="fa fa-trash-o u_margin-left hidden-xs"></i>
+  <a ng-click="confirmDelete()">
+    <i class="fa fa-trash-o u_margin-left hidden-xs"></i>
+  </a>
 </div>
 
 <div class="toolbar-right">
@@ -19,5 +29,7 @@
     {{'common.publish' | translate}}
   </button>
 
-  <i class="fa fa-trash-o u_margin-left visible-xs"></i>
+  <a ng-click="confirmDelete()">
+    <i class="fa fa-trash-o u_margin-left visible-xs"></i>
+  </a>
 </div>

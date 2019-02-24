@@ -1,0 +1,60 @@
+<style>
+  .confirm-delete-modal .modal-header {
+    background: inherit;
+    border-bottom: 0;
+  }
+
+  .confirm-delete-modal .modal-body {
+    padding-top: 0;
+  }
+
+  .confirm-delete-modal .modal-header .close {
+    width: 40px;
+    height: 40px;
+  }
+
+  .confirm-delete-modal .modal-footer {
+    background: rgb(242, 242, 242);
+    padding-top: 1.2em;
+  }
+
+  .confirm-delete-modal .modal-body p {
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .confirm-delete-modal .modal-footer button {
+    border: inherit;
+    font-weight: bold;
+    padding-top: 0.6em;
+    padding-bottom: 0.6em;
+  }
+
+  .confirm-delete-modal .modal-footer .btn-default {
+    background: rgb(230, 230, 230);
+  }
+</style>
+<form id="confirmForm" class="confirm-delete-modal">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="dismiss()" data-dismiss="modal" aria-hidden="true">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body" stop-event="touchend">
+    <p translate>{{confirmationMessage}}</p>
+  </div>
+  <div class="modal-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <button class="btn btn-danger w-100" ng-click="ok()">
+          <span translate="{{confirmationButton}}"></span>
+        </button>
+      </div>
+      <div class="col-xs-6">
+        <button class="btn btn-default w-100" ng-click="cancel()">
+          <span translate="{{cancelButton}}"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
