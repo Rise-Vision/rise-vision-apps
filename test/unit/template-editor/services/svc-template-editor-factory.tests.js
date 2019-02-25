@@ -10,8 +10,9 @@ describe('service: templateEditorFactory:', function() {
 
     $provide.service('presentation',function () {
       return {
-        add : function(){},
-        get: function() {}
+        add : function() {},
+        get: function() {},
+        delete: function () {}
       };
     });
 
@@ -296,6 +297,71 @@ describe('service: templateEditorFactory:', function() {
           done();
         });
       });
+    });
+  });
+
+  describe('deletePresentation:', function() {
+    beforeEach(function () {
+      sandbox.stub(presentation, 'get').returns(Q.resolve({
+        item: {
+          id: 'presentationId',
+          name: 'Test Presentation',
+          productCode: 'test-id'
+        }
+      }));
+      $httpBackend.when('GET', blueprintUrl).respond(200, {});
+      setTimeout(function() {
+        $httpBackend.flush();
+      });
+    });
+
+    it('should delete the presentation', function(done) {
+      sandbox.stub(presentation, 'delete').returns(Q.resolve());
+
+      templateEditorFactory.getPresentation('presentationId')
+        .then(templateEditorFactory.deletePresentation.bind(templateEditorFactory))
+        .then(function() {
+          expect(messageBox).to.not.have.been.called;
+          expect(templateEditorFactory.savingPresentation).to.be.true;
+          expect(templateEditorFactory.loadingPresentation).to.be.true;
+
+          setTimeout(function() {
+            expect($state.go).to.have.been.calledWith('apps.editor.list');
+            expect(presentation.delete.getCall(0).args[0]).to.equal('presentationId');
+            expect(templateEditorFactory.savingPresentation).to.be.false;
+            expect(templateEditorFactory.loadingPresentation).to.be.false;
+            expect(templateEditorFactory.errorMessage).to.not.be.ok;
+            expect(templateEditorFactory.apiError).to.not.be.ok;
+
+            done();
+          },10);
+        })
+        .then(null, function(err) {
+          done(err);
+        })
+        .then(null, done);
+    });
+
+    it('should fail to delete the presentation', function(done) {
+      sandbox.stub(presentation, 'delete').returns(Q.reject());
+
+      templateEditorFactory.getPresentation('presentationId')
+        .then(function () {
+          return templateEditorFactory.deletePresentation();
+        })
+        .then(null, function(e) {
+          setTimeout(function() {
+            expect(presentation.delete.getCall(0).args[0]).to.equal('presentationId');
+            expect(processErrorCode).to.have.been.calledWith('Presentation', 'delete', e);
+            expect(messageBox).to.have.been.called;
+            expect($state.go).to.not.have.been.called;
+            expect(templateEditorFactory.apiError).to.be.ok;
+            expect(templateEditorFactory.savingPresentation).to.be.false;
+            expect(templateEditorFactory.loadingPresentation).to.be.false;
+
+            done();
+          }, 10);
+        });
     });
   });
 });

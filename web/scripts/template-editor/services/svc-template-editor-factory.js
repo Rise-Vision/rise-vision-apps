@@ -113,23 +113,31 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.deletePresentation = function () {
+        var deferred = $q.defer();
+
         _clearMessages();
 
         //show spinner
         factory.loadingPresentation = true;
+        factory.savingPresentation = true;
 
         presentation.delete(factory.presentation.id)
           .then(function () {
             factory.presentation = {};
 
             $state.go('apps.editor.list');
+            deferred.resolve();
           })
           .then(null, function (e) {
             _showErrorMessage('delete', e);
+            deferred.reject(e);
           })
           .finally(function () {
             factory.loadingPresentation = false;
+            factory.savingPresentation = false;
           });
+
+        return deferred.promise;
       };
 
       var _parseJSON = function (json) {
