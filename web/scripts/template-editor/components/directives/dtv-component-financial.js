@@ -5,7 +5,7 @@ angular.module('risevision.template-editor.directives')
     function (templateEditorFactory) {
       return {
         restrict: 'E',
-        templateUrl: 'partials/template-editor/component-financial.html',
+        templateUrl: 'partials/template-editor/components/component-financial.html',
         link: function ($scope) {
           $scope.factory = templateEditorFactory;
         }
