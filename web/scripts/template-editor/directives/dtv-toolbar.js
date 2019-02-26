@@ -16,7 +16,7 @@ angular.module('risevision.template-editor.directives')
             $scope.isEditingName = false;
           };
 
-          $scope.$watch("isEditingName", function(editing) {
+          $scope.$watch('isEditingName', function(editing) {
             var templateNameInput = element.find('input.presentation-name');
 
             if (!$scope.defaultNameWidth) {
