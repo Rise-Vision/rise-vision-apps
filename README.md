@@ -97,6 +97,8 @@ In case the Jenkins Company gets removed, which causes all e2e tests to fail, th
 - In Storage, upload an image file named *logo.gif*
 - In Storage, create a folder named *E2E_TEST_FOLDER*
 
+Two weeks after the company is created, the user will be prompted to complete ICP information. This is not handled automatically by the tests and will cause them to fail, which means a manual login to `jenkins@risevision.com` will be necessary to fill in those details. Once that information is saved, tests will start working again.
+
 ## Submitting Issues
 If you encounter problems or find defects we really want to hear about them. If you could take the time to add them as issues to this Repository it would be most appreciated. When reporting issues please use the following format where applicable:
 
