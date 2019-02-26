@@ -477,8 +477,12 @@ angular.module('risevision.apps', [
 
     }
   ])
-  .run(['$rootScope', '$state', '$modalStack', 'userState', 'displayFactory',
-    function ($rootScope, $state, $modalStack, userState, displayFactory) {
+  .run(['$rootScope', '$state', '$modalStack', 'userState', 'displayFactory', '$window',
+    function ($rootScope, $state, $modalStack, userState, displayFactory, $window) {
+
+      if ($window.Stretchy) {
+        $window.Stretchy.selectors.filter = ".input-stretchy, .input-stretchy *";
+      }
 
       $rootScope.$on('risevision.user.signedOut', function () {
         $state.go('common.auth.unauthorized');
