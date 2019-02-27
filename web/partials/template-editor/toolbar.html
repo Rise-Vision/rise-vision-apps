@@ -14,10 +14,10 @@
   <button id="saveButton"
     class="btn btn-primary btn-fixed-width u_margin-right hidden-xs"
     ng-click="factory.save()">
-    -{{ factory.presentation.id }}-
     {{ factory.savingPresentation ?
       ( 'common.saving' | translate ) : ( 'common.save' | translate )
     }}
+    -{{ factory.presentation.id }}-
     <i class="fa fa-check icon-right"></i>
   </button>
 

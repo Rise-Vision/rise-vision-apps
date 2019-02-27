@@ -51,6 +51,7 @@ angular.module('risevision.template-editor.services')
             if (resp && resp.item && resp.item.id) {
               $rootScope.$broadcast('presentationCreated');
 
+              factory.presentation.id = resp.item.id;
               $state.go('apps.editor.templates.add', {
                 presentationId: resp.item.id
               });
