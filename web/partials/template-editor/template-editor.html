@@ -6,7 +6,8 @@
   </div>
 
   <div class="row template-editor-body">
-    <div class="col-sm-8 col-sm-push-4 preview-holder">
+    <div class="col-sm-8 col-sm-push-4 preview-holder"
+         ng-class="{ 'hidden-xs': factory.selected }">
       <div style="background-color: #C0C0C0">
         <template-editor-preview-holder>
         </template-editor-preview-holder>
@@ -20,7 +21,8 @@
   </div>
 
   <template-editor-footer
-    class="template-editor-footer navbar-fixed-bottom visible-xs">
+    class="template-editor-footer navbar-fixed-bottom visible-xs"
+    ng-class="{ 'hidden-xs': factory.selected }">
   </template-editor-footer>
 
 </div>
