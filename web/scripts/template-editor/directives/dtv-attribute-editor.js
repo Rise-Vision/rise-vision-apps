@@ -12,7 +12,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.editComponent = function (component) {
             $scope.factory.selected = component;
-            _showAttributeList(false);
+            _showAttributeList(false, 300);
           };
 
           $scope.backToList = function () {
