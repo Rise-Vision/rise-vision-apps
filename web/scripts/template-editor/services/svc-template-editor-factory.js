@@ -71,6 +71,14 @@ angular.module('risevision.template-editor.services')
         return deferred.promise;
       };
 
+      factory.save = function () {
+        if (factory.presentation.id) {
+          return $q.resolve(factory.presentation.id);
+        } else {
+          return factory.addPresentation();
+        }
+      };
+
       factory.getPresentation = function (presentationId) {
         var deferred = $q.defer();
 
