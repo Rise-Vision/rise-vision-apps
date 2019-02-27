@@ -98,11 +98,10 @@ angular.module('risevision.template-editor.services')
 
         presentation.update(presentationVal.id, presentationVal)
           .then(function (resp) {
-              _setPresentation(resp.item);
-              $rootScope.$broadcast('presentationUpdated');
+            _setPresentation(resp.item);
+            $rootScope.$broadcast('presentationUpdated');
 
-              deferred.resolve(resp.item.id);
-            }
+            deferred.resolve(resp.item.id);
           })
           .then(null, function (e) {
             _showErrorMessage('update', e);
