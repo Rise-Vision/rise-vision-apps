@@ -8,6 +8,22 @@ angular.module('risevision.template-editor.services')
       HTML_PRESENTATION_TYPE, BLUEPRINT_URL) {
       var factory = {};
 
+      var _setPresentation = function (presentation) {
+        presentation.templateAttributeData =
+          _parseJSON(presentation.templateAttributeData) || {};
+
+        factory.presentation = presentation;
+      };
+
+      var _getPresentationForUpdate = function() {
+        var presentationVal = JSON.parse(JSON.stringify(factory.presentation));
+
+        presentationVal.templateAttributeData =
+          JSON.stringify(presentationVal.templateAttributeData);
+
+        return presentationVal;
+      }
+
       factory.createFromTemplate = function (productDetails) {
         _clearMessages();
 
@@ -36,15 +52,13 @@ angular.module('risevision.template-editor.services')
 
       factory.addPresentation = function () {
         var deferred = $q.defer(),
-          presentationVal = JSON.parse(JSON.stringify(factory.presentation));
+          presentationVal = _getPresentationForUpdate();
 
         _clearMessages();
 
         //show loading spinner
         factory.loadingPresentation = true;
         factory.savingPresentation = true;
-
-        presentationVal.templateAttributeData = JSON.stringify(presentationVal.templateAttributeData);
 
         presentation.add(presentationVal)
           .then(function (resp) {
@@ -72,9 +86,40 @@ angular.module('risevision.template-editor.services')
         return deferred.promise;
       };
 
+      factory.updatePresentation = function () {
+        var deferred = $q.defer(),
+          presentationVal = _getPresentationForUpdate();
+
+        _clearMessages();
+
+        //show loading spinner
+        factory.loadingPresentation = true;
+        factory.savingPresentation = true;
+
+        presentation.update(presentationVal.id, presentationVal)
+          .then(function (resp) {
+              _setPresentation(resp.item);
+              $rootScope.$broadcast('presentationUpdated');
+
+              deferred.resolve(resp.item.id);
+            }
+          })
+          .then(null, function (e) {
+            _showErrorMessage('update', e);
+
+            deferred.reject(e);
+          })
+          .finally(function () {
+            factory.loadingPresentation = false;
+            factory.savingPresentation = false;
+          });
+
+        return deferred.promise;
+      };
+
       factory.save = function () {
         if (factory.presentation.id) {
-          return $q.resolve(factory.presentation.id);
+          return factory.updatePresentation();
         } else {
           return factory.addPresentation();
         }
@@ -90,9 +135,7 @@ angular.module('risevision.template-editor.services')
 
         presentation.get(presentationId)
           .then(function (result) {
-            result.item.templateAttributeData = _parseJSON(result.item.templateAttributeData) || {};
-
-            factory.presentation = result.item;
+            _setPresentation(result.item);
 
             return factory.loadBlueprintData(factory.presentation.productCode);
           })
