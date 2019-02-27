@@ -2,12 +2,12 @@
 <input type="text" class="input-stretchy presentation-name"
        ng-model="factory.presentation.name" ng-blur="onPresentationNameBlur()" ng-disabled="!isEditingName">
 <div>
-  <button ng-disabled="isEditingName" type="button" class="edit-name" ng-click="isEditingName=true">
+  <button ng-disabled="isEditingName" type="button" class="edit-name pr-0" ng-click="isEditingName=true">
     <i class="fa fa-pencil u_margin-left"></i>
   </button>
-  <a ng-click="confirmDelete()">
-    <i class="fa fa-trash-o u_margin-left hidden-xs"></i>
-  </a>
+  <button ng-disabled="isEditingName" ng-click="confirmDelete()" class="delete-presentation pl-0">
+    <i class="fa fa-trash-o u_margin-left"></i>
+  </button>
 </div>
 
 <div class="toolbar-right">
@@ -21,8 +21,4 @@
     class="btn btn-primary btn-fixed-width hidden-xs">
     {{'common.publish' | translate}}
   </button>
-
-  <a ng-click="confirmDelete()">
-    <i class="fa fa-trash-o u_margin-left visible-xs"></i>
-  </a>
 </div>
