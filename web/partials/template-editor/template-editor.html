@@ -1,7 +1,9 @@
 <div class="container-flow template-editor">
 
   <div>
-    <template-editor-toolbar class="template-editor-toolbar">
+    <template-editor-toolbar
+      class="template-editor-toolbar"
+      ng-class="{ 'hidden-xs': factory.selected }">
     </template-editor-toolbar>
   </div>
 
