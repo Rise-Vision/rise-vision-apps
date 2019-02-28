@@ -1,42 +1,16 @@
-<style>
-  .attribute-editor .attribute-list {
-    font-size: 1.1em;
-    font-weight: bold;
-  }
-
-  .attribute-row {
-    border-bottom: 1px solid rgb(242, 242, 242);
-    padding-bottom: 0.5em;
-    padding-top: 0.5em;
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  .attribute-desc {
-    color: rgb(77, 77, 77);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .attribute-edit {
-    color: rgb(69, 183, 100);
-  }
-</style>
-
-<div class="row attribute-row" ng-repeat="comp in components">
+<div class="row attribute-row" ng-repeat="comp in components track by $index">
   <div class="col-xs-10 pl-0 attribute-desc">
-    <i class="mr-2 fa fa-lg {{ getAttributeIcon(comp) }}"></i>
+    <i class="mr-2 fa fa-lg {{ getComponentIcon(comp) }}"></i>
     <span>
       {{ ( "template." + comp.type ) | translate }} -
       {{ comp.label | translate }}
     </span>
   </div>
   <div class="col-xs-2 pr-0 align-right">
-    <a href="#">
+    <a ng-click="editComponent(comp);">
       <span class="attribute-edit text-nowrap">
-        Edit
-        <i class="fa fa-lg fa-angle-right"></i>
+        <span translate>template.attribute-editor.edit-component</span>
+        <i class="fa fa-lg fa-angle-right arrow-icon"></i>
       </span>
     </a>
   </div>

@@ -1,3 +1,7 @@
-<div class="col">
-    <template-attribute-list class="attribute-list"></template-attribute-list>
+<div class="attribute-list" ng-class="{ 'attribute-list-hide': factory.selected }" ng-show="showAttributeList">
+  <template-attribute-list></template-attribute-list>
+</div>
+
+<div class="attribute-component" ng-show="!showAttributeList">
+  <template-component></template-component>
 </div>
