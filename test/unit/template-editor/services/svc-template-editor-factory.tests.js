@@ -201,7 +201,6 @@ describe('service: templateEditorFactory:', function() {
           expect(templateEditorFactory.loadingPresentation).to.be.true;
 
           setTimeout(function(){
-            expect($state.go).to.not.have.been.called;
             expect(presentation.update.getCall(0).args[1].templateAttributeData).to.equal('{}');
             expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
             expect(templateEditorFactory.savingPresentation).to.be.false;
