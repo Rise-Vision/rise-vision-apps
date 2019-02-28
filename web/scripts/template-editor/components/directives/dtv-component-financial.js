@@ -17,9 +17,7 @@ angular.module('risevision.template-editor.directives')
             onBackHandler: function () {
               if ($scope.showSelector) {
                 $scope.showSelector = false;
-              }
-              else {
-                $scope.backToList();
+                return true;
               }
             }
           });

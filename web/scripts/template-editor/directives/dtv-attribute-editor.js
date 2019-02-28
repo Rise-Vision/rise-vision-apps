@@ -29,10 +29,7 @@ angular.module('risevision.template-editor.directives')
             var component = $scope.factory.selected;
             var directive = $scope.directives[component.type];
 
-            if (directive.onBackHandler) {
-              directive.onBackHandler();
-            }
-            else {
+            if (!directive.onBackHandler || !directive.onBackHandler()) {
               $scope.backToList();
             }
           };
