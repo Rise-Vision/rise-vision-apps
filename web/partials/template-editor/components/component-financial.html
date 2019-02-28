@@ -71,6 +71,24 @@
     margin-left: 1.5em;
   }
 
+  .instrument-selector-no-results {
+    color: rgb(77, 77, 77);
+  }
+
+  .instrument-selector-no-results > h2 {
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 20px 0px;
+  }
+
+  .instrument-selector-no-results > div:first-child {
+    font-weight: bold;
+  }
+
+  .instrument-selector-no-results > a {
+    text-decoration: underline;
+  }
+
   .financial-action-button-bar {
     position: fixed;
     width: 100%;
@@ -122,7 +140,9 @@
     <h2>No Results Found</h2>
     <div>Can't find what you're looking for?</div>
     <div>
-      <a href="#" target="_blank">Verify the instrument is valid</a>
+      <a
+        href="https://help.risevision.com/hc/en-us/articles/115001426846-Verify-a-stock-symbol-is-valid"
+        target="_blank">Verify the instrument is valid</a>
       or contact
       <a href="mailto:support@risevision.com">support@risevision.com</a>
       for help.
