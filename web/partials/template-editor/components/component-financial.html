@@ -38,6 +38,7 @@
 
   .instrument-delete a {
     color: rgb(239, 70, 55);
+    text-decoration: underline;
   }
 
   .instrument-selector {
@@ -72,7 +73,19 @@
 
   .financial-action-button-bar {
     position: fixed;
+    width: 100%;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    left: 0%;
+    right: 0%;
     bottom: 0%;
+  }
+
+  .financial-action-button-bar > div {
+    background: #FFF;
+    padding-bottom: 10px;
   }
 </style>
 
@@ -84,7 +97,7 @@
     </div>
     <div class="col-xs-2 instrument-delete"><a href="#">Remove</a></div>
   </div>
-</div>>
+</div>
 
 <div ng-show="!showSelector && !animationRunning" class="row financial-action-button-bar">
   <div class="col-sm-4">
