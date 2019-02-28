@@ -70,7 +70,7 @@
     margin-left: 1.5em;
   }
 
-  .financial-action-button {
+  .financial-action-button-bar {
     position: fixed;
     bottom: 0%;
   }
@@ -84,8 +84,11 @@
     </div>
     <div class="col-xs-2 instrument-delete"><a href="#">Remove</a></div>
   </div>
-  <div class="row text-center">
-    <button class="btn btn-primary" ng-click="addInstruments()">
+</div>>
+
+<div ng-show="!showSelector && !animationRunning" class="row financial-action-button-bar">
+  <div class="col-sm-4">
+    <button class="btn btn-primary btn-block" ng-click="addInstruments()">
       <strong>Add Currencies</strong>
     </button>
   </div>
@@ -117,8 +120,10 @@
   </div>
 </div>
 
-<div ng-show="showSelector && !animationRunning" class="financial-action-button">
-  <button class="btn btn-primary btn-block" ng-click="selectInstruments()">
-    <strong>Add Selected</strong>
-  </button>
+<div ng-show="showSelector && !animationRunning" class="row financial-action-button-bar">
+  <div class="col-sm-4">
+    <button class="btn btn-primary btn-block" ng-click="selectInstruments()">
+      <strong>Add Selected</strong>
+    </button>
+  </div>
 </div>
