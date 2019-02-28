@@ -1,6 +1,6 @@
 <div class="row component-header">
   <div class="col-xs-12 attribute-desc">
-    <a ng-click="backToList();">
+    <a ng-click="onBackButton();">
       <span class="attribute-edit text-nowrap">
         <i class="fa fa-lg fa-angle-left arrow-icon"></i>
         <span translate>template.attribute-editor.back-to-list</span>
@@ -14,8 +14,8 @@
   </div>
 </div>
 <div class="row">
-  <div class="col">
-    <template-component-financial ng-if="factory.selected.type === 'rise-data-financial'"></template-component-financial>
-    <template-component-image ng-if="factory.selected.type === 'rise-data-image'"></template-component-image>
+  <div class="col pt-0">
+    <template-component-financial></template-component-financial>
+    <template-component-image></template-component-image>
   </div>
 </div>
