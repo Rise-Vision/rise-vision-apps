@@ -69,6 +69,11 @@
     display: inline-block;
     margin-left: 1.5em;
   }
+
+  .financial-action-button {
+    position: fixed;
+    bottom: 0%;
+  }
 </style>
 
 <div ng-show="!showSelector && !animationRunning" class="instrument-list" ng-class="{ 'instrument-list-hide': showSelector }">
@@ -110,9 +115,10 @@
       </span>
     </div>
   </div>
-  <div class="row text-center">
-    <button class="btn btn-primary" ng-click="selectInstruments()">
-      <strong>Add Selected</strong>
-    </button>
-  </div>
+</div>
+
+<div ng-show="showSelector && !animationRunning" class="financial-action-button">
+  <button class="btn btn-primary btn-block" ng-click="selectInstruments()">
+    <strong>Add Selected</strong>
+  </button>
 </div>
