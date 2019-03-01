@@ -8,10 +8,16 @@ angular.module('risevision.template-editor.directives')
         templateUrl: 'partials/template-editor/components/component-financial.html',
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
-          $scope.showInstrumentList = true;
+          $scope.showInstrumentList = false;
           $scope.showSymbolSelector = false;
+          $scope.enteringInstrumentSelector = true;
           $scope.enteringSymbolSelector = false;
           $scope.exitingSymbolSelector = false;
+
+          $timeout(function () {
+            $scope.enteringInstrumentSelector = false;
+            $scope.showInstrumentList = true;
+          }, 500);
 
           $scope.registerDirective({
             type: 'rise-data-financial',

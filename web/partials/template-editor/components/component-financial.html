@@ -140,8 +140,8 @@
 </style>
 
 <div class="instrument-list"
-    ng-class="{ 'instrument-list-cover': enteringSymbolSelector, 'instrument-list-uncover': exitingSymbolSelector }"
-    ng-show="showInstrumentList || enteringSymbolSelector || exitingSymbolSelector">
+    ng-class="{ 'instrument-list-show': enteringInstrumentSelector, 'instrument-list-cover': enteringSymbolSelector, 'instrument-list-uncover': exitingSymbolSelector }"
+    ng-show="showInstrumentList || enteringInstrumentSelector || exitingSymbolSelector">
   <div class="row instrument-row" ng-repeat="instr in instruments">
     <div class="col-xs-10">
       <div class="instrument-name">{{ instr.name | uppercase }}</div>
@@ -161,7 +161,7 @@
 
 <div class="instrument-selector"
     ng-class="{ 'instrument-selector-show': enteringSymbolSelector, 'instrument-selector-hide': exitingSymbolSelector }"
-    ng-show="showSymbolSelector || enteringSymbolSelector || exitingSymbolSelector">
+    ng-show="showSymbolSelector || enteringSymbolSelector">
   <div class="input-group">
     <span class="input-group-addon">
       <i class="fa fa-search"></i>
