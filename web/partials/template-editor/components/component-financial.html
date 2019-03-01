@@ -1,4 +1,15 @@
 <style>
+
+  @keyframes slide-in-right {
+    0% { transform: translateX(150%); }
+    100% { transform: translateX(0%); }
+  }
+
+  @keyframes slide-out-right {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(150%); }
+  }
+
   .instrument-list {
     animation-name: slide-in;
     animation-duration: 0.5s;
@@ -85,7 +96,7 @@
     font-weight: bold;
   }
 
-  .instrument-selector-no-results > a {
+  .instrument-selector-no-results a:hover {
     text-decoration: underline;
   }
 
