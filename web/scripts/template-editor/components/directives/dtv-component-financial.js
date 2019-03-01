@@ -13,6 +13,7 @@ angular.module('risevision.template-editor.directives')
             $scope.showInstrumentList = false;
             $scope.showSymbolSelector = false;
             $scope.enteringInstrumentSelector = false;
+            $scope.exitingInstrumentSelector = false;
             $scope.enteringSymbolSelector = false;
             $scope.exitingSymbolSelector = false;
           }
@@ -32,7 +33,7 @@ angular.module('risevision.template-editor.directives')
               $timeout(function () {
                 $scope.enteringInstrumentSelector = false;
                 $scope.showInstrumentList = true;
-              }, 500);
+              }, 1000);
             },
             onBackHandler: function () {
               if ($scope.showSymbolSelector) {
