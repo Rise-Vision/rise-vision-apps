@@ -12,8 +12,11 @@
 
 <div class="toolbar-right">
   <button id="saveButton"
-    class="btn btn-primary btn-fixed-width u_margin-right hidden-xs">
-    {{ 'common.save' | translate }}
+    class="btn btn-primary btn-fixed-width u_margin-right hidden-xs"
+    ng-click="factory.save()">
+    {{ factory.savingPresentation ?
+      ( 'common.saving' | translate ) : ( 'common.save' | translate )
+    }}
     <i class="fa fa-check icon-right"></i>
   </button>
 

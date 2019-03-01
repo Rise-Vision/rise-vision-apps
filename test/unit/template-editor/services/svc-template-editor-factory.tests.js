@@ -11,6 +11,7 @@ describe('service: templateEditorFactory:', function() {
     $provide.service('presentation',function () {
       return {
         add : function() {},
+        update : function() {},
         get: function() {},
         delete: function () {}
       };
@@ -159,6 +160,76 @@ describe('service: templateEditorFactory:', function() {
           expect(templateEditorFactory.errorMessage).to.equal('Failed to add Presentation.');
 
           processErrorCode.should.have.been.calledWith('Presentation', 'add', e);
+          expect(templateEditorFactory.apiError).to.be.ok;
+          expect(messageBox).to.have.been.called;
+
+          setTimeout(function() {
+            expect(templateEditorFactory.loadingPresentation).to.be.false;
+            expect(templateEditorFactory.savingPresentation).to.be.false;
+            expect($state.go).to.not.have.been.called;
+
+            done();
+          }, 10);
+        })
+        .then(null, done);
+    });
+  });
+
+  describe('updatePresentation:',function(){
+    it('should update the presentation',function(done){
+      sandbox.stub(presentation, 'update').returns(Q.resolve({
+        item: {
+          name: 'Test Presentation',
+          id: 'presentationId'
+        }
+      }));
+
+      $httpBackend.when('GET', blueprintUrl).respond(200, {});
+      setTimeout(function() {
+        $httpBackend.flush();
+      });
+
+      templateEditorFactory.createFromTemplate({ productCode: 'test-id', name: 'Test HTML Template' });
+      expect(templateEditorFactory.presentation.id).to.be.undefined;
+      expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
+      expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
+
+      templateEditorFactory.updatePresentation()
+        .then(function() {
+          expect(messageBox).to.not.have.been.called;
+          expect(templateEditorFactory.savingPresentation).to.be.true;
+          expect(templateEditorFactory.loadingPresentation).to.be.true;
+
+          setTimeout(function(){
+            expect(presentation.update.getCall(0).args[1].templateAttributeData).to.equal('{}');
+            expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
+            expect(templateEditorFactory.savingPresentation).to.be.false;
+            expect(templateEditorFactory.loadingPresentation).to.be.false;
+            expect(templateEditorFactory.errorMessage).to.not.be.ok;
+            expect(templateEditorFactory.apiError).to.not.be.ok;
+
+            done();
+          },10);
+        })
+        .then(null, function(err) {
+          done(err);
+        })
+        .then(null, done);
+    });
+
+    it('should show an error if fails to update presentation',function(done){
+      sandbox.stub(presentation, 'update').returns(Q.reject({ name: 'Test Presentation' }));
+
+      templateEditorFactory.updatePresentation()
+        .then(function(result) {
+          done(result);
+        })
+        .then(null, function(e) {
+          expect(e).to.be.ok;
+          expect(templateEditorFactory.errorMessage).to.be.ok;
+          expect(templateEditorFactory.errorMessage).to.equal('Failed to update Presentation.');
+
+          processErrorCode.should.have.been.calledWith('Presentation', 'update', e);
           expect(templateEditorFactory.apiError).to.be.ok;
           expect(messageBox).to.have.been.called;
 
