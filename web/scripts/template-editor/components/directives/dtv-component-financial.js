@@ -13,11 +13,12 @@ angular.module('risevision.template-editor.directives')
           $scope.enteringInstrumentSelector = true;
           $scope.enteringSymbolSelector = false;
           $scope.exitingSymbolSelector = false;
-
+          console.log("entering symbol selector");
           $timeout(function () {
             $scope.enteringInstrumentSelector = false;
             $scope.showInstrumentList = true;
-          }, 500);
+            console.log("entered symbol selector");
+          }, 3000);
 
           $scope.registerDirective({
             type: 'rise-data-financial',
