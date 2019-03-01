@@ -14,7 +14,7 @@
     100% { transform: translateX(150%); }
   }
 
-  .instrument-list {
+  .instrument-list-show {
     animation-name: slide-in-right;
     animation-duration: 0.5s;
     animation-fill-mode: forwards;
@@ -28,10 +28,14 @@
 
   .instrument-list-cover {
     animation-name: slide-out;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
   }
 
   .instrument-list-uncover {
     animation-name: slide-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
   }
 
   .instrument-row {
@@ -61,10 +65,14 @@
 
   .instrument-delete a {
     color: rgb(239, 70, 55);
+    text-decoration: none;
+  }
+
+  .instrument-delete a:hover {
     text-decoration: underline;
   }
 
-  .instrument-selector {
+  .instrument-selector-show {
     animation-name: slide-in-right;
     animation-duration: 0.5s;
     animation-fill-mode: forwards;
@@ -132,7 +140,7 @@
 
 <div class="instrument-list"
     ng-class="{ 'instrument-list-cover': enteringSymbolSelector, 'instrument-list-uncover': exitingSymbolSelector }"
-    ng-show="!showSymbolSelector || enteringSymbolSelector || exitingSymbolSelector">
+    ng-show="showInstrumentList || enteringSymbolSelector || exitingSymbolSelector">
   <div class="row instrument-row" ng-repeat="instr in instruments">
     <div class="col-xs-10">
       <div class="instrument-name">{{ instr.name | uppercase }}</div>
@@ -142,8 +150,7 @@
   </div>
 </div>
 
-<div ng-show="!showSymbolSelector && !isAnimationRunning()"
-    class="row financial-action-button-bar">
+<div class="row financial-action-button-bar" ng-show="showInstrumentList">
   <div class="col-sm-4">
     <button class="btn btn-primary btn-block" ng-click="showSymbolSearch()">
       <strong>Add Currencies</strong>
@@ -152,7 +159,7 @@
 </div>
 
 <div class="instrument-selector"
-    ng-class="{ 'instrument-selector-hide': exitingSymbolSelector }"
+    ng-class="{ 'instrument-selector-show': enteringSymbolSelector, 'instrument-selector-hide': exitingSymbolSelector }"
     ng-show="showSymbolSelector || enteringSymbolSelector || exitingSymbolSelector">
   <div class="input-group">
     <span class="input-group-addon">
@@ -194,8 +201,7 @@
   </div>
 </div>
 
-<div ng-show="showSymbolSelector && !isAnimationRunning()"
-    class="row financial-action-button-bar">
+<div class="row financial-action-button-bar" ng-show="showSymbolSelector">
   <div class="col-sm-4">
     <button class="btn btn-primary btn-block" ng-click="selectInstruments()">
       <strong>Add Selected</strong>

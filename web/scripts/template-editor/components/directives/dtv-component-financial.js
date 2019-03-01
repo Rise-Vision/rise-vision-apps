@@ -8,6 +8,7 @@ angular.module('risevision.template-editor.directives')
         templateUrl: 'partials/template-editor/components/component-financial.html',
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
+          $scope.showInstrumentList = true;
           $scope.showSymbolSelector = false;
           $scope.enteringSymbolSelector = false;
           $scope.exitingSymbolSelector = false;
@@ -32,12 +33,9 @@ angular.module('risevision.template-editor.directives')
             changeInstrumentView(false);
           };
 
-          $scope.isAnimationRunning = function() {
-            return $scope.enteringSymbolSelector || $scope.exitingSymbolSelector;
-          }
-
           function changeInstrumentView(enteringSelector, delay) {
-            $scope.showSymbolSelector = enteringSelector;
+            $scope.showInstrumentList = false;
+            $scope.showSymbolSelector = false;
 
             if(enteringSelector) {
               $scope.enteringSymbolSelector = true;
@@ -50,6 +48,8 @@ angular.module('risevision.template-editor.directives')
             $timeout(function () {
               $scope.enteringSymbolSelector = false;
               $scope.exitingSymbolSelector = false;
+              $scope.showSymbolSelector = enteringSelector;
+              $scope.showInstrumentList = !enteringSelector;
             }, !isNaN(delay) ? delay : 500);
           }
 
