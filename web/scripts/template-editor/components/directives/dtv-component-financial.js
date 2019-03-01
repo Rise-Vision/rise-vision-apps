@@ -23,12 +23,12 @@ angular.module('risevision.template-editor.directives')
           });
 
           $scope.addInstruments = function () {
-            _startAnimationDelay(0);
+            _startAnimationDelay();
             $scope.showSelector = true;
           };
 
           $scope.selectInstruments = function () {
-            _startAnimationDelay(0);
+            _startAnimationDelay();
             $scope.showSelector = false;
           };
 
