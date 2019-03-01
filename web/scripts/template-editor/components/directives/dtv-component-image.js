@@ -12,7 +12,10 @@ angular.module('risevision.template-editor.directives')
           $scope.registerDirective({
             type: 'rise-data-image',
             icon: 'fa-image',
-            element: element
+            element: element,
+            show: function() {
+              element.show();
+            }
           });
         }
       };

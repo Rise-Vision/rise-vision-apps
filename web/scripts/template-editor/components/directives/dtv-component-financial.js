@@ -8,39 +8,49 @@ angular.module('risevision.template-editor.directives')
         templateUrl: 'partials/template-editor/components/component-financial.html',
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
-          $scope.showInstrumentList = false;
-          $scope.showSymbolSelector = false;
-          $scope.enteringInstrumentSelector = true;
-          $scope.enteringSymbolSelector = false;
-          $scope.exitingSymbolSelector = false;
-          console.log("entering symbol selector");
-          $timeout(function () {
+
+          function _reset() {
+            $scope.showInstrumentList = false;
+            $scope.showSymbolSelector = false;
             $scope.enteringInstrumentSelector = false;
-            $scope.showInstrumentList = true;
-            console.log("entered symbol selector");
-          }, 3000);
+            $scope.enteringSymbolSelector = false;
+            $scope.exitingSymbolSelector = false;
+          }
+
+          _reset();
 
           $scope.registerDirective({
             type: 'rise-data-financial',
             icon: 'fa-line-chart',
             element: element,
+            show: function() {
+              element.show();
+
+              _reset();
+              $scope.enteringInstrumentSelector = true;
+
+              $timeout(function () {
+                $scope.enteringInstrumentSelector = false;
+                $scope.showInstrumentList = true;
+              }, 500);
+            },
             onBackHandler: function () {
               if ($scope.showSymbolSelector) {
-                changeInstrumentView(false);
+                _changeInstrumentView(false);
                 return true;
               }
             }
           });
 
           $scope.showSymbolSearch = function () {
-            changeInstrumentView(true);
+            _changeInstrumentView(true);
           };
 
           $scope.selectInstruments = function () {
-            changeInstrumentView(false);
+            _changeInstrumentView(false);
           };
 
-          function changeInstrumentView(enteringSelector, delay) {
+          function _changeInstrumentView(enteringSelector, delay) {
             $scope.showInstrumentList = false;
             $scope.showSymbolSelector = false;
 

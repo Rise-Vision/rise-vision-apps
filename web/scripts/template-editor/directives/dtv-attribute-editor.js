@@ -20,7 +20,7 @@ angular.module('risevision.template-editor.directives')
             var directive = $scope.directives[component.type];
 
             $scope.factory.selected = component;
-            directive.element.show();
+            directive.show();
 
             _showAttributeList(false, 300);
           };
