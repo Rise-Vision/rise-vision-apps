@@ -8,34 +8,48 @@ angular.module('risevision.template-editor.directives')
         templateUrl: 'partials/template-editor/components/component-financial.html',
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
-          $scope.showSelector = false;
+          $scope.showSymbolSelector = false;
+          $scope.enteringSymbolSelector = false;
+          $scope.exitingSymbolSelector = false;
 
           $scope.registerDirective({
             type: 'rise-data-financial',
             icon: 'fa-line-chart',
             element: element,
             onBackHandler: function () {
-              if ($scope.showSelector) {
-                $scope.showSelector = false;
+              if ($scope.showSymbolSelector) {
+                changeInstrumentView(false);
                 return true;
               }
             }
           });
 
-          $scope.addInstruments = function () {
-            _startAnimationDelay();
-            $scope.showSelector = true;
+          $scope.showSymbolSearch = function () {
+            changeInstrumentView(true);
           };
 
           $scope.selectInstruments = function () {
-            _startAnimationDelay();
-            $scope.showSelector = false;
+            changeInstrumentView(false);
           };
 
-          function _startAnimationDelay(delay) {
-            $scope.animationRunning = true;
+          $scope.isAnimationRunning = function() {
+            return $scope.enteringSymbolSelector || $scope.exitingSymbolSelector;
+          }
+
+          function changeInstrumentView(enteringSelector, delay) {
+            $scope.showSymbolSelector = enteringSelector;
+
+            if(enteringSelector) {
+              $scope.enteringSymbolSelector = true;
+              $scope.exitingSymbolSelector = false;
+            } else {
+              $scope.enteringSymbolSelector = false;
+              $scope.exitingSymbolSelector = true;
+            }
+
             $timeout(function () {
-              $scope.animationRunning = false;
+              $scope.enteringSymbolSelector = false;
+              $scope.exitingSymbolSelector = false;
             }, !isNaN(delay) ? delay : 500);
           }
 

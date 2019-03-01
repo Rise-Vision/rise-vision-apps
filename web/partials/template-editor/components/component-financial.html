@@ -26,6 +26,14 @@
     animation-fill-mode: forwards;
   }
 
+  .instrument-list-cover {
+    animation-name: slide-out;
+  }
+
+  .instrument-list-uncover {
+    animation-name: slide-in;
+  }
+
   .instrument-row {
     border-bottom: 1px solid rgb(242, 242, 242);
     padding-bottom: 0.5em;
@@ -122,7 +130,9 @@
   }
 </style>
 
-<div ng-show="!showSelector" class="instrument-list" ng-class="{ 'instrument-list-hide': showSelector }">
+<div class="instrument-list"
+    ng-class="{ 'instrument-list-cover': enteringSymbolSelector, 'instrument-list-uncover': exitingSymbolSelector }"
+    ng-show="!showSymbolSelector || enteringSymbolSelector || exitingSymbolSelector">
   <div class="row instrument-row" ng-repeat="instr in instruments">
     <div class="col-xs-10">
       <div class="instrument-name">{{ instr.name | uppercase }}</div>
@@ -132,15 +142,18 @@
   </div>
 </div>
 
-<div ng-show="!showSelector && !animationRunning" class="row financial-action-button-bar">
+<div ng-show="!showSymbolSelector && !isAnimationRunning()"
+    class="row financial-action-button-bar">
   <div class="col-sm-4">
-    <button class="btn btn-primary btn-block" ng-click="addInstruments()">
+    <button class="btn btn-primary btn-block" ng-click="showSymbolSearch()">
       <strong>Add Currencies</strong>
     </button>
   </div>
 </div>
 
-<div ng-show="showSelector" class="instrument-selector" ng-class="{ 'instrument-selector-hide': !showSelector }">
+<div class="instrument-selector"
+    ng-class="{ 'instrument-selector-hide': exitingSymbolSelector }"
+    ng-show="showSymbolSelector || enteringSymbolSelector || exitingSymbolSelector">
   <div class="input-group">
     <span class="input-group-addon">
       <i class="fa fa-search"></i>
@@ -181,7 +194,8 @@
   </div>
 </div>
 
-<div ng-show="showSelector && !animationRunning" class="row financial-action-button-bar">
+<div ng-show="showSymbolSelector && !isAnimationRunning()"
+    class="row financial-action-button-bar">
   <div class="col-sm-4">
     <button class="btn btn-primary btn-block" ng-click="selectInstruments()">
       <strong>Add Selected</strong>
