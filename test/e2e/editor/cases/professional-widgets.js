@@ -18,7 +18,7 @@ var helper = require('rv-common-e2e').helper;
 var ProfessionalWidgetsScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
-  describe('Professional Widgets', function () {
+  xdescribe('Professional Widgets', function () {
     var subCompanyName = 'E2E TEST SUBCOMPANY - PROFESSIONAL WIDGETS';
     var homepage;
     var signInPage;
