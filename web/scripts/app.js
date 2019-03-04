@@ -371,15 +371,14 @@ angular.module('risevision.apps', [
                 }
 
                 return canAccessApps(signup).then(function () {
-                  if ($stateParams.presentationId && $stateParams.presentationId !== 'new') {
-                    return editorFactory.getPresentation($stateParams.presentationId);
-                  } else if (!$stateParams.copyPresentation) {
-                    if (copyOf) {
-                      return editorFactory.copyTemplate(null, copyOf);
-                    }
-                    return editorFactory.newPresentation();
-                  } else {
+                  if ($stateParams.copyPresentation) {
                     return editorFactory.presentation;
+                  } else if ($stateParams.presentationId && $stateParams.presentationId !== 'new') {
+                    return editorFactory.getPresentation($stateParams.presentationId);
+                  } else if (copyOf) {
+                    return editorFactory.copyTemplate(null, copyOf);
+                  } else {
+                    return editorFactory.newPresentation();
                   }
                 });
               }
