@@ -6,14 +6,16 @@
       <div class="instrument-name">{{ instr.name | uppercase }}</div>
       <div class="instrument-rate">{{ instr.rate | uppercase }}</div>
     </div>
-    <div class="col-xs-2 instrument-delete"><a href="#">Remove</a></div>
+    <div class="col-xs-2 instrument-delete">
+      <a href="#" translate>editor-app.details.remove</a>
+    </div>
   </div>
 </div>
 
 <div class="row financial-action-button-bar" ng-show="showInstrumentList">
   <div class="col-sm-4">
     <button class="btn btn-primary btn-block" ng-click="showSymbolSearch()">
-      <strong>Add Currencies</strong>
+      <strong translate>template.financial.add-category.currencies</strong>
     </button>
   </div>
 </div>
@@ -26,27 +28,27 @@
       <i class="fa fa-search"></i>
     </span>
     <input type="text" class="form-control"
-      placeholder="Search Currencies"
-      aria-label="Search Currencies">
+      placeholder="{{ 'template.financial.search-category.currencies' | translate }}"
+      aria-label="{{ 'template.financial.search-category.currencies' | translate }}">
     <span class="input-group-addon">
       <i class="fa fa-close"></i>
     </span>
   </div>
 
   <div class="instrument-selector-no-results">
-    <h2>No Results Found</h2>
-    <div>Can't find what you're looking for?</div>
+    <h2 translate>template.financial.no-results.title</h2>
+    <div translate>template.financial.no-results.question</div>
     <div>
-      <a
+      <a target="_blank"
         href="https://help.risevision.com/hc/en-us/articles/115001426846-Verify-a-stock-symbol-is-valid"
-        target="_blank">Verify the instrument is valid</a>
-      or contact
+        translate>template.financial.no-results.verify-start</a>
+      {{ 'template.financial.no-results.verify-mid' | translate }}
       <a href="mailto:support@risevision.com">support@risevision.com</a>
-      for help.
+      {{ 'template.financial.no-results.verify-end' | translate }}
     </div>
   </div>
 
-  <div class="instrument-selector-popular">Most Popular Currencies</div>
+  <div class="instrument-selector-popular" translate>template.financial.most-popular-category.currencies</div>
 
   <div class="row instrument-row" ng-repeat="instr in instruments">
     <div class="col-xs-12">
