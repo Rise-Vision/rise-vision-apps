@@ -7,7 +7,8 @@ angular.module('risevision.template-editor.controllers')
       $scope.presentation = presentation;
 
       $scope.getBlueprintData = function(componentId, attributeKey) {
-        var component = _.find($scope.components, {id: componentId});
+        var components = $scope.factory.blueprintData.components;
+        var component = _.find(components, {id: componentId});
 
         if(!component || !component.attributes) {
           return null;

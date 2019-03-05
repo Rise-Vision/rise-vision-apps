@@ -30,17 +30,22 @@ describe('controller: TemplateEditor', function() {
     }
   ];
 
+  var $scope,
+    factory;
+
+  beforeEach(function() {
+    factory = {};
+  });
+
   beforeEach(module('risevision.template-editor.controllers'));
   beforeEach(module('risevision.template-editor.services'));
   beforeEach(module('risevision.editor.services'));
   beforeEach(module(mockTranlate()));
   beforeEach(module(function ($provide) {
     $provide.factory('templateEditorFactory',function() {
-      return {};
+      return factory;
     });
   }));
-
-  var $scope;
 
   beforeEach(function() {
     inject(function($injector, $rootScope, $controller) {
@@ -119,21 +124,23 @@ describe('controller: TemplateEditor', function() {
   });
 
   it('should get null blueprint data',function() {
-    $scope.components = [];
+    factory.blueprintData = { components: [] };
+
     var data = $scope.getBlueprintData("rise-data-financial-01");
 
     expect(data).to.be.null;
   });
 
   it('should get null blueprint data value',function() {
-    $scope.components = [];
+    factory.blueprintData = { components: [] };
+
     var data = $scope.getBlueprintData("rise-data-financial-01", "symbols");
 
     expect(data).to.be.null;
   });
 
   it('should get blueprint data attributes',function() {
-    $scope.components = SAMPLE_COMPONENTS;
+    factory.blueprintData = { components: SAMPLE_COMPONENTS };
 
     var data = $scope.getBlueprintData("rise-data-financial-01");
 
@@ -150,7 +157,7 @@ describe('controller: TemplateEditor', function() {
   });
 
   it('should get blueprint data value',function() {
-    $scope.components = SAMPLE_COMPONENTS;
+    factory.blueprintData = { components: SAMPLE_COMPONENTS };
 
     var data = $scope.getBlueprintData("rise-data-financial-01", "symbols");
 
