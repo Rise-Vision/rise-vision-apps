@@ -93,7 +93,7 @@
     </div>
   </div>
 
-  <div class="instrument-selector-popular" ng-show="instrumentSearch.length > 0" translate>template.financial.most-popular-category.currencies</div>
+  <div class="instrument-selector-popular" ng-show="instrumentSearch.length > 0">{{ getPopularTitle() | translate }}</div>
 
   <div class="row instrument-row" ng-show="instrumentSearch.length > 0"
        ng-repeat="(key, value) in instrumentSearch"

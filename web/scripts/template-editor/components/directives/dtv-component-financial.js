@@ -77,6 +77,10 @@ angular.module('risevision.template-editor.directives')
               } );
           };
 
+          $scope.getPopularTitle = function() {
+            return 'template.financial.most-popular-category.' + $scope.category;
+          };
+
           function _changeInstrumentView(enteringSelector, delay) {
             $scope.showInstrumentList = false;
             $scope.showSymbolSelector = false;
