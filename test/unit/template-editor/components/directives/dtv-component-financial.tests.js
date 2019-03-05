@@ -6,6 +6,44 @@ describe('directive: TemplateComponentFinancial', function() {
       factory,
       timeout;
 
+  var popularResults = [
+    {
+      "symbol": "CADUSD=X",
+      "name": "CANADIAN DOLLAR",
+      "category": "currencies",
+      "logo": "https://risecontentlogos.s3.amazonaws.com/financial/CAD-USD.svg"
+    },
+    {
+      "symbol": "CHFUSD=X",
+      "name": "SWISS FRANC",
+      "category": "currencies",
+      "logo": "https://risecontentlogos.s3.amazonaws.com/financial/CHF-USD.svg"
+    },
+    {
+      "symbol": "HKDUSD=X",
+      "name": "HONG KONG DOLLAR",
+      "category": "currencies",
+      "logo": "https://risecontentlogos.s3.amazonaws.com/financial/HKD-USD.svg"
+    }
+  ],
+    keywordResults = [
+      {
+        "symbol": "SXFc1",
+        "name": "Montreal Exchange S&P/TSX 60 Index Future Continuation 1",
+        "category": "Stocks"
+      },
+      {
+        "symbol": "FCSc1",
+        "name": "Montreal Exchange S&P/TSX CompositeTM Mini Index Future Continuation 1",
+        "category": "Stocks"
+      },
+      {
+        "symbol": "LLY",
+        "name": "Eli Lilly and Co",
+        "category": "Stocks"
+      }
+    ];
+
   beforeEach(function() {
     factory = {};
   });
@@ -18,6 +56,17 @@ describe('directive: TemplateComponentFinancial', function() {
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
       return factory;
+    });
+
+    $provide.service('instrumentSearchService', function($q) {
+      return {
+        popularSearch: function() {
+          return $q.when(popularResults);
+        },
+        keywordSearch: function() {
+          return $q.when(keywordResults)
+        }
+      };
     });
   }));
 
