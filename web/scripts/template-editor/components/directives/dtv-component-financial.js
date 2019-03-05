@@ -33,6 +33,15 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _buildInstrumentListFromBlueprint() {
+            var symbolString = $scope.getBlueprintData(componentId, "symbols");
+
+            if(!symbolString) {
+              $log.error("The component blueprint data is not providing default symbols value: " + componentId)
+
+              return;
+            }
+
+            var symbols = symbolString.split("|");
           }
 
           _reset();
