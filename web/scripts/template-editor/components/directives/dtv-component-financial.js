@@ -73,13 +73,13 @@ angular.module('risevision.template-editor.directives')
 
           $scope.instruments = [{
             name: 'Canadian Dollar',
-            rate: 'CADUSD=X'
+            symbol: 'CADUSD=X'
           }, {
             name: 'Swiss Franc',
-            rate: 'CHFUSD=X'
+            symbol: 'CHFUSD=X'
           }, {
             name: 'Hong Kong Dollar',
-            rate: 'HKDUSD=X'
+            symbol: 'HKDUSD=X'
           }];
         }
       };
