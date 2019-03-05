@@ -8,17 +8,27 @@ describe('app:', function() {
 
       module(function ($provide) {
         $provide.service('canAccessApps',function(){
-          return function() {
-            var deferred = Q.defer();
-            deferred.resolve("auth");
-            return deferred.promise;
-          }
+          return sinon.spy(function() {
+            return Q.resolve("auth");
+          })
         });
+
+        $provide.service('editorFactory',function(){
+          return {
+            presentation: 'copyPresentation',
+            addPresentationModal: sinon.spy(),
+            getPresentation: sinon.spy(),
+            copyTemplate: sinon.spy(),
+            newPresentation: sinon.spy()
+          };
+        });
+
         $provide.service('displayFactory',function(){
           return {
             addDisplayModal: function(){}
           };
         });
+
         $provide.service('plansFactory',function(){
           return {
             showPlansModal: sinon.stub()
@@ -33,34 +43,123 @@ describe('app:', function() {
         displayFactory = $injector.get('displayFactory');
         plansFactory = $injector.get('plansFactory');
         $rootScope = $injector.get('$rootScope');
+        $location = $injector.get('$location');
       });
   });
 
 
-  var $state, canAccessApps, editorFactory, displayFactory, plansFactory, $rootScope;
+  var $state, canAccessApps, editorFactory, displayFactory, plansFactory, $rootScope, $location;
 
   describe('state apps.editor.add:',function(){
 
     it('should register state',function(){
-      var state = $state.get('apps.editor.add')
+      var state = $state.get('apps.editor.add');
       expect(state).to.be.ok;
       expect(state.url).to.equal('/editor/add');
       expect(state.controller).to.be.ok;
     });
 
     it('should init add presentation modal',function(done){
-      var spy = sinon.spy(editorFactory,'addPresentationModal')
       $state.get('apps.editor.add').controller[3]($state, canAccessApps, editorFactory);
       setTimeout(function() {
-        spy.should.have.been.called;
+        canAccessApps.should.have.been.called;
+
+        editorFactory.addPresentationModal.should.have.been.called;
         done();
       }, 10);
     });
   });
 
+  describe('state apps.editor.workspace:',function(){
+    it('should register state',function(){
+      var state = $state.get('apps.editor.workspace');
+      expect(state).to.be.ok;
+      expect(state.url).to.equal('/editor/workspace/:presentationId/:copyPresentation');
+      expect(state.controller).to.be.ok;
+      expect(state.abstract).to.be.true;
+    });
+
+    it('should only check access once', function(done) {
+      $state.get('apps.editor.workspace').resolve.presentationInfo[4](canAccessApps, editorFactory, {}, $location);
+      setTimeout(function() {
+        canAccessApps.should.have.been.called.once;
+        canAccessApps.should.have.been.calledWith();
+
+        done();
+      }, 10);
+    });
+
+    it('should redirect to signup for templates', function(done) {
+      var $stateParams = {
+        presentationId: 'new'
+      }
+      sinon.stub($location, 'search').returns({copyOf: 'templateId'});
+
+      $state.get('apps.editor.workspace').resolve.presentationInfo[4](canAccessApps, editorFactory, $stateParams, $location);
+      setTimeout(function() {
+        canAccessApps.should.have.been.calledWith(true);
+
+        done();
+      }, 10);
+    });
+
+    describe('states: ', function() {
+      it('should copy presentation', function(done) {
+        var $stateParams = {
+          copyPresentation: true
+        };
+
+        $state.get('apps.editor.workspace').resolve.presentationInfo[4](canAccessApps, editorFactory, $stateParams, $location)
+          .then(function(stateResolve) {
+            expect(stateResolve).to.equal('copyPresentation');
+
+            done();
+          });
+      });
+
+      it('should retrieve existing presentation', function(done) {
+        var $stateParams = {
+          presentationId: 'presentationId'
+        };
+
+        $state.get('apps.editor.workspace').resolve.presentationInfo[4](canAccessApps, editorFactory, $stateParams, $location)
+          .then(function() {
+            editorFactory.getPresentation.should.have.been.calledWith('presentationId');
+
+            done();
+          });
+      });
+
+      it('should copy template', function(done) {
+        var $stateParams = {
+          presentationId: 'new'
+        };
+        sinon.stub($location, 'search').returns({copyOf: 'templateId'});
+
+        $state.get('apps.editor.workspace').resolve.presentationInfo[4](canAccessApps, editorFactory, $stateParams, $location)
+          .then(function() {
+            editorFactory.copyTemplate.should.have.been.calledWith(null, 'templateId');
+
+            done();
+          });
+      });
+
+      it('should add new presentation', function(done) {
+        var $stateParams = {};
+
+        $state.get('apps.editor.workspace').resolve.presentationInfo[4](canAccessApps, editorFactory, $stateParams, $location)
+          .then(function() {
+            editorFactory.newPresentation.should.have.been.called;
+
+            done();
+          });
+      });
+    });
+  });
+
   describe('state apps.editor.workspace.artboard:',function(){
     it('should register state',function(){
-      var state = $state.get('apps.editor.workspace.artboard')
+      var state = $state.get('apps.editor.workspace.artboard');
       expect(state).to.be.ok;
       expect(state.url).to.equal('');
       expect(state.controller).to.be.ok;
@@ -71,7 +170,7 @@ describe('app:', function() {
 
   describe('state apps.editor.workspace.htmleditor:',function(){
     it('should register state',function(){
-      var state = $state.get('apps.editor.workspace.htmleditor')
+      var state = $state.get('apps.editor.workspace.htmleditor');
       expect(state).to.be.ok;
       expect(state.url).to.equal('/htmleditor');
       expect(state.controller).to.be.ok;
@@ -90,7 +189,7 @@ describe('app:', function() {
 
   describe('state apps.launcher.signup:',function(){
     it('should register state',function(){
-      var state = $state.get('apps.launcher.signup')
+      var state = $state.get('apps.launcher.signup');
       expect(state).to.be.ok;
       expect(state.url).to.equal('/signup');
       expect(state.controller).to.be.ok;
