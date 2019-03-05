@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .constant('INSTRUMENT_SEARCH_BASE_URL', '"https://contentfinancial2.appspot.com/_ah/api/financial/v1.00/"')
+  .constant('INSTRUMENT_SEARCH_BASE_URL', 'https://contentfinancial2.appspot.com/_ah/api/financial/v1.00/')
   .service('instrumentSearchService', ['$q', '$log', '$http', 'INSTRUMENT_SEARCH_BASE_URL',
     function ($q, $log, $http, INSTRUMENT_SEARCH_BASE_URL) {
       var factory = {},

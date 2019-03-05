@@ -1,3 +1,70 @@
-<div class="col">
-    Financial Component
+<div class="instrument-list"
+    ng-class="{ 'instrument-list-show': enteringInstrumentSelector, 'instrument-list-cover': enteringSymbolSelector, 'instrument-list-uncover': exitingSymbolSelector }"
+    ng-show="showInstrumentList || enteringInstrumentSelector || exitingSymbolSelector">
+  <div class="row instrument-row" ng-repeat="instr in instruments">
+    <div class="col-xs-10">
+      <div class="instrument-name">{{ instr.name | uppercase }}</div>
+      <div class="instrument-rate">{{ instr.rate | uppercase }}</div>
+    </div>
+    <div class="col-xs-2 instrument-delete">
+      <a href="#" translate>editor-app.details.remove</a>
+    </div>
+  </div>
+</div>
+
+<div class="row financial-action-button-bar" ng-show="showInstrumentList">
+  <div class="col-sm-4">
+    <button class="btn btn-primary btn-block" ng-click="showSymbolSearch()">
+      <strong translate>template.financial.add-category.currencies</strong>
+    </button>
+  </div>
+</div>
+
+<div class="instrument-selector"
+    ng-class="{ 'instrument-selector-show': enteringSymbolSelector, 'instrument-selector-hide': exitingSymbolSelector }"
+    ng-show="showSymbolSelector || enteringSymbolSelector">
+  <div class="input-group">
+    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+    <input type="text" class="form-control"
+      placeholder="{{ 'template.financial.search-category.currencies' | translate }}"
+      aria-label="{{ 'template.financial.search-category.currencies' | translate }}">
+    <span class="input-group-addon">
+      <i class="fa fa-close"></i>
+    </span>
+  </div>
+
+  <div class="instrument-selector-no-results">
+    <h2 translate>template.financial.no-results.title</h2>
+    <div translate>template.financial.no-results.question</div>
+    <div>
+      <a target="_blank"
+        href="https://help.risevision.com/hc/en-us/articles/115001426846-Verify-a-stock-symbol-is-valid"
+        translate>template.financial.no-results.verify-start</a>
+      {{ 'template.financial.no-results.verify-mid' | translate }}
+      <a href="mailto:support@risevision.com">support@risevision.com</a>
+      {{ 'template.financial.no-results.verify-end' | translate }}
+    </div>
+  </div>
+
+  <div class="instrument-selector-popular" translate>template.financial.most-popular-category.currencies</div>
+
+  <div class="row instrument-row" ng-repeat="instr in instruments">
+    <div class="col-xs-12">
+      <span class="instrument-selector-checkbox">
+        <input type="checkbox">
+      </span>
+      <span class="instrument-selector-name">
+        <div class="instrument-name">{{ instr.name | uppercase }}</div>
+        <div class="instrument-rate">{{ instr.rate | uppercase }}</div>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="row financial-action-button-bar" ng-show="showSymbolSelector">
+  <div class="col-sm-4">
+    <button class="btn btn-primary btn-block" ng-click="selectInstruments()">
+      <strong translate>template.financial.add-selected</strong>
+    </button>
+  </div>
 </div>

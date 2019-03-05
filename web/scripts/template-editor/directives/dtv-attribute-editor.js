@@ -9,24 +9,43 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope) {
           $scope.factory = templateEditorFactory;
           $scope.showAttributeList = true;
+          $scope.directives = {};
+
+          $scope.registerDirective = function (directive) {
+            directive.element.hide();
+            $scope.directives[directive.type] = directive;
+          };
 
           $scope.editComponent = function (component) {
+            var directive = $scope.directives[component.type];
+
             $scope.factory.selected = component;
+            directive.show();
+
             _showAttributeList(false, 300);
           };
 
+          $scope.onBackButton = function () {
+            var component = $scope.factory.selected;
+            var directive = $scope.directives[component.type];
+
+            if (!directive.onBackHandler || !directive.onBackHandler()) {
+              $scope.backToList();
+            }
+          };
+
           $scope.backToList = function () {
+            var component = $scope.factory.selected;
+            var directive = $scope.directives[component.type];
+
             $scope.factory.selected = null;
+            directive.element.hide();
+
             _showAttributeList(true, 0);
           };
 
           $scope.getComponentIcon = function (component) {
-            var iconsMap = {
-              'rise-data-financial': 'fa-line-chart',
-              'rise-data-image': 'fa-image'
-            };
-
-            return component ? iconsMap[component.type] : '';
+            return component ? $scope.directives[component.type].icon : '';
           };
 
           function _showAttributeList(value, delay) {
