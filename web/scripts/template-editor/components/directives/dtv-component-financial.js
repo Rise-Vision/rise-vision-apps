@@ -16,6 +16,23 @@ angular.module('risevision.template-editor.directives')
             $scope.exitingInstrumentSelector = false;
             $scope.enteringSymbolSelector = false;
             $scope.exitingSymbolSelector = false;
+
+            $scope.instruments = [];
+          }
+
+          function _loadInstrumentList() {
+            var componentId = $scope.factory.selected.id;
+            var instruments =
+              $scope.getAttributeData(componentId, "instruments");
+
+            if(instruments) {
+              $scope.instruments = instruments;
+            } else {
+              _buildInstrumentListFromBlueprint();
+            }
+          }
+
+          function _buildInstrumentListFromBlueprint() {
           }
 
           _reset();
@@ -28,6 +45,7 @@ angular.module('risevision.template-editor.directives')
               element.show();
 
               _reset();
+              _loadInstrumentList();
               $scope.enteringInstrumentSelector = true;
 
               $timeout(function () {
@@ -70,17 +88,6 @@ angular.module('risevision.template-editor.directives')
               $scope.showInstrumentList = !enteringSelector;
             }, !isNaN(delay) ? delay : 500);
           }
-
-          $scope.instruments = [{
-            name: 'Canadian Dollar',
-            symbol: 'CADUSD=X'
-          }, {
-            name: 'Swiss Franc',
-            symbol: 'CHFUSD=X'
-          }, {
-            name: 'Hong Kong Dollar',
-            symbol: 'HKDUSD=X'
-          }];
         }
       };
     }
