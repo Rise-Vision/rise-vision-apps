@@ -1,3 +1,50 @@
+<style>
+  .instrument-row {
+    cursor: pointer;
+  }
+
+  .instrument-selector-checkbox > input[type=checkbox] { display:none; }
+  .instrument-selector-checkbox > input[type=checkbox] + label:before {
+    font-family: FontAwesome;
+    color: #4d4d4d;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    content: '\f096';
+    cursor: pointer;
+  }
+  .instrument-selector-checkbox > input[type=checkbox]:checked + label:before {
+    color: #FFF;
+    content: '\f14a';
+  }
+
+  .instrument-selector-name {
+    margin-left: 1.75em;
+  }
+
+  .instrument-name {
+    font-weight: bold;
+    color: rgb(77, 77, 77);
+  }
+
+  .instrument-rate {
+    font-size: 0.8em;
+    color: rgb(77, 77, 77);
+  }
+
+  .instrument-row--is-selected {
+    background: #4ab767;
+  }
+
+  .instrument-row--is-selected .instrument-name {
+    color: #FFF;
+  }
+
+  .instrument-row--is-selected .instrument-rate {
+    color: #FFF;
+  }
+</style>
+
 <div class="instrument-list"
     ng-class="{ 'instrument-list-show': enteringInstrumentSelector, 'instrument-list-cover': enteringSymbolSelector, 'instrument-list-uncover': exitingSymbolSelector }"
     ng-show="showInstrumentList || enteringInstrumentSelector || exitingSymbolSelector">
@@ -25,7 +72,7 @@
     ng-show="showSymbolSelector || enteringSymbolSelector">
   <div class="input-group">
     <span class="input-group-addon"><i class="fa fa-search"></i></span>
-    <input type="text" class="form-control"
+    <input type="text" class="form-control" ng-model="searchKeyword"
       placeholder="{{ 'template.financial.search-category.currencies' | translate }}"
       aria-label="{{ 'template.financial.search-category.currencies' | translate }}">
     <span class="input-group-addon">
@@ -33,7 +80,7 @@
     </span>
   </div>
 
-  <div class="instrument-selector-no-results">
+  <div class="instrument-selector-no-results" ng-show="instrumentSearch.length === 0">
     <h2 translate>template.financial.no-results.title</h2>
     <div translate>template.financial.no-results.question</div>
     <div>
@@ -46,16 +93,22 @@
     </div>
   </div>
 
-  <div class="instrument-selector-popular" translate>template.financial.most-popular-category.currencies</div>
+  <div class="instrument-selector-popular" ng-show="instrumentSearch.length > 0" translate>template.financial.most-popular-category.currencies</div>
 
-  <div class="row instrument-row" ng-repeat="instr in instruments">
+  <div class="row instrument-row" ng-show="instrumentSearch.length > 0"
+       ng-repeat="(key, value) in instrumentSearch"
+       ng-click="selectInstrument(key)"
+       ng-class="{'instrument-row--is-selected' : value.isSelected}">
     <div class="col-xs-12">
       <span class="instrument-selector-checkbox">
-        <input type="checkbox">
+        <input id="{{value.symbol}}" type="checkbox"
+               ng-click="selectInstrument(key)"
+               ng-checked="value.isSelected">
+        <label for="{{value.symbol}}"></label>
       </span>
       <span class="instrument-selector-name">
-        <div class="instrument-name">{{ instr.name | uppercase }}</div>
-        <div class="instrument-rate">{{ instr.rate | uppercase }}</div>
+        <div class="instrument-name">{{ value.name | uppercase }}</div>
+        <div class="instrument-rate">{{ value.symbol | uppercase }}</div>
       </span>
     </div>
   </div>
