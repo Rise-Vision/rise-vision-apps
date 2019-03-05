@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentFinancial', ['$timeout', 'templateEditorFactory',
-    function ($timeout, templateEditorFactory) {
+  .directive('templateComponentFinancial', ['$log', '$timeout', 'templateEditorFactory',
+    function ($log, $timeout, templateEditorFactory) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/components/component-financial.html',
