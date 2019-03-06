@@ -7,7 +7,9 @@
       <div class="instrument-rate">{{ instr.symbol | uppercase }}</div>
     </div>
     <div class="col-xs-2 instrument-delete">
-      <a href="#" translate>editor-app.details.remove</a>
+      <a href="#"
+         ng-click="removeInstrument(instr.symbol)"
+         translate>editor-app.details.remove</a>
     </div>
   </div>
 </div>
