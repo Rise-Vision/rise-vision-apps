@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentFinancial', ['$log', '$timeout', 'templateEditorFactory',
-    function ($log, $timeout, templateEditorFactory) {
+  .directive('templateComponentFinancial', ['$log', '$timeout', 'templateEditorFactory', 'instrumentSearchService',
+    function ($log, $timeout, templateEditorFactory, instrumentSearchService) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/components/component-financial.html',
@@ -17,6 +17,8 @@ angular.module('risevision.template-editor.directives')
             $scope.enteringSymbolSelector = false;
             $scope.exitingSymbolSelector = false;
 
+            // TODO: hardcoding category for now until templates have component surface category attribute
+            $scope.category = "currencies";
             $scope.instruments = [];
           }
 
@@ -28,11 +30,11 @@ angular.module('risevision.template-editor.directives')
             if(instruments) {
               $scope.instruments = instruments;
             } else {
-              _buildInstrumentListFromBlueprint();
+              _buildInstrumentListFromBlueprint(componentId);
             }
           }
 
-          function _buildInstrumentListFromBlueprint() {
+          function _buildInstrumentListFromBlueprint(componentId) {
             var symbolString = $scope.getBlueprintData(componentId, "symbols");
 
             if(!symbolString) {
@@ -41,7 +43,49 @@ angular.module('risevision.template-editor.directives')
               return;
             }
 
+            var instruments = [];
             var symbols = symbolString.split("|");
+
+            _buildListRecursive(componentId, instruments, symbols);
+          }
+
+          function _buildListRecursive(componentId, instruments, symbols) {
+            if( symbols.length === 0 ) {
+              _setInstruments(componentId, instruments);
+
+              return;
+            }
+
+            var symbol = symbols.shift();
+
+            instrumentSearchService.keywordSearch($scope.category, symbol)
+            .then( function(items) {
+              var instrument = _.find(items, {symbol: symbol});
+
+              if(instrument) {
+                instruments.push(instrument);
+              } else {
+                $log.warn("no instrument found for symbol: " + symbol);
+              }
+            })
+            .catch( function(error) {
+              $log.error( error );
+            })
+            .finally( function() {
+              _buildListRecursive(componentId, instruments, symbols);
+            });
+          }
+
+          function _symbolsFor(instruments) {
+            return _map(instruments, function(instrument) {
+              return instrument.symbol;
+            }).join("|");
+          }
+
+          function _setInstruments(componentId, instruments) {
+            $scope.instruments = instruments;
+            $scope.setAttributeData(componentId, "instruments", instruments);
+            $scope.setAttributeData(componentId, "symbols", _symbolsFor(instruments));
           }
 
           _reset();
