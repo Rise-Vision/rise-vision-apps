@@ -6,6 +6,44 @@ describe('directive: TemplateComponentFinancial', function() {
       factory,
       timeout;
 
+  var popularResults = [
+    {
+      "symbol": "CADUSD=X",
+      "name": "CANADIAN DOLLAR",
+      "category": "currencies",
+      "logo": "https://risecontentlogos.s3.amazonaws.com/financial/CAD-USD.svg"
+    },
+    {
+      "symbol": "CHFUSD=X",
+      "name": "SWISS FRANC",
+      "category": "currencies",
+      "logo": "https://risecontentlogos.s3.amazonaws.com/financial/CHF-USD.svg"
+    },
+    {
+      "symbol": "HKDUSD=X",
+      "name": "HONG KONG DOLLAR",
+      "category": "currencies",
+      "logo": "https://risecontentlogos.s3.amazonaws.com/financial/HKD-USD.svg"
+    }
+  ],
+    keywordResults = [
+      {
+        "symbol": "SXFc1",
+        "name": "Montreal Exchange S&P/TSX 60 Index Future Continuation 1",
+        "category": "Stocks"
+      },
+      {
+        "symbol": "FCSc1",
+        "name": "Montreal Exchange S&P/TSX CompositeTM Mini Index Future Continuation 1",
+        "category": "Stocks"
+      },
+      {
+        "symbol": "LLY",
+        "name": "Eli Lilly and Co",
+        "category": "Stocks"
+      }
+    ];
+
   beforeEach(function() {
     factory = { selected: { id: "TEST-ID" } };
   });
@@ -19,12 +57,26 @@ describe('directive: TemplateComponentFinancial', function() {
     $provide.service('templateEditorFactory', function() {
       return factory;
     });
+
+    $provide.service('instrumentSearchService', function($q) {
+      return {
+        popularSearch: function() {
+          return $q.when(popularResults);
+        },
+        keywordSearch: function() {
+          return $q.when(keywordResults)
+        }
+      };
+    });
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout){
     $templateCache.put('partials/template-editor/components/component-financial.html', '<p>mock</p>');
     $scope = $rootScope.$new();
+
     $scope.registerDirective = sinon.stub();
+    $scope.setAttributeData = sinon.stub();
+
     timeout = $timeout;
     element = $compile("<template-component-financial></template-component-financial>")($scope);
     $scope.$digest();
@@ -107,6 +159,74 @@ describe('directive: TemplateComponentFinancial', function() {
     expect($scope.instruments).to.deep.equal(sampleInstruments);
 
     timeout.flush();
+  });
+
+  it('should download instruments when not available as attribute data', function(done) {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+
+    $scope.getAttributeData = function() {
+      return null;
+    }
+    $scope.getBlueprintData = function() {
+      return "SXFc1";
+    }
+
+    directive.show();
+    timeout.flush();
+
+    setTimeout(function() {
+      var expectedInstruments = [
+        {
+          "symbol": "SXFc1",
+          "name": "Montreal Exchange S&P/TSX 60 Index Future Continuation 1",
+          "category": "Stocks"
+        }
+      ];
+
+      expect($scope.instruments).to.deep.equal(expectedInstruments);
+
+      expect($scope.setAttributeData).to.have.been.called.twice;
+
+      expect($scope.setAttributeData.calledWith(
+        "TEST-ID", "instruments", expectedInstruments
+      )).to.be.true;
+
+      expect($scope.setAttributeData.calledWith(
+        "TEST-ID", "symbols", "SXFc1"
+      )).to.be.true;
+
+      done();
+    }, 100);
+  });
+
+  it('should not set instruments when they are not available in the search', function(done) {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+
+    $scope.getAttributeData = function() {
+      return null;
+    }
+    $scope.getBlueprintData = function() {
+      return "invalid_symbol";
+    }
+
+    directive.show();
+    timeout.flush();
+
+    setTimeout(function() {
+      expect($scope.instruments).to.deep.equal([]);
+
+      expect($scope.setAttributeData).to.have.been.called.twice;
+
+      expect($scope.setAttributeData.calledWith(
+        "TEST-ID", "instruments", []
+      )).to.be.true;
+
+      expect($scope.setAttributeData.calledWith(
+        "TEST-ID", "symbols", ""
+      )).to.be.true;
+
+      done();
+    }, 100);
   });
 
 });
