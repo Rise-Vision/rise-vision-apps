@@ -363,17 +363,22 @@ angular.module('risevision.apps', [
           resolve: {
             presentationInfo: ['canAccessApps', 'editorFactory', '$stateParams', '$location',
               function (canAccessApps, editorFactory, $stateParams, $location) {
-                return canAccessApps().then(function () {
-                  if ($stateParams.presentationId && $stateParams.presentationId !== 'new') {
-                    return editorFactory.getPresentation($stateParams.presentationId);
-                  } else if (!$stateParams.copyPresentation) {
-                    var copyOf = $location.search().copyOf;
-                    if (copyOf) {
-                      return editorFactory.copyTemplate(null, copyOf);
-                    }
-                    return editorFactory.newPresentation();
-                  } else {
+                var signup = false;
+                var copyOf = $location.search().copyOf;
+
+                if ($stateParams.presentationId === 'new' && !$stateParams.copyPresentation && copyOf) {
+                  signup = true;
+                }
+
+                return canAccessApps(signup).then(function () {
+                  if ($stateParams.copyPresentation) {
                     return editorFactory.presentation;
+                  } else if ($stateParams.presentationId && $stateParams.presentationId !== 'new') {
+                    return editorFactory.getPresentation($stateParams.presentationId);
+                  } else if (copyOf) {
+                    return editorFactory.copyTemplate(null, copyOf);
+                  } else {
+                    return editorFactory.newPresentation();
                   }
                 });
               }
@@ -387,31 +392,16 @@ angular.module('risevision.apps', [
             return $templateCache.get('partials/editor/artboard.html');
           }],
           reloadOnSearch: false,
-          controller: 'ArtboardController',
-          resolve: {
-            canAccess: ['canAccessApps',
-              function (canAccessApps) {
-                return canAccessApps();
-              }
-            ]
-          }
+          controller: 'ArtboardController'
         })
 
         .state('apps.editor.workspace.htmleditor', {
           url: '/htmleditor',
           templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get(
-              'partials/editor/html-editor.html');
+            return $templateCache.get('partials/editor/html-editor.html');
           }],
           reloadOnSearch: false,
-          controller: 'HtmlEditorController',
-          resolve: {
-            canAccess: ['canAccessApps',
-              function (canAccessApps) {
-                return canAccessApps();
-              }
-            ]
-          }
+          controller: 'HtmlEditorController'
         })
 
         .state('apps.editor.templates', {
