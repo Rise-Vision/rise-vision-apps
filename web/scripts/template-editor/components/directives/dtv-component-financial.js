@@ -80,6 +80,51 @@ angular.module('risevision.template-editor.directives')
           }, {
             name: 'Hong Kong Dollar',
             rate: 'HKDUSD=X'
+          }, {
+            name: 'Test Dollar 1',
+            rate: 'TS1USD=X'
+          }, {
+            name: 'Test Dollar 2',
+            rate: 'TS2USD=X'
+          }, {
+            name: 'Test Dollar 3',
+            rate: 'TS3USD=X'
+          }, {
+            name: 'Test Dollar 4',
+            rate: 'TS4USD=X'
+          }, {
+            name: 'Test Dollar 5',
+            rate: 'TS5USD=X'
+          }, {
+            name: 'Test Dollar 6',
+            rate: 'TS6USD=X'
+          }, {
+            name: 'Test Dollar 7',
+            rate: 'TS7USD=X'
+          }, {
+            name: 'Test Dollar 8',
+            rate: 'TS8USD=X'
+          }, {
+            name: 'Test Dollar 9',
+            rate: 'TS9USD=X'
+          }, {
+            name: 'Test Dollar 10',
+            rate: 'TS10USD=X'
+          }, {
+            name: 'Test Dollar 11',
+            rate: 'TS11USD=X'
+          }, {
+            name: 'Test Dollar 12',
+            rate: 'TS12USD=X'
+          }, {
+            name: 'Test Dollar 13',
+            rate: 'TS13USD=X'
+          }, {
+            name: 'Test Dollar 14',
+            rate: 'TS14USD=X'
+          }, {
+            name: 'Test Dollar 15',
+            rate: 'TS15USD=X'
           }];
         }
       };

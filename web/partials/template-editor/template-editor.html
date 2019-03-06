@@ -1,24 +1,23 @@
-<div class="container-flow template-editor">
-
+<div class="template-editor"
+     ng-class="{ 'active-banner-mode' : isSubcompanySelected() || isTestCompanySelected(),
+                 'active-banner-mode-double' : isSubcompanySelected() && isTestCompanySelected() }">
   <div>
     <template-editor-toolbar
       class="template-editor-toolbar"
       ng-class="{ 'hidden-xs': factory.selected }">
     </template-editor-toolbar>
   </div>
-
-  <div class="row template-editor-body">
-    <div class="col-sm-8 col-sm-push-4 preview-holder"
+  <div class="template-editor-body">
+    <div class="attribute-editor">
+      <template-attribute-editor>
+      </template-attribute-editor>
+    </div>
+    <div class="preview-holder"
          ng-class="{ 'hidden-xs': factory.selected }">
       <div style="background-color: #C0C0C0">
         <template-editor-preview-holder>
         </template-editor-preview-holder>
       </div>
-    </div>
-
-    <div class="col-sm-4 col-sm-pull-8 attribute-editor pt-3">
-      <template-attribute-editor>
-      </template-attribute-editor>
     </div>
   </div>
 

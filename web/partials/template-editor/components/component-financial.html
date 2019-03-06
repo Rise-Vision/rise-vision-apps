@@ -1,3 +1,4 @@
+<div class="financial-container">
 <div class="instrument-list"
     ng-class="{ 'instrument-list-show': enteringInstrumentSelector, 'instrument-list-cover': enteringSymbolSelector, 'instrument-list-uncover': exitingSymbolSelector }"
     ng-show="showInstrumentList || enteringInstrumentSelector || exitingSymbolSelector">
@@ -12,12 +13,10 @@
   </div>
 </div>
 
-<div class="row financial-action-button-bar" ng-show="showInstrumentList">
-  <div class="col-sm-4">
-    <button class="btn btn-primary btn-block" ng-click="showSymbolSearch()">
-      <strong translate>template.financial.add-category.currencies</strong>
-    </button>
-  </div>
+<div class="financial-action-button-bar" ng-show="showInstrumentList">
+  <button class="btn btn-primary btn-block" ng-click="showSymbolSearch()">
+    <strong translate>template.financial.add-category.currencies</strong>
+  </button>
 </div>
 
 <div class="instrument-selector"
@@ -67,4 +66,5 @@
       <strong translate>template.financial.add-selected</strong>
     </button>
   </div>
+</div>
 </div>
