@@ -4,7 +4,7 @@
   <div class="row instrument-row" ng-repeat="instr in instruments">
     <div class="col-xs-10">
       <div class="instrument-name">{{ instr.name | uppercase }}</div>
-      <div class="instrument-rate">{{ instr.rate | uppercase }}</div>
+      <div class="instrument-rate">{{ instr.symbol | uppercase }}</div>
     </div>
     <div class="col-xs-2 instrument-delete">
       <a href="#" translate>editor-app.details.remove</a>
