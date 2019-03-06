@@ -23,22 +23,21 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _loadInstrumentList() {
-            var componentId = $scope.factory.selected.id;
             var instruments =
-              $scope.getAttributeData(componentId, "instruments");
+              $scope.getAttributeData($scope.componentId, "instruments");
 
             if(instruments) {
               $scope.instruments = instruments;
             } else {
-              _buildInstrumentListFromBlueprint(componentId);
+              _buildInstrumentListFromBlueprint();
             }
           }
 
-          function _buildInstrumentListFromBlueprint(componentId) {
-            var symbolString = $scope.getBlueprintData(componentId, "symbols");
+          function _buildInstrumentListFromBlueprint() {
+            var symbolString = $scope.getBlueprintData($scope.componentId, "symbols");
 
             if(!symbolString) {
-              $log.error("The component blueprint data is not providing default symbols value: " + componentId)
+              $log.error("The component blueprint data is not providing default symbols value: " + $scope.componentId)
 
               return;
             }
@@ -46,12 +45,12 @@ angular.module('risevision.template-editor.directives')
             var instruments = [];
             var symbols = symbolString.split("|");
 
-            _buildListRecursive(componentId, instruments, symbols);
+            _buildListRecursive(instruments, symbols);
           }
 
-          function _buildListRecursive(componentId, instruments, symbols) {
+          function _buildListRecursive(instruments, symbols) {
             if( symbols.length === 0 ) {
-              _setInstruments(componentId, instruments);
+              _setInstruments(instruments);
 
               return;
             }
@@ -72,7 +71,7 @@ angular.module('risevision.template-editor.directives')
               $log.error( error );
             })
             .finally( function() {
-              _buildListRecursive(componentId, instruments, symbols);
+              _buildListRecursive(instruments, symbols);
             });
           }
 
@@ -82,12 +81,12 @@ angular.module('risevision.template-editor.directives')
             }).join("|");
           }
 
-          function _setInstruments(componentId, instruments) {
+          function _setInstruments(instruments) {
             var value = angular.copy(instruments);
 
             $scope.instruments = value;
-            $scope.setAttributeData(componentId, "instruments", value);
-            $scope.setAttributeData(componentId, "symbols", _symbolsFor(value));
+            $scope.setAttributeData($scope.componentId, "instruments", value);
+            $scope.setAttributeData($scope.componentId, "symbols", _symbolsFor(value));
           }
 
           _reset();
@@ -100,6 +99,8 @@ angular.module('risevision.template-editor.directives')
               element.show();
 
               _reset();
+              $scope.componentId = $scope.factory.selected.id;
+
               _loadInstrumentList();
               $scope.enteringInstrumentSelector = true;
 
