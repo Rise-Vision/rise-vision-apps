@@ -77,15 +77,17 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _symbolsFor(instruments) {
-            return _map(instruments, function(instrument) {
+            return _.map(instruments, function(instrument) {
               return instrument.symbol;
             }).join("|");
           }
 
           function _setInstruments(componentId, instruments) {
-            $scope.instruments = instruments;
-            $scope.setAttributeData(componentId, "instruments", instruments);
-            $scope.setAttributeData(componentId, "symbols", _symbolsFor(instruments));
+            var value = angular.copy(instruments);
+
+            $scope.instruments = value;
+            $scope.setAttributeData(componentId, "instruments", value);
+            $scope.setAttributeData(componentId, "symbols", _symbolsFor(value));
           }
 
           _reset();
