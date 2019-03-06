@@ -39,7 +39,7 @@ angular.module('risevision.template-editor.controllers')
       }
 
       function _componentFor(componentId) {
-        var attributeData = $scope.presentation.templateAttributeData;
+        var attributeData = $scope.factory.presentation.templateAttributeData;
 
         if(!attributeData.components) {
           attributeData.components = [];
