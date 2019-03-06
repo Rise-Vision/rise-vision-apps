@@ -92,7 +92,7 @@ describe('service: instrumentSearchService:', function() {
         ]
       };
 
-      $httpBackend.when('GET', INSTRUMENT_SEARCH_BASE_URL + "instrument/search?category=stocks&query=Amazon").respond(200, instruments);
+      $httpBackend.when('GET', INSTRUMENT_SEARCH_BASE_URL + "instrument/search?category=Stocks&query=Amazon").respond(200, instruments);
       setTimeout(function() {
         $httpBackend.flush();
       });

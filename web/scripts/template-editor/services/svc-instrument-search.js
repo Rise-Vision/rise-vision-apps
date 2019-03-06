@@ -19,7 +19,9 @@ angular.module('risevision.template-editor.services')
           return $q.when( results.keyword[ keywordProp ] );
         }
 
-        return $http.get( keywordSearchURL.replace( "CATEGORY", category ).replace( "QUERY", keyword ) )
+        var capitalized = category.charAt(0).toUpperCase() + category.slice(1);
+
+        return $http.get( keywordSearchURL.replace( "CATEGORY", capitalized ).replace( "QUERY", keyword ) )
           .then( function( resp ) {
             results.keyword[ keywordProp ] = resp.data.items;
             return results.keyword[ keywordProp ];
