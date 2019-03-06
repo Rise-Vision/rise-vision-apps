@@ -124,6 +124,33 @@ angular.module('risevision.template-editor.directives')
             _changeInstrumentView(false);
           };
 
+          $scope.selectInstrument = function(key) {
+            if ( $scope.searching ) {
+              return;
+            }
+            $scope.instrumentSearch[ key ].isSelected = !$scope.instrumentSearch[ key ].isSelected;
+          };
+
+          $scope.searchInstruments = function() {
+            var promise = $scope.searchKeyword ?
+              instrumentSearchService.keywordSearch( $scope.category, $scope.searchKeyword ) :
+              instrumentSearchService.popularSearch( $scope.category );
+
+            $scope.searching = true;
+            promise.then( function( res ) {
+              $scope.instrumentSearch = angular.copy( res );
+              $scope.searching = false;
+            } )
+              .catch( function( err ) {
+                console.error( err );
+                $scope.searching = false;
+              } );
+          };
+
+          $scope.getPopularTitle = function() {
+            return 'template.financial.most-popular-category.' + $scope.category;
+          };
+
           function _changeInstrumentView(enteringSelector, delay) {
             $scope.showInstrumentList = false;
             $scope.showSymbolSelector = false;
@@ -143,6 +170,21 @@ angular.module('risevision.template-editor.directives')
               $scope.showInstrumentList = !enteringSelector;
             }, !isNaN(delay) ? delay : 500);
           }
+
+          $scope.$watch("showInstrumentList", function(value) {
+            if (value) {
+              $scope.searchKeyword = "";
+              $scope.searching = false;
+
+              if ($scope.instrumentSearch) {
+                $scope.instrumentSearch.forEach(function(item) {
+                  item.isSelected = false;
+                });
+              }
+            }
+          });
+
+          $scope.searchInstruments();
         }
       };
     }
