@@ -230,4 +230,38 @@ describe('directive: TemplateComponentFinancial', function() {
     }, 100);
   });
 
+  it('should remove an instrument by symbol', function() {
+    $scope.instruments = keywordResults;
+
+    // normally set up by start() function
+    $scope.componentId = "TEST-ID";
+
+    $scope.removeInstrument('LLY');
+
+    var expectedInstruments = [
+      {
+        "symbol": "SXFc1",
+        "name": "Montreal Exchange S&P/TSX 60 Index Future Continuation 1",
+        "category": "Stocks"
+      },
+      {
+        "symbol": "FCSc1",
+        "name": "Montreal Exchange S&P/TSX CompositeTM Mini Index Future Continuation 1",
+        "category": "Stocks"
+      }
+    ];
+
+    expect($scope.instruments).to.deep.equal(expectedInstruments);
+
+    expect($scope.setAttributeData).to.have.been.called.twice;
+
+    expect($scope.setAttributeData.calledWith(
+      "TEST-ID", "instruments", expectedInstruments
+    )).to.be.true;
+
+    expect($scope.setAttributeData.calledWith(
+      "TEST-ID", "symbols", "SXFc1|FCSc1"
+    )).to.be.true;
+  });
+
 });

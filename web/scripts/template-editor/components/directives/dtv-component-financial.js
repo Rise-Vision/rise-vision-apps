@@ -152,6 +152,12 @@ angular.module('risevision.template-editor.directives')
             return 'template.financial.most-popular-category.' + $scope.category;
           };
 
+          $scope.removeInstrument = function(symbol) {
+            var filtered = _.reject($scope.instruments, {symbol: symbol});
+
+            _setInstruments(filtered);
+          }
+
           function _changeInstrumentView(enteringSelector, delay) {
             $scope.showInstrumentList = false;
             $scope.showSymbolSelector = false;
