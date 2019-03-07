@@ -45,7 +45,8 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.getComponentIcon = function (component) {
-            return component ? $scope.directives[component.type].icon : '';
+            return component && $scope.directives[component.type] ?
+              $scope.directives[component.type].icon : '';
           };
 
           function _showAttributeList(value, delay) {
