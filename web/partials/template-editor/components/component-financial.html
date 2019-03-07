@@ -26,16 +26,17 @@
     ng-class="{ 'instrument-selector-show': enteringSymbolSelector, 'instrument-selector-hide': exitingSymbolSelector }"
     ng-show="showSymbolSelector || enteringSymbolSelector">
   <div class="input-group">
-    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-    <input type="text" class="form-control" ng-model="searchKeyword"
-      placeholder="{{ 'template.financial.search-category.currencies' | translate }}"
-      aria-label="{{ 'template.financial.search-category.currencies' | translate }}">
-    <span class="input-group-addon">
+    <span class="input-group-addon" ng-click="searchInstruments()"><i class="fa fa-search"></i></span>
+    <input type="text" class="form-control"
+           ng-model="searchKeyword" ng-disabled="searching" ng-keyup="searchKeyPressed($event)"
+           placeholder="{{ getSearchPlaceholder() | translate }}"
+           aria-label="{{ getSearchPlaceholder() | translate }}">
+    <span class="input-group-addon" ng-click="resetSearch()">
       <i class="fa fa-close"></i>
     </span>
   </div>
 
-  <div class="instrument-selector-no-results" ng-show="instrumentSearch.length === 0">
+  <div class="instrument-selector-no-results" ng-show="!instrumentSearch.length || instrumentSearch.length === 0">
     <h2 translate>template.financial.no-results.title</h2>
     <div translate>template.financial.no-results.question</div>
     <div>
@@ -48,7 +49,7 @@
     </div>
   </div>
 
-  <div class="instrument-selector-popular" ng-show="instrumentSearch.length > 0">{{ getPopularTitle() | translate }}</div>
+  <div class="instrument-selector-popular" ng-show="popularResults">{{ getPopularTitle() | translate }}</div>
 
   <div class="row instrument-row" ng-show="instrumentSearch.length > 0"
        ng-repeat="(key, value) in instrumentSearch"

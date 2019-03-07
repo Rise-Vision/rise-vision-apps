@@ -125,6 +125,13 @@ angular.module('risevision.template-editor.directives')
             _changeInstrumentView(false);
           };
 
+          $scope.searchKeyPressed = function( keyEvent ) {
+            // handle enter key
+            if ( keyEvent.which === 13 ) {
+              $scope.searchInstruments();
+            }
+          };
+
           $scope.selectInstrument = function(key) {
             if ( $scope.searching ) {
               return;
@@ -140,16 +147,26 @@ angular.module('risevision.template-editor.directives')
             $scope.searching = true;
             promise.then( function( res ) {
               $scope.instrumentSearch = angular.copy( res );
+              $scope.popularResults = !$scope.searchKeyword;
               $scope.searching = false;
             } )
               .catch( function( err ) {
-                console.error( err );
+                $log.error( err );
                 $scope.searching = false;
               } );
           };
 
+          $scope.resetSearch = function() {
+            $scope.searchKeyword = "";
+            $scope.searchInstruments();
+          };
+
           $scope.getPopularTitle = function() {
-            return 'template.financial.most-popular-category.' + $scope.category;
+            return 'template.financial.most-popular-category.' + $scope.category.toLowerCase();
+          };
+
+          $scope.getSearchPlaceholder = function() {
+            return 'template.financial.search-category.' + $scope.category.toLowerCase();
           };
 
           $scope.removeInstrument = function(symbol) {
@@ -180,7 +197,6 @@ angular.module('risevision.template-editor.directives')
 
           $scope.$watch("showInstrumentList", function(value) {
             if (value) {
-              $scope.searchKeyword = "";
               $scope.searching = false;
 
               if ($scope.instrumentSearch) {
@@ -188,10 +204,10 @@ angular.module('risevision.template-editor.directives')
                   item.isSelected = false;
                 });
               }
+
+              $scope.resetSearch();
             }
           });
-
-          $scope.searchInstruments();
         }
       };
     }
