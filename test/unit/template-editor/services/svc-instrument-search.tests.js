@@ -70,34 +70,54 @@ describe('service: instrumentSearchService:', function() {
   } );
 
   describe( 'keywordSearch', function() {
-    it("should return list of instruments by category and keyword", function(done) {
-      var instruments = {
-        items: [
-          {
-            symbol: "AMZN.O",
-            name: "Amazon.com Inc",
-            category: "Stocks",
-            logo: "https://risecontentlogos.s3.amazonaws.com/financial/AMZN.svg"
-          },
-          {
-            symbol: "0#AMZF:",
-            name: "Eurex Amazon Equity Future Chain Contract",
-            category: "Stocks"
-          },
-          {
-            symbol: "0#AMZNDFW:OX",
-            name: "One Chicago LLC Amazon Com No Dividend Friday Weekly Equity Future Chain Contracts",
-            category: "Stocks"
-          }
-        ]
-      };
+    var instruments = {
+      items: [
+        {
+          symbol: "AMZN.O",
+          name: "Amazon.com Inc",
+          category: "Stocks",
+          logo: "https://risecontentlogos.s3.amazonaws.com/financial/AMZN.svg"
+        },
+        {
+          symbol: "0#AMZF:",
+          name: "Eurex Amazon Equity Future Chain Contract",
+          category: "Stocks"
+        },
+        {
+          symbol: "0#AMZNDFW:OX",
+          name: "One Chicago LLC Amazon Com No Dividend Friday Weekly Equity Future Chain Contracts",
+          category: "Stocks"
+        }
+      ]
+    };
 
+    it("should return list of instruments by category and keyword", function(done) {
       $httpBackend.when('GET', INSTRUMENT_SEARCH_BASE_URL + "instrument/search?category=Stocks&query=Amazon").respond(200, instruments);
       setTimeout(function() {
         $httpBackend.flush();
       });
 
       instrumentSearchService.keywordSearch("stocks", "Amazon")
+        .then(function (results) {
+          expect(results).to.deep.equal(instruments.items);
+
+          done();
+        })
+        .catch(function(err) {
+          console.log("shouldn't be here", err);
+        });
+    });
+
+    it("should return list of instruments by category and keyword", function(done) {
+      $httpBackend.when('GET', INSTRUMENT_SEARCH_BASE_URL +
+        "instrument/search?category=World%20Indexes&query=Amazon")
+      .respond(200, instruments);
+
+      setTimeout(function() {
+        $httpBackend.flush();
+      });
+
+      instrumentSearchService.keywordSearch("world indexes", "Amazon")
         .then(function (results) {
           expect(results).to.deep.equal(instruments.items);
 

@@ -19,8 +19,7 @@ angular.module('risevision.template-editor.services')
           return $q.when( results.keyword[ keywordProp ] );
         }
 
-        var capitalized = category.charAt(0).toUpperCase() +
-          category.slice(1).toLowerCase();
+        var capitalized = _capitalizeWords(category);
 
         return $http.get( keywordSearchURL.replace( "CATEGORY", capitalized ).replace( "QUERY", keyword ) )
           .then( function( resp ) {
@@ -28,6 +27,17 @@ angular.module('risevision.template-editor.services')
             return results.keyword[ keywordProp ];
           } );
       };
+
+      function _capitalizeWords(category) {
+        var fragments = category.split(' ');
+
+        return _.map(fragments, function(fragment) {
+          return fragment ? (
+            fragment.charAt(0).toUpperCase() +
+            fragment.slice(1).toLowerCase()
+          ) : ''
+        }).join('%20');
+      }
 
       factory.popularSearch = function( category ) {
         if ( results.popular[ category ] ) {
