@@ -1,10 +1,9 @@
 'use strict';
 
 angular.module('risevision.template-editor.controllers')
-  .controller('TemplateEditorController', ['$scope', 'templateEditorFactory', 'presentation',
-    function ($scope, templateEditorFactory, presentation) {
+  .controller('TemplateEditorController', ['$scope', 'templateEditorFactory',
+    function ($scope, templateEditorFactory) {
       $scope.factory = templateEditorFactory;
-      $scope.presentation = presentation;
 
       $scope.getBlueprintData = function(componentId, attributeKey) {
         var components = $scope.factory.blueprintData.components;
