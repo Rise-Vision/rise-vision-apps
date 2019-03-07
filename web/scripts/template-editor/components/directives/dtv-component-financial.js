@@ -160,13 +160,15 @@ angular.module('risevision.template-editor.directives')
             $scope.searchKeyword = "";
             $scope.searchInstruments();
           };
-          
+
           $scope.getOpenSymbolSelectorButtonLabel = function() {
             return _getFinancialLabel('add-category');
           };
+
           $scope.getPopularTitle = function() {
             return _getFinancialLabel('most-popular-category');
           };
+
           $scope.getSearchPlaceholder = function() {
             return _getFinancialLabel('search-category');
           };
