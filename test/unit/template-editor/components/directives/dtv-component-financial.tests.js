@@ -42,7 +42,8 @@ describe('directive: TemplateComponentFinancial', function() {
         "name": "Eli Lilly and Co",
         "category": "Stocks"
       }
-    ];
+    ],
+    noResults = false;
 
   beforeEach(function() {
     factory = { selected: { id: "TEST-ID" } };
@@ -64,7 +65,7 @@ describe('directive: TemplateComponentFinancial', function() {
           return $q.when(popularResults);
         },
         keywordSearch: function() {
-          return $q.when(keywordResults)
+          return noResults ? $q.when({}) : $q.when(keywordResults)
         }
       };
     });
@@ -203,17 +204,17 @@ describe('directive: TemplateComponentFinancial', function() {
   it('should not set instruments when they are not available in the search', function(done) {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
-    $scope.getAttributeData = function() {
+    $scope.getAttributeData = function () {
       return null;
     }
-    $scope.getBlueprintData = function() {
+    $scope.getBlueprintData = function () {
       return "invalid_symbol";
     }
 
     directive.show();
     timeout.flush();
 
-    setTimeout(function() {
+    setTimeout(function () {
       expect($scope.instruments).to.deep.equal([]);
 
       expect($scope.setAttributeData).to.have.been.called.twice;
@@ -263,5 +264,56 @@ describe('directive: TemplateComponentFinancial', function() {
       "TEST-ID", "symbols", "SXFc1|FCSc1"
     )).to.be.true;
   });
+
+  it('should reset instrument selector list to show popular instruments when showing instrument list', function() {
+    $scope.selectInstruments();
+    timeout.flush();
+    $scope.$digest();
+
+    expect($scope.instrumentSearch).to.deep.equal(popularResults);
+  });
+
+  it('should populate instrument selector list with search results when search returns results', function() {
+    $scope.showSymbolSearch();
+    timeout.flush();
+
+    $scope.searchKeyword = "test";
+    $scope.searchInstruments();
+
+    $scope.$digest();
+    expect($scope.instrumentSearch).to.deep.equal(keywordResults);
+  });
+
+  it('should allow for UI to handle empty results from search', function() {
+    $scope.showSymbolSearch();
+    timeout.flush();
+
+    noResults = true;
+    $scope.searchKeyword = "test";
+    $scope.searchInstruments();
+
+    $scope.$digest();
+    expect($scope.instrumentSearch).to.deep.equal({});
+    noResults = false;
+  });
+
+  it('should reset instrument selector list to show popular instruments when search input cleared', function() {
+    $scope.showSymbolSearch();
+    timeout.flush();
+    $scope.$digest();
+
+    $scope.searchKeyword = "test";
+    $scope.searchInstruments();
+    $scope.$digest();
+
+    expect($scope.instrumentSearch).to.deep.equal(keywordResults);
+
+    $scope.resetSearch();
+    $scope.$digest();
+
+    expect($scope.searchKeyword).to.equal("");
+    expect($scope.instrumentSearch).to.deep.equal(popularResults);
+  });
+
 
 });
