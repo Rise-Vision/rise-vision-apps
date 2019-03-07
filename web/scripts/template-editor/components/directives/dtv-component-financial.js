@@ -139,6 +139,9 @@ angular.module('risevision.template-editor.directives')
               return;
             }
             $scope.instrumentSearch[ key ].isSelected = !$scope.instrumentSearch[ key ].isSelected;
+            $scope.canAddInstrument = _.some($scope.instrumentSearch, function(item) {
+              return item.isSelected === true;
+            });
           };
 
           $scope.searchInstruments = function() {
@@ -147,6 +150,8 @@ angular.module('risevision.template-editor.directives')
               instrumentSearchService.popularSearch( $scope.category );
 
             $scope.searching = true;
+            $scope.canAddInstrument = false;
+
             promise.then( function( res ) {
               $scope.instrumentSearch = angular.copy( res );
               $scope.popularResults = !$scope.searchKeyword;
