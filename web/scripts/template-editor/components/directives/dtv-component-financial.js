@@ -156,7 +156,9 @@ angular.module('risevision.template-editor.directives')
           };
 
           function _getFinancialLabel(key) {
-            return 'template.financial.' + key + '.' + $scope.category;
+            var category = $scope.category.toLowerCase().replace(' ', '-');
+
+            return 'template.financial.' + key + '.' + category;
           }
 
           $scope.removeInstrument = function(symbol) {

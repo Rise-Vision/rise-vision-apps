@@ -264,4 +264,20 @@ describe('directive: TemplateComponentFinancial', function() {
     )).to.be.true;
   });
 
+  it('should get the open symbol button label', function() {
+    $scope.category = 'currencies';
+
+    var label = $scope.getOpenSymbolSelectorButtonLabel();
+
+    expect(label).to.equal('template.financial.add-category.currencies');
+  });
+
+  it('should get the open symbol button label on categories with space', function() {
+    $scope.category = 'world indexes';
+
+    var label = $scope.getOpenSymbolSelectorButtonLabel();
+
+    expect(label).to.equal('template.financial.add-category.world-indexes');
+  });
+
 });
