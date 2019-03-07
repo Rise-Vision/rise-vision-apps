@@ -1,21 +1,25 @@
 <div class="financial-container">
 <div class="instrument-list"
     ng-class="{ 'instrument-list-show': enteringInstrumentSelector, 'instrument-list-cover': enteringSymbolSelector, 'instrument-list-uncover': exitingSymbolSelector }"
-    ng-show="showInstrumentList || enteringInstrumentSelector || exitingSymbolSelector">
+    ng-show="showInstrumentList || enteringInstrumentSelector || exitingSymbolSelector"
+    rv-spinner rv-spinner-key="template-editor-loader"
+    rv-spinner-start-active="1">
   <div class="row instrument-row" ng-repeat="instr in instruments">
     <div class="col-xs-10">
       <div class="instrument-name">{{ instr.name | uppercase }}</div>
-      <div class="instrument-rate">{{ instr.rate | uppercase }}</div>
+      <div class="instrument-rate">{{ instr.symbol | uppercase }}</div>
     </div>
     <div class="col-xs-2 instrument-delete">
-      <a href="#" translate>editor-app.details.remove</a>
+      <a href="#"
+         ng-click="removeInstrument(instr.symbol)"
+         translate>editor-app.details.remove</a>
     </div>
   </div>
 </div>
 
 <div class="financial-action-button-bar" ng-show="showInstrumentList">
   <button class="btn btn-primary btn-block" ng-click="showSymbolSearch()">
-    <strong translate>template.financial.add-category.currencies</strong>
+    <strong>{{ getOpenSymbolSelectorButtonLabel() | translate }}</strong>
   </button>
 </div>
 
@@ -23,16 +27,17 @@
     ng-class="{ 'instrument-selector-show': enteringSymbolSelector, 'instrument-selector-hide': exitingSymbolSelector }"
     ng-show="showSymbolSelector || enteringSymbolSelector">
   <div class="input-group">
-    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-    <input type="text" class="form-control" ng-model="searchKeyword"
-      placeholder="{{ 'template.financial.search-category.currencies' | translate }}"
-      aria-label="{{ 'template.financial.search-category.currencies' | translate }}">
-    <span class="input-group-addon">
+    <span class="input-group-addon" ng-click="searchInstruments()"><i class="fa fa-search"></i></span>
+    <input type="text" class="form-control"
+           ng-model="searchKeyword" ng-disabled="searching" ng-keyup="searchKeyPressed($event)"
+           placeholder="{{ getSearchPlaceholder() | translate }}"
+           aria-label="{{ getSearchPlaceholder() | translate }}">
+    <span class="input-group-addon" ng-click="resetSearch()">
       <i class="fa fa-close"></i>
     </span>
   </div>
 
-  <div class="instrument-selector-no-results" ng-show="instrumentSearch.length === 0">
+  <div class="instrument-selector-no-results" ng-show="!instrumentSearch.length || instrumentSearch.length === 0">
     <h2 translate>template.financial.no-results.title</h2>
     <div translate>template.financial.no-results.question</div>
     <div>
@@ -45,7 +50,7 @@
     </div>
   </div>
 
-  <div class="instrument-selector-popular" ng-show="instrumentSearch.length > 0">{{ getPopularTitle() | translate }}</div>
+  <div class="instrument-selector-popular" ng-show="popularResults">{{ getPopularTitle() | translate }}</div>
 
   <div class="row instrument-row" ng-show="instrumentSearch.length > 0"
        ng-repeat="(key, value) in instrumentSearch"

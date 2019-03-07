@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('risevision.template-editor.controllers')
-  .controller('TemplateEditorController', ['$scope', 'userState', 'templateEditorFactory', 'presentation',
-    function ($scope, userState, templateEditorFactory, presentation) {
+  .controller('TemplateEditorController',
+    ['$scope', 'templateEditorFactory', '$loading', 'userState',
+    function ($scope, templateEditorFactory, $loading, userState) {
       $scope.factory = templateEditorFactory;
-      $scope.presentation = presentation;
       $scope.isSubcompanySelected = userState.isSubcompanySelected;
       $scope.isTestCompanySelected = userState.isTestCompanySelected;
 
@@ -41,7 +41,7 @@ angular.module('risevision.template-editor.controllers')
       };
 
       function _componentFor(componentId) {
-        var attributeData = $scope.presentation.templateAttributeData;
+        var attributeData = $scope.factory.presentation.templateAttributeData;
 
         if(!attributeData.components) {
           attributeData.components = [];
@@ -57,5 +57,13 @@ angular.module('risevision.template-editor.controllers')
 
         return component;
       }
+
+      $scope.$watch('factory.loadingPresentation', function(loading) {
+        if (loading) {
+          $loading.start('template-editor-loader');
+        } else {
+          $loading.stop('template-editor-loader');
+        }
+      });
     }
   ]);

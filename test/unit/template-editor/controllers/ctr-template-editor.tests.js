@@ -34,7 +34,7 @@ describe('controller: TemplateEditor', function() {
     factory;
 
   beforeEach(function() {
-    factory = {};
+    factory = { presentation: { templateAttributeData: {} } };
   });
 
   beforeEach(module('risevision.template-editor.controllers'));
@@ -53,8 +53,7 @@ describe('controller: TemplateEditor', function() {
 
       $controller('TemplateEditorController', {
         $scope: $scope,
-        editorFactory: $injector.get('templateEditorFactory'),
-        presentation: { templateAttributeData: {} }
+        editorFactory: $injector.get('templateEditorFactory')
       });
 
       $scope.$digest();
@@ -64,8 +63,8 @@ describe('controller: TemplateEditor', function() {
   it('should exist', function() {
     expect($scope).to.be.truely;
     expect($scope.factory).to.be.truely;
-    expect($scope.presentation).to.be.ok;
-    expect($scope.presentation.templateAttributeData).to.deep.equal({});
+    expect($scope.factory.presentation).to.be.ok;
+    expect($scope.factory.presentation.templateAttributeData).to.deep.equal({});
   });
 
   it('should define attribute and blueprint data functions',function() {
@@ -78,7 +77,7 @@ describe('controller: TemplateEditor', function() {
     var data = $scope.getAttributeData("test-id");
 
     expect(data).to.deep.equal({ id: "test-id" });
-    expect($scope.presentation.templateAttributeData).to.deep.equal({
+    expect($scope.factory.presentation.templateAttributeData).to.deep.equal({
       components: [
         { id: "test-id" }
       ]
@@ -94,7 +93,7 @@ describe('controller: TemplateEditor', function() {
   it('should set an attribute data value',function() {
     $scope.setAttributeData("test-id", "symbols", "CADUSD=X|MXNUSD=X");
 
-    expect($scope.presentation.templateAttributeData).to.deep.equal({
+    expect($scope.factory.presentation.templateAttributeData).to.deep.equal({
       components: [
         {
           id: "test-id",
