@@ -17,7 +17,7 @@
 <div class="row financial-action-button-bar" ng-show="showInstrumentList">
   <div class="col-sm-4">
     <button class="btn btn-primary btn-block" ng-click="showSymbolSearch()">
-      <strong translate>template.financial.add-category.currencies</strong>
+      <strong>{{ getOpenSymbolSelectorButtonLabel() | translate }}</strong>
     </button>
   </div>
 </div>
