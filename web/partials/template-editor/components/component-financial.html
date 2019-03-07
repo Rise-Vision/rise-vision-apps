@@ -1,6 +1,8 @@
 <div class="instrument-list"
     ng-class="{ 'instrument-list-show': enteringInstrumentSelector, 'instrument-list-cover': enteringSymbolSelector, 'instrument-list-uncover': exitingSymbolSelector }"
-    ng-show="showInstrumentList || enteringInstrumentSelector || exitingSymbolSelector">
+    ng-show="showInstrumentList || enteringInstrumentSelector || exitingSymbolSelector"
+    rv-spinner rv-spinner-key="template-editor-loader"
+    rv-spinner-start-active="1">
   <div class="row instrument-row" ng-repeat="instr in instruments">
     <div class="col-xs-10">
       <div class="instrument-name">{{ instr.name | uppercase }}</div>

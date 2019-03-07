@@ -34,6 +34,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _buildInstrumentListFromBlueprint() {
+            $scope.factory.loadingPresentation = true;
             var symbolString = $scope.getBlueprintData($scope.componentId, "symbols");
 
             if(!symbolString) {
@@ -51,6 +52,7 @@ angular.module('risevision.template-editor.directives')
           function _buildListRecursive(instruments, symbols) {
             if( symbols.length === 0 ) {
               _setInstruments(instruments);
+              $scope.factory.loadingPresentation = false;
 
               return;
             }

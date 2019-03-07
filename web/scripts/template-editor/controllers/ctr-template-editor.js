@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('risevision.template-editor.controllers')
-  .controller('TemplateEditorController', ['$scope', 'templateEditorFactory',
-    function ($scope, templateEditorFactory) {
+  .controller('TemplateEditorController',
+    ['$scope', 'templateEditorFactory', '$loading',
+    function ($scope, templateEditorFactory, $loading) {
       $scope.factory = templateEditorFactory;
 
       $scope.getBlueprintData = function(componentId, attributeKey) {
@@ -54,5 +55,13 @@ angular.module('risevision.template-editor.controllers')
 
         return component;
       }
+
+      $scope.$watch('factory.loadingPresentation', function(loading) {
+        if (loading) {
+          $loading.start('template-editor-loader');
+        } else {
+          $loading.stop('template-editor-loader');
+        }
+      });
     }
   ]);
