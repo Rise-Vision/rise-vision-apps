@@ -13,6 +13,7 @@ angular.module('risevision.template-editor.services')
           _parseJSON(presentation.templateAttributeData) || {};
 
         factory.presentation = presentation;
+        factory.selected = null;
       };
 
       var _getPresentationForUpdate = function() {

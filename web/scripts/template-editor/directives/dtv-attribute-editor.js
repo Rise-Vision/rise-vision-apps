@@ -11,6 +11,10 @@ angular.module('risevision.template-editor.directives')
           $scope.showAttributeList = true;
           $scope.directives = {};
 
+          $scope.$watch('factory.presentation', function () {
+            $scope.showAttributeList = true;
+          });
+
           $scope.registerDirective = function (directive) {
             directive.element.hide();
             $scope.directives[directive.type] = directive;
