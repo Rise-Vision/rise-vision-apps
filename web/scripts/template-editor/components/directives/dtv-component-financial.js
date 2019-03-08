@@ -144,6 +144,36 @@ angular.module('risevision.template-editor.directives')
             });
           };
 
+          $scope.addInstrument = function() {
+            var instrumentsSelected = _.chain($scope.instrumentSearch)
+              .filter(function (instrument) { return instrument.isSelected; })
+              .sortBy('symbol')
+              .map(function(instrument) {
+                delete instrument.isSelected;
+                return instrument;
+              })
+              .value()
+              .reverse();
+
+            var instrumentsToAdd = _.reject(instrumentsSelected, function(instrument) {
+              return _.find($scope.instruments, function(item) {
+                return item.symbol === instrument.symbol;
+              }) !== undefined;
+            });
+
+            if (instrumentsToAdd.length && instrumentsToAdd.length > 0) {
+              var instruments = angular.copy($scope.instruments);
+
+              instrumentsToAdd.forEach(function(item) {
+                instruments.unshift(item);
+              });
+
+              _setInstruments(instruments);
+            }
+
+            $scope.selectInstruments();
+          };
+
           $scope.searchInstruments = function() {
             var promise = $scope.searchKeyword ?
               instrumentSearchService.keywordSearch( $scope.category, $scope.searchKeyword ) :
