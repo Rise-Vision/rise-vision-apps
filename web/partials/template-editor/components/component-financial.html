@@ -1,5 +1,5 @@
 <div class="financial-container">
-<div class="instrument-list"
+<div class="instrument-list te-scrollable-container"
     ng-class="{ 'instrument-list-show': enteringInstrumentSelector, 'instrument-list-cover': enteringSymbolSelector, 'instrument-list-uncover': exitingSymbolSelector }"
     ng-show="showInstrumentList || enteringInstrumentSelector || exitingSymbolSelector"
     rv-spinner rv-spinner-key="template-editor-loader"
@@ -37,7 +37,7 @@
     </span>
   </div>
 
-  <div class="instrument-selector">
+  <div class="instrument-selector te-scrollable-container">
   <div class="instrument-selector-no-results" ng-show="!instrumentSearch.length || instrumentSearch.length === 0">
     <h2 translate>template.financial.no-results.title</h2>
     <div translate>template.financial.no-results.question</div>
