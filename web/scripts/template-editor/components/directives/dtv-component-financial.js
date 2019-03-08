@@ -18,13 +18,13 @@ angular.module('risevision.template-editor.directives')
             $scope.exitingSymbolSelector = false;
 
             // TODO: hardcoding category for now until templates have component surface category attribute
-            $scope.category = "currencies";
+            $scope.category = 'currencies';
             $scope.instruments = [];
           }
 
           function _loadInstrumentList() {
             var instruments =
-              $scope.getAttributeData($scope.componentId, "instruments");
+              $scope.getAttributeData($scope.componentId, 'instruments');
 
             if(instruments) {
               $scope.instruments = instruments;
@@ -35,16 +35,16 @@ angular.module('risevision.template-editor.directives')
 
           function _buildInstrumentListFromBlueprint() {
             $scope.factory.loadingPresentation = true;
-            var symbolString = $scope.getBlueprintData($scope.componentId, "symbols");
+            var symbolString = $scope.getBlueprintData($scope.componentId, 'symbols');
 
             if(!symbolString) {
-              $log.error("The component blueprint data is not providing default symbols value: " + $scope.componentId)
+              $log.error('The component blueprint data is not providing default symbols value: ' + $scope.componentId)
 
               return;
             }
 
             var instruments = [];
-            var symbols = symbolString.split("|");
+            var symbols = symbolString.split('|');
 
             _buildListRecursive(instruments, symbols);
           }
@@ -66,7 +66,7 @@ angular.module('risevision.template-editor.directives')
               if(instrument) {
                 instruments.push(instrument);
               } else {
-                $log.warn("no instrument found for symbol: " + symbol);
+                $log.warn('no instrument found for symbol: ' + symbol);
               }
             })
             .catch( function(error) {
@@ -80,15 +80,15 @@ angular.module('risevision.template-editor.directives')
           function _symbolsFor(instruments) {
             return _.map(instruments, function(instrument) {
               return instrument.symbol;
-            }).join("|");
+            }).join('|');
           }
 
           function _setInstruments(instruments) {
             var value = angular.copy(instruments);
 
             $scope.instruments = value;
-            $scope.setAttributeData($scope.componentId, "instruments", value);
-            $scope.setAttributeData($scope.componentId, "symbols", _symbolsFor(value));
+            $scope.setAttributeData($scope.componentId, 'instruments', value);
+            $scope.setAttributeData($scope.componentId, 'symbols', _symbolsFor(value));
           }
 
           _reset();
@@ -159,7 +159,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.resetSearch = function() {
-            $scope.searchKeyword = "";
+            $scope.searchKeyword = '';
             $scope.searchInstruments();
           };
 
@@ -207,7 +207,7 @@ angular.module('risevision.template-editor.directives')
             }, !isNaN(delay) ? delay : 500);
           }
 
-          $scope.$watch("showInstrumentList", function(value) {
+          $scope.$watch('showInstrumentList', function(value) {
             if (value) {
               $scope.searching = false;
 
