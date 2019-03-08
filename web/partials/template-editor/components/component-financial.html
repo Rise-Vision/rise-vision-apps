@@ -4,12 +4,12 @@
     ng-show="showInstrumentList || enteringInstrumentSelector || exitingSymbolSelector"
     rv-spinner rv-spinner-key="template-editor-loader"
     rv-spinner-start-active="1">
-  <div class="row instrument-row" ng-repeat="instr in instruments">
-    <div class="col-xs-10">
+  <div class="row instrument-row" ng-repeat="instr in instruments track by $index">
+    <div class="col-xs-10 pl-0">
       <div class="instrument-name">{{ instr.name | uppercase }}</div>
       <div class="instrument-rate">{{ instr.symbol | uppercase }}</div>
     </div>
-    <div class="col-xs-2 instrument-delete">
+    <div class="col-xs-2 pr-0 instrument-delete">
       <a href="#"
          ng-click="removeInstrument(instr.symbol)"
          translate>editor-app.details.remove</a>
@@ -23,10 +23,10 @@
   </button>
 </div>
 
-<div class="instrument-selector"
+<div
     ng-class="{ 'instrument-selector-show': enteringSymbolSelector, 'instrument-selector-hide': exitingSymbolSelector }"
     ng-show="showSymbolSelector || enteringSymbolSelector">
-  <div class="input-group">
+  <div class="input-group instrument-selector-search-box">
     <span class="input-group-addon" ng-click="searchInstruments()"><i class="fa fa-search"></i></span>
     <input type="text" class="form-control"
            ng-model="searchKeyword" ng-disabled="searching" ng-keyup="searchKeyPressed($event)"
@@ -37,6 +37,7 @@
     </span>
   </div>
 
+  <div class="instrument-selector">
   <div class="instrument-selector-no-results" ng-show="!instrumentSearch.length || instrumentSearch.length === 0">
     <h2 translate>template.financial.no-results.title</h2>
     <div translate>template.financial.no-results.question</div>
@@ -56,7 +57,7 @@
        ng-repeat="(key, value) in instrumentSearch"
        ng-click="selectInstrument(key)"
        ng-class="{'instrument-row--is-selected' : value.isSelected}">
-    <div class="col-xs-12">
+    <div class="col-xs-12 pl-0 pr-0">
       <span class="instrument-selector-checkbox">
         <input id="{{value.symbol}}" type="checkbox"
                ng-click="selectInstrument(key)"
@@ -68,6 +69,7 @@
         <div class="instrument-rate">{{ value.symbol | uppercase }}</div>
       </span>
     </div>
+  </div>
   </div>
 </div>
 
