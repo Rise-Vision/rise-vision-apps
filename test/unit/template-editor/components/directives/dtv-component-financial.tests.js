@@ -315,6 +315,112 @@ describe('directive: TemplateComponentFinancial', function() {
     expect($scope.instrumentSearch).to.deep.equal(popularResults);
   });
 
+  it("should disable adding instruments until at least one instrument is selected", function() {
+    $scope.selectInstruments();
+    timeout.flush();
+    $scope.$digest();
+    $scope.showSymbolSearch();
+
+    expect($scope.canAddInstrument).to.be.false;
+
+    $scope.selectInstrument(1);
+
+    expect($scope.canAddInstrument).to.be.true;
+
+    $scope.selectInstrument(1);
+
+    expect($scope.canAddInstrument).to.be.false;
+  });
+
+  it('should add selected instruments to instruments list and prioritize them to top of list', function() {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+    var instruments = [
+      {
+        "symbol": "CADUSD=X",
+        "name": "CANADIAN DOLLAR",
+        "category": "currencies",
+        "logo": "https://risecontentlogos.s3.amazonaws.com/financial/CAD-USD.svg"
+      }
+    ];
+
+    $scope.getAttributeData = function() {
+      return instruments;
+    };
+
+    directive.show();
+
+    expect($scope.instruments).to.deep.equal(instruments);
+
+    timeout.flush();
+
+    $scope.showSymbolSearch();
+    timeout.flush();
+    $scope.$digest();
+
+    $scope.selectInstrument(1);
+    $scope.selectInstrument(2);
+
+    $scope.addInstrument();
+
+    expect($scope.instruments).to.deep.equal([
+      {
+        "symbol": "CHFUSD=X",
+        "name": "SWISS FRANC",
+        "category": "currencies",
+        "logo": "https://risecontentlogos.s3.amazonaws.com/financial/CHF-USD.svg"
+      },
+      {
+        "symbol": "HKDUSD=X",
+        "name": "HONG KONG DOLLAR",
+        "category": "currencies",
+        "logo": "https://risecontentlogos.s3.amazonaws.com/financial/HKD-USD.svg"
+      },
+      {
+        "symbol": "CADUSD=X",
+        "name": "CANADIAN DOLLAR",
+        "category": "currencies",
+        "logo": "https://risecontentlogos.s3.amazonaws.com/financial/CAD-USD.svg"
+      }
+    ]);
+  });
+
+  it('should not add duplicate instruments', function() {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+    var instruments = [
+      {
+        "symbol": "CADUSD=X",
+        "name": "CANADIAN DOLLAR",
+        "category": "currencies",
+        "logo": "https://risecontentlogos.s3.amazonaws.com/financial/CAD-USD.svg"
+      },
+      {
+        "symbol": "HKDUSD=X",
+        "name": "HONG KONG DOLLAR",
+        "category": "currencies",
+        "logo": "https://risecontentlogos.s3.amazonaws.com/financial/HKD-USD.svg"
+      }
+    ];
+
+    $scope.getAttributeData = function() {
+      return instruments;
+    };
+
+    directive.show();
+
+    expect($scope.instruments).to.deep.equal(instruments);
+
+    timeout.flush();
+
+    $scope.showSymbolSearch();
+    timeout.flush();
+    $scope.$digest();
+
+    $scope.selectInstrument(2);
+    $scope.addInstrument();
+
+    expect($scope.instruments).to.deep.equal(instruments);
+  });
+
   it('should get the open symbol button label', function() {
     $scope.category = 'currencies';
 

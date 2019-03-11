@@ -2,9 +2,11 @@
 
 angular.module('risevision.template-editor.controllers')
   .controller('TemplateEditorController',
-    ['$scope', 'templateEditorFactory', '$loading',
-    function ($scope, templateEditorFactory, $loading) {
+    ['$scope', 'templateEditorFactory', '$loading', 'userState',
+    function ($scope, templateEditorFactory, $loading, userState) {
       $scope.factory = templateEditorFactory;
+      $scope.isSubcompanySelected = userState.isSubcompanySelected;
+      $scope.isTestCompanySelected = userState.isTestCompanySelected;
 
       $scope.getBlueprintData = function(componentId, attributeKey) {
         var components = $scope.factory.blueprintData.components;
@@ -23,20 +25,20 @@ angular.module('risevision.template-editor.controllers')
 
         var attribute = attributes[attributeKey];
         return attribute && attribute.value;
-      }
+      };
 
       $scope.getAttributeData = function(componentId, attributeKey) {
         var component = _componentFor(componentId);
 
         // if the attributeKey is not provided, it returns the full component structure
         return attributeKey ? component[attributeKey] : component;
-      }
+      };
 
       $scope.setAttributeData = function(componentId, attributeKey, value) {
         var component = _componentFor(componentId);
 
         component[attributeKey] = value;
-      }
+      };
 
       function _componentFor(componentId) {
         var attributeData = $scope.factory.presentation.templateAttributeData;

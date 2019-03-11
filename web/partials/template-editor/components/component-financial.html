@@ -1,14 +1,15 @@
-<div class="instrument-list"
+<div class="financial-container">
+<div class="instrument-list te-scrollable-container"
     ng-class="{ 'instrument-list-show': enteringInstrumentSelector, 'instrument-list-cover': enteringSymbolSelector, 'instrument-list-uncover': exitingSymbolSelector }"
     ng-show="showInstrumentList || enteringInstrumentSelector || exitingSymbolSelector"
     rv-spinner rv-spinner-key="template-editor-loader"
     rv-spinner-start-active="1">
-  <div class="row instrument-row" ng-repeat="instr in instruments">
-    <div class="col-xs-10">
+  <div class="row instrument-row" ng-repeat="instr in instruments track by $index">
+    <div class="col-xs-10 pl-0">
       <div class="instrument-name">{{ instr.name | uppercase }}</div>
       <div class="instrument-rate">{{ instr.symbol | uppercase }}</div>
     </div>
-    <div class="col-xs-2 instrument-delete">
+    <div class="col-xs-2 pr-0 instrument-delete">
       <a href="#"
          ng-click="removeInstrument(instr.symbol)"
          translate>editor-app.details.remove</a>
@@ -16,18 +17,16 @@
   </div>
 </div>
 
-<div class="row financial-action-button-bar" ng-show="showInstrumentList">
-  <div class="col-sm-4">
-    <button class="btn btn-primary btn-block" ng-click="showSymbolSearch()">
-      <strong>{{ getOpenSymbolSelectorButtonLabel() | translate }}</strong>
-    </button>
-  </div>
+<div class="financial-action-button-bar" ng-show="showInstrumentList">
+  <button class="btn btn-primary btn-block" ng-click="showSymbolSearch()">
+    <strong>{{ getOpenSymbolSelectorButtonLabel() | translate }}</strong>
+  </button>
 </div>
 
-<div class="instrument-selector"
+<div
     ng-class="{ 'instrument-selector-show': enteringSymbolSelector, 'instrument-selector-hide': exitingSymbolSelector }"
     ng-show="showSymbolSelector || enteringSymbolSelector">
-  <div class="input-group">
+  <div class="input-group instrument-selector-search-box">
     <span class="input-group-addon" ng-click="searchInstruments()"><i class="fa fa-search"></i></span>
     <input type="text" class="form-control"
            ng-model="searchKeyword" ng-disabled="searching" ng-keyup="searchKeyPressed($event)"
@@ -38,6 +37,7 @@
     </span>
   </div>
 
+  <div class="instrument-selector te-scrollable-container">
   <div class="instrument-selector-no-results" ng-show="!instrumentSearch.length || instrumentSearch.length === 0">
     <h2 translate>template.financial.no-results.title</h2>
     <div translate>template.financial.no-results.question</div>
@@ -57,7 +57,7 @@
        ng-repeat="(key, value) in instrumentSearch"
        ng-click="selectInstrument(key)"
        ng-class="{'instrument-row--is-selected' : value.isSelected}">
-    <div class="col-xs-12">
+    <div class="col-xs-12 pl-0 pr-0">
       <span class="instrument-selector-checkbox">
         <input id="{{value.symbol}}" type="checkbox"
                ng-click="selectInstrument(key)"
@@ -70,12 +70,12 @@
       </span>
     </div>
   </div>
+  </div>
 </div>
 
-<div class="row financial-action-button-bar" ng-show="showSymbolSelector">
-  <div class="col-sm-4">
-    <button class="btn btn-primary btn-block" ng-click="selectInstruments()">
-      <strong translate>template.financial.add-selected</strong>
-    </button>
-  </div>
+<div class="financial-action-button-bar" ng-show="showSymbolSelector">
+  <button class="btn btn-primary btn-block" ng-disabled="!canAddInstrument" ng-click="addInstrument()">
+    <strong translate>template.financial.add-selected</strong>
+  </button>
+</div>
 </div>
