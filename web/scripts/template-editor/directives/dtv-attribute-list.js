@@ -11,8 +11,6 @@ angular.module('risevision.template-editor.directives')
           $scope.factory = templateEditorFactory;
 
           $scope.components = templateEditorFactory.blueprintData.components;
-          $scope.components = [].concat($scope.components, $scope.components, $scope.components, $scope.components, $scope.components);
-          $scope.components = [].concat($scope.components, $scope.components, $scope.components, $scope.components, $scope.components);
         }
       };
     }

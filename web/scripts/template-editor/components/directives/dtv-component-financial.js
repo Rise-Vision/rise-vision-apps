@@ -51,7 +51,7 @@ angular.module('risevision.template-editor.directives')
 
           function _buildListRecursive(instruments, symbols) {
             if( symbols.length === 0 ) {
-              _setInstruments([].concat(instruments, instruments, instruments, instruments, instruments));
+              _setInstruments(instruments);
               $scope.factory.loadingPresentation = false;
 
               return;
