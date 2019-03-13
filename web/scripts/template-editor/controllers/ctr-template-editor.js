@@ -2,8 +2,8 @@
 
 angular.module('risevision.template-editor.controllers')
   .controller('TemplateEditorController',
-    ['$scope', '$loading', '$modal', '$state', '$timeout', '$window', 'templateEditorFactory', 'userState',
-    function ($scope, $loading, $modal, $state, $timeout, $window, templateEditorFactory, userState) {
+    ['$scope', '$filter', '$loading', '$modal', '$state', '$timeout', '$window', 'templateEditorFactory', 'userState',
+    function ($scope, $filter, $loading, $modal, $state, $timeout, $window, templateEditorFactory, userState) {
       $scope.factory = templateEditorFactory;
       $scope.isSubcompanySelected = userState.isSubcompanySelected;
       $scope.isTestCompanySelected = userState.isTestCompanySelected;

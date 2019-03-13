@@ -9,7 +9,7 @@
 
         $scope.save = function () {
           templateEditorFactory.save().then(function () {
-            $modalInstance.dismiss();
+            $modalInstance.close();
           });
         };
 
