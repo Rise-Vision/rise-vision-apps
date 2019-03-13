@@ -17,8 +17,7 @@ angular.module('risevision.template-editor.directives')
             $scope.enteringSymbolSelector = false;
             $scope.exitingSymbolSelector = false;
 
-            // TODO: hardcoding category for now until templates have component surface category attribute
-            $scope.category = 'currencies';
+            $scope.category = '';
             $scope.instruments = [];
           }
 
@@ -91,6 +90,16 @@ angular.module('risevision.template-editor.directives')
             $scope.setAttributeData($scope.componentId, 'symbols', _symbolsFor(value));
           }
 
+          function _getCategory() {
+            var category = $scope.getBlueprintData($scope.componentId, 'category');
+
+            if( !category ) {
+              $log.error( "No category was defined for financial component" );
+            }
+
+            return category;
+          }
+
           _reset();
 
           $scope.registerDirective({
@@ -102,6 +111,7 @@ angular.module('risevision.template-editor.directives')
 
               _reset();
               $scope.componentId = $scope.factory.selected.id;
+              $scope.category = _getCategory();
 
               _loadInstrumentList();
               $scope.enteringInstrumentSelector = true;
