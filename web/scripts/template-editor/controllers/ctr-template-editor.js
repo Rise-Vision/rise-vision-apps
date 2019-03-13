@@ -2,8 +2,8 @@
 
 angular.module('risevision.template-editor.controllers')
   .controller('TemplateEditorController',
-    ['$scope', 'templateEditorFactory', '$loading', 'userState',
-    function ($scope, templateEditorFactory, $loading, userState) {
+    ['$scope', '$loading', '$modal', '$state', '$timeout', '$window', 'userState', 'templateEditorFactory',
+    function ($scope, $loading, $modal, $state, $timeout, $window, templateEditorFactory, userState) {
       $scope.factory = templateEditorFactory;
       $scope.isSubcompanySelected = userState.isSubcompanySelected;
       $scope.isTestCompanySelected = userState.isTestCompanySelected;
@@ -57,6 +57,61 @@ angular.module('risevision.template-editor.controllers')
 
         return component;
       }
+
+      var _bypass = false, _initializing = false;
+      var _setUnsavedChanges = function (state) {
+        $timeout(function () {
+          $scope.hasUnsavedChanges = state;
+        });
+      };
+
+      $scope.$watch('factory.presentation', function (newValue, oldValue) {
+        if ($scope.hasUnsavedChanges) {
+          return;
+        }
+        if (_initializing) {
+          $timeout(function () {
+            _initializing = false;
+          });
+        } else {
+          if (!_.isEqual(newValue, oldValue)) {
+            _setUnsavedChanges(true);
+          }
+        }
+      }, true);
+
+      $scope.$on('presentationCreated', _setUnsavedChanges.bind(null, false));
+      $scope.$on('presentationUpdated', _setUnsavedChanges.bind(null, false));
+      $scope.$on('presentationDeleted', _setUnsavedChanges.bind(null, false));
+
+      $scope.$on('$stateChangeStart', function (event, toState, toParams) {
+        if (_bypass) {
+          _bypass = false;
+          return;
+        }
+        if ($scope.hasUnsavedChanges && toState.name.indexOf('apps.editor.templates') === -1) {
+          event.preventDefault();
+          var modalInstance = $modal.open({
+            templateUrl: 'partials/template-editor/unsaved-changes-modal.html',
+            size: 'md',
+            controller: 'TemplateEditorUnsavedChangesModalController'
+          });
+          modalInstance.result.then(function () {
+            _bypass = true;
+            $state.go(toState, toParams);
+          });
+        }
+      });
+
+      $window.onbeforeunload = function () {
+        if ($scope.hasUnsavedChanges) {
+          return $filter('translate')('common.saveBeforeLeave');
+        }
+      };
+
+      $scope.$on('$destroy', function () {
+        $window.onbeforeunload = undefined;
+      });
 
       $scope.$watch('factory.loadingPresentation', function(loading) {
         if (loading) {
