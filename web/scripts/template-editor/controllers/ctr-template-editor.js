@@ -2,7 +2,7 @@
 
 angular.module('risevision.template-editor.controllers')
   .controller('TemplateEditorController',
-    ['$scope', '$loading', '$modal', '$state', '$timeout', '$window', 'userState', 'templateEditorFactory',
+    ['$scope', '$loading', '$modal', '$state', '$timeout', '$window', 'templateEditorFactory', 'userState',
     function ($scope, $loading, $modal, $state, $timeout, $window, templateEditorFactory, userState) {
       $scope.factory = templateEditorFactory;
       $scope.isSubcompanySelected = userState.isSubcompanySelected;
@@ -58,7 +58,7 @@ angular.module('risevision.template-editor.controllers')
         return component;
       }
 
-      var _bypass = false, _initializing = false;
+      var _bypassUnsaved = false, _initializing = false;
       var _setUnsavedChanges = function (state) {
         $timeout(function () {
           $scope.hasUnsavedChanges = state;
@@ -85,8 +85,8 @@ angular.module('risevision.template-editor.controllers')
       $scope.$on('presentationDeleted', _setUnsavedChanges.bind(null, false));
 
       $scope.$on('$stateChangeStart', function (event, toState, toParams) {
-        if (_bypass) {
-          _bypass = false;
+        if (_bypassUnsaved) {
+          _bypassUnsaved = false;
           return;
         }
         if ($scope.hasUnsavedChanges && toState.name.indexOf('apps.editor.templates') === -1) {
@@ -97,7 +97,7 @@ angular.module('risevision.template-editor.controllers')
             controller: 'TemplateEditorUnsavedChangesModalController'
           });
           modalInstance.result.then(function () {
-            _bypass = true;
+            _bypassUnsaved = true;
             $state.go(toState, toParams);
           });
         }
