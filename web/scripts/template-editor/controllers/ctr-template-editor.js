@@ -7,6 +7,7 @@ angular.module('risevision.template-editor.controllers')
       $scope.factory = templateEditorFactory;
       $scope.isSubcompanySelected = userState.isSubcompanySelected;
       $scope.isTestCompanySelected = userState.isTestCompanySelected;
+      $scope.hasUnsavedChanges = false;
 
       $scope.getBlueprintData = function(componentId, attributeKey) {
         var components = $scope.factory.blueprintData.components;

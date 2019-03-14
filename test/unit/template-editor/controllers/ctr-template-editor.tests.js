@@ -30,8 +30,7 @@ describe('controller: TemplateEditor', function() {
     }
   ];
 
-  var $scope,
-    factory;
+  var $rootScope, $scope, $modal, $timeout, $window, factory;
 
   beforeEach(function() {
     factory = { presentation: { templateAttributeData: {} } };
@@ -45,11 +44,32 @@ describe('controller: TemplateEditor', function() {
     $provide.factory('templateEditorFactory',function() {
       return factory;
     });
+    $provide.factory('$modal', function() {
+      return {
+        open: function(params){
+          modalOpenCalled = true;
+          expect(params).to.be.ok;
+          return {
+            result: {
+              then: function(func) {
+                expect(func).to.be.a('function');
+              }
+            }
+          };
+        }
+      };
+    });
   }));
 
   beforeEach(function() {
-    inject(function($injector, $rootScope, $controller) {
+    inject(function($injector, $controller) {
+      $rootScope = $injector.get('$rootScope');
       $scope = $rootScope.$new();
+
+      $modal = $injector.get('$modal');
+      $window = $injector.get('$window');
+      $timeout = $injector.get('$timeout');
+      factory = $injector.get('templateEditorFactory');
 
       $controller('TemplateEditorController', {
         $scope: $scope,
@@ -163,4 +183,111 @@ describe('controller: TemplateEditor', function() {
     expect(data).to.equal("CADUSD=X|MXNUSD=X|USDEUR=X");
   });
 
+  describe('unsaved changes', function () {
+    it('should flag unsaved changes to presentation', function () {
+      expect($scope.hasUnsavedChanges).to.be.false;
+      factory.presentation.name = 'New Name';
+      $scope.$apply();
+      $timeout.flush();
+
+      expect($scope.hasUnsavedChanges).to.be.true;
+    });
+
+    it('should clear unsaved changes flag after saving presentation', function () {
+      factory.presentation.name = 'New Name';
+      $scope.$apply();
+      $rootScope.$broadcast('presentationUpdated');
+      $scope.$apply();
+      $timeout.flush();
+      expect($scope.hasUnsavedChanges).to.be.false;
+    });
+
+    it('should clear unsaved changes when deleting the presentation', function () {
+      factory.presentation.name = 'New Name';
+      $scope.$apply();
+      $rootScope.$broadcast('presentationDeleted');
+      $scope.$apply();
+      expect($scope.hasUnsavedChanges).to.be.false;
+    });
+
+    it('should not flag unsaved changes when publishing', function () {
+      factory.presentation.revisionStatusName = 'Published';
+      factory.presentation.changeDate = new Date();
+      factory.presentation.changedBy = 'newUsername';
+      $scope.$apply();
+
+      expect($scope.hasUnsavedChanges).to.be.false;
+    });
+
+    it('should notify unsaved changes when changing URL', function () {
+      factory.presentation.name = 'New Name';
+      $scope.$apply();
+      $timeout.flush();
+      var modalOpenStub = sinon.stub($modal, 'open', function () {
+        return {
+          result: {
+            then: function() {}
+          }
+        }
+      });
+
+      $rootScope.$broadcast('$stateChangeStart', { name: 'newState' });
+      $scope.$apply();
+
+      modalOpenStub.should.have.been.called;
+    });
+
+    it('should not notify unsaved changes when changing URL if there are no changes', function () {
+      var modalOpenStub = sinon.stub($modal, 'open', function() {
+        return {
+          result: {
+            then: function(){}
+          }
+        }
+      });
+
+      $rootScope.$broadcast('$stateChangeStart', { name: 'newState' });
+      $scope.$apply();
+
+      modalOpenStub.should.not.have.been.called;
+    });
+
+    it('should not notify unsaved changes when changing URL if state is in Template Editor', function () {
+      factory.presentation.name = 'New Name';
+      $scope.$apply();
+      var modalOpenStub = sinon.stub($modal, 'open', function() {
+        return {
+          result: {
+            then: function () {}
+          }
+        }
+      });
+
+      $rootScope.$broadcast('$stateChangeStart', { name: 'apps.editor.templates' });
+      $scope.$apply();
+
+      modalOpenStub.should.not.have.been.called;
+    });
+
+    it('should notify unsaved changes when closing window', function () {
+      factory.presentation.name = 'New Name';
+      $scope.$apply();
+      $timeout.flush();
+
+      var result = $window.onbeforeunload();
+      expect(result).to.equal("common.saveBeforeLeave");
+    });
+
+    it('should not notify unsaved changes when closing window if there are no changes', function() {
+      var result = $window.onbeforeunload();
+      expect(result).to.equal(undefined);
+    });
+
+    it('should stop listening for window close on $destroy', function () {
+      expect($window.onbeforeunload).to.be.a('function');
+      $rootScope.$broadcast('$destroy');
+      $scope.$apply();
+      expect($window.onbeforeunload).to.equal(null);
+    });
+  });
 });
