@@ -11,17 +11,19 @@
 </div>
 
 <div class="toolbar-right">
-  <button id="saveButton"
-    class="btn btn-primary btn-fixed-width u_margin-right hidden-xs"
-    ng-click="factory.save()">
+  <button id="saveButton" require-role="ce cp"
+          class="btn btn-primary btn-fixed-width u_margin-right hidden-xs"
+          ng-disabled="!hasUnsavedChanges || factory.savingPresentation"
+          ng-click="factory.save()">
     {{ factory.savingPresentation ?
       ( 'common.saving' | translate ) : ( 'common.save' | translate )
     }}
     <i class="fa fa-check icon-right"></i>
   </button>
 
-  <button id="publishButton" disabled
-    class="btn btn-primary btn-fixed-width hidden-xs">
+  <button id="publishButton" require-role="cp" class="btn btn-primary btn-fixed-width hidden-xs"
+          ng-disabled="hasUnsavedChanges || !factory.isRevised() || factory.savingPresentation"
+          ng-click="factory.publishPresentation()">
     {{'common.publish' | translate}}
   </button>
 </div>

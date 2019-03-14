@@ -67,6 +67,8 @@ angular.module('risevision.template-editor.controllers')
       };
 
       $scope.$watch('factory.presentation', function (newValue, oldValue) {
+        var ignoredFields = [ 'revisionStatusName', 'changeDate', 'changedBy' ];
+
         if ($scope.hasUnsavedChanges) {
           return;
         }
@@ -75,7 +77,7 @@ angular.module('risevision.template-editor.controllers')
             _initializing = false;
           });
         } else {
-          if (!_.isEqual(newValue, oldValue)) {
+          if (!_.isEqual(_.omit(newValue, ignoredFields), _.omit(oldValue, ignoredFields))) {
             _setUnsavedChanges(true);
           }
         }
@@ -84,6 +86,7 @@ angular.module('risevision.template-editor.controllers')
       $scope.$on('presentationCreated', _setUnsavedChanges.bind(null, false));
       $scope.$on('presentationUpdated', _setUnsavedChanges.bind(null, false));
       $scope.$on('presentationDeleted', _setUnsavedChanges.bind(null, false));
+      $scope.$on('presentationPublished', _setUnsavedChanges.bind(null, false));
 
       $scope.$on('$stateChangeStart', function (event, toState, toParams) {
         if (_bypassUnsaved) {

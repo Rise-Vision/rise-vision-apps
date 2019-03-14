@@ -3,9 +3,9 @@
 angular.module('risevision.template-editor.services')
   .constant('BLUEPRINT_URL', 'https://widgets.risevision.com/beta/templates/PRODUCT_CODE/blueprint.json')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', '$http', 'messageBox', 'presentation', 'processErrorCode', 'userState',
-    'HTML_PRESENTATION_TYPE', 'BLUEPRINT_URL',
+    'HTML_PRESENTATION_TYPE', 'BLUEPRINT_URL', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
     function ($q, $log, $state, $rootScope, $http, messageBox, presentation, processErrorCode, userState,
-      HTML_PRESENTATION_TYPE, BLUEPRINT_URL) {
+      HTML_PRESENTATION_TYPE, BLUEPRINT_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {};
 
       var _setPresentation = function (presentation) {
@@ -176,6 +176,7 @@ angular.module('risevision.template-editor.services')
         presentation.delete(factory.presentation.id)
           .then(function () {
             factory.presentation = {};
+            $rootScope.$broadcast('presentationDeleted');
 
             $state.go('apps.editor.list');
             deferred.resolve();
@@ -183,6 +184,41 @@ angular.module('risevision.template-editor.services')
           .then(null, function (e) {
             _showErrorMessage('delete', e);
             deferred.reject(e);
+          })
+          .finally(function () {
+            factory.loadingPresentation = false;
+            factory.savingPresentation = false;
+          });
+
+        return deferred.promise;
+      };
+
+      factory.isRevised = function () {
+        return factory.presentation.revisionStatusName === REVISION_STATUS_REVISED;
+      };
+
+      factory.publishPresentation = function () {
+        var deferred = $q.defer();
+
+        _clearMessages();
+
+        //show spinner
+        factory.loadingPresentation = true;
+        factory.savingPresentation = true;
+
+        presentation.publish(factory.presentation.id)
+          .then(function () {
+            factory.presentation.revisionStatusName = REVISION_STATUS_PUBLISHED;
+            factory.presentation.changeDate = new Date();
+            factory.presentation.changedBy = userState.getUsername();
+            $rootScope.$broadcast('presentationPublished');
+
+            deferred.resolve();
+          })
+          .then(null, function (e) {
+            _showErrorMessage('publish', e);
+
+            deferred.reject();
           })
           .finally(function () {
             factory.loadingPresentation = false;

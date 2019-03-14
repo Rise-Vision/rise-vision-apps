@@ -1,12 +1,16 @@
 <div>
-  <button class="btn btn-primary btn-block" ng-click="factory.save()">
+  <button id="saveButton" require-role="ce cp" class="btn btn-primary btn-block"
+          ng-disabled="!hasUnsavedChanges || factory.savingPresentation"
+          ng-click="factory.save()">
     {{ factory.savingPresentation ?
       ( 'common.saving' | translate ) : ( 'common.save' | translate )
     }}
     <i class="fa fa-check icon-right"></i>
   </button>
 
-  <button disabled class="btn btn-primary btn-block">
+  <button id="publishButton" require-role="cp" class="btn btn-primary"
+          ng-disabled="hasUnsavedChanges || !factory.isRevised() || factory.savingPresentation"
+          ng-click="factory.publishPresentation()">
     {{'common.publish' | translate}}
   </button>
 </div>

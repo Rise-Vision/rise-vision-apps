@@ -13,7 +13,8 @@ describe('service: templateEditorFactory:', function() {
         add : function() {},
         update : function() {},
         get: function() {},
-        delete: function () {}
+        delete: function () {},
+        publish: function () {}
       };
     });
 
@@ -429,6 +430,96 @@ describe('service: templateEditorFactory:', function() {
             expect(templateEditorFactory.apiError).to.be.ok;
             expect(templateEditorFactory.savingPresentation).to.be.false;
             expect(templateEditorFactory.loadingPresentation).to.be.false;
+
+            done();
+          }, 10);
+        });
+    });
+  });
+
+  describe('isRevised:', function() {
+    beforeEach(function() {
+      templateEditorFactory.presentation = {};
+    });
+
+    it('should default to false', function() {
+      expect(templateEditorFactory.isRevised()).to.be.false;
+    });
+
+    it('should not be revised if published', function() {
+      templateEditorFactory.presentation.revisionStatusName = 'Published';
+
+      expect(templateEditorFactory.isRevised()).to.be.false;
+    });
+
+    it('should be revised with revision status Revised', function() {
+      templateEditorFactory.presentation.revisionStatusName = 'Revised';
+
+      expect(templateEditorFactory.isRevised()).to.be.true;
+    });
+  });
+
+  describe('publishPresentation: ', function() {
+    beforeEach(function () {
+      sandbox.stub(presentation, 'get').returns(Q.resolve({
+        item: {
+          id: 'presentationId',
+          name: 'Test Presentation',
+          productCode: 'test-id'
+        }
+      }));
+      $httpBackend.when('GET', blueprintUrl).respond(200, {});
+      setTimeout(function() {
+        $httpBackend.flush();
+      });
+    });
+
+    it('should publish the presentation', function(done) {
+      sandbox.stub(presentation, 'publish').returns(Q.resolve());
+
+      var timeBeforePublish = new Date();
+
+      templateEditorFactory.getPresentation('presentationId')
+        .then(function () {
+          return templateEditorFactory.publishPresentation(templateEditorFactory);
+        })
+        .then(function() {
+          expect(messageBox).to.not.have.been.called;
+          expect(templateEditorFactory.savingPresentation).to.be.true;
+          expect(templateEditorFactory.loadingPresentation).to.be.true;
+
+          setTimeout(function() {
+            expect(templateEditorFactory.presentation.revisionStatusName).to.equal('Published');
+            expect(templateEditorFactory.presentation.changeDate).to.be.gte(timeBeforePublish);
+            expect(templateEditorFactory.presentation.changedBy).to.equal("testusername");
+            expect(templateEditorFactory.savingPresentation).to.be.false;
+            expect(templateEditorFactory.loadingPresentation).to.be.false;
+            expect(templateEditorFactory.errorMessage).to.not.be.ok;
+            expect(templateEditorFactory.apiError).to.not.be.ok;
+
+            done();
+          },10);
+        })
+        .then(null, function(err) {
+          done(err);
+        })
+        .then(null, done);
+    });
+
+    it('should show an error if fails to publish the presentation', function(done) {
+      sandbox.stub(presentation, 'publish').returns(Q.reject());
+
+      templateEditorFactory.getPresentation('presentationId')
+        .then(function () {
+          return templateEditorFactory.publishPresentation();
+        })
+        .then(null, function(e) {
+          setTimeout(function() {
+            expect(templateEditorFactory.savingPresentation).to.be.false;
+            expect(templateEditorFactory.loadingPresentation).to.be.false;
+            expect(templateEditorFactory.errorMessage).to.be.ok;
+            expect(templateEditorFactory.apiError).to.be.ok;
+            expect(messageBox).to.have.been.called;
 
             done();
           }, 10);
