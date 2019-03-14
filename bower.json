@@ -15,7 +15,7 @@
     "Sortable": "^1.4.2",
     "angular-truncate": "*",
     "angular-slugify": "^1.0.1",
-    "common-header": "https://github.com/Rise-Vision/common-header.git#v3.5.9",
+    "common-header": "https://github.com/Rise-Vision/common-header.git#v3.5.10",
     "oauthio-web": "0.6.2",
     "stretchy": "https://github.com/Rise-Vision/stretchy.git"
   },
