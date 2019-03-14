@@ -155,9 +155,13 @@ describe('directive: TemplateComponentFinancial', function() {
     $scope.getAttributeData = function() {
       return sampleInstruments;
     }
+    $scope.getBlueprintData = function () {
+      return "currencies";
+    }
 
     directive.show();
 
+    expect($scope.category).to.equal("currencies");
     expect($scope.instruments).to.deep.equal(sampleInstruments);
 
     timeout.flush();
@@ -346,6 +350,9 @@ describe('directive: TemplateComponentFinancial', function() {
     $scope.getAttributeData = function() {
       return instruments;
     };
+    $scope.getBlueprintData = function () {
+      return "currencies";
+    }
 
     directive.show();
 
@@ -404,6 +411,9 @@ describe('directive: TemplateComponentFinancial', function() {
     $scope.getAttributeData = function() {
       return instruments;
     };
+    $scope.getBlueprintData = function () {
+      return "currencies";
+    }
 
     directive.show();
 
