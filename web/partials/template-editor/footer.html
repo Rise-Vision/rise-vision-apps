@@ -1,6 +1,6 @@
 <div>
   <button id="saveButton" require-role="ce cp" class="btn btn-primary btn-block"
-          ng-disabled="!hasUnsavedChanges || factory.savingPresentation"
+          ng-disabled="factory.savingPresentation"
           ng-click="factory.save()">
     {{ factory.savingPresentation ?
       ( 'common.saving' | translate ) : ( 'common.save' | translate )
@@ -8,7 +8,7 @@
     <i class="fa fa-check icon-right"></i>
   </button>
 
-  <button id="publishButton" require-role="cp" class="btn btn-primary"
+  <button id="publishButton" require-role="cp" class="btn btn-primary btn-block"
           ng-disabled="hasUnsavedChanges || !factory.isRevised() || factory.savingPresentation"
           ng-click="factory.publishPresentation()">
     {{'common.publish' | translate}}

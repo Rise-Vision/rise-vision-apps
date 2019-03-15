@@ -13,7 +13,7 @@
 <div class="toolbar-right">
   <button id="saveButton" require-role="ce cp"
           class="btn btn-primary btn-fixed-width u_margin-right hidden-xs"
-          ng-disabled="!hasUnsavedChanges || factory.savingPresentation"
+          ng-disabled="factory.savingPresentation"
           ng-click="factory.save()">
     {{ factory.savingPresentation ?
       ( 'common.saving' | translate ) : ( 'common.save' | translate )
