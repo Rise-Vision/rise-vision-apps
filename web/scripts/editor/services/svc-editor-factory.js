@@ -182,7 +182,8 @@ angular.module('risevision.editor.services')
               $rootScope.$broadcast('presentationCreated');
 
               $state.go('apps.editor.workspace.artboard', {
-                presentationId: resp.item.id
+                presentationId: resp.item.id,
+                copyPresentation: null
               }).then(function () {
                 scheduleFactory.createFirstSchedule(resp.item.id,
                     resp.item.name)
