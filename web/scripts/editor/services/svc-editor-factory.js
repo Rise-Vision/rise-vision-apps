@@ -183,7 +183,7 @@ angular.module('risevision.editor.services')
 
               $state.go('apps.editor.workspace.artboard', {
                 presentationId: resp.item.id,
-                copyPresentation: null
+                copyPresentation: undefined
               }).then(function () {
                 scheduleFactory.createFirstSchedule(resp.item.id,
                     resp.item.name)
