@@ -1,3 +1,23 @@
+<style>
+  .template-editor {
+    --component-header-height: 63px;
+    --toolbar-height: 78px;
+    --financial-button-bar-height: 74px;
+  }
+
+  .template-editor-toolbar {
+    padding: 38px 0;
+  }
+
+  .attribute-editor .attribute-desc a {
+    margin-right: 18px;
+  }
+
+  .attribute-editor .component-header {
+    padding: 20px 0px 19px;
+  }
+</style>
+
 <div class="template-editor"
      ng-class="{ 'active-banner-mode' : isSubcompanySelected() || isTestCompanySelected(),
                  'active-banner-mode-double' : isSubcompanySelected() && isTestCompanySelected() }">
