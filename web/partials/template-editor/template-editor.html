@@ -62,6 +62,13 @@
     border-top: 1px solid #e6e6e6;
   }
 
+  @media (max-width: 768px) {
+    .financial-container {
+      --financial-body-height: calc(100vh - var(--body-height) - var(--component-header-height) - var(--financial-button-bar-height));
+      --selector-body-height: calc(100vh - var(--body-height) - var(--component-header-height) - var(--financial-button-bar-height) - var(--selector-search-box-height));
+    }
+  }
+
 </style>
 
 <div class="template-editor"
