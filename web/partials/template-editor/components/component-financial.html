@@ -6,7 +6,7 @@
     rv-spinner-start-active="1">
   <div class="row instrument-row" ng-repeat="instr in instruments track by $index">
     <div class="col-xs-10 pl-0">
-      <div class="instrument-name">{{ instr.name | uppercase }}</div>
+      <div class="instrument-name instrument-name-ellipsis">{{ instr.name | uppercase }}</div>
       <div class="instrument-rate">{{ instr.symbol | uppercase }}</div>
     </div>
     <div class="col-xs-2 pr-0 instrument-delete">
