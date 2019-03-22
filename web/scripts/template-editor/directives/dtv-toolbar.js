@@ -60,6 +60,13 @@ angular.module('risevision.template-editor.directives')
             });
           };
 
+          $scope.presentationNameKeyUp = function(keyEvent) {
+            // handle enter key
+            if ( keyEvent.which === 13 && $scope.isEditingName) {
+              $scope.isEditingName = false;
+            }
+          };
+
           function setFocus(elem) {
             if (elem !== null) {
               if (elem.createTextRange) {

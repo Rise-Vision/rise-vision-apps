@@ -1,5 +1,5 @@
 <!-- Presentation Name -->
-<input type="text" class="input-stretchy presentation-name"
+<input type="text" class="input-stretchy presentation-name" ng-keyup="presentationNameKeyUp($event)"
        ng-model="factory.presentation.name" ng-blur="onPresentationNameBlur()" ng-disabled="!isEditingName">
 <div>
   <button ng-disabled="isEditingName" type="button" class="edit-name pr-0" ng-click="isEditingName=true">
