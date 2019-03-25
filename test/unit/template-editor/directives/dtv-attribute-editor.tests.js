@@ -212,4 +212,78 @@ describe('directive: TemplateAttributeEditor', function() {
     expect($scope.showAttributeList).to.be.false;
   });
 
+  it('Shows header bottom rule if isHeaderBottomRuleVisible is not defined for directive', function() {
+    var directive = {
+      type: 'rise-test',
+      icon: 'fa-test',
+      element: {
+        hide: sinon.stub()
+      },
+      show: function() {},
+      onBackHandler: function() { return true; }
+    };
+
+    var component = {
+      type: 'rise-test'
+    }
+
+    $scope.registerDirective(directive);
+    $scope.editComponent(component);
+    timeout.flush();
+
+    var visible = $scope.isHeaderBottomRuleVisible(component);
+
+    expect(visible).to.be.true;
+  });
+
+  it('Shows header bottom rule if isHeaderBottomRuleVisible allows it', function() {
+    var directive = {
+      type: 'rise-test',
+      icon: 'fa-test',
+      element: {
+        hide: sinon.stub()
+      },
+      show: function() {},
+      isHeaderBottomRuleVisible: function() { return true; },
+      onBackHandler: function() { return true; }
+    };
+
+    var component = {
+      type: 'rise-test'
+    }
+
+    $scope.registerDirective(directive);
+    $scope.editComponent(component);
+    timeout.flush();
+
+    var visible = $scope.isHeaderBottomRuleVisible(component);
+
+    expect(visible).to.be.true;
+  });
+
+  it('Does not show header bottom rule if isHeaderBottomRuleVisible not allows it', function() {
+    var directive = {
+      type: 'rise-test',
+      icon: 'fa-test',
+      element: {
+        hide: sinon.stub()
+      },
+      show: function() {},
+      isHeaderBottomRuleVisible: function() { return false; },
+      onBackHandler: function() { return true; }
+    };
+
+    var component = {
+      type: 'rise-test'
+    }
+
+    $scope.registerDirective(directive);
+    $scope.editComponent(component);
+    timeout.flush();
+
+    var visible = $scope.isHeaderBottomRuleVisible(component);
+
+    expect(visible).to.be.false;
+  });
+
 });
