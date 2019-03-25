@@ -18,9 +18,11 @@
 </div>
 
 <div class="financial-action-button-bar" ng-show="showInstrumentList">
-  <button class="btn btn-primary btn-block" ng-click="showSymbolSearch()">
-    <strong>{{ getOpenSymbolSelectorButtonLabel() | translate }}</strong>
-  </button>
+  <div>
+    <button class="btn btn-primary btn-block" ng-click="showSymbolSearch()">
+      <strong>{{ getOpenSymbolSelectorButtonLabel() | translate }}</strong>
+    </button>
+  </div>
 </div>
 
 <div
@@ -74,8 +76,10 @@
 </div>
 
 <div class="financial-action-button-bar" ng-show="showSymbolSelector">
-  <button class="btn btn-primary btn-block" ng-disabled="!canAddInstrument" ng-click="addInstrument()">
-    <strong translate>template.financial.add-selected</strong>
-  </button>
+  <div>
+    <button class="btn btn-primary btn-block" ng-disabled="!canAddInstrument" ng-click="addInstrument()">
+      <strong translate>template.financial.add-selected</strong>
+    </button>
+  </div>
 </div>
 </div>
