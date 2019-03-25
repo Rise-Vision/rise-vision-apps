@@ -1,4 +1,5 @@
-<div class="component-header">
+<div class="component-header"
+    ng-class="{ 'visible-bottom-rule': isHeaderBottomRuleVisible(factory.selected) }">
   <div class="attribute-desc">
     <a ng-click="onBackButton();">
       <span class="attribute-edit text-nowrap">

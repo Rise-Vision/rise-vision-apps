@@ -121,6 +121,9 @@ angular.module('risevision.template-editor.directives')
                 $scope.showInstrumentList = true;
               }, 1000);
             },
+            isHeaderBottomRuleVisible: function() {
+              return $scope.enteringInstrumentSelector || $scope.showInstrumentList || $scope.exitingInstrumentSelector || $scope.exitingSymbolSelector;
+            },
             onBackHandler: function () {
               if ($scope.showSymbolSelector) {
                 _changeInstrumentView(false);

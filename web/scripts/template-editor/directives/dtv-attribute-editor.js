@@ -53,6 +53,17 @@ angular.module('risevision.template-editor.directives')
               $scope.directives[component.type].icon : '';
           };
 
+          $scope.isHeaderBottomRuleVisible = function(component) {
+            if ( !component ) {
+              return true;
+            }
+
+            var directive = $scope.directives[component.type];
+
+            return directive && directive.isHeaderBottomRuleVisible ?
+              directive.isHeaderBottomRuleVisible() : true;
+          };
+
           function _showAttributeList(value, delay) {
             $timeout(function () {
               $scope.showAttributeList = value;
