@@ -1,5 +1,5 @@
 <!-- Presentation Name -->
-<input type="text" class="input-stretchy presentation-name"
+<input type="text" class="input-stretchy presentation-name" ng-keyup="presentationNameKeyUp($event)"
        ng-model="factory.presentation.name" ng-blur="onPresentationNameBlur()" ng-disabled="!isEditingName">
 <div>
   <button ng-disabled="isEditingName" type="button" class="edit-name pr-0" ng-click="isEditingName=true">
@@ -15,15 +15,16 @@
           class="btn btn-primary btn-fixed-width u_margin-right hidden-xs"
           ng-disabled="factory.savingPresentation"
           ng-click="factory.save()">
-    {{ factory.savingPresentation ?
-      ( 'common.saving' | translate ) : ( 'common.save' | translate )
-    }}
-    <i class="fa fa-check icon-right"></i>
+    <strong>
+      {{ factory.savingPresentation ?
+        ( 'common.saving' | translate ) : ( 'common.save' | translate )
+      }}
+    </strong>
   </button>
 
   <button id="publishButton" require-role="cp" class="btn btn-primary btn-fixed-width hidden-xs"
           ng-disabled="hasUnsavedChanges || !factory.isRevised() || factory.savingPresentation"
           ng-click="factory.publishPresentation()">
-    {{'common.publish' | translate}}
+    <strong translate>common.publish</strong>
   </button>
 </div>

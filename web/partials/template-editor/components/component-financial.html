@@ -6,7 +6,7 @@
     rv-spinner-start-active="1">
   <div class="row instrument-row" ng-repeat="instr in instruments track by $index">
     <div class="col-xs-10 pl-0">
-      <div class="instrument-name">{{ instr.name | uppercase }}</div>
+      <div class="instrument-name instrument-name-ellipsis">{{ instr.name | uppercase }}</div>
       <div class="instrument-rate">{{ instr.symbol | uppercase }}</div>
     </div>
     <div class="col-xs-2 pr-0 instrument-delete">
@@ -18,9 +18,11 @@
 </div>
 
 <div class="financial-action-button-bar" ng-show="showInstrumentList">
-  <button class="btn btn-primary btn-block" ng-click="showSymbolSearch()">
-    <strong>{{ getOpenSymbolSelectorButtonLabel() | translate }}</strong>
-  </button>
+  <div>
+    <button class="btn btn-primary btn-block" ng-click="showSymbolSearch()">
+      <strong>{{ getOpenSymbolSelectorButtonLabel() | translate }}</strong>
+    </button>
+  </div>
 </div>
 
 <div
@@ -74,8 +76,10 @@
 </div>
 
 <div class="financial-action-button-bar" ng-show="showSymbolSelector">
-  <button class="btn btn-primary btn-block" ng-disabled="!canAddInstrument" ng-click="addInstrument()">
-    <strong translate>template.financial.add-selected</strong>
-  </button>
+  <div>
+    <button class="btn btn-primary btn-block" ng-disabled="!canAddInstrument" ng-click="addInstrument()">
+      <strong translate>template.financial.add-selected</strong>
+    </button>
+  </div>
 </div>
 </div>
