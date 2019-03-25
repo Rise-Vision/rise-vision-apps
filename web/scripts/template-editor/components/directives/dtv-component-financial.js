@@ -122,7 +122,7 @@ angular.module('risevision.template-editor.directives')
               }, 1000);
             },
             isHeaderBottomRuleVisible: function() {
-              return $scope.showInstrumentList;
+              return $scope.enteringInstrumentSelector && $scope.showInstrumentList && $scope.exitingInstrumentSelector;
             },
             onBackHandler: function () {
               if ($scope.showSymbolSelector) {
