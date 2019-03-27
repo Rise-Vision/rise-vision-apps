@@ -29,8 +29,8 @@ commands:
 jobs:
   dependencies:
     working_directory: ~/rise-vision-apps
-    docker:
-      - image: jenkinsrise/apps-node:8.1.4
+    docker: &BUILDIMAGE
+      - image: jenkinsrise/apps-node:8.9.4-stretch
     steps:
       - checkout
       - run:
@@ -45,8 +45,7 @@ jobs:
             - rise-vision-apps/*
   test_unit:
     working_directory: ~/rise-vision-apps
-    docker:
-      - image: jenkinsrise/apps-node:8.1.4
+    docker: *BUILDIMAGE
     steps:
       - attach_workspace:
           at: ~/
@@ -59,58 +58,50 @@ jobs:
           path: ~/rise-vision-apps/reports
   e2e_launcher:
     working_directory: ~/rise-vision-apps
-    docker:
-      - image: jenkinsrise/apps-node:8.1.4
+    docker: *BUILDIMAGE
     steps:
       - run_e2e_cases:
           casesfile: "test/e2e/launcher/launcher.cases.js"
   e2e_schedules:
     working_directory: ~/rise-vision-apps
-    docker:
-      - image: jenkinsrise/apps-node:8.1.4
+    docker: *BUILDIMAGE
     steps:
       - run_e2e_cases:
           casesfile: "test/e2e/schedules/schedules.cases.js"
   e2e_common:
     working_directory: ~/rise-vision-apps
-    docker:
-      - image: jenkinsrise/apps-node:8.1.4
+    docker: *BUILDIMAGE
     steps:
       - run_e2e_cases:
           casesfile: "test/e2e/common/common.cases.js"
   e2e_editor:
     working_directory: ~/rise-vision-apps
-    docker:
-      - image: jenkinsrise/apps-node:8.1.4
+    docker: *BUILDIMAGE
     steps:
       - run_e2e_cases:
           casesfile: "test/e2e/editor/editor.cases.js"
   e2e_displays:
     working_directory: ~/rise-vision-apps
-    docker:
-      - image: jenkinsrise/apps-node:8.1.4
+    docker: *BUILDIMAGE
     steps:
       - run_e2e_cases:
           casesfile: "test/e2e/displays/displays.cases.js"
   e2e_storage:
     working_directory: ~/rise-vision-apps
-    docker:
-      - image: jenkinsrise/apps-node:8.1.4
+    docker: *BUILDIMAGE
     steps:
       - run_e2e_cases:
           casesfile: "test/e2e/storage/storage.cases.js"
   test_e2e:
     working_directory: ~/rise-vision-apps
-    docker:
-      - image: jenkinsrise/apps-node:8.1.4
+    docker: *BUILDIMAGE
     steps:
       - attach_workspace:
           at: ~/
       - run: echo "e2e tests finished"
   deploy_staging:
     working_directory: ~/rise-vision-apps
-    docker:
-      - image: jenkinsrise/apps-node:8.1.4
+    docker: *BUILDIMAGE
     steps:
       - attach_workspace:
           at: ~/
@@ -138,8 +129,7 @@ jobs:
           path: ~/rise-vision-apps/dist.tar.gz
   deploy_beta:
     working_directory: ~/rise-vision-apps
-    docker:
-      - image: jenkinsrise/apps-node:8.1.4
+    docker: *BUILDIMAGE
     steps:
       - attach_workspace:
           at: ~/
@@ -155,8 +145,7 @@ jobs:
           path: ~/rise-vision-apps/dist.tar.gz
   deploy_production:
     working_directory: ~/rise-vision-apps
-    docker:
-      - image: jenkinsrise/apps-node:8.1.4
+    docker: *BUILDIMAGE
     steps:
       - attach_workspace:
           at: ~/
