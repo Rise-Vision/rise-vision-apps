@@ -1,18 +1,9 @@
 <style>
-  @media (max-width: $screen-sm) {
-    .financial-container {
-      --financial-body-height: calc(100vh - var(--body-height) - var(--financial-button-bar-height));
-      --selector-body-height: calc(100vh - var(--body-height) - var(--financial-button-bar-height) - var(--selector-search-box-height));
-    }
-
-    .instrument-list {
-      height: var(--financial-body-height);
-    }
-
-    .instrument-selector {
-      height: var(--selector-body-height);
-    }
+@media (max-width: $screen-sm) {
+  .template-editor {
+    --chrome-bar-height: 0px;
   }
+}
 </style>
 
 <div class="template-editor"
