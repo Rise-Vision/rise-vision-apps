@@ -1,3 +1,20 @@
+<style>
+  @media (max-width: $screen-sm) {
+    .financial-container {
+      --financial-body-height: calc(100vh - var(--body-height) - var(--financial-button-bar-height));
+      --selector-body-height: calc(100vh - var(--body-height) - var(--financial-button-bar-height) - var(--selector-search-box-height));
+    }
+
+    .instrument-list {
+      height: var(--financial-body-height);
+    }
+
+    .instrument-selector {
+      height: var(--selector-body-height);
+    }
+  }
+</style>
+
 <div class="template-editor"
      ng-class="{ 'active-banner-mode' : isSubcompanySelected() || isTestCompanySelected(),
                  'active-banner-mode-double' : isSubcompanySelected() && isTestCompanySelected(),
