@@ -1,6 +1,6 @@
 <style>
   @media (max-width: 768px) {
-    .template-editor.active-component {
+    .template-editor.active-component.desktop-mode {
       --body-height: calc(var(--common-header-height) + var(--toolbar-height));
     }
   }
@@ -9,7 +9,8 @@
 <div class="template-editor"
      ng-class="{ 'active-banner-mode' : isSubcompanySelected() || isTestCompanySelected(),
                  'active-banner-mode-double' : isSubcompanySelected() && isTestCompanySelected(),
-                 'active-component' : factory.selected }">
+                 'active-component' : factory.selected,
+                 'desktop-mode': !isMobileBrowser() }">
   <div>
     <template-editor-toolbar
       class="template-editor-toolbar"

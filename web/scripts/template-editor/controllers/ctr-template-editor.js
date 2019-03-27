@@ -9,6 +9,12 @@ angular.module('risevision.template-editor.controllers')
       $scope.isTestCompanySelected = userState.isTestCompanySelected;
       $scope.hasUnsavedChanges = false;
 
+      $scope.isMobileBrowser = function() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          $window.navigator.userAgent
+        );
+      }
+
       $scope.getBlueprintData = function(componentId, attributeKey) {
         var components = $scope.factory.blueprintData.components;
         var component = _.find(components, {id: componentId});
