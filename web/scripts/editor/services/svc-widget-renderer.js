@@ -111,6 +111,9 @@ angular.module('risevision.editor.services')
 
       gadgetsApi.rpc.register('rsevent_ready', function (id) {
         gadgetsApi.rpc.call(IFRAME_PREFIX + id, 'rscmd_play_' + id);
+        //force redraw to fix #866
+        angular.element('#' + IFRAME_PREFIX + id).parent().css('top', '+=1'); 
+        $window.setTimeout(function(){angular.element('#' + IFRAME_PREFIX + id).parent().css('top', '-=1'); },0)
       });
 
       gadgetsApi.rpc.register('rsparam_get', function (id, param) {
