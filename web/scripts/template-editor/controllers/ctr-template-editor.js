@@ -2,12 +2,13 @@
 
 angular.module('risevision.template-editor.controllers')
   .controller('TemplateEditorController',
-    ['$scope', '$filter', '$loading', '$modal', '$state', '$timeout', '$window', 'templateEditorFactory', 'userState',
-    function ($scope, $filter, $loading, $modal, $state, $timeout, $window, templateEditorFactory, userState) {
+    ['$scope', '$filter', '$loading', '$modal', '$state', '$timeout', '$window', 'templateEditorFactory', 'userState', 'presentationUtils',
+    function ($scope, $filter, $loading, $modal, $state, $timeout, $window, templateEditorFactory, userState, presentationUtils) {
       $scope.factory = templateEditorFactory;
       $scope.isSubcompanySelected = userState.isSubcompanySelected;
       $scope.isTestCompanySelected = userState.isTestCompanySelected;
       $scope.hasUnsavedChanges = false;
+      $scope.isMobileBrowser = presentationUtils.isMobileBrowser();
 
       $scope.getBlueprintData = function(componentId, attributeKey) {
         var components = $scope.factory.blueprintData.components;
