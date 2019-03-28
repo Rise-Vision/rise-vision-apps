@@ -3,9 +3,15 @@
 angular.module('risevision.editor.services')
   .constant('HTML_PRESENTATION_TYPE', 'HTML Template')
   .factory('presentationUtils', ['HTML_TEMPLATE_TYPE', 'HTML_PRESENTATION_TYPE',
-    '$state', 'checkTemplateAccess', 'plansFactory',
-    function (HTML_TEMPLATE_TYPE, HTML_PRESENTATION_TYPE, $state, checkTemplateAccess, plansFactory) {
+    '$state', '$window', 'checkTemplateAccess', 'plansFactory',
+    function (HTML_TEMPLATE_TYPE, HTML_PRESENTATION_TYPE, $state, $window, checkTemplateAccess, plansFactory) {
       var factory = {};
+
+      factory.isMobileBrowser = function() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          $window.navigator.userAgent
+        );
+      }
 
       factory.isHtmlTemplate = function (product) {
         return product.productTag && product.productTag.indexOf(HTML_TEMPLATE_TYPE) >= 0;
