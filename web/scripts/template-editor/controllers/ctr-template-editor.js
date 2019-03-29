@@ -8,7 +8,8 @@ angular.module('risevision.template-editor.controllers')
       $scope.isSubcompanySelected = userState.isSubcompanySelected;
       $scope.isTestCompanySelected = userState.isTestCompanySelected;
       $scope.hasUnsavedChanges = false;
-      $scope.isMobileBrowser = presentationUtils.isMobileBrowser();
+
+      $scope.considerChromeBarHeight = _considerChromeBarHeight();
 
       $scope.getBlueprintData = function(componentId, attributeKey) {
         var components = $scope.factory.blueprintData.components;
@@ -66,6 +67,14 @@ angular.module('risevision.template-editor.controllers')
           $scope.hasUnsavedChanges = state;
         });
       };
+
+      function _considerChromeBarHeight() {
+        var userAgent = $window.navigator.userAgent;
+
+        // so far, Pixel 2 and Firefox seem to require desktop rule
+        return presentationUtils.isMobileBrowser() &&
+          !( /Pixel 2|Firefox/i.test(userAgent) );
+      }
 
       $scope.$watch('factory.presentation', function (newValue, oldValue) {
         var ignoredFields = [ 'revisionStatusName', 'changeDate', 'changedBy' ];
