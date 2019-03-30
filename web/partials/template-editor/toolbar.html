@@ -1,17 +1,17 @@
 <!-- Presentation Name -->
-<input type="text" class="input-stretchy presentation-name" ng-keyup="presentationNameKeyUp($event)"
+<input type="text" id="presentationName" class="input-stretchy presentation-name" ng-keyup="presentationNameKeyUp($event)"
        ng-model="factory.presentation.name" ng-blur="onPresentationNameBlur()" ng-disabled="!isEditingName">
 <div>
-  <button ng-disabled="isEditingName" type="button" class="edit-name pr-0" ng-click="isEditingName=true">
+  <button id="editNameButton" ng-disabled="isEditingName" type="button" class="edit-name pr-0" ng-click="isEditingName=true">
     <i class="fa fa-pencil u_margin-left"></i>
   </button>
-  <button ng-disabled="isEditingName" ng-click="confirmDelete()" class="delete-presentation pl-0">
+  <button id="deleteButton" ng-disabled="isEditingName" ng-click="confirmDelete()" class="delete-presentation pl-0">
     <i class="fa fa-trash-o u_margin-left"></i>
   </button>
 </div>
 
 <div class="toolbar-right">
-  <button id="saveButton" require-role="ce cp"
+  <button id="saveButtonDesktop" require-role="ce cp"
           class="btn btn-primary btn-fixed-width u_margin-right hidden-xs"
           ng-disabled="factory.savingPresentation"
           ng-click="factory.save()">
@@ -22,7 +22,7 @@
     </strong>
   </button>
 
-  <button id="publishButton" require-role="cp" class="btn btn-primary btn-fixed-width hidden-xs"
+  <button id="publishButtonDesktop" require-role="cp" class="btn btn-primary btn-fixed-width hidden-xs"
           ng-disabled="hasUnsavedChanges || !factory.isRevised() || factory.savingPresentation"
           ng-click="factory.publishPresentation()">
     <strong translate>common.publish</strong>
