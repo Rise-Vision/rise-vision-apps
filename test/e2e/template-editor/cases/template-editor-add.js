@@ -64,6 +64,7 @@ var TemplateAddScenarios = function() {
 
     describe('basic operations', function () {
       it('should show more than one component', function () {
+        helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
         expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
       });
 
@@ -82,33 +83,55 @@ var TemplateAddScenarios = function() {
 
       it('should publish the Presentation', function () {
         // Since the first time a Presentation is saved it's also Published, to test the button an additional Save is needed (or two?)
-        helper.clickWhenClickable(templateEditorPage.getSaveButton(), 'Save Button');
-        helper.wait(templateEditorPage.getSaveButton(), 'Save Button');
-        helper.clickWhenClickable(templateEditorPage.getSaveButton(), 'Save Button');
-        helper.wait(templateEditorPage.getSaveButton(), 'Save Button');
+        helper.clickWhenClickable(templateEditorPage.getSaveButton(), 'Save Button 1');
+        helper.wait(templateEditorPage.getSaveButton(), 'Save Button 1');
+        helper.clickWhenClickable(templateEditorPage.getSaveButton(), 'Save Button 2');
+        helper.wait(templateEditorPage.getSaveButton(), 'Save Button 2');
         helper.clickWhenClickable(templateEditorPage.getPublishButton(), 'Publish Button');
-        helper.wait(templateEditorPage.getSaveButton(), 'Save Button');
+        helper.wait(templateEditorPage.getSaveButton(), 'Save Button 3');
+      });
+
+      it('should load the newly created Presentation', function () {
+        helper.clickWhenClickable(templateEditorPage.getPresentationsListLink(), 'Presentations List');
+        helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
+        helper.clickWhenClickable(templateEditorPage.getCreatedPresentationLink(presentationName), 'Created Presentation Link');
+        helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
+        expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
+        expect(templateEditorPage.getImageComponentEdit().isPresent()).to.eventually.be.true;
+      });
+
+      it('should navigate into the Image component and back to the Components list', function () {
+        helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
+        helper.wait(templateEditorPage.getImageComponent(), 'Image Component');
+        expect(templateEditorPage.getImageComponent().isPresent()).to.eventually.be.true;
+        helper.clickWhenClickable(templateEditorPage.getImageComponentEdit(), 'Image Component Edit');
+        helper.wait(templateEditorPage.getBackToComponentsButton(), 'Back to Components Button');
+        helper.clickWhenClickable(templateEditorPage.getBackToComponentsButton(), 'Back to Components Button');
+        helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
+        expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
       });
     });
 
     describe('financial component', function () {
       it('should show one Financial Component', function () {
+        helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
         helper.wait(templateEditorPage.getFinancialComponent(), 'Financial Component');
         expect(templateEditorPage.getFinancialComponent().isPresent()).to.eventually.be.true;
-        templateEditorPage.getFinancialComponentEdit().click();
+        helper.clickWhenClickable(templateEditorPage.getFinancialComponentEdit(), 'Financial Component Edit');
         expect(templateEditorPage.getAddCurrenciesButton().isEnabled()).to.eventually.be.true;
       });
 
       it('should show open the Instrument Selector', function () {
-        templateEditorPage.getAddCurrenciesButton().click();
+        helper.wait(templateEditorPage.getAddCurrenciesButton(), 'Add Currencies');
+        helper.clickWhenClickable(templateEditorPage.getAddCurrenciesButton(), 'Add Currencies');
         expect(templateEditorPage.getAddInstrumentButton().isPresent()).to.eventually.be.true;
       });
 
       it('should add CAD/USD instrument', function () {
         expect(templateEditorPage.getAddInstrumentButton().isEnabled()).to.eventually.be.false;
-        templateEditorPage.getCadUsdSelector().click();
+        helper.clickWhenClickable(templateEditorPage.getCadUsdSelector(), 'CAD/USD Selector');
         expect(templateEditorPage.getAddInstrumentButton().isEnabled()).to.eventually.be.true;
-        templateEditorPage.getAddInstrumentButton().click();
+        helper.clickWhenClickable(templateEditorPage.getAddInstrumentButton(), 'Add Instrument');
         expect(templateEditorPage.getAddCurrenciesButton().isPresent()).to.eventually.be.true;
       });
     });
