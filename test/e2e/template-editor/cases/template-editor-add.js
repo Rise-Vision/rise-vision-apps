@@ -118,8 +118,8 @@ var TemplateAddScenarios = function() {
         helper.wait(templateEditorPage.getFinancialComponent(), 'Financial Component');
         expect(templateEditorPage.getFinancialComponent().isPresent()).to.eventually.be.true;
         helper.clickWhenClickable(templateEditorPage.getFinancialComponentEdit(), 'Financial Component Edit');
-        expect(templateEditorPage.getInstrumentItems().count()).to.eventually.equal(3);
         expect(templateEditorPage.getAddCurrenciesButton().isEnabled()).to.eventually.be.true;
+        expect(templateEditorPage.getInstrumentItems().count()).to.eventually.equal(3);
       });
 
       it('should show open the Instrument Selector', function () {
@@ -150,6 +150,7 @@ var TemplateAddScenarios = function() {
         helper.wait(templateEditorPage.getFinancialComponent(), 'Financial Component');
         expect(templateEditorPage.getFinancialComponent().isPresent()).to.eventually.be.true;
         helper.clickWhenClickable(templateEditorPage.getFinancialComponentEdit(), 'Financial Component Edit');
+        expect(templateEditorPage.getAddCurrenciesButton().isEnabled()).to.eventually.be.true;
         expect(templateEditorPage.getInstrumentItems().count()).to.eventually.equal(4);
       });
     });
