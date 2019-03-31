@@ -97,7 +97,7 @@ jobs:
     docker: *BUILDIMAGE
     steps:
       - run_e2e_cases:
-          casesfile: "test/e2e/storage/template-editor.cases.js"
+          casesfile: "test/e2e/template-editor/template-editor.cases.js"
   test_e2e:
     working_directory: ~/rise-vision-apps
     docker: *BUILDIMAGE
