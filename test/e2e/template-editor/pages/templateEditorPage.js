@@ -18,9 +18,10 @@ var TemplateEditorPage = function() {
   var financialComponentSelector = '//div[div/span[contains(text(), "Financial - ")]]';
   var financialComponent = element(by.xpath(financialComponentSelector));
   var financialComponentEdit = element(by.xpath(financialComponentSelector + '/div/a'));
+  var instrumentItems = element.all(by.repeater('instr in instruments track by $index'));
   var addCurrenciesButton = element(by.css('[ng-click="showSymbolSearch()"]'));
   var addInstrumentButton = element(by.css('[ng-click="addInstrument()"]'));
-  var cadUsdSelector = element(by.css('[for="CADUSD=X"]'));
+  var jpyUsdSelector = element(by.css('[for="JPYUSD=X"]'));
 
   this.seePlansLink = function () {
     return seePlansLink;
@@ -86,6 +87,10 @@ var TemplateEditorPage = function() {
     return financialComponentEdit;
   };
 
+  this.getInstrumentItems = function () {
+    return instrumentItems;
+  };
+
   this.getAddCurrenciesButton = function () {
     return addCurrenciesButton;
   };
@@ -94,8 +99,8 @@ var TemplateEditorPage = function() {
     return addInstrumentButton;
   };
 
-  this.getCadUsdSelector = function () {
-    return cadUsdSelector;
+  this.getJpyUsdSelector = function () {
+    return jpyUsdSelector;
   };
 };
 

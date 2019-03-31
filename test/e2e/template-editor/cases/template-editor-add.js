@@ -118,6 +118,7 @@ var TemplateAddScenarios = function() {
         helper.wait(templateEditorPage.getFinancialComponent(), 'Financial Component');
         expect(templateEditorPage.getFinancialComponent().isPresent()).to.eventually.be.true;
         helper.clickWhenClickable(templateEditorPage.getFinancialComponentEdit(), 'Financial Component Edit');
+        expect(templateEditorPage.getInstrumentItems().count()).to.eventually.equal(3);
         expect(templateEditorPage.getAddCurrenciesButton().isEnabled()).to.eventually.be.true;
       });
 
@@ -127,12 +128,29 @@ var TemplateAddScenarios = function() {
         expect(templateEditorPage.getAddInstrumentButton().isPresent()).to.eventually.be.true;
       });
 
-      it('should add CAD/USD instrument', function () {
+      it('should add JPY/USD instrument', function () {
         expect(templateEditorPage.getAddInstrumentButton().isEnabled()).to.eventually.be.false;
-        helper.clickWhenClickable(templateEditorPage.getCadUsdSelector(), 'CAD/USD Selector');
+        helper.clickWhenClickable(templateEditorPage.getJpyUsdSelector(), 'JPY/USD Selector');
         expect(templateEditorPage.getAddInstrumentButton().isEnabled()).to.eventually.be.true;
         helper.clickWhenClickable(templateEditorPage.getAddInstrumentButton(), 'Add Instrument');
         expect(templateEditorPage.getAddCurrenciesButton().isPresent()).to.eventually.be.true;
+      });
+
+      it('should save the Presentation, reload it, and validate changes were saved', function () {
+        helper.clickWhenClickable(templateEditorPage.getSaveButton(), 'Save Button');
+        expect(templateEditorPage.getSaveButton().getText()).to.eventually.equal('Saving');
+        helper.wait(templateEditorPage.getSaveButton(), 'Save Button');
+
+        helper.clickWhenClickable(templateEditorPage.getPresentationsListLink(), 'Presentations List');
+        helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
+        helper.clickWhenClickable(templateEditorPage.getCreatedPresentationLink(presentationName), 'Created Presentation Link');
+        helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
+
+        helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
+        helper.wait(templateEditorPage.getFinancialComponent(), 'Financial Component');
+        expect(templateEditorPage.getFinancialComponent().isPresent()).to.eventually.be.true;
+        helper.clickWhenClickable(templateEditorPage.getFinancialComponentEdit(), 'Financial Component Edit');
+        expect(templateEditorPage.getInstrumentItems().count()).to.eventually.equal(4);
       });
     });
 
