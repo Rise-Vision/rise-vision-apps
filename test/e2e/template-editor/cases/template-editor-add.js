@@ -47,6 +47,20 @@ var TemplateAddScenarios = function() {
       helper.waitDisappear(plansModalPage.getPlansModal(), 'Plans Modal');
     }
 
+    function _loadPresentation (presentationName) {
+      helper.clickWhenClickable(templateEditorPage.getPresentationsListLink(), 'Presentations List');
+      helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
+      helper.clickWhenClickable(templateEditorPage.getCreatedPresentationLink(presentationName), 'Presentation Link');
+      helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
+      helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
+    }
+
+    function _savePresentation () {
+      helper.clickWhenClickable(templateEditorPage.getSaveButton(), 'Save Button');
+      expect(templateEditorPage.getSaveButton().getText()).to.eventually.equal('Saving');
+      helper.wait(templateEditorPage.getSaveButton(), 'Save Button');
+    }
+
     before(function () {
       commonHeaderPage = new CommonHeaderPage();
       homepage = new HomePage();
@@ -76,34 +90,30 @@ var TemplateAddScenarios = function() {
       });
 
       it('should save the Presentation', function () {
-        helper.clickWhenClickable(templateEditorPage.getSaveButton(), 'Save Button');
-        expect(templateEditorPage.getSaveButton().getText()).to.eventually.equal('Saving');
-        helper.wait(templateEditorPage.getSaveButton(), 'Save Button');
+        _savePresentation();
+
+        expect(templateEditorPage.getSaveButton().isEnabled()).to.eventually.be.true;
       });
 
       it('should publish the Presentation', function () {
-        // Since the first time a Presentation is saved it's also Published, to test the button an additional Save is needed (or two?)
-        helper.clickWhenClickable(templateEditorPage.getSaveButton(), 'Save Button 1');
-        helper.wait(templateEditorPage.getSaveButton(), 'Save Button 1');
-        helper.clickWhenClickable(templateEditorPage.getSaveButton(), 'Save Button 2');
-        helper.wait(templateEditorPage.getSaveButton(), 'Save Button 2');
+        // Since the first time a Presentation is saved it's also Published, to test the button an additional Save is needed
+        _savePresentation();
+        _savePresentation();
+
         helper.clickWhenClickable(templateEditorPage.getPublishButton(), 'Publish Button');
-        helper.wait(templateEditorPage.getSaveButton(), 'Save Button 3');
+        helper.wait(templateEditorPage.getSaveButton(), 'Save Button (after Publish)');
+        expect(templateEditorPage.getSaveButton().isEnabled()).to.eventually.be.true;
       });
 
       it('should load the newly created Presentation', function () {
-        helper.clickWhenClickable(templateEditorPage.getPresentationsListLink(), 'Presentations List');
-        helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
-        helper.clickWhenClickable(templateEditorPage.getCreatedPresentationLink(presentationName), 'Created Presentation Link');
-        helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
+        _loadPresentation(presentationName);
+
         expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
         expect(templateEditorPage.getImageComponentEdit().isPresent()).to.eventually.be.true;
       });
 
       it('should navigate into the Image component and back to the Components list', function () {
-        helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
-        helper.wait(templateEditorPage.getImageComponent(), 'Image Component');
-        expect(templateEditorPage.getImageComponent().isPresent()).to.eventually.be.true;
+        helper.wait(templateEditorPage.getImageComponentEdit(), 'Image Component');
         helper.clickWhenClickable(templateEditorPage.getImageComponentEdit(), 'Image Component Edit');
         helper.wait(templateEditorPage.getBackToComponentsButton(), 'Back to Components Button');
         helper.clickWhenClickable(templateEditorPage.getBackToComponentsButton(), 'Back to Components Button');
@@ -113,12 +123,16 @@ var TemplateAddScenarios = function() {
     });
 
     describe('financial component', function () {
-      it('should show one Financial Component', function () {
+      function _loadFinancialSelector () {
         helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
-        helper.wait(templateEditorPage.getFinancialComponent(), 'Financial Component');
-        expect(templateEditorPage.getFinancialComponent().isPresent()).to.eventually.be.true;
+        helper.wait(templateEditorPage.getFinancialComponentEdit(), 'Financial Component Edit');
         helper.clickWhenClickable(templateEditorPage.getFinancialComponentEdit(), 'Financial Component Edit');
         expect(templateEditorPage.getAddCurrenciesButton().isEnabled()).to.eventually.be.true;
+      }
+
+      it('should show one Financial Component', function () {
+        _loadPresentation(presentationName);
+        _loadFinancialSelector();
         expect(templateEditorPage.getInstrumentItems().count()).to.eventually.equal(3);
       });
 
@@ -141,16 +155,9 @@ var TemplateAddScenarios = function() {
         expect(templateEditorPage.getSaveButton().getText()).to.eventually.equal('Saving');
         helper.wait(templateEditorPage.getSaveButton(), 'Save Button');
 
-        helper.clickWhenClickable(templateEditorPage.getPresentationsListLink(), 'Presentations List');
-        helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
-        helper.clickWhenClickable(templateEditorPage.getCreatedPresentationLink(presentationName), 'Created Presentation Link');
-        helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
+        _loadPresentation(presentationName);
+        _loadFinancialSelector();
 
-        helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
-        helper.wait(templateEditorPage.getFinancialComponent(), 'Financial Component');
-        expect(templateEditorPage.getFinancialComponent().isPresent()).to.eventually.be.true;
-        helper.clickWhenClickable(templateEditorPage.getFinancialComponentEdit(), 'Financial Component Edit');
-        expect(templateEditorPage.getAddCurrenciesButton().isEnabled()).to.eventually.be.true;
         expect(templateEditorPage.getInstrumentItems().count()).to.eventually.equal(4);
       });
     });
