@@ -71,9 +71,9 @@ angular.module('risevision.template-editor.controllers')
       function _considerChromeBarHeight() {
         var userAgent = $window.navigator.userAgent;
 
-        // so far, Pixel 2 and Firefox seem to require desktop rule
+        // Firefox requires desktop rule
         return presentationUtils.isMobileBrowser() &&
-          !( /Pixel 2|Firefox/i.test(userAgent) );
+          !( /Firefox/i.test(userAgent) );
       }
 
       $scope.$watch('factory.presentation', function (newValue, oldValue) {
