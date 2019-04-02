@@ -59,7 +59,7 @@
 <div id="display-loader" rv-spinner rv-spinner-key="display-loader" rv-spinner-start-active="0"></div> 
 
 <div>
-  <form role="form" name="displayDetails">
+  <form role="form" name="displayDetails" ng-submit="save()">
     <div class="row" ng-show="!isProSupported()">
       <div class="col-sm-12">
         <div class="alert alert-warning" role="alert">
@@ -67,6 +67,8 @@
         </div>
       </div>
     </div>
+
+    
 
     <display-fields></display-fields>
 
@@ -83,12 +85,12 @@
       </button>
       <span class="hidden-xs u_margin-right"><last-modified change-date="display.changeDate" changed-by="display.changedBy"></last-modified></span>
       <!-- Indicates a successful or positive action -->
-      <button id="saveButton" type="submit" class="btn btn-primary" ng-click="save()" ng-disabled="displayDetails.$invalid || factory.savingDisplay" require-role="da">
+      <button id="saveButton" type="submit" class="btn btn-primary" ng-disabled="displayDetails.$invalid || factory.savingDisplay" require-role="da">
         {{ factory.savingDisplay ? ('common.saving' | translate) : ('common.save' | translate)}}
         <i class="fa fa-check icon-right"></i>
       </button>
       <!-- Indicates cancel or non-destructive action -->
-      <button id="cancelButton" ui-sref="apps.displays.list" class="btn btn-default">
+      <button id="cancelButton" type="button" ui-sref="apps.displays.list" class="btn btn-default">
         {{'common.cancel' | translate}}
         <i class="fa fa-times icon-right"></i>
       </button>

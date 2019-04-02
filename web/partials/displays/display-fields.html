@@ -167,7 +167,7 @@
           <tr class="table-body__row text-center u_padding-md" ng-show="!currentPlanFactory.isPlanActive() && !display.playerProAuthorized">
             <td colspan="2">
               <span translate>displays-app.fields.player.rpp.unlock</span><br/>
-              <button ng-click="showPlansModal()" class="btn btn-xs btn-primary u_margin-sm-top" translate>
+              <button type="button" ng-click="showPlansModal()" class="btn btn-xs btn-primary u_margin-sm-top" translate>
                 displays-app.fields.player.rpp.start-trial
               </button>
             </td>
@@ -214,7 +214,7 @@
             <!-- ACTIVE -->
             <td class="table-body__cell" ng-show="playerProFactory.isDisplayControlCompatiblePlayer(display)">
               <span translate> displays-app.fields.player.displayControl.description </span>
-              <button class="btn btn-primary btn-xs" ng-click="playerProFactory.openConfigureDisplayControl(display)" ng-disabled="!display.playerProAuthorized" require-role="da" translate>
+              <button type="button" class="btn btn-primary btn-xs" ng-click="playerProFactory.openConfigureDisplayControl(display)" ng-disabled="!display.playerProAuthorized" require-role="da" translate>
                 displays-app.fields.player.displayControl.configure
               </button>
             </td>
