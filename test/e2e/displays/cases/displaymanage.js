@@ -96,6 +96,12 @@ var DisplayAddScenarios = function() {
       expect(displayManagePage.getSaveButton().getText()).to.eventually.equal('Save');
     });
 
+    it('should save the display on Enter', function () {
+      displayManagePage.getDisplayNameField().sendKeys(protractor.Key.ENTER);
+      helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
+      expect(displayManagePage.getSaveButton().getText()).to.eventually.equal('Save');
+    });
+
     it('should show correct timezone after reload',function(done){
       browser.refresh();
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
