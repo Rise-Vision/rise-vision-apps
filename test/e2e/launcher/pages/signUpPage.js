@@ -1,5 +1,5 @@
 'use strict';
-var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
+var CommonHeaderPage = require('./../../../../web/bower_components/common-header/test/e2e/pages/commonHeaderPage.js');
 var HomePage = require('./homepage.js');
 var SignInPage = require('./../pages/signInPage.js');
 var helper = require('rv-common-e2e').helper;

@@ -2,7 +2,7 @@
 var expect = require('rv-common-e2e').expect;
 var SignUpPage = require('./../pages/signUpPage.js');
 var GoogleAuthPage = require('rv-common-e2e').googleAuthPage;
-var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
+var CommonHeaderPage = require('./../../../../web/bower_components/common-header/test/e2e/pages/commonHeaderPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var SignupScenarios = function() {
