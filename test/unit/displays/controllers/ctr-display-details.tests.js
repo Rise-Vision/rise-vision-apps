@@ -105,7 +105,11 @@ describe('controller: display details', function() {
       };
     });
     $provide.factory('currentPlanFactory', function() {
-      return {};
+      return {
+        currentPlan: {
+          isPurchasedByParent: false
+        }
+      };
     });
     $provide.factory('playerLicenseFactory', function() {
       return {
@@ -122,7 +126,7 @@ describe('controller: display details', function() {
   }));
   var $scope, $state, updateCalled, deleteCalled, confirmDelete;
   var resolveLoadScreenshot, resolveRequestScreenshot, enableCompanyProduct, userState,
-  $rootScope, $loading, displayFactory, playerLicenseFactory, playerProFactory;
+  $rootScope, $loading, displayFactory, playerLicenseFactory, playerProFactory, currentPlanFactory;
   var company;
   beforeEach(function(){
     company = {};
@@ -135,6 +139,7 @@ describe('controller: display details', function() {
       displayFactory = $injector.get('displayFactory');
       playerLicenseFactory = $injector.get('playerLicenseFactory');
       playerProFactory = $injector.get('playerProFactory');
+      currentPlanFactory = $injector.get('currentPlanFactory');
       enableCompanyProduct = $injector.get('enableCompanyProduct');
       userState = $injector.get('userState');
       $loading = $injector.get('$loading');
@@ -459,18 +464,51 @@ describe('controller: display details', function() {
       expect($scope.isProToggleEnabled()).to.be.false;
     });
 
-    it('should return true if it is a supported player', function () {
-      sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(false);
-
-      expect($scope.isProToggleEnabled()).to.be.true;
-    });
-
     it('should return true if playerProAuthorized = true', function () {
       $scope.display = { playerProAuthorized: true };
       sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(true);
 
       expect($scope.isProToggleEnabled()).to.be.true;
     });
+
+    it('should return true if it is a supported player', function () {
+      sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(false);
+
+      expect($scope.isProToggleEnabled()).to.be.true;
+    });
+
+    it('should return true if not all licenses are used', function () {
+      sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(false);
+      sandbox.stub($scope, 'areAllProLicensesUsed').returns(false);
+
+      expect($scope.isProToggleEnabled()).to.be.true;
+    });
+
+    it('should return true if not all licenses are used, even if plan is purchased by parent', function () {
+      sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(false);
+      sandbox.stub($scope, 'areAllProLicensesUsed').returns(false);
+
+      currentPlanFactory.currentPlan.isPurchasedByParent = true;
+
+      expect($scope.isProToggleEnabled()).to.be.true;
+    });
+
+    it('should return true if all licenses are used but plan is not purchased by parent', function () {
+      sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(false);
+      sandbox.stub($scope, 'areAllProLicensesUsed').returns(true);
+
+      expect($scope.isProToggleEnabled()).to.be.true;
+    });
+
+    it('should return false if all licenses are used but plan is purchased by parent', function () {
+      sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(false);
+      sandbox.stub($scope, 'areAllProLicensesUsed').returns(true);
+
+      currentPlanFactory.currentPlan.isPurchasedByParent = true;
+
+      expect($scope.isProToggleEnabled()).to.be.false;
+    });
+
   });
 
   describe('risevision.company.updated: ', function() {

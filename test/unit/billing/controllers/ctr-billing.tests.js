@@ -52,6 +52,9 @@ describe('controller: BillingCtrl', function () {
         }
       };
     });
+    $provide.service('currentPlanFactory', function() {
+      return {};
+    });
     $provide.service('chargebeeFactory', function () {
       return {
         openBillingHistory: sandbox.stub(),

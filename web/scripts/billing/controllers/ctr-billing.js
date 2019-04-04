@@ -4,10 +4,11 @@ angular.module('risevision.apps.billing.controllers')
   .value('PAST_INVOICES_PATH', 'account/view/invoicesHistory?cid=companyId')
   .value('UNPAID_INVOICES_PATH', 'account/view/invoicesDue?cid=companyId')
   .controller('BillingCtrl', ['$rootScope', '$scope', '$loading', '$window', '$modal', '$templateCache', '$timeout',
-    'ScrollingListService', 'getCoreCountries', 'userState', 'chargebeeFactory', 'billing', 'STORE_URL',
-    'PAST_INVOICES_PATH', 'UNPAID_INVOICES_PATH',
+    'ScrollingListService', 'getCoreCountries', 'userState', 'currentPlanFactory', 'chargebeeFactory', 'billing',
+    'STORE_URL', 'PAST_INVOICES_PATH', 'UNPAID_INVOICES_PATH',
     function ($rootScope, $scope, $loading, $window, $modal, $templateCache, $timeout, ScrollingListService,
-      getCoreCountries, userState, chargebeeFactory, billing, STORE_URL, PAST_INVOICES_PATH, UNPAID_INVOICES_PATH) {
+      getCoreCountries, userState, currentPlanFactory, chargebeeFactory, billing,
+      STORE_URL, PAST_INVOICES_PATH, UNPAID_INVOICES_PATH) {
 
       $scope.search = {
         count: $scope.listLimit,
@@ -17,6 +18,7 @@ angular.module('risevision.apps.billing.controllers')
       };
 
       $scope.company = userState.getCopyOfSelectedCompany();
+      $scope.currentPlan = currentPlanFactory.currentPlan;
       $scope.chargebeeFactory = chargebeeFactory;
       $scope.subscriptions = new ScrollingListService(billing.getSubscriptions, $scope.search);
 
