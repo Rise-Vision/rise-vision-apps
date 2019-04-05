@@ -77,8 +77,16 @@ describe('service: gadgetFactory: ', function() {
         return status;
       };
     });
+
+    $provide.factory('playerLicenseFactory', function() {
+      return {
+        $$hasProfessionalLicenses: false,
+        hasProfessionalLicenses: function () { return this.$$hasProfessionalLicenses; }
+      };
+    });
+
   }));
-  var gadgetFactory, returnGadget, apiCalls, statusError,statusResponse;
+  var gadgetFactory, returnGadget, apiCalls, statusError,statusResponse, playerLicenseFactory;
   beforeEach(function(){
     returnGadget = true;
     statusError = false;
@@ -87,6 +95,7 @@ describe('service: gadgetFactory: ', function() {
     
     inject(function($injector){  
       gadgetFactory = $injector.get('gadgetFactory');
+      playerLicenseFactory = $injector.get('playerLicenseFactory');
     });
   });
 
@@ -360,6 +369,21 @@ describe('service: gadgetFactory: ', function() {
         gadgetFactory.updateItemsStatus(items).then(function(){
           expect(items[0].gadget.subscriptionStatus).to.equal('Not Subscribed');
           expect(items[0].gadget.statusMessage).to.equal('Not Subscribed');
+          expect(items[0].gadget.isSubscribed).to.be.false;
+          done();
+        }); 
+      })
+
+      it('should return Subscribed if Active plan exists',function(done){
+        statusResponse.status = 'Not Subscribed';
+        statusResponse.isSubscribed = false;
+
+        playerLicenseFactory.$$hasProfessionalLicenses = true; //has Active plan
+
+        gadgetFactory.updateItemsStatus(items).then(function(){
+          expect(items[0].gadget.subscriptionStatus).to.equal('Subscribed');
+          expect(items[0].gadget.statusMessage).to.equal('Subscribed');
+          expect(items[0].gadget.isSubscribed).to.be.true;
           done();
         }); 
       })

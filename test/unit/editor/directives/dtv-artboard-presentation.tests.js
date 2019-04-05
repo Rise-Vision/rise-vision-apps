@@ -28,6 +28,7 @@ describe('directive: artboard-presentation', function() {
         presentation: presentation
       };
     });
+    $provide.service('playerLicenseFactory', function() {});
     $provide.service('artboardFactory', function() {
       return {
         zoomLevel: 0.5,

@@ -11,6 +11,7 @@ describe('controller: Workspace', function() {
         }
       };
     });
+    $provide.service('playerLicenseFactory', function() {});
     $provide.factory('artboardFactory', function() {
       return {};
     });

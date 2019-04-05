@@ -4,9 +4,9 @@ angular.module('risevision.editor.services')
   .value('EMBEDDED_PRESENTATIONS_CODE', 'd3a418f1a3acaed42cf452fefb1eaed198a1c620')
   .factory('gadgetFactory', ['$q', '$filter', 'gadget', 'BaseList',
     'subscriptionStatusFactory', 'widgetUtils', 'productsFactory',
-    'EMBEDDED_PRESENTATIONS_CODE',
+    'EMBEDDED_PRESENTATIONS_CODE', "playerLicenseFactory",
     function ($q, $filter, gadget, BaseList, subscriptionStatusFactory, widgetUtils,
-      productsFactory, EMBEDDED_PRESENTATIONS_CODE) {
+      productsFactory, EMBEDDED_PRESENTATIONS_CODE, playerLicenseFactory) {
       var factory = {};
 
       var _gadgets = [{
@@ -191,8 +191,8 @@ angular.module('risevision.editor.services')
                 for (var i = 0; i < statusItems.length; i++) {
                   var statusItem = statusItems[i];
                   var gadget = productCodeItemMap[statusItem.pc].gadget;
-                  gadget.isSubscribed = statusItem.isSubscribed;
-                  gadget.subscriptionStatus = statusItem.status;
+                  gadget.isSubscribed = statusItem.isSubscribed || playerLicenseFactory.hasProfessionalLicenses();
+                  gadget.subscriptionStatus = playerLicenseFactory.hasProfessionalLicenses() ? "Subscribed" : statusItem.status;
                   gadget.expiry = statusItem.expiry;
                   gadget.trialPeriod = statusItem.trialPeriod;
                   gadget.statusMessage = _getMessage(gadget);
