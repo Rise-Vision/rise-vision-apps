@@ -1,5 +1,6 @@
 'use strict';
 describe('controller: Workspace', function() {
+  beforeEach(module('risevision.displays.services'));
   beforeEach(module('risevision.editor.controllers'));
   beforeEach(module('risevision.editor.services'));
   beforeEach(module(mockTranlate()));
@@ -11,7 +12,6 @@ describe('controller: Workspace', function() {
         }
       };
     });
-    $provide.service('playerLicenseFactory', function() {});
     $provide.factory('artboardFactory', function() {
       return {};
     });

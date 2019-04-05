@@ -19,6 +19,7 @@ describe('directive: artboard-presentation', function() {
       backgroundScaleToFit: true
   };
 
+  beforeEach(module('risevision.displays.services'));
   beforeEach(module('risevision.editor.services'));
   beforeEach(module('risevision.editor.directives'));
   beforeEach(module(mockTranlate()));
@@ -28,7 +29,6 @@ describe('directive: artboard-presentation', function() {
         presentation: presentation
       };
     });
-    $provide.service('playerLicenseFactory', function() {});
     $provide.service('artboardFactory', function() {
       return {
         zoomLevel: 0.5,
