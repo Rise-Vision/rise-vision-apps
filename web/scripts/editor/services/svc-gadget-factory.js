@@ -191,8 +191,13 @@ angular.module('risevision.editor.services')
                 for (var i = 0; i < statusItems.length; i++) {
                   var statusItem = statusItems[i];
                   var gadget = productCodeItemMap[statusItem.pc].gadget;
-                  gadget.isSubscribed = statusItem.isSubscribed || playerLicenseFactory.hasProfessionalLicenses();
-                  gadget.subscriptionStatus = playerLicenseFactory.hasProfessionalLicenses() ? "Subscribed" : statusItem.status;
+                  if (!statusItem.isSubscribed && playerLicenseFactory.hasProfessionalLicenses()) {
+                    gadget.isSubscribed = true;
+                    gadget.subscriptionStatus = "Subscribed";
+                  } else {
+                    gadget.isSubscribed = statusItem.isSubscribed;
+                    gadget.subscriptionStatus = statusItem.status;                    
+                  }
                   gadget.expiry = statusItem.expiry;
                   gadget.trialPeriod = statusItem.trialPeriod;
                   gadget.statusMessage = _getMessage(gadget);

@@ -365,6 +365,7 @@ describe('service: gadgetFactory: ', function() {
 
       it('should handle Not Subscribed',function(done){
         statusResponse.status = 'Not Subscribed';
+        statusResponse.isSubscribed = false;
 
         gadgetFactory.updateItemsStatus(items).then(function(){
           expect(items[0].gadget.subscriptionStatus).to.equal('Not Subscribed');
