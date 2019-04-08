@@ -38,11 +38,12 @@ var TemplateAddScenarios = function() {
 
     function _startTrial() {
       helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
-      templateEditorPage.seePlansLink().click();
-      helper.wait(plansModalPage.getPlansModal(), 'Plans Modal');
-      helper.wait(plansModalPage.getStartTrialBasicButton(), 'Basic Plan Start Trial');
+      helper.wait(templateEditorPage.seePlansLink(), 'See Plans Link');
+      helper.clickWhenClickable(templateEditorPage.seePlansLink(), 'See Plans Link');
 
-      plansModalPage.getStartTrialBasicButton().click();
+      helper.wait(plansModalPage.getPlansModal(), 'Plans Modal');
+      helper.wait(plansModalPage.getStartTrialBasicButton(), 'Start Trial Basic Button');
+      helper.clickWhenClickable(plansModalPage.getStartTrialBasicButton(), 'Start Trial Basic Button');
 
       helper.waitDisappear(plansModalPage.getPlansModal(), 'Plans Modal');
     }
@@ -56,6 +57,7 @@ var TemplateAddScenarios = function() {
     }
 
     function _savePresentation () {
+      helper.wait(templateEditorPage.getSaveButton(), 'Save Button');
       helper.clickWhenClickable(templateEditorPage.getSaveButton(), 'Save Button');
       expect(templateEditorPage.getSaveButton().getText()).to.eventually.equal('Saving');
       helper.wait(templateEditorPage.getSaveButton(), 'Save Button');
@@ -143,14 +145,15 @@ var TemplateAddScenarios = function() {
       });
 
       it('should add JPY/USD instrument', function () {
-        expect(templateEditorPage.getAddInstrumentButton().isEnabled()).to.eventually.be.false;
+        helper.wait(templateEditorPage.getJpyUsdSelector(), 'JPY/USD Selector');
         helper.clickWhenClickable(templateEditorPage.getJpyUsdSelector(), 'JPY/USD Selector');
-        expect(templateEditorPage.getAddInstrumentButton().isEnabled()).to.eventually.be.true;
+        helper.wait(templateEditorPage.getAddInstrumentButton(), 'Add Instrument');
         helper.clickWhenClickable(templateEditorPage.getAddInstrumentButton(), 'Add Instrument');
         expect(templateEditorPage.getAddCurrenciesButton().isPresent()).to.eventually.be.true;
       });
 
       it('should save the Presentation, reload it, and validate changes were saved', function () {
+        helper.wait(templateEditorPage.getSaveButton(), 'Save Button');
         helper.clickWhenClickable(templateEditorPage.getSaveButton(), 'Save Button');
         expect(templateEditorPage.getSaveButton().getText()).to.eventually.equal('Saving');
         helper.wait(templateEditorPage.getSaveButton(), 'Save Button');
