@@ -547,7 +547,8 @@ angular.module('risevision.displays.controllers', []);
 angular.module('risevision.editor.services', [
   'risevision.common.header',
   'risevision.common.gapi',
-  'risevision.apps.config'
+  'risevision.apps.config',
+  'risevision.displays.services'
 ]);
 angular.module('risevision.editor.filters', []);
 angular.module('risevision.editor.directives', [
