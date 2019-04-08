@@ -3,10 +3,10 @@
 angular.module('risevision.editor.services')
   .value('EMBEDDED_PRESENTATIONS_CODE', 'd3a418f1a3acaed42cf452fefb1eaed198a1c620')
   .factory('gadgetFactory', ['$q', '$filter', 'gadget', 'BaseList',
-    'subscriptionStatusFactory', 'widgetUtils', 'productsFactory',
+    'subscriptionStatusFactory', 'widgetUtils',
     'EMBEDDED_PRESENTATIONS_CODE', "playerLicenseFactory",
     function ($q, $filter, gadget, BaseList, subscriptionStatusFactory, widgetUtils,
-      productsFactory, EMBEDDED_PRESENTATIONS_CODE, playerLicenseFactory) {
+      EMBEDDED_PRESENTATIONS_CODE, playerLicenseFactory) {
       var factory = {};
 
       var _gadgets = [{
@@ -223,13 +223,7 @@ angular.module('risevision.editor.services')
       };
 
       var _showAsProfessional = function (gadget) {
-        if (widgetUtils.isProfessionalWidget(gadget.id)) {
-          if (productsFactory.isUnlistedProduct(gadget.productCode) && gadget.isSubscribed) {
-            return false;
-          }
-          return true;
-        }
-        return false;
+        return widgetUtils.isProfessionalWidget(gadget.id);
       };
 
       var _getMessage = function (gadget) {

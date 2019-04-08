@@ -35,14 +35,6 @@ describe('service: gadgetFactory: ', function() {
       };
     });
 
-    $provide.service('productsFactory', function() {
-      return {
-        isUnlistedProduct: function() {
-          return true;
-        }
-      };
-    });
-
     $provide.service('subscriptionStatusFactory',function () {
       return {
         checkProductCodes: function(productCodes) {
@@ -315,7 +307,7 @@ describe('service: gadgetFactory: ', function() {
           expect(items[0].gadget.name).to.equal('Embedded Presentation');
           expect(items[0].gadget.subscriptionStatus).to.equal('Free');
           expect(items[0].gadget.isSubscribed).to.be.true;
-          expect(items[0].gadget.statusMessage).to.equal('Free');
+          expect(items[0].gadget.statusMessage).to.equal('Professional');
 
           done();
         });
