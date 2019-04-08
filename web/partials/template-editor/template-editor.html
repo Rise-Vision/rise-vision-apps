@@ -2,7 +2,7 @@
      ng-class="{ 'active-banner-mode' : isSubcompanySelected() || isTestCompanySelected(),
                  'active-banner-mode-double' : isSubcompanySelected() && isTestCompanySelected(),
                  'active-component' : factory.selected,
-                 'desktop-mode': !isMobileBrowser }">
+                 'desktop-mode': !considerChromeBarHeight }">
   <div>
     <template-editor-toolbar
       class="template-editor-toolbar"

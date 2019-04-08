@@ -3,7 +3,7 @@
 
   var HomePage = require('./../../launcher/pages/homepage.js');
   var SignInPage = require('./../../launcher/pages/signInPage.js');
-  var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
+  var CommonHeaderPage = require('./../../../../web/bower_components/common-header/test/e2e/pages/commonHeaderPage.js');
   var helper = require('rv-common-e2e').helper;
   var IframePage = require('./iframeStorageSelectorPage.js');
   var StorageSelectorModalPage = require('./storageSelectorModalPage.js');

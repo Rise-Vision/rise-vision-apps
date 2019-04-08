@@ -2,7 +2,7 @@
 var expect = require('rv-common-e2e').expect;
 var HomePage = require('./../../launcher/pages/homepage.js');
 var SignInPage = require('./../../launcher/pages/signInPage.js');
-var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
+var CommonHeaderPage = require('./../../../../web/bower_components/common-header/test/e2e/pages/commonHeaderPage.js');
 var DisplaysListPage = require('./../pages/displaysListPage.js');
 var DisplayManagePage = require('./../pages/displayManagePage.js');
 var DisplayAddModalPage = require('./../pages/displayAddModalPage.js');
@@ -92,6 +92,12 @@ var DisplayAddScenarios = function() {
 
     it('should save the display', function () {
       displayManagePage.getSaveButton().click();
+      helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
+      expect(displayManagePage.getSaveButton().getText()).to.eventually.equal('Save');
+    });
+
+    it('should save the display on Enter', function () {
+      displayManagePage.getDisplayNameField().sendKeys(protractor.Key.ENTER);
       helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
       expect(displayManagePage.getSaveButton().getText()).to.eventually.equal('Save');
     });
