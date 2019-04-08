@@ -1,6 +1,6 @@
 'use strict';
 var expect = require('rv-common-e2e').expect;
-var CommonHeaderPage = require('rv-common-e2e').commonHeaderPage;
+var CommonHeaderPage = require('./../../../../web/bower_components/common-header/test/e2e/pages/commonHeaderPage.js');
 var HomePage = require('./../../launcher/pages/homepage.js');
 var SignInPage = require('./../../launcher/pages/signInPage.js');
 var PlansModalPage = require('./../../common/pages/plansModalPage.js');
