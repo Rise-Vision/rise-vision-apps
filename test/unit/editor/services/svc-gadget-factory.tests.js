@@ -57,6 +57,13 @@ describe('service: gadgetFactory: ', function() {
       }
     });
 
+    $provide.factory('playerLicenseFactory', function() {
+      return playerLicenseFactory = {
+        $$hasProfessionalLicenses: false,
+        hasProfessionalLicenses: function () { return this.$$hasProfessionalLicenses; }
+      };
+    });
+
     $provide.service('translateFilter', function(){
       return function(key){
         var status = '';
@@ -78,7 +85,7 @@ describe('service: gadgetFactory: ', function() {
       };
     });
   }));
-  var gadgetFactory, returnGadget, apiCalls, statusError,statusResponse;
+  var gadgetFactory, returnGadget, apiCalls, statusError,statusResponse, playerLicenseFactory;
   beforeEach(function(){
     returnGadget = true;
     statusError = false;
@@ -356,15 +363,32 @@ describe('service: gadgetFactory: ', function() {
 
       it('should handle Not Subscribed',function(done){
         statusResponse.status = 'Not Subscribed';
+        statusResponse.isSubscribed = false;
 
         gadgetFactory.updateItemsStatus(items).then(function(){
           expect(items[0].gadget.subscriptionStatus).to.equal('Not Subscribed');
           expect(items[0].gadget.statusMessage).to.equal('Not Subscribed');
+          expect(items[0].gadget.isSubscribed).to.be.false;
+          expect(items[0].gadget.isLicensed).to.be.false;
           done();
         }); 
-      })
+      });
 
-      it('should handle Not Subscribed with trial',function(done){
+      it('should handle Not Subscribed but Licensed',function(done){
+        statusResponse.status = 'Not Subscribed';
+        statusResponse.isSubscribed = false;
+        playerLicenseFactory.$$hasProfessionalLicenses = true;
+
+        gadgetFactory.updateItemsStatus(items).then(function(){
+          expect(items[0].gadget.subscriptionStatus).to.equal('Not Subscribed');
+          expect(items[0].gadget.statusMessage).to.equal('Not Subscribed');
+          expect(items[0].gadget.isSubscribed).to.be.false;
+          expect(items[0].gadget.isLicensed).to.be.true;
+          done();
+        }); 
+      });
+
+      it('should handle Not Subscribed with trial',function(done) {
         statusResponse.status = 'Not Subscribed';
         statusResponse.trialPeriod = 7
 
@@ -373,7 +397,7 @@ describe('service: gadgetFactory: ', function() {
           expect(items[0].gadget.statusMessage).to.equal('Not Subscribed - 7 Days Trial');
           done();
         }); 
-      })
+      });
 
     });
 
