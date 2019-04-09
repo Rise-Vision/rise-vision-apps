@@ -47,12 +47,24 @@ describe('directive: playlist subscription status', function() {
 
   describe('showStatus:', function(){
     it('should hide status by default if gadget is missing',function(){
-      expect(elm.isolateScope().showStatus()).to.be.undefined;
+      expect(elm.isolateScope().showStatus()).to.not.be.ok;
+    });
+
+    it('should hide status if subscriptionStatus is not loaded',function(){
+      item.gadget = {
+        isSubscribed: false,
+        isLicensed: false
+      };
+
+      compileDirective();
+
+      expect(elm.isolateScope().showStatus()).to.not.be.ok;
     });
 
 
     it('should show status if gadget is not subscribed and not licensed',function(){
       item.gadget = {
+        subscriptionStatus: 'status',
         isSubscribed: false,
         isLicensed: false
       };
@@ -64,6 +76,7 @@ describe('directive: playlist subscription status', function() {
 
     it('should hide status if gadget subscribed and not licensed',function(){
       item.gadget = {
+        subscriptionStatus: 'status',
         isSubscribed: true,
         isLicensed: false
       };
@@ -75,6 +88,7 @@ describe('directive: playlist subscription status', function() {
 
     it('should hide status if gadget is not subscribed but licensed',function(){
       item.gadget = {
+        subscriptionStatus: 'status',
         isSubscribed: false,
         isLicensed: true
       };
@@ -86,6 +100,7 @@ describe('directive: playlist subscription status', function() {
 
     it('should hide status if gadget is subscribed and licensed',function(){
       item.gadget = {
+        subscriptionStatus: 'status',
         isSubscribed: true,
         isLicensed: true
       };

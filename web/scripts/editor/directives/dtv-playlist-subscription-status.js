@@ -17,7 +17,7 @@
             $scope.showStatus = function() {
               var gadget = $scope.item && $scope.item.gadget;
 
-              return gadget && !gadget.isSubscribed && !gadget.isLicensed;
+              return gadget && gadget.subscriptionStatus && !gadget.isSubscribed && !gadget.isLicensed;
             };
 
           } //link()
