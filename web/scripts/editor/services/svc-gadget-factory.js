@@ -2,11 +2,10 @@
 
 angular.module('risevision.editor.services')
   .value('EMBEDDED_PRESENTATIONS_CODE', 'd3a418f1a3acaed42cf452fefb1eaed198a1c620')
-  .factory('gadgetFactory', ['$q', '$filter', 'gadget', 'BaseList',
-    'subscriptionStatusFactory', 'widgetUtils', 'productsFactory', 'playerLicenseFactory',
-    'EMBEDDED_PRESENTATIONS_CODE',
-    function ($q, $filter, gadget, BaseList, subscriptionStatusFactory, widgetUtils,
-      productsFactory, playerLicenseFactory, EMBEDDED_PRESENTATIONS_CODE) {
+  .factory('gadgetFactory', ['$q', 'gadget', 'BaseList', 'subscriptionStatusFactory',
+    'widgetUtils', 'playerLicenseFactory', 'EMBEDDED_PRESENTATIONS_CODE',
+    function ($q, gadget, BaseList, subscriptionStatusFactory, widgetUtils,
+      playerLicenseFactory, EMBEDDED_PRESENTATIONS_CODE) {
       var factory = {};
 
       var _gadgets = [{
@@ -191,12 +190,18 @@ angular.module('risevision.editor.services')
                 for (var i = 0; i < statusItems.length; i++) {
                   var statusItem = statusItems[i];
                   var gadget = productCodeItemMap[statusItem.pc].gadget;
-                  gadget.isSubscribed = statusItem.isSubscribed;
-                  gadget.subscriptionStatus = statusItem.status;
+                  if (!statusItem.isSubscribed && widgetUtils.isProfessionalWidget(gadget.id) && 
+                    playerLicenseFactory.hasProfessionalLicenses()) {
+                    gadget.isSubscribed = true;
+                    gadget.subscriptionStatus = 'Subscribed';
+                    gadget.isLicensed = true;
+                  } else {
+                    gadget.isSubscribed = statusItem.isSubscribed;
+                    gadget.subscriptionStatus = statusItem.status;
+                    gadget.isLicensed = false;                 
+                  }
                   gadget.expiry = statusItem.expiry;
                   gadget.trialPeriod = statusItem.trialPeriod;
-                  gadget.statusMessage = _getMessage(gadget);
-                  gadget.isLicensed = playerLicenseFactory.hasProfessionalLicenses();
                 }
                 deferred.resolve();
               }, function (e) {
@@ -209,39 +214,6 @@ angular.module('risevision.editor.services')
         });
 
         return deferred.promise;
-      };
-
-      var _getRemainingDays = function (date) {
-        var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-        var today = new Date();
-        return Math.round(Math.abs((date.getTime() - today.getTime()) / (
-          oneDay)));
-      };
-
-      var _showAsProfessional = function (gadget) {
-        if (widgetUtils.isProfessionalWidget(gadget.id)) {
-          if (productsFactory.isUnlistedProduct(gadget.productCode) && gadget.isSubscribed) {
-            return false;
-          }
-          return true;
-        }
-        return false;
-      };
-
-      var _getMessage = function (gadget) {
-        var statusMessage = gadget.subscriptionStatus;
-        if (_showAsProfessional(gadget)) {
-          statusMessage = $filter('translate')
-            ('editor-app.subscription.status.professional');
-        } else if (gadget.subscriptionStatus === 'Not Subscribed' && gadget.trialPeriod > 0) {
-          statusMessage = statusMessage + ' - ' + gadget.trialPeriod +
-            ' ' + $filter('translate')('editor-app.subscription.status.daysTrial');
-        } else if (gadget.subscriptionStatus === 'On Trial') {
-          statusMessage = statusMessage +
-            ' - ' + _getRemainingDays(new Date(gadget.expiry)) +
-            ' ' + $filter('translate')('editor-app.subscription.status.daysRemaining');
-        }
-        return statusMessage;
       };
 
       return factory;

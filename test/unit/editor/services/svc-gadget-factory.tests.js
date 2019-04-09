@@ -6,7 +6,7 @@ describe('service: gadgetFactory: ', function() {
 
     $provide.service('gadget',function () {
       return {
-        _gadget: {
+        _gadget: gadget = {
           id: 'gadgetId',
           productCode: 'productCode',
           name: 'some gadget',
@@ -35,14 +35,6 @@ describe('service: gadgetFactory: ', function() {
       };
     });
 
-    $provide.service('productsFactory', function() {
-      return {
-        isUnlistedProduct: function() {
-          return true;
-        }
-      };
-    });
-
     $provide.service('subscriptionStatusFactory',function () {
       return {
         checkProductCodes: function(productCodes) {
@@ -64,28 +56,8 @@ describe('service: gadgetFactory: ', function() {
       };
     });
 
-    $provide.service('translateFilter', function(){
-      return function(key){
-        var status = '';
-        switch (key) {
-          case 'editor-app.subscription.status.professional':
-            status = 'Professional';
-            break;
-          case 'editor-app.subscription.status.premium':
-            status = 'Premium';
-            break;
-          case 'editor-app.subscription.status.daysTrial':
-            status = 'Days Trial';
-            break;
-          case 'editor-app.subscription.status.daysRemaining':
-            status = 'Days Remaining';
-            break;
-        }
-        return status;
-      };
-    });
   }));
-  var gadgetFactory, returnGadget, apiCalls, statusError,statusResponse, playerLicenseFactory;
+  var gadgetFactory, gadget, returnGadget, apiCalls, statusError,statusResponse, playerLicenseFactory;
   beforeEach(function(){
     returnGadget = true;
     statusError = false;
@@ -98,7 +70,7 @@ describe('service: gadgetFactory: ', function() {
   });
 
   it('should exist',function(){
-    expect(gadgetFactory).to.be.truely;
+    expect(gadgetFactory).to.be.ok;
     
     expect(gadgetFactory.loadingGadget).to.be.false;
 
@@ -313,7 +285,6 @@ describe('service: gadgetFactory: ', function() {
           expect(items[0].gadget.name).to.equal('Embedded Presentation');
           expect(items[0].gadget.subscriptionStatus).to.equal('Free');
           expect(items[0].gadget.isSubscribed).to.be.true;
-          expect(items[0].gadget.statusMessage).to.equal('Free');
 
           done();
         });
@@ -331,7 +302,6 @@ describe('service: gadgetFactory: ', function() {
           expect(items[0].gadget.name).to.equal('Embedded Presentation');
           expect(items[0].gadget.subscriptionStatus).to.equal('Free');
           expect(items[0].gadget.isSubscribed).to.be.false;
-          expect(items[0].gadget.statusMessage).to.equal('Professional');
 
           done();
         });
@@ -344,57 +314,51 @@ describe('service: gadgetFactory: ', function() {
         expect(items[0].gadget).to.be.an('object');
         expect(items[0].gadget.id).to.equal('gadgetId');
         expect(items[0].gadget.subscriptionStatus).to.equal('Free');
-        expect(items[0].gadget.statusMessage).to.equal('Free');
         done();
       });  
     });
 
-    describe('statusMessage:',function(){
-      it('should handle On Trial',function(done){
-        statusResponse.status = 'On Trial';
-        statusResponse.expiry = new Date().setDate(new Date().getDate() + 3);
-
-        gadgetFactory.updateItemsStatus(items).then(function(){
-          expect(items[0].gadget.subscriptionStatus).to.equal('On Trial');
-          expect(items[0].gadget.statusMessage).to.equal('On Trial - 3 Days Remaining');
-          done();
-        }); 
-      });
-
+    describe('should handle Licensed Displays:',function(){
       it('should handle Not Subscribed',function(done){
         statusResponse.status = 'Not Subscribed';
         statusResponse.isSubscribed = false;
 
         gadgetFactory.updateItemsStatus(items).then(function(){
           expect(items[0].gadget.subscriptionStatus).to.equal('Not Subscribed');
-          expect(items[0].gadget.statusMessage).to.equal('Not Subscribed');
           expect(items[0].gadget.isSubscribed).to.be.false;
           expect(items[0].gadget.isLicensed).to.be.false;
           done();
         }); 
       });
 
-      it('should handle Not Subscribed but Licensed',function(done){
+      it('should handle Not Subscribed but Licensed for non-Professional Widgets',function(done){
         statusResponse.status = 'Not Subscribed';
         statusResponse.isSubscribed = false;
         playerLicenseFactory.$$hasProfessionalLicenses = true;
 
         gadgetFactory.updateItemsStatus(items).then(function(){
           expect(items[0].gadget.subscriptionStatus).to.equal('Not Subscribed');
-          expect(items[0].gadget.statusMessage).to.equal('Not Subscribed');
           expect(items[0].gadget.isSubscribed).to.be.false;
-          expect(items[0].gadget.isLicensed).to.be.true;
+          expect(items[0].gadget.isLicensed).to.be.false;
           done();
         }); 
       });
 
-      it('should handle Not Subscribed with trial',function(done) {
+      it('should handle Not Subscribed but Licensed for Professional Widgets',function(done){
+        items = [{
+          type: 'gadget',
+          objectReference: '67e511ae-62b5-4a44-9551-077f63596079'
+        }];    
+
+        gadget.id = '67e511ae-62b5-4a44-9551-077f63596079';
         statusResponse.status = 'Not Subscribed';
-        statusResponse.trialPeriod = 7
+        statusResponse.isSubscribed = false;
+        playerLicenseFactory.$$hasProfessionalLicenses = true;
 
         gadgetFactory.updateItemsStatus(items).then(function(){
-          expect(items[0].gadget.subscriptionStatus).to.equal('Not Subscribed');
-          expect(items[0].gadget.statusMessage).to.equal('Not Subscribed - 7 Days Trial');
+          expect(items[0].gadget.subscriptionStatus).to.equal('Subscribed');
+          expect(items[0].gadget.isSubscribed).to.be.true;
+          expect(items[0].gadget.isLicensed).to.be.true;
           done();
         }); 
       });
