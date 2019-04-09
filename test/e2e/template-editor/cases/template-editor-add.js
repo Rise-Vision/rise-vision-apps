@@ -122,9 +122,7 @@ var TemplateAddScenarios = function() {
         helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
         expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
       });
-    });
 
-    describe('financial component', function () {
       function _loadFinancialSelector () {
         helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
         helper.wait(templateEditorPage.getFinancialComponentEdit(), 'Financial Component Edit');
