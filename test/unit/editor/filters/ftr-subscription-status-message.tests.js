@@ -11,12 +11,6 @@ describe('filter: subscriptionStatusMessage', function() {
           case 'editor-app.subscription.status.professional':
             status = 'Professional';
             break;
-          case 'editor-app.subscription.status.daysTrial':
-            status = 'Days Trial';
-            break;
-          case 'editor-app.subscription.status.daysRemaining':
-            status = 'Days Remaining';
-            break;
         }
         return status;
       };
@@ -34,9 +28,20 @@ describe('filter: subscriptionStatusMessage', function() {
     expect(subscriptionStatusMessage).to.be.ok;
   });
 
-  it('should return status if none of the conditions match',function() {
+  it('should return for licensed displays if not Subscribed',function() {
     var gadget = {
-      subscriptionStatus: 'Subscribed'
+      subscriptionStatus: 'Subscribed',
+      isSubscribed: false
+    };
+
+    expect(subscriptionStatusMessage(gadget)).to.equal('Professional');
+  });
+
+  it('should return original status if Subscribed but not Licensed',function() {
+    var gadget = {
+      subscriptionStatus: 'Subscribed',
+      isSubscribed: true,
+      isLicensed: false
     };
 
     expect(subscriptionStatusMessage(gadget)).to.equal('Subscribed');
@@ -44,28 +49,11 @@ describe('filter: subscriptionStatusMessage', function() {
 
   it('should return licensed displays if isLicensed',function(){
     var gadget = {
+      isSubscribed: true,
       isLicensed: true
     };
 
     expect(subscriptionStatusMessage(gadget)).to.equal('Professional');
-  });
-
-  it('should trial period if available',function(){
-    var gadget = {
-      subscriptionStatus: 'Not Subscribed',
-      trialPeriod: 14
-    };
-
-    expect(subscriptionStatusMessage(gadget)).to.equal('Not Subscribed - ' + 14 + ' Days Trial');
-  });
-
-  it('should return non free gadget',function(){
-    var gadget = {
-      subscriptionStatus: 'On Trial',
-      expiry: new Date().setDate(new Date().getDate() + 3)
-    };
-
-    expect(subscriptionStatusMessage(gadget)).to.equal('On Trial - 3 Days Remaining');
   });
 
 });
