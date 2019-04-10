@@ -35,7 +35,7 @@ var FirstSigninScenarios = function() {
       before(function () {
         homepage.getDisplays();
         signInPage.signIn();
-        var subCompanyName = 'E2E TEST SUBCOMPANY';
+        var subCompanyName = 'E2E TEST SUBCOMPANY - PLAYER PRO';
         commonHeaderPage.createSubCompany(subCompanyName);
         commonHeaderPage.selectSubCompany(subCompanyName);
         helper.waitDisappear(displaysListPage.getDisplaysLoader(), 'Displays loader');
