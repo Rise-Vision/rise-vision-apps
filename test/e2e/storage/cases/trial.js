@@ -11,7 +11,7 @@ var PlaceholderPlaylistPage = require('./../../editor/pages/placeholderPlaylistP
 var StorageSelectorModalPage = require('./../pages/storageSelectorModalPage.js');
 var FilesListPage = require('./../pages/filesListPage.js');
 
-var FirstSigninScenarios = function() {
+var StorageTrialScenarios = function() {
 
   browser.driver.manage().window().setSize(1400, 900);
   describe('Trial', function () {
@@ -93,4 +93,4 @@ var FirstSigninScenarios = function() {
     });
   });
 };
-module.exports = FirstSigninScenarios;
+module.exports = StorageTrialScenarios;

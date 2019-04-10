@@ -7,8 +7,6 @@ var CommonHeaderPage = require('./../../../../web/bower_components/common-header
 var GetStartedPage = require('./../pages/getStartedPage.js');
 var OnboardingPage = require('./../pages/onboarding.js');
 var WorkspacePage = require('./../../editor/pages/workspacePage.js');
-var PresentationListPage = require('./../../editor/pages/presentationListPage.js');
-var PresentationPropertiesModalPage = require('./../../editor/pages/presentationPropertiesModalPage.js');
 var StoreProductsModalPage = require('./../../editor/pages/storeProductsModalPage.js');
 var AutoScheduleModalPage = require('./../../editor/pages/autoScheduleModalPage.js');
 var DisplayAddModalPage = require('./../../displays/pages/displayAddModalPage.js');
@@ -23,8 +21,6 @@ var FirstSigninScenarios = function() {
     var getStartedPage;
     var onboardingPage;
     var workspacePage;
-    var presentationListPage;
-    var presentationPropertiesModalPage;
     var storeProductsModalPage;
     var autoScheduleModalPage;
     var displayAddModalPage;
@@ -35,8 +31,6 @@ var FirstSigninScenarios = function() {
       getStartedPage = new GetStartedPage();
       onboardingPage = new OnboardingPage();
       workspacePage = new WorkspacePage();
-      presentationListPage = new PresentationListPage();
-      presentationPropertiesModalPage = new PresentationPropertiesModalPage();
       storeProductsModalPage = new StoreProductsModalPage()
       autoScheduleModalPage = new AutoScheduleModalPage();
       displayAddModalPage = new DisplayAddModalPage();

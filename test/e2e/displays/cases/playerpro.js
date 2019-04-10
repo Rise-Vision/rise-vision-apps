@@ -9,7 +9,7 @@ var DisplayAddModalPage = require('./../pages/displayAddModalPage.js');
 var PlayerProInfoModalPage = require('./../pages/playerProInfoModalPage.js');
 var helper = require('rv-common-e2e').helper;
 
-var FirstSigninScenarios = function() {
+var PlayerProScenarios = function() {
 
   browser.driver.manage().window().setSize(1400, 900);
   describe('Player Professional', function () {
@@ -77,4 +77,4 @@ var FirstSigninScenarios = function() {
     });
   });
 };
-module.exports = FirstSigninScenarios;
+module.exports = PlayerProScenarios;
