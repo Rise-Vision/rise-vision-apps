@@ -11,7 +11,7 @@
             useCustomOnClick: '@',
             customOnClick: '&'
           },
-          templateUrl: 'partials/editor/subscription-status.html',
+          templateUrl: 'partials/editor/gadget-subscription-status.html',
           link: function ($scope) {
             $scope.storeUrl = STORE_URL;
             $scope.companyId = userState.getSelectedCompanyId();

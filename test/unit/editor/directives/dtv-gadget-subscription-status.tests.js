@@ -1,5 +1,5 @@
 'use strict';
-describe('directive: subscription status', function() {
+describe('directive: gadget subscription status', function() {
   beforeEach(module('risevision.editor.services'));
   beforeEach(module('risevision.editor.directives'));
   var elm, $scope, $compile, item, gadget;
@@ -24,7 +24,7 @@ describe('directive: subscription status', function() {
       id: 'gadgetId',
       subscriptionStatus: 'Subscribed'
     }
-    $templateCache.put('partials/editor/subscription-status.html', '<p>{{item.gadget.subscriptionStatus}}</p>');
+    $templateCache.put('partials/editor/gadget-subscription-status.html', '<p>{{item.gadget.subscriptionStatus}}</p>');
     $scope = $rootScope.$new();
     $scope.item = item;
     $compile = _$compile_;

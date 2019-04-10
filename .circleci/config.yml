@@ -92,6 +92,12 @@ jobs:
     steps:
       - run_e2e_cases:
           casesfile: "test/e2e/storage/storage.cases.js"
+  e2e_template_editor:
+    working_directory: ~/rise-vision-apps
+    docker: *BUILDIMAGE
+    steps:
+      - run_e2e_cases:
+          casesfile: "test/e2e/template-editor/template-editor.cases.js"
   test_e2e:
     working_directory: ~/rise-vision-apps
     docker: *BUILDIMAGE
@@ -203,6 +209,9 @@ workflows:
       - e2e_storage:
           requires:
             - dependencies
+      - e2e_template_editor:
+          requires:
+            - dependencies
       - test_e2e:
           requires:
             - e2e_launcher
@@ -211,6 +220,7 @@ workflows:
             - e2e_editor
             - e2e_displays
             - e2e_storage
+            - e2e_template_editor
       - deploy_production:
           requires:
             - test_unit
