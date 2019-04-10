@@ -5,7 +5,7 @@ angular.module('risevision.displays.controllers')
     function ($scope, $modalInstance, downloadOnly) {
       var _init = function() {
         if (downloadOnly) {
-          $scope.setCurrentTab('downloadPlayer');
+          $scope.setCurrentTab('displayAdded');
         }
       };
 
@@ -16,6 +16,8 @@ angular.module('risevision.displays.controllers')
       $scope.dismiss = function () {
         $modalInstance.dismiss();
       };
+
+      _init();
 
     }
   ]);
