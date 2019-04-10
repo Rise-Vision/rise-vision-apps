@@ -131,6 +131,8 @@ var FirstSigninScenarios = function() {
       });
 
       it('should no longer show the Get Started Page', function () {
+        browser.sleep(500);
+
         helper.wait(commonHeaderPage.getCommonHeaderMenuItems(), 'Common Header Menu Items');
         helper.clickWhenClickable(commonHeaderPage.getCommonHeaderMenuItems().get(0), 'First Common Header Menu Item');
 
