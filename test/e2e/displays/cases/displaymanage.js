@@ -130,7 +130,7 @@ var DisplayAddScenarios = function() {
       helper.clickWhenClickable(displayAddModalPage.getDismissButton(), 'Dismiss Button');
 
       helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
-      expect(displayAddModalPage.getDisplayAddModal().isDisplayed()).to.eventually.be.false;
+      expect(displayAddModalPage.getDisplayAddModal().isPresent()).to.eventually.be.false;
     });
 
     it('should show the Install Player button, which opens the Display Modal', function() {
