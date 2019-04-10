@@ -104,7 +104,7 @@ var TemplateAddScenarios = function() {
 
       it('should publish the Presentation', function () {
         // Since the first time a Presentation is saved it's also Published, to test the button an additional Save is needed
-        _savePresentation();
+        browser.wait(1000);
         _savePresentation();
 
         helper.clickWhenClickable(templateEditorPage.getPublishButton(), 'Publish Button');
