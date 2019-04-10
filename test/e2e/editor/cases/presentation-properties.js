@@ -127,7 +127,9 @@ var PresentationPropertiesScenarios = function() {
 
         it('should handle Enter', function () {
           helper.wait(workspacePage.getPresentationPropertiesButton(), 'Presentation Properties Button');
+          helper.clickWhenClickable(workspacePage.getPresentationPropertiesButton(), 'Presentation Properties Button');
           helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
+          browser.sleep(500);
           presentationPropertiesModalPage.getNameInput().clear();
           presentationPropertiesModalPage.getNameInput().sendKeys('Presentation Enter');
           presentationPropertiesModalPage.getNameInput().sendKeys(protractor.Key.ENTER);
