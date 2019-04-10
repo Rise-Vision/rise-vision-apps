@@ -126,9 +126,11 @@ var DisplayAddScenarios = function() {
       expect(displayAddModalPage.getDownloadWindows64Button().isDisplayed()).to.eventually.be.true;
 
       // Close the modal
+      helper.wait(displayAddModalPage.getDismissButton(), 'Dismiss Button');
       helper.clickWhenClickable(displayAddModalPage.getDismissButton(), 'Dismiss Button');
 
       helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
+      expect(displayAddModalPage.getDisplayAddModal().isDisplayed()).to.eventually.be.false;
     });
 
     it('should show the Install Player button, which opens the Display Modal', function() {
