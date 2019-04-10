@@ -1,5 +1,5 @@
 <form id="forms.displayAdd" role="form" name="forms.displayAdd" novalidate>
-  <div class="u_margin-md-top text-center">
+  <div class="u_margin-md-top">
     <div class="form-group" ng-class="{'has-error': !forms.displayAdd.name.$pristine && forms.displayAdd.name.$invalid}" show-errors>
       <label class="control-label">{{'displays-app.add.name.name' | translate}} *</label>
       <input type="text" class="form-control" placeholder="{{ 'displays-app.add.name.name' | translate}}" id="name" name="name" ng-model="display.name" required focus-me="true">
@@ -12,6 +12,6 @@
       <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
     </div>
 
-    <button id="nextButton" type="submit" class="btn btn-primary u_margin-md-top" ng-click="save()" translate="displays-app.add.next" ng-disabled="forms.displayAdd.$invalid || factory.savingDisplay" require-role="da"></button>
+    <button id="nextButton" type="submit" class="btn btn-lg btn-block btn-primary u_margin-md-top" ng-click="save()" translate="displays-app.add.next" ng-disabled="forms.displayAdd.$invalid || factory.savingDisplay" require-role="da"></button>
   </div>
 </form>
