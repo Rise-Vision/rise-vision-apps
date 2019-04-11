@@ -31,7 +31,7 @@ describe('directive: name your display', function() {
     });
     $scope.$digest();
 
-    $scope.setCurrentTab = sinon.spy();
+    $scope.setCurrentPage = sinon.spy();
   }
 
   it('should compile html', function() {
@@ -54,7 +54,7 @@ describe('directive: name your display', function() {
 
     setTimeout(function() {
       expect(displayAdded).to.not.be.ok;
-      $scope.setCurrentTab.should.not.have.been.called;
+      $scope.setCurrentPage.should.not.have.been.called;
 
       done();
     });
@@ -72,7 +72,7 @@ describe('directive: name your display', function() {
 
     setTimeout(function() {
       expect(displayAdded).to.be.true;
-      $scope.setCurrentTab.should.have.been.calledWith('displayAdded');
+      $scope.setCurrentPage.should.have.been.calledWith('displayAdded');
 
       done();
     });
