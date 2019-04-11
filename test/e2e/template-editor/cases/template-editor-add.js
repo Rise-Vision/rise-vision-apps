@@ -75,11 +75,7 @@ var TemplateAddScenarios = function() {
       _createSubCompany();
       _selectSubCompany();
       _startTrial();
-      // Sometimes the trial does not start in time; this section tries to reduce the number of times this step fails
-      browser.sleep(5000);
-      _loadPresentationsList();
-      _selectSubCompany();
-      // Continue as usual
+
       presentationsListPage.openNewExampleTemplate();
     });
 
