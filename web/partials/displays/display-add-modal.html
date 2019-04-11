@@ -7,9 +7,9 @@
     <h3 class="modal-title" translate="displays-app.add.activate" ng-show="downloadOnly"></h3>
   </div>
   <div class="modal-body">
-    <name-your-display ng-if="!currentTab"></name-your-display>
-    <display-added ng-if="currentTab === 'displayAdded'"></display-added>
-    <preconfigured-media-player ng-if="currentTab === 'preconfiguredMediaPlayer'"></preconfigured-media-player>
+    <name-your-display ng-if="!currentPage"></name-your-display>
+    <display-added ng-if="currentPage === 'displayAdded'"></display-added>
+    <preconfigured-media-player ng-if="currentPage === 'preconfiguredMediaPlayer'"></preconfigured-media-player>
     <user-media-player ng-if="currentPage === 'userMediaPlayer'"></user-media-player>
   </div>
 </div>
