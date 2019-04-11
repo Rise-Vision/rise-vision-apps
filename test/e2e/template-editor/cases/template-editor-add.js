@@ -125,6 +125,7 @@ var TemplateAddScenarios = function() {
         helper.wait(templateEditorPage.getBackToComponentsButton(), 'Back to Components Button');
         helper.clickWhenClickable(templateEditorPage.getBackToComponentsButton(), 'Back to Components Button');
         helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
+        browser.sleep(500); // Wait for transition to finish
         expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
       });
 
