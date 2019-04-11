@@ -1,7 +1,7 @@
 'use strict';
 describe('controller: BillingCtrl', function () {
   var sandbox = sinon.sandbox.create();
-  var $rootScope, $scope, $window, $loading, $modal, $timeout, chargebeeFactory, listServiceInstance;
+  var $rootScope, $scope, $window, $loading, $modal, $timeout, listServiceInstance;
 
   beforeEach(module('risevision.apps.billing.controllers'));
 
@@ -52,11 +52,16 @@ describe('controller: BillingCtrl', function () {
         }
       };
     });
-    $provide.service('chargebeeFactory', function () {
-      return {
-        openBillingHistory: sandbox.stub(),
-        openPaymentSources: sandbox.stub(),
-        openSubscriptionDetails: sandbox.stub()
+    $provide.service('currentPlanFactory', function() {
+      return {};
+    });
+    $provide.service('ChargebeeFactory', function () {
+      return function() {
+        return {
+          openBillingHistory: sandbox.stub(),
+          openPaymentSources: sandbox.stub(),
+          openSubscriptionDetails: sandbox.stub()
+        };
       };
     });
     $provide.service('billing', function () {
@@ -78,7 +83,6 @@ describe('controller: BillingCtrl', function () {
     $modal = $injector.get('$modal');
     $loading = $injector.get('$loading');
     $timeout = $injector.get('$timeout');
-    chargebeeFactory = $injector.get('chargebeeFactory');
 
     $controller('BillingCtrl', {
       $scope: $scope
@@ -103,8 +107,8 @@ describe('controller: BillingCtrl', function () {
   describe('past invoices', function () {
     it('should show Chargebee invoices', function () {
       $scope.viewPastInvoices();
-      expect(chargebeeFactory.openBillingHistory).to.be.calledOnce;
-      expect(chargebeeFactory.openBillingHistory.getCall(0).args[0]).to.equal('testId');
+      expect($scope.chargebeeFactory.openBillingHistory).to.be.calledOnce;
+      expect($scope.chargebeeFactory.openBillingHistory.getCall(0).args[0]).to.equal('testId');
     });
 
     it('should show Past Store invoices', function () {
@@ -178,24 +182,24 @@ describe('controller: BillingCtrl', function () {
   describe('payment methods', function () {
     it('should show Chargebee payment methods', function () {
       $scope.editPaymentMethods();
-      expect(chargebeeFactory.openPaymentSources).to.be.calledOnce;
-      expect(chargebeeFactory.openPaymentSources.getCall(0).args[0]).to.equal('testId');
+      expect($scope.chargebeeFactory.openPaymentSources).to.be.calledOnce;
+      expect($scope.chargebeeFactory.openPaymentSources.getCall(0).args[0]).to.equal('testId');
     });
   });
 
   describe('edit subscriptions', function () {
     it('should show Chargebee subscription details for a Subscription with parentId == null', function () {
       $scope.editSubscription({ subscriptionId: 'subs1' });
-      expect(chargebeeFactory.openSubscriptionDetails).to.be.calledOnce;
-      expect(chargebeeFactory.openSubscriptionDetails.getCall(0).args[0]).to.equal('testId');
-      expect(chargebeeFactory.openSubscriptionDetails.getCall(0).args[1]).to.equal('subs1');
+      expect($scope.chargebeeFactory.openSubscriptionDetails).to.be.calledOnce;
+      expect($scope.chargebeeFactory.openSubscriptionDetails.getCall(0).args[0]).to.equal('testId');
+      expect($scope.chargebeeFactory.openSubscriptionDetails.getCall(0).args[1]).to.equal('subs1');
     });
 
     it('should show Chargebee parent subscription details for a Subscription with parentId != null', function () {
       $scope.editSubscription({ subscriptionId: 'subs1', parentId: 'parentId' });
-      expect(chargebeeFactory.openSubscriptionDetails).to.be.calledOnce;
-      expect(chargebeeFactory.openSubscriptionDetails.getCall(0).args[0]).to.equal('testId');
-      expect(chargebeeFactory.openSubscriptionDetails.getCall(0).args[1]).to.equal('parentId');
+      expect($scope.chargebeeFactory.openSubscriptionDetails).to.be.calledOnce;
+      expect($scope.chargebeeFactory.openSubscriptionDetails.getCall(0).args[0]).to.equal('testId');
+      expect($scope.chargebeeFactory.openSubscriptionDetails.getCall(0).args[1]).to.equal('parentId');
     });
   });
 
