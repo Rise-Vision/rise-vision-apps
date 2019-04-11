@@ -7,13 +7,7 @@ angular.module('risevision.displays.directives')
         restrict: 'E',
         templateUrl: 'partials/displays/display-id.html',
         link: function ($scope) {
-          $scope.factory = displayFactory;
           $scope.display = displayFactory.display;
-
-          $scope.toggleEmailForm = function () {
-            $scope.showEmailForm = !$scope.showEmailForm;
-          };
-
         } //link()
       };
     }

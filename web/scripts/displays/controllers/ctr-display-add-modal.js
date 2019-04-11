@@ -10,7 +10,12 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.setCurrentPage = function (tabName) {
+        $scope.previousPage = $scope.currentPage;
         $scope.currentPage = tabName;
+      };
+
+      $scope.showPreviousPage = function () {
+        $scope.setCurrentPage($scope.previousPage);
       };
 
       $scope.dismiss = function () {

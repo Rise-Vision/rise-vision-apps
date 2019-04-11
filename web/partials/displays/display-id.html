@@ -1,37 +1,5 @@
-<!-- MATCH STYLE HERE -->
-<div class="col-xs-12 u_margin-md-bottom">
-  <input type="text" class="id-form form-control" value="{{display.id}}" readonly="readonly" select-on-focus>
-</div>
-
-<div>
-  <p class="u_margin-sm-top">
-    <span>{{'displays-app.add.instructions.emailInfo' | translate}}
-      <b>{{userEmail}}</b>
-    </span>
-    <a class="" href="#" ng-click="toggleEmailForm()" target="_blank">
-      Send to another email?
-    </a>
-  </p>
-</div>
-
-<form id="anotherEmailForm" role="form" name="anotherEmailForm" novalidate>
-  <div class="u_margin-md-top" ng-show="display.id && showEmailForm">
-
-    <h4 class="text-center" translate="displays-app.add.instructions.anotherEmail"></h4>
-    <div class="form-group text-center" ng-class="{'has-error': !anotherEmailForm.anotherEmail.$pristine && anotherEmailForm.anotherEmail.$invalid}" show-errors>
-      <input type="email" class="form-control" placeholder="{{ 'displays-app.add.instructions.emailPlaceholder' | translate}}"
-        id="anotherEmail" name="anotherEmail" ng-model="anotherEmail" required focus-me="true">
-      <p class="text-danger" ng-show="!anotherEmailForm.anotherEmail.$pristine && anotherEmailForm.anotherEmail.$invalid" translate>
-        displays-app.fields.email.invalid
-      </p>
-
-      <div ng-show="errorMessage" class="alert alert-danger" role="alert">
-        <strong>{{errorMessage}}</strong>
-      </div>
-
-      <button class="btn btn-default u_margin-md-top" ng-click="toggleEmailForm()" translate="common.cancel"></button>
-      <button class="btn btn-primary u_margin-md-top" ng-click="sendToAnotherEmail()" ng-disabled="anotherEmailForm.$invalid || displayEmail.sendingEmail" translate="common.send"></button>
-    </div>
+<div class="row">
+  <div class="col-xs-12">
+    <input type="text" class="id-form form-control" value="{{display.id}}" readonly="readonly" select-on-focus>
   </div>
-</form>
-
+</div>
