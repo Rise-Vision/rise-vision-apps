@@ -1,53 +1,102 @@
-<div>
-  <p>
-    Great choice! With the Rise Vision Media Player you’ll be up and running in just a few minutes.
-  </p>
-
-  <p>
-    I want to ...
-  </p>
-  <div class="prototype-download-content row u_margin-md">
-    <div class="col-xs-6 text-center">
-      <a href="https://www.cdw.com/product/risevision-preconfig-n3350-64-4-lin/5471221" class="u_link-no-underline">
-        <div class="u_bordered u_bordered-hover u_clickable">
-          <img src="../images/group.svg" width="68">
-          <h5>
-            <span>Purchase The Rise Vision Media Player</span>
-          </h5>
-          <span>(Not available outside the United States)</span>
-        </div>
-      </a>
-    </div>
-    <div class="col-xs-6 text-center">
-      <a href="https://help.risevision.com/hc/en-us/articles/115001817143-Choose-a-Media-Player#%E2%80%9Crise-vision-preconfigured-media-player%E2%80%9D" class="u_link-no-underline" id="downloadWindows64">
-        <div class="u_bordered u_bordered-hover u_clickable">
-          <img src="../images/book.svg" width="68">
-          <h5>
-            <span>Learn More About The Rise Vision Media Player</span>
-          </h5>
-        </div>
-      </a>
-    </div>
-  </div>
-
-  <p class="u_margin-sm-top">
-    Once you receive your Media Player plug in your Display and enter the Display ID below to activate it and show the content you’ve created!
-  </p>
-
-  <!-- MATCH STYLE HERE -->
-  <div class="col-xs-12 u_margin-md-bottom">
-    <input type="text" class="id-form form-control" value="{{display.id}}" readonly="readonly" select-on-focus>
-  </div>
-
-  <div>
-    <p class="u_margin-sm-top">
-      <span>{{'displays-app.add.instructions.emailInfo' | translate}}
-        <b>{{userEmail}}</b>
-      </span>
-      <a class="" href="#" ng-click="toggleEmailForm()" target="_blank">
-        Send to another email?
-      </a>
+<div class="row">
+  <div class="col-xs-12">
+    <p>
+      Great choice! With the Rise Vision Media Player you’ll be up and running in just a few minutes.
     </p>
   </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12 u_margin-md-top text-center">
+    <p>
+      <strong>I want to ...</strong>
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+    <div class="u_margin-sm-top text-center sideways-panels">
+      <div class="panel panel-default action-panel u_remove-bottom u_clickable" ng-click="setCurrentTab('')">
+        <div class="panel-body u_margin-sm-top">
+          <div class="row">
+            <div class="col-xs-12">
+              <img src="../images/display-add/rise-media-player.svg" width="67">
+            </div>
+          </div>
+          <div class="row u_margin-md-top">
+            <div class="col-xs-12">
+              Purchase The Rise Vision Media Player.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-default action-panel u_remove-bottom u_clickable" ng-click="setCurrentTab('')">
+        <div class="panel-body u_margin-sm-top">
+          <div class="row">
+            <div class="col-xs-12">
+              <img src="../images/display-add/media-player.svg" width="67">
+            </div>
+          </div>
+          <div class="row u_margin-md-top">
+            <div class="col-xs-12">
+              Configure my own Media Player.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<div class="prototype-download-content row u_margin-md">
+  <div class="col-xs-6 text-center">
+    <a href="https://www.cdw.com/product/risevision-preconfig-n3350-64-4-lin/5471221" class="u_link-no-underline">
+      <div class="u_bordered u_bordered-hover u_clickable">
+        <img src="../images/group.svg" width="68">
+        <h5>
+          <span>Purchase The Rise Vision Media Player</span>
+        </h5>
+        <span>(Not available outside the United States)</span>
+      </div>
+    </a>
+  </div>
+  <div class="col-xs-6 text-center">
+    <a href="https://help.risevision.com/hc/en-us/articles/115001817143-Choose-a-Media-Player#%E2%80%9Crise-vision-preconfigured-media-player%E2%80%9D" class="u_link-no-underline" id="downloadWindows64">
+      <div class="u_bordered u_bordered-hover u_clickable">
+        <img src="../images/book.svg" width="68">
+        <h5>
+          <span>Learn More About The Rise Vision Media Player</span>
+        </h5>
+      </div>
+    </a>
+  </div>
+</div>
+
+<p class="u_margin-sm-top">
+  Once you receive your Media Player plug in your Display and enter the Display ID below to activate it and show the content you’ve created!
+</p>
+
+<!-- MATCH STYLE HERE -->
+<div class="col-xs-12 u_margin-md-bottom">
+  <input type="text" class="id-form form-control" value="{{display.id}}" readonly="readonly" select-on-focus>
+</div>
+
+<div>
+  <p class="u_margin-sm-top">
+    <span>{{'displays-app.add.instructions.emailInfo' | translate}}
+      <b>{{userEmail}}</b>
+    </span>
+    <a class="" href="#" ng-click="toggleEmailForm()" target="_blank">
+      Send to another email?
+    </a>
+  </p>
 </div>
 

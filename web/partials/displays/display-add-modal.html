@@ -5,9 +5,14 @@
     </button>
     <h3 class="modal-title" translate="displays-app.add.title" ng-show="!downloadOnly"></h3>
     <h3 class="modal-title" translate="displays-app.add.activate" ng-show="downloadOnly"></h3>
+    <!-- TODO REMOVE BEFORE DEPLOYMENT -->
+    <button ng-click="setCurrentTab('displayAdded')">Display Added </button>
+    <button ng-click="setCurrentTab('preconfiguredMediaPlayer')">Preconfigured Media Player</button>
+    <!-- END OF "TODO REMOVE BEFORE DEPLOYMENT" -->
   </div>
   <div class="modal-body">
     <name-your-display ng-if="!currentTab"></name-your-display>
     <display-added ng-if="currentTab === 'displayAdded'"></display-added>
+    <preconfigured-media-player ng-if="currentTab === 'preconfiguredMediaPlayer'"></preconfigured-media-player>
   </div>
 </div>
