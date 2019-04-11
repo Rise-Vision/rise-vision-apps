@@ -18,7 +18,7 @@ angular.module('risevision.displays.directives')
             displayFactory.addDisplay().then(function () {
               $scope.display = displayFactory.display;
 
-              $scope.setCurrentTab('displayAdded');
+              $scope.setCurrentPage('displayAdded');
             });
           };
 
