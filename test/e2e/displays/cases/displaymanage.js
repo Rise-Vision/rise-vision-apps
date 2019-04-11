@@ -145,9 +145,11 @@ var DisplayAddScenarios = function() {
       expect(displayAddModalPage.getDownloadWindows64Button().isDisplayed()).to.eventually.be.true;
 
       // Close the modal
+      helper.wait(displayAddModalPage.getDismissButton(), 'Dismiss Button');
       helper.clickWhenClickable(displayAddModalPage.getDismissButton(), 'Dismiss Button');
 
       helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
+      expect(displayAddModalPage.getDisplayAddModal().isPresent()).to.eventually.be.false;
     });
 
     it('should delete the display', function (done) {
