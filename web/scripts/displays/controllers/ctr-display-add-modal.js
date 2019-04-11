@@ -5,17 +5,19 @@ angular.module('risevision.displays.controllers')
     function ($scope, $modalInstance, downloadOnly) {
       var _init = function() {
         if (downloadOnly) {
-          $scope.setCurrentTab('downloadPlayer');
+          $scope.setCurrentPage('displayAdded');
         }
       };
 
-      $scope.setCurrentTab = function (tabName) {
-        $scope.currentTab = tabName;
+      $scope.setCurrentPage = function (tabName) {
+        $scope.currentPage = tabName;
       };
 
       $scope.dismiss = function () {
         $modalInstance.dismiss();
       };
+
+      _init();
 
     }
   ]);

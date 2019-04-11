@@ -11,13 +11,14 @@ angular.module('risevision.displays.directives')
           $scope.display = displayFactory.display;
 
           $scope.save = function () {
-            if (!$scope.displayAdd.$valid) {
-              console.error('form not valid: ', $scope.displayAdd.errors);
+            if (!$scope.forms.displayAdd.$valid) {
               return;
             }
 
             displayFactory.addDisplay().then(function () {
               $scope.display = displayFactory.display;
+
+              $scope.setCurrentPage('displayAdded');
             });
           };
 

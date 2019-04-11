@@ -10,9 +10,9 @@
   describe('Displays', function() {
     var alertsScenarios = new AlertsScenarios();
     var displayListScenarios = new DisplayListScenarios();
-    var displayAddScenarios = new DisplayAddScenarios();
-    var displayManageScenarios = new DisplayManageScenarios();
-    var playerProScenarios = new PlayerProScenarios();
+    // var displayAddScenarios = new DisplayAddScenarios();
+    // var displayManageScenarios = new DisplayManageScenarios();
+    // var playerProScenarios = new PlayerProScenarios();
   });
 
 })();
