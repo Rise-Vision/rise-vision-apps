@@ -4,10 +4,11 @@ angular.module('risevision.apps.billing.controllers')
   .value('PAST_INVOICES_PATH', 'account/view/invoicesHistory?cid=companyId')
   .value('UNPAID_INVOICES_PATH', 'account/view/invoicesDue?cid=companyId')
   .controller('BillingCtrl', ['$rootScope', '$scope', '$loading', '$window', '$modal', '$templateCache', '$timeout',
-    'ScrollingListService', 'getCoreCountries', 'userState', 'chargebeeFactory', 'billing', 'STORE_URL',
-    'PAST_INVOICES_PATH', 'UNPAID_INVOICES_PATH',
+    'ScrollingListService', 'getCoreCountries', 'userState', 'currentPlanFactory', 'ChargebeeFactory', 'billing',
+    'STORE_URL', 'PAST_INVOICES_PATH', 'UNPAID_INVOICES_PATH',
     function ($rootScope, $scope, $loading, $window, $modal, $templateCache, $timeout, ScrollingListService,
-      getCoreCountries, userState, chargebeeFactory, billing, STORE_URL, PAST_INVOICES_PATH, UNPAID_INVOICES_PATH) {
+      getCoreCountries, userState, currentPlanFactory, ChargebeeFactory, billing,
+      STORE_URL, PAST_INVOICES_PATH, UNPAID_INVOICES_PATH) {
 
       $scope.search = {
         count: $scope.listLimit,
@@ -17,7 +18,8 @@ angular.module('risevision.apps.billing.controllers')
       };
 
       $scope.company = userState.getCopyOfSelectedCompany();
-      $scope.chargebeeFactory = chargebeeFactory;
+      $scope.currentPlan = currentPlanFactory.currentPlan;
+      $scope.chargebeeFactory = new ChargebeeFactory();
       $scope.subscriptions = new ScrollingListService(billing.getSubscriptions, $scope.search);
 
       $scope.hasUnpaidInvoices = false;
@@ -34,7 +36,7 @@ angular.module('risevision.apps.billing.controllers')
       $rootScope.$on('chargebee.subscriptionCancelled', _reloadSubscriptions);
 
       $scope.viewPastInvoices = function () {
-        chargebeeFactory.openBillingHistory(userState.getSelectedCompanyId());
+        $scope.chargebeeFactory.openBillingHistory(userState.getSelectedCompanyId());
       };
 
       $scope.viewPastInvoicesStore = function () {
@@ -62,13 +64,13 @@ angular.module('risevision.apps.billing.controllers')
       _loadUnpaidInvoices();
 
       $scope.editPaymentMethods = function () {
-        chargebeeFactory.openPaymentSources(userState.getSelectedCompanyId());
+        $scope.chargebeeFactory.openPaymentSources(userState.getSelectedCompanyId());
       };
 
       $scope.editSubscription = function (subscription) {
         var subscriptionId = subscription.parentId || subscription.subscriptionId;
 
-        chargebeeFactory.openSubscriptionDetails(userState.getSelectedCompanyId(), subscriptionId);
+        $scope.chargebeeFactory.openSubscriptionDetails(userState.getSelectedCompanyId(), subscriptionId);
       };
 
       $scope.showCompanySettings = function () {

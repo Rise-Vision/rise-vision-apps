@@ -55,7 +55,7 @@ var HomePage = function() {
   };
 
   this.getEditor = function() {
-    this.confirmGet(editorUrl)
+    this.confirmGet(editorUrl);
   };
 
   this.getSchedules = function() {

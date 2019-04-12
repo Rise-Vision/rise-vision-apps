@@ -43,14 +43,14 @@
         {{ getProAvailableLicenseCount() }}
       </span>
       Available Licenses
-      <a href="#" class="ml-2" ng-show="areAllProLicensesUsed()" ng-click="showPlansModal(true)" aria-label="Get More Display Licenses" translate>displays-app.details.get-more</a>
+      <a href="#" class="ml-2" ng-show="areAllProLicensesUsed() && !currentPlanFactory.currentPlan.isPurchasedByParent" ng-click="showPlansModal('displays-app.details.additional-license-warning')" aria-label="Get More Display Licenses" translate>displays-app.details.get-more</a>
     </li>
   </ul>
 
   <div class="row" ng-show="areAllProLicensesUsed()">
-    <div class="alert alert-danger mt-2 mb-4" ng-show="currentPlanFactory.currentPlan.parentPlan">
-      <p ng-show="currentPlanFactory.currentPlan.parentPlan.contactEmail" translate translate-values="{ administratorEmail: currentPlanFactory.currentPlan.parentPlan.contactEmail }">displays-app.details.contact-plan-parent-email</p>
-      <p ng-show="!currentPlanFactory.currentPlan.parentPlan.contactEmail" translate>displays-app.details.contact-plan-parent-no-email</p>
+    <div class="alert alert-danger mt-2 mb-4" ng-show="currentPlanFactory.currentPlan.parentPlan || currentPlanFactory.currentPlan.isPurchasedByParent">
+      <p ng-show="currentPlanFactory.currentPlan.parentPlanContactEmail" translate translate-values="{ administratorEmail: currentPlanFactory.currentPlan.parentPlanContactEmail }">displays-app.details.contact-plan-parent-email</p>
+      <p ng-show="!currentPlanFactory.currentPlan.parentPlanContactEmail" translate>displays-app.details.contact-plan-parent-no-email</p>
     </div>
   </div>
 
