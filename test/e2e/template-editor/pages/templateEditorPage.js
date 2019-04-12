@@ -12,8 +12,8 @@ var TemplateEditorPage = function() {
   var saveButton = element(by.id('saveButtonDesktop'));
   var publishButton = element(by.id('publishButtonDesktop'));
   var imageComponentSelector = '//div[div/span[contains(text(), "Image - ")]]';
-  var imageComponent = element(by.xpath(imageComponentSelector));
-  var imageComponentEdit = element(by.xpath(imageComponentSelector + '/div/a'));
+  var imageComponent = element(by.xpath('(' + imageComponentSelector + ')[1]'));
+  var imageComponentEdit = element(by.xpath('(' + imageComponentSelector + '/div/a)[1]'));
   var backToComponentsButton = element(by.css('[ng-click="onBackButton();"]'));
   var financialComponentSelector = '//div[div/span[contains(text(), "Financial - ")]]';
   var financialComponent = element(by.xpath(financialComponentSelector));
