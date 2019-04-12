@@ -194,17 +194,21 @@
   <div class="col-xs-12 u_margin-lg-top">
     <p>
       Consider the 
-      <a href="#" ng-click="setCurrentPage('riseMediaPlayer')">pre-configured Rise Vision Media Player</a>
+      <a href="#" ng-click="setCurrentPage('preconfiguredMediaPlayer')">pre-configured Rise Vision Media Player</a>
       to save yourself some time!
     </p>
   </div>
 </div>
 
 <div class="row">
-  <div class="col-xs-12 u_margin-md-top u_margin-sm-bottom">
+  <div class="col-xs-12 u_margin-md-top">
     <p>
       Once you’ve configured your Media Player plug in your Display and enter the 
       Display ID below to activate it and show the content you’ve created!
     </p>
   </div>
 </div>
+
+<ng-include src="'partials/displays/display-id.html'"></ng-include>
+
+<emailed-instructions></emailed-instructions> 

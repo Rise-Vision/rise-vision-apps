@@ -6,6 +6,7 @@ angular.module('risevision.displays.directives')
       return {
         restrict: 'E',
         templateUrl: 'partials/displays/user-media-player.html',
+        scope: true,
         link: function ($scope) {
           $scope.currentTab = 'windows';
 

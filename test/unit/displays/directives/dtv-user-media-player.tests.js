@@ -10,23 +10,17 @@ describe('directive: user media player', function() {
 
   }));
   
-  var elm, $scope, $compile;
+  var elm, $scope;
 
-  beforeEach(inject(function($rootScope, _$compile_, $templateCache) {
-    $templateCache.put('partials/displays/user-media-player.html', '<p></p>');
-    $scope = $rootScope.$new();
-    $compile = _$compile_;
-    compileDirective();
-  }));
-
-  function compileDirective() {
+  beforeEach(inject(function($compile, $rootScope, $templateCache){
     var tpl = '<user-media-player></user-media-player>';
-    inject(function($compile) {
-      elm = $compile(tpl)($scope);
-    });
-    $scope.$digest();
+    $templateCache.put('partials/displays/user-media-player.html', '<p></p>');
 
-  }
+    elm = $compile(tpl)($rootScope.$new());
+    $rootScope.$digest();
+    
+    $scope = elm.scope();
+  }));
 
   it('should compile html', function() {
     expect(elm.html()).to.equal('<p></p>');
