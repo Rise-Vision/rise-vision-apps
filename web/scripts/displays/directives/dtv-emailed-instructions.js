@@ -6,8 +6,10 @@ angular.module('risevision.displays.directives')
       return {
         restrict: 'E',
         templateUrl: 'partials/displays/emailed-instructions.html',
+        scope: true,
         link: function ($scope) {
           $scope.userEmail = userState.getUserEmail();
+
         } //link()
       };
     }

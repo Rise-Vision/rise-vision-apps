@@ -8,9 +8,11 @@
   </div>
   <div class="modal-body">
     <name-your-display ng-if="!currentPage"></name-your-display>
-    <display-added ng-if="currentPage === 'displayAdded'"></display-added>
-    <preconfigured-media-player ng-if="currentPage === 'preconfiguredMediaPlayer'"></preconfigured-media-player>
-    <send-another-email ng-if="currentPage === 'anotherEmailPage'"></send-another-email>
+    <ng-include ng-if="currentPage === 'displayAdded'" src="'partials/displays/display-added.html'"></ng-include>
+
+    <ng-include ng-if="currentPage === 'preconfiguredMediaPlayer'" src="'partials/displays/preconfigured-media-player.html'"></ng-include>
     <user-media-player ng-if="currentPage === 'userMediaPlayer'"></user-media-player>
+
+    <send-another-email ng-if="currentPage === 'anotherEmailPage'"></send-another-email>
   </div>
 </div>

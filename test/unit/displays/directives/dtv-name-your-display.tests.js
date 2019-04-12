@@ -15,30 +15,24 @@ describe('directive: name your display', function() {
 
   }));
   
-  var elm, $scope, $compile, displayAdded;
+  var elm, $scope, displayAdded;
 
-  beforeEach(inject(function($rootScope, _$compile_, $templateCache) {
-    $templateCache.put('partials/displays/name-your-display.html', '<p></p>');
-    $scope = $rootScope.$new();
-    $compile = _$compile_;
-    compileDirective();
-  }));
-
-  function compileDirective() {
+  beforeEach(inject(function($compile, $rootScope, $templateCache){
     var tpl = '<name-your-display></name-your-display>';
-    inject(function($compile) {
-      elm = $compile(tpl)($scope);
-    });
-    $scope.$digest();
+    $templateCache.put('partials/displays/name-your-display.html', '<p></p>');
+
+    elm = $compile(tpl)($rootScope.$new());
+    $rootScope.$digest();
+    
+    $scope = elm.scope();
 
     $scope.setCurrentPage = sinon.spy();
-  }
+
+  }));
 
   it('should compile html', function() {
     expect(elm.html()).to.equal('<p></p>');
     expect($scope.factory).to.be.ok;
-    expect($scope.display).to.be.an('object');
-    expect($scope.display).to.deep.equal({});
 
     expect($scope.save).to.be.a('function');
   });
