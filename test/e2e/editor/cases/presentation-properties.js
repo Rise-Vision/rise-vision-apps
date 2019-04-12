@@ -41,6 +41,7 @@ var PresentationPropertiesScenarios = function() {
 
       describe('Given a user clicks on the presentation properties cog icon', function () {
         it('should open the properties modal when clicking cog', function () {
+          helper.wait(workspacePage.getPresentationPropertiesButton(), 'Presentation Properties Button');
           helper.clickWhenClickable(workspacePage.getPresentationPropertiesButton(), 'Presentation Properties Button');
           helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
           browser.sleep(500);
@@ -49,6 +50,7 @@ var PresentationPropertiesScenarios = function() {
         });
 
         it('should open the properties modal when clicking Presentation name', function () {
+          helper.wait(presentationPropertiesModalPage.getCancelButton(), 'Cancel Button');
           helper.clickWhenClickable(presentationPropertiesModalPage.getCancelButton(), 'Cancel Button');
           expect(presentationPropertiesModalPage.getPresentationPropertiesModal().isPresent()).to.eventually.be.false;
         
@@ -119,16 +121,20 @@ var PresentationPropertiesScenarios = function() {
           presentationPropertiesModalPage.getNameInput().sendKeys('E2E Test Presentation');
           helper.clickWhenClickable(presentationPropertiesModalPage.getApplyButton(), 'Apply Button');
 
+          helper.waitDisappear(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
           expect(presentationPropertiesModalPage.getPresentationPropertiesModal().isPresent()).to.eventually.be.false;
         });
 
         it('should handle Enter', function () {
-          workspacePage.getPresentationPropertiesButton().click();
+          helper.wait(workspacePage.getPresentationPropertiesButton(), 'Presentation Properties Button');
+          helper.clickWhenClickable(workspacePage.getPresentationPropertiesButton(), 'Presentation Properties Button');
           helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
+          browser.sleep(500);
           presentationPropertiesModalPage.getNameInput().clear();
           presentationPropertiesModalPage.getNameInput().sendKeys('Presentation Enter');
           presentationPropertiesModalPage.getNameInput().sendKeys(protractor.Key.ENTER);
 
+          helper.waitDisappear(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
           expect(presentationPropertiesModalPage.getPresentationPropertiesModal().isPresent()).to.eventually.be.false;
           expect(workspacePage.getPresentationNameContainer().getText()).to.eventually.equal('Presentation Enter');
         });

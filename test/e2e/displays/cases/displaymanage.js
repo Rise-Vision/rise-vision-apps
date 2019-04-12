@@ -91,7 +91,7 @@ var DisplayAddScenarios = function() {
     });
 
     it('should save the display', function () {
-      displayManagePage.getSaveButton().click();
+      helper.clickWhenClickable(displayManagePage.getSaveButton(), 'Save Button');
       helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
       expect(displayManagePage.getSaveButton().getText()).to.eventually.equal('Save');
     });
@@ -119,16 +119,18 @@ var DisplayAddScenarios = function() {
       expect(displayManagePage.getNotActivatedPlayerLink().isDisplayed()).to.eventually.be.true;
 
       // Display modal and validate download button
-      displayManagePage.getNotActivatedPlayerLink().click();
+      helper.clickWhenClickable(displayManagePage.getNotActivatedPlayerLink(), 'Not Activated Display link');
 
       helper.wait(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
       helper.wait(displayAddModalPage.getDownloadWindows64Button(), 'Download Windows 64 Button');
       expect(displayAddModalPage.getDownloadWindows64Button().isDisplayed()).to.eventually.be.true;
 
       // Close the modal
-      displayAddModalPage.getDismissButton().click();
+      helper.wait(displayAddModalPage.getDismissButton(), 'Dismiss Button');
+      helper.clickWhenClickable(displayAddModalPage.getDismissButton(), 'Dismiss Button');
 
       helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
+      expect(displayAddModalPage.getDisplayAddModal().isPresent()).to.eventually.be.false;
     });
 
     it('should show the Install Player button, which opens the Display Modal', function() {
@@ -136,16 +138,18 @@ var DisplayAddScenarios = function() {
       expect(displayManagePage.getInstallPlayerButton().isDisplayed()).to.eventually.be.true;
 
       // Display modal and validate download button
-      displayManagePage.getInstallPlayerButton().click();
+      helper.clickWhenClickable(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
 
       helper.wait(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
       helper.wait(displayAddModalPage.getDownloadWindows64Button(), 'Download Windows 64 Button');
       expect(displayAddModalPage.getDownloadWindows64Button().isDisplayed()).to.eventually.be.true;
 
       // Close the modal
-      displayAddModalPage.getDismissButton().click();
+      helper.wait(displayAddModalPage.getDismissButton(), 'Dismiss Button');
+      helper.clickWhenClickable(displayAddModalPage.getDismissButton(), 'Dismiss Button');
 
       helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
+      expect(displayAddModalPage.getDisplayAddModal().isPresent()).to.eventually.be.false;
     });
 
     it('should delete the display', function (done) {

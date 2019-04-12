@@ -75,6 +75,11 @@ var TemplateAddScenarios = function() {
       _createSubCompany();
       _selectSubCompany();
       _startTrial();
+      // Sometimes the trial does not start in time; this section tries to reduce the number of times this step fails
+      browser.sleep(5000);
+      _loadPresentationsList();
+      _selectSubCompany();
+      // Continue as usual
       presentationsListPage.openNewExampleTemplate();
     });
 
@@ -120,6 +125,7 @@ var TemplateAddScenarios = function() {
         helper.wait(templateEditorPage.getBackToComponentsButton(), 'Back to Components Button');
         helper.clickWhenClickable(templateEditorPage.getBackToComponentsButton(), 'Back to Components Button');
         helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
+        browser.sleep(500); // Wait for transition to finish
         expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
       });
 

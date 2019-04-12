@@ -17,12 +17,13 @@ var PresentationListPage = function() {
     var templateEditorPage = new TemplateEditorPage();
 
     helper.waitDisappear(presentationsLoader, 'Presentation loader');
-    presentationAddButton.click();
+    helper.wait(presentationAddButton, 'Add Presentation Button');
+    helper.clickWhenClickable(presentationAddButton, 'Add Presentation Button');
     helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
     helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader(), 'Store Products Loader');
     storeProductsModalPage.getSearchInput().sendKeys('Example Financial');
-    helper.wait(storeProductsModalPage.getAddExampleTemplate(), 'Add Example Template');
-    storeProductsModalPage.getAddExampleTemplate().click();
+    helper.wait(storeProductsModalPage.getAddExampleTemplate(), 'Add Example Template Button');
+    helper.clickWhenClickable(storeProductsModalPage.getAddExampleTemplate(), 'Add Example Template Button');
 
     helper.wait(templateEditorPage.getTemplateEditorContainer(), 'Template Editor Container');
     browser.sleep(500);
