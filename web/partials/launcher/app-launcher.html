@@ -5,16 +5,7 @@
   
   <div ng-show="launcherFactory.presentations.list.length > 0 || launcherFactory.presentations.apiError">
 
-    <div class="row">
-      <div class="col-sm-12">
-         <div id="TemplateList" class="scrollable-list" rv-spinner rv-spinner-key="template-list-loader" rv-spinner-start-active="0">
-           <h3>Keep it interesting!</h3>
-           <span>Pick a Template</span> from this week’s recommendations to create a Presentation:
-
-
-         </div>
-      </div>      
-    </div>
+    <weekly-templates></weekly-templates>
 
     <div class="row">
 
