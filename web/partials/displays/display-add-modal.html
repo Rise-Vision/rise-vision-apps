@@ -1,10 +1,10 @@
-<div id="display-add-modal">
+<div id="displayAddModal">
   <div class="modal-header">
     <button id="dismissButton" type="button" class="close" ng-click="dismiss()">
       <i class="fa fa-times"></i>
     </button>
-    <h3 class="modal-title" translate="displays-app.add.title" ng-show="!downloadOnly"></h3>
-    <h3 class="modal-title" translate="displays-app.add.activate" ng-show="downloadOnly"></h3>
+    <h3 class="modal-title" translate="displays-app.add.title" ng-if="!downloadOnly"></h3>
+    <h3 class="modal-title" translate="displays-app.add.activate" ng-if="downloadOnly"></h3>
   </div>
   <div class="modal-body">
     <name-your-display ng-if="!currentPage"></name-your-display>
