@@ -5,6 +5,12 @@ describe('directive: send another email', function() {
     $provide.value('translateFilter', function(key){
       return key;
     });
+    $provide.service('$loading',function(){
+      return $loading = {
+        start: sinon.spy(),
+        stop: sinon.spy()
+      }
+    });
 
     $provide.service('displayEmail',function(){
       return displayEmail = {
@@ -14,13 +20,14 @@ describe('directive: send another email', function() {
           } else {
             return Q.resolve();  
           }          
-        })
+        }),
+        sendingEmail: false
       }
     });
 
   }));
 
-  var elm, $scope, displayEmail, failSendEmail;
+  var elm, $scope, displayEmail, failSendEmail, $loading;
 
   beforeEach(inject(function($compile, $rootScope, $templateCache){
     var tpl = '<send-another-email></send-another-email>';
@@ -38,6 +45,22 @@ describe('directive: send another email', function() {
     expect(elm.html()).to.equal('<p></p>');
     expect($scope.display).to.be.ok;
     expect($scope.sendToAnotherEmail).to.be.a('function');
+  });
+
+  describe('$loading: ', function() {
+    it('should stop spinner', function() {
+      $loading.stop.should.have.been.calledWith('send-another-email');
+    });
+    
+    it('should start spinner', function(done) {
+      $scope.displayEmail.sendingEmail = true;
+      $scope.$digest();
+      setTimeout(function() {
+        $loading.start.should.have.been.calledWith('send-another-email');
+        
+        done();
+      }, 10);
+    });
   });
 
   describe('sendToAnotherEmail:',function(){

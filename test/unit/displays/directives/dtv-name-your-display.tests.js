@@ -2,6 +2,12 @@
 describe('directive: name your display', function() {
   beforeEach(module('risevision.displays.directives'));
   beforeEach(module(function ($provide) {
+    $provide.service('$loading',function(){
+      return $loading = {
+        start: sinon.spy(),
+        stop: sinon.spy()
+      }
+    });
     $provide.service('displayFactory',function(){
       return {
         display: {},
@@ -9,13 +15,14 @@ describe('directive: name your display', function() {
           displayAdded = true;
 
           return Q.resolve();
-        }
+        },
+        savingDisplay: false
       }
     });
 
   }));
   
-  var elm, $scope, displayAdded;
+  var elm, $scope, displayAdded, $loading;
 
   beforeEach(inject(function($compile, $rootScope, $templateCache){
     var tpl = '<name-your-display></name-your-display>';
@@ -35,6 +42,22 @@ describe('directive: name your display', function() {
     expect($scope.factory).to.be.ok;
 
     expect($scope.save).to.be.a('function');
+  });
+
+  describe('$loading: ', function() {
+    it('should stop spinner', function() {
+      $loading.stop.should.have.been.calledWith('name-your-display');
+    });
+    
+    it('should start spinner', function(done) {
+      $scope.factory.savingDisplay = true;
+      $scope.$digest();
+      setTimeout(function() {
+        $loading.start.should.have.been.calledWith('name-your-display');
+        
+        done();
+      }, 10);
+    });
   });
 
   it('should return early if the form is invalid',function(done){
