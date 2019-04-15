@@ -54,6 +54,7 @@ var TemplateAddScenarios = function() {
       helper.clickWhenClickable(templateEditorPage.getCreatedPresentationLink(presentationName), 'Presentation Link');
       helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
       helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
+      browser.sleep(500); // Wait for transition to finish
     }
 
     function _savePresentation () {
