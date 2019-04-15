@@ -1,140 +1,81 @@
 'use strict';
 describe('controller: display add modal', function() {
-  var displayId = 1234;
   beforeEach(module('risevision.displays.controllers'));
-  beforeEach(module('risevision.displays.services'));
-  beforeEach(module(mockTranlate()));
   beforeEach(module(function ($provide) {
-    $provide.service('displayFactory',function(){
-      return {
-        display: {},
-        loadingDisplay: true,
-        addDisplay : function(){
-          displayAdded = true;
-
-          return Q.resolve();
-        }
-      };
-    });
-    
     $provide.service('$modalInstance',function(){
       return {
-        dismiss : function(action){
-          return;
-        }
+        dismiss : sinon.spy()
       }
     });
-
-    $provide.service('displayEmail',function(){
+    $provide.service('displayFactory',function(){
       return {
-        send : function(){
-          if (failSendEmail) {
-            return Q.reject();
-          } else {
-            return Q.resolve();  
-          }          
-        }
-      }
+        display: 'display'
+      };
     });
 
   }));
-  var $scope, displayFactory, $modalInstanceDismissSpy, displayAdded, displayEmail, failSendEmail;
-  beforeEach(function(){
-    displayAdded = false;
-    failSendEmail = false;
-    
+
+  var $scope, $modalInstance, displayFactory;
+  beforeEach(function() {    
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
+
+      $modalInstance = $injector.get('$modalInstance');
       displayFactory = $injector.get('displayFactory');
-      displayEmail = $injector.get('displayEmail');
-      var $modalInstance = $injector.get('$modalInstance');
-      $modalInstanceDismissSpy = sinon.spy($modalInstance, 'dismiss');
 
       $controller('displayAddModal', {
         $scope : $scope,
-        displayFactory: displayFactory,
         $modalInstance: $modalInstance,
-        $log: $injector.get('$log'),
-        downloadOnly: false
+        downloadOnly: true
       });
       $scope.$digest();
     });
   });
   
   it('should exist',function(){
-    expect($scope).to.be.truely;
+    expect($scope).to.be.ok;
 
-    expect($scope.showEmailForm).to.be.false;
-    expect($scope.anotherEmail).to.be.null;
-    expect($scope.errorMessage).to.be.null;
+    expect($scope.display).to.equal('display');
 
-    expect($scope.displayEmail).to.be.ok;
-    expect($scope.factory).to.be.ok;
-
-    expect($scope.save).to.be.a('function');
+    expect($scope.setCurrentPage).to.be.a('function');
+    expect($scope.showPreviousPage).to.be.a('function');
     expect($scope.dismiss).to.be.a('function');
-    expect($scope.toggleEmailForm).to.be.a('function');    
-    expect($scope.sendToAnotherEmail).to.be.a('function');
   });
 
-  it('should init the correct defaults',function(){
-    expect($scope.display).to.be.truely;
-    expect($scope.display).to.deep.equal({});
+  it('should initialize for downloadOnly', function() {
+    expect($scope.currentPage).to.equal('displayAdded');
   });
 
-  it('should return early if the form is invalid',function(){
-    $scope.displayAdd = {};
-    $scope.displayAdd.$valid = false;
-    $scope.save();
+  it('should update display when notified', function() {
+    displayFactory.display = 'updatedDisplay';
+
+    $scope.$broadcast('displayCreated');
+
+    $scope.$digest();
+
+    expect($scope.display).to.equal('updatedDisplay');
   });
 
-  it('should save the display',function(){
-    $scope.displayAdd = {};
-    $scope.displayAdd.$valid = true;
-    $scope.display = {id:123};
-    $scope.save();
+  it('should set Current Tab', function() {
+    $scope.setCurrentPage('somethingElse');
 
-    expect(displayAdded).to.be.true;
+    expect($scope.currentPage).to.equal('somethingElse');
+  });
 
+  it('should show Previous Tab', function() {
+    $scope.setCurrentPage('somethingElse');
+
+    expect($scope.currentPage).to.equal('somethingElse');
+
+    $scope.showPreviousPage();
+
+    expect($scope.currentPage).to.equal('displayAdded');
   });
 
   it('should dismiss modal when clicked on close with no action',function(){
     $scope.dismiss();
 
-    $modalInstanceDismissSpy.should.have.been.called;
-  });
-
-  it('should toggle email form',function(){
-    expect($scope.showEmailForm).to.be.false;
-    $scope.toggleEmailForm();
-    expect($scope.showEmailForm).to.be.true;
-    $scope.toggleEmailForm();
-    expect($scope.showEmailForm).to.be.false;
-  });
-
-  describe('sendToAnotherEmail:',function(){
-    it('should send instructions to another email address',function(done){
-      var spy = sinon.spy(displayEmail,'send')
-      $scope.display.id = 'ID';
-      $scope.anotherEmail = 'another@email.com';
-      $scope.sendToAnotherEmail();
-
-      spy.should.have.been.calledWith('ID', 'another@email.com');
-      setTimeout(function() {
-        expect($scope.errorMessage).to.be.null;
-        done();
-      }, 10);
-    });
-
-    it('should handle send failure',function(done){
-      failSendEmail = true;
-      $scope.sendToAnotherEmail();
-
-      setTimeout(function() {
-        expect($scope.errorMessage).to.equal('displays-app.fields.email.failed');
-        done();
-      }, 10);
-    });
+    $modalInstance.dismiss.should.have.been.called;
   });
 
 });
