@@ -7,6 +7,7 @@ angular.module('risevision.apps', [
     'truncate',
     'slugifier',
     'ngTagsInput',
+    'ngStorage',
     'risevision.common.header',
     'risevision.common.header.templates',
     'risevision.common.components.last-modified',

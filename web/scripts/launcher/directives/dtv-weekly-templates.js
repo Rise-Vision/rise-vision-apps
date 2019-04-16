@@ -2,15 +2,16 @@
 
 angular.module('risevision.apps.launcher.directives')
   .directive('weeklyTemplates', ['productsFactory', 'ScrollingListService', 'presentationUtils',
-    'editorFactory', 'templateEditorFactory', 'userState',
+    'editorFactory', 'templateEditorFactory', 'userState', '$sessionStorage',
     function (productsFactory, ScrollingListService, presentationUtils, editorFactory,
-      templateEditorFactory, userState) {
+      templateEditorFactory, userState, $sessionStorage) {
       return {
         restrict: 'E',
         templateUrl: 'partials/launcher/weekly-templates.html',
         link: function ($scope) {
+          $sessionStorage.$default({weeklyTemplatesFullView: true});
 
-          $scope.fullView = true;
+          $scope.fullView = $sessionStorage.weeklyTemplatesFullView;
 
           $scope.search = {
             // sortBy: 'templateReleaseDate DESC',
@@ -30,6 +31,7 @@ angular.module('risevision.apps.launcher.directives')
 
           $scope.toggleView = function () {
             $scope.fullView = !$scope.fullView;
+            $sessionStorage.weeklyTemplatesFullView = $scope.fullView;
           };
 
           $scope.select = function (product) {
