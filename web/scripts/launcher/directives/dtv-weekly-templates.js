@@ -10,6 +10,8 @@ angular.module('risevision.apps.launcher.directives')
         templateUrl: 'partials/launcher/weekly-templates.html',
         link: function ($scope) {
 
+          $scope.fullView = true;
+
           $scope.search = {
             // sortBy: 'templateReleaseDate DESC',
             query: 'templateOfTheWeek:1',
@@ -25,6 +27,10 @@ angular.module('risevision.apps.launcher.directives')
             $scope.factory = new ScrollingListService(productsFactory.loadProducts,
               $scope.search);
           }
+
+          $scope.toggleView = function () {
+            $scope.fullView = !$scope.fullView;
+          };
 
           $scope.select = function (product) {
             if (!presentationUtils.isHtmlTemplate(product)) {
