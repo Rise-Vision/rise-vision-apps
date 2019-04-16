@@ -1,27 +1,32 @@
-<div class="row" ng-if="factory.items.list.length">
-  <div class="col-sm-12">
-    <div id="TemplateList" class="panel panel-default">
-      <div class="panel-body">
+<div id="TemplateList" class="panel panel-default" ng-if="factory.items.list.length">
+  <div class="panel-body">
 
-        <div ng-if="!fullView">
-          <a href="#" ng-click="toggleView()">
-            Keep it interesting! Pick a Template from this week’s recommendations to create a Presentation …
-          </a>
-          <button id="closeButton" type="button" class="close" ng-click="toggleView()">
-            <i class="fa fa-angle-double-down"></i>
-          </button>
-        </div><!-- collapsed view -->
 
-        <div ng-if="fullView">
+    <div ng-if="!fullView">
+      <a href="#" ng-click="toggleView()">
+        Keep it interesting! Pick a Template from this week’s recommendations to create a Presentation …
+      </a>
+      <button id="closeButton" type="button" class="close" ng-click="toggleView()">
+        <i class="fa fa-angle-double-down"></i>
+      </button>
+    </div><!-- collapsed view -->
+
+    <div ng-if="fullView">
+      <div class="row" >
+        <div class="col-sm-12">
           <button id="closeButton" type="button" class="close" ng-click="toggleView()">
             <i class="fa fa-times"></i>
           </button>
           <h3>Keep it interesting!</h3>
-          <strong>Pick a Template</strong> from this week’s recommendations to create a Presentation:
-          <br>
-          <br>
+          <p>
+            <strong>Pick a Template</strong> from this week’s recommendations to create a Presentation:
+          </p>
+        </div>
+      </div>
 
-          <div>
+      <div class="row" >
+        <div class="col-sm-12">
+          <div class="u_margin-md-top">
             <ng-repeat ng-repeat="product in factory.items.list">
               <div id="storeProduct" class="col-sm-6 col-md-4 col-lg-3" ng-click="select(product)">
                 <div class="product-grid_item panel panel-default">
@@ -34,9 +39,20 @@
               </div>
             </ng-repeat>
           </div>
-        </div><!-- full view -->
-
+        </div>
       </div>
-    </div>
+
+      <div class="row" >
+        <div class="col-sm-12 u_margin-xs-top u_margin-xs-bottom text-center">
+          <a href="https://www.risevision.com/weekly-playbook" target="_blank">
+            Want us to send you great Template ideas each week?
+          </a>
+        </div>
+      </div>
+    </div><!-- full view -->
+
   </div>
 </div>
+
+
+
