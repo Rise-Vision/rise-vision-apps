@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('risevision.apps.launcher.directives')
-  .directive('weeklyTemplates', ['$loading', 'productsFactory', 'ScrollingListService', 'presentationUtils',
-    'editorFactory', 'templateEditorFactory',
-    function ($loading, productsFactory, ScrollingListService, presentationUtils, editorFactory,
-      templateEditorFactory) {
+  .directive('weeklyTemplates', ['productsFactory', 'ScrollingListService', 'presentationUtils',
+    'editorFactory', 'templateEditorFactory', 'userState',
+    function (productsFactory, ScrollingListService, presentationUtils, editorFactory,
+      templateEditorFactory, userState) {
       return {
         restrict: 'E',
         templateUrl: 'partials/launcher/weekly-templates.html',
@@ -17,16 +17,14 @@ angular.module('risevision.apps.launcher.directives')
             count: 4
           };
 
-          $scope.factory = new ScrollingListService(productsFactory.loadProducts,
-            $scope.search);
+          var company = userState.getCopyOfSelectedCompany();
 
-          $scope.$watch('factory.loadingItems', function (loading) {
-            if (loading) {
-              $loading.start('weekly-templates');
-            } else {
-              $loading.stop('weekly-templates');
-            }
-          });
+          if (company.companyIndustry === "PRIMARY_SECONDARY_EDUCATION" ||
+              company.companyIndustry === "HIGHER_EDUCATION") {
+
+            $scope.factory = new ScrollingListService(productsFactory.loadProducts,
+              $scope.search);
+          }
 
           $scope.select = function (product) {
             if (!presentationUtils.isHtmlTemplate(product)) {
