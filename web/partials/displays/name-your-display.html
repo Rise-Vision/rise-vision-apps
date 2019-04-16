@@ -1,0 +1,17 @@
+<div rv-spinner rv-spinner-key="name-your-display" rv-spinner-start-active="1">
+  <form id="forms.displayAdd" role="form" name="forms.displayAdd" ng-submit="save()" novalidate>
+    <div class="form-group" ng-class="{'has-error': !forms.displayAdd.name.$pristine && forms.displayAdd.name.$invalid}" show-errors>
+      <label for="name" class="control-label">{{'displays-app.add.name.name' | translate}} *</label>
+      <input type="text" class="form-control" placeholder="{{ 'displays-app.add.name.name' | translate}}" id="name" name="name" ng-model="display.name" autofocus required>
+      <p class="text-danger" ng-show="!forms.displayAdd.name.$pristine && forms.displayAdd.name.$error.required" translate>
+        displays-app.fields.name.required
+      </p>
+    </div>
+
+    <div ng-show="factory.apiError" class="alert alert-danger" role="alert">
+      <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
+    </div>
+
+    <button id="nextButton" type="submit" class="btn btn-primary btn-lg btn-block u_margin-lg-top" aria-label="Next" tabindex="1" form="forms.displayAdd" translate="displays-app.add.next" ng-disabled="forms.displayAdd.$invalid || factory.savingDisplay" require-role="da"></button>
+  </form>
+</div>

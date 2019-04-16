@@ -21,7 +21,7 @@ var DisplayManagePage = function() {
   var deleteButton = element(by.id('deleteButton'));
   var deleteForeverButton = element(by.buttonText('Delete Forever'));
 
-  var displayLoader = element(by.id('display-loader'));
+  var displayLoader = element(by.xpath('//div[@spinner-key="display-loader"]'));
 
   this.getDisplaysAppContainer = function() {
     return displaysAppContainer;

@@ -122,9 +122,26 @@ var DisplayAddScenarios = function() {
       helper.clickWhenClickable(displayManagePage.getNotActivatedPlayerLink(), 'Not Activated Display link');
 
       helper.wait(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
-      helper.wait(displayAddModalPage.getDownloadWindows64Button(), 'Download Windows 64 Button');
-      expect(displayAddModalPage.getDownloadWindows64Button().isDisplayed()).to.eventually.be.true;
 
+      expect(displayAddModalPage.getDisplayAddModal().isDisplayed()).to.eventually.be.true;
+
+      browser.sleep(100);
+      expect(displayAddModalPage.getTitle().getText()).to.eventually.equal('Activate your Display');
+
+    });
+
+    it('should show Display Id but hide the Email Instructions', function() {
+      displayAddModalPage.getPreconfiguredPlayerPanel().click();
+
+      helper.wait(displayAddModalPage.getPreconfiguredPlayerPage(), 'User Player page');
+
+      expect(displayAddModalPage.getDisplayIdField().isDisplayed()).to.eventually.be.true;
+      expect(displayAddModalPage.getDisplayIdField().getAttribute('value')).to.eventually.have.length.greaterThan(0);
+
+      expect(displayAddModalPage.getEmailedInstructions().isPresent()).to.eventually.be.false;      
+    });
+
+    it('should close the modal', function() {
       // Close the modal
       helper.wait(displayAddModalPage.getDismissButton(), 'Dismiss Button');
       helper.clickWhenClickable(displayAddModalPage.getDismissButton(), 'Dismiss Button');
@@ -141,9 +158,14 @@ var DisplayAddScenarios = function() {
       helper.clickWhenClickable(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
 
       helper.wait(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
-      helper.wait(displayAddModalPage.getDownloadWindows64Button(), 'Download Windows 64 Button');
-      expect(displayAddModalPage.getDownloadWindows64Button().isDisplayed()).to.eventually.be.true;
 
+      expect(displayAddModalPage.getDisplayAddModal().isDisplayed()).to.eventually.be.true;
+
+      browser.sleep(100);
+      expect(displayAddModalPage.getTitle().getText()).to.eventually.equal('Activate your Display');
+    });
+
+    it('should close the modal', function() {
       // Close the modal
       helper.wait(displayAddModalPage.getDismissButton(), 'Dismiss Button');
       helper.clickWhenClickable(displayAddModalPage.getDismissButton(), 'Dismiss Button');

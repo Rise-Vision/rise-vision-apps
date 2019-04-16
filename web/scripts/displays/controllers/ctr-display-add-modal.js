@@ -1,54 +1,35 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .controller('displayAddModal', ['$scope', '$modalInstance', 'displayFactory',
-    'userState', '$log', 'displayEmail', '$filter', 'downloadOnly',
-    function ($scope, $modalInstance, displayFactory, userState, $log,
-      displayEmail, $filter, downloadOnly) {
-      $scope.factory = displayFactory;
-      $scope.display = displayFactory.display;
-      $scope.userEmail = userState.getUserEmail();
-      $scope.displayEmail = displayEmail;
-      $scope.showEmailForm = false;
-      $scope.anotherEmail = null;
-      $scope.errorMessage = null;
-      $scope.downloadOnly = downloadOnly;
-      $scope.currentTab = 'windows';
+  .controller('displayAddModal', ['$scope', '$modalInstance', 'displayFactory', 'downloadOnly',
+    function ($scope, $modalInstance, displayFactory, downloadOnly) {
+      var _init = function() {
+        $scope.display = displayFactory.display;
+        $scope.downloadOnly = downloadOnly;
 
-      $scope.toggleEmailForm = function () {
-        $scope.showEmailForm = !$scope.showEmailForm;
-      };
-
-      $scope.save = function () {
-        if (!$scope.displayAdd.$valid) {
-          console.error('form not valid: ', $scope.displayAdd.errors);
-          return;
+        if (downloadOnly) {
+          $scope.setCurrentPage('displayAdded');
         }
-
-        displayFactory.addDisplay().then(function () {
-          $scope.display = displayFactory.display;
-        });
       };
 
-      $scope.sendToAnotherEmail = function () {
-        $scope.errorMessage = null;
-        displayEmail.send($scope.display.id, $scope.anotherEmail)
-          .then(function () {
-            $scope.anotherEmail = '';
-            $scope.anotherEmailForm.$setPristine(true);
-          }, function (error) {
-            $scope.errorMessage = $filter('translate')(
-              'displays-app.fields.email.failed');
-          });
+      $scope.$on('displayCreated', function() {
+        $scope.display = displayFactory.display;
+      });
+
+      $scope.setCurrentPage = function (tabName) {
+        $scope.previousPage = $scope.currentPage;
+        $scope.currentPage = tabName;
       };
 
-      $scope.setCurrentTab = function (tabName) {
-        $scope.currentTab = tabName;
+      $scope.showPreviousPage = function () {
+        $scope.setCurrentPage($scope.previousPage);
       };
 
       $scope.dismiss = function () {
         $modalInstance.dismiss();
       };
+
+      _init();
 
     }
   ]);
