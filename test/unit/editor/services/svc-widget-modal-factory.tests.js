@@ -119,7 +119,6 @@ describe('service: widgetModalFactory:', function() {
         templateUrl: 'partials/editor/widget-modal.html',
         controller: 'widgetModal',
         size: 'lg',
-        backdrop: true,
         resolve: sinon.match.object
       });
     });
@@ -191,7 +190,6 @@ describe('service: widgetModalFactory:', function() {
         templateUrl: 'partials/widgets/image-settings.html',
         controller: 'WidgetSettingsModalController',
         size: 'lg',
-        backdrop: true,
         resolve: sinon.match.object
       });
     });

@@ -62,7 +62,6 @@ angular.module('risevision.editor.services')
           templateUrl: 'partials/editor/widget-modal.html',
           controller: 'widgetModal',
           size: 'lg',
-          backdrop: true,
           resolve: {
             widget: function () {
               var deferred = $q.defer();
@@ -110,7 +109,6 @@ angular.module('risevision.editor.services')
           templateUrl: inAppDetails.partial,
           controller: 'WidgetSettingsModalController',
           size: 'lg',
-          backdrop: true,
           resolve: {
             widget: function () {
               return {

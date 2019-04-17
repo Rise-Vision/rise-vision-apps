@@ -11,7 +11,6 @@ angular.module('risevision.editor.services')
           templateUrl: 'partials/editor/presentation-item-settings.html',
           controller: 'PresentationItemModalController',
           size: 'lg',
-          backdrop: true,
           resolve: {
             item: function () {
               return item;
