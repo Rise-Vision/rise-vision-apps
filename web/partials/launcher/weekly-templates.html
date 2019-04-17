@@ -1,8 +1,8 @@
-<div id="TemplateList" class="panel panel-default" ng-if="factory.items.list.length">
+<div id="TemplateList1" class="weekly-templates panel panel-default" ng-if="factory.items.list.length">
   <div class="panel-body">
 
     <div ng-if="!fullView" class="u_clickable" ng-click="toggleView()">
-      <span class="font-weight-medium u_link u_link-no-underline">
+      <span class="collapsed-label font-weight-medium u_link u_link-no-underline">
         Keep it interesting! Pick a Template from this week’s recommendations to create a Presentation …
       </span>
       <img src="../images/expand.svg" alt="expand" class="pull-right" height="23">
@@ -10,10 +10,10 @@
 
     <div ng-if="fullView">
       <div class="row" >
-        <div class="col-sm-12">
+        <div class="col-sm-12 expanded-panel">
           <i class="fa fa-times pull-right u_clickable" ng-click="toggleView()"></i>
           <h3>Keep it interesting!</h3>
-          <p>
+          <p class="expanded-message">
             <strong>Pick a Template</strong> from this week’s recommendations to create a Presentation:
           </p>
         </div>
@@ -21,7 +21,7 @@
 
       <div class="row" >
         <div class="col-sm-12">
-          <div class="u_margin-md-top">
+          <div class="u_margin-sm-top">
             <ng-repeat ng-repeat="product in factory.items.list">
               <div id="storeProduct" class="col-sm-6 col-md-4 col-lg-3" ng-click="select(product)">
                 <div class="product-grid_item panel panel-default">
