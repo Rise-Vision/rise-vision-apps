@@ -1,22 +1,17 @@
 <div id="TemplateList" class="panel panel-default" ng-if="factory.items.list.length">
   <div class="panel-body">
 
-
-    <div ng-if="!fullView">
-      <a href="#" ng-click="toggleView()">
+    <div ng-if="!fullView" class="u_clickable" ng-click="toggleView()">
+      <span class="font-weight-medium u_link u_link-no-underline">
         Keep it interesting! Pick a Template from this week’s recommendations to create a Presentation …
-      </a>
-      <button id="closeButton" type="button" class="close" ng-click="toggleView()">
-        <i class="fa fa-angle-double-down"></i>
-      </button>
+      </span>
+      <img src="../images/expand.svg" alt="expand" class="pull-right" height="23">
     </div><!-- collapsed view -->
 
     <div ng-if="fullView">
       <div class="row" >
         <div class="col-sm-12">
-          <button id="closeButton" type="button" class="close" ng-click="toggleView()">
-            <i class="fa fa-times"></i>
-          </button>
+          <i class="fa fa-times pull-right u_clickable" ng-click="toggleView()"></i>
           <h3>Keep it interesting!</h3>
           <p>
             <strong>Pick a Template</strong> from this week’s recommendations to create a Presentation:
