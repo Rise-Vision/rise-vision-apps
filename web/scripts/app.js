@@ -506,6 +506,9 @@ angular.module('risevision.apps', [
     }
   ]);
 
+angular.module('risevision.common.components.analytics')
+  .value('GA_LINKER_USE_ANCHOR', false);
+
 angular.module('risevision.apps.services', [
   'risevision.common.header'
 ]);
