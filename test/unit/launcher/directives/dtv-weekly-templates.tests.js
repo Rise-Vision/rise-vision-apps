@@ -57,13 +57,13 @@ describe('directive: weekly-templates', function() {
 
     $compile = _$compile_;
     $rootScope = _$rootScope_;
-    $scope = $rootScope.$new();
     $templateCache.put('partials/launcher/weekly-templates.html', '<p>mock</p>');
   }));
 
   function compileDirective() {
-    element = $compile('<weekly-templates></weekly-templates>')($scope);
-    $scope.$digest();
+    element = $compile('<weekly-templates></weekly-templates>')($rootScope.$new());
+    $rootScope.$digest();
+    $scope = element.isolateScope();   
   }
 
   describe('weekly-templates:', function () {
@@ -72,7 +72,7 @@ describe('directive: weekly-templates', function() {
     });
 
     it('should compile', function() {
-      expect(element[0].outerHTML).to.equal('<weekly-templates class="ng-scope"><p>mock</p></weekly-templates>');
+      expect(element[0].outerHTML).to.equal('<weekly-templates class="ng-scope ng-isolate-scope"><p>mock</p></weekly-templates>');
     });
 
     it('should initialize scope', function() {

@@ -7,6 +7,7 @@ angular.module('risevision.apps.launcher.directives')
       templateEditorFactory, userState, $sessionStorage) {
       return {
         restrict: 'E',
+        scope: {},
         templateUrl: 'partials/launcher/weekly-templates.html',
         link: function ($scope) {
           $sessionStorage.$default({weeklyTemplatesFullView: true});
