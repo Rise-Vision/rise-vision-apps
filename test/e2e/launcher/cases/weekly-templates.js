@@ -87,6 +87,7 @@ var WeeklyTemplatesScenarios = function() {
       expect(weeklyTemplatesPage.getWeeklyTemplatesCloseButton().isDisplayed()).to.eventually.be.true;
       
       weeklyTemplatesPage.getWeeklyTemplatesCloseButton().click();
+      browser.sleep(500);
 
       expect(weeklyTemplatesPage.getWeeklyTemplatesExpandedView().isPresent()).to.eventually.be.false;
       expect(weeklyTemplatesPage.getWeeklyTemplatesNoticeView().isDisplayed()).to.eventually.be.true;
