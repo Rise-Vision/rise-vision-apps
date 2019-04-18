@@ -1,17 +1,17 @@
 <div id="TemplateList1" class="weekly-templates panel panel-default" ng-if="factory.items.list.length">
   <div class="panel-body">
 
-    <div ng-if="!fullView" class="u_clickable" ng-click="toggleView()">
+    <div id="weekly-templates-notice" ng-if="!fullView" class="u_clickable" ng-click="toggleView()">
       <span class="collapsed-label font-weight-medium u_link u_link-no-underline">
         Keep it interesting! Pick a Template from this week’s recommendations to create a Presentation …
       </span>
       <img src="../images/expand.svg" alt="expand" class="pull-right" height="23">
     </div><!-- collapsed view -->
 
-    <div ng-if="fullView">
+    <div id="weekly-templates-expanded" ng-if="fullView">
       <div class="row" >
         <div class="col-sm-12 expanded-panel">
-          <i class="fa fa-times pull-right u_clickable" ng-click="toggleView()"></i>
+          <i id="weekly-templates-close" class="fa fa-times pull-right u_clickable" ng-click="toggleView()"></i>
           <h3>Keep it interesting!</h3>
           <p class="expanded-message">
             <strong>Pick a Template</strong> from this week’s recommendations to create a Presentation:
@@ -39,7 +39,7 @@
 
       <div class="row" >
         <div class="col-sm-12 u_margin-xs-top u_margin-xs-bottom text-center">
-          <a href="https://www.risevision.com/weekly-playbook" target="_blank">
+          <a id="susbcribe-playbook" href="https://www.risevision.com/weekly-playbook" target="_blank">
             Want us to send you great Template ideas each week?
           </a>
         </div>
