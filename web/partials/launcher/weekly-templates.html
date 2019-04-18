@@ -8,7 +8,7 @@
       <img src="../images/expand.svg" alt="expand" class="pull-right" height="23">
     </div><!-- collapsed view -->
 
-    <div ng-if="fullView">
+    <div ng-if="fullView" class="text-center">
       <div class="row" >
         <div class="col-sm-12 expanded-panel">
           <i class="fa fa-times pull-right u_clickable" ng-click="toggleView()"></i>
@@ -20,25 +20,21 @@
       </div>
 
       <div class="row" >
-        <div class="col-sm-12">
-          <div class="u_margin-sm-top">
-            <ng-repeat ng-repeat="product in factory.items.list">
-              <div id="storeProduct" class="col-sm-6 col-md-4 col-lg-3" ng-click="select(product)">
-                <div class="product-grid_item panel panel-default">
-
-                  <figure class="product-grid_image u_clickable">
-                    <img ng-src="{{product.imageUrl}}" class="img-responsive" alt="{{product.name}}">
-                  </figure> 
-
-                </div>
+        <div class="u_margin-sm-top">
+          <ng-repeat ng-repeat="product in factory.items.list">
+            <div id="storeProduct" class="col-sm-6 col-md-4 col-lg-3 col-centered" ng-click="select(product)">
+              <div class="product-grid_item panel panel-default">
+                <figure class="product-grid_image u_clickable">
+                  <img ng-src="{{product.imageUrl}}" class="img-responsive" alt="{{product.name}}">
+                </figure> 
               </div>
-            </ng-repeat>
-          </div>
+            </div>
+          </ng-repeat>
         </div>
       </div>
 
       <div class="row" >
-        <div class="col-sm-12 u_margin-xs-top u_margin-xs-bottom text-center">
+        <div class="col-sm-12 u_margin-xs-top u_margin-xs-bottom">
           <a href="https://www.risevision.com/weekly-playbook" target="_blank">
             Want us to send you great Template ideas each week?
           </a>
@@ -48,6 +44,3 @@
 
   </div>
 </div>
-
-
-
