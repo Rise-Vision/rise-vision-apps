@@ -4,12 +4,7 @@ var HomePage = require('./../pages/homepage.js');
 var SignInPage = require('./../pages/signInPage.js');
 var WeeklyTemplatesPage = require('./../pages/weeklyTemplates.js');
 var CommonHeaderPage = require('./../../../../web/bower_components/common-header/test/e2e/pages/commonHeaderPage.js');
-var GoogleAuthPage = require('rv-common-e2e').googleAuthPage;
 var helper = require('rv-common-e2e').helper;
-var StoreProductsModalPage = require('./../../editor/pages/storeProductsModalPage.js');
-var AutoScheduleModalPage = require('./../../editor/pages/autoScheduleModalPage.js');
-var GetStartedPage = require('./../../common/pages/getStartedPage.js');
-var WorkspacePage = require('./../../editor/pages/workspacePage.js');
 
 var WeeklyTemplatesScenarios = function() {
   
@@ -20,22 +15,12 @@ var WeeklyTemplatesScenarios = function() {
     var signInPage;
     var weeklyTemplatesPage;
     var commonHeaderPage;
-    var googleAuthPage;
-    var storeProductsModalPage;
-    var autoScheduleModalPage;
-    var getStartedPage;
-    var workspacePage;
 
     before(function (){
       homepage = new HomePage();
       signInPage = new SignInPage();
       weeklyTemplatesPage = new WeeklyTemplatesPage();
       commonHeaderPage = new CommonHeaderPage();
-      googleAuthPage = new GoogleAuthPage();
-      storeProductsModalPage = new StoreProductsModalPage();
-      autoScheduleModalPage = new AutoScheduleModalPage();
-      getStartedPage = new GetStartedPage();
-      workspacePage = new WorkspacePage();
 
       homepage.get();
       signInPage.signIn();
