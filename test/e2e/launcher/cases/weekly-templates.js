@@ -53,19 +53,21 @@ var WeeklyTemplatesScenarios = function() {
       var subCompanyName = 'E2E TEST EDUCATION SUBCOMPANY';
       commonHeaderPage.createSubCompany(subCompanyName,'PRIMARY_SECONDARY_EDUCATION');
       commonHeaderPage.selectSubCompany(subCompanyName);
+      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       
       browser.sleep(500);
       helper.wait(commonHeaderPage.getCommonHeaderMenuItems().get(1), 'Presentations Common Header Menu Item');
       helper.clickWhenClickable(commonHeaderPage.getCommonHeaderMenuItems().get(1), 'Presentations Common Header Menu Item');
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-      browser.sleep(500);
 
+      helper.wait(weeklyTemplatesPage.getWeeklyTemplatesMainPanel(), 'Notice View');
       expect(weeklyTemplatesPage.getWeeklyTemplatesMainPanel().isDisplayed()).to.eventually.be.true;
       expect(weeklyTemplatesPage.getWeeklyTemplatesExpandedView().isDisplayed()).to.eventually.be.true;
       expect(weeklyTemplatesPage.getWeeklyTemplatesNoticeView().isPresent()).to.eventually.be.false;
     });
 
     it('should close Weekly Template Panel',function(){
+      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       expect(weeklyTemplatesPage.getWeeklyTemplatesCloseButton().isDisplayed()).to.eventually.be.true;
       
       weeklyTemplatesPage.getWeeklyTemplatesCloseButton().click();
