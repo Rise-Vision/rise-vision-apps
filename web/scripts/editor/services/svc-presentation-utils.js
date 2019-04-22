@@ -30,7 +30,7 @@ angular.module('risevision.editor.services')
               $state.go('apps.editor.templates.edit', { presentationId: presentation.id });
             })
             .catch(function () {
-              $state.go('apps.editor.templates.edit', { presentationId: presentation.id });
+              plansFactory.showPlansModal();
             });
         }
       };
