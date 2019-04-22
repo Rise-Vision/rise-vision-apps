@@ -2,9 +2,9 @@
 
 angular.module('risevision.template-editor.services')
   .constant('BLUEPRINT_URL', 'https://widgets.risevision.com/stable/templates/PRODUCT_CODE/blueprint.json')
-  .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', '$http', 'messageBox', 'presentation', 'processErrorCode', 'userState',
+  .factory('templateEditorFactory', ['$q', '$log', '$sce', '$state', '$rootScope', '$http', 'messageBox', 'presentation', 'processErrorCode', 'userState',
     'HTML_PRESENTATION_TYPE', 'BLUEPRINT_URL', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
-    function ($q, $log, $state, $rootScope, $http, messageBox, presentation, processErrorCode, userState,
+    function ($q, $log, $sce, $state, $rootScope, $http, messageBox, presentation, processErrorCode, userState,
       HTML_PRESENTATION_TYPE, BLUEPRINT_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {};
 
@@ -227,6 +227,12 @@ angular.module('risevision.template-editor.services')
 
         return deferred.promise;
       };
+
+      factory.getEditorPreviewUrl = function() {
+        var url = 'https://widgets.risevision.com/beta/templates/02614df3097474588a1432dd980cac4d82c362c7/src/template.html';
+
+        return $sce.trustAsResourceUrl(url);
+      }
 
       var _parseJSON = function (json) {
         try {

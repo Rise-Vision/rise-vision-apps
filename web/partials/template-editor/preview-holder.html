@@ -1,7 +1,7 @@
 <div class="preview-temp-parent">
   <iframe id="template-editor-preview"
     style="width: 100%; height: 100%; margin: 10px"
-    ng-src="https://widgets.risevision.com/beta/templates/{{factory.presentation.productCode}}/src/template.html"
+    ng-src="{{ factory.getEditorPreviewUrl() }}"
   >
   </iframe>
 </div>
