@@ -54,27 +54,9 @@ var WeeklyTemplatesScenarios = function() {
       commonHeaderPage.createSubCompany(subCompanyName,'PRIMARY_SECONDARY_EDUCATION');
       commonHeaderPage.selectSubCompany(subCompanyName);
       
-      //Adds a Presentation so we can access the main Apps Home instead of Onboarding Home
       browser.sleep(500);
-      helper.clickWhenClickable(getStartedPage.getGetStartedButton1(), 'Get Started Button 1');
-      browser.sleep(500);
-      helper.clickWhenClickable(getStartedPage.getGetStartedButton2(), 'Get Started Button 2');
-      browser.sleep(500);
-      helper.clickWhenClickable(getStartedPage.getGetStartedButton3(), 'Get Started Button 3');
-      browser.sleep(500);
-      helper.clickWhenClickable(getStartedPage.getGetStartedAddPresentation(), 'Get Started Add Presentation');
-      helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
-      helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader());
-      helper.clickWhenClickable(storeProductsModalPage.getAddBlankPresentation(), 'Add Blank Presentation');
-      helper.wait(workspacePage.getWorkspaceContainer(), 'Workspace Container');
-      browser.sleep(500);
-      helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
-      helper.clickWhenClickable(workspacePage.getSaveButton(), 'Save Button');
-      helper.wait(autoScheduleModalPage.getAutoScheduleModal());
-      helper.clickWhenClickable(autoScheduleModalPage.getCloseButton(), 'Close Button');
-      browser.sleep(500);
-      helper.wait(commonHeaderPage.getCommonHeaderMenuItems().get(0), 'First Common Header Menu Item');
-      helper.clickWhenClickable(commonHeaderPage.getCommonHeaderMenuItems().get(0), 'First Common Header Menu Item');
+      helper.wait(commonHeaderPage.getCommonHeaderMenuItems().get(1), 'Presentations Common Header Menu Item');
+      helper.clickWhenClickable(commonHeaderPage.getCommonHeaderMenuItems().get(1), 'Presentations Common Header Menu Item');
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       browser.sleep(500);
 
