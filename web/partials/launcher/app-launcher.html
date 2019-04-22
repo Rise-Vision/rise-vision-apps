@@ -1,10 +1,13 @@
 <div id="appLauncherContainer">
-  <div class="container u_margin-md-top">
+  <div class="container">
 
   <ng-include ng-show="!launcherFactory.presentations.loadingItems && launcherFactory.presentations.list.length === 0 && !launcherFactory.presentations.apiError" src="'partials/launcher/get-started-cta.html'"></ng-include>
   
   <div ng-show="launcherFactory.presentations.list.length > 0 || launcherFactory.presentations.apiError">
-    <div class="row">
+
+    <weekly-templates></weekly-templates>
+
+    <div class="row u_margin-md-top">
 
       <div class="col-sm-4">
         <button id="presentationAddButton" class="btn btn-link pull-right visible-lg" ng-click="editorFactory.addPresentationModal()">{{'editor-app.list.actions.add' |translate}} <i class="fa fa-plus icon-right"></i></button>
