@@ -26,8 +26,9 @@ angular.module('risevision.template-editor.directives')
             console.log('attribute data text');
             console.log(attributeDataText);
             console.log(iframe.src);
+            console.log(iframe.contentWindow.location.origin);
 
-            iframe.contentWindow.onload = function() {
+            iframe.onload = function() {
               console.log('content window loaded');
               console.log(iframe.src);
             }
