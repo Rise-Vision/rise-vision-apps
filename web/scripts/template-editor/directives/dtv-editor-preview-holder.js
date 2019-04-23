@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateEditorPreviewHolder', ['$sce', 'templateEditorFactory', 'HTML_TEMPLATE_URL',
-    function ($sce, templateEditorFactory, HTML_TEMPLATE_URL) {
+  .directive('templateEditorPreviewHolder', ['$window', '$sce', 'templateEditorFactory', 'HTML_TEMPLATE_URL',
+    function ($window, $sce, templateEditorFactory, HTML_TEMPLATE_URL) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/preview-holder.html',
@@ -14,6 +14,20 @@ angular.module('risevision.template-editor.directives')
 
             return $sce.trustAsResourceUrl(url);
           }
+
+          $scope.$watch('factory.presentation.templateAttributeData', function (value) {
+            var attributeDataText = typeof value === 'string' ?
+              value : JSON.stringify(value);
+
+            var iframe = $window.document.getElementById('template-editor-preview');
+            var domain = $window.location.origin;
+
+            iframe.contentWindow.postMessage(attributeDataText, domain);
+
+            console.log('attribute data text');
+            console.log(attributeDataText);
+            console.log(domain);
+          });
         }
       };
     }
