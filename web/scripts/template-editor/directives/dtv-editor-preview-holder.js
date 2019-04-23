@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateEditorPreviewHolder', ['$window', '$sce', 'templateEditorFactory', 'HTML_TEMPLATE_URL', 'WIDGETS_DOMAIN',
-    function ($window, $sce, templateEditorFactory, HTML_TEMPLATE_URL, WIDGETS_DOMAIN) {
+  .directive('templateEditorPreviewHolder', ['$window', '$sce', 'templateEditorFactory', 'HTML_TEMPLATE_DOMAIN', 'HTML_TEMPLATE_URL',
+    function ($window, $sce, templateEditorFactory, HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/preview-holder.html',
@@ -37,7 +37,7 @@ angular.module('risevision.template-editor.directives')
               return;
             }
 
-            iframe.contentWindow.postMessage(attributeDataText, WIDGETS_DOMAIN);
+            iframe.contentWindow.postMessage(attributeDataText, HTML_TEMPLATE_DOMAIN);
 
             attributeDataText = null;
           }
