@@ -20,7 +20,7 @@ angular.module('risevision.template-editor.directives')
               value : JSON.stringify(value);
 
             var iframe = $window.document.getElementById('template-editor-preview');
-            var domain = 'risevision.com';  // $window.location.origin;
+            var domain = 'widgets.risevision.com';  // $window.location.origin;
 
             iframe.contentWindow.postMessage(attributeDataText, domain);
 
