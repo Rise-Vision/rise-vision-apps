@@ -9,6 +9,16 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope) {
           $scope.factory = templateEditorFactory;
 
+          var iframeLoaded = false;
+          var attributeDataText = null;
+          var iframe = $window.document.getElementById('template-editor-preview');
+
+          iframe.onload = function() {
+            iframeLoaded = true;
+
+            _postAttributeData();
+          }
+
           $scope.getEditorPreviewUrl = function(productCode) {
             var url = HTML_TEMPLATE_URL.replace('PRODUCT_CODE', productCode);
 
@@ -16,23 +26,23 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.$watch('factory.presentation.templateAttributeData', function (value) {
-            var attributeDataText = typeof value === 'string' ?
+            attributeDataText = typeof value === 'string' ?
               value : JSON.stringify(value);
 
-            var iframe = $window.document.getElementById('template-editor-preview');
+            _postAttributeData();
+          }, true);
+
+          function _postAttributeData() {
+            if( !attributeDataText || !iframeLoaded ) {
+              return;
+            }
 
             iframe.contentWindow.postMessage(attributeDataText, WIDGETS_DOMAIN);
-
             console.log('attribute data text');
             console.log(attributeDataText);
-            console.log(iframe.src);
-            console.log(iframe.contentWindow.location.origin);
 
-            iframe.onload = function() {
-              console.log('content window loaded');
-              console.log(iframe.src);
-            }
-          }, true);
+            attributeDataText = null;
+          }
         }
       };
     }
