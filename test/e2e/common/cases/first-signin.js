@@ -135,7 +135,7 @@ var FirstSigninScenarios = function() {
         expect(getStartedPage.getGetStartedContainer().isDisplayed()).to.eventually.be.false;
       });
 
-      it('removes current SubCompany',function(){
+      after(function() {
         commonHeaderPage.deleteCurrentCompany();
       });
 
