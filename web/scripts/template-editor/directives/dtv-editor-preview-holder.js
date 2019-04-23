@@ -20,13 +20,13 @@ angular.module('risevision.template-editor.directives')
               value : JSON.stringify(value);
 
             var iframe = $window.document.getElementById('template-editor-preview');
-            var domain = 'https://widgets.risevision.com';  // $window.location.origin;
+            var domain = 'https://widgets.risevision.com';
 
             iframe.contentWindow.postMessage(attributeDataText, domain);
 
             console.log('attribute data text');
             console.log(attributeDataText);
-            console.log($window.location.origin);
+            console.log(iframe.src);
           }, true);
         }
       };
