@@ -38,8 +38,6 @@ angular.module('risevision.template-editor.directives')
             }
 
             iframe.contentWindow.postMessage(attributeDataText, WIDGETS_DOMAIN);
-            console.log('attribute data text');
-            console.log(attributeDataText);
 
             attributeDataText = null;
           }
