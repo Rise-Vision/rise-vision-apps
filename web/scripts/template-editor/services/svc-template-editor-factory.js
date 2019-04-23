@@ -243,7 +243,7 @@ angular.module('risevision.template-editor.services')
 
         $log.error(factory.errorMessage, e);
 
-        messageBox(factory.errorMessage, factory.apiError);
+        messageBox(factory.errorMessage, factory.apiError, null, 'template-editor-message-box', 'partials/template-editor/message-box.html');
       };
 
       var _clearMessages = function () {
