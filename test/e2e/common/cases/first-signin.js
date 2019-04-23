@@ -15,6 +15,7 @@ var FirstSigninScenarios = function() {
 
   browser.driver.manage().window().setSize(1400, 900);
   describe('First Signin', function () {
+    var subCompanyName = 'E2E TEST SUBCOMPANY - FIRST SIGN IN';
     var homepage;
     var signInPage;
     var commonHeaderPage;
@@ -42,7 +43,7 @@ var FirstSigninScenarios = function() {
       before(function () {
         homepage.get();
         signInPage.signIn();
-        var subCompanyName = 'E2E TEST SUBCOMPANY - FIRST SIGN IN';
+
         commonHeaderPage.createSubCompany(subCompanyName);
         commonHeaderPage.selectSubCompany(subCompanyName);
       });
