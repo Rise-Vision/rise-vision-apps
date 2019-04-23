@@ -65,11 +65,6 @@ var TemplateAddScenarios = function() {
       openContentModal();
     });
 
-    after(function() {
-      loadEditor();
-      commonHeaderPage.deleteAllSubCompanies();
-    });
-
     it('should open the Store Templates Modal', function () {
       expect(storeProductsModalPage.getStoreProductsModal().isDisplayed()).to.eventually.be.true;
     });
@@ -220,6 +215,11 @@ var TemplateAddScenarios = function() {
       expect(workspacePage.getCancelButton().isPresent()).to.eventually.be.true;
     });
 
+    after(function() {
+      loadEditor();
+      selectSubCompany();
+      commonHeaderPage.deleteCurrentCompany();
+    });
   });
 };
 module.exports = TemplateAddScenarios;

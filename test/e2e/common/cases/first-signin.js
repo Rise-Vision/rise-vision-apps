@@ -44,7 +44,7 @@ var FirstSigninScenarios = function() {
         signInPage.signIn();
         var subCompanyName = 'E2E TEST SUBCOMPANY - FIRST SIGN IN';
         commonHeaderPage.createSubCompany(subCompanyName);
-        commonHeaderPage.selectSubCompany(subCompanyName);   
+        commonHeaderPage.selectSubCompany(subCompanyName);
       });
 
       it('should show the Get Started page', function() {
@@ -262,7 +262,7 @@ var FirstSigninScenarios = function() {
       });
 
       after(function() {
-        commonHeaderPage.deleteAllSubCompanies();
+        commonHeaderPage.deleteCurrentCompany();
       });
     });
   });
