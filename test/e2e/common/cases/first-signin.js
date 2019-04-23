@@ -262,6 +262,7 @@ var FirstSigninScenarios = function() {
       });
 
       after(function() {
+        commonHeaderPage.selectSubCompany(subCompanyName);
         commonHeaderPage.deleteCurrentCompany();
       });
     });
