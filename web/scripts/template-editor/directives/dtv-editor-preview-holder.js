@@ -26,7 +26,7 @@ angular.module('risevision.template-editor.directives')
 
             console.log('attribute data text');
             console.log(attributeDataText);
-            console.log(domain);
+            console.log($window.location.origin);
           }, true);
         }
       };
