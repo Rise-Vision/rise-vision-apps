@@ -48,9 +48,13 @@ var TemplateAddScenarios = function() {
       helper.waitDisappear(plansModalPage.getPlansModal(), 'Plans Modal');
     }
 
-    function _loadPresentation (presentationName) {
+    function _loadCurrentCompanyPresentationList() {
       helper.clickWhenClickable(templateEditorPage.getPresentationsListLink(), 'Presentations List');
       helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
+    }
+
+    function _loadPresentation (presentationName) {
+      _loadCurrentCompanyPresentationList();
       helper.clickWhenClickable(templateEditorPage.getCreatedPresentationLink(presentationName), 'Presentation Link');
       helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
       helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
@@ -171,6 +175,8 @@ var TemplateAddScenarios = function() {
     });
 
     after(function() {
+      // Loading the Presentation List is a workaround to a Chrome Driver issue that has it fail to click on elements over the Preview iframe
+      _loadCurrentCompanyPresentationList();
       commonHeaderPage.deleteCurrentCompany();
     });
   });
