@@ -1,0 +1,20 @@
+<form id="messageForm">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="dismiss()" data-dismiss="modal" aria-hidden="true">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body" stop-event="touchend">
+    <p class="modal-title" translate>{{title}}</p>
+    <p translate>{{message}}</p>
+  </div>
+  <div class="modal-footer">
+    <div class="row">
+      <div class="col-xs-12">
+        <button class="btn btn-default w-100" ng-click="dismiss()">
+          <span translate="template.message-box.confirmation-message"></span></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

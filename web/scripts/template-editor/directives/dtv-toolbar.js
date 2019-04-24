@@ -41,7 +41,7 @@ angular.module('risevision.template-editor.directives')
             $scope.modalInstance = $modal.open({
               template: $templateCache.get('partials/template-editor/confirm-modal.html'),
               controller: 'confirmInstance',
-              windowClass: 'modal-custom',
+              windowClass: 'template-editor-confirm-modal',
               resolve: {
                 confirmationMessage: function () {
                   return 'template.confirm-modal.delete-warning';
