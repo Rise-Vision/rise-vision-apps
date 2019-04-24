@@ -82,7 +82,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
     var aspectRatio = $scope.getTemplateAspectRatio();
 
-    expect(aspectRatio).to.equal("75");
+    expect(aspectRatio).to.equal("75.00");
   });
 
   it('should calculate a 333.33 aspect ratio', function() {
