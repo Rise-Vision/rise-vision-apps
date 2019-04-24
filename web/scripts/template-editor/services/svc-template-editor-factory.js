@@ -2,11 +2,12 @@
 
 angular.module('risevision.template-editor.services')
   .constant('BLUEPRINT_URL', 'https://widgets.risevision.com/stable/templates/PRODUCT_CODE/blueprint.json')
-  .constant('HTML_TEMPLATE_URL', 'https://widgets.risevision.com/beta/templates/PRODUCT_CODE/src/template.html')
-  .factory('templateEditorFactory', ['$q', '$log', '$sce', '$state', '$rootScope', '$http', 'messageBox', 'presentation', 'processErrorCode', 'userState',
-    'HTML_PRESENTATION_TYPE', 'BLUEPRINT_URL', 'HTML_TEMPLATE_URL', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
-    function ($q, $log, $sce, $state, $rootScope, $http, messageBox, presentation, processErrorCode, userState,
-      HTML_PRESENTATION_TYPE, BLUEPRINT_URL, HTML_TEMPLATE_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
+  .constant('HTML_TEMPLATE_URL', 'https://widgets.risevision.com/stable/templates/PRODUCT_CODE/src/template.html')
+  .constant('HTML_TEMPLATE_DOMAIN', 'https://widgets.risevision.com')
+  .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', '$http', 'messageBox', 'presentation', 'processErrorCode', 'userState',
+    'HTML_PRESENTATION_TYPE', 'BLUEPRINT_URL', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
+    function ($q, $log, $state, $rootScope, $http, messageBox, presentation, processErrorCode, userState,
+      HTML_PRESENTATION_TYPE, BLUEPRINT_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {};
 
       var _setPresentation = function (presentation) {
@@ -228,12 +229,6 @@ angular.module('risevision.template-editor.services')
 
         return deferred.promise;
       };
-
-      factory.getEditorPreviewUrl = function(productCode) {
-        var url = HTML_TEMPLATE_URL.replace('PRODUCT_CODE', productCode);
-
-        return $sce.trustAsResourceUrl(url);
-      }
 
       var _parseJSON = function (json) {
         try {
