@@ -12,9 +12,9 @@ var TemplateAddScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
 
-  describe('Template Editor Add', function () {
+  describe('Template Editor', function () {
     var testStartTime = Date.now();
-    var subCompanyName = 'E2E TEST SUBCOMPANY - TEMPLATE EDITOR ADD';
+    var subCompanyName = 'E2E TEST SUBCOMPANY - TEMPLATE EDITOR';
     var presentationName = 'Example Presentation - ' + testStartTime;
     var commonHeaderPage;
     var homepage;
