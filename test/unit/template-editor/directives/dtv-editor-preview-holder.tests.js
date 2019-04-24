@@ -69,6 +69,22 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     expect(aspectRatio).to.equal("50.00");
   });
 
+  it('should calculate the 16:9 aspect ratio', function() {
+    factory.blueprintData = { width: "1920", height: "1080" };
+
+    var aspectRatio = $scope.getTemplateAspectRatio();
+
+    expect(aspectRatio).to.equal("56.25");
+  });
+
+  it('should calculate the 4:3 aspect ratio', function() {
+    factory.blueprintData = { width: "800", height: "600" };
+
+    var aspectRatio = $scope.getTemplateAspectRatio();
+
+    expect(aspectRatio).to.equal("75");
+  });
+
   it('should calculate a 333.33 aspect ratio', function() {
     factory.blueprintData = { width: "300", height: "1000" };
 
