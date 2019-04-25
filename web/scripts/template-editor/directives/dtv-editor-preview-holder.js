@@ -11,6 +11,7 @@ angular.module('risevision.template-editor.directives')
 
           var DEFAULT_TEMPLATE_WIDTH = 800;
           var DEFAULT_TEMPLATE_HEIGHT = 600;
+          var MOBILE_PREVIEW_HEIGHT = 160;
 
           var iframeLoaded = false;
           var attributeDataText = null;
@@ -42,8 +43,18 @@ angular.module('risevision.template-editor.directives')
             return height ? parseInt( height ) : DEFAULT_TEMPLATE_HEIGHT;
           }
 
+          function _getHeightDividedByWidth() {
+            return _getTemplateHeight() / _getTemplateWidth();
+          }
+
+          $scope.getMobileWidth = function() {
+            var value = MOBILE_PREVIEW_HEIGHT / _getHeightDividedByWidth();
+
+            return value.toFixed(0);
+          }
+
           $scope.getTemplateAspectRatio = function() {
-            var value = ( _getTemplateHeight() / _getTemplateWidth() ) * 100;
+            var value = _getHeightDividedByWidth() * 100;
 
             return value.toFixed(2);
           }
@@ -54,8 +65,10 @@ angular.module('risevision.template-editor.directives')
           ], function() {
             var aspectRatio = $scope.getTemplateAspectRatio();
             var style = 'padding-bottom: ' + aspectRatio + '%';
+            var width = $scope.getMobileWidth() + 'px';
 
             iframeParent.setAttribute('style', style);
+            iframeParent.setAttribute('width', width);
           });
 
           $scope.$watch('factory.presentation.templateAttributeData', function (value) {
