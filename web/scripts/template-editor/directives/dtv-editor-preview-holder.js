@@ -14,6 +14,8 @@ angular.module('risevision.template-editor.directives')
 
           var iframeLoaded = false;
           var attributeDataText = null;
+
+          var iframeParent = $window.document.getElementById('template-editor-preview-parent');
           var iframe = $window.document.getElementById('template-editor-preview');
 
           iframe.onload = function() {
@@ -45,6 +47,16 @@ angular.module('risevision.template-editor.directives')
 
             return value.toFixed(2);
           }
+
+          $scope.$watchGroup([
+            'factory.blueprintData.width',
+            'factory.blueprintData.height'
+          ], function() {
+            var aspectRatio = $scope.getTemplateAspectRatio();
+            var style = 'padding-bottom: ' + aspectRatio + '%';
+
+            iframeParent.setAttribute('style', style);
+          });
 
           $scope.$watch('factory.presentation.templateAttributeData', function (value) {
             attributeDataText = typeof value === 'string' ?

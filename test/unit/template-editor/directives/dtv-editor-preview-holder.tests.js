@@ -7,7 +7,9 @@ describe('directive: TemplateEditorPreviewHolder', function() {
       factory;
 
   beforeEach(function() {
-    factory = {};
+    factory = {
+      blueprintData: { width: "1000", height: "1000" }
+    };
   });
 
   beforeEach(module('risevision.template-editor.directives'));
@@ -25,7 +27,9 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     $templateCache.put('partials/template-editor/preview-holder.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
-    sandbox.stub($window.document, 'getElementById').returns({});
+    sandbox.stub($window.document, 'getElementById').returns({
+      setAttribute: function() {}
+    });
 
     element = $compile("<template-editor-preview-holder></template-editor-preview-holder>")($scope);
     $scope.$digest();
