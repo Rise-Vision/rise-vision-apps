@@ -63,12 +63,13 @@ angular.module('risevision.template-editor.directives')
             'factory.blueprintData.width',
             'factory.blueprintData.height'
           ], function() {
-            var aspectRatio = $scope.getTemplateAspectRatio();
-            var style = 'padding-bottom: ' + aspectRatio + '%';
+            var aspectRatio = $scope.getTemplateAspectRatio() + '%';
             var width = $scope.getMobileWidth() + 'px';
 
+            var style = 'padding-bottom: ' + aspectRatio + ';' +
+              'width: ' + width;
+
             iframeParent.setAttribute('style', style);
-            iframeParent.setAttribute('width', width);
           });
 
           $scope.$watch('factory.presentation.templateAttributeData', function (value) {
