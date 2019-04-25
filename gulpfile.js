@@ -289,8 +289,8 @@ gulp.task("server-close", factory.testServerClose());
 gulp.task("test:webdrive_update", factory.webdriveUpdate());
 gulp.task("test:e2e:core", ["test:webdrive_update"],factory.testE2EAngular({
   browser: "chrome",
-  loginUser: process.env.E2E_USER,
-  loginPass: process.env.E2E_PASS,
+  loginUser: "jenkinsrisevision@gmail.com", // process.env.E2E_USER,
+  loginPass: "JenkinsRise#1", //process.env.E2E_PASS,
   loginUser2: process.env.E2E_USER2,
   loginPass2: process.env.E2E_PASS2,
   twitterUser: process.env.TWITTER_USER,
