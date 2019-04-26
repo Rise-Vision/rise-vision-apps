@@ -127,8 +127,8 @@ jobs:
             echo 'export STAGE_ENV="$STAGE_ENV"' >> $BASH_ENV
             echo "BASH_ENV is $BASH_ENV"
       - run:
-        - name: Do things
-        - command: |
+          name: Do things
+          command: |
             echo $BASH_ENV
             source $BASH_ENV
             echo "Testing e2e tests - Env $STAGE_ENV"
