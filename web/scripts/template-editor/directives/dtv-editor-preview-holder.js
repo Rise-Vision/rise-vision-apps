@@ -93,10 +93,15 @@ angular.module('risevision.template-editor.directives')
             'factory.blueprintData.height'
           ], _applyAspectRatio);
 
-          angular.element($window).on('resize', function() {
+          function _onResize() {
             _applyAspectRatio();
 
             $scope.$digest();
+          }
+
+          angular.element($window).on('resize', _onResize);
+          $scope.$on('$destroy', function() {
+            angular.element($window).off('resize', _onResize);
           });
 
           $scope.$watch('factory.presentation.templateAttributeData', function (value) {
