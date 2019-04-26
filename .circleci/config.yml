@@ -17,8 +17,24 @@ commands:
       - run: sudo apt-get update -qq
       - run: sudo apt-get install -y google-chrome-stable
       - run:
+          name: Set environment variables
+          command: |
+            # Set +e flag to fix issue where no stage environment is specified
+            set +e
+            STAGE_ENV="$(git log -1 --pretty=%B | grep '\[.*\]' |sed -e 's/.*\[\(.*\)\].*/\1/g')";
+            if [ "$STAGE_ENV" != '' ]; then
+              echo "Deploying to $STAGE_ENV";
+            fi;
+            if [ "$STAGE_ENV" == '' ]; then
+              echo "stage deployment environment missing. Deploying to [stage-0].";
+              STAGE_ENV='stage-0';
+            fi;
+            echo "$STAGE_ENV" > stage.txt
+      - run:
           name: e2e_tests
           command: |
+            STAGE_ENV=$(cat stage.txt)
+            echo "Running tests on $STAGE_ENV";
             TEST_FILES=$(circleci tests glob "<< parameters.casesfile >>" | circleci tests split)
             NODE_ENV=test XUNIT_FILE=~/rise-vision-apps/reports/angular-xunit.xml PROSHOT_DIR=~/rise-vision-apps/reports/screenshots DBUS_SESSION_BUS_ADDRESS=/dev/null xvfb-run node run-test.js $TEST_FILES
       - store_test_results:
@@ -111,25 +127,13 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
+      - run: NODE_ENV=stage npm run ci-build
+      - run: ssh -o StrictHostKeyChecking=no apps@webserver-stage.risevision.com 'mkdir -p /rise-front-end/apps';
       - run:
-          name: Set environment variables
-          command: |
-            # Set +e flag to fix issue where no stage environment is specified
-            set +e
-            STAGE_ENV="$(git log -1 --pretty=%B | grep '\[.*\]' |sed -e 's/.*\[\(.*\)\].*/\1/g')";
-            if [ "$STAGE_ENV" != '' ]; then
-              echo "Deploying to $STAGE_ENV";
-            fi;
-            if [ "$STAGE_ENV" == '' ]; then
-              echo "stage deployment environment missing. Deploying to [stage-0].";
-              STAGE_ENV='stage-0';
-            fi;
-            echo "$STAGE_ENV" > stage.txt
-      - run:
-          name: Do things
+          name: Deploy to stage
           command: |
             STAGE_ENV=$(cat stage.txt)
-            echo "Testing e2e tests - Env $STAGE_ENV"
+            #rsync -rptz -e ssh --delete dist apps@webserver-stage.risevision.com:/rise-front-end/apps/$STAGE_ENV;
       - store_artifacts:
           path: ~/rise-vision-apps/dist.tar.gz
   deploy_beta:
