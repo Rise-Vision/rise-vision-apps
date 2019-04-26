@@ -28,6 +28,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     $scope = $rootScope.$new();
 
     sandbox.stub($window.document, 'getElementById').returns({
+      clientHeight: 500,
       setAttribute: function() {}
     });
 
@@ -49,52 +50,90 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     expect($scope.getTemplateAspectRatio).to.be.a('function');
   });
 
-  it('should calculate the 100 aspect ratio', function() {
-    factory.blueprintData = { width: "1000", height: "1000" };
+  describe('getTemplateAspectRatio', function() {
+    it('should calculate the 100 aspect ratio', function() {
+      factory.blueprintData = { width: "1000", height: "1000" };
 
-    var aspectRatio = $scope.getTemplateAspectRatio();
+      var aspectRatio = $scope.getTemplateAspectRatio();
 
-    expect(aspectRatio).to.equal("100.00");
+      expect(aspectRatio).to.equal("100.00");
+    });
+
+    it('should calculate the 200 aspect ratio', function() {
+      factory.blueprintData = { width: "1000", height: "2000" };
+
+      var aspectRatio = $scope.getTemplateAspectRatio();
+
+      expect(aspectRatio).to.equal("200.00");
+    });
+
+    it('should calculate the 50 aspect ratio', function() {
+      factory.blueprintData = { width: "2000", height: "1000" };
+
+      var aspectRatio = $scope.getTemplateAspectRatio();
+
+      expect(aspectRatio).to.equal("50.00");
+    });
+
+    it('should calculate the 16:9 aspect ratio', function() {
+      factory.blueprintData = { width: "1920", height: "1080" };
+
+      var aspectRatio = $scope.getTemplateAspectRatio();
+
+      expect(aspectRatio).to.equal("56.25");
+    });
+
+    it('should calculate the 4:3 aspect ratio', function() {
+      factory.blueprintData = { width: "800", height: "600" };
+
+      var aspectRatio = $scope.getTemplateAspectRatio();
+
+      expect(aspectRatio).to.equal("75.00");
+    });
+
+    it('should calculate a 333.33 aspect ratio', function() {
+      factory.blueprintData = { width: "300", height: "1000" };
+
+      var aspectRatio = $scope.getTemplateAspectRatio();
+
+      expect(aspectRatio).to.equal("333.33");
+    });
   });
 
-  it('should calculate the 200 aspect ratio', function() {
-    factory.blueprintData = { width: "1000", height: "2000" };
+  describe('getMobileWidth', function() {
+    it('should calculate mobile width for 16:9 aspect ratio', function() {
+      factory.blueprintData = { width: "1920", height: "1080" };
 
-    var aspectRatio = $scope.getTemplateAspectRatio();
+      var aspectRatio = $scope.getMobileWidth();
 
-    expect(aspectRatio).to.equal("200.00");
+      expect(aspectRatio).to.equal("284");
+    });
+
+    it('should calculate mobile width for 9:16 aspect ratio', function() {
+      factory.blueprintData = { width: "1080", height: "1920" };
+
+      var aspectRatio = $scope.getMobileWidth();
+
+      expect(aspectRatio).to.equal("90");
+    });
   });
 
-  it('should calculate the 50 aspect ratio', function() {
-    factory.blueprintData = { width: "2000", height: "1000" };
+  describe('getDesktopWidth', function() {
+    it('should calculate desktop width for 16:9 aspect ratio', function() {
+      factory.blueprintData = { width: "1920", height: "1080" };
 
-    var aspectRatio = $scope.getTemplateAspectRatio();
+      var aspectRatio = $scope.getMobileWidth();
 
-    expect(aspectRatio).to.equal("50.00");
-  });
+      expect(aspectRatio).to.equal("889");
+    });
 
-  it('should calculate the 16:9 aspect ratio', function() {
-    factory.blueprintData = { width: "1920", height: "1080" };
+    it('should calculate desktop width for 9:16 aspect ratio', function() {
+      factory.blueprintData = { width: "1080", height: "1920" };
 
-    var aspectRatio = $scope.getTemplateAspectRatio();
+      var aspectRatio = $scope.getMobileWidth();
 
-    expect(aspectRatio).to.equal("56.25");
-  });
-
-  it('should calculate the 4:3 aspect ratio', function() {
-    factory.blueprintData = { width: "800", height: "600" };
-
-    var aspectRatio = $scope.getTemplateAspectRatio();
-
-    expect(aspectRatio).to.equal("75.00");
-  });
-
-  it('should calculate a 333.33 aspect ratio', function() {
-    factory.blueprintData = { width: "300", height: "1000" };
-
-    var aspectRatio = $scope.getTemplateAspectRatio();
-
-    expect(aspectRatio).to.equal("333.33");
+      expect(aspectRatio).to.equal("281");
+    });
   });
 
 });
