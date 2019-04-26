@@ -15,6 +15,7 @@ var FirstSigninScenarios = function() {
 
   browser.driver.manage().window().setSize(1400, 900);
   describe('First Signin', function () {
+    var subCompanyName = 'E2E TEST SUBCOMPANY - FIRST SIGN IN';
     var homepage;
     var signInPage;
     var commonHeaderPage;
@@ -40,7 +41,6 @@ var FirstSigninScenarios = function() {
       var displayId;
 
       before(function () {
-        var subCompanyName = 'E2E TEST SUBCOMPANY - FIRST SIGN IN';
         homepage.get();
         signInPage.signIn();
         browser.sleep(1000);
@@ -128,6 +128,12 @@ var FirstSigninScenarios = function() {
 
       it('should no longer show the Get Started Page', function () {
         browser.sleep(500);
+        homepage.get();
+        signInPage.signIn();
+        browser.sleep(1000);
+        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+
+        commonHeaderPage.selectSubCompany(subCompanyName);
 
         helper.wait(commonHeaderPage.getCommonHeaderMenuItems().get(0), 'First Common Header Menu Item');
         helper.clickWhenClickable(commonHeaderPage.getCommonHeaderMenuItems().get(0), 'First Common Header Menu Item');
