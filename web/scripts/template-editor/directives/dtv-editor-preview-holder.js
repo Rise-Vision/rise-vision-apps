@@ -72,10 +72,7 @@ angular.module('risevision.template-editor.directives')
             return value.toFixed(2);
           }
 
-          $scope.$watchGroup([
-            'factory.blueprintData.width',
-            'factory.blueprintData.height'
-          ], function() {
+          function _applyAspectRatio() {
             var style;
 
             if( $window.matchMedia('(max-width: 768px)').matches ) {
@@ -89,6 +86,17 @@ angular.module('risevision.template-editor.directives')
             }
 
             iframeParent.setAttribute('style', style);
+          }
+
+          $scope.$watchGroup([
+            'factory.blueprintData.width',
+            'factory.blueprintData.height'
+          ], _applyAspectRatio);
+
+          angular.element($window).on('resize', function() {
+            _applyAspectRatio();
+
+            $scope.$digest();
           });
 
           $scope.$watch('factory.presentation.templateAttributeData', function (value) {
