@@ -45,6 +45,7 @@ var FirstSigninScenarios = function() {
         signInPage.signIn();
         browser.sleep(1000);
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+        helper.wait(homepage.getPresentationAddButton(), 'Add Presentation Button');
 
         commonHeaderPage.createSubCompany(subCompanyName);
         commonHeaderPage.selectSubCompany(subCompanyName);
