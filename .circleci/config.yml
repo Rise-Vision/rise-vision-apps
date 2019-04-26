@@ -7,6 +7,7 @@ commands:
       casesfile:
         type: string
         default: "invalid_path"
+    working_directory: ~/rise-vision-apps
     steps:
       - attach_workspace:
           at: ~/
