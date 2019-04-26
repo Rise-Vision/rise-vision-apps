@@ -122,7 +122,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     it('should calculate desktop width for 16:9 aspect ratio', function() {
       factory.blueprintData = { width: "1920", height: "1080" };
 
-      var aspectRatio = $scope.getMobileWidth();
+      var aspectRatio = $scope.getDesktopWidth();
 
       expect(aspectRatio).to.equal("889");
     });
@@ -130,7 +130,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     it('should calculate desktop width for 9:16 aspect ratio', function() {
       factory.blueprintData = { width: "1080", height: "1920" };
 
-      var aspectRatio = $scope.getMobileWidth();
+      var aspectRatio = $scope.getDesktopWidth();
 
       expect(aspectRatio).to.equal("281");
     });
