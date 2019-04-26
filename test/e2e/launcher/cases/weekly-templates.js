@@ -55,7 +55,8 @@ var WeeklyTemplatesScenarios = function() {
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       expect(weeklyTemplatesPage.getWeeklyTemplatesCloseButton().isDisplayed()).to.eventually.be.true;
       
-      weeklyTemplatesPage.getWeeklyTemplatesCloseButton().click();
+      helper.wait(weeklyTemplatesPage.getWeeklyTemplatesCloseButton());
+      helper.clickWhenClickable(weeklyTemplatesPage.getWeeklyTemplatesCloseButton(), 'Weekly Templates Close Button');
       browser.sleep(500);
 
       expect(weeklyTemplatesPage.getWeeklyTemplatesExpandedView().isPresent()).to.eventually.be.false;
@@ -71,7 +72,8 @@ var WeeklyTemplatesScenarios = function() {
     });
 
     it('should expand Weekly Template Panel',function(){
-      weeklyTemplatesPage.getWeeklyTemplatesNoticeView().click();
+      helper.wait(weeklyTemplatesPage.getWeeklyTemplatesNoticeView(), 'Weekly Templates Notice View');
+      helper.clickWhenClickable(weeklyTemplatesPage.getWeeklyTemplatesNoticeView(), 'Weekly Templates Notice View');
       browser.sleep(500);
       expect(weeklyTemplatesPage.getWeeklyTemplatesExpandedView().isDisplayed()).to.eventually.be.true;
       expect(weeklyTemplatesPage.getWeeklyTemplatesNoticeView().isPresent()).to.eventually.be.false;
