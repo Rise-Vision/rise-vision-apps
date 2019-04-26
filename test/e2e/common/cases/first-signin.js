@@ -40,9 +40,11 @@ var FirstSigninScenarios = function() {
       var displayId;
 
       before(function () {
+        var subCompanyName = 'E2E TEST SUBCOMPANY - FIRST SIGN IN';
         homepage.get();
         signInPage.signIn();
-        var subCompanyName = 'E2E TEST SUBCOMPANY - FIRST SIGN IN';
+        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+
         commonHeaderPage.createSubCompany(subCompanyName);
         commonHeaderPage.selectSubCompany(subCompanyName);
       });
