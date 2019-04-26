@@ -4,7 +4,7 @@ var HomePage = require('./../pages/homepage.js');
 var SignInPage = require('./../pages/signInPage.js');
 var WeeklyTemplatesPage = require('./../pages/weeklyTemplates.js');
 var CommonHeaderPage = require('./../../../../web/bower_components/common-header/test/e2e/pages/commonHeaderPage.js');
-var PresentationListPage = require('./../pages/presentationListPage.js');
+var PresentationListPage = require('./../../editor/pages/presentationListPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var WeeklyTemplatesScenarios = function() {
