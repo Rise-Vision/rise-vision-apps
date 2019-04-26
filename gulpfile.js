@@ -299,7 +299,6 @@ gulp.task("test:e2e:core", ["test:webdrive_update"],factory.testE2EAngular({
   twitterPass: process.env.TWITTER_PASS,
   testFiles: function(){ 
     try{
-      console.log("STAGE_ENV is: ", process.env.STAGE_ENV);
       return JSON.parse(fs.readFileSync('/tmp/testFiles.txt').toString())
     } catch (e) {
       return process.env.TEST_FILES
