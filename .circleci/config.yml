@@ -126,7 +126,12 @@ jobs:
             fi;
             echo 'export STAGE_ENV="$STAGE_ENV"' >> $BASH_ENV
             echo "BASH_ENV is $BASH_ENV"
-      - run: echo "Testing e2e tests - Env $STAGE_ENV"
+      - run:
+        - name: Do things
+        - command: |
+            echo $BASH_ENV
+            source $BASH_ENV
+            echo "Testing e2e tests - Env $STAGE_ENV"
       - store_artifacts:
           path: ~/rise-vision-apps/dist.tar.gz
   deploy_beta:
