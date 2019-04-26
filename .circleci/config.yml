@@ -29,7 +29,7 @@ commands:
       - run:
           name: e2e_tests
           command: |
-            STAGE_ENV=$(cat stage.txt)
+            export STAGE_ENV=$(cat stage.txt)
             echo "Running tests on $STAGE_ENV";
             TEST_FILES=$(circleci tests glob "<< parameters.casesfile >>" | circleci tests split)
             NODE_ENV=test XUNIT_FILE=~/rise-vision-apps/reports/angular-xunit.xml PROSHOT_DIR=~/rise-vision-apps/reports/screenshots DBUS_SESSION_BUS_ADDRESS=/dev/null xvfb-run node run-test.js $TEST_FILES
