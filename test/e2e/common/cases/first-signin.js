@@ -43,7 +43,7 @@ var FirstSigninScenarios = function() {
       before(function () {
         homepage.get();
         signInPage.signIn();
-        browser.sleep(1000);
+        browser.sleep(10000);
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
         helper.wait(homepage.getPresentationAddButton(), 'Add Presentation Button');
 
@@ -128,10 +128,9 @@ var FirstSigninScenarios = function() {
       });
 
       it('should no longer show the Get Started Page', function () {
-        browser.sleep(500);
         homepage.get();
         signInPage.signIn();
-        browser.sleep(1000);
+        browser.sleep(10000);
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
         helper.wait(homepage.getPresentationAddButton(), 'Add Presentation Button');
 
