@@ -116,13 +116,13 @@ jobs:
           command: |
             # Set +e flag to fix issue where no stage environment is specified
             set +e
-            STAGE_ENV="$(git log -1 --pretty=%B | grep '\[.*\]' |sed -e 's/.*\[\(.*\)\].*/\1/g')";
+            export STAGE_ENV="$(git log -1 --pretty=%B | grep '\[.*\]' |sed -e 's/.*\[\(.*\)\].*/\1/g')";
             if [ "$STAGE_ENV" != '' ]; then
               echo "Deploying to $STAGE_ENV";
             fi;
             if [ "$STAGE_ENV" == '' ]; then
               echo "stage deployment environment missing. Deploying to [stage-0].";
-              STAGE_ENV='stage-0';
+              export STAGE_ENV='stage-0';
             fi;
       - run: echo "Testing e2e tests - Env $STAGE_ENV"
       - store_artifacts:
