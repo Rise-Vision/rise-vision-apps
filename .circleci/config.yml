@@ -7,7 +7,6 @@ commands:
       casesfile:
         type: string
         default: "invalid_path"
-    working_directory: ~/rise-vision-apps
     steps:
       - attach_workspace:
           at: ~/
@@ -143,6 +142,7 @@ jobs:
               STAGE_ENV='stage-0';
             fi;
             #rsync -rptz -e ssh --delete dist apps@webserver-stage.risevision.com:/rise-front-end/apps/$STAGE_ENV;
+      - run: tar czvf dist.tar.gz dist
       - store_artifacts:
           path: ~/rise-vision-apps/dist.tar.gz
   deploy_beta:
