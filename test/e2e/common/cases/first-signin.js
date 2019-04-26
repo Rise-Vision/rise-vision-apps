@@ -141,6 +141,7 @@ var FirstSigninScenarios = function() {
         helper.clickWhenClickable(commonHeaderPage.getCommonHeaderMenuItems().get(0), 'First Common Header Menu Item');
 
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+        helper.wait(homepage.getPresentationAddButton(), 'Add Presentation Button');
         browser.sleep(500);
 
         expect(getStartedPage.getGetStartedContainer().isDisplayed()).to.eventually.be.false;
