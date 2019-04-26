@@ -16,6 +16,7 @@ angular.module('risevision.template-editor.directives')
           var iframeLoaded = false;
           var attributeDataText = null;
 
+          var previewHolder = $window.document.getElementById('preview-holder');
           var iframeParent = $window.document.getElementById('template-editor-preview-parent');
           var iframe = $window.document.getElementById('template-editor-preview');
 
@@ -47,10 +48,22 @@ angular.module('risevision.template-editor.directives')
             return _getTemplateHeight() / _getTemplateWidth();
           }
 
-          $scope.getMobileWidth = function() {
-            var value = MOBILE_PREVIEW_HEIGHT / _getHeightDividedByWidth();
+          function _isLandscape() {
+            return _getHeightDividedByWidth() < 1;
+          }
+
+          function _getWidthFor(height) {
+            var value = height / _getHeightDividedByWidth();
 
             return value.toFixed(0);
+          }
+
+          $scope.getMobileWidth = function() {
+            return _getWidthFor(MOBILE_PREVIEW_HEIGHT);
+          }
+
+          $scope.getDesktopWidth = function() {
+            return _getWidthFor(previewHolder.clientHeight);
           }
 
           $scope.getTemplateAspectRatio = function() {
@@ -63,11 +76,17 @@ angular.module('risevision.template-editor.directives')
             'factory.blueprintData.width',
             'factory.blueprintData.height'
           ], function() {
-            var aspectRatio = $scope.getTemplateAspectRatio() + '%';
-            var width = $scope.getMobileWidth() + 'px';
+            var style;
 
-            var style = 'padding-bottom: ' + aspectRatio + ';' +
-              'width: ' + width;
+            if( $window.matchMedia('(max-width: 768px)').matches ) {
+              style = 'width: ' + $scope.getMobileWidth() + 'px';
+            } else if( _isLandscape() ) {
+              var aspectRatio = $scope.getTemplateAspectRatio() + '%';
+
+              style = 'padding-bottom: ' + aspectRatio + ';'
+            } else {
+              style = 'height: 100%; width: ' + $scope.getDesktopWidth() + 'px';
+            }
 
             iframeParent.setAttribute('style', style);
           });
