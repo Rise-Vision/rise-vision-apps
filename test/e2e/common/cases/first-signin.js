@@ -43,7 +43,7 @@ var FirstSigninScenarios = function() {
         var subCompanyName = 'E2E TEST SUBCOMPANY - FIRST SIGN IN';
         homepage.get();
         signInPage.signIn();
-        browser.wait(1000);
+        browser.sleep(1000);
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
         commonHeaderPage.createSubCompany(subCompanyName);
