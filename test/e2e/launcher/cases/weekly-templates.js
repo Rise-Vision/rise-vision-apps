@@ -68,6 +68,7 @@ var WeeklyTemplatesScenarios = function() {
     it('should persist Weekly Template Panel state on page reload',function(){
       browser.refresh();
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+      helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
       helper.wait(weeklyTemplatesPage.getWeeklyTemplatesNoticeView(), 'Notice View');
       expect(weeklyTemplatesPage.getWeeklyTemplatesExpandedView().isPresent()).to.eventually.be.false;
       expect(weeklyTemplatesPage.getWeeklyTemplatesNoticeView().isDisplayed()).to.eventually.be.true;
