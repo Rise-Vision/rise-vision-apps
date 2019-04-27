@@ -43,7 +43,6 @@ var FirstSigninScenarios = function() {
       helper.waitDisappear(homepage.getPresentationsListLoader(), 'Presentations List Loader');
       helper.waitDisappear(homepage.getSchedulesListLoader(), 'Schedules List Loader');
       helper.waitDisappear(homepage.getDisplaysListLoader(), 'Displays List Loader');
-      helper.wait(homepage.getPresentationAddButton(), 'Add Presentation Button');
     }
 
     describe('Given a user that just signed up for Rise Vision', function () {
