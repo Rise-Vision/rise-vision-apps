@@ -37,21 +37,26 @@ var FirstSigninScenarios = function() {
       displayAddModalPage = new DisplayAddModalPage();
     });
 
+    function _waitFullPageLoad() {
+      browser.sleep(10000);
+      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH Spinner Loader');
+      helper.waitDisappear(homepage.getPresentationsListLoader(), 'Presentations List Loader');
+      helper.waitDisappear(homepage.getSchedulesListLoader(), 'Schedules List Loader');
+      helper.waitDisappear(homepage.getDisplaysListLoader(), 'Displays List Loader');
+      helper.wait(homepage.getPresentationAddButton(), 'Add Presentation Button');
+    }
+
     describe('Given a user that just signed up for Rise Vision', function () {
       var displayId;
 
       before(function () {
         homepage.get();
         signInPage.signIn();
-        browser.sleep(10000);
-        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH Spinner Loader');
-        helper.waitDisappear(homepage.getPresentationsListLoader(), 'Presentations List Loader');
-        helper.waitDisappear(homepage.getSchedulesListLoader(), 'Schedules List Loader');
-        helper.waitDisappear(homepage.getDisplaysListLoader(), 'Displays List Loader');
-        helper.wait(homepage.getPresentationAddButton(), 'Add Presentation Button');
+        _waitFullPageLoad();
 
         commonHeaderPage.createSubCompany(subCompanyName);
         commonHeaderPage.selectSubCompany(subCompanyName);
+        _waitFullPageLoad();
       });
 
       it('should show the Get Started page', function() {
@@ -133,24 +138,11 @@ var FirstSigninScenarios = function() {
       it('should no longer show the Get Started Page', function () {
         homepage.get();
         signInPage.signIn();
-        browser.sleep(10000);
-        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH Spinner Loader');
-        helper.waitDisappear(homepage.getPresentationsListLoader(), 'Presentations List Loader');
-        helper.waitDisappear(homepage.getSchedulesListLoader(), 'Schedules List Loader');
-        helper.waitDisappear(homepage.getDisplaysListLoader(), 'Displays List Loader');
-        helper.wait(homepage.getPresentationAddButton(), 'Add Presentation Button');
+        _waitFullPageLoad();
 
         commonHeaderPage.selectSubCompany(subCompanyName);
 
-        helper.wait(commonHeaderPage.getCommonHeaderMenuItems().get(0), 'First Common Header Menu Item');
-        helper.clickWhenClickable(commonHeaderPage.getCommonHeaderMenuItems().get(0), 'First Common Header Menu Item');
-
-        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH Spinner Loader');
-        helper.waitDisappear(homepage.getPresentationsListLoader(), 'Presentations List Loader');
-        helper.waitDisappear(homepage.getSchedulesListLoader(), 'Schedules List Loader');
-        helper.waitDisappear(homepage.getDisplaysListLoader(), 'Displays List Loader');
-        helper.wait(homepage.getPresentationAddButton(), 'Add Presentation Button');
-        browser.sleep(500);
+        _waitFullPageLoad();
 
         expect(getStartedPage.getGetStartedContainer().isDisplayed()).to.eventually.be.false;
       });
