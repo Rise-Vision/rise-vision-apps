@@ -47,7 +47,7 @@ jobs:
             # Set +e flag to fix issue where no stage environment is specified
             set +e
             STAGE_ENV="$(git log -1 --pretty=%B | grep '\[.*\]' |sed -e 's/.*\[\(.*\)\].*/\1/g')";
-            if [ "$STAGE_ENV" == '' ]; then
+            if [ "$STAGE_ENV" == '' ] || [ "$CIRCLE_BRANCH" == "master" ]; then
               STAGE_ENV='stage-0';
             fi;
             echo "$STAGE_ENV" > stage.txt
