@@ -35,8 +35,8 @@ var DisplayAddScenarios = function() {
       // Search for recently created Display
       var displayName = 'TEST_E2E_DISPLAY ' + commonHeaderPage.getStageEnv();
 
-      helper.wait(displaysListPage.getSearchFilter(), 'Search Filter');
-      displaysListPage.getSearchFilter().sendKeys(displayName);
+      helper.wait(displaysListPage.getSearchFilterField(), 'Search Filter Field');
+      displaysListPage.getSearchFilterField().sendKeys(displayName);
       helper.wait(displaysListPage.getDisplaysLoader(), 'Displays loader');
       helper.waitDisappear(displaysListPage.getDisplaysLoader(), 'Displays loader');
       displaysListPage.getDisplayItems().first().element(by.tagName('td')).click();
