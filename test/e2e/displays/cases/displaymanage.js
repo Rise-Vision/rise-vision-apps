@@ -32,8 +32,14 @@ var DisplayAddScenarios = function() {
       signInPage.signIn();
       helper.waitDisappear(displaysListPage.getDisplaysLoader(), 'Displays loader');
 
+      // Search for recently created Display
       var displayName = 'TEST_E2E_DISPLAY ' + commonHeaderPage.getStageEnv();
-      displaysListPage.getCreatedDisplayLink(displayName).click();
+
+      helper.wait(displaysListPage.getSearchFilter(), 'Search Filter');
+      displaysListPage.getSearchFilter().sendKeys(displayName);
+      helper.wait(displaysListPage.getDisplaysLoader(), 'Displays loader');
+      helper.waitDisappear(displaysListPage.getDisplaysLoader(), 'Displays loader');
+      displaysListPage.getDisplayItems().first().element(by.tagName('td')).click();
     });
 
     it('should load display', function () {

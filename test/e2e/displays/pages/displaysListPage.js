@@ -58,10 +58,6 @@ var DisplaysListPage = function() {
   this.getFirstRowStatus = function() {
     return displayItems.first().element(by.css('.display-status .u_icon-hover'));
   };
-
-  this.getCreatedDisplayLink = function (displayName) {
-    return element(by.xpath('//a[span/strong[contains(text(), "' + displayName + '")]]'));
-  };
 };
 
 module.exports = DisplaysListPage;
