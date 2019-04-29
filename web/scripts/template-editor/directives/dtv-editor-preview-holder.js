@@ -11,9 +11,13 @@ angular.module('risevision.template-editor.directives')
 
           var DEFAULT_TEMPLATE_WIDTH = 800;
           var DEFAULT_TEMPLATE_HEIGHT = 600;
+          var MOBILE_PREVIEW_HEIGHT = 160;
 
           var iframeLoaded = false;
           var attributeDataText = null;
+
+          var previewHolder = $window.document.getElementById('preview-holder');
+          var iframeParent = $window.document.getElementById('template-editor-preview-parent');
           var iframe = $window.document.getElementById('template-editor-preview');
 
           iframe.onload = function() {
@@ -40,11 +44,65 @@ angular.module('risevision.template-editor.directives')
             return height ? parseInt( height ) : DEFAULT_TEMPLATE_HEIGHT;
           }
 
+          function _getHeightDividedByWidth() {
+            return _getTemplateHeight() / _getTemplateWidth();
+          }
+
+          function _isLandscape() {
+            return _getHeightDividedByWidth() < 1;
+          }
+
+          function _getWidthFor(height) {
+            var value = height / _getHeightDividedByWidth();
+
+            return value.toFixed(0);
+          }
+
+          $scope.getMobileWidth = function() {
+            return _getWidthFor(MOBILE_PREVIEW_HEIGHT);
+          }
+
+          $scope.getDesktopWidth = function() {
+            return _getWidthFor(previewHolder.clientHeight);
+          }
+
           $scope.getTemplateAspectRatio = function() {
-            var value = ( _getTemplateHeight() / _getTemplateWidth() ) * 100;
+            var value = _getHeightDividedByWidth() * 100;
 
             return value.toFixed(2);
           }
+
+          function _applyAspectRatio() {
+            var style;
+
+            if( $window.matchMedia('(max-width: 768px)').matches ) {
+              style = 'width: ' + $scope.getMobileWidth() + 'px';
+            } else if( _isLandscape() ) {
+              var aspectRatio = $scope.getTemplateAspectRatio() + '%';
+
+              style = 'padding-bottom: ' + aspectRatio + ';'
+            } else {
+              style = 'height: 100%; width: ' + $scope.getDesktopWidth() + 'px';
+            }
+
+            iframeParent.setAttribute('style', style);
+          }
+
+          $scope.$watchGroup([
+            'factory.blueprintData.width',
+            'factory.blueprintData.height'
+          ], _applyAspectRatio);
+
+          function _onResize() {
+            _applyAspectRatio();
+
+            $scope.$digest();
+          }
+
+          angular.element($window).on('resize', _onResize);
+          $scope.$on('$destroy', function() {
+            angular.element($window).off('resize', _onResize);
+          });
 
           $scope.$watch('factory.presentation.templateAttributeData', function (value) {
             attributeDataText = typeof value === 'string' ?
