@@ -1,5 +1,9 @@
-<div class="preview-parent">
-  <iframe id="template-editor-preview" scrolling="no"
+<div id="template-editor-preview-parent"
+  class="preview-parent embed-responsive"
+>
+  <iframe id="template-editor-preview"
+    class="embed-responsive-item"
+    scrolling="no"
     ng-src="{{ getEditorPreviewUrl(factory.presentation.productCode) }}"
   >
   </iframe>
