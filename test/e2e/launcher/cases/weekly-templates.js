@@ -46,6 +46,7 @@ var WeeklyTemplatesScenarios = function() {
       browser.sleep(500);
       helper.wait(commonHeaderPage.getCommonHeaderMenuItems().get(1), 'Presentations Common Header Menu Item');
       helper.clickWhenClickable(commonHeaderPage.getCommonHeaderMenuItems().get(1), 'Presentations Common Header Menu Item');
+      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
 
       helper.wait(weeklyTemplatesPage.getWeeklyTemplatesMainPanel(), 'Notice View');
