@@ -37,12 +37,22 @@ var FirstSigninScenarios = function() {
       displayAddModalPage = new DisplayAddModalPage();
     });
 
-    function _waitFullPageLoad() {
+    function _waitFullPageLoad(retries) {
       browser.sleep(10000);
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH Spinner Loader');
-      helper.waitDisappear(homepage.getPresentationsListLoader(), 'Presentations List Loader');
-      helper.waitDisappear(homepage.getSchedulesListLoader(), 'Schedules List Loader');
-      helper.waitDisappear(homepage.getDisplaysListLoader(), 'Displays List Loader');
+      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH Spinner Loader')
+      .then(function () {
+        helper.waitDisappear(homepage.getPresentationsListLoader(), 'Presentations List Loader');
+        helper.waitDisappear(homepage.getSchedulesListLoader(), 'Schedules List Loader');
+        helper.waitDisappear(homepage.getDisplaysListLoader(), 'Displays List Loader');
+      })
+      .catch(function () {
+        retries = typeof(retries) === 'undefined' ? 3 : retries;
+
+        if (retries > 0) {
+          browser.driver.navigate().refresh();
+          _waitFullPageLoad(retries - 1);
+        }
+      });
     }
 
     describe('Given a user that just signed up for Rise Vision', function () {
