@@ -31,7 +31,9 @@ var DisplayAddScenarios = function() {
       homepage.getDisplays();
       signInPage.signIn();
       helper.waitDisappear(displaysListPage.getDisplaysLoader(), 'Displays loader');
-      displaysListPage.getDisplayItems().first().element(by.tagName('td')).click();
+
+      var displayName = 'TEST_E2E_DISPLAY ' + commonHeaderPage.getStageEnv();
+      displaysListPage.getCreatedDisplayLink(displayName).click();
     });
 
     it('should load display', function () {
