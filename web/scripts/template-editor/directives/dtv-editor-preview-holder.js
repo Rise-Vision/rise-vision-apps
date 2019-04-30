@@ -48,8 +48,11 @@ angular.module('risevision.template-editor.directives')
             return _getTemplateHeight() / _getTemplateWidth();
           }
 
-          function _isLandscape() {
-            return _getHeightDividedByWidth() < 1;
+          function _useFullWidth() {
+            var aspectRatio = _getHeightDividedByWidth();
+            var projectedHeight = previewHolder.clientWidth * aspectRatio;
+
+            return projectedHeight < previewHolder.clientHeight;
           }
 
           function _getWidthFor(height) {
@@ -77,7 +80,7 @@ angular.module('risevision.template-editor.directives')
 
             if( $window.matchMedia('(max-width: 768px)').matches ) {
               style = 'width: ' + $scope.getMobileWidth() + 'px';
-            } else if( _isLandscape() ) {
+            } else if( _useFullWidth() ) {
               var aspectRatio = $scope.getTemplateAspectRatio() + '%';
 
               style = 'padding-bottom: ' + aspectRatio + ';'
