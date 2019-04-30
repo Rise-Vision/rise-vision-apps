@@ -37,18 +37,25 @@ describe('service: templateEditorFactory:', function() {
       return sandbox.spy(function() { return 'error'; });
     });
 
+    $provide.service('checkTemplateAccess',function(){
+      return sinon.spy(function () {
+        return storeAuthorize ? Q.resolve() : Q.reject();
+      });
+    });
+
     $provide.factory('messageBox', function() {
       return sandbox.stub();
     });
   }));
 
-  var $state, $httpBackend, templateEditorFactory, messageBox, presentation, processErrorCode, HTML_PRESENTATION_TYPE, blueprintUrl;
+  var $state, $httpBackend, templateEditorFactory, messageBox, presentation, processErrorCode, HTML_PRESENTATION_TYPE, blueprintUrl, storeAuthorize, checkTemplateAccessSpy;
 
   beforeEach(function() {
-    inject(function($injector) {
+    inject(function($injector, checkTemplateAccess) {
       $state = $injector.get('$state');
       $httpBackend = $injector.get('$httpBackend');
       templateEditorFactory = $injector.get('templateEditorFactory');
+      checkTemplateAccessSpy = checkTemplateAccess;
 
       presentation = $injector.get('presentation');
       messageBox = $injector.get('messageBox');
@@ -269,12 +276,15 @@ describe('service: templateEditorFactory:', function() {
         $httpBackend.flush();
       });
 
+      storeAuthorize = true;
+
       templateEditorFactory.getPresentation('presentationId')
       .then(function() {
         expect(templateEditorFactory.presentation).to.be.truely;
         expect(templateEditorFactory.presentation.name).to.equal('Test Presentation');
         expect(templateEditorFactory.presentation.templateAttributeData.attribute1).to.equal('value1');
         expect(templateEditorFactory.blueprintData.components.length).to.equal(1);
+        expect(checkTemplateAccessSpy).to.have.been.calledWith('test-id');
 
         setTimeout(function() {
           expect(templateEditorFactory.loadingPresentation).to.be.false;
@@ -302,10 +312,13 @@ describe('service: templateEditorFactory:', function() {
         $httpBackend.flush();
       });
 
+      storeAuthorize = true;
+
       templateEditorFactory.getPresentation('presentationId')
       .then(function() {
         expect(templateEditorFactory.presentation).to.be.truely;
         expect(templateEditorFactory.presentation.templateAttributeData).to.be.truely;
+        expect(checkTemplateAccessSpy).to.have.been.calledWith('test-id');
 
         setTimeout(function() {
           done();
@@ -319,6 +332,7 @@ describe('service: templateEditorFactory:', function() {
 
     it('should handle failure to get presentation correctly', function(done) {
       sandbox.stub(presentation, 'get').returns(Q.reject({ name: 'Test Presentation' }));
+      storeAuthorize = true;
 
       templateEditorFactory.getPresentation()
       .then(function(result) {
@@ -370,6 +384,51 @@ describe('service: templateEditorFactory:', function() {
         });
       });
     });
+
+    it( 'should open expired/cancelled modal when not authorized', function(done) {
+      sandbox.stub(presentation, 'get').returns(Q.resolve({
+        item: {
+          name: 'Test Presentation',
+          productCode: 'test-id',
+          templateAttributeData: '{ "attribute1": "value1" }'
+        }
+      }));
+
+      $httpBackend.when('GET', blueprintUrl).respond(200, {
+        components: [
+          {
+            type: 'rise-data-image',
+            id: 'rise-data-image-01',
+            attributes: {}
+          }
+        ]
+      });
+      setTimeout(function() {
+        $httpBackend.flush();
+      });
+
+      sinon.spy(console, "log");
+
+      storeAuthorize = false;
+
+      templateEditorFactory.getPresentation('presentationId')
+        .then(function() {
+          expect(checkTemplateAccessSpy).to.have.been.calledWith('test-id');
+
+          // TODO: revise test once expired/cancelled modal functionality is added
+          expect(console.log).to.have.been.calledWith("Plan has expired or been cancelled");
+
+          console.log.restore();
+
+          setTimeout(function() {
+            done();
+          }, 10);
+        })
+        .then(null, function(err) {
+          done(err);
+        })
+        .then(null, done);
+    } );
   });
 
   describe('deletePresentation:', function() {

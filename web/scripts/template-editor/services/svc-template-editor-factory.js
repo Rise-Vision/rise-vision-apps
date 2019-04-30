@@ -4,9 +4,9 @@ angular.module('risevision.template-editor.services')
   .constant('BLUEPRINT_URL', 'https://widgets.risevision.com/stable/templates/PRODUCT_CODE/blueprint.json')
   .constant('HTML_TEMPLATE_URL', 'https://widgets.risevision.com/stable/templates/PRODUCT_CODE/src/template.html')
   .constant('HTML_TEMPLATE_DOMAIN', 'https://widgets.risevision.com')
-  .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', '$http', 'messageBox', 'presentation', 'processErrorCode', 'userState',
+  .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', '$http', 'messageBox', 'presentation', 'processErrorCode', 'userState', 'checkTemplateAccess',
     'HTML_PRESENTATION_TYPE', 'BLUEPRINT_URL', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
-    function ($q, $log, $state, $rootScope, $http, messageBox, presentation, processErrorCode, userState,
+    function ($q, $log, $state, $rootScope, $http, messageBox, presentation, processErrorCode, userState, checkTemplateAccess,
       HTML_PRESENTATION_TYPE, BLUEPRINT_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {};
 
@@ -26,6 +26,14 @@ angular.module('risevision.template-editor.services')
 
         return presentationVal;
       }
+
+      var _checkTemplateAccess = function(productCode) {
+        checkTemplateAccess(productCode)
+          .catch(function() {
+            // TODO: show expired/cancelled modal
+            console.log("Plan has expired or been cancelled");
+          })
+      };
 
       factory.createFromTemplate = function (productDetails) {
         _clearMessages();
@@ -143,6 +151,7 @@ angular.module('risevision.template-editor.services')
           })
           .then(function (blueprintData) {
             factory.blueprintData = blueprintData.data;
+            _checkTemplateAccess(factory.presentation.productCode);
 
             deferred.resolve();
           })
