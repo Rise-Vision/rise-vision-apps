@@ -13,8 +13,9 @@ var DisplayAddModalPage = require('./../../displays/pages/displayAddModalPage.js
 
 var FirstSigninScenarios = function() {
 
-  browser.driver.manage().window().setSize(1400, 900);
+  browser.driver.manage().window().setSize(1920, 1080);
   describe('First Signin', function () {
+    var subCompanyName = 'E2E TEST SUBCOMPANY - FIRST SIGN IN';
     var homepage;
     var signInPage;
     var commonHeaderPage;
@@ -36,15 +37,35 @@ var FirstSigninScenarios = function() {
       displayAddModalPage = new DisplayAddModalPage();
     });
 
+    function _waitFullPageLoad(retries) {
+      browser.sleep(10000);
+      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH Spinner Loader')
+      .then(function () {
+        helper.waitDisappear(homepage.getPresentationsListLoader(), 'Presentations List Loader');
+        helper.waitDisappear(homepage.getSchedulesListLoader(), 'Schedules List Loader');
+        helper.waitDisappear(homepage.getDisplaysListLoader(), 'Displays List Loader');
+      })
+      .catch(function () {
+        retries = typeof(retries) === 'undefined' ? 3 : retries;
+
+        if (retries > 0) {
+          browser.driver.navigate().refresh();
+          _waitFullPageLoad(retries - 1);
+        }
+      });
+    }
+
     describe('Given a user that just signed up for Rise Vision', function () {
       var displayId;
 
       before(function () {
         homepage.get();
         signInPage.signIn();
-        var subCompanyName = 'E2E TEST SUBCOMPANY - FIRST SIGN IN';
+        _waitFullPageLoad();
+
         commonHeaderPage.createSubCompany(subCompanyName);
         commonHeaderPage.selectSubCompany(subCompanyName);
+        _waitFullPageLoad();
       });
 
       it('should show the Get Started page', function() {
@@ -124,13 +145,13 @@ var FirstSigninScenarios = function() {
       });
 
       it('should no longer show the Get Started Page', function () {
-        browser.sleep(500);
+        homepage.get();
+        signInPage.signIn();
+        _waitFullPageLoad();
 
-        helper.wait(commonHeaderPage.getCommonHeaderMenuItems().get(0), 'First Common Header Menu Item');
-        helper.clickWhenClickable(commonHeaderPage.getCommonHeaderMenuItems().get(0), 'First Common Header Menu Item');
+        commonHeaderPage.selectSubCompany(subCompanyName);
 
-        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-        browser.sleep(500);
+        _waitFullPageLoad();
 
         expect(getStartedPage.getGetStartedContainer().isDisplayed()).to.eventually.be.false;
       });

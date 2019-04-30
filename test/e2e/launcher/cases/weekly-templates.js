@@ -4,6 +4,7 @@ var HomePage = require('./../pages/homepage.js');
 var SignInPage = require('./../pages/signInPage.js');
 var WeeklyTemplatesPage = require('./../pages/weeklyTemplates.js');
 var CommonHeaderPage = require('./../../../../web/bower_components/common-header/test/e2e/pages/commonHeaderPage.js');
+var PresentationListPage = require('./../../editor/pages/presentationListPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var WeeklyTemplatesScenarios = function() {
@@ -15,12 +16,14 @@ var WeeklyTemplatesScenarios = function() {
     var signInPage;
     var weeklyTemplatesPage;
     var commonHeaderPage;
+    var presentationsListPage;
 
     before(function (){
       homepage = new HomePage();
       signInPage = new SignInPage();
       weeklyTemplatesPage = new WeeklyTemplatesPage();
       commonHeaderPage = new CommonHeaderPage();
+      presentationsListPage = new PresentationListPage();
 
       homepage.get();
       signInPage.signIn();
@@ -33,7 +36,7 @@ var WeeklyTemplatesScenarios = function() {
       expect(weeklyTemplatesPage.getWeeklyTemplatesNoticeView().isPresent()).to.eventually.be.false;
     });
 
-    it('should show Weekly Tempaltes for Education Customers',function(){
+    it('should show Weekly Templates for Education Customers',function(){
       //creates an Education sub-company
       var subCompanyName = 'E2E TEST EDUCATION SUBCOMPANY';
       commonHeaderPage.createSubCompany(subCompanyName,'PRIMARY_SECONDARY_EDUCATION');
@@ -44,6 +47,7 @@ var WeeklyTemplatesScenarios = function() {
       helper.wait(commonHeaderPage.getCommonHeaderMenuItems().get(1), 'Presentations Common Header Menu Item');
       helper.clickWhenClickable(commonHeaderPage.getCommonHeaderMenuItems().get(1), 'Presentations Common Header Menu Item');
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+      helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
 
       helper.wait(weeklyTemplatesPage.getWeeklyTemplatesMainPanel(), 'Notice View');
       expect(weeklyTemplatesPage.getWeeklyTemplatesMainPanel().isDisplayed()).to.eventually.be.true;
@@ -52,10 +56,10 @@ var WeeklyTemplatesScenarios = function() {
     });
 
     it('should close Weekly Template Panel',function(){
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       expect(weeklyTemplatesPage.getWeeklyTemplatesCloseButton().isDisplayed()).to.eventually.be.true;
       
-      weeklyTemplatesPage.getWeeklyTemplatesCloseButton().click();
+      helper.wait(weeklyTemplatesPage.getWeeklyTemplatesCloseButton());
+      helper.clickWhenClickable(weeklyTemplatesPage.getWeeklyTemplatesCloseButton(), 'Weekly Templates Close Button');
       browser.sleep(500);
 
       expect(weeklyTemplatesPage.getWeeklyTemplatesExpandedView().isPresent()).to.eventually.be.false;
@@ -65,13 +69,15 @@ var WeeklyTemplatesScenarios = function() {
     it('should persist Weekly Template Panel state on page reload',function(){
       browser.refresh();
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+      helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
       helper.wait(weeklyTemplatesPage.getWeeklyTemplatesNoticeView(), 'Notice View');
       expect(weeklyTemplatesPage.getWeeklyTemplatesExpandedView().isPresent()).to.eventually.be.false;
       expect(weeklyTemplatesPage.getWeeklyTemplatesNoticeView().isDisplayed()).to.eventually.be.true;
     });
 
     it('should expand Weekly Template Panel',function(){
-      weeklyTemplatesPage.getWeeklyTemplatesNoticeView().click();
+      helper.wait(weeklyTemplatesPage.getWeeklyTemplatesNoticeView(), 'Weekly Templates Notice View');
+      helper.clickWhenClickable(weeklyTemplatesPage.getWeeklyTemplatesNoticeView(), 'Weekly Templates Notice View');
       browser.sleep(500);
       expect(weeklyTemplatesPage.getWeeklyTemplatesExpandedView().isDisplayed()).to.eventually.be.true;
       expect(weeklyTemplatesPage.getWeeklyTemplatesNoticeView().isPresent()).to.eventually.be.false;
