@@ -174,6 +174,8 @@ var TemplateAddScenarios = function() {
     });
     
     it('should show Select Template button', function() {
+      // Sometimes the trial does not start in time; this section tries to reduce the number of times this step fails
+      browser.sleep(5000);
       // Reload page and select company whose trial has just started
       loadEditor();
       selectSubCompany();

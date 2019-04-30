@@ -8,8 +8,8 @@
 
   describe('Displays', function() {
     var alertsScenarios = new AlertsScenarios();
-    var displayListScenarios = new DisplayListScenarios();
     var displayAddScenarios = new DisplayAddScenarios();
+    var displayListScenarios = new DisplayListScenarios();
     var displayManageScenarios = new DisplayManageScenarios();
   });
 

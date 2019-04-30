@@ -3,6 +3,7 @@ var DisplaysListPage = function() {
   var displaysAppContainer = element(by.css('.displays-app'));
   var title = element(by.id('title'));
   var searchFilter = element(by.tagName('search-filter'));
+  var searchFilterField = element(by.css('search-filter div input'));
   var displayAddButton = element(by.id('displayAddButton'));
   var displaysListTable = element(by.id('displaysListTable'));
   var tableHeaderName = element(by.id('tableHeaderName'));
@@ -21,6 +22,10 @@ var DisplaysListPage = function() {
 
   this.getSearchFilter = function() {
     return searchFilter;
+  };
+
+  this.getSearchFilterField = function() {
+    return searchFilterField;
   };
 
   this.getDisplayAddButton = function() {

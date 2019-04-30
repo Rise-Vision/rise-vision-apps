@@ -51,7 +51,7 @@ var DisplayAddScenarios = function() {
     });
 
     it('should add display', function () {
-      var displayName = 'TEST_E2E_DISPLAY';
+      var displayName = 'TEST_E2E_DISPLAY ' + commonHeaderPage.getStageEnv();
       displayAddModalPage.getDisplayNameField().sendKeys(displayName);
       expect(displayAddModalPage.getNextButton().isEnabled()).to.eventually.be.true;
       displayAddModalPage.getNextButton().click();

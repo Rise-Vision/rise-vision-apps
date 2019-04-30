@@ -12,7 +12,7 @@ var ArtboardPage = require('./../pages/artboardPage.js');
 var PresentationAddScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
-  xdescribe('Presentation Add', function () {
+  describe('Presentation Add', function () {
     var homepage;
     var signInPage;
     var commonHeaderPage;
@@ -72,7 +72,7 @@ var PresentationAddScenarios = function() {
       workspacePage.getPresentationPropertiesButton().click();
       helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
 
-      var presentationName = 'TEST_E2E_PRESENTATION';
+      var presentationName = 'TEST_E2E_PRESENTATION ' + commonHeaderPage.getStageEnv();
 
       helper.wait(presentationPropertiesModalPage.getNameInput(), 'Waiting for Name Input');
       presentationPropertiesModalPage.getNameInput().sendKeys('workaround'); // clear() fails sometimes
