@@ -15,7 +15,7 @@ commands:
       - run: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
       - run: echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee -a /etc/apt/sources.list
       - run: sudo apt-get update -qq
-      - run: sudo apt-get install -y google-chrome-stable
+      - run: sudo apt-get install -y google-chrome-unstable
       - run:
           name: e2e_tests
           command: |
