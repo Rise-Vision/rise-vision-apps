@@ -75,20 +75,30 @@ angular.module('risevision.template-editor.directives')
             return value.toFixed(2);
           }
 
+          function _getFrameStyle(viewSize, templateSize) {
+            var ratio = ( viewSize / templateSize ).toFixed(2);
+
+            return 'transform:scale3d(' + ratio + ',' + ratio + ',' + ratio + ');'
+          }
+
           function _applyAspectRatio() {
-            var style;
+            var frameStyle, parentStyle;
 
             if( $window.matchMedia('(max-width: 768px)').matches ) {
-              style = 'width: ' + $scope.getMobileWidth() + 'px';
+              parentStyle = 'width: ' + $scope.getMobileWidth() + 'px';
+              frameStyle = _getFrameStyle(previewHolder.clientHeight, _getTemplateHeight());
             } else if( _useFullWidth() ) {
               var aspectRatio = $scope.getTemplateAspectRatio() + '%';
 
-              style = 'padding-bottom: ' + aspectRatio + ';'
+              parentStyle = 'padding-bottom: ' + aspectRatio + ';'
+              frameStyle = _getFrameStyle(previewHolder.clientWidth, _getTemplateWidth());
             } else {
-              style = 'height: 100%; width: ' + $scope.getDesktopWidth() + 'px';
+              parentStyle = 'height: 100%; width: ' + $scope.getDesktopWidth() + 'px';
+              frameStyle = _getFrameStyle(previewHolder.clientHeight, _getTemplateHeight());
             }
 
-            iframeParent.setAttribute('style', style);
+            iframeParent.setAttribute('style', parentStyle);
+            iframe.setAttribute('style', frameStyle);
           }
 
           $scope.$watchGroup([
