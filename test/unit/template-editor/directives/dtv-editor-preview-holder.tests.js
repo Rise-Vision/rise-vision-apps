@@ -56,7 +56,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
       var aspectRatio = $scope.getTemplateAspectRatio();
 
-      expect(aspectRatio).to.equal("100.00");
+      expect(aspectRatio).to.equal("100.0000");
     });
 
     it('should calculate the 200 aspect ratio', function() {
@@ -64,7 +64,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
       var aspectRatio = $scope.getTemplateAspectRatio();
 
-      expect(aspectRatio).to.equal("200.00");
+      expect(aspectRatio).to.equal("200.0000");
     });
 
     it('should calculate the 50 aspect ratio', function() {
@@ -72,7 +72,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
       var aspectRatio = $scope.getTemplateAspectRatio();
 
-      expect(aspectRatio).to.equal("50.00");
+      expect(aspectRatio).to.equal("50.0000");
     });
 
     it('should calculate the 16:9 aspect ratio', function() {
@@ -80,7 +80,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
       var aspectRatio = $scope.getTemplateAspectRatio();
 
-      expect(aspectRatio).to.equal("56.25");
+      expect(aspectRatio).to.equal("56.2500");
     });
 
     it('should calculate the 4:3 aspect ratio', function() {
@@ -88,7 +88,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
       var aspectRatio = $scope.getTemplateAspectRatio();
 
-      expect(aspectRatio).to.equal("75.00");
+      expect(aspectRatio).to.equal("75.0000");
     });
 
     it('should calculate a 333.33 aspect ratio', function() {
@@ -96,7 +96,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
       var aspectRatio = $scope.getTemplateAspectRatio();
 
-      expect(aspectRatio).to.equal("333.33");
+      expect(aspectRatio).to.equal("333.3333");
     });
   });
 

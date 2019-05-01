@@ -77,11 +77,11 @@ angular.module('risevision.template-editor.directives')
           $scope.getTemplateAspectRatio = function() {
             var value = _getHeightDividedByWidth() * 100;
 
-            return value.toFixed(2);
+            return value.toFixed(4);
           }
 
           function _getFrameStyle(viewSize, templateSize) {
-            var ratio = ( viewSize / templateSize ).toFixed(2);
+            var ratio = ( viewSize / templateSize ).toFixed(4);
             var width = _getTemplateWidth();
             var height = _getTemplateHeight();
 
