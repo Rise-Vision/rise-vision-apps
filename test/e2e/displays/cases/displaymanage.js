@@ -19,6 +19,7 @@ var DisplayAddScenarios = function() {
     var displaysListPage;
     var displayManagePage;
     var displayAddModalPage;
+    var displayName;
 
     before(function () {
       homepage = new HomePage();
@@ -31,13 +32,21 @@ var DisplayAddScenarios = function() {
       homepage.getDisplays();
       signInPage.signIn();
       helper.waitDisappear(displaysListPage.getDisplaysLoader(), 'Displays loader');
+
+      // Search for recently created Display
+      displayName = 'TEST_E2E_DISPLAY ' + commonHeaderPage.getStageEnv();
+
+      helper.wait(displaysListPage.getSearchFilterField(), 'Search Filter Field');
+      displaysListPage.getSearchFilterField().sendKeys(displayName);
+      helper.wait(displaysListPage.getDisplaysLoader(), 'Displays loader');
+      helper.waitDisappear(displaysListPage.getDisplaysLoader(), 'Displays loader');
       displaysListPage.getDisplayItems().first().element(by.tagName('td')).click();
     });
 
     it('should load display', function () {
       helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
       expect(displayManagePage.getDisplayNameField().isPresent()).to.eventually.be.true;
-      expect(displayManagePage.getDisplayNameField().getAttribute('value')).to.eventually.equal('TEST_E2E_DISPLAY');
+      expect(displayManagePage.getDisplayNameField().getAttribute('value')).to.eventually.equal(displayName);
     });
 
     it('should show User Company Address Checkbox', function () {

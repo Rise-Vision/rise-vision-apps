@@ -19,6 +19,8 @@ commands:
       - run:
           name: e2e_tests
           command: |
+            export STAGE_ENV=$(cat stage.txt)
+            echo "Running tests on $STAGE_ENV";
             TEST_FILES=$(circleci tests glob "<< parameters.casesfile >>" | circleci tests split)
             NODE_ENV=test XUNIT_FILE=~/rise-vision-apps/reports/angular-xunit.xml PROSHOT_DIR=~/rise-vision-apps/reports/screenshots DBUS_SESSION_BUS_ADDRESS=/dev/null xvfb-run node run-test.js $TEST_FILES
       - store_test_results:
@@ -39,6 +41,16 @@ jobs:
       - run: 
           name: install bower
           command: bower install
+      - run:
+          name: Set environment variables
+          command: |
+            # Set +e flag to fix issue where no stage environment is specified
+            set +e
+            STAGE_ENV="$(git log -1 --pretty=%B | grep '\[.*\]' |sed -e 's/.*\[\(.*\)\].*/\1/g')";
+            if [ "$STAGE_ENV" == '' ] || [ "$CIRCLE_BRANCH" == "master" ]; then
+              STAGE_ENV='stage-0';
+            fi;
+            echo "$STAGE_ENV" > stage.txt
       - persist_to_workspace:
           root: ~/
           paths:
@@ -113,22 +125,14 @@ jobs:
           at: ~/
       - run: NODE_ENV=stage npm run ci-build
       - run: ssh -o StrictHostKeyChecking=no apps@webserver-stage.risevision.com 'mkdir -p /rise-front-end/apps';
-      # We have 5 stage environments, apps-stage-0.risevision.com to apps-stage-4.risevision.com
+      # We have 10 stage environments, apps-stage-0.risevision.com to apps-stage-9.risevision.com
       # To deploy to one of these environments a tag must be added to the commit message. For instance, [stage-0] for apps-stage-0.risevision.com.
       # If tag is missing, the [stage-0] is used.
-      - run: 
+      - run:
           name: Deploy to stage
           command: |
-            # Set +e flag to fix issue where no stage environment is specified
-            set +e
-            STAGE_ENV="$(git log -1 --pretty=%B | grep '\[.*\]' |sed -e 's/.*\[\(.*\)\].*/\1/g')";
-            if [ "$STAGE_ENV" != '' ]; then
-              echo "Deploying to $STAGE_ENV";
-            fi;
-            if [ "$STAGE_ENV" == '' ]; then
-              echo "stage deployment environment missing. Deploying to [stage-0].";
-              STAGE_ENV='stage-0';
-            fi;
+            export STAGE_ENV=$(cat stage.txt)
+            echo "Deploying to $STAGE_ENV";
             rsync -rptz -e ssh --delete dist apps@webserver-stage.risevision.com:/rise-front-end/apps/$STAGE_ENV;
       - run: tar czvf dist.tar.gz dist
       - store_artifacts:
