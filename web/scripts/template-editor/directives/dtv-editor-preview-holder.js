@@ -77,9 +77,11 @@ angular.module('risevision.template-editor.directives')
 
           function _getFrameStyle(viewSize, templateSize) {
             var ratio = ( viewSize / templateSize ).toFixed(2);
+            var width = _getTemplateWidth() - 40;
+            var height = _getTemplateHeight() - 40;
 
-            return 'width: ' + _getTemplateWidth() + 'px;' +
-              'height: ' + _getTemplateHeight() + 'px;' +
+            return 'width: ' + width + 'px;' +
+              'height: ' + height + 'px;' +
               'transform:scale3d(' + ratio + ',' + ratio + ',' + ratio + ');'
           }
 
