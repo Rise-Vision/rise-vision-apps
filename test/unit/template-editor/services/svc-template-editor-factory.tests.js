@@ -46,14 +46,31 @@ describe('service: templateEditorFactory:', function() {
     $provide.factory('messageBox', function() {
       return sandbox.stub();
     });
+
+    $provide.factory('$modal', function() {
+      return {
+        open: function(params){
+          modalOpenCalled = true;
+          expect(params).to.be.ok;
+          return {
+            result: {
+              then: function(func) {
+                expect(func).to.be.a('function');
+              }
+            }
+          };
+        }
+      };
+    });
   }));
 
-  var $state, $httpBackend, templateEditorFactory, messageBox, presentation, processErrorCode, HTML_PRESENTATION_TYPE, blueprintUrl, storeAuthorize, checkTemplateAccessSpy;
+  var $state, $httpBackend, $modal, templateEditorFactory, messageBox, presentation, processErrorCode, HTML_PRESENTATION_TYPE, blueprintUrl, storeAuthorize, checkTemplateAccessSpy;
 
   beforeEach(function() {
     inject(function($injector, checkTemplateAccess) {
       $state = $injector.get('$state');
       $httpBackend = $injector.get('$httpBackend');
+      $modal = $injector.get('$modal');
       templateEditorFactory = $injector.get('templateEditorFactory');
       checkTemplateAccessSpy = checkTemplateAccess;
 
@@ -276,6 +293,14 @@ describe('service: templateEditorFactory:', function() {
         $httpBackend.flush();
       });
 
+      var modalOpenStub = sinon.stub($modal, 'open', function () {
+        return {
+          result: {
+            then: function() {}
+          }
+        }
+      });
+
       storeAuthorize = true;
 
       templateEditorFactory.getPresentation('presentationId')
@@ -285,6 +310,7 @@ describe('service: templateEditorFactory:', function() {
         expect(templateEditorFactory.presentation.templateAttributeData.attribute1).to.equal('value1');
         expect(templateEditorFactory.blueprintData.components.length).to.equal(1);
         expect(checkTemplateAccessSpy).to.have.been.calledWith('test-id');
+        expect(modalOpenStub).to.not.have.been.called;
 
         setTimeout(function() {
           expect(templateEditorFactory.loadingPresentation).to.be.false;
@@ -407,7 +433,13 @@ describe('service: templateEditorFactory:', function() {
         $httpBackend.flush();
       });
 
-      sinon.spy(console, "log");
+      var modalOpenStub = sinon.stub($modal, 'open', function () {
+        return {
+          result: {
+            then: function() {}
+          }
+        }
+      });
 
       storeAuthorize = false;
 
@@ -415,10 +447,7 @@ describe('service: templateEditorFactory:', function() {
         .then(function() {
           expect(checkTemplateAccessSpy).to.have.been.calledWith('test-id');
 
-          // TODO: revise test once expired/cancelled modal functionality is added
-          expect(console.log).to.have.been.calledWith("Plan has expired or been cancelled");
-
-          console.log.restore();
+          expect(modalOpenStub).to.have.been.called;
 
           setTimeout(function() {
             done();
