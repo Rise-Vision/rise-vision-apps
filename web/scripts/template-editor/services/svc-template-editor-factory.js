@@ -65,10 +65,16 @@ angular.module('risevision.template-editor.services')
           .then(function () {
             return store.product.get(productCode, 'code')
               .then(function (productDetails) {
-                return factory.createFromTemplate(productDetails);
+                if (productDetails.productCode) {
+                  return factory.createFromTemplate(productDetails);
+                }
+                else {
+                  return $q.reject({ result: { error: { message: 'Invalid Product Code' } } });
+                }
               })
               .catch(function (err) {
                 _showErrorMessage('add', err);
+                $state.go('apps.editor.list');
                 return $q.reject(err);
               });
           }, function (err) {
