@@ -1,0 +1,25 @@
+<form id="expiredForm">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="dismiss()" data-dismiss="modal" aria-hidden="true">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body" stop-event="touchend">
+    <p class="modal-title" translate>{{confirmationTitle}}</p>
+    <p translate>{{confirmationMessage}}</p>
+  </div>
+  <div class="modal-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <button class="btn btn-primary w-100" ng-click="ok()">
+          <span translate="{{confirmationButton}}"></span>
+        </button>
+      </div>
+      <div class="col-xs-6">
+        <button class="btn btn-default w-100" ng-click="cancel()">
+          <span translate="{{cancelButton}}"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

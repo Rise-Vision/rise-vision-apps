@@ -4,7 +4,7 @@ angular.module('risevision.editor.services')
   .constant('HTML_PRESENTATION_TYPE', 'HTML Template')
   .factory('presentationUtils', ['HTML_TEMPLATE_TYPE', 'HTML_PRESENTATION_TYPE',
     '$state', '$window', 'checkTemplateAccess', 'plansFactory',
-    function (HTML_TEMPLATE_TYPE, HTML_PRESENTATION_TYPE, $state, $window, checkTemplateAccess, plansFactory) {
+    function (HTML_TEMPLATE_TYPE, HTML_PRESENTATION_TYPE, $state, $window) {
       var factory = {};
 
       factory.isMobileBrowser = function() {
@@ -25,13 +25,7 @@ angular.module('risevision.editor.services')
         if (presentation.presentationType !== HTML_PRESENTATION_TYPE) {
           $state.go('apps.editor.workspace.artboard', { presentationId: presentation.id });
         } else {
-          checkTemplateAccess(presentation.productCode)
-            .then(function () {
-              $state.go('apps.editor.templates.edit', { presentationId: presentation.id });
-            })
-            .catch(function () {
-              plansFactory.showPlansModal();
-            });
+          $state.go('apps.editor.templates.edit', { presentationId: presentation.id });
         }
       };
 
