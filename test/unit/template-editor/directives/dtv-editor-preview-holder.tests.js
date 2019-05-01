@@ -29,11 +29,6 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
     sandbox.stub($window.document, 'getElementById').returns({
       clientHeight: 500,
-      contentDocument: {
-        body: {
-          setAttribute: function() {}
-        }
-      },
       setAttribute: function() {}
     });
 

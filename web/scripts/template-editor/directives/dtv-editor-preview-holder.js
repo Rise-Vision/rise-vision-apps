@@ -75,30 +75,32 @@ angular.module('risevision.template-editor.directives')
             return value.toFixed(2);
           }
 
-          function _getContentStyle(viewSize, templateSize) {
+          function _getFrameStyle(viewSize, templateSize) {
             var ratio = ( viewSize / templateSize ).toFixed(2);
 
-            return 'transform:scale3d(' + ratio + ',' + ratio + ',' + ratio + ');'
+            return 'width: ' + _getTemplateWidth() + 'px;' +
+              'height: ' + _getTemplateHeight() + 'px;' +
+              'transform:scale3d(' + ratio + ',' + ratio + ',' + ratio + ');'
           }
 
           function _applyAspectRatio() {
-            var contentStyle, parentStyle;
+            var frameStyle, parentStyle;
 
             if( $window.matchMedia('(max-width: 768px)').matches ) {
               parentStyle = 'width: ' + $scope.getMobileWidth() + 'px';
-              contentStyle = _getContentStyle(previewHolder.clientHeight, _getTemplateHeight());
+              frameStyle = _getFrameStyle(previewHolder.clientHeight, _getTemplateHeight());
             } else if( _useFullWidth() ) {
               var aspectRatio = $scope.getTemplateAspectRatio() + '%';
 
               parentStyle = 'padding-bottom: ' + aspectRatio + ';'
-              contentStyle = _getContentStyle(previewHolder.clientWidth, _getTemplateWidth());
+              frameStyle = _getFrameStyle(previewHolder.clientWidth, _getTemplateWidth());
             } else {
               parentStyle = 'height: 100%; width: ' + $scope.getDesktopWidth() + 'px';
-              contentStyle = _getContentStyle(previewHolder.clientHeight, _getTemplateHeight());
+              frameStyle = _getFrameStyle(previewHolder.clientHeight, _getTemplateHeight());
             }
 
             iframeParent.setAttribute('style', parentStyle);
-            iframe.contentDocument.body.setAttribute('style', contentStyle);
+            iframe.setAttribute('style', frameStyle);
           }
 
           $scope.$watchGroup([
