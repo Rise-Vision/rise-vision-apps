@@ -364,7 +364,8 @@ gulp.task("server", factory.testServer({
 }));
 gulp.task("server-close", factory.testServerClose());
 gulp.task("test:webdriver_update", factory.webdriverUpdateSpecific({
-    browsers: ["gecko=false"]
+    browsers: ["gecko=false"],
+    webdriverManagerArgs: ["--versions.chrome=" + (process.env.CHROME_VERSION || "latest")]
   }
 ));
 gulp.task("test:e2e:core", ["test:webdriver_update"],factory.testE2EAngular({
