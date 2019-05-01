@@ -77,8 +77,8 @@ angular.module('risevision.template-editor.directives')
 
           function _getFrameStyle(viewSize, templateSize) {
             var ratio = ( viewSize / templateSize ).toFixed(2);
-            var width = _getTemplateWidth() - 40;
-            var height = _getTemplateHeight() - 40;
+            var width = _getTemplateWidth();
+            var height = _getTemplateHeight();
 
             return 'width: ' + width + 'px;' +
               'height: ' + height + 'px;' +
@@ -87,18 +87,24 @@ angular.module('risevision.template-editor.directives')
 
           function _applyAspectRatio() {
             var frameStyle, parentStyle;
+            var isMobile = $window.matchMedia('(max-width: 768px)').matches;
+            var margin = isMobile ? 10 : 20;
 
-            if( $window.matchMedia('(max-width: 768px)').matches ) {
+            if( isMobile ) {
+              var viewHeight = previewHolder.clientHeight - 2*margin;
               parentStyle = 'width: ' + $scope.getMobileWidth() + 'px';
-              frameStyle = _getFrameStyle(previewHolder.clientHeight, _getTemplateHeight());
+              frameStyle = _getFrameStyle(viewHeight, _getTemplateHeight());
             } else if( _useFullWidth() ) {
+              var viewWidth = previewHolder.clientWidth - 2*margin;
               var aspectRatio = $scope.getTemplateAspectRatio() + '%';
 
               parentStyle = 'padding-bottom: ' + aspectRatio + ';'
-              frameStyle = _getFrameStyle(previewHolder.clientWidth, _getTemplateWidth());
+              frameStyle = _getFrameStyle(viewWidth, _getTemplateWidth());
             } else {
+              var viewHeight = previewHolder.clientHeight - 2*margin;
+
               parentStyle = 'height: 100%; width: ' + $scope.getDesktopWidth() + 'px';
-              frameStyle = _getFrameStyle(previewHolder.clientHeight, _getTemplateHeight());
+              frameStyle = _getFrameStyle(viewHeight, _getTemplateHeight());
             }
 
             iframeParent.setAttribute('style', parentStyle);
