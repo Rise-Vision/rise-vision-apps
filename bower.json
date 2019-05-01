@@ -35,6 +35,7 @@
     "angular-ui-router": "^0.2.18",
     "angular-sanitize": "~1.5.0",
     "angular-mocks": "~1.5.0",
+    "common-header": "feature/update-no-results-icons-and-links",
     "jquery": "^2",
     "font-awesome": "~4.7.0"
   }
