@@ -11,7 +11,7 @@ angular.module('risevision.template-editor.directives')
 
           var DEFAULT_TEMPLATE_WIDTH = 800;
           var DEFAULT_TEMPLATE_HEIGHT = 600;
-          var MOBILE_PREVIEW_HEIGHT = 160;
+          var MOBILE_PREVIEW_HEIGHT = 200;
           var MOBILE_MARGIN = 10;
           var DESKTOP_MARGIN = 20;
 
