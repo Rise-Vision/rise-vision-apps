@@ -427,6 +427,17 @@ angular.module('risevision.apps', [
           }
         })
 
+        .state('apps.editor.templates.addFromProduct', {
+          url: '/add/:productCode',
+          controller: ['$stateParams', 'canAccessApps', 'templateEditorFactory',
+            function ($stateParams, canAccessApps, templateEditorFactory) {
+              return canAccessApps().then(function () {
+                return templateEditorFactory.createFromProductCode($stateParams.productCode);
+              });
+            }
+          ]
+        })
+
         .state('apps.editor.templates.edit', {
           url: '/edit/:presentationId',
           templateProvider: ['$templateCache', function ($templateCache) {

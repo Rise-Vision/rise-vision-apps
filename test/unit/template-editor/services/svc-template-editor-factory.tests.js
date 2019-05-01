@@ -18,9 +18,23 @@ describe('service: templateEditorFactory:', function() {
       };
     });
 
+    $provide.service('plansFactory',function() {
+      return {
+        showPlansModal: sandbox.stub()
+      };
+    });
+
     $provide.service('$state',function() {
       return {
         go: sandbox.stub()
+      };
+    });
+
+    $provide.service('store',function() {
+      return {
+        product: {
+          get: function () {}
+        }
       };
     });
 
@@ -64,7 +78,8 @@ describe('service: templateEditorFactory:', function() {
     });
   }));
 
-  var $state, $httpBackend, $modal, templateEditorFactory, messageBox, presentation, processErrorCode, HTML_PRESENTATION_TYPE, blueprintUrl, storeAuthorize, checkTemplateAccessSpy;
+  var $state, $httpBackend, $modal, templateEditorFactory, messageBox, presentation, processErrorCode,
+    HTML_PRESENTATION_TYPE, blueprintUrl, storeAuthorize, checkTemplateAccessSpy, store, plansFactory;
 
   beforeEach(function() {
     inject(function($injector, checkTemplateAccess) {
@@ -75,6 +90,8 @@ describe('service: templateEditorFactory:', function() {
       checkTemplateAccessSpy = checkTemplateAccess;
 
       presentation = $injector.get('presentation');
+      plansFactory = $injector.get('plansFactory');
+      store = $injector.get('store');
       messageBox = $injector.get('messageBox');
       processErrorCode = $injector.get('processErrorCode');
       HTML_PRESENTATION_TYPE = $injector.get('HTML_PRESENTATION_TYPE');
@@ -97,6 +114,56 @@ describe('service: templateEditorFactory:', function() {
 
     expect(templateEditorFactory.getPresentation).to.be.a('function');
     expect(templateEditorFactory.addPresentation).to.be.a('function');
+  });
+
+  describe('createFromProductCode:', function() {
+    it('should create a new presentation when provided a productCode', function(done) {
+      var sampleProduct = { productCode: 'test-product-code', name: 'Test HTML Template from productCode' };
+
+      storeAuthorize = true;
+      sandbox.stub(store.product, 'get').returns(Q.resolve(sampleProduct));
+      sandbox.stub(templateEditorFactory, 'createFromTemplate').returns(Q.resolve({}));
+
+      templateEditorFactory.createFromProductCode('test-product-code')
+      .then(function () {
+        expect(templateEditorFactory.createFromTemplate).to.have.been.calledWith(sampleProduct);
+        expect(plansFactory.showPlansModal).to.not.have.been.called;
+        expect(messageBox).to.not.have.been.called;
+
+        done();
+      });
+    });
+
+    it('should fail to create a new presentation when not subscribed', function(done) {
+      storeAuthorize = false;
+      sandbox.stub(templateEditorFactory, 'createFromTemplate').returns(Q.resolve({}));
+
+      templateEditorFactory.createFromProductCode('test-product-code')
+      .catch(function () {
+        expect(templateEditorFactory.createFromTemplate).to.not.have.been.called;
+        expect(plansFactory.showPlansModal).to.have.been.called;
+        expect($state.go).to.have.been.calledWith('apps.editor.list');
+        expect(messageBox).to.not.have.been.called;
+
+        done();
+      });
+    });
+
+    it('should fail to create a new presentation if productCode does not exist', function(done) {
+      storeAuthorize = true;
+      sandbox.stub(store.product, 'get').returns(Q.reject('Invalid product'));
+      sandbox.stub(templateEditorFactory, 'createFromTemplate').returns(Q.resolve({}));
+
+      templateEditorFactory.createFromProductCode('test-product-code')
+      .catch(function (err) {
+        expect(templateEditorFactory.createFromTemplate).to.not.have.been.called;
+        expect(plansFactory.showPlansModal).to.not.have.been.called;
+        expect(err).to.equal('Invalid product');
+        expect(messageBox).to.have.been.called;
+
+        done();
+      });
+    });
   });
 
   describe('createFromTemplate:', function() {

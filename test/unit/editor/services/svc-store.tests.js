@@ -21,6 +21,21 @@ describe('service: store:', function() {
                 
         deferred.resolve({
           product: {
+            get: function(obj){
+              expect(obj).to.be.ok;
+
+              var def = Q.defer();
+              if (returnStatus) {
+                def.resolve({
+                  result: {
+                    productId: 'productId1'
+                  }
+                });
+              } else {
+                def.reject('API Failed');
+              }
+              return def.promise;
+            },
             list: function(obj){
               expect(obj).to.be.ok;
               
@@ -36,7 +51,7 @@ describe('service: store:', function() {
                   }
                 });
               } else {
-                def.reject("API Failed");
+                def.reject('API Failed');
               }
               return def.promise;
             },
@@ -51,7 +66,7 @@ describe('service: store:', function() {
                   }
                 });
               } else {
-                def.reject("API Failed");
+                def.reject('API Failed');
               }
               return def.promise;
             }
@@ -78,7 +93,33 @@ describe('service: store:', function() {
     expect(store).to.be.truely;
     expect(store.product.list).to.be.a('function');
   });
-  
+
+  describe('get:', function() {
+   it('should return a product',function(done) {
+      store.product.get('productCode1', 'code')
+      .then(function(result) {
+        expect(result).to.be.truely;
+        expect(result.productId).to.equal('productId1');
+        done();
+      })
+      .then(null, done);
+    });
+
+    it('should handle failure to get a product correctly', function(done) {
+      returnStatus = false;
+
+      store.product.get('invalidProductId')
+      .then(function(product) {
+        done(product);
+      })
+      .then(null, function(error) {
+        expect(error).to.deep.equal('API Failed');
+        done();
+      })
+      .then(null,done);
+    });
+  });
+
   describe('list:',function(){
     it('should return a list of products',function(done){
       store.product.list({})
@@ -131,7 +172,7 @@ describe('service: store:', function() {
         .then(null,done);
     });
     
-    it("should handle failure to get list correctly",function(done){
+    it('should handle failure to get list correctly',function(done){
       returnList = false;
 
       store.product.list({})
@@ -159,7 +200,7 @@ describe('service: store:', function() {
     });
     
         
-    it("should handle failure to get status correctly",function(done){
+    it('should handle failure to get status correctly',function(done){
       returnStatus = false;
 
       store.product.status({})

@@ -7,6 +7,31 @@ angular.module('risevision.editor.services')
     function ($q, $log, storeAPILoader, userState) {
       var service = {
         product: {
+          get: function (id, idType) {
+            var deferred = $q.defer();
+
+            var obj = {
+              'id': id,
+              'idType': idType
+            };
+
+            $log.debug('Store product get called with', obj);
+
+            storeAPILoader().then(function (storeApi) {
+                return storeApi.product.get(obj);
+              })
+              .then(function (resp) {
+                $log.debug('get store product resp', resp);
+
+                deferred.resolve(resp.result);
+              })
+              .then(null, function (e) {
+                console.error('Failed to get product.', e);
+                deferred.reject(e);
+              });
+
+            return deferred.promise;
+          },
           status: function (productCodes) {
             var deferred = $q.defer();
 
