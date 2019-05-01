@@ -51,10 +51,11 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _useFullWidth() {
+            var offset = 2 * DESKTOP_MARGIN;
             var aspectRatio = _getHeightDividedByWidth();
-            var projectedHeight = previewHolder.clientWidth * aspectRatio;
+            var projectedHeight = ( previewHolder.clientWidth - offset ) * aspectRatio;
 
-            return projectedHeight < previewHolder.clientHeight;
+            return projectedHeight < previewHolder.clientHeight - offset;
           }
 
           function _getWidthFor(height) {
