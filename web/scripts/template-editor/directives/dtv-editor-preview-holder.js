@@ -12,6 +12,8 @@ angular.module('risevision.template-editor.directives')
           var DEFAULT_TEMPLATE_WIDTH = 800;
           var DEFAULT_TEMPLATE_HEIGHT = 600;
           var MOBILE_PREVIEW_HEIGHT = 160;
+          var MOBILE_MARGIN = 10;
+          var DESKTOP_MARGIN = 20;
 
           var iframeLoaded = false;
           var attributeDataText = null;
@@ -58,15 +60,18 @@ angular.module('risevision.template-editor.directives')
           function _getWidthFor(height) {
             var value = height / _getHeightDividedByWidth();
 
-            return value.toFixed(0);
+            return value;
           }
 
           $scope.getMobileWidth = function() {
-            return _getWidthFor(MOBILE_PREVIEW_HEIGHT);
+            var offset = 2 * MOBILE_MARGIN;
+            var value = _getWidthFor(MOBILE_PREVIEW_HEIGHT - offset) + offset;
+
+            return value.toFixed(0);
           }
 
           $scope.getDesktopWidth = function() {
-            return _getWidthFor(previewHolder.clientHeight);
+            return _getWidthFor(previewHolder.clientHeight).toFixed(0);
           }
 
           $scope.getTemplateAspectRatio = function() {
@@ -88,20 +93,20 @@ angular.module('risevision.template-editor.directives')
           function _applyAspectRatio() {
             var frameStyle, parentStyle;
             var isMobile = $window.matchMedia('(max-width: 768px)').matches;
-            var margin = isMobile ? 10 : 20;
+            var offset = ( isMobile ? MOBILE_MARGIN : DESKTOP_MARGIN ) * 2;
 
             if( isMobile ) {
-              var viewHeight = previewHolder.clientHeight - 2*margin;
+              var viewHeight = previewHolder.clientHeight - offset;
               parentStyle = 'width: ' + $scope.getMobileWidth() + 'px';
               frameStyle = _getFrameStyle(viewHeight, _getTemplateHeight());
             } else if( _useFullWidth() ) {
-              var viewWidth = previewHolder.clientWidth - 2*margin;
+              var viewWidth = previewHolder.clientWidth - offset;
               var aspectRatio = $scope.getTemplateAspectRatio() + '%';
 
               parentStyle = 'padding-bottom: ' + aspectRatio + ';'
               frameStyle = _getFrameStyle(viewWidth, _getTemplateWidth());
             } else {
-              var viewHeight = previewHolder.clientHeight - 2*margin;
+              var viewHeight = previewHolder.clientHeight - offset;
 
               parentStyle = 'height: 100%; width: ' + $scope.getDesktopWidth() + 'px';
               frameStyle = _getFrameStyle(viewHeight, _getTemplateHeight());

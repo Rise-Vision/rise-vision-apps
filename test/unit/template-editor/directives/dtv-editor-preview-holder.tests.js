@@ -106,7 +106,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
       var aspectRatio = $scope.getMobileWidth();
 
-      expect(aspectRatio).to.equal("284");
+      expect(aspectRatio).to.equal("269");
     });
 
     it('should calculate mobile width for 9:16 aspect ratio', function() {
@@ -114,7 +114,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
       var aspectRatio = $scope.getMobileWidth();
 
-      expect(aspectRatio).to.equal("90");
+      expect(aspectRatio).to.equal("99");
     });
   });
 
