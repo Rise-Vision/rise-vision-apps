@@ -116,15 +116,15 @@ describe('service: templateEditorFactory:', function() {
     expect(templateEditorFactory.addPresentation).to.be.a('function');
   });
 
-  describe.only('createFromProductCode:', function() {
-    it('should create a new presentation when provided a productCode', function(done) {
-      var sampleProduct = { productCode: 'test-product-code', name: 'Test HTML Template from productCode' };
+  describe.only('createFromProductId:', function() {
+    var sampleProduct = { productCode: 'test-product-code', name: 'Test HTML Template from productId' };
 
+    it('should create a new presentation when provided a productId', function(done) {
       storeAuthorize = true;
       sandbox.stub(store.product, 'get').returns(Q.resolve(sampleProduct));
       sandbox.stub(templateEditorFactory, 'createFromTemplate').returns(Q.resolve({}));
 
-      templateEditorFactory.createFromProductCode('test-product-code')
+      templateEditorFactory.createFromProductId('test-product-id')
       .then(function () {
         expect(templateEditorFactory.createFromTemplate).to.have.been.calledWith(sampleProduct);
         expect(plansFactory.showPlansModal).to.not.have.been.called;
@@ -136,9 +136,10 @@ describe('service: templateEditorFactory:', function() {
 
     it('should fail to create a new presentation when not subscribed', function(done) {
       storeAuthorize = false;
+      sandbox.stub(store.product, 'get').returns(Q.resolve(sampleProduct));
       sandbox.stub(templateEditorFactory, 'createFromTemplate').returns(Q.resolve({}));
 
-      templateEditorFactory.createFromProductCode('test-product-code')
+      templateEditorFactory.createFromProductId('test-product-id')
       .catch(function () {
         expect(templateEditorFactory.createFromTemplate).to.not.have.been.called;
         expect(plansFactory.showPlansModal).to.have.been.called;
@@ -149,16 +150,16 @@ describe('service: templateEditorFactory:', function() {
       });
     });
 
-    it('should fail to create a new presentation if productCode does not exist', function(done) {
+    it('should fail to create a new presentation if productId does not exist', function(done) {
       storeAuthorize = true;
       sandbox.stub(store.product, 'get').returns(Q.resolve({}));
       sandbox.stub(templateEditorFactory, 'createFromTemplate').returns(Q.resolve({}));
 
-      templateEditorFactory.createFromProductCode('test-product-code')
+      templateEditorFactory.createFromProductId('test-product-id')
       .catch(function (err) {
         expect(templateEditorFactory.createFromTemplate).to.not.have.been.called;
         expect(plansFactory.showPlansModal).to.not.have.been.called;
-        expect(err.result.error.message).to.equal('Invalid Product Code');
+        expect(err.result.error.message).to.equal('Invalid Product Id');
         expect(messageBox).to.have.been.called;
 
         done();

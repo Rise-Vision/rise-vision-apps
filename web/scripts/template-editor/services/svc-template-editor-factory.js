@@ -60,28 +60,31 @@ angular.module('risevision.template-editor.services')
           });
       };
 
-      factory.createFromProductCode = function (productCode) {
-        return checkTemplateAccess(productCode)
-          .then(function () {
-            return store.product.get(productCode, 'code')
-              .then(function (productDetails) {
-                if (productDetails.productCode) {
-                  return factory.createFromTemplate(productDetails);
-                }
-                else {
-                  return $q.reject({ result: { error: { message: 'Invalid Product Code' } } });
-                }
-              })
-              .catch(function (err) {
-                _showErrorMessage('add', err);
-                $state.go('apps.editor.list');
-                return $q.reject(err);
-              });
-          }, function (err) {
-            plansFactory.showPlansModal('editor-app.templatesLibrary.access-warning');
+      factory.createFromProductId = function (productId) {
+        return store.product.get(productId)
+          .then(function (productDetails) {
+            if (productDetails.productCode) {
+              return $q.resolve(productDetails);
+            }
+            else {
+              return $q.reject({ result: { error: { message: 'Invalid Product Id' } } });
+            }
+          })
+          .then(function (productDetails) {
+            return checkTemplateAccess(productDetails.productCode)
+            .then(function () {
+              return factory.createFromTemplate(productDetails);
+            })
+            .catch(function (err) {
+              plansFactory.showPlansModal('editor-app.templatesLibrary.access-warning');
 
+              $state.go('apps.editor.list');
+              $log.error('checkTemplateAccess', err);
+              return $q.reject(err);
+            });
+          }, function (err) {
+            _showErrorMessage('add', err);
             $state.go('apps.editor.list');
-            $log.error('checkTemplateAccess', err);
             return $q.reject(err);
           });
       };

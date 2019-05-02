@@ -427,12 +427,12 @@ angular.module('risevision.apps', [
           }
         })
 
-        .state('apps.editor.templates.addFromProduct', {
-          url: '/add/:productCode',
+        .state('apps.editor.templates.addFromProductId', {
+          url: '/add/:productId',
           controller: ['$stateParams', 'canAccessApps', 'templateEditorFactory',
             function ($stateParams, canAccessApps, templateEditorFactory) {
               return canAccessApps().then(function () {
-                return templateEditorFactory.createFromProductCode($stateParams.productCode);
+                return templateEditorFactory.createFromProductId($stateParams.productId);
               });
             }
           ]
