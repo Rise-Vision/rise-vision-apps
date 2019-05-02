@@ -12,8 +12,10 @@ angular.module('risevision.template-editor.directives')
           var DEFAULT_TEMPLATE_WIDTH = 800;
           var DEFAULT_TEMPLATE_HEIGHT = 600;
           var MOBILE_PREVIEW_HEIGHT = 200;
+          var MOBILE_PREVIEW_HEIGHT_SHORT = 140;
           var MOBILE_MARGIN = 10;
           var DESKTOP_MARGIN = 20;
+          var PREVIEW_INITIAL_DELAY_MILLIS = 1000;
 
           var iframeLoaded = false;
           var attributeDataText = null;
@@ -64,15 +66,25 @@ angular.module('risevision.template-editor.directives')
             return value;
           }
 
+          function _mediaMatches(mediaQuery) {
+            return $window.matchMedia(mediaQuery).matches
+          }
+
           $scope.getMobileWidth = function() {
+            var isShort = _mediaMatches('(max-height: 570px)');
+            var layerHeight = isShort ? MOBILE_PREVIEW_HEIGHT_SHORT : MOBILE_PREVIEW_HEIGHT;
+
             var offset = 2 * MOBILE_MARGIN;
-            var value = _getWidthFor(MOBILE_PREVIEW_HEIGHT - offset) + offset;
+            var value = _getWidthFor(layerHeight - offset) + offset;
 
             return value.toFixed(0);
           }
 
           $scope.getDesktopWidth = function() {
-            return _getWidthFor(previewHolder.clientHeight).toFixed(0);
+            var offset = 2 * DESKTOP_MARGIN;
+            var height = previewHolder.clientHeight - offset;
+
+            return _getWidthFor(height).toFixed(0);
           }
 
           $scope.getTemplateAspectRatio = function() {
@@ -93,7 +105,7 @@ angular.module('risevision.template-editor.directives')
 
           function _applyAspectRatio() {
             var frameStyle, parentStyle;
-            var isMobile = $window.matchMedia('(max-width: 768px)').matches;
+            var isMobile = _mediaMatches('(max-width: 768px)');
             var offset = ( isMobile ? MOBILE_MARGIN : DESKTOP_MARGIN ) * 2;
 
             if( isMobile ) {
@@ -120,7 +132,11 @@ angular.module('risevision.template-editor.directives')
           $scope.$watchGroup([
             'factory.blueprintData.width',
             'factory.blueprintData.height'
-          ], _applyAspectRatio);
+          ], function() {
+            _applyAspectRatio();
+
+            setTimeout(_applyAspectRatio, PREVIEW_INITIAL_DELAY_MILLIS);
+          });
 
           function _onResize() {
             _applyAspectRatio();
