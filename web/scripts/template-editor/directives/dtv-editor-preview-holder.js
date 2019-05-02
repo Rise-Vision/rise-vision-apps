@@ -127,7 +127,9 @@ angular.module('risevision.template-editor.directives')
           $scope.$watchGroup([
             'factory.blueprintData.width',
             'factory.blueprintData.height'
-          ], _applyAspectRatio);
+          ], function() {
+            setTimeout(_applyAspectRatio, 5000);
+          });
 
           function _onResize() {
             _applyAspectRatio();
