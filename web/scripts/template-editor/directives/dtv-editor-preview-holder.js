@@ -11,7 +11,9 @@ angular.module('risevision.template-editor.directives')
 
           var DEFAULT_TEMPLATE_WIDTH = 800;
           var DEFAULT_TEMPLATE_HEIGHT = 600;
-          var MOBILE_PREVIEW_HEIGHT = 160;
+          var MOBILE_PREVIEW_HEIGHT = 200;
+          var MOBILE_MARGIN = 10;
+          var DESKTOP_MARGIN = 20;
 
           var iframeLoaded = false;
           var attributeDataText = null;
@@ -48,44 +50,71 @@ angular.module('risevision.template-editor.directives')
             return _getTemplateHeight() / _getTemplateWidth();
           }
 
-          function _isLandscape() {
-            return _getHeightDividedByWidth() < 1;
+          function _useFullWidth() {
+            var offset = 2 * DESKTOP_MARGIN;
+            var aspectRatio = _getHeightDividedByWidth();
+            var projectedHeight = ( previewHolder.clientWidth - offset ) * aspectRatio;
+
+            return projectedHeight < previewHolder.clientHeight - offset;
           }
 
           function _getWidthFor(height) {
             var value = height / _getHeightDividedByWidth();
 
-            return value.toFixed(0);
+            return value;
           }
 
           $scope.getMobileWidth = function() {
-            return _getWidthFor(MOBILE_PREVIEW_HEIGHT);
+            var offset = 2 * MOBILE_MARGIN;
+            var value = _getWidthFor(MOBILE_PREVIEW_HEIGHT - offset) + offset;
+
+            return value.toFixed(0);
           }
 
           $scope.getDesktopWidth = function() {
-            return _getWidthFor(previewHolder.clientHeight);
+            return _getWidthFor(previewHolder.clientHeight).toFixed(0);
           }
 
           $scope.getTemplateAspectRatio = function() {
             var value = _getHeightDividedByWidth() * 100;
 
-            return value.toFixed(2);
+            return value.toFixed(4);
+          }
+
+          function _getFrameStyle(viewSize, templateSize) {
+            var ratio = ( viewSize / templateSize ).toFixed(4);
+            var width = _getTemplateWidth();
+            var height = _getTemplateHeight();
+
+            return 'width: ' + width + 'px;' +
+              'height: ' + height + 'px;' +
+              'transform:scale3d(' + ratio + ',' + ratio + ',' + ratio + ');'
           }
 
           function _applyAspectRatio() {
-            var style;
+            var frameStyle, parentStyle;
+            var isMobile = $window.matchMedia('(max-width: 768px)').matches;
+            var offset = ( isMobile ? MOBILE_MARGIN : DESKTOP_MARGIN ) * 2;
 
-            if( $window.matchMedia('(max-width: 768px)').matches ) {
-              style = 'width: ' + $scope.getMobileWidth() + 'px';
-            } else if( _isLandscape() ) {
+            if( isMobile ) {
+              var viewHeight = previewHolder.clientHeight - offset;
+              parentStyle = 'width: ' + $scope.getMobileWidth() + 'px';
+              frameStyle = _getFrameStyle(viewHeight, _getTemplateHeight());
+            } else if( _useFullWidth() ) {
+              var viewWidth = previewHolder.clientWidth - offset;
               var aspectRatio = $scope.getTemplateAspectRatio() + '%';
 
-              style = 'padding-bottom: ' + aspectRatio + ';'
+              parentStyle = 'padding-bottom: ' + aspectRatio + ';'
+              frameStyle = _getFrameStyle(viewWidth, _getTemplateWidth());
             } else {
-              style = 'height: 100%; width: ' + $scope.getDesktopWidth() + 'px';
+              var viewHeight = previewHolder.clientHeight - offset;
+
+              parentStyle = 'height: 100%; width: ' + $scope.getDesktopWidth() + 'px';
+              frameStyle = _getFrameStyle(viewHeight, _getTemplateHeight());
             }
 
-            iframeParent.setAttribute('style', style);
+            iframeParent.setAttribute('style', parentStyle);
+            iframe.setAttribute('style', frameStyle);
           }
 
           $scope.$watchGroup([
