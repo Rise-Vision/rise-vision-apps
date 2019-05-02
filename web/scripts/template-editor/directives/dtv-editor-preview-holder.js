@@ -15,7 +15,7 @@ angular.module('risevision.template-editor.directives')
           var MOBILE_PREVIEW_HEIGHT_SHORT = 140;
           var MOBILE_MARGIN = 10;
           var DESKTOP_MARGIN = 20;
-          var PREVIEW_INITIAL_DELAY_MILLIS = 2000;
+          var PREVIEW_INITIAL_DELAY_MILLIS = 1000;
 
           var iframeLoaded = false;
           var attributeDataText = null;
@@ -133,6 +133,8 @@ angular.module('risevision.template-editor.directives')
             'factory.blueprintData.width',
             'factory.blueprintData.height'
           ], function() {
+            _applyAspectRatio();
+
             setTimeout(_applyAspectRatio, PREVIEW_INITIAL_DELAY_MILLIS);
           });
 
