@@ -96,10 +96,6 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _applyAspectRatio() {
-            console.log('CLIENT...............................');
-            console.log(previewHolder.clientWidth);
-            console.log(previewHolder.clientHeight);
-
             var frameStyle, parentStyle;
             var isMobile = $window.matchMedia('(max-width: 768px)').matches;
             var offset = ( isMobile ? MOBILE_MARGIN : DESKTOP_MARGIN ) * 2;
