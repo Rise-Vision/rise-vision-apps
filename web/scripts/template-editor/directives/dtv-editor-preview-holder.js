@@ -72,7 +72,10 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.getDesktopWidth = function() {
-            return _getWidthFor(previewHolder.clientHeight).toFixed(0);
+            var offset = 2 * DESKTOP_MARGIN;
+            var height = previewHolder.clientHeight - offset;
+
+            return _getWidthFor(height).toFixed(0);
           }
 
           $scope.getTemplateAspectRatio = function() {
