@@ -104,17 +104,17 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     it('should calculate mobile width for 16:9 aspect ratio', function() {
       factory.blueprintData = { width: "1920", height: "1080" };
 
-      var aspectRatio = $scope.getMobileWidth();
+      var width = $scope.getMobileWidth();
 
-      expect(aspectRatio).to.equal("340");
+      expect(width).to.equal("340");
     });
 
     it('should calculate mobile width for 9:16 aspect ratio', function() {
       factory.blueprintData = { width: "1080", height: "1920" };
 
-      var aspectRatio = $scope.getMobileWidth();
+      var width = $scope.getMobileWidth();
 
-      expect(aspectRatio).to.equal("121");
+      expect(width).to.equal("121");
     });
   });
 
@@ -122,17 +122,17 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     it('should calculate desktop width for 16:9 aspect ratio', function() {
       factory.blueprintData = { width: "1920", height: "1080" };
 
-      var aspectRatio = $scope.getDesktopWidth();
+      var width = $scope.getDesktopWidth();
 
-      expect(aspectRatio).to.equal("889");
+      expect(width).to.equal("889");
     });
 
     it('should calculate desktop width for 9:16 aspect ratio', function() {
       factory.blueprintData = { width: "1080", height: "1920" };
 
-      var aspectRatio = $scope.getDesktopWidth();
+      var width = $scope.getDesktopWidth();
 
-      expect(aspectRatio).to.equal("281");
+      expect(width).to.equal("281");
     });
   });
 
