@@ -116,7 +116,7 @@ describe('service: templateEditorFactory:', function() {
     expect(templateEditorFactory.addPresentation).to.be.a('function');
   });
 
-  describe.only('createFromProductId:', function() {
+  describe('createFromProductId:', function() {
     var sampleProduct = { productCode: 'test-product-code', name: 'Test HTML Template from productId' };
 
     it('should create a new presentation when provided a productId', function(done) {
