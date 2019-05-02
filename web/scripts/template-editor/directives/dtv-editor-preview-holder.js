@@ -12,7 +12,7 @@ angular.module('risevision.template-editor.directives')
           var DEFAULT_TEMPLATE_WIDTH = 800;
           var DEFAULT_TEMPLATE_HEIGHT = 600;
           var MOBILE_PREVIEW_HEIGHT = 200;
-          var MOBILE_PREVIEW_HEIGHT_SMALL = 140;
+          var MOBILE_PREVIEW_HEIGHT_SHORT = 140;
           var MOBILE_MARGIN = 10;
           var DESKTOP_MARGIN = 20;
           var PREVIEW_INITIAL_DELAY_MILLIS = 2000;
@@ -71,8 +71,8 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.getMobileWidth = function() {
-            var isSmall = _mediaMatches('(max-height: 570px)');
-            var layerHeight = isSmall ? MOBILE_PREVIEW_HEIGHT_SMALL : MOBILE_PREVIEW_HEIGHT;
+            var isShort = _mediaMatches('(max-height: 570px)');
+            var layerHeight = isShort ? MOBILE_PREVIEW_HEIGHT_SHORT : MOBILE_PREVIEW_HEIGHT;
 
             var offset = 2 * MOBILE_MARGIN;
             var value = _getWidthFor(layerHeight - offset) + offset;
