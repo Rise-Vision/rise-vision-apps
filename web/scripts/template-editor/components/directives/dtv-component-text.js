@@ -13,9 +13,9 @@ angular.module('risevision.template-editor.directives')
             $scope.value = $scope.getAttributeData($scope.componentId, 'value');
           }
 
-          function _save() {
+          $scope.save = function() {
             $scope.setAttributeData($scope.componentId, 'value', $scope.value);
-          }
+          };
 
           $scope.registerDirective({
             type: 'rise-text',
@@ -25,10 +25,6 @@ angular.module('risevision.template-editor.directives')
               element.show();
               $scope.componentId = $scope.factory.selected.id;
               _load();
-            },
-            onBackHandler: function () {
-              _save();
-              return false;
             }
           });
 
