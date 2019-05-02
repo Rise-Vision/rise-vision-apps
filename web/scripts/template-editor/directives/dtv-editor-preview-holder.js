@@ -12,6 +12,7 @@ angular.module('risevision.template-editor.directives')
           var DEFAULT_TEMPLATE_WIDTH = 800;
           var DEFAULT_TEMPLATE_HEIGHT = 600;
           var MOBILE_PREVIEW_HEIGHT = 200;
+          var MOBILE_PREVIEW_HEIGHT_SMALL = 140;
           var MOBILE_MARGIN = 10;
           var DESKTOP_MARGIN = 20;
           var PREVIEW_INITIAL_DELAY_MILLIS = 2000;
@@ -65,9 +66,16 @@ angular.module('risevision.template-editor.directives')
             return value;
           }
 
+          function _mediaMatches(mediaQuery) {
+            return $window.matchMedia(mediaQuery).matches
+          }
+
           $scope.getMobileWidth = function() {
+            var isSmall = _mediaMatches('(max-height: 570px)');
+            var layerHeight = isSmall ? MOBILE_PREVIEW_HEIGHT_SMALL : MOBILE_PREVIEW_HEIGHT;
+
             var offset = 2 * MOBILE_MARGIN;
-            var value = _getWidthFor(MOBILE_PREVIEW_HEIGHT - offset) + offset;
+            var value = _getWidthFor(layerHeight - offset) + offset;
 
             return value.toFixed(0);
           }
@@ -97,7 +105,7 @@ angular.module('risevision.template-editor.directives')
 
           function _applyAspectRatio() {
             var frameStyle, parentStyle;
-            var isMobile = $window.matchMedia('(max-width: 768px)').matches;
+            var isMobile = _mediaMatches('(max-width: 768px)');
             var offset = ( isMobile ? MOBILE_MARGIN : DESKTOP_MARGIN ) * 2;
 
             if( isMobile ) {
