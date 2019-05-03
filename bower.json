@@ -36,6 +36,7 @@
     "angular-sanitize": "~1.5.0",
     "angular-mocks": "~1.5.0",
     "jquery": "^2",
-    "font-awesome": "~4.7.0"
+    "font-awesome": "~4.7.0",
+    "common-header": "feature/image-component-base"
   }
 }
