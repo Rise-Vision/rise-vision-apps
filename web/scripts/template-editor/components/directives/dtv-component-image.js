@@ -17,6 +17,10 @@ angular.module('risevision.template-editor.directives')
               element.show();
             }
           });
+
+          $scope.getPartialPath = function (partial) {
+            return 'partials/template-editor/components/component-image/' + partial;
+          };
         }
       };
     }
