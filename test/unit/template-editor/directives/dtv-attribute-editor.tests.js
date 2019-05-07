@@ -286,4 +286,40 @@ describe('directive: TemplateAttributeEditor', function() {
     expect(visible).to.be.false;
   });
 
+  describe('showNextPanel', function () {
+    it('should show a new panel', function () {
+      expect($scope.panels).to.have.length(0);
+
+      $scope.showNextPanel('selector1');
+
+      expect($scope.panels).to.have.length(1);
+      expect($scope.panels[0]).to.equal('selector1');
+    });
+
+    it('should show a second panel', function () {
+      $scope.showNextPanel('selector1');
+      $scope.showNextPanel('selector2');
+
+      expect($scope.panels).to.deep.equal(['selector1', 'selector2']);
+    });
+  });
+
+  describe('showPreviousPanel', function () {
+    it('should hide the first panel', function () {
+      $scope.showNextPanel('selector1');
+
+      expect($scope.showPreviousPanel()).to.be.false;
+
+      expect($scope.panels).to.have.length(0);
+    });
+
+    it('should hide the second panel', function () {
+      $scope.showNextPanel('selector1');
+      $scope.showNextPanel('selector2');
+
+      expect($scope.showPreviousPanel()).to.be.true;
+
+      expect($scope.panels).to.deep.equal(['selector1']);
+    });
+  });
 });

@@ -81,6 +81,10 @@ angular.module('risevision.template-editor.directives')
             return !!previousPanel;
           };
 
+          function _findElement(selector) {
+            return document.querySelector(selector) && angular.element(document.querySelector(selector));
+          }
+
           function _showAttributeList(value, delay) {
             $timeout(function () {
               $scope.showAttributeList = value;
@@ -88,7 +92,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _removeAnimationClasses(selector) {
-            var element = document.querySelector(selector) && angular.element(document.querySelector(selector));
+            var element = _findElement(selector);
 
             if (element) {
               element.removeClass('attribute-editor-show-from-right');
@@ -99,7 +103,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _showElement(selector, delay) {
-            var element = document.querySelector(selector) && angular.element(document.querySelector(selector));
+            var element = _findElement(selector);
 
             if (element) {
               setTimeout(function () {
@@ -109,7 +113,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _hideElement(selector, delay) {
-            var element = document.querySelector(selector) && angular.element(document.querySelector(selector));
+            var element = _findElement(selector);
 
             if (element) {
               setTimeout(function () {
@@ -119,7 +123,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _setCurrentClass(selector, currentClass) {
-            var element = document.querySelector(selector) && angular.element(document.querySelector(selector));
+            var element = _findElement(selector);
 
             if (element) {
               _removeAnimationClasses(selector);
