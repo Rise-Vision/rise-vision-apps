@@ -69,7 +69,7 @@ angular.module('risevision.editor.services')
       imageAlt: 'add web page',
       gadgetType: 'Widget',
       id: '5e9499c8-c877-4791-95b9-9ae4835030e4',
-      url: 'https://s3.amazonaws.com/widget-web-page/1.0.0/dist/widget.html'
+      url: 'http://s3.amazonaws.com/widget-web-page/1.0.0/dist/widget.html'
     },
     {
       env: 'PROD',
@@ -78,7 +78,7 @@ angular.module('risevision.editor.services')
       imageAlt: 'add web page',
       gadgetType: 'Widget',
       id: 'df887785-3614-4f05-86c7-fce07b8745dc',
-      url: 'https://s3.amazonaws.com/widget-web-page/1.0.0/dist/widget.html'
+      url: 'http://s3.amazonaws.com/widget-web-page/1.0.0/dist/widget.html'
     },
     // Third Party Widgets
     {
