@@ -1,3 +1,9 @@
-<div class="col">
-    Image Component
+<div>
+  <div class="image-component-container" style="display: none">
+    <ng-include src="getPartialPath('image-list.html')"></ng-include>
+  </div>
+
+  <div class="storage-selector-container" style="display: none">
+    <ng-include src="getPartialPath('storage-selector.html')"></ng-include>
+  </div>
 </div>

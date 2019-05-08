@@ -15,8 +15,25 @@ angular.module('risevision.template-editor.directives')
             element: element,
             show: function() {
               element.show();
+
+              $scope.showNextPanel('.image-component-container');
+            },
+            onBackHandler: function () {
+              return $scope.showPreviousPanel();
             }
           });
+
+          $scope.uploadImages = function () {
+            $scope.showNextPanel('.upload-images-container');
+          };
+
+          $scope.selectFromStorage = function () {
+            $scope.showNextPanel('.storage-selector-container');
+          };
+
+          $scope.getPartialPath = function (partial) {
+            return 'partials/template-editor/components/component-image/' + partial;
+          };
         }
       };
     }
