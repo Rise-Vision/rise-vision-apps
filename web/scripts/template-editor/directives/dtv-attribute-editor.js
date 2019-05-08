@@ -54,6 +54,11 @@ angular.module('risevision.template-editor.directives')
               $scope.directives[component.type].icon : '';
           };
 
+          $scope.getComponentIconType = function (component) {
+            return component && $scope.directives[component.type] ?
+              $scope.directives[component.type].iconType : '';
+          };
+
           $scope.isHeaderBottomRuleVisible = function(component) {
             if ( !component ) {
               return true;

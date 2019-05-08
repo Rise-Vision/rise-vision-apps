@@ -1,6 +1,6 @@
 <div class="row attribute-row" ng-repeat="comp in components track by $index">
   <div class="col-xs-10 pl-0 attribute-desc">
-    <i class="mr-2 fa fa-lg {{ getComponentIcon(comp) }}"></i>
+    <component-icon icon="{{ getComponentIcon(comp) }}" type="{{ getComponentIconType(comp) }}"></component-icon>
     <span>
       {{ ( "template." + comp.type ) | translate }} -
       {{ comp.label }}
