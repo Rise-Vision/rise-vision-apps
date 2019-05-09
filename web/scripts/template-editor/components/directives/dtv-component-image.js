@@ -56,7 +56,7 @@ angular.module('risevision.template-editor.directives')
                 "thumbnail-url": url || ''
               };
 
-              metadata.push(instrument);
+              metadata.push(entry);
             })
             .catch( function(error) {
               $log.error( error );
