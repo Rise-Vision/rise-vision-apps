@@ -6,10 +6,10 @@
     </div>
     <div class="image-entry">
       <div class="image-entry-top">
-        <div class="image-name">{{ image.name }}</div>
+        <div class="image-name">{{ image.file | fileNameOf }}</div>
         <a href="#" translate>editor-app.details.remove</a>
       </div>
-      <div class="image-not-available" ng-hide>
+      <div class="image-not-available hidden">
         Your image has been deleted, renamed, or moved.
       </div>
     </div>

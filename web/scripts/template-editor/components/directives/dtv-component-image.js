@@ -101,6 +101,10 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
+          $scope.fileNameOf = function( path ) {
+            return path.split('/').pop();
+          }
+
           $scope.uploadImages = function () {
             $scope.showNextPanel('.upload-images-container');
           };
