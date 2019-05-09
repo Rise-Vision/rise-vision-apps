@@ -6,7 +6,7 @@
     </div>
     <div class="image-entry">
       <div class="image-entry-top">
-        <div class="image-name">{{ image.file | fileNameOf }}</div>
+        <div class="image-name">{{ fileNameOf(image.file) }}</div>
         <a href="#" translate>editor-app.details.remove</a>
       </div>
       <div class="image-not-available hidden">
