@@ -14,30 +14,10 @@ var TemplateAddScenarios = function() {
     var presentationsListPage;
     var templateEditorPage;
 
-    function _loadCurrentCompanyPresentationList() {
-      helper.clickWhenClickable(templateEditorPage.getPresentationsListLink(), 'Presentations List');
-      helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
-    }
-
-    function _loadPresentation (presentationName) {
-      _loadCurrentCompanyPresentationList();
-      helper.clickWhenClickable(templateEditorPage.getCreatedPresentationLink(presentationName), 'Presentation Link');
-      helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
-      helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
-      browser.sleep(500); // Wait for transition to finish
-    }
-
-    function _savePresentation () {
-      helper.wait(templateEditorPage.getSaveButton(), 'Save Button');
-      helper.clickWhenClickable(templateEditorPage.getSaveButton(), 'Save Button');
-      expect(templateEditorPage.getSaveButton().getText()).to.eventually.equal('Saving');
-      helper.wait(templateEditorPage.getSaveButton(), 'Save Button');
-    }
-
     before(function () {
       presentationsListPage = new PresentationListPage();
       templateEditorPage = new TemplateEditorPage();
-      presentationsListPage.openNewExampleTemplate();
+      presentationsListPage.createNewPresentationFromTemplate("Example Financial Template", "example-financial-template");
     });
 
     describe('basic operations', function () {
@@ -47,22 +27,20 @@ var TemplateAddScenarios = function() {
       });
 
       it('should edit the Presentation name', function () {
-        expect(templateEditorPage.getPresentationName().isEnabled()).to.eventually.be.false;
-        templateEditorPage.getEditNameButton().click();
-        expect(templateEditorPage.getPresentationName().isEnabled()).to.eventually.be.true;
-        templateEditorPage.getPresentationName().sendKeys(presentationName + protractor.Key.ENTER);
+        presentationsListPage.changePresentationName(presentationName);
+        expect(templateEditorPage.getPresentationName().getAttribute('value')).to.eventually.equal(presentationName);
       });
 
       it('should save the Presentation', function () {
-        _savePresentation();
+        presentationsListPage.savePresentation();
 
         expect(templateEditorPage.getSaveButton().isEnabled()).to.eventually.be.true;
       });
 
       it('should publish the Presentation', function () {
         // Since the first time a Presentation is saved it's also Published, to test the button an additional Save is needed
-        _savePresentation();
-        _savePresentation();
+        presentationsListPage.savePresentation();
+        presentationsListPage.savePresentation();
 
         helper.clickWhenClickable(templateEditorPage.getPublishButton(), 'Publish Button');
         helper.wait(templateEditorPage.getSaveButton(), 'Save Button (after Publish)');
@@ -70,7 +48,7 @@ var TemplateAddScenarios = function() {
       });
 
       it('should load the newly created Presentation', function () {
-        _loadPresentation(presentationName);
+        presentationsListPage.loadPresentation(presentationName);
 
         expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
         expect(templateEditorPage.getImageComponentEdit().isPresent()).to.eventually.be.true;
@@ -84,45 +62,6 @@ var TemplateAddScenarios = function() {
         helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
         browser.sleep(500); // Wait for transition to finish
         expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
-      });
-
-      function _loadFinancialSelector () {
-        helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
-        helper.wait(templateEditorPage.getFinancialComponentEdit(), 'Financial Component Edit');
-        helper.clickWhenClickable(templateEditorPage.getFinancialComponentEdit(), 'Financial Component Edit');
-        expect(templateEditorPage.getAddCurrenciesButton().isEnabled()).to.eventually.be.true;
-      }
-
-      it('should show one Financial Component', function () {
-        _loadPresentation(presentationName);
-        _loadFinancialSelector();
-        expect(templateEditorPage.getInstrumentItems().count()).to.eventually.equal(3);
-      });
-
-      it('should show open the Instrument Selector', function () {
-        helper.wait(templateEditorPage.getAddCurrenciesButton(), 'Add Currencies');
-        helper.clickWhenClickable(templateEditorPage.getAddCurrenciesButton(), 'Add Currencies');
-        expect(templateEditorPage.getAddInstrumentButton().isPresent()).to.eventually.be.true;
-      });
-
-      it('should add JPY/USD instrument', function () {
-        helper.wait(templateEditorPage.getJpyUsdSelector(), 'JPY/USD Selector');
-        helper.clickWhenClickable(templateEditorPage.getJpyUsdSelector(), 'JPY/USD Selector');
-        helper.wait(templateEditorPage.getAddInstrumentButton(), 'Add Instrument');
-        helper.clickWhenClickable(templateEditorPage.getAddInstrumentButton(), 'Add Instrument');
-        expect(templateEditorPage.getAddCurrenciesButton().isPresent()).to.eventually.be.true;
-      });
-
-      it('should save the Presentation, reload it, and validate changes were saved', function () {
-        helper.wait(templateEditorPage.getSaveButton(), 'Save Button');
-        helper.clickWhenClickable(templateEditorPage.getSaveButton(), 'Save Button');
-        expect(templateEditorPage.getSaveButton().getText()).to.eventually.equal('Saving');
-        helper.wait(templateEditorPage.getSaveButton(), 'Save Button');
-
-        _loadPresentation(presentationName);
-        _loadFinancialSelector();
-
-        expect(templateEditorPage.getInstrumentItems().count()).to.eventually.equal(4);
       });
     });
   });
