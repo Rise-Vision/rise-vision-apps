@@ -1,35 +1,21 @@
 <div class="image-component-list te-scrollable-container">
-  <div class="pl-0 image-row">
+  <div class="pl-0 image-row"
+    ng-repeat="image in selectedImages track by $index">
     <div class="image-thumbnail">
-      <div>
-        <img src="http://via.placeholder.com/80x60" width="80" height="60"></img>
-      </div>
+      <img src="{{ image['thumbnail-url'] }}" width="80"></img>
     </div>
     <div class="image-entry">
       <div class="image-entry-top">
-        <div class="image-name">image.jpg</div>
+        <div class="image-name">{{ fileNameOf(image.file) }}</div>
         <a href="#" translate>editor-app.details.remove</a>
       </div>
-      <div>
-      </div>
-    </div>
-  </div>
-  <div class="pl-0 image-row">
-    <div class="image-thumbnail">
-      <img src="http://via.placeholder.com/80x60" width="80" height="60"></img>
-    </div>
-    <div class="image-entry">
-      <div class="image-entry-top">
-        <div class="image-name">very-long-image-name-of-image.jpg</div>
-        <a href="#" translate>editor-app.details.remove</a>
-      </div>
-      <div class="image-not-available">
+      <div class="image-not-available hidden">
         Your image has been deleted, renamed, or moved.
       </div>
     </div>
   </div>
 
-  <div class="image-component-list-empty" ng-hide="availableImages.length > 0">
+  <div class="image-component-list-empty" ng-hide="selectedImages.length > 0">
     <div class="row">
       <div class="col-xs-12">
         <h2>You have no images here</h2>
