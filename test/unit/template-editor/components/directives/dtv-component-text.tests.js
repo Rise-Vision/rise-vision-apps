@@ -59,6 +59,24 @@ describe('directive: templateComponentText', function() {
     expect($scope.value).to.equal(sampleValue);
   });
 
+  it('should load text from blueprint when  attribute data', function() {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+    var sampleValue = "test text";
+
+    $scope.getAttributeData = function() {
+      return null;
+    };
+
+    $scope.getBlueprintData = function() {
+      return sampleValue;
+    };
+
+    directive.show();
+
+    expect($scope.componentId).to.equal("TEST-ID");
+    expect($scope.value).to.equal(sampleValue);
+  });
+
   it('should save text to attribute data', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     var sampleValue = "test text";

@@ -29,8 +29,6 @@ var StoreProductsModalPage = function() {
   var addWidgetByUrlButton = element(by.id('addWidgetByUrl'));
   var closeButton = element(by.css('.close'));
 
-  var addExampleTemplate = element(by.id('example-financial-template'));
-
   this.getFreeProducts = function() {
     return freeProducts;
   }
@@ -131,8 +129,8 @@ var StoreProductsModalPage = function() {
     return closeButton;
   };
 
-  this.getAddExampleTemplate = function() {
-    return addExampleTemplate;
+  this.getAddButtonById = function(id) {
+    return element(by.id(id));
   };
 };
 

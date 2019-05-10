@@ -7,7 +7,7 @@
         <span translate>template.attribute-editor.back-to-list</span>
       </span>
     </a>
-    <i class="ml-2 mr-2 fa fa-lg {{ getComponentIcon(factory.selected) }}"></i>
+    <component-icon icon="{{ getComponentIcon(factory.selected) }}" type="{{ getComponentIconType(factory.selected) }}"></component-icon>
     <span>
       {{ ( "template." + factory.selected.type ) | translate }} -
       {{ factory.selected.label }}
