@@ -1,13 +1,15 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentImage', ['templateEditorFactory',
-    function (templateEditorFactory) {
+  .constant('SUPPORTED_IMAGE_TYPES', '.png, .jpg, .gif, .tif, .tiff')
+  .directive('templateComponentImage', ['templateEditorFactory', 'SUPPORTED_IMAGE_TYPES',
+    function (templateEditorFactory, SUPPORTED_IMAGE_TYPES) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/components/component-image.html',
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
+          $scope.validExtensions = SUPPORTED_IMAGE_TYPES;
 
           $scope.registerDirective({
             type: 'rise-data-image',

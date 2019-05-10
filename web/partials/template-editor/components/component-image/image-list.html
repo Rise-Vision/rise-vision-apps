@@ -43,10 +43,12 @@
 </div>
 
 <div class="image-component-list-action-button-bar">
+  <basic-uploader valid-extensions="validExtensions"></basic-uploader>
+
   <div class="upload-images">
-    <button class="btn btn-primary btn-block" ng-click="uploadImages()">
+    <label class="btn btn-primary btn-block" for="basic-upload-files">
       <strong>Upload Images</strong>
-    </button>
+    </label>
   </div>
   <div class="select-from-storage">
     <button class="btn btn-primary btn-block" ng-click="selectFromStorage()">
