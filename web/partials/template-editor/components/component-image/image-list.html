@@ -1,6 +1,6 @@
 <div class="image-component-list te-scrollable-container">
   <div class="pl-0 image-row"
-    ng-repeat="image in selectedImages track by $index">
+    ng-repeat="image in selectedImages track by $index" style="display:none">
     <div class="image-thumbnail">
       <img src="{{ image['thumbnail-url'] }}" width="80"></img>
     </div>
@@ -15,7 +15,7 @@
     </div>
   </div>
 
-  <div class="image-component-list-empty" ng-hide="selectedImages.length > 0">
+  <div class="image-component-list-empty" ng-hide="selectedImages.length > 0" style="display:none">
     <div class="row">
       <div class="col-xs-12">
         <h2>You have no images here</h2>
@@ -26,11 +26,11 @@
       </div>
     </div>
   </div>
+
+  <basic-uploader valid-extensions="validExtensions"></basic-uploader>
 </div>
 
 <div class="image-component-list-action-button-bar">
-  <basic-uploader valid-extensions="validExtensions"></basic-uploader>
-
   <div class="upload-images">
     <label class="btn btn-primary btn-block" for="basic-upload-files">
       <strong>Upload Images</strong>

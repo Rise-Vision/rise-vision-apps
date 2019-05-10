@@ -99,6 +99,7 @@ angular.module('risevision.template-editor.controllers')
       $scope.$on('presentationPublished', _setUnsavedChanges.bind(null, false));
 
       $scope.$on('$stateChangeStart', function (event, toState, toParams) {
+        $scope.hasUnsavedChanges = false;
         if (_bypassUnsaved) {
           _bypassUnsaved = false;
           return;
@@ -118,6 +119,7 @@ angular.module('risevision.template-editor.controllers')
       });
 
       $window.onbeforeunload = function () {
+        $scope.hasUnsavedChanges = false;
         if ($scope.hasUnsavedChanges) {
           return $filter('translate')('common.saveBeforeLeave');
         }

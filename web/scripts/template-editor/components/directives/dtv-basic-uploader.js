@@ -14,11 +14,15 @@ angular.module('risevision.template-editor.directives')
           $scope.warnings = [];
           $scope.uploader = FileUploader;
           $scope.status = {};
+          $scope.files = [
+            { file: { name: 'test1.jpg', size: 12000 }, progress: 45 },
+            { file: { name: 'test2.jpg', size: 37000 }, progress: 72 }
+          ];
 
           $scope.removeItem = function (item) {
             FileUploader.removeFromQueue(item);
           };
-/*
+
           $scope.getErrorCount = function () {
             return FileUploader.getErrorCount();
           };
@@ -44,7 +48,7 @@ angular.module('risevision.template-editor.directives')
           $scope.cancelAllUploads = function () {
             FileUploader.removeAll();
           };
-*/
+
           FileUploader.onAfterAddingFile = function (fileItem) {
             console.info('onAfterAddingFile', fileItem.file.name);
             UploadURIService.getURI(fileItem.file)
