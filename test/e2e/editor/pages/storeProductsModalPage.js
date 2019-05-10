@@ -131,7 +131,6 @@ var StoreProductsModalPage = function() {
 
   this.getAddButtonById = function(id) {
     return element(by.id(id));
-    ;
   };
 };
 
