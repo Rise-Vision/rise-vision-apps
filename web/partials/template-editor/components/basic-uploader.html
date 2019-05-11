@@ -1,6 +1,5 @@
 <div>
-  <div ng-show="uploader.queue.length > 0"></div>
-  <div id="uploadPanel" class="storage-upload-panel">
+  <div id="uploadPanel" class="storage-upload-panel" ng-show="uploader.queue.length > 0">
     <div class="storage-upload-header" style="display: none">
       <p>
         <strong translate="storage-client.uploading-count-files"></strong>
@@ -16,8 +15,7 @@
       </div>
     </div>
     <div class="storage-upload-body te-scrollable-container">
-      <div ng-repeat="item in uploader.queue"></div>
-      <div class="u_margin-sm-top" ng-repeat="item in files">
+      <div class="u_margin-sm-top" ng-repeat="item in uploader.queue">
         <p>
           <a class="pull-right" href="#" ng-click="removeItem(item)">
             <span translate="common.lremove"></span>
@@ -25,7 +23,7 @@
           <a class="pull-right u_margin-right" href="#" ng-click="retryFailedUpload(item)" ng-show="item.isError">
             <span translate="common.lretry"></span>
           </a>
-          <span class="pull-right text-muted u_margin-left u_margin-right"> {{ item.file.size|fileSizeFilter }}</span>
+          <span class="pull-right text-muted u_margin-left u_margin-right"> {{ item.file.size | fileSizeFilter }}</span>
           <span class="u_ellipsis-lg" ng-class="{'text-danger': item.isError }">
             <i class="fa fa-exclamation u_icon-red icon-left" ng-show="item.isError"></i>
             {{item.file.name}}

@@ -10,6 +10,15 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
           $scope.validExtensions = SUPPORTED_IMAGE_TYPES;
+          $scope.uploadManager = {
+            onUploadStatus: function (isUploading) {
+              $scope.isUploading = isUploading;
+            },
+            addFile: function (file) {
+              console.log('Added file to uploadManager', file);
+              $scope.selectedImages.push({ file: file.name });
+            }
+          };
 
           function _reset() {
             $scope.selectedImages = [];

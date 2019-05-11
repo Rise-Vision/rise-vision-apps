@@ -6,18 +6,18 @@ angular.module('risevision.template-editor.directives')
       return {
         restrict: 'E',
         scope: {
-          validExtensions: '=?'
-          //filesFactory: '='
+          validExtensions: '=?',
+          uploadManager: '='
         },
         templateUrl: 'partials/template-editor/components/basic-uploader.html',
         link: function ($scope) {
           $scope.warnings = [];
           $scope.uploader = FileUploader;
           $scope.status = {};
-          $scope.files = [
-            { file: { name: 'test1.jpg', size: 12000 }, progress: 45 },
-            { file: { name: 'test2.jpg', size: 37000 }, progress: 72 }
-          ];
+
+          function _isUploading () {
+            return $scope.uploader.queue.length > 0;
+          }
 
           $scope.removeItem = function (item) {
             FileUploader.removeFromQueue(item);
@@ -51,6 +51,9 @@ angular.module('risevision.template-editor.directives')
 
           FileUploader.onAfterAddingFile = function (fileItem) {
             console.info('onAfterAddingFile', fileItem.file.name);
+
+            $scope.uploadManager.onUploadStatus(_isUploading());
+
             UploadURIService.getURI(fileItem.file)
               .then(function (resp) {
                 fileItem.url = resp;
@@ -73,6 +76,8 @@ angular.module('risevision.template-editor.directives')
           };
 
           FileUploader.onCompleteItem = function (item) {
+            $scope.uploadManager.onUploadStatus(_isUploading());
+
             if (item.isCancel) {
               return;
             }
@@ -98,13 +103,14 @@ angular.module('risevision.template-editor.directives')
               .then(function (resp) {
                 var file = resp && resp.files && resp.files[0] ? resp.files[0] : baseFile;
                 console.log('Add file to list of available files', file);
-                // TODO: $scope.filesFactory.addFile(file);
+                $scope.uploadManager.addFile(file);
               }, function (err) {
                 console.log('Failed to upload', item.file.name, err);
-                // TODO: $scope.filesFactory.addFile(baseFile);
+                $scope.uploadManager.addFile(baseFile);
               })
               .finally(function () {
                 FileUploader.removeFromQueue(item);
+                $scope.uploadManager.onUploadStatus(_isUploading());
               });
           };
         }
