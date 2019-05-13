@@ -27,7 +27,7 @@ var PresentationListPage = function() {
     helper.clickWhenClickable(presentationAddButton, 'Add Presentation Button');
     helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
     helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader(), 'Store Products Loader');
-    storeProductsModalPage.getSearchInput().sendKeys('"' + templateName + '"');
+    storeProductsModalPage.getSearchInput().sendKeys(templateName);
     helper.wait(storeProductsModalPage.getAddButtonById(addTemplateButtonId), 'Add Example Template Button');
     helper.clickWhenClickable(storeProductsModalPage.getAddButtonById(addTemplateButtonId), 'Add Example Template Button');
 

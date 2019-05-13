@@ -1,5 +1,7 @@
 'use strict';
 
+var helper = require('rv-common-e2e').helper;
+
 var TemplateEditorPage = function() {
   var seePlansLink = element(by.xpath('//a[contains(text(), "See Our Plans")]'));
   var presentationsListLink = element(by.css('[ng-href="/editor"]'));
@@ -15,13 +17,6 @@ var TemplateEditorPage = function() {
   var imageComponent = element(by.xpath('(' + imageComponentSelector + ')[1]'));
   var imageComponentEdit = element(by.xpath('(' + imageComponentSelector + '/div/a)[1]'));
   var backToComponentsButton = element(by.css('[ng-click="onBackButton();"]'));
-  var financialComponentSelector = '//div[div/span[contains(text(), "Financial - ")]]';
-  var financialComponent = element(by.xpath(financialComponentSelector));
-  var financialComponentEdit = element(by.xpath(financialComponentSelector + '/div/a'));
-  var instrumentItems = element.all(by.repeater('instr in instruments track by $index'));
-  var addCurrenciesButton = element(by.css('[ng-click="showSymbolSearch()"]'));
-  var addInstrumentButton = element(by.css('[ng-click="addInstrument()"]'));
-  var jpyUsdSelector = element(by.css('[for="JPYUSD=X"]'));
 
   this.seePlansLink = function () {
     return seePlansLink;
@@ -79,29 +74,13 @@ var TemplateEditorPage = function() {
     return backToComponentsButton;
   };
 
-  this.getFinancialComponent = function () {
-    return financialComponent;
-  };
+  this.selectComponent = function (selectorLabel) {
+    var componentEditLink = element(by.xpath('//div[div/span[contains(text(), "' + selectorLabel + '")]]/div/a'));
 
-  this.getFinancialComponentEdit = function () {
-    return financialComponentEdit;
-  };
-
-  this.getInstrumentItems = function () {
-    return instrumentItems;
-  };
-
-  this.getAddCurrenciesButton = function () {
-    return addCurrenciesButton;
-  };
-
-  this.getAddInstrumentButton = function () {
-    return addInstrumentButton;
-  };
-
-  this.getJpyUsdSelector = function () {
-    return jpyUsdSelector;
-  };
+    helper.wait(this.getAttributeList(), 'Attribute List');
+    helper.wait(componentEditLink, 'Component Edit');
+    helper.clickWhenClickable(componentEditLink, 'Component Edit');
+  }
 };
 
 module.exports = TemplateEditorPage;
