@@ -1,19 +1,5 @@
 <div>
   <div id="uploadPanel" class="storage-upload-panel" ng-show="uploader.queue.length > 0">
-    <div class="storage-upload-header" style="display: none">
-      <p>
-        <strong translate="storage-client.uploading-count-files"></strong>
-      </p>
-
-      <div class="actions-block">
-        <button class="btn btn-default btn-sm" type="button" ng-click="cancelAllUploads()" title="{{'storage-client.cancel-uploads' | translate}}">
-          <span translate="storage-client.cancel-uploads"></span>
-        </button>
-        <button class="btn btn-default btn-sm" type="button" ng-click="retryFailedUploads()" ng-show="getErrorCount() > 0 && getNotErrorCount() === 0" title="{{'storage-client.retry-failed-uploads' | translate}}">
-        <span translate="storage-client.retry-failed-uploads"></span>
-        </button>
-      </div>
-    </div>
     <div class="storage-upload-body te-scrollable-container">
       <div class="u_margin-sm-top" ng-repeat="item in uploader.queue">
         <p>

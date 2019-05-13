@@ -11,24 +11,21 @@ angular.module('risevision.template-editor.directives')
         },
         templateUrl: 'partials/template-editor/components/basic-uploader.html',
         link: function ($scope) {
-          $scope.warnings = [];
           $scope.uploader = FileUploader;
           $scope.status = {};
 
           function _isUploading () {
-            return $scope.uploader.queue.length > 0;
+            return $scope.activeUploadCount() > 0;
           }
 
           $scope.removeItem = function (item) {
             FileUploader.removeFromQueue(item);
           };
 
-          $scope.getErrorCount = function () {
-            return FileUploader.getErrorCount();
-          };
-
-          $scope.getNotErrorCount = function () {
-            return FileUploader.getNotErrorCount();
+          $scope.activeUploadCount = function () {
+            return FileUploader.queue.filter(function (file) {
+              return !file.isUploaded || file.isError;
+            }).length;
           };
 
           $scope.retryFailedUpload = function (file) {
@@ -37,20 +34,12 @@ angular.module('risevision.template-editor.directives')
             }
           };
 
-          $scope.retryFailedUploads = function () {
-            FileUploader.queue.forEach(function (f) {
-              if (f.isError) {
-                FileUploader.retryItem(f);
-              }
-            });
-          };
-
-          $scope.cancelAllUploads = function () {
-            FileUploader.removeAll();
-          };
-
           FileUploader.onAfterAddingFile = function (fileItem) {
             console.info('onAfterAddingFile', fileItem.file.name);
+
+            if (!fileItem.isRetrying) {
+              fileItem.file.name = ($scope.uploadManager.folderPath || '') + fileItem.file.name;
+            }
 
             $scope.uploadManager.onUploadStatus(_isUploading());
 
