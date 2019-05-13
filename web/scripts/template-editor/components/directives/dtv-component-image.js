@@ -17,19 +17,27 @@ angular.module('risevision.template-editor.directives')
             addFile: function (file) {
               console.log('Added file to uploadManager', file);
               var selectedImages = _.cloneDeep($scope.selectedImages);
+              var newFile = { file: file.name, 'thumbnail-url': file.metadata.thumbnail };
+              var idx = _.findIndex(selectedImages, { file: file.name });
 
-              selectedImages.push({ file: file.name, 'thumbnail-url': file.metadata.thumbnail });
+              if (idx >= 0) {
+                selectedImages.splice(idx, 1, newFile);
+              }
+              else {
+                selectedImages.push(newFile);
+              }
+
               _setMetadata(selectedImages);
             }
           };
 
           function _reset() {
             $scope.selectedImages = [];
+            $scope.isUploading = false;
           }
 
           function _loadSelectedImages() {
-            var selectedImages =
-              $scope.getAttributeData($scope.componentId, 'metadata');
+            var selectedImages = $scope.getAttributeData($scope.componentId, 'metadata');
 
             if(selectedImages) {
               $scope.selectedImages = selectedImages;

@@ -4,12 +4,8 @@ describe('directive: basicUploader', function () {
 
   beforeEach(module(function ($provide) {
     uploadManager = {
-      onUploadStatus: function () {
-
-      },
-      addFile: function () {
-        
-      }
+      onUploadStatus: sinon.stub(),
+      addFile: sinon.stub()
     };
 
     $provide.constant('STORAGE_UPLOAD_CHUNK_SIZE', 1024);
@@ -45,28 +41,6 @@ describe('directive: basicUploader', function () {
           
           return deferred.promise;
         })
-      };
-    });
-
-    $provide.factory('XHRFactory', function () {
-      return {
-        get: function () {
-          return {
-            upload: function () {
-
-            },
-            open: function () {
-
-            },
-            setRequestHeader: function () {
-
-            },
-            send: function () {
-              this.status = 200;
-              this.onload();
-            }
-          };
-        }
       };
     });
   }));  
@@ -124,7 +98,7 @@ describe('directive: basicUploader', function () {
     expect(onAfterAddingFile.getCall(0).args[0].file.name).to.equal('test-folder/test1.jpg');
   });
 
-  it('should add current path to the name if the file is just being', function () {
+  it('should add current path to the name if the file is just being uploaded', function () {
     var fileName = 'test1.jpg';
     var file1 = { name: fileName, size: 200, slice: function () {}, file: { name: fileName } };
     
