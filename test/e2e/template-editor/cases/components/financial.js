@@ -30,7 +30,6 @@ var FinancialComponentScenarios = function () {
 
       it('should show one Financial Component', function () {
         templateEditorPage.selectComponent("Financial - ");
-        // _loadFinancialSelector();
         expect(financialComponentPage.getInstrumentItems().count()).to.eventually.equal(3);
       });
 
@@ -62,7 +61,6 @@ var FinancialComponentScenarios = function () {
         expect(templateEditorPage.getSaveButton().isEnabled()).to.eventually.be.true;
 
         presentationsListPage.loadPresentation(presentationName);
-        // _loadFinancialSelector();
         templateEditorPage.selectComponent("Financial - ");
 
         expect(financialComponentPage.getInstrumentItems().count()).to.eventually.equal(4);
