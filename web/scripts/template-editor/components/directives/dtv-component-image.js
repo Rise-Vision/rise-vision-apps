@@ -16,7 +16,7 @@ angular.module('risevision.template-editor.directives')
             },
             addFile: function (file) {
               console.log('Added file to uploadManager', file);
-              $scope.selectedImages.push({ file: file.name });
+              $scope.selectedImages.push({ file: file.name, 'thumbnail-url': file.metadata.thumbnail });
             }
           };
 
@@ -63,8 +63,8 @@ angular.module('risevision.template-editor.directives')
             _getThumbnailUrlFor(fileName)
             .then( function(url) {
               var entry = {
-                "file": fileName,
-                "thumbnail-url": url || ''
+                'file': fileName,
+                'thumbnail-url': url || ''
               };
 
               metadata.push(entry);
