@@ -72,7 +72,7 @@ angular.module('risevision.template-editor.directives')
             .catch( function(error) {
               $log.error( error );
             })
-            .finally( function() {
+            .then( function() {
               _buildListRecursive(metadata, fileNames);
             });
           }
