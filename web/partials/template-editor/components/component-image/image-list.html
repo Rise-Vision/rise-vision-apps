@@ -8,7 +8,7 @@
     <div class="image-entry">
       <div class="image-entry-top">
         <div class="image-name">{{ fileNameOf(image.file) }}</div>
-        <a href="#" translate>editor-app.details.remove</a>
+        <a href="#" ng-click="removeImageFromList(image)" translate>editor-app.details.remove</a>
       </div>
       <div class="image-not-available hidden">
         Your image has been deleted, renamed, or moved.

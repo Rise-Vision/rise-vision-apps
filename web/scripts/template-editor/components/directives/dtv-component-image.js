@@ -16,7 +16,10 @@ angular.module('risevision.template-editor.directives')
             },
             addFile: function (file) {
               console.log('Added file to uploadManager', file);
-              $scope.selectedImages.push({ file: file.name, 'thumbnail-url': file.metadata.thumbnail });
+              var selectedImages = _.cloneDeep($scope.selectedImages);
+
+              selectedImages.push({ file: file.name, 'thumbnail-url': file.metadata.thumbnail });
+              _setMetadata(selectedImages);
             }
           };
 
@@ -126,6 +129,16 @@ angular.module('risevision.template-editor.directives')
 
           $scope.getPartialPath = function (partial) {
             return 'partials/template-editor/components/component-image/' + partial;
+          };
+
+          $scope.removeImageFromList = function (image) {
+            var idx = $scope.selectedImages.indexOf(image);
+            var selectedImages = _.cloneDeep($scope.selectedImages);
+
+            if (idx >= 0) {
+              selectedImages.splice(idx, 1);
+              _setMetadata(selectedImages);
+            }
           };
         }
       };
