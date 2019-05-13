@@ -45,6 +45,11 @@ var PresentationListPage = function() {
     helper.waitDisappear(this.getPresentationsLoader(), 'Presentation loader');
   }
 
+  this.reloadCurrentCompanyPresentationList = function() {
+    browser.refresh();
+    helper.waitDisappear(this.getPresentationsLoader(), 'Presentation loader');
+  }
+
   this.loadPresentation = function(presentationName) {
     this.loadCurrentCompanyPresentationList();
     helper.clickWhenClickable(templateEditorPage.getCreatedPresentationLink(presentationName), 'Presentation Link');

@@ -9,6 +9,7 @@
   
   var TemplateEditorAddScenarios = require('./cases/template-editor-add.js');
   var FinancialComponentScenarios = require('./cases/components/financial.js');
+  var TextComponentScenarios = require('./cases/components/text.js');
 
   describe('Template Editor', function() {
 
@@ -56,6 +57,7 @@
 
     var templateEditorAddScenarios = new TemplateEditorAddScenarios();
     var financialComponentScenarios = new FinancialComponentScenarios();
+    var textComponentScenarios = new TextComponentScenarios();
 
     after(function() {
       // Loading the Presentation List is a workaround to a Chrome Driver issue that has it fail to click on elements over the Preview iframe
