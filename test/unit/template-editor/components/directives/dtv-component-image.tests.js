@@ -19,6 +19,18 @@ describe('directive: TemplateComponentImage', function() {
     $provide.service('templateEditorFactory', function() {
       return factory;
     });
+
+    $provide.service('storageAPILoader', function() {
+      return function() {
+        return Promise.resolve({
+          files: {
+            get: function() {
+              return {};
+            }
+          }
+        });
+      };
+    });
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout){

@@ -2,8 +2,8 @@
 
 angular.module('risevision.template-editor.directives')
   .constant('SUPPORTED_IMAGE_TYPES', '.png, .jpg, .gif, .tif, .tiff')
-  .directive('templateComponentImage', ['$log', 'templateEditorFactory', 'SUPPORTED_IMAGE_TYPES',
-    function ($log, templateEditorFactory, SUPPORTED_IMAGE_TYPES) {
+  .directive('templateComponentImage', ['$log', 'templateEditorFactory', 'storageAPILoader', 'SUPPORTED_IMAGE_TYPES',
+    function ($log, templateEditorFactory, storageAPILoader, SUPPORTED_IMAGE_TYPES) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/components/component-image.html',
@@ -57,8 +57,36 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _getThumbnailUrlFor(fileName) {
-            // TODO: call service
-            return Promise.resolve("http://lh3.googleusercontent.com/hOkuYaXqdtS2e4fzQGx1zqTFKko71OSDVTrOb84JsOeaUUL8hfOaLaZ5eCquqN20u_NJv_QSwMoNQl-vJ1lT");
+            var search = {
+              'companyId': 'cf85e5c4-9439-40ce-94d6-e5ea6ea2411c',
+              'file': 'linux.png'
+            };
+            var search2 = {
+              'companyId': 'b428b4e8-c8b9-41d5-8a10-b4193c789443',
+              'file': 'download.png'
+            };
+
+            return storageAPILoader()
+              .then(function (storageApi) {
+                storageApi.files.get(search)
+                .then(function (resp) {
+                  console.log(JSON.stringify(resp));
+                })
+                .catch( function(error) {
+                  $log.error( error );
+                });
+
+                return storageApi.files.get(search2);
+              })
+              .then(function (resp) {
+                console.log(JSON.stringify(resp));
+              })
+              .catch( function(error) {
+                $log.error( error );
+              })
+              .then( function() {
+                return "http://lh3.googleusercontent.com/hOkuYaXqdtS2e4fzQGx1zqTFKko71OSDVTrOb84JsOeaUUL8hfOaLaZ5eCquqN20u_NJv_QSwMoNQl-vJ1lT";
+              });
           }
 
           function _buildListRecursive(metadata, fileNames) {
