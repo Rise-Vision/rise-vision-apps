@@ -6,8 +6,9 @@ angular.module('risevision.template-editor.directives')
       return {
         restrict: 'E',
         scope: {
-          validExtensions: '=?',
-          uploadManager: '='
+          uploaderId: '@',
+          uploadManager: '=',
+          validExtensions: '=?'
         },
         templateUrl: 'partials/template-editor/components/basic-uploader.html',
         link: function ($scope) {

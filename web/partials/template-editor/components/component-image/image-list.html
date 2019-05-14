@@ -28,12 +28,12 @@
     </div>
   </div>
 
-  <basic-uploader upload-manager="uploadManager" valid-extensions="validExtensions" ng-show="isUploading"></basic-uploader>
+  <basic-uploader uploader-id="image-list-uploader" upload-manager="uploadManager" valid-extensions="validExtensions" ng-show="isUploading"></basic-uploader>
 </div>
 
 <div class="image-component-list-action-button-bar">
   <div class="upload-images">
-    <label class="btn btn-primary btn-block" for="basic-upload-files" ng-disabled="isUploading">
+    <label class="btn btn-primary btn-block" for="image-list-uploader" ng-disabled="isUploading">
       <strong>Upload Images</strong>
     </label>
   </div>
