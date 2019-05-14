@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('basicUploader', ['storage', 'FileUploader', 'UploadURIService', 'STORAGE_UPLOAD_CHUNK_SIZE',
-    function (storage, FileUploader, UploadURIService, STORAGE_UPLOAD_CHUNK_SIZE) {
+  .directive('basicUploader', ['storage', 'fileUploaderFactory', 'UploadURIService', 'STORAGE_UPLOAD_CHUNK_SIZE',
+    function (storage, fileUploaderFactory, UploadURIService, STORAGE_UPLOAD_CHUNK_SIZE) {
       return {
         restrict: 'E',
         scope: {
@@ -10,8 +10,10 @@ angular.module('risevision.template-editor.directives')
           uploadManager: '=',
           validExtensions: '=?'
         },
-        templateUrl: 'partials/template-editor/components/basic-uploader.html',
+        templateUrl: 'partials/template-editor/common/basic-uploader.html',
         link: function ($scope) {
+          var FileUploader = fileUploaderFactory();
+
           $scope.uploader = FileUploader;
           $scope.status = {};
 

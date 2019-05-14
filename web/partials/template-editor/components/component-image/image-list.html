@@ -1,7 +1,7 @@
 <div class="image-component-list te-scrollable-container">
   <div class="pl-0 image-row"
     ng-repeat="image in selectedImages track by $index"
-    ng-show="!isUploading">
+    ng-show="selectedImages.length > 0 && !isUploading">
     <div class="image-thumbnail">
       <img src="{{ image['thumbnail-url'] }}" width="80"></img>
     </div>
@@ -28,7 +28,11 @@
     </div>
   </div>
 
-  <basic-uploader uploader-id="image-list-uploader" upload-manager="uploadManager" valid-extensions="validExtensions" ng-show="isUploading"></basic-uploader>
+  <basic-uploader uploader-id="image-list-uploader"
+                  upload-manager="uploadManager"
+                  valid-extensions="validExtensions"
+                  ng-show="isUploading">
+  </basic-uploader>
 </div>
 
 <div class="image-component-list-action-button-bar">

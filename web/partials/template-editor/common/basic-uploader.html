@@ -1,5 +1,5 @@
 <div>
-  <div id="uploadPanel" class="storage-upload-panel" ng-show="uploader.queue.length > 0">
+  <div class="storage-upload-panel" ng-show="activeUploadCount() > 0">
     <div class="storage-upload-body te-scrollable-container">
       <div class="u_margin-sm-top" ng-repeat="item in uploader.queue">
         <p>
@@ -24,9 +24,8 @@
   </div>
 
   <div class="modal fade" tabindex="-1">
-    <form id="uploadform">
+    <form id="upload-form-{{uploaderId}}">
       <input type="file" id="{{uploaderId}}" storage-file-select uploader="uploader" multiple accept="{{validExtensions}}">
     </form>
   </div>
 </div>
- 

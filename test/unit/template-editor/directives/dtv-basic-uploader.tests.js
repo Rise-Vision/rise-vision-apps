@@ -10,15 +10,17 @@ describe('directive: basicUploader', function () {
 
     $provide.constant('STORAGE_UPLOAD_CHUNK_SIZE', 1024);
 
-    $provide.factory('FileUploader', function () {
-      return FileUploader = {
-        addToQueue: function(files){
-          FileUploader.onAfterAddingFile({file:files[0]});
-        },
-        uploadItem: function () {},
-        queue: [],
-        removeFromQueue: sinon.spy(),
-        retryItem: sinon.spy()
+    $provide.factory('fileUploaderFactory', function () {
+      return function () {
+        return FileUploader = {
+          addToQueue: function(files){
+            FileUploader.onAfterAddingFile({file:files[0]});
+          },
+          uploadItem: function () {},
+          queue: [],
+          removeFromQueue: sinon.spy(),
+          retryItem: sinon.spy()
+        };
       };
     });
 
@@ -57,7 +59,7 @@ describe('directive: basicUploader', function () {
 
   beforeEach(inject(function($compile, $rootScope, $templateCache) {
     $rootScope.uploadManager = uploadManager;
-    $templateCache.put('partials/template-editor/components/basic-uploader.html', '<p>mock</p>');
+    $templateCache.put('partials/template-editor/common/basic-uploader.html', '<p>mock</p>');
 
     element = $compile('<basic-uploader upload-manager="uploadManager" valid-extensions="validExtensions"></basic-uploader>')($rootScope);
     $rootScope.$apply();

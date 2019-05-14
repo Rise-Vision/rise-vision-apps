@@ -1,5 +1,5 @@
 <div class="storage-selector-component">
-  <div class="storage-selector-list-empty">
+  <div class="storage-selector-list-empty" ng-show="folderItems.length === 0 && !isUploading">
     <div class="row">
       <div class="col-xs-12">
         <h2>You have no images in Storage</h2>
@@ -10,12 +10,18 @@
       </div>
     </div>
   </div>
+
+  <basic-uploader uploader-id="{{storageSelectorId}}"
+                  upload-manager="storageUploadManager"
+                  valid-extensions="validExtensions"
+                  ng-show="isUploading">
+  </basic-uploader>
 </div>
 
 <div class="storage-selector-action-button-bar">
   <div class="upload-images">
-    <button class="btn btn-primary btn-block">
+    <label class="btn btn-primary btn-block" for="{{storageSelectorId}}" ng-disabled="isUploading">
       <strong>Upload Images</strong>
-    </button>
+    </label>
   </div>
 </div>
