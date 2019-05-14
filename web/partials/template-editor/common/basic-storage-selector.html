@@ -1,4 +1,17 @@
 <div class="storage-selector-component">
+  <div class="pl-0 image-row"
+    ng-repeat="item in folderItems track by $index"
+    ng-show="folderItems.length > 0 && !isUploading">
+    <div class="image-entry">
+      <div class="image-name" ng-if="isFolder(item.name)">
+        <a ng-click="loadItems(item.name)">{{ fileNameOf(item.name) }}</a>
+      </div>
+      <div class="image-name" ng-if="!isFolder(item.name)">
+        {{ fileNameOf(item.name) }}
+      </div>
+    </div>
+  </div>
+
   <div class="storage-selector-list-empty" ng-show="folderItems.length === 0 && !isUploading">
     <div class="row">
       <div class="col-xs-12">
