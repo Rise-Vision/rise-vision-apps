@@ -57,35 +57,40 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _getThumbnailUrlFor(fileName) {
+            var DEFAULT_THUMBNAIL = "http://lh3.googleusercontent.com/hOkuYaXqdtS2e4fzQGx1zqTFKko71OSDVTrOb84JsOeaUUL8hfOaLaZ5eCquqN20u_NJv_QSwMoNQl-vJ1lT";
+            var regex = /risemedialibrary-([0-9a-f-]{36})[/](.+)/g;
+            var match = regex.exec(fileName);
+
+            if(!match) {
+              $log.error("Filename is not a valid Rise Storage path: " + fileName );
+
+              return Promise.resolve(DEFAULT_THUMBNAIL);
+            }
+
+            return _requestFileData(match[1], match[2])
+              .then(function (resp) {
+                var file = resp && resp.result && resp.result.result &&
+                  resp.result.files && resp.result.files[0];
+
+                return file && file.metadata && file.metadata.thumbnail ?
+                  file.metadata.thumbnail : DEFAULT_THUMBNAIL;
+              })
+              .catch( function(error) {
+                $log.error( error );
+
+                return DEFAULT_THUMBNAIL;
+              })
+          }
+
+          function _requestFileData(companyId, file) {
             var search = {
-              'companyId': 'cf85e5c4-9439-40ce-94d6-e5ea6ea2411c',
-              'file': 'linux.png'
-            };
-            var search2 = {
-              'companyId': 'b428b4e8-c8b9-41d5-8a10-b4193c789443',
-              'file': 'download.png'
+              'companyId': companyId,
+              'file': file
             };
 
             return storageAPILoader()
               .then(function (storageApi) {
-                storageApi.files.get(search)
-                .then(function (resp) {
-                  console.log(JSON.stringify(resp));
-                })
-                .catch( function(error) {
-                  $log.error( error );
-                });
-
-                return storageApi.files.get(search2);
-              })
-              .then(function (resp) {
-                console.log(JSON.stringify(resp));
-              })
-              .catch( function(error) {
-                $log.error( error );
-              })
-              .then( function() {
-                return "http://lh3.googleusercontent.com/hOkuYaXqdtS2e4fzQGx1zqTFKko71OSDVTrOb84JsOeaUUL8hfOaLaZ5eCquqN20u_NJv_QSwMoNQl-vJ1lT";
+                return storageApi.files.get(search);
               });
           }
 
