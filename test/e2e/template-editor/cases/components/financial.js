@@ -3,6 +3,7 @@
 var expect = require('rv-common-e2e').expect;
 var PresentationListPage = require('./../../pages/presentationListPage.js');
 var TemplateEditorPage = require('./../../pages/templateEditorPage.js');
+var FinancialComponentPage = require('./../../pages/components/financialComponentPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var FinancialComponentScenarios = function () {
@@ -14,42 +15,36 @@ var FinancialComponentScenarios = function () {
     var presentationName = 'Financial Component Presentation - ' + testStartTime;
     var presentationsListPage;
     var templateEditorPage;
+    var financialComponentPage;
 
     before(function () {
       presentationsListPage = new PresentationListPage();
       templateEditorPage = new TemplateEditorPage();
+      financialComponentPage = new FinancialComponentPage();
 
       presentationsListPage.loadCurrentCompanyPresentationList();
-      presentationsListPage.createNewPresentationFromTemplate("Example Financial Template", "example-financial-template");
+      presentationsListPage.createNewPresentationFromTemplate('"Example Financial Template"', 'example-financial-template');
     });
 
     describe('basic operations', function () {
 
-      function _loadFinancialSelector() {
-        helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
-        helper.wait(templateEditorPage.getFinancialComponentEdit(), 'Financial Component Edit');
-        helper.clickWhenClickable(templateEditorPage.getFinancialComponentEdit(), 'Financial Component Edit');
-        expect(templateEditorPage.getAddCurrenciesButton().isEnabled()).to.eventually.be.true;
-      }
-
       it('should show one Financial Component', function () {
-        // presentationsListPage.loadPresentation(presentationName);
-        _loadFinancialSelector();
-        expect(templateEditorPage.getInstrumentItems().count()).to.eventually.equal(3);
+        templateEditorPage.selectComponent("Financial - ");
+        expect(financialComponentPage.getInstrumentItems().count()).to.eventually.equal(3);
       });
 
       it('should show open the Instrument Selector', function () {
-        helper.wait(templateEditorPage.getAddCurrenciesButton(), 'Add Currencies');
-        helper.clickWhenClickable(templateEditorPage.getAddCurrenciesButton(), 'Add Currencies');
-        expect(templateEditorPage.getAddInstrumentButton().isPresent()).to.eventually.be.true;
+        helper.wait(financialComponentPage.getAddCurrenciesButton(), 'Add Currencies');
+        helper.clickWhenClickable(financialComponentPage.getAddCurrenciesButton(), 'Add Currencies');
+        expect(financialComponentPage.getAddInstrumentButton().isPresent()).to.eventually.be.true;
       });
 
       it('should add JPY/USD instrument', function () {
-        helper.wait(templateEditorPage.getJpyUsdSelector(), 'JPY/USD Selector');
-        helper.clickWhenClickable(templateEditorPage.getJpyUsdSelector(), 'JPY/USD Selector');
-        helper.wait(templateEditorPage.getAddInstrumentButton(), 'Add Instrument');
-        helper.clickWhenClickable(templateEditorPage.getAddInstrumentButton(), 'Add Instrument');
-        expect(templateEditorPage.getAddCurrenciesButton().isPresent()).to.eventually.be.true;
+        helper.wait(financialComponentPage.getJpyUsdSelector(), 'JPY/USD Selector');
+        helper.clickWhenClickable(financialComponentPage.getJpyUsdSelector(), 'JPY/USD Selector');
+        helper.wait(financialComponentPage.getAddInstrumentButton(), 'Add Instrument');
+        helper.clickWhenClickable(financialComponentPage.getAddInstrumentButton(), 'Add Instrument');
+        expect(financialComponentPage.getAddCurrenciesButton().isPresent()).to.eventually.be.true;
       });
 
       it('should save the Presentation, reload it, and validate changes were saved', function () {
@@ -66,9 +61,9 @@ var FinancialComponentScenarios = function () {
         expect(templateEditorPage.getSaveButton().isEnabled()).to.eventually.be.true;
 
         presentationsListPage.loadPresentation(presentationName);
-        _loadFinancialSelector();
+        templateEditorPage.selectComponent("Financial - ");
 
-        expect(templateEditorPage.getInstrumentItems().count()).to.eventually.equal(4);
+        expect(financialComponentPage.getInstrumentItems().count()).to.eventually.equal(4);
       });
     });
   });
