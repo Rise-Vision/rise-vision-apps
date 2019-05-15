@@ -63,8 +63,6 @@ jobs:
           at: ~/
       - run: 
           command: NODE_ENV=test npm run ci-build
-      - store_artifacts:
-          path: ~/rise-vision-apps/reports
   test_unit:
     working_directory: ~/rise-vision-apps
     docker: *BUILDIMAGE

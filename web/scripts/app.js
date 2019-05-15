@@ -66,7 +66,7 @@ angular.module('risevision.apps', [
       $locationProvider, $tooltipProvider) {
       $tooltipProvider.setTriggers({
         'show': 'hide'
-      })
+      });
 
       // Use $stateProvider to configure states.
       $stateProvider.state('apps', {
