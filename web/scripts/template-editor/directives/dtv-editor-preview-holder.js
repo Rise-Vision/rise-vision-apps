@@ -105,12 +105,12 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _applyAspectRatio() {
-            var frameStyle, parentStyle;
+            var frameStyle, parentStyle, viewHeight;
             var isMobile = _mediaMatches('(max-width: 768px)');
             var offset = (isMobile ? MOBILE_MARGIN : DESKTOP_MARGIN) * 2;
 
             if (isMobile) {
-              var viewHeight = previewHolder.clientHeight - offset;
+              viewHeight = previewHolder.clientHeight - offset;
               parentStyle = 'width: ' + $scope.getMobileWidth() + 'px';
               frameStyle = _getFrameStyle(viewHeight, _getTemplateHeight());
             } else if (_useFullWidth()) {
@@ -120,7 +120,7 @@ angular.module('risevision.template-editor.directives')
               parentStyle = 'padding-bottom: ' + aspectRatio + ';';
               frameStyle = _getFrameStyle(viewWidth, _getTemplateWidth());
             } else {
-              var viewHeight = previewHolder.clientHeight - offset;
+              viewHeight = previewHolder.clientHeight - offset;
 
               parentStyle = 'height: 100%; width: ' + $scope.getDesktopWidth() + 'px';
               frameStyle = _getFrameStyle(viewHeight, _getTemplateHeight());

@@ -34,7 +34,7 @@ angular.module('risevision.storage.services')
           var newPieces = [];
           pieces.forEach(function (v) {
             newPieces.push(imageArrayBuffer.slice(v.recess, v.offset));
-          }, this);
+          });
           newPieces.push(imageArrayBuffer.slice(recess));
           return newPieces;
         }
