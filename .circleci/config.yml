@@ -202,7 +202,7 @@ workflows:
   test_and_deploy:
     jobs: 
       - dependencies
-      - test_build
+      - test_build:
           requires:
             - dependencies
       - test_unit:
