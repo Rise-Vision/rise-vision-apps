@@ -1,13 +1,13 @@
 <div class="storage-selector-component">
-  <div class="pl-0 image-row"
-    ng-repeat="item in folderItems track by $index"
-    ng-show="folderItems.length > 0 && !isUploading">
-    <div class="image-entry">
-      <div class="image-name" ng-if="isFolder(item.name)">
-        <a ng-click="loadItems(item.name)">{{ fileNameOf(item.name) }}</a>
-      </div>
-      <div class="image-name" ng-if="!isFolder(item.name)">
-        {{ fileNameOf(item.name) }}
+  <div class="storage-selector-list" ng-show="folderItems.length > 0 && !isUploading">
+    <div class="image-row" ng-repeat="item in folderItems track by $index">
+      <div class="image-entry">
+        <div class="image-name" ng-if="isFolder(item.name)" ng-click="loadItems(item.name)">
+          <a href="#">{{ fileNameOf(item.name) }}</a>
+        </div>
+        <div class="image-name" ng-if="!isFolder(item.name)" ng-click="selectItem(item)" ng-class="{ 'selected-item': isSelected(item) }">
+          <a href="#">{{ fileNameOf(item.name) }}</a>
+        </div>
       </div>
     </div>
   </div>
@@ -36,5 +36,10 @@
     <label class="btn btn-primary btn-block" for="{{storageSelectorId}}" ng-disabled="isUploading">
       <strong>Upload Images</strong>
     </label>
+  </div>
+  <div class="add-selected">
+    <button class="btn btn-primary btn-block" ng-click="addSelected()" ng-disabled="isUploading">
+      <strong>Add Selected</strong>
+    </button>
   </div>
 </div>

@@ -26,15 +26,17 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.activeUploadCount = function () {
-            return FileUploader.queue.filter(function (file) {
-              return !file.isUploaded || file.isError;
-            }).length;
+            return FileUploader.queue.length;
           };
 
           $scope.retryFailedUpload = function (file) {
             if (file.isError) {
               FileUploader.retryItem(file);
             }
+          };
+
+          $scope.fileNameOf = function( path ) {
+            return path.split('/').pop();
           };
 
           FileUploader.onAfterAddingFile = function (fileItem) {
@@ -68,14 +70,13 @@ angular.module('risevision.template-editor.directives')
           };
 
           FileUploader.onCompleteItem = function (item) {
-            $scope.uploadManager.onUploadStatus(_isUploading());
+            if (item.isCancel || !item.isSuccess) {
+              $scope.uploadManager.onUploadStatus(_isUploading());
 
-            if (item.isCancel) {
-              return;
-            }
+              if (!item.isSuccess) {
+                console.log('Failed to upload: ', item.file);
+              }
 
-            if (!item.isSuccess) {
-              console.log('Failed to upload: ', item.file);
               return;
             }
 

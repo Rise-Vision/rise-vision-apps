@@ -145,7 +145,7 @@ describe('directive: basicUploader', function () {
       }
     ];
 
-    expect($scope.activeUploadCount()).to.equal(2);
+    expect($scope.activeUploadCount()).to.equal(3);
   });
 
   describe('retryFailedUpload:', function () {
