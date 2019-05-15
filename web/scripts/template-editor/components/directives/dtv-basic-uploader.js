@@ -17,7 +17,7 @@ angular.module('risevision.template-editor.directives')
           $scope.uploader = FileUploader;
           $scope.status = {};
 
-          function _isUploading () {
+          function _isUploading() {
             return $scope.activeUploadCount() > 0;
           }
 

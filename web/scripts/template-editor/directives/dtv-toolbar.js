@@ -12,11 +12,11 @@ angular.module('risevision.template-editor.directives')
           $scope.defaultNameValue = templateEditorFactory.presentation.name;
           $scope.defaultNameWidth = '';
 
-          $scope.onPresentationNameBlur = function() {
+          $scope.onPresentationNameBlur = function () {
             $scope.isEditingName = false;
           };
 
-          $scope.$watch('isEditingName', function(editing) {
+          $scope.$watch('isEditingName', function (editing) {
             var templateNameInput = element.find('input.presentation-name');
 
             if (!$scope.defaultNameWidth) {
@@ -60,9 +60,9 @@ angular.module('risevision.template-editor.directives')
             });
           };
 
-          $scope.presentationNameKeyUp = function(keyEvent) {
+          $scope.presentationNameKeyUp = function (keyEvent) {
             // handle enter key
-            if ( keyEvent.which === 13 && $scope.isEditingName) {
+            if (keyEvent.which === 13 && $scope.isEditingName) {
               $scope.isEditingName = false;
             }
           };

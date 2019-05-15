@@ -3,7 +3,7 @@
 angular.module('risevision.displays.controllers')
   .controller('displayAddModal', ['$scope', '$modalInstance', 'displayFactory', 'downloadOnly',
     function ($scope, $modalInstance, displayFactory, downloadOnly) {
-      var _init = function() {
+      var _init = function () {
         $scope.display = displayFactory.display;
         $scope.downloadOnly = downloadOnly;
 
@@ -12,7 +12,7 @@ angular.module('risevision.displays.controllers')
         }
       };
 
-      $scope.$on('displayCreated', function() {
+      $scope.$on('displayCreated', function () {
         $scope.display = displayFactory.display;
       });
 

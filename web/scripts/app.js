@@ -448,7 +448,7 @@ angular.module('risevision.apps', [
           resolve: {
             presentationInfo: ['$stateParams', 'canAccessApps', 'templateEditorFactory',
               function ($stateParams, canAccessApps, templateEditorFactory) {
-                return canAccessApps().then(function() {
+                return canAccessApps().then(function () {
                   return templateEditorFactory.getPresentation($stateParams.presentationId);
                 });
               }
@@ -483,7 +483,7 @@ angular.module('risevision.apps', [
     function ($rootScope, $state, $modalStack, userState, displayFactory, $window) {
 
       if ($window.Stretchy) {
-        $window.Stretchy.selectors.filter = ".input-stretchy, .input-stretchy *";
+        $window.Stretchy.selectors.filter = '.input-stretchy, .input-stretchy *';
       }
 
       $rootScope.$on('risevision.user.signedOut', function () {

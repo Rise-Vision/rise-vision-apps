@@ -3,7 +3,8 @@
 angular.module('risevision.template-editor.directives')
   .constant('DEFAULT_IMAGE_THUMBNAIL', 'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon%402x.png')
   .constant('SUPPORTED_IMAGE_TYPES', '.png, .jpg, .gif, .tif, .tiff')
-  .directive('templateComponentImage', ['$log', 'templateEditorFactory', 'storageAPILoader', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
+  .directive('templateComponentImage', ['$log', 'templateEditorFactory', 'storageAPILoader', 'DEFAULT_IMAGE_THUMBNAIL',
+    'SUPPORTED_IMAGE_TYPES',
     function ($log, templateEditorFactory, storageAPILoader, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES) {
       return {
         restrict: 'E',
@@ -18,13 +19,17 @@ angular.module('risevision.template-editor.directives')
             addFile: function (file) {
               console.log('Added file to uploadManager', file);
               var selectedImages = _.cloneDeep($scope.selectedImages);
-              var newFile = { file: file.name, 'thumbnail-url': file.metadata.thumbnail };
-              var idx = _.findIndex(selectedImages, { file: file.name });
+              var newFile = {
+                file: file.name,
+                'thumbnail-url': file.metadata.thumbnail
+              };
+              var idx = _.findIndex(selectedImages, {
+                file: file.name
+              });
 
               if (idx >= 0) {
                 selectedImages.splice(idx, 1, newFile);
-              }
-              else {
+              } else {
                 selectedImages.push(newFile);
               }
 
@@ -40,7 +45,7 @@ angular.module('risevision.template-editor.directives')
           function _loadSelectedImages() {
             var selectedImages = $scope.getAttributeData($scope.componentId, 'metadata');
 
-            if(selectedImages) {
+            if (selectedImages) {
               $scope.selectedImages = selectedImages;
             } else {
               _buildSelectedImagesFromBlueprint();
@@ -61,8 +66,8 @@ angular.module('risevision.template-editor.directives')
             var regex = /risemedialibrary-([0-9a-f-]{36})[/](.+)/g;
             var match = regex.exec(fileName);
 
-            if(!match) {
-              $log.error("Filename is not a valid Rise Storage path: " + fileName );
+            if (!match) {
+              $log.error('Filename is not a valid Rise Storage path: ' + fileName);
 
               return Promise.resolve(DEFAULT_IMAGE_THUMBNAIL);
             }
@@ -75,11 +80,11 @@ angular.module('risevision.template-editor.directives')
                 return file && file.metadata && file.metadata.thumbnail ?
                   file.metadata.thumbnail : DEFAULT_IMAGE_THUMBNAIL;
               })
-              .catch( function(error) {
-                $log.error( error );
+              .catch(function (error) {
+                $log.error(error);
 
                 return DEFAULT_IMAGE_THUMBNAIL;
-              })
+              });
           }
 
           function _requestFileData(companyId, file) {
@@ -95,7 +100,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _buildListRecursive(metadata, fileNames) {
-            if( fileNames.length === 0 ) {
+            if (fileNames.length === 0) {
               _setMetadata(metadata);
               $scope.factory.loadingPresentation = false;
 
@@ -105,24 +110,24 @@ angular.module('risevision.template-editor.directives')
             var fileName = fileNames.shift();
 
             _getThumbnailUrlFor(fileName)
-            .then( function(url) {
-              var entry = {
-                'file': fileName,
-                'thumbnail-url': url || ''
-              };
+              .then(function (url) {
+                var entry = {
+                  'file': fileName,
+                  'thumbnail-url': url || ''
+                };
 
-              metadata.push(entry);
-            })
-            .catch( function(error) {
-              $log.error( error );
-            })
-            .then( function() {
-              _buildListRecursive(metadata, fileNames);
-            });
+                metadata.push(entry);
+              })
+              .catch(function (error) {
+                $log.error(error);
+              })
+              .then(function () {
+                _buildListRecursive(metadata, fileNames);
+              });
           }
 
           function _filesAttributeFor(metadata) {
-            return _.map(metadata, function(entry) {
+            return _.map(metadata, function (entry) {
               return entry.file;
             }).join('|');
           }
@@ -141,7 +146,7 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-data-image',
             icon: 'fa-image',
             element: element,
-            show: function() {
+            show: function () {
               element.show();
 
               _reset();
@@ -156,9 +161,9 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
-          $scope.fileNameOf = function( path ) {
+          $scope.fileNameOf = function (path) {
             return path.split('/').pop();
-          }
+          };
 
           $scope.uploadImages = function () {
             $scope.showNextPanel('.upload-images-container');

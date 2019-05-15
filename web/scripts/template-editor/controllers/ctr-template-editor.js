@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('risevision.template-editor.controllers')
-  .controller('TemplateEditorController',
-    ['$scope', '$filter', '$loading', '$modal', '$state', '$timeout', '$window', 'templateEditorFactory', 'userState', 'presentationUtils',
-    function ($scope, $filter, $loading, $modal, $state, $timeout, $window, templateEditorFactory, userState, presentationUtils) {
+  .controller('TemplateEditorController', ['$scope', '$filter', '$loading', '$modal', '$state', '$timeout', '$window',
+    'templateEditorFactory', 'userState', 'presentationUtils',
+    function ($scope, $filter, $loading, $modal, $state, $timeout, $window, templateEditorFactory, userState,
+      presentationUtils) {
       $scope.factory = templateEditorFactory;
       $scope.isSubcompanySelected = userState.isSubcompanySelected;
       $scope.isTestCompanySelected = userState.isTestCompanySelected;
@@ -11,18 +12,20 @@ angular.module('risevision.template-editor.controllers')
 
       $scope.considerChromeBarHeight = _considerChromeBarHeight();
 
-      $scope.getBlueprintData = function(componentId, attributeKey) {
+      $scope.getBlueprintData = function (componentId, attributeKey) {
         var components = $scope.factory.blueprintData.components;
-        var component = _.find(components, {id: componentId});
+        var component = _.find(components, {
+          id: componentId
+        });
 
-        if(!component || !component.attributes) {
+        if (!component || !component.attributes) {
           return null;
         }
 
         var attributes = component.attributes;
 
         // if the attributeKey is not provided, it returns the full attributes structure
-        if(!attributeKey) {
+        if (!attributeKey) {
           return attributes;
         }
 
@@ -30,14 +33,14 @@ angular.module('risevision.template-editor.controllers')
         return attribute && attribute.value;
       };
 
-      $scope.getAttributeData = function(componentId, attributeKey) {
+      $scope.getAttributeData = function (componentId, attributeKey) {
         var component = _componentFor(componentId);
 
         // if the attributeKey is not provided, it returns the full component structure
         return attributeKey ? component[attributeKey] : component;
       };
 
-      $scope.setAttributeData = function(componentId, attributeKey, value) {
+      $scope.setAttributeData = function (componentId, attributeKey, value) {
         var component = _componentFor(componentId);
 
         component[attributeKey] = value;
@@ -46,14 +49,18 @@ angular.module('risevision.template-editor.controllers')
       function _componentFor(componentId) {
         var attributeData = $scope.factory.presentation.templateAttributeData;
 
-        if(!attributeData.components) {
+        if (!attributeData.components) {
           attributeData.components = [];
         }
 
-        var component = _.find(attributeData.components, {id: componentId});
+        var component = _.find(attributeData.components, {
+          id: componentId
+        });
 
-        if(!component) {
-          component = { id: componentId };
+        if (!component) {
+          component = {
+            id: componentId
+          };
 
           attributeData.components.push(component);
         }
@@ -61,7 +68,8 @@ angular.module('risevision.template-editor.controllers')
         return component;
       }
 
-      var _bypassUnsaved = false, _initializing = false;
+      var _bypassUnsaved = false,
+        _initializing = false;
       var _setUnsavedChanges = function (state) {
         $timeout(function () {
           $scope.hasUnsavedChanges = state;
@@ -73,11 +81,11 @@ angular.module('risevision.template-editor.controllers')
 
         // Firefox requires desktop rule
         return presentationUtils.isMobileBrowser() &&
-          !( /Firefox/i.test(userAgent) );
+          !(/Firefox/i.test(userAgent));
       }
 
       $scope.$watch('factory.presentation', function (newValue, oldValue) {
-        var ignoredFields = [ 'revisionStatusName', 'changeDate', 'changedBy' ];
+        var ignoredFields = ['revisionStatusName', 'changeDate', 'changedBy'];
 
         if ($scope.hasUnsavedChanges) {
           return;
@@ -127,7 +135,7 @@ angular.module('risevision.template-editor.controllers')
         $window.onbeforeunload = undefined;
       });
 
-      $scope.$watch('factory.loadingPresentation', function(loading) {
+      $scope.$watch('factory.loadingPresentation', function (loading) {
         if (loading) {
           $loading.start('template-editor-loader');
         } else {

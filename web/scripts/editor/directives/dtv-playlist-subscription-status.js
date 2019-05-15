@@ -14,7 +14,7 @@
           link: function ($scope) {
             $scope.playlistItemFactory = playlistItemFactory;
 
-            $scope.showStatus = function() {
+            $scope.showStatus = function () {
               var gadget = $scope.item && $scope.item.gadget;
 
               return gadget && gadget.subscriptionStatus && !gadget.isSubscribed && !gadget.isLicensed;

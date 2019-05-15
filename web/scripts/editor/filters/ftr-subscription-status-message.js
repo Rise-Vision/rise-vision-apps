@@ -8,7 +8,7 @@ angular.module('risevision.editor.filters')
           if (gadget.isSubscribed && !gadget.isLicensed) {
             return gadget.subscriptionStatus;
           } else {
-            return $filter('translate')('editor-app.subscription.status.professional');            
+            return $filter('translate')('editor-app.subscription.status.professional');
           }
         };
 
