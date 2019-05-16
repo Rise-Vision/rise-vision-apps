@@ -49,6 +49,9 @@ describe('directive: TemplateComponentImage', function() {
     $scope.registerDirective = sinon.stub();
     $scope.setAttributeData = sinon.stub();
     $scope.showNextPanel = sinon.stub();
+    $scope.getBlueprintData = function() {
+      return null;
+    };
 
     timeout = $timeout;
     element = $compile("<template-component-image></template-component-image>")($scope);
@@ -77,11 +80,51 @@ describe('directive: TemplateComponentImage', function() {
 
     $scope.getAttributeData = function() {
       return sampleImages;
-    }
+    };
 
     directive.show();
 
     expect($scope.selectedImages).to.deep.equal(sampleImages);
+
+    timeout.flush();
+  });
+
+  it('should detect default images', function() {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+    var sampleImages = [
+      { "file": "image.png", "thumbnail-url": "http://image" }
+    ];
+
+    $scope.getAttributeData = function() {
+      return sampleImages;
+    };
+    $scope.getBlueprintData = function() {
+      return "image.png";
+    };
+
+    directive.show();
+
+    expect($scope.isDefaultImageList).to.be.true;
+
+    timeout.flush();
+  });
+
+  it('should not consider a default value if it is not', function() {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+    var sampleImages = [
+      { "file": "image.png", "thumbnail-url": "http://image" }
+    ];
+
+    $scope.getAttributeData = function() {
+      return sampleImages;
+    };
+    $scope.getBlueprintData = function() {
+      return "default.png";
+    };
+
+    directive.show();
+
+    expect($scope.isDefaultImageList).to.be.false;
 
     timeout.flush();
   });
@@ -92,10 +135,10 @@ describe('directive: TemplateComponentImage', function() {
 
     $scope.getAttributeData = function() {
       return null;
-    }
+    };
     $scope.getBlueprintData = function() {
       return TEST_FILE;
-    }
+    };
 
     directive.show();
     timeout.flush();

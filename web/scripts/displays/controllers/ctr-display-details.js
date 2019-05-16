@@ -89,7 +89,8 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.isProAvailable = function () {
-        return playerLicenseFactory.hasProfessionalLicenses() && $scope.getProLicenseCount() > 0 && !$scope.areAllProLicensesUsed();
+        return playerLicenseFactory.hasProfessionalLicenses() && $scope.getProLicenseCount() > 0 && !$scope
+          .areAllProLicensesUsed();
       };
 
       $scope.isProSupported = function () {

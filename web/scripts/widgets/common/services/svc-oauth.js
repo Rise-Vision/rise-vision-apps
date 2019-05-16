@@ -10,7 +10,8 @@ angular.module('risevision.widgets.services')
       var key = '';
 
       var _getRequestOptions = function () {
-        var authorization = (userState.getAccessToken().token_type === 'Bearer') ? userState.getAccessToken().token_type +
+        var authorization = (userState.getAccessToken().token_type === 'Bearer') ? userState.getAccessToken()
+          .token_type +
           ' ' + userState.getAccessToken().access_token : userState.getAccessToken().access_token;
         var requestOptions = {
           'headers': {
@@ -46,7 +47,8 @@ angular.module('risevision.widgets.services')
         var deferred = $q.defer();
         _getStatus()
           .then(function (response) {
-            if (response.data && Array.isArray(response.data.authenticated) && response.data.authenticated.length) {
+            if (response.data && Array.isArray(response.data.authenticated) && response.data.authenticated
+              .length) {
               key = userState.getSelectedCompanyId() + ':' + provider + ':' + response.data.authenticated[0];
               deferred.resolve(true);
             } else {

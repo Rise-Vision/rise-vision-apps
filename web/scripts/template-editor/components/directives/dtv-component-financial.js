@@ -37,7 +37,8 @@ angular.module('risevision.template-editor.directives')
             var symbolString = $scope.getBlueprintData($scope.componentId, 'symbols');
 
             if (!symbolString) {
-              $log.error('The component blueprint data is not providing default symbols value: ' + $scope.componentId);
+              $log.error('The component blueprint data is not providing default symbols value: ' + $scope
+                .componentId);
 
               return;
             }
@@ -124,7 +125,8 @@ angular.module('risevision.template-editor.directives')
               }, 1000);
             },
             isHeaderBottomRuleVisible: function () {
-              return $scope.enteringInstrumentSelector || $scope.showInstrumentList || $scope.exitingInstrumentSelector ||
+              return $scope.enteringInstrumentSelector || $scope.showInstrumentList || $scope
+                .exitingInstrumentSelector ||
                 $scope.exitingSymbolSelector;
             },
             onBackHandler: function () {
