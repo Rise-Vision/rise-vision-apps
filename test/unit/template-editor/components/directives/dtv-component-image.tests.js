@@ -51,7 +51,7 @@ describe('directive: TemplateComponentImage', function() {
     $scope.showNextPanel = sinon.stub();
     $scope.getBlueprintData = function() {
       return null;
-    }
+    };
 
     timeout = $timeout;
     element = $compile("<template-component-image></template-component-image>")($scope);
@@ -80,7 +80,7 @@ describe('directive: TemplateComponentImage', function() {
 
     $scope.getAttributeData = function() {
       return sampleImages;
-    }
+    };
 
     directive.show();
 
@@ -97,10 +97,10 @@ describe('directive: TemplateComponentImage', function() {
 
     $scope.getAttributeData = function() {
       return sampleImages;
-    }
+    };
     $scope.getBlueprintData = function() {
       return "image.png";
-    }
+    };
 
     directive.show();
 
@@ -117,10 +117,10 @@ describe('directive: TemplateComponentImage', function() {
 
     $scope.getAttributeData = function() {
       return sampleImages;
-    }
+    };
     $scope.getBlueprintData = function() {
       return "default.png";
-    }
+    };
 
     directive.show();
 
@@ -135,10 +135,10 @@ describe('directive: TemplateComponentImage', function() {
 
     $scope.getAttributeData = function() {
       return null;
-    }
+    };
     $scope.getBlueprintData = function() {
       return TEST_FILE;
-    }
+    };
 
     directive.show();
     timeout.flush();
