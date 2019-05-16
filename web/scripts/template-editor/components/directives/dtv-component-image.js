@@ -8,6 +8,8 @@ angular.module('risevision.template-editor.directives')
         restrict: 'E',
         templateUrl: 'partials/template-editor/components/component-image.html',
         link: function ($scope, element) {
+          var storagePanelSelector = '.storage-selector-container';
+
           $scope.factory = templateEditorFactory;
           $scope.validExtensions = SUPPORTED_IMAGE_TYPES;
           $scope.uploadManager = {
@@ -17,23 +19,42 @@ angular.module('risevision.template-editor.directives')
             addFile: function (file) {
               console.log('Added file to uploadManager', file);
               var selectedImages = _.cloneDeep($scope.selectedImages);
-              var newFile = { file: file.name, 'thumbnail-url': file.metadata.thumbnail };
-              var idx = _.findIndex(selectedImages, { file: file.name });
 
-              if (idx >= 0) {
-                selectedImages.splice(idx, 1, newFile);
-              }
-              else {
-                selectedImages.push(newFile);
-              }
+              _addFileToSet(selectedImages, file);
 
               _setMetadata(selectedImages);
+            }
+          };
+          $scope.storageManager = {
+            addSelectedItems: function (newSelectedItems) {
+              console.log('addSelectedItems', newSelectedItems);
+
+              var selectedImages = _.cloneDeep($scope.selectedImages);
+
+              newSelectedItems.forEach(function (file) {
+                _addFileToSet(selectedImages, file);
+              });
+
+              _setMetadata(selectedImages);
+              $scope.showPreviousPanel();
             }
           };
 
           function _reset() {
             $scope.selectedImages = [];
             $scope.isUploading = false;
+          }
+
+          function _addFileToSet (selectedImages, file) {
+            var newFile = { file: file.name, 'thumbnail-url': file.metadata.thumbnail };
+            var idx = _.findIndex(selectedImages, { file: file.name });
+
+            if (idx >= 0) {
+              selectedImages.splice(idx, 1, newFile);
+            }
+            else {
+              selectedImages.push(newFile);
+            }
           }
 
           function _loadSelectedImages() {
@@ -119,7 +140,9 @@ angular.module('risevision.template-editor.directives')
               $scope.showNextPanel('.image-component-container');
             },
             onBackHandler: function () {
-              return $scope.showPreviousPanel();
+              if ($scope.getCurrentPanel() !== storagePanelSelector || !$scope.storageManager.onBackHandler()) {
+                return $scope.showPreviousPanel();
+              }
             }
           });
 
@@ -127,12 +150,9 @@ angular.module('risevision.template-editor.directives')
             return path.split('/').pop();
           };
 
-          $scope.uploadImages = function () {
-            $scope.showNextPanel('.upload-images-container');
-          };
-
           $scope.selectFromStorage = function () {
-            $scope.showNextPanel('.storage-selector-container');
+            $scope.storageManager.refresh();
+            $scope.showNextPanel(storagePanelSelector);
           };
 
           $scope.getPartialPath = function (partial) {

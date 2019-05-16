@@ -7,7 +7,8 @@ angular.module('risevision.template-editor.directives')
         restrict: 'E',
         scope: {
           storageSelectorId: '@',
-          validExtensions: '=?'
+          validExtensions: '=?',
+          storageManager: '='
         },
         templateUrl: 'partials/template-editor/common/basic-storage-selector.html',
         link: function ($scope) {
@@ -29,6 +30,27 @@ angular.module('risevision.template-editor.directives')
               }
             }
           };
+          $scope.storageManager = angular.extend($scope.storageManager, {
+            refresh: function () {
+              $scope.loadItems($scope.storageUploadManager.folderPath);
+            },
+            onBackHandler: function () {
+              var parts = $scope.storageUploadManager.folderPath.split('/');
+
+              if (parts.length === 0) {
+                return false;
+              } else {
+                $scope.storageUploadManager.folderPath = parts.join('/') + '/';
+                return true;
+              }
+            }
+          });
+
+          function _reset () {
+            $scope.folderItems = [];
+            $scope.selectedItems = [];
+            $scope.storageUploadManager.folderPath = '';
+          }
 
           $scope.isFolder = function (path) {
             return path[path.length - 1] === '/';
@@ -46,7 +68,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.loadItems = function (newFolderPath) {
-            var folderPath = ($scope.folderPath || '') + (newFolderPath || '');
+            var folderPath = ($scope.storageUploadManager.folderPath || '') + (newFolderPath || '');
 
             storage.files.get({ folderPath: folderPath }).then(function (items) {
               $scope.selectedItems = [];
@@ -72,7 +94,11 @@ angular.module('risevision.template-editor.directives')
             return $scope.selectedItems.indexOf(item) >= 0;
           };
 
-          $scope.loadItems();
+          $scope.addSelected = function () {
+            console.log('addSelected', $scope.selectedItems);
+            $scope.storageManager.addSelectedItems($scope.selectedItems);
+            _reset();
+          };
         }
       };
     }

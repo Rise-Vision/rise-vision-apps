@@ -4,6 +4,9 @@
   </div>
 
   <div class="storage-selector-container" style="display: none">
-    <ng-include src="getPartialPath('image-storage.html')"></ng-include>
+    <basic-storage-selector storage-selector-id="image-storage"
+                            valid-extensions="validExtensions"
+                            storage-manager="storageManager">
+    </basic-storage-selector>
   </div>
 </div>

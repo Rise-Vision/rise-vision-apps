@@ -71,11 +71,15 @@ angular.module('risevision.template-editor.directives')
               directive.isHeaderBottomRuleVisible() : true;
           };
 
+          $scope.getCurrentPanel = function () {
+            return $scope.panels.length > 0 ? $scope.panels[$scope.panels.length - 1] : null;
+          };
+
           $scope.showNextPanel = function (newPanel) {
-            var previousPanel = $scope.panels.length > 0 ? $scope.panels[$scope.panels.length - 1] : null;
+            var currentPanel = $scope.getCurrentPanel();
 
             $scope.panels.push(newPanel);
-            _swapToLeft(previousPanel, newPanel);
+            _swapToLeft(currentPanel, newPanel);
           };
 
           $scope.showPreviousPanel = function () {
