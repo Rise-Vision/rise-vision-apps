@@ -28,7 +28,7 @@ angular.module('risevision.template-editor.directives')
           };
           $scope.storageManager = {
             addSelectedItems: function (newSelectedItems) {
-              var selectedImages = _.cloneDeep($scope.selectedImages);
+              var selectedImages = $scope.isDefaultImageList ? [] : _.cloneDeep($scope.selectedImages);
 
               newSelectedItems.forEach(function (file) {
                 _addFileToSet(selectedImages, file);
