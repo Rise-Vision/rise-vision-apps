@@ -18,7 +18,8 @@ angular.module('risevision.template-editor.directives')
             },
             addFile: function (file) {
               console.log('Added file to uploadManager', file);
-              var selectedImages = _.cloneDeep($scope.selectedImages);
+              var selectedImages = $scope.isDefaultImageList ? [] : _.cloneDeep($scope.selectedImages);
+
               var newFile = {
                 file: file.name,
                 'thumbnail-url': file.metadata.thumbnail
@@ -40,6 +41,7 @@ angular.module('risevision.template-editor.directives')
           function _reset() {
             $scope.selectedImages = [];
             $scope.isUploading = false;
+            $scope.isDefaultImageList = false;
           }
 
           function _loadSelectedImages() {
@@ -52,9 +54,13 @@ angular.module('risevision.template-editor.directives')
             }
           }
 
+          function _getDefaultFilesAttribute() {
+            return $scope.getBlueprintData($scope.componentId, 'files');
+          }
+
           function _buildSelectedImagesFromBlueprint() {
             $scope.factory.loadingPresentation = true;
-            var files = $scope.getBlueprintData($scope.componentId, 'files');
+            var files = _getDefaultFilesAttribute();
 
             var metadata = [];
             var fileNames = files ? files.split('|') : [];
@@ -134,10 +140,13 @@ angular.module('risevision.template-editor.directives')
 
           function _setMetadata(metadata) {
             var value = angular.copy(metadata);
+            var filesAttribute = _filesAttributeFor(value);
 
             $scope.selectedImages = value;
+            $scope.isDefaultImageList = filesAttribute === _getDefaultFilesAttribute();
+
             $scope.setAttributeData($scope.componentId, 'metadata', value);
-            $scope.setAttributeData($scope.componentId, 'files', _filesAttributeFor(value));
+            $scope.setAttributeData($scope.componentId, 'files', filesAttribute);
           }
 
           _reset();
