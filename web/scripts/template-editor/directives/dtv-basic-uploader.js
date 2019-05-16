@@ -10,7 +10,7 @@ angular.module('risevision.template-editor.directives')
           uploadManager: '=',
           validExtensions: '=?'
         },
-        templateUrl: 'partials/template-editor/common/basic-uploader.html',
+        templateUrl: 'partials/template-editor/basic-uploader.html',
         link: function ($scope) {
           var FileUploader = fileUploaderFactory();
 

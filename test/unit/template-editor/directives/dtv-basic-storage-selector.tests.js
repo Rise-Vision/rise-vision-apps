@@ -32,7 +32,7 @@ describe('directive: basicStorageSelector', function() {
     $loading = $injector.get('$loading');
     storage = $injector.get('storage');
 
-    $templateCache.put('partials/template-editor/common/basic-storage-selector.html', '<p>mock</p>');
+    $templateCache.put('partials/template-editor/basic-storage-selector.html', '<p>mock</p>');
     element = $compile('<basic-storage-selector storage-selector-id="test" valid-extensions="validExtensions" storage-manager="storageManager"></basic-storage-selector>')($rootScope);
     $rootScope.$apply();
 

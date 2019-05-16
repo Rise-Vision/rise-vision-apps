@@ -10,7 +10,7 @@ angular.module('risevision.template-editor.directives')
           validExtensions: '=?',
           storageManager: '='
         },
-        templateUrl: 'partials/template-editor/common/basic-storage-selector.html',
+        templateUrl: 'partials/template-editor/basic-storage-selector.html',
         link: function ($scope) {
           var spinnerId = 'storage-' + $scope.storageSelectorId + '-spinner';
 

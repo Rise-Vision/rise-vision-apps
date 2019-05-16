@@ -59,7 +59,7 @@ describe('directive: basicUploader', function () {
 
   beforeEach(inject(function($compile, $rootScope, $templateCache) {
     $rootScope.uploadManager = uploadManager;
-    $templateCache.put('partials/template-editor/common/basic-uploader.html', '<p>mock</p>');
+    $templateCache.put('partials/template-editor/basic-uploader.html', '<p>mock</p>');
 
     element = $compile('<basic-uploader upload-manager="uploadManager" valid-extensions="validExtensions"></basic-uploader>')($rootScope);
     $rootScope.$apply();
