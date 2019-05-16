@@ -38,7 +38,7 @@
     </label>
   </div>
   <div class="add-selected">
-    <button class="btn btn-primary btn-block" ng-click="addSelected()" ng-disabled="isUploading">
+    <button class="btn btn-primary btn-block" ng-click="addSelected()" ng-disabled="isUploading || selectedItems.length === 0">
       <strong>Add Selected</strong>
     </button>
   </div>
