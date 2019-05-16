@@ -76,7 +76,7 @@ angular.module('risevision.template-editor.directives')
           $scope.loadItems = function (newFolderPath) {
             $loading.start(spinnerId);
 
-            storage.files.get({ folderPath: newFolderPath })
+            return storage.files.get({ folderPath: newFolderPath })
             .then(function (items) {
               $scope.selectedItems = [];
               $scope.storageUploadManager.folderPath = newFolderPath;
@@ -84,13 +84,16 @@ angular.module('risevision.template-editor.directives')
                 return item.name !== newFolderPath;
               });
             })
+            .catch(function (err) {
+              console.log('Failed to load files', err);
+            })
             .finally(function () {
               $loading.stop(spinnerId);
             });
           };
 
           $scope.selectItem = function (item) {
-            var idx = $scope.selectedItems.indexOf(item);
+            var idx = _.findIndex($scope.selectedItems, { name: item.name });
 
             if (idx >= 0) {
               $scope.selectedItems.splice(idx, 1);
@@ -101,11 +104,10 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.isSelected = function (item) {
-            return $scope.selectedItems.indexOf(item) >= 0;
+            return _.findIndex($scope.selectedItems, { name: item.name }) >= 0;
           };
 
           $scope.addSelected = function () {
-            console.log('addSelected', $scope.selectedItems);
             $scope.storageManager.addSelectedItems($scope.selectedItems);
             _reset();
           };
