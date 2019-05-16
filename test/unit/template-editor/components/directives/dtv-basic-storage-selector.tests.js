@@ -1,6 +1,6 @@
 'use strict';
 
-describe.only('directive: basicStorageSelector', function() {
+describe('directive: basicStorageSelector', function() {
   var sandbox = sinon.sandbox.create(),
       $scope, $loading, storage, element;
 
