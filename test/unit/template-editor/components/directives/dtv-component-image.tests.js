@@ -19,6 +19,27 @@ describe('directive: TemplateComponentImage', function() {
     $provide.service('templateEditorFactory', function() {
       return factory;
     });
+
+    $provide.service('storageAPILoader', function() {
+      return function() {
+        return Promise.resolve({
+          files: {
+            get: function() {
+              return {
+                result: {
+                  result: true,
+                  files: [{
+                    metadata: {
+                      thumbnail: "http://thumbnail.png"
+                    }
+                  }]
+                }
+              };
+            }
+          }
+        });
+      };
+    });
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout){
@@ -66,13 +87,14 @@ describe('directive: TemplateComponentImage', function() {
   });
 
   it('should get thumbnail URLs when not available as attribute data', function(done) {
+    var TEST_FILE = 'risemedialibrary-7fa5ee92-7deb-450b-a8d5-e5ed648c575f/file1.png';
     var directive = $scope.registerDirective.getCall(0).args[0];
 
     $scope.getAttributeData = function() {
       return null;
     }
     $scope.getBlueprintData = function() {
-      return "file1.png";
+      return TEST_FILE;
     }
 
     directive.show();
@@ -81,8 +103,8 @@ describe('directive: TemplateComponentImage', function() {
     setTimeout(function() {
       var expectedMetadata = [
         {
-          "file": "file1.png",
-          "thumbnail-url": "http://lh3.googleusercontent.com/hOkuYaXqdtS2e4fzQGx1zqTFKko71OSDVTrOb84JsOeaUUL8hfOaLaZ5eCquqN20u_NJv_QSwMoNQl-vJ1lT"
+          'file': TEST_FILE,
+          'thumbnail-url': 'http://thumbnail.png'
         }
       ];
 
@@ -91,11 +113,11 @@ describe('directive: TemplateComponentImage', function() {
       expect($scope.setAttributeData).to.have.been.called.twice;
 
       expect($scope.setAttributeData.calledWith(
-        "TEST-ID", "metadata", expectedMetadata
+        'TEST-ID', 'metadata', expectedMetadata
       )).to.be.true;
 
       expect($scope.setAttributeData.calledWith(
-        "TEST-ID", "files", "file1.png"
+        'TEST-ID', 'files', TEST_FILE
       )).to.be.true;
 
       done();

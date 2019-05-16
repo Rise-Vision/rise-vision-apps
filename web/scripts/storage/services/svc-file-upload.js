@@ -11,19 +11,19 @@ angular.module('risevision.storage.services')
         recess = 0;
       var pieces = [];
       var i = 0;
-      if (dv.getUint16(offset) == 0xffd8) {
+      if (dv.getUint16(offset) === 0xffd8) {
         offset += 2;
         var app1 = dv.getUint16(offset);
         offset += 2;
         while (offset < dv.byteLength) {
-          if (app1 == 0xffe1) {
+          if (app1 === 0xffe1) {
             pieces[i] = {
               recess: recess,
               offset: offset - 2
             };
             recess = offset + dv.getUint16(offset);
             i++;
-          } else if (app1 == 0xffda) {
+          } else if (app1 === 0xffda) {
             break;
           }
           offset += dv.getUint16(offset);
@@ -34,7 +34,7 @@ angular.module('risevision.storage.services')
           var newPieces = [];
           pieces.forEach(function (v) {
             newPieces.push(imageArrayBuffer.slice(v.recess, v.offset));
-          }, this);
+          });
           newPieces.push(imageArrayBuffer.slice(recess));
           return newPieces;
         }
@@ -76,7 +76,8 @@ angular.module('risevision.storage.services')
   .factory('FileUploader', ['fileUploaderFactory',
     function (fileUploaderFactory) {
       return fileUploaderFactory();
-    }])
+    }
+  ])
   .factory('fileUploaderFactory', ['$rootScope', '$q', 'XHRFactory', 'ExifStripper', '$timeout',
     function ($rootScope, $q, XHRFactory, ExifStripper, $timeout) {
       return function () {

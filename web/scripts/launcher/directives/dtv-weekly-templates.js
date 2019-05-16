@@ -10,7 +10,9 @@ angular.module('risevision.apps.launcher.directives')
         scope: {},
         templateUrl: 'partials/launcher/weekly-templates.html',
         link: function ($scope) {
-          $sessionStorage.$default({weeklyTemplatesFullView: true});
+          $sessionStorage.$default({
+            weeklyTemplatesFullView: true
+          });
 
           $scope.fullView = $sessionStorage.weeklyTemplatesFullView;
 
@@ -23,8 +25,8 @@ angular.module('risevision.apps.launcher.directives')
 
           var company = userState.getCopyOfSelectedCompany();
 
-          if (company.companyIndustry === "PRIMARY_SECONDARY_EDUCATION" ||
-              company.companyIndustry === "HIGHER_EDUCATION") {
+          if (company.companyIndustry === 'PRIMARY_SECONDARY_EDUCATION' ||
+            company.companyIndustry === 'HIGHER_EDUCATION') {
 
             $scope.factory = new ScrollingListService(productsFactory.loadProducts,
               $scope.search);

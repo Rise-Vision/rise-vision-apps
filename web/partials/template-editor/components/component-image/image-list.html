@@ -3,6 +3,7 @@
     ng-repeat="image in selectedImages track by $index"
     ng-show="selectedImages.length > 0 && !isUploading">
     <div class="image-thumbnail">
+      <div class="image-helper"></div>
       <img src="{{ image['thumbnail-url'] }}" width="80"></img>
     </div>
     <div class="image-entry">

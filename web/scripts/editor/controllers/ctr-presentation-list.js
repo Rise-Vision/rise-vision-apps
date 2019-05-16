@@ -29,7 +29,8 @@ angular.module('risevision.editor.controllers')
       $scope.$watchGroup([
         'factory.loadingItems',
         'editorFactory.loadingPresentation',
-        'templateEditorFactory.loadingPresentation'], function (newValues) {
+        'templateEditorFactory.loadingPresentation'
+      ], function (newValues) {
         if (!newValues[0] && !newValues[1] && !newValues[2]) {
           $loading.stop('presentation-list-loader');
         } else {

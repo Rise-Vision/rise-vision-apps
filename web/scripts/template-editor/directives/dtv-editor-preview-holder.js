@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateEditorPreviewHolder', ['$window', '$sce', 'templateEditorFactory', 'HTML_TEMPLATE_DOMAIN', 'HTML_TEMPLATE_URL',
+  .directive('templateEditorPreviewHolder', ['$window', '$sce', 'templateEditorFactory', 'HTML_TEMPLATE_DOMAIN',
+    'HTML_TEMPLATE_URL',
     function ($window, $sce, templateEditorFactory, HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL) {
       return {
         restrict: 'E',
@@ -24,28 +25,28 @@ angular.module('risevision.template-editor.directives')
           var iframeParent = $window.document.getElementById('template-editor-preview-parent');
           var iframe = $window.document.getElementById('template-editor-preview');
 
-          iframe.onload = function() {
+          iframe.onload = function () {
             iframeLoaded = true;
 
             _postAttributeData();
-          }
+          };
 
-          $scope.getEditorPreviewUrl = function(productCode) {
+          $scope.getEditorPreviewUrl = function (productCode) {
             var url = HTML_TEMPLATE_URL.replace('PRODUCT_CODE', productCode);
 
             return $sce.trustAsResourceUrl(url);
-          }
+          };
 
           function _getTemplateWidth() {
             var width = $scope.factory.blueprintData.width;
 
-            return width ? parseInt( width ) : DEFAULT_TEMPLATE_WIDTH;
+            return width ? parseInt(width) : DEFAULT_TEMPLATE_WIDTH;
           }
 
           function _getTemplateHeight() {
             var height = $scope.factory.blueprintData.height;
 
-            return height ? parseInt( height ) : DEFAULT_TEMPLATE_HEIGHT;
+            return height ? parseInt(height) : DEFAULT_TEMPLATE_HEIGHT;
           }
 
           function _getHeightDividedByWidth() {
@@ -55,7 +56,7 @@ angular.module('risevision.template-editor.directives')
           function _useFullWidth() {
             var offset = 2 * DESKTOP_MARGIN;
             var aspectRatio = _getHeightDividedByWidth();
-            var projectedHeight = ( previewHolder.clientWidth - offset ) * aspectRatio;
+            var projectedHeight = (previewHolder.clientWidth - offset) * aspectRatio;
 
             return projectedHeight < previewHolder.clientHeight - offset;
           }
@@ -67,10 +68,10 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _mediaMatches(mediaQuery) {
-            return $window.matchMedia(mediaQuery).matches
+            return $window.matchMedia(mediaQuery).matches;
           }
 
-          $scope.getMobileWidth = function() {
+          $scope.getMobileWidth = function () {
             var isShort = _mediaMatches('(max-height: 570px)');
             var layerHeight = isShort ? MOBILE_PREVIEW_HEIGHT_SHORT : MOBILE_PREVIEW_HEIGHT;
 
@@ -78,48 +79,48 @@ angular.module('risevision.template-editor.directives')
             var value = _getWidthFor(layerHeight - offset) + offset;
 
             return value.toFixed(0);
-          }
+          };
 
-          $scope.getDesktopWidth = function() {
+          $scope.getDesktopWidth = function () {
             var offset = 2 * DESKTOP_MARGIN;
             var height = previewHolder.clientHeight - offset;
 
             return _getWidthFor(height).toFixed(0);
-          }
+          };
 
-          $scope.getTemplateAspectRatio = function() {
+          $scope.getTemplateAspectRatio = function () {
             var value = _getHeightDividedByWidth() * 100;
 
             return value.toFixed(4);
-          }
+          };
 
           function _getFrameStyle(viewSize, templateSize) {
-            var ratio = ( viewSize / templateSize ).toFixed(4);
+            var ratio = (viewSize / templateSize).toFixed(4);
             var width = _getTemplateWidth();
             var height = _getTemplateHeight();
 
             return 'width: ' + width + 'px;' +
               'height: ' + height + 'px;' +
-              'transform:scale3d(' + ratio + ',' + ratio + ',' + ratio + ');'
+              'transform:scale3d(' + ratio + ',' + ratio + ',' + ratio + ');';
           }
 
           function _applyAspectRatio() {
-            var frameStyle, parentStyle;
+            var frameStyle, parentStyle, viewHeight;
             var isMobile = _mediaMatches('(max-width: 768px)');
-            var offset = ( isMobile ? MOBILE_MARGIN : DESKTOP_MARGIN ) * 2;
+            var offset = (isMobile ? MOBILE_MARGIN : DESKTOP_MARGIN) * 2;
 
-            if( isMobile ) {
-              var viewHeight = previewHolder.clientHeight - offset;
+            if (isMobile) {
+              viewHeight = previewHolder.clientHeight - offset;
               parentStyle = 'width: ' + $scope.getMobileWidth() + 'px';
               frameStyle = _getFrameStyle(viewHeight, _getTemplateHeight());
-            } else if( _useFullWidth() ) {
+            } else if (_useFullWidth()) {
               var viewWidth = previewHolder.clientWidth - offset;
               var aspectRatio = $scope.getTemplateAspectRatio() + '%';
 
-              parentStyle = 'padding-bottom: ' + aspectRatio + ';'
+              parentStyle = 'padding-bottom: ' + aspectRatio + ';';
               frameStyle = _getFrameStyle(viewWidth, _getTemplateWidth());
             } else {
-              var viewHeight = previewHolder.clientHeight - offset;
+              viewHeight = previewHolder.clientHeight - offset;
 
               parentStyle = 'height: 100%; width: ' + $scope.getDesktopWidth() + 'px';
               frameStyle = _getFrameStyle(viewHeight, _getTemplateHeight());
@@ -132,7 +133,7 @@ angular.module('risevision.template-editor.directives')
           $scope.$watchGroup([
             'factory.blueprintData.width',
             'factory.blueprintData.height'
-          ], function() {
+          ], function () {
             _applyAspectRatio();
 
             setTimeout(_applyAspectRatio, PREVIEW_INITIAL_DELAY_MILLIS);
@@ -145,7 +146,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           angular.element($window).on('resize', _onResize);
-          $scope.$on('$destroy', function() {
+          $scope.$on('$destroy', function () {
             angular.element($window).off('resize', _onResize);
           });
 
@@ -157,7 +158,7 @@ angular.module('risevision.template-editor.directives')
           }, true);
 
           function _postAttributeData() {
-            if( !attributeDataText || !iframeLoaded ) {
+            if (!attributeDataText || !iframeLoaded) {
               return;
             }
 

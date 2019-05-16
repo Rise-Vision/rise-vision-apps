@@ -55,6 +55,14 @@ jobs:
           root: ~/
           paths:
             - rise-vision-apps/*
+  test_build:
+    working_directory: ~/rise-vision-apps
+    docker: *BUILDIMAGE
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: 
+          command: NODE_ENV=test npm run ci-build
   test_unit:
     working_directory: ~/rise-vision-apps
     docker: *BUILDIMAGE
@@ -192,30 +200,33 @@ workflows:
   test_and_deploy:
     jobs: 
       - dependencies
+      - test_build:
+          requires:
+            - dependencies
       - test_unit:
           requires:
-            - dependencies
+            - test_build
       - e2e_launcher:
           requires:
-            - dependencies
+            - test_build
       - e2e_schedules:
           requires:
-            - dependencies
+            - test_build
       - e2e_common:
           requires:
-            - dependencies
+            - test_build
       - e2e_editor:
           requires:
-            - dependencies
+            - test_build
       - e2e_displays:
           requires:
-            - dependencies
+            - test_build
       - e2e_storage:
           requires:
-            - dependencies
+            - test_build
       - e2e_template_editor:
           requires:
-            - dependencies
+            - test_build
       - test_e2e:
           requires:
             - e2e_launcher
@@ -234,7 +245,7 @@ workflows:
               only: master
       - deploy_staging:
           requires:
-            - dependencies
+            - test_build
           filters:
             branches:
               only: /(feature|fix|chore).*/

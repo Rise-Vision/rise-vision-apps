@@ -25,7 +25,7 @@ angular.module('risevision.template-editor.directives')
             var instruments =
               $scope.getAttributeData($scope.componentId, 'instruments');
 
-            if(instruments) {
+            if (instruments) {
               $scope.instruments = instruments;
             } else {
               _buildInstrumentListFromBlueprint();
@@ -36,8 +36,8 @@ angular.module('risevision.template-editor.directives')
             $scope.factory.loadingPresentation = true;
             var symbolString = $scope.getBlueprintData($scope.componentId, 'symbols');
 
-            if(!symbolString) {
-              $log.error('The component blueprint data is not providing default symbols value: ' + $scope.componentId)
+            if (!symbolString) {
+              $log.error('The component blueprint data is not providing default symbols value: ' + $scope.componentId);
 
               return;
             }
@@ -49,7 +49,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _buildListRecursive(instruments, symbols) {
-            if( symbols.length === 0 ) {
+            if (symbols.length === 0) {
               _setInstruments(instruments);
               $scope.factory.loadingPresentation = false;
 
@@ -59,25 +59,27 @@ angular.module('risevision.template-editor.directives')
             var symbol = symbols.shift();
 
             instrumentSearchService.keywordSearch($scope.category, symbol)
-            .then( function(items) {
-              var instrument = _.find(items, {symbol: symbol});
+              .then(function (items) {
+                var instrument = _.find(items, {
+                  symbol: symbol
+                });
 
-              if(instrument) {
-                instruments.push(instrument);
-              } else {
-                $log.warn('no instrument found for symbol: ' + symbol);
-              }
-            })
-            .catch( function(error) {
-              $log.error( error );
-            })
-            .finally( function() {
-              _buildListRecursive(instruments, symbols);
-            });
+                if (instrument) {
+                  instruments.push(instrument);
+                } else {
+                  $log.warn('no instrument found for symbol: ' + symbol);
+                }
+              })
+              .catch(function (error) {
+                $log.error(error);
+              })
+              .finally(function () {
+                _buildListRecursive(instruments, symbols);
+              });
           }
 
           function _symbolsFor(instruments) {
-            return _.map(instruments, function(instrument) {
+            return _.map(instruments, function (instrument) {
               return instrument.symbol;
             }).join('|');
           }
@@ -93,8 +95,8 @@ angular.module('risevision.template-editor.directives')
           function _getCategory() {
             var category = $scope.getBlueprintData($scope.componentId, 'category');
 
-            if( !category ) {
-              $log.error( "No category was defined for financial component" );
+            if (!category) {
+              $log.error('No category was defined for financial component');
             }
 
             return category;
@@ -106,7 +108,7 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-data-financial',
             icon: 'fa-line-chart',
             element: element,
-            show: function() {
+            show: function () {
               element.show();
 
               _reset();
@@ -121,8 +123,9 @@ angular.module('risevision.template-editor.directives')
                 $scope.showInstrumentList = true;
               }, 1000);
             },
-            isHeaderBottomRuleVisible: function() {
-              return $scope.enteringInstrumentSelector || $scope.showInstrumentList || $scope.exitingInstrumentSelector || $scope.exitingSymbolSelector;
+            isHeaderBottomRuleVisible: function () {
+              return $scope.enteringInstrumentSelector || $scope.showInstrumentList || $scope.exitingInstrumentSelector ||
+                $scope.exitingSymbolSelector;
             },
             onBackHandler: function () {
               if ($scope.showSymbolSelector) {
@@ -140,36 +143,38 @@ angular.module('risevision.template-editor.directives')
             _changeInstrumentView(false);
           };
 
-          $scope.searchKeyPressed = function( keyEvent ) {
+          $scope.searchKeyPressed = function (keyEvent) {
             // handle enter key
-            if ( keyEvent.which === 13 ) {
+            if (keyEvent.which === 13) {
               $scope.searchInstruments();
             }
           };
 
-          $scope.selectInstrument = function(key) {
-            if ( $scope.searching ) {
+          $scope.selectInstrument = function (key) {
+            if ($scope.searching) {
               return;
             }
-            $scope.instrumentSearch[ key ].isSelected = !$scope.instrumentSearch[ key ].isSelected;
-            $scope.canAddInstrument = _.some($scope.instrumentSearch, function(item) {
+            $scope.instrumentSearch[key].isSelected = !$scope.instrumentSearch[key].isSelected;
+            $scope.canAddInstrument = _.some($scope.instrumentSearch, function (item) {
               return item.isSelected === true;
             });
           };
 
-          $scope.addInstrument = function() {
+          $scope.addInstrument = function () {
             var instrumentsSelected = _.chain($scope.instrumentSearch)
-              .filter(function (instrument) { return instrument.isSelected; })
+              .filter(function (instrument) {
+                return instrument.isSelected;
+              })
               .sortBy('symbol')
-              .map(function(instrument) {
+              .map(function (instrument) {
                 delete instrument.isSelected;
                 return instrument;
               })
               .value()
               .reverse();
 
-            var instrumentsToAdd = _.reject(instrumentsSelected, function(instrument) {
-              return _.find($scope.instruments, function(item) {
+            var instrumentsToAdd = _.reject(instrumentsSelected, function (instrument) {
+              return _.find($scope.instruments, function (item) {
                 return item.symbol === instrument.symbol;
               }) !== undefined;
             });
@@ -177,7 +182,7 @@ angular.module('risevision.template-editor.directives')
             if (instrumentsToAdd.length && instrumentsToAdd.length > 0) {
               var instruments = angular.copy($scope.instruments);
 
-              instrumentsToAdd.forEach(function(item) {
+              instrumentsToAdd.forEach(function (item) {
                 instruments.unshift(item);
               });
 
@@ -187,39 +192,39 @@ angular.module('risevision.template-editor.directives')
             $scope.selectInstruments();
           };
 
-          $scope.searchInstruments = function() {
+          $scope.searchInstruments = function () {
             var promise = $scope.searchKeyword ?
-              instrumentSearchService.keywordSearch( $scope.category, $scope.searchKeyword ) :
-              instrumentSearchService.popularSearch( $scope.category );
+              instrumentSearchService.keywordSearch($scope.category, $scope.searchKeyword) :
+              instrumentSearchService.popularSearch($scope.category);
 
             $scope.searching = true;
             $scope.canAddInstrument = false;
 
-            promise.then( function( res ) {
-              $scope.instrumentSearch = angular.copy( res );
-              $scope.popularResults = !$scope.searchKeyword;
-              $scope.searching = false;
-            } )
-              .catch( function( err ) {
-                $log.error( err );
+            promise.then(function (res) {
+                $scope.instrumentSearch = angular.copy(res);
+                $scope.popularResults = !$scope.searchKeyword;
                 $scope.searching = false;
-              } );
+              })
+              .catch(function (err) {
+                $log.error(err);
+                $scope.searching = false;
+              });
           };
 
-          $scope.resetSearch = function() {
+          $scope.resetSearch = function () {
             $scope.searchKeyword = '';
             $scope.searchInstruments();
           };
 
-          $scope.getOpenSymbolSelectorButtonLabel = function() {
+          $scope.getOpenSymbolSelectorButtonLabel = function () {
             return _getFinancialLabel('add-category');
           };
 
-          $scope.getPopularTitle = function() {
+          $scope.getPopularTitle = function () {
             return _getFinancialLabel('most-popular-category');
           };
 
-          $scope.getSearchPlaceholder = function() {
+          $scope.getSearchPlaceholder = function () {
             return _getFinancialLabel('search-category');
           };
 
@@ -229,17 +234,19 @@ angular.module('risevision.template-editor.directives')
             return 'template.financial.' + key + '.' + category;
           }
 
-          $scope.removeInstrument = function(symbol) {
-            var filtered = _.reject($scope.instruments, {symbol: symbol});
+          $scope.removeInstrument = function (symbol) {
+            var filtered = _.reject($scope.instruments, {
+              symbol: symbol
+            });
 
             _setInstruments(filtered);
-          }
+          };
 
           function _changeInstrumentView(enteringSelector, delay) {
             $scope.showInstrumentList = false;
             $scope.showSymbolSelector = false;
 
-            if(enteringSelector) {
+            if (enteringSelector) {
               $scope.enteringSymbolSelector = true;
               $scope.exitingSymbolSelector = false;
             } else {
@@ -255,12 +262,12 @@ angular.module('risevision.template-editor.directives')
             }, !isNaN(delay) ? delay : 500);
           }
 
-          $scope.$watch('showInstrumentList', function(value) {
+          $scope.$watch('showInstrumentList', function (value) {
             if (value) {
               $scope.searching = false;
 
               if ($scope.instrumentSearch) {
-                $scope.instrumentSearch.forEach(function(item) {
+                $scope.instrumentSearch.forEach(function (item) {
                   item.isSelected = false;
                 });
               }

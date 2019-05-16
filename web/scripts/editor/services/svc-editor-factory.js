@@ -16,7 +16,8 @@ angular.module('risevision.editor.services')
       presentationParser, distributionParser, presentationTracker, store,
       VIEWER_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED,
       DEFAULT_LAYOUT, $modal, $rootScope, $window,
-      scheduleFactory, plansFactory, processErrorCode, messageBox, $templateCache, $log, templateEditorFactory, presentationUtils) {
+      scheduleFactory, plansFactory, processErrorCode, messageBox, $templateCache, $log, templateEditorFactory,
+      presentationUtils) {
       var factory = {};
       var JSON_PARSE_ERROR = 'JSON parse error';
 
@@ -415,7 +416,8 @@ angular.module('risevision.editor.services')
         });
 
         modalInstance.result.then(function (productDetails) {
-          if (!productDetails || (!productDetails.rvaEntityId && !presentationUtils.isHtmlTemplate(productDetails))) {
+          if (!productDetails || (!productDetails.rvaEntityId && !presentationUtils.isHtmlTemplate(
+              productDetails))) {
             return;
           }
 

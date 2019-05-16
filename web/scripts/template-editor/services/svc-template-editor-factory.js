@@ -20,7 +20,7 @@ angular.module('risevision.template-editor.services')
         factory.selected = null;
       };
 
-      var _getPresentationForUpdate = function() {
+      var _getPresentationForUpdate = function () {
         var presentationVal = JSON.parse(JSON.stringify(factory.presentation));
 
         presentationVal.templateAttributeData =
@@ -29,7 +29,7 @@ angular.module('risevision.template-editor.services')
         return presentationVal;
       };
 
-      var _openExpiredModal = function() {
+      var _openExpiredModal = function () {
         var modalInstance = $modal.open({
           templateUrl: 'partials/template-editor/expired-modal.html',
           controller: 'confirmInstance',
@@ -53,9 +53,9 @@ angular.module('risevision.template-editor.services')
         });
       };
 
-      var _checkTemplateAccess = function(productCode) {
+      var _checkTemplateAccess = function (productCode) {
         checkTemplateAccess(productCode)
-          .catch(function() {
+          .catch(function () {
             _openExpiredModal();
           });
       };
@@ -65,23 +65,28 @@ angular.module('risevision.template-editor.services')
           .then(function (productDetails) {
             if (productDetails.productCode) {
               return $q.resolve(productDetails);
-            }
-            else {
-              return $q.reject({ result: { error: { message: 'Invalid Product Id' } } });
+            } else {
+              return $q.reject({
+                result: {
+                  error: {
+                    message: 'Invalid Product Id'
+                  }
+                }
+              });
             }
           })
           .then(function (productDetails) {
             return checkTemplateAccess(productDetails.productCode)
-            .then(function () {
-              return factory.createFromTemplate(productDetails);
-            })
-            .catch(function (err) {
-              plansFactory.showPlansModal('editor-app.templatesLibrary.access-warning');
+              .then(function () {
+                return factory.createFromTemplate(productDetails);
+              })
+              .catch(function (err) {
+                plansFactory.showPlansModal('editor-app.templatesLibrary.access-warning');
 
-              $state.go('apps.editor.list');
-              $log.error('checkTemplateAccess', err);
-              return $q.reject(err);
-            });
+                $state.go('apps.editor.list');
+                $log.error('checkTemplateAccess', err);
+                return $q.reject(err);
+              });
           }, function (err) {
             _showErrorMessage('add', err);
             $state.go('apps.editor.list');
@@ -308,7 +313,8 @@ angular.module('risevision.template-editor.services')
 
         $log.error(factory.errorMessage, e);
 
-        messageBox(factory.errorMessage, factory.apiError, null, 'template-editor-message-box', 'partials/template-editor/message-box.html');
+        messageBox(factory.errorMessage, factory.apiError, null, 'template-editor-message-box',
+          'partials/template-editor/message-box.html');
       };
 
       var _clearMessages = function () {
