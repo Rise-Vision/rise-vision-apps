@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('basicUploader', ['storage', 'fileUploaderFactory', 'UploadURIService', 'STORAGE_UPLOAD_CHUNK_SIZE',
-    function (storage, fileUploaderFactory, UploadURIService, STORAGE_UPLOAD_CHUNK_SIZE) {
+  .directive('basicUploader', ['storage', 'fileUploaderFactory', 'UploadURIService', 'templateEditorUtils', 'STORAGE_UPLOAD_CHUNK_SIZE',
+    function (storage, fileUploaderFactory, UploadURIService, templateEditorUtils, STORAGE_UPLOAD_CHUNK_SIZE) {
       return {
         restrict: 'E',
         scope: {
@@ -35,9 +35,7 @@ angular.module('risevision.template-editor.directives')
             }
           };
 
-          $scope.fileNameOf = function( path ) {
-            return path.split('/').pop();
-          };
+          $scope.fileNameOf = templateEditorUtils.fileNameOf;
 
           FileUploader.onAfterAddingFile = function (fileItem) {
             console.info('onAfterAddingFile', fileItem.file.name);

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('basicStorageSelector', ['$loading', 'storage',
-    function ($loading, storage) {
+  .directive('basicStorageSelector', ['$loading', 'storage', 'templateEditorUtils',
+    function ($loading, storage, templateEditorUtils) {
       return {
         restrict: 'E',
         scope: {
@@ -22,14 +22,7 @@ angular.module('risevision.template-editor.directives')
               $scope.isUploading = isUploading;
             },
             addFile: function (file) {
-              var idx = _.findIndex($scope.folderItems, { name: file.name });
-
-              if (idx >= 0) {
-                $scope.folderItems.splice(idx, 1, file);
-              }
-              else {
-                $scope.folderItems.push(file);
-              }
+              templateEditorUtils.addOrReplace($scope.folderItems, { name: file.name }, file);
             }
           };
           $scope.storageManager = angular.extend($scope.storageManager, {
@@ -93,14 +86,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.selectItem = function (item) {
-            var idx = _.findIndex($scope.selectedItems, { name: item.name });
-
-            if (idx >= 0) {
-              $scope.selectedItems.splice(idx, 1);
-            }
-            else {
-              $scope.selectedItems.push(item);
-            }
+            templateEditorUtils.addOrRemove($scope.selectedItems, { name: item.name }, item);
           };
 
           $scope.isSelected = function (item) {

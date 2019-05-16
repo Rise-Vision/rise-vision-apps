@@ -166,18 +166,15 @@ describe('directive: basicUploader', function () {
       $scope.retryFailedUpload(myItem);
       FileUploader.retryItem.should.not.have.been.called;
     });
-
   });
 
   describe('removeItem:', function () {
-
     it('should remove item from Uploader queue', function () {
       var myItem = 'item';
 
       $scope.removeItem(myItem);
       FileUploader.removeFromQueue.should.have.been.calledWith(myItem);
     });
-
   });
 
   describe('onCompleteItem:', function () {
@@ -204,5 +201,4 @@ describe('directive: basicUploader', function () {
       }, 10);               
     });      
   });
-
 });
