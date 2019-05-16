@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('basicStorageSelector', ['storage',
-    function (storage) {
+  .directive('basicStorageSelector', ['$loading', 'storage',
+    function ($loading, storage) {
       return {
         restrict: 'E',
         scope: {
@@ -12,6 +12,8 @@ angular.module('risevision.template-editor.directives')
         },
         templateUrl: 'partials/template-editor/common/basic-storage-selector.html',
         link: function ($scope) {
+          var spinnerId = 'storage-' + $scope.storageSelectorId + '-spinner';
+
           $scope.folderItems = [];
           $scope.selectedItems = [];
           $scope.storageUploadManager = {
@@ -72,12 +74,18 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.loadItems = function (newFolderPath) {
-            storage.files.get({ folderPath: newFolderPath }).then(function (items) {
+            $loading.start(spinnerId);
+
+            storage.files.get({ folderPath: newFolderPath })
+            .then(function (items) {
               $scope.selectedItems = [];
               $scope.storageUploadManager.folderPath = newFolderPath;
               $scope.folderItems = items.files.filter(function (item) {
                 return item.name !== newFolderPath;
               });
+            })
+            .finally(function () {
+              $loading.stop(spinnerId);
             });
           };
 
