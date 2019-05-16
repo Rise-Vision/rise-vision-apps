@@ -39,16 +39,15 @@ angular.module('risevision.template-editor.directives')
           };
 
           function _reset() {
-            $scope.selectedImages = [];
+            _setSelectedImages([]);
             $scope.isUploading = false;
-            $scope.isDefaultImageList = false;
           }
 
           function _loadSelectedImages() {
             var selectedImages = $scope.getAttributeData($scope.componentId, 'metadata');
 
             if (selectedImages) {
-              $scope.selectedImages = selectedImages;
+              _setSelectedImages(selectedImages);
             } else {
               _buildSelectedImagesFromBlueprint();
             }
@@ -139,14 +138,20 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _setMetadata(metadata) {
-            var value = angular.copy(metadata);
-            var filesAttribute = _filesAttributeFor(value);
+            var selectedImages = angular.copy(metadata);
+            var filesAttribute = _filesAttributeFor(selectedImages);
 
-            $scope.selectedImages = value;
-            $scope.isDefaultImageList = filesAttribute === _getDefaultFilesAttribute();
+            _setSelectedImages(selectedImages);
 
-            $scope.setAttributeData($scope.componentId, 'metadata', value);
+            $scope.setAttributeData($scope.componentId, 'metadata', selectedImages);
             $scope.setAttributeData($scope.componentId, 'files', filesAttribute);
+          }
+
+          function _setSelectedImages(selectedImages) {
+            var filesAttribute = _filesAttributeFor(selectedImages);
+
+            $scope.selectedImages = selectedImages;
+            $scope.isDefaultImageList = filesAttribute === _getDefaultFilesAttribute();
           }
 
           _reset();
