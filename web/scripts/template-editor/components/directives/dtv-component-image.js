@@ -2,7 +2,7 @@
 
 angular.module('risevision.template-editor.directives')
   .constant('DEFAULT_IMAGE_THUMBNAIL', 'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon%402x.png')
-  .constant('SUPPORTED_IMAGE_TYPES', '.png, .jpg, .gif, .tif, .tiff')
+  .constant('SUPPORTED_IMAGE_TYPES', '.png, .jpg, .gif, .tif, .tiff, .svg')
   .directive('templateComponentImage', ['$log', 'templateEditorFactory', 'templateEditorUtils', 'storageAPILoader',
     'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
     function ($log, templateEditorFactory, templateEditorUtils, storageAPILoader, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES) {

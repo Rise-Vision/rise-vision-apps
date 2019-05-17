@@ -34,6 +34,15 @@ angular.module('risevision.template-editor.services')
         return list;
       };
 
+      svc.isFolder = function (path) {
+        return path[path.length - 1] === '/';
+      };
+
+      svc.fileHasValidExtension = function (file, extensions) {
+        return !extensions || extensions.length === 0 || _.some(extensions, function (extension) {
+          return _.endsWith(file, extension.trim());
+        });
+      };
+
       return svc;
     }]);
-

@@ -95,4 +95,34 @@ describe('service: templateEditorUtils:', function() {
       expect(items).to.have.lengthOf(2);
     });
   });
+
+  describe('fileHasValidExtension', function () {
+    var extensions = ['.jpg', '.png', '.svg'];
+
+    it('should return true for files with valid extensions', function () {
+      expect(templateEditorUtils.fileHasValidExtension('test.jpg', extensions)).to.be.true;
+      expect(templateEditorUtils.fileHasValidExtension('folder/test.svg', extensions)).to.be.true;
+      expect(templateEditorUtils.fileHasValidExtension('folder/test.mpg')).to.be.true;
+      expect(templateEditorUtils.fileHasValidExtension('folder/test.mpg', [])).to.be.true;
+    });
+
+    it('should return false for files with not valid extensions', function () {
+      expect(templateEditorUtils.fileHasValidExtension('', extensions)).to.be.false;
+      expect(templateEditorUtils.fileHasValidExtension('folder/', extensions)).to.be.false;
+      expect(templateEditorUtils.fileHasValidExtension('folder/test.mpg', extensions)).to.be.false;
+    });
+  });
+
+  describe('isFolder', function () {
+    it('should return true for paths belonging to folders', function () {
+      expect(templateEditorUtils.isFolder('folder/')).to.be.true;
+      expect(templateEditorUtils.isFolder('folder/subfolder/')).to.be.true;
+    });
+
+    it('should return false for paths belonging to files', function () {
+      expect(templateEditorUtils.isFolder('')).to.be.false;
+      expect(templateEditorUtils.isFolder('file.txt')).to.be.false;
+      expect(templateEditorUtils.isFolder('folder/file.txt')).to.be.false;
+    });
+  });
 });

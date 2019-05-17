@@ -13,6 +13,7 @@ angular.module('risevision.template-editor.directives')
         templateUrl: 'partials/template-editor/basic-storage-selector.html',
         link: function ($scope) {
           var spinnerId = 'storage-' + $scope.storageSelectorId + '-spinner';
+          var validExtensionsList = $scope.validExtensions ? $scope.validExtensions.split(',') : [];
 
           $scope.folderItems = [];
           $scope.selectedItems = [];
@@ -51,9 +52,7 @@ angular.module('risevision.template-editor.directives')
             $scope.storageUploadManager.folderPath = '';
           }
 
-          $scope.isFolder = function (path) {
-            return path[path.length - 1] === '/';
-          };
+          $scope.isFolder = templateEditorUtils.isFolder;
 
           $scope.fileNameOf = function (path) {
             var parts = path.split('/');
@@ -74,7 +73,9 @@ angular.module('risevision.template-editor.directives')
               $scope.selectedItems = [];
               $scope.storageUploadManager.folderPath = newFolderPath;
               $scope.folderItems = items.files.filter(function (item) {
-                return item.name !== newFolderPath;
+                var isValid = templateEditorUtils.fileHasValidExtension(item.name, validExtensionsList);
+
+                return item.name !== newFolderPath && ($scope.isFolder(item.name) || isValid);
               });
             })
             .catch(function (err) {

@@ -24,7 +24,7 @@ describe('directive: basicStorageSelector', function() {
   }));
 
   beforeEach(inject(function($injector, $compile, $rootScope, $templateCache) {
-    $rootScope.validExtensions = '.jpg';
+    $rootScope.validExtensions = '.jpg, .png';
     $rootScope.storageManager = {
       addSelectedItems: sandbox.stub()
     };
@@ -52,19 +52,6 @@ describe('directive: basicStorageSelector', function() {
     expect($scope.isSelected).to.be.a.function;
     expect($scope.addSelected).to.be.a.function;
     expect($scope.loadItems).to.be.a.function;
-  });
-
-  describe('isFolder', function () {
-    it('should return true for paths belonging to folders', function () {
-      expect($scope.isFolder('folder/')).to.be.true;
-      expect($scope.isFolder('folder/subfolder/')).to.be.true;
-    });
-
-    it('should return false for paths belonging to files', function () {
-      expect($scope.isFolder('')).to.be.false;
-      expect($scope.isFolder('file.txt')).to.be.false;
-      expect($scope.isFolder('folder/file.txt')).to.be.false;
-    });
   });
 
   describe('fileNameOf', function () {
@@ -122,6 +109,31 @@ describe('directive: basicStorageSelector', function() {
         name: 'folder/file1.jpg'
       }, {
         name: 'folder/file2.jpg'
+      }];
+
+      sandbox.stub(storage.files, 'get').returns(Q.resolve({ files: files }));
+
+      $scope.loadItems('folder/')
+      .then(function () {
+        expect($loading.start).to.have.been.called;
+        expect($loading.stop).to.have.been.called;
+        expect($scope.selectedItems).to.be.empty;
+        expect($scope.storageUploadManager.folderPath).to.equal('folder/');
+        expect($scope.folderItems).to.have.lengthOf(2);
+
+        done();
+      });
+    });
+
+    it('should only load the files with the provided extensions', function (done) {
+      var files = [{
+        name: 'folder/'
+      }, {
+        name: 'folder/file1.jpg'
+      }, {
+        name: 'folder/file2.png'
+      }, {
+        name: 'folder/file3.pdf'
       }];
 
       sandbox.stub(storage.files, 'get').returns(Q.resolve({ files: files }));
