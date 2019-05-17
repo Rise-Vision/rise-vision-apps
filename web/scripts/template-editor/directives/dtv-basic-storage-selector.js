@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('basicStorageSelector', ['$loading', 'storage', 'templateEditorUtils',
-    function ($loading, storage, templateEditorUtils) {
+  .constant('DEFAULT_IMAGE_THUMBNAIL', 'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon%402x.png')
+  .directive('basicStorageSelector', ['$loading', 'storage', 'templateEditorUtils', 'DEFAULT_IMAGE_THUMBNAIL',
+    function ($loading, storage, templateEditorUtils, DEFAULT_IMAGE_THUMBNAIL) {
       return {
         restrict: 'E',
         scope: {
@@ -68,7 +69,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.thumbnailFor = function (item) {
             return item.metadata && item.metadata.thumbnail ?
-              item.metadata.thumbnail : 'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon%402x.png';
+              item.metadata.thumbnail : DEFAULT_IMAGE_THUMBNAIL;
           };
 
           $scope.loadItems = function (newFolderPath) {
