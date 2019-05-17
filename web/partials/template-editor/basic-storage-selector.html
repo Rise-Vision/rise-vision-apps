@@ -1,5 +1,5 @@
 <div class="storage-selector-component" rv-spinner rv-spinner-key="storage-{{storageSelectorId}}-spinner" rv-spinner-start-active="1">
-  <div class="storage-selector-list" ng-show="folderItems.length > 0 && !isUploading">
+  <div class="storage-selector-list te-scrollable-container" ng-show="folderItems.length > 0 && !isUploading">
     <div class="image-row" ng-repeat="item in folderItems track by $index">
       <div class="image-entry">
         <div class="image-name" ng-if="isFolder(item.name)" ng-click="loadItems(item.name)">
