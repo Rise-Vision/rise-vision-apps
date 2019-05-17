@@ -49,7 +49,7 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
-          function _reset() {
+          function _reset () {
             $scope.folderItems = [];
             $scope.selectedItems = [];
             $scope.storageUploadManager.folderPath = '';
