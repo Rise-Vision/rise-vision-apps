@@ -99,11 +99,15 @@ describe('service: templateEditorUtils:', function() {
   describe('fileHasValidExtension', function () {
     var extensions = ['.jpg', '.png', '.svg'];
 
+    it('should return true if an empty list of extensions was provided', function () {
+      expect(templateEditorUtils.fileHasValidExtension('folder/test.mpg')).to.be.true;
+      expect(templateEditorUtils.fileHasValidExtension('folder/test.mpg', [])).to.be.true;
+    });
+
     it('should return true for files with valid extensions', function () {
       expect(templateEditorUtils.fileHasValidExtension('test.jpg', extensions)).to.be.true;
       expect(templateEditorUtils.fileHasValidExtension('folder/test.svg', extensions)).to.be.true;
-      expect(templateEditorUtils.fileHasValidExtension('folder/test.mpg')).to.be.true;
-      expect(templateEditorUtils.fileHasValidExtension('folder/test.mpg', [])).to.be.true;
+      expect(templateEditorUtils.fileHasValidExtension('folder/TEST.SVG', extensions)).to.be.true;
     });
 
     it('should return false for files with not valid extensions', function () {

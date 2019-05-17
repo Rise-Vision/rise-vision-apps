@@ -40,7 +40,7 @@ angular.module('risevision.template-editor.services')
 
       svc.fileHasValidExtension = function (file, extensions) {
         return !extensions || extensions.length === 0 || _.some(extensions, function (extension) {
-          return _.endsWith(file, extension.trim());
+          return _.endsWith(file.toLowerCase(), extension.trim().toLowerCase());
         });
       };
 
