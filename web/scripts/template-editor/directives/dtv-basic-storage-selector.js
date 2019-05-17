@@ -23,7 +23,9 @@ angular.module('risevision.template-editor.directives')
               $scope.isUploading = isUploading;
             },
             addFile: function (file) {
-              templateEditorUtils.addOrReplace($scope.folderItems, { name: file.name }, file);
+              templateEditorUtils.addOrReplace($scope.folderItems, {
+                name: file.name
+              }, file);
             }
           };
           $scope.storageManager = angular.extend($scope.storageManager, {
@@ -46,7 +48,7 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
-          function _reset () {
+          function _reset() {
             $scope.folderItems = [];
             $scope.selectedItems = [];
             $scope.storageUploadManager.folderPath = '';
@@ -59,10 +61,14 @@ angular.module('risevision.template-editor.directives')
 
             if ($scope.isFolder(path)) {
               return parts[parts.length - 2] + '/';
-            }
-            else {
+            } else {
               return parts.pop();
             }
+          };
+
+          $scope.thumbnailFor = function (item) {
+            return item.metadata && item.metadata.thumbnail ?
+              item.metadata.thumbnail : 'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon%402x.png';
           };
 
           $scope.loadItems = function (newFolderPath) {
@@ -77,21 +83,18 @@ angular.module('risevision.template-editor.directives')
 
                 return item.name !== newFolderPath && ($scope.isFolder(item.name) || isValid);
               });
-            })
-            .catch(function (err) {
-              console.log('Failed to load files', err);
-            })
-            .finally(function () {
-              $loading.stop(spinnerId);
-            });
           };
 
           $scope.selectItem = function (item) {
-            templateEditorUtils.addOrRemove($scope.selectedItems, { name: item.name }, item);
+            templateEditorUtils.addOrRemove($scope.selectedItems, {
+              name: item.name
+            }, item);
           };
 
           $scope.isSelected = function (item) {
-            return _.findIndex($scope.selectedItems, { name: item.name }) >= 0;
+            return _.findIndex($scope.selectedItems, {
+              name: item.name
+            }) >= 0;
           };
 
           $scope.addSelected = function () {

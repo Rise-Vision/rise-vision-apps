@@ -4,12 +4,12 @@
       <div class="image-entry">
         <div class="image-name" ng-if="isFolder(item.name)" ng-click="loadItems(item.name)">
           <a href="#">
-            <img src="https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon%402x.png"></img>
+            <img src="https://s3.amazonaws.com/Rise-Images/UI/storage-folder-icon%402x.png"></img>
           </a>
         </div>
         <div class="image-name" ng-if="!isFolder(item.name)" ng-click="selectItem(item)" ng-class="{ 'selected-item': isSelected(item) }">
           <a href="#">
-            <img src="https://lh3.googleusercontent.com/3WnvD0HELKjOFelWdwS3E91TsSCZAHj9F_c8eBPMB1x4mq6maygbV_hbb5YcBeB7p8aAahpV4qBjl8n_E9arJsV2"></img>
+            <img src="{{ thumbnailFor(item) }}"></img>
           </a>
         </div>
       </div>
