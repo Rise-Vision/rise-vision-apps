@@ -84,6 +84,13 @@ angular.module('risevision.template-editor.directives')
 
                 return item.name !== newFolderPath && ($scope.isFolder(item.name) || isValid);
               });
+            })
+            .catch(function (err) {
+              console.log('Failed to load files', err);
+            })
+            .finally(function () {
+              $loading.stop(spinnerId);
+            });
           };
 
           $scope.selectItem = function (item) {
