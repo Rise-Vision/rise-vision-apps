@@ -4,7 +4,8 @@ angular.module('risevision.template-editor.directives')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .tif, .tiff, .svg, .webp')
   .directive('templateComponentImage', ['$log', 'templateEditorFactory', 'templateEditorUtils', 'storageAPILoader',
     'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
-    function ($log, templateEditorFactory, templateEditorUtils, storageAPILoader, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES) {
+    function ($log, templateEditorFactory, templateEditorUtils, storageAPILoader, DEFAULT_IMAGE_THUMBNAIL,
+      SUPPORTED_IMAGE_TYPES) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/components/component-image.html',
@@ -34,7 +35,7 @@ angular.module('risevision.template-editor.directives')
             $scope.isUploading = false;
           }
 
-          function _addFilesToMetadata (files) {
+          function _addFilesToMetadata(files) {
             var selectedImages = $scope.isDefaultImageList ? [] : _.cloneDeep($scope.selectedImages);
 
             files.forEach(function (file) {
@@ -44,10 +45,15 @@ angular.module('risevision.template-editor.directives')
             _setMetadata(selectedImages);
           }
 
-          function _addFileToSet (selectedImages, file) {
-            var newFile = { file: file.name, 'thumbnail-url': file.metadata.thumbnail };
+          function _addFileToSet(selectedImages, file) {
+            var newFile = {
+              file: file.name,
+              'thumbnail-url': file.metadata.thumbnail
+            };
 
-            templateEditorUtils.addOrReplace(selectedImages, { file: file.name }, newFile);
+            templateEditorUtils.addOrReplace(selectedImages, {
+              file: file.name
+            }, newFile);
           }
 
           function _loadSelectedImages() {
@@ -180,8 +186,7 @@ angular.module('risevision.template-editor.directives')
             onBackHandler: function () {
               if ($scope.getCurrentPanel() !== storagePanelSelector || !$scope.storageManager.onBackHandler()) {
                 return $scope.showPreviousPanel();
-              }
-              else {
+              } else {
                 return true;
               }
             }

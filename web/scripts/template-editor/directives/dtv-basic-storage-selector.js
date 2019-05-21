@@ -49,7 +49,7 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
-          function _reset () {
+          function _reset() {
             $scope.folderItems = [];
             $scope.selectedItems = [];
             $scope.storageUploadManager.folderPath = '';
@@ -75,22 +75,24 @@ angular.module('risevision.template-editor.directives')
           $scope.loadItems = function (newFolderPath) {
             $loading.start(spinnerId);
 
-            return storage.files.get({ folderPath: newFolderPath })
-            .then(function (items) {
-              $scope.selectedItems = [];
-              $scope.storageUploadManager.folderPath = newFolderPath;
-              $scope.folderItems = items.files.filter(function (item) {
-                var isValid = templateEditorUtils.fileHasValidExtension(item.name, validExtensionsList);
+            return storage.files.get({
+                folderPath: newFolderPath
+              })
+              .then(function (items) {
+                $scope.selectedItems = [];
+                $scope.storageUploadManager.folderPath = newFolderPath;
+                $scope.folderItems = items.files.filter(function (item) {
+                  var isValid = templateEditorUtils.fileHasValidExtension(item.name, validExtensionsList);
 
-                return item.name !== newFolderPath && ($scope.isFolder(item.name) || isValid);
+                  return item.name !== newFolderPath && ($scope.isFolder(item.name) || isValid);
+                });
+              })
+              .catch(function (err) {
+                console.log('Failed to load files', err);
+              })
+              .finally(function () {
+                $loading.stop(spinnerId);
               });
-            })
-            .catch(function (err) {
-              console.log('Failed to load files', err);
-            })
-            .finally(function () {
-              $loading.stop(spinnerId);
-            });
           };
 
           $scope.selectItem = function (item) {

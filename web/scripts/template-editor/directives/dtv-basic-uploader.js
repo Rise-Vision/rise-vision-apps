@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('basicUploader', ['storage', 'fileUploaderFactory', 'UploadURIService', 'templateEditorUtils', 'STORAGE_UPLOAD_CHUNK_SIZE',
+  .directive('basicUploader', ['storage', 'fileUploaderFactory', 'UploadURIService', 'templateEditorUtils',
+    'STORAGE_UPLOAD_CHUNK_SIZE',
     function (storage, fileUploaderFactory, UploadURIService, templateEditorUtils, STORAGE_UPLOAD_CHUNK_SIZE) {
       return {
         restrict: 'E',
