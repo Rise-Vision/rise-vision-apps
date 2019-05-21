@@ -1,5 +1,6 @@
 'use strict';
 describe('directive: basicUploader', function () {
+  beforeEach(module('risevision.template-editor.services'));
   beforeEach(module('risevision.template-editor.directives'));
 
   beforeEach(module(function ($provide) {
@@ -18,8 +19,11 @@ describe('directive: basicUploader', function () {
           },
           uploadItem: function () {},
           queue: [],
-          removeFromQueue: sinon.spy(),
-          retryItem: sinon.spy()
+          removeFromQueue: sinon.stub(),
+          retryItem: sinon.stub(),
+          removeExif: sinon.spy(function (files) {
+            return Q.resolve(files);
+          })
         };
       };
     });
@@ -48,7 +52,7 @@ describe('directive: basicUploader', function () {
   }));  
 
   var element;
-  var $scope, uploadManager, storage;
+  var $scope, uploadManager, storage, templateEditorUtils;
   var FileUploader, UploadURIService;
 
   beforeEach(inject(function($injector){
@@ -57,9 +61,11 @@ describe('directive: basicUploader', function () {
     $httpBackend.whenGET(/\.*/).respond(200, {});
   }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache) {
+  beforeEach(inject(function($injector, $compile, $rootScope, $templateCache) {
     $rootScope.uploadManager = uploadManager;
     $templateCache.put('partials/template-editor/basic-uploader.html', '<p>mock</p>');
+
+    templateEditorUtils = $injector.get('templateEditorUtils');
 
     element = $compile('<basic-uploader upload-manager="uploadManager" valid-extensions="validExtensions"></basic-uploader>')($rootScope);
     $rootScope.$apply();
@@ -198,7 +204,43 @@ describe('directive: basicUploader', function () {
       setTimeout(function () {
         FileUploader.removeFromQueue.should.have.been.calledWith(item);
         done();
-      }, 10);               
+      }, 10);
     });      
+  });
+
+  describe('uploadSelectedFiles: ', function () {
+    beforeEach(function () {
+      $scope.validExtensions = '.gif, .jpg, .png';
+      sinon.spy($scope.uploader, 'addToQueue');
+      sinon.spy(templateEditorUtils, 'fileHasValidExtension');
+      sinon.stub(templateEditorUtils, 'showInvalidExtensionsMessage');
+    });
+
+    it('should upload the files without warning', function (done) {
+      var file1 = { name: 'test.jpg' };
+      $scope.uploadSelectedFiles([ file1 ])
+      .then (function () {
+        expect($scope.uploader.removeExif).to.have.been.called;
+        expect($scope.uploader.addToQueue).to.have.been.calledWith([ file1 ]);
+        expect(templateEditorUtils.fileHasValidExtension).to.have.been.called;
+        expect(templateEditorUtils.showInvalidExtensionsMessage).to.have.not.been.called;
+
+        done();
+      });
+    });
+
+    it('should upload the valid files and warn about the invalid ones', function (done) {
+      var file1 = { name: 'test.jpg' };
+      var file2 = { name: 'test.pdf' };
+      $scope.uploadSelectedFiles([ file1, file2 ])
+      .then (function () {
+        expect($scope.uploader.removeExif).to.have.been.called;
+        expect($scope.uploader.addToQueue).to.have.been.calledWith([ file1 ]);
+        expect(templateEditorUtils.fileHasValidExtension).to.have.been.called;
+        expect(templateEditorUtils.showInvalidExtensionsMessage).to.have.been.called;
+
+        done();
+      });
+    });
   });
 });

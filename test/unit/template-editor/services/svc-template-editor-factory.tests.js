@@ -57,8 +57,10 @@ describe('service: templateEditorFactory:', function() {
       });
     });
 
-    $provide.factory('messageBox', function() {
-      return sandbox.stub();
+    $provide.factory('templateEditorUtils', function() {
+      return {
+        showMessageWindow: sandbox.stub()
+      };
     });
 
     $provide.factory('$modal', function() {
@@ -78,7 +80,7 @@ describe('service: templateEditorFactory:', function() {
     });
   }));
 
-  var $state, $httpBackend, $modal, templateEditorFactory, messageBox, presentation, processErrorCode,
+  var $state, $httpBackend, $modal, templateEditorFactory, templateEditorUtils, presentation, processErrorCode,
     HTML_PRESENTATION_TYPE, blueprintUrl, storeAuthorize, checkTemplateAccessSpy, store, plansFactory;
 
   beforeEach(function() {
@@ -92,7 +94,7 @@ describe('service: templateEditorFactory:', function() {
       presentation = $injector.get('presentation');
       plansFactory = $injector.get('plansFactory');
       store = $injector.get('store');
-      messageBox = $injector.get('messageBox');
+      templateEditorUtils = $injector.get('templateEditorUtils');
       processErrorCode = $injector.get('processErrorCode');
       HTML_PRESENTATION_TYPE = $injector.get('HTML_PRESENTATION_TYPE');
 
@@ -128,7 +130,7 @@ describe('service: templateEditorFactory:', function() {
       .then(function () {
         expect(templateEditorFactory.createFromTemplate).to.have.been.calledWith(sampleProduct);
         expect(plansFactory.showPlansModal).to.not.have.been.called;
-        expect(messageBox).to.not.have.been.called;
+        expect(templateEditorUtils.showMessageWindow).to.not.have.been.called;
 
         done();
       });
@@ -144,7 +146,7 @@ describe('service: templateEditorFactory:', function() {
         expect(templateEditorFactory.createFromTemplate).to.not.have.been.called;
         expect(plansFactory.showPlansModal).to.have.been.called;
         expect($state.go).to.have.been.calledWith('apps.editor.list');
-        expect(messageBox).to.not.have.been.called;
+        expect(templateEditorUtils.showMessageWindow).to.not.have.been.called;
 
         done();
       });
@@ -160,7 +162,7 @@ describe('service: templateEditorFactory:', function() {
         expect(templateEditorFactory.createFromTemplate).to.not.have.been.called;
         expect(plansFactory.showPlansModal).to.not.have.been.called;
         expect(err.result.error.message).to.equal('Invalid Product Id');
-        expect(messageBox).to.have.been.called;
+        expect(templateEditorUtils.showMessageWindow).to.have.been.called;
 
         done();
       });
@@ -218,7 +220,7 @@ describe('service: templateEditorFactory:', function() {
 
       templateEditorFactory.addPresentation()
         .then(function() {
-          expect(messageBox).to.not.have.been.called;
+          expect(templateEditorUtils.showMessageWindow).to.not.have.been.called;
           expect(templateEditorFactory.savingPresentation).to.be.true;
           expect(templateEditorFactory.loadingPresentation).to.be.true;
 
@@ -254,7 +256,7 @@ describe('service: templateEditorFactory:', function() {
 
           processErrorCode.should.have.been.calledWith('Presentation', 'add', e);
           expect(templateEditorFactory.apiError).to.be.ok;
-          expect(messageBox).to.have.been.called;
+          expect(templateEditorUtils.showMessageWindow).to.have.been.called;
 
           setTimeout(function() {
             expect(templateEditorFactory.loadingPresentation).to.be.false;
@@ -289,7 +291,7 @@ describe('service: templateEditorFactory:', function() {
 
       templateEditorFactory.updatePresentation()
         .then(function() {
-          expect(messageBox).to.not.have.been.called;
+          expect(templateEditorUtils.showMessageWindow).to.not.have.been.called;
           expect(templateEditorFactory.savingPresentation).to.be.true;
           expect(templateEditorFactory.loadingPresentation).to.be.true;
 
@@ -324,7 +326,7 @@ describe('service: templateEditorFactory:', function() {
 
           processErrorCode.should.have.been.calledWith('Presentation', 'update', e);
           expect(templateEditorFactory.apiError).to.be.ok;
-          expect(messageBox).to.have.been.called;
+          expect(templateEditorUtils.showMessageWindow).to.have.been.called;
 
           setTimeout(function() {
             expect(templateEditorFactory.loadingPresentation).to.be.false;
@@ -439,7 +441,7 @@ describe('service: templateEditorFactory:', function() {
 
         processErrorCode.should.have.been.calledWith('Presentation', 'get', e);
         expect(templateEditorFactory.apiError).to.be.ok;
-        expect(messageBox).to.have.been.called;
+        expect(templateEditorUtils.showMessageWindow).to.have.been.called;
 
         setTimeout(function() {
           expect(templateEditorFactory.loadingPresentation).to.be.false;
@@ -549,7 +551,7 @@ describe('service: templateEditorFactory:', function() {
       templateEditorFactory.getPresentation('presentationId')
         .then(templateEditorFactory.deletePresentation.bind(templateEditorFactory))
         .then(function() {
-          expect(messageBox).to.not.have.been.called;
+          expect(templateEditorUtils.showMessageWindow).to.not.have.been.called;
           expect(templateEditorFactory.savingPresentation).to.be.true;
           expect(templateEditorFactory.loadingPresentation).to.be.true;
 
@@ -581,7 +583,7 @@ describe('service: templateEditorFactory:', function() {
           setTimeout(function() {
             expect(presentation.delete.getCall(0).args[0]).to.equal('presentationId');
             expect(processErrorCode).to.have.been.calledWith('Presentation', 'delete', e);
-            expect(messageBox).to.have.been.called;
+            expect(templateEditorUtils.showMessageWindow).to.have.been.called;
             expect($state.go).to.not.have.been.called;
             expect(templateEditorFactory.apiError).to.be.ok;
             expect(templateEditorFactory.savingPresentation).to.be.false;
@@ -640,7 +642,7 @@ describe('service: templateEditorFactory:', function() {
           return templateEditorFactory.publishPresentation(templateEditorFactory);
         })
         .then(function() {
-          expect(messageBox).to.not.have.been.called;
+          expect(templateEditorUtils.showMessageWindow).to.not.have.been.called;
           expect(templateEditorFactory.savingPresentation).to.be.true;
           expect(templateEditorFactory.loadingPresentation).to.be.true;
 
@@ -675,7 +677,7 @@ describe('service: templateEditorFactory:', function() {
             expect(templateEditorFactory.loadingPresentation).to.be.false;
             expect(templateEditorFactory.errorMessage).to.be.ok;
             expect(templateEditorFactory.apiError).to.be.ok;
-            expect(messageBox).to.have.been.called;
+            expect(templateEditorUtils.showMessageWindow).to.have.been.called;
 
             done();
           }, 10);
