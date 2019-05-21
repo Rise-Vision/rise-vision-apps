@@ -61,7 +61,7 @@ angular.module('risevision.template-editor.directives')
             var parts = path.split('/');
 
             if ($scope.isFolder(path)) {
-              return parts[parts.length - 2] + '/';
+              return parts[parts.length - 2];
             } else {
               return parts.pop();
             }

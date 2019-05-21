@@ -1,13 +1,14 @@
 <div class="storage-selector-component te-scrollable-container" rv-spinner rv-spinner-key="storage-{{storageSelectorId}}-spinner" rv-spinner-start-active="1">
   <div class="storage-selector-list" ng-show="folderItems.length > 0 && !isUploading">
     <div class="image-row" ng-repeat="item in folderItems track by $index">
-      <div class="image-entry">
-        <div class="image-name" ng-if="isFolder(item.name)" ng-click="loadItems(item.name)">
+      <div>
+        <div class="folder-entry" ng-if="isFolder(item.name)" ng-click="loadItems(item.name)">
           <a href="#">
-            <img src="https://s3.amazonaws.com/Rise-Images/UI/storage-folder-icon%402x.png"></img>
+            <i class="fa fa-folder"></i>
+            <div class="folder-name">{{ fileNameOf(item.name) }}</div>
           </a>
         </div>
-        <div class="image-name" ng-if="!isFolder(item.name)" ng-click="selectItem(item)" ng-class="{ 'selected-item': isSelected(item) }">
+        <div ng-if="!isFolder(item.name)" ng-click="selectItem(item)" ng-class="{ 'selected-item': isSelected(item) }">
           <a href="#">
             <img src="{{ thumbnailFor(item) }}"></img>
           </a>

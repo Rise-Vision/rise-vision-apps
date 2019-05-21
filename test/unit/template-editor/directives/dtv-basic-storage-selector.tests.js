@@ -58,7 +58,7 @@ describe('directive: basicStorageSelector', function() {
     it('should return only the name of the file given a full path', function () {
       expect($scope.fileNameOf('')).to.equal('');
       expect($scope.fileNameOf('test.jpg')).to.equal('test.jpg');
-      expect($scope.fileNameOf('folder/')).to.equal('folder/');
+      expect($scope.fileNameOf('folder/')).to.equal('folder');
       expect($scope.fileNameOf('folder/test.jpg')).to.equal('test.jpg');
       expect($scope.fileNameOf('folder/subfolder/test.jpg')).to.equal('test.jpg');
     });
