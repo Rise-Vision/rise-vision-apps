@@ -186,8 +186,7 @@ angular.module('risevision.template-editor.directives')
               $scope.showNextPanel('.image-component-container');
             },
             onBackHandler: function () {
-              if ($scope.getCurrentPanel() !== storagePanelSelector || !$scope.storageManager
-              .onBackHandler()) {
+              if ($scope.getCurrentPanel() !== storagePanelSelector || !$scope.storageManager.onBackHandler()) {
                 return $scope.showPreviousPanel();
               } else {
                 return true;
