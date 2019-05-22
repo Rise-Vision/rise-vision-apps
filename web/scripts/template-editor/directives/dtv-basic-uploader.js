@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('basicUploader', ['storage', 'fileUploaderFactory', 'UploadURIService', 'templateEditorUtils', 'STORAGE_UPLOAD_CHUNK_SIZE',
+  .directive('basicUploader', ['storage', 'fileUploaderFactory', 'UploadURIService', 'templateEditorUtils',
+    'STORAGE_UPLOAD_CHUNK_SIZE',
     function (storage, fileUploaderFactory, UploadURIService, templateEditorUtils, STORAGE_UPLOAD_CHUNK_SIZE) {
       return {
         restrict: 'E',
@@ -11,11 +12,13 @@ angular.module('risevision.template-editor.directives')
           validExtensions: '=?'
         },
         templateUrl: 'partials/template-editor/basic-uploader.html',
-        link: function ($scope) {
+        link: function ($scope, element) {
           var FileUploader = fileUploaderFactory();
+          var inputElement = element.find('input');
 
           $scope.uploader = FileUploader;
           $scope.status = {};
+          $scope.warnings = [];
 
           function _isUploading() {
             return $scope.activeUploadCount() > 0;
@@ -23,6 +26,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.removeItem = function (item) {
             FileUploader.removeFromQueue(item);
+            $scope.uploadManager.onUploadStatus(_isUploading());
           };
 
           $scope.activeUploadCount = function () {
@@ -36,6 +40,31 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.fileNameOf = templateEditorUtils.fileNameOf;
+
+          $scope.uploadSelectedFiles = function (selectedFiles) {
+            var validExtensions = $scope.validExtensions ? $scope.validExtensions.split(',') : [];
+            var validFiles = selectedFiles.filter(function (file) {
+              return templateEditorUtils.fileHasValidExtension(file.name, validExtensions);
+            });
+
+            if (validExtensions.length > 0 && validFiles.length < selectedFiles.length) {
+              templateEditorUtils.showInvalidExtensionsMessage(validExtensions);
+            }
+
+            return $scope.uploader.removeExif(validFiles)
+              .then(function (fileItems) {
+                return $scope.uploader.addToQueue(fileItems);
+              });
+          };
+
+          inputElement.bind('change', function () {
+            var selectedFiles = Array.from(this.files);
+
+            $scope.uploadSelectedFiles(selectedFiles)
+              .finally(function () {
+                inputElement.prop('value', null);
+              });
+          });
 
           FileUploader.onAfterAddingFile = function (fileItem) {
             console.info('onAfterAddingFile', fileItem.file.name);

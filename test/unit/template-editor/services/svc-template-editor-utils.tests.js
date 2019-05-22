@@ -129,4 +129,24 @@ describe('service: templateEditorUtils:', function() {
       expect(templateEditorUtils.isFolder('folder/file.txt')).to.be.false;
     });
   });
+
+  describe('showInvalidExtensionsMessage', function () {
+    it('should call the correct functions', function () {
+      sandbox.stub(templateEditorUtils, 'showMessageWindow');
+      sandbox.stub(templateEditorUtils, 'getValidExtensionsMessage');
+
+      templateEditorUtils.showInvalidExtensionsMessage([]);
+
+      expect(templateEditorUtils.showMessageWindow).to.have.been.called;
+      expect(templateEditorUtils.getValidExtensionsMessage).to.have.been.called;
+    });
+  });
+
+  describe('getValidExtensionsMessage', function () {
+    it('should return the correct message for the given set of extensions', function () {
+      expect(templateEditorUtils.getValidExtensionsMessage(['.gif'])).to.equal('Rise Vision supports .GIF');
+      expect(templateEditorUtils.getValidExtensionsMessage(['.gif', '.jpg'])).to.equal('Rise Vision supports .GIF and .JPG');
+      expect(templateEditorUtils.getValidExtensionsMessage(['.gif', '.jpg', '.png'])).to.equal('Rise Vision supports .GIF, .JPG and .PNG');
+    });
+  });
 });

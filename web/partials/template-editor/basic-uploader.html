@@ -11,7 +11,6 @@
           </a>
           <span class="pull-right text-muted u_margin-left u_margin-right"> {{ item.file.size | fileSizeFilter }}</span>
           <span class="u_ellipsis-lg" ng-class="{'text-danger': item.isError }">
-            <i class="fa fa-exclamation u_icon-red icon-left" ng-show="item.isError"></i>
             {{ fileNameOf(item.file.name) }}
           </span>
         </p>
@@ -25,7 +24,7 @@
 
   <div class="modal fade" tabindex="-1">
     <form id="upload-form-{{uploaderId}}">
-      <input type="file" id="{{uploaderId}}" storage-file-select uploader="uploader" multiple accept="{{validExtensions}}">
+      <input type="file" id="{{uploaderId}}" uploader="uploader" multiple accept="{{validExtensions}}">
     </form>
   </div>
 </div>
