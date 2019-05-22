@@ -55,6 +55,7 @@ describe('directive: TemplateComponentImage', function() {
 
     timeout = $timeout;
     element = $compile("<template-component-image></template-component-image>")($scope);
+    $scope = element.scope();
     $scope.$digest();
   }));
 
