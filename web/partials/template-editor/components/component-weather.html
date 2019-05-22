@@ -1,86 +1,16 @@
-<style>
-
-  /* Radio */
-
-  input[type=radio] {
-    position: absolute;
-    top: auto;
-    overflow: hidden;
-    clip: rect(1px 1px 1px 1px); /* IE 6/7 */
-    clip: rect(1px, 1px, 1px, 1px);
-    width: 1px;
-    height: 1px;
-    white-space: nowrap;
-  }
-
-  input[type=radio] + label {
-    display: block;
-    padding: .5em;
-    padding-left: 2em;
-    text-indent: 0.5em;
-    max-width: calc(100% - 2em);
-    /*margin: -1em 0;*/
-  }
-
-  fieldset > div input[type=radio] + label {
-    margin: -1em 0;
-  }
-
-  input[type=radio] + label:before {
-    content: '';
-    background: #fff;
-    border: .15em solid #999999;
-    background-color: rgba(255, 255, 255, .8);
-    display: block;
-    box-sizing: border-box;
-    float: left;
-    width: 1.5em;
-    height: 1.5em;
-    margin-left: -2em;
-    /*margin-top: .15em;*/
-    vertical-align: top;
-    cursor: pointer;
-    text-align: center;
-    transition: all .1s ease-out;
-  }
-
-  input[type=radio] + label:before {
-    border-radius: 100%;
-  }
-
-  input[type=radio]:checked + label:before {
-    background-color: #4ab767;
-    border: .15em solid #4ab767;
-    box-shadow: inset 0 0 0 0.23em rgba(255, 255, 255, .95);
-  }
-
-  
-</style>
-<div class="row attribute-row-first attribute-row-last">
-  <div style="    
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #999999;">This Template will show the weather for the Address of the Display it is playing on.</div>
-  <div class="u_margin-md-top" style="
-    font-size: 0.8em;
-    font-weight: bold;
-    color: #4d4d4d;">Display weather in</div>
+<div class="row attribute-row weather-component">
+  <h2>This Template will show the weather for the Address of the Display it is playing on.</h2>
+  <h3>Display weather in</h3>
   <div class="radio">
     <input type="radio" ng-model="scale" value="F" id="farenheit" name="farenheit" ng-change="save()" aria-required="true" tabindex="1" required>
-    <label for="farenheit" style="
-  font-size: 0.9em;
-  font-weight: normal;
-  color: #4d4d4d;">
+    <label for="farenheit">
       Farenheit
     </label>
   </div>
 
   <div class="radio">
     <input type="radio" ng-model="scale" value="C" id="celsius" name="celsius" ng-change="save()" aria-required="true" tabindex="1" required>
-    <label for="celsius" style="
-  font-size: 0.9em;
-  font-weight: normal;
-  color: #4d4d4d;">
+    <label for="celsius">
       Celsius
     </label>
   </div>
