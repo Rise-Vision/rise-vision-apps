@@ -69,7 +69,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.thumbnailFor = function (item) {
             return item.metadata && item.metadata.thumbnail ?
-              item.metadata.thumbnail : DEFAULT_IMAGE_THUMBNAIL;
+              item.metadata.thumbnail : item.mediaLink;
           };
 
           $scope.loadItems = function (newFolderPath) {

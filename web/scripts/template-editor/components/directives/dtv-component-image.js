@@ -46,9 +46,11 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _addFileToSet(selectedImages, file) {
+            var thumbnail = file.metadata && file.metadata.thumbnail ?
+              file.metadata.thumbnail : DEFAULT_IMAGE_THUMBNAIL;
             var newFile = {
               file: file.name,
-              'thumbnail-url': file.metadata.thumbnail
+              'thumbnail-url': thumbnail
             };
 
             templateEditorUtils.addOrReplace(selectedImages, {
@@ -131,7 +133,7 @@ angular.module('risevision.template-editor.directives')
               .then(function (url) {
                 var entry = {
                   'file': fileName,
-                  'thumbnail-url': url || ''
+                  'thumbnail-url': url || DEFAULT_IMAGE_THUMBNAIL
                 };
 
                 metadata.push(entry);
