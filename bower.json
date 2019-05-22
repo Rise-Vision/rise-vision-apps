@@ -15,7 +15,7 @@
     "Sortable": "^1.4.2",
     "angular-truncate": "*",
     "angular-slugify": "^1.0.1",
-    "common-header": "https://github.com/Rise-Vision/common-header.git#v3.7.22",
+    "common-header": "https://github.com/Rise-Vision/common-header.git#chore/weather-translation",
     "oauthio-web": "0.6.2",
     "stretchy": "https://github.com/Rise-Vision/stretchy.git#gh-pages"
   },
@@ -36,6 +36,7 @@
     "angular-sanitize": "~1.5.0",
     "angular-mocks": "~1.5.0",
     "jquery": "^2",
-    "font-awesome": "~4.7.0"
+    "font-awesome": "~4.7.0",
+    "common-header": "chore/weather-translation"
   }
 }
