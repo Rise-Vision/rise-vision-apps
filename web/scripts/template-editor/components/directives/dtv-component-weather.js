@@ -6,6 +6,7 @@ angular.module('risevision.template-editor.directives')
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/components/component-weather.html',
+        scope: true,
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
 
