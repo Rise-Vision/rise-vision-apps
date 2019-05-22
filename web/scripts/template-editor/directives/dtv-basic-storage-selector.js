@@ -74,7 +74,6 @@ angular.module('risevision.template-editor.directives')
 
           $scope.loadItems = function (newFolderPath) {
             $loading.start(spinnerId);
-
             $scope.currentFolder = $scope.fileNameOf(newFolderPath);
 
             return storage.files.get({
