@@ -69,7 +69,7 @@ angular.module('risevision.template-editor.services')
         suffix = ' and ' + validExtensions[validExtensions.length - 1].toUpperCase();
       }
 
-      return 'Rise Vision supports ' + prefix.join(', ').toUpperCase() + suffix;
+      return 'Rise Vision supports ' + prefix.join(', ').toUpperCase() + suffix + '.';
     };
 
     return svc;

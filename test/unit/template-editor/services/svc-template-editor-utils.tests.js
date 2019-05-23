@@ -144,9 +144,9 @@ describe('service: templateEditorUtils:', function() {
 
   describe('getValidExtensionsMessage', function () {
     it('should return the correct message for the given set of extensions', function () {
-      expect(templateEditorUtils.getValidExtensionsMessage(['.gif'])).to.equal('Rise Vision supports .GIF');
-      expect(templateEditorUtils.getValidExtensionsMessage(['.gif', '.jpg'])).to.equal('Rise Vision supports .GIF and .JPG');
-      expect(templateEditorUtils.getValidExtensionsMessage(['.gif', '.jpg', '.png'])).to.equal('Rise Vision supports .GIF, .JPG and .PNG');
+      expect(templateEditorUtils.getValidExtensionsMessage(['.gif'])).to.equal('Rise Vision supports .GIF.');
+      expect(templateEditorUtils.getValidExtensionsMessage(['.gif', '.jpg'])).to.equal('Rise Vision supports .GIF and .JPG.');
+      expect(templateEditorUtils.getValidExtensionsMessage(['.gif', '.jpg', '.png'])).to.equal('Rise Vision supports .GIF, .JPG and .PNG.');
     });
   });
 });

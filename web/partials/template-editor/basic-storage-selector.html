@@ -20,7 +20,8 @@
   <div class="storage-selector-list-empty" ng-show="folderItems.length === 0 && !isUploading">
     <div class="row">
       <div class="col-xs-12">
-        <h2>You have no images in Storage</h2>
+        <h2 ng-show="!currentFolder">You have no images in Storage.</h2>
+        <h2 ng-show="currentFolder">You have no images in {{currentFolder}}.</h2>
         <p>Upload images from your device to keep your display interesting!</p>
         <div>
           <img class="img-responsive" src="../images/image-empty-list.svg">
