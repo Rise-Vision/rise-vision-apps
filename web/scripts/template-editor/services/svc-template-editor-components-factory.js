@@ -7,7 +7,7 @@ angular.module('risevision.template-editor.services')
       factory.components = {};
 
       factory.getSetupData = function (components) {
-        var setupData = []
+        var setupData = [];
         angular.forEach(components, function (componentBlueprint) {
 
           if (factory.components[componentBlueprint.type] &&
@@ -20,7 +20,7 @@ angular.module('risevision.template-editor.services')
           }
         });
         return setupData;
-      }
+      };
       return factory;
     }
   ]);
