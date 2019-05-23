@@ -130,6 +130,15 @@ describe('service: templateEditorUtils:', function() {
     });
   });
 
+  describe('fileNameOf', function () {
+    it('should return the name of the last valid element in the provided path', function () {
+      expect(templateEditorUtils.fileNameOf('file1.jpg')).to.equal('file1.jpg');
+      expect(templateEditorUtils.fileNameOf('folder/')).to.equal('folder');
+      expect(templateEditorUtils.fileNameOf('folder/file1.jpg')).to.equal('file1.jpg');
+      expect(templateEditorUtils.fileNameOf('folder/subfolder/')).to.equal('subfolder');
+    });
+  });
+
   describe('showInvalidExtensionsMessage', function () {
     it('should call the correct functions', function () {
       sandbox.stub(templateEditorUtils, 'showMessageWindow');

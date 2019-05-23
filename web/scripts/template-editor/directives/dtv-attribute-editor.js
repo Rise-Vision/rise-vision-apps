@@ -88,7 +88,21 @@ angular.module('risevision.template-editor.directives')
 
             _swapToRight(currentPanel, previousPanel);
 
+            if (!previousPanel) {
+              $scope.setPanelIcon(null, null);
+              $scope.setPanelTitle(null);
+            }
+
             return !!previousPanel;
+          };
+
+          $scope.setPanelIcon = function (panelIcon, panelIconType) {
+            $scope.panelIcon = panelIcon;
+            $scope.panelIconType = panelIconType;
+          };
+
+          $scope.setPanelTitle = function (panelTitle) {
+            $scope.panelTitle = panelTitle;
           };
 
           function _showAttributeList(value, delay) {

@@ -26,7 +26,8 @@ describe('directive: basicStorageSelector', function() {
   beforeEach(inject(function($injector, $compile, $rootScope, $templateCache) {
     $rootScope.validExtensions = '.jpg, .png';
     $rootScope.storageManager = {
-      addSelectedItems: sandbox.stub()
+      addSelectedItems: sandbox.stub(),
+      handleNavigation: sandbox.stub()
     };
 
     $loading = $injector.get('$loading');
@@ -120,6 +121,7 @@ describe('directive: basicStorageSelector', function() {
         expect($scope.selectedItems).to.be.empty;
         expect($scope.storageUploadManager.folderPath).to.equal('folder/');
         expect($scope.folderItems).to.have.lengthOf(2);
+        expect($scope.storageManager.handleNavigation).to.have.been.calledWith('folder/');
 
         done();
       });
