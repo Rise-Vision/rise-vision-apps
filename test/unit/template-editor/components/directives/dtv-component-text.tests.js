@@ -28,6 +28,7 @@ describe('directive: templateComponentText', function() {
     $scope.setAttributeData = sinon.stub();
 
     element = $compile("<template-component-text></template-component-text>")($scope);
+    $scope = element.scope();
     $scope.$digest();
   }));
 

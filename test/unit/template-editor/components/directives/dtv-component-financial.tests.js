@@ -80,6 +80,7 @@ describe('directive: TemplateComponentFinancial', function() {
 
     timeout = $timeout;
     element = $compile("<template-component-financial></template-component-financial>")($scope);
+    $scope = element.scope();
     $scope.$digest();
   }));
 
