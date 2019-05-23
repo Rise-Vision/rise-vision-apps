@@ -16,9 +16,9 @@ angular.module('risevision.template-editor.directives')
                 $scope.icon + '</svg>';
             } else if ($scope.type === 'riseSvg') {
               return '<svg class="mr-2 fa fa-lg" viewBox="0 0 32 32" width="24" height="18" xmlns="http://www.w3.org/2000/svg">' +
-                       '<path fill="#4d4d4d" d="' + iconsList.icons1[$scope.icon] + '"></path>' +
-                       '<path fill="#4d4d4d" d="' + iconsList.icons2[$scope.icon] + '"></path>' +
-                     '</svg>';
+                '<path fill="#4d4d4d" d="' + iconsList.icons1[$scope.icon] + '"></path>' +
+                '<path fill="#4d4d4d" d="' + iconsList.icons2[$scope.icon] + '"></path>' +
+                '</svg>';
             } else {
               return '<i class="mr-2 fa fa-lg ' + $scope.icon + '"></i>';
             }

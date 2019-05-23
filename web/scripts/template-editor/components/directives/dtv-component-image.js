@@ -34,8 +34,7 @@ angular.module('risevision.template-editor.directives')
               if (folderName) {
                 $scope.setPanelIcon('fa-folder');
                 $scope.setPanelTitle(folderName);
-              }
-              else {
+              } else {
                 $scope.setPanelIcon('riseStorage', 'riseSvg');
                 $scope.setPanelTitle('Rise Storage');
               }
