@@ -30,6 +30,8 @@ angular.module('risevision.template-editor.directives')
             iframeLoaded = true;
 
             _setupComponents();
+
+            _postAttributeData();
           };
 
           $scope.getEditorPreviewUrl = function (productCode) {

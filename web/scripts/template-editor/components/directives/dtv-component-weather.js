@@ -46,6 +46,7 @@ angular.module('risevision.template-editor.directives')
               };
               return {
                 id: componentBlueprint.id,
+                scale: $scope.getAttributeData($scope.componentId, 'scale'),
                 displayAddress: displayAddress
               };
             }
