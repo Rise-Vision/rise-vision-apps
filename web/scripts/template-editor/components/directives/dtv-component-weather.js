@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentWeather', ['templateEditorFactory',
-    function (templateEditorFactory) {
+  .directive('templateComponentWeather', ['templateEditorFactory', 'userState',
+    function (templateEditorFactory, userState) {
       return {
         restrict: 'E',
         scope: true,
@@ -35,6 +35,16 @@ angular.module('risevision.template-editor.directives')
               element.show();
               $scope.componentId = $scope.factory.selected.id;
               _load();
+            },
+            preConfigureComponentInstance: function(componentBlueprint) {
+              var company = userState.getCopyOfSelectedCompany(true);
+              var displayAddress = {
+                city: company.city,
+                province: company.province,
+                country: company.country,
+                postalCode: company.postalCode
+              }
+              $scope.setAttributeData(componentBlueprint.id, 'displayAddress', displayAddress);
             }
           });
 

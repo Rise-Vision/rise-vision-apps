@@ -42,8 +42,10 @@ angular.module('risevision.template-editor.controllers')
 
       $scope.setAttributeData = function (componentId, attributeKey, value) {
         var component = _componentFor(componentId);
+        console.log('setAttributeData',component,attributeKey,value)
 
         component[attributeKey] = value;
+        console.log($scope.factory.presentation.templateAttributeData)
       };
 
       function _componentFor(componentId) {

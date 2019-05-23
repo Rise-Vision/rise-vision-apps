@@ -2,8 +2,9 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('templateEditorPreviewHolder', ['$window', '$sce', 'templateEditorFactory', 'HTML_TEMPLATE_DOMAIN',
-    'HTML_TEMPLATE_URL',
-    function ($window, $sce, templateEditorFactory, HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL) {
+    'HTML_TEMPLATE_URL', 'templateEditorComponentsFactory',
+    function ($window, $sce, templateEditorFactory, HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL,
+    templateEditorComponentsFactory) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/preview-holder.html',
@@ -19,7 +20,6 @@ angular.module('risevision.template-editor.directives')
           var PREVIEW_INITIAL_DELAY_MILLIS = 1000;
 
           var iframeLoaded = false;
-          var attributeDataText = null;
 
           var previewHolder = $window.document.getElementById('preview-holder');
           var iframeParent = $window.document.getElementById('template-editor-preview-parent');
@@ -27,6 +27,8 @@ angular.module('risevision.template-editor.directives')
 
           iframe.onload = function () {
             iframeLoaded = true;
+
+            _preConfigureComponents();
 
             _postAttributeData();
           };
@@ -150,21 +152,30 @@ angular.module('risevision.template-editor.directives')
             angular.element($window).off('resize', _onResize);
           });
 
-          $scope.$watch('factory.presentation.templateAttributeData', function (value) {
-            attributeDataText = typeof value === 'string' ?
-              value : JSON.stringify(value);
-
+          $scope.$watch('factory.presentation.templateAttributeData', function () {
             _postAttributeData();
           }, true);
 
           function _postAttributeData() {
+            var attributeDataText = $scope.factory.presentation.templateAttributeData;
+
             if (!attributeDataText || !iframeLoaded) {
               return;
             }
 
+            attributeDataText = typeof attributeDataText === 'string' ? attributeDataText : JSON.stringify(attributeDataText);
+
+            console.log('_postAttributeData',attributeDataText)          
+
             iframe.contentWindow.postMessage(attributeDataText, HTML_TEMPLATE_DOMAIN);
 
             attributeDataText = null;
+          }
+
+          function _preConfigureComponents() {
+            angular.forEach($scope.factory.blueprintData.components,function(componentBlueprint){
+              templateEditorComponentsFactory.preConfigureComponentInstance(componentBlueprint);             
+            });            
           }
         }
       };

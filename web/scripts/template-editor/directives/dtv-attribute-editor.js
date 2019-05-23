@@ -2,14 +2,14 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('templateAttributeEditor', ['$timeout', 'templateEditorFactory', 'templateEditorUtils',
-    function ($timeout, templateEditorFactory, templateEditorUtils) {
+    'templateEditorComponentsFactory',
+    function ($timeout, templateEditorFactory, templateEditorUtils, templateEditorComponentsFactory) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/attribute-editor.html',
         link: function ($scope) {
           $scope.factory = templateEditorFactory;
           $scope.showAttributeList = true;
-          $scope.directives = {};
           $scope.panels = [];
 
           $scope.$watch('factory.presentation', function () {
@@ -18,12 +18,12 @@ angular.module('risevision.template-editor.directives')
           });
 
           $scope.registerDirective = function (directive) {
-            directive.element.hide();
-            $scope.directives[directive.type] = directive;
+            directive.element.hide();           
+            templateEditorComponentsFactory.components[directive.type] = directive;
           };
 
           $scope.editComponent = function (component) {
-            var directive = $scope.directives[component.type];
+            var directive = templateEditorComponentsFactory.components[component.type];
 
             $scope.factory.selected = component;
             directive.show();
@@ -33,7 +33,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.onBackButton = function () {
             var component = $scope.factory.selected;
-            var directive = $scope.directives[component.type];
+            var directive = templateEditorComponentsFactory.components[component.type];
 
             if (!directive.onBackHandler || !directive.onBackHandler()) {
               $scope.backToList();
@@ -42,7 +42,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.backToList = function () {
             var component = $scope.factory.selected;
-            var directive = $scope.directives[component.type];
+            var directive = templateEditorComponentsFactory.components[component.type];
 
             $scope.factory.selected = null;
             directive.element.hide();
@@ -51,13 +51,13 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.getComponentIcon = function (component) {
-            return component && $scope.directives[component.type] ?
-              $scope.directives[component.type].icon : '';
+            return component && templateEditorComponentsFactory.components[component.type] ?
+              templateEditorComponentsFactory.components[component.type].icon : '';
           };
 
           $scope.getComponentIconType = function (component) {
-            return component && $scope.directives[component.type] ?
-              $scope.directives[component.type].iconType : '';
+            return component && templateEditorComponentsFactory.components[component.type] ?
+              templateEditorComponentsFactory.components[component.type].iconType : '';
           };
 
           $scope.isHeaderBottomRuleVisible = function (component) {
@@ -65,7 +65,7 @@ angular.module('risevision.template-editor.directives')
               return true;
             }
 
-            var directive = $scope.directives[component.type];
+            var directive = templateEditorComponentsFactory.components[component.type];
 
             return directive && directive.isHeaderBottomRuleVisible ?
               directive.isHeaderBottomRuleVisible() : true;
