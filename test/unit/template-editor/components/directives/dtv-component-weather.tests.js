@@ -1,6 +1,6 @@
 'use strict';
 
-describe('directive: templateComponentText', function() {
+describe('directive: templateComponentWeather', function() {
   var $scope,
       element,
       factory;
@@ -21,16 +21,21 @@ describe('directive: templateComponentText', function() {
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache){
-    $templateCache.put('partials/template-editor/components/component-text.html', '<p>mock</p>');
-    $scope = $rootScope.$new();
+    $templateCache.put('partials/template-editor/components/component-weather.html', '<p>mock</p>');
+
+    element = $compile("<template-component-weather></template-component-weather>")($rootScope.$new());
+
+    $scope = element.scope();
 
     $scope.registerDirective = sinon.stub();
     $scope.setAttributeData = sinon.stub();
 
-    element = $compile("<template-component-text></template-component-text>")($scope);
-    $scope = element.scope();
     $scope.$digest();
   }));
+
+  it('should compile html', function() {
+    expect(element.html()).to.equal('<p>mock</p>');
+  });
 
   it('should exist', function() {
     expect($scope).to.be.ok;
@@ -40,15 +45,15 @@ describe('directive: templateComponentText', function() {
 
     var directive = $scope.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
-    expect(directive.type).to.equal('rise-text');
+    expect(directive.type).to.equal('rise-data-weather');
     expect(directive.iconType).to.equal('svg');
     expect(directive.icon).to.exist;
     expect(directive.show).to.be.a('function');
   });
 
-  it('should load text from attribute data', function() {
+  it('should load weather from attribute data', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
-    var sampleValue = "test text";
+    var sampleValue = "test weather";
 
     $scope.getAttributeData = function() {
       return sampleValue;
@@ -57,12 +62,12 @@ describe('directive: templateComponentText', function() {
     directive.show();
 
     expect($scope.componentId).to.equal("TEST-ID");
-    expect($scope.value).to.equal(sampleValue);
+    expect($scope.scale).to.equal(sampleValue);
   });
 
-  it('should load text from blueprint when  attribute data', function() {
+  it('should load weather from blueprint when the attribute data is missing', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
-    var sampleValue = "test text";
+    var sampleValue = "test weather";
 
     $scope.getAttributeData = function() {
       return null;
@@ -75,12 +80,12 @@ describe('directive: templateComponentText', function() {
     directive.show();
 
     expect($scope.componentId).to.equal("TEST-ID");
-    expect($scope.value).to.equal(sampleValue);
+    expect($scope.scale).to.equal(sampleValue);
   });
 
-  it('should save text to attribute data', function() {
+  it('should save weather to attribute data', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
-    var sampleValue = "test text";
+    var sampleValue = "test weather";
 
     $scope.getAttributeData = function() {
       return sampleValue;
@@ -88,12 +93,12 @@ describe('directive: templateComponentText', function() {
 
     directive.show();
 
-    $scope.value = "updated text";
+    $scope.scale = "updated weather";
 
     $scope.save();
 
     expect($scope.setAttributeData.calledWith(
-      "TEST-ID", "value", "updated text"
+      "TEST-ID", "scale", "updated weather"
     )).to.be.true;
   });
 

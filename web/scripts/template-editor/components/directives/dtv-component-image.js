@@ -8,6 +8,7 @@ angular.module('risevision.template-editor.directives')
       SUPPORTED_IMAGE_TYPES) {
       return {
         restrict: 'E',
+        scope: true,
         templateUrl: 'partials/template-editor/components/component-image.html',
         link: function ($scope, element) {
           var storagePanelSelector = '.storage-selector-container';
