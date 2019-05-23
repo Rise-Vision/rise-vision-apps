@@ -6,11 +6,20 @@ angular.module('risevision.template-editor.services')
       var factory = {};
       factory.components = {};
 
-      factory.preConfigureComponentInstance = function(componentBlueprint) {
-        if (factory.components[componentBlueprint.type] && 
-          typeof factory.components[componentBlueprint.type].preConfigureComponentInstance === 'function') {
-          factory.components[componentBlueprint.type].preConfigureComponentInstance(componentBlueprint);
-        }        
+      factory.getSetupData = function (components) {
+        var setupData = []
+        angular.forEach(components, function (componentBlueprint) {
+
+          if (factory.components[componentBlueprint.type] &&
+            typeof factory.components[componentBlueprint.type].getSetupData === 'function') {
+
+            var data = factory.components[componentBlueprint.type].getSetupData(componentBlueprint);
+            if (data) {
+              setupData.push(data);
+            }
+          }
+        });
+        return setupData;
       }
       return factory;
     }

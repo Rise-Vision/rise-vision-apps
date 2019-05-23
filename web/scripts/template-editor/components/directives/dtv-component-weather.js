@@ -36,15 +36,18 @@ angular.module('risevision.template-editor.directives')
               $scope.componentId = $scope.factory.selected.id;
               _load();
             },
-            preConfigureComponentInstance: function(componentBlueprint) {
+            getSetupData: function (componentBlueprint) {
               var company = userState.getCopyOfSelectedCompany(true);
               var displayAddress = {
                 city: company.city,
                 province: company.province,
                 country: company.country,
                 postalCode: company.postalCode
-              }
-              $scope.setAttributeData(componentBlueprint.id, 'displayAddress', displayAddress);
+              };
+              return {
+                id: componentBlueprint.id,
+                displayAddress: displayAddress
+              };
             }
           });
 

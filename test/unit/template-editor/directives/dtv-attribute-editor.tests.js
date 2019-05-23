@@ -38,9 +38,9 @@ describe('directive: TemplateAttributeEditor', function() {
     expect($scope.showAttributeList).to.be.true;
   });
 
-  it('should have empty directives', function() {
-    expect($scope.directives).to.deep.equal({});
-  });
+  // it('should have empty directives', function() {
+  //   expect($scope.directives).to.deep.equal({});
+  // });
 
   it('Replaces the element with the appropriate content', function() {
     expect(element.html()).to.equal('<p>mock</p>');
@@ -54,23 +54,23 @@ describe('directive: TemplateAttributeEditor', function() {
     expect($scope.getComponentIcon).to.be.a('function');
   });
 
-  it('Registers a directive', function() {
-    var directive = {
-      type: 'rise-test',
-      icon: 'fa-test',
-      element: {
-        hide: sinon.stub()
-      },
-      show: function() {}
-    };
+  // it('Registers a directive', function() {
+  //   var directive = {
+  //     type: 'rise-test',
+  //     icon: 'fa-test',
+  //     element: {
+  //       hide: sinon.stub()
+  //     },
+  //     show: function() {}
+  //   };
 
-    $scope.registerDirective(directive);
+  //   $scope.registerDirective(directive);
 
-    expect($scope.directives["rise-test"]).to.be.ok;
-    expect($scope.directives["rise-test"].type).to.equal("rise-test");
+  //   expect($scope.directives["rise-test"]).to.be.ok;
+  //   expect($scope.directives["rise-test"].type).to.equal("rise-test");
 
-    expect(directive.element.hide).to.have.been.called;
-  });
+  //   expect(directive.element.hide).to.have.been.called;
+  // });
 
   it('Edits a component', function() {
     var directive = {
