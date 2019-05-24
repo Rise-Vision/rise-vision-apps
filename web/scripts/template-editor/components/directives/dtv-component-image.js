@@ -110,7 +110,11 @@ angular.module('risevision.template-editor.directives')
                 var file = resp && resp.result && resp.result.result &&
                   resp.result.files && resp.result.files[0];
 
-                return file && file.metadata && file.metadata.thumbnail ?
+                if (!file) {
+                  return MISSING_IMAGE_THUMBNAIL;
+                }
+
+                return file.metadata && file.metadata.thumbnail ?
                   file.metadata.thumbnail : DEFAULT_IMAGE_THUMBNAIL;
               })
               .catch(function (error) {
