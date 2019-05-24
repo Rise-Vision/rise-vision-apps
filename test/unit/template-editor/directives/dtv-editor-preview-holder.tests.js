@@ -16,7 +16,6 @@ describe('directive: TemplateEditorPreviewHolder', function() {
       setAttribute: sandbox.stub(),
       contentWindow: {
         postMessage: sandbox.stub()
-        
       }
     };
     componentsFactory = {
@@ -168,7 +167,6 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
       iframe.onload();
 
-      console.log(iframe.contentWindow.postMessage.getCall(0).args);
       expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"components":[{"id":"comp"}]}', 'https://widgets.risevision.com']);
     });
   });
