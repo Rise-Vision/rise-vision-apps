@@ -147,7 +147,8 @@ describe('directive: TemplateComponentImage', function() {
     setTimeout(function() {
       var expectedMetadata = [
         {
-          'file': TEST_FILE,
+          file: TEST_FILE,
+          exists: true,
           'thumbnail-url': 'http://thumbnail.png'
         }
       ];
