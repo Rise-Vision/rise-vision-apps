@@ -3,9 +3,9 @@
 angular.module('risevision.template-editor.directives')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
   .directive('templateComponentImage', ['$log', 'templateEditorFactory', 'templateEditorUtils', 'storageAPILoader',
-    'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
+    'DEFAULT_IMAGE_THUMBNAIL', 'MISSING_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
     function ($log, templateEditorFactory, templateEditorUtils, storageAPILoader, DEFAULT_IMAGE_THUMBNAIL,
-      SUPPORTED_IMAGE_TYPES) {
+      MISSING_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES) {
       return {
         restrict: 'E',
         scope: true,
@@ -62,6 +62,7 @@ angular.module('risevision.template-editor.directives')
               file.metadata.thumbnail : DEFAULT_IMAGE_THUMBNAIL;
             var newFile = {
               file: file.name,
+              exists: true,
               'thumbnail-url': thumbnail
             };
 
@@ -101,7 +102,7 @@ angular.module('risevision.template-editor.directives')
             if (!match) {
               $log.error('Filename is not a valid Rise Storage path: ' + fileName);
 
-              return Promise.resolve(DEFAULT_IMAGE_THUMBNAIL);
+              return Promise.resolve(MISSING_IMAGE_THUMBNAIL);
             }
 
             return _requestFileData(match[1], match[2])
@@ -115,7 +116,7 @@ angular.module('risevision.template-editor.directives')
               .catch(function (error) {
                 $log.error(error);
 
-                return DEFAULT_IMAGE_THUMBNAIL;
+                return MISSING_IMAGE_THUMBNAIL;
               });
           }
 
@@ -144,7 +145,8 @@ angular.module('risevision.template-editor.directives')
             _getThumbnailUrlFor(fileName)
               .then(function (url) {
                 var entry = {
-                  'file': fileName,
+                  file: fileName,
+                  exists: url !== MISSING_IMAGE_THUMBNAIL,
                   'thumbnail-url': url || DEFAULT_IMAGE_THUMBNAIL
                 };
 

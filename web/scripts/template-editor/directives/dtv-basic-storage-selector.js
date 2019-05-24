@@ -2,6 +2,7 @@
 
 angular.module('risevision.template-editor.directives')
   .constant('DEFAULT_IMAGE_THUMBNAIL', 'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon%402x.png')
+  .constant('MISSING_IMAGE_THUMBNAIL', 'http://apache.org/img/ASF20thAnniversary.jpg')
   .directive('basicStorageSelector', ['$loading', 'storage', 'templateEditorUtils', 'DEFAULT_IMAGE_THUMBNAIL',
     function ($loading, storage, templateEditorUtils, DEFAULT_IMAGE_THUMBNAIL) {
       return {
