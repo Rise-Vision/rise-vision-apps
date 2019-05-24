@@ -1,25 +1,28 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('templateEditorComponentsFactory', ['templateEditorFactory',
-    function (templateEditorFactory) {
+  .factory('templateEditorComponentsFactory', ['templateEditorFactory', 'userState',
+    function (templateEditorFactory,userState) {
       var factory = {};
       factory.components = {};
 
-      factory.getSetupData = function (components) {
-        var setupData = [];
+      factory.getPrePopulateData = function (components) {
+        var company = userState.getCopyOfSelectedCompany(true);
+        var displayAddress = {
+          city: company.city,
+          province: company.province,
+          country: company.country,
+          postalCode: company.postalCode
+        };
+
+        var prePopulateData = [];
         angular.forEach(components, function (componentBlueprint) {
-
           if (factory.components[componentBlueprint.type] &&
-            typeof factory.components[componentBlueprint.type].getSetupData === 'function') {
-
-            var data = factory.components[componentBlueprint.type].getSetupData(componentBlueprint);
-            if (data) {
-              setupData.push(data);
-            }
-          }
+            factory.components[componentBlueprint.type].prePopulateDisplayAddres) {
+            prePopulateData.push({id: componentBlueprint.id,displayAddress: displayAddress});
+          }          
         });
-        return setupData;
+        return prePopulateData;
       };
       return factory;
     }

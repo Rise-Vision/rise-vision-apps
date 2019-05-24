@@ -29,7 +29,7 @@ angular.module('risevision.template-editor.directives')
           iframe.onload = function () {
             iframeLoaded = true;
 
-            _setupComponents();
+            _prePopulateComponents();
 
             _postAttributeData();
           };
@@ -170,9 +170,9 @@ angular.module('risevision.template-editor.directives')
             attributeDataText = null;
           }
 
-          function _setupComponents() {
+          function _prePopulateComponents() {
             var setupData = {
-              components: templateEditorComponentsFactory.getSetupData($scope.factory.blueprintData.components)
+              components: templateEditorComponentsFactory.getPrePopulateData($scope.factory.blueprintData.components)
             };
             iframe.contentWindow.postMessage(JSON.stringify(setupData), HTML_TEMPLATE_DOMAIN);
           }
