@@ -49,6 +49,7 @@ describe('directive: templateComponentWeather', function() {
     expect(directive.iconType).to.equal('svg');
     expect(directive.icon).to.exist;
     expect(directive.show).to.be.a('function');
+    expect(directive.initDisplayAddres).to.be.true;
   });
 
   it('should load weather from attribute data', function() {

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('templateEditorComponentsFactory', ['templateEditorFactory', 'userState',
-    function (templateEditorFactory, userState) {
+  .factory('templateEditorComponentsFactory', ['userState',
+    function (userState) {
       var factory = {};
       factory.components = {};
 
@@ -27,6 +27,7 @@ angular.module('risevision.template-editor.services')
         });
         return setupData;
       };
+
       return factory;
     }
   ]);
