@@ -2,7 +2,7 @@
 
 angular.module('risevision.template-editor.services')
   .factory('templateEditorComponentsFactory', ['templateEditorFactory', 'userState',
-    function (templateEditorFactory,userState) {
+    function (templateEditorFactory, userState) {
       var factory = {};
       factory.components = {};
 
@@ -19,8 +19,11 @@ angular.module('risevision.template-editor.services')
         angular.forEach(components, function (componentBlueprint) {
           if (factory.components[componentBlueprint.type] &&
             factory.components[componentBlueprint.type].initDisplayAddres) {
-            setupData.push({id: componentBlueprint.id,displayAddress: displayAddress});
-          }          
+            setupData.push({
+              id: componentBlueprint.id,
+              displayAddress: displayAddress
+            });
+          }
         });
         return setupData;
       };

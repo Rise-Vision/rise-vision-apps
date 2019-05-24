@@ -4,12 +4,24 @@ describe('directive: TemplateEditorPreviewHolder', function() {
   var sandbox = sinon.sandbox.create(),
       $scope,
       element,
-      factory;
+      factory,
+      iframe,
+      componentsFactory;
 
   beforeEach(function() {
     factory = {
       blueprintData: { width: "1000", height: "1000" }
     };
+    iframe = {
+      setAttribute: sandbox.stub(),
+      contentWindow: {
+        postMessage: sandbox.stub()
+        
+      }
+    };
+    componentsFactory = {
+      getSetupData: sandbox.stub().returns([])
+    }
   });
 
   beforeEach(module('risevision.template-editor.directives'));
@@ -21,17 +33,24 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     $provide.service('templateEditorFactory', function() {
       return factory;
     });
+    $provide.service('templateEditorComponentsFactory', function() {
+      return componentsFactory;
+    });    
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $window){
     $templateCache.put('partials/template-editor/preview-holder.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
-    sandbox.stub($window.document, 'getElementById').returns({
-      clientHeight: 500,
-      setAttribute: function() {}
+    sandbox.stub($window.document, 'getElementById', function(id) {
+      if (id === 'template-editor-preview') return iframe;
+      return {
+          clientHeight: 500,
+          setAttribute: function() {}
+        }
     });
 
+      
     element = $compile("<template-editor-preview-holder></template-editor-preview-holder>")($scope);
     $scope.$digest();
   }));
@@ -133,6 +152,24 @@ describe('directive: TemplateEditorPreviewHolder', function() {
       var width = $scope.getDesktopWidth();
 
       expect(width).to.equal("259");
+    });
+  });
+
+  describe('iframe',function() {
+    it('should setup components on load',function(){
+
+      iframe.onload();
+      
+      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(["{\"components\":[]}","https://widgets.risevision.com"]);
+    });
+
+    it('should setup components on load with displayAddress',function(){
+      componentsFactory.getSetupData.returns([{id:'comp'}]);
+
+      iframe.onload();
+
+      console.log(iframe.contentWindow.postMessage.getCall(0).args);
+      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"components":[{"id":"comp"}]}', 'https://widgets.risevision.com']);
     });
   });
 
