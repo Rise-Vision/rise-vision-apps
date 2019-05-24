@@ -36,7 +36,7 @@ angular.module('risevision.template-editor.directives')
               $scope.componentId = $scope.factory.selected.id;
               _load();
             },
-            prePopulateDisplayAddres: true
+            initDisplayAddres: true
           });
 
         }

@@ -6,7 +6,7 @@ angular.module('risevision.template-editor.services')
       var factory = {};
       factory.components = {};
 
-      factory.getPrePopulateData = function (components) {
+      factory.getSetupData = function (components) {
         var company = userState.getCopyOfSelectedCompany(true);
         var displayAddress = {
           city: company.city,
@@ -15,14 +15,14 @@ angular.module('risevision.template-editor.services')
           postalCode: company.postalCode
         };
 
-        var prePopulateData = [];
+        var setupData = [];
         angular.forEach(components, function (componentBlueprint) {
           if (factory.components[componentBlueprint.type] &&
-            factory.components[componentBlueprint.type].prePopulateDisplayAddres) {
-            prePopulateData.push({id: componentBlueprint.id,displayAddress: displayAddress});
+            factory.components[componentBlueprint.type].initDisplayAddres) {
+            setupData.push({id: componentBlueprint.id,displayAddress: displayAddress});
           }          
         });
-        return prePopulateData;
+        return setupData;
       };
       return factory;
     }
