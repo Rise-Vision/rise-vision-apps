@@ -29,6 +29,7 @@ var PresentationListPage = function() {
     helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader(), 'Store Products Loader');
     storeProductsModalPage.getSearchInput().sendKeys(templateName);
     helper.wait(storeProductsModalPage.getAddButtonById(addTemplateButtonId), 'Add Example Template Button');
+    browser.sleep(1000);
     helper.clickWhenClickable(storeProductsModalPage.getAddButtonById(addTemplateButtonId), 'Add Example Template Button');
 
     helper.wait(templateEditorPage.getTemplateEditorContainer(), 'Template Editor Container');

@@ -57,15 +57,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.isFolder = templateEditorUtils.isFolder;
 
-          $scope.fileNameOf = function (path) {
-            var parts = path.split('/');
-
-            if ($scope.isFolder(path)) {
-              return parts[parts.length - 2];
-            } else {
-              return parts.pop();
-            }
-          };
+          $scope.fileNameOf = templateEditorUtils.fileNameOf;
 
           $scope.thumbnailFor = function (item) {
             return item.metadata && item.metadata.thumbnail ?
@@ -75,6 +67,7 @@ angular.module('risevision.template-editor.directives')
           $scope.loadItems = function (newFolderPath) {
             $loading.start(spinnerId);
             $scope.currentFolder = $scope.fileNameOf(newFolderPath);
+            $scope.storageManager.handleNavigation(newFolderPath);
 
             return storage.files.get({
                 folderPath: newFolderPath

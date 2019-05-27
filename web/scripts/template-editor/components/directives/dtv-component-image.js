@@ -28,6 +28,17 @@ angular.module('risevision.template-editor.directives')
               _addFilesToMetadata(newSelectedItems);
 
               $scope.showPreviousPanel();
+            },
+            handleNavigation: function (folderPath) {
+              var folderName = templateEditorUtils.fileNameOf(folderPath);
+
+              if (folderName) {
+                $scope.setPanelIcon('fa-folder');
+                $scope.setPanelTitle(folderName);
+              } else {
+                $scope.setPanelIcon('riseStorage', 'riseSvg');
+                $scope.setPanelTitle('Rise Storage');
+              }
             }
           };
 
@@ -187,7 +198,12 @@ angular.module('risevision.template-editor.directives')
               $scope.showNextPanel('.image-component-container');
             },
             onBackHandler: function () {
-              if ($scope.getCurrentPanel() !== storagePanelSelector || !$scope.storageManager.onBackHandler()) {
+              if ($scope.getCurrentPanel() !== storagePanelSelector) {
+                return $scope.showPreviousPanel();
+              } else if (!$scope.storageManager.onBackHandler()) {
+                $scope.setPanelIcon();
+                $scope.setPanelTitle();
+
                 return $scope.showPreviousPanel();
               } else {
                 return true;

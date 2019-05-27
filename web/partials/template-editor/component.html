@@ -7,16 +7,25 @@
         <span translate>template.attribute-editor.back-to-list</span>
       </span>
     </a>
-    <component-icon icon="{{ getComponentIcon(factory.selected) }}" type="{{ getComponentIconType(factory.selected) }}"></component-icon>
-    <span>
+    <component-icon ng-if="!panelIcon"
+                    icon="{{ getComponentIcon(factory.selected) }}"
+                    type="{{ getComponentIconType(factory.selected) }}">
+    </component-icon>
+    <component-icon ng-if="panelIcon"
+                    icon="{{ panelIcon }}"
+                    type="{{ panelIconType }}">
+    </component-icon>
+    <span ng-show="!panelTitle">
       {{ ( "template." + factory.selected.type ) | translate }} -
       {{ factory.selected.label }}
     </span>
+    <span ng-show="panelTitle">{{ panelTitle }}</span>
   </div>
 </div>
 <div class="component-container">
   <template-component-financial></template-component-financial>
   <template-component-image></template-component-image>
+  <template-component-slides></template-component-slides>
   <template-component-text></template-component-text>
   <template-component-weather></template-component-weather>
 </div>

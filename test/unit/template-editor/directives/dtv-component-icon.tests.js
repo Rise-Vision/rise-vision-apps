@@ -11,10 +11,9 @@ describe('directive: ComponentIcon', function () {
 
   beforeEach(inject(function ($compile, $rootScope) {
     $scope = $rootScope.$new();
-    //the directive is using "replaceWith()" function, so in order to see rendered HTML we need to wrap it into <div> 
-    //ref: https://stackoverflow.com/questions/18895738/#18898115
-    element = $compile('<div> <component-icon icon="{{iconValue}}" type="{{typeValue}}"></component-icon> </div>')($scope);
-    elementScope = element.children().isolateScope();
+
+    element = $compile('<component-icon icon="{{iconValue}}" type="{{typeValue}}"></component-icon>')($scope);
+    elementScope = element.isolateScope();
     $scope.$digest();
   }));
 
