@@ -174,8 +174,8 @@ describe('service: templateEditorFactory:', function() {
       $httpBackend.when('GET', blueprintUrl).respond(200, {
         components: [
           {
-            type: 'rise-data-image',
-            id: 'rise-data-image-01',
+            type: 'rise-image',
+            id: 'rise-image-01',
             attributes: {}
           }
         ]
@@ -353,8 +353,8 @@ describe('service: templateEditorFactory:', function() {
       $httpBackend.when('GET', blueprintUrl).respond(200, {
         components: [
           {
-            type: 'rise-data-image',
-            id: 'rise-data-image-01',
+            type: 'rise-image',
+            id: 'rise-image-01',
             attributes: {}
           }
         ]
@@ -493,8 +493,8 @@ describe('service: templateEditorFactory:', function() {
       $httpBackend.when('GET', blueprintUrl).respond(200, {
         components: [
           {
-            type: 'rise-data-image',
-            id: 'rise-data-image-01',
+            type: 'rise-image',
+            id: 'rise-image-01',
             attributes: {}
           }
         ]

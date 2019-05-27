@@ -67,7 +67,7 @@ describe('directive: TemplateComponentImage', function() {
 
     var directive = $scope.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
-    expect(directive.type).to.equal('rise-data-image');
+    expect(directive.type).to.equal('rise-image');
     expect(directive.icon).to.equal('fa-image');
     expect(directive.show).to.be.a('function');
     expect(directive.onBackHandler).to.be.a('function');
