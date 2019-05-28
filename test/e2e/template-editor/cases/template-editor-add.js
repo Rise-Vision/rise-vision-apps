@@ -17,7 +17,7 @@ var TemplateAddScenarios = function() {
     before(function () {
       presentationsListPage = new PresentationListPage();
       templateEditorPage = new TemplateEditorPage();
-      presentationsListPage.createNewPresentationFromTemplate('"Example Financial Template V3"', 'example-financial-template_v3');
+      presentationsListPage.createNewPresentationFromTemplate('"Example Financial Template V3"', 'example-financial-template');
     });
 
     describe('basic operations', function () {
