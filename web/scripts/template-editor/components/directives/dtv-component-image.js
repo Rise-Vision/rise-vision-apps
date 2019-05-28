@@ -102,7 +102,7 @@ angular.module('risevision.template-editor.directives')
             if (!match) {
               $log.error('Filename is not a valid Rise Storage path: ' + fileName);
 
-              return Promise.resolve("");
+              return Promise.resolve('');
             }
 
             return _requestFileData(match[1], match[2])
@@ -111,7 +111,7 @@ angular.module('risevision.template-editor.directives')
                   resp.result.files && resp.result.files[0];
 
                 if (!file) {
-                  return "";
+                  return '';
                 }
 
                 return file.metadata && file.metadata.thumbnail ?
@@ -120,7 +120,7 @@ angular.module('risevision.template-editor.directives')
               .catch(function (error) {
                 $log.error(error);
 
-                return "";
+                return '';
               });
           }
 
