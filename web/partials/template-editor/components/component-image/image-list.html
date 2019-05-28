@@ -6,7 +6,7 @@
       <div class="image-helper"></div>
       <img src="{{ image['thumbnail-url'] }}" ng-if="image.exists"
         width="80"></img>
-      <div ng-hide="image.exists">
+      <div class="broken-link" ng-hide="image.exists">
         <i class="fa fa-unlink"></i>
       </div>
     </div>
