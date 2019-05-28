@@ -4,7 +4,11 @@
     ng-show="selectedImages.length > 0 && !isUploading">
     <div class="image-thumbnail">
       <div class="image-helper"></div>
-      <img src="{{ image['thumbnail-url'] }}" width="80"></img>
+      <img src="{{ image['thumbnail-url'] }}" ng-show="image.exists"
+        width="80"></img>
+      <div ng-show="image.exists">
+        <i class="fa fa-unlink"></i>
+      </div>
     </div>
     <div class="image-entry">
       <div class="image-entry-top">

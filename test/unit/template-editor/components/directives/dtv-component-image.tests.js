@@ -22,7 +22,7 @@ describe('directive: TemplateComponentImage', function() {
 
     $provide.service('storageAPILoader', function() {
       return function() {
-        return Promise.resolve({
+        return Q.resolve({
           files: {
             get: function() {
               return {
