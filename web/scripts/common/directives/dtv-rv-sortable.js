@@ -26,7 +26,7 @@ angular.module('risevision.apps.directives')
 
           sortable.on('sortable:stop', function (evt) {
             if ($scope.onSort) {
-              $scope.$evalAsync(function() {
+              $scope.$evalAsync(function () {
                 $scope.onSort({
                   evt: evt
                 });

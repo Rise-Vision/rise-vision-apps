@@ -161,7 +161,7 @@ angular.module('risevision.template-editor.directives')
             var message = {
               type: 'attributeData',
               value: $scope.factory.presentation.templateAttributeData
-            }
+            };
             _postMessageToTemplate(message);
           }
 
