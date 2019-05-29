@@ -60,8 +60,9 @@ angular.module('risevision.template-editor.directives')
           function _addFileToSet(selectedImages, file) {
             var thumbnail = file.metadata && file.metadata.thumbnail ?
               file.metadata.thumbnail : DEFAULT_IMAGE_THUMBNAIL;
+            var filePath = file.bucket + '/' + file.name;
             var newFile = {
-              file: file.name,
+              file: filePath,
               exists: true,
               'thumbnail-url': thumbnail
             };

@@ -82,7 +82,7 @@ describe('directive: TemplateComponentImage', function() {
     $scope.getAttributeData = function(componentId, key) {
       switch(key) {
         case 'metadata': return sampleImages;
-        case 'files': return 'iamge.png';
+        case 'files': return 'image.png';
       }
     };
 
@@ -102,7 +102,7 @@ describe('directive: TemplateComponentImage', function() {
     $scope.getAttributeData = function(componentId, key) {
       switch(key) {
         case 'metadata': return sampleImages;
-        case 'files': return 'iamge.png';
+        case 'files': return 'image.png';
       }
     };
     $scope.getBlueprintData = function() {
@@ -125,7 +125,7 @@ describe('directive: TemplateComponentImage', function() {
     $scope.getAttributeData = function(componentId, key) {
       switch(key) {
         case 'metadata': return sampleImages;
-        case 'files': return 'iamge.png';
+        case 'files': return 'image.png';
       }
     };
     $scope.getBlueprintData = function() {
