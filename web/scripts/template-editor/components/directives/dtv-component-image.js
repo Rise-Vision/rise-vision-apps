@@ -72,22 +72,28 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _loadSelectedImages() {
-            var selectedImages = $scope.getAttributeData($scope.componentId, 'metadata');
+            var files = _getAttribute('files');
+            var selectedImages = _getAttribute('metadata');
 
-            if (selectedImages) {
+            if (files && selectedImages) {
               _setSelectedImages(selectedImages);
             } else {
-              _buildSelectedImagesFromBlueprint();
+              files = _getDefaultFilesAttribute();
             }
+
+            _buildSelectedImagesFrom(files);
+          }
+
+          function _getAttribute(key) {
+            return $scope.getAttributeData($scope.componentId, key);
           }
 
           function _getDefaultFilesAttribute() {
             return $scope.getBlueprintData($scope.componentId, 'files');
           }
 
-          function _buildSelectedImagesFromBlueprint() {
+          function _buildSelectedImagesFrom(files) {
             $scope.factory.loadingPresentation = true;
-            var files = _getDefaultFilesAttribute();
 
             var metadata = [];
             var fileNames = files ? files.split('|') : [];
