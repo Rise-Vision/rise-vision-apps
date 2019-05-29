@@ -184,7 +184,7 @@ angular.module('risevision.template-editor.directives')
           _reset();
 
           $scope.registerDirective({
-            type: 'rise-data-image',
+            type: 'rise-image',
             icon: 'fa-image',
             element: element,
             show: function () {

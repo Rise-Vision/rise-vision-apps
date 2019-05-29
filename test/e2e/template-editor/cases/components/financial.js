@@ -23,7 +23,7 @@ var FinancialComponentScenarios = function () {
       financialComponentPage = new FinancialComponentPage();
 
       presentationsListPage.loadCurrentCompanyPresentationList();
-      presentationsListPage.createNewPresentationFromTemplate('"Example Financial Template"', 'example-financial-template');
+      presentationsListPage.createNewPresentationFromTemplate('"Example Financial Template V3"', 'example-financial-template-v3');
     });
 
     describe('basic operations', function () {
@@ -52,7 +52,7 @@ var FinancialComponentScenarios = function () {
         presentationsListPage.changePresentationName(presentationName);
         presentationsListPage.savePresentation();
 
-        //log presentaion / company URL for troubeshooting 
+        //log presentaion / company URL for troubeshooting
         browser.getCurrentUrl().then(function(actualUrl) {
           console.log(actualUrl);
         });

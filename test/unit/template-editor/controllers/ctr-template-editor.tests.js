@@ -3,13 +3,13 @@ describe('controller: TemplateEditor', function() {
 
   var SAMPLE_COMPONENTS = [
     {
-      "type": "rise-data-image",
-      "id": "rise-data-image-01",
-      "label": "template.rise-data-image",
+      "type": "rise-image",
+      "id": "rise-image-01",
+      "label": "template.rise-image",
       "attributes": {
         "file": {
           "label": "template.file",
-          "value": "risemedialibrary-7fa5ee92-7deb-450b-a8d5-e5ed648c575f/rise-data-image-demo/heatmap-icon.png"
+          "value": "risemedialibrary-7fa5ee92-7deb-450b-a8d5-e5ed648c575f/rise-image-demo/heatmap-icon.png"
         }
       }
     },
