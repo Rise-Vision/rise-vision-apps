@@ -6,11 +6,12 @@ describe('directive: TemplateEditorPreviewHolder', function() {
       element,
       factory,
       iframe,
-      componentsFactory;
+      userState;
 
   beforeEach(function() {
     factory = {
-      blueprintData: { width: "1000", height: "1000" }
+      blueprintData: { width: "1000", height: "1000" },
+      presentation: {}
     };
     iframe = {
       setAttribute: sandbox.stub(),
@@ -18,8 +19,9 @@ describe('directive: TemplateEditorPreviewHolder', function() {
         postMessage: sandbox.stub()
       }
     };
-    componentsFactory = {
-      getSetupData: sandbox.stub().returns([])
+    userState = {
+      getCopyOfSelectedCompany: sandbox.stub().returns({}),
+      _restoreState: sandbox.stub()
     }
   });
 
@@ -32,8 +34,8 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     $provide.service('templateEditorFactory', function() {
       return factory;
     });
-    $provide.service('templateEditorComponentsFactory', function() {
-      return componentsFactory;
+    $provide.service('userState', function() {
+      return userState;
     });    
   }));
 
@@ -159,15 +161,12 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
       iframe.onload();
       
-      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(["{\"components\":[]}","https://widgets.risevision.com"]);
-    });
-
-    it('should setup components on load with displayAddress',function(){
-      componentsFactory.getSetupData.returns([{id:'comp'}]);
-
-      iframe.onload();
-
-      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"components":[{"id":"comp"}]}', 'https://widgets.risevision.com']);
+      //send attributes data
+      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal([ '{"type":"attributeData"}', 'https://widgets.risevision.com' ]);
+      //send start event
+      expect(iframe.contentWindow.postMessage.getCall(1).args).to.deep.equal([ '{"type":"sendStartEvent"}', 'https://widgets.risevision.com' ]);
+      //send display data
+      expect(iframe.contentWindow.postMessage.getCall(2).args).to.deep.equal([ '{"type":"displayData","value":{"displayAddress":{}}}', 'https://widgets.risevision.com' ]);
     });
   });
 

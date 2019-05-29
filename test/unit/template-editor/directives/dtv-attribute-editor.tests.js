@@ -4,12 +4,10 @@ describe('directive: TemplateAttributeEditor', function() {
   var $scope,
       element,
       factory,
-      templateEditorComponentsFactory,
       timeout;
 
   beforeEach(function() {
     factory = {};
-    templateEditorComponentsFactory = {components:{}};
   });
 
   beforeEach(module('risevision.template-editor.directives'));
@@ -20,9 +18,6 @@ describe('directive: TemplateAttributeEditor', function() {
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
       return factory;
-    });
-    $provide.service('templateEditorComponentsFactory', function() {
-      return templateEditorComponentsFactory;
     });
   }));
 
@@ -43,6 +38,10 @@ describe('directive: TemplateAttributeEditor', function() {
     expect($scope.showAttributeList).to.be.true;
   });
 
+  it('should have empty directives', function() {
+    expect($scope.directives).to.deep.equal({});
+  });
+
   it('Replaces the element with the appropriate content', function() {
     expect(element.html()).to.equal('<p>mock</p>');
   });
@@ -55,7 +54,7 @@ describe('directive: TemplateAttributeEditor', function() {
     expect($scope.getComponentIcon).to.be.a('function');
   });
 
-  it('Registers a directive to componentsFactory', function() {
+  it('Registers a directive', function() {
     var directive = {
       type: 'rise-test',
       icon: 'fa-test',
@@ -67,8 +66,8 @@ describe('directive: TemplateAttributeEditor', function() {
 
     $scope.registerDirective(directive);
 
-    expect(templateEditorComponentsFactory.components["rise-test"]).to.be.ok;
-    expect(templateEditorComponentsFactory.components["rise-test"].type).to.equal("rise-test");
+    expect($scope.directives["rise-test"]).to.be.ok;
+    expect($scope.directives["rise-test"].type).to.equal("rise-test");
 
     expect(directive.element.hide).to.have.been.called;
   });
