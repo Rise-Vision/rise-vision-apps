@@ -1,29 +1,10 @@
-<style>
-  @media (min-width: 768px) {
-    .image-component-container {
-      --image-component-list-duration-height: 80px; } }
-
-  @media (max-width: 768px) {
-    .image-component-container {
-      --image-component-list-duration-height: 85px; } }
-
-  .image-component-list {
-    height: calc(var(--image-component-body-height) - var(--image-component-list-duration-height) - var(--image-component-list-button-bar-height));
-  }
-
-  .image-component-list-duration {
-    height: var(--image-component-list-duration-height);
-    padding: 10px 20px 0;
-    background: white; }
-
-</style>
-
-<div class="image-component-list-duration">
+<div class="image-component-list-duration"
+     ng-show="selectedImages.length > 1 && !isUploading">
   <label>Show each image for</label>
   <div class="row">
     <div class="col-xs-12">
       <div class="input-group">
-        <input type="text" class="form-control" value="10" ng-model="duration">
+        <input type="text" class="form-control" ng-model="values.duration" ng-change="saveDuration()">
         <span class="input-group-addon">Seconds</span>
       </div>
     </div>
