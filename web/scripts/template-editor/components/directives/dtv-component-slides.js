@@ -16,11 +16,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _loadAttributeData(attributeName) {
-            var result = $scope.getAttributeData($scope.componentId, attributeName);
-            if (!result) {
-              result = $scope.getBlueprintData($scope.componentId, attributeName);
-            }
-            return result;
+            return $scope.getAttributeData($scope.componentId, attributeName);
           }
 
           $scope.save = function () {
