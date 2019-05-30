@@ -22,8 +22,6 @@ var TextComponentScenarios = function () {
       textComponentPage = new TextComponentPage();
 
       presentationsListPage.loadCurrentCompanyPresentationList();
-      //reload page - this is a fix for attribute list not appearing
-      presentationsListPage.reloadCurrentCompanyPresentationList();
 
       presentationsListPage.createNewPresentationFromTemplate('"Text Component Test"', 'text-component-test');
     });
