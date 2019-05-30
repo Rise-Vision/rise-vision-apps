@@ -2,9 +2,8 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('templateEditorPreviewHolder', ['$window', '$sce', 'templateEditorFactory', 'HTML_TEMPLATE_DOMAIN',
-    'HTML_TEMPLATE_URL', 'templateEditorComponentsFactory',
-    function ($window, $sce, templateEditorFactory, HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL,
-      templateEditorComponentsFactory) {
+    'HTML_TEMPLATE_URL', 'userState',
+    function ($window, $sce, templateEditorFactory, HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL, userState) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/preview-holder.html',
@@ -20,7 +19,6 @@ angular.module('risevision.template-editor.directives')
           var PREVIEW_INITIAL_DELAY_MILLIS = 1000;
 
           var iframeLoaded = false;
-          var attributeDataText = null;
 
           var previewHolder = $window.document.getElementById('preview-holder');
           var iframeParent = $window.document.getElementById('template-editor-preview-parent');
@@ -31,7 +29,9 @@ angular.module('risevision.template-editor.directives')
 
             _postAttributeData();
 
-            _setupComponents();
+            _postStartEvent();
+
+            _postDisplayData();
           };
 
           $scope.getEditorPreviewUrl = function (productCode) {
@@ -154,27 +154,44 @@ angular.module('risevision.template-editor.directives')
           });
 
           $scope.$watch('factory.presentation.templateAttributeData', function (value) {
-            attributeDataText = typeof value === 'string' ?
-              value : JSON.stringify(value);
-
             _postAttributeData();
           }, true);
 
           function _postAttributeData() {
-            if (!attributeDataText || !iframeLoaded) {
-              return;
-            }
-
-            iframe.contentWindow.postMessage(attributeDataText, HTML_TEMPLATE_DOMAIN);
-
-            attributeDataText = null;
+            var message = {
+              type: 'attributeData',
+              value: $scope.factory.presentation.templateAttributeData
+            };
+            _postMessageToTemplate(message);
           }
 
-          function _setupComponents() {
-            var setupData = {
-              components: templateEditorComponentsFactory.getSetupData($scope.factory.blueprintData.components)
+          function _postStartEvent() {
+            _postMessageToTemplate({
+              type: 'sendStartEvent'
+            });
+          }
+
+          function _postDisplayData() {
+            var company = userState.getCopyOfSelectedCompany(true);
+            var message = {
+              type: 'displayData',
+              value: {
+                displayAddress: {
+                  city: company.city,
+                  province: company.province,
+                  country: company.country,
+                  postalCode: company.postalCode
+                }
+              }
             };
-            iframe.contentWindow.postMessage(JSON.stringify(setupData), HTML_TEMPLATE_DOMAIN);
+            _postMessageToTemplate(message);
+          }
+
+          function _postMessageToTemplate(message) {
+            if (!iframeLoaded) {
+              return;
+            }
+            iframe.contentWindow.postMessage(JSON.stringify(message), HTML_TEMPLATE_DOMAIN);
           }
         }
       };
