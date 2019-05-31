@@ -1,6 +1,6 @@
 <div class="image-component-list-duration"
      ng-show="selectedImages.length > 1 && !isUploading">
-  <label>Show each image for</label>
+  <label>Show each image for:</label>
   <div class="row">
     <div class="col-xs-12">
       <div class="input-group">
@@ -10,7 +10,7 @@
     </div>
   </div>
 </div>
-<div class="image-component-list te-scrollable-container">
+<div class="image-component-list te-scrollable-container" ng-class="{'active-duration' : selectedImages.length > 1 && !isUploading}">
   <div class="pl-0 image-row"
     ng-repeat="image in selectedImages track by $index"
     ng-show="selectedImages.length > 0 && !isUploading">
