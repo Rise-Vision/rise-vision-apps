@@ -9,14 +9,14 @@ angular.module('risevision.template-editor.directives')
         restrict: 'E',
         scope: {
           name: '@',
-          w: '@',
-          h: '@'
+          width: '@',
+          height: '@'
         },
         link: function ($scope, element) {
           var _path = function (name) {
             var iconDef = iconsList[name];
-            var width = $scope.w || 32;
-            var height = $scope.w || 32;
+            var width = $scope.width || 32;
+            var height = $scope.height || 32;
             var size = ' width="' + width + '" height="' + height + '"';
             var viewBox = ' viewBox="' + iconDef.viewBox + '"';
             var paths = iconDef.paths.map(function (p) {
