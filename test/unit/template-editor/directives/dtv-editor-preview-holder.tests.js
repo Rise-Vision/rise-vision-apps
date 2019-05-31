@@ -144,7 +144,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
       var width = $scope.getDesktopWidth();
 
-      expect(width).to.equal("818");
+      expect(width).to.equal("889");
     });
 
     it('should calculate desktop width for 9:16 aspect ratio', function() {
@@ -152,7 +152,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
       var width = $scope.getDesktopWidth();
 
-      expect(width).to.equal("259");
+      expect(width).to.equal("281");
     });
   });
 
