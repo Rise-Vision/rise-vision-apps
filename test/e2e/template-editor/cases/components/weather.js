@@ -22,8 +22,6 @@ var WeatherComponentScenarios = function () {
       weatherComponentPage = new WeatherComponentPage();
 
       presentationsListPage.loadCurrentCompanyPresentationList();
-      //reload page - this is a fix for attribute list not appearing
-      presentationsListPage.reloadCurrentCompanyPresentationList();
 
       presentationsListPage.createNewPresentationFromTemplate('"Weather Component Test"', 'weather-component-test');
     });

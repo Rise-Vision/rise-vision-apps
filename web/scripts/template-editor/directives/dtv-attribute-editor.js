@@ -11,6 +11,7 @@ angular.module('risevision.template-editor.directives')
           $scope.showAttributeList = true;
           $scope.directives = {};
           $scope.panels = [];
+          $scope.factory.selected = null;
 
           $scope.$watch('factory.presentation', function () {
             $scope.showAttributeList = true;
