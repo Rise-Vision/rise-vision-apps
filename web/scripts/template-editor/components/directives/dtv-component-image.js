@@ -42,6 +42,7 @@ angular.module('risevision.template-editor.directives')
               }
             }
           };
+          $scope.values = {};
 
           function _reset() {
             _setSelectedImages([]);
@@ -86,12 +87,29 @@ angular.module('risevision.template-editor.directives')
             _buildSelectedImagesFrom(files);
           }
 
+          function _loadDuration() {
+            var duration = _getAttribute('duration');
+
+            if (!duration) {
+              duration = _getDefaultDurationAttribute();
+            }
+
+            duration = parseInt( duration, 10 );
+
+            // default to value 10 if duration not defined
+            $scope.values.duration = (duration && !isNaN(duration)) ? duration : 10;
+          }
+
           function _getAttribute(key) {
             return $scope.getAttributeData($scope.componentId, key);
           }
 
           function _getDefaultFilesAttribute() {
             return $scope.getBlueprintData($scope.componentId, 'files');
+          }
+
+          function _getDefaultDurationAttribute() {
+            return $scope.getBlueprintData($scope.componentId, 'duration');
           }
 
           function _buildSelectedImagesFrom(files) {
@@ -197,6 +215,10 @@ angular.module('risevision.template-editor.directives')
 
           _reset();
 
+          $scope.saveDuration = function () {
+            $scope.setAttributeData($scope.componentId, 'duration', $scope.values.duration);
+          };
+
           $scope.registerDirective({
             type: 'rise-image',
             icon: 'fa-image',
@@ -208,6 +230,7 @@ angular.module('risevision.template-editor.directives')
               $scope.componentId = $scope.factory.selected.id;
 
               _loadSelectedImages();
+              _loadDuration();
 
               $scope.showNextPanel('.image-component-container');
             },
