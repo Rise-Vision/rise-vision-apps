@@ -411,22 +411,6 @@ angular.module('risevision.apps', [
           template: '<div class="templates-app" ui-view></div>'
         })
 
-        .state('apps.editor.templates.add', {
-          url: '/add',
-          templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get('partials/template-editor/template-editor.html');
-          }],
-          reloadOnSearch: false,
-          controller: 'TemplateEditorController',
-          resolve: {
-            canAccess: ['canAccessApps',
-              function (canAccessApps) {
-                return canAccessApps();
-              }
-            ]
-          }
-        })
-
         .state('apps.editor.templates.addFromProductId', {
           url: '/add/:productId',
           controller: ['$stateParams', 'canAccessApps', 'templateEditorFactory',
@@ -449,7 +433,9 @@ angular.module('risevision.apps', [
             presentationInfo: ['$stateParams', 'canAccessApps', 'templateEditorFactory',
               function ($stateParams, canAccessApps, templateEditorFactory) {
                 return canAccessApps().then(function () {
-                  return templateEditorFactory.getPresentation($stateParams.presentationId);
+                  if ($stateParams.presentationId) {
+                    return templateEditorFactory.getPresentation($stateParams.presentationId);                    
+                  }
                 });
               }
             ]

@@ -21,7 +21,6 @@ angular.module('risevision.apps.controllers')
           'apps.editor.list',
           'apps.editor.workspace.artboard',
           'apps.editor.workspace.htmleditor',
-          'apps.editor.templates.add',
           'apps.editor.templates.edit'
         ]
       }, {
