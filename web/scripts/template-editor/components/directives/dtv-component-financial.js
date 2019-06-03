@@ -223,6 +223,10 @@ angular.module('risevision.template-editor.directives')
             return _getFinancialLabel('add-category');
           };
 
+          $scope.getEmptyListSuggestionText = function () {
+            return _getFinancialLabel('empty-list.suggestion');
+          };
+
           $scope.getPopularTitle = function () {
             return _getFinancialLabel('most-popular-category');
           };
