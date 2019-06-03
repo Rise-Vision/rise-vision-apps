@@ -406,7 +406,7 @@ angular.module('risevision.apps', [
         })
 
         .state('apps.editor.templates', {
-          url: '/templates?cid',
+          url: '/templates',
           abstract: true,
           template: '<div class="templates-app" ui-view></div>'
         })
