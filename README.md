@@ -55,18 +55,8 @@ When pushing changes to chore/fix/feature branches, an optional staging environm
 
 #### Staging Assignments by Team
 
-| Stage | Team |
----|---
-| apps-stage-0 |	Reserved - CCI |
-| apps-stage-1 |	Apps |
-| apps-stage-2 |	Apps |
-| apps-stage-3 |	Apps |
-| apps-stage-4 |	Apps |
-| apps-stage-5 |	Apps |
-| apps-stage-6 |	Delivery |
-| apps-stage-7 |	Delivery |
-| apps-stage-8 |	Creative |
-| apps-stage-9 |	Creative |
+Please check the staging assignment in [this article](https://help.risevision.com/hc/en-us/articles/360001203463-Apps-Stage-Environments).
+
 
 #### Check which Stage is in Use
 
