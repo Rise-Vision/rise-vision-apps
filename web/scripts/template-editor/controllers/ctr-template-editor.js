@@ -85,7 +85,7 @@ angular.module('risevision.template-editor.controllers')
       }
 
       $scope.$watch('factory.presentation', function (newValue, oldValue) {
-        var ignoredFields = ['revisionStatusName', 'changeDate', 'changedBy'];
+        var ignoredFields = ['id', 'revisionStatusName', 'changeDate', 'changedBy'];
 
         if ($scope.hasUnsavedChanges) {
           return;
