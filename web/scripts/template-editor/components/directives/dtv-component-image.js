@@ -27,6 +27,7 @@ angular.module('risevision.template-editor.directives')
             addSelectedItems: function (newSelectedItems) {
               _addFilesToMetadata(newSelectedItems);
 
+              $scope.resetPanelHeader();
               $scope.showPreviousPanel();
             },
             handleNavigation: function (folderPath) {
