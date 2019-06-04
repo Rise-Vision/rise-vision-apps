@@ -1,6 +1,16 @@
-<div class="row attribute-row-first ">
-  <input type="text" class="form-control" ng-model="src" placeholder="Enter URL" ng-change="save()">
+<div class="row attribute-row-first">
+  <label class="control-label">Google Slides url</label>
+  <div ng-class="{ 'has-error': validationError }">
+    <input type="text" class="form-control" ng-model="src" placeholder="Enter URL" ng-keypress="handleKeyPressSrc($event)" ng-paste="saveSrc()">
+    <p class="help-block" ng-show="validationError">
+      {{validationError}}
+    </p>
+  </div>
 </div>
 <div class="attribute-row-last">
-  <input type="text" class="form-control" ng-model="duration" placeholder="Enter duration" ng-change="save()">
+  <label class="control-label">Show each slide for</label>
+  <div class="input-group">
+    <input type="number" class="form-control" ng-model="duration" placeholder="Enter duration" ng-change="saveDiration()">
+    <span class="input-group-addon">seconds</span>
+  </div>
 </div>
