@@ -55,7 +55,7 @@ angular.module('risevision.template-editor.directives')
           function _validateSrcLocally() {
 
             //clear the error
-            $scope.validationError = "";
+            $scope.validationError = '';
 
             const PUBLISHED_URL_REGEXP =
               /^(http:|https:)\/\/docs\.google\.com\/presentation\/d\/e\/([^\s]+)\/(pub|embed)(\?|$)/i;
@@ -87,7 +87,7 @@ angular.module('risevision.template-editor.directives')
               return true;
             }
 
-            $scope.validationError = "Invalid URL";
+            $scope.validationError = 'Invalid URL';
             return false;
           }
 
