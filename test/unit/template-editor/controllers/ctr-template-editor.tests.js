@@ -97,11 +97,12 @@ describe('controller: TemplateEditor', function() {
     var data = $scope.getAttributeData("test-id");
 
     expect(data).to.deep.equal({ id: "test-id" });
-    expect($scope.factory.presentation.templateAttributeData).to.deep.equal({
-      components: [
-        { id: "test-id" }
-      ]
-    });
+  });
+
+  it('should not update templateAttributeData on get',function() {
+    $scope.getAttributeData("test-id");
+
+    expect($scope.factory.presentation.templateAttributeData).to.deep.equal({});
   });
 
   it('should get undefined attribute data value',function() {
