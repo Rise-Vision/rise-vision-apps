@@ -18,7 +18,7 @@
   <div class="row instrument-list-empty" ng-hide="instruments.length !== 0">
     <div class="col-xs-12">
       <h2 translate>template.financial.empty-list.title</h2>
-      <p translate>template.financial.empty-list.suggestion</p>
+      <p>{{ getEmptyListSuggestionText() | translate }}</p>
       <div>
         <img class="img-responsive" src="../images/financial-empty-list.svg">
       </div>

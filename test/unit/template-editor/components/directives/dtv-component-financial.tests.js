@@ -448,4 +448,23 @@ describe('directive: TemplateComponentFinancial', function() {
     expect(label).to.equal('template.financial.add-category.world-indexes');
   });
 
+
+  it('should get the empty list suggestion text', function() {
+    $scope.category = 'currencies';
+
+    var label = $scope.getEmptyListSuggestionText();
+
+    expect(label).to.equal('template.financial.empty-list.suggestion.currencies');
+  });
+
+  it('should get the empty list suggestion text on categories with space', function() {
+    $scope.category = 'world indexes';
+
+    var label = $scope.getEmptyListSuggestionText();
+
+    expect(label).to.equal('template.financial.empty-list.suggestion.world-indexes');
+  });
+
+
+
 });

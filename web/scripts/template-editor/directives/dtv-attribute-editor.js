@@ -90,11 +90,15 @@ angular.module('risevision.template-editor.directives')
             _swapToRight(currentPanel, previousPanel);
 
             if (!previousPanel) {
-              $scope.setPanelIcon(null, null);
-              $scope.setPanelTitle(null);
+              $scope.resetPanelHeader();
             }
 
             return !!previousPanel;
+          };
+
+          $scope.resetPanelHeader = function () {
+            $scope.setPanelIcon(null, null);
+            $scope.setPanelTitle(null);
           };
 
           $scope.setPanelIcon = function (panelIcon, panelIconType) {

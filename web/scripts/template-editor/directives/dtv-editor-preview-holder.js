@@ -78,15 +78,13 @@ angular.module('risevision.template-editor.directives')
             var isShort = _mediaMatches('(max-height: 570px)');
             var layerHeight = isShort ? MOBILE_PREVIEW_HEIGHT_SHORT : MOBILE_PREVIEW_HEIGHT;
 
-            var offset = 2 * MOBILE_MARGIN;
-            var value = _getWidthFor(layerHeight - offset) + offset;
+            var value = _getWidthFor(layerHeight);
 
             return value.toFixed(0);
           };
 
           $scope.getDesktopWidth = function () {
-            var offset = 2 * DESKTOP_MARGIN;
-            var height = previewHolder.clientHeight - offset;
+            var height = previewHolder.clientHeight;
 
             return _getWidthFor(height).toFixed(0);
           };

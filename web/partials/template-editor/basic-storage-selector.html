@@ -1,6 +1,6 @@
 <div class="storage-selector-component te-scrollable-container" rv-spinner rv-spinner-key="storage-{{storageSelectorId}}-spinner" rv-spinner-start-active="1">
   <div class="storage-selector-list" ng-show="folderItems.length > 0 && !isUploading">
-    <div class="image-row" ng-repeat="item in folderItems track by $index">
+    <div class="storage-row" ng-repeat="item in folderItems track by $index">
       <div>
         <div class="folder-entry" ng-if="isFolder(item.name)" ng-click="loadItems(item.name)">
           <a href="#">
@@ -8,10 +8,14 @@
             <div class="folder-name">{{ fileNameOf(item.name) }}</div>
           </a>
         </div>
-        <div ng-if="!isFolder(item.name)" ng-click="selectItem(item)" ng-class="{ 'selected-item': isSelected(item) }">
+        <div class="file-entry" ng-if="!isFolder(item.name)" ng-click="selectItem(item)">
           <a href="#">
             <img src="{{ thumbnailFor(item) }}"></img>
           </a>
+        </div>
+        <div class="overlay-entry" ng-if="isSelected(item)" ng-click="selectItem(item)">
+          <streamline-icon class="overlay-icon" name="checkmark" width="38" height="28"></streamline-icon>
+          <p class="overlay-text">{{item.name}}</p>
         </div>
       </div>
     </div>
