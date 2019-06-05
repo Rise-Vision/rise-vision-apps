@@ -50,6 +50,10 @@ var ImageComponentScenarios = function () {
       it('should list uploaded file only, with sample files removed', function() {
         expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(1);
       });
+
+      it('should have a thumbnail', function() {
+        expect(imageComponentPage.getThumbnails().count()).to.eventually.equal(1);
+      });
     });
 
     describe('save and validations', function () {
@@ -80,6 +84,28 @@ var ImageComponentScenarios = function () {
         templateEditorPage.selectComponent('Image - ');
         helper.wait(imageComponentPage.getListDurationComponent(), 'List Duration');
         expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(4);
+      });
+
+      it('should display image titles', function () {
+        var titles = imageComponentPage.getSelectedImagesTitles();
+
+        expect(titles.count()).to.eventually.equal(4);
+
+        titles.each(function(title) {
+          expect(title.getText()).to.eventually.match(/[\w ]+[.](jpg|png)$/);
+        });
+      });
+
+      it('should display broken links', function () {
+        // the test environment does not get the thumbnail for permission reasons,
+        // so we just test the existence of the broken link
+        var brokenLinks = imageComponentPage.getBrokenLinks();
+
+        expect(brokenLinks.count()).to.eventually.equal(4);
+
+        brokenLinks.each(function(brokenLink) {
+          expect(brokenLink.isDisplayed()).to.eventually.be.true;
+        });
       });
 
       it('should remove an image row', function () {
