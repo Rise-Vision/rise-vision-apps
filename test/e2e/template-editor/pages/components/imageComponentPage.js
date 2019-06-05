@@ -1,5 +1,7 @@
 'use strict';
 
+var helper = require('rv-common-e2e').helper;
+
 var ImageComponentPage = function() {
   var selectedImagesMain = element.all(by.repeater('image in selectedImages track by $index'));
   var listDurationComponent = element(by.css('.image-component-list-duration'));
@@ -26,6 +28,15 @@ var ImageComponentPage = function() {
   this.getUploadPanelMain = function () {
     return uploadPanelMain;
   };
+
+  this.removeImageRow = function (selectorLabel) {
+    var removeLink = element(by.xpath(
+      '//div[@class="image-remove"][..//div[contains(text(), "' + selectorLabel + '")]]/a'
+    ));
+
+    helper.wait(removeLink, 'Image Row Remove');
+    helper.clickWhenClickable(removeLink, 'Image Row Remove');
+  }
 };
 
 module.exports = ImageComponentPage;

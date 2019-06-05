@@ -57,7 +57,7 @@ var ImageComponentScenarios = function () {
         presentationsListPage.changePresentationName(presentationName);
         presentationsListPage.savePresentation();
 
-        //log presentaion / company URL for troubleshooting
+        //log presentation / company URL for troubleshooting
         browser.getCurrentUrl().then(function(actualUrl) {
           console.log(actualUrl);
         });
@@ -71,6 +71,32 @@ var ImageComponentScenarios = function () {
         expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(1);
       });
     });
+
+    describe('list and remove images', function () {
+      it('should create a new presentation and open it', function () {
+        presentationsListPage.loadCurrentCompanyPresentationList();
+        presentationsListPage.createNewPresentationFromTemplate('"Example Financial Template V3"', 'example-financial-template-v3');
+
+        templateEditorPage.selectComponent('Image - ');
+        helper.wait(imageComponentPage.getListDurationComponent(), 'List Duration');
+        expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(4);
+      });
+
+      it('should remove an image row', function () {
+        imageComponentPage.removeImageRow('raptors_logo.png');
+
+        expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(3);
+      });
+
+      it('should save the Presentation', function () {
+        presentationsListPage.savePresentation();
+
+        browser.sleep(100);
+
+        expect(templateEditorPage.getSaveButton().isEnabled()).to.eventually.be.true;
+      });
+    });
+
   });
 };
 
