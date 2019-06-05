@@ -122,8 +122,6 @@ jobs:
     working_directory: ~/rise-vision-apps
     docker: *BUILDIMAGE
     steps:
-      - attach_workspace:
-          at: ~/
       - run: echo "e2e tests finished"
   deploy_staging:
     working_directory: ~/rise-vision-apps
