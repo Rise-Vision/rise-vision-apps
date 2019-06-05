@@ -29,6 +29,18 @@ var ImageComponentPage = function() {
     return uploadPanelMain;
   };
 
+  this.getSelectedImagesTitles = function() {
+    return element.all(by.xpath('//div[@class="image-text"]/div[1]'));
+  }
+
+  this.getThumbnails = function() {
+    return element.all(by.xpath('//div[@class="image-thumbnail"]/img'));
+  }
+
+  this.getBrokenLinks = function() {
+    return element.all(by.xpath('//div[@class="image-thumbnail"]/div[2]'));
+  }
+
   this.removeImageRow = function (selectorLabel) {
     var removeLink = element(by.xpath(
       '//div[@class="image-remove"][..//div[contains(text(), "' + selectorLabel + '")]]/a'
