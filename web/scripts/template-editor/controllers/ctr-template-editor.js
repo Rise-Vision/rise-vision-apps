@@ -52,12 +52,12 @@ angular.module('risevision.template-editor.controllers')
         var attributeData = $scope.factory.presentation.templateAttributeData;
         var component;
 
-        if (!attributeData.components) {
-          updateAttributeData && (attributeData.components = []);
-        } else {
+        if (attributeData.components) {
           component = _.find(attributeData.components, {
             id: componentId
           });
+        } else if (updateAttributeData) {
+          attributeData.components = [];
         }
 
         if (!component) {
@@ -65,7 +65,9 @@ angular.module('risevision.template-editor.controllers')
             id: componentId
           };
 
-          updateAttributeData && attributeData.components.push(component);
+          if (updateAttributeData) {
+            attributeData.components.push(component);
+          }
         }
 
         return component;
