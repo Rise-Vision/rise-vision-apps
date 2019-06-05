@@ -192,7 +192,7 @@ describe('service: templateEditorFactory:', function() {
         expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_PRESENTATION_TYPE);
         expect(templateEditorFactory.blueprintData.components.length).to.equal(1);
 
-        expect($state.go).to.have.been.calledWith('apps.editor.templates.add');
+        expect($state.go).to.have.been.calledWith('apps.editor.templates.edit');
 
         done();
       });
@@ -225,7 +225,7 @@ describe('service: templateEditorFactory:', function() {
           expect(templateEditorFactory.loadingPresentation).to.be.true;
 
           setTimeout(function(){
-            expect($state.go).to.have.been.calledWith('apps.editor.templates.add');
+            expect($state.go).to.have.been.calledWith('apps.editor.templates.edit');
             expect(presentation.add.getCall(0).args[0].templateAttributeData).to.equal('{}');
             expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
             expect(templateEditorFactory.savingPresentation).to.be.false;

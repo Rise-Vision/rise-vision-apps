@@ -71,8 +71,12 @@ angular.module('risevision.template-editor.controllers')
       var _bypassUnsaved = false,
         _initializing = false;
       var _setUnsavedChanges = function (state) {
+        $scope.hasUnsavedChanges = state;
+      };
+
+      var _setUnsavedChangesAsync = function (state) {
         $timeout(function () {
-          $scope.hasUnsavedChanges = state;
+          _setUnsavedChanges(state);
         });
       };
 
@@ -101,10 +105,10 @@ angular.module('risevision.template-editor.controllers')
         }
       }, true);
 
-      $scope.$on('presentationCreated', _setUnsavedChanges.bind(null, false));
-      $scope.$on('presentationUpdated', _setUnsavedChanges.bind(null, false));
+      $scope.$on('presentationCreated', _setUnsavedChangesAsync.bind(null, false));
+      $scope.$on('presentationUpdated', _setUnsavedChangesAsync.bind(null, false));
       $scope.$on('presentationDeleted', _setUnsavedChanges.bind(null, false));
-      $scope.$on('presentationPublished', _setUnsavedChanges.bind(null, false));
+      $scope.$on('presentationPublished', _setUnsavedChangesAsync.bind(null, false));
 
       $scope.$on('$stateChangeStart', function (event, toState, toParams) {
         if (_bypassUnsaved) {

@@ -18,6 +18,8 @@ angular.module('risevision.template-editor.services')
 
         factory.presentation = presentation;
         factory.selected = null;
+
+        $rootScope.$broadcast('presentationUpdated');
       };
 
       var _getPresentationForUpdate = function () {
@@ -114,7 +116,7 @@ angular.module('risevision.template-editor.services')
           .then(function (blueprintData) {
             factory.blueprintData = blueprintData.data;
 
-            $state.go('apps.editor.templates.add');
+            $state.go('apps.editor.templates.edit');
           })
           .then(null, function (e) {
             _showErrorMessage('add', e);
@@ -137,9 +139,11 @@ angular.module('risevision.template-editor.services')
             if (resp && resp.item && resp.item.id) {
               $rootScope.$broadcast('presentationCreated');
 
-              factory.presentation.id = resp.item.id;
-              $state.go('apps.editor.templates.add', {
+              $state.go('apps.editor.templates.edit', {
                 presentationId: resp.item.id
+              }, {
+                notify: false,
+                location: 'replace'
               });
 
               deferred.resolve(resp.item.id);
@@ -171,7 +175,6 @@ angular.module('risevision.template-editor.services')
         presentation.update(presentationVal.id, presentationVal)
           .then(function (resp) {
             _setPresentation(resp.item);
-            $rootScope.$broadcast('presentationUpdated');
 
             deferred.resolve(resp.item.id);
           })
@@ -333,9 +336,6 @@ angular.module('risevision.template-editor.services')
       };
 
       _init();
-
-      $log.info('Current user is: ' + userState.getUsername());
-      $log.info(factory.presentation);
 
       return factory;
     }
