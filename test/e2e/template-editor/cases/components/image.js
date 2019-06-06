@@ -36,14 +36,14 @@ var ImageComponentScenarios = function () {
 
     describe('upload', function () {
       it('should upload a file and show the corresponding upload panel', function () {
-        var uploadFilePath = process.cwd() + '/web/images/e2e-upload-image.png';
+        var uploadFilePath = process.cwd() + '/web/images/e2e-upload-image-1.png';
         imageComponentPage.getUploadInputMain().sendKeys(uploadFilePath);
 
         expect(imageComponentPage.getUploadPanelMain().isDisplayed()).to.eventually.be.true;
       });
 
       it('should hide upload panel when finished', function() {
-        helper.waitDisappear(imageComponentPage.getUploadPanelMain(), 'Storage Upload Panel');
+        helper.waitDisappear(imageComponentPage.getUploadPanelMain(), 'Main Upload Panel');
         expect(imageComponentPage.getUploadPanelMain().isDisplayed()).to.eventually.be.false;
       });
 
@@ -52,12 +52,51 @@ var ImageComponentScenarios = function () {
       });
     });
 
+    describe('storage', function () {
+      describe('basic operations', function () {
+        it('should load Storage page', function () {
+          helper.wait(imageComponentPage.getStorageButtonMain(), 'Storage Button Main');
+          helper.clickWhenClickable(imageComponentPage.getStorageButtonMain(), 'Storage Button Main');
+          browser.sleep(500);
+          helper.waitDisappear(imageComponentPage.getStorageSpinner(), 'Storage Spinner');
+          expect(imageComponentPage.getStorageItems().count()).to.eventually.equal(1);
+        });
+      });
+
+      describe('upload', function () {
+        it('should upload a file and show the corresponding upload panel', function () {
+          var uploadFilePath = process.cwd() + '/web/images/e2e-upload-image-2.png';
+          imageComponentPage.getUploadInputStorage().sendKeys(uploadFilePath);
+
+          expect(imageComponentPage.getUploadPanelStorage().isDisplayed()).to.eventually.be.true;
+        });
+
+        it('should hide upload panel when finished', function() {
+          helper.waitDisappear(imageComponentPage.getUploadPanelStorage(), 'Storage Upload Panel');
+          expect(imageComponentPage.getUploadPanelStorage().isDisplayed()).to.eventually.be.false;
+        });
+
+        it('should list uploaded file only, with sample files removed', function() {
+          expect(imageComponentPage.getStorageItems().count()).to.eventually.equal(2);
+        });
+
+        it('should select one file and add it to Image List', function() {
+          helper.clickWhenClickable(imageComponentPage.getStorageNewFile(), 'Storage New File');
+          browser.sleep(500);
+          helper.clickWhenClickable(imageComponentPage.getStorageAddSelected(), 'Storage Add Selected');
+
+          helper.wait(imageComponentPage.getListDurationComponent(), 'List Duration');
+          expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(2);
+        });
+      });
+    });
+
     describe('save and validations', function () {
       it('should save the Presentation, reload it, and validate changes were saved', function () {
         presentationsListPage.changePresentationName(presentationName);
         presentationsListPage.savePresentation();
 
-        //log presentaion / company URL for troubleshooting
+        //log presentation / company URL for troubleshooting
         browser.getCurrentUrl().then(function(actualUrl) {
           console.log(actualUrl);
         });
@@ -68,7 +107,7 @@ var ImageComponentScenarios = function () {
         presentationsListPage.loadPresentation(presentationName);
         templateEditorPage.selectComponent('Image - ');
 
-        expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(1);
+        expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(2);
       });
     });
   });

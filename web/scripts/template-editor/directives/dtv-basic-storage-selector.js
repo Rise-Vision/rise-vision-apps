@@ -75,7 +75,7 @@ angular.module('risevision.template-editor.directives')
               .then(function (items) {
                 $scope.selectedItems = [];
                 $scope.storageUploadManager.folderPath = newFolderPath;
-                $scope.folderItems = items.files.filter(function (item) {
+                $scope.folderItems = items.files && items.files.filter(function (item) {
                   var isValid = templateEditorUtils.fileHasValidExtension(item.name, validExtensionsList);
 
                   return item.name !== newFolderPath && ($scope.isFolder(item.name) || isValid);
