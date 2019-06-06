@@ -41,14 +41,12 @@ var ImageComponentPage = function() {
     return element.all(by.xpath('//div[@class="image-thumbnail"]/div[2]'));
   }
 
-  this.removeImageRow = function (selectorLabel) {
-    var removeLink = element(by.xpath(
-      '//div[@class="image-remove"][..//div[contains(text(), "' + selectorLabel + '")]]/a'
+  this.getRemoveLinkFor(imageName) {
+    return element(by.xpath(
+      '//div[@class="image-remove"][..//div[contains(text(), "' + imageName + '")]]/a'
     ));
-
-    helper.wait(removeLink, 'Image Row Remove');
-    helper.clickWhenClickable(removeLink, 'Image Row Remove');
   }
+
 };
 
 module.exports = ImageComponentPage;

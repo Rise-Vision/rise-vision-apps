@@ -109,7 +109,10 @@ var ImageComponentScenarios = function () {
       });
 
       it('should remove an image row', function () {
-        imageComponentPage.removeImageRow('raptors_logo.png');
+        var removeLink = imageComponentPage.getRemoveLinkFor('raptors_logo.png');
+
+        helper.wait(removeLink, 'Image Row Remove');
+        helper.clickWhenClickable(removeLink, 'Image Row Remove');
 
         expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(3);
       });
