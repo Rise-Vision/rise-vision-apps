@@ -154,9 +154,7 @@ describe('service: editorFactory:', function() {
     });
     $provide.service('scheduleFactory', function() {
       return {
-        createFirstSchedule: function(){
-          return Q.resolve();
-        }
+        createFirstSchedule: sinon.stub()
       };
     });
     $provide.service('plansFactory', function() {
@@ -354,10 +352,9 @@ describe('service: editorFactory:', function() {
         });
     });
 
-    it('should create first Schedule when adding first presentation and show modal',function(done){
+    it('should create first Schedule when adding first presentation',function(done){
       updatePresentation = true;
 
-      var createFirstScheduleSpy = sinon.spy(scheduleFactory,'createFirstSchedule');
       var $modalOpenSpy = sinon.spy($modal, 'open');
 
       sandbox.stub(presentationParser, "parsePresentation").returns(true);
@@ -365,10 +362,7 @@ describe('service: editorFactory:', function() {
       editorFactory.addPresentation();
 
       setTimeout(function(){
-        createFirstScheduleSpy.should.have.been.called;
-        $modalOpenSpy.should.have.been.called;
-        expect($modalOpenSpy.getCall(0).args[0].templateUrl).to.equal('partials/editor/auto-schedule-modal.html');
-        expect($modalOpenSpy.getCall(0).args[0].controller).to.equal('AutoScheduleModalController');
+        scheduleFactory.createFirstSchedule.should.have.been.called;
 
         done();
       },100);

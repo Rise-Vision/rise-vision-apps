@@ -578,7 +578,8 @@ angular.module('risevision.template-editor.services', [
   'risevision.common.header',
   'risevision.common.gapi',
   'risevision.apps.config',
-  'risevision.editor.services'
+  'risevision.editor.services',
+  'risevision.schedules.services'
 ]);
 angular.module('risevision.template-editor.directives', [
   'risevision.template-editor.services'

@@ -5,10 +5,10 @@ angular.module('risevision.template-editor.services')
   .constant('HTML_TEMPLATE_URL', 'https://widgets.risevision.com/stable/templates/PRODUCT_CODE/src/template.html')
   .constant('HTML_TEMPLATE_DOMAIN', 'https://widgets.risevision.com')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', '$http', 'presentation',
-    'processErrorCode', 'userState', 'checkTemplateAccess', '$modal', 'plansFactory', 'store', 'templateEditorUtils',
+    'processErrorCode', 'userState', 'checkTemplateAccess', '$modal', 'scheduleFactory', 'plansFactory', 'store', 'templateEditorUtils',
     'HTML_PRESENTATION_TYPE', 'BLUEPRINT_URL', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
     function ($q, $log, $state, $rootScope, $http, presentation, processErrorCode, userState,
-      checkTemplateAccess, $modal, plansFactory, store, templateEditorUtils,
+      checkTemplateAccess, $modal, scheduleFactory, plansFactory, store, templateEditorUtils,
       HTML_PRESENTATION_TYPE, BLUEPRINT_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {};
 
@@ -144,6 +144,8 @@ angular.module('risevision.template-editor.services')
               }, {
                 notify: false,
                 location: 'replace'
+              }).then(function () {
+                scheduleFactory.createFirstSchedule(resp.item.id, resp.item.name);
               });
 
               deferred.resolve(resp.item.id);

@@ -26,7 +26,7 @@ describe('service: templateEditorFactory:', function() {
 
     $provide.service('$state',function() {
       return {
-        go: sandbox.stub()
+        go: sandbox.stub().resolves()
       };
     });
 
@@ -62,6 +62,11 @@ describe('service: templateEditorFactory:', function() {
         showMessageWindow: sandbox.stub()
       };
     });
+    $provide.service('scheduleFactory', function() {
+      return {
+        createFirstSchedule: sinon.stub()
+      };
+    });
 
     $provide.factory('$modal', function() {
       return {
@@ -81,7 +86,7 @@ describe('service: templateEditorFactory:', function() {
   }));
 
   var $state, $httpBackend, $modal, templateEditorFactory, templateEditorUtils, presentation, processErrorCode,
-    HTML_PRESENTATION_TYPE, blueprintUrl, storeAuthorize, checkTemplateAccessSpy, store, plansFactory;
+    HTML_PRESENTATION_TYPE, blueprintUrl, storeAuthorize, checkTemplateAccessSpy, store, plansFactory, scheduleFactory;
 
   beforeEach(function() {
     inject(function($injector, checkTemplateAccess) {
@@ -93,6 +98,7 @@ describe('service: templateEditorFactory:', function() {
 
       presentation = $injector.get('presentation');
       plansFactory = $injector.get('plansFactory');
+      scheduleFactory = $injector.get('scheduleFactory');
       store = $injector.get('store');
       templateEditorUtils = $injector.get('templateEditorUtils');
       processErrorCode = $injector.get('processErrorCode');
@@ -267,6 +273,40 @@ describe('service: templateEditorFactory:', function() {
           }, 10);
         })
         .then(null, done);
+    });
+
+    it('should create first Schedule when adding first presentation and show modal',function(done){
+      sandbox.stub(presentation, 'add').returns(Q.resolve({
+        item: {
+          name: 'Test Presentation',
+          id: 'presentationId'
+        }
+      }));
+
+      $httpBackend.when('GET', blueprintUrl).respond(200, {});
+      setTimeout(function() {
+        $httpBackend.flush();
+      });
+
+      templateEditorFactory.createFromTemplate({ productCode: 'test-id', name: 'Test HTML Template' });
+      expect(templateEditorFactory.presentation.id).to.be.undefined;
+      expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
+      expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
+
+      templateEditorFactory.addPresentation()        
+        .then(function() {
+
+          setTimeout(function(){
+            scheduleFactory.createFirstSchedule.should.have.been.called;
+
+            done();
+          },10);
+        })
+        .then(null, function(err) {
+          done(err);
+        })
+        .then(null, done);
+
     });
   });
 

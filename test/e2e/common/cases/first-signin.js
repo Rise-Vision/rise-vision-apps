@@ -8,7 +8,7 @@ var GetStartedPage = require('./../pages/getStartedPage.js');
 var OnboardingPage = require('./../pages/onboarding.js');
 var WorkspacePage = require('./../../editor/pages/workspacePage.js');
 var StoreProductsModalPage = require('./../../editor/pages/storeProductsModalPage.js');
-var AutoScheduleModalPage = require('./../../editor/pages/autoScheduleModalPage.js');
+var AutoScheduleModalPage = require('./../../schedules/pages/autoScheduleModalPage.js');
 var DisplayAddModalPage = require('./../../displays/pages/displayAddModalPage.js');
 
 var FirstSigninScenarios = function() {
@@ -138,10 +138,13 @@ var FirstSigninScenarios = function() {
         helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
         helper.clickWhenClickable(workspacePage.getSaveButton(), 'Save Button');
 
-        helper.wait(autoScheduleModalPage.getAutoScheduleModal());
+        helper.wait(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
 
         expect(autoScheduleModalPage.getAutoScheduleModal().isDisplayed()).to.eventually.be.true;
-        helper.clickWhenClickable(autoScheduleModalPage.getCloseButton(), 'Close Button');
+
+        helper.clickWhenClickable(autoScheduleModalPage.getCloseButton(), 'Auto Schedule Modal - Close Button');
+
+        helper.waitDisappear(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
       });
 
       it('should no longer show the Get Started Page', function () {
