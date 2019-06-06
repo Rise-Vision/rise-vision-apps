@@ -15,7 +15,7 @@
         </div>
         <div class="overlay-entry" ng-if="isSelected(item)" ng-click="selectItem(item)">
           <streamline-icon class="overlay-icon" name="checkmark" width="38" height="28"></streamline-icon>
-          <p class="overlay-text">{{item.name}}</p>
+          <p class="overlay-text">{{ fileNameOf(item.name) }}</p>
         </div>
       </div>
     </div>
@@ -34,7 +34,7 @@
     </div>
   </div>
 
-  <basic-uploader uploader-id="{{storageSelectorId}}"
+  <basic-uploader uploader-id="{{storageSelectorId}}-uploader"
                   upload-manager="storageUploadManager"
                   valid-extensions="validExtensions"
                   ng-show="isUploading">
@@ -43,12 +43,12 @@
 
 <div class="storage-selector-action-button-bar">
   <div class="upload-images">
-    <label class="btn btn-primary btn-block" for="{{storageSelectorId}}" ng-disabled="isUploading">
+    <label id="{{storageSelectorId}}-uploader-label" class="btn btn-primary btn-block" for="{{storageSelectorId}}-uploader" ng-disabled="isUploading">
       <strong>Upload Images</strong>
     </label>
   </div>
   <div class="add-selected">
-    <button class="btn btn-primary btn-block" ng-click="addSelected()" ng-disabled="isUploading || selectedItems.length === 0">
+    <button id="{{storageSelectorId}}-add-selected" class="btn btn-primary btn-block" ng-click="addSelected()" ng-disabled="isUploading || selectedItems.length === 0">
       <strong>Add Selected</strong>
     </button>
   </div>
