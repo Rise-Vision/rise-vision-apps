@@ -41,7 +41,7 @@ var ImageComponentPage = function() {
     return element.all(by.xpath('//div[@class="image-thumbnail"]/div[2]'));
   }
 
-  this.getRemoveLinkFor(imageName) {
+  this.getRemoveLinkFor = function(imageName) {
     return element(by.xpath(
       '//div[@class="image-remove"][..//div[contains(text(), "' + imageName + '")]]/a'
     ));
