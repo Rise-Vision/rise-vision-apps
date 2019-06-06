@@ -15,7 +15,7 @@
         </div>
         <div class="overlay-entry" ng-if="isSelected(item)" ng-click="selectItem(item)">
           <streamline-icon class="overlay-icon" name="checkmark" width="38" height="28"></streamline-icon>
-          <p class="overlay-text">{{item.name}}</p>
+          <p class="overlay-text">{{ fileNameOf(item.name) }}</p>
         </div>
       </div>
     </div>
