@@ -53,17 +53,6 @@ var TemplateAddScenarios = function() {
         expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
         expect(templateEditorPage.getImageComponentEdit().isPresent()).to.eventually.be.true;
       });
-
-      // image component now has some extra behaviros, this test will be fixed later as part of the e2e task
-      xit('should navigate into the Image component and back to the Components list', function () {
-        helper.wait(templateEditorPage.getImageComponentEdit(), 'Image Component');
-        helper.clickWhenClickable(templateEditorPage.getImageComponentEdit(), 'Image Component Edit');
-        helper.wait(templateEditorPage.getBackToComponentsButton(), 'Back to Components Button');
-        helper.clickWhenClickable(templateEditorPage.getBackToComponentsButton(), 'Back to Components Button');
-        helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
-        browser.sleep(500); // Wait for transition to finish
-        expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
-      });
     });
   });
 };
