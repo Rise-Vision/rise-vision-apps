@@ -59,7 +59,7 @@ angular.module('risevision.template-editor.directives')
 
             const PUBLISHED_URL_REGEXP =
               /^(http:|https:)\/\/docs\.google\.com\/presentation\/d\/e\/([^\s]+)\/(pub|embed)(\?|$)/i;
-            const BROWSER_URL_REGEXP = /^(http:|https:)\/\/docs\.google\.com\/presentation\/d\/([\w]+)/i;
+            const BROWSER_URL_REGEXP = /^(http:|https:)\/\/docs\.google\.com\/presentation\/d\/([\w-_]+)/i;
 
             if (!$scope.src) {
               //empty string is allowed

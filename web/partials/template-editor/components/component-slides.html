@@ -1,7 +1,7 @@
 <div class="row attribute-row-first">
   <label class="control-label">Google Slides url</label>
   <div ng-class="{ 'has-error': validationError }">
-    <input type="text" class="form-control" ng-model="src" placeholder="Enter URL" ng-keypress="handleKeyPressSrc($event)" ng-paste="saveSrc()">
+    <input type="text" class="form-control" ng-model="src" placeholder="Enter URL" ng-keypress="handleKeyPressSrc($event)" ng-model-options="{ debounce: 1000 }" ng-change="saveSrc()" >
     <p class="help-block" ng-show="validationError">
       {{validationError}}
     </p>
