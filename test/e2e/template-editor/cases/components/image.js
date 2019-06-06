@@ -50,6 +50,10 @@ var ImageComponentScenarios = function () {
       it('should list uploaded file only, with sample files removed', function() {
         expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(1);
       });
+
+      it('should have a thumbnail', function() {
+        expect(imageComponentPage.getThumbnails().count()).to.eventually.equal(1);
+      });
     });
 
     describe('storage', function () {
@@ -110,6 +114,57 @@ var ImageComponentScenarios = function () {
         expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(2);
       });
     });
+
+    describe('list and remove images', function () {
+      it('should create a new presentation and open it', function () {
+        presentationsListPage.loadCurrentCompanyPresentationList();
+        presentationsListPage.createNewPresentationFromTemplate('"Example Financial Template V3"', 'example-financial-template-v3');
+
+        templateEditorPage.selectComponent('Image - ');
+        helper.wait(imageComponentPage.getListDurationComponent(), 'List Duration');
+        expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(4);
+      });
+
+      it('should display image titles', function () {
+        var titles = imageComponentPage.getSelectedImagesTitles();
+
+        expect(titles.count()).to.eventually.equal(4);
+
+        titles.each(function(title) {
+          expect(title.getText()).to.eventually.match(/[\w ]+[.](jpg|png)$/);
+        });
+      });
+
+      it('should display broken links', function () {
+        // the test environment does not get the thumbnail for permission reasons,
+        // so we just test the existence of the broken link
+        var brokenLinks = imageComponentPage.getBrokenLinks();
+
+        expect(brokenLinks.count()).to.eventually.equal(4);
+
+        brokenLinks.each(function(brokenLink) {
+          expect(brokenLink.isDisplayed()).to.eventually.be.true;
+        });
+      });
+
+      it('should remove an image row', function () {
+        var removeLink = imageComponentPage.getRemoveLinkFor('raptors_logo.png');
+
+        helper.wait(removeLink, 'Image Row Remove');
+        helper.clickWhenClickable(removeLink, 'Image Row Remove');
+
+        expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(3);
+      });
+
+      it('should save the Presentation', function () {
+        presentationsListPage.savePresentation();
+
+        browser.sleep(100);
+
+        expect(templateEditorPage.getSaveButton().isEnabled()).to.eventually.be.true;
+      });
+    });
+
   });
 };
 

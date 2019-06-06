@@ -1,5 +1,7 @@
 'use strict';
 
+var helper = require('rv-common-e2e').helper;
+
 var ImageComponentPage = function() {
   var selectedImagesMain = element.all(by.repeater('image in selectedImages track by $index'));
   var listDurationComponent = element(by.css('.image-component-list-duration'));
@@ -66,6 +68,24 @@ var ImageComponentPage = function() {
 
   this.getUploadPanelStorage = function () {
     return uploadPanelStorage;
+  };
+
+  this.getSelectedImagesTitles = function() {
+    return element.all(by.xpath('//div[@class="image-text"]/div[1]'));
+  };
+
+  this.getThumbnails = function() {
+    return element.all(by.xpath('//div[@class="image-thumbnail"]/img'));
+  };
+
+  this.getBrokenLinks = function() {
+    return element.all(by.xpath('//div[@class="image-thumbnail"]/div[2]'));
+  };
+
+  this.getRemoveLinkFor = function(imageName) {
+    return element(by.xpath(
+      '//div[@class="image-remove"][..//div[contains(text(), "' + imageName + '")]]/a'
+    ));
   };
 };
 
