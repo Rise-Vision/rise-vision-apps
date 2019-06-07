@@ -12,7 +12,7 @@ angular.module('risevision.template-editor.directives')
 
           function _load() {
             $scope.src = _loadAttributeData('src');
-            $scope.duration = _loadAttributeData('duration');
+            $scope.duration = parseInt(_loadAttributeData('duration'));
           }
 
           function _loadAttributeData(attributeName) {
