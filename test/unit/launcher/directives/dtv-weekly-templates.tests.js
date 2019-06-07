@@ -6,9 +6,7 @@ describe('directive: weekly-templates', function() {
       element,
       selectedCompany,
       sessionStorage,
-      presentationUtils,
-      editorFactory,
-      templateEditorFactory;
+      editorFactory;
   beforeEach(module('risevision.apps.launcher.directives'));
   beforeEach(module(function ($provide) {
     $provide.service('productsFactory', function() {
@@ -24,15 +22,9 @@ describe('directive: weekly-templates', function() {
         };
       };
     });
-    $provide.service('presentationUtils', function() {
-      return presentationUtils
-    }); 
     $provide.service('editorFactory', function() {
       return editorFactory;
     });  
-    $provide.service('templateEditorFactory', function() {
-      return templateEditorFactory;
-    });   
     $provide.service('userState', function() {
       return {
         getCopyOfSelectedCompany: function() {
@@ -51,9 +43,7 @@ describe('directive: weekly-templates', function() {
         $default: sinon.stub(),
         weeklyTemplatesFullView: true
     };
-    presentationUtils = {isHtmlTemplate: sinon.stub()};
-    editorFactory = {copyTemplate: sinon.stub()};
-    templateEditorFactory = {createFromTemplate: sinon.stub()};
+    editorFactory = {copyProduct: sinon.stub()};
 
     $compile = _$compile_;
     $rootScope = _$rootScope_;
@@ -140,21 +130,11 @@ describe('directive: weekly-templates', function() {
       compileDirective();
     });  
 
-    it('should open regular Editor if template is a regular Presentaion',function(){
+    it('should copy template',function(){
       var product = {}
-      presentationUtils.isHtmlTemplate.returns(false);
       $scope.select(product);
-      editorFactory.copyTemplate.should.have.been.calledWith(product);
-      templateEditorFactory.createFromTemplate.should.not.have.been.called;
-    })
-
-    it('should open template Editor if template is a HTML Presentaion',function(){
-      var product = {}
-      presentationUtils.isHtmlTemplate.returns(true);
-      $scope.select(product);
-      editorFactory.copyTemplate.should.not.have.been.called;
-      templateEditorFactory.createFromTemplate.should.have.been.calledWith(product);
-    })
+      editorFactory.copyProduct.should.have.been.calledWith(product);
+    });
   });
 
 });

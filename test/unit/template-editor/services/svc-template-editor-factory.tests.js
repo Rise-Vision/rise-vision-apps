@@ -192,8 +192,6 @@ describe('service: templateEditorFactory:', function() {
         expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_PRESENTATION_TYPE);
         expect(templateEditorFactory.blueprintData.components.length).to.equal(1);
 
-        expect($state.go).to.have.been.calledWith('apps.editor.templates.edit');
-
         done();
       });
     });

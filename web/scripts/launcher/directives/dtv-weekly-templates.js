@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('risevision.apps.launcher.directives')
-  .directive('weeklyTemplates', ['productsFactory', 'ScrollingListService', 'presentationUtils',
-    'editorFactory', 'templateEditorFactory', 'userState', '$sessionStorage',
-    function (productsFactory, ScrollingListService, presentationUtils, editorFactory,
-      templateEditorFactory, userState, $sessionStorage) {
+  .directive('weeklyTemplates', ['productsFactory', 'ScrollingListService',
+    'editorFactory', 'userState', '$sessionStorage',
+    function (productsFactory, ScrollingListService, editorFactory,
+      userState, $sessionStorage) {
       return {
         restrict: 'E',
         scope: {},
@@ -38,11 +38,7 @@ angular.module('risevision.apps.launcher.directives')
           };
 
           $scope.select = function (product) {
-            if (!presentationUtils.isHtmlTemplate(product)) {
-              editorFactory.copyTemplate(product);
-            } else {
-              templateEditorFactory.createFromTemplate(product);
-            }
+            editorFactory.copyProduct(product);
           };
 
         } //link()

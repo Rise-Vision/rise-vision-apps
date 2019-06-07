@@ -115,8 +115,6 @@ angular.module('risevision.template-editor.services')
         return factory.loadBlueprintData(factory.presentation.productCode)
           .then(function (blueprintData) {
             factory.blueprintData = blueprintData.data;
-
-            $state.go('apps.editor.templates.edit');
           })
           .then(null, function (e) {
             _showErrorMessage('add', e);
@@ -140,7 +138,8 @@ angular.module('risevision.template-editor.services')
               $rootScope.$broadcast('presentationCreated');
 
               $state.go('apps.editor.templates.edit', {
-                presentationId: resp.item.id
+                presentationId: resp.item.id,
+                productId: undefined
               }, {
                 notify: false,
                 location: 'replace'

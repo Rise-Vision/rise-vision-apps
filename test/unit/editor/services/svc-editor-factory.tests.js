@@ -114,13 +114,13 @@ describe('service: editorFactory:', function() {
     });
     $provide.service('$state',function(){
       return {
-        go : function(state, params){
+        go : sinon.spy(function(state, params){
           if (state){
             currentState = state;
             stateParams = params;
           }
           return Q.resolve();
-        },
+        }),
         is: function(state) {
           return state === currentState;
         }
@@ -178,16 +178,10 @@ describe('service: editorFactory:', function() {
     $provide.factory('messageBox', function() {
       return messageBoxStub;
     });
-    $provide.service('templateEditorFactory', function() {
-      return templateEditorFactory = {
-        createFromTemplate: sinon.stub(),
-        getPresentation: sinon.stub()
-      };
-    });
   }));
-  var editorFactory, trackerCalled, updatePresentation, currentState, stateParams,
+  var editorFactory, trackerCalled, updatePresentation, currentState, $state, stateParams,
     presentationParser, $window, $modal, processErrorCode, scheduleFactory, userAuthFactory,
-    $rootScope, plansFactory, templateEditorFactory;
+    $rootScope, plansFactory;
   beforeEach(function(){
     trackerCalled = undefined;
     currentState = undefined;
@@ -195,10 +189,10 @@ describe('service: editorFactory:', function() {
 
     inject(function($injector){
       editorFactory = $injector.get('editorFactory');
-      templateEditorFactory = $injector.get('templateEditorFactory');
       presentationParser = $injector.get('presentationParser');
       $window = $injector.get('$window');
       $modal = $injector.get('$modal');
+      $state = $injector.get('$state');
       scheduleFactory = $injector.get('scheduleFactory');
       userAuthFactory = $injector.get('userAuthFactory');
       $rootScope = $injector.get('$rootScope');
@@ -624,7 +618,11 @@ describe('service: editorFactory:', function() {
 
       expect(trackerCalled).to.equal('Presentation Copied');
       expect(currentState).to.equal('apps.editor.workspace.artboard');
-      expect(stateParams).to.deep.equal({presentationId: undefined, copyPresentation:true});
+      expect(stateParams).to.deep.equal({
+        presentationId: 'new',
+        copyOf: 'someId',
+        isLoaded: true
+      });
     });
 
     it('should copy a template',function(){
@@ -643,45 +641,72 @@ describe('service: editorFactory:', function() {
 
       expect(trackerCalled).to.equal('Template Copied');
       expect(currentState).to.equal('apps.editor.workspace.artboard');
-      expect(stateParams).to.deep.equal({presentationId: undefined, copyPresentation:true});
+      expect(stateParams).to.deep.equal({
+        presentationId: 'new',
+        copyOf: 'someId',
+        isLoaded: true
+      });
     });
   });
 
-  describe('addPresentationModal:', function() {
-    it('should create a presentation using a Classic Template: ', function(done) {
-      editorFactory.addPresentationModal();
-      expect(trackerCalled).to.equal("Add Presentation");
-      var copyTemplateSpy = sinon.spy(editorFactory, 'copyTemplate');
+  it('addPresentationModal:', function(done) {
+    sinon.stub(editorFactory, 'copyProduct');
+
+    editorFactory.addPresentationModal();
+    expect(trackerCalled).to.equal("Add Presentation");
+
+    setTimeout(function() {
+      editorFactory.copyProduct.should.have.been.called;
+
+      done();
+    }, 10);
+  });
+
+  describe('copyProduct:', function() {
+    it('should validate productDetails', function(done) {
+      sinon.stub(editorFactory, 'copyTemplate');
+
+      editorFactory.copyProduct();
+      editorFactory.copyProduct({});
 
       setTimeout(function() {
-        copyTemplateSpy.should.have.been.called;
+        editorFactory.copyTemplate.should.not.have.been.called;
+        expect(currentState).to.not.be.ok;
 
-        expect(editorFactory.loadingPresentation).to.be.false;
+        done();
+      }, 10);
+    });
 
-        expect(editorFactory.presentation.id).to.not.be.ok;
-        expect(editorFactory.presentation.name).to.equal('Copy of some presentation');
+    it('should create a presentation using a Classic Template: ', function(done) {
+      sinon.stub(editorFactory, 'copyTemplate');
 
-        expect(trackerCalled).to.equal('Presentation Copied');
-        expect(currentState).to.equal('apps.editor.workspace.artboard');
-        expect(stateParams).to.deep.equal({presentationId: undefined, copyPresentation:true});
+      editorFactory.copyProduct({rvaEntityId: 'id1'});
+
+      setTimeout(function() {
+        editorFactory.copyTemplate.should.have.been.calledWith('id1');
 
         done();
       }, 10);
     });
 
     it('should create a presentation using an HTML Template: ', function(done) {
-      sinon.stub($modal, 'open').returns({
-        result: Q.resolve({productTag: ['HTMLTemplates']})
-      });
+      var productDetails = {
+        productTag: ['HTMLTemplates'],
+        productId: 'productId'
+      };
+      sinon.stub(editorFactory, 'copyTemplate');
 
-      editorFactory.addPresentationModal();
-      expect(trackerCalled).to.equal('Add Presentation');
-      var copyTemplateSpy = sinon.spy(editorFactory, 'copyTemplate');
+      editorFactory.copyProduct(productDetails);
 
       setTimeout(function() {
-        copyTemplateSpy.should.have.not.been.called;
+        editorFactory.copyTemplate.should.have.not.been.called;
 
-        expect(templateEditorFactory.createFromTemplate).to.have.been.called;
+        expect(currentState).to.equal('apps.editor.templates.edit');
+        expect(stateParams).to.deep.equal({
+          presentationId: 'new',
+          productId: productDetails.productId,
+          productDetails: productDetails
+        });
 
         done();
       }, 10);
@@ -689,66 +714,38 @@ describe('service: editorFactory:', function() {
   });
 
   describe('copyTemplate: ', function() {
-    var newCopyOfSpy, copyPresentationSpy;
-
     beforeEach(function() {
-      newCopyOfSpy = sinon.spy(editorFactory, 'newCopyOf');
-      copyPresentationSpy = sinon.spy(editorFactory, 'copyPresentation');
+      sinon.stub(editorFactory, 'copyPresentation');
     });
 
-    it('should copy the template based on productDetails', function(done) {
-      editorFactory.copyTemplate({rvaEntityId: 'presentationId'});
+    it('should not do anything if rvaEntityId is blank', function() {
+      sinon.stub(editorFactory, 'getPresentation');
 
-      newCopyOfSpy.should.have.been.calledWith('presentationId');
+      editorFactory.copyTemplate();
 
-      setTimeout(function() {
-        copyPresentationSpy.should.have.been.called;
-
-        done();
-      }, 10);
+      editorFactory.getPresentation.should.not.have.been.called;
     });
 
     it('should copy the template based on rvaEntityId', function(done) {
-      editorFactory.copyTemplate(null, 'presentationId');
-
-      newCopyOfSpy.should.have.been.calledWith('presentationId');
+      editorFactory.copyTemplate('presentationId');
 
       setTimeout(function() {
-        copyPresentationSpy.should.have.been.called;
+        editorFactory.copyPresentation.should.have.been.called;
 
         done();
       }, 10);
     });
 
-    it('if API returns 403, and product is available, show plans modal', function(done) {
+    it('if API returns 403, show plans modal', function(done) {
       var $modalOpenSpy = sinon.spy($modal, 'open');
 
       updatePresentation = false;
-      editorFactory.copyTemplate({rvaEntityId: 'presentationId'});
-
-      newCopyOfSpy.should.have.been.calledWith('presentationId');
+      editorFactory.copyTemplate('presentationId');
 
       setTimeout(function() {
-        copyPresentationSpy.should.not.have.been.called;
+        editorFactory.copyPresentation.should.not.have.been.called;
 
         plansFactory.showPlansModal.should.have.been.calledWith('editor-app.templatesLibrary.access-warning');
-        done();
-      }, 10);
-    });
-
-    it('if API returns 403, and product is not available, show plans modal', function(done) {
-      var $modalOpenSpy = sinon.spy($modal, 'open');
-
-      updatePresentation = false;
-      editorFactory.copyTemplate(null, 'presentationId');
-
-      newCopyOfSpy.should.have.been.calledWith('presentationId');
-
-      setTimeout(function() {
-        copyPresentationSpy.should.not.have.been.called;
-
-        plansFactory.showPlansModal.should.have.been.calledWith('editor-app.templatesLibrary.access-warning');
-
         done();
       }, 10);
     });
@@ -757,9 +754,7 @@ describe('service: editorFactory:', function() {
       var $modalOpenSpy = sinon.spy($modal, 'open');
 
       updatePresentation = false;
-      editorFactory.copyTemplate(null, 'presentationId');
-
-      newCopyOfSpy.should.have.been.calledWith('presentationId');
+      editorFactory.copyTemplate('presentationId');
 
       setTimeout(function() {
         plansFactory.showPlansModal.should.have.been.calledWith('editor-app.templatesLibrary.access-warning');
@@ -795,34 +790,15 @@ describe('service: editorFactory:', function() {
 
       expect(trackerCalled).to.equal('Presentation Copied');
       expect(currentState).to.equal('apps.editor.workspace.artboard');
-      expect(stateParams).to.deep.equal({presentationId: undefined, copyPresentation:true});
+      expect(stateParams).to.deep.equal({
+        presentationId: 'new',
+        copyOf: 'presentationId',
+        isLoaded: true
+      });
 
       done();
     }, 10);
 
-  });
-
-  describe('newCopyOf: ', function(done) {
-    it('should return a promise', function() {
-      expect(editorFactory.newCopyOf().then).to.be.a.function;
-    });
-
-    it('should copy Presentation', function(done) {
-      editorFactory.newCopyOf("presentationId");
-
-      setTimeout(function() {
-        expect(editorFactory.loadingPresentation).to.be.false;
-
-        expect(editorFactory.presentation.id).to.not.be.ok;
-        expect(editorFactory.presentation.name).to.equal('Copy of some presentation');
-
-        expect(trackerCalled).to.equal('Presentation Copied');
-        expect(currentState).to.equal('apps.editor.workspace.artboard');
-        expect(stateParams).to.deep.equal({presentationId: undefined, copyPresentation:true});
-
-        done();
-      }, 10);
-    });
   });
 
   describe('saveAndPreview: ', function() {

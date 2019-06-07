@@ -163,7 +163,7 @@ describe('directive: artboard-presentation', function() {
 
 
     it('should not show empty state for Templates',function(){
-      $stateParams.copyPresentation = true;
+      $stateParams.copyOf = true;
       var element = $compile("<artboard-presentation></artboard-presentation>")($scope);
       $scope.$apply();
       expect(element.scope().showEmptyState()).to.be.false;

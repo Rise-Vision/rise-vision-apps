@@ -11,12 +11,12 @@ angular.module('risevision.editor.services')
     'presentationTracker', 'store', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
     'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT',
     '$modal', '$rootScope', '$window', 'scheduleFactory', 'plansFactory', 'processErrorCode', 'messageBox',
-    '$templateCache', '$log', 'templateEditorFactory', 'presentationUtils',
+    '$templateCache', '$log', 'presentationUtils',
     function ($q, $state, userState, userAuthFactory, presentation,
       presentationParser, distributionParser, presentationTracker, store,
       VIEWER_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED,
       DEFAULT_LAYOUT, $modal, $rootScope, $window,
-      scheduleFactory, plansFactory, processErrorCode, messageBox, $templateCache, $log, templateEditorFactory,
+      scheduleFactory, plansFactory, processErrorCode, messageBox, $templateCache, $log,
       presentationUtils) {
       var factory = {};
       var JSON_PARSE_ERROR = 'JSON parse error';
@@ -184,7 +184,7 @@ angular.module('risevision.editor.services')
 
               $state.go('apps.editor.workspace.artboard', {
                 presentationId: resp.item.id,
-                copyPresentation: undefined
+                copyOf: undefined
               }, {
                 notify: false,
                 location: 'replace'
@@ -383,8 +383,9 @@ angular.module('risevision.editor.services')
       };
 
       factory.copyPresentation = function () {
-        presentationTracker((factory.presentation.isTemplate ?
-            'Template' : 'Presentation') + ' Copied',
+        var copyOf = factory.presentation.id;
+
+        presentationTracker((factory.presentation.isTemplate ? 'Template' : 'Presentation') + ' Copied',
           factory.presentation.id, factory.presentation.name);
 
         factory.presentation.id = undefined;
@@ -394,14 +395,10 @@ angular.module('risevision.editor.services')
         factory.presentation.isStoreProduct = false;
 
         $state.go('apps.editor.workspace.artboard', {
-          presentationId: undefined,
-          copyPresentation: true
+          presentationId: 'new',
+          copyOf: copyOf,
+          isLoaded: true
         });
-      };
-
-      factory.newCopyOf = function (presentationId) {
-        return factory.getPresentation(presentationId)
-          .then(factory.copyPresentation);
       };
 
       factory.addPresentationModal = function () {
@@ -418,26 +415,34 @@ angular.module('risevision.editor.services')
           }
         });
 
-        modalInstance.result.then(function (productDetails) {
-          if (!productDetails || (!productDetails.rvaEntityId && !presentationUtils.isHtmlTemplate(
-              productDetails))) {
-            return;
-          }
-
-          if (!presentationUtils.isHtmlTemplate(productDetails)) {
-            factory.copyTemplate(productDetails);
-          } else {
-            templateEditorFactory.createFromTemplate(productDetails);
-          }
-        });
+        modalInstance.result.then(factory.copyProduct);
       };
 
-      factory.copyTemplate = function (productDetails, rvaEntityId) {
-        rvaEntityId = productDetails ? productDetails.rvaEntityId :
-          rvaEntityId;
+      factory.copyProduct = function (productDetails) {
+        if (!productDetails || (!productDetails.rvaEntityId && !presentationUtils.isHtmlTemplate(
+            productDetails))) {
+          return;
+        }
 
-        factory.newCopyOf(rvaEntityId)
-          .then(null, function (e) {
+        if (!presentationUtils.isHtmlTemplate(productDetails)) {
+          factory.copyTemplate(productDetails.rvaEntityId);
+        } else {
+          $state.go('apps.editor.templates.edit', {
+            presentationId: 'new',
+            productId: productDetails.productId,
+            productDetails: productDetails
+          });
+        }
+      };
+
+      factory.copyTemplate = function (rvaEntityId) {
+        if (!rvaEntityId) {
+          return;
+        }
+
+        return factory.getPresentation(rvaEntityId)
+          .then(factory.copyPresentation)
+          .catch(function (e) {
             // 403 Status indicates Premium Template needs purchase
             if (e && e.status === 403) {
               plansFactory.showPlansModal('editor-app.templatesLibrary.access-warning');
@@ -451,18 +456,14 @@ angular.module('risevision.editor.services')
 
       factory.addFromSharedTemplateModal = function () {
         presentationTracker('Add Presentation from Shared Template');
+
         var modalInstance = $modal.open({
           templateUrl: 'partials/editor/shared-templates-modal.html',
           size: 'md',
           controller: 'SharedTemplatesModalController'
         });
 
-        modalInstance.result.then(function (templateId) {
-          if (!templateId) {
-            return;
-          }
-          factory.newCopyOf(templateId);
-        });
+        modalInstance.result.then(factory.copyTemplate);
       };
 
       var _getPreviewUrl = function (presentationId) {

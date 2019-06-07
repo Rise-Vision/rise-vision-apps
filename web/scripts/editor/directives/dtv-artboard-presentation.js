@@ -56,7 +56,7 @@ angular.module('risevision.editor.directives')
 
           $scope.showEmptyState = function () {
             return !editorFactory.presentation.id && !$scope.hasUnsavedChanges &&
-              !$stateParams.copyPresentation;
+              !$stateParams.copyOf;
           };
         } //link()
       };

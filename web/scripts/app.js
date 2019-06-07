@@ -355,29 +355,33 @@ angular.module('risevision.apps', [
         })
 
         .state('apps.editor.workspace', {
-          url: '/editor/workspace/:presentationId/:copyPresentation',
+          url: '/editor/workspace/:presentationId?copyOf',
           abstract: true,
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get('partials/editor/workspace.html');
           }],
           controller: 'WorkspaceController',
+          params: {
+            isLoaded: false
+          },
           resolve: {
-            presentationInfo: ['canAccessApps', 'editorFactory', '$stateParams', '$location',
-              function (canAccessApps, editorFactory, $stateParams, $location) {
+            presentationInfo: ['canAccessApps', 'editorFactory', '$stateParams',
+              function (canAccessApps, editorFactory, $stateParams) {
                 var signup = false;
-                var copyOf = $location.search().copyOf;
 
-                if ($stateParams.presentationId === 'new' && !$stateParams.copyPresentation && copyOf) {
+                if ($stateParams.copyOf) {
                   signup = true;
                 }
 
                 return canAccessApps(signup).then(function () {
-                  if ($stateParams.copyPresentation) {
-                    return editorFactory.presentation;
-                  } else if ($stateParams.presentationId && $stateParams.presentationId !== 'new') {
+                  if ($stateParams.presentationId && $stateParams.presentationId !== 'new') {
                     return editorFactory.getPresentation($stateParams.presentationId);
-                  } else if (copyOf) {
-                    return editorFactory.copyTemplate(null, copyOf);
+                  } else if ($stateParams.copyOf) {
+                    if ($stateParams.isLoaded) {
+                      return editorFactory.presentation;
+                    } else {
+                      return editorFactory.copyTemplate($stateParams.copyOf);
+                    }
                   } else {
                     return editorFactory.newPresentation();
                   }
@@ -411,30 +415,34 @@ angular.module('risevision.apps', [
           template: '<div class="templates-app" ui-view></div>'
         })
 
-        .state('apps.editor.templates.addFromProductId', {
-          url: '/add/:productId',
-          controller: ['$stateParams', 'canAccessApps', 'templateEditorFactory',
-            function ($stateParams, canAccessApps, templateEditorFactory) {
-              return canAccessApps().then(function () {
-                return templateEditorFactory.createFromProductId($stateParams.productId);
-              });
-            }
-          ]
-        })
-
         .state('apps.editor.templates.edit', {
-          url: '/edit/:presentationId',
+          url: '/edit/:presentationId/:productId',
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get('partials/template-editor/template-editor.html');
           }],
           reloadOnSearch: false,
           controller: 'TemplateEditorController',
+          params: {
+            productDetails: null
+          },
           resolve: {
             presentationInfo: ['$stateParams', 'canAccessApps', 'templateEditorFactory',
               function ($stateParams, canAccessApps, templateEditorFactory) {
-                return canAccessApps().then(function () {
-                  if ($stateParams.presentationId) {
-                    return templateEditorFactory.getPresentation($stateParams.presentationId);                    
+                var signup = false;
+
+                if ($stateParams.presentationId === 'new' && $stateParams.productId) {
+                  signup = true;
+                }
+
+                return canAccessApps(signup).then(function () {
+                  if ($stateParams.presentationId === 'new') {
+                    if ($stateParams.productDetails) {
+                      return templateEditorFactory.createFromTemplate($stateParams.productDetails);
+                    } else {
+                      return templateEditorFactory.createFromProductId($stateParams.productId);
+                    }
+                  } else {
+                    return templateEditorFactory.getPresentation($stateParams.presentationId);
                   }
                 });
               }
