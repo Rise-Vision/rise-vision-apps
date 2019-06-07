@@ -87,7 +87,9 @@ angular.module('risevision.template-editor.services')
       };
 
       svc.needsFinancialDataLicense = function (blueprint) {
-        if (!blueprint) return false;
+        if (!blueprint) {
+          return false;
+        } 
         return _.some(blueprint.components, function (component) {
           return _.includes(NEED_FINANCIAL_DATA_LICENSE, component.type);
         });
@@ -114,7 +116,7 @@ angular.module('risevision.template-editor.services')
 
         modalInstance.result.then(function () {
           modalInstance.dismiss();
-          $window.open(CONTACT_US_URL, "_blank");
+          $window.open(CONTACT_US_URL, '_blank');
         });
       };
 
