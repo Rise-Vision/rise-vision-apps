@@ -17,6 +17,8 @@ var TemplateEditorPage = function() {
   var imageComponent = element(by.xpath('(' + imageComponentSelector + ')[1]'));
   var imageComponentEdit = element(by.xpath('(' + imageComponentSelector + '/div/a)[1]'));
   var backToComponentsButton = element(by.css('[ng-click="onBackButton();"]'));
+  var financialDataLicenseMessage = element(by.css('.financial-data-license-message'));
+  var financialDataLicenseCloseButton = element(by.css('#confirmForm .close'));
 
   this.seePlansLink = function () {
     return seePlansLink;
@@ -73,6 +75,22 @@ var TemplateEditorPage = function() {
   this.getBackToComponentsButton = function () {
     return backToComponentsButton;
   };
+
+  this.getFinancialDataLicenseMessage = function() {
+    return financialDataLicenseMessage;
+  };
+
+  this.getFinancialDataLicenseCloseButton = function() {
+    return financialDataLicenseCloseButton;
+  }
+
+  this.dismissFinancialDataLicenseMessage = function() {
+    //workaround as protractor doesn't click over the preview iframe
+    //this width will hide the preview and allow Close button to be clickable
+    browser.driver.manage().window().setSize(400,1080); 
+    helper.clickWhenClickable(financialDataLicenseCloseButton, 'Financial Data License Close Button');
+    browser.driver.manage().window().setSize(1920, 1080);
+  }
 
   this.selectComponent = function (selectorLabel) {
     var componentEditLink = element(by.xpath('//div[div/span[contains(text(), "' + selectorLabel + '")]]/div/a'));

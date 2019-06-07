@@ -24,6 +24,7 @@ var ImageComponentScenarios = function () {
 
       presentationsListPage.loadCurrentCompanyPresentationList();
       presentationsListPage.createNewPresentationFromTemplate('"Example Financial Template V3"', 'example-financial-template-v3');
+      templateEditorPage.dismissFinancialDataLicenseMessage();
     });
 
     describe('basic operations', function () {
@@ -119,6 +120,7 @@ var ImageComponentScenarios = function () {
       it('should create a new presentation and open it', function () {
         presentationsListPage.loadCurrentCompanyPresentationList();
         presentationsListPage.createNewPresentationFromTemplate('"Example Financial Template V3"', 'example-financial-template-v3');
+        templateEditorPage.dismissFinancialDataLicenseMessage();
 
         templateEditorPage.selectComponent('Image - ');
         helper.wait(imageComponentPage.getListDurationComponent(), 'List Duration');
