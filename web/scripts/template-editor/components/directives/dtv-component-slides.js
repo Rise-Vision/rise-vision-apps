@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentSlides', ['templateEditorFactory',
-    function (templateEditorFactory) {
+  .directive('templateComponentSlides', ['templateEditorFactory', 'slidesUrlValidationService',
+    function (templateEditorFactory, slidesUrlValidationService) {
       return {
         restrict: 'E',
         scope: true,
@@ -33,9 +33,18 @@ angular.module('risevision.template-editor.directives')
           $scope.saveSrc = function () {
             if (_validateSrcLocally()) {
 
-              //TODO implement remote validation - check is presentation is shared and not deleted
+              slidesUrlValidationService.validate($scope.src)
+                .then(function (result) {
+                  if (result === 'VALID') {
+                    $scope.setAttributeData($scope.componentId, 'src', $scope.src);
+                  } else {
+                    $scope.validationError = result;
+                  }
+                })
+                .catch(function () {
+                  $scope.setAttributeData($scope.componentId, 'src', $scope.src);
+                });
 
-              $scope.setAttributeData($scope.componentId, 'src', $scope.src);
             }
           };
 
@@ -57,16 +66,16 @@ angular.module('risevision.template-editor.directives')
             //clear the error
             $scope.validationError = '';
 
-            const PUBLISHED_URL_REGEXP =
+            var PUBLISHED_URL_REGEXP =
               /^(http:|https:)\/\/docs\.google\.com\/presentation\/d\/e\/([^\s]+)\/(pub|embed)(\?|$)/i;
-            const BROWSER_URL_REGEXP = /^(http:|https:)\/\/docs\.google\.com\/presentation\/d\/([\w-_]+)/i;
+            var BROWSER_URL_REGEXP = /^(http:|https:)\/\/docs\.google\.com\/presentation\/d\/([\w-_]+)/i;
 
             if (!$scope.src) {
               //empty string is allowed
               return true;
             }
 
-            let _src = $scope.src.trim();
+            var _src = $scope.src.trim();
 
             //check if uses entered Published URL
             if (PUBLISHED_URL_REGEXP.test(_src)) {
@@ -76,7 +85,7 @@ angular.module('risevision.template-editor.directives')
 
             //check if uses entered URL from browser navigation bar
             if (BROWSER_URL_REGEXP.test(_src)) {
-              let slideId = BROWSER_URL_REGEXP.exec(_src)[2];
+              var slideId = BROWSER_URL_REGEXP.exec(_src)[2];
               $scope.src = _slideIdToEmbedUrl(slideId);
               return true;
             }
@@ -87,7 +96,7 @@ angular.module('risevision.template-editor.directives')
               return true;
             }
 
-            $scope.validationError = 'Invalid URL';
+            $scope.validationError = 'INVALID';
             return false;
           }
 
