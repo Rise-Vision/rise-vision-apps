@@ -1,6 +1,18 @@
-<div class="row attribute-row-first ">
-  <input type="text" class="form-control" ng-model="src" placeholder="Enter URL" ng-change="save()">
+<div class="row attribute-row-first">
+  <label class="control-label">Google Slides url</label>
+  <div ng-class="{ 'has-error': validationError }">
+    <input type="text" class="form-control" ng-model="src" placeholder="Enter URL" ng-keypress="handleKeyPressSrc($event)" ng-model-options="{ debounce: 1000 }" ng-change="saveSrc()" >
+    <p class="help-block" ng-switch on="validationError">
+      <span ng-switch-when="DELETED">Your Google Slideshow is no longer accessible, please check if it’s been deleted.</span>
+      <span ng-switch-when="NOT_PUBLIC">To use this Google Slideshow it must be publicly accessible. <a href="https://support.google.com/docs/answer/183965?co=GENIE.Platform%3DDesktop&hl=en" target="_blank">How to make your Google Slideshow public.</a></span>
+      <span ng-switch-when="INVALID">Invalid URL</span>
+    </p>
+  </div>
 </div>
 <div class="attribute-row-last">
-  <input type="text" class="form-control" ng-model="duration" placeholder="Enter duration" ng-change="save()">
+  <label class="control-label">Show each slide for</label>
+  <div class="input-group">
+    <input type="number" class="form-control" ng-model="duration" placeholder="Enter duration" ng-change="saveDiration()">
+    <span class="input-group-addon">seconds</span>
+  </div>
 </div>
