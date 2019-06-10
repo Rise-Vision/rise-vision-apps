@@ -1,6 +1,6 @@
 'use strict';
 describe('controller: AutoScheduleModalController', function() {
-  beforeEach(module('risevision.editor.controllers'));
+  beforeEach(module('risevision.schedules.controllers'));
   beforeEach(module(function ($provide) {
     presentationName = {};
     $provide.service('$modalInstance',function(){

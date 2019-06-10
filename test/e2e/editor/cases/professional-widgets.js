@@ -11,7 +11,7 @@ var PlansModalPage = require('./../../common/pages/plansModalPage.js');
 var PresentationItemModalPage = require('./../pages/presentationItemModalPage.js');
 var PresentationModalPage = require('./../../schedules/pages/presentationModalPage.js');
 var TwitterSettingsPage = require('./../pages/twitterSettingsPage.js');
-var AutoScheduleModalPage = require('./../../editor/pages/autoScheduleModalPage.js');
+var AutoScheduleModalPage = require('./../../schedules/pages/autoScheduleModalPage.js');
 
 var helper = require('rv-common-e2e').helper;
 

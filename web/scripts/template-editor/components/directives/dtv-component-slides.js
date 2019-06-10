@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentSlides', ['templateEditorFactory',
-    function (templateEditorFactory) {
+  .directive('templateComponentSlides', ['templateEditorFactory', 'slidesUrlValidationService',
+    function (templateEditorFactory, slidesUrlValidationService) {
       return {
         restrict: 'E',
         scope: true,
@@ -12,16 +12,40 @@ angular.module('risevision.template-editor.directives')
 
           function _load() {
             $scope.src = _loadAttributeData('src');
-            $scope.duration = _loadAttributeData('duration');
+            $scope.duration = parseInt(_loadAttributeData('duration'));
           }
 
           function _loadAttributeData(attributeName) {
             return $scope.getAttributeData($scope.componentId, attributeName);
           }
 
-          $scope.save = function () {
-            $scope.setAttributeData($scope.componentId, 'src', $scope.src);
+          $scope.saveDiration = function () {
             $scope.setAttributeData($scope.componentId, 'duration', $scope.duration);
+          };
+
+          $scope.handleKeyPressSrc = function (event) {
+            //handle Enter key only
+            if (event.which === 13) {
+              $scope.saveSrc();
+            }
+          };
+
+          $scope.saveSrc = function () {
+            if (_validateSrcLocally()) {
+
+              slidesUrlValidationService.validate($scope.src)
+                .then(function (result) {
+                  if (result === 'VALID') {
+                    $scope.setAttributeData($scope.componentId, 'src', $scope.src);
+                  } else {
+                    $scope.validationError = result;
+                  }
+                })
+                .catch(function () {
+                  $scope.setAttributeData($scope.componentId, 'src', $scope.src);
+                });
+
+            }
           };
 
           $scope.registerDirective({
@@ -37,6 +61,52 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
+          function _validateSrcLocally() {
+
+            //clear the error
+            $scope.validationError = '';
+
+            var PUBLISHED_URL_REGEXP =
+              /^(http:|https:)\/\/docs\.google\.com\/presentation\/d\/e\/([^\s]+)\/(pub|embed)(\?|$)/i;
+            var BROWSER_URL_REGEXP = /^(http:|https:)\/\/docs\.google\.com\/presentation\/d\/([\w-_]+)/i;
+
+            if (!$scope.src) {
+              //empty string is allowed
+              return true;
+            }
+
+            var _src = $scope.src.trim();
+
+            //check if uses entered Published URL
+            if (PUBLISHED_URL_REGEXP.test(_src)) {
+              //nothing to do here - URL is formatted correctly
+              return true;
+            }
+
+            //check if uses entered URL from browser navigation bar
+            if (BROWSER_URL_REGEXP.test(_src)) {
+              var slideId = BROWSER_URL_REGEXP.exec(_src)[2];
+              $scope.src = _slideIdToEmbedUrl(slideId);
+              return true;
+            }
+
+            //check if uses entered Slide ID - there should be no occurrences of '/' in the string
+            if (_src.indexOf('/') === -1) {
+              $scope.src = _slideIdToEmbedUrl(_src);
+              return true;
+            }
+
+            $scope.validationError = 'INVALID';
+            return false;
+          }
+
+          function _slideIdToEmbedUrl(slideId) {
+            // There are 2 types of Slide ID: 
+            //  1) Google doc ID i.e. ID copied from the browser's navigation bar
+            //  2) ID of the published URL. This ID ususally starst with "2PACX-"
+            // For this implementaion we assume user entered Google doc ID (option #1)
+            return 'https://docs.google.com/presentation/d/' + slideId + '/embed';
+          }
         }
       };
     }

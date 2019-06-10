@@ -72,13 +72,19 @@ describe('service: scheduleFactory:', function() {
         }
       }
     });
+    $provide.service('$modal',function(){
+      return {
+        open: sinon.stub()
+      };
+    });
+
     $provide.service('processErrorCode', function() {
       return processErrorCode = sinon.spy(function() { return 'error'; });
     });
     $provide.value('VIEWER_URL', 'http://rvaviewer-test.appspot.com');
 
   }));
-  var scheduleFactory, trackerCalled, updateSchedule, currentState, returnList, scheduleListSpy, scheduleAddSpy, processErrorCode;
+  var scheduleFactory, trackerCalled, updateSchedule, currentState, returnList, scheduleListSpy, scheduleAddSpy, processErrorCode, $modal;
   beforeEach(function(){
     trackerCalled = undefined;
     currentState = undefined;
@@ -90,6 +96,8 @@ describe('service: scheduleFactory:', function() {
       var schedule = $injector.get('schedule');
       scheduleListSpy = sinon.spy(schedule,'list');
       scheduleAddSpy = sinon.spy(schedule,'add');
+
+      $modal = $injector.get('$modal');
     });
   });
 
@@ -316,7 +324,7 @@ describe('service: scheduleFactory:', function() {
       timeDefined: false
     };
 
-    it('should create first schedule', function(done) {
+    it('should create first schedule and show modal', function(done) {
       returnList = {};
       scheduleFactory.createFirstSchedule('presentationId','presentationName')
       .then(function(){
@@ -325,6 +333,11 @@ describe('service: scheduleFactory:', function() {
         scheduleAddSpy.should.have.been.calledWith(firstScheduleSample);
 
         expect(trackerCalled).to.equal('Schedule Created');
+
+        $modal.open.should.have.been.called;
+
+        expect($modal.open.getCall(0).args[0].templateUrl).to.equal('partials/schedules/auto-schedule-modal.html');
+        expect($modal.open.getCall(0).args[0].controller).to.equal('AutoScheduleModalController');
 
         done();
       });

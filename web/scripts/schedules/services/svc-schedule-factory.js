@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.schedules.services')
-  .factory('scheduleFactory', ['$q', '$state', '$log', 'schedule', 'scheduleTracker', 'processErrorCode',
+  .factory('scheduleFactory', ['$q', '$state', '$log', '$modal', 'schedule', 'scheduleTracker', 'processErrorCode',
     'VIEWER_URL',
-    function ($q, $state, $log, schedule, scheduleTracker, processErrorCode, VIEWER_URL) {
+    function ($q, $state, $log, $modal, schedule, scheduleTracker, processErrorCode, VIEWER_URL) {
       var factory = {};
       var _hasSchedules = false;
       var _scheduleId;
@@ -64,6 +64,31 @@ angular.module('risevision.schedules.services')
         return deferred.promise;
       };
 
+      
+      var _checkFirstSchedule = function() {
+        var deferred = $q.defer();
+
+        if (!_hasSchedules) {
+          schedule.list({
+            count: 1
+          }).then(function (result) {
+
+            if (result && (!result.items || result.items.length === 0)) {
+              deferred.resolve();
+            } else {
+              _hasSchedules = true;
+              deferred.reject('Already have Schedules');
+            }
+          }, function (error) {
+            deferred.reject(error);
+          });
+        } else {
+          deferred.reject('Already have Schedules');
+        }
+
+        return deferred.promise;
+      };
+
       var _initFirstSchedule = function (presentationId, presentationName) {
         return {
           name: 'All Displays - 24/7',
@@ -79,43 +104,36 @@ angular.module('risevision.schedules.services')
         };
       };
 
-      factory.createFirstSchedule = function (presentationId,
-        presentationName) {
-        var deferred = $q.defer();
-        if (!_hasSchedules) {
-          schedule.list({
-            count: 1
-          }).then(function (result) {
+      factory.createFirstSchedule = function (presentationId, presentationName) {
 
-            if (result && (!result.items || result.items.length === 0)) {
-              var firstSchedule = _initFirstSchedule(presentationId,
-                presentationName);
+        return _checkFirstSchedule()
+          .then(function (result) {
+            var firstSchedule = _initFirstSchedule(presentationId, presentationName);
 
-              schedule.add(firstSchedule).then(function (resp) {
-
-                if (resp && resp.item && resp.item.id) {
-                  _hasSchedules = true;
-                  scheduleTracker('Schedule Created', resp.item.id,
-                    resp.item.name);
-                  deferred.resolve();
-
-                } else {
-                  deferred.reject('Error adding Schedule');
-                }
-              }, function (error) {
-                deferred.reject(error);
-              });
-            } else {
+            return schedule.add(firstSchedule);
+          })
+          .then(function (resp) {
+            if (resp && resp.item && resp.item.id) {
               _hasSchedules = true;
-              deferred.reject('Already have Schedules');
+              scheduleTracker('Schedule Created', resp.item.id, resp.item.name);
+
+              return $q.resolve();
+            } else {
+              return $q.reject('Error adding Schedule');
             }
-          }, function (error) {
-            deferred.reject(error);
+          })
+          .then(function () {
+            $modal.open({
+              templateUrl: 'partials/schedules/auto-schedule-modal.html',
+              size: 'md',
+              controller: 'AutoScheduleModalController',
+              resolve: {
+                presentationName: function () {
+                  return presentationName;
+                }
+              }
+            });
           });
-        } else {
-          deferred.reject('Already have Schedules');
-        }
-        return deferred.promise;
       };
 
       factory.addSchedule = function () {
