@@ -355,7 +355,7 @@ angular.module('risevision.apps', [
         })
 
         .state('apps.editor.workspace', {
-          url: '/editor/workspace/:presentationId?copyOf',
+          url: '/editor/workspace/:presentationId/?copyOf',
           abstract: true,
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get('partials/editor/workspace.html');
