@@ -1,14 +1,20 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentSlides', ['templateEditorFactory', 'slidesUrlValidationService',
-    function (templateEditorFactory, slidesUrlValidationService) {
+  .directive('templateComponentSlides', ['templateEditorFactory', 'slidesUrlValidationService', '$rootScope',
+    function (templateEditorFactory, slidesUrlValidationService, $rootScope) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-slides.html',
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
+
+          $rootScope.$on('risevision.page.visible', function (visible) {
+            if (visible && $scope.validationError !== 'VALID') {
+              $scope.saveSrc();
+            }
+          });
 
           function _load() {
             $scope.src = _loadAttributeData('src');
