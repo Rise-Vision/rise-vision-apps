@@ -344,11 +344,14 @@ angular.module('risevision.apps', [
 
         .state('apps.editor.add', {
           url: '/editor/add/:productId',
-          controller: ['$state', '$stateParams', 'canAccessApps', 'editorFactory',
-            function ($state, $stateParams, canAccessApps, editorFactory) {
+          controller: ['$state', '$stateParams', '$location', 'canAccessApps', 'editorFactory',
+            function ($state, $stateParams, $location, canAccessApps, editorFactory) {
               canAccessApps().then(function () {
                 if ($stateParams.productId) {
-                  editorFactory.addFromProductId($stateParams.productId);
+                  editorFactory.addFromProductId($stateParams.productId)
+                    .then(function() {
+                      $location.replace();
+                    });
                 } else {
                   editorFactory.addPresentationModal();
 
@@ -360,7 +363,7 @@ angular.module('risevision.apps', [
         })
 
         .state('apps.editor.workspace', {
-          url: '/editor/workspace/:presentationId/?copyOf',
+          url: '/editor/workspace/:presentationId?copyOf',
           abstract: true,
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get('partials/editor/workspace.html');

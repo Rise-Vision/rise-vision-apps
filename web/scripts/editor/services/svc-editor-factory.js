@@ -446,9 +446,9 @@ angular.module('risevision.editor.services')
         }
 
         if (!presentationUtils.isHtmlTemplate(productDetails)) {
-          factory.copyTemplate(productDetails.rvaEntityId);
+          return factory.copyTemplate(productDetails.rvaEntityId);
         } else {
-          $state.go('apps.editor.templates.edit', {
+          return $state.go('apps.editor.templates.edit', {
             presentationId: 'new',
             productId: productDetails.productId,
             productDetails: productDetails

@@ -70,7 +70,7 @@ describe('app:', function() {
     });
 
     it('should init add presentation modal',function(done){
-      $state.get('apps.editor.add').controller[4]($state, {}, canAccessApps, editorFactory);
+      $state.get('apps.editor.add').controller[5]($state, {}, $location, canAccessApps, editorFactory);
       setTimeout(function() {
         canAccessApps.should.have.been.called;
 
@@ -80,7 +80,7 @@ describe('app:', function() {
     });
 
     it('should add by productId',function(done){
-      $state.get('apps.editor.add').controller[4]($state, { productId: 'productId' }, canAccessApps, editorFactory);
+      $state.get('apps.editor.add').controller[5]($state, { productId: 'productId' }, $location, canAccessApps, editorFactory);
       setTimeout(function() {
         canAccessApps.should.have.been.called;
 
@@ -94,7 +94,7 @@ describe('app:', function() {
     it('should register state',function(){
       var state = $state.get('apps.editor.workspace');
       expect(state).to.be.ok;
-      expect(state.url).to.equal('/editor/workspace/:presentationId/?copyOf');
+      expect(state.url).to.equal('/editor/workspace/:presentationId?copyOf');
       expect(state.controller).to.be.ok;
       expect(state.params).to.be.ok;
       expect(state.abstract).to.be.true;
