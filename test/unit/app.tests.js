@@ -83,7 +83,7 @@ describe('app:', function() {
     it('should register state',function(){
       var state = $state.get('apps.editor.workspace');
       expect(state).to.be.ok;
-      expect(state.url).to.equal('/editor/workspace/:presentationId?copyOf');
+      expect(state.url).to.equal('/editor/workspace/:presentationId/?copyOf');
       expect(state.controller).to.be.ok;
       expect(state.params).to.be.ok;
       expect(state.abstract).to.be.true;
