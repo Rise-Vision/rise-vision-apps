@@ -38,7 +38,7 @@ angular.module('risevision.apps.launcher.directives')
           };
 
           $scope.select = function (product) {
-            editorFactory.copyProduct(product);
+            editorFactory.addFromProduct(product);
           };
 
         } //link()

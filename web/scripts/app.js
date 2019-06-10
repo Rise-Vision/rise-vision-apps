@@ -343,12 +343,17 @@ angular.module('risevision.apps', [
         })
 
         .state('apps.editor.add', {
-          url: '/editor/add',
-          controller: ['$state', 'canAccessApps', 'editorFactory',
-            function ($state, canAccessApps, editorFactory) {
+          url: '/editor/add/:productId',
+          controller: ['$state', '$stateParams', 'canAccessApps', 'editorFactory',
+            function ($state, $stateParams, canAccessApps, editorFactory) {
               canAccessApps().then(function () {
-                editorFactory.addPresentationModal();
-                $state.go('apps.editor.list');
+                if ($stateParams.productId) {
+                  editorFactory.addFromProductId($stateParams.productId);
+                } else {
+                  editorFactory.addPresentationModal();
+
+                  $state.go('apps.editor.list');                  
+                }
               });
             }
           ]
@@ -426,8 +431,8 @@ angular.module('risevision.apps', [
             productDetails: null
           },
           resolve: {
-            presentationInfo: ['$stateParams', 'canAccessApps', 'templateEditorFactory',
-              function ($stateParams, canAccessApps, templateEditorFactory) {
+            presentationInfo: ['$stateParams', 'canAccessApps', 'editorFactory', 'templateEditorFactory',
+              function ($stateParams, canAccessApps, editorFactory, templateEditorFactory) {
                 var signup = false;
 
                 if ($stateParams.presentationId === 'new' && $stateParams.productId) {
@@ -437,9 +442,9 @@ angular.module('risevision.apps', [
                 return canAccessApps(signup).then(function () {
                   if ($stateParams.presentationId === 'new') {
                     if ($stateParams.productDetails) {
-                      return templateEditorFactory.createFromTemplate($stateParams.productDetails);
+                      return templateEditorFactory.addFromProduct($stateParams.productDetails);
                     } else {
-                      return templateEditorFactory.createFromProductId($stateParams.productId);
+                      return editorFactory.addFromProductId($stateParams.productId);
                     }
                   } else {
                     return templateEditorFactory.getPresentation($stateParams.presentationId);

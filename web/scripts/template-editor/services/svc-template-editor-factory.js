@@ -5,10 +5,10 @@ angular.module('risevision.template-editor.services')
   .constant('HTML_TEMPLATE_URL', 'https://widgets.risevision.com/stable/templates/PRODUCT_CODE/src/template.html')
   .constant('HTML_TEMPLATE_DOMAIN', 'https://widgets.risevision.com')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', '$http', 'presentation',
-    'processErrorCode', 'userState', 'checkTemplateAccess', '$modal', 'scheduleFactory', 'plansFactory', 'store', 'templateEditorUtils',
+    'processErrorCode', 'userState', 'checkTemplateAccess', '$modal', 'scheduleFactory', 'plansFactory', 'templateEditorUtils',
     'HTML_PRESENTATION_TYPE', 'BLUEPRINT_URL', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
     function ($q, $log, $state, $rootScope, $http, presentation, processErrorCode, userState,
-      checkTemplateAccess, $modal, scheduleFactory, plansFactory, store, templateEditorUtils,
+      checkTemplateAccess, $modal, scheduleFactory, plansFactory, templateEditorUtils,
       HTML_PRESENTATION_TYPE, BLUEPRINT_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {};
 
@@ -62,41 +62,7 @@ angular.module('risevision.template-editor.services')
           });
       };
 
-      factory.createFromProductId = function (productId) {
-        return store.product.get(productId)
-          .then(function (productDetails) {
-            if (productDetails.productCode) {
-              return $q.resolve(productDetails);
-            } else {
-              return $q.reject({
-                result: {
-                  error: {
-                    message: 'Invalid Product Id'
-                  }
-                }
-              });
-            }
-          })
-          .then(function (productDetails) {
-            return checkTemplateAccess(productDetails.productCode)
-              .then(function () {
-                return factory.createFromTemplate(productDetails);
-              })
-              .catch(function (err) {
-                plansFactory.showPlansModal('editor-app.templatesLibrary.access-warning');
-
-                $state.go('apps.editor.list');
-                $log.error('checkTemplateAccess', err);
-                return $q.reject(err);
-              });
-          }, function (err) {
-            _showErrorMessage('add', err);
-            $state.go('apps.editor.list');
-            return $q.reject(err);
-          });
-      };
-
-      factory.createFromTemplate = function (productDetails) {
+      factory.addFromProduct = function (productDetails) {
         _clearMessages();
 
         factory.selected = null;

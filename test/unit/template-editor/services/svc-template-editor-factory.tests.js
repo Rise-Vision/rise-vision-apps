@@ -30,14 +30,6 @@ describe('service: templateEditorFactory:', function() {
       };
     });
 
-    $provide.service('store',function() {
-      return {
-        product: {
-          get: function () {}
-        }
-      };
-    });
-
     $provide.service('userState', function() {
       return {
         getUsername: function() {
@@ -124,58 +116,7 @@ describe('service: templateEditorFactory:', function() {
     expect(templateEditorFactory.addPresentation).to.be.a('function');
   });
 
-  describe('createFromProductId:', function() {
-    var sampleProduct = { productCode: 'test-product-code', name: 'Test HTML Template from productId' };
-
-    it('should create a new presentation when provided a productId', function(done) {
-      storeAuthorize = true;
-      sandbox.stub(store.product, 'get').returns(Q.resolve(sampleProduct));
-      sandbox.stub(templateEditorFactory, 'createFromTemplate').returns(Q.resolve({}));
-
-      templateEditorFactory.createFromProductId('test-product-id')
-      .then(function () {
-        expect(templateEditorFactory.createFromTemplate).to.have.been.calledWith(sampleProduct);
-        expect(plansFactory.showPlansModal).to.not.have.been.called;
-        expect(templateEditorUtils.showMessageWindow).to.not.have.been.called;
-
-        done();
-      });
-    });
-
-    it('should fail to create a new presentation when not subscribed', function(done) {
-      storeAuthorize = false;
-      sandbox.stub(store.product, 'get').returns(Q.resolve(sampleProduct));
-      sandbox.stub(templateEditorFactory, 'createFromTemplate').returns(Q.resolve({}));
-
-      templateEditorFactory.createFromProductId('test-product-id')
-      .catch(function () {
-        expect(templateEditorFactory.createFromTemplate).to.not.have.been.called;
-        expect(plansFactory.showPlansModal).to.have.been.called;
-        expect($state.go).to.have.been.calledWith('apps.editor.list');
-        expect(templateEditorUtils.showMessageWindow).to.not.have.been.called;
-
-        done();
-      });
-    });
-
-    it('should fail to create a new presentation if productId does not exist', function(done) {
-      storeAuthorize = true;
-      sandbox.stub(store.product, 'get').returns(Q.resolve({}));
-      sandbox.stub(templateEditorFactory, 'createFromTemplate').returns(Q.resolve({}));
-
-      templateEditorFactory.createFromProductId('test-product-id')
-      .catch(function (err) {
-        expect(templateEditorFactory.createFromTemplate).to.not.have.been.called;
-        expect(plansFactory.showPlansModal).to.not.have.been.called;
-        expect(err.result.error.message).to.equal('Invalid Product Id');
-        expect(templateEditorUtils.showMessageWindow).to.have.been.called;
-
-        done();
-      });
-    });
-  });
-
-  describe('createFromTemplate:', function() {
+  describe('addFromProduct:', function() {
     it('should create a new presentation', function(done) {
       $httpBackend.when('GET', blueprintUrl).respond(200, {
         components: [
@@ -191,7 +132,7 @@ describe('service: templateEditorFactory:', function() {
         $httpBackend.flush();
       });
 
-      templateEditorFactory.createFromTemplate({ productCode: 'test-id', name: 'Test HTML Template' }).then(function () {
+      templateEditorFactory.addFromProduct({ productCode: 'test-id', name: 'Test HTML Template' }).then(function () {
         expect(templateEditorFactory.presentation.id).to.be.undefined;
         expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
         expect(templateEditorFactory.presentation.name).to.equal('Copy of Test HTML Template');
@@ -217,7 +158,7 @@ describe('service: templateEditorFactory:', function() {
         $httpBackend.flush();
       });
 
-      templateEditorFactory.createFromTemplate({ productCode: 'test-id', name: 'Test HTML Template' });
+      templateEditorFactory.addFromProduct({ productCode: 'test-id', name: 'Test HTML Template' });
       expect(templateEditorFactory.presentation.id).to.be.undefined;
       expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
       expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
@@ -286,7 +227,7 @@ describe('service: templateEditorFactory:', function() {
         $httpBackend.flush();
       });
 
-      templateEditorFactory.createFromTemplate({ productCode: 'test-id', name: 'Test HTML Template' });
+      templateEditorFactory.addFromProduct({ productCode: 'test-id', name: 'Test HTML Template' });
       expect(templateEditorFactory.presentation.id).to.be.undefined;
       expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
       expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
@@ -322,7 +263,7 @@ describe('service: templateEditorFactory:', function() {
         $httpBackend.flush();
       });
 
-      templateEditorFactory.createFromTemplate({ productCode: 'test-id', name: 'Test HTML Template' });
+      templateEditorFactory.addFromProduct({ productCode: 'test-id', name: 'Test HTML Template' });
       expect(templateEditorFactory.presentation.id).to.be.undefined;
       expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
       expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
