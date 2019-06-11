@@ -13,12 +13,15 @@ angular.module('risevision.template-editor.services')
       HTML_PRESENTATION_TYPE, BLUEPRINT_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {};
 
-      var _setPresentation = function (presentation) {
+      var _setPresentation = function (presentation, isUpdate) {
         presentation.templateAttributeData =
           _parseJSON(presentation.templateAttributeData) || {};
 
         factory.presentation = presentation;
-        factory.selected = null;
+
+        if (!isUpdate) {
+          factory.selected = null;
+        }
 
         $rootScope.$broadcast('presentationUpdated');
       };
@@ -150,7 +153,7 @@ angular.module('risevision.template-editor.services')
 
         presentation.update(presentationVal.id, presentationVal)
           .then(function (resp) {
-            _setPresentation(resp.item);
+            _setPresentation(resp.item, true);
 
             deferred.resolve(resp.item.id);
           })
