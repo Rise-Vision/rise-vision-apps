@@ -10,8 +10,8 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
 
-          $rootScope.$on('risevision.page.visible', function (visible) {
-            if (visible && $scope.validationError !== 'VALID') {
+          $rootScope.$on('risevision.page.visible', function (pageIsVisible) {
+            if (_directiveIsVisible() && pageIsVisible) {
               $scope.saveSrc();
             }
           });
@@ -67,6 +67,12 @@ angular.module('risevision.template-editor.directives')
               $scope.saveSrc(); //validate Slides URL
             }
           });
+
+          function _directiveIsVisible() {
+            // This directive is instantiated once by templateAttributeEditor
+            // It becomes visible when <rise-slides> is selected
+            return $scope.factory.selected && ($scope.factory.selected.type === 'ise-slides');
+          }
 
           function _validateSrcLocally() {
 
