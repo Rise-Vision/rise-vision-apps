@@ -85,11 +85,9 @@ var TemplateEditorPage = function() {
   }
 
   this.dismissFinancialDataLicenseMessage = function() {
-    //workaround as protractor doesn't click over the preview iframe
-    //this width will hide the preview and allow Close button to be clickable
-    browser.driver.manage().window().setSize(400,1080); 
-    helper.clickWhenClickable(financialDataLicenseCloseButton, 'Financial Data License Close Button');
-    browser.driver.manage().window().setSize(1920, 1080);
+    //workaround as protractor doesn't click a modal in front of the preview iframe
+    financialDataLicenseCloseButton.sendKeys(protractor.Key.ESCAPE);
+    // helper.clickWhenClickable(financialDataLicenseCloseButton, 'Financial Data License Close Button');
   }
 
   this.selectComponent = function (selectorLabel) {
