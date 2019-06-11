@@ -33,7 +33,10 @@ describe('controller: TemplateEditor', function() {
   var $rootScope, $scope, $modal, $timeout, $window, factory;
 
   beforeEach(function() {
-    factory = { presentation: { templateAttributeData: {} } };
+    factory = {
+      presentation: { templateAttributeData: {} },
+      save: function() {}
+    };
   });
 
   beforeEach(module('risevision.template-editor.controllers'));

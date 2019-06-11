@@ -26,7 +26,7 @@ describe('service: templateEditorFactory:', function() {
 
     $provide.service('$state',function() {
       return {
-        go: sandbox.stub().resolves()
+        go: sinon.stub().returns(Q.resolve())
       };
     });
 
@@ -62,6 +62,11 @@ describe('service: templateEditorFactory:', function() {
       };
     });
 
+    $provide.service('$timeout', function() {
+      return function(callback, duration) {
+      };
+    });
+
     $provide.factory('$modal', function() {
       return {
         open: function(params){
@@ -84,7 +89,9 @@ describe('service: templateEditorFactory:', function() {
     needsFinancialDataLicense;
 
   beforeEach(function() {
+    console.log('D');
     inject(function($injector, checkTemplateAccess) {
+      console.log('A');
       $state = $injector.get('$state');
       $httpBackend = $injector.get('$httpBackend');
       $modal = $injector.get('$modal');
@@ -266,7 +273,7 @@ describe('service: templateEditorFactory:', function() {
       expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
       expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
 
-      templateEditorFactory.addPresentation()        
+      templateEditorFactory.addPresentation()
         .then(function() {
 
           setTimeout(function(){
