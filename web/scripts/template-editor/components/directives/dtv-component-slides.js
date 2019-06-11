@@ -71,7 +71,7 @@ angular.module('risevision.template-editor.directives')
           function _directiveIsVisible() {
             // This directive is instantiated once by templateAttributeEditor
             // It becomes visible when <rise-slides> is selected
-            return $scope.factory.selected && ($scope.factory.selected.type === 'ise-slides');
+            return $scope.factory.selected && ($scope.factory.selected.type === 'rise-slides');
           }
 
           function _validateSrcLocally() {
