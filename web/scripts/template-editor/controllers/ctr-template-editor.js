@@ -1,10 +1,13 @@
 'use strict';
 
 angular.module('risevision.template-editor.controllers')
+  .constant('MINIMUM_INTERVAL_BETWEEN_SAVES', 5000)
+  .constant('MAXIMUM_INTERVAL_BETWEEN_SAVES', 20000)
   .controller('TemplateEditorController', ['$scope', '$filter', '$loading', '$modal', '$state', '$timeout', '$window',
-    'templateEditorFactory', 'userState', 'presentationUtils',
+    'templateEditorFactory', 'userState', 'presentationUtils', 'MINIMUM_INTERVAL_BETWEEN_SAVES',
+    'MAXIMUM_INTERVAL_BETWEEN_SAVES',
     function ($scope, $filter, $loading, $modal, $state, $timeout, $window, templateEditorFactory, userState,
-      presentationUtils) {
+      presentationUtils, MINIMUM_INTERVAL_BETWEEN_SAVES, MAXIMUM_INTERVAL_BETWEEN_SAVES) {
       $scope.factory = templateEditorFactory;
       $scope.isSubcompanySelected = userState.isSubcompanySelected;
       $scope.isTestCompanySelected = userState.isTestCompanySelected;
