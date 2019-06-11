@@ -8,6 +8,9 @@ angular.module('risevision.template-editor.controllers')
     'MAXIMUM_INTERVAL_BETWEEN_SAVES',
     function ($scope, $filter, $loading, $modal, $state, $timeout, $window, templateEditorFactory, userState,
       presentationUtils, MINIMUM_INTERVAL_BETWEEN_SAVES, MAXIMUM_INTERVAL_BETWEEN_SAVES) {
+      var _lastSavedTimestamp = 0,
+        _saveTimeout = null;
+
       $scope.factory = templateEditorFactory;
       $scope.isSubcompanySelected = userState.isSubcompanySelected;
       $scope.isTestCompanySelected = userState.isTestCompanySelected;
@@ -76,10 +79,54 @@ angular.module('risevision.template-editor.controllers')
         return component;
       }
 
+      function _getCurrentTimestamp() {
+        return new Date().getTime();
+      }
+
+      function _programSave() {
+        _saveTimeout = $timeout(function () {
+          _saveTimeout = null;
+
+          // if a previous save hasn't finished, give more time
+          if ($scope.factory.savingPresentation) {
+            _programSave();
+          } else {
+            _lastSavedTimestamp = _getCurrentTimestamp();
+            console.log('Saving' + _lastSavedTimestamp);
+
+            $scope.factory.save();
+          }
+        }, MINIMUM_INTERVAL_BETWEEN_SAVES);
+      }
+
+      function _clearSaveTimeout() {
+        if (_saveTimeout) {
+          $timeout.cancel(_saveTimeout);
+          _saveTimeout = null;
+        }
+      }
+
+      function _reprogramSave() {
+        _clearSaveTimeout();
+        _programSave();
+      }
+
       var _bypassUnsaved = false,
         _initializing = false;
       var _setUnsavedChanges = function (state) {
         $scope.hasUnsavedChanges = state;
+
+        if ($scope.hasUnsavedChanges) {
+          if (_saveTimeout) {
+            var elapsed = _getCurrentTimestamp() - _lastSavedTimestamp;
+
+            if (elapsed < MAXIMUM_INTERVAL_BETWEEN_SAVES) {
+              _reprogramSave();
+            }
+          } else {
+            _programSave();
+          }
+        }
       };
 
       var _setUnsavedChangesAsync = function (state) {
