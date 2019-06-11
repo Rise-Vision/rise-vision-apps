@@ -89,7 +89,7 @@ angular.module('risevision.template-editor.services')
       svc.needsFinancialDataLicense = function (blueprint) {
         if (!blueprint) {
           return false;
-        } 
+        }
         return _.some(blueprint.components, function (component) {
           return _.includes(NEED_FINANCIAL_DATA_LICENSE, component.type);
         });

@@ -23,7 +23,7 @@ angular.module('risevision.template-editor.services')
           .catch(function (err) {
             deferred.reject(err);
           });
-        
+
         return deferred.promise;
       };
 

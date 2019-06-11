@@ -64,8 +64,8 @@ angular.module('risevision.schedules.services')
         return deferred.promise;
       };
 
-      
-      var _checkFirstSchedule = function() {
+
+      var _checkFirstSchedule = function () {
         var deferred = $q.defer();
 
         if (!_hasSchedules) {

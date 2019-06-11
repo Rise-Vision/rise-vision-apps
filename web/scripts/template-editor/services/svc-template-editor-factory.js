@@ -5,7 +5,8 @@ angular.module('risevision.template-editor.services')
   .constant('HTML_TEMPLATE_URL', 'https://widgets.risevision.com/stable/templates/PRODUCT_CODE/src/template.html')
   .constant('HTML_TEMPLATE_DOMAIN', 'https://widgets.risevision.com')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', '$http', 'presentation',
-    'processErrorCode', 'userState', 'checkTemplateAccess', '$modal', 'scheduleFactory', 'plansFactory', 'templateEditorUtils',
+    'processErrorCode', 'userState', 'checkTemplateAccess', '$modal', 'scheduleFactory', 'plansFactory',
+    'templateEditorUtils',
     'HTML_PRESENTATION_TYPE', 'BLUEPRINT_URL', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
     function ($q, $log, $state, $rootScope, $http, presentation, processErrorCode, userState,
       checkTemplateAccess, $modal, scheduleFactory, plansFactory, templateEditorUtils,
@@ -62,6 +63,12 @@ angular.module('risevision.template-editor.services')
           });
       };
 
+      var _checkFinancialDataLicenseMessage = function (blueprintData) {
+        if (templateEditorUtils.needsFinancialDataLicense(factory.blueprintData)) {
+          templateEditorUtils.showFinancialDataLicenseRequiredMessage();
+        }
+      };
+
       factory.addFromProduct = function (productDetails) {
         _clearMessages();
 
@@ -81,6 +88,8 @@ angular.module('risevision.template-editor.services')
         return factory.loadBlueprintData(factory.presentation.productCode)
           .then(function (blueprintData) {
             factory.blueprintData = blueprintData.data;
+
+            _checkFinancialDataLicenseMessage(factory.blueprintData);
           })
           .then(null, function (e) {
             _showErrorMessage('add', e);
