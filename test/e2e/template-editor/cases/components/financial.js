@@ -4,6 +4,7 @@ var expect = require('rv-common-e2e').expect;
 var PresentationListPage = require('./../../pages/presentationListPage.js');
 var TemplateEditorPage = require('./../../pages/templateEditorPage.js');
 var FinancialComponentPage = require('./../../pages/components/financialComponentPage.js');
+var AutoScheduleModalPage = require('./../../../schedules/pages/autoScheduleModalPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var FinancialComponentScenarios = function () {
@@ -16,11 +17,13 @@ var FinancialComponentScenarios = function () {
     var presentationsListPage;
     var templateEditorPage;
     var financialComponentPage;
+    var autoScheduleModalPage;
 
     before(function () {
       presentationsListPage = new PresentationListPage();
       templateEditorPage = new TemplateEditorPage();
       financialComponentPage = new FinancialComponentPage();
+      autoScheduleModalPage = new AutoScheduleModalPage();
 
       presentationsListPage.loadCurrentCompanyPresentationList();
       presentationsListPage.createNewPresentationFromTemplate('"Example Financial Template V3"', 'example-financial-template-v3');
@@ -43,6 +46,11 @@ var FinancialComponentScenarios = function () {
       it('should auto-save the component after the instruments are loaded', function () {
         helper.wait(templateEditorPage.getSavingText(), 'Financial component auto-saving');
         helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
+
+        helper.wait(autoScheduleModalPage.getAutoScheduleModal());
+        autoScheduleModalPage.getCloseButton().click();
+        helper.waitDisappear(autoScheduleModalPage.getAutoScheduleModal());
+        helper.waitDisappear(presentationsListPage.getTemplateEditorLoader());
       });
 
       it('should show open the Instrument Selector', function () {
