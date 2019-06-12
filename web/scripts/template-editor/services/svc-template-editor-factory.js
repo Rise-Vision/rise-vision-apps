@@ -25,7 +25,6 @@ angular.module('risevision.template-editor.services')
             _parseJSON(presentation.templateAttributeData) || {};
 
           factory.presentation = presentation;
-          factory.selected = null;
         }
 
         $rootScope.$broadcast('presentationUpdated');

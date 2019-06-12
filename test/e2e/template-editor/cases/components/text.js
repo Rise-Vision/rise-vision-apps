@@ -55,10 +55,6 @@ var TextComponentScenarios = function () {
         //save presentation
         helper.wait(templateEditorPage.getSavingText(), 'Text component auto-saving');
         helper.wait(templateEditorPage.getSavedText(), 'Text component auto-saved');
-
-        //wait for lagging auto-saves
-        browser.sleep(10000);
-        helper.wait(templateEditorPage.getSavedText(), 'Text component auto-saved');
       });
 
       it('should auto-save the Presentation, reload it, and validate changes were saved', function () {
