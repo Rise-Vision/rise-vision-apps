@@ -12,13 +12,14 @@
 
 <div class="toolbar-right">
   <div id="saveButtonDesktop" require-role="ce cp"
-          class="btn btn-primary btn-fixed-width u_margin-right hidden-xs"
+          class="btn-primary btn-fixed-width u_margin-right hidden-xs"
           ng-disabled="factory.savingPresentation"
           ng-click="factory.save()">
     <strong>
       {{
-        factory.savingPresentation ? 'Saving': 'Save'
-      }} {{ hasUnsavedChanges ? 'dirty' : 'clean' }}
+        factory.savingPresentation ? 'Saving' :
+        hasUnsavedChanges ? 'Dirty' : 'Saved'
+      }}
     </strong>
   </div>
 
