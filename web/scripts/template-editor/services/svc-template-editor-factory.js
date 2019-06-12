@@ -36,7 +36,7 @@ angular.module('risevision.template-editor.services')
         var modalInstance = $modal.open({
           templateUrl: 'partials/template-editor/expired-modal.html',
           controller: 'confirmInstance',
-          windowClass: 'template-editor-message-box',
+          windowClass: 'madero-style centered-modal',
           resolve: {
             confirmationTitle: function () {
               return 'template.expired-modal.expired-title';
