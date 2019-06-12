@@ -2,7 +2,8 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('templateComponentSlides', ['templateEditorFactory', 'slidesUrlValidationService', '$rootScope',
-    function (templateEditorFactory, slidesUrlValidationService, $rootScope) {
+    '$loading',
+    function (templateEditorFactory, slidesUrlValidationService, $rootScope, $loading) {
       return {
         restrict: 'E',
         scope: true,
@@ -15,6 +16,16 @@ angular.module('risevision.template-editor.directives')
               $scope.saveSrc();
             }
           });
+
+          $scope.$watch('spinner', function (loading) {
+            if (loading) {
+              $loading.start('slides-editor-loader');
+            } else {
+              $loading.stop('slides-editor-loader');
+            }
+          });
+
+          $scope.spinner = false;
 
           function _load() {
             $scope.src = _loadAttributeData('src');
@@ -39,6 +50,8 @@ angular.module('risevision.template-editor.directives')
           $scope.saveSrc = function () {
             if (_validateSrcLocally()) {
 
+              $scope.spinner = true;
+
               slidesUrlValidationService.validate($scope.src)
                 .then(function (result) {
                   if (result === 'VALID') {
@@ -49,8 +62,10 @@ angular.module('risevision.template-editor.directives')
                 })
                 .catch(function () {
                   $scope.setAttributeData($scope.componentId, 'src', $scope.src);
+                })
+                .finally(function () {
+                  $scope.spinner = false;
                 });
-
             }
           };
 
