@@ -37,9 +37,19 @@ var TextComponentScenarios = function () {
 
       it('should auto-save the Presentation after a text change', function () {
 
-        //change text
+        //clear text
         expect(textComponentPage.getTextInput().isEnabled()).to.eventually.be.true;
         textComponentPage.getTextInput().clear();
+
+        //save presentation
+        helper.wait(templateEditorPage.getSavingText(), 'Text component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Text component auto-saved');
+
+        //wait for lagging auto-saves
+        browser.sleep(10000);
+        helper.wait(templateEditorPage.getSavedText(), 'Text component auto-saved');
+
+        //change text
         textComponentPage.getTextInput().sendKeys("Changed Text" + protractor.Key.ENTER);
 
         //save presentation
@@ -54,14 +64,12 @@ var TextComponentScenarios = function () {
       it('should auto-save the Presentation, reload it, and validate changes were saved', function () {
 
         //change presentation name
-        browser.sleep(1000);
         presentationsListPage.changePresentationName(presentationName);
 
         //save presentation
         helper.waitDisappear(templateEditorPage.getDirtyText());
         helper.wait(templateEditorPage.getSavingText(), 'Text component auto-saving');
         helper.wait(templateEditorPage.getSavedText(), 'Text component auto-saved');
-        browser.sleep(1000);
 
         //log URL for troubeshooting
         browser.getCurrentUrl().then(function(actualUrl) {

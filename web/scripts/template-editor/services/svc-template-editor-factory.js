@@ -14,6 +14,7 @@ angular.module('risevision.template-editor.services')
       var factory = {};
 
       var _setPresentation = function (presentation, isUpdate) {
+
         if (isUpdate) {
           factory.presentation.id = presentation.id;
           factory.presentation.revisionStatusName = presentation.revisionStatusName;
