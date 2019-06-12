@@ -14,6 +14,7 @@ var PresentationListPage = function() {
   var presentationItems = element.all(by.repeater('presentation in presentations.list'));
 
   var presentationsLoader = element(by.xpath('//div[@spinner-key="presentation-list-loader"]'));
+  var spinner = element(by.xpath('//div[@spinner-key="template-editor-loader"]'));
 
   var homepage = new HomePage();
   var signInPage = new SignInPage();
@@ -63,6 +64,7 @@ var PresentationListPage = function() {
 
   this.changePresentationName = function(presentationName) {
     expect(templateEditorPage.getPresentationName().isEnabled()).to.eventually.be.false;
+    helper.waitDisappear(spinner, 'Spinner');
     templateEditorPage.getEditNameButton().click();
     expect(templateEditorPage.getPresentationName().isEnabled()).to.eventually.be.true;
     templateEditorPage.getPresentationName().sendKeys(presentationName + protractor.Key.ENTER);

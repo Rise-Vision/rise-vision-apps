@@ -60,6 +60,14 @@ var TemplateEditorPage = function() {
     return saveButton;
   };
 
+  this.getSavedText = function () {
+    return savedText;
+  };
+
+  this.getSavingText = function () {
+    return savingText;
+  };
+
   this.getPublishButton = function () {
     return publishButton;
   };
