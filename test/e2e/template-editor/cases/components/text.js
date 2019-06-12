@@ -67,10 +67,11 @@ var TextComponentScenarios = function () {
         helper.wait(templateEditorPage.getSavingText(), 'Text component auto-saving');
         helper.wait(templateEditorPage.getSavedText(), 'Text component auto-saved');
 
-        //log URL for troubeshooting
+        //log URL for troubleshooting
         browser.getCurrentUrl().then(function(actualUrl) {
           console.log(actualUrl);
         });
+        browser.sleep(100);
 
         //load presentation
         presentationsListPage.loadPresentation(presentationName);

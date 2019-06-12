@@ -72,10 +72,11 @@ var FinancialComponentScenarios = function () {
 
         presentationsListPage.changePresentationName(presentationName);
 
-        //log presentation / company URL for troubeshooting
+        //log presentation / company URL for troubleshooting
         browser.getCurrentUrl().then(function(actualUrl) {
           console.log(actualUrl);
         });
+        browser.sleep(100);
 
         helper.wait(templateEditorPage.getSavingText(), 'Financial component auto-saving');
         helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
