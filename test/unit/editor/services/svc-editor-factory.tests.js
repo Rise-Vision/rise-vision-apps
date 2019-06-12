@@ -104,13 +104,19 @@ describe('service: editorFactory:', function() {
       };
     });
     $provide.service('store', function() {
-      return {
+      return store = {
         product: {
           list: function() {
             return Q.resolve({items:[{productCode: 'test'}]});
-          }
+          },
+          get: function () {}
         }
       };
+    });
+    $provide.service('checkTemplateAccess',function(){
+      return sinon.spy(function () {
+        return storeAuthorize ? Q.resolve() : Q.reject();
+      });
     });
     $provide.service('$state',function(){
       return {
@@ -179,7 +185,7 @@ describe('service: editorFactory:', function() {
   }));
   var editorFactory, trackerCalled, updatePresentation, currentState, $state, stateParams,
     presentationParser, $window, $modal, processErrorCode, scheduleFactory, userAuthFactory,
-    $rootScope, plansFactory;
+    $rootScope, plansFactory, store, storeAuthorize;
   beforeEach(function(){
     trackerCalled = undefined;
     currentState = undefined;
@@ -644,24 +650,75 @@ describe('service: editorFactory:', function() {
   });
 
   it('addPresentationModal:', function(done) {
-    sinon.stub(editorFactory, 'copyProduct');
+    sinon.stub(editorFactory, 'addFromProduct');
 
     editorFactory.addPresentationModal();
     expect(trackerCalled).to.equal("Add Presentation");
 
     setTimeout(function() {
-      editorFactory.copyProduct.should.have.been.called;
+      editorFactory.addFromProduct.should.have.been.called;
 
       done();
     }, 10);
   });
 
-  describe('copyProduct:', function() {
+  describe('addFromProductId:', function() {
+    var sampleProduct = { productCode: 'test-product-code', name: 'Test HTML Template from productId' };
+
+    it('should create a new presentation when provided a productId', function(done) {
+      storeAuthorize = true;
+      sandbox.stub(store.product, 'get').returns(Q.resolve(sampleProduct));
+      sandbox.stub(editorFactory, 'addFromProduct').returns(Q.resolve({}));
+
+      editorFactory.addFromProductId('test-product-id')
+      .then(function () {
+        expect(editorFactory.addFromProduct).to.have.been.calledWith(sampleProduct);
+        expect(plansFactory.showPlansModal).to.not.have.been.called;
+        expect(messageBoxStub).to.not.have.been.called;
+
+        done();
+      });
+    });
+
+    it('should fail to create a new presentation when not subscribed', function(done) {
+      storeAuthorize = false;
+      sandbox.stub(store.product, 'get').returns(Q.resolve(sampleProduct));
+      sandbox.stub(editorFactory, 'addFromProduct').returns(Q.resolve({}));
+
+      editorFactory.addFromProductId('test-product-id')
+      .catch(function () {
+        expect(editorFactory.addFromProduct).to.not.have.been.called;
+        expect(plansFactory.showPlansModal).to.have.been.called;
+        expect($state.go).to.have.been.calledWith('apps.editor.list');
+        expect(messageBoxStub).to.not.have.been.called;
+
+        done();
+      });
+    });
+
+    it('should fail to create a new presentation if productId does not exist', function(done) {
+      storeAuthorize = true;
+      sandbox.stub(store.product, 'get').returns(Q.resolve({}));
+      sandbox.stub(editorFactory, 'addFromProduct').returns(Q.resolve({}));
+
+      editorFactory.addFromProductId('test-product-id')
+      .catch(function (err) {
+        expect(editorFactory.addFromProduct).to.not.have.been.called;
+        expect(plansFactory.showPlansModal).to.not.have.been.called;
+        expect(err.result.error.message).to.equal('Invalid Product Id');
+        expect(messageBoxStub).to.have.been.called;
+
+        done();
+      });
+    });
+  });
+
+  describe('addFromProduct:', function() {
     it('should validate productDetails', function(done) {
       sinon.stub(editorFactory, 'copyTemplate');
 
-      editorFactory.copyProduct();
-      editorFactory.copyProduct({});
+      editorFactory.addFromProduct();
+      editorFactory.addFromProduct({});
 
       setTimeout(function() {
         editorFactory.copyTemplate.should.not.have.been.called;
@@ -674,7 +731,7 @@ describe('service: editorFactory:', function() {
     it('should create a presentation using a Classic Template: ', function(done) {
       sinon.stub(editorFactory, 'copyTemplate');
 
-      editorFactory.copyProduct({rvaEntityId: 'id1'});
+      editorFactory.addFromProduct({rvaEntityId: 'id1'});
 
       setTimeout(function() {
         editorFactory.copyTemplate.should.have.been.calledWith('id1');
@@ -690,7 +747,7 @@ describe('service: editorFactory:', function() {
       };
       sinon.stub(editorFactory, 'copyTemplate');
 
-      editorFactory.copyProduct(productDetails);
+      editorFactory.addFromProduct(productDetails);
 
       setTimeout(function() {
         editorFactory.copyTemplate.should.have.not.been.called;

@@ -43,7 +43,7 @@ describe('directive: weekly-templates', function() {
         $default: sinon.stub(),
         weeklyTemplatesFullView: true
     };
-    editorFactory = {copyProduct: sinon.stub()};
+    editorFactory = {addFromProduct: sinon.stub()};
 
     $compile = _$compile_;
     $rootScope = _$rootScope_;
@@ -133,7 +133,7 @@ describe('directive: weekly-templates', function() {
     it('should copy template',function(){
       var product = {}
       $scope.select(product);
-      editorFactory.copyProduct.should.have.been.calledWith(product);
+      editorFactory.addFromProduct.should.have.been.calledWith(product);
     });
   });
 

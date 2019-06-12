@@ -3,7 +3,7 @@
 angular.module('risevision.editor.services')
   .constant('HTML_PRESENTATION_TYPE', 'HTML Template')
   .factory('presentationUtils', ['HTML_TEMPLATE_TYPE', 'HTML_PRESENTATION_TYPE',
-    '$state', '$window', 'checkTemplateAccess', 'plansFactory',
+    '$state', '$window',
     function (HTML_TEMPLATE_TYPE, HTML_PRESENTATION_TYPE, $state, $window) {
       var factory = {};
 

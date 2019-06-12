@@ -17,6 +17,7 @@ describe('app:', function() {
           return {
             presentation: 'copyPresentation',
             addPresentationModal: sinon.spy(),
+            addFromProductId: sinon.spy(),
             getPresentation: sinon.spy(),
             copyTemplate: sinon.spy(),
             newPresentation: sinon.spy()
@@ -25,7 +26,7 @@ describe('app:', function() {
 
         $provide.service('templateEditorFactory',function(){
           return {
-            createFromTemplate: sinon.spy(),
+            addFromProduct: sinon.spy(),
             createFromProductId: sinon.spy(),
             getPresentation: sinon.spy()
           };
@@ -64,16 +65,26 @@ describe('app:', function() {
     it('should register state',function(){
       var state = $state.get('apps.editor.add');
       expect(state).to.be.ok;
-      expect(state.url).to.equal('/editor/add');
+      expect(state.url).to.equal('/editor/add/:productId');
       expect(state.controller).to.be.ok;
     });
 
     it('should init add presentation modal',function(done){
-      $state.get('apps.editor.add').controller[3]($state, canAccessApps, editorFactory);
+      $state.get('apps.editor.add').controller[5]($state, {}, $location, canAccessApps, editorFactory);
       setTimeout(function() {
         canAccessApps.should.have.been.called;
 
         editorFactory.addPresentationModal.should.have.been.called;
+        done();
+      }, 10);
+    });
+
+    it('should add by productId',function(done){
+      $state.get('apps.editor.add').controller[5]($state, { productId: 'productId' }, $location, canAccessApps, editorFactory);
+      setTimeout(function() {
+        canAccessApps.should.have.been.called;
+
+        editorFactory.addFromProductId.should.have.been.calledWith('productId');
         done();
       }, 10);
     });
@@ -83,7 +94,7 @@ describe('app:', function() {
     it('should register state',function(){
       var state = $state.get('apps.editor.workspace');
       expect(state).to.be.ok;
-      expect(state.url).to.equal('/editor/workspace/:presentationId/?copyOf');
+      expect(state.url).to.equal('/editor/workspace/:presentationId?copyOf');
       expect(state.controller).to.be.ok;
       expect(state.params).to.be.ok;
       expect(state.abstract).to.be.true;
@@ -227,7 +238,7 @@ describe('app:', function() {
     });
 
     it('should only check access once', function(done) {
-      $state.get('apps.editor.templates.edit').resolve.presentationInfo[3]({}, canAccessApps, templateEditorFactory);
+      $state.get('apps.editor.templates.edit').resolve.presentationInfo[4]({}, canAccessApps, editorFactory, templateEditorFactory);
       setTimeout(function() {
         canAccessApps.should.have.been.called.once;
         canAccessApps.should.have.been.calledWith();
@@ -242,7 +253,7 @@ describe('app:', function() {
         productId: 'productId'
       }
 
-      $state.get('apps.editor.templates.edit').resolve.presentationInfo[3]($stateParams, canAccessApps, templateEditorFactory);
+      $state.get('apps.editor.templates.edit').resolve.presentationInfo[4]($stateParams, canAccessApps, editorFactory, templateEditorFactory);
       setTimeout(function() {
         canAccessApps.should.have.been.calledWith(true);
 
@@ -256,7 +267,7 @@ describe('app:', function() {
           presentationId: 'presentationId'
         };
 
-        $state.get('apps.editor.templates.edit').resolve.presentationInfo[3]($stateParams, canAccessApps, templateEditorFactory)
+        $state.get('apps.editor.templates.edit').resolve.presentationInfo[4]($stateParams, canAccessApps, editorFactory, templateEditorFactory)
           .then(function() {
             templateEditorFactory.getPresentation.should.have.been.calledWith('presentationId');
 
@@ -271,9 +282,9 @@ describe('app:', function() {
           productDetails: 'productDetails'
         };
 
-        $state.get('apps.editor.templates.edit').resolve.presentationInfo[3]($stateParams, canAccessApps, templateEditorFactory)
+        $state.get('apps.editor.templates.edit').resolve.presentationInfo[4]($stateParams, canAccessApps, editorFactory, templateEditorFactory)
           .then(function() {
-            templateEditorFactory.createFromTemplate.should.have.been.calledWith('productDetails');
+            templateEditorFactory.addFromProduct.should.have.been.calledWith('productDetails');
 
             done();
           });
@@ -285,9 +296,9 @@ describe('app:', function() {
           productId: 'templateId'
         };
 
-        $state.get('apps.editor.templates.edit').resolve.presentationInfo[3]($stateParams, canAccessApps, templateEditorFactory)
+        $state.get('apps.editor.templates.edit').resolve.presentationInfo[4]($stateParams, canAccessApps, editorFactory, templateEditorFactory)
           .then(function() {
-            templateEditorFactory.createFromProductId.should.have.been.calledWith('templateId');
+            editorFactory.addFromProductId.should.have.been.calledWith('templateId');
 
             done();
           });

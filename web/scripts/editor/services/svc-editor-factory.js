@@ -8,12 +8,12 @@ angular.module('risevision.editor.services')
   )
   .factory('editorFactory', ['$q', '$state', 'userState', 'userAuthFactory',
     'presentation', 'presentationParser', 'distributionParser',
-    'presentationTracker', 'store', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
+    'presentationTracker', 'store', 'checkTemplateAccess', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
     'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT',
     '$modal', '$rootScope', '$window', 'scheduleFactory', 'plansFactory', 'processErrorCode', 'messageBox',
     '$templateCache', '$log', 'presentationUtils',
     function ($q, $state, userState, userAuthFactory, presentation,
-      presentationParser, distributionParser, presentationTracker, store,
+      presentationParser, distributionParser, presentationTracker, store, checkTemplateAccess,
       VIEWER_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED,
       DEFAULT_LAYOUT, $modal, $rootScope, $window,
       scheduleFactory, plansFactory, processErrorCode, messageBox, $templateCache, $log,
@@ -402,19 +402,53 @@ angular.module('risevision.editor.services')
           }
         });
 
-        modalInstance.result.then(factory.copyProduct);
+        modalInstance.result.then(factory.addFromProduct);
       };
 
-      factory.copyProduct = function (productDetails) {
+      factory.addFromProductId = function (productId) {
+        return store.product.get(productId)
+          .then(function (productDetails) {
+            if (productDetails.productCode) {
+              return $q.resolve(productDetails);
+            } else {
+              return $q.reject({
+                result: {
+                  error: {
+                    message: 'Invalid Product Id'
+                  }
+                }
+              });
+            }
+          })
+          .then(function (productDetails) {
+            return checkTemplateAccess(productDetails.productCode)
+              .then(function () {
+                return factory.addFromProduct(productDetails);
+              })
+              .catch(function (err) {
+                plansFactory.showPlansModal('editor-app.templatesLibrary.access-warning');
+
+                $state.go('apps.editor.list');
+                $log.error('checkTemplateAccess', err);
+                return $q.reject(err);
+              });
+          }, function (err) {
+            _showErrorMessage('add', err);
+            $state.go('apps.editor.list');
+            return $q.reject(err);
+          });
+      };
+
+      factory.addFromProduct = function (productDetails) {
         if (!productDetails || (!productDetails.rvaEntityId && !presentationUtils.isHtmlTemplate(
             productDetails))) {
           return;
         }
 
         if (!presentationUtils.isHtmlTemplate(productDetails)) {
-          factory.copyTemplate(productDetails.rvaEntityId);
+          return factory.copyTemplate(productDetails.rvaEntityId);
         } else {
-          $state.go('apps.editor.templates.edit', {
+          return $state.go('apps.editor.templates.edit', {
             presentationId: 'new',
             productId: productDetails.productId,
             productDetails: productDetails

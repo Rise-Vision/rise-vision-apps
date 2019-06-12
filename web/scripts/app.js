@@ -343,19 +343,27 @@ angular.module('risevision.apps', [
         })
 
         .state('apps.editor.add', {
-          url: '/editor/add',
-          controller: ['$state', 'canAccessApps', 'editorFactory',
-            function ($state, canAccessApps, editorFactory) {
+          url: '/editor/add/:productId',
+          controller: ['$state', '$stateParams', '$location', 'canAccessApps', 'editorFactory',
+            function ($state, $stateParams, $location, canAccessApps, editorFactory) {
               canAccessApps().then(function () {
-                editorFactory.addPresentationModal();
-                $state.go('apps.editor.list');
+                if ($stateParams.productId) {
+                  editorFactory.addFromProductId($stateParams.productId)
+                    .then(function() {
+                      $location.replace();
+                    });
+                } else {
+                  editorFactory.addPresentationModal();
+
+                  $state.go('apps.editor.list');                  
+                }
               });
             }
           ]
         })
 
         .state('apps.editor.workspace', {
-          url: '/editor/workspace/:presentationId/?copyOf',
+          url: '/editor/workspace/:presentationId?copyOf',
           abstract: true,
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get('partials/editor/workspace.html');
@@ -426,8 +434,8 @@ angular.module('risevision.apps', [
             productDetails: null
           },
           resolve: {
-            presentationInfo: ['$stateParams', 'canAccessApps', 'templateEditorFactory',
-              function ($stateParams, canAccessApps, templateEditorFactory) {
+            presentationInfo: ['$stateParams', 'canAccessApps', 'editorFactory', 'templateEditorFactory',
+              function ($stateParams, canAccessApps, editorFactory, templateEditorFactory) {
                 var signup = false;
 
                 if ($stateParams.presentationId === 'new' && $stateParams.productId) {
@@ -437,9 +445,9 @@ angular.module('risevision.apps', [
                 return canAccessApps(signup).then(function () {
                   if ($stateParams.presentationId === 'new') {
                     if ($stateParams.productDetails) {
-                      return templateEditorFactory.createFromTemplate($stateParams.productDetails);
+                      return templateEditorFactory.addFromProduct($stateParams.productDetails);
                     } else {
-                      return templateEditorFactory.createFromProductId($stateParams.productId);
+                      return editorFactory.addFromProductId($stateParams.productId);
                     }
                   } else {
                     return templateEditorFactory.getPresentation($stateParams.presentationId);
