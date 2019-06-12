@@ -59,7 +59,7 @@
 
     //var templateEditorAddScenarios = new TemplateEditorAddScenarios();
     var financialComponentScenarios = new FinancialComponentScenarios();
-    //var textComponentScenarios = new TextComponentScenarios();
+    var textComponentScenarios = new TextComponentScenarios();
     //var weatherComponentScenarios = new WeatherComponentScenarios();
     //var imageComponentScenarios = new ImageComponentScenarios();
 

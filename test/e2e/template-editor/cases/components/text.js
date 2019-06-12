@@ -4,6 +4,7 @@ var expect = require('rv-common-e2e').expect;
 var PresentationListPage = require('./../../pages/presentationListPage.js');
 var TemplateEditorPage = require('./../../pages/templateEditorPage.js');
 var TextComponentPage = require('./../../pages/components/textComponentPage.js');
+var helper = require('rv-common-e2e').helper;
 
 var TextComponentScenarios = function () {
 
@@ -34,23 +35,38 @@ var TextComponentScenarios = function () {
         expect(textComponentPage.getTextInput().getAttribute('value')).to.eventually.equal("Financial Literacy");
       });
 
-      it('should save the Presentation, reload it, and validate changes were saved', function () {
+      it('should auto-save the Presentation after a text change', function () {
 
         //change text
         expect(textComponentPage.getTextInput().isEnabled()).to.eventually.be.true;
         textComponentPage.getTextInput().clear();
         textComponentPage.getTextInput().sendKeys("Changed Text" + protractor.Key.ENTER);
-    
-        //save presentation
-        presentationsListPage.changePresentationName(presentationName);
-        presentationsListPage.savePresentation();
-        expect(templateEditorPage.getSaveButton().isEnabled()).to.eventually.be.true;
 
-        //log URL for troubeshooting 
+        //save presentation
+        helper.wait(templateEditorPage.getSavingText(), 'Text component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Text component auto-saved');
+
+        //wait for lagging auto-saves
+        browser.sleep(10000);
+        helper.wait(templateEditorPage.getSavedText(), 'Text component auto-saved');
+      });
+
+      it('should auto-save the Presentation, reload it, and validate changes were saved', function () {
+
+        //change presentation name
+        browser.sleep(1000);
+        presentationsListPage.changePresentationName(presentationName);
+
+        //save presentation
+        helper.waitDisappear(templateEditorPage.getDirtyText());
+        helper.wait(templateEditorPage.getSavingText(), 'Text component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Text component auto-saved');
+        browser.sleep(1000);
+
+        //log URL for troubeshooting
         browser.getCurrentUrl().then(function(actualUrl) {
           console.log(actualUrl);
         });
-        browser.sleep(100);
 
         //load presentation
         presentationsListPage.loadPresentation(presentationName);

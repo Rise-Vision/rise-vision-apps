@@ -68,6 +68,10 @@ var TemplateEditorPage = function() {
     return savingText;
   };
 
+  this.getDirtyText = function () {
+    return dirtyText;
+  };
+
   this.getPublishButton = function () {
     return publishButton;
   };

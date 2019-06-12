@@ -55,6 +55,7 @@ var FinancialComponentScenarios = function () {
 
       it('should show open the Instrument Selector', function () {
         helper.wait(financialComponentPage.getAddCurrenciesButton(), 'Add Currencies');
+        helper.waitDisappear(presentationsListPage.getTemplateEditorLoader());
         helper.clickWhenClickable(financialComponentPage.getAddCurrenciesButton(), 'Add Currencies');
         expect(financialComponentPage.getAddInstrumentButton().isPresent()).to.eventually.be.true;
       });
@@ -71,19 +72,17 @@ var FinancialComponentScenarios = function () {
 
         presentationsListPage.changePresentationName(presentationName);
 
-        //log presentaion / company URL for troubeshooting
+        //log presentation / company URL for troubeshooting
         browser.getCurrentUrl().then(function(actualUrl) {
           console.log(actualUrl);
         });
 
         helper.wait(templateEditorPage.getSavingText(), 'Financial component auto-saving');
         helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
-        browser.sleep(100);
 
         presentationsListPage.loadPresentation(presentationName);
         templateEditorPage.selectComponent("Financial - ");
 
-        browser.sleep(500);
         expect(financialComponentPage.getInstrumentItems().count()).to.eventually.equal(4);
       });
     });

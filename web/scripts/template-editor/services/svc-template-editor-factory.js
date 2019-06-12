@@ -14,12 +14,16 @@ angular.module('risevision.template-editor.services')
       var factory = {};
 
       var _setPresentation = function (presentation, isUpdate) {
-        presentation.templateAttributeData =
-          _parseJSON(presentation.templateAttributeData) || {};
+        if (isUpdate) {
+          factory.presentation.id = presentation.id;
+          factory.presentation.revisionStatusName = presentation.revisionStatusName;
+          factory.presentation.changeDate = presentation.changeDate;
+          factory.presentation.changedBy = presentation.changedBy;
+        } else {
+          presentation.templateAttributeData =
+            _parseJSON(presentation.templateAttributeData) || {};
 
-        factory.presentation = presentation;
-
-        if (!isUpdate) {
+          factory.presentation = presentation;
           factory.selected = null;
         }
 
