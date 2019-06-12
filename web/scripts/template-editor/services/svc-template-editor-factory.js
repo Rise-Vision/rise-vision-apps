@@ -64,7 +64,7 @@ angular.module('risevision.template-editor.services')
       };
 
       var _checkFinancialDataLicenseMessage = function (blueprintData) {
-        if (templateEditorUtils.needsFinancialDataLicense(factory.blueprintData)) {
+        if (templateEditorUtils.needsFinancialDataLicense(blueprintData)) {
           templateEditorUtils.showFinancialDataLicenseRequiredMessage();
         }
       };
