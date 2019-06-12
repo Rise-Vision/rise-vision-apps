@@ -1,14 +1,20 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentSlides', ['templateEditorFactory', 'slidesUrlValidationService',
-    function (templateEditorFactory, slidesUrlValidationService) {
+  .directive('templateComponentSlides', ['templateEditorFactory', 'slidesUrlValidationService', '$rootScope',
+    function (templateEditorFactory, slidesUrlValidationService, $rootScope) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-slides.html',
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
+
+          $rootScope.$on('risevision.page.visible', function (pageIsVisible) {
+            if (_directiveIsVisible() && pageIsVisible) {
+              $scope.saveSrc();
+            }
+          });
 
           function _load() {
             $scope.src = _loadAttributeData('src');
@@ -58,8 +64,15 @@ angular.module('risevision.template-editor.directives')
               element.show();
               $scope.componentId = $scope.factory.selected.id;
               _load();
+              $scope.saveSrc(); //validate Slides URL
             }
           });
+
+          function _directiveIsVisible() {
+            // This directive is instantiated once by templateAttributeEditor
+            // It becomes visible when <rise-slides> is selected
+            return $scope.factory.selected && ($scope.factory.selected.type === 'rise-slides');
+          }
 
           function _validateSrcLocally() {
 
@@ -76,6 +89,10 @@ angular.module('risevision.template-editor.directives')
             }
 
             var _src = $scope.src.trim();
+
+            if (_src === '') {
+              return true;
+            }
 
             //check if uses entered Published URL
             if (PUBLISHED_URL_REGEXP.test(_src)) {
