@@ -194,7 +194,7 @@ describe('service: templateEditorUtils:', function() {
       
       $modal.open.should.have.been.calledWithMatch({
         controller: "confirmInstance",
-        windowClass: 'template-editor-message-box financial-data-license-message'
+        windowClass: 'madero-style centered-modal financial-data-license-message'
       });
     });
 

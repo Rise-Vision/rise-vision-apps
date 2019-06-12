@@ -62,7 +62,7 @@ angular.module('risevision.template-editor.services')
 
       svc.showMessageWindow = function (title, message, buttonLabel) {
         var partial = 'partials/template-editor/message-box.html';
-        var windowClass = 'template-editor-message-box';
+        var windowClass = 'madero-style centered-modal';
 
         messageBox(title, message, buttonLabel, windowClass, partial);
       };
@@ -99,13 +99,13 @@ angular.module('risevision.template-editor.services')
         var modalInstance = $modal.open({
           template: $templateCache.get('partials/template-editor/confirm-modal.html'),
           controller: 'confirmInstance',
-          windowClass: 'template-editor-message-box financial-data-license-message',
+          windowClass: 'madero-style centered-modal financial-data-license-message',
           resolve: {
             confirmationTitle: function () {
-              return 'Financial Data License required';
+              return 'Financial Data License Required';
             },
             confirmationMessage: function () {
-              return 'This template requires a Financial Data License to show on your Display(s), if you need one please contact sales@risevision.com to purchase.';
+              return 'This template requires a Financial Data License to show on your Display(s), if you need one please contact <a href="mailto:sales@risevision.com">sales@risevision.com</a> to purchase.';
             },
             confirmationButton: function () {
               return 'Contact Us';
