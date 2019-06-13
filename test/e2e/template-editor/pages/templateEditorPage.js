@@ -20,10 +20,10 @@ var TemplateEditorPage = function() {
   var financialDataLicenseMessage = element(by.css('.financial-data-license-message'));
   var financialDataLicenseCloseButton = element(by.css('#confirmForm .close'));
 
-  var autoSaveXPath = '//div[@id="saveButtonDesktop"]/strong[contains(text(), "TEXT")]';
-  var dirtyText = element(by.xpath(autoSaveXPath.replace('TEXT', 'Dirty')));
-  var savedText = element(by.xpath(autoSaveXPath.replace('TEXT', 'Saved')));
-  var savingText = element(by.xpath(autoSaveXPath.replace('TEXT', 'Saving')));
+  var autoSaveXPath = '//div[@id="autoSavingDesktop"]//div[contains(text(), "TEXT")]';
+  var dirtyText = element(by.xpath(autoSaveXPath.replace('TEXT', 'Unsaved changes')));
+  var savedText = element(by.xpath(autoSaveXPath.replace('TEXT', 'All changes saved')));
+  var savingText = element(by.xpath(autoSaveXPath.replace('TEXT', 'Saving changes')));
 
   this.seePlansLink = function () {
     return seePlansLink;

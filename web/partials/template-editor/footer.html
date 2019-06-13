@@ -1,13 +1,17 @@
 <div>
-  <button id="saveButton" require-role="ce cp" class="btn btn-primary btn-block"
-          ng-disabled="factory.savingPresentation"
-          ng-click="factory.save()">
-    <strong>
-      {{ factory.savingPresentation ?
-        ( 'common.saving' | translate ) : ( 'common.save' | translate )
-      }}
-    </strong>
-  </button>
+  <div class="auto-saving-changes">
+    <div ng-show="!factory.savingPresentation && hasUnsavedChanges">
+      Unsaved changes
+    </div>
+    <div ng-show="factory.savingPresentation">
+      Saving changes...
+    </div>
+    <div class="all-changes-saved-message"
+         ng-show="!factory.savingPresentation && !hasUnsavedChanges">
+      All changes saved
+      <streamline-icon name="checkmark" width="12" height="12"></streamline-icon>
+    </div>
+  </div>
 
   <button id="publishButton" require-role="cp" class="btn btn-primary btn-block"
           ng-disabled="hasUnsavedChanges || !factory.isRevised() || factory.savingPresentation"
