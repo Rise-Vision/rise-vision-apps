@@ -27,14 +27,14 @@ var TemplateAddScenarios = function() {
     });
 
     describe('basic operations', function () {
-      it('should show more than one component', function () {
-        helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
-        expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
-      });
-
       it('should auto-save the Presentation after it has been created', function () {
         helper.wait(templateEditorPage.getSavingText(), 'Component auto-saving');
         helper.wait(templateEditorPage.getSavedText(), 'Component auto-saved');
+      });
+
+      it('should show more than one component', function () {
+        helper.wait(templateEditorPage.getAttributeList(), 'Attribute List');
+        expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
       });
 
       it('should edit the Presentation name', function () {

@@ -38,6 +38,11 @@ var FinancialComponentScenarios = function () {
         templateEditorPage.dismissFinancialDataLicenseMessage();
       });
 
+      it('should auto-save the Presentation after it has been created', function () {
+        helper.wait(templateEditorPage.getSavingText(), 'Component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Component auto-saved');
+      });
+
       it('should show one Financial Component', function () {
         templateEditorPage.selectComponent("Financial - ");
         expect(financialComponentPage.getInstrumentItems().count()).to.eventually.equal(3);
@@ -46,11 +51,6 @@ var FinancialComponentScenarios = function () {
       it('should auto-save the component after the instruments are loaded', function () {
         helper.wait(templateEditorPage.getSavingText(), 'Financial component auto-saving');
         helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
-
-        helper.wait(autoScheduleModalPage.getAutoScheduleModal());
-        autoScheduleModalPage.getCloseButton().click();
-        helper.waitDisappear(autoScheduleModalPage.getAutoScheduleModal());
-        helper.waitDisappear(presentationsListPage.getTemplateEditorLoader());
       });
 
       it('should show open the Instrument Selector', function () {
@@ -72,14 +72,14 @@ var FinancialComponentScenarios = function () {
 
         presentationsListPage.changePresentationName(presentationName);
 
+        helper.wait(templateEditorPage.getSavingText(), 'Financial component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
+
         //log presentation / company URL for troubleshooting
         browser.getCurrentUrl().then(function(actualUrl) {
           console.log(actualUrl);
         });
         browser.sleep(100);
-
-        helper.wait(templateEditorPage.getSavingText(), 'Financial component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
 
         presentationsListPage.loadPresentation(presentationName);
         templateEditorPage.selectComponent("Financial - ");
