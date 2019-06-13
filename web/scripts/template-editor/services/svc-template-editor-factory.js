@@ -98,7 +98,7 @@ angular.module('risevision.template-editor.services')
 
             _checkFinancialDataLicenseMessage(factory.blueprintData);
 
-            return factory.addPresentation();
+            //return factory.addPresentation();
           })
           .then(null, function (e) {
             _showErrorMessage('add', e);
