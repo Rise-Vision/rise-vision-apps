@@ -12,7 +12,6 @@ var TemplateAddScenarios = function() {
   describe('Template Editor Add', function () {
     var testStartTime = Date.now();
     var presentationName = 'Example Presentation - ' + testStartTime;
-    var presentationName2 = 'Example Presentation 2 - ' + testStartTime;
     var presentationsListPage;
     var templateEditorPage;
     var autoScheduleModalPage;
@@ -22,6 +21,7 @@ var TemplateAddScenarios = function() {
       templateEditorPage = new TemplateEditorPage();
       autoScheduleModalPage = new AutoScheduleModalPage();
 
+      presentationsListPage.loadCurrentCompanyPresentationList();
       presentationsListPage.createNewPresentationFromTemplate('"Example Financial Template V3"', 'example-financial-template-v3');
       templateEditorPage.dismissFinancialDataLicenseMessage();
     });
@@ -32,34 +32,17 @@ var TemplateAddScenarios = function() {
         expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
       });
 
+      it('should auto-save the Presentation after it has been created', function () {
+        helper.wait(templateEditorPage.getSavingText(), 'Component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Component auto-saved');
+      });
+
       it('should edit the Presentation name', function () {
         presentationsListPage.changePresentationName(presentationName);
         expect(templateEditorPage.getPresentationName().getAttribute('value')).to.eventually.equal(presentationName);
       });
 
-      it('should auto-save the Presentation', function () {
-        helper.wait(templateEditorPage.getSavingText(), 'Component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Component auto-saved');
-      });
-
-      it('should auto create Schedule when saving Presentation', function () {
-        browser.sleep(500);
-
-        helper.wait(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
-
-        expect(autoScheduleModalPage.getAutoScheduleModal().isDisplayed()).to.eventually.be.true;
-
-        helper.clickWhenClickable(autoScheduleModalPage.getCloseButton(), 'Auto Schedule Modal - Close Button');
-
-        helper.waitDisappear(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
-        helper.waitDisappear(presentationsListPage.getTemplateEditorLoader());
-      });
-
-      it('should edit the Presentation name again', function () {
-        // Since the first time a Presentation is saved it's also Published, to later test the publish button an additional Save is needed
-        presentationsListPage.changePresentationName(presentationName2);
-        expect(templateEditorPage.getPresentationName().getAttribute('value')).to.eventually.equal(presentationName2);
-
+      it('should auto-save the Presentation after the name has changed', function () {
         helper.wait(templateEditorPage.getSavingText(), 'Component auto-saving');
         helper.wait(templateEditorPage.getSavedText(), 'Component auto-saved');
       });
@@ -72,7 +55,7 @@ var TemplateAddScenarios = function() {
       });
 
       it('should load the newly created Presentation', function () {
-        presentationsListPage.loadPresentation(presentationName2);
+        presentationsListPage.loadPresentation(presentationName);
 
         expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
         expect(templateEditorPage.getImageComponentEdit().isPresent()).to.eventually.be.true;

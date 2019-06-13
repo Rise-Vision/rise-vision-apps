@@ -57,9 +57,10 @@
       _selectSubCompany();
     });
 
+    // Text component scenarios deal with the auto schedule modal, so they always should come first.
+    var textComponentScenarios = new TextComponentScenarios();
     var templateEditorAddScenarios = new TemplateEditorAddScenarios();
     //var financialComponentScenarios = new FinancialComponentScenarios();
-    //var textComponentScenarios = new TextComponentScenarios();
     //var weatherComponentScenarios = new WeatherComponentScenarios();
     //var imageComponentScenarios = new ImageComponentScenarios();
 
