@@ -39,8 +39,8 @@ var FinancialComponentScenarios = function () {
       });
 
       it('should auto-save the Presentation after it has been created', function () {
-        helper.wait(templateEditorPage.getSavingText(), 'Component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Component auto-saved');
+        helper.wait(templateEditorPage.getSavingText(), 'Financial component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
       });
 
       it('should show one Financial Component', function () {

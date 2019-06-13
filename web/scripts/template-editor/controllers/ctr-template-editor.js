@@ -92,7 +92,6 @@ angular.module('risevision.template-editor.controllers')
             _programSave();
           } else {
             _lastSavedTimestamp = _getCurrentTimestamp();
-            console.log('Saving: ' + _lastSavedTimestamp);
 
             $scope.factory.save();
           }
