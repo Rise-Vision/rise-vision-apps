@@ -190,6 +190,7 @@ describe('controller: TemplateEditor', function() {
   describe('unsaved changes', function () {
     it('should flag unsaved changes to presentation', function () {
       expect($scope.hasUnsavedChanges).to.be.false;
+      factory.presentation.id = '1234';
       factory.presentation.name = 'New Name';
       $scope.$apply();
       $timeout.flush();
@@ -198,6 +199,7 @@ describe('controller: TemplateEditor', function() {
     });
 
     it('should clear unsaved changes flag after saving presentation', function () {
+      factory.presentation.id = '1234';
       factory.presentation.name = 'New Name';
       $scope.$apply();
       $rootScope.$broadcast('presentationUpdated');
@@ -207,6 +209,7 @@ describe('controller: TemplateEditor', function() {
     });
 
     it('should clear unsaved changes when deleting the presentation', function () {
+      factory.presentation.id = '1234';
       factory.presentation.name = 'New Name';
       $scope.$apply();
       $rootScope.$broadcast('presentationDeleted');
@@ -215,6 +218,7 @@ describe('controller: TemplateEditor', function() {
     });
 
     it('should not flag unsaved changes when publishing', function () {
+      factory.presentation.id = '1234';
       factory.presentation.revisionStatusName = 'Published';
       factory.presentation.changeDate = new Date();
       factory.presentation.changedBy = 'newUsername';
@@ -224,6 +228,7 @@ describe('controller: TemplateEditor', function() {
     });
 
     it('should notify unsaved changes when changing URL', function () {
+      factory.presentation.id = '1234';
       factory.presentation.name = 'New Name';
       $scope.$apply();
       $timeout.flush();
@@ -257,6 +262,7 @@ describe('controller: TemplateEditor', function() {
     });
 
     it('should not notify unsaved changes when changing URL if state is in Template Editor', function () {
+      factory.presentation.id = '1234';
       factory.presentation.name = 'New Name';
       $scope.$apply();
       var modalOpenStub = sinon.stub($modal, 'open', function() {
@@ -274,6 +280,7 @@ describe('controller: TemplateEditor', function() {
     });
 
     it('should notify unsaved changes when closing window', function () {
+      factory.presentation.id = '1234';
       factory.presentation.name = 'New Name';
       $scope.$apply();
       $timeout.flush();
