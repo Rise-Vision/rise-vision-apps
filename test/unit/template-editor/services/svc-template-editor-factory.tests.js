@@ -126,15 +126,6 @@ describe('service: templateEditorFactory:', function() {
   });
 
   describe('addFromProduct:', function() {
-    beforeEach(function() {
-      sandbox.stub(presentation, 'add').returns(Q.resolve({
-        item: {
-          name: 'Test Presentation',
-          id: 'presentationId'
-        }
-      }));
-    });
-
     it('should create a new presentation', function(done) {
       $httpBackend.when('GET', blueprintUrl).respond(200, {
         components: [
@@ -157,21 +148,7 @@ describe('service: templateEditorFactory:', function() {
         expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_PRESENTATION_TYPE);
         expect(templateEditorFactory.blueprintData.components.length).to.equal(1);
 
-        expect(templateEditorUtils.showMessageWindow).to.not.have.been.called;
-        expect(templateEditorFactory.savingPresentation).to.be.true;
-        expect(templateEditorFactory.loadingPresentation).to.be.true;
-
-        setTimeout(function(){
-          expect($state.go).to.have.been.calledWith('apps.editor.templates.edit');
-          expect(presentation.add.getCall(0).args[0].templateAttributeData).to.equal('{}');
-          expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
-          expect(templateEditorFactory.savingPresentation).to.be.false;
-          expect(templateEditorFactory.loadingPresentation).to.be.false;
-          expect(templateEditorFactory.errorMessage).to.not.be.ok;
-          expect(templateEditorFactory.apiError).to.not.be.ok;
-
-          done();
-        },10);
+        done();
       });
     });
 
@@ -312,6 +289,47 @@ describe('service: templateEditorFactory:', function() {
   });
 
   describe('updatePresentation:',function(){
+    it('should update the presentation',function(done){
+      sandbox.stub(presentation, 'update').returns(Q.resolve({
+        item: {
+          name: 'Test Presentation',
+          id: 'presentationId'
+        }
+      }));
+
+      $httpBackend.when('GET', blueprintUrl).respond(200, {});
+      setTimeout(function() {
+        $httpBackend.flush();
+      });
+
+      templateEditorFactory.addFromProduct({ productCode: 'test-id', name: 'Test HTML Template' });
+      expect(templateEditorFactory.presentation.id).to.be.undefined;
+      expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
+      expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
+
+      templateEditorFactory.updatePresentation()
+        .then(function() {
+          expect(templateEditorUtils.showMessageWindow).to.not.have.been.called;
+          expect(templateEditorFactory.savingPresentation).to.be.true;
+          expect(templateEditorFactory.loadingPresentation).to.be.true;
+
+          setTimeout(function(){
+            expect(presentation.update.getCall(0).args[1].templateAttributeData).to.equal('{}');
+            expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
+            expect(templateEditorFactory.savingPresentation).to.be.false;
+            expect(templateEditorFactory.loadingPresentation).to.be.false;
+            expect(templateEditorFactory.errorMessage).to.not.be.ok;
+            expect(templateEditorFactory.apiError).to.not.be.ok;
+
+            done();
+          },10);
+        })
+        .then(null, function(err) {
+          done(err);
+        })
+        .then(null, done);
+    });
+
     it('should show an error if fails to update presentation',function(done){
       sandbox.stub(presentation, 'update').returns(Q.reject({ name: 'Test Presentation' }));
 
