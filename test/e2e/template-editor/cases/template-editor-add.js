@@ -2,7 +2,6 @@
 var expect = require('rv-common-e2e').expect;
 var PresentationListPage = require('./../pages/presentationListPage.js');
 var TemplateEditorPage = require('./../pages/templateEditorPage.js');
-var AutoScheduleModalPage = require('./../../schedules/pages/autoScheduleModalPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var TemplateAddScenarios = function() {
@@ -14,12 +13,10 @@ var TemplateAddScenarios = function() {
     var presentationName = 'Example Presentation - ' + testStartTime;
     var presentationsListPage;
     var templateEditorPage;
-    var autoScheduleModalPage;
 
     before(function () {
       presentationsListPage = new PresentationListPage();
       templateEditorPage = new TemplateEditorPage();
-      autoScheduleModalPage = new AutoScheduleModalPage();
 
       presentationsListPage.loadCurrentCompanyPresentationList();
       presentationsListPage.createNewPresentationFromTemplate('"Example Financial Template V3"', 'example-financial-template-v3');
