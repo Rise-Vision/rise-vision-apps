@@ -50,18 +50,13 @@ angular.module('risevision.template-editor.directives')
           $scope.saveSrc = function () {
             if (_validateSrcLocally()) {
 
+              $scope.setAttributeData($scope.componentId, 'src', $scope.src);
+
               $scope.spinner = true;
 
               slidesUrlValidationService.validate($scope.src)
                 .then(function (result) {
-                  if (result === 'VALID') {
-                    $scope.setAttributeData($scope.componentId, 'src', $scope.src);
-                  } 
-                  
                   $scope.validationResult = result;
-                })
-                .catch(function () {
-                  $scope.setAttributeData($scope.componentId, 'src', $scope.src);
                 })
                 .finally(function () {
                   $scope.spinner = false;
