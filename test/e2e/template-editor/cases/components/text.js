@@ -48,7 +48,7 @@ var TextComponentScenarios = function () {
       it('should auto-save the Presentation after it has been created', function () {
         helper.waitDisappear(templateEditorPage.getDirtyText());
         helper.waitDisappear(templateEditorPage.getSavingText());
-        helper.wait(templateEditorPage.getSavedText(), 'Component auto-saved');
+        helper.wait(templateEditorPage.getSavedText(), 'Text component auto-saved');
       });
 
       it('should open properties of Text Component', function () {
