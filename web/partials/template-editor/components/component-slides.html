@@ -1,18 +1,23 @@
 <div class="attribute-editor-component" rv-spinner rv-spinner-key="slides-editor-loader" rv-spinner-start-active="1">
   <div class="row attribute-row-first">
-    <label class="control-label">Google Slides url</label>
-    <div ng-class="{ 'has-error': validationError }">
-      <input type="text" class="form-control" ng-model="src" placeholder="Enter URL" ng-keypress="handleKeyPressSrc($event)" ng-model-options="{ debounce: 1000 }" ng-change="saveSrc()" >
-      <p class="help-block" ng-switch on="validationError">
+    <div class="form-group has-feedback" ng-class="{ 'has-error': validationResult && validationResult !== 'VALID', 'has-success': validationResult === 'VALID' }">
+      <label class="control-label" for="urlInput">Google Slides URL</label>
+      <input type="text" class="form-control" id="urlInput" ng-model="src" placeholder="Enter URL" ng-keypress="handleKeyPressSrc($event)" ng-model-options="{ debounce: 1000 }" ng-change="saveSrc()" >
+      <streamline-icon class="overlay-icon form-control-feedback" aria-hidden="true" name="{{validationResult && validationResult !== 'VALID' ? 'exclamation' : 'checkmark'}}" width="14" height="12"></streamline-icon>
+      <p class="help-block" ng-switch on="validationResult">
         <span ng-switch-when="DELETED">Your Google Slideshow is no longer accessible, please check if it’s been deleted.</span>
-        <span ng-switch-when="NOT_PUBLIC">To use this Google Slideshow it must be publicly accessible. <a href="https://support.google.com/docs/answer/183965?co=GENIE.Platform%3DDesktop&hl=en" target="_blank">How to make your Google Slideshow public.</a></span>
+        <span ng-switch-when="NOT_PUBLIC">To use this Google Slideshow it must be publicly accessible.</span>
         <span ng-switch-when="INVALID">Invalid URL</span>
+      </p>
+      <p ng-show="validationResult === 'NOT_PUBLIC'">
+        <streamline-icon class="icon-help" aria-hidden="true" name="help" width="15" height="15"></streamline-icon>
+        <a href="https://support.google.com/docs/answer/183965?co=GENIE.Platform%3DDesktop&hl=en" target="_blank">How to make your Google Slideshow public.</a>
       </p>
     </div>
   </div>
   <div class="attribute-row-last">
     <label class="control-label">Show each slide for</label>
-    <div class="input-group">
+    <div class="input-group input-duration">
       <input type="number" class="form-control" ng-model="duration" placeholder="Enter duration" ng-change="saveDiration()">
       <span class="input-group-addon">seconds</span>
     </div>

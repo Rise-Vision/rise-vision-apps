@@ -56,9 +56,9 @@ angular.module('risevision.template-editor.directives')
                 .then(function (result) {
                   if (result === 'VALID') {
                     $scope.setAttributeData($scope.componentId, 'src', $scope.src);
-                  } else {
-                    $scope.validationError = result;
-                  }
+                  } 
+                  
+                  $scope.validationResult = result;
                 })
                 .catch(function () {
                   $scope.setAttributeData($scope.componentId, 'src', $scope.src);
@@ -92,7 +92,7 @@ angular.module('risevision.template-editor.directives')
           function _validateSrcLocally() {
 
             //clear the error
-            $scope.validationError = '';
+            $scope.validationResult = '';
 
             var PUBLISHED_URL_REGEXP =
               /^(http:|https:)\/\/docs\.google\.com\/presentation\/d\/e\/([^\s]+)\/(pub|embed)(\?|$)/i;
@@ -128,7 +128,7 @@ angular.module('risevision.template-editor.directives')
               return true;
             }
 
-            $scope.validationError = 'INVALID';
+            $scope.validationResult = 'INVALID';
             return false;
           }
 
