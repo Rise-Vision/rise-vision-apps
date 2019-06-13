@@ -105,6 +105,10 @@ angular.module('risevision.template-editor.directives')
 
             var _src = $scope.src.trim();
 
+            if (_src === '') {
+              return true;
+            }
+
             //check if uses entered Published URL
             if (PUBLISHED_URL_REGEXP.test(_src)) {
               //nothing to do here - URL is formatted correctly

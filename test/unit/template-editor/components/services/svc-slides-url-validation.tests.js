@@ -24,6 +24,21 @@ describe('service: slidesUrlValidationService:', function() {
   });
 
   describe('validate', function() {
+
+    it("should return 'VALID' if url is empty", function( done ) {
+      var urlToValidate = "";
+
+      slidesUrlValidationService.validate(urlToValidate)
+        .then(function (result) {
+          expect(result).to.be.equal('VALID');
+
+          done();
+        })
+        .catch(function(err) {
+          fail('Unexpected ' + err);
+        });
+    });
+
     it("should return 'VALID' if final url is equal to the url to validate", function( done ) {
       var urlToValidate = "https://docs.google.com/presentation/d/e/2PACX-1vRK9noBs7XGTp-jRNkkxSR_bvTIPFq415ff2EKZIpUAOQJcYoV42XtxPGnGEd6bvjl36yZvjcn_eYDS/embed";
 

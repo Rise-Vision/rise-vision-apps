@@ -7,6 +7,10 @@ angular.module('risevision.template-editor.services')
         proxyUrl = 'https://proxy.risevision.com/';
 
       factory.validate = function (url) {
+        if (url === '') {
+          return $q.resolve('VALID');
+        }
+
         var deferred = $q.defer();
 
         $http.get(proxyUrl + url)

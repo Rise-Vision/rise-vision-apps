@@ -349,13 +349,13 @@ angular.module('risevision.apps', [
               canAccessApps().then(function () {
                 if ($stateParams.productId) {
                   editorFactory.addFromProductId($stateParams.productId)
-                    .then(function() {
+                    .then(function () {
                       $location.replace();
                     });
                 } else {
                   editorFactory.addPresentationModal();
 
-                  $state.go('apps.editor.list');                  
+                  $state.go('apps.editor.list');
                 }
               });
             }

@@ -28,6 +28,13 @@ var FinancialComponentScenarios = function () {
 
     describe('basic operations', function () {
 
+      it('should warn users that a Financial Data License is required',function() {
+        helper.wait(templateEditorPage.getFinancialDataLicenseMessage(),'Financial Data License Message');
+        expect(templateEditorPage.getFinancialDataLicenseMessage().isDisplayed()).to.eventually.be.true;
+
+        templateEditorPage.dismissFinancialDataLicenseMessage();
+      });
+
       it('should show one Financial Component', function () {
         templateEditorPage.selectComponent("Financial - ");
         expect(financialComponentPage.getInstrumentItems().count()).to.eventually.equal(3);

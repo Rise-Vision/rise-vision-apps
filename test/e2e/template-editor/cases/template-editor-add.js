@@ -19,8 +19,10 @@ var TemplateAddScenarios = function() {
     before(function () {
       presentationsListPage = new PresentationListPage();
       templateEditorPage = new TemplateEditorPage();
-      presentationsListPage.createNewPresentationFromTemplate('"Example Financial Template V3"', 'example-financial-template-v3');
       autoScheduleModalPage = new AutoScheduleModalPage();
+
+      presentationsListPage.createNewPresentationFromTemplate('"Example Financial Template V3"', 'example-financial-template-v3');
+      templateEditorPage.dismissFinancialDataLicenseMessage();
     });
 
     describe('basic operations', function () {

@@ -51,6 +51,8 @@ describe('service: templateEditorFactory:', function() {
 
     $provide.factory('templateEditorUtils', function() {
       return {
+        needsFinancialDataLicense: sandbox.spy(function() { return needsFinancialDataLicense; }),
+        showFinancialDataLicenseRequiredMessage: sandbox.spy(),
         showMessageWindow: sandbox.stub()
       };
     });
@@ -78,7 +80,8 @@ describe('service: templateEditorFactory:', function() {
   }));
 
   var $state, $httpBackend, $modal, templateEditorFactory, templateEditorUtils, presentation, processErrorCode,
-    HTML_PRESENTATION_TYPE, blueprintUrl, storeAuthorize, checkTemplateAccessSpy, store, plansFactory, scheduleFactory;
+    HTML_PRESENTATION_TYPE, blueprintUrl, storeAuthorize, checkTemplateAccessSpy, store, plansFactory, scheduleFactory,
+    needsFinancialDataLicense;
 
   beforeEach(function() {
     inject(function($injector, checkTemplateAccess) {
@@ -87,6 +90,7 @@ describe('service: templateEditorFactory:', function() {
       $modal = $injector.get('$modal');
       templateEditorFactory = $injector.get('templateEditorFactory');
       checkTemplateAccessSpy = checkTemplateAccess;
+      needsFinancialDataLicense = false;
 
       presentation = $injector.get('presentation');
       plansFactory = $injector.get('plansFactory');
@@ -138,6 +142,36 @@ describe('service: templateEditorFactory:', function() {
         expect(templateEditorFactory.presentation.name).to.equal('Copy of Test HTML Template');
         expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_PRESENTATION_TYPE);
         expect(templateEditorFactory.blueprintData.components.length).to.equal(1);
+
+        done();
+      });
+    });
+
+    it('should open Financial Data License message if Template uses rise-data-financial', function(done) {
+      $httpBackend.when('GET', blueprintUrl).respond(200, {
+        components: [
+          {
+            type: 'rise-data-financial',
+            id: 'rise-data-financial-01',
+            attributes: {}
+          }
+        ]
+      });
+
+      setTimeout(function() {
+        $httpBackend.flush();
+      });
+
+      needsFinancialDataLicense = true;
+
+      templateEditorFactory.addFromProduct({ productCode: 'test-id', name: 'Test HTML Template' }).then(function () {
+        expect(templateEditorFactory.presentation.id).to.be.undefined;
+        expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
+        expect(templateEditorFactory.presentation.name).to.equal('Copy of Test HTML Template');
+        expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_PRESENTATION_TYPE);
+        expect(templateEditorFactory.blueprintData.components.length).to.equal(1);
+
+        expect(templateEditorUtils.showFinancialDataLicenseRequiredMessage).to.have.been.called;
 
         done();
       });

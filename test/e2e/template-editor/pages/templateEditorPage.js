@@ -17,6 +17,8 @@ var TemplateEditorPage = function() {
   var imageComponent = element(by.xpath('(' + imageComponentSelector + ')[1]'));
   var imageComponentEdit = element(by.xpath('(' + imageComponentSelector + '/div/a)[1]'));
   var backToComponentsButton = element(by.css('[ng-click="onBackButton();"]'));
+  var financialDataLicenseMessage = element(by.css('.financial-data-license-message'));
+  var financialDataLicenseCloseButton = element(by.css('#confirmForm .close'));
 
   this.seePlansLink = function () {
     return seePlansLink;
@@ -73,6 +75,20 @@ var TemplateEditorPage = function() {
   this.getBackToComponentsButton = function () {
     return backToComponentsButton;
   };
+
+  this.getFinancialDataLicenseMessage = function() {
+    return financialDataLicenseMessage;
+  };
+
+  this.getFinancialDataLicenseCloseButton = function() {
+    return financialDataLicenseCloseButton;
+  }
+
+  this.dismissFinancialDataLicenseMessage = function() {
+    //workaround as protractor doesn't click a modal in front of the preview iframe
+    financialDataLicenseCloseButton.sendKeys(protractor.Key.ESCAPE);
+    // helper.clickWhenClickable(financialDataLicenseCloseButton, 'Financial Data License Close Button');
+  }
 
   this.selectComponent = function (selectorLabel) {
     var componentEditLink = element(by.xpath('//div[div/span[contains(text(), "' + selectorLabel + '")]]/div/a'));
