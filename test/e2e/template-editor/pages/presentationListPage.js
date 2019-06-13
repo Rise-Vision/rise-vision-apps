@@ -55,13 +55,6 @@ var PresentationListPage = function() {
     browser.sleep(500); // Wait for transition to finish
   }
 
-  this.savePresentation = function() {
-    helper.wait(templateEditorPage.getSaveButton(), 'Save Button');
-    helper.clickWhenClickable(templateEditorPage.getSaveButton(), 'Save Button');
-    expect(templateEditorPage.getSaveButton().getText()).to.eventually.equal('Saving');
-    helper.wait(templateEditorPage.getSaveButton(), 'Save Button');
-  }
-
   this.changePresentationName = function(presentationName) {
     expect(templateEditorPage.getPresentationName().isEnabled()).to.eventually.be.false;
     helper.waitDisappear(this.getTemplateEditorLoader());

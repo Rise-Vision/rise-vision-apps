@@ -11,7 +11,6 @@ var TemplateEditorPage = function() {
   var presentationName = element(by.id('presentationName'));
   var editNameButton = element(by.id('editNameButton'));
   var deleteButton = element(by.id('deleteButton'));
-  var saveButton = element(by.id('saveButtonDesktop'));
   var publishButton = element(by.id('publishButtonDesktop'));
   var imageComponentSelector = '//div[div/span[contains(text(), "Image - ")]]';
   var imageComponent = element(by.xpath('(' + imageComponentSelector + ')[1]'));
@@ -59,10 +58,6 @@ var TemplateEditorPage = function() {
 
   this.getDeleteButton = function () {
     return deleteButton;
-  };
-
-  this.getSaveButton = function () {
-    return saveButton;
   };
 
   this.getSavedText = function () {
