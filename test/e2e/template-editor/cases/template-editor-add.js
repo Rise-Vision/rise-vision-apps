@@ -12,6 +12,7 @@ var TemplateAddScenarios = function() {
   describe('Template Editor Add', function () {
     var testStartTime = Date.now();
     var presentationName = 'Example Presentation - ' + testStartTime;
+    var presentationName2 = 'Example Presentation 2 - ' + testStartTime;
     var presentationsListPage;
     var templateEditorPage;
     var autoScheduleModalPage;
@@ -36,10 +37,9 @@ var TemplateAddScenarios = function() {
         expect(templateEditorPage.getPresentationName().getAttribute('value')).to.eventually.equal(presentationName);
       });
 
-      it('should save the Presentation', function () {
-        presentationsListPage.savePresentation();
-
-        expect(templateEditorPage.getSaveButton().isEnabled()).to.eventually.be.true;
+      it('should auto-save the Presentation', function () {
+        helper.wait(templateEditorPage.getSavingText(), 'Component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Component auto-saved');
       });
 
       it('should auto create Schedule when saving Presentation', function () {
@@ -52,20 +52,27 @@ var TemplateAddScenarios = function() {
         helper.clickWhenClickable(autoScheduleModalPage.getCloseButton(), 'Auto Schedule Modal - Close Button');
 
         helper.waitDisappear(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
+        helper.waitDisappear(presentationsListPage.getTemplateEditorLoader());
+      });
+
+      it('should edit the Presentation name again', function () {
+        // Since the first time a Presentation is saved it's also Published, to later test the publish button an additional Save is needed
+        presentationsListPage.changePresentationName(presentationName2);
+        expect(templateEditorPage.getPresentationName().getAttribute('value')).to.eventually.equal(presentationName2);
+
+        helper.wait(templateEditorPage.getSavingText(), 'Component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Component auto-saved');
       });
 
       it('should publish the Presentation', function () {
-        // Since the first time a Presentation is saved it's also Published, to test the button an additional Save is needed
-        presentationsListPage.savePresentation();
-        presentationsListPage.savePresentation();
-
         helper.clickWhenClickable(templateEditorPage.getPublishButton(), 'Publish Button');
-        helper.wait(templateEditorPage.getSaveButton(), 'Save Button (after Publish)');
-        expect(templateEditorPage.getSaveButton().isEnabled()).to.eventually.be.true;
+
+        helper.wait(templateEditorPage.getSavingText(), 'Component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Component auto-saved');
       });
 
       it('should load the newly created Presentation', function () {
-        presentationsListPage.loadPresentation(presentationName);
+        presentationsListPage.loadPresentation(presentationName2);
 
         expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
         expect(templateEditorPage.getImageComponentEdit().isPresent()).to.eventually.be.true;
