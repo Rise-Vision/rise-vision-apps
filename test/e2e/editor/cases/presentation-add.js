@@ -128,6 +128,7 @@ var PresentationAddScenarios = function() {
       helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
       helper.clickWhenClickable(presentationPropertiesModalPage.getDeleteButton(), 'Presentation Delete Button');
 
+      browser.sleep(500);
       helper.wait(presentationPropertiesModalPage.getDeleteForeverButton(), 'Presentation Delete Forever Button');      
       helper.clickWhenClickable(presentationPropertiesModalPage.getDeleteForeverButton(), 'Presentation Delete Forever Button');
 
