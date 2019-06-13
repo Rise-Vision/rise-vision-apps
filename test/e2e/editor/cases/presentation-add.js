@@ -126,6 +126,7 @@ var PresentationAddScenarios = function() {
     it('should delete presentation and return to list', function() {
       workspacePage.getPresentationPropertiesButton().click();
       helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
+      browser.sleep(500);
       helper.clickWhenClickable(presentationPropertiesModalPage.getDeleteButton(), 'Presentation Delete Button');
 
       browser.sleep(500);
