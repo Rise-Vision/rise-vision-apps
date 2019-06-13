@@ -52,7 +52,6 @@ var FinancialComponentScenarios = function () {
 
       it('should show open the Instrument Selector', function () {
         helper.wait(financialComponentPage.getAddCurrenciesButton(), 'Add Currencies');
-        helper.waitDisappear(presentationsListPage.getTemplateEditorLoader());
         helper.clickWhenClickable(financialComponentPage.getAddCurrenciesButton(), 'Add Currencies');
         expect(financialComponentPage.getAddInstrumentButton().isPresent()).to.eventually.be.true;
       });
