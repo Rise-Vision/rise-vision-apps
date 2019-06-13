@@ -97,6 +97,8 @@ angular.module('risevision.template-editor.services')
             factory.blueprintData = blueprintData.data;
 
             _checkFinancialDataLicenseMessage(factory.blueprintData);
+
+            return factory.addPresentation();
           })
           .then(null, function (e) {
             _showErrorMessage('add', e);
@@ -175,11 +177,11 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.save = function () {
-        if (factory.presentation.id) {
-          return factory.updatePresentation();
-        } else {
-          return factory.addPresentation();
+        if (!factory.presentation.id) {
+          $log.error('presentation should already have an id');
         }
+
+        return factory.updatePresentation();
       };
 
       factory.getPresentation = function (presentationId) {
