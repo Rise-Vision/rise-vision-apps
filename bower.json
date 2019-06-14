@@ -15,13 +15,13 @@
     "Sortable": "^1.4.2",
     "angular-truncate": "*",
     "angular-slugify": "^1.0.1",
-    "common-header": "https://github.com/Rise-Vision/common-header.git#v3.10.11",
+    "common-header": "https://github.com/Rise-Vision/common-header.git#fix/angular-1-6-new",
     "oauthio-web": "0.6.2",
     "stretchy": "https://github.com/Rise-Vision/stretchy.git#gh-pages"
   },
   "devDependencies": {
     "q": "1.0.1",
-    "angular-mocks": "~1.5.0"
+    "angular-mocks": "~1.6.0"
   },
   "homepage": "https://github.com/Rise-Vision/rise-vision-apps",
   "authors": [
@@ -30,12 +30,17 @@
   "description": "RiseVision App Launcher",
   "license": "GNU",
   "resolutions": {
-    "angular": "~1.5.0",
+    "angular": "~1.6.0",
     "angular-bootstrap": "~0.13.0",
-    "angular-ui-router": "^0.2.18",
-    "angular-sanitize": "~1.5.0",
-    "angular-mocks": "~1.5.0",
-    "jquery": "^2",
-    "font-awesome": "~4.7.0"
+    "angular-sanitize": "~1.6.0",
+    "angular-mocks": "~1.6.0",
+    "jquery": "^3",
+    "font-awesome": "~4.7.0",
+    "common-header": "fix/angular-1-6-new",
+    "angular-animate": "~1.6.0",
+    "angular-touch": "~1.6.0",
+    "angular-translate": "~2.18.1",
+    "angular-translate-loader-static-files": "~2.18.1",
+    "angular-ui-router": "^0.4.0"
   }
 }

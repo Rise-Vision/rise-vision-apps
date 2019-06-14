@@ -170,7 +170,7 @@ describe('directive: onboarding steps', function() {
           expect($scope.addDisplayCompleted).to.be.true;
           expect($scope.activateDisplayCompleted).to.be.true;
           expect($scope.$$listeners['displayCreated']).to.not.be.ok;
-          expect($scope.$$listeners['displaysLoaded'][0]).to.be.null;
+          expect($scope.$$listeners['displaysLoaded'][0]).to.not.be.ok;
 
           expect($scope.stepCount).to.equal(0);
           expect($rootScope.showOnboarding).to.be.false;
@@ -319,7 +319,7 @@ describe('directive: onboarding steps', function() {
 
           expect($scope.$$listeners['presentationCreated'][0]).to.be.a('function');
           expect($scope.$$listeners['displayCreated'][0]).to.be.a('function');
-          expect($scope.$$listeners['displaysLoaded'][0]).to.be.null;
+          expect($scope.$$listeners['displaysLoaded'][0]).to.not.be.ok;
           expect($scope.$$listeners['displaysLoaded'][1]).to.be.a('function');
 
           done();
@@ -352,11 +352,11 @@ describe('directive: onboarding steps', function() {
 
           expect($rootScope.showOnboarding).to.be.true;
 
-          expect($scope.$$listeners['presentationCreated'][0]).to.be.null;
+          expect($scope.$$listeners['presentationCreated'][0]).to.not.be.ok;
           expect($scope.$$listeners['presentationCreated'][1]).to.be.a('function');
-          expect($scope.$$listeners['displayCreated'][0]).to.be.null;
+          expect($scope.$$listeners['displayCreated'][0]).to.not.be.ok;
           expect($scope.$$listeners['displayCreated'][1]).to.be.a('function');
-          expect($scope.$$listeners['displaysLoaded'][0]).to.be.null;
+          expect($scope.$$listeners['displaysLoaded'][0]).to.not.be.ok;
           expect($scope.$$listeners['displaysLoaded'][1]).to.be.a('function');
 
           done();
