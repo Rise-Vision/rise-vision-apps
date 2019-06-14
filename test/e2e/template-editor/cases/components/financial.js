@@ -36,7 +36,8 @@ var FinancialComponentScenarios = function () {
       });
 
       it('should auto-save the Presentation after it has been created', function () {
-        helper.wait(templateEditorPage.getSavingText(), 'Financial component auto-saving');
+        helper.waitDisappear(templateEditorPage.getDirtyText());
+        helper.waitDisappear(templateEditorPage.getSavingText());
         helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
       });
 

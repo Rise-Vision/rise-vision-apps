@@ -30,7 +30,8 @@ var WeatherComponentScenarios = function () {
     describe('basic operations', function () {
 
       it('should auto-save the Presentation after it has been created', function () {
-        helper.wait(templateEditorPage.getSavingText(), 'Weather component auto-saving');
+        helper.waitDisappear(templateEditorPage.getDirtyText());
+        helper.waitDisappear(templateEditorPage.getSavingText());
         helper.wait(templateEditorPage.getSavedText(), 'Weather component auto-saved');
       });
 

@@ -29,7 +29,8 @@ var ImageComponentScenarios = function () {
 
     describe('basic operations', function () {
       it('should auto-save the Presentation after it has been created', function () {
-        helper.wait(templateEditorPage.getSavingText(), 'Image component auto-saving');
+        helper.waitDisappear(templateEditorPage.getDirtyText());
+        helper.waitDisappear(templateEditorPage.getSavingText());
         helper.wait(templateEditorPage.getSavedText(), 'Image component auto-saved');
       });
 
@@ -77,7 +78,7 @@ var ImageComponentScenarios = function () {
         it('should load Storage page', function () {
           helper.wait(imageComponentPage.getStorageButtonMain(), 'Storage Button Main');
           helper.clickWhenClickable(imageComponentPage.getStorageButtonMain(), 'Storage Button Main');
-          browser.sleep(500);
+          browser.sleep(1000);
           helper.waitDisappear(imageComponentPage.getStorageSpinner(), 'Storage Spinner');
           expect(imageComponentPage.getStorageItems().count()).to.eventually.equal(1);
         });
@@ -142,7 +143,8 @@ var ImageComponentScenarios = function () {
         presentationsListPage.createNewPresentationFromTemplate('"Example Financial Template V3"', 'example-financial-template-v3');
         templateEditorPage.dismissFinancialDataLicenseMessage();
 
-        helper.wait(templateEditorPage.getSavingText(), 'Image component auto-saving');
+        helper.waitDisappear(templateEditorPage.getDirtyText());
+        helper.waitDisappear(templateEditorPage.getSavingText());
         helper.wait(templateEditorPage.getSavedText(), 'Image component auto-saved');
 
         templateEditorPage.selectComponent('Image - ');

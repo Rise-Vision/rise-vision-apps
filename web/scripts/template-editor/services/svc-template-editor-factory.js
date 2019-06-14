@@ -17,7 +17,10 @@ angular.module('risevision.template-editor.services')
 
         if (isUpdate) {
           factory.presentation.id = presentation.id;
+          factory.presentation.companyId = presentation.companyId;
+          factory.presentation.revisionStatus = presentation.revisionStatus;
           factory.presentation.revisionStatusName = presentation.revisionStatusName;
+          factory.presentation.creationDate = presentation.creationDate;
           factory.presentation.changeDate = presentation.changeDate;
           factory.presentation.changedBy = presentation.changedBy;
         } else {

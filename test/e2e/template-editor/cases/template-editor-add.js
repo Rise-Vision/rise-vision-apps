@@ -25,7 +25,9 @@ var TemplateAddScenarios = function() {
 
     describe('basic operations', function () {
       it('should auto-save the Presentation after it has been created', function () {
-        helper.wait(templateEditorPage.getSavingText(), 'Component auto-saving');
+        browser.sleep(3000);
+        helper.waitDisappear(templateEditorPage.getDirtyText());
+        helper.waitDisappear(templateEditorPage.getSavingText());
         helper.wait(templateEditorPage.getSavedText(), 'Component auto-saved');
       });
 
