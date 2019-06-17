@@ -182,7 +182,7 @@ angular.module('risevision.template-editor.controllers')
 
           _clearSaveTimeout();
 
-          $scope.factory.save().finally(function(){
+          $scope.factory.save().finally(function () {
             _bypassUnsaved = true;
             $state.go(toState, toParams);
           });
