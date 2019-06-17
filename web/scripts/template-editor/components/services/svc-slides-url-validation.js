@@ -21,7 +21,10 @@ angular.module('risevision.template-editor.services')
             }
 
             return deferred.resolve('VALID');
-          }, function () {
+          }, function (response) {
+            if (response.status === 401) {
+              return deferred.resolve('NOT_PUBLIC');
+            }
             return deferred.resolve('DELETED');
           })
           .catch(function (err) {

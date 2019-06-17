@@ -101,6 +101,25 @@ describe('service: slidesUrlValidationService:', function() {
         });
     });
 
+    it("should return 'NOT_PUBLIC' if response is unauthorized error", function( done ) {
+      var urlToValidate = "https://docs.google.com/presentation/d/e/2PACX-1vRK9noBs7XGTp-jRNkkxSR_bvTIPFq415ff2EKZIpUAOQJcYoV42XtxPGnGEd6bvjl36yZvjcn_eYDS/embed";
+
+      $httpBackend.when('GET', 'https://proxy.risevision.com/' + urlToValidate).respond(401, {}, {'x-final-url': urlToValidate}, 'error');
+
+      setTimeout(function() {
+        $httpBackend.flush();
+      });
+
+      slidesUrlValidationService.validate(urlToValidate)
+        .then(function (result) {
+          expect(result).to.be.equal('NOT_PUBLIC');
+
+          done();
+        })
+        .catch(function(err) {
+          fail('Unexpected ' + err);
+        });
+    });
 
   } );
 
