@@ -40,13 +40,6 @@ angular.module('risevision.template-editor.directives')
             $scope.setAttributeData($scope.componentId, 'duration', $scope.duration);
           };
 
-          $scope.handleKeyPressSrc = function (event) {
-            //handle Enter key only
-            if (event.which === 13) {
-              $scope.saveSrc();
-            }
-          };
-
           $scope.saveSrc = function () {
             if (_validateSrcLocally()) {
 
