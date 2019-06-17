@@ -179,12 +179,10 @@ angular.module('risevision.template-editor.controllers')
         }
         if ($scope.hasUnsavedChanges && toState.name.indexOf('apps.editor.templates') === -1) {
           event.preventDefault();
-          var modalInstance = $modal.open({
-            templateUrl: 'partials/template-editor/unsaved-changes-modal.html',
-            size: 'md',
-            controller: 'TemplateEditorUnsavedChangesModalController'
-          });
-          modalInstance.result.then(function () {
+
+          _clearSaveTimeout();
+
+          $scope.factory.save().finally(function(){
             _bypassUnsaved = true;
             $state.go(toState, toParams);
           });

@@ -35,7 +35,9 @@ describe('controller: TemplateEditor', function() {
   beforeEach(function() {
     factory = {
       presentation: { templateAttributeData: {} },
-      save: function() {}
+      save: function() {
+        return Q.resolve();
+      }
     };
   });
 
@@ -232,51 +234,35 @@ describe('controller: TemplateEditor', function() {
       factory.presentation.name = 'New Name';
       $scope.$apply();
       $timeout.flush();
-      var modalOpenStub = sinon.stub($modal, 'open', function () {
-        return {
-          result: {
-            then: function() {}
-          }
-        }
+      var saveStub = sinon.stub(factory, 'save', function(){
+        return Q.resolve();
       });
 
       $rootScope.$broadcast('$stateChangeStart', { name: 'newState' });
       $scope.$apply();
 
-      modalOpenStub.should.have.been.called;
+      saveStub.should.have.been.called;
     });
 
     it('should not notify unsaved changes when changing URL if there are no changes', function () {
-      var modalOpenStub = sinon.stub($modal, 'open', function() {
-        return {
-          result: {
-            then: function(){}
-          }
-        }
-      });
+      var saveStub = sinon.stub(factory, 'save');
 
       $rootScope.$broadcast('$stateChangeStart', { name: 'newState' });
       $scope.$apply();
 
-      modalOpenStub.should.not.have.been.called;
+      saveStub.should.not.have.been.called;
     });
 
     it('should not notify unsaved changes when changing URL if state is in Template Editor', function () {
       factory.presentation.id = '1234';
       factory.presentation.name = 'New Name';
       $scope.$apply();
-      var modalOpenStub = sinon.stub($modal, 'open', function() {
-        return {
-          result: {
-            then: function () {}
-          }
-        }
-      });
+      var saveStub = sinon.stub(factory, 'save');
 
       $rootScope.$broadcast('$stateChangeStart', { name: 'apps.editor.templates' });
       $scope.$apply();
 
-      modalOpenStub.should.not.have.been.called;
+      saveStub.should.not.have.been.called;
     });
 
     it('should notify unsaved changes when closing window', function () {
