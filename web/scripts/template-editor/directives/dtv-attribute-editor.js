@@ -13,11 +13,6 @@ angular.module('risevision.template-editor.directives')
           $scope.panels = [];
           $scope.factory.selected = null;
 
-          $scope.$watch('factory.presentation', function () {
-            $scope.showAttributeList = true;
-            $scope.panels = [];
-          });
-
           $scope.registerDirective = function (directive) {
             directive.element.hide();
             $scope.directives[directive.type] = directive;

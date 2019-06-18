@@ -11,7 +11,6 @@ var TemplateEditorPage = function() {
   var presentationName = element(by.id('presentationName'));
   var editNameButton = element(by.id('editNameButton'));
   var deleteButton = element(by.id('deleteButton'));
-  var saveButton = element(by.id('saveButtonDesktop'));
   var publishButton = element(by.id('publishButtonDesktop'));
   var imageComponentSelector = '//div[div/span[contains(text(), "Image - ")]]';
   var imageComponent = element(by.xpath('(' + imageComponentSelector + ')[1]'));
@@ -19,6 +18,11 @@ var TemplateEditorPage = function() {
   var backToComponentsButton = element(by.css('[ng-click="onBackButton();"]'));
   var financialDataLicenseMessage = element(by.css('.financial-data-license-message'));
   var financialDataLicenseCloseButton = element(by.css('#confirmForm .close'));
+
+  var autoSaveXPath = '//div[@id="autoSavingDesktop"]//div[contains(text(), "TEXT")]';
+  var dirtyText = element(by.xpath(autoSaveXPath.replace('TEXT', 'Unsaved changes')));
+  var savedText = element(by.xpath(autoSaveXPath.replace('TEXT', 'All changes saved')));
+  var savingText = element(by.xpath(autoSaveXPath.replace('TEXT', 'Saving changes')));
 
   this.seePlansLink = function () {
     return seePlansLink;
@@ -56,8 +60,16 @@ var TemplateEditorPage = function() {
     return deleteButton;
   };
 
-  this.getSaveButton = function () {
-    return saveButton;
+  this.getSavedText = function () {
+    return savedText;
+  };
+
+  this.getSavingText = function () {
+    return savingText;
+  };
+
+  this.getDirtyText = function () {
+    return dirtyText;
   };
 
   this.getPublishButton = function () {

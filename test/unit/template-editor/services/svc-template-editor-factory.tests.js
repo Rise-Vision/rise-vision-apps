@@ -26,7 +26,7 @@ describe('service: templateEditorFactory:', function() {
 
     $provide.service('$state',function() {
       return {
-        go: sandbox.stub().resolves()
+        go: sinon.stub().returns(Q.resolve())
       };
     });
 
@@ -59,6 +59,11 @@ describe('service: templateEditorFactory:', function() {
     $provide.service('scheduleFactory', function() {
       return {
         createFirstSchedule: sinon.stub()
+      };
+    });
+
+    $provide.service('$timeout', function() {
+      return function(callback, duration) {
       };
     });
 
@@ -266,7 +271,7 @@ describe('service: templateEditorFactory:', function() {
       expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
       expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
 
-      templateEditorFactory.addPresentation()        
+      templateEditorFactory.addPresentation()
         .then(function() {
 
           setTimeout(function(){

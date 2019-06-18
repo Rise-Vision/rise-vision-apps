@@ -1,10 +1,16 @@
 'use strict';
 
 angular.module('risevision.template-editor.controllers')
+  .constant('MINIMUM_INTERVAL_BETWEEN_SAVES', 5000)
+  .constant('MAXIMUM_INTERVAL_BETWEEN_SAVES', 20000)
   .controller('TemplateEditorController', ['$scope', '$filter', '$loading', '$modal', '$state', '$timeout', '$window',
-    'templateEditorFactory', 'userState', 'presentationUtils',
+    'templateEditorFactory', 'userState', 'presentationUtils', 'MINIMUM_INTERVAL_BETWEEN_SAVES',
+    'MAXIMUM_INTERVAL_BETWEEN_SAVES',
     function ($scope, $filter, $loading, $modal, $state, $timeout, $window, templateEditorFactory, userState,
-      presentationUtils) {
+      presentationUtils, MINIMUM_INTERVAL_BETWEEN_SAVES, MAXIMUM_INTERVAL_BETWEEN_SAVES) {
+      var _lastSavedTimestamp = 0,
+        _saveTimeout = null;
+
       $scope.factory = templateEditorFactory;
       $scope.isSubcompanySelected = userState.isSubcompanySelected;
       $scope.isTestCompanySelected = userState.isTestCompanySelected;
@@ -73,10 +79,53 @@ angular.module('risevision.template-editor.controllers')
         return component;
       }
 
+      function _getCurrentTimestamp() {
+        return new Date().getTime();
+      }
+
+      function _programSave() {
+        _saveTimeout = $timeout(function () {
+          _saveTimeout = null;
+
+          // if a previous save hasn't finished, give more time
+          if ($scope.factory.savingPresentation) {
+            _programSave();
+          } else {
+            _lastSavedTimestamp = _getCurrentTimestamp();
+
+            $scope.factory.save();
+          }
+        }, MINIMUM_INTERVAL_BETWEEN_SAVES);
+      }
+
+      function _clearSaveTimeout() {
+        if (_saveTimeout) {
+          $timeout.cancel(_saveTimeout);
+          _saveTimeout = null;
+        }
+      }
+
+      function _reprogramSave() {
+        _clearSaveTimeout();
+        _programSave();
+      }
+
       var _bypassUnsaved = false,
         _initializing = false;
       var _setUnsavedChanges = function (state) {
         $scope.hasUnsavedChanges = state;
+
+        if ($scope.hasUnsavedChanges) {
+          if (_saveTimeout) {
+            var elapsed = _getCurrentTimestamp() - _lastSavedTimestamp;
+
+            if (elapsed < MAXIMUM_INTERVAL_BETWEEN_SAVES) {
+              _reprogramSave();
+            }
+          } else {
+            _programSave();
+          }
+        }
       };
 
       var _setUnsavedChangesAsync = function (state) {
@@ -94,11 +143,19 @@ angular.module('risevision.template-editor.controllers')
       }
 
       $scope.$watch('factory.presentation', function (newValue, oldValue) {
-        var ignoredFields = ['id', 'revisionStatusName', 'changeDate', 'changedBy'];
+        var ignoredFields = [
+          'id', 'companyId', 'revisionStatus', 'revisionStatusName',
+          'changeDate', 'changedBy', 'creationDate', 'publish', 'layout'
+        ];
 
+        if (!newValue.id) {
+          $scope.factory.save();
+          return;
+        }
         if ($scope.hasUnsavedChanges) {
           return;
         }
+
         if (_initializing) {
           $timeout(function () {
             _initializing = false;
@@ -122,12 +179,10 @@ angular.module('risevision.template-editor.controllers')
         }
         if ($scope.hasUnsavedChanges && toState.name.indexOf('apps.editor.templates') === -1) {
           event.preventDefault();
-          var modalInstance = $modal.open({
-            templateUrl: 'partials/template-editor/unsaved-changes-modal.html',
-            size: 'md',
-            controller: 'TemplateEditorUnsavedChangesModalController'
-          });
-          modalInstance.result.then(function () {
+
+          _clearSaveTimeout();
+
+          $scope.factory.save().finally(function () {
             _bypassUnsaved = true;
             $state.go(toState, toParams);
           });

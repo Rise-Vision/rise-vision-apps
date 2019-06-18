@@ -11,17 +11,19 @@
 </div>
 
 <div class="toolbar-right">
-  <button id="saveButtonDesktop" require-role="ce cp"
-          class="btn btn-primary btn-fixed-width u_margin-right hidden-xs"
-          ng-disabled="factory.savingPresentation"
-          ng-click="factory.save()">
-    <strong>
-      {{ factory.savingPresentation ?
-        ( 'common.saving' | translate ) : ( 'common.save' | translate )
-      }}
-    </strong>
-  </button>
-
+  <div id="autoSavingDesktop" class="auto-saving-changes hidden-xs">
+    <div ng-show="!factory.savingPresentation && hasUnsavedChanges">
+      Unsaved changes
+    </div>
+    <div ng-show="factory.savingPresentation">
+      Saving changes...
+    </div>
+    <div ng-show="!factory.savingPresentation && !hasUnsavedChanges">
+      <div>
+        All changes saved <streamline-icon name="checkmark" width="12" height="12"></streamline-icon>
+      </div>
+    </div>
+  </div>
   <button id="publishButtonDesktop" require-role="cp" class="btn btn-primary btn-fixed-width hidden-xs"
           ng-disabled="hasUnsavedChanges || !factory.isRevised() || factory.savingPresentation"
           ng-click="factory.publishPresentation()">

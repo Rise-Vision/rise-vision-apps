@@ -13,12 +13,22 @@ angular.module('risevision.template-editor.services')
       HTML_PRESENTATION_TYPE, BLUEPRINT_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {};
 
-      var _setPresentation = function (presentation) {
-        presentation.templateAttributeData =
-          _parseJSON(presentation.templateAttributeData) || {};
+      var _setPresentation = function (presentation, isUpdate) {
 
-        factory.presentation = presentation;
-        factory.selected = null;
+        if (isUpdate) {
+          factory.presentation.id = presentation.id;
+          factory.presentation.companyId = presentation.companyId;
+          factory.presentation.revisionStatus = presentation.revisionStatus;
+          factory.presentation.revisionStatusName = presentation.revisionStatusName;
+          factory.presentation.creationDate = presentation.creationDate;
+          factory.presentation.changeDate = presentation.changeDate;
+          factory.presentation.changedBy = presentation.changedBy;
+        } else {
+          presentation.templateAttributeData =
+            _parseJSON(presentation.templateAttributeData) || {};
+
+          factory.presentation = presentation;
+        }
 
         $rootScope.$broadcast('presentationUpdated');
       };
@@ -150,7 +160,7 @@ angular.module('risevision.template-editor.services')
 
         presentation.update(presentationVal.id, presentationVal)
           .then(function (resp) {
-            _setPresentation(resp.item);
+            _setPresentation(resp.item, true);
 
             deferred.resolve(resp.item.id);
           })

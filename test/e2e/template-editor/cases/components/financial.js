@@ -35,9 +35,20 @@ var FinancialComponentScenarios = function () {
         templateEditorPage.dismissFinancialDataLicenseMessage();
       });
 
+      it('should auto-save the Presentation after it has been created', function () {
+        helper.waitDisappear(templateEditorPage.getDirtyText());
+        helper.waitDisappear(templateEditorPage.getSavingText());
+        helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
+      });
+
       it('should show one Financial Component', function () {
         templateEditorPage.selectComponent("Financial - ");
         expect(financialComponentPage.getInstrumentItems().count()).to.eventually.equal(3);
+      });
+
+      it('should auto-save the component after the instruments are loaded', function () {
+        helper.wait(templateEditorPage.getSavingText(), 'Financial component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
       });
 
       it('should show open the Instrument Selector', function () {
@@ -57,15 +68,15 @@ var FinancialComponentScenarios = function () {
       it('should save the Presentation, reload it, and validate changes were saved', function () {
 
         presentationsListPage.changePresentationName(presentationName);
-        presentationsListPage.savePresentation();
 
-        //log presentaion / company URL for troubeshooting
+        helper.wait(templateEditorPage.getSavingText(), 'Financial component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
+
+        //log presentation / company URL for troubleshooting
         browser.getCurrentUrl().then(function(actualUrl) {
           console.log(actualUrl);
         });
         browser.sleep(100);
-
-        expect(templateEditorPage.getSaveButton().isEnabled()).to.eventually.be.true;
 
         presentationsListPage.loadPresentation(presentationName);
         templateEditorPage.selectComponent("Financial - ");
