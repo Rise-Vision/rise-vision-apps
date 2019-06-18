@@ -200,30 +200,32 @@ angular.module('risevision.template-editor.directives')
             }).join('|');
           }
 
-          $scope.updateImageMetadata = function(metadata) {
+          $scope.updateImageMetadata = function (metadata) {
             var currentMetadata = _getAttribute('metadata');
 
-            if(!currentMetadata) {
+            if (!currentMetadata) {
               _setMetadata(metadata);
             } else {
               var atLeastOneOriginalEntryIsStillSelected = false;
               var metadataCopy = angular.copy(currentMetadata);
 
-              _.each(metadata, function(entry) {
-                var currentEntry = _.find(metadataCopy, {file: entry.file});
+              _.each(metadata, function (entry) {
+                var currentEntry = _.find(metadataCopy, {
+                  file: entry.file
+                });
 
-                if(currentEntry) {
+                if (currentEntry) {
                   atLeastOneOriginalEntryIsStillSelected = true;
                   currentEntry.exists = entry.exists;
                   currentEntry['thumbnail-url'] = entry['thumbnail-url'];
                 }
               });
 
-              if(atLeastOneOriginalEntryIsStillSelected) {
+              if (atLeastOneOriginalEntryIsStillSelected) {
                 _setMetadata(metadataCopy);
               }
             }
-          }
+          };
 
           function _setMetadata(metadata) {
             var selectedImages = angular.copy(metadata);
