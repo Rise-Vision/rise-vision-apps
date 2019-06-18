@@ -7,7 +7,7 @@ describe('directive: TemplateComponentImage', function() {
       timeout;
 
   beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" } };
+    factory = { selected: { id: 'TEST-ID' } };
   });
 
   beforeEach(module('risevision.template-editor.directives'));
@@ -176,6 +176,131 @@ describe('directive: TemplateComponentImage', function() {
 
       done();
     }, 100);
+  });
+
+  describe('updateImageMetadata', function() {
+
+    var sampleImages;
+
+    beforeEach(function() {
+      sampleImages = [
+        { "file": "image.png", exists: true, "thumbnail-url": "http://image" },
+        { "file": "image2.png", exists: false, "thumbnail-url": "http://image2" }
+      ];
+
+      $scope.componentId = 'TEST-ID';
+    });
+
+    it('should directly set metadata if it\'s not already loaded', function()
+    {
+      $scope.getAttributeData = function() {
+        return null;
+      };
+
+      $scope.updateImageMetadata(sampleImages);
+
+      expect($scope.isDefaultImageList).to.be.false;
+      expect($scope.selectedImages).to.deep.equal(sampleImages);
+
+      expect($scope.setAttributeData).to.have.been.called.twice;
+
+      expect($scope.setAttributeData.calledWith(
+        'TEST-ID', 'metadata', sampleImages
+      ), 'set metadata attribute').to.be.true;
+
+      expect($scope.setAttributeData.calledWith(
+        'TEST-ID', 'files', 'image.png|image2.png'
+      ), 'set files attribute').to.be.true;
+    });
+
+    it('should combine metadata if it\'s already loaded', function()
+    {
+      var updatedImages = [
+        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" },
+        { "file": "image2.png", exists: false, "thumbnail-url": "http://image6" }
+      ];
+
+      $scope.getAttributeData = function() {
+        return sampleImages;
+      };
+
+      $scope.updateImageMetadata(updatedImages);
+
+      expect($scope.isDefaultImageList).to.be.false;
+      expect($scope.selectedImages).to.deep.equal(updatedImages);
+
+      expect($scope.setAttributeData).to.have.been.called.twice;
+
+      expect($scope.setAttributeData.calledWith(
+        'TEST-ID', 'metadata', updatedImages
+      ), 'set metadata attribute').to.be.true;
+
+      expect($scope.setAttributeData.calledWith(
+        'TEST-ID', 'files', 'image.png|image2.png'
+      ), 'set files attribute').to.be.true;
+    });
+
+    it('should only update the provided images', function()
+    {
+      var updatedImages = [
+        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" }
+      ];
+      var expectedImages = [
+        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" },
+        { "file": "image2.png", exists: false, "thumbnail-url": "http://image2" }
+      ];
+
+      $scope.getAttributeData = function() {
+        return sampleImages;
+      };
+
+      $scope.updateImageMetadata(updatedImages);
+
+      expect($scope.isDefaultImageList).to.be.false;
+      expect($scope.selectedImages).to.deep.equal(expectedImages);
+
+      expect($scope.setAttributeData).to.have.been.called.twice;
+
+      expect($scope.setAttributeData.calledWith(
+        'TEST-ID', 'metadata', expectedImages
+      ), 'set metadata attribute').to.be.true;
+
+      expect($scope.setAttributeData.calledWith(
+        'TEST-ID', 'files', 'image.png|image2.png'
+      ), 'set files attribute').to.be.true;
+    });
+
+    it('should not update images that are not already present', function()
+    {
+      var updatedImages = [
+        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" },
+        { "file": "imageNew.png", exists: false, "thumbnail-url": "http://imageN" }
+      ];
+      var expectedImages = [
+        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" },
+        { "file": "image2.png", exists: false, "thumbnail-url": "http://image2" }
+      ];
+
+      $scope.getAttributeData = function() {
+        return sampleImages;
+      };
+
+      $scope.updateImageMetadata(updatedImages);
+
+      expect($scope.isDefaultImageList).to.be.false;
+      expect($scope.selectedImages).to.deep.equal(expectedImages);
+
+      expect($scope.setAttributeData).to.have.been.called.twice;
+
+      expect($scope.setAttributeData.calledWith(
+        'TEST-ID', 'metadata', expectedImages
+      ), 'set metadata attribute').to.be.true;
+
+      expect($scope.setAttributeData.calledWith(
+        'TEST-ID', 'files', 'image.png|image2.png'
+      ), 'set files attribute').to.be.true;
+    });
+
   });
 
 });

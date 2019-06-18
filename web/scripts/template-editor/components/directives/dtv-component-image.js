@@ -104,6 +104,10 @@ angular.module('risevision.template-editor.directives')
             return $scope.getAttributeData($scope.componentId, key);
           }
 
+          function _setAttribute(key, value) {
+            $scope.setAttributeData($scope.componentId, key, value);
+          }
+
           function _getDefaultFilesAttribute() {
             return $scope.getBlueprintData($scope.componentId, 'files');
           }
@@ -164,7 +168,7 @@ angular.module('risevision.template-editor.directives')
 
           function _buildListRecursive(metadata, fileNames) {
             if (fileNames.length === 0) {
-              _setMetadata(metadata);
+              $scope.updateImageMetadata(metadata);
               $scope.factory.loadingPresentation = false;
 
               return;
@@ -196,14 +200,39 @@ angular.module('risevision.template-editor.directives')
             }).join('|');
           }
 
+          $scope.updateImageMetadata = function(metadata) {
+            var currentMetadata = _getAttribute('metadata');
+
+            if(!currentMetadata) {
+              _setMetadata(metadata);
+            } else {
+              var atLeastOneOriginalEntryIsStillSelected = false;
+              var metadataCopy = angular.copy(currentMetadata);
+
+              _.each(metadata, function(entry) {
+                var currentEntry = _.find(metadataCopy, {file: entry.file});
+
+                if(currentEntry) {
+                  atLeastOneOriginalEntryIsStillSelected = true;
+                  currentEntry.exists = entry.exists;
+                  currentEntry['thumbnail-url'] = entry['thumbnail-url'];
+                }
+              });
+
+              if(atLeastOneOriginalEntryIsStillSelected) {
+                _setMetadata(metadataCopy);
+              }
+            }
+          }
+
           function _setMetadata(metadata) {
             var selectedImages = angular.copy(metadata);
             var filesAttribute = _filesAttributeFor(selectedImages);
 
             _setSelectedImages(selectedImages);
 
-            $scope.setAttributeData($scope.componentId, 'metadata', selectedImages);
-            $scope.setAttributeData($scope.componentId, 'files', filesAttribute);
+            _setAttribute('metadata', selectedImages);
+            _setAttribute('files', filesAttribute);
           }
 
           function _setSelectedImages(selectedImages) {
@@ -216,7 +245,7 @@ angular.module('risevision.template-editor.directives')
           _reset();
 
           $scope.saveDuration = function () {
-            $scope.setAttributeData($scope.componentId, 'duration', $scope.values.duration);
+            _setAttribute('duration', $scope.values.duration);
           };
 
           $scope.registerDirective({
