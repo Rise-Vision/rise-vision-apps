@@ -30,12 +30,6 @@ var SlidesComponentScenarios = function () {
 
     describe('basic operations', function () {
 
-      it('should auto-save the Presentation after it has been created', function () {
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText());
-        helper.wait(templateEditorPage.getSavedText(), 'Slides component auto-saved');
-      });
-
       it('should open properties of Slides Component', function () {
         templateEditorPage.selectComponent(componentLabel);
         expect(slidesComponentPage.getSrcInput().isEnabled()).to.eventually.be.true;
