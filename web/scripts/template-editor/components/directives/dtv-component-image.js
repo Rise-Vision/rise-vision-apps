@@ -2,9 +2,9 @@
 
 angular.module('risevision.template-editor.directives')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
-  .directive('templateComponentImage', ['$log', 'templateEditorFactory', 'templateEditorUtils', 'storageAPILoader',
+  .directive('templateComponentImage', ['$log', '$q', '$timeout', 'templateEditorFactory', 'templateEditorUtils', 'storageAPILoader',
     'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
-    function ($log, templateEditorFactory, templateEditorUtils, storageAPILoader, DEFAULT_IMAGE_THUMBNAIL,
+    function ($log, $q, $timeout, templateEditorFactory, templateEditorUtils, storageAPILoader, DEFAULT_IMAGE_THUMBNAIL,
       SUPPORTED_IMAGE_TYPES) {
       return {
         restrict: 'E',
@@ -132,7 +132,7 @@ angular.module('risevision.template-editor.directives')
             if (!match) {
               $log.error('Filename is not a valid Rise Storage path: ' + fileName);
 
-              return Promise.resolve('');
+              return $q.resolve('');
             }
 
             return _requestFileData(match[1], match[2])
@@ -168,10 +168,10 @@ angular.module('risevision.template-editor.directives')
 
           function _buildListRecursive(metadata, fileNames) {
             if (fileNames.length === 0) {
-              $scope.updateImageMetadata(metadata);
-              $scope.factory.loadingPresentation = false;
-
-              return;
+              return $timeout(function () {
+                $scope.updateImageMetadata(metadata);
+                $scope.factory.loadingPresentation = false;
+              });
             }
 
             var fileName = fileNames.shift();

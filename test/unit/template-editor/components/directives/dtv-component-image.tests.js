@@ -162,6 +162,7 @@ describe('directive: TemplateComponentImage', function() {
         }
       ];
 
+      timeout.flush();
       expect($scope.selectedImages).to.deep.equal(expectedMetadata);
 
       expect($scope.setAttributeData).to.have.been.called.twice;
