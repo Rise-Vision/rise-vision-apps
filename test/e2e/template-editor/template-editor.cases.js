@@ -12,6 +12,7 @@
   var TextComponentScenarios = require('./cases/components/text.js');
   var WeatherComponentScenarios = require('./cases/components/weather.js');
   var ImageComponentScenarios = require('./cases/components/image.js');
+  var SlidesComponentScenarios = require('./cases/components/slides.js');
 
   describe('Template Editor', function() {
 
@@ -63,6 +64,7 @@
     var financialComponentScenarios = new FinancialComponentScenarios();
     var weatherComponentScenarios = new WeatherComponentScenarios();
     var imageComponentScenarios = new ImageComponentScenarios();
+    var slidesomponentScenarios = new SlidesComponentScenarios();
 
     after(function() {
       // Loading the Presentation List is a workaround to a Chrome Driver issue that has it fail to click on elements over the Preview iframe

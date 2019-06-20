@@ -74,7 +74,7 @@ var TextComponentScenarios = function () {
         //change presentation name
         presentationsListPage.changePresentationName(presentationName);
 
-        //save presentation
+        //wait for presentation to be auto-saved
         helper.waitDisappear(templateEditorPage.getDirtyText());
         helper.wait(templateEditorPage.getSavingText(), 'Text component auto-saving');
         helper.wait(templateEditorPage.getSavedText(), 'Text component auto-saved');
