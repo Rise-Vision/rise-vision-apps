@@ -4,8 +4,8 @@
          That way the model value is processed immeditly on Form submit and saveSrc() is called only once. -->
     <form>
       <div class="form-group has-feedback" ng-class="{ 'has-error': validationResult && validationResult !== 'VALID', 'has-success': validationResult === 'VALID' }">
-        <label class="control-label" for="urlInput">Google Slides URL</label>
-        <input type="text" id="te-slides-src" class="form-control" id="urlInput" ng-model="src" placeholder="Enter URL" ng-model-options="{ debounce: 1000 }" ng-change="saveSrc()" >
+        <label class="control-label" for="te-slides-src">Google Slides URL:</label>
+        <input type="text" id="te-slides-src" class="form-control u_ellipsis" ng-model="src" placeholder="Enter URL" ng-model-options="{ debounce: 1000 }" ng-change="saveSrc()" >
         <streamline-icon class="overlay-icon form-control-feedback" aria-hidden="true" name="{{validationResult && validationResult !== 'VALID' ? 'exclamation' : 'checkmark'}}" width="14" height="12"></streamline-icon>
         <p class="help-block" ng-switch on="validationResult">
           <span ng-switch-when="DELETED">Your Google Slideshow is no longer accessible, please check if it’s been deleted.</span>
@@ -20,7 +20,7 @@
     </form>
   </div>
   <div class="attribute-row-last">
-    <label class="control-label">Show each slide for</label>
+    <label class="control-label" for="te-slides-duration">Show each slide for:</label>
     <div class="input-group input-duration">
       <input type="number" id="te-slides-duration" class="form-control" ng-model="duration" placeholder="10" ng-change="saveDuration()">
       <span class="input-group-addon">seconds</span>
