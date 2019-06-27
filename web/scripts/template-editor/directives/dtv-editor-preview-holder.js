@@ -141,6 +141,7 @@ angular.module('risevision.template-editor.directives')
           });
 
           function _onResize() {
+            console.log('resize:' + previewHolder.clientWidth + ':' + previewHolder.clientHeight);
             _applyAspectRatio();
 
             $scope.$digest();
