@@ -1,6 +1,8 @@
 <div id="appLauncherContainer">
   <div class="container">
 
+  <pricing-changes-message></pricing-changes-message>
+
   <ng-include ng-show="!launcherFactory.presentations.loadingItems && launcherFactory.presentations.list.length === 0 && !launcherFactory.presentations.apiError" src="'partials/launcher/get-started-cta.html'"></ng-include>
   
   <div ng-show="launcherFactory.presentations.list.length > 0 || launcherFactory.presentations.apiError">
