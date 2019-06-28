@@ -56,7 +56,7 @@ angular.module('risevision.template-editor.directives')
             return previewHolder.clientWidth;
           }
 
-          return _getPreviewAreaHeight() {
+          function _getPreviewAreaHeight() {
             return previewHolder.clientHeight;
           }
 
