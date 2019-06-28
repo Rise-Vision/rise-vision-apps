@@ -150,9 +150,7 @@ angular.module('risevision.template-editor.directives')
 
           function _onResize() {
             console.log('resize:' + previewHolder.clientWidth + ':' + previewHolder.clientHeight);
-            console.log('offset:' + previewHolder.offsetWidth + ':' + previewHolder.offsetHeight);
-            console.log('scroll:' + previewHolder.scrollWidth + ':' + previewHolder.scrollHeight);
-            //console.log('calculated:' + _getPreviewAreaWidth() + ':' + _getPreviewAreaHeight());
+            console.log('calculated:' + _getPreviewAreaWidth() + ':' + _getPreviewAreaHeight());
             _applyAspectRatio();
 
             $scope.$digest();
@@ -161,6 +159,12 @@ angular.module('risevision.template-editor.directives')
           angular.element($window).on('resize', _onResize);
           $scope.$on('$destroy', function () {
             angular.element($window).off('resize', _onResize);
+          });
+
+          $scope.$watch('factory.selected', function (selected) {
+            if (!selected) {
+              _applyAspectRatio();
+            }
           });
 
           $scope.$watch('factory.presentation.templateAttributeData', function (value) {
