@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateEditorPreviewHolder', ['$window', '$sce', 'templateEditorFactory', 'HTML_TEMPLATE_DOMAIN',
-    'HTML_TEMPLATE_URL', 'userState',
-    function ($window, $sce, templateEditorFactory, HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL, userState) {
+  .directive('templateEditorPreviewHolder', ['$window', '$timeout', '$sce', 'templateEditorFactory',
+    'HTML_TEMPLATE_DOMAIN', 'HTML_TEMPLATE_URL', 'userState',
+    function ($window, $timeout, $sce, templateEditorFactory, HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL, userState) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/preview-holder.html',
@@ -145,7 +145,7 @@ angular.module('risevision.template-editor.directives')
           ], function () {
             _applyAspectRatio();
 
-            setTimeout(_applyAspectRatio, PREVIEW_INITIAL_DELAY_MILLIS);
+            $timeout(_applyAspectRatio, PREVIEW_INITIAL_DELAY_MILLIS);
           });
 
           function _onResize() {
@@ -164,7 +164,7 @@ angular.module('risevision.template-editor.directives')
             console.log('selected:' + selected + ':' + _getPreviewAreaWidth() + ':' + _getPreviewAreaHeight());
 
             if (!selected) {
-              _applyAspectRatio();
+              $timeout(_onResize);
             }
           });
 
