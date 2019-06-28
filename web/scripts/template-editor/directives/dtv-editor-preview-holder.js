@@ -52,6 +52,14 @@ angular.module('risevision.template-editor.directives')
             return height ? parseInt(height) : DEFAULT_TEMPLATE_HEIGHT;
           }
 
+          function _getPreviewAreaWidth() {
+            return previewHolder.clientWidth;
+          }
+
+          return _getPreviewAreaHeight() {
+            return previewHolder.clientHeight;
+          }
+
           function _getHeightDividedByWidth() {
             return _getTemplateHeight() / _getTemplateWidth();
           }
@@ -59,9 +67,9 @@ angular.module('risevision.template-editor.directives')
           function _useFullWidth() {
             var offset = 2 * DESKTOP_MARGIN;
             var aspectRatio = _getHeightDividedByWidth();
-            var projectedHeight = (previewHolder.clientWidth - offset) * aspectRatio;
+            var projectedHeight = (_getPreviewAreaWidth() - offset) * aspectRatio;
 
-            return projectedHeight < previewHolder.clientHeight - offset;
+            return projectedHeight < _getPreviewAreaHeight() - offset;
           }
 
           function _getWidthFor(height) {
@@ -84,7 +92,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.getDesktopWidth = function () {
-            var height = previewHolder.clientHeight;
+            var height = _getPreviewAreaHeight();
 
             return _getWidthFor(height).toFixed(0);
           };
@@ -111,17 +119,17 @@ angular.module('risevision.template-editor.directives')
             var offset = (isMobile ? MOBILE_MARGIN : DESKTOP_MARGIN) * 2;
 
             if (isMobile) {
-              viewHeight = previewHolder.clientHeight - offset;
+              viewHeight = _getPreviewAreaHeight() - offset;
               parentStyle = 'width: ' + $scope.getMobileWidth() + 'px';
               frameStyle = _getFrameStyle(viewHeight, _getTemplateHeight());
             } else if (_useFullWidth()) {
-              var viewWidth = previewHolder.clientWidth - offset;
+              var viewWidth = _getPreviewAreaWidth() - offset;
               var aspectRatio = $scope.getTemplateAspectRatio() + '%';
 
               parentStyle = 'padding-bottom: ' + aspectRatio + ';';
               frameStyle = _getFrameStyle(viewWidth, _getTemplateWidth());
             } else {
-              viewHeight = previewHolder.clientHeight - offset;
+              viewHeight = _getPreviewAreaHeight() - offset;
 
               parentStyle = 'height: 100%; width: ' + $scope.getDesktopWidth() + 'px';
               frameStyle = _getFrameStyle(viewHeight, _getTemplateHeight());
@@ -142,6 +150,9 @@ angular.module('risevision.template-editor.directives')
 
           function _onResize() {
             console.log('resize:' + previewHolder.clientWidth + ':' + previewHolder.clientHeight);
+            console.log('offset:' + previewHolder.offsetWidth + ':' + previewHolder.offsetHeight);
+            console.log('scroll:' + previewHolder.scrollWidth + ':' + previewHolder.scrollHeight);
+            //console.log('calculated:' + _getPreviewAreaWidth() + ':' + _getPreviewAreaHeight());
             _applyAspectRatio();
 
             $scope.$digest();
