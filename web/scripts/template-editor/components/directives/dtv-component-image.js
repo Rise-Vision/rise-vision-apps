@@ -3,8 +3,7 @@
 angular.module('risevision.template-editor.directives')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
   .directive('templateComponentImage', ['$log', '$q', '$timeout', 'templateEditorFactory', 'templateEditorUtils',
-    'storageAPILoader',
-    'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
+    'storageAPILoader', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
     function ($log, $q, $timeout, templateEditorFactory, templateEditorUtils, storageAPILoader,
       DEFAULT_IMAGE_THUMBNAIL,
       SUPPORTED_IMAGE_TYPES) {
