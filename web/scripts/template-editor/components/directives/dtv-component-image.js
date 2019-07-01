@@ -5,8 +5,7 @@ angular.module('risevision.template-editor.directives')
   .directive('templateComponentImage', ['$log', '$q', '$timeout', 'templateEditorFactory', 'templateEditorUtils',
     'storageAPILoader', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
     function ($log, $q, $timeout, templateEditorFactory, templateEditorUtils, storageAPILoader,
-      DEFAULT_IMAGE_THUMBNAIL,
-      SUPPORTED_IMAGE_TYPES) {
+      DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES) {
       return {
         restrict: 'E',
         scope: true,
