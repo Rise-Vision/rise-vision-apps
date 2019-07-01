@@ -149,7 +149,6 @@ angular.module('risevision.template-editor.directives')
           });
 
           function _onResize() {
-            console.log('calculated:' + _getPreviewAreaWidth() + ':' + _getPreviewAreaHeight());
             _applyAspectRatio();
 
             $scope.$digest();
@@ -161,8 +160,6 @@ angular.module('risevision.template-editor.directives')
           });
 
           $scope.$watch('factory.selected', function (selected) {
-            console.log('selected:' + selected + ':' + _getPreviewAreaWidth() + ':' + _getPreviewAreaHeight());
-
             if (!selected) {
               $timeout(_onResize);
             }
