@@ -252,40 +252,6 @@ describe('service: templateEditorFactory:', function() {
         })
         .then(null, done);
     });
-
-    it('should create first Schedule when adding first presentation and show modal',function(done){
-      sandbox.stub(presentation, 'add').returns(Q.resolve({
-        item: {
-          name: 'Test Presentation',
-          id: 'presentationId'
-        }
-      }));
-
-      $httpBackend.when('GET', blueprintUrl).respond(200, {});
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
-
-      templateEditorFactory.addFromProduct({ productCode: 'test-id', name: 'Test HTML Template' });
-      expect(templateEditorFactory.presentation.id).to.be.undefined;
-      expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
-      expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
-
-      templateEditorFactory.addPresentation()
-        .then(function() {
-
-          setTimeout(function(){
-            scheduleFactory.createFirstSchedule.should.have.been.called;
-
-            done();
-          },10);
-        })
-        .then(null, function(err) {
-          done(err);
-        })
-        .then(null, done);
-
-    });
   });
 
   describe('updatePresentation:',function(){
@@ -700,6 +666,26 @@ describe('service: templateEditorFactory:', function() {
             done();
           }, 10);
         });
+    });
+
+    it('should create first Schedule when publishing first presentation and show modal', function(done) {
+      sandbox.stub(presentation, 'publish').returns(Q.resolve());
+
+      templateEditorFactory.getPresentation('presentationId')
+        .then(function () {
+          return templateEditorFactory.publishPresentation(templateEditorFactory);
+        })
+        .then(function() {
+          setTimeout(function() {
+            scheduleFactory.createFirstSchedule.should.have.been.called;
+
+            done();
+          });
+        })
+        .then(null, function(err) {
+          done(err);
+        })
+        .then(null, done);
     });
   });
 });

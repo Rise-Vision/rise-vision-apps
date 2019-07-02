@@ -30,12 +30,15 @@ describe('controller: TemplateEditor', function() {
     }
   ];
 
-  var $rootScope, $scope, $modal, $timeout, $window, factory;
+  var $rootScope, $scope, $modal, $timeout, $window, $state, factory, scheduleFactory;
 
   beforeEach(function() {
     factory = {
       presentation: { templateAttributeData: {} },
       save: function() {
+        return Q.resolve();
+      },
+      publishPresentation: function () {
         return Q.resolve();
       }
     };
@@ -48,6 +51,11 @@ describe('controller: TemplateEditor', function() {
   beforeEach(module(function ($provide) {
     $provide.factory('templateEditorFactory',function() {
       return factory;
+    });
+    $provide.factory('scheduleFactory',function() {
+      return {
+        hasSchedules: function () {}
+      };
     });
     $provide.factory('$modal', function() {
       return {
@@ -74,7 +82,9 @@ describe('controller: TemplateEditor', function() {
       $modal = $injector.get('$modal');
       $window = $injector.get('$window');
       $timeout = $injector.get('$timeout');
+      $state = $injector.get('$state');
       factory = $injector.get('templateEditorFactory');
+      scheduleFactory = $injector.get('scheduleFactory');
 
       $controller('TemplateEditorController', {
         $scope: $scope,
@@ -244,13 +254,34 @@ describe('controller: TemplateEditor', function() {
       saveStub.should.have.been.called;
     });
 
-    it.only('should not notify unsaved changes when changing URL if there are no changes', function () {
+    it('should not notify unsaved changes when changing URL if there are no changes and user has schedules', function () {
       var saveStub = sinon.stub(factory, 'save');
+
+      sinon.stub($state, 'go');
+      sinon.stub(factory, 'publishPresentation');
+      sinon.stub(scheduleFactory, 'hasSchedules').returns(true);
 
       $rootScope.$broadcast('$stateChangeStart', { name: 'newState' });
       $scope.$apply();
 
       saveStub.should.not.have.been.called;
+      $state.go.should.have.been.called;
+      factory.publishPresentation.should.not.have.been.called;
+    });
+
+    it('should not change URL if there are no changes but user does not have schedules', function () {
+      var saveStub = sinon.stub(factory, 'save');
+
+      sinon.stub($state, 'go');
+      sinon.stub(factory, 'publishPresentation');
+      sinon.stub(scheduleFactory, 'hasSchedules').returns(false);
+
+      $rootScope.$broadcast('$stateChangeStart', { name: 'newState' });
+      $scope.$apply();
+
+      saveStub.should.not.have.been.called;
+      $state.go.should.not.have.been.called;
+      factory.publishPresentation.should.have.been.called;
     });
 
     it('should not notify unsaved changes when changing URL if state is in Template Editor', function () {
