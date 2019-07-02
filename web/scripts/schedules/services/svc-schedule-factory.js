@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('risevision.schedules.services')
-  .factory('scheduleFactory', ['$q', '$state', '$log', '$modal', 'schedule', 'scheduleTracker', 'processErrorCode',
+  .factory('scheduleFactory', ['$q', '$state', '$log', '$modal', '$rootScope', 'schedule', 'scheduleTracker', 'processErrorCode',
     'VIEWER_URL',
-    function ($q, $state, $log, $modal, schedule, scheduleTracker, processErrorCode, VIEWER_URL) {
+    function ($q, $state, $log, $modal, $rootScope, schedule, scheduleTracker, processErrorCode, VIEWER_URL) {
       var factory = {};
-      var _hasSchedules = false;
+      var _hasSchedules;
       var _scheduleId;
 
       var _clearMessages = function () {
@@ -64,6 +64,25 @@ angular.module('risevision.schedules.services')
         return deferred.promise;
       };
 
+      factory.hasSchedules = function () {
+        if (typeof _hasSchedules === 'undefined') {
+          _hasSchedules = false;
+
+          // Load status in background. Used by Template Editor to enable/disable Publish button for first time users
+          // The objective is being able to associate the Auto Schedule Modal with a user action (in this case, Publish)
+          _checkFirstSchedule()
+            .then(function () {
+              _hasSchedules = false;
+            })
+            .catch(function (err) {
+              if (err !== 'Already have Schedules') {
+                console.log('Failed while checking if company has Schedules', err);
+              }
+            });
+        }
+
+        return _hasSchedules;
+      };
 
       var _checkFirstSchedule = function () {
         var deferred = $q.defer();
@@ -146,8 +165,7 @@ angular.module('risevision.schedules.services')
         schedule.add(factory.schedule)
           .then(function (resp) {
             if (resp && resp.item && resp.item.id) {
-              scheduleTracker('Schedule Created', resp.item.id, resp.item
-                .name);
+              scheduleTracker('Schedule Created', resp.item.id, resp.item.name);
 
               $state.go('apps.schedules.details', {
                 scheduleId: resp.item.id
@@ -174,8 +192,7 @@ angular.module('risevision.schedules.services')
 
         schedule.update(_scheduleId, factory.schedule)
           .then(function (scheduleId) {
-            scheduleTracker('Schedule Updated', _scheduleId,
-              factory.schedule.name);
+            scheduleTracker('Schedule Updated', _scheduleId, factory.schedule.name);
 
             deferred.resolve();
           })
@@ -200,8 +217,8 @@ angular.module('risevision.schedules.services')
 
         schedule.delete(_scheduleId)
           .then(function () {
-            scheduleTracker('Schedule Deleted', _scheduleId,
-              factory.schedule.name);
+            _hasSchedules = undefined;
+            scheduleTracker('Schedule Deleted', _scheduleId, factory.schedule.name);
 
             factory.schedule = {};
 
@@ -221,6 +238,10 @@ angular.module('risevision.schedules.services')
         }
         return null;
       };
+
+      $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
+        _hasSchedules = undefined;
+      });
 
       var _showErrorMessage = function (action, e) {
         factory.errorMessage = 'Failed to ' + action + ' Schedule.';

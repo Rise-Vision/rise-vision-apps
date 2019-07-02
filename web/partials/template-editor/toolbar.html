@@ -25,7 +25,7 @@
     </div>
   </div>
   <button id="publishButtonDesktop" require-role="cp" class="btn btn-primary btn-fixed-width hidden-xs"
-          ng-disabled="hasUnsavedChanges || !factory.isRevised() || factory.savingPresentation"
+          ng-disabled="isPublishDisabled()"
           ng-click="factory.publishPresentation()">
     <strong translate>common.publish</strong>
   </button>

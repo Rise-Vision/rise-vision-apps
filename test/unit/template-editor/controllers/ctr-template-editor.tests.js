@@ -244,7 +244,7 @@ describe('controller: TemplateEditor', function() {
       saveStub.should.have.been.called;
     });
 
-    it('should not notify unsaved changes when changing URL if there are no changes', function () {
+    it.only('should not notify unsaved changes when changing URL if there are no changes', function () {
       var saveStub = sinon.stub(factory, 'save');
 
       $rootScope.$broadcast('$stateChangeStart', { name: 'newState' });

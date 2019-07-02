@@ -128,8 +128,6 @@ angular.module('risevision.template-editor.services')
               }, {
                 notify: false,
                 location: 'replace'
-              }).then(function () {
-                scheduleFactory.createFirstSchedule(resp.item.id, resp.item.name);
               });
 
               deferred.resolve(resp.item.id);
@@ -274,6 +272,9 @@ angular.module('risevision.template-editor.services')
             factory.presentation.changedBy = userState.getUsername();
             $rootScope.$broadcast('presentationPublished');
 
+            return _createFirstSchedule();
+          })
+          .then(function () {
             deferred.resolve();
           })
           .then(null, function (e) {
@@ -287,6 +288,13 @@ angular.module('risevision.template-editor.services')
           });
 
         return deferred.promise;
+      };
+
+      var _createFirstSchedule = function () {
+        return scheduleFactory.createFirstSchedule(factory.presentation.id, factory.presentation.name)
+          .catch(function (err) {
+            return err === 'Already have Schedules' ? $q.resolve() : $q.reject(err);
+          });
       };
 
       var _parseJSON = function (json) {

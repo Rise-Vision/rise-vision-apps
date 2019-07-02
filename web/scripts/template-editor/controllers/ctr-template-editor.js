@@ -3,11 +3,11 @@
 angular.module('risevision.template-editor.controllers')
   .constant('MINIMUM_INTERVAL_BETWEEN_SAVES', 5000)
   .constant('MAXIMUM_INTERVAL_BETWEEN_SAVES', 20000)
-  .controller('TemplateEditorController', ['$scope', '$filter', '$loading', '$modal', '$state', '$timeout', '$window',
-    'templateEditorFactory', 'userState', 'presentationUtils', 'MINIMUM_INTERVAL_BETWEEN_SAVES',
+  .controller('TemplateEditorController', ['$scope', '$q', '$filter', '$loading', '$state', '$timeout', '$window',
+    'templateEditorFactory', 'userState', 'scheduleFactory', 'presentationUtils', 'MINIMUM_INTERVAL_BETWEEN_SAVES',
     'MAXIMUM_INTERVAL_BETWEEN_SAVES',
-    function ($scope, $filter, $loading, $modal, $state, $timeout, $window, templateEditorFactory, userState,
-      presentationUtils, MINIMUM_INTERVAL_BETWEEN_SAVES, MAXIMUM_INTERVAL_BETWEEN_SAVES) {
+    function ($scope, $q, $filter, $loading, $state, $timeout, $window, templateEditorFactory, userState,
+      scheduleFactory, presentationUtils, MINIMUM_INTERVAL_BETWEEN_SAVES, MAXIMUM_INTERVAL_BETWEEN_SAVES) {
       var _lastSavedTimestamp = 0,
         _saveTimeout = null;
 
@@ -50,6 +50,12 @@ angular.module('risevision.template-editor.controllers')
         var component = _componentFor(componentId, true);
 
         component[attributeKey] = value;
+      };
+
+      $scope.isPublishDisabled = function () {
+        var isNotRevised = !$scope.factory.isRevised() && scheduleFactory.hasSchedules();
+
+        return $scope.factory.savingPresentation || $scope.hasUnsavedChanges || isNotRevised;
       };
 
       // updateAttributeData: do not update the object on getAttributeData
@@ -177,14 +183,26 @@ angular.module('risevision.template-editor.controllers')
           _bypassUnsaved = false;
           return;
         }
-        if ($scope.hasUnsavedChanges && toState.name.indexOf('apps.editor.templates') === -1) {
+        if (toState.name.indexOf('apps.editor.templates') === -1) {
           event.preventDefault();
 
           _clearSaveTimeout();
 
-          $scope.factory.save().finally(function () {
-            _bypassUnsaved = true;
-            $state.go(toState, toParams);
+          var savePromise = $scope.hasUnsavedChanges ? $scope.factory.save() : $q.resolve();
+          var hasSchedules = scheduleFactory.hasSchedules();
+
+          savePromise
+          .then(function () {
+            if (!hasSchedules) {
+              return $scope.factory.publishPresentation();
+            }
+          })
+          .finally(function () {
+            // If the modal was displayed we can't navigate away, otherwise it will be closed by apps.js' $modalStack.dismissAll
+            if (hasSchedules) {
+              _bypassUnsaved = true;
+              $state.go(toState, toParams);
+            }
           });
         }
       });
