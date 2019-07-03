@@ -35,7 +35,7 @@
       <div class="form-group u_margin-sm-top">
 
         <label class="control-label u_margin-right" translate>editor-app.playlistItem.duration</label>
-        <label class="control-label control-label-secondary u_margin-left" ng-if="playlistItem.type === 'presentation'">
+        <label class="control-label control-label-secondary u_margin-left" ng-if="playlistItem.type === 'presentation' && playUntilDoneSupported">
           <input type="checkbox" ng-model="playlistItem.playUntilDone" />
           <span translate>editor-app.playlistItem.playUntilDone</span>
         </label>

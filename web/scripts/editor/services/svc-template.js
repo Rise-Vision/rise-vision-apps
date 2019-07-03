@@ -3,12 +3,13 @@
 /*jshint camelcase: false */
 
 angular.module('risevision.editor.services')
+  .constant('BLUEPRINT_URL', 'https://widgets.risevision.com/stable/templates/PRODUCT_CODE/blueprint.json')
   .constant('TEMPLATE_SEARCH_FIELDS', [
     'name', 'id'
   ])
-  .service('template', ['$q', '$log', 'coreAPILoader', 'userState',
-    'TEMPLATE_SEARCH_FIELDS',
-    function ($q, $log, coreAPILoader, userState, TEMPLATE_SEARCH_FIELDS) {
+  .service('template', ['$q', '$log', 'coreAPILoader', 'userState', '$http',
+    'TEMPLATE_SEARCH_FIELDS', 'BLUEPRINT_URL',
+    function ($q, $log, coreAPILoader, userState, $http, TEMPLATE_SEARCH_FIELDS, BLUEPRINT_URL) {
 
       var createSearchQuery = function (fields, search) {
         var query = '';
@@ -50,6 +51,12 @@ angular.module('risevision.editor.services')
           return deferred.promise;
         }
 
+      };
+
+      service.loadBlueprintData = function (productCode) {
+        var url = BLUEPRINT_URL.replace('PRODUCT_CODE', productCode);
+
+        return $http.get(url);
       };
 
       return service;
