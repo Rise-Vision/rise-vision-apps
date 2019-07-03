@@ -19,8 +19,11 @@
   "trailing": true,
   "smarttabs": true,
   "globals": {
+    "browser": false,
     "sinon": false,
     "Sortable": false,
+    "before": false,
+    "after": false,
     "beforeEach": false,
     "afterEach": false,
     "describe": false,
