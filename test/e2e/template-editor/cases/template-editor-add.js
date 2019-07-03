@@ -2,7 +2,6 @@
 var expect = require('rv-common-e2e').expect;
 var PresentationListPage = require('./../pages/presentationListPage.js');
 var TemplateEditorPage = require('./../pages/templateEditorPage.js');
-var AutoScheduleModalPage = require('./../../schedules/pages/autoScheduleModalPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var TemplateAddScenarios = function() {
@@ -14,12 +13,10 @@ var TemplateAddScenarios = function() {
     var presentationName = 'Example Presentation - ' + testStartTime;
     var presentationsListPage;
     var templateEditorPage;
-    var autoScheduleModalPage;
 
     before(function () {
       presentationsListPage = new PresentationListPage();
       templateEditorPage = new TemplateEditorPage();
-      autoScheduleModalPage = new AutoScheduleModalPage();
 
       presentationsListPage.loadCurrentCompanyPresentationList();
       presentationsListPage.createNewPresentationFromTemplate('"Example Financial Template V3"', 'example-financial-template-v3');
@@ -54,19 +51,6 @@ var TemplateAddScenarios = function() {
 
         helper.wait(templateEditorPage.getSavingText(), 'Component auto-saving');
         helper.wait(templateEditorPage.getSavedText(), 'Component auto-saved');
-      });
-
-      it('should auto create Schedule when saving Presentation', function () {
-        browser.sleep(500);
-
-        helper.wait(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
-
-        expect(autoScheduleModalPage.getAutoScheduleModal().isDisplayed()).to.eventually.be.true;
-
-        helper.clickWhenClickable(autoScheduleModalPage.getCloseButton(), 'Auto Schedule Modal - Close Button');
-
-        helper.waitDisappear(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
-        helper.waitDisappear(presentationsListPage.getTemplateEditorLoader());
       });
 
       it('should load the newly created Presentation', function () {

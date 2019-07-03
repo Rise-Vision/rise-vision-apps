@@ -4,6 +4,7 @@ var expect = require('rv-common-e2e').expect;
 var PresentationListPage = require('./../../pages/presentationListPage.js');
 var TemplateEditorPage = require('./../../pages/templateEditorPage.js');
 var TextComponentPage = require('./../../pages/components/textComponentPage.js');
+var AutoScheduleModalPage = require('./../../../schedules/pages/autoScheduleModalPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var TextComponentScenarios = function () {
@@ -16,11 +17,13 @@ var TextComponentScenarios = function () {
     var presentationsListPage;
     var templateEditorPage;
     var textComponentPage;
+    var autoScheduleModalPage;
 
     before(function () {
       presentationsListPage = new PresentationListPage();
       templateEditorPage = new TemplateEditorPage();
       textComponentPage = new TextComponentPage();
+      autoScheduleModalPage = new AutoScheduleModalPage();
 
       presentationsListPage.loadCurrentCompanyPresentationList();
 
@@ -51,6 +54,21 @@ var TextComponentScenarios = function () {
         //save presentation
         helper.wait(templateEditorPage.getSavingText(), 'Text component auto-saving');
         helper.wait(templateEditorPage.getSavedText(), 'Text component auto-saved');
+      });
+
+      it('should auto create Schedule when publishing Presentation', function () {
+        helper.clickWhenClickable(templateEditorPage.getPublishButton(), 'Publish Button');
+
+        browser.sleep(500);
+
+        helper.wait(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
+
+        expect(autoScheduleModalPage.getAutoScheduleModal().isDisplayed()).to.eventually.be.true;
+
+        helper.clickWhenClickable(autoScheduleModalPage.getCloseButton(), 'Auto Schedule Modal - Close Button');
+
+        helper.waitDisappear(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
+        helper.waitDisappear(presentationsListPage.getTemplateEditorLoader());
       });
 
       it('should auto-save the Presentation, reload it, and validate changes were saved', function () {
