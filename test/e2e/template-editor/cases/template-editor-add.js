@@ -2,7 +2,7 @@
 var expect = require('rv-common-e2e').expect;
 var PresentationListPage = require('./../pages/presentationListPage.js');
 var TemplateEditorPage = require('./../pages/templateEditorPage.js');
-var AutoScheduleModalPage = require('./../../../schedules/pages/autoScheduleModalPage.js');
+var AutoScheduleModalPage = require('./../../schedules/pages/autoScheduleModalPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var TemplateAddScenarios = function() {
