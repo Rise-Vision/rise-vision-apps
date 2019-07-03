@@ -4,7 +4,6 @@ var expect = require('rv-common-e2e').expect;
 var PresentationListPage = require('./../../pages/presentationListPage.js');
 var TemplateEditorPage = require('./../../pages/templateEditorPage.js');
 var TextComponentPage = require('./../../pages/components/textComponentPage.js');
-var AutoScheduleModalPage = require('./../../../schedules/pages/autoScheduleModalPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var TextComponentScenarios = function () {
@@ -17,13 +16,11 @@ var TextComponentScenarios = function () {
     var presentationsListPage;
     var templateEditorPage;
     var textComponentPage;
-    var autoScheduleModalPage;
 
     before(function () {
       presentationsListPage = new PresentationListPage();
       templateEditorPage = new TemplateEditorPage();
       textComponentPage = new TextComponentPage();
-      autoScheduleModalPage = new AutoScheduleModalPage();
 
       presentationsListPage.loadCurrentCompanyPresentationList();
 
@@ -31,19 +28,6 @@ var TextComponentScenarios = function () {
     });
 
     describe('basic operations', function () {
-
-      it('should auto create Schedule when saving Presentation', function () {
-        browser.sleep(500);
-
-        helper.wait(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
-
-        expect(autoScheduleModalPage.getAutoScheduleModal().isDisplayed()).to.eventually.be.true;
-
-        helper.clickWhenClickable(autoScheduleModalPage.getCloseButton(), 'Auto Schedule Modal - Close Button');
-
-        helper.waitDisappear(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
-        helper.waitDisappear(presentationsListPage.getTemplateEditorLoader());
-      });
 
       it('should auto-save the Presentation after it has been created', function () {
         helper.waitDisappear(templateEditorPage.getDirtyText());
