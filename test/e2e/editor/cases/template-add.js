@@ -180,7 +180,7 @@ var TemplateAddScenarios = function() {
       helper.waitDisappear(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
     });
 
-    it('should show preview modal selecting a premium template',function(){
+    xit('should show preview modal selecting a premium template',function(){
       browser.call(()=>console.log("should show preview modal"));
       storeProductsModalPage.getPremiumProducts().get(0).click();
 

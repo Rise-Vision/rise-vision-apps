@@ -92,7 +92,7 @@
     var financialComponentScenarios = new FinancialComponentScenarios();
     var weatherComponentScenarios = new WeatherComponentScenarios();
     var imageComponentScenarios = new ImageComponentScenarios();
-    var slidesomponentScenarios = new SlidesComponentScenarios();
+    var slidesComponentScenarios = new SlidesComponentScenarios();
 
     after(function() {
       // Loading the Presentation List is a workaround to a Chrome Driver issue that has it fail to click on elements over the Preview iframe
