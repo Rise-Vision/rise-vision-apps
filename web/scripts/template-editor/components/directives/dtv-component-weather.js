@@ -1,14 +1,18 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentWeather', ['templateEditorFactory',
-    function (templateEditorFactory) {
+  .directive('templateComponentWeather', ['templateEditorFactory', 'companySettingsFactory', 'userState',
+    function (templateEditorFactory, companySettingsFactory, userState) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-weather.html',
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
+          $scope.companySettingsFactory = companySettingsFactory;
+
+          var company = userState.getCopyOfSelectedCompany(true);
+          $scope.hasValidAddress = !!(company.postalCode || (company.city && company.country));
 
           function _load() {
             var attributeDataValue = $scope.getAttributeData($scope.componentId, 'scale');

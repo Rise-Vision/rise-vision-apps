@@ -3,12 +3,12 @@
 angular.module('risevision.apps.billing.controllers')
   .value('PAST_INVOICES_PATH', 'account/view/invoicesHistory?cid=companyId')
   .value('UNPAID_INVOICES_PATH', 'account/view/invoicesDue?cid=companyId')
-  .controller('BillingCtrl', ['$rootScope', '$scope', '$loading', '$window', '$modal', '$templateCache', '$timeout',
-    'ScrollingListService', 'getCoreCountries', 'userState', 'currentPlanFactory', 'ChargebeeFactory', 'billing',
-    'STORE_URL', 'PAST_INVOICES_PATH', 'UNPAID_INVOICES_PATH',
-    function ($rootScope, $scope, $loading, $window, $modal, $templateCache, $timeout, ScrollingListService,
-      getCoreCountries, userState, currentPlanFactory, ChargebeeFactory, billing,
-      STORE_URL, PAST_INVOICES_PATH, UNPAID_INVOICES_PATH) {
+  .controller('BillingCtrl', ['$rootScope', '$scope', '$loading', '$window', '$timeout',
+    'ScrollingListService', 'userState', 'currentPlanFactory', 'ChargebeeFactory', 'billing',
+    'STORE_URL', 'PAST_INVOICES_PATH', 'UNPAID_INVOICES_PATH', 'companySettingsFactory',
+    function ($rootScope, $scope, $loading, $window, $timeout, ScrollingListService, userState, 
+      currentPlanFactory, ChargebeeFactory, billing, STORE_URL, PAST_INVOICES_PATH, UNPAID_INVOICES_PATH,
+      companySettingsFactory) {
 
       $scope.search = {
         count: $scope.listLimit,
@@ -21,6 +21,7 @@ angular.module('risevision.apps.billing.controllers')
       $scope.currentPlan = currentPlanFactory.currentPlan;
       $scope.chargebeeFactory = new ChargebeeFactory();
       $scope.subscriptions = new ScrollingListService(billing.getSubscriptions, $scope.search);
+      $scope.companySettingsFactory = companySettingsFactory;
 
       $scope.hasUnpaidInvoices = false;
 
@@ -71,22 +72,6 @@ angular.module('risevision.apps.billing.controllers')
         var subscriptionId = subscription.parentId || subscription.subscriptionId;
 
         $scope.chargebeeFactory.openSubscriptionDetails(userState.getSelectedCompanyId(), subscriptionId);
-      };
-
-      $scope.showCompanySettings = function () {
-        $modal.open({
-          template: $templateCache.get('company-settings-modal.html'),
-          controller: 'CompanySettingsModalCtrl',
-          size: 'lg',
-          resolve: {
-            companyId: function () {
-              return userState.getSelectedCompanyId();
-            },
-            countries: function () {
-              return getCoreCountries();
-            }
-          }
-        });
       };
 
       $scope.getSubscriptionDesc = function (subscription) {

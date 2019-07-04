@@ -1,7 +1,7 @@
 'use strict';
 describe('controller: BillingCtrl', function () {
   var sandbox = sinon.sandbox.create();
-  var $rootScope, $scope, $window, $loading, $modal, $timeout, listServiceInstance;
+  var $rootScope, $scope, $window, $loading, $timeout, listServiceInstance;
 
   beforeEach(module('risevision.apps.billing.controllers'));
 
@@ -22,24 +22,14 @@ describe('controller: BillingCtrl', function () {
         stop: sandbox.stub()
       };
     });
-    $provide.service('$modal', function () {
+    $provide.service('companySettingsFactory', function () {
       return {
-        open: sandbox.stub()
+        openCompanySettings: sandbox.stub()
       };
-    });
-    $provide.service('$templateCache', function () {
-      return {
-        get: sandbox.stub()
-      };
-    });
+    });   
     $provide.service('ScrollingListService', function () {
       return function () {
         return listServiceInstance;
-      };
-    });
-    $provide.service('getCoreCountries', function () {
-      return function () {
-        return [];
       };
     });
     $provide.service('userState', function () {
@@ -80,7 +70,6 @@ describe('controller: BillingCtrl', function () {
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
     $window = $injector.get('$window');
-    $modal = $injector.get('$modal');
     $loading = $injector.get('$loading');
     $timeout = $injector.get('$timeout');
 
@@ -96,12 +85,12 @@ describe('controller: BillingCtrl', function () {
 
   it('should exist',function () {
     expect($scope).to.be.ok;
+    expect($scope.companySettingsFactory).to.be.ok;
     expect($scope.viewPastInvoices).to.be.a.function;
     expect($scope.viewPastInvoicesStore).to.be.a.function;
     expect($scope.viewUnpaidInvoicesStore).to.be.a.function;
     expect($scope.editPaymentMethods).to.be.a.function;
     expect($scope.editSubscription).to.be.a.function;
-    expect($scope.showCompanySettings).to.be.a.function;
   });
 
   describe('past invoices', function () {
@@ -200,13 +189,6 @@ describe('controller: BillingCtrl', function () {
       expect($scope.chargebeeFactory.openSubscriptionDetails).to.be.calledOnce;
       expect($scope.chargebeeFactory.openSubscriptionDetails.getCall(0).args[0]).to.equal('testId');
       expect($scope.chargebeeFactory.openSubscriptionDetails.getCall(0).args[1]).to.equal('parentId');
-    });
-  });
-
-  describe('account information', function () {
-    it('should show Company Settings modal', function () {
-      $scope.showCompanySettings();
-      expect($modal.open).to.be.calledOnce;
     });
   });
 

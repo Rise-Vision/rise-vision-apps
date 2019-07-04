@@ -3,10 +3,16 @@
 describe('directive: templateComponentWeather', function() {
   var $scope,
       element,
-      factory;
+      factory,
+      company,
+      rootScope,
+      compile;
 
   beforeEach(function() {
     factory = { selected: { id: "TEST-ID" } };
+    company = {
+      postalCode: '12345'
+    };
   });
 
   beforeEach(module('risevision.template-editor.directives'));
@@ -18,20 +24,34 @@ describe('directive: templateComponentWeather', function() {
     $provide.service('templateEditorFactory', function() {
       return factory;
     });
+    $provide.service('companySettingsFactory', function() {
+      return {};
+    });
+    $provide.service('userState', function() {
+      return {
+        _restoreState: function(){},
+        getCopyOfSelectedCompany: function() { 
+          return company;
+        }
+      };
+    });
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache){
+    rootScope = $rootScope;
+    compile = $compile;
     $templateCache.put('partials/template-editor/components/component-weather.html', '<p>mock</p>');
 
-    element = $compile("<template-component-weather></template-component-weather>")($rootScope.$new());
+    compileDirective();
+  }));
 
+  function compileDirective() {
+    element = compile("<template-component-weather></template-component-weather>")(rootScope.$new());
     $scope = element.scope();
-
     $scope.registerDirective = sinon.stub();
     $scope.setAttributeData = sinon.stub();
-
     $scope.$digest();
-  }));
+  }
 
   it('should compile html', function() {
     expect(element.html()).to.equal('<p>mock</p>');
@@ -42,6 +62,8 @@ describe('directive: templateComponentWeather', function() {
     expect($scope.factory).to.be.ok;
     expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
     expect($scope.registerDirective).to.have.been.called;
+    expect($scope.companySettingsFactory).to.be.ok;
+    expect($scope.hasValidAddress).to.be.ok;
 
     var directive = $scope.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
@@ -100,6 +122,64 @@ describe('directive: templateComponentWeather', function() {
     expect($scope.setAttributeData.calledWith(
       "TEST-ID", "scale", "updated weather"
     )).to.be.true;
+  });
+
+  describe('hasValidAddress:',function(){
+    it('should be valid if postalCode is provided',function(){
+      company = {
+        postalCode: '12345'
+      };      
+      compileDirective();
+      
+      expect($scope.hasValidAddress).to.be.true;
+    });
+
+    it('should be valid if city and country provided',function(){
+      company = {
+        city: 'city',
+        country: 'country'
+      };      
+      compileDirective();
+      
+      expect($scope.hasValidAddress).to.be.true;
+    });
+
+    it('should be invalid if address is not provided',function(){
+      company = {};      
+      compileDirective();
+      
+      expect($scope.hasValidAddress).to.be.false;
+    });
+
+    it('should be invalid if address is empty',function(){
+      company = {
+        postalCode: "",
+        city: "",
+        country: "",
+      };      
+      compileDirective();
+      
+      expect($scope.hasValidAddress).to.be.false;
+    });
+
+    it('should be invalid if only city is provided but no country',function(){
+      company = {
+        city: "city",
+      };      
+      compileDirective();
+      
+      expect($scope.hasValidAddress).to.be.false;
+    });
+
+    it('should be invalid if only country is provided but no city',function(){
+      company = {
+        country: 'country'
+      };      
+      compileDirective();
+      
+      expect($scope.hasValidAddress).to.be.false;
+    });
+
   });
 
 });
