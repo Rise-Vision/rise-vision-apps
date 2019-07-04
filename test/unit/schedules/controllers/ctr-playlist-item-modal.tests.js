@@ -44,18 +44,14 @@ describe('controller: Playlist Item Modal', function() {
     $provide.service('presentation',function(){
       return {
         get: function(){
-          var deferred = Q.defer();
-          deferred.resolve({item: {productCode: '123'}});
-          return deferred.promise
+          return Q.resolve({item: {productCode: '123'}});
         }
       };
     });
     $provide.service('template',function(){
       return {
         loadBlueprintData: function(){
-          var deferred = Q.defer();
-          deferred.resolve(blueprintData);
-          return deferred.promise
+          return Q.resolve(blueprintData);
         }
       };
     });

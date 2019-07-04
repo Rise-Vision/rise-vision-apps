@@ -54,6 +54,10 @@ angular.module('risevision.schedules.controllers')
                 $scope.playlistItem.playUntilDone = false;
               }
             })
+            .catch(function () {
+              $scope.playUntilDoneSupported = false;
+              $scope.playlistItem.playUntilDone = false;
+            })
             .finally(function () {
               $scope.loadingTemplate = false;
             });
