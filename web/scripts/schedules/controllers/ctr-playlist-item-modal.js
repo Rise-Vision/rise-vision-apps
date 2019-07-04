@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.schedules.controllers')
-  .controller('playlistItemModal', ['$scope', '$modal', '$modalInstance',
+  .controller('playlistItemModal', ['$scope', '$modal', '$modalInstance', '$loading',
     'playlistFactory', 'playlistItem', 'userState', 'presentation', 'template', 'HTML_PRESENTATION_TYPE',
-    function ($scope, $modal, $modalInstance, playlistFactory, playlistItem,
+    function ($scope, $modal, $modalInstance, $loading, playlistFactory, playlistItem,
       userState, presentation, template, HTML_PRESENTATION_TYPE) {
       $scope.companyId = userState.getSelectedCompanyId();
       $scope.playlistItem = angular.copy(playlistItem);
@@ -12,6 +12,14 @@ angular.module('risevision.schedules.controllers')
 
       $scope.$on('picked', function (event, url) {
         $scope.playlistItem.objectReference = url[0];
+      });
+
+      $scope.$watch('loadingTemplate', function (loading) {
+        if (loading) {
+          $loading.start('playlist-item-modal-loader');
+        } else {
+          $loading.stop('playlist-item-modal-loader');
+        }
       });
 
       $scope.selectPresentation = function () {
@@ -33,7 +41,7 @@ angular.module('risevision.schedules.controllers')
 
         if ($scope.playlistItem.presentationType === HTML_PRESENTATION_TYPE) {
 
-          //start spinner
+          $scope.loadingTemplate = true;
 
           presentation.get($scope.playlistItem.objectReference).then(function (result) {
 
@@ -47,9 +55,11 @@ angular.module('risevision.schedules.controllers')
               }
             })
             .finally(function () {
-              //stop spinner
+              $scope.loadingTemplate = false;
             });
 
+        } else {
+          $scope.loadingTemplate = false;
         }
       }
 
