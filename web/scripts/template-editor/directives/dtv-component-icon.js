@@ -13,7 +13,7 @@ angular.module('risevision.template-editor.directives')
           var _html = function () {
             if ($scope.type === 'streamline') {
               // eventually all icons should fall into this
-              var fragment = '<div class="mt-1 mr-2">' +
+              var fragment = '<div class="streamline-component-icon">' +
                 '<streamline-icon name="' + $scope.icon + '"' +
                 ' width="24" height="18"></streamline-icon>' +
                 '</div>';
