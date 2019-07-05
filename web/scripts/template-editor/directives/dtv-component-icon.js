@@ -14,7 +14,7 @@ angular.module('risevision.template-editor.directives')
             if ($scope.type === 'streamline') {
               // eventually all icons should fall into this
               var fragment = '<streamline-icon name="' + $scope.icon + '"' +
-                ' width="61" height="60"></streamline-icon>';
+                ' width="24" height="18"></streamline-icon>';
 
               return $compile(fragment)($scope);
             } else if ($scope.type === 'svg') {
