@@ -52,6 +52,16 @@ angular.module('risevision.template-editor.controllers')
         component[attributeKey] = value;
       };
 
+      $scope.getAvailableAttributeData = function (componentId, attributeName) {
+        var result = $scope.getAttributeData(componentId, attributeName);
+
+        if (angular.isUndefined(result)) {
+          result = $scope.getBlueprintData(componentId, attributeName);
+        }
+
+        return result;
+      };
+
       $scope.isPublishDisabled = function () {
         var isNotRevised = !$scope.factory.isRevised() && scheduleFactory.hasSchedules();
 

@@ -64,7 +64,7 @@ describe('directive: templateComponentSlides', function() {
       src: 'https://docs.google.com/presentation/d/e/2PACX-1vTncMMQxJIzZNdNIFqAsTI8ydohnKU97taOG-dvwYcxS3d0DjdkLlcEqUQKeL-z_nvYQIcFwxKC81b1/pub?start=false&loop=false&delayms=3000'
     };
 
-    $scope.getAttributeData = function(componentId, attributeName) {
+    $scope.getAvailableAttributeData = function(componentId, attributeName) {
       return sampleData[attributeName];
     };
 
@@ -81,7 +81,7 @@ describe('directive: templateComponentSlides', function() {
       duration: 2
     };
 
-    $scope.getAttributeData = function(componentId, attributeName) {
+    $scope.getAvailableAttributeData = function(componentId, attributeName) {
       return sampleData[attributeName];
     };
 
@@ -91,6 +91,19 @@ describe('directive: templateComponentSlides', function() {
     expect($scope.duration).to.equal(sampleData.duration);
   });
 
+  it('should set duration to 10 when default value and blueprint are undefined', function() {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+
+    $scope.getAvailableAttributeData = function(componentId, attributeName) {
+      return undefined;
+    };
+
+    directive.show();
+
+    expect($scope.componentId).to.equal("TEST-ID");
+    expect($scope.duration).to.equal(10);
+  });
+
   it('should validate URL when is shown', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     var sampleData = {
@@ -98,7 +111,7 @@ describe('directive: templateComponentSlides', function() {
       duration: 2
     };
 
-    $scope.getAttributeData = function(componentId, attributeName) {
+    $scope.getAvailableAttributeData = function(componentId, attributeName) {
       return sampleData[attributeName];
     };
 
@@ -115,7 +128,7 @@ describe('directive: templateComponentSlides', function() {
         duration: 2
       };
   
-      $scope.getAttributeData = function(componentId, attributeName) {
+      $scope.getAvailableAttributeData = function(componentId, attributeName) {
         return sampleData[attributeName];
       };
     });

@@ -28,12 +28,8 @@ angular.module('risevision.template-editor.directives')
           $scope.spinner = false;
 
           function _load() {
-            $scope.src = _loadAttributeData('src');
-            $scope.duration = parseInt(_loadAttributeData('duration')) || 10;
-          }
-
-          function _loadAttributeData(attributeName) {
-            return $scope.getAttributeData($scope.componentId, attributeName);
+            $scope.src = $scope.getAvailableAttributeData($scope.componentId, 'src');
+            $scope.duration = parseInt($scope.getAvailableAttributeData($scope.componentId, 'duration')) || 10;
           }
 
           $scope.saveDuration = function () {
