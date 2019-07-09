@@ -1,6 +1,6 @@
 'use strict';
 
-describe('directive: templateComponentText', function() {
+describe('directive: templateComponentVideo', function() {
   var $scope,
       element,
       factory;
@@ -21,13 +21,13 @@ describe('directive: templateComponentText', function() {
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache){
-    $templateCache.put('partials/template-editor/components/component-text.html', '<p>mock</p>');
+    $templateCache.put('partials/template-editor/components/component-video.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
     $scope.registerDirective = sinon.stub();
     $scope.setAttributeData = sinon.stub();
 
-    element = $compile("<template-component-text></template-component-text>")($scope);
+    element = $compile("<template-component-video></template-component-video>")($scope);
     $scope = element.scope();
     $scope.$digest();
   }));
@@ -40,43 +40,10 @@ describe('directive: templateComponentText', function() {
 
     var directive = $scope.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
-    expect(directive.type).to.equal('rise-text');
-    expect(directive.iconType).to.equal('svg');
+    expect(directive.type).to.equal('rise-video');
+    expect(directive.iconType).to.equal('streamline');
     expect(directive.icon).to.exist;
     expect(directive.show).to.be.a('function');
-  });
-
-  it('should load text from attribute data', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
-    var sampleValue = "test text";
-
-    $scope.getAvailableAttributeData = function() {
-      return sampleValue;
-    }
-
-    directive.show();
-
-    expect($scope.componentId).to.equal("TEST-ID");
-    expect($scope.value).to.equal(sampleValue);
-  });
-
-  it('should save text to attribute data', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
-    var sampleValue = "test text";
-
-    $scope.getAvailableAttributeData = function() {
-      return sampleValue;
-    }
-
-    directive.show();
-
-    $scope.value = "updated text";
-
-    $scope.save();
-
-    expect($scope.setAttributeData.calledWith(
-      "TEST-ID", "value", "updated text"
-    )).to.be.true;
   });
 
 });

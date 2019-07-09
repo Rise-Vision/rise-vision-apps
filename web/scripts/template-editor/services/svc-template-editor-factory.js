@@ -1,16 +1,15 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .constant('BLUEPRINT_URL', 'https://widgets.risevision.com/stable/templates/PRODUCT_CODE/blueprint.json')
   .constant('HTML_TEMPLATE_URL', 'https://widgets.risevision.com/stable/templates/PRODUCT_CODE/src/template.html')
   .constant('HTML_TEMPLATE_DOMAIN', 'https://widgets.risevision.com')
-  .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', '$http', 'presentation',
+  .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', 'presentation',
     'processErrorCode', 'userState', 'checkTemplateAccess', '$modal', 'scheduleFactory', 'plansFactory',
     'templateEditorUtils',
-    'HTML_PRESENTATION_TYPE', 'BLUEPRINT_URL', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
-    function ($q, $log, $state, $rootScope, $http, presentation, processErrorCode, userState,
+    'HTML_PRESENTATION_TYPE', 'template', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
+    function ($q, $log, $state, $rootScope, presentation, processErrorCode, userState,
       checkTemplateAccess, $modal, scheduleFactory, plansFactory, templateEditorUtils,
-      HTML_PRESENTATION_TYPE, BLUEPRINT_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
+      HTML_PRESENTATION_TYPE, template, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {};
 
       var _setPresentation = function (presentation, isUpdate) {
@@ -95,7 +94,7 @@ angular.module('risevision.template-editor.services')
           isStoreProduct: false
         };
 
-        return factory.loadBlueprintData(factory.presentation.productCode)
+        return template.loadBlueprintData(factory.presentation.productCode)
           .then(function (blueprintData) {
             factory.blueprintData = blueprintData.data;
 
@@ -195,7 +194,7 @@ angular.module('risevision.template-editor.services')
           .then(function (result) {
             _setPresentation(result.item);
 
-            return factory.loadBlueprintData(factory.presentation.productCode);
+            return template.loadBlueprintData(factory.presentation.productCode);
           })
           .then(function (blueprintData) {
             factory.blueprintData = blueprintData.data;
@@ -215,12 +214,6 @@ angular.module('risevision.template-editor.services')
           });
 
         return deferred.promise;
-      };
-
-      factory.loadBlueprintData = function (productCode) {
-        var url = BLUEPRINT_URL.replace('PRODUCT_CODE', productCode);
-
-        return $http.get(url);
       };
 
       factory.deletePresentation = function () {

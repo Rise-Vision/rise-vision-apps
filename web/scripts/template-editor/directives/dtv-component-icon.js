@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('componentIcon', ['iconsList',
-    function (iconsList) {
+  .directive('componentIcon', ['$compile', 'iconsList',
+    function ($compile, iconsList) {
       return {
         restrict: 'E',
         scope: {
@@ -11,7 +11,15 @@ angular.module('risevision.template-editor.directives')
         },
         link: function ($scope, element) {
           var _html = function () {
-            if ($scope.type === 'svg') {
+            if ($scope.type === 'streamline') {
+              // eventually all icons should fall into this
+              var fragment = '<div class="streamline-component-icon">' +
+                '<streamline-icon name="' + $scope.icon + '"' +
+                ' width="24" height="18"></streamline-icon>' +
+                '</div>';
+
+              return $compile(fragment)($scope);
+            } else if ($scope.type === 'svg') {
               return '<svg class="mr-2 fa fa-lg" width="24px" height="18px" viewBox="0 0 24 18" xmlns="http://www.w3.org/2000/svg">' +
                 $scope.icon + '</svg>';
             } else if ($scope.type === 'riseSvg') {
