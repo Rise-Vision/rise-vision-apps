@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('risevision.schedules.services')
-  .factory('scheduleFactory', ['$q', '$state', '$log', '$modal', '$rootScope', 'schedule', 'scheduleTracker', 'processErrorCode',
+  .factory('scheduleFactory', ['$q', '$state', '$log', '$modal', '$rootScope', 'schedule', 'scheduleTracker',
+    'processErrorCode',
     'VIEWER_URL',
     function ($q, $state, $log, $modal, $rootScope, schedule, scheduleTracker, processErrorCode, VIEWER_URL) {
       var factory = {};

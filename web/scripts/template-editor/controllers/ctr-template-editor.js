@@ -52,6 +52,16 @@ angular.module('risevision.template-editor.controllers')
         component[attributeKey] = value;
       };
 
+      $scope.getAvailableAttributeData = function (componentId, attributeName) {
+        var result = $scope.getAttributeData(componentId, attributeName);
+
+        if (angular.isUndefined(result)) {
+          result = $scope.getBlueprintData(componentId, attributeName);
+        }
+
+        return result;
+      };
+
       $scope.isPublishDisabled = function () {
         var isNotRevised = !$scope.factory.isRevised() && scheduleFactory.hasSchedules();
 
@@ -192,18 +202,18 @@ angular.module('risevision.template-editor.controllers')
           var hasSchedules = scheduleFactory.hasSchedules();
 
           savePromise
-          .then(function () {
-            if (!hasSchedules) {
-              return $scope.factory.publishPresentation();
-            }
-          })
-          .finally(function () {
-            // If the modal was displayed we can't navigate away, otherwise it will be closed by apps.js' $modalStack.dismissAll
-            if (hasSchedules) {
-              _bypassUnsaved = true;
-              $state.go(toState, toParams);
-            }
-          });
+            .then(function () {
+              if (!hasSchedules) {
+                return $scope.factory.publishPresentation();
+              }
+            })
+            .finally(function () {
+              // If the modal was displayed we can't navigate away, otherwise it will be closed by apps.js' $modalStack.dismissAll
+              if (hasSchedules) {
+                _bypassUnsaved = true;
+                $state.go(toState, toParams);
+              }
+            });
         }
       });
 

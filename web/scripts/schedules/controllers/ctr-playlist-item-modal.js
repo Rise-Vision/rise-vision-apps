@@ -1,16 +1,25 @@
 'use strict';
 
 angular.module('risevision.schedules.controllers')
-  .controller('playlistItemModal', ['$scope', '$modal', '$modalInstance',
-    'playlistFactory', 'playlistItem', 'userState',
-    function ($scope, $modal, $modalInstance, playlistFactory, playlistItem,
-      userState) {
+  .controller('playlistItemModal', ['$scope', '$modal', '$modalInstance', '$loading',
+    'playlistFactory', 'playlistItem', 'userState', 'presentation', 'template', 'HTML_PRESENTATION_TYPE',
+    function ($scope, $modal, $modalInstance, $loading, playlistFactory, playlistItem,
+      userState, presentation, template, HTML_PRESENTATION_TYPE) {
       $scope.companyId = userState.getSelectedCompanyId();
       $scope.playlistItem = angular.copy(playlistItem);
       $scope.isNew = playlistFactory.isNew(playlistItem);
+      configurePlayUntilDone();
 
       $scope.$on('picked', function (event, url) {
         $scope.playlistItem.objectReference = url[0];
+      });
+
+      $scope.$watch('loadingTemplate', function (loading) {
+        if (loading) {
+          $loading.start('playlist-item-modal-loader');
+        } else {
+          $loading.stop('playlist-item-modal-loader');
+        }
       });
 
       $scope.selectPresentation = function () {
@@ -21,8 +30,42 @@ angular.module('risevision.schedules.controllers')
 
         modalInstance.result.then(function (presentationDetails) {
           $scope.playlistItem.objectReference = presentationDetails[0];
+          $scope.playlistItem.presentationType = presentationDetails[2];
+          configurePlayUntilDone();
         });
       };
+
+      function configurePlayUntilDone() {
+
+        $scope.playUntilDoneSupported = true;
+
+        if ($scope.playlistItem.presentationType === HTML_PRESENTATION_TYPE) {
+
+          $scope.loadingTemplate = true;
+
+          presentation.get($scope.playlistItem.objectReference).then(function (result) {
+
+              return template.loadBlueprintData(result.item.productCode);
+            })
+            .then(function (result) {
+
+              if (result.data && !result.data.playUntilDone) {
+                $scope.playUntilDoneSupported = false;
+                $scope.playlistItem.playUntilDone = false;
+              }
+            })
+            .catch(function () {
+              $scope.playUntilDoneSupported = false;
+              $scope.playlistItem.playUntilDone = false;
+            })
+            .finally(function () {
+              $scope.loadingTemplate = false;
+            });
+
+        } else {
+          $scope.loadingTemplate = false;
+        }
+      }
 
       $scope.save = function () {
         angular.copy($scope.playlistItem, playlistItem);

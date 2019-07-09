@@ -11,12 +11,7 @@ angular.module('risevision.template-editor.directives')
           $scope.factory = templateEditorFactory;
 
           function _load() {
-            var attributeDataValue = $scope.getAttributeData($scope.componentId, 'value');
-            if (attributeDataValue) {
-              $scope.value = attributeDataValue;
-            } else {
-              $scope.value = $scope.getBlueprintData($scope.componentId, 'value');
-            }
+            $scope.value = $scope.getAvailableAttributeData($scope.componentId, 'value');
           }
 
           $scope.save = function () {
