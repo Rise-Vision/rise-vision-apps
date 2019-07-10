@@ -39,7 +39,7 @@
     </div>
   </div>
 
-  <div class="image-component-list-empty" ng-hide="selectedImages.length !== 0 || factory.loadingPresentation">
+  <div class="image-component-list-empty" ng-hide="isUploading || selectedImages.length !== 0 || factory.loadingPresentation">
     <div class="row">
       <div class="col-xs-12">
         <h2>You have no images here.</h2>
