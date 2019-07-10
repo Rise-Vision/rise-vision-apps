@@ -133,7 +133,7 @@ angular.module('risevision.displays.services')
         } else {
           return addressFactory.isValidOrEmptyAddress(factory.display);
         }
-      }
+      };
 
       factory.updateDisplay = function () {
         var deferred = $q.defer();
@@ -155,7 +155,7 @@ angular.module('risevision.displays.services')
               .then(null, function (e) {
                 _showErrorMessage('update', e);
                 deferred.reject();
-              })
+              });
           })
           .catch(function (e) {
             factory.errorMessage = 'We couldn\'t update your address.';
