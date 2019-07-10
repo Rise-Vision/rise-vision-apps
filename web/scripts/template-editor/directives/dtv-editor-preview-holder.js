@@ -2,8 +2,9 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('templateEditorPreviewHolder', ['$window', '$timeout', '$sce', 'templateEditorFactory',
-    'HTML_TEMPLATE_DOMAIN', 'HTML_TEMPLATE_URL', 'userState',
-    function ($window, $timeout, $sce, templateEditorFactory, HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL, userState) {
+    'HTML_TEMPLATE_DOMAIN', 'HTML_TEMPLATE_URL', 'userState', '$rootScope',
+    function ($window, $timeout, $sce, templateEditorFactory, HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL, userState,
+    $rootScope) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/preview-holder.html',
@@ -168,6 +169,10 @@ angular.module('risevision.template-editor.directives')
           $scope.$watch('factory.presentation.templateAttributeData', function (value) {
             _postAttributeData();
           }, true);
+
+          $rootScope.$on('risevision.company.updated', function () {
+            _postDisplayData();
+          });
 
           function _postAttributeData() {
             var message = {
