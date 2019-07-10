@@ -84,19 +84,33 @@ describe('service: displayFactory:', function() {
     $provide.service('processErrorCode', function() {
       return processErrorCode = sinon.spy(function() { return 'error'; });
     });
-
+    $provide.service('addressFactory', function() {
+      return {
+        isValidOrEmptyAddress: sandbox.spy(function(displayId) {
+          var deferred = Q.defer();
+          if(validateAddress){
+            deferred.resolve();
+          }else{
+            deferred.reject({result: {error: { message: 'ERROR; could not validate address'}}});
+          }
+          return deferred.promise;
+        })
+      }
+    });
   }));
   var displayFactory, $rootScope, $modal, trackerCalled, updateDisplay, currentState, returnList, 
-  displayListSpy, displayAddSpy, playerLicenseFactory, display, processErrorCode;
+  displayListSpy, displayAddSpy, playerLicenseFactory, display, processErrorCode, validateAddress, addressFactory;
   beforeEach(function(){
     trackerCalled = undefined;
     currentState = undefined;
     updateDisplay = true;
+    validateAddress = true;
     returnList = null;
 
     inject(function($injector){
       displayFactory = $injector.get('displayFactory');
       playerLicenseFactory = $injector.get('playerLicenseFactory');
+      addressFactory = $injector.get('addressFactory');
       display = $injector.get('display');
       $modal = $injector.get('$modal');
       $rootScope = $injector.get('$rootScope');
@@ -342,8 +356,59 @@ describe('service: displayFactory:', function() {
         expect(displayFactory.savingDisplay).to.be.false;
         expect(displayFactory.loadingDisplay).to.be.false;
 
-        expect(displayFactory.errorMessage).to.be.ok;
+        expect(displayFactory.errorMessage).to.equal("Failed to update Display.");
         expect(displayFactory.apiError).to.be.ok;
+        done();
+      },10);
+    });
+
+    it('should validate the address if not using company address',function(done){
+      updateDisplay = true;
+      displayFactory.display.useCompanyAddress = false;
+      validateAddress = false;
+
+      displayFactory.updateDisplay();
+      addressFactory.isValidOrEmptyAddress.should.have.been.called;
+      
+      expect(displayFactory.savingDisplay).to.be.true;
+      expect(displayFactory.loadingDisplay).to.be.true;
+
+
+      setTimeout(function(){
+        expect(trackerCalled).to.not.be.ok;
+        expect(displayFactory.savingDisplay).to.be.false;
+        expect(displayFactory.loadingDisplay).to.be.false;
+
+        expect(displayFactory.errorMessage).to.equal("We couldn\'t update your address.");
+        expect(displayFactory.apiError).to.be.ok;
+        done();
+      },10);
+    });
+
+    it('should follow validation result from addressFactory',function(done){
+      updateDisplay = true;
+      displayFactory.display.useCompanyAddress = false;
+      validateAddress = true;
+
+      displayFactory.updateDisplay();
+      addressFactory.isValidOrEmptyAddress.should.have.been.called;
+
+      setTimeout(function(){
+        expect(trackerCalled).to.equal('Display Updated');
+        done();
+      },10);
+    });
+
+    it('should not validate the address if using company address',function(done){
+      updateDisplay = true;
+      displayFactory.display.useCompanyAddress = true;
+
+      displayFactory.updateDisplay();
+
+      addressFactory.isValidOrEmptyAddress.should.not.have.been.called;
+
+      setTimeout(function(){
+        expect(trackerCalled).to.equal('Display Updated');
         done();
       },10);
     });

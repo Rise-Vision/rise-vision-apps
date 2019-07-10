@@ -6,7 +6,7 @@ angular.module('risevision.apps.billing.controllers')
   .controller('BillingCtrl', ['$rootScope', '$scope', '$loading', '$window', '$timeout',
     'ScrollingListService', 'userState', 'currentPlanFactory', 'ChargebeeFactory', 'billing',
     'STORE_URL', 'PAST_INVOICES_PATH', 'UNPAID_INVOICES_PATH', 'companySettingsFactory',
-    function ($rootScope, $scope, $loading, $window, $timeout, ScrollingListService, userState, 
+    function ($rootScope, $scope, $loading, $window, $timeout, ScrollingListService, userState,
       currentPlanFactory, ChargebeeFactory, billing, STORE_URL, PAST_INVOICES_PATH, UNPAID_INVOICES_PATH,
       companySettingsFactory) {
 
