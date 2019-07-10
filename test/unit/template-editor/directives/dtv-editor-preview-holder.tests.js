@@ -6,7 +6,8 @@ describe('directive: TemplateEditorPreviewHolder', function() {
       element,
       factory,
       iframe,
-      userState;
+      userState,
+      rootScope;
 
   beforeEach(function() {
     factory = {
@@ -40,6 +41,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $window){
+    rootScope = $rootScope;
     $templateCache.put('partials/template-editor/preview-holder.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
@@ -68,6 +70,18 @@ describe('directive: TemplateEditorPreviewHolder', function() {
   it('should define component directive registry functions', function() {
     expect($scope.getEditorPreviewUrl).to.be.a('function');
     expect($scope.getTemplateAspectRatio).to.be.a('function');
+  });
+
+  it('posts display address when company is updated', function(done) {
+    iframe.onload();
+    iframe.contentWindow.postMessage.reset();
+    rootScope.$broadcast('risevision.company.updated');
+
+    setTimeout(function(){
+      iframe.contentWindow.postMessage.should.have.been.called;
+      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal([ '{"type":"displayData","value":{"displayAddress":{}}}', 'https://widgets.risevision.com' ]);
+      done();
+    },10);
   });
 
   describe('getTemplateAspectRatio', function() {
