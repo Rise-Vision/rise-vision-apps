@@ -2,9 +2,9 @@
 
 angular.module('risevision.editor.controllers')
   .controller('PresentationItemModalController', ['$scope', '$log', '$modal',
-    '$modalInstance', 'presentationFactory', 'item',
+    '$modalInstance', 'presentationFactory', 'item', 'PRESENTATION_SEARCH',
     function ($scope, $log, $modal, $modalInstance, presentationFactory,
-      item) {
+      item, PRESENTATION_SEARCH) {
       var initialPresentationName;
       $scope.item = angular.copy(item);
 
@@ -48,9 +48,14 @@ angular.module('risevision.editor.controllers')
       });
 
       $scope.selectPresentation = function () {
+        PRESENTATION_SEARCH.filter = ' NOT presentationType:\"HTML Template\"';
         var modalInstance = $modal.open({
           templateUrl: 'partials/editor/presentation-selector-modal.html',
           controller: 'PresentationSelectorModal'
+        });
+
+        $scope.$$postDigest(function () {
+          PRESENTATION_SEARCH.filter = '';
         });
 
         modalInstance.result.then(function (presentationDetails) {

@@ -42,6 +42,8 @@
               <i ng-if="search.sortBy == 'revisionStatusName'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
               <!-- end ngIf: search.sortBy == 'revisionStatusName' -->
             </th>
+            <th>presentationType
+            </th>
             <th id="tableHeaderChangeDate" class="table-header__cell hidden-xs" ng-click="factory.sortBy('changeDate')">
               {{'editor-app.list.heading.changeDate' | translate}}
               <!-- ngIf: search.sortBy == 'changeDate' -->
@@ -54,6 +56,7 @@
           <tr class="table-body__row" ng-repeat="presentation in factory.items.list" ng-click="openPresentation(presentation)">
             <td class="table-body__cell col-sm-9"><a ng-click="openPresentation(presentation); $event.stopPropagation();"><strong>{{presentation.name}}</strong></a></td>
             <td class="table-body__cell col-sm-9 hidden-xs"><span ng-click="openPresentation(presentation); $event.stopPropagation();"><span ng-class="{'text-danger': presentation.revisionStatusName==='Revised'}">{{presentation.revisionStatusName | presentationStatus}}</span></span></td>
+            <td class="table-body__cell col-sm-9 hidden-xs"><span ng-click="openPresentation(presentation); $event.stopPropagation();">{{presentation.presentationType}}</span></td>
             <td class="table-body__cell col-sm-2 hidden-xs u_nowrap" ><span ng-click="openPresentation(presentation); $event.stopPropagation();">{{presentation.changeDate | date:'d-MMM-yyyy h:mm a'}}</span></td>
           </tr>
           <!-- If no presentation available -->
