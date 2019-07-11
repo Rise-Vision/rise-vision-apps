@@ -45,6 +45,9 @@ describe('controller: Presentation List', function() {
         openPresentation: sinon.stub()
       };
     });
+    $provide.value('PRESENTATION_SEARCH', {
+      filter: 'search filter'
+    });
   }));
   var $scope, $loading, $loadingStartSpy, $loadingStopSpy;
   beforeEach(function(){
@@ -80,6 +83,7 @@ describe('controller: Presentation List', function() {
     expect($scope.search).to.be.ok;
     expect($scope.search).to.have.property('sortBy');
     expect($scope.search).to.have.property('reverse');
+    expect($scope.search).to.have.property('filter');
     expect($scope.search.count).to.equal(5);
   });
 

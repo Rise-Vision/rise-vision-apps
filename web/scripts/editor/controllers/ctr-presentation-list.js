@@ -16,7 +16,9 @@ angular.module('risevision.editor.controllers')
         filter: PRESENTATION_SEARCH.filter
       };
 
-      $scope.factory = new ScrollingListService(presentation.list, $scope.search);
+      editorFactory.presentations = new ScrollingListService(presentation.list,
+        $scope.search);
+      $scope.factory = editorFactory.presentations;
       $scope.editorFactory = editorFactory;
       $scope.templateEditorFactory = templateEditorFactory;
       $scope.presentationTracker = presentationTracker;

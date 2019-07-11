@@ -240,6 +240,16 @@ describe('service: presentation:', function() {
         })
         .then(null,done);
     });
+
+    it('should apply the search filter to the search string',function(done){
+      presentation.list({query: 'str', filter: ' NOT presentationType:\"HTML Template\"'})
+        .then(function(result){
+          expect(searchString).to.equal('name:~\"str\" OR id:~\"str\" OR revisionStatusName:~\"str\" NOT presentationType:\"HTML Template\"');
+
+          done();
+        })
+        .then(null,done);
+    });
     
     it("should handle failure to get list correctly",function(done){
       returnList = false;

@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.editor.controllers')
-  .controller('PresentationItemModalController', ['$scope', '$log', '$modal',
+  .controller('PresentationItemModalController', ['$scope', '$timeout', '$log', '$modal',
     '$modalInstance', 'presentationFactory', 'item', 'PRESENTATION_SEARCH',
-    function ($scope, $log, $modal, $modalInstance, presentationFactory,
+    function ($scope, $timeout, $log, $modal, $modalInstance, presentationFactory,
       item, PRESENTATION_SEARCH) {
       var initialPresentationName;
       $scope.item = angular.copy(item);
@@ -54,7 +54,7 @@ angular.module('risevision.editor.controllers')
           controller: 'PresentationSelectorModal'
         });
 
-        $scope.$$postDigest(function () {
+        $timeout(function () {
           PRESENTATION_SEARCH.filter = '';
         });
 

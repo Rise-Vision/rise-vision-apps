@@ -32,9 +32,8 @@ angular.module('risevision.editor.services')
           var deferred = $q.defer();
 
           var query = search.query ?
-            createSearchQuery(PRESENTAION_SEARCH_FIELDS, search.query) :
-            '';
-          query = query + search.filter ? search.filter : '';
+            createSearchQuery(PRESENTAION_SEARCH_FIELDS, search.query) : '';
+          query += search.filter ? search.filter : '';
 
           var obj = {
             'companyId': userState.getSelectedCompanyId(),
