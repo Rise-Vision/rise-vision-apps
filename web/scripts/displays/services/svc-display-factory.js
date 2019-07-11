@@ -2,10 +2,10 @@
 
 angular.module('risevision.displays.services')
   .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal', '$loading', '$log',
-    'display', 'displayTracker', 'playerLicenseFactory', 'processErrorCode', 'addressFactory',
+    'display', 'displayTracker', 'playerLicenseFactory', 'processErrorCode', 'storeService',
     'humanReadableError',
     function ($rootScope, $q, $state, $modal, $loading, $log, display, displayTracker,
-      playerLicenseFactory, processErrorCode, addressFactory, humanReadableError) {
+      playerLicenseFactory, processErrorCode, storeService, humanReadableError) {
       var factory = {};
       var _displayId;
 
@@ -128,10 +128,13 @@ angular.module('risevision.displays.services')
       };
 
       var _validateAddress = function () {
-        if (factory.display.useCompanyAddress) {
+        if (factory.display.useCompanyAddress ||
+          (factory.display.country !== "" &&
+            factory.display.country !== "CA" &&
+            factory.display.country !== "US")) {
           return $q.resolve();
         } else {
-          return addressFactory.isValidOrEmptyAddress(factory.display);
+          return storeService.validateAddress(factory.display);
         }
       };
 

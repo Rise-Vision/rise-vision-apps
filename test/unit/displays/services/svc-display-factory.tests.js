@@ -84,9 +84,9 @@ describe('service: displayFactory:', function() {
     $provide.service('processErrorCode', function() {
       return processErrorCode = sinon.spy(function() { return 'error'; });
     });
-    $provide.service('addressFactory', function() {
+    $provide.service('storeService', function() {
       return {
-        isValidOrEmptyAddress: sandbox.spy(function(displayId) {
+        validateAddress: sandbox.spy(function(displayId) {
           var deferred = Q.defer();
           if(validateAddress){
             deferred.resolve();
@@ -99,7 +99,7 @@ describe('service: displayFactory:', function() {
     });
   }));
   var displayFactory, $rootScope, $modal, trackerCalled, updateDisplay, currentState, returnList, 
-  displayListSpy, displayAddSpy, playerLicenseFactory, display, processErrorCode, validateAddress, addressFactory;
+  displayListSpy, displayAddSpy, playerLicenseFactory, display, processErrorCode, validateAddress, storeService;
   beforeEach(function(){
     trackerCalled = undefined;
     currentState = undefined;
@@ -110,7 +110,7 @@ describe('service: displayFactory:', function() {
     inject(function($injector){
       displayFactory = $injector.get('displayFactory');
       playerLicenseFactory = $injector.get('playerLicenseFactory');
-      addressFactory = $injector.get('addressFactory');
+      storeService = $injector.get('storeService');
       display = $injector.get('display');
       $modal = $injector.get('$modal');
       $rootScope = $injector.get('$rootScope');
@@ -325,6 +325,11 @@ describe('service: displayFactory:', function() {
   });
   
   describe('updateDisplay: ',function(){
+
+    beforeEach(function(){
+      displayFactory.display.country = 'CA';
+    });
+
     it('should update the display',function(done){
       updateDisplay = true;
 
@@ -368,7 +373,7 @@ describe('service: displayFactory:', function() {
       validateAddress = false;
 
       displayFactory.updateDisplay();
-      addressFactory.isValidOrEmptyAddress.should.have.been.called;
+      storeService.validateAddress.should.have.been.called;
       
       expect(displayFactory.savingDisplay).to.be.true;
       expect(displayFactory.loadingDisplay).to.be.true;
@@ -385,13 +390,13 @@ describe('service: displayFactory:', function() {
       },10);
     });
 
-    it('should follow validation result from addressFactory',function(done){
+    it('should follow validation result from storeService',function(done){
       updateDisplay = true;
       displayFactory.display.useCompanyAddress = false;
       validateAddress = true;
 
       displayFactory.updateDisplay();
-      addressFactory.isValidOrEmptyAddress.should.have.been.called;
+      storeService.validateAddress.should.have.been.called;
 
       setTimeout(function(){
         expect(trackerCalled).to.equal('Display Updated');
@@ -405,13 +410,46 @@ describe('service: displayFactory:', function() {
 
       displayFactory.updateDisplay();
 
-      addressFactory.isValidOrEmptyAddress.should.not.have.been.called;
+      storeService.validateAddress.should.not.have.been.called;
 
       setTimeout(function(){
         expect(trackerCalled).to.equal('Display Updated');
         done();
       },10);
     });
+
+    it('should flag empty address',function(done){
+      updateDisplay = true;
+      validateAddress = false;
+      displayFactory.display.useCompanyAddress = false;
+      displayFactory.display.country = '';
+
+      displayFactory.updateDisplay();
+
+      storeService.validateAddress.should.have.been.called;
+
+      setTimeout(function(){
+        expect(displayFactory.errorMessage).to.equal("We couldn\'t update your address.");
+        done();
+      },10);
+    });
+
+    it('should skip validation if country is not US or CA',function(done){
+      updateDisplay = true;
+      displayFactory.display.useCompanyAddress = false;
+      displayFactory.display.country = 'AR';
+
+      displayFactory.updateDisplay();
+
+      storeService.validateAddress.should.not.have.been.called;
+
+      setTimeout(function(){
+        expect(trackerCalled).to.equal('Display Updated');
+        done();
+      },10);
+    });
+
+
   });
   
   describe('deleteDisplay: ',function(){
