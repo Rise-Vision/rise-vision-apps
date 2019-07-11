@@ -129,9 +129,9 @@ angular.module('risevision.displays.services')
 
       var _validateAddress = function () {
         if (factory.display.useCompanyAddress ||
-          (factory.display.country !== "" &&
-            factory.display.country !== "CA" &&
-            factory.display.country !== "US")) {
+          (factory.display.country !== '' &&
+            factory.display.country !== 'CA' &&
+            factory.display.country !== 'US')) {
           return $q.resolve();
         } else {
           return storeService.validateAddress(factory.display);
