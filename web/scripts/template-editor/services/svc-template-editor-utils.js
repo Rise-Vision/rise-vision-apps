@@ -110,7 +110,9 @@ angular.module('risevision.template-editor.services')
             confirmationButton: function () {
               return 'Contact Us';
             },
-            cancelButton: null
+            cancelButton: function () {
+              return 'Close';
+            }
           }
         });
 
