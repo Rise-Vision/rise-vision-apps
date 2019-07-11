@@ -109,7 +109,9 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _getDefaultFilesAttribute() {
-            return $scope.getBlueprintData($scope.componentId, 'files');
+            var defaultFiles = $scope.getBlueprintData($scope.componentId, 'files');
+
+            return !Array.isArray( defaultFiles ) ? defaultFiles.split('|') : defaultFiles;
           }
 
           function _getDefaultDurationAttribute() {
@@ -120,7 +122,11 @@ angular.module('risevision.template-editor.directives')
             $scope.factory.loadingPresentation = true;
 
             var metadata = [];
-            var fileNames = files ? files.split('|') : [];
+            var fileNames = [];
+
+            if ( files ) {
+              fileNames = !Array.isArray( files ) ? files.split('|') : files;
+            }
 
             _buildListRecursive(metadata, fileNames);
           }
@@ -197,7 +203,7 @@ angular.module('risevision.template-editor.directives')
           function _filesAttributeFor(metadata) {
             return _.map(metadata, function (entry) {
               return entry.file;
-            }).join('|');
+            });
           }
 
           $scope.updateImageMetadata = function (metadata) {
