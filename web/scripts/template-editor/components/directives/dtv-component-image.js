@@ -111,9 +111,12 @@ angular.module('risevision.template-editor.directives')
           function _getDefaultFilesAttribute() {
             var defaultFiles = $scope.getBlueprintData($scope.componentId, 'files');
 
-            console.log('_getDefaultFilesAttribute', defaultFiles);
+            // backwards compatible with legacy 'files' attribute, covert to array
+            if ( defaultFiles && !Array.isArray(defaultFiles) ) {
+              defaultFiles = defaultFiles.split('|');
+            }
 
-            return defaultFiles && !Array.isArray(defaultFiles) ? defaultFiles.split('|') : defaultFiles;
+            return defaultFiles;
           }
 
           function _getDefaultDurationAttribute() {
