@@ -114,9 +114,9 @@ angular.module('risevision.template-editor.directives')
             if (defaultFiles) {
               // new 'files' attribute value is an Array, but generated in Blueprint as a String
               // example value "["test1.jpg", "test2.jpg"]"
-              if (defaultFiles.charAt(0) === "[" && defaultFiles.charAt(defaultFiles.length-1) === "]") {
+              if (defaultFiles.charAt(0) === '[' && defaultFiles.charAt(defaultFiles.length - 1) === ']') {
                 try {
-                  defaultFiles = JSON.parse("'" + defaultFiles + "'");
+                  defaultFiles = JSON.parse('\'' + defaultFiles + '\'');
                 } catch (err) {
                   $log.error('Invalid default files value: ' + err);
                   return null;
