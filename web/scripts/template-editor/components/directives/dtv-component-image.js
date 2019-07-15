@@ -111,9 +111,21 @@ angular.module('risevision.template-editor.directives')
           function _getDefaultFilesAttribute() {
             var defaultFiles = $scope.getBlueprintData($scope.componentId, 'files');
 
-            // backwards compatible with legacy 'files' attribute, covert to array
-            if ( defaultFiles && !Array.isArray(defaultFiles) ) {
-              defaultFiles = defaultFiles.split('|');
+            if (defaultFiles) {
+              // new 'files' attribute value is an Array, but generated in Blueprint as a String
+              // example value "["test1.jpg", "test2.jpg"]"
+              if (defaultFiles.charAt(0) === "[" && defaultFiles.charAt(defaultFiles.length-1) === "]") {
+                try {
+                  defaultFiles = JSON.parse("'" + defaultFiles + "'");
+                } catch (err) {
+                  $log.error('Invalid default files value: ' + err);
+                  return null;
+                }
+              } else {
+                // old'files' attribute value is String containing | separated values
+                // example value "test1.jpg|test2.jpg"
+                defaultFiles = defaultFiles.split('|');
+              }
             }
 
             return defaultFiles;
