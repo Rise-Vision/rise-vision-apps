@@ -172,7 +172,7 @@ describe('directive: TemplateComponentImage', function() {
       )).to.be.true;
 
       expect($scope.setAttributeData.calledWith(
-        'TEST-ID', 'files', [TEST_FILE]
+        'TEST-ID', 'files', TEST_FILE
       )).to.be.true;
 
       done();
@@ -210,7 +210,7 @@ describe('directive: TemplateComponentImage', function() {
       ), 'set metadata attribute').to.be.true;
 
       expect($scope.setAttributeData.calledWith(
-        'TEST-ID', 'files', ['image.png','image2.png']
+        'TEST-ID', 'files', 'image.png|image2.png'
       ), 'set files attribute').to.be.true;
     });
 
@@ -237,7 +237,7 @@ describe('directive: TemplateComponentImage', function() {
       ), 'set metadata attribute').to.be.true;
 
       expect($scope.setAttributeData.calledWith(
-        'TEST-ID', 'files', ['image.png', 'image2.png']
+        'TEST-ID', 'files', 'image.png|image2.png'
       ), 'set files attribute').to.be.true;
     });
 
@@ -267,7 +267,7 @@ describe('directive: TemplateComponentImage', function() {
       ), 'set metadata attribute').to.be.true;
 
       expect($scope.setAttributeData.calledWith(
-        'TEST-ID', 'files', ['image.png', 'image2.png']
+        'TEST-ID', 'files', 'image.png|image2.png'
       ), 'set files attribute').to.be.true;
     });
 
@@ -298,7 +298,7 @@ describe('directive: TemplateComponentImage', function() {
       ), 'set metadata attribute').to.be.true;
 
       expect($scope.setAttributeData.calledWith(
-        'TEST-ID', 'files', ['image.png', 'image2.png']
+        'TEST-ID', 'files', 'image.png|image2.png'
       ), 'set files attribute').to.be.true;
     });
 
