@@ -109,7 +109,26 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _getDefaultFilesAttribute() {
-            return $scope.getBlueprintData($scope.componentId, 'files');
+            var defaultFiles = $scope.getBlueprintData($scope.componentId, 'files');
+
+            if (defaultFiles) {
+              // new 'files' attribute value is an Array, but generated in Blueprint as a String
+              // example value "["test1.jpg", "test2.jpg"]"
+              if (defaultFiles.charAt(0) === '[' && defaultFiles.charAt(defaultFiles.length - 1) === ']') {
+                try {
+                  defaultFiles = JSON.parse(defaultFiles);
+                } catch (err) {
+                  $log.error('Invalid default files value: ' + err);
+                  return null;
+                }
+              } else {
+                // old'files' attribute value is String containing | separated values
+                // example value "test1.jpg|test2.jpg"
+                defaultFiles = defaultFiles.split('|');
+              }
+            }
+
+            return defaultFiles;
           }
 
           function _getDefaultDurationAttribute() {
@@ -120,7 +139,11 @@ angular.module('risevision.template-editor.directives')
             $scope.factory.loadingPresentation = true;
 
             var metadata = [];
-            var fileNames = files ? files.split('|') : [];
+            var fileNames = [];
+
+            if (files) {
+              fileNames = !Array.isArray(files) ? files.split('|') : JSON.parse(JSON.stringify(files));
+            }
 
             _buildListRecursive(metadata, fileNames);
           }
@@ -197,7 +220,7 @@ angular.module('risevision.template-editor.directives')
           function _filesAttributeFor(metadata) {
             return _.map(metadata, function (entry) {
               return entry.file;
-            }).join('|');
+            });
           }
 
           $scope.updateImageMetadata = function (metadata) {
@@ -241,7 +264,8 @@ angular.module('risevision.template-editor.directives')
             var filesAttribute = _filesAttributeFor(selectedImages);
 
             $scope.selectedImages = selectedImages;
-            $scope.isDefaultImageList = filesAttribute === _getDefaultFilesAttribute();
+            // need to compare two Arrays
+            $scope.isDefaultImageList = JSON.stringify(filesAttribute) === JSON.stringify(_getDefaultFilesAttribute());
           }
 
           _reset();
