@@ -24,7 +24,7 @@ var WeatherComponentScenarios = function () {
 
       presentationsListPage.loadCurrentCompanyPresentationList();
 
-      presentationsListPage.createNewPresentationFromTemplate('"Weather Component Test"', 'weather-component-test');
+      presentationsListPage.createNewPresentationFromTemplate('Weather Component Test', 'weather-component-test');
     });
 
     describe('basic operations', function () {

@@ -25,7 +25,7 @@ var SlidesComponentScenarios = function () {
 
       presentationsListPage.loadCurrentCompanyPresentationList();
 
-      presentationsListPage.createNewPresentationFromTemplate('"Slides Component Test"', 'slides-component-test');
+      presentationsListPage.createNewPresentationFromTemplate('Slides Component Test', 'slides-component-test');
     });
 
     describe('basic operations', function () {

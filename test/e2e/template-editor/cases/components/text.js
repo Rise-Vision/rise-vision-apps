@@ -27,7 +27,7 @@ var TextComponentScenarios = function () {
 
       presentationsListPage.loadCurrentCompanyPresentationList();
 
-      presentationsListPage.createNewPresentationFromTemplate('"Text Component Test"', 'text-component-test');
+      presentationsListPage.createNewPresentationFromTemplate('Text Component Test', 'text-component-test');
     });
 
     describe('basic operations', function () {
