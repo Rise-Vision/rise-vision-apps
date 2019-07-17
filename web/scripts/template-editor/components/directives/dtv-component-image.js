@@ -264,6 +264,7 @@ angular.module('risevision.template-editor.directives')
             var filesAttribute = _filesAttributeFor(selectedImages);
 
             $scope.selectedImages = selectedImages;
+            // need to compare two Arrays
             $scope.isDefaultImageList = JSON.stringify(filesAttribute) === JSON.stringify(_getDefaultFilesAttribute());
           }
 
