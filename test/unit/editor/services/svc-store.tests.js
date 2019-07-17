@@ -161,6 +161,16 @@ describe('service: store:', function() {
         })
         .then(null,done);
     });
+
+    it('should apply filter to search',function(done){
+      store.product.list({filter: 'templateOfTheWeek:1',category:'Content'})
+        .then(function(result){
+          expect(searchString).to.equal('(visibleTo:ALL OR visibleTo:TEST_COMP_ID) AND (productTag:Content) AND templateOfTheWeek:1');
+
+          done();
+        })
+        .then(null,done);
+    });
     
     it('should search by rvaEntityId',function(done){
       store.product.list({category:'Presentations',rvaEntityId:'presentationId'})

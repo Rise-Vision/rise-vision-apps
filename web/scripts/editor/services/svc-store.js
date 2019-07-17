@@ -86,6 +86,10 @@ angular.module('risevision.editor.services')
               filterString += ' AND \"' + search.query + '\"';
             }
 
+            if (search.filter && search.filter.length) {
+              filterString += ' AND ' + search.filter;
+            }
+
             var obj = {
               'companyId': userState.getSelectedCompanyId(),
               'search': filterString,
