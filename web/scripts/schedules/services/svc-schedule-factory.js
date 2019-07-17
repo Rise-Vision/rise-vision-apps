@@ -109,26 +109,32 @@ angular.module('risevision.schedules.services')
         return deferred.promise;
       };
 
-      var _initFirstSchedule = function (presentationId, presentationName) {
-        return {
-          name: 'All Displays - 24/7',
-          content: [{
+      var _initFirstSchedule = function (presentationId, presentationName, presentationType) {
+        var item = {
             name: presentationName,
             objectReference: presentationId,
             duration: 10,
             timeDefined: false,
             type: 'presentation'
-          }],
+          };
+
+        if (presentationType) {
+          item.presentationType = presentationType;
+        }
+
+        return {
+          name: 'All Displays - 24/7',
+          content: [item],
           distributeToAll: true,
           timeDefined: false
         };
       };
 
-      factory.createFirstSchedule = function (presentationId, presentationName) {
+      factory.createFirstSchedule = function (presentationId, presentationName, presentationType) {
 
         return _checkFirstSchedule()
           .then(function (result) {
-            var firstSchedule = _initFirstSchedule(presentationId, presentationName);
+            var firstSchedule = _initFirstSchedule(presentationId, presentationName, presentationType);
 
             return schedule.add(firstSchedule);
           })
