@@ -230,7 +230,7 @@ describe('service: gadget:', function() {
     it('should output a proper search string',function(done){
       gadget.list({query: 'str'})
         .then(function(result){
-          expect(searchString).to.equal('name:~\'str\' OR id:~\'str\'');
+          expect(searchString).to.equal('name:~\"str\" OR id:~\"str\"');
 
           done();
         })

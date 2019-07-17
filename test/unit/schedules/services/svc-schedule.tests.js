@@ -200,7 +200,7 @@ describe('service: schedule:', function() {
     it('should output a proper search string',function(done){
       schedule.list({query: 'str'})
         .then(function(result){
-          expect(searchString).to.equal('name:~\'str\' OR id:~\'str\'');
+          expect(searchString).to.equal('name:~\"str\" OR id:~\"str\"');
 
           done();
         })

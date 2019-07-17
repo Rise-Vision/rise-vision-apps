@@ -83,7 +83,7 @@ angular.module('risevision.editor.services')
             }
 
             if (search.query && search.query.length) {
-              filterString += ' AND ' + search.query;
+              filterString += ' AND \"' + search.query + '\"';
             }
 
             var obj = {
