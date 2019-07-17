@@ -142,7 +142,7 @@ angular.module('risevision.template-editor.directives')
             var fileNames = [];
 
             if (files) {
-              fileNames = !Array.isArray(files) ? files.split('|') : files;
+              fileNames = !Array.isArray(files) ? files.split('|') : JSON.parse(JSON.stringify(files));
             }
 
             _buildListRecursive(metadata, fileNames);
