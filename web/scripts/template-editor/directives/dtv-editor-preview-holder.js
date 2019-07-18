@@ -170,7 +170,7 @@ angular.module('risevision.template-editor.directives')
             _postAttributeData();
           }, true);
 
-          $rootScope.$on('risevision.company.updated', function () {
+          $scope.$on('risevision.company.updated', function () {
             _postDisplayData();
           });
 
