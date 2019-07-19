@@ -2,7 +2,8 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('templateEditorToolbar', ['templateEditorFactory', '$templateCache', '$modal',
-    function (templateEditorFactory, $templateCache, $modal) {
+    '$window', '$timeout',
+    function (templateEditorFactory, $templateCache, $modal, $window, $timeout) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/toolbar.html',
@@ -16,13 +17,21 @@ angular.module('risevision.template-editor.directives')
             $scope.isEditingName = false;
           };
 
-          $scope.$watch('isEditingName', function (editing) {
+          var _initStretchy = function() {
             var templateNameInput = element.find('input.presentation-name');
+
+            $window.Stretchy.resize(templateNameInput[0]);
 
             if (!$scope.defaultNameWidth) {
               // first time editing, store the width of the field when default name is displayed
-              $scope.defaultNameWidth = templateNameInput[0].style.width;
+              $scope.defaultNameWidth = $window.getComputedStyle(templateNameInput[0]).getPropertyValue('width');
             }
+          };
+
+          $timeout(_initStretchy);
+
+          $scope.$watch('isEditingName', function (editing) {
+            var templateNameInput = element.find('input.presentation-name');
 
             if (editing) {
               setFocus(templateNameInput[0]);
