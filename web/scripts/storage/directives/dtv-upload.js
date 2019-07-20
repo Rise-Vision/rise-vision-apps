@@ -7,9 +7,9 @@
       var GOOGLES_REQUIRED_CHUNK_MULTIPLE = 256 * 1024;
       return GOOGLES_REQUIRED_CHUNK_MULTIPLE * 4 * 25;
     }()))
-    .directive('upload', ['$rootScope', '$timeout', '$translate', 'storage',
+    .directive('upload', ['$rootScope', '$timeout', '$translate', '$q', 'storage',
       'FileUploader', 'UploadURIService', 'STORAGE_UPLOAD_CHUNK_SIZE',
-      function ($rootScope, $timeout, $translate, storage, FileUploader,
+      function ($rootScope, $timeout, $translate, $q, storage, FileUploader,
         UploadURIService, STORAGE_UPLOAD_CHUNK_SIZE) {
         return {
           restrict: 'E',
@@ -158,12 +158,8 @@
               };
 
               //retrieve to generate thumbnail
-              storage.files.get({
-                  file: item.file.name
-                })
-                .then(function (resp) {
-                  var file = resp && resp.files && resp.files[0] ?
-                    resp.files[0] : baseFile;
+              _retrieveFileMetadata(item.file.name, 3)
+                .then(function (file) {
                   $scope.filesFactory.addFile(file);
                 }, function (err) {
                   $scope.filesFactory.addFile(baseFile);
@@ -172,6 +168,23 @@
                   FileUploader.removeFromQueue(item);
                 });
             };
+
+            function _retrieveFileMetadata(fileName, attempt) {
+              console.log('Attempt #' + attempt + ' to get metadata for: ' + fileName);
+
+              return storage.files.get({ file: fileName })
+                .then(function (resp) {
+                  var file = resp && resp.files && resp.files[0];
+
+                  if (file && (!file.metadata || file.metadata['needs-thumbnail-update'] !== 'true')) {
+                    return $q.resolve(file);
+                  } else if (attempt > 0) {
+                    return _retrieveFileMetadata(fileName, attempt - 1);
+                  } else {
+                    return $q.reject();
+                  }
+                });
+            }
           }
         };
       }
