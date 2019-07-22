@@ -9,6 +9,7 @@ var DisplayManagePage = function() {
   var displayRebootCheckbox = element(by.model('display.restartEnabled'));
   var viewScheduleLink = element(by.id('viewSchedule'));
 
+  var displayCountrySelect = element(by.model('display.country'));  
   var displayTimeZoneSelect = element(by.model('display.timeZoneOffset'));  
 
   var displayHoursField = element(by.model('hours'));
@@ -22,6 +23,8 @@ var DisplayManagePage = function() {
   var deleteForeverButton = element(by.buttonText('Delete Forever'));
 
   var displayLoader = element(by.xpath('//div[@spinner-key="display-loader"]'));
+
+  var displayErrorBox = element(by.id('errorBox'));
 
   this.getDisplaysAppContainer = function() {
     return displaysAppContainer;
@@ -53,6 +56,10 @@ var DisplayManagePage = function() {
 
   this.getViewScheduleLink = function() {
     return viewScheduleLink;
+  };
+
+  this.getDisplayCountrySelect = function() {
+    return displayCountrySelect;
   };
 
   this.getDisplayTimeZoneSelect = function() {
@@ -89,6 +96,10 @@ var DisplayManagePage = function() {
 
   this.getDisplayLoader = function() {
     return displayLoader;
+  };
+
+  this.getDisplayErrorBox = function() {
+    return displayErrorBox;
   };
 };
 

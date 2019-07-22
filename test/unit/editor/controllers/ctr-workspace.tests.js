@@ -59,9 +59,7 @@ describe('controller: Workspace', function() {
   });
 
   it('should exist',function(){
-    expect($scope).to.be.truely;
-    expect($scope.isSubcompanySelected).to.be.a('function');
-    expect($scope.isTestCompanySelected).to.be.a('function');
+    expect($scope).to.be.ok;
 
     expect($scope.factory).to.be.ok;
     expect($scope.artboardFactory).to.be.ok;

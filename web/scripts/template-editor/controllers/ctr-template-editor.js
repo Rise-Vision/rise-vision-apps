@@ -4,16 +4,14 @@ angular.module('risevision.template-editor.controllers')
   .constant('MINIMUM_INTERVAL_BETWEEN_SAVES', 5000)
   .constant('MAXIMUM_INTERVAL_BETWEEN_SAVES', 20000)
   .controller('TemplateEditorController', ['$scope', '$q', '$filter', '$loading', '$state', '$timeout', '$window',
-    'templateEditorFactory', 'userState', 'scheduleFactory', 'presentationUtils', 'MINIMUM_INTERVAL_BETWEEN_SAVES',
+    'templateEditorFactory', 'scheduleFactory', 'presentationUtils', 'MINIMUM_INTERVAL_BETWEEN_SAVES',
     'MAXIMUM_INTERVAL_BETWEEN_SAVES',
-    function ($scope, $q, $filter, $loading, $state, $timeout, $window, templateEditorFactory, userState,
+    function ($scope, $q, $filter, $loading, $state, $timeout, $window, templateEditorFactory,
       scheduleFactory, presentationUtils, MINIMUM_INTERVAL_BETWEEN_SAVES, MAXIMUM_INTERVAL_BETWEEN_SAVES) {
       var _lastSavedTimestamp = 0,
         _saveTimeout = null;
 
       $scope.factory = templateEditorFactory;
-      $scope.isSubcompanySelected = userState.isSubcompanySelected;
-      $scope.isTestCompanySelected = userState.isTestCompanySelected;
       $scope.hasUnsavedChanges = false;
 
       $scope.considerChromeBarHeight = _considerChromeBarHeight();

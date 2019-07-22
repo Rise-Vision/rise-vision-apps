@@ -45,7 +45,7 @@
           {{ getProAvailableLicenseCount() }}
         </span>
         Available Licenses
-        <a href="#" class="ml-2" ng-show="areAllProLicensesUsed() && !currentPlanFactory.currentPlan.isPurchasedByParent" ng-click="showPlansModal('displays-app.details.additional-license-warning')" aria-label="Get More Display Licenses" translate>displays-app.details.get-more</a>
+        <a ui-sref="apps.billing.home" class="ml-2" ng-show="areAllProLicensesUsed() && !currentPlanFactory.currentPlan.isPurchasedByParent" aria-label="Get More Display Licenses" translate>displays-app.details.get-more</a>
       </li>
     </ul>
 
