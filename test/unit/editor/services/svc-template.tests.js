@@ -109,7 +109,7 @@ describe('service: template:', function() {
     it('should output a proper search string',function(done){
       template.list({query: 'str'})
         .then(function(result){
-          expect(searchString).to.equal('name:~\'str\' OR id:~\'str\'');
+          expect(searchString).to.equal('name:~\"str\" OR id:~\"str\"');
 
           done();
         })

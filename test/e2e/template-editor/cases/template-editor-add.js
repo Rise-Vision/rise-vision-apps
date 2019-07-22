@@ -19,7 +19,7 @@ var TemplateAddScenarios = function() {
       templateEditorPage = new TemplateEditorPage();
 
       presentationsListPage.loadCurrentCompanyPresentationList();
-      presentationsListPage.createNewPresentationFromTemplate('"Example Financial Template V3"', 'example-financial-template-v3');
+      presentationsListPage.createNewPresentationFromTemplate('Example Financial Template V3', 'example-financial-template-v3');
       templateEditorPage.dismissFinancialDataLicenseMessage();
     });
 

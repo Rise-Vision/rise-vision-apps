@@ -2,9 +2,9 @@
 
 describe('directive: TemplateComponentImage', function() {
   var $scope,
-      element,
-      factory,
-      timeout;
+    element,
+    factory,
+    timeout;
 
   beforeEach(function() {
     factory = { selected: { id: 'TEST-ID' } };

@@ -350,7 +350,7 @@ describe('service: display:', function() {
     it('should output a proper search string',function(done){
       display.list({query: 'str'})
         .then(function(result){
-          expect(searchString).to.equal('name:~\'str\' OR id:~\'str\' OR street:~\'str\' OR unit:~\'str\' OR city:~\'str\' OR province:~\'str\' OR country:~\'str\' OR postalCode:~\'str\'');
+          expect(searchString).to.equal('name:~\"str\" OR id:~\"str\" OR street:~\"str\" OR unit:~\"str\" OR city:~\"str\" OR province:~\"str\" OR country:~\"str\" OR postalCode:~\"str\"');
 
           done();
         })

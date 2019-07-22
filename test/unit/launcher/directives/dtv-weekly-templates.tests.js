@@ -68,7 +68,7 @@ describe('directive: weekly-templates', function() {
     it('should initialize scope', function() {
       expect($scope.fullView).to.be.true;
       expect($scope.search).to.deep.equal({
-          query: 'templateOfTheWeek:1',
+          filter: 'templateOfTheWeek:1',
           category: 'Templates',
           count: 4
         }

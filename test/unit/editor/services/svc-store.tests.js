@@ -155,7 +155,17 @@ describe('service: store:', function() {
     it('should output a proper search string',function(done){
       store.product.list({query: 'str',category:'Content'})
         .then(function(result){
-          expect(searchString).to.equal('(visibleTo:ALL OR visibleTo:TEST_COMP_ID) AND (productTag:Content) AND str');
+          expect(searchString).to.equal('(visibleTo:ALL OR visibleTo:TEST_COMP_ID) AND (productTag:Content) AND \"str\"');
+
+          done();
+        })
+        .then(null,done);
+    });
+
+    it('should apply filter to search',function(done){
+      store.product.list({filter: 'templateOfTheWeek:1',category:'Content'})
+        .then(function(result){
+          expect(searchString).to.equal('(visibleTo:ALL OR visibleTo:TEST_COMP_ID) AND (productTag:Content) AND templateOfTheWeek:1');
 
           done();
         })

@@ -2,9 +2,10 @@
 
 angular.module('risevision.displays.services')
   .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal', '$loading', '$log',
-    'display', 'displayTracker', 'playerLicenseFactory', 'processErrorCode',
+    'display', 'displayTracker', 'playerLicenseFactory', 'processErrorCode', 'storeService',
+    'humanReadableError',
     function ($rootScope, $q, $state, $modal, $loading, $log, display, displayTracker,
-      playerLicenseFactory, processErrorCode) {
+      playerLicenseFactory, processErrorCode, storeService, humanReadableError) {
       var factory = {};
       var _displayId;
 
@@ -126,6 +127,17 @@ angular.module('risevision.displays.services')
         return deferred.promise;
       };
 
+      var _validateAddress = function () {
+        if (factory.display.useCompanyAddress ||
+          (factory.display.country !== '' &&
+            factory.display.country !== 'CA' &&
+            factory.display.country !== 'US')) {
+          return $q.resolve();
+        } else {
+          return storeService.validateAddress(factory.display);
+        }
+      };
+
       factory.updateDisplay = function () {
         var deferred = $q.defer();
 
@@ -135,17 +147,23 @@ angular.module('risevision.displays.services')
         factory.loadingDisplay = true;
         factory.savingDisplay = true;
 
-        display.update(_displayId, factory.display)
-          .then(function (displayId) {
-            displayTracker('Display Updated', _displayId,
-              factory.display.name);
+        _validateAddress().then(function () {
+            return display.update(_displayId, factory.display)
+              .then(function (displayId) {
+                displayTracker('Display Updated', _displayId,
+                  factory.display.name);
 
-            deferred.resolve();
+                deferred.resolve();
+              })
+              .then(null, function (e) {
+                _showErrorMessage('update', e);
+                deferred.reject();
+              });
           })
-          .then(null, function (e) {
-            _showErrorMessage('update', e);
-
-            deferred.reject();
+          .catch(function (e) {
+            factory.errorMessage = 'We couldn\'t update your address.';
+            factory.apiError = humanReadableError(e);
+            $log.error(factory.errorMessage, e);
           })
           .finally(function () {
             factory.loadingDisplay = false;

@@ -18,7 +18,7 @@ angular.module('risevision.apps.launcher.directives')
 
           $scope.search = {
             // sortBy: 'templateReleaseDate DESC',
-            query: 'templateOfTheWeek:1',
+            filter: 'templateOfTheWeek:1',
             category: 'Templates',
             count: 4
           };

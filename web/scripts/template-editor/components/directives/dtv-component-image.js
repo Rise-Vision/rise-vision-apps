@@ -120,7 +120,13 @@ angular.module('risevision.template-editor.directives')
             $scope.factory.loadingPresentation = true;
 
             var metadata = [];
-            var fileNames = files ? files.split('|') : [];
+            var fileNames;
+
+            if (files && Array.isArray(files)) {
+              fileNames = JSON.parse(JSON.stringify(files));
+            } else {
+              fileNames = files ? files.split('|') : [];
+            }
 
             _buildListRecursive(metadata, fileNames);
           }

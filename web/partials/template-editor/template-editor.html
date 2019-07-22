@@ -1,8 +1,6 @@
 <div id="template-editor" class="template-editor"
-     ng-class="{ 'active-banner-mode' : isSubcompanySelected() || isTestCompanySelected(),
-                 'active-banner-mode-double' : isSubcompanySelected() && isTestCompanySelected(),
-                 'active-component' : factory.selected,
-                 'desktop-mode': !considerChromeBarHeight }">
+     ng-class="{ 'active-component' : factory.selected,
+                 'desktop-mode': !considerChromeBarHeight }" common-header-height>
   <div>
     <template-editor-toolbar
       class="template-editor-toolbar"
