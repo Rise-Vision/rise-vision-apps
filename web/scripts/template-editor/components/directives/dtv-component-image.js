@@ -26,7 +26,7 @@ angular.module('risevision.template-editor.directives')
           };
           $scope.storageManager = {
             addSelectedItems: function (newSelectedItems) {
-              _addFilesToMetadata(newSelectedItems);
+              _addFilesToMetadata(newSelectedItems, true);
 
               $scope.resetPanelHeader();
               $scope.showPreviousPanel();
@@ -50,17 +50,17 @@ angular.module('risevision.template-editor.directives')
             $scope.isUploading = false;
           }
 
-          function _addFilesToMetadata(files) {
+          function _addFilesToMetadata(files, alwaysAppend) {
             var selectedImages = $scope.isDefaultImageList ? [] : _.cloneDeep($scope.selectedImages);
 
             files.forEach(function (file) {
-              _addFileToSet(selectedImages, file);
+              _addFileToSet(selectedImages, file, alwaysAppend);
             });
 
             _setMetadata(selectedImages);
           }
 
-          function _addFileToSet(selectedImages, file) {
+          function _addFileToSet(selectedImages, file, alwaysAppend) {
             console.log('_addFileToSet', selectedImages, file);
 
             var filePath = file.bucket + '/' + file.name;
@@ -73,6 +73,10 @@ angular.module('risevision.template-editor.directives')
             templateEditorUtils.addOrReplaceAll(selectedImages, {
               file: filePath
             }, newFile);
+
+            if (alwaysAppend) {
+              selectedImages.push(newFile);
+            }
           }
 
           function _thumbnailFor(item) {
