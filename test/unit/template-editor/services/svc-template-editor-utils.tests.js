@@ -69,12 +69,12 @@ describe('service: templateEditorUtils:', function() {
     });
   });
 
-  describe('addOrReplace', function () {
+  describe('addOrReplaceAll', function () {
     it('should add an item to an empty list', function () {
       var items = [];
       var item = { name: 'test1.jpg' };
 
-      templateEditorUtils.addOrReplace(items, item, item);
+      templateEditorUtils.addOrReplaceAll(items, item, item);
 
       expect(items).to.have.lengthOf(1);
     });
@@ -83,7 +83,7 @@ describe('service: templateEditorUtils:', function() {
       var items = [{ name: 'test1.jpg' }];
       var item = { name: 'test2.jpg' };
 
-      templateEditorUtils.addOrReplace(items, item, item);
+      templateEditorUtils.addOrReplaceAll(items, item, item);
 
       expect(items).to.have.lengthOf(2);
     });
@@ -92,7 +92,7 @@ describe('service: templateEditorUtils:', function() {
       var items = [{ name: 'test1.jpg' }, { name: 'test2.jpg' }];
       var item = { name: 'test1.jpg' };
 
-      templateEditorUtils.addOrReplace(items, item, item);
+      templateEditorUtils.addOrReplaceAll(items, item, item);
 
       expect(items).to.have.lengthOf(2);
     });

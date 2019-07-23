@@ -60,17 +60,19 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _addFileToSet(selectedImages, file) {
+            console.log('_addFileToSet', selectedImages, file);
+
             var thumbnail = file.metadata && file.metadata.thumbnail ?
               file.metadata.thumbnail : DEFAULT_IMAGE_THUMBNAIL;
             var filePath = file.bucket + '/' + file.name;
             var newFile = {
               file: filePath,
               exists: true,
-              'thumbnail-url': thumbnail
+              'thumbnail-url': thumbnail + '?_=' + (file.timeCreated && file.timeCreated.value)
             };
 
-            templateEditorUtils.addOrReplace(selectedImages, {
-              file: file.name
+            templateEditorUtils.addOrReplaceAll(selectedImages, {
+              file: filePath
             }, newFile);
           }
 
@@ -151,7 +153,7 @@ angular.module('risevision.template-editor.directives')
                 }
 
                 return file.metadata && file.metadata.thumbnail ?
-                  file.metadata.thumbnail : DEFAULT_IMAGE_THUMBNAIL;
+                  file.metadata.thumbnail + '?_=' + (file.timeCreated && file.timeCreated.value) : DEFAULT_IMAGE_THUMBNAIL;
               })
               .catch(function (error) {
                 $log.error(error);

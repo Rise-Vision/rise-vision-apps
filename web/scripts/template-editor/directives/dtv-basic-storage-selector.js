@@ -24,7 +24,7 @@ angular.module('risevision.template-editor.directives')
               $scope.isUploading = isUploading;
             },
             addFile: function (file) {
-              templateEditorUtils.addOrReplace($scope.folderItems, {
+              templateEditorUtils.addOrReplaceAll($scope.folderItems, {
                 name: file.name
               }, file);
             }
