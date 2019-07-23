@@ -7,6 +7,7 @@ angular.module('risevision.template-editor.directives')
         restrict: 'E',
         scope: {
           storageSelectorId: '@',
+          fileType: '@',
           validExtensions: '=?',
           storageManager: '='
         },
