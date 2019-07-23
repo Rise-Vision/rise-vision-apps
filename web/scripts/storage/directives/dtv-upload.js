@@ -170,23 +170,6 @@
                   FileUploader.removeFromQueue(item);
                 });
             };
-
-            function _retrieveFileMetadata(fileName, attempt) {
-              console.log('Attempt #' + attempt + ' to get metadata for: ' + fileName);
-
-              return storage.files.get({ file: fileName })
-                .then(function (resp) {
-                  var file = resp && resp.files && resp.files[0];
-
-                  if (file && (!file.metadata || file.metadata['needs-thumbnail-update'] !== 'true')) {
-                    return $q.resolve(file);
-                  } else if (attempt > 0) {
-                    return _retrieveFileMetadata(fileName, attempt - 1);
-                  } else {
-                    return $q.reject();
-                  }
-                });
-            }
           }
         };
       }
