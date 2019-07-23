@@ -287,6 +287,27 @@ angular.module('risevision.storage.services')
             });
 
           return deferred.promise;
+        },
+
+        refreshFileMetadata: function (fileName) {
+          return _refreshFileMetadata(fileName, 3);
+
+          function _refreshFileMetadata(fileName, remainingAttempts) {
+            console.log('Attempt #' + remainingAttempts + ' to get metadata for: ' + fileName);
+
+            return service.files.get({ file: fileName })
+              .then(function (resp) {
+                var file = resp && resp.files && resp.files[0];
+
+                if (file && (!file.metadata || file.metadata['needs-thumbnail-update'] !== 'true')) {
+                  return $q.resolve(file);
+                } else if (file && remainingAttempts > 0) {
+                  return _refreshFileMetadata(fileName, remainingAttempts - 1);
+                } else {
+                  return $q.reject();
+                }
+              });
+          }
         }
 
 
