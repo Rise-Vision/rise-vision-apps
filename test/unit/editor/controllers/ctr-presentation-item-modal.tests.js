@@ -43,7 +43,7 @@ describe('controller: presentation item modal', function() {
     });
 
   }));
-  var $scope, $modalInstance, $modal, presentationFactory, returnPresentation, itemProperties, itemType;
+  var $scope, $modalInstance, $modal, $timeout, presentationFactory, returnPresentation, itemProperties, itemType, PRESENTATION_SEARCH;
 
   beforeEach(function() {
     inject(function($injector, $rootScope){
@@ -52,6 +52,8 @@ describe('controller: presentation item modal', function() {
       presentationFactory = $injector.get('presentationFactory');
       $modalInstance = $injector.get('$modalInstance');
       $modal = $injector.get('$modal');
+      $timeout = $injector.get('$timeout');
+      PRESENTATION_SEARCH = $injector.get('PRESENTATION_SEARCH');
       
       $scope = $rootScope.$new();
       $scope.presentationItemFields = {
@@ -60,6 +62,12 @@ describe('controller: presentation item modal', function() {
         }
       };
     });
+  });
+
+  afterEach(function() {
+    try {
+      $timeout.flush();
+    } catch (e) {}
   });
 
   describe('Blank item: ', function () {
@@ -252,6 +260,17 @@ describe('controller: presentation item modal', function() {
       }, 10);
     });
 
+    it('should filter out HTML Templates from Presentation Selector', function() {
+      expect(PRESENTATION_SEARCH.filter).to.equal('');
+
+      $scope.selectPresentation();
+
+      expect(PRESENTATION_SEARCH.filter).to.equal(' NOT presentationType:\"HTML Template\"');
+
+      $timeout.flush();
+
+      expect(PRESENTATION_SEARCH.filter).to.equal('');
+    });
+
   });
-  
 });

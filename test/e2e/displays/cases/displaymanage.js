@@ -75,6 +75,7 @@ var DisplayAddScenarios = function() {
           displayManagePage.getDisplayUseCompanyAddressCheckbox().click();
         }
 
+        expect(displayManagePage.getDisplayCountrySelect().isDisplayed()).to.eventually.be.true;
         expect(displayManagePage.getDisplayTimeZoneSelect().isDisplayed()).to.eventually.be.true;
 
         done();
@@ -82,13 +83,18 @@ var DisplayAddScenarios = function() {
 
     });
 
-    it('should select timezone',function(done){
+    it('should select country',function(done){
       browser.driver.executeScript('window.scrollTo(0,500);').then(function() {
-        displayManagePage.getDisplayTimeZoneSelect().element(by.cssContainingText('option', 'Buenos Aires')).click();
-        expect(displayManagePage.getDisplayTimeZoneSelect().$('option:checked').getText()).to.eventually.contain('Buenos Aires');
+        displayManagePage.getDisplayCountrySelect().element(by.cssContainingText('option', 'Canada')).click();
+        expect(displayManagePage.getDisplayCountrySelect().$('option:checked').getText()).to.eventually.contain('Canada');
 
         done();
-      })
+      });
+    });
+
+    it('should select timezone',function(){
+      displayManagePage.getDisplayTimeZoneSelect().element(by.cssContainingText('option', 'Buenos Aires')).click();
+      expect(displayManagePage.getDisplayTimeZoneSelect().$('option:checked').getText()).to.eventually.contain('Buenos Aires');
     });
 
     it('should show Save Button', function () {
@@ -99,13 +105,18 @@ var DisplayAddScenarios = function() {
       expect(displayManagePage.getCancelButton().isPresent()).to.eventually.be.true;
     });
 
-    it('should save the display', function () {
+    it('should fail to save the display and show validation error', function () {
       helper.clickWhenClickable(displayManagePage.getSaveButton(), 'Save Button');
       helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
-      expect(displayManagePage.getSaveButton().getText()).to.eventually.equal('Save');
+      expect(displayManagePage.getDisplayErrorBox().getText()).to.eventually.contain('We couldn\'t update your address.');
     });
 
-    it('should save the display on Enter', function () {
+    it('should select another country',function(){
+      displayManagePage.getDisplayCountrySelect().element(by.cssContainingText('option', 'Argentina')).click();
+      expect(displayManagePage.getDisplayCountrySelect().$('option:checked').getText()).to.eventually.contain('Argentina');
+    });
+
+    it('should save the display on Enter and skip address validation', function () {
       displayManagePage.getDisplayNameField().sendKeys(protractor.Key.ENTER);
       helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
       expect(displayManagePage.getSaveButton().getText()).to.eventually.equal('Save');
