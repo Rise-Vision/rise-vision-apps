@@ -64,6 +64,7 @@ angular.module('risevision.template-editor.directives')
             console.log('_addFileToSet', selectedImages, file);
 
             var filePath = file.bucket + '/' + file.name;
+            var initialLength = selectedImages.length;
             var newFile = {
               file: filePath,
               exists: true,
@@ -74,7 +75,7 @@ angular.module('risevision.template-editor.directives')
               file: filePath
             }, newFile);
 
-            if (alwaysAppend) {
+            if (alwaysAppend && initialLength === selectedImages.length) {
               selectedImages.push(newFile);
             }
           }
