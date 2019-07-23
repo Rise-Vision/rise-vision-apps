@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .constant('DEFAULT_IMAGE_THUMBNAIL', 'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon%402x.png')
-  .directive('basicStorageSelector', ['$loading', 'storage', 'templateEditorUtils', 'DEFAULT_IMAGE_THUMBNAIL',
-    function ($loading, storage, templateEditorUtils, DEFAULT_IMAGE_THUMBNAIL) {
+  .directive('basicStorageSelector', ['$loading', 'storage', 'templateEditorUtils',
+    function ($loading, storage, templateEditorUtils) {
       return {
         restrict: 'E',
         scope: {
