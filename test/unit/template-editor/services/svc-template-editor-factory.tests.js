@@ -2,6 +2,7 @@
 
 describe('service: templateEditorFactory:', function() {
   var sandbox = sinon.sandbox.create();
+  var presentationTracker = sandbox.spy();
 
   beforeEach(module('risevision.template-editor.services'));
 
@@ -56,6 +57,11 @@ describe('service: templateEditorFactory:', function() {
         showMessageWindow: sandbox.stub()
       };
     });
+
+    $provide.factory('presentationTracker', function() {
+      return presentationTracker;
+    });
+
     $provide.service('scheduleFactory', function() {
       return {
         createFirstSchedule: sinon.stub()
@@ -216,6 +222,7 @@ describe('service: templateEditorFactory:', function() {
             expect(templateEditorFactory.loadingPresentation).to.be.false;
             expect(templateEditorFactory.errorMessage).to.not.be.ok;
             expect(templateEditorFactory.apiError).to.not.be.ok;
+            expect(presentationTracker).to.have.been.calledWith('Presentation Created', 'presentationId', 'Test Presentation');
 
             done();
           },10);
@@ -286,6 +293,7 @@ describe('service: templateEditorFactory:', function() {
             expect(templateEditorFactory.loadingPresentation).to.be.false;
             expect(templateEditorFactory.errorMessage).to.not.be.ok;
             expect(templateEditorFactory.apiError).to.not.be.ok;
+            expect(presentationTracker).to.have.been.calledWith('Presentation Updated', 'presentationId', 'Test Presentation');
 
             done();
           },10);
@@ -546,6 +554,7 @@ describe('service: templateEditorFactory:', function() {
             expect(templateEditorFactory.loadingPresentation).to.be.false;
             expect(templateEditorFactory.errorMessage).to.not.be.ok;
             expect(templateEditorFactory.apiError).to.not.be.ok;
+            expect(presentationTracker).to.have.been.calledWith('Presentation Deleted', 'presentationId', 'Test Presentation');
 
             done();
           },10);
@@ -638,6 +647,7 @@ describe('service: templateEditorFactory:', function() {
             expect(templateEditorFactory.loadingPresentation).to.be.false;
             expect(templateEditorFactory.errorMessage).to.not.be.ok;
             expect(templateEditorFactory.apiError).to.not.be.ok;
+            expect(presentationTracker).to.have.been.calledWith('Presentation Published', 'presentationId', 'Test Presentation');
 
             done();
           },10);
