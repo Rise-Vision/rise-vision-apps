@@ -62,18 +62,24 @@ angular.module('risevision.template-editor.directives')
           function _addFileToSet(selectedImages, file) {
             console.log('_addFileToSet', selectedImages, file);
 
-            var thumbnail = file.metadata && file.metadata.thumbnail ?
-              file.metadata.thumbnail : DEFAULT_IMAGE_THUMBNAIL;
             var filePath = file.bucket + '/' + file.name;
             var newFile = {
               file: filePath,
               exists: true,
-              'thumbnail-url': thumbnail + '?_=' + (file.timeCreated && file.timeCreated.value)
+              'thumbnail-url': _thumbnailFor(file)
             };
 
             templateEditorUtils.addOrReplaceAll(selectedImages, {
               file: filePath
             }, newFile);
+          }
+
+          function _thumbnailFor(item) {
+            if (item.metadata && item.metadata.thumbnail) {
+              return item.metadata.thumbnail + '?_=' + (item.timeCreated && item.timeCreated.value);
+            } else {
+              return DEFAULT_IMAGE_THUMBNAIL;
+            }
           }
 
           function _loadSelectedImages() {
@@ -130,7 +136,7 @@ angular.module('risevision.template-editor.directives')
               fileNames = files ? files.split('|') : [];
             }
 
-            _buildListRecursive(metadata, fileNames);
+            _loadThumbnails(metadata, fileNames);
           }
 
           function _getThumbnailUrlFor(fileName) {
@@ -152,8 +158,7 @@ angular.module('risevision.template-editor.directives')
                   return '';
                 }
 
-                return file.metadata && file.metadata.thumbnail ?
-                  file.metadata.thumbnail + '?_=' + (file.timeCreated && file.timeCreated.value) : DEFAULT_IMAGE_THUMBNAIL;
+                return _thumbnailFor(file);
               })
               .catch(function (error) {
                 $log.error(error);
@@ -174,32 +179,31 @@ angular.module('risevision.template-editor.directives')
               });
           }
 
-          function _buildListRecursive(metadata, fileNames) {
-            if (fileNames.length === 0) {
+          function _loadThumbnails(metadata, fileNames) {
+            var promises = _.map(fileNames, function (fileName) {
+              return _getThumbnailUrlFor(fileName)
+                .then(function (url) {
+                  return {
+                    file: fileName,
+                    exists: !!url,
+                    'thumbnail-url': url
+                  };
+                })
+                .catch(function (error) {
+                  $log.error(error);
+                });
+            });
+
+            $q.all(promises).then(function (results) {
+              _.reject(results, _.isNil).forEach(function (file) {
+                metadata.push(file);
+              });
+
               return $timeout(function () {
                 $scope.updateImageMetadata(metadata);
                 $scope.factory.loadingPresentation = false;
               });
-            }
-
-            var fileName = fileNames.shift();
-
-            _getThumbnailUrlFor(fileName)
-              .then(function (url) {
-                var entry = {
-                  file: fileName,
-                  exists: !!url,
-                  'thumbnail-url': url
-                };
-
-                metadata.push(entry);
-              })
-              .catch(function (error) {
-                $log.error(error);
-              })
-              .then(function () {
-                _buildListRecursive(metadata, fileNames);
-              });
+            });
           }
 
           function _filesAttributeFor(metadata) {
