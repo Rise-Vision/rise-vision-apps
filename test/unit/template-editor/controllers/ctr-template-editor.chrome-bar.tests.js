@@ -1,8 +1,7 @@
 'use strict';
 describe('controller: TemplateEditor : Chrome Bar', function() {
 
-  var $rootScope, $scope, $window, $state, factory, scheduleFactory,
-    originalWindowNavigator;
+  var $rootScope, $scope, $window, factory, originalWindowNavigator;
 
   function _providePresentationUtils($provide, isMobileBrowser) {
     $provide.factory('presentationUtils', function() {
@@ -24,10 +23,6 @@ describe('controller: TemplateEditor : Chrome Bar', function() {
         userAgent: userAgent,
         language: originalWindowNavigator.language
       };
-
-      $state = $injector.get('$state');
-      factory = $injector.get('templateEditorFactory');
-      scheduleFactory = $injector.get('scheduleFactory');
 
       $controller('TemplateEditorController', {
         $scope: $scope,
