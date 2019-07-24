@@ -153,6 +153,7 @@ describe('service: templateEditorFactory:', function() {
         expect(templateEditorFactory.presentation.name).to.equal('Copy of Test HTML Template');
         expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_PRESENTATION_TYPE);
         expect(templateEditorFactory.blueprintData.components.length).to.equal(1);
+        expect(presentationTracker).to.have.been.calledWith('HTML Template Copied', 'test-id', 'Test HTML Template');
 
         done();
       });
@@ -222,7 +223,7 @@ describe('service: templateEditorFactory:', function() {
             expect(templateEditorFactory.loadingPresentation).to.be.false;
             expect(templateEditorFactory.errorMessage).to.not.be.ok;
             expect(templateEditorFactory.apiError).to.not.be.ok;
-            expect(presentationTracker).to.have.been.calledWith('Presentation Created', 'presentationId', 'Test Presentation');
+            expect(presentationTracker).to.have.been.calledWith('HTML Presentation Created', 'presentationId', 'Test Presentation');
 
             done();
           },10);
@@ -293,7 +294,7 @@ describe('service: templateEditorFactory:', function() {
             expect(templateEditorFactory.loadingPresentation).to.be.false;
             expect(templateEditorFactory.errorMessage).to.not.be.ok;
             expect(templateEditorFactory.apiError).to.not.be.ok;
-            expect(presentationTracker).to.have.been.calledWith('Presentation Updated', 'presentationId', 'Test Presentation');
+            expect(presentationTracker).to.have.been.calledWith('HTML Presentation Updated', 'presentationId', 'Test Presentation');
 
             done();
           },10);
@@ -554,7 +555,7 @@ describe('service: templateEditorFactory:', function() {
             expect(templateEditorFactory.loadingPresentation).to.be.false;
             expect(templateEditorFactory.errorMessage).to.not.be.ok;
             expect(templateEditorFactory.apiError).to.not.be.ok;
-            expect(presentationTracker).to.have.been.calledWith('Presentation Deleted', 'presentationId', 'Test Presentation');
+            expect(presentationTracker).to.have.been.calledWith('HTML Presentation Deleted', 'presentationId', 'Test Presentation');
 
             done();
           },10);
@@ -647,7 +648,7 @@ describe('service: templateEditorFactory:', function() {
             expect(templateEditorFactory.loadingPresentation).to.be.false;
             expect(templateEditorFactory.errorMessage).to.not.be.ok;
             expect(templateEditorFactory.apiError).to.not.be.ok;
-            expect(presentationTracker).to.have.been.calledWith('Presentation Published', 'presentationId', 'Test Presentation');
+            expect(presentationTracker).to.have.been.calledWith('HTML Presentation Published', 'presentationId', 'Test Presentation');
 
             done();
           },10);
