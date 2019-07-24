@@ -39,7 +39,7 @@ class PricingComponent extends PolymerElement {
           width: 40%;
           vertical-align: top;
           border: solid 1px #979797;
-          border-radius: 5px;
+          border-radius: 4px;
           box-sizing: border-box;
           padding: 1em;
         }
@@ -53,6 +53,7 @@ class PricingComponent extends PolymerElement {
         pricing-summary-component {
           display: block;
           border: solid 1px #979797;
+          border-radius: 4px;
           padding: 0.5em;
           margin-bottom: 1em;
           box-sizing: border-box;
@@ -60,8 +61,9 @@ class PricingComponent extends PolymerElement {
 
         #billingHelp {
           display: block;
+          font-size: 12px;
           text-align: right;
-          color: #979797;
+          color: #999999;
           margin: 1em 0 0.5em 0;
         }
       </style>
