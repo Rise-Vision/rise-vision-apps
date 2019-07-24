@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .constant('DEFAULT_IMAGE_THUMBNAIL', 'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon-no-transparency%402x.png')
+  .constant('DEFAULT_IMAGE_THUMBNAIL',
+    'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon-no-transparency%402x.png')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
   .directive('templateComponentImage', ['$log', '$q', '$timeout', 'templateEditorFactory', 'templateEditorUtils',
     'storageAPILoader', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
@@ -68,7 +69,7 @@ angular.module('risevision.template-editor.directives')
             var newFile = {
               file: filePath,
               exists: true,
-              'time-created': _timeCreatedFor(item),
+              'time-created': _timeCreatedFor(file),
               'thumbnail-url': _thumbnailFor(file)
             };
 
@@ -159,7 +160,11 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _getThumbnailDataFor(fileName) {
-            var invalidThumbnailData = { exists: false, timeCreated: '', url: '' };
+            var invalidThumbnailData = {
+              exists: false,
+              timeCreated: '',
+              url: ''
+            };
             var regex = /risemedialibrary-([0-9a-f-]{36})[/](.+)/g;
             var match = regex.exec(fileName);
 
