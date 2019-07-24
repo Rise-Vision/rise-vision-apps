@@ -68,6 +68,7 @@ angular.module('risevision.template-editor.directives')
             var newFile = {
               file: filePath,
               exists: true,
+              'time-created': _timeCreatedFor(item),
               'thumbnail-url': _thumbnailFor(file)
             };
 
@@ -90,10 +91,14 @@ angular.module('risevision.template-editor.directives')
 
           function _thumbnailFor(item) {
             if (item.metadata && item.metadata.thumbnail) {
-              return item.metadata.thumbnail + '?_=' + (item.timeCreated && item.timeCreated.value);
+              return item.metadata.thumbnail + '?_=' + _timeCreatedFor(item);
             } else {
               return DEFAULT_IMAGE_THUMBNAIL;
             }
+          }
+
+          function _timeCreatedFor(item) {
+            return item.timeCreated && item.timeCreated.value;
           }
 
           function _loadSelectedImages() {
@@ -153,14 +158,15 @@ angular.module('risevision.template-editor.directives')
             _loadThumbnails(metadata, fileNames);
           }
 
-          function _getThumbnailUrlFor(fileName) {
+          function _getThumbnailDataFor(fileName) {
+            var invalidThumbnailData = { exists: false, url: '' };
             var regex = /risemedialibrary-([0-9a-f-]{36})[/](.+)/g;
             var match = regex.exec(fileName);
 
             if (!match) {
               $log.error('Filename is not a valid Rise Storage path: ' + fileName);
 
-              return $q.resolve('');
+              return $q.resolve(invalidThumbnailData);
             }
 
             return _requestFileData(match[1], match[2])
@@ -169,15 +175,21 @@ angular.module('risevision.template-editor.directives')
                   resp.result.files && resp.result.files[0];
 
                 if (!file) {
-                  return '';
+                  return invalidThumbnailData;
                 }
 
-                return _thumbnailFor(file);
+                var url = _thumbnailFor(file);
+
+                return {
+                  exists: !!url,
+                  timeCreated: _timeCreatedFor(file),
+                  url: url
+                };
               })
               .catch(function (error) {
                 $log.error(error);
 
-                return '';
+                return invalidThumbnailData;
               });
           }
 
@@ -195,12 +207,13 @@ angular.module('risevision.template-editor.directives')
 
           function _loadThumbnails(metadata, fileNames) {
             var promises = _.map(fileNames, function (fileName) {
-              return _getThumbnailUrlFor(fileName)
-                .then(function (url) {
+              return _getThumbnailDataFor(fileName)
+                .then(function (data) {
                   return {
                     file: fileName,
-                    exists: !!url,
-                    'thumbnail-url': url
+                    exists: data.exists,
+                    'time-created': data.timeCreated,
+                    'thumbnail-url': data.url
                   };
                 })
                 .catch(function (error) {
