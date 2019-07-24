@@ -159,7 +159,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _getThumbnailDataFor(fileName) {
-            var invalidThumbnailData = { exists: false, url: '' };
+            var invalidThumbnailData = { exists: false, timeCreated: '', url: '' };
             var regex = /risemedialibrary-([0-9a-f-]{36})[/](.+)/g;
             var match = regex.exec(fileName);
 
