@@ -34,7 +34,7 @@ describe('directive: basicStorageSelector', function() {
     storage = $injector.get('storage');
 
     $templateCache.put('partials/template-editor/basic-storage-selector.html', '<p>mock</p>');
-    element = $compile('<basic-storage-selector storage-selector-id="test" valid-extensions="validExtensions" storage-manager="storageManager"></basic-storage-selector>')($rootScope);
+    element = $compile('<basic-storage-selector storage-selector-id="test" file-type="image" valid-extensions="validExtensions" storage-manager="storageManager"></basic-storage-selector>')($rootScope);
     $rootScope.$apply();
 
     $scope = element.isolateScope();
@@ -53,6 +53,11 @@ describe('directive: basicStorageSelector', function() {
     expect($scope.isSelected).to.be.a.function;
     expect($scope.addSelected).to.be.a.function;
     expect($scope.loadItems).to.be.a.function;
+  });
+
+  it('should receive attributes', function () {
+    expect($scope.storageSelectorId).to.equal('test');
+    expect($scope.fileType).to.equal('image');
   });
 
   describe('fileNameOf', function () {
