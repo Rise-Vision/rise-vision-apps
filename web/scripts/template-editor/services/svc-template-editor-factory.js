@@ -94,6 +94,8 @@ angular.module('risevision.template-editor.services')
           isStoreProduct: false
         };
 
+        presentationTracker('HTML Template Copied', productDetails.productCode, productDetails.name);
+
         return template.loadBlueprintData(factory.presentation.productCode)
           .then(function (blueprintData) {
             factory.blueprintData = blueprintData.data;

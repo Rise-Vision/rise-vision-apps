@@ -2,7 +2,10 @@
 
 angular.module('risevision.editor.services')
   .value('PRESENTATION_EVENTS_TO_BQ', [
-    'Presentation Created'
+    'Presentation Created',
+    'New Presentation',
+    'Template Copied',
+    'HTML Template Copied'
   ])
   .factory('presentationTracker', ['userState', 'segmentAnalytics',
     'bigQueryLogging', 'PRESENTATION_EVENTS_TO_BQ',

@@ -153,6 +153,7 @@ describe('service: templateEditorFactory:', function() {
         expect(templateEditorFactory.presentation.name).to.equal('Copy of Test HTML Template');
         expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_PRESENTATION_TYPE);
         expect(templateEditorFactory.blueprintData.components.length).to.equal(1);
+        expect(presentationTracker).to.have.been.calledWith('HTML Template Copied', 'test-id', 'Test HTML Template');
 
         done();
       });
