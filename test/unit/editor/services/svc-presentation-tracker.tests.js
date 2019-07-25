@@ -52,10 +52,34 @@ describe('service: presentation tracker:', function() {
     bQSpy.should.not.have.been.called;
   });
 
-  it('should log Presentation Created to BQ',function(){
-    presentationTracker('Presentation Created', 'presentationId', 'presentationName');
+  describe('big query logging: ', function() {
+    it('should log Presentation Created to BQ',function(){
+      presentationTracker('Presentation Created', 'presentationId', 'presentationName');
 
-    bQSpy.should.have.been.calledWith('Presentation Created', 'presentationId');
+      bQSpy.should.have.been.calledWith('Presentation Created', 'presentationId');
+    });
+
+    it('should log Presentation Created to BQ',function(){
+      presentationTracker('Presentation Created', 'presentationId', 'presentationName');
+
+      bQSpy.should.have.been.calledWith('Presentation Created', 'presentationId');
+    });
+
+    it('should log New Presentation to BQ',function(){
+      presentationTracker('New Presentation');
+      bQSpy.should.have.been.called;
+    });
+
+    it('should log Template Copied to BQ',function(){
+      presentationTracker('Template Copied');
+      bQSpy.should.have.been.called;
+    });
+
+    it('should log HTML Template Copied to BQ',function(){
+      presentationTracker('HTML Template Copied');
+      bQSpy.should.have.been.called;
+    });
+    
   });
 
   it('should not call segment w/ blank event',function(){

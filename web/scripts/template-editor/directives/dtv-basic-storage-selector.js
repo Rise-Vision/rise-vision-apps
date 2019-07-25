@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .constant('DEFAULT_IMAGE_THUMBNAIL', 'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon%402x.png')
-  .directive('basicStorageSelector', ['$loading', 'storage', 'templateEditorUtils', 'DEFAULT_IMAGE_THUMBNAIL',
-    function ($loading, storage, templateEditorUtils, DEFAULT_IMAGE_THUMBNAIL) {
+  .directive('basicStorageSelector', ['$loading', 'storage', 'templateEditorUtils',
+    function ($loading, storage, templateEditorUtils) {
       return {
         restrict: 'E',
         scope: {
           storageSelectorId: '@',
+          fileType: '@',
           validExtensions: '=?',
           storageManager: '='
         },
@@ -75,11 +75,16 @@ angular.module('risevision.template-editor.directives')
               .then(function (items) {
                 $scope.selectedItems = [];
                 $scope.storageUploadManager.folderPath = newFolderPath;
-                $scope.folderItems = items.files && items.files.filter(function (item) {
-                  var isValid = templateEditorUtils.fileHasValidExtension(item.name, validExtensionsList);
 
-                  return item.name !== newFolderPath && ($scope.isFolder(item.name) || isValid);
-                });
+                if (items.files) {
+                  $scope.folderItems = items.files.filter(function (item) {
+                    var isValid = templateEditorUtils.fileHasValidExtension(item.name, validExtensionsList);
+
+                    return item.name !== newFolderPath && ($scope.isFolder(item.name) || isValid);
+                  });
+                } else {
+                  $scope.folderItems = [];
+                }
               })
               .catch(function (err) {
                 console.log('Failed to load files', err);

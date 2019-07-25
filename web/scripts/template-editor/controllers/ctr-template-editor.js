@@ -151,9 +151,9 @@ angular.module('risevision.template-editor.controllers')
       function _considerChromeBarHeight() {
         var userAgent = $window.navigator.userAgent;
 
-        // Firefox requires desktop rule
+        // Firefox and Samsung browser require desktop rule
         return presentationUtils.isMobileBrowser() &&
-          !(/Firefox/i.test(userAgent));
+          !(/Firefox|SamsungBrowser/i.test(userAgent));
       }
 
       $scope.$watch('factory.presentation', function (newValue, oldValue) {

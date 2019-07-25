@@ -1,11 +1,12 @@
 #pricingComponentTitle {
   font-weight: bold;
+  font-size: 24px;
   text-align: center;
   margin-top: 0;
 }
 
 #pricingComponentContainer {
-  margin: 0.5em;
+  margin: 0 20px;
 }
 
 .pricing-component-modal button.dismiss {
@@ -23,19 +24,21 @@
 }
 
 .pricing-component-modal .modal-dialog {
-  width: 65%;
-  max-width: 1000px;
+  width: 755px;
 }
 
 .pricing-component-modal .modal-content {
   padding: 0;
+  color: #020620;
+  background-color: #fff;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 755px) {
   .pricing-component-modal .modal-dialog {
     width: 100%;
   }
 }
+
 #subscribeButton {
   width: 100%;
   background-color: #45b764;
@@ -44,6 +47,7 @@
   font-size: large;
   padding: 0.7em;
   margin-bottom: 0.5em;
+  border-radius: 4px;
 }
 
 #subscribeButton[disabled] {

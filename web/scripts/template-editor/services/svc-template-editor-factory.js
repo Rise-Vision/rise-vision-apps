@@ -5,10 +5,10 @@ angular.module('risevision.template-editor.services')
   .constant('HTML_TEMPLATE_DOMAIN', 'https://widgets.risevision.com')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', 'presentation',
     'processErrorCode', 'userState', 'checkTemplateAccess', '$modal', 'scheduleFactory', 'plansFactory',
-    'templateEditorUtils',
+    'templateEditorUtils', 'presentationTracker',
     'HTML_PRESENTATION_TYPE', 'template', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
     function ($q, $log, $state, $rootScope, presentation, processErrorCode, userState,
-      checkTemplateAccess, $modal, scheduleFactory, plansFactory, templateEditorUtils,
+      checkTemplateAccess, $modal, scheduleFactory, plansFactory, templateEditorUtils, presentationTracker,
       HTML_PRESENTATION_TYPE, template, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {};
 
@@ -94,6 +94,8 @@ angular.module('risevision.template-editor.services')
           isStoreProduct: false
         };
 
+        presentationTracker('HTML Template Copied', productDetails.productCode, productDetails.name);
+
         return template.loadBlueprintData(factory.presentation.productCode)
           .then(function (blueprintData) {
             factory.blueprintData = blueprintData.data;
@@ -120,6 +122,8 @@ angular.module('risevision.template-editor.services')
           .then(function (resp) {
             if (resp && resp.item && resp.item.id) {
               $rootScope.$broadcast('presentationCreated');
+
+              presentationTracker('Presentation Created', resp.item.id, resp.item.name);
 
               $state.go('apps.editor.templates.edit', {
                 presentationId: resp.item.id,
@@ -157,6 +161,8 @@ angular.module('risevision.template-editor.services')
 
         presentation.update(presentationVal.id, presentationVal)
           .then(function (resp) {
+            presentationTracker('Presentation Updated', resp.item.id, resp.item.name);
+
             _setPresentation(resp.item, true);
 
             deferred.resolve(resp.item.id);
@@ -227,8 +233,11 @@ angular.module('risevision.template-editor.services')
 
         presentation.delete(factory.presentation.id)
           .then(function () {
-            factory.presentation = {};
+            presentationTracker('Presentation Deleted', factory.presentation.id, factory.presentation.name);
+
             $rootScope.$broadcast('presentationDeleted');
+
+            factory.presentation = {};
 
             $state.go('apps.editor.list');
             deferred.resolve();
@@ -260,6 +269,8 @@ angular.module('risevision.template-editor.services')
 
         presentation.publish(factory.presentation.id)
           .then(function () {
+            presentationTracker('Presentation Published', factory.presentation.id, factory.presentation.name);
+
             factory.presentation.revisionStatusName = REVISION_STATUS_PUBLISHED;
             factory.presentation.changeDate = new Date();
             factory.presentation.changedBy = userState.getUsername();
