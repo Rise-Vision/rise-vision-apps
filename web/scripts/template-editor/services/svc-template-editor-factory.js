@@ -123,7 +123,7 @@ angular.module('risevision.template-editor.services')
             if (resp && resp.item && resp.item.id) {
               $rootScope.$broadcast('presentationCreated');
 
-              presentationTracker('HTML Presentation Created', resp.item.id, resp.item.name);
+              presentationTracker('Presentation Created', resp.item.id, resp.item.name);
 
               $state.go('apps.editor.templates.edit', {
                 presentationId: resp.item.id,
@@ -161,7 +161,7 @@ angular.module('risevision.template-editor.services')
 
         presentation.update(presentationVal.id, presentationVal)
           .then(function (resp) {
-            presentationTracker('HTML Presentation Updated', resp.item.id, resp.item.name);
+            presentationTracker('Presentation Updated', resp.item.id, resp.item.name);
 
             _setPresentation(resp.item, true);
 
@@ -233,7 +233,7 @@ angular.module('risevision.template-editor.services')
 
         presentation.delete(factory.presentation.id)
           .then(function () {
-            presentationTracker('HTML Presentation Deleted', factory.presentation.id, factory.presentation.name);
+            presentationTracker('Presentation Deleted', factory.presentation.id, factory.presentation.name);
 
             $rootScope.$broadcast('presentationDeleted');
 
@@ -269,7 +269,7 @@ angular.module('risevision.template-editor.services')
 
         presentation.publish(factory.presentation.id)
           .then(function () {
-            presentationTracker('HTML Presentation Published', factory.presentation.id, factory.presentation.name);
+            presentationTracker('Presentation Published', factory.presentation.id, factory.presentation.name);
 
             factory.presentation.revisionStatusName = REVISION_STATUS_PUBLISHED;
             factory.presentation.changeDate = new Date();

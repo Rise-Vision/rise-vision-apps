@@ -65,11 +65,6 @@ describe('service: presentation tracker:', function() {
       bQSpy.should.have.been.calledWith('Presentation Created', 'presentationId');
     });
 
-    it('should log HTML Presentation Created to BQ',function(){
-      presentationTracker('HTML Presentation Created');
-      bQSpy.should.have.been.called;
-    });
-
     it('should log New Presentation to BQ',function(){
       presentationTracker('New Presentation');
       bQSpy.should.have.been.called;

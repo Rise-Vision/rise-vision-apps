@@ -3,7 +3,6 @@
 angular.module('risevision.editor.services')
   .value('PRESENTATION_EVENTS_TO_BQ', [
     'Presentation Created',
-    'HTML Presentation Created',
     'New Presentation',
     'Template Copied',
     'HTML Template Copied'
