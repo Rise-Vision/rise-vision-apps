@@ -2,7 +2,8 @@
 
 angular.module('risevision.template-editor.directives')
   .constant('SUPPORTED_VIDEO_TYPES', '.mp4, .webm')
-  .directive('templateComponentVideo', ['$timeout', 'templateEditorFactory', 'templateEditorUtils', 'SUPPORTED_VIDEO_TYPES',
+  .directive('templateComponentVideo', ['$timeout', 'templateEditorFactory', 'templateEditorUtils',
+    'SUPPORTED_VIDEO_TYPES',
     function ($timeout, templateEditorFactory, templateEditorUtils, SUPPORTED_VIDEO_TYPES) {
       return {
         restrict: 'E',
