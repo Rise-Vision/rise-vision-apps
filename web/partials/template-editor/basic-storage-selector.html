@@ -24,11 +24,11 @@
   <div class="storage-selector-list-empty" ng-show="folderItems.length === 0 && !isUploading">
     <div class="row">
       <div class="col-xs-12">
-        <h2 ng-show="!currentFolder">You have no images in Storage.</h2>
-        <h2 ng-show="currentFolder">You have no images in {{currentFolder}}.</h2>
-        <p>Upload images from your device to keep your display interesting!</p>
+        <h2 ng-show="!currentFolder">You have no {{fileType}}s in Storage.</h2>
+        <h2 ng-show="currentFolder">You have no {{fileType}}s in {{currentFolder}}.</h2>
+        <p>Upload {{fileType}}s from your device to keep your display interesting!</p>
         <div>
-          <img class="img-responsive" src="../images/image-empty-list.svg">
+          <img class="img-responsive" src="../images/{{fileType}}-empty-list.svg">
         </div>
       </div>
     </div>
@@ -42,9 +42,11 @@
 </div>
 
 <div class="storage-selector-action-button-bar">
-  <div class="upload-images">
+  <div class="upload-files">
     <label id="{{storageSelectorId}}-uploader-label" class="btn btn-primary btn-block" for="{{storageSelectorId}}-uploader" ng-disabled="isUploading">
-      <strong>Upload Images</strong>
+      <strong>
+        {{ ( 'template.' + fileType + '.upload' ) | translate }}
+      </strong>
     </label>
   </div>
   <div class="add-selected">
