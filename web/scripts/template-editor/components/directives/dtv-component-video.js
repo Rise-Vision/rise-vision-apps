@@ -10,7 +10,7 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/components/component-video.html',
         link: function ($scope, element) {
-          var storagePanelSelector = '.storage-selector-container';
+          var storagePanelSelector = '.video-storage-container';
 
           $scope.factory = templateEditorFactory;
           $scope.validExtensions = SUPPORTED_VIDEO_TYPES;
