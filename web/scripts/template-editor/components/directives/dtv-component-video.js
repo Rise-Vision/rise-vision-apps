@@ -2,8 +2,8 @@
 
 angular.module('risevision.template-editor.directives')
   .constant('SUPPORTED_VIDEO_TYPES', '.mp4, .webm')
-  .directive('templateComponentVideo', ['templateEditorFactory', 'templateEditorUtils', 'SUPPORTED_VIDEO_TYPES',
-    function (templateEditorFactory, templateEditorUtils, SUPPORTED_VIDEO_TYPES) {
+  .directive('templateComponentVideo', ['$timeout', 'templateEditorFactory', 'templateEditorUtils', 'SUPPORTED_VIDEO_TYPES',
+    function ($timeout, templateEditorFactory, templateEditorUtils, SUPPORTED_VIDEO_TYPES) {
       return {
         restrict: 'E',
         scope: true,
@@ -82,7 +82,9 @@ angular.module('risevision.template-editor.directives')
               _reset();
               $scope.componentId = $scope.factory.selected.id;
 
-              $scope.factory.loadingPresentation = false;
+              $timeout(function () {
+                $scope.factory.loadingPresentation = false;
+              });
               // TODO: show selected files
 
               $scope.showNextPanel('.video-component-container');
