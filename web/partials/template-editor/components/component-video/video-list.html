@@ -20,22 +20,16 @@
         </div>
       </div>
       <div class="file-remove">
-        <a href="#" ng-click="removeVideoFromList(video)"
+        <a href="#" ng-click="removeFileFromList(video)"
           translate>editor-app.details.remove</a>
       </div>
     </div>
   </div>
 
-  <div class="file-component-list-empty" ng-hide="isUploading || selectedFiles.length !== 0 || factory.loadingPresentation">
-    <div class="row">
-      <div class="col-xs-12">
-        <h2>You have no videos here.</h2>
-        <p>Upload videos from your device or select videos from storage to keep your display interesting!</p>
-        <div>
-          <img class="img-responsive" src="../images/image-empty-list.svg">
-        </div>
-      </div>
-    </div>
+  <div class="file-component-list-empty"
+      ng-hide="isUploading || selectedFiles.length !== 0 || factory.loadingPresentation">
+    <template-editor-empty-file-list fileType="video">
+    </template-editor-empty-file-list>
   </div>
 
   <basic-uploader uploader-id="video-list-uploader"

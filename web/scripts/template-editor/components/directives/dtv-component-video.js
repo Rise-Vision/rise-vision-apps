@@ -122,7 +122,7 @@ angular.module('risevision.template-editor.directives')
             return 'partials/template-editor/components/component-video/' + partial;
           };
 
-          $scope.removeImageFromList = function (file) {
+          $scope.removeFileFromList = function (file) {
             // TODO: remove files
             console.log('removing file', file);
           };
