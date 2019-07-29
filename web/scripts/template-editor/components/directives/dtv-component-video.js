@@ -53,6 +53,16 @@ angular.module('risevision.template-editor.directives')
             console.log('adding files', files);
           }
 
+          function _loadSelectedFiles() {
+            $scope.factory.loadingPresentation = true;
+
+            // TODO: load selected files
+
+            $timeout(function () {
+              $scope.factory.loadingPresentation = false;
+            });
+          }
+
           function _setAttribute(key, value) {
             $scope.setAttributeData($scope.componentId, key, value);
           }
@@ -82,10 +92,7 @@ angular.module('risevision.template-editor.directives')
               _reset();
               $scope.componentId = $scope.factory.selected.id;
 
-              $timeout(function () {
-                $scope.factory.loadingPresentation = false;
-              });
-              // TODO: show selected files
+              _loadSelectedFiles();
 
               $scope.showNextPanel('.video-component-container');
             },
