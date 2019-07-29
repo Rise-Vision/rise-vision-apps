@@ -84,7 +84,7 @@ angular.module('risevision.template-editor.directives')
 
               // TODO: show selected files
 
-              $scope.showNextPanel('.image-component-container');
+              $scope.showNextPanel('.video-component-container');
             },
             onBackHandler: function () {
               if ($scope.getCurrentPanel() !== storagePanelSelector) {
