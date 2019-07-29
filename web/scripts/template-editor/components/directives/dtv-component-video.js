@@ -82,6 +82,7 @@ angular.module('risevision.template-editor.directives')
               _reset();
               $scope.componentId = $scope.factory.selected.id;
 
+              $scope.factory.loadingPresentation = false;
               // TODO: show selected files
 
               $scope.showNextPanel('.video-component-container');
