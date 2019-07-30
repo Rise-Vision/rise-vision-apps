@@ -16,7 +16,12 @@ angular.module('risevision.template-editor.directives')
           $scope.registerDirective = function (directive) {
             directive.element.hide();
             console.log('registering directive', directive.type);
+            console.log($scope.factory.presentation && $scope.factory.presentation.templateAttributeData);
             $scope.directives[directive.type] = directive;
+
+            if (directive.onPresentationOpen) {
+              directive.onPresentationOpen();
+            }
           };
 
           $scope.editComponent = function (component) {
