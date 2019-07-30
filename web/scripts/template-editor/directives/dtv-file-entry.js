@@ -14,9 +14,9 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope) {
           $scope.factory = templateEditorFactory;
 
-          $scope.removeFileFromList = function() {
+          $scope.removeFileFromList = function () {
             $scope.removeAction($scope.entry);
-          }
+          };
         }
       };
     }
