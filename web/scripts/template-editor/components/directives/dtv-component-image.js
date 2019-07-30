@@ -81,6 +81,7 @@ angular.module('risevision.template-editor.directives')
 
             if (selectedImages) {
               _setSelectedImages(selectedImages);
+              files = _filesAttributeFor(selectedImages);
             } else {
               files = _getDefaultFilesAttribute();
             }
