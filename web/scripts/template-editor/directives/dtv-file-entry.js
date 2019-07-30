@@ -13,8 +13,7 @@ angular.module('risevision.template-editor.directives')
         templateUrl: 'partials/template-editor/file-entry.html',
         link: function ($scope) {
           $scope.factory = templateEditorFactory;
-
-          $scope.fileNameOf = templateEditorUtils.fileNameOf;
+          $scope.fileName = templateEditorUtils.fileNameOf($scope.entry.file);
 
           $scope.removeFileFromList = function () {
             $scope.removeAction($scope.entry);
