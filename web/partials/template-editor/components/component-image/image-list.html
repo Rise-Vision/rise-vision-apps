@@ -14,30 +14,12 @@
      ng-class="{'active-duration' : selectedImages.length > 1 && !isUploading}"
      rv-spinner rv-spinner-key="template-editor-loader"
      rv-spinner-start-active="1">
-  <div class="pl-0 file-row"
-    ng-repeat="image in selectedImages track by $index"
-    ng-show="selectedImages.length > 0 && !isUploading">
-    <div class="file-thumbnail">
-      <div class="file-helper"></div>
-      <img src="{{ image['thumbnail-url'] }}" ng-if="image.exists"
-        width="80"></img>
-      <div class="broken-link" ng-hide="image.exists">
-        <streamline-icon name="forbidden" width="61" height="60"></streamline-icon>
-      </div>
-    </div>
-    <div class="file-entry">
-      <div class="file-text">
-        <div class="file-name">{{ fileNameOf(image.file) }}</div>
-        <div class="file-not-available" ng-hide="image.exists">
-          Your image has been deleted, renamed, or moved.
-        </div>
-      </div>
-      <div class="file-remove">
-        <a href="#" ng-click="removeImageFromList(image)"
-          translate>editor-app.details.remove</a>
-      </div>
-    </div>
-  </div>
+  <template-editor-file-entry class="pl-0 file-row"
+    ng-repeat="entry in selectedImages track by $index"
+    ng-show="selectedImages.length > 0 && !isUploading"
+    file-type="image"
+    remove-action="removeImageFromList">
+  </template-editor-file-entry>
 
   <div class="file-component-list-empty" ng-hide="isUploading || selectedImages.length !== 0 || factory.loadingPresentation">
     <template-editor-empty-file-list file-type="image">
