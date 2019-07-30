@@ -1,30 +1,13 @@
 <div class="video-component-list file-component-list te-scrollable-container"
      rv-spinner rv-spinner-key="template-editor-loader"
      rv-spinner-start-active="1">
-  <div class="pl-0 file-row"
-    ng-repeat="video in selectedFiles track by $index"
-    ng-show="selectedFiles.length > 0 && !isUploading">
-    <div class="file-thumbnail">
-      <div class="file-helper"></div>
-      <img src="{{ video['thumbnail-url'] }}" ng-if="video.exists"
-        width="80"></img>
-      <div class="broken-link" ng-hide="video.exists">
-        <streamline-icon name="forbidden" width="61" height="60"></streamline-icon>
-      </div>
-    </div>
-    <div class="file-entry">
-      <div class="file-text">
-        <div class="file-name">{{ fileNameOf(video.file) }}</div>
-        <div class="file-not-available" ng-hide="video.exists">
-          Your video has been deleted, renamed, or moved.
-        </div>
-      </div>
-      <div class="file-remove">
-        <a href="#" ng-click="removeFileFromList(video)"
-          translate>editor-app.details.remove</a>
-      </div>
-    </div>
-  </div>
+  <template-editor-file-entry
+    ng-repeat="file in selectedFiles track by $index"
+    ng-show="selectedFiles.length > 0 && !isUploading"
+    entry="file"
+    file-type="video"
+    remove-action="removeFileFromList">
+  </template-editor-file-entry>
 
   <template-editor-empty-file-list file-type="video"
       ng-hide="isUploading || selectedFiles.length !== 0 || factory.loadingPresentation">
