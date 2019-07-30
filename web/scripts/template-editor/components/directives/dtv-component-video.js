@@ -111,8 +111,6 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
-          $scope.fileNameOf = templateEditorUtils.fileNameOf;
-
           $scope.selectFromStorage = function () {
             $scope.storageManager.refresh();
             $scope.showNextPanel(storagePanelSelector);
