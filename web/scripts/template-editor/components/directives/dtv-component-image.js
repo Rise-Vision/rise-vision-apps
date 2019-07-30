@@ -317,16 +317,16 @@ angular.module('risevision.template-editor.directives')
                 return true;
               }
             },
-            onPresentationOpen: function() {
+            onPresentationOpen: function () {
               console.log('on presentation open');
 
               fileExistenceCheckService.requestMetadataFor('file.txt', DEFAULT_IMAGE_THUMBNAIL)
-              .then(function(metadata) {
-                console.log(metadata);
-              })
-              .catch(function(error) {
-                $log.error('error while checking rise-image file existence', error);
-              });
+                .then(function (metadata) {
+                  console.log(metadata);
+                })
+                .catch(function (error) {
+                  $log.error('error while checking rise-image file existence', error);
+                });
             }
           });
 
