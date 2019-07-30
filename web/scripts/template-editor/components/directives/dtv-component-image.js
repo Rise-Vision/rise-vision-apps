@@ -259,7 +259,8 @@ angular.module('risevision.template-editor.directives')
 
           $scope.registerDirective({
             type: 'rise-image',
-            icon: 'fa-image',
+            iconType: 'streamline',
+            icon: 'image',
             element: element,
             show: function () {
               element.show();

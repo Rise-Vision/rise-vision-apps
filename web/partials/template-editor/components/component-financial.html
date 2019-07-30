@@ -38,13 +38,15 @@
     ng-class="{ 'instrument-selector-show': enteringSymbolSelector, 'instrument-selector-hide': exitingSymbolSelector }"
     ng-show="showSymbolSelector || enteringSymbolSelector">
   <div class="input-group instrument-selector-search-box">
-    <span class="input-group-addon" ng-click="searchInstruments()"><i class="fa fa-search"></i></span>
+    <span class="input-group-addon" ng-click="searchInstruments()">
+      <streamline-icon name="magnifier" width="16" height="16"></streamline-icon>
+    </span>
     <input type="text" class="form-control"
            ng-model="searchKeyword" ng-disabled="searching" ng-keyup="searchKeyPressed($event)"
            placeholder="{{ getSearchPlaceholder() | translate }}"
            aria-label="{{ getSearchPlaceholder() | translate }}">
     <span class="input-group-addon" ng-click="resetSearch()">
-      <i class="fa fa-close"></i>
+      <streamline-icon name="close" width="12" height="12"></streamline-icon>
     </span>
   </div>
 

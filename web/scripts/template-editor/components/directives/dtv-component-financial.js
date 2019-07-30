@@ -108,7 +108,8 @@ angular.module('risevision.template-editor.directives')
 
           $scope.registerDirective({
             type: 'rise-data-financial',
-            icon: 'fa-line-chart',
+            iconType: 'streamline',
+            icon: 'financial',
             element: element,
             show: function () {
               element.show();
