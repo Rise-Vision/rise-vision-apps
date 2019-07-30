@@ -5,9 +5,9 @@ angular.module('risevision.template-editor.directives')
     'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon-no-transparency%402x.png')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
   .directive('templateComponentImage', ['$log', '$q', '$timeout', 'templateEditorFactory', 'templateEditorUtils',
-    'storageAPILoader', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
+    'storageAPILoader', 'fileExistenceCheckService', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
     function ($log, $q, $timeout, templateEditorFactory, templateEditorUtils, storageAPILoader,
-      DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES) {
+      fileExistenceCheckService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES) {
       return {
         restrict: 'E',
         scope: true,
@@ -316,6 +316,17 @@ angular.module('risevision.template-editor.directives')
               } else {
                 return true;
               }
+            },
+            onPresentationOpen: function() {
+              console.log('on presentation open');
+
+              fileExistenceCheckService.requestMetadataFor('file.txt', DEFAULT_IMAGE_THUMBNAIL)
+              .then(function(metadata) {
+                console.log(metadata);
+              })
+              .catch(function(error) {
+                $log.error('error while checking rise-image file existence', error);
+              });
             }
           });
 

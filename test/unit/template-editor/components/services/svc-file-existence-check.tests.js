@@ -25,7 +25,7 @@ describe('service: fileExistenceCheckService:', function() {
   describe('requestMetadataFor', function() {
 
     it('should request metadata for a file', function(done) {
-      fileExistenceCheckService.requestMetadataFor('file.txt')
+      fileExistenceCheckService.requestMetadataFor('file.txt', 'default-url')
       .then(function(metadata) {
         expect(metadata).to.deep.equal([]);
 
