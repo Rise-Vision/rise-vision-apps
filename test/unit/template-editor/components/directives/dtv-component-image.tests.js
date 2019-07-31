@@ -31,6 +31,9 @@ describe('directive: TemplateComponentImage', function() {
                   files: [{
                     metadata: {
                       thumbnail: "http://thumbnail.png"
+                    },
+                    timeCreated: {
+                      value: 100
                     }
                   }]
                 }
@@ -159,7 +162,7 @@ describe('directive: TemplateComponentImage', function() {
         {
           file: TEST_FILE,
           exists: true,
-          'thumbnail-url': 'http://thumbnail.png'
+          'thumbnail-url': 'http://thumbnail.png?_=100'
         }
       ];
 

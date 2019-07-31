@@ -117,15 +117,12 @@ angular.module('risevision.template-editor.directives')
             };
 
             // Retrieve to force thumbnail creation
-            storage.files.get({
-                file: item.file.name
-              })
-              .then(function (resp) {
-                var file = resp && resp.files && resp.files[0] ? resp.files[0] : baseFile;
+            storage.refreshFileMetadata(item.file.name)
+              .then(function (file) {
                 console.log('Add file to list of available files', file);
                 $scope.uploadManager.addFile(file);
               }, function (err) {
-                console.log('Failed to upload', item.file.name, err);
+                console.log('Error refreshing metadata', item.file.name, err);
                 $scope.uploadManager.addFile(baseFile);
               })
               .finally(function () {
