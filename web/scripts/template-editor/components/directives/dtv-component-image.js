@@ -150,7 +150,7 @@ angular.module('risevision.template-editor.directives')
           function _getFilesFor(componentId) {
             var metadata = $scope.getAttributeData(componentId, 'metadata');
 
-            if( !metadata ) {
+            if (!metadata) {
               return $scope.getBlueprintData(componentId, 'files');
             }
 
@@ -336,13 +336,15 @@ angular.module('risevision.template-editor.directives')
             onPresentationOpen: function () {
               console.log('on presentation open');
 
-              var imageComponentIds = getComponentIds({ type: 'rise-image' });
+              var imageComponentIds = $scope.getComponentIds({
+                type: 'rise-image'
+              });
 
-              _.forEach(imageComponentIds, function(componentId) {
+              _.forEach(imageComponentIds, function (componentId) {
                 $scope.fileExistenceChecksCompleted[componentId] = false;
               });
 
-              _.forEach(imageComponentIds, function(componentId) {
+              _.forEach(imageComponentIds, function (componentId) {
                 console.log('starting file check on', componentId);
 
                 var files = _getFilesFor(componentId);
@@ -354,6 +356,9 @@ angular.module('risevision.template-editor.directives')
                   })
                   .catch(function (error) {
                     $log.error('error while checking rise-image file existence', error);
+                  })
+                  .finally(function() {
+                    $scope.fileExistenceChecksCompleted[componentId] = true;
                   });
               });
             }
