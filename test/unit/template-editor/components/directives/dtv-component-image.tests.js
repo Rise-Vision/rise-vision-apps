@@ -80,13 +80,14 @@ describe('directive: TemplateComponentImage', function() {
   it('should set image lists when available as attribute data', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     var sampleImages = [
-      { "file": 'image.png', "thumbnail-url": "http://image" }
+      { "file": 'image.png', "thumbnail-url": "http://image" },
+      { "file": 'test|character.jpg', "thumbnail-url": "http://test%7Ccharacter.jpg" }
     ];
 
     $scope.getAttributeData = function(componentId, key) {
       switch(key) {
         case 'metadata': return sampleImages;
-        case 'files': return 'image.png';
+        case 'files': return 'image.png|test|character.png';
       }
     };
 
