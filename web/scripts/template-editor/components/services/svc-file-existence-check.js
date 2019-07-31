@@ -6,6 +6,8 @@ angular.module('risevision.template-editor.services')
       var service = {};
 
       service.requestMetadataFor = function (files, defaultThumbnailUrl) {
+        console.log(files);
+
         return $q.resolve([]);
       };
 

@@ -17,6 +17,8 @@ angular.module('risevision.template-editor.directives')
 
           $scope.factory = templateEditorFactory;
           $scope.validExtensions = SUPPORTED_IMAGE_TYPES;
+          $scope.fileExistenceChecksCompleted = {};
+
           $scope.uploadManager = {
             onUploadStatus: function (isUploading) {
               $scope.isUploading = isUploading;
@@ -139,6 +141,22 @@ angular.module('risevision.template-editor.directives')
             return $scope.getBlueprintData($scope.componentId, 'duration');
           }
 
+          function _extractFileNamesFrom(metadata) {
+            return _.map(metadata, function (entry) {
+              return entry.file;
+            });
+          }
+
+          function _getFilesFor(componentId) {
+            var metadata = $scope.getAttributeData(componentId, 'metadata');
+
+            if( !metadata ) {
+              return $scope.getBlueprintData(componentId, 'files');
+            }
+
+            return _extractFileNamesFrom(metadata);
+          }
+
           function _buildSelectedImagesFrom(files) {
             $scope.factory.loadingPresentation = true;
 
@@ -234,9 +252,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _filesAttributeFor(metadata) {
-            return _.map(metadata, function (entry) {
-              return entry.file;
-            }).join('|');
+            return _extractFileNamesFrom(metadata).join('|');
           }
 
           $scope.updateImageMetadata = function (metadata) {
@@ -320,13 +336,26 @@ angular.module('risevision.template-editor.directives')
             onPresentationOpen: function () {
               console.log('on presentation open');
 
-              fileExistenceCheckService.requestMetadataFor('file.txt', DEFAULT_IMAGE_THUMBNAIL)
-                .then(function (metadata) {
-                  console.log(metadata);
-                })
-                .catch(function (error) {
-                  $log.error('error while checking rise-image file existence', error);
-                });
+              var imageComponentIds = getComponentIds({ type: 'rise-image' });
+
+              _.forEach(imageComponentIds, function(componentId) {
+                $scope.fileExistenceChecksCompleted[componentId] = false;
+              });
+
+              _.forEach(imageComponentIds, function(componentId) {
+                console.log('starting file check on', componentId);
+
+                var files = _getFilesFor(componentId);
+
+                fileExistenceCheckService.requestMetadataFor(files, DEFAULT_IMAGE_THUMBNAIL)
+                  .then(function (metadata) {
+                    console.log('ending file check on', componentId);
+                    console.log(metadata);
+                  })
+                  .catch(function (error) {
+                    $log.error('error while checking rise-image file existence', error);
+                  });
+              });
             }
           });
 
