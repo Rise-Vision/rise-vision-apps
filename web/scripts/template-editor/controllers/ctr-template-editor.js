@@ -37,6 +37,16 @@ angular.module('risevision.template-editor.controllers')
         return attribute && attribute.value;
       };
 
+      $scope.getComponentIds = function (filter) {
+        var components = $scope.factory.blueprintData.components;
+
+        var filteredComponents = _.filter(components, filter);
+
+        return _.map(filteredComponents, function (component) {
+          return component.id;
+        });
+      };
+
       $scope.getAttributeData = function (componentId, attributeKey) {
         var component = _componentFor(componentId, false);
 
