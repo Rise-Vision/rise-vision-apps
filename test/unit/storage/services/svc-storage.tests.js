@@ -526,4 +526,72 @@ describe('service: storage:', function() {
     });
   });
 
+  describe('refreshFileMetadata',function() {
+    it('should only call get once', function(done) {
+      sinon.stub(storage.files, 'get').returns(Q.resolve({
+        files: [{name: 'file1.jpg'}]
+      }));
+
+      storage.refreshFileMetadata('file1')
+        .then(function(result) {
+          expect(result).to.be.ok;
+          expect(storage.files.get).have.been.calledOnce;
+
+          done();
+        });
+    });
+
+    it('should call get three times', function(done) {
+      var getStub = sinon.stub(storage.files, 'get');
+
+      getStub.onCall(0).returns(Q.resolve({
+        files: [{ metadata: { 'needs-thumbnail-update': 'true' } }]
+      }));
+      getStub.onCall(1).returns(Q.resolve({
+        files: [{ metadata: { 'needs-thumbnail-update': 'true' } }]
+      }));
+      getStub.onCall(2).returns(Q.resolve({
+        files: [{name: 'file1.jpg'}]
+      }));
+
+      storage.refreshFileMetadata('file1')
+        .then(function(result) {
+          expect(result).to.be.ok;
+          expect(storage.files.get).have.been.calledThrice;
+
+          done();
+        });
+    });
+
+    it('should fail after the third attempt', function(done) {
+      var getStub = sinon.stub(storage.files, 'get');
+
+      getStub.onCall(0).returns(Q.resolve({
+        files: [{ metadata: { 'needs-thumbnail-update': 'true' } }]
+      }));
+      getStub.onCall(1).returns(Q.resolve({
+        files: [{ metadata: { 'needs-thumbnail-update': 'true' } }]
+      }));
+      getStub.onCall(2).returns(Q.resolve({
+        files: [{ metadata: { 'needs-thumbnail-update': 'true' } }]
+      }));
+
+      storage.refreshFileMetadata('file1')
+        .catch(function(err) {
+          done();
+        });
+    });
+
+    it('should handle failure',function(done) {
+      sinon.stub(storage.files, 'get').returns(Q.reject('error'));
+
+      storage.refreshFileMetadata('file1')
+        .catch(function(err) {
+          expect(err).to.equal('error');
+
+          done();
+        });
+    });
+  });
+
 });

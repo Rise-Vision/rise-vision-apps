@@ -24,16 +24,21 @@ angular.module('risevision.template-editor.services')
         return list;
       };
 
-      svc.addOrReplace = function (list, oldItem, newItem) {
-        var idx = _.findIndex(list, oldItem);
+      svc.addOrReplaceAll = function (list, oldItem, newItem) {
+        var matchCount = 0;
 
-        if (idx >= 0) {
-          list.splice(idx, 1, newItem);
-        } else {
-          list.push(newItem);
+        for (var i = 0; i < list.length; i++) {
+          var item = list[i];
+
+          if (_.isMatch(item, oldItem)) {
+            matchCount++;
+            list.splice(i, 1, newItem);
+          }
         }
 
-        return list;
+        if (matchCount === 0) {
+          list.push(newItem);
+        }
       };
 
       svc.isFolder = function (path) {

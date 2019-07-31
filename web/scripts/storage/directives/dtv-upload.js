@@ -7,9 +7,9 @@
       var GOOGLES_REQUIRED_CHUNK_MULTIPLE = 256 * 1024;
       return GOOGLES_REQUIRED_CHUNK_MULTIPLE * 4 * 25;
     }()))
-    .directive('upload', ['$rootScope', '$timeout', '$translate', 'storage',
+    .directive('upload', ['$rootScope', '$timeout', '$translate', '$q', 'storage',
       'FileUploader', 'UploadURIService', 'STORAGE_UPLOAD_CHUNK_SIZE',
-      function ($rootScope, $timeout, $translate, storage, FileUploader,
+      function ($rootScope, $timeout, $translate, $q, storage, FileUploader,
         UploadURIService, STORAGE_UPLOAD_CHUNK_SIZE) {
         return {
           restrict: 'E',
@@ -158,14 +158,12 @@
               };
 
               //retrieve to generate thumbnail
-              storage.files.get({
-                  file: item.file.name
-                })
-                .then(function (resp) {
-                  var file = resp && resp.files && resp.files[0] ?
-                    resp.files[0] : baseFile;
+              storage.refreshFileMetadata(item.file.name)
+                .then(function (file) {
+                  console.log('Add file to list of available files', file);
                   $scope.filesFactory.addFile(file);
                 }, function (err) {
+                  console.log('Error refreshing metadata', item.file.name, err);
                   $scope.filesFactory.addFile(baseFile);
                 })
                 .finally(function () {

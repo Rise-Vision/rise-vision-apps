@@ -21,11 +21,9 @@ describe('directive: upload', function() {
 
     $provide.factory('storage', function() {
       return storage = {
-        files: {
-          get: sinon.spy(function() {
-            return Q.when({file:'file.jpg'})
-          })
-        }
+        refreshFileMetadata: sinon.spy(function() {
+          return Q.when({file:'file.jpg'});
+        })
       };
     });
 
@@ -237,7 +235,7 @@ describe('directive: upload', function() {
       $scope.activeUploadCount = function() {return 1};
       FileUploader.onCompleteItem(item);
       
-      storage.files.get.should.have.been.calledWith({file:file1.name});      
+      storage.refreshFileMetadata.should.have.been.calledWith(file1.name);
     });
 
     it('should remove item on completed',function(done){
