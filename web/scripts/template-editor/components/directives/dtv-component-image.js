@@ -348,9 +348,9 @@ angular.module('risevision.template-editor.directives')
                 console.log('starting file check on', componentId);
 
                 _checkFileExistenceFor(componentId)
-                .finally(function() {
-                  $scope.fileExistenceChecksCompleted[componentId] = true;
-                });
+                  .finally(function () {
+                    $scope.fileExistenceChecksCompleted[componentId] = true;
+                  });
               });
             }
           });
