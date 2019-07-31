@@ -36,17 +36,4 @@ describe('directive: ComponentIcon', function () {
     });
   });
 
-  it("should render SVG icon", function (done) {
-    $scope.iconValue = "svg-data";
-    $scope.typeValue = "svg";
-    $scope.$digest();
-
-    setTimeout(function () {
-      expect(elementScope.icon).to.equal("svg-data");
-      expect(elementScope.type).to.equal("svg");
-      expect(element.children()[0].tagName.toUpperCase()).to.equal("SVG");
-      done();
-    });
-  });
-
 });

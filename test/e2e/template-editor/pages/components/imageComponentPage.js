@@ -71,20 +71,20 @@ var ImageComponentPage = function() {
   };
 
   this.getSelectedImagesTitles = function() {
-    return element.all(by.xpath('//div[@class="image-text"]/div[1]'));
+    return element.all(by.xpath('//div[@class="file-text"]/div[1]'));
   };
 
   this.getThumbnails = function() {
-    return element.all(by.xpath('//div[@class="image-thumbnail"]/img'));
+    return element.all(by.xpath('//div[@class="file-thumbnail"]/img'));
   };
 
   this.getBrokenLinks = function() {
-    return element.all(by.xpath('//div[@class="image-thumbnail"]/div[2]'));
+    return element.all(by.xpath('//div[@class="file-thumbnail"]/div[2]'));
   };
 
   this.getRemoveLinkFor = function(imageName) {
     return element(by.xpath(
-      '//div[@class="image-remove"][..//div[contains(text(), "' + imageName + '")]]/a'
+      '//div[@class="file-remove"][..//div[contains(text(), "' + imageName + '")]]/a'
     ));
   };
 };
