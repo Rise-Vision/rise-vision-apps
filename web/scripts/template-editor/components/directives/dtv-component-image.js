@@ -84,14 +84,6 @@ angular.module('risevision.template-editor.directives')
 
           function _thumbnailFor(item) {
             if (item.metadata && item.metadata.thumbnail) {
-              return item.metadata.thumbnail + '?_=' + (item.timeCreated && item.timeCreated.value);
-            } else {
-              return DEFAULT_IMAGE_THUMBNAIL;
-            }
-          }
-
-          function _thumbnailFor(item) {
-            if (item.metadata && item.metadata.thumbnail) {
               return item.metadata.thumbnail + '?_=' + _timeCreatedFor(item);
             } else {
               return DEFAULT_IMAGE_THUMBNAIL;
