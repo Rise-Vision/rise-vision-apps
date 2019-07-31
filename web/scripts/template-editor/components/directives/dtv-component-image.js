@@ -347,19 +347,10 @@ angular.module('risevision.template-editor.directives')
               _.forEach(imageComponentIds, function (componentId) {
                 console.log('starting file check on', componentId);
 
-                var files = _getFilesFor(componentId);
-
-                fileExistenceCheckService.requestMetadataFor(files, DEFAULT_IMAGE_THUMBNAIL)
-                  .then(function (metadata) {
-                    console.log('ending file check on', componentId);
-                    console.log(metadata);
-                  })
-                  .catch(function (error) {
-                    $log.error('error while checking rise-image file existence', error);
-                  })
-                  .finally(function() {
-                    $scope.fileExistenceChecksCompleted[componentId] = true;
-                  });
+                _checkFileExistenceFor(componentId)
+                .finally(function() {
+                  $scope.fileExistenceChecksCompleted[componentId] = true;
+                });
               });
             }
           });
