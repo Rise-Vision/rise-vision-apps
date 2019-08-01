@@ -355,6 +355,18 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
+          function _checkFileExistenceFor(componentId) {
+            var files = _getFilesFor(componentId);
+
+            return fileExistenceCheckService.requestMetadataFor(files, DEFAULT_IMAGE_THUMBNAIL)
+            .then(function(metadata) {
+              console.log('received metadata', metadata);
+            })
+            .catch(function(error) {
+              $log.error('Could not check file existence for: ' + componentId, error);
+            });
+          }
+
           $scope.selectFromStorage = function () {
             $scope.storageManager.refresh();
             $scope.showNextPanel(storagePanelSelector);
