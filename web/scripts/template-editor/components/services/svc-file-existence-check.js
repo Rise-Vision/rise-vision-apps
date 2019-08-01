@@ -1,13 +1,64 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .service('fileExistenceCheckService', ['$q', '$log',
-    function ($q, $log) {
+  .service('fileExistenceCheckService', ['$q', '$log', 'storageAPILoader',
+    function ($q, $log, storageAPILoader) {
       var service = {};
 
-      function _loadMetadata(metadata, fileNames) {
+      function _requestFileData(companyId, file) {
+        var search = {
+          'companyId': companyId,
+          'file': file
+        };
+
+        return storageAPILoader()
+          .then(function (storageApi) {
+            return storageApi.files.get(search);
+          });
+      }
+
+      function _getThumbnailDataFor(fileName, defaultThumbnailUrl) {
+        var invalidThumbnailData = {
+          exists: false,
+          timeCreated: '',
+          url: ''
+        };
+        var regex = /risemedialibrary-([0-9a-f-]{36})[/](.+)/g;
+        var match = regex.exec(fileName);
+
+        if (!match) {
+          $log.error('Filename is not a valid Rise Storage path: ' + fileName);
+
+          return $q.resolve(invalidThumbnailData);
+        }
+
+        return _requestFileData(match[1], match[2])
+          .then(function (resp) {
+            var file = resp && resp.result && resp.result.result &&
+              resp.result.files && resp.result.files[0];
+
+            if (!file) {
+              return invalidThumbnailData;
+            }
+
+            var url = service.thumbnailFor(file, defaultThumbnailUrl);
+
+            return {
+              exists: !!url,
+              timeCreated: service.timeCreatedFor(file),
+              url: url
+            };
+          })
+          .catch(function (error) {
+            $log.error(error);
+
+            return invalidThumbnailData;
+          });
+      }
+
+      function _loadMetadata(metadata, fileNames, defaultThumbnailUrl) {
         var promises = _.map(fileNames, function (fileName) {
-          return _getThumbnailDataFor(fileName)
+          return _getThumbnailDataFor(fileName, defaultThumbnailUrl)
             .then(function (data) {
               return {
                 file: fileName,
@@ -32,6 +83,18 @@ angular.module('risevision.template-editor.services')
         });
       }
 
+      service.thumbnailFor = function (item, defaultThumbnailUrl) {
+        if (item.metadata && item.metadata.thumbnail) {
+          return item.metadata.thumbnail + '?_=' + service.timeCreatedFor(item);
+        } else {
+          return defaultThumbnailUrl;
+        }
+      };
+
+      service.timeCreatedFor = function (item) {
+        return item.timeCreated && item.timeCreated.value;
+      };
+
       service.requestMetadataFor = function (files, defaultThumbnailUrl) {
         var fileNames;
 
@@ -42,7 +105,7 @@ angular.module('risevision.template-editor.services')
           fileNames = [];
         }
 
-        return _loadMetadata(fileNames);
+        return _loadMetadata(fileNames, defaultThumbnailUrl);
       };
 
       return service;
