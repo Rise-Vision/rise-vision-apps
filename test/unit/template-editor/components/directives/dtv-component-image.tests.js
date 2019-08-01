@@ -163,6 +163,7 @@ describe('directive: TemplateComponentImage', function() {
         {
           file: TEST_FILE,
           exists: true,
+          'time-created': 100,
           'thumbnail-url': 'http://thumbnail.png?_=100'
         }
       ];
