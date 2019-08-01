@@ -150,7 +150,7 @@ angular.module('risevision.template-editor.directives')
             return _extractFileNamesFrom(metadata).join('|');
           }
 
-          $scope.updateImageMetadata = function (metadata) {
+          $scope.updateFileMetadata = function (metadata) {
             var currentMetadata = _getAttribute('metadata');
 
             if (!currentMetadata) {
@@ -240,7 +240,7 @@ angular.module('risevision.template-editor.directives')
               .then(function (metadata) {
                 console.log('received metadata', metadata);
 
-                updateImageMetadata(metadata);
+                $scope.updateFileMetadata(metadata);
               })
               .catch(function (error) {
                 $log.error('Could not check file existence for: ' + componentId, error);
