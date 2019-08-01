@@ -56,7 +56,7 @@ angular.module('risevision.template-editor.services')
           });
       }
 
-      function _loadMetadata(metadata, fileNames, defaultThumbnailUrl) {
+      function _loadMetadata(fileNames, defaultThumbnailUrl) {
         var promises = _.map(fileNames, function (fileName) {
           return _getThumbnailDataFor(fileName, defaultThumbnailUrl)
             .then(function (data) {
@@ -97,14 +97,14 @@ angular.module('risevision.template-editor.services')
 
       service.requestMetadataFor = function (files, defaultThumbnailUrl) {
         var fileNames;
-        console.log('files', files);
+
         if (files) {
           fileNames = Array.isArray(files) ?
             angular.copy(files) : files.split('|');
         } else {
           fileNames = [];
         }
-        console.log('files', fileNames);
+        console.log('fileNames', fileNames);
         return _loadMetadata(fileNames, defaultThumbnailUrl);
       };
 
