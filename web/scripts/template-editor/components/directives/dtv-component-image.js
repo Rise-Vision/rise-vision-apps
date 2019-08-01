@@ -239,6 +239,8 @@ angular.module('risevision.template-editor.directives')
             return fileExistenceCheckService.requestMetadataFor(files, DEFAULT_IMAGE_THUMBNAIL)
               .then(function (metadata) {
                 console.log('received metadata', metadata);
+
+                updateImageMetadata(metadata);
               })
               .catch(function (error) {
                 $log.error('Could not check file existence for: ' + componentId, error);
