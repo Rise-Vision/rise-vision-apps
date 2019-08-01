@@ -97,14 +97,14 @@ angular.module('risevision.template-editor.services')
 
       service.requestMetadataFor = function (files, defaultThumbnailUrl) {
         var fileNames;
-
+        console.log('files', files);
         if (files) {
           fileNames = Array.isArray(files) ?
             angular.copy(files) : files.split('|');
         } else {
           fileNames = [];
         }
-
+        console.log('files', fileNames);
         return _loadMetadata(fileNames, defaultThumbnailUrl);
       };
 
