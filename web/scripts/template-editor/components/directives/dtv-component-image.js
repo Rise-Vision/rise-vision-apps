@@ -227,17 +227,6 @@ angular.module('risevision.template-editor.directives')
               } else {
                 return true;
               }
-            },
-            onPresentationOpen: function () {
-              console.log('on presentation open');
-
-              var imageComponentIds = $scope.getComponentIds({
-                type: 'rise-image'
-              });
-
-              _.forEach(imageComponentIds, function (componentId) {
-                console.log('TODO: check file existence for component', componentId);
-              });
             }
           });
 

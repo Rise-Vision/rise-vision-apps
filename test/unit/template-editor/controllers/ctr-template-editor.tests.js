@@ -212,49 +212,6 @@ describe('controller: TemplateEditor', function() {
 
   });
 
-  describe('getComponentIds', function () {
-
-    it('should get the component ids of rise-image components',function() {
-      factory.blueprintData = { components: SAMPLE_COMPONENTS };
-
-      var ids = $scope.getComponentIds({ type: 'rise-image' });
-
-      expect(ids).to.deep.equal(['rise-image-01']);
-    });
-
-    it('should get the component ids of all rise-image components',function() {
-      factory.blueprintData = { components: SAMPLE_COMPONENTS };
-
-      var ids = $scope.getComponentIds();
-
-      expect(ids).to.deep.equal(['rise-image-01', 'rise-data-financial-01']);
-    });
-
-  });
-
-  describe('test getAvailableAttributeData()', function () {
-
-    it('should get attribute data value',function() {
-      $scope.setAttributeData('test-id', 'symbols', 'CADUSD=X|MXNUSD=X');
-
-      var data = $scope.getAvailableAttributeData('test-id', 'symbols');
-
-      expect(data).to.equal('CADUSD=X|MXNUSD=X');
-    });
-
-    it('should get blueprint data value when attribute data is undefined',function() {
-
-      factory.blueprintData = { components: SAMPLE_COMPONENTS };
-
-      var attributeData = $scope.getAttributeData('rise-data-financial-01', 'symbols');
-      var data = $scope.getAvailableAttributeData('rise-data-financial-01', 'symbols');
-
-      expect(attributeData).to.equal(undefined);
-      expect(data).to.equal('CADUSD=X|MXNUSD=X|USDEUR=X');
-    });
-
-  });
-
   describe('unsaved changes', function () {
     it('should flag unsaved changes to presentation', function () {
       expect($scope.hasUnsavedChanges).to.be.false;
