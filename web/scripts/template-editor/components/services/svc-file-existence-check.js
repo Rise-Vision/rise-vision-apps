@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .service('fileExistenceCheckService', ['$q', '$log', 'storageAPILoader',
-    function ($q, $log, storageAPILoader) {
+  .service('fileExistenceCheckService', ['$q', '$log', 'storageAPILoader', 'fileMetadataUtilsService',
+    function ($q, $log, storageAPILoader, fileMetadataUtilsService) {
       var service = {};
 
       function _requestFileData(companyId, file) {
@@ -41,11 +41,11 @@ angular.module('risevision.template-editor.services')
               return invalidThumbnailData;
             }
 
-            var url = service.thumbnailFor(file, defaultThumbnailUrl);
+            var url = fileMetadataUtilsService.thumbnailFor(file, defaultThumbnailUrl);
 
             return {
               exists: !!url,
-              timeCreated: service.timeCreatedFor(file),
+              timeCreated: fileMetadataUtilsService.timeCreatedFor(file),
               url: url
             };
           })
@@ -83,18 +83,6 @@ angular.module('risevision.template-editor.services')
         });
       }
 
-      service.thumbnailFor = function (item, defaultThumbnailUrl) {
-        if (item.metadata && item.metadata.thumbnail) {
-          return item.metadata.thumbnail + '?_=' + service.timeCreatedFor(item);
-        } else {
-          return defaultThumbnailUrl;
-        }
-      };
-
-      service.timeCreatedFor = function (item) {
-        return item.timeCreated && item.timeCreated.value;
-      };
-
       service.requestMetadataFor = function (files, defaultThumbnailUrl) {
         var fileNames;
 
@@ -104,7 +92,7 @@ angular.module('risevision.template-editor.services')
         } else {
           fileNames = [];
         }
-        console.log('fileNames', fileNames);
+
         return _loadMetadata(fileNames, defaultThumbnailUrl);
       };
 

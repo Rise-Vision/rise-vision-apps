@@ -5,9 +5,9 @@ angular.module('risevision.template-editor.directives')
     'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon-no-transparency%402x.png')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
   .directive('templateComponentImage', ['$log', '$timeout', 'templateEditorFactory', 'templateEditorUtils',
-    'fileExistenceCheckService', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
+    'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
     function ($log, $timeout, templateEditorFactory, templateEditorUtils,
-      fileExistenceCheckService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES) {
+      fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES) {
       return {
         restrict: 'E',
         scope: true,
@@ -67,8 +67,8 @@ angular.module('risevision.template-editor.directives')
 
             var filePath = file.bucket + '/' + file.name;
             var initialLength = selectedImages.length;
-            var timeCreated = fileExistenceCheckService.timeCreatedFor(file);
-            var thumbnail = fileExistenceCheckService.thumbnailFor(file, DEFAULT_IMAGE_THUMBNAIL);
+            var timeCreated = fileMetadataUtilsService.timeCreatedFor(file);
+            var thumbnail = fileMetadataUtilsService.thumbnailFor(file, DEFAULT_IMAGE_THUMBNAIL);
 
             var newFile = {
               file: filePath,
@@ -230,6 +230,14 @@ angular.module('risevision.template-editor.directives')
             },
             onPresentationOpen: function () {
               console.log('on presentation open');
+
+              var imageComponentIds = $scope.getComponentIds({
+                type: 'rise-image'
+              });
+
+              _.forEach(imageComponentIds, function (componentId) {
+                console.log('TODO: check file existence for component', componentId);
+              });
             }
           });
 

@@ -7,6 +7,30 @@ describe('service: fileExistenceCheckService:', function() {
     $provide.service('$q', function() {
       return Q;
     });
+
+    $provide.service('storageAPILoader', function() {
+      return function() {
+        return Q.resolve({
+          files: {
+            get: function() {
+              return {
+                result: {
+                  result: true,
+                  files: [{
+                    metadata: {
+                      thumbnail: 'http://thumbnail.png'
+                    },
+                    timeCreated: {
+                      value: 100
+                    }
+                  }]
+                }
+              };
+            }
+          }
+        });
+      };
+    });
   }));
 
   var fileExistenceCheckService;
@@ -25,9 +49,18 @@ describe('service: fileExistenceCheckService:', function() {
   describe('requestMetadataFor', function() {
 
     it('should request metadata for a file', function(done) {
-      fileExistenceCheckService.requestMetadataFor('file.txt', 'default-url')
+      var TEST_FILE = 'risemedialibrary-7fa5ee92-7deb-450b-a8d5-e5ed648c575f/file1.png';
+      fileExistenceCheckService.requestMetadataFor(TEST_FILE, 'default-url')
       .then(function(metadata) {
-        expect(metadata).to.deep.equal([]);
+        console.log(metadata);
+        expect(metadata).to.deep.equal([
+          {
+            file: TEST_FILE,
+            exists: true,
+            'time-created': 100,
+            'thumbnail-url': 'http://thumbnail.png?_=100'
+          }
+        ]);
 
         done();
       })
