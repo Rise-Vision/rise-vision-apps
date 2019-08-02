@@ -176,6 +176,9 @@ angular.module('risevision.template-editor.directives')
               } else {
                 return true;
               }
+            },
+            onPresentationOpen: function () {
+              console.log('on presentation open');
             }
           });
 
