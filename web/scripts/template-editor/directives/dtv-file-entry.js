@@ -16,10 +16,10 @@ angular.module('risevision.template-editor.directives')
           $scope.factory = templateEditorFactory;
           $scope.fileName = templateEditorUtils.fileNameOf($scope.entry.file);
 
-          $scope.isStreamlineThumbnail = function() {
+          $scope.isStreamlineThumbnail = function () {
             var thumbnailUrl = $scope.entry && $scope.entry['thumbnail-url'];
 
-            return thumbnailUrl && /^streamline:.+/.test( thumbnailUrl );
+            return thumbnailUrl && /^streamline:.+/.test(thumbnailUrl);
           };
 
           $scope.streamlineIcon = $scope.isStreamlineThumbnail() ?
