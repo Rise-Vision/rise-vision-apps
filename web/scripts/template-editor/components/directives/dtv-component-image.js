@@ -4,9 +4,9 @@ angular.module('risevision.template-editor.directives')
   .constant('DEFAULT_IMAGE_THUMBNAIL',
     'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon-no-transparency%402x.png')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
-  .directive('templateComponentImage', ['$log', '$timeout', 'templateEditorFactory', 'templateEditorUtils',
+  .directive('templateComponentImage', ['$log', 'templateEditorFactory', 'templateEditorUtils',
     'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
-    function ($log, $timeout, templateEditorFactory, templateEditorUtils,
+    function ($log, templateEditorFactory, templateEditorUtils,
       fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES) {
       return {
         restrict: 'E',
@@ -53,37 +53,11 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _addFilesToMetadata(files, alwaysAppend) {
-            var selectedImages = $scope.isDefaultImageList ? [] : _.cloneDeep($scope.selectedImages);
+            var selectedFiles = $scope.isDefaultImageList ? [] : $scope.selectedImages;
+            var metadata = fileMetadataUtilsService.metadataWithFile(selectedFiles,
+              DEFAULT_IMAGE_THUMBNAIL, files, alwaysAppend);
 
-            files.forEach(function (file) {
-              _addFileToSet(selectedImages, file, alwaysAppend);
-            });
-
-            _setMetadata(selectedImages);
-          }
-
-          function _addFileToSet(selectedImages, file, alwaysAppend) {
-            console.log('_addFileToSet', selectedImages, file);
-
-            var filePath = file.bucket + '/' + file.name;
-            var initialLength = selectedImages.length;
-            var timeCreated = fileMetadataUtilsService.timeCreatedFor(file);
-            var thumbnail = fileMetadataUtilsService.thumbnailFor(file, DEFAULT_IMAGE_THUMBNAIL);
-
-            var newFile = {
-              file: filePath,
-              exists: true,
-              'time-created': timeCreated,
-              'thumbnail-url': thumbnail
-            };
-
-            templateEditorUtils.addOrReplaceAll(selectedImages, {
-              file: filePath
-            }, newFile);
-
-            if (alwaysAppend && initialLength === selectedImages.length) {
-              selectedImages.push(newFile);
-            }
+            _setMetadata(metadata);
           }
 
           function _loadSelectedImages() {
@@ -130,12 +104,6 @@ angular.module('risevision.template-editor.directives')
             return $scope.getBlueprintData($scope.componentId, 'duration');
           }
 
-          function _extractFileNamesFrom(metadata) {
-            return _.map(metadata, function (entry) {
-              return entry.file;
-            });
-          }
-
           function _getFilesFor(componentId) {
             var metadata = $scope.getAttributeData(componentId, 'metadata');
 
@@ -143,43 +111,23 @@ angular.module('risevision.template-editor.directives')
               return $scope.getBlueprintData(componentId, 'files');
             }
 
-            return _extractFileNamesFrom(metadata);
+            return fileMetadataUtilsService.extractFileNamesFrom(metadata);
           }
 
-          function _filesAttributeFor(metadata) {
-            return _extractFileNamesFrom(metadata).join('|');
-          }
-
-          $scope.updateFileMetadata = function (metadata) {
+          $scope.updateFileMetadata = function (newMetadata) {
             var currentMetadata = _getAttribute('metadata');
+            var updatedMetadata =
+              fileMetadataUtilsService.getUpdatedFileMetadata(currentMetadata, newMetadata);
 
-            if (!currentMetadata) {
-              _setMetadata(metadata);
-            } else {
-              var atLeastOneOriginalEntryIsStillSelected = false;
-              var metadataCopy = angular.copy(currentMetadata);
-
-              _.each(metadata, function (entry) {
-                var currentEntry = _.find(metadataCopy, {
-                  file: entry.file
-                });
-
-                if (currentEntry) {
-                  atLeastOneOriginalEntryIsStillSelected = true;
-                  currentEntry.exists = entry.exists;
-                  currentEntry['thumbnail-url'] = entry['thumbnail-url'];
-                }
-              });
-
-              if (atLeastOneOriginalEntryIsStillSelected) {
-                _setMetadata(metadataCopy);
-              }
+            if (updatedMetadata) {
+              _setMetadata(updatedMetadata);
             }
           };
 
           function _setMetadata(metadata) {
             var selectedImages = angular.copy(metadata);
-            var filesAttribute = _filesAttributeFor(selectedImages);
+            var filesAttribute =
+              fileMetadataUtilsService.filesAttributeFor(selectedImages);
 
             _setSelectedImages(selectedImages);
 
@@ -188,7 +136,8 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _setSelectedImages(selectedImages) {
-            var filesAttribute = _filesAttributeFor(selectedImages);
+            var filesAttribute =
+              fileMetadataUtilsService.filesAttributeFor(selectedImages);
 
             $scope.selectedImages = selectedImages;
             $scope.isDefaultImageList = filesAttribute === _getDefaultFilesAttribute();
@@ -254,12 +203,12 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.removeImageFromList = function (image) {
-            var idx = $scope.selectedImages.indexOf(image);
-            var selectedImages = _.cloneDeep($scope.selectedImages);
+            var currentMetadata = $scope.selectedImages;
+            var metadata =
+              fileMetadataUtilsService.metadataWithFileRemoved(currentMetadata, image);
 
-            if (idx >= 0) {
-              selectedImages.splice(idx, 1);
-              _setMetadata(selectedImages);
+            if (metadata) {
+              _setMetadata(metadata);
             }
           };
         }

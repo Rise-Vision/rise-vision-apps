@@ -63,4 +63,246 @@ describe('service: fileMetadataUtilsService:', function() {
 
   });
 
+  describe('extractFileNamesFrom', function() {
+
+    it('should extract file names from metadata', function() {
+      var fileNames = fileMetadataUtilsService.extractFileNamesFrom([
+        { file: 'a.txt' },
+        { file: 'b.txt' },
+        { file: 'c.txt' }
+      ]);
+
+      expect(fileNames).to.deep.equal(['a.txt', 'b.txt', 'c.txt']);
+    });
+
+  });
+
+  describe('filesAttributeFor', function() {
+
+    it('should extract file names from metadata', function() {
+      var filesAttribute = fileMetadataUtilsService.filesAttributeFor([
+        { file: 'a.txt' },
+        { file: 'b.txt' },
+        { file: 'c.txt' }
+      ]);
+
+      expect(filesAttribute).to.deep.equal('a.txt|b.txt|c.txt');
+    });
+
+  });
+
+  describe('metadataWithFile', function() {
+
+    it('should add to metadata', function() {
+      var metadata = fileMetadataUtilsService.metadataWithFile([],
+        'http://default-thumbnail', [
+          {
+            bucket: 'x',
+            name: 'd.txt',
+            metadata: {
+              thumbnail: 'http://thumbnail'
+            },
+            timeCreated: {
+              value: 200
+            }
+          }
+        ]
+      );
+
+      expect(metadata).to.deep.equal([
+        {
+          file: 'x/d.txt',
+          exists: true,
+          'time-created': 200,
+          'thumbnail-url': 'http://thumbnail?_=200'
+        }
+      ]);
+    });
+
+    it('should consider default thumbnail', function() {
+      var metadata = fileMetadataUtilsService.metadataWithFile([],
+        'http://default-thumbnail', [
+          {
+            bucket: 'x',
+            name: 'd.txt',
+            timeCreated: {
+              value: 200
+            }
+          }
+        ]
+      );
+
+      expect(metadata).to.deep.equal([
+        {
+          file: 'x/d.txt',
+          exists: true,
+          'time-created': 200,
+          'thumbnail-url': 'http://default-thumbnail'
+        }
+      ]);
+    });
+
+    it('should rewrite existing image', function() {
+      var metadata = fileMetadataUtilsService.metadataWithFile([
+          { file: 'x/d.txt' }
+        ],
+        'http://default-thumbnail', [
+          {
+            bucket: 'x',
+            name: 'd.txt',
+            metadata: {
+              thumbnail: 'http://thumbnail'
+            },
+            timeCreated: {
+              value: 200
+            }
+          }
+        ]
+      );
+
+      expect(metadata).to.deep.equal([
+        {
+          file: 'x/d.txt',
+          exists: true,
+          'time-created': 200,
+          'thumbnail-url': 'http://thumbnail?_=200'
+        }
+      ]);
+    });
+
+    it('should append an image', function() {
+      var metadata = fileMetadataUtilsService.metadataWithFile([
+          { file: 'x/d.txt' }
+        ],
+        'http://default-thumbnail', [
+          {
+            bucket: 'x',
+            name: 'd.txt',
+            metadata: {
+              thumbnail: 'http://thumbnail'
+            },
+            timeCreated: {
+              value: 200
+            }
+          }
+        ], true
+      );
+
+      expect(metadata).to.deep.equal([
+        {
+          file: 'x/d.txt',
+          exists: true,
+          'time-created': 200,
+          'thumbnail-url': 'http://thumbnail?_=200'
+        },
+        {
+          file: 'x/d.txt',
+          exists: true,
+          'time-created': 200,
+          'thumbnail-url': 'http://thumbnail?_=200'
+        }
+      ]);
+    });
+
+  });
+
+  describe('metadataWithFileRemoved', function() {
+
+      it('should remove an image', function() {
+        var entryToDelete = { file: 'x/b.txt' };
+        var metadata = fileMetadataUtilsService.metadataWithFileRemoved([
+            { file: 'x/a.txt' },
+            entryToDelete,
+            { file: 'x/c.txt' }
+          ], entryToDelete
+        );
+
+        expect(metadata).to.deep.equal([
+          { file: 'x/a.txt' },
+          { file: 'x/c.txt' }
+        ]);
+      });
+
+  });
+
+  describe('getUpdatedFileMetadata', function() {
+
+    var sampleMetadata;
+
+    beforeEach(function() {
+      sampleMetadata = [
+        { "file": "image.png", exists: true, "thumbnail-url": "http://image" },
+        { "file": "image2.png", exists: false, "thumbnail-url": "http://image2" }
+      ];
+    });
+
+    it('should directly return metadata if it\'s not already loaded', function()
+    {
+      var metadata =
+        fileMetadataUtilsService.getUpdatedFileMetadata(null, sampleMetadata);
+
+      expect(metadata).to.deep.equal(sampleMetadata);
+    });
+
+    it('should combine metadata if it\'s already loaded', function()
+    {
+      var updatedImages = [
+        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" },
+        { "file": "image2.png", exists: false, "thumbnail-url": "http://image6" }
+      ];
+
+      var metadata =
+        fileMetadataUtilsService.getUpdatedFileMetadata(sampleMetadata, updatedImages);
+
+      expect(metadata).to.deep.equal(updatedImages);
+    });
+
+    it('should only update the provided images', function()
+    {
+      var updatedImages = [
+        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" }
+      ];
+      var expectedImages = [
+        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" },
+        { "file": "image2.png", exists: false, "thumbnail-url": "http://image2" }
+      ];
+
+      var metadata =
+        fileMetadataUtilsService.getUpdatedFileMetadata(sampleMetadata, updatedImages);
+
+      expect(metadata).to.deep.equal(expectedImages);
+    });
+
+    it('should not update images that are not already present', function()
+    {
+      var updatedImages = [
+        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" },
+        { "file": "imageNew.png", exists: false, "thumbnail-url": "http://imageN" }
+      ];
+      var expectedImages = [
+        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" },
+        { "file": "image2.png", exists: false, "thumbnail-url": "http://image2" }
+      ];
+
+      var metadata =
+        fileMetadataUtilsService.getUpdatedFileMetadata(sampleMetadata, updatedImages);
+
+      expect(metadata).to.deep.equal(expectedImages);
+    });
+
+    it('should not return anything if no files match', function()
+    {
+      var updatedImages = [
+        { "file": "imageOther.png", exists: false, "thumbnail-url": "http://image5" },
+        { "file": "imageNew.png", exists: false, "thumbnail-url": "http://imageN" }
+      ];
+
+      var metadata =
+        fileMetadataUtilsService.getUpdatedFileMetadata(sampleMetadata, updatedImages);
+
+      expect(metadata).to.be.falsey;
+    });
+
+  });
+
 });
