@@ -60,11 +60,11 @@ angular.module('risevision.template-editor.services')
       };
 
       service.metadataWithFileRemoved = function (previousMetadata, entry) {
-        var index = previousMetadata.indexOf(entry);
+        var idx = previousMetadata.indexOf(entry);
         var metadata = _.cloneDeep(previousMetadata);
 
-        if (index >= 0) {
-          metadata.splice(index, 1);
+        if (idx >= 0) {
+          metadata.splice(idx, 1);
 
           return metadata;
         }
