@@ -7,7 +7,7 @@
     ></img>
     <div class="broken-link" ng-hide="entry.exists && !isStreamlineThumbnail()">
       <streamline-icon width="61" height="60"
-        name={{ entry.exists ? streamlineIcon : "forbidden" }}
+        name="{{ entry.exists ? streamlineIcon : 'forbidden' }}"
       ></streamline-icon>
     </div>
   </div>
