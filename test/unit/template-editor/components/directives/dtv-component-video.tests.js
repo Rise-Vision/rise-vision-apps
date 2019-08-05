@@ -8,7 +8,7 @@ describe('directive: templateComponentVideo', function() {
       timeout;
 
   beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" } };
+    factory = { selected: { id: 'TEST-ID' } };
   });
 
   beforeEach(module('risevision.template-editor.directives'));
@@ -42,7 +42,7 @@ describe('directive: templateComponentVideo', function() {
     };
 
     timeout = $timeout;
-    element = $compile("<template-component-video></template-component-video>")($scope);
+    element = $compile('<template-component-video></template-component-video>')($scope);
     $scope = element.scope();
     $scope.$digest();
   }));
@@ -50,7 +50,7 @@ describe('directive: templateComponentVideo', function() {
   it('should exist', function() {
     expect($scope).to.be.ok;
     expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
+    expect($scope.factory).to.deep.equal({ selected: { id: 'TEST-ID' } })
     expect($scope.registerDirective).to.have.been.called;
 
     var directive = $scope.registerDirective.getCall(0).args[0];
@@ -65,8 +65,8 @@ describe('directive: templateComponentVideo', function() {
   it('should set video lists when available as attribute data', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     testMetadata = [
-      { "file": 'video.mp4', "thumbnail-url": "http://video" },
-      { "file": 'test|character.mp4', "thumbnail-url": "http://test%7Ccharacter.mp4" }
+      { 'file': 'video.mp4', 'thumbnail-url': 'http://video' },
+      { 'file': 'test|character.mp4', 'thumbnail-url': 'http://test%7Ccharacter.mp4' }
     ];
 
     $scope.getAttributeData = function(componentId, key) {
@@ -121,8 +121,8 @@ describe('directive: templateComponentVideo', function() {
 
     beforeEach(function() {
       sampleVideos = [
-        { "file": "video.mp4", exists: true, "thumbnail-url": "http://video" },
-        { "file": "video2.mp4", exists: false, "thumbnail-url": "http://video2" }
+        { 'file': 'video.mp4', exists: true, 'thumbnail-url': 'http://video' },
+        { 'file': 'video2.mp4', exists: false, 'thumbnail-url': 'http://video2' }
       ];
 
       $scope.componentId = 'TEST-ID';
@@ -148,8 +148,8 @@ describe('directive: templateComponentVideo', function() {
     it('should combine metadata if it\'s already loaded', function()
     {
       var updatedVideos = [
-        { "file": "video.mp4", exists: false, "thumbnail-url": "http://video5" },
-        { "file": "video2.mp4", exists: false, "thumbnail-url": "http://video6" }
+        { 'file': 'video.mp4', exists: false, 'thumbnail-url': 'http://video5' },
+        { 'file': 'video2.mp4', exists: false, 'thumbnail-url': 'http://video6' }
       ];
 
       $scope.getAttributeData = function() {
@@ -170,11 +170,11 @@ describe('directive: templateComponentVideo', function() {
     it('should only update the provided videos', function()
     {
       var updatedVideos = [
-        { "file": "video.mp4", exists: false, "thumbnail-url": "http://video5" }
+        { 'file': 'video.mp4', exists: false, 'thumbnail-url': 'http://video5' }
       ];
       var expectedVideos = [
-        { "file": "video.mp4", exists: false, "thumbnail-url": "http://video5" },
-        { "file": "video2.mp4", exists: false, "thumbnail-url": "http://video2" }
+        { 'file': 'video.mp4', exists: false, 'thumbnail-url': 'http://video5' },
+        { 'file': 'video2.mp4', exists: false, 'thumbnail-url': 'http://video2' }
       ];
 
       $scope.getAttributeData = function() {
@@ -195,12 +195,12 @@ describe('directive: templateComponentVideo', function() {
     it('should not update videos that are not already present', function()
     {
       var updatedVideos = [
-        { "file": "video.mp4", exists: false, "thumbnail-url": "http://video5" },
-        { "file": "videoNew.mp4", exists: false, "thumbnail-url": "http://video-thumbnail" }
+        { 'file': 'video.mp4', exists: false, 'thumbnail-url': 'http://video5' },
+        { 'file': 'videoNew.mp4', exists: false, 'thumbnail-url': 'http://video-thumbnail' }
       ];
       var expectedVideos = [
-        { "file": "video.mp4", exists: false, "thumbnail-url": "http://video5" },
-        { "file": "video2.mp4", exists: false, "thumbnail-url": "http://video2" }
+        { 'file': 'video.mp4', exists: false, 'thumbnail-url': 'http://video5' },
+        { 'file': 'video2.mp4', exists: false, 'thumbnail-url': 'http://video2' }
       ];
 
       $scope.getAttributeData = function() {
