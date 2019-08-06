@@ -4,9 +4,9 @@ angular.module('risevision.template-editor.directives')
   .constant('DEFAULT_IMAGE_THUMBNAIL',
     'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon-no-transparency%402x.png')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
-  .directive('templateComponentImage', ['$log', 'templateEditorFactory', 'templateEditorUtils',
+  .directive('templateComponentImage', ['$log', '$timeout', 'templateEditorFactory', 'templateEditorUtils',
     'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
-    function ($log, templateEditorFactory, templateEditorUtils,
+    function ($log, $timeout, templateEditorFactory, templateEditorUtils,
       fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES) {
       return {
         restrict: 'E',
@@ -67,15 +67,15 @@ angular.module('risevision.template-editor.directives')
               _setSelectedImages(selectedImages);
             }
 
+            $scope.factory.loadingPresentation = true;
+
             var checksCompleted = $scope.fileExistenceChecksCompleted;
             console.log('checksCompleted', checksCompleted);
-            console.log('current loading', $scope.factory.loadingPresentation);
 
-            if (checksCompleted) {
-              var completed = checksCompleted[$scope.componentId];
-
-              console.log('new loading', !completed);
-              $scope.factory.loadingPresentation = !completed;
+            if (checksCompleted && checksCompleted[$scope.componentId]) {
+              $timeout(function(){
+                $scope.factory.loadingPresentation = false;
+              });
             }
           }
 
