@@ -70,7 +70,6 @@ angular.module('risevision.template-editor.directives')
             $scope.factory.loadingPresentation = true;
 
             var checksCompleted = $scope.fileExistenceChecksCompleted;
-            console.log('checksCompleted', checksCompleted);
 
             if (checksCompleted && checksCompleted[$scope.componentId]) {
               $timeout(function(){
