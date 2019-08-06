@@ -236,6 +236,7 @@ angular.module('risevision.template-editor.controllers')
       });
 
       $scope.$watch('factory.loadingPresentation', function (loading) {
+        console.log('loading', loading);
         if (loading) {
           $loading.start('template-editor-loader');
         } else {
