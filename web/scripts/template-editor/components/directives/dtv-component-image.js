@@ -192,7 +192,7 @@ angular.module('risevision.template-editor.directives')
 
                 _checkFileExistenceFor(componentId)
                   .finally(function () {
-                    $scope.fileExistenceChecksCompleted[componentId] = false;
+                    $scope.fileExistenceChecksCompleted[componentId] = true;
 
                     if (componentId === $scope.componentId && $scope.factory.loadingPresentation) {
                       $scope.factory.loadingPresentation = false;
