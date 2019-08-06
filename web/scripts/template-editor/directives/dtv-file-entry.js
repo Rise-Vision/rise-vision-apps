@@ -8,8 +8,7 @@ angular.module('risevision.template-editor.directives')
         scope: {
           fileType: '@',
           entry: '=',
-          removeAction: '=',
-          thumbnailType: '@'
+          removeAction: '='
         },
         templateUrl: 'partials/template-editor/file-entry.html',
         link: function ($scope) {
