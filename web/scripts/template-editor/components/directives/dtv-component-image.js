@@ -17,7 +17,6 @@ angular.module('risevision.template-editor.directives')
 
           $scope.factory = templateEditorFactory;
           $scope.validExtensions = SUPPORTED_IMAGE_TYPES;
-          $scope.fileExistenceChecksCompleted = {};
 
           $scope.uploadManager = {
             onUploadStatus: function (isUploading) {
@@ -68,7 +67,10 @@ angular.module('risevision.template-editor.directives')
               _setSelectedImages(selectedImages);
             }
 
-            if (!$scope.fileExistenceChecksCompleted[$scope.componentId]) {
+            var checksCompleted = $scope.fileExistenceChecksCompleted;
+            console.log('checksCompleted', checksCompleted);
+
+            if (checksCompleted && !checksCompleted[$scope.componentId]) {
               $scope.factory.loadingPresentation = true;
             }
           }
