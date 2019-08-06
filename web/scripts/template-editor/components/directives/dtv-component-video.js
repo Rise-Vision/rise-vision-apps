@@ -110,7 +110,6 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _setSelectedFiles(selectedFiles) {
-            console.log('selected', selectedFiles);
             $scope.selectedFiles = selectedFiles;
           }
 
@@ -170,11 +169,10 @@ angular.module('risevision.template-editor.directives')
 
           $scope.removeFileFromList = function (file) {
             var currentMetadata = $scope.selectedFiles;
-            console.log('current', currentMetadata);
-            console.log('file', file);
+
             var metadata =
               fileMetadataUtilsService.metadataWithFileRemoved(currentMetadata, file);
-            console.log('removed', metadata);
+
             if (metadata) {
               _setMetadata(metadata);
             }

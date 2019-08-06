@@ -16,16 +16,20 @@ angular.module('risevision.template-editor.directives')
           var STREAMLINE_URI = /^streamline:(.+)/;
 
           $scope.factory = templateEditorFactory;
-          $scope.fileName = templateEditorUtils.fileNameOf($scope.entry.file);
-
-          var thumbnailUrl = $scope.entry && $scope.entry['thumbnail-url'];
-
-          $scope.isStreamlineThumbnail = !!(thumbnailUrl && STREAMLINE_URI.test(thumbnailUrl));
-          $scope.streamlineIcon = $scope.isStreamlineThumbnail ?
-            thumbnailUrl.match(STREAMLINE_URI)[1] : '';
 
           $scope.getFileName = function () {
             return templateEditorUtils.fileNameOf($scope.entry.file);
+          };
+
+          $scope.isStreamlineThumbnail = function() {
+            var thumbnailUrl = $scope.entry && $scope.entry['thumbnail-url'];
+
+            return !!(thumbnailUrl && STREAMLINE_URI.test(thumbnailUrl));
+          };
+
+          $scope.getStreamlineIcon = function() {
+            return $scope.isStreamlineThumbnail ?
+              thumbnailUrl.match(STREAMLINE_URI)[1] : '';
           };
 
           $scope.removeFileFromList = function () {

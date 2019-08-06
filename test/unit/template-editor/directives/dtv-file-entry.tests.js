@@ -39,17 +39,20 @@ describe('directive: templateEditorFileEntry', function() {
 
       expect($scope.removeAction).to.be.a.function;
       expect($scope.removeFileFromList).to.be.a.function;
+      expect($scope.getFileName).to.be.a.function;
+      expect($scope.isStreamlineThumbnail).to.be.a.function;
+      expect($scope.getStreamlineIcon).to.be.a.function;
       expect($scope.fileType).to.equal('image');
       expect($scope.entry).to.deep.equal(testEntry);
     });
 
     it('should have a file name', function () {
-      expect($scope.fileName).to.equal('file.png');
+      expect($scope.getFileName()).to.equal('file.png');
     });
 
     it('should not be a streamline thumbnail', function () {
-      expect($scope.isStreamlineThumbnail).to.be.false;
-      expect($scope.streamlineIcon).to.equal('');
+      expect($scope.isStreamlineThumbnail()).to.be.false;
+      expect($scope.getStreamlineIcon()).to.equal('');
     });
 
     it('should call remove', function () {
@@ -81,8 +84,8 @@ describe('directive: templateEditorFileEntry', function() {
     }));
 
     it('should be a streamline thumbnail', function () {
-      expect($scope.isStreamlineThumbnail).to.be.true;
-      expect($scope.streamlineIcon).to.equal('video');
+      expect($scope.isStreamlineThumbnail()).to.be.true;
+      expect($scope.getStreamlineIcon()).to.equal('video');
     });
 
   });
