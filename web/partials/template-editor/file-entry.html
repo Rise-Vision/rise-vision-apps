@@ -2,10 +2,10 @@
   <div class="file-thumbnail">
     <div class="file-helper"></div>
     <img src="{{ entry['thumbnail-url'] }}"
-      ng-if="entry.exists && !isStreamlineThumbnail()"
+      ng-if="entry.exists && !isStreamlineThumbnail"
       width="80"
     ></img>
-    <div class="broken-link" ng-hide="entry.exists && !isStreamlineThumbnail()">
+    <div class="broken-link" ng-hide="entry.exists && !isStreamlineThumbnail">
       <streamline-icon width="61" height="60"
         name="{{ entry.exists ? streamlineIcon : 'forbidden' }}"
       ></streamline-icon>

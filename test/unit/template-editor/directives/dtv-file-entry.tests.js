@@ -39,7 +39,6 @@ describe('directive: templateEditorFileEntry', function() {
 
       expect($scope.removeAction).to.be.a.function;
       expect($scope.removeFileFromList).to.be.a.function;
-      expect($scope.isStreamlineThumbnail).to.be.a.function;
       expect($scope.fileType).to.equal('image');
       expect($scope.entry).to.deep.equal(testEntry);
     });
@@ -49,7 +48,7 @@ describe('directive: templateEditorFileEntry', function() {
     });
 
     it('should not be a streamline thumbnail', function () {
-      expect($scope.isStreamlineThumbnail()).to.be.falsey;
+      expect($scope.isStreamlineThumbnail).to.be.false;
       expect($scope.streamlineIcon).to.equal('');
     });
 
@@ -82,7 +81,7 @@ describe('directive: templateEditorFileEntry', function() {
     }));
 
     it('should be a streamline thumbnail', function () {
-      expect($scope.isStreamlineThumbnail()).to.be.true;
+      expect($scope.isStreamlineThumbnail).to.be.true;
       expect($scope.streamlineIcon).to.equal('video');
     });
 
