@@ -17,6 +17,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.factory = templateEditorFactory;
           $scope.validExtensions = SUPPORTED_IMAGE_TYPES;
+          $scope.fileExistenceChecksCompleted = {};
 
           $scope.uploadManager = {
             onUploadStatus: function (isUploading) {
@@ -57,7 +58,7 @@ angular.module('risevision.template-editor.directives')
             var metadata = fileMetadataUtilsService.metadataWithFile(selectedFiles,
               DEFAULT_IMAGE_THUMBNAIL, files, alwaysAppend);
 
-            _setMetadata(metadata);
+            _setMetadata($scope.componentId, metadata);
           }
 
           function _loadSelectedImages() {
@@ -67,12 +68,9 @@ angular.module('risevision.template-editor.directives')
               _setSelectedImages(selectedImages);
             }
 
-            $scope.factory.loadingPresentation = true;
-
-            _checkFileExistenceFor($scope.componentId)
-              .finally(function () {
-                $scope.factory.loadingPresentation = false;
-              });
+            if (!$scope.fileExistenceChecksCompleted[$scope.componentId]) {
+              $scope.factory.loadingPresentation = true;
+            }
           }
 
           function _loadDuration() {
@@ -114,25 +112,27 @@ angular.module('risevision.template-editor.directives')
             return fileMetadataUtilsService.extractFileNamesFrom(metadata);
           }
 
-          $scope.updateFileMetadata = function (newMetadata) {
-            var currentMetadata = _getAttribute('metadata');
+          $scope.updateFileMetadata = function (componentId, newMetadata) {
+            var currentMetadata = $scope.getAttributeData(componentId, 'metadata');
             var updatedMetadata =
               fileMetadataUtilsService.getUpdatedFileMetadata(currentMetadata, newMetadata);
 
             if (updatedMetadata) {
-              _setMetadata(updatedMetadata);
+              _setMetadata(componentId, updatedMetadata);
             }
           };
 
-          function _setMetadata(metadata) {
+          function _setMetadata(componentId, metadata) {
             var selectedImages = angular.copy(metadata);
             var filesAttribute =
               fileMetadataUtilsService.filesAttributeFor(selectedImages);
 
-            _setSelectedImages(selectedImages);
+            if (componentId === $scope.componentId) {
+              _setSelectedImages(selectedImages);
+            }
 
-            _setAttribute('metadata', selectedImages);
-            _setAttribute('files', filesAttribute);
+            $scope.setAttributeData(componentId, 'metadata', selectedImages);
+            $scope.setAttributeData(componentId, 'files', filesAttribute);
           }
 
           function _setSelectedImages(selectedImages) {
@@ -186,8 +186,16 @@ angular.module('risevision.template-editor.directives')
               });
 
               _.forEach(imageComponentIds, function (componentId) {
-                console.log('TODO: check file existence for component', componentId);
-                $scope.fileExistenceChecksCompleted[componentId] = false;
+                console.log('checking file existence for component', componentId);
+
+                _checkFileExistenceFor(componentId)
+                .finally(function(){
+                  $scope.fileExistenceChecksCompleted[componentId] = false;
+
+                  if(componentId === $scope.componentId && $scope.factory.loadingPresentation) {
+                    $scope.factory.loadingPresentation = false;
+                  }
+                });
               });
             }
           });
@@ -199,7 +207,7 @@ angular.module('risevision.template-editor.directives')
               .then(function (metadata) {
                 console.log('received metadata', metadata);
 
-                $scope.updateFileMetadata(metadata);
+                $scope.updateFileMetadata(componentId, metadata);
               })
               .catch(function (error) {
                 $log.error('Could not check file existence for: ' + componentId, error);
@@ -221,7 +229,7 @@ angular.module('risevision.template-editor.directives')
               fileMetadataUtilsService.metadataWithFileRemoved(currentMetadata, image);
 
             if (metadata) {
-              _setMetadata(metadata);
+              _setMetadata($scope.componentId, metadata);
             }
           };
         }
