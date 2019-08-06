@@ -109,116 +109,105 @@ describe('controller: TemplateEditor', function() {
     expect($scope.getAvailableAttributeData).to.be.a('function');
   });
 
-  it('should get empty attribute data',function() {
-    var data = $scope.getAttributeData("test-id");
+  describe('getAttributeData', function () {
 
-    expect(data).to.deep.equal({ id: "test-id" });
-  });
+    it('should get empty attribute data',function() {
+      var data = $scope.getAttributeData('test-id');
 
-  it('should not update templateAttributeData on get',function() {
-    $scope.getAttributeData("test-id");
-
-    expect($scope.factory.presentation.templateAttributeData).to.deep.equal({});
-  });
-
-  it('should get undefined attribute data value',function() {
-    var data = $scope.getAttributeData("test-id", "symbols");
-
-    expect(data).to.not.be.ok;
-  });
-
-  it('should set an attribute data value',function() {
-    $scope.setAttributeData("test-id", "symbols", "CADUSD=X|MXNUSD=X");
-
-    expect($scope.factory.presentation.templateAttributeData).to.deep.equal({
-      components: [
-        {
-          id: "test-id",
-          symbols: "CADUSD=X|MXNUSD=X"
-        }
-      ]
-    });
-  });
-
-  it('should get an attribute data value',function() {
-    $scope.setAttributeData("test-id", "symbols", "CADUSD=X|MXNUSD=X");
-
-    var data = $scope.getAttributeData("test-id", "symbols");
-
-    expect(data).to.equal("CADUSD=X|MXNUSD=X");
-  });
-
-  it('should get attribute data',function() {
-    $scope.setAttributeData("test-id", "symbols", "CADUSD=X|MXNUSD=X");
-
-    var data = $scope.getAttributeData("test-id");
-
-    expect(data).to.deep.equal({
-      id: "test-id",
-      symbols: "CADUSD=X|MXNUSD=X"
-    });
-  });
-
-  it('should get null blueprint data',function() {
-    factory.blueprintData = { components: [] };
-
-    var data = $scope.getBlueprintData("rise-data-financial-01");
-
-    expect(data).to.be.null;
-  });
-
-  it('should get null blueprint data value',function() {
-    factory.blueprintData = { components: [] };
-
-    var data = $scope.getBlueprintData("rise-data-financial-01", "symbols");
-
-    expect(data).to.be.null;
-  });
-
-  it('should get blueprint data attributes',function() {
-    factory.blueprintData = { components: SAMPLE_COMPONENTS };
-
-    var data = $scope.getBlueprintData("rise-data-financial-01");
-
-    expect(data).to.deep.equal({
-      "financial-list": {
-        "label": "template.financial-list",
-        "value": "-LNuO9WH5ZEQ2PLCeHhz"
-      },
-      "symbols": {
-        "label": "template.symbols",
-        "value": "CADUSD=X|MXNUSD=X|USDEUR=X"
-      }
-    });
-  });
-
-  it('should get blueprint data value',function() {
-    factory.blueprintData = { components: SAMPLE_COMPONENTS };
-
-    var data = $scope.getBlueprintData("rise-data-financial-01", "symbols");
-
-    expect(data).to.equal("CADUSD=X|MXNUSD=X|USDEUR=X");
-  });
-
-  describe('test getAvailableAttributeData()', function () {
-
-    it('should get attribute data value',function() {
-      $scope.setAttributeData("test-id", "symbols", "CADUSD=X|MXNUSD=X");
-  
-      var data = $scope.getAvailableAttributeData("test-id", "symbols");
-  
-      expect(data).to.equal("CADUSD=X|MXNUSD=X");
+      expect(data).to.deep.equal({ id: 'test-id' });
     });
 
-    it('should get blueprint data value when attribute data is undefined',function() {
+    it('should not update templateAttributeData on get',function() {
+      $scope.getAttributeData('test-id');
 
+      expect($scope.factory.presentation.templateAttributeData).to.deep.equal({});
+    });
+
+    it('should get undefined attribute data value',function() {
+      var data = $scope.getAttributeData('test-id', 'symbols');
+
+      expect(data).to.not.be.ok;
+    });
+
+  });
+
+  describe('setAttributeData', function () {
+
+    it('should set an attribute data value',function() {
+      $scope.setAttributeData('test-id', 'symbols', 'CADUSD=X|MXNUSD=X');
+
+      expect($scope.factory.presentation.templateAttributeData).to.deep.equal({
+        components: [
+          {
+            id: 'test-id',
+            symbols: 'CADUSD=X|MXNUSD=X'
+          }
+        ]
+      });
+    });
+
+    it('should get an attribute data value',function() {
+      $scope.setAttributeData('test-id', 'symbols', 'CADUSD=X|MXNUSD=X');
+
+      var data = $scope.getAttributeData('test-id', 'symbols');
+
+      expect(data).to.equal('CADUSD=X|MXNUSD=X');
+    });
+
+    it('should get attribute data',function() {
+      $scope.setAttributeData('test-id', 'symbols', 'CADUSD=X|MXNUSD=X');
+
+      var data = $scope.getAttributeData('test-id');
+
+      expect(data).to.deep.equal({
+        id: 'test-id',
+        symbols: 'CADUSD=X|MXNUSD=X'
+      });
+    });
+
+  });
+
+  describe('getBlueprintData', function () {
+
+    it('should get null blueprint data',function() {
+      factory.blueprintData = { components: [] };
+
+      var data = $scope.getBlueprintData('rise-data-financial-01');
+
+      expect(data).to.be.null;
+    });
+
+    it('should get null blueprint data value',function() {
+      factory.blueprintData = { components: [] };
+
+      var data = $scope.getBlueprintData('rise-data-financial-01', 'symbols');
+
+      expect(data).to.be.null;
+    });
+
+    it('should get blueprint data attributes',function() {
       factory.blueprintData = { components: SAMPLE_COMPONENTS };
 
-      var attributeData = $scope.getAttributeData("rise-data-financial-01", "symbols");
-      var data = $scope.getAvailableAttributeData("rise-data-financial-01", "symbols");
+      var data = $scope.getBlueprintData('rise-data-financial-01');
 
-      expect(attributeData).to.equal(undefined);
-      expect(data).to.equal("CADUSD=X|MXNUSD=X|USDEUR=X");
+      expect(data).to.deep.equal({
+        "financial-list": {
+          "label": "template.financial-list",
+          "value": "-LNuO9WH5ZEQ2PLCeHhz"
+        },
+        "symbols": {
+          "label": "template.symbols",
+          "value": "CADUSD=X|MXNUSD=X|USDEUR=X"
+        }
+      });
+    });
+
+    it('should get blueprint data value',function() {
+      factory.blueprintData = { components: SAMPLE_COMPONENTS };
+
+      var data = $scope.getBlueprintData('rise-data-financial-01', 'symbols');
+
+      expect(data).to.equal('CADUSD=X|MXNUSD=X|USDEUR=X');
     });
 
   });
@@ -327,7 +316,7 @@ describe('controller: TemplateEditor', function() {
       $timeout.flush();
 
       var result = $window.onbeforeunload();
-      expect(result).to.equal("common.saveBeforeLeave");
+      expect(result).to.equal('common.saveBeforeLeave');
     });
 
     it('should not notify unsaved changes when closing window if there are no changes', function() {

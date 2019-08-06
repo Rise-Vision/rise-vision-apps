@@ -4,10 +4,10 @@ angular.module('risevision.template-editor.directives')
   .constant('DEFAULT_IMAGE_THUMBNAIL',
     'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon-no-transparency%402x.png')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
-  .directive('templateComponentImage', ['$log', '$q', '$timeout', 'templateEditorFactory', 'templateEditorUtils',
-    'storageAPILoader', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
-    function ($log, $q, $timeout, templateEditorFactory, templateEditorUtils, storageAPILoader,
-      DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES) {
+  .directive('templateComponentImage', ['$log', 'templateEditorFactory', 'templateEditorUtils',
+    'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
+    function ($log, templateEditorFactory, templateEditorUtils,
+      fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES) {
       return {
         restrict: 'E',
         scope: true,
@@ -17,6 +17,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.factory = templateEditorFactory;
           $scope.validExtensions = SUPPORTED_IMAGE_TYPES;
+
           $scope.uploadManager = {
             onUploadStatus: function (isUploading) {
               $scope.isUploading = isUploading;
@@ -52,62 +53,26 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _addFilesToMetadata(files, alwaysAppend) {
-            var selectedImages = $scope.isDefaultImageList ? [] : _.cloneDeep($scope.selectedImages);
+            var selectedFiles = $scope.isDefaultImageList ? [] : $scope.selectedImages;
+            var metadata = fileMetadataUtilsService.metadataWithFile(selectedFiles,
+              DEFAULT_IMAGE_THUMBNAIL, files, alwaysAppend);
 
-            files.forEach(function (file) {
-              _addFileToSet(selectedImages, file, alwaysAppend);
-            });
-
-            _setMetadata(selectedImages);
-          }
-
-          function _addFileToSet(selectedImages, file, alwaysAppend) {
-            console.log('_addFileToSet', selectedImages, file);
-
-            var filePath = file.bucket + '/' + file.name;
-            var initialLength = selectedImages.length;
-            var newFile = {
-              file: filePath,
-              exists: true,
-              'time-created': _timeCreatedFor(file),
-              'thumbnail-url': _thumbnailFor(file)
-            };
-
-            templateEditorUtils.addOrReplaceAll(selectedImages, {
-              file: filePath
-            }, newFile);
-
-            if (alwaysAppend && initialLength === selectedImages.length) {
-              selectedImages.push(newFile);
-            }
-          }
-
-          function _thumbnailFor(item) {
-            if (item.metadata && item.metadata.thumbnail) {
-              return item.metadata.thumbnail + '?_=' + _timeCreatedFor(item);
-            } else {
-              return DEFAULT_IMAGE_THUMBNAIL;
-            }
-          }
-
-          function _timeCreatedFor(item) {
-            return item.timeCreated && item.timeCreated.value;
+            _setMetadata(metadata);
           }
 
           function _loadSelectedImages() {
-            var files;
             var selectedImages = _getAttribute('metadata');
 
             if (selectedImages) {
               _setSelectedImages(selectedImages);
-              files = _.map(selectedImages, function (entry) {
-                return entry.file;
-              });
-            } else {
-              files = _getDefaultFilesAttribute();
             }
 
-            _buildSelectedImagesFrom(files);
+            $scope.factory.loadingPresentation = true;
+
+            _checkFileExistenceFor($scope.componentId)
+              .finally(function () {
+                $scope.factory.loadingPresentation = false;
+              });
           }
 
           function _loadDuration() {
@@ -139,136 +104,30 @@ angular.module('risevision.template-editor.directives')
             return $scope.getBlueprintData($scope.componentId, 'duration');
           }
 
-          function _buildSelectedImagesFrom(files) {
-            $scope.factory.loadingPresentation = true;
+          function _getFilesFor(componentId) {
+            var metadata = $scope.getAttributeData(componentId, 'metadata');
 
-            var metadata = [];
-            var fileNames;
-
-            if (files && Array.isArray(files)) {
-              fileNames = JSON.parse(JSON.stringify(files));
-            } else {
-              fileNames = files ? files.split('|') : [];
+            if (!metadata) {
+              return $scope.getBlueprintData(componentId, 'files');
             }
 
-            _loadThumbnails(metadata, fileNames);
+            return fileMetadataUtilsService.extractFileNamesFrom(metadata);
           }
 
-          function _getThumbnailDataFor(fileName) {
-            var invalidThumbnailData = {
-              exists: false,
-              timeCreated: '',
-              url: ''
-            };
-            var regex = /risemedialibrary-([0-9a-f-]{36})[/](.+)/g;
-            var match = regex.exec(fileName);
-
-            if (!match) {
-              $log.error('Filename is not a valid Rise Storage path: ' + fileName);
-
-              return $q.resolve(invalidThumbnailData);
-            }
-
-            return _requestFileData(match[1], match[2])
-              .then(function (resp) {
-                var file = resp && resp.result && resp.result.result &&
-                  resp.result.files && resp.result.files[0];
-
-                if (!file) {
-                  return invalidThumbnailData;
-                }
-
-                var url = _thumbnailFor(file);
-
-                return {
-                  exists: !!url,
-                  timeCreated: _timeCreatedFor(file),
-                  url: url
-                };
-              })
-              .catch(function (error) {
-                $log.error(error);
-
-                return invalidThumbnailData;
-              });
-          }
-
-          function _requestFileData(companyId, file) {
-            var search = {
-              'companyId': companyId,
-              'file': file
-            };
-
-            return storageAPILoader()
-              .then(function (storageApi) {
-                return storageApi.files.get(search);
-              });
-          }
-
-          function _loadThumbnails(metadata, fileNames) {
-            var promises = _.map(fileNames, function (fileName) {
-              return _getThumbnailDataFor(fileName)
-                .then(function (data) {
-                  return {
-                    file: fileName,
-                    exists: data.exists,
-                    'time-created': data.timeCreated,
-                    'thumbnail-url': data.url
-                  };
-                })
-                .catch(function (error) {
-                  $log.error(error);
-                });
-            });
-
-            $q.all(promises).then(function (results) {
-              _.reject(results, _.isNil).forEach(function (file) {
-                metadata.push(file);
-              });
-
-              return $timeout(function () {
-                $scope.updateImageMetadata(metadata);
-                $scope.factory.loadingPresentation = false;
-              });
-            });
-          }
-
-          function _filesAttributeFor(metadata) {
-            return _.map(metadata, function (entry) {
-              return entry.file;
-            }).join('|');
-          }
-
-          $scope.updateImageMetadata = function (metadata) {
+          $scope.updateFileMetadata = function (newMetadata) {
             var currentMetadata = _getAttribute('metadata');
+            var updatedMetadata =
+              fileMetadataUtilsService.getUpdatedFileMetadata(currentMetadata, newMetadata);
 
-            if (!currentMetadata) {
-              _setMetadata(metadata);
-            } else {
-              var atLeastOneOriginalEntryIsStillSelected = false;
-              var metadataCopy = angular.copy(currentMetadata);
-
-              _.each(metadata, function (entry) {
-                var currentEntry = _.find(metadataCopy, {
-                  file: entry.file
-                });
-
-                if (currentEntry) {
-                  atLeastOneOriginalEntryIsStillSelected = true;
-                  currentEntry.exists = entry.exists;
-                  currentEntry['thumbnail-url'] = entry['thumbnail-url'];
-                }
-              });
-
-              if (atLeastOneOriginalEntryIsStillSelected) {
-                _setMetadata(metadataCopy);
-              }
+            if (updatedMetadata) {
+              _setMetadata(updatedMetadata);
             }
           };
 
           function _setMetadata(metadata) {
             var selectedImages = angular.copy(metadata);
-            var filesAttribute = _filesAttributeFor(selectedImages);
+            var filesAttribute =
+              fileMetadataUtilsService.filesAttributeFor(selectedImages);
 
             _setSelectedImages(selectedImages);
 
@@ -277,7 +136,8 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _setSelectedImages(selectedImages) {
-            var filesAttribute = _filesAttributeFor(selectedImages);
+            var filesAttribute =
+              fileMetadataUtilsService.filesAttributeFor(selectedImages);
 
             $scope.selectedImages = selectedImages;
             $scope.isDefaultImageList = filesAttribute === _getDefaultFilesAttribute();
@@ -319,6 +179,20 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
+          function _checkFileExistenceFor(componentId) {
+            var files = _getFilesFor(componentId);
+
+            return fileExistenceCheckService.requestMetadataFor(files, DEFAULT_IMAGE_THUMBNAIL)
+              .then(function (metadata) {
+                console.log('received metadata', metadata);
+
+                $scope.updateFileMetadata(metadata);
+              })
+              .catch(function (error) {
+                $log.error('Could not check file existence for: ' + componentId, error);
+              });
+          }
+
           $scope.selectFromStorage = function () {
             $scope.storageManager.refresh();
             $scope.showNextPanel(storagePanelSelector);
@@ -329,12 +203,12 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.removeImageFromList = function (image) {
-            var idx = $scope.selectedImages.indexOf(image);
-            var selectedImages = _.cloneDeep($scope.selectedImages);
+            var currentMetadata = $scope.selectedImages;
+            var metadata =
+              fileMetadataUtilsService.metadataWithFileRemoved(currentMetadata, image);
 
-            if (idx >= 0) {
-              selectedImages.splice(idx, 1);
-              _setMetadata(selectedImages);
+            if (metadata) {
+              _setMetadata(metadata);
             }
           };
         }

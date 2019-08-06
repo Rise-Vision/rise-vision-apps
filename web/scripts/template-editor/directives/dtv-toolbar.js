@@ -17,7 +17,7 @@ angular.module('risevision.template-editor.directives')
             $scope.isEditingName = false;
           };
 
-          var _initStretchy = function() {
+          var _initStretchy = function () {
             var templateNameInput = element.find('input.presentation-name');
 
             $window.Stretchy.resize(templateNameInput[0]);

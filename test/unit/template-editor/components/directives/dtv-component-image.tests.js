@@ -185,7 +185,7 @@ describe('directive: TemplateComponentImage', function() {
     }, 100);
   });
 
-  describe('updateImageMetadata', function() {
+  describe('updateFileMetadata', function() {
 
     var sampleImages;
 
@@ -204,7 +204,7 @@ describe('directive: TemplateComponentImage', function() {
         return null;
       };
 
-      $scope.updateImageMetadata(sampleImages);
+      $scope.updateFileMetadata(sampleImages);
 
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(sampleImages);
@@ -231,7 +231,7 @@ describe('directive: TemplateComponentImage', function() {
         return sampleImages;
       };
 
-      $scope.updateImageMetadata(updatedImages);
+      $scope.updateFileMetadata(updatedImages);
 
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(updatedImages);
@@ -261,7 +261,7 @@ describe('directive: TemplateComponentImage', function() {
         return sampleImages;
       };
 
-      $scope.updateImageMetadata(updatedImages);
+      $scope.updateFileMetadata(updatedImages);
 
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(expectedImages);
@@ -292,7 +292,7 @@ describe('directive: TemplateComponentImage', function() {
         return sampleImages;
       };
 
-      $scope.updateImageMetadata(updatedImages);
+      $scope.updateFileMetadata(updatedImages);
 
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(expectedImages);

@@ -1,15 +1,19 @@
 <div class="pl-0 file-row">
   <div class="file-thumbnail">
     <div class="file-helper"></div>
-    <img src="{{ entry['thumbnail-url'] }}" ng-if="entry.exists"
-      width="80"></img>
-    <div class="broken-link" ng-hide="entry.exists">
-      <streamline-icon name="forbidden" width="61" height="60"></streamline-icon>
+    <img src="{{ entry['thumbnail-url'] }}"
+      ng-if="entry.exists && !isStreamlineThumbnail()"
+      width="80"
+    ></img>
+    <div class="broken-link" ng-hide="entry.exists && !isStreamlineThumbnail()">
+      <streamline-icon width="61" height="60"
+        name="{{ entry.exists ? getStreamlineIcon() : 'forbidden' }}"
+      ></streamline-icon>
     </div>
   </div>
   <div class="file-entry">
     <div class="file-text">
-      <div class="file-name">{{fileName}}</div>
+      <div class="file-name">{{getFileName()}}</div>
       <div class="file-not-available" ng-hide="entry.exists">
         Your {{fileType}} has been deleted, renamed, or moved.
       </div>
