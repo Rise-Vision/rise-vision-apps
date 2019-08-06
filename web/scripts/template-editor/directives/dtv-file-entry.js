@@ -24,6 +24,10 @@ angular.module('risevision.template-editor.directives')
           $scope.streamlineIcon = $scope.isStreamlineThumbnail ?
             thumbnailUrl.match(STREAMLINE_URI)[1] : '';
 
+          $scope.getFileName = function() {
+            return templateEditorUtils.fileNameOf($scope.entry.file);
+          }
+
           $scope.removeFileFromList = function () {
             $scope.removeAction($scope.entry);
           };

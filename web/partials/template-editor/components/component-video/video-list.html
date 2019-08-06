@@ -1,14 +1,13 @@
 <div class="video-component-list file-component-list te-scrollable-container"
      rv-spinner rv-spinner-key="template-editor-loader"
      rv-spinner-start-active="1">
-  <div ng-repeat="file in selectedFiles track by $index"
-   ng-show="selectedFiles.length > 0 && !isUploading">
-    <template-editor-file-entry
-       entry="file"
-       file-type="video"
-       remove-action="removeFileFromList">
-    </template-editor-file-entry>
-  </div>
+  <template-editor-file-entry
+     ng-repeat="file in selectedFiles track by $index"
+     ng-show="selectedFiles.length > 0 && !isUploading"
+     entry="file"
+     file-type="video"
+     remove-action="removeFileFromList">
+  </template-editor-file-entry>
 
   <template-editor-empty-file-list file-type="video"
      ng-hide="isUploading || selectedFiles.length !== 0 || factory.loadingPresentation">
