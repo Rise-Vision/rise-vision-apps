@@ -110,6 +110,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _setSelectedFiles(selectedFiles) {
+            console.log('selected', selectedFiles);
             $scope.selectedFiles = selectedFiles;
           }
 
