@@ -20,8 +20,7 @@ angular.module('risevision.template-editor.directives')
 
           var thumbnailUrl = $scope.entry && $scope.entry['thumbnail-url'];
 
-          $scope.isStreamlineThumbnail =
-            !!(thumbnailUrl && STREAMLINE_URI.test(thumbnailUrl));
+          $scope.isStreamlineThumbnail = !!(thumbnailUrl && STREAMLINE_URI.test(thumbnailUrl));
           $scope.streamlineIcon = $scope.isStreamlineThumbnail ?
             thumbnailUrl.match(STREAMLINE_URI)[1] : '';
 
