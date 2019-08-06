@@ -169,9 +169,11 @@ angular.module('risevision.template-editor.directives')
 
           $scope.removeFileFromList = function (file) {
             var currentMetadata = $scope.selectedFiles;
+            console.log("current", currentMetadata);
+            console.log("file", file);
             var metadata =
               fileMetadataUtilsService.metadataWithFileRemoved(currentMetadata, file);
-
+            console.log("removed", metadata);
             if (metadata) {
               _setMetadata(metadata);
             }
