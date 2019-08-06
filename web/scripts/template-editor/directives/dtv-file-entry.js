@@ -21,15 +21,19 @@ angular.module('risevision.template-editor.directives')
             return templateEditorUtils.fileNameOf($scope.entry.file);
           };
 
-          $scope.isStreamlineThumbnail = function() {
-            var thumbnailUrl = $scope.entry && $scope.entry['thumbnail-url'];
+          function getThumbnailUrl() {
+            return $scope.entry && $scope.entry['thumbnail-url'];
+          }
+
+          $scope.isStreamlineThumbnail = function () {
+            var thumbnailUrl = getThumbnailUrl();
 
             return !!(thumbnailUrl && STREAMLINE_URI.test(thumbnailUrl));
           };
 
-          $scope.getStreamlineIcon = function() {
-            return $scope.isStreamlineThumbnail ?
-              thumbnailUrl.match(STREAMLINE_URI)[1] : '';
+          $scope.getStreamlineIcon = function () {
+            return $scope.isStreamlineThumbnail() ?
+              getThumbnailUrl().match(STREAMLINE_URI)[1] : '';
           };
 
           $scope.removeFileFromList = function () {
