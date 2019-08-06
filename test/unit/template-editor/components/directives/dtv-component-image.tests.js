@@ -52,6 +52,7 @@ describe('directive: TemplateComponentImage', function() {
     $scope.registerDirective = sinon.stub();
     $scope.setAttributeData = sinon.stub();
     $scope.showNextPanel = sinon.stub();
+    $scope.fileExistenceChecksCompleted = {};
     $scope.getBlueprintData = function() {
       return null;
     };
