@@ -189,13 +189,13 @@ angular.module('risevision.template-editor.directives')
                 console.log('checking file existence for component', componentId);
 
                 _checkFileExistenceFor(componentId)
-                .finally(function(){
-                  $scope.fileExistenceChecksCompleted[componentId] = false;
+                  .finally(function () {
+                    $scope.fileExistenceChecksCompleted[componentId] = false;
 
-                  if(componentId === $scope.componentId && $scope.factory.loadingPresentation) {
-                    $scope.factory.loadingPresentation = false;
-                  }
-                });
+                    if (componentId === $scope.componentId && $scope.factory.loadingPresentation) {
+                      $scope.factory.loadingPresentation = false;
+                    }
+                  });
               });
             }
           });
