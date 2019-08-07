@@ -295,7 +295,9 @@ angular.module('risevision.storage.services')
           function _refreshFileMetadata(fileName, remainingAttempts) {
             console.log('Attempt #' + remainingAttempts + ' to get metadata for: ' + fileName);
 
-            return service.files.get({ file: fileName })
+            return service.files.get({
+                file: fileName
+              })
               .then(function (resp) {
                 var file = resp && resp.files && resp.files[0];
 

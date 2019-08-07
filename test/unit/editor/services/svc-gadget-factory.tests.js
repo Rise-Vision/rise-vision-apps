@@ -1,5 +1,7 @@
 'use strict';
 describe('service: gadgetFactory: ', function() {
+  var sandbox = sinon.sandbox.create();
+
   beforeEach(module('risevision.editor.services'));
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
@@ -57,7 +59,7 @@ describe('service: gadgetFactory: ', function() {
     });
 
   }));
-  var gadgetFactory, gadget, returnGadget, apiCalls, statusError,statusResponse, playerLicenseFactory;
+  var gadgetFactory, gadget, returnGadget, apiCalls, statusError,statusResponse, playerLicenseFactory, gadgetApi;
   beforeEach(function(){
     returnGadget = true;
     statusError = false;
@@ -66,7 +68,12 @@ describe('service: gadgetFactory: ', function() {
     
     inject(function($injector){  
       gadgetFactory = $injector.get('gadgetFactory');
+      gadgetApi = $injector.get('gadget');
     });
+  });
+
+  afterEach(function() {
+    sandbox.restore();
   });
 
   it('should exist',function(){
@@ -270,6 +277,21 @@ describe('service: gadgetFactory: ', function() {
           }, 10);
         }, 10);
       });
+
+      it('should not repeat gadgetIds on requests', function() {
+        items = [
+          { type: 'gadget', objectReference: 'gadgetId'},
+          { type: 'gadget', objectReference: 'gadgetId'},
+          { type: 'gadget', objectReference: 'gadgetId2'},
+          { type: 'gadget', objectReference: 'gadgetId2'},
+        ]; 
+
+        sandbox.spy(gadgetApi,'list');
+        gadgetFactory.updateItemsStatus(items);
+
+        gadgetApi.list.should.have.been.calledWith({ids:['gadgetId', 'gadgetId2']});
+      });
+
     });
 
     describe('Embedded Presentations: ', function() {
