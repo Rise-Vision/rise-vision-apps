@@ -222,7 +222,7 @@ describe('controller: TemplateEditor', function() {
       expect(ids).to.deep.equal(['rise-image-01']);
     });
 
-    it('should get the component ids of all rise-image components',function() {
+    it('should get the component ids of all rise components',function() {
       factory.blueprintData = { components: SAMPLE_COMPONENTS };
 
       var ids = $scope.getComponentIds();
