@@ -210,10 +210,10 @@ angular.module('risevision.template-editor.directives')
               var factory = $scope.factory;
               var SMALL_CHECK_INTERVAL = 100;
 
-              if(factory.presentation && factory.presentation.id) {
+              if (factory.presentation && factory.presentation.id) {
                 deferred.resolve(metadata);
               } else {
-                $timeout(function() {
+                $timeout(function () {
                   _checkPresentationIdOrWait();
                 }, SMALL_CHECK_INTERVAL);
               }
