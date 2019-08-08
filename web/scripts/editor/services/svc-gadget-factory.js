@@ -127,7 +127,9 @@ angular.module('risevision.editor.services')
           if (cachedGadget) {
             items[i].gadget = cachedGadget;
           } else {
-            nonCachedIds.push(items[i].objectReference);
+            if (nonCachedIds.indexOf(items[i].objectReference) === -1) {
+              nonCachedIds.push(items[i].objectReference);
+            }
           }
         }
         if (nonCachedIds.length === 0) {

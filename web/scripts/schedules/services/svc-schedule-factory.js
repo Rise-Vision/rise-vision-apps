@@ -111,12 +111,12 @@ angular.module('risevision.schedules.services')
 
       var _initFirstSchedule = function (presentationId, presentationName, presentationType) {
         var item = {
-            name: presentationName,
-            objectReference: presentationId,
-            duration: 10,
-            timeDefined: false,
-            type: 'presentation'
-          };
+          name: presentationName,
+          objectReference: presentationId,
+          duration: 10,
+          timeDefined: false,
+          type: 'presentation'
+        };
 
         if (presentationType) {
           item.presentationType = presentationType;
