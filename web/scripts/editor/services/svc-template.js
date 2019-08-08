@@ -3,7 +3,6 @@
 /*jshint camelcase: false */
 
 angular.module('risevision.editor.services')
-  .constant('BLUEPRINT_URL', 'https://widgets.risevision.com/stable/templates/PRODUCT_CODE/blueprint.json')
   .constant('TEMPLATE_SEARCH_FIELDS', [
     'name', 'id'
   ])

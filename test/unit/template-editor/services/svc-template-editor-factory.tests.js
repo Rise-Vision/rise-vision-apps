@@ -91,7 +91,7 @@ describe('service: templateEditorFactory:', function() {
   }));
 
   var $state, $httpBackend, $modal, templateEditorFactory, templateEditorUtils, presentation, processErrorCode,
-    HTML_PRESENTATION_TYPE, blueprintUrl, storeAuthorize, checkTemplateAccessSpy, store, plansFactory, scheduleFactory,
+    HTML_PRESENTATION_TYPE, BLUEPRINT_URL, storeAuthorize, checkTemplateAccessSpy, store, plansFactory, scheduleFactory,
     needsFinancialDataLicense;
 
   beforeEach(function() {
@@ -110,8 +110,7 @@ describe('service: templateEditorFactory:', function() {
       templateEditorUtils = $injector.get('templateEditorUtils');
       processErrorCode = $injector.get('processErrorCode');
       HTML_PRESENTATION_TYPE = $injector.get('HTML_PRESENTATION_TYPE');
-
-      blueprintUrl = 'https://widgets.risevision.com/stable/templates/test-id/blueprint.json';
+      BLUEPRINT_URL = $injector.get('BLUEPRINT_URL').replace('PRODUCT_CODE', 'test-id');
     });
   });
 
@@ -133,7 +132,7 @@ describe('service: templateEditorFactory:', function() {
 
   describe('addFromProduct:', function() {
     it('should create a new presentation', function(done) {
-      $httpBackend.when('GET', blueprintUrl).respond(200, {
+      $httpBackend.when('GET', BLUEPRINT_URL).respond(200, {
         components: [
           {
             type: 'rise-image',
@@ -160,7 +159,7 @@ describe('service: templateEditorFactory:', function() {
     });
 
     it('should open Financial Data License message if Template uses rise-data-financial', function(done) {
-      $httpBackend.when('GET', blueprintUrl).respond(200, {
+      $httpBackend.when('GET', BLUEPRINT_URL).respond(200, {
         components: [
           {
             type: 'rise-data-financial',
@@ -199,7 +198,7 @@ describe('service: templateEditorFactory:', function() {
         }
       }));
 
-      $httpBackend.when('GET', blueprintUrl).respond(200, {});
+      $httpBackend.when('GET', BLUEPRINT_URL).respond(200, {});
       setTimeout(function() {
         $httpBackend.flush();
       });
@@ -271,7 +270,7 @@ describe('service: templateEditorFactory:', function() {
         }
       }));
 
-      $httpBackend.when('GET', blueprintUrl).respond(200, {});
+      $httpBackend.when('GET', BLUEPRINT_URL).respond(200, {});
       setTimeout(function() {
         $httpBackend.flush();
       });
@@ -343,7 +342,7 @@ describe('service: templateEditorFactory:', function() {
         }
       }));
 
-      $httpBackend.when('GET', blueprintUrl).respond(200, {
+      $httpBackend.when('GET', BLUEPRINT_URL).respond(200, {
         components: [
           {
             type: 'rise-image',
@@ -396,7 +395,7 @@ describe('service: templateEditorFactory:', function() {
         }
       }));
 
-      $httpBackend.when('GET', blueprintUrl).respond(200, {});
+      $httpBackend.when('GET', BLUEPRINT_URL).respond(200, {});
       setTimeout(function() {
         $httpBackend.flush();
       });
@@ -455,7 +454,7 @@ describe('service: templateEditorFactory:', function() {
         }
       }));
 
-      $httpBackend.when('GET', blueprintUrl).respond(500, {});
+      $httpBackend.when('GET', BLUEPRINT_URL).respond(500, {});
       setTimeout(function() {
         $httpBackend.flush();
       });
@@ -483,7 +482,7 @@ describe('service: templateEditorFactory:', function() {
         }
       }));
 
-      $httpBackend.when('GET', blueprintUrl).respond(200, {
+      $httpBackend.when('GET', BLUEPRINT_URL).respond(200, {
         components: [
           {
             type: 'rise-image',
@@ -532,7 +531,7 @@ describe('service: templateEditorFactory:', function() {
           productCode: 'test-id'
         }
       }));
-      $httpBackend.when('GET', blueprintUrl).respond(200, {});
+      $httpBackend.when('GET', BLUEPRINT_URL).respond(200, {});
       setTimeout(function() {
         $httpBackend.flush();
       });
@@ -620,7 +619,7 @@ describe('service: templateEditorFactory:', function() {
           productCode: 'test-id'
         }
       }));
-      $httpBackend.when('GET', blueprintUrl).respond(200, {});
+      $httpBackend.when('GET', BLUEPRINT_URL).respond(200, {});
       setTimeout(function() {
         $httpBackend.flush();
       });
