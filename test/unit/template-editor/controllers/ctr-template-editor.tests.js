@@ -212,26 +212,6 @@ describe('controller: TemplateEditor', function() {
 
   });
 
-  describe('getComponentIds', function () {
-
-    it('should get the component ids of rise-image components',function() {
-      factory.blueprintData = { components: SAMPLE_COMPONENTS };
-
-      var ids = $scope.getComponentIds({ type: 'rise-image' });
-
-      expect(ids).to.deep.equal(['rise-image-01']);
-    });
-
-    it('should get the component ids of all rise components',function() {
-      factory.blueprintData = { components: SAMPLE_COMPONENTS };
-
-      var ids = $scope.getComponentIds();
-
-      expect(ids).to.deep.equal(['rise-image-01', 'rise-data-financial-01']);
-    });
-
-  });
-
   describe('unsaved changes', function () {
     it('should flag unsaved changes to presentation', function () {
       expect($scope.hasUnsavedChanges).to.be.false;

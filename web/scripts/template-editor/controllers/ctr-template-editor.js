@@ -60,16 +60,6 @@ angular.module('risevision.template-editor.controllers')
         return result;
       };
 
-      $scope.getComponentIds = function (filter) {
-        var components = $scope.factory.blueprintData.components;
-
-        var filteredComponents = _.filter(components, filter);
-
-        return _.map(filteredComponents, function (component) {
-          return component.id;
-        });
-      };
-
       $scope.isPublishDisabled = function () {
         var isNotRevised = !$scope.factory.isRevised() && scheduleFactory.hasSchedules();
 

@@ -39,6 +39,11 @@ var ImageComponentScenarios = function () {
         helper.wait(imageComponentPage.getListDurationComponent(), 'List Duration');
         expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(4);
       });
+
+      it('should auto-save the Presentation after loading thumbnails', function () {
+        helper.wait(templateEditorPage.getSavingText(), 'Image component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Image component auto-saved');
+      });
     });
 
     describe('upload', function () {
@@ -141,12 +146,13 @@ var ImageComponentScenarios = function () {
         helper.waitDisappear(templateEditorPage.getDirtyText());
         helper.waitDisappear(templateEditorPage.getSavingText());
         helper.wait(templateEditorPage.getSavedText(), 'Image component auto-saved');
-      });
 
-      it('should list the duration and images for the first Image Component', function () {
         templateEditorPage.selectComponent('Image - ');
         helper.wait(imageComponentPage.getListDurationComponent(), 'List Duration');
         expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(4);
+
+        helper.wait(templateEditorPage.getSavingText(), 'Image component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Image component auto-saved');
       });
 
       it('should display image titles', function () {

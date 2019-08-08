@@ -52,7 +52,6 @@ describe('directive: TemplateComponentImage', function() {
     $scope.registerDirective = sinon.stub();
     $scope.setAttributeData = sinon.stub();
     $scope.showNextPanel = sinon.stub();
-    $scope.fileExistenceChecksCompleted = {};
     $scope.getBlueprintData = function() {
       return null;
     };
@@ -95,7 +94,6 @@ describe('directive: TemplateComponentImage', function() {
     directive.show();
 
     expect($scope.selectedImages).to.deep.equal(sampleImages);
-    expect($scope.factory.loadingPresentation).to.be.true;
 
     timeout.flush();
   });
@@ -146,6 +144,47 @@ describe('directive: TemplateComponentImage', function() {
     timeout.flush();
   });
 
+  it('should get thumbnail URLs when not available as attribute data', function(done) {
+    var TEST_FILE = 'risemedialibrary-7fa5ee92-7deb-450b-a8d5-e5ed648c575f/file1.png';
+    var directive = $scope.registerDirective.getCall(0).args[0];
+
+    $scope.getAttributeData = function() {
+      return null;
+    };
+    $scope.getBlueprintData = function() {
+      return TEST_FILE;
+    };
+
+    directive.show();
+    timeout.flush();
+
+    setTimeout(function() {
+      var expectedMetadata = [
+        {
+          file: TEST_FILE,
+          exists: true,
+          'time-created': 100,
+          'thumbnail-url': 'http://thumbnail.png?_=100'
+        }
+      ];
+
+      timeout.flush();
+      expect($scope.selectedImages).to.deep.equal(expectedMetadata);
+
+      expect($scope.setAttributeData).to.have.been.called.twice;
+
+      expect($scope.setAttributeData.calledWith(
+        'TEST-ID', 'metadata', expectedMetadata
+      )).to.be.true;
+
+      expect($scope.setAttributeData.calledWith(
+        'TEST-ID', 'files', TEST_FILE
+      )).to.be.true;
+
+      done();
+    }, 100);
+  });
+
   describe('updateFileMetadata', function() {
 
     var sampleImages;
@@ -165,7 +204,7 @@ describe('directive: TemplateComponentImage', function() {
         return null;
       };
 
-      $scope.updateFileMetadata($scope.componentId, sampleImages);
+      $scope.updateFileMetadata(sampleImages);
 
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(sampleImages);
@@ -192,7 +231,7 @@ describe('directive: TemplateComponentImage', function() {
         return sampleImages;
       };
 
-      $scope.updateFileMetadata($scope.componentId, updatedImages);
+      $scope.updateFileMetadata(updatedImages);
 
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(updatedImages);
@@ -222,7 +261,7 @@ describe('directive: TemplateComponentImage', function() {
         return sampleImages;
       };
 
-      $scope.updateFileMetadata($scope.componentId, updatedImages);
+      $scope.updateFileMetadata(updatedImages);
 
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(expectedImages);
@@ -253,7 +292,7 @@ describe('directive: TemplateComponentImage', function() {
         return sampleImages;
       };
 
-      $scope.updateFileMetadata($scope.componentId, updatedImages);
+      $scope.updateFileMetadata(updatedImages);
 
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(expectedImages);

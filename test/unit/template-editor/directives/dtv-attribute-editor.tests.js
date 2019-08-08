@@ -98,21 +98,6 @@ describe('directive: TemplateAttributeEditor', function() {
     expect($scope.showAttributeList).to.be.false;
   });
 
-  it('Runs the open presentation handler', function() {
-    var directive = {
-      type: 'rise-test',
-      icon: 'fa-test',
-      element: {
-        hide: function() {}
-      },
-      onPresentationOpen: sinon.stub()
-    };
-
-    $scope.registerDirective(directive);
-
-    expect(directive.onPresentationOpen).to.have.been.called;
-  });
-
   it('Goes back to list', function() {
     var directive = {
       type: 'rise-test',
