@@ -147,6 +147,10 @@ var ImageComponentScenarios = function () {
         templateEditorPage.selectComponent('Image - ');
         helper.wait(imageComponentPage.getListDurationComponent(), 'List Duration');
         expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(4);
+
+        helper.waitDisappear(templateEditorPage.getDirtyText());
+        helper.waitDisappear(templateEditorPage.getSavingText());
+        helper.wait(templateEditorPage.getSavedText(), 'Image component auto-saved');
       });
 
       it('should display image titles', function () {
