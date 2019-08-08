@@ -4,9 +4,9 @@ angular.module('risevision.template-editor.directives')
   .constant('DEFAULT_IMAGE_THUMBNAIL',
     'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon-no-transparency%402x.png')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
-  .directive('templateComponentImage', ['$log', '$timeout', 'templateEditorFactory', 'templateEditorUtils',
+  .directive('templateComponentImage', ['$log', '$q', '$timeout', 'templateEditorFactory', 'templateEditorUtils',
     'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
-    function ($log, $timeout, templateEditorFactory, templateEditorUtils,
+    function ($log, $q, $timeout, templateEditorFactory, templateEditorUtils,
       fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES) {
       return {
         restrict: 'E',
@@ -205,10 +205,34 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
+          function _waitForPresentationId(metadata) {
+            function _checkPresentationIdOrWait() {
+              var factory = $scope.factory;
+              var SMALL_CHECK_INTERVAL = 100;
+
+              if(factory.presentation && factory.presentation.id) {
+                deferred.resolve(metadata);
+              } else {
+                $timeout(function() {
+                  _checkPresentationIdOrWait();
+                }, SMALL_CHECK_INTERVAL);
+              }
+            }
+
+            var deferred = $q.defer();
+
+            _checkPresentationIdOrWait();
+
+            return deferred.promise;
+          }
+
           function _checkFileExistenceFor(componentId) {
             var files = _getFilesFor(componentId);
 
             return fileExistenceCheckService.requestMetadataFor(files, DEFAULT_IMAGE_THUMBNAIL)
+              .then(function (metadata) {
+                return _waitForPresentationId(metadata);
+              })
               .then(function (metadata) {
                 console.log('received metadata', metadata);
 
