@@ -7,7 +7,10 @@ describe('directive: TemplateComponentImage: onPresentationOpen', function() {
     timeout;
 
   beforeEach(function() {
-    factory = { selected: { id: 'TEST-ID' } };
+    factory = {
+      presentation: { id: 'TEST-ID' },
+      selected: { id: 'TEST-ID' }
+    };
   });
 
   beforeEach(module('risevision.template-editor.directives'));
@@ -52,6 +55,11 @@ describe('directive: TemplateComponentImage: onPresentationOpen', function() {
 
   it('should check file existence when presentation opens', function(done)
   {
+    $scope.factory = factory;
+    $scope.waitForPresentationId = function(metadata) {
+      return Q.resolve(metadata);
+    };
+
     var directive = $scope.registerDirective.getCall(0).args[0];
     var sampleImages = [
       { "file": 'image.png', "thumbnail-url": "http://image" },

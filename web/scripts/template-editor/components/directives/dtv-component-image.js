@@ -205,7 +205,7 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
-          function _waitForPresentationId(metadata) {
+          $scope.waitForPresentationId = function(metadata) {
             function _checkPresentationIdOrWait() {
               var factory = $scope.factory;
               var SMALL_CHECK_INTERVAL = 100;
@@ -224,14 +224,14 @@ angular.module('risevision.template-editor.directives')
             _checkPresentationIdOrWait();
 
             return deferred.promise;
-          }
+          };
 
           function _checkFileExistenceFor(componentId) {
             var files = _getFilesFor(componentId);
 
             return fileExistenceCheckService.requestMetadataFor(files, DEFAULT_IMAGE_THUMBNAIL)
               .then(function (metadata) {
-                return _waitForPresentationId(metadata);
+                return $scope.waitForPresentationId(metadata);
               })
               .then(function (metadata) {
                 console.log('received metadata', metadata);
