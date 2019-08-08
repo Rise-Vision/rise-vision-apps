@@ -173,7 +173,6 @@ angular.module('risevision.template-editor.controllers')
         ];
 
         if (!newValue.id) {
-          console.log('no id, saving presentation', newValue);
           $scope.factory.save();
           return;
         }
