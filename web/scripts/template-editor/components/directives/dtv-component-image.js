@@ -205,7 +205,7 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
-          $scope.waitForPresentationId = function(metadata) {
+          $scope.waitForPresentationId = function (metadata) {
             function _checkPresentationIdOrWait() {
               var factory = $scope.factory;
               var SMALL_CHECK_INTERVAL = 100;
