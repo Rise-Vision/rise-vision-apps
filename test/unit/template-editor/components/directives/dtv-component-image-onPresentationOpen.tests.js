@@ -55,7 +55,7 @@ describe('directive: TemplateComponentImage: onPresentationOpen', function() {
 
   it('should check file existence when presentation opens', function(done)
   {
-    $scope.factory = factory;
+    // I had to mock as this because directly setting $q provider above broke registerDirective() call
     $scope.waitForPresentationId = function(metadata) {
       return Q.resolve(metadata);
     };
