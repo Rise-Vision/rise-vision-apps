@@ -37,6 +37,8 @@
     .value('CHARGEBEE_TEST_SITE', 'risevision-test')
     .value('CHARGEBEE_PROD_SITE', 'risevision')
     .value('STRIPE_PROD_KEY', 'pk_live_31dWkTWQU125m2RcWpK4HQBR')
-    .value('STRIPE_TEST_KEY', 'pk_test_GrMIAHSoqhaik4tcHepsxjOR');
+    .value('STRIPE_TEST_KEY', 'pk_test_GrMIAHSoqhaik4tcHepsxjOR')
+    .value('HTML_TEMPLATE_URL', 'https://widgets.risevision.com/stable/templates/PRODUCT_CODE/src/template.html')
+    .value('BLUEPRINT_URL', 'https://widgets.risevision.com/stable/templates/PRODUCT_CODE/blueprint.json');
 
 })(angular);
