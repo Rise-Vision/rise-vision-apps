@@ -3,9 +3,9 @@
 angular.module('risevision.template-editor.directives')
   .constant('DEFAULT_VIDEO_THUMBNAIL', 'streamline:video')
   .constant('SUPPORTED_VIDEO_TYPES', '.mp4, .webm')
-  .directive('templateComponentVideo', ['$log', 'templateEditorFactory', 'templateEditorUtils',
+  .directive('templateComponentVideo', ['$log', '$timeout', 'templateEditorFactory', 'templateEditorUtils',
     'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_VIDEO_THUMBNAIL', 'SUPPORTED_VIDEO_TYPES',
-    function ($log, templateEditorFactory, templateEditorUtils,
+    function ($log, $timeout, templateEditorFactory, templateEditorUtils,
       fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_VIDEO_THUMBNAIL, SUPPORTED_VIDEO_TYPES) {
       return {
         restrict: 'E',
@@ -69,7 +69,9 @@ angular.module('risevision.template-editor.directives')
 
             _checkFileExistenceFor($scope.componentId)
               .finally(function () {
-                $scope.factory.loadingPresentation = false;
+                $timeout(function() {
+                  $scope.factory.loadingPresentation = false;
+                });
               });
           }
 
