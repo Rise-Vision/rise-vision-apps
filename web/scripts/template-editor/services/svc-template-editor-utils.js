@@ -91,10 +91,6 @@ angular.module('risevision.template-editor.services')
         return 'Rise Vision supports ' + prefix.join(', ').toUpperCase() + suffix + '.';
       };
 
-      svc.hasBrandingElements = function (blueprint) {
-        return !!blueprint && blueprint.branding === true;
-      }
-
       svc.needsFinancialDataLicense = function (blueprint) {
         if (!blueprint) {
           return false;

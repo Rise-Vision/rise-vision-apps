@@ -19,7 +19,7 @@ angular.module('risevision.template-editor.services')
         var blueprint = templateEditorFactory.blueprintData;
 
         return !!blueprint && blueprint.branding === true;
-      }
+      };
 
       return factory;
     }

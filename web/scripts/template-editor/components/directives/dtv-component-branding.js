@@ -21,7 +21,7 @@ angular.module('risevision.template-editor.directives')
           $scope.registerDirective({
             type: 'rise-branding',
             iconType: 'streamline',
-            icon: 'sun',
+            icon: 'ratingStar',
             element: element,
             show: function () {
               $scope.setPanelTitle('Branding Settings');
