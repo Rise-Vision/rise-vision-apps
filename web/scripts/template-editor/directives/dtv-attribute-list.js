@@ -14,7 +14,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.components = templateEditorFactory.blueprintData.components
             .filter(function (c) {
-              return !c.nonEditable;
+              return !c.nonEditable && !(c.attributes && c.attributes['is-logo'] && c.attributes['is-logo'].value === 'true');
             });
         }
       };
