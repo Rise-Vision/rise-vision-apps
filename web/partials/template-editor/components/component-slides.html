@@ -10,7 +10,7 @@
         <p class="help-block" ng-switch on="validationResult">
           <span ng-switch-when="DELETED">Your Google Slideshow is no longer accessible, please check if it’s been deleted.</span>
           <span ng-switch-when="NOT_PUBLIC">To use this Google Slideshow it must be publicly accessible.</span>
-          <span ng-switch-when="INVALID">Invalid URL</span>
+          <span ng-switch-when="INVALID">Please provide a valid Google Slides URL.</span>
         </p>
         <p ng-show="validationResult === 'NOT_PUBLIC'">
           <streamline-icon class="icon-help" aria-hidden="true" name="help" width="15" height="15"></streamline-icon>
