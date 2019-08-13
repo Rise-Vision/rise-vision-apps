@@ -5,20 +5,20 @@ angular.module('risevision.template-editor.services')
     function (templateEditorFactory) {
       var factory = {};
 
+      var _hasBrandingElements = function () {
+        var blueprint = templateEditorFactory.blueprintData;
+
+        return !!blueprint && blueprint.branding === true;
+      };
+
       factory.getBrandingComponent = function () {
-        if (factory.hasBrandingElements()) {
+        if (_hasBrandingElements()) {
           return {
             type: 'rise-branding'
           };
         }
 
         return null;
-      };
-
-      factory.hasBrandingElements = function () {
-        var blueprint = templateEditorFactory.blueprintData;
-
-        return !!blueprint && blueprint.branding === true;
       };
 
       return factory;

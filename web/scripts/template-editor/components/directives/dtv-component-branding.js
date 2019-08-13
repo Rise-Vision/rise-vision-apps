@@ -28,6 +28,11 @@ angular.module('risevision.template-editor.directives')
 
               element.show();
               _load();
+            },
+            onBackHandler: function() {
+              $scope.setPanelTitle();
+
+              return false;
             }
           });
 
