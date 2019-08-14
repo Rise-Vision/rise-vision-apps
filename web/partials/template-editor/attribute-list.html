@@ -1,4 +1,27 @@
-<div class="row attribute-row" ng-repeat="comp in components track by $index">
+<div id="branding" ng-show="brandingComponent">
+  <label>Settings for all Templates:</label>
+
+  <div class="attribute-row">
+    <div class="col-xs-10 pl-0 attribute-desc">
+      <component-icon icon="{{ getComponentIcon(brandingComponent) }}" type="{{ getComponentIconType(brandingComponent) }}"></component-icon>
+      <span>
+        Branding Settings
+      </span>
+    </div>
+    <div class="col-xs-2 pr-0 align-right">
+      <a ng-click="editComponent(brandingComponent);">
+        <span class="attribute-edit text-nowrap">
+          <span translate>template.attribute-editor.edit-component</span>
+          <i class="fa fa-lg fa-angle-right arrow-icon"></i>
+        </span>
+      </a>
+    </div>
+  </div>
+
+  <label class="u_margin-md-top">Settings for this Template:</label>
+</div>
+
+<div class="attribute-row" ng-repeat="comp in components track by $index">
   <div class="col-xs-10 pl-0 attribute-desc">
     <component-icon icon="{{ getComponentIcon(comp) }}" type="{{ getComponentIconType(comp) }}"></component-icon>
     <span>

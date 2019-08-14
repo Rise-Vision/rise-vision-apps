@@ -1,3 +1,26 @@
-<div>
-  RSS settings
+<div class="attribute-editor-component" rv-spinner rv-spinner-key="rss-editor-loader" rv-spinner-start-active="1">
+  <div class="attribute-editor-row">
+    <div class="form-group has-feedback has-error">
+      <label class="control-label" for="te-rss-feed">Enter the link to your RSS feed:</label>
+      <input type="text" id="te-rss-feed" class="form-control u_ellipsis" ng-model="src" placeholder="Enter the link to your RSS feed" >
+      <streamline-icon class="overlay-icon form-control-feedback" aria-hidden="true" name="exclamation" width="14" height="12"></streamline-icon>
+      <p class="help-block">
+        <span>Please provide a valid URL.</span>
+        <span>There are errors with the RSS feed that could impact how your content appears. You can view a summary of the errors detected <a ng-href="https://validator.w3.org/feed/check.cgi?url={{src | encodeLink}}" target="_blank">here</a>.</span>
+      </p>
+    </div>
+  </div>
+  <div class="attribute-editor-row">
+    <div class="form-group">
+      <label class="control-label" for="te-rss-max-items">Max items in queue:</label>
+      <select id="te-rss-max-items" ng-model="maxItems" class="form-control">
+        <option value="1">1</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+      </select>
+    </div>
+  </div>
 </div>

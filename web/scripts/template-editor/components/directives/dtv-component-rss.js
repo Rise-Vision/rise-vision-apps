@@ -1,14 +1,26 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentRss', ['templateEditorFactory',
-    function (templateEditorFactory) {
+  .directive('templateComponentRss', ['templateEditorFactory', '$loading',
+    function (templateEditorFactory, $loading) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-rss.html',
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
+
+          $scope.$watch('spinner', function (loading) {
+            if (loading) {
+              $loading.start('rss-editor-loader');
+            } else {
+              $loading.stop('rss-editor-loader');
+            }
+          });
+
+          $scope.spinner = false;
+
+          $scope.maxItems = '1';
 
           $scope.registerDirective({
             type: 'rise-data-rss',

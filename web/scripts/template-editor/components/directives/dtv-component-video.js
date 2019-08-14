@@ -69,7 +69,7 @@ angular.module('risevision.template-editor.directives')
 
             _checkFileExistenceFor($scope.componentId)
               .finally(function () {
-                $timeout(function() {
+                $timeout(function () {
                   $scope.factory.loadingPresentation = false;
                 });
               });
