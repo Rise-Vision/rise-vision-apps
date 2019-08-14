@@ -167,4 +167,40 @@ describe('controller: Playlist Item Modal', function() {
     }, 10);
   });
 
+  it('should set playlistItem.playUntilDone to TRUE when adding a new HTML template that is PUD', function(done) {
+
+    presentationType = 'HTML Template';
+    blueprintData = {data: {playUntilDone: true}};
+    $scope.playlistItem.playUntilDone = undefined;
+    $scope.isNew = true;
+
+    $scope.selectPresentation();
+
+    setTimeout(function() {
+      expect($scope.playlistItem.objectReference).to.equal('presentationId');
+      expect($scope.playUntilDoneSupported).to.equal(true);
+      expect($scope.playlistItem.playUntilDone).to.equal(true);
+      
+      done();
+    }, 10);
+  });
+
+  it('should not set playlistItem.playUntilDone to TRUE when editing existing HTML template that is PUD', function(done) {
+
+    presentationType = 'HTML Template';
+    blueprintData = {data: {playUntilDone: true}};
+    $scope.playlistItem.playUntilDone = false;
+    $scope.isNew = false;
+
+    $scope.selectPresentation();
+
+    setTimeout(function() {
+      expect($scope.playlistItem.objectReference).to.equal('presentationId');
+      expect($scope.playUntilDoneSupported).to.equal(true);
+      expect($scope.playlistItem.playUntilDone).to.equal(false);
+      
+      done();
+    }, 10);
+  });
+
 });

@@ -1,7 +1,7 @@
 'use strict';
 
 var TextComponentPage = function() {
-  var textInput = element(by.xpath('//template-component-text/div/input'));
+  var textInput = element(by.id('text-component-input'));
 
   this.getTextInput = function () {
     return textInput;
