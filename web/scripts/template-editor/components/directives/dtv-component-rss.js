@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentRss', ['templateEditorFactory', '$loading', 'componentUtils', 'rssFeedValidation', '$timeout',
+  .directive('templateComponentRss', ['templateEditorFactory', '$loading', 'componentUtils', 'rssFeedValidation',
+    '$timeout',
     function (templateEditorFactory, $loading, componentUtils, rssFeedValidation, $timeout) {
       return {
         restrict: 'E',
