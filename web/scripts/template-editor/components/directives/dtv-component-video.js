@@ -179,6 +179,10 @@ angular.module('risevision.template-editor.directives')
               _setMetadata(metadata);
             }
           };
+
+          $scope.showSettingsUI = function () {
+            return $scope.selectedFiles.length > 0 && !$scope.isUploading;
+          };
         }
       };
     }

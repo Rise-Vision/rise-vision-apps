@@ -1,4 +1,6 @@
-<div class="attribute-editor-component video-component-settings">
+<div class="attribute-editor-component video-component-settings"
+  ng-show="showSettingsUI()"
+>
   <div class="attribute-editor-row">
     <div class="video-component-volume">
       <label>Volume</label>
@@ -18,10 +20,12 @@
 
 <div class="video-component-list file-component-list te-scrollable-container"
      rv-spinner rv-spinner-key="template-editor-loader"
-     rv-spinner-start-active="1">
+     rv-spinner-start-active="1"
+     ng-class="{ 'not-empty': selectedFiles.length > 0 }"
+>
   <template-editor-file-entry
      ng-repeat="file in selectedFiles track by $index"
-     ng-show="selectedFiles.length > 0 && !isUploading"
+     ng-show="showSettingsUI()"
      entry="file"
      file-type="video"
      remove-action="removeFileFromList">
