@@ -313,7 +313,7 @@ angular.module('risevision.template-editor.services')
         }
 
         return component;
-      }
+      };
 
       var _publishPresentation = function () {
         if (!factory.isRevised()) {

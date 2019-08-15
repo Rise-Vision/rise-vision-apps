@@ -5,9 +5,11 @@ angular.module('risevision.template-editor.directives')
     'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon-no-transparency%402x.png')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
   .directive('templateComponentImage', ['$log', '$q', '$timeout', 'templateEditorFactory', 'templateEditorUtils',
-    'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES', 'logoImageFactory', 'regularImageFactory',
+    'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
+    'logoImageFactory', 'regularImageFactory',
     function ($log, $q, $timeout, templateEditorFactory, templateEditorUtils,
-      fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES, logoImageFactory, regularImageFactory) {
+      fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES,
+      logoImageFactory, regularImageFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -58,14 +60,14 @@ angular.module('risevision.template-editor.directives')
             var metadata = fileMetadataUtilsService.metadataWithFile(selectedFiles,
               DEFAULT_IMAGE_THUMBNAIL, files, alwaysAppend);
 
-            imageFactory.handleMetadata(metadata);
+            metadata = imageFactory.updateMetadata(metadata);
 
             _setSelectedImages(metadata);
 
           }
 
           function _loadSelectedImages() {
-            var selectedImages = _getAttribute('metadata');
+            var selectedImages = imageFactory.getImagesAsMetadata();
 
             if (selectedImages) {
               _setSelectedImages(selectedImages);
@@ -81,7 +83,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _loadDuration() {
-            var duration = _getAttribute('duration');
+            var duration = imageFactory.getDuration();
 
             if (!duration) {
               duration = _getDefaultDurationAttribute();
@@ -91,14 +93,6 @@ angular.module('risevision.template-editor.directives')
 
             // default to value 10 if duration not defined
             $scope.values.duration = (duration && !isNaN(duration)) ? duration : 10;
-          }
-
-          function _getAttribute(key) {
-            return imageFactory.getAttributeData(key);
-          }
-
-          function _setAttribute(key, value) {
-            imageFactory.setAttributeData(key, value);
           }
 
           function _getBlueprint(key) {
@@ -157,7 +151,7 @@ angular.module('risevision.template-editor.directives')
           _reset();
 
           $scope.saveDuration = function () {
-            _setAttribute('duration', $scope.values.duration);
+            imageFactory.setDuration($scope.values.duration);
           };
 
           $scope.registerDirective({
@@ -175,7 +169,7 @@ angular.module('risevision.template-editor.directives')
               } else {
                 imageFactory = logoImageFactory;
               }
-              
+
               _loadSelectedImages();
               _loadDuration();
 
@@ -264,7 +258,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.removeImageFromList = function (image) {
-            _setSelectedImages(imageFactory.removeImage(image,$scope.selectedImages));
+            _setSelectedImages(imageFactory.removeImage(image, $scope.selectedImages));
           };
         }
       };
