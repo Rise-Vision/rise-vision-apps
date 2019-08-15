@@ -4,9 +4,11 @@ angular.module('risevision.template-editor.controllers')
   .constant('MINIMUM_INTERVAL_BETWEEN_SAVES', 5000)
   .constant('MAXIMUM_INTERVAL_BETWEEN_SAVES', 20000)
   .controller('TemplateEditorController', ['$scope', '$q', '$filter', '$loading', '$state', '$timeout', '$window',
-    'templateEditorFactory', 'brandingFactory', 'blueprintFactory', 'scheduleFactory', 'presentationUtils', 'MINIMUM_INTERVAL_BETWEEN_SAVES',
+    'templateEditorFactory', 'brandingFactory', 'blueprintFactory', 'scheduleFactory', 'presentationUtils',
+    'MINIMUM_INTERVAL_BETWEEN_SAVES',
     'MAXIMUM_INTERVAL_BETWEEN_SAVES',
-    function ($scope, $q, $filter, $loading, $state, $timeout, $window, templateEditorFactory, brandingFactory, blueprintFactory,
+    function ($scope, $q, $filter, $loading, $state, $timeout, $window, templateEditorFactory, brandingFactory,
+      blueprintFactory,
       scheduleFactory, presentationUtils, MINIMUM_INTERVAL_BETWEEN_SAVES, MAXIMUM_INTERVAL_BETWEEN_SAVES) {
       var _lastSavedTimestamp = 0,
         _saveTimeout = null;
@@ -71,7 +73,8 @@ angular.module('risevision.template-editor.controllers')
       };
 
       $scope.isPublishDisabled = function () {
-        var isNotRevised = !$scope.factory.isRevised() && !brandingFactory.isRevised() && scheduleFactory.hasSchedules();
+        var isNotRevised = !$scope.factory.isRevised() && !brandingFactory.isRevised() &&
+          scheduleFactory.hasSchedules();
 
         return $scope.factory.savingPresentation || $scope.hasUnsavedChanges || isNotRevised;
       };

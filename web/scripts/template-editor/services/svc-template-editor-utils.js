@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('templateEditorUtils', ['messageBox', '$window',
-    function (messageBox, $window) {
+  .factory('templateEditorUtils', ['messageBox',
+    function (messageBox) {
       var svc = {};
 
       svc.fileNameOf = function (path) {

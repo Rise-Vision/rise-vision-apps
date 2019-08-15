@@ -46,9 +46,9 @@ angular.module('risevision.template-editor.services')
           brandingLogoFile: company.settings.brandingDraftLogoFile,
           brandingPrimaryColor: company.settings.brandingDraftPrimaryColor,
           brandingSecondaryColor: company.settings.brandingDraftSecondaryColor,
-          brandingDraftLogoFile: "",
-          brandingDraftPrimaryColor: "",
-          brandingDraftSecondaryColor: ""
+          brandingDraftLogoFile: '',
+          brandingDraftPrimaryColor: '',
+          brandingDraftSecondaryColor: ''
         });
       };
 

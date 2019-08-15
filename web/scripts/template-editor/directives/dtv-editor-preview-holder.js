@@ -3,7 +3,8 @@
 angular.module('risevision.template-editor.directives')
   .directive('templateEditorPreviewHolder', ['$window', '$timeout', '$sce', 'templateEditorFactory', 'blueprintFactory',
     'HTML_TEMPLATE_DOMAIN', 'HTML_TEMPLATE_URL', 'userState',
-    function ($window, $timeout, $sce, templateEditorFactory, blueprintFactory, HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL, userState) {
+    function ($window, $timeout, $sce, templateEditorFactory, blueprintFactory, HTML_TEMPLATE_DOMAIN,
+      HTML_TEMPLATE_URL, userState) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/preview-holder.html',
@@ -190,12 +191,16 @@ angular.module('risevision.template-editor.directives')
 
           function _postDisplayData() {
             var company = userState.getCopyOfSelectedCompany(true);
+            var settings = company.settings;
             var branding = {};
 
-            if (company.settings) {
-              branding.logoFile = company.settings.brandingDraftLogoFile ? company.settings.brandingDraftLogoFile : company.settings.brandingLogoFile;
-              branding.primaryColor = company.settings.brandingDraftPrimaryColor ? company.settings.brandingDraftPrimaryColor : company.settings.brandingPrimaryColor;
-              branding.secondaryColor = company.settings.brandingDraftSecondaryColor ? company.settings.brandingDraftSecondaryColor : company.settings.brandingSecondaryColor;
+            if (settings) {
+              branding.logoFile = settings.brandingDraftLogoFile ?
+                settings.brandingDraftLogoFile : settings.brandingLogoFile;
+              branding.primaryColor = settings.brandingDraftPrimaryColor ?
+                settings.brandingDraftPrimaryColor : settings.brandingPrimaryColor;
+              branding.secondaryColor = settings.brandingDraftSecondaryColor ?
+                settings.brandingDraftSecondaryColor : settings.brandingSecondaryColor;
             }
 
             var message = {

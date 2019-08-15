@@ -7,7 +7,8 @@ angular.module('risevision.template-editor.services')
     'templateEditorUtils', 'brandingFactory', 'blueprintFactory', 'financialLicenseFactory', 'presentationTracker',
     'HTML_PRESENTATION_TYPE', 'template', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
     function ($q, $log, $state, $rootScope, presentation, processErrorCode, userState,
-      checkTemplateAccess, $modal, scheduleFactory, plansFactory, templateEditorUtils, brandingFactory, blueprintFactory, financialLicenseFactory, 
+      checkTemplateAccess, $modal, scheduleFactory, plansFactory, templateEditorUtils, brandingFactory,
+      blueprintFactory, financialLicenseFactory,
       presentationTracker, HTML_PRESENTATION_TYPE, template, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {};
 
@@ -271,7 +272,7 @@ angular.module('risevision.template-editor.services')
             factory.savingPresentation = false;
           });
 
-        return deferred.promise;        
+        return deferred.promise;
       };
 
       var _publishPresentation = function () {

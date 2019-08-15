@@ -3,9 +3,9 @@
 angular.module('risevision.template-editor.services')
   .constant('NEED_FINANCIAL_DATA_LICENSE', ['rise-data-financial'])
   .constant('CONTACT_US_URL', 'https://www.risevision.com/contact-us')
-  .factory('financialLicenseFactory', ['$modal', '$templateCache', 'blueprintFactory',
-  'NEED_FINANCIAL_DATA_LICENSE', 'CONTACT_US_URL',
-    function ($modal, $templateCache, blueprintFactory, NEED_FINANCIAL_DATA_LICENSE, CONTACT_US_URL) {
+  .factory('financialLicenseFactory', ['$window', '$modal', '$templateCache', 'blueprintFactory',
+    'NEED_FINANCIAL_DATA_LICENSE', 'CONTACT_US_URL',
+    function ($window, $modal, $templateCache, blueprintFactory, NEED_FINANCIAL_DATA_LICENSE, CONTACT_US_URL) {
       var factory = {};
 
       var _needsFinancialDataLicense = function () {
