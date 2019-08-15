@@ -6,10 +6,13 @@
       <label>Volume</label>
       <div class="row">
         <div class="col-xs-12">
-          <input min="0" max="100" type="range">
+          <input min="0" max="100" type="range"
+            ng-model="values.volume"
+            ng-change="saveVolume()"
+          >
         </div>
       </div>
-      <p class="range-value">5</p>
+      <p class="range-value">{{ values.volume }}</p>
     </div>
 
     <p class="mt-3">

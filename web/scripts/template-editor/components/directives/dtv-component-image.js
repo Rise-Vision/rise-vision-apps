@@ -85,10 +85,8 @@ angular.module('risevision.template-editor.directives')
               duration = _getDefaultDurationAttribute();
             }
 
-            duration = parseInt(duration, 10);
-
             // default to value 10 if duration not defined
-            $scope.values.duration = (duration && !isNaN(duration)) ? duration : 10;
+            $scope.values.duration = templateEditorUtils.intValueFor(duration, 10);
           }
 
           function _getAttribute(key) {
