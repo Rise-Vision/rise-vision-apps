@@ -9,8 +9,8 @@ angular.module('risevision.template-editor.services')
         var url = BLUEPRINT_URL.replace('PRODUCT_CODE', productCode);
 
         return $http.get(url)
-          .then(function (blueprintData) {
-            factory.blueprintData = blueprintData.data;
+          .then(function (response) {
+            factory.blueprintData = response.data;
 
             return factory.blueprintData;
           });
