@@ -16,7 +16,7 @@
   <div class="attribute-editor-row">
     <div class="form-group">
       <label class="control-label" for="te-rss-max-items">Max items in queue:</label>
-      <select id="te-rss-max-items" ng-model="maxItems" class="form-control">
+      <select id="te-rss-max-items" ng-model="maxItems" class="form-control" ng-change="saveMaxItems()">
         <option value="1">1</option>
         <option value="5">5</option>
         <option value="10">10</option>

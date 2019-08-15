@@ -30,6 +30,10 @@ angular.module('risevision.template-editor.directives')
             }
           };
 
+          $scope.saveMaxItems = function () {
+            $scope.setAttributeData($scope.componentId, 'maxItems', parseInt($scope.maxItems, 10));
+          };
+
           $scope.registerDirective({
             type: 'rise-data-rss',
             iconType: 'streamline',
@@ -44,8 +48,10 @@ angular.module('risevision.template-editor.directives')
           });
 
           function _load() {
+            var maxItems = $scope.getAvailableAttributeData($scope.componentId, 'maxItems');
+
             $scope.feedUrl = $scope.getAvailableAttributeData($scope.componentId, 'feedUrl');
-            $scope.maxItems = $scope.getAvailableAttributeData($scope.componentId, 'maxItems') || '1';
+            $scope.maxItems = maxItems ? maxItems.toString() : '1';
           }
 
           function _validateFeedUrl() {
