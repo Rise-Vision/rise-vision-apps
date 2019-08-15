@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateEditorPreviewHolder', ['$window', '$timeout', '$sce', 'templateEditorFactory', 'blueprintFactory',
-    'HTML_TEMPLATE_DOMAIN', 'HTML_TEMPLATE_URL', 'userState',
-    function ($window, $timeout, $sce, templateEditorFactory, blueprintFactory, HTML_TEMPLATE_DOMAIN,
-      HTML_TEMPLATE_URL, userState) {
+  .directive('templateEditorPreviewHolder', ['$window', '$timeout', '$sce', 'userState', 'templateEditorFactory',
+    'blueprintFactory', 'brandingFactory', 'HTML_TEMPLATE_DOMAIN', 'HTML_TEMPLATE_URL',
+    function ($window, $timeout, $sce, userState, templateEditorFactory, blueprintFactory, brandingFactory,
+      HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/preview-holder.html',
@@ -172,7 +172,8 @@ angular.module('risevision.template-editor.directives')
           }, true);
 
           $scope.$on('risevision.company.updated', function () {
-            _postDisplayData();
+            // ensure branding factory updates branding via the same handler
+            $timeout(_postDisplayData);
           });
 
           function _postAttributeData() {
@@ -191,17 +192,6 @@ angular.module('risevision.template-editor.directives')
 
           function _postDisplayData() {
             var company = userState.getCopyOfSelectedCompany(true);
-            var settings = company.settings;
-            var branding = {};
-
-            if (settings) {
-              branding.logoFile = settings.brandingDraftLogoFile ?
-                settings.brandingDraftLogoFile : settings.brandingLogoFile;
-              branding.primaryColor = settings.brandingDraftPrimaryColor ?
-                settings.brandingDraftPrimaryColor : settings.brandingPrimaryColor;
-              branding.secondaryColor = settings.brandingDraftSecondaryColor ?
-                settings.brandingDraftSecondaryColor : settings.brandingSecondaryColor;
-            }
 
             var message = {
               type: 'displayData',
@@ -212,7 +202,7 @@ angular.module('risevision.template-editor.directives')
                   country: company.country,
                   postalCode: company.postalCode
                 },
-                companyBranding: branding
+                companyBranding: brandingFactory.brandingSettings
               }
             };
             _postMessageToTemplate(message);

@@ -1,24 +1,39 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('brandingFactory', ['$q', 'blueprintFactory', 'userState', 'updateCompany',
-    function ($q, blueprintFactory, userState, updateCompany) {
-      var factory = {};
-
-      var _hasBrandingElements = function () {
-        var blueprint = blueprintFactory.blueprintData;
-
-        return !!blueprint && blueprint.branding === true;
+  .factory('brandingFactory', ['$rootScope', '$q', 'blueprintFactory', 'userState', 'updateCompany',
+    function ($rootScope, $q, blueprintFactory, userState, updateCompany) {
+      var brandingComponent = {
+        type: 'rise-branding'
+      };
+      var factory = {
+        brandingSettings: null
       };
 
-      factory.getBrandingComponent = function () {
-        if (_hasBrandingElements()) {
-          return {
-            type: 'rise-branding'
+      var _loadBranding = function (forceRefresh) {
+        if (!factory.brandingSettings || forceRefresh) {
+          var company = userState.getCopyOfSelectedCompany();
+          var settings = company.settings || {};
+
+          factory.brandingSettings = {
+            logoFile: settings.brandingDraftLogoFile ?
+              settings.brandingDraftLogoFile : settings.brandingLogoFile,
+            primaryColor: settings.brandingDraftPrimaryColor ?
+              settings.brandingDraftPrimaryColor : settings.brandingPrimaryColor,
+            secondaryColor: settings.brandingDraftSecondaryColor ?
+              settings.brandingDraftSecondaryColor : settings.brandingSecondaryColor
           };
         }
+      };
 
-        return null;
+      $rootScope.$on('risevision.company.updated', function () {
+        _loadBranding(true);
+      });
+
+      factory.getBrandingComponent = function () {
+        _loadBranding();
+
+        return (blueprintFactory.hasBranding() ? brandingComponent : null);
       };
 
       var _updateCompanySettings = function (settings) {
@@ -52,16 +67,16 @@ angular.module('risevision.template-editor.services')
         });
       };
 
-      factory.updateDraftColors = function (primaryColor, secondaryColor) {
+      factory.updateDraftColors = function () {
         return _updateCompanySettings({
-          brandingDraftPrimaryColor: primaryColor,
-          brandingDraftSecondaryColor: secondaryColor
+          brandingDraftPrimaryColor: factory.brandingSettings.primaryColor,
+          brandingDraftSecondaryColor: factory.brandingSettings.secondaryColor
         });
       };
 
-      factory.updateDraftLogo = function (logoFile) {
+      factory.updateDraftLogo = function () {
         return _updateCompanySettings({
-          brandingDraftLogoFile: logoFile
+          brandingDraftLogoFile: factory.brandingSettings.logoFile
         });
       };
 
