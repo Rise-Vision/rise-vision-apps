@@ -1,23 +1,13 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentBranding', ['templateEditorFactory',
-    function (templateEditorFactory) {
+  .directive('templateComponentBranding', [
+    function () {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-branding/component-branding.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
-
-          function _load() {
-
-          }
-
-          $scope.save = function () {
-
-          };
-
           $scope.editLogo = function () {
             $scope.showNextPanel('.branding-logo-container');
           };
@@ -37,7 +27,6 @@ angular.module('risevision.template-editor.directives')
               $scope.setPanelTitle('Branding Settings');
 
               element.show();
-              _load();
 
               $scope.showNextPanel('.branding-component-container');
             },

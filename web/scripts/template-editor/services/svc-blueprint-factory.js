@@ -16,6 +16,10 @@ angular.module('risevision.template-editor.services')
           });
       };
 
+      factory.hasBranding = function () {
+        return (!!factory.blueprintData && factory.blueprintData.branding === true);
+      };
+
       return factory;
     }
   ]);
