@@ -11,7 +11,7 @@ angular.module('risevision.template-editor.services')
       svc.intValueFor = function (providedValue, defaultValue) {
         var intValue = parseInt(providedValue, 10);
 
-        return (intValue && !isNaN(intValue)) ? intValue : defaultValue;
+        return isNaN(intValue) ? defaultValue : intValue;
       };
 
       svc.fileNameOf = function (path) {
