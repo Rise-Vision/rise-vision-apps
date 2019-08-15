@@ -1,30 +1,22 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('logoImageFactory', ['userState', 'fileExistenceCheckService', 'DEFAULT_IMAGE_THUMBNAIL', 'brandingFactory',
-    function (userState, fileExistenceCheckService, DEFAULT_IMAGE_THUMBNAIL, brandingFactory) {
+  .factory('logoImageFactory', ['fileExistenceCheckService', 'DEFAULT_IMAGE_THUMBNAIL', 'brandingFactory',
+    function (fileExistenceCheckService, DEFAULT_IMAGE_THUMBNAIL, brandingFactory) {
       var factory = {};
 
       factory.getImagesAsMetadata = function () {
-
-        var company = userState.getCopyOfSelectedCompany();
-        var logo = company.settings && company.settings.brandingDraftLogoFile;
-        // if (logo) {
-        return [{
-          exists: true,
-          file: logo,
-          'thumbnail-url': DEFAULT_IMAGE_THUMBNAIL,
-          // "time-created": "1565380652872"
-        }];
-
-        // fileExistenceCheckService.requestMetadataFor([logo], DEFAULT_IMAGE_THUMBNAIL)
-        //   .then(function (metadata) {
-        //     console.log('received metadata', metadata);
-        //   })
-        //   .catch(function (error) {
-        //     console.error('Could not check file existence for: ' + logo, error);
-        //   });
-        // }        
+        if (brandingFactory.brandingSettings.logoFile) {
+          return brandingFactory.brandingSettings.logoFileMetadata ?
+            brandingFactory.brandingSettings.logoFileMetadata : [{
+              exists: true,
+              file: brandingFactory.brandingSettings.logoFile,
+              'thumbnail-url': DEFAULT_IMAGE_THUMBNAIL,
+              "time-created": "0"
+            }];
+        } else {
+          return [];
+        }
       };
 
       factory.getDuration = function () {
@@ -38,12 +30,14 @@ angular.module('risevision.template-editor.services')
       factory.updateMetadata = function (metadata) {
         if (metadata && metadata.length > 0) {
           var item = metadata[metadata.length - 1];
-          brandingFactory.updateDraftLogo(item.file);
-          return [item];
+          brandingFactory.brandingSettings.logoFileMetadata = [item];
+          brandingFactory.brandingSettings.logoFile = item.file;
         } else {
-          brandingFactory.updateDraftLogo('');
-          return [];
+          brandingFactory.brandingSettings.logoFileMetadata = [];
+          brandingFactory.brandingSettings.logoFile = '';
         }
+        brandingFactory.updateDraftLogo();
+        return brandingFactory.brandingSettings.logoFileMetadata;
       };
 
       factory.getBlueprintData = function (key) {
@@ -51,12 +45,11 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.areChecksCompleted = function (checksCompleted) {
-        return true;
+        return !!brandingFactory.brandingSettings.logoFileMetadata;
       };
 
       factory.removeImage = function (image, currentMetadata) {
-        brandingFactory.updateDraftLogo('');
-        return [];
+        return factory.updateMetadata([]);
       };
 
       return factory;
