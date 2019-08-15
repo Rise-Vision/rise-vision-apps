@@ -18,6 +18,16 @@ angular.module('risevision.template-editor.directives')
 
           };
 
+          $scope.editLogo = function() {
+            $scope.showNextPanel('.branding-logo-container');            
+          };
+
+          $scope.editColors = function() {
+            $scope.setPanelIcon('palette', 'streamline');
+            $scope.setPanelTitle('Color Settings');
+            $scope.showNextPanel('.branding-colors-container');            
+          };
+
           $scope.registerDirective({
             type: 'rise-branding',
             iconType: 'streamline',
@@ -28,11 +38,13 @@ angular.module('risevision.template-editor.directives')
 
               element.show();
               _load();
+
+              $scope.showNextPanel('.branding-component-container');
             },
             onBackHandler: function() {
-              $scope.setPanelTitle();
-
-              return false;
+              $scope.setPanelIcon();
+              $scope.setPanelTitle('Branding Settings');
+              return $scope.showPreviousPanel();
             }
           });
 
