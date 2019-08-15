@@ -16,6 +16,27 @@ angular.module('risevision.template-editor.services')
           });
       };
 
+      factory.getBlueprintData = function (componentId, attributeKey) {
+        var components = factory.blueprintData.components;
+        var component = _.find(components, {
+          id: componentId
+        });
+
+        if (!component || !component.attributes) {
+          return null;
+        }
+
+        var attributes = component.attributes;
+
+        // if the attributeKey is not provided, it returns the full attributes structure
+        if (!attributeKey) {
+          return attributes;
+        }
+
+        var attribute = attributes[attributeKey];
+        return attribute && attribute.value;
+      };
+
       return factory;
     }
   ]);

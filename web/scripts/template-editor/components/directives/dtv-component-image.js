@@ -5,15 +5,16 @@ angular.module('risevision.template-editor.directives')
     'https://s3.amazonaws.com/Rise-Images/UI/storage-image-icon-no-transparency%402x.png')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
   .directive('templateComponentImage', ['$log', '$q', '$timeout', 'templateEditorFactory', 'templateEditorUtils',
-    'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
+    'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES', 'logoImageFactory', 'regularImageFactory',
     function ($log, $q, $timeout, templateEditorFactory, templateEditorUtils,
-      fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES) {
+      fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES, logoImageFactory, regularImageFactory) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-image.html',
         link: function ($scope, element) {
           var storagePanelSelector = '.storage-selector-container';
+          var imageFactory = regularImageFactory;
 
           $scope.factory = templateEditorFactory;
           $scope.validExtensions = SUPPORTED_IMAGE_TYPES;
@@ -57,7 +58,10 @@ angular.module('risevision.template-editor.directives')
             var metadata = fileMetadataUtilsService.metadataWithFile(selectedFiles,
               DEFAULT_IMAGE_THUMBNAIL, files, alwaysAppend);
 
-            _setMetadata($scope.componentId, metadata);
+            imageFactory.handleMetadata(metadata);
+
+            _setSelectedImages(metadata);
+
           }
 
           function _loadSelectedImages() {
@@ -69,9 +73,7 @@ angular.module('risevision.template-editor.directives')
 
             $scope.factory.loadingPresentation = true;
 
-            var checksCompleted = $scope.fileExistenceChecksCompleted;
-
-            if (checksCompleted && checksCompleted[$scope.componentId]) {
+            if (imageFactory.areChecksCompleted($scope.fileExistenceChecksCompleted)) {
               $timeout(function () {
                 $scope.factory.loadingPresentation = false;
               });
@@ -92,19 +94,23 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _getAttribute(key) {
-            return $scope.getAttributeData($scope.componentId, key);
+            return imageFactory.getAttributeData(key);
           }
 
           function _setAttribute(key, value) {
-            $scope.setAttributeData($scope.componentId, key, value);
+            imageFactory.setAttributeData(key, value);
+          }
+
+          function _getBlueprint(key) {
+            return imageFactory.getBlueprintData(key);
           }
 
           function _getDefaultFilesAttribute() {
-            return $scope.getBlueprintData($scope.componentId, 'files');
+            return _getBlueprint('files');
           }
 
           function _getDefaultDurationAttribute() {
-            return $scope.getBlueprintData($scope.componentId, 'duration');
+            return _getBlueprint('duration');
           }
 
           function _getFilesFor(componentId) {
@@ -132,7 +138,7 @@ angular.module('risevision.template-editor.directives')
             var filesAttribute =
               fileMetadataUtilsService.filesAttributeFor(selectedImages);
 
-            if (componentId === $scope.componentId) {
+            if (componentId === imageFactory.componentId) {
               _setSelectedImages(selectedImages);
             }
 
@@ -163,8 +169,13 @@ angular.module('risevision.template-editor.directives')
               element.show();
 
               _reset();
-              $scope.componentId = $scope.factory.selected.id;
-
+              if ($scope.factory.selected.id) {
+                imageFactory = regularImageFactory;
+                imageFactory.componentId = $scope.factory.selected.id;
+              } else {
+                imageFactory = logoImageFactory;
+              }
+              
               _loadSelectedImages();
               _loadDuration();
 
@@ -197,7 +208,7 @@ angular.module('risevision.template-editor.directives')
                   .finally(function () {
                     $scope.fileExistenceChecksCompleted[componentId] = true;
 
-                    if (componentId === $scope.componentId && $scope.factory.loadingPresentation) {
+                    if (imageFactory.areChecksCompleted($scope.fileExistenceChecksCompleted)) {
                       $scope.factory.loadingPresentation = false;
                     }
                   });
@@ -253,13 +264,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.removeImageFromList = function (image) {
-            var currentMetadata = $scope.selectedImages;
-            var metadata =
-              fileMetadataUtilsService.metadataWithFileRemoved(currentMetadata, image);
-
-            if (metadata) {
-              _setMetadata($scope.componentId, metadata);
-            }
+            _setSelectedImages(imageFactory.removeImage(image,$scope.selectedImages));
           };
         }
       };

@@ -18,8 +18,10 @@ angular.module('risevision.template-editor.directives')
 
           };
 
-          $scope.editLogo = function () {
-            $scope.showNextPanel('.branding-logo-container');
+          $scope.editLogo = function() {
+            $scope.setPanelIcon('circleStar', 'streamline');
+            $scope.setPanelTitle('Logo Settings');
+            $scope.editComponent({type: 'rise-image'});
           };
 
           $scope.editColors = function () {
