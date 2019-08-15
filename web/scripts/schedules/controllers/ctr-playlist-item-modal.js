@@ -49,9 +49,15 @@ angular.module('risevision.schedules.controllers')
             })
             .then(function (result) {
 
-              if (result.data && !result.data.playUntilDone) {
-                $scope.playUntilDoneSupported = false;
-                $scope.playlistItem.playUntilDone = false;
+              if (result.data) {
+                if (result.data.playUntilDone && $scope.isNew) {
+                  //When user schedules a PUD template, then set schedule item to PUD by default.
+                  $scope.playlistItem.playUntilDone = true;
+                }
+                if (!result.data.playUntilDone) {
+                  $scope.playUntilDoneSupported = false;
+                  $scope.playlistItem.playUntilDone = false;
+                }
               }
             })
             .catch(function () {
