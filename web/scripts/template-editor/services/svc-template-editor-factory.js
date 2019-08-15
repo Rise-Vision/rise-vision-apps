@@ -4,11 +4,11 @@ angular.module('risevision.template-editor.services')
   .constant('HTML_TEMPLATE_DOMAIN', 'https://widgets.risevision.com')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', 'presentation',
     'processErrorCode', 'userState', 'checkTemplateAccess', '$modal', 'scheduleFactory', 'plansFactory',
-    'templateEditorUtils', 'presentationTracker',
+    'templateEditorUtils', 'brandingFactory', 'blueprintFactory', 'financialLicenseFactory', 'presentationTracker',
     'HTML_PRESENTATION_TYPE', 'template', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
     function ($q, $log, $state, $rootScope, presentation, processErrorCode, userState,
-      checkTemplateAccess, $modal, scheduleFactory, plansFactory, templateEditorUtils, presentationTracker,
-      HTML_PRESENTATION_TYPE, template, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
+      checkTemplateAccess, $modal, scheduleFactory, plansFactory, templateEditorUtils, brandingFactory, blueprintFactory, financialLicenseFactory, 
+      presentationTracker, HTML_PRESENTATION_TYPE, template, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {};
 
       var _setPresentation = function (presentation, isUpdate) {
@@ -71,12 +71,6 @@ angular.module('risevision.template-editor.services')
           });
       };
 
-      var _checkFinancialDataLicenseMessage = function (blueprintData) {
-        if (templateEditorUtils.needsFinancialDataLicense(blueprintData)) {
-          templateEditorUtils.showFinancialDataLicenseRequiredMessage();
-        }
-      };
-
       factory.addFromProduct = function (productDetails) {
         _clearMessages();
 
@@ -95,11 +89,9 @@ angular.module('risevision.template-editor.services')
 
         presentationTracker('HTML Template Copied', productDetails.productCode, productDetails.name);
 
-        return template.loadBlueprintData(factory.presentation.productCode)
-          .then(function (blueprintData) {
-            factory.blueprintData = blueprintData.data;
-
-            _checkFinancialDataLicenseMessage(factory.blueprintData);
+        return blueprintFactory.load(factory.presentation.productCode)
+          .then(function () {
+            financialLicenseFactory.checkFinancialDataLicenseMessage();
           })
           .then(null, function (e) {
             _showErrorMessage('add', e);
@@ -199,10 +191,9 @@ angular.module('risevision.template-editor.services')
           .then(function (result) {
             _setPresentation(result.item);
 
-            return template.loadBlueprintData(factory.presentation.productCode);
+            return blueprintFactory.load(factory.presentation.productCode);
           })
-          .then(function (blueprintData) {
-            factory.blueprintData = blueprintData.data;
+          .then(function () {
             _checkTemplateAccess(factory.presentation.productCode);
 
             deferred.resolve();
@@ -210,7 +201,7 @@ angular.module('risevision.template-editor.services')
           .then(null, function (e) {
             _showErrorMessage('get', e);
             factory.presentation = null;
-            factory.blueprintData = null;
+            blueprintFactory.blueprintData = null;
 
             deferred.reject(e);
           })
@@ -257,7 +248,7 @@ angular.module('risevision.template-editor.services')
         return factory.presentation.revisionStatusName === REVISION_STATUS_REVISED;
       };
 
-      factory.publishPresentation = function () {
+      factory.publish = function () {
         var deferred = $q.defer();
 
         _clearMessages();
@@ -266,17 +257,7 @@ angular.module('risevision.template-editor.services')
         factory.loadingPresentation = true;
         factory.savingPresentation = true;
 
-        presentation.publish(factory.presentation.id)
-          .then(function () {
-            presentationTracker('Presentation Published', factory.presentation.id, factory.presentation.name);
-
-            factory.presentation.revisionStatusName = REVISION_STATUS_PUBLISHED;
-            factory.presentation.changeDate = new Date();
-            factory.presentation.changedBy = userState.getUsername();
-            $rootScope.$broadcast('presentationPublished');
-
-            return _createFirstSchedule();
-          })
+        $q.all([brandingFactory.publishBranding(), _publishPresentation()])
           .then(function () {
             deferred.resolve();
           })
@@ -290,7 +271,25 @@ angular.module('risevision.template-editor.services')
             factory.savingPresentation = false;
           });
 
-        return deferred.promise;
+        return deferred.promise;        
+      };
+
+      var _publishPresentation = function () {
+        if (!factory.isRevised()) {
+          return $q.resolve();
+        }
+
+        return presentation.publish(factory.presentation.id)
+          .then(function () {
+            presentationTracker('Presentation Published', factory.presentation.id, factory.presentation.name);
+
+            factory.presentation.revisionStatusName = REVISION_STATUS_PUBLISHED;
+            factory.presentation.changeDate = new Date();
+            factory.presentation.changedBy = userState.getUsername();
+            $rootScope.$broadcast('presentationPublished');
+
+            return _createFirstSchedule();
+          });
       };
 
       var _createFirstSchedule = function () {
