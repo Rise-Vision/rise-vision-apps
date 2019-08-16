@@ -4,10 +4,16 @@ describe('directive: TemplateComponentImage', function() {
   var $scope,
     element,
     factory,
-    timeout;
+    timeout,
+    regularImageFactory,
+    sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
     factory = { selected: { id: 'TEST-ID' } };
+  });
+
+  afterEach(function() {
+    sandbox.restore();
   });
 
   beforeEach(module('risevision.template-editor.directives'));
@@ -19,7 +25,14 @@ describe('directive: TemplateComponentImage', function() {
     $provide.service('templateEditorFactory', function() {
       return factory;
     });
-
+    $provide.service('regularImageFactory', function() {
+      return {
+        getBlueprintData: sandbox.stub().returns({}),
+        getImagesAsMetadata: sandbox.stub().returns([]),
+        areChecksCompleted: sandbox.stub().returns(true),
+        getDuration: sandbox.stub().returns(10)
+      };
+    });
     $provide.service('storageAPILoader', function() {
       return function() {
         return Q.resolve({
@@ -45,9 +58,11 @@ describe('directive: TemplateComponentImage', function() {
     });
   }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout){
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout, $injector){
     $templateCache.put('partials/template-editor/components/component-image.html', '<p>mock</p>');
     $scope = $rootScope.$new();
+
+    regularImageFactory = $injector.get('regularImageFactory');
 
     $scope.registerDirective = sinon.stub();
     $scope.setAttributeData = sinon.stub();
@@ -85,12 +100,7 @@ describe('directive: TemplateComponentImage', function() {
       { "file": 'test|character.jpg', "thumbnail-url": "http://test%7Ccharacter.jpg" }
     ];
 
-    $scope.getAttributeData = function(componentId, key) {
-      switch(key) {
-        case 'metadata': return sampleImages;
-        case 'files': return 'image.png|test|character.png';
-      }
-    };
+    regularImageFactory.getImagesAsMetadata.returns(sampleImages);
 
     directive.show();
 
@@ -106,15 +116,8 @@ describe('directive: TemplateComponentImage', function() {
       { "file": "image.png", "thumbnail-url": "http://image" }
     ];
 
-    $scope.getAttributeData = function(componentId, key) {
-      switch(key) {
-        case 'metadata': return sampleImages;
-        case 'files': return 'image.png';
-      }
-    };
-    $scope.getBlueprintData = function() {
-      return "image.png";
-    };
+    regularImageFactory.getImagesAsMetadata.returns(sampleImages);
+    regularImageFactory.getBlueprintData.returns("image.png");
 
     directive.show();
 
@@ -129,15 +132,8 @@ describe('directive: TemplateComponentImage', function() {
       { "file": "image.png", "thumbnail-url": "http://image" }
     ];
 
-    $scope.getAttributeData = function(componentId, key) {
-      switch(key) {
-        case 'metadata': return sampleImages;
-        case 'files': return 'image.png';
-      }
-    };
-    $scope.getBlueprintData = function() {
-      return "default.png";
-    };
+    regularImageFactory.getImagesAsMetadata.returns(sampleImages);
+    regularImageFactory.getBlueprintData.returns("default.png");
 
     directive.show();
 
@@ -156,7 +152,7 @@ describe('directive: TemplateComponentImage', function() {
         { "file": "image2.png", exists: false, "thumbnail-url": "http://image2" }
       ];
 
-      $scope.componentId = 'TEST-ID';
+      regularImageFactory.componentId = 'TEST-ID';
     });
 
     it('should directly set metadata if it\'s not already loaded', function()
@@ -165,7 +161,7 @@ describe('directive: TemplateComponentImage', function() {
         return null;
       };
 
-      $scope.updateFileMetadata($scope.componentId, sampleImages);
+      $scope.updateFileMetadata(regularImageFactory.componentId, sampleImages);
 
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(sampleImages);
@@ -181,8 +177,7 @@ describe('directive: TemplateComponentImage', function() {
       ), 'set files attribute').to.be.true;
     });
 
-    it('should combine metadata if it\'s already loaded', function()
-    {
+    it('should combine metadata if it\'s already loaded', function(){
       var updatedImages = [
         { "file": "image.png", exists: false, "thumbnail-url": "http://image5" },
         { "file": "image2.png", exists: false, "thumbnail-url": "http://image6" }
@@ -192,7 +187,7 @@ describe('directive: TemplateComponentImage', function() {
         return sampleImages;
       };
 
-      $scope.updateFileMetadata($scope.componentId, updatedImages);
+      $scope.updateFileMetadata(regularImageFactory.componentId, updatedImages);
 
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(updatedImages);
@@ -208,8 +203,7 @@ describe('directive: TemplateComponentImage', function() {
       ), 'set files attribute').to.be.true;
     });
 
-    it('should only update the provided images', function()
-    {
+    it('should only update the provided images', function() {
       var updatedImages = [
         { "file": "image.png", exists: false, "thumbnail-url": "http://image5" }
       ];
@@ -222,7 +216,7 @@ describe('directive: TemplateComponentImage', function() {
         return sampleImages;
       };
 
-      $scope.updateFileMetadata($scope.componentId, updatedImages);
+      $scope.updateFileMetadata(regularImageFactory.componentId, updatedImages);
 
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(expectedImages);
@@ -238,8 +232,7 @@ describe('directive: TemplateComponentImage', function() {
       ), 'set files attribute').to.be.true;
     });
 
-    it('should not update images that are not already present', function()
-    {
+    it('should not update images that are not already present', function() {
       var updatedImages = [
         { "file": "image.png", exists: false, "thumbnail-url": "http://image5" },
         { "file": "imageNew.png", exists: false, "thumbnail-url": "http://imageN" }
@@ -253,7 +246,7 @@ describe('directive: TemplateComponentImage', function() {
         return sampleImages;
       };
 
-      $scope.updateFileMetadata($scope.componentId, updatedImages);
+      $scope.updateFileMetadata(regularImageFactory.componentId, updatedImages);
 
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(expectedImages);
