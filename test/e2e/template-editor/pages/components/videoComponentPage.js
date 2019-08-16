@@ -5,6 +5,8 @@ var helper = require('rv-common-e2e').helper;
 var VideoComponentPage = function() {
   var selectedVideosMain = element.all(by.repeater('file in selectedFiles track by $index'));
   var volumeComponent = element(by.css('.video-component-volume'));
+  var volumeInput = element(by.css('.video-component-volume input'));
+  var volumeValue = element(by.css('.range-value'));
   var uploadButtonMain = element(by.id('video-list-uploader-label'));
   var uploadInputMain = element(by.id('video-list-uploader'));
   var uploadPanelMain = element(by.id('upload-panel-video-list-uploader'));
@@ -24,6 +26,14 @@ var VideoComponentPage = function() {
 
   this.getVolumeComponent = function () {
     return volumeComponent;
+  };
+
+  this.getVolumeInput = function () {
+    return volumeInput;
+  };
+
+  this.getVolumeValue = function () {
+    return volumeValue;
   };
 
   this.getUploadButtonMain = function () {

@@ -169,6 +169,24 @@ var VideoComponentScenarios = function () {
         });
       });
 
+      it('should display volume settings', function () {
+        expect(videoComponentPage.getVolumeComponent().isDisplayed()).to.eventually.be.true;
+
+        expect(videoComponentPage.getVolumeValue().getText()).to.eventually.equal('0');
+      });
+
+      it('should update volume', function () {
+        videoComponentPage.getVolumeInput().sendKeys(protractor.Key.RIGHT);
+
+        expect(videoComponentPage.getVolumeValue().getText()).to.eventually.equal('1');
+      });
+
+      it('should auto-save the Presentation after updating volume', function () {
+        helper.waitDisappear(templateEditorPage.getDirtyText());
+        helper.wait(templateEditorPage.getSavingText(), 'Video component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Video component auto-saved');
+      });
+
       it('should remove a video row', function () {
         var removeLink = videoComponentPage.getRemoveLinkFor('Beach-Ball.mp4');
 
@@ -176,9 +194,27 @@ var VideoComponentScenarios = function () {
         helper.clickWhenClickable(removeLink, 'Video Row Remove');
 
         expect(videoComponentPage.getSelectedVideosMain().count()).to.eventually.equal(1);
+        expect(videoComponentPage.getVolumeComponent().isDisplayed()).to.eventually.be.true;
       });
 
       it('should auto-save the Presentation after removing a row', function () {
+        helper.waitDisappear(templateEditorPage.getDirtyText());
+        helper.wait(templateEditorPage.getSavingText(), 'Video component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Video component auto-saved');
+      });
+
+      it('should remove another video row and hide volume', function () {
+        var removeLink = videoComponentPage.getRemoveLinkFor('Under.mp4');
+
+        helper.wait(removeLink, 'Video Row Remove');
+        helper.clickWhenClickable(removeLink, 'Video Row Remove');
+
+        expect(videoComponentPage.getSelectedVideosMain().count()).to.eventually.equal(0);
+        expect(videoComponentPage.getVolumeComponent().isDisplayed()).to.eventually.be.false;
+      });
+
+      it('should auto-save the Presentation after removing another row', function () {
+        helper.waitDisappear(templateEditorPage.getDirtyText());
         helper.wait(templateEditorPage.getSavingText(), 'Video component auto-saving');
         helper.wait(templateEditorPage.getSavedText(), 'Video component auto-saved');
       });
