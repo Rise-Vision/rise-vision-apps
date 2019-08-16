@@ -2,6 +2,7 @@
 
 describe('service: brandingFactory', function() {
 
+  beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module('risevision.template-editor.services'));
   beforeEach(module(mockTranlate()));
 
