@@ -176,11 +176,11 @@ angular.module('risevision.template-editor.directives')
 
           $scope.$watch('brandingFactory.brandingSettings.logoFileMetadata', function (value) {
             _postLogoData();
-          }, true);          
+          }, true);
 
           $scope.$on('risevision.company.updated', function () {
             // ensure branding factory updates branding via the same handler
-            $timeout(function() {
+            $timeout(function () {
               _postDisplayData();
               _postLogoData();
             });
@@ -219,14 +219,11 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _postLogoData() {
-            console.log('_postLogoData',brandingFactory.brandingSettings.logoFileMetadata)
             if (brandingFactory.brandingSettings.logoFileMetadata) {
 
               var logoComponents = blueprintFactory.getLogoComponents();
-
               var components = [];
-
-              angular.forEach(logoComponents,function(c){
+              angular.forEach(logoComponents, function (c) {
                 components.push({
                   id: c.id,
                   metadata: brandingFactory.brandingSettings.logoFileMetadata

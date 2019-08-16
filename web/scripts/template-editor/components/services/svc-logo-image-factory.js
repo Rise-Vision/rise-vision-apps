@@ -12,7 +12,7 @@ angular.module('risevision.template-editor.services')
               exists: true,
               file: brandingFactory.brandingSettings.logoFile,
               'thumbnail-url': DEFAULT_IMAGE_THUMBNAIL,
-              "time-created": "0"
+              'time-created': '0'
             }];
         } else {
           return [];

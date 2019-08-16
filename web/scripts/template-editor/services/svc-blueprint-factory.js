@@ -41,14 +41,14 @@ angular.module('risevision.template-editor.services')
         return attribute && attribute.value;
       };
 
-      factory.getLogoComponents = function() {
+      factory.getLogoComponents = function () {
         var components = factory.blueprintData.components;
 
         return _.filter(components, function (c) {
-            return c.type == 'rise-image' && (c.attributes && c.attributes['is-logo'] && c
-              .attributes['is-logo'].value === 'true');
+          return c.type === 'rise-image' && (c.attributes && c.attributes['is-logo'] && c
+            .attributes['is-logo'].value === 'true');
         });
-      }
+      };
 
       return factory;
     }
