@@ -4,6 +4,35 @@ describe('service: blueprint factory', function() {
   beforeEach(module('risevision.template-editor.services'));
   beforeEach(module(mockTranlate()));
 
+  var SAMPLE_COMPONENTS = [
+    {
+      "type": "rise-image",
+      "id": "rise-image-01",
+      "label": "template.rise-image",
+      "attributes": {
+        "file": {
+          "label": "template.file",
+          "value": "risemedialibrary-7fa5ee92-7deb-450b-a8d5-e5ed648c575f/rise-image-demo/heatmap-icon.png"
+        }
+      }
+    },
+    {
+      "type": "rise-data-financial",
+      "id": "rise-data-financial-01",
+      "label": "template.rise-data-financial",
+      "attributes": {
+        "financial-list": {
+          "label": "template.financial-list",
+          "value": "-LNuO9WH5ZEQ2PLCeHhz"
+        },
+        "symbols": {
+          "label": "template.symbols",
+          "value": "CADUSD=X|MXNUSD=X|USDEUR=X"
+        }
+      }
+    }
+  ];
+
   var PRODUCT_CODE = "template123";
   var blueprintFactory, httpReturn, $httpBackend;
   beforeEach(function(){
@@ -79,6 +108,51 @@ describe('service: blueprint factory', function() {
 
       expect(blueprintFactory.hasBranding()).to.equal.false;
     });    
+  });
+
+  describe('getBlueprintData', function () {
+
+    it('should get blueprint data from factory',function() {
+      blueprintFactory.blueprintData = { components: [] };
+
+      var data = blueprintFactory.getBlueprintData('rise-data-financial-01');
+
+      expect(data).to.be.null;
+    });
+
+    it('should get null blueprint data value',function() {
+      blueprintFactory.blueprintData = { components: [] };
+
+      var data = blueprintFactory.getBlueprintData('rise-data-financial-01', 'symbols');
+
+      expect(data).to.be.null;
+    });
+
+    it('should get blueprint data attributes',function() {
+      blueprintFactory.blueprintData = { components: SAMPLE_COMPONENTS };
+
+      var data = blueprintFactory.getBlueprintData('rise-data-financial-01');
+
+      expect(data).to.deep.equal({
+        "financial-list": {
+          "label": "template.financial-list",
+          "value": "-LNuO9WH5ZEQ2PLCeHhz"
+        },
+        "symbols": {
+          "label": "template.symbols",
+          "value": "CADUSD=X|MXNUSD=X|USDEUR=X"
+        }
+      });
+    });
+
+    it('should get blueprint data value',function() {
+      blueprintFactory.blueprintData = { components: SAMPLE_COMPONENTS };
+
+      var data = blueprintFactory.getBlueprintData('rise-data-financial-01', 'symbols');
+
+      expect(data).to.equal('CADUSD=X|MXNUSD=X|USDEUR=X');
+    });
+
   });
 
 });

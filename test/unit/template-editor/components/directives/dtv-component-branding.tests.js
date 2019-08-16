@@ -39,6 +39,9 @@ describe('directive: templateComponentBranding', function() {
 
     $scope.registerDirective = sinon.stub();
     $scope.setPanelTitle = sinon.stub();
+    $scope.setPanelIcon = sinon.stub();
+    $scope.showNextPanel = sinon.stub();
+    $scope.showPreviousPanel = sinon.stub();
 
     $scope.$digest();
   }
@@ -49,8 +52,6 @@ describe('directive: templateComponentBranding', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
     expect($scope.registerDirective).to.have.been.called;
   });
 
@@ -69,15 +70,18 @@ describe('directive: templateComponentBranding', function() {
 
     directive.show();
 
-    $scope.setPanelTitle.should.have.been.calledWith('Branding Settings')
+    $scope.setPanelTitle.should.have.been.calledWith('Branding Settings');
+    $scope.showNextPanel.should.have.been.calledWith('.branding-component-container');
   });
 
   it('directive.onBackHandler: ', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
-    expect(directive.onBackHandler()).to.be.false;
+    directive.onBackHandler();
 
     $scope.setPanelTitle.should.have.been.calledWith();
+    $scope.setPanelIcon.should.have.been.calledWith();
+    $scope.showPreviousPanel.should.have.been.calledWith();
   });
 
 });

@@ -2,6 +2,7 @@
 describe('controller: Presentation List', function() {
   beforeEach(module('risevision.editor.controllers'));
   beforeEach(module('risevision.editor.services'));
+  beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module('risevision.template-editor.services'));
   beforeEach(module(mockTranlate()));
   beforeEach(module(function ($provide) {

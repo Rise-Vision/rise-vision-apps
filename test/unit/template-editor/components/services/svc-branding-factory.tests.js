@@ -2,23 +2,18 @@
 
 describe('service: brandingFactory', function() {
 
+  beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module('risevision.template-editor.services'));
 
-  beforeEach(module(function($provide) {
-    $provide.service('templateEditorFactory', function() {
-      return {
-        blueprintData: blueprintData
-      };
-    });
-  }));
-
-  var brandingFactory, blueprintData;
+  var brandingFactory, blueprintData, blueprintFactory;
 
   beforeEach(function() {
     blueprintData = {};
 
     inject(function($injector) {
       brandingFactory = $injector.get('brandingFactory');
+      blueprintFactory = $injector.get('blueprintFactory');
+      blueprintFactory.blueprintData = blueprintData;
     });
   });
 
