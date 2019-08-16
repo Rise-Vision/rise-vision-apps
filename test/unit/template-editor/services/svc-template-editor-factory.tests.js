@@ -27,7 +27,7 @@ describe('service: templateEditorFactory:', function() {
 
     $provide.service('$state',function() {
       return {
-        go: sinon.stub().returns(Q.resolve())
+        go: sandbox.stub().returns(Q.resolve())
       };
     });
 
@@ -45,7 +45,7 @@ describe('service: templateEditorFactory:', function() {
     });
 
     $provide.service('checkTemplateAccess',function(){
-      return sinon.spy(function () {
+      return sandbox.spy(function () {
         return storeAuthorize ? Q.resolve() : Q.reject();
       });
     });
@@ -67,9 +67,7 @@ describe('service: templateEditorFactory:', function() {
 
     $provide.factory('brandingFactory', function() {
       return {
-        publishBranding: function() {
-          return Q.resolve();
-        }
+        publishBranding: sandbox.stub()
       };
     });
 
@@ -85,7 +83,7 @@ describe('service: templateEditorFactory:', function() {
 
     $provide.service('scheduleFactory', function() {
       return {
-        createFirstSchedule: sinon.stub()
+        createFirstSchedule: sandbox.stub()
       };
     });
 
@@ -107,7 +105,7 @@ describe('service: templateEditorFactory:', function() {
   }));
 
   var $state, $modal, templateEditorFactory, templateEditorUtils, financialLicenseFactory, blueprintFactory, presentation, processErrorCode,
-    HTML_PRESENTATION_TYPE, storeAuthorize, checkTemplateAccessSpy, store, plansFactory, scheduleFactory;
+    HTML_PRESENTATION_TYPE, storeAuthorize, checkTemplateAccessSpy, store, plansFactory, scheduleFactory, brandingFactory;
 
   beforeEach(function() {
     inject(function($injector, checkTemplateAccess) {
@@ -119,6 +117,7 @@ describe('service: templateEditorFactory:', function() {
       presentation = $injector.get('presentation');
       plansFactory = $injector.get('plansFactory');
       scheduleFactory = $injector.get('scheduleFactory');
+      brandingFactory = $injector.get('brandingFactory');
       store = $injector.get('store');
       templateEditorUtils = $injector.get('templateEditorUtils');
       processErrorCode = $injector.get('processErrorCode');
@@ -336,7 +335,7 @@ describe('service: templateEditorFactory:', function() {
         }
       ];
 
-      var modalOpenStub = sinon.stub($modal, 'open', function () {
+      var modalOpenStub = sandbox.stub($modal, 'open', function () {
         return {
           result: {
             then: function() {}
@@ -460,7 +459,7 @@ describe('service: templateEditorFactory:', function() {
         }
       ];
 
-      var modalOpenStub = sinon.stub($modal, 'open', function () {
+      var modalOpenStub = sandbox.stub($modal, 'open', function () {
         return {
           result: {
             then: function() {}
@@ -573,6 +572,7 @@ describe('service: templateEditorFactory:', function() {
 
   describe('publish: ', function() {
     beforeEach(function (done) {
+      scheduleFactory.createFirstSchedule.returns(Q.resolve());
       sandbox.stub(presentation, 'get').returns(Q.resolve({
         item: {
           id: 'presentationId',
@@ -588,69 +588,145 @@ describe('service: templateEditorFactory:', function() {
       });
     });
 
-    it('should publish the presentation', function(done) {
-      sandbox.stub(presentation, 'publish').returns(Q.resolve());
+    it('should wait for both promises to resolve', function(done) {
+      var publishTemplateDeferred = Q.defer();
+      var publishBrandingDeferred = Q.defer();
+      sandbox.stub(presentation, 'publish').returns(publishTemplateDeferred.promise);
+      brandingFactory.publishBranding.returns(publishBrandingDeferred.promise);
 
-      var timeBeforePublish = new Date();
+      templateEditorFactory.publish();
 
-      templateEditorFactory.publish(templateEditorFactory)
-        .then(function() {
-          expect(templateEditorUtils.showMessageWindow).to.not.have.been.called;
-          expect(templateEditorFactory.savingPresentation).to.be.true;
-          expect(templateEditorFactory.loadingPresentation).to.be.true;
+      presentation.publish.should.have.been.called;
+      brandingFactory.publishBranding.should.have.been.called;
 
-          setTimeout(function() {
-            expect(templateEditorFactory.presentation.revisionStatusName).to.equal('Published');
-            expect(templateEditorFactory.presentation.changeDate).to.be.gte(timeBeforePublish);
-            expect(templateEditorFactory.presentation.changedBy).to.equal("testusername");
-            expect(templateEditorFactory.savingPresentation).to.be.false;
-            expect(templateEditorFactory.loadingPresentation).to.be.false;
-            expect(templateEditorFactory.errorMessage).to.not.be.ok;
-            expect(templateEditorFactory.apiError).to.not.be.ok;
-            expect(presentationTracker).to.have.been.calledWith('Presentation Published', 'presentationId', 'Test Presentation');
+      expect(templateEditorFactory.savingPresentation).to.be.true;
 
-            done();
-          },10);
-        })
-        .then(null, function(err) {
-          done(err);
-        })
-        .then(null, done);
-    });
+      publishTemplateDeferred.resolve();
 
-    it('should show an error if fails to publish the presentation', function(done) {
-      sandbox.stub(presentation, 'publish').returns(Q.reject());
+      setTimeout(function() {
+        expect(templateEditorFactory.savingPresentation).to.be.true;  
 
-      templateEditorFactory.publish()
-        .then(null, function(e) {
-          setTimeout(function() {
-            expect(templateEditorFactory.savingPresentation).to.be.false;
-            expect(templateEditorFactory.loadingPresentation).to.be.false;
-            expect(templateEditorFactory.errorMessage).to.be.ok;
-            expect(templateEditorFactory.apiError).to.be.ok;
-            expect(templateEditorUtils.showMessageWindow).to.have.been.called;
+        publishBrandingDeferred.resolve();
+        
+        setTimeout(function() {
+          expect(templateEditorFactory.savingPresentation).to.be.false;  
 
-            done();
-          }, 10);
+          done();
         });
+      });
     });
 
-    it('should create first Schedule when publishing first presentation and show modal', function(done) {
-      sandbox.stub(presentation, 'publish').returns(Q.resolve());
+    describe('publishTemplate: ', function() {
+      it('should not publish the presentation if it is not revised', function(done) {
+        sandbox.stub(presentation, 'publish');
+        sandbox.stub(templateEditorFactory, 'isRevised').returns(false);
 
-      templateEditorFactory.publish(templateEditorFactory)
-        .then(function() {
-          setTimeout(function() {
-            scheduleFactory.createFirstSchedule.should.have.been.called;
+        templateEditorFactory.publish()
+          .then(function() {
+            presentation.publish.should.not.have.been.called;
 
             done();
+          })
+          .then(null, function(err) {
+            done(err);
+          })
+          .then(null, done);
+      });
+
+      it('should publish the presentation', function(done) {
+        sandbox.stub(presentation, 'publish').returns(Q.resolve());
+
+        var timeBeforePublish = new Date();
+
+        templateEditorFactory.publish()
+          .then(function() {
+            expect(templateEditorUtils.showMessageWindow).to.not.have.been.called;
+            expect(templateEditorFactory.savingPresentation).to.be.true;
+            expect(templateEditorFactory.loadingPresentation).to.be.true;
+
+            setTimeout(function() {
+              expect(templateEditorFactory.presentation.revisionStatusName).to.equal('Published');
+              expect(templateEditorFactory.presentation.changeDate).to.be.gte(timeBeforePublish);
+              expect(templateEditorFactory.presentation.changedBy).to.equal("testusername");
+              expect(templateEditorFactory.savingPresentation).to.be.false;
+              expect(templateEditorFactory.loadingPresentation).to.be.false;
+              expect(templateEditorFactory.errorMessage).to.not.be.ok;
+              expect(templateEditorFactory.apiError).to.not.be.ok;
+              expect(presentationTracker).to.have.been.calledWith('Presentation Published', 'presentationId', 'Test Presentation');
+
+              done();
+            },10);
+          })
+          .then(null, function(err) {
+            done(err);
+          })
+          .then(null, done);
+      });
+
+      it('should show an error if fails to publish the presentation', function(done) {
+        sandbox.stub(presentation, 'publish').returns(Q.reject());
+
+        templateEditorFactory.publish()
+          .then(null, function(e) {
+            setTimeout(function() {
+              expect(templateEditorFactory.savingPresentation).to.be.false;
+              expect(templateEditorFactory.loadingPresentation).to.be.false;
+              expect(templateEditorFactory.errorMessage).to.be.ok;
+              expect(templateEditorFactory.apiError).to.be.ok;
+              expect(templateEditorUtils.showMessageWindow).to.have.been.called;
+
+              done();
+            }, 10);
           });
-        })
-        .then(null, function(err) {
-          done(err);
-        })
-        .then(null, done);
+      });
+
+      it('should create first Schedule when publishing first presentation and show modal', function(done) {
+        sandbox.stub(presentation, 'publish').returns(Q.resolve());
+
+        templateEditorFactory.publish(templateEditorFactory)
+          .then(function() {
+            setTimeout(function() {
+              scheduleFactory.createFirstSchedule.should.have.been.called;
+
+              done();
+            });
+          })
+          .then(null, function(err) {
+            done(err);
+          })
+          .then(null, done);
+      });
     });
+
+    describe('publishBranding: ', function() {
+      beforeEach(function() {
+        sandbox.stub(presentation, 'publish').returns(Q.resolve());
+      });
+
+      it('should publish the branding settings', function() {
+        templateEditorFactory.publish();
+
+        brandingFactory.publishBranding.should.have.been.called;
+      });
+
+      it('should show an error if fails to publish the presentation', function(done) {
+        brandingFactory.publishBranding.returns(Q.reject());
+
+        templateEditorFactory.publish()
+          .then(null, function(e) {
+            setTimeout(function() {
+              expect(templateEditorFactory.savingPresentation).to.be.false;
+              expect(templateEditorFactory.loadingPresentation).to.be.false;
+              expect(templateEditorFactory.errorMessage).to.be.ok;
+              expect(templateEditorFactory.apiError).to.be.ok;
+              expect(templateEditorUtils.showMessageWindow).to.have.been.called;
+
+              done();
+            }, 10);
+          });
+      });
+    });    
+
   });
 
 
