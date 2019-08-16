@@ -72,6 +72,9 @@ describe('directive: templateComponentVideo', function() {
     $scope.getAttributeData = function(componentId, key) {
       return testMetadata;
     };
+    $scope.getAvailableAttributeData = function(componentId, key) {
+      return "";
+    };
 
     directive.show();
 
@@ -89,6 +92,9 @@ describe('directive: templateComponentVideo', function() {
     };
     $scope.getBlueprintData = function() {
       return TEST_FILE;
+    };
+    $scope.getAvailableAttributeData = function(componentId, key) {
+      return "";
     };
 
     testMetadata = [
@@ -113,6 +119,90 @@ describe('directive: templateComponentVideo', function() {
 
       done();
     }, 100);
+  });
+
+  it('should get volume data', function() {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+
+    $scope.getAttributeData = function(componentId, key) {
+      return [];
+    };
+    $scope.getAvailableAttributeData = function(componentId, key) {
+      return "10";
+    };
+
+    directive.show();
+
+    expect($scope.values).to.deep.equal({ volume: 10 });
+
+    timeout.flush();
+  });
+
+  it('should default volume data to 0', function() {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+
+    $scope.getAttributeData = function(componentId, key) {
+      return [];
+    };
+    $scope.getAvailableAttributeData = function(componentId, key) {
+    };
+
+    directive.show();
+
+    expect($scope.values).to.deep.equal({ volume: 0 });
+
+    timeout.flush();
+  });
+
+  it('should set volume as 0 if it has an invalid vaue', function() {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+
+    $scope.getAttributeData = function(componentId, key) {
+      return [];
+    };
+    $scope.getAvailableAttributeData = function(componentId, key) {
+      return "NOT A NUMBER !"
+    };
+
+    directive.show();
+
+    expect($scope.values).to.deep.equal({ volume: 0 });
+
+    timeout.flush();
+  });
+
+  describe('showSettingsUI', function() {
+
+    it('should not show settings UI if it is uploading', function()
+    {
+      $scope.selectedFiles = [ 'a' ];
+      $scope.isUploading = true;
+
+      var show = $scope.showSettingsUI();
+
+      expect(show).to.be.false;
+    });
+
+    it('should not show settings UI if there are no selected files', function()
+    {
+      $scope.selectedFiles = [];
+      $scope.isUploading = false;
+
+      var show = $scope.showSettingsUI();
+
+      expect(show).to.be.false;
+    });
+
+    it('should show settings UI if there are selected files and it\'s not uploading', function()
+    {
+      $scope.selectedFiles = [ 'a' ];
+      $scope.isUploading = false;
+
+      var show = $scope.showSettingsUI();
+
+      expect(show).to.be.true;
+    });
+
   });
 
   describe('updateFileMetadata', function() {
@@ -218,6 +308,20 @@ describe('directive: templateComponentVideo', function() {
       ), 'set metadata attribute').to.be.true;
     });
 
+  });
+
+  describe('showSettingsUI', function() {
+    it('should save volume', function()
+    {
+      $scope.componentId = 'TEST-ID';
+      $scope.values.volume = 100;
+
+      $scope.saveVolume();
+
+      expect($scope.setAttributeData.calledWith(
+        'TEST-ID', 'volume', 100
+      ), 'set volume attribute').to.be.true;
+    });
   });
 
 });

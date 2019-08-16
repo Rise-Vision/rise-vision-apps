@@ -26,9 +26,38 @@ describe('service: templateEditorUtils:', function() {
   it('should initialize', function() {
     expect(templateEditorUtils).to.be.truely;
 
+    expect(templateEditorUtils.intValueFor).to.be.a.function;
     expect(templateEditorUtils.fileNameOf).to.be.a.function;
     expect(templateEditorUtils.addOrRemove).to.be.a.function;
     expect(templateEditorUtils.addOrReplace).to.be.a.function;
+  });
+
+  describe('intValueFor',function() {
+
+    it('should get the int value of a string',function(){
+      var value = templateEditorUtils.intValueFor('100');
+
+      expect(value).to.equal(100);
+    });
+
+    it('should return 0',function(){
+      var value = templateEditorUtils.intValueFor('0', 10);
+
+      expect(value).to.equal(0);
+    });
+
+    it('should return the default value if the input is not a valid number',function(){
+      var value = templateEditorUtils.intValueFor('INVALID', 89);
+
+      expect(value).to.equal(89);
+    });
+
+    it('should return the default value if the input is undefined',function(){
+      var value = templateEditorUtils.intValueFor(undefined, 8);
+
+      expect(value).to.equal(8);
+    });
+
   });
 
   describe('fileNameOf', function () {
@@ -191,7 +220,7 @@ describe('service: templateEditorUtils:', function() {
       sandbox.stub($modal,'open').returns({ result: { then: sandbox.stub() } });
 
       templateEditorUtils.showFinancialDataLicenseRequiredMessage();
-      
+
       $modal.open.should.have.been.calledWithMatch({
         controller: "confirmInstance",
         windowClass: 'madero-style centered-modal financial-data-license-message'
@@ -199,7 +228,7 @@ describe('service: templateEditorUtils:', function() {
     });
 
     it('should dismiss and open Contact Us on page confirm', function(done){
-      var modalInstance = { result: Q.resolve(), dismiss: sinon.stub() };           
+      var modalInstance = { result: Q.resolve(), dismiss: sinon.stub() };
       sandbox.stub($modal,'open').returns(modalInstance);
       sandbox.stub($window,'open');
 
@@ -207,10 +236,10 @@ describe('service: templateEditorUtils:', function() {
 
       setTimeout(function(){
         modalInstance.dismiss.should.have.been.called;
-        $window.open.should.have.been.calledWith('https://www.risevision.com/contact-us', "_blank"); 
-        done() 
+        $window.open.should.have.been.calledWith('https://www.risevision.com/contact-us', "_blank");
+        done()
       },10);
     });
   });
-  
+
 });

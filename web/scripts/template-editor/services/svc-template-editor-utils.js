@@ -8,6 +8,12 @@ angular.module('risevision.template-editor.services')
     function (messageBox, NEED_FINANCIAL_DATA_LICENSE, $modal, $templateCache, $window, CONTACT_US_URL) {
       var svc = {};
 
+      svc.intValueFor = function (providedValue, defaultValue) {
+        var intValue = parseInt(providedValue, 10);
+
+        return isNaN(intValue) ? defaultValue : intValue;
+      };
+
       svc.fileNameOf = function (path) {
         return path.split('/').pop();
       };
