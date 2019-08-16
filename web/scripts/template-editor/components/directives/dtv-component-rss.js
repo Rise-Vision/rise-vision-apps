@@ -23,7 +23,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.saveFeed = function () {
             if (_validateFeedUrl()) {
-              $scope.setAttributeData($scope.componentId, 'feed-url', $scope.feedUrl);
+              $scope.setAttributeData($scope.componentId, 'feedurl', $scope.feedUrl);
               $scope.spinner = true;
 
               _isFeedParsable();
@@ -31,7 +31,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.saveMaxItems = function () {
-            $scope.setAttributeData($scope.componentId, 'max-items', parseInt($scope.maxItems, 10));
+            $scope.setAttributeData($scope.componentId, 'maxitems', parseInt($scope.maxItems, 10));
           };
 
           $scope.registerDirective({
@@ -48,9 +48,9 @@ angular.module('risevision.template-editor.directives')
           });
 
           function _load() {
-            var maxItems = $scope.getAvailableAttributeData($scope.componentId, 'max-items');
+            var maxItems = $scope.getAvailableAttributeData($scope.componentId, 'maxitems');
 
-            $scope.feedUrl = $scope.getAvailableAttributeData($scope.componentId, 'feed-url');
+            $scope.feedUrl = $scope.getAvailableAttributeData($scope.componentId, 'feedurl');
             $scope.maxItems = maxItems ? maxItems.toString() : '1';
           }
 
