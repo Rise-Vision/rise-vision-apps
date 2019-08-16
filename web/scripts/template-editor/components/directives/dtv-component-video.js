@@ -75,12 +75,23 @@ angular.module('risevision.template-editor.directives')
               });
           }
 
+          function _loadVolume() {
+            var volume = _getAvailableAttribute('volume');
+
+            // default to value 0 if volume not defined
+            $scope.values.volume = templateEditorUtils.intValueFor(volume, 0);
+          }
+
           function _getAttribute(key) {
             return $scope.getAttributeData($scope.componentId, key);
           }
 
           function _setAttribute(key, value) {
             $scope.setAttributeData($scope.componentId, key, value);
+          }
+
+          function _getAvailableAttribute(key) {
+            return $scope.getAvailableAttributeData($scope.componentId, key);
           }
 
           function _getFilesFor(componentId) {
@@ -117,6 +128,10 @@ angular.module('risevision.template-editor.directives')
 
           _reset();
 
+          $scope.saveVolume = function () {
+            _setAttribute('volume', $scope.values.volume);
+          };
+
           $scope.registerDirective({
             type: 'rise-video',
             iconType: 'streamline',
@@ -129,6 +144,7 @@ angular.module('risevision.template-editor.directives')
               $scope.componentId = $scope.factory.selected.id;
 
               _loadSelectedFiles();
+              _loadVolume();
 
               $scope.showNextPanel('.video-component-container');
             },
@@ -178,6 +194,10 @@ angular.module('risevision.template-editor.directives')
             if (metadata) {
               _setMetadata(metadata);
             }
+          };
+
+          $scope.showSettingsUI = function () {
+            return $scope.selectedFiles.length > 0 && !$scope.isUploading;
           };
         }
       };
