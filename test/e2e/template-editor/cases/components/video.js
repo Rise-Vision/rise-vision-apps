@@ -23,8 +23,7 @@ var VideoComponentScenarios = function () {
       videoComponentPage = new VideoComponentPage();
 
       presentationsListPage.loadCurrentCompanyPresentationList();
-      presentationsListPage.createNewPresentationFromTemplate('Video Component', 'example-video-component_v1');
-      templateEditorPage.dismissFinancialDataLicenseMessage();
+      presentationsListPage.createNewPresentationFromTemplate('Example Video Component', 'example-video-component');
     });
 
     describe('basic operations', function () {
@@ -131,8 +130,7 @@ var VideoComponentScenarios = function () {
     describe('list and remove videos', function () {
       it('should create a new presentation and open it', function () {
         presentationsListPage.loadCurrentCompanyPresentationList();
-        presentationsListPage.createNewPresentationFromTemplate('Video Component', 'example-video-component_v1');
-        templateEditorPage.dismissFinancialDataLicenseMessage();
+        presentationsListPage.createNewPresentationFromTemplate('Example Video Component', 'example-video-component');
 
         helper.waitDisappear(templateEditorPage.getDirtyText());
         helper.waitDisappear(templateEditorPage.getSavingText());
