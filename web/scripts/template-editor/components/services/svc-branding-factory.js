@@ -53,15 +53,12 @@ angular.module('risevision.template-editor.services')
         return updateCompany(userState.getSelectedCompanyId(), companyPatch)
           .then(function (updatedCompany) {
             userState.updateCompanySettings(updatedCompany);
-          }).catch(function (err) {
-            console.log('err', err);
           });
       };
 
       factory.publishBranding = function () {
         if (!factory.isRevised()) {
-          console.log('Branding already published.');
-
+          //Branding already published.
           return $q.resolve();
         }
 
@@ -93,8 +90,8 @@ angular.module('risevision.template-editor.services')
       factory.isRevised = function () {
         var company = userState.getCopyOfSelectedCompany();
 
-        return company.settings && (company.settings.brandingDraftLogoFile ||
-          company.settings.brandingDraftPrimaryColor || company.settings.brandingDraftPrimaryColor);
+        return !!(company.settings && (company.settings.brandingDraftLogoFile ||
+          company.settings.brandingDraftPrimaryColor || company.settings.brandingDraftPrimaryColor));
       };
 
       return factory;
