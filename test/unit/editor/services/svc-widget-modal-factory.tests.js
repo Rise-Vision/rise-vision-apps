@@ -1,7 +1,7 @@
 'use strict';
 describe('service: widgetModalFactory:', function() {
   beforeEach(module('risevision.editor.services'));
-
+  beforeEach(module(mockTranlate()));
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
     $provide.service('userState',function(){
