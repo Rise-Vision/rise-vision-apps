@@ -60,7 +60,7 @@ describe('directive: templateComponentRss', function() {
   it('should load feed url from attribute data', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     var sampleData = {
-      feedUrl: 'http://rss.cnn.com/rss/cnn_topstories.rss'
+      'feed-url': 'http://rss.cnn.com/rss/cnn_topstories.rss'
     };
 
     $scope.getAvailableAttributeData = function(componentId, attributeName) {
@@ -70,14 +70,14 @@ describe('directive: templateComponentRss', function() {
     directive.show();
 
     expect($scope.componentId).to.equal("TEST-ID");
-    expect($scope.feedUrl).to.equal(sampleData.feedUrl);
+    expect($scope.feedUrl).to.equal(sampleData['feed-url']);
   });
 
   it('should load max items from attribute data', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
     var sampleData = {
-      feedUrl: 'http://rss.cnn.com/rss/cnn_topstories.rss',
-      maxItems: 5
+      'feed-url': 'http://rss.cnn.com/rss/cnn_topstories.rss',
+      'max-items': 5
     };
 
     $scope.getAvailableAttributeData = function(componentId, attributeName) {
@@ -87,7 +87,7 @@ describe('directive: templateComponentRss', function() {
     directive.show();
 
     expect($scope.componentId).to.equal("TEST-ID");
-    expect($scope.maxItems).to.equal(sampleData.maxItems.toString());
+    expect($scope.maxItems).to.equal(sampleData['max-items'].toString());
   });
 
   it('should set maxItems to 1 when default value and blueprint are undefined', function() {
@@ -106,8 +106,8 @@ describe('directive: templateComponentRss', function() {
   it('should save feed and check feed parsability and check if valid RSS when is shown', function(done) {
     var directive = $scope.registerDirective.getCall(0).args[0];
     var sampleData = {
-      feedUrl: 'http://rss.cnn.com/rss/cnn_topstories.rss',
-      maxItems: 5
+      'feed-url': 'http://rss.cnn.com/rss/cnn_topstories.rss',
+      'max-items': 5
     };
 
     $scope.getAvailableAttributeData = function(componentId, attributeName) {
@@ -116,7 +116,7 @@ describe('directive: templateComponentRss', function() {
 
     directive.show();
 
-    expect($scope.feedUrl).to.equal(sampleData.feedUrl);
+    expect($scope.feedUrl).to.equal(sampleData['feed-url']);
     expect(rssFeedValidation.isParsable).to.have.been.called;
 
     setTimeout(function(){
