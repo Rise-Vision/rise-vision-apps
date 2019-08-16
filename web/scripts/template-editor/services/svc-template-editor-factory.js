@@ -5,11 +5,11 @@ angular.module('risevision.template-editor.services')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', 'presentation',
     'processErrorCode', 'userState', 'checkTemplateAccess', '$modal', 'scheduleFactory', 'plansFactory',
     'templateEditorUtils', 'brandingFactory', 'blueprintFactory', 'financialLicenseFactory', 'presentationTracker',
-    'HTML_PRESENTATION_TYPE', 'template', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
+    'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
     function ($q, $log, $state, $rootScope, presentation, processErrorCode, userState,
       checkTemplateAccess, $modal, scheduleFactory, plansFactory, templateEditorUtils, brandingFactory,
       blueprintFactory, financialLicenseFactory,
-      presentationTracker, HTML_PRESENTATION_TYPE, template, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
+      presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {};
 
       var _setPresentation = function (presentation, isUpdate) {

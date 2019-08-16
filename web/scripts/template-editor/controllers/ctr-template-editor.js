@@ -5,11 +5,10 @@ angular.module('risevision.template-editor.controllers')
   .constant('MAXIMUM_INTERVAL_BETWEEN_SAVES', 20000)
   .controller('TemplateEditorController', ['$scope', '$q', '$filter', '$loading', '$state', '$timeout', '$window',
     'templateEditorFactory', 'brandingFactory', 'blueprintFactory', 'scheduleFactory', 'presentationUtils',
-    'MINIMUM_INTERVAL_BETWEEN_SAVES',
-    'MAXIMUM_INTERVAL_BETWEEN_SAVES',
+    'MINIMUM_INTERVAL_BETWEEN_SAVES', 'MAXIMUM_INTERVAL_BETWEEN_SAVES',
     function ($scope, $q, $filter, $loading, $state, $timeout, $window, templateEditorFactory, brandingFactory,
-      blueprintFactory,
-      scheduleFactory, presentationUtils, MINIMUM_INTERVAL_BETWEEN_SAVES, MAXIMUM_INTERVAL_BETWEEN_SAVES) {
+      blueprintFactory, scheduleFactory, presentationUtils,
+      MINIMUM_INTERVAL_BETWEEN_SAVES, MAXIMUM_INTERVAL_BETWEEN_SAVES) {
       var _lastSavedTimestamp = 0,
         _saveTimeout = null;
 

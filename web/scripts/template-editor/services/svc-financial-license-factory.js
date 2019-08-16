@@ -12,6 +12,7 @@ angular.module('risevision.template-editor.services')
         if (!blueprintFactory.blueprintData) {
           return false;
         }
+
         return _.some(blueprintFactory.blueprintData.components, function (component) {
           return _.includes(NEED_FINANCIAL_DATA_LICENSE, component.type);
         });

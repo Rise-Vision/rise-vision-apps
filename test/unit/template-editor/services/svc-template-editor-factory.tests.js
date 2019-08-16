@@ -52,9 +52,30 @@ describe('service: templateEditorFactory:', function() {
 
     $provide.factory('templateEditorUtils', function() {
       return {
-        needsFinancialDataLicense: sandbox.spy(function() { return needsFinancialDataLicense; }),
-        showFinancialDataLicenseRequiredMessage: sandbox.spy(),
         showMessageWindow: sandbox.stub()
+      };
+    });
+
+    $provide.factory('blueprintFactory', function() {
+      return blueprintFactory = {
+        blueprintData: {},
+        load: function() {
+          return Q.resolve(blueprintFactory.blueprintData);
+        }
+      };
+    });
+
+    $provide.factory('brandingFactory', function() {
+      return {
+        publishBranding: function() {
+          return Q.resolve();
+        }
+      };
+    });
+
+    $provide.factory('financialLicenseFactory', function() {
+      return financialLicenseFactory = {
+        checkFinancialDataLicenseMessage: sandbox.spy()
       };
     });
 
@@ -65,11 +86,6 @@ describe('service: templateEditorFactory:', function() {
     $provide.service('scheduleFactory', function() {
       return {
         createFirstSchedule: sinon.stub()
-      };
-    });
-
-    $provide.service('$timeout', function() {
-      return function(callback, duration) {
       };
     });
 
@@ -90,18 +106,15 @@ describe('service: templateEditorFactory:', function() {
     });
   }));
 
-  var $state, $httpBackend, $modal, templateEditorFactory, templateEditorUtils, presentation, processErrorCode,
-    HTML_PRESENTATION_TYPE, BLUEPRINT_URL, storeAuthorize, checkTemplateAccessSpy, store, plansFactory, scheduleFactory,
-    needsFinancialDataLicense;
+  var $state, $modal, templateEditorFactory, templateEditorUtils, financialLicenseFactory, blueprintFactory, presentation, processErrorCode,
+    HTML_PRESENTATION_TYPE, storeAuthorize, checkTemplateAccessSpy, store, plansFactory, scheduleFactory;
 
   beforeEach(function() {
     inject(function($injector, checkTemplateAccess) {
       $state = $injector.get('$state');
-      $httpBackend = $injector.get('$httpBackend');
       $modal = $injector.get('$modal');
       templateEditorFactory = $injector.get('templateEditorFactory');
       checkTemplateAccessSpy = checkTemplateAccess;
-      needsFinancialDataLicense = false;
 
       presentation = $injector.get('presentation');
       plansFactory = $injector.get('plansFactory');
@@ -110,7 +123,6 @@ describe('service: templateEditorFactory:', function() {
       templateEditorUtils = $injector.get('templateEditorUtils');
       processErrorCode = $injector.get('processErrorCode');
       HTML_PRESENTATION_TYPE = $injector.get('HTML_PRESENTATION_TYPE');
-      BLUEPRINT_URL = $injector.get('BLUEPRINT_URL').replace('PRODUCT_CODE', 'test-id');
     });
   });
 
@@ -132,26 +144,19 @@ describe('service: templateEditorFactory:', function() {
 
   describe('addFromProduct:', function() {
     it('should create a new presentation', function(done) {
-      $httpBackend.when('GET', BLUEPRINT_URL).respond(200, {
-        components: [
-          {
-            type: 'rise-image',
-            id: 'rise-image-01',
-            attributes: {}
-          }
-        ]
-      });
-
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
+      blueprintFactory.blueprintData.components = [
+        {
+          type: 'rise-image',
+          id: 'rise-image-01',
+          attributes: {}
+        }
+      ];
 
       templateEditorFactory.addFromProduct({ productCode: 'test-id', name: 'Test HTML Template' }).then(function () {
         expect(templateEditorFactory.presentation.id).to.be.undefined;
         expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
         expect(templateEditorFactory.presentation.name).to.equal('Copy of Test HTML Template');
         expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_PRESENTATION_TYPE);
-        expect(templateEditorFactory.blueprintData.components.length).to.equal(1);
         expect(presentationTracker).to.have.been.calledWith('HTML Template Copied', 'test-id', 'Test HTML Template');
 
         done();
@@ -159,30 +164,21 @@ describe('service: templateEditorFactory:', function() {
     });
 
     it('should open Financial Data License message if Template uses rise-data-financial', function(done) {
-      $httpBackend.when('GET', BLUEPRINT_URL).respond(200, {
-        components: [
-          {
-            type: 'rise-data-financial',
-            id: 'rise-data-financial-01',
-            attributes: {}
-          }
-        ]
-      });
-
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
-
-      needsFinancialDataLicense = true;
+      blueprintFactory.blueprintData.components = [
+        {
+          type: 'rise-data-financial',
+          id: 'rise-data-financial-01',
+          attributes: {}
+        }
+      ];
 
       templateEditorFactory.addFromProduct({ productCode: 'test-id', name: 'Test HTML Template' }).then(function () {
         expect(templateEditorFactory.presentation.id).to.be.undefined;
         expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
         expect(templateEditorFactory.presentation.name).to.equal('Copy of Test HTML Template');
         expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_PRESENTATION_TYPE);
-        expect(templateEditorFactory.blueprintData.components.length).to.equal(1);
 
-        expect(templateEditorUtils.showFinancialDataLicenseRequiredMessage).to.have.been.called;
+        expect(financialLicenseFactory.checkFinancialDataLicenseMessage).to.have.been.called;
 
         done();
       });
@@ -197,11 +193,6 @@ describe('service: templateEditorFactory:', function() {
           id: 'presentationId'
         }
       }));
-
-      $httpBackend.when('GET', BLUEPRINT_URL).respond(200, {});
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
 
       templateEditorFactory.addFromProduct({ productCode: 'test-id', name: 'Test HTML Template' });
       expect(templateEditorFactory.presentation.id).to.be.undefined;
@@ -270,11 +261,6 @@ describe('service: templateEditorFactory:', function() {
         }
       }));
 
-      $httpBackend.when('GET', BLUEPRINT_URL).respond(200, {});
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
-
       templateEditorFactory.addFromProduct({ productCode: 'test-id', name: 'Test HTML Template' });
       expect(templateEditorFactory.presentation.id).to.be.undefined;
       expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
@@ -342,18 +328,13 @@ describe('service: templateEditorFactory:', function() {
         }
       }));
 
-      $httpBackend.when('GET', BLUEPRINT_URL).respond(200, {
-        components: [
-          {
-            type: 'rise-image',
-            id: 'rise-image-01',
-            attributes: {}
-          }
-        ]
-      });
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
+      blueprintFactory.blueprintData.components = [
+        {
+          type: 'rise-image',
+          id: 'rise-image-01',
+          attributes: {}
+        }
+      ];
 
       var modalOpenStub = sinon.stub($modal, 'open', function () {
         return {
@@ -370,7 +351,6 @@ describe('service: templateEditorFactory:', function() {
         expect(templateEditorFactory.presentation).to.be.truely;
         expect(templateEditorFactory.presentation.name).to.equal('Test Presentation');
         expect(templateEditorFactory.presentation.templateAttributeData.attribute1).to.equal('value1');
-        expect(templateEditorFactory.blueprintData.components.length).to.equal(1);
         expect(checkTemplateAccessSpy).to.have.been.calledWith('test-id');
         expect(modalOpenStub).to.not.have.been.called;
 
@@ -394,11 +374,6 @@ describe('service: templateEditorFactory:', function() {
           productCode: 'test-id'
         }
       }));
-
-      $httpBackend.when('GET', BLUEPRINT_URL).respond(200, {});
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
 
       storeAuthorize = true;
 
@@ -453,11 +428,7 @@ describe('service: templateEditorFactory:', function() {
           templateAttributeData: '{ "attribute1": "value1" }'
         }
       }));
-
-      $httpBackend.when('GET', BLUEPRINT_URL).respond(500, {});
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
+      sandbox.stub(blueprintFactory, 'load').rejects();
 
       templateEditorFactory.getPresentation('presentationId')
       .then(function() {
@@ -465,8 +436,7 @@ describe('service: templateEditorFactory:', function() {
       })
       .then(null, function(err) {
         setTimeout(function() {
-          expect(templateEditorFactory.presentation).to.be.falsey;
-          expect(templateEditorFactory.blueprintData).to.be.falsey;
+          expect(templateEditorFactory.presentation).to.not.be.ok;
 
           done();
         });
@@ -482,18 +452,13 @@ describe('service: templateEditorFactory:', function() {
         }
       }));
 
-      $httpBackend.when('GET', BLUEPRINT_URL).respond(200, {
-        components: [
-          {
-            type: 'rise-image',
-            id: 'rise-image-01',
-            attributes: {}
-          }
-        ]
-      });
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
+      blueprintFactory.blueprintData.components = [
+        {
+          type: 'rise-image',
+          id: 'rise-image-01',
+          attributes: {}
+        }
+      ];
 
       var modalOpenStub = sinon.stub($modal, 'open', function () {
         return {
@@ -531,10 +496,6 @@ describe('service: templateEditorFactory:', function() {
           productCode: 'test-id'
         }
       }));
-      $httpBackend.when('GET', BLUEPRINT_URL).respond(200, {});
-      setTimeout(function() {
-        $httpBackend.flush();
-      });
     });
 
     it('should delete the presentation', function(done) {
@@ -610,18 +571,20 @@ describe('service: templateEditorFactory:', function() {
     });
   });
 
-  describe('publishPresentation: ', function() {
-    beforeEach(function () {
+  describe('publish: ', function() {
+    beforeEach(function (done) {
       sandbox.stub(presentation, 'get').returns(Q.resolve({
         item: {
           id: 'presentationId',
           name: 'Test Presentation',
-          productCode: 'test-id'
+          productCode: 'test-id',
+          revisionStatusName: 'Revised'
         }
       }));
-      $httpBackend.when('GET', BLUEPRINT_URL).respond(200, {});
-      setTimeout(function() {
-        $httpBackend.flush();
+
+      templateEditorFactory.getPresentation('presentationId').then(function() {
+        // allow get.finally to execute so flags are reset
+        setTimeout(done);
       });
     });
 
@@ -630,10 +593,7 @@ describe('service: templateEditorFactory:', function() {
 
       var timeBeforePublish = new Date();
 
-      templateEditorFactory.getPresentation('presentationId')
-        .then(function () {
-          return templateEditorFactory.publishPresentation(templateEditorFactory);
-        })
+      templateEditorFactory.publish(templateEditorFactory)
         .then(function() {
           expect(templateEditorUtils.showMessageWindow).to.not.have.been.called;
           expect(templateEditorFactory.savingPresentation).to.be.true;
@@ -661,10 +621,7 @@ describe('service: templateEditorFactory:', function() {
     it('should show an error if fails to publish the presentation', function(done) {
       sandbox.stub(presentation, 'publish').returns(Q.reject());
 
-      templateEditorFactory.getPresentation('presentationId')
-        .then(function () {
-          return templateEditorFactory.publishPresentation();
-        })
+      templateEditorFactory.publish()
         .then(null, function(e) {
           setTimeout(function() {
             expect(templateEditorFactory.savingPresentation).to.be.false;
@@ -681,10 +638,7 @@ describe('service: templateEditorFactory:', function() {
     it('should create first Schedule when publishing first presentation and show modal', function(done) {
       sandbox.stub(presentation, 'publish').returns(Q.resolve());
 
-      templateEditorFactory.getPresentation('presentationId')
-        .then(function () {
-          return templateEditorFactory.publishPresentation(templateEditorFactory);
-        })
+      templateEditorFactory.publish(templateEditorFactory)
         .then(function() {
           setTimeout(function() {
             scheduleFactory.createFirstSchedule.should.have.been.called;
