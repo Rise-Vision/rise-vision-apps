@@ -277,6 +277,7 @@ angular.module('risevision.template-editor.services')
 
       var _publishPresentation = function () {
         if (!factory.isRevised()) {
+          // template is already published
           return $q.resolve();
         }
 

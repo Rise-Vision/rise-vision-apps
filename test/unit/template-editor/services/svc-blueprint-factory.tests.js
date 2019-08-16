@@ -61,7 +61,7 @@ describe('service: blueprint factory', function() {
   describe('hasBranding: ', function() {
 
     it('should return false if blueprintData is not populated',function() {
-      expect(blueprintFactory.hasBranding()).to.equal.false;
+      expect(blueprintFactory.hasBranding()).to.be.false;
     });
 
     it('should return true if blueprintData.branding is true',function() {
@@ -69,7 +69,7 @@ describe('service: blueprint factory', function() {
         branding: true
       };
 
-      expect(blueprintFactory.hasBranding()).to.equal.true;
+      expect(blueprintFactory.hasBranding()).to.be.true;
     });
 
     it('should return false otherwise',function() {
@@ -77,7 +77,7 @@ describe('service: blueprint factory', function() {
         branding: false
       };
 
-      expect(blueprintFactory.hasBranding()).to.equal.false;
+      expect(blueprintFactory.hasBranding()).to.be.false;
     });    
   });
 
