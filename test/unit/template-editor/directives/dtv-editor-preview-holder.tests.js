@@ -42,7 +42,10 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     });
     $provide.service('brandingFactory', function() {
       return {
-        brandingSettings: 'brandingSettings'
+        brandingSettings: {
+          primaryColor: 'primaryColor',
+          secondaryColor: 'secondaryColor'
+        }
       };
     });
     $provide.service('userState', function() {
@@ -93,7 +96,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
     setTimeout(function(){
       iframe.contentWindow.postMessage.should.have.been.called;
-      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal([ '{"type":"displayData","value":{"displayAddress":{},"companyBranding":"brandingSettings"}}', 'https://widgets.risevision.com' ]);
+      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"primaryColor":"primaryColor","secondaryColor":"secondaryColor"}}}', 'https://widgets.risevision.com']);
 
       done();
     },10);
@@ -108,7 +111,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
     setTimeout(function(){
       iframe.contentWindow.postMessage.should.have.been.called;
-      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal([ '{"type":"displayData","value":{"displayAddress":{},"companyBranding":"brandingSettings"}}', 'https://widgets.risevision.com' ]);
+      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"primaryColor":"primaryColor","secondaryColor":"secondaryColor"}}}', 'https://widgets.risevision.com']);
 
       done();
     },10);
@@ -210,7 +213,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
       //send start event
       expect(iframe.contentWindow.postMessage.getCall(1).args).to.deep.equal([ '{"type":"sendStartEvent"}', 'https://widgets.risevision.com' ]);
       //send display data
-      expect(iframe.contentWindow.postMessage.getCall(2).args).to.deep.equal([ '{"type":"displayData","value":{"displayAddress":{},"companyBranding":"brandingSettings"}}', 'https://widgets.risevision.com' ]);
+      expect(iframe.contentWindow.postMessage.getCall(2).args).to.deep.equal([ '{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"primaryColor":"primaryColor","secondaryColor":"secondaryColor"}}}', 'https://widgets.risevision.com' ]);
     });
   });
 

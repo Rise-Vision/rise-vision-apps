@@ -55,7 +55,6 @@ angular.module('risevision.template-editor.services')
         templateEditorFactory.setAttributeData(factory.componentId, key, value);
       };
 
-
       return factory;
     }
   ]);

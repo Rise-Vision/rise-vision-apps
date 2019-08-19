@@ -220,7 +220,10 @@ angular.module('risevision.template-editor.directives')
                   country: company.country,
                   postalCode: company.postalCode
                 },
-                companyBranding: brandingFactory.brandingSettings
+                companyBranding: {
+                  primaryColor: brandingFactory.brandingSettings.primaryColor,
+                  secondaryColor: brandingFactory.brandingSettings.secondaryColor
+                }
               }
             };
             _postMessageToTemplate(message);

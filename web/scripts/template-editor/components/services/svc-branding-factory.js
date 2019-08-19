@@ -31,13 +31,17 @@ angular.module('risevision.template-editor.services')
             };
           }
 
-          fileExistenceCheckService.requestMetadataFor([factory.brandingSettings.logoFile], DEFAULT_IMAGE_THUMBNAIL)
-            .then(function (metadata) {
-              factory.brandingSettings.logoFileMetadata = metadata;
-            })
-            .catch(function (error) {
-              console.error('Could not load metadata for: ' + factory.brandingSettings.logoFile, error);
-            });
+          if (factory.brandingSettings.logoFile) {
+            fileExistenceCheckService.requestMetadataFor([factory.brandingSettings.logoFile], DEFAULT_IMAGE_THUMBNAIL)
+              .then(function (metadata) {
+                factory.brandingSettings.logoFileMetadata = metadata;
+              })
+              .catch(function (error) {
+                console.error('Could not load metadata for: ' + factory.brandingSettings.logoFile, error);
+              });            
+          } else {
+            factory.brandingSettings.logoFileMetadata = [];
+          }
         }
       };
 

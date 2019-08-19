@@ -155,4 +155,47 @@ describe('service: blueprint factory', function() {
 
   });
 
+  describe('getLogoComponents',function(){
+
+    it('should handle empty data',function(){
+      blueprintFactory.blueprintData = {};
+
+      expect(blueprintFactory.getLogoComponents()).to.deep.equal([]);
+
+      blueprintFactory.blueprintData = { components: []};
+      expect(blueprintFactory.getLogoComponents()).to.deep.equal([]);
+    });
+
+    it('should return is-logo images',function(){      
+      var logoComponent = { type: "rise-image", attributes: {'is-logo': {value:'true' } } };
+      blueprintFactory.blueprintData = {
+        components: [
+          { "type": "rise-image", "id": "rise-image-01" },
+          logoComponent
+        ]
+      };
+      expect(blueprintFactory.getLogoComponents()).to.deep.equal([logoComponent]);
+    });
+
+    it('should handle no logo',function(){
+      blueprintFactory.blueprintData = {
+        components: [
+          { "type": "rise-image", "id": "rise-image-01" },
+        ]
+      };
+      expect(blueprintFactory.getLogoComponents()).to.deep.equal([]);
+    });
+
+    it('should handle is-logo false',function(){
+      var logoComponent = { type: "rise-image", attributes: {'is-logo': {value:'false' } } };
+      blueprintFactory.blueprintData = {
+        components: [
+          { "type": "rise-image", "id": "rise-image-01" },
+        ]
+      };
+      expect(blueprintFactory.getLogoComponents()).to.deep.equal([]);
+    });
+
+  });
+
 });

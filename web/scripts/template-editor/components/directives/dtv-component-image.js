@@ -168,6 +168,7 @@ angular.module('risevision.template-editor.directives')
                 imageFactory.componentId = $scope.factory.selected.id;
               } else {
                 imageFactory = logoImageFactory;
+                imageFactory.componentId = null;
               }
 
               _loadSelectedImages();
