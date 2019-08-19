@@ -1,6 +1,6 @@
 'use strict';
 
-describe('service: brandingFactory', function() {
+describe.only('service: brandingFactory', function() {
 
   beforeEach(module('risevision.template-editor.services'));
   beforeEach(module(mockTranlate()));
@@ -166,6 +166,26 @@ describe('service: brandingFactory', function() {
       });
     });
 
+    it('should apply some draft settings if available', function() {
+      userState.getCopyOfSelectedCompany.returns({
+        settings: {
+          brandingLogoFile: 'logoFile',
+          brandingDraftLogoFile: 'draftLogoFile',
+          brandingPrimaryColor: 'primaryColor',
+          brandingSecondaryColor: 'secondaryColor',
+          brandingDraftSecondaryColor: 'draftSecondaryColor'
+        }
+      });
+
+      brandingFactory.getBrandingComponent();
+
+      expect(brandingFactory.brandingSettings).to.deep.equal({
+        primaryColor: undefined,
+        secondaryColor: 'draftSecondaryColor',
+        logoFile: 'draftLogoFile'
+      });
+    });
+
     it('should apply published settings if draft is not available', function() {
       userState.getCopyOfSelectedCompany.returns({
         settings: {
@@ -321,11 +341,21 @@ describe('service: brandingFactory', function() {
       expect(brandingFactory.isRevised()).to.be.false;
     });
 
-    it('should be true if any of the draft settings exist', function() {
+    it('should be true if the draft settings exist', function() {
       userState.getCopyOfSelectedCompany.returns({
         settings: {
           brandingDraftLogoFile: 'draftLogoFile',
           brandingDraftPrimaryColor: 'draftPrimaryColor',
+          brandingDraftSecondaryColor: 'draftSecondaryColor'
+        }
+      });
+
+      expect(brandingFactory.isRevised()).to.be.true;
+    });
+
+    it('should be true if any of the the draft settings exist', function() {
+      userState.getCopyOfSelectedCompany.returns({
+        settings: {
           brandingDraftSecondaryColor: 'draftSecondaryColor'
         }
       });
