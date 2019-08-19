@@ -1,15 +1,16 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateEditorPreviewHolder', ['$window', '$timeout', '$sce', 'templateEditorFactory',
-    'HTML_TEMPLATE_DOMAIN', 'HTML_TEMPLATE_URL', 'userState', '$rootScope',
-    function ($window, $timeout, $sce, templateEditorFactory, HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL, userState,
-      $rootScope) {
+  .directive('templateEditorPreviewHolder', ['$window', '$timeout', '$sce', 'userState', 'templateEditorFactory',
+    'blueprintFactory', 'brandingFactory', 'HTML_TEMPLATE_DOMAIN', 'HTML_TEMPLATE_URL',
+    function ($window, $timeout, $sce, userState, templateEditorFactory, blueprintFactory, brandingFactory,
+      HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/preview-holder.html',
         link: function ($scope) {
           $scope.factory = templateEditorFactory;
+          $scope.blueprintFactory = blueprintFactory;
 
           var DEFAULT_TEMPLATE_WIDTH = 800;
           var DEFAULT_TEMPLATE_HEIGHT = 600;
@@ -42,13 +43,13 @@ angular.module('risevision.template-editor.directives')
           };
 
           function _getTemplateWidth() {
-            var width = $scope.factory.blueprintData.width;
+            var width = blueprintFactory.blueprintData.width;
 
             return width ? parseInt(width) : DEFAULT_TEMPLATE_WIDTH;
           }
 
           function _getTemplateHeight() {
-            var height = $scope.factory.blueprintData.height;
+            var height = blueprintFactory.blueprintData.height;
 
             return height ? parseInt(height) : DEFAULT_TEMPLATE_HEIGHT;
           }
@@ -141,8 +142,8 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.$watchGroup([
-            'factory.blueprintData.width',
-            'factory.blueprintData.height'
+            'blueprintFactory.blueprintData.width',
+            'blueprintFactory.blueprintData.height'
           ], function () {
             _applyAspectRatio();
 
@@ -171,7 +172,13 @@ angular.module('risevision.template-editor.directives')
           }, true);
 
           $scope.$on('risevision.company.updated', function () {
-            _postDisplayData();
+            // ensure branding factory updates branding via the same handler
+            $timeout(_postDisplayData);
+          });
+
+          $scope.$on('risevision.company.selectedCompanyChanged', function () {
+            // ensure branding factory updates branding via the same handler
+            $timeout(_postDisplayData);
           });
 
           function _postAttributeData() {
@@ -190,6 +197,7 @@ angular.module('risevision.template-editor.directives')
 
           function _postDisplayData() {
             var company = userState.getCopyOfSelectedCompany(true);
+
             var message = {
               type: 'displayData',
               value: {
@@ -198,7 +206,8 @@ angular.module('risevision.template-editor.directives')
                   province: company.province,
                   country: company.country,
                   postalCode: company.postalCode
-                }
+                },
+                companyBranding: brandingFactory.brandingSettings
               }
             };
             _postMessageToTemplate(message);

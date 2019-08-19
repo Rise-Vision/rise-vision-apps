@@ -38,7 +38,7 @@ describe('controller: TemplateEditor', function() {
       save: function() {
         return Q.resolve();
       },
-      publishPresentation: function () {
+      publish: function () {
         return Q.resolve();
       }
     };
@@ -50,6 +50,9 @@ describe('controller: TemplateEditor', function() {
   beforeEach(module(mockTranlate()));
   beforeEach(module(function ($provide) {
     $provide.factory('templateEditorFactory',function() {
+      return factory;
+    });
+    $provide.factory('blueprintFactory',function() {
       return factory;
     });
     $provide.factory('scheduleFactory',function() {
@@ -291,7 +294,7 @@ describe('controller: TemplateEditor', function() {
       var saveStub = sinon.stub(factory, 'save');
 
       sinon.stub($state, 'go');
-      sinon.stub(factory, 'publishPresentation');
+      sinon.stub(factory, 'publish');
       sinon.stub(scheduleFactory, 'hasSchedules').returns(true);
 
       $rootScope.$broadcast('$stateChangeStart', { name: 'newState' });
@@ -299,14 +302,14 @@ describe('controller: TemplateEditor', function() {
 
       saveStub.should.not.have.been.called;
       $state.go.should.have.been.called;
-      factory.publishPresentation.should.not.have.been.called;
+      factory.publish.should.not.have.been.called;
     });
 
     it('should not change URL if there are no changes but user does not have schedules', function () {
       var saveStub = sinon.stub(factory, 'save');
 
       sinon.stub($state, 'go');
-      sinon.stub(factory, 'publishPresentation');
+      sinon.stub(factory, 'publish');
       sinon.stub(scheduleFactory, 'hasSchedules').returns(false);
 
       $rootScope.$broadcast('$stateChangeStart', { name: 'newState' });
@@ -314,7 +317,7 @@ describe('controller: TemplateEditor', function() {
 
       saveStub.should.not.have.been.called;
       $state.go.should.not.have.been.called;
-      factory.publishPresentation.should.have.been.called;
+      factory.publish.should.have.been.called;
     });
 
     it('should not notify unsaved changes when changing URL if state is in Template Editor', function () {

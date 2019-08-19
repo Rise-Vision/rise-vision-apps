@@ -21,6 +21,8 @@ describe('directive: streamline-icon', function() {
       expect(iconsList.sun).to.be.ok;
       expect(iconsList.close).to.be.ok;
       expect(iconsList.ratingStar).to.be.ok;
+      expect(iconsList.palette).to.be.ok;
+      expect(iconsList.circleStar).to.be.ok;
       
       _.map(iconsList, function (value) {
         expect(value.viewBox).to.be.a('string');

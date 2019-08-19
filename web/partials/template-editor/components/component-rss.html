@@ -1,19 +1,22 @@
 <div class="attribute-editor-component" rv-spinner rv-spinner-key="rss-editor-loader" rv-spinner-start-active="1">
   <div class="attribute-editor-row">
-    <div class="form-group has-feedback has-error">
+    <div class="form-group has-feedback" ng-class="{ 'has-error': validationResult && validationResult !== 'VALID', 'has-success': validationResult === 'VALID' && feed !== '' }">
       <label class="control-label" for="te-rss-feed">Enter the link to your RSS feed:</label>
-      <input type="text" id="te-rss-feed" class="form-control u_ellipsis" ng-model="src" placeholder="Enter the link to your RSS feed" >
-      <streamline-icon class="overlay-icon form-control-feedback" aria-hidden="true" name="exclamation" width="14" height="12"></streamline-icon>
-      <p class="help-block">
-        <span>Please provide a valid URL.</span>
-        <span>There are errors with the RSS feed that could impact how your content appears. You can view a summary of the errors detected <a ng-href="https://validator.w3.org/feed/check.cgi?url={{src | encodeLink}}" target="_blank">here</a>.</span>
+      <input type="text" id="te-rss-feed" class="form-control u_ellipsis" ng-model="feedUrl" placeholder="Enter the link to your RSS feed" ng-model-options="{ debounce: 1000 }" ng-disabled="spinner" ng-change="saveFeed()" >
+      <streamline-icon class="overlay-icon form-control-feedback" aria-hidden="true" name="{{validationResult && validationResult !== 'VALID' ? 'exclamation' : 'checkmark'}}" width="14" height="12"></streamline-icon>
+      <p class="help-block" ng-switch on="validationResult">
+        <span ng-switch-when="INVALID_URL">Please provide a valid URL.</span>
+        <span ng-switch-when="UNAUTHORIZED">The feed at the URL provided cannot be shown because it is protected and requires authentication.</span>
+        <span ng-switch-when="NON_FEED">The URL provided is not an RSS feed.</span>
+        <span ng-switch-when="NOT_FOUND">The URL provided could not be resolved.</span>
+        <span ng-switch-when="INVALID_FEED">There are errors with the RSS feed that could impact how your content appears. You can view a summary of the errors detected <a ng-href="https://validator.w3.org/feed/check.cgi?url={{feedUrl | encodeLink}}" target="_blank">here</a>.</span>
       </p>
     </div>
   </div>
   <div class="attribute-editor-row">
     <div class="form-group">
       <label class="control-label" for="te-rss-max-items">Max items in queue:</label>
-      <select id="te-rss-max-items" ng-model="maxItems" class="form-control">
+      <select id="te-rss-max-items" ng-model="maxItems" class="form-control" ng-change="saveMaxItems()">
         <option value="1">1</option>
         <option value="5">5</option>
         <option value="10">10</option>

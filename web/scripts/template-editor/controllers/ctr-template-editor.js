@@ -4,10 +4,11 @@ angular.module('risevision.template-editor.controllers')
   .constant('MINIMUM_INTERVAL_BETWEEN_SAVES', 5000)
   .constant('MAXIMUM_INTERVAL_BETWEEN_SAVES', 20000)
   .controller('TemplateEditorController', ['$scope', '$q', '$filter', '$loading', '$state', '$timeout', '$window',
-    'templateEditorFactory', 'scheduleFactory', 'presentationUtils', 'MINIMUM_INTERVAL_BETWEEN_SAVES',
-    'MAXIMUM_INTERVAL_BETWEEN_SAVES',
-    function ($scope, $q, $filter, $loading, $state, $timeout, $window, templateEditorFactory,
-      scheduleFactory, presentationUtils, MINIMUM_INTERVAL_BETWEEN_SAVES, MAXIMUM_INTERVAL_BETWEEN_SAVES) {
+    'templateEditorFactory', 'brandingFactory', 'blueprintFactory', 'scheduleFactory', 'presentationUtils',
+    'MINIMUM_INTERVAL_BETWEEN_SAVES', 'MAXIMUM_INTERVAL_BETWEEN_SAVES',
+    function ($scope, $q, $filter, $loading, $state, $timeout, $window, templateEditorFactory, brandingFactory,
+      blueprintFactory, scheduleFactory, presentationUtils,
+      MINIMUM_INTERVAL_BETWEEN_SAVES, MAXIMUM_INTERVAL_BETWEEN_SAVES) {
       var _lastSavedTimestamp = 0,
         _saveTimeout = null;
 
@@ -17,7 +18,7 @@ angular.module('risevision.template-editor.controllers')
       $scope.considerChromeBarHeight = _considerChromeBarHeight();
 
       $scope.getBlueprintData = function (componentId, attributeKey) {
-        var components = $scope.factory.blueprintData.components;
+        var components = blueprintFactory.blueprintData.components;
         var component = _.find(components, {
           id: componentId
         });
@@ -61,7 +62,7 @@ angular.module('risevision.template-editor.controllers')
       };
 
       $scope.getComponentIds = function (filter) {
-        var components = $scope.factory.blueprintData.components;
+        var components = blueprintFactory.blueprintData.components;
 
         var filteredComponents = _.filter(components, filter);
 
@@ -71,7 +72,8 @@ angular.module('risevision.template-editor.controllers')
       };
 
       $scope.isPublishDisabled = function () {
-        var isNotRevised = !$scope.factory.isRevised() && scheduleFactory.hasSchedules();
+        var isNotRevised = !$scope.factory.isRevised() && !brandingFactory.isRevised() &&
+          scheduleFactory.hasSchedules();
 
         return $scope.factory.savingPresentation || $scope.hasUnsavedChanges || isNotRevised;
       };
@@ -212,7 +214,7 @@ angular.module('risevision.template-editor.controllers')
           savePromise
             .then(function () {
               if (!hasSchedules) {
-                return $scope.factory.publishPresentation();
+                return $scope.factory.publish();
               }
             })
             .finally(function () {
