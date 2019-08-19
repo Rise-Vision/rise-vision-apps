@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('logoImageFactory', ['fileExistenceCheckService', 'DEFAULT_IMAGE_THUMBNAIL', 'brandingFactory',
-    function (fileExistenceCheckService, DEFAULT_IMAGE_THUMBNAIL, brandingFactory) {
+  .factory('logoImageFactory', ['DEFAULT_IMAGE_THUMBNAIL', 'brandingFactory',
+    function (DEFAULT_IMAGE_THUMBNAIL, brandingFactory) {
       var factory = {};
 
       factory.getImagesAsMetadata = function () {
@@ -41,7 +41,7 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.getBlueprintData = function (key) {
-        return [];
+        return null;
       };
 
       factory.areChecksCompleted = function (checksCompleted) {
