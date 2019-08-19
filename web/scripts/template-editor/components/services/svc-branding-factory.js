@@ -35,6 +35,10 @@ angular.module('risevision.template-editor.services')
         _loadBranding(true);
       });
 
+      $rootScope.$on('risevision.company.selectedCompanyChanged', function() {
+        _loadBranding(true);
+      });
+
       factory.getBrandingComponent = function () {
         _loadBranding();
 

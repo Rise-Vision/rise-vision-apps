@@ -1,6 +1,6 @@
 'use strict';
 
-describe.only('service: brandingFactory', function() {
+describe('service: brandingFactory', function() {
 
   beforeEach(module('risevision.template-editor.services'));
   beforeEach(module(mockTranlate()));
@@ -143,6 +143,27 @@ describe.only('service: brandingFactory', function() {
     });
 
   });
+
+  describe('risevision.company.selectedCompanyChanged: ', function() {
+    it('should update branding settings on event', function() {
+      brandingFactory.brandingSettings = 'previousBranding';
+
+      userState.getCopyOfSelectedCompany.returns({
+        settings: {}
+      });
+
+      $rootScope.$emit('risevision.company.selectedCompanyChanged');
+      $rootScope.$digest();
+
+      expect(brandingFactory.brandingSettings).to.deep.equal({
+        primaryColor: undefined,
+        secondaryColor: undefined,
+        logoFile: undefined
+      });
+    });
+
+  });
+
 
   describe('brandingSettings: ', function() {
     it('should apply draft settings if available', function() {
