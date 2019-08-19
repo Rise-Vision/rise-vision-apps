@@ -186,6 +186,14 @@ angular.module('risevision.template-editor.directives')
             });
           });
 
+          $scope.$on('risevision.company.selectedCompanyChanged', function () {
+            // ensure branding factory updates branding via the same handler
+            $timeout(function () {
+              _postDisplayData();
+              _postLogoData();
+            });
+          });
+
           function _postAttributeData() {
             var message = {
               type: 'attributeData',

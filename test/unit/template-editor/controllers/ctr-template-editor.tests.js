@@ -30,14 +30,11 @@ describe('controller: TemplateEditor', function() {
     }
   ];
 
-  var $rootScope, $scope, $modal, $timeout, $window, $state, factory, scheduleFactory, blueprintFactory;
-  var sandbox = sinon.sandbox.create();
+  var $rootScope, $scope, $modal, $timeout, $window, $state, factory, scheduleFactory;
 
   beforeEach(function() {
     factory = {
       presentation: { templateAttributeData: {} },
-      getAttributeData: sandbox.stub().returns('data'),
-      setAttributeData: sandbox.stub(),
       save: function() {
         return Q.resolve();
       },
@@ -46,12 +43,8 @@ describe('controller: TemplateEditor', function() {
       }
     };
   });
-  afterEach(function() {
-    sandbox.restore();
-  });
 
   beforeEach(module('risevision.template-editor.controllers'));
-  beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module('risevision.template-editor.services'));
   beforeEach(module('risevision.editor.services'));
   beforeEach(module(mockTranlate()));
@@ -60,9 +53,7 @@ describe('controller: TemplateEditor', function() {
       return factory;
     });
     $provide.factory('blueprintFactory',function() {
-      return {
-        getBlueprintData: sandbox.stub().returns('blueprintData')
-      };
+      return factory;
     });
     $provide.factory('scheduleFactory',function() {
       return {
@@ -96,7 +87,6 @@ describe('controller: TemplateEditor', function() {
       $timeout = $injector.get('$timeout');
       $state = $injector.get('$state');
       factory = $injector.get('templateEditorFactory');
-      blueprintFactory = $injector.get('blueprintFactory');
       scheduleFactory = $injector.get('scheduleFactory');
 
       $controller('TemplateEditorController', {
@@ -124,31 +114,103 @@ describe('controller: TemplateEditor', function() {
 
   describe('getAttributeData', function () {
 
-    it('should return attribute data from factory',function() {
+    it('should get empty attribute data',function() {
       var data = $scope.getAttributeData('test-id');
 
-      factory.getAttributeData.should.have.been.calledWith('test-id');
-      expect(data).to.equal('data');
+      expect(data).to.deep.equal({ id: 'test-id' });
+    });
+
+    it('should not update templateAttributeData on get',function() {
+      $scope.getAttributeData('test-id');
+
+      expect($scope.factory.presentation.templateAttributeData).to.deep.equal({});
+    });
+
+    it('should get undefined attribute data value',function() {
+      var data = $scope.getAttributeData('test-id', 'symbols');
+
+      expect(data).to.not.be.ok;
     });
 
   });
 
   describe('setAttributeData', function () {
 
-    it('should set attribute data via factory',function() {
+    it('should set an attribute data value',function() {
       $scope.setAttributeData('test-id', 'symbols', 'CADUSD=X|MXNUSD=X');
 
-      factory.setAttributeData.should.have.been.calledWith('test-id', 'symbols', 'CADUSD=X|MXNUSD=X');
+      expect($scope.factory.presentation.templateAttributeData).to.deep.equal({
+        components: [
+          {
+            id: 'test-id',
+            symbols: 'CADUSD=X|MXNUSD=X'
+          }
+        ]
+      });
     });
+
+    it('should get an attribute data value',function() {
+      $scope.setAttributeData('test-id', 'symbols', 'CADUSD=X|MXNUSD=X');
+
+      var data = $scope.getAttributeData('test-id', 'symbols');
+
+      expect(data).to.equal('CADUSD=X|MXNUSD=X');
+    });
+
+    it('should get attribute data',function() {
+      $scope.setAttributeData('test-id', 'symbols', 'CADUSD=X|MXNUSD=X');
+
+      var data = $scope.getAttributeData('test-id');
+
+      expect(data).to.deep.equal({
+        id: 'test-id',
+        symbols: 'CADUSD=X|MXNUSD=X'
+      });
+    });
+
   });
 
   describe('getBlueprintData', function () {
 
-    it('should get blueprint data from factory',function() {
-      var data = $scope.getBlueprintData('test-id');
+    it('should get null blueprint data',function() {
+      factory.blueprintData = { components: [] };
 
-      blueprintFactory.getBlueprintData.should.have.been.calledWith('test-id');
-      expect(data).to.equal('blueprintData');
+      var data = $scope.getBlueprintData('rise-data-financial-01');
+
+      expect(data).to.be.null;
+    });
+
+    it('should get null blueprint data value',function() {
+      factory.blueprintData = { components: [] };
+
+      var data = $scope.getBlueprintData('rise-data-financial-01', 'symbols');
+
+      expect(data).to.be.null;
+    });
+
+    it('should get blueprint data attributes',function() {
+      factory.blueprintData = { components: SAMPLE_COMPONENTS };
+
+      var data = $scope.getBlueprintData('rise-data-financial-01');
+
+      expect(data).to.deep.equal({
+        "financial-list": {
+          "label": "template.financial-list",
+          "value": "-LNuO9WH5ZEQ2PLCeHhz"
+        },
+        "symbols": {
+          "label": "template.symbols",
+          "value": "CADUSD=X|MXNUSD=X|USDEUR=X"
+        }
+      });
+    });
+
+    it('should get blueprint data value',function() {
+      factory.blueprintData = { components: SAMPLE_COMPONENTS };
+
+      var data = $scope.getBlueprintData('rise-data-financial-01', 'symbols');
+
+      expect(data).to.equal('CADUSD=X|MXNUSD=X|USDEUR=X');
     });
 
   });
@@ -156,7 +218,7 @@ describe('controller: TemplateEditor', function() {
   describe('getComponentIds', function () {
 
     it('should get the component ids of rise-image components',function() {
-      blueprintFactory.blueprintData = { components: SAMPLE_COMPONENTS };
+      factory.blueprintData = { components: SAMPLE_COMPONENTS };
 
       var ids = $scope.getComponentIds({ type: 'rise-image' });
 
@@ -164,7 +226,7 @@ describe('controller: TemplateEditor', function() {
     });
 
     it('should get the component ids of all rise components',function() {
-      blueprintFactory.blueprintData = { components: SAMPLE_COMPONENTS };
+      factory.blueprintData = { components: SAMPLE_COMPONENTS };
 
       var ids = $scope.getComponentIds();
 

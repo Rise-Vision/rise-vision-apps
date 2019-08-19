@@ -20,9 +20,38 @@ describe('service: templateEditorUtils:', function() {
   it('should initialize', function() {
     expect(templateEditorUtils).to.be.truely;
 
+    expect(templateEditorUtils.intValueFor).to.be.a.function;
     expect(templateEditorUtils.fileNameOf).to.be.a.function;
     expect(templateEditorUtils.addOrRemove).to.be.a.function;
     expect(templateEditorUtils.addOrReplace).to.be.a.function;
+  });
+
+  describe('intValueFor',function() {
+
+    it('should get the int value of a string',function(){
+      var value = templateEditorUtils.intValueFor('100');
+
+      expect(value).to.equal(100);
+    });
+
+    it('should return 0',function(){
+      var value = templateEditorUtils.intValueFor('0', 10);
+
+      expect(value).to.equal(0);
+    });
+
+    it('should return the default value if the input is not a valid number',function(){
+      var value = templateEditorUtils.intValueFor('INVALID', 89);
+
+      expect(value).to.equal(89);
+    });
+
+    it('should return the default value if the input is undefined',function(){
+      var value = templateEditorUtils.intValueFor(undefined, 8);
+
+      expect(value).to.equal(8);
+    });
+
   });
 
   describe('fileNameOf', function () {

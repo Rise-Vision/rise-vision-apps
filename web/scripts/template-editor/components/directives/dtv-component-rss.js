@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentRss', ['templateEditorFactory', '$loading',
-    function (templateEditorFactory, $loading) {
+  .directive('templateComponentRss', ['templateEditorFactory', '$loading', 'componentUtils', 'rssFeedValidation',
+    '$timeout',
+    function (templateEditorFactory, $loading, componentUtils, rssFeedValidation, $timeout) {
       return {
         restrict: 'E',
         scope: true,
@@ -20,7 +21,18 @@ angular.module('risevision.template-editor.directives')
 
           $scope.spinner = false;
 
-          $scope.maxItems = '1';
+          $scope.saveFeed = function () {
+            if (_validateFeedUrl()) {
+              $scope.setAttributeData($scope.componentId, 'feedurl', $scope.feedUrl);
+              $scope.spinner = true;
+
+              _isFeedParsable();
+            }
+          };
+
+          $scope.saveMaxItems = function () {
+            $scope.setAttributeData($scope.componentId, 'maxitems', parseInt($scope.maxItems, 10));
+          };
 
           $scope.registerDirective({
             type: 'rise-data-rss',
@@ -30,8 +42,58 @@ angular.module('risevision.template-editor.directives')
             show: function () {
               element.show();
               $scope.componentId = $scope.factory.selected.id;
+              _load();
+              $scope.saveFeed(); // validate Feed URL
             }
           });
+
+          function _load() {
+            var maxItems = $scope.getAvailableAttributeData($scope.componentId, 'maxitems');
+
+            $scope.feedUrl = $scope.getAvailableAttributeData($scope.componentId, 'feedurl');
+            $scope.maxItems = maxItems ? maxItems.toString() : '1';
+          }
+
+          function _validateFeedUrl() {
+            //clear the error
+            $scope.validationResult = '';
+
+            var _feed = !$scope.feedUrl ? '' : $scope.feedUrl.trim();
+            if (_feed === '') {
+              //empty string is allowed
+              return true;
+            }
+
+            //check if feed url is valid format
+            if (componentUtils.isValidUrl(_feed)) {
+              return true;
+            }
+
+            $scope.validationResult = 'INVALID_URL';
+            return false;
+          }
+
+          function _isFeedParsable() {
+            rssFeedValidation.isParsable($scope.feedUrl)
+              .then(function (result) {
+                if (result === 'VALID') {
+                  _isFeedValid();
+                } else {
+                  $scope.validationResult = result;
+                  $scope.spinner = false;
+                }
+              });
+          }
+
+          function _isFeedValid() {
+            rssFeedValidation.isValid($scope.feedUrl)
+              .then(function (result) {
+                $scope.validationResult = result;
+              })
+              .finally(function () {
+                $scope.spinner = false;
+              });
+          }
 
         }
       };

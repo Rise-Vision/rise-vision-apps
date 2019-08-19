@@ -5,6 +5,12 @@ angular.module('risevision.template-editor.services')
     function (messageBox) {
       var svc = {};
 
+      svc.intValueFor = function (providedValue, defaultValue) {
+        var intValue = parseInt(providedValue, 10);
+
+        return isNaN(intValue) ? defaultValue : intValue;
+      };
+
       svc.fileNameOf = function (path) {
         return path.split('/').pop();
       };

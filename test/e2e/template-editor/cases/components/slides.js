@@ -89,10 +89,10 @@ var SlidesComponentScenarios = function () {
 
         //wait for presentation to be auto-saved
         helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.wait(templateEditorPage.getSavingText(), 'Text component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Text component auto-saved');
+        helper.wait(templateEditorPage.getSavingText(), 'Slides component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Slides component auto-saved');
 
-        //log URL for troubeshooting 
+        //log URL for troubeshooting
         browser.getCurrentUrl().then(function(actualUrl) {
           console.log(actualUrl);
         });

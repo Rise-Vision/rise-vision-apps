@@ -145,6 +145,27 @@ describe('service: brandingFactory', function() {
 
   });
 
+  describe('risevision.company.selectedCompanyChanged: ', function() {
+    it('should update branding settings on event', function() {
+      brandingFactory.brandingSettings = 'previousBranding';
+
+      userState.getCopyOfSelectedCompany.returns({
+        settings: {}
+      });
+
+      $rootScope.$emit('risevision.company.selectedCompanyChanged');
+      $rootScope.$digest();
+
+      expect(brandingFactory.brandingSettings).to.deep.equal({
+        primaryColor: undefined,
+        secondaryColor: undefined,
+        logoFile: undefined
+      });
+    });
+
+  });
+
+
   describe('brandingSettings: ', function() {
     it('should apply draft settings if available', function() {
       userState.getCopyOfSelectedCompany.returns({
@@ -162,6 +183,26 @@ describe('service: brandingFactory', function() {
 
       expect(brandingFactory.brandingSettings).to.deep.equal({
         primaryColor: 'draftPrimaryColor',
+        secondaryColor: 'draftSecondaryColor',
+        logoFile: 'draftLogoFile'
+      });
+    });
+
+    it('should apply some draft settings if available', function() {
+      userState.getCopyOfSelectedCompany.returns({
+        settings: {
+          brandingLogoFile: 'logoFile',
+          brandingDraftLogoFile: 'draftLogoFile',
+          brandingPrimaryColor: 'primaryColor',
+          brandingSecondaryColor: 'secondaryColor',
+          brandingDraftSecondaryColor: 'draftSecondaryColor'
+        }
+      });
+
+      brandingFactory.getBrandingComponent();
+
+      expect(brandingFactory.brandingSettings).to.deep.equal({
+        primaryColor: undefined,
         secondaryColor: 'draftSecondaryColor',
         logoFile: 'draftLogoFile'
       });
@@ -322,11 +363,21 @@ describe('service: brandingFactory', function() {
       expect(brandingFactory.isRevised()).to.be.false;
     });
 
-    it('should be true if any of the draft settings exist', function() {
+    it('should be true if the draft settings exist', function() {
       userState.getCopyOfSelectedCompany.returns({
         settings: {
           brandingDraftLogoFile: 'draftLogoFile',
           brandingDraftPrimaryColor: 'draftPrimaryColor',
+          brandingDraftSecondaryColor: 'draftSecondaryColor'
+        }
+      });
+
+      expect(brandingFactory.isRevised()).to.be.true;
+    });
+
+    it('should be true if any of the the draft settings exist', function() {
+      userState.getCopyOfSelectedCompany.returns({
+        settings: {
           brandingDraftSecondaryColor: 'draftSecondaryColor'
         }
       });

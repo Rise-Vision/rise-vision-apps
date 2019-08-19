@@ -17,14 +17,19 @@ angular.module('risevision.template-editor.services')
           var company = userState.getCopyOfSelectedCompany();
           var settings = company.settings || {};
 
-          factory.brandingSettings = {
-            logoFile: settings.brandingDraftLogoFile ?
-              settings.brandingDraftLogoFile : settings.brandingLogoFile,
-            primaryColor: settings.brandingDraftPrimaryColor ?
-              settings.brandingDraftPrimaryColor : settings.brandingPrimaryColor,
-            secondaryColor: settings.brandingDraftSecondaryColor ?
-              settings.brandingDraftSecondaryColor : settings.brandingSecondaryColor
-          };
+          if (factory.isRevised()) {
+            factory.brandingSettings = {
+              logoFile: settings.brandingDraftLogoFile,
+              primaryColor: settings.brandingDraftPrimaryColor,
+              secondaryColor: settings.brandingDraftSecondaryColor
+            };            
+          } else {
+            factory.brandingSettings = {
+              logoFile: settings.brandingLogoFile,
+              primaryColor: settings.brandingPrimaryColor,
+              secondaryColor: settings.brandingSecondaryColor
+            };
+          }
 
           fileExistenceCheckService.requestMetadataFor([factory.brandingSettings.logoFile], DEFAULT_IMAGE_THUMBNAIL)
             .then(function (metadata) {
@@ -37,6 +42,10 @@ angular.module('risevision.template-editor.services')
       };
 
       $rootScope.$on('risevision.company.updated', function () {
+        _loadBranding(true);
+      });
+
+      $rootScope.$on('risevision.company.selectedCompanyChanged', function() {
         _loadBranding(true);
       });
 
@@ -91,7 +100,7 @@ angular.module('risevision.template-editor.services')
         var company = userState.getCopyOfSelectedCompany();
 
         return !!(company.settings && (company.settings.brandingDraftLogoFile ||
-          company.settings.brandingDraftPrimaryColor || company.settings.brandingDraftPrimaryColor));
+          company.settings.brandingDraftPrimaryColor || company.settings.brandingDraftSecondaryColor));
       };
 
       return factory;
