@@ -1,21 +1,21 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentBranding', ['templateEditorFactory',
-    function (templateEditorFactory) {
+  .directive('templateComponentBranding', [
+    function () {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-branding/component-branding.html',
         link: function ($scope, element) {
-          $scope.factory = templateEditorFactory;
+          $scope.editLogo = function () {
+            $scope.showNextPanel('.branding-logo-container');
+          };
 
-          function _load() {
-
-          }
-
-          $scope.save = function () {
-
+          $scope.editColors = function () {
+            $scope.setPanelIcon('palette', 'streamline');
+            $scope.setPanelTitle('Color Settings');
+            $scope.showNextPanel('.branding-colors-container');
           };
 
           $scope.registerDirective({
@@ -27,12 +27,13 @@ angular.module('risevision.template-editor.directives')
               $scope.setPanelTitle('Branding Settings');
 
               element.show();
-              _load();
+
+              $scope.showNextPanel('.branding-component-container');
             },
             onBackHandler: function () {
-              $scope.setPanelTitle();
-
-              return false;
+              $scope.setPanelIcon();
+              $scope.setPanelTitle('Branding Settings');
+              return $scope.showPreviousPanel();
             }
           });
 

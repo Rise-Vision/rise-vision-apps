@@ -3,27 +3,11 @@
 describe('directive: templateComponentBranding', function() {
   var $scope,
       element,
-      factory,
-      company,
       rootScope,
       compile;
 
-  beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" } };
-    company = {
-      postalCode: '12345'
-    };
-  });
-
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module('risevision.template-editor.controllers'));
-  beforeEach(module('risevision.template-editor.services'));
   beforeEach(module(mockTranlate()));
-  beforeEach(module(function ($provide) {
-    $provide.service('templateEditorFactory', function() {
-      return factory;
-    });
-  }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache){
     rootScope = $rootScope;
@@ -37,8 +21,11 @@ describe('directive: templateComponentBranding', function() {
     element = compile("<template-component-branding></template-component-branding>")(rootScope.$new());
     $scope = element.scope();
 
-    $scope.registerDirective = sinon.stub();
+    $scope.registerDirective = sinon.stub();    
     $scope.setPanelTitle = sinon.stub();
+    $scope.setPanelIcon = sinon.stub();
+    $scope.showNextPanel = sinon.stub();
+    $scope.showPreviousPanel = sinon.stub();
 
     $scope.$digest();
   }
@@ -49,8 +36,8 @@ describe('directive: templateComponentBranding', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
+    expect($scope.editLogo).to.be.ok;
+    expect($scope.editColors).to.be.ok;
     expect($scope.registerDirective).to.have.been.called;
   });
 
@@ -64,20 +51,38 @@ describe('directive: templateComponentBranding', function() {
     expect(directive.onBackHandler).to.be.a('function');
   });
 
+  it('editLogo:', function() {
+    $scope.editLogo();
+
+    $scope.showNextPanel.should.have.been.calledWith('.branding-logo-container');
+  });
+
+  it('editColors: ', function() {
+    $scope.editColors();
+
+    $scope.setPanelIcon.should.have.been.calledWith('palette', 'streamline');
+    $scope.setPanelTitle.should.have.been.calledWith('Color Settings');
+    $scope.showNextPanel.should.have.been.calledWith('.branding-colors-container');
+  });
+
   it('directive.show: ', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
     directive.show();
 
-    $scope.setPanelTitle.should.have.been.calledWith('Branding Settings')
+    $scope.setPanelTitle.should.have.been.calledWith('Branding Settings');
+    $scope.showNextPanel.should.have.been.calledWith('.branding-component-container');
   });
 
   it('directive.onBackHandler: ', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
+    $scope.showPreviousPanel.returns('backPanel');
 
-    expect(directive.onBackHandler()).to.be.false;
+    expect(directive.onBackHandler()).to.equal('backPanel');
 
-    $scope.setPanelTitle.should.have.been.calledWith();
+    $scope.setPanelIcon.should.have.been.called;
+    $scope.setPanelTitle.should.have.been.calledWith('Branding Settings');
+    $scope.showPreviousPanel.should.have.been.called;
   });
 
 });
