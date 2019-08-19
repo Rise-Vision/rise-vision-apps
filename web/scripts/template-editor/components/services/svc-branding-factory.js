@@ -18,14 +18,14 @@ angular.module('risevision.template-editor.services')
           if (factory.isRevised()) {
             factory.brandingSettings = {
               logoFile: settings.brandingDraftLogoFile,
-              primaryColor: settings.brandingDraftPrimaryColor,
-              secondaryColor: settings.brandingDraftSecondaryColor
+              baseColor: settings.brandingDraftBaseColor,
+              accentColor: settings.brandingDraftAccentColor
             };            
           } else {
             factory.brandingSettings = {
               logoFile: settings.brandingLogoFile,
-              primaryColor: settings.brandingPrimaryColor,
-              secondaryColor: settings.brandingSecondaryColor
+              baseColor: settings.brandingBaseColor,
+              accentColor: settings.brandingAccentColor
             };
           }
         }
@@ -65,18 +65,18 @@ angular.module('risevision.template-editor.services')
 
         return _updateCompanySettings({
           brandingLogoFile: company.settings.brandingDraftLogoFile,
-          brandingPrimaryColor: company.settings.brandingDraftPrimaryColor,
-          brandingSecondaryColor: company.settings.brandingDraftSecondaryColor,
+          brandingBaseColor: company.settings.brandingDraftBaseColor,
+          brandingAccentColor: company.settings.brandingDraftAccentColor,
           brandingDraftLogoFile: '',
-          brandingDraftPrimaryColor: '',
-          brandingDraftSecondaryColor: ''
+          brandingDraftBaseColor: '',
+          brandingDraftAccentColor: ''
         });
       };
 
       factory.updateDraftColors = function () {
         return _updateCompanySettings({
-          brandingDraftPrimaryColor: factory.brandingSettings.primaryColor,
-          brandingDraftSecondaryColor: factory.brandingSettings.secondaryColor
+          brandingDraftBaseColor: factory.brandingSettings.baseColor,
+          brandingDraftAccentColor: factory.brandingSettings.accentColor
         });
       };
 
@@ -90,7 +90,7 @@ angular.module('risevision.template-editor.services')
         var company = userState.getCopyOfSelectedCompany();
 
         return !!(company.settings && (company.settings.brandingDraftLogoFile ||
-          company.settings.brandingDraftPrimaryColor || company.settings.brandingDraftSecondaryColor));
+          company.settings.brandingDraftBaseColor || company.settings.brandingDraftAccentColor));
       };
 
       return factory;
