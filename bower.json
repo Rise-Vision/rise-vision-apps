@@ -36,6 +36,7 @@
     "angular-ui-router": "^0.2.18",
     "angular-sanitize": "~1.5.0",
     "angular-mocks": "~1.5.0",
+    "common-header": "fix/issue-1167-hide-add-selected-button-on-empty-storage",
     "jquery": "^2",
     "font-awesome": "~4.7.0"
   }
