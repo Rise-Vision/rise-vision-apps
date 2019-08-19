@@ -87,8 +87,23 @@ describe('directive: TemplateEditorPreviewHolder', function() {
   it('posts display address when company is updated', function(done) {
     iframe.onload();
     iframe.contentWindow.postMessage.reset();
-    rootScope.$broadcast('risevision.company.updated');
-    rootScope.$digest();
+    $scope.$broadcast('risevision.company.updated');
+    $scope.$digest();
+    $timeout.flush();
+
+    setTimeout(function(){
+      iframe.contentWindow.postMessage.should.have.been.called;
+      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal([ '{"type":"displayData","value":{"displayAddress":{},"companyBranding":"brandingSettings"}}', 'https://widgets.risevision.com' ]);
+
+      done();
+    },10);
+  });
+
+  it('posts display address when selected company is changed', function(done) {
+    iframe.onload();
+    iframe.contentWindow.postMessage.reset();
+    $scope.$broadcast('risevision.company.selectedCompanyChanged');
+    $scope.$digest();
     $timeout.flush();
 
     setTimeout(function(){

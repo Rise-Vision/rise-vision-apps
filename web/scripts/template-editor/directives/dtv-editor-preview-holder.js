@@ -176,6 +176,11 @@ angular.module('risevision.template-editor.directives')
             $timeout(_postDisplayData);
           });
 
+          $scope.$on('risevision.company.selectedCompanyChanged', function () {
+            // ensure branding factory updates branding via the same handler
+            $timeout(_postDisplayData);
+          });
+
           function _postAttributeData() {
             var message = {
               type: 'attributeData',
