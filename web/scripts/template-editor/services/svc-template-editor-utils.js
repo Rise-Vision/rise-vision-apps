@@ -65,7 +65,7 @@ angular.module('risevision.template-editor.services')
       };
 
       svc.hasRegularFileItems = function (folderItems) {
-        var regularFiles = _.filter(folderItems, function(item) {
+        var regularFiles = _.filter(folderItems, function (item) {
           return !svc.isFolder(item.name);
         });
 

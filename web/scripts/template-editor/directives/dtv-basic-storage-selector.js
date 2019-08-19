@@ -59,7 +59,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.fileNameOf = templateEditorUtils.fileNameOf;
 
-          $scope.hasRegularFileItems = function() {
+          $scope.hasRegularFileItems = function () {
             return templateEditorUtils.hasRegularFileItems($scope.folderItems);
           };
 
