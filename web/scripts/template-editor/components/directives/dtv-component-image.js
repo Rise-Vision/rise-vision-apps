@@ -163,6 +163,8 @@ angular.module('risevision.template-editor.directives')
               element.show();
 
               _reset();
+
+              // edits branding logo if no id is provided
               if ($scope.factory.selected.id) {
                 imageFactory = regularImageFactory;
                 imageFactory.componentId = $scope.factory.selected.id;

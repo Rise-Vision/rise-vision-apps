@@ -6,6 +6,7 @@ describe('directive: TemplateComponentImage', function() {
     factory,
     timeout,
     regularImageFactory,
+    logoImageFactory,
     sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
@@ -24,6 +25,14 @@ describe('directive: TemplateComponentImage', function() {
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
       return factory;
+    });
+    $provide.service('logoImageFactory', function() {
+      return {
+        getBlueprintData: sandbox.stub().returns({}),
+        getImagesAsMetadata: sandbox.stub().returns([]),
+        areChecksCompleted: sandbox.stub().returns(true),
+        getDuration: sandbox.stub().returns(10)
+      };
     });
     $provide.service('regularImageFactory', function() {
       return {
@@ -63,6 +72,7 @@ describe('directive: TemplateComponentImage', function() {
     $scope = $rootScope.$new();
 
     regularImageFactory = $injector.get('regularImageFactory');
+    logoImageFactory = $injector.get('logoImageFactory');
 
     $scope.registerDirective = sinon.stub();
     $scope.setAttributeData = sinon.stub();
@@ -93,54 +103,86 @@ describe('directive: TemplateComponentImage', function() {
     expect(directive.onBackHandler).to.be.a('function');
   });
 
-  it('should set image lists when available as attribute data', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
-    var sampleImages = [
-      { "file": 'image.png', "thumbnail-url": "http://image" },
-      { "file": 'test|character.jpg', "thumbnail-url": "http://test%7Ccharacter.jpg" }
-    ];
+  describe('show',function(){
 
-    regularImageFactory.getImagesAsMetadata.returns(sampleImages);
+    it('should use logoImageFactory when opening logo settings',function(){
+      var directive = $scope.registerDirective.getCall(0).args[0];
+      logoImageFactory.getImagesAsMetadata.returns([]);
 
-    directive.show();
+      $scope.factory.selected = {type:'rise-image'};
 
-    expect($scope.selectedImages).to.deep.equal(sampleImages);
-    expect($scope.factory.loadingPresentation).to.be.true;
+      directive.show();
 
-    timeout.flush();
+      expect(logoImageFactory.getImagesAsMetadata).to.have.been.called;
+      expect(regularImageFactory.getImagesAsMetadata).to.not.have.been.called;
+    });
+
+    it('should use regularImageFactory whne opening images',function(){
+      var directive = $scope.registerDirective.getCall(0).args[0];
+      logoImageFactory.getImagesAsMetadata.returns([]);
+
+      $scope.factory.selected = {type:'rise-image', id:'image-id'};
+
+      directive.show();
+
+      expect(regularImageFactory.getImagesAsMetadata).to.have.been.called;
+      expect(regularImageFactory.componentId).to.equal('image-id');
+      expect(logoImageFactory.getImagesAsMetadata).to.not.have.been.called;
+    });
+
+    it('should set image lists when available as attribute data', function() {
+      var directive = $scope.registerDirective.getCall(0).args[0];
+      var sampleImages = [
+        { "file": 'image.png', "thumbnail-url": "http://image" },
+        { "file": 'test|character.jpg', "thumbnail-url": "http://test%7Ccharacter.jpg" }
+      ];
+
+      regularImageFactory.getImagesAsMetadata.returns(sampleImages);
+
+      directive.show();
+
+      expect($scope.selectedImages).to.deep.equal(sampleImages);
+      expect($scope.factory.loadingPresentation).to.be.true;
+
+      timeout.flush();
+    });
+
+    it('should detect default images', function() {
+      var directive = $scope.registerDirective.getCall(0).args[0];
+      var sampleImages = [
+        { "file": "image.png", "thumbnail-url": "http://image" }
+      ];
+
+      regularImageFactory.getImagesAsMetadata.returns(sampleImages);
+      regularImageFactory.getBlueprintData.returns("image.png");
+
+      directive.show();
+
+      expect($scope.isDefaultImageList).to.be.true;
+
+      timeout.flush();
+    });
+
+    it('should not consider a default value if it is not', function() {
+      var directive = $scope.registerDirective.getCall(0).args[0];
+      var sampleImages = [
+        { "file": "image.png", "thumbnail-url": "http://image" }
+      ];
+
+      regularImageFactory.getImagesAsMetadata.returns(sampleImages);
+      regularImageFactory.getBlueprintData.returns("default.png");
+
+      directive.show();
+
+      expect($scope.isDefaultImageList).to.be.false;
+
+      timeout.flush();
+    });
+
+
   });
 
-  it('should detect default images', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
-    var sampleImages = [
-      { "file": "image.png", "thumbnail-url": "http://image" }
-    ];
-
-    regularImageFactory.getImagesAsMetadata.returns(sampleImages);
-    regularImageFactory.getBlueprintData.returns("image.png");
-
-    directive.show();
-
-    expect($scope.isDefaultImageList).to.be.true;
-
-    timeout.flush();
-  });
-
-  it('should not consider a default value if it is not', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
-    var sampleImages = [
-      { "file": "image.png", "thumbnail-url": "http://image" }
-    ];
-
-    regularImageFactory.getImagesAsMetadata.returns(sampleImages);
-    regularImageFactory.getBlueprintData.returns("default.png");
-
-    directive.show();
-
-    expect($scope.isDefaultImageList).to.be.false;
-
-    timeout.flush();
-  });
+  
 
   describe('updateFileMetadata', function() {
 

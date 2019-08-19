@@ -24,7 +24,7 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.areChecksCompleted = function (checksCompleted) {
-        return checksCompleted && checksCompleted[factory.componentId];
+        return !!checksCompleted && !!checksCompleted[factory.componentId];
       };
 
       factory.removeImage = function (image, currentMetadata) {
