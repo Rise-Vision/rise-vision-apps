@@ -70,7 +70,7 @@ describe('directive: templateComponentBranding', function() {
 
     directive.show();
 
-    $scope.setPanelTitle.should.have.been.calledWith('Branding Settings');
+    $scope.setPanelTitle.should.have.been.calledWith('Brand Settings');
     $scope.showNextPanel.should.have.been.calledWith('.branding-component-container');
   });
 
@@ -81,7 +81,7 @@ describe('directive: templateComponentBranding', function() {
     expect(directive.onBackHandler()).to.equal('backPanel');
 
     $scope.setPanelIcon.should.have.been.called;
-    $scope.setPanelTitle.should.have.been.calledWith('Branding Settings');
+    $scope.setPanelTitle.should.have.been.calledWith('Brand Settings');
     $scope.showPreviousPanel.should.have.been.called;
   });
 
