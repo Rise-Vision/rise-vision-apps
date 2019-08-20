@@ -15,7 +15,7 @@ describe('service: logoImageFactory', function() {
     });
   }));
 
-  var logoImageFactory, brandingFactory;
+  var logoImageFactory, brandingFactory, $modal;
   var sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
@@ -23,6 +23,7 @@ describe('service: logoImageFactory', function() {
       logoImageFactory = $injector.get('logoImageFactory');
      
       brandingFactory = $injector.get('brandingFactory');
+      $modal = $injector.get('$modal');
     });
   });
 
@@ -151,6 +152,36 @@ describe('service: logoImageFactory', function() {
       expect(brandingFactory.brandingSettings.logoFileMetadata).to.deep.equals([]);
       
       brandingFactory.updateDraftLogo.should.have.been.called;
+    });
+  });
+
+  describe('canRemoveImage: ', function() {
+    it('should show confirmation modal and resolve on confirm', function(done) {      
+      sandbox.stub($modal,'open').returns({result: Q.resolve()});
+
+      logoImageFactory.canRemoveImage().then(function(){
+        $modal.open.should.have.been.calledWithMatch({
+          controller: "confirmInstance",
+          windowClass: 'primary-btn-danger madero-style centered-modal'
+        });        
+        done();
+      }).catch(function(){
+        done('Should not reject');
+      });
+    });
+
+    it('should show confirmation modal and reject on close', function() {      
+      sandbox.stub($modal,'open').returns({result: Q.reject()});
+
+      logoImageFactory.canRemoveImage().then(function(){
+        done('Should not resolve');
+      }).catch(function(){
+        $modal.open.should.have.been.calledWithMatch({
+          controller: "confirmInstance",
+          windowClass: 'primary-btn-danger madero-style centered-modal'
+        });        
+        done();
+      });
     });
   });
 
