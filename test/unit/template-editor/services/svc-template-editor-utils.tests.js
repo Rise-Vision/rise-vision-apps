@@ -5,17 +5,11 @@ describe('service: templateEditorUtils:', function() {
 
   beforeEach(module('risevision.template-editor.services'));
 
-  beforeEach(module(function ($provide) {
-    $provide.service('$q', function() { return Q; });
-  }));
-
-  var templateEditorUtils, $modal, $window;
+  var templateEditorUtils;
 
   beforeEach(function() {
     inject(function($injector) {
       templateEditorUtils = $injector.get('templateEditorUtils');
-      $modal = $injector.get('$modal');
-      $window = $injector.get('$window');
     });
   });
 
@@ -189,57 +183,5 @@ describe('service: templateEditorUtils:', function() {
       expect(templateEditorUtils.getValidExtensionsMessage(['.gif', '.jpg', '.png'])).to.equal('Rise Vision supports .GIF, .JPG and .PNG.');
     });
   });
-
-  describe('needsFinancialDataLicense', function() {
-    it('should return true if a rise-data-financial component is present',function() {
-      var blueprint = {components: [{type: 'rise-data-financial'}]};
-      expect(templateEditorUtils.needsFinancialDataLicense(blueprint)).to.be.true;
-
-      blueprint.components = [{type: 'rise-data-financial'},{type: 'rise-data-financial'}];
-      expect(templateEditorUtils.needsFinancialDataLicense(blueprint)).to.be.true;
-
-      blueprint.components = [{type: 'rise-image'},{type: 'rise-data-financial'}];
-      expect(templateEditorUtils.needsFinancialDataLicense(blueprint)).to.be.true;
-    });
-
-    it('should return false if there are no rise-data-financial components',function() {
-      var blueprint = {components: [{type: 'rise-image'}]};
-      expect(templateEditorUtils.needsFinancialDataLicense(blueprint)).to.be.false;
-
-      blueprint.components = [];
-      expect(templateEditorUtils.needsFinancialDataLicense(blueprint)).to.be.false;
-    });
-
-    it('should return false on empty blueprint data',function() {
-      expect(templateEditorUtils.needsFinancialDataLicense(null)).to.be.false;
-    });
-  });
-
-  describe('showFinancialDataLicenseRequiredMessage',function() {
-    it('should open modal',function(){
-      sandbox.stub($modal,'open').returns({ result: { then: sandbox.stub() } });
-
-      templateEditorUtils.showFinancialDataLicenseRequiredMessage();
-
-      $modal.open.should.have.been.calledWithMatch({
-        controller: "confirmInstance",
-        windowClass: 'madero-style centered-modal financial-data-license-message'
-      });
-    });
-
-    it('should dismiss and open Contact Us on page confirm', function(done){
-      var modalInstance = { result: Q.resolve(), dismiss: sinon.stub() };
-      sandbox.stub($modal,'open').returns(modalInstance);
-      sandbox.stub($window,'open');
-
-      templateEditorUtils.showFinancialDataLicenseRequiredMessage();
-
-      setTimeout(function(){
-        modalInstance.dismiss.should.have.been.called;
-        $window.open.should.have.been.calledWith('https://www.risevision.com/contact-us', "_blank");
-        done()
-      },10);
-    });
-  });
-
+  
 });

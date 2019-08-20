@@ -15,7 +15,7 @@ describe('directive: attribute-list', function() {
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module(mockTranlate()));
     beforeEach(module(function ($provide) {
-    $provide.service('templateEditorFactory', function() {
+    $provide.service('blueprintFactory', function() {
       return {
         blueprintData: {
           components: components
