@@ -31,7 +31,8 @@ angular.module('risevision.template-editor.services')
             }
 
           }, function (response) {
-            $log.debug('Validation request failed with status code ' + response.status + ': ' + response.statusText);
+            $log.debug('Validation request failed with status code ' + response.status + ': ' + response
+              .statusText);
             // assume it's valid
             return deferred.resolve('VALID');
           })
@@ -76,7 +77,8 @@ angular.module('risevision.template-editor.services')
             return deferred.resolve('VALID');
 
           }, function (response) {
-            $log.debug('Feed parser check failed with status code ' + response.status + ': ' + response.statusText);
+            $log.debug('Feed parser check failed with status code ' + response.status + ': ' + response
+              .statusText);
 
             // assume it's parsable
             return deferred.resolve('VALID');

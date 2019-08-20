@@ -21,7 +21,7 @@ angular.module('risevision.template-editor.services')
             logoFile: settings.brandingDraftLogoFile,
             baseColor: settings.brandingDraftBaseColor,
             accentColor: settings.brandingDraftAccentColor
-          };            
+          };
         }
       };
 
@@ -29,7 +29,7 @@ angular.module('risevision.template-editor.services')
         _loadBranding(true);
       });
 
-      $rootScope.$on('risevision.company.selectedCompanyChanged', function() {
+      $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
         _loadBranding(true);
       });
 

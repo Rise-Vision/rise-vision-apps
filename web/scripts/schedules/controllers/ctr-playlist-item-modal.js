@@ -48,14 +48,14 @@ angular.module('risevision.schedules.controllers')
               return blueprintFactory.load(result.item.productCode);
             })
             .then(function () {
-                if (blueprintFactory.isPlayUntilDone() && $scope.isNew) {
-                  //When user schedules a PUD template, then set schedule item to PUD by default.
-                  $scope.playlistItem.playUntilDone = true;
-                }
-                if (!blueprintFactory.isPlayUntilDone()) {
-                  $scope.playUntilDoneSupported = false;
-                  $scope.playlistItem.playUntilDone = false;
-                }
+              if (blueprintFactory.isPlayUntilDone() && $scope.isNew) {
+                //When user schedules a PUD template, then set schedule item to PUD by default.
+                $scope.playlistItem.playUntilDone = true;
+              }
+              if (!blueprintFactory.isPlayUntilDone()) {
+                $scope.playUntilDoneSupported = false;
+                $scope.playlistItem.playUntilDone = false;
+              }
             })
             .catch(function () {
               $scope.playUntilDoneSupported = false;
