@@ -59,6 +59,10 @@ angular.module('risevision.template-editor.directives')
 
           $scope.fileNameOf = templateEditorUtils.fileNameOf;
 
+          $scope.hasRegularFileItems = function () {
+            return templateEditorUtils.hasRegularFileItems($scope.folderItems);
+          };
+
           $scope.thumbnailFor = function (item) {
             if (item.metadata && item.metadata.thumbnail) {
               return item.metadata.thumbnail + '?_=' + (item.timeCreated && item.timeCreated.value);
