@@ -75,7 +75,8 @@ describe('service: brandingFactory', function() {
       expect(brandingFactory.brandingSettings).to.deep.equal({
         primaryColor: undefined,
         secondaryColor: undefined,
-        logoFile: undefined
+        logoFile: undefined,
+        logoFileMetadata: []
       });
     });
 
@@ -97,7 +98,8 @@ describe('service: brandingFactory', function() {
       expect(brandingFactory.brandingSettings).to.deep.equal({
         primaryColor: undefined,
         secondaryColor: undefined,
-        logoFile: undefined
+        logoFile: undefined,
+        logoFileMetadata: []
       });
     });
 
@@ -115,7 +117,8 @@ describe('service: brandingFactory', function() {
       expect(brandingFactory.brandingSettings).to.deep.equal({
         primaryColor: undefined,
         secondaryColor: undefined,
-        logoFile: undefined
+        logoFile: undefined,
+        logoFileMetadata: []
       });
     });
 
@@ -159,7 +162,8 @@ describe('service: brandingFactory', function() {
       expect(brandingFactory.brandingSettings).to.deep.equal({
         primaryColor: undefined,
         secondaryColor: undefined,
-        logoFile: undefined
+        logoFile: undefined,
+        logoFileMetadata: []
       });
     });
 
