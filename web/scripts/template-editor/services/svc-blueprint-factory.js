@@ -18,7 +18,7 @@ angular.module('risevision.template-editor.services')
 
       factory.isPlayUntilDone = function() {
         return !!(factory.blueprintData && factory.blueprintData.playUntilDone);
-      }
+      };
 
       factory.hasBranding = function () {
         return (!!factory.blueprintData && factory.blueprintData.branding === true);
