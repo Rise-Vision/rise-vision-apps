@@ -164,6 +164,34 @@ describe('service: templateEditorUtils:', function() {
     });
   });
 
+  describe('hasRegularFileItems', function () {
+    it('should return true for lists with regular file items', function () {
+      var items = [
+        { name: 'file.png' },
+        { name: 'folder/' }
+      ]
+      var hasFiles = templateEditorUtils.hasRegularFileItems(items);
+
+      expect(hasFiles).to.be.true;
+    });
+
+    it('should return false for lists with no regular file items', function () {
+      var items = [
+        { name: 'not-a-file/' },
+        { name: 'folder/' }
+      ]
+      var hasFiles = templateEditorUtils.hasRegularFileItems(items);
+
+      expect(hasFiles).to.be.false;
+    });
+
+    it('should return false for empty lists', function () {
+      var hasFiles = templateEditorUtils.hasRegularFileItems([]);
+
+      expect(hasFiles).to.be.false;
+    });
+  });
+
   describe('showInvalidExtensionsMessage', function () {
     it('should call the correct functions', function () {
       sandbox.stub(templateEditorUtils, 'showMessageWindow');

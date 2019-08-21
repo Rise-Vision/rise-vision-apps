@@ -28,7 +28,7 @@ angular.module('risevision.template-editor.directives')
             icon: 'ratingStar',
             element: element,
             show: function () {
-              $scope.setPanelTitle('Branding Settings');
+              $scope.setPanelTitle('Brand Settings');
 
               element.show();
 
@@ -36,7 +36,7 @@ angular.module('risevision.template-editor.directives')
             },
             onBackHandler: function () {
               $scope.setPanelIcon();
-              $scope.setPanelTitle('Branding Settings');
+              $scope.setPanelTitle('Brand Settings');
               return $scope.showPreviousPanel();
             }
           });

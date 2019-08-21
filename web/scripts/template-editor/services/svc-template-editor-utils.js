@@ -64,6 +64,14 @@ angular.module('risevision.template-editor.services')
         });
       };
 
+      svc.hasRegularFileItems = function (folderItems) {
+        var regularFiles = _.filter(folderItems, function (item) {
+          return !svc.isFolder(item.name);
+        });
+
+        return regularFiles.length > 0;
+      };
+
       svc.findElement = function (selector) {
         return document.querySelector(selector) && angular.element(document.querySelector(selector));
       };
