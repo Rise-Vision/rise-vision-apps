@@ -169,9 +169,8 @@ describe('service: brandingFactory', function() {
 
   });
 
-
   describe('brandingSettings: ', function() {
-    it('should apply draft settings if available', function() {
+    it('should apply draft settings if in draft', function() {
       userState.getCopyOfSelectedCompany.returns({
         settings: {
           brandingLogoFile: 'logoFile',
@@ -179,7 +178,8 @@ describe('service: brandingFactory', function() {
           brandingBaseColor: 'baseColor',
           brandingDraftBaseColor: 'draftBaseColor',
           brandingAccentColor: 'accentColor',
-          brandingDraftAccentColor: 'draftAccentColor'
+          brandingDraftAccentColor: 'draftAccentColor',
+          brandingRevisionStatusName: 'Revised'
         }
       });
 
@@ -199,7 +199,8 @@ describe('service: brandingFactory', function() {
           brandingDraftLogoFile: 'draftLogoFile',
           brandingBaseColor: 'baseColor',
           brandingAccentColor: 'accentColor',
-          brandingDraftAccentColor: 'draftAccentColor'
+          brandingDraftAccentColor: 'draftAccentColor',
+          brandingRevisionStatusName: 'Revised'
         }
       });
 
@@ -212,30 +213,22 @@ describe('service: brandingFactory', function() {
       });
     });
 
-    it('should apply published settings if draft is not available', function() {
+    it('should apply draft settings even if published', function() {
       userState.getCopyOfSelectedCompany.returns({
         settings: {
-          brandingLogoFile: 'logoFile',
-          brandingBaseColor: 'baseColor',
-          brandingAccentColor: 'accentColor'
-        }
-      });
-
-      $rootScope.$emit('risevision.company.updated');
-      $rootScope.$digest();
-
-      userState.getCopyOfSelectedCompany.returns({
-        settings: {
-          brandingDraftLogoFile: 'logoFile'
+          brandingDraftLogoFile: 'draftLogoFile',
+          brandingDraftBaseColor: 'draftBaseColor',
+          brandingDraftAccentColor: 'draftAccentColor',
+          brandingRevisionStatusName: 'Published'
         }
       });
 
       brandingFactory.getBrandingComponent();
 
       expect(brandingFactory.brandingSettings).to.deep.equal({
-        baseColor: 'baseColor',
-        accentColor: 'accentColor',
-        logoFile: 'logoFile'
+        baseColor: 'draftBaseColor',
+        accentColor: 'draftAccentColor',
+        logoFile: 'draftLogoFile'
       });
     });
   });
@@ -278,16 +271,14 @@ describe('service: brandingFactory', function() {
       });
     });
 
-    it('should publish settings and clear drafts', function(done) {
+    it('should publish settings based on draft values', function(done) {
       brandingFactory.publishBranding().then(function() {
         updateCompany.should.have.been.calledWith('companyId', {
           settings: {
             brandingLogoFile: 'draftLogoFile',
-            brandingDraftLogoFile: '',
             brandingBaseColor: 'draftBaseColor',
-            brandingDraftBaseColor: '',
             brandingAccentColor: 'draftAccentColor',
-            brandingDraftAccentColor: ''
+            brandingRevisionStatusName: 'Published'
           }
         });
 
@@ -326,7 +317,8 @@ describe('service: brandingFactory', function() {
       updateCompany.should.have.been.calledWith('companyId', {
         settings: {
           brandingDraftBaseColor: 'draftBaseColor',
-          brandingDraftAccentColor: 'draftAccentColor'
+          brandingDraftAccentColor: 'draftAccentColor',
+          brandingRevisionStatusName: 'Revised'
         }
       });
 
@@ -342,7 +334,8 @@ describe('service: brandingFactory', function() {
     brandingFactory.updateDraftLogo().then(function() {
       updateCompany.should.have.been.calledWith('companyId', {
         settings: {
-          brandingDraftLogoFile: 'draftLogoFile'
+          brandingDraftLogoFile: 'draftLogoFile',
+          brandingRevisionStatusName: 'Revised'
         }
       });
 
@@ -355,38 +348,36 @@ describe('service: brandingFactory', function() {
       expect(brandingFactory.isRevised()).to.be.false;
     });
 
-    it('should be false if none of the draft settings exist', function() {
+    it('should be false if flag does not exist', function() {
       userState.getCopyOfSelectedCompany.returns({
         settings: {
           brandingLogoFile: 'logoFile',
-          brandingBaseColor: 'baseColor',
-          brandingAccentColor: 'accentColor'
         }
       });
 
       expect(brandingFactory.isRevised()).to.be.false;
     });
 
-    it('should be true if the draft settings exist', function() {
+    it('should be true revision status equals revised', function() {
       userState.getCopyOfSelectedCompany.returns({
         settings: {
           brandingDraftLogoFile: 'draftLogoFile',
-          brandingDraftBaseColor: 'draftBaseColor',
-          brandingDraftAccentColor: 'draftAccentColor'
+          brandingRevisionStatusName: 'Revised'
         }
       });
 
       expect(brandingFactory.isRevised()).to.be.true;
     });
 
-    it('should be true if any of the the draft settings exist', function() {
+    it('should be falsed otherwise', function() {
       userState.getCopyOfSelectedCompany.returns({
         settings: {
-          brandingDraftAccentColor: 'draftAccentColor'
+          brandingDraftAccentColor: 'draftAccentColor',
+          brandingRevisionStatusName: 'Published'
         }
       });
 
-      expect(brandingFactory.isRevised()).to.be.true;
+      expect(brandingFactory.isRevised()).to.be.false;
     });
 
   });
