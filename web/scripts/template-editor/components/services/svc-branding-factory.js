@@ -2,7 +2,9 @@
 
 angular.module('risevision.template-editor.services')
   .factory('brandingFactory', ['$rootScope', '$q', 'blueprintFactory', 'userState', 'updateCompany',
-    function ($rootScope, $q, blueprintFactory, userState, updateCompany) {
+    'fileExistenceCheckService', 'DEFAULT_IMAGE_THUMBNAIL',
+    function ($rootScope, $q, blueprintFactory, userState, updateCompany, fileExistenceCheckService,
+      DEFAULT_IMAGE_THUMBNAIL) {
       var brandingComponent = {
         type: 'rise-branding'
       };
@@ -27,6 +29,18 @@ angular.module('risevision.template-editor.services')
               baseColor: settings.brandingBaseColor,
               accentColor: settings.brandingAccentColor
             };
+          }
+
+          if (factory.brandingSettings.logoFile) {
+            fileExistenceCheckService.requestMetadataFor([factory.brandingSettings.logoFile], DEFAULT_IMAGE_THUMBNAIL)
+              .then(function (metadata) {
+                factory.brandingSettings.logoFileMetadata = metadata;
+              })
+              .catch(function (error) {
+                console.error('Could not load metadata for: ' + factory.brandingSettings.logoFile, error);
+              });            
+          } else {
+            factory.brandingSettings.logoFileMetadata = [];
           }
         }
       };

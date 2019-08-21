@@ -18,37 +18,15 @@ angular.module('risevision.template-editor.controllers')
       $scope.considerChromeBarHeight = _considerChromeBarHeight();
 
       $scope.getBlueprintData = function (componentId, attributeKey) {
-        var components = blueprintFactory.blueprintData.components;
-        var component = _.find(components, {
-          id: componentId
-        });
-
-        if (!component || !component.attributes) {
-          return null;
-        }
-
-        var attributes = component.attributes;
-
-        // if the attributeKey is not provided, it returns the full attributes structure
-        if (!attributeKey) {
-          return attributes;
-        }
-
-        var attribute = attributes[attributeKey];
-        return attribute && attribute.value;
+        return blueprintFactory.getBlueprintData(componentId, attributeKey);
       };
 
       $scope.getAttributeData = function (componentId, attributeKey) {
-        var component = _componentFor(componentId, false);
-
-        // if the attributeKey is not provided, it returns the full component structure
-        return attributeKey ? component[attributeKey] : component;
+        return templateEditorFactory.getAttributeData(componentId, attributeKey);
       };
 
       $scope.setAttributeData = function (componentId, attributeKey, value) {
-        var component = _componentFor(componentId, true);
-
-        component[attributeKey] = value;
+        templateEditorFactory.setAttributeData(componentId, attributeKey, value);
       };
 
       $scope.getAvailableAttributeData = function (componentId, attributeName) {
@@ -77,33 +55,6 @@ angular.module('risevision.template-editor.controllers')
 
         return $scope.factory.savingPresentation || $scope.hasUnsavedChanges || isNotRevised;
       };
-
-      // updateAttributeData: do not update the object on getAttributeData
-      // or it will unnecessarily trigger hasUnsavedChanges = true
-      function _componentFor(componentId, updateAttributeData) {
-        var attributeData = $scope.factory.presentation.templateAttributeData;
-        var component;
-
-        if (attributeData.components) {
-          component = _.find(attributeData.components, {
-            id: componentId
-          });
-        } else if (updateAttributeData) {
-          attributeData.components = [];
-        }
-
-        if (!component) {
-          component = {
-            id: componentId
-          };
-
-          if (updateAttributeData) {
-            attributeData.components.push(component);
-          }
-        }
-
-        return component;
-      }
 
       function _getCurrentTimestamp() {
         return new Date().getTime();

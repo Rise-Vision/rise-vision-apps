@@ -1,7 +1,7 @@
 <div class="pl-0 file-row">
   <div class="file-thumbnail">
     <div class="file-helper"></div>
-    <img src="{{ entry['thumbnail-url'] }}"
+    <img ng-src="{{ entry['thumbnail-url'] }}"
       ng-if="entry.exists && !isStreamlineThumbnail()"
       width="80"
     ></img>

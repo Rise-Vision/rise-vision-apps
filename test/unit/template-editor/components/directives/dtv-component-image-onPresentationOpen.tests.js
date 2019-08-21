@@ -22,7 +22,11 @@ describe('directive: TemplateComponentImage: onPresentationOpen', function() {
     $provide.service('templateEditorFactory', function() {
       return factory;
     });
-
+    $provide.service('baseImageFactory', function() {
+      return {
+        getBlueprintData: function() { return {}; }
+      };
+    });
     $provide.service('fileExistenceCheckService', function() {
       return {
         requestMetadataFor: function() {

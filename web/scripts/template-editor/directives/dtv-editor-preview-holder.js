@@ -11,6 +11,7 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope) {
           $scope.factory = templateEditorFactory;
           $scope.blueprintFactory = blueprintFactory;
+          $scope.brandingFactory = brandingFactory;
 
           var DEFAULT_TEMPLATE_WIDTH = 800;
           var DEFAULT_TEMPLATE_HEIGHT = 600;
@@ -34,6 +35,8 @@ angular.module('risevision.template-editor.directives')
             _postStartEvent();
 
             _postDisplayData();
+
+            _postLogoData();
           };
 
           $scope.getEditorPreviewUrl = function (productCode) {
@@ -171,14 +174,24 @@ angular.module('risevision.template-editor.directives')
             _postAttributeData();
           }, true);
 
+          $scope.$watch('brandingFactory.brandingSettings.logoFileMetadata', function (value) {
+            _postLogoData();
+          }, true);
+
           $scope.$on('risevision.company.updated', function () {
             // ensure branding factory updates branding via the same handler
-            $timeout(_postDisplayData);
+            $timeout(function () {
+              _postDisplayData();
+              _postLogoData();
+            });
           });
 
           $scope.$on('risevision.company.selectedCompanyChanged', function () {
             // ensure branding factory updates branding via the same handler
-            $timeout(_postDisplayData);
+            $timeout(function () {
+              _postDisplayData();
+              _postLogoData();
+            });
           });
 
           function _postAttributeData() {
@@ -207,10 +220,35 @@ angular.module('risevision.template-editor.directives')
                   country: company.country,
                   postalCode: company.postalCode
                 },
-                companyBranding: brandingFactory.brandingSettings
+                companyBranding: {
+                  baseColor: brandingFactory.brandingSettings.baseColor,
+                  accentColor: brandingFactory.brandingSettings.accentColor
+                }
               }
             };
             _postMessageToTemplate(message);
+          }
+
+          function _postLogoData() {
+            if (brandingFactory.brandingSettings.logoFileMetadata) {
+
+              var logoComponents = blueprintFactory.getLogoComponents();
+              var components = [];
+              angular.forEach(logoComponents, function (c) {
+                components.push({
+                  id: c.id,
+                  metadata: brandingFactory.brandingSettings.logoFileMetadata
+                });
+              });
+
+              var logoAttributeData = {
+                type: 'attributeData',
+                value: {
+                  components: components
+                }
+              };
+              _postMessageToTemplate(logoAttributeData);
+            }
           }
 
           function _postMessageToTemplate(message) {

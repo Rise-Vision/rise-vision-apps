@@ -275,6 +275,46 @@ angular.module('risevision.template-editor.services')
         return deferred.promise;
       };
 
+      factory.getAttributeData = function (componentId, attributeKey) {
+        var component = _componentFor(componentId, false);
+
+        // if the attributeKey is not provided, it returns the full component structure
+        return attributeKey ? component[attributeKey] : component;
+      };
+
+      factory.setAttributeData = function (componentId, attributeKey, value) {
+        var component = _componentFor(componentId, true);
+
+        component[attributeKey] = value;
+      };
+
+      // updateAttributeData: do not update the object on getAttributeData
+      // or it will unnecessarily trigger hasUnsavedChanges = true
+      var _componentFor = function (componentId, updateAttributeData) {
+        var attributeData = factory.presentation.templateAttributeData;
+        var component;
+
+        if (attributeData.components) {
+          component = _.find(attributeData.components, {
+            id: componentId
+          });
+        } else if (updateAttributeData) {
+          attributeData.components = [];
+        }
+
+        if (!component) {
+          component = {
+            id: componentId
+          };
+
+          if (updateAttributeData) {
+            attributeData.components.push(component);
+          }
+        }
+
+        return component;
+      };
+
       var _publishPresentation = function () {
         if (!factory.isRevised()) {
           // template is already published
