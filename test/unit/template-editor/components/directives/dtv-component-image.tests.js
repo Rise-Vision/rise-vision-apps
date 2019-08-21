@@ -40,8 +40,7 @@ describe('directive: TemplateComponentImage', function() {
         getImagesAsMetadata: sandbox.stub().returns([]),
         areChecksCompleted: sandbox.stub().returns(true),
         getDuration: sandbox.stub().returns(10),
-        canRemoveImage: sandbox.stub().returns(Q.resolve()),
-        removeImage: sandbox.stub()
+        removeImage: sandbox.stub().returns(Q.resolve())
       };
     });
     $provide.service('storageAPILoader', function() {
@@ -309,31 +308,18 @@ describe('directive: TemplateComponentImage', function() {
   });
 
   describe('removeImageFromList',function(){
-
-    it('should confirm and call removal funciton',function(done){
+    it('should forward call to imageFactory and update with the result',function(done){
       var image = {file:'file1'};
+      var expectedImages = [{file: 'file2'}];
+      baseImageFactory.removeImage.returns(Q.resolve(expectedImages));
       
       $scope.removeImageFromList(image);
 
-      baseImageFactory.canRemoveImage.should.have.been.calledWith(image);
+      baseImageFactory.removeImage.should.have.been.calledWith(image);
       setTimeout(function(){
-        baseImageFactory.removeImage.should.have.been.calledWith(image);
-        done()
+        expect($scope.selectedImages).to.deep.equal(expectedImages);
+        done();
       },10);
     });
-
-    it('should not call removal if confirmation was rejected', function(done) {
-      var image = {file:'file1'};
-      baseImageFactory.canRemoveImage.returns(Q.reject());
-
-      $scope.removeImageFromList(image);
-
-      baseImageFactory.canRemoveImage.should.have.been.calledWith(image);
-      setTimeout(function(){
-        baseImageFactory.removeImage.should.not.have.been.calledWith(image);
-        done()
-      },10);    
-    });
-
   });
 });
