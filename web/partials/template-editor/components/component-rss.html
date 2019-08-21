@@ -8,7 +8,7 @@
         <span ng-switch-when="INVALID_URL">Please provide a valid URL.</span>
         <span ng-switch-when="UNAUTHORIZED">The feed at the URL provided cannot be shown because it is protected and requires authentication.</span>
         <span ng-switch-when="NON_FEED">The URL provided is not an RSS feed.</span>
-        <span ng-switch-when="NOT_FOUND">The URL provided could not be resolved.</span>
+        <span ng-switch-when="NOT_FOUND">Provide a valid RSS URL.</span>
         <span ng-switch-when="INVALID_FEED">There are errors with the RSS feed that could impact how your content appears. You can view a summary of the errors detected <a ng-href="https://validator.w3.org/feed/check.cgi?url={{feedUrl | encodeLink}}" target="_blank">here</a>.</span>
       </p>
     </div>
