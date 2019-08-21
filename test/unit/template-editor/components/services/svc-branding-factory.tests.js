@@ -2,6 +2,7 @@
 
 describe('service: brandingFactory', function() {
 
+  beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module('risevision.template-editor.services'));
   beforeEach(module(mockTranlate()));
 
@@ -74,7 +75,8 @@ describe('service: brandingFactory', function() {
       expect(brandingFactory.brandingSettings).to.deep.equal({
         baseColor: undefined,
         accentColor: undefined,
-        logoFile: undefined
+        logoFile: undefined,
+        logoFileMetadata: []
       });
     });
 
@@ -96,7 +98,8 @@ describe('service: brandingFactory', function() {
       expect(brandingFactory.brandingSettings).to.deep.equal({
         baseColor: undefined,
         accentColor: undefined,
-        logoFile: undefined
+        logoFile: undefined,
+        logoFileMetadata: []
       });
     });
 
@@ -114,7 +117,8 @@ describe('service: brandingFactory', function() {
       expect(brandingFactory.brandingSettings).to.deep.equal({
         baseColor: undefined,
         accentColor: undefined,
-        logoFile: undefined
+        logoFile: undefined,
+        logoFileMetadata: []
       });
     });
 
@@ -158,7 +162,8 @@ describe('service: brandingFactory', function() {
       expect(brandingFactory.brandingSettings).to.deep.equal({
         baseColor: undefined,
         accentColor: undefined,
-        logoFile: undefined
+        logoFile: undefined,
+        logoFileMetadata: []
       });
     });
 

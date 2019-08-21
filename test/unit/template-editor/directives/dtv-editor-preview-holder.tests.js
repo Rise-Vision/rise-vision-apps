@@ -6,13 +6,15 @@ describe('directive: TemplateEditorPreviewHolder', function() {
       $timeout,
       element,
       blueprintFactory,
+      brandingFactory,
       iframe,
       userState,
       rootScope;
 
   beforeEach(function() {
     blueprintFactory = {
-        blueprintData: { width: "1000", height: "1000" }
+        blueprintData: { width: "1000", height: "1000" },
+        getLogoComponents: sandbox.stub().returns([{id:'logo'}])
       };
     iframe = {
       setAttribute: sandbox.stub(),
@@ -42,7 +44,11 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     });
     $provide.service('brandingFactory', function() {
       return {
-        brandingSettings: 'brandingSettings'
+        brandingSettings: {
+          baseColor: 'baseColor',
+          accentColor: 'accentColor',
+          logoFileMetadata: 'logoMetadata'
+        }
       };
     });
     $provide.service('userState', function() {
@@ -50,13 +56,15 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     });    
   }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache, $window, _$timeout_){
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $window, _$timeout_,$injector){
     rootScope = $rootScope;
     $timeout = _$timeout_;
     $templateCache.put('partials/template-editor/preview-holder.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
-    sandbox.stub($window.document, 'getElementById', function(id) {
+    brandingFactory = $injector.get('brandingFactory');
+
+    sandbox.stub($window.document, 'getElementById').callsFake(function(id) {
       if (id === 'template-editor-preview') return iframe;
       return {
           clientHeight: 500,
@@ -93,7 +101,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
     setTimeout(function(){
       iframe.contentWindow.postMessage.should.have.been.called;
-      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal([ '{"type":"displayData","value":{"displayAddress":{},"companyBranding":"brandingSettings"}}', 'https://widgets.risevision.com' ]);
+      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"baseColor":"baseColor","accentColor":"accentColor"}}}', 'https://widgets.risevision.com']);
 
       done();
     },10);
@@ -108,7 +116,22 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
     setTimeout(function(){
       iframe.contentWindow.postMessage.should.have.been.called;
-      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal([ '{"type":"displayData","value":{"displayAddress":{},"companyBranding":"brandingSettings"}}', 'https://widgets.risevision.com' ]);
+      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"baseColor":"baseColor","accentColor":"accentColor"}}}', 'https://widgets.risevision.com']);
+
+      done();
+    },10);
+  });
+
+  it('posts post logo data when metadata has changed', function(done) {
+    iframe.onload();
+    iframe.contentWindow.postMessage.reset();
+    $scope.brandingFactory.brandingSettings.logoFileMetadata = 'newMetadata';
+    $scope.$digest();
+    $timeout.flush();
+
+    setTimeout(function(){
+      iframe.contentWindow.postMessage.should.have.been.called;
+      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"attributeData","value":{"components":[{"id":"logo","metadata":"newMetadata"}]}}', 'https://widgets.risevision.com']);
 
       done();
     },10);
@@ -210,7 +233,9 @@ describe('directive: TemplateEditorPreviewHolder', function() {
       //send start event
       expect(iframe.contentWindow.postMessage.getCall(1).args).to.deep.equal([ '{"type":"sendStartEvent"}', 'https://widgets.risevision.com' ]);
       //send display data
-      expect(iframe.contentWindow.postMessage.getCall(2).args).to.deep.equal([ '{"type":"displayData","value":{"displayAddress":{},"companyBranding":"brandingSettings"}}', 'https://widgets.risevision.com' ]);
+      expect(iframe.contentWindow.postMessage.getCall(2).args).to.deep.equal([ '{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"baseColor":"baseColor","accentColor":"accentColor"}}}', 'https://widgets.risevision.com' ]);
+      //send logo data
+      expect(iframe.contentWindow.postMessage.getCall(3).args).to.deep.equal(['{"type":"attributeData","value":{"components":[{"id":"logo","metadata":"logoMetadata"}]}}', 'https://widgets.risevision.com']);
     });
   });
 

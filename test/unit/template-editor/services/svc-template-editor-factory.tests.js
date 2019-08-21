@@ -728,4 +728,72 @@ describe('service: templateEditorFactory:', function() {
     });    
 
   });
+
+
+  describe('getAttributeData', function () {
+
+    beforeEach(function(){
+      templateEditorFactory.presentation = { templateAttributeData: {} };
+    });
+
+    it('should get empty attribute data',function() {
+      var data = templateEditorFactory.getAttributeData('test-id');
+
+      expect(data).to.deep.equal({ id: 'test-id' });
+    });
+
+    it('should not update templateAttributeData on get',function() {
+      templateEditorFactory.getAttributeData('test-id');
+
+      expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
+    });
+
+    it('should get undefined attribute data value',function() {
+      var data = templateEditorFactory.getAttributeData('test-id', 'symbols');
+
+      expect(data).to.not.be.ok;
+    });
+
+  });
+
+  describe('setAttributeData', function () {
+
+    beforeEach(function(){
+      templateEditorFactory.presentation = { templateAttributeData: {} };
+    });
+
+    it('should set an attribute data value',function() {
+      templateEditorFactory.setAttributeData('test-id', 'symbols', 'CADUSD=X|MXNUSD=X');
+
+      expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({
+        components: [
+          {
+            id: 'test-id',
+            symbols: 'CADUSD=X|MXNUSD=X'
+          }
+        ]
+      });
+    });
+
+    it('should get an attribute data value',function() {
+      templateEditorFactory.setAttributeData('test-id', 'symbols', 'CADUSD=X|MXNUSD=X');
+
+      var data = templateEditorFactory.getAttributeData('test-id', 'symbols');
+
+      expect(data).to.equal('CADUSD=X|MXNUSD=X');
+    });
+
+    it('should get attribute data',function() {
+      templateEditorFactory.setAttributeData('test-id', 'symbols', 'CADUSD=X|MXNUSD=X');
+
+      var data = templateEditorFactory.getAttributeData('test-id');
+
+      expect(data).to.deep.equal({
+        id: 'test-id',
+        symbols: 'CADUSD=X|MXNUSD=X'
+      });
+    });
+
+  });
+  
 });

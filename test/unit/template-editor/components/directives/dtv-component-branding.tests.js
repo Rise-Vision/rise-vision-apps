@@ -21,11 +21,12 @@ describe('directive: templateComponentBranding', function() {
     element = compile("<template-component-branding></template-component-branding>")(rootScope.$new());
     $scope = element.scope();
 
-    $scope.registerDirective = sinon.stub();    
+    $scope.registerDirective = sinon.stub();
     $scope.setPanelTitle = sinon.stub();
     $scope.setPanelIcon = sinon.stub();
     $scope.showNextPanel = sinon.stub();
     $scope.showPreviousPanel = sinon.stub();
+    $scope.editComponent = sinon.stub();
 
     $scope.$digest();
   }
@@ -54,7 +55,7 @@ describe('directive: templateComponentBranding', function() {
   it('editLogo:', function() {
     $scope.editLogo();
 
-    $scope.showNextPanel.should.have.been.calledWith('.branding-logo-container');
+    $scope.editComponent.should.have.been.calledWith({type: 'rise-image'});
   });
 
   it('editColors: ', function() {
