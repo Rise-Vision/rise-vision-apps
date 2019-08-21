@@ -48,10 +48,14 @@ describe('controller: Playlist Item Modal', function() {
         }
       };
     });
-    $provide.service('template',function(){
+    $provide.service('blueprintFactory',function(){
       return {
-        loadBlueprintData: function(){
-          return Q.resolve(blueprintData);
+        isPlayUntilDone: function() {
+          return this.playUntilDone;
+        },
+        load: function(){
+          this.playUntilDone = playUntilDone;
+          return Q.resolve();
         }
       };
     });
@@ -65,7 +69,7 @@ describe('controller: Playlist Item Modal', function() {
     $provide.constant('HTML_PRESENTATION_TYPE', 'HTML Template');
   }));
 
-  var $scope, $modalInstance, $modalInstanceDismissSpy, itemUpdated, playlistItem, presentationType, blueprintData;
+  var $scope, $modalInstance, $modalInstanceDismissSpy, itemUpdated, playlistItem, presentationType, playUntilDone;
 
   beforeEach(function(){
     itemUpdated = false;
@@ -140,7 +144,7 @@ describe('controller: Playlist Item Modal', function() {
   it('should set playUntilDoneSupported to FALSE for HTML template', function(done) {
 
     presentationType = 'HTML Template';
-    blueprintData = {data: {playUntilDone: false}};
+    playUntilDone = false;
 
     $scope.selectPresentation();
 
@@ -155,7 +159,7 @@ describe('controller: Playlist Item Modal', function() {
   it('should set playUntilDoneSupported to TRUE for HTML template', function(done) {
 
     presentationType = 'HTML Template';
-    blueprintData = {data: {playUntilDone: true}};
+    playUntilDone = true;
 
     $scope.selectPresentation();
 
@@ -170,7 +174,7 @@ describe('controller: Playlist Item Modal', function() {
   it('should set playlistItem.playUntilDone to TRUE when adding a new HTML template that is PUD', function(done) {
 
     presentationType = 'HTML Template';
-    blueprintData = {data: {playUntilDone: true}};
+    playUntilDone = true;
     $scope.playlistItem.playUntilDone = undefined;
     $scope.isNew = true;
 
@@ -188,7 +192,7 @@ describe('controller: Playlist Item Modal', function() {
   it('should not set playlistItem.playUntilDone to TRUE when editing existing HTML template that is PUD', function(done) {
 
     presentationType = 'HTML Template';
-    blueprintData = {data: {playUntilDone: true}};
+    playUntilDone = true;
     $scope.playlistItem.playUntilDone = false;
     $scope.isNew = false;
 

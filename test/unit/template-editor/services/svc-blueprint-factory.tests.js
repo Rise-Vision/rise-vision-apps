@@ -16,6 +16,7 @@ describe('service: blueprint factory', function() {
   it('should exist',function(){
     expect(blueprintFactory).to.be.ok;
     expect(blueprintFactory.load).to.be.a('function');
+    expect(blueprintFactory.isPlayUntilDone).to.be.a('function');
     expect(blueprintFactory.hasBranding).to.be.a('function');
   });
 
@@ -55,6 +56,37 @@ describe('service: blueprint factory', function() {
         });
 
       $httpBackend.flush();
+    });    
+  });
+
+  describe('isPlayUntilDone: ', function() {
+
+    it('should return false if blueprintData is not populated',function() {
+      expect(blueprintFactory.isPlayUntilDone()).to.be.false;
+    });
+
+    it('should return true if blueprintData.playUntilDone is true',function() {
+      blueprintFactory.blueprintData = {
+        playUntilDone: true
+      };
+
+      expect(blueprintFactory.isPlayUntilDone()).to.be.true;
+    });
+
+    it('should return true if blueprintData.playUntilDone exists',function() {
+      blueprintFactory.blueprintData = {
+        playUntilDone: "something"
+      };
+
+      expect(blueprintFactory.isPlayUntilDone()).to.be.true;
+    });
+
+    it('should return false otherwise',function() {
+      blueprintFactory.blueprintData = {
+        playUntilDone: false
+      };
+
+      expect(blueprintFactory.isPlayUntilDone()).to.be.false;
     });    
   });
 
