@@ -221,8 +221,8 @@ angular.module('risevision.template-editor.directives')
                   postalCode: company.postalCode
                 },
                 companyBranding: {
-                  primaryColor: brandingFactory.brandingSettings.primaryColor,
-                  secondaryColor: brandingFactory.brandingSettings.secondaryColor
+                  baseColor: brandingFactory.brandingSettings.baseColor,
+                  accentColor: brandingFactory.brandingSettings.accentColor
                 }
               }
             };

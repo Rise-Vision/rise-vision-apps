@@ -73,8 +73,8 @@ describe('service: brandingFactory', function() {
       brandingFactory.getBrandingComponent();
 
       expect(brandingFactory.brandingSettings).to.deep.equal({
-        primaryColor: undefined,
-        secondaryColor: undefined,
+        baseColor: undefined,
+        accentColor: undefined,
         logoFile: undefined,
         logoFileMetadata: []
       });
@@ -96,8 +96,8 @@ describe('service: brandingFactory', function() {
       brandingFactory.getBrandingComponent();
 
       expect(brandingFactory.brandingSettings).to.deep.equal({
-        primaryColor: undefined,
-        secondaryColor: undefined,
+        baseColor: undefined,
+        accentColor: undefined,
         logoFile: undefined,
         logoFileMetadata: []
       });
@@ -115,8 +115,8 @@ describe('service: brandingFactory', function() {
       $rootScope.$digest();
 
       expect(brandingFactory.brandingSettings).to.deep.equal({
-        primaryColor: undefined,
-        secondaryColor: undefined,
+        baseColor: undefined,
+        accentColor: undefined,
         logoFile: undefined,
         logoFileMetadata: []
       });
@@ -140,8 +140,8 @@ describe('service: brandingFactory', function() {
       $rootScope.$digest();
 
       expect(brandingFactory.brandingSettings).to.deep.equal({
-        primaryColor: undefined,
-        secondaryColor: undefined,
+        baseColor: undefined,
+        accentColor: undefined,
         logoFile: 'logoFile'
       });
     });
@@ -160,8 +160,8 @@ describe('service: brandingFactory', function() {
       $rootScope.$digest();
 
       expect(brandingFactory.brandingSettings).to.deep.equal({
-        primaryColor: undefined,
-        secondaryColor: undefined,
+        baseColor: undefined,
+        accentColor: undefined,
         logoFile: undefined,
         logoFileMetadata: []
       });
@@ -176,18 +176,18 @@ describe('service: brandingFactory', function() {
         settings: {
           brandingLogoFile: 'logoFile',
           brandingDraftLogoFile: 'draftLogoFile',
-          brandingPrimaryColor: 'primaryColor',
-          brandingDraftPrimaryColor: 'draftPrimaryColor',
-          brandingSecondaryColor: 'secondaryColor',
-          brandingDraftSecondaryColor: 'draftSecondaryColor'
+          brandingBaseColor: 'baseColor',
+          brandingDraftBaseColor: 'draftBaseColor',
+          brandingAccentColor: 'accentColor',
+          brandingDraftAccentColor: 'draftAccentColor'
         }
       });
 
       brandingFactory.getBrandingComponent();
 
       expect(brandingFactory.brandingSettings).to.deep.equal({
-        primaryColor: 'draftPrimaryColor',
-        secondaryColor: 'draftSecondaryColor',
+        baseColor: 'draftBaseColor',
+        accentColor: 'draftAccentColor',
         logoFile: 'draftLogoFile'
       });
     });
@@ -197,17 +197,17 @@ describe('service: brandingFactory', function() {
         settings: {
           brandingLogoFile: 'logoFile',
           brandingDraftLogoFile: 'draftLogoFile',
-          brandingPrimaryColor: 'primaryColor',
-          brandingSecondaryColor: 'secondaryColor',
-          brandingDraftSecondaryColor: 'draftSecondaryColor'
+          brandingBaseColor: 'baseColor',
+          brandingAccentColor: 'accentColor',
+          brandingDraftAccentColor: 'draftAccentColor'
         }
       });
 
       brandingFactory.getBrandingComponent();
 
       expect(brandingFactory.brandingSettings).to.deep.equal({
-        primaryColor: undefined,
-        secondaryColor: 'draftSecondaryColor',
+        baseColor: undefined,
+        accentColor: 'draftAccentColor',
         logoFile: 'draftLogoFile'
       });
     });
@@ -216,8 +216,8 @@ describe('service: brandingFactory', function() {
       userState.getCopyOfSelectedCompany.returns({
         settings: {
           brandingLogoFile: 'logoFile',
-          brandingPrimaryColor: 'primaryColor',
-          brandingSecondaryColor: 'secondaryColor'
+          brandingBaseColor: 'baseColor',
+          brandingAccentColor: 'accentColor'
         }
       });
 
@@ -233,8 +233,8 @@ describe('service: brandingFactory', function() {
       brandingFactory.getBrandingComponent();
 
       expect(brandingFactory.brandingSettings).to.deep.equal({
-        primaryColor: 'primaryColor',
-        secondaryColor: 'secondaryColor',
+        baseColor: 'baseColor',
+        accentColor: 'accentColor',
         logoFile: 'logoFile'
       });
     });
@@ -248,10 +248,10 @@ describe('service: brandingFactory', function() {
         settings: {
           brandingLogoFile: 'logoFile',
           brandingDraftLogoFile: 'draftLogoFile',
-          brandingPrimaryColor: 'primaryColor',
-          brandingDraftPrimaryColor: 'draftPrimaryColor',
-          brandingSecondaryColor: 'secondaryColor',
-          brandingDraftSecondaryColor: 'draftSecondaryColor'
+          brandingBaseColor: 'baseColor',
+          brandingDraftBaseColor: 'draftBaseColor',
+          brandingAccentColor: 'accentColor',
+          brandingDraftAccentColor: 'draftAccentColor'
         }
       });
     });
@@ -284,10 +284,10 @@ describe('service: brandingFactory', function() {
           settings: {
             brandingLogoFile: 'draftLogoFile',
             brandingDraftLogoFile: '',
-            brandingPrimaryColor: 'draftPrimaryColor',
-            brandingDraftPrimaryColor: '',
-            brandingSecondaryColor: 'draftSecondaryColor',
-            brandingDraftSecondaryColor: ''
+            brandingBaseColor: 'draftBaseColor',
+            brandingDraftBaseColor: '',
+            brandingAccentColor: 'draftAccentColor',
+            brandingDraftAccentColor: ''
           }
         });
 
@@ -318,15 +318,15 @@ describe('service: brandingFactory', function() {
 
   it('updateDraftColors: ', function(done) {
     brandingFactory.brandingSettings = {
-      primaryColor: 'draftPrimaryColor',
-      secondaryColor: 'draftSecondaryColor'
+      baseColor: 'draftBaseColor',
+      accentColor: 'draftAccentColor'
     };
 
     brandingFactory.updateDraftColors().then(function() {
       updateCompany.should.have.been.calledWith('companyId', {
         settings: {
-          brandingDraftPrimaryColor: 'draftPrimaryColor',
-          brandingDraftSecondaryColor: 'draftSecondaryColor'
+          brandingDraftBaseColor: 'draftBaseColor',
+          brandingDraftAccentColor: 'draftAccentColor'
         }
       });
 
@@ -359,8 +359,8 @@ describe('service: brandingFactory', function() {
       userState.getCopyOfSelectedCompany.returns({
         settings: {
           brandingLogoFile: 'logoFile',
-          brandingPrimaryColor: 'primaryColor',
-          brandingSecondaryColor: 'secondaryColor'
+          brandingBaseColor: 'baseColor',
+          brandingAccentColor: 'accentColor'
         }
       });
 
@@ -371,8 +371,8 @@ describe('service: brandingFactory', function() {
       userState.getCopyOfSelectedCompany.returns({
         settings: {
           brandingDraftLogoFile: 'draftLogoFile',
-          brandingDraftPrimaryColor: 'draftPrimaryColor',
-          brandingDraftSecondaryColor: 'draftSecondaryColor'
+          brandingDraftBaseColor: 'draftBaseColor',
+          brandingDraftAccentColor: 'draftAccentColor'
         }
       });
 
@@ -382,7 +382,7 @@ describe('service: brandingFactory', function() {
     it('should be true if any of the the draft settings exist', function() {
       userState.getCopyOfSelectedCompany.returns({
         settings: {
-          brandingDraftSecondaryColor: 'draftSecondaryColor'
+          brandingDraftAccentColor: 'draftAccentColor'
         }
       });
 

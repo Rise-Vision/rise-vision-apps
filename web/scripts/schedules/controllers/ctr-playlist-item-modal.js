@@ -2,9 +2,9 @@
 
 angular.module('risevision.schedules.controllers')
   .controller('playlistItemModal', ['$scope', '$modal', '$modalInstance', '$loading',
-    'playlistFactory', 'playlistItem', 'userState', 'presentation', 'template', 'HTML_PRESENTATION_TYPE',
+    'playlistFactory', 'playlistItem', 'userState', 'presentation', 'blueprintFactory', 'HTML_PRESENTATION_TYPE',
     function ($scope, $modal, $modalInstance, $loading, playlistFactory, playlistItem,
-      userState, presentation, template, HTML_PRESENTATION_TYPE) {
+      userState, presentation, blueprintFactory, HTML_PRESENTATION_TYPE) {
       $scope.companyId = userState.getSelectedCompanyId();
       $scope.playlistItem = angular.copy(playlistItem);
       $scope.isNew = playlistFactory.isNew(playlistItem);
@@ -45,20 +45,17 @@ angular.module('risevision.schedules.controllers')
 
           presentation.get($scope.playlistItem.objectReference).then(function (result) {
 
-              return template.loadBlueprintData(result.item.productCode);
+              return blueprintFactory.load(result.item.productCode);
             })
-            .then(function (result) {
-
-              if (result.data) {
-                if (result.data.playUntilDone && $scope.isNew) {
+            .then(function () {
+                if (blueprintFactory.isPlayUntilDone() && $scope.isNew) {
                   //When user schedules a PUD template, then set schedule item to PUD by default.
                   $scope.playlistItem.playUntilDone = true;
                 }
-                if (!result.data.playUntilDone) {
+                if (!blueprintFactory.isPlayUntilDone()) {
                   $scope.playUntilDoneSupported = false;
                   $scope.playlistItem.playUntilDone = false;
                 }
-              }
             })
             .catch(function () {
               $scope.playUntilDoneSupported = false;

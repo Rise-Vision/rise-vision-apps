@@ -6,17 +6,17 @@ angular.module('risevision.template-editor.directives')
   .constant('SUPPORTED_IMAGE_TYPES', '.bmp, .gif, .jpeg, .jpg, .png, .svg, .webp')
   .directive('templateComponentImage', ['$log', '$q', '$timeout', 'templateEditorFactory', 'templateEditorUtils',
     'fileExistenceCheckService', 'fileMetadataUtilsService', 'DEFAULT_IMAGE_THUMBNAIL', 'SUPPORTED_IMAGE_TYPES',
-    'logoImageFactory', 'regularImageFactory',
+    'logoImageFactory', 'baseImageFactory',
     function ($log, $q, $timeout, templateEditorFactory, templateEditorUtils,
       fileExistenceCheckService, fileMetadataUtilsService, DEFAULT_IMAGE_THUMBNAIL, SUPPORTED_IMAGE_TYPES,
-      logoImageFactory, regularImageFactory) {
+      logoImageFactory, baseImageFactory) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-image.html',
         link: function ($scope, element) {
           var storagePanelSelector = '.storage-selector-container';
-          var imageFactory = regularImageFactory;
+          var imageFactory = baseImageFactory;
 
           $scope.factory = templateEditorFactory;
           $scope.validExtensions = SUPPORTED_IMAGE_TYPES;
@@ -166,7 +166,7 @@ angular.module('risevision.template-editor.directives')
 
               // edits branding logo if no id is provided
               if ($scope.factory.selected.id) {
-                imageFactory = regularImageFactory;
+                imageFactory = baseImageFactory;
                 imageFactory.componentId = $scope.factory.selected.id;
               } else {
                 imageFactory = logoImageFactory;

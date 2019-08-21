@@ -1,0 +1,134 @@
+'use strict';
+
+describe('service: baseImageFactory', function() {
+
+  beforeEach(module('risevision.template-editor.directives'));
+  beforeEach(module('risevision.template-editor.services'));
+  beforeEach(module(mockTranlate()));
+
+  beforeEach(module(function($provide) {
+    $provide.service('blueprintFactory', function() {
+      return {
+        getBlueprintData: sandbox.stub().returns('data')
+      };
+    });
+    $provide.service('templateEditorFactory', function() {
+      return {
+        getAttributeData: sandbox.stub().returns('data'),
+        setAttributeData: sandbox.stub()
+      };
+    });
+    $provide.service('fileMetadataUtilsService', function() {
+      return {
+        metadataWithFileRemoved: sandbox.stub().returns([]),
+        filesAttributeFor: sandbox.stub().returns('files')
+      };
+    });
+  }));
+
+  var baseImageFactory, blueprintFactory, templateEditorFactory, fileMetadataUtilsService;
+  var sandbox = sinon.sandbox.create();
+
+  beforeEach(function() {
+    inject(function($injector) {
+      baseImageFactory = $injector.get('baseImageFactory');
+      baseImageFactory.componentId = 'componentId';
+      
+      blueprintFactory = $injector.get('blueprintFactory');
+      templateEditorFactory = $injector.get('templateEditorFactory');
+      fileMetadataUtilsService = $injector.get('fileMetadataUtilsService');
+    });
+  });
+
+  afterEach(function() {
+   sandbox.restore();
+  })
+
+  it('should initialize', function () {
+    expect(baseImageFactory).to.be.ok;
+    expect(baseImageFactory.getImagesAsMetadata).to.be.a('function');
+    expect(baseImageFactory.getDuration).to.be.a('function');
+    expect(baseImageFactory.setDuration).to.be.a('function');
+    expect(baseImageFactory.getBlueprintData).to.be.a('function');
+    expect(baseImageFactory.areChecksCompleted).to.be.a('function');
+    expect(baseImageFactory.removeImage).to.be.a('function');
+    expect(baseImageFactory.updateMetadata).to.be.a('function');
+  });
+
+  describe('getImagesAsMetadata: ', function() {
+    it('should return Template Editor attributes metadata', function() {
+      var data = baseImageFactory.getImagesAsMetadata();      
+
+      expect(data).to.equals('data');
+      templateEditorFactory.getAttributeData.should.have.been.calledWith('componentId','metadata');
+    });
+  });
+
+  describe('getDuration: ', function() {
+    it('should return Template Editor attributes duration', function() {
+      var data = baseImageFactory.getDuration();      
+
+      expect(data).to.equals('data');
+      templateEditorFactory.getAttributeData.should.have.been.calledWith('componentId','duration');
+    });
+  });
+
+  describe('setDuration: ', function() {
+    it('should set Template Editor attributes duration', function() {
+      baseImageFactory.setDuration(55);      
+
+      templateEditorFactory.setAttributeData.should.have.been.calledWith('componentId','duration',55);
+    });
+  });
+
+  describe('getBlueprintData: ', function() {
+    it('should return blueprint data', function() {
+      var data = baseImageFactory.getBlueprintData('key');      
+
+      expect(data).to.equals('data');
+      blueprintFactory.getBlueprintData.should.have.been.calledWith('componentId','key');
+    });
+  });
+
+  describe('areChecksCompleted: ', function() {
+    it('should return true if componentId is in the list', function() {
+      expect(baseImageFactory.areChecksCompleted({componentId:true})).to.be.true;
+      expect(baseImageFactory.areChecksCompleted({otherID:true,componentId:true})).to.be.true;
+    });
+
+    it('should return false if empty or not present', function() {
+      expect(baseImageFactory.areChecksCompleted(null)).to.be.false
+      expect(baseImageFactory.areChecksCompleted({})).to.be.false;
+      expect(baseImageFactory.areChecksCompleted({anotherId:true})).to.be.false;
+    });
+
+    it('should return false if componentId is not set', function() {
+      baseImageFactory.componentId = null;
+      expect(baseImageFactory.areChecksCompleted({componentId:true})).to.be.false;
+    });
+  });
+
+  describe('removeImage: ', function() {
+    it('should rely on fileMetadataUtilsService', function() {
+      var metadata = []
+      var data = baseImageFactory.removeImage({},metadata);      
+
+      expect(data).to.deep.equals([]);
+      fileMetadataUtilsService.metadataWithFileRemoved.should.have.been.calledWith(metadata,{});
+    });
+  });
+
+  describe('updateMetadata: ', function() {
+    it('should set attributes data and return metadata', function() {
+      var metadata = ['metadata'];
+      var data = baseImageFactory.updateMetadata(metadata);      
+
+      expect(data).to.deep.equals(metadata);
+      templateEditorFactory.setAttributeData.should.have.been.calledWith('componentId','metadata',metadata);
+      templateEditorFactory.setAttributeData.should.have.been.calledWith('componentId','files','files');
+
+      fileMetadataUtilsService.filesAttributeFor.should.have.been.calledWith(metadata);
+    });
+  });
+
+});
