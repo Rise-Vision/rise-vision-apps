@@ -16,7 +16,7 @@ angular.module('risevision.template-editor.services')
           });
       };
 
-      factory.isPlayUntilDone = function() {
+      factory.isPlayUntilDone = function () {
         return !!(factory.blueprintData && factory.blueprintData.playUntilDone);
       };
 
