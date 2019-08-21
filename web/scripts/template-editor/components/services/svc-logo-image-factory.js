@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('logoImageFactory', ['DEFAULT_IMAGE_THUMBNAIL', 'brandingFactory', '$modal', '$templateCache',
-    function (DEFAULT_IMAGE_THUMBNAIL, brandingFactory, $modal, $templateCache) {
+  .factory('logoImageFactory', ['DEFAULT_IMAGE_THUMBNAIL', 'brandingFactory', '$modal', '$templateCache', '$q',
+    function (DEFAULT_IMAGE_THUMBNAIL, brandingFactory, $modal, $templateCache, $q) {
       var factory = {};
 
       factory.getImagesAsMetadata = function () {
@@ -48,7 +48,7 @@ angular.module('risevision.template-editor.services')
         return !!brandingFactory.brandingSettings.logoFileMetadata;
       };
 
-      factory.canRemoveImage = function (image) {
+      factory._canRemoveImage = function () {
         var modalInstance = $modal.open({
           template: $templateCache.get('partials/template-editor/confirm-modal.html'),
           controller: 'confirmInstance',
@@ -72,7 +72,15 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.removeImage = function (image, currentMetadata) {
-        return factory.updateMetadata([]);
+        var deferred = $q.defer();
+
+        factory._canRemoveImage().then(function(){
+          deferred.resolve(factory.updateMetadata([]));
+        }).catch(function(){
+          deferred.resolve(currentMetadata);
+        });
+
+        return deferred.promise;
       };
 
       return factory;

@@ -112,12 +112,16 @@ describe('service: baseImageFactory', function() {
   });
 
   describe('removeImage: ', function() {
-    it('should rely on fileMetadataUtilsService', function() {
-      var metadata = []
-      var data = baseImageFactory.removeImage({},metadata);      
-
-      expect(data).to.deep.equals([]);
-      fileMetadataUtilsService.metadataWithFileRemoved.should.have.been.calledWith(metadata,{});
+    it('should resolve fileMetadataUtilsService result', function(done) {
+      var file = {file:'file1'};
+      var metadata = [file];
+      baseImageFactory.removeImage(file,metadata).then(function(result){
+        expect(result).to.deep.equals([]);
+        fileMetadataUtilsService.metadataWithFileRemoved.should.have.been.calledWith(metadata,file);
+        done()
+      }).catch(function(){
+        done('should not reject');
+      });
     });
   });
 
@@ -131,16 +135,6 @@ describe('service: baseImageFactory', function() {
       templateEditorFactory.setAttributeData.should.have.been.calledWith('componentId','files','files');
 
       fileMetadataUtilsService.filesAttributeFor.should.have.been.calledWith(metadata);
-    });
-  });
-
-  describe('canRemoveImage: ', function() {
-    it('should always resolve as there is no need for user confirmation', function(done) {      
-      baseImageFactory.canRemoveImage().then(function(){
-        done();
-      }).catch(function(){
-        done('Should not reject');
-      });
     });
   });
 

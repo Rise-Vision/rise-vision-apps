@@ -27,17 +27,11 @@ angular.module('risevision.template-editor.services')
         return !!checksCompleted && !!checksCompleted[factory.componentId];
       };
 
-      factory.canRemoveImage = function (image) {
-        return $q.resolve();
-      };
-
       factory.removeImage = function (image, currentMetadata) {
         var metadata =
           fileMetadataUtilsService.metadataWithFileRemoved(currentMetadata, image);
 
-        if (metadata) {
-          return factory.updateMetadata(metadata);
-        }
+        return $q.resolve(factory.updateMetadata(metadata));
       };
 
       factory.updateMetadata = function (metadata) {
