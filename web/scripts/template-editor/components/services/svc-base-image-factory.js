@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('regularImageFactory', ['fileMetadataUtilsService', 'blueprintFactory', 'templateEditorFactory',
+  .factory('baseImageFactory', ['fileMetadataUtilsService', 'blueprintFactory', 'templateEditorFactory',
     function (fileMetadataUtilsService, blueprintFactory, templateEditorFactory) {
       var factory = {};
 

@@ -5,7 +5,7 @@ describe('directive: TemplateComponentImage', function() {
     element,
     factory,
     timeout,
-    regularImageFactory,
+    baseImageFactory,
     logoImageFactory,
     sandbox = sinon.sandbox.create();
 
@@ -34,7 +34,7 @@ describe('directive: TemplateComponentImage', function() {
         getDuration: sandbox.stub().returns(10)
       };
     });
-    $provide.service('regularImageFactory', function() {
+    $provide.service('baseImageFactory', function() {
       return {
         getBlueprintData: sandbox.stub().returns({}),
         getImagesAsMetadata: sandbox.stub().returns([]),
@@ -71,7 +71,7 @@ describe('directive: TemplateComponentImage', function() {
     $templateCache.put('partials/template-editor/components/component-image.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
-    regularImageFactory = $injector.get('regularImageFactory');
+    baseImageFactory = $injector.get('baseImageFactory');
     logoImageFactory = $injector.get('logoImageFactory');
 
     $scope.registerDirective = sinon.stub();
@@ -114,10 +114,10 @@ describe('directive: TemplateComponentImage', function() {
       directive.show();
 
       expect(logoImageFactory.getImagesAsMetadata).to.have.been.called;
-      expect(regularImageFactory.getImagesAsMetadata).to.not.have.been.called;
+      expect(baseImageFactory.getImagesAsMetadata).to.not.have.been.called;
     });
 
-    it('should use regularImageFactory whne opening images',function(){
+    it('should use baseImageFactory when opening images',function(){
       var directive = $scope.registerDirective.getCall(0).args[0];
       logoImageFactory.getImagesAsMetadata.returns([]);
 
@@ -125,8 +125,8 @@ describe('directive: TemplateComponentImage', function() {
 
       directive.show();
 
-      expect(regularImageFactory.getImagesAsMetadata).to.have.been.called;
-      expect(regularImageFactory.componentId).to.equal('image-id');
+      expect(baseImageFactory.getImagesAsMetadata).to.have.been.called;
+      expect(baseImageFactory.componentId).to.equal('image-id');
       expect(logoImageFactory.getImagesAsMetadata).to.not.have.been.called;
     });
 
@@ -137,7 +137,7 @@ describe('directive: TemplateComponentImage', function() {
         { "file": 'test|character.jpg', "thumbnail-url": "http://test%7Ccharacter.jpg" }
       ];
 
-      regularImageFactory.getImagesAsMetadata.returns(sampleImages);
+      baseImageFactory.getImagesAsMetadata.returns(sampleImages);
 
       directive.show();
 
@@ -153,8 +153,8 @@ describe('directive: TemplateComponentImage', function() {
         { "file": "image.png", "thumbnail-url": "http://image" }
       ];
 
-      regularImageFactory.getImagesAsMetadata.returns(sampleImages);
-      regularImageFactory.getBlueprintData.returns("image.png");
+      baseImageFactory.getImagesAsMetadata.returns(sampleImages);
+      baseImageFactory.getBlueprintData.returns("image.png");
 
       directive.show();
 
@@ -169,8 +169,8 @@ describe('directive: TemplateComponentImage', function() {
         { "file": "image.png", "thumbnail-url": "http://image" }
       ];
 
-      regularImageFactory.getImagesAsMetadata.returns(sampleImages);
-      regularImageFactory.getBlueprintData.returns("default.png");
+      baseImageFactory.getImagesAsMetadata.returns(sampleImages);
+      baseImageFactory.getBlueprintData.returns("default.png");
 
       directive.show();
 
@@ -194,7 +194,7 @@ describe('directive: TemplateComponentImage', function() {
         { "file": "image2.png", exists: false, "thumbnail-url": "http://image2" }
       ];
 
-      regularImageFactory.componentId = 'TEST-ID';
+      baseImageFactory.componentId = 'TEST-ID';
     });
 
     it('should directly set metadata if it\'s not already loaded', function()
@@ -203,7 +203,7 @@ describe('directive: TemplateComponentImage', function() {
         return null;
       };
 
-      $scope.updateFileMetadata(regularImageFactory.componentId, sampleImages);
+      $scope.updateFileMetadata(baseImageFactory.componentId, sampleImages);
 
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(sampleImages);
@@ -229,7 +229,7 @@ describe('directive: TemplateComponentImage', function() {
         return sampleImages;
       };
 
-      $scope.updateFileMetadata(regularImageFactory.componentId, updatedImages);
+      $scope.updateFileMetadata(baseImageFactory.componentId, updatedImages);
 
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(updatedImages);
@@ -258,7 +258,7 @@ describe('directive: TemplateComponentImage', function() {
         return sampleImages;
       };
 
-      $scope.updateFileMetadata(regularImageFactory.componentId, updatedImages);
+      $scope.updateFileMetadata(baseImageFactory.componentId, updatedImages);
 
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(expectedImages);
@@ -288,7 +288,7 @@ describe('directive: TemplateComponentImage', function() {
         return sampleImages;
       };
 
-      $scope.updateFileMetadata(regularImageFactory.componentId, updatedImages);
+      $scope.updateFileMetadata(baseImageFactory.componentId, updatedImages);
 
       expect($scope.isDefaultImageList).to.be.false;
       expect($scope.selectedImages).to.deep.equal(expectedImages);

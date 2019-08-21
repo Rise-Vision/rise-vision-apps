@@ -22,7 +22,7 @@ describe('directive: TemplateComponentImage: onPresentationOpen', function() {
     $provide.service('templateEditorFactory', function() {
       return factory;
     });
-    $provide.service('regularImageFactory', function() {
+    $provide.service('baseImageFactory', function() {
       return {
         getBlueprintData: function() { return {}; }
       };
