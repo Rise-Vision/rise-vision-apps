@@ -24,6 +24,9 @@ describe('service: baseImageFactory', function() {
         filesAttributeFor: sandbox.stub().returns('files')
       };
     });
+    $provide.service('$q', function() {
+      return Q;
+    });
   }));
 
   var baseImageFactory, blueprintFactory, templateEditorFactory, fileMetadataUtilsService;
@@ -128,6 +131,16 @@ describe('service: baseImageFactory', function() {
       templateEditorFactory.setAttributeData.should.have.been.calledWith('componentId','files','files');
 
       fileMetadataUtilsService.filesAttributeFor.should.have.been.calledWith(metadata);
+    });
+  });
+
+  describe('canRemoveImage: ', function() {
+    it('should always resolve as there is no need for user confirmation', function(done) {      
+      baseImageFactory.canRemoveImage().then(function(){
+        done();
+      }).catch(function(){
+        done('Should not reject');
+      });
     });
   });
 

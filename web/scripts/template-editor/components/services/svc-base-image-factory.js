@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('baseImageFactory', ['fileMetadataUtilsService', 'blueprintFactory', 'templateEditorFactory',
-    function (fileMetadataUtilsService, blueprintFactory, templateEditorFactory) {
+  .factory('baseImageFactory', ['fileMetadataUtilsService', 'blueprintFactory', 'templateEditorFactory', '$q',
+    function (fileMetadataUtilsService, blueprintFactory, templateEditorFactory, $q) {
       var factory = {};
 
       factory.componentId = null;
@@ -25,6 +25,10 @@ angular.module('risevision.template-editor.services')
 
       factory.areChecksCompleted = function (checksCompleted) {
         return !!checksCompleted && !!checksCompleted[factory.componentId];
+      };
+
+      factory.canRemoveImage = function (image) {
+        return $q.resolve();
       };
 
       factory.removeImage = function (image, currentMetadata) {
