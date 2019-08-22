@@ -195,8 +195,7 @@ angular.module('risevision.template-editor.directives')
               $scope.fileExistenceChecksCompleted = {};
 
               var imageComponentIds = $scope.getComponentIds(function (c) {
-                return c.type === 'rise-image' && !(c.attributes && c.attributes['is-logo'] && c
-                  .attributes['is-logo'].value === 'true');
+                return c.type === 'rise-image';
               });
 
               _.forEach(imageComponentIds, function (componentId) {

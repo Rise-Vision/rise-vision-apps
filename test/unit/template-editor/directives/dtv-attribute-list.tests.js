@@ -5,11 +5,7 @@ describe('directive: attribute-list', function() {
   var components = [
     {id: 'cp1', nonEditable: true},
     {id: 'cp2', nonEditable: false},
-    {id: 'cp3'},
-    {id: 'cp4', attributes: { 'is-logo': {value: 'true'}}},
-    {id: 'cp5', attributes: { 'is-logo': {value: 'false'}}},
-    {id: 'cp6', attributes: { 'is-logo': true }},
-    {id: 'cp7', attributes: {}}
+    {id: 'cp3'}
   ];
 
   beforeEach(module('risevision.template-editor.directives'));
@@ -46,18 +42,10 @@ describe('directive: attribute-list', function() {
   });
 
   it('should not list non-editable components', function() {
-    expect($scope.components.length).to.equal(5);
+    expect($scope.components.length).to.equal(2);
     expect($scope.components).to.not.contain(components[0]);
     expect($scope.components).to.contain(components[1]);
     expect($scope.components).to.contain(components[2]);
-  });
-
-  it('should not list is-logo="true" components', function() {
-    expect($scope.components.length).to.equal(5);
-    expect($scope.components).to.not.contain(components[3]);
-    expect($scope.components).to.contain(components[4]);
-    expect($scope.components).to.contain(components[5]);
-    expect($scope.components).to.contain(components[6]);
   });
 
   it('should retrieve branding component', function() {

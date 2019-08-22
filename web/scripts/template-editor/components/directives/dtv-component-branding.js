@@ -17,9 +17,9 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.editColors = function () {
-            $scope.setPanelIcon('palette', 'streamline');
-            $scope.setPanelTitle('Color Settings');
-            $scope.showNextPanel('.branding-colors-container');
+            $scope.editComponent({
+              type: 'rise-branding-colors'
+            });
           };
 
           $scope.registerDirective({
@@ -35,8 +35,7 @@ angular.module('risevision.template-editor.directives')
               $scope.showNextPanel('.branding-component-container');
             },
             onBackHandler: function () {
-              $scope.setPanelIcon();
-              $scope.setPanelTitle('Brand Settings');
+              $scope.resetPanelHeader();
               return $scope.showPreviousPanel();
             }
           });
