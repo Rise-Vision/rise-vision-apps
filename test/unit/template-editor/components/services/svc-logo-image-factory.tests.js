@@ -13,9 +13,12 @@ describe('service: logoImageFactory', function() {
         updateDraftLogo: sandbox.stub()
       };
     });
+    $provide.service('$q', function() {
+      return Q;
+    });
   }));
 
-  var logoImageFactory, brandingFactory;
+  var logoImageFactory, brandingFactory, $modal;
   var sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
@@ -23,6 +26,7 @@ describe('service: logoImageFactory', function() {
       logoImageFactory = $injector.get('logoImageFactory');
      
       brandingFactory = $injector.get('brandingFactory');
+      $modal = $injector.get('$modal');
     });
   });
 
@@ -59,7 +63,6 @@ describe('service: logoImageFactory', function() {
       brandingFactory.brandingSettings.logoFile = 'file1';
       var data = logoImageFactory.getImagesAsMetadata();      
 
-      console.log(data);
       expect(data).to.deep.equals(
         [{
           exists: true,
@@ -107,14 +110,28 @@ describe('service: logoImageFactory', function() {
   });
 
   describe('removeImage: ', function() {
-    it('should remove all images and clear metadata', function() {
+    it('should remove all images and clear metadata on confirm', function(done) {
       var metadata = [{file:'logo1'},{file:'logo2'}];
+      sandbox.stub(logoImageFactory,'_canRemoveImage').returns(Q.resolve());
       sandbox.stub(logoImageFactory,'updateMetadata').returns([]);
 
-      var data = logoImageFactory.removeImage({file:'logo1'},metadata);
+      logoImageFactory.removeImage({file:'logo1'},metadata).then(function(data){
+        expect(data).to.deep.equals([]);
+        logoImageFactory.updateMetadata.should.have.been.calledWith([]);
+        done();
+      });
+    });
 
-      expect(data).to.deep.equals([]);
-      logoImageFactory.updateMetadata.should.have.been.calledWith([]);
+    it('should resolve previous metadata on cancel', function(done) {
+      var metadata = [{file:'logo1'},{file:'logo2'}];
+      sandbox.stub(logoImageFactory,'_canRemoveImage').returns(Q.reject());
+      sandbox.stub(logoImageFactory,'updateMetadata').returns([]);
+
+      logoImageFactory.removeImage({file:'logo1'},metadata).then(function(data){
+        expect(data).to.deep.equals(metadata);
+        logoImageFactory.updateMetadata.should.not.have.been.called;
+        done();
+      });
     });
   });
 
@@ -151,6 +168,36 @@ describe('service: logoImageFactory', function() {
       expect(brandingFactory.brandingSettings.logoFileMetadata).to.deep.equals([]);
       
       brandingFactory.updateDraftLogo.should.have.been.called;
+    });
+  });
+
+  describe('_canRemoveImage: ', function() {
+    it('should show confirmation modal and resolve on confirm', function(done) {      
+      sandbox.stub($modal,'open').returns({result: Q.resolve()});
+
+      logoImageFactory._canRemoveImage().then(function(){
+        $modal.open.should.have.been.calledWithMatch({
+          controller: "confirmInstance",
+          windowClass: 'primary-btn-danger madero-style centered-modal'
+        });        
+        done();
+      }).catch(function(){
+        done('Should not reject');
+      });
+    });
+
+    it('should show confirmation modal and reject on close', function() {      
+      sandbox.stub($modal,'open').returns({result: Q.reject()});
+
+      logoImageFactory._canRemoveImage().then(function(){
+        done('Should not resolve');
+      }).catch(function(){
+        $modal.open.should.have.been.calledWithMatch({
+          controller: "confirmInstance",
+          windowClass: 'primary-btn-danger madero-style centered-modal'
+        });        
+        done();
+      });
     });
   });
 

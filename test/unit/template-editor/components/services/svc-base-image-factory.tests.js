@@ -20,9 +20,12 @@ describe('service: baseImageFactory', function() {
     });
     $provide.service('fileMetadataUtilsService', function() {
       return {
-        metadataWithFileRemoved: sandbox.stub().returns([]),
+        metadataWithFileRemoved: sandbox.stub().returns(['metadataWithFileRemoved']),
         filesAttributeFor: sandbox.stub().returns('files')
       };
+    });
+    $provide.service('$q', function() {
+      return Q;
     });
   }));
 
@@ -109,12 +112,30 @@ describe('service: baseImageFactory', function() {
   });
 
   describe('removeImage: ', function() {
-    it('should rely on fileMetadataUtilsService', function() {
-      var metadata = []
-      var data = baseImageFactory.removeImage({},metadata);      
+    it('should resolve fileMetadataUtilsService result', function(done) {
+      var file = {file:'file1'};
+      var metadata = [file];
+      baseImageFactory.removeImage(file,metadata).then(function(result){
+        expect(result).to.deep.equals(['metadataWithFileRemoved']);
+        fileMetadataUtilsService.metadataWithFileRemoved.should.have.been.calledWith(metadata,file);
+        done()
+      }).catch(function(){
+        done('should not reject');
+      });
+    });
 
-      expect(data).to.deep.equals([]);
-      fileMetadataUtilsService.metadataWithFileRemoved.should.have.been.calledWith(metadata,{});
+    it('should resolve to empty list if metadataWithFileRemoved is undefined', function(done) {
+      var file = {file:'file1'};
+      var metadata = [file];
+      fileMetadataUtilsService.metadataWithFileRemoved.returns(undefined);
+
+      baseImageFactory.removeImage(file,metadata).then(function(result){
+        expect(result).to.deep.equals([]);
+        fileMetadataUtilsService.metadataWithFileRemoved.should.have.been.calledWith(metadata,file);
+        done()
+      }).catch(function(){
+        done('should not reject');
+      });
     });
   });
 

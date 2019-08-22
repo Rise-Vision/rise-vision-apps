@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('baseImageFactory', ['fileMetadataUtilsService', 'blueprintFactory', 'templateEditorFactory',
-    function (fileMetadataUtilsService, blueprintFactory, templateEditorFactory) {
+  .factory('baseImageFactory', ['fileMetadataUtilsService', 'blueprintFactory', 'templateEditorFactory', '$q',
+    function (fileMetadataUtilsService, blueprintFactory, templateEditorFactory, $q) {
       var factory = {};
 
       factory.componentId = null;
@@ -32,8 +32,10 @@ angular.module('risevision.template-editor.services')
           fileMetadataUtilsService.metadataWithFileRemoved(currentMetadata, image);
 
         if (metadata) {
-          return factory.updateMetadata(metadata);
-        }
+          return $q.resolve(factory.updateMetadata(metadata));  
+        } else {
+          return $q.resolve([]);  
+        }        
       };
 
       factory.updateMetadata = function (metadata) {

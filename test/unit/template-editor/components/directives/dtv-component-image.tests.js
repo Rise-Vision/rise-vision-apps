@@ -39,7 +39,8 @@ describe('directive: TemplateComponentImage', function() {
         getBlueprintData: sandbox.stub().returns({}),
         getImagesAsMetadata: sandbox.stub().returns([]),
         areChecksCompleted: sandbox.stub().returns(true),
-        getDuration: sandbox.stub().returns(10)
+        getDuration: sandbox.stub().returns(10),
+        removeImage: sandbox.stub().returns(Q.resolve())
       };
     });
     $provide.service('storageAPILoader', function() {
@@ -306,4 +307,19 @@ describe('directive: TemplateComponentImage', function() {
 
   });
 
+  describe('removeImageFromList',function(){
+    it('should forward call to imageFactory and update with the result',function(done){
+      var image = {file:'file1'};
+      var expectedImages = [{file: 'file2'}];
+      baseImageFactory.removeImage.returns(Q.resolve(expectedImages));
+      
+      $scope.removeImageFromList(image);
+
+      baseImageFactory.removeImage.should.have.been.calledWith(image);
+      setTimeout(function(){
+        expect($scope.selectedImages).to.deep.equal(expectedImages);
+        done();
+      },10);
+    });
+  });
 });
