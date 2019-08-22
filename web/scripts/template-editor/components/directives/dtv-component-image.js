@@ -36,6 +36,9 @@ angular.module('risevision.template-editor.directives')
               $scope.resetPanelHeader();
               $scope.showPreviousPanel();
             },
+            isSingleFileSelector: function () {
+              return imageFactory === logoImageFactory;
+            },
             handleNavigation: function (folderPath) {
               var folderName = templateEditorUtils.fileNameOf(folderPath);
 
@@ -262,7 +265,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.removeImageFromList = function (image) {
-            imageFactory.removeImage(image, $scope.selectedImages).then(function(updatedMetadata){
+            imageFactory.removeImage(image, $scope.selectedImages).then(function (updatedMetadata) {
               _setSelectedImages(updatedMetadata);
             });
           };

@@ -32,10 +32,10 @@ angular.module('risevision.template-editor.services')
           fileMetadataUtilsService.metadataWithFileRemoved(currentMetadata, image);
 
         if (metadata) {
-          return $q.resolve(factory.updateMetadata(metadata));  
+          return $q.resolve(factory.updateMetadata(metadata));
         } else {
-          return $q.resolve([]);  
-        }        
+          return $q.resolve([]);
+        }
       };
 
       factory.updateMetadata = function (metadata) {

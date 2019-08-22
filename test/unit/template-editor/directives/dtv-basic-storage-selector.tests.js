@@ -27,6 +27,7 @@ describe('directive: basicStorageSelector', function() {
     $rootScope.validExtensions = '.jpg, .png';
     $rootScope.storageManager = {
       addSelectedItems: sandbox.stub(),
+      isSingleFileSelector: sandbox.stub().returns(false),
       handleNavigation: sandbox.stub()
     };
 
@@ -84,6 +85,43 @@ describe('directive: basicStorageSelector', function() {
       $scope.selectItem({ name: 'test.jpg' });
       expect($scope.selectedItems).to.have.lengthOf(0);
     });
+
+    it('should select multiple items', function(){
+      expect($scope.selectedItems).to.be.empty;
+      $scope.selectItem({ name: 'test.jpg' });
+      expect($scope.selectedItems).to.have.lengthOf(1);
+      $scope.selectItem({ name: 'test2.jpg' });
+      expect($scope.selectedItems).to.have.lengthOf(2);
+    });
+
+    describe('selectItem() as single file selector',function(){
+      beforeEach(function(){
+        $scope.storageManager.isSingleFileSelector.returns(true);
+      });
+
+      it('should select an item',function(){
+        expect($scope.selectedItems).to.be.empty;
+        $scope.selectItem({ name: 'test.jpg' });
+        expect($scope.selectedItems).to.have.lengthOf(1);
+      });
+      
+      it('should unmark the item if it is selected twice', function () {
+        expect($scope.selectedItems).to.be.empty;
+        $scope.selectItem({ name: 'test.jpg' });
+        expect($scope.selectedItems).to.have.lengthOf(1);
+        $scope.selectItem({ name: 'test.jpg' });
+        expect($scope.selectedItems).to.have.lengthOf(0);
+      });
+
+      it('should not select multiple items, only the last item',function(){
+        expect($scope.selectedItems).to.be.empty;
+        $scope.selectItem({ name: 'test.jpg' });
+        expect($scope.selectedItems).to.have.lengthOf(1);        
+        $scope.selectItem({ name: 'test2.jpg' });
+        expect($scope.selectedItems).to.have.lengthOf(1);
+        expect($scope.selectedItems).to.deep.equals([{ name: 'test2.jpg' }]);
+      });
+    });    
   });
 
   describe('isSelected', function () {
