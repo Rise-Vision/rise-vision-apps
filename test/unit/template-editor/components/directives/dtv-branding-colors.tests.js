@@ -54,6 +54,10 @@ describe('directive: templateBrandingColors', function() {
   });
 
   it('directive.show: ', function() {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+
+    directive.show();
+
     $scope.setPanelTitle.should.have.been.calledWith('Color Settings');
   });
 
