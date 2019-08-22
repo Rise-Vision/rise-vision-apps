@@ -24,7 +24,6 @@ describe('directive: templateBrandingColors', function() {
 
     $scope.registerDirective = sinon.stub();
     $scope.setPanelTitle = sinon.stub();
-    $scope.showNextPanel = sinon.stub();
     $scope.showPreviousPanel = sinon.stub();
 
     $scope.$digest();
@@ -43,6 +42,7 @@ describe('directive: templateBrandingColors', function() {
     expect(directive.type).to.equal('rise-branding-colors');
     expect(directive.iconType).to.equal('streamline');
     expect(directive.icon).to.equal('palette');
+    expect(directive.panel).to.equal('.branding-colors-container');
     expect(directive.show).to.be.a('function');
     expect(directive.onBackHandler).to.be.a('function');
   });
@@ -54,12 +54,7 @@ describe('directive: templateBrandingColors', function() {
   });
 
   it('directive.show: ', function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
-
-    directive.show();
-
     $scope.setPanelTitle.should.have.been.calledWith('Color Settings');
-    $scope.showNextPanel.should.have.been.calledWith('.branding-colors-container');
   });
 
   it('directive.onBackHandler: ', function() {

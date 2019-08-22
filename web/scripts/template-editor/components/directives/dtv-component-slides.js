@@ -59,7 +59,6 @@ angular.module('risevision.template-editor.directives')
             icon: 'slides',
             element: element,
             show: function () {
-              element.show();
               $scope.componentId = $scope.factory.selected.id;
               _load();
               $scope.saveSrc(); //validate Slides URL

@@ -159,9 +159,8 @@ angular.module('risevision.template-editor.directives')
             iconType: 'streamline',
             icon: 'image',
             element: element,
+            panel: '.image-component-container',
             show: function () {
-              element.show();
-
               _reset();
 
               // edits branding logo if no id is provided
@@ -175,8 +174,6 @@ angular.module('risevision.template-editor.directives')
 
               _loadSelectedImages();
               _loadDuration();
-
-              $scope.showNextPanel('.image-component-container');
             },
             onBackHandler: function () {
               if ($scope.getCurrentPanel() !== storagePanelSelector) {

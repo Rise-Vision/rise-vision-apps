@@ -19,12 +19,9 @@ angular.module('risevision.template-editor.directives')
             iconType: 'streamline',
             icon: 'palette',
             element: element,
+            panel: '.branding-colors-container',
             show: function () {
               $scope.setPanelTitle('Color Settings');
-
-              element.show();
-
-              $scope.showNextPanel('.branding-colors-container');
             },
             onBackHandler: function () {
               return $scope.showPreviousPanel();

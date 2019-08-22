@@ -27,12 +27,9 @@ angular.module('risevision.template-editor.directives')
             iconType: 'streamline',
             icon: 'ratingStar',
             element: element,
+            panel: '.branding-component-container',
             show: function () {
               $scope.setPanelTitle('Brand Settings');
-
-              element.show();
-
-              $scope.showNextPanel('.branding-component-container');
             },
             onBackHandler: function () {
               $scope.resetPanelHeader();
