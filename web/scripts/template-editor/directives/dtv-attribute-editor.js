@@ -28,7 +28,9 @@ angular.module('risevision.template-editor.directives')
             $scope.factory.selected = component;
 
             directive.element.show();
-            directive.panel && $scope.showNextPanel(directive.panel);
+            if (directive.panel) {
+              $scope.showNextPanel(directive.panel);
+            }
 
             directive.show();
 
@@ -154,13 +156,13 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _swapToLeft(swappedOutSelector, swappedInSelector) {
-            _showElement(swappedInSelector, 'right');              
-            _hideElement(swappedOutSelector);              
+            _showElement(swappedInSelector, 'right');
+            _hideElement(swappedOutSelector);
           }
 
           function _swapToRight(swappedOutSelector, swappedInSelector) {
-            _showElement(swappedInSelector, 'left');              
-            _hideElement(swappedOutSelector);              
+            _showElement(swappedInSelector, 'left');
+            _hideElement(swappedOutSelector);
           }
         }
       };
