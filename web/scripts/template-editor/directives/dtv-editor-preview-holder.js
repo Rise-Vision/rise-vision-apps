@@ -193,15 +193,15 @@ angular.module('risevision.template-editor.directives')
           });
 
           function _updateLogoData(attributeData) {
-            if (brandingFactory.brandingSettings.logoFileMetadata) {
+            if (attributeData && attributeData.components && brandingFactory.brandingSettings.logoFileMetadata) {
               var logoComponents = blueprintFactory.getLogoComponents();
 
               angular.forEach(logoComponents, function (logoComponent) {
-                var component = attributeData.components && attributeData.components.find(function (element) {
-                  return element.id === logoComponent.id;
+                var component = _.find(attributeData.components, {
+                  id: logoComponent.id
                 });
 
-                if (component && component.isLogo === true) {
+                if (component && component.isLogo !== false) {
                   component.metadata = brandingFactory.brandingSettings.logoFileMetadata;
                 }
               });
