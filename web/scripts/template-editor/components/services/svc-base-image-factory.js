@@ -51,7 +51,7 @@ angular.module('risevision.template-editor.services')
         // Company Branding logo
         if (factory.getBlueprintData('is-logo') === 'true') {
           if (selectedImages && selectedImages.length > 0) {
-            _setAttributeData('isLogo', false);            
+            _setAttributeData('isLogo', false);
           } else {
             _setAttributeData('isLogo', true);
           }

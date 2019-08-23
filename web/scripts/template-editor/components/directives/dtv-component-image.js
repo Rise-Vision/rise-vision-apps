@@ -29,11 +29,22 @@ angular.module('risevision.template-editor.directives')
               _addFilesToMetadata([file]);
             }
           };
+
+          var _updatePanelHeader = function () {
+            if (!imageFactory.componentId) {
+              $scope.setPanelIcon('circleStar', 'streamline');
+              $scope.setPanelTitle('Logo Settings');
+            } else {
+              $scope.resetPanelHeader();
+            }
+          };
+
           $scope.storageManager = {
             addSelectedItems: function (newSelectedItems) {
               _addFilesToMetadata(newSelectedItems, true);
 
-              $scope.resetPanelHeader();
+              _updatePanelHeader();
+
               $scope.showPreviousPanel();
             },
             handleNavigation: function (folderPath) {
@@ -179,13 +190,7 @@ angular.module('risevision.template-editor.directives')
               if ($scope.getCurrentPanel() !== storagePanelSelector) {
                 return $scope.showPreviousPanel();
               } else if (!$scope.storageManager.onBackHandler()) {
-                if (!imageFactory.componentId) {
-                  $scope.setPanelIcon('circleStar', 'streamline');
-                  $scope.setPanelTitle('Logo Settings');
-                } else {
-                  $scope.setPanelIcon();
-                  $scope.setPanelTitle();
-                }
+                _updatePanelHeader();
 
                 return $scope.showPreviousPanel();
               } else {
