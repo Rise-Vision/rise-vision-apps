@@ -17,6 +17,7 @@ var ImageComponentPage = function() {
   var uploadButtonStorage = element(by.id('image-storage-uploader-label'));
   var uploadInputStorage = element(by.id('image-storage-uploader'));
   var uploadPanelStorage = element(by.id('upload-panel-image-storage-uploader'));
+  var emptyListContainer = element(by.css('.item-list-empty'));
 
   this.getSelectedImagesMain = function () {
     return selectedImagesMain;
@@ -68,6 +69,10 @@ var ImageComponentPage = function() {
 
   this.getUploadPanelStorage = function () {
     return uploadPanelStorage;
+  };
+
+  this.getEmptyListContainer = function () {
+    return emptyListContainer;
   };
 
   this.getSelectedImagesTitles = function() {
