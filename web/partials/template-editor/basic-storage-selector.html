@@ -58,7 +58,7 @@
   <div class="upload-files">
     <label id="{{storageSelectorId}}-uploader-label"
       class="btn btn-block"
-      ng-class="{ 'btn-primary': !hasRegularFileItems() }"
+      ng-class="hasRegularFileItems() ? 'btn-default' : 'btn-primary'"
       for="{{storageSelectorId}}-uploader"
       ng-disabled="isUploading"
     >
