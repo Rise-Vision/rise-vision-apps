@@ -22,9 +22,9 @@ describe('directive: templateComponentBranding', function() {
     $scope = element.scope();
 
     $scope.registerDirective = sinon.stub();
+    $scope.resetPanelHeader = sinon.stub();
     $scope.setPanelTitle = sinon.stub();
     $scope.setPanelIcon = sinon.stub();
-    $scope.showNextPanel = sinon.stub();
     $scope.showPreviousPanel = sinon.stub();
     $scope.editComponent = sinon.stub();
 
@@ -48,6 +48,7 @@ describe('directive: templateComponentBranding', function() {
     expect(directive.type).to.equal('rise-branding');
     expect(directive.iconType).to.equal('streamline');
     expect(directive.icon).to.equal('ratingStar');
+    expect(directive.panel).to.equal('.branding-component-container');
     expect(directive.show).to.be.a('function');
     expect(directive.onBackHandler).to.be.a('function');
   });
@@ -61,9 +62,7 @@ describe('directive: templateComponentBranding', function() {
   it('editColors: ', function() {
     $scope.editColors();
 
-    $scope.setPanelIcon.should.have.been.calledWith('palette', 'streamline');
-    $scope.setPanelTitle.should.have.been.calledWith('Color Settings');
-    $scope.showNextPanel.should.have.been.calledWith('.branding-colors-container');
+    $scope.editComponent.should.have.been.calledWith({type: 'rise-branding-colors'});
   });
 
   it('directive.show: ', function() {
@@ -72,7 +71,6 @@ describe('directive: templateComponentBranding', function() {
     directive.show();
 
     $scope.setPanelTitle.should.have.been.calledWith('Brand Settings');
-    $scope.showNextPanel.should.have.been.calledWith('.branding-component-container');
   });
 
   it('directive.onBackHandler: ', function() {
@@ -81,8 +79,7 @@ describe('directive: templateComponentBranding', function() {
 
     expect(directive.onBackHandler()).to.equal('backPanel');
 
-    $scope.setPanelIcon.should.have.been.called;
-    $scope.setPanelTitle.should.have.been.calledWith('Brand Settings');
+    $scope.resetPanelHeader.should.have.been.called;
     $scope.showPreviousPanel.should.have.been.called;
   });
 

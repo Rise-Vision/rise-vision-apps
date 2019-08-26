@@ -93,6 +93,11 @@ describe('directive: TemplateComponentImage', function() {
     expect($scope).to.be.ok;
     expect($scope.factory).to.be.ok;
     expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
+    expect($scope.storageManager).to.be.ok;
+    expect($scope.storageManager.isSingleFileSelector).to.be.ok;    
+    expect($scope.storageManager.addSelectedItems).to.be.ok;
+    expect($scope.storageManager.handleNavigation).to.be.ok;    
+
     expect($scope.registerDirective).to.have.been.called;
 
     var directive = $scope.registerDirective.getCall(0).args[0];
@@ -179,11 +184,7 @@ describe('directive: TemplateComponentImage', function() {
 
       timeout.flush();
     });
-
-
-  });
-
-
+  });  
 
   describe('updateFileMetadata', function() {
 
@@ -375,6 +376,20 @@ describe('directive: TemplateComponentImage', function() {
         expect($scope.selectedImages).to.deep.equal(expectedImages);
         done();
       },10);
+    });
+  });
+
+  describe('storageManager.isSingleFileSelector',function(){
+    it('should be a single file selector when picking logo',function(){
+      var directive = $scope.registerDirective.getCall(0).args[0];
+      $scope.factory.selected = {type:'rise-image'};
+      directive.show();
+
+      expect($scope.storageManager.isSingleFileSelector()).be.true;
+    });
+
+    it('should not be a single file selector when picking a regular image',function(){
+      expect($scope.storageManager.isSingleFileSelector()).be.false;
     });
   });
 });

@@ -35,8 +35,6 @@ angular.module('risevision.template-editor.directives')
             _postStartEvent();
 
             _postDisplayData();
-
-            _postLogoData();
           };
 
           $scope.getEditorPreviewUrl = function (productCode) {
@@ -175,14 +173,14 @@ angular.module('risevision.template-editor.directives')
           }, true);
 
           $scope.$watch('brandingFactory.brandingSettings.logoFileMetadata', function (value) {
-            _postLogoData();
+            _postAttributeData();
           }, true);
 
           $scope.$on('risevision.company.updated', function () {
             // ensure branding factory updates branding via the same handler
             $timeout(function () {
               _postDisplayData();
-              _postLogoData();
+              _postAttributeData();
             });
           });
 
@@ -190,14 +188,34 @@ angular.module('risevision.template-editor.directives')
             // ensure branding factory updates branding via the same handler
             $timeout(function () {
               _postDisplayData();
-              _postLogoData();
+              _postAttributeData();
             });
           });
 
+          function _updateLogoData(attributeData) {
+            if (attributeData && attributeData.components && brandingFactory.brandingSettings.logoFileMetadata) {
+              var logoComponents = blueprintFactory.getLogoComponents();
+
+              angular.forEach(logoComponents, function (logoComponent) {
+                var component = _.find(attributeData.components, {
+                  id: logoComponent.id
+                });
+
+                if (component && component.isLogo !== false) {
+                  component.metadata = brandingFactory.brandingSettings.logoFileMetadata;
+                }
+              });
+            }
+          }
+
           function _postAttributeData() {
+            var attributeData = angular.copy($scope.factory.presentation.templateAttributeData);
+
+            _updateLogoData(attributeData);
+
             var message = {
               type: 'attributeData',
-              value: $scope.factory.presentation.templateAttributeData
+              value: attributeData
             };
             _postMessageToTemplate(message);
           }
@@ -227,28 +245,6 @@ angular.module('risevision.template-editor.directives')
               }
             };
             _postMessageToTemplate(message);
-          }
-
-          function _postLogoData() {
-            if (brandingFactory.brandingSettings.logoFileMetadata) {
-
-              var logoComponents = blueprintFactory.getLogoComponents();
-              var components = [];
-              angular.forEach(logoComponents, function (c) {
-                components.push({
-                  id: c.id,
-                  metadata: brandingFactory.brandingSettings.logoFileMetadata
-                });
-              });
-
-              var logoAttributeData = {
-                type: 'attributeData',
-                value: {
-                  components: components
-                }
-              };
-              _postMessageToTemplate(logoAttributeData);
-            }
           }
 
           function _postMessageToTemplate(message) {

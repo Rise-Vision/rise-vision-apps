@@ -74,9 +74,9 @@ angular.module('risevision.template-editor.services')
       factory.removeImage = function (image, currentMetadata) {
         var deferred = $q.defer();
 
-        factory._canRemoveImage().then(function(){
+        factory._canRemoveImage().then(function () {
           deferred.resolve(factory.updateMetadata([]));
-        }).catch(function(){
+        }).catch(function () {
           deferred.resolve(currentMetadata);
         });
 

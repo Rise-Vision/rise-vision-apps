@@ -137,16 +137,13 @@ angular.module('risevision.template-editor.directives')
             iconType: 'streamline',
             icon: 'video',
             element: element,
+            panel: '.video-component-container',
             show: function () {
-              element.show();
-
               _reset();
               $scope.componentId = $scope.factory.selected.id;
 
               _loadSelectedFiles();
               _loadVolume();
-
-              $scope.showNextPanel('.video-component-container');
             },
             onBackHandler: function () {
               if ($scope.getCurrentPanel() !== storagePanelSelector) {

@@ -1,22 +1,28 @@
 <div>
   <div id="upload-panel-{{uploaderId}}" class="storage-upload-panel" ng-show="activeUploadCount() > 0">
     <div class="storage-upload-body te-scrollable-container">
-      <div class="u_margin-sm-top" ng-repeat="item in uploader.queue">
-        <p>
-          <a class="pull-right" href="#" ng-click="removeItem(item)">
-            <span translate="common.lremove"></span>
-          </a>
-          <a class="pull-right u_margin-right" href="#" ng-click="retryFailedUpload(item)" ng-show="item.isError">
-            <span translate="common.lretry"></span>
-          </a>
-          <span class="pull-right text-muted u_margin-left u_margin-right"> {{ item.file.size | fileSizeFilter }}</span>
-          <span class="u_ellipsis-lg" ng-class="{'text-danger': item.isError }">
-            {{ fileNameOf(item.file.name) }}
-          </span>
-        </p>
-        <div class="progress inline-progress">
-          <div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar"
-                ng-style="{ 'width': item.progress + '%' }"></div>
+      <div ng-repeat="item in uploader.queue">
+        <div class="file-row">
+          <div class="file-entry" ng-class="{'is-error': item.isError}">
+            <div class="file-text">
+                <div class="file-name">{{ fileNameOf(item.file.name) }}</div>
+                <div class="file-error" ng-show="item.isError">
+                  Your file couldn't be uploaded.
+                  <a href="#" ng-click="retryFailedUpload(item)">Try again?</a>
+                </div>
+            </div>
+
+            <div class="file-remove">
+              <a href="#" ng-click="removeItem(item)">
+                <span translate="common.lremove"></span>
+              </a>
+            </div>
+          </div>
+
+          <div class="progress inline-progress" ng-show="!item.isError">
+            <div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar"
+                  ng-style="{ 'width': item.progress + '%' }"></div>
+          </div>
         </div>
       </div>
     </div>

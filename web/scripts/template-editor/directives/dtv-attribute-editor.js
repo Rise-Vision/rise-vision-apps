@@ -26,6 +26,12 @@ angular.module('risevision.template-editor.directives')
             var directive = $scope.directives[component.type];
 
             $scope.factory.selected = component;
+
+            directive.element.show();
+            if (directive.panel) {
+              $scope.showNextPanel(directive.panel);
+            }
+
             directive.show();
 
             _showAttributeList(false, 300);
@@ -115,55 +121,45 @@ angular.module('risevision.template-editor.directives')
             }, !isNaN(delay) ? delay : 500);
           }
 
-          function _removeAnimationClasses(selector) {
-            var element = templateEditorUtils.findElement(selector);
-
-            if (element) {
-              element.removeClass('attribute-editor-show-from-right');
-              element.removeClass('attribute-editor-hide-to-right');
-              element.removeClass('attribute-editor-show-from-left');
-              element.removeClass('attribute-editor-hide-to-left');
-            }
+          function _removeAnimationClasses(element) {
+            element.removeClass('attribute-editor-show-from-right');
+            element.removeClass('attribute-editor-show-from-left');
           }
 
-          function _showElement(selector, delay) {
+          function _showElement(selector, direction, delay) {
             var element = templateEditorUtils.findElement(selector);
 
-            if (element) {
-              setTimeout(function () {
-                element.show();
-              }, delay || 0);
+            if (!element) {
+              return;
             }
+
+            _removeAnimationClasses(element);
+            element.addClass('attribute-editor-show-from-' + direction);
+
+            setTimeout(function () {
+              element.show();
+            }, delay || 0);
           }
 
           function _hideElement(selector, delay) {
             var element = templateEditorUtils.findElement(selector);
 
-            if (element) {
-              setTimeout(function () {
-                element.hide();
-              }, delay || 0);
+            if (!element) {
+              return;
             }
-          }
 
-          function _setCurrentClass(selector, currentClass) {
-            var element = templateEditorUtils.findElement(selector);
-
-            if (element) {
-              _removeAnimationClasses(selector);
-              element.addClass(currentClass);
-            }
+            setTimeout(function () {
+              element.hide();
+            }, delay || 0);
           }
 
           function _swapToLeft(swappedOutSelector, swappedInSelector) {
-            _setCurrentClass(swappedInSelector, 'attribute-editor-show-from-right');
-            _showElement(swappedInSelector);
+            _showElement(swappedInSelector, 'right');
             _hideElement(swappedOutSelector);
           }
 
           function _swapToRight(swappedOutSelector, swappedInSelector) {
-            _setCurrentClass(swappedInSelector, 'attribute-editor-show-from-left');
-            _showElement(swappedInSelector);
+            _showElement(swappedInSelector, 'left');
             _hideElement(swappedOutSelector);
           }
         }
