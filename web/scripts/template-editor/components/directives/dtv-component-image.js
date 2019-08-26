@@ -29,11 +29,26 @@ angular.module('risevision.template-editor.directives')
               _addFilesToMetadata([file]);
             }
           };
+
+          var _isEditingLogo = function () {
+            return imageFactory === logoImageFactory;
+          };
+
+          var _updatePanelHeader = function () {
+            if (_isEditingLogo()) {
+              $scope.setPanelIcon('circleStar', 'streamline');
+              $scope.setPanelTitle('Logo Settings');
+            } else {
+              $scope.resetPanelHeader();
+            }
+          };
+
           $scope.storageManager = {
             addSelectedItems: function (newSelectedItems) {
               _addFilesToMetadata(newSelectedItems, true);
 
-              $scope.resetPanelHeader();
+              _updatePanelHeader();
+
               $scope.showPreviousPanel();
             },
             isSingleFileSelector: function () {
@@ -43,7 +58,7 @@ angular.module('risevision.template-editor.directives')
               var folderName = templateEditorUtils.fileNameOf(folderPath);
 
               if (folderName) {
-                $scope.setPanelIcon('fa-folder');
+                $scope.setPanelIcon('folder', 'streamline');
                 $scope.setPanelTitle(folderName);
               } else {
                 $scope.setPanelIcon('riseStorage', 'riseSvg');
@@ -162,9 +177,8 @@ angular.module('risevision.template-editor.directives')
             iconType: 'streamline',
             icon: 'image',
             element: element,
+            panel: '.image-component-container',
             show: function () {
-              element.show();
-
               _reset();
 
               // edits branding logo if no id is provided
@@ -178,15 +192,12 @@ angular.module('risevision.template-editor.directives')
 
               _loadSelectedImages();
               _loadDuration();
-
-              $scope.showNextPanel('.image-component-container');
             },
             onBackHandler: function () {
               if ($scope.getCurrentPanel() !== storagePanelSelector) {
                 return $scope.showPreviousPanel();
               } else if (!$scope.storageManager.onBackHandler()) {
-                $scope.setPanelIcon();
-                $scope.setPanelTitle();
+                _updatePanelHeader();
 
                 return $scope.showPreviousPanel();
               } else {
@@ -198,8 +209,7 @@ angular.module('risevision.template-editor.directives')
               $scope.fileExistenceChecksCompleted = {};
 
               var imageComponentIds = $scope.getComponentIds(function (c) {
-                return c.type === 'rise-image' && !(c.attributes && c.attributes['is-logo'] && c
-                  .attributes['is-logo'].value === 'true');
+                return c.type === 'rise-image';
               });
 
               _.forEach(imageComponentIds, function (componentId) {

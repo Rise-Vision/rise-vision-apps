@@ -40,7 +40,6 @@ angular.module('risevision.template-editor.directives')
             icon: 'rss',
             element: element,
             show: function () {
-              element.show();
               $scope.componentId = $scope.factory.selected.id;
               _load();
               $scope.saveFeed(); // validate Feed URL

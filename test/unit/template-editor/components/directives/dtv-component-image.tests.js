@@ -192,8 +192,18 @@ describe('directive: TemplateComponentImage', function() {
 
     beforeEach(function() {
       sampleImages = [
-        { "file": "image.png", exists: true, "thumbnail-url": "http://image" },
-        { "file": "image2.png", exists: false, "thumbnail-url": "http://image2" }
+        {
+          "file": "image.png",
+          exists: true,
+          "thumbnail-url": "http://image",
+          "time-created": "123"
+        },
+        {
+          "file": "image2.png",
+          exists: false,
+          "thumbnail-url": "http://image2",
+          "time-created": "345"
+        }
       ];
 
       baseImageFactory.componentId = 'TEST-ID';
@@ -223,8 +233,18 @@ describe('directive: TemplateComponentImage', function() {
 
     it('should combine metadata if it\'s already loaded', function(){
       var updatedImages = [
-        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" },
-        { "file": "image2.png", exists: false, "thumbnail-url": "http://image6" }
+        {
+          "file": "image.png",
+          exists: false,
+          "thumbnail-url": "http://image5",
+          "time-created": "987"
+        },
+        {
+          "file": "image2.png",
+          exists: false,
+          "thumbnail-url": "http://image6",
+          "time-created": "654"
+        }
       ];
 
       $scope.getAttributeData = function() {
@@ -249,11 +269,26 @@ describe('directive: TemplateComponentImage', function() {
 
     it('should only update the provided images', function() {
       var updatedImages = [
-        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" }
+        {
+          "file": "image.png",
+          exists: false,
+          "thumbnail-url": "http://image5",
+          "time-created": "876"
+        }
       ];
       var expectedImages = [
-        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" },
-        { "file": "image2.png", exists: false, "thumbnail-url": "http://image2" }
+        {
+          "file": "image.png",
+          exists: false,
+          "thumbnail-url": "http://image5",
+          "time-created": "876"
+        },
+        {
+          "file": "image2.png",
+          exists: false,
+          "thumbnail-url": "http://image2",
+          "time-created": "345"
+        }
       ];
 
       $scope.getAttributeData = function() {
@@ -278,12 +313,32 @@ describe('directive: TemplateComponentImage', function() {
 
     it('should not update images that are not already present', function() {
       var updatedImages = [
-        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" },
-        { "file": "imageNew.png", exists: false, "thumbnail-url": "http://imageN" }
+        {
+          "file": "image.png",
+          exists: false,
+          "thumbnail-url": "http://image5",
+          "time-created": "999"
+        },
+        {
+          "file": "imageNew.png",
+          exists: false,
+          "thumbnail-url": "http://imageN",
+          "time-created": "432"
+        }
       ];
       var expectedImages = [
-        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" },
-        { "file": "image2.png", exists: false, "thumbnail-url": "http://image2" }
+        {
+          "file": "image.png",
+          exists: false,
+          "thumbnail-url": "http://image5",
+          "time-created": "999"
+        },
+        {
+          "file": "image2.png",
+          exists: false,
+          "thumbnail-url": "http://image2",
+          "time-created": "345"
+        }
       ];
 
       $scope.getAttributeData = function() {
@@ -313,7 +368,7 @@ describe('directive: TemplateComponentImage', function() {
       var image = {file:'file1'};
       var expectedImages = [{file: 'file2'}];
       baseImageFactory.removeImage.returns(Q.resolve(expectedImages));
-      
+
       $scope.removeImageFromList(image);
 
       baseImageFactory.removeImage.should.have.been.calledWith(image);

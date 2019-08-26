@@ -77,7 +77,8 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: function() {}
+        hide: function() {},
+        show: sinon.stub()
       },
       show: sinon.stub()
     };
@@ -90,6 +91,8 @@ describe('directive: TemplateAttributeEditor', function() {
     $scope.editComponent(component);
 
     expect(factory.selected).to.deep.equal(component);
+
+    expect(directive.element.show).to.have.been.called;
     expect(directive.show).to.have.been.called;
 
     expect($scope.showAttributeList).to.be.true;
@@ -103,7 +106,8 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: function() {}
+        hide: function() {},
+        show: function() {}
       },
       onPresentationOpen: sinon.stub()
     };
@@ -118,7 +122,8 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub()
+        hide: sinon.stub(),
+        show: function() {}
       },
       show: function() {}
     };
@@ -147,7 +152,8 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub()
+        hide: sinon.stub(),
+        show: function() {}
       },
       show: function() {}
     };
@@ -176,7 +182,8 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub()
+        hide: sinon.stub(),
+        show: function() {}
       },
       show: function() {},
       onBackHandler: function() { return false; }
@@ -206,7 +213,8 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub()
+        hide: sinon.stub(),
+        show: function() {}
       },
       show: function() {},
       onBackHandler: function() { return true; }
@@ -232,7 +240,8 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub()
+        hide: sinon.stub(),
+        show: function() {}
       },
       show: function() {},
       onBackHandler: function() { return true; }
@@ -256,7 +265,8 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub()
+        hide: sinon.stub(),
+        show: function() {}
       },
       show: function() {},
       isHeaderBottomRuleVisible: function() { return true; },
@@ -281,7 +291,8 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub()
+        hide: sinon.stub(),
+        show: function() {}
       },
       show: function() {},
       isHeaderBottomRuleVisible: function() { return false; },
