@@ -86,6 +86,7 @@ angular.module('risevision.template-editor.services')
               atLeastOneOriginalEntryIsStillSelected = true;
               currentEntry.exists = entry.exists;
               currentEntry['thumbnail-url'] = entry['thumbnail-url'];
+              currentEntry['time-created'] = entry['time-created'];
             }
           });
 
