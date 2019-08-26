@@ -94,9 +94,9 @@ describe('directive: TemplateComponentImage', function() {
     expect($scope.factory).to.be.ok;
     expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
     expect($scope.storageManager).to.be.ok;
-    expect($scope.storageManager.isSingleFileSelector).to.be.ok;    
+    expect($scope.storageManager.isSingleFileSelector).to.be.ok;
     expect($scope.storageManager.addSelectedItems).to.be.ok;
-    expect($scope.storageManager.handleNavigation).to.be.ok;    
+    expect($scope.storageManager.handleNavigation).to.be.ok;
 
     expect($scope.registerDirective).to.have.been.called;
 
@@ -184,7 +184,7 @@ describe('directive: TemplateComponentImage', function() {
 
       timeout.flush();
     });
-  });  
+  });
 
   describe('updateFileMetadata', function() {
 
