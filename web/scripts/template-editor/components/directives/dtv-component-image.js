@@ -30,8 +30,12 @@ angular.module('risevision.template-editor.directives')
             }
           };
 
+          var _isEditingLogo = function () {
+            return imageFactory === logoImageFactory;
+          }
+
           var _updatePanelHeader = function () {
-            if (!imageFactory.componentId) {
+            if (_isEditingLogo()) {
               $scope.setPanelIcon('circleStar', 'streamline');
               $scope.setPanelTitle('Logo Settings');
             } else {

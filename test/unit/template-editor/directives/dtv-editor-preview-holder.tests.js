@@ -159,7 +159,6 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
       setTimeout(function(){
         iframe.contentWindow.postMessage.should.have.been.called;
-        console.log(JSON.stringify(iframe.contentWindow.postMessage.getCall(0).args))
         expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"attributeData","value":{"components":[{"id":"image","metadata":"originalMetadata1"},{"id":"logo","metadata":"originalMetadata2","isLogo":false}]}}', 'https://widgets.risevision.com']);
 
         done();

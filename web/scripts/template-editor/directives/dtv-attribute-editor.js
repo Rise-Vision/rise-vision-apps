@@ -123,9 +123,7 @@ angular.module('risevision.template-editor.directives')
 
           function _removeAnimationClasses(element) {
             element.removeClass('attribute-editor-show-from-right');
-            element.removeClass('attribute-editor-hide-to-right');
             element.removeClass('attribute-editor-show-from-left');
-            element.removeClass('attribute-editor-hide-to-left');
           }
 
           function _showElement(selector, direction, delay) {
