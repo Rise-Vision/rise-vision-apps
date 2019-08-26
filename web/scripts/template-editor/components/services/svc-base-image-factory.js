@@ -32,10 +32,10 @@ angular.module('risevision.template-editor.services')
           fileMetadataUtilsService.metadataWithFileRemoved(currentMetadata, image);
 
         if (metadata) {
-          return $q.resolve(factory.updateMetadata(metadata));  
+          return $q.resolve(factory.updateMetadata(metadata));
         } else {
-          return $q.resolve([]);  
-        }        
+          return $q.resolve([]);
+        }
       };
 
       factory.updateMetadata = function (metadata) {
@@ -45,6 +45,17 @@ angular.module('risevision.template-editor.services')
 
         _setAttributeData('metadata', selectedImages);
         _setAttributeData('files', filesAttribute);
+
+        // Check default isLogo value; if the user selects their own image
+        // set this component to use that image; if empty set it to use the 
+        // Company Branding logo
+        if (factory.getBlueprintData('is-logo') === 'true') {
+          if (selectedImages && selectedImages.length > 0) {
+            _setAttributeData('isLogo', false);
+          } else {
+            _setAttributeData('isLogo', true);
+          }
+        }
 
         return selectedImages;
       };

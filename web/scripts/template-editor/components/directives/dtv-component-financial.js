@@ -112,8 +112,6 @@ angular.module('risevision.template-editor.directives')
             icon: 'financial',
             element: element,
             show: function () {
-              element.show();
-
               _reset();
               $scope.componentId = $scope.factory.selected.id;
               $scope.category = _getCategory();

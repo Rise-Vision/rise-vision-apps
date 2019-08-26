@@ -150,6 +150,40 @@ describe('service: baseImageFactory', function() {
 
       fileMetadataUtilsService.filesAttributeFor.should.have.been.calledWith(metadata);
     });
+
+    describe('isLogo: ', function() {
+      it('should not update flag if isLogo is not true', function() {
+        var metadata = ['metadata'];
+        var data = baseImageFactory.updateMetadata(metadata);      
+
+        templateEditorFactory.setAttributeData.should.have.been.calledTwice;
+      });
+
+      it('should update flag if isLogo is true', function() {
+        var metadata = ['metadata'];
+        blueprintFactory.getBlueprintData.returns('true');
+        var data = baseImageFactory.updateMetadata(metadata);      
+
+        templateEditorFactory.setAttributeData.should.have.been.calledThrice;
+      });
+
+      it('should update isLogo flag to false if some files are sent', function() {
+        var metadata = ['metadata'];
+        blueprintFactory.getBlueprintData.returns('true');
+        var data = baseImageFactory.updateMetadata(metadata);      
+
+        templateEditorFactory.setAttributeData.should.have.been.calledWith('componentId', 'isLogo', false);
+      });
+
+      it('should reset isLogo flag to true if no files are sent', function() {
+        var metadata = [];
+        blueprintFactory.getBlueprintData.returns('true');
+        var data = baseImageFactory.updateMetadata(metadata);      
+
+        templateEditorFactory.setAttributeData.should.have.been.calledWith('componentId', 'isLogo', true);
+      });
+
+    });
   });
 
 });
