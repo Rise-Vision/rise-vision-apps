@@ -1,8 +1,15 @@
 <div class="branding-colors-container attribute-list-container">
 
     <label class="control-label u_margin-md-top" for="branding-base-color">Base Color:</label>
-    <input id="branding-base-color" type="text" class="form-control" ng-model="brandingFactory.brandingSettings.baseColor" placeholder="Enter a hex value, eg. #00FF00" ng-blur="saveBranding()">
+    <div class="input-group" colorpicker="rgba" colorpicker-position="bottom" ng-model="brandingFactory.brandingSettings.baseColor">
+      <input id="branding-base-color" type="text" class="form-control" ng-model="brandingFactory.brandingSettings.baseColor" placeholder="Enter a hex value, eg. #00FF00" ng-blur="saveBranding()">
+      <span class="input-group-addon color-wheel"></span>
+    </div>
 
     <label class="control-label u_margin-md-top" for="branding-accent-color">Accent Color:</label>
-    <input id="branding-accent-color" type="text" class="form-control" ng-model="brandingFactory.brandingSettings.accentColor" placeholder="Enter a hex value, eg. #00FF00" ng-blur="saveBranding()">
+    <div class="input-group" colorpicker="rgba" colorpicker-position="bottom" ng-model="brandingFactory.brandingSettings.accentColor">
+      <input id="branding-accent-color" type="text" class="form-control" ng-model="brandingFactory.brandingSettings.accentColor" placeholder="Enter a hex value, eg. #00FF00" ng-blur="saveBranding()">
+      <span class="input-group-addon color-wheel"></span>
+    </div>
+
 </div>
