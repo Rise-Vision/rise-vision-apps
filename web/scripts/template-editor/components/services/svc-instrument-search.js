@@ -43,7 +43,7 @@ angular.module('risevision.template-editor.services')
         var items = resp.data.items;
 
         return _.filter(items, function (item) {
-          return !!item.symbol
+          return !!item.symbol;
         });
       }
 
