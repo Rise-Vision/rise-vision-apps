@@ -102,9 +102,17 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.selectItem = function (item) {
-            templateEditorUtils.addOrRemove($scope.selectedItems, {
-              name: item.name
-            }, item);
+            if ($scope.storageManager.isSingleFileSelector && $scope.storageManager.isSingleFileSelector()) {
+              if ($scope.isSelected(item)) {
+                $scope.selectedItems = [];
+              } else {
+                $scope.selectedItems = [item];
+              }
+            } else {
+              templateEditorUtils.addOrRemove($scope.selectedItems, {
+                name: item.name
+              }, item);
+            }
           };
 
           $scope.isSelected = function (item) {

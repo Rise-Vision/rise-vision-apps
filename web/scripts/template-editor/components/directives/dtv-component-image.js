@@ -51,6 +51,7 @@ angular.module('risevision.template-editor.directives')
 
               $scope.showPreviousPanel();
             },
+            isSingleFileSelector: _isEditingLogo,
             handleNavigation: function (folderPath) {
               var folderName = templateEditorUtils.fileNameOf(folderPath);
 
