@@ -51,7 +51,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _addFilesToMetadata(files, alwaysAppend) {
-            var selectedFiles = $scope.selectedFiles;
+            var selectedFiles = $scope.isDefaultFileList ? [] : $scope.selectedFiles;
             var metadata = fileMetadataUtilsService.metadataWithFile(selectedFiles,
               DEFAULT_VIDEO_THUMBNAIL, files, alwaysAppend);
 
@@ -94,6 +94,10 @@ angular.module('risevision.template-editor.directives')
             return $scope.getAvailableAttributeData($scope.componentId, key);
           }
 
+          function _getBlueprintData(key) {
+            return $scope.getBlueprintData($scope.componentId, key);
+          }
+
           function _getFilesFor(componentId) {
             var metadata = $scope.getAttributeData(componentId, 'metadata');
 
@@ -123,7 +127,11 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _setSelectedFiles(selectedFiles) {
+            var filesAttribute =
+              fileMetadataUtilsService.filesAttributeFor(selectedFiles);
+
             $scope.selectedFiles = selectedFiles;
+            $scope.isDefaultFileList = filesAttribute === _getBlueprintData('files');
           }
 
           _reset();
