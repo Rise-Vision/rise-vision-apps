@@ -24,6 +24,14 @@ angular.module('risevision.template-editor.directives')
             return $scope.activeUploadCount() > 0;
           }
 
+          $scope.$watch($scope.uploadManager.isSingleFileSelector, function(value) {
+            if (!value) {
+              inputElement[0].setAttribute('multiple', true);
+            } else {
+              inputElement[0].removeAttribute('multiple');
+            }
+          });
+
           $scope.removeItem = function (item) {
             FileUploader.removeFromQueue(item);
             $scope.uploadManager.onUploadStatus(_isUploading());

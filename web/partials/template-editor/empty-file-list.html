@@ -1,10 +1,25 @@
-<div class="item-list-empty">
+<div class="item-list-empty" ng-if="!isEditingLogo()">
   <div class="row">
     <div class="col-xs-12">
       <h2>You have no {{fileType}}s here.</h2>
       <p>
         Upload {{fileType}}s from your device
         or select {{fileType}}s from storage to keep your display interesting!
+      </p>
+      <div>
+        <img class="img-responsive" src="../images/empty-list.svg">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="item-list-empty" ng-if="isEditingLogo()">
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>You haven't selected a logo yet.</h2>
+      <p>
+        Upload a logo from your device
+        or select a logo from storage to keep your display interesting!
       </p>
       <div>
         <img class="img-responsive" src="../images/empty-list.svg">
