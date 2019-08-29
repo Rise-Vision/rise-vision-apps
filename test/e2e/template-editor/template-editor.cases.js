@@ -35,6 +35,26 @@
       commonHeaderPage.selectSubCompany(subCompanyName);
     }
 
+    function _waitPlanUpdate(retries) {
+      helper.waitDisappear(templateEditorPage.seePlansLink(), 'See Plans Link')
+        .catch(function () {
+          retries = typeof(retries) === 'undefined' ? 3 : retries;
+
+          if (retries > 0) {
+            browser.call(()=>console.log("waiting for plan bar to disappear, attempt: " + (4 - retries)));
+
+            browser.sleep(30 * 1000);
+
+            browser.driver.navigate().refresh();
+
+            browser.sleep(10000);
+            helper.waitDisappear(commonHeaderPage.getLoader(), 'CH Spinner Loader')
+
+            _waitPlanUpdate(retries - 1);
+          }
+        });
+    }
+
     function _purchaseSubscription() {
       helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
       helper.wait(templateEditorPage.seePlansLink(), 'See Plans Link');
@@ -70,6 +90,8 @@
       browser.sleep(3000);
       helper.clickWhenClickable(purchaseFlowModalPage.getPayButton(), 'Purchase flow Review');
       helper.waitDisappear(purchaseFlowModalPage.getPayButton(), 'Purchase flow Complete');
+
+      _waitForPlanUpdate();
     }
 
     before(function () {
