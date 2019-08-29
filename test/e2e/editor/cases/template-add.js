@@ -42,31 +42,8 @@ var TemplateAddScenarios = function() {
       helper.waitDisappear(pricingComponentModalPage.getSubscribeButton(), 'Subscribe Button Disappear');
 
       browser.call(()=>console.log("waiting purchase flow billing continue button"));
-      helper.wait(purchaseFlowModalPage.getContinueButton(), "Purchase flow Billing");
-      browser.sleep(1000);
-      helper.clickWhenClickable(purchaseFlowModalPage.getContinueButton(), 'Purchase flow Billing');
-      helper.waitDisappear(purchaseFlowModalPage.getEmailField(), "Purchase flow Billing");
-      browser.sleep(1000);
-      purchaseFlowModalPage.getCompanyNameField().sendKeys("same");
-      purchaseFlowModalPage.getStreet().sendKeys("2967 Dundas St. W #632");
-      purchaseFlowModalPage.getCity().sendKeys("Toronto");
-      purchaseFlowModalPage.getCountry().sendKeys("Can");
-      purchaseFlowModalPage.getProv().sendKeys("O");
-      purchaseFlowModalPage.getPC().sendKeys("M6P 1Z2");
-      browser.sleep(1000);
-      helper.clickWhenClickable(purchaseFlowModalPage.getContinueButton(), 'Purchase flow Shipping');
-      helper.waitDisappear(purchaseFlowModalPage.getCompanyNameField(), "Purchase flow Shipping");
-      purchaseFlowModalPage.getCardName().sendKeys("AAA");
-      purchaseFlowModalPage.getCardNumber().sendKeys("4242424242424242");
-      purchaseFlowModalPage.getCardExpMon().sendKeys("0");
-      purchaseFlowModalPage.getCardExpYr().sendKeys("222");
-      purchaseFlowModalPage.getCardCVS().sendKeys("222");
-      browser.sleep(1000);
-      helper.clickWhenClickable(purchaseFlowModalPage.getContinueButton(), 'Purchase flow Payment');
-      helper.wait(purchaseFlowModalPage.getPayButton(), "Purchase flow Payment");
-      browser.sleep(3000);
-      helper.clickWhenClickable(purchaseFlowModalPage.getPayButton(), 'Purchase flow Review');
-      helper.waitDisappear(purchaseFlowModalPage.getPayButton(), "Purchase flow Payment");
+
+      purchaseFlowModalPage.purchase();
     }
 
     function openContentModal() {
