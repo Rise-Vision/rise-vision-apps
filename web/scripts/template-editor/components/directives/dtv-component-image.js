@@ -161,6 +161,7 @@ angular.module('risevision.template-editor.directives')
             var filesAttribute =
               fileMetadataUtilsService.filesAttributeFor(selectedImages);
 
+            // Show logo in the image list if component is set to use logo and a logo is available 
             var logoAsMetadata = logoImageFactory.getImagesAsMetadata();
             if (!$scope.isEditingLogo() && imageFactory.isSetAsLogo() && logoAsMetadata.length > 0) {
               selectedImages = logoAsMetadata;
