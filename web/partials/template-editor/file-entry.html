@@ -11,7 +11,7 @@
       ></streamline-icon>
     </div>
   </div>
-  <div class="file-entry">
+  <div class="file-entry" ng-class="{'is-error' : !entry.exists}">
     <div class="file-text">
       <div class="file-name">{{getFileName()}}</div>
       <div class="file-error" ng-hide="entry.exists">

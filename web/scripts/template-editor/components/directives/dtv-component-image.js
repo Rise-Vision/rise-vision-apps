@@ -193,6 +193,10 @@ angular.module('risevision.template-editor.directives')
             },
             onBackHandler: function () {
               if ($scope.getCurrentPanel() !== storagePanelSelector) {
+                if (_isEditingLogo()) {
+                  $scope.setPanelIcon('ratingStar', 'streamline');
+                  $scope.setPanelTitle('Brand Settings');
+                }
                 return $scope.showPreviousPanel();
               } else if (!$scope.storageManager.onBackHandler()) {
                 _updatePanelHeader();

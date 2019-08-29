@@ -24,6 +24,9 @@ angular.module('risevision.template-editor.directives')
               $scope.setPanelTitle('Color Settings');
             },
             onBackHandler: function () {
+              $scope.setPanelIcon('ratingStar', 'streamline');
+              $scope.setPanelTitle('Brand Settings');
+
               return $scope.showPreviousPanel();
             }
           });
