@@ -53,8 +53,8 @@ var VideoComponentScenarios = function () {
         expect(videoComponentPage.getUploadPanelMain().isDisplayed()).to.eventually.be.false;
       });
 
-      it('should list uploaded file in addition to sample files', function() {
-        expect(videoComponentPage.getSelectedVideosMain().count()).to.eventually.equal(3);
+      it('should list uploaded file only, with sample files removed', function() {
+        expect(videoComponentPage.getSelectedVideosMain().count()).to.eventually.equal(1);
       });
 
       it('should auto-save the Presentation after updating the video list', function () {
@@ -97,7 +97,7 @@ var VideoComponentScenarios = function () {
           helper.clickWhenClickable(videoComponentPage.getStorageAddSelected(), 'Storage Add Selected');
 
           helper.wait(videoComponentPage.getVolumeComponent(), 'Volume');
-          expect(videoComponentPage.getSelectedVideosMain().count()).to.eventually.equal(4);
+          expect(videoComponentPage.getSelectedVideosMain().count()).to.eventually.equal(2);
         });
 
         it('should auto-save the Presentation after adding file from storage', function () {
@@ -123,7 +123,7 @@ var VideoComponentScenarios = function () {
         presentationsListPage.loadPresentation(presentationName);
         templateEditorPage.selectComponent('Video - ');
 
-        expect(videoComponentPage.getSelectedVideosMain().count()).to.eventually.equal(4);
+        expect(videoComponentPage.getSelectedVideosMain().count()).to.eventually.equal(2);
       });
     });
 
