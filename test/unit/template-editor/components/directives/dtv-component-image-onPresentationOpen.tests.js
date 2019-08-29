@@ -22,9 +22,15 @@ describe('directive: TemplateComponentImage: onPresentationOpen', function() {
     $provide.service('templateEditorFactory', function() {
       return factory;
     });
+    $provide.service('logoImageFactory', function() {
+      return {
+        getImagesAsMetadata: function() { return []; }
+      };
+    });
     $provide.service('baseImageFactory', function() {
       return {
-        getBlueprintData: function() { return {}; }
+        getBlueprintData: function() { return {}; },
+        isSetAsLogo: function() { return false; }
       };
     });
     $provide.service('fileExistenceCheckService', function() {
