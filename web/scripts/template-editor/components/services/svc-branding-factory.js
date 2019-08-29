@@ -12,6 +12,21 @@ angular.module('risevision.template-editor.services')
         brandingSettings: null
       };
 
+      var _refreshMetadata = function() {
+        if (factory.brandingSettings.logoFile) {
+          fileExistenceCheckService.requestMetadataFor([factory.brandingSettings.logoFile],
+              DEFAULT_IMAGE_THUMBNAIL)
+            .then(function (metadata) {
+              factory.brandingSettings.logoFileMetadata = metadata;
+            })
+            .catch(function (error) {
+              console.error('Could not load metadata for: ' + factory.brandingSettings.logoFile, error);
+            });
+        } else {
+          factory.brandingSettings.logoFileMetadata = [];
+        }
+      };
+
       var _loadBranding = function (forceRefresh) {
         if (!factory.brandingSettings || forceRefresh) {
           var company = userState.getCopyOfSelectedCompany();
@@ -22,20 +37,9 @@ angular.module('risevision.template-editor.services')
             baseColor: settings.brandingDraftBaseColor,
             accentColor: settings.brandingDraftAccentColor
           };
-
-          if (factory.brandingSettings.logoFile) {
-            fileExistenceCheckService.requestMetadataFor([factory.brandingSettings.logoFile],
-                DEFAULT_IMAGE_THUMBNAIL)
-              .then(function (metadata) {
-                factory.brandingSettings.logoFileMetadata = metadata;
-              })
-              .catch(function (error) {
-                console.error('Could not load metadata for: ' + factory.brandingSettings.logoFile, error);
-              });
-          } else {
-            factory.brandingSettings.logoFileMetadata = [];
-          }
         }
+
+        _refreshMetadata();
       };
 
       $rootScope.$on('risevision.company.updated', function () {
