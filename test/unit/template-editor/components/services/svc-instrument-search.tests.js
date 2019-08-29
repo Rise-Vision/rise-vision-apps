@@ -67,7 +67,49 @@ describe('service: instrumentSearchService:', function() {
           console.log("shouldn't be here", err);
         });
     });
-  } );
+
+    it("should filter out results with no symbols", function() {
+      var returnedStocks = {
+        items: [
+          {
+            symbol: "AAPL.O",
+            name: "APPLE INC.",
+            category: "STOCKS",
+            logo: "https://risecontentlogos.s3.amazonaws.com/financial/AAPL.svg"
+          },
+          {
+            name: "AMAZON.COM",
+            category: "STOCKS",
+            logo: "https://risecontentlogos.s3.amazonaws.com/financial/AMZN.svg"
+          },
+          {
+            name: "AUTOZONE INC",
+            category: "STOCKS",
+            logo: "https://risecontentlogos.s3.amazonaws.com/financial/AZO.svg"
+          }
+        ]
+      };
+
+      $httpBackend.when('GET', INSTRUMENT_SEARCH_BASE_URL + "instruments/common?category=stocks").respond(200, returnedStocks);
+
+      setTimeout(function() {
+        $httpBackend.flush();
+      });
+
+      return instrumentSearchService.popularSearch("stocks")
+        .then(function (results) {
+          expect(results).to.deep.equal([
+            {
+              symbol: "AAPL.O",
+              name: "APPLE INC.",
+              category: "STOCKS",
+              logo: "https://risecontentlogos.s3.amazonaws.com/financial/AAPL.svg"
+            }
+          ]);
+        });
+    });
+
+  });
 
   describe( 'keywordSearch', function() {
     var instruments = {
@@ -127,6 +169,50 @@ describe('service: instrumentSearchService:', function() {
           console.log("shouldn't be here", err);
         });
     });
-  } );
+
+    it("should filter out results with no symbols", function() {
+      var returnedInstruments = {
+        items: [
+          {
+            name: "Amazon.com Inc",
+            category: "Stocks",
+            logo: "https://risecontentlogos.s3.amazonaws.com/financial/AMZN.svg"
+          },
+          {
+            symbol: "0#AMZF:",
+            name: "Eurex Amazon Equity Future Chain Contract",
+            category: "Stocks"
+          },
+          {
+            symbol: "0#AMZNDFW:OX",
+            name: "One Chicago LLC Amazon Com No Dividend Friday Weekly Equity Future Chain Contracts",
+            category: "Stocks"
+          }
+        ]
+      };
+
+      $httpBackend.when('GET', INSTRUMENT_SEARCH_BASE_URL + "instrument/search?category=Stocks&query=Amazon").respond(200, returnedInstruments);
+      setTimeout(function() {
+        $httpBackend.flush();
+      });
+
+      return instrumentSearchService.keywordSearch("stocks", "Amazon")
+        .then(function (results) {
+          expect(results).to.deep.equal([
+            {
+              symbol: "0#AMZF:",
+              name: "Eurex Amazon Equity Future Chain Contract",
+              category: "Stocks"
+            },
+            {
+              symbol: "0#AMZNDFW:OX",
+              name: "One Chicago LLC Amazon Com No Dividend Friday Weekly Equity Future Chain Contracts",
+              category: "Stocks"
+            }
+          ]);
+        });
+    });
+
+  });
 
 });

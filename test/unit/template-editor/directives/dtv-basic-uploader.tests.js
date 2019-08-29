@@ -6,7 +6,10 @@ describe('directive: basicUploader', function () {
   beforeEach(module(function ($provide) {
     uploadManager = {
       onUploadStatus: sinon.stub(),
-      addFile: sinon.stub()
+      addFile: sinon.stub(),
+      isSingleFileSelector: function() {
+        return isSingleFileSelector;
+      }
     };
 
     $provide.constant('STORAGE_UPLOAD_CHUNK_SIZE', 1024);
@@ -50,7 +53,7 @@ describe('directive: basicUploader', function () {
   }));  
 
   var element;
-  var $scope, uploadManager, storage, templateEditorUtils;
+  var $scope, uploadManager, storage, templateEditorUtils, isSingleFileSelector;
   var FileUploader, UploadURIService;
 
   beforeEach(inject(function($injector){
@@ -61,7 +64,7 @@ describe('directive: basicUploader', function () {
 
   beforeEach(inject(function($injector, $compile, $rootScope, $templateCache) {
     $rootScope.uploadManager = uploadManager;
-    $templateCache.put('partials/template-editor/basic-uploader.html', '<p>mock</p>');
+    $templateCache.put('partials/template-editor/basic-uploader.html', '<input type="file" multiple>');
 
     templateEditorUtils = $injector.get('templateEditorUtils');
 
@@ -72,7 +75,7 @@ describe('directive: basicUploader', function () {
   }));
 
   it('should render directive', function () {
-    expect(element.html()).to.equal('<p>mock</p>');
+    expect(element.html()).to.equal('<input type="file" multiple="true">');
   });
 
   it('should add utility functions to scope', function () {
@@ -86,6 +89,14 @@ describe('directive: basicUploader', function () {
     expect(FileUploader.onCompleteItem).to.exist;
 
     expect(UploadURIService.getURI).to.exist;
+  });
+
+  it('should watch uploadManager.isSingleFileSelector value and update input multiple attribute', function() {
+    isSingleFileSelector = true;
+
+    $scope.$apply();
+
+    expect(element.html()).to.equal('<input type="file">');
   });
 
   it('should invoke onAfterAddingFile', function () {
