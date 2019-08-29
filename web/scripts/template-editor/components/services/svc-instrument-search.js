@@ -23,7 +23,7 @@ angular.module('risevision.template-editor.services')
 
         return $http.get(keywordSearchURL.replace('CATEGORY', capitalized).replace('QUERY', keyword))
           .then(function (resp) {
-            results.keyword[keywordProp] = resp.data.items;
+            results.keyword[keywordProp] = _getValidItems(resp);
             return results.keyword[keywordProp];
           });
       };
@@ -39,6 +39,14 @@ angular.module('risevision.template-editor.services')
         }).join('%20');
       }
 
+      function _getValidItems(resp) {
+        var items = resp.data.items;
+
+        return _.filter(items, function (item) {
+          return !!item.symbol;
+        });
+      }
+
       factory.popularSearch = function (category) {
         if (results.popular[category]) {
           return $q.when(results.popular[category]);
@@ -46,7 +54,7 @@ angular.module('risevision.template-editor.services')
 
         return $http.get(popularSearchURL.replace('CATEGORY', category))
           .then(function (resp) {
-            results.popular[category] = resp.data.items;
+            results.popular[category] = _getValidItems(resp);
             return results.popular[category];
           });
       };
