@@ -5,14 +5,20 @@ describe('directive: templateComponentRss', function() {
     element,
     factory,
     rssFeedValidation,
+    parsableResult = true,
+    isValidResult = true,
     sandbox = sinon.sandbox.create();
+
+  function getParsableResult() {
+    return parsableResult;
+  }
 
   beforeEach(function() {
     factory = { selected: { id: "TEST-ID" } };
 
     rssFeedValidation = {
-      isParsable: sandbox.stub().returns(Q.resolve('VALID')),
-      isValid: sandbox.stub().returns(Q.resolve('VALID'))
+      isParsable: sandbox.stub().returns(parsableResult ? Q.resolve('VALID') : Q.resolve('NON_FEED')),
+      isValid: sandbox.stub().returns(isValidResult ? Q.resolve('VALID') : Q.resolve('INVALID_FEED'))
     };
   });
 
@@ -142,6 +148,31 @@ describe('directive: templateComponentRss', function() {
 
     // only 1 call from initial load, no subsequent call from invalid url entry
     expect(rssFeedValidation.isParsable.callCount).to.equal(1);
+  });
+
+  it('should not check feed validity if feed parser response is not VALID', function(done) {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+    var sampleData = {};
+
+    $scope.getAvailableAttributeData = function(componentId, attributeName) {
+      return sampleData[attributeName];
+    };
+
+    parsableResult = false;
+
+    directive.show();
+
+    var invalidUrl = 'http://test.com';
+    $scope.feedUrl = invalidUrl;
+    $scope.saveFeed();
+
+    expect(rssFeedValidation.isParsable.callCount).to.equal(2);
+
+    setTimeout(function(){
+      expect(rssFeedValidation.isValid).to.not.have.been.called;
+
+      done();
+    }, 200);
   });
 
 });
