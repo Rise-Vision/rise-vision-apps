@@ -92,11 +92,8 @@ describe('directive: TemplateComponentImage', function() {
   it('should exist', function() {
     expect($scope).to.be.ok;
     expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
-    expect($scope.storageManager).to.be.ok;
-    expect($scope.storageManager.isSingleFileSelector).to.be.ok;
-    expect($scope.storageManager.addSelectedItems).to.be.ok;
-    expect($scope.storageManager.handleNavigation).to.be.ok;
+    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } });
+    expect($scope.isEditingLogo).to.be.a('function');
 
     expect($scope.registerDirective).to.have.been.called;
 
@@ -107,6 +104,41 @@ describe('directive: TemplateComponentImage', function() {
     expect(directive.iconType).to.equal('streamline');
     expect(directive.show).to.be.a('function');
     expect(directive.onBackHandler).to.be.a('function');
+  });
+
+  it('uploadManager:', function() {
+    expect($scope.uploadManager).to.be.ok;
+    expect($scope.uploadManager.isSingleFileSelector).to.be.ok;
+    expect($scope.uploadManager.isSingleFileSelector).to.equal($scope.isEditingLogo);
+    expect($scope.uploadManager.onUploadStatus).to.be.ok;
+    expect($scope.uploadManager.addFile).to.be.ok;
+  });
+
+  it('storageManager:', function() {
+    expect($scope.storageManager).to.be.ok;
+    expect($scope.storageManager.isSingleFileSelector).to.be.ok;
+    expect($scope.storageManager.isSingleFileSelector).to.equal($scope.isEditingLogo);
+    expect($scope.storageManager.addSelectedItems).to.be.ok;
+    expect($scope.storageManager.handleNavigation).to.be.ok;
+  });
+
+  describe('isEditingLogo:', function() {
+    it('should not edit logo if component id is available', function() {
+      var directive = $scope.registerDirective.getCall(0).args[0];
+
+      directive.show();
+
+      expect($scope.isEditingLogo()).to.be.false;
+    });
+
+    it('should edit logo if component id is not available', function() {
+      var directive = $scope.registerDirective.getCall(0).args[0];
+      $scope.factory.selected = {};
+
+      directive.show();
+
+      expect($scope.isEditingLogo()).to.be.true;
+    });
   });
 
   describe('show',function(){

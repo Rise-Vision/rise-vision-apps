@@ -46,15 +46,10 @@ angular.module('risevision.template-editor.services')
         _setAttributeData('metadata', selectedImages);
         _setAttributeData('files', filesAttribute);
 
-        // Check default isLogo value; if the user selects their own image
-        // set this component to use that image; if empty set it to use the 
-        // Company Branding logo
+        // Check default isLogo===true value; if the user makes changes to the component
+        // revert it to isLogo=false
         if (factory.getBlueprintData('is-logo') === 'true') {
-          if (selectedImages && selectedImages.length > 0) {
-            _setAttributeData('isLogo', false);
-          } else {
-            _setAttributeData('isLogo', true);
-          }
+          _setAttributeData('isLogo', false);
         }
 
         return selectedImages;

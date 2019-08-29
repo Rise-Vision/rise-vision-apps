@@ -22,7 +22,7 @@
     remove-action="removeImageFromList">
   </template-editor-file-entry>
 
-  <template-editor-empty-file-list file-type="image"
+  <template-editor-empty-file-list file-type="image" is-editing-logo="isEditingLogo"
      ng-hide="isUploading || selectedImages.length !== 0 || factory.loadingPresentation">
   </template-editor-empty-file-list>
 
@@ -40,7 +40,8 @@
       for="image-list-uploader"
       ng-disabled="isUploading"
     >
-      <strong>Upload Images</strong>
+      <strong ng-if="!isEditingLogo()">Upload Images</strong>
+      <strong ng-if="isEditingLogo()">Upload A Logo</strong>
     </label>
   </div>
   <div class="select-from-storage">
