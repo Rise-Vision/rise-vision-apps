@@ -175,12 +175,12 @@ describe('service: baseImageFactory', function() {
         templateEditorFactory.setAttributeData.should.have.been.calledWith('componentId', 'isLogo', false);
       });
 
-      it('should reset isLogo flag to true if no files are sent', function() {
+      it('should update isLogo flag to false if no files are sent', function() {
         var metadata = [];
         blueprintFactory.getBlueprintData.returns('true');
         var data = baseImageFactory.updateMetadata(metadata);      
 
-        templateEditorFactory.setAttributeData.should.have.been.calledWith('componentId', 'isLogo', true);
+        templateEditorFactory.setAttributeData.should.have.been.calledWith('componentId', 'isLogo', false);
       });
 
     });

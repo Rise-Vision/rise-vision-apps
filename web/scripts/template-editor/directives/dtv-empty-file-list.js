@@ -6,7 +6,8 @@ angular.module('risevision.template-editor.directives')
       return {
         restrict: 'E',
         scope: {
-          fileType: '@'
+          fileType: '@',
+          isEditingLogo: '='
         },
         templateUrl: 'partials/template-editor/empty-file-list.html',
         link: function ($scope) {
