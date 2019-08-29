@@ -24,6 +24,7 @@ describe('directive: templateBrandingColors', function() {
 
     $scope.registerDirective = sinon.stub();
     $scope.setPanelTitle = sinon.stub();
+    $scope.setPanelIcon = sinon.stub();
     $scope.showPreviousPanel = sinon.stub();
 
     $scope.$digest();
@@ -66,6 +67,9 @@ describe('directive: templateBrandingColors', function() {
     $scope.showPreviousPanel.returns('backPanel');
 
     expect(directive.onBackHandler()).to.equal('backPanel');
+
+    $scope.setPanelTitle.should.have.been.calledWith('Brand Settings');
+    $scope.setPanelIcon.should.have.been.calledWith('ratingStar', 'streamline');
 
     $scope.showPreviousPanel.should.have.been.called;
   });
