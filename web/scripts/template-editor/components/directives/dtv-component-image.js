@@ -21,21 +21,22 @@ angular.module('risevision.template-editor.directives')
           $scope.factory = templateEditorFactory;
           $scope.validExtensions = SUPPORTED_IMAGE_TYPES;
 
+          $scope.isEditingLogo = function () {
+            return imageFactory === logoImageFactory;
+          };
+
           $scope.uploadManager = {
             onUploadStatus: function (isUploading) {
               $scope.isUploading = isUploading;
             },
             addFile: function (file) {
               _addFilesToMetadata([file]);
-            }
-          };
-
-          var _isEditingLogo = function () {
-            return imageFactory === logoImageFactory;
+            },
+            isSingleFileSelector: $scope.isEditingLogo
           };
 
           var _updatePanelHeader = function () {
-            if (_isEditingLogo()) {
+            if ($scope.isEditingLogo()) {
               $scope.setPanelIcon('circleStar', 'streamline');
               $scope.setPanelTitle('Logo Settings');
             } else {
@@ -51,7 +52,7 @@ angular.module('risevision.template-editor.directives')
 
               $scope.showPreviousPanel();
             },
-            isSingleFileSelector: _isEditingLogo,
+            isSingleFileSelector: $scope.isEditingLogo,
             handleNavigation: function (folderPath) {
               var folderName = templateEditorUtils.fileNameOf(folderPath);
 
@@ -193,7 +194,7 @@ angular.module('risevision.template-editor.directives')
             },
             onBackHandler: function () {
               if ($scope.getCurrentPanel() !== storagePanelSelector) {
-                if (_isEditingLogo()) {
+                if ($scope.isEditingLogo()) {
                   $scope.setPanelIcon('ratingStar', 'streamline');
                   $scope.setPanelTitle('Brand Settings');
                 }
