@@ -35,7 +35,7 @@
       commonHeaderPage.selectSubCompany(subCompanyName);
     }
 
-    function _waitPlanUpdate(retries) {
+    function _waitForPlanUpdate(retries) {
       helper.waitDisappear(templateEditorPage.seePlansLink(), 'See Plans Link')
         .catch(function () {
           retries = typeof(retries) === 'undefined' ? 3 : retries;
@@ -50,7 +50,7 @@
             browser.sleep(10000);
             helper.waitDisappear(commonHeaderPage.getLoader(), 'CH Spinner Loader')
 
-            _waitPlanUpdate(retries - 1);
+            _waitForPlanUpdate(retries - 1);
           }
         });
     }
@@ -91,7 +91,7 @@
       helper.clickWhenClickable(purchaseFlowModalPage.getPayButton(), 'Purchase flow Review');
       helper.waitDisappear(purchaseFlowModalPage.getPayButton(), 'Purchase flow Complete');
 
-      _waitForPlanUpdate();
+      console.log('purchase complete')
     }
 
     before(function () {
@@ -108,19 +108,22 @@
       // Sometimes the trial does not start in time; this section tries to reduce the number of times this step fails
       browser.sleep(5000);
       presentationsListPage.loadPresentationsList();
+
+      _waitForPlanUpdate();
+
       _selectSubCompany();
     });
 
     // Text component scenarios deal with the auto schedule modal, so they always should come first.
     var textComponentScenarios = new TextComponentScenarios();
-    var templateEditorAddScenarios = new TemplateEditorAddScenarios();
-    var financialComponentScenarios = new FinancialComponentScenarios();
-    var weatherComponentScenarios = new WeatherComponentScenarios();
-    var imageComponentScenarios = new ImageComponentScenarios();
-    var slidesComponentScenarios = new SlidesComponentScenarios();
-    var videoComponentScenarios = new VideoComponentScenarios();
-    var rssComponentScenarios = new RssComponentScenarios();
-    var brandingComponentScenarios = new BrandingComponentScenarios();
+    // var templateEditorAddScenarios = new TemplateEditorAddScenarios();
+    // var financialComponentScenarios = new FinancialComponentScenarios();
+    // var weatherComponentScenarios = new WeatherComponentScenarios();
+    // var imageComponentScenarios = new ImageComponentScenarios();
+    // var slidesComponentScenarios = new SlidesComponentScenarios();
+    // var videoComponentScenarios = new VideoComponentScenarios();
+    // var rssComponentScenarios = new RssComponentScenarios();
+    // var brandingComponentScenarios = new BrandingComponentScenarios();
 
     after(function() {
       // Loading the Presentation List is a workaround to a Chrome Driver issue that has it fail to click on elements over the Preview iframe
