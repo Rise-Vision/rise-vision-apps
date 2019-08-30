@@ -15,7 +15,7 @@ var VideoComponentScenarios = function () {
   };
 
   var setUserAgent = function (userAgent) {
-    return browser.driver.executeScript('Object.defineProperty(navigator, "userAgent", {get: function () { return "' + userAgent + '"; }});');
+    return browser.driver.executeScript('Object.defineProperty(navigator, "userAgent", {configurable: true, get: function () { return "' + userAgent + '"; }});');
   };
 
   describe('Video Component', function () {
