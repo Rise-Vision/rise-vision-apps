@@ -21,9 +21,6 @@ angular.module('risevision.template-editor.directives')
           $scope.uploader = FileUploader;
           $scope.status = {};
           $scope.warnings = [];
-          $scope.accept = presentationUtils.isMobileBrowser() && _.includes(ALLOWED_VALID_TYPES, $scope.validType)
-            ? $scope.validType + '/*'
-            : $scope.validExtensions;
 
           function _isUploading() {
             return $scope.activeUploadCount() > 0;
@@ -143,6 +140,16 @@ angular.module('risevision.template-editor.directives')
                 $scope.uploadManager.onUploadStatus(_isUploading());
               });
           };
+
+          $scope.setAcceptAttribute = function () {
+            if (presentationUtils.isMobileBrowser() && _.includes(ALLOWED_VALID_TYPES, $scope.validType)) {
+              $scope.accept = $scope.validType + '/*';
+            } else {
+              $scope.accept = $scope.validExtensions;
+            }
+          };
+
+          $scope.setAcceptAttribute();
         }
       };
     }

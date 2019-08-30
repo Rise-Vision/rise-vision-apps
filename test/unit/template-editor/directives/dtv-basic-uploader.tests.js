@@ -43,17 +43,17 @@ describe('directive: basicUploader', function () {
       return UploadURIService = {
         getURI: sinon.spy(function(file) {
           var deferred = Q.defer();
-          
+
           deferred.resolve(file.name);
-          
+
           return deferred.promise;
         })
       };
     });
-  }));  
+  }));
 
   var element;
-  var $scope, uploadManager, storage, templateEditorUtils, isSingleFileSelector;
+  var $scope, uploadManager, storage, templateEditorUtils, presentationUtils, isSingleFileSelector;
   var FileUploader, UploadURIService;
 
   beforeEach(inject(function($injector){
@@ -67,10 +67,11 @@ describe('directive: basicUploader', function () {
     $templateCache.put('partials/template-editor/basic-uploader.html', '<input type="file" multiple>');
 
     templateEditorUtils = $injector.get('templateEditorUtils');
+    presentationUtils = $injector.get('presentationUtils');
 
     element = $compile('<basic-uploader upload-manager="uploadManager" valid-extensions="validExtensions"></basic-uploader>')($rootScope);
     $rootScope.$apply();
-    
+
     $scope = element.isolateScope();
   }));
 
@@ -103,7 +104,7 @@ describe('directive: basicUploader', function () {
     var file1 = { name: 'test1.jpg', size: 200, slice: function () {} };
     var spy = sinon.spy(FileUploader,'onAfterAddingFile');
     FileUploader.addToQueue([ file1 ]);
-    spy.should.have.been.called;  
+    spy.should.have.been.called;
   });
 
   it('should upload to the correct folder', function () {
@@ -118,12 +119,12 @@ describe('directive: basicUploader', function () {
   it('should add current path to the name if the file is just being uploaded', function () {
     var fileName = 'test1.jpg';
     var file1 = { name: fileName, size: 200, slice: function () {}, file: { name: fileName } };
-    
+
     uploadManager.folderPath = 'test/';
     FileUploader.onAfterAddingFile(file1);
-    
+
     var args = UploadURIService.getURI.getCall(0).args;
-    
+
     expect(UploadURIService.getURI.called).to.be.true;
     expect(args[0].name).to.be.equal('test/test1.jpg');
   });
@@ -131,12 +132,12 @@ describe('directive: basicUploader', function () {
   it('should not modify the name if the file is being retried', function () {
     var fileName = 'test/test1.jpg';
     var file1 = { name: fileName, size: 200, slice: function () {}, isRetrying: true, file: { name: fileName } };
-    
+
     uploadManager.folderPath = 'test/';
     FileUploader.onAfterAddingFile(file1);
-    
+
     var args = UploadURIService.getURI.getCall(0).args;
-    
+
     expect(UploadURIService.getURI.called).to.be.true;
     expect(args[0].name).to.be.equal('test/test1.jpg');
   });
@@ -199,7 +200,7 @@ describe('directive: basicUploader', function () {
 
       $scope.activeUploadCount = function () {return 1};
       FileUploader.onCompleteItem(item);
-      
+
       storage.refreshFileMetadata.should.have.been.calledWith(file1.name);
     });
 
@@ -214,7 +215,7 @@ describe('directive: basicUploader', function () {
         FileUploader.removeFromQueue.should.have.been.calledWith(item);
         done();
       }, 10);
-    });      
+    });
   });
 
   describe('uploadSelectedFiles: ', function () {
@@ -250,6 +251,30 @@ describe('directive: basicUploader', function () {
 
         done();
       });
+    });
+  });
+
+  describe('setAcceptAttribute:', function () {
+    it('should use a generic accept attribute value when on a mobile device', function () {
+      sinon.stub(presentationUtils, 'isMobileBrowser').callsFake(function() { return true; });
+
+      $scope.validExtensions = '.gif, .jpg, .png';
+      $scope.validType = 'image';
+
+      $scope.setAcceptAttribute();
+
+      expect($scope.accept).to.be.equal('image/*')
+    });
+
+    it('should use a specific accept attribute value when not on a mobile device', function () {
+      sinon.stub(presentationUtils, 'isMobileBrowser').callsFake(function() { return false; });
+
+      $scope.validExtensions = '.webm, .mp4';
+      $scope.validType = 'video';
+
+      $scope.setAcceptAttribute();
+
+      expect($scope.accept).to.be.equal($scope.validExtensions);
     });
   });
 });
