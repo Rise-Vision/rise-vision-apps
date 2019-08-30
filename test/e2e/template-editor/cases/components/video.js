@@ -71,13 +71,13 @@ var VideoComponentScenarios = function () {
       });
 
       it('should use a specific accept attribute value when not on a mobile device', function (done) {
-        expect(videoComponentPage.getUploadInputMain().getAttribute('accept')).to.eventually.equal('.mp4, .webm');
+        helper.wait(videoComponentPage.getUploadInputMain().getAttribute('accept'), '.mp4, .webm');
       });
 
       it('should use a generic accept attribute value when on a mobile device', function (done) {
         getUserAgent().then(function (initialUserAgent) {
           setUserAgent('Mozilla/5.0 (Linux; Android 6.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Mobile Safari/537.36').then(function () {
-            expect(videoComponentPage.getUploadInputMain().getAttribute('accept')).to.eventually.equal('video/*');
+            helper.wait(videoComponentPage.getUploadInputMain().getAttribute('accept'), 'video/*');
 
             setUserAgent(initialUserAgent).then(function () {
               done();
