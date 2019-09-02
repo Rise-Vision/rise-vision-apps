@@ -104,6 +104,24 @@ var WeatherComponentScenarios = function () {
           expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(1);
         });
       });
+
+      describe('storage',function(){
+        it('should load Storage page', function () {
+          helper.wait(imageComponentPage.getStorageButtonMain(), 'Storage Button Main');
+          helper.clickWhenClickable(imageComponentPage.getStorageButtonMain(), 'Storage Button Main');
+          browser.sleep(1000);
+          helper.waitDisappear(imageComponentPage.getStorageSpinner(), 'Storage Spinner');
+          expect(imageComponentPage.getStorageItems().count()).to.eventually.above(0);
+        });
+
+        it('should select a file as logo', function() {
+          helper.clickWhenClickable(imageComponentPage.getStorageNewFile(), 'Storage New File');
+          browser.sleep(500);
+          helper.clickWhenClickable(imageComponentPage.getStorageAddSelected(), 'Storage Add Selected');
+          browser.sleep(1000);
+          expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(1);
+        });
+      })
     });
 
     describe('remove',function(){
