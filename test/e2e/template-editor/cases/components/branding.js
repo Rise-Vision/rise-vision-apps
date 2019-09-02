@@ -57,6 +57,48 @@ var WeatherComponentScenarios = function () {
 
     });
 
+    describe('Edit Colors', function(){
+      it('should open Colors panel', function() {
+        helper.clickWhenClickable(brandingComponentPage.getEditColorsLink(),'Edit Colors Link')
+        browser.sleep(1000);
+
+        expect(brandingComponentPage.getColorsPanel().isDisplayed()).to.eventually.be.true;
+        expect(brandingComponentPage.getBaseColorInput().isDisplayed()).to.eventually.be.true;
+        expect(brandingComponentPage.getAccentColorInput().isDisplayed()).to.eventually.be.true;
+
+        expect(brandingComponentPage.getBaseColorInput().isEnabled()).to.eventually.be.true;
+        expect(brandingComponentPage.getAccentColorInput().isEnabled()).to.eventually.be.true;
+      });
+
+      it('should set colors', function() {
+        brandingComponentPage.getBaseColorInput().sendKeys("red");
+        brandingComponentPage.getAccentColorInput().sendKeys("yellow");
+
+        expect(brandingComponentPage.getBaseColorInput().getAttribute('value')).to.eventually.equal("red");
+        expect(brandingComponentPage.getAccentColorInput().getAttribute('value')).to.eventually.equal("yellow");
+
+        //return to branding
+        helper.clickWhenClickable(templateEditorPage.getBackToComponentsButton(),'Back to Branding Settings');
+        browser.sleep(1000);
+      });
+
+      it('should persist colors', function() {
+        helper.clickWhenClickable(brandingComponentPage.getEditColorsLink(),'Edit Colors Link')
+        browser.sleep(1000);
+
+        expect(brandingComponentPage.getColorsPanel().isDisplayed()).to.eventually.be.true;
+        expect(brandingComponentPage.getBaseColorInput().isDisplayed()).to.eventually.be.true;
+        expect(brandingComponentPage.getAccentColorInput().isDisplayed()).to.eventually.be.true;
+
+        expect(brandingComponentPage.getBaseColorInput().getAttribute('value')).to.eventually.equal("red");
+        expect(brandingComponentPage.getAccentColorInput().getAttribute('value')).to.eventually.equal("yellow");
+        
+        // return to branding
+        helper.clickWhenClickable(templateEditorPage.getBackToComponentsButton(),'Back to Branding Settings');
+        browser.sleep(1000);
+      });
+    });
+
     describe('Edit Branding Logo',function(){
       it('should edit logo and have logo by default',function() {
         helper.clickWhenClickable(brandingComponentPage.getEditLogoLink(),'Edit Logo Link')

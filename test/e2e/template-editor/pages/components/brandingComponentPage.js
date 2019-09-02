@@ -4,10 +4,14 @@ var BrandingComponentPage = function() {
   var brandingPanel = element(by.css('.branding-component-container'));
   var editLogoLink = element(by.id('edit-logo'));
   var editColorsLink = element(by.id('edit-colors'));
+
   var logoRemovalConfirmationModal = element(by.id('confirmForm'));
   var confirmButton = element(by.id('confirm-primary'));
 
-
+  var colorsPanel = element(by.css('.branding-colors-container'));
+  var baseColorInput = element(by.id('branding-base-color'));
+  var accentColorInput = element(by.id('branding-accent-color'));
+  
   this.getBrandingPanel = function () {
     return brandingPanel;
   };
@@ -26,6 +30,18 @@ var BrandingComponentPage = function() {
 
   this.getConfirmButton = function () {
     return confirmButton;
+  };
+
+  this.getColorsPanel = function () {
+    return colorsPanel;
+  };
+
+  this.getBaseColorInput = function () {
+    return baseColorInput;
+  };
+
+  this.getAccentColorInput = function () {
+    return accentColorInput;
   };
 };
 
