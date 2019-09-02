@@ -87,7 +87,8 @@ angular.module('risevision.template-editor.controllers')
         _programSave();
       }
 
-      var _initializing = false;
+      var _bypassUnsaved = false,
+        _initializing = false;
       var _setUnsavedChanges = function (state) {
         $scope.hasUnsavedChanges = state;
 
@@ -149,6 +150,10 @@ angular.module('risevision.template-editor.controllers')
       $scope.$on('presentationPublished', _setUnsavedChangesAsync.bind(null, false));
 
       $scope.$on('$stateChangeStart', function (event, toState, toParams) {
+        if (_bypassUnsaved) {
+          _bypassUnsaved = false;
+          return;
+        }
         if (toState.name.indexOf('apps.editor.templates') === -1) {
           event.preventDefault();
 
@@ -158,7 +163,8 @@ angular.module('risevision.template-editor.controllers')
 
           savePromise
             .finally(function () {
-                $state.go(toState, toParams);
+              _bypassUnsaved = true;
+              $state.go(toState, toParams);
             });
         }
       });
