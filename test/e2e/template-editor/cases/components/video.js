@@ -238,8 +238,6 @@ var VideoComponentScenarios = function () {
 
       it('should use a generic accept attribute value when on a mobile device', function (done) {
         getUserAgent().then(function (initialUserAgent) {
-          console.log("initial user agent:", initialUserAgent);
-
           setUserAgent('Mozilla/5.0 (Linux; Android 6.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Mobile Safari/537.36').then(function () {
 
             // Reload presentation so user agent is applied
