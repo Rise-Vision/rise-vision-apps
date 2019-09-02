@@ -87,8 +87,7 @@ angular.module('risevision.template-editor.controllers')
         _programSave();
       }
 
-      var _bypassUnsaved = false,
-        _initializing = false;
+      var _initializing = false;
       var _setUnsavedChanges = function (state) {
         $scope.hasUnsavedChanges = state;
 
@@ -150,30 +149,16 @@ angular.module('risevision.template-editor.controllers')
       $scope.$on('presentationPublished', _setUnsavedChangesAsync.bind(null, false));
 
       $scope.$on('$stateChangeStart', function (event, toState, toParams) {
-        if (_bypassUnsaved) {
-          _bypassUnsaved = false;
-          return;
-        }
         if (toState.name.indexOf('apps.editor.templates') === -1) {
           event.preventDefault();
 
           _clearSaveTimeout();
 
           var savePromise = $scope.hasUnsavedChanges ? $scope.factory.save() : $q.resolve();
-          var hasSchedules = scheduleFactory.hasSchedules();
 
           savePromise
-            .then(function () {
-              if (!hasSchedules) {
-                return $scope.factory.publish();
-              }
-            })
             .finally(function () {
-              // If the modal was displayed we can't navigate away, otherwise it will be closed by apps.js' $modalStack.dismissAll
-              if (hasSchedules) {
-                _bypassUnsaved = true;
                 $state.go(toState, toParams);
-              }
             });
         }
       });
