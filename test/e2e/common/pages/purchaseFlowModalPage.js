@@ -8,6 +8,7 @@ var PurchaseFlowModalPage = function() {
   var seePlansLink = element(by.xpath('//a[contains(text(), "See Our Plans")]'));
 
   var emailField = element(by.id('contact-email'));
+  var paymentMethod = element(by.id('payment-method-select'));
   var cardName = element(by.id('new-card-name'));
   var cardNumber = element(by.id('new-card-number'));
   var cardExpMon = element(by.id('new-card-expiry-month'));
@@ -41,7 +42,7 @@ var PurchaseFlowModalPage = function() {
       });
   }
 
-  this.purchase = function() {
+  this.purchase = function(useCreditCard) {
     helper.wait(this.getContinueButton(), 'Purchase flow Billing');
     browser.sleep(1000);
     helper.clickWhenClickable(this.getContinueButton(), 'Purchase flow Billing');
@@ -56,11 +57,17 @@ var PurchaseFlowModalPage = function() {
     browser.sleep(1000);
     helper.clickWhenClickable(this.getContinueButton(), 'Purchase flow Shipping');
     helper.waitDisappear(this.getCompanyNameField(), 'Purchase flow Shipping');
-    this.getCardName().sendKeys('AAA');
-    this.getCardNumber().sendKeys('4242424242424242');
-    this.getCardExpMon().sendKeys('0');
-    this.getCardExpYr().sendKeys('222');
-    this.getCardCVS().sendKeys('222');
+    if (useCreditCard) {
+      console.log('Purchase using Credit Card');
+      this.getCardName().sendKeys('AAA');
+      this.getCardNumber().sendKeys('4242424242424242');
+      this.getCardExpMon().sendKeys('0');
+      this.getCardExpYr().sendKeys('222');
+      this.getCardCVS().sendKeys('222');
+    } else {
+      console.log('Purchase using Invoice Me');
+      this.getPaymentMethod().element(by.cssContainingText('option', 'Invoice Me')).click();
+    }
     browser.sleep(1000);
     helper.clickWhenClickable(this.getContinueButton(), 'Purchase flow Payment');
     helper.wait(this.getPayButton(), 'Purchase flow Payment');
@@ -91,6 +98,10 @@ var PurchaseFlowModalPage = function() {
 
   this.getEmailField = function() {
     return emailField;
+  }
+
+  this.getPaymentMethod = function() {
+    return paymentMethod;
   }
 
   this.getCompanyNameField = function() {
