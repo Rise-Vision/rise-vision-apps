@@ -160,20 +160,11 @@ angular.module('risevision.template-editor.controllers')
           _clearSaveTimeout();
 
           var savePromise = $scope.hasUnsavedChanges ? $scope.factory.save() : $q.resolve();
-          var hasSchedules = scheduleFactory.hasSchedules();
 
           savePromise
-            .then(function () {
-              if (!hasSchedules) {
-                return $scope.factory.publish();
-              }
-            })
             .finally(function () {
-              // If the modal was displayed we can't navigate away, otherwise it will be closed by apps.js' $modalStack.dismissAll
-              if (hasSchedules) {
-                _bypassUnsaved = true;
-                $state.go(toState, toParams);
-              }
+              _bypassUnsaved = true;
+              $state.go(toState, toParams);
             });
         }
       });

@@ -40,7 +40,8 @@ describe('directive: TemplateComponentImage', function() {
         getImagesAsMetadata: sandbox.stub().returns([]),
         areChecksCompleted: sandbox.stub().returns(true),
         getDuration: sandbox.stub().returns(10),
-        removeImage: sandbox.stub().returns(Q.resolve())
+        removeImage: sandbox.stub().returns(Q.resolve()),
+        isSetAsLogo: sandbox.stub().returns(false)
       };
     });
     $provide.service('storageAPILoader', function() {
@@ -165,7 +166,6 @@ describe('directive: TemplateComponentImage', function() {
 
       expect(baseImageFactory.getImagesAsMetadata).to.have.been.called;
       expect(baseImageFactory.componentId).to.equal('image-id');
-      expect(logoImageFactory.getImagesAsMetadata).to.not.have.been.called;
     });
 
     it('should set image lists when available as attribute data', function() {
@@ -215,6 +215,20 @@ describe('directive: TemplateComponentImage', function() {
       expect($scope.isDefaultImageList).to.be.false;
 
       timeout.flush();
+    });
+
+    it('should show logo when isLogo is true and a logo is available',function(){
+      var directive = $scope.registerDirective.getCall(0).args[0];
+      var sampleImages = [
+        { "file": 'logo.png', "thumbnail-url": "http://logo" }
+      ];
+
+      logoImageFactory.getImagesAsMetadata.returns(sampleImages);
+      baseImageFactory.isSetAsLogo.returns(true);
+
+      directive.show();
+
+      expect($scope.selectedImages).to.deep.equal(sampleImages);
     });
   });
 
