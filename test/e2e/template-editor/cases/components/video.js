@@ -10,6 +10,14 @@ var VideoComponentScenarios = function () {
 
   browser.driver.manage().window().setSize(1920, 1080);
 
+  var getUserAgent = function () {
+    return browser.driver.executeScript('return navigator.userAgent');
+  };
+
+  var setUserAgent = function (userAgent) {
+    return browser.driver.executeScript('Object.defineProperty(navigator, "userAgent", {configurable: true, get: function () { return "' + userAgent + '"; }});');
+  };
+
   describe('Video Component', function () {
     var testStartTime = Date.now();
     var presentationName = 'Video Component Presentation - ' + testStartTime;
@@ -220,6 +228,34 @@ var VideoComponentScenarios = function () {
       });
     });
 
+    describe('file types', function () {
+      it('should use a specific accept attribute value when not on a mobile device', function (done) {
+        videoComponentPage.getUploadInputMain().getAttribute('accept').then(accept => {
+          expect(accept).to.equal('.mp4, .webm');
+          done();
+        });
+      });
+
+      it('should use a generic accept attribute value when on a mobile device', function (done) {
+        getUserAgent().then(function (initialUserAgent) {
+          setUserAgent('Mozilla/5.0 (Linux; Android 6.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Mobile Safari/537.36').then(function () {
+
+            // Reload presentation so user agent is applied
+
+            presentationsListPage.loadPresentation(presentationName);
+            templateEditorPage.selectComponent('Video - ');
+
+            videoComponentPage.getUploadInputMain().getAttribute('accept').then(accept => {
+              expect(accept).to.equal('video/*')
+
+              setUserAgent(initialUserAgent).then(function () {
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
   });
 };
 

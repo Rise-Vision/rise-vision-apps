@@ -50,11 +50,54 @@ var WeatherComponentScenarios = function () {
         expect(brandingComponentPage.getBrandingPanel().isDisplayed()).to.eventually.be.true;        
       });
 
-      it('should liat Edit Logo and Colors links', function () {
+      it('should list Edit Logo and Colors links', function () {
         expect(brandingComponentPage.getEditLogoLink().isDisplayed()).to.eventually.be.true;
         expect(brandingComponentPage.getEditColorsLink().isDisplayed()).to.eventually.be.true;
       });
 
+    });
+
+    describe('Edit Colors', function(){
+      it('should open Colors panel', function() {
+        helper.clickWhenClickable(brandingComponentPage.getEditColorsLink(),'Edit Colors Link')
+        browser.sleep(1000);
+
+        expect(brandingComponentPage.getColorsPanel().isDisplayed()).to.eventually.be.true;
+        expect(brandingComponentPage.getBaseColorInput().isDisplayed()).to.eventually.be.true;
+        expect(brandingComponentPage.getAccentColorInput().isDisplayed()).to.eventually.be.true;
+
+        expect(brandingComponentPage.getBaseColorInput().isEnabled()).to.eventually.be.true;
+        expect(brandingComponentPage.getAccentColorInput().isEnabled()).to.eventually.be.true;
+      });
+
+      it('should set colors', function() {
+        brandingComponentPage.getBaseColorInput().sendKeys("red");
+        brandingComponentPage.getAccentColorInput().sendKeys("yellow");
+
+        expect(brandingComponentPage.getBaseColorInput().getAttribute('value')).to.eventually.equal("red");
+        expect(brandingComponentPage.getAccentColorInput().getAttribute('value')).to.eventually.equal("yellow");
+
+        //return to branding
+        helper.clickWhenClickable(templateEditorPage.getBackToComponentsButton(),'Back to Branding Settings');
+        browser.sleep(1000);
+      });
+
+      it('should persist colors', function() {
+        helper.clickWhenClickable(brandingComponentPage.getEditColorsLink(),'Edit Colors Link')
+        browser.sleep(1000);
+
+        helper.wait(brandingComponentPage.getColorsPanel(), 'Colors Settings');
+        expect(brandingComponentPage.getColorsPanel().isDisplayed()).to.eventually.be.true;
+        expect(brandingComponentPage.getBaseColorInput().isDisplayed()).to.eventually.be.true;
+        expect(brandingComponentPage.getAccentColorInput().isDisplayed()).to.eventually.be.true;
+
+        expect(brandingComponentPage.getBaseColorInput().getAttribute('value')).to.eventually.equal("red");
+        expect(brandingComponentPage.getAccentColorInput().getAttribute('value')).to.eventually.equal("yellow");
+
+        // return to branding
+        helper.clickWhenClickable(templateEditorPage.getBackToComponentsButton(),'Back to Branding Settings');
+        browser.sleep(1000);
+      });
     });
 
     describe('Edit Branding Logo',function(){
@@ -104,6 +147,24 @@ var WeatherComponentScenarios = function () {
           expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(1);
         });
       });
+
+      describe('storage',function(){
+        it('should load Storage page', function () {
+          helper.wait(imageComponentPage.getStorageButtonMain(), 'Storage Button Main');
+          helper.clickWhenClickable(imageComponentPage.getStorageButtonMain(), 'Storage Button Main');
+          browser.sleep(1000);
+          helper.waitDisappear(imageComponentPage.getStorageSpinner(), 'Storage Spinner');
+          expect(imageComponentPage.getStorageItems().count()).to.eventually.above(0);
+        });
+
+        it('should select a file as logo', function() {
+          helper.clickWhenClickable(imageComponentPage.getStorageNewFile(), 'Storage New File');
+          browser.sleep(500);
+          helper.clickWhenClickable(imageComponentPage.getStorageAddSelected(), 'Storage Add Selected');
+          browser.sleep(1000);
+          expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(1);
+        });
+      })
     });
 
     describe('remove',function(){
