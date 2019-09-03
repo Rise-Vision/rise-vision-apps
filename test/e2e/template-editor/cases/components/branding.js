@@ -50,7 +50,7 @@ var WeatherComponentScenarios = function () {
         expect(brandingComponentPage.getBrandingPanel().isDisplayed()).to.eventually.be.true;        
       });
 
-      it('should liat Edit Logo and Colors links', function () {
+      it('should list Edit Logo and Colors links', function () {
         expect(brandingComponentPage.getEditLogoLink().isDisplayed()).to.eventually.be.true;
         expect(brandingComponentPage.getEditColorsLink().isDisplayed()).to.eventually.be.true;
       });
@@ -86,13 +86,14 @@ var WeatherComponentScenarios = function () {
         helper.clickWhenClickable(brandingComponentPage.getEditColorsLink(),'Edit Colors Link')
         browser.sleep(1000);
 
+        helper.wait(brandingComponentPage.getColorsPanel(), 'Colors Settings');
         expect(brandingComponentPage.getColorsPanel().isDisplayed()).to.eventually.be.true;
         expect(brandingComponentPage.getBaseColorInput().isDisplayed()).to.eventually.be.true;
         expect(brandingComponentPage.getAccentColorInput().isDisplayed()).to.eventually.be.true;
 
         expect(brandingComponentPage.getBaseColorInput().getAttribute('value')).to.eventually.equal("red");
         expect(brandingComponentPage.getAccentColorInput().getAttribute('value')).to.eventually.equal("yellow");
-        
+
         // return to branding
         helper.clickWhenClickable(templateEditorPage.getBackToComponentsButton(),'Back to Branding Settings');
         browser.sleep(1000);
