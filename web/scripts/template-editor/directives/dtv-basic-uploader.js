@@ -1,15 +1,17 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('basicUploader', ['storage', 'fileUploaderFactory', 'UploadURIService', 'templateEditorUtils',
-    'STORAGE_UPLOAD_CHUNK_SIZE',
-    function (storage, fileUploaderFactory, UploadURIService, templateEditorUtils, STORAGE_UPLOAD_CHUNK_SIZE) {
+  .constant('ALLOWED_VALID_TYPES', ['video', 'image'])
+  .directive('basicUploader', ['storage', 'fileUploaderFactory', 'UploadURIService', 'templateEditorUtils', 'presentationUtils',
+    'STORAGE_UPLOAD_CHUNK_SIZE', 'ALLOWED_VALID_TYPES',
+    function (storage, fileUploaderFactory, UploadURIService, templateEditorUtils, presentationUtils, STORAGE_UPLOAD_CHUNK_SIZE, ALLOWED_VALID_TYPES) {
       return {
         restrict: 'E',
         scope: {
           uploaderId: '@',
           uploadManager: '=',
-          validExtensions: '=?'
+          validExtensions: '=?',
+          validType: '@',
         },
         templateUrl: 'partials/template-editor/basic-uploader.html',
         link: function ($scope, element) {
@@ -138,6 +140,16 @@ angular.module('risevision.template-editor.directives')
                 $scope.uploadManager.onUploadStatus(_isUploading());
               });
           };
+
+          $scope.setAcceptAttribute = function () {
+            if (presentationUtils.isMobileBrowser() && _.includes(ALLOWED_VALID_TYPES, $scope.validType)) {
+              $scope.accept = $scope.validType + '/*';
+            } else {
+              $scope.accept = $scope.validExtensions;
+            }
+          };
+
+          $scope.setAcceptAttribute();
         }
       };
     }
