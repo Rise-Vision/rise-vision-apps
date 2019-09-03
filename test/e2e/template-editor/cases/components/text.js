@@ -71,9 +71,7 @@ var TextComponentScenarios = function () {
         helper.waitDisappear(presentationsListPage.getTemplateEditorLoader());
       });
 
-      it('should auto-save the Presentation, reload it, and validate changes were saved', function () {
-
-        //change presentation name
+      it('should change the Presentation name and auto-save', function () {
         presentationsListPage.changePresentationName(presentationName);
 
         //wait for presentation to be auto-saved
@@ -86,12 +84,19 @@ var TextComponentScenarios = function () {
           console.log(actualUrl);
         });
         browser.sleep(100);
+      });
 
-        //load presentation
+      it('should reload the Presentation, and validate changes were saved', function () {
         presentationsListPage.loadPresentation(presentationName);
+
         templateEditorPage.selectComponent("Text - Title");
         expect(textComponentPage.getTextInput().isEnabled()).to.eventually.be.true;
         expect(textComponentPage.getTextInput().getAttribute('value')).to.eventually.equal("Changed Text");
+      });
+
+      it('should not have auto-published the Presentation when navigating', function () {
+        // prevents reoccurrence of issue 1186
+        expect(templateEditorPage.getPublishButton().isEnabled()).to.eventually.be.true;
       });
     });
   });

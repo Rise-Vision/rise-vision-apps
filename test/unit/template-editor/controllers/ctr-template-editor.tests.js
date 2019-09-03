@@ -243,7 +243,7 @@ describe('controller: TemplateEditor', function() {
       factory.publish.should.not.have.been.called;
     });
 
-    it('should not change URL if there are no changes but user does not have schedules', function () {
+    it('should change URL if there are no changes and user does not have schedules', function () {
       var saveStub = sinon.stub(factory, 'save');
 
       sinon.stub($state, 'go');
@@ -254,8 +254,8 @@ describe('controller: TemplateEditor', function() {
       $scope.$apply();
 
       saveStub.should.not.have.been.called;
-      $state.go.should.not.have.been.called;
-      factory.publish.should.have.been.called;
+      $state.go.should.have.been.called;
+      factory.publish.should.not.have.been.called;
     });
 
     it('should not notify unsaved changes when changing URL if state is in Template Editor', function () {
