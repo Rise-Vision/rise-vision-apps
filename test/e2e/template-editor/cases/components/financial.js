@@ -23,7 +23,7 @@ var FinancialComponentScenarios = function () {
       financialComponentPage = new FinancialComponentPage();
 
       presentationsListPage.loadCurrentCompanyPresentationList();
-      presentationsListPage.createNewPresentationFromTemplate('Example Financial Template V3', 'example-financial-template-v3');
+      presentationsListPage.createNewPresentationFromTemplate('Example Financial Template V4', 'example-financial-template-v4');
     });
 
     describe('basic operations', function () {
