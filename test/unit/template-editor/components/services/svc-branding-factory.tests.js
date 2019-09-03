@@ -25,9 +25,14 @@ describe('service: brandingFactory', function() {
     $provide.service('updateCompany', function() {
       return sinon.stub().returns(Q.resolve('updatedCompany'));
     });
+    $provide.service('fileExistenceCheckService', function() {
+      return {
+        requestMetadataFor: sinon.stub().returns(Q.resolve('metadata'))
+      };
+    });
   }));
 
-  var brandingFactory, $rootScope, userState, blueprintFactory, updateCompany;
+  var brandingFactory, $rootScope, userState, blueprintFactory, updateCompany, fileExistenceCheckService;
 
   beforeEach(function() {
     inject(function($injector) {
@@ -37,6 +42,7 @@ describe('service: brandingFactory', function() {
       blueprintFactory = $injector.get('blueprintFactory');
       userState = $injector.get('userState');
       updateCompany = $injector.get('updateCompany');
+      fileExistenceCheckService = $injector.get('fileExistenceCheckService');
     });
   });
 
@@ -165,6 +171,45 @@ describe('service: brandingFactory', function() {
         logoFile: undefined,
         logoFileMetadata: []
       });
+    });
+
+  });
+
+  describe('_refreshMetadata()', function() {
+    it('should update metadata when logo is available', function(done) {
+      userState.getCopyOfSelectedCompany.returns({
+        settings: {
+          brandingDraftLogoFile: 'logoFile'
+        }
+      });
+
+      brandingFactory.getBrandingComponent();
+
+      fileExistenceCheckService.requestMetadataFor.should.have.been.calledWith(['logoFile'], sinon.match.string);
+
+      setTimeout(function() {
+        expect(brandingFactory.brandingSettings).to.deep.equal({
+          baseColor: undefined,
+          accentColor: undefined,
+          logoFile: 'logoFile',
+          logoFileMetadata: 'metadata'
+        });
+
+        done();
+      }, 10);
+    });
+
+    it('should refresh metadata every time', function() {
+      userState.getCopyOfSelectedCompany.returns({
+        settings: {
+          brandingDraftLogoFile: 'logoFile'
+        }
+      });
+
+      brandingFactory.getBrandingComponent();
+      brandingFactory.getBrandingComponent();
+
+      fileExistenceCheckService.requestMetadataFor.should.have.been.calledTwice;
     });
 
   });

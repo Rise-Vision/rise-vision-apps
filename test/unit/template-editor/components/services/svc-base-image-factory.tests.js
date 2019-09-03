@@ -184,6 +184,29 @@ describe('service: baseImageFactory', function() {
       });
 
     });
+
+    describe('isSetAsLogo',function() {
+      it('should return true if blueprint is logo and attribute is true',function(){
+        blueprintFactory.getBlueprintData.returns('true');
+        templateEditorFactory.getAttributeData.returns(true);
+
+        expect(baseImageFactory.isSetAsLogo()).to.equals(true);
+      });
+
+      it('should return false otherwise',function(){
+        blueprintFactory.getBlueprintData.returns('false');
+        templateEditorFactory.getAttributeData.returns(true);
+        expect(baseImageFactory.isSetAsLogo()).to.equals(false);
+
+        blueprintFactory.getBlueprintData.returns('true');
+        templateEditorFactory.getAttributeData.returns(false);
+        expect(baseImageFactory.isSetAsLogo()).to.equals(false);
+
+        blueprintFactory.getBlueprintData.returns('false');
+        templateEditorFactory.getAttributeData.returns(false);
+        expect(baseImageFactory.isSetAsLogo()).to.equals(false);
+      });
+    });
   });
 
 });

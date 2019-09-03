@@ -27,6 +27,10 @@ angular.module('risevision.template-editor.services')
         return !!checksCompleted && !!checksCompleted[factory.componentId];
       };
 
+      factory.isSetAsLogo = function () {
+        return factory.getBlueprintData('is-logo') === 'true' && _getAttributeData('isLogo') !== false;
+      };
+
       factory.removeImage = function (image, currentMetadata) {
         var metadata =
           fileMetadataUtilsService.metadataWithFileRemoved(currentMetadata, image);
