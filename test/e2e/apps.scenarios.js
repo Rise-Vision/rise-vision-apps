@@ -5,3 +5,5 @@ require('./editor/editor.cases.js');
 require('./storage/storage.cases.js');
 require('./common/common.cases.js');
 require('./template-editor/template-editor.cases');
+require('./template-editor/template-editor2.cases');
+require('./template-editor/template-editor3.cases');

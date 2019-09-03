@@ -8,13 +8,13 @@
   var TemplateEditorPage = require('./pages/templateEditorPage.js');
   var helper = require('rv-common-e2e').helper;
 
-  var TemplateEditorAddScenarios = require('./cases/template-editor-add.js');
-  var FinancialComponentScenarios = require('./cases/components/financial.js');
-  var TextComponentScenarios = require('./cases/components/text.js');
-  
-  describe('Template Editor', function() {
+  var VideoComponentScenarios = require('./cases/components/video.js');
+  var RssComponentScenarios = require('./cases/components/rss.js');
+  var BrandingComponentScenarios = require('./cases/components/branding.js');
 
-    var subCompanyName = 'E2E TEST SUBCOMPANY - TEMPLATE EDITOR';
+  describe('Template Editor 3', function() {
+
+    var subCompanyName = 'E2E TEST SUBCOMPANY - TEMPLATE EDITOR 3';
     var commonHeaderPage;
     var pricingComponentModalPage;
     var purchaseFlowModalPage;
@@ -60,10 +60,9 @@
       _selectSubCompany();
     });
 
-    // Text component scenarios deal with the auto schedule modal, so they always should come first.
-    var textComponentScenarios = new TextComponentScenarios();
-    var templateEditorAddScenarios = new TemplateEditorAddScenarios();
-    var financialComponentScenarios = new FinancialComponentScenarios();   
+    var videoComponentScenarios = new VideoComponentScenarios();
+    var rssComponentScenarios = new RssComponentScenarios();
+    var brandingComponentScenarios = new BrandingComponentScenarios();
 
     after(function() {
       // Loading the Presentation List is a workaround to a Chrome Driver issue that has it fail to click on elements over the Preview iframe
