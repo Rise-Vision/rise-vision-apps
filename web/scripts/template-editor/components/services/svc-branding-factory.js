@@ -12,7 +12,7 @@ angular.module('risevision.template-editor.services')
         brandingSettings: null
       };
 
-      var _refreshMetadata = function() {
+      var _refreshMetadata = function () {
         if (factory.brandingSettings.logoFile) {
           fileExistenceCheckService.requestMetadataFor([factory.brandingSettings.logoFile],
               DEFAULT_IMAGE_THUMBNAIL)
