@@ -2,9 +2,11 @@
 
 angular.module('risevision.template-editor.directives')
   .constant('ALLOWED_VALID_TYPES', ['video', 'image'])
-  .directive('basicUploader', ['storage', 'fileUploaderFactory', 'UploadURIService', 'templateEditorUtils', 'presentationUtils',
+  .directive('basicUploader', ['storage', 'fileUploaderFactory', 'UploadURIService', 'templateEditorUtils',
+    'presentationUtils',
     'STORAGE_UPLOAD_CHUNK_SIZE', 'ALLOWED_VALID_TYPES',
-    function (storage, fileUploaderFactory, UploadURIService, templateEditorUtils, presentationUtils, STORAGE_UPLOAD_CHUNK_SIZE, ALLOWED_VALID_TYPES) {
+    function (storage, fileUploaderFactory, UploadURIService, templateEditorUtils, presentationUtils,
+      STORAGE_UPLOAD_CHUNK_SIZE, ALLOWED_VALID_TYPES) {
       return {
         restrict: 'E',
         scope: {

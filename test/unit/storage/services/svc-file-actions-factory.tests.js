@@ -7,9 +7,7 @@ describe('service: fileActionsFactory', function() {
 
   var modalOpenMock = function() {
     return {
-      result: {
-        then: function(cb){ cb(); }
-      }
+      result: Q.resolve()
     };
   };
 
@@ -109,11 +107,7 @@ describe('service: fileActionsFactory', function() {
   });
 
   it('should exist',function(){
-    expect(fileActionsFactory).to.be.truely;
-
-    expect(fileActionsFactory.statusDetails).to.be.truely;
-    expect(fileActionsFactory.pendingOperations).to.be.truely;
-    expect(fileActionsFactory.isPOCollapsed).to.be.truely;
+    expect(fileActionsFactory).to.be.ok;
     
     expect(fileActionsFactory.downloadButtonClick).to.be.a('function');
     expect(fileActionsFactory.deleteButtonClick).to.be.a('function');
@@ -143,11 +137,57 @@ describe('service: fileActionsFactory', function() {
   });
 
   describe('trashButtonClick:', function(){
-    it('should enqueue trash action',function(){
-      var stub = sinon.stub(fileActionsFactory,'processFilesAction');
+    beforeEach(function() {
+      sandbox.stub($modal, 'open').returns({
+        result: Q.resolve()
+      });
+      sandbox.stub(fileActionsFactory,'processFilesAction');
+    });
+    
+    it('should open warning modal',function(done){
+      sandbox.stub(localStorageService, "get").returns('false');
+
+      fileActionsFactory.trashButtonClick();
+      
+      setTimeout(function() {
+        $modal.open.should.have.been.called;
+        expect($modal.open.getCall(0).args[0].templateUrl).to.equal('partials/storage/break-link-warning-modal.html');
+        expect($modal.open.getCall(0).args[0].controller).to.equal('BreakLinkWarningModalCtrl');
+        expect($modal.open.getCall(0).args[0].resolve).to.be.ok;
+        expect($modal.open.getCall(0).args[0].resolve.infoLine1Key()).to.equal('storage-client.breaking-link-warning.text1');
+
+        fileActionsFactory.processFilesAction.should.have.been.calledWith(storage.trash.move, 'delete');
+        
+        done();
+      }, 10);
+    });
+
+    it('should not open warning modal',function(done){
+      sandbox.stub(localStorageService, "get").returns('true');
+
+      fileActionsFactory.trashButtonClick();
+      
+      setTimeout(function() {
+        $modal.open.should.not.have.been.called;
+
+        fileActionsFactory.processFilesAction.should.have.been.calledWith(storage.trash.move, 'delete');
+        
+        done();
+      }, 10);
+    });
+
+    it('should not enqueue trash action',function(done){
+      $modal.open.returns({
+        result: Q.reject()
+      });
+
       fileActionsFactory.trashButtonClick();
 
-      stub.should.have.been.calledWith(storage.trash.move, 'delete');
+      setTimeout(function() {
+        fileActionsFactory.processFilesAction.should.not.have.been.called;
+
+        done();
+      }, 10);
     });
   });
 
