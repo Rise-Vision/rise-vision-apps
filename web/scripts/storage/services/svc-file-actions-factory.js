@@ -19,7 +19,9 @@ angular.module('risevision.storage.services')
         };
 
         factory.trashButtonClick = function () {
-          factory.processFilesAction(storage.trash.move, 'delete');
+          return _showBreakLinkWarning().then(function () {
+            factory.processFilesAction(storage.trash.move, 'delete');
+          });
         };
 
         factory.restoreButtonClick = function () {
