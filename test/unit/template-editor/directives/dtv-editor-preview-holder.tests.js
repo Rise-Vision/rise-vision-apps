@@ -131,6 +131,22 @@ describe('directive: TemplateEditorPreviewHolder', function() {
         done();
       },10);
     });    
+
+    it('posts display data when branding colors have changed', function(done) {
+      iframe.onload();
+      iframe.contentWindow.postMessage.reset();
+      brandingFactory.brandingSettings.baseColor = "newBaseColor";
+      brandingFactory.brandingSettings.accentColor = "newAccentColor";
+      $scope.$digest();
+      $timeout.flush();
+
+      setTimeout(function(){
+        iframe.contentWindow.postMessage.should.have.been.called;
+        expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"baseColor":"newBaseColor","accentColor":"newAccentColor"}}}', 'https://widgets.risevision.com']);
+
+        done();
+      },10);
+    });    
   });
 
   describe('_updateLogoData', function() {

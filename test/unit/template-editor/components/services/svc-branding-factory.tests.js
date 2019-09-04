@@ -111,49 +111,6 @@ describe('service: brandingFactory', function() {
 
   });
 
-  describe('risevision.company.updated: ', function() {
-    it('should load branding settings on event', function() {
-      userState.getCopyOfSelectedCompany.returns({
-        settings: {}
-      });
-
-      $rootScope.$emit('risevision.company.updated');
-      $rootScope.$digest();
-
-      expect(brandingFactory.brandingSettings).to.deep.equal({
-        baseColor: undefined,
-        accentColor: undefined,
-        logoFile: undefined,
-        logoFileMetadata: []
-      });
-    });
-
-    it('should update branding settings on subsequent events', function() {
-      userState.getCopyOfSelectedCompany.returns({
-        settings: {}
-      });
-
-      $rootScope.$emit('risevision.company.updated');
-      $rootScope.$digest();
-
-      userState.getCopyOfSelectedCompany.returns({
-        settings: {
-          brandingDraftLogoFile: 'logoFile'
-        }
-      });
-
-      $rootScope.$emit('risevision.company.updated');
-      $rootScope.$digest();
-
-      expect(brandingFactory.brandingSettings).to.deep.equal({
-        baseColor: undefined,
-        accentColor: undefined,
-        logoFile: 'logoFile'
-      });
-    });
-
-  });
-
   describe('risevision.company.selectedCompanyChanged: ', function() {
     it('should update branding settings on event', function() {
       brandingFactory.brandingSettings = 'previousBranding';
@@ -170,6 +127,30 @@ describe('service: brandingFactory', function() {
         accentColor: undefined,
         logoFile: undefined,
         logoFileMetadata: []
+      });
+    });
+
+    it('should update branding settings on subsequent events', function() {
+      userState.getCopyOfSelectedCompany.returns({
+        settings: {}
+      });
+
+      $rootScope.$emit('risevision.company.selectedCompanyChanged');
+      $rootScope.$digest();
+
+      userState.getCopyOfSelectedCompany.returns({
+        settings: {
+          brandingDraftLogoFile: 'logoFile'
+        }
+      });
+
+      $rootScope.$emit('risevision.company.selectedCompanyChanged');
+      $rootScope.$digest();
+
+      expect(brandingFactory.brandingSettings).to.deep.equal({
+        baseColor: undefined,
+        accentColor: undefined,
+        logoFile: 'logoFile'
       });
     });
 

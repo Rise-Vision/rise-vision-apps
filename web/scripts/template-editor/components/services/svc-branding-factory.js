@@ -42,10 +42,6 @@ angular.module('risevision.template-editor.services')
         _refreshMetadata();
       };
 
-      $rootScope.$on('risevision.company.updated', function () {
-        _loadBranding(true);
-      });
-
       $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
         _loadBranding(true);
       });

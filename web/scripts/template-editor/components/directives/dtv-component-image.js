@@ -86,6 +86,12 @@ angular.module('risevision.template-editor.directives')
           function _loadSelectedImages() {
             var selectedImages = imageFactory.getImagesAsMetadata();
 
+            // Show logo in the image list if component is set to use logo and a logo is available 
+            var logoAsMetadata = logoImageFactory.getImagesAsMetadata();
+            if (!$scope.isEditingLogo() && imageFactory.isSetAsLogo() && logoAsMetadata.length > 0) {
+              selectedImages = logoAsMetadata;
+            }
+
             if (selectedImages) {
               _setSelectedImages(selectedImages);
             }
@@ -160,12 +166,6 @@ angular.module('risevision.template-editor.directives')
           function _setSelectedImages(selectedImages) {
             var filesAttribute =
               fileMetadataUtilsService.filesAttributeFor(selectedImages);
-
-            // Show logo in the image list if component is set to use logo and a logo is available 
-            var logoAsMetadata = logoImageFactory.getImagesAsMetadata();
-            if (!$scope.isEditingLogo() && imageFactory.isSetAsLogo() && logoAsMetadata.length > 0) {
-              selectedImages = logoAsMetadata;
-            }
 
             $scope.selectedImages = selectedImages;
             $scope.isDefaultImageList = filesAttribute === _getDefaultFilesAttribute();

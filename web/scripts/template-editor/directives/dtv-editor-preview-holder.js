@@ -176,11 +176,19 @@ angular.module('risevision.template-editor.directives')
             _postAttributeData();
           }, true);
 
+          $scope.$watchGroup([
+            'brandingFactory.brandingSettings.baseColor',
+            'brandingFactory.brandingSettings.accentColor'
+          ], function () {
+            $timeout(function () {
+              _postDisplayData();
+            });
+          });
+
           $scope.$on('risevision.company.updated', function () {
             // ensure branding factory updates branding via the same handler
             $timeout(function () {
               _postDisplayData();
-              _postAttributeData();
             });
           });
 
@@ -188,7 +196,6 @@ angular.module('risevision.template-editor.directives')
             // ensure branding factory updates branding via the same handler
             $timeout(function () {
               _postDisplayData();
-              _postAttributeData();
             });
           });
 
