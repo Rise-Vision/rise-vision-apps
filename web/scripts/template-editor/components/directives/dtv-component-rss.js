@@ -23,7 +23,6 @@ angular.module('risevision.template-editor.directives')
 
           $scope.saveFeed = function () {
             if (_validateFeedUrl()) {
-              $scope.setAttributeData($scope.componentId, 'feedurl', $scope.feedUrl);
               $scope.spinner = true;
 
               _isFeedParsable();
@@ -76,6 +75,8 @@ angular.module('risevision.template-editor.directives')
             rssFeedValidation.isParsable($scope.feedUrl)
               .then(function (result) {
                 if (result === 'VALID') {
+                  $scope.setAttributeData($scope.componentId, 'feedurl', $scope.feedUrl);
+
                   _isFeedValid();
                 } else {
                   $scope.validationResult = result;
