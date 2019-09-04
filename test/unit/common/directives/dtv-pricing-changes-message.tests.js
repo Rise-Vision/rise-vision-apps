@@ -62,12 +62,6 @@ describe('directive: pricingChangesMessage', function() {
       expect($scope.alertVisible()).to.be.false;
     });
 
-    it('should not show alert if company is missing',function() {
-      compileDirective();
-
-      expect($scope.alertVisible()).to.be.false;
-    });
-
     it('should not show notice if company creationDate is after Jun 25', function() {
       selectedCompany.creationDate = 'Jun 26, 2019';
       compileDirective();
