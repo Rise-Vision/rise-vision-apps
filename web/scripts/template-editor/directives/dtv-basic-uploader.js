@@ -3,10 +3,9 @@
 angular.module('risevision.template-editor.directives')
   .constant('ALLOWED_VALID_TYPES', ['video', 'image'])
   .directive('basicUploader', ['storage', 'fileUploaderFactory', 'UploadURIService', 'templateEditorUtils',
-    'presentationUtils',
-    'STORAGE_UPLOAD_CHUNK_SIZE', 'ALLOWED_VALID_TYPES',
+    'presentationUtils', 'STORAGE_UPLOAD_CHUNK_SIZE', 'ALLOWED_VALID_TYPES', '$templateCache', '$modal', '$q',
     function (storage, fileUploaderFactory, UploadURIService, templateEditorUtils, presentationUtils,
-      STORAGE_UPLOAD_CHUNK_SIZE, ALLOWED_VALID_TYPES) {
+      STORAGE_UPLOAD_CHUNK_SIZE, ALLOWED_VALID_TYPES, $templateCache, $modal, $q) {
       return {
         restrict: 'E',
         scope: {
@@ -19,6 +18,7 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope, element) {
           var FileUploader = fileUploaderFactory();
           var inputElement = element.find('input');
+          var confirmOverwriteModal = undefined;
 
           $scope.uploader = FileUploader;
           $scope.status = {};
@@ -78,6 +78,40 @@ angular.module('risevision.template-editor.directives')
               });
           });
 
+          function checkOverwrite(resp) {
+            if (resp.isOverwrite === true) {
+              //multiple uploads can trigger the modal, they should all use the same instance
+              if (!confirmOverwriteModal) {
+                confirmOverwriteModal = $modal.open({
+                  template: $templateCache.get('partials/template-editor/confirm-modal.html'),
+                  controller: 'confirmInstance',
+                  windowClass: 'primary-btn-danger madero-style centered-modal',
+                  resolve: {
+                    confirmationTitle: function () {
+                      return 'Are you sure you want to overwrite your files?';
+                    },
+                    confirmationMessage: function () {
+                      return 'There is a file or folder in this folder with the same name as the one(s) you are trying to upload.<br/>Uploading these new files or folder will cause the existing ones to be overwritten and could change the content on your Displays.';
+                    },
+                    confirmationButton: function () {
+                      return 'Yes, overwrite files';
+                    },
+                    cancelButton: function() {
+                      return 'No, keep source files';
+                    }
+                  }
+                });                  
+              }
+              return confirmOverwriteModal.result;
+            } else {
+              return $q.resolve();
+            }              
+          }
+
+          FileUploader.onAddingFiles = function() {
+            confirmOverwriteModal = undefined;
+          };
+
           FileUploader.onAfterAddingFile = function (fileItem) {
             console.info('onAfterAddingFile', fileItem.file.name);
 
@@ -89,9 +123,15 @@ angular.module('risevision.template-editor.directives')
 
             UploadURIService.getURI(fileItem.file)
               .then(function (resp) {
-                fileItem.url = resp.message;
-                fileItem.chunkSize = STORAGE_UPLOAD_CHUNK_SIZE;
-                FileUploader.uploadItem(fileItem);
+
+                checkOverwrite(resp).then(function(){
+                  fileItem.url = resp.message;
+                  fileItem.chunkSize = STORAGE_UPLOAD_CHUNK_SIZE;
+                  FileUploader.uploadItem(fileItem);                    
+                }).catch(function(){
+                  FileUploader.removeFromQueue(fileItem);
+                  $scope.uploadManager.onUploadStatus(_isUploading());
+                });
               })
               .then(null, function (resp) {
                 console.log('getURI error', resp);

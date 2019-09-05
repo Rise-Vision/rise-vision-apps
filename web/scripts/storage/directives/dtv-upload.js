@@ -91,6 +91,7 @@
 
             function checkOverwrite(resp) {
               if (resp.isOverwrite === true) {
+                //multiple uploads can trigger the modal, they should all use the same instance
                 if (!confirmOverwriteModal) {
                   confirmOverwriteModal = $modal.open({
                     templateUrl: 'confirm-instance/confirm-modal.html',
