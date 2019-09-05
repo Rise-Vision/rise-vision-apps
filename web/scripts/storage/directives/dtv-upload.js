@@ -96,7 +96,7 @@
                   confirmOverwriteModal = $modal.open({
                     templateUrl: 'confirm-instance/confirm-modal.html',
                     controller: 'confirmInstance',
-                    windowClass: 'modal-custom',
+                    windowClass: 'modal-custom confirm-overwrite-modal',
                     resolve: {
                       confirmationTitle: function () {
                         return 'Warning';
