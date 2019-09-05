@@ -6,9 +6,10 @@ describe('directive: upload', function() {
     $provide.factory('FileUploader', function() {
       return FileUploader = {
         addToQueue: function(files){
+          FileUploader.onAddingFiles({file:files[0]});
           FileUploader.onAfterAddingFile({file:files[0]});
         },
-        uploadItem: function(){},
+        uploadItem: sinon.stub(),
         queue: [],
         removeFromQueue: sinon.spy(),
         retryItem: sinon.spy()
@@ -29,13 +30,7 @@ describe('directive: upload', function() {
 
     $provide.factory('UploadURIService', function() {
       return UploadURIService = {
-        getURI: sinon.spy(function(file) {
-          var deferred = Q.defer();
-          
-          deferred.resolve(file.name);
-          
-          return deferred.promise;
-        })
+        getURI: sinon.stub().returns(Q.resolve({}))
       };
     });
     
@@ -55,6 +50,12 @@ describe('directive: upload', function() {
             }
           }
         };
+      };
+    });
+
+    $provide.factory('$modal', function() {
+      return $modal = {
+        open: sinon.stub().returns({result: Q.resolve()})
       };
     });
     
@@ -83,7 +84,7 @@ describe('directive: upload', function() {
 
   var element;
   var UploadController, $scope, filesFactory, storage;
-  var FileUploader, UploadURIService;
+  var FileUploader, UploadURIService, $modal;
 
   beforeEach(inject(function($injector){
     var $httpBackend = $injector.get('$httpBackend');
@@ -112,6 +113,7 @@ describe('directive: upload', function() {
   });
 
   it('should add uploader callbacks', function() {
+    expect(FileUploader.onAddingFiles).to.exist;
     expect(FileUploader.onAfterAddingFile).to.exist;
     expect(FileUploader.onBeforeUploadItem).to.exist;
     expect(FileUploader.onCancelItem).to.exist;
@@ -171,6 +173,62 @@ describe('directive: upload', function() {
 
     expect($scope.warnings[0].fileName).to.be.equal('test/test1.tif');
     expect($scope.warnings[0].message).to.be.equal('storage-client.warning.image-not-supported');
+  });
+
+  it('should ask for confirmation before overwriting files', function(done) {
+    UploadURIService.getURI.returns(Q.resolve({message: 'uri', isOverwrite: true}));
+
+    var fileName = 'test1.tif';
+    var file1 = { name: fileName, size: 200, slice: function() {}, file: { name: fileName } };
+
+    FileUploader.onAfterAddingFile(file1);
+
+    setTimeout(function(){
+      expect($modal.open).to.have.been.called;
+      expect($modal.open.getCall(0).args[0].templateUrl).to.equal('confirm-instance/confirm-modal.html');
+      expect($modal.open.getCall(0).args[0].controller).to.equal('confirmInstance');
+      expect($modal.open.getCall(0).args[0].resolve).to.be.ok;
+
+      expect(FileUploader.uploadItem).to.have.been.calledWith(file1);
+
+      done();
+    },10);
+  });
+
+  it('should remove file if user doesn\'t want to overwrite', function( done) {
+    UploadURIService.getURI.returns(Q.resolve({message: 'uri', isOverwrite: true}));
+    $modal.open.returns({result: Q.reject()});
+
+    var fileName = 'test1.tif';
+    var file1 = { name: fileName, size: 200, slice: function() {}, file: { name: fileName } };
+
+    FileUploader.onAfterAddingFile(file1);
+
+    setTimeout(function(){
+      expect($modal.open).to.have.been.called;
+      expect(FileUploader.uploadItem).to.not.have.been.called;
+
+      done();
+    },10);
+  });
+
+  it('should ask for confirmation only once for multiple files', function(done) {
+    UploadURIService.getURI.returns(Q.resolve({message: 'uri', isOverwrite: true}));
+
+    var fileName = 'test1.tif';
+    var file1 = { name: fileName, size: 200, slice: function() {}, file: { name: fileName } };
+
+    var fileName2 = 'test2.tif';
+    var file2 = { name: fileName2, size: 200, slice: function() {}, file: { name: fileName2 } };
+
+    FileUploader.onAfterAddingFile(file1);
+    FileUploader.onAfterAddingFile(file2);
+
+    setTimeout(function(){
+      expect($modal.open).to.have.been.calledOnce;
+
+      done();
+    },10);
   });
 
   it('activeUploadCount: ', function() {

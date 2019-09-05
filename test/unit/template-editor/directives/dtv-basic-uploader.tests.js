@@ -1,5 +1,5 @@
 'use strict';
-describe('directive: basicUploader', function () {
+describe.only('directive: basicUploader', function () {
   beforeEach(module('risevision.template-editor.services'));
   beforeEach(module('risevision.template-editor.directives'));
 
@@ -18,9 +18,10 @@ describe('directive: basicUploader', function () {
       return function () {
         return FileUploader = {
           addToQueue: function(files){
+            FileUploader.onAddingFiles({file:files[0]});
             FileUploader.onAfterAddingFile({file:files[0]});
           },
-          uploadItem: function () {},
+          uploadItem: sinon.stub(),
           queue: [],
           removeFromQueue: sinon.stub(),
           retryItem: sinon.stub(),
@@ -39,22 +40,22 @@ describe('directive: basicUploader', function () {
       };
     });
 
+    $provide.factory('$modal', function() {
+      return $modal = {
+        open: sinon.stub().returns({result: Q.resolve()})
+      };
+    });
+
     $provide.factory('UploadURIService', function () {
       return UploadURIService = {
-        getURI: sinon.spy(function(file) {
-          var deferred = Q.defer();
-
-          deferred.resolve(file.name);
-
-          return deferred.promise;
-        })
+         getURI: sinon.stub().returns(Q.resolve({}))
       };
     });
   }));
 
   var element;
   var $scope, uploadManager, storage, templateEditorUtils, presentationUtils, isSingleFileSelector;
-  var FileUploader, UploadURIService;
+  var FileUploader, UploadURIService, $modal;
 
   beforeEach(inject(function($injector){
     var $httpBackend = $injector.get('$httpBackend');
@@ -65,6 +66,7 @@ describe('directive: basicUploader', function () {
   beforeEach(inject(function($injector, $compile, $rootScope, $templateCache) {
     $rootScope.uploadManager = uploadManager;
     $templateCache.put('partials/template-editor/basic-uploader.html', '<input type="file" multiple>');
+    $templateCache.put('partials/template-editor/confirm-modal.html', 'confirm-modal');
 
     templateEditorUtils = $injector.get('templateEditorUtils');
     presentationUtils = $injector.get('presentationUtils');
@@ -140,6 +142,62 @@ describe('directive: basicUploader', function () {
 
     expect(UploadURIService.getURI.called).to.be.true;
     expect(args[0].name).to.be.equal('test/test1.jpg');
+  });
+
+  it('should ask for confirmation before overwriting files', function(done) {
+    UploadURIService.getURI.returns(Q.resolve({message: 'uri', isOverwrite: true}));
+
+    var fileName = 'test1.tif';
+    var file1 = { name: fileName, size: 200, slice: function() {}, file: { name: fileName } };
+
+    FileUploader.onAfterAddingFile(file1);
+
+    setTimeout(function(){
+      expect($modal.open).to.have.been.called;
+      expect($modal.open.getCall(0).args[0].template).to.equal('confirm-modal');
+      expect($modal.open.getCall(0).args[0].controller).to.equal('confirmInstance');
+      expect($modal.open.getCall(0).args[0].resolve).to.be.ok;
+
+      expect(FileUploader.uploadItem).to.have.been.calledWith(file1);
+
+      done();
+    },10);
+  });
+
+  it('should remove file if user doesn\'t want to overwrite', function( done) {
+    UploadURIService.getURI.returns(Q.resolve({message: 'uri', isOverwrite: true}));
+    $modal.open.returns({result: Q.reject()});
+
+    var fileName = 'test1.tif';
+    var file1 = { name: fileName, size: 200, slice: function() {}, file: { name: fileName } };
+
+    FileUploader.onAfterAddingFile(file1);
+
+    setTimeout(function(){
+      expect($modal.open).to.have.been.called;
+      expect(FileUploader.uploadItem).to.not.have.been.called;
+
+      done();
+    },10);
+  });
+
+  it('should ask for confirmation only once for multiple files', function(done) {
+    UploadURIService.getURI.returns(Q.resolve({message: 'uri', isOverwrite: true}));
+
+    var fileName = 'test1.tif';
+    var file1 = { name: fileName, size: 200, slice: function() {}, file: { name: fileName } };
+
+    var fileName2 = 'test2.tif';
+    var file2 = { name: fileName2, size: 200, slice: function() {}, file: { name: fileName2 } };
+
+    FileUploader.onAfterAddingFile(file1);
+    FileUploader.onAfterAddingFile(file2);
+
+    setTimeout(function(){
+      expect($modal.open).to.have.been.calledOnce;
+
+      done();
+    },10);
   });
 
   it('activeUploadCount: ', function () {

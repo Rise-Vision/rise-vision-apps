@@ -35,6 +35,7 @@ describe('Services: uploader', function() {
       lastAddedFileItem = null;
 
       uploader = $injector.get('FileUploader');
+      uploader.onAddingFiles = function() {};
       uploader.onAfterAddingFile = function(item) {
         lastAddedFileItem = item;
         return Q.resolve(item);
@@ -88,12 +89,14 @@ describe('Services: uploader', function() {
       expect(uploader.queue[0].file.name).to.equal('folder/test' + (uploader.queueLimit + 1) + '.txt');
     });
 
-    it('should invoke onAfterAddingFile', function() {
+    it('should invoke onAddingFiles and onAfterAddingFile', function() {
       var fileItem = { file: { name: 'test1.jpg', size: 200 }, domFileItem: { slice: function() {} } };
+      var onAddingFilesSpy = sinon.spy(uploader,'onAddingFiles');
       var spy = sinon.spy(uploader,'onAfterAddingFile');
 
       uploader.addToQueue([ fileItem ]);
 
+      onAddingFilesSpy.should.have.been.called;
       spy.should.have.been.called;  
 
     });
