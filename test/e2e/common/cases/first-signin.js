@@ -38,7 +38,7 @@ var FirstSigninScenarios = function() {
     });
 
     function _waitFullPageLoad(retries) {
-      browser.sleep(10000);
+      helper.waitForSpinner();
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH Spinner Loader')
       .then(function () {
         helper.waitDisappear(homepage.getPresentationsListLoader(), 'Presentations List Loader');
