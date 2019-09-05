@@ -38,6 +38,7 @@ var FirstSigninScenarios = function() {
     });
 
     function _waitFullPageLoad(retries) {
+      browser.sleep(10000);
       helper.waitForSpinner();
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH Spinner Loader')
       .then(function () {
@@ -49,6 +50,7 @@ var FirstSigninScenarios = function() {
         retries = typeof(retries) === 'undefined' ? 3 : retries;
 
         if (retries > 0) {
+          console.log('retry #'+retries);
           browser.driver.navigate().refresh();
           _waitFullPageLoad(retries - 1);
         }
