@@ -1,5 +1,5 @@
 'use strict';
-describe.only('directive: basicUploader', function () {
+describe('directive: basicUploader', function () {
   beforeEach(module('risevision.template-editor.services'));
   beforeEach(module('risevision.template-editor.directives'));
 
