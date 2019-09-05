@@ -20,7 +20,7 @@ angular.module('risevision.template-editor.services')
 
       var _showFinancialDataLicenseRequiredMessage = function () {
         var modalInstance = $modal.open({
-          template: $templateCache.get('partials/template-editor/confirm-modal.html'),
+          template: $templateCache.get('partials/template-editor/more-info-modal.html'),
           controller: 'confirmInstance',
           windowClass: 'madero-style centered-modal financial-data-license-message',
           resolve: {
