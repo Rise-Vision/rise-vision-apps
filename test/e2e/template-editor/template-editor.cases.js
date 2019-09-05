@@ -30,7 +30,7 @@
     }
 
     function _purchaseSubscription() {
-      helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
+      helper.waitForSpinner();
       helper.wait(templateEditorPage.seePlansLink(), 'See Plans Link');
       helper.clickWhenClickable(templateEditorPage.seePlansLink(), 'See Plans Link');
 
