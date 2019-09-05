@@ -11,7 +11,7 @@ angular.module('risevision.storage.services')
 
         return storage.getResumableUploadURI(file.name, file.type)
           .then(function (resp) {
-            return resp.message;
+            return resp;
           })
           .then(null, function (e) {
             var type = file.type === 'folder' ? 'Folder' : 'File';

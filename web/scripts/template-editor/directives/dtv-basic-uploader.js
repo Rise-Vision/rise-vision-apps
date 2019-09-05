@@ -89,7 +89,7 @@ angular.module('risevision.template-editor.directives')
 
             UploadURIService.getURI(fileItem.file)
               .then(function (resp) {
-                fileItem.url = resp;
+                fileItem.url = resp.message;
                 fileItem.chunkSize = STORAGE_UPLOAD_CHUNK_SIZE;
                 FileUploader.uploadItem(fileItem);
               })

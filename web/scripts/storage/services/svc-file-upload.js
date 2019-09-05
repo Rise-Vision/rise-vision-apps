@@ -118,6 +118,7 @@ angular.module('risevision.storage.services')
           var deferred = $q.defer();
           var currItem = 0;
           svc.remainingFileCount += fileItems.length;
+          svc.onAddingFiles();
 
           var enqueue = function (fileItem) {
             // Checks it's a file
