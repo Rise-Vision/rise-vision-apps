@@ -18,9 +18,9 @@
           },
           templateUrl: 'partials/storage/upload-panel.html',
           link: function ($scope) {
+            var confirmOverwriteModal;
             var videoTypesNotSupported = ['mov', 'wmv', 'm4v', 'flv', 'avi', 'ogg', 'ogv'];
             var imageTypesNotSupported = ['tiff', 'tif'];
-            var confirmOverwriteModal = undefined;
 
             $scope.warnings = [];
             $scope.uploader = FileUploader;
@@ -107,21 +107,21 @@
                       confirmationButton: function () {
                         return 'Yes, overwrite files';
                       },
-                      cancelButton: function() {
+                      cancelButton: function () {
                         return 'No, keep source files';
                       }
                     }
-                  });                  
+                  });
                 }
                 return confirmOverwriteModal.result;
               } else {
                 return $q.resolve();
-              }              
+              }
             }
 
-            FileUploader.onAddingFiles = function() {
+            FileUploader.onAddingFiles = function () {
               confirmOverwriteModal = undefined;
-            }
+            };
 
             FileUploader.onAfterAddingFile = function (fileItem) {
               console.info('onAfterAddingFile', fileItem.file.name);
@@ -142,12 +142,12 @@
                   $rootScope.$emit('refreshSubscriptionStatus',
                     'trial-available');
 
-                  checkOverwrite(resp).then(function(){
+                  checkOverwrite(resp).then(function () {
                     fileItem.url = resp.message;
                     fileItem.chunkSize =
                       STORAGE_UPLOAD_CHUNK_SIZE;
-                    FileUploader.uploadItem(fileItem);                    
-                  }).catch(function(){
+                    FileUploader.uploadItem(fileItem);
+                  }).catch(function () {
                     FileUploader.removeFromQueue(fileItem);
                   });
                 })

@@ -15,7 +15,7 @@ angular.module('risevision.apps.directives')
           var _checkCreationDate = function () {
             var company = userState.getCopyOfSelectedCompany();
             var creationDate = ((company && company.creationDate) ? (new Date(company.creationDate)) : (
-            new Date()));
+              new Date()));
 
             isPastCreationDate = creationDate < new Date('June 25, 2019');
           };

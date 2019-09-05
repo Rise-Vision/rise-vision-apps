@@ -16,9 +16,9 @@ angular.module('risevision.template-editor.directives')
         },
         templateUrl: 'partials/template-editor/basic-uploader.html',
         link: function ($scope, element) {
+          var confirmOverwriteModal;
           var FileUploader = fileUploaderFactory();
           var inputElement = element.find('input');
-          var confirmOverwriteModal = undefined;
 
           $scope.uploader = FileUploader;
           $scope.status = {};
@@ -96,19 +96,19 @@ angular.module('risevision.template-editor.directives')
                     confirmationButton: function () {
                       return 'Yes, overwrite files';
                     },
-                    cancelButton: function() {
+                    cancelButton: function () {
                       return 'No, keep source files';
                     }
                   }
-                });                  
+                });
               }
               return confirmOverwriteModal.result;
             } else {
               return $q.resolve();
-            }              
+            }
           }
 
-          FileUploader.onAddingFiles = function() {
+          FileUploader.onAddingFiles = function () {
             confirmOverwriteModal = undefined;
           };
 
@@ -124,11 +124,11 @@ angular.module('risevision.template-editor.directives')
             UploadURIService.getURI(fileItem.file)
               .then(function (resp) {
 
-                checkOverwrite(resp).then(function(){
+                checkOverwrite(resp).then(function () {
                   fileItem.url = resp.message;
                   fileItem.chunkSize = STORAGE_UPLOAD_CHUNK_SIZE;
-                  FileUploader.uploadItem(fileItem);                    
-                }).catch(function(){
+                  FileUploader.uploadItem(fileItem);
+                }).catch(function () {
                   FileUploader.removeFromQueue(fileItem);
                   $scope.uploadManager.onUploadStatus(_isUploading());
                 });
