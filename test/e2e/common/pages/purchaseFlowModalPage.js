@@ -71,9 +71,9 @@ var PurchaseFlowModalPage = function() {
     browser.sleep(1000);
     helper.clickWhenClickable(this.getContinueButton(), 'Purchase flow Payment');
     helper.wait(this.getPayButton(), 'Purchase flow Payment');
-    browser.sleep(3000);
+    helper.waitForSpinner();
     helper.clickWhenClickable(this.getPayButton(), 'Purchase flow Review');
-    helper.waitDisappear(this.getPayButton(), 'Purchase flow Complete');
+    helper.waitForSpinner();
 
     console.log('Purchase complete');
 
