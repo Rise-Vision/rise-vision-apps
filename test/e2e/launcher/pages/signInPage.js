@@ -71,6 +71,7 @@ var SignInPage = function() {
 
   this.googleSignIn = function() {
     //wait for spinner to go away.
+    helper.waitForSpinner();
     helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - Before Google Sign In');
 
     signInGoogleLink.isPresent().then(function (state) {
