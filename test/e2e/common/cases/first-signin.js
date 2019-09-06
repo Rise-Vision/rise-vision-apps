@@ -64,6 +64,8 @@ var FirstSigninScenarios = function() {
         _waitFullPageLoad();
 
         commonHeaderPage.createSubCompany(subCompanyName);
+        helper.waitForSpinner();
+
         commonHeaderPage.selectSubCompany(subCompanyName);
         _waitFullPageLoad();
       });

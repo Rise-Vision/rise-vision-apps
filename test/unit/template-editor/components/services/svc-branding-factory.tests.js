@@ -370,6 +370,10 @@ describe('service: brandingFactory', function() {
   });
 
   describe('isRevised', function() {
+    beforeEach(function() {
+      blueprintFactory.hasBranding.returns(true);
+    });
+
     it('should be false if settings does not exist', function() {
       expect(brandingFactory.isRevised()).to.be.false;
     });
@@ -378,6 +382,19 @@ describe('service: brandingFactory', function() {
       userState.getCopyOfSelectedCompany.returns({
         settings: {
           brandingLogoFile: 'logoFile',
+        }
+      });
+
+      expect(brandingFactory.isRevised()).to.be.false;
+    });
+
+    it('should be false if Template is not branded', function() {
+      blueprintFactory.hasBranding.returns(false);
+
+      userState.getCopyOfSelectedCompany.returns({
+        settings: {
+          brandingDraftLogoFile: 'draftLogoFile',
+          brandingRevisionStatusName: 'Revised'
         }
       });
 
@@ -395,7 +412,7 @@ describe('service: brandingFactory', function() {
       expect(brandingFactory.isRevised()).to.be.true;
     });
 
-    it('should be falsed otherwise', function() {
+    it('should be false otherwise', function() {
       userState.getCopyOfSelectedCompany.returns({
         settings: {
           brandingDraftAccentColor: 'draftAccentColor',
