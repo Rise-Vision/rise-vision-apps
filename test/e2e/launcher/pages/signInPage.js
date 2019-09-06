@@ -75,11 +75,8 @@ var SignInPage = function() {
 
     signInGoogleLink.isPresent().then(function (state) {
       if (state) {
-        console.log('clicking signInGoogleLink');
-        helper.clickWhenClickable(signInGoogleLink).then(function () {
-          console.log('before signin');
+        signInGoogleLink.click().then(function () {
           googleAuthPage.signin();
-          console.log('after signin');
           helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - After Google Sign In');
         });
       }

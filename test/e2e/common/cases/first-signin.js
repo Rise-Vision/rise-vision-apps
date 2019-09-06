@@ -39,7 +39,6 @@ var FirstSigninScenarios = function() {
 
     function _waitFullPageLoad(retries) {
       browser.sleep(10000);
-      helper.waitForSpinner();
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH Spinner Loader')
       .then(function () {
         helper.waitDisappear(homepage.getPresentationsListLoader(), 'Presentations List Loader');
@@ -50,7 +49,6 @@ var FirstSigninScenarios = function() {
         retries = typeof(retries) === 'undefined' ? 3 : retries;
 
         if (retries > 0) {
-          console.log('retry #'+retries);
           browser.driver.navigate().refresh();
           _waitFullPageLoad(retries - 1);
         }
@@ -65,10 +63,9 @@ var FirstSigninScenarios = function() {
         signInPage.signIn();
         _waitFullPageLoad();
 
-        console.log('before create subcompany' );
         commonHeaderPage.createSubCompany(subCompanyName);
-        console.log('before select subcompany');
         helper.waitForSpinner();
+
         commonHeaderPage.selectSubCompany(subCompanyName);
         _waitFullPageLoad();
       });
