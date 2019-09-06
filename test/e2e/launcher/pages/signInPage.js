@@ -71,13 +71,15 @@ var SignInPage = function() {
 
   this.googleSignIn = function() {
     //wait for spinner to go away.
-    helper.waitForSpinner();
     helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - Before Google Sign In');
 
     signInGoogleLink.isPresent().then(function (state) {
       if (state) {
-        signInGoogleLink.click().then(function () {
+        console.log('clicking signInGoogleLink');
+        helper.clickWhenClickable(signInGoogleLink).then(function () {
+          console.log('before signin');
           googleAuthPage.signin();
+          console.log('after signin');
           helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - After Google Sign In');
         });
       }
