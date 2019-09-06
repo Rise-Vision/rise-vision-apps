@@ -65,7 +65,10 @@ var FirstSigninScenarios = function() {
         signInPage.signIn();
         _waitFullPageLoad();
 
+        console.log('before create subcompany' );
         commonHeaderPage.createSubCompany(subCompanyName);
+        console.log('before select subcompany');
+        helper.waitForSpinner();
         commonHeaderPage.selectSubCompany(subCompanyName);
         _waitFullPageLoad();
       });
