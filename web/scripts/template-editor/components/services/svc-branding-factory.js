@@ -94,6 +94,10 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.isRevised = function () {
+        if (!blueprintFactory.hasBranding()) {
+          return false;
+        }
+
         var company = userState.getCopyOfSelectedCompany();
 
         return !!(company.settings && company.settings.brandingRevisionStatusName === REVISION_STATUS_REVISED);

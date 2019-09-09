@@ -43,6 +43,7 @@ var PurchaseFlowModalPage = function() {
   }
 
   this.purchase = function(useCreditCard) {
+    helper.waitForSpinner();
     helper.wait(this.getContinueButton(), 'Purchase flow Billing');
     browser.sleep(1000);
     helper.clickWhenClickable(this.getContinueButton(), 'Purchase flow Billing');
@@ -56,7 +57,8 @@ var PurchaseFlowModalPage = function() {
     this.getPC().sendKeys('M6P 1Z2');
     browser.sleep(1000);
     helper.clickWhenClickable(this.getContinueButton(), 'Purchase flow Shipping');
-    helper.waitDisappear(this.getCompanyNameField(), 'Purchase flow Shipping');
+    helper.waitForSpinner();
+    helper.wait(this.getCardName(), 'Purchase flow Payment');
     if (useCreditCard) {
       console.log('Purchase using Credit Card');
       this.getCardName().sendKeys('AAA');
