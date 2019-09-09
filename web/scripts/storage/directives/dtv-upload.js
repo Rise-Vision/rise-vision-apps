@@ -8,9 +8,9 @@
       return GOOGLES_REQUIRED_CHUNK_MULTIPLE * 4 * 25;
     }()))
     .directive('upload', ['$rootScope', '$timeout', '$translate', '$q', 'storage',
-      'FileUploader', 'UploadURIService', 'STORAGE_UPLOAD_CHUNK_SIZE', '$modal',
+      'FileUploader', 'UploadURIService', 'STORAGE_UPLOAD_CHUNK_SIZE', 'uploadOverwriteWarning',
       function ($rootScope, $timeout, $translate, $q, storage, FileUploader,
-        UploadURIService, STORAGE_UPLOAD_CHUNK_SIZE, $modal) {
+        UploadURIService, STORAGE_UPLOAD_CHUNK_SIZE, uploadOverwriteWarning) {
         return {
           restrict: 'E',
           scope: {
@@ -89,38 +89,8 @@
               }
             }
 
-            function checkOverwrite(resp) {
-              if (resp.isOverwrite === true) {
-                //multiple uploads can trigger the modal, they should all use the same instance
-                if (!confirmOverwriteModal) {
-                  confirmOverwriteModal = $modal.open({
-                    templateUrl: 'confirm-instance/confirm-modal.html',
-                    controller: 'confirmInstance',
-                    windowClass: 'modal-custom confirm-overwrite-modal',
-                    resolve: {
-                      confirmationTitle: function () {
-                        return 'Warning';
-                      },
-                      confirmationMessage: function () {
-                        return 'There is a file or folder in this folder with the same name as the one(s) you are trying to upload.<br/>Uploading these new files or folder will cause the existing ones to be overwritten and could change the content on your Displays.<br/>Are you sure you want to overwrite your files?';
-                      },
-                      confirmationButton: function () {
-                        return 'Yes, overwrite files';
-                      },
-                      cancelButton: function () {
-                        return 'No, keep source files';
-                      }
-                    }
-                  });
-                }
-                return confirmOverwriteModal.result;
-              } else {
-                return $q.resolve();
-              }
-            }
-
             FileUploader.onAddingFiles = function () {
-              confirmOverwriteModal = undefined;
+              uploadOverwriteWarning.resetConfirmation();
             };
 
             FileUploader.onAfterAddingFile = function (fileItem) {
@@ -142,7 +112,7 @@
                   $rootScope.$emit('refreshSubscriptionStatus',
                     'trial-available');
 
-                  checkOverwrite(resp).then(function () {
+                  uploadOverwriteWarning.checkOverwrite(resp).then(function () {
                     fileItem.url = resp.message;
                     fileItem.chunkSize =
                       STORAGE_UPLOAD_CHUNK_SIZE;

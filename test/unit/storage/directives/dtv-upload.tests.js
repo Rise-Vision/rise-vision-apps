@@ -53,9 +53,10 @@ describe('directive: upload', function() {
       };
     });
 
-    $provide.factory('$modal', function() {
-      return $modal = {
-        open: sinon.stub().returns({result: Q.resolve()})
+    $provide.factory('uploadOverwriteWarning', function() {
+      return uploadOverwriteWarning = {
+        checkOverwrite: sinon.stub().returns(Q.resolve()),
+        resetConfirmation: sinon.stub()
       };
     });
     
@@ -84,7 +85,7 @@ describe('directive: upload', function() {
 
   var element;
   var UploadController, $scope, filesFactory, storage;
-  var FileUploader, UploadURIService, $modal;
+  var FileUploader, UploadURIService, uploadOverwriteWarning;
 
   beforeEach(inject(function($injector){
     var $httpBackend = $injector.get('$httpBackend');
@@ -127,6 +128,19 @@ describe('directive: upload', function() {
     var spy = sinon.spy(FileUploader,'onAfterAddingFile');
     FileUploader.addToQueue([ file1 ]);
     spy.should.have.been.called;  
+  });
+
+  it('should invoke onAddingFiles', function () {
+    var file1 = { name: 'test1.jpg', size: 200, slice: function () {} };
+    var spy = sinon.spy(FileUploader,'onAddingFiles');
+    FileUploader.addToQueue([ file1 ]);
+    spy.should.have.been.called;
+  });
+
+  it('should reset upload overwrite message on adding files', function () {
+    var file1 = { name: 'test1.jpg', size: 200, slice: function () {} };
+    FileUploader.addToQueue([ file1 ]);
+    uploadOverwriteWarning.resetConfirmation.should.have.been.called;
   });
 
   it('should upload to the correct folder', function() {
@@ -176,7 +190,8 @@ describe('directive: upload', function() {
   });
 
   it('should ask for confirmation before overwriting files', function(done) {
-    UploadURIService.getURI.returns(Q.resolve({message: 'uri', isOverwrite: true}));
+    var resp = {message: 'uri', isOverwrite: true};
+    UploadURIService.getURI.returns(Q.resolve(resp));
 
     var fileName = 'test1.tif';
     var file1 = { name: fileName, size: 200, slice: function() {}, file: { name: fileName } };
@@ -184,10 +199,8 @@ describe('directive: upload', function() {
     FileUploader.onAfterAddingFile(file1);
 
     setTimeout(function(){
-      expect($modal.open).to.have.been.called;
-      expect($modal.open.getCall(0).args[0].templateUrl).to.equal('confirm-instance/confirm-modal.html');
-      expect($modal.open.getCall(0).args[0].controller).to.equal('confirmInstance');
-      expect($modal.open.getCall(0).args[0].resolve).to.be.ok;
+      expect(uploadOverwriteWarning.checkOverwrite).to.have.been.called;
+      expect(uploadOverwriteWarning.checkOverwrite).to.have.been.calledWith(resp);    
 
       expect(FileUploader.uploadItem).to.have.been.calledWith(file1);
 
@@ -197,7 +210,7 @@ describe('directive: upload', function() {
 
   it('should remove file if user doesn\'t want to overwrite', function( done) {
     UploadURIService.getURI.returns(Q.resolve({message: 'uri', isOverwrite: true}));
-    $modal.open.returns({result: Q.reject()});
+    uploadOverwriteWarning.checkOverwrite.returns(Q.reject());
 
     var fileName = 'test1.tif';
     var file1 = { name: fileName, size: 200, slice: function() {}, file: { name: fileName } };
@@ -205,27 +218,9 @@ describe('directive: upload', function() {
     FileUploader.onAfterAddingFile(file1);
 
     setTimeout(function(){
-      expect($modal.open).to.have.been.called;
+      expect(uploadOverwriteWarning.checkOverwrite).to.have.been.called;
+      expect(FileUploader.removeFromQueue).to.have.been.called;
       expect(FileUploader.uploadItem).to.not.have.been.called;
-
-      done();
-    },10);
-  });
-
-  it('should ask for confirmation only once for multiple files', function(done) {
-    UploadURIService.getURI.returns(Q.resolve({message: 'uri', isOverwrite: true}));
-
-    var fileName = 'test1.tif';
-    var file1 = { name: fileName, size: 200, slice: function() {}, file: { name: fileName } };
-
-    var fileName2 = 'test2.tif';
-    var file2 = { name: fileName2, size: 200, slice: function() {}, file: { name: fileName2 } };
-
-    FileUploader.onAfterAddingFile(file1);
-    FileUploader.onAfterAddingFile(file2);
-
-    setTimeout(function(){
-      expect($modal.open).to.have.been.calledOnce;
 
       done();
     },10);
