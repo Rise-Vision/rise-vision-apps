@@ -16,7 +16,7 @@ var RssComponentScenarios = function () {
     var presentationsListPage;
     var templateEditorPage;
     var rssComponentPage;
-    var componentLabel = 'RSS - Test Feed';
+    var componentLabel = 'RSS - Top left';
 
     before(function () {
       presentationsListPage = new PresentationListPage();

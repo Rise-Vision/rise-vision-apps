@@ -1,12 +1,13 @@
 'use strict';
 
 var RssComponentPage = function() {
-  var rssFeedInput = element.all(by.id('te-rss-feed')).get(0);
-  var rssMaxItemsSelect = element.all(by.id('te-rss-max-items')).get(0);
+  var rssFeedInput = element(by.id('te-rss-feed'));
+  var rssMaxItemsSelect = element(by.id('te-rss-max-items'));
   var loader = element(by.xpath('//div[@spinner-key="rss-editor-loader"]'));
   var validationError = element(by.xpath('//template-component-rss//p[@on="validationResult"]/span'));
   var validationIconError = element(by.xpath('//template-component-rss//streamline-icon[@name="exclamation"]'));
   var validationIconValid = element(by.xpath('//template-component-rss//streamline-icon[@name="checkmark"]'));
+
   
   this.getRssFeedInput = function () {
     return rssFeedInput;
