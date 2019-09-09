@@ -35,7 +35,7 @@ var RssComponentScenarios = function () {
         expect(rssComponentPage.getRssFeedInput().isEnabled()).to.eventually.be.true;
         expect(rssComponentPage.getRssFeedInput().getAttribute('value')).to.eventually.equal('https://www.feedforall.com/sample.xml');
         expect(rssComponentPage.getRssMaxItemsSelect().isEnabled()).to.eventually.be.true;
-        expect(rssComponentPage.getRssMaxItemsSelect().getAttribute('value')).to.eventually.equal('15');
+        expect(rssComponentPage.getRssMaxItemsSelect().getAttribute('value')).to.eventually.equal('1');
       });
 
       function _testInvalidScenario (feedUrl, expectedMessageKey) {
