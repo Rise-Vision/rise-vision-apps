@@ -170,7 +170,7 @@
 
     </section>
 
-    <div id="suggestTemplate" class="text-center" ng-if="factory.search.category == 'Templates' && !factory.loadingItems">
+    <div id="suggestTemplate" class="text-center" ng-if="factory.search.category == 'Templates' && isEducationCustomer && !factory.loadingItems">
       <h3 translate>editor-app.storeProduct.templates.cantFind</h3>
       <a translate href="https://docs.google.com/forms/d/1slHKxGxywkiSakMukDr4dMGLmhzhYhoU0F2BHP8FSd4/viewform" target="_blank">
         editor-app.storeProduct.templates.suggest

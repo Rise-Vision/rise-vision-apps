@@ -8,14 +8,18 @@ angular.module('risevision.editor.controllers')
   .controller('storeProductsModal', ['$scope', '$loading', '$filter', '$modal', '$modalInstance',
     'ScrollingListService', 'productsFactory', 'playlistItemFactory', 'widgetUtils', 'checkTemplateAccess',
     'plansFactory', 'playerLicenseFactory', 'category', 'STORE_URL', 'PAYMENT_CATEGORIES', 'TEMPLATES_TYPE',
+    'userState',
     function ($scope, $loading, $filter, $modal, $modalInstance,
       ScrollingListService, productsFactory, playlistItemFactory, widgetUtils, checkTemplateAccess,
-      plansFactory, playerLicenseFactory, category, STORE_URL, PAYMENT_CATEGORIES, TEMPLATES_TYPE) {
+      plansFactory, playerLicenseFactory, category, STORE_URL, PAYMENT_CATEGORIES, TEMPLATES_TYPE, userState) {
       var defaultCount = 1000;
+      var company = userState.getCopyOfSelectedCompany();
 
       $scope.playerLicenseFactory = playerLicenseFactory;
       $scope.showPlansModal = plansFactory.showPlansModal;
       $scope.paymentCategories = PAYMENT_CATEGORIES;
+      $scope.isEducationCustomer = company.companyIndustry === 'PRIMARY_SECONDARY_EDUCATION' || company
+        .companyIndustry === 'HIGHER_EDUCATION';
 
       $scope.search = {
         category: category,
