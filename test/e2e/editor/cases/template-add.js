@@ -56,7 +56,7 @@ var TemplateAddScenarios = function() {
     }
 
     function createSubCompany() {
-      commonHeaderPage.createSubCompany(subCompanyName);
+      commonHeaderPage.createSubCompany(subCompanyName, 'PRIMARY_SECONDARY_EDUCATION');
     }
 
     function selectSubCompany() {
