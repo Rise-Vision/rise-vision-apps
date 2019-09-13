@@ -70,7 +70,7 @@ describe('controller: Store Products Modal', function() {
 
     $provide.service('userState',function(){
       return {
-        getCopyOfSelectedCompany : function(){ return company; },
+        isEducationCustomer : function(){ return isEducationCustomer; },
         _restoreState: function(){}
       }
     });
@@ -81,7 +81,7 @@ describe('controller: Store Products Modal', function() {
   var $scope, $loading, $loadingStartSpy, $loadingStopSpy;
   var $modalInstance, $modalInstanceDismissSpy, $modalInstanceCloseSpy, $q;
   var $modal, playlistItemAddWidgetByUrlSpy, scrollingListService;
-  var productAuthorized, company = {};
+  var productAuthorized, isEducationCustomer = false;
 
 
   function initController(paymentTerms) {
@@ -144,26 +144,14 @@ describe('controller: Store Products Modal', function() {
   });
 
   describe('isEducationCustomer:',function(){   
-    it('should flag k-12 education customers',function(){
-      company.companyIndustry = 'PRIMARY_SECONDARY_EDUCATION';
+    it('should return userstate isEducationCustomer response for education customers',function(){
+      isEducationCustomer = true;
       initController();
       expect($scope.isEducationCustomer).to.be.true;
     });
 
-    it('should flag higher education customers',function(){
-      company.companyIndustry = 'HIGHER_EDUCATION';
-      initController();
-      expect($scope.isEducationCustomer).to.be.true;
-    });
-
-    it('should not flag other industries',function(){
-      company.companyIndustry = 'MARKETING';
-      initController();
-      expect($scope.isEducationCustomer).to.be.false;
-    });
-
-    it('should not flag undefined industry',function(){
-      company.companyIndustry = undefined;
+    it('should return userstate isEducationCustomer response for non-education customers',function(){
+      isEducationCustomer = false;
       initController();
       expect($scope.isEducationCustomer).to.be.false;
     });

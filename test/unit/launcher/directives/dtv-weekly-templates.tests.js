@@ -4,7 +4,7 @@ describe('directive: weekly-templates', function() {
       $rootScope,
       $scope,
       element,
-      selectedCompany,
+      isEducationCustomer,
       sessionStorage,
       editorFactory;
   beforeEach(module('risevision.apps.launcher.directives'));
@@ -27,8 +27,8 @@ describe('directive: weekly-templates', function() {
     });  
     $provide.service('userState', function() {
       return {
-        getCopyOfSelectedCompany: function() {
-          return selectedCompany;
+        isEducationCustomer: function() {
+          return isEducationCustomer;
         }
       };
     });
@@ -38,7 +38,7 @@ describe('directive: weekly-templates', function() {
     
   }));
   beforeEach(inject(function(_$compile_, _$rootScope_, $templateCache){
-    selectedCompany = {companyIndustry: "PRIMARY_SECONDARY_EDUCATION"};
+    isEducationCustomer = true;
     sessionStorage = {
         $default: sinon.stub(),
         weeklyTemplatesFullView: true
@@ -87,16 +87,13 @@ describe('directive: weekly-templates', function() {
 
     it('should load Templates if Education',function() {
       expect($scope.factory).to.be.a.function;
-      selectedCompany.companyIndustry =  "HIGHER_EDUCATION";
+      isEducationCustomer = true;
       compileDirective();
       expect($scope.factory).to.be.a.function;
     });
 
     it('should not load Templates if not Education',function() {
-      selectedCompany.companyIndustry =  "OTHER";
-      compileDirective();
-      expect($scope.factory).to.not.be.a.function;
-      selectedCompany.companyIndustry =  "AUTOMOTIVE";
+      isEducationCustomer = false;
       compileDirective();
       expect($scope.factory).to.not.be.a.function;
     });

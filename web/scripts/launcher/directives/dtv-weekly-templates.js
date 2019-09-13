@@ -23,11 +23,7 @@ angular.module('risevision.apps.launcher.directives')
             count: 4
           };
 
-          var company = userState.getCopyOfSelectedCompany();
-
-          if (company.companyIndustry === 'PRIMARY_SECONDARY_EDUCATION' ||
-            company.companyIndustry === 'HIGHER_EDUCATION') {
-
+          if (userState.isEducationCustomer()) {
             $scope.factory = new ScrollingListService(productsFactory.loadProducts,
               $scope.search);
           }

@@ -13,13 +13,11 @@ angular.module('risevision.editor.controllers')
       ScrollingListService, productsFactory, playlistItemFactory, widgetUtils, checkTemplateAccess,
       plansFactory, playerLicenseFactory, category, STORE_URL, PAYMENT_CATEGORIES, TEMPLATES_TYPE, userState) {
       var defaultCount = 1000;
-      var company = userState.getCopyOfSelectedCompany();
 
       $scope.playerLicenseFactory = playerLicenseFactory;
       $scope.showPlansModal = plansFactory.showPlansModal;
       $scope.paymentCategories = PAYMENT_CATEGORIES;
-      $scope.isEducationCustomer = company.companyIndustry === 'PRIMARY_SECONDARY_EDUCATION' || company
-        .companyIndustry === 'HIGHER_EDUCATION';
+      $scope.isEducationCustomer = userState.isEducationCustomer();
 
       $scope.search = {
         category: category,
