@@ -1,21 +1,15 @@
 'use strict';
 angular.module('risevision.editor.controllers')
-  .constant('PAYMENT_CATEGORIES', [
-    'all',
-    'free',
-    'premium'
-  ])
   .controller('storeProductsModal', ['$scope', '$loading', '$filter', '$modal', '$modalInstance',
     'ScrollingListService', 'productsFactory', 'playlistItemFactory', 'widgetUtils', 'checkTemplateAccess',
-    'plansFactory', 'playerLicenseFactory', 'category', 'STORE_URL', 'PAYMENT_CATEGORIES', 'TEMPLATES_TYPE',
+    'plansFactory', 'playerLicenseFactory', 'category', 'STORE_URL', 'TEMPLATES_TYPE',
     function ($scope, $loading, $filter, $modal, $modalInstance,
       ScrollingListService, productsFactory, playlistItemFactory, widgetUtils, checkTemplateAccess,
-      plansFactory, playerLicenseFactory, category, STORE_URL, PAYMENT_CATEGORIES, TEMPLATES_TYPE) {
+      plansFactory, playerLicenseFactory, category, STORE_URL, TEMPLATES_TYPE) {
       var defaultCount = 1000;
 
       $scope.playerLicenseFactory = playerLicenseFactory;
       $scope.showPlansModal = plansFactory.showPlansModal;
-      $scope.paymentCategories = PAYMENT_CATEGORIES;
 
       $scope.search = {
         category: category,

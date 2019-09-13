@@ -113,10 +113,6 @@ var PlaylistScenarios = function() {
           expect(storeProductsModalPage.getStoreProducts().count()).to.eventually.be.above(0);
         });
       });
-      
-      it('should hide search categories', function() {
-        expect(storeProductsModalPage.getSearchCategories().count()).to.eventually.equal(0);
-      });
 
       it('should search products',function(){
         storeProductsModalPage.getSearchInput().sendKeys('image widget');
