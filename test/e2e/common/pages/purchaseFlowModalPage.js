@@ -50,11 +50,10 @@ var PurchaseFlowModalPage = function() {
     helper.waitDisappear(this.getEmailField(), 'Purchase flow Billing');
     browser.sleep(1000);
     this.getCompanyNameField().sendKeys('same');
-    this.getStreet().sendKeys('2967 Dundas St. W #632');
-    this.getCity().sendKeys('Toronto');
-    this.getCountry().sendKeys('Can');
-    this.getProv().sendKeys('O');
-    this.getPC().sendKeys('M6P 1Z2');
+    this.getStreet().sendKeys('R. Huet Bacelar, 40');
+    this.getCity().sendKeys('Sao Paulo');
+    this.getCountry().sendKeys('Braz');
+    this.getPC().sendKeys('04275000');
     browser.sleep(1000);
     helper.clickWhenClickable(this.getContinueButton(), 'Purchase flow Shipping');
     helper.waitForSpinner();
