@@ -126,7 +126,6 @@ describe('controller: Store Products Modal', function() {
     expect($scope.factory.loadingItems).to.be.false;
     expect($scope.search).to.be.ok;
     expect($scope.filterConfig).to.be.ok;
-    expect($scope.paymentCategories).to.be.ok;
     expect($scope.isEducationCustomer).to.be.false;
 
     expect($scope.select).to.be.a('function');

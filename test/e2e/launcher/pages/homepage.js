@@ -10,9 +10,6 @@ var HomePage = function() {
 
   var appLauncherContainer = element(by.id('appLauncherContainer'));
 
-  var presentationCTA = element(by.id('presentationCTA'));
-  var presentationCTAButton = element(by.id('presentationCTAButton'));
-
   var presentationAddButton = element(by.id('presentationAddButton'));
   var presentationsList = element(by.id('presentationsList'));
   var presentationsListLoader = element(by.xpath('//div[@spinner-key="presentation-list-loader"]'));
@@ -76,14 +73,6 @@ var HomePage = function() {
 
   this.getAppLauncherContainer = function() {
     return appLauncherContainer;
-  };
-
-  this.getPresentationCTA = function() {
-    return presentationCTA;
-  };
-
-  this.getPresentationCTAButton = function() {
-    return presentationCTAButton;
   };
 
   this.getPresentationAddButton = function() {

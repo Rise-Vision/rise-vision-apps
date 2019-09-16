@@ -5,11 +5,9 @@ var HomePage = require('./../../launcher/pages/homepage.js');
 var SignInPage = require('./../../launcher/pages/signInPage.js');
 var CommonHeaderPage = require('./../../../../web/bower_components/common-header/test/e2e/pages/commonHeaderPage.js');
 var GetStartedPage = require('./../pages/getStartedPage.js');
-var OnboardingPage = require('./../pages/onboarding.js');
 var WorkspacePage = require('./../../editor/pages/workspacePage.js');
 var StoreProductsModalPage = require('./../../editor/pages/storeProductsModalPage.js');
 var AutoScheduleModalPage = require('./../../schedules/pages/autoScheduleModalPage.js');
-var DisplayAddModalPage = require('./../../displays/pages/displayAddModalPage.js');
 
 var FirstSigninScenarios = function() {
 
@@ -20,21 +18,17 @@ var FirstSigninScenarios = function() {
     var signInPage;
     var commonHeaderPage;
     var getStartedPage;
-    var onboardingPage;
     var workspacePage;
     var storeProductsModalPage;
     var autoScheduleModalPage;
-    var displayAddModalPage;
     before(function () {
       homepage = new HomePage();
       signInPage = new SignInPage();
       commonHeaderPage = new CommonHeaderPage();
       getStartedPage = new GetStartedPage();
-      onboardingPage = new OnboardingPage();
       workspacePage = new WorkspacePage();
       storeProductsModalPage = new StoreProductsModalPage()
       autoScheduleModalPage = new AutoScheduleModalPage();
-      displayAddModalPage = new DisplayAddModalPage();
     });
 
     function _waitFullPageLoad(retries) {
@@ -168,127 +162,6 @@ var FirstSigninScenarios = function() {
         commonHeaderPage.deleteCurrentCompany();
       });
 
-      xdescribe('Onboarding Bar: ', function() {
-        it('should show Add Presentation CTA home page', function () {
-          helper.wait(homepage.getPresentationCTA(), 'Presentation Call to Action');
-          expect(homepage.getPresentationCTA().isDisplayed()).to.eventually.be.true;
-          expect(homepage.getPresentationCTAButton().isDisplayed()).to.eventually.be.true;
-        });
-
-        it('should show onboarding bar where the next step is Add Presentation', function() {
-          helper.wait(onboardingPage.getOnboardingBar(), 'Onboarding bar');
-
-          expect(onboardingPage.getOnboardingBar().isDisplayed()).to.eventually.be.true;
-
-          expect(onboardingPage.getAddPresentation().isDisplayed()).to.eventually.be.true;
-          expect(onboardingPage.getAddPresentationButton().isDisplayed()).to.eventually.be.true;
-          expect(onboardingPage.getAddPresentation().getAttribute('class')).to.eventually.contain('current');
-          
-          expect(onboardingPage.getAddDisplay().isDisplayed()).to.eventually.be.true;
-          expect(onboardingPage.getAddDisplayButton().isPresent()).to.eventually.be.false;
-
-          expect(onboardingPage.getActivateDisplay().isDisplayed()).to.eventually.be.true;
-          expect(onboardingPage.getActivateDisplayButton().isPresent()).to.eventually.be.false;
-          
-          expect(onboardingPage.getStepCount().getText()).to.eventually.equal('3');
-        });
-
-        it('should start a new presentation', function () {
-          homepage.getPresentationCTAButton().click();
-
-          helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
-          helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader());
-          storeProductsModalPage.getAddBlankPresentation().click();
-          
-          helper.wait(workspacePage.getWorkspaceContainer(), 'Workspace Container');
-          expect(workspacePage.getWorkspaceContainer().isDisplayed()).to.eventually.be.true;
-        });
-
-        it('should show Change Template button', function () {
-          expect(workspacePage.getChangeTemplateButton().isDisplayed()).to.eventually.be.true;
-        });      
-
-        it('should auto create Schedule when saving first Presentation', function () {
-          helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
-          workspacePage.getSaveButton().click();
-
-          helper.wait(autoScheduleModalPage.getAutoScheduleModal());
-
-          expect(autoScheduleModalPage.getAutoScheduleModal().isDisplayed()).to.eventually.be.true;
-          autoScheduleModalPage.getCloseButton().click();
-        });
-        
-        it('should complete Add Presentation onboarding step', function() {
-          expect(onboardingPage.getAddPresentation().isDisplayed()).to.eventually.be.true;
-          expect(onboardingPage.getAddPresentationButton().isPresent()).to.eventually.be.false;
-          expect(onboardingPage.getAddPresentation().getAttribute('class')).to.eventually.contain('completed');
-          
-          expect(onboardingPage.getAddDisplay().isDisplayed()).to.eventually.be.true;
-          expect(onboardingPage.getAddDisplayButton().isDisplayed()).to.eventually.be.true;
-          expect(onboardingPage.getAddDisplay().getAttribute('class')).to.eventually.contain('current');
-
-          expect(onboardingPage.getActivateDisplay().isDisplayed()).to.eventually.be.true;
-          expect(onboardingPage.getActivateDisplayButton().isPresent()).to.eventually.be.false;
-
-          expect(onboardingPage.getStepCount().getText()).to.eventually.equal('2');
-        });
-        
-        it('should open add Display modal', function() {
-          onboardingPage.getAddDisplayButton().click();
-
-          helper.wait(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
-          expect(displayAddModalPage.getDisplayNameField().isPresent()).to.eventually.be.true;
-        });
-        
-        it('should add display', function () {
-          var displayName = 'TEST_E2E_DISPLAY';
-          displayAddModalPage.getDisplayNameField().sendKeys(displayName);
-          expect(displayAddModalPage.getNextButton().isEnabled()).to.eventually.be.true;
-          displayAddModalPage.getNextButton().click();
-          helper.waitDisappear(displayAddModalPage.getNextButton(), 'Next Button');
-          expect(displayAddModalPage.getNextButton().isDisplayed()).to.eventually.be.false;
-          
-          displayAddModalPage.getDisplayIdField().getText().then(function(text) {
-            displayId = text;
-          });
-        });
-
-        it('should close modal', function() {
-          helper.clickWhenClickable(displayAddModalPage.getDismissButton(), 'Close modal button');
-          
-          helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
-        });
-
-        it('should complete Add Display onboarding step', function() {
-          expect(onboardingPage.getAddPresentation().isDisplayed()).to.eventually.be.true;
-          expect(onboardingPage.getAddPresentationButton().isPresent()).to.eventually.be.false;
-          expect(onboardingPage.getAddPresentation().getAttribute('class')).to.eventually.contain('completed');
-          
-          expect(onboardingPage.getAddDisplay().isDisplayed()).to.eventually.be.true;
-          expect(onboardingPage.getAddDisplayButton().isPresent()).to.eventually.be.false;
-          expect(onboardingPage.getAddDisplay().getAttribute('class')).to.eventually.contain('completed');
-
-          expect(onboardingPage.getActivateDisplay().isDisplayed()).to.eventually.be.true;
-          expect(onboardingPage.getActivateDisplayButton().isDisplayed()).to.eventually.be.true;        
-          expect(onboardingPage.getActivateDisplay().getAttribute('class')).to.eventually.contain('current');
-
-          expect(onboardingPage.getStepCount().getText()).to.eventually.equal('1');
-        });
-        
-        it('should show Display installation instructions', function () {
-          onboardingPage.getActivateDisplayButton().click();
-
-          helper.wait(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
-          expect(displayAddModalPage.getDisplayIdField().getText()).to.eventually.equal(displayId);
-        });  
-        
-        it('should close modal', function() {
-          helper.clickWhenClickable(displayAddModalPage.getDismissButton(), 'Close modal button');
-          
-          helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
-        });
-
-      });
     });
   });
 };

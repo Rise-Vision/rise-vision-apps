@@ -94,13 +94,6 @@ var TemplateAddScenarios = function() {
       expect(storeProductsModalPage.getSearchInput().getAttribute('placeholder')).to.eventually.equal('Search for Templates');
     });
 
-    it('should show search categories', function() {
-      expect(storeProductsModalPage.getSearchCategories().count()).to.eventually.equal(3);
-      expect(storeProductsModalPage.getSearchCategories().get(0).getText()).to.eventually.equal('ALL');
-      expect(storeProductsModalPage.getSearchCategories().get(1).getText()).to.eventually.equal('FREE');
-      expect(storeProductsModalPage.getSearchCategories().get(2).getText()).to.eventually.equal('FOR LICENSED DISPLAYS');
-    });
-
     it('should show a list of templates', function () {
       expect(storeProductsModalPage.getStoreProductsList().isDisplayed()).to.eventually.be.true;
     });
@@ -121,29 +114,8 @@ var TemplateAddScenarios = function() {
     it('should show a link to Missing Template form',function(){
       expect(storeProductsModalPage.getSuggestTemplate().isDisplayed()).to.eventually.be.true;
     });
-    
-    it('should filter Free templates', function() {
-      storeProductsModalPage.getSearchCategories().get(1).click();
 
-      expect(storeProductsModalPage.getFreeProducts().count()).to.eventually.be.above(0);
-      expect(storeProductsModalPage.getPremiumProducts().count()).to.eventually.equal(0);
-    });
-
-    it('should filter Premium templates', function() {
-      storeProductsModalPage.getSearchCategories().get(2).click();
-
-      expect(storeProductsModalPage.getFreeProducts().count()).to.eventually.equal(0);
-      expect(storeProductsModalPage.getPremiumProducts().count()).to.eventually.be.above(0);
-    });
-    
-    it('should show all templates again', function () {
-      storeProductsModalPage.getSearchCategories().get(0).click();
-
-      expect(storeProductsModalPage.getFreeProducts().count()).to.eventually.be.above(0);
-      expect(storeProductsModalPage.getPremiumProducts().count()).to.eventually.be.above(0);
-    });
-
-    it('should show preview modal when selecting a free template',function(){
+    xit('should show preview modal when selecting a free template',function(){
       storeProductsModalPage.getFreeProducts().get(0).click();
 
       helper.wait(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
@@ -155,22 +127,6 @@ var TemplateAddScenarios = function() {
       productDetailsModalPage.getCloseButton().click();
 
       helper.waitDisappear(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
-    });
-
-    xit('should show preview modal selecting a premium template',function(){
-      browser.call(()=>console.log("should show preview modal"));
-      storeProductsModalPage.getPremiumProducts().get(0).click();
-
-      helper.wait(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
-
-      helper.waitDisappear(productDetailsModalPage.getPricingLoader(), 'Pricing loader');
-      expect(productDetailsModalPage.getProductDetailsModal().isDisplayed()).to.eventually.be.true;
-      expect(productDetailsModalPage.getPreviewTemplate().isDisplayed()).to.eventually.be.true;
-      expect(productDetailsModalPage.getPreviewTemplate().getAttribute('href')).to.eventually.contain('http://preview.risevision.com');
-      productDetailsModalPage.getCloseButton().click();
-
-      helper.waitDisappear(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
-      browser.call(()=>console.log("show preview modal done"));
     });
 
     it('should show pricing component modal',function(){

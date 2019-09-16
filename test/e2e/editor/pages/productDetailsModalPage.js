@@ -6,7 +6,6 @@ var ProductDetailsModalPage = function() {
 
   var pricingLoader = element(by.xpath('//div[@spinner-key="loading-price"]'));
   var trialLoader = element(by.xpath('//a[@spinner-key="loading-trial"]'));
-  var previewTemplate = element(by.id('previewTemplate'));
 
   var pricingInfo = element(by.id('pricingInfo'));
   var closeButton = element(by.id('closeButton'));
@@ -39,10 +38,6 @@ var ProductDetailsModalPage = function() {
 
   this.getCloseButton = function() {
     return closeButton;
-  };
-
-  this.getPreviewTemplate = function() {
-    return previewTemplate;
   };
 
   this.getErrorDialogCloseButton = function() {

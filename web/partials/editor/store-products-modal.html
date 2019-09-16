@@ -90,22 +90,12 @@
       <h4 class="u_margin-sm-top" translate="editor-app.storeProduct.content.otherWidgets"></h4>
     </div>
 
-    <div class="template-filters u_margin-sm-bottom" ng-if="factory.search.category === 'Templates'">
-      <ul class="list-unstyled">
-        <li ng-repeat="category in paymentCategories"
-            ng-class="{ active : search.paymentCategory === category || !search.paymentCategory && category === 'all' }"
-            ng-click="search.paymentCategory = category">
-            <span>{{'editor-app.storeProduct.category.' + category | translate}}</span>
-        </li>
-      </ul>
-    </div><!--template-filters-->
-
     <section id="productList" class="product-grid" 
         scrolling-list="factory.load()"
         rv-spinner rv-spinner-key="product-list-loader"
         rv-spinner-start-active="1">
 
-      <div class="row">
+      <div class="row u_margin-md-top">
         <div class="col-sm-6 col-md-4 col-lg-3" ng-if="factory.search.category == 'Templates' && !factory.loadingItems">
           <div class="product-grid_item panel panel-default">
             <figure class="product-grid_image u_clickable" ui-sref="apps.editor.workspace.artboard" ng-click="dismiss();">
@@ -132,7 +122,7 @@
           </div><!--product-grid-item-->
         </div>
        
-        <ng-repeat ng-repeat="product in factory.items.list | storePaymentCategory:search.paymentCategory">
+        <ng-repeat ng-repeat="product in factory.items.list">
           <div id="storeProduct" class="col-sm-6 col-md-4 col-lg-3" ng-click="select(product)">
             <div class="product-grid_item panel panel-default">
 
