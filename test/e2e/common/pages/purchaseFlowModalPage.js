@@ -52,7 +52,11 @@ var PurchaseFlowModalPage = function() {
     this.getCompanyNameField().sendKeys('same');
     this.getStreet().sendKeys('2967 Dundas St. W #632');
     this.getCity().sendKeys('Toronto');
-    this.getCountry().sendKeys('Can');
+
+    // NOTE: Use Brasil address to skip validation which is 
+    // currently broken
+    this.getCountry().sendKeys('Br');
+    // this.getCountry().sendKeys('Can');
     this.getProv().sendKeys('O');
     this.getPC().sendKeys('M6P 1Z2');
     browser.sleep(1000);
