@@ -59,6 +59,10 @@ angular.module('risevision.template-editor.directives')
 
           $scope.fileNameOf = templateEditorUtils.fileNameOf;
 
+          $scope.hasRegularFileItems = function () {
+            return templateEditorUtils.hasRegularFileItems($scope.folderItems);
+          };
+
           $scope.thumbnailFor = function (item) {
             if (item.metadata && item.metadata.thumbnail) {
               return item.metadata.thumbnail + '?_=' + (item.timeCreated && item.timeCreated.value);
@@ -98,9 +102,17 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.selectItem = function (item) {
-            templateEditorUtils.addOrRemove($scope.selectedItems, {
-              name: item.name
-            }, item);
+            if ($scope.storageManager.isSingleFileSelector && $scope.storageManager.isSingleFileSelector()) {
+              if ($scope.isSelected(item)) {
+                $scope.selectedItems = [];
+              } else {
+                $scope.selectedItems = [item];
+              }
+            } else {
+              templateEditorUtils.addOrRemove($scope.selectedItems, {
+                name: item.name
+              }, item);
+            }
           };
 
           $scope.isSelected = function (item) {

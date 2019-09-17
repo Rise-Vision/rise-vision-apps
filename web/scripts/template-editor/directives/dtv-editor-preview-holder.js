@@ -1,15 +1,17 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateEditorPreviewHolder', ['$window', '$timeout', '$sce', 'templateEditorFactory',
-    'HTML_TEMPLATE_DOMAIN', 'HTML_TEMPLATE_URL', 'userState', '$rootScope',
-    function ($window, $timeout, $sce, templateEditorFactory, HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL, userState,
-      $rootScope) {
+  .directive('templateEditorPreviewHolder', ['$window', '$timeout', '$sce', 'userState', 'templateEditorFactory',
+    'blueprintFactory', 'brandingFactory', 'HTML_TEMPLATE_DOMAIN', 'HTML_TEMPLATE_URL',
+    function ($window, $timeout, $sce, userState, templateEditorFactory, blueprintFactory, brandingFactory,
+      HTML_TEMPLATE_DOMAIN, HTML_TEMPLATE_URL) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/preview-holder.html',
         link: function ($scope) {
           $scope.factory = templateEditorFactory;
+          $scope.blueprintFactory = blueprintFactory;
+          $scope.brandingFactory = brandingFactory;
 
           var DEFAULT_TEMPLATE_WIDTH = 800;
           var DEFAULT_TEMPLATE_HEIGHT = 600;
@@ -42,13 +44,13 @@ angular.module('risevision.template-editor.directives')
           };
 
           function _getTemplateWidth() {
-            var width = $scope.factory.blueprintData.width;
+            var width = blueprintFactory.blueprintData.width;
 
             return width ? parseInt(width) : DEFAULT_TEMPLATE_WIDTH;
           }
 
           function _getTemplateHeight() {
-            var height = $scope.factory.blueprintData.height;
+            var height = blueprintFactory.blueprintData.height;
 
             return height ? parseInt(height) : DEFAULT_TEMPLATE_HEIGHT;
           }
@@ -141,8 +143,8 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.$watchGroup([
-            'factory.blueprintData.width',
-            'factory.blueprintData.height'
+            'blueprintFactory.blueprintData.width',
+            'blueprintFactory.blueprintData.height'
           ], function () {
             _applyAspectRatio();
 
@@ -170,14 +172,57 @@ angular.module('risevision.template-editor.directives')
             _postAttributeData();
           }, true);
 
-          $scope.$on('risevision.company.updated', function () {
-            _postDisplayData();
+          $scope.$watch('brandingFactory.brandingSettings.logoFileMetadata', function (value) {
+            _postAttributeData();
+          }, true);
+
+          $scope.$watchGroup([
+            'brandingFactory.brandingSettings.baseColor',
+            'brandingFactory.brandingSettings.accentColor'
+          ], function () {
+            $timeout(function () {
+              _postDisplayData();
+            });
           });
 
+          $scope.$on('risevision.company.updated', function () {
+            // ensure branding factory updates branding via the same handler
+            $timeout(function () {
+              _postDisplayData();
+            });
+          });
+
+          $scope.$on('risevision.company.selectedCompanyChanged', function () {
+            // ensure branding factory updates branding via the same handler
+            $timeout(function () {
+              _postDisplayData();
+            });
+          });
+
+          function _updateLogoData(attributeData) {
+            if (attributeData && attributeData.components) {
+              var logoComponents = blueprintFactory.getLogoComponents();
+
+              angular.forEach(logoComponents, function (logoComponent) {
+                var component = _.find(attributeData.components, {
+                  id: logoComponent.id
+                });
+
+                if (component && component.isLogo !== false) {
+                  component.metadata = brandingFactory.brandingSettings.logoFileMetadata;
+                }
+              });
+            }
+          }
+
           function _postAttributeData() {
+            var attributeData = angular.copy($scope.factory.presentation.templateAttributeData);
+
+            _updateLogoData(attributeData);
+
             var message = {
               type: 'attributeData',
-              value: $scope.factory.presentation.templateAttributeData
+              value: attributeData
             };
             _postMessageToTemplate(message);
           }
@@ -190,6 +235,7 @@ angular.module('risevision.template-editor.directives')
 
           function _postDisplayData() {
             var company = userState.getCopyOfSelectedCompany(true);
+
             var message = {
               type: 'displayData',
               value: {
@@ -198,6 +244,10 @@ angular.module('risevision.template-editor.directives')
                   province: company.province,
                   country: company.country,
                   postalCode: company.postalCode
+                },
+                companyBranding: {
+                  baseColor: brandingFactory.brandingSettings.baseColor,
+                  accentColor: brandingFactory.brandingSettings.accentColor
                 }
               }
             };

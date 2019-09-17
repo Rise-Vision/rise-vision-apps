@@ -61,8 +61,18 @@ var TrashScenarios = function() {
         expect(storageHomePage.getMoveToTrashButton().isEnabled()).to.eventually.be.true;
       });
 
-      it('should delete the file',function(){
+      it('should show break file link warning',function(){
         storageHomePage.getMoveToTrashButton().click();
+
+        helper.wait(storageHomePage.getConfirmBreakLinkModal(), 'Confirm Break Link Modal');
+
+        expect(storageHomePage.getConfirmBreakLinkModal().isDisplayed()).to.eventually.be.true;
+      });
+
+      it('should delete the file',function(){
+        storageHomePage.getConfirmBreakLinkButton().click();
+
+        helper.waitDisappear(storageHomePage.getConfirmBreakLinkModal(), 'Confirm Break Link Modal');
 
         helper.waitDisappear(storageHomePage.getPendingOperationsPanel(), 'Pending Operations Panel');
 
@@ -113,6 +123,11 @@ var TrashScenarios = function() {
         //delete file
         filesListPage.getFileItems().get(0).click();
         storageHomePage.getMoveToTrashButton().click();
+
+        helper.wait(storageHomePage.getConfirmBreakLinkModal(), 'Confirm Break Link Modal');
+        storageHomePage.getConfirmBreakLinkButton().click();
+        helper.waitDisappear(storageHomePage.getConfirmBreakLinkModal(), 'Confirm Break Link Modal');
+
         helper.waitDisappear(storageHomePage.getPendingOperationsPanel(), 'Pending Operations Panel');
 
         //open Trash

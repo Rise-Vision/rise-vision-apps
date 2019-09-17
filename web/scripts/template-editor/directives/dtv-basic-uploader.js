@@ -1,18 +1,22 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
+  .constant('ALLOWED_VALID_TYPES', ['video', 'image'])
   .directive('basicUploader', ['storage', 'fileUploaderFactory', 'UploadURIService', 'templateEditorUtils',
-    'STORAGE_UPLOAD_CHUNK_SIZE',
-    function (storage, fileUploaderFactory, UploadURIService, templateEditorUtils, STORAGE_UPLOAD_CHUNK_SIZE) {
+    'presentationUtils', 'STORAGE_UPLOAD_CHUNK_SIZE', 'ALLOWED_VALID_TYPES', 'uploadOverwriteWarning',
+    function (storage, fileUploaderFactory, UploadURIService, templateEditorUtils, presentationUtils,
+      STORAGE_UPLOAD_CHUNK_SIZE, ALLOWED_VALID_TYPES, uploadOverwriteWarning) {
       return {
         restrict: 'E',
         scope: {
           uploaderId: '@',
           uploadManager: '=',
-          validExtensions: '=?'
+          validExtensions: '=?',
+          validType: '@',
         },
         templateUrl: 'partials/template-editor/basic-uploader.html',
         link: function ($scope, element) {
+          var confirmOverwriteModal;
           var FileUploader = fileUploaderFactory();
           var inputElement = element.find('input');
 
@@ -23,6 +27,14 @@ angular.module('risevision.template-editor.directives')
           function _isUploading() {
             return $scope.activeUploadCount() > 0;
           }
+
+          $scope.$watch($scope.uploadManager.isSingleFileSelector, function (value) {
+            if (!value) {
+              inputElement[0].setAttribute('multiple', true);
+            } else {
+              inputElement[0].removeAttribute('multiple');
+            }
+          });
 
           $scope.removeItem = function (item) {
             FileUploader.removeFromQueue(item);
@@ -66,6 +78,10 @@ angular.module('risevision.template-editor.directives')
               });
           });
 
+          FileUploader.onAddingFiles = function () {
+            uploadOverwriteWarning.resetConfirmation();
+          };
+
           FileUploader.onAfterAddingFile = function (fileItem) {
             console.info('onAfterAddingFile', fileItem.file.name);
 
@@ -77,9 +93,15 @@ angular.module('risevision.template-editor.directives')
 
             UploadURIService.getURI(fileItem.file)
               .then(function (resp) {
-                fileItem.url = resp;
-                fileItem.chunkSize = STORAGE_UPLOAD_CHUNK_SIZE;
-                FileUploader.uploadItem(fileItem);
+
+                uploadOverwriteWarning.checkOverwrite(resp, true).then(function () {
+                  fileItem.url = resp.message;
+                  fileItem.chunkSize = STORAGE_UPLOAD_CHUNK_SIZE;
+                  FileUploader.uploadItem(fileItem);
+                }).catch(function () {
+                  FileUploader.removeFromQueue(fileItem);
+                  $scope.uploadManager.onUploadStatus(_isUploading());
+                });
               })
               .then(null, function (resp) {
                 console.log('getURI error', resp);
@@ -130,6 +152,16 @@ angular.module('risevision.template-editor.directives')
                 $scope.uploadManager.onUploadStatus(_isUploading());
               });
           };
+
+          $scope.setAcceptAttribute = function () {
+            if (presentationUtils.isMobileBrowser() && _.includes(ALLOWED_VALID_TYPES, $scope.validType)) {
+              $scope.accept = $scope.validType + '/*';
+            } else {
+              $scope.accept = $scope.validExtensions;
+            }
+          };
+
+          $scope.setAcceptAttribute();
         }
       };
     }

@@ -18,6 +18,8 @@ var TemplateEditorPage = function() {
   var backToComponentsButton = element(by.css('[ng-click="onBackButton();"]'));
   var financialDataLicenseMessage = element(by.css('.financial-data-license-message'));
   var financialDataLicenseCloseButton = element(by.css('#confirmForm .close'));
+  var brandingContainer = element(by.id('branding'));
+  var brandingEditLink = element(by.id('branding-edit'));
 
   var autoSaveXPath = '//div[@id="autoSavingDesktop"]//div[contains(text(), "TEXT")]';
   var dirtyText = element(by.xpath(autoSaveXPath.replace('TEXT', 'Unsaved changes')));
@@ -95,6 +97,14 @@ var TemplateEditorPage = function() {
   this.getFinancialDataLicenseCloseButton = function() {
     return financialDataLicenseCloseButton;
   }
+
+  this.getBrandingContainer = function () {
+    return brandingContainer;
+  };
+
+  this.getBrandingEditLink = function () {
+    return brandingEditLink;
+  };
 
   this.dismissFinancialDataLicenseMessage = function() {
     //workaround as protractor doesn't click a modal in front of the preview iframe

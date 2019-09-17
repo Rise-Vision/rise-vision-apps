@@ -4,10 +4,11 @@ angular.module('risevision.template-editor.controllers')
   .constant('MINIMUM_INTERVAL_BETWEEN_SAVES', 5000)
   .constant('MAXIMUM_INTERVAL_BETWEEN_SAVES', 20000)
   .controller('TemplateEditorController', ['$scope', '$q', '$filter', '$loading', '$state', '$timeout', '$window',
-    'templateEditorFactory', 'scheduleFactory', 'presentationUtils', 'MINIMUM_INTERVAL_BETWEEN_SAVES',
-    'MAXIMUM_INTERVAL_BETWEEN_SAVES',
-    function ($scope, $q, $filter, $loading, $state, $timeout, $window, templateEditorFactory,
-      scheduleFactory, presentationUtils, MINIMUM_INTERVAL_BETWEEN_SAVES, MAXIMUM_INTERVAL_BETWEEN_SAVES) {
+    'templateEditorFactory', 'brandingFactory', 'blueprintFactory', 'scheduleFactory', 'presentationUtils',
+    'MINIMUM_INTERVAL_BETWEEN_SAVES', 'MAXIMUM_INTERVAL_BETWEEN_SAVES',
+    function ($scope, $q, $filter, $loading, $state, $timeout, $window, templateEditorFactory, brandingFactory,
+      blueprintFactory, scheduleFactory, presentationUtils,
+      MINIMUM_INTERVAL_BETWEEN_SAVES, MAXIMUM_INTERVAL_BETWEEN_SAVES) {
       var _lastSavedTimestamp = 0,
         _saveTimeout = null;
 
@@ -17,37 +18,15 @@ angular.module('risevision.template-editor.controllers')
       $scope.considerChromeBarHeight = _considerChromeBarHeight();
 
       $scope.getBlueprintData = function (componentId, attributeKey) {
-        var components = $scope.factory.blueprintData.components;
-        var component = _.find(components, {
-          id: componentId
-        });
-
-        if (!component || !component.attributes) {
-          return null;
-        }
-
-        var attributes = component.attributes;
-
-        // if the attributeKey is not provided, it returns the full attributes structure
-        if (!attributeKey) {
-          return attributes;
-        }
-
-        var attribute = attributes[attributeKey];
-        return attribute && attribute.value;
+        return blueprintFactory.getBlueprintData(componentId, attributeKey);
       };
 
       $scope.getAttributeData = function (componentId, attributeKey) {
-        var component = _componentFor(componentId, false);
-
-        // if the attributeKey is not provided, it returns the full component structure
-        return attributeKey ? component[attributeKey] : component;
+        return templateEditorFactory.getAttributeData(componentId, attributeKey);
       };
 
       $scope.setAttributeData = function (componentId, attributeKey, value) {
-        var component = _componentFor(componentId, true);
-
-        component[attributeKey] = value;
+        templateEditorFactory.setAttributeData(componentId, attributeKey, value);
       };
 
       $scope.getAvailableAttributeData = function (componentId, attributeName) {
@@ -61,7 +40,7 @@ angular.module('risevision.template-editor.controllers')
       };
 
       $scope.getComponentIds = function (filter) {
-        var components = $scope.factory.blueprintData.components;
+        var components = blueprintFactory.blueprintData.components;
 
         var filteredComponents = _.filter(components, filter);
 
@@ -71,37 +50,11 @@ angular.module('risevision.template-editor.controllers')
       };
 
       $scope.isPublishDisabled = function () {
-        var isNotRevised = !$scope.factory.isRevised() && scheduleFactory.hasSchedules();
+        var isNotRevised = !$scope.factory.isRevised() && !brandingFactory.isRevised() &&
+          scheduleFactory.hasSchedules();
 
         return $scope.factory.savingPresentation || $scope.hasUnsavedChanges || isNotRevised;
       };
-
-      // updateAttributeData: do not update the object on getAttributeData
-      // or it will unnecessarily trigger hasUnsavedChanges = true
-      function _componentFor(componentId, updateAttributeData) {
-        var attributeData = $scope.factory.presentation.templateAttributeData;
-        var component;
-
-        if (attributeData.components) {
-          component = _.find(attributeData.components, {
-            id: componentId
-          });
-        } else if (updateAttributeData) {
-          attributeData.components = [];
-        }
-
-        if (!component) {
-          component = {
-            id: componentId
-          };
-
-          if (updateAttributeData) {
-            attributeData.components.push(component);
-          }
-        }
-
-        return component;
-      }
 
       function _getCurrentTimestamp() {
         return new Date().getTime();
@@ -207,20 +160,11 @@ angular.module('risevision.template-editor.controllers')
           _clearSaveTimeout();
 
           var savePromise = $scope.hasUnsavedChanges ? $scope.factory.save() : $q.resolve();
-          var hasSchedules = scheduleFactory.hasSchedules();
 
           savePromise
-            .then(function () {
-              if (!hasSchedules) {
-                return $scope.factory.publishPresentation();
-              }
-            })
             .finally(function () {
-              // If the modal was displayed we can't navigate away, otherwise it will be closed by apps.js' $modalStack.dismissAll
-              if (hasSchedules) {
-                _bypassUnsaved = true;
-                $state.go(toState, toParams);
-              }
+              _bypassUnsaved = true;
+              $state.go(toState, toParams);
             });
         }
       });

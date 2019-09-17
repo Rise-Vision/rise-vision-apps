@@ -2,12 +2,18 @@
 
 angular.module('risevision.displays.services')
   .factory('alertsFactory', ['$modal', 'companyService', 'userState', 'company',
-    '$log', 'regenerateCompanyField', '$filter',
+    '$log', 'regenerateCompanyField', '$filter','humanReadableError',
     function ($modal, companyService, userState, company, $log,
-      regenerateCompanyField, $filter) {
+      regenerateCompanyField, $filter, humanReadableError) {
       var factory = {};
 
       var _company = null;
+      
+      var _clearMessages = function () {
+
+          factory.errorMessage = '';
+          factory.apiError = '';
+        };
 
       var _updateSettings = function (company) {
         _company = company;
@@ -172,12 +178,12 @@ angular.module('risevision.displays.services')
         });
         modalInstance.result.then(function (presentationDetails) {
           factory.alertSettings.presentationId = presentationDetails[0];
-          factory.alertSettings.presentationName = presentationDetails[
-            1];
+          factory.alertSettings.presentationName = presentationDetails[1];
         });
       };
 
       factory.save = function () {
+    	_clearMessages();
         factory.savingAlerts = true;
         factory.errorSaving = false;
         company.updateAlerts(_company.id, _company).then(function (result) {
@@ -187,16 +193,21 @@ angular.module('risevision.displays.services')
         }, function (error) {
           factory.savingAlerts = false;
           factory.errorSaving = true;
-          console.error('Error updating Alerts', error);
+          factory.errorMessage = 'Failed to update Alerts.';
+          factory.apiError = humanReadableError(error && error.result || error);
+          $log.error(factory.errorMessage, error);
         });
       };
 
       factory.regenerateAlertKey = function () {
-        regenerateCompanyField(_company.id, 'alertKey').then(function (
-          result) {
+    	 _clearMessages(); 
+    	  
+        regenerateCompanyField(_company.id, 'alertKey').then(function (result) {
           factory.alertKey = result.item;
         }, function (error) {
-          console.error('Error regenerating alertKey', error);
+            factory.errorMessage = 'Failed to reset Web Service URL.';
+            factory.apiError = humanReadableError(error);
+            $log.error(factory.errorMessage, error);
         });
       };
 

@@ -3,17 +3,20 @@
 describe('directive: TemplateEditorPreviewHolder', function() {
   var sandbox = sinon.sandbox.create(),
       $scope,
+      $timeout,
       element,
-      factory,
+      templateEditorFactory,
+      blueprintFactory,
+      brandingFactory,
       iframe,
       userState,
       rootScope;
 
   beforeEach(function() {
-    factory = {
-      blueprintData: { width: "1000", height: "1000" },
-      presentation: {}
-    };
+    blueprintFactory = {
+        blueprintData: { width: "1000", height: "1000" },
+        getLogoComponents: sandbox.stub().returns([{id:'logo'}])
+      };
     iframe = {
       setAttribute: sandbox.stub(),
       contentWindow: {
@@ -33,19 +36,44 @@ describe('directive: TemplateEditorPreviewHolder', function() {
   beforeEach(module(mockTranlate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
-      return factory;
+      return {
+        presentation: {
+          templateAttributeData: {
+            components: [
+              {id:'image', metadata: 'originalMetadata1'},
+              {id:'logo', metadata: 'originalMetadata2'}
+            ]
+          }
+        }
+      };
+    });
+    $provide.service('blueprintFactory', function() {
+      return blueprintFactory;
+    });
+    $provide.service('brandingFactory', function() {
+      return {
+        brandingSettings: {
+          baseColor: 'baseColor',
+          accentColor: 'accentColor',
+          logoFileMetadata: 'logoMetadata'
+        }
+      };
     });
     $provide.service('userState', function() {
       return userState;
     });    
   }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache, $window){
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $window, _$timeout_,$injector){
     rootScope = $rootScope;
+    $timeout = _$timeout_;
     $templateCache.put('partials/template-editor/preview-holder.html', '<p>mock</p>');
     $scope = $rootScope.$new();
 
-    sandbox.stub($window.document, 'getElementById', function(id) {
+    brandingFactory = $injector.get('brandingFactory');
+    templateEditorFactory = $injector.get('templateEditorFactory');
+
+    sandbox.stub($window.document, 'getElementById').callsFake(function(id) {
       if (id === 'template-editor-preview') return iframe;
       return {
           clientHeight: 500,
@@ -65,6 +93,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
   it('should exist', function() {
     expect($scope).to.be.ok;
     expect($scope.factory).to.be.ok;
+    expect($scope.blueprintFactory).to.be.ok;
   });
 
   it('should define component directive registry functions', function() {
@@ -72,21 +101,90 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     expect($scope.getTemplateAspectRatio).to.be.a('function');
   });
 
-  it('posts display address when company is updated', function(done) {
-    iframe.onload();
-    iframe.contentWindow.postMessage.reset();
-    rootScope.$broadcast('risevision.company.updated');
+  describe('_postDisplayData: ', function() {
+    it('posts display address when company is updated', function(done) {
+      iframe.onload();
+      iframe.contentWindow.postMessage.reset();
+      $scope.$broadcast('risevision.company.updated');
+      $scope.$digest();
+      $timeout.flush();
 
-    setTimeout(function(){
-      iframe.contentWindow.postMessage.should.have.been.called;
-      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal([ '{"type":"displayData","value":{"displayAddress":{}}}', 'https://widgets.risevision.com' ]);
-      done();
-    },10);
+      setTimeout(function(){
+        iframe.contentWindow.postMessage.should.have.been.called;
+        expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"baseColor":"baseColor","accentColor":"accentColor"}}}', 'https://widgets.risevision.com']);
+
+        done();
+      },10);
+    });
+
+    it('posts display address when selected company is changed', function(done) {
+      iframe.onload();
+      iframe.contentWindow.postMessage.reset();
+      $scope.$broadcast('risevision.company.selectedCompanyChanged');
+      $scope.$digest();
+      $timeout.flush();
+
+      setTimeout(function(){
+        iframe.contentWindow.postMessage.should.have.been.called;
+        expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"baseColor":"baseColor","accentColor":"accentColor"}}}', 'https://widgets.risevision.com']);
+
+        done();
+      },10);
+    });    
+
+    it('posts display data when branding colors have changed', function(done) {
+      iframe.onload();
+      iframe.contentWindow.postMessage.reset();
+      brandingFactory.brandingSettings.baseColor = "newBaseColor";
+      brandingFactory.brandingSettings.accentColor = "newAccentColor";
+      $scope.$digest();
+      $timeout.flush();
+
+      setTimeout(function(){
+        iframe.contentWindow.postMessage.should.have.been.called;
+        expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"baseColor":"newBaseColor","accentColor":"newAccentColor"}}}', 'https://widgets.risevision.com']);
+
+        done();
+      },10);
+    });    
+  });
+
+  describe('_updateLogoData', function() {
+    it('posts logo data when metadata has changed', function(done) {
+      iframe.onload();
+      iframe.contentWindow.postMessage.reset();
+      $scope.brandingFactory.brandingSettings.logoFileMetadata = 'newMetadata';
+      $scope.$digest();
+      $timeout.flush();
+
+      setTimeout(function(){
+        iframe.contentWindow.postMessage.should.have.been.called;
+        expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"attributeData","value":{"components":[{"id":"image","metadata":"originalMetadata1"},{"id":"logo","metadata":"newMetadata"}]}}', 'https://widgets.risevision.com']);
+
+        done();
+      },10);
+    });
+
+    it('should not post metadata if component is not a logo', function(done) {
+      iframe.onload();
+      iframe.contentWindow.postMessage.reset();
+      templateEditorFactory.presentation.templateAttributeData.components[1].isLogo = false;
+      $scope.brandingFactory.brandingSettings.logoFileMetadata = 'newMetadata';
+      $scope.$digest();
+      $timeout.flush();
+
+      setTimeout(function(){
+        iframe.contentWindow.postMessage.should.have.been.called;
+        expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"attributeData","value":{"components":[{"id":"image","metadata":"originalMetadata1"},{"id":"logo","metadata":"originalMetadata2","isLogo":false}]}}', 'https://widgets.risevision.com']);
+
+        done();
+      },10);
+    });
   });
 
   describe('getTemplateAspectRatio', function() {
     it('should calculate the 100 aspect ratio', function() {
-      factory.blueprintData = { width: "1000", height: "1000" };
+      blueprintFactory.blueprintData = { width: "1000", height: "1000" };
 
       var aspectRatio = $scope.getTemplateAspectRatio();
 
@@ -94,7 +192,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     });
 
     it('should calculate the 200 aspect ratio', function() {
-      factory.blueprintData = { width: "1000", height: "2000" };
+      blueprintFactory.blueprintData = { width: "1000", height: "2000" };
 
       var aspectRatio = $scope.getTemplateAspectRatio();
 
@@ -102,7 +200,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     });
 
     it('should calculate the 50 aspect ratio', function() {
-      factory.blueprintData = { width: "2000", height: "1000" };
+      blueprintFactory.blueprintData = { width: "2000", height: "1000" };
 
       var aspectRatio = $scope.getTemplateAspectRatio();
 
@@ -110,7 +208,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     });
 
     it('should calculate the 16:9 aspect ratio', function() {
-      factory.blueprintData = { width: "1920", height: "1080" };
+      blueprintFactory.blueprintData = { width: "1920", height: "1080" };
 
       var aspectRatio = $scope.getTemplateAspectRatio();
 
@@ -118,7 +216,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     });
 
     it('should calculate the 4:3 aspect ratio', function() {
-      factory.blueprintData = { width: "800", height: "600" };
+      blueprintFactory.blueprintData = { width: "800", height: "600" };
 
       var aspectRatio = $scope.getTemplateAspectRatio();
 
@@ -126,7 +224,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     });
 
     it('should calculate a 333.33 aspect ratio', function() {
-      factory.blueprintData = { width: "300", height: "1000" };
+      blueprintFactory.blueprintData = { width: "300", height: "1000" };
 
       var aspectRatio = $scope.getTemplateAspectRatio();
 
@@ -136,7 +234,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
   describe('getMobileWidth', function() {
     it('should calculate mobile width for 16:9 aspect ratio', function() {
-      factory.blueprintData = { width: "1920", height: "1080" };
+      blueprintFactory.blueprintData = { width: "1920", height: "1080" };
 
       var width = $scope.getMobileWidth();
 
@@ -144,7 +242,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     });
 
     it('should calculate mobile width for 9:16 aspect ratio', function() {
-      factory.blueprintData = { width: "1080", height: "1920" };
+      blueprintFactory.blueprintData = { width: "1080", height: "1920" };
 
       var width = $scope.getMobileWidth();
 
@@ -154,7 +252,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
   describe('getDesktopWidth', function() {
     it('should calculate desktop width for 16:9 aspect ratio', function() {
-      factory.blueprintData = { width: "1920", height: "1080" };
+      blueprintFactory.blueprintData = { width: "1920", height: "1080" };
 
       var width = $scope.getDesktopWidth();
 
@@ -162,7 +260,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     });
 
     it('should calculate desktop width for 9:16 aspect ratio', function() {
-      factory.blueprintData = { width: "1080", height: "1920" };
+      blueprintFactory.blueprintData = { width: "1080", height: "1920" };
 
       var width = $scope.getDesktopWidth();
 
@@ -176,11 +274,11 @@ describe('directive: TemplateEditorPreviewHolder', function() {
       iframe.onload();
       
       //send attributes data
-      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal([ '{"type":"attributeData"}', 'https://widgets.risevision.com' ]);
+      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal([ '{"type":"attributeData","value":{"components":[{"id":"image","metadata":"originalMetadata1"},{"id":"logo","metadata":"logoMetadata"}]}}', 'https://widgets.risevision.com' ]);
       //send start event
       expect(iframe.contentWindow.postMessage.getCall(1).args).to.deep.equal([ '{"type":"sendStartEvent"}', 'https://widgets.risevision.com' ]);
       //send display data
-      expect(iframe.contentWindow.postMessage.getCall(2).args).to.deep.equal([ '{"type":"displayData","value":{"displayAddress":{}}}', 'https://widgets.risevision.com' ]);
+      expect(iframe.contentWindow.postMessage.getCall(2).args).to.deep.equal([ '{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"baseColor":"baseColor","accentColor":"accentColor"}}}', 'https://widgets.risevision.com' ]);
     });
   });
 

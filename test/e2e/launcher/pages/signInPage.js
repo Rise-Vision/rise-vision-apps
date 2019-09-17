@@ -2,15 +2,12 @@
 var CommonHeaderPage = require('./../../../../web/bower_components/common-header/test/e2e/pages/commonHeaderPage.js');
 var GoogleAuthPage = require('rv-common-e2e').googleAuthPage;
 var HomePage = require('./homepage.js');
-var OnboardingPage = require('./../../common/pages/onboarding.js');
 var helper = require('rv-common-e2e').helper;
 
 var SignInPage = function() {
   var commonHeaderPage = new CommonHeaderPage();
   var googleAuthPage = new GoogleAuthPage();
   var homepage = new HomePage();
-  var onboardingPage = new OnboardingPage();
-
 
   var url = homepage.getUrl() + 'signin';
 
@@ -82,7 +79,6 @@ var SignInPage = function() {
       }
     });
     
-    // helper.wait(onboardingPage.getOnboardingBar(), 'Onboarding bar');
   };
 
   this.signIn = this.googleSignIn;

@@ -26,6 +26,15 @@ var UploadScenarios = function() {
         expect(storageSelectorModalPage.getUploadPanel().isDisplayed()).to.eventually.be.true;
       });
 
+      it('should ask for confirmation before overwriting files',function(){
+        helper.wait(storageSelectorModalPage.getOverwriteConfirmationModal(),'Overwrite Confirmation');
+
+        expect(storageSelectorModalPage.getOverwriteConfirmationModal().isDisplayed()).to.eventually.be.true;
+
+        helper.clickWhenClickable(storageSelectorModalPage.getOverwriteFilesButton(),'Keep Files button');
+        helper.waitDisappear(storageSelectorModalPage.getOverwriteConfirmationModal(), 'Overwrite Confirmation');
+      });
+
       it('should hide Upload panel when finished',function(){
         helper.waitDisappear(storageSelectorModalPage.getUploadPanel(), 'Storage Upload Panel');
         expect(storageSelectorModalPage.getUploadPanel().isDisplayed()).to.eventually.be.false;

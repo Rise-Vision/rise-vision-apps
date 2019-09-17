@@ -1,11 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .constant('NEED_FINANCIAL_DATA_LICENSE', ['rise-data-financial'])
-  .constant('CONTACT_US_URL', 'https://www.risevision.com/contact-us')
-  .factory('templateEditorUtils', ['messageBox', 'NEED_FINANCIAL_DATA_LICENSE', '$modal', '$templateCache', '$window',
-    'CONTACT_US_URL',
-    function (messageBox, NEED_FINANCIAL_DATA_LICENSE, $modal, $templateCache, $window, CONTACT_US_URL) {
+  .factory('templateEditorUtils', ['messageBox',
+    function (messageBox) {
       var svc = {};
 
       svc.intValueFor = function (providedValue, defaultValue) {
@@ -67,6 +64,14 @@ angular.module('risevision.template-editor.services')
         });
       };
 
+      svc.hasRegularFileItems = function (folderItems) {
+        var regularFiles = _.filter(folderItems, function (item) {
+          return !svc.isFolder(item.name);
+        });
+
+        return regularFiles.length > 0;
+      };
+
       svc.findElement = function (selector) {
         return document.querySelector(selector) && angular.element(document.querySelector(selector));
       };
@@ -95,42 +100,6 @@ angular.module('risevision.template-editor.services')
         }
 
         return 'Rise Vision supports ' + prefix.join(', ').toUpperCase() + suffix + '.';
-      };
-
-      svc.needsFinancialDataLicense = function (blueprint) {
-        if (!blueprint) {
-          return false;
-        }
-        return _.some(blueprint.components, function (component) {
-          return _.includes(NEED_FINANCIAL_DATA_LICENSE, component.type);
-        });
-      };
-
-      svc.showFinancialDataLicenseRequiredMessage = function () {
-        var modalInstance = $modal.open({
-          template: $templateCache.get('partials/template-editor/confirm-modal.html'),
-          controller: 'confirmInstance',
-          windowClass: 'madero-style centered-modal financial-data-license-message',
-          resolve: {
-            confirmationTitle: function () {
-              return 'Financial Data License Required';
-            },
-            confirmationMessage: function () {
-              return 'This template requires a Financial Data License to show on your Display(s), if you need one please contact <a href="mailto:sales@risevision.com">sales@risevision.com</a> to purchase.';
-            },
-            confirmationButton: function () {
-              return 'Contact Us';
-            },
-            cancelButton: function () {
-              return 'Close';
-            }
-          }
-        });
-
-        modalInstance.result.then(function () {
-          modalInstance.dismiss();
-          $window.open(CONTACT_US_URL, '_blank');
-        });
       };
 
       return svc;

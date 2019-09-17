@@ -1,6 +1,14 @@
 'use strict';
+
+var helper = require('rv-common-e2e').helper;
+var CommonHeaderPage = require('./../../../../web/bower_components/common-header/test/e2e/pages/commonHeaderPage.js');
+
 var PurchaseFlowModalPage = function() {
+  var commonHeaderPage = new CommonHeaderPage();
+  var seePlansLink = element(by.xpath('//a[contains(text(), "See Our Plans")]'));
+
   var emailField = element(by.id('contact-email'));
+  var paymentMethod = element(by.id('payment-method-select'));
   var cardName = element(by.id('new-card-name'));
   var cardNumber = element(by.id('new-card-number'));
   var cardExpMon = element(by.id('new-card-expiry-month'));
@@ -13,6 +21,69 @@ var PurchaseFlowModalPage = function() {
   var pc = element(by.id('address-form-postalCode'));
   var companyNameField = element(by.id('address-form-companyName'));
   var payButton = element(by.id('payButton'));
+
+  function _waitForPlanUpdate(retries) {
+    helper.waitDisappear(seePlansLink, 'See Plans Link')
+      .catch(function () {
+        retries = typeof(retries) === 'undefined' ? 3 : retries;
+
+        if (retries > 0) {
+          browser.call(()=>console.log("waiting for plan bar to disappear, attempt: " + (4 - retries)));
+
+          browser.sleep(30 * 1000);
+
+          browser.driver.navigate().refresh();
+
+          browser.sleep(10000);
+          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH Spinner Loader')
+
+          _waitForPlanUpdate(retries - 1);
+        }
+      });
+  }
+
+  this.purchase = function(useCreditCard) {
+    helper.waitForSpinner();
+    helper.wait(this.getContinueButton(), 'Purchase flow Billing');
+    browser.sleep(1000);
+    helper.clickWhenClickable(this.getContinueButton(), 'Purchase flow Billing');
+    helper.waitDisappear(this.getEmailField(), 'Purchase flow Billing');
+    browser.sleep(1000);
+    this.getCompanyNameField().sendKeys('same');
+    this.getStreet().sendKeys('R. Huet Bacelar, 40');
+    this.getCity().sendKeys('Sao Paulo');
+    this.getCountry().sendKeys('Braz');
+    this.getPC().sendKeys('04275000');
+    browser.sleep(1000);
+    helper.clickWhenClickable(this.getContinueButton(), 'Purchase flow Shipping');
+    helper.waitForSpinner();
+    helper.wait(this.getCardName(), 'Purchase flow Payment');
+    if (useCreditCard) {
+      console.log('Purchase using Credit Card');
+      this.getCardName().sendKeys('AAA');
+      this.getCardNumber().sendKeys('4242424242424242');
+      this.getCardExpMon().sendKeys('0');
+      this.getCardExpYr().sendKeys('222');
+      this.getCardCVS().sendKeys('222');
+    } else {
+      console.log('Purchase using Invoice Me');
+      this.getPaymentMethod().element(by.cssContainingText('option', 'Invoice Me')).click();
+    }
+    browser.sleep(1000);
+    helper.clickWhenClickable(this.getContinueButton(), 'Purchase flow Payment');
+    helper.wait(this.getPayButton(), 'Purchase flow Payment');
+    helper.waitForSpinner();
+    helper.clickWhenClickable(this.getPayButton(), 'Purchase flow Review');
+    helper.waitForSpinner();
+
+    console.log('Purchase complete');
+
+    _waitForPlanUpdate();
+  };
+
+  this.getSeePlansLink = function () {
+    return seePlansLink;
+  };
 
   this.getContinueButton = function() {
     return element(by.id('continueButton'));
@@ -28,6 +99,10 @@ var PurchaseFlowModalPage = function() {
 
   this.getEmailField = function() {
     return emailField;
+  }
+
+  this.getPaymentMethod = function() {
+    return paymentMethod;
   }
 
   this.getCompanyNameField = function() {

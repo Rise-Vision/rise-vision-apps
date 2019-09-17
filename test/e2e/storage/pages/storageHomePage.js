@@ -15,6 +15,9 @@ var StorageHomePage = function() {
   var deleteForeverButton = element(by.id('deleteForeverButton'));
   var confirmDeleteButton = element(by.id('confirmForm')).element(by.buttonText('Delete Forever'));
 
+  var confirmBreakLinkModal = element(by.id('breakLinkModal'));
+  var confirmBreakLinkButton = element(by.id('breakLinkModal')).element(by.buttonText('Okay'));
+
   var breadcrumbs = element.all(by.css('.breadcrumb li a'));
 
   var pendingOperationsPanel = element(by.id('pendingOperationsPanel'));
@@ -57,24 +60,31 @@ var StorageHomePage = function() {
   
   this.getCopyUrlButton = function() {
     return copyUrlButton;
-  }
+  };
 
   this.getMoveToTrashButton = function() {
     return moveToTrashButton;
-  }
+  };
 
   this.getRestoreFromTrashButton = function() {
     return restoreFromTrashButton;
-  }
+  };
 
   this.getDeleteForeverButton = function() {
     return deleteForeverButton;
-  }
+  };
 
   this.getConfirmDeleteButton = function() {
     return confirmDeleteButton;
-  }
+  };
 
+  this.getConfirmBreakLinkModal = function() {
+    return confirmBreakLinkModal;
+  };
+
+  this.getConfirmBreakLinkButton = function() {
+    return confirmBreakLinkButton;
+  };
 };
 
 module.exports = StorageHomePage;

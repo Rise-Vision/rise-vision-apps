@@ -231,8 +231,18 @@ describe('service: fileMetadataUtilsService:', function() {
 
     beforeEach(function() {
       sampleMetadata = [
-        { "file": "image.png", exists: true, "thumbnail-url": "http://image" },
-        { "file": "image2.png", exists: false, "thumbnail-url": "http://image2" }
+        {
+          "file": "image.png",
+          exists: true,
+          "thumbnail-url": "http://image",
+          "time-created": "123"
+        },
+        {
+          "file": "image2.png",
+          exists: false,
+          "thumbnail-url": "http://image2",
+          "time-created": "345"
+        }
       ];
     });
 
@@ -247,8 +257,18 @@ describe('service: fileMetadataUtilsService:', function() {
     it('should combine metadata if it\'s already loaded', function()
     {
       var updatedImages = [
-        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" },
-        { "file": "image2.png", exists: false, "thumbnail-url": "http://image6" }
+        {
+          "file": "image.png",
+          exists: false,
+          "thumbnail-url": "http://image5",
+          "time-created": "654"
+        },
+        {
+          "file": "image2.png",
+          exists: false,
+          "thumbnail-url": "http://image6",
+          "time-created": "877"
+        }
       ];
 
       var metadata =
@@ -260,11 +280,26 @@ describe('service: fileMetadataUtilsService:', function() {
     it('should only update the provided images', function()
     {
       var updatedImages = [
-        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" }
+        {
+          "file": "image.png",
+          exists: false,
+          "thumbnail-url": "http://image5",
+          "time-created": "765"
+        }
       ];
       var expectedImages = [
-        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" },
-        { "file": "image2.png", exists: false, "thumbnail-url": "http://image2" }
+        {
+          "file": "image.png",
+          exists: false,
+          "thumbnail-url": "http://image5",
+          "time-created": "765"
+        },
+        {
+          "file": "image2.png",
+          exists: false,
+          "thumbnail-url": "http://image2",
+          "time-created": "345"
+        }
       ];
 
       var metadata =
@@ -276,12 +311,31 @@ describe('service: fileMetadataUtilsService:', function() {
     it('should not update images that are not already present', function()
     {
       var updatedImages = [
-        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" },
-        { "file": "imageNew.png", exists: false, "thumbnail-url": "http://imageN" }
+        {
+          "file": "image.png",
+          exists: false,
+          "thumbnail-url": "http://image5",
+          "time-created": "555"
+        },
+        {
+          "file": "imageNew.png",
+          exists: false, "thumbnail-url": "http://imageN",
+          "time-created": "9"
+        }
       ];
       var expectedImages = [
-        { "file": "image.png", exists: false, "thumbnail-url": "http://image5" },
-        { "file": "image2.png", exists: false, "thumbnail-url": "http://image2" }
+        {
+          "file": "image.png",
+          exists: false,
+          "thumbnail-url": "http://image5",
+          "time-created": "555"
+        },
+        {
+          "file": "image2.png",
+          exists: false,
+          "thumbnail-url": "http://image2",
+          "time-created": "345"
+        }
       ];
 
       var metadata =

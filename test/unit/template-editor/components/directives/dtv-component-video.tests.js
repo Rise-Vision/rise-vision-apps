@@ -83,6 +83,52 @@ describe('directive: templateComponentVideo', function() {
     timeout.flush();
   });
 
+  it('should detect default files', function() {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+    var sampleFiles = [
+      { "file": "video.mp4", "thumbnail-url": "http://video" }
+    ];
+
+    $scope.getAttributeData = function(componentId, key) {
+      return sampleFiles;
+    };
+    $scope.getBlueprintData = function(componentId, key) {
+      return "video.mp4";
+    };
+    $scope.getAvailableAttributeData = function(componentId, key) {
+      return "0";
+    };
+
+    directive.show();
+
+    expect($scope.isDefaultFileList).to.be.true;
+
+    timeout.flush();
+  });
+
+  it('should not consider a default value if it is not', function() {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+    var sampleFiles = [
+      { "file": "video.mp4", "thumbnail-url": "http://video" }
+    ];
+
+    $scope.getAttributeData = function(componentId, key) {
+      return sampleFiles;
+    };
+    $scope.getBlueprintData = function(componentId, key) {
+      return "default.mp4";
+    };
+    $scope.getAvailableAttributeData = function(componentId, key) {
+      return "0";
+    };
+
+    directive.show();
+
+    expect($scope.isDefaultFileList).to.be.false;
+
+    timeout.flush();
+  });
+
   it('should get thumbnail URLs when not available as attribute data', function(done) {
     var TEST_FILE = 'risemedialibrary-7fa5ee92-7deb-450b-a8d5-e5ed648c575f/file1.mp4';
     var directive = $scope.registerDirective.getCall(0).args[0];
@@ -211,11 +257,24 @@ describe('directive: templateComponentVideo', function() {
 
     beforeEach(function() {
       sampleVideos = [
-        { 'file': 'video.mp4', exists: true, 'thumbnail-url': 'http://video' },
-        { 'file': 'video2.mp4', exists: false, 'thumbnail-url': 'http://video2' }
+        {
+          'file': 'video.mp4',
+          exists: true,
+          'thumbnail-url': 'http://video',
+          'time-created': '123'
+        },
+        {
+          'file': 'video2.mp4',
+          exists: false,
+          'thumbnail-url': 'http://video2',
+          'time-created': '345'
+        }
       ];
 
       $scope.componentId = 'TEST-ID';
+      $scope.getBlueprintData = function(componentId, key) {
+        return "video.mp4";
+      };
     });
 
     it('should directly set metadata if it\'s not already loaded', function()
@@ -226,6 +285,7 @@ describe('directive: templateComponentVideo', function() {
 
       $scope.updateFileMetadata(sampleVideos);
 
+      expect($scope.isDefaultFileList).to.be.false;
       expect($scope.selectedFiles).to.deep.equal(sampleVideos);
 
       expect($scope.setAttributeData).to.have.been.called.once;
@@ -238,8 +298,18 @@ describe('directive: templateComponentVideo', function() {
     it('should combine metadata if it\'s already loaded', function()
     {
       var updatedVideos = [
-        { 'file': 'video.mp4', exists: false, 'thumbnail-url': 'http://video5' },
-        { 'file': 'video2.mp4', exists: false, 'thumbnail-url': 'http://video6' }
+        {
+          'file': 'video.mp4',
+          exists: false,
+          'thumbnail-url': 'http://video5',
+          'time-created': '543'
+        },
+        {
+          'file': 'video2.mp4',
+          exists: false,
+          'thumbnail-url': 'http://video6',
+          'time-created': '777'
+        }
       ];
 
       $scope.getAttributeData = function() {
@@ -248,6 +318,7 @@ describe('directive: templateComponentVideo', function() {
 
       $scope.updateFileMetadata(updatedVideos);
 
+      expect($scope.isDefaultFileList).to.be.false;
       expect($scope.selectedFiles).to.deep.equal(updatedVideos);
 
       expect($scope.setAttributeData).to.have.been.called.once;
@@ -260,11 +331,26 @@ describe('directive: templateComponentVideo', function() {
     it('should only update the provided videos', function()
     {
       var updatedVideos = [
-        { 'file': 'video.mp4', exists: false, 'thumbnail-url': 'http://video5' }
+        {
+          'file': 'video.mp4',
+          exists: false,
+          'thumbnail-url': 'http://video5',
+          'time-created': '533'
+        }
       ];
       var expectedVideos = [
-        { 'file': 'video.mp4', exists: false, 'thumbnail-url': 'http://video5' },
-        { 'file': 'video2.mp4', exists: false, 'thumbnail-url': 'http://video2' }
+        {
+          'file': 'video.mp4',
+          exists: false,
+          'thumbnail-url': 'http://video5',
+          'time-created': '533'
+        },
+        {
+          'file': 'video2.mp4',
+          exists: false,
+          'thumbnail-url': 'http://video2',
+          'time-created': '345'
+        }
       ];
 
       $scope.getAttributeData = function() {
@@ -273,6 +359,7 @@ describe('directive: templateComponentVideo', function() {
 
       $scope.updateFileMetadata(updatedVideos);
 
+      expect($scope.isDefaultFileList).to.be.false;
       expect($scope.selectedFiles).to.deep.equal(expectedVideos);
 
       expect($scope.setAttributeData).to.have.been.called.once;
@@ -285,12 +372,32 @@ describe('directive: templateComponentVideo', function() {
     it('should not update videos that are not already present', function()
     {
       var updatedVideos = [
-        { 'file': 'video.mp4', exists: false, 'thumbnail-url': 'http://video5' },
-        { 'file': 'videoNew.mp4', exists: false, 'thumbnail-url': 'http://video-thumbnail' }
+        {
+          'file': 'video.mp4',
+          exists: false,
+          'thumbnail-url': 'http://video5',
+          'time-created': '765'
+        },
+        {
+          'file': 'videoNew.mp4',
+          exists: false,
+          'thumbnail-url': 'http://video-thumbnail',
+          'time-created': '544'
+        }
       ];
       var expectedVideos = [
-        { 'file': 'video.mp4', exists: false, 'thumbnail-url': 'http://video5' },
-        { 'file': 'video2.mp4', exists: false, 'thumbnail-url': 'http://video2' }
+        {
+          'file': 'video.mp4',
+          exists: false,
+          'thumbnail-url': 'http://video5',
+          'time-created': '765'
+        },
+        {
+          'file': 'video2.mp4',
+          exists: false,
+          'thumbnail-url': 'http://video2',
+          'time-created': '345'
+        }
       ];
 
       $scope.getAttributeData = function() {
@@ -299,6 +406,7 @@ describe('directive: templateComponentVideo', function() {
 
       $scope.updateFileMetadata(updatedVideos);
 
+      expect($scope.isDefaultFileList).to.be.false;
       expect($scope.selectedFiles).to.deep.equal(expectedVideos);
 
       expect($scope.setAttributeData).to.have.been.called.once;

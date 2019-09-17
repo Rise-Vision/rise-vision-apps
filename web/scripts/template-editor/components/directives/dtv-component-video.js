@@ -35,7 +35,7 @@ angular.module('risevision.template-editor.directives')
               var folderName = templateEditorUtils.fileNameOf(folderPath);
 
               if (folderName) {
-                $scope.setPanelIcon('fa-folder');
+                $scope.setPanelIcon('folder', 'streamline');
                 $scope.setPanelTitle(folderName);
               } else {
                 $scope.setPanelIcon('riseStorage', 'riseSvg');
@@ -51,7 +51,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _addFilesToMetadata(files, alwaysAppend) {
-            var selectedFiles = $scope.selectedFiles;
+            var selectedFiles = $scope.isDefaultFileList ? [] : $scope.selectedFiles;
             var metadata = fileMetadataUtilsService.metadataWithFile(selectedFiles,
               DEFAULT_VIDEO_THUMBNAIL, files, alwaysAppend);
 
@@ -94,6 +94,10 @@ angular.module('risevision.template-editor.directives')
             return $scope.getAvailableAttributeData($scope.componentId, key);
           }
 
+          function _getBlueprintData(key) {
+            return $scope.getBlueprintData($scope.componentId, key);
+          }
+
           function _getFilesFor(componentId) {
             var metadata = $scope.getAttributeData(componentId, 'metadata');
 
@@ -123,7 +127,11 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _setSelectedFiles(selectedFiles) {
+            var filesAttribute =
+              fileMetadataUtilsService.filesAttributeFor(selectedFiles);
+
             $scope.selectedFiles = selectedFiles;
+            $scope.isDefaultFileList = filesAttribute === _getBlueprintData('files');
           }
 
           _reset();
@@ -137,16 +145,13 @@ angular.module('risevision.template-editor.directives')
             iconType: 'streamline',
             icon: 'video',
             element: element,
+            panel: '.video-component-container',
             show: function () {
-              element.show();
-
               _reset();
               $scope.componentId = $scope.factory.selected.id;
 
               _loadSelectedFiles();
               _loadVolume();
-
-              $scope.showNextPanel('.video-component-container');
             },
             onBackHandler: function () {
               if ($scope.getCurrentPanel() !== storagePanelSelector) {

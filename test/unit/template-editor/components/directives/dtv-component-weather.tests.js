@@ -6,7 +6,8 @@ describe('directive: templateComponentWeather', function() {
       factory,
       company,
       rootScope,
-      compile;
+      compile,
+      hasRole = true;
 
   beforeEach(function() {
     factory = { selected: { id: "TEST-ID" } };
@@ -32,6 +33,9 @@ describe('directive: templateComponentWeather', function() {
         _restoreState: function(){},
         getCopyOfSelectedCompany: function() { 
           return company;
+        },
+        hasRole: function(){
+          return hasRole;
         }
       };
     });
@@ -64,6 +68,7 @@ describe('directive: templateComponentWeather', function() {
     expect($scope.registerDirective).to.have.been.called;
     expect($scope.companySettingsFactory).to.be.ok;
     expect($scope.hasValidAddress).to.be.ok;
+    expect($scope.canEditCompany).to.be.true;
 
     var directive = $scope.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
@@ -122,6 +127,22 @@ describe('directive: templateComponentWeather', function() {
     expect($scope.setAttributeData.calledWith(
       "TEST-ID", "scale", "updated weather"
     )).to.be.true;
+  });
+
+  describe('canEditCompany:',function(){
+    it('should be true if user has required role',function(){
+      hasRole = true;
+      compileDirective();
+      
+      expect($scope.canEditCompany).to.be.true;
+    });
+
+    it('should be false if user does not have required role',function(){
+      hasRole = false;
+      compileDirective();
+      
+      expect($scope.canEditCompany).to.be.false;
+    });
   });
 
   describe('hasValidAddress:',function(){

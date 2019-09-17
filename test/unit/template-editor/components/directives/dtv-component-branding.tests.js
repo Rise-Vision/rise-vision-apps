@@ -3,27 +3,11 @@
 describe('directive: templateComponentBranding', function() {
   var $scope,
       element,
-      factory,
-      company,
       rootScope,
       compile;
 
-  beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" } };
-    company = {
-      postalCode: '12345'
-    };
-  });
-
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module('risevision.template-editor.controllers'));
-  beforeEach(module('risevision.template-editor.services'));
   beforeEach(module(mockTranlate()));
-  beforeEach(module(function ($provide) {
-    $provide.service('templateEditorFactory', function() {
-      return factory;
-    });
-  }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache){
     rootScope = $rootScope;
@@ -38,7 +22,11 @@ describe('directive: templateComponentBranding', function() {
     $scope = element.scope();
 
     $scope.registerDirective = sinon.stub();
+    $scope.resetPanelHeader = sinon.stub();
     $scope.setPanelTitle = sinon.stub();
+    $scope.setPanelIcon = sinon.stub();
+    $scope.showPreviousPanel = sinon.stub();
+    $scope.editComponent = sinon.stub();
 
     $scope.$digest();
   }
@@ -49,8 +37,8 @@ describe('directive: templateComponentBranding', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
+    expect($scope.editLogo).to.be.ok;
+    expect($scope.editColors).to.be.ok;
     expect($scope.registerDirective).to.have.been.called;
   });
 
@@ -60,8 +48,21 @@ describe('directive: templateComponentBranding', function() {
     expect(directive.type).to.equal('rise-branding');
     expect(directive.iconType).to.equal('streamline');
     expect(directive.icon).to.equal('ratingStar');
+    expect(directive.panel).to.equal('.branding-component-container');
     expect(directive.show).to.be.a('function');
     expect(directive.onBackHandler).to.be.a('function');
+  });
+
+  it('editLogo:', function() {
+    $scope.editLogo();
+
+    $scope.editComponent.should.have.been.calledWith({type: 'rise-image'});
+  });
+
+  it('editColors: ', function() {
+    $scope.editColors();
+
+    $scope.editComponent.should.have.been.calledWith({type: 'rise-branding-colors'});
   });
 
   it('directive.show: ', function() {
@@ -69,15 +70,17 @@ describe('directive: templateComponentBranding', function() {
 
     directive.show();
 
-    $scope.setPanelTitle.should.have.been.calledWith('Branding Settings')
+    $scope.setPanelTitle.should.have.been.calledWith('Brand Settings');
   });
 
   it('directive.onBackHandler: ', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
+    $scope.showPreviousPanel.returns('backPanel');
 
-    expect(directive.onBackHandler()).to.be.false;
+    expect(directive.onBackHandler()).to.equal('backPanel');
 
-    $scope.setPanelTitle.should.have.been.calledWith();
+    $scope.resetPanelHeader.should.have.been.called;
+    $scope.showPreviousPanel.should.have.been.called;
   });
 
 });

@@ -42,31 +42,8 @@ var TemplateAddScenarios = function() {
       helper.waitDisappear(pricingComponentModalPage.getSubscribeButton(), 'Subscribe Button Disappear');
 
       browser.call(()=>console.log("waiting purchase flow billing continue button"));
-      helper.wait(purchaseFlowModalPage.getContinueButton(), "Purchase flow Billing");
-      browser.sleep(1000);
-      helper.clickWhenClickable(purchaseFlowModalPage.getContinueButton(), 'Purchase flow Billing');
-      helper.waitDisappear(purchaseFlowModalPage.getEmailField(), "Purchase flow Billing");
-      browser.sleep(1000);
-      purchaseFlowModalPage.getCompanyNameField().sendKeys("same");
-      purchaseFlowModalPage.getStreet().sendKeys("2967 Dundas St. W #632");
-      purchaseFlowModalPage.getCity().sendKeys("Toronto");
-      purchaseFlowModalPage.getCountry().sendKeys("Can");
-      purchaseFlowModalPage.getProv().sendKeys("O");
-      purchaseFlowModalPage.getPC().sendKeys("M6P 1Z2");
-      browser.sleep(1000);
-      helper.clickWhenClickable(purchaseFlowModalPage.getContinueButton(), 'Purchase flow Shipping');
-      helper.waitDisappear(purchaseFlowModalPage.getCompanyNameField(), "Purchase flow Shipping");
-      purchaseFlowModalPage.getCardName().sendKeys("AAA");
-      purchaseFlowModalPage.getCardNumber().sendKeys("4242424242424242");
-      purchaseFlowModalPage.getCardExpMon().sendKeys("0");
-      purchaseFlowModalPage.getCardExpYr().sendKeys("222");
-      purchaseFlowModalPage.getCardCVS().sendKeys("222");
-      browser.sleep(1000);
-      helper.clickWhenClickable(purchaseFlowModalPage.getContinueButton(), 'Purchase flow Payment');
-      helper.wait(purchaseFlowModalPage.getPayButton(), "Purchase flow Payment");
-      browser.sleep(3000);
-      helper.clickWhenClickable(purchaseFlowModalPage.getPayButton(), 'Purchase flow Review');
-      helper.waitDisappear(purchaseFlowModalPage.getPayButton(), "Purchase flow Payment");
+
+      purchaseFlowModalPage.purchase();
     }
 
     function openContentModal() {
@@ -79,7 +56,7 @@ var TemplateAddScenarios = function() {
     }
 
     function createSubCompany() {
-      commonHeaderPage.createSubCompany(subCompanyName);
+      commonHeaderPage.createSubCompany(subCompanyName, 'PRIMARY_SECONDARY_EDUCATION');
     }
 
     function selectSubCompany() {
@@ -117,13 +94,6 @@ var TemplateAddScenarios = function() {
       expect(storeProductsModalPage.getSearchInput().getAttribute('placeholder')).to.eventually.equal('Search for Templates');
     });
 
-    it('should show search categories', function() {
-      expect(storeProductsModalPage.getSearchCategories().count()).to.eventually.equal(3);
-      expect(storeProductsModalPage.getSearchCategories().get(0).getText()).to.eventually.equal('ALL');
-      expect(storeProductsModalPage.getSearchCategories().get(1).getText()).to.eventually.equal('FREE');
-      expect(storeProductsModalPage.getSearchCategories().get(2).getText()).to.eventually.equal('FOR LICENSED DISPLAYS');
-    });
-
     it('should show a list of templates', function () {
       expect(storeProductsModalPage.getStoreProductsList().isDisplayed()).to.eventually.be.true;
     });
@@ -144,29 +114,8 @@ var TemplateAddScenarios = function() {
     it('should show a link to Missing Template form',function(){
       expect(storeProductsModalPage.getSuggestTemplate().isDisplayed()).to.eventually.be.true;
     });
-    
-    it('should filter Free templates', function() {
-      storeProductsModalPage.getSearchCategories().get(1).click();
 
-      expect(storeProductsModalPage.getFreeProducts().count()).to.eventually.be.above(0);
-      expect(storeProductsModalPage.getPremiumProducts().count()).to.eventually.equal(0);
-    });
-
-    it('should filter Premium templates', function() {
-      storeProductsModalPage.getSearchCategories().get(2).click();
-
-      expect(storeProductsModalPage.getFreeProducts().count()).to.eventually.equal(0);
-      expect(storeProductsModalPage.getPremiumProducts().count()).to.eventually.be.above(0);
-    });
-    
-    it('should show all templates again', function () {
-      storeProductsModalPage.getSearchCategories().get(0).click();
-
-      expect(storeProductsModalPage.getFreeProducts().count()).to.eventually.be.above(0);
-      expect(storeProductsModalPage.getPremiumProducts().count()).to.eventually.be.above(0);
-    });
-
-    it('should show preview modal when selecting a free template',function(){
+    xit('should show preview modal when selecting a free template',function(){
       storeProductsModalPage.getFreeProducts().get(0).click();
 
       helper.wait(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
@@ -178,22 +127,6 @@ var TemplateAddScenarios = function() {
       productDetailsModalPage.getCloseButton().click();
 
       helper.waitDisappear(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
-    });
-
-    xit('should show preview modal selecting a premium template',function(){
-      browser.call(()=>console.log("should show preview modal"));
-      storeProductsModalPage.getPremiumProducts().get(0).click();
-
-      helper.wait(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
-
-      helper.waitDisappear(productDetailsModalPage.getPricingLoader(), 'Pricing loader');
-      expect(productDetailsModalPage.getProductDetailsModal().isDisplayed()).to.eventually.be.true;
-      expect(productDetailsModalPage.getPreviewTemplate().isDisplayed()).to.eventually.be.true;
-      expect(productDetailsModalPage.getPreviewTemplate().getAttribute('href')).to.eventually.contain('http://preview.risevision.com');
-      productDetailsModalPage.getCloseButton().click();
-
-      helper.waitDisappear(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
-      browser.call(()=>console.log("show preview modal done"));
     });
 
     it('should show pricing component modal',function(){
