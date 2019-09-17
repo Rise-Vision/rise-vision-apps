@@ -31,6 +31,6 @@ angular.module('risevision.apps.launcher.controllers')
         }
       });
 
-      launcherFactory.load();
+      launcherFactory.load(true);
     }
   ]); //ctr

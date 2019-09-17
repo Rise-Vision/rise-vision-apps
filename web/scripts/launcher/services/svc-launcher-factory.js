@@ -47,8 +47,8 @@ angular.module('risevision.apps.launcher.services')
         return deferred;
       };
 
-      factory.load = function () {
-        if (!deferred) {
+      factory.load = function (forceReload) {
+        if (!deferred || forceReload) {
           _setDefaults();
 
           deferred = canAccessApps()
@@ -59,7 +59,7 @@ angular.module('risevision.apps.launcher.services')
                 _getDeferred(factory.displays, display, 'Displays')
               ]);
             })
-            .then(function () {
+            .catch(function () {
               deferred = undefined;
             });
         }
