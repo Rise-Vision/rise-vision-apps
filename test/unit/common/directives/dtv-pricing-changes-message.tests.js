@@ -1,5 +1,5 @@
 'use strict';
-describe('directive: pricingChangesMessage', function() {
+xdescribe('directive: in-app-messages', function() {
   var $compile,
       $rootScope,
       $scope,
@@ -29,11 +29,11 @@ describe('directive: pricingChangesMessage', function() {
 
     $compile = _$compile_;
     $rootScope = _$rootScope_;
-    $templateCache.put('partials/common/pricing-changes-message.html', '<p>mock</p>');
+    $templateCache.put('partials/common/in-app-messages.html', '<p>mock</p>');
   }));
 
   function compileDirective() {
-    element = $compile('<pricing-changes-message></pricing-changes-message>')($rootScope.$new());
+    element = $compile('<in-app-messages></in-app-messages>')($rootScope.$new());
     $rootScope.$digest();
     $scope = element.isolateScope();   
   }
@@ -42,7 +42,7 @@ describe('directive: pricingChangesMessage', function() {
     beforeEach(compileDirective);
 
     it('should compile', function() {
-      expect(element[0].outerHTML).to.equal('<pricing-changes-message class="ng-scope ng-isolate-scope"><p>mock</p></pricing-changes-message>');
+      expect(element[0].outerHTML).to.equal('<in-app-messages class="ng-scope ng-isolate-scope"><p>mock</p></in-app-messages>');
     });
 
     it('should initialize scope', function() {
