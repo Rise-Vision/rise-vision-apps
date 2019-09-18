@@ -1,7 +1,7 @@
 'use strict';
 describe('service: in-app-messages-factory', function() {
   var sandbox = sinon.sandbox.create();
-  var factory, selectedCompany, localStorageService, executeStub;
+  var factory, selectedCompany, localStorageService, executeStub, userState;
 
   beforeEach(module('risevision.apps.services'));
   beforeEach(module(function ($provide) {
@@ -15,6 +15,7 @@ describe('service: in-app-messages-factory', function() {
         getCopyOfSelectedCompany: function() {
           return selectedCompany;
         },
+        isEducationCustomer: sandbox.stub().returns(false),
         _restoreState: sandbox.stub()
       };
     });
@@ -39,6 +40,7 @@ describe('service: in-app-messages-factory', function() {
   beforeEach(function() {
     inject(function($injector) {
       factory = $injector.get('inAppMessagesFactory');
+      userState = $injector.get('userState');
       localStorageService = $injector.get('localStorageService');
       selectedCompany = {};
     });
@@ -90,11 +92,22 @@ describe('service: in-app-messages-factory', function() {
         localStorageService.get.withArgs('pricingChangesAlert.dismissed').returns("true");
       });
 
-      it('should show training message if pricing is dismissed and company has created presentations',function(done){
+      it('should show training message for education customers if pricing is dismissed and company has created presentations',function(done){
         executeStub.returns(Q.resolve({items:[{id: 'presentationId'}]}));
+        userState.isEducationCustomer.returns(true);
 
         factory.pickMessage().then(function(message){
           expect(message).to.equal('promoteTraining');
+          done();
+        });
+      });
+
+      it('should not show training message if not an education customer',function(done){
+        executeStub.returns(Q.resolve({items:[{id: 'presentationId'}]}));
+        userState.isEducationCustomer.returns(false);
+
+        factory.pickMessage().then(function(message){
+          expect(message).to.be.undefined;
           done();
         });
       });

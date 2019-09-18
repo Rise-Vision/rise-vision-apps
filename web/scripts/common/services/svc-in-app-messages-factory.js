@@ -34,7 +34,7 @@ angular.module('risevision.apps.services')
 
       var _shouldShowPromoteTraining = function (presentations) {
         var hasAddedPresentation = presentations && presentations.length > 0;
-        return hasAddedPresentation && !_isDismissed('promoteTraining');
+        return userState.isEducationCustomer() && hasAddedPresentation && !_isDismissed('promoteTraining');
       };
 
       var _isDismissed = function (key) {
