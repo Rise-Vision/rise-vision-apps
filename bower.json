@@ -32,16 +32,16 @@
   "license": "GNU",
   "resolutions": {
     "angular": "~1.7.0",
-    "angular-bootstrap": "~0.13.0",
-    "angular-sanitize": "~1.7.0",
-    "angular-mocks": "~1.7.0",
-    "jquery": "~2.1.4",
-    "font-awesome": "~4.7.0",
-    "common-header": "chore/angular17",
     "angular-animate": "~1.7.0",
+    "angular-sanitize": "~1.7.0",
+    "angular-spinner": "~1.0.1",
     "angular-touch": "~1.7.0",
-    "angular-translate": "~2.18.1",
     "angular-translate-loader-static-files": "~2.18.1",
-    "angular-ui-router": "^0.4.0"
+    "angular-translate": "~2.18.1",
+    "angular-ui-router": "^0.4.0",
+    "common-header": "chore/angular17",
+    "font-awesome": "~4.7.0",
+    "jquery": "^3",
+    "ng-csv": "~0.3.6"
   }
 }
