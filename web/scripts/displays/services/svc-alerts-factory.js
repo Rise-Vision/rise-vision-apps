@@ -2,18 +2,18 @@
 
 angular.module('risevision.displays.services')
   .factory('alertsFactory', ['$modal', 'companyService', 'userState', 'company',
-    '$log', 'regenerateCompanyField', '$filter','humanReadableError',
+    '$log', 'regenerateCompanyField', '$filter', 'humanReadableError',
     function ($modal, companyService, userState, company, $log,
       regenerateCompanyField, $filter, humanReadableError) {
       var factory = {};
 
       var _company = null;
-      
+
       var _clearMessages = function () {
 
-          factory.errorMessage = '';
-          factory.apiError = '';
-        };
+        factory.errorMessage = '';
+        factory.apiError = '';
+      };
 
       var _updateSettings = function (company) {
         _company = company;
@@ -183,7 +183,7 @@ angular.module('risevision.displays.services')
       };
 
       factory.save = function () {
-    	_clearMessages();
+        _clearMessages();
         factory.savingAlerts = true;
         factory.errorSaving = false;
         company.updateAlerts(_company.id, _company).then(function (result) {
@@ -200,14 +200,14 @@ angular.module('risevision.displays.services')
       };
 
       factory.regenerateAlertKey = function () {
-    	 _clearMessages(); 
-    	  
+        _clearMessages();
+
         regenerateCompanyField(_company.id, 'alertKey').then(function (result) {
           factory.alertKey = result.item;
         }, function (error) {
-            factory.errorMessage = 'Failed to reset Web Service URL.';
-            factory.apiError = humanReadableError(error);
-            $log.error(factory.errorMessage, error);
+          factory.errorMessage = 'Failed to reset Web Service URL.';
+          factory.apiError = humanReadableError(error);
+          $log.error(factory.errorMessage, error);
         });
       };
 
