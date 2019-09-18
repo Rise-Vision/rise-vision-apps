@@ -276,6 +276,10 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.getAttributeData = function (componentId, attributeKey) {
+        if (!componentId) {
+          return null;
+        }
+
         var component = _componentFor(componentId, false);
 
         // if the attributeKey is not provided, it returns the full component structure
@@ -283,6 +287,10 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.setAttributeData = function (componentId, attributeKey, value) {
+        if (!componentId) {
+          return null;
+        }
+
         var component = _componentFor(componentId, true);
 
         component[attributeKey] = value;

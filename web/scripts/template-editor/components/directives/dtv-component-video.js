@@ -43,7 +43,9 @@ angular.module('risevision.template-editor.directives')
               }
             }
           };
-          $scope.values = {};
+          $scope.values = {
+            volume: 0
+          };
 
           function _reset() {
             _setSelectedFiles([]);
