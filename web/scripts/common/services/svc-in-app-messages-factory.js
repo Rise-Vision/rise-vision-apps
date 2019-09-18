@@ -12,6 +12,8 @@ angular.module('risevision.apps.services')
             return 'pricingChanges';
           } else if (_shouldShowPromoteTraining(resp.items)) {
             return 'promoteTraining';
+          } else {
+            return undefined;
           }
         });
       };
