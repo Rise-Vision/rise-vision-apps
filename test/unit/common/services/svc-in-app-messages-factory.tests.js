@@ -172,7 +172,7 @@ describe('service: in-app-messages-factory', function() {
       $rootScope.$digest();
 
       expect(factory.messageToShow).to.be.undefined;
-      expect(factory.pickMessage).to.have.been.called;
+      expect(factory.pickMessage).to.have.been.calledWith(true);
     })
 
     it('should reload message on selected company changed', function() {
@@ -183,7 +183,7 @@ describe('service: in-app-messages-factory', function() {
       $rootScope.$digest();
 
       expect(factory.messageToShow).to.be.undefined;
-      expect(factory.pickMessage).to.have.been.called;
+      expect(factory.pickMessage).to.have.been.calledWith(true);
     })
   })
 
