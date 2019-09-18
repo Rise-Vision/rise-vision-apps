@@ -67,6 +67,13 @@ describe('controller: Store Products Modal', function() {
         return productAuthorized ? Q.resolve() : Q.reject();
       };
     });
+
+    $provide.service('userState',function(){
+      return {
+        isEducationCustomer : function(){ return isEducationCustomer; },
+        _restoreState: function(){}
+      }
+    });
     
     $provide.service('playerLicenseFactory', function() {});
   }));
@@ -74,9 +81,10 @@ describe('controller: Store Products Modal', function() {
   var $scope, $loading, $loadingStartSpy, $loadingStopSpy;
   var $modalInstance, $modalInstanceDismissSpy, $modalInstanceCloseSpy, $q;
   var $modal, playlistItemAddWidgetByUrlSpy, scrollingListService;
-  var productAuthorized;
+  var productAuthorized, isEducationCustomer = false;
 
-  beforeEach(function(){
+
+  function initController(paymentTerms) {
     productAuthorized = true;
 
     scrollingListService = {
@@ -108,16 +116,17 @@ describe('controller: Store Products Modal', function() {
       });
       $scope.$digest();
     });
-  });
+  }
 
   it('should exist',function(){
+    initController();
     expect($scope).to.be.ok;
     
     expect($scope.factory).to.be.ok;
     expect($scope.factory.loadingItems).to.be.false;
     expect($scope.search).to.be.ok;
     expect($scope.filterConfig).to.be.ok;
-    expect($scope.paymentCategories).to.be.ok;
+    expect($scope.isEducationCustomer).to.be.false;
 
     expect($scope.select).to.be.a('function');
     expect($scope.dismiss).to.be.a('function');
@@ -125,6 +134,7 @@ describe('controller: Store Products Modal', function() {
   });
 
   it('should init the scope objects',function(){
+    initController();
     expect($scope.search).to.be.ok;
     expect($scope.search).to.have.property('category');
     expect($scope.search.count).to.equal(1000);
@@ -132,7 +142,25 @@ describe('controller: Store Products Modal', function() {
     expect($scope.professionalWidgets).to.equal('professionalWidgets');
   });
 
+  describe('isEducationCustomer:',function(){   
+    it('should return userstate isEducationCustomer response for education customers',function(){
+      isEducationCustomer = true;
+      initController();
+      expect($scope.isEducationCustomer).to.be.true;
+    });
+
+    it('should return userstate isEducationCustomer response for non-education customers',function(){
+      isEducationCustomer = false;
+      initController();
+      expect($scope.isEducationCustomer).to.be.false;
+    });
+  });
+
   describe('$loading: ', function() {
+    beforeEach(function(){
+      initController();
+    });
+
     it('should stop spinner', function() {
       $loadingStopSpy.should.have.been.calledWith('product-list-loader');
     });
@@ -149,6 +177,10 @@ describe('controller: Store Products Modal', function() {
   });
 
   describe('$modalInstance functionality: ', function() {
+    beforeEach(function(){
+      initController();
+    });
+
     it('should exist',function(){
       expect($scope).to.be.truely;
       

@@ -31,6 +31,11 @@
 				<p class="u_remove-bottom"><i class="fa fa-warning icon-left"></i><span translate>displays-app.alerts.turnedOffWarning</span> <a href="" ng-click="$parent.alertsOn = true" translate>displays-app.alerts.turnOnShort</a></p>
 			</div>
 		</div><!--warning-->
+		
+		
+	    <div id="errorBox" ng-show="factory.apiError" class="alert alert-danger" role="alert">
+            <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
+        </div>
 
 		<div class="form-group">
 			<label class="control-label" translate>displays-app.alerts.webServiceURL</label>
