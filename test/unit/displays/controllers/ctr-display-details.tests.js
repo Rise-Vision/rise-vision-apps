@@ -458,10 +458,10 @@ describe('controller: display details', function() {
       $scope.display = { playerProAuthorized: false };
     });
 
-    it('should return false if it is an unsupported player', function () {
+    it('should return true if it is an unsupported player (the restriction was removed)', function () {
       sandbox.stub(playerProFactory, 'isUnsupportedPlayer').returns(true);
 
-      expect($scope.isProToggleEnabled()).to.be.false;
+      expect($scope.isProToggleEnabled()).to.be.true;
     });
 
     it('should return true if playerProAuthorized = true', function () {
