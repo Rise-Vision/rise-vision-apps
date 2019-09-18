@@ -40,51 +40,13 @@ describe('directive: in-app-messages', function() {
     });
 
     it('should initialize scope', function() {
-      expect($scope.messageToShow).to.be.undefined;
-      expect($scope.dismissMessage).to.be.a('function');
+      expect($scope.inAppMessagesFactory).to.be.ok;
     });
 
-  });
-
-  describe('messageToShow:', function() {
-    it('should resolve to message from inAppMessagesFactory',function(done) {
-      compileDirective();
-      setTimeout(function(){
-        expect($scope.messageToShow).to.equal('message');
-        done()
-      },10);      
+    it('should request a new message', function() {
+      expect(inAppMessagesFactory.pickMessage).to.have.been.called;
     });
 
-    it('should remain undefined if inAppMessagesFactory rejects',function(done) {
-      inAppMessagesFactory.pickMessage.returns(Q.reject())
-      compileDirective();
-      setTimeout(function(){
-        expect($scope.messageToShow).to.be.undefined;
-        done()
-      },10);      
-    });
-
-  });
-
-  describe('dismissMessage:',function() {
-    beforeEach(compileDirective);
-
-    it('should clear messageToShow', function(done) {
-      setTimeout(function(){
-        expect($scope.messageToShow).to.equal('message');
-        $scope.dismissMessage();
-
-        expect($scope.messageToShow).to.be.undefined;
-
-        done()
-      },10);  
-    });
-
-    it('should call inAppMessagesFactory', function() {
-      $scope.dismissMessage();
-
-      expect(inAppMessagesFactory.dismissMessage).to.have.been.called;
-    });
   });
 
 });

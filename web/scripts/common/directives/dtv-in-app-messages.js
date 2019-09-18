@@ -8,15 +8,8 @@ angular.module('risevision.apps.directives')
         scope: {},
         templateUrl: 'partials/common/in-app-messages.html',
         link: function ($scope) {
-
-          inAppMessagesFactory.pickMessage().then(function (result) {
-            $scope.messageToShow = result;
-          });
-
-          $scope.dismissMessage = function () {
-            inAppMessagesFactory.dismissMessage($scope.messageToShow);
-            $scope.messageToShow = undefined;
-          };
+          $scope.inAppMessagesFactory = inAppMessagesFactory;
+          inAppMessagesFactory.pickMessage();
         }
       };
     }

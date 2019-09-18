@@ -1,9 +1,10 @@
 'use strict';
 describe('service: in-app-messages-factory', function() {
   var sandbox = sinon.sandbox.create();
-  var factory, selectedCompany, localStorageService, executeStub, userState;
+  var factory, selectedCompany, localStorageService, executeStub, userState, $rootScope;
 
   beforeEach(module('risevision.apps.services'));
+  beforeEach(module(mockTranlate()));
   beforeEach(module(function ($provide) {
 
     $provide.service('presentation', function() {
@@ -16,7 +17,8 @@ describe('service: in-app-messages-factory', function() {
           return selectedCompany;
         },
         isEducationCustomer: sandbox.stub().returns(false),
-        _restoreState: sandbox.stub()
+        _restoreState: sandbox.stub(),
+        getSelectedCompanyId: sandbox.stub().returns('')
       };
     });
 
@@ -42,6 +44,7 @@ describe('service: in-app-messages-factory', function() {
       factory = $injector.get('inAppMessagesFactory');
       userState = $injector.get('userState');
       localStorageService = $injector.get('localStorageService');
+      $rootScope = $injector.get('$rootScope');
       selectedCompany = {};
     });
   });
@@ -53,37 +56,42 @@ describe('service: in-app-messages-factory', function() {
   describe('pickMessage:', function() {
     it('should not show message if company is missing',function(done) {
       selectedCompany = undefined;
-      factory.pickMessage().then(function(message){
-        expect(message).to.be.undefined;
+      factory.pickMessage();
+      setTimeout(function(){
+        expect(factory.messageToShow).to.be.undefined;
         done();
-      });
+      },10);
     });
 
     describe('pricingChanges message',function(){
       it('should not show notice if company creationDate is after Jun 25', function(done) {
         selectedCompany.creationDate = 'Jun 26, 2019';
-        factory.pickMessage().then(function(message){
-          expect(message).to.be.undefined;
+        factory.pickMessage();
+        setTimeout(function(){
+          expect(factory.messageToShow).to.be.undefined;
           done();
-        });
+        },10);
       });      
 
       it('should show notice if company creationDate is before Jun 25',function(done) {
         selectedCompany.creationDate = 'Jun 24, 2019';        
-        factory.pickMessage().then(function(message){
-          expect(message).to.equal('pricingChanges');
+        factory.pickMessage();
+        setTimeout(function(){
+          expect(factory.messageToShow).to.equal('pricingChanges');
           done();
-        });  
+        },10);
       });  
 
       it('should not show notice if dismissed',function(done) {
         selectedCompany.creationDate = 'Jun 24, 2019';
 
         localStorageService.get.withArgs('pricingChangesAlert.dismissed').returns("true");
-        factory.pickMessage().then(function(message){
-          expect(message).to.be.undefined;
+
+        factory.pickMessage();
+        setTimeout(function(){
+          expect(factory.messageToShow).to.be.undefined;
           done();
-        });  
+        },10); 
       });    
     });
 
@@ -92,33 +100,36 @@ describe('service: in-app-messages-factory', function() {
         localStorageService.get.withArgs('pricingChangesAlert.dismissed').returns("true");
       });
 
-      it('should show training message for education customers if pricing is dismissed and company has created presentations',function(done){
+      it('should show training message for education customers if pricing message was dismissed and company has created presentations',function(done){
         executeStub.returns(Q.resolve({items:[{id: 'presentationId'}]}));
         userState.isEducationCustomer.returns(true);
 
-        factory.pickMessage().then(function(message){
-          expect(message).to.equal('promoteTraining');
+        factory.pickMessage();
+        setTimeout(function(){
+          expect(factory.messageToShow).to.equal('promoteTraining');
           done();
-        });
+        },10);
       });
 
       it('should not show training message if not an education customer',function(done){
         executeStub.returns(Q.resolve({items:[{id: 'presentationId'}]}));
         userState.isEducationCustomer.returns(false);
 
-        factory.pickMessage().then(function(message){
-          expect(message).to.be.undefined;
+        factory.pickMessage();
+        setTimeout(function(){
+          expect(factory.messageToShow).to.be.undefined;
           done();
-        });
+        },10); 
       });
 
       it('should not show training message if company does not have presentations',function(done){
         executeStub.returns(Q.resolve({items:[]}));
 
-        factory.pickMessage().then(function(message){
-          expect(message).to.be.undefined;
+        factory.pickMessage();
+        setTimeout(function(){
+          expect(factory.messageToShow).to.be.undefined;
           done();
-        });
+        },10);
       });
 
       it('should not show training message if dismissed',function(done){
@@ -126,20 +137,54 @@ describe('service: in-app-messages-factory', function() {
 
         localStorageService.get.withArgs('promoteTrainingAlert.dismissed').returns("true");
 
-        factory.pickMessage().then(function(message){
-          expect(message).to.be.undefined;
+        factory.pickMessage();
+        setTimeout(function(){
+          expect(factory.messageToShow).to.be.undefined;
           done();
-        });
+        },10); 
       });
     })
   });
 
   describe('dismissMessage:',function() {
-    it('should update local storage value', function() {
-      factory.dismissMessage('pricingChanges');
+    it('should dsimiss message and update local storage value', function(done) {
+      selectedCompany.creationDate = 'Jun 24, 2019';        
+        factory.pickMessage();
+        setTimeout(function(){
+          expect(factory.messageToShow).to.equal('pricingChanges');
 
-      localStorageService.set.should.have.been.calledWith('pricingChangesAlert.dismissed', 'true');
+          factory.dismissMessage();
+
+          localStorageService.set.should.have.been.calledWith('pricingChangesAlert.dismissed', 'true');
+          expect(factory.messageToShow).to.be.undefined;
+
+          done();
+        },10);
     });
   });
+
+  describe('$rootScope.$watches', function() {
+    it('should reload message on company updated', function() {
+      sandbox.stub(factory,'pickMessage');
+
+      factory.messageToShow = 'fakeMessage';
+      $rootScope.$broadcast('risevision.company.updated');
+      $rootScope.$digest();
+
+      expect(factory.messageToShow).to.be.undefined;
+      expect(factory.pickMessage).to.have.been.called;
+    })
+
+    it('should reload message on selected company changed', function() {
+      sandbox.stub(factory,'pickMessage');
+
+      factory.messageToShow = 'fakeMessage';
+      $rootScope.$broadcast('risevision.company.selectedCompanyChanged');
+      $rootScope.$digest();
+
+      expect(factory.messageToShow).to.be.undefined;
+      expect(factory.pickMessage).to.have.been.called;
+    })
+  })
 
 });

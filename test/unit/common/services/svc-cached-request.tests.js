@@ -70,9 +70,6 @@ describe('service: CachedRequest', function() {
         done();
       });
     });
-
-
   });
-
 
 });

@@ -2,25 +2,44 @@
 
 angular.module('risevision.apps.services')
   .factory('inAppMessagesFactory', ['localStorageService', 'userState', 'CachedRequest', 'presentation', '$q',
-    function (localStorageService, userState, CachedRequest, presentation, $q) {
+    '$rootScope',
+    function (localStorageService, userState, CachedRequest, presentation, $q, $rootScope) {
       var presentationListReq = new CachedRequest(presentation.list, {});
-      var factory = {};
+      var factory = {
+        messageToShow: undefined
+      };
 
-      factory.pickMessage = function () {
-        return presentationListReq.execute().then(function (resp) {
+      $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
+        _reset();
+      });
+      $rootScope.$on('risevision.company.updated', function () {
+        _reset();
+      });
+
+      factory.pickMessage = function (forceReload) {
+        presentationListReq.execute(forceReload).then(function (resp) {
           if (_shouldShowPricingChanges()) {
-            return 'pricingChanges';
+            factory.messageToShow = 'pricingChanges';
           } else if (_shouldShowPromoteTraining(resp.items)) {
-            return 'promoteTraining';
+            factory.messageToShow = 'promoteTraining';
           } else {
-            return undefined;
+            factory.messageToShow = undefined;
           }
         });
       };
 
-      factory.dismissMessage = function (message) {
-        var alertDismissedKey = message + 'Alert.dismissed';
+      factory.dismissMessage = function () {
+        if (!factory.messageToShow) {
+          return;
+        }
+        var alertDismissedKey = factory.messageToShow + 'Alert.dismissed';
         localStorageService.set(alertDismissedKey, 'true');
+        factory.messageToShow = undefined;
+      };
+
+      var _reset = function () {
+        factory.messageToShow = undefined;
+        factory.pickMessage(true);
       };
 
       var _shouldShowPricingChanges = function () {
