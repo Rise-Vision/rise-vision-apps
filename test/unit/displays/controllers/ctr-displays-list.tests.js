@@ -160,12 +160,16 @@ describe('controller: displays list', function() {
       expect($scope.getDisplayType({ playerProAuthorized: true })).to.equal('professional');
     });
 
-    it('should return unsupported', function() {
-      expect($scope.getDisplayType({ onlineStatus: 'online', unsupported: true })).to.equal('unsupported');
+    it('should return standard (unsupported only shown in details)', function() {
+      expect($scope.getDisplayType({ onlineStatus: 'online', unsupported: true })).to.equal('standard');
     });
 
     it('should return professional', function() {
       expect($scope.getDisplayType({ onlineStatus: 'online', playerProAuthorized: true })).to.equal('professional');
+    });
+
+    it('should return professional (unsupported only shown in details)', function() {
+      expect($scope.getDisplayType({ onlineStatus: 'online', unsupported: true, playerProAuthorized: true })).to.equal('professional');
     });
 
     it('should return standard', function() {

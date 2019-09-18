@@ -100,8 +100,8 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.isProToggleEnabled = function () {
-        return ($scope.display && $scope.display.playerProAuthorized) || ($scope.isProSupported() &&
-          ($scope.areAllProLicensesUsed() ? !currentPlanFactory.currentPlan.isPurchasedByParent : true));
+        return ($scope.display && $scope.display.playerProAuthorized) ||
+          ($scope.areAllProLicensesUsed() ? !currentPlanFactory.currentPlan.isPurchasedByParent : true);
       };
 
       $scope.confirmDelete = function () {
