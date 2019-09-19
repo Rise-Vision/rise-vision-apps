@@ -11,7 +11,7 @@
   "dependencies": {
     "angular-bootstrap-colorpicker": "~3.0.19",
     "angular-ui-codemirror": "~0.3.0",
-    "jszip": "~3.2.2",
+    "jszip": "~2.5.0",
     "Sortable": "^1.4.2",
     "angular-truncate": "*",
     "angular-slugify": "^1.0.1",
