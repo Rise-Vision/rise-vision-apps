@@ -45,7 +45,6 @@ var unitTestFiles = [
   "web/bower_components/q/q.js",
   "web/bower_components/common-header/dist/js/common-header.js",
   "web/bower_components/angular-ui-codemirror/ui-codemirror.js",
-  "web/bower_components/angular-vertilize/angular-vertilize.js",
   "web/bower_components/angular-truncate/src/truncate.js",
   "web/bower_components/angular-slugify/angular-slugify.js",
   'web/bower_components/Sortable/Sortable.js',
