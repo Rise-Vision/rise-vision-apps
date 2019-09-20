@@ -24,7 +24,7 @@ describe('service: in-app-messages-factory', function() {
 
     $provide.service('localStorageService', function() {
       return {
-        get: sandbox.stub().returns('false'),
+        get: sandbox.stub().returns(false),
         set: sandbox.stub(),
         remove: sandbox.stub()
       }
@@ -85,7 +85,7 @@ describe('service: in-app-messages-factory', function() {
       it('should not show notice if dismissed',function(done) {
         selectedCompany.creationDate = 'Jun 24, 2019';
 
-        localStorageService.get.withArgs('pricingChangesAlert.dismissed').returns("true");
+        localStorageService.get.withArgs('pricingChangesAlert.dismissed').returns(true);
 
         factory.pickMessage();
         setTimeout(function(){
@@ -97,7 +97,7 @@ describe('service: in-app-messages-factory', function() {
 
     describe('promoteTraining:',function(){
       beforeEach(function(){
-        localStorageService.get.withArgs('pricingChangesAlert.dismissed').returns("true");
+        localStorageService.get.withArgs('pricingChangesAlert.dismissed').returns(true);
       });
 
       it('should show training message for education customers if pricing message was dismissed and company has created presentations',function(done){
@@ -135,7 +135,7 @@ describe('service: in-app-messages-factory', function() {
       it('should not show training message if dismissed',function(done){
         executeStub.returns(Q.resolve({items:[{id: 'presentationId'}]}));
 
-        localStorageService.get.withArgs('promoteTrainingAlert.dismissed').returns("true");
+        localStorageService.get.withArgs('promoteTrainingAlert.dismissed').returns(true);
 
         factory.pickMessage();
         setTimeout(function(){
@@ -155,7 +155,7 @@ describe('service: in-app-messages-factory', function() {
 
           factory.dismissMessage();
 
-          localStorageService.set.should.have.been.calledWith('pricingChangesAlert.dismissed', 'true');
+          localStorageService.set.should.have.been.calledWith('pricingChangesAlert.dismissed', true);
           expect(factory.messageToShow).to.be.undefined;
 
           done();

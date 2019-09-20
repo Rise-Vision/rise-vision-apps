@@ -163,7 +163,7 @@ describe('service: fileActionsFactory', function() {
     });
 
     it('should not open warning modal',function(done){
-      sandbox.stub(localStorageService, "get").returns('true');
+      sandbox.stub(localStorageService, "get").returns(true);
 
       fileActionsFactory.trashButtonClick();
       
@@ -418,7 +418,7 @@ describe('service: fileActionsFactory', function() {
     });
 
     it('should not open warning modal',function(done){
-      sandbox.stub(localStorageService, "get").returns('true');
+      sandbox.stub(localStorageService, "get").returns(true);
 
       fileActionsFactory.renameButtonClick();
       
@@ -430,7 +430,7 @@ describe('service: fileActionsFactory', function() {
     });
 
     it('should open rename modal',function(done){
-      sandbox.stub(localStorageService, "get").returns('true');
+      sandbox.stub(localStorageService, "get").returns(true);
       selectedFiles = ['file1'];
 
       fileActionsFactory.renameButtonClick();
@@ -532,7 +532,7 @@ describe('service: fileActionsFactory', function() {
     });
     
     it('should exclude selected files from folder modal', function(done) {
-      sandbox.stub(localStorageService, "get").returns('true');
+      sandbox.stub(localStorageService, "get").returns(true);
 
       fileActionsFactory.moveButtonClick();
       

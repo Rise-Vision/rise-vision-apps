@@ -33,7 +33,7 @@ angular.module('risevision.apps.services')
           return;
         }
         var alertDismissedKey = factory.messageToShow + 'Alert.dismissed';
-        localStorageService.set(alertDismissedKey, 'true');
+        localStorageService.set(alertDismissedKey, true);
         factory.messageToShow = undefined;
       };
 
@@ -57,7 +57,7 @@ angular.module('risevision.apps.services')
       };
 
       var _isDismissed = function (key) {
-        return localStorageService.get(key + 'Alert.dismissed') === 'true';
+        return localStorageService.get(key + 'Alert.dismissed') === true;
       };
 
       return factory;

@@ -197,8 +197,7 @@ angular.module('risevision.storage.services')
 
         var _showBreakLinkWarning = function () {
           var localStorageKey = 'breakingLinkWarning.hideWarning';
-          var hideWarning = localStorageService.get(localStorageKey) ===
-            'true';
+          var hideWarning = localStorageService.get(localStorageKey) === true;
 
           if (hideWarning) {
             return $q.resolve();
