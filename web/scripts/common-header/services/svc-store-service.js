@@ -1,5 +1,6 @@
 (function () {
   'use strict';
+  /*jshint camelcase: false */
 
   angular.module('risevision.store.services')
     .service('storeService', ['$q', '$log', '$http', 'storeAPILoader',

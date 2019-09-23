@@ -1,4 +1,5 @@
 'use strict';
+/*jshint camelcase: false */
 
 angular.module('risevision.store.services')
   .factory('getChargebeeInstance', ['$q', '$window', '$loading', 'storeService', 'userState',

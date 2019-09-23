@@ -1,5 +1,6 @@
 (function (angular) {
   'use strict';
+  /*jshint camelcase: false */
 
   angular.module('risevision.common.components.userstate')
     .factory('customAuthFactory', ['$q', '$log', 'gapiLoader',
