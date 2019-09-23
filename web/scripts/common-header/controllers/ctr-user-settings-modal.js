@@ -1,4 +1,5 @@
 'use strict';
+/*global confirm: false */
 
 angular.module('risevision.common.header')
   .controller('UserSettingsModalCtrl', [
