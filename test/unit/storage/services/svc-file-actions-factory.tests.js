@@ -219,7 +219,7 @@ describe('service: fileActionsFactory', function() {
       fileActionsFactory.confirmDeleteFilesAction();
 
       stub.should.have.been.called;
-      expect(stub.getCall(0).args[0].templateUrl).to.equal('confirm-instance/confirm-modal.html');
+      expect(stub.getCall(0).args[0].templateUrl).to.equal('partials/components/confirm-instance/confirm-modal.html');
       expect(stub.getCall(0).args[0].controller).to.equal('confirmInstance');    
     });
 

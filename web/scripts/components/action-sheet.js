@@ -3,7 +3,7 @@
 // ------------------------------------
 // Action Sheet
 // ------------------------------------
-angular.module('risevision.common.header')
+angular.module('risevision.common.components.action-sheet', [])
   .directive('actionSheet', ['$document', '$compile', '$timeout',
     function ($document, $compile, $timeout) {
       return {

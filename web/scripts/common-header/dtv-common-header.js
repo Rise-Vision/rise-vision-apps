@@ -22,6 +22,8 @@ angular.module('risevision.common.header', [
     'risevision.common.registration',
     'checklist-model',
     'ui.bootstrap', 'ngSanitize', 'ngCsv', 'ngTouch', 'ngTagsInput',
+    'risevision.common.components.action-sheet',
+    'risevision.common.components.off-canvas-nav',
     'risevision.common.components.userstate',
     'risevision.common.components.last-modified',
     'risevision.common.components.loading',
