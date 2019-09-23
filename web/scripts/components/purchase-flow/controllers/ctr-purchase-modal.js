@@ -1,24 +1,26 @@
-angular.module("risevision.common.components.purchase-flow")
+'use strict';
 
-  .value("PURCHASE_STEPS", [{
-    name: "Billing Address",
+angular.module('risevision.common.components.purchase-flow')
+
+  .value('PURCHASE_STEPS', [{
+    name: 'Billing Address',
     index: 0,
-    formName: "billingAddressForm"
+    formName: 'billingAddressForm'
   }, {
-    name: "Shipping Address",
+    name: 'Shipping Address',
     index: 1,
-    formName: "shippingAddressForm"
+    formName: 'shippingAddressForm'
   }, {
-    name: "Payment Method",
+    name: 'Payment Method',
     index: 2,
-    formName: "paymentMethodsForm"
+    formName: 'paymentMethodsForm'
   }, {
-    name: "Purchase Review",
+    name: 'Purchase Review',
     index: 3
   }])
 
-  .controller("PurchaseModalCtrl", [
-    "$scope", "$modalInstance", "$loading", "purchaseFactory", "addressFactory", "plansFactory", "PURCHASE_STEPS",
+  .controller('PurchaseModalCtrl', [
+    '$scope', '$modalInstance', '$loading', 'purchaseFactory', 'addressFactory', 'plansFactory', 'PURCHASE_STEPS',
     function ($scope, $modalInstance, $loading, purchaseFactory, addressFactory, plansFactory, PURCHASE_STEPS) {
 
       $scope.form = {};
@@ -28,11 +30,11 @@ angular.module("risevision.common.components.purchase-flow")
       $scope.currentStep = 0;
       $scope.finalStep = false;
 
-      $scope.$watch("factory.loading", function (loading) {
+      $scope.$watch('factory.loading', function (loading) {
         if (loading) {
-          $loading.start("purchase-modal");
+          $loading.start('purchase-modal');
         } else {
-          $loading.stop("purchase-modal");
+          $loading.stop('purchase-modal');
         }
       });
 
@@ -121,22 +123,22 @@ angular.module("risevision.common.components.purchase-flow")
 
       $scope.close = function () {
         if (!purchaseFactory.purchase.reloadingCompany) {
-          $modalInstance.close("success");
+          $modalInstance.close('success');
         } else {
           purchaseFactory.loading = true;
 
-          $scope.$watch("factory.purchase.reloadingCompany", function (loading) {
+          $scope.$watch('factory.purchase.reloadingCompany', function (loading) {
             if (!loading) {
               purchaseFactory.loading = false;
 
-              $modalInstance.close("success");
+              $modalInstance.close('success');
             }
           });
         }
       };
 
       $scope.dismiss = function () {
-        $modalInstance.dismiss("cancel");
+        $modalInstance.dismiss('cancel');
       };
 
     }

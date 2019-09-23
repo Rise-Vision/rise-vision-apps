@@ -1,12 +1,12 @@
 (function (angular) {
-  "use strict";
+  'use strict';
 
 
-  angular.module("risevision.common.currency", [
-      "risevision.common.gapi"
+  angular.module('risevision.common.currency', [
+      'risevision.common.gapi'
     ])
 
-    .factory("currencyService", ["$q", "storeAPILoader", "$log",
+    .factory('currencyService', ['$q', 'storeAPILoader', '$log',
       function ($q, storeAPILoader, $log) {
 
         var deferred = null;
@@ -27,7 +27,7 @@
 
           this.pickPrice = function (priceUSD, priceCAD) {
             switch (this.currencyCode.toUpperCase()) {
-            case "CAD":
+            case 'CAD':
               return priceCAD;
             default:
               return priceUSD;
@@ -67,16 +67,16 @@
 
           deferred = $q.defer();
 
-          $log.debug("currencyService called");
+          $log.debug('currencyService called');
           storeAPILoader().then(function (storeAPI) {
             var request = storeAPI.currency.list();
             request.execute(function (resp) {
-              $log.debug("currencyService resp", resp);
+              $log.debug('currencyService resp', resp);
               if (!resp.error) {
                 currency.setItems(resp.items);
                 deferred.resolve(currency);
               } else {
-                console.error("currencyService error: ", resp.error);
+                console.error('currencyService error: ', resp.error);
                 deferred.reject(resp.error);
               }
             });

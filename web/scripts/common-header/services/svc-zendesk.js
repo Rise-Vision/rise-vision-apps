@@ -1,21 +1,19 @@
 /* jshint maxlen: false */
 
 (function (angular) {
-  "use strict";
+  'use strict';
 
-  angular.module("risevision.common.support", [])
-    /* jshint quotmark: single */
+  angular.module('risevision.common.support', [])
     .value('ZENDESK_WEB_WIDGET_SCRIPT',
       'window.zE||(function(e,t,s){var n=window.zE=window.zEmbed=function(){n._.push(arguments)},a=n.s=e.createElement(t),r=e.getElementsByTagName(t)[0];n.set=function(e){n.set._.push(e)},n._=[],n.set._=[],a.async=true,a.setAttribute("charset","utf-8"),a.src="https://static.zdassets.com/ekr/asset_composer.js?key="+s,n.t=+new Date,a.type="text/javascript",r.parentNode.insertBefore(a,r)})(document,"script","b8d6bdba-10ea-4b88-b96c-9d3905b85d8f");'
     )
-    /* jshint quotmark: double */
-    .factory("zendesk", ["$q", "$window", "segmentAnalytics",
-      "userState", "ZENDESK_WEB_WIDGET_SCRIPT",
+    .factory('zendesk', ['$q', '$window', 'segmentAnalytics',
+      'userState', 'ZENDESK_WEB_WIDGET_SCRIPT',
       function ($q, $window, segmentAnalytics, userState,
         ZENDESK_WEB_WIDGET_SCRIPT) {
 
         var loaded = false;
-        var previousUsername = "";
+        var previousUsername = '';
         var $ = $window.$;
 
         function ensureScript() {
@@ -24,13 +22,13 @@
               webWidget: {
                 helpCenter: {
                   title: {
-                    "*": "Help"
+                    '*': 'Help'
                   },
                   searchPlaceholder: {
-                    "*": "How can we help?"
+                    '*': 'How can we help?'
                   },
                   messageButton: {
-                    "*": "Open a Support Ticket"
+                    '*': 'Open a Support Ticket'
                   }
                 },
 
@@ -40,13 +38,13 @@
 
                 contactForm: {
                   title: {
-                    "*": "Open a Support Ticket"
+                    '*': 'Open a Support Ticket'
                   }
                 }
               }
             };
 
-            var scriptElem = $window.document.createElement("script");
+            var scriptElem = $window.document.createElement('script');
             scriptElem.innerText = ZENDESK_WEB_WIDGET_SCRIPT;
 
             $window.document.body.appendChild(scriptElem);
@@ -64,7 +62,7 @@
             var username = userState.getUsername();
             var properties = {
               email: userState.getUserEmail(),
-              "rise_vision_company_id": userState.getUserCompanyId(),
+              'rise_vision_company_id': userState.getUserCompanyId(),
             };
 
             segmentAnalytics.identify(username, properties);
@@ -102,12 +100,12 @@
         }
 
         function _changeBorderStyle() {
-          $("iframe[class^=zEWidget]").contents().find(".Container")
-            .css("border", "1px solid #4ab767");
+          $('iframe[class^=zEWidget]').contents().find('.Container')
+            .css('border', '1px solid #4ab767');
         }
 
         function logout() {
-          previousUsername = "";
+          previousUsername = '';
         }
 
         function enableSuggestions() {
@@ -156,7 +154,7 @@
       }
     ])
 
-    .run(["$rootScope", "$window", "userState", "userAuthFactory", "zendesk", "ZENDESK_WEB_WIDGET_SCRIPT",
+    .run(['$rootScope', '$window', 'userState', 'userAuthFactory', 'zendesk', 'ZENDESK_WEB_WIDGET_SCRIPT',
       function ($rootScope, $window, userState, userAuthFactory, zendesk, ZENDESK_WEB_WIDGET_SCRIPT) {
         var widgetVisible = false;
 
@@ -173,16 +171,16 @@
               _showWebWidget();
             });
 
-          $rootScope.$on("risevision.user.authorized", function () {
+          $rootScope.$on('risevision.user.authorized', function () {
             zendesk.initializeWidget(); // Needed to authenticate the user
             _hideWebWidget();
           });
 
-          $rootScope.$on("risevision.user.signedOut", function () {
+          $rootScope.$on('risevision.user.signedOut', function () {
             _showWebWidget();
           });
 
-          $rootScope.$on("$stateChangeStart", function () {
+          $rootScope.$on('$stateChangeStart', function () {
             zendesk.enableSuggestions();
           });
         }

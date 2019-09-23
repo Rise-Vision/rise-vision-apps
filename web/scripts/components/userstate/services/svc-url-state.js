@@ -1,14 +1,14 @@
 (function (angular) {
-  "use strict";
+  'use strict';
 
-  angular.module("risevision.common.components.userstate")
-    .factory("urlStateService", ["$window", "$location", "userState",
+  angular.module('risevision.common.components.userstate')
+    .factory('urlStateService', ['$window', '$location', 'userState',
       function ($window, $location, userState) {
 
         var urlStateService = {};
 
         urlStateService.get = function () {
-          var state = "";
+          var state = '';
           var stateObject = {
             p: null,
             u: null,
@@ -20,11 +20,11 @@
           // This prevents Domain authentication errors for sub-folders
           // Warning: Root folder must have CH available for this to work,
           // otherwise no redirect is performed!
-          // loc = $window.location.origin + "/";
+          // loc = $window.location.origin + '/';
           // Remove first character (/) from path since we're adding it to loc
           stateObject.p = $window.location.pathname ? $window.location
             .pathname
-            .substring(1) : "";
+            .substring(1) : '';
           stateObject.s = $window.location.search;
           stateObject.u = $window.location.hash;
 
@@ -62,8 +62,8 @@
               $window.location.hash = state.u;
             }
           } else { // HTML5 mode
-            state.p = state.p || "/";
-            state.s = state.s || "";
+            state.p = state.p || '/';
+            state.s = state.s || '';
             $location.url(state.p + state.s);
             $location.replace();
           }
@@ -88,7 +88,7 @@
             var decodedPath = decodeURIComponent(decodeURIComponent(decodeURIComponent(decodeURIComponent(
               $location
               .path()))));
-            var match = new RegExp("[\?&]" + paramName + "=([^&#\"]*)").exec(decodedPath);
+            var match = new RegExp('[\?&]' + paramName + '=([^&#"]*)').exec(decodedPath);
             return match && match[1];
           }
         };

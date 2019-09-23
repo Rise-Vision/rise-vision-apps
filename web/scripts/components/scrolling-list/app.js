@@ -1,19 +1,19 @@
 /* jshint unused: false */
 (function (angular) {
 
-  "use strict";
+  'use strict';
 
-  angular.module("risevision.common.components.scrolling-list", [
-      "rvScrollEvent"
+  angular.module('risevision.common.components.scrolling-list', [
+      'rvScrollEvent'
     ])
-    .value("BaseList", function (maxCount) {
+    .value('BaseList', function (maxCount) {
       this.list = [];
       this.maxCount = maxCount ? maxCount : 40;
       this.cursor = null;
       this.endOfList = false;
 
       //unused
-      this.searchString = "";
+      this.searchString = '';
       this.clear = function () {
         this.list = [];
         this.cursor = null;

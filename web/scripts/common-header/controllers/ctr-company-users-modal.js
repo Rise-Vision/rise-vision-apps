@@ -1,43 +1,43 @@
-angular.module("risevision.common.header")
+'use strict';
 
-  .filter("roleLabel", ["userRoleMap",
+angular.module('risevision.common.header')
+  .filter('roleLabel', ['userRoleMap',
     function (userRoleMap) {
       return function (key) {
         return userRoleMap[key];
       };
     }
   ])
-
-  .controller("CompanyUsersModalCtrl", ["$scope", "$loading", "$modalInstance", "$modal",
-    "$templateCache", "ScrollingListService", "company", "getUsers",
+  .controller('CompanyUsersModalCtrl', ['$scope', '$loading', '$modalInstance', '$modal',
+    '$templateCache', 'ScrollingListService', 'company', 'getUsers',
     function ($scope, $loading, $modalInstance, $modal, $templateCache,
       ScrollingListService, company, getUsers) {
 
       $scope.search = {
         companyId: company.id,
-        sortBy: "username",
+        sortBy: 'username',
         reverse: false,
-        name: "Users"
+        name: 'Users'
       };
 
       $scope.users = new ScrollingListService(getUsers, $scope.search);
 
       $scope.filterConfig = {
-        placeholder: "Search Users"
+        placeholder: 'Search Users'
       };
 
-      $scope.$watch("users.loadingItems", function (loading) {
+      $scope.$watch('users.loadingItems', function (loading) {
         if (loading) {
-          $loading.start("company-users-list");
+          $loading.start('company-users-list');
         } else {
-          $loading.stop("company-users-list");
+          $loading.stop('company-users-list');
         }
       });
 
       $scope.addUser = function (size) {
         var instance = $modal.open({
-          template: $templateCache.get("partials/common-header/user-settings-modal.html"),
-          controller: "AddUserModalCtrl",
+          template: $templateCache.get('partials/common-header/user-settings-modal.html'),
+          controller: 'AddUserModalCtrl',
           size: size,
           resolve: {
             companyId: function () {
@@ -50,8 +50,8 @@ angular.module("risevision.common.header")
 
       $scope.editUser = function (username, size) {
         var instance = $modal.open({
-          template: $templateCache.get("partials/common-header/user-settings-modal.html"),
-          controller: "UserSettingsModalCtrl",
+          template: $templateCache.get('partials/common-header/user-settings-modal.html'),
+          controller: 'UserSettingsModalCtrl',
           size: size,
           resolve: {
             username: function () {
@@ -66,7 +66,7 @@ angular.module("risevision.common.header")
       };
 
       $scope.closeModal = function () {
-        $modalInstance.dismiss("cancel");
+        $modalInstance.dismiss('cancel');
       };
 
     }

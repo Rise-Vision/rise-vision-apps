@@ -1,6 +1,8 @@
-angular.module("risevision.common.header")
-  .controller("CompanyButtonsCtrl", ["$scope", "$modal", "$templateCache",
-    "userState", "getCoreCountries", "companySettingsFactory",
+'use strict';
+
+angular.module('risevision.common.header')
+  .controller('CompanyButtonsCtrl', ['$scope', '$modal', '$templateCache',
+    'userState', 'getCoreCountries', 'companySettingsFactory',
 
     function ($scope, $modal, $templateCache, userState, getCoreCountries, companySettingsFactory) {
       $scope.inRVAFrame = userState.inRVAFrame();
@@ -42,9 +44,9 @@ angular.module("risevision.common.header")
 
       $scope.addSubCompany = function () {
         $modal.open({
-          template: $templateCache.get("partials/common-header/subcompany-modal.html"),
-          controller: "SubCompanyModalCtrl",
-          size: "lg",
+          template: $templateCache.get('partials/common-header/subcompany-modal.html'),
+          controller: 'SubCompanyModalCtrl',
+          size: 'lg',
           resolve: {
             countries: function () {
               return getCoreCountries();
@@ -56,8 +58,8 @@ angular.module("risevision.common.header")
       // Show Company Users Modal
       $scope.companyUsers = function (size) {
         $modal.open({
-          template: $templateCache.get("partials/common-header/company-users-modal.html"),
-          controller: "CompanyUsersModalCtrl",
+          template: $templateCache.get('partials/common-header/company-users-modal.html'),
+          controller: 'CompanyUsersModalCtrl',
           size: size,
           backdrop: true,
           resolve: {
@@ -70,8 +72,8 @@ angular.module("risevision.common.header")
 
       $scope.switchCompany = function () {
         var modalInstance = $modal.open({
-          template: $templateCache.get("partials/common-header/company-selector-modal.html"),
-          controller: "companySelectorCtr",
+          template: $templateCache.get('partials/common-header/company-selector-modal.html'),
+          controller: 'companySelectorCtr',
           backdrop: true,
           resolve: {
             companyId: function () {
@@ -86,8 +88,8 @@ angular.module("risevision.common.header")
       $scope.moveCompany = function (size) {
         // var modalInstance =
         $modal.open({
-          template: $templateCache.get("partials/common-header/move-company-modal.html"),
-          controller: "MoveCompanyModalCtrl",
+          template: $templateCache.get('partials/common-header/move-company-modal.html'),
+          controller: 'MoveCompanyModalCtrl',
           size: size
         });
       };

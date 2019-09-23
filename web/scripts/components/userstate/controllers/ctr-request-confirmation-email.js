@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.common.components.userstate")
-  .controller("RequestConfirmationEmailCtrl", ["$scope", "$loading", "$log",
-    "userauth",
+angular.module('risevision.common.components.userstate')
+  .controller('RequestConfirmationEmailCtrl', ['$scope', '$loading', '$log',
+    'userauth',
     function ($scope, $loading, $log, userauth) {
       $scope.forms = {};
       $scope.credentials = {};
@@ -14,20 +14,20 @@ angular.module("risevision.common.components.userstate")
         $scope.emailSent = false;
         $scope.isGoogleAccount = false;
         $scope.emailAlreadyConfirmed = false;
-        $loading.startGlobal("auth-request-confirmation-email");
+        $loading.startGlobal('auth-request-confirmation-email');
 
         userauth.requestConfirmationEmail($scope.credentials.username)
           .then(function () {
-            $log.log("Confirmation email request sent");
+            $log.log('Confirmation email request sent');
             $scope.emailSent = true;
           })
           .catch(function (err) {
             if (err.status === 400) {
-              $log.log("Requested confirmation email for Google account");
+              $log.log('Requested confirmation email for Google account');
               $scope.isGoogleAccount = true;
             } else if (err.status === 409) {
               $log.log(
-                "Requested confirmation email for already confirmed account"
+                'Requested confirmation email for already confirmed account'
               );
               $scope.emailAlreadyConfirmed = true;
             } else { // No special case for 404, for security reasons
@@ -36,7 +36,7 @@ angular.module("risevision.common.components.userstate")
             }
           })
           .finally(function () {
-            $loading.stopGlobal("auth-request-confirmation-email");
+            $loading.stopGlobal('auth-request-confirmation-email');
           });
       };
     }

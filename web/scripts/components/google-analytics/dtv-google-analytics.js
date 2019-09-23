@@ -2,13 +2,13 @@
  * Created by rodrigopavezi on 11/28/14.
  */
 (function (angular) {
-  "use strict";
-  angular.module("risevision.common.components.google-analytics", [])
-    .directive("analytics", function () {
+  'use strict';
+  angular.module('risevision.common.components.google-analytics', [])
+    .directive('analytics', function () {
       return {
-        restrict: "E",
+        restrict: 'E',
         scope: {
-          analyticsAccountId: "="
+          analyticsAccountId: '='
         },
         link: function () {
           /*jshint -W030 */
@@ -23,16 +23,16 @@
             a.async = 1;
             a.src = g;
             m.parentNode.insertBefore(a, m)
-          })(window, document, "script",
-            "//www.google-analytics.com/analytics.js", "ga");
+          })(window, document, 'script',
+            '//www.google-analytics.com/analytics.js', 'ga');
           /*jshint +W030 */
           /*jshint +W033 */
         },
-        controller: ["$scope", "$window",
+        controller: ['$scope', '$window',
           function ($scope, $window) {
-            $scope.$watch("analyticsAccountId", function (newId) {
+            $scope.$watch('analyticsAccountId', function (newId) {
               if (newId) {
-                $window.ga("create", $scope.analyticsAccountId, "auto");
+                $window.ga('create', $scope.analyticsAccountId, 'auto');
               }
             });
           }

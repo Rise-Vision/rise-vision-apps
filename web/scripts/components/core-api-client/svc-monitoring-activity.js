@@ -1,15 +1,15 @@
 /**
  * Created by rodrigopavezi on 30/01/15.
  */
-"use strict";
+'use strict';
 
-angular.module("risevision.common.monitoring.activity", [
-    "risevision.common.gapi"
+angular.module('risevision.common.monitoring.activity', [
+    'risevision.common.gapi'
   ])
-  .factory("getActivity", ["$q", "monitoringAPILoader", "$log",
+  .factory('getActivity', ['$q', 'monitoringAPILoader', '$log',
     function ($q, monitoringAPILoader, $log) {
       return function (clientId, api) {
-        $log.debug("getActivity called", clientId, api);
+        $log.debug('getActivity called', clientId, api);
 
         var deferred = $q.defer();
         monitoringAPILoader().then(function (monitoringApi) {
@@ -23,7 +23,7 @@ angular.module("risevision.common.monitoring.activity", [
 
           var request = monitoringApi.activity.get(criteria);
           request.execute(function (resp) {
-            $log.debug("getActivity resp", resp);
+            $log.debug('getActivity resp', resp);
             if (resp.result) {
               deferred.resolve(resp.result);
             } else {
@@ -31,7 +31,7 @@ angular.module("risevision.common.monitoring.activity", [
             }
           });
         }, function (errorResult) {
-          $log.debug("Error: " + errorResult);
+          $log.debug('Error: ' + errorResult);
           deferred.reject(errorResult);
         });
         return deferred.promise;

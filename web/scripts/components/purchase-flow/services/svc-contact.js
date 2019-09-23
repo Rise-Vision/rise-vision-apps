@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.common.components.purchase-flow")
-  .service("contactService", [
+angular.module('risevision.common.components.purchase-flow')
+  .service('contactService', [
 
     function () {
 

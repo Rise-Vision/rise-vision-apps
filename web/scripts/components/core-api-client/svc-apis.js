@@ -1,15 +1,15 @@
 /**
  * Created by rodrigopavezi on 10/16/14.
  */
-"use strict";
+'use strict';
 
-angular.module("risevision.common.apis", [
-    "risevision.common.gapi"
+angular.module('risevision.common.apis', [
+    'risevision.common.gapi'
   ])
-  .factory("listApis", ["$q", "discoveryAPILoader", "$log",
+  .factory('listApis', ['$q', 'discoveryAPILoader', '$log',
     function ($q, discoveryAPILoader, $log) {
       return function (name, preferred) {
-        $log.debug("listApis called", name, preferred);
+        $log.debug('listApis called', name, preferred);
 
         var deferred = $q.defer();
 
@@ -24,7 +24,7 @@ angular.module("risevision.common.apis", [
 
           var request = discoveryAPI.apis.list(criteria);
           request.execute(function (resp) {
-            $log.debug("listApis resp", resp);
+            $log.debug('listApis resp', resp);
             if (resp.result) {
               deferred.resolve(resp.items);
             } else {
@@ -37,10 +37,10 @@ angular.module("risevision.common.apis", [
       };
     }
   ])
-  .factory("getRest", ["$q", "discoveryAPILoader", "$log",
+  .factory('getRest', ['$q', 'discoveryAPILoader', '$log',
     function ($q, discoveryAPILoader, $log) {
       return function (api, version) {
-        $log.debug("getRest called", api, version);
+        $log.debug('getRest called', api, version);
 
         var deferred = $q.defer();
         discoveryAPILoader().then(function (discoveryAPI) {
@@ -53,7 +53,7 @@ angular.module("risevision.common.apis", [
           }
           var request = discoveryAPI.apis.getRest(criteria);
           request.execute(function (resp) {
-            $log.debug("getRest resp", resp);
+            $log.debug('getRest resp', resp);
             if (resp.result) {
               deferred.resolve(resp);
             } else {

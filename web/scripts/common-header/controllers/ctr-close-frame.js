@@ -1,10 +1,11 @@
-angular.module("risevision.common.header")
+'use strict';
 
-  .controller("CloseFrameButtonCtrl", [
-    "$scope", "$log", "gadgetsService",
+angular.module('risevision.common.header')
+  .controller('CloseFrameButtonCtrl', [
+    '$scope', '$log', 'gadgetsService',
     function ($scope, $log, gadgetsService) {
       $scope.closeIFrame = function () {
-        $log.debug("gadgetsService.closeIFrame");
+        $log.debug('gadgetsService.closeIFrame');
         gadgetsService.closeIFrame();
       };
 

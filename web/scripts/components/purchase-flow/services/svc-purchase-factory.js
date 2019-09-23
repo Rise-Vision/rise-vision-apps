@@ -1,11 +1,11 @@
 (function (angular) {
 
-  "use strict";
-  angular.module("risevision.common.components.purchase-flow")
-    .constant("RPP_ADDON_ID", "c4b368be86245bf9501baaa6e0b00df9719869fd")
-    .factory("purchaseFactory", ["$rootScope", "$q", "$log", "$modal", "$templateCache", "$timeout",
-      "userState", "storeService", "stripeService", "addressService", "contactService", "purchaseFlowTracker",
-      "RPP_ADDON_ID",
+  'use strict';
+  angular.module('risevision.common.components.purchase-flow')
+    .constant('RPP_ADDON_ID', 'c4b368be86245bf9501baaa6e0b00df9719869fd')
+    .factory('purchaseFactory', ['$rootScope', '$q', '$log', '$modal', '$templateCache', '$timeout',
+      'userState', 'storeService', 'stripeService', 'addressService', 'contactService', 'purchaseFlowTracker',
+      'RPP_ADDON_ID',
       function ($rootScope, $q, $log, $modal, $templateCache, $timeout, userState,
         storeService, stripeService, addressService, contactService, purchaseFlowTracker, RPP_ADDON_ID) {
         var factory = {};
@@ -26,7 +26,7 @@
 
           factory.purchase.contact = contactService.copyContactObj(userState.getCopyOfProfile());
           factory.purchase.paymentMethods = {
-            paymentMethod: "card",
+            paymentMethod: 'card',
             existingCreditCards: [],
             newCreditCard: {
               isNew: true,
@@ -51,10 +51,10 @@
           _init(plan, isMonthly);
 
           var modalInstance = $modal.open({
-            template: $templateCache.get("partials/components/purchase-flow/purchase-modal.html"),
-            controller: "PurchaseModalCtrl",
-            size: "md",
-            backdrop: "static"
+            template: $templateCache.get('partials/components/purchase-flow/purchase-modal.html'),
+            controller: 'PurchaseModalCtrl',
+            size: 'md',
+            backdrop: 'static'
           });
 
           return modalInstance.result;
@@ -62,10 +62,10 @@
 
         factory.showTaxExemptionModal = function () {
           var modalInstance = $modal.open({
-            template: $templateCache.get("partials/components/purchase-flow/tax-exemption.html"),
-            controller: "TaxExemptionModalCtrl",
-            size: "md",
-            backdrop: "static"
+            template: $templateCache.get('partials/components/purchase-flow/tax-exemption.html'),
+            controller: 'TaxExemptionModalCtrl',
+            size: 'md',
+            backdrop: 'static'
           });
 
           return modalInstance.result.then(function (result) {
@@ -87,10 +87,10 @@
           var paymentMethods = factory.purchase.paymentMethods;
           var deferred = $q.defer();
 
-          if (paymentMethods.paymentMethod === "invoice") {
+          if (paymentMethods.paymentMethod === 'invoice') {
             // TODO: Check Invoice credit (?)
             deferred.resolve();
-          } else if (paymentMethods.paymentMethod === "card") {
+          } else if (paymentMethods.paymentMethod === 'card') {
             if (!paymentMethods.selectedCard.isNew) {
               if (_validateCard(paymentMethods.selectedCard, false)) {
                 // Existing Card selected
@@ -125,19 +125,19 @@
         };
 
         var _getBillingPeriod = function () {
-          return factory.purchase.plan.isMonthly ? "01m" : "01y";
+          return factory.purchase.plan.isMonthly ? '01m' : '01y';
         };
 
         var _getCurrency = function () {
-          return (factory.purchase.billingAddress.country === "CA") ? "cad" : "usd";
+          return (factory.purchase.billingAddress.country === 'CA') ? 'cad' : 'usd';
         };
 
         var _getChargebeePlanId = function () {
-          return factory.purchase.plan.productCode + "-" + _getCurrency() + _getBillingPeriod();
+          return factory.purchase.plan.productCode + '-' + _getCurrency() + _getBillingPeriod();
         };
 
         var _getChargebeeAddonId = function () {
-          return RPP_ADDON_ID + "-" + _getCurrency() + _getBillingPeriod() +
+          return RPP_ADDON_ID + '-' + _getCurrency() + _getBillingPeriod() +
             factory.purchase.plan.productCode.substring(0, 3);
         };
 
@@ -167,7 +167,7 @@
             })
             .catch(function (result) {
               factory.purchase.estimate.estimateError = result && result.message ? result.message :
-                "An unexpected error has occurred. Please try again.";
+                'An unexpected error has occurred. Please try again.';
             })
             .finally(function () {
               factory.loading = false;
@@ -185,7 +185,7 @@
           }];
 
           var card = factory.purchase.paymentMethods.selectedCard;
-          var cardData = factory.purchase.paymentMethods.paymentMethod === "invoice" ? null : {
+          var cardData = factory.purchase.paymentMethods.paymentMethod === 'invoice' ? null : {
             cardId: card.id,
             isDefault: card.isDefault ? true : false
           };
@@ -218,10 +218,10 @@
                   return userState.reloadSelectedCompany();
                 })
                 .then(function () {
-                  $rootScope.$emit("risevision.company.trial.started");
+                  $rootScope.$emit('risevision.company.trial.started');
                 })
                 .catch(function (err) {
-                  $log.debug("Failed to reload company", err);
+                  $log.debug('Failed to reload company', err);
                 })
                 .finally(function () {
                   factory.purchase.reloadingCompany = false;
@@ -229,7 +229,7 @@
             })
             .catch(function (result) {
               factory.purchase.checkoutError = result && result.message ? result.message :
-                "There was an unknown error with the payment.";
+                'There was an unknown error with the payment.';
             })
             .finally(function () {
               factory.loading = false;

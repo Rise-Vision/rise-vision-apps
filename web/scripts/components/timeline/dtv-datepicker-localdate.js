@@ -1,20 +1,20 @@
 // https://gist.github.com/weberste/354a3f0a9ea58e0ea0de
 
 (function (angular) {
-  "use strict";
-  angular.module("risevision.common.components.timeline")
-    .directive("datepickerLocaldate", [
+  'use strict';
+  angular.module('risevision.common.components.timeline')
+    .directive('datepickerLocaldate', [
 
       function () {
         return {
-          restrict: "A",
-          require: ["ngModel"],
+          restrict: 'A',
+          require: ['ngModel'],
           link: function ($scope, element, attr, ctrls) {
             var useLocaldate = $scope.$eval(attr.datepickerLocaldate);
             var ngModelController = ctrls[0];
             var formatDate = function (date) {
-              return date.toLocaleDateString("en-US") + " " +
-                date.toLocaleTimeString("en-US");
+              return date.toLocaleDateString('en-US') + ' ' +
+                date.toLocaleTimeString('en-US');
             };
 
             // called with a JavaScript Date object when picked from the datepicker

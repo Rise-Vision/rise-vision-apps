@@ -1,41 +1,41 @@
 (function () {
-  "use strict";
+  'use strict';
 
   angular.module(
-      "risevision.common.components.background-image-setting", [
-        "risevision.common.i18n",
-        "colorpicker.module",
-        "risevision.widget.common.url-field",
-        "risevision.widget.common.position-setting",
-        "risevision.common.components.background-image",
-        "risevision.common.components.repeat-setting"
+      'risevision.common.components.background-image-setting', [
+        'risevision.common.i18n',
+        'colorpicker.module',
+        'risevision.widget.common.url-field',
+        'risevision.widget.common.position-setting',
+        'risevision.common.components.background-image',
+        'risevision.common.components.repeat-setting'
       ])
-    .directive("backgroundImageSetting", ["$templateCache",
+    .directive('backgroundImageSetting', ['$templateCache',
       function ($templateCache) {
         return {
-          restrict: "E",
+          restrict: 'E',
           scope: {
-            background: "=",
-            companyId: "@",
-            colorParentContainerClass: "=",
-            colorContainerClass: "=",
-            positionParentContainerClass: "=",
-            positionContainerClass: "=",
-            repeatParentContainerClass: "=",
-            repeatContainerClass: "="
+            background: '=',
+            companyId: '@',
+            colorParentContainerClass: '=',
+            colorContainerClass: '=',
+            positionParentContainerClass: '=',
+            positionContainerClass: '=',
+            repeatParentContainerClass: '=',
+            repeatContainerClass: '='
           },
           template: $templateCache.get(
-            "partials/components/background-image-setting/background-image-setting.html"
+            'partials/components/background-image-setting/background-image-setting.html'
           ),
           link: function (scope) {
 
             scope.defaultSetting = {
               useImage: false,
               image: {
-                url: "",
-                position: "top-left",
+                url: '',
+                position: 'top-left',
                 scale: true,
-                repeat: "no-repeat"
+                repeat: 'no-repeat'
               }
             };
 
@@ -55,26 +55,26 @@
             };
 
             scope.imageLoaded = false;
-            scope.imageUrl = "";
+            scope.imageUrl = '';
 
-            scope.$watch("background", function (background) {
+            scope.$watch('background', function (background) {
               scope.defaults(background, scope.defaultSetting);
             });
 
-            scope.$watch("background.image.url", function (newUrl) {
+            scope.$watch('background.image.url', function (newUrl) {
               if (scope.imageUrl !== newUrl) {
                 scope.imageUrl = newUrl;
               }
             });
 
-            scope.$on("backgroundImageLoad", function (event, loaded) {
+            scope.$on('backgroundImageLoad', function (event, loaded) {
               scope.$apply(function () {
                 scope.imageLoaded = loaded;
               });
 
             });
 
-            scope.$on("urlFieldBlur", function () {
+            scope.$on('urlFieldBlur', function () {
               scope.imageUrl = scope.background.image.url;
             });
 

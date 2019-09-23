@@ -1,5 +1,7 @@
-angular.module("risevision.common.components.purchase-flow")
-  .controller("TaxExemptionModalCtrl", ["$scope", "$modalInstance", "$loading", "taxExemptionFactory",
+'use strict';
+
+angular.module('risevision.common.components.purchase-flow')
+  .controller('TaxExemptionModalCtrl', ['$scope', '$modalInstance', '$loading', 'taxExemptionFactory',
     function ($scope, $modalInstance, $loading, taxExemptionFactory) {
 
       $scope.form = {};
@@ -9,11 +11,11 @@ angular.module("risevision.common.components.purchase-flow")
       // $scope.regionsCA = REGIONS_CA;
       // $scope.regionsUS = REGIONS_US;
 
-      $scope.$watch("factory.loading", function (loading) {
+      $scope.$watch('factory.loading', function (loading) {
         if (loading) {
-          $loading.start("tax-exemption-modal");
+          $loading.start('tax-exemption-modal');
         } else {
-          $loading.stop("tax-exemption-modal");
+          $loading.stop('tax-exemption-modal');
         }
       });
 
@@ -36,7 +38,7 @@ angular.module("risevision.common.components.purchase-flow")
 
       $scope.selectFile = function () {
         setTimeout(function () {
-          document.querySelector("#inputExemption").click();
+          document.querySelector('#inputExemption').click();
         }, 0);
       };
 
@@ -48,7 +50,7 @@ angular.module("risevision.common.components.purchase-flow")
 
       $scope.clearFile = function () {
         taxExemptionFactory.taxExemption.file = null;
-        document.querySelector("#inputExemption").value = "";
+        document.querySelector('#inputExemption').value = '';
       };
 
       // $scope.openDatepicker = function ($event) {
@@ -59,7 +61,7 @@ angular.module("risevision.common.components.purchase-flow")
       // };
 
       // $scope.countryFilter = function (country) {
-      //   return country.code === "CA" || country.code === "US";
+      //   return country.code === 'CA' || country.code === 'US';
       // };
 
       $scope.isFieldInvalid = function (fieldName) {

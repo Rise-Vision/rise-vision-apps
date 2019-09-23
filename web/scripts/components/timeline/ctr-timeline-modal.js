@@ -1,15 +1,15 @@
 (function (angular) {
-  "use strict";
-  angular.module("risevision.common.components.timeline")
-    .controller("timelineModal", ["$scope", "$modalInstance", "timeline",
-      "TimelineFactory",
+  'use strict';
+  angular.module('risevision.common.components.timeline')
+    .controller('timelineModal', ['$scope', '$modalInstance', 'timeline',
+      'TimelineFactory',
       function ($scope, $modalInstance, timeline, TimelineFactory) {
         var factory = new TimelineFactory(timeline);
         $scope.recurrence = factory.recurrence;
         $scope.timeline = factory.timeline;
 
         $scope.dateOptions = {
-          formatYear: "yy",
+          formatYear: 'yy',
           startingDay: 1,
           showWeeks: false,
           showButtonBar: false

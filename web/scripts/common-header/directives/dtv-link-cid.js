@@ -1,23 +1,25 @@
-angular.module("risevision.common.header.directives")
-  .directive("linkCid", ["userState",
+'use strict';
+
+angular.module('risevision.common.header.directives')
+  .directive('linkCid', ['userState',
     function (userState) {
       return {
         link: function ($scope, ele, attr) {
 
-          var linkCompanyId = "";
+          var linkCompanyId = '';
 
           var updateLinkCompanyId = function (companyId) {
-            var index = attr.href.indexOf("cid=");
+            var index = attr.href.indexOf('cid=');
             var value;
             if (index > -1) {
               value = attr.href.substring(0, index + 4) + companyId;
             } else {
               value = attr.href +
-                (attr.href.indexOf("?") === -1 ? "?" : "&") +
-                "cid=" + companyId;
+                (attr.href.indexOf('?') === -1 ? '?' : '&') +
+                'cid=' + companyId;
             }
             linkCompanyId = companyId;
-            attr.$set("href", value);
+            attr.$set('href', value);
           };
 
           $scope.$watch(function () {

@@ -1,15 +1,16 @@
-angular.module("risevision.common.header")
+'use strict';
 
-  .controller("GlobalAlertsCtrl", ["$scope", "$rootScope",
+angular.module('risevision.common.header')
+  .controller('GlobalAlertsCtrl', ['$scope', '$rootScope',
     function ($scope, $rootScope) {
 
       $scope.errors = [];
 
-      $scope.$on("risevision.user.authorized", function () {
+      $scope.$on('risevision.user.authorized', function () {
         $scope.errors.length = 0;
       });
 
-      $rootScope.$on("risevision.common.globalError", function (event, message) {
+      $rootScope.$on('risevision.common.globalError', function (event, message) {
         $scope.errors.push(message);
       });
 

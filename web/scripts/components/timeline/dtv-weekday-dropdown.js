@@ -1,14 +1,14 @@
 (function (angular) {
-  "use strict";
-  angular.module("risevision.common.components.timeline")
-    .directive("weekdayDropdown",
+  'use strict';
+  angular.module('risevision.common.components.timeline')
+    .directive('weekdayDropdown',
       function () {
         return {
-          restrict: "E",
+          restrict: 'E',
           scope: {
-            weekday: "="
+            weekday: '='
           },
-          templateUrl: "partials/components/timeline/weekday-dropdown.html"
+          templateUrl: 'partials/components/timeline/weekday-dropdown.html'
         };
       }
     );

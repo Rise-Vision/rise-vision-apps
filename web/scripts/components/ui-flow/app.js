@@ -1,10 +1,10 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.common.components.ui-flow", [
-    "LocalStorageModule"
+angular.module('risevision.common.components.ui-flow', [
+    'LocalStorageModule'
   ])
 
-  .constant("uiStatusDependencies", {
+  .constant('uiStatusDependencies', {
     _dependencies: {},
     _retries: {},
     addDependencies: function (deps) {
@@ -12,8 +12,8 @@ angular.module("risevision.common.components.ui-flow", [
     },
     setMaximumRetryCount: function (status, num) {
       if (num < 1) {
-        throw "Retry count for " + status +
-          " must be equal to or greater than 1.";
+        throw 'Retry count for ' + status +
+          ' must be equal to or greater than 1.';
       }
       if (this._retries[status] === undefined) {
         this._retries[status] = num;

@@ -1,22 +1,22 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.common.components.userstate")
-  .directive("confirmPasswordValidator", [
+angular.module('risevision.common.components.userstate')
+  .directive('confirmPasswordValidator', [
 
     function () {
       return {
-        require: "ngModel",
-        restrict: "A",
+        require: 'ngModel',
+        restrict: 'A',
         scope: {
-          confirmPasswordValidator: "="
+          confirmPasswordValidator: '='
         },
         link: function (scope, elem, attr, ngModel) {
           var validator = function (value) {
             if (!value || !scope.confirmPasswordValidator ||
               value === scope.confirmPasswordValidator) {
-              ngModel.$setValidity("passwordMatch", true);
+              ngModel.$setValidity('passwordMatch', true);
             } else {
-              ngModel.$setValidity("passwordMatch", false);
+              ngModel.$setValidity('passwordMatch', false);
             }
 
             return value;

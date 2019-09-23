@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.common.components.scrolling-list")
-  .service("ScrollingListService", ["$log", "BaseList", "processErrorCode",
+angular.module('risevision.common.components.scrolling-list')
+  .service('ScrollingListService', ['$log', 'BaseList', 'processErrorCode',
     function ($log, BaseList, processErrorCode) {
       return function (listService, search) {
         var DB_MAX_COUNT = 40; //number of records to load at a time
@@ -11,17 +11,17 @@ angular.module("risevision.common.components.scrolling-list")
 
         factory.search = search ? search : {};
         _.defaults(factory.search, {
-          sortBy: "name",
+          sortBy: 'name',
           count: DB_MAX_COUNT,
           reverse: false,
-          name: "Items"
+          name: 'Items'
         });
 
         var _clearMessages = function () {
           factory.loadingItems = false;
 
-          factory.errorMessage = "";
-          factory.apiError = "";
+          factory.errorMessage = '';
+          factory.apiError = '';
         };
 
         factory.load = function () {
@@ -37,8 +37,8 @@ angular.module("risevision.common.components.scrolling-list")
                   result.cursor);
               })
               .then(null, function (e) {
-                factory.errorMessage = "Failed to load " + factory.search.name + ".";
-                factory.apiError = processErrorCode(factory.search.name, "load", e);
+                factory.errorMessage = 'Failed to load ' + factory.search.name + '.';
+                factory.apiError = processErrorCode(factory.search.name, 'load', e);
 
                 $log.error(factory.errorMessage, e);
               })

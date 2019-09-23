@@ -1,8 +1,8 @@
 (function () {
-  "use strict";
+  'use strict';
 
-  angular.module("risevision.common.components.userstate")
-    .service("userauth", ["$q", "$log", "riseAPILoader",
+  angular.module('risevision.common.components.userstate')
+    .service('userauth', ['$q', '$log', 'riseAPILoader',
       function ($q, $log, riseAPILoader) {
 
         var service = {
@@ -10,18 +10,18 @@
             var deferred = $q.defer();
 
             var obj = {
-              "username": username,
-              "password": password
+              'username': username,
+              'password': password
             };
             riseAPILoader().then(function (coreApi) {
                 return coreApi.userauth.add(obj);
               })
               .then(function (resp) {
-                $log.debug("added user credentials", resp);
+                $log.debug('added user credentials', resp);
                 deferred.resolve(resp.result);
               })
               .then(null, function (e) {
-                console.error("Failed to add credentials.", e);
+                console.error('Failed to add credentials.', e);
                 deferred.reject(e);
               });
             return deferred.promise;
@@ -30,19 +30,19 @@
             var deferred = $q.defer();
 
             var obj = {
-              "username": username,
-              "oldPassword": oldPassword,
-              "newPassword": newPassword
+              'username': username,
+              'oldPassword': oldPassword,
+              'newPassword': newPassword
             };
             riseAPILoader().then(function (coreApi) {
                 return coreApi.userauth.updatePassword(obj);
               })
               .then(function (resp) {
-                $log.debug("update user credentials resp", resp);
+                $log.debug('update user credentials resp', resp);
                 deferred.resolve(resp.result);
               })
               .then(null, function (e) {
-                console.error("Failed to update credentials.", e);
+                console.error('Failed to update credentials.', e);
                 deferred.reject(e);
               });
 
@@ -52,18 +52,18 @@
             var deferred = $q.defer();
 
             var obj = {
-              "username": username,
-              "password": password
+              'username': username,
+              'password': password
             };
             riseAPILoader().then(function (coreApi) {
                 return coreApi.userauth.login(obj);
               })
               .then(function (resp) {
-                $log.debug("login successful", resp);
+                $log.debug('login successful', resp);
                 deferred.resolve(resp);
               })
               .then(null, function (e) {
-                console.error("Failed to login user.", e);
+                console.error('Failed to login user.', e);
                 deferred.reject(e);
               });
 
@@ -73,18 +73,18 @@
             var deferred = $q.defer();
 
             var obj = {
-              "username": username,
-              "token": token
+              'username': username,
+              'token': token
             };
             riseAPILoader().then(function (coreApi) {
                 return coreApi.userauth.refreshToken(obj);
               })
               .then(function (resp) {
-                $log.debug("token refresh successful", resp);
+                $log.debug('token refresh successful', resp);
                 deferred.resolve(resp);
               })
               .then(null, function (e) {
-                console.error("Failed to refresh token.", e);
+                console.error('Failed to refresh token.', e);
                 deferred.reject(e);
               });
 
@@ -94,18 +94,18 @@
             var deferred = $q.defer();
 
             var obj = {
-              "username": username,
-              "userConfirmedToken": userConfirmedToken
+              'username': username,
+              'userConfirmedToken': userConfirmedToken
             };
             riseAPILoader().then(function (coreApi) {
                 return coreApi.userauth.confirmUserCreation(obj);
               })
               .then(function (resp) {
-                $log.debug("Confirm user creation successful", resp);
+                $log.debug('Confirm user creation successful', resp);
                 deferred.resolve(resp);
               })
               .then(null, function (e) {
-                console.error("Failed to confirm user creation.", e);
+                console.error('Failed to confirm user creation.', e);
                 deferred.reject(e);
               });
 
@@ -115,18 +115,18 @@
             var deferred = $q.defer();
 
             var obj = {
-              "username": username
+              'username': username
             };
             riseAPILoader().then(function (coreApi) {
                 return coreApi.userauth.requestConfirmationEmail(obj);
               })
               .then(function (resp) {
-                $log.debug("Request confirmation email successful",
+                $log.debug('Request confirmation email successful',
                   resp);
                 deferred.resolve(resp);
               })
               .then(null, function (e) {
-                console.error("Failed to request confirmation email.",
+                console.error('Failed to request confirmation email.',
                   e);
                 deferred.reject(e);
               });
@@ -137,17 +137,17 @@
             var deferred = $q.defer();
 
             var obj = {
-              "username": username
+              'username': username
             };
             riseAPILoader().then(function (coreApi) {
                 return coreApi.userauth.requestPasswordReset(obj);
               })
               .then(function (resp) {
-                $log.debug("Request password reset successful", resp);
+                $log.debug('Request password reset successful', resp);
                 deferred.resolve(resp);
               })
               .then(null, function (e) {
-                console.error("Failed to request password reset.", e);
+                console.error('Failed to request password reset.', e);
                 deferred.reject(e);
               });
 
@@ -158,19 +158,19 @@
             var deferred = $q.defer();
 
             var obj = {
-              "username": username,
-              "passwordResetToken": passwordResetToken,
-              "newPassword": newPassword
+              'username': username,
+              'passwordResetToken': passwordResetToken,
+              'newPassword': newPassword
             };
             riseAPILoader().then(function (coreApi) {
                 return coreApi.userauth.resetPassword(obj);
               })
               .then(function (resp) {
-                $log.debug("Reset password successful", resp);
+                $log.debug('Reset password successful', resp);
                 deferred.resolve(resp);
               })
               .then(null, function (e) {
-                console.error("Failed to reset password.", e);
+                console.error('Failed to reset password.', e);
                 deferred.reject(e);
               });
 

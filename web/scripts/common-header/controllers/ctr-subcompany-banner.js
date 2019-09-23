@@ -1,7 +1,8 @@
-angular.module("risevision.common.header")
+'use strict';
 
-  .controller("SubcompanyBannerCtrl", ["$scope", "$modal",
-    "$loading", "userState",
+angular.module('risevision.common.header')
+  .controller('SubcompanyBannerCtrl', ['$scope', '$modal',
+    '$loading', 'userState',
     function ($scope, $modal, $loading, userState) {
       $scope.inRVAFrame = userState.inRVAFrame();
 

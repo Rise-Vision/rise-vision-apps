@@ -1,12 +1,13 @@
-angular.module("risevision.common.components.purchase-flow")
-  .directive("provinceValidator", ["REGIONS_CA", "REGIONS_US",
+'use strict';
 
+angular.module('risevision.common.components.purchase-flow')
+  .directive('provinceValidator', ['REGIONS_CA', 'REGIONS_US',
     function (REGIONS_CA, REGIONS_US) {
       return {
-        require: "ngModel",
-        restrict: "A",
+        require: 'ngModel',
+        restrict: 'A',
         scope: {
-          provinceValidator: "="
+          provinceValidator: '='
         },
         link: function ($scope, elem, attr, ngModel) {
           var validator = function (value) {
@@ -15,23 +16,23 @@ angular.module("risevision.common.components.purchase-flow")
             var valid = true;
 
             if (country) {
-              if (country === "CA") {
+              if (country === 'CA') {
                 valid = value && _.find(REGIONS_CA, function (region) {
                   return region[1] === value;
                 });
-              } else if (country === "US") {
+              } else if (country === 'US') {
                 valid = value && _.find(REGIONS_US, function (region) {
                   return region[1] === value;
                 });
               }
             }
 
-            ngModel.$setValidity("validProvince", !!valid);
+            ngModel.$setValidity('validProvince', !!valid);
 
             return value;
           };
 
-          $scope.$watch("provinceValidator", function () {
+          $scope.$watch('provinceValidator', function () {
             validator(ngModel.$modelValue);
           });
 

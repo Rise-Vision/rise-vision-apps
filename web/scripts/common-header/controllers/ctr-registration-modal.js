@@ -1,11 +1,13 @@
-angular.module("risevision.common.header")
-  .controller("RegistrationModalCtrl", [
-    "$q", "$scope", "$rootScope", "$modalInstance",
-    "$loading", "registerAccount", "$log", "$cookies",
-    "userState", "pick", "uiFlowManager", "humanReadableError",
-    "agreeToTermsAndUpdateUser", "account", "segmentAnalytics",
-    "bigQueryLogging", "analyticsEvents", "updateCompany", "plansFactory",
-    "COMPANY_INDUSTRY_FIELDS", "urlStateService",
+'use strict';
+
+angular.module('risevision.common.header')
+  .controller('RegistrationModalCtrl', [
+    '$q', '$scope', '$rootScope', '$modalInstance',
+    '$loading', 'registerAccount', '$log', '$cookies',
+    'userState', 'pick', 'uiFlowManager', 'humanReadableError',
+    'agreeToTermsAndUpdateUser', 'account', 'segmentAnalytics',
+    'bigQueryLogging', 'analyticsEvents', 'updateCompany', 'plansFactory',
+    'COMPANY_INDUSTRY_FIELDS', 'urlStateService',
     function ($q, $scope, $rootScope, $modalInstance, $loading, registerAccount,
       $log, $cookies, userState, pick, uiFlowManager, humanReadableError,
       agreeToTermsAndUpdateUser, account, segmentAnalytics, bigQueryLogging,
@@ -20,10 +22,10 @@ angular.module("risevision.common.header")
       $scope.company = {};
 
       //remove cookie so that it will show next time user refreshes page
-      $cookies.remove("surpressRegistration");
+      $cookies.remove('surpressRegistration');
 
-      $scope.profile = pick(copyOfProfile, "email", "mailSyncEnabled",
-        "firstName", "lastName");
+      $scope.profile = pick(copyOfProfile, 'email', 'mailSyncEnabled',
+        'firstName', 'lastName');
       $scope.profile.email = $scope.profile.email || userState.getUsername();
       $scope.registering = false;
 
@@ -32,7 +34,7 @@ angular.module("risevision.common.header")
         copyOfProfile.termsAcceptanceDate !== null;
 
       if (!angular.isDefined($scope.profile.mailSyncEnabled)) {
-        //"no sign up" by default
+        //'no sign up' by default
         $scope.profile.mailSyncEnabled = false;
       }
 
@@ -44,14 +46,14 @@ angular.module("risevision.common.header")
         function (undetermined) {
           if (undetermined === true) {
             //start the spinner
-            $loading.start("registration-modal");
+            $loading.start('registration-modal');
           } else if (undetermined === false) {
-            if (uiFlowManager.getStatus() === "registrationComplete") {
-              $modalInstance.close("success");
+            if (uiFlowManager.getStatus() === 'registrationComplete') {
+              $modalInstance.close('success');
               //stop the watch
               watch();
             }
-            $loading.stop("registration-modal");
+            $loading.stop('registration-modal');
           }
         });
 
@@ -65,7 +67,7 @@ angular.module("risevision.common.header")
         if (!$scope.forms.registrationForm.$invalid) {
           //update terms and conditions date
           $scope.registering = true;
-          $loading.start("registration-modal");
+          $loading.start('registration-modal');
 
           var action;
           if ($scope.newUser) {
@@ -86,32 +88,32 @@ angular.module("risevision.common.header")
                         })
                         .finally(function () {
                           $rootScope.$broadcast(
-                            "risevision.user.authorized");
+                            'risevision.user.authorized');
 
-                          $modalInstance.close("success");
-                          $loading.stop("registration-modal");
+                          $modalInstance.close('success');
+                          $loading.stop('registration-modal');
                         });
                     }
 
                     analyticsEvents.identify();
-                    segmentAnalytics.track("User Registered", {
-                      "companyId": userState.getUserCompanyId(),
-                      "companyName": userState.getUserCompanyName(),
-                      "isNewCompany": $scope.newUser
+                    segmentAnalytics.track('User Registered', {
+                      'companyId': userState.getUserCompanyId(),
+                      'companyName': userState.getUserCompanyName(),
+                      'isNewCompany': $scope.newUser
                     });
-                    bigQueryLogging.logEvent("User Registered");
+                    bigQueryLogging.logEvent('User Registered');
 
                     if (!$scope.newUser) {
                       $rootScope.$broadcast(
-                        "risevision.user.authorized");
+                        'risevision.user.authorized');
 
-                      $modalInstance.close("success");
-                      $loading.stop("registration-modal");
+                      $modalInstance.close('success');
+                      $loading.stop('registration-modal');
                     }
                   });
               },
               function (err) {
-                alert("Error: " + humanReadableError(err));
+                alert('Error: ' + humanReadableError(err));
                 console.error(err);
               })
             .finally(function () {
@@ -124,7 +126,7 @@ angular.module("risevision.common.header")
 
       var populateIndustryFromUrl = function () {
 
-        var industryName = urlStateService.getUrlParam("industry");
+        var industryName = urlStateService.getUrlParam('industry');
 
         if ($scope.newUser && industryName) {
 

@@ -1,15 +1,17 @@
-angular.module("risevision.common.header.directives")
-  .directive("integerParser", [
+'use strict';
+
+angular.module('risevision.common.header.directives')
+  .directive('integerParser', [
 
     function () {
       return {
-        require: "ngModel",
+        require: 'ngModel',
         link: function (scope, ele, attr, ctrl) {
           ctrl.$parsers.push(function (viewValue) {
             return parseInt(viewValue, 10) || 0;
           });
           ctrl.$formatters.push(function (viewValue) {
-            return typeof viewValue === "undefined" ? "" : "" + viewValue;
+            return typeof viewValue === 'undefined' ? '' : '' + viewValue;
           });
         }
       };

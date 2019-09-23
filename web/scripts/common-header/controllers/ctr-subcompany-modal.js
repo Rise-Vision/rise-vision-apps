@@ -1,9 +1,11 @@
-angular.module("risevision.common.header")
-  .controller("SubCompanyModalCtrl", ["$scope", "$modalInstance", "$modal",
-    "$templateCache", "createCompany", "countries", "REGIONS_CA",
-    "REGIONS_US", "TIMEZONES", "userState", "$loading", "humanReadableError",
-    "segmentAnalytics", "bigQueryLogging", "COMPANY_INDUSTRY_FIELDS",
-    "COMPANY_SIZE_FIELDS",
+'use strict';
+
+angular.module('risevision.common.header')
+  .controller('SubCompanyModalCtrl', ['$scope', '$modalInstance', '$modal',
+    '$templateCache', 'createCompany', 'countries', 'REGIONS_CA',
+    'REGIONS_US', 'TIMEZONES', 'userState', '$loading', 'humanReadableError',
+    'segmentAnalytics', 'bigQueryLogging', 'COMPANY_INDUSTRY_FIELDS',
+    'COMPANY_SIZE_FIELDS',
     function ($scope, $modalInstance, $modal, $templateCache,
       createCompany, countries, REGIONS_CA, REGIONS_US, TIMEZONES, userState,
       $loading, humanReadableError, segmentAnalytics, bigQueryLogging,
@@ -19,31 +21,31 @@ angular.module("risevision.common.header")
 
       $scope.forms = {};
 
-      $scope.$watch("loading", function (loading) {
+      $scope.$watch('loading', function (loading) {
         if (loading) {
-          $loading.start("add-subcompany-modal");
+          $loading.start('add-subcompany-modal');
         } else {
-          $loading.stop("add-subcompany-modal");
+          $loading.stop('add-subcompany-modal');
         }
       });
 
       $scope.closeModal = function () {
-        $modalInstance.dismiss("cancel");
+        $modalInstance.dismiss('cancel');
       };
       $scope.save = function () {
         $scope.loading = true;
         createCompany(userState.getSelectedCompanyId(),
             $scope.company).then(function (company) {
-            segmentAnalytics.track("Company Created", {
+            segmentAnalytics.track('Company Created', {
               companyId: company.id,
               companyName: company.name
             });
-            bigQueryLogging.logEvent("Company Created", company.name, null,
+            bigQueryLogging.logEvent('Company Created', company.name, null,
               userState.getUsername(), company.id);
 
-            $modalInstance.close("success");
+            $modalInstance.close('success');
           }, function (err) {
-            alert("Error: " + humanReadableError(err));
+            alert('Error: ' + humanReadableError(err));
           })
           .finally(function () {
             $scope.loading = false;
@@ -53,8 +55,8 @@ angular.module("risevision.common.header")
       $scope.moveCompany = function (size) {
         // var modalInstance =
         $modal.open({
-          template: $templateCache.get("partials/common-header/move-company-modal.html"),
-          controller: "MoveCompanyModalCtrl",
+          template: $templateCache.get('partials/common-header/move-company-modal.html'),
+          controller: 'MoveCompanyModalCtrl',
           size: size
         });
       };

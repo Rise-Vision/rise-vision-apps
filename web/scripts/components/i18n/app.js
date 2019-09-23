@@ -1,17 +1,17 @@
-"use strict";
+'use strict';
 /* global angular */
 
 try {
-  angular.module("risevision.common.i18n.config");
+  angular.module('risevision.common.i18n.config');
 } catch (err) {
-  angular.module("risevision.common.i18n.config", []);
+  angular.module('risevision.common.i18n.config', []);
 }
 
 /**
  * Reimplementation of $translateStaticFilesLoader to handle missing files and locale hierarchy (en/en_US)
  */
-angular.module("pascalprecht.translate")
-  .factory("$translateStaticFilesLoader", ["$q", "$http",
+angular.module('pascalprecht.translate')
+  .factory('$translateStaticFilesLoader', ['$q', '$http',
     function ($q, $http) {
       function loadTranslationFile(options, deferred) {
         $http(angular.extend({
@@ -19,21 +19,21 @@ angular.module("pascalprecht.translate")
             options.prefix,
             options.key.toLowerCase(),
             options.suffix
-          ].join(""),
-          method: "GET",
-          params: ""
+          ].join(''),
+          method: 'GET',
+          params: ''
         }, options.$http)).then(function (response) {
           deferred.resolve(response.data);
         }, function () {
-          if (options.key.indexOf("_") >= 0) {
-            var key = options.key.substr(0, options.key.lastIndexOf("_"));
+          if (options.key.indexOf('_') >= 0) {
+            var key = options.key.substr(0, options.key.lastIndexOf('_'));
             var opts = angular.extend({}, options, {
               key: key
             });
 
             loadTranslationFile(opts, deferred);
           } else {
-            deferred.resolve("{}");
+            deferred.resolve('{}');
           }
 
         });
@@ -43,7 +43,7 @@ angular.module("pascalprecht.translate")
         if (!options || (!angular.isString(options.prefix) ||
             !angular.isString(options.suffix))) {
           throw new Error(
-            "Couldn\"t load static files, no prefix or suffix specified!");
+            'Couldn"t load static files, no prefix or suffix specified!');
         }
 
         var deferred = $q.defer();
@@ -55,11 +55,11 @@ angular.module("pascalprecht.translate")
     }
   ]);
 
-angular.module("risevision.common.i18n", [
-    "pascalprecht.translate",
-    "risevision.common.i18n.config"
+angular.module('risevision.common.i18n', [
+    'pascalprecht.translate',
+    'risevision.common.i18n.config'
   ])
-  .config(["$translateProvider", "LOCALES_PREFIX", "LOCALES_SUFIX",
+  .config(['$translateProvider', 'LOCALES_PREFIX', 'LOCALES_SUFIX',
     function ($translateProvider, LOCALES_PREFIX, LOCALES_SUFIX) {
       // Tries to determine the browsers locale
       $translateProvider.useStaticFilesLoader({
@@ -69,7 +69,7 @@ angular.module("risevision.common.i18n", [
 
       $translateProvider
         .determinePreferredLanguage()
-        .fallbackLanguage("en")
+        .fallbackLanguage('en')
         .useSanitizeValueStrategy(null);
     }
   ]);

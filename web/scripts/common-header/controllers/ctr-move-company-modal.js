@@ -1,7 +1,8 @@
-angular.module("risevision.common.header")
+'use strict';
 
-  .controller("MoveCompanyModalCtrl", ["$scope", "$modalInstance",
-    "moveCompany", "lookupCompany", "userState", "$loading",
+angular.module('risevision.common.header')
+  .controller('MoveCompanyModalCtrl', ['$scope', '$modalInstance',
+    'moveCompany', 'lookupCompany', 'userState', '$loading',
     function ($scope, $modalInstance, moveCompany, lookupCompany, userState,
       $loading) {
 
@@ -9,18 +10,18 @@ angular.module("risevision.common.header")
       $scope.errors = [];
       $scope.messages = [];
 
-      $scope.$watch("loading", function (loading) {
+      $scope.$watch('loading', function (loading) {
         if (loading) {
-          $loading.start("move-company-modal");
+          $loading.start('move-company-modal');
         } else {
-          $loading.stop("move-company-modal");
+          $loading.stop('move-company-modal');
         }
       });
 
       $scope.selectedCompany = userState.getCopyOfSelectedCompany();
 
       $scope.closeModal = function () {
-        $modalInstance.dismiss("cancel");
+        $modalInstance.dismiss('cancel');
       };
 
       $scope.moveCompany = function () {
@@ -29,11 +30,11 @@ angular.module("risevision.common.header")
         moveCompany($scope.company.authKey, userState.getSelectedCompanyId()).then(
             function () {
               $scope.messages.push(
-                "Success. The company has been moved under your company.");
+                'Success. The company has been moved under your company.');
               $scope.moveSuccess = true;
             },
             function (err) {
-              $scope.errors.push("Error: " + JSON.stringify(err));
+              $scope.errors.push('Error: ' + JSON.stringify(err));
             })
           .finally(function () {
             $scope.loading = false;
@@ -47,17 +48,17 @@ angular.module("risevision.common.header")
         lookupCompany($scope.company.authKey).then(function (resp) {
           angular.extend($scope.company, resp);
         }, function (resp) {
-          $scope.errors.push("Failed to retrieve company. " + resp.message);
+          $scope.errors.push('Failed to retrieve company. ' + resp.message);
         }).finally(function () {
           $scope.loading = false;
         });
       };
 
-      $scope.$watch("moveSuccess", function (moveSuccess) {
+      $scope.$watch('moveSuccess', function (moveSuccess) {
         if (moveSuccess) {
-          $scope.dismissButtonText = "Close";
+          $scope.dismissButtonText = 'Close';
         } else {
-          $scope.dismissButtonText = "Cancel";
+          $scope.dismissButtonText = 'Cancel';
         }
       });
     }

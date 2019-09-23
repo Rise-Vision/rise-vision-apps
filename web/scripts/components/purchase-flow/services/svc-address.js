@@ -1,5 +1,7 @@
-angular.module("risevision.common.components.purchase-flow")
-  .service("addressService", [
+'use strict';
+
+angular.module('risevision.common.components.purchase-flow')
+  .service('addressService', [
 
     function () {
       this.copyAddress = function (src, dest) {

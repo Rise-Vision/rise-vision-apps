@@ -1,9 +1,9 @@
 (function (angular) {
-  "use strict";
+  'use strict';
 
-  angular.module("risevision.core.util", [])
+  angular.module('risevision.core.util', [])
 
-    .factory("pick", function () {
+    .factory('pick', function () {
       var ArrayProto = Array.prototype;
       var
         slice = ArrayProto.slice,

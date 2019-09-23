@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.common.components.userstate")
-  .controller("LoginCtrl", ["$scope", "$loading", "$stateParams",
-    "$state", "userAuthFactory", "customAuthFactory", "uiFlowManager",
-    "urlStateService", "userState", "FORCE_GOOGLE_AUTH",
+angular.module('risevision.common.components.userstate')
+  .controller('LoginCtrl', ['$scope', '$loading', '$stateParams',
+    '$state', 'userAuthFactory', 'customAuthFactory', 'uiFlowManager',
+    'urlStateService', 'userState', 'FORCE_GOOGLE_AUTH',
     function ($scope, $loading, $stateParams, $state, userAuthFactory,
       customAuthFactory, uiFlowManager, urlStateService, userState,
       FORCE_GOOGLE_AUTH) {
@@ -20,10 +20,10 @@ angular.module("risevision.common.components.userstate")
       $scope.messages.accountConfirmed = $stateParams.accountConfirmed;
 
       $scope.googleLogin = function (endStatus) {
-        $loading.startGlobal("auth-buttons-login");
+        $loading.startGlobal('auth-buttons-login');
         userAuthFactory.authenticate(true)
           .finally(function () {
-            $loading.stopGlobal("auth-buttons-login");
+            $loading.stopGlobal('auth-buttons-login');
             uiFlowManager.invalidateStatus(endStatus);
           });
       };
@@ -33,7 +33,7 @@ angular.module("risevision.common.components.userstate")
         $scope.messages = {};
 
         if ($scope.forms.loginForm.$valid) {
-          $loading.startGlobal("auth-buttons-login");
+          $loading.startGlobal('auth-buttons-login');
           userAuthFactory.authenticate(true, $scope.credentials)
             .then(function () {
               urlStateService.redirectToState($stateParams.state);
@@ -49,7 +49,7 @@ angular.module("risevision.common.components.userstate")
               }
             })
             .finally(function () {
-              $loading.stopGlobal("auth-buttons-login");
+              $loading.stopGlobal('auth-buttons-login');
               uiFlowManager.invalidateStatus(endStatus);
             });
         }
@@ -60,7 +60,7 @@ angular.module("risevision.common.components.userstate")
         $scope.messages = {};
 
         if ($scope.forms.loginForm.$valid) {
-          $loading.startGlobal("auth-buttons-login");
+          $loading.startGlobal('auth-buttons-login');
 
           customAuthFactory.addUser($scope.credentials)
             .then(function () {
@@ -70,7 +70,7 @@ angular.module("risevision.common.components.userstate")
               $scope.errors.duplicateError = true;
             })
             .finally(function () {
-              $loading.stopGlobal("auth-buttons-login");
+              $loading.stopGlobal('auth-buttons-login');
               uiFlowManager.invalidateStatus(endStatus);
             });
         }

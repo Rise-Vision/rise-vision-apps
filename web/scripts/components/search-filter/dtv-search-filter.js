@@ -1,17 +1,17 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.common.components.search-filter", [])
-  .directive("searchFilter", ["$timeout",
+angular.module('risevision.common.components.search-filter', [])
+  .directive('searchFilter', ['$timeout',
     function ($timeout) {
 
       return {
-        restrict: "E",
+        restrict: 'E',
         scope: {
-          filterConfig: "=",
-          search: "=",
-          doSearch: "="
+          filterConfig: '=',
+          search: '=',
+          doSearch: '='
         },
-        templateUrl: "partials/components/search-filter/search-filter.html",
+        templateUrl: 'partials/components/search-filter/search-filter.html',
         link: function ($scope) {
           $scope.delay = (function () {
             var promise = null;
@@ -23,7 +23,7 @@ angular.module("risevision.common.components.search-filter", [])
 
           $scope.reset = function () {
             if ($scope.search.query) {
-              $scope.search.query = "";
+              $scope.search.query = '';
               $scope.doSearch();
             }
           };

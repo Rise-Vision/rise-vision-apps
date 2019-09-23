@@ -1,8 +1,8 @@
 (function (angular) {
 
-  "use strict";
-  angular.module("risevision.common.components.purchase-flow")
-    .factory("taxExemptionFactory", ["storeService",
+  'use strict';
+  angular.module('risevision.common.components.purchase-flow')
+    .factory('taxExemptionFactory', ['storeService',
       function (storeService) {
         var factory = {
           taxExemption: {}
@@ -20,7 +20,7 @@
               return storeService.addTaxExemption(factory.taxExemption, blobKey);
             }).catch(function (error) {
               factory.taxExemptionError = error.message ||
-                "An error ocurred while submitting your tax exemption. Please try again.";
+                'An error ocurred while submitting your tax exemption. Please try again.';
             }).finally(function () {
               factory.loading = false;
             });

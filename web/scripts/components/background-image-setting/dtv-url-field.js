@@ -1,25 +1,25 @@
 (function () {
-  "use strict";
+  'use strict';
 
-  angular.module("risevision.widget.common.url-field", [
-      "risevision.common.i18n",
-      "risevision.widget.common.storage-selector"
+  angular.module('risevision.widget.common.url-field', [
+      'risevision.common.i18n',
+      'risevision.widget.common.storage-selector'
     ])
-    .directive("urlField", ["$templateCache", "$log",
+    .directive('urlField', ['$templateCache', '$log',
       function ($templateCache, $log) {
         return {
-          restrict: "E",
-          require: "?ngModel",
+          restrict: 'E',
+          require: '?ngModel',
           scope: {
-            url: "=",
-            hideLabel: "@",
-            hideStorage: "@",
-            companyId: "@",
-            fileType: "@",
-            storageType: "@"
+            url: '=',
+            hideLabel: '@',
+            hideStorage: '@',
+            companyId: '@',
+            fileType: '@',
+            storageType: '@'
           },
           template: $templateCache.get(
-            "partials/components/background-image-setting/url-field.html"),
+            'partials/components/background-image-setting/url-field.html'),
           link: function (scope, element, attrs, ctrl) {
 
             function hasValidExtension(url, fileType) {
@@ -27,13 +27,13 @@
                 extensions;
 
               switch (fileType) {
-              case "image":
-                extensions = [".jpg", ".jpeg", ".png", ".bmp", ".svg",
-                  ".gif"
+              case 'image':
+                extensions = ['.jpg', '.jpeg', '.png', '.bmp', '.svg',
+                  '.gif'
                 ];
                 break;
-              case "video":
-                extensions = [".webm", ".mp4", ".ogv", ".ogg"];
+              case 'video':
+                extensions = ['.webm', '.mp4', '.ogv', '.ogg'];
                 break;
               default:
                 extensions = [];
@@ -66,19 +66,19 @@
                 /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/i; // jshint ignore:line
 
               // Add http:// if no protocol parameter exists
-              if (value.indexOf("://") === -1) {
-                value = "http://" + value;
+              if (value.indexOf('://') === -1) {
+                value = 'http://' + value;
               }
 
               isValid = urlRegExp.test(value);
 
-              if (isValid && typeof scope.fileType !== "undefined") {
+              if (isValid && typeof scope.fileType !== 'undefined') {
                 isValid = hasValidExtension(value, scope.fileType);
                 if (!isValid) {
                   scope.invalidType = scope.fileType;
                 }
               } else {
-                scope.invalidType = "url";
+                scope.invalidType = 'url';
               }
 
               return isValid;
@@ -91,25 +91,25 @@
             // Validation state
             scope.valid = true;
 
-            scope.invalidType = "url";
+            scope.invalidType = 'url';
 
-            scope.allowInitEmpty = (typeof attrs.initEmpty !== "undefined");
+            scope.allowInitEmpty = (typeof attrs.initEmpty !== 'undefined');
 
             if (!scope.hideStorage) {
-              scope.$on("picked", function (event, data) {
+              scope.$on('picked', function (event, data) {
                 scope.url = data[0];
               });
             }
 
             scope.blur = function () {
-              scope.$emit("urlFieldBlur");
+              scope.$emit('urlFieldBlur');
             };
 
-            scope.$watch("url", function (url) {
-              if (typeof url !== "undefined" && url !== null) {
+            scope.$watch('url', function (url) {
+              if (typeof url !== 'undefined' && url !== null) {
 
-                if (url !== "" && scope.allowInitEmpty) {
-                  // ensure an empty "" value now gets validated
+                if (url !== '' && scope.allowInitEmpty) {
+                  // ensure an empty '' value now gets validated
                   scope.allowInitEmpty = false;
                 }
 
@@ -119,15 +119,15 @@
               }
             });
 
-            scope.$watch("valid", function (valid) {
+            scope.$watch('valid', function (valid) {
               if (ctrl) {
-                $log.info("Calling $setValidity() on parent controller");
-                ctrl.$setValidity("valid", valid);
+                $log.info('Calling $setValidity() on parent controller');
+                ctrl.$setValidity('valid', valid);
               }
             });
 
-            scope.$watch("doValidation", function (doValidation) {
-              if (typeof scope.url !== "undefined") {
+            scope.$watch('doValidation', function (doValidation) {
+              if (typeof scope.url !== 'undefined') {
                 if (doValidation) {
                   scope.forcedValid = false;
 

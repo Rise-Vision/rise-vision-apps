@@ -1,12 +1,12 @@
-angular.module("risevision.common.header")
+'use strict';
 
-
-  .controller("CompanySettingsModalCtrl", ["$scope", "$modalInstance",
-    "updateCompany", "companyId", "countries", "REGIONS_CA", "REGIONS_US",
-    "TIMEZONES", "getCompany", "regenerateCompanyField", "$window", "$loading",
-    "humanReadableError", "userState", "userAuthFactory", "deleteCompany",
-    "segmentAnalytics", "$modal", "$templateCache",
-    "COMPANY_INDUSTRY_FIELDS", "COMPANY_SIZE_FIELDS", "addressFactory",
+angular.module('risevision.common.header')
+  .controller('CompanySettingsModalCtrl', ['$scope', '$modalInstance',
+    'updateCompany', 'companyId', 'countries', 'REGIONS_CA', 'REGIONS_US',
+    'TIMEZONES', 'getCompany', 'regenerateCompanyField', '$window', '$loading',
+    'humanReadableError', 'userState', 'userAuthFactory', 'deleteCompany',
+    'segmentAnalytics', '$modal', '$templateCache',
+    'COMPANY_INDUSTRY_FIELDS', 'COMPANY_SIZE_FIELDS', 'addressFactory',
     function ($scope, $modalInstance, updateCompany, companyId,
       countries, REGIONS_CA, REGIONS_US, TIMEZONES, getCompany,
       regenerateCompanyField, $window, $loading, humanReadableError,
@@ -25,11 +25,11 @@ angular.module("risevision.common.header")
       $scope.isRiseStoreAdmin = userState.isRiseStoreAdmin();
       _clearErrorMessages();
 
-      $scope.$watch("loading", function (loading) {
+      $scope.$watch('loading', function (loading) {
         if (loading) {
-          $loading.start("company-settings-modal");
+          $loading.start('company-settings-modal');
         } else {
-          $loading.stop("company-settings-modal");
+          $loading.stop('company-settings-modal');
         }
       });
 
@@ -43,16 +43,16 @@ angular.module("risevision.common.header")
           function (company) {
             $scope.company = company;
             $scope.company.isSeller = company && company.sellerId ? true : false;
-            $scope.company.isChargebee = company && company.origin === "Chargebee";
+            $scope.company.isChargebee = company && company.origin === 'Chargebee';
           },
           function (resp) {
-            _showErrorMessage("load", resp);
+            _showErrorMessage('load', resp);
           }).finally(function () {
           $scope.loading = false;
         });
       }
       $scope.closeModal = function () {
-        $modalInstance.dismiss("cancel");
+        $modalInstance.dismiss('cancel');
       };
       $scope.save = function () {
         $scope.loading = true;
@@ -65,20 +65,20 @@ angular.module("risevision.common.header")
             return updateCompany($scope.company.id, company)
               .then(
                 function () {
-                  segmentAnalytics.track("Company Updated", {
+                  segmentAnalytics.track('Company Updated', {
                     companyId: userState.getSelectedCompanyId(),
                     companyName: userState.getSelectedCompanyName(),
                     isUserCompany: !userState.isSubcompanySelected()
                   });
 
                   userState.updateCompanySettings($scope.company);
-                  $modalInstance.close("success");
+                  $modalInstance.close('success');
                 }).catch(function (error) {
-                _showErrorMessage("update", error);
+                _showErrorMessage('update', error);
               });
           })
           .catch(function (error) {
-            $scope.formError = "We couldn't update your address.";
+            $scope.formError = 'We couldn\'t update your address.';
             $scope.apiError = humanReadableError(error);
           })
           .finally(function () {
@@ -88,15 +88,15 @@ angular.module("risevision.common.header")
       $scope.deleteCompany = function () {
         _clearErrorMessages();
         var instance = $modal.open({
-          template: $templateCache.get("partials/common-header/safe-delete-modal.html"),
-          controller: "SafeDeleteModalCtrl"
+          template: $templateCache.get('partials/common-header/safe-delete-modal.html'),
+          controller: 'SafeDeleteModalCtrl'
         });
         instance.result.then(function () {
           $scope.loading = true;
           deleteCompany($scope.company.id)
             .then(
               function () {
-                segmentAnalytics.track("Company Deleted", {
+                segmentAnalytics.track('Company Deleted', {
                   companyId: userState.getSelectedCompanyId(),
                   companyName: userState.getSelectedCompanyName(),
                   isUserCompany: !userState.isSubcompanySelected()
@@ -108,11 +108,11 @@ angular.module("risevision.common.header")
                   .id) {
                   userState.resetCompany();
                 }
-                $modalInstance.close("success");
+                $modalInstance.close('success');
               })
             .catch(
               function (error) {
-                _showErrorMessage("delete", error);
+                _showErrorMessage('delete', error);
               })
             .finally(function () {
               $scope.loading = false;
@@ -122,45 +122,45 @@ angular.module("risevision.common.header")
       $scope.resetAuthKey = function () {
         _clearErrorMessages();
         if ($window.confirm(
-            "Resetting the Company Authentication Key will cause existing Data Gadgets to no longer report data until they are updated with the new Key."
+            'Resetting the Company Authentication Key will cause existing Data Gadgets to no longer report data until they are updated with the new Key.'
           )) {
-          $loading.start("company-settings-modal");
-          regenerateCompanyField($scope.company.id, "authKey").then(
+          $loading.start('company-settings-modal');
+          regenerateCompanyField($scope.company.id, 'authKey').then(
               function (resp) {
                 $scope.company.authKey = resp.item;
-                $window.alert("Successfully changed Authentication Key.");
+                $window.alert('Successfully changed Authentication Key.');
               },
               function (error) {
-                _showErrorMessage("update", error);
+                _showErrorMessage('update', error);
               })
             .finally(function () {
-              $loading.stop("company-settings-modal");
+              $loading.stop('company-settings-modal');
             });
         }
       };
       $scope.resetClaimId = function () {
         _clearErrorMessages();
         if ($window.confirm(
-            "Resetting the Company Claim Id will cause existing installations to no longer be associated with your Company."
+            'Resetting the Company Claim Id will cause existing installations to no longer be associated with your Company.'
           )) {
-          $loading.start("company-settings-modal");
-          regenerateCompanyField($scope.company.id, "claimId").then(
+          $loading.start('company-settings-modal');
+          regenerateCompanyField($scope.company.id, 'claimId').then(
               function (resp) {
                 $scope.company.claimId = resp.item;
-                $window.alert("Successfully changed Claim ID.");
+                $window.alert('Successfully changed Claim ID.');
               },
               function (error) {
-                _showErrorMessage("update", error);
+                _showErrorMessage('update', error);
               })
             .finally(function () {
-              $loading.stop("company-settings-modal");
+              $loading.stop('company-settings-modal');
             });
         }
       };
 
       function verifyAdmin(company) {
         if ($scope.isRiseStoreAdmin) {
-          company.sellerId = company.isSeller ? "yes" : null;
+          company.sellerId = company.isSeller ? 'yes' : null;
         } else {
           //exclude fields from API call
           delete company.sellerId;
@@ -175,7 +175,7 @@ angular.module("risevision.common.header")
       }
 
       function _showErrorMessage(action, error) {
-        $scope.formError = "Failed to " + action + " Company.";
+        $scope.formError = 'Failed to ' + action + ' Company.';
         $scope.apiError = humanReadableError(error);
       }
 

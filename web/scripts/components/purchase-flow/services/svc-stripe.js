@@ -1,22 +1,22 @@
-"use strict";
+'use strict';
 
 /*jshint camelcase: false */
 
-angular.module("risevision.common.components.purchase-flow")
-  .constant("STRIPE_ERRORS", {
-    invalid_number: "Invalid Card Number.",
-    incorrect_number: "Invalid Card Number.",
-    invalid_cvc: "Invalid Security Code.",
-    incorrect_cvc: "Invalid Security Code.",
-    invalid_expiry_month: "Invalid Exp. Month.",
-    invalid_expiry_year: "Invalid Exp. Year.",
-    incorrect_zip: "Invalid ZIP / Postal Code. The ZIP / Postal Code provided is not associated with the billing address of this card.",
-    expired_card: "The card provided has expired.",
-    card_declined: "The card was declined. Please confirm all information is correct. If the problem continues try a different card.",
-    missing: "No card associated with the account.",
-    processing_error: "An unexpected error has occurred. Please try again."
+angular.module('risevision.common.components.purchase-flow')
+  .constant('STRIPE_ERRORS', {
+    invalid_number: 'Invalid Card Number.',
+    incorrect_number: 'Invalid Card Number.',
+    invalid_cvc: 'Invalid Security Code.',
+    incorrect_cvc: 'Invalid Security Code.',
+    invalid_expiry_month: 'Invalid Exp. Month.',
+    invalid_expiry_year: 'Invalid Exp. Year.',
+    incorrect_zip: 'Invalid ZIP / Postal Code. The ZIP / Postal Code provided is not associated with the billing address of this card.',
+    expired_card: 'The card provided has expired.',
+    card_declined: 'The card was declined. Please confirm all information is correct. If the problem continues try a different card.',
+    missing: 'No card associated with the account.',
+    processing_error: 'An unexpected error has occurred. Please try again.'
   })
-  .service("stripeService", ["$q", "$log", "$window", "stripeLoader", "STRIPE_ERRORS",
+  .service('stripeService', ['$q', '$log', '$window', 'stripeLoader', 'STRIPE_ERRORS',
     function ($q, $log, $window, stripeLoader, STRIPE_ERRORS) {
 
       this.validateCard = function (card, isNew) {
@@ -29,7 +29,7 @@ angular.module("risevision.common.components.purchase-flow")
         }
 
         if (isNew) {
-          card.number = card.number ? card.number.trim() : "";
+          card.number = card.number ? card.number.trim() : '';
 
           if (!$window.Stripe.card.validateCardNumber(card.number)) {
             errors.push(STRIPE_ERRORS.invalid_number);
@@ -40,7 +40,7 @@ angular.module("risevision.common.components.purchase-flow")
         }
 
         if (!$window.Stripe.card.validateExpiry(card.expMonth, card.expYear)) {
-          errors.push("Invalid Expiry Date.");
+          errors.push('Invalid Expiry Date.');
         }
 
         return errors;
@@ -78,11 +78,11 @@ angular.module("risevision.common.components.purchase-flow")
         stripeLoader().then(function (stripeClient) {
           stripeClient.card.createToken(cardObject, function (status, response) {
             if (response && response.card && !response.error) {
-              $log.debug("Create Token response: ", response);
+              $log.debug('Create Token response: ', response);
 
               deferred.resolve(response);
             } else {
-              console.error("Failed to get Card Token: ", response);
+              console.error('Failed to get Card Token: ', response);
 
               card.tokenError = _processStripeError(response && response.error && response.error.code);
 

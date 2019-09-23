@@ -1,12 +1,12 @@
 (function (angular) {
 
-  "use strict";
-  angular.module("risevision.common.components.plans")
-    .factory("currentPlanFactory", ["$log", "$rootScope", "$timeout", "userState", "PLANS_LIST",
+  'use strict';
+  angular.module('risevision.common.components.plans')
+    .factory('currentPlanFactory', ['$log', '$rootScope', '$timeout', 'userState', 'PLANS_LIST',
       function ($log, $rootScope, $timeout, userState, PLANS_LIST) {
         var _factory = {};
-        var _plansByType = _.keyBy(PLANS_LIST, "type");
-        var _plansByCode = _.keyBy(PLANS_LIST, "productCode");
+        var _plansByType = _.keyBy(PLANS_LIST, 'type');
+        var _plansByCode = _.keyBy(PLANS_LIST, 'productCode');
 
         var _loadCurrentPlan = function () {
           var company = userState.getCopyOfSelectedCompany();
@@ -39,21 +39,21 @@
           plan.parentPlanCompanyName = company.parentPlanCompanyName;
           plan.parentPlanContactEmail = company.parentPlanContactEmail;
 
-          $log.debug("Current plan", plan);
-          $rootScope.$emit("risevision.plan.loaded", plan);
+          $log.debug('Current plan', plan);
+          $rootScope.$emit('risevision.plan.loaded', plan);
         };
 
         var _reloadCurrentPlan = function () {
-          $log.debug("Reloading current plan");
+          $log.debug('Reloading current plan');
 
           $timeout(function () {
             userState.reloadSelectedCompany()
               .then(_loadCurrentPlan)
               .catch(function (err) {
-                $log.error("Error reloading plan information", err);
+                $log.error('Error reloading plan information', err);
               })
               .finally(function () {
-                $log.debug("Finished reloading current plan");
+                $log.debug('Finished reloading current plan');
               });
           }, 10000);
         };
@@ -63,7 +63,7 @@
         };
 
         _factory.isFree = function () {
-          return _factory.currentPlan.type === "free";
+          return _factory.currentPlan.type === 'free';
         };
 
         _factory.isParentPlan = function () {
@@ -71,27 +71,27 @@
         };
 
         _factory.isEnterpriseSubCompany = function () {
-          return _factory.currentPlan.type === "enterprisesub";
+          return _factory.currentPlan.type === 'enterprisesub';
         };
 
         _factory.isSubscribed = function () {
-          return !_factory.isFree() && _factory.currentPlan.status === "Active";
+          return !_factory.isFree() && _factory.currentPlan.status === 'Active';
         };
 
         _factory.isOnTrial = function () {
-          return !_factory.isFree() && _factory.currentPlan.status === "Trial";
+          return !_factory.isFree() && _factory.currentPlan.status === 'Trial';
         };
 
         _factory.isTrialExpired = function () {
-          return !_factory.isFree() && _factory.currentPlan.status === "Trial Expired";
+          return !_factory.isFree() && _factory.currentPlan.status === 'Trial Expired';
         };
 
         _factory.isSuspended = function () {
-          return !_factory.isFree() && _factory.currentPlan.status === "Suspended";
+          return !_factory.isFree() && _factory.currentPlan.status === 'Suspended';
         };
 
         _factory.isCancelled = function () {
-          return !_factory.isFree() && _factory.currentPlan.status === "Cancelled";
+          return !_factory.isFree() && _factory.currentPlan.status === 'Cancelled';
         };
 
         _factory.isCancelledActive = function () {
@@ -102,19 +102,19 @@
 
         _loadCurrentPlan();
 
-        $rootScope.$on("risevision.company.selectedCompanyChanged", function () {
+        $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
           _loadCurrentPlan();
         });
 
-        $rootScope.$on("risevision.company.updated", function () {
+        $rootScope.$on('risevision.company.updated', function () {
           _loadCurrentPlan();
         });
 
-        $rootScope.$on("chargebee.subscriptionChanged", function () {
+        $rootScope.$on('chargebee.subscriptionChanged', function () {
           _reloadCurrentPlan();
         });
 
-        $rootScope.$on("chargebee.subscriptionCancelled", function () {
+        $rootScope.$on('chargebee.subscriptionCancelled', function () {
           _reloadCurrentPlan();
         });
 

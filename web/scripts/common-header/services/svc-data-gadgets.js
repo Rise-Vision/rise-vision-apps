@@ -1,13 +1,13 @@
-"use strict";
+'use strict';
 /*global gadgets: false */
 
-angular.module("risevision.store.data-gadgets", [])
-  .service("gadgetsService", ["$q",
+angular.module('risevision.store.data-gadgets', [])
+  .service('gadgetsService', ['$q',
     function ($q) {
 
       this.closeIFrame = function () {
         var deferred = $q.defer();
-        gadgets.rpc.call("", "rscmd_closeSettings", function () {
+        gadgets.rpc.call('', 'rscmd_closeSettings', function () {
           deferred.resolve(true);
         });
         return deferred.promise;
@@ -18,7 +18,7 @@ angular.module("risevision.store.data-gadgets", [])
         var data = {
           params: productCode
         };
-        gadgets.rpc.call("", "rscmd_saveSettings", function () {
+        gadgets.rpc.call('', 'rscmd_saveSettings', function () {
           deferred.resolve(true);
         }, data);
         return deferred.promise;

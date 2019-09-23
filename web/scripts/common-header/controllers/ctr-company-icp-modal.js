@@ -1,7 +1,8 @@
-angular.module("risevision.common.header")
+'use strict';
 
-  .controller("CompanyIcpModalCtrl", ["$scope", "$modalInstance",
-    "company", "user", "COMPANY_INDUSTRY_FIELDS",
+angular.module('risevision.common.header')
+  .controller('CompanyIcpModalCtrl', ['$scope', '$modalInstance',
+    'company', 'user', 'COMPANY_INDUSTRY_FIELDS',
     function ($scope, $modalInstance, company, user,
       COMPANY_INDUSTRY_FIELDS) {
 
@@ -20,7 +21,7 @@ angular.module("risevision.common.header")
         if (company.companyIndustry !== industryValue) {
           company.companyIndustry = industryValue;
         } else {
-          company.companyIndustry = "";
+          company.companyIndustry = '';
         }
       };
 

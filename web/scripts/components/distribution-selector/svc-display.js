@@ -1,26 +1,26 @@
-"use strict";
+'use strict';
 
 /*jshint camelcase: false */
 
-angular.module("risevision.common.components.distribution-selector.services")
-  .constant("DISPLAY_SEARCH_FIELDS", [
-    "name", "id"
+angular.module('risevision.common.components.distribution-selector.services')
+  .constant('DISPLAY_SEARCH_FIELDS', [
+    'name', 'id'
   ])
-  .service("displayService", ["$q", "$log", "coreAPILoader", "userState",
-    "DISPLAY_SEARCH_FIELDS",
+  .service('displayService', ['$q', '$log', 'coreAPILoader', 'userState',
+    'DISPLAY_SEARCH_FIELDS',
     function ($q, $log, coreAPILoader, userState, DISPLAY_SEARCH_FIELDS) {
 
       var createSearchQuery = function (fields, search) {
-        var query = "";
+        var query = '';
 
         for (var i in fields) {
-          query += "OR " + fields[i] + ":~\"" + search + "\" ";
+          query += 'OR ' + fields[i] + ':~"' + search + '" ';
         }
 
         query = query.substring(3);
 
         //restrict the search result to contain only displays from the selected company
-        query = query + " AND companyId=" + userState.getSelectedCompanyId();
+        query = query + ' AND companyId=' + userState.getSelectedCompanyId();
 
         return query.trim();
       };
@@ -30,16 +30,16 @@ angular.module("risevision.common.components.distribution-selector.services")
           var deferred = $q.defer();
 
           var query = search.query ?
-            createSearchQuery(DISPLAY_SEARCH_FIELDS, search.query) : "";
+            createSearchQuery(DISPLAY_SEARCH_FIELDS, search.query) : '';
 
           var obj = {
-            "companyId": userState.getSelectedCompanyId(),
-            "search": query,
-            "cursor": cursor,
-            "count": search.count,
-            "sort": search.sortBy + (search.reverse ? " desc" : " asc")
+            'companyId': userState.getSelectedCompanyId(),
+            'search': query,
+            'cursor': cursor,
+            'count': search.count,
+            'sort': search.sortBy + (search.reverse ? ' desc' : ' asc')
           };
-          $log.debug("list displays called with", obj);
+          $log.debug('list displays called with', obj);
 
           coreAPILoader().then(function (coreApi) {
               return coreApi.display.list(obj);
@@ -48,7 +48,7 @@ angular.module("risevision.common.components.distribution-selector.services")
               deferred.resolve(resp.result);
             })
             .then(null, function (e) {
-              console.error("Failed to get list of displays.", e);
+              console.error('Failed to get list of displays.', e);
               deferred.reject(e);
             });
 

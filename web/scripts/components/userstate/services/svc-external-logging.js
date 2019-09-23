@@ -1,20 +1,20 @@
-"use strict";
+'use strict';
 
 /*jshint camelcase: false */
 
-angular.module("risevision.common.components.logging")
-  .constant("EXTERNAL_LOGGER_SERVICE_URL",
-    "https://www.googleapis.com/bigquery/v2/projects/client-side-events/datasets/Apps_Events/tables/TABLE_ID/insertAll"
+angular.module('risevision.common.components.logging')
+  .constant('EXTERNAL_LOGGER_SERVICE_URL',
+    'https://www.googleapis.com/bigquery/v2/projects/client-side-events/datasets/Apps_Events/tables/TABLE_ID/insertAll'
   )
-  .constant("EXTERNAL_LOGGER_REFRESH_URL",
-    "https://www.googleapis.com/oauth2/v3/token?" +
-    "client_id=1088527147109-6q1o2vtihn34292pjt4ckhmhck0rk0o7.apps.googleusercontent.com&" +
-    "client_secret=nlZyrcPLg6oEwO9f9Wfn29Wh&refresh_token=1/xzt4kwzE1H7W9VnKB8cAaCx6zb4Es4nKEoqaYHdTD15IgOrJDtdun6zK6XiATCKT&" +
-    "grant_type=refresh_token"
+  .constant('EXTERNAL_LOGGER_REFRESH_URL',
+    'https://www.googleapis.com/oauth2/v3/token?' +
+    'client_id=1088527147109-6q1o2vtihn34292pjt4ckhmhck0rk0o7.apps.googleusercontent.com&' +
+    'client_secret=nlZyrcPLg6oEwO9f9Wfn29Wh&refresh_token=1/xzt4kwzE1H7W9VnKB8cAaCx6zb4Es4nKEoqaYHdTD15IgOrJDtdun6zK6XiATCKT&' +
+    'grant_type=refresh_token'
   )
-  .factory("externalLogging", ["$http", "$window", "$q", "$log",
-    "EXTERNAL_LOGGER_REFRESH_URL", "EXTERNAL_LOGGER_SERVICE_URL",
-    "ENABLE_EXTERNAL_LOGGING",
+  .factory('externalLogging', ['$http', '$window', '$q', '$log',
+    'EXTERNAL_LOGGER_REFRESH_URL', 'EXTERNAL_LOGGER_SERVICE_URL',
+    'ENABLE_EXTERNAL_LOGGING',
     function ($http, $window, $q, $log, EXTERNAL_LOGGER_REFRESH_URL,
       EXTERNAL_LOGGER_SERVICE_URL, ENABLE_EXTERNAL_LOGGING) {
       var factory = {};
@@ -25,29 +25,29 @@ angular.module("risevision.common.components.logging")
         var month = date.getUTCMonth() + 1;
         var day = date.getUTCDate();
         if (month < 10) {
-          month = "0" + month;
+          month = '0' + month;
         }
         if (day < 10) {
-          day = "0" + day;
+          day = '0' + day;
         }
         return year.toString() + month.toString() + day.toString();
       };
 
       var EXTERNAL_LOGGER_INSERT_SCHEMA = {
-        "kind": "bigquery#tableDataInsertAllRequest",
-        "skipInvalidRows": false,
-        "ignoreUnknownValues": false,
-        "templateSuffix": _getSuffix(),
-        "rows": [{
-          "insertId": "",
-          "json": {
-            "event": "",
-            "event_details": "",
-            "event_value": 0,
-            "host": "",
-            "ts": 0,
-            "user_id": "",
-            "company_id": ""
+        'kind': 'bigquery#tableDataInsertAllRequest',
+        'skipInvalidRows': false,
+        'ignoreUnknownValues': false,
+        'templateSuffix': _getSuffix(),
+        'rows': [{
+          'insertId': '',
+          'json': {
+            'event': '',
+            'event_details': '',
+            'event_value': 0,
+            'host': '',
+            'ts': 0,
+            'user_id': '',
+            'company_id': ''
           }
         }]
       };
@@ -56,11 +56,11 @@ angular.module("risevision.common.components.logging")
 
       factory.logEvent = function (eventName, eventDetails, eventValue,
         userId, companyId) {
-        $log.debug("BQ log", eventName, eventDetails, eventValue, userId,
+        $log.debug('BQ log', eventName, eventDetails, eventValue, userId,
           companyId);
 
         if (ENABLE_EXTERNAL_LOGGING === false) {
-          $log.debug("External Logging DISABLED");
+          $log.debug('External Logging DISABLED');
           return;
         }
 
@@ -69,8 +69,8 @@ angular.module("risevision.common.components.logging")
         factory.getToken().then(function (token) {
           var insertData = JSON.parse(JSON.stringify(
             EXTERNAL_LOGGER_INSERT_SCHEMA));
-          var serviceUrl = EXTERNAL_LOGGER_SERVICE_URL.replace("TABLE_ID",
-            "apps_events");
+          var serviceUrl = EXTERNAL_LOGGER_SERVICE_URL.replace('TABLE_ID',
+            'apps_events');
 
           insertData.rows[0].insertId = Math.random().toString(36).substr(2)
             .toUpperCase();
@@ -81,24 +81,24 @@ angular.module("risevision.common.components.logging")
           if (eventValue) {
             insertData.rows[0].json.event_value = eventValue;
           }
-          insertData.rows[0].json.user_id = userId || "";
-          insertData.rows[0].json.company_id = companyId || "";
+          insertData.rows[0].json.user_id = userId || '';
+          insertData.rows[0].json.company_id = companyId || '';
           insertData.rows[0].json.host = $window.location.hostname;
           insertData.rows[0].json.ts = new Date().toISOString();
 
           $http.post(serviceUrl, insertData, {
             headers: {
-              "Content-Type": "application/json",
-              "Authorization": "Bearer " + token
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
             }
           }).then(function (result) {
             deferred.resolve(result);
           }, function (error) {
-            $log.debug("error posting to BQ", error);
+            $log.debug('error posting to BQ', error);
             deferred.reject(error);
           });
         }, function (error) {
-          $log.debug("BQ token ERROR", error);
+          $log.debug('BQ token ERROR', error);
           deferred.reject(error);
         });
 

@@ -1,14 +1,16 @@
-angular.module("risevision.common.components.plans")
-  .controller("PlansModalCtrl", [
-    "$scope", "$rootScope", "$modalInstance", "$log", "$loading", "$timeout", "getCompany",
-    "plansFactory", "currentPlanFactory", "ChargebeeFactory", "userState", "purchaseFactory",
-    "PLANS_LIST", "CHARGEBEE_PLANS_USE_PROD",
+'use strict';
+
+angular.module('risevision.common.components.plans')
+  .controller('PlansModalCtrl', [
+    '$scope', '$rootScope', '$modalInstance', '$log', '$loading', '$timeout', 'getCompany',
+    'plansFactory', 'currentPlanFactory', 'ChargebeeFactory', 'userState', 'purchaseFactory',
+    'PLANS_LIST', 'CHARGEBEE_PLANS_USE_PROD',
     function ($scope, $rootScope, $modalInstance, $log, $loading, $timeout, getCompany,
       plansFactory, currentPlanFactory, ChargebeeFactory, userState, purchaseFactory,
       PLANS_LIST, CHARGEBEE_PLANS_USE_PROD) {
 
       var volumePlan = PLANS_LIST.filter(function (plan) {
-        return plan.name === "Volume";
+        return plan.name === 'Volume';
       })[0];
 
       $scope.pricingAtLeastOneDisplay = true;
@@ -18,7 +20,7 @@ angular.module("risevision.common.components.plans")
       $scope.startTrialError = null;
       $scope.isMonthly = true;
       $scope.pricingComponentDiscount = false;
-      $scope.useProductionChargebeeData = CHARGEBEE_PLANS_USE_PROD === "true";
+      $scope.useProductionChargebeeData = CHARGEBEE_PLANS_USE_PROD === 'true';
 
       function _setPricingComponentDiscount() {
         var companyIndustry = userState.getCopyOfSelectedCompany().companyIndustry;
@@ -28,14 +30,14 @@ angular.module("risevision.common.components.plans")
       }
 
       function _getPlansDetails() {
-        $loading.start("plans-modal");
+        $loading.start('plans-modal');
 
         return plansFactory.getPlansDetails()
           .then(function (resp) {
             $scope.plans = resp;
           })
           .finally(function () {
-            $loading.stop("plans-modal");
+            $loading.stop('plans-modal');
           });
       }
 
@@ -54,27 +56,27 @@ angular.module("risevision.common.components.plans")
       };
 
       $scope.isOnTrial = function (plan) {
-        return plan.statusCode === "on-trial";
+        return plan.statusCode === 'on-trial';
       };
 
       $scope.isTrialAvailable = function (plan) {
-        return plan.statusCode === "trial-available";
+        return plan.statusCode === 'trial-available';
       };
 
       $scope.isTrialExpired = function (plan) {
-        return plan.statusCode === "trial-expired";
+        return plan.statusCode === 'trial-expired';
       };
 
       $scope.isSubscribed = function (plan) {
-        return plan.status === "Subscribed" || plan.status === "Active";
+        return plan.status === 'Subscribed' || plan.status === 'Active';
       };
 
       $scope.isFree = function (plan) {
-        return plan.type === "free";
+        return plan.type === 'free';
       };
 
       $scope.isStarter = function (plan) {
-        return plan.type === "starter";
+        return plan.type === 'starter';
       };
 
       $scope.showSavings = function (plan) {
@@ -99,39 +101,39 @@ angular.module("risevision.common.components.plans")
           if ($scope.isCurrentPlan(plan)) {
             // Can buy Subscription?
             if ($scope.isOnTrial(plan)) {
-              return "subscribe";
+              return 'subscribe';
             } else {
-              return "";
+              return '';
             }
           } else { // This is a different Plan
             // Is lower Plan?
             if ($scope.currentPlan.order > plan.order) {
               if (currentPlanFactory.isOnTrial() && !$scope.isFree(
                 plan)) { // Does not have Chargebee account, use Purchase Flow
-                return "downgrade";
+                return 'downgrade';
               } else { // Already has Chargebee account, use Customer Portal
-                return "downgrade-portal";
+                return 'downgrade-portal';
               }
             } else if (currentPlanFactory.isOnTrial()) { // Does not have Chargebee account, use Purchase Flow
-              return "subscribe";
+              return 'subscribe';
             } else { // Already has Chargebee account, use Customer Portal
-              return "subscribe-portal";
+              return 'subscribe-portal';
             }
           }
         } else { // Were on Free Plan
           // Is there a Trial?
           if ($scope.isFree(plan)) {
-            return "";
+            return '';
           } else if ($scope.isTrialAvailable(plan)) {
-            return "start-trial";
+            return 'start-trial';
           } else { // Subscribe using Purchase Flow
-            return "subscribe";
+            return 'subscribe';
           }
         }
       };
 
       $scope.startTrial = function (plan) {
-        $loading.start("plans-modal");
+        $loading.start('plans-modal');
         $scope.startTrialError = null;
 
         plansFactory.startTrial(plan)
@@ -141,10 +143,10 @@ angular.module("risevision.common.components.plans")
                 return userState.reloadSelectedCompany();
               })
               .then(function () {
-                $rootScope.$emit("risevision.company.trial.started");
+                $rootScope.$emit('risevision.company.trial.started');
               })
               .catch(function (err) {
-                $log.debug("Failed to reload company", err);
+                $log.debug('Failed to reload company', err);
               })
               .finally(function () {
                 $modalInstance.close(plan);
@@ -154,7 +156,7 @@ angular.module("risevision.common.components.plans")
             $scope.startTrialError = err;
           })
           .finally(function () {
-            $loading.stop("plans-modal");
+            $loading.stop('plans-modal');
           });
       };
 
@@ -174,7 +176,7 @@ angular.module("risevision.common.components.plans")
       };
 
       $scope.refreshButton = function () {
-        var component = document.querySelector("pricing-component");
+        var component = document.querySelector('pricing-component');
 
         $scope.pricingAtLeastOneDisplay = component &&
           component.displayCount &&
@@ -182,19 +184,19 @@ angular.module("risevision.common.components.plans")
       };
 
       $scope.dismissAndShowPurchaseModal = function () {
-        var component = document.querySelector("pricing-component");
+        var component = document.querySelector('pricing-component');
 
         var displays = component.displayCount;
-        var period = component.period === "yearly" ? "Yearly" : "Monthly";
+        var period = component.period === 'yearly' ? 'Yearly' : 'Monthly';
         var tierName = component.tierName;
-        var s = displays > 1 ? "s" : "";
-        var plan = "" + displays + " Display" + s + " (" + tierName + " Plan, " + period + ")";
+        var s = displays > 1 ? 's' : '';
+        var plan = '' + displays + ' Display' + s + ' (' + tierName + ' Plan, ' + period + ')';
 
-        if (displays === 0 || displays === "0") {
+        if (displays === 0 || displays === '0') {
           return;
         }
 
-        $modalInstance.dismiss("cancel");
+        $modalInstance.dismiss('cancel');
         $scope.showPurchaseModal({
           name: plan,
           productId: volumePlan.productId,
@@ -206,11 +208,11 @@ angular.module("risevision.common.components.plans")
           monthly: {
             billAmount: component.priceTotal
           }
-        }, component.period === "monthly");
+        }, component.period === 'monthly');
       };
 
       $scope.dismiss = function () {
-        $modalInstance.dismiss("cancel");
+        $modalInstance.dismiss('cancel');
       };
 
       $scope.init = function () {
