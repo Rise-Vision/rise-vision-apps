@@ -1,0 +1,89 @@
+<!-- Step 1 -->
+<div id="checkout-review-subscription">
+  <form id="reviewSubscriptionForm" role="form" name="form.reviewSubscriptionForm" autocomplete="on" novalidate>
+    <h3 class="text-center" translate translate-values="{ planName: plan.name }">common-header.purchase.review-subscription.plan-name</h3>
+
+    <div class="subscription-summary text-center">
+
+        <div class="subscription-summary-item">
+          <div class="stat">
+            <div class="stat-value">${{plan.monthly.priceDisplayMonth}}</div>
+            <div class="stat-legend">
+              {{ 'common-header.purchase.review-subscription.per-display' | translate}}
+              {{ 'common-header.purchase.review-subscription.per-month' | translate}}
+            </div>
+          </div><!--stat-->
+        </div>
+
+        <div class="subscription-summary-divider">x</div>
+    
+        <div class="subscription-summary-item">
+          <div class="stat">
+            <div class="stat-value">{{plan.proLicenseCount}}</div>
+            <div class="stat-legend">
+              <span ng-show="plan.proLicenseCount === 1" translate>common-header.purchase.review-subscription.display-included</span>
+              <span ng-show="plan.proLicenseCount > 1" translate>common-header.purchase.review-subscription.displays-included</span>
+            </div>
+          </div><!--stat-->
+        </div>
+      
+    </div><!--subcription-summary-->
+
+    
+    <hr class="u_remove-margin">
+    <div class="text-center flex-additive-rule">
+      <b>+</b>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 u_margin-md-bottom" translate translate-values="{ planName: plan.name, priceDisplayMonth: plan.monthly.priceDisplayMonth }">
+        common-header.purchase.review-subscription.need-more-displays
+      </div>
+      <div class="col-xs-12">
+        <div class="input-group spinner" ng-class="{ 'has-error': form.reviewSubscriptionForm.additionalLicenses.$invalid }">
+          <div class="input-group-btn-vertical">
+            <button class="btn btn-white" type="button" ng-click="incrementLicenses()">
+              <i class="fa fa-caret-up"></i>
+            </button>
+            <button class="btn btn-white" type="button" ng-click="decrementLicenses()">
+              <i class="fa fa-caret-down"></i>
+            </button>
+          </div>
+          <label for="additionalLicenses">
+            <input id="additionalLicenses" name="additionalLicenses" type="number" class="form-control" ng-model="plan.additionalDisplayLicenses" min="0" max="999" pattern="[0-9]{1,3}" tabindex="1" aria-required="true" required>
+            <span class="icon-right u_align-middle" translate>common-header.purchase.review-subscription.additional-licenses</span>
+          </label>
+        </div>
+      </div>
+      <div class="col-xs-12">
+        <hr>
+      </div>
+      <div class="col-xs-12 u_margin-sm-bottom">
+        <b class="pull-left" translate>common-header.purchase.review-subscription.total</b>
+        <b class="pull-right" translate>common-header.purchase.review-subscription.pay-yearly</b>
+      </div>
+      <div class="col-xs-12">
+        <div class="panel payment-recurrence-selector" ng-class="{ 'has-error': form.reviewSubscriptionForm.billingPeriod.$invalid }">
+          <div class="radio" ng-class="{ active: plan.isMonthly }">
+            <label for="monthlyBilling">
+              <input type="radio" name="billingPeriod" id="monthlyBilling" ng-value="true" ng-model="plan.isMonthly" aria-required="true" tabindex="1" required>
+              <span translate translate-values="{ monthlyPrice: getMonthlyPrice() }">common-header.purchase.review-subscription.billed-monthly</span>
+            </label>
+          </div>
+          <div class="radio" ng-class="{ active: !plan.isMonthly }">
+            <label for="yearlyBilling">
+              <input type="radio" name="billingPeriod" id="yearlyBilling" ng-value="false" ng-model="plan.isMonthly" aria-required="true" tabindex="1" required>
+              <span translate translate-values="{ yearlyPrice: getYearlyPrice() }">common-header.purchase.review-subscription.billed-yearly</span>
+            </label>
+            <div class="label label-success" translate translate-values="{ saveYearly: plan.yearly.save }">common-header.purchase.review-subscription.save-yearly</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-xs-12">
+        <button id="continueButton" type="submit" aria-label="Continue to Billing Address" tabindex="1" form="form.reviewSubscriptionForm" class="btn btn-primary pull-right" ng-click="setNextStep()" translate>common.continue</button>
+      </div>
+    </div>
+  </form>
+</div>

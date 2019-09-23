@@ -1,0 +1,16 @@
+<div class="form-group" >
+  <label ng-if="!hideLabel">{{ "url.label" | translate }}</label>
+  <div ng-class="{'input-group':!hideStorage}">
+    <input name="url" type="text" ng-model="url" ng-blur="blur()" class="form-control" placeholder="http://">
+    <span class="input-url-addon" ng-if="!hideStorage"><storage-selector company-id="{{companyId}}" type="{{storageType}}"></storage-selector></span>
+  </div>
+  <p ng-if="!valid && invalidType === 'url'" class="text-danger">{{ "url.errors.url" | translate }}</p>
+  <p ng-if="!valid && invalidType === 'image'" class="text-danger">{{ "url.errors.image" | translate }}</p>
+  <p ng-if="!valid && invalidType === 'video'" class="text-danger">{{ "url.errors.video" | translate }}</p>
+  <div class="checkbox" ng-show="forcedValid || !valid">
+    <label>
+      <input name="validate-url" ng-click="doValidation = !doValidation" type="checkbox"
+             value="validate-url"> {{"url.validate.label" | translate}}
+    </label>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+<form id="safeDeleteForm">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="dismiss()" data-dismiss="modal" aria-hidden="true">
+      <i class="fa fa-times"></i>
+    </button>
+    <h3 class="modal-title" translate>common.safeDelete.title</h3>
+  </div>
+  <div class="modal-body" stop-event="touchend">
+    <p translate>common.safeDelete.message</p>
+    <input id="safeDeleteInput" type="text" ng-model="inputText" class="form-control" />
+  </div>
+  <div class="modal-footer">
+    <button id="deleteForeverButton" class="btn btn-primary" ng-click="confirm()" ng-disabled="!canConfirm">
+      <span translate>common.delete-forever</span> <i class="fa fa-white fa-check icon-right"></i>
+    </button>
+    <button class="btn btn-default btn-fixed-width" ng-click="cancel()">
+      <span translate>common.cancel</span> <i class="fa fa-white fa-times icon-right"></i>
+    </button>
+  </div>
+</form>

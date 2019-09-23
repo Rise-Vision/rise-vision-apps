@@ -1,0 +1,15 @@
+<tags-input type="email"
+            placeholder="Add an email"
+            class="email-tags"
+            ng-model="emailsList"
+            add-on-enter="true"
+            add-on-space="true"
+            add-on-comma="true"
+            add-on-blur="true"
+            add-on-paste="true"
+            on-tag-adding="isValidEmail($tag)"
+            on-tag-removing="canRemove()"
+            on-tag-added="updateModel()"
+            on-tag-removed="updateModel()"
+            on-invalid-tag="invalidateModel()">
+</tags-input>

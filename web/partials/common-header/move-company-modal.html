@@ -1,0 +1,64 @@
+<div rv-spinner
+  rv-spinner-key="move-company-modal"
+  rv-spinner-start-active="1">
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="closeModal()">
+    <i class="fa fa-times"></i>
+  </button>
+  <h2 id="move-company-label" class="modal-title">Move Company</h2>
+</div>
+<div class="modal-body move-company-modal" stop-event="touchend">
+  <form role="form">
+    <div class="form-group">
+      <label for="auth-key">
+        Enter the Authentication Key of the Company that you want to move.
+      </label>
+      <div class="row">
+        <div class="col-sm-6">
+          <input id="auth-key" type="text" class="form-control"
+          ng-model="company.authKey" />
+        </div>
+        <div class="col-sm-6">
+          <a href="" class="btn btn-secondary retrieve-company-details-button"
+          ng-disabled="!company.authKey"
+          ng-click="getCompany()">Retrieve Company Details</a>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div ng-show="company.name" class="company-details-info">
+    <h3>Details of the Company You Want to Move</h3>
+    <div>
+      {{company.name}}<br>
+      {{company.address}}
+      {{company.city}}, {{company.province}}, {{company.country}} {{company.postalCode}}
+    </div>
+    <h3>Details of the Company You Are Moving the Above Company Under</h3>
+    <div class="to-company">
+      {{selectedCompany.name}}<br>
+      {{selectedCompany.address}}<br>
+      {{selectedCompany.city}}, {{selectedCompany.province}},
+      {{selectedCompany.country}} {{selectedCompany.postalCode}}
+    </div>
+  </div>
+  <div ng-show="errors.length > 0">
+    <div class="alert alert-danger" ng-repeat="error in errors">
+      {{error}}
+    </div>
+  </div>
+  <div ng-show="messages.length > 0">
+    <div class="alert alert-success" ng-repeat="message in messages">
+      {{message}}
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button"
+    class="btn btn-success move-company-button"
+    ng-show="company.name && !moveSuccess" ng-click="moveCompany()">Move Company
+    <i class="fa fa-white fa-check icon-right"></i>
+  </button>
+  <button type="button" class="btn btn-default btn-fixed-width close-move-company-button" data-dismiss="modal" ng-click="closeModal()">
+    {{dismissButtonText}} <i class="fa fa-white fa-times icon-right"></i>
+  </button>
+</div>

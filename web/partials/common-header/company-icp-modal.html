@@ -1,0 +1,31 @@
+<div id="companyIcpModal">
+  <div class="modal-header">
+    <h2 id="icpModalTitle" class="modal-title">Help us personalize your experience</h2>
+  </div>
+  <div class="modal-body" stop-event="touchend">    
+    <form id="forms.companyIcpForm" role="form" name="forms.companyIcpForm">
+      <div class="form-group">
+        <label for="company-industry" class="control-label">
+          Tell us your Industry to help us make your Display look great *
+        </label>
+        <select id="company-industry" name="companyIndustry" class="form-control selectpicker" ng-model="company.companyIndustry" aria-required="true" tabindex="1" autofocus required>
+          <option value="" ng-show="false">&lt; Select Industry &gt;</option>
+          <option ng-repeat="industry in DROPDOWN_INDUSTRY_FIELDS | orderBy:industry[0]" value="{{industry[1]}}">{{industry[0]}}</option>
+        </select>
+      </div>
+
+      <!-- Newsletter -->
+      <newsletter-signup ng-model="user.mailSyncEnabled" company-industry="company.companyIndustry"></newsletter-signup>
+
+    </form>
+
+  </div> <!-- //Modal Body -->
+
+  <div class="modal-footer"> 
+    <button id="saveButton" type="submit" class="btn btn-primary btn-lg btn-block ng-binding" aria-label="Apply" tabindex="1" form="forms.companyIcpForm" ng-click="save()" ng-disabled="forms.companyIcpForm.$invalid">
+      Apply 
+      <i class="fa fa-check icon-right"></i>
+    </button> 
+  </div>
+
+</div>

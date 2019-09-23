@@ -1,0 +1,37 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal"
+    aria-hidden="true" ng-click="closeModal()">
+    <i class="fa fa-times"></i>
+  </button>
+  <h2 id="company-users-label" class="modal-title">Company Users</h2>
+</div>
+<div class="modal-body company-users-modal" stop-event="touchend">
+  <div id="errorBox" ng-show="users.apiError" class="alert alert-danger" role="alert">
+    <strong>{{users.errorMessage}}</strong> {{users.apiError}}
+  </div> 
+
+  <!-- Search -->
+  <search-filter filter-config="filterConfig" search="search" do-search="users.doSearch"></search-filter>
+
+  <!-- List of Users -->
+  <div class="panel panel-default scrollable-list company-users-list u_margin-sm-top"
+    scrolling-list="users.load()"
+    rv-spinner
+    rv-spinner-key="company-users-list"
+    rv-spinner-start-active="1">
+    <div class="list-group-item company-users-list-item"
+      ng-repeat="user in users.items.list | orderBy:sort.field:sort.descending | filter:userSearchString" ng-click="editUser(user.username)">
+      <p class="list-group-item-text"><strong>{{user.firstName}} {{user.lastName}}</strong> <small class="text-muted">{{user.email}}</small></p>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-success add-company-user-button"
+    ng-click="addUser()">Add User
+    <i class="fa fa-white fa-plus icon-right"></i>
+  </button>
+  <button type="button" class="btn btn-default close-company-users-button"
+    data-dismiss="modal" ng-click="closeModal()">
+    Cancel <i class="fa fa-white fa-times icon-right"></i>
+  </button>
+</div>

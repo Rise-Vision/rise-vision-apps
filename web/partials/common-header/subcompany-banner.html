@@ -1,0 +1,11 @@
+<div ng-show="isSubcompanySelected && !inRVAFrame"
+  class="common-header-alert sub-company-alert hidden-xs">
+  You're in Sub-Company {{selectedCompanyName}}&nbsp;
+  <a href="" ng-click="switchToMyCompany()" class="link-button">Switch to My Company</a>
+</div>
+<div ng-show="isSubcompanySelected && !inRVAFrame"
+  class="common-header-alert sub-company-alert visible-xs">
+  <a href="" ng-click="switchToMyCompany()" class="link-button">My Company</a>
+  <span class="sub-company-name">Sub-Company {{selectedCompanyName}}</span>
+  <span>&nbsp;</span>
+</div>

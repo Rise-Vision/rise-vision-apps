@@ -1,0 +1,8 @@
+<label class="control-label control-label-secondary u_margin-left">
+  <input ng-model="timeline.always" type="checkbox"> Always
+</label>
+<div id="timelineTextbox" class="panel-editable u_remove-bottom u_clickable" ng-click="openModal()" ng-show="!timeline.always">
+  <div class="label label-tag">
+    <span id="timelineLabel" timeline="timeline">{{timeline.label}}</span>
+  </div>
+</div>  

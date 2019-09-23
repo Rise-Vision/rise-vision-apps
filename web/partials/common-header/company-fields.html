@@ -1,0 +1,127 @@
+<div class="form-group" ng-class="{'has-error': forms.companyForm.name.$invalid && !forms.companyForm.name.$pristine}">
+  <label for="company-settings-name">
+    Company Name *
+  </label>
+  <input required id="company-settings-name" type="text" class="form-control"
+    ng-model="company.name" name="name" />
+  <p ng-show="forms.companyForm.name.$invalid && !forms.companyForm.name.$pristine"
+    class="help-block validation-error-message-name">Company Name is required.</p>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="form-group">
+      <label for="company-size" class="control-label">
+        Company Size
+      </label>
+      <select id="company-size" class="form-control" ng-model="company.companySize">
+        <option value="" ng-show="false">&lt; Select Size &gt;</option>
+        <option ng-repeat="size in COMPANY_SIZE_FIELDS" value="{{size[1]}}">{{size[0]}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="form-group">
+      <label for="company-industry" class="control-label">
+        Industry
+      </label>
+      <select id="company-industry" class="form-control selectpicker" ng-model="company.companyIndustry">
+        <option value="" ng-show="false">&lt; Select Industry &gt;</option>
+        <option ng-repeat="industry in COMPANY_INDUSTRY_FIELDS | orderBy:industry[0]" value="{{industry[1]}}">{{industry[0]}}</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="form-group">
+      <label for="company-settings-street" class="control-label">
+        Street
+      </label>
+      <input id="company-settings-street" type="text" class="form-control" ng-model="company.street" />
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="form-group">
+      <label for="company-settings-unit" class="control-label">
+        Unit
+      </label>
+      <input id="company-settings-unit" type="text" class="form-control" ng-model="company.unit" />
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3">      
+    <div class="form-group">
+      <label for="company-settings-city" class="control-label">
+        City
+      </label>
+      <input id="company-settings-city" type="text" class="form-control" ng-model="company.city" />
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label for="company-settings-country" class="control-label">
+        Country
+      </label>
+      <select id="company-settings-country" class="form-control selectpicker"
+        ng-model="company.country" ng-options="c.code as c.name for c in countries" empty-select-parser>
+        <option ng-show="false" value="">&lt; Select Country &gt;</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label for="company-settings-state" class="control-label">
+        State/Province/Region
+      </label>
+      <input id="company-settings-state" type="text" class="form-control" ng-model="company.province" ng-hide="company.country == 'US' || company.country == 'CA'" />
+      <select class="form-control selectpicker" ng-model="company.province" ng-options="c[1] as c[0] for c in regionsCA" ng-show="company.country == 'CA'" empty-select-parser>
+        <option ng-show="false" value="">&lt; Select Province &gt;</option>
+      </select>
+      <select class="form-control selectpicker" ng-model="company.province" ng-options="c[1] as c[0] for c in regionsUS" ng-show="company.country == 'US'" empty-select-parser>
+        <option ng-show="false" value="">&lt; Select State &gt;</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label for="company-settings-zip" class="control-label">
+        ZIP/Postal Code
+      </label>
+      <input id="company-settings-zip" type="text" class="form-control" ng-model="company.postalCode" />
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="form-group" ng-class="{'has-error': forms.companyForm.website.$error.website}">
+      <label for="company-settings-website" class="control-label">
+        Website
+      </label>
+      <input id="company-settings-website" name="website" type="text" placeholder="http://" class="form-control" ng-model="company.website" 
+      website-validator />
+      <p ng-show="forms.companyForm.website.$error.website"
+        class="help-block validation-error-message-website">Please provide a valid URL.</p>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="form-group">
+      <label for="company-settings-phone" class="control-label">
+        Phone Number
+      </label>
+      <input id="company-settings-phone" type="tel" class="form-control" ng-model="company.telephone"/>
+    </div>
+  </div>
+</div>
+<div class="form-group">
+  <label for="company-settings-timezone" class="control-label">Time Zone</label>
+  <select class="form-control" ng-model="company.timeZoneOffset" integer-parser>
+    <option ng-show="false" value="">&lt; Select Time Zone &gt;</option>
+    <option value="{{c[1]}}" ng-repeat="c in timezones">{{c[0]}}</option>
+  </select>
+</div>
+<div class="form-group" ng-show="company.isChargebee">
+  <label class="form-control-label">Billing Notifications Email</label>
+  <emails-field ng-model="company.billingContactEmails" />
+</div>

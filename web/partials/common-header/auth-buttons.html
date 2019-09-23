@@ -1,0 +1,55 @@
+<!-- Desktop and tablet -->
+<li
+  ng-show="isLoggedIn && !isRiseVisionUser && !loading">
+  <button type="button" ng-controller="RegisterButtonCtrl" ng-click="register()"
+    class="btn btn-danger register-user-menu-button">
+    Complete Registration
+  </button>
+</li>
+<li
+  dropdown
+  class="dropdown user-profile-dropdown desktop-menu-item"
+  ng-class="{'hidden-xs': isLoggedIn}"
+  ng-show="isLoggedIn"
+  >
+    <a href="" dropdown-toggle class="dropdown-toggle">
+      <div class="user-id pull-left">
+        <span ng-class="{'pending-registration' : isLoggedIn && !isRiseVisionUser && !loading}" class="username">{{username}}</span>
+        <span><strong>{{companyName}}</strong></span>
+      </div>
+      <img ng-src="{{userPicture}}"
+        class="profile-pic" width="30" height="30" alt="User" />
+    </a>
+    <div class="dropdown-menu" role="menu">
+      <ng-include
+        src="'partials/common-header/auth-buttons-menu.html'"
+        replace-include
+      ></ng-include>
+    </div>
+</li>
+<!-- Mobile -->
+<li
+  dropdown
+  class="dropdown user-profile-dropdown mobile-menu-item"
+  ng-class="{'visible-xs-inline-block': isLoggedIn}"
+  ng-show="isLoggedIn"
+  >
+    <a href="" dropdown-toggle class="visible-xs dropdown-toggle" action-sheet="'partials/common-header/auth-buttons-menu.html'"
+      action-sheet-class="user-profile-dropdown">
+      <div class="user-id">
+        <span>{{username}}</span>
+        <span><strong>{{companyName}}</strong></span>
+      </div>
+    </a>
+</li>
+<!-- If User NOT Authenticated -->
+<li ng-show="!undetermined && isLoggedIn === false">
+  <button type="button" class="btn-primary btn u_margin-right" ng-click="login('registrationComplete', true)">
+    Sign Up Free
+  </button>
+</li>
+<li ng-show="!undetermined && isLoggedIn === false">
+  <button type="button" class="sign-in top-auth-button" ng-click="login('registrationComplete')">
+    Sign In
+  </button>
+</li>

@@ -1,0 +1,37 @@
+
+<form role="form">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal"
+		  aria-hidden="true" ng-click="closeModal()">
+			<i class="fa fa-times"></i>
+		</button>
+		<h2 id="switch-company" class="modal-title">
+			Select Sub-Company
+		</h2>
+	</div>
+	<div class="modal-body select-subcompany-modal" stop-event="touchend">
+		<div id="errorBox" ng-show="companies.apiError" class="alert alert-danger" role="alert">
+	    <strong>{{companies.errorMessage}}</strong> {{companies.apiError}}
+	  </div>
+
+	  <!-- Search -->
+		<search-filter filter-config="filterConfig" search="search" do-search="companies.doSearch"></search-filter> 
+
+		<!-- List of Companies -->
+		<div class="panel panel-default scrollable-list u_margin-sm-top"
+		  scrolling-list="companies.load()"
+		  rv-spinner rv-spinner-key="company-selector-modal-list"
+			rv-spinner-start-active="1"
+		>
+			<div class="list-group-item"  ng-repeat="company in companies.items.list" ng-click="setCompany(company)">
+				<p class="list-group-item-text"><strong>{{company.name}}</strong><br/><small class="text-muted">{{company | fullAddress}}</small>
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-default btn-fixed-width" data-dismiss="modal" aria-hidden="true" ng-click="closeModal()">Cancel
+			<i class="fa fa-white fa-times icon-right"></i>
+		</button>
+	</div>
+</form>

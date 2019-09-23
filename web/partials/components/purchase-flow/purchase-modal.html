@@ -1,0 +1,32 @@
+<div rv-spinner rv-spinner-key="purchase-modal" rv-spinner-start-active="1">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="dismiss()" aria-label="close" tabindex="2" ng-hide="currentStep === 5">
+      <i class="fa fa-times"></i>
+    </button>
+    <h3 class="modal-title" translate>Checkout</h3>
+  </div>
+
+  <div class="steps">
+    <div ng-repeat="step in PURCHASE_STEPS" class="step-item" ng-class="{ active: currentStep === step.index, complete: currentStep > step.index }">
+      <span>{{step.name}}</span>
+    </div>
+  </div>
+
+  <div id="purchase-modal" class="modal-body checkout-modal" stop-event="touchend">
+
+    <billing-address ng-if="currentStep === 0"></billing-address>
+    <shipping-address ng-if="currentStep === 1"></shipping-address>
+    <payment-methods ng-if="currentStep === 2"></payment-methods>
+    <review-purchase ng-if="currentStep === 3"></review-purchase>
+    <checkout-success ng-if="currentStep === 4"></checkout-success>
+
+  </div> <!-- //Modal Body -->
+
+  <div id="security-branding" class="modal-footer text-center" ng-show="currentStep > 2 && currentStep < 5">
+    <span class="text-muted">
+      <i class="fa fa-lock icon-left"></i>
+      Secure Checkout from ChargeBee and <img alt="powered by Stripe" height="16" src="https://s3.amazonaws.com/Rise-Images/UI/powered_by_stripe.svg">
+    </span>
+  </div>
+
+</div>

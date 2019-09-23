@@ -1,0 +1,59 @@
+<div id="timelineModal">
+  <div class="modal-header">
+     <button type="button" class="close" ng-click="close()" aria-hidden="true">
+       <i class="fa fa-times"></i>
+     </button>
+     <h3 class="modal-title">Edit Timeline</h3>
+   </div>
+
+  <div class="modal-body" stop-event="touchend">
+    <form role="form" name="timelineDetails" novalidate>
+      <div class="timeline">
+
+        <section>
+          <label class="control-label u_margin-sm-bottom">
+            <input type="checkbox" ng-model="timeline.allDay"> <strong>All Day</strong>
+            <a href="https://help.risevision.com/hc/en-us/articles/360000382486" target="_blank"> <i class="fa fa-question-circle icon-right" aria-hidden="true"></i> </a>
+          </label>
+          <div class="row form-group" ng-hide="timeline.allDay">
+            <div class="col-sm-4">
+              <label class="control-label">Start Time (UTC)</label>
+              <div class="time-picker">
+                <timepicker id="startTime" ng-model="timeline.startTime" ng-change="changed()" hour-step="1" minute-step="15" show-meridian="true" datepicker-localdate="{{timeline.useLocaldate}}"></timepicker>
+              </div>
+            </div><!--col-sm-4-->
+            <div class="col-sm-4">
+              <label class="control-label">End Time (UTC)</label>
+              <div class="time-picker">
+                <timepicker id="endTime" ng-model="timeline.endTime" ng-change="changed()" hour-step="1" minute-step="15" show-meridian="true" datepicker-localdate="{{timeline.useLocaldate}}"></timepicker>
+              </div>
+            </div><!--col-sm-4-->
+          </div>
+        </section>
+
+        <section>
+          <label class="control-label u_margin-sm-bottom">
+            <input type="checkbox" ng-model="timeline.everyDay"> <strong>Every Day</strong>
+          </label>
+
+          <div class="recurrence-option" ng-hide="timeline.everyDay">
+            <div class="form-group timelineWeekdays">
+              <label class="control-label"><input type="checkbox" ng-model="recurrence.weekly.monday"> Monday</label>
+              <label class="control-label"><input type="checkbox" ng-model="recurrence.weekly.tuesday"> Tuesday</label>
+              <label class="control-label"><input type="checkbox" ng-model="recurrence.weekly.wednesday"> Wednesday</label>
+              <label class="control-label"><input type="checkbox" ng-model="recurrence.weekly.thursday"> Thursday</label>
+              <label class="control-label"><input type="checkbox" ng-model="recurrence.weekly.friday"> Friday</label>
+              <label class="control-label"><input type="checkbox" ng-model="recurrence.weekly.saturday"> Saturday</label>
+              <label class="control-label"><input type="checkbox" ng-model="recurrence.weekly.sunday"> Sunday</label>
+            </div><!--form-group-->
+          </div>
+        </section>
+      </div><!--timeline-->
+    </form>
+  </div><!--modal-body-->
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary btn-fixed-width"  ng-click="save()" ng-disabled="timelineDetails.$invalid">Apply <i class="fa fa-white fa-check icon-right"></i></button>
+    <button type="button" class="btn btn-default btn-fixed-width" ng-click="close()">Cancel <i class="fa fa-times icon-right"></i></button>
+  </div>
+</div>

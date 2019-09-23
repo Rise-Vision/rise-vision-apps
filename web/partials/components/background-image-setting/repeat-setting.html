@@ -1,0 +1,11 @@
+<div class="{{parentContainerClass || 'row'}}">
+  <div class="{{containerClass || 'col-md-3'}}">
+    <label ng-if="!hideLabel" translate>background.image.repeat.label</label>
+    <select name="repeat" ng-model="repeat" class="form-control" ng-disabled="disabled">
+      <option value="no-repeat" translate>background.image.repeat.noRepeat</option>
+      <option value="repeat-y" translate>background.image.repeat.vertical</option>
+      <option value="repeat-x" translate>background.image.repeat.horizontal</option>
+      <option value="repeat" translate>background.image.repeat.both</option>
+    </select>
+  </div>
+</div>

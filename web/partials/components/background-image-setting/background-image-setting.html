@@ -1,0 +1,55 @@
+<!-- Color -->
+<div class="{{colorParentContainerClass || 'row'}}">
+  <div class="{{colorContainerClass || 'col-md-3'}}" style="position:relative;">
+    <div class="input-group" colorpicker="rgba" colorpicker-parent="true" ng-model="background.color">
+      <input class="form-control" type="text" ng-model="background.color">
+      <span class="input-group-addon color-wheel"></span>
+    </div>
+  </div>
+</div>
+<!-- Image Choice -->
+<div class="checkbox">
+  <label>
+    <input name="choice" type="checkbox" ng-model="background.useImage"> {{"background.choice" | translate}}
+  </label>
+</div>
+<div id="backgroundImageControls" ng-if="background.useImage">
+  <!-- Image Placeholder -->
+  <div class="form-group">
+    <div ng-if="!imageLoaded" class="image-placeholder">
+      <i class="fa fa-image"></i>
+    </div>
+    <!-- Image -->
+    <div ng-show="imageLoaded" class="row">
+      <div class="col-xs-4">
+        <img ng-src="{{imageUrl}}" background-image class="img-rounded img-responsive">
+      </div>
+    </div>
+  </div>
+  <!-- Image URL -->
+  <url-field id="backgroundImageUrl" url="background.image.url"
+             file-type="image"
+             hide-label="true"
+             company-id="{{companyId}}"
+             ng-model="urlentry" valid></url-field>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <label translate>background.image.position.label</label>             
+      <!-- Position -->
+      <position-setting parent-container-class="positionParentContainerClass" container-class="positionContainerClass" position="background.image.position" hide-label="true"></position-setting>
+    </div>
+
+    <div class="col-sm-6">
+      <label translate>background.image.repeat.label</label>             
+      <!-- Position -->
+      <repeat-setting parent-container-class="repeatParentContainerClass" container-class="repeatContainerClass" repeat="background.image.repeat" hide-label="true" disabled="background.image.scale"></repeat-setting>
+    </div>
+  </div>  
+  <!-- Scale to fit -->
+  <div class="checkbox">
+    <label>
+      <input name="scale" type="checkbox" ng-model="background.image.scale"> {{"background.image.scale" | translate}}
+    </label>
+  </div>
+</div>
