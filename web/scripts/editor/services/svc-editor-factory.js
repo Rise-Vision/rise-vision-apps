@@ -318,7 +318,7 @@ angular.module('risevision.editor.services')
       factory.confirmRestorePresentation = function () {
         var modalInstance = $modal.open({
           template: $templateCache.get(
-            'confirm-instance/confirm-modal.html'),
+            'partials/components/confirm-instance/confirm-modal.html'),
           controller: 'confirmInstance',
           windowClass: 'modal-custom',
           resolve: {

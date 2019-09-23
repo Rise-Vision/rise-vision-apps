@@ -51,7 +51,7 @@ angular.module('risevision.displays.controllers')
       $scope.confirm = function (displayId, displayName, mode) {
         $scope.modalInstance = $modal.open({
           template: $templateCache.get(
-            'confirm-instance/confirm-modal.html'),
+            'partials/components/confirm-instance/confirm-modal.html'),
           controller: 'confirmInstance',
           windowClass: 'modal-custom',
           resolve: {
