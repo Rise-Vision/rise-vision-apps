@@ -21,7 +21,7 @@ describe('service: uploadOverwriteWarning', function() {
 
       var $templateCache = $injector.get('$templateCache');
 
-      $templateCache.put('confirm-instance/confirm-modal.html', 'confirm-modal');
+      $templateCache.put('partials/components/confirm-instance/confirm-modal.html', 'confirm-modal');
       $templateCache.put('partials/template-editor/confirm-modal.html', 'confirm-modal-madero');
     });
   });

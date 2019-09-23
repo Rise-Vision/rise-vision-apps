@@ -3,7 +3,7 @@
 // ------------------------------------
 // Off-Canvas Navigation
 // ------------------------------------
-angular.module('risevision.common.header')
+angular.module('risevision.common.components.off-canvas-nav', [])
   .service('offCanvas', ['$window',
     function ($window) {
 
