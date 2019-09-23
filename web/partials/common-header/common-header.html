@@ -1,0 +1,131 @@
+<div id="commonHeaderDiv" ng-hide="hideCommonHeader">
+	<!-- Plan Banner -->
+	<ng-include
+		replace-include
+		ng-controller="PlanBannerCtrl"
+		src="'partials/common-header/plan-banner.html'"
+	></ng-include>
+	<!-- END Plan Banner -->
+
+	<!-- Common Header Navbar -->
+	<nav class="navbar navbar-default hidden-print"
+		ng-class="{'active-banner': isSubcompanySelected() || isTestCompanySelected()}" role="navigation">
+			<div class="navbar-header">
+
+				<a class="navbar-brand visible-md visible-lg"
+				  href="http://www.risevision.com/" target="{{newTabHome ? '_blank' : '_self'}}" ng-if="!inRVAFrame">
+					<img src="//s3.amazonaws.com/Rise-Images/UI/logo.svg" class="img-responsive logo-small" width="113" height="42" alt="Rise Vision">
+				</a>
+				<a class="navbar-brand hidden-md hidden-lg text-center"
+					href="" off-canvas-toggle>
+					<i class="fa fa-bars"></i>
+				</a>
+				<!-- If User Authenticated -->
+				
+
+				<!-- Nav Links -->
+				<div class="navbar-left visible-xs visible-sm" ng-if="ENV_NAME">
+					<ul class="nav navbar-nav">
+						<li class="env-name-nav-item">
+							<span class="env-name-label">{{ENV_NAME}}</span>
+						</li>
+					</ul>
+				</div>
+
+				<div class="navbar-collapse navbar-left hidden-xs hidden-sm">
+					<ul class="nav navbar-nav">
+						<li class="env-name-nav-item visible-md visible-lg" ng-if="ENV_NAME">
+							<span class="env-name-label">{{ENV_NAME}}</span>
+						</li>
+						<li ng-repeat="opt in navOptions">
+							<a ng-if="opt.cid" ng-href="{{opt.link}}" link-cid target="{{opt.target}}" ng-class="{'selected': opt.states && opt.states.indexOf(navSelected) > -1}">{{opt.title}}</a>
+							<a ng-if="!opt.cid" ng-href="{{opt.link}}" target="{{opt.target}}" ng-class="{'selected': opt.states && opt.states.indexOf(navSelected) > -1}">{{opt.title}}</a>
+						</li>
+						
+						<li ng-if="!inRVAFrame && !hideHelpMenu">
+							<a href="http://www.risevision.com/help/" target="_blank">
+								Help
+							</a>
+						</li>
+					</ul>
+				</div>
+
+
+				<!-- Action Nav -->
+				<ul class="nav navbar-nav navbar-right actions-nav pull-right">
+					<!-- Zendesk -->
+					<ng-include
+						replace-include
+					  ng-controller="ZendeskButtonCtrl"
+						src="'partials/common-header/zendesk-button.html'"
+					></ng-include>
+					<ng-include
+						replace-include
+						ng-if="inRVAFrame"
+						ng-controller="CloseFrameButtonCtrl"
+						src="'partials/common-header/close-frame-button.html'"
+					></ng-include>
+
+					<!-- Current App -->
+					<ng-include
+						ng-if="!inRVAFrame"
+						replace-include
+						src="'partials/common-header/app-nav-buttons.html'"
+					></ng-include>
+					<!-- END Current App -->
+					<!-- Auth -->
+					<ng-include
+						replace-include
+						ng-if="!inRVAFrame"
+					  ng-controller="AuthButtonsCtr"
+						src="'partials/common-header/auth-buttons.html'"
+					></ng-include>
+					<li ng-if="inRVAFrame"
+					  ng-controller="AuthButtonsCtr"></li>
+				</ul>
+				<!-- END Action Nav -->
+				
+				<!-- END Nav Links -->
+			</div>
+
+			<ng-include
+			replace-include
+			ng-controller="TestCompanyBannerCtrl"
+			src="'partials/common-header/test-company-banner.html'"></ng-include>
+			
+			<ng-include
+			replace-include
+			ng-controller="SubcompanyBannerCtrl"
+			src="'partials/common-header/subcompany-banner.html'"></ng-include>
+	</nav>
+
+	<ng-include
+		replace-include
+		ng-controller="GlobalAlertsCtrl"
+		src="'partials/common-header/global-alerts.html'"></ng-include>
+
+	<!-- END Common Header Navbar -->
+
+	<!-- Off Canvas Version of the Nav -->
+	<nav class="off-canvas-nav" off-canvas-nav>
+	  <ul class="nav nav-pills nav-stacked">
+	  	<li off-canvas-toggle>
+	  		<i class="fa fa-times fa-2x pull-right"></i>
+	  		<img src="//s3.amazonaws.com/rise-common/images/logo-small.png" class="img-responsive logo-small" width="113" height="42" alt="Rise Vision">
+	  	</li>
+	    <li ng-repeat="opt in navOptions">
+				<a ng-if="opt.cid" ng-href="{{opt.link}}" link-cid target="{{opt.target}}">{{opt.title}}</a>
+				<a ng-if="!opt.cid" ng-href="{{opt.link}}" target="{{opt.target}}">{{opt.title}}</a>
+			</li>
+			<li ng-if="!hideHelpMenu">
+				<a target="_blank" href="http://www.risevision.com/help">Help</a>
+			</li>
+	  </ul>
+	</nav>
+</div>
+
+<div ng-show="cookieEnabled === false" class="bg-warning text-center u_padding-sm">
+    <small><strong>Cookies Are Disabled.</strong> Rise Vision needs to use cookies to properly function. Please enable Cookies and Third-Party Cookies on your web browser and refresh this page.</small>
+</div>
+
+<iframe name="logoutFrame" id="logoutFrame" style='display:none'></iframe>

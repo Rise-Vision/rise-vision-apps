@@ -1,0 +1,35 @@
+<ul>
+  <li class="dropdown-header" ng-show="!isSubcompanySelected">
+    <p>{{username}}</p>
+    <p><strong>{{selectedCompanyName}}</strong>
+      <span class="text-muted" ng-show="isRiseVisionUser && !isSubcompanySelected">|</span>
+      <a id="select-subcompany-button" href="" ng-click="switchCompany()" ng-show="isRiseVisionUser && !isSubcompanySelected">Select Sub-Company</a>
+    </p>
+  </li>
+
+  <li class="dropdown-header sub-company-header" ng-show="isSubcompanySelected">
+    <p>You are in Sub-Company <strong>{{selectedCompanyName}}</strong>
+    <span class="text-muted">|</span>
+     <a id="change-subcompany-button" href="" ng-click="switchCompany()" ng-show="isRiseVisionUser">Change</a></p>
+    <p><a id="reset-subcompany-button" href="" ng-click="resetCompany()">Switch to My Company</a></p>
+  </li>
+  <hr>
+  <li ng-show="isUserAdmin || isRiseAdmin">
+    <a href="" ng-click="addSubCompany()" class="action add-subcompany-menu-button">
+      <i class="fa fa-plus"></i>
+      <span class="item-name">Add Sub-Company</span>
+    </a>
+  </li>
+  <li ng-show="isUserAdmin || isRiseAdmin">
+    <a href="" ng-click="companySettingsFactory.openCompanySettings()" class="action company-settings-menu-button">
+      <i class="fa fa-building"></i>
+      <span class="item-name">Company Settings</span>
+    </a>
+  </li>
+  <li ng-show="isUserAdmin || isRiseAdmin">
+    <a href="" data-toggle="modal" ng-click="companyUsers()" class="action company-users-menu-button">
+      <i class="fa fa-users"></i>
+      <span class="item-name">Company Users</span>
+    </a>
+  </li>
+</ul>

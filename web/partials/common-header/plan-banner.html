@@ -1,0 +1,63 @@
+<!-- Common Header Plan Info -->
+<div class="hidden-xs">
+  <div id="parent-plan-banner" class="alert p-2 mb-0 bg-success text-right" ng-show="getVisibleBanner() === 'parent'">
+    <div class="u_margin-right">
+      <span class="ml-2">Subscription managed by {{plan.parentPlanCompanyName || "the Parent Company"}}
+        <!-- <a href="#" aria-label="Go to Parent Company">{{plan.parentPlanCompanyName}}</a> -->
+      </span>
+      <a ng-if="!isApps()" class="ml-3 btn btn-xs btn-primary" href="https://apps.risevision.com/signup?show_product=true" target="_blank" link-cid>Change Plan</a>
+      <a ng-if="isApps()" class="ml-3 btn btn-xs btn-primary" href="#" ng-click="showPlans()">Change Plan</a>
+    </div>
+  </div>
+
+  <div id="parent-purchased-plan-banner" class="alert p-2 mb-0 bg-success text-right" ng-show="getVisibleBanner() === 'parentPurchased'">
+    <div class="u_margin-right">
+      <span class="ml-2">Subscription managed by {{plan.parentPlanCompanyName || "the Parent Company"}}</span>
+    </div>
+  </div>
+
+  <div id="free-plan-banner" class="alert alert-plan plan-active text-right" ng-show="getVisibleBanner() === 'free'">
+    <div class="u_margin-right">
+      <span class="font-weight-bold">Get more out of Rise Vision!</span>
+      <a ng-if="!isApps()" class="u_margin-left" href="https://apps.risevision.com/signup?show_product=true" target="_blank" link-cid>See Our Plans</a>
+      <a ng-if="isApps()" class="u_margin-left" href="#" ng-click="showPlans()">See Our Plans</a>
+    </div>
+  </div>
+
+  <div id="cancelled-plan-banner" class="alert alert-plan plan-active text-right" ng-show="getVisibleBanner() === 'cancelled'">
+    <div class="u_margin-right">
+      <span class="font-weight-bold">Your subscription expires on {{ plan.currentPeriodEndDate | date : 'd-MMM-yyyy'}}</span>
+
+      <a ng-hide="isChargebee" class="ml-3 btn btn-xs btn-primary" href="{{storeAccountUrl}}" target="_blank" link-cid>Account Settings</a>
+      <a ng-show="isChargebee" ng-if="!isApps()" class="ml-3 btn btn-xs btn-primary" href="https://apps.risevision.com/billing" target="_blank" link-cid>Account Settings</a>
+      <a ng-show="isChargebee" ng-if="isApps()" class="ml-3 btn btn-xs btn-primary" ui-sref="apps.billing.home">Account Settings</a>
+    </div>
+  </div>
+
+  <div id="trial-plan-banner" class="alert alert-plan plan-active text-right" ng-show="getVisibleBanner() === 'trial'">
+    <div class="u_margin-right">
+      <span class="font-weight-bold">You have {{plan.trialPeriod}} days left on your trial!</span>
+      <a ng-show="!isEnterpriseSubCompany()" ng-if="!isApps()" class="ml-3 btn btn-xs btn-primary" href="https://apps.risevision.com/signup?show_product=true" target="_blank" link-cid>Subscribe Now</a>
+      <a ng-show="!isEnterpriseSubCompany()" ng-if="isApps()" class="ml-3 btn btn-xs btn-primary" href="#" ng-click="showPlans()">Subscribe Now</a>
+    </div>
+  </div>
+
+  <div class="alert alert-plan plan-suspended text-center" ng-show="getVisibleBanner() === 'expired'">
+    <div class="u_margin-right">
+      <span class="font-weight-bold" ng-show="!plan.playerProTotalLicenseCount">Your trial has expired! You are now on the Free Plan. Your Displays are no longer Licensed.</span>
+      <span class="font-weight-bold" ng-show="plan.playerProTotalLicenseCount">Your trial has expired! You are now on the Free Plan. Some of your Displays are no longer Licensed.</span>
+      <a ng-show="!isEnterpriseSubCompany()" ng-if="!isApps()" class="ml-3 btn btn-xs btn-primary" href="https://apps.risevision.com/signup?show_product=true" target="_blank" link-cid>Subscribe Now</a>
+      <a ng-show="!isEnterpriseSubCompany()" ng-if="isApps()" class="ml-3 btn btn-xs btn-primary" href="#" ng-click="showPlans()">Subscribe Now</a>
+    </div>
+  </div>
+
+  <div class="alert alert-plan plan-suspended text-center" ng-show="getVisibleBanner() === 'suspended'">
+    <div class="u_margin-right">
+      <span class="font-weight-bold">There was an issue processing your payment. Please update your billing information. Your Displays may be affected.</span>
+
+      <a ng-hide="isChargebee" class="ml-3 btn btn-xs btn-primary" href="{{storeAccountUrl}}" target="_blank" link-cid>Update Billing</a>
+      <a ng-show="isChargebee" ng-if="!isApps()" class="ml-3 btn btn-xs btn-primary" href="https://apps.risevision.com/billing" target="_blank" link-cid>Update Billing</a>
+      <a ng-show="isChargebee" ng-if="isApps()" class="ml-3 btn btn-xs btn-primary" ui-sref="apps.billing.home">Update Billing</a>
+    </div>
+  </div>
+</div>

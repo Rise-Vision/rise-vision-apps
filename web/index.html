@@ -65,19 +65,10 @@
   <!-- build:js js/website.min.js -->
   <script src="/pricing-component.js"></script>
   <script src="bower_components/common-header/dist/js/dependencies.js"></script>
-  <script src="bower_components/common-header/dist/js/common-header.js"></script>
 
   <script src="vendor/@shopify/draggable/draggable.bundle.js"></script>
   <script src="bower_components/stretchy/stretchy.js"></script>
   <script src="bower_components/xmlToJSON.js/lib/xmlToJSON.js"></script>
-  <script src="bower_components/common-header/dist/js/components/search-filter.js"></script>
-  <script src="bower_components/common-header/dist/js/components/focus-me.js"></script>
-  <script src="bower_components/common-header/dist/js/components/confirm-instance.js"></script>
-  <script src="bower_components/common-header/dist/js/components/stop-event.js"></script>
-  <script src="bower_components/common-header/dist/js/components/timeline.js"></script>
-  <script src="bower_components/common-header/dist/js/components/timeline-basic.js"></script>
-  <script src="bower_components/common-header/dist/js/components/distribution-selector.js"></script>
-  <script src="bower_components/common-header/dist/js/components/background-image-setting.js"></script>
 
   <!-- Background image settings widget component -->
   <script src="bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js"></script>
@@ -99,6 +90,202 @@
   <script type="text/javascript" src="bower_components/angular-slugify/angular-slugify.js"></script>
 
   <script src="tmp/partials.js"></script>
+
+  <!-- common header -->
+  <script src="scripts/common-header/dtv-common-header.js"></script>
+  <script src="scripts/common-header/config/config.js"></script>
+
+  <script src="scripts/common-header/controllers/ctr-auth-buttons.js"></script>
+  <script src="scripts/common-header/controllers/ctr-close-frame.js"></script>
+  <script src="scripts/common-header/controllers/ctr-company-buttons.js"></script>
+  <script src="scripts/common-header/controllers/ctr-company-icp-modal.js"></script>
+  <script src="scripts/common-header/controllers/ctr-company-settings-modal.js"></script>
+  <script src="scripts/common-header/controllers/ctr-company-users-modal.js"></script>
+  <script src="scripts/common-header/controllers/ctr-global-alerts.js"></script>
+  <script src="scripts/common-header/controllers/ctr-move-company-modal.js"></script>
+  <script src="scripts/common-header/controllers/ctr-plan-banner.js"></script>
+  <script src="scripts/common-header/controllers/ctr-register-button.js"></script>
+  <script src="scripts/common-header/controllers/ctr-registration-modal.js"></script>
+  <script src="scripts/common-header/controllers/ctr-safe-delete-modal.js"></script>
+  <script src="scripts/common-header/controllers/ctr-signout-button.js"></script>
+  <script src="scripts/common-header/controllers/ctr-signout-modal.js"></script>
+  <script src="scripts/common-header/controllers/ctr-subcompany-banner.js"></script>
+  <script src="scripts/common-header/controllers/ctr-subcompany-modal.js"></script>
+  <script src="scripts/common-header/controllers/ctr-subcompany-selector-modal.js"></script>
+  <script src="scripts/common-header/controllers/ctr-test-company-banner.js"></script>
+  <script src="scripts/common-header/controllers/ctr-user-add-modal.js"></script>
+  <script src="scripts/common-header/controllers/ctr-user-settings-modal.js"></script>
+  <script src="scripts/common-header/controllers/ctr-zendesk-button.js"></script>
+
+  <script src="scripts/common-header/directives/dtv-classic-editor-link.js"></script>
+  <script src="scripts/common-header/directives/dtv-common-header-height.js"></script>
+  <script src="scripts/common-header/directives/dtv-company-buttons.js"></script>
+  <script src="scripts/common-header/directives/dtv-emails-field.js"></script>
+  <script src="scripts/common-header/directives/dtv-empty-select-parser.js"></script>
+  <script src="scripts/common-header/directives/dtv-fastpass.js"></script>
+  <script src="scripts/common-header/directives/dtv-integer-parser.js"></script>
+  <script src="scripts/common-header/directives/dtv-link-cid.js"></script>
+  <script src="scripts/common-header/directives/dtv-newsletter-signup.js"></script>
+  <script src="scripts/common-header/directives/dtv-require-role.js"></script>
+  <script src="scripts/common-header/directives/dtv-website-validator.js"></script>
+  
+  <script src="scripts/common-header/filters/ftr-supress-zero.js"></script>
+  
+  <script src="scripts/common-header/services/svc-account.js"></script>
+  <script src="scripts/common-header/services/svc-chargebee-factory.js"></script>
+  <script src="scripts/common-header/services/svc-company-icp.js"></script>
+  <script src="scripts/common-header/services/svc-company-settings-factory.js"></script>
+  <script src="scripts/common-header/services/svc-cookie-tester.js"></script>
+  <script src="scripts/common-header/services/svc-data-gadgets.js"></script>
+  <script src="scripts/common-header/services/svc-geodata.js"></script>
+  <script src="scripts/common-header/services/svc-registration.js"></script>
+  <script src="scripts/common-header/services/svc-store-service.js"></script>
+  <script src="scripts/common-header/services/svc-zendesk.js"></script>
+
+  <!-- components -->
+  <script src="scripts/components/action-sheet.js"></script>
+  <script src="scripts/components/off-canvas-nav.js"></script>
+
+  <script src="scripts/components/i18n/app.js"></script>
+
+  <script src="scripts/components/gapi-loader/svc-gapi.js"></script>
+  <script src="scripts/components/gapi-loader/svc-util.js"></script>
+
+  <script src="scripts/components/core-api-client/svc-apis.js"></script>
+  <script src="scripts/components/core-api-client/svc-app.js"></script>
+  <script src="scripts/components/core-api-client/svc-cache.js"></script>
+  <script src="scripts/components/core-api-client/svc-call-endpoint.js"></script>
+  <script src="scripts/components/core-api-client/svc-company.js"></script>
+  <script src="scripts/components/core-api-client/svc-core-util.js"></script>
+  <script src="scripts/components/core-api-client/svc-countries.js"></script>
+  <script src="scripts/components/core-api-client/svc-display.js"></script>
+  <script src="scripts/components/core-api-client/svc-fastpass.js"></script>
+  <script src="scripts/components/core-api-client/svc-monitoring-activity.js"></script>
+  <script src="scripts/components/core-api-client/svc-oauth2.js"></script>
+  <script src="scripts/components/core-api-client/svc-schedule.js"></script>
+  <script src="scripts/components/core-api-client/svc-store-authorization.js"></script>
+  <script src="scripts/components/core-api-client/svc-subscription-status.js"></script>
+  <script src="scripts/components/core-api-client/svc-user.js"></script>
+
+  <script src="scripts/components/ui-flow/app.js"></script>
+  <script src="scripts/components/ui-flow/svc-ui-flow.js"></script>
+
+  <script src="scripts/components/userstate/app.js"></script>
+  <script src="scripts/components/userstate/controllers/ctr-confirm-account.js"></script>
+  <script src="scripts/components/userstate/controllers/ctr-login.js"></script>
+  <script src="scripts/components/userstate/controllers/ctr-request-confirmation-email.js"></script>
+  <script src="scripts/components/userstate/controllers/ctr-request-password-reset.js"></script>
+  <script src="scripts/components/userstate/controllers/ctr-reset-password-confirm.js"></script>
+  <script src="scripts/components/userstate/directives/dtv-confirm-password-validator.js"></script>
+  <script src="scripts/components/userstate/services/svc-access.js"></script>
+  <script src="scripts/components/userstate/services/svc-big-query-logging.js"></script>
+  <script src="scripts/components/userstate/services/svc-companystate.js"></script>
+  <script src="scripts/components/userstate/services/svc-custom-auth-factory.js"></script>
+  <script src="scripts/components/userstate/services/svc-external-logging.js"></script>
+  <script src="scripts/components/userstate/services/svc-google-auth-factory.js"></script>
+  <script src="scripts/components/userstate/services/svc-rv-token-store.js"></script>
+  <script src="scripts/components/userstate/services/svc-selected-company-url-handler.js"></script>
+  <script src="scripts/components/userstate/services/svc-url-state.js"></script>
+  <script src="scripts/components/userstate/services/svc-user-auth-factory.js"></script>
+  <script src="scripts/components/userstate/services/svc-userauth.js"></script>
+  <script src="scripts/components/userstate/services/svc-userstate.js"></script>
+
+  <script src="scripts/components/last-modified/dtv-last-modified.js"></script>
+  <script src="scripts/components/last-modified/ftr-username.js"></script>
+
+  <script src="scripts/components/loading/app.js"></script>
+  <script src="scripts/components/loading/dtv-global-spinner.js"></script>
+  <script src="scripts/components/loading/dtv-loading.js"></script>
+  <script src="scripts/components/loading/svc-loading.js"></script>
+
+  <script src="scripts/components/search-filter/dtv-search-filter.js"></script>
+
+  <script src="scripts/components/scrolling-list/app.js"></script>
+  <script src="scripts/components/scrolling-list/dtv-scroll-event.js"></script>
+  <script src="scripts/components/scrolling-list/dtv-scrolling-list.js"></script>
+  <script src="scripts/components/scrolling-list/svc-process-error-code.js"></script>
+  <script src="scripts/components/scrolling-list/svc-scrolling-list-service.js"></script>
+
+  <script src="scripts/components/stop-event/dtv-stop-event.js"></script>
+
+  <script src="scripts/components/segment-analytics/svc-segment-analytics.js"></script>
+
+  <script src="scripts/components/message-box/ctr-message-box.js"></script>
+  <script src="scripts/components/message-box/svc-message-box.js"></script>
+
+  <script src="scripts/components/svg-icon/dtv-svg-icon.js"></script>
+
+  <script src="scripts/components/subscription-status/app.js"></script>
+  <script src="scripts/components/subscription-status/dtv-subscription-status.js"></script>
+  <script src="scripts/components/subscription-status/ftr-product-trial-day-to-expiry.js"></script>
+  <script src="scripts/components/subscription-status/svc-subscription-status.js"></script>
+
+  <script src="scripts/components/plans/app.js"></script>
+  <script src="scripts/components/plans/ctr-plans-modal.js"></script>
+  <script src="scripts/components/plans/dtv-rv-on.js"></script>
+  <script src="scripts/components/plans/svc-currency.js"></script>
+  <script src="scripts/components/plans/svc-current-plan-factory.js"></script>
+  <script src="scripts/components/plans/svc-plans-factory.js"></script>
+
+  <script src="scripts/components/purchase-flow/app.js"></script>
+  <script src="scripts/components/purchase-flow/controllers/ctr-purchase-modal.js"></script>
+  <script src="scripts/components/purchase-flow/controllers/ctr-tax-exemption-modal.js"></script>
+  <script src="scripts/components/purchase-flow/directives/dtv-address-form.js"></script>
+  <script src="scripts/components/purchase-flow/directives/dtv-billing-address.js"></script>
+  <script src="scripts/components/purchase-flow/directives/dtv-checkout-success.js"></script>
+  <script src="scripts/components/purchase-flow/directives/dtv-payment-methods.js"></script>
+  <script src="scripts/components/purchase-flow/directives/dtv-province-validator.js"></script>
+  <script src="scripts/components/purchase-flow/directives/dtv-review-purchase.js"></script>
+  <script src="scripts/components/purchase-flow/directives/dtv-review-subscription.js"></script>
+  <script src="scripts/components/purchase-flow/directives/dtv-shipping-address.js"></script>
+  <script src="scripts/components/purchase-flow/directives/dtv-year-selector.js"></script>
+  <script src="scripts/components/purchase-flow/filters/ftr-card-last-four.js"></script>
+  <script src="scripts/components/purchase-flow/filters/ftr-country-name.js"></script>
+  <script src="scripts/components/purchase-flow/filters/ftr-padded-month.js"></script>
+  <script src="scripts/components/purchase-flow/services/svc-address-factory.js"></script>
+  <script src="scripts/components/purchase-flow/services/svc-address.js"></script>
+  <script src="scripts/components/purchase-flow/services/svc-contact.js"></script>
+  <script src="scripts/components/purchase-flow/services/svc-purchase-factory.js"></script>
+  <script src="scripts/components/purchase-flow/services/svc-stripe-loader.js"></script>
+  <script src="scripts/components/purchase-flow/services/svc-stripe.js"></script>
+  <script src="scripts/components/purchase-flow/services/svc-tax-exemption-factory.js"></script>
+  <script src="scripts/components/purchase-flow/services/svc-track-events.js"></script>
+
+  <script src="scripts/components/search-filter/dtv-search-filter.js"></script>
+
+  <script src="scripts/components/focus-me/dtv-focus-me.js"></script>
+
+  <script src="scripts/components/confirm-instance/ctr-confirm-instance.js"></script>
+
+  <script src="scripts/components/stop-event/dtv-stop-event.js"></script>
+
+  <script src="scripts/components/timeline/app.js"></script>
+  <script src="scripts/components/timeline/ctr-timeline-modal.js"></script>
+  <script src="scripts/components/timeline/dtv-date-compare.js"></script>
+  <script src="scripts/components/timeline/dtv-datepicker-localdate.js"></script>
+  <script src="scripts/components/timeline/dtv-month-dropdown.js"></script>
+  <script src="scripts/components/timeline/dtv-timeline-textbox.js"></script>
+  <script src="scripts/components/timeline/dtv-week-dropdown.js"></script>
+  <script src="scripts/components/timeline/dtv-weekday-dropdown.js"></script>
+  <script src="scripts/components/timeline/svc-timeline-description.js"></script>
+  <script src="scripts/components/timeline/svc-timeline-factory.js"></script>
+
+  <script src="scripts/components/timeline-basic/app.js"></script>
+  <script src="scripts/components/timeline-basic/ctr-timeline-modal.js"></script>
+  <script src="scripts/components/timeline-basic/dtv-timeline-textbox.js"></script>
+  <script src="scripts/components/timeline-basic/svc-timeline-description.js"></script>
+  <script src="scripts/components/timeline-basic/svc-timeline-factory.js"></script>
+
+  <script src="scripts/components/distribution-selector/app.js"></script>
+  <script src="scripts/components/distribution-selector/ctr-distribution-list.js"></script>
+  <script src="scripts/components/distribution-selector/ctr-select-distribution-modal.js"></script>
+  <script src="scripts/components/distribution-selector/dtv-distribution-selector.js"></script>
+  <script src="scripts/components/distribution-selector/svc-display.js"></script>
+
+  <script src="scripts/components/background-image-setting/dtv-background-image-setting.js"></script>
+  <script src="scripts/components/background-image-setting/dtv-background-image.js"></script>
+  <script src="scripts/components/background-image-setting/dtv-repeat-setting.js"></script>
+  <script src="scripts/components/background-image-setting/dtv-url-field.js"></script>
 
   <!-- app js -->
   <script src="scripts/config/config.js"></script>

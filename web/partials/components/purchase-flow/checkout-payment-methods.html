@@ -1,0 +1,197 @@
+<!-- Step 4 -->
+<div id="checkout-payment-methods">
+  <form id="form.paymentMethodsForm" role="form" class="u_margin-md-top" name="form.paymentMethodsForm" novalidate>
+    <!-- Alpha Release - Select New Card by default -->
+    <div class="row u_margin-md-top">
+      <div class="col-md-8 col-xs-12 form-inline">
+        <div class="form-group">
+          <label for="payment-method-select" class="u_margin-right">Payment Method</label>
+          <select id="payment-method-select" class="form-control selectpicker" ng-model="paymentMethods.paymentMethod" tabindex="1">
+            <option value="card">Credit Card</option>
+            <option value="invoice">Invoice Me</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <hr />
+
+    <div id="credit-card-form" ng-if="paymentMethods.paymentMethod === 'card'">
+      <!-- Alpha Release - Select New Card by default -->
+      <div class="row" ng-if="false">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="credit-card-select" class="hidden">Add New Credit Card</label>
+            <select id="credit-card-select" class="form-control selectpicker" ng-model="paymentMethods.selectedCard" ng-options="c as getCardDescription(c) for c in paymentMethods.existingCreditCards track by c.id">
+              <option value="">Add New Credit Card</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEW CREDIT CARD -->
+      <div id="new-credit-card-form" ng-if="paymentMethods.selectedCard.isNew">
+        <div class="alert alert-danger" ng-show="form.paymentMethodsForm.$submitted && form.paymentMethodsForm.$invalid">
+          Please complete the missing information below.
+        </div>
+        <div id="errorBox" class="alert alert-danger" role="alert" ng-show="paymentMethods.newCreditCard.validationErrors.length">
+          <strong>Card Validation Error<span ng-show="paymentMethods.newCreditCard.validationErrors.length > 1">s</span></strong>
+          <ul>
+            <li ng-repeat="error in paymentMethods.newCreditCard.validationErrors">{{error}}</li>
+          </ul>
+        </div>
+        <div id="errorBox" class="alert alert-danger" role="alert" ng-show="paymentMethods.newCreditCard.tokenError">
+          <strong>Card Processing Error</strong> {{paymentMethods.newCreditCard.tokenError}}
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group" ng-class="{ 'has-error': (form.paymentMethodsForm.cardholderName.$dirty || form.paymentMethodsForm.$submitted) && form.paymentMethodsForm.cardholderName.$invalid }">
+              <label for="new-card-name" lass="control-label">Cardholder Name *</label>
+              <input id="new-card-name" aria-required="true" tabindex="1" type="text" class="form-control" name="cardholderName" data-stripe="name" ng-model="paymentMethods.newCreditCard.name" autocomplete="cc-name" required>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group" ng-class="{ 'has-error': (form.paymentMethodsForm.cardNumber.$dirty || form.paymentMethodsForm.$submitted) && form.paymentMethodsForm.cardNumber.$invalid }">
+              <label for="new-card-number" class="control-label">Card Number *</label>
+              <input id="new-card-number" type="text" aria-required="true" tabindex="1" class="form-control" placeholder="0000 0000 0000 0000" name="cardNumber"  data-stripe="number" ng-model="paymentMethods.newCreditCard.number" autocomplete="cc-number" required>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group" ng-class="{ 'has-error': (form.paymentMethodsForm.cardExpiryMonth.$dirty || form.paymentMethodsForm.$submitted) && form.paymentMethodsForm.cardExpiryMonth.$invalid }">
+              <label for="new-card-expiry-month" class="control-label">Expiry Month *</label>
+              <select id="new-card-expiry-month" aria-required="true" tabindex="1" class="form-control" name="cardExpiryMonth" data-stripe="exp-month" ng-model="paymentMethods.newCreditCard.expMonth" autocomplete="cc-exp-month" integer-parser required>
+                <option ng-show="false" value="">&lt; Select Month &gt;</option>
+                <option value="1">01</option>
+                <option value="2">02</option>
+                <option value="3">03</option>
+                <option value="4">04</option>
+                <option value="5">05</option>
+                <option value="6">06</option>
+                <option value="7">07</option>
+                <option value="8">08</option>
+                <option value="9">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group" ng-class="{ 'has-error': (form.paymentMethodsForm.cardExpiryYear.$dirty || form.paymentMethodsForm.$submitted) && form.paymentMethodsForm.cardExpiryYear.$invalid }">
+              <label for="expiry-year" class="control-label">Expiry Year *</label>
+              <year-selector id="new-card-expiry-year" class="form-control" name="cardExpiryYear" data-stripe="exp-year" ng-model="paymentMethods.newCreditCard.expYear" tabindex="1" autocomplete="cc-exp-year" integer-parser required>
+              </year-selector>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group" ng-class="{ 'has-error': (form.paymentMethodsForm.cardCvc.$dirty || form.paymentMethodsForm.$submitted) && form.paymentMethodsForm.cardCvc.$invalid }">
+              <label for="new-card-cvc" class="control-label">Security Code *</label>
+              <input id="new-card-cvc" aria-required="true" tabindex="1" type="text" pattern="[0-9]*" class="form-control" name="cardCvc" data-stripe="cvc" ng-model="paymentMethods.newCreditCard.cvc" autocomplete="cc-csc" maxlength="4" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="checkbox">
+          <label for="toggleMatchBillingAddress" aria-label="Match Billing Address">
+            <input type="checkbox" id="toggleMatchBillingAddress" ng-model="paymentMethods.newCreditCard.useBillingAddress" tabindex="1">
+            Same As Billing Address
+          </label>
+        </div>
+
+        <!-- NEW CC ADDRESS -->
+        <div id="new-card-address">
+
+          <address-form form-object="form.paymentMethodsForm" address-object="paymentMethods.newCreditCard.address" hide-company-name="true" ng-if="!paymentMethods.newCreditCard.useBillingAddress"></address-form>
+
+        </div>
+        <!--  END NEW CC ADDRESS -->
+      </div>
+      <!-- END NEW CC -->
+
+      <!-- EXISTING CREDIT CARD -->
+      <div id="existing-credit-card-form" ng-if="!paymentMethods.selectedCard.isNew">
+        <div id="errorBox" class="alert alert-danger" role="alert" ng-show="paymentMethods.selectedCard.validationErrors.length">
+          <strong>Card Validation Error</strong> {{paymentMethods.selectedCard.validationErrors[0]}}
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="existing-card-name" class="control-label">Cardholder Name</label>
+              <input id="existing-card-name" type="text" class="form-control" placeholder="{{paymentMethods.selectedCard.name}}" tabindex="1" disabled="disabled">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="existing-card-number" class="control-label">Card Number</label>
+              <input id="existing-card-number" type="text" class="form-control" placeholder="{{paymentMethods.selectedCard.last4 | cardLastFour}}" tabindex="1" disabled="disabled" />
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="existing-card-expiry-month" class="control-label">Expiry Month</label>
+              <input id="existing-card-expiry-month" type="text" class="form-control masked"  placeholder="{{paymentMethods.selectedCard.expMonth | paddedMonth}}" disabled="disabled" tabindex="1" />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="existing-card-expiry-year" class="control-label">Expiry Year</label>
+              <input id="existing-card-expiry-year" type="text" class="form-control masked"  placeholder="{{paymentMethods.selectedCard.expYear}}" tabindex="1" disabled="disabled"/>
+            </div>
+          </div>          
+        </div>
+      </div>
+      <!-- END EXISTING CC -->
+    </div>
+
+    <!-- //GENERATE INVOICE FORM -->
+    <div id="generateInvoice" ng-if="paymentMethods.paymentMethod === 'invoice'">
+      <p>If you'd like to be invoiced for your purchase (rather than paying now by credit card), please enter a <b>Purchase Order</b> number
+        and continue with checkout.</p>
+      <p>You will receive an invoice for this purchase total at <span class="font-weight-bold">{{contactEmail}}</span>. Invoices are due within 30 days of creation, payable by check, wire transfer, or credit card.</p>
+      <p>Please note your invoice is generated only once this checkout is completed.</p>
+
+      <div class="row">
+        <div class="col-xs-12 col-sm-6">
+          <div class="form-group">
+            <label for="invoice-po-number" class="control-label">
+              Purchase Order Number
+            </label>
+            <input id="invoice-po-number" type="text" class="form-control" name="purchaseOrder" ng-model="paymentMethods.purchaseOrderNumber" tabindex="1"/>
+          </div>
+        </div>
+      </div>
+
+      <div id="generateInvoiceOverdue" class="hidden">
+        <p class="text-danger">You have overdue invoice payments on your account.</p>
+        <p>In order to complete this purchase by invoice, please pay your outstanding invoices <a href="#">here</a>.</p>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <div class="col-xs-12 text-center u_margin-sm-bottom">
+        <a id="showTaxExemption" href="#" aria-label="Are you Tax Exempt?" ng-click="showTaxExemptionModal()" ng-show="!purchase.taxExemptionSent" tabindex="3" translate>Are you Tax Exempt?</a>
+        <h5 ng-show="purchase.taxExemptionSent">Tax Exemption Submitted</h5>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <button id="backButton" type="button" aria-label="Go back to Shipping Address" class="btn btn-default pull-left" ng-click="setPreviousStep()" ng-hide="finalStep" tabindex="2" translate>common.back</button>
+        <button id="continueButton" type="submit" aria-label="Continue to Purchase Review" form="form.paymentMethodsForm" class="btn btn-primary pull-right" ng-click="validatePaymentMethod()" tabindex="1" translate>common.continue</button>
+      </div>
+    </div>
+  </form>
+
+</div>

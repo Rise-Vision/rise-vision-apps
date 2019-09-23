@@ -1,0 +1,26 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">
+    <i class="fa fa-times"></i>
+  </button>
+  <h2 id="sign-out-label" class="modal-title">Sign Out</h2>
+</div>
+<div class="modal-body sign-out-modal" stop-event="touchend">
+  <form role="form">
+    <p>
+      Signing out does not sign you out of your Google Account.
+    </p>
+    <p>
+      If you are on a shared computer you should sign out of your Google Account.
+    </p>
+    <p>
+      <button type="button" class="btn btn-default sign-out-rv-only-button" ng-click="signOut(false)">Sign Out
+        <i class="fa fa-sign-out fa-lg icon-right"></i>
+      </button>
+    </p>
+      <button type="button" class="btn btn-default sign-out-google-account" ng-click="signOut(true)">Sign Out of your Google Account
+        <i class="fa fa-google-plus-square fa-lg icon-right"></i>
+      </button>
+    <p>
+    </p>
+  </form>
+</div>

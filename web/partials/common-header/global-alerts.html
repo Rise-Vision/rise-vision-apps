@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="alert alert-danger" role="alert" ng-repeat="msg in errors">
+        <span ng-bind-html="msg"></span>
+        <button type="button" class="close pull-right"
+          ng-click="dismiss('errors', $index);">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
