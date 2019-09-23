@@ -28,7 +28,7 @@ angular.module('risevision.schedules.directives')
           $scope.remove = function (playlistItem) {
             var modalInstance = $modal.open({
               template: $templateCache.get(
-                'confirm-instance/confirm-modal.html'),
+                'partials/components/confirm-instance/confirm-modal.html'),
               controller: 'confirmInstance',
               windowClass: 'modal-custom',
               resolve: {
