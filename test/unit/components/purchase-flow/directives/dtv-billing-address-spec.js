@@ -15,7 +15,7 @@ describe("directive: billing address", function() {
   var $scope, element;
 
   beforeEach(inject(function($compile, $rootScope, $templateCache){
-    $templateCache.put("purchase-flow/checkout-billing-address.html", "<p>mock</p>");
+    $templateCache.put("partials/components/purchase-flow/checkout-billing-address.html", "<p>mock</p>");
     $scope = $rootScope.$new();
 
     element = $compile("<billing-address></billing-address>")($scope);

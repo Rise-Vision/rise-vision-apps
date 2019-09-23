@@ -13,7 +13,7 @@ describe("directive: timeline-basic-textbox", function() {
   }
 
   beforeEach(inject(function($rootScope, $injector, _$compile_, $templateCache) {
-    $templateCache.put("timeline-basic/timeline-textbox.html", "<p>Timeline</p>");
+    $templateCache.put("partials/components/timeline-basic/timeline-textbox.html", "<p>Timeline</p>");
 
     $mainScope = $rootScope.$new();
     $compile = _$compile_;

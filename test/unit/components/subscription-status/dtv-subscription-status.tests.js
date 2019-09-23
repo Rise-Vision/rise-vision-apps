@@ -27,7 +27,7 @@ describe("directive: subscription status", function() {
     modalResult = "";
     subscriptionSuccess = false;
 
-    $templateCache.put("subscription-status/subscription-status-template.html", "<p>mock</p>");
+    $templateCache.put("partials/components/subscription-status/subscription-status-template.html", "<p>mock</p>");
     $compile = _$compile_;
     $rootScope = _$rootScope_;
 

@@ -14,7 +14,7 @@ describe("directive: review subscription", function() {
   var $scope, element;
 
   beforeEach(inject(function($compile, $rootScope, $templateCache){
-    $templateCache.put("purchase-flow/checkout-review-subscription.html", "<p>mock</p>");
+    $templateCache.put("partials/components/purchase-flow/checkout-review-subscription.html", "<p>mock</p>");
     $scope = $rootScope.$new();
     $scope.plan = {};
 

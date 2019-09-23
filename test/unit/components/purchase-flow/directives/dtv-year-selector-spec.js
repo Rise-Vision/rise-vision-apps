@@ -6,7 +6,7 @@ describe("directive: year selector", function() {
 
   beforeEach(inject(function($compile, _$rootScope_, $templateCache){
     $rootScope = _$rootScope_;
-    $templateCache.put("purchase-flow/year-selector.html", "<p>mock</p>");
+    $templateCache.put("partials/components/purchase-flow/year-selector.html", "<p>mock</p>");
     $rootScope.selectedYear = 2012;
 
     element = angular.element("<year-selector ng-model=\"selectedYear\"></year-selector>");

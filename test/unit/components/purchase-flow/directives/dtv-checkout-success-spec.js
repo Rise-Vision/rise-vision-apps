@@ -12,7 +12,7 @@ describe("directive: checkout success", function() {
   var $scope, element;
 
   beforeEach(inject(function($compile, $rootScope, $templateCache){
-    $templateCache.put("purchase-flow/checkout-success.html", "<p>mock</p>");
+    $templateCache.put("partials/components/purchase-flow/checkout-success.html", "<p>mock</p>");
     $scope = $rootScope.$new();
 
     element = $compile("<checkout-success></checkout-success>")($scope);

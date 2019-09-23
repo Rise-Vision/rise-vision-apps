@@ -21,7 +21,7 @@ describe("directive: review purchase", function() {
   var $scope, element, purchaseFactory;
 
   beforeEach(inject(function($compile, $rootScope, $templateCache){
-    $templateCache.put("purchase-flow/checkout-review-purchase.html", "<p>mock</p>");
+    $templateCache.put("partials/components/purchase-flow/checkout-review-purchase.html", "<p>mock</p>");
     $scope = $rootScope.$new();
 
     element = $compile("<review-purchase></review-purchase>")($scope);
