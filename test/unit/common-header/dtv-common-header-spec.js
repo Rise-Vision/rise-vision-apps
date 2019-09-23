@@ -13,6 +13,11 @@ describe("directive: common header", function() {
         backdrop: true
       }
     };
+    $provide.service("$http", function() {
+      return {
+        get: sandbox.stub().returns(Q.resolve())
+      };
+    });
     $provide.service("$modalStack", function() {
       return {
         getTop: sandbox.spy(function() {

@@ -11,7 +11,7 @@ describe("directive: address form", function() {
   var $scope, form, element;
 
   beforeEach(inject(function($compile, $rootScope, $templateCache){
-    $templateCache.put("purchase-flow/address-form.html", "<p>mock</p>");
+    $templateCache.put("partials/components/purchase-flow/address-form.html", "<p>mock</p>");
     $rootScope.address = {};
     $rootScope.form = form = {
       addressForm: {
