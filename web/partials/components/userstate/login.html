@@ -19,7 +19,7 @@
 
 <!-- CUSTOM LOGIN -->
 <div class="col-md-8 col-xs-12" ng-if="!FORCE_GOOGLE_AUTH">
-	<div ng-include="'userstate/auth-form.html'"></div>
+	<div ng-include="'partials/components/userstate/auth-form.html'"></div>
 
 	<div class="form-group">
     <button id="sign-in-button" class="btn btn-primary btn-hg" type="submit" form="forms.loginForm" ng-click="customLogin('registrationComplete')">
