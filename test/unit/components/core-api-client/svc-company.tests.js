@@ -186,6 +186,8 @@ describe("Services: Company Core API Service", function() {
       Array.prototype.contains = function(){};
       companyService.getCompanies({companyId: "some_id", query: "s"}).then(function (result) {
         expect(result).to.deep.equal(rvFixtures.companiesResp);
+        
+        delete Array.prototype.contains;
         done();
       });
     });
