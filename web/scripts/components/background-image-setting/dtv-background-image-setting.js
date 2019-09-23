@@ -2,14 +2,14 @@
   "use strict";
 
   angular.module(
-    "risevision.common.components.background-image-setting", [
-      "risevision.common.i18n",
-      "colorpicker.module",
-      "risevision.widget.common.url-field",
-      "risevision.widget.common.position-setting",
-      "risevision.common.components.background-image",
-      "risevision.common.components.repeat-setting"
-    ])
+      "risevision.common.components.background-image-setting", [
+        "risevision.common.i18n",
+        "colorpicker.module",
+        "risevision.widget.common.url-field",
+        "risevision.widget.common.position-setting",
+        "risevision.common.components.background-image",
+        "risevision.common.components.repeat-setting"
+      ])
     .directive("backgroundImageSetting", ["$templateCache",
       function ($templateCache) {
         return {

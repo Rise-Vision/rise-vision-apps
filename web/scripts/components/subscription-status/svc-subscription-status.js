@@ -2,9 +2,9 @@
   "use strict";
 
   angular.module("risevision.common.components.subscription-status.service", [
-    "risevision.common.config",
-    "risevision.common.components.subscription-status.config"
-  ])
+      "risevision.common.config",
+      "risevision.common.components.subscription-status.config"
+    ])
     .service("subscriptionStatusService", ["$http", "$q", "STORE_SERVER_URL",
       "PATH_URL", "AUTH_PATH_URL", "PATH_URL_BY_DISPLAY_ID",
       function ($http, $q, STORE_SERVER_URL, PATH_URL, AUTH_PATH_URL,

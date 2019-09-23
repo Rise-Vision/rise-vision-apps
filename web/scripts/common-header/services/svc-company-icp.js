@@ -80,7 +80,8 @@ angular.module("risevision.common.header")
 
       factory.init = function () {
         $rootScope.$on(
-          "risevision.company.selectedCompanyChanged", function () {
+          "risevision.company.selectedCompanyChanged",
+          function () {
             _checkIcpCollection();
           });
       };

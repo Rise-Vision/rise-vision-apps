@@ -140,7 +140,8 @@
         var _plansByType = _.keyBy(PLANS_LIST, "type");
         var _plansByCode = _.keyBy(PLANS_LIST, "productCode");
         var _plansList = [
-          _plansByType.free, _plansByType.starter, _plansByType.basic, _plansByType.advanced, _plansByType.enterprise
+          _plansByType.free, _plansByType.starter, _plansByType.basic, _plansByType.advanced, _plansByType
+          .enterprise
         ];
 
         _factory.showPlansModal = function () {

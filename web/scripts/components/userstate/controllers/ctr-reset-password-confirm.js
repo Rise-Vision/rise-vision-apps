@@ -19,7 +19,7 @@ angular.module("risevision.common.components.userstate")
         if ($scope.forms.resetPasswordForm.$valid) {
           $loading.startGlobal("auth-reset-password");
           userauth.resetPassword($stateParams.user, $stateParams.token, $scope.credentials
-            .newPassword)
+              .newPassword)
             .then(function () {
               $log.log("Password updated");
               $state.go("common.auth.unauthorized", {

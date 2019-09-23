@@ -33,18 +33,18 @@ angular.module("risevision.common.header")
       $scope.save = function () {
         $scope.loading = true;
         createCompany(userState.getSelectedCompanyId(),
-          $scope.company).then(function (company) {
-          segmentAnalytics.track("Company Created", {
-            companyId: company.id,
-            companyName: company.name
-          });
-          bigQueryLogging.logEvent("Company Created", company.name, null,
-            userState.getUsername(), company.id);
+            $scope.company).then(function (company) {
+            segmentAnalytics.track("Company Created", {
+              companyId: company.id,
+              companyName: company.name
+            });
+            bigQueryLogging.logEvent("Company Created", company.name, null,
+              userState.getUsername(), company.id);
 
-          $modalInstance.close("success");
-        }, function (err) {
-          alert("Error: " + humanReadableError(err));
-        })
+            $modalInstance.close("success");
+          }, function (err) {
+            alert("Error: " + humanReadableError(err));
+          })
           .finally(function () {
             $scope.loading = false;
           });

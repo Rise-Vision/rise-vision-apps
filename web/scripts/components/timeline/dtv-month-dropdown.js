@@ -11,5 +11,5 @@
           templateUrl: "partials/components/timeline/week-dropdown.html"
         };
       }
-  );
+    );
 })(angular);

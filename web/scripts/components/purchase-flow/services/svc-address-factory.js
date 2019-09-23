@@ -73,7 +73,8 @@ angular.module("risevision.common.components.purchase-flow")
 
       factory.updateAddress = function (addressObject, contact, isShipping) {
         var deferred = $q.defer();
-        var currentAddress = isShipping ? addressService.copyAddressFromShipTo(userState.getCopyOfSelectedCompany()) :
+        var currentAddress = isShipping ? addressService.copyAddressFromShipTo(userState
+        .getCopyOfSelectedCompany()) :
           userState.getCopyOfUserCompany();
 
         var addressFields = {};
@@ -92,7 +93,8 @@ angular.module("risevision.common.components.purchase-flow")
           }
         }
 
-        if (addressObject && !addressService.addressesAreIdentical(addressObject, currentAddress) || requiresUpdate) {
+        if (addressObject && !addressService.addressesAreIdentical(addressObject, currentAddress) ||
+          requiresUpdate) {
           if (isShipping) {
             addressService.copyAddressToShipTo(addressObject, addressFields);
           } else {

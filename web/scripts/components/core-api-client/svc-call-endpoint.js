@@ -6,8 +6,8 @@
  */
 "use strict";
 angular.module("risevision.common.core.endpoint", [
-  "risevision.common.gapi"
-])
+    "risevision.common.gapi"
+  ])
   .factory("callEndpoint", ["coreAPILoader", "$q", "$log",
     function (coreAPILoader, $q, $log) {
       return function (method, criteria) {

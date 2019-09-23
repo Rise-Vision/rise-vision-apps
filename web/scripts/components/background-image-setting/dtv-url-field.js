@@ -2,9 +2,9 @@
   "use strict";
 
   angular.module("risevision.widget.common.url-field", [
-    "risevision.common.i18n",
-    "risevision.widget.common.storage-selector"
-  ])
+      "risevision.common.i18n",
+      "risevision.widget.common.storage-selector"
+    ])
     .directive("urlField", ["$templateCache", "$log",
       function ($templateCache, $log) {
         return {

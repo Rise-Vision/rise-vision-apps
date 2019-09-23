@@ -4,8 +4,8 @@
 "use strict";
 
 angular.module("risevision.common.monitoring.activity", [
-  "risevision.common.gapi"
-])
+    "risevision.common.gapi"
+  ])
   .factory("getActivity", ["$q", "monitoringAPILoader", "$log",
     function ($q, monitoringAPILoader, $log) {
       return function (clientId, api) {

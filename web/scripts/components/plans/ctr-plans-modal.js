@@ -106,7 +106,8 @@ angular.module("risevision.common.components.plans")
           } else { // This is a different Plan
             // Is lower Plan?
             if ($scope.currentPlan.order > plan.order) {
-              if (currentPlanFactory.isOnTrial() && !$scope.isFree(plan)) { // Does not have Chargebee account, use Purchase Flow
+              if (currentPlanFactory.isOnTrial() && !$scope.isFree(
+                plan)) { // Does not have Chargebee account, use Purchase Flow
                 return "downgrade";
               } else { // Already has Chargebee account, use Customer Portal
                 return "downgrade-portal";

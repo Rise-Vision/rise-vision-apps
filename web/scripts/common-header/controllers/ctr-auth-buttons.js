@@ -48,7 +48,8 @@ angular.module("risevision.common.header")
 
             //render a dialog based on the status current UI is in
             if (newStatus === "registeredAsRiseVisionUser") {
-              if (!userState.registrationModalInstance && userState.isLoggedIn()) { // avoid duplicate registration modals
+              if (!userState.registrationModalInstance && userState
+              .isLoggedIn()) { // avoid duplicate registration modals
                 userState.registrationModalInstance = $modal.open({
                   template: $templateCache.get("partials/common-header/registration-modal.html"),
                   controller: "RegistrationModalCtrl",
@@ -159,17 +160,17 @@ angular.module("risevision.common.header")
 
       $loading.startGlobal("auth-buttons-silent");
       oauth2APILoader() //force loading oauth api on startup
-      //to avoid popup blocker
-      .then().finally(function () {
-        userAuthFactory.authenticate(false).then().finally(function () {
-          $loading.stopGlobal("auth-buttons-silent");
-          if (!uiFlowManager.isStatusUndetermined()) {
-            //attempt to reach a stable registration state only
-            //when there is currently no validating checking
-            uiFlowManager.invalidateStatus("registrationComplete");
-          }
+        //to avoid popup blocker
+        .then().finally(function () {
+          userAuthFactory.authenticate(false).then().finally(function () {
+            $loading.stopGlobal("auth-buttons-silent");
+            if (!uiFlowManager.isStatusUndetermined()) {
+              //attempt to reach a stable registration state only
+              //when there is currently no validating checking
+              uiFlowManager.invalidateStatus("registrationComplete");
+            }
+          });
         });
-      });
 
 
     }

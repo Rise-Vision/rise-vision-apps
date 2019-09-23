@@ -70,8 +70,8 @@ angular.module("risevision.common.components.timeline.services")
         if (timeline.startTime) {
           var shortTimeformat = "hh:mm a";
           label = label + _filterDateFormat(timeline.startTime,
-            timeline.useLocaldate,
-            shortTimeformat) +
+              timeline.useLocaldate,
+              shortTimeformat) +
             " ";
 
           if (timeline.endTime) {

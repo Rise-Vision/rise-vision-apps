@@ -13,7 +13,7 @@
 
           if (credentials && credentials.username && credentials.password) {
             $q.all([gapiLoader(), userauth.login(credentials.username,
-              credentials.password)])
+                credentials.password)])
               .then(function (result) {
                 var gApi = result[0];
                 var loginInfo = result[1] && result[1].result;
