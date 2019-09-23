@@ -1,13 +1,13 @@
 (function (angular) {
-  "use strict";
+  'use strict';
 
   /*jshint camelcase: false */
 
-  angular.module("risevision.common.components.userstate")
+  angular.module('risevision.common.components.userstate')
     // constants (you can override them in your app as needed)
-    .factory("googleAuthFactory", ["$rootScope", "$q", "$log", "$window",
-      "$stateParams", "auth2APILoader", "getOAuthUserInfo", "uiFlowManager",
-      "userState", "urlStateService",
+    .factory('googleAuthFactory', ['$rootScope', '$q', '$log', '$window',
+      '$stateParams', 'auth2APILoader', 'getOAuthUserInfo', 'uiFlowManager',
+      'userState', 'urlStateService',
       function ($rootScope, $q, $log, $window, $stateParams, auth2APILoader,
         getOAuthUserInfo, uiFlowManager, userState, urlStateService) {
 
@@ -19,11 +19,11 @@
               var authResult = auth2.getAuthInstance() &&
                 auth2.getAuthInstance().isSignedIn.get();
 
-              $log.debug("auth2.isSignedIn result:", authResult);
+              $log.debug('auth2.isSignedIn result:', authResult);
               if (authResult) {
                 deferred.resolve(authResult);
               } else {
-                deferred.reject("Failed to authorize user (auth2)");
+                deferred.reject('Failed to authorize user (auth2)');
               }
             })
             .then(null, deferred.reject); //auth2APILoader
@@ -68,11 +68,11 @@
           // Redirect to full URL path
           if ($rootScope.redirectToRoot === false) {
             loc = $window.location.href.substr(0, $window.location.href
-              .indexOf("#")) || $window.location.href;
+              .indexOf('#')) || $window.location.href;
 
             redirectState = urlStateService.clearStatePath(redirectState);
           } else {
-            loc = $window.location.origin + "/";
+            loc = $window.location.origin + '/';
           }
 
           userState._state.redirectState = redirectState;
@@ -80,9 +80,9 @@
           uiFlowManager.persist();
 
           var opts = {
-            response_type: "token",
-            prompt: "select_account",
-            ux_mode: _isPopupAuth() ? "popup" : "redirect",
+            response_type: 'token',
+            prompt: 'select_account',
+            ux_mode: _isPopupAuth() ? 'popup' : 'redirect',
             redirect_uri: loc
           };
 

@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.common.components.userstate")
-  .factory("canAccessApps", ["$q", "$state", "$location",
-    "userState", "userAuthFactory", "urlStateService",
+angular.module('risevision.common.components.userstate')
+  .factory('canAccessApps', ['$q', '$state', '$location',
+    'userState', 'userAuthFactory', 'urlStateService',
     function ($q, $state, $location, userState, userAuthFactory,
       urlStateService) {
       return function (signup, allowReturn) {
@@ -20,12 +20,12 @@ angular.module("risevision.common.components.userstate")
 
             if (!userState.isLoggedIn()) {
               if (signup) {
-                newState = "common.auth.createaccount";
+                newState = 'common.auth.createaccount';
               } else {
-                newState = "common.auth.unauthorized";
+                newState = 'common.auth.unauthorized';
               }
-            } else if ($state.get("common.auth.unregistered")) {
-              newState = "common.auth.unregistered";
+            } else if ($state.get('common.auth.unregistered')) {
+              newState = 'common.auth.unregistered';
             }
 
             if (newState) {

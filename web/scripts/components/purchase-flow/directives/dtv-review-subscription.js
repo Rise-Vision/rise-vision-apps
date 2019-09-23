@@ -1,10 +1,12 @@
-angular.module("risevision.common.components.purchase-flow")
-  .directive("reviewSubscription", ["$templateCache", "purchaseFactory",
+'use strict';
+
+angular.module('risevision.common.components.purchase-flow')
+  .directive('reviewSubscription', ['$templateCache', 'purchaseFactory',
     function ($templateCache, purchaseFactory) {
       return {
-        restrict: "E",
+        restrict: 'E',
         template: $templateCache.get(
-          "partials/components/purchase-flow/checkout-review-subscription.html"),
+          'partials/components/purchase-flow/checkout-review-subscription.html'),
         link: function ($scope) {
           $scope.plan = purchaseFactory.purchase.plan;
 

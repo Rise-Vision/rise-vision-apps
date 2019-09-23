@@ -1,16 +1,16 @@
 (function (angular) {
-  "use strict";
-  angular.module("risevision.common.components.timeline-basic")
-    .directive("timelineBasicTextbox", ["$modal", "$filter", "TimelineBasicFactory",
-      "timelineBasicDescription",
+  'use strict';
+  angular.module('risevision.common.components.timeline-basic')
+    .directive('timelineBasicTextbox', ['$modal', '$filter', 'TimelineBasicFactory',
+      'timelineBasicDescription',
       function ($modal, $filter, TimelineBasicFactory, timelineBasicDescription) {
         return {
-          restrict: "E",
+          restrict: 'E',
           scope: {
-            timelineString: "=",
-            ngDisabled: "="
+            timelineString: '=',
+            ngDisabled: '='
           },
-          templateUrl: "partials/components/timeline-basic/timeline-textbox.html",
+          templateUrl: 'partials/components/timeline-basic/timeline-textbox.html',
           link: function ($scope) {
             var updatingModal = false;
             var updatingAlwaysCheckbox = false;
@@ -18,7 +18,7 @@
             $scope.monitoringSchedule = {};
 
             // Watch for the formatted input string
-            $scope.$watch("timelineString", function () {
+            $scope.$watch('timelineString', function () {
               if (!updatingModal && !updatingAlwaysCheckbox) {
                 $scope.monitoringSchedule = $scope.parseTimeline($scope.timelineString);
                 $scope.timeline = TimelineBasicFactory.getTimeline(
@@ -34,7 +34,7 @@
               }
             });
 
-            $scope.$watch("timeline.always", function (newValue) {
+            $scope.$watch('timeline.always', function (newValue) {
               if (!updatingModal) {
                 updatingAlwaysCheckbox = true;
                 $scope.monitoringSchedule.timeDefined = !newValue;
@@ -48,14 +48,14 @@
               }
 
               var modalInstance = $modal.open({
-                templateUrl: "partials/components/timeline-basic/timeline-modal.html",
-                controller: "timelineBasicModal",
+                templateUrl: 'partials/components/timeline-basic/timeline-modal.html',
+                controller: 'timelineBasicModal',
                 resolve: {
                   timeline: function () {
                     return angular.copy($scope.timeline);
                   }
                 },
-                size: "md"
+                size: 'md'
               });
 
               modalInstance.result.then(function (timeline) {
@@ -85,9 +85,9 @@
 
               if (timeline.startTime || timeline.endTime) {
                 resp.time = {};
-                resp.time.start = timeline.startTime ? $filter("date")(new Date(timeline.startTime), "HH:mm") :
+                resp.time.start = timeline.startTime ? $filter('date')(new Date(timeline.startTime), 'HH:mm') :
                   null;
-                resp.time.end = timeline.endTime ? $filter("date")(new Date(timeline.endTime), "HH:mm") : null;
+                resp.time.end = timeline.endTime ? $filter('date')(new Date(timeline.endTime), 'HH:mm') : null;
               }
 
               if (timeline.recurrenceDaysOfWeek && timeline.recurrenceDaysOfWeek.length > 0) {
@@ -101,13 +101,13 @@
 
               resp = JSON.stringify(resp);
 
-              return resp !== "{}" ? resp : null;
+              return resp !== '{}' ? resp : null;
             };
 
             $scope.parseTimeline = function (tl) {
               var timeline = {};
 
-              if (tl && tl !== "{}") {
+              if (tl && tl !== '{}') {
                 tl = JSON.parse(tl);
 
                 timeline.timeDefined = true;
@@ -132,9 +132,9 @@
             };
 
             $scope.reformatTime = function (timeString) {
-              var today = $filter("date")(new Date(), "dd MMM yyyy");
-              var fullDate = new Date(today + " " + timeString);
-              return $filter("date")(fullDate, "dd MMM yyyy hh:mm a");
+              var today = $filter('date')(new Date(), 'dd MMM yyyy');
+              var fullDate = new Date(today + ' ' + timeString);
+              return $filter('date')(fullDate, 'dd MMM yyyy hh:mm a');
             };
           } // link
         };

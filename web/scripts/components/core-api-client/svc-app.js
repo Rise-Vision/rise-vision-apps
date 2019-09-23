@@ -1,20 +1,20 @@
 /**
  * Created by rodrigopavezi on 10/16/14.
  */
-"use strict";
+'use strict';
 
-angular.module("risevision.common.app", [
-    "risevision.common.gapi",
-    "risevision.core.util"
+angular.module('risevision.common.app', [
+    'risevision.common.gapi',
+    'risevision.core.util'
 
   ])
-  .constant("APP_WRITABLE_FIELDS", [
-    "name", "description", "clientId", "url"
+  .constant('APP_WRITABLE_FIELDS', [
+    'name', 'description', 'clientId', 'url'
   ])
-  .factory("listApps", ["$q", "riseAPILoader", "$log",
+  .factory('listApps', ['$q', 'riseAPILoader', '$log',
     function ($q, riseAPILoader, $log) {
       return function (companyId) {
-        $log.debug("listApps called", companyId);
+        $log.debug('listApps called', companyId);
 
         var deferred = $q.defer();
         riseAPILoader().then(function (riseApi) {
@@ -25,7 +25,7 @@ angular.module("risevision.common.app", [
 
           var request = riseApi.app.list(criteria);
           request.execute(function (resp) {
-            $log.debug("listApps resp", resp);
+            $log.debug('listApps resp', resp);
             if (resp.result) {
               deferred.resolve(resp.items);
             } else {
@@ -38,10 +38,10 @@ angular.module("risevision.common.app", [
       };
     }
   ])
-  .factory("getApp", ["$q", "riseAPILoader", "$log",
+  .factory('getApp', ['$q', 'riseAPILoader', '$log',
     function ($q, riseAPILoader, $log) {
       return function (id) {
-        $log.debug("getApp called", id);
+        $log.debug('getApp called', id);
 
         var deferred = $q.defer();
         riseAPILoader().then(function (riseApi) {
@@ -52,7 +52,7 @@ angular.module("risevision.common.app", [
 
           var request = riseApi.app.get(criteria);
           request.execute(function (resp) {
-            $log.debug("getApp resp", resp);
+            $log.debug('getApp resp', resp);
             if (resp.result) {
               deferred.resolve(resp.item);
             } else {
@@ -64,11 +64,11 @@ angular.module("risevision.common.app", [
       };
     }
   ])
-  .factory("createApp", ["$q", "riseAPILoader", "$log", "pick",
-    "APP_WRITABLE_FIELDS",
+  .factory('createApp', ['$q', 'riseAPILoader', '$log', 'pick',
+    'APP_WRITABLE_FIELDS',
     function ($q, riseAPILoader, $log, pick, APP_WRITABLE_FIELDS) {
       return function (companyId, userId, app) {
-        $log.debug("createApp called", companyId, userId, app);
+        $log.debug('createApp called', companyId, userId, app);
 
         var deferred = $q.defer();
         riseAPILoader().then(function (riseApi) {
@@ -91,11 +91,11 @@ angular.module("risevision.common.app", [
       };
     }
   ])
-  .factory("updateApp", ["$q", "riseAPILoader", "$log", "pick",
-    "APP_WRITABLE_FIELDS",
+  .factory('updateApp', ['$q', 'riseAPILoader', '$log', 'pick',
+    'APP_WRITABLE_FIELDS',
     function ($q, riseAPILoader, $log, pick, APP_WRITABLE_FIELDS) {
       return function (id, app) {
-        $log.debug("updateApp called", id, app);
+        $log.debug('updateApp called', id, app);
 
         var deferred = $q.defer();
         riseAPILoader().then(function (riseApi) {
@@ -117,10 +117,10 @@ angular.module("risevision.common.app", [
       };
     }
   ])
-  .factory("deleteApp", ["$q", "riseAPILoader", "$log",
+  .factory('deleteApp', ['$q', 'riseAPILoader', '$log',
     function ($q, riseAPILoader, $log) {
       return function (id) {
-        $log.debug("deleteApp called", id);
+        $log.debug('deleteApp called', id);
 
         var deferred = $q.defer();
         riseAPILoader().then(function (riseApi) {
@@ -130,7 +130,7 @@ angular.module("risevision.common.app", [
           }
           var request = riseApi.app.delete(criteria);
           request.execute(function (resp) {
-            $log.debug("deleteApp resp", resp);
+            $log.debug('deleteApp resp', resp);
             if (resp.result) {
               deferred.resolve(resp.item);
             } else {

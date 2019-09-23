@@ -1,28 +1,28 @@
 (function (angular) {
-  "use strict";
+  'use strict';
 
-  angular.module("risevision.core.userprofile", [
-      "risevision.common.gapi", "risevision.core.oauth2"
+  angular.module('risevision.core.userprofile', [
+      'risevision.common.gapi', 'risevision.core.oauth2'
     ])
 
-    .value("userRoleMap", {
-      "ce": "Content Editor",
-      "cp": "Content Publisher",
-      "da": "Display Administrator",
-      "ua": "System Administrator",
-      "pu": "Store Purchaser",
-      "sa": "Rise System Administrator",
-      "ba": "Rise Store Administrator"
+    .value('userRoleMap', {
+      'ce': 'Content Editor',
+      'cp': 'Content Publisher',
+      'da': 'Display Administrator',
+      'ua': 'System Administrator',
+      'pu': 'Store Purchaser',
+      'sa': 'Rise System Administrator',
+      'ba': 'Rise Store Administrator'
     })
 
-    .constant("USER_WRITABLE_FIELDS", [
-      "mailSyncEnabled", "email", "firstName", "lastName", "telephone",
-      "roles",
-      "status", "companyRole", "dataCollectionDate"
+    .constant('USER_WRITABLE_FIELDS', [
+      'mailSyncEnabled', 'email', 'firstName', 'lastName', 'telephone',
+      'roles',
+      'status', 'companyRole', 'dataCollectionDate'
     ])
 
-    .factory("getUserProfile", ["oauth2APILoader", "coreAPILoader", "$q",
-      "$log",
+    .factory('getUserProfile', ['oauth2APILoader', 'coreAPILoader', '$q',
+      '$log',
       function (oauth2APILoader, coreAPILoader, $q, $log) {
         var _username;
         var _cachedPromises = {};
@@ -42,15 +42,15 @@
 
           if (!username) {
             deferred.reject(
-              "getUserProfile failed: username param is required.");
-            $log.debug("getUserProfile failed: username param is required.");
+              'getUserProfile failed: username param is required.');
+            $log.debug('getUserProfile failed: username param is required.');
           } else {
 
             var criteria = {};
             if (username) {
               criteria.username = username;
             }
-            $log.debug("getUserProfile called", criteria);
+            $log.debug('getUserProfile called', criteria);
 
             $q.all([oauth2APILoader(), coreAPILoader()]).then(function (
               results) {
@@ -60,7 +60,7 @@
                 if (resp.error || !resp.result) {
                   deferred.reject(resp);
                 } else {
-                  $log.debug("getUser resp", resp);
+                  $log.debug('getUser resp', resp);
                   //get user profile
                   deferred.resolve(resp.item);
                 }
@@ -72,21 +72,21 @@
       }
     ])
 
-    .factory("updateUser", ["$q", "coreAPILoader", "$log",
-      "getUserProfile", "pick", "USER_WRITABLE_FIELDS",
+    .factory('updateUser', ['$q', 'coreAPILoader', '$log',
+      'getUserProfile', 'pick', 'USER_WRITABLE_FIELDS',
       function ($q, coreAPILoader, $log, getUserProfile, pick,
         USER_WRITABLE_FIELDS) {
         return function (username, profile) {
           var deferred = $q.defer();
           profile = pick(profile, USER_WRITABLE_FIELDS);
-          $log.debug("updateUser called", username, profile);
+          $log.debug('updateUser called', username, profile);
           coreAPILoader().then(function (coreApi) {
             var request = coreApi.user.patch({
               username: username,
               data: profile
             });
             request.execute(function (resp) {
-              $log.debug("updateUser resp", resp);
+              $log.debug('updateUser resp', resp);
               if (resp.error) {
                 deferred.reject(resp);
               } else if (resp.result) {
@@ -94,7 +94,7 @@
                   deferred.resolve(resp);
                 });
               } else {
-                deferred.reject("updateUser");
+                deferred.reject('updateUser');
               }
             });
           }, deferred.reject);
@@ -103,22 +103,22 @@
       }
     ])
 
-    .factory("addUser", ["$q", "coreAPILoader", "$log", "pick",
-      "getUserProfile",
+    .factory('addUser', ['$q', 'coreAPILoader', '$log', 'pick',
+      'getUserProfile',
       function ($q, coreAPILoader, $log, pick, getUserProfile) {
         return function (companyId, username, profile) {
           var deferred = $q.defer();
           coreAPILoader().then(function (coreApi) {
-            profile = pick(profile, "mailSyncEnabled",
-              "email", "firstName", "lastName", "telephone", "roles",
-              "status");
+            profile = pick(profile, 'mailSyncEnabled',
+              'email', 'firstName', 'lastName', 'telephone', 'roles',
+              'status');
             var request = coreApi.user.add({
               username: username,
               companyId: companyId,
               data: profile
             });
             request.execute(function (resp) {
-              $log.debug("addUser resp", resp);
+              $log.debug('addUser resp', resp);
               if (resp.result) {
                 getUserProfile(username, true).then(function () {
                   deferred.resolve(resp);
@@ -133,7 +133,7 @@
       }
     ])
 
-    .factory("deleteUser", ["$q", "coreAPILoader", "$log",
+    .factory('deleteUser', ['$q', 'coreAPILoader', '$log',
       function ($q, coreAPILoader, $log) {
         return function (username) {
           var deferred = $q.defer();
@@ -142,11 +142,11 @@
               username: username
             });
             request.execute(function (resp) {
-              $log.debug("deleteUser resp", resp);
+              $log.debug('deleteUser resp', resp);
               if (resp.result) {
                 deferred.resolve(resp);
               } else {
-                deferred.reject("deleteUser");
+                deferred.reject('deleteUser');
               }
             });
           });
@@ -155,27 +155,27 @@
       }
     ])
 
-    .factory("getUsers", ["$q", "coreAPILoader", "$log",
+    .factory('getUsers', ['$q', 'coreAPILoader', '$log',
       function ($q, coreAPILoader, $log) {
         return function (search, cursor) {
           var obj = {
-            "companyId": search.companyId,
-            "search": search.query,
-            "cursor": cursor,
-            "count": search.count,
-            "sort": search.sortBy + (search.reverse ? " desc" : " asc")
+            'companyId': search.companyId,
+            'search': search.query,
+            'cursor': cursor,
+            'count': search.count,
+            'sort': search.sortBy + (search.reverse ? ' desc' : ' asc')
           };
 
-          $log.debug("getUsers", obj);
+          $log.debug('getUsers', obj);
           var deferred = $q.defer();
           coreAPILoader().then(function (coreApi) {
             var request = coreApi.user.list(obj);
             request.execute(function (resp) {
-              $log.debug("getUsers resp", resp);
+              $log.debug('getUsers resp', resp);
               if (resp.result) {
                 deferred.resolve(resp.result);
               } else {
-                deferred.reject("getUsers");
+                deferred.reject('getUsers');
               }
             });
           }, deferred.reject);

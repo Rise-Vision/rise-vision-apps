@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.common.components.distribution-selector")
-  .controller("selectDistributionModal", ["$scope", "$modalInstance",
-    "distribution",
+angular.module('risevision.common.components.distribution-selector')
+  .controller('selectDistributionModal', ['$scope', '$modalInstance',
+    'distribution',
     function ($scope, $modalInstance, distribution) {
       $scope.parameters = {};
 
@@ -10,7 +10,7 @@ angular.module("risevision.common.components.distribution-selector")
         distribution) : [];
 
       $scope.apply = function () {
-        console.debug("Selected Distribution: ", $scope.parameters.distribution);
+        console.debug('Selected Distribution: ', $scope.parameters.distribution);
         $modalInstance.close($scope.parameters.distribution);
       };
 

@@ -1,10 +1,11 @@
-angular.module("risevision.common.header")
+'use strict';
 
-  .controller("UserSettingsModalCtrl", [
-    "$scope", "$filter", "$modalInstance", "updateUser", "getUserProfile",
-    "deleteUser", "username", "userRoleMap", "$log", "$loading", "userState",
-    "userAuthFactory", "uiFlowManager", "humanReadableError", "messageBox",
-    "$rootScope", "segmentAnalytics", "userauth", "$q", "COMPANY_ROLE_FIELDS",
+angular.module('risevision.common.header')
+  .controller('UserSettingsModalCtrl', [
+    '$scope', '$filter', '$modalInstance', 'updateUser', 'getUserProfile',
+    'deleteUser', 'username', 'userRoleMap', '$log', '$loading', 'userState',
+    'userAuthFactory', 'uiFlowManager', 'humanReadableError', 'messageBox',
+    '$rootScope', 'segmentAnalytics', 'userauth', '$q', 'COMPANY_ROLE_FIELDS',
     function ($scope, $filter, $modalInstance, updateUser, getUserProfile,
       deleteUser, username, userRoleMap, $log, $loading, userState,
       userAuthFactory, uiFlowManager, humanReadableError, messageBox,
@@ -13,11 +14,11 @@ angular.module("risevision.common.header")
       $scope.userPassword = {};
       $scope.showChangePassword = false;
       $scope.isRiseAuthUser = userState.isRiseAuthUser();
-      $scope.$watch("loading", function (loading) {
+      $scope.$watch('loading', function (loading) {
         if (loading) {
-          $loading.start("user-settings-modal");
+          $loading.start('user-settings-modal');
         } else {
-          $loading.stop("user-settings-modal");
+          $loading.stop('user-settings-modal');
         }
       });
 
@@ -32,8 +33,8 @@ angular.module("risevision.common.header")
       $scope.COMPANY_ROLE_FIELDS = COMPANY_ROLE_FIELDS;
 
       // convert string to numbers
-      $scope.$watch("user.status", function (status) {
-        if (typeof $scope.user.status === "string") {
+      $scope.$watch('user.status', function (status) {
+        if (typeof $scope.user.status === 'string') {
           $scope.user.status = parseInt(status);
         }
       });
@@ -51,14 +52,14 @@ angular.module("risevision.common.header")
       });
 
       $scope.closeModal = function () {
-        $modalInstance.dismiss("cancel");
+        $modalInstance.dismiss('cancel');
       };
 
       $scope.deleteUser = function () {
-        if (confirm("Are you sure you want to delete this user?")) {
+        if (confirm('Are you sure you want to delete this user?')) {
           deleteUser($scope.username)
             .then(function () {
-              segmentAnalytics.track("User Deleted", {
+              segmentAnalytics.track('User Deleted', {
                 userId: $scope.username,
                 companyId: userState.getSelectedCompanyId(),
                 isSelf: userState.checkUsername(username)
@@ -66,12 +67,12 @@ angular.module("risevision.common.header")
 
               if (userState.checkUsername(username)) {
                 userAuthFactory.signOut().then().finally(function () {
-                  uiFlowManager.invalidateStatus("registrationComplete");
+                  uiFlowManager.invalidateStatus('registrationComplete');
                 });
               }
             })
             .finally(function () {
-              $modalInstance.dismiss("deleted");
+              $modalInstance.dismiss('deleted');
             });
         }
       };
@@ -116,28 +117,28 @@ angular.module("risevision.common.header")
                 userState.updateUserProfile(resp.item);
               }
 
-              segmentAnalytics.track("User Updated", {
+              segmentAnalytics.track('User Updated', {
                 userId: $scope.username,
                 companyId: userState.getSelectedCompanyId(),
                 isSelf: userState.checkUsername(username)
               });
 
-              $modalInstance.close("success");
+              $modalInstance.close('success');
             })
             .catch(function (error) {
               error = (error.result && error.result.error) || error;
               $log.debug(error);
-              var errorMessage = "Error: " + humanReadableError(error);
+              var errorMessage = 'Error: ' + humanReadableError(error);
               if (error.code === 409 && !error.changePassword) {
-                errorMessage = $filter("translate")(
-                  "common-header.user.error.duplicate-user", {
-                    "username": $scope.user.username
+                errorMessage = $filter('translate')(
+                  'common-header.user.error.duplicate-user', {
+                    'username': $scope.user.username
                   });
               } else if (error.changePassword) {
                 errorMessage = error.message;
               }
 
-              messageBox("common-header.user.error.update-user",
+              messageBox('common-header.user.error.update-user',
                 errorMessage);
             })
             .finally(function () {
@@ -150,9 +151,9 @@ angular.module("risevision.common.header")
         if (userState.isRiseAdmin()) {
           return true;
         } else if (userState.isUserAdmin()) {
-          if (role.key === "sa" || role.key === "ba") {
+          if (role.key === 'sa' || role.key === 'ba') {
             return false;
-          } else if (role.key === "ua" &&
+          } else if (role.key === 'ua' &&
             userState.checkUsername($scope.user.username)) {
             //cannot unassign oneself from ua
             return false;
@@ -166,17 +167,17 @@ angular.module("risevision.common.header")
       };
 
       $scope.editRoleVisible = function (role) {
-        if (userState.isSelectedCompanyChargebee() && role.key === "pu") {
+        if (userState.isSelectedCompanyChargebee() && role.key === 'pu') {
           return false;
         } else if (userState.isRiseAdmin()) {
-          if (userState.isSubcompanySelected() && (role.key === "sa" || role.key ===
-              "ba")) {
+          if (userState.isSubcompanySelected() && (role.key === 'sa' || role.key ===
+              'ba')) {
             return false;
           } else {
             return true;
           }
         } else if (userState.isUserAdmin() || userState.isRiseVisionUser()) {
-          if (role.key === "sa" || role.key === "ba") {
+          if (role.key === 'sa' || role.key === 'ba') {
             return false;
           } else {
             return true;

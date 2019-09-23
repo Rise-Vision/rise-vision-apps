@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.common.components.message-box.services", [])
-  .factory("messageBox", ["$modal", "$templateCache",
+angular.module('risevision.common.components.message-box.services', [])
+  .factory('messageBox', ['$modal', '$templateCache',
     function ($modal, $templateCache) {
       return function (title, message, close, windowClass, templateUrl) {
         var options = {
-          controller: "messageBoxInstance",
-          size: "md",
+          controller: 'messageBoxInstance',
+          size: 'md',
           resolve: {
             title: function () {
               return title;
@@ -15,7 +15,7 @@ angular.module("risevision.common.components.message-box.services", [])
               return message;
             },
             button: function () {
-              return close || "common.ok";
+              return close || 'common.ok';
             }
           }
         };
@@ -25,7 +25,7 @@ angular.module("risevision.common.components.message-box.services", [])
         }
 
         if (!templateUrl) {
-          options.template = $templateCache.get("partials/components/message-box/message-box.html");
+          options.template = $templateCache.get('partials/components/message-box/message-box.html');
         } else {
           options.templateUrl = templateUrl;
         }

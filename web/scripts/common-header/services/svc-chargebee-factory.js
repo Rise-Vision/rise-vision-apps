@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.store.services")
-  .factory("getChargebeeInstance", ["$q", "$window", "$loading", "storeService", "userState",
-    "CHARGEBEE_TEST_SITE", "CHARGEBEE_PROD_SITE",
+angular.module('risevision.store.services')
+  .factory('getChargebeeInstance', ['$q', '$window', '$loading', 'storeService', 'userState',
+    'CHARGEBEE_TEST_SITE', 'CHARGEBEE_PROD_SITE',
     function ($q, $window, $loading, storeService, userState, CHARGEBEE_TEST_SITE, CHARGEBEE_PROD_SITE) {
       var currentCompanyId = null;
       var currentInstance = null;
@@ -34,11 +34,11 @@ angular.module("risevision.store.services")
         } else {
           var deferred = $q.defer();
 
-          $loading.startGlobal("chargebee-session");
+          $loading.startGlobal('chargebee-session');
 
           storeService.createSession(companyId)
             .then(function (session) {
-              console.log("Chargebee session for companyId", companyId, "is", session);
+              console.log('Chargebee session for companyId', companyId, 'is', session);
 
               currentInstance = _createChargebeeInstance(session);
               currentCompanyId = companyId;
@@ -46,12 +46,12 @@ angular.module("risevision.store.services")
               var sessionDuration = (Number(session.expires_at) - Number(session.created_at)) * 1000;
               currentSessionExpiration = Date.now() + sessionDuration;
 
-              $loading.stopGlobal("chargebee-session");
+              $loading.stopGlobal('chargebee-session');
               deferred.resolve(currentInstance);
             })
             .catch(function (err) {
-              console.log("Error creating Customer Portal session for company id", companyId, err);
-              $loading.stopGlobal("chargebee-session");
+              console.log('Error creating Customer Portal session for company id', companyId, err);
+              $loading.stopGlobal('chargebee-session');
               deferred.reject(err);
             });
 
@@ -60,8 +60,8 @@ angular.module("risevision.store.services")
       };
     }
   ])
-  .factory("ChargebeeFactory", ["$rootScope", "$window", "$log", "getChargebeeInstance", "plansFactory",
-    "currentPlanFactory",
+  .factory('ChargebeeFactory', ['$rootScope', '$window', '$log', 'getChargebeeInstance', 'plansFactory',
+    'currentPlanFactory',
     function ($rootScope, $window, $log, getChargebeeInstance, plansFactory, currentPlanFactory) {
       return function () {
         var factory = {
@@ -84,45 +84,45 @@ angular.module("risevision.store.services")
           } else if (err.status === 404 && currentPlanFactory.currentPlan.isPurchasedByParent) {
             // Throw no access error
             factory.apiError = 403;
-            console.log("Company does not exist in Chargebee, companyId", companyId, err);
+            console.log('Company does not exist in Chargebee, companyId', companyId, err);
           } else {
             factory.apiError = err;
-            console.log("Failed to retrieve session for companyId", companyId, err);
+            console.log('Failed to retrieve session for companyId', companyId, err);
           }
         };
 
         var _chargebeeCallbacks = {
           loaded: function () {
-            $log.debug("Chargebee loaded event");
-            $rootScope.$emit("chargebee.loaded");
+            $log.debug('Chargebee loaded event');
+            $rootScope.$emit('chargebee.loaded');
           },
           close: function () {
-            $log.debug("Chargebee close event");
-            $rootScope.$emit("chargebee.close");
+            $log.debug('Chargebee close event');
+            $rootScope.$emit('chargebee.close');
           },
           visit: function (sectionName) {
-            $log.debug("Chargebee visit event", sectionName);
-            $rootScope.$emit("chargebee.visit", sectionName);
+            $log.debug('Chargebee visit event', sectionName);
+            $rootScope.$emit('chargebee.visit', sectionName);
           },
           paymentSourceAdd: function () {
-            $log.debug("Chargebee paymentSourceAdd event");
-            $rootScope.$emit("chargebee.paymentSourceAdd");
+            $log.debug('Chargebee paymentSourceAdd event');
+            $rootScope.$emit('chargebee.paymentSourceAdd');
           },
           paymentSourceUpdate: function () {
-            $log.debug("Chargebee paymentSourceUpdate event");
-            $rootScope.$emit("chargebee.paymentSourceUpdate");
+            $log.debug('Chargebee paymentSourceUpdate event');
+            $rootScope.$emit('chargebee.paymentSourceUpdate');
           },
           paymentSourceRemove: function () {
-            $log.debug("Chargebee paymentSourceRemove event");
-            $rootScope.$emit("chargebee.paymentSourceRemove");
+            $log.debug('Chargebee paymentSourceRemove event');
+            $rootScope.$emit('chargebee.paymentSourceRemove');
           },
           subscriptionChanged: function (data) {
-            $log.debug("Chargebee subscriptionChanged event", data);
-            $rootScope.$emit("chargebee.subscriptionChanged", data);
+            $log.debug('Chargebee subscriptionChanged event', data);
+            $rootScope.$emit('chargebee.subscriptionChanged', data);
           },
           subscriptionCancelled: function (data) {
-            $log.debug("Chargebee subscriptionCancelled event", data);
-            $rootScope.$emit("chargebee.subscriptionCancelled", data);
+            $log.debug('Chargebee subscriptionCancelled event', data);
+            $rootScope.$emit('chargebee.subscriptionCancelled', data);
           }
         };
 

@@ -1,32 +1,32 @@
 (function (angular) {
-  "use strict";
-  angular.module("risevision.common.components.timeline")
-    .directive("timelineTextbox", ["$modal", "TimelineFactory",
-      "timelineDescription",
+  'use strict';
+  angular.module('risevision.common.components.timeline')
+    .directive('timelineTextbox', ['$modal', 'TimelineFactory',
+      'timelineDescription',
       function ($modal, TimelineFactory, timelineDescription) {
         return {
-          restrict: "E",
+          restrict: 'E',
           scope: {
-            useLocaldate: "=",
-            timeDefined: "=",
-            startDate: "=",
-            endDate: "=",
-            startTime: "=",
-            endTime: "=",
-            recurrenceType: "=",
-            recurrenceFrequency: "=",
-            recurrenceAbsolute: "=",
-            recurrenceDayOfWeek: "=",
-            recurrenceDayOfMonth: "=",
-            recurrenceWeekOfMonth: "=",
-            recurrenceMonthOfYear: "=",
-            recurrenceDaysOfWeek: "="
+            useLocaldate: '=',
+            timeDefined: '=',
+            startDate: '=',
+            endDate: '=',
+            startTime: '=',
+            endTime: '=',
+            recurrenceType: '=',
+            recurrenceFrequency: '=',
+            recurrenceAbsolute: '=',
+            recurrenceDayOfWeek: '=',
+            recurrenceDayOfMonth: '=',
+            recurrenceWeekOfMonth: '=',
+            recurrenceMonthOfYear: '=',
+            recurrenceDaysOfWeek: '='
           },
-          templateUrl: "partials/components/timeline/timeline-textbox.html",
+          templateUrl: 'partials/components/timeline/timeline-textbox.html',
           link: function ($scope) {
             // Watch one of the scope variables to see when
             // new data is coming in
-            $scope.$watch("startDate", function () {
+            $scope.$watch('startDate', function () {
               $scope.timeline = TimelineFactory.getTimeline(
                 $scope.useLocaldate,
                 $scope.timeDefined,
@@ -47,20 +47,20 @@
                 $scope.timeline);
             });
 
-            $scope.$watch("timeline.always", function (newValue) {
+            $scope.$watch('timeline.always', function (newValue) {
               $scope.timeDefined = !newValue;
             });
 
             $scope.openModal = function () {
               var modalInstance = $modal.open({
-                templateUrl: "partials/components/timeline/timeline-modal.html",
-                controller: "timelineModal",
+                templateUrl: 'partials/components/timeline/timeline-modal.html',
+                controller: 'timelineModal',
                 resolve: {
                   timeline: function () {
                     return angular.copy($scope.timeline);
                   }
                 },
-                size: "md"
+                size: 'md'
               });
 
               modalInstance.result.then(function (timeline) {

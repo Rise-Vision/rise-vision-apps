@@ -1,16 +1,16 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.common.components.purchase-flow")
-  .directive("yearSelector", ["$templateCache",
+angular.module('risevision.common.components.purchase-flow')
+  .directive('yearSelector', ['$templateCache',
     function ($templateCache) {
       return {
-        restrict: "E",
-        template: $templateCache.get("partials/components/purchase-flow/year-selector.html"),
-        replace: "true",
+        restrict: 'E',
+        template: $templateCache.get('partials/components/purchase-flow/year-selector.html'),
+        replace: 'true',
         scope: {
-          ngModel: "=?"
+          ngModel: '=?'
         },
-        controller: ["$scope",
+        controller: ['$scope',
           function ($scope) {
             var baseYear = new Date().getFullYear();
             var MAX_COUNT = 20;

@@ -1,34 +1,34 @@
 (function (angular) {
-  "use strict";
+  'use strict';
 
-  angular.module("risevision.core.company", [
-      "risevision.common.gapi",
-      "risevision.core.cache",
-      "risevision.core.util"
+  angular.module('risevision.core.company', [
+      'risevision.common.gapi',
+      'risevision.core.cache',
+      'risevision.core.util'
     ])
 
-    .constant("COMPANY_WRITABLE_FIELDS", [
-      "name", "street", "unit", "city", "province", "country",
-      "postalCode", "timeZoneOffset", "telephone", "fax", "companyStatus",
-      "mailSyncEnabled", "sellerId", "isTest", "shipToUseCompanyAddress",
-      "shipToName", "shipToStreet", "shipToUnit", "shipToCity",
-      "shipToProvince", "shipToPostalCode", "shipToCountry", "website",
-      "companySize", "companyIndustry", "billingContactEmails", "shareCompanyPlan", "settings"
+    .constant('COMPANY_WRITABLE_FIELDS', [
+      'name', 'street', 'unit', 'city', 'province', 'country',
+      'postalCode', 'timeZoneOffset', 'telephone', 'fax', 'companyStatus',
+      'mailSyncEnabled', 'sellerId', 'isTest', 'shipToUseCompanyAddress',
+      'shipToName', 'shipToStreet', 'shipToUnit', 'shipToCity',
+      'shipToProvince', 'shipToPostalCode', 'shipToCountry', 'website',
+      'companySize', 'companyIndustry', 'billingContactEmails', 'shareCompanyPlan', 'settings'
     ])
 
-    .constant("ALERTS_WRITABLE_FIELDS", [
-      "alertSettings"
+    .constant('ALERTS_WRITABLE_FIELDS', [
+      'alertSettings'
     ])
 
-    .constant("COMPANY_SEARCH_FIELDS", [
-      "name", "id", "street", "unit", "city", "province", "country",
-      "postalCode", "telephone", "fax",
-      "shipToName", "shipToStreet", "shipToCity", "shipToPostalCode"
+    .constant('COMPANY_SEARCH_FIELDS', [
+      'name', 'id', 'street', 'unit', 'city', 'province', 'country',
+      'postalCode', 'telephone', 'fax',
+      'shipToName', 'shipToStreet', 'shipToCity', 'shipToPostalCode'
     ])
 
     // New service format:
-    .factory("company", ["$q", "$log", "coreAPILoader", "pick",
-      "ALERTS_WRITABLE_FIELDS",
+    .factory('company', ['$q', '$log', 'coreAPILoader', 'pick',
+      'ALERTS_WRITABLE_FIELDS',
       function ($q, $log, coreAPILoader, pick, ALERTS_WRITABLE_FIELDS) {
         var service = {
           updateAlerts: function (companyId, company) {
@@ -36,20 +36,20 @@
             var fields = pick.apply(this, [company].concat(
               ALERTS_WRITABLE_FIELDS));
             var obj = {
-              "id": companyId,
-              "data": fields
+              'id': companyId,
+              'data': fields
             };
-            $log.debug("updateAlerts called", companyId, fields);
+            $log.debug('updateAlerts called', companyId, fields);
 
             coreAPILoader().then(function (coreApi) {
                 return coreApi.company.patch(obj);
               })
               .then(function (resp) {
-                $log.debug("update Alerts resp", resp);
+                $log.debug('update Alerts resp', resp);
                 deferred.resolve(resp.result);
               })
               .then(null, function (e) {
-                $log.error("Failed to update Alerts.", e);
+                $log.error('Failed to update Alerts.', e);
                 deferred.reject(e);
               });
 
@@ -62,8 +62,8 @@
     ])
 
     // Old services:
-    .factory("createCompany", ["$q", "coreAPILoader", "COMPANY_WRITABLE_FIELDS",
-      "pick",
+    .factory('createCompany', ['$q', 'coreAPILoader', 'COMPANY_WRITABLE_FIELDS',
+      'pick',
       function ($q, coreAPILoader, COMPANY_WRITABLE_FIELDS, pick) {
         return function (parentCompanyId, company) {
           var deferred = $q.defer();
@@ -87,10 +87,10 @@
       }
     ])
 
-    .factory("getCompany", ["coreAPILoader", "$q", "$log",
+    .factory('getCompany', ['coreAPILoader', '$q', '$log',
       function (coreAPILoader, $q, $log) {
         return function (id) { //get a company either by id or authKey
-          $log.debug("getCompany called", id);
+          $log.debug('getCompany called', id);
 
           var deferred = $q.defer();
           coreAPILoader().then(function (coreApi) {
@@ -100,7 +100,7 @@
             }
             var request = coreApi.company.get(criteria);
             request.execute(function (resp) {
-              $log.debug("getCompany resp", resp);
+              $log.debug('getCompany resp', resp);
               if (resp.result) {
                 deferred.resolve(resp.item);
               } else {
@@ -113,10 +113,10 @@
       }
     ])
 
-    .factory("lookupCompany", ["coreAPILoader", "$q", "$log",
+    .factory('lookupCompany', ['coreAPILoader', '$q', '$log',
       function (coreAPILoader, $q, $log) {
         return function (authKey) { //get a company either by id or authKey
-          $log.debug("lookupCompany called", authKey);
+          $log.debug('lookupCompany called', authKey);
 
           var deferred = $q.defer();
           coreAPILoader().then(function (coreApi) {
@@ -124,7 +124,7 @@
               authKey: authKey
             });
             request.execute(function (resp) {
-              $log.debug("lookupCompany resp", resp);
+              $log.debug('lookupCompany resp', resp);
               if (resp.result) {
                 deferred.resolve(resp.item);
               } else {
@@ -137,7 +137,7 @@
       }
     ])
 
-    .factory("moveCompany", ["coreAPILoader", "$q", "$log",
+    .factory('moveCompany', ['coreAPILoader', '$q', '$log',
       function (coreAPILoader, $q, $log) {
         return function (authKey, newParentId) { //get a company either by id or authKey
           var deferred = $q.defer();
@@ -147,7 +147,7 @@
               newParentId: newParentId
             });
             request.execute(function (resp) {
-              $log.debug("moveCompany resp", resp);
+              $log.debug('moveCompany resp', resp);
               if (resp.result) {
                 deferred.resolve(resp.item);
               } else {
@@ -160,13 +160,13 @@
       }
     ])
 
-    .factory("updateCompany", ["$q", "$log", "coreAPILoader", "pick",
-      "COMPANY_WRITABLE_FIELDS",
+    .factory('updateCompany', ['$q', '$log', 'coreAPILoader', 'pick',
+      'COMPANY_WRITABLE_FIELDS',
       function ($q, $log, coreAPILoader, pick, COMPANY_WRITABLE_FIELDS) {
         return function (companyId, fields) {
           var deferred = $q.defer();
           fields = pick.apply(this, [fields].concat(COMPANY_WRITABLE_FIELDS));
-          $log.debug("updateCompany called", companyId, fields);
+          $log.debug('updateCompany called', companyId, fields);
           // fields.validate = validationRequired || false;
           coreAPILoader().then(function (coreApi) {
             var request = coreApi.company.patch({
@@ -174,7 +174,7 @@
               data: fields
             });
             request.execute(function (resp) {
-              $log.debug("updateCompany resp", resp);
+              $log.debug('updateCompany resp', resp);
               if (resp.result && resp.result.item) {
                 deferred.resolve(resp.result.item);
               } else {
@@ -188,19 +188,19 @@
       }
     ])
 
-    .factory("regenerateCompanyField", ["$q", "$log", "coreAPILoader",
+    .factory('regenerateCompanyField', ['$q', '$log', 'coreAPILoader',
       function ($q, $log, coreAPILoader) {
         return function (companyId, fieldName) {
           var deferred = $q.defer();
-          $log.debug("regenerateField called", companyId, fieldName);
+          $log.debug('regenerateField called', companyId, fieldName);
           coreAPILoader().then(function (coreApi) {
             var request = coreApi.company.regenerateField({
-              "id": companyId,
-              "fieldName": fieldName
+              'id': companyId,
+              'fieldName': fieldName
             });
             request.execute(
               function (resp) {
-                $log.debug("regenerateField resp", resp);
+                $log.debug('regenerateField resp', resp);
                 if (!resp.error) {
                   deferred.resolve(resp);
                 } else {
@@ -208,7 +208,7 @@
                 }
               },
               function (resp) {
-                deferred.reject("call failed " + resp);
+                deferred.reject('call failed ' + resp);
               }
             );
           });
@@ -218,10 +218,10 @@
       }
     ])
 
-    .factory("deleteCompany", ["coreAPILoader", "$q", "$log",
+    .factory('deleteCompany', ['coreAPILoader', '$q', '$log',
       function (coreAPILoader, $q, $log) {
         return function (id) { //get a company either by id or authKey
-          $log.debug("deleteCompany called", id);
+          $log.debug('deleteCompany called', id);
 
           var deferred = $q.defer();
           coreAPILoader().then(function (coreApi) {
@@ -231,7 +231,7 @@
             }
             var request = coreApi.company.delete(criteria);
             request.execute(function (resp) {
-              $log.debug("deleteCompany resp", resp);
+              $log.debug('deleteCompany resp', resp);
               if (resp.result) {
                 deferred.resolve(resp.item);
               } else {
@@ -244,18 +244,18 @@
       }
     ])
 
-    .service("companyService", ["coreAPILoader", "$q", "$log", "getCompany",
-      "COMPANY_SEARCH_FIELDS",
+    .service('companyService', ['coreAPILoader', '$q', '$log', 'getCompany',
+      'COMPANY_SEARCH_FIELDS',
       function (coreAPILoader, $q, $log, getCompany, COMPANY_SEARCH_FIELDS) {
 
         var createSearchQuery = function (fields, search) {
-          var query = "";
+          var query = '';
 
           for (var i = 0; i < fields.length; i++) {
-            query += "OR " + fields[i] + ":~\"" + search + "\" ";
+            query += 'OR ' + fields[i] + ':~"' + search + '" ';
           }
 
-          query = query ? query.substring(3) : "";
+          query = query ? query.substring(3) : '';
 
           return query.trim();
         };
@@ -264,21 +264,21 @@
           var deferred = $q.defer();
 
           var query = search.query ? createSearchQuery(COMPANY_SEARCH_FIELDS,
-            search.query) : "";
+            search.query) : '';
 
           var obj = {
-            "companyId": search.companyId,
-            "search": query,
-            "cursor": cursor,
-            "count": search.count,
-            "sort": search.sortBy + (search.reverse ? " desc" : " asc")
+            'companyId': search.companyId,
+            'search': query,
+            'cursor': cursor,
+            'count': search.count,
+            'sort': search.sortBy + (search.reverse ? ' desc' : ' asc')
           };
 
-          $log.debug("getCompanies called with", obj);
+          $log.debug('getCompanies called with', obj);
           coreAPILoader().then(function (coreApi) {
             var request = coreApi.company.list(obj);
             request.execute(function (resp) {
-              $log.debug("getCompanies resp", resp);
+              $log.debug('getCompanies resp', resp);
               deferred.resolve(resp);
             });
           });
@@ -305,12 +305,12 @@
       }
     ])
 
-    .factory("enableCompanyProduct", ["$q", "$log", "coreAPILoader",
+    .factory('enableCompanyProduct', ['$q', '$log', 'coreAPILoader',
       function ($q, $log, coreAPILoader) {
         return function (companyId, productCode, displayStatusMap) {
           var deferred = $q.defer();
 
-          $log.debug("enableCompanyProduct called", companyId, productCode, displayStatusMap);
+          $log.debug('enableCompanyProduct called', companyId, productCode, displayStatusMap);
 
           coreAPILoader().then(function (coreApi) {
             var request = coreApi.company.enableProduct({
@@ -319,7 +319,7 @@
               data: displayStatusMap
             });
             request.execute(function (resp) {
-              $log.debug("enableCompanyProduct resp", resp);
+              $log.debug('enableCompanyProduct resp', resp);
               if (resp.result) {
                 deferred.resolve(resp);
               } else {
@@ -333,13 +333,13 @@
       }
     ])
 
-    .filter("fullAddress", function () {
+    .filter('fullAddress', function () {
       return function (company) {
-        var res = (company.street ? company.street + ", " : "") +
-          (company.city ? company.city + ", " : "") +
-          (company.province ? company.province + ", " : "") +
-          (company.country ? company.country + ", " : "") +
-          (company.postalCode ? company.postalCode + ", " : "");
+        var res = (company.street ? company.street + ', ' : '') +
+          (company.city ? company.city + ', ' : '') +
+          (company.province ? company.province + ', ' : '') +
+          (company.country ? company.country + ', ' : '') +
+          (company.postalCode ? company.postalCode + ', ' : '');
         if (res) {
           res = res.substr(0, res.length - 2);
         }

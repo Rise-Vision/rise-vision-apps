@@ -1,8 +1,8 @@
 (function (angular) {
-  "use strict";
-  angular.module("risevision.common.components.timeline-basic")
-    .controller("timelineBasicModal", ["$scope", "$modalInstance", "timeline",
-      "TimelineBasicFactory",
+  'use strict';
+  angular.module('risevision.common.components.timeline-basic')
+    .controller('timelineBasicModal', ['$scope', '$modalInstance', 'timeline',
+      'TimelineBasicFactory',
       function ($scope, $modalInstance, timeline, TimelineBasicFactory) {
         var factory = new TimelineBasicFactory(timeline);
         $scope.recurrence = factory.recurrence;

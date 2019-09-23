@@ -1,13 +1,13 @@
 (function (angular) {
-  "use strict";
+  'use strict';
 
-  angular.module("risevision.common.components.userstate")
-    .value("FORCE_GOOGLE_AUTH", false)
-    .factory("userAuthFactory", ["$q", "$log", "$location",
-      "$rootScope", "$loading", "$window", "$document",
-      "auth2APILoader", "objectHelper", "rvTokenStore", "externalLogging",
-      "userState", "googleAuthFactory", "customAuthFactory",
-      "FORCE_GOOGLE_AUTH",
+  angular.module('risevision.common.components.userstate')
+    .value('FORCE_GOOGLE_AUTH', false)
+    .factory('userAuthFactory', ['$q', '$log', '$location',
+      '$rootScope', '$loading', '$window', '$document',
+      'auth2APILoader', 'objectHelper', 'rvTokenStore', 'externalLogging',
+      'userState', 'googleAuthFactory', 'customAuthFactory',
+      'FORCE_GOOGLE_AUTH',
       function ($q, $log, $location, $rootScope, $loading, $window,
         $document, auth2APILoader, objectHelper,
         rvTokenStore, externalLogging, userState, googleAuthFactory,
@@ -25,12 +25,12 @@
             try {
               var duration = new Date().getTime() - $window.performance
                 .timing.navigationStart;
-              externalLogging.logEvent("page load time", details,
+              externalLogging.logEvent('page load time', details,
                 duration,
                 userState.getUsername(), userState.getSelectedCompanyId()
               );
             } catch (e) {
-              $log.debug("Error logging load time");
+              $log.debug('Error logging load time');
             }
           }
         };
@@ -43,7 +43,7 @@
         var _cancelAccessTokenAutoRefresh = function () {};
 
         var _resetUserState = function () {
-          $log.debug("Clearing user token...");
+          $log.debug('Clearing user token...');
           _cancelAccessTokenAutoRefresh();
           delete _state.userToken;
           rvTokenStore.clear();
@@ -54,7 +54,7 @@
         var _detectUserOrAuthChange = function () {
           var token = rvTokenStore.read();
           if (!angular.equals(token, _state.userToken)) {
-            $log.error("Authentication Failed. User token no longer matches stored token.");
+            $log.error('Authentication Failed. User token no longer matches stored token.');
 
             //token change indicates that user either signed in, or signed out, or changed account in other app
             $window.location.reload();
@@ -64,7 +64,7 @@
             //make sure user is not signed out of Google account outside of the CH enabled apps
             authenticate(false).finally(function () {
               if (!_state.userToken) {
-                $log.error("Authentication Failed. User no longer signed in.");
+                $log.error('Authentication Failed. User no longer signed in.');
 
                 $window.location.reload();
               }
@@ -75,33 +75,33 @@
         var _visibilityListener = function () {
           var visibilityState;
           var document = $document[0];
-          if (typeof document.hidden !== "undefined") {
-            visibilityState = "visibilityState";
-          } else if (typeof document.mozHidden !== "undefined") {
-            visibilityState = "mozVisibilityState";
-          } else if (typeof document.msHidden !== "undefined") {
-            visibilityState = "msVisibilityState";
-          } else if (typeof document.webkitHidden !== "undefined") {
-            visibilityState = "webkitVisibilityState";
+          if (typeof document.hidden !== 'undefined') {
+            visibilityState = 'visibilityState';
+          } else if (typeof document.mozHidden !== 'undefined') {
+            visibilityState = 'mozVisibilityState';
+          } else if (typeof document.msHidden !== 'undefined') {
+            visibilityState = 'msVisibilityState';
+          } else if (typeof document.webkitHidden !== 'undefined') {
+            visibilityState = 'webkitVisibilityState';
           }
-          $log.debug("visibility: " + document[visibilityState]);
-          if ("visible" === document[visibilityState]) {
+          $log.debug('visibility: ' + document[visibilityState]);
+          if ('visible' === document[visibilityState]) {
             _detectUserOrAuthChange();
-            $rootScope.$broadcast("risevision.page.visible", true);
+            $rootScope.$broadcast('risevision.page.visible', true);
           }
         };
 
         var _getVisibilityChangeName = function () {
           var visibilityChange;
           var document = $document[0];
-          if (typeof document.hidden !== "undefined") {
-            visibilityChange = "visibilitychange";
-          } else if (typeof document.mozHidden !== "undefined") {
-            visibilityChange = "mozvisibilitychange";
-          } else if (typeof document.msHidden !== "undefined") {
-            visibilityChange = "msvisibilitychange";
-          } else if (typeof document.webkitHidden !== "undefined") {
-            visibilityChange = "webkitvisibilitychange";
+          if (typeof document.hidden !== 'undefined') {
+            visibilityChange = 'visibilitychange';
+          } else if (typeof document.mozHidden !== 'undefined') {
+            visibilityChange = 'mozvisibilitychange';
+          } else if (typeof document.msHidden !== 'undefined') {
+            visibilityChange = 'msvisibilitychange';
+          } else if (typeof document.webkitHidden !== 'undefined') {
+            visibilityChange = 'webkitvisibilitychange';
           }
           return visibilityChange;
         };
@@ -145,7 +145,7 @@
               userState.refreshProfile()
                 .then(null, function (err) {
                   if (err && err.code !== 403) {
-                    _authorizeDeferred.reject("Refresh Profile Error");
+                    _authorizeDeferred.reject('Refresh Profile Error');
 
                     _authorizeDeferred = undefined;
 
@@ -155,11 +155,11 @@
                 .then(function () {
                   _authorizeDeferred.resolve();
 
-                  $rootScope.$broadcast("risevision.user.authorized");
+                  $rootScope.$broadcast('risevision.user.authorized');
 
                   if (!attemptImmediate) {
                     $rootScope.$broadcast(
-                      "risevision.user.userSignedIn");
+                      'risevision.user.userSignedIn');
                   }
 
                   _authorizeDeferred = undefined;
@@ -170,7 +170,7 @@
               return $q.resolve();
             }
           } else {
-            return $q.reject("No user");
+            return $q.reject('No user');
           }
         };
 
@@ -195,7 +195,7 @@
           // Always resolve local copy of promise
           // in case cached version is cleared
           authenticateDeferred = _authenticateDeferred;
-          $log.debug("authentication called");
+          $log.debug('authentication called');
 
           var _proceed = function () {
             var authenticationPromise;
@@ -219,11 +219,11 @@
               })
               .then(null, function (err) {
                 if (_state.redirectDetected) {
-                  $log.error("Authentication Error from Redirect: ", err);
+                  $log.error('Authentication Error from Redirect: ', err);
 
                   delete _state.redirectDetected;
                 } else {
-                  $log.debug("Authentication Error: ", err);
+                  $log.debug('Authentication Error: ', err);
                 }
                 _resetUserState();
 
@@ -232,16 +232,16 @@
               .finally(function () {
                 _addEventListenerVisibilityAPI();
 
-                $loading.stopGlobal("risevision.user.authenticate");
+                $loading.stopGlobal('risevision.user.authenticate');
 
-                _logPageLoad("authenticated user");
+                _logPageLoad('authenticated user');
               });
           };
           // pre-load gapi to prevent popup blocker issues
           auth2APILoader().finally(_proceed);
 
           if (forceAuth) {
-            $loading.startGlobal("risevision.user.authenticate");
+            $loading.startGlobal('risevision.user.authenticate');
           }
 
           return authenticateDeferred.promise;
@@ -252,7 +252,7 @@
             if (!userState.isRiseAuthUser()) {
               if (signOutGoogle) {
                 $window.logoutFrame.location =
-                  "https://accounts.google.com/Logout";
+                  'https://accounts.google.com/Logout';
               }
 
               auth2.getAuthInstance().signOut();
@@ -265,8 +265,8 @@
             _resetUserState();
 
             //call google api to sign out
-            $rootScope.$broadcast("risevision.user.signedOut");
-            $log.debug("User is signed out.");
+            $rootScope.$broadcast('risevision.user.signedOut');
+            $log.debug('User is signed out.');
           });
         };
 

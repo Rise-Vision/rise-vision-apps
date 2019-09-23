@@ -1,6 +1,8 @@
-angular.module("risevision.common.components.purchase-flow")
-  .service("addressFactory", ["$q", "$log", "userState", "storeService", "updateCompany", "updateUser",
-    "addressService", "contactService",
+'use strict';
+
+angular.module('risevision.common.components.purchase-flow')
+  .service('addressFactory', ['$q', '$log', 'userState', 'storeService', 'updateCompany', 'updateUser',
+    'addressService', 'contactService',
     function ($q, $log, userState, storeService, updateCompany, updateUser, addressService, contactService) {
       var factory = {};
 
@@ -9,7 +11,7 @@ angular.module("risevision.common.components.purchase-flow")
           // Use Current Name for Comparison
           name: src.name,
           street: result.line1,
-          unit: result.line2 && result.line2.length ? result.line2 : "",
+          unit: result.line2 && result.line2.length ? result.line2 : '',
           city: result.city,
           postalCode: result.postalCode,
           province: result.region,
@@ -22,30 +24,30 @@ angular.module("risevision.common.components.purchase-flow")
       factory.validateAddress = function (addressObject) {
         addressObject.validationError = false;
 
-        if (addressObject.country !== "CA" && addressObject.country !== "US") {
-          $log.debug("Address Validation skipped for country: ", addressObject.country);
+        if (addressObject.country !== 'CA' && addressObject.country !== 'US') {
+          $log.debug('Address Validation skipped for country: ', addressObject.country);
 
           return $q.resolve();
         } else {
           return storeService.validateAddress(addressObject)
             .then(function (result) {
               if (!_addressesAreIdentical(addressObject, result)) {
-                $log.error("Validated address differs from entered address: ", addressObject, result);
+                $log.error('Validated address differs from entered address: ', addressObject, result);
               }
             })
             .catch(function (result) {
-              addressObject.validationError = result.message ? result.message : "Unknown Error";
+              addressObject.validationError = result.message ? result.message : 'Unknown Error';
             });
         }
       };
 
       factory.isValidOrEmptyAddress = function (addressObject) {
         if (addressService.isEmptyAddress(addressObject)) {
-          $log.debug("Address is empty, skipped validation");
+          $log.debug('Address is empty, skipped validation');
           return $q.resolve();
         }
-        if (addressObject.country !== "CA" && addressObject.country !== "US" && addressObject.country !== "") {
-          $log.debug("Address Validation skipped for country: ", addressObject.country);
+        if (addressObject.country !== 'CA' && addressObject.country !== 'US' && addressObject.country !== '') {
+          $log.debug('Address Validation skipped for country: ', addressObject.country);
           return $q.resolve();
         }
         return storeService.validateAddress(addressObject);
@@ -57,7 +59,7 @@ angular.module("risevision.common.components.purchase-flow")
           var shipToCopyNoFollow = userState.getCopyOfSelectedCompany(true);
           angular.extend(shipToCopyNoFollow, company);
 
-          // this will fire "risevision.company.updated" event
+          // this will fire 'risevision.company.updated' event
           userState.updateCompanySettings(shipToCopyNoFollow);
         }
         // only proceed if currently selected BillTo company is the User company
@@ -66,7 +68,7 @@ angular.module("risevision.common.components.purchase-flow")
           var billToCopyNoFollow = userState.getCopyOfUserCompany(true);
           angular.extend(billToCopyNoFollow, company);
 
-          // this will fire "risevision.company.updated" event
+          // this will fire 'risevision.company.updated' event
           userState.updateCompanySettings(billToCopyNoFollow);
         }
       };
@@ -101,19 +103,19 @@ angular.module("risevision.common.components.purchase-flow")
             addressService.copyAddress(addressObject, addressFields);
           }
 
-          $log.info("Company Fields changed. Saving...");
+          $log.info('Company Fields changed. Saving...');
 
           updateCompany(addressFields.id, addressFields)
             .then(function () {
               _updateCompanySettings(addressFields, isShipping);
 
-              $log.info("Company Fields saved.");
+              $log.info('Company Fields saved.');
 
               deferred.resolve();
             })
             .catch(function () {
-              $log.info("Error saving Company Fields.");
-              deferred.reject("Error saving Company Fields.");
+              $log.info('Error saving Company Fields.');
+              deferred.reject('Error saving Company Fields.');
             });
         } else {
           deferred.resolve();
@@ -127,22 +129,22 @@ angular.module("risevision.common.components.purchase-flow")
         var currentContact = userState.getCopyOfProfile();
 
         if (contact && !contactService.contactsAreIdentical(contact, currentContact)) {
-          $log.info("Contact information changed. Saving...");
+          $log.info('Contact information changed. Saving...');
 
           updateUser(userState.getUsername(), contact)
             .then(function () {
               var profileCopyNoFollow = userState.getCopyOfProfile(true);
               contactService.copyContactObj(contact, profileCopyNoFollow);
 
-              // this fires "risevision.company.updated" event
+              // this fires 'risevision.company.updated' event
               userState.updateUserProfile(profileCopyNoFollow);
 
-              $log.info("Contact information saved.");
+              $log.info('Contact information saved.');
               deferred.resolve();
             })
             .catch(function () {
-              $log.info("Error saving Contact information.");
-              deferred.reject("Error saving Contact information.");
+              $log.info('Error saving Contact information.');
+              deferred.reject('Error saving Contact information.');
             });
         } else {
           deferred.resolve();

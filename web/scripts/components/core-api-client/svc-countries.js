@@ -1,9 +1,9 @@
 (function (angular) {
-  "use strict";
+  'use strict';
 
-  angular.module("risevision.core.countries", ["risevision.common.gapi"])
+  angular.module('risevision.core.countries', ['risevision.common.gapi'])
 
-    .factory("getCoreCountries", ["coreAPILoader", "$q", "$log", "$filter",
+    .factory('getCoreCountries', ['coreAPILoader', '$q', '$log', '$filter',
       function (coreAPILoader, $q, $log, $filter) {
         var deferred;
         return function () {
@@ -19,13 +19,13 @@
             .then(function (resp) {
               var items = resp.result ? resp.result.items : [];
               if (items instanceof Array) {
-                items = $filter("orderBy")(items, "name");
+                items = $filter('orderBy')(items, 'name');
               }
 
               deferred.resolve(items);
             })
             .then(null, function (e) {
-              $log.debug("getCoreCountries failed", e);
+              $log.debug('getCoreCountries failed', e);
               deferred.reject(e);
 
               deferred = null;
@@ -34,7 +34,7 @@
         };
       }
     ])
-    .factory("COUNTRIES", ["getCoreCountries",
+    .factory('COUNTRIES', ['getCoreCountries',
       function (getCoreCountries) {
         var countries = [];
 

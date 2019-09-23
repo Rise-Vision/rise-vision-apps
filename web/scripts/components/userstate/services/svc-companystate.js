@@ -1,10 +1,10 @@
 (function (angular) {
 
-  "use strict";
+  'use strict';
 
-  angular.module("risevision.common.components.userstate")
-    .factory("companyState", ["$location", "getCompany", "objectHelper",
-      "$rootScope", "$log", "$q",
+  angular.module('risevision.common.components.userstate')
+    .factory('companyState', ['$location', 'getCompany', 'objectHelper',
+      '$rootScope', '$log', '$q',
       function ($location, getCompany, objectHelper, $rootScope, $log, $q) {
         var pendingSelectedCompany;
 
@@ -16,12 +16,12 @@
         var _resetCompanyState = function () {
           objectHelper.clearObj(_state.selectedCompany);
           objectHelper.clearObj(_state.userCompany);
-          $log.debug("Company state has been reset.");
+          $log.debug('Company state has been reset.');
         };
 
         if ($location.search().cid) {
-          $log.debug("cid", $location.search().cid,
-            "saved for later processing.");
+          $log.debug('cid', $location.search().cid,
+            'saved for later processing.');
           pendingSelectedCompany = $location.search().cid;
         }
 
@@ -60,10 +60,10 @@
 
                 deferred.resolve();
                 $rootScope.$broadcast(
-                  "risevision.company.selectedCompanyChanged");
+                  'risevision.company.selectedCompanyChanged');
               })
               .then(null, function (resp) {
-                console.error("Failed to load selected company.", resp);
+                console.error('Failed to load selected company.', resp);
 
                 deferred.reject(resp);
               });
@@ -84,12 +84,12 @@
               objectHelper.clearAndCopy(company, _state.selectedCompany);
 
               deferred.resolve();
-              $rootScope.$broadcast("risevision.company.updated", {
-                "companyId": company.id
+              $rootScope.$broadcast('risevision.company.updated', {
+                'companyId': company.id
               });
             })
             .then(null, function (resp) {
-              console.error("Failed to reload selected company.", resp);
+              console.error('Failed to reload selected company.', resp);
 
               deferred.reject(resp);
             });
@@ -109,15 +109,15 @@
               objectHelper.clearAndCopy(company, _state.userCompany);
             }
 
-            $rootScope.$broadcast("risevision.company.updated", {
-              "companyId": company.id
+            $rootScope.$broadcast('risevision.company.updated', {
+              'companyId': company.id
             });
           },
           resetCompany: function () {
             objectHelper.clearAndCopy(_state.userCompany, _state.selectedCompany);
 
             $rootScope.$broadcast(
-              "risevision.company.selectedCompanyChanged");
+              'risevision.company.selectedCompanyChanged');
           },
           resetCompanyState: _resetCompanyState,
           getUserCompanyId: function () {
@@ -169,11 +169,11 @@
             return _state.userCompany && !_state.userCompany.parentId;
           },
           isSelectedCompanyChargebee: function () {
-            return _state.selectedCompany && _state.selectedCompany.origin === "Chargebee";
+            return _state.selectedCompany && _state.selectedCompany.origin === 'Chargebee';
           },
           isEducationCustomer: function () {
             return _state.selectedCompany && (_state.selectedCompany.companyIndustry ===
-              "PRIMARY_SECONDARY_EDUCATION" || _state.selectedCompany.companyIndustry === "HIGHER_EDUCATION");
+              'PRIMARY_SECONDARY_EDUCATION' || _state.selectedCompany.companyIndustry === 'HIGHER_EDUCATION');
           }
         };
 

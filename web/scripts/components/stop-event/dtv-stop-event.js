@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.common.components.stop-event", [])
-  .directive("stopEvent", function () {
+angular.module('risevision.common.components.stop-event', [])
+  .directive('stopEvent', function () {
     return {
-      restrict: "A",
+      restrict: 'A',
       link: function (scope, element, attr) {
         element.on(attr.stopEvent, function (e) {
           e.stopPropagation();

@@ -1,14 +1,14 @@
 (function (angular) {
-  "use strict";
+  'use strict';
 
-  angular.module("risevision.common.components.userstate")
+  angular.module('risevision.common.components.userstate')
     // constants (you can override them in your app as needed)
-    .value("PROFILE_PICTURE_URL",
-      "https://www.gravatar.com/avatar/{emailMD5}?d=mm")
-    .factory("userState", [
-      "$q", "$rootScope", "$window", "$log", "$location", "userInfoCache",
-      "getUserProfile", "companyState", "objectHelper",
-      "localStorageService", "rvTokenStore", "md5", "PROFILE_PICTURE_URL",
+    .value('PROFILE_PICTURE_URL',
+      'https://www.gravatar.com/avatar/{emailMD5}?d=mm')
+    .factory('userState', [
+      '$q', '$rootScope', '$window', '$log', '$location', 'userInfoCache',
+      'getUserProfile', 'companyState', 'objectHelper',
+      'localStorageService', 'rvTokenStore', 'md5', 'PROFILE_PICTURE_URL',
       function ($q, $rootScope, $window, $log, $location, userInfoCache,
         getUserProfile, companyState, objectHelper,
         localStorageService, rvTokenStore, md5, PROFILE_PICTURE_URL) {
@@ -65,11 +65,11 @@
 
         var _restoreState = function () {
           var sFromStorage = localStorageService.get(
-            "risevision.common.userState");
+            'risevision.common.userState');
           if (sFromStorage) {
             angular.extend(_state, sFromStorage);
-            localStorageService.remove("risevision.common.userState"); //clear
-            $log.debug("userState restored with", sFromStorage);
+            localStorageService.remove('risevision.common.userState'); //clear
+            $log.debug('userState restored with', sFromStorage);
 
             _state.redirectDetected = true;
           }
@@ -83,14 +83,14 @@
           _state.roleMap = {};
 
           companyState.resetCompanyState();
-          $log.debug("User state has been reset.");
+          $log.debug('User state has been reset.');
         };
 
         var _getEmailMD5 = function () {
           var emailHash = userState.getUsername() && md5.createHash(
             userState.getUsername());
-          var gravatarId = emailHash || "0";
-          return PROFILE_PICTURE_URL.replace("{emailMD5}", gravatarId);
+          var gravatarId = emailHash || '0';
+          return PROFILE_PICTURE_URL.replace('{emailMD5}', gravatarId);
         };
 
         var userState = {
@@ -99,10 +99,10 @@
             return (_state.user && _state.user.username) || null;
           },
           getUserFullName: function () {
-            var firstName = (_state.profile && _state.profile.firstName) || "";
-            var lastName = (_state.profile && _state.profile.lastName) || "";
+            var firstName = (_state.profile && _state.profile.firstName) || '';
+            var lastName = (_state.profile && _state.profile.lastName) || '';
 
-            return (firstName + " " + lastName).trim();
+            return (firstName + ' ' + lastName).trim();
           },
           getUserEmail: function () {
             return _state.profile.email;
@@ -122,16 +122,16 @@
             return _state.inRVAFrame;
           },
           isRiseAdmin: function () {
-            return hasRole("sa") && companyState.isRootCompany();
+            return hasRole('sa') && companyState.isRootCompany();
           },
           isRiseStoreAdmin: function () {
-            return hasRole("ba") && companyState.isRootCompany();
+            return hasRole('ba') && companyState.isRootCompany();
           },
           isUserAdmin: function () {
-            return hasRole("ua");
+            return hasRole('ua');
           },
           isPurchaser: function () {
-            return hasRole("pu");
+            return hasRole('pu');
           },
           isRiseAuthUser: function () {
             return _state.isRiseAuthUser;
@@ -160,7 +160,7 @@
                 });
               }
 
-              $rootScope.$broadcast("risevision.user.updated");
+              $rootScope.$broadcast('risevision.user.updated');
             }
           },
           refreshProfile: refreshProfile,
@@ -191,11 +191,11 @@
             _state.params = params;
 
             // set fake user token to idicate user is logged in
-            _state.userToken = "dummy";
+            _state.userToken = 'dummy';
           },
           _persistState: function () {
             // persist user state
-            localStorageService.set("risevision.common.userState",
+            localStorageService.set('risevision.common.userState',
               _state);
           },
           _state: _state,

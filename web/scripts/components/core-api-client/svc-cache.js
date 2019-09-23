@@ -1,11 +1,11 @@
 (function (angular) {
-  "use strict";
+  'use strict';
 
-  angular.module("risevision.core.cache", [])
+  angular.module('risevision.core.cache', [])
 
-    .factory("userInfoCache", ["$cacheFactory",
+    .factory('userInfoCache', ['$cacheFactory',
       function ($cacheFactory) {
-        return $cacheFactory("user-info-cache");
+        return $cacheFactory('user-info-cache');
       }
     ]);
 

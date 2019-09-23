@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.common.components.logging")
-  .factory("bigQueryLogging", ["externalLogging", "userState",
+angular.module('risevision.common.components.logging')
+  .factory('bigQueryLogging', ['externalLogging', 'userState',
     function (externalLogging, userState) {
       var factory = {};
 

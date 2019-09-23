@@ -1,13 +1,13 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.common.header")
-  .controller("SafeDeleteModalCtrl", ["$scope", "$modalInstance",
+angular.module('risevision.common.header')
+  .controller('SafeDeleteModalCtrl', ['$scope', '$modalInstance',
     function ($scope, $modalInstance) {
       $scope.inputText = null;
       $scope.canConfirm = false;
 
-      $scope.$watch("inputText", function () {
-        $scope.canConfirm = $scope.inputText === "DELETE";
+      $scope.$watch('inputText', function () {
+        $scope.canConfirm = $scope.inputText === 'DELETE';
       });
 
       $scope.confirm = function () {
@@ -17,7 +17,7 @@ angular.module("risevision.common.header")
       };
 
       $scope.cancel = function () {
-        $modalInstance.dismiss("cancel");
+        $modalInstance.dismiss('cancel');
       };
 
       $scope.dismiss = function () {

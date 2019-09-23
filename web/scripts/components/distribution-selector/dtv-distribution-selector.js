@@ -1,25 +1,25 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.common.components.distribution-selector")
-  .directive("distributionSelector", ["$modal",
+angular.module('risevision.common.components.distribution-selector')
+  .directive('distributionSelector', ['$modal',
     function ($modal) {
       return {
-        restrict: "E",
+        restrict: 'E',
         scope: {
-          distribution: "=",
-          distributeToAll: "=",
-          hideCta: "="
+          distribution: '=',
+          distributeToAll: '=',
+          hideCta: '='
         },
-        templateUrl: "partials/components/distribution-selector/distribution-selector.html",
+        templateUrl: 'partials/components/distribution-selector/distribution-selector.html',
         link: function ($scope) {
           var _getDistributionSelectionMessage = function () {
-            var message = "No Displays Selected";
+            var message = 'No Displays Selected';
 
             if ($scope.distribution && $scope.distribution.length > 0) {
               if ($scope.distribution.length === 1) {
-                message = "1 Display Selected";
+                message = '1 Display Selected';
               } else {
-                message = $scope.distribution.length + " Displays Selected";
+                message = $scope.distribution.length + ' Displays Selected';
               }
             }
             return message;
@@ -30,8 +30,8 @@ angular.module("risevision.common.components.distribution-selector")
               _getDistributionSelectionMessage();
           };
 
-          $scope.$watchGroup(["distribution", "distributeToAll"], function () {
-            if (typeof $scope.distributeToAll === "undefined") {
+          $scope.$watchGroup(['distribution', 'distributeToAll'], function () {
+            if (typeof $scope.distributeToAll === 'undefined') {
               $scope.distributeToAll = true;
             }
 
@@ -43,9 +43,9 @@ angular.module("risevision.common.components.distribution-selector")
           $scope.manage = function () {
 
             var modalInstance = $modal.open({
-              templateUrl: "partials/components/distribution-selector/distribution-modal.html",
-              controller: "selectDistributionModal",
-              size: "lg",
+              templateUrl: 'partials/components/distribution-selector/distribution-modal.html',
+              controller: 'selectDistributionModal',
+              size: 'lg',
               resolve: {
                 distribution: function () {
                   return $scope.distribution;

@@ -1,14 +1,14 @@
 (function (angular) {
-  "use strict";
-  angular.module("risevision.common.components.timeline")
-    .directive("monthDropdown",
+  'use strict';
+  angular.module('risevision.common.components.timeline')
+    .directive('monthDropdown',
       function () {
         return {
-          restrict: "E",
+          restrict: 'E',
           scope: {
-            month: "="
+            month: '='
           },
-          templateUrl: "partials/components/timeline/month-dropdown.html"
+          templateUrl: 'partials/components/timeline/month-dropdown.html'
         };
       }
     );

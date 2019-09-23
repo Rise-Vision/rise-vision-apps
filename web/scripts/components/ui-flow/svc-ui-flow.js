@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-angular.module("risevision.common.components.ui-flow")
-  .factory("uiFlowManager", ["$log", "$q", "$injector",
-    "uiStatusDependencies", "$rootScope", "localStorageService",
+angular.module('risevision.common.components.ui-flow')
+  .factory('uiFlowManager', ['$log', '$q', '$injector',
+    'uiStatusDependencies', '$rootScope', 'localStorageService',
     function ($log, $q, $injector, uiStatusDependencies, $rootScope,
       localStorageService) {
 
@@ -23,7 +23,7 @@ angular.module("risevision.common.components.ui-flow")
         try {
           factory = $injector.get(status);
         } catch (e) {
-          $log.debug("Generating dummy status", status);
+          $log.debug('Generating dummy status', status);
           factory = genedateDummyStatus();
         }
         return factory;
@@ -33,7 +33,7 @@ angular.module("risevision.common.components.ui-flow")
       var _attemptStatus = function (status) {
         var lastD;
 
-        $log.debug("Attempting to reach status", status, "...");
+        $log.debug('Attempting to reach status', status, '...');
         var dependencies = _dependencyMap[status];
         if (dependencies) {
           if (!(dependencies instanceof Array)) {
@@ -50,24 +50,24 @@ angular.module("risevision.common.components.ui-flow")
               _attemptStatus(dep).then(function () {
                 //should come here if any of the dependencies is satisfied
                 if (_dependencyMap[dep]) {
-                  $log.debug("Deps for status", dep, "satisfied.");
+                  $log.debug('Deps for status', dep, 'satisfied.');
                 }
                 //find factory function and check for satisfaction
 
                 _getOrCreateDummyFactory(status)().then(
                   function () {
-                    $log.debug("Status", status, "satisfied.");
+                    $log.debug('Status', status, 'satisfied.');
                     currentD.resolve(true);
                   },
                   function () {
-                    $log.debug("Status", status, "not satisfied.");
+                    $log.debug('Status', status, 'not satisfied.');
                     currentD.reject(status);
                   }
                 );
               }, function (lastRej) {
                 if (_dependencyMap[dep]) {
-                  $log.debug("Failed to reach status", dep,
-                    " because its dependencies are not satisfied. Last rejected dep: ",
+                  $log.debug('Failed to reach status', dep,
+                    ' because its dependencies are not satisfied. Last rejected dep: ',
                     lastRej);
                   currentD.reject(lastRej);
                 } else {
@@ -86,11 +86,11 @@ angular.module("risevision.common.components.ui-flow")
           lastD = $q.defer();
           _getOrCreateDummyFactory(status)().then(
             function () {
-              $log.debug("Termination status", status, "satisfied.");
+              $log.debug('Termination status', status, 'satisfied.');
               lastD.resolve(true);
             },
             function () {
-              $log.debug("Termination status", status, "not satisfied.");
+              $log.debug('Termination status', status, 'not satisfied.');
               lastD.reject(status);
             }
           );
@@ -131,8 +131,8 @@ angular.module("risevision.common.components.ui-flow")
               _status = status;
               if (_retriesLeft[status] !== undefined) {
                 if (_retriesLeft[status] === 0) {
-                  $log.debug("Maximum allowed retries for status", status,
-                    "reached. Validation will cancel.");
+                  $log.debug('Maximum allowed retries for status', status,
+                    'reached. Validation will cancel.');
                   cancelValidation();
                 } else {
                   _retriesLeft[status]--;
@@ -147,38 +147,38 @@ angular.module("risevision.common.components.ui-flow")
 
 
       var invalidateStatus = function (desiredStatus) {
-        _status = "pendingCheck";
+        _status = 'pendingCheck';
         return _recheckStatus(desiredStatus);
       };
 
       var persist = function () {
-        localStorageService.set("risevision.ui-flow.state", {
+        localStorageService.set('risevision.ui-flow.state', {
           goalStatus: _goalStatus,
           retriesLeft: _retriesLeft
         });
       };
 
       var cancelValidation = function () {
-        _status = "";
-        _goalStatus = "";
+        _status = '';
+        _goalStatus = '';
         _retriesLeft = null;
         final = true;
-        $rootScope.$broadcast("risevision.uiStatus.validationCancelled");
-        $log.debug("UI status validation cancelled.");
+        $rootScope.$broadcast('risevision.uiStatus.validationCancelled');
+        $log.debug('UI status validation cancelled.');
       };
 
       //restore
-      if (localStorageService.get("risevision.ui-flow.state")) {
-        var state = localStorageService.get("risevision.ui-flow.state");
+      if (localStorageService.get('risevision.ui-flow.state')) {
+        var state = localStorageService.get('risevision.ui-flow.state');
         if (state && state.goalStatus) {
           _goalStatus = state.goalStatus;
-          $log.debug("uiFlowManager.goalStatus restored to", state.goalStatus,
+          $log.debug('uiFlowManager.goalStatus restored to', state.goalStatus,
             state.retriesLeft);
           _retriesLeft = state.retriesLeft;
           deferred = $q.defer();
           final = false;
         }
-        localStorageService.remove("risevision.ui-flow.state");
+        localStorageService.remove('risevision.ui-flow.state');
       }
 
       var manager = {
@@ -188,7 +188,7 @@ angular.module("risevision.common.components.ui-flow")
           return _status;
         },
         isStatusUndetermined: function () {
-          return _status === "pendingCheck";
+          return _status === 'pendingCheck';
         },
         persist: persist
       };

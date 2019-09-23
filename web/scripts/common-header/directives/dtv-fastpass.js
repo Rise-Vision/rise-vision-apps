@@ -1,8 +1,10 @@
-angular.module("risevision.common.header.directives")
-  .directive("fastpass", ["loadFastpass", "userState",
+'use strict';
+
+angular.module('risevision.common.header.directives')
+  .directive('fastpass', ['loadFastpass', 'userState',
     function (loadFastpass, userState) {
       return {
-        restrict: "AE",
+        restrict: 'AE',
         scope: {},
         link: function ($scope) {
           $scope.$watch(function () {

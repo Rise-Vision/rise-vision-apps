@@ -1,33 +1,33 @@
-"use strict";
-angular.module("risevision.common.components.distribution-selector")
-  .controller("distributionListController", ["$scope", "$rootScope",
-    "displayService", "$loading", "BaseList",
+'use strict';
+angular.module('risevision.common.components.distribution-selector')
+  .controller('distributionListController', ['$scope', '$rootScope',
+    'displayService', '$loading', 'BaseList',
     function ($scope, $rootScope, displayService, $loading, BaseList) {
       var DB_MAX_COUNT = 40; //number of records to load at a time
 
       $scope.displays = new BaseList(DB_MAX_COUNT);
       $scope.search = {
-        sortBy: "name",
+        sortBy: 'name',
         count: DB_MAX_COUNT,
         reverse: false
       };
 
       $scope.filterConfig = {
-        placeholder: "Search Displays",
-        id: "displaySearchInput"
+        placeholder: 'Search Displays',
+        id: 'displaySearchInput'
       };
 
-      $scope.$on("displayCreated", function () {
+      $scope.$on('displayCreated', function () {
         $scope.displays.clear();
 
         $scope.load();
       });
 
-      $scope.$watch("loadingDisplays", function (loading) {
+      $scope.$watch('loadingDisplays', function (loading) {
         if (loading) {
-          $loading.start("display-list-loader");
+          $loading.start('display-list-loader');
         } else {
-          $loading.stop("display-list-loader");
+          $loading.stop('display-list-loader');
         }
       });
 
@@ -43,7 +43,7 @@ angular.module("risevision.common.components.distribution-selector")
             })
             .then(null, function () {
               $scope.error =
-                "Failed to load displays. Please try again later.";
+                'Failed to load displays. Please try again later.';
             })
             .finally(function () {
               $scope.loadingDisplays = false;
@@ -81,7 +81,7 @@ angular.module("risevision.common.components.distribution-selector")
       };
 
       $scope.addDisplay = function () {
-        $rootScope.$broadcast("distributionSelector.addDisplay");
+        $rootScope.$broadcast('distributionSelector.addDisplay');
       };
 
       $scope.isSelected = function (displayId) {

@@ -1,12 +1,12 @@
 (function (angular) {
 
-  "use strict";
+  'use strict';
 
-  angular.module("risevision.common.components.scrolling-list")
-    .directive("scrollingList", ["$parse", "$compile",
+  angular.module('risevision.common.components.scrolling-list')
+    .directive('scrollingList', ['$parse', '$compile',
       function ($parse, $compile) {
         return {
-          restrict: "A",
+          restrict: 'A',
           replace: false,
           terminal: true,
           priority: 1000,
@@ -14,7 +14,7 @@
             var fn = $parse(attr.scrollingList);
 
             scope.handleScroll = function (event, isEndEvent) {
-              // $log.debug(event.target.scrollTop + " / " + event.target.scrollHeight + " / " + isEndEvent);
+              // $log.debug(event.target.scrollTop + ' / ' + event.target.scrollHeight + ' / ' + isEndEvent);
               if (isEndEvent) {
                 if (event.target.scrollTop &&
                   (event.target.scrollHeight - event.target.clientHeight -
@@ -28,9 +28,9 @@
 
             // Override this directive with rvScrollEvent
             // http://stackoverflow.com/questions/19224028/add-directives-from-directive-in-angularjs
-            element.attr("rv-scroll-event",
-              "handleScroll($event, isEndEvent)");
-            element.removeAttr("scrolling-list"); //remove the attribute to avoid indefinite loop
+            element.attr('rv-scroll-event',
+              'handleScroll($event, isEndEvent)');
+            element.removeAttr('scrolling-list'); //remove the attribute to avoid indefinite loop
 
             $compile(element)(scope);
           }

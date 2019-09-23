@@ -1,9 +1,9 @@
 (function (angular) {
-  "use strict";
+  'use strict';
 
-  angular.module("risevision.common.components.userstate")
-    .factory("customAuthFactory", ["$q", "$log", "gapiLoader",
-      "userauth", "userState",
+  angular.module('risevision.common.components.userstate')
+    .factory('customAuthFactory', ['$q', '$log', 'gapiLoader',
+      'userauth', 'userState',
       function ($q, $log, gapiLoader, userauth, userState) {
         var factory = {};
 
@@ -18,12 +18,12 @@
                 var gApi = result[0];
                 var loginInfo = result[1] && result[1].result;
 
-                $log.debug("JWT login result:", loginInfo);
+                $log.debug('JWT login result:', loginInfo);
                 if (loginInfo && loginInfo.item) {
                   var token = {
                     access_token: loginInfo.item,
-                    expires_in: "3600",
-                    token_type: "Bearer"
+                    expires_in: '3600',
+                    token_type: 'Bearer'
                   };
                   gApi.auth.setToken(token);
 
@@ -32,7 +32,7 @@
                     token: token
                   });
                 } else {
-                  deferred.reject("Invalid Auth Token (JWT)");
+                  deferred.reject('Invalid Auth Token (JWT)');
                 }
               })
               .then(null, function (err) {

@@ -1,11 +1,11 @@
 (function (angular) {
 
-  "use strict";
+  'use strict';
 
   var INTERVAL_DELAY = 150;
 
-  angular.module("rvScrollEvent", [])
-    .directive("rvScrollEvent", ["$parse", "$window",
+  angular.module('rvScrollEvent', [])
+    .directive('rvScrollEvent', ['$parse', '$window',
       function ($parse, $window) {
         return {
           scope: false,
@@ -14,7 +14,7 @@
             var interval,
               handler,
               el = element[0],
-              scrollEvent = "scroll",
+              scrollEvent = 'scroll',
               scrollPosition = {
                 x: 0,
                 y: 0
@@ -50,7 +50,7 @@
             };
 
             var unbindScroll = function () {
-              // be nice to others, don"t unbind their scroll handlers
+              // be nice to others, don't unbind their scroll handlers
               element.unbind(scrollEvent, handler);
             };
 

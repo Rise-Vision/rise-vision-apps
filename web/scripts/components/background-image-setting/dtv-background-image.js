@@ -1,18 +1,18 @@
 (function () {
-  "use strict";
+  'use strict';
 
-  angular.module("risevision.common.components.background-image", [])
-    .directive("backgroundImage", ["$log",
+  angular.module('risevision.common.components.background-image', [])
+    .directive('backgroundImage', ['$log',
       function ( /*$log*/ ) {
         return {
-          restrict: "A",
+          restrict: 'A',
           link: function (scope, element) {
-            element.bind("load", function () {
-              scope.$emit("backgroundImageLoad", true);
+            element.bind('load', function () {
+              scope.$emit('backgroundImageLoad', true);
             });
 
-            element.bind("error", function () {
-              scope.$emit("backgroundImageLoad", false);
+            element.bind('error', function () {
+              scope.$emit('backgroundImageLoad', false);
             });
           }
         };
