@@ -85,7 +85,8 @@
           if ($location.search()[paramName]) {
             return $location.search()[paramName];
           } else {
-            var decodedPath = decodeURIComponent(decodeURIComponent(decodeURIComponent(decodeURIComponent($location
+            var decodedPath = decodeURIComponent(decodeURIComponent(decodeURIComponent(decodeURIComponent(
+              $location
               .path()))));
             var match = new RegExp("[\?&]" + paramName + "=([^&#\"]*)").exec(decodedPath);
             return match && match[1];

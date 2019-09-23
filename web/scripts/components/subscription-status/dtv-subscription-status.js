@@ -2,7 +2,7 @@
   "use strict";
 
   angular.module(
-    "risevision.common.components.subscription-status.directives")
+      "risevision.common.components.subscription-status.directives")
     .directive("subscriptionStatus", ["$rootScope", "$templateCache", "subscriptionStatusService",
       "STORE_URL", "ACCOUNT_PATH", "IN_RVA_PATH",
       function ($rootScope, $templateCache, subscriptionStatusService, STORE_URL, ACCOUNT_PATH,
@@ -46,7 +46,8 @@
                 subscriptionStatusService.get($scope.productCode, $scope.companyId, $scope.displayId)
                   .then(function (subscriptionStatus) {
                       if (subscriptionStatus) {
-                        if (!$scope.subscriptionStatus || $scope.subscriptionStatus.status !== subscriptionStatus.status) {
+                        if (!$scope.subscriptionStatus || $scope.subscriptionStatus.status !== subscriptionStatus
+                          .status) {
                           $rootScope.$emit("subscription-status:changed", subscriptionStatus);
                         }
 
@@ -66,7 +67,8 @@
             });
 
             var subscriptionStatusListener = $rootScope.$on(
-              "refreshSubscriptionStatus", function (event, data) {
+              "refreshSubscriptionStatus",
+              function (event, data) {
                 // Only refresh if currentStatus code matches the provided value, or value is null
                 if (data === null || $scope.subscriptionStatus.statusCode === data) {
                   checkSubscriptionStatus();

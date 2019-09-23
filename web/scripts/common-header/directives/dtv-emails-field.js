@@ -3,7 +3,7 @@
 angular.module("risevision.common.header.directives")
   .value("EMAIL_REGEX",
     /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
-)
+  )
   .directive("emailsField", ["$templateCache", "$timeout", "EMAIL_REGEX",
     function ($templateCache, $timeout, EMAIL_REGEX) {
       return {
@@ -67,7 +67,8 @@ angular.module("risevision.common.header.directives")
           };
 
           $scope.isValidEmail = function (email) {
-            return !!(email && email.text && EMAIL_REGEX.test(email.text) && _emailsModelToStrings().indexOf(email.text) ===
+            return !!(email && email.text && EMAIL_REGEX.test(email.text) && _emailsModelToStrings().indexOf(email
+                .text) ===
               -1);
           };
 

@@ -11,5 +11,5 @@
           templateUrl: "partials/components/timeline/month-dropdown.html"
         };
       }
-  );
+    );
 })(angular);

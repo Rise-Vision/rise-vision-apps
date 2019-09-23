@@ -4,203 +4,203 @@
   "use strict";
 
   angular.module("risevision.common.support", [])
-  /* jshint quotmark: single */
-  .value('ZENDESK_WEB_WIDGET_SCRIPT',
-    'window.zE||(function(e,t,s){var n=window.zE=window.zEmbed=function(){n._.push(arguments)},a=n.s=e.createElement(t),r=e.getElementsByTagName(t)[0];n.set=function(e){n.set._.push(e)},n._=[],n.set._=[],a.async=true,a.setAttribute("charset","utf-8"),a.src="https://static.zdassets.com/ekr/asset_composer.js?key="+s,n.t=+new Date,a.type="text/javascript",r.parentNode.insertBefore(a,r)})(document,"script","b8d6bdba-10ea-4b88-b96c-9d3905b85d8f");'
-  )
-  /* jshint quotmark: double */
-  .factory("zendesk", ["$q", "$window", "segmentAnalytics",
-    "userState", "ZENDESK_WEB_WIDGET_SCRIPT",
-    function ($q, $window, segmentAnalytics, userState,
-      ZENDESK_WEB_WIDGET_SCRIPT) {
+    /* jshint quotmark: single */
+    .value('ZENDESK_WEB_WIDGET_SCRIPT',
+      'window.zE||(function(e,t,s){var n=window.zE=window.zEmbed=function(){n._.push(arguments)},a=n.s=e.createElement(t),r=e.getElementsByTagName(t)[0];n.set=function(e){n.set._.push(e)},n._=[],n.set._=[],a.async=true,a.setAttribute("charset","utf-8"),a.src="https://static.zdassets.com/ekr/asset_composer.js?key="+s,n.t=+new Date,a.type="text/javascript",r.parentNode.insertBefore(a,r)})(document,"script","b8d6bdba-10ea-4b88-b96c-9d3905b85d8f");'
+    )
+    /* jshint quotmark: double */
+    .factory("zendesk", ["$q", "$window", "segmentAnalytics",
+      "userState", "ZENDESK_WEB_WIDGET_SCRIPT",
+      function ($q, $window, segmentAnalytics, userState,
+        ZENDESK_WEB_WIDGET_SCRIPT) {
 
-      var loaded = false;
-      var previousUsername = "";
-      var $ = $window.$;
+        var loaded = false;
+        var previousUsername = "";
+        var $ = $window.$;
 
-      function ensureScript() {
-        if (!loaded) {
-          $window.zESettings = {
-            webWidget: {
-              helpCenter: {
-                title: {
-                  "*": "Help"
+        function ensureScript() {
+          if (!loaded) {
+            $window.zESettings = {
+              webWidget: {
+                helpCenter: {
+                  title: {
+                    "*": "Help"
+                  },
+                  searchPlaceholder: {
+                    "*": "How can we help?"
+                  },
+                  messageButton: {
+                    "*": "Open a Support Ticket"
+                  }
                 },
-                searchPlaceholder: {
-                  "*": "How can we help?"
+
+                chat: {
+                  suppress: true
                 },
-                messageButton: {
-                  "*": "Open a Support Ticket"
-                }
-              },
 
-              chat: {
-                suppress: true
-              },
-
-              contactForm: {
-                title: {
-                  "*": "Open a Support Ticket"
+                contactForm: {
+                  title: {
+                    "*": "Open a Support Ticket"
+                  }
                 }
               }
-            }
-          };
+            };
 
-          var scriptElem = $window.document.createElement("script");
-          scriptElem.innerText = ZENDESK_WEB_WIDGET_SCRIPT;
+            var scriptElem = $window.document.createElement("script");
+            scriptElem.innerText = ZENDESK_WEB_WIDGET_SCRIPT;
 
-          $window.document.body.appendChild(scriptElem);
-          loaded = true;
+            $window.document.body.appendChild(scriptElem);
+            loaded = true;
 
-          hideWidget();
+            hideWidget();
+          }
+          return $q.when();
         }
-        return $q.when();
-      }
 
-      function _identify() {
-        var deferred = $q.defer();
+        function _identify() {
+          var deferred = $q.defer();
 
-        $window.zE(function () {
+          $window.zE(function () {
+            var username = userState.getUsername();
+            var properties = {
+              email: userState.getUserEmail(),
+              "rise_vision_company_id": userState.getUserCompanyId(),
+            };
+
+            segmentAnalytics.identify(username, properties);
+
+            deferred.resolve();
+          });
+          return deferred.promise;
+        }
+
+        function initializeWidget() {
+          return ensureScript()
+            .then(_identify)
+            .then(_completeInitialization);
+        }
+
+        function _completeInitialization() {
           var username = userState.getUsername();
-          var properties = {
-            email: userState.getUserEmail(),
-            "rise_vision_company_id": userState.getUserCompanyId(),
-          };
 
-          segmentAnalytics.identify(username, properties);
+          if (previousUsername !== username) {
+            var identity = {
+              email: username,
+              name: userState.getUserFullName()
+            };
 
-          deferred.resolve();
-        });
-        return deferred.promise;
-      }
+            if (username) {
+              $window.zE(function () {
+                $window.zE.identify(identity);
+              });
+            }
 
-      function initializeWidget() {
-        return ensureScript()
-          .then(_identify)
-          .then(_completeInitialization);
-      }
-
-      function _completeInitialization() {
-        var username = userState.getUsername();
-
-        if (previousUsername !== username) {
-          var identity = {
-            email: username,
-            name: userState.getUserFullName()
-          };
-
-          if (username) {
-            $window.zE(function () {
-              $window.zE.identify(identity);
-            });
+            previousUsername = username;
           }
 
-          previousUsername = username;
+          _changeBorderStyle();
         }
 
-        _changeBorderStyle();
-      }
+        function _changeBorderStyle() {
+          $("iframe[class^=zEWidget]").contents().find(".Container")
+            .css("border", "1px solid #4ab767");
+        }
 
-      function _changeBorderStyle() {
-        $("iframe[class^=zEWidget]").contents().find(".Container")
-          .css("border", "1px solid #4ab767");
-      }
+        function logout() {
+          previousUsername = "";
+        }
 
-      function logout() {
-        previousUsername = "";
-      }
-
-      function enableSuggestions() {
-        if ($window.zE) {
-          $window.zE(function () {
-            $window.zE.setHelpCenterSuggestions({
-              url: true
+        function enableSuggestions() {
+          if ($window.zE) {
+            $window.zE(function () {
+              $window.zE.setHelpCenterSuggestions({
+                url: true
+              });
             });
-          });
+          }
         }
-      }
 
-      function displayButton() {
-        if ($window.zE) {
-          $window.zE(function () {
-            $window.zE.show();
-          });
+        function displayButton() {
+          if ($window.zE) {
+            $window.zE(function () {
+              $window.zE.show();
+            });
+          }
         }
-      }
 
-      function hideWidget() {
-        if ($window.zE) {
-          $window.zE(function () {
-            $window.zE.hide();
-          });
+        function hideWidget() {
+          if ($window.zE) {
+            $window.zE(function () {
+              $window.zE.hide();
+            });
+          }
         }
-      }
 
-      function activateWidget() {
-        if ($window.zE) {
-          $window.zE(function () {
-            $window.zE.activate();
-          });
+        function activateWidget() {
+          if ($window.zE) {
+            $window.zE(function () {
+              $window.zE.activate();
+            });
+          }
         }
+
+        return {
+          initializeWidget: initializeWidget,
+          displayButton: displayButton,
+          hideWidget: hideWidget,
+          activateWidget: activateWidget,
+          enableSuggestions: enableSuggestions,
+          logout: logout
+        };
+
       }
+    ])
 
-      return {
-        initializeWidget: initializeWidget,
-        displayButton: displayButton,
-        hideWidget: hideWidget,
-        activateWidget: activateWidget,
-        enableSuggestions: enableSuggestions,
-        logout: logout
-      };
+    .run(["$rootScope", "$window", "userState", "userAuthFactory", "zendesk", "ZENDESK_WEB_WIDGET_SCRIPT",
+      function ($rootScope, $window, userState, userAuthFactory, zendesk, ZENDESK_WEB_WIDGET_SCRIPT) {
+        var widgetVisible = false;
 
-    }
-  ])
+        if (ZENDESK_WEB_WIDGET_SCRIPT) {
+          zendesk.initializeWidget();
 
-  .run(["$rootScope", "$window", "userState", "userAuthFactory", "zendesk", "ZENDESK_WEB_WIDGET_SCRIPT",
-    function ($rootScope, $window, userState, userAuthFactory, zendesk, ZENDESK_WEB_WIDGET_SCRIPT) {
-      var widgetVisible = false;
-
-      if (ZENDESK_WEB_WIDGET_SCRIPT) {
-        zendesk.initializeWidget();
-
-        userAuthFactory.authenticate()
-          .then(function () {
-            if (!userState.isLoggedIn()) {
+          userAuthFactory.authenticate()
+            .then(function () {
+              if (!userState.isLoggedIn()) {
+                _showWebWidget();
+              }
+            })
+            .catch(function () {
               _showWebWidget();
-            }
-          })
-          .catch(function () {
+            });
+
+          $rootScope.$on("risevision.user.authorized", function () {
+            zendesk.initializeWidget(); // Needed to authenticate the user
+            _hideWebWidget();
+          });
+
+          $rootScope.$on("risevision.user.signedOut", function () {
             _showWebWidget();
           });
 
-        $rootScope.$on("risevision.user.authorized", function () {
-          zendesk.initializeWidget(); // Needed to authenticate the user
-          _hideWebWidget();
-        });
+          $rootScope.$on("$stateChangeStart", function () {
+            zendesk.enableSuggestions();
+          });
+        }
 
-        $rootScope.$on("risevision.user.signedOut", function () {
-          _showWebWidget();
-        });
+        function _hideWebWidget() {
+          if (widgetVisible) {
+            zendesk.hideWidget();
+            widgetVisible = false;
+          }
+        }
 
-        $rootScope.$on("$stateChangeStart", function () {
-          zendesk.enableSuggestions();
-        });
-      }
-
-      function _hideWebWidget() {
-        if (widgetVisible) {
-          zendesk.hideWidget();
-          widgetVisible = false;
+        function _showWebWidget() {
+          setTimeout(function () {
+            zendesk.logout();
+            zendesk.displayButton();
+            widgetVisible = true;
+          }, 2000);
         }
       }
-
-      function _showWebWidget() {
-        setTimeout(function () {
-          zendesk.logout();
-          zendesk.displayButton();
-          widgetVisible = true;
-        }, 2000);
-      }
-    }
-  ]);
+    ]);
 })(angular);

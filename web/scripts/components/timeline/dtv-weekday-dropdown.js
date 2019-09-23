@@ -11,5 +11,5 @@
           templateUrl: "partials/components/timeline/weekday-dropdown.html"
         };
       }
-  );
+    );
 })(angular);

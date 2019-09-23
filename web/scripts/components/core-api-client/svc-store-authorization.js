@@ -1,8 +1,8 @@
 "use strict";
 
 angular.module("risevision.store.authorization", [
-  "risevision.common.gapi"
-])
+    "risevision.common.gapi"
+  ])
   .factory("storeAuthorization", ["$q", "$log", "$http",
     "STORE_SERVER_URL", "userState",
     function ($q, $log, $http, STORE_SERVER_URL, userState) {

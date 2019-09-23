@@ -2,8 +2,8 @@
   "use strict";
 
   angular.module("risevision.common.components.repeat-setting", [
-    "risevision.common.i18n"
-  ])
+      "risevision.common.i18n"
+    ])
     .directive("repeatSetting", ["$templateCache",
       function ($templateCache) {
         return {

@@ -78,7 +78,8 @@ angular.module("risevision.store.services")
         };
 
         var _handleChargebeePortalError = function (err, companyId) {
-          if (err.status === 404 && !currentPlanFactory.currentPlan.isPurchasedByParent && !plansFactory.isPlansModalOpen) {
+          if (err.status === 404 && !currentPlanFactory.currentPlan.isPurchasedByParent && !plansFactory
+            .isPlansModalOpen) {
             plansFactory.showPlansModal();
           } else if (err.status === 404 && currentPlanFactory.currentPlan.isPurchasedByParent) {
             // Throw no access error

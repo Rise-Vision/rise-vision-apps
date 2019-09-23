@@ -58,8 +58,8 @@
             };
 
             storeAPILoader().then(function (storeApi) {
-              return storeApi.tax.estimate(obj);
-            })
+                return storeApi.tax.estimate(obj);
+              })
               .then(function (resp) {
                 if (resp.result && !resp.result.error && resp.result.result === true) {
                   $log.debug("tax estimate resp", resp);
@@ -80,11 +80,11 @@
           purchase: function (jsonData) {
             var deferred = $q.defer();
             storeAPILoader().then(function (storeAPI) {
-              var obj = {
-                jsonData: jsonData
-              };
-              return storeAPI.purchase.put2(obj);
-            })
+                var obj = {
+                  jsonData: jsonData
+                };
+                return storeAPI.purchase.put2(obj);
+              })
               .then(function (resp) {
                 if (resp && resp.result && !resp.result.error) {
                   $log.debug("purchase resp", resp);
@@ -108,8 +108,8 @@
             };
 
             storeAPILoader().then(function (storeApi) {
-              return storeApi.customer_portal.createSession(obj);
-            })
+                return storeApi.customer_portal.createSession(obj);
+              })
               .then(function (resp) {
                 $log.debug("customer_portal.createSession resp", resp);
                 deferred.resolve(JSON.parse(resp.result.result));
@@ -159,12 +159,12 @@
                   deferred.reject(resp.error);
                 } else {
                   $http.post(resp.result.result, formData, {
-                    withCredentials: true,
-                    headers: {
-                      "Content-Type": undefined
-                    },
-                    transformRequest: angular.identity
-                  })
+                      withCredentials: true,
+                      headers: {
+                        "Content-Type": undefined
+                      },
+                      transformRequest: angular.identity
+                    })
                     .then(function (response) {
                         deferred.resolve(response.data);
                       },

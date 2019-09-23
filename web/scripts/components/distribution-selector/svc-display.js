@@ -42,8 +42,8 @@ angular.module("risevision.common.components.distribution-selector.services")
           $log.debug("list displays called with", obj);
 
           coreAPILoader().then(function (coreApi) {
-            return coreApi.display.list(obj);
-          })
+              return coreApi.display.list(obj);
+            })
             .then(function (resp) {
               deferred.resolve(resp.result);
             })

@@ -1,8 +1,8 @@
 "use strict";
 
 angular.module("risevision.common.components.message-box", [
-  "risevision.common.components.message-box.services"
-])
+    "risevision.common.components.message-box.services"
+  ])
   .controller("messageBoxInstance", ["$scope", "$modalInstance",
     "title", "message", "button",
     function ($scope, $modalInstance, title, message, button) {

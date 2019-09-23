@@ -2,8 +2,8 @@
   "use strict";
 
   angular.module("risevision.common.subscription-status", [
-    "risevision.common.gapi"
-  ])
+      "risevision.common.gapi"
+    ])
     .service("subscriptionStatusService", ["$http", "$q", "storeAPILoader",
       "$log",
       function ($http, $q, storeAPILoader, $log) {

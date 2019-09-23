@@ -41,7 +41,7 @@ angular.module("pascalprecht.translate")
 
       return function (options) {
         if (!options || (!angular.isString(options.prefix) ||
-          !angular.isString(options.suffix))) {
+            !angular.isString(options.suffix))) {
           throw new Error(
             "Couldn\"t load static files, no prefix or suffix specified!");
         }
@@ -56,9 +56,9 @@ angular.module("pascalprecht.translate")
   ]);
 
 angular.module("risevision.common.i18n", [
-  "pascalprecht.translate",
-  "risevision.common.i18n.config"
-])
+    "pascalprecht.translate",
+    "risevision.common.i18n.config"
+  ])
   .config(["$translateProvider", "LOCALES_PREFIX", "LOCALES_SUFIX",
     function ($translateProvider, LOCALES_PREFIX, LOCALES_SUFIX) {
       // Tries to determine the browsers locale

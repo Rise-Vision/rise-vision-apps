@@ -30,14 +30,14 @@
 
           //populate userCompany
           getCompany().then(function (company) {
-            var selectedCompanyId = _companyState.getSelectedCompanyId() ?
-              _companyState.getSelectedCompanyId() :
-              pendingSelectedCompany;
+              var selectedCompanyId = _companyState.getSelectedCompanyId() ?
+                _companyState.getSelectedCompanyId() :
+                pendingSelectedCompany;
 
-            objectHelper.clearAndCopy(company, _state.userCompany);
+              objectHelper.clearAndCopy(company, _state.userCompany);
 
-            return _switchCompany(selectedCompanyId);
-          })
+              return _switchCompany(selectedCompanyId);
+            })
             .then(null, function () {
               _companyState.resetCompany();
             })

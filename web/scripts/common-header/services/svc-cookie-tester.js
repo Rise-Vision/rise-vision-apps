@@ -28,8 +28,8 @@ angular.module("risevision.common.cookie", ["risevision.common.config"])
         var deferred = $q.defer();
 
         $http.get(COOKIE_CHECK_URL + "/createThirdPartyCookie", {
-          withCredentials: true
-        })
+            withCredentials: true
+          })
           .then(function () {
             return $http.get(COOKIE_CHECK_URL + "/checkThirdPartyCookie", {
               withCredentials: true

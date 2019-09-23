@@ -4,8 +4,8 @@
   "use strict";
 
   angular.module("risevision.common.components.scrolling-list", [
-    "rvScrollEvent"
-  ])
+      "rvScrollEvent"
+    ])
     .value("BaseList", function (maxCount) {
       this.list = [];
       this.maxCount = maxCount ? maxCount : 40;

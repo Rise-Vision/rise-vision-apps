@@ -2,9 +2,9 @@
   "use strict";
 
   angular.module("risevision.common.components.userstate")
-  // constants (you can override them in your app as needed)
-  .value("PROFILE_PICTURE_URL",
-    "https://www.gravatar.com/avatar/{emailMD5}?d=mm")
+    // constants (you can override them in your app as needed)
+    .value("PROFILE_PICTURE_URL",
+      "https://www.gravatar.com/avatar/{emailMD5}?d=mm")
     .factory("userState", [
       "$q", "$rootScope", "$window", "$log", "$location", "userInfoCache",
       "getUserProfile", "companyState", "objectHelper",

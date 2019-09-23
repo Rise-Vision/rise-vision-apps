@@ -4,8 +4,8 @@
 "use strict";
 
 angular.module("risevision.common.apis", [
-  "risevision.common.gapi"
-])
+    "risevision.common.gapi"
+  ])
   .factory("listApis", ["$q", "discoveryAPILoader", "$log",
     function ($q, discoveryAPILoader, $log) {
       return function (name, preferred) {

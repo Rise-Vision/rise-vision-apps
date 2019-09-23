@@ -4,10 +4,10 @@
 "use strict";
 
 angular.module("risevision.common.app", [
-  "risevision.common.gapi",
-  "risevision.core.util"
+    "risevision.common.gapi",
+    "risevision.core.util"
 
-])
+  ])
   .constant("APP_WRITABLE_FIELDS", [
     "name", "description", "clientId", "url"
   ])

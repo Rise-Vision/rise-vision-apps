@@ -14,8 +14,8 @@
               "password": password
             };
             riseAPILoader().then(function (coreApi) {
-              return coreApi.userauth.add(obj);
-            })
+                return coreApi.userauth.add(obj);
+              })
               .then(function (resp) {
                 $log.debug("added user credentials", resp);
                 deferred.resolve(resp.result);
@@ -35,8 +35,8 @@
               "newPassword": newPassword
             };
             riseAPILoader().then(function (coreApi) {
-              return coreApi.userauth.updatePassword(obj);
-            })
+                return coreApi.userauth.updatePassword(obj);
+              })
               .then(function (resp) {
                 $log.debug("update user credentials resp", resp);
                 deferred.resolve(resp.result);
@@ -56,8 +56,8 @@
               "password": password
             };
             riseAPILoader().then(function (coreApi) {
-              return coreApi.userauth.login(obj);
-            })
+                return coreApi.userauth.login(obj);
+              })
               .then(function (resp) {
                 $log.debug("login successful", resp);
                 deferred.resolve(resp);
@@ -77,8 +77,8 @@
               "token": token
             };
             riseAPILoader().then(function (coreApi) {
-              return coreApi.userauth.refreshToken(obj);
-            })
+                return coreApi.userauth.refreshToken(obj);
+              })
               .then(function (resp) {
                 $log.debug("token refresh successful", resp);
                 deferred.resolve(resp);
@@ -98,8 +98,8 @@
               "userConfirmedToken": userConfirmedToken
             };
             riseAPILoader().then(function (coreApi) {
-              return coreApi.userauth.confirmUserCreation(obj);
-            })
+                return coreApi.userauth.confirmUserCreation(obj);
+              })
               .then(function (resp) {
                 $log.debug("Confirm user creation successful", resp);
                 deferred.resolve(resp);
@@ -118,8 +118,8 @@
               "username": username
             };
             riseAPILoader().then(function (coreApi) {
-              return coreApi.userauth.requestConfirmationEmail(obj);
-            })
+                return coreApi.userauth.requestConfirmationEmail(obj);
+              })
               .then(function (resp) {
                 $log.debug("Request confirmation email successful",
                   resp);
@@ -140,8 +140,8 @@
               "username": username
             };
             riseAPILoader().then(function (coreApi) {
-              return coreApi.userauth.requestPasswordReset(obj);
-            })
+                return coreApi.userauth.requestPasswordReset(obj);
+              })
               .then(function (resp) {
                 $log.debug("Request password reset successful", resp);
                 deferred.resolve(resp);
@@ -163,8 +163,8 @@
               "newPassword": newPassword
             };
             riseAPILoader().then(function (coreApi) {
-              return coreApi.userauth.resetPassword(obj);
-            })
+                return coreApi.userauth.resetPassword(obj);
+              })
               .then(function (resp) {
                 $log.debug("Reset password successful", resp);
                 deferred.resolve(resp);
