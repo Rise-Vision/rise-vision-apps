@@ -9,7 +9,7 @@
     var nameField = element(by.id("company-settings-name"));
     var streetField = element(by.id("company-settings-street"));
 
-    var formError = element(by.id("errorBox"));
+    var formError = element(by.css(".company-settings-modal #errorBox"));
     
     var authKeyField = element(by.css(".ps-auth-key"));
     var claimIdField = element(by.css(".ps-claim-id"));
