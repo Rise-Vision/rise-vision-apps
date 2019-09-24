@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Timeline textbox - Test Page</title>
+    <link rel="stylesheet" href="/dist/css/rise.min.css">
+</head>
+<body ng-app="testapp" ng-controller="mainController">
+
+<timeline-textbox
+time-defined = "timeline.timeDefined"
+start-date = "timeline.startDate"
+end-date = "timeline.endDate"
+start-time = "timeline.startTime"
+end-time = "timeline.endTime"
+recurrence-type = "timeline.recurrenceType"
+recurrence-frequency = "timeline.recurrenceFrequency"
+recurrence-absolute = "timeline.recurrenceAbsolute"
+recurrence-day-of-week = "timeline.recurrenceDayOfWeek"
+recurrence-day-of-month = "timeline.recurrenceDayOfMonth"
+recurrence-week-of-month = "timeline.recurrenceWeekOfMonth"
+recurrence-month-of-year = "timeline.recurrenceMonthOfYear"
+recurrence-days-of-week = "timeline.recurrenceDaysOfWeek"
+></timeline-textbox>
+
+<script type="text/javascript" src="/bower_components/angular/angular.js"></script>
+<script type="text/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script type="text/javascript" src="/dist/js/components/timeline.js"></script>
+
+<script>
+  angular.module("testapp", ["risevision.common.components.timeline"])
+    .controller("mainController", ["$scope", function ($scope) {
+      $scope.timeline = {};
+    }]);
+</script>
+
+</body>
+</html>

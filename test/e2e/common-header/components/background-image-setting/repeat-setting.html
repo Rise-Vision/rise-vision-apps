@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Position Setting - Test Page</title>
+
+  <link rel="stylesheet" href="/dist/css/rise.min.css">
+  <link rel="stylesheet" href="/bower_components/rv-angular-bootstrap-colorpicker/css/colorpicker.css">
+</head>
+<body ng-app="testapp" ng-controller="mainController">
+  <div class="container-fluid">
+    <div class="modal-dialog modal-lg">
+      <!-- MODAL-->
+      <div class="modal-content">
+        <!-- Start Modal Header-->
+        <div class="modal-header">
+          <div class="app-header" style="padding:15px">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              <i class="fa fa-times"></i>
+            </button>
+            <div class="title-block">
+              <h1>Widget Settings</h1>
+              <button class="btn btn-link">
+                <i class="fa fa-github fa-2x"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- End Modal Header-->
+
+        <!-- Start Modal Body-->
+        <div class="modal-body">
+          <form>
+              <repeat-setting id="main" repeat="settings.additionalParams.main"></repeat-setting>
+              <repeat-setting id="hide" hide-label="true" repeat="settings.additionalParams.hiding"></repeat-setting>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript" src="/bower_components/angular/angular.js"></script>
+<script type="text/javascript" src="/bower_components/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="/bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+<script type="text/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
+<script type="text/javascript" src="/bower_components/angular-translate/angular-translate.js"></script>
+<script type="text/javascript" src="/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+
+<script type="text/javascript" src="/bower_components/rv-angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js"></script>
+<script type="text/javascript" src="/bower_components/component-storage-selector/dist/storage-selector.js"></script>
+<script type="text/javascript" src="/bower_components/widget-settings-ui-components/dist/js/angular/url-field.js"></script>
+<script type="text/javascript" src="/bower_components/widget-settings-ui-components/dist/js/angular/position-setting.js"></script>
+
+<script type="text/javascript" src="/dist/js/components/i18n.js"></script>
+<script type="text/javascript" src="/src/js/config/config.js"></script>
+
+<script type="text/javascript" src="/dist/js/components/background-image-setting.js"></script>
+
+<script>
+  angular.module("testapp", ["risevision.common.components.repeat-setting", "risevision.common.components.background-image-setting"])
+    .controller("mainController", ["$scope", "$log", function ($scope, $log) {
+      $scope.settings = {
+        additionalParams: {}
+      };
+
+      $scope.getAdditionalParams = function (val, defaultVal) {
+        //always return defaultVal for now
+        return defaultVal;
+      }
+
+    }]);
+</script>
+</body>
+</html>

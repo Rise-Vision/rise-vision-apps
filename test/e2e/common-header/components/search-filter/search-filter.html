@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Search Filter - Test Page</title>
+    <link rel="stylesheet" href="/dist/css/rise.min.css">
+</head>
+<body ng-app="testapp" ng-controller="mainController">
+
+  <search-filter filter-config="filterConfig" search="search" do-search="doSearch"></search-filter> 
+  <div id="searchCount">{{searchCount}}</div>
+
+  <script type="text/javascript" src="/bower_components/angular/angular.js"></script>
+  <script type="text/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script type="text/javascript" src="/dist/js/components/search-filter.js"></script>
+
+  <script>
+    angular.module("testapp", ["risevision.common.components.search-filter"])
+      .controller("mainController", ["$scope", function ($scope) {
+        $scope.searchCount = 0;
+        $scope.filterConfig = {
+          placeholder: "Search items"
+        };
+        $scope.search = {
+          query: "test"
+        };
+        $scope.doSearch = function() {
+          $scope.searchCount++;
+        };
+      }]);
+  </script>
+
+</body>
+</html>

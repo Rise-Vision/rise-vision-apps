@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>URL Field - Test Page</title>
+
+  <link rel="stylesheet" href="/components/rv-common-style/dist/css/rise.min.css">
+</head>
+<body ng-app="testapp" ng-controller="mainController">
+  <div class="container-fluid">
+    <div class="modal-dialog modal-lg">
+      <!-- MODAL-->
+      <div class="modal-content">
+        <!-- Start Modal Header-->
+        <div class="modal-header">
+          <div class="app-header" style="padding:15px">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              <i class="fa fa-times"></i>
+            </button>
+            <div class="title-block">
+              <h1>Widget Settings</h1>
+              <button class="btn btn-link">
+                <i class="fa fa-github fa-2x"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- End Modal Header-->
+
+        <!-- Start Modal Body-->
+        <div class="modal-body">
+          <form>
+            <!-- main test instance -->
+            <url-field id="main"
+                       url="settings.additionalParams.main"
+                       company-id="{{settings.params.companyId}}"></url-field>
+
+            <!-- attributes for hiding -->
+            <url-field id="hiding"
+                       url="settings.additionalParams.hide"
+                       hide-storage="true"
+                       hide-label="true"></url-field>
+
+            <!-- allow validation to pass on initial empty value -->
+            <url-field id="empty"
+                       url="settings.additionalParams.empty"
+                       init-empty></url-field>
+
+            <!-- file type specific -->
+            <url-field id="imageType"
+                       url="settings.additionalParams.type"
+                       file-type="image"></url-field>
+
+            <url-field id="videoType"
+                       url="settings.additionalParams.type"
+                       file-type="video"></url-field>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript" src="/components/angular/angular.js"></script>
+<script type="text/javascript" src="/components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script type="text/javascript" src="/components/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="/components/angular-translate/angular-translate.js"></script>
+<script type="text/javascript" src="/components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+<script type="text/javascript" src="/components/rv-common-i18n/dist/i18n.js"></script>
+<script type="text/javascript" src="/node_modules/widget-tester/mocks/i18n-config.js"></script>
+<script type="text/javascript" src="/components/component-storage-selector/dist/storage-selector.js"></script>
+<script type="text/javascript" src="/dist/js/angular/url-field.js"></script>
+<script>
+  angular.module("testapp", ["risevision.widget.common.url-field"])
+    .controller("mainController", ["$scope", function ($scope) {
+      $scope.settings = {
+        params: {
+          companyId: "12345"
+        },
+        additionalParams: {
+          main: "",
+          hide: "",
+          empty: "",
+          type: ""
+        }
+      };
+    }]);
+</script>
+
+</body>
+</html>

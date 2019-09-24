@@ -66,14 +66,14 @@ var SignInPage = function() {
     signInGoogleLink.click();
   };
 
-  this.googleSignIn = function() {
+  this.googleSignIn = function(username,password) {
     //wait for spinner to go away.
     helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - Before Google Sign In');
 
     signInGoogleLink.isPresent().then(function (state) {
       if (state) {
         signInGoogleLink.click().then(function () {
-          googleAuthPage.signin();
+          googleAuthPage.signin(username,password);
           helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - After Google Sign In');
         });
       }

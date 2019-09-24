@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Last Modified - Test Page</title>
+    <link rel="stylesheet" href="/dist/css/rise.min.css">
+</head>
+<body ng-app="testapp" ng-controller="mainController">
+
+  <input id="firstInput" type="text" class="form-control" focus-me="focusFirst" ng-focus="focusedElement='firstInput'">
+  <input id="secondInput" type="text" class="form-control" focus-me="focusSecond" ng-focus="focusedElement='secondInput'">
+  
+  <span id="focusedElement">{{focusedElement}}</span>
+  <button id="focusSecond" ng-click="focusSecond='true'">Focus Second</button>
+
+  <script type="text/javascript" src="/bower_components/angular/angular.js"></script>
+  <script type="text/javascript" src="/dist/js/components/focus-me.js"></script>
+
+  <script>
+    angular.module("testapp", ["risevision.common.components.focus-me"])
+      .controller("mainController", ["$scope", function ($scope) {
+        $scope.focusFirst = true;
+      }]);
+  </script>
+
+</body>
+</html>
