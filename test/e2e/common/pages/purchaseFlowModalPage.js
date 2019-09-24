@@ -1,7 +1,7 @@
 'use strict';
 
 var helper = require('rv-common-e2e').helper;
-var CommonHeaderPage = require('./../../../../web/bower_components/common-header/test/e2e/pages/commonHeaderPage.js');
+var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
 
 var PurchaseFlowModalPage = function() {
   var commonHeaderPage = new CommonHeaderPage();
