@@ -1,0 +1,105 @@
+{
+  "actions": {
+    "file-picker": "Attach an image or file",
+    "new": "Open Support Ticket"
+  },
+  "details": {
+    "by": "Created By",
+    "close-ticket": "This issue is solved. Close this Ticket.",
+    "comments": {
+      "at": "at",
+      "attachments": "Attachments",
+      "placeholder": "Enter new comment",
+      "title": "Comments"
+    },
+    "on": "Created On",
+    "reopen-ticket": "This issue is not solved. Reopen this Ticket.",
+    "updated": "Last Updated",
+    "xs": {
+      "by": "Created by",
+      "on": "on",
+      "updated": "Last updated on"
+    }
+  },
+  "hours": {
+    "available": "<strong>Support hours:</strong> Monday to Friday, 8am to 5pm {{timeZone}}, holidays excluded. It is currently <strong>{{currentTime}}</strong>. Expected response time is <strong>{{expectedResponseTime}}</strong>.",
+    "unavailable": "<strong>Support hours:</strong> <span class='text-danger'>Monday to Friday, 8am to 5pm {{timeZone}}</span>, holidays excluded. It is currently <strong>{{currentTime}}</strong>. You can expect to hear from us <strong>{{nextSupportDay}}</strong> at <strong>{{nextSupportTime}}</strong>.",
+    "unknown": "currently unknown"
+  },
+  "list": {
+    "empty": "You haven't created any tickets yet.",
+    "filter": "Filter tickets by status",
+    "heading": {
+      "id": "ID",
+      "requested": "Requested",
+      "requester": "Requester",
+      "status": "Status",
+      "subject": "Subject"
+    },
+    "title": "Your Tickets"
+  },
+  "on-boarding": {
+    "details-1": "We provide Support from 8am to 5pm CST Monday through Friday, holidays excluded. It is currently <strong>{{currentTime}}</strong>.",
+    "details-2": "You can expect to hear from us <strong>{{nextSupportDay}}</strong> at <strong>{{nextSupportTime}}</strong>.",
+    "lead": "Subscribe to access telephone, email and remote control, diagnosis, and correction, for  Rise Vision Applications.",
+    "title": "Support"
+  },
+  "submission": {
+    "contact": {
+      "company": {
+        "name": "Company",
+        "placeholder": "Company Name"
+      },
+      "email": {
+        "invalid": "Invalid Email Address.",
+        "name": "Email",
+        "required": "Required"
+      },
+      "first-name": {
+        "name": "First Name",
+        "required": "Required"
+      },
+      "info": "Can you review and if applicable update your contact details?",
+      "last-name": {
+        "name": "Last Name",
+        "required": "Required"
+      },
+      "phone": {
+        "name": "Phone Number",
+        "required": "Required"
+      },
+      "reach": {
+        "email": "Email",
+        "name": "Best way to reach you?",
+        "phone": "Phone"
+      }
+    },
+    "description": {
+      "name": "Description",
+      "required": "Required"
+    },
+    "display": {
+      "name": "Display",
+      "placeholder": "select a display"
+    },
+    "error": "Failed to create ticket!",
+    "schedule-info": "If applicable, can you select which Schedule or Display is involved with your issue?",
+    "schedule": {
+      "name": "Schedule",
+      "placeholder": "select a schedule"
+    },
+    "subcompany-selected": "<strong>Warning!</strong> Tickets created for a sub Company will appear under the Company you belong to.",
+    "subject": {
+      "max-length": "150 Character Max Length.",
+      "name": "Subject",
+      "required": "Required"
+    },
+    "title": "Submit a New Ticket"
+  },
+  "title": "Support",
+  "upload": {
+    "attached": "Attached",
+    "overwrite": "You can only submit one attachment per comment. Do you want to overwrite the existing file?",
+    "uploading": "Uploading"
+  }
+}

@@ -1,0 +1,24 @@
+.alerts-app {
+  h2 { margin-top: 0px !important; }
+
+  .alerts-list {
+    color: #333;
+    margin-top: 0;
+    padding: 0 10px;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    h5 {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      padding-right: 40px;
+    }
+
+    .media-body {
+      padding: 15px 0;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "errors": {
+    "numeric": "This field must be numeric",
+    "required": "This field is required"
+  },
+  "font": "Fonte",
+  "layout": {
+    "custom": "Personalizado",
+    "error": "Please enter a Layout URL",
+    "heading": "Layout",
+    "url": "URL do Layout"
+  }
+}

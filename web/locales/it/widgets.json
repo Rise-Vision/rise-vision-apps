@@ -1,0 +1,14 @@
+{
+  "background-color": "Colore sfondo",
+  "errors": {
+    "numeric": "This field must be numeric",
+    "required": "This field is required"
+  },
+  "font": "Carattere",
+  "layout": {
+    "custom": "Personale",
+    "error": "Please enter a Layout URL",
+    "heading": "Disposizione",
+    "url": "URL Disposizione"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "alignment": "Alignment",
+  "auto-hide": "Auto Hide Navigation",
+  "background-color": "Background Color",
+  "errors": {
+    "numeric": "This field must be numeric",
+    "required": "This field is required",
+    "storage-folder": "Please select a folder from Storage."
+  },
+  "font": "Font",
+  "layout": {
+    "custom": "Custom",
+    "default": {
+      "label": "Use Default Layout"
+    },
+    "error": "Please enter a Layout URL",
+    "heading": "Layout",
+    "url": "Layout URL"
+  },
+  "pause": {
+    "label": "Pause",
+    "tooltip": "Number of seconds before slideshow resumes after a touch"
+  },
+  "resume": "Resume Playing from Last Position",
+  "scale-to-fit": "Scale to Fit",
+  "storage": {
+    "folder": {
+      "url": "Rise Storage Folder URL"
+    }
+  }
+}

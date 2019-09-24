@@ -1,0 +1,63 @@
+{
+  "format": {
+    "body": {
+      "label": "Body Format",
+      "text": "Data Sample Text"
+    },
+    "evenRow": "Even Row Color",
+    "header": {
+      "label": "Header Format",
+      "text": "Column Header Sample Text"
+    },
+    "heading": "Format",
+    "oddRow": "Odd Row Color",
+    "rowHeight": "Row Height",
+    "separator": {
+      "column": "Show Separator Between Columns",
+      "heading": "Separator",
+      "row": "Show Separator Between Rows"
+    },
+    "spreadsheet": "Spreadsheet Format"
+  },
+  "settings": "Google Spreadsheet Settings",
+  "spreadsheet": {
+    "apiKey": "API Key",
+    "apiKeyDescription": "The default refresh interval is 60 minutes. To use a different refresh interval you must provide an API Key. For more information on how to obtain an API Key, please review the article",
+    "apiKeyDescriptionLink": "How to create an API Key for the Google Spreadsheet Widget.",
+    "apiKeyNotValid": "The API Key provided is not valid.",
+    "cells": {
+      "range": "Show Range",
+      "sheet": "Show Entire Sheet"
+    },
+    "data": {
+      "error": "There was an error accessing your spreadsheet data."
+    },
+    "first-row-as-header": "Use First Row as Header",
+    "key": {
+      "placeholder": "Enter your Key",
+      "select": "Enter Spreadsheet Key"
+    },
+    "preview": "Open Spreadsheet",
+    "public": {
+      "message": "To use this Google Spreadsheet it must be publicly accessible. To do this, open the Google Spreadsheet and select <strong><em>File > Share > Advanced</em></strong>, then select <strong><em>On - Anyone with the link</em></strong>."
+    },
+    "publish": {
+      "text1": "To use this Google Spreadsheet it must be published to the web. To publish, open the Google Spreadsheet and select",
+      "text2": "File > Publish to the web",
+      "text3": "then click",
+      "text4": "Publish"
+    },
+    "range": {
+      "end": "Ending Cell (Bottom Right)",
+      "invalid": "Please ensure a valid range and Worksheet has been selected.",
+      "start": "Starting Cell (Top Left)"
+    },
+    "refresh": "Data Refresh Interval",
+    "refreshInterval": "Refresh Interval",
+    "retry": "Check Again",
+    "worksheet": {
+      "select": "Select Worksheet",
+      "warning": "Changing the name of your Worksheet will cause your Presentation to stop showing data."
+    }
+  }
+}

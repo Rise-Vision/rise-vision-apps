@@ -1,0 +1,354 @@
+{
+  "actions": {
+    "new": "Add Display"
+  },
+  "add": {
+    "activate": "Activate your Display",
+    "instructions": {
+      "anotherEmail": "Send To Another E-Mail",
+      "emailInfo": "We’ve also emailed these instructions to",
+      "emailPlaceholder": "Enter Email Address",
+      "os": {
+        "chromeos": "Chrome OS",
+        "linux": "Linux",
+        "pi": "Raspberry Pi",
+        "windows10": "Windows 7 and Up"
+      }
+    },
+    "name": {
+      "name": "Name Your Display"
+    },
+    "next": "Next",
+    "title": "Add a Display"
+  },
+  "alerts": {
+    "acceptTerms": "Please accept Terms and Conditions to enable Alerts",
+    "authenticationName": "Authentication Name",
+    "authenticationPassword": "Authentication Password",
+    "categories": {
+      "cbrne": "Chemical, Biological, Radiological, Nuclear and Explosives",
+      "env": "Environment",
+      "fire": "Fire",
+      "geo": "Geophysical",
+      "health": "Health",
+      "infra": "Infrastructure",
+      "met": "Meteorological",
+      "other": "Other",
+      "rescue": "Rescue",
+      "safety": "Safety",
+      "security": "Security",
+      "transport": "Transport"
+    },
+    "category": "Category",
+    "certainties": {
+      "likely": "Likely",
+      "observed": "Observed",
+      "possible": "Possible",
+      "unknown": "Unknown",
+      "unlikely": "Unlikely"
+    },
+    "certainty": "Certainty",
+    "code": "Code",
+    "defaultExpiry": "Default Expiry",
+    "handling": "Handling",
+    "hideFilters": "Hide Filters",
+    "iAccept": "I accept the terms and conditions.",
+    "minutes": "Minutes",
+    "presentation": "Presentation",
+    "reset": "Reset",
+    "sender": "Sender",
+    "severities": {
+      "extreme": "Extreme",
+      "minor": "Minor",
+      "moderate": "Moderate",
+      "severe": "Severe",
+      "unknown": "Unknown"
+    },
+    "severity": "Severity",
+    "showFilters": "Show Filters",
+    "status": "Status",
+    "statuses": {
+      "actual": "Actual",
+      "draft": "Draft",
+      "exercise": "Exercise",
+      "system": "System",
+      "test": "Test"
+    },
+    "terms": "The Alert Service is based upon the Common Alert Protocol version 1.2. This standard does not require authentication or a secure connection, which could result in somebody sending false Alerts by pretending to be your Alerts provider. We highly recommend that, at the very least, you have your Alerts provider connect to our service with HTTPS, not HTTP, and that you require an Authentication Name and Password for that connection. That password should be complex and changed regularly. You should test your Alerts system at least weekly. You have read and understood this disclaimer and you agree that Rise Vision cannot be responsible for the erroneous showing of Alert Messages on your Displays.",
+    "textFields": {
+      "description": "Description",
+      "headline": "Headline",
+      "instruction": "Instruction"
+    },
+    "textToShow": "Alert Text To Show",
+    "title": "Alerts",
+    "turnOff": "Turn Off Alerts",
+    "turnOn": "Turn On Alerts",
+    "turnOnShort": "Turn On",
+    "turnedOffWarning": "Alerts Are Turned Off and Won't Be Sent to Your Target Displays.",
+    "urgencies": {
+      "expected": "Expected",
+      "future": "Future",
+      "immediate": "Immediate",
+      "past": "Past",
+      "unknown": "Unknown"
+    },
+    "urgency": "Urgency",
+    "viewTerms": "View Terms and Conditions",
+    "webServiceURL": "Web Service URL"
+  },
+  "details": {
+    "additional-license-warning": "You need to Upgrade your Plan or Purchase Additional Licenses to License this Display.",
+    "contact-plan-parent-email": "You don't have access to purchase Display Licenses. Please contact your Plan Administrator at <a href=\"mailto:{{administratorEmail}}\">{{administratorEmail}}</a> to request more.",
+    "contact-plan-parent-no-email": "You don't have access to purchase Display Licenses. Please contact your Plan Administrator to request more.",
+    "deleteTitle": "Deleting Display",
+    "deleteWarning": "Are you sure you want to delete this Display?",
+    "error": "Failed to update display!",
+    "get-more": "Get More",
+    "rpp-is": "Licensed Display is",
+    "rpp-loading": "LOADING",
+    "rpp-not-supported": "Player version does not support Licensed Display features",
+    "startPlayerProTrial": "Start Licensed Display Trial",
+    "title": "Display Settings",
+    "unsavedTitle": "Unsaved Changes",
+    "unsavedWarning": "You have unsaved changes. Do you want to Save or Discard them?"
+  },
+  "displayDetails": "Display Details",
+  "download": {
+    "armv7l": "Download Player for Raspbian 8.0 [ARMv7]",
+    "linux32": "Download Player for Ubuntu 16.04 LTS [32-bit]",
+    "linux64": "Download Player for Ubuntu 16.04 LTS [64-bit]",
+    "player": "Download Player",
+    "win32": "Download Player for Windows 7 and Up [32-bit]",
+    "win64": "Download Player for Windows 7 and Up [64-bit]"
+  },
+  "fields": {
+    "address": {
+      "city": "City",
+      "country": {
+        "name": "Country",
+        "placeholder": "&lt; Select Country &gt;"
+      },
+      "description": "Description",
+      "postalCode": "Zip / Postal Code",
+      "province": {
+        "name": "State/Province/Region",
+        "provincePlaceholder": "&lt; Select Province &gt;",
+        "statePlaceholder": "&lt; Select State &gt;"
+      },
+      "street": "Street",
+      "timezone": {
+        "name": "Time Zone",
+        "placeholder": "&lt; Select Time Zone &gt;"
+      },
+      "unit": "Unit",
+      "useCompany": "Use Company Address"
+    },
+    "controls": {
+      "download": "Download Rise Player",
+      "error": "Error:",
+      "howto": "How do I show Presentations on my device?",
+      "howtoInstall": "How do I install Rise Player?",
+      "install": "Install Rise Player",
+      "reboot": {
+        "name": "Reboot Media Player",
+        "success": "Reboot signal sent",
+        "title": "Rebooting Display",
+        "warning": "The Rise Player on the Display's Computer will reboot and the currently Scheduled Content will be interrupted. Do you wish to proceed?"
+      },
+      "restart": {
+        "name": "Restart Rise Player",
+        "success": "Restart signal sent",
+        "title": "Restarting Display",
+        "warning": "The Rise Player on the Display's Computer will restart and the currently Scheduled Content will be interrupted. Do you wish to proceed?"
+      }
+    },
+    "email": {
+      "failed": "Failed to send e-mail",
+      "invalid": "Invalid e-mail address"
+    },
+    "id": "Display Id:",
+    "monitor": {
+      "name": "Monitor",
+      "warning": "No Monitoring Emails have been set up for your Company. Please go to your Company Settings to configure."
+    },
+    "name": {
+      "name": "Name",
+      "required": "Required"
+    },
+    "player": {
+      "browser": {
+        "installed": "Browser Version:",
+        "recommended": "Recommended Browser:",
+        "upgrade": {
+          "autoUpgrade": "Auto Upgrade",
+          "name": "Browser Upgrade:",
+          "userManaged": "User Managed"
+        }
+      },
+      "browserVersion": "Browser Version",
+      "displayControl": {
+        "label": "Display Control",
+        "configure": "Configure",
+        "description": "Turn Screen ON/OFF based on Schedule",
+        "unsupported": "Your Rise Player version doesn't support <b>Display Control</b>.",
+        "configureModal": {
+          "title": "Configure Display Control",
+          "disclaimer": "<b>DISCLAIMER:</b> Display Control is currently in beta release and is only compatible on Displays running Rise Player version RisePlayerElectron {{playerVersion}} or higher.",
+          "help": "Need help configuring Display Control?",
+          "reset": "Reset To Defaults"
+        }
+      },
+      "id": "Display ID",
+      "install": {
+        "heading": "Install Rise Player",
+        "id": "Your Display ID is"
+      },
+      "ipAddress": "IP Address",
+      "lastConnection": "Last Connection",
+      "localIpAddress": "Local IP Address",
+      "macAddress": "MAC Address",
+      "operatingSystem": "Operating System",
+      "orientation": {
+        "0": "Landscape",
+        "90": "Portrait",
+        "180": "Landscape (flipped)",
+        "270": "Portrait (flipped)",
+        "name": "Rotation:"
+      },
+      "playerVersion": "Player Version",
+      "playerWarning": "A Player has not been configured for your Display. To configure your Display, select your Operating System below and install the software <b>on the device</b> that will operate your Display. When the Player starts for the first time you will be prompted to enter the Display ID (above) to link the Player with the Display that you have setup here. Further setup details can be <a href=\"https://help.risevision.com/hc/en-us/articles/115000860926\" target=\"_blank\">found here</a>.",
+      "resolution": "Resolution",
+      "rpp": {
+        "email-recipients": "Email Recipients",
+        "features": "Licensed Display Features",
+        "invalid-email": "A valid email address is required.",
+        "monitoring-timeline": "Monitoring Timeline",
+        "monitoring": "Display Monitoring",
+        "offline-play-desc": "Play your Display content without a network connection",
+        "offline-play": "Offline Play",
+        "send-email-offline": "Send email notifications when your Display goes offline",
+        "start-trial": "Start a Plan Trial",
+        "unlock": "Unlock Licensed Display with any paid plan!"
+      },
+      "schedule": {
+        "addToSchedule": "Add To Schedule",
+        "assigned": "Assigned Schedule",
+        "label": "Schedule",
+        "notScheduled": "This Display is not scheduled."
+      },
+      "serialNumber": "Serial Number",
+      "cpu": "CPU",
+      "hostName": "Host Name",
+      "productName": "Product Name",
+      "status": "Status",
+      "version": {
+        "howGetHelp": "How do I get help?",
+        "notCurrent": "Player Version Not Current",
+        "thirdParty": "(3rd Party Player)",
+        "unsupported": "Unsupported",
+        "upgrade": "Upgrade"
+      },
+      "viewerVersion": "Viewer Version"
+    },
+    "reboot": "Reboot:",
+    "screenshot": {
+      "error1": "There was a problem requesting the screenshot.",
+      "error2": "Please check connectivity.",
+      "learnSupportedOS1": "Learn more about supported",
+      "learnSupportedOS2": "operating systems.",
+      "missing1": "No Screenshot to show.",
+      "missing2": "Click 'Update' above.",
+      "notAvailable": "Screenshot not available.",
+      "notScheduled": "This Display is not scheduled.",
+      "osNotSupported": "Media Player operating system not supported.",
+      "playerInstall": "Install Rise Player",
+      "playerNotInstalled": "Rise Player not installed.",
+      "playerOffline": "This Display is Offline.",
+      "title": "Display Screenshot",
+      "updateScreenshot": "Update",
+      "upgradePlayer": "Upgrade Rise Player",
+      "upgradeRequired": "Rise Player software must be upgraded."
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "name": "Status",
+      "notActivated": "Not Activated"
+    }
+  },
+  "landing": {
+    "manageDisplaysText": "Manage and monitor your digital signage displays, anywhere, anytime."
+  },
+  "list": {
+    "empty": "You haven't created any Displays yet.",
+    "filter": {
+      "filters": "Filters",
+      "placeholder": "Search for Displays"
+    },
+    "heading": {
+      "address": "Address",
+      "lastConnection": "Last Connection",
+      "name": "Name",
+      "playerType": "Player Type",
+      "schedule": "Schedule",
+      "status": "Status"
+    },
+    "no-results": "Your search didn't return any results",
+    "noDisplays": "No Displays",
+    "player": {
+      "cta": {
+        "checkStore": "Check Store Account",
+        "getSupport": "Get Support",
+        "subscribeNow": "Subscribe Now",
+        "subscribePro": "Subscribe To Professional",
+        "tryPro": "Try Professional",
+        "upgrade": "Upgrade"
+      },
+      "type": {
+        "3rdParty": "3rd Party Player",
+        "cancelled": "Licensed (Cancelled)",
+        "professional": "Licensed",
+        "professionalSuspended": "Licensed (Suspended)",
+        "professionalTrial": "Licensed (Trial)",
+        "standard": "Free",
+        "unsupported": "Unsupported"
+      }
+    },
+    "schedule": {
+      "add": "Add to Schedule"
+    },
+    "searchNotification": "Search results may include Displays that belong to your sub-companies.",
+    "status": {
+      "error": "Error",
+      "install": "Install Player",
+      "notActivated": "Not Activated",
+      "offline": "Offline",
+      "online": "Online",
+      "whyOffline": "Why is my Display offline?"
+    },
+    "viewAll": "View All Displays"
+  },
+  "playerProInfo": {
+    "displayControl": {
+      "title": "<b>Display Control</b> powers off your screen when nothing is showing, and powers on when content is available.",
+      "feature1": "Saves on electricity costs.",
+      "feature2": "Extends the life of your hardware."
+    },
+    "footer": "If you're already subscribed to Rise Player Professional, please assign your Display in your <a href=\"{{accountLink}}\" target=\"_blank\">Store Account</a>.",
+    "heading": "<a href=\"{{productLink}}\" target=\"_blank\">Rise Player Professional</a> offers premium features for your digital signage content!",
+    "offlinePlay": {
+      "title": "<b>Offline Play</b> eliminates having to be connected to the internet in order to start and show your content.",
+      "feature1": "Compatible with many widgets.",
+      "feature2": "Monitors network status.",
+      "feature3": "Refreshes content when connected."
+    },
+    "price": "$9 USD/CAD Per Display Per Month",
+    "title": {
+      "trial": "Try Rise Player Professional",
+      "noTrial": "Rise Player Professional"
+    },
+    "trialInfo": "30 days FREE trial for all Displays in your Company. No credit card required."
+  },
+  "title": "Displays"
+}

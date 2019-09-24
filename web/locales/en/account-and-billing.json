@@ -1,0 +1,6 @@
+{
+  "errors": {
+    "403-contact-email": "You don't have access to make changes to your Subscription. Please contact your Plan Administrator at <a href=\"mailto:{{parentPlanContactEmail}}\">{{parentPlanContactEmail}}</a>.",
+    "403-no-contact-email": "You don't have access to make changes to your Subscription. Please contact your Plan Administrator."
+  }
+}

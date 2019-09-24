@@ -1,0 +1,197 @@
+.distribution {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  width: 100%;
+  background-color: #fff;
+  .no-display {
+    margin-left: 20px;
+    font-style: italic;
+  }
+  .btn-new,
+  .btn-new:hover,
+  .btn-new:active {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background-color: #dddddd;
+    background-repeat: repeat-x;
+    background-image: -moz-linear-gradient(top, #fff 0%, #dddddd 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fff), color-stop(100%, #dddddd));
+    background-image: -webkit-linear-gradient(top, #fff 0%, #dddddd 100%);
+    background-image: -ms-linear-gradient(top, #fff 0%, #dddddd 100%);
+    background-image: -o-linear-gradient(top, #fff 0%, #dddddd 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff', endColorstr='#dddddd', GradientType=0);
+    background-image: linear-gradient(top, #fff 0%, #dddddd 100%);
+  }
+  .btn-link {
+    color: #333;
+    &:hover,
+    &:active {
+      text-decoration: none !important;
+      color: #333;
+    }
+  }
+  .company {
+    margin-top: 20px;
+    &:first-of-type {
+      margin-top: 40px;
+    }
+    &:not(:last-of-type) {
+      border-bottom: 1px solid #ccc;
+    }
+  }
+  .list-unstyled {
+    padding: 0 20px;
+    span {
+      margin-left: 20px;
+      line-height: 30px;
+      color: #aaa;
+      font-style: italic;
+    }
+  }
+}
+
+/**
+ * Slide Left-Right, and Right-Left, each with the reserve
+ * --------------------------------------------------
+ * NEW content slides IN from the RIGHT, OLD slides OUT to the LEFT
+ * Reverse: NEW content slides IN from the LEFT, OLD slides OUT to the RIGHT
+ */
+
+.distribution-modal-container .modal-content {
+  overflow-x: hidden;
+}
+
+.slide-left-right {
+  min-width: 100%;
+  min-height: 383px;
+}
+
+$transition-duration: 250ms;
+.slide-left-right,
+.slide-right-left.reverse {
+  >.ng-enter,
+  &.ng-enter,
+  >.ng-leave,
+  &.ng-leave {
+    @include transition(all ease-in-out $transition-duration);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+  >.ng-enter,
+  &.ng-enter {
+    /* NEW content placed far RIGHT BEFORE it slides IN from the RIGHT */
+    @include translate3d(100%, 0, 0);
+  }
+  >.ng-enter.ng-enter-active,
+  &.ng-enter.ng-enter-active {
+    /* NEW content ACTIVELY sliding IN from the RIGHT */
+    @include translate3d(0, 0, 0);
+  }
+  >.ng-leave.ng-leave-active,
+  &.ng-leave.ng-leave-active {
+    /* OLD content ACTIVELY sliding OUT to the LEFT */
+    @include translate3d(-100%, 0, 0);
+  }
+}
+
+.slide-left-right.reverse,
+.slide-right-left {
+  >.ng-enter,
+  &.ng-enter,
+  >.ng-leave,
+  &.ng-leave {
+    @include transition(all ease-in-out $transition-duration);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+  >.ng-enter,
+  &.ng-enter {
+    /* NEW content placed far LEFT BEFORE it slides IN from the LEFT */
+    @include translate3d(-100%, 0, 0);
+  }
+  >.ng-enter.ng-enter-active,
+  &.ng-enter.ng-enter-active {
+    /* NEW content ACTIVELY sliding IN from the LEFT */
+    @include translate3d(0, 0, 0);
+  }
+  >.ng-leave.ng-leave-active,
+  &.ng-leave.ng-leave-active {
+    /* OLD content ACTIVELY sliding OUT to the RIGHT */
+    @include translate3d(100%, 0, 0);
+  }
+}
+
+.distribution-modal {
+  .list-group {
+    margin-bottom: 40px;
+  }
+  .list-group-item {
+    cursor: pointer;
+  }
+  .list-group-item-success {
+    background-color: $brand-success;
+    color: #fff;
+    font-weight: bold;
+    border-color: darken($brand-success, 10%);
+    border-bottom: 0;
+  }
+  .list-group-company-selected {
+    background-color: #ddd;
+    border-color: darken(#ddd, 10%);
+    font-weight: bold;
+  }
+  .list-group-company {
+    background-color: #FCFCFC;
+  }
+  .list-group-item-secondary {
+    background-color: #F6F6F6;
+    border-top: 0;
+    border-color: darken(#F6F6F6, 20%);
+  }
+  .list-group-item-danger,
+  .list-group-item-secondary,
+  .list-group-item-success,
+  .fa.fa-chevron-right {
+    line-height: 40px;
+  }
+  .list-group-item-danger {
+    background-color: #FFF8F5;
+    border-color: darken(#F6F6F6, 20%);
+    border-bottom: 1px solid darken(#F6F6F6, 20%);
+    margin-bottom: 0;
+    color: $brand-danger;
+    .btn {
+      border-radius: 2px;
+      height: 40px;
+    }
+    .confirm-btn-group {
+      float: right;
+    }
+    @media (max-width: 483px) {
+      line-height: 24px;
+      height: 110px;
+    }
+    @media (min-width: 484px) and (max-width: 580px) {
+      line-height: 30px;
+      height: 100px;
+    }
+    @media (max-width: 580px) {
+      .confirm-btn-group {
+        display: block;
+        float: left;
+        width: 100%;
+        text-align: center;
+      }
+      .btn {
+        width: 100px;
+      }
+    }
+  }
+}

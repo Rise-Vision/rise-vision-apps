@@ -1,0 +1,18 @@
+{
+  "bottom": {
+    "center": "Bottom Center",
+    "left": "Bottom Left",
+    "right": "Bottom Right"
+  },
+  "label": "Position",
+  "middle": {
+    "center": "Middle Center",
+    "left": "Middle Left",
+    "right": "Middle Right"
+  },
+  "top": {
+    "center": "Top Center",
+    "left": "Top Left",
+    "right": "Top Right"
+  }
+}

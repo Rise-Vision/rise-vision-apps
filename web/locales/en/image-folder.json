@@ -1,0 +1,18 @@
+{
+  "auto-hide": "Auto Hide Navigation",
+  "duration": "Duration",
+  "order": {
+    "alpha-asc": "A to Z",
+    "alpha-desc": "Z to A",
+    "date-asc": "Date",
+    "date-desc": "Date",
+    "label": "Order",
+    "random": "Random"
+  },
+  "pause": {
+    "label": "Pause",
+    "tooltip": "Number of seconds before slideshow resumes after a touch"
+  },
+  "settings": "Image Folder Settings",
+  "storage-error": "Please select a folder from Storage."
+}

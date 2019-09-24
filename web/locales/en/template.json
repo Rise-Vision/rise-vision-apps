@@ -1,0 +1,80 @@
+{
+  "attribute-editor": {
+    "edit-component": "Edit",
+    "back-to-list": "Back"
+  },
+  "confirm-modal": {
+    "delete-warning": "Are you sure you want to delete this Presentation?"
+  },
+  "message-box": {
+    "confirmation-message": "Okay I Got It"
+  },
+  "expired-modal": {
+    "expired-title": "Your Rise Vision Plan is no longer active",
+    "expired-message": "You are now on the Free plan and can edit and preview this Template but it will not show on your Display until you subscribe to a plan.",
+    "confirmation-button": "Subscribe Now"
+  },
+  "image": {
+    "upload": "Upload Images"
+  },
+  "financial": {
+    "add-category": {
+      "bonds": "Add Bonds",
+      "commodities": "Add Commodities",
+      "currencies": "Add Currencies",
+      "market-statistics": "Add Market Statistics",
+      "stocks": "Add Stocks",
+      "world-indexes": "Add World Indexes"
+    },
+    "add-selected": "Add Selected",
+    "bonds": "Bonds",
+    "commodities": "Commodities",
+    "currencies": "Currencies",
+    "empty-list": {
+      "title": "There are no symbols in this list",
+      "suggestion": {
+        "bonds": "Add bonds to keep your display interesting!",
+        "commodities": "Add commodities to keep your display interesting!",
+        "currencies": "Add currencies to keep your display interesting!",
+        "market-statistics": "Add market statistics to keep your display interesting!",
+        "stocks": "Add stocks to keep your display interesting!",
+        "world-indexes": "Add world indexes to keep your display interesting!"
+      }
+    },
+    "market-statistics": "Market Statistics",
+    "most-popular-category": {
+      "bonds": "Most Popular Bonds",
+      "commodities": "Most Popular Commodities",
+      "currencies": "Most Popular Currencies",
+      "market-statistics": "Most Popular Market Statistics",
+      "stocks": "Most Popular Stocks",
+      "world-indexes": "Most Popular World Indexes"
+    },
+    "no-results": {
+      "title": "No Results Found",
+      "question": "Can't find what you're looking for?",
+      "verify": "Verify the instrument is valid.",
+      "contact": "Contact support@risevision.com for help."
+    },
+    "search-category": {
+      "bonds": "Search Bonds",
+      "commodities": "Search Commodities",
+      "currencies": "Search Currencies",
+      "market-statistics": "Search Market Statistics",
+      "stocks": "Search Stocks",
+      "world-indexes": "Search World Indexes"
+    },
+    "stocks": "Stocks",
+    "world-indexes": "World Indexes"
+  },
+  "video": {
+    "upload": "Upload Videos"
+  },
+  "rise-image": "Image",
+  "rise-data-financial": "Financial",
+  "rise-data-rss": "RSS",
+  "rise-data-weather": "Weather",
+  "rise-slides": "Google Slides",
+  "rise-text": "Text",
+  "rise-video": "Video"
+}

@@ -1,0 +1,18 @@
+{
+  "cancel": "Annulla",
+  "friday": "Venerdì",
+  "help": "Aiuto",
+  "monday": "Lunedì",
+  "saturday": "Sabato",
+  "save": "Salva",
+  "sunday": "Domenica",
+  "thursday": "Giovedì",
+  "tuesday": "Martedì",
+  "units": {
+    "celsius": "Celsius",
+    "fahrenheit": "Fahrenheit",
+    "kph": "kph",
+    "mph": "mph"
+  },
+  "wednesday": "Mercoledì"
+}

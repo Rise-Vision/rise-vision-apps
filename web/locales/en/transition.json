@@ -1,0 +1,31 @@
+{
+  "direction": {
+    "label": "Direction",
+    "left": "Left",
+    "up": "Up"
+  },
+  "duration": "Show Each Item for",
+  "heading": "Transition",
+  "pud": {
+    "label": "PUD Failover",
+    "tooltip": "If Play Until Done (PUD) is enabled, the amount of time to show the item(s) when all data is visible and no scrolling takes place."
+  },
+  "resume": {
+    "label": "Resume Play",
+    "tooltip": "If content is interacted with resume playing after this set duration."
+  },
+  "speed": {
+    "fast": "Fast",
+    "fastest": "Fastest",
+    "label": "Speed",
+    "medium": "Medium",
+    "slow": "Slow",
+    "slowest": "Slowest"
+  },
+  "type": {
+    "fade": "Fade",
+    "none": "None",
+    "page": "Page",
+    "scroll": "Scroll"
+  }
+}

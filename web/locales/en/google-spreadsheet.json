@@ -1,0 +1,14 @@
+{
+  "layout": {
+    "default": {
+      "label": "Use Default Layout",
+      "tooltip": "Whether to use a default or custom layout"
+    }
+  },
+  "settings": "Google Spreadsheet Settings",
+  "validation": {
+    "spreadsheet": {
+      "required": "Please choose a spreadsheet."
+    }
+  }
+}

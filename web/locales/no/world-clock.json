@@ -1,0 +1,102 @@
+{
+  "clock-type": {
+    "analog": {
+      "face-color": "Farge på Skive",
+      "font": {
+        "text": "Tall Test Tekst"
+      },
+      "frame-color": "Ramme Farge",
+      "frame-width": "Ramme Vidde (pixels)",
+      "hand-color": "Farge På Viserne",
+      "hand-width": "Vidde På Viserne (pixels)",
+      "hour-tick-width": "Timeviser Vidde (pixels)",
+      "label": "Analog",
+      "minute-tick-width": "Minuttviser vidde (pixels)",
+      "second-hand-color": "Sekundviser Farge",
+      "second-hand-width": "Sekundviser Vidde (pixels)",
+      "show-second-hand": "Vis Sekundviser"
+    },
+    "digital": {
+      "font": {
+        "text": "Digital Klokke Test Tekst"
+      },
+      "format": "Format",
+      "label": "Digital"
+    },
+    "label": "Klokke Type"
+  },
+  "settings": "World Clock Innstillinger",
+  "time": {
+    "label": "Tid",
+    "local-time": "Bruk Lokal Tid",
+    "time-zone": {
+      "America/Argentina/Buenos_Aires": "Buenos Aires, Georgetown",
+      "Asia/Almaty": "Astana, Almaty, Dhaka, Novosibirsk",
+      "Asia/Bangkok": "Bangkok, Hanoi, Jakarta",
+      "Asia/Calcutta": "Calcutta, Chennai, Mumbai, New Delhi",
+      "Asia/Hong_Kong": "Beijing, Chongqing, Hong Kong, Urumqi",
+      "Asia/Kabul": "Kabul",
+      "Asia/Karachi": "Islamabad, Karachi, Tashkent",
+      "Asia/Kathmandu": "Kathmandu",
+      "Asia/Magadan": "Magadan, Solomon Is., New Caledonia",
+      "Asia/Muscat": "Abu Dhabi, Muscat",
+      "Asia/Rangoon": "Rangoon (Yangon, Burma)",
+      "Asia/Tehran": "Tehran",
+      "Asia/Tokyo": "Osaka, Sapporo, Tokyo",
+      "Atlantic/Cape_Verde": "Cape Verde Is.",
+      "Atlantic/South_Georgia": "Mid-Atlantic",
+      "Australia/Adelaide": "Adelaide, Darwin",
+      "Australia/Canberra": "Canberra, Melbourne, Sydney, Vladivostok",
+      "Canada/Atlantic": "Atlantic Time (Canada)",
+      "Canada/Central": "Central Time (US & Canada)",
+      "Canada/Eastern": "Eastern Time (US & Canada)",
+      "Canada/Mountain": "Mountain Time (US & Canada)",
+      "Canada/Newfoundland": "Newfoundland Time (Canada)",
+      "Canada/Pacific": "Pacific Time (US & Canada)",
+      "Etc/UTC": "Universal Time Coordinated, Zulu",
+      "Europe/Amsterdam": "Amsterdam, Berlin, Bern, Rome, Paris, Stockholm, Vienna",
+      "Europe/Athens": "Athens, Bucharest, Istanbul, Minsk",
+      "Europe/London": "Dublin, Edinburgh, Lisbon, London",
+      "Europe/Moscow": "Moscow, St. Petersburg, Volgograd",
+      "Pacific/Auckland": "Auckland, Fiji, Kamchatka, Marshall Is.",
+      "Pacific/Samoa": "Midway Island, Samoa",
+      "Pacific/Tongatapu": "Nuku'alofa",
+      "US/Alaska": "Alaska",
+      "US/Hawaii": "Hawaii",
+      "label": "Tidssone"
+    },
+    "tooltip": "Vis Lokal Display Tid eller velg riktig Tidssone"
+  },
+  "title": {
+    "font": {
+      "text": "Min Tittel Test Tekst"
+    },
+    "horizontal-align": {
+      "center": "Senter",
+      "label": "Oppstilling",
+      "left": "Venstre",
+      "right": "Høyre"
+    },
+    "label": "Tittel",
+    "padding": {
+      "label": "Mellomrom (pixels)",
+      "tooltip": "Mellomrommet mellom klokke og tittel"
+    },
+    "placement": {
+      "bottom": "Bunn",
+      "label": "Plassering",
+      "left": "Venstre",
+      "right": "Høyre",
+      "tooltip": "Plassering av Tittel",
+      "top": "Topp"
+    },
+    "show": "Vis Tittel",
+    "tooltip": "Gi Klokken Et Navn",
+    "vertical-align": {
+      "bottom": "Bunn",
+      "label": "Oppstilling",
+      "middle": "Midt",
+      "top": "Topp"
+    }
+  }
+}

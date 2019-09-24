@@ -1,0 +1,15 @@
+{
+  "settings": "Twitter Widget Settings",
+  "authentication": {
+    "connectText": "Connect your Twitter account to use the Twitter Widget",
+    "connectButtonText": "Connect an account",
+    "connectedText": "Twitter account succesfully connected.",
+    "revokeLinkText": "Revoke Access"
+  },
+  "screenName": {
+    "error": "Error: you must specify a handle before you can save.",
+    "text": "Enter a handle to display Tweets from any public account"
+  },
+  "previewLabel": "Preview",
+  "previewText": "The Twitter Widget shows Tweets from Rise Vision in Preview, your Tweets will only show on a Linux, Windows, or Raspberry Pi Licensed Display."
+}

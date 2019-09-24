@@ -1,0 +1,11 @@
+.slider-handle {
+  background: $rise-green;
+}
+
+.slider.slider-vertical .slider-handle.triangle {
+  border-left-color: $rise-green;
+}
+
+.slider.slider-horizontal .slider-handle.triangle {
+  border-bottom-color: $rise-green;
+}

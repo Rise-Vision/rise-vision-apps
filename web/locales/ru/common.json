@@ -1,0 +1,18 @@
+{
+  "cancel": "Cancel",
+  "friday": "пятница",
+  "help": "Help",
+  "monday": "понедельник",
+  "saturday": "суббота",
+  "save": "Save",
+  "sunday": "воскресенье",
+  "thursday": "четверг",
+  "tuesday": "вторник",
+  "units": {
+    "celsius": "Celsius",
+    "fahrenheit": "Fahrenheit",
+    "kph": "км/ч",
+    "mph": "миль/час"
+  },
+  "wednesday": "среда"
+}

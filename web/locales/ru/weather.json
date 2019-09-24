@@ -1,0 +1,80 @@
+{
+  "E": "восточный",
+  "N": "северный",
+  "NE": "северо-восточный",
+  "NW": "северо-западный",
+  "S": "южный",
+  "SE": "юго-восточный",
+  "SW": "юго-западный",
+  "W": "западный",
+  "address": {
+    "address": {
+      "custom": "Custom Address",
+      "custom-address": "Your Custom Address",
+      "display": "Display Address",
+      "error": "Please enter a Custom Address",
+      "geolocation": "Geolocation",
+      "label": "Address"
+    },
+    "description": {
+      "custom": "Custom Description",
+      "custom-description": "Your Custom Description",
+      "error": "Please enter a Custom Description",
+      "label": "Description",
+      "none": "None",
+      "service": "From Service"
+    },
+    "font": {
+      "text": "Address Sample Text"
+    }
+  },
+  "at": "",
+  "current-temp": {
+    "font": {
+      "label": "Current Temperature Font",
+      "text": "Current Temperature Sample Text"
+    }
+  },
+  "errors": {
+    "no-data": "Unable to retrieve weather data for that location.",
+    "no-terms": "You must check the Acceptance setting in order to use this Widget."
+  },
+  "forecast-day": {
+    "font": {
+      "label": "Forecast Day Font",
+      "text": "Forecast Day Sample Text"
+    }
+  },
+  "forecast-temp": {
+    "font": {
+      "label": "Forecast Temperature Font",
+      "text": "Forecast Temperature Sample Text"
+    }
+  },
+  "humidity": "Влажность",
+  "humidity-wind": {
+    "font": {
+      "text": "Humidity & Wind Sample Text"
+    },
+    "heading": "Humidity and Wind",
+    "show": "Show Humidity and Wind",
+    "wind-speed": {
+      "label": "Wind Speed"
+    }
+  },
+  "layout": {
+    "current": "Current Weather",
+    "current-and-three-day": "Current Weather and 3 Day Forecast",
+    "three-day": "3 Day Forecast"
+  },
+  "settings": "Weather Settings",
+  "terms": {
+    "error": "Please accept the terms before saving.",
+    "label": "I acknowledge that there is currently no charge for this Widget, but at a date that has yet to be determined, it will cost $2 per Display, per month.  At that time I will have 30 days to decide if I wish to continue using this Widget."
+  },
+  "unit": {
+    "heading": "Temperature",
+    "label": "Unit"
+  },
+  "wind": "Ветер"
+}

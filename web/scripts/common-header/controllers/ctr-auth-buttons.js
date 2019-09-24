@@ -51,7 +51,7 @@ angular.module('risevision.common.header')
             //render a dialog based on the status current UI is in
             if (newStatus === 'registeredAsRiseVisionUser') {
               if (!userState.registrationModalInstance && userState
-              .isLoggedIn()) { // avoid duplicate registration modals
+                .isLoggedIn()) { // avoid duplicate registration modals
                 userState.registrationModalInstance = $modal.open({
                   template: $templateCache.get('partials/common-header/registration-modal.html'),
                   controller: 'RegistrationModalCtrl',

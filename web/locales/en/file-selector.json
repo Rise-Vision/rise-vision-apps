@@ -1,0 +1,12 @@
+{
+  "buttons": {
+    "custom": "Custom URL",
+    "preview": "Preview File"
+  },
+  "errors": {
+    "storage": {
+      "image": "Please choose a valid image. (jpg, jpeg, png, bmp, svg, gif)",
+      "video": "Please choose a valid HTML5 video. (webm, mp4, ogg, ogv)"
+    }
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "clock-type": {
+    "analog": {
+      "face-color": "Color de la Cara",
+      "font": {
+        "text": "Números - Ejemplo de Texto"
+      },
+      "frame-color": "Color del Marco",
+      "frame-width": "Anchura del Marco (píxeles)",
+      "hand-color": "Manecilla de Hora / Minuto - Color",
+      "hand-width": "Manecilla de Hora / Minuto- Anchura (píxeles)",
+      "hour-tick-width": "Marcas de hora - Anchura (píxeles)",
+      "label": "Analógico",
+      "minute-tick-width": "Marcas de Minutos - Anchura (píxeles)",
+      "second-hand-color": "Manecilla de Minutos - Color",
+      "second-hand-width": "Manecilla de Minutos - Anchura (píxeles)",
+      "show-second-hand": "Enseñar Manecilla de Minutos"
+    },
+    "digital": {
+      "font": {
+        "text": "Reloj Digital - Ejemplo de Texto"
+      },
+      "format": "Formato",
+      "label": "Digital"
+    },
+    "label": "Tipo de Reloj"
+  },
+  "settings": "Configuración del Reloj",
+  "time": {
+    "label": "Tiempo",
+    "local-time": "Utilice Hora Local",
+    "time-zone": {
+      "America/Argentina/Buenos_Aires": "Buenos Aires, Georgetown",
+      "Asia/Almaty": "Astana, Almaty, Dhaka, Novosibirsk",
+      "Asia/Bangkok": "Bangkok, Hanoi, Jakarta",
+      "Asia/Calcutta": "Kolkata, Chennai, Mumbai, Nueva Delhi",
+      "Asia/Hong_Kong": "Beijing, Chongqing, Hong Kong, Urumqi",
+      "Asia/Kabul": "Kabul",
+      "Asia/Karachi": "Islamabad, Karachi, Tashkent",
+      "Asia/Kathmandu": "Katmandú",
+      "Asia/Magadan": "Magadan, Islas Salomón, Nueva Caledonia",
+      "Asia/Muscat": "Abu Dhabi, Muscat",
+      "Asia/Rangoon": "Rangún (Yangon, Birmania)",
+      "Asia/Tehran": "Teherán",
+      "Asia/Tokyo": "Osaka, Sapporo, Tokyo",
+      "Atlantic/Cape_Verde": "Cabo Verde",
+      "Atlantic/South_Georgia": "Mid-Atlantic",
+      "Australia/Adelaide": "Adelaide, Darwin",
+      "Australia/Canberra": "Canberra, Melbourne, Sydney, Vladivostok",
+      "Canada/Atlantic": "Tiempo Atlántico(EE.UU. y Canadá)",
+      "Canada/Central": "Tiempo Central (EE.UU. y Canadá)",
+      "Canada/Eastern": "Tiempo del Este(EE.UU. y Canadá)",
+      "Canada/Mountain": "Tiempo Montaña (EE.UU. y Canadá)",
+      "Canada/Newfoundland": "Hora de Terranova (Canada)",
+      "Canada/Pacific": "Tiempo Pacífico (EE.UU. y Canadá)",
+      "Etc/UTC": "Universal Time Coordinated, Zulu",
+      "Europe/Amsterdam": "Amsterdam, Berlín, Berna, Roma, París, Estocolmo, Viena",
+      "Europe/Athens": "Atenas, Bucarest, Estambul, Minsk",
+      "Europe/London": "Dublín, Edimburgo, Lisboa, Londres",
+      "Europe/Moscow": "Moscú, San Petersburgo, Volgogrado",
+      "Pacific/Auckland": "Auckland, Fiji, Kamchatka, Isla Marshall",
+      "Pacific/Samoa": "Midway Island, Samoa",
+      "Pacific/Tongatapu": "Nuku'alofa",
+      "US/Alaska": "Alaska",
+      "US/Hawaii": "Hawaii",
+      "label": "Huso Horario"
+    },
+    "tooltip": "Mostrar tiempo local de pantalla o escoge la Huso Horario"
+  },
+  "title": {
+    "font": {
+      "text": "Mi Título - Ejemplo de Texto"
+    },
+    "horizontal-align": {
+      "center": "Centro",
+      "label": "Alineación",
+      "left": "Izquierda",
+      "right": "Derecha"
+    },
+    "label": "Título",
+    "padding": {
+      "label": "Espaciamiento (píxeles)",
+      "tooltip": "La cantidad de espacio entre el título y el reloj"
+    },
+    "placement": {
+      "bottom": "Abajo",
+      "label": "Colocación",
+      "left": "Izquierda",
+      "right": "Derecha",
+      "tooltip": "Posición del título",
+      "top": "Arriba"
+    },
+    "show": "Mostrar Título",
+    "tooltip": "Poner nombre al reloj",
+    "vertical-align": {
+      "bottom": "Abajo",
+      "label": "Alineación",
+      "middle": "Medio",
+      "top": "Arriba"
+    }
+  }
+}

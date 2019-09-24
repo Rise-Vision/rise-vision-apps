@@ -1,0 +1,18 @@
+{
+  "cancel": "Cancelar",
+  "friday": "Sexta",
+  "help": "Ajuda",
+  "monday": "Segunda",
+  "saturday": "Sábado",
+  "save": "Salvar",
+  "sunday": "Domingo",
+  "thursday": "Quinta",
+  "tuesday": "Terça",
+  "units": {
+    "celsius": "Celsius",
+    "fahrenheit": "Fahrenheit",
+    "kph": "km/h",
+    "mph": "mi./h"
+  },
+  "wednesday": "Quarta"
+}

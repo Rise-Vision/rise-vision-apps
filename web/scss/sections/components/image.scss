@@ -1,0 +1,54 @@
+@media (min-width: $screen-sm) {
+  .image-component-container {
+    --image-component-list-button-bar-height: 115px;
+    --image-component-list-duration-height: 80px;
+    --image-component-body-height: calc(100vh - var(--body-height) - var(--component-header-height));
+  }
+}
+
+@media (max-width: $screen-sm) {
+  .image-component-container {
+    --image-component-list-button-bar-height: 120px;
+    --image-component-list-duration-height: 85px;
+    --image-component-body-height: calc(100vh - var(--body-height));
+  }
+}
+
+.image-component-list {
+  height: calc(var(--image-component-body-height) - var(--image-component-list-button-bar-height));
+
+  &.active-duration {
+    height: calc(var(--image-component-body-height) - var(--image-component-list-duration-height) - var(--image-component-list-button-bar-height));
+  }
+}
+
+.image-component-list-duration {
+  height: var(--image-component-list-duration-height);
+  padding: 10px 20px 0;
+  background: $white;
+
+  & .form-control {
+    height: 40px;
+    color: $gray-dark;
+    border: 1px solid $mid-gray;
+    border-right: 0;
+    box-shadow: none;
+    transition: none;
+
+    &:focus {
+      border-color: $blue-border-color;
+    }
+
+    &:focus + .input-group-addon {
+      border-color: $blue-border-color;
+    }
+  }
+
+  & .input-group-addon {
+    font-size: 12px;
+    color: #020621;
+    background-color: $lighter-gray;
+    border: 1px solid $mid-gray;
+    border-left: 0;
+  }
+}
