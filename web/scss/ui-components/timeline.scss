@@ -1,0 +1,84 @@
+.timeline {
+  .control-label {
+  	font-weight: 500;
+  }
+  .dropdown-menu {
+    padding:5px;
+    li {
+      overflow: hidden;
+      padding: 5px !important;
+      .btn {
+        @extend .btn-default;
+        margin: 0;
+      }
+    }
+    * {
+      outline: 0;
+      &:focus {
+        outline: 0;
+      }
+    }
+    table {
+      border-collapse: separate;
+      border-spacing: 1px;
+      thead tr:last-child th {
+        font-weight: 400;
+        padding: 5px 0;
+      }
+      tbody {
+        .btn {
+          border: none;
+          border-radius: 0;
+        }
+      }
+    }
+  }
+}
+
+.recurrence-option {
+  .form-control {
+    margin: 0 5px;
+    display: inline-block;
+  }
+  .control-label {
+    display: inline-block;
+  }
+  fieldset {
+    display: inline-block;
+  }
+  select {
+    width: 90px;
+    display: inline-block;
+  }
+  .input-short {
+    width: 40px;
+  }
+  .text-danger {
+    margin-top: 15px;
+  }
+  .timelineWeekdays {
+    .control-label {
+      display: block;
+    }
+  }
+}
+
+
+//TODO - This is a table. Is there a better approach?
+.time-picker {
+  .btn-link {
+    padding: 0;
+    line-height: 12px;
+    font-size: 12px;
+    span {
+      line-height: normal;
+    }
+  }
+  .form-control {
+    margin: 0;
+  }
+  .btn {
+    margin-left: 5px;
+  }
+}
+

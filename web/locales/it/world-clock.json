@@ -1,0 +1,102 @@
+{
+  "clock-type": {
+    "analog": {
+      "face-color": "Colore quadrante",
+      "font": {
+        "text": "Esempio numeri"
+      },
+      "frame-color": "Colore cornice",
+      "frame-width": "Larghezza quadro (pixels)",
+      "hand-color": "Colore lancette Hora/Minuti",
+      "hand-width": "Larghezza lancette Hore/Minuti (pixels)",
+      "hour-tick-width": "Spessore segni ora (pixels)",
+      "label": "Analogico",
+      "minute-tick-width": "Spessore segni minuti (pixels) (pixels)",
+      "second-hand-color": "Colore lancetta secondi",
+      "second-hand-width": "Spessore lancetta secondi (pixels)",
+      "show-second-hand": "Mostra lancetta secondi"
+    },
+    "digital": {
+      "font": {
+        "text": "Testo esempio orologio digitale"
+      },
+      "format": "Formato",
+      "label": "Digitale"
+    },
+    "label": "Tipo di Orologio"
+  },
+  "settings": "Impostazione Orologio Mondiale",
+  "time": {
+    "label": "Tempo",
+    "local-time": "Usa Ora Locale",
+    "time-zone": {
+      "America/Argentina/Buenos_Aires": "Buenos Aires, Georgetown",
+      "Asia/Almaty": "Astana, Almaty, Dhaka, Novosibirsk",
+      "Asia/Bangkok": "Bangkok, Hanoi, Jakarta",
+      "Asia/Calcutta": "Calcutta, Chennai, Mumbai, New Delhi",
+      "Asia/Hong_Kong": "Beijing, Chongqing, Hong Kong, Urumqi",
+      "Asia/Kabul": "Kabul",
+      "Asia/Karachi": "Islamabad, Karachi, Tashkent",
+      "Asia/Kathmandu": "Kathmandu",
+      "Asia/Magadan": "Magadan, Solomon Is., New Caledonia",
+      "Asia/Muscat": "Abu Dhabi, Muscat",
+      "Asia/Rangoon": "Rangoon (Yangon, Burma)",
+      "Asia/Tehran": "Tehran",
+      "Asia/Tokyo": "Osaka, Sapporo, Tokyo",
+      "Atlantic/Cape_Verde": "Cape Verde Is.",
+      "Atlantic/South_Georgia": "Mid-Atlantic",
+      "Australia/Adelaide": "Adelaide, Darwin",
+      "Australia/Canberra": "Canberra, Melbourne, Sydney, Vladivostok",
+      "Canada/Atlantic": "Atlantic Time (Canada)",
+      "Canada/Central": "Central Time (US & Canada)",
+      "Canada/Eastern": "Eastern Time (US & Canada)",
+      "Canada/Mountain": "Mountain Time (US & Canada)",
+      "Canada/Newfoundland": "Newfoundland Time (Canada)",
+      "Canada/Pacific": "Pacific Time (US & Canada)",
+      "Etc/UTC": "Universal Time Coordinated, Zulu",
+      "Europe/Amsterdam": "Amsterdam, Berlin, Bern, Rome, Paris, Stockholm, Vienna",
+      "Europe/Athens": "Athens, Bucharest, Istanbul, Minsk",
+      "Europe/London": "Dublin, Edinburgh, Lisbon, London",
+      "Europe/Moscow": "Moscow, St. Petersburg, Volgograd",
+      "Pacific/Auckland": "Auckland, Fiji, Kamchatka, Marshall Is.",
+      "Pacific/Samoa": "Midway Island, Samoa",
+      "Pacific/Tongatapu": "Nuku'alofa",
+      "US/Alaska": "Alaska",
+      "US/Hawaii": "Hawaii",
+      "label": "Zona orari"
+    },
+    "tooltip": "Mostra ora locale del Display o seleziona la zona oraria appropiata"
+  },
+  "title": {
+    "font": {
+      "text": "Testo di esempio per il Titolo"
+    },
+    "horizontal-align": {
+      "center": "Centro",
+      "label": "Alineamento",
+      "left": "Sinistra",
+      "right": "Destra"
+    },
+    "label": "Titolo",
+    "padding": {
+      "label": "Padding (pixels)",
+      "tooltip": "Lo spazio fra il titolo e l'orologio"
+    },
+    "placement": {
+      "bottom": "Sotto",
+      "label": "Posizionamento",
+      "left": "Sinistra",
+      "right": "Destra",
+      "tooltip": "Posizione del titolo",
+      "top": "Sopra"
+    },
+    "show": "Mostra titolo",
+    "tooltip": "Dai un nome al tuo orologgio",
+    "vertical-align": {
+      "bottom": "Sotto",
+      "label": "Alineamento",
+      "middle": "Mezzo",
+      "top": "Sopra"
+    }
+  }
+}

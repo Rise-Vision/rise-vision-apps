@@ -1,0 +1,249 @@
+{
+  "add": {
+    "error": "Failed to create Presentation!"
+  },
+  "addWidget": {
+    "settingsUrl": "Settings URL",
+    "title": "Add a Custom Rise Widget",
+    "url": "URL"
+  },
+  "autoSchedule": {
+    "areYouReady": "Are you ready to add a Display?",
+    "congrats": "Congrats!",
+    "maybeLater": "Maybe Later",
+    "message": "You've saved \"{{presentationName}}\". Since you're a new user, we've added it to a Schedule."
+  },
+  "details": {
+    "deleteTitle": "Deleting Presentation",
+    "deleteWarning": "Are you sure you want to delete this Presentation?",
+    "error": "Failed to update Presentation!",
+    "published": "Published",
+    "remove": "Remove",
+    "removePlaceholder": "Remove Placeholder",
+    "removePlaceholderWarning": "Are you sure you want to remove this Placeholder from the Presentation?",
+    "removePlaylistItem": "Remove Item",
+    "removePlaylistItemWarning": "Are you sure you want to remove this Widget from the Playlist?",
+    "revised": "Revised",
+    "saved": "Saved",
+    "unsavedTitle": "Unsaved Changes",
+    "unsavedWarning": "You have unsaved changes. Do you want to Save or Discard them?"
+  },
+  "json-error": {
+    "message": "The content of your Presentation could not be parsed. Please check the syntax in HTML mode.",
+    "title": "Invalid presentation data"
+  },
+  "landing": {
+    "manageEditorText": "Create and manage HTML content for your digital signage displays, anywhere, anytime."
+  },
+  "list": {
+    "actions": {
+      "add": "Add Presentation",
+      "fromTemplate": "From Template",
+      "new": "New"
+    },
+    "empty": "You haven't created any Presentations yet.",
+    "error": "Failed to load presentation. Please try again later.",
+    "filter": {
+      "filters": "Filters",
+      "placeholder": "Search for Presentations"
+    },
+    "heading": {
+      "changeDate": "Last Modified",
+      "name": "Name",
+      "status": "Status"
+    },
+    "no-results": "Your search didn't return any results",
+    "noPresentations": "No Presentations",
+    "title": "Presentations",
+    "viewAll": "View All Presentations"
+  },
+  "playlistItem": {
+    "add": "Add Widget",
+    "add-image": "Image",
+    "add-widgets": "Widgets",
+    "add-text": "Text",
+    "add-video": "Video",
+    "content": "Widget",
+    "delete": "Delete",
+    "duplicate": "Duplicate",
+    "duration": "Duration",
+    "legacyWarningPart1": "This is a Gadget and it is not supported in this Editor. To configure a Gadget please use the",
+    "legacyWarningPart2": "previous version",
+    "legacyWarningPart3": "of the Editor.",
+    "name": "Name",
+    "no-playlistItem": "Click Image, Video, Text or Widgets to add to this Playlist",
+    "playUntilDone": "Play Until Done",
+    "playUntilDone-short": "PUD",
+    "presentation": {
+      "enterId": "Enter Presentation ID",
+      "error": {
+        "invalidId": "Presentation ID is not valid. Please enter a valid ID.",
+        "noAccess": "There was an error accessing the Presentation. This could indicate it does not exist or you cannot access it.",
+        "noId": "Please enter a Presentation ID",
+        "noneSelected": "No Presentation selected. Please select a Presentation or enter an ID."
+      },
+      "name": "Embedded Presentation",
+      "open": "Open Presentation",
+      "select": "Select Presentation",
+      "title": "Embedded Presentation Settings"
+    },
+    "required": "Required",
+    "seconds": "seconds",
+    "seconds-short": "s",
+    "select": "Select",
+    "title": "Edit Playlist Item"
+  },
+  "properties": {
+    "labels": {
+      "background": "Background",
+      "copy": "Copy Presentation",
+      "height": "Height",
+      "hideMouse": "Hide Mouse Pointer",
+      "id": "ID",
+      "isStoreProduct": "This Presentation is a Store Product",
+      "name": "Name",
+      "playUntilDone": "Play Until Done Placeholder",
+      "resolution": "Resolution",
+      "shareAsTemplate": "Share this Presentation as a Template with your Sub-Companies",
+      "width": "Width"
+    },
+    "title": "Presentation Properties",
+    "transition": {
+      "fade": "Fade",
+      "label": "Transition",
+      "none": "None",
+      "slideDown": "Slide Down",
+      "slideLeft": "Slide Left",
+      "slideRight": "Slide Right",
+      "slideUp": "Slide Up"
+    },
+    "warnings": {
+      "duplicate": "Duplicate Placeholder names are not allowed",
+      "invalid": "Placeholder name contains invalid character",
+      "invalidUrl": "Invalid URL",
+      "required": "Required"
+    }
+  },
+  "restore": {
+    "confirm": {
+      "message": "Are you sure you want to Restore this Presentation to it's Published version? All changes will be lost.",
+      "title": "Restoring Presentation"
+    }
+  },
+  "selector-modal": {
+    "title": "Select Presentation"
+  },
+  "sharedTemplates": {
+    "name": "Name",
+    "preview": "Preview",
+    "search": "Search for Shared Templates",
+    "title": "Shared Templates"
+  },
+  "storeProduct": {
+    "add": "Add",
+    "category": {
+      "all": "All",
+      "free": "Free",
+      "metered": "For Licensed Displays",
+      "premium": "For Licensed Displays",
+      "subscription": "For Licensed Displays"
+    },
+    "content": {
+      "search": "Search for Widget",
+      "title": "Add Widget",
+      "otherWidgets": "For All Displays",
+      "noResults": "Your search didn't return any results"
+    },
+    "professional": {
+      "title": "For Licensed Displays Only",
+      "learnMore": "Learn More",
+      "unlock": "Unlock",
+      "widgetType": "For Licensed Displays",
+      "promotion": "Add power and functionality to your Presentations with Widgets for Licensed Displays",
+      "promotionTrial": "Unlock the power of Widgets for Licensed Displays with a Paid Plan.",
+      "promotionTrialButton": "View Plans",
+      "promotionPlan": "Unlock the power of Widgets for Licensed Displays. Assign your included Display Licenses.",
+      "promotionDisplaysButton": "View Displays",
+      "noResults": "Your search didn't return any results"
+    },
+    "details": "Details",
+    "productTags": {
+      "all": "All",
+      "business": "Business",
+      "education": "Education",
+      "healthcare": "Healthcare",
+      "hospitality": "Hospitality",
+      "lifestyle": "Lifestyle",
+      "other": "Other",
+      "retail": "Retail",
+      "worship": "Worship"
+    },
+    "templates": {
+      "back": "Back to all Templates",
+      "blank": "Blank",
+      "cantFind": "Can’t find what you’re looking for?",
+      "search": "Search for Templates",
+      "start": "Start with this Template",
+      "suggest": "Suggest a Template!",
+      "title": "Add a New Presentation"
+    }
+  },
+  "subscription": {
+    "buy": "Buy",
+    "subscribe": "Subscribe",
+    "status": {
+      "professional": "For Licensed Displays"
+    },
+    "viewAccount": "View Account"
+  },
+  "templatesLibrary": {
+    "details": {
+      "details-list-1": "Get access to all Templates with any 14-day Plan Trial, and with any Plan Subscription thereafter.",
+      "details-list-2": "There's no contract, and you can cancel at any time.",
+      "details-list-3": "New Templates added every month.",
+      "details-list-title": "Subscription Details",
+      "free": "FREE",
+      "freeWithTrial": "with a Plan Trial or Subscription",
+      "preview": "Preview this Template"
+    },
+    "access-warning": "You need a Plan subscription to use this Template. Get access to all Templates with any 14-day Plan Trial, and with any Plan Subscription thereafter."
+  },
+  "title": "Editor",
+  "workspace": {
+    "legacyWarning": {
+      "confirmation": "Open with Classic Editor",
+      "message": "This Presentation contains Gadgets, Video Items, Image Items, HTML Items, Text Items or Presentation Items that are not supported in this Editor.<br/>To modify this Presentation please use the previous version of the Editor.",
+      "title": "Deprecated Items"
+    },
+    "sidebar": {
+      "edit": {
+        "playlist": "Playlist",
+        "properties": "Properties",
+        "settings": {
+          "height": "Height",
+          "left": "Left",
+          "top": "Top",
+          "visible": "Visible",
+          "width": "Width",
+          "zOrder": "Z Order"
+        },
+        "title": "Edit Placeholder"
+      },
+      "no-placeholder": "You haven't added any Placeholders to your Presentation yet.",
+      "placeholderTooltip": "Click to change Images, Video, Text, and Widgets",
+      "title": "Placeholders"
+    },
+    "toolbar": {
+      "addPlaceholder": "Add Placeholder",
+      "addPlaceholderTooltip": "Click to add Images, Video, Text, and Widgets",
+      "changeTemplate": "Change Template",
+      "mode": {
+        "design": "View Design",
+        "html": "View HTML"
+      },
+      "or": "or",
+      "preview": "Preview",
+      "saveAndPreview": "Save & Preview"
+    }
+  }
+}

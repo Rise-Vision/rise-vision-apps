@@ -1,0 +1,22 @@
+{
+  "options": {
+    "autoplay": "Auto Play Video on Startup",
+    "controls": "Show Video Controls",
+    "label": "Video Options"
+  },
+  "pause": {
+    "label": "If video is paused resume playing after"
+  },
+  "settings": "Video Settings",
+  "url": {
+    "file": "Single Video",
+    "folder": "Folder of Video(s)",
+    "label": "How do you want to show your video(s)?"
+  },
+  "volume": {
+    "label": "Volume"
+  },
+  "preview": {
+    "previewMutedText": "The Video Widget will be muted in Preview, your videos will play with volume on your display if configured for it."
+  }
+}

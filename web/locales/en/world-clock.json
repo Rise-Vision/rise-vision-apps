@@ -1,0 +1,102 @@
+{
+  "clock-type": {
+    "analog": {
+      "face-color": "Face Color",
+      "font": {
+        "text": "Numbers Sample Text"
+      },
+      "frame-color": "Frame Color",
+      "frame-width": "Frame Width (pixels)",
+      "hand-color": "Hour/Minute Hand Color",
+      "hand-width": "Hour/Minute Hand Width (pixels)",
+      "hour-tick-width": "Hour Tick Width (pixels)",
+      "label": "Analog",
+      "minute-tick-width": "Minute Tick Width (pixels)",
+      "second-hand-color": "Second Hand Color",
+      "second-hand-width": "Second Hand Width (pixels)",
+      "show-second-hand": "Show Second Hand"
+    },
+    "digital": {
+      "font": {
+        "text": "Digital Clock Sample Text"
+      },
+      "format": "Format",
+      "label": "Digital"
+    },
+    "label": "Clock Type"
+  },
+  "settings": "World Clock Settings",
+  "time": {
+    "label": "Time",
+    "local-time": "Use Local Time",
+    "time-zone": {
+      "America/Argentina/Buenos_Aires": "Buenos Aires, Georgetown",
+      "Asia/Almaty": "Astana, Almaty, Dhaka, Novosibirsk",
+      "Asia/Bangkok": "Bangkok, Hanoi, Jakarta",
+      "Asia/Calcutta": "Calcutta, Chennai, Mumbai, New Delhi",
+      "Asia/Hong_Kong": "Beijing, Chongqing, Hong Kong, Urumqi",
+      "Asia/Kabul": "Kabul",
+      "Asia/Karachi": "Islamabad, Karachi, Tashkent",
+      "Asia/Kathmandu": "Kathmandu",
+      "Asia/Magadan": "Magadan, Solomon Is., New Caledonia",
+      "Asia/Muscat": "Abu Dhabi, Muscat",
+      "Asia/Rangoon": "Rangoon (Yangon, Burma)",
+      "Asia/Tehran": "Tehran",
+      "Asia/Tokyo": "Osaka, Sapporo, Tokyo",
+      "Atlantic/Cape_Verde": "Cape Verde Is.",
+      "Atlantic/South_Georgia": "Mid-Atlantic",
+      "Australia/Adelaide": "Adelaide, Darwin",
+      "Australia/Canberra": "Canberra, Melbourne, Sydney, Vladivostok",
+      "Canada/Atlantic": "Atlantic Time (Canada)",
+      "Canada/Central": "Central Time (US & Canada)",
+      "Canada/Eastern": "Eastern Time (US & Canada)",
+      "Canada/Mountain": "Mountain Time (US & Canada)",
+      "Canada/Newfoundland": "Newfoundland Time (Canada)",
+      "Canada/Pacific": "Pacific Time (US & Canada)",
+      "Etc/UTC": "Universal Time Coordinated, Zulu",
+      "Europe/Amsterdam": "Amsterdam, Berlin, Bern, Rome, Paris, Stockholm, Vienna",
+      "Europe/Athens": "Athens, Bucharest, Istanbul, Minsk",
+      "Europe/London": "Dublin, Edinburgh, Lisbon, London",
+      "Europe/Moscow": "Moscow, St. Petersburg, Volgograd",
+      "Pacific/Auckland": "Auckland, Fiji, Kamchatka, Marshall Is.",
+      "Pacific/Samoa": "Midway Island, Samoa",
+      "Pacific/Tongatapu": "Nuku'alofa",
+      "US/Alaska": "Alaska",
+      "US/Hawaii": "Hawaii",
+      "label": "Time Zone"
+    },
+    "tooltip": "Show local Display time or pick the Time Zone required"
+  },
+  "title": {
+    "font": {
+      "text": "My Title Sample Text"
+    },
+    "horizontal-align": {
+      "center": "Center",
+      "label": "Alignment",
+      "left": "Left",
+      "right": "Right"
+    },
+    "label": "Title",
+    "padding": {
+      "label": "Padding (pixels)",
+      "tooltip": "The amount of space between your title and clock"
+    },
+    "placement": {
+      "bottom": "Bottom",
+      "label": "Placement",
+      "left": "Left",
+      "right": "Right",
+      "tooltip": "Position of title",
+      "top": "Top"
+    },
+    "show": "Show Title",
+    "tooltip": "Give your clock a name",
+    "vertical-align": {
+      "bottom": "Bottom",
+      "label": "Alignment",
+      "middle": "Middle",
+      "top": "Top"
+    }
+  }
+}

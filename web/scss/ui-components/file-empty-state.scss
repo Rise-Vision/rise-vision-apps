@@ -1,0 +1,39 @@
+.file-empty-state {
+  font-size: 16px;
+  padding-bottom: 66px;
+  text-align: center;
+  color: #333;
+  .product-graphic {
+    width: 64px;
+    height: 64px;
+    margin-top: 33px;
+    text-align: center;
+    @media screen and (max-width: $screen-sm) {
+      margin-top: 44px;
+    }
+    svg-icon {
+      margin-left: 0;
+      svg {
+        width: 32px;
+        height: 32px;
+      }
+    }
+  }
+  .btn {
+    .fa-2x {
+      font-size: 22px;
+    }
+  }
+  .fa::before {
+    color: #969595;
+  }
+  svg {
+    width: 70px;
+    height: 40px;
+    position: relative;
+    top: 19px;
+    & path {
+      fill: #444;
+    }
+  }
+}

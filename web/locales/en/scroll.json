@@ -1,0 +1,25 @@
+{
+  "by": {
+    "continuous": "Continuously",
+    "label": "Type",
+    "none": "No",
+    "page": "By Page"
+  },
+  "heading": "Scroll",
+  "pause": {
+    "label": "Pause",
+    "tooltip": "Number of seconds to pause after touch or the end of the list is reached"
+  },
+  "pud": {
+    "label": "PUD Failover",
+    "tooltip": "Duration that the content should be shown for in the event of no scrolling or insufficient content to scroll"
+  },
+  "speed": {
+    "fast": "Fast",
+    "fastest": "Fastest",
+    "label": "Speed",
+    "medium": "Medium",
+    "slow": "Slow",
+    "slowest": "Slowest"
+  }
+}

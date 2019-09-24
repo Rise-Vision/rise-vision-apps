@@ -1,0 +1,16 @@
+{
+  "errors": {
+    "tryAgain": "Please try again; you may need to reload the page.",
+    "generalError": "An Error has Occurred",
+    "actionFailed": "The {{itemName}} could not be {{actionName}}.",
+    "notAuthenticated": "You do not have permissions to {{actionName}} the {{itemName}}, because you are not authenticated. Please, sign in.",
+    "parentCompanyAction": "Action required by parent Company.",
+    "permissionRequired": "You do not have the required permissions.",
+    "premiumTemplate": "You need to be subscribed to a Plan to use the Template Library.",
+    "generalAccess": "You may have not have the required permissions, or an action is required by parent Company.",
+    "notFound": "The {{itemName}} could not be found. Please validate it still exists.",
+    "serverError": "An error occurred while trying to {{actionName}} the {{itemName}}.",
+    "checkConnection": "The server could not be reached. Check your connection and proxy or firewall settings.",
+    "storageSubscription": "You need to be subscribed to a Plan to use Storage."
+  }
+}

@@ -1,0 +1,80 @@
+/* ==========================================================================
+   Store Navigation
+   ========================================================================== */
+
+.scrollfix {
+  overflow-x: hidden;
+  height: 100%;
+}
+
+.navbar-store {
+  padding-top: 0;
+  padding-bottom: 0;
+  .rise-logo {
+    margin-top: 5px;
+  }
+  .navbar-left,
+  .navbar-right {
+    margin-top: 6px;
+  }
+}
+
+.inner-box {
+  position: relative;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 5px;
+  padding: 22px;
+  &.no-padding {
+    padding: 0;
+  }
+}
+
+body.in-rva-iframe {
+  height: 100%;
+  overflow-x: hidden;
+  .navbar-store {
+    .store-logo {
+      width: 50px;
+      margin-top: 2px;
+      float: left;
+    }
+    h1 {
+      margin-top: 7px;
+      margin-left: 12px;
+      margin-bottom: 5px;
+      float: left;
+      color: #333;
+      font-size: 28px;
+    }
+    .close-iframe {
+      margin: 3px 5px;
+      cursor: pointer;
+    }
+  }
+}
+
+.bottom-border {
+  padding-bottom: 10px;
+  border-bottom: $border;
+}
+
+.print-only {
+  display: none;
+}
+
+.navbar-right>li>a.shopping-cart-button {
+  font-size: 24px !important;
+  display: block;
+  margin-left: 6px;
+  padding: 0 15px 0 0 !important;
+  margin-top: 3px;
+  .label { 
+    left: 65%; 
+  }
+  .fa-shopping-cart {
+    line-height: 45px;
+    display: block;
+    padding: 0 10px;
+  }
+}

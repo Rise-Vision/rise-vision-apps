@@ -1,0 +1,18 @@
+{
+  "cancel": "Annuleren",
+  "friday": "Vrijdag",
+  "help": "Help",
+  "monday": "Maandag",
+  "saturday": "Zaterdag",
+  "save": "Opslaan",
+  "sunday": "Zondag",
+  "thursday": "Donderdag",
+  "tuesday": "Dinsdag",
+  "units": {
+    "celsius": "Celsius",
+    "fahrenheit": "Fahrenheit",
+    "kph": "kph",
+    "mph": "mph"
+  },
+  "wednesday": "Woensdag"
+}

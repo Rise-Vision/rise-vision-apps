@@ -24,6 +24,10 @@ var factory     = require("widget-tester").gulpTaskFactory;
 var fs          = require('fs');
 var os          = require('os');
 
+require("./ch-build");
+require("./i18n-build");
+require("./css-build");
+
 //--------------------- Variables --------------------------------------
 
 var appJSFiles = [
@@ -33,10 +37,6 @@ var appJSFiles = [
 
 var partialsHTMLFiles = [
   "./web/partials/**/*.html"
-];
-
-var localeFiles = [
-  "./web/bower_components/common-header/dist/locales/**/*"
 ];
 
 var unitTestFiles = [
@@ -91,8 +91,6 @@ var unitTestFiles = [
   "test/unit/**/*-spec.js",
   "test/unit/common/services/svc-zendesk-override.js"
 ];
-
-var commonStyleLink = fs.realpathSync('web/bower_components/common-header') + '/**/*.css';
 
 //------------------------- Browser Sync --------------------------------
 
@@ -180,11 +178,6 @@ gulp.task("clean-tmp", function () {
 });
 
 gulp.task("clean", ["clean-dist", "clean-tmp"]);
-
-gulp.task("locales", function() {
-  return gulp.src(localeFiles)
-    .pipe(gulp.dest("dist/locales"));
-});
 
 gulp.task("lint", function() {
   return gulp.src(appJSFiles)
@@ -291,11 +284,6 @@ gulp.task("images", function () {
     })
 });
 
-gulp.task("fonts", function() {
-  return gulp.src("./web/bower_components/common-header/dist/fonts/**/*")
-    .pipe(gulp.dest("dist/fonts"));
-});
-
 gulp.task("static-html", function() {
   return gulp.src(['./web/loading-preview.html', './web/pricing-component.js', './web/pricing-component.css'])
     .pipe(gulp.dest('dist/'));
@@ -310,8 +298,12 @@ gulp.task("config", function() {
     .pipe(gulp.dest("./web/scripts/config"));
 });
 
+gulp.task('build-pieces', function (cb) {
+  runSequence(["clean"], ['config', 'i18n-build', 'css-build', 'pricing', 'html2js'], cb);
+});
+
 gulp.task('build', function (cb) {
-  runSequence(["clean", "config"], ['pretty', 'pricing', 'html2js'],["html", "static-html", "fonts", "locales", "images"], cb);
+  runSequence(["clean", ], ['build-pieces', 'pretty'], ["html", "static-html", "images"], cb);
 });
 
 /*---- testing ----*/
@@ -356,11 +348,11 @@ gulp.task("test:e2e:core", ["test:webdrive_update"],factory.testE2EAngular({
   }()
 }));
 gulp.task("test:e2e", function (cb) { 
-  runSequence(["config", "config-e2e", "pricing", "html2js"], "server", "test:e2e:core", "server-close", cb);
+  runSequence(["build-pieces", "config-e2e"], "server", "test:e2e:core", "server-close", cb);
 });
 
 gulp.task("test",  function (cb) {
-  runSequence(["config", "pricing", "html2js"], "test:unit", "coveralls", cb);
+  runSequence(["build-pieces"], "test:unit", "coveralls", cb);
 });
 
 //------------------------ Global ---------------------------------
@@ -376,10 +368,9 @@ gulp.task('default', [], function() {
   return true;
 });
 
-gulp.task('dev', ['config', 'pricing', 'html2js', 'browser-sync', 'watch']);
+gulp.task('dev', ['build-pieces', 'browser-sync', 'watch']);
 
 /**
- * Default task, running just `gulp` will compile the sass,
- * compile the jekyll site, launch BrowserSync & watch files.
+ * Default task, running just `gulp` will compile the sass, launch BrowserSync & watch files.
  */
 gulp.task('default', ['dev']);

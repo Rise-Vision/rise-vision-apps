@@ -1,0 +1,15 @@
+{
+  "alt-row-color": "Alternate Row Color",
+  "col-header-font": {
+    "heading": "Header Format",
+    "text": "Column Header Sample Text"
+  },
+  "col-padding": "Column Padding",
+  "data-font": {
+    "heading": "Data Format",
+    "text": "Data Sample Text"
+  },
+  "heading": "Table Format",
+  "row-color": "Row Color",
+  "row-padding": "Row Padding"
+}

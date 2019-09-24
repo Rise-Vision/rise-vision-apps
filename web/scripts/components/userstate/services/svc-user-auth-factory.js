@@ -135,7 +135,7 @@
               //populate user
               objectHelper.clearAndCopy({
                 userId: authenticatedUser
-                .id, //TODO: ideally we should not use real user ID or email, but use hash value instead
+                  .id, //TODO: ideally we should not use real user ID or email, but use hash value instead
                 username: authenticatedUser.email,
                 picture: authenticatedUser.picture
               }, _state.user);

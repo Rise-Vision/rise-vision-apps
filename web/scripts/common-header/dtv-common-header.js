@@ -2,6 +2,7 @@
 
 angular.module('risevision.common.header', [
     'ui.router',
+    'risevision.apps.partials',
     'risevision.common.account',
     'risevision.common.gapi',
     'risevision.common.config',

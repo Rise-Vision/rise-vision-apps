@@ -1,0 +1,53 @@
+.off-canvas--nav {
+  width: 350px;
+  background-color: #fff;
+  color: #000;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 300px;
+  height: 100%;
+  -webkit-user-drag: none;
+  z-index: $zindex-off-canvas;
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+
+  -webkit-transform: translate3d(-300px, 0, 0);
+     -moz-transform: translate3d(-300px, 0, 0);
+      -ms-transform: translate3d(-300px, 0, 0);
+       -o-transform: translate3d(-300px, 0, 0);
+          transform: translate3d(-300px, 0, 0);
+  -webkit-transition: all 0.3s cubic-bezier(0.16, 0.63, 0.45, 0.98);
+     -moz-transition: all 0.3s cubic-bezier(0.16, 0.63, 0.45, 0.98);
+      -ms-transition: all 0.3s cubic-bezier(0.16, 0.63, 0.45, 0.98);
+       -o-transition: all 0.3s cubic-bezier(0.16, 0.63, 0.45, 0.98);
+          transition: all 0.3s cubic-bezier(0.16, 0.63, 0.45, 0.98);
+
+  .off-canvas--nav-close {
+    font-size: 24px;
+    line-height: 40px;
+  }
+
+  .nav-stacked>li {
+    &+li { margin-top: 0px; }
+    &:first-child {
+      padding: 10px 15px;
+      border-bottom: 1px solid $navbar-default-border;
+    }
+
+    a {
+      border-radius: 0px;
+      font-size: 16px;
+      line-height: 40px;
+    }
+    i { line-height: 40px; }
+  }
+}
+
+.off-canvas--nav.is-off-canvas-opened  {
+  -webkit-transform: translate3d(0, 0, 0);
+     -moz-transform: translate3d(0, 0, 0);
+      -ms-transform: translate3d(0, 0, 0);
+       -o-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+  @include box-shadow(0 0 8px rgba(0, 0, 0, 0.2));
+}

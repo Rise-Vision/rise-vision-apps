@@ -1,0 +1,49 @@
+{
+  "plans": {
+    "choose-plan": "Choose Your Plan",
+    "pricing-component-title": "Subscribe to Rise Vision",
+    "current": "Current Plan",
+    "days-left-trial": "{{count}} days left on your trial.",
+    "displayIncluded": "Display Included",
+    "displaysIncluded": "Displays Included",
+    "downgrade": "Downgrade",
+    "error-starting-trial": "There was an error starting your Plan Trial. Please try again!",
+    "go-to-store": "Go To Store",
+    "individual-licenses": "Purchase Additional Licenses",
+    "learn-more-1": "Learn More About Our Plan Pricing",
+    "learn-more-2": "OR",
+    "learn-more-3": "Contact Sales If You Need Help",
+    "needMoreDisplays": "Need more Displays?",
+    "per-company-month": "per Company per Month",
+    "perDisplayBilledMonthly": "per Display per Month billed monthly at ${{price | number:0}}",
+    "perDisplayBilledYearly": "per Display per Month billed yearly at ${{price | number:0}}",
+    "saveEachYear": "Save ${{save | number:0}} each year",
+    "start-trial": "Start Trial",
+    "subscribe": "Subscribe",
+    "trial-expired": "Trial Expired",
+    "upgrade": "Upgrade"
+  },
+  "purchase": {
+    "review-subscription": {
+      "plan-name": "{{planName}} Plan",
+      "display-included": "Display Included",
+      "displays-included": "Displays Included",
+      "per-display": "per Display",
+      "per-month": "per Month",
+      "need-more-displays": "Need more Displays than <b>{{planName}} Plan</b> offers? Add more at only <b>${{priceDisplayMonth}} per Display</b>!",
+      "additional-licenses": "additional Display licenses added to your purchase.",
+      "pay-yearly": "Pay yearly, get one month free!",
+      "total": "TOTAL",
+      "save-yearly": "Save ${{saveYearly}}!",
+      "billed-monthly": "${{monthlyPrice}} billed monthly",
+      "billed-yearly": "${{yearlyPrice}} billed yearly"
+    }
+  },
+  "user": {
+    "error": {
+      "add-user": "User could not be added",
+      "duplicate-user": "A User with the Username '{{username}}' already belongs to another Company. To add them to this Company, they must sign in and delete themselves from their current Company by opening their User Settings and clicking the Delete button.",
+      "update-user": "User could not be updated"
+    }
+  }
+}

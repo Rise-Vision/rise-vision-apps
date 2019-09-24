@@ -1,0 +1,13 @@
+{
+  "errors": {
+    "numeric": "This field must be numeric",
+    "required": "This field is required"
+  },
+  "font": "Police",
+  "layout": {
+    "custom": "Personnalisé",
+    "error": "Please enter a Layout URL",
+    "heading": "Disposition",
+    "url": "URL de la disposition"
+  }
+}

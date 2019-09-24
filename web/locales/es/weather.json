@@ -1,0 +1,80 @@
+{
+  "E": "E",
+  "N": "N",
+  "NE": "NE",
+  "NW": "NW",
+  "S": "S",
+  "SE": "SE",
+  "SW": "SW",
+  "W": "W",
+  "address": {
+    "address": {
+      "custom": "Dirección Personalizada",
+      "custom-address": "Tu Dirección Personalizada",
+      "display": "Dirección de pantalla",
+      "error": "Please enter a Custom Address",
+      "geolocation": "Geolocalización",
+      "label": "Dirección"
+    },
+    "description": {
+      "custom": "Descripción Personalizada",
+      "custom-description": "Tu Descripción Personalizada",
+      "error": "Please enter a Custom Description",
+      "label": "Dirección - Descripción",
+      "none": "Ninguno",
+      "service": "Servicio de"
+    },
+    "font": {
+      "text": "Dirección - Ejemplo de Texto"
+    }
+  },
+  "at": "en",
+  "current-temp": {
+    "font": {
+      "label": "Temperatura Actual - Tipo de Letra",
+      "text": "Tiempo Actual - Ejemplo de Texto"
+    }
+  },
+  "errors": {
+    "no-data": "Unable to retrieve weather data for that location.",
+    "no-terms": "You must check the Acceptance setting in order to use this Widget."
+  },
+  "forecast-day": {
+    "font": {
+      "label": "Pronóstico del Día - Tipo de Letra",
+      "text": "Pronóstico del día - Ejemplo del Texto"
+    }
+  },
+  "forecast-temp": {
+    "font": {
+      "label": "Pronóstico de Temperatura - Tipo de Letra",
+      "text": "Pronóstico de Temperatura - Ejemplo de Texto"
+    }
+  },
+  "humidity": "Humedad",
+  "humidity-wind": {
+    "font": {
+      "text": "Humedad y Viento - Ejemplo de Texto"
+    },
+    "heading": "Humedad y Viento",
+    "show": "Mostrar Humedad y Vient",
+    "wind-speed": {
+      "label": "Velocidad de Viento"
+    }
+  },
+  "layout": {
+    "current": "Tiempo Actual",
+    "current-and-three-day": "Tiempo Actual y Pronóstico de 3 Días",
+    "three-day": "Pronóstico de 3 días"
+  },
+  "settings": "Configuración de Tiempo",
+  "terms": {
+    "error": "Please accept the terms before saving.",
+    "label": "Reconozco que actualmente no hay cargo por este Widget, pero en una fecha aún no determinada, me costará $2 por pantalla, por mes. En ese momento voy a tener 30 días para decidir si quiero seguir usando este Widget."
+  },
+  "unit": {
+    "heading": "Temperatura",
+    "label": "Unidad"
+  },
+  "wind": "Viento"
+}

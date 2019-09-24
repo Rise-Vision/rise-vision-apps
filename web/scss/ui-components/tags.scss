@@ -1,0 +1,130 @@
+.label-tag {
+  background: $lighter-gray;
+  color: #777;
+  white-space: normal;
+  font-size: 14px;
+  display: inline-block;
+  border: 1px solid $light-gray;
+  padding: 2px 5px 2px 5px;
+  line-height: 20px;
+  text-align: left;
+  cursor: pointer;
+  font-weight: 500;
+  &:hover {
+    color: $gray;
+  }
+  .tag-name, .tag-value {
+    overflow: hidden;
+    text-overflow:ellipsis;
+    vertical-align: top;
+  }
+  .tag-name {
+    max-width: 80px;
+    display: inline-block;
+    padding: 0;
+    &::before {
+      content:':';
+      float: right;
+      font-weight: bold;
+      font-size: 13px;
+      margin-left: 2px;
+    }
+  }
+  .tag-value {
+    max-width: 120px;
+    display: inline-block;
+    padding: 0;
+    font-weight: bold;
+    color: $dark-gray;
+  }
+  @media (max-width: $screen-xs) {
+    font-size: 13px;
+    .tag-name::before {
+      line-height: 18px;
+    }
+  }
+  &.invalid {
+    background-color: #f2dede;
+    border-color: #ebccd1;
+  }
+}
+
+.tag-selector {
+  padding: 5px;
+  margin-bottom: 10px;
+  .scrollable-content {
+    white-space: normal;
+    .label-tag {
+      display: inline-block;
+      margin-top:5px;
+      margin-right: 5px;
+    }
+  }
+}
+
+.btn-remove {
+  color: $gray;
+  padding: 0;
+}
+
+.panel-editable {
+  @extend .panel;
+  min-height: 34px;
+  padding: 0;
+  position: relative;
+  border: 1px solid #ccc;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+
+  .input-group>.input-group-addon {
+    height: 32px;
+    }
+  >.edit-icon {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+  }
+  .label-tag {
+    margin-top: 3px;
+    margin-left: 3px;
+  }
+  .text-muted,.text-placeholder {
+    line-height: 24px;
+    margin: 4px 0 0 0;
+    padding: 0 12px;
+    color: $gray-light;
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+
+  &.panel-disabled {
+    background-color: #d5d5d5 !important;
+    cursor: not-allowed !important;
+      .label-tag {
+          cursor: not-allowed !important;
+          opacity: .5;
+        }
+  }
+}
+
+//TODO: Still in use?
+// .content-box-filters {
+//   background: #fcfcfc;
+//   padding: 10px 10px 5px;
+//   margin-top: 5px;
+// }
+
+.select-tags {
+  padding: 3px;
+  .label {
+    margin-right: 3px;
+    margin-top: 3px;
+  }
+}
+
+//TODO: Still in use?
+// .content-box-disabled {
+//   pointer-events: none !important;
+//   background: $light-gray !important;
+// }
+
+

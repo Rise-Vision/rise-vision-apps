@@ -1,0 +1,118 @@
+{
+  "add-by-url": "By URL",
+  "breaking-link-warning": {
+    "text1": "Modifying these files or folders will break all links with existing Presentations.",
+    "text2": "If you are using this asset in any Presentation, the link for each must be manually updated in the Editor."
+  },
+  "cancel-uploads": "Cancel All",
+  "delete": {
+    "files-folders-plural": "{{count}} files and folders are about to be permanently deleted.",
+    "files-plural": "{{count}} files are about to be permanently deleted.",
+    "files-singular": "One file is about to be permanently deleted.",
+    "folders-plural": "{{count}} folders are about to be permanently deleted.",
+    "folders-singular": "One folder is about to be permanently deleted." 
+  },
+  "download-status": "Download Status",
+  "empty-state": {
+    "no-uploads": "You haven't uploaded any files yet!",
+    "or": "or",
+    "select": "Select",
+    "select-file": "Or just select single Images and Videos to add and order them in your Playlist",
+    "select-folder": "Select a Folder to show and update Images and Videos as you add or remove them from the Folder."
+  },
+  "error": {
+    "blocked-file": "This file is being requested too many times and is blocked.",
+    "duplicate-folder": "A Folder already uses that name, please choose a different one",
+    "move": {
+      "both-files-or-folders": "Destination must be a folder.",
+      "both-root-or-trash": "Source and destination must be both in Root or in Trash.",
+      "destination-must-not-exist": "Destination folder already contains a file with that name.",
+      "invalid-name": "The new name cannot have slashes.",
+      "must-be-different": "You cannot move these files or folders into the same folder. Please select a different folder and try again.",
+      "no-matches-found": "No matching files found.",
+      "parent-must-exist": "Destination parent directory must exist.",
+      "root-not-valid": "Source and destination cannot point to the root folder.",
+      "subfolders-not-valid": "Source and destination cannot be subfolders of each other.",
+      "unknown": "An error occured while moving. Please try again."
+    },
+    "server-error": "An error has occured.",
+    "signed-download-uri-request-failed": "Download failed. Please try again.",
+    "upload-failed": "Upload failed. Please try again."
+  },
+  "warning": {
+    "video-not-supported": "File <b>{{fileName}}</b> is not supported by Video Widget. <a href=\"https://help.risevision.com/hc/en-us/articles/201788630-Video-Widget-supported-formats\" target=\"__blank\" class=\"alert-link\">View supported file types</a>.",
+    "image-not-supported": "File <b>{{fileName}}</b> is not supported by Image Widget. <a href=\"https://help.risevision.com/hc/en-us/articles/115001957183-Supported-file-types-for-the-Image-Widget\" target=\"__blank\" class=\"alert-link\">View supported file types</a>."
+  },
+  "folder-selector": {
+    "title": "Select Destination"
+  },
+  "header": "Storage",
+  "list": {
+    "toggle-grid-view": "Grid View",
+    "toggle-list-view": "List View"
+  },
+  "loading-files": "Loading...",
+  "loading-functions": "Loading...",
+  "new-folder": "Create Folder",
+  "open-in-storage-app": "Open in Storage App",
+  "pending-operation": {
+    "delete": "Deleting...",
+    "duplicate": "Duplicating...",
+    "failed": {
+      "delete": "Delete failed. Please try again.",
+      "duplicate": "Duplicate failed. Please try again.",
+      "load": "Load failed. Please try again.",
+      "move": "Move failed. Please try again.",
+      "restore": "Restore failed. Please try again.",
+      "trash": "Move to trash failed. Please try again."
+    },
+    "load": "Loading Files...",
+    "leave-page": "There are tasks in progress. If you close this window they won't be completed.",
+    "move": "Moving...",
+    "restore": "Restoring...",
+    "trash": "Moving to trash..."
+  },
+  "rename": {
+    "error": {
+      "both-files-or-folders": "Source and destination must be both files or folders.",
+      "both-root-or-trash": "Source and destination must be both in Root or in Trash.",
+      "destination-must-not-exist": "Name is in use, please choose another.",
+      "invalid-name": "The new name cannot have slashes.",
+      "must-be-different": "The new name must be different.",
+      "no-matches-found": "No matching files found.",
+      "parent-must-exist": "Destination parent directory must exist.",
+      "root-not-valid": "Source and destination cannot point to the root folder.",
+      "subfolders-not-valid": "Source and destination cannot be subfolders of each other.",
+      "unknown": "An error occured while renaming. Please try again."
+    },
+    "title": "Rename File or Folder"
+  },
+  "retry-failed-uploads": "Retry failed uploads",
+  "select-file": "Select a File",
+  "select-folder-to-update": "Select a Folder to show and update Images and Videos as you add or remove them from the Folder.",
+  "select-multiple-file": "Select one or more Files",
+  "select-multiple-files-folders": "Select Files and Folders",
+  "select-multiple-files-folders-images": "Select Images and/or Folders of Images",
+  "select-multiple-files-folders-videos": "Select Videos and/or Folders of Videos",
+  "select-single-file": "Select a File",
+  "select-single-file-images": "Select an Image",
+  "select-single-file-videos": "Select a Video",
+  "select-single-folder": "Select a Folder",
+  "select-single-folder-images": "Select a Folder of Images",
+  "select-single-folder-videos": "Select a Folder of Videos",
+  "selected-items": "{{count}} Selected",
+  "start-trial": {
+    "cta": "Start Your Free Trial",
+    "free-trial": "Included as part of our plan packages along with many more great features",
+    "tagline": "Manage and deliver media to your digital signage displays, anywhere, anytime."
+  },
+  "title": "Rise Vision Storage",
+  "trash": "Trash",
+  "upload": "Upload",
+  "upload-files": "Upload Files",
+  "upload-folder": "Upload Folder",
+  "upload-status": "Upload Status",
+  "uploading": "Uploading {{filename}}",
+  "uploading-count-files": "Uploading {{count}} files",
+  "uploading-one-file": "Uploading 1 file"
+}

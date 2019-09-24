@@ -1,0 +1,26 @@
+{
+  "interactive": {
+    "label": "Interactive",
+    "tooltip": "Enable to allow users to interact with webpage."
+  },
+  "refresh": {
+    "label": "Data Refresh Interval (minutes)",
+    "none": "Do Not Refresh"
+  },
+  "scroll": {
+    "horizontal": {
+      "label": "Horizontal Scroll",
+      "tooltip": "Enter amount you want clipped from the leftmost portion of the webpage."
+    },
+    "vertical": {
+      "label": "Vertical Scroll",
+      "tooltip": "Enter amount you want clipped from the topmost portion of the webpage."
+    }
+  },
+  "scrollbars": "Scrollbars Enabled",
+  "settings": "Web Page Settings",
+  "zoom": {
+    "label": "Zoom",
+    "tooltip": "This will allow you to zoom in/out of a web page. If value is higher than 100% then scrollbars will be disabled."
+  }
+}

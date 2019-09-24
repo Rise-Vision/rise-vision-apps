@@ -1,0 +1,18 @@
+{
+  "cancel": "Otkaži",
+  "friday": "Petak",
+  "help": "Pomoć",
+  "monday": "Ponedeljak",
+  "saturday": "Subota",
+  "save": "Sačuvaj",
+  "sunday": "Nedelja",
+  "thursday": "Četvrtak",
+  "tuesday": "Utorak",
+  "units": {
+    "celsius": "Celsius",
+    "fahrenheit": "Fahrenheit",
+    "kph": "km/h",
+    "mph": "m/h"
+  },
+  "wednesday": "Sreda"
+}

@@ -8,7 +8,6 @@
  *
  */
 (function (angular) {
-
   'use strict';
 
   try {
@@ -18,26 +17,25 @@
   }
 
   angular.module('risevision.common.i18n.config', [])
-    .constant('LOCALES_PREFIX',
-      '../../dist/locales/translation_')
+    .constant('LOCALES_PREFIX', 'locales/translation_')
     .constant('LOCALES_SUFIX', '.json');
 
   angular.module('risevision.common.config')
-    .value('ENABLE_EXTERNAL_LOGGING', false)
-    .value('CORE_URL', 'https://rvacore-test.appspot.com/_ah/api')
-    .value('COOKIE_CHECK_URL', '//storage-dot-rvacore-test.appspot.com')
+    .value('ENABLE_EXTERNAL_LOGGING', true)
+    .value('CORE_URL', 'https://rvaserver2.appspot.com/_ah/api')
+    .value('COOKIE_CHECK_URL', '//storage-dot-rvaserver2.appspot.com')
     .value('STORE_URL', 'https://store.risevision.com/')
     .value('STORE_SERVER_URL',
-      'https://store-dot-rvacore-test.appspot.com/')
+      'https://store-dot-rvaserver2.appspot.com/')
     .value('STORE_ENDPOINT_URL',
-      'https://store-dot-rvacore-test.appspot.com/_ah/api')
+      'https://store-dot-rvaserver2.appspot.com/_ah/api')
     .value('STORAGE_ENDPOINT_URL',
-      'https://storage-dot-rvacore-test.appspot.com/_ah/api')
+      'https://storage-dot-rvaserver2.appspot.com/_ah/api')
     .value('GSFP_URL', 'https://gsfp-dot-rvaserver2.appspot.com/fp')
-    .value('APPS_URL', 'https://apps-stage-0.risevision.com')
+    .value('APPS_URL', 'https://apps.risevision.com')
     .value('CHARGEBEE_TEST_SITE', 'risevision-test')
-    .value('CHARGEBEE_PROD_SITE', 'risevision-test')
-    .value('CHARGEBEE_PLANS_USE_PROD', 'false')
-    .value('STRIPE_PROD_KEY', 'pk_test_GrMIAHSoqhaik4tcHepsxjOR')
+    .value('CHARGEBEE_PROD_SITE', 'risevision')
+    .value('CHARGEBEE_PLANS_USE_PROD', 'true')
+    .value('STRIPE_PROD_KEY', 'pk_live_31dWkTWQU125m2RcWpK4HQBR')
     .value('STRIPE_TEST_KEY', 'pk_test_GrMIAHSoqhaik4tcHepsxjOR');
 })(angular);

@@ -76,7 +76,7 @@ angular.module('risevision.common.components.purchase-flow')
       factory.updateAddress = function (addressObject, contact, isShipping) {
         var deferred = $q.defer();
         var currentAddress = isShipping ? addressService.copyAddressFromShipTo(userState
-        .getCopyOfSelectedCompany()) :
+            .getCopyOfSelectedCompany()) :
           userState.getCopyOfUserCompany();
 
         var addressFields = {};

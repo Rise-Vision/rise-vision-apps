@@ -1,0 +1,14 @@
+//TODO Examine if this is in use
+.collapse-panel.panel-heading a.panel-heading:after {
+    font-family: 'Glyphicons Halflings';
+    content: "\e114";
+    float: left;
+    color: grey;
+}
+.collapse-panel.panel-heading a.panel-heading.collapsed:after {
+    content: "\e080";
+}
+.collapse-panel .remove-column-button {
+  float: right;
+  padding-top: 3.5px;
+}

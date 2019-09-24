@@ -1,0 +1,57 @@
+{
+  "actions": {
+    "new": "Add Schedule",
+    "preview": "Preview"
+  },
+  "add": {
+    "error": "Failed to create Schedule!"
+  },
+  "details": {
+    "deleteTitle": "Deleting Schedule",
+    "deleteWarning": "Are you sure you want to delete this Schedule?",
+    "error": "Failed to update Schedule!",
+    "unsavedTitle": "Unsaved Changes",
+    "unsavedWarning": "You have unsaved changes. Do you want to Save or Discard them?"
+  },
+  "fields": {
+    "name": {
+      "name": "Name",
+      "placeholder": "Schedule Name",
+      "required": "Required"
+    },
+    "timeline": "Timeline"
+  },
+  "landing": {
+    "manageSchedulesText": "Schedule delivery of HTML content to your digital signage displays, anywhere, anytime."
+  },
+  "list": {
+    "empty": "You haven't created any Schedules yet.",
+    "error": "Failed to load schedules.",
+    "filter": {
+      "filters": "Filters",
+      "placeholder": "Search for Schedules"
+    },
+    "heading": {
+      "changeDate": "Last Modified",
+      "name": "Name"
+    },
+    "no-results": "Your search didn't return any results",
+    "noSchedules": "No Schedules",
+    "viewAll": "View All Schedules"
+  },
+  "playlist": {
+    "add-playlist-item": "Add Playlist Item",
+    "empty": "You haven't added any items to your Playlist yet.",
+    "item": {
+      "distribution": "Distribution",
+      "duration": "Duration (seconds)",
+      "name": "Name",
+      "presentation": "Presentation",
+      "required": "Required",
+      "title": "Playlist Item",
+      "url": "URL"
+    },
+    "title": "Playlist"
+  },
+  "title": "Schedules"
+}

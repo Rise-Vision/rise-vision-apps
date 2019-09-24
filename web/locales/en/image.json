@@ -1,0 +1,18 @@
+{
+  "auto-hide": "Auto Hide Navigation",
+  "duration": {
+    "label": "Duration each image shows for"
+  },
+  "errors": {
+    "file-type": "Please provide the URL to a valid image."
+  },
+  "pause": {
+    "label": "If image is touched resume playing after"
+  },
+  "settings": "Image Settings",
+  "url": {
+    "file": "Single Image",
+    "folder": "Folder of Image(s)",
+    "label": "How do you want to show your image(s)?"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "calendar": {
+    "error": {
+      "required": "Please enter a Calendar ID"
+    },
+    "label": "Calendar ID"
+  },
+  "date": {
+    "font": {
+      "label": "Font",
+      "text": "Date Sample Text"
+    },
+    "format": {
+      "label": "Format"
+    },
+    "heading": "Date",
+    "range": {
+      "10days": "10 Days",
+      "11days": "11 Days",
+      "12days": "12 Days",
+      "12months": "12 Months",
+      "13days": "13 Days",
+      "14days": "14 Days",
+      "15days": "15 Days",
+      "6months": "6 Months",
+      "8days": "8 Days",
+      "9days": "9 Days",
+      "day": "Day",
+      "label": "Range",
+      "month": "Month",
+      "week": "Week"
+    },
+    "show": "Show Date"
+  },
+  "description": {
+    "heading": "Description",
+    "label": "Font",
+    "show": "Show Description",
+    "text": "Description Sample Text"
+  },
+  "location": {
+    "heading": "Location",
+    "label": "Font",
+    "show": "Show Location",
+    "text": "Location Sample Text"
+  },
+  "settings": "Google Calendar Settings",
+  "time": {
+    "font": {
+      "label": "Font",
+      "text": "Time Sample Text"
+    },
+    "format": {
+      "12hour": "12-Hour",
+      "24hour": "24-Hour",
+      "label": "Format"
+    },
+    "heading": "Time",
+    "show": "Show Time",
+    "show-completed": "Show Today's Completed Events",
+    "show-end": {
+      "always": "Always",
+      "extended": "For events longer than one hour",
+      "hour": "For events one hour long",
+      "label": "Show End Times",
+      "never": "Never"
+    }
+  },
+  "title": {
+    "heading": "Title",
+    "label": "Font",
+    "show": "Show Title",
+    "text": "Title Sample Text"
+  }
+}

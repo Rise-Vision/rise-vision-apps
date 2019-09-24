@@ -1,0 +1,42 @@
+{
+  "cacheBuster": {
+    "label": "Enable cache buster (recommended)"
+  },
+  "interactivity": {
+    "heading": "Interactivity",
+    "interactive": "Allow Interaction",
+    "scrollbars": "Scrollbars Enabled"
+  },
+  "offline": {
+    "anchor": "these instructions.",
+    "message": "To use the Web Page Widget offline you will need to build an Offline Play compatible Web Page by following "
+  },
+  "refresh": {
+    "label": "Refresh Interval",
+    "none": "Never Refresh"
+  },
+  "region": {
+    "heading": "Region",
+    "horizontal": "Horizontal Scroll",
+    "page": "Show Entire Page",
+    "region": "Show a Region",
+    "vertical": "Vertical Scroll"
+  },
+  "settings": "Web Page Settings",
+  "unload": {
+    "label": "Unload Web Page when not visible in Presentation (recommended)"
+  },
+  "warning": {
+    "preview": "Using Preview URLs in the Web Page Widget is not supported. You can place one Presentation into another using Embedded Presentations.",
+    "frameAncestors": {
+      "anchor": "content-security-policy / frame-ancestors"
+    },
+    "xframe": {
+      "anchor": "X-Frame-Options",
+      "message": "The owner of the Web Page at the URL provided does not allow the page to be embedded within an iFrame. If possible, please contact the Web Page owner to discuss"
+    }
+  },
+  "zoom": {
+    "heading": "Zoom"
+  }
+}

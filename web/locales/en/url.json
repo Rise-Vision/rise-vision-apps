@@ -1,0 +1,11 @@
+{
+  "errors": {
+    "image": "Please provide the URL to a valid image. (jpg, jpeg, png, bmp, svg, gif, webp)",
+    "url": "Please provide a valid URL.",
+    "video": "Please provide the URL to a valid HTML5 video. (webm, mp4, ogg, ogv)"
+  },
+  "label": "URL",
+  "validate": {
+    "label": "Remove Validation"
+  }
+}

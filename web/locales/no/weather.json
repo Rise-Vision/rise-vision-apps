@@ -1,0 +1,80 @@
+{
+  "E": "Ø",
+  "N": "N",
+  "NE": "NØ",
+  "NW": "NV",
+  "S": "S",
+  "SE": "SØ",
+  "SW": "SV",
+  "W": "V",
+  "address": {
+    "address": {
+      "custom": "Annen Adresse",
+      "custom-address": "Din Valgte Adresse",
+      "display": "Display Adresse",
+      "error": "Please enter a Custom Address",
+      "geolocation": "Geolokasjon",
+      "label": "Adresse"
+    },
+    "description": {
+      "custom": "Egen Beskrivelse",
+      "custom-description": "Din Egen Beskrivelse",
+      "error": "Please enter a Custom Description",
+      "label": "Adresse Beskrivelse",
+      "none": "Ingen",
+      "service": "Fra Service"
+    },
+    "font": {
+      "text": "Adresse Test Tekst"
+    }
+  },
+  "at": "på",
+  "current-temp": {
+    "font": {
+      "label": "Temperatur font",
+      "text": "Temperatur Test Tekst"
+    }
+  },
+  "errors": {
+    "no-data": "Unable to retrieve weather data for that location.",
+    "no-terms": "You must check the Acceptance setting in order to use this Widget."
+  },
+  "forecast-day": {
+    "font": {
+      "label": "Varsel Dag Font",
+      "text": "Varsel Day test tekst"
+    }
+  },
+  "forecast-temp": {
+    "font": {
+      "label": "Varsel Temperatur Font",
+      "text": "Varsel Temperature Test Tekst"
+    }
+  },
+  "humidity": "Luftfuktighet",
+  "humidity-wind": {
+    "font": {
+      "text": "Luftfuktighet og Vind Test Tekst"
+    },
+    "heading": "Luftfuktighet og Vind",
+    "show": "Vis Luftfuktighet og Vind",
+    "wind-speed": {
+      "label": "Vindhastighet"
+    }
+  },
+  "layout": {
+    "current": "Været nå",
+    "current-and-three-day": "Været nå og 3 dagers varsel",
+    "three-day": "3 dagers varsel"
+  },
+  "settings": "Væroppsett",
+  "terms": {
+    "error": "Please accept the terms before saving.",
+    "label": "Jeg erkjenner at denne widgeten nå er gratis å bruke, men på en dato som har ennå ikke bestemt, vil det koste ca $ 2 per Display i  måneden. Jeg vil da ha 30 dager på å bestemme om jeg ønsker å fortsette å bruke denne widgeten."
+  },
+  "unit": {
+    "heading": "Temperatur",
+    "label": "Enhet"
+  },
+  "wind": "Vind"
+}

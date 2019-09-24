@@ -1,0 +1,23 @@
+{
+  "52-week-high": "52 Week High",
+  "52-week-low": "52 Week Low",
+  "accumulated-volume": "Accumulated Volume",
+  "ask": "Ask",
+  "bid": "Bid",
+  "change": "Change",
+  "day-high": "Day High",
+  "day-low": "Day Low",
+  "error": {
+    "required": "Please add some fields to the table."
+  },
+  "instrument": "Instrument",
+  "instrument-logo": "Instrument Logo",
+  "instrument-name": "Instrument Name",
+  "label": "Select Field(s) to Display",
+  "last-price": "Last Price",
+  "percent-change": "% Change",
+  "previous-close": "Previous Close",
+  "trade-time": "Trade Time",
+  "yield": "Yield",
+  "yield-change": "Yield Change"
+}

@@ -1,0 +1,18 @@
+{
+  "cancel": "Avbryt",
+  "friday": "Fredag",
+  "help": "Hjelp",
+  "monday": "Mandag",
+  "saturday": "Lørdag",
+  "save": "Lagre",
+  "sunday": "Søndag",
+  "thursday": "Torsdag",
+  "tuesday": "Tirsdag",
+  "units": {
+    "celsius": "Celsius",
+    "fahrenheit": "Fahrenheit",
+    "kph": "kmt",
+    "mph": "mph"
+  },
+  "wednesday": "Onsdag"
+}

@@ -1,0 +1,14 @@
+{
+  "background-color": "Color de Fondo",
+  "errors": {
+    "numeric": "This field must be numeric",
+    "required": "This field is required"
+  },
+  "font": "Tipo de Letra",
+  "layout": {
+    "custom": "Personalizar",
+    "error": "Please enter a Layout URL",
+    "heading": "Diseño",
+    "url": "Diseño URL"
+  }
+}

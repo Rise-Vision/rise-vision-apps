@@ -1,0 +1,22 @@
+{
+  "cancelled": "Suscripción Cancelada",
+  "company-not-found": "Compañía No Encontrada",
+  "error": "Error",
+  "expires-in": "Expirando en {{days}} Días",
+  "expires-today": "Expirando Hoy",
+  "free": "Gratis",
+  "heading": "Estado de la suscripción",
+  "na": "N/D",
+  "not-subscribed": "No Suscripto",
+  "on-trial": "<strong>{{expiry}} día</strong> de Prueba",
+  "on-trial-many": "<strong>{{expiry}} días</strong> de Prueba",
+  "on-trial-zero": "<strong>{{expiry}} días</strong> de Prueba",
+  "product-not-found": "Producto No Encontrado",
+  "start-trial": "Iniciar Prueba",
+  "subscribe": "Suscribir",
+  "subscribed": "Suscripto",
+  "suspended": "Suscripción Suspendida",
+  "trial-available": "Prueba Gratuita de {{trialPeriod}} Días Disponible",
+  "trial-expired": "Prueba Expirada",
+  "view-account": "Ver Cuenta"
+}

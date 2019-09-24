@@ -1,0 +1,52 @@
+{
+  "authentication-warning": {
+    "message": "The feed at the URL provided cannot be shown because it is protected and requires authentication"
+  },
+  "author-format": {
+    "heading": "Author Style",
+    "text": "Author Style Sample Text"
+  },
+  "data-selection": {
+    "heading": "Data Selection",
+    "showAuthor": "Show Author",
+    "showDescriptionSnippet": "Show Description Snippet",
+    "showFullDescription": "Show Full Description",
+    "showImage": "Show Image",
+    "showTimestamp": "Show Timestamp",
+    "showTitle": "Show Title",
+    "snippetLength": "Length of Description Snippet",
+    "snippetLengthMeasure": "characters"
+  },
+  "item": {
+    "itemsToShow": "Items to Show",
+    "maxItemsInQueue": "Max Items in Queue"
+  },
+  "layout": {
+    "custom": "Custom Layout URL",
+    "heading": "Layout"
+  },
+  "not-a-feed-warning": {
+    "message": "The URL provided is not an RSS feed"
+  },
+  "separator": {
+    "heading": "Separator",
+    "option": "Show Separator Between Stories"
+  },
+  "settings": "RSS Settings",
+  "story-format": {
+    "heading": "Description Style",
+    "text": "Description Style Sample Text"
+  },
+  "timestamp-format": {
+    "heading": "Timestamp Style",
+    "text": "Timestamp Style Sample Text"
+  },
+  "title-format": {
+    "heading": "Title Style",
+    "text": "Title Style Sample Text"
+  },
+  "warning": {
+    "anchor": "here",
+    "message": "Please note that one or more errors have been detected in the URL provided that could impact how your Content appears. You can view a summary of the errors detected"
+  }
+}

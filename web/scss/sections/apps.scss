@@ -1,0 +1,212 @@
+// Current app launcher with steps
+.app-launcher-wizard .panel-body {
+	height: 70vh;
+	min-height: 500px;
+}
+
+.app-launcher-wizard_step {
+	h1 {
+		font-size: 2em;
+		margin-top: 0;
+	}
+	h2 {
+		font-weight: 400;
+		font-size: 1.5em;
+		color: #888;
+	}
+}
+
+.app-launcher-wizard_image {
+	float: none;
+	display: none;
+}
+
+.app-launcher-wizard_text {
+	max-width: 75%;
+}
+
+.app-launcher-wizard_progress-bar {
+	display: flex;
+	.progress-bar-step {
+		flex: 1;
+		display: inline-block;
+		height: 8px;
+		background-color: $light-gray;
+		&.progress-bar-step--active {
+			background-color: $rise-green;
+		}
+	}
+}
+
+/* ==========================================================================
+   Small devices (tablets, 768px and up)
+   ========================================================================== */
+
+ 
+@media (min-width: 768px) {
+	.app-launcher-wizard_step {
+		max-width: 100%;
+		h1 {
+			font-size: 2.8em;
+			margin-top: 0;
+		}
+		h2 {
+			font-weight: 400;
+			font-size: 1.8em;
+			color: #888;
+		}
+	}
+	.app-launcher-wizard_text {
+		max-width: 60%;
+	}
+	.app-launcher-wizard_image {
+		max-width: 40%;
+		display: block;
+		padding: 0 20px;
+		img {
+			margin: 0 auto;
+			max-height: 500px;
+		}
+	}
+}
+
+
+
+// Billing Page container (despite name)
+#appLauncherContainer {
+	h3 {
+		margin-top: 0;
+		line-height: 30px;
+		display: block;
+		a {
+			color: #444;
+			&:hover {
+				color: $rise-blue;
+			}
+		}
+	}
+	.scrollable-list {
+		@extend .panel;
+		padding: 0;
+		height: auto;
+	}
+	.list {
+		height: calc(100vh - 290px);
+		margin-top: 1px;
+		&.help-active {
+			height: calc(100vh - 977px);
+		}
+		@media (max-width: $screen-sm) {
+			height: auto;
+		}
+		.list-item {
+			border-bottom: 1px solid #f2f2f2;
+			padding: 4px 12px;
+			h4 {
+				font-weight: 500;
+				font-size: 14px;
+				color: #555;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				width: 260px;
+				@media (max-width: $screen-md){
+					width: 180px;
+				}
+			}
+			&:last-child {
+				border-bottom: none;
+			}
+			&:hover {
+				h4 {
+					color: $rise-blue;
+				}
+			}
+		}
+	}
+}
+
+
+// Help dropdown
+#helpDropdownButton {
+	&.add-notice {
+		@extend .animated;
+	    -webkit-animation-iteration-count: 3;
+        animation-iteration-count: 3;
+        -webkit-animation-name: pulse;
+        animation-name: pulse;
+        -webkit-animation-delay: 1s;
+        animation-delay: 1s;
+    }
+}
+
+// Login page
+.app-launcher-login {
+	padding-top: 55px;
+	background-color: #f2fcf4;
+	background-size: cover;
+	height: 100vh;
+	h1 {
+		margin-top: 0;
+	}
+	.panel {
+		padding: 32px;
+	}
+	.rise-logo {
+		text-align: center;
+		padding: 210px 0;
+		img {
+			width: 150px;
+		}
+		@media (max-width: $screen-sm){
+			border-right: none;
+			text-align: left;
+			padding:0;
+			margin-bottom: 22px;
+			img {
+				width: 100px;
+			}
+		}
+	}
+}
+
+// Display page stats
+.display-stats {
+	display: flex;
+	flex-direction: row;
+}
+
+.display-stats-item {
+	padding: 0 1em;
+	border-left: 1px solid #d4d4d4;
+	&:first-child {
+		padding-left: 0;
+		border-left: none;
+	}
+}
+
+// Weekly templates
+.weekly-templates {
+	.collapsed-label {
+		font-size: 18px;
+	}
+	.expanded-panel {
+		color: #444;
+	}
+	.expanded-message {
+		font-size: 16px;
+	}
+	.col-centered {
+		float: none; display:
+		inline-block;
+		@media (min-width: $screen-sm) and (max-width: $screen-sm-max) {
+			width: 49%;
+		}	
+		@media (min-width: $screen-md) and (max-width: $screen-md-max) {
+			width: 33%;
+		}
+		@media (min-width: $screen-lg) {
+			width: 24%;
+		}
+	}
+}

@@ -1,0 +1,18 @@
+{
+  "cancel": "Cancel",
+  "friday": "Freitag",
+  "help": "Help",
+  "monday": "Montag",
+  "saturday": "Samstag",
+  "save": "Save",
+  "sunday": "Sonntag",
+  "thursday": "Donnerstag",
+  "tuesday": "Dienstag",
+  "units": {
+    "celsius": "Celsius",
+    "fahrenheit": "Fahrenheit",
+    "kph": "kph",
+    "mph": "mph"
+  },
+  "wednesday": "Mittwoch"
+}

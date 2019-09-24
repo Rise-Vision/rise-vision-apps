@@ -1,0 +1,742 @@
+
+/* Purchases
+   ========================================================================== */
+
+.product-qty {
+  margin-bottom: 0;
+}
+
+.subtotals {
+  margin-bottom: 0;
+  tbody tr td {
+    text-align: right;
+  }
+}
+
+.order-total {
+  /* Display & Box Model */
+  display: block;
+  /* Visual */
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 35px;
+  text-align: right;
+}
+
+.order-currency {
+  /* Display & Box Model */
+  display: block;
+  /* Visual */
+  font-size: 14px;
+  text-align: right;
+}
+
+
+/* ==========================================================================
+   Account
+   ========================================================================== */
+
+.account {
+  .title {
+    margin-top: $title-margin;
+    margin-bottom: 0;
+  }
+  .date {
+    /* Display & Box Model */
+    margin-top: $title-margin;
+    /* Visual */
+    font-size: 16px;
+    font-style: italic;
+  }
+}
+
+
+/* ==========================================================================
+   Subscription Confirmation & Purchase Invoice
+   ========================================================================== */
+
+.subscription-confirmation,
+.purchase-invoice {
+  .header {
+    margin-bottom: 20px;
+  }
+  .header-details {
+    margin-top: 20px;
+    text-align: right;
+  }
+  .title {
+    font-weight: bold;
+    font-size: 18px;
+  }
+  .bill-to,
+  .ship-to {
+    /* Display & Box Model */
+    margin-top: 20px;
+    /* Visual */
+    font-weight: bold;
+  }
+  .company-address {
+    text-align: center;
+    font-style: italic;
+    font-size: 85%;
+  }
+}
+
+.purchase-invoice {
+  .paid,
+  .overdue,
+  .status,
+  .total {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .paid {
+    color: $rise-green;
+  }
+  .overdue {
+    color: red;
+  }
+  .display-name {
+    padding-left: 10px;
+    font-style: italic;
+  }
+  .product-name {
+    padding-left: 25px;
+  }
+
+  table.invoice-due-summary {
+    td {
+      width: 50%;
+    }
+    width: 100%;
+    text-align: right;
+    .currency-code {
+      text-transform: uppercase;
+    }
+    .paid-with-label,
+    .paid-with,
+    .currency-code-label,
+    .currency-code {
+      font-style: italic;
+    }
+  }
+}
+
+
+/* Media queries
+   ========================================================================== */
+
+@media (min-width: $screen-sm) {
+  .subscription-confirmation,
+  .purchase-invoice {
+    .header-details {
+      /* Display & Box Model */
+      margin-top: 0;
+    }
+  }
+}
+
+
+/* ==========================================================================
+   Address Editor Modal
+   ========================================================================== */
+
+.address-editor {
+  div.checkbox.persist-changes {
+    float: left;
+  }
+  td.addr-label {
+    max-width: 33%;
+    text-align: right;
+    padding-left: 10px;
+  }
+  td.addr-value {
+    padding-left: 10px;
+    font-weight: bold;
+  }
+  p.validation-notice {
+    font-size: 13px;
+    color: #094F76;
+    line-height: 14px;
+  }
+  .alert-info .form-group {
+    margin-bottom:0;
+  }
+  .alert-info + .row {
+    margin-right:5px;
+  }
+}
+
+
+/* ==========================================================================
+   Custom Classes
+   ========================================================================== */
+
+.payment-modal-form {
+  min-height: 400px;
+}
+
+.clear-both {
+  clear: both;
+}
+
+.checkbox.checkbox-label-left {
+  input[type=checkbox] {
+    position: relative;
+    margin-left: 0;
+  }
+  label {
+    padding-left: 0;
+  }
+}
+
+.required-asterisk {
+  color: red;
+}
+
+.btn.btn-form-control {
+  width: 100%;
+  border-radius: 4px;
+  span {
+    float: left;
+  }
+  span.caret {
+    float: right;
+    margin-top: 8px;
+  }
+}
+
+.drop-down-menu-full-width {
+  width: 100%;
+  li {
+    text-align: left;
+  }
+}
+
+.no-js-backdrop {
+  background-color: #FFFFFF;
+  height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100000;
+  position: absolute;
+  .no-js-message {
+    margin: 20px 0;
+  }
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.page-banner {
+  margin-bottom: 0px;
+}
+
+.alert-default {
+  background-color: #f4f4f4;
+  border: 1px solid #CCC;
+}
+
+.img-preloader {
+  width: 94% !important;
+  height: 332px !important;
+  background-color: #DDD;
+  background: url("../img/loader.gif") no-repeat center center;
+}
+
+.item-description {
+  margin-top: 22px;
+}
+
+.store-icon,
+.icon-medium {
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: $gray;
+  img {
+    width: 100%;
+  }
+}
+
+.checkout-icon {
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: 10px;
+  float: left;
+  img {
+    width: 100%;
+  }
+}
+
+.store-block {
+  border-bottom: 1px solid #e6e6e6;
+  padding: 0 15px;
+  margin: 0 -15px 20px;
+  .store-icon {
+    float: left;
+    margin-right: 10px;
+  }
+  .description {
+    margin-top: 5px;
+    p {
+      margin: 0;
+      line-height: 20px;
+      display: block;
+      @media (max-width: $screen-sm) {
+        text-overflow: ellipsis;
+        width: 180px;
+        overflow: hidden;
+      }
+    }
+  }
+}
+
+.modal-header {
+  .store-block {
+    margin: 0 0 10px;
+    border-bottom: 0;
+    height: 40px;
+    .store-icon {
+      height: 40px;
+      width: 40px;
+    }
+    .description {
+      margin: 0;
+      p {
+        @media (max-width: $screen-xs) {
+          text-overflow: ellipsis;
+          width: 100px;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+      }
+    }
+  }
+}
+
+.tax-notice {
+  font-size: 11px;
+}
+
+.table {
+  .store-block {
+    margin-top: 0;
+    border: none;
+    .store-icon {
+      width: 40px;
+      height: 40px;
+    }
+  }
+}
+
+.text-green {
+  color: #4AB767;
+}
+
+.text-error {
+  color: #cf371f;
+}
+
+.help-links {
+  span,
+  a {
+    display: inline-block;
+  }
+  line-height: 20px;
+  @media (max-width: $screen-sm) {
+    display: block;
+    float: none !important;
+    width: 100%;
+    text-align: left;
+    line-height: normal;
+    margin-bottom: 10px;
+  }
+}
+
+.cards-wrap {
+  display: table;
+  width: 100%;
+  border-collapse: separate;
+  .card {
+    vertical-align: top;
+    display: table-cell;
+    width: 50%;
+    &.card-price {
+      width: 31%;
+    }
+  }
+  .divider {
+    width: 1%;
+    display: table-cell;
+  }
+  @media (max-width: $screen-sm) {
+    display: block;
+    .card {
+      display: block;
+      width: auto;
+      &.card-price {
+        width: auto;
+      }
+    }
+    .divider {
+      display: none;
+    }
+  }
+}
+
+.card {
+  @extend .panel;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .23);
+  .card-body {
+    padding: 15px;
+  }
+  .card-footer {
+    padding: 0 15px 15px;
+  }
+}
+
+.card-price {
+  h3 {
+    margin: 0 0 10px;
+    font-weight: 500;
+  }
+  p {
+    color: #777;
+  }
+}
+
+.callout {
+  padding: 15px;
+  border-radius: 3px;
+  width: 100%;
+  z-index: 8000;
+  position: absolute;
+  left: 0;
+  color: #444;
+  opacity: .9;
+  -webkit-box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.75);
+  box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.75);
+  &.callout-green {
+    background: #e3f7e8;
+    border: 1px solid #47b767;
+    .arrow:before {
+      border-bottom: 10px solid #e3f7e8;
+    }
+    .arrow:after {
+      border-bottom: 12px solid #47b767;
+    }
+  }
+  &.callout-red {
+    background: #ffece8;
+    border: 1px solid red;
+    .arrow:before {
+      border-bottom: 10px solid #ffece8;
+    }
+    .arrow:after {
+      border-bottom: 12px solid #cf371f;
+    }
+  }
+  .arrow {
+    width: 40px;
+    position: absolute;
+    display: block;
+    top: 0;
+  }
+  .arrow:before {
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    z-index: 2;
+  }
+  .arrow:after {
+    position: absolute;
+    top: -12px;
+    right: 8px;
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    z-index: 1;
+  }
+}
+
+.callout-green {
+  color: #47b767;
+  font-weight: bold;
+  max-width: 280px;
+  text-align: center;
+  font-size: 24px;
+  right: 0;
+  left: auto;
+}
+
+.checkout-logos {
+  height: 75px;
+  text-align: left;
+  .stripe {
+    img {
+      height: 26px;
+      margin-top: 3px;
+    }
+  }
+  .seals {
+    img {
+      height: 70px;
+    }
+  }
+  @media (max-width: 320px) {
+    .seals {
+      img {
+        height: 50px
+      }
+    }
+    .stripe {
+      img {
+        height: 18px;
+      }
+    }
+  }
+}
+
+.table-checkout {
+  tbody>tr>td {
+    margin-right: 0;
+    &.checkout-detail {
+      font-weight: bold;
+    }
+    &.checkout-item {
+      color: #555
+    }
+    &.checkout-total {}
+    &.checkout-qty {
+      input {
+        width: 33px;
+        padding: 0;
+        text-align: center;
+        display: inline-block;
+      }
+      button {
+        padding: 0;
+        font-size: 12px;
+      }
+    }
+    &.checkout-coupon {
+      label {
+        padding-right: 10px;
+      }
+      .form-group {
+        margin: 0;
+      }
+      input {
+        width: 165px;
+        display: inline-block;
+      }
+      button {
+        width: 70px;
+      }
+    }
+    .control-label {
+      color: #777;
+    }
+  }
+  @media (max-width: $screen-sm) {
+    tbody {
+      tr>td {
+        font-size: 13px;
+        &:before {
+          content: attr(data-td)" ";
+          font-weight: bold;
+        }
+        &.checkout-item {
+          width: 70%;
+          p {
+            width: 120px;
+            overflow: hidden;
+            white-space: nowrap;
+          }
+        }
+        &.checkout-qty {
+          width: 30%;
+          text-align: right;
+          padding-left: 0
+        }
+        &.checkout-total {
+          text-align: right;
+          width: 30%;
+          float: right;
+        }
+        &.checkout-value {
+          text-align: right;
+          width: 30%
+        }
+        &.checkout-detail {
+          text-align: right;
+          width: 70%;
+          font-weight: bold;
+        }
+        &.checkout-plan {
+          width: 50%;
+          text-align: right;
+        }
+        &.checkout-price {
+          width: 20%;
+        }
+        &.checkout-coupon {
+          display: block;
+          .form-group {
+            margin-bottom: 5px;
+          }
+          input {
+            display: inline-block;
+            float: left;
+            width: 70%
+          }
+          button {
+            display: inline-block;
+          }
+          label {
+            display: block;
+            margin: 0;
+            text-align: left;
+          }
+        }
+        @media (max-width: 320px) {
+          &.checkout-item {
+            width: 80%;
+            padding-right: 0;
+            p {
+              width: 100px;
+              overflow: hidden;
+              white-space: nowrap;
+            }
+          }
+          &.checkout-qty {
+            width: 20%;
+            button {
+              width: 32px
+            }
+          }
+          &.checkout-coupon {
+            button {
+              width: 60px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.product-graphic {
+  width: 96px;
+  height: 96px;
+  margin: 30px auto 0;
+}
+
+.product-intro {
+  text-align: center;
+  max-width: 600px;
+  margin: 30px auto 30px;
+  h1 {
+    font-weight: 500;
+    margin-bottom: 15px;
+  }
+  strong {
+    font-weight: 500;
+  }
+  .lead {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  .text-muted {
+    margin-top: 30px;
+  }
+  .btn {
+    margin-top: 30px;
+  }
+}
+
+// Subscription Page within an RVA Modal
+.storage-modal {
+  .product-graphic {
+    width: 54px;
+    height: 54px;
+    margin: 0 auto;
+  }
+  .product-intro {
+    margin: 0 auto;
+  }
+  .text-muted {
+    margin-top: 5px;
+  }
+}
+
+.modal-dialog {
+  max-width: 1140px;
+  margin: 10px auto;
+}
+
+.modal-content {
+  margin: 0 10px;
+}
+
+.table .store-block {
+  margin-bottom: 0;
+}
+
+.table .description {
+  margin-top: 0;
+}
+
+.total-row {
+  padding: 10px;
+  border-bottom: 1px solid #e6e6e6;
+  text-align: right;
+  &.rowEnter {
+    padding: 0 10px;
+    opacity: 0;
+    height: 0;
+    background: #cf371f;
+  }
+  .total {
+    width: 200px;
+    margin-right: 10px;
+    display: inline-block;
+  }
+  .total-value {
+    display: inline-block;
+    width: 100px;
+  }
+}
+
+.couponEntry {
+  margin: 0 10px;
+  .alert {
+    margin-bottom: 10px;
+    padding: 5px 15px;
+    text-align: center;
+    span {
+      display: inline;
+    }
+  }
+  input {
+    display: inline-block;
+    width: 150px;
+  }
+}
+
+.couponStart .col-md-12 {
+  text-align: right;
+}

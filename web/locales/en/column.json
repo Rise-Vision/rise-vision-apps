@@ -1,0 +1,39 @@
+{
+  "alignment": {
+    "center": "Center",
+    "label": "Alignment",
+    "left": "Left",
+    "right": "Right"
+  },
+  "color-condition": {
+    "change-down": "Change down green change up red",
+    "change-up": "Change up green change down red",
+    "label": "Color Conditions",
+    "none": "None",
+    "value-negative": "Positive value red negative green",
+    "value-positive": "Positive value green negative red"
+  },
+  "date": {
+    "label": "Date Format",
+    "long": "Long",
+    "medium": "Medium",
+    "short": "Short"
+  },
+  "decimals": {
+    "label": "Decimals"
+  },
+  "description": "The field 'Use First Row as Header' must be enabled in order to apply formatting on a per column basis.",
+  "header-text": {
+    "label": "Header Text"
+  },
+  "heading": "Columns",
+  "note": "Note: Column formatting overrides Body Format options (above)",
+  "numeric": "Numeric data column",
+  "select-title": "Per Column Format",
+  "sign": {
+    "arrow": "Arrow",
+    "label": "Sign",
+    "none": "None"
+  },
+  "width": "Width"
+}

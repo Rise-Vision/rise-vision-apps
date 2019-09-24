@@ -1,0 +1,80 @@
+{
+  "E": "I",
+  "N": "S",
+  "NE": "SI",
+  "NW": "SZ",
+  "S": "J",
+  "SE": "JI",
+  "SW": "JZ",
+  "W": "Z",
+  "address": {
+    "address": {
+      "custom": "Custom Adresa",
+      "custom-address": "Tvoja Custom Adresa",
+      "display": "Display Adresa",
+      "error": "Please enter a Custom Address",
+      "geolocation": "Geolokacija",
+      "label": "Adresa"
+    },
+    "description": {
+      "custom": "Custom opis",
+      "custom-description": "Tvoj Custom Opis",
+      "error": "Please enter a Custom Description",
+      "label": "Adresa Opis",
+      "none": "None",
+      "service": "From Service"
+    },
+    "font": {
+      "text": "Adresa Sample Text"
+    }
+  },
+  "at": "pri brzini od",
+  "current-temp": {
+    "font": {
+      "label": "Font trenutne temperature",
+      "text": "Sample Text trenutne temperature"
+    }
+  },
+  "errors": {
+    "no-data": "Unable to retrieve weather data for that location.",
+    "no-terms": "You must check the Acceptance setting in order to use this Widget."
+  },
+  "forecast-day": {
+    "font": {
+      "label": "Prognoza Dan Font",
+      "text": "Prognoza Dan Sample Text"
+    }
+  },
+  "forecast-temp": {
+    "font": {
+      "label": "Prognoza vremena font",
+      "text": "Prognoza vremena Sample Text"
+    }
+  },
+  "humidity": "Vlažnost vazduha",
+  "humidity-wind": {
+    "font": {
+      "text": "Vlažnost vazduha & Vetar Sample Text"
+    },
+    "heading": "Vlažnost vazduha i vetar",
+    "show": "Prikaži Vlažnost vazduha i vetar",
+    "wind-speed": {
+      "label": "Vetar"
+    }
+  },
+  "layout": {
+    "current": "Trenutno Vreme",
+    "current-and-three-day": "Trenutno vreme i progonza za 3 dana",
+    "three-day": "Prognoza za 3 dana"
+  },
+  "settings": "Podešavanja vremena",
+  "terms": {
+    "error": "Please accept the terms before saving.",
+    "label": "Prihvatam da se trenunto za ovaj Widget ne naplaćuje, ali mogući datum početka naplate još treba da se odredi, nakon čega će se za ovaj widget naplaćivati 2$ po Display-u, svaki mesec."
+  },
+  "unit": {
+    "heading": "Temperature",
+    "label": "Jedinica mere"
+  },
+  "wind": "Vetar"
+}

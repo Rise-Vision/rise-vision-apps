@@ -1,0 +1,12 @@
+.empty-state {
+  height: 300px;
+  text-align: center;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  border-radius: $border-radius-small;
+  background-color: #fff;
+  color: #aaa;
+
+  i:before { color: #aaa; }
+  .tag { @extend %vertical-align; }
+}
