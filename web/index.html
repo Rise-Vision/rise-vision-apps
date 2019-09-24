@@ -58,14 +58,35 @@
 
   <div ui-view></div>
 
-  <!-- dependencies -->
+  <!-- external libraries -->
   <script src="https://js.chargebee.com/v2/chargebee.js" async></script>
   <script src="https://js.stripe.com/v2/" async></script>
 
   <!-- build:js js/website.min.js -->
   <script src="/pricing-component.js"></script>
-  <script src="bower_components/common-header/dist/js/dependencies.js"></script>
 
+  <!-- common-header dependencies -->
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-touch/angular-touch.js"></script>
+  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+  <script src="bower_components/angular-translate/angular-translate.js"></script>
+  <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+  <script src="bower_components/checklist-model/checklist-model.js"></script>
+  <script src="bower_components/ngstorage/ngStorage.js"></script>
+  <script src="bower_components/angular-spinner/dist/angular-spinner.js"></script>
+  <script src="bower_components/spin.js/spin.js"></script>
+  <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="bower_components/lodash/dist/lodash.js"></script>
+  <script src="bower_components/ng-csv/build/ng-csv.js"></script>
+  <script src="bower_components/ng-tags-input/ng-tags-input.js"></script>
+  <script src="bower_components/angular-md5/angular-md5.min.js"></script>
+  <script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
+
+  <!-- misc dependencies -->
   <script src="vendor/@shopify/draggable/draggable.bundle.js"></script>
   <script src="bower_components/stretchy/stretchy.js"></script>
   <script src="bower_components/xmlToJSON.js/lib/xmlToJSON.js"></script>
@@ -142,7 +163,7 @@
   <script src="scripts/common-header/services/svc-store-service.js"></script>
   <script src="scripts/common-header/services/svc-zendesk.js"></script>
 
-  <!-- components -->
+  <!-- common-header components -->
   <script src="scripts/components/action-sheet.js"></script>
   <script src="scripts/components/off-canvas-nav.js"></script>
 
@@ -251,6 +272,7 @@
   <script src="scripts/components/purchase-flow/services/svc-tax-exemption-factory.js"></script>
   <script src="scripts/components/purchase-flow/services/svc-track-events.js"></script>
 
+  <!-- apps components -->
   <script src="scripts/components/search-filter/dtv-search-filter.js"></script>
 
   <script src="scripts/components/focus-me/dtv-focus-me.js"></script>
