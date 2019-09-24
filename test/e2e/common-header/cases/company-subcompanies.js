@@ -39,7 +39,7 @@
         signInPage = new SignInPage();
 
         homepage.get();
-        signInPage.signIn(browser.params.login.user2, browser.params.login.pass2);
+        signInPage.signIn(browser.params.login.user1, browser.params.login.pass1);
       });
       
       describe("Add subcompany", function () {

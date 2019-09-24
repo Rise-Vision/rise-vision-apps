@@ -92,7 +92,7 @@
       describe("New User Logs in and Registers", function() {
         it("should show T&C Dialog on new Google Account", function() {
           //sign in, wait for spinner to go away
-          signInPage.signIn(browser.params.login.user2, browser.params.login.pass2);
+          signInPage.signIn(browser.params.login.user1, browser.params.login.pass1);
           
           helper.wait(registrationModalPage.getRegistrationModal(), "Registration Modal");
           
