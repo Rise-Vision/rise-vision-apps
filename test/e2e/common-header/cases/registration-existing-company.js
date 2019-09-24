@@ -34,7 +34,7 @@
         signInPage.signIn();
       });
 
-      xdescribe("Add a new User", function() {
+      describe("Add a new User", function() {
         it("Opens Company Users Dialog and load company users", function() {
           companyUsersModalPage.openCompanyUsersModal();
 
