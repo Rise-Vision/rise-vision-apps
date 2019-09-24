@@ -26,7 +26,7 @@
 
 
         homepage.get();
-        signInPage.signIn();
+        signInPage.signIn(browser.params.login.user1, browser.params.login.pass1);
       });
 
       it("should show user settings modal", function() {
@@ -102,33 +102,6 @@
       });
     });
 
-    // describe("Alerts link", function() {
-    //   var commonHeaderPage,
-    //       homepage;
-
-    //   before(function (){
-    //     commonHeaderPage = new CommonHeaderPage();
-    //     homepage = new HomePage();
-
-    //     homepage.get();
-
-    //     //sign in, wait for spinner to go away
-    //     helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader').then(function () {
-    //       commonHeaderPage.signin();
-    //     });
-    //   });
-
-    //   it("should show alert settings page", function() {
-    //     commonHeaderPage.getProfilePic().click();
-
-    //     expect(homepage.getAlertSettingsButton().isDisplayed()).to.eventually.be.true;
-
-    //     //click on alert settings button
-    //     homepage.getAlertSettingsButton().click();
-
-    //     expect(browser.driver.getCurrentUrl()).to.eventually.contain("alerts");
-    //   });
-    // });
   };
 
   module.exports = UserSettingsScenarios;
