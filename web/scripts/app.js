@@ -1,4 +1,5 @@
 'use strict';
+
 angular.module('risevision.apps', [
     'ui.router',
     'ngTouch',
