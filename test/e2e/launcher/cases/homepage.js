@@ -2,7 +2,7 @@
 var expect = require('rv-common-e2e').expect;
 var HomePage = require('./../pages/homepage.js');
 var SignInPage = require('./../pages/signInPage.js');
-var CommonHeaderPage = require('./../../../../web/bower_components/common-header/test/e2e/pages/commonHeaderPage.js');
+var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
 var GoogleAuthPage = require('rv-common-e2e').googleAuthPage;
 var helper = require('rv-common-e2e').helper;
 var StoreProductsModalPage = require('./../../editor/pages/storeProductsModalPage.js');
@@ -46,6 +46,42 @@ var HomepageScenarios = function() {
     it('should show common header',function(){
       expect(commonHeaderPage.getCommonHeader().isDisplayed()).to.eventually.be.true;
     });
+
+    describe('NavMenu', function(){
+
+      it("should load menu items", function() {
+        // expect 10 menu items (5 for the off-canvas menu)
+        expect(commonHeaderPage.getCommonHeaderMenuItems().count()).to.eventually.equal(10);
+        
+        expect(commonHeaderPage.getCommonHeaderMenuItems().get(0).getText()).to.eventually.equal('Home');
+        expect(commonHeaderPage.getCommonHeaderMenuItems().get(1).getText()).to.eventually.equal('Presentations');
+        expect(commonHeaderPage.getCommonHeaderMenuItems().get(2).getText()).to.eventually.equal('Schedules');
+        expect(commonHeaderPage.getCommonHeaderMenuItems().get(3).getText()).to.eventually.equal('Displays');
+        expect(commonHeaderPage.getCommonHeaderMenuItems().get(4).getText()).to.eventually.equal('Storage');
+      });
+
+      it("off canvas menu should not show", function() {
+        expect(commonHeaderPage.getCommonHeaderMenuItems().get(0).isDisplayed()).to.eventually.be.true;
+
+        expect(commonHeaderPage.getCommonHeaderMenuItems().get(5).isDisplayed()).to.eventually.be.false;
+        expect(commonHeaderPage.getCommonHeaderMenuItems().get(6).isDisplayed()).to.eventually.be.false;
+        expect(commonHeaderPage.getCommonHeaderMenuItems().get(7).isDisplayed()).to.eventually.be.false;
+        expect(commonHeaderPage.getCommonHeaderMenuItems().get(8).isDisplayed()).to.eventually.be.false;
+        expect(commonHeaderPage.getCommonHeaderMenuItems().get(9).isDisplayed()).to.eventually.be.false;
+      });
+
+      it("links target & href should be configured", function(done) {
+        commonHeaderPage.getCommonHeaderMenuItems().then(function(elements) {
+          expect(elements[0].element(by.tagName('a')).getAttribute('target')).to.eventually.not.be.ok;
+          expect(elements[0].element(by.tagName('a')).getAttribute('href')).to.eventually.contain('?cid=');
+
+          expect(elements[1].element(by.tagName('a')).getAttribute('target')).to.eventually.not.be.ok;
+          expect(elements[1].element(by.tagName('a')).getAttribute('href')).to.eventually.contain('?cid=');
+          
+          done();
+        });
+      });
+    })
     
     describe('Given a user who wants to share the url', function () {
       before(function () {

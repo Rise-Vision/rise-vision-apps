@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  var CommonHeaderPage = require('./../../../web/bower_components/common-header/test/e2e/pages/commonHeaderPage.js');
+  var CommonHeaderPage = require('./../common-header/pages/commonHeaderPage.js');
   var PricingComponentModalPage = require('./../common/pages/pricingComponentModalPage.js');
   var PurchaseFlowModalPage = require('./../common/pages/purchaseFlowModalPage.js');
   var PresentationListPage = require('./pages/presentationListPage.js');

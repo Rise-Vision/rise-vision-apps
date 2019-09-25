@@ -1,5 +1,5 @@
 'use strict';
-var CommonHeaderPage = require('./../../../../web/bower_components/common-header/test/e2e/pages/commonHeaderPage.js');
+var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
 var GoogleAuthPage = require('rv-common-e2e').googleAuthPage;
 var HomePage = require('./homepage.js');
 var helper = require('rv-common-e2e').helper;
@@ -66,14 +66,14 @@ var SignInPage = function() {
     signInGoogleLink.click();
   };
 
-  this.googleSignIn = function() {
+  this.googleSignIn = function(username,password) {
     //wait for spinner to go away.
     helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - Before Google Sign In');
 
     signInGoogleLink.isPresent().then(function (state) {
       if (state) {
         signInGoogleLink.click().then(function () {
-          googleAuthPage.signin();
+          googleAuthPage.signin(username,password);
           helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - After Google Sign In');
         });
       }

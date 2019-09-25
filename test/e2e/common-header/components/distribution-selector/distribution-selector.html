@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Search Filter - Test Page</title>
+  <link rel="stylesheet" href="/dist/css/rise.min.css">
+</head>
+<body ng-app="testapp" ng-controller="mainController">
+
+<distribution-selector distribution="distribution" distribute-to-all="distributeToAll"></distribution-selector>
+<br>
+<p>distribution: <span id="distributionValue">{{distribution}}</span></p>
+<p>distributeToAll: <span id="distributeToAllValue">{{distributeToAll}}</span></p>
+
+
+<script type="text/javascript" src="/bower_components/angular/angular.js"></script>
+<script type="text/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script type="text/javascript" src="/bower_components/angular-spinner/dist/angular-spinner.js"></script>
+<script src="/bower_components/angular-translate/angular-translate.js"></script>
+<script src="/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+<script type="text/javascript" src="/dist/js/components/i18n.js"></script>
+<script type="text/javascript" src="/dist/js/components/gapi-loader.js"></script>
+<script type="text/javascript" src="/dist/js/components/loading.js"></script>
+<script type="text/javascript" src="/src/js/config/config.js"></script>
+<script type="text/javascript" src="/dist/js/components/scrolling-list.js"></script>
+<script type="text/javascript" src="mocks/gapi-mock.js"></script>
+<script type="text/javascript" src="/dist/js/components/distribution-selector.js"></script>
+
+<script>
+  angular.module("testapp", ["risevision.common.components.distribution-selector",
+    "risevision.common.i18n"])
+    .controller("mainController", ["$scope", function ($scope) {
+      $scope.distribution = "";
+      $scope.distributeToAll = true;
+
+    }])
+    .service('userState',function(){
+      return {
+        getSelectedCompanyId : function(){
+          return 'TEST_COMP_ID';
+        }
+      }
+    })
+    .value("CORE_URL",
+    "https://rvacore-test.appspot.com/_ah/api");
+</script>
+
+</body>
+</html>

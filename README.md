@@ -126,3 +126,4 @@ If you would like more information on developing applications for Rise Vision pl
 **Facilitator**
 
 [Rodrigo Serviuc Pavezi](https://github.com/rodrigopavezi "Rodrigo Serviuc Pavezi")
+
