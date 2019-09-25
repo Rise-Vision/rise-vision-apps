@@ -5,7 +5,6 @@ var gulp = require("gulp");
 var sass = require("gulp-sass");
 var minifyCSS = require("gulp-minify-css");
 var rename = require("gulp-rename");
-var colors = require("colors");
 
 var paths = {
   sass: ["./web/scss/**/*.scss", "./web/scss/*.scss"],
@@ -61,7 +60,7 @@ gulp.task("css-build", ["css-build-alignment", "fonts-copy"], function() {
 gulp.task("css-watch", ["css-build"], function() {
   // Watch Less files for changes
   gulp.watch(paths.sass, ["css-build"]);
-  console.log("[SASS] Watching for changes in SASS files".yellow.inverse);
+  console.log("[SASS] Watching for changes in SASS files".yellow);
 });
 
 module.exports = cssBuild;
