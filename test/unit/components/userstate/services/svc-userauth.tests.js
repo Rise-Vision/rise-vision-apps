@@ -12,12 +12,13 @@ describe("service: userauth:", function() {
           userauth: {
             add: function(obj) {
               expect(obj).to.be.ok;
-              expect(obj.username).to.be.ok;
-              expect(obj.password).to.be.ok;
+              expect(obj.data).to.be.ok;
+              expect(obj.data.username).to.be.ok;
+              expect(obj.data.password).to.be.ok;
 
               if (returnResult) {
                 return Q.resolve({
-                  result: obj.username
+                  result: obj.data.username
                 });
               } else {
                 return Q.reject("API Failed");
@@ -25,13 +26,14 @@ describe("service: userauth:", function() {
             },
             updatePassword: function(obj) {
               expect(obj).to.be.ok;
-              expect(obj.username).to.be.ok;
-              expect(obj.oldPassword).to.be.ok;
-              expect(obj.newPassword).to.be.ok;
+              expect(obj.data).to.be.ok;
+              expect(obj.data.username).to.be.ok;
+              expect(obj.data.oldPassword).to.be.ok;
+              expect(obj.data.newPassword).to.be.ok;
 
               if (returnResult) {
                 return Q.resolve({
-                  result: obj.username
+                  result: obj.data.username
                 });
               } else {
                 return Q.reject("API Failed");
@@ -39,8 +41,9 @@ describe("service: userauth:", function() {
             }, 
             login: function(obj) {
               expect(obj).to.be.ok;
-              expect(obj.username).to.be.ok;
-              expect(obj.password).to.be.ok;
+              expect(obj.data).to.be.ok;
+              expect(obj.data.username).to.be.ok;
+              expect(obj.data.password).to.be.ok;
 
               if (returnResult) {
                 return Q.resolve("token");
@@ -50,8 +53,8 @@ describe("service: userauth:", function() {
             },
             refreshToken: function(obj) {
               expect(obj).to.be.ok;
-              expect(obj.username).to.be.ok;
-              expect(obj.token).to.be.ok;
+              expect(obj.data).to.be.ok;
+              expect(obj.data.token).to.be.ok;
 
               if (returnResult) {
                 return Q.resolve("refreshedToken");
@@ -61,8 +64,9 @@ describe("service: userauth:", function() {
             },
             confirmUserCreation: function(obj) {
               expect(obj).to.be.ok;
-              expect(obj.username).to.be.ok;
-              expect(obj.userConfirmedToken).to.be.ok;
+              expect(obj.data).to.be.ok;
+              expect(obj.data.username).to.be.ok;
+              expect(obj.data.userConfirmedToken).to.be.ok;
 
               if (returnResult) {
                 return Q.resolve("user confirmed");
@@ -72,7 +76,8 @@ describe("service: userauth:", function() {
             },
             requestConfirmationEmail: function(obj) {
               expect(obj).to.be.ok;
-              expect(obj.username).to.be.ok;
+              expect(obj.data).to.be.ok;
+              expect(obj.data.username).to.be.ok;
 
               if (returnResult) {
                 return Q.resolve("requested confirmation email");
@@ -82,7 +87,8 @@ describe("service: userauth:", function() {
             },
             requestPasswordReset: function(obj) {
               expect(obj).to.be.ok;
-              expect(obj.username).to.be.ok;
+              expect(obj.data).to.be.ok;
+              expect(obj.data.username).to.be.ok;
 
               if (returnResult) {
                 return Q.resolve("requested password reset");
@@ -92,7 +98,8 @@ describe("service: userauth:", function() {
             },
             resetPassword: function(obj) {
               expect(obj).to.be.ok;
-              expect(obj.username).to.be.ok;
+              expect(obj.data).to.be.ok;
+              expect(obj.data.username).to.be.ok;
 
               if (returnResult) {
                 return Q.resolve("reseted password");
