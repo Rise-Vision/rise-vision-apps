@@ -19,8 +19,6 @@ var gulp = require("gulp"),
     fs = require("fs"),
     ngHtml2Js = require("gulp-ng-html2js"),
     minifyHtml = require("gulp-minify-html");
-    // i18nBuild = require("./i18n-build"),
-    // cssBuildn = require("./css-build");
 
     var commonHeaderSrcFiles = ["./tmp/partials/partials.js",
     "./web/scripts/common-header/dtv-common-header.js",

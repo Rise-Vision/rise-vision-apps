@@ -6,7 +6,6 @@ var path = require("path");
 var jsoncombine = require("gulp-jsoncombine");
 var jsonminify = require("gulp-jsonminify");
 var folders = require("gulp-folders");
-var colors = require("colors");
 
 var paths = {
   localesJson: "./web/locales",
@@ -31,7 +30,7 @@ gulp.task("i18n-build", folders(paths.localesJson, function (
 gulp.task("i18n-watch", ["i18n-build"], function () {
   // Watch locale files for changes
   gulp.watch([paths.localesJson + "/**/*.json"], ["i18n-build"]);
-  console.log("[locales] Watching for changes in locale files".yellow.inverse);
+  console.log("[locales] Watching for changes in locale files".yellow);
 });
 
 module.exports = i18nBuild;
