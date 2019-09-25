@@ -78,6 +78,29 @@
               });
             return deferred.promise;
           },
+          preparePurchase: function (jsonData) {
+            var deferred = $q.defer();
+            storeAPILoader().then(function (storeAPI) {
+                var obj = {
+                  jsonData: jsonData
+                };
+                return storeAPI.purchase.prepare(obj);
+              })
+              .then(function (resp) {
+                if (resp && resp.result && !resp.result.error) {
+                  $log.debug('prepare purchase resp', resp);
+                  deferred.resolve(resp.result);
+                } else {
+                  deferred.reject(resp && resp.result && resp.result.error);
+                }
+              })
+              .then(null, function (resp) {
+                console.error('Failed to prepare Purchase.', resp);
+
+                deferred.reject(resp && resp.result && resp.result.error);
+              });
+            return deferred.promise;
+          },
           purchase: function (jsonData) {
             var deferred = $q.defer();
             storeAPILoader().then(function (storeAPI) {

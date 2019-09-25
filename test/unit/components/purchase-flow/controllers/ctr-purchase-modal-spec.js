@@ -33,6 +33,20 @@ describe("controller: purchase modal", function() {
         showPlansModal: sinon.stub()
       };
     });
+    $provide.service("storeService", function() {
+      return storeService = {
+        preparePurchase: sinon.spy(function() {
+          return Q.resolve();
+        })
+      };
+    });
+    $provide.service("stripeService", function() {
+      return stripeService = {
+        createPaymentMethod: sinon.spy(function() {
+          return Q.resolve();
+        })
+      };
+    });
     $provide.service("purchaseFactory", function() {
       return purchaseFactory = {
         validatePaymentMethod: sinon.spy(function() {
@@ -41,6 +55,12 @@ describe("controller: purchase modal", function() {
           } else {
             return Q.reject();
           }
+        }),
+        preparePaymentIntent: sinon.spy(function() {
+          return Q.resolve();
+        }),
+        initializeStripeElements: sinon.spy(function() {
+          return Q.resolve();
         }),
         getEstimate: sinon.spy(function() {
           return Q.resolve();
@@ -57,7 +77,7 @@ describe("controller: purchase modal", function() {
     });
   }));
 
-  var sandbox, $scope, $modalInstance, $loading, validate, purchaseFactory, addressFactory;
+  var sandbox, $scope, $modalInstance, $loading, validate, purchaseFactory, stripeService, storeService, addressFactory;
 
   beforeEach(function() {
     validate = true;

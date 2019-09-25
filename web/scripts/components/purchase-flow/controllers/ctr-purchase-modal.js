@@ -66,13 +66,23 @@ angular.module('risevision.common.components.purchase-flow')
           });
       };
 
-      $scope.validatePaymentMethod = function () {
+      $scope.validatePaymentMethod = function (element) {
         if (!_isFormValid()) {
           return;
         }
 
-        purchaseFactory.validatePaymentMethod()
-          .then($scope.setNextStep);
+        purchaseFactory.loading = true;
+
+        purchaseFactory.validatePaymentMethod(element)
+          .then($scope.preparePayment)
+          .then($scope.setNextStep)
+          .finally(function () {
+            purchaseFactory.loading = false;
+          });
+      };
+
+      $scope.preparePayment = function () {
+        return purchaseFactory.preparePaymentIntent();
       };
 
       $scope.completePayment = function () {
