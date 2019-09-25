@@ -61,26 +61,19 @@ describe("Services: purchase factory", function() {
             return Q.reject();
           }
         })
-
       };
     });
 
     $provide.service("stripeService", function() {
+      var failMode = false;
       return stripeService = {
-        validateCard: sinon.stub().returns(true),
-        createToken: sinon.spy(function() {
-          if (validate) {
-            return Q.resolve({
-              id: "id",
-              card: {
-                id: "wrongId",
-                last4: "last4",
-                type: "cardType"
-              }
-            });
-          } else {
-            return Q.reject();
-          }
+        shouldFail: function(mode) {failMode = mode;},
+        createPaymentMethod: sinon.spy(function() {
+          console.log("Stripe Service: createPaymentMethod mock will " + (failMode ? "fail" : "pass"));
+          return Q.resolve(failMode ? {error: {}} : {});
+        }),
+        authenticate3ds: sinon.spy(function() {
+          return Q.resolve();
         })
       };
     });
@@ -268,6 +261,7 @@ describe("Services: purchase factory", function() {
           paymentMethods: {
             paymentMethod: "card",
             selectedCard: card = {
+              isNew: true,
               number: "123"
             }
           }
@@ -277,26 +271,25 @@ describe("Services: purchase factory", function() {
       it("should validate card and proceed to next step", function(done) {
         purchaseFactory.validatePaymentMethod()
         .then(function() {
-          stripeService.validateCard.should.have.been.calledWith(card, false);
+          stripeService.shouldFail(false);
+          stripeService.createPaymentMethod.should.have.been.called;
 
           done();
         })
-        .then(null,function() {
-          done("error");
+        .then(null,function(error) {
+          done(error);
         });
       });
 
       it("should validate and not proceed if there are errors", function(done) {
-        stripeService.validateCard.returns(false);
+        stripeService.shouldFail(true);
 
         purchaseFactory.validatePaymentMethod()
-        .then(null, function() {
-          stripeService.validateCard.should.have.been.calledWith(card, false);
-
+        .then(function () {
+          console.log("Should not be here");
+        }, function() {
+          stripeService.createPaymentMethod.should.have.been.called;
           done();
-        })
-        .then(null, function() {
-          done("error");
         });
       });
       
@@ -326,41 +319,30 @@ describe("Services: purchase factory", function() {
       it("should validate card", function() {
         purchaseFactory.validatePaymentMethod();
 
-        stripeService.validateCard.should.have.been.calledWith(card, true);
+        stripeService.createPaymentMethod.should.have.been.called;
       });
 
       it("should validate and not proceed if there are errors", function(done) {
-        stripeService.validateCard.returns(false);
+        stripeService.shouldFail(true);
 
         purchaseFactory.validatePaymentMethod()
         .then(null, function() {
-          stripeService.validateCard.should.have.been.calledWith(card, true);
+          stripeService.createPaymentMethod.should.have.been.called;
 
           done();
         })
         .then(null,function() {
-          done("error");
+          done("should not be here");
         });
-      });
-
-      it("should create card token and proceed to next step", function() {
-        purchaseFactory.validatePaymentMethod();
-
-        stripeService.createToken.should.have.been.called;
-      });
-
-      it("should use card address", function() {
-        purchaseFactory.validatePaymentMethod();
-
-        stripeService.createToken.should.have.been.calledWith(card, card.address);
       });
 
       it("should use billing address if selected", function() {
         card.useBillingAddress = true;
+        card.billingAddress = {city: "test-billing-city"};
 
         purchaseFactory.validatePaymentMethod();
 
-        stripeService.createToken.should.have.been.calledWith(card, card.billingAddress);
+        assert.equal(stripeService.createPaymentMethod.getCall(0).args[2].billing_details.address.city, "test-billing-city");
       });
 
       it("should resolve if token is received", function(done) {
@@ -371,47 +353,6 @@ describe("Services: purchase factory", function() {
         .then(null,function() {
           done("error");
         });
-      });
-
-      it("should update Card fields with API results", function(done) {
-        purchaseFactory.validatePaymentMethod()
-        .then(function() {
-          expect(card.id).to.equal("id");
-          expect(card.last4).to.equal("last4");
-          expect(card.cardType).to.equal("cardType");
-
-          expect(purchaseFactory.purchase.paymentMethods.selectedCard).to.equal(card);
-          expect(purchaseFactory.purchase.paymentMethods.newCreditCard).to.equal(card);
-
-          done();
-        })
-        .then(null,function() {
-          done("error");
-        });
-      });
-
-      it("should reject if token creation fails", function(done) {
-        validate = false;
-
-        purchaseFactory.validatePaymentMethod()
-        .then(function() {
-          done("error");
-        })
-        .then(null,function() {
-          done();
-        });
-      });
-
-      it("should start and stop spinner", function(done) {
-        purchaseFactory.validatePaymentMethod();
-
-        expect(purchaseFactory.loading).to.be.true;
-
-        setTimeout(function() {
-          expect(purchaseFactory.loading).to.be.false;
-
-          done();
-        }, 10);
       });
 
     });
@@ -583,6 +524,8 @@ describe("Services: purchase factory", function() {
     });
 
     it("should call purchase with a JSON string", function() {
+      purchaseFactory.purchase.paymentMethods.intentResponse = {intentId: "test"};
+      purchaseFactory.purchase.paymentMethodResponse = {paymentMethod: {id: "test"}};
       purchaseFactory.completePayment();
 
       storeService.purchase.should.have.been.called;
@@ -605,8 +548,10 @@ describe("Services: purchase factory", function() {
         purchaseOrderNumber: "purchaseOrderNumber",
         card: {
           cardId: "cardId",
+          intentId: "test",
           isDefault: true
-        }
+        },
+        paymentMethodId: null
       }));
 
     });

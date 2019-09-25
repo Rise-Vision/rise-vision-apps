@@ -52,6 +52,8 @@ describe("Services: stripe loader", function() {
   });
 
   it("should resolve once stripe object is found", function(done) {
+    $window.Stripe = function() {return 1;};
+
     stripeLoader()
     .then(function(result) {
       expect(result).to.be.ok;
@@ -60,25 +62,19 @@ describe("Services: stripe loader", function() {
     })
     .then(null,done);
 
-    $window.Stripe = {
-      setPublishableKey: sinon.stub()
-    };
-
     $interval.flush(100);
   });
 
   it("should initialize with the key", function(done) {
+    $window.Stripe = sinon.spy();
+
     stripeLoader()
     .then(function() {
-      $window.Stripe.setPublishableKey.should.have.been.calledWith(STRIPE_TEST_KEY);
+      expect($window.Stripe).to.have.been.calledWith(STRIPE_TEST_KEY);
 
       done();
     })
     .then(null,done);
-
-    $window.Stripe = {
-      setPublishableKey: sinon.stub()
-    };
 
     $interval.flush(100);
   });

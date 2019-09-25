@@ -1,12 +1,16 @@
 <!-- Step 4 -->
 <div id="checkout-payment-methods">
+  <div id="errorBox" class="alert alert-danger" role="alert" ng-show="purchase.checkoutError">
+    <strong>Payment Method Error</strong> {{purchase.checkoutError}}
+  </div>
+
   <form id="form.paymentMethodsForm" role="form" class="u_margin-md-top" name="form.paymentMethodsForm" novalidate>
     <!-- Alpha Release - Select New Card by default -->
     <div class="row u_margin-md-top">
       <div class="col-md-8 col-xs-12 form-inline">
         <div class="form-group">
           <label for="payment-method-select" class="u_margin-right">Payment Method</label>
-          <select id="payment-method-select" class="form-control selectpicker" ng-model="paymentMethods.paymentMethod" tabindex="1">
+          <select id="payment-method-select" class="form-control selectpicker" ng-model="paymentMethods.paymentMethod" >
             <option value="card">Credit Card</option>
             <option value="invoice">Invoice Me</option>
           </select>
@@ -46,8 +50,8 @@
         <div class="row">
           <div class="col-md-12">
             <div class="form-group" ng-class="{ 'has-error': (form.paymentMethodsForm.cardholderName.$dirty || form.paymentMethodsForm.$submitted) && form.paymentMethodsForm.cardholderName.$invalid }">
-              <label for="new-card-name" lass="control-label">Cardholder Name *</label>
-              <input id="new-card-name" aria-required="true" tabindex="1" type="text" class="form-control" name="cardholderName" data-stripe="name" ng-model="paymentMethods.newCreditCard.name" autocomplete="cc-name" required>
+              <label for="new-card-name" class="control-label">Cardholder Name *</label>
+              <input id="new-card-name" aria-required="true" type="text" class="form-control" name="cardholderName" data-stripe="name" ng-model="paymentMethods.newCreditCard.name" autocomplete="cc-name" required>
             </div>
           </div>
         </div>
@@ -55,49 +59,28 @@
           <div class="col-md-12">
             <div class="form-group" ng-class="{ 'has-error': (form.paymentMethodsForm.cardNumber.$dirty || form.paymentMethodsForm.$submitted) && form.paymentMethodsForm.cardNumber.$invalid }">
               <label for="new-card-number" class="control-label">Card Number *</label>
-              <input id="new-card-number" type="text" aria-required="true" tabindex="1" class="form-control" placeholder="0000 0000 0000 0000" name="cardNumber"  data-stripe="number" ng-model="paymentMethods.newCreditCard.number" autocomplete="cc-number" required>
+              <div id="new-card-number"></div>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-md-4">
             <div class="form-group" ng-class="{ 'has-error': (form.paymentMethodsForm.cardExpiryMonth.$dirty || form.paymentMethodsForm.$submitted) && form.paymentMethodsForm.cardExpiryMonth.$invalid }">
-              <label for="new-card-expiry-month" class="control-label">Expiry Month *</label>
-              <select id="new-card-expiry-month" aria-required="true" tabindex="1" class="form-control" name="cardExpiryMonth" data-stripe="exp-month" ng-model="paymentMethods.newCreditCard.expMonth" autocomplete="cc-exp-month" integer-parser required>
-                <option ng-show="false" value="">&lt; Select Month &gt;</option>
-                <option value="1">01</option>
-                <option value="2">02</option>
-                <option value="3">03</option>
-                <option value="4">04</option>
-                <option value="5">05</option>
-                <option value="6">06</option>
-                <option value="7">07</option>
-                <option value="8">08</option>
-                <option value="9">09</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group" ng-class="{ 'has-error': (form.paymentMethodsForm.cardExpiryYear.$dirty || form.paymentMethodsForm.$submitted) && form.paymentMethodsForm.cardExpiryYear.$invalid }">
-              <label for="expiry-year" class="control-label">Expiry Year *</label>
-              <year-selector id="new-card-expiry-year" class="form-control" name="cardExpiryYear" data-stripe="exp-year" ng-model="paymentMethods.newCreditCard.expYear" tabindex="1" autocomplete="cc-exp-year" integer-parser required>
-              </year-selector>
+              <label for="new-card-expiry" class="control-label">Expiry*</label>
+              <div id="new-card-expiry"></div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group" ng-class="{ 'has-error': (form.paymentMethodsForm.cardCvc.$dirty || form.paymentMethodsForm.$submitted) && form.paymentMethodsForm.cardCvc.$invalid }">
               <label for="new-card-cvc" class="control-label">Security Code *</label>
-              <input id="new-card-cvc" aria-required="true" tabindex="1" type="text" pattern="[0-9]*" class="form-control" name="cardCvc" data-stripe="cvc" ng-model="paymentMethods.newCreditCard.cvc" autocomplete="cc-csc" maxlength="4" required>
+              <div id="new-card-cvc"></div>
             </div>
           </div>
         </div>
 
         <div class="checkbox">
           <label for="toggleMatchBillingAddress" aria-label="Match Billing Address">
-            <input type="checkbox" id="toggleMatchBillingAddress" ng-model="paymentMethods.newCreditCard.useBillingAddress" tabindex="1">
+            <input type="checkbox" id="toggleMatchBillingAddress" ng-model="paymentMethods.newCreditCard.useBillingAddress">
             Same As Billing Address
           </label>
         </div>
@@ -122,7 +105,7 @@
           <div class="col-md-12">
             <div class="form-group">
               <label for="existing-card-name" class="control-label">Cardholder Name</label>
-              <input id="existing-card-name" type="text" class="form-control" placeholder="{{paymentMethods.selectedCard.name}}" tabindex="1" disabled="disabled">
+              <input id="existing-card-name" type="text" class="form-control" placeholder="{{paymentMethods.selectedCard.name}}" disabled="disabled">
             </div>
           </div>
         </div>
@@ -130,7 +113,7 @@
           <div class="col-md-12">
             <div class="form-group">
               <label for="existing-card-number" class="control-label">Card Number</label>
-              <input id="existing-card-number" type="text" class="form-control" placeholder="{{paymentMethods.selectedCard.last4 | cardLastFour}}" tabindex="1" disabled="disabled" />
+              <input id="existing-card-number" type="text" class="form-control" placeholder="{{paymentMethods.selectedCard.last4 | cardLastFour}}" disabled="disabled" />
             </div>
           </div>
         </div>
@@ -138,13 +121,13 @@
           <div class="col-md-4">
             <div class="form-group">
               <label for="existing-card-expiry-month" class="control-label">Expiry Month</label>
-              <input id="existing-card-expiry-month" type="text" class="form-control masked"  placeholder="{{paymentMethods.selectedCard.expMonth | paddedMonth}}" disabled="disabled" tabindex="1" />
+              <input id="existing-card-expiry-month" type="text" class="form-control masked"  placeholder="{{paymentMethods.selectedCard.expMonth | paddedMonth}}" disabled="disabled" />
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
               <label for="existing-card-expiry-year" class="control-label">Expiry Year</label>
-              <input id="existing-card-expiry-year" type="text" class="form-control masked"  placeholder="{{paymentMethods.selectedCard.expYear}}" tabindex="1" disabled="disabled"/>
+              <input id="existing-card-expiry-year" type="text" class="form-control masked"  placeholder="{{paymentMethods.selectedCard.expYear}}" disabled="disabled"/>
             </div>
           </div>          
         </div>
@@ -165,7 +148,7 @@
             <label for="invoice-po-number" class="control-label">
               Purchase Order Number
             </label>
-            <input id="invoice-po-number" type="text" class="form-control" name="purchaseOrder" ng-model="paymentMethods.purchaseOrderNumber" tabindex="1"/>
+            <input id="invoice-po-number" type="text" class="form-control" name="purchaseOrder" ng-model="paymentMethods.purchaseOrderNumber" />
           </div>
         </div>
       </div>
@@ -180,7 +163,7 @@
 
     <div class="row">
       <div class="col-xs-12 text-center u_margin-sm-bottom">
-        <a id="showTaxExemption" href="#" aria-label="Are you Tax Exempt?" ng-click="showTaxExemptionModal()" ng-show="!purchase.taxExemptionSent" tabindex="3" translate>Are you Tax Exempt?</a>
+        <a id="showTaxExemption" href="#" aria-label="Are you Tax Exempt?" ng-click="showTaxExemptionModal()" ng-show="!purchase.taxExemptionSent" translate>Are you Tax Exempt?</a>
         <h5 ng-show="purchase.taxExemptionSent">Tax Exemption Submitted</h5>
 
       </div>
@@ -188,8 +171,8 @@
 
     <div class="row">
       <div class="col-xs-12">
-        <button id="backButton" type="button" aria-label="Go back to Shipping Address" class="btn btn-default pull-left" ng-click="setPreviousStep()" ng-hide="finalStep" tabindex="2" translate>common.back</button>
-        <button id="continueButton" type="submit" aria-label="Continue to Purchase Review" form="form.paymentMethodsForm" class="btn btn-primary pull-right" ng-click="validatePaymentMethod()" tabindex="1" translate>common.continue</button>
+        <button id="backButton" type="button" aria-label="Go back to Shipping Address" class="btn btn-default pull-left" ng-click="setPreviousStep()" ng-hide="finalStep" translate>common.back</button>
+        <button id="continueButton" type="submit" aria-label="Continue to Purchase Review" form="form.paymentMethodsForm" class="btn btn-primary pull-right" ng-click="validatePaymentMethod(cardNumber)" translate>common.continue</button>
       </div>
     </div>
   </form>
