@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Last Modified - Test Page</title>
+    <link rel="stylesheet" href="/dist/css/rise.min.css">
+</head>
+<body ng-app="testapp" ng-controller="mainController">
+
+<last-modified id="dtv1" change-date="results[0].changeDate" changed-by="results[0].changedBy"></last-modified>
+<last-modified id="dtv2" change-date="results[1].changeDate" changed-by="results[1].changedBy"></last-modified>
+<last-modified id="dtv3" change-date="results[2].changeDate" changed-by="results[2].changedBy"></last-modified>
+
+
+<script type="text/javascript" src="/bower_components/angular/angular.js"></script>
+<script type="text/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script type="text/javascript" src="/bower_components/angular-spinner/dist/angular-spinner.js"></script>
+<script type="text/javascript" src="/bower_components/rv-loading/loading.js"></script>
+<script type="text/javascript" src="/dist/js/components/last-modified.js"></script>
+
+<script>
+  angular.module("testapp", ["risevision.common.components.last-modified"])
+    .controller("mainController", ["$scope", function ($scope) {
+      $scope.results = [
+        {
+          changeDate: null,
+          changedBy: null
+        },
+        {
+          changeDate: null,
+          changedBy: "user.name"
+        },
+        {
+          changeDate: "2015-02-23T16:40:22.572Z",
+          changedBy: "user.name@somemail.com"
+        }
+      ];
+    }]);
+</script>
+
+</body>
+</html>
