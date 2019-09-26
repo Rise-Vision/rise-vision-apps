@@ -24,6 +24,7 @@ angular.module('risevision.template-editor.services')
               _programSave();
             } else {
               _lastSavedTimestamp = _getCurrentTimestamp();
+              _saving = true;
 
               saveFunction().finally(function () {
                 _saving = false;

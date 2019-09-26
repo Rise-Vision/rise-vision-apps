@@ -298,8 +298,6 @@ describe('service: templateEditorFactory:', function() {
       });
 
       it('should save the presentation', function(done) {
-        var timeBeforePublish = new Date();
-
         templateEditorFactory.save()
           .then(function() {
             presentation.add.should.have.been.called;
