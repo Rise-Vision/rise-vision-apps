@@ -10,7 +10,7 @@ describe('directive: templateBrandingColors', function() {
   beforeEach(module(function ($provide) {
     $provide.service('brandingFactory', function() {
       return factory = {
-        updateDraftColors: sinon.spy()
+        setUnsavedChanges: sinon.spy()
       };
     });
   }));
@@ -51,7 +51,14 @@ describe('directive: templateBrandingColors', function() {
   it('saveBranding: ', function() {
     $scope.saveBranding();
 
-    factory.updateDraftColors.should.have.been.called;
+    factory.setUnsavedChanges.should.have.been.called;
+  });
+
+  it('colorpicker-selected event: ', function() {
+    $scope.$emit('colorpicker-selected');
+    $scope.$digest();
+
+    factory.setUnsavedChanges.should.have.been.called;
   });
 
   it('directive.show: ', function() {

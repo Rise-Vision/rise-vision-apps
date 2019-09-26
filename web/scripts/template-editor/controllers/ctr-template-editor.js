@@ -1,19 +1,15 @@
 'use strict';
 
 angular.module('risevision.template-editor.controllers')
-  .constant('MINIMUM_INTERVAL_BETWEEN_SAVES', 5000)
-  .constant('MAXIMUM_INTERVAL_BETWEEN_SAVES', 20000)
   .controller('TemplateEditorController', ['$scope', '$q', '$filter', '$loading', '$state', '$timeout', '$window',
-    'templateEditorFactory', 'brandingFactory', 'blueprintFactory', 'scheduleFactory', 'presentationUtils',
-    'MINIMUM_INTERVAL_BETWEEN_SAVES', 'MAXIMUM_INTERVAL_BETWEEN_SAVES',
+    'templateEditorFactory', 'brandingFactory', 'blueprintFactory', 'scheduleFactory', 'AutoSaveService',
+    'presentationUtils',
     function ($scope, $q, $filter, $loading, $state, $timeout, $window, templateEditorFactory, brandingFactory,
-      blueprintFactory, scheduleFactory, presentationUtils,
-      MINIMUM_INTERVAL_BETWEEN_SAVES, MAXIMUM_INTERVAL_BETWEEN_SAVES) {
-      var _lastSavedTimestamp = 0,
-        _saveTimeout = null;
+      blueprintFactory, scheduleFactory, AutoSaveService, presentationUtils) {
+      var autoSaveService = new AutoSaveService(templateEditorFactory.save);
 
       $scope.factory = templateEditorFactory;
-      $scope.hasUnsavedChanges = false;
+      $scope.factory.hasUnsavedChanges = false;
 
       $scope.considerChromeBarHeight = _considerChromeBarHeight();
 
@@ -53,55 +49,16 @@ angular.module('risevision.template-editor.controllers')
         var isNotRevised = !$scope.factory.isRevised() && !brandingFactory.isRevised() &&
           scheduleFactory.hasSchedules();
 
-        return $scope.factory.savingPresentation || $scope.hasUnsavedChanges || isNotRevised;
+        return $scope.factory.savingPresentation || $scope.factory.isUnsaved() || isNotRevised;
       };
-
-      function _getCurrentTimestamp() {
-        return new Date().getTime();
-      }
-
-      function _programSave() {
-        _saveTimeout = $timeout(function () {
-          _saveTimeout = null;
-
-          // if a previous save hasn't finished, give more time
-          if ($scope.factory.savingPresentation) {
-            _programSave();
-          } else {
-            _lastSavedTimestamp = _getCurrentTimestamp();
-
-            $scope.factory.save();
-          }
-        }, MINIMUM_INTERVAL_BETWEEN_SAVES);
-      }
-
-      function _clearSaveTimeout() {
-        if (_saveTimeout) {
-          $timeout.cancel(_saveTimeout);
-          _saveTimeout = null;
-        }
-      }
-
-      function _reprogramSave() {
-        _clearSaveTimeout();
-        _programSave();
-      }
 
       var _bypassUnsaved = false,
         _initializing = false;
       var _setUnsavedChanges = function (state) {
-        $scope.hasUnsavedChanges = state;
+        $scope.factory.hasUnsavedChanges = state;
 
-        if ($scope.hasUnsavedChanges) {
-          if (_saveTimeout) {
-            var elapsed = _getCurrentTimestamp() - _lastSavedTimestamp;
-
-            if (elapsed < MAXIMUM_INTERVAL_BETWEEN_SAVES) {
-              _reprogramSave();
-            }
-          } else {
-            _programSave();
-          }
+        if ($scope.factory.hasUnsavedChanges) {
+          autoSaveService.save();
         }
       };
 
@@ -129,7 +86,7 @@ angular.module('risevision.template-editor.controllers')
           $scope.factory.save();
           return;
         }
-        if ($scope.hasUnsavedChanges) {
+        if ($scope.factory.hasUnsavedChanges) {
           return;
         }
 
@@ -149,6 +106,8 @@ angular.module('risevision.template-editor.controllers')
       $scope.$on('presentationDeleted', _setUnsavedChanges.bind(null, false));
       $scope.$on('presentationPublished', _setUnsavedChangesAsync.bind(null, false));
 
+      $scope.$on('risevision.template-editor.brandingUnsavedChanges', autoSaveService.save);
+
       $scope.$on('$stateChangeStart', function (event, toState, toParams) {
         if (_bypassUnsaved) {
           _bypassUnsaved = false;
@@ -157,11 +116,9 @@ angular.module('risevision.template-editor.controllers')
         if (toState.name.indexOf('apps.editor.templates') === -1) {
           event.preventDefault();
 
-          _clearSaveTimeout();
+          autoSaveService.clearSaveTimeout();
 
-          var savePromise = $scope.hasUnsavedChanges ? $scope.factory.save() : $q.resolve();
-
-          savePromise
+          $scope.factory.save()
             .finally(function () {
               _bypassUnsaved = true;
               $state.go(toState, toParams);
@@ -170,7 +127,7 @@ angular.module('risevision.template-editor.controllers')
       });
 
       $window.onbeforeunload = function () {
-        if ($scope.hasUnsavedChanges) {
+        if ($scope.factory.isUnsaved()) {
           return $filter('translate')('common.saveBeforeLeave');
         }
       };

@@ -48,10 +48,11 @@ describe('service: brandingFactory', function() {
 
   it('should initialize', function () {
     expect(brandingFactory).to.be.ok;
+    expect(brandingFactory.hasUnsavedChanges).to.be.false;
     expect(brandingFactory.getBrandingComponent).to.be.a('function');
     expect(brandingFactory.publishBranding).to.be.a('function');
-    expect(brandingFactory.updateDraftColors).to.be.a('function');
-    expect(brandingFactory.updateDraftLogo).to.be.a('function');
+    expect(brandingFactory.saveBranding).to.be.a('function');
+    expect(brandingFactory.setUnsavedChanges).to.be.a('function');
     expect(brandingFactory.isRevised).to.be.a('function');
   });
 
@@ -128,6 +129,19 @@ describe('service: brandingFactory', function() {
         logoFile: undefined,
         logoFileMetadata: []
       });
+    });
+
+    it('should reset unsaved changes', function() {
+      brandingFactory.hasUnsavedChanges = true;
+
+      userState.getCopyOfSelectedCompany.returns({
+        settings: {}
+      });
+
+      $rootScope.$emit('risevision.company.selectedCompanyChanged');
+      $rootScope.$digest();
+
+      expect(brandingFactory.hasUnsavedChanges).to.be.false;
     });
 
     it('should update branding settings on subsequent events', function() {
@@ -333,40 +347,85 @@ describe('service: brandingFactory', function() {
     });
   });
 
-  it('updateDraftColors: ', function(done) {
-    brandingFactory.brandingSettings = {
-      baseColor: 'draftBaseColor',
-      accentColor: 'draftAccentColor'
-    };
-
-    brandingFactory.updateDraftColors().then(function() {
-      updateCompany.should.have.been.calledWith('companyId', {
-        settings: {
-          brandingDraftBaseColor: 'draftBaseColor',
-          brandingDraftAccentColor: 'draftAccentColor',
-          brandingRevisionStatusName: 'Revised'
-        }
-      });
-
-      done();
+  describe('saveBranding: ', function() {
+    beforeEach(function() {
+      blueprintFactory.hasBranding.returns(true);
+      brandingFactory.brandingSettings = {};
     });
+
+    it('should save if the settings are unsaved', function(done) {
+      brandingFactory.hasUnsavedChanges = true;
+
+      brandingFactory.saveBranding().then(function() {
+        updateCompany.should.have.been.called;
+
+        done();
+      });
+    });
+
+    it('should not save if Template is not branded', function(done) {
+      brandingFactory.hasUnsavedChanges = true;
+      blueprintFactory.hasBranding.returns(false);
+
+      brandingFactory.saveBranding().then(function() {
+        updateCompany.should.not.have.been.called;
+
+        done();
+      });
+    });
+
+    it('should not save if the settings are not unsaved', function(done) {
+      brandingFactory.saveBranding().then(function() {
+        updateCompany.should.not.have.been.called;
+
+        done();
+      });
+    });
+
+    it('should save values from brandingSettings: ', function(done) {
+      brandingFactory.hasUnsavedChanges = true;
+      brandingFactory.brandingSettings = {
+        baseColor: 'draftBaseColor',
+        accentColor: 'draftAccentColor',
+        logoFile: 'draftLogoFile'
+      };
+
+      brandingFactory.saveBranding().then(function() {
+        updateCompany.should.have.been.calledWith('companyId', {
+          settings: {
+            brandingDraftBaseColor: 'draftBaseColor',
+            brandingDraftAccentColor: 'draftAccentColor',
+            brandingDraftLogoFile: 'draftLogoFile',
+            brandingRevisionStatusName: 'Revised'
+          }
+        });
+
+        done();
+      });
+    });
+
+    it('should reset hasUnsavedChanges: ', function(done) {
+      brandingFactory.hasUnsavedChanges = true;
+
+      brandingFactory.saveBranding().then(function() {
+        expect(brandingFactory.hasUnsavedChanges).to.be.false;
+
+        done();
+      });
+    });
+
   });
 
-  it('updateDraftLogo: ', function(done) {
-    brandingFactory.brandingSettings = {
-      logoFile: 'draftLogoFile'
-    };
-
-    brandingFactory.updateDraftLogo().then(function() {
-      updateCompany.should.have.been.calledWith('companyId', {
-        settings: {
-          brandingDraftLogoFile: 'draftLogoFile',
-          brandingRevisionStatusName: 'Revised'
-        }
-      });
-
+  it('setUnsavedChanges: ', function(done) {
+    $rootScope.$on('risevision.template-editor.brandingUnsavedChanges', function() {
       done();
     });
+
+    brandingFactory.setUnsavedChanges();
+    
+    expect(brandingFactory.hasUnsavedChanges).to.be.true;
+
+    $rootScope.$digest();
   });
 
   describe('isRevised', function() {

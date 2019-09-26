@@ -11,8 +11,10 @@ angular.module('risevision.template-editor.directives')
           $scope.brandingFactory = brandingFactory;
 
           $scope.saveBranding = function () {
-            brandingFactory.updateDraftColors();
+            brandingFactory.setUnsavedChanges();
           };
+
+          $scope.$on('colorpicker-selected', $scope.saveBranding);
 
           $scope.registerDirective({
             type: 'rise-branding-colors',
