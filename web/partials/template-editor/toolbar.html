@@ -12,13 +12,13 @@
 
 <div class="toolbar-right">
   <div id="autoSavingDesktop" class="auto-saving-changes hidden-xs">
-    <div ng-show="!factory.savingPresentation && hasUnsavedChanges">
+    <div ng-show="!factory.savingPresentation && factory.isUnsaved()">
       Unsaved changes
     </div>
     <div ng-show="factory.savingPresentation">
       Saving changes...
     </div>
-    <div ng-show="!factory.savingPresentation && !hasUnsavedChanges">
+    <div ng-show="!factory.savingPresentation && !factory.isUnsaved()">
       <div>
         All changes saved <streamline-icon name="checkmark" width="12" height="12"></streamline-icon>
       </div>
