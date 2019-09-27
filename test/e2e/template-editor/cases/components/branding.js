@@ -98,6 +98,7 @@ var WeatherComponentScenarios = function () {
         helper.clickWhenClickable(templateEditorPage.getBackToComponentsButton(),'Back to Branding Settings');
         browser.sleep(1000);
       });
+
     });
 
     describe('Edit Branding Logo',function(){
@@ -128,6 +129,12 @@ var WeatherComponentScenarios = function () {
         it('should have a thumbnail', function() {
           expect(imageComponentPage.getThumbnails().count()).to.eventually.equal(1);
         });
+
+        it('should auto-save the Branding after adding file from storage', function () {
+          helper.wait(templateEditorPage.getSavingText(), 'Branding component auto-saving');
+          helper.wait(templateEditorPage.getSavedText(), 'Branding component auto-saved');
+        });
+
       });
 
       describe('subsequent upload - should list a single file', function () {
@@ -146,6 +153,12 @@ var WeatherComponentScenarios = function () {
         it('should list only the uploaded file', function() {
           expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(1);
         });
+
+        it('should auto-save the Branding after adding file from storage', function () {
+          helper.wait(templateEditorPage.getSavingText(), 'Branding component auto-saving');
+          helper.wait(templateEditorPage.getSavedText(), 'Branding component auto-saved');
+        });
+
       });
 
       describe('storage',function(){
@@ -164,7 +177,13 @@ var WeatherComponentScenarios = function () {
           browser.sleep(1000);
           expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(1);
         });
-      })
+
+        it('should auto-save the Branding after adding file from storage', function () {
+          helper.wait(templateEditorPage.getSavingText(), 'Branding component auto-saving');
+          helper.wait(templateEditorPage.getSavedText(), 'Branding component auto-saved');
+        });
+
+      });
     });
 
     describe('remove',function(){
@@ -174,7 +193,7 @@ var WeatherComponentScenarios = function () {
         browser.driver.manage().window().setSize(500, 800); 
       });
 
-      it('should aks for confirmation before removing logo', function () {
+      it('should asks for confirmation before removing logo', function () {
         var removeLink = imageComponentPage.getRemoveLinkFor('e2e-upload-image-2.png');
         helper.wait(removeLink, 'Image Row Remove');
         helper.clickWhenClickable(removeLink, 'Image Row Remove');
