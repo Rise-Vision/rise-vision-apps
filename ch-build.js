@@ -24,9 +24,9 @@ var gulp = require("gulp"),
     "./web/scripts/common-header/dtv-common-header.js",
     "./web/scripts/common-header/directives/*.js",
     "./web/scripts/common-header/filters/*.js",
-    "./web/scripts/common-header/controllers*.js",
-    "./web/scripts/common-header/components/*.js",
+    "./web/scripts/common-header/controllers/*.js",
     "./web/scripts/common-header/services/*.js",
+    "./web/scripts/components/*.js",
     "./dist/js/components/i18n.js",
     "./dist/js/components/gapi-loader.js",
     "./dist/js/components/core-api-client.js",
@@ -97,7 +97,9 @@ gulp.task("components-html2js", function() {
         var pathParts = file.path.split("/");
         var folder = pathParts[pathParts.length - 2];
         return "risevision.common.components." + folder;
-      }
+      },
+      useStrict: true,
+      prefix: "partials/components/"
     }))
     .pipe(gulp.dest("./tmp/partials/"));
 });
@@ -138,7 +140,7 @@ gulp.task("build-components", function (cb) {
 
 
 // Dist build
-gulp.task("html2js", function() {
+gulp.task("ch-html2js", function() {
   return gulp.src("web/partials/common-header/*.html")
     .pipe(minifyHtml({
       empty: true,
@@ -148,7 +150,7 @@ gulp.task("html2js", function() {
     .pipe(ngHtml2Js({
       moduleName: "risevision.apps.partials",
       useStrict: true,
-      base: "partials/"
+      prefix: "partials/common-header/"
     }))
     .pipe(concat("partials.js"))
     .pipe(gulp.dest("./tmp/partials/"));
@@ -179,5 +181,5 @@ gulp.task("build-dist", function (cb) {
 // End - Dist build
 
 gulp.task("ch-build", function (cb) {
-  runSequence(["html2js", "build-components"], "build-dist", cb);
+  runSequence(["ch-html2js", "build-components"], "build-dist", cb);
 });
