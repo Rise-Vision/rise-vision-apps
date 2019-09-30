@@ -9,7 +9,8 @@ angular.module('risevision.template-editor.services')
         type: 'rise-branding'
       };
       var factory = {
-        brandingSettings: null
+        brandingSettings: null,
+        hasUnsavedChanges: false
       };
 
       var _refreshMetadata = function () {
@@ -37,6 +38,7 @@ angular.module('risevision.template-editor.services')
             baseColor: settings.brandingDraftBaseColor,
             accentColor: settings.brandingDraftAccentColor
           };
+          factory.hasUnsavedChanges = false;
         }
 
         _refreshMetadata();
@@ -78,19 +80,25 @@ angular.module('risevision.template-editor.services')
         });
       };
 
-      factory.updateDraftColors = function () {
+      factory.saveBranding = function () {
+        if (!factory.hasUnsavedChanges || !blueprintFactory.hasBranding()) {
+          return $q.resolve();
+        }
+
         return _updateCompanySettings({
           brandingDraftBaseColor: factory.brandingSettings.baseColor,
           brandingDraftAccentColor: factory.brandingSettings.accentColor,
+          brandingDraftLogoFile: factory.brandingSettings.logoFile,
           brandingRevisionStatusName: REVISION_STATUS_REVISED
+        }).then(function () {
+          factory.hasUnsavedChanges = false;
         });
       };
 
-      factory.updateDraftLogo = function () {
-        return _updateCompanySettings({
-          brandingDraftLogoFile: factory.brandingSettings.logoFile,
-          brandingRevisionStatusName: REVISION_STATUS_REVISED
-        });
+      factory.setUnsavedChanges = function () {
+        $rootScope.$broadcast('risevision.template-editor.brandingUnsavedChanges');
+
+        this.hasUnsavedChanges = true;
       };
 
       factory.isRevised = function () {

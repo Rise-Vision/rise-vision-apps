@@ -1,13 +1,13 @@
 <div>
   <div class="auto-saving-changes">
-    <div ng-show="!factory.savingPresentation && hasUnsavedChanges">
+    <div ng-show="!factory.savingPresentation && factory.isUnsaved()">
       Unsaved changes
     </div>
     <div ng-show="factory.savingPresentation">
       Saving changes...
     </div>
     <div class="all-changes-saved-message"
-         ng-show="!factory.savingPresentation && !hasUnsavedChanges">
+         ng-show="!factory.savingPresentation && !factory.isUnsaved()">
       All changes saved
       <streamline-icon name="checkmark" width="12" height="12"></streamline-icon>
     </div>

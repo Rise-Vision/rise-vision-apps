@@ -38,6 +38,9 @@ describe('controller: TemplateEditor', function() {
       presentation: { templateAttributeData: {} },
       getAttributeData: sandbox.stub().returns('data'),
       setAttributeData: sandbox.stub(),
+      isUnsaved: function() {
+        return factory.hasUnsavedChanges
+      },
       save: function() {
         return Q.resolve();
       },
@@ -109,8 +112,8 @@ describe('controller: TemplateEditor', function() {
   });
 
   it('should exist', function() {
-    expect($scope).to.be.truely;
-    expect($scope.factory).to.be.truely;
+    expect($scope).to.be.ok;
+    expect($scope.factory).to.be.ok;
     expect($scope.factory.presentation).to.be.ok;
     expect($scope.factory.presentation.templateAttributeData).to.deep.equal({});
   });
@@ -175,13 +178,13 @@ describe('controller: TemplateEditor', function() {
 
   describe('unsaved changes', function () {
     it('should flag unsaved changes to presentation', function () {
-      expect($scope.hasUnsavedChanges).to.be.false;
+      expect($scope.factory.hasUnsavedChanges).to.be.false;
       factory.presentation.id = '1234';
       factory.presentation.name = 'New Name';
       $scope.$apply();
       $timeout.flush();
 
-      expect($scope.hasUnsavedChanges).to.be.true;
+      expect($scope.factory.hasUnsavedChanges).to.be.true;
     });
 
     it('should clear unsaved changes flag after saving presentation', function () {
@@ -191,7 +194,7 @@ describe('controller: TemplateEditor', function() {
       $rootScope.$broadcast('presentationUpdated');
       $scope.$apply();
       $timeout.flush();
-      expect($scope.hasUnsavedChanges).to.be.false;
+      expect($scope.factory.hasUnsavedChanges).to.be.false;
     });
 
     it('should clear unsaved changes when deleting the presentation', function () {
@@ -200,7 +203,7 @@ describe('controller: TemplateEditor', function() {
       $scope.$apply();
       $rootScope.$broadcast('presentationDeleted');
       $scope.$apply();
-      expect($scope.hasUnsavedChanges).to.be.false;
+      expect($scope.factory.hasUnsavedChanges).to.be.false;
     });
 
     it('should not flag unsaved changes when publishing', function () {
@@ -210,7 +213,7 @@ describe('controller: TemplateEditor', function() {
       factory.presentation.changedBy = 'newUsername';
       $scope.$apply();
 
-      expect($scope.hasUnsavedChanges).to.be.false;
+      expect($scope.factory.hasUnsavedChanges).to.be.false;
     });
 
     it('should notify unsaved changes when changing URL', function () {
@@ -226,36 +229,6 @@ describe('controller: TemplateEditor', function() {
       $scope.$apply();
 
       saveStub.should.have.been.called;
-    });
-
-    it('should not notify unsaved changes when changing URL if there are no changes and user has schedules', function () {
-      var saveStub = sinon.stub(factory, 'save');
-
-      sinon.stub($state, 'go');
-      sinon.stub(factory, 'publish');
-      sinon.stub(scheduleFactory, 'hasSchedules').returns(true);
-
-      $rootScope.$broadcast('$stateChangeStart', { name: 'newState' });
-      $scope.$apply();
-
-      saveStub.should.not.have.been.called;
-      $state.go.should.have.been.called;
-      factory.publish.should.not.have.been.called;
-    });
-
-    it('should change URL if there are no changes and user does not have schedules', function () {
-      var saveStub = sinon.stub(factory, 'save');
-
-      sinon.stub($state, 'go');
-      sinon.stub(factory, 'publish');
-      sinon.stub(scheduleFactory, 'hasSchedules').returns(false);
-
-      $rootScope.$broadcast('$stateChangeStart', { name: 'newState' });
-      $scope.$apply();
-
-      saveStub.should.not.have.been.called;
-      $state.go.should.have.been.called;
-      factory.publish.should.not.have.been.called;
     });
 
     it('should not notify unsaved changes when changing URL if state is in Template Editor', function () {

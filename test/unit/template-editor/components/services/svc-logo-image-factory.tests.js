@@ -10,7 +10,7 @@ describe('service: logoImageFactory', function() {
     $provide.service('brandingFactory', function() {
       return {
         brandingSettings: {},
-        updateDraftLogo: sandbox.stub()
+        setUnsavedChanges: sandbox.stub()
       };
     });
     $provide.service('$q', function() {
@@ -144,7 +144,7 @@ describe('service: logoImageFactory', function() {
       expect(brandingFactory.brandingSettings.logoFile).to.equal('logo1');
       expect(brandingFactory.brandingSettings.logoFileMetadata).to.deep.equals(metadata);
       
-      brandingFactory.updateDraftLogo.should.have.been.called;
+      brandingFactory.setUnsavedChanges.should.have.been.called;
     });
 
     it('should set branding attributes with last metadata item and ignore the rest', function() {
@@ -156,7 +156,7 @@ describe('service: logoImageFactory', function() {
       expect(brandingFactory.brandingSettings.logoFile).to.equal('logo3');
       expect(brandingFactory.brandingSettings.logoFileMetadata).to.deep.equals([lastFile]);
       
-      brandingFactory.updateDraftLogo.should.have.been.called;
+      brandingFactory.setUnsavedChanges.should.have.been.called;
     });
 
     it('should clear branding attributes if no metadata items', function() {
@@ -167,7 +167,7 @@ describe('service: logoImageFactory', function() {
       expect(brandingFactory.brandingSettings.logoFile).to.equal('');
       expect(brandingFactory.brandingSettings.logoFileMetadata).to.deep.equals([]);
       
-      brandingFactory.updateDraftLogo.should.have.been.called;
+      brandingFactory.setUnsavedChanges.should.have.been.called;
     });
   });
 

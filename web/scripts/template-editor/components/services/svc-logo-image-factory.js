@@ -36,7 +36,7 @@ angular.module('risevision.template-editor.services')
           brandingFactory.brandingSettings.logoFileMetadata = [];
           brandingFactory.brandingSettings.logoFile = '';
         }
-        brandingFactory.updateDraftLogo();
+        brandingFactory.setUnsavedChanges();
         return brandingFactory.brandingSettings.logoFileMetadata;
       };
 

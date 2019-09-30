@@ -10,7 +10,9 @@ angular.module('risevision.template-editor.services')
       checkTemplateAccess, $modal, scheduleFactory, plansFactory, templateEditorUtils, brandingFactory,
       blueprintFactory, financialLicenseFactory,
       presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
-      var factory = {};
+      var factory = {
+        hasUnsavedChanges: false
+      };
 
       var _setPresentation = function (presentation, isUpdate) {
 
@@ -101,16 +103,9 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.addPresentation = function () {
-        var deferred = $q.defer(),
-          presentationVal = _getPresentationForUpdate();
+        var presentationVal = _getPresentationForUpdate();
 
-        _clearMessages();
-
-        //show loading spinner
-        factory.loadingPresentation = true;
-        factory.savingPresentation = true;
-
-        presentation.add(presentationVal)
+        return presentation.add(presentationVal)
           .then(function (resp) {
             if (resp && resp.item && resp.item.id) {
               $rootScope.$broadcast('presentationCreated');
@@ -125,42 +120,57 @@ angular.module('risevision.template-editor.services')
                 location: 'replace'
               });
 
-              deferred.resolve(resp.item.id);
+              return $q.resolve(resp.item.id);
             }
-          })
-          .then(null, function (e) {
-            _showErrorMessage('add', e);
-
-            deferred.reject(e);
-          })
-          .finally(function () {
-            factory.loadingPresentation = false;
-            factory.savingPresentation = false;
           });
-
-        return deferred.promise;
       };
 
       factory.updatePresentation = function () {
-        var deferred = $q.defer(),
-          presentationVal = _getPresentationForUpdate();
+        if (!factory.hasUnsavedChanges) {
+          //Factory has no Changes.
+          return $q.resolve();
+        }
 
-        _clearMessages();
+        var presentationVal = _getPresentationForUpdate();
 
-        //show loading spinner
-        factory.loadingPresentation = true;
-        factory.savingPresentation = true;
-
-        presentation.update(presentationVal.id, presentationVal)
+        return presentation.update(presentationVal.id, presentationVal)
           .then(function (resp) {
             presentationTracker('Presentation Updated', resp.item.id, resp.item.name);
 
             _setPresentation(resp.item, true);
 
-            deferred.resolve(resp.item.id);
+            return $q.resolve(resp.item.id);
+          });
+      };
+
+      factory.isUnsaved = function () {
+        return !!(factory.hasUnsavedChanges || brandingFactory.hasUnsavedChanges);
+      };
+
+      factory.save = function () {
+        var deferred = $q.defer(),
+          saveFunction;
+
+        if (factory.presentation.id) {
+          saveFunction = factory.updatePresentation;
+        } else {
+          saveFunction = factory.addPresentation;
+        }
+
+        _clearMessages();
+
+        //show spinner
+        factory.loadingPresentation = true;
+        factory.savingPresentation = true;
+
+        $q.all([brandingFactory.saveBranding(), saveFunction()])
+          .then(function () {
+            deferred.resolve();
           })
           .then(null, function (e) {
-            _showErrorMessage('update', e);
+            // If adding, and there is a Presentation Id it means save was successful
+            // and the failure was to update Branding
+            _showErrorMessage(factory.presentation.id ? 'update' : 'add', e);
 
             deferred.reject(e);
           })
@@ -172,13 +182,6 @@ angular.module('risevision.template-editor.services')
         return deferred.promise;
       };
 
-      factory.save = function () {
-        if (factory.presentation.id) {
-          return factory.updatePresentation();
-        } else {
-          return factory.addPresentation();
-        }
-      };
 
       factory.getPresentation = function (presentationId) {
         var deferred = $q.defer();

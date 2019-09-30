@@ -67,7 +67,8 @@ describe('service: templateEditorFactory:', function() {
 
     $provide.factory('brandingFactory', function() {
       return {
-        publishBranding: sandbox.stub()
+        publishBranding: sandbox.stub(),
+        saveBranding: sandbox.stub()
       };
     });
 
@@ -130,12 +131,12 @@ describe('service: templateEditorFactory:', function() {
   });
 
   it('should initialize', function() {
-    expect(templateEditorFactory).to.be.truely;
+    expect(templateEditorFactory).to.be.ok;
 
-    expect(templateEditorFactory.presentation).to.be.truely;
+    expect(templateEditorFactory.presentation).to.be.a('object');
     expect(templateEditorFactory.loadingPresentation).to.be.false;
     expect(templateEditorFactory.savingPresentation).to.be.false;
-    expect(templateEditorFactory.apiError).to.not.be.truely;
+    expect(templateEditorFactory.apiError).to.not.be.ok;
 
     expect(templateEditorFactory.getPresentation).to.be.a('function');
     expect(templateEditorFactory.addPresentation).to.be.a('function');
@@ -184,8 +185,33 @@ describe('service: templateEditorFactory:', function() {
     });
   });
 
-  describe('addPresentation:',function(){
-    it('should add the presentation',function(done){
+  describe('isUnsaved: ', function() {
+    it('should return false if neither factory hasUnsavedChanges', function() {
+      expect(templateEditorFactory.isUnsaved()).to.be.false;
+    });
+
+    it('should return true if this factory hasUnsavedChanges', function() {
+      templateEditorFactory.hasUnsavedChanges = true;
+
+      expect(templateEditorFactory.isUnsaved()).to.be.true;
+    });
+
+    it('should return true if branding hasUnsavedChanges', function() {
+      brandingFactory.hasUnsavedChanges = true;
+
+      expect(templateEditorFactory.isUnsaved()).to.be.true;
+    });
+
+    it('should return true if both factories have UnsavedChanges', function() {
+      templateEditorFactory.hasUnsavedChanges = true;
+      brandingFactory.hasUnsavedChanges = true;
+
+      expect(templateEditorFactory.isUnsaved()).to.be.true;
+    });
+  });
+
+  describe('save: ', function() {
+    beforeEach(function() {
       sandbox.stub(presentation, 'add').returns(Q.resolve({
         item: {
           name: 'Test Presentation',
@@ -193,66 +219,6 @@ describe('service: templateEditorFactory:', function() {
         }
       }));
 
-      templateEditorFactory.addFromProduct({ productCode: 'test-id', name: 'Test HTML Template' });
-      expect(templateEditorFactory.presentation.id).to.be.undefined;
-      expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
-      expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
-
-      templateEditorFactory.addPresentation()
-        .then(function() {
-          expect(templateEditorUtils.showMessageWindow).to.not.have.been.called;
-          expect(templateEditorFactory.savingPresentation).to.be.true;
-          expect(templateEditorFactory.loadingPresentation).to.be.true;
-
-          setTimeout(function(){
-            expect($state.go).to.have.been.calledWith('apps.editor.templates.edit');
-            expect(presentation.add.getCall(0).args[0].templateAttributeData).to.equal('{}');
-            expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
-            expect(templateEditorFactory.savingPresentation).to.be.false;
-            expect(templateEditorFactory.loadingPresentation).to.be.false;
-            expect(templateEditorFactory.errorMessage).to.not.be.ok;
-            expect(templateEditorFactory.apiError).to.not.be.ok;
-            expect(presentationTracker).to.have.been.calledWith('Presentation Created', 'presentationId', 'Test Presentation');
-
-            done();
-          },10);
-        })
-        .then(null, function(err) {
-          done(err);
-        })
-        .then(null, done);
-    });
-
-    it('should show an error if fails to add presentation',function(done){
-      sandbox.stub(presentation, 'add').returns(Q.reject({ name: 'Test Presentation' }));
-
-      templateEditorFactory.addPresentation()
-        .then(function(result) {
-          done(result);
-        })
-        .then(null, function(e) {
-          expect(e).to.be.ok;
-          expect(templateEditorFactory.errorMessage).to.be.ok;
-          expect(templateEditorFactory.errorMessage).to.equal('Failed to add Presentation.');
-
-          processErrorCode.should.have.been.calledWith('Presentation', 'add', e);
-          expect(templateEditorFactory.apiError).to.be.ok;
-          expect(templateEditorUtils.showMessageWindow).to.have.been.called;
-
-          setTimeout(function() {
-            expect(templateEditorFactory.loadingPresentation).to.be.false;
-            expect(templateEditorFactory.savingPresentation).to.be.false;
-            expect($state.go).to.not.have.been.called;
-
-            done();
-          }, 10);
-        })
-        .then(null, done);
-    });
-  });
-
-  describe('updatePresentation:',function(){
-    it('should update the presentation',function(done){
       sandbox.stub(presentation, 'update').returns(Q.resolve({
         item: {
           name: 'Test Presentation',
@@ -264,57 +230,223 @@ describe('service: templateEditorFactory:', function() {
       expect(templateEditorFactory.presentation.id).to.be.undefined;
       expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
       expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
+    });
 
-      templateEditorFactory.updatePresentation()
-        .then(function() {
+    it('should wait for both promises to resolve', function(done) {
+      var addTemplateDeferred = Q.defer();
+      var saveBrandingDeferred = Q.defer();
+      presentation.add.returns(addTemplateDeferred.promise);
+      brandingFactory.saveBranding.returns(saveBrandingDeferred.promise);
+
+      templateEditorFactory.save();
+
+      presentation.add.should.have.been.called;
+      brandingFactory.saveBranding.should.have.been.called;
+
+      expect(templateEditorFactory.savingPresentation).to.be.true;
+
+      addTemplateDeferred.resolve({
+        item: {
+          name: 'Test Presentation',
+          id: 'presentationId'
+        }
+      });
+
+      setTimeout(function() {
+        expect(templateEditorFactory.savingPresentation).to.be.true;  
+
+        saveBrandingDeferred.resolve();
+        
+        setTimeout(function() {
+          expect(templateEditorFactory.savingPresentation).to.be.false;  
+
+          done();
+        });
+      });
+    });
+
+    describe('save Template: ', function() {
+      it('should add the presentation if it is new', function(done) {
+        templateEditorFactory.save()
+          .then(function() {
+            presentation.add.should.have.been.called;
+            presentation.update.should.not.have.been.called;
+
+            done();
+          })
+          .then(null, function(err) {
+            done(err);
+          })
+          .then(null, done);
+      });
+
+      it('should update the presentation if it is existing', function(done) {
+        templateEditorFactory.presentation.id = 'presentationId';
+        templateEditorFactory.hasUnsavedChanges = true;
+
+        templateEditorFactory.save()
+          .then(function() {
+            presentation.add.should.not.have.been.called;
+            presentation.update.should.have.been.called;
+
+            done();
+          })
+          .then(null, function(err) {
+            done(err);
+          })
+          .then(null, done);
+      });
+
+      it('should save the presentation', function(done) {
+        templateEditorFactory.save()
+          .then(function() {
+            presentation.add.should.have.been.called;
+
+            setTimeout(function() {
+              expect(templateEditorFactory.savingPresentation).to.be.false;
+              expect(templateEditorFactory.loadingPresentation).to.be.false;
+              expect(templateEditorFactory.errorMessage).to.not.be.ok;
+              expect(templateEditorFactory.apiError).to.not.be.ok;
+
+              done();
+            },10);
+          })
+          .then(null, function(err) {
+            done(err);
+          })
+          .then(null, done);
+
           expect(templateEditorUtils.showMessageWindow).to.not.have.been.called;
           expect(templateEditorFactory.savingPresentation).to.be.true;
           expect(templateEditorFactory.loadingPresentation).to.be.true;
+      });
 
-          setTimeout(function(){
+      it('should show an error if fails to add the presentation', function(done) {
+        presentation.add.returns(Q.reject());
+
+        templateEditorFactory.save()
+          .then(null, function(e) {
+            expect(templateEditorFactory.errorMessage).to.be.ok;
+            expect(templateEditorFactory.apiError).to.be.ok;
+            expect(templateEditorUtils.showMessageWindow).to.have.been.called;
+
+            setTimeout(function() {
+              expect(templateEditorFactory.savingPresentation).to.be.false;
+              expect(templateEditorFactory.loadingPresentation).to.be.false;
+
+              done();
+            }, 10);
+          });
+      });
+
+      it('should show an error if fails to update the presentation', function(done) {
+        templateEditorFactory.presentation.id = 'presentationId';
+        templateEditorFactory.hasUnsavedChanges = true;
+
+        presentation.update.returns(Q.reject());
+
+        templateEditorFactory.save()
+          .then(null, function(e) {
+            expect(templateEditorFactory.errorMessage).to.be.ok;
+            expect(templateEditorFactory.apiError).to.be.ok;
+            expect(templateEditorUtils.showMessageWindow).to.have.been.called;
+
+            setTimeout(function() {
+              expect(templateEditorFactory.savingPresentation).to.be.false;
+              expect(templateEditorFactory.loadingPresentation).to.be.false;
+
+              done();
+            }, 10);
+          });
+      });
+
+    });
+
+    describe('addPresentation:',function(){
+      it('should add the presentation',function(done){
+        templateEditorFactory.addPresentation()
+          .then(function() {
+            expect($state.go).to.have.been.calledWith('apps.editor.templates.edit');
+            expect(presentation.add.getCall(0).args[0].templateAttributeData).to.equal('{}');
+            expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
+            expect(presentationTracker).to.have.been.calledWith('Presentation Created', 'presentationId', 'Test Presentation');
+
+            done();
+          })
+          .then(null, function(err) {
+            done(err);
+          })
+          .then(null, done);
+      });
+
+    });
+
+    describe('updatePresentation:',function(){
+      it('should not update the presentation if it does not have unsaved changes',function(){
+        templateEditorFactory.updatePresentation();
+        
+        presentation.update.should.not.have.been.called;
+      });
+
+      it('should still resolve it does not have unsaved changes',function(done){
+        templateEditorFactory.updatePresentation().then(function() {
+          presentation.update.should.not.have.been.called;
+
+          done();
+        });      
+      });
+
+      it('should update the presentation if it has unsaved changes',function(){
+        templateEditorFactory.hasUnsavedChanges = true;
+        templateEditorFactory.updatePresentation();
+        
+        presentation.update.should.have.been.called;
+      });
+
+      it('should update the presentation',function(done){
+        templateEditorFactory.hasUnsavedChanges = true;
+        templateEditorFactory.updatePresentation()
+          .then(function() {
             expect(presentation.update.getCall(0).args[1].templateAttributeData).to.equal('{}');
             expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
-            expect(templateEditorFactory.savingPresentation).to.be.false;
-            expect(templateEditorFactory.loadingPresentation).to.be.false;
-            expect(templateEditorFactory.errorMessage).to.not.be.ok;
-            expect(templateEditorFactory.apiError).to.not.be.ok;
             expect(presentationTracker).to.have.been.calledWith('Presentation Updated', 'presentationId', 'Test Presentation');
 
             done();
-          },10);
-        })
-        .then(null, function(err) {
-          done(err);
-        })
-        .then(null, done);
+          })
+          .then(null, function(err) {
+            done(err);
+          })
+          .then(null, done);
+      });
+
     });
 
-    it('should show an error if fails to update presentation',function(done){
-      sandbox.stub(presentation, 'update').returns(Q.reject({ name: 'Test Presentation' }));
+    describe('saveBranding: ', function() {
+      it('should save the branding settings', function() {
+        templateEditorFactory.save();
 
-      templateEditorFactory.updatePresentation()
-        .then(function(result) {
-          done(result);
-        })
-        .then(null, function(e) {
-          expect(e).to.be.ok;
-          expect(templateEditorFactory.errorMessage).to.be.ok;
-          expect(templateEditorFactory.errorMessage).to.equal('Failed to update Presentation.');
+        brandingFactory.saveBranding.should.have.been.called;
+      });
 
-          processErrorCode.should.have.been.calledWith('Presentation', 'update', e);
-          expect(templateEditorFactory.apiError).to.be.ok;
-          expect(templateEditorUtils.showMessageWindow).to.have.been.called;
+      it('should show an error if fails to save the branding', function(done) {
+        brandingFactory.saveBranding.returns(Q.reject());
 
-          setTimeout(function() {
-            expect(templateEditorFactory.loadingPresentation).to.be.false;
-            expect(templateEditorFactory.savingPresentation).to.be.false;
-            expect($state.go).to.not.have.been.called;
+        templateEditorFactory.save()
+          .then(null, function(e) {
+            expect(templateEditorFactory.errorMessage).to.be.ok;
+            expect(templateEditorFactory.apiError).to.be.ok;
+            expect(templateEditorUtils.showMessageWindow).to.have.been.called;
 
-            done();
-          }, 10);
-        })
-        .then(null, done);
-    });
+            setTimeout(function() {
+              expect(templateEditorFactory.savingPresentation).to.be.false;
+              expect(templateEditorFactory.loadingPresentation).to.be.false;
+
+              done();
+            }, 10);
+          });
+      });
+    });    
+
   });
 
   describe('getPresentation:', function() {
