@@ -112,11 +112,19 @@
 
     this.getStageEnv = function () {
       return browser.params.login.stageEnv.split('-').join('');
-    }
+    };
 
     this.addStageSuffix = function (name) {
       return name + " - " + this.getStageEnv();
-    }
+    };
+
+    this.getStageEmailAddress = function () {
+      return 'jenkins.rise+'+this.getStageEnv()+'@gmail.com';
+    };
+
+    this.getPassword = function () {
+      return browser.params.login.pass;
+    };
 
     this.searchSubCompany = function (subCompanyName) {
       this.openProfileMenu();

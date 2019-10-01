@@ -43,6 +43,7 @@
     "gulp-usemin": "0.3.28",
     "gulp-util": "^3.0.8",
     "jshint-stylish": "^2.0.1",
+    "mail-listener2-updated": "^0.3.3",
     "rollup": "^1.15.6",
     "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-node-resolve": "^5.0.3",

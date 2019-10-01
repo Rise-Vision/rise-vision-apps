@@ -60,6 +60,20 @@ var SignInPage = function() {
     return incorrectCredentialsError;
   };
 
+  this.customAuthSignIn = function(username,password) {
+    //wait for spinner to go away.
+    helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - Before Custom Sign In');
+
+    this.getUsernameTextBox().clear();
+    this.getUsernameTextBox().sendKeys(username);
+
+    var enter = "\ue007";
+    this.getPasswordTextBox().clear();
+    this.getPasswordTextBox().sendKeys(password + enter);
+    
+    helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - After Custom Sign In');    
+  };
+
   this.getGoogleLogin = function() {
     helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - Get Google Login');
     helper.wait(signInGoogleLink, 'Sign In Google Link', 1000);
