@@ -17,8 +17,10 @@
     var loader = element(by.xpath('//div[@spinner-key="_rv-global-spinner"]'));
 
     var profilePic = element(by.css(".user-profile-dropdown img.profile-pic"));
+    var profileMenu = element(by.css(".user-profile-dropdown .dropdown-menu"));
     var addSubcompanyButton = element(by.css(".dropdown-menu .add-subcompany-menu-button"));
-    var selectSubcompanyButton = element(by.id("select-subcompany-button"));
+    var selectSubcompanyButton = element(by.css(".dropdown-menu #select-subcompany-button"));
+    var changeSubcompanyButton = element(by.css(".dropdown-menu #change-subcompany-button"));
     var companySettingsButton = element(by.css(".dropdown-menu .company-settings-menu-button"));
 
     var addSubcompanyModal = element(by.css(".add-subcompany-modal"));
@@ -39,7 +41,7 @@
     var safeDeleteModalInput = element(by.id("safeDeleteInput"));
     var safeDeleteModalDeleteForeverButton = element(by.css("#deleteForeverButton.btn-primary"));
 
-    var subcompanyAlert = element(by.css(".common-header-alert.sub-company-alert"));
+    var subcompanyAlert = element(by.css(".common-header-alert.sub-company-alert.hidden-xs"));
 
     var signOutButton = element(by.css(".dropdown-menu .sign-out-button"));
     var signOutModal = element(by.css(".sign-out-modal"));
@@ -48,6 +50,26 @@
 
     var alertSettingsButton = element(by.css(".alert-settings-button"));
     var turnOnAlertsButton = element(by.id("alertsToggleButton"));
+
+    this.openProfileMenu = function () {
+      //wait for spinner to go away.
+      helper.waitDisappear(loader, 'CH spinner loader');
+
+      helper.wait(profilePic, 'Profile Picture');
+      helper.clickWhenClickable(profilePic, 'Profile Picture');
+
+      helper.wait(profileMenu, 'Profile Menu');
+    };
+
+    this.clickSubcompanyButton = function() {
+      selectSubcompanyButton.isDisplayed().then(function(value) {
+        if (value) {
+          helper.clickWhenClickable(selectSubcompanyButton, 'Select Sub Company Button');
+        } else {
+          helper.clickWhenClickable(changeSubcompanyButton, 'Change Sub Company Button');
+        }
+      });
+    };
 
     this.signin = function (username, password) {
       //wait for spinner to go away.
@@ -73,12 +95,13 @@
     };
 
     this.signOut = function() {
+      var _this = this;
       helper.waitDisappear(loader, 'CH spinner loader');
 
       profilePic.isDisplayed().then(function(value) {
         if (value) {
-          helper.wait(profilePic, 'Profile Picture');
-          helper.clickWhenClickable(profilePic, 'Profile Picture');
+          _this.openProfileMenu();
+
           helper.clickWhenClickable(signOutButton, 'Sign Out Button');
           helper.wait(signOutModal, 'Sign Out Modal');
           signOutRvOnlyButton.click();
@@ -87,41 +110,39 @@
       });
     };
 
-    function _getStageEnv() {
+    this.getStageEnv = function () {
       return browser.params.login.stageEnv.split('-').join('');
     }
 
-    function _addStageSuffix(name) {
-      return name + " - " + _getStageEnv();
+    this.addStageSuffix = function (name) {
+      return name + " - " + this.getStageEnv();
     }
 
-    function _searchSubCompany(subCompanyName) {
-      helper.wait(profilePic, 'Profile Picture');
-      helper.clickWhenClickable(profilePic, 'Profile Picture');
-      helper.wait(selectSubcompanyButton, 'Select Sub Company Button');
-      helper.clickWhenClickable(selectSubcompanyButton, 'Select Sub Company Button');
+    this.searchSubCompany = function (subCompanyName) {
+      this.openProfileMenu();
+
+      this.clickSubcompanyButton();
       helper.wait(selectSubcompanyModal, "Select Subcompany Modal");
       helper.waitDisappear(selectSubcompanyModalLoader, "Load Companies");
 
       if (subCompanyName) {
-        selectSubcompanyModalFilter.sendKeys(_addStageSuffix(subCompanyName).split('-').join(''));
+        selectSubcompanyModalFilter.sendKeys(this.addStageSuffix(subCompanyName).split('-').join(''));
         helper.wait(selectSubcompanyModalLoader, "Load Companies");
         helper.waitDisappear(selectSubcompanyModalLoader, "Load Companies");
       }
     }
 
-    this.getStageEnv = _getStageEnv;
-
     this.createSubCompany = function(name, industryValue = 'OTHER') {
+      console.log('Creating Subcompany');
+
       this.deleteSubCompanyIfExists(name);
 
-      helper.wait(profilePic, 'Profile Picture');
-      helper.clickWhenClickable(profilePic, 'Profile Picture');
-      helper.wait(addSubcompanyButton, 'Add Sub Company Button');
+      this.openProfileMenu();
+
       helper.clickWhenClickable(addSubcompanyButton, 'Add Sub Company Button');
       helper.wait(addSubcompanyModal, "Add Subcompany Modal");
 
-      addSubcompanyModalNameField.sendKeys(_addStageSuffix(name));
+      addSubcompanyModalNameField.sendKeys(this.addStageSuffix(name));
       if (industryValue) {
         addSubcompanyModalIndustryField.$('[value="'+industryValue+'"]').click(); 
       }
@@ -131,7 +152,8 @@
 
     this.selectSubCompany = function(subCompanyName, avoidRetry) {
       var service = this;
-      _searchSubCompany(subCompanyName);
+
+      this.searchSubCompany(subCompanyName);
 
       selectSubcompanyModalCompanies.count().then(function(count) {
         if (count > 0) {
@@ -151,25 +173,27 @@
 
     this.deleteSubCompanyIfExists = function(subCompanyName) {
       var service = this;
-      _searchSubCompany(subCompanyName);
+      this.searchSubCompany(subCompanyName);
 
       selectSubcompanyModalCompanies.count().then(function(count) {
         if (count > 0) {
+          console.log('Found matching Subcompany, deleting');
+
           helper.clickWhenClickable(selectSubcompanyModalCompanies.get(0), "First matching Subcompany");
           helper.wait(subcompanyAlert, "Subcompany Alert");
           service.deleteCurrentCompany();
         }
         else {
+          console.log('Matching Subcompany not found');
+
           helper.clickWhenClickable(selectSubcompanyModalCloseButton, "Subcompany Modal Close Button");
         }
       });
     };
 
     this.deleteCurrentCompany = function() {
-      helper.wait(profilePic, 'Profile Picture');
-      helper.clickWhenClickable(profilePic, 'Profile Picture');
+      this.openProfileMenu();
 
-      helper.wait(companySettingsButton, 'Company Settings Button');
       helper.clickWhenClickable(companySettingsButton, 'Company Settings Button');
 
       helper.wait(companySettingsModal, "Company Settings Modal");
@@ -189,9 +213,9 @@
     };
 
     this.deleteAllSubCompanies = function() {
-      helper.waitDisappear(loader, 'CH spinner loader');
-      helper.clickWhenClickable(profilePic, 'Profile Picture');
-      helper.clickWhenClickable(selectSubcompanyButton, 'Select Sub Company Button');
+      this.openProfileMenu();
+
+      this.clickSubcompanyButton();
       helper.wait(selectSubcompanyModal, "Select Subcompany Modal");
       helper.waitDisappear(selectSubcompanyModalLoader, "Load Companies");
       selectSubcompanyModalCompanies.count().then(function(count) {
@@ -209,10 +233,8 @@
     };
 
     this.selectAlerts = function() {
-      helper.wait(profilePic, 'Profile Picture');
-      helper.clickWhenClickable(profilePic, 'Profile Picture');
+      this.openProfileMenu();
 
-      helper.wait(alertSettingsButton, "Alert settings button");
       helper.clickWhenClickable(alertSettingsButton, "Alert settings button");
       helper.wait(turnOnAlertsButton, "Turn on alerts button");
     };
@@ -239,6 +261,10 @@
 
     this.getProfilePic = function () {
       return profilePic;
+    };
+
+    this.getProfileMenu = function () {
+      return profileMenu
     };
 
     this.getSignOutButton = function() {

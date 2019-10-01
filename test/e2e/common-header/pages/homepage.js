@@ -17,11 +17,11 @@
     var companyUsersButton = element(by.css(".dropdown-menu .company-users-menu-button"));
     var companySettingsButton = element(by.css(".dropdown-menu .company-settings-menu-button"));
     var addSubcompanyButton = element(by.css(".dropdown-menu .add-subcompany-menu-button"));
-    var selectSubcompanyButton = element(by.id("select-subcompany-button"));
-    var changeSubcompanyButton = element(by.id("change-subcompany-button"));
-    var resetSubcompanyButton = element(by.id("reset-subcompany-button"));
+    var selectSubcompanyButton = element(by.css(".dropdown-menu #select-subcompany-button"));
+    var changeSubcompanyButton = element(by.css(".dropdown-menu #change-subcompany-button"));
+    var resetSubcompanyButton = element(by.css(".dropdown-menu #reset-subcompany-button"));
     
-    var subcompanyAlert = element(by.css(".common-header-alert.sub-company-alert"));
+    var subcompanyAlert = element(by.css(".common-header-alert.sub-company-alert.hidden-xs"));
     var testCompanyAlert = element(by.css(".sub-company-alert.test-company-alert"));
 
     var alertSettingsButton = element(by.css(".alert-settings-button"));

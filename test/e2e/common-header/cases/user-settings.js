@@ -24,9 +24,8 @@
         userSettingsModalPage = new UserSettingsModalPage();
         signInPage = new SignInPage();
 
-
         homepage.get();
-        signInPage.signIn(browser.params.login.user1, browser.params.login.pass1);
+        signInPage.signIn();
       });
 
       it("should show user settings modal", function() {
@@ -39,67 +38,22 @@
         homepage.getUserSettingsButton().click();
         
         helper.wait(userSettingsModalPage.getUserSettingsModal(), "User Settings Modal");
+        helper.waitDisappear(userSettingsModalPage.getLoader(), "User Settings Loader");
 
         expect(userSettingsModalPage.getUserSettingsModal().isDisplayed()).to.eventually.be.true;
       });
       
-      it("should update settings", function() {
-        userSettingsModalPage.getFirstNameField().clear();
-        userSettingsModalPage.getFirstNameField().sendKeys("John");
-
-        userSettingsModalPage.getLastNameField().clear();
-        userSettingsModalPage.getLastNameField().sendKeys("Doe");
-
-        userSettingsModalPage.getPhoneField().clear();
-        userSettingsModalPage.getPhoneField().sendKeys("000-000-0000");
-
-        userSettingsModalPage.getEmailField().clear();
-        userSettingsModalPage.getEmailField().sendKeys("testmail@testmail.com");
-
-        if ( !userSettingsModalPage.getCeCheckbox().isSelected() )
-        {
-           userSettingsModalPage.getCeCheckbox().click();
-        }
-
-        if ( userSettingsModalPage.getCpCheckbox().isSelected() )
-        {
-           userSettingsModalPage.getCpCheckbox().click();
-        }
-
-        if ( !userSettingsModalPage.getDaCheckbox().isSelected() )
-        {
-           userSettingsModalPage.getDaCheckbox().click();
-        }
-
-        //click save button
-        userSettingsModalPage.getSaveButton().click();
-        
-        helper.waitRemoved(userSettingsModalPage.getUserSettingsModal(), "User Settings Modal");
-        
-      });
-      
-      it("should show updated information", function() {
-        commonHeaderPage.getProfilePic().click();
-        homepage.getUserSettingsButton().click();
-        
-        helper.wait(userSettingsModalPage.getUserSettingsModal(), "User Settings Modal");
-
-        expect(userSettingsModalPage.getFirstNameField().getAttribute('value')).to.eventually.equal("John");
-        expect(userSettingsModalPage.getLastNameField().getAttribute('value')).to.eventually.equal("Doe");
-        expect(userSettingsModalPage.getEmailField().getAttribute('value')).to.eventually.equal("testmail@testmail.com");
+      it("should show user information", function() {
+        expect(userSettingsModalPage.getFirstNameField().getAttribute('value')).to.eventually.equal("Jenkins");
+        expect(userSettingsModalPage.getLastNameField().getAttribute('value')).to.eventually.equal("Rise");
+        expect(userSettingsModalPage.getEmailField().getAttribute('value')).to.eventually.equal("jenkins@risevision.com");
         expect(userSettingsModalPage.getPhoneField().getAttribute('value')).to.eventually.equal("000-000-0000");
 
         expect(userSettingsModalPage.getCeCheckbox().isSelected()).to.eventually.be.true;
-        expect(userSettingsModalPage.getCpCheckbox().isSelected()).to.eventually.be.false;
+        expect(userSettingsModalPage.getCpCheckbox().isSelected()).to.eventually.be.true;
         expect(userSettingsModalPage.getDaCheckbox().isSelected()).to.eventually.be.true;
       });
 
-      // username should be shown here instead of email
-      // however that's not an editable field
-      xit("should immediately update fixes", function () {
-        expect(element(
-          by.css("span.username")).getText()).to.eventually.equal("testmail@testmail.com");
-      });
     });
 
   };

@@ -17,6 +17,9 @@
   var CompanySubcompaniesScenarios = function() {
 
     describe("Subcompanies", function() {
+      var subCompanyName = 'E2E TEST SUBCOMPANY - SUBCOMPANIES - parent';
+      var subSubCompanyName = 'E2E TEST SUBCOMPANY - SUBCOMPANIES - sub';
+
       var commonHeaderPage, 
         homepage,
         addSubcompanyModalPage,
@@ -39,7 +42,7 @@
         signInPage = new SignInPage();
 
         homepage.get();
-        signInPage.signIn(browser.params.login.user1, browser.params.login.pass1);
+        signInPage.signIn();
       });
       
       describe("Add subcompany", function () {
@@ -51,51 +54,14 @@
           });  
         });
         
-        it("Opens Add Subcompany dialog", function () {
-          commonHeaderPage.getProfilePic().click();
-          
-          expect(homepage.getAddSubcompanyButton().isDisplayed()).to.eventually.be.true;
-          homepage.getAddSubcompanyButton().click();
-
-          helper.wait(addSubcompanyModalPage.getAddSubcompanyModal(), "Add Subcompany Modal");
-
-          expect(addSubcompanyModalPage.getAddSubcompanyModal().isDisplayed()).to.eventually.be.true;
-        });
-        
         it("Add new company", function() {
-          addSubcompanyModalPage.getNameField().sendKeys("e2e test sub-company");
-          addSubcompanyModalPage.getIndustryOption().click(); 
-          addSubcompanyModalPage.getSaveButton().click();
-          
-          helper.waitRemoved(addSubcompanyModalPage.getAddSubcompanyModal(), "Sub-Company modal should hide");
+          commonHeaderPage.createSubCompany(subCompanyName);
         });
       });
 
       describe("Select Subcompany", function () {
-        it("Opens select subcompany dialog", function (done) {
-          commonHeaderPage.getProfilePic().click();
-
-          expect(homepage.getSelectSubcompanyButton().isDisplayed()).to.eventually.be.true;
-          homepage.getSelectSubcompanyButton().click();
-          
-          helper.wait(selectSubcompanyModalPage.getSelectSubcompanyModal(), "Select Subcompany Modal");
-
-          expect(selectSubcompanyModalPage.getSelectSubcompanyModal().isDisplayed()).to.eventually.be.true;
-            
-          helper.waitDisappear(selectSubcompanyModalPage.getLoader(), "Load Companies");
-
-          selectSubcompanyModalPage.getCompanies().count().then(function(count) {
-            subCompanyCount = count;
-            
-            done();            
-          });
-        });
-        
         it("Switches to subcompany", function (done) {
-          // assume first Company
-          selectSubcompanyModalPage.getCompanies().get(0).click();
-          
-          helper.wait(homepage.getSubcompanyAlert(), "Subcompany Alert");
+          commonHeaderPage.selectSubCompany(subCompanyName);
 
           expect(homepage.getSubcompanyAlert().isDisplayed()).to.eventually.be.true;
           expect(browser.getCurrentUrl()).to.eventually.not.equal(companyUrl);
@@ -140,33 +106,15 @@
         var subCompanyClaimId;
         
         it("Add another sub company", function() {
-          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-
-          commonHeaderPage.getProfilePic().click();
-          homepage.getAddSubcompanyButton().click();
-
-          helper.wait(addSubcompanyModalPage.getAddSubcompanyModal(), "Add Subcompany Modal");
-
-          addSubcompanyModalPage.getNameField().sendKeys("e2e test sub-sub-company");
-          addSubcompanyModalPage.getIndustryOption().click(); 
-          addSubcompanyModalPage.getSaveButton().click();
-          
-          helper.waitRemoved(addSubcompanyModalPage.getAddSubcompanyModal(), "Sub-Company modal should hide");
+          commonHeaderPage.createSubCompany(subSubCompanyName);
         });
         
         it("Switch to sub-sub-company", function() {
-          commonHeaderPage.getProfilePic().click();
-          homepage.getChangeSubcompanyButton().click();
-          
-          helper.wait(selectSubcompanyModalPage.getSelectSubcompanyModal(), "Select Subcompany Modal");
-          helper.waitDisappear(selectSubcompanyModalPage.getLoader(), "Load Companies");
+          browser.get(companyUrl);
 
-          // assume first
-          selectSubcompanyModalPage.getCompanies().get(0).click();
-          
-          helper.waitForElementTextToChange(homepage.getSubcompanyAlert(), 
-            "You're in Sub-Company e2e test sub-sub-company  Switch to My Company",
-            "Subcompany Alert");          
+          commonHeaderPage.selectSubCompany(subSubCompanyName);
+
+          expect(homepage.getSubcompanyAlert().getText()).to.eventually.contain(commonHeaderPage.addStageSuffix(subSubCompanyName));
         });
           
         it("Get Company Auth Key", function(done) {
@@ -257,14 +205,9 @@
         });
 
         it("Verify there are 2 sub-companies", function() {
-          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-          commonHeaderPage.getProfilePic().click();
-          homepage.getSelectSubcompanyButton().click();
-          
-          helper.wait(selectSubcompanyModalPage.getSelectSubcompanyModal(), "Select Subcompany Modal");
-          helper.waitDisappear(selectSubcompanyModalPage.getLoader(), "Load Companies");
+          commonHeaderPage.searchSubCompany("E2E TEST SUBCOMPANY - SUBCOMPANIES");
 
-          expect(selectSubcompanyModalPage.getCompanies().count()).to.eventually.equal(subCompanyCount + 1);
+          expect(selectSubcompanyModalPage.getCompanies().count()).to.eventually.equal(2);
         });
 
         it("Close sub-company modal dialog", function() {
@@ -274,21 +217,15 @@
       });
       
       describe("Delete Company", function () {
-        it("Switch to sub-company", function() {
-          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-          commonHeaderPage.getProfilePic().click();
-          homepage.getSelectSubcompanyButton().click();
-          
-          helper.wait(selectSubcompanyModalPage.getSelectSubcompanyModal(), "Select Subcompany Modal");
-          helper.waitDisappear(selectSubcompanyModalPage.getLoader(), "Load Companies");
+        before(function() {
+          homepage.get();
+        });
 
-          // pick first
-          selectSubcompanyModalPage.getCompanies().get(0).click();
+        it("Switch to sub-company", function() {
+          commonHeaderPage.selectSubCompany(subCompanyName);
         });
         
         it("Opens Company Settings Dialog", function() {
-          helper.wait(homepage.getSubcompanyAlert(), "Subcompany Alert");
-
           helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
           commonHeaderPage.getProfilePic().click();
@@ -301,7 +238,7 @@
             
           helper.waitDisappear(companySettingsModalPage.getLoader(), "Load Company Settings");
           
-          expect(companySettingsModalPage.getNameField().getAttribute('value')).to.eventually.equal("e2e test sub-company");
+          expect(companySettingsModalPage.getNameField().getAttribute('value')).to.eventually.equal(commonHeaderPage.addStageSuffix(subCompanyName));
         });
 
         it("Should open safe delete dialog",function(){
@@ -331,37 +268,22 @@
         });
       });
 
-      after("Clean up remaining companies", function() {
-        for (var i = 0; i < subCompanyCount - 1; i++) {
-          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-          commonHeaderPage.getProfilePic().click();
-          homepage.getSelectSubcompanyButton().click();
-          
-          helper.wait(selectSubcompanyModalPage.getSelectSubcompanyModal(), "Select Subcompany Modal");
-          helper.waitDisappear(selectSubcompanyModalPage.getLoader(), "Load Companies");
-      
-          // pick first
-          selectSubcompanyModalPage.getCompanies().get(0).click();
-          
-          helper.wait(homepage.getSubcompanyAlert(), "Subcompany Alert");
-      
+      describe("Clean up other subcompany", function() {
+        before(function() {
+          homepage.get();
+        });
 
-          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-          commonHeaderPage.getProfilePic().click();
-          homepage.getCompanySettingsButton().click();        
-          
-          helper.wait(companySettingsModalPage.getCompanySettingsModal(), "Comapny Settings Modal");
-          helper.waitDisappear(companySettingsModalPage.getLoader(), "Load Company Settings");
-          
-          companySettingsModalPage.getDeleteButton().click();
-      
-          // confirm delete
-          helper.wait(safeDeleteModalPage.getSafeDeleteModal(), "Safe Delete Modal");
-          safeDeleteModalPage.getSafeDeleteInput().sendKeys('DELETE');
-          safeDeleteModalPage.getDeleteForeverButton().click();
+        it("Switch to sub-company and delete it", function() {
+          commonHeaderPage.selectSubCompany(subSubCompanyName);
 
-          helper.waitDisappear(homepage.getSubcompanyAlert(), "Subcompany Alert");
-        }
+          expect(homepage.getSubcompanyAlert().getText()).to.eventually.contain(commonHeaderPage.addStageSuffix(subSubCompanyName));
+
+          commonHeaderPage.deleteCurrentCompany();
+        });
+        
+        it("Should return to parent company", function() {
+          expect(homepage.getSubcompanyAlert().isDisplayed()).to.eventually.be.false;
+        });
       });
 
     });

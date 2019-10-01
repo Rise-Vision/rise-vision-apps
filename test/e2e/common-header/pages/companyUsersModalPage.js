@@ -2,6 +2,7 @@
 (function(module) {
   'use strict';
 
+  var expect = require('rv-common-e2e').expect;
   var helper = require("rv-common-e2e").helper;
   var CommonHeaderPage = require("./commonHeaderPage.js");
   var HomePage = require("./homepage.js");
@@ -14,6 +15,8 @@
 
     var companyUsersModal = element(by.css(".company-users-modal"));
     var loader = element(by.xpath('//div[@spinner-key="company-users-list"]'));
+
+    var usersModalFilter = element(by.css('.company-users-modal input[ng-model="search.query"]'));
 
     var usersList = element.all(by.css(".company-users-list-item"));
     var users = element.all(by.css(".company-users-list-item .list-group-item-text"));
@@ -49,6 +52,43 @@
       helper.wait(userSettingsModalPage.getUserSettingsModal(), "User Settings Modal");
     };
 
+    this.searchUser = function(username) {
+      this.getUsersModalFilter().clear();
+      this.getUsersModalFilter().sendKeys(username);
+      helper.wait(this.getLoader(), "Load Company Users");
+      helper.waitDisappear(this.getLoader(), "Company Users Loaded");
+    };
+
+    this.deleteUserIfExists = function(username) {
+      var _this = this;
+      this.openCompanyUsersModal();
+      this.searchUser(username);
+
+      users.count().then(function(count) {
+        if (count > 0) {
+          console.log('Found matching User, deleting');
+
+          helper.clickWhenClickable(users.get(0), "First matching User");
+
+          helper.wait(userSettingsModalPage.getUserSettingsModal(), "User Settings Modal");
+          helper.waitDisappear(userSettingsModalPage.getLoader(), "User Settings Modal Loader");
+
+          expect(userSettingsModalPage.getUsernameLabel().getText()).to.eventually.equal(username);
+
+          userSettingsModalPage.getDeleteButton().click();
+          
+          browser.switchTo().alert().accept();  // Use to accept (simulate clicking ok)
+          
+          helper.waitDisappear(userSettingsModalPage.getUserSettingsModal(), "User Settings Modal");
+        }
+        else {
+          console.log('Matching User not found');
+        }
+
+        _this.closeCompanyUsersModal();
+      });
+    };
+
     this.getCompanyUsersModal = function() {
       return companyUsersModal;
     };
@@ -57,6 +97,10 @@
       return loader;
     };
     
+    this.getUsersModalFilter = function() {
+      return usersModalFilter;
+    };
+
     this.getUsersList = function() {
       return usersList;
     };

@@ -25,7 +25,7 @@
         signInPage = new SignInPage();
 
         homepage.get();
-        signInPage.signIn(browser.params.login.user1, browser.params.login.pass1);
+        signInPage.signIn();
 
         homepage.getNavMenuOptions().get(1).click();
         helper.waitDisappear(companySettingsModalPage.getLoader(), "Company Settings Modal");
@@ -49,7 +49,7 @@
           helper.waitDisappear(companySettingsModalPage.getLoader(), "Load Company Settings");
           
           expect(companySettingsModalPage.getNameField().getAttribute('value')).to.eventually.be.ok;
-          expect(companySettingsModalPage.getNameField().getAttribute("value")).to.eventually.equal("Public School #5");
+          expect(companySettingsModalPage.getNameField().getAttribute("value")).to.eventually.equal("jenkins@risevision.com's Company");
         });
 
         it("should not navigate back with Backspace/Delete key", function(done) {
@@ -64,10 +64,10 @@
         it("should delete text from input", function() {
           companySettingsModalPage.getNameField().sendKeys(protractor.Key.BACK_SPACE);
           
-          expect(companySettingsModalPage.getNameField().getAttribute('value')).to.eventually.equal('Public School #');
+          expect(companySettingsModalPage.getNameField().getAttribute('value')).to.eventually.equal("jenkins@risevision.com's Compan");
 
           //revert change
-          companySettingsModalPage.getNameField().sendKeys('5')
+          companySettingsModalPage.getNameField().sendKeys('y')
         });
 
         it("Resets auth key", function() {
@@ -110,11 +110,12 @@
 
           expect(companySettingsModalPage.getFormError().isDisplayed()).to.eventually.be.true;
           expect(companySettingsModalPage.getFormError().getText()).to.eventually.be.ok;
-          expect(companySettingsModalPage.getFormError().getText()).to.eventually.equal("We couldn't update your address. \"The address value was incomplete.\"");
+          expect(companySettingsModalPage.getFormError().getText()).to.eventually.contain("We couldn't update your address");
         });
 
         it("Saves company with empty address and closes dialog", function () {
           companySettingsModalPage.getStreetField().clear();
+          companySettingsModalPage.getStreetField().sendKeys("515 King St W");
 
           companySettingsModalPage.getSaveButton().click();
           helper.waitDisappear(companySettingsModalPage.getCompanySettingsModal(), "Company Settings Modal");

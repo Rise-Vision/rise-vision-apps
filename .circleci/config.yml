@@ -100,6 +100,12 @@ jobs:
     steps:
       - run_e2e_cases:
           casesfile: "test/e2e/common-header/common-header.cases.js"
+  e2e_registration:
+    working_directory: ~/rise-vision-apps
+    docker: *BUILDIMAGE
+    steps:
+      - run_e2e_cases:
+          casesfile: "test/e2e/common-header/registration.cases.js"
   e2e_editor:
     working_directory: ~/rise-vision-apps
     docker: *BUILDIMAGE
@@ -234,6 +240,9 @@ workflows:
       - e2e_common_header:
           requires:
             - test_build
+      - e2e_registration:
+          requires:
+            - test_build
       - e2e_editor:
           requires:
             - test_build
@@ -258,6 +267,7 @@ workflows:
             - e2e_schedules
             - e2e_common
             - e2e_common_header
+            - e2e_registration
             - e2e_editor
             - e2e_displays
             - e2e_storage
