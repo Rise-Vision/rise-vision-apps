@@ -43,6 +43,9 @@
 
         homepage.get();
         signInPage.signIn();
+
+        // In case move succeeded and deletion failed
+        commonHeaderPage.deleteSubCompanyIfExists(subSubCompanyName);
       });
       
       describe("Add subcompany", function () {
@@ -55,7 +58,7 @@
         });
         
         it("Add new company", function() {
-          commonHeaderPage.createSubCompany(subCompanyName);
+          commonHeaderPage.createUnsubscribedSubCompany(subCompanyName);
         });
       });
 
@@ -106,7 +109,7 @@
         var subCompanyClaimId;
         
         it("Add another sub company", function() {
-          commonHeaderPage.createSubCompany(subSubCompanyName);
+          commonHeaderPage.createUnsubscribedSubCompany(subSubCompanyName);
         });
         
         it("Switch to sub-sub-company", function() {

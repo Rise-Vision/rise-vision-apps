@@ -4,12 +4,16 @@
   'use strict';
 
   var LoginPage = require('./loginPage.js');
+  var CompanySettingsModalPage = require('./companySettingsModalPage.js');
   var helper = require('rv-common-e2e').helper;
+  var expect = require('rv-common-e2e').expect;
 
   var CommonHeaderPage = function () {
     var selfCommonHeaderPage = this;
 
     var loginPage = new LoginPage();
+    var companySettingsModalPage = new CompanySettingsModalPage();
+
     var commonHeader = element(by.tagName('common-header'));
     var commonHeaderMenuItems = element.all(by.repeater('opt in navOptions'));
     var signInButton = element(by.buttonText('Sign In'));
@@ -95,12 +99,11 @@
     };
 
     this.signOut = function() {
-      var _this = this;
       helper.waitDisappear(loader, 'CH spinner loader');
 
       profilePic.isDisplayed().then(function(value) {
         if (value) {
-          _this.openProfileMenu();
+          selfCommonHeaderPage.openProfileMenu();
 
           helper.clickWhenClickable(signOutButton, 'Sign Out Button');
           helper.wait(signOutModal, 'Sign Out Modal');
@@ -118,7 +121,7 @@
       return name + " - " + this.getStageEnv();
     }
 
-    this.searchSubCompany = function (subCompanyName) {
+    this.searchSubCompany = function (subCompanyName, skipSuffix) {
       this.openProfileMenu();
 
       this.clickSubcompanyButton();
@@ -126,23 +129,21 @@
       helper.waitDisappear(selectSubcompanyModalLoader, "Load Companies");
 
       if (subCompanyName) {
-        selectSubcompanyModalFilter.sendKeys(this.addStageSuffix(subCompanyName).split('-').join(''));
+        var name = skipSuffix ? subCompanyName : this.addStageSuffix(subCompanyName).split('-').join('');
+        selectSubcompanyModalFilter.sendKeys(name);
         helper.wait(selectSubcompanyModalLoader, "Load Companies");
         helper.waitDisappear(selectSubcompanyModalLoader, "Load Companies");
       }
     }
 
-    this.createSubCompany = function(name, industryValue = 'OTHER') {
-      console.log('Creating Subcompany');
+    function _createSubCompany(name, industryValue = 'OTHER') {
 
-      this.deleteSubCompanyIfExists(name);
-
-      this.openProfileMenu();
+      selfCommonHeaderPage.openProfileMenu();
 
       helper.clickWhenClickable(addSubcompanyButton, 'Add Sub Company Button');
       helper.wait(addSubcompanyModal, "Add Subcompany Modal");
 
-      addSubcompanyModalNameField.sendKeys(this.addStageSuffix(name));
+      addSubcompanyModalNameField.sendKeys(selfCommonHeaderPage.addStageSuffix(name));
       if (industryValue) {
         addSubcompanyModalIndustryField.$('[value="'+industryValue+'"]').click(); 
       }
@@ -150,21 +151,41 @@
       helper.waitRemoved(addSubcompanyModal, "Add Subcompany Modal");
     };
 
-    this.selectSubCompany = function(subCompanyName, avoidRetry) {
-      var service = this;
+    this.createUnsubscribedSubCompany = function(name, industryValue) {
+      console.log('Creating Unsubscribed Subcompany');
 
-      this.searchSubCompany(subCompanyName);
+      this.deleteSubCompanyIfExists(name);
+
+      // this.selectSubCompany('Jenkins Unsubscribed Subcompany');
+
+      _createSubCompany(name, industryValue);
+    };
+
+    this.createSubscribedSubCompany = function(name, industryValue) {
+      console.log('Creating Subscribed Subcompany');
+
+      this.deleteSubCompanyIfExists(name);
+      
+      this.selectSubCompany('Jenkins Subscribed Subcompany', false, true);
+
+      _createSubCompany(name, industryValue);
+    };
+
+    this.selectSubCompany = function(subCompanyName, avoidRetry, skipSuffix) {
+      this.searchSubCompany(subCompanyName, skipSuffix);
 
       selectSubcompanyModalCompanies.count().then(function(count) {
         if (count > 0) {
+          var name = skipSuffix ? subCompanyName : selfCommonHeaderPage.addStageSuffix(subCompanyName);
+
           helper.clickWhenClickable(selectSubcompanyModalCompanies.get(0), "First matching Subcompany");
           helper.wait(subcompanyAlert, "Subcompany Alert");
-          helper.waitForElementTextToChange(subcompanyAlert, service.addStageSuffix(subCompanyName), 'Subcompany Selected');
+          helper.waitForElementTextToChange(subcompanyAlert, name, 'Subcompany Selected');
         }
         else if (!avoidRetry) {
           helper.clickWhenClickable(selectSubcompanyModalCloseButton, "Subcompany Modal Close Button");
           browser.sleep(10000);
-          service.selectSubCompany(subCompanyName, true);
+          selfCommonHeaderPage.selectSubCompany(subCompanyName, true, skipSuffix);
         }
         else {
           throw "Could not find the Sub Company: " + subCompanyName;
@@ -173,7 +194,6 @@
     };
 
     this.deleteSubCompanyIfExists = function(subCompanyName) {
-      var service = this;
       this.searchSubCompany(subCompanyName);
 
       selectSubcompanyModalCompanies.count().then(function(count) {
@@ -182,7 +202,7 @@
 
           helper.clickWhenClickable(selectSubcompanyModalCompanies.get(0), "First matching Subcompany");
           helper.wait(subcompanyAlert, "Subcompany Alert");
-          service.deleteCurrentCompany();
+          selfCommonHeaderPage.deleteCurrentCompany(subCompanyName);
         }
         else {
           console.log('Matching Subcompany not found');
@@ -192,13 +212,17 @@
       });
     };
 
-    this.deleteCurrentCompany = function() {
+    this.deleteCurrentCompany = function(companyName) {
       this.openProfileMenu();
 
       helper.clickWhenClickable(companySettingsButton, 'Company Settings Button');
 
       helper.wait(companySettingsModal, "Company Settings Modal");
       helper.waitDisappear(companySettingsModalLoader, "Load Company Settings");
+
+      if (companyName) {
+        expect(companySettingsModalPage.getNameField().getAttribute('value')).to.eventually.contain(companyName);
+      }
 
       helper.wait(companySettingsModalDeleteButton, "Delete Button");
       helper.clickWhenClickable(companySettingsModalDeleteButton, "Delete Button");

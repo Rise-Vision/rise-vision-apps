@@ -66,8 +66,8 @@
         userSettingsModalPage.getLastNameField().sendKeys("test");
         userSettingsModalPage.getPhoneField().sendKeys("000-000-0000");
 
-       userSettingsModalPage.getCeCheckbox().click();
-       userSettingsModalPage.getDaCheckbox().click();
+        userSettingsModalPage.getCeCheckbox().click();
+        userSettingsModalPage.getDaCheckbox().click();
 
         userSettingsModalPage.getEmailField().sendKeys(initialUsername);
         userSettingsModalPage.getSaveButton().click();

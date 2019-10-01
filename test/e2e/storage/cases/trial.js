@@ -42,7 +42,7 @@ var StorageTrialScenarios = function() {
         homepage.getStorage();
         signInPage.signIn();
         var subCompanyName = 'E2E TEST SUBCOMPANY - STORAGE TRIAL';
-        commonHeaderPage.createSubCompany(subCompanyName);
+        commonHeaderPage.createUnsubscribedSubCompany(subCompanyName);
         commonHeaderPage.selectSubCompany(subCompanyName);   
       });
 
