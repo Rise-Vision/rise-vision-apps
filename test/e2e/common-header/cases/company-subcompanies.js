@@ -110,8 +110,6 @@
         });
         
         it("Switch to sub-sub-company", function() {
-          browser.get(companyUrl);
-
           commonHeaderPage.selectSubCompany(subSubCompanyName);
 
           expect(homepage.getSubcompanyAlert().getText()).to.eventually.contain(commonHeaderPage.addStageSuffix(subSubCompanyName));
