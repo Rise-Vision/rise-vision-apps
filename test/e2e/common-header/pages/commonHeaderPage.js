@@ -159,6 +159,7 @@
         if (count > 0) {
           helper.clickWhenClickable(selectSubcompanyModalCompanies.get(0), "First matching Subcompany");
           helper.wait(subcompanyAlert, "Subcompany Alert");
+          helper.waitForElementTextToChange(subcompanyAlert, service.addStageSuffix(subCompanyName), 'Subcompany Selected');
         }
         else if (!avoidRetry) {
           helper.clickWhenClickable(selectSubcompanyModalCloseButton, "Subcompany Modal Close Button");
