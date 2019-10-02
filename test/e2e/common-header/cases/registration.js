@@ -10,8 +10,7 @@
   var RegistrationModalPage = require('./../pages/registrationModalPage.js');
   var SignInPage = require('./../../launcher/pages/signInPage.js');
   var SignUpPage = require('./../../launcher/pages/signUpPage.js');
-
-  var MailListener = require("mail-listener2-updated");
+  var MailListener = require('./../utils/mailListener.js');
 
   var RegistrationScenarios = function() {
 
@@ -25,27 +24,7 @@
         signUpPage,
         mailListener,
         confirmationLink;
-
-
-      function getLastEmail() {
-        var deferred = protractor.promise.defer();
-        console.log("Waiting for an email...");
-
-        mailListener.on("mail", function(mail, seqno, attributes){
-          console.log("Mail received: " + mail.subject);
-
-          mailListener.imap.addFlags(attributes.uid, '\\Seen', function(err) {
-            if (err) {
-              console.log('error marking message read/SEEN');
-            } else {
-              console.log('marked message as SEEN');
-            }
-          });          
-          deferred.fulfill(mail);
-        });
-        return deferred.promise;
-      };
-        
+      
       before(function (){
         commonHeaderPage = new CommonHeaderPage();
         homepage = new HomePage();
@@ -56,23 +35,7 @@
         EMAIL_ADDRESS = commonHeaderPage.getStageEmailAddress();
         PASSWORD = commonHeaderPage.getPassword();
 
-        console.log('Username: '+EMAIL_ADDRESS);
-        mailListener = new MailListener({
-          username: "jenkins.rise@gmail.com",
-          password: PASSWORD, 
-          host: "imap.gmail.com",
-          port: 993,
-          searchFilter: ["UNSEEN",['TO', EMAIL_ADDRESS]],
-          tls: true,
-          fetchUnreadOnStart: true
-        });
-        mailListener.on("server:connected", function(){
-          console.log("Mail listener connected");
-        });
-
-        mailListener.on("server:disconnected", function(){
-          console.log("Mail listener disconnected");
-        });
+        mailListener = new MailListener(EMAIL_ADDRESS,PASSWORD);
         mailListener.start();
 
         signUpPage.get();
@@ -98,7 +61,7 @@
       });
 
       it('should wait for confirmation email', function() {        
-        browser.controlFlow().wait(getLastEmail(), 45000).then(function (email) {
+        browser.controlFlow().wait(mailListener.getLastEmail(), 45000).then(function (email) {
 
           expect(email.subject).to.equal("Confirm account");
 
@@ -178,9 +141,8 @@
       });
 
       after(function(){
-        console.log("Stopping Mail listener");
         mailListener.stop();
-      })
+      });
 
     });
   };

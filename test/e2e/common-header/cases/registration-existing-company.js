@@ -10,6 +10,8 @@
   var CompanyUsersModalPage = require("./../pages/companyUsersModalPage.js");
   var UserSettingsModalPage = require("./../pages/userSettingsModalPage.js");
   var SignInPage = require('./../../launcher/pages/signInPage.js');
+  var SignUpPage = require('./../../launcher/pages/signUpPage.js');
+  var MailListener = require('./../utils/mailListener.js');
 
   var RegistrationExistingCompanyScenarios = function() {
 
@@ -21,6 +23,10 @@
       var companyUsersModalPage;
       var userSettingsModalPage;
       var signInPage;
+      var signUpPage;
+      var EMAIL_ADDRESS;
+      var PASSWORD;
+      var mailListener;
 
       before(function (){
         commonHeaderPage = new CommonHeaderPage();
@@ -29,6 +35,13 @@
         companyUsersModalPage = new CompanyUsersModalPage();
         userSettingsModalPage = new UserSettingsModalPage();
         signInPage = new SignInPage();
+        signUpPage = new SignUpPage();
+
+        EMAIL_ADDRESS = commonHeaderPage.getStageEmailAddress();
+        PASSWORD = commonHeaderPage.getPassword();
+
+        mailListener = new MailListener(EMAIL_ADDRESS,PASSWORD);
+        mailListener.start();
 
         homepage.get();
         signInPage.signIn();
@@ -50,10 +63,10 @@
         });
 
         it("adds a user", function () {
-          userSettingsModalPage.getUsernameField().sendKeys("jenkins1@risevision.com");
-          userSettingsModalPage.getFirstNameField().sendKeys("Jenkins");
-          userSettingsModalPage.getLastNameField().sendKeys("1");
-          userSettingsModalPage.getEmailField().sendKeys("jenkins1@risevision.com");
+          userSettingsModalPage.getUsernameField().sendKeys(EMAIL_ADDRESS);
+          userSettingsModalPage.getFirstNameField().sendKeys("Added");
+          userSettingsModalPage.getLastNameField().sendKeys("User");
+          userSettingsModalPage.getEmailField().sendKeys(EMAIL_ADDRESS);
           // Set as User Administrator so they can delete themselves
           userSettingsModalPage.getUaCheckbox().click();
           userSettingsModalPage.getSaveButton().click();
@@ -61,6 +74,12 @@
           helper.waitDisappear(userSettingsModalPage.getUserSettingsModal(), "User Settings Modal");        
 
           expect(userSettingsModalPage.getUserSettingsModal().isPresent()).to.eventually.be.false;
+        });
+
+        it('should send an email to the added user',function(){
+          browser.controlFlow().wait(mailListener.getLastEmail(), 45000).then(function (email) {
+            expect(email.subject).to.equal("You've been added to a Rise Vision account!");
+          }); 
         });
         
         it("Company Users Dialog Should Close", function () {
@@ -81,25 +100,70 @@
           helper.wait(commonHeaderPage.getSignOutModal(), "Sign Out Modal");
           
           expect(commonHeaderPage.getSignOutModal().isDisplayed()).to.eventually.be.true;
-          commonHeaderPage.getSignOutRvOnlyButton().click();
+          commonHeaderPage.getSignOutGoogleButton().click();
 
           //signed out; google sign-in button shows
           expect(signInPage.getSignInGoogleLink().isDisplayed()).to.eventually.be.true;
+          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
         });
 
       });
 
       describe("New User Logs in and Registers", function() {
-        it("should show T&C Dialog on new Google Account", function() {
-          //sign in, wait for spinner to go away
-          signInPage.signIn(browser.params.login.user1, browser.params.login.pass1);
+        var confirmationLink;
+
+        it('should register user',function(){
+          signUpPage.get();
+          
+          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+
+          signUpPage.getUsernameTextBox().sendKeys(EMAIL_ADDRESS);
+          signUpPage.getPasswordTextBox().sendKeys(PASSWORD);
+          signUpPage.getConfirmPasswordTextBox().sendKeys(PASSWORD);
+
+          signUpPage.getSignupButton().click();
+
+          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+        });
+
+        it('should wait for confirmation email', function() {        
+          browser.controlFlow().wait(mailListener.getLastEmail(), 45000).then(function (email) {
+
+            expect(email.subject).to.equal("Confirm account");
+
+            var pattern = /href="(https:\/\/apps-stage-0\.risevision\.com\/confirmaccount\/.*?)"/g;
+            confirmationLink = pattern.exec(email.html)[1];
+            console.log("Confirmation link: "+confirmationLink);
+
+            expect(confirmationLink).to.contain("https://apps-stage-0.risevision.com/confirmaccount/"+EMAIL_ADDRESS);
+          });        
+        });
+
+        it('should confirm email address',function(){
+          browser.get(confirmationLink);
+          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+
+          expect(signInPage.getUsernameTextBox().isPresent()).to.eventually.be.true;
+          expect(signInPage.getPasswordTextBox().isPresent()).to.eventually.be.true;
+          
+          expect(signInPage.getSigninButton().isPresent()).to.eventually.be.true;
+        });
+
+        it('should sign in user', function() {
+          signInPage.getUsernameTextBox().sendKeys(EMAIL_ADDRESS);
+
+          var enter = "\ue007";
+          signInPage.getPasswordTextBox().clear();
+          signInPage.getPasswordTextBox().sendKeys(PASSWORD + enter);
+        });
+
+        it("should show T&C Dialog on new Account", function() {
+          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
           
           helper.wait(registrationModalPage.getRegistrationModal(), "Registration Modal");
           
           //dialog shows
           expect(registrationModalPage.getRegistrationModal().isPresent()).to.eventually.be.true;
-
-          //fill in email address
         });
 
         it("should show only relevant Registration fields", function() {
@@ -118,8 +182,6 @@
           //click authorize
           registrationModalPage.getTermsCheckbox().click();
           
-          // No need to sign up for newsletter
-          // registrationModalPage.getNewsletterCheckbox().click();
           registrationModalPage.getSaveButton().click();
           
           helper.waitRemoved(registrationModalPage.getRegistrationModal(), "Registration Modal");
@@ -134,14 +196,11 @@
       });
 
       describe("New User Deletes Themselves", function() {
-        before(function() {
-          homepage.get();
-
-          helper.waitDisappear(commonHeaderPage.getLoader(), "CH spinner loader");
-        });
 
         it("Opens User Settings Dialog", function() {
-          commonHeaderPage.getProfilePic().click();
+          helper.waitDisappear(commonHeaderPage.getLoader(), "CH spinner loader");
+
+          commonHeaderPage.openProfileMenu();
 
           expect(homepage.getUserSettingsButton().isDisplayed()).to.eventually.be.true;
           homepage.getUserSettingsButton().click();
@@ -153,7 +212,7 @@
 
         it("deletes a user", function() {
           // Ensure the right User is being deleted
-          expect(userSettingsModalPage.getUsernameLabel().getText()).to.eventually.equal("jenkins1@risevision.com");
+          expect(userSettingsModalPage.getUsernameLabel().getText()).to.eventually.equal(EMAIL_ADDRESS);
 
           userSettingsModalPage.getDeleteButton().click();
           
@@ -162,6 +221,10 @@
           helper.waitDisappear(userSettingsModalPage.getLoader(), "User Settings Modal");
         });
         
+      });
+
+      after(function(){
+        mailListener.stop();
       });
 
     });

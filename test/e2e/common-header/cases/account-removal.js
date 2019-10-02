@@ -33,7 +33,7 @@
       });
 
       it("Deletes company", function() {
-        commonHeaderPage.getProfilePic().click();
+        commonHeaderPage.openProfileMenu();
         homepage.getCompanySettingsButton().click();        
         
         helper.wait(companySettingsModalPage.getCompanySettingsModal(), "Comapny Settings Modal");
