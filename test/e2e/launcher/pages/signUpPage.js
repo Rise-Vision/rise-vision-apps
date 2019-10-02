@@ -107,7 +107,7 @@ var SignUpPage = function() {
   this.getConfirmationLink = function(mailListener) {
     var deferred = protractor.promise.defer();
 
-    browser.controlFlow().wait(mailListener.getLastEmail(), 45000).then(function (email) {
+    mailListener.getLastEmail().then(function (email) {
       var pattern = /href="(https:\/\/apps-stage-0\.risevision\.com\/confirmaccount\/.*?)"/g;
       var confirmationLink = pattern.exec(email.html)[1];
       console.log("Confirmation link: "+confirmationLink);
@@ -119,7 +119,7 @@ var SignUpPage = function() {
 
   this.customAuthSignUp = function(email, password){
     helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-    
+
     this.getUsernameTextBox().sendKeys(email);
     this.getPasswordTextBox().sendKeys(password);
     this.getConfirmPasswordTextBox().sendKeys(password);
