@@ -114,7 +114,7 @@
 
         it('should register user',function(){
           signUpPage.get();
-          
+
           helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
           signUpPage.getUsernameTextBox().sendKeys(EMAIL_ADDRESS);
@@ -122,8 +122,9 @@
           signUpPage.getConfirmPasswordTextBox().sendKeys(PASSWORD);
 
           signUpPage.getSignupButton().click();
-
           helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+
+          expect(signUpPage.getConfirmEmailNotice().isDisplayed()).to.eventually.be.true;
         });
 
         it('should wait for confirmation email', function() {        
@@ -145,24 +146,16 @@
 
           expect(signInPage.getUsernameTextBox().isPresent()).to.eventually.be.true;
           expect(signInPage.getPasswordTextBox().isPresent()).to.eventually.be.true;
-          
           expect(signInPage.getSigninButton().isPresent()).to.eventually.be.true;
+
+          expect(signUpPage.getEmailConfirmedNotice().isDisplayed()).to.eventually.be.true;
         });
 
-        it('should sign in user', function() {
-          signInPage.getUsernameTextBox().sendKeys(EMAIL_ADDRESS);
-
-          var enter = "\ue007";
-          signInPage.getPasswordTextBox().clear();
-          signInPage.getPasswordTextBox().sendKeys(PASSWORD + enter);
-        });
-
-        it("should show T&C Dialog on new Account", function() {
-          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+        it('should sign in user and show T&C Dialog on new Account', function() {
+          signInPage.customAuthSignIn(EMAIL_ADDRESS,PASSWORD);
           
           helper.wait(registrationModalPage.getRegistrationModal(), "Registration Modal");
-          
-          //dialog shows
+
           expect(registrationModalPage.getRegistrationModal().isPresent()).to.eventually.be.true;
         });
 

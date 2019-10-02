@@ -21,6 +21,8 @@ var SignUpPage = function() {
   var passwordStrengthWarning = element(by.cssContainingText('.text-warning', 'strong password'));
   var matchingPasswordsError = element(by.cssContainingText('.text-danger', 'must match'));
   var alreadyRegisteredError = element(by.id('already-registered-warning'));
+  var confirmEmailNotice = element(by.cssContainingText('.panel-body', 'check your inbox to complete your account registration'));
+  var emailConfirmedNotice = element(by.cssContainingText('.panel-body', 'Account successfully confirmed'));
 
   var modalDialog = element(by.css('.modal-dialog'));
   var modalTitle = element(by.css('.modal-title'));
@@ -75,6 +77,14 @@ var SignUpPage = function() {
 
   this.getAlreadyRegisteredError = function() {
     return alreadyRegisteredError;
+  };
+
+  this.getConfirmEmailNotice = function() {
+    return confirmEmailNotice;
+  };
+
+  this.getEmailConfirmedNotice = function() {
+    return emailConfirmedNotice;
   };
 
   this.getModalDialog = function () {

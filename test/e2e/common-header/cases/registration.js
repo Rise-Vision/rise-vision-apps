@@ -58,6 +58,7 @@
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
         expect(signUpPage.getAlreadyRegisteredError().isDisplayed()).to.eventually.be.false;
+        expect(signUpPage.getConfirmEmailNotice().isDisplayed()).to.eventually.be.true;
       });
 
       it('should wait for confirmation email', function() {        
@@ -78,24 +79,17 @@
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
         expect(signInPage.getUsernameTextBox().isPresent()).to.eventually.be.true;
-        expect(signInPage.getPasswordTextBox().isPresent()).to.eventually.be.true;
-        
+        expect(signInPage.getPasswordTextBox().isPresent()).to.eventually.be.true;        
         expect(signInPage.getSigninButton().isPresent()).to.eventually.be.true;
+
+        expect(signUpPage.getEmailConfirmedNotice().isDisplayed()).to.eventually.be.true;
       });
 
-      it('should sign in user', function() {
-        signInPage.getUsernameTextBox().sendKeys(EMAIL_ADDRESS);
-
-        var enter = "\ue007";
-        signInPage.getPasswordTextBox().clear();
-        signInPage.getPasswordTextBox().sendKeys(PASSWORD + enter);
-      });
-      
-      it("should show T&C Dialog on new Google Account", function() {
-        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-        helper.wait(registrationModalPage.getRegistrationModal(), "Registration Modal");
+      it('should sign in user and show T&C Dialog on new Account', function() {
+        signInPage.customAuthSignIn(EMAIL_ADDRESS,PASSWORD);
         
-        //dialog shows
+        helper.wait(registrationModalPage.getRegistrationModal(), "Registration Modal");
+
         expect(registrationModalPage.getRegistrationModal().isPresent()).to.eventually.be.true;
       });
 
