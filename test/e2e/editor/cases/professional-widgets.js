@@ -38,14 +38,6 @@ var ProfessionalWidgetsScenarios = function() {
       signInPage.signIn();
     }
 
-    function createSubCompany() {
-      commonHeaderPage.createSubCompany(subCompanyName);
-    }
-
-    function selectSubCompany() {
-      commonHeaderPage.selectSubCompany(subCompanyName);
-    }
-
     before(function () {
       homepage = new HomePage();
       signInPage = new SignInPage();
@@ -61,8 +53,8 @@ var ProfessionalWidgetsScenarios = function() {
       autoScheduleModalPage = new AutoScheduleModalPage();
 
       loadEditor();
-      createSubCompany();
-      selectSubCompany();
+      commonHeaderPage.createUnsubscribedSubCompany(subCompanyName);
+      commonHeaderPage.selectSubCompany(subCompanyName);
     });
 
     after(function() {

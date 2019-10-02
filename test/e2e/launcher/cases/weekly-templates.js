@@ -39,7 +39,7 @@ var WeeklyTemplatesScenarios = function() {
     it('should show Weekly Templates for Education Customers',function(){
       //creates an Education sub-company
       var subCompanyName = 'E2E TEST EDUCATION SUBCOMPANY';
-      commonHeaderPage.createSubCompany(subCompanyName,'PRIMARY_SECONDARY_EDUCATION');
+      commonHeaderPage.createUnsubscribedSubCompany(subCompanyName,'PRIMARY_SECONDARY_EDUCATION');
       commonHeaderPage.selectSubCompany(subCompanyName);
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       

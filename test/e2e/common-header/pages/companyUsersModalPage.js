@@ -53,6 +53,7 @@
     };
 
     this.searchUser = function(username) {
+      helper.waitDisappear(this.getLoader(), "Company Users Loaded");
       this.getUsersModalFilter().clear();
       this.getUsersModalFilter().sendKeys(username);
       helper.wait(this.getLoader(), "Load Company Users");

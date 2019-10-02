@@ -57,7 +57,7 @@ var FirstSigninScenarios = function() {
         signInPage.signIn();
         _waitFullPageLoad();
 
-        commonHeaderPage.createSubCompany(subCompanyName);
+        commonHeaderPage.createUnsubscribedSubCompany(subCompanyName);
         helper.waitForSpinner();
 
         commonHeaderPage.selectSubCompany(subCompanyName);
