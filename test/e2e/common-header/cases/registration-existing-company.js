@@ -115,47 +115,27 @@
         it('should register user',function(){
           signUpPage.get();
 
-          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-
-          signUpPage.getUsernameTextBox().sendKeys(EMAIL_ADDRESS);
-          signUpPage.getPasswordTextBox().sendKeys(PASSWORD);
-          signUpPage.getConfirmPasswordTextBox().sendKeys(PASSWORD);
-
-          signUpPage.getSignupButton().click();
-          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+          signUpPage.customAuthSignUp(EMAIL_ADDRESS, PASSWORD);
 
           expect(signUpPage.getConfirmEmailNotice().isDisplayed()).to.eventually.be.true;
         });
 
         it('should wait for confirmation email', function() {        
-          browser.controlFlow().wait(mailListener.getLastEmail(), 45000).then(function (email) {
-
-            expect(email.subject).to.equal("Confirm account");
-
-            var pattern = /href="(https:\/\/apps-stage-0\.risevision\.com\/confirmaccount\/.*?)"/g;
-            confirmationLink = pattern.exec(email.html)[1];
-            console.log("Confirmation link: "+confirmationLink);
-
+          browser.controlFlow().wait(signUpPage.getConfirmationLink(mailListener), 45000).then(function(link){
+            confirmationLink = link;
             expect(confirmationLink).to.contain("https://apps-stage-0.risevision.com/confirmaccount/"+EMAIL_ADDRESS);
-          });        
+          });
         });
 
         it('should confirm email address',function(){
           browser.get(confirmationLink);
           helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-
-          expect(signInPage.getUsernameTextBox().isPresent()).to.eventually.be.true;
-          expect(signInPage.getPasswordTextBox().isPresent()).to.eventually.be.true;
-          expect(signInPage.getSigninButton().isPresent()).to.eventually.be.true;
-
           expect(signUpPage.getEmailConfirmedNotice().isDisplayed()).to.eventually.be.true;
         });
 
         it('should sign in user and show T&C Dialog on new Account', function() {
-          signInPage.customAuthSignIn(EMAIL_ADDRESS,PASSWORD);
-          
+          signInPage.customAuthSignIn(EMAIL_ADDRESS,PASSWORD);         
           helper.wait(registrationModalPage.getRegistrationModal(), "Registration Modal");
-
           expect(registrationModalPage.getRegistrationModal().isPresent()).to.eventually.be.true;
         });
 
