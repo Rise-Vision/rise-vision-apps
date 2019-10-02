@@ -7,8 +7,6 @@ var HomePage = require('./../pages/homepage.js');
 var helper = require('rv-common-e2e').helper;
 
 var SigninCustomScenarios = function() {
-  var USERNAME2 = browser.params.login.user2;
-  var PASSWORD2 = browser.params.login.pass2;
 
   browser.driver.manage().window().setSize(1920, 1080);
   describe('Signin Custom', function() {
@@ -41,8 +39,8 @@ var SigninCustomScenarios = function() {
     });
 
     it('should show password strength warning', function() {
-      signUpPage.getUsernameTextBox().sendKeys(USERNAME2);
-      signUpPage.getPasswordTextBox().sendKeys(PASSWORD2);
+      signUpPage.getUsernameTextBox().sendKeys('test@test.com');
+      signUpPage.getPasswordTextBox().sendKeys('password');
 
       expect(signUpPage.getPasswordStrengthWarning().isDisplayed()).to.eventually.be.true;
     });
@@ -55,7 +53,7 @@ var SigninCustomScenarios = function() {
 
       expect(signUpPage.getMatchingPasswordsError().isDisplayed()).to.eventually.be.true;
 
-      signInPage.getPasswordTextBox().clear();
+      signUpPage.getPasswordTextBox().clear();
       signUpPage.getConfirmPasswordTextBox().sendKeys('PASSWORD2');
 
       expect(signUpPage.getMatchingPasswordsError().isDisplayed()).to.eventually.be.false;
@@ -87,7 +85,7 @@ var SigninCustomScenarios = function() {
     });
 
     it('should show incorrect credentials error', function() {
-      signInPage.getUsernameTextBox().sendKeys(USERNAME2);
+      signInPage.getUsernameTextBox().sendKeys('test@test.com');
       signInPage.getPasswordTextBox().sendKeys('incorrectpassword');
 
       signInPage.getSigninButton().click();
@@ -97,35 +95,6 @@ var SigninCustomScenarios = function() {
       expect(signInPage.getIncorrectCredentialsError().isPresent()).to.eventually.be.true;
     });
 
-    it('should sign in user', function() {
-      var enter = "\ue007";
-
-      signInPage.getPasswordTextBox().clear();
-      signInPage.getPasswordTextBox().sendKeys(PASSWORD2 + enter);
-    });
-    
-    it('should go to sign in page',function(){
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-
-      expect(homepage.getAppLauncherContainer().isPresent()).to.eventually.be.true;
-    });
-
-    it('should not sign in the user through google when it is already signed in',function(){
-      homepage.get();
-
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-      expect(homepage.getAppLauncherContainer().isPresent()).to.eventually.be.true;
-    });
-
-    after('should not show sign out modal when signing out user', function() {
-      commonHeaderPage.getProfilePic().click();
-      commonHeaderPage.getSignOutButton().click();
-
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-
-      expect(signInPage.getSignInPageContainer().isPresent()).to.eventually.be.true;
-      expect(signInPage.getSignInCTA().isPresent()).to.eventually.be.true;
-    });
   });
 };
 

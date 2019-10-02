@@ -122,6 +122,18 @@
         expect(commonHeaderPage.getProfilePic().isDisplayed()).to.eventually.be.true;
       });
 
+      it('should not show sign out modal when signing out custom auth user', function() {
+        commonHeaderPage.openProfileMenu();
+        commonHeaderPage.getSignOutButton().click();
+
+        expect(commonHeaderPage.getSignOutModal().isPresent()).to.eventually.be.false;
+
+        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+
+        expect(signInPage.getSignInPageContainer().isPresent()).to.eventually.be.true;
+        expect(signInPage.getSignInCTA().isPresent()).to.eventually.be.true;
+      });
+
       after(function(){
         mailListener.stop();
       });
