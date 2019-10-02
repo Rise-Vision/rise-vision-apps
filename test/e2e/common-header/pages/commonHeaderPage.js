@@ -55,6 +55,8 @@
     var alertSettingsButton = element(by.css(".alert-settings-button"));
     var turnOnAlertsButton = element(by.id("alertsToggleButton"));
 
+    var subscribeNowButton = element(by.cssContainingText('#trial-plan-banner a', 'Subscribe Now'));
+
     this.openProfileMenu = function () {
       //wait for spinner to go away.
       helper.waitDisappear(loader, 'CH spinner loader');
@@ -315,6 +317,10 @@
     this.getSignOutGoogleButton = function() {
       return signOutGoogleButton;
     };
+
+    this.getSubscribeNowButton = function() {
+      return subscribeNowButton;
+    }
   };
 
   module.exports = CommonHeaderPage;

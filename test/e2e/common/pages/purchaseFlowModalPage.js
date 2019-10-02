@@ -45,10 +45,21 @@ var PurchaseFlowModalPage = function() {
   this.purchase = function(useCreditCard) {
     helper.waitForSpinner();
     helper.wait(this.getContinueButton(), 'Purchase flow Billing');
+    this.getStreet().clear();
+    this.getCity().clear();
+    this.getPC().clear();
+    this.getStreet().sendKeys('2967 Dundas St. W #632');
+    this.getCity().sendKeys('Toronto');
+    this.getCountry().sendKeys('Can');
+    this.getProv().sendKeys('O');
+    this.getPC().sendKeys('M6P 1Z2');
     browser.sleep(1000);
     helper.clickWhenClickable(this.getContinueButton(), 'Purchase flow Billing');
     helper.waitDisappear(this.getEmailField(), 'Purchase flow Billing');
     browser.sleep(1000);
+    this.getStreet().clear();
+    this.getCity().clear();
+    this.getPC().clear();
     this.getCompanyNameField().sendKeys('same');
     this.getStreet().sendKeys('2967 Dundas St. W #632');
     this.getCity().sendKeys('Toronto');
