@@ -161,7 +161,7 @@ var FirstSigninScenarios = function() {
       after(function() {
         commonHeaderPage.deleteCurrentCompany();
 
-        commonHeaderPage.signOut();
+        commonHeaderPage.signOut(true);
       });
 
     });

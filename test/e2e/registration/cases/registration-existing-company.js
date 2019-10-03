@@ -90,19 +90,7 @@
         });
 
         it("should log out", function() {
-          commonHeaderPage.getProfilePic().click();
-
-          //shows sign-out menu item
-          expect(commonHeaderPage.getSignOutButton().isDisplayed()).to.eventually.be.true;
-
-          //click sign out
-          commonHeaderPage.getSignOutButton().click();
-          
-          helper.wait(commonHeaderPage.getSignOutModal(), "Sign Out Modal");
-          
-          expect(commonHeaderPage.getSignOutModal().isDisplayed()).to.eventually.be.true;
-          commonHeaderPage.getSignOutGoogleButton().click();
-
+          commonHeaderPage.signOut(true);
           //signed out; google sign-in button shows
           expect(signInPage.getSignInGoogleLink().isDisplayed()).to.eventually.be.true;
           helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
