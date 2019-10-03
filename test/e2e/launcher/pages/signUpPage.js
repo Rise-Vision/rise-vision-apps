@@ -110,6 +110,7 @@ var SignUpPage = function() {
     mailListener.getLastEmail().then(function (email) {
       var pattern = /href="(https:\/\/apps-stage-0\.risevision\.com\/confirmaccount\/.*?)"/g;
       var confirmationLink = pattern.exec(email.html)[1];
+      confirmationLink = confirmationLink.replace('https://apps-stage-0.risevision.com','http://localhost:8099');
       console.log("Confirmation link: "+confirmationLink);
 
       deferred.fulfill(confirmationLink);

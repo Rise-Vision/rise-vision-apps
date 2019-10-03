@@ -123,7 +123,7 @@
         it('should wait for confirmation email', function() {        
           browser.controlFlow().wait(signUpPage.getConfirmationLink(mailListener), 45000).then(function(link){
             confirmationLink = link;
-            expect(confirmationLink).to.contain("https://apps-stage-0.risevision.com/confirmaccount/"+EMAIL_ADDRESS);
+            expect(confirmationLink).to.contain("http://localhost:8099/confirmaccount/"+EMAIL_ADDRESS);
           });
         });
 
@@ -171,8 +171,6 @@
       describe("New User Deletes Themselves", function() {
 
         it("Opens User Settings Dialog", function() {
-          helper.waitDisappear(commonHeaderPage.getLoader(), "CH spinner loader");
-
           commonHeaderPage.openProfileMenu();
 
           expect(homepage.getUserSettingsButton().isDisplayed()).to.eventually.be.true;
