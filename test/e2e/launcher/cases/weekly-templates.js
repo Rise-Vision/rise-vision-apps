@@ -37,11 +37,7 @@ var WeeklyTemplatesScenarios = function() {
     });
 
     it('should show Weekly Templates for Education Customers',function(){
-      //creates an Education sub-company
-      var subCompanyName = 'E2E TEST EDUCATION SUBCOMPANY';
-      commonHeaderPage.createUnsubscribedSubCompany(subCompanyName,'PRIMARY_SECONDARY_EDUCATION');
-      commonHeaderPage.selectSubCompany(subCompanyName);
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+      commonHeaderPage.selectUnsubscribedSubCompany();
       
       browser.sleep(500);
       helper.wait(commonHeaderPage.getCommonHeaderMenuItems().get(1), 'Presentations Common Header Menu Item');
@@ -89,9 +85,6 @@ var WeeklyTemplatesScenarios = function() {
       expect(weeklyTemplatesPage.getSubscribeToPlaybookLink().getAttribute('href')).to.eventually.equal('https://www.risevision.com/weekly-playbook');
     });
 
-    after(function() {
-      commonHeaderPage.deleteCurrentCompany();
-    });
   });
 };
 
