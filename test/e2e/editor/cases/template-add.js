@@ -55,10 +55,6 @@ var TemplateAddScenarios = function() {
       helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader(), 'Store products loader');
     }
 
-    function createSubCompany() {
-      commonHeaderPage.createSubCompany(subCompanyName, 'PRIMARY_SECONDARY_EDUCATION');
-    }
-
     function selectSubCompany() {
       commonHeaderPage.selectSubCompany(subCompanyName);
     }
@@ -76,7 +72,7 @@ var TemplateAddScenarios = function() {
       purchaseFlowModalPage = new PurchaseFlowModalPage();
 
       loadEditor();
-      createSubCompany();
+      commonHeaderPage.createUnsubscribedSubCompany(subCompanyName, 'PRIMARY_SECONDARY_EDUCATION');
       selectSubCompany();
       openContentModal();
     });
