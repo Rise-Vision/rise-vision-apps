@@ -58,7 +58,7 @@
       it('should wait for confirmation email', function() {
         browser.controlFlow().wait(signUpPage.getConfirmationLink(mailListener), 45000).then(function(link){
           confirmationLink = link;
-          expect(confirmationLink).to.contain("https://apps-stage-0.risevision.com/confirmaccount/"+EMAIL_ADDRESS);
+          expect(confirmationLink).to.contain("http://localhost:8099/confirmaccount/"+EMAIL_ADDRESS);
         });             
       });
 
@@ -122,16 +122,15 @@
         expect(commonHeaderPage.getProfilePic().isDisplayed()).to.eventually.be.true;
       });
 
-      it('should not show sign out modal when signing out custom auth user', function() {
+      it("should sign out", function() {
         commonHeaderPage.openProfileMenu();
-        commonHeaderPage.getSignOutButton().click();
 
-        expect(commonHeaderPage.getSignOutModal().isPresent()).to.eventually.be.false;
+        expect(commonHeaderPage.getSignOutButton().isDisplayed()).to.eventually.be.true;
 
+        commonHeaderPage.getSignOutButton().click();       
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
-        expect(signInPage.getSignInPageContainer().isPresent()).to.eventually.be.true;
-        expect(signInPage.getSignInCTA().isPresent()).to.eventually.be.true;
+        expect(signInPage.getSignInGoogleLink().isDisplayed()).to.eventually.be.true;
       });
 
       after(function(){
