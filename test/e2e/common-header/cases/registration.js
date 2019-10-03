@@ -123,14 +123,7 @@
       });
 
       it("should sign out", function() {
-        commonHeaderPage.openProfileMenu();
-
-        expect(commonHeaderPage.getSignOutButton().isDisplayed()).to.eventually.be.true;
-
-        commonHeaderPage.getSignOutButton().click();       
-        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-
-        expect(signInPage.getSignInGoogleLink().isDisplayed()).to.eventually.be.true;
+        commonHeaderPage.signOut(true);
       });
 
       after(function(){

@@ -105,7 +105,7 @@
       });
     };
 
-    this.signOut = function() {
+    this.signOut = function(isCustomAuth) {
       helper.waitDisappear(loader, 'CH spinner loader');
 
       profilePic.isDisplayed().then(function(value) {
@@ -113,8 +113,12 @@
           selfCommonHeaderPage.openProfileMenu();
 
           helper.clickWhenClickable(signOutButton, 'Sign Out Button');
-          helper.wait(signOutModal, 'Sign Out Modal');
-          signOutRvOnlyButton.click();
+
+          if (!isCustomAuth) {
+            helper.wait(signOutModal, 'Sign Out Modal');
+            signOutRvOnlyButton.click();            
+          }
+
           helper.waitDisappear(signOutModal, 'Sign Out Modal');
         }
       });
@@ -256,26 +260,6 @@
       helper.waitDisappear(loader, 'CH spinner loader');
       helper.waitDisappear(subcompanyAlert, "Subcompany Alert");
       helper.waitDisappear(loader, 'CH spinner loader');
-    };
-
-    this.deleteAllSubCompanies = function() {
-      this.openProfileMenu();
-
-      this.clickSubcompanyButton();
-      helper.wait(selectSubcompanyModal, "Select Subcompany Modal");
-      helper.waitDisappear(selectSubcompanyModalLoader, "Load Companies");
-      selectSubcompanyModalCompanies.count().then(function(count) {
-        console.log("count: "+count);
-        if (count > 0) {
-          helper.clickWhenClickable(selectSubcompanyModalCompanies.get(0), "First matching Subcompany");
-          helper.wait(subcompanyAlert, "Subcompany Alert");
-          helper.waitDisappear(loader, 'CH spinner loader');
-          selfCommonHeaderPage.deleteCurrentCompany();
-          selfCommonHeaderPage.deleteAllSubCompanies();    
-        } else {
-          helper.clickWhenClickable(selectSubcompanyModalCloseButton, "Subcompany Modal Close Button");
-        }
-      });
     };
 
     this.selectAlerts = function() {

@@ -68,7 +68,10 @@
         expect(commonHeaderPage.getSubscribeNowButton().isDisplayed()).to.eventually.be.false;
       });
 
-      
+      after(function() {
+        commonHeaderPage.signOut(true);
+      });
+
     });
   };
 
