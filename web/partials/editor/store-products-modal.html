@@ -96,32 +96,6 @@
         rv-spinner-start-active="1">
 
       <div class="row u_margin-md-top">
-        <div class="col-sm-6 col-md-4 col-lg-3" ng-if="factory.search.category == 'Templates' && !factory.loadingItems">
-          <div class="product-grid_item panel panel-default">
-            <figure class="product-grid_image u_clickable" ui-sref="apps.editor.workspace.artboard" ng-click="dismiss();">
-              <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/UI/blank-landscape.png" alt="add blank presentation"> 
-            </figure><!--template-image-->
-            <div class="product-grid_details">
-              <div class="row">
-                <div class="col-xs-8">
-                  <h4>{{'editor-app.storeProduct.templates.blank' | translate}}</h4>
-                  
-                </div><!-- end col -->
-                <div class="col-xs-4">
-
-                  <button class="btn btn-primary btn-sm btn-block" id="newPresentationButton" ui-sref="apps.editor.workspace.artboard" ng-click="dismiss();">
-                    Add
-                  </button>
-                </div><!-- end col -->
-                <div class="col-xs-12">
-                  <p class="text-muted">&nbsp;</p>
-                </div>
-              </div><!-- end row -->
-              
-            </div>
-          </div><!--product-grid-item-->
-        </div>
-       
         <ng-repeat ng-repeat="product in factory.items.list">
           <div id="storeProduct" class="col-sm-6 col-md-4 col-lg-3" ng-click="select(product)">
             <div class="product-grid_item panel panel-default">
@@ -151,6 +125,33 @@
             </div>
           </div>
         </ng-repeat>
+
+        <div class="col-sm-6 col-md-4 col-lg-3" ng-if="factory.search.category == 'Templates' && !factory.loadingItems">
+          <div class="product-grid_item panel panel-default">
+            <figure class="product-grid_image u_clickable" ui-sref="apps.editor.workspace.artboard" ng-click="dismiss();">
+              <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/UI/blank-landscape.png" alt="add blank presentation"> 
+            </figure><!--template-image-->
+            <div class="product-grid_details">
+              <div class="row">
+                <div class="col-xs-8">
+                  <h4>{{'editor-app.storeProduct.templates.blank' | translate}}</h4>
+                  
+                </div><!-- end col -->
+                <div class="col-xs-4">
+
+                  <button class="btn btn-primary btn-sm btn-block" id="newPresentationButton" ui-sref="apps.editor.workspace.artboard" ng-click="dismiss();">
+                    Add
+                  </button>
+                </div><!-- end col -->
+                <div class="col-xs-12">
+                  <p class="text-muted">&nbsp;</p>
+                </div>
+              </div><!-- end row -->
+              
+            </div>
+          </div><!--product-grid-item-->
+        </div>
+
         <!-- If no search results -->
         <div class="col-sm-12" ng-show="factory.items.list.length === 0 && search.query && !factory.loadingItems">
           <div class="text-muted text-center u_padding-lg"><span translate>editor-app.storeProduct.content.noResults</span></div>
