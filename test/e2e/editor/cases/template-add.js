@@ -128,60 +128,7 @@ var TemplateAddScenarios = function() {
 
         expect(pricingComponentModalPage.getSubscribeButton().isDisplayed()).to.eventually.be.true;
 
-        // Note: No point to purchase here; we test purchase subscription and adding a template in other tests
-        // helper.clickWhenClickable(pricingComponentModalPage.getSubscribeButton(), 'Subscribe Button');
-        // browser.call(()=>console.log("clicked subscribe button"));
-        // 
-        // helper.waitDisappear(pricingComponentModalPage.getSubscribeButton(), 'Subscribe Button Disappear');
-        // 
-        // browser.call(()=>console.log("waiting purchase flow billing continue button"));
-
-        // purchaseFlowModalPage.purchase();
-    });
-    
-    xit('should show Select Template button', function() {
-      browser.call(()=>console.log("should show select template button"));
-      // Sometimes the trial does not start in time; this section tries to reduce the number of times this step fails
-      browser.sleep(5000);
-      // Reload page and select company whose trial has just started
-      loadEditor();
-      selectSubCompany();
-      openContentModal();
-
-      // Validate buttons are updated as expected
-      storeProductsModalPage.getPremiumProducts().get(0).click();
-
-      helper.wait(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
-
-      helper.waitDisappear(productDetailsModalPage.getPricingLoader(), 'Pricing loader');
-      expect(productDetailsModalPage.getProductDetailsModal().isDisplayed()).to.eventually.be.true;
-      helper.wait(productDetailsModalPage.getUseProductButton(),'Use Product Button');
-      expect(productDetailsModalPage.getUseProductButton().isDisplayed()).to.eventually.be.true;
-      productDetailsModalPage.getCloseButton().click();
-      
-      helper.waitDisappear(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
-    });
-
-    // The Store Templates are not yet released to sub-companies
-    // so there are no templates to select; disabled tests
-    // TODO: re-enable tests when templates are released
-    xit('should open the Template presentation', function () {
-      storeProductsModalPage.getAddProductButtons().get(0).click();
-
-      helper.wait(presentationPropertiesModalPage.getPresentationPropertiesModal(), 'Presentation Properties Modal');
-
-      expect(presentationPropertiesModalPage.getNameInput().getAttribute('value')).to.eventually.contain('Copy of ');
-    });
-
-    xit('should treat template as New Presentation', function () {
-      expect(workspacePage.getPreviewButton().getAttribute('disabled')).to.eventually.equal('true');
-
-      expect(workspacePage.getPublishButton().isDisplayed()).to.eventually.be.false;
-      expect(workspacePage.getRestoreButton().isDisplayed()).to.eventually.be.false;
-      expect(workspacePage.getDeleteButton().isDisplayed()).to.eventually.be.false;
-
-      expect(workspacePage.getSaveButton().isPresent()).to.eventually.be.true;
-      expect(workspacePage.getCancelButton().isPresent()).to.eventually.be.true;
+        // Note: No purchase here; we test purchase subscription and adding a template in other tests
     });
 
   });
