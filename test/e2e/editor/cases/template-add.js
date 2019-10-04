@@ -120,7 +120,6 @@ var TemplateAddScenarios = function() {
       browser.call(()=>console.log("waiting for pricing component frame"));
       helper.wait(pricingComponentModalPage.getSubscribeButton(), 'Pricing Component Modal');
       browser.call(()=>console.log("subscribing"));
-      purchaseSubscription();
     });
 
     it('should initialize purchase flow', function() {
