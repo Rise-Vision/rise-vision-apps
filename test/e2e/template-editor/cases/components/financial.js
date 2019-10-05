@@ -11,8 +11,7 @@ var FinancialComponentScenarios = function () {
   browser.driver.manage().window().setSize(1920, 1080);
 
   describe('Financial Component', function () {
-    var testStartTime = Date.now();
-    var presentationName = 'Financial Component Presentation - ' + testStartTime;
+    var presentationName;
     var presentationsListPage;
     var templateEditorPage;
     var financialComponentPage;
@@ -24,10 +23,15 @@ var FinancialComponentScenarios = function () {
 
       presentationsListPage.loadCurrentCompanyPresentationList();
       presentationsListPage.createNewPresentationFromTemplate('Example Financial Template V4', 'example-financial-template-v4');
+
+      templateEditorPage.getPresentationName().getAttribute('value').then(function(name) {
+        expect(name).to.contain('Copy of');
+
+        presentationName = name;
+      });
     });
 
     describe('basic operations', function () {
-
       it('should warn users that a Financial Data License is required',function() {
         helper.wait(templateEditorPage.getFinancialDataLicenseMessage(),'Financial Data License Message');
         expect(templateEditorPage.getFinancialDataLicenseMessage().isDisplayed()).to.eventually.be.true;
@@ -47,7 +51,8 @@ var FinancialComponentScenarios = function () {
       });
 
       it('should auto-save the component after the instruments are loaded', function () {
-        helper.wait(templateEditorPage.getSavingText(), 'Financial component auto-saving');
+        helper.waitDisappear(templateEditorPage.getDirtyText());
+        helper.waitDisappear(templateEditorPage.getSavingText(), 'Financial component auto-saving');
         helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
       });
 
@@ -65,19 +70,13 @@ var FinancialComponentScenarios = function () {
         expect(financialComponentPage.getAddCurrenciesButton().isPresent()).to.eventually.be.true;
       });
 
-      it('should save the Presentation, reload it, and validate changes were saved', function () {
-
-        presentationsListPage.changePresentationName(presentationName);
-
-        helper.wait(templateEditorPage.getSavingText(), 'Financial component auto-saving');
+      it('should auto-save the component after the instruments are loaded', function () {
+        helper.waitDisappear(templateEditorPage.getDirtyText());
+        helper.waitDisappear(templateEditorPage.getSavingText(), 'Financial component auto-saving');
         helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
+      });
 
-        //log presentation / company URL for troubleshooting
-        browser.getCurrentUrl().then(function(actualUrl) {
-          console.log(actualUrl);
-        });
-        browser.sleep(100);
-
+      it('should save the Presentation, reload it, and validate changes were saved', function () {
         presentationsListPage.loadPresentation(presentationName);
         templateEditorPage.selectComponent("Financial - ");
 

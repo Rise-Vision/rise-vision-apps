@@ -12,8 +12,6 @@ var WeatherComponentScenarios = function () {
   browser.driver.manage().window().setSize(1920, 1080);
 
   describe('Branding Component', function () {
-    var testStartTime = Date.now();
-    var presentationName = 'Branding Component Presentation - ' + testStartTime;
     var presentationsListPage;
     var templateEditorPage;
     var brandingComponentPage;

@@ -19,8 +19,7 @@ var VideoComponentScenarios = function () {
   };
 
   describe('Video Component', function () {
-    var testStartTime = Date.now();
-    var presentationName = 'Video Component Presentation - ' + testStartTime;
+    var presentationName;
     var presentationsListPage;
     var templateEditorPage;
     var videoComponentPage;
@@ -32,6 +31,12 @@ var VideoComponentScenarios = function () {
 
       presentationsListPage.loadCurrentCompanyPresentationList();
       presentationsListPage.createNewPresentationFromTemplate('Example Video Component', 'example-video-component');
+
+      templateEditorPage.getPresentationName().getAttribute('value').then(function(name) {
+        expect(name).to.contain('Copy of');
+
+        presentationName = name;
+      });
     });
 
     describe('basic operations', function () {
@@ -109,6 +114,7 @@ var VideoComponentScenarios = function () {
         });
 
         it('should auto-save the Presentation after adding file from storage', function () {
+          helper.waitDisappear(templateEditorPage.getDirtyText());
           helper.wait(templateEditorPage.getSavingText(), 'Video component auto-saving');
           helper.wait(templateEditorPage.getSavedText(), 'Video component auto-saved');
         });
@@ -117,17 +123,6 @@ var VideoComponentScenarios = function () {
 
     describe('save and validations', function () {
       it('should save the Presentation, reload it, and validate changes were saved', function () {
-        presentationsListPage.changePresentationName(presentationName);
-
-        helper.wait(templateEditorPage.getSavingText(), 'Video component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Video component auto-saved');
-
-        //log presentation / company URL for troubleshooting
-        browser.getCurrentUrl().then(function(actualUrl) {
-          console.log(actualUrl);
-        });
-        browser.sleep(100);
-
         presentationsListPage.loadPresentation(presentationName);
         templateEditorPage.selectComponent('Video - ');
 

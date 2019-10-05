@@ -258,9 +258,6 @@ workflows:
       - e2e_template_editor2:
           requires:
             - test_build
-      - e2e_template_editor3:
-          requires:
-            - test_build
       - test_e2e:
           requires:
             - e2e_launcher
@@ -273,7 +270,6 @@ workflows:
             - e2e_storage
             - e2e_template_editor
             - e2e_template_editor2
-            - e2e_template_editor3
       - deploy_production:
           requires:
             - test_unit
