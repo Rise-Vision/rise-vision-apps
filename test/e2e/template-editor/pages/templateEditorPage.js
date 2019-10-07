@@ -129,12 +129,6 @@ var TemplateEditorPage = function() {
     helper.wait(componentEditLink, 'Component Edit');
     helper.clickWhenClickable(componentEditLink, 'Component Edit');
   }
-
-  this.waitForAutosave = function() {
-    helper.waitDisappear(dirtyText);
-    helper.wait(savingText, 'Template Editor auto-saving');
-    helper.wait(savedText, 'Template Editor auto-saved');
-  };
 };
 
 module.exports = TemplateEditorPage;

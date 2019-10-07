@@ -95,7 +95,9 @@ var SlidesComponentScenarios = function () {
         presentationsListPage.changePresentationName(presentationName);
 
         //wait for presentation to be auto-saved
-        templateEditorPage.waitForAutosave();
+        helper.waitDisappear(templateEditorPage.getDirtyText());
+        helper.wait(templateEditorPage.getSavingText(), 'Slides component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Slides component auto-saved');
 
         //load presentation
         presentationsListPage.loadPresentation(presentationName);

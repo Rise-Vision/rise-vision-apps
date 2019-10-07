@@ -109,7 +109,9 @@ var RssComponentScenarios = function () {
         presentationsListPage.changePresentationName(presentationName);
 
         // Wait for presentation to be auto-saved
-        templateEditorPage.waitForAutosave();
+        helper.waitDisappear(templateEditorPage.getDirtyText());
+        helper.wait(templateEditorPage.getSavingText(), 'RSS component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'RSS component auto-saved');
 
         // Load presentation
         presentationsListPage.loadPresentation(presentationName);

@@ -34,7 +34,9 @@ var TextComponentScenarios = function () {
 
     describe('basic operations', function () {
       it('should auto-save the Presentation after it has been created', function () {
-        templateEditorPage.waitForAutosave();
+        helper.waitDisappear(templateEditorPage.getDirtyText());
+        helper.waitDisappear(templateEditorPage.getSavingText());
+        helper.wait(templateEditorPage.getSavedText(), 'Text component auto-saved');
       });
 
       it('should open properties of Text Component', function () {
@@ -53,7 +55,9 @@ var TextComponentScenarios = function () {
         // have to send a fake autoupdate to trigger it
         presentationsListPage.changePresentationName(presentationName);
 
-        templateEditorPage.waitForAutosave();
+        helper.waitDisappear(templateEditorPage.getDirtyText());
+        helper.wait(templateEditorPage.getSavingText(), 'Text component auto-saving');
+        helper.wait(templateEditorPage.getSavedText(), 'Text component auto-saved');
       });
 
       it('should reload the Presentation, and validate changes were saved', function () {
