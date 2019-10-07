@@ -123,12 +123,12 @@ var TemplateAddScenarios = function() {
     });
 
     it('should initialize purchase flow', function() {
-        browser.call(()=>console.log("waiting for getSubscribeButton"));
-        helper.wait(pricingComponentModalPage.getSubscribeButton(), 'Subscribe Button');
+      browser.call(()=>console.log("waiting for getSubscribeButton"));
+      helper.wait(pricingComponentModalPage.getSubscribeButton(), 'Subscribe Button');
 
-        expect(pricingComponentModalPage.getSubscribeButton().isDisplayed()).to.eventually.be.true;
+      expect(pricingComponentModalPage.getSubscribeButton().isDisplayed()).to.eventually.be.true;
 
-        // Note: No purchase here; we test purchase subscription and adding a template in other tests
+      // Note: No purchase here; we test purchase subscription and adding a template in other tests
     });
 
   });

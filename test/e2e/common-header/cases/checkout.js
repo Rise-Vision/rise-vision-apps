@@ -36,11 +36,11 @@
       });
 
       it("should show Subscribe button", function() {
-        expect(commonHeaderPage.getSubscribeNowButton().isDisplayed()).to.eventually.be.true;
+        expect(purchaseFlowModalPage.getSubscribeNowButton().isDisplayed()).to.eventually.be.true;
       });
 
       it("should open plans modal", function() {
-        helper.clickWhenClickable(commonHeaderPage.getSubscribeNowButton(), 'Subscribe Button');
+        helper.clickWhenClickable(purchaseFlowModalPage.getSubscribeNowButton(), 'Subscribe Button');
 
         helper.wait(pricingComponentModalPage.getSubscribeButton(), 'Pricing Component Modal');
 
@@ -56,16 +56,9 @@
       });
 
       it("should purchase",function() {
-        //TODO use credit card
-        purchaseFlowModalPage.purchase(false);
+        purchaseFlowModalPage.purchase();
 
-        //TODO move this inside retry mechanism of purchase() above
-        browser.sleep(30 * 1000);       
-        browser.driver.navigate().refresh();
-        browser.sleep(10000);
-        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH Spinner Loader');
-
-        expect(commonHeaderPage.getSubscribeNowButton().isDisplayed()).to.eventually.be.false;
+        expect(purchaseFlowModalPage.getSubscribeNowButton().isDisplayed()).to.eventually.be.false;
       });
 
       after(function() {

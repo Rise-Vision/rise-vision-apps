@@ -5,7 +5,9 @@ var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js'
 
 var PurchaseFlowModalPage = function() {
   var commonHeaderPage = new CommonHeaderPage();
+  var planBanner = element(by.id('plan-banner'));
   var seePlansLink = element(by.xpath('//a[contains(text(), "See Our Plans")]'));
+  var subscribeNowButton = element(by.cssContainingText('#trial-plan-banner a', 'Subscribe Now'));
 
   var emailField = element(by.id('contact-email'));
   var paymentMethod = element(by.id('payment-method-select'));
@@ -23,7 +25,7 @@ var PurchaseFlowModalPage = function() {
   var payButton = element(by.id('payButton'));
 
   function _waitForPlanUpdate(retries) {
-    helper.waitDisappear(seePlansLink, 'See Plans Link')
+    helper.waitDisappear(planBanner, 'Plan Banner')
       .catch(function () {
         retries = typeof(retries) === 'undefined' ? 3 : retries;
 
@@ -93,8 +95,16 @@ var PurchaseFlowModalPage = function() {
     _waitForPlanUpdate();
   };
 
+  this.getPlanBanner = function () {
+    return planBanner;
+  };
+
   this.getSeePlansLink = function () {
     return seePlansLink;
+  };
+
+  this.getSubscribeNowButton = function() {
+    return subscribeNowButton;
   };
 
   this.getContinueButton = function() {
