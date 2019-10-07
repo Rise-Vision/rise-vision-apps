@@ -118,7 +118,9 @@ angular.module('risevision.template-editor.controllers')
 
           autoSaveService.clearSaveTimeout();
 
-          $scope.factory.save()
+          var savePromise = $scope.factory.isUnsaved() ? $scope.factory.save() : $q.resolve();
+
+          savePromise
             .finally(function () {
               _bypassUnsaved = true;
               $state.go(toState, toParams);
