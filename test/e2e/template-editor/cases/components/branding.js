@@ -31,9 +31,7 @@ var WeatherComponentScenarios = function () {
     describe('Branding list', function () {
 
       it('should auto-save the Presentation after it has been created', function () {
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText());
-        helper.wait(templateEditorPage.getSavedText(), 'Branding Template auto-saved');
+        templateEditorPage.waitForAutosave();
       });
 
       it('should list Branding Settings link', function () {
@@ -129,8 +127,7 @@ var WeatherComponentScenarios = function () {
         });
 
         it('should auto-save the Branding after adding file from storage', function () {
-          helper.wait(templateEditorPage.getSavingText(), 'Branding component auto-saving');
-          helper.wait(templateEditorPage.getSavedText(), 'Branding component auto-saved');
+          templateEditorPage.waitForAutosave();
         });
 
       });
@@ -153,8 +150,7 @@ var WeatherComponentScenarios = function () {
         });
 
         it('should auto-save the Branding after adding file from storage', function () {
-          helper.wait(templateEditorPage.getSavingText(), 'Branding component auto-saving');
-          helper.wait(templateEditorPage.getSavedText(), 'Branding component auto-saved');
+          templateEditorPage.waitForAutosave();
         });
 
       });
@@ -177,8 +173,7 @@ var WeatherComponentScenarios = function () {
         });
 
         it('should auto-save the Branding after adding file from storage', function () {
-          helper.wait(templateEditorPage.getSavingText(), 'Branding component auto-saving');
-          helper.wait(templateEditorPage.getSavedText(), 'Branding component auto-saved');
+          templateEditorPage.waitForAutosave();
         });
 
       });

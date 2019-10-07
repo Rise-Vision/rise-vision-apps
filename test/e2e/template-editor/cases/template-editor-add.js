@@ -29,9 +29,7 @@ var TemplateAddScenarios = function() {
     describe('basic operations', function () {
       it('should auto-save the Presentation after it has been created', function () {
         browser.sleep(3000);
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText());
-        helper.wait(templateEditorPage.getSavedText(), 'Component auto-saved');
+        templateEditorPage.waitForAutosave();
       });
 
       it('should set presentation name', function(done) {
@@ -68,8 +66,7 @@ var TemplateAddScenarios = function() {
       });
 
       it('should auto-save the Presentation after the name has changed', function () {
-        helper.wait(templateEditorPage.getSavingText(), 'Component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Component auto-saved');
+        templateEditorPage.waitForAutosave();
       });
 
       it('should load the newly created Presentation', function () {

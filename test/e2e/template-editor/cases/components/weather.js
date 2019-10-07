@@ -35,9 +35,7 @@ var WeatherComponentScenarios = function () {
     describe('basic operations', function () {
 
       it('should auto-save the Presentation after it has been created', function () {
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText());
-        helper.wait(templateEditorPage.getSavedText(), 'Weather component auto-saved');
+        templateEditorPage.waitForAutosave();
       });
 
       it('should open properties of Weather Component', function () {
@@ -53,9 +51,7 @@ var WeatherComponentScenarios = function () {
         expect(weatherComponentPage.getFarenheitOption().isSelected()).to.eventually.be.true;
         expect(weatherComponentPage.getCelsiusOption().isSelected()).to.eventually.not.be.true;
 
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.wait(templateEditorPage.getSavingText(), 'Weather component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Weather component auto-saved');
+        templateEditorPage.waitForAutosave();
       });
 
       it('should save the Presentation, reload it, and validate changes were saved', function () {

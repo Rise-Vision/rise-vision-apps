@@ -40,9 +40,7 @@ var FinancialComponentScenarios = function () {
       });
 
       it('should auto-save the Presentation after it has been created', function () {
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText());
-        helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
+        templateEditorPage.waitForAutosave();
       });
 
       it('should show one Financial Component', function () {
@@ -51,9 +49,7 @@ var FinancialComponentScenarios = function () {
       });
 
       it('should auto-save the component after the instruments are loaded', function () {
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText(), 'Financial component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
+        templateEditorPage.waitForAutosave();
       });
 
       it('should show open the Instrument Selector', function () {
@@ -71,9 +67,7 @@ var FinancialComponentScenarios = function () {
       });
 
       it('should auto-save the component after the instruments are loaded', function () {
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText(), 'Financial component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
+        templateEditorPage.waitForAutosave();
       });
 
       it('should save the Presentation, reload it, and validate changes were saved', function () {

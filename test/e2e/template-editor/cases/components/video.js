@@ -41,9 +41,7 @@ var VideoComponentScenarios = function () {
 
     describe('basic operations', function () {
       it('should auto-save the Presentation after it has been created', function () {
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText());
-        helper.wait(templateEditorPage.getSavedText(), 'Video component auto-saved');
+        templateEditorPage.waitForAutosave();
       });
 
       it('should list the volume and videos for the first Video Component', function () {
@@ -71,8 +69,7 @@ var VideoComponentScenarios = function () {
       });
 
       it('should auto-save the Presentation after updating the video list', function () {
-        helper.wait(templateEditorPage.getSavingText(), 'Video component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Video component auto-saved');
+        templateEditorPage.waitForAutosave();
       });
     });
 
@@ -114,9 +111,7 @@ var VideoComponentScenarios = function () {
         });
 
         it('should auto-save the Presentation after adding file from storage', function () {
-          helper.waitDisappear(templateEditorPage.getDirtyText());
-          helper.wait(templateEditorPage.getSavingText(), 'Video component auto-saving');
-          helper.wait(templateEditorPage.getSavedText(), 'Video component auto-saved');
+          templateEditorPage.waitForAutosave();
         });
       });
     });
@@ -135,9 +130,7 @@ var VideoComponentScenarios = function () {
         presentationsListPage.loadCurrentCompanyPresentationList();
         presentationsListPage.createNewPresentationFromTemplate('Example Video Component', 'example-video-component');
 
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText());
-        helper.wait(templateEditorPage.getSavedText(), 'Video component auto-saved');
+        templateEditorPage.waitForAutosave();
       });
 
       it('should list the volume and videos for the first Video Component', function () {
@@ -145,9 +138,7 @@ var VideoComponentScenarios = function () {
         helper.wait(videoComponentPage.getVolumeComponent(), 'Volume');
         expect(videoComponentPage.getSelectedVideosMain().count()).to.eventually.equal(2);
 
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText());
-        helper.wait(templateEditorPage.getSavedText(), 'Video component auto-saved');
+        templateEditorPage.waitForAutosave();
       });
 
       it('should display video titles', function () {
@@ -185,9 +176,7 @@ var VideoComponentScenarios = function () {
       });
 
       it('should auto-save the Presentation after updating volume', function () {
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.wait(templateEditorPage.getSavingText(), 'Video component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Video component auto-saved');
+        templateEditorPage.waitForAutosave();
       });
 
       it('should remove a video row', function () {
@@ -201,9 +190,7 @@ var VideoComponentScenarios = function () {
       });
 
       it('should auto-save the Presentation after removing a row', function () {
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.wait(templateEditorPage.getSavingText(), 'Video component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Video component auto-saved');
+        templateEditorPage.waitForAutosave();
       });
 
       it('should remove another video row and hide volume', function () {
@@ -217,9 +204,7 @@ var VideoComponentScenarios = function () {
       });
 
       it('should auto-save the Presentation after removing another row', function () {
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.wait(templateEditorPage.getSavingText(), 'Video component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Video component auto-saved');
+        templateEditorPage.waitForAutosave();
       });
     });
 
