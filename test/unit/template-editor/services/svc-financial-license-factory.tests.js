@@ -96,7 +96,7 @@ describe('service: financialLicenseFactory:', function() {
 
         setTimeout(function(){
           modalInstance.dismiss.should.have.been.called;
-          $window.open.should.have.been.calledWith('https://www.risevision.com/contact-us', "_blank"); 
+          $window.open.should.have.been.calledWith('https://www.risevision.com/contact-us?form_selected=sales&content_hide=true', "_blank"); 
           done() 
         },10);
       });
