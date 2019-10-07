@@ -66,6 +66,14 @@ angular.module('risevision.template-editor.directives')
               $scope.directives[component.type].iconType : '';
           };
 
+          $scope.getComponentTitle = function (component) {
+            if (component.type === 'rise-data-counter') {
+              return 'template.' + component.type + '-' + component.attributes.type.value;
+            }
+
+            return 'template.' + component.type;
+          };
+
           $scope.isHeaderBottomRuleVisible = function (component) {
             if (!component) {
               return true;
