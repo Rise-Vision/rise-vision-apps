@@ -59,6 +59,37 @@ var TemplateAddScenarios = function() {
         expect(templateEditorPage.getComponentItems().count()).to.eventually.be.above(1);
         expect(templateEditorPage.getImageComponentEdit().isPresent()).to.eventually.be.true;
       });
+
+      describe('remove',function(){
+        before(function(){
+          //workaround as protactor can't click on top of iframes
+          //decrease window size to hide template preview        
+          browser.driver.manage().window().setSize(500, 800); 
+        });
+
+        it('should delete the Presentation', function () {
+          browser.sleep(500);
+          helper.clickWhenClickable(templateEditorPage.getDeleteButton(), 'Template Delete Button');
+
+          browser.sleep(500);
+          helper.wait(templateEditorPage.getDeleteForeverButton(), 'Template Delete Forever Button');      
+          helper.clickWhenClickable(templateEditorPage.getDeleteForeverButton(), 'Template Delete Forever Button');
+
+          helper.wait(presentationsListPage.getTitle(), 'Presentation List');
+        });
+
+        it('should not show any errors', function() {
+          browser.sleep(3000);
+
+          expect(templateEditorPage.getErrorModal().isPresent()).to.eventually.be.false;
+        });
+
+        after(function(){
+          //revert workaround
+          browser.driver.manage().window().setSize(1920, 1080); 
+        });
+      });    
+
     });
   });
 };

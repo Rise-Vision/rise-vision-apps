@@ -104,6 +104,12 @@ var SignUpPage = function() {
     signInPage.getSignInGoogleLink().click();
   };
 
+  function decodeHtml (str) {
+    return str.replace(/&#(\d+);/g, function(match, dec) {
+      return String.fromCharCode(dec);
+    });
+  }
+
   this.getConfirmationLink = function(mailListener) {
     var deferred = protractor.promise.defer();
 
@@ -111,6 +117,7 @@ var SignUpPage = function() {
       var pattern = /href="(https:\/\/apps-stage-0\.risevision\.com\/confirmaccount\/.*?)"/g;
       var confirmationLink = pattern.exec(email.html)[1];
       confirmationLink = confirmationLink.replace('https://apps-stage-0.risevision.com','http://localhost:8099');
+      confirmationLink = decodeHtml(confirmationLink);
       console.log("Confirmation link: "+confirmationLink);
 
       deferred.fulfill(confirmationLink);

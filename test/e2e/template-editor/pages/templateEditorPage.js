@@ -11,6 +11,8 @@ var TemplateEditorPage = function() {
   var presentationName = element(by.id('presentationName'));
   var editNameButton = element(by.id('editNameButton'));
   var deleteButton = element(by.id('deleteButton'));
+  var deleteForeverButton = element(by.buttonText('Delete Forever'));
+  var errorModal = element(by.xpath('//h4[contains(text(), "Failed to")]'));
   var publishButton = element(by.id('publishButtonDesktop'));
   var imageComponentSelector = '//div[div/span[contains(text(), "Image - ")]]';
   var imageComponent = element(by.xpath('(' + imageComponentSelector + ')[1]'));
@@ -60,6 +62,14 @@ var TemplateEditorPage = function() {
 
   this.getDeleteButton = function () {
     return deleteButton;
+  };
+
+  this.getDeleteForeverButton = function () {
+    return deleteForeverButton
+  };
+
+  this.getErrorModal = function () {
+    return errorModal;
   };
 
   this.getSavedText = function () {

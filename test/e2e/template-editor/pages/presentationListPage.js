@@ -8,6 +8,8 @@ var StoreProductsModalPage = require('../../editor/pages/storeProductsModalPage.
 var TemplateEditorPage = require('./templateEditorPage.js');
 
 var PresentationListPage = function() {
+  var title = element(by.id('title'));
+
   var presentationAddButton = element(by.id('presentationAddButton'));
 
   var presentationListTable = element(by.id('presentationListTable'));
@@ -62,6 +64,10 @@ var PresentationListPage = function() {
     expect(templateEditorPage.getPresentationName().isEnabled()).to.eventually.be.true;
     templateEditorPage.getPresentationName().sendKeys(presentationName + protractor.Key.ENTER);
   }
+
+  this.getTitle = function() {
+    return title;
+  };
 
   this.getPresentationAddButton = function() {
     return presentationAddButton;

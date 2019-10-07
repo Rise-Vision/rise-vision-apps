@@ -231,6 +231,24 @@ describe('controller: TemplateEditor', function() {
       saveStub.should.have.been.called;
     });
 
+    it('should not notify unsaved changes when changing URL on delete', function () {
+      factory.presentation.id = '1234';
+      factory.presentation.name = 'New Name';
+      $scope.$apply();
+      $timeout.flush();
+      var saveStub = sinon.stub(factory, 'save', function(){
+        return Q.resolve();
+      });
+
+      $rootScope.$broadcast('presentationDeleted');
+      $scope.$apply();
+
+      $rootScope.$broadcast('$stateChangeStart', { name: 'newState' });
+      $scope.$apply();
+
+      saveStub.should.not.have.been.called;
+    });
+
     it('should not notify unsaved changes when changing URL if state is in Template Editor', function () {
       factory.presentation.id = '1234';
       factory.presentation.name = 'New Name';
