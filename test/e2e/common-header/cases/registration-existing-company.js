@@ -182,6 +182,7 @@
         });
 
         it("deletes a user", function() {
+          browser.sleep(500);
           // Ensure the right User is being deleted
           expect(userSettingsModalPage.getUsernameLabel().getText()).to.eventually.equal(EMAIL_ADDRESS);
 
