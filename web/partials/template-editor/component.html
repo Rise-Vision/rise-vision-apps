@@ -16,7 +16,7 @@
                   class="component-icon">
   </component-icon>
   <span ng-show="!panelTitle">
-    {{ ( "template." + factory.selected.type ) | translate }} -
+    {{ factory.selected && getComponentTitle(factory.selected) | translate }} -
     {{ factory.selected.label }}
   </span>
   <span ng-show="panelTitle">{{ panelTitle }}</span>
