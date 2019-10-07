@@ -5,9 +5,9 @@
 
   var MailListener = function (emailAddressToFilter, password) {
     var mailListener2 = new MailListener2({
-      username: "jenkins.rise@gmail.com",
+      username: "jenkins.rise@hotmail.com",
       password: password, 
-      host: "imap.gmail.com",
+      host: "outlook.office365.com",
       port: 993,
       searchFilter: ["UNSEEN",['TO', emailAddressToFilter]],
       tls: true,
@@ -36,14 +36,6 @@
 
       mailListener2.once("mail", function(mail, seqno, attributes){
         console.log("Mail received: " + mail.subject);
-
-        mailListener2.imap.addFlags(attributes.uid, '\\Seen', function(err) {
-          if (err) {
-            console.log('Error marking message read/SEEN');
-          } else {
-            console.log('Marked message as SEEN');
-          }
-        });          
         deferred.fulfill(mail);
       });
       return deferred.promise;
