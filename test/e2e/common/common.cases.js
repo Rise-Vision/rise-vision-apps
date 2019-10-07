@@ -4,7 +4,7 @@
 	var FirstSigninScenarios = require('./cases/first-signin.js');
 	
 	describe('Apps Common', function() {
-		var firstSigninScenarios = new FirstSigninScenarios();		
+		var firstSigninScenarios = new FirstSigninScenarios();
 	});
 
 })();

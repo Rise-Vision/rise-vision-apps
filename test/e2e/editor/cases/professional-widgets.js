@@ -59,7 +59,7 @@ var ProfessionalWidgetsScenarios = function() {
 
     after(function() {
       loadEditor();
-      commonHeaderPage.deleteAllSubCompanies();
+      commonHeaderPage.deleteCurrentCompany(subCompanyName);
     });
 
     before('Add a Blank Presentation: ', function() {

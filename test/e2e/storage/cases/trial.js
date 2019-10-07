@@ -6,7 +6,6 @@ var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js'
 var helper = require('rv-common-e2e').helper;
 var PresentationListPage = require('./../../editor/pages/presentationListPage.js');
 var WorkspacePage = require('./../../editor/pages/workspacePage.js');
-var StoreProductsModalPage = require('./../../editor/pages/storeProductsModalPage.js');
 var PlaceholderPlaylistPage = require('./../../editor/pages/placeholderPlaylistPage.js');
 var StorageSelectorModalPage = require('./../pages/storageSelectorModalPage.js');
 var FilesListPage = require('./../pages/filesListPage.js');
@@ -20,7 +19,6 @@ var StorageTrialScenarios = function() {
     var commonHeaderPage;
     var presentationListPage;
     var workspacePage;
-    var storeProductsModalPage;
     var placeholderPlaylistPage;
     var storageSelectorModalPage;
     var filesListPage;
@@ -30,7 +28,6 @@ var StorageTrialScenarios = function() {
       commonHeaderPage = new CommonHeaderPage();
       presentationListPage = new PresentationListPage();
       workspacePage = new WorkspacePage();
-      storeProductsModalPage = new StoreProductsModalPage()
       placeholderPlaylistPage = new PlaceholderPlaylistPage();
       storageSelectorModalPage = new StorageSelectorModalPage();
       filesListPage = new FilesListPage();
@@ -41,9 +38,7 @@ var StorageTrialScenarios = function() {
       before(function () {
         homepage.getStorage();
         signInPage.signIn();
-        var subCompanyName = 'E2E TEST SUBCOMPANY - STORAGE TRIAL';
-        commonHeaderPage.createUnsubscribedSubCompany(subCompanyName);
-        commonHeaderPage.selectSubCompany(subCompanyName);   
+        commonHeaderPage.selectUnsubscribedSubCompany();
       });
 
       it('should show Storage Trial on Storage home', function () {
@@ -59,18 +54,6 @@ var StorageTrialScenarios = function() {
         presentationListPage.openNewPresentation();
       });
 
-      xit('should start a new presentation', function () {
-        helper.clickWhenClickable(homepage.getPresentationCTAButton(), 'Presentation CTA button');
-
-        helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
-        helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader());
-        storeProductsModalPage.getAddBlankPresentation().click();
-        
-        helper.wait(workspacePage.getWorkspaceContainer(), 'Workspace Container');
-        expect(workspacePage.getWorkspaceContainer().isDisplayed()).to.eventually.be.true;
-        browser.sleep(500);
-      });
-
       it('should show Storage Trial when adding an Image', function () {
         helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
         browser.sleep(500);
@@ -84,10 +67,6 @@ var StorageTrialScenarios = function() {
         expect(filesListPage.getSearchInput().isDisplayed()).to.eventually.be.false;
 
         storageSelectorModalPage.getCloseButton().click();
-      });
-
-      after(function(){
-        commonHeaderPage.deleteCurrentCompany();
       });
 
     });

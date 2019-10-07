@@ -20,6 +20,10 @@
 
       presentationsListPage.loadPresentationsList();
       commonHeaderPage.createSubscribedSubCompany(subCompanyName);
+
+      //TODO Allow time for the subcompany subscription to be enabled
+      browser.sleep(30000);
+
       commonHeaderPage.selectSubCompany(subCompanyName);
     });
 

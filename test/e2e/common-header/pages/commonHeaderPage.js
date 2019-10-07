@@ -11,6 +11,10 @@
   var CommonHeaderPage = function () {
     var selfCommonHeaderPage = this;
 
+    var JENKINS_SUBSCRIBED = 'Jenkins Subscribed Subcompany';
+    var JENKINS_UNSUBSCRIBED = 'Jenkins Unsubscribed Subcompany';
+    var E2E_UNSUBSCRIBED = 'E2E SUBCOMPANY - UNSUBSCRIBED';
+
     var loginPage = new LoginPage();
     var companySettingsModalPage = new CompanySettingsModalPage();
 
@@ -22,6 +26,7 @@
 
     var profilePic = element(by.css(".user-profile-dropdown img.profile-pic"));
     var profileMenu = element(by.css(".user-profile-dropdown .dropdown-menu"));
+
     var addSubcompanyButton = element(by.css(".dropdown-menu .add-subcompany-menu-button"));
     var selectSubcompanyButton = element(by.css(".dropdown-menu #select-subcompany-button"));
     var changeSubcompanyButton = element(by.css(".dropdown-menu #change-subcompany-button"));
@@ -98,7 +103,7 @@
       });
     };
 
-    this.signOut = function() {
+    this.signOut = function(isCustomAuth) {
       helper.waitDisappear(loader, 'CH spinner loader');
 
       profilePic.isDisplayed().then(function(value) {
@@ -106,8 +111,12 @@
           selfCommonHeaderPage.openProfileMenu();
 
           helper.clickWhenClickable(signOutButton, 'Sign Out Button');
-          helper.wait(signOutModal, 'Sign Out Modal');
-          signOutRvOnlyButton.click();
+
+          if (!isCustomAuth) {
+            helper.wait(signOutModal, 'Sign Out Modal');
+            signOutRvOnlyButton.click();            
+          }
+
           helper.waitDisappear(signOutModal, 'Sign Out Modal');
         }
       });
@@ -164,7 +173,7 @@
 
       this.deleteSubCompanyIfExists(name);
 
-      // this.selectSubCompany('Jenkins Unsubscribed Subcompany');
+      // this.selectSubCompany(JENKINS_UNSUBSCRIBED);
 
       _createSubCompany(name, industryValue);
     };
@@ -174,7 +183,7 @@
 
       this.deleteSubCompanyIfExists(name);
       
-      this.selectSubCompany('Jenkins Subscribed Subcompany', false, true);
+      this.selectSubCompany(JENKINS_SUBSCRIBED, false, true);
 
       _createSubCompany(name, industryValue);
     };
@@ -189,6 +198,8 @@
           helper.clickWhenClickable(selectSubcompanyModalCompanies.get(0), "First matching Subcompany");
           helper.wait(subcompanyAlert, "Subcompany Alert");
           helper.waitForElementTextToChange(subcompanyAlert, name, 'Subcompany Selected');
+
+          helper.waitDisappear(loader, 'CH spinner loader');
         }
         else if (!avoidRetry) {
           helper.clickWhenClickable(selectSubcompanyModalCloseButton, "Subcompany Modal Close Button");
@@ -199,6 +210,10 @@
           throw "Could not find the Sub Company: " + subCompanyName;
         }
       });
+    };
+
+    this.selectUnsubscribedSubCompany = function() {
+      this.selectSubCompany(E2E_UNSUBSCRIBED, false, true);
     };
 
     this.deleteSubCompanyIfExists = function(subCompanyName) {
@@ -243,26 +258,6 @@
       helper.waitDisappear(loader, 'CH spinner loader');
       helper.waitDisappear(subcompanyAlert, "Subcompany Alert");
       helper.waitDisappear(loader, 'CH spinner loader');
-    };
-
-    this.deleteAllSubCompanies = function() {
-      this.openProfileMenu();
-
-      this.clickSubcompanyButton();
-      helper.wait(selectSubcompanyModal, "Select Subcompany Modal");
-      helper.waitDisappear(selectSubcompanyModalLoader, "Load Companies");
-      selectSubcompanyModalCompanies.count().then(function(count) {
-        console.log("count: "+count);
-        if (count > 0) {
-          helper.clickWhenClickable(selectSubcompanyModalCompanies.get(0), "First matching Subcompany");
-          helper.wait(subcompanyAlert, "Subcompany Alert");
-          helper.waitDisappear(loader, 'CH spinner loader');
-          selfCommonHeaderPage.deleteCurrentCompany();
-          selfCommonHeaderPage.deleteAllSubCompanies();    
-        } else {
-          helper.clickWhenClickable(selectSubcompanyModalCloseButton, "Subcompany Modal Close Button");
-        }
-      });
     };
 
     this.selectAlerts = function() {
@@ -315,6 +310,7 @@
     this.getSignOutGoogleButton = function() {
       return signOutGoogleButton;
     };
+
   };
 
   module.exports = CommonHeaderPage;
