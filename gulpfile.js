@@ -20,6 +20,7 @@ var gutil       = require("gulp-util");
 var rename      = require('gulp-rename');
 var sourcemaps  = require('gulp-sourcemaps');
 var runSequence = require('run-sequence');
+var colors      = require("colors");
 var factory     = require("widget-tester").gulpTaskFactory;
 var fs          = require('fs');
 var os          = require('os');
