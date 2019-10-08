@@ -20,13 +20,15 @@ var TemplateAddScenarios = function() {
       presentationsListPage = new PresentationListPage();
       templateEditorPage = new TemplateEditorPage();
       autoScheduleModalPage = new AutoScheduleModalPage();
-
-      presentationsListPage.loadCurrentCompanyPresentationList();
-      presentationsListPage.createNewPresentationFromTemplate('Example Financial Template V4', 'example-financial-template-v4');
-      templateEditorPage.dismissFinancialDataLicenseMessage();
     });
 
     describe('basic operations', function () {
+      before(function() {
+        presentationsListPage.loadCurrentCompanyPresentationList();
+        presentationsListPage.createNewPresentationFromTemplate('Example Financial Template V4', 'example-financial-template-v4');
+        templateEditorPage.dismissFinancialDataLicenseMessage();
+      });
+
       it('should auto-save the Presentation after it has been created', function () {
         browser.sleep(3000);
         helper.waitDisappear(templateEditorPage.getDirtyText());
@@ -84,37 +86,47 @@ var TemplateAddScenarios = function() {
         expect(templateEditorPage.getPublishButton().isEnabled()).to.eventually.be.true;
       });
 
-      describe('remove',function(){
-        before(function(){
-          //workaround as protactor can't click on top of iframes
-          //decrease window size to hide template preview        
-          browser.driver.manage().window().setSize(500, 800); 
-        });
-
-        it('should delete the Presentation', function () {
-          browser.sleep(500);
-          helper.clickWhenClickable(templateEditorPage.getDeleteButton(), 'Template Delete Button');
-
-          browser.sleep(500);
-          helper.wait(templateEditorPage.getDeleteForeverButton(), 'Template Delete Forever Button');      
-          helper.clickWhenClickable(templateEditorPage.getDeleteForeverButton(), 'Template Delete Forever Button');
-
-          helper.wait(presentationsListPage.getTitle(), 'Presentation List');
-        });
-
-        it('should not show any errors', function() {
-          browser.sleep(3000);
-
-          expect(templateEditorPage.getErrorModal().isPresent()).to.eventually.be.false;
-        });
-
-        after(function(){
-          //revert workaround
-          browser.driver.manage().window().setSize(1920, 1080); 
-        });
-      });    
-
     });
+
+    describe('remove',function(){
+      before(function(){
+        presentationsListPage.loadCurrentCompanyPresentationList();
+        presentationsListPage.createNewPresentationFromTemplate('Example Financial Template V4', 'example-financial-template-v4');
+        templateEditorPage.dismissFinancialDataLicenseMessage();
+
+        browser.sleep(3000);
+        helper.waitDisappear(templateEditorPage.getDirtyText());
+        helper.waitDisappear(templateEditorPage.getSavingText());
+        helper.wait(templateEditorPage.getSavedText(), 'Component auto-saved');
+
+        //workaround as protactor can't click on top of iframes
+        //decrease window size to hide template preview        
+        browser.driver.manage().window().setSize(500, 800); 
+      });
+
+      it('should delete the Presentation', function () {
+        browser.sleep(500);
+        helper.clickWhenClickable(templateEditorPage.getDeleteButton(), 'Template Delete Button');
+
+        browser.sleep(500);
+        helper.wait(templateEditorPage.getDeleteForeverButton(), 'Template Delete Forever Button');      
+        helper.clickWhenClickable(templateEditorPage.getDeleteForeverButton(), 'Template Delete Forever Button');
+
+        helper.wait(presentationsListPage.getTitle(), 'Presentation List');
+      });
+
+      it('should not show any errors', function() {
+        browser.sleep(3000);
+
+        expect(templateEditorPage.getErrorModal().isPresent()).to.eventually.be.false;
+      });
+
+      after(function(){
+        //revert workaround
+        browser.driver.manage().window().setSize(1920, 1080); 
+      });
+    });    
+
   });
 };
 
