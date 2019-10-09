@@ -18,7 +18,8 @@ var gulp = require("gulp"),
     path = require("path"),
     fs = require("fs"),
     ngHtml2Js = require("gulp-ng-html2js"),
-    minifyHtml = require("gulp-minify-html");
+    minifyHtml = require("gulp-minify-html"),
+    colors = require("colors");
 
     var commonHeaderSrcFiles = ["./tmp/partials/partials.js",
     "./web/scripts/common-header/dtv-common-header.js",

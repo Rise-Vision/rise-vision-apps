@@ -11,8 +11,7 @@ var RssComponentScenarios = function () {
   browser.driver.manage().window().setSize(1920, 1080);
 
   describe('RSS Component', function () {
-    var testStartTime = Date.now();
-    var presentationName = 'RSS Component Presentation - ' + testStartTime;
+    var presentationName;
     var presentationsListPage;
     var templateEditorPage;
     var rssComponentPage;
@@ -26,6 +25,12 @@ var RssComponentScenarios = function () {
       presentationsListPage.loadCurrentCompanyPresentationList();
 
       presentationsListPage.createNewPresentationFromTemplate('Example RSS Component', 'example-rss-component');
+
+      templateEditorPage.getPresentationName().getAttribute('value').then(function(name) {
+        expect(name).to.contain('Copy of');
+
+        presentationName = name + ' updated';
+      });
     });
 
     describe('basic operations', function () {
@@ -96,20 +101,17 @@ var RssComponentScenarios = function () {
 
         // Wait for validation to complete
         helper.waitDisappear(rssComponentPage.getLoader(), 'Validation spinner');
+      });
 
-        // Change presentation name
+      it('should change the Presentation name and auto-save', function () {
+        // Note: sendKeys does not trigger the "ng-change" event for the max items dropdown
+        // have to send a fake autoupdate to trigger it
         presentationsListPage.changePresentationName(presentationName);
 
         // Wait for presentation to be auto-saved
         helper.waitDisappear(templateEditorPage.getDirtyText());
         helper.wait(templateEditorPage.getSavingText(), 'RSS component auto-saving');
         helper.wait(templateEditorPage.getSavedText(), 'RSS component auto-saved');
-
-        // Log URL for troubeshooting
-        browser.getCurrentUrl().then(function(actualUrl) {
-          console.log(actualUrl);
-        });
-        browser.sleep(100);
 
         // Load presentation
         presentationsListPage.loadPresentation(presentationName);

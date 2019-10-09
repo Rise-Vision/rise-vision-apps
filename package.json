@@ -23,6 +23,7 @@
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "browser-sync": "^2.7.13",
+    "colors": "^0.6.2",
     "connect-modrewrite": "0.8.1",
     "gulp": "^3.9.0",
     "gulp-bower": "0.0.10",

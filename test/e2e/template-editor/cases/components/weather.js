@@ -11,8 +11,7 @@ var WeatherComponentScenarios = function () {
   browser.driver.manage().window().setSize(1920, 1080);
 
   describe('Weather Component', function () {
-    var testStartTime = Date.now();
-    var presentationName = 'Weather Component Presentation - ' + testStartTime;
+    var presentationName;
     var presentationsListPage;
     var templateEditorPage;
     var weatherComponentPage;
@@ -25,6 +24,12 @@ var WeatherComponentScenarios = function () {
       presentationsListPage.loadCurrentCompanyPresentationList();
 
       presentationsListPage.createNewPresentationFromTemplate('Weather Component Test', 'weather-component-test');
+
+      templateEditorPage.getPresentationName().getAttribute('value').then(function(name) {
+        expect(name).to.contain('Copy of');
+
+        presentationName = name;
+      });
     });
 
     describe('basic operations', function () {
@@ -48,23 +53,12 @@ var WeatherComponentScenarios = function () {
         expect(weatherComponentPage.getFarenheitOption().isSelected()).to.eventually.be.true;
         expect(weatherComponentPage.getCelsiusOption().isSelected()).to.eventually.not.be.true;
 
+        helper.waitDisappear(templateEditorPage.getDirtyText());
         helper.wait(templateEditorPage.getSavingText(), 'Weather component auto-saving');
         helper.wait(templateEditorPage.getSavedText(), 'Weather component auto-saved');
       });
 
       it('should save the Presentation, reload it, and validate changes were saved', function () {
-
-        //change name and save presentation
-        presentationsListPage.changePresentationName(presentationName);
-        helper.wait(templateEditorPage.getSavingText(), 'Weather component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Weather component auto-saved');
-
-        //log URL for troubleshooting
-        browser.getCurrentUrl().then(function(actualUrl) {
-          console.log(actualUrl);
-        });
-        browser.sleep(100);
-
         //load presentation
         presentationsListPage.loadPresentation(presentationName);
         templateEditorPage.selectComponent("Weather - Weather Forecast");

@@ -80,8 +80,8 @@ describe('directive: TemplateEditorPreviewHolder', function() {
           setAttribute: function() {}
         }
     });
+    sandbox.stub($window, 'matchMedia').returns({ matches: false });
 
-      
     element = $compile("<template-editor-preview-holder></template-editor-preview-holder>")($scope);
     $scope.$digest();
   }));

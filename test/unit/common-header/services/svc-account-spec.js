@@ -35,7 +35,7 @@ describe("Services: account", function() {
         deferred.resolve({
           account: {
             agreeToTerms: riseApiResponse,
-            add: riseApiResponse,
+            addWithDetails: riseApiResponse,
             get: riseApiResponse
           }
         });

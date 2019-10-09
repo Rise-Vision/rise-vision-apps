@@ -11,8 +11,7 @@ var SlidesComponentScenarios = function () {
   browser.driver.manage().window().setSize(1920, 1080);
 
   describe('Slides Component', function () {
-    var testStartTime = Date.now();
-    var presentationName = 'Slides Component Presentation - ' + testStartTime;
+    var presentationName;
     var presentationsListPage;
     var templateEditorPage;
     var slidesComponentPage;
@@ -26,10 +25,15 @@ var SlidesComponentScenarios = function () {
       presentationsListPage.loadCurrentCompanyPresentationList();
 
       presentationsListPage.createNewPresentationFromTemplate('Slides Component Test', 'slides-component-test');
+
+      templateEditorPage.getPresentationName().getAttribute('value').then(function(name) {
+        expect(name).to.contain('Copy of');
+
+        presentationName = name + ' updated';
+      });
     });
 
     describe('basic operations', function () {
-
       it('should open properties of Slides Component', function () {
         templateEditorPage.selectComponent(componentLabel);
         expect(slidesComponentPage.getSrcInput().isEnabled()).to.eventually.be.true;
@@ -83,20 +87,17 @@ var SlidesComponentScenarios = function () {
 
         //wait for validation to complete
         helper.waitDisappear(slidesComponentPage.getLoader(), 'Validation spinner');
+      });
 
-        //change presentation name
+      it('should change the Presentation name and auto-save', function () {
+        // Note: sendKeys does not trigger the "ng-change" event for the duration textbox
+        // have to send a fake autoupdate to trigger it
         presentationsListPage.changePresentationName(presentationName);
 
         //wait for presentation to be auto-saved
         helper.waitDisappear(templateEditorPage.getDirtyText());
         helper.wait(templateEditorPage.getSavingText(), 'Slides component auto-saving');
         helper.wait(templateEditorPage.getSavedText(), 'Slides component auto-saved');
-
-        //log URL for troubeshooting
-        browser.getCurrentUrl().then(function(actualUrl) {
-          console.log(actualUrl);
-        });
-        browser.sleep(100);
 
         //load presentation
         presentationsListPage.loadPresentation(presentationName);
