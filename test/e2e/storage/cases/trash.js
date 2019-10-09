@@ -6,6 +6,7 @@ var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js'
 var helper = require('rv-common-e2e').helper;
 var StorageHomePage = require('./../pages/storageHomePage.js');
 var FilesListPage = require('./../pages/filesListPage.js');
+var StorageSelectorModalPage = require('./../pages/storageSelectorModalPage.js');
 
 var TrashScenarios = function() {
 
@@ -16,6 +17,7 @@ var TrashScenarios = function() {
     var commonHeaderPage;
     var storageHomePage;
     var filesListPage;
+    var storageSelectorModalPage;
 
     before(function () {
       homepage = new HomePage();
@@ -23,6 +25,7 @@ var TrashScenarios = function() {
       commonHeaderPage = new CommonHeaderPage();
       storageHomePage = new StorageHomePage();
       filesListPage = new FilesListPage();
+      storageSelectorModalPage = new StorageSelectorModalPage();
     });
 
     describe('Given a user who wants to delete a file forever', function () {
@@ -37,6 +40,13 @@ var TrashScenarios = function() {
         //upload sample file       
         var uploadFilePath = process.cwd() + '/bower.json';
         storageHomePage.getUploadInput().sendKeys(uploadFilePath);
+
+        storageSelectorModalPage.getOverwriteConfirmationModal().isPresent().then(function(isDisplayed) {
+          if (isDisplayed) {
+            helper.clickWhenClickable(storageSelectorModalPage.getOverwriteFilesButton(),'Keep Files button');
+            helper.waitDisappear(storageSelectorModalPage.getOverwriteConfirmationModal(), 'Overwrite Confirmation');            
+          }
+        });
 
         //wait upload to finish        
         helper.waitDisappear(storageHomePage.getUploadPanel(), 'Storage Upload Panel');
