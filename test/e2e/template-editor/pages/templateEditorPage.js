@@ -117,10 +117,14 @@ var TemplateEditorPage = function() {
   };
 
   this.waitForAutosave = function() {
-    //wait for presentation to be auto-saved
-    helper.waitDisappear(dirtyText);
-    helper.wait(savingText, 'Template Editor auto-saving');
-    helper.wait(savedText, 'Template Editor auto-saved');
+    savedText.isDisplayed().then(function(isDisplayed) {
+      if (!isDisplayed) {
+        //wait for presentation to be auto-saved
+        helper.waitDisappear(dirtyText);
+        helper.waitDisappear(savingText, 'Template Editor auto-saving');
+        helper.wait(savedText, 'Template Editor auto-saved');        
+      }
+    });
   };
 
   this.dismissFinancialDataLicenseMessage = function() {
