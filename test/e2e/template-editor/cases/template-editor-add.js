@@ -80,28 +80,6 @@ var TemplateAddScenarios = function() {
         expect(templateEditorPage.getPublishButton().isEnabled()).to.eventually.be.true;
       });
 
-      xdescribe('delete', function() {
-        it('should try to delete the Template', function() {
-          browser.sleep(500);
-          helper.clickWhenClickable(templateEditorPage.getDeleteButton(), 'Template Delete Button');
-          
-          browser.sleep(500);
-          helper.wait(templateEditorPage.getDeleteForeverButton(), 'Template Delete Forever Button');      
-          helper.clickWhenClickable(templateEditorPage.getDeleteForeverButton(), 'Template Delete Forever Button');
-        });
-
-        it('should not delete the Template as it is used in a Schedule', function() {
-          helper.wait(templateEditorPage.getErrorMessageModal(), 'Template Delete Error Modal');
-          expect(templateEditorPage.getErrorMessageModalTitle().getText()).to.eventually.contain('Failed to delete Presentation.');
-        });
-
-        it('should close the error modal', function() {
-          templateEditorPage.getErrorMessageModalCloseButton().sendKeys(protractor.Key.ESCAPE);
-
-          helper.waitDisappear(templateEditorPage.getErrorMessageModal(), 'Template Delete Error Modal');
-        });        
-      });
-
     });
 
     describe('remove',function(){

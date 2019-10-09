@@ -28,10 +28,6 @@ var TemplateEditorPage = function() {
   var savedText = element(by.xpath(autoSaveXPath.replace('TEXT', 'All changes saved')));
   var savingText = element(by.xpath(autoSaveXPath.replace('TEXT', 'Saving changes')));
 
-  var errorMessageModal = element(by.css('.modal-dialog .modal-content'));
-  var errorMessageModalTitle = element(by.css('.modal-dialog .modal-title'));
-  var errorMessageModalCloseButton = element(by.css('.modal-dialog .btn-primary'));
-
   this.seePlansLink = function () {
     return seePlansLink;
   };
@@ -118,18 +114,6 @@ var TemplateEditorPage = function() {
 
   this.getBrandingEditLink = function () {
     return brandingEditLink;
-  };
-
-  this.getErrorMessageModal = function () {
-    return errorMessageModal;
-  };
-
-  this.getErrorMessageModalTitle = function () {
-    return errorMessageModalTitle;
-  };
-
-  this.getErrorMessageModalCloseButton = function () {
-    return errorMessageModalCloseButton;
   };
 
   this.waitForAutosave = function() {
