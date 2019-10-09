@@ -128,6 +128,8 @@ var TemplateEditorPage = function() {
   };
 
   this.dismissFinancialDataLicenseMessage = function() {
+    helper.wait(financialDataLicenseMessage, 'Financial Data License Message');
+
     //workaround as protractor doesn't click a modal in front of the preview iframe
     financialDataLicenseCloseButton.sendKeys(protractor.Key.ESCAPE);
     // helper.clickWhenClickable(financialDataLicenseCloseButton, 'Financial Data License Close Button');
