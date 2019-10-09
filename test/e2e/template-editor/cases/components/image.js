@@ -129,8 +129,7 @@ var ImageComponentScenarios = function () {
         helper.wait(imageComponentPage.getListDurationComponent(), 'List Duration');
         expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(4);
 
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText());
+        //wait for presentation to be auto-saved
         helper.wait(templateEditorPage.getSavedText(), 'Image component auto-saved');
       });
 

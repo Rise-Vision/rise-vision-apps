@@ -42,8 +42,7 @@ var FinancialComponentScenarios = function () {
       });
 
       it('should auto-save the component after the instruments are loaded', function () {
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText(), 'Financial component auto-saving');
+        //wait for presentation to be auto-saved
         helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
       });
 
@@ -62,8 +61,7 @@ var FinancialComponentScenarios = function () {
       });
 
       it('should auto-save the component after the instruments are loaded', function () {
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText(), 'Financial component auto-saving');
+        //wait for presentation to be auto-saved
         helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
       });
 

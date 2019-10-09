@@ -131,8 +131,7 @@ var VideoComponentScenarios = function () {
         helper.wait(videoComponentPage.getVolumeComponent(), 'Volume');
         expect(videoComponentPage.getSelectedVideosMain().count()).to.eventually.equal(2);
 
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText());
+        //wait for presentation to be auto-saved
         helper.wait(templateEditorPage.getSavedText(), 'Video component auto-saved');
       });
 
