@@ -12,13 +12,15 @@
 
   describe('Template Editor', function() {
 
-    var subCompanyName = 'E2E TEST SUBCOMPANY - TEMPLATE EDITOR';
+    var subCompanyName = 'E2E TEST SUBCOMPANY - TEMPLATE EDITOR 1';
     var commonHeaderPage;
     var presentationsListPage;
 
     before(function () {
       commonHeaderPage = new CommonHeaderPage();
       presentationsListPage = new PresentationListPage();
+
+      browser.driver.manage().window().setSize(1920, 1080);
 
       presentationsListPage.loadPresentationsList();
       commonHeaderPage.createSubscribedSubCompany(subCompanyName);

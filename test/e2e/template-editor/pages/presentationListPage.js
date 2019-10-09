@@ -37,6 +37,10 @@ var PresentationListPage = function() {
 
     helper.wait(templateEditorPage.getTemplateEditorContainer(), 'Template Editor Container');
     browser.sleep(500);
+
+    helper.waitDisappear(templateEditorPage.getDirtyText());
+    helper.waitDisappear(templateEditorPage.getSavingText());
+    helper.wait(templateEditorPage.getSavedText(), 'Template auto-saved');
   };
 
   this.loadPresentationsList = function() {

@@ -6,9 +6,6 @@ var AutoScheduleModalPage = require('./../../schedules/pages/autoScheduleModalPa
 var helper = require('rv-common-e2e').helper;
 
 var TemplateAddScenarios = function() {
-
-  browser.driver.manage().window().setSize(1920, 1080);
-
   describe('Template Editor Add', function () {
     var testStartTime = Date.now();
     var presentationName = 'Example Presentation - ' + testStartTime;
@@ -30,10 +27,7 @@ var TemplateAddScenarios = function() {
       });
 
       it('should auto-save the Presentation after it has been created', function () {
-        browser.sleep(3000);
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText());
-        helper.wait(templateEditorPage.getSavedText(), 'Component auto-saved');
+        expect(templateEditorPage.getSavedText().isDisplayed()).to.eventually.be.true;
       });
 
       it('should set presentation name', function(done) {
@@ -70,8 +64,8 @@ var TemplateAddScenarios = function() {
       });
 
       it('should auto-save the Presentation after the name has changed', function () {
-        helper.wait(templateEditorPage.getSavingText(), 'Component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Component auto-saved');
+        //wait for presentation to be auto-saved
+        templateEditorPage.waitForAutosave();
       });
 
       it('should load the newly created Presentation', function () {
@@ -86,6 +80,28 @@ var TemplateAddScenarios = function() {
         expect(templateEditorPage.getPublishButton().isEnabled()).to.eventually.be.true;
       });
 
+      xdescribe('delete', function() {
+        it('should try to delete the Template', function() {
+          browser.sleep(500);
+          helper.clickWhenClickable(templateEditorPage.getDeleteButton(), 'Template Delete Button');
+          
+          browser.sleep(500);
+          helper.wait(templateEditorPage.getDeleteForeverButton(), 'Template Delete Forever Button');      
+          helper.clickWhenClickable(templateEditorPage.getDeleteForeverButton(), 'Template Delete Forever Button');
+        });
+
+        it('should not delete the Template as it is used in a Schedule', function() {
+          helper.wait(templateEditorPage.getErrorMessageModal(), 'Template Delete Error Modal');
+          expect(templateEditorPage.getErrorMessageModalTitle().getText()).to.eventually.contain('Failed to delete Presentation.');
+        });
+
+        it('should close the error modal', function() {
+          templateEditorPage.getErrorMessageModalCloseButton().sendKeys(protractor.Key.ESCAPE);
+
+          helper.waitDisappear(templateEditorPage.getErrorMessageModal(), 'Template Delete Error Modal');
+        });        
+      });
+
     });
 
     describe('remove',function(){
@@ -93,11 +109,6 @@ var TemplateAddScenarios = function() {
         presentationsListPage.loadCurrentCompanyPresentationList();
         presentationsListPage.createNewPresentationFromTemplate('Example Financial Template V4', 'example-financial-template-v4');
         templateEditorPage.dismissFinancialDataLicenseMessage();
-
-        browser.sleep(3000);
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText());
-        helper.wait(templateEditorPage.getSavedText(), 'Component auto-saved');
 
         //workaround as protactor can't click on top of iframes
         //decrease window size to hide template preview        
