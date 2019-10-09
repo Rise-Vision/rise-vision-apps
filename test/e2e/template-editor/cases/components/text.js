@@ -37,15 +37,12 @@ var TextComponentScenarios = function () {
         expect(textComponentPage.getTextInput().getAttribute('value')).to.eventually.equal("Financial Literacy");
       });
 
-      it('should clear the component text', function () {
+      it('should clear and update the component text', function () {
+        // Note: Disconnect from Angular to prevent Autosave timeout from interrupting edits
+        browser.waitForAngularEnabled(false);
         textComponentPage.getTextInput().clear();
-
-        //wait for presentation to be auto-saved
-        templateEditorPage.waitForAutosave();
-      });
-
-      it('should update the component text', function () {
         textComponentPage.getTextInput().sendKeys("Changed Text" + protractor.Key.ENTER);
+        browser.waitForAngularEnabled(true);
 
         //wait for presentation to be auto-saved
         templateEditorPage.waitForAutosave();

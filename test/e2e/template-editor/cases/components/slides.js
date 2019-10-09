@@ -79,17 +79,17 @@ var SlidesComponentScenarios = function () {
 
         //wait for validation to complete
         helper.waitDisappear(slidesComponentPage.getLoader(), 'Validation spinner');
-      });
-
-      it('should clear the duration text', function () {
-        slidesComponentPage.getDurationInput().clear();
 
         //wait for presentation to be auto-saved
-        templateEditorPage.waitForAutosave();
+        helper.wait(templateEditorPage.getSavedText(), 'RSS component auto-saved');
       });
 
-      it('should update duration and autosave', function () {
+      it('should clear and update the duration text', function () {
+        // Note: Disconnect from Angular to prevent Autosave timeout from interrupting edits
+        browser.waitForAngularEnabled(false);
+        slidesComponentPage.getDurationInput().clear();
         slidesComponentPage.getDurationInput().sendKeys("999" + protractor.Key.ENTER);
+        browser.waitForAngularEnabled(true);
 
         //wait for presentation to be auto-saved
         templateEditorPage.waitForAutosave();

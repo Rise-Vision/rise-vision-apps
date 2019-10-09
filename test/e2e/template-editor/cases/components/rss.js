@@ -98,7 +98,7 @@ var RssComponentScenarios = function () {
         helper.waitDisappear(rssComponentPage.getLoader(), 'Validation spinner');
 
         //wait for presentation to be auto-saved
-        templateEditorPage.waitForAutosave();
+        helper.wait(templateEditorPage.getSavedText(), 'RSS component auto-saved');
       });
 
       it('should update the max items field', function() {
