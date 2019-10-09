@@ -52,17 +52,13 @@
     .factory('registerAccount', ['$q', '$log',
       'addAccount', 'updateUser',
       function ($q, $log, addAccount, updateUser) {
-        return function (username, basicProfile) {
-          $log.debug('registerAccount called.', username, basicProfile);
+        return function (userFirst, userLast, companyName, companyIndustry) {
+          $log.debug('registerAccount called.', userFirst, userLast, companyName, companyIndustry);
           var deferred = $q.defer();
-          addAccount().then().finally(function () {
-            updateUser(username, basicProfile).then(function (resp) {
-              if (resp.result) {
-                deferred.resolve();
-              } else {
-                deferred.reject();
-              }
-            }, deferred.reject).finally('registerAccount ended');
+          addAccount(userFirst, userLast, companyName, companyIndustry).then(function () {
+            deferred.resolve();
+          }).finally(function () {
+            deferred.reject();
           });
           return deferred.promise;
         };
@@ -71,11 +67,17 @@
 
     .factory('addAccount', ['$q', 'riseAPILoader', '$log',
       function ($q, riseAPILoader, $log) {
-        return function () {
+        return function (userFirst, userLast, companyName, companyIndustry) {
           $log.debug('addAccount called.');
           var deferred = $q.defer();
           riseAPILoader().then(function (riseApi) {
-            var request = riseApi.account.add();
+            var request = riseApi.account.addWithDetails({
+              userFirst: userFirst,
+              userLast: userLast,
+              companyName: companyName,
+              companyIndustry: companyIndustry
+            });
+
             request.execute(function (resp) {
               $log.debug('addAccount resp', resp);
               if (resp.result) {

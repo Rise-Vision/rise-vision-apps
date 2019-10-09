@@ -72,7 +72,8 @@ angular.module('risevision.common.header')
 
           var action;
           if ($scope.newUser) {
-            action = registerAccount(userState.getUsername(), $scope.profile);
+            action = registerAccount($scope.profile.firstName, $scope.profile.lastName, $scope.company.name, $scope
+              .company.companyIndustry);
           } else {
             action = agreeToTermsAndUpdateUser(userState.getUsername(),
               $scope.profile);
@@ -83,17 +84,11 @@ angular.module('risevision.common.header')
                 userState.refreshProfile()
                   .finally(function () {
                     if ($scope.newUser) {
-                      updateCompany(userState.getUserCompanyId(), $scope.company)
-                        .then(function () {
-                          plansFactory.startVolumePlanTrial();
-                        })
-                        .finally(function () {
-                          $rootScope.$broadcast(
-                            'risevision.user.authorized');
+                      plansFactory.startVolumePlanTrial();
+                      $rootScope.$broadcast('risevision.user.authorized');
 
-                          $modalInstance.close('success');
-                          $loading.stop('registration-modal');
-                        });
+                      $modalInstance.close('success');
+                      $loading.stop('registration-modal');
                     }
 
                     analyticsEvents.identify();
