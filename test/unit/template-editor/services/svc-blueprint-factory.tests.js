@@ -52,7 +52,7 @@ describe('service: blueprint factory', function() {
   describe('load: ', function() {
 
     it('should call API and return blueprintData',function(done) {
-      $httpBackend.expect('GET', 'https://widgets.risevision.com/beta/templates/template123/blueprint.json').respond(200, 'blueprintData');
+      $httpBackend.expect('GET', 'https://widgets.risevision.com/staging/templates/template123/blueprint.json').respond(200, 'blueprintData');
 
       blueprintFactory.load(PRODUCT_CODE)
         .then(function(resp) {
@@ -64,7 +64,7 @@ describe('service: blueprint factory', function() {
     });
 
     it('should populate factory object on load',function(done) {
-      $httpBackend.expect('GET', 'https://widgets.risevision.com/beta/templates/template123/blueprint.json').respond(200, 'blueprintData');
+      $httpBackend.expect('GET', 'https://widgets.risevision.com/staging/templates/template123/blueprint.json').respond(200, 'blueprintData');
 
       blueprintFactory.load(PRODUCT_CODE)
         .then(function(resp) {
@@ -76,7 +76,7 @@ describe('service: blueprint factory', function() {
     });
 
     it('should reject on http error',function(done) {
-      $httpBackend.expect('GET', 'https://widgets.risevision.com/beta/templates/template123/blueprint.json').respond(500, { error: 'Error' });
+      $httpBackend.expect('GET', 'https://widgets.risevision.com/staging/templates/template123/blueprint.json').respond(500, { error: 'Error' });
 
       blueprintFactory.load(PRODUCT_CODE)
         .then(null,function(error) {
@@ -85,7 +85,7 @@ describe('service: blueprint factory', function() {
         });
 
       $httpBackend.flush();
-    });    
+    });
   });
 
   describe('isPlayUntilDone: ', function() {
@@ -116,7 +116,7 @@ describe('service: blueprint factory', function() {
       };
 
       expect(blueprintFactory.isPlayUntilDone()).to.be.false;
-    });    
+    });
   });
 
   describe('hasBranding: ', function() {
@@ -139,7 +139,7 @@ describe('service: blueprint factory', function() {
       };
 
       expect(blueprintFactory.hasBranding()).to.be.false;
-    });    
+    });
   });
 
   describe('getBlueprintData', function () {
@@ -198,7 +198,7 @@ describe('service: blueprint factory', function() {
       expect(blueprintFactory.getLogoComponents()).to.deep.equal([]);
     });
 
-    it('should return is-logo images',function(){      
+    it('should return is-logo images',function(){
       var logoComponent = { type: "rise-image", attributes: {'is-logo': {value:'true' } } };
       blueprintFactory.blueprintData = {
         components: [
