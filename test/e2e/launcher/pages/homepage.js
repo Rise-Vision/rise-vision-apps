@@ -2,6 +2,8 @@
 var config = require('../../config/config.json');
 
 var HomePage = function() {
+  var _this = this;
+
   var url = config.rootUrl + '/';
   var displaysUrl = config.rootUrl + '/displays/list';
   var editorUrl = config.rootUrl + '/editor/list';
@@ -31,12 +33,14 @@ var HomePage = function() {
   var signInLink = element(by.id('sign-in-link'));  
 
   this.confirmGet = function(url) {
-    return browser.get(url).then(null,function () {
-      return browser.switchTo().alert().then(function (alert) {
-        alert.accept();
-        return browser.get(url)
+    return browser.get(url)
+      .then(null,function () {
+        return browser.switchTo().alert().then(function (alert) {
+          alert.accept();
+
+          return _this.confirmGet(url);
+        });
       });
-    });
   };
 
   this.get = function() {
