@@ -63,6 +63,18 @@ describe("controller: company settings", function() {
         }
       };
     });
+    $provide.service('$loading', function() {
+      return {
+        start: sinon.stub(),
+        stop: sinon.stub()
+      }
+    });
+    $provide.factory('confirmModal', function() {
+      return confirmModalStub = sinon.stub();
+    });
+    $provide.factory("regenerateCompanyField", function ($q) {
+      return regenerateCompanyFieldStub = sinon.stub();
+    });
     $provide.factory("customLoader", function ($q) {
       return function () {
         var deferred = $q.defer();
@@ -73,11 +85,10 @@ describe("controller: company settings", function() {
 
     $translateProvider.useLoader("customLoader");
 
-
   }));
 
   var $scope, userProfile, userCompany, savedCompany, company, userState, $modalInstance, createCompany,
-  trackerCalled, validateAddress;
+  trackerCalled, validateAddress, $loading, confirmModalStub, regenerateCompanyFieldStub;
   var isStoreAdmin = true;
   beforeEach(function(){
     createCompany = true;
@@ -142,9 +153,11 @@ describe("controller: company settings", function() {
         _state: {}
       };
     };
+
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
       $modalInstance = $injector.get("$modalInstance");
+      $loading = $injector.get("$loading");
       $controller("CompanySettingsModalCtrl", {
         $scope : $scope,
         $modalInstance: $modalInstance,
@@ -275,6 +288,160 @@ describe("controller: company settings", function() {
         done();
       },10);
     });
+  });
+
+  describe('resetAuthKey', function() {
+    beforeEach(function() {
+      $loading.start.reset();
+      $loading.stop.reset();
+    });
+
+    it('should open confirm dialog', function() {
+      confirmModalStub.returns(Q.resolve());
+
+      $scope.resetAuthKey();
+
+      confirmModalStub.should.have.been.calledWith(sinon.match.string, sinon.match.string);
+    });
+
+    it('should not do anything if the user cancels', function(done) {
+      confirmModalStub.returns(Q.reject());
+
+      $scope.resetAuthKey();
+      
+      setTimeout(function() {
+        $loading.start.should.not.have.been.called;
+        $loading.stop.should.not.have.been.called;
+        regenerateCompanyFieldStub.should.not.have.been.called;
+
+        done();
+      }, 10);
+
+    });
+
+    it('should show spinner and call api', function(done) {
+      confirmModalStub.returns(Q.resolve());
+
+      $scope.resetAuthKey();
+
+      setTimeout(function() {
+        $loading.start.should.have.been.calledWith('company-settings-modal');
+        $loading.stop.should.not.have.been.called;
+        regenerateCompanyFieldStub.should.have.been.calledWith('RV_test_id', 'authKey');
+
+        done();
+      }, 10);
+    });
+
+    it('should reset auth key', function(done) {
+      confirmModalStub.returns(Q.resolve());
+      regenerateCompanyFieldStub.returns(Q.resolve({
+        item: 'updatedKey'
+      }));
+
+      $scope.resetAuthKey();
+
+      setTimeout(function() {
+        $loading.stop.should.have.been.calledWith('company-settings-modal');
+        
+        expect($scope.company.authKey).to.equal('updatedKey');
+
+        done();
+      }, 10);
+    });
+
+    it('should handle failure to reset auth key', function(done) {
+      confirmModalStub.returns(Q.resolve());
+      regenerateCompanyFieldStub.returns(Q.reject());
+
+      $scope.resetAuthKey();
+
+      setTimeout(function() {
+        $loading.stop.should.have.been.calledWith('company-settings-modal');
+        
+        expect($scope.company.authKey).to.be.undefined;
+
+        done();
+      }, 10);
+    });
+
+  });
+
+  describe('resetClaimId', function() {
+    beforeEach(function() {
+      $loading.start.reset();
+      $loading.stop.reset();
+    });
+
+    it('should open confirm dialog', function() {
+      confirmModalStub.returns(Q.resolve());
+
+      $scope.resetClaimId();
+
+      confirmModalStub.should.have.been.calledWith(sinon.match.string, sinon.match.string);
+    });
+
+    it('should not do anything if the user cancels', function(done) {
+      confirmModalStub.returns(Q.reject());
+
+      $scope.resetClaimId();
+      
+      setTimeout(function() {
+        $loading.start.should.not.have.been.called;
+        $loading.stop.should.not.have.been.called;
+        regenerateCompanyFieldStub.should.not.have.been.called;
+
+        done();
+      }, 10);
+
+    });
+
+    it('should show spinner and call api', function(done) {
+      confirmModalStub.returns(Q.resolve());
+
+      $scope.resetClaimId();
+
+      setTimeout(function() {
+        $loading.start.should.have.been.calledWith('company-settings-modal');
+        $loading.stop.should.not.have.been.called;
+        regenerateCompanyFieldStub.should.have.been.calledWith('RV_test_id', 'claimId');
+
+        done();
+      }, 10);
+    });
+
+    it('should reset claim id', function(done) {
+      confirmModalStub.returns(Q.resolve());
+      regenerateCompanyFieldStub.returns(Q.resolve({
+        item: 'updatedId'
+      }));
+
+      $scope.resetClaimId();
+
+      setTimeout(function() {
+        $loading.stop.should.have.been.calledWith('company-settings-modal');
+        
+        expect($scope.company.claimId).to.equal('updatedId');
+
+        done();
+      }, 10);
+    });
+
+    it('should handle failure to reset claim id', function(done) {
+      confirmModalStub.returns(Q.resolve());
+      regenerateCompanyFieldStub.returns(Q.reject());
+
+      $scope.resetClaimId();
+
+      setTimeout(function() {
+        $loading.stop.should.have.been.calledWith('company-settings-modal');
+        
+        expect($scope.company.claimId).to.be.undefined;
+
+        done();
+      }, 10);
+    });
+
   });
 
   it("should close modal on cancel",function(){

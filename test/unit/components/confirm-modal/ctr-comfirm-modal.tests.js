@@ -1,6 +1,6 @@
 "use strict";
-describe("controller: Confirm Instance", function() {
-  beforeEach(module("risevision.common.components.confirm-instance"));
+describe("controller: Confirm Modal Controller", function() {
+  beforeEach(module("risevision.common.components.confirm-modal"));
   beforeEach(module(function ($provide) {
     $provide.service("$modalInstance",function(){
       return {
@@ -31,7 +31,7 @@ describe("controller: Confirm Instance", function() {
       $modalInstance = $injector.get("$modalInstance");
       $modalInstanceCloseSpy = sinon.spy($modalInstance, "close");
       $modalInstanceDismissSpy = sinon.spy($modalInstance, "dismiss");
-      $controller("confirmInstance", {
+      $controller("confirmModalController", {
         $scope : $scope,
         $modalInstance : $modalInstance,
         confirmationTitle: $injector.get("confirmationTitle"),
@@ -71,7 +71,7 @@ describe("controller: Confirm Instance", function() {
     var defaultConfirmationButton = "common.ok";
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
-      $controller("confirmInstance", {
+      $controller("confirmModalController", {
         $scope : $scope,
         confirmationButton: undefined
       });
@@ -91,7 +91,7 @@ describe("controller: Confirm Instance", function() {
     var defaultConfirmationButton = "common.cancel";
     inject(function($injector,$rootScope, $controller) {
       $scope = $rootScope.$new();
-      $controller("confirmInstance", {
+      $controller("confirmModalController", {
         $scope: $scope,
         cancelButton: undefined
       });

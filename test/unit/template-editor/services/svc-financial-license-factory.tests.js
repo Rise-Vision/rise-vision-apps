@@ -82,7 +82,7 @@ describe('service: financialLicenseFactory:', function() {
         financialLicenseFactory.checkFinancialDataLicenseMessage();
         
         $modal.open.should.have.been.calledWithMatch({
-          controller: "confirmInstance",
+          controller: "confirmModalController",
           windowClass: 'madero-style centered-modal financial-data-license-message'
         });
       });

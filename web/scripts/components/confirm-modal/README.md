@@ -1,9 +1,9 @@
-`confirm-instance` is the controller for the confirm message box. It's basically a simplification for the ui-bootstrap component, which always requires a controller to function. It is used in the following manner:
+`confirmModalController` is the controller for the confirm message box. It's basically a simplification for the ui-bootstrap component, which always requires a controller to function. It is used in the following manner:
 
 ```
         $scope.modalInstance = $modal.open({
           templateUrl: 'partials/confirm-modal.html',
-          controller: 'confirmInstance',
+          controller: 'confirmModalController',
           windowClass: 'modal-custom',
           resolve: {
             confirmationTitle: function () {

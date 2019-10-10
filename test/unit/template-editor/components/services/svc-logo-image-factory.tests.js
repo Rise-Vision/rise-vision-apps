@@ -177,7 +177,7 @@ describe('service: logoImageFactory', function() {
 
       logoImageFactory._canRemoveImage().then(function(){
         $modal.open.should.have.been.calledWithMatch({
-          controller: "confirmInstance",
+          controller: "confirmModalController",
           windowClass: 'primary-btn-danger madero-style centered-modal'
         });        
         done();
@@ -193,7 +193,7 @@ describe('service: logoImageFactory', function() {
         done('Should not resolve');
       }).catch(function(){
         $modal.open.should.have.been.calledWithMatch({
-          controller: "confirmInstance",
+          controller: "confirmModalController",
           windowClass: 'primary-btn-danger madero-style centered-modal'
         });        
         done();

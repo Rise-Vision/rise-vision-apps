@@ -107,8 +107,8 @@ angular.module('risevision.displays.controllers')
       $scope.confirmDelete = function () {
         $scope.modalInstance = $modal.open({
           template: $templateCache.get(
-            'partials/components/confirm-instance/confirm-modal.html'),
-          controller: 'confirmInstance',
+            'partials/components/confirm-modal/confirm-modal.html'),
+          controller: 'confirmModalController',
           windowClass: 'modal-custom',
           resolve: {
             confirmationTitle: function () {
@@ -133,8 +133,8 @@ angular.module('risevision.displays.controllers')
         } else {
           $scope.modalInstance = $modal.open({
             template: $templateCache.get(
-              'partials/components/confirm-instance/confirm-modal.html'),
-            controller: 'confirmInstance',
+              'partials/components/confirm-modal/confirm-modal.html'),
+            controller: 'confirmModalController',
             windowClass: 'modal-custom',
             resolve: {
               confirmationTitle: function () {

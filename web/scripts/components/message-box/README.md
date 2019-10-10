@@ -3,7 +3,7 @@
 ```
         $scope.modalInstance = $modal.open({
           templateUrl: 'partials/message-box.html',
-          controller: 'messageBoxInstance',
+          controller: 'messageBoxController',
           windowClass: 'modal-custom',
           resolve: {
             title: function () {

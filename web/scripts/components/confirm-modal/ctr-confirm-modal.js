@@ -1,7 +1,9 @@
 'use strict';
 
-angular.module('risevision.common.components.confirm-instance', [])
-  .controller('confirmInstance', ['$scope', '$modalInstance',
+angular.module('risevision.common.components.confirm-modal', [
+    'risevision.common.components.confirm-modal.services'
+  ])
+  .controller('confirmModalController', ['$scope', '$modalInstance',
     'confirmationTitle', 'confirmationMessage', 'confirmationButton',
     'cancelButton',
     function ($scope, $modalInstance, confirmationTitle, confirmationMessage,

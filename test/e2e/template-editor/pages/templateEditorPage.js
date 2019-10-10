@@ -65,7 +65,7 @@ var TemplateEditorPage = function() {
   };
 
   this.getDeleteForeverButton = function () {
-    return deleteForeverButton
+    return deleteForeverButton;
   };
 
   this.getErrorModal = function () {

@@ -4,12 +4,12 @@
 angular.module('risevision.common.header')
   .controller('SubCompanyModalCtrl', ['$scope', '$modalInstance', '$modal',
     '$templateCache', 'createCompany', 'countries', 'REGIONS_CA',
-    'REGIONS_US', 'TIMEZONES', 'userState', '$loading', 'humanReadableError',
+    'REGIONS_US', 'TIMEZONES', 'userState', '$loading', 'messageBox', 'humanReadableError',
     'segmentAnalytics', 'bigQueryLogging', 'COMPANY_INDUSTRY_FIELDS',
     'COMPANY_SIZE_FIELDS',
     function ($scope, $modalInstance, $modal, $templateCache,
       createCompany, countries, REGIONS_CA, REGIONS_US, TIMEZONES, userState,
-      $loading, humanReadableError, segmentAnalytics, bigQueryLogging,
+      $loading, messageBox, humanReadableError, segmentAnalytics, bigQueryLogging,
       COMPANY_INDUSTRY_FIELDS, COMPANY_SIZE_FIELDS) {
 
       $scope.company = {};
@@ -46,7 +46,7 @@ angular.module('risevision.common.header')
 
             $modalInstance.close('success');
           }, function (err) {
-            alert('Error: ' + humanReadableError(err));
+            messageBox('Error', humanReadableError(err));
           })
           .finally(function () {
             $scope.loading = false;

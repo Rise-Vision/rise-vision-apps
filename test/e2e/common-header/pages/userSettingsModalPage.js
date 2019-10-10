@@ -17,6 +17,7 @@
     var uaCheckbox = element(by.id("user-settings-ua"));
     var saveButton = element(by.id("save-button"));
     var deleteButton = element(by.id("delete-button"));
+    var deleteForeverButton = element(by.buttonText('Delete Forever'));
     
     this.getUserSettingsModal = function() {
       return userSettingsModal;
@@ -72,6 +73,10 @@
     
     this.getDeleteButton = function() {
       return deleteButton;
+    };
+
+    this.getDeleteForeverButton = function () {
+      return deleteForeverButton;
     };
     
   };

@@ -51,7 +51,7 @@ angular.module('risevision.template-editor.services')
       factory._canRemoveImage = function () {
         var modalInstance = $modal.open({
           template: $templateCache.get('partials/template-editor/confirm-modal.html'),
-          controller: 'confirmInstance',
+          controller: 'confirmModalController',
           windowClass: 'primary-btn-danger madero-style centered-modal',
           resolve: {
             confirmationTitle: function () {

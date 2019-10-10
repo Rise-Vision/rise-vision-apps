@@ -60,8 +60,8 @@ angular.module('risevision.storage.services')
               'singular' : 'plural');
 
           var modalInstance = $modal.open({
-            templateUrl: 'partials/components/confirm-instance/confirm-modal.html',
-            controller: 'confirmInstance',
+            templateUrl: 'partials/components/confirm-modal/confirm-modal.html',
+            controller: 'confirmModalController',
             windowClass: 'modal-custom',
             resolve: {
               confirmationTitle: function () {

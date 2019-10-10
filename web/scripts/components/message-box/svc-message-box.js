@@ -1,11 +1,13 @@
 'use strict';
 
-angular.module('risevision.common.components.message-box.services', [])
+angular.module('risevision.common.components.message-box.services', [
+    'ui.bootstrap'
+  ])
   .factory('messageBox', ['$modal', '$templateCache',
     function ($modal, $templateCache) {
       return function (title, message, close, windowClass, templateUrl) {
         var options = {
-          controller: 'messageBoxInstance',
+          controller: 'messageBoxController',
           size: 'md',
           resolve: {
             title: function () {
@@ -30,7 +32,7 @@ angular.module('risevision.common.components.message-box.services', [])
           options.templateUrl = templateUrl;
         }
 
-        return $modal.open(options);
+        return $modal.open(options).result;
       };
     }
   ]);

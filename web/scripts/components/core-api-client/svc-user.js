@@ -146,7 +146,7 @@
               if (resp.result) {
                 deferred.resolve(resp);
               } else {
-                deferred.reject('deleteUser');
+                deferred.reject(resp);
               }
             });
           });

@@ -78,7 +78,9 @@
 
           userSettingsModalPage.getDeleteButton().click();
           
-          browser.switchTo().alert().accept();  // Use to accept (simulate clicking ok)
+          browser.sleep(500);
+          helper.wait(userSettingsModalPage.getDeleteForeverButton(), 'User Delete Forever Button');      
+          helper.clickWhenClickable(userSettingsModalPage.getDeleteForeverButton(), 'User Delete Forever Button');
           
           helper.waitDisappear(userSettingsModalPage.getUserSettingsModal(), "User Settings Modal");
         }

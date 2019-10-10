@@ -75,11 +75,11 @@
           
           companySettingsModalPage.getResetAuthKeyButton().click();
 
-          helper.waitForAlert("Confirm Auth Key reset");
-          browser.switchTo().alert().then(function (prompt){ prompt.accept(); }); //confirm reset
-          
-          helper.waitForAlert("Auth Key reset");
-          browser.switchTo().alert().then(function (prompt){ prompt.accept(); }); //acknowledge reset message
+          browser.sleep(500);
+          helper.wait(companySettingsModalPage.getConfirmActionButton(), 'Confirm Reset Button');      
+          helper.clickWhenClickable(companySettingsModalPage.getConfirmActionButton(), 'Confirm Reset Button');
+
+          helper.waitDisappear(companySettingsModalPage.getLoader(), "Company Settings Modal");
           
           expect(companySettingsModalPage.getAuthKeyField().getText()).to.eventually.be.ok;
           expect(companySettingsModalPage.getAuthKeyField().getText()).to.eventually.not.equal(authKey);
@@ -90,11 +90,11 @@
           
           companySettingsModalPage.getResetClaimIdButton().click();
 
-          helper.waitForAlert("Confirm Claim Id reset");
-          browser.switchTo().alert().then(function (prompt){ prompt.accept(); }); //confirm reset
-          
-          helper.waitForAlert("Claim Id reset");
-          browser.switchTo().alert().then(function (prompt){ prompt.accept(); }); //acknowledge reset message
+          browser.sleep(500);
+          helper.wait(companySettingsModalPage.getConfirmActionButton(), 'Confirm Reset Button');      
+          helper.clickWhenClickable(companySettingsModalPage.getConfirmActionButton(), 'Confirm Reset Button');
+
+          helper.waitDisappear(companySettingsModalPage.getLoader(), "Company Settings Modal");
           
           expect(companySettingsModalPage.getClaimIdField().getText()).to.eventually.be.ok;
           expect(companySettingsModalPage.getClaimIdField().getText()).to.eventually.not.equal(claimId);

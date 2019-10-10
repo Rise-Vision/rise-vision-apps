@@ -3,14 +3,14 @@
 angular.module('risevision.common.header')
   .controller('CompanySettingsModalCtrl', ['$scope', '$modalInstance',
     'updateCompany', 'companyId', 'countries', 'REGIONS_CA', 'REGIONS_US',
-    'TIMEZONES', 'getCompany', 'regenerateCompanyField', '$window', '$loading',
+    'TIMEZONES', 'getCompany', 'regenerateCompanyField', '$loading',
     'humanReadableError', 'userState', 'userAuthFactory', 'deleteCompany',
-    'segmentAnalytics', '$modal', '$templateCache',
+    'segmentAnalytics', 'confirmModal', '$modal', '$templateCache',
     'COMPANY_INDUSTRY_FIELDS', 'COMPANY_SIZE_FIELDS', 'addressFactory',
     function ($scope, $modalInstance, updateCompany, companyId,
       countries, REGIONS_CA, REGIONS_US, TIMEZONES, getCompany,
-      regenerateCompanyField, $window, $loading, humanReadableError,
-      userState, userAuthFactory, deleteCompany, segmentAnalytics,
+      regenerateCompanyField, $loading, humanReadableError,
+      userState, userAuthFactory, deleteCompany, segmentAnalytics, confirmModal,
       $modal, $templateCache, COMPANY_INDUSTRY_FIELDS, COMPANY_SIZE_FIELDS, addressFactory) {
 
       $scope.company = {
@@ -119,43 +119,46 @@ angular.module('risevision.common.header')
             });
         });
       };
-      $scope.resetAuthKey = function () {
+
+      var _resetCompanyField = function (type, title, message) {
         _clearErrorMessages();
-        if ($window.confirm(
-            'Resetting the Company Authentication Key will cause existing Data Gadgets to no longer report data until they are updated with the new Key.'
-          )) {
-          $loading.start('company-settings-modal');
-          regenerateCompanyField($scope.company.id, 'authKey').then(
-              function (resp) {
-                $scope.company.authKey = resp.item;
-                $window.alert('Successfully changed Authentication Key.');
-              },
-              function (error) {
+
+        return confirmModal(title, message)
+          .then(function () {
+            $loading.start('company-settings-modal');
+
+            return regenerateCompanyField($scope.company.id, type)
+              .catch(function (error) {
                 _showErrorMessage('update', error);
               })
-            .finally(function () {
-              $loading.stop('company-settings-modal');
-            });
-        }
+              .finally(function () {
+                $loading.stop('company-settings-modal');
+              });
+          });
       };
+
+      $scope.resetAuthKey = function () {
+        var type = 'authKey';
+        var title = 'Reset Authentication Key',
+          message = 'Resetting the Company Authentication Key will cause existing Data Gadgets ' +
+          'to no longer report data until they are updated with the new Key.';
+
+        _resetCompanyField(type, title, message)
+          .then(function (resp) {
+            $scope.company.authKey = resp.item;
+          });
+      };
+
       $scope.resetClaimId = function () {
-        _clearErrorMessages();
-        if ($window.confirm(
-            'Resetting the Company Claim Id will cause existing installations to no longer be associated with your Company.'
-          )) {
-          $loading.start('company-settings-modal');
-          regenerateCompanyField($scope.company.id, 'claimId').then(
-              function (resp) {
-                $scope.company.claimId = resp.item;
-                $window.alert('Successfully changed Claim ID.');
-              },
-              function (error) {
-                _showErrorMessage('update', error);
-              })
-            .finally(function () {
-              $loading.stop('company-settings-modal');
-            });
-        }
+        var type = 'claimId';
+        var title = 'Reset Claim Id',
+          message = 'Resetting the Company Claim Id will cause existing installations to no ' +
+          'longer be associated with your Company.';
+
+        _resetCompanyField(type, title, message)
+          .then(function (resp) {
+            $scope.company.claimId = resp.item;
+          });
       };
 
       function verifyAdmin(company) {

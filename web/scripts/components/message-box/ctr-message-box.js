@@ -3,7 +3,7 @@
 angular.module('risevision.common.components.message-box', [
     'risevision.common.components.message-box.services'
   ])
-  .controller('messageBoxInstance', ['$scope', '$modalInstance',
+  .controller('messageBoxController', ['$scope', '$modalInstance',
     'title', 'message', 'button',
     function ($scope, $modalInstance, title, message, button) {
       $scope.title = title;

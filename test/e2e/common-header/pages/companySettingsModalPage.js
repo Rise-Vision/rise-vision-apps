@@ -15,6 +15,7 @@
     var claimIdField = element(by.css(".ps-claim-id"));
     var resetAuthKeyButton = element(by.css(".ps-reset-auth-key"));
     var resetClaimIdButton = element(by.css(".ps-reset-claim-id"));
+    var confirmActionButton = element(by.buttonText('Okay'));
 
     var saveButton = element(by.id("save-button"));
     var closeButton = element(by.id("close-button"));
@@ -54,6 +55,10 @@
     
     this.getResetClaimIdButton = function() {
       return resetClaimIdButton;
+    };
+
+    this.getConfirmActionButton = function() {
+      return confirmActionButton;
     };
 
     this.getSaveButton = function() {

@@ -21,7 +21,7 @@ describe('service: uploadOverwriteWarning', function() {
 
       var $templateCache = $injector.get('$templateCache');
 
-      $templateCache.put('partials/components/confirm-instance/confirm-modal.html', 'confirm-modal');
+      $templateCache.put('partials/components/confirm-modal/confirm-modal.html', 'confirm-modal');
       $templateCache.put('partials/template-editor/confirm-modal.html', 'confirm-modal-madero');
     });
   });
@@ -61,7 +61,7 @@ describe('service: uploadOverwriteWarning', function() {
         .catch(function(){
           expect($modal.open).to.have.been.called;
           expect($modal.open.getCall(0).args[0].template).to.equal('confirm-modal');
-          expect($modal.open.getCall(0).args[0].controller).to.equal('confirmInstance');
+          expect($modal.open.getCall(0).args[0].controller).to.equal('confirmModalController');
           expect($modal.open.getCall(0).args[0].windowClass).to.equal('modal-custom confirm-overwrite-modal');      
           expect($modal.open.getCall(0).args[0].resolve).to.be.ok;
 
@@ -82,7 +82,7 @@ describe('service: uploadOverwriteWarning', function() {
       uploadOverwriteWarning.checkOverwrite({isOverwrite: true},true).then(function(){
           expect($modal.open).to.have.been.called;
           expect($modal.open.getCall(0).args[0].template).to.equal('confirm-modal-madero');
-          expect($modal.open.getCall(0).args[0].controller).to.equal('confirmInstance');
+          expect($modal.open.getCall(0).args[0].controller).to.equal('confirmModalController');
           expect($modal.open.getCall(0).args[0].windowClass).to.equal('primary-btn-danger madero-style centered-modal');      
           expect($modal.open.getCall(0).args[0].resolve).to.be.ok;
 

@@ -26,7 +26,7 @@ describe("controller: Message Box", function() {
       $scope = $rootScope.$new();
       $modalInstance = $injector.get("$modalInstance");
       $modalInstanceDismissSpy = sinon.spy($modalInstance, "dismiss");
-      $controller("messageBoxInstance", {
+      $controller("messageBoxController", {
         $scope : $scope,
         $modalInstance : $modalInstance,
         title: $injector.get("title"),

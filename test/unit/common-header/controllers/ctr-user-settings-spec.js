@@ -10,16 +10,8 @@ describe("controller: user settings", function() {
     $provide.service("userState",userState);
     $provide.service("$modalInstance",function(){
       return {
-        _dismissed : false,
-        _closed: false,
-        dismiss : function(reason){
-          expect(reason).to.equal("cancel");
-          this._dismissed = true;
-        },
-        close: function(reason) {
-          expect(reason).to.equal("success");          
-          this._closed = true;
-        }
+        dismiss : sinon.stub(),
+        close: sinon.stub()
       };
     });
     $provide.value("username", "user@example.io");
@@ -46,6 +38,9 @@ describe("controller: user settings", function() {
         return deferred.promise;
       };
     });
+    $provide.service('deleteUser', function() {
+      return deleteUserStub = sinon.stub();
+    });
     $provide.service("segmentAnalytics", function() { 
       return {
         track: function(name) {
@@ -66,15 +61,19 @@ describe("controller: user settings", function() {
     $translateProvider.useLoader("customLoader");
 
     $provide.factory("messageBox", function() {
-      return messageBoxStub;
+      return messageBoxStub = sinon.stub();
     });
+    $provide.factory('confirmModal', function() {
+      return confirmModalStub = sinon.stub();
+    });
+
     $provide.factory("$filter", function() {
       return function() { return filterStub; };
     });
 
   }));
   var $scope, userProfile, savedUser, userState, $modalInstance, createUserError,
-  trackerCalled, messageBoxStub, filterStub;
+  trackerCalled, deleteUserStub, messageBoxStub, confirmModalStub, filterStub;
   var isRiseAdmin = true, isUserAdmin = true, isRiseVisionUser = true, isRiseAuthUser = false;
   beforeEach(function(){
     createUserError = false;
@@ -129,8 +128,7 @@ describe("controller: user settings", function() {
       $scope = $rootScope.$new();
       $modalInstance = $injector.get("$modalInstance");
       userState = $injector.get("userState");
-      
-      messageBoxStub = sinon.stub();
+
       filterStub = sinon.stub();
 
       $controller("UserSettingsModalCtrl", {
@@ -197,7 +195,7 @@ describe("controller: user settings", function() {
       expect($scope.loading).to.be.false;
 
       expect(trackerCalled).to.not.be.ok;
-      expect($modalInstance._closed).to.be.false;
+      $modalInstance.close.should.not.have.been.called;
     });
 
     it("should save the user and close the modal",function(done){
@@ -214,7 +212,7 @@ describe("controller: user settings", function() {
         userProfileSpy.should.have.been.once;
 
         expect(trackerCalled).to.equal("User Updated");
-        expect($modalInstance._closed).to.be.true;
+        $modalInstance.close.should.have.been.calledWith('success');
         
         done();
       },10);
@@ -231,7 +229,7 @@ describe("controller: user settings", function() {
         expect(filterStub).to.have.not.been.called;
         
         expect($scope.loading).to.be.false;
-        expect($modalInstance._closed).to.be.false;
+        $modalInstance.close.should.not.have.been.called;
 
         done();
       },10);
@@ -250,16 +248,91 @@ describe("controller: user settings", function() {
         });
 
         expect($scope.loading).to.be.false;
-        expect($modalInstance._closed).to.be.false;
+        $modalInstance.close.should.not.have.been.called;
 
         done();
       },10);
     });
   });
+
+  describe('deleteUser: ', function() {
+    it('should open confirm dialog', function() {
+      confirmModalStub.returns(Q.resolve());
+
+      $scope.deleteUser();
+
+      confirmModalStub.should.have.been.calledWith(sinon.match.string, sinon.match.string);
+
+      expect($scope.loading).to.be.true;
+    });
+
+    it('should not do anything if the user cancels', function(done) {
+      confirmModalStub.returns(Q.reject());
+
+      $scope.deleteUser();
+      
+      setTimeout(function() {
+        expect($scope.loading).to.be.false;
+        deleteUserStub.should.not.have.been.called;
+
+        done();
+      }, 10);
+
+    });
+
+    it('should show spinner and call api', function(done) {
+      confirmModalStub.returns(Q.resolve());
+
+      $scope.deleteUser();
+
+      setTimeout(function() {
+        expect($scope.loading).to.be.false;
+
+        deleteUserStub.should.have.been.calledWith("user@example.io");
+
+        done();
+      }, 10);
+    });
+
+    it('should delete user', function(done) {
+      confirmModalStub.returns(Q.resolve());
+      deleteUserStub.returns(Q.resolve());
+
+      $scope.deleteUser();
+
+      setTimeout(function() {
+        expect($scope.loading).to.be.false;
+        
+        expect(trackerCalled).to.equal("User Deleted");
+        $modalInstance.dismiss.should.have.been.calledWith('deleted');
+
+        done();
+      }, 10);
+    });
+
+    it('should handle failure to delete user', function(done) {
+      confirmModalStub.returns(Q.resolve());
+      deleteUserStub.returns(Q.reject({}));
+
+      $scope.deleteUser();
+
+      setTimeout(function() {
+        expect($scope.loading).to.be.false;
+        
+        messageBoxStub.should.have.been.called;
+
+        expect(trackerCalled).to.not.be.ok;
+        $modalInstance.dismiss.should.not.have.been.called;
+
+        done();
+      }, 10);
+    });
+  });
   
   it("should close modal on cancel",function (){
     $scope.closeModal();
-    expect($modalInstance._dismissed).to.be.true;
+
+    $modalInstance.dismiss.should.have.been.calledWith('cancel');
   });
   
   describe("editRoleVisible: ", function () {

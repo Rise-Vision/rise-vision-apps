@@ -12,8 +12,8 @@ angular.module('risevision.storage.services')
             factory.confirmOverwriteModal = $modal.open({
               template: $templateCache.get(isMaderoStyle ?
                 'partials/template-editor/confirm-modal.html' :
-                'partials/components/confirm-instance/confirm-modal.html'),
-              controller: 'confirmInstance',
+                'partials/components/confirm-modal/confirm-modal.html'),
+              controller: 'confirmModalController',
               windowClass: isMaderoStyle ?
                 'primary-btn-danger madero-style centered-modal' : 'modal-custom confirm-overwrite-modal',
               resolve: {

@@ -1,16 +1,15 @@
 'use strict';
-/*global alert: false */
 
 angular.module('risevision.common.header')
   .controller('RegistrationModalCtrl', [
     '$q', '$scope', '$rootScope', '$modalInstance',
     '$loading', 'registerAccount', '$log', '$cookies',
-    'userState', 'pick', 'uiFlowManager', 'humanReadableError',
+    'userState', 'pick', 'uiFlowManager', 'messageBox', 'humanReadableError',
     'agreeToTermsAndUpdateUser', 'account', 'segmentAnalytics',
     'bigQueryLogging', 'analyticsEvents', 'updateCompany', 'plansFactory',
     'COMPANY_INDUSTRY_FIELDS', 'urlStateService',
     function ($q, $scope, $rootScope, $modalInstance, $loading, registerAccount,
-      $log, $cookies, userState, pick, uiFlowManager, humanReadableError,
+      $log, $cookies, userState, pick, uiFlowManager, messageBox, humanReadableError,
       agreeToTermsAndUpdateUser, account, segmentAnalytics, bigQueryLogging,
       analyticsEvents, updateCompany, plansFactory, COMPANY_INDUSTRY_FIELDS,
       urlStateService) {
@@ -109,7 +108,7 @@ angular.module('risevision.common.header')
                   });
               },
               function (err) {
-                alert('Error: ' + humanReadableError(err));
+                messageBox('Error', humanReadableError(err));
                 console.error(err);
               })
             .finally(function () {

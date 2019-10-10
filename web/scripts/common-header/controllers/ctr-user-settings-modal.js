@@ -5,11 +5,11 @@ angular.module('risevision.common.header')
   .controller('UserSettingsModalCtrl', [
     '$scope', '$filter', '$modalInstance', 'updateUser', 'getUserProfile',
     'deleteUser', 'username', 'userRoleMap', '$log', '$loading', 'userState',
-    'userAuthFactory', 'uiFlowManager', 'humanReadableError', 'messageBox',
+    'userAuthFactory', 'uiFlowManager', 'humanReadableError', 'messageBox', 'confirmModal',
     '$rootScope', 'segmentAnalytics', 'userauth', '$q', 'COMPANY_ROLE_FIELDS',
     function ($scope, $filter, $modalInstance, updateUser, getUserProfile,
       deleteUser, username, userRoleMap, $log, $loading, userState,
-      userAuthFactory, uiFlowManager, humanReadableError, messageBox,
+      userAuthFactory, uiFlowManager, humanReadableError, messageBox, confirmModal,
       $rootScope, segmentAnalytics, userauth, $q, COMPANY_ROLE_FIELDS) {
       $scope.user = {};
       $scope.userPassword = {};
@@ -57,25 +57,35 @@ angular.module('risevision.common.header')
       };
 
       $scope.deleteUser = function () {
-        if (confirm('Are you sure you want to delete this user?')) {
-          deleteUser($scope.username)
-            .then(function () {
-              segmentAnalytics.track('User Deleted', {
-                userId: $scope.username,
-                companyId: userState.getSelectedCompanyId(),
-                isSelf: userState.checkUsername(username)
-              });
+        confirmModal('Deleting User', 'Are you sure you want to delete this user?', 'common.delete-forever')
+          .then(function () {
+            $scope.loading = true;
 
-              if (userState.checkUsername(username)) {
-                userAuthFactory.signOut().then().finally(function () {
-                  uiFlowManager.invalidateStatus('registrationComplete');
+            deleteUser($scope.username)
+              .then(function () {
+                segmentAnalytics.track('User Deleted', {
+                  userId: $scope.username,
+                  companyId: userState.getSelectedCompanyId(),
+                  isSelf: userState.checkUsername(username)
                 });
-              }
-            })
-            .finally(function () {
-              $modalInstance.dismiss('deleted');
-            });
-        }
+
+                if (userState.checkUsername(username)) {
+                  userAuthFactory.signOut().then().finally(function () {
+                    uiFlowManager.invalidateStatus('registrationComplete');
+                  });
+                }
+
+                $modalInstance.dismiss('deleted');
+              })
+              .catch(function (error) {
+                var errorMessage = 'Error: ' + humanReadableError(error);
+
+                messageBox('Failed to delete User!', errorMessage);
+              })
+              .finally(function () {
+                $scope.loading = false;
+              });
+          });
       };
 
       $scope.save = function () {
