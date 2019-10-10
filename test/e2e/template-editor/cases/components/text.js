@@ -8,8 +8,6 @@ var helper = require('rv-common-e2e').helper;
 
 var TextComponentScenarios = function () {
 
-  browser.driver.manage().window().setSize(1920, 1080);
-
   describe('Text Component', function () {
     var presentationName;
     var presentationsListPage;
@@ -28,36 +26,26 @@ var TextComponentScenarios = function () {
       templateEditorPage.getPresentationName().getAttribute('value').then(function(name) {
         expect(name).to.contain('Copy of');
 
-        presentationName = name + ' updated';
+        presentationName = name;
       });
     });
 
     describe('basic operations', function () {
-      it('should auto-save the Presentation after it has been created', function () {
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText());
-        helper.wait(templateEditorPage.getSavedText(), 'Text component auto-saved');
-      });
-
       it('should open properties of Text Component', function () {
         templateEditorPage.selectComponent("Text - Title");
 
         expect(textComponentPage.getTextInput().getAttribute('value')).to.eventually.equal("Financial Literacy");
       });
 
-      it('should update component text', function () {
+      it('should clear and update the component text', function () {
+        // Note: Disconnect from Angular to prevent Autosave timeout from interrupting edits
+        browser.waitForAngularEnabled(false);
         textComponentPage.getTextInput().clear();
         textComponentPage.getTextInput().sendKeys("Changed Text" + protractor.Key.ENTER);
-      });
+        browser.waitForAngularEnabled(true);
 
-      it('should change the Presentation name and auto-save', function () {
-        // Note: sendKeys does not trigger the "ng-change" event for the text textbox
-        // have to send a fake autoupdate to trigger it
-        presentationsListPage.changePresentationName(presentationName);
-
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.wait(templateEditorPage.getSavingText(), 'Text component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Text component auto-saved');
+        //wait for presentation to be auto-saved
+        templateEditorPage.waitForAutosave();
       });
 
       it('should reload the Presentation, and validate changes were saved', function () {

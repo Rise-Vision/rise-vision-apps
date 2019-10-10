@@ -19,6 +19,8 @@
       commonHeaderPage = new CommonHeaderPage();
       presentationsListPage = new PresentationListPage();
 
+      browser.driver.manage().window().setSize(1920, 1080);
+
       presentationsListPage.loadPresentationsList();
       commonHeaderPage.createSubscribedSubCompany(subCompanyName);
 

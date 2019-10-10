@@ -75,19 +75,52 @@ If you have not ran git pull/git fetch in a while, you may want to run: git fetc
 
 Because of the way git works (mainly, references to remote repositories), it's important to have an up to date copy of the repository. The proposed command, ```git fetch --prune```, will retrieve the latest branches from GitHub and remove no longer existing references to branches. It will NOT remove local branches and it will not merge into working copies, which means unless you are doing something really specific with your repository, it's safe to run.
 
-## Restoring Jenkins company
+
+## Testing
+
+### Unit Testing
+```
+gulp test:unit
+```
+
+### Protractor End-to-End Testing
+
+E2E tests require `E2E_USER` and `E2E_PASS` environment variables to be defined with the Google account used for testing:
+
+```
+E2E_USER=jenkins@risevision.com E2E_PASS=... gulp test:e2e
+```
+
+#### Susbcribed vs Non Susbscribed Test Companies
+When adding new E2E tests, you can opt to run them on the main test company or create a new subcompany to start from a clean environment.
+The main test company is subscribed to a plan, and has two subcompanies: `Jenkins Subscribed Subcompany` and `Jenkins Unsubscribed Subcompany`. As implied by their names, one is subscribed to a plan and the other isn't. You can use those companies accordingly, or create sub companies of them that will inherit their subscription statuses.  
+
+#### Parallel Builds
+Tests that may cause conflicts when running in parallel are isolated by appending the staging name to its resources. For instance, by sufixing a new subcompany name with the stage name. The staging name can be retrieved via `commonHeaderPage.getStageEnv()`.
+
+#### User Registration Tests 
+In similar fashion, when running user registration tests, the stage name is appended to create a unique user per stage environment, to prevent conflicts.
+
+This is achieved by using [plus addressing](https://will.koffel.org/post/2014/using-email-plus-addressing/). In summary, from single email account you can have multiple 'aliases' by appending `+` and an identifier. In our case, we use `jenkins.rise@homail.com` as the main account and `jenkins.rise+stage1@hotmail.com`, `jenkins.rise+stage2@hotmail.com`, etc, for the user registration tests on respective staging environments.
+
+#### Mail Listener
+Some funtionalities like registering a new user or adding a new user to a company send emails to users.
+To test that emails are properly delivered, E2E tests use the [MailListener](https://github.com/Rise-Vision/rise-vision-apps/blob/master/test/e2e/common-header/utils/mailListener.js) service, which connects via IMAP and checks user emails. 
+Same as above, it will use `jenkins.rise@homail.com` and filter received emails per stage environment, so that tests can be safely run in parallel without retrieving email messages from other environments.
+
+#### Restoring Jenkins company
 
 In case the Jenkins Company gets removed, which causes all e2e tests to fail, the steps to recreate it are:
 
 - Login with jenkins@risevision.com
-- Create a new company
+- Create a new company with a non-education industry
 - Subscribe to a plan (any plan would do). Not a trial, a renewable Subscription. This needs to be done as jenkins@risevision.com
 - Go to Company Settings and uncheck *"Share Company Plan”*
 - Create an empty presentation named *TEST_E2E_PRESENTATION*
 - In Storage, upload an image file named *logo.gif*
 - In Storage, create a folder named *E2E_TEST_FOLDER*
-
-Additionally the _Company Size_, _Industry_ and _User Role_ fields need to be filled for the newly created company. This can be done from Company Settings (size and industry) and User Settings (role) by any user with access to this company. In case this is not done, two weeks after the company is created the `jenkins@risevision.com` user will be prompted to complete ICP information. This is not handled automatically by the tests and will cause them to fail.
+- Create a new Subcompany *"Jenkins Subscribed Subcompany"*, susbcribe to a plan with it and confirm it has `Share Company Plan` checked.
+- Create a new  subcompany *"Jenkins Unsubscribed Subcompany"*
 
 ## Submitting Issues
 If you encounter problems or find defects we really want to hear about them. If you could take the time to add them as issues to this Repository it would be most appreciated. When reporting issues please use the following format where applicable:

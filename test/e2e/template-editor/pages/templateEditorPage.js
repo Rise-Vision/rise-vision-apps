@@ -116,7 +116,20 @@ var TemplateEditorPage = function() {
     return brandingEditLink;
   };
 
+  this.waitForAutosave = function() {
+    savedText.isDisplayed().then(function(isDisplayed) {
+      if (!isDisplayed) {
+        //wait for presentation to be auto-saved
+        helper.waitDisappear(dirtyText);
+        helper.waitDisappear(savingText, 'Template Editor auto-saving');
+        helper.wait(savedText, 'Template Editor auto-saved');        
+      }
+    });
+  };
+
   this.dismissFinancialDataLicenseMessage = function() {
+    helper.wait(financialDataLicenseMessage, 'Financial Data License Message');
+
     //workaround as protractor doesn't click a modal in front of the preview iframe
     financialDataLicenseCloseButton.sendKeys(protractor.Key.ESCAPE);
     // helper.clickWhenClickable(financialDataLicenseCloseButton, 'Financial Data License Close Button');

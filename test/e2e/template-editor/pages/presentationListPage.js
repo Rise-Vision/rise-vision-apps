@@ -37,6 +37,9 @@ var PresentationListPage = function() {
 
     helper.wait(templateEditorPage.getTemplateEditorContainer(), 'Template Editor Container');
     browser.sleep(500);
+
+    //wait for presentation to be auto-saved
+    helper.wait(templateEditorPage.getSavedText(), 'Template auto-saved');
   };
 
   this.loadPresentationsList = function() {

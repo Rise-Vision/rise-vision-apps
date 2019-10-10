@@ -7,9 +7,6 @@ var FinancialComponentPage = require('./../../pages/components/financialComponen
 var helper = require('rv-common-e2e').helper;
 
 var FinancialComponentScenarios = function () {
-
-  browser.driver.manage().window().setSize(1920, 1080);
-
   describe('Financial Component', function () {
     var presentationName;
     var presentationsListPage;
@@ -39,20 +36,13 @@ var FinancialComponentScenarios = function () {
         templateEditorPage.dismissFinancialDataLicenseMessage();
       });
 
-      it('should auto-save the Presentation after it has been created', function () {
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText());
-        helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
-      });
-
       it('should show one Financial Component', function () {
         templateEditorPage.selectComponent("Financial - ");
         expect(financialComponentPage.getInstrumentItems().count()).to.eventually.equal(3);
       });
 
       it('should auto-save the component after the instruments are loaded', function () {
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText(), 'Financial component auto-saving');
+        //wait for presentation to be auto-saved
         helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
       });
 
@@ -71,8 +61,7 @@ var FinancialComponentScenarios = function () {
       });
 
       it('should auto-save the component after the instruments are loaded', function () {
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText(), 'Financial component auto-saving');
+        //wait for presentation to be auto-saved
         helper.wait(templateEditorPage.getSavedText(), 'Financial component auto-saved');
       });
 

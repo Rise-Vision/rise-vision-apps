@@ -7,9 +7,6 @@ var TemplateEditorPage = require('./../../pages/templateEditorPage.js');
 var SlidesComponentPage = require('./../../pages/components/slidesComponentPage.js');
 
 var SlidesComponentScenarios = function () {
-
-  browser.driver.manage().window().setSize(1920, 1080);
-
   describe('Slides Component', function () {
     var presentationName;
     var presentationsListPage;
@@ -29,7 +26,7 @@ var SlidesComponentScenarios = function () {
       templateEditorPage.getPresentationName().getAttribute('value').then(function(name) {
         expect(name).to.contain('Copy of');
 
-        presentationName = name + ' updated';
+        presentationName = name;
       });
     });
 
@@ -41,7 +38,6 @@ var SlidesComponentScenarios = function () {
       });
 
       it('should show validation error', function () {
-
         //change slides URL
         expect(slidesComponentPage.getSrcInput().isEnabled()).to.eventually.be.true;
         slidesComponentPage.getSrcInput().clear();
@@ -59,7 +55,6 @@ var SlidesComponentScenarios = function () {
       });
 
       it('should not show validation error', function () {
-
         //change slides URL
         expect(slidesComponentPage.getSrcInput().isEnabled()).to.eventually.be.true;
         slidesComponentPage.getSrcInput().clear();
@@ -76,29 +71,31 @@ var SlidesComponentScenarios = function () {
         expect(slidesComponentPage.getValidationIconValid().isDisplayed()).to.eventually.be.true;
       });
 
-      it('should save the Presentation, reload it, and validate changes were saved', function () {
-
+      it('should update slides URL', function () {
         //change slides
         expect(slidesComponentPage.getSrcInput().isEnabled()).to.eventually.be.true;
         slidesComponentPage.getSrcInput().clear();
         slidesComponentPage.getSrcInput().sendKeys("https://docs.google.com/presentation/d/e/fakeSlidesId/pub" + protractor.Key.ENTER);
-        slidesComponentPage.getDurationInput().clear();
-        slidesComponentPage.getDurationInput().sendKeys("999" + protractor.Key.ENTER);
 
         //wait for validation to complete
         helper.waitDisappear(slidesComponentPage.getLoader(), 'Validation spinner');
-      });
-
-      it('should change the Presentation name and auto-save', function () {
-        // Note: sendKeys does not trigger the "ng-change" event for the duration textbox
-        // have to send a fake autoupdate to trigger it
-        presentationsListPage.changePresentationName(presentationName);
 
         //wait for presentation to be auto-saved
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.wait(templateEditorPage.getSavingText(), 'Slides component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Slides component auto-saved');
+        helper.wait(templateEditorPage.getSavedText(), 'RSS component auto-saved');
+      });
 
+      it('should clear and update the duration text', function () {
+        // Note: Disconnect from Angular to prevent Autosave timeout from interrupting edits
+        browser.waitForAngularEnabled(false);
+        slidesComponentPage.getDurationInput().clear();
+        slidesComponentPage.getDurationInput().sendKeys("999" + protractor.Key.ENTER);
+        browser.waitForAngularEnabled(true);
+
+        //wait for presentation to be auto-saved
+        templateEditorPage.waitForAutosave();
+      });
+
+      it('should reload the Presentation, and validate changes were saved', function () {
         //load presentation
         presentationsListPage.loadPresentation(presentationName);
         templateEditorPage.selectComponent(componentLabel);
@@ -107,6 +104,7 @@ var SlidesComponentScenarios = function () {
         expect(slidesComponentPage.getDurationInput().isEnabled()).to.eventually.be.true;
         expect(slidesComponentPage.getDurationInput().getAttribute('value')).to.eventually.equal("999");
       });
+
     });
   });
 };

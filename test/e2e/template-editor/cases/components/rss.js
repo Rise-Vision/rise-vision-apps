@@ -7,9 +7,6 @@ var TemplateEditorPage = require('./../../pages/templateEditorPage.js');
 var RssComponentPage = require('./../../pages/components/rssComponentPage.js');
 
 var RssComponentScenarios = function () {
-
-  browser.driver.manage().window().setSize(1920, 1080);
-
   describe('RSS Component', function () {
     var presentationName;
     var presentationsListPage;
@@ -29,7 +26,7 @@ var RssComponentScenarios = function () {
       templateEditorPage.getPresentationName().getAttribute('value').then(function(name) {
         expect(name).to.contain('Copy of');
 
-        presentationName = name + ' updated';
+        presentationName = name;
       });
     });
 
@@ -91,28 +88,27 @@ var RssComponentScenarios = function () {
         expect(rssComponentPage.getValidationIconValid().isDisplayed()).to.eventually.be.true;
       });
 
-      it('should save the Presentation, reload it, and validate changes were saved', function () {
-
+      it('should not show validation error for valid feed', function () {
         // Change Feed URL
         expect(rssComponentPage.getRssFeedInput().isEnabled()).to.eventually.be.true;
         rssComponentPage.getRssFeedInput().clear();
         rssComponentPage.getRssFeedInput().sendKeys('https://hnrss.org/frontpage' + protractor.Key.ENTER);
-        rssComponentPage.getRssMaxItemsSelect().element(by.cssContainingText('option', '10')).click();
 
         // Wait for validation to complete
         helper.waitDisappear(rssComponentPage.getLoader(), 'Validation spinner');
+
+        //wait for presentation to be auto-saved
+        helper.wait(templateEditorPage.getSavedText(), 'RSS component auto-saved');
       });
 
-      it('should change the Presentation name and auto-save', function () {
-        // Note: sendKeys does not trigger the "ng-change" event for the max items dropdown
-        // have to send a fake autoupdate to trigger it
-        presentationsListPage.changePresentationName(presentationName);
+      it('should update the max items field', function() {
+        rssComponentPage.getRssMaxItemsSelect().element(by.cssContainingText('option', '10')).click();
 
-        // Wait for presentation to be auto-saved
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.wait(templateEditorPage.getSavingText(), 'RSS component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'RSS component auto-saved');
+        //wait for presentation to be auto-saved
+        templateEditorPage.waitForAutosave();
+      });
 
+      it('should reload the Presentation, and validate changes were saved', function () {
         // Load presentation
         presentationsListPage.loadPresentation(presentationName);
         templateEditorPage.selectComponent(componentLabel);

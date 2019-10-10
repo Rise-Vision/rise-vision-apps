@@ -7,9 +7,6 @@ var ImageComponentPage = require('./../../pages/components/imageComponentPage.js
 var helper = require('rv-common-e2e').helper;
 
 var ImageComponentScenarios = function () {
-
-  browser.driver.manage().window().setSize(1920, 1080);
-
   describe('Image Component', function () {
     var presentationName;
     var presentationsListPage;
@@ -33,12 +30,6 @@ var ImageComponentScenarios = function () {
     });
 
     describe('basic operations', function () {
-      it('should auto-save the Presentation after it has been created', function () {
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText());
-        helper.wait(templateEditorPage.getSavedText(), 'Image component auto-saved');
-      });
-
       it('should list the duration and images for the first Image Component', function () {
         templateEditorPage.selectComponent('Image - ');
         helper.wait(imageComponentPage.getListDurationComponent(), 'List Duration');
@@ -68,8 +59,8 @@ var ImageComponentScenarios = function () {
       });
 
       it('should auto-save the Presentation after updating the image list', function () {
-        helper.wait(templateEditorPage.getSavingText(), 'Image component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Image component auto-saved');
+        //wait for presentation to be auto-saved
+        templateEditorPage.waitForAutosave();
       });
     });
 
@@ -111,9 +102,8 @@ var ImageComponentScenarios = function () {
         });
 
         it('should auto-save the Presentation after adding file from storage', function () {
-          helper.waitDisappear(templateEditorPage.getDirtyText());
-          helper.wait(templateEditorPage.getSavingText(), 'Image component auto-saving');
-          helper.wait(templateEditorPage.getSavedText(), 'Image component auto-saved');
+          //wait for presentation to be auto-saved
+          templateEditorPage.waitForAutosave();
         });
       });
     });
@@ -132,10 +122,6 @@ var ImageComponentScenarios = function () {
         presentationsListPage.loadCurrentCompanyPresentationList();
         presentationsListPage.createNewPresentationFromTemplate('Example Financial Template V4', 'example-financial-template-v4');
         templateEditorPage.dismissFinancialDataLicenseMessage();
-
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText());
-        helper.wait(templateEditorPage.getSavedText(), 'Image component auto-saved');
       });
 
       it('should list the duration and images for the first Image Component', function () {
@@ -143,8 +129,7 @@ var ImageComponentScenarios = function () {
         helper.wait(imageComponentPage.getListDurationComponent(), 'List Duration');
         expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(4);
 
-        helper.waitDisappear(templateEditorPage.getDirtyText());
-        helper.waitDisappear(templateEditorPage.getSavingText());
+        //wait for presentation to be auto-saved
         helper.wait(templateEditorPage.getSavedText(), 'Image component auto-saved');
       });
 
@@ -180,8 +165,8 @@ var ImageComponentScenarios = function () {
       });
 
       it('should auto-save the Presentation after removing a row', function () {
-        helper.wait(templateEditorPage.getSavingText(), 'Image component auto-saving');
-        helper.wait(templateEditorPage.getSavedText(), 'Image component auto-saved');
+        //wait for presentation to be auto-saved
+        templateEditorPage.waitForAutosave();
       });
     });
 
