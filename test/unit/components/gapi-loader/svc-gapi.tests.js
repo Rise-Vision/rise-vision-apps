@@ -36,19 +36,19 @@ describe("Services: gapi loader", function() {
       $window = $injector.get("$window");
 
       var gapiClient = {
-        load: function(path, version, cb) {
+        load: sinon.spy(function(path, version, cb, url) {
           if (loadApi) {
             $window.gapi.client[path] = {version: version};
-            cb();
+            return Q.resolve();
+          } else {
+            return Q.reject({});
           }
-        }
+        })
       };
 
       gapiAuth2 = {
-        init: sinon.spy(function() {
-          return Q.resolve();
-        }),
-        getAuthInstance: sinon.spy()
+        init: sinon.stub().returns(Q.resolve()),
+        getAuthInstance: sinon.stub()
       };
 
       $window.gapi = {};
@@ -125,17 +125,16 @@ describe("Services: gapi loader", function() {
   });
 
   describe("gapiClientLoaderGenerator", function () {
-    var gapiClientLoaderGenerator, $httpBackend, $timeout;
+    var gapiClientLoaderGenerator;
     beforeEach(function() {
       inject(function($injector) {
         gapiClientLoaderGenerator = $injector.get("gapiClientLoaderGenerator");
-        $httpBackend = $injector.get("$httpBackend");
-        $timeout = $injector.get("$timeout");
       });
     });
 
     it("should exist", function() {
       expect(gapiClientLoaderGenerator).to.be.ok;      
+      expect(gapiClientLoaderGenerator).to.be.a('function');
     });
 
     it("should load a gapi client lib", function (done) {
@@ -147,70 +146,16 @@ describe("Services: gapi loader", function() {
       }, done);
     });
 
-    it("should check endpoint url if no response is received", function (done) {
+    it("should handle failure to load a gapi client lib", function (done) {
       loadApi = false;
-      $httpBackend.expect("GET", "baseUrl").respond(403, {});
-
-      gapiClientLoaderGenerator("custom", "v0", "baseUrl")();
-
-      setTimeout(function(){
-        $timeout.flush(10 * 1000);
-        
-        setTimeout(function() {
-          $httpBackend.flush();
-
-          done();          
-        }, 10);
-      }, 10);
-    });
-
-    it("should reject promise if invalid response is received", function (done) {
-      loadApi = false;
-      $httpBackend.expect("GET", "baseUrl").respond(403, {});
-
-      var loaderFn = gapiClientLoaderGenerator("custom", "v0", "baseUrl");
-      loaderFn().then(done, function (e) {
-        expect(e).to.be.ok;
-        expect(e.status).to.equal(-1);
-
+      var loaderFn = gapiClientLoaderGenerator("custom", "v0", "someUrls");
+      loaderFn().then(done)
+      .catch(function() {
         expect($window.gapi).to.be.ok;
         expect($window.gapi.client.custom).to.not.be.ok;
         done();
       });
-
-      setTimeout(function(){
-        $timeout.flush(10 * 1000);
-        
-        setTimeout(function() {
-          $httpBackend.flush();
-        }, 10);
-      }, 10);
     });
-
-    it("should not reject promise if valid response is received", function (done) {
-      loadApi = false;
-      $httpBackend.expect("GET", "baseUrl").respond(404, {});
-
-      var loaderFn = gapiClientLoaderGenerator("custom", "v0", "baseUrl");
-      // should not resolve or reject
-      loaderFn().then(done, done);
-
-      setTimeout(function(){
-        $timeout.flush(10 * 1000);
-        
-        setTimeout(function() {
-          $httpBackend.flush();
-          
-          setTimeout(function() {
-            expect($window.gapi).to.be.ok;
-            expect($window.gapi.client.custom).to.not.be.ok;
-
-            done();
-          }, 10);
-        }, 10);
-      }, 10);
-    });
-
   });
 
   describe("oauth2APILoader", function () {

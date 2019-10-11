@@ -171,8 +171,11 @@ describe('service: storage:', function() {
       };
     });
 
+    $provide.service('processErrorCode', function() {
+      return sinon.spy(function() { return 'error'; });
+    });
   }));
-  var storage, returnResult, folderPath, filePath, folderName, storageApiRequestObj;
+  var storage, returnResult, folderPath, filePath, folderName, storageApiRequestObj, processErrorCode;
   beforeEach(function(){
     returnResult = true;
     folderPath = '';
@@ -180,6 +183,7 @@ describe('service: storage:', function() {
     
     inject(function($injector){
       storage = $injector.get('storage');
+      processErrorCode = $injector.get('processErrorCode');
     });
   });
 
@@ -252,6 +256,7 @@ describe('service: storage:', function() {
           done(result);
         })
         .then(null, function(error) {
+          expect(processErrorCode).to.have.been.calledWith('Files', 'list', 'API Failed');
           expect(error).to.deep.equal('API Failed');
           done();
         })
