@@ -77,7 +77,7 @@
         });
 
         it('should send an email to the added user',function(){
-          browser.controlFlow().wait(mailListener.getLastEmail(), 45000).then(function (email) {
+          browser.controlFlow().wait(mailListener.getLastEmail(), 60000).then(function (email) {
             expect(email.subject).to.equal("You've been added to a Rise Vision account!");
           }); 
         });
@@ -121,7 +121,7 @@
         });
 
         it('should wait for confirmation email', function() {        
-          browser.controlFlow().wait(signUpPage.getConfirmationLink(mailListener), 45000).then(function(link){
+          browser.controlFlow().wait(signUpPage.getConfirmationLink(mailListener), 60000).then(function(link){
             confirmationLink = link;
             expect(confirmationLink).to.contain("http://localhost:8099/confirmaccount/"+EMAIL_ADDRESS);
           });

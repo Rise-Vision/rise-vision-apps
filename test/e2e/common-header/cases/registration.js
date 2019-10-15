@@ -56,7 +56,7 @@
       });
 
       it('should wait for confirmation email', function() {
-        browser.controlFlow().wait(signUpPage.getConfirmationLink(mailListener), 45000).then(function(link){
+        browser.controlFlow().wait(signUpPage.getConfirmationLink(mailListener), 60000).then(function(link){
           confirmationLink = link;
           expect(confirmationLink).to.contain("http://localhost:8099/confirmaccount/"+EMAIL_ADDRESS);
         });             
