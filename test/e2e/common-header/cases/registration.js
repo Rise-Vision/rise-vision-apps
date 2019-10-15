@@ -6,7 +6,6 @@
   var assert = require('rv-common-e2e').assert;
   var helper = require('rv-common-e2e').helper;
   var CommonHeaderPage = require('./../pages/commonHeaderPage.js');
-  var HomePage = require('./../pages/homepage.js');
   var RegistrationModalPage = require('./../pages/registrationModalPage.js');
   var SignInPage = require('./../../launcher/pages/signInPage.js');
   var SignUpPage = require('./../../launcher/pages/signUpPage.js');
@@ -18,7 +17,6 @@
       var EMAIL_ADDRESS, 
         PASSWORD,
         commonHeaderPage, 
-        homepage, 
         registrationModalPage,
         signInPage,
         signUpPage,
@@ -27,7 +25,6 @@
       
       before(function (){
         commonHeaderPage = new CommonHeaderPage();
-        homepage = new HomePage();
         registrationModalPage = new RegistrationModalPage();
         signInPage = new SignInPage();
         signUpPage = new SignUpPage();
@@ -41,6 +38,20 @@
         signUpPage.get();
       });
 
+      function detectAndFixUserAlreadyRegistered() {
+        signUpPage.getAlreadyRegisteredError().isDisplayed().then(function(isDisplayed){
+          if (isDisplayed) {
+            console.log('User already registered. Attempting to delete an sign up again.');
+            signInPage.get();
+            signInPage.customAuthSignIn(EMAIL_ADDRESS, PASSWORD);
+            commonHeaderPage.deleteCurrentUser(EMAIL_ADDRESS);
+            signUpPage.get();
+            helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+            signUpPage.customAuthSignUp(EMAIL_ADDRESS, PASSWORD);
+          }
+        });
+      }
+
       it('should show create account page', function() {
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
@@ -51,7 +62,8 @@
       it('should register user', function() {
         signUpPage.customAuthSignUp(EMAIL_ADDRESS, PASSWORD);
         
-        expect(signUpPage.getAlreadyRegisteredError().isDisplayed()).to.eventually.be.false;
+        detectAndFixUserAlreadyRegistered();
+
         expect(signUpPage.getConfirmEmailNotice().isDisplayed()).to.eventually.be.true;
       });
 

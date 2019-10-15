@@ -3,6 +3,7 @@ var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js'
 var GoogleAuthPage = require('rv-common-e2e').googleAuthPage;
 var HomePage = require('./homepage.js');
 var helper = require('rv-common-e2e').helper;
+var expect = require('rv-common-e2e').expect;
 
 var SignInPage = function() {
   var commonHeaderPage = new CommonHeaderPage();
@@ -19,6 +20,7 @@ var SignInPage = function() {
   var passwordTextBox = element(by.id('password'));
   var signinButton = element(by.cssContainingText('button.btn-primary', 'Sign In'));
   var incorrectCredentialsError = element(by.cssContainingText('.bg-danger', 'incorrect'));
+  var emailNotConfirmedInfo = element(by.cssContainingText('.bg-info', 'Your email address has not been confirmed.'));
 
   this.get = function() {
     browser.get(url);
@@ -71,7 +73,13 @@ var SignInPage = function() {
     this.getPasswordTextBox().clear();
     this.getPasswordTextBox().sendKeys(password + enter);
     
-    helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - After Custom Sign In');    
+    helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - After Custom Sign In');
+
+    emailNotConfirmedInfo.isPresent().then(function (isPresent) {
+      if (isPresent) {
+        expect.fail('Email has not been not confirmed. Manual action is required. Please confirm the email or remove the account.');
+      }
+    });
   };
 
   this.getGoogleLogin = function() {

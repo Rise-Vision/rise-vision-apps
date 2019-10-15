@@ -5,6 +5,7 @@
 
   var LoginPage = require('./loginPage.js');
   var CompanySettingsModalPage = require('./companySettingsModalPage.js');
+  var UserSettingsModalPage = require('./userSettingsModalPage.js');
   var helper = require('rv-common-e2e').helper;
   var expect = require('rv-common-e2e').expect;
 
@@ -17,6 +18,7 @@
 
     var loginPage = new LoginPage();
     var companySettingsModalPage = new CompanySettingsModalPage();
+    var userSettingsModalPage = new UserSettingsModalPage();
 
     var commonHeader = element(by.tagName('common-header'));
     var commonHeaderMenuItems = element.all(by.repeater('opt in navOptions'));
@@ -31,6 +33,8 @@
     var selectSubcompanyButton = element(by.css(".dropdown-menu #select-subcompany-button"));
     var changeSubcompanyButton = element(by.css(".dropdown-menu #change-subcompany-button"));
     var companySettingsButton = element(by.css(".dropdown-menu .company-settings-menu-button"));
+
+    var userSettingsButton = element(by.css(".dropdown-menu .user-settings-button"));
 
     var addSubcompanyModal = element(by.css(".add-subcompany-modal"));
     var addSubcompanyModalNameField = element(by.id("company-settings-name"));
@@ -259,6 +263,24 @@
       helper.waitDisappear(subcompanyAlert, "Subcompany Alert");
       helper.waitDisappear(loader, 'CH spinner loader');
     };
+
+    this.deleteCurrentUser = function(emailAddress) {
+      this.openProfileMenu();
+
+      userSettingsButton.click();
+      helper.wait(userSettingsModalPage.getUserSettingsModal(), "User Settings Modal");
+      helper.waitDisappear(userSettingsModalPage.getLoader(), "User Settings Modal Loader");
+      browser.sleep(500);
+
+      // Ensure the right User is being deleted
+      expect(userSettingsModalPage.getUsernameLabel().getText()).to.eventually.equal(emailAddress);
+
+      userSettingsModalPage.getDeleteButton().click();          
+      browser.sleep(500);
+      helper.wait(userSettingsModalPage.getDeleteForeverButton(), 'User Delete Forever Button');      
+      helper.clickWhenClickable(userSettingsModalPage.getDeleteForeverButton(), 'User Delete Forever Button');          
+      helper.waitDisappear(userSettingsModalPage.getLoader(), "User Settings Modal");
+    }
 
     this.selectAlerts = function() {
       this.openProfileMenu();
