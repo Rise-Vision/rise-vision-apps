@@ -39,6 +39,10 @@ var HomePage = function() {
           alert.accept();
 
           return _this.confirmGet(url);
+        })
+        .catch(function(error) {
+          // no Alert shown, proceed
+          console.log(error);
         });
       });
   };
