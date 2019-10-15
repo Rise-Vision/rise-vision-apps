@@ -4,8 +4,8 @@
 
 angular.module('risevision.storage.services')
   .service('storage', ['$q', '$log', 'storageAPILoader',
-    'userState', '$window',
-    function ($q, $log, storageAPILoader, userState, $window) {
+    'userState', '$window', 'processErrorCode',
+    function ($q, $log, storageAPILoader, userState, $window, processErrorCode) {
       var service = {
         files: {
           get: function (search) {
@@ -33,7 +33,8 @@ angular.module('risevision.storage.services')
                 deferred.resolve(resp.result);
               })
               .then(null, function (e) {
-                console.error('Failed to get storage files', e);
+                var apiError = processErrorCode('Files', 'list', e);
+                console.error('Failed to get storage files', apiError);
                 deferred.reject(e);
               });
 

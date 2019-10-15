@@ -21,9 +21,8 @@
       'status', 'companyRole', 'dataCollectionDate'
     ])
 
-    .factory('getUserProfile', ['oauth2APILoader', 'coreAPILoader', '$q',
-      '$log',
-      function (oauth2APILoader, coreAPILoader, $q, $log) {
+    .factory('getUserProfile', ['coreAPILoader', '$q', '$log',
+      function (coreAPILoader, $q, $log) {
         var _username;
         var _cachedPromises = {};
 
@@ -52,10 +51,7 @@
             }
             $log.debug('getUserProfile called', criteria);
 
-            $q.all([oauth2APILoader(), coreAPILoader()]).then(function (
-              results) {
-              var coreApi = results[1];
-              // var oauthUserInfo = results[2];
+            coreAPILoader().then(function (coreApi) {
               coreApi.user.get(criteria).execute(function (resp) {
                 if (resp.error || !resp.result) {
                   deferred.reject(resp);

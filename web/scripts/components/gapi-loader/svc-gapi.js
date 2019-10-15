@@ -65,30 +65,35 @@ angular.module('risevision.common.gapi', [
             //already loaded. return right away
             deferred.resolve(gApi.auth2);
           } else {
-            gApi.load('auth2', function () {
+            gApi.load('auth2', function (err) {
               if (gApi.auth2) {
-                gApi.auth2.init({
+                var config = {
                   client_id: CLIENT_ID,
                   scope: OAUTH2_SCOPES,
                   cookie_policy: $location.protocol() + '://' + getBaseDomain() +
                     ($window.location.port ? ':' + $window.location.port : '')
-                }).then(function () {
-                  $log.debug('auth2 API Loaded');
+                };
 
-                  deferred.resolve(gApi.auth2);
-                }, function () {
-                  var errMsg = 'auth2 GoogleAuth Init Failed';
-                  $log.error(errMsg);
-                  deferred.reject(errMsg);
-                });
+                gApi.auth2.init(config)
+                  .then(function () {
+                    $log.debug('auth2 API Loaded');
+
+                    deferred.resolve(gApi.auth2);
+                  })
+                  .catch(function (err) {
+                    var errMsg = 'auth2 GoogleAuth Init Failed';
+                    $log.error(errMsg, err);
+                    deferred.reject(err || errMsg);
+                  });
               } else {
                 var errMsg = 'auth2 API Load Failed';
-                $log.error(errMsg);
-                deferred.reject(errMsg);
+                $log.error(errMsg, err);
+                deferred.reject(err || errMsg);
               }
             });
           }
         });
+
         return deferred.promise;
       };
     }
@@ -103,15 +108,15 @@ angular.module('risevision.common.gapi', [
             //already loaded. return right away
             deferred.resolve(gApi);
           } else {
-            gApi.load('client', function () {
+            gApi.load('client', function (err) {
               if (gApi.client) {
                 $log.debug('client API Loaded');
 
                 deferred.resolve(gApi);
               } else {
                 var errMsg = 'client API Load Failed';
-                $log.error(errMsg);
-                deferred.reject(errMsg);
+                $log.error(errMsg, err);
+                deferred.reject(err || errMsg);
               }
             });
           }
@@ -124,70 +129,30 @@ angular.module('risevision.common.gapi', [
   //abstract method for creading a loader factory service that loads any
   //custom Google Client API library
 
-  .factory('gapiClientLoaderGenerator', ['$q', '$log', '$timeout', '$http', 'clientAPILoader',
-    function ($q, $log, $timeout, $http, clientAPILoader) {
+  .factory('gapiClientLoaderGenerator', ['$q', '$log', 'clientAPILoader',
+    function ($q, $log, clientAPILoader) {
       return function (libName, libVer, baseUrl) {
-        var gapiAccessValidated = false;
-
         return function () {
           var deferred = $q.defer();
           clientAPILoader().then(function (gApi) {
-            var apiValidationTimer;
-
             if (gApi.client[libName]) {
               // already loaded. return right away
-              gapiAccessValidated = true;
               deferred.resolve(gApi.client[libName]);
             } else {
-              gApi.client.load(libName, libVer,
-                function () {
-                  gapiAccessValidated = true;
-
-                  if (apiValidationTimer) {
-                    $timeout.cancel(apiValidationTimer);
-                  }
-
+              gApi.client.load(libName, libVer, null, baseUrl)
+                .then(function () {
                   if (gApi.client[libName]) {
                     $log.debug(libName + '.' + libVer + ' Loaded');
                     deferred.resolve(gApi.client[libName]);
                   } else {
-                    var errMsg = libName + '.' + libVer + ' Load Failed';
-                    $log.error(errMsg);
-                    deferred.reject(errMsg);
+                    return $q.reject();
                   }
-                },
-                baseUrl);
-
-              if (!gapiAccessValidated) {
-                apiValidationTimer = $timeout(function () {
-                  gapiAccessValidated = true;
-
-                  if (baseUrl && !gApi.client[libName]) {
-                    $http({
-                      url: baseUrl,
-                      method: 'GET',
-                    }).catch(function (e) {
-                      // Expect 404 for success (allow for other valid HTTP responses)
-                      if (e && e.status !== 404 && (e.status < 200 || e.status >= 400)) {
-                        var errorString = libName + ' (' + baseUrl + ') failed to respond';
-                        $log.error(errorString, e);
-
-                        // Throw consistent error object
-                        deferred.reject({
-                          status: -1,
-                          result: {
-                            error: {
-                              code: -1,
-                              message: errorString,
-                              error: e
-                            }
-                          }
-                        });
-                      }
-                    });
-                  }
-                }, 10 * 1000);
-              }
+                })
+                .catch(function (err) {
+                  var errMsg = libName + '.' + libVer + ' Load Failed';
+                  $log.error(errMsg, err);
+                  deferred.reject(err || errMsg);
+                });
             }
           });
           return deferred.promise;

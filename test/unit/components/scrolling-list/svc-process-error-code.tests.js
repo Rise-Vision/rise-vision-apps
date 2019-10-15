@@ -25,6 +25,22 @@ describe("service: process error code:", function() {
     expect(processErrorCode(itemName, action, {})).to.equal("An Error has Occurred");
   });
 
+  it("should process all flavors of errors", function() {
+    var e = { code: -1 };
+    expect(processErrorCode(itemName, action, e)).to.equal("apps-common.errors.checkConnection");
+    expect(processErrorCode(itemName, action, {
+      error: e
+    })).to.equal("apps-common.errors.checkConnection");
+    expect(processErrorCode(itemName, action, {
+      result: e
+    })).to.equal("apps-common.errors.checkConnection");
+    expect(processErrorCode(itemName, action, {
+      result: {
+        error: e
+      }
+    })).to.equal("apps-common.errors.checkConnection");
+  });
+
   it("should attempt to internationalize Storage errors", function() {
     expect(processErrorCode(itemName, action, {
       result: { error: { message: "i18n-fail" } }
