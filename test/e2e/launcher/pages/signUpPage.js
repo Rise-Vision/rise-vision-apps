@@ -113,7 +113,7 @@ var SignUpPage = function() {
   this.getConfirmationLink = function(mailListener) {
     var deferred = protractor.promise.defer();
 
-    mailListener.getLastEmail().then(function (email) {
+    mailListener.getLastEmail('Confirm account').then(function (email) {
       var pattern = /href="(https:\/\/apps-stage-0\.risevision\.com\/confirmaccount\/.*?)"/g;
       var confirmationLink = pattern.exec(email.html)[1];
       confirmationLink = confirmationLink.replace('https://apps-stage-0.risevision.com','http://localhost:8099');

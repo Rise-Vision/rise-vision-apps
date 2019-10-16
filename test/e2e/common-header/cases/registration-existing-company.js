@@ -77,9 +77,10 @@
         });
 
         it('should send an email to the added user',function(){
-          browser.controlFlow().wait(mailListener.getLastEmail(), 60000).then(function (email) {
-            expect(email.subject).to.equal("You've been added to a Rise Vision account!");
-          }); 
+          browser.controlFlow().wait(mailListener.getLastEmail("You've been added to a Rise Vision account!"), 60000)
+            .then(function (email) {
+              expect(email.subject).to.equal("You've been added to a Rise Vision account!");
+            }); 
         });
         
         it("Company Users Dialog Should Close", function () {

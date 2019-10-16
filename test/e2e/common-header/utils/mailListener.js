@@ -30,14 +30,23 @@
       mailListener2.stop();
     };
 
-    this.getLastEmail = function() {
+    this.getLastEmail = function(subjectFilter) {
       var deferred = protractor.promise.defer();
       console.log("Waiting for an email...");
-
-      mailListener2.once("mail", function(mail, seqno, attributes){
-        console.log("Mail received: " + mail.subject);
-        deferred.fulfill(mail);
-      });
+      if (!subjectFilter) {
+        mailListener2.once("mail", function(mail, seqno, attributes){
+          console.log("Mail received: " + mail.subject);
+          deferred.fulfill(mail);
+        });
+      } else {
+        mailListener2.on("mail", function(mail, seqno, attributes){
+          console.log("Mail received: " + mail.subject);
+          if (mail.subject === subjectFilter) {
+            mailListener2.removeAllListeners("mail");
+            deferred.fulfill(mail);
+          }
+        });
+      }
       return deferred.promise;
     };   
   };
