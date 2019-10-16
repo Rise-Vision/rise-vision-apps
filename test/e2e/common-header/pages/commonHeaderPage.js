@@ -64,6 +64,8 @@
     var alertSettingsButton = element(by.css(".alert-settings-button"));
     var turnOnAlertsButton = element(by.id("alertsToggleButton"));
 
+    var mainCompanyNameSpan = element(by.id("mainCompanyName"));
+
     this.openProfileMenu = function () {
       //wait for spinner to go away.
       helper.waitDisappear(loader, 'CH spinner loader');
@@ -331,6 +333,10 @@
 
     this.getSignOutGoogleButton = function() {
       return signOutGoogleButton;
+    };
+
+    this.getMainCompanyNameSpan = function() {
+      return mainCompanyNameSpan;
     };
 
   };

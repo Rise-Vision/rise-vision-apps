@@ -16,6 +16,7 @@
     describe("Registration", function() {
       var EMAIL_ADDRESS, 
         PASSWORD,
+        NEW_COMPANY_NAME,
         commonHeaderPage, 
         registrationModalPage,
         signInPage,
@@ -31,6 +32,7 @@
 
         EMAIL_ADDRESS = commonHeaderPage.getStageEmailAddress();
         PASSWORD = commonHeaderPage.getPassword();
+        NEW_COMPANY_NAME = commonHeaderPage.addStageSuffix("Public School");
 
         mailListener = new MailListener(EMAIL_ADDRESS,PASSWORD);
         mailListener.start();
@@ -44,7 +46,16 @@
             console.log('User already registered. Attempting to delete an sign up again.');
             signInPage.get();
             signInPage.customAuthSignIn(EMAIL_ADDRESS, PASSWORD);
-            commonHeaderPage.deleteCurrentUser(EMAIL_ADDRESS);
+
+            // if user belongs to a new company, removes the company
+            // if it was added to jenkins company, removes only the user
+            commonHeaderPage.getMainCompanyNameSpan().getText().then(function(text){
+              if (text === NEW_COMPANY_NAME) {
+                commonHeaderPage.deleteCurrentCompany(NEW_COMPANY_NAME);
+              } else {
+                commonHeaderPage.deleteCurrentUser(EMAIL_ADDRESS);
+              }
+            });
             signUpPage.get();
             helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
             signUpPage.customAuthSignUp(EMAIL_ADDRESS, PASSWORD);
@@ -114,7 +125,7 @@
       it("should complete the registration process", function () {
         registrationModalPage.getFirstNameField().sendKeys("John");
         registrationModalPage.getLastNameField().sendKeys("Doe");
-        registrationModalPage.getCompanyNameField().sendKeys(commonHeaderPage.addStageSuffix("Public School"));
+        registrationModalPage.getCompanyNameField().sendKeys(NEW_COMPANY_NAME);
         registrationModalPage.getCompanyIndustryOptions().then(function(options){
           options[2].click(); //select random option
         }); 

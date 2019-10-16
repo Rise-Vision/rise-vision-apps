@@ -15,7 +15,7 @@
     <a href="" dropdown-toggle class="dropdown-toggle">
       <div class="user-id pull-left">
         <span ng-class="{'pending-registration' : isLoggedIn && !isRiseVisionUser && !loading}" class="username">{{username}}</span>
-        <span><strong>{{companyName}}</strong></span>
+        <span><strong id="mainCompanyName">{{companyName}}</strong></span>
       </div>
       <img ng-src="{{userPicture}}"
         class="profile-pic" width="30" height="30" alt="User" />
