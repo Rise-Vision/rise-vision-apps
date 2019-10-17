@@ -168,6 +168,10 @@
           helper.wait(purchaseFlowModalPage.getReviewPurchasePage(), 'Review Purchase Page');
 
           expect(purchaseFlowModalPage.getReviewPurchasePage().isDisplayed()).to.eventually.be.true;
+
+          // Wait for other responses to complete and update Chargebee address for the Company
+          browser.sleep(10000);
+
           expect(purchaseFlowModalPage.getPayButton().isDisplayed()).to.eventually.be.true;
 
           helper.clickWhenClickable(purchaseFlowModalPage.getPayButton(), 'Purchase flow Pay Button');
