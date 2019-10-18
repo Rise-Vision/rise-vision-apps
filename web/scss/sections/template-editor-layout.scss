@@ -1103,6 +1103,7 @@ $maderio-green-disabled: #a2dbb2;
     vertical-align: middle;
     content: " ";
     height: 100%;
+    margin-right: -4px; /* Adjusts for small screens by removing the space added by inline-block */
   }
 
   &.centered-modal {
