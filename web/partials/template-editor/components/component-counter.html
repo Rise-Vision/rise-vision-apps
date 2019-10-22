@@ -1,3 +1,76 @@
-<div>
-  Counter settings
+<style>
+  .rise-date-picker > ul {
+    left: 85px !important;
+  }
+
+  .rise-date-picker table {
+    outline: none !important;
+  }
+
+  .rise-date-picker table th button strong {
+    font-size: 15px;
+  }
+
+  .rise-date-picker .btn-default {
+    font-size: 13px;
+    border: 0px;
+    color: #107DDA;
+  }
+
+  .rise-date-picker .btn-default .text-muted {
+    font-weight: normal;
+    color: #107DDA;
+  }
+
+  .rise-date-picker .btn-default.active {
+    background-color: #107DDA;
+    color: white;
+  }
+
+  .rise-date-picker .btn-default.active span {
+    color: white;
+  }
+</style>
+<div class="attribute-editor-component">
+  <div class="attribute-editor-row" style="height: 600px;">
+    <label class="u_margin-sm-top">Countdown to:</label>
+    <div>
+      <input type="radio" ng-model="countDownTo" value="downToDate" id="specificDate" name="specificDate" ng-change="save()" aria-required="true" tabindex="1" required>
+      <label for="specificDate">
+        A specific date:
+      </label>
+      <div class="input-group rise-date-picker visible-xs" ng-show="countDownTo == 'downToDate'">
+        <input type="text" class="form-control" />
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-primary" ng-click="openSystemDatePicker()"><i class="fa fa-calendar"></i></button>
+        </span>
+        <input id="nativeDatePicker" type="date" ng-model="datePickers.downToDate.initDate" ng-change="closeSystemDatePicker()" style="display:none"/>
+      </div>
+      <div class="input-group rise-date-picker hidden-xs" ng-show="countDownTo == 'downToDate'">
+        <input type="text"
+               class="form-control"
+               id="downToDate"
+               name="downToDate"
+               ng-model="downToDate"
+               datepicker-options="dateOptions"
+               datepicker-popup="dd-MMM-yyyy"
+               show-button-bar="false"
+               popup-placement="auto bottom-right"
+               placement="auto bottom-right"
+               is-open="datePickers.downToDate.isOpen"
+               init-date="datePickers.downToDate.initDate"
+               min-date="today"/>
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-primary" ng-click="openDatepicker($event, 'downToDate')"><i class="fa fa-calendar"></i></button>
+        </span>
+      </div>
+    </div>
+
+    <div class="radio">
+      <input type="radio" ng-model="countDownTo" value="downToTime" id="specificTime" name="specificTime" ng-change="save()" aria-required="true" tabindex="1" required>
+      <label for="specificTime">
+        A specific time:
+      </label>
+    </div>
+  </div>
 </div>
