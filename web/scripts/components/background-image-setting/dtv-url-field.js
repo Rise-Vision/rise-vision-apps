@@ -28,9 +28,7 @@
 
               switch (fileType) {
               case 'image':
-                extensions = ['.jpg', '.jpeg', '.png', '.bmp', '.svg',
-                  '.gif'
-                ];
+                extensions = ['.jpg', '.jpeg', '.png', '.bmp', '.svg', '.gif', '.webp'];
                 break;
               case 'video':
                 extensions = ['.webm', '.mp4', '.ogv', '.ogg'];
@@ -48,6 +46,27 @@
               return false;
             }
 
+            // Check that the URL points to a valid image file.
+            function testImage() {
+              if ((scope.fileType !== 'undefined') && (scope.url !== 'undefined')) {
+                if (scope.fileType === 'image') {
+                  var image = new Image();
+
+                  image.onload = function () {
+                    scope.valid = true;
+                    scope.$apply();
+                  };
+
+                  image.onerror = function () {
+                    scope.valid = false;
+                    scope.invalidType = scope.fileType;
+                    scope.$apply();
+                  };
+
+                  image.src = scope.url;
+                }
+              }
+            }
 
             function testUrl(value) {
               var urlRegExp,
@@ -57,13 +76,16 @@
              Discussion
              http://stackoverflow.com/questions/37684/how-to-replace-plain-urls-with-links#21925491
 
-             Using
+             Using a variation of
              https://gist.github.com/dperini/729294
              Reasoning
-             http://mathiasbynens.be/demo/url-regex */
+             http://mathiasbynens.be/demo/url-regex 
+             
+             Update: https://github.com/Rise-Vision/widget-settings-ui-components/pull/280
+             */
 
               urlRegExp =
-                /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/i; // jshint ignore:line
+                /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u00a1-\uffff][a-z0-9\u00a1-\uffff_-]{0,62})?[a-z0-9\u00a1-\uffff]\.)+(?:[a-z\u00a1-\uffff]{2,}\.?))(?::\d{2,5})?(?:[/?#]\S*)?$/i; // jshint ignore:line
 
               // Add http:// if no protocol parameter exists
               if (value.indexOf('://') === -1) {
@@ -79,6 +101,10 @@
                 }
               } else {
                 scope.invalidType = 'url';
+              }
+
+              if (isValid) {
+                testImage();
               }
 
               return isValid;
