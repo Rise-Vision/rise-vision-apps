@@ -28,6 +28,9 @@ var DisplayAddScenarios = function() {
       homepage.getDisplays();
       signInPage.signIn();
       helper.waitDisappear(displaysListPage.getDisplaysLoader(), 'Displays loader');
+
+      displaysListPage.deleteDisplayIfExists();
+
       displaysListPage.getDisplayAddButton().click();
     });
 

@@ -1,5 +1,16 @@
 'use strict';
+
+var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
+var DisplayManagePage = require('./displayManagePage.js');
+var helper = require('rv-common-e2e').helper;
+var expect = require('rv-common-e2e').expect;
+
 var DisplaysListPage = function() {
+  var _this = this;
+
+  var commonHeaderPage = new CommonHeaderPage();
+  var displayManagePage = new DisplayManagePage();
+
   var displaysAppContainer = element(by.css('.displays-app'));
   var title = element(by.id('title'));
   var searchFilter = element(by.tagName('search-filter'));
@@ -11,6 +22,65 @@ var DisplaysListPage = function() {
   var tableHeaderStatus = element(by.id('tableHeaderStatus'));
   var displayItems = element.all(by.repeater('display in displays.items.list'));
   var displaysLoader = element(by.xpath('//div[@spinner-key="displays-list-loader"]'));
+  var displayStatusError = element(by.cssContainingText('#errorBox strong', 'Failed to load displays connection status.'));
+
+  this.searchDisplay = function(displayName) {
+    helper.wait(searchFilterField, 'Search Filter Field');
+    searchFilterField.sendKeys(displayName);
+    helper.wait(displaysLoader, 'Displays loader');
+    helper.waitDisappear(displaysLoader, 'Displays loader');
+
+    displayItems.count().then(function(count) {
+      if (count > 0) {
+        helper.wait(displayStatusError, 'Connection Status Load error');
+      }
+    });
+  };
+
+  this.clearSearch = function() {
+    helper.wait(searchFilterField, 'Search Filter Field');
+    searchFilterField.clear();
+    helper.wait(displaysLoader, 'Displays loader');
+    helper.waitDisappear(displaysLoader, 'Displays loader');
+
+    displayItems.count().then(function(count) {
+      if (count > 0) {
+        helper.wait(displayStatusError, 'Connection Status Load error');
+      }
+    });
+  };
+
+  this.deleteDisplayIfExists = function() {
+    var displayName = 'TEST_E2E_DISPLAY ' + commonHeaderPage.getStageEnv();
+
+    helper.waitDisappear(displaysLoader, 'Displays loader');
+
+    this.searchDisplay(displayName);
+
+    displayItems.count().then(function(count) {
+      if (count > 0) {
+        helper.clickWhenClickable(displayItems.get(0).element(by.tagName('td')), "First matching Display");
+
+        helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
+
+        expect(displayManagePage.getDisplayNameField().getAttribute('value')).to.eventually.contain(displayName);
+
+        helper.wait(displayManagePage.getDeleteButton(), 'Display Delete Button');
+        helper.clickWhenClickable(displayManagePage.getDeleteButton(), 'Display Delete Button');
+
+        helper.wait(displayManagePage.getDeleteForeverButton(), 'Display Delete Forever Button');
+        helper.clickWhenClickable(displayManagePage.getDeleteForeverButton(), 'Display Delete Forever Button');
+        helper.waitDisappear(displayManagePage.getDeleteForeverButton(), 'Display Delete Forever Button');
+
+        helper.wait(displaysListTable, 'Displays List');
+        helper.waitDisappear(displaysLoader, 'Displays loader');
+
+        _this.deleteDisplayIfExists();
+      } else {
+        _this.clearSearch();
+      }
+    });
+  };
 
   this.getDisplaysAppContainer = function() {
     return displaysAppContainer;
