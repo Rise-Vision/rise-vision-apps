@@ -7,8 +7,8 @@
   var helper = require('rv-common-e2e').helper;
   var CommonHeaderPage = require('./../pages/commonHeaderPage.js');
   var RegistrationModalPage = require('./../pages/registrationModalPage.js');
-  var SignInPage = require('./../../launcher/pages/signInPage.js');
-  var SignUpPage = require('./../../launcher/pages/signUpPage.js');
+  var SignInPage = require('./../../common/pages/signInPage.js');
+  var SignUpPage = require('./../../common/pages/signUpPage.js');
   var MailListener = require('./../utils/mailListener.js');
 
   var RegistrationScenarios = function() {

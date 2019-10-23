@@ -9,7 +9,7 @@
   var HomePage = require('./../pages/homepage.js');
   var CompanySettingsModalPage = require('./../pages/companySettingsModalPage.js');
   var SafeDeleteModalPage = require('./../pages/safeDeleteModalPage.js');
-  var SignInPage = require('./../../launcher/pages/signInPage.js');
+  var SignInPage = require('./../../common/pages/signInPage.js');
 
   var AccountRemoval = function() {
 

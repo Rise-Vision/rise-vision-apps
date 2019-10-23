@@ -9,8 +9,8 @@
   var RegistrationModalPage = require("./../pages/registrationModalPage.js");
   var CompanyUsersModalPage = require("./../pages/companyUsersModalPage.js");
   var UserSettingsModalPage = require("./../pages/userSettingsModalPage.js");
-  var SignInPage = require('./../../launcher/pages/signInPage.js');
-  var SignUpPage = require('./../../launcher/pages/signUpPage.js');
+  var SignInPage = require('./../../common/pages/signInPage.js');
+  var SignUpPage = require('./../../common/pages/signUpPage.js');
   var MailListener = require('./../utils/mailListener.js');
 
   var RegistrationExistingCompanyScenarios = function() {

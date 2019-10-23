@@ -8,7 +8,7 @@
   var CommonHeaderPage = require('./../pages/commonHeaderPage.js');
   var HomePage = require('./../pages/homepage.js');
   var CompanySettingsModalPage = require('./../pages/companySettingsModalPage.js');
-  var SignInPage = require('./../../launcher/pages/signInPage.js');
+  var SignInPage = require('./../../common/pages/signInPage.js');
 
   var CompanySettingsScenarios = function() {
 

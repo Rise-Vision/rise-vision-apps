@@ -7,7 +7,7 @@
   var helper = require('rv-common-e2e').helper;
   var CommonHeaderPage = require('./../pages/commonHeaderPage.js');
   var HomePage = require('./../pages/homepage.js');
-  var SignInPage = require('./../../launcher/pages/signInPage.js');
+  var SignInPage = require('./../../common/pages/signInPage.js');
   var PurchaseFlowModalPage = require('./../../common/pages/purchaseFlowModalPage.js');
   var PricingComponentModalPage = require('./../../common/pages/pricingComponentModalPage.js');
 

@@ -1,8 +1,8 @@
 'use strict';
 var expect = require('rv-common-e2e').expect;
 var helper = require('rv-common-e2e').helper;
-var HomePage = require('./../../launcher/pages/homepage.js');
-var SignInPage = require('./../../launcher/pages/signInPage.js');
+var HomePage = require('./../pages/homepage.js');
+var SignInPage = require('./../pages/signInPage.js');
 var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
 var GetStartedPage = require('./../pages/getStartedPage.js');
 var WorkspacePage = require('./../../editor/pages/workspacePage.js');
@@ -160,6 +160,8 @@ var FirstSigninScenarios = function() {
 
       after(function() {
         commonHeaderPage.deleteCurrentCompany();
+
+        commonHeaderPage.signOut();
       });
 
     });
