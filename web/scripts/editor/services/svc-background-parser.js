@@ -95,7 +95,7 @@ angular.module('risevision.editor.services')
           backgroundStyle = background.color;
         }
 
-        if (background && background.useImage) {
+        if (background && background.useImage && background.image.url) {
           backgroundStyle += backgroundStyle ? ' ' : '';
           backgroundStyle += 'url(\'' + background.image.url.replace(/'/g,
               '\\\'') +

@@ -1,16 +1,25 @@
-<div class="form-group" >
-  <label ng-if="!hideLabel">{{ "url.label" | translate }}</label>
-  <div ng-class="{'input-group':!hideStorage}">
-    <input name="url" type="text" ng-model="url" ng-blur="blur()" class="form-control" placeholder="http://">
-    <span class="input-url-addon" ng-if="!hideStorage"><storage-selector company-id="{{companyId}}" type="{{storageType}}"></storage-selector></span>
+<form name="urlForm">
+  <div class="form-group" ng-class="{'has-error': urlForm.url.$invalid && urlForm.url.$dirty}">
+    <label ng-if="!hideLabel" class="control-label">{{ label ||  'URL *' }}</label>
+    <div ng-class="{'input-group':!hideStorage}">
+      <input type="text" name="url" ng-model="url" ng-blur="blur()" class="form-control" 
+      placeholder="http://" required>
+      <span class="input-url-addon" ng-if="!hideStorage">
+        <storage-selector company-id="{{companyId}}" type="{{storageType}}"></storage-selector>
+      </span>
+    </div>
+    <ng-messages role="alert" for="urlForm.url.$error" ng-if="urlForm.url.$invalid && urlForm.url.$dirty">
+      <p ng-message="required" class="text-danger">This field is required.</p>
+      <p ng-message="pattern" class="text-danger">Please provide a valid URL.</p>
+      <p ng-message="fileType" class="text-danger">Please provide a valid file type. ({{validFileTypes[fileType].join(', ')}})</p>
+      <p ng-message="customError" class="text-danger" ng-bind-html="customErrorMessage"></p>    
+    </ng-messages>
+
+    <div class="checkbox" ng-show="forcedValid || (urlForm.url.$invalid && urlForm.url.$dirty)">
+      <label class="input-url-remove-validation">
+        <input name="validate-url" ng-click="doValidation = !doValidation" type="checkbox"
+               value="validate-url"> {{"url.validate.label" | translate}}
+      </label>
+    </div>
   </div>
-  <p ng-if="!valid && invalidType === 'url'" class="text-danger">{{ "url.errors.url" | translate }}</p>
-  <p ng-if="!valid && invalidType === 'image'" class="text-danger">{{ "url.errors.image" | translate }}</p>
-  <p ng-if="!valid && invalidType === 'video'" class="text-danger">{{ "url.errors.video" | translate }}</p>
-  <div class="checkbox" ng-show="forcedValid || !valid">
-    <label>
-      <input name="validate-url" ng-click="doValidation = !doValidation" type="checkbox"
-             value="validate-url"> {{"url.validate.label" | translate}}
-    </label>
-  </div>
-</div>
+</form>

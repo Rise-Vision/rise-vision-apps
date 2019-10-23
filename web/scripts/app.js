@@ -9,6 +9,7 @@ angular.module('risevision.apps', [
     'slugifier',
     'ngTagsInput',
     'ngStorage',
+    'ngMessages',
     'risevision.common.header',
     'risevision.common.components.last-modified',
     'risevision.common.components.loading',

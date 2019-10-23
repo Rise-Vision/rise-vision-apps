@@ -3,16 +3,14 @@
 angular.module('risevision.schedules.controllers')
   .controller('playlistItemModal', ['$scope', '$modal', '$modalInstance', '$loading',
     'playlistFactory', 'playlistItem', 'userState', 'presentation', 'blueprintFactory', 'HTML_PRESENTATION_TYPE',
+    'responseHeaderAnalyzer',
     function ($scope, $modal, $modalInstance, $loading, playlistFactory, playlistItem,
-      userState, presentation, blueprintFactory, HTML_PRESENTATION_TYPE) {
+      userState, presentation, blueprintFactory, HTML_PRESENTATION_TYPE, responseHeaderAnalyzer) {
       $scope.companyId = userState.getSelectedCompanyId();
       $scope.playlistItem = angular.copy(playlistItem);
       $scope.isNew = playlistFactory.isNew(playlistItem);
+      $scope.customValidator = responseHeaderAnalyzer.validate;
       configurePlayUntilDone();
-
-      $scope.$on('picked', function (event, url) {
-        $scope.playlistItem.objectReference = url[0];
-      });
 
       $scope.$watch('loadingTemplate', function (loading) {
         if (loading) {
