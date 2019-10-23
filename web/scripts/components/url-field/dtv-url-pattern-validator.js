@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('risevision.widget.common.url-field')
-.directive('urlPatternValidator', ['componentUtils',
+angular.module('risevision.widget.common.url-field.url-pattern-validator',[])
+  .directive('urlPatternValidator', ['componentUtils',
     function (componentUtils) {
       return {
         require: 'ngModel',

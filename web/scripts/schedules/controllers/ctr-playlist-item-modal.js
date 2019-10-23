@@ -3,9 +3,8 @@
 angular.module('risevision.schedules.controllers')
   .controller('playlistItemModal', ['$scope', '$modal', '$modalInstance', '$loading',
     'playlistFactory', 'playlistItem', 'userState', 'presentation', 'blueprintFactory', 'HTML_PRESENTATION_TYPE',
-    'responseHeaderAnalyzer', '$q',
     function ($scope, $modal, $modalInstance, $loading, playlistFactory, playlistItem,
-      userState, presentation, blueprintFactory, HTML_PRESENTATION_TYPE, responseHeaderAnalyzer, $q) {
+      userState, presentation, blueprintFactory, HTML_PRESENTATION_TYPE) {
       $scope.companyId = userState.getSelectedCompanyId();
       $scope.playlistItem = angular.copy(playlistItem);
       $scope.isNew = playlistFactory.isNew(playlistItem);
@@ -77,16 +76,6 @@ angular.module('risevision.schedules.controllers')
 
       $scope.dismiss = function () {
         $modalInstance.dismiss();
-      };
-
-      $scope.customValidator = function (url) {
-        if (url && url.indexOf('preview.risevision.com') > -1) {
-          return $q.reject(
-            'Using Preview URLs is not supported. You can place one Presentation into another using Embedded Presentations.'
-          );
-        } else {
-          return responseHeaderAnalyzer.validate(url);
-        }
       };
     }
   ]);

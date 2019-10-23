@@ -1,9 +1,10 @@
 (function () {
   'use strict';
 
-  angular.module('risevision.widget.common.url-field', [
-      'risevision.common.i18n',
-      'risevision.widget.common.storage-selector'
+  angular.module('risevision.widget.common.url-field',[
+      'risevision.widget.common.url-field.file-type-validator',
+      'risevision.widget.common.url-field.response-header-validator',
+      'risevision.widget.common.url-field.url-pattern-validator'
     ])
     .value('VALID_FILE_TYPES', {
       image: ['.jpg', '.jpeg', '.png', '.bmp', '.svg', '.gif', '.webp'],
@@ -40,7 +41,7 @@
               scope.$emit('urlFieldBlur');
             };
 
-            scope.$watch('ngModel', function (newValue,oldValue) {
+            scope.$watch('ngModel', function (newValue, oldValue) {
               if (newValue !== oldValue) {
                 scope.urlCtrl.$setDirty(true);
               }
@@ -62,9 +63,4 @@
         };
       }
     ]);
-
-
-
-
-    ;
 }());
