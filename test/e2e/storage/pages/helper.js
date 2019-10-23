@@ -1,8 +1,8 @@
 (function (module) {
   'use strict';
 
-  var HomePage = require('./../../launcher/pages/homepage.js');
-  var SignInPage = require('./../../launcher/pages/signInPage.js');
+  var HomePage = require('./../../common/pages/homepage.js');
+  var SignInPage = require('./../../common/pages/signInPage.js');
   var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
   var helper = require('rv-common-e2e').helper;
   var IframePage = require('./iframeStorageSelectorPage.js');

@@ -6,7 +6,7 @@
   var assert = require('rv-common-e2e').assert;
   var helper = require('rv-common-e2e').helper;
   var CommonHeaderPage = require('./../pages/commonHeaderPage.js');
-  var SignInPage = require('./../../launcher/pages/signInPage.js');
+  var SignInPage = require('./../../common/pages/signInPage.js');
   var HomePage = require('./../pages/homepage.js');
   var CompanyUsersModalPage = require('./../pages/companyUsersModalPage.js');
   var UserSettingsModalPage = require('./../pages/userSettingsModalPage.js');

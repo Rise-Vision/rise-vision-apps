@@ -6,7 +6,7 @@ var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js'
 var HomePage = require('./../pages/homepage.js');
 var helper = require('rv-common-e2e').helper;
 
-var SigninScenarios = function() {
+var SigninGoogleScenarios = function() {
 
   browser.driver.manage().window().setSize(1920, 1080);
   describe('Signin', function() {
@@ -21,7 +21,6 @@ var SigninScenarios = function() {
       googleAuthPage = new GoogleAuthPage();
       commonHeaderPage = new CommonHeaderPage();
       signInPage.get();
-
     });
 
     it('should sign in the user through google',function(){
@@ -45,4 +44,4 @@ var SigninScenarios = function() {
   });
 };
 
-module.exports = SigninScenarios;
+module.exports = SigninGoogleScenarios;
