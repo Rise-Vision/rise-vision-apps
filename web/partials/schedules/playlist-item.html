@@ -12,9 +12,7 @@
         <label class="control-label" translate>schedules-app.playlist.item.name</label>
         <input type="text" class="form-control" id="itemName" placeholder="Item Name" ng-model="playlistItem.name"> 
       </div>      
-
-
-
+  
       <url-field ng-if="playlistItem.type === 'url'"
                 name="urlField"
                 ng-model="playlistItem.objectReference"
@@ -73,7 +71,7 @@
   </div><!--modal-body-->
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary btn-fixed-width" id="itemSave" ng-click="save()" ng-disabled="(playlistItemFields.$invalid && playlistItemFields.$dirty) || (playlistItemFields.$invalid && isNew)">{{isNew ? 'common.add' : 'common.apply' | translate}} <i class="fa fa-white fa-check icon-right"></i></button>
+    <button type="button" class="btn btn-primary btn-fixed-width" id="itemSave" ng-click="save()" ng-disabled="playlistItemFields.$invalid && (playlistItemFields.$dirty || isNew)">{{isNew ? 'common.add' : 'common.apply' | translate}} <i class="fa fa-white fa-check icon-right"></i></button>
     <button type="button" class="btn btn-default btn-fixed-width" ng-click="dismiss()">{{'common.cancel' | translate}} <i class="fa fa-times icon-right"></i></button>
   </div>
 </div>

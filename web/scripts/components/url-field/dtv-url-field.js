@@ -6,10 +6,6 @@
       'risevision.widget.common.url-field.response-header-validator',
       'risevision.widget.common.url-field.url-pattern-validator'
     ])
-    .value('VALID_FILE_TYPES', {
-      image: ['.jpg', '.jpeg', '.png', '.bmp', '.svg', '.gif', '.webp'],
-      video: ['.webm', '.mp4', '.ogv', '.ogg']
-    })
     .directive('urlField', ['$templateCache', '$log', 'componentUtils',
       function ($templateCache, $log, componentUtils) {
         return {
