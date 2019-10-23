@@ -79,12 +79,14 @@ angular.module('risevision.schedules.controllers')
         $modalInstance.dismiss();
       };
 
-      $scope.customValidator = function(url) {
-        if (url && url.indexOf( 'preview.risevision.com' ) > -1) {
-          return $q.reject('Using Preview URLs is not supported. You can place one Presentation into another using Embedded Presentations.');
+      $scope.customValidator = function (url) {
+        if (url && url.indexOf('preview.risevision.com') > -1) {
+          return $q.reject(
+            'Using Preview URLs is not supported. You can place one Presentation into another using Embedded Presentations.'
+          );
         } else {
           return responseHeaderAnalyzer.validate(url);
         }
-      }
+      };
     }
   ]);

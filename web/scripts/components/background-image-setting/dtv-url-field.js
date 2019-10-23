@@ -5,7 +5,7 @@
       'risevision.common.i18n',
       'risevision.widget.common.storage-selector'
     ])
-    .value('VALID_FILE_TYPES',{
+    .value('VALID_FILE_TYPES', {
       image: ['.jpg', '.jpeg', '.png', '.bmp', '.svg', '.gif', '.webp'],
       video: ['.webm', '.mp4', '.ogv', '.ogg']
     })
@@ -51,7 +51,7 @@
               checkCustomValidation();
             });
 
-            var checkValidation = function() {
+            var checkValidation = function () {
               clearFormErros();
               if (scope.doValidation) {
                 if (scope.url) {
@@ -67,30 +67,30 @@
               }
             };
 
-            var checkCustomValidation = function() {
-              if(scope.doValidation && scope.customValidator && scope.urlForm.url.$valid) {
+            var checkCustomValidation = function () {
+              if (scope.doValidation && scope.customValidator && scope.urlForm.url.$valid) {
 
-                scope.customValidator(scope.url).then(function(){                  
+                scope.customValidator(scope.url).then(function () {
                   scope.urlForm.url.$setValidity('customError', true);
-                
-                }).catch(function(errorMessage){
+
+                }).catch(function (errorMessage) {
                   scope.customErrorMessage = errorMessage;
                   scope.urlForm.url.$setValidity('customError', false);
-                })
+                });
               }
-            }
+            };
 
-            var clearFormErros = function() {
-              angular.forEach(scope.urlForm, function(ctrl, name) {
-                if (name.indexOf('$') != 0) {
-                  angular.forEach(ctrl.$error, function(value, name) {
+            var clearFormErros = function () {
+              angular.forEach(scope.urlForm, function (ctrl, name) {
+                if (name.indexOf('$') !== 0) {
+                  angular.forEach(ctrl.$error, function (value, name) {
                     ctrl.$setValidity(name, null);
                   });
                 }
               });
             };
 
-            var hasValidExtension = function(url, fileType) {
+            var hasValidExtension = function (url, fileType) {
               var testUrl = url.toLowerCase();
               var extensions = VALID_FILE_TYPES[fileType] || [];
               for (var i = 0, len = extensions.length; i < len; i++) {
@@ -100,7 +100,7 @@
               }
               return false;
             };
-            
+
           }
         };
       }
