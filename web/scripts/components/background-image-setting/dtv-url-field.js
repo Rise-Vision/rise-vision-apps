@@ -9,100 +9,152 @@
       image: ['.jpg', '.jpeg', '.png', '.bmp', '.svg', '.gif', '.webp'],
       video: ['.webm', '.mp4', '.ogv', '.ogg']
     })
-    .directive('urlField', ['$templateCache', '$log', 'VALID_FILE_TYPES', 'componentUtils',
-      function ($templateCache, $log, VALID_FILE_TYPES, componentUtils) {
+    .directive('urlField', ['$templateCache', '$log', 'componentUtils',
+      function ($templateCache, $log, componentUtils) {
         return {
           restrict: 'E',
+          require: '?ngModel',
           scope: {
-            url: '=',
-            customValidator: '=',
+            ngModel: '=',
             label: '@',
             hideLabel: '@',
             hideStorage: '@',
             companyId: '@',
             fileType: '@',
-            storageType: '@'
+            storageType: '@',
           },
           template: $templateCache.get(
             'partials/components/background-image-setting/url-field.html'),
           link: function (scope, element, attrs, ctrl) {
+            scope.urlCtrl = ctrl;
             scope.doValidation = true;
             scope.forcedValid = false;
-            scope.validFileTypes = VALID_FILE_TYPES;
 
             if (!scope.hideStorage) {
               scope.$on('picked', function (event, data) {
-                scope.url = data[0];
+                scope.ngModel = data[0];
               });
             }
 
             scope.blur = function () {
               scope.$emit('urlFieldBlur');
-              checkCustomValidation();
             };
 
-            scope.$watch('url', function (url) {
-              checkValidation();
+            scope.$watch('ngModel', function (newValue,oldValue) {
+              if (newValue !== oldValue) {
+                scope.urlCtrl.$setDirty(true);
+              }
             });
 
             scope.$watch('doValidation', function (doValidation) {
               scope.forcedValid = !doValidation;
-              checkValidation();
-              checkCustomValidation();
+              if (scope.forcedValid) {
+                clearFormErros();
+              }
             });
 
-            var checkValidation = function () {
-              clearFormErros();
-              if (scope.doValidation) {
-                if (scope.url) {
-                  scope.urlForm.url.$setValidity('pattern', componentUtils.isValidUrl(scope.url));
-
-                  if (scope.fileType) {
-                    var valid = hasValidExtension(scope.url, scope.fileType);
-                    scope.urlForm.url.$setValidity('fileType', valid);
-                  }
-                } else {
-                  scope.urlForm.url.$setValidity('required', false);
-                }
-              }
-            };
-
-            var checkCustomValidation = function () {
-              if (scope.doValidation && scope.customValidator && scope.urlForm.url.$valid) {
-
-                scope.customValidator(scope.url).then(function () {
-                  scope.urlForm.url.$setValidity('customError', true);
-
-                }).catch(function (errorMessage) {
-                  scope.customErrorMessage = errorMessage;
-                  scope.urlForm.url.$setValidity('customError', false);
-                });
-              }
-            };
-
             var clearFormErros = function () {
-              angular.forEach(scope.urlForm, function (ctrl, name) {
-                if (name.indexOf('$') !== 0) {
-                  angular.forEach(ctrl.$error, function (value, name) {
-                    ctrl.$setValidity(name, null);
-                  });
-                }
+              angular.forEach(scope.urlCtrl.$error, function (value, name) {
+                scope.urlCtrl.$setValidity(name, null);
               });
             };
-
-            var hasValidExtension = function (url, fileType) {
-              var testUrl = url.toLowerCase();
-              var extensions = VALID_FILE_TYPES[fileType] || [];
-              for (var i = 0, len = extensions.length; i < len; i++) {
-                if (testUrl.indexOf(extensions[i]) !== -1) {
-                  return true;
-                }
-              }
-              return false;
-            };
-
           }
         };
       }
-    ]);
+    ])
+
+.directive('urlPatternValidator', ['componentUtils',
+    function (componentUtils) {
+      return {
+        require: 'ngModel',
+        restrict: 'A',
+        link: function (scope, elem, attr, ngModelCtrl) {
+          var validator = function (value) {
+            if (value && componentUtils.isValidUrl(value)) {
+              ngModelCtrl.$setValidity('pattern', true);
+            } else {
+              ngModelCtrl.$setValidity('pattern', false);
+            }
+
+            if (value && value.indexOf('preview.risevision.com') > -1) {
+              ngModelCtrl.$setValidity('noPreviewUrl', false);
+            } else {
+              ngModelCtrl.$setValidity('noPreviewUrl', true);
+            }
+            return value;
+          };
+          ngModelCtrl.$parsers.unshift(validator);
+          ngModelCtrl.$formatters.unshift(validator);
+        }
+      };
+    }
+  ])
+
+.directive('fileTypeValidator', ['VALID_FILE_TYPES',
+    function (VALID_FILE_TYPES) {
+      return {
+        require: 'ngModel',
+        restrict: 'A',
+        link: function (scope, elem, attr, ngModelCtrl) {
+          var hasValidExtension = function (url, fileType) {
+            var testUrl = url.toLowerCase();
+            var extensions = VALID_FILE_TYPES[fileType] || [];
+            for (var i = 0, len = extensions.length; i < len; i++) {
+              if (testUrl.indexOf(extensions[i]) !== -1) {
+                return true;
+              }
+            }
+            return false;
+          };
+
+          var validator = function (value) {
+            if (hasValidExtension(value, attr.fileTypeValidator)) {
+              ngModelCtrl.$setValidity('fileType', true);
+            } else {
+              ngModelCtrl.customErrorMessage = 'Please provide a valid file type. ('+VALID_FILE_TYPES[attr.fileTypeValidator].join(', ')+')';
+              ngModelCtrl.$setValidity('fileType', false);
+            }
+            return value;
+          };
+          ngModelCtrl.$parsers.unshift(validator);
+          ngModelCtrl.$formatters.unshift(validator);
+        }
+      };
+    }
+  ])
+
+.directive('responseHeaderValidator', ['responseHeaderAnalyzer', '$q',
+    function (responseHeaderAnalyzer, $q) {
+      return {
+        require: 'ngModel',
+        restrict: 'A',
+        link: function (scope, elem, attr, ngModelCtrl) {
+          var _isInArray = function(key) {
+            return jsObjects.find(obj => {
+              return obj.b === 6
+            })
+          }
+
+          ngModelCtrl.$asyncValidators.responseHeaderValidator = function(modelValue, viewValue) {
+            //prevent requests if field is already invalid
+            if (Object.keys(ngModelCtrl.$error).length >= 1 && !ngModelCtrl.$error.responseHeaderValidator) {
+              return $q.resolve();
+            }
+            var value = modelValue || viewValue;
+            return responseHeaderAnalyzer.validate(value)
+              .catch(function(errorMessage){
+                ngModelCtrl.customErrorMessage = errorMessage;
+                return $q.reject();
+              });
+          };
+        }
+      };
+    }
+  ])
+;
+
+
+
+
+    ;
 }());

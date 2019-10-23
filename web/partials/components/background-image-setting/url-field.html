@@ -1,25 +1,23 @@
-<form name="urlForm">
-  <div class="form-group" ng-class="{'has-error': urlForm.url.$invalid && urlForm.url.$dirty}">
-    <label ng-if="!hideLabel" class="control-label">{{ label ||  'URL *' }}</label>
-    <div ng-class="{'input-group':!hideStorage}">
-      <input type="text" name="url" ng-model="url" ng-blur="blur()" class="form-control" 
-      placeholder="http://" required>
-      <span class="input-url-addon" ng-if="!hideStorage">
-        <storage-selector company-id="{{companyId}}" type="{{storageType}}"></storage-selector>
-      </span>
-    </div>
-    <ng-messages role="alert" for="urlForm.url.$error" ng-if="urlForm.url.$invalid && urlForm.url.$dirty">
-      <p ng-message="required" class="text-danger">This field is required.</p>
-      <p ng-message="pattern" class="text-danger">Please provide a valid URL.</p>
-      <p ng-message="fileType" class="text-danger">Please provide a valid file type. ({{validFileTypes[fileType].join(', ')}})</p>
-      <p ng-message="customError" class="text-danger" ng-bind-html="customErrorMessage"></p>    
-    </ng-messages>
-
-    <div class="checkbox" ng-show="forcedValid || (urlForm.url.$invalid && urlForm.url.$dirty)">
-      <label class="input-url-remove-validation">
-        <input name="validate-url" ng-click="doValidation = !doValidation" type="checkbox"
-               value="validate-url"> {{"url.validate.label" | translate}}
-      </label>
-    </div>
+<div class="form-group" ng-class="{'has-error': urlCtrl.$invalid && urlCtrl.$dirty}">
+  <label ng-if="!hideLabel" class="control-label">{{ label ||  'URL *' }}</label>
+  <div ng-class="{'input-group':!hideStorage}">
+    <input type="text" ng-model="ngModel" ng-blur="blur()" class="form-control" 
+    placeholder="http://" >
+    <span class="input-url-addon" ng-if="!hideStorage">
+      <storage-selector company-id="{{companyId}}" type="{{storageType}}"></storage-selector>
+    </span>
   </div>
-</form>
+  <ng-messages role="alert" for="urlCtrl.$error" ng-if="urlCtrl.$invalid && urlCtrl.$dirty">
+    <p ng-message="required" class="text-danger">This field is required.</p>
+    <p ng-message="pattern" class="text-danger">Please provide a valid URL.</p>
+    <p ng-message="noPreviewUrl" class="text-danger">Using Preview URLs is not supported. You can place one Presentation into another using Embedded Presentations.</p>    
+    <p ng-message-default class="text-danger" ng-bind-html="urlCtrl.customErrorMessage"></p>
+  </ng-messages>
+
+  <div class="checkbox" ng-show="forcedValid || (urlCtrl.$invalid && urlCtrl.$dirty)">
+    <label class="input-url-remove-validation">
+      <input name="validate-url" ng-click="doValidation = !doValidation" type="checkbox"
+             value="validate-url"> {{"url.validate.label" | translate}}
+    </label>
+  </div>
+</div>

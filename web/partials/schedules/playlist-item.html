@@ -13,9 +13,16 @@
         <input type="text" class="form-control" id="itemName" placeholder="Item Name" ng-model="playlistItem.name"> 
       </div>      
 
+
+
       <url-field ng-if="playlistItem.type === 'url'"
-                url="playlistItem.objectReference"
-                custom-validator="customValidator"
+                name="urlField"
+                ng-model="playlistItem.objectReference"
+                required 
+                url-pattern-validator 
+                xfile-type-validator="image" 
+                ng-model-options="{ updateOn: 'default blur', debounce: {'default': 300, 'blur': 0} }"
+                response-header-validator 
                 company-id="{{companyId}}"></url-field>
 
       <div class="form-group" ng-if="playlistItem.type === 'presentation'">
