@@ -1,8 +1,7 @@
 <div class="form-group" ng-class="{'has-error': urlCtrl.$invalid && urlCtrl.$dirty}">
   <label ng-if="!hideLabel" class="control-label">{{ label ||  'URL *' }}</label>
   <div ng-class="{'input-group':!hideStorage}">
-    <input type="text" ng-model="ngModel" ng-blur="blur()" class="form-control" 
-    placeholder="http://" >
+    <input type="text" ng-model="ngModel" ng-blur="blur()" class="form-control" placeholder="https://">
     <span class="input-url-addon" ng-if="!hideStorage">
       <storage-selector company-id="{{companyId}}" type="{{storageType}}"></storage-selector>
     </span>
