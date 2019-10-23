@@ -9,7 +9,7 @@ var helper = require('rv-common-e2e').helper;
 var PresentationPropertiesModalPage = require('./../pages/presentationPropertiesModalPage.js');
 var StoreProductsModalPage = require('./../pages/storeProductsModalPage.js');
 var ProductDetailsModalPage = require('./../pages/productDetailsModalPage.js');
-var PricingComponentModalPage = require('./../../common/pages/pricingComponentModalPage.js');
+var PricingComponentModalPage = require('./../../registration/pages/pricingComponentModalPage.js');
 
 var TemplateAddScenarios = function() {
 

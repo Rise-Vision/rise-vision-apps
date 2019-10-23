@@ -4,11 +4,11 @@
 
   var expect = require("rv-common-e2e").expect;
   var helper = require("rv-common-e2e").helper;
-  var CommonHeaderPage = require('./../pages/commonHeaderPage.js');
-  var HomePage = require("./../pages/homepage.js");
+  var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
+  var HomePage = require("./../../common-header/pages/homepage.js");
   var RegistrationModalPage = require("./../pages/registrationModalPage.js");
-  var CompanyUsersModalPage = require("./../pages/companyUsersModalPage.js");
-  var UserSettingsModalPage = require("./../pages/userSettingsModalPage.js");
+  var CompanyUsersModalPage = require("./../../common-header/pages/companyUsersModalPage.js");
+  var UserSettingsModalPage = require("./../../common-header/pages/userSettingsModalPage.js");
   var SignInPage = require('./../../common/pages/signInPage.js');
   var SignUpPage = require('./../../common/pages/signUpPage.js');
   var MailListener = require('./../utils/mailListener.js');

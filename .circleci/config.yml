@@ -99,7 +99,7 @@ jobs:
     docker: *BUILDIMAGE
     steps:
       - run_e2e_cases:
-          casesfile: "test/e2e/common-header/registration.cases.js"
+          casesfile: "test/e2e/registration/registration.cases.js"
   e2e_editor:
     working_directory: ~/rise-vision-apps
     docker: *BUILDIMAGE
