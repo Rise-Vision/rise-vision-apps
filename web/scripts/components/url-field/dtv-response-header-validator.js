@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('risevision.widget.common.url-field.response-header-validator',[
-  'risevision.widget.common.url-field.response-header-analyzer'
+angular.module('risevision.widget.common.url-field.response-header-validator', [
+    'risevision.widget.common.url-field.response-header-analyzer'
   ])
   .directive('responseHeaderValidator', ['responseHeaderAnalyzer', '$q',
     function (responseHeaderAnalyzer, $q) {
@@ -12,7 +12,8 @@ angular.module('risevision.widget.common.url-field.response-header-validator',[
           ngModelCtrl.$asyncValidators.responseHeaderValidator = function (modelValue, viewValue) {
             var value = modelValue || viewValue;
             //prevent requests if field is already invalid
-            if (!value || (Object.keys(ngModelCtrl.$error).length >= 1 && !ngModelCtrl.$error.responseHeaderValidator)) {
+            if (!value || (Object.keys(ngModelCtrl.$error).length >= 1 && !ngModelCtrl.$error
+                .responseHeaderValidator)) {
               return $q.resolve();
             }
             return responseHeaderAnalyzer.validate(value);

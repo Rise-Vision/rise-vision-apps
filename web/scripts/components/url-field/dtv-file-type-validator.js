@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('risevision.widget.common.url-field.file-type-validator',[
-  'risevision.storage.services'
+angular.module('risevision.widget.common.url-field.file-type-validator', [
+    'risevision.storage.services'
   ])
   .directive('fileTypeValidator', ['SELECTOR_FILTERS',
     function (SELECTOR_FILTERS) {
@@ -26,7 +26,8 @@ angular.module('risevision.widget.common.url-field.file-type-validator',[
             if (!value || hasValidExtension(value, attr.fileTypeValidator)) {
               ngModelCtrl.$setValidity('fileType', true);
             } else {
-              ngModelCtrl.customErrorMessage = 'Please provide a valid file type. (' + allowedExtensions.join(', ') + ')';
+              ngModelCtrl.customErrorMessage = 'Please provide a valid file type. (' + allowedExtensions.join(
+                ', ') + ')';
               ngModelCtrl.$setValidity('fileType', false);
             }
             return value;

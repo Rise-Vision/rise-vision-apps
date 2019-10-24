@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('risevision.widget.common.url-field.response-header-analyzer',[])
+angular.module('risevision.widget.common.url-field.response-header-analyzer', [])
   .factory('responseHeaderAnalyzer', ['$log', '$http', '$q',
     function ($log, $http, $q) {
       //Ported from https://github.com/Rise-Vision/widget-web-page/blob/master/src/settings/svc-response-header-analyzer.js

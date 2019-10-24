@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('risevision.widget.common.url-field.url-pattern-validator',[
-  'risevision.template-editor.services'
+angular.module('risevision.widget.common.url-field.url-pattern-validator', [
+    'risevision.template-editor.services'
   ])
   .directive('urlPatternValidator', ['componentUtils',
     function (componentUtils) {
