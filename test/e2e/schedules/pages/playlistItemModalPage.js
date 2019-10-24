@@ -10,6 +10,9 @@ var PlaylistItemModalPage = function() {
   // presentation item fields
   var presentationNameField = element(by.css('#playlistItemModal #presentationName'));
 
+  var invalidUrlMessage = element(by.cssContainingText('form div p', 'Please provide a valid URL.'));
+  var requiredFieldMessage = element(by.cssContainingText('form div p', 'This field is required.'));
+  
   var saveButton = element(by.id('itemSave'));
 
   this.getPlaylistItemModal = function () {
@@ -39,6 +42,14 @@ var PlaylistItemModalPage = function() {
   this.getPresentationNameField = function() {
     return presentationNameField;
   };
+
+  this.getInvalidUrlMessage = function() {
+    return invalidUrlMessage;
+  }
+
+  this.getRequiredFieldMessage = function() {
+    return requiredFieldMessage;
+  }
   
   this.getSaveButton = function() {
     return saveButton;
