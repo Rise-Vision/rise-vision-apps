@@ -132,9 +132,12 @@ var AlertsScenarios = function() {
           expect(presentationModalPage.getAddPresentationModal().isDisplayed()).to.eventually.be.true;
           expect(presentationModalPage.getModalTitle().getText()).to.eventually.equal('Select Presentation');
           presentationModalPage.getCloseButton().click();
+          helper.waitDisappear(presentationModalPage.getAddPresentationModal(), 'Add Presentation Modal');
       });
 
       it('should open the Edit Distribution Modal', function () {
+        browser.sleep(100);
+
         alertsPage.getDistributeToAllText().click();
         alertsPage.getDistributionField().click();
         helper.wait(distributionModalPage.getEditDistributionModal(), 'Edit Distribution Modal');

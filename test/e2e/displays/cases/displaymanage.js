@@ -8,7 +8,7 @@ var DisplayManagePage = require('./../pages/displayManagePage.js');
 var DisplayAddModalPage = require('./../pages/displayAddModalPage.js');
 var helper = require('rv-common-e2e').helper;
 
-var DisplayAddScenarios = function() {
+var DisplayManageScenarios = function() {
 
   browser.driver.manage().window().setSize(1280, 960);
   describe('Display Manage', function () {
@@ -36,174 +36,198 @@ var DisplayAddScenarios = function() {
       // Search for recently created Display
       displayName = 'TEST_E2E_DISPLAY ' + commonHeaderPage.getStageEnv();
 
-      helper.wait(displaysListPage.getSearchFilterField(), 'Search Filter Field');
-      displaysListPage.getSearchFilterField().sendKeys(displayName);
-      helper.wait(displaysListPage.getDisplaysLoader(), 'Displays loader');
-      helper.waitDisappear(displaysListPage.getDisplaysLoader(), 'Displays loader');
+      displaysListPage.searchDisplay(displayName);
+
       displaysListPage.getDisplayItems().first().element(by.tagName('td')).click();
     });
 
-    it('should load display', function () {
-      helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
-      expect(displayManagePage.getDisplayNameField().isPresent()).to.eventually.be.true;
-      expect(displayManagePage.getDisplayNameField().getAttribute('value')).to.eventually.equal(displayName);
-    });
-
-    it('should show User Company Address Checkbox', function () {
-      expect(displayManagePage.getDisplayUseCompanyAddressCheckbox().isPresent()).to.eventually.be.true;
-    });
-
-    it('should show Reboot Checkbox', function () {
-      expect(displayManagePage.getDisplayRebootCheckbox().isPresent()).to.eventually.be.true;
-    });
-
-    it('should show Time Selector', function () {
-      expect(displayManagePage.getDisplayHoursField().isPresent()).to.eventually.be.true;
-      expect(displayManagePage.getDisplayMinutesField().isPresent()).to.eventually.be.true;
-      expect(displayManagePage.getDisplayMeridianButton().isPresent()).to.eventually.be.true;
-    });
-
-    it('should show the schedule link', function() {
-      helper.wait(displayManagePage.getViewScheduleLink(), 'View Schedule Link');
-      expect(displayManagePage.getViewScheduleLink().isDisplayed()).to.eventually.be.true;
-    });
-
-    it('should show address options', function(done) {
-      displayManagePage.getDisplayUseCompanyAddressCheckbox().click();
-      displayManagePage.getDisplayTimeZoneSelect().isDisplayed().then(function (isDisplayed) {
-        if (!isDisplayed) {
-          displayManagePage.getDisplayUseCompanyAddressCheckbox().click();
-        }
-
-        expect(displayManagePage.getDisplayCountrySelect().isDisplayed()).to.eventually.be.true;
-        expect(displayManagePage.getDisplayTimeZoneSelect().isDisplayed()).to.eventually.be.true;
-
-        done();
+    describe('load', function() {
+      it('should load display', function () {
+        helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
+        expect(displayManagePage.getDisplayNameField().isPresent()).to.eventually.be.true;
+        expect(displayManagePage.getDisplayNameField().getAttribute('value')).to.eventually.equal(displayName);
       });
 
-    });
+      it('should show User Company Address Checkbox', function () {
+        expect(displayManagePage.getDisplayUseCompanyAddressCheckbox().isPresent()).to.eventually.be.true;
+      });
 
-    it('should select country',function(done){
-      browser.driver.executeScript('window.scrollTo(0,500);').then(function() {
-        displayManagePage.getDisplayCountrySelect().element(by.cssContainingText('option', 'Canada')).click();
-        expect(displayManagePage.getDisplayCountrySelect().$('option:checked').getText()).to.eventually.contain('Canada');
+      it('should show Reboot Checkbox', function () {
+        expect(displayManagePage.getDisplayRebootCheckbox().isPresent()).to.eventually.be.true;
+      });
 
-        done();
+      it('should show Time Selector', function () {
+        expect(displayManagePage.getDisplayHoursField().isPresent()).to.eventually.be.true;
+        expect(displayManagePage.getDisplayMinutesField().isPresent()).to.eventually.be.true;
+        expect(displayManagePage.getDisplayMeridianButton().isPresent()).to.eventually.be.true;
+      });
+
+      it('should show the schedule link', function() {
+        helper.wait(displayManagePage.getViewScheduleLink(), 'View Schedule Link');
+        expect(displayManagePage.getViewScheduleLink().isDisplayed()).to.eventually.be.true;
       });
     });
 
-    it('should select timezone',function(){
-      displayManagePage.getDisplayTimeZoneSelect().element(by.cssContainingText('option', 'Buenos Aires')).click();
-      expect(displayManagePage.getDisplayTimeZoneSelect().$('option:checked').getText()).to.eventually.contain('Buenos Aires');
-    });
+    describe('display address', function() {
+      it('should show address options', function(done) {
+        displayManagePage.getDisplayUseCompanyAddressCheckbox().click();
+        displayManagePage.getDisplayTimeZoneSelect().isDisplayed().then(function (isDisplayed) {
+          if (!isDisplayed) {
+            displayManagePage.getDisplayUseCompanyAddressCheckbox().click();
+          }
 
-    it('should show Save Button', function () {
-      expect(displayManagePage.getSaveButton().isPresent()).to.eventually.be.true;
-    });
+          expect(displayManagePage.getDisplayCountrySelect().isDisplayed()).to.eventually.be.true;
+          expect(displayManagePage.getDisplayTimeZoneSelect().isDisplayed()).to.eventually.be.true;
 
-    it('should show Cancel Button', function () {
-      expect(displayManagePage.getCancelButton().isPresent()).to.eventually.be.true;
-    });
+          done();
+        });
 
-    it('should fail to save the display and show validation error', function () {
-      helper.clickWhenClickable(displayManagePage.getSaveButton(), 'Save Button');
-      helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
-      expect(displayManagePage.getDisplayErrorBox().getText()).to.eventually.contain('We couldn\'t update your address.');
-    });
+      });
 
-    it('should select another country',function(){
-      displayManagePage.getDisplayCountrySelect().element(by.cssContainingText('option', 'Argentina')).click();
-      expect(displayManagePage.getDisplayCountrySelect().$('option:checked').getText()).to.eventually.contain('Argentina');
-    });
+      it('should select country',function(done){
+        browser.driver.executeScript('window.scrollTo(0,500);').then(function() {
+          displayManagePage.getDisplayCountrySelect().element(by.cssContainingText('option', 'Canada')).click();
+          expect(displayManagePage.getDisplayCountrySelect().$('option:checked').getText()).to.eventually.contain('Canada');
 
-    it('should save the display on Enter and skip address validation', function () {
-      displayManagePage.getDisplayNameField().sendKeys(protractor.Key.ENTER);
-      helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
-      expect(displayManagePage.getSaveButton().getText()).to.eventually.equal('Save');
-    });
+          done();
+        });
+      });
 
-    it('should show correct timezone after reload',function(done){
-      browser.refresh();
-      helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-      helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
-
-      browser.driver.executeScript('window.scrollTo(0,500);').then(function() {
+      it('should select timezone',function(){
+        displayManagePage.getDisplayTimeZoneSelect().element(by.cssContainingText('option', 'Buenos Aires')).click();
         expect(displayManagePage.getDisplayTimeZoneSelect().$('option:checked').getText()).to.eventually.contain('Buenos Aires');
+      });      
+    });
 
-        done();
+    describe('update display', function() {
+      it('should show Save Button', function () {
+        expect(displayManagePage.getSaveButton().isPresent()).to.eventually.be.true;
       });
-    });
 
-    it('should show the Not Activated Display link, which opens the Display Modal', function() {
-      helper.wait(displayManagePage.getNotActivatedPlayerLink(), 'Not Activated Display link');
-      expect(displayManagePage.getNotActivatedPlayerLink().isDisplayed()).to.eventually.be.true;
+      it('should show Cancel Button', function () {
+        expect(displayManagePage.getCancelButton().isPresent()).to.eventually.be.true;
+      });
 
-      // Display modal and validate download button
-      helper.clickWhenClickable(displayManagePage.getNotActivatedPlayerLink(), 'Not Activated Display link');
+      it('should fail to save the display and show validation error', function () {
+        helper.clickWhenClickable(displayManagePage.getSaveButton(), 'Save Button');
+        helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
+        expect(displayManagePage.getDisplayErrorBox().getText()).to.eventually.contain('We couldn\'t update your address.');
+      });
 
-      helper.wait(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
+      it('should select another country',function(){
+        displayManagePage.getDisplayCountrySelect().element(by.cssContainingText('option', 'Argentina')).click();
+        expect(displayManagePage.getDisplayCountrySelect().$('option:checked').getText()).to.eventually.contain('Argentina');
+      });
 
-      expect(displayAddModalPage.getDisplayAddModal().isDisplayed()).to.eventually.be.true;
+      it('should save the display on Enter and skip address validation', function () {
+        displayManagePage.getDisplayNameField().sendKeys(protractor.Key.ENTER);
+        helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
+        expect(displayManagePage.getSaveButton().getText()).to.eventually.equal('Save');
+      });
 
-      browser.sleep(100);
-      expect(displayAddModalPage.getTitle().getText()).to.eventually.equal('Activate your Display');
+      it('should show correct timezone after reload',function(done){
+        browser.refresh();
+        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+        helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
 
-    });
-
-    it('should show Display Id but hide the Email Instructions', function() {
-      displayAddModalPage.getPreconfiguredPlayerPanel().click();
-
-      helper.wait(displayAddModalPage.getPreconfiguredPlayerPage(), 'User Player page');
-
-      expect(displayAddModalPage.getDisplayIdField().isDisplayed()).to.eventually.be.true;
-      expect(displayAddModalPage.getDisplayIdField().getAttribute('value')).to.eventually.have.length.greaterThan(0);
-
-      expect(displayAddModalPage.getEmailedInstructions().isPresent()).to.eventually.be.false;      
-    });
-
-    it('should close the modal', function() {
-      // Close the modal
-      helper.wait(displayAddModalPage.getDismissButton(), 'Dismiss Button');
-      helper.clickWhenClickable(displayAddModalPage.getDismissButton(), 'Dismiss Button');
-
-      helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
-      expect(displayAddModalPage.getDisplayAddModal().isPresent()).to.eventually.be.false;
-    });
-
-    it('should show the Install Player button, which opens the Display Modal', function() {
-      helper.wait(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
-      expect(displayManagePage.getInstallPlayerButton().isDisplayed()).to.eventually.be.true;
-
-      // Display modal and validate download button
-      helper.clickWhenClickable(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
-
-      helper.wait(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
-
-      expect(displayAddModalPage.getDisplayAddModal().isDisplayed()).to.eventually.be.true;
-
-      browser.sleep(100);
-      expect(displayAddModalPage.getTitle().getText()).to.eventually.equal('Activate your Display');
-    });
-
-    it('should close the modal', function() {
-      // Close the modal
-      helper.wait(displayAddModalPage.getDismissButton(), 'Dismiss Button');
-      helper.clickWhenClickable(displayAddModalPage.getDismissButton(), 'Dismiss Button');
-
-      helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
-      expect(displayAddModalPage.getDisplayAddModal().isPresent()).to.eventually.be.false;
-    });
-
-    it('should delete the display', function (done) {
-      helper.clickWhenClickable(displayManagePage.getDeleteButton(), 'Display Delete Button').then(function () {
-        helper.clickWhenClickable(displayManagePage.getDeleteForeverButton(), 'Display Delete Forever Button').then(function () {
-          helper.wait(displaysListPage.getDisplaysAppContainer(), 'Displays List');
+        browser.driver.executeScript('window.scrollTo(0,500);').then(function() {
+          expect(displayManagePage.getDisplayTimeZoneSelect().$('option:checked').getText()).to.eventually.contain('Buenos Aires');
 
           done();
         });
       });
     });
+
+    describe('display activation', function() {
+      it('should show the Not Activated Display link, which opens the Display Modal', function() {
+        helper.wait(displayManagePage.getNotActivatedPlayerLink(), 'Not Activated Display link');
+        expect(displayManagePage.getNotActivatedPlayerLink().isDisplayed()).to.eventually.be.true;
+
+        // Display modal and validate download button
+        helper.clickWhenClickable(displayManagePage.getNotActivatedPlayerLink(), 'Not Activated Display link');
+
+        helper.wait(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
+
+        expect(displayAddModalPage.getDisplayAddModal().isDisplayed()).to.eventually.be.true;
+
+        browser.sleep(100);
+        expect(displayAddModalPage.getTitle().getText()).to.eventually.equal('Activate your Display');
+
+      });
+
+      it('should show Display Id but hide the Email Instructions', function() {
+        displayAddModalPage.getPreconfiguredPlayerPanel().click();
+
+        helper.wait(displayAddModalPage.getPreconfiguredPlayerPage(), 'User Player page');
+
+        expect(displayAddModalPage.getDisplayIdField().isDisplayed()).to.eventually.be.true;
+        expect(displayAddModalPage.getDisplayIdField().getAttribute('value')).to.eventually.have.length.greaterThan(0);
+
+        expect(displayAddModalPage.getEmailedInstructions().isPresent()).to.eventually.be.false;      
+      });
+
+      it('should close the modal', function() {
+        // Close the modal
+        helper.wait(displayAddModalPage.getDismissButton(), 'Dismiss Button');
+        helper.clickWhenClickable(displayAddModalPage.getDismissButton(), 'Dismiss Button');
+
+        helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
+        expect(displayAddModalPage.getDisplayAddModal().isPresent()).to.eventually.be.false;
+      });
+    });
+
+    describe('install player', function() {
+      it('should show the Install Player button, which opens the Display Modal', function() {
+        helper.wait(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
+        expect(displayManagePage.getInstallPlayerButton().isDisplayed()).to.eventually.be.true;
+
+        // Display modal and validate download button
+        helper.clickWhenClickable(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
+
+        helper.wait(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
+
+        expect(displayAddModalPage.getDisplayAddModal().isDisplayed()).to.eventually.be.true;
+
+        browser.sleep(100);
+        expect(displayAddModalPage.getTitle().getText()).to.eventually.equal('Activate your Display');
+      });
+
+      it('should close the modal', function() {
+        // Close the modal
+        helper.wait(displayAddModalPage.getDismissButton(), 'Dismiss Button');
+        helper.clickWhenClickable(displayAddModalPage.getDismissButton(), 'Dismiss Button');
+
+        helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
+        expect(displayAddModalPage.getDisplayAddModal().isPresent()).to.eventually.be.false;
+      });
+    });
+
+    describe('delete', function() {
+      it('should delete the display', function () {
+        helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
+        helper.wait(displayManagePage.getDeleteButton(), 'Display Delete Button');
+
+        expect(displayManagePage.getDeleteButton().isPresent()).to.eventually.be.true;
+
+        helper.clickWhenClickable(displayManagePage.getDeleteButton(), 'Display Delete Button');
+      });
+
+      it('should confirm deletion', function () {
+        helper.wait(displayManagePage.getDeleteForeverButton(), 'Display Delete Forever Button');
+
+        expect(displayManagePage.getDeleteForeverButton().isPresent()).to.eventually.be.true;
+        helper.clickWhenClickable(displayManagePage.getDeleteForeverButton(), 'Display Delete Forever Button');
+
+        helper.waitDisappear(displayManagePage.getDeleteForeverButton(), 'Display Delete Forever Button');
+      });
+
+      it('should return to displays page', function() {
+        helper.wait(displaysListPage.getDisplaysListTable(), 'Displays List');
+
+        expect(displaysListPage.getDisplaysListTable().isPresent()).to.eventually.be.true;
+      });
+    });
   });
 };
 
-module.exports = DisplayAddScenarios;
+module.exports = DisplayManageScenarios;
