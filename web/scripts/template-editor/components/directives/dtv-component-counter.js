@@ -42,28 +42,14 @@ angular.module('risevision.template-editor.directives')
               });
 
               function _load () {
-                $scope.date = $scope.getAvailableAttributeData($scope.componentId, 'date');
+                $scope.downToDate = $scope.getAvailableAttributeData($scope.componentId, 'date');
                 $scope.time = $scope.getAvailableAttributeData($scope.componentId, 'time');
 
                 $scope.countDownTo = $scope.time ? 'downToTime' : 'downToDate';
               }
 
-              $scope.openSystemDatePicker = function () {
-                let date = document.querySelector('#nativeDatePicker');
-
-                date.style.display = 'block';
-                date.focus();
-                date.click();
-              };
-
-              $scope.closeSystemDatePicker = function () {
-                let date = document.querySelector('#nativeDatePicker');
-
-                date.style.display = 'none';
-              };
-
               $scope.save = function () {
-                //$scope.setAttributeData($scope.componentId, 'date', $scope.date);
+                $scope.setAttributeData($scope.componentId, 'date', $scope.downToDate);
               };
 
               $scope.openDatepicker = function ($event, which) {
