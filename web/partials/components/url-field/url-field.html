@@ -1,0 +1,19 @@
+<div class="form-group" ng-class="{'has-error': ngModelCtrl.$invalid && ngModelCtrl.$dirty}">
+  <label ng-if="!hideLabel" class="control-label">{{ label ||  'URL *' }}</label>
+  <div ng-class="{'input-group':!hideStorage}">
+    <input id="url" type="text" ng-model="ngModel" ng-blur="blur()" class="form-control" placeholder="https://">
+    <span class="input-url-addon" ng-if="!hideStorage">
+      <storage-selector company-id="{{companyId}}" type="{{storageType}}"></storage-selector>
+    </span>
+  </div>
+  <ng-messages role="alert" for="ngModelCtrl.$error" ng-if="ngModelCtrl.$invalid && ngModelCtrl.$dirty">
+    <ng-messages-include src="partials/components/url-field/messages.html"></ng-messages-include>
+  </ng-messages>
+  
+  <div class="checkbox" ng-show="forcedValid || (ngModelCtrl.$invalid && ngModelCtrl.$dirty)">
+    <label class="input-url-remove-validation">
+      <input name="validate-url" ng-click="doValidation = !doValidation" type="checkbox"
+             value="validate-url"> {{"url.validate.label" | translate}}
+    </label>
+  </div>
+</div>

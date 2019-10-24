@@ -15,6 +15,7 @@
     "angular-bootstrap-colorpicker": "~3.0.19",
     "angular-cookies": "~1.7.0",
     "angular-md5": "^0.1.10",
+    "angular-messages": "^1.7.8",
     "angular-sanitize": "~1.7.0",
     "angular-slugify": "^1.0.1",
     "angular-spinner": "~1.0.1",

@@ -11,20 +11,16 @@
       <div class="form-group">
         <label class="control-label" translate>schedules-app.playlist.item.name</label>
         <input type="text" class="form-control" id="itemName" placeholder="Item Name" ng-model="playlistItem.name"> 
-      </div>
-      
-      <div class="form-group" ng-if="playlistItem.type === 'url'" ng-class="{'has-error': playlistItemFields.url.$touched && playlistItemFields.url.$invalid}" show-errors>
-        <label class="control-label">{{'schedules-app.playlist.item.url' | translate}} *</label>
-        <div class="input-group custom-addon">
-          <input type="text" class="form-control" placeholder="{{'schedules-app.playlist.item.url' | translate}}" id="url" name="url" ng-model="playlistItem.objectReference" required focus-me="isNew">
-          <span class="input-group-addon">
-            <storage-selector company-id="{{companyId}}" type="single-file"></storage-selector>
-          </span>
-        </div>
-        <p class="text-danger" ng-show="playlistItemFields.url.$touched && playlistItemFields.url.$error.required"  translate>
-          schedules-app.playlist.item.required
-        </p>
-      </div>
+      </div>      
+  
+      <url-field ng-if="playlistItem.type === 'url'"
+                name="urlField"
+                ng-model="playlistItem.objectReference"
+                required 
+                url-pattern-validator 
+                ng-model-options="{ debounce: 300 }"
+                response-header-validator 
+                company-id="{{companyId}}"></url-field>
 
       <div class="form-group" ng-if="playlistItem.type === 'presentation'">
         <label class="control-label u_margin-right" >{{'schedules-app.playlist.item.presentation' | translate}}:</label>
@@ -75,7 +71,7 @@
   </div><!--modal-body-->
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary btn-fixed-width" id="itemSave" ng-click="save()" ng-disabled="playlistItemFields.$invalid">{{isNew ? 'common.add' : 'common.apply' | translate}} <i class="fa fa-white fa-check icon-right"></i></button>
+    <button type="button" class="btn btn-primary btn-fixed-width" id="itemSave" ng-click="save()" ng-disabled="playlistItemFields.$invalid && (playlistItemFields.$dirty || isNew)">{{isNew ? 'common.add' : 'common.apply' | translate}} <i class="fa fa-white fa-check icon-right"></i></button>
     <button type="button" class="btn btn-default btn-fixed-width" ng-click="dismiss()">{{'common.cancel' | translate}} <i class="fa fa-times icon-right"></i></button>
   </div>
 </div>

@@ -10,10 +10,6 @@ angular.module('risevision.schedules.controllers')
       $scope.isNew = playlistFactory.isNew(playlistItem);
       configurePlayUntilDone();
 
-      $scope.$on('picked', function (event, url) {
-        $scope.playlistItem.objectReference = url[0];
-      });
-
       $scope.$watch('loadingTemplate', function (loading) {
         if (loading) {
           $loading.start('playlist-item-modal-loader');

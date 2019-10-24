@@ -18,7 +18,7 @@ angular.module('risevision.common.components.scrolling-list')
         reboot: 'rebooted'
       };
 
-      var _getError = function(e) {
+      var _getError = function (e) {
         if (e) {
           if (e.result) {
             if (e.result.error) {

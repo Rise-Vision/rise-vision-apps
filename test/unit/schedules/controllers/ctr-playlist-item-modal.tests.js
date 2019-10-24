@@ -134,12 +134,6 @@ describe('controller: Playlist Item Modal', function() {
       done();
     }, 10);
   });
-  
-  it('should populate url on picked event',function(){
-    $scope.$broadcast('picked', ['some_url']);
-    $scope.$digest();
-    expect($scope.playlistItem.objectReference).to.equal('some_url');
-  });
 
   it('should set playUntilDoneSupported to FALSE for HTML template', function(done) {
 

@@ -60,6 +60,7 @@ var unitTestFiles = [
   "web/bower_components/ng-tags-input/ng-tags-input.js",
   "web/bower_components/angular-md5/angular-md5.min.js",
   "web/bower_components/angular-local-storage/dist/angular-local-storage.js",
+  "web/bower_components/angular-messages/angular-messages.js",
   "web/bower_components/angular-mocks/angular-mocks.js",
   "web/bower_components/q/q.js",
   "web/bower_components/angular-ui-codemirror/ui-codemirror.js",

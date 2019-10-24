@@ -53,11 +53,13 @@
       'addAccount', 'updateUser',
       function ($q, $log, addAccount, updateUser) {
         return function (userFirst, userLast, companyName, companyIndustry, userPhone, mailSyncEnabled) {
-          $log.debug('registerAccount called.', userFirst, userLast, companyName, companyIndustry, userPhone, mailSyncEnabled);
+          $log.debug('registerAccount called.', userFirst, userLast, companyName, companyIndustry, userPhone,
+            mailSyncEnabled);
           var deferred = $q.defer();
-          addAccount(userFirst, userLast, companyName, companyIndustry, userPhone, mailSyncEnabled).then(function () {
-            deferred.resolve();
-          }).finally(function () {
+          addAccount(userFirst, userLast, companyName, companyIndustry, userPhone, mailSyncEnabled).then(
+            function () {
+              deferred.resolve();
+            }).finally(function () {
             deferred.reject();
           });
           return deferred.promise;

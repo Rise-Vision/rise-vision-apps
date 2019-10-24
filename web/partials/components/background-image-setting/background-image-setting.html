@@ -27,11 +27,13 @@
     </div>
   </div>
   <!-- Image URL -->
-  <url-field id="backgroundImageUrl" url="background.image.url"
-             file-type="image"
-             hide-label="true"
-             company-id="{{companyId}}"
-             ng-model="urlentry" valid></url-field>
+  <url-field id="backgroundImageUrl"
+            ng-model="background.image.url"                
+            required 
+            url-pattern-validator 
+            file-type-validator="IMAGES"
+            hide-label="true"
+            company-id="{{companyId}}"></url-field>        
 
   <div class="row">
     <div class="col-sm-6">
