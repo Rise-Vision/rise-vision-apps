@@ -8,7 +8,7 @@ describe('TwitterSettingsController', function () {
     twitterOAuthService;
 
   beforeEach(module('risevision.widgets.twitter'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
 
   beforeEach(module(function ($provide) {
     $provide.service('TwitterOAuthService',function(){

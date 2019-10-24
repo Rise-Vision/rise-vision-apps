@@ -4,7 +4,7 @@ describe('directive: templateEditorEmptyFileList', function() {
   var element, $scope;
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache){
     $templateCache.put('partials/template-editor/empty-file-list.html', '<p>mock</p>');

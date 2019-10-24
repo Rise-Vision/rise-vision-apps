@@ -4,7 +4,7 @@ describe('service: baseImageFactory', function() {
 
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
 
   beforeEach(module(function($provide) {
     $provide.service('blueprintFactory', function() {

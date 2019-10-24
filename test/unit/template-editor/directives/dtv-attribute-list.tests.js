@@ -9,7 +9,7 @@ describe('directive: attribute-list', function() {
   ];
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
     beforeEach(module(function ($provide) {
     $provide.service('blueprintFactory', function() {
       return {

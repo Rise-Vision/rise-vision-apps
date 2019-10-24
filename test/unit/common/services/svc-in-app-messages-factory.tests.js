@@ -4,7 +4,7 @@ describe('service: in-app-messages-factory', function() {
   var factory, selectedCompany, localStorageService, executeStub, userState, $rootScope;
 
   beforeEach(module('risevision.apps.services'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
 
     $provide.service('presentation', function() {

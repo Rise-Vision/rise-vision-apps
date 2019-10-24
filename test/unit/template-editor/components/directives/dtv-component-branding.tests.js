@@ -7,7 +7,7 @@ describe('directive: templateComponentBranding', function() {
       compile;
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache){
     rootScope = $rootScope;

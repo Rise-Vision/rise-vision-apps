@@ -2,7 +2,7 @@
 describe('controller: Widget Items Modal', function() {
   beforeEach(module('risevision.editor.controllers'));
   beforeEach(module('risevision.editor.services'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('$modalInstance',function(){
       return {

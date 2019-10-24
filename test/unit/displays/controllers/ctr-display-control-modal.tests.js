@@ -4,7 +4,7 @@ describe('controller: display control modal', function() {
 
   beforeEach(module('risevision.displays.controllers'));
   beforeEach(module('risevision.displays.services'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('displayControlFactory',function() {
       return {

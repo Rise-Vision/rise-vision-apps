@@ -7,7 +7,7 @@ describe('ImageSettingsController', function () {
     rootScope;
 
   beforeEach(module('risevision.widgets.image'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
 
   beforeEach(inject(function ($injector, $rootScope, $controller) {
     defaultSettings = $injector.get('defaultSettings');

@@ -5,7 +5,7 @@ describe('controller: displays list', function() {
   beforeEach(module('risevision.displays.filters'));
   beforeEach(module('risevision.displays.controllers'));
   beforeEach(module('risevision.displays.services'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('userState',function(){
       return {

@@ -9,7 +9,7 @@ describe('directive: scheduleFields', function() {
 
   beforeEach(module('risevision.editor.services'));
   beforeEach(module('risevision.schedules.directives'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('$modal', function() {
       return {

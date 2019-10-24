@@ -2,7 +2,7 @@
 
 describe('service: auto save service', function() {
   beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
 
   var autoSaveService, saveFunction, clock, $timeout, MINIMUM_INTERVAL_BETWEEN_SAVES, MAXIMUM_INTERVAL_BETWEEN_SAVES;
   beforeEach(function(){
