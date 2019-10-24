@@ -1285,6 +1285,40 @@ $maderio-green-disabled: #a2dbb2;
     }
   }
 
+  .rise-date-picker {
+    .form-control[readonly] {
+      cursor: default;
+      background-color: $white;
+    }
+
+    table {
+      outline: none !important;
+
+      th button strong {
+        font-size: 15px;
+      }
+    }
+
+    .btn-default {
+      font-size: 13px;
+      border: 0px;
+      color: $rise-blue;
+
+      .text-muted {
+        font-weight: normal;
+        color: $rise-blue;
+      }
+
+      &.active {
+        background-color: $rise-blue;
+        color: $white;
+
+        span {
+          color: $white;
+        }
+      }
+    }
+  }
 }
 
 .streamline-component-icon {
