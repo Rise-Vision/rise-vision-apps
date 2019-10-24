@@ -17,11 +17,9 @@ angular.module('risevision.template-editor.directives')
                 showButtonBar: false
               };
 
-              $scope.datePickers = {
-                downToDate: {
-                  isOpen: false,
-                  initDate: null
-                }
+              $scope.targetDatePicker = {
+                isOpen: false,
+                initDate: null
               };
             },
             post: function ($scope, element) {
@@ -42,21 +40,28 @@ angular.module('risevision.template-editor.directives')
               });
 
               function _load () {
-                $scope.downToDate = $scope.getAvailableAttributeData($scope.componentId, 'date');
-                $scope.time = $scope.getAvailableAttributeData($scope.componentId, 'time');
+                $scope.counterType = $scope.getAvailableAttributeData($scope.componentId, 'type');
+                $scope.targetDate = $scope.getAvailableAttributeData($scope.componentId, 'date');
+                $scope.targetTime = $scope.getAvailableAttributeData($scope.componentId, 'time');
 
-                $scope.countDownTo = $scope.time ? 'downToTime' : 'downToDate';
+                $scope.targetUnit = $scope.targetTime ? 'targetTime' : 'targetDate';
               }
 
               $scope.save = function () {
-                $scope.setAttributeData($scope.componentId, 'date', $scope.downToDate);
+                if ($scope.targetUnit === 'targetDate') {
+                  $scope.setAttributeData($scope.componentId, 'date', $scope.targetDate);
+                  $scope.setAttributeData($scope.componentId, 'time', null);
+                } else {
+                  $scope.setAttributeData($scope.componentId, 'date', null);
+                  $scope.setAttributeData($scope.componentId, 'time', $scope.targetTime);
+                }
               };
 
-              $scope.openDatepicker = function ($event, which) {
+              $scope.openDatePicker = function ($event) {
                 $event.preventDefault();
                 $event.stopPropagation();
 
-                $scope.datePickers[which].isOpen = !$scope.datePickers[which].isOpen;
+                $scope.targetDatePicker.isOpen = !$scope.targetDatePicker.isOpen;
               };
             }
           };
