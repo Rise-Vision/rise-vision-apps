@@ -1,6 +1,8 @@
 'use strict';
 
-angular.module('risevision.widget.common.url-field.url-pattern-validator',[])
+angular.module('risevision.widget.common.url-field.url-pattern-validator',[
+  'risevision.template-editor.services'
+  ])
   .directive('urlPatternValidator', ['componentUtils',
     function (componentUtils) {
       return {
@@ -8,7 +10,7 @@ angular.module('risevision.widget.common.url-field.url-pattern-validator',[])
         restrict: 'A',
         link: function (scope, elem, attr, ngModelCtrl) {
           var validator = function (value) {
-            if (value && componentUtils.isValidUrl(value)) {
+            if (!value || componentUtils.isValidUrl(value)) {
               ngModelCtrl.$setValidity('pattern', true);
             } else {
               ngModelCtrl.$setValidity('pattern', false);

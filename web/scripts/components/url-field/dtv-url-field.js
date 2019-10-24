@@ -6,8 +6,8 @@
       'risevision.widget.common.url-field.response-header-validator',
       'risevision.widget.common.url-field.url-pattern-validator'
     ])
-    .directive('urlField', ['$templateCache', '$log', 'componentUtils',
-      function ($templateCache, $log, componentUtils) {
+    .directive('urlField', ['$templateCache',
+      function ($templateCache) {
         return {
           restrict: 'E',
           require: '?ngModel',
@@ -17,7 +17,6 @@
             hideLabel: '@',
             hideStorage: '@',
             companyId: '@',
-            fileType: '@',
             storageType: '@',
           },
           template: $templateCache.get(
@@ -27,7 +26,7 @@
             scope.doValidation = true;
             scope.forcedValid = false;
 
-            if (!scope.hideStorage) {
+            if (!scope.hideStorage || scope.hideStorage === 'false') {
               scope.$on('picked', function (event, data) {
                 scope.ngModel = data[0];
               });

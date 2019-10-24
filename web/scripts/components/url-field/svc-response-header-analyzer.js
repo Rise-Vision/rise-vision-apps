@@ -10,15 +10,15 @@ angular.module('risevision.widget.common.url-field.response-header-analyzer',[])
         var deferred = $q.defer();
 
         factory.getOptions(url).then(function (options) {
-          if (options.includes('frame-ancestors')) {
+          if (options.indexOf('frame-ancestors') > -1) {
             deferred.reject('frame-ancestors');
-          } else if (options.includes('X-Frame-Options')) {
+          } else if (options.indexOf('X-Frame-Options') > -1) {
             deferred.reject('X-Frame-Options');
           } else {
             deferred.resolve(true);
           }
-        }).catch(function (response) {
-          deferred.reject('Could not reach URL. Error ' + response.status + ': ' + response.statusText);
+        }).catch(function () {
+          deferred.reject('Could not reach URL.');
         });
         return deferred.promise;
       };
