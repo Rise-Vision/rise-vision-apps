@@ -2,8 +2,8 @@
 
 var expect = require('rv-common-e2e').expect;
 var helper = require('rv-common-e2e').helper;
-var HomePage = require('./../../launcher/pages/homepage.js');
-var SignInPage = require('./../../launcher/pages/signInPage.js');
+var HomePage = require('./../../common/pages/homepage.js');
+var SignInPage = require('./../../common/pages/signInPage.js');
 var StoreProductsModalPage = require('../../editor/pages/storeProductsModalPage.js');
 var TemplateEditorPage = require('./templateEditorPage.js');
 

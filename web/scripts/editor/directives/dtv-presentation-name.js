@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.editor.directives')
-  .directive('presentationName', ['presentationFactory',
-    function (presentationFactory) {
+  .directive('presentationName', ['$sce', 'presentationFactory',
+    function ($sce, presentationFactory) {
       return {
         restrict: 'A',
         require: '?ngModel',
@@ -19,7 +19,7 @@ angular.module('risevision.editor.directives')
                     if (ngModel) {
                       $scope.ngModel = presentation.name;
                     } else {
-                      element.html(presentation.name);
+                      element.html($sce.getTrustedHtml(presentation.name));
                     }
                   }
                 });

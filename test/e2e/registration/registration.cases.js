@@ -7,10 +7,9 @@
   var AccountRemovalScenarios = require("./cases/account-removal.js");
   var RegistrationExistingCompanyScenarios = require("./cases/registration-existing-company.js");
 
-
   browser.driver.manage().window().setSize(1280, 768);
 
-  describe("Common Header ", function() {
+  describe("Registration", function() {
     this.timeout(2000);// to allow for protactor to load the seperate page
 
     var registrationScenarios = new RegistrationScenarios();

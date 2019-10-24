@@ -76,12 +76,6 @@ jobs:
           path: ~/rise-vision-apps/reports
       - store_artifacts:
           path: ~/rise-vision-apps/reports
-  e2e_launcher:
-    working_directory: ~/rise-vision-apps
-    docker: *BUILDIMAGE
-    steps:
-      - run_e2e_cases:
-          casesfile: "test/e2e/launcher/launcher.cases.js"
   e2e_schedules:
     working_directory: ~/rise-vision-apps
     docker: *BUILDIMAGE
@@ -105,7 +99,7 @@ jobs:
     docker: *BUILDIMAGE
     steps:
       - run_e2e_cases:
-          casesfile: "test/e2e/common-header/registration.cases.js"
+          casesfile: "test/e2e/registration/registration.cases.js"
   e2e_editor:
     working_directory: ~/rise-vision-apps
     docker: *BUILDIMAGE
@@ -228,9 +222,6 @@ workflows:
       - test_unit:
           requires:
             - test_build
-      - e2e_launcher:
-          requires:
-            - test_build
       - e2e_schedules:
           requires:
             - test_build
@@ -260,7 +251,6 @@ workflows:
             - test_build
       - test_e2e:
           requires:
-            - e2e_launcher
             - e2e_schedules
             - e2e_common
             - e2e_common_header

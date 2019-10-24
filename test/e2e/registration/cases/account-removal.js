@@ -5,11 +5,11 @@
   var expect = require('rv-common-e2e').expect;
   var assert = require('rv-common-e2e').assert;
   var helper = require('rv-common-e2e').helper;
-  var CommonHeaderPage = require('./../pages/commonHeaderPage.js');
-  var HomePage = require('./../pages/homepage.js');
-  var CompanySettingsModalPage = require('./../pages/companySettingsModalPage.js');
-  var SafeDeleteModalPage = require('./../pages/safeDeleteModalPage.js');
-  var SignInPage = require('./../../launcher/pages/signInPage.js');
+  var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
+  var HomePage = require('./../../common-header/pages/homepage.js');
+  var CompanySettingsModalPage = require('./../../common-header/pages/companySettingsModalPage.js');
+  var SafeDeleteModalPage = require('./../../common-header/pages/safeDeleteModalPage.js');
+  var SignInPage = require('./../../common/pages/signInPage.js');
 
   var AccountRemoval = function() {
 
