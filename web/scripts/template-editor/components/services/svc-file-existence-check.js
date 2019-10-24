@@ -22,6 +22,7 @@ angular.module('risevision.template-editor.services')
           return false;
         }
 
+        // all default files for Rise Vision templates are defined under this GCS bucket
         var regex = /^risemedialibrary-7fa5ee92-7deb-450b-a8d5-e5ed648c575f[/]Template Library[/].+/;
 
         return regex.test(fileName);
@@ -43,7 +44,7 @@ angular.module('risevision.template-editor.services')
         } else if (_isDefaultImageOnTestAppsEnvironment(fileName)) {
           return $q.resolve({
             exists: true,
-            timeCreated: '123',
+            timeCreated: '',
             url: defaultThumbnailUrl
           });
         }
