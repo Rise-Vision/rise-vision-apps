@@ -201,6 +201,17 @@ describe('service: displayFactory:', function() {
       });
       expect(displayFactory.displayId).to.not.be.truely;
     });
+
+    it('should set the display to parameter if it exists',function(){
+      var testDisplay = { id: 'test', name: 'test' };
+      
+      displayFactory.addDisplayModal(testDisplay);
+      
+      expect(trackerCalled).to.equal('Add Display');
+      
+      expect(displayFactory.display).to.deep.equal(testDisplay);
+    });
+
   });
     
   describe('getDisplay:',function(){

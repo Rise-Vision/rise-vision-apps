@@ -37,11 +37,11 @@ angular.module('risevision.displays.services')
 
       factory.addDisplayModal = function (display) {
         displayTracker('Add Display');
-
-        _init();
-
+        
         if (display) {
           factory.display = display;
+        } else {
+          _init();  
         }
 
         $modal.open({
