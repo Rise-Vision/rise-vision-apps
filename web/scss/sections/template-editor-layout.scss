@@ -1286,6 +1286,11 @@ $maderio-green-disabled: #a2dbb2;
   }
 
   .rise-date-picker {
+    .form-control[readonly] {
+      cursor: default;
+      background-color: $white;
+    }
+
     table {
       outline: none !important;
 
