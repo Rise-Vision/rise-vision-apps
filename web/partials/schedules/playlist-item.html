@@ -18,7 +18,7 @@
                 ng-model="playlistItem.objectReference"
                 required 
                 url-pattern-validator 
-                ng-model-options="{ updateOn: 'default blur', debounce: {'default': 300, 'blur': 0} }"
+                ng-model-options="{ debounce: 300 }"
                 response-header-validator 
                 company-id="{{companyId}}"></url-field>
 

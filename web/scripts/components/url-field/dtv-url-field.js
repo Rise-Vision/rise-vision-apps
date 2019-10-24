@@ -22,7 +22,7 @@
           template: $templateCache.get(
             'partials/components/url-field/url-field.html'),
           link: function (scope, element, attrs, ctrl) {
-            scope.urlCtrl = ctrl;
+            scope.ngModelCtrl = ctrl;
             scope.doValidation = true;
             scope.forcedValid = false;
 
@@ -38,7 +38,7 @@
 
             scope.$watch('ngModel', function (newValue, oldValue) {
               if (newValue !== oldValue) {
-                scope.urlCtrl.$setDirty(true);
+                scope.ngModelCtrl.$setDirty(true);
               }
             });
 
@@ -50,8 +50,8 @@
             });
 
             var clearFormErrors = function () {
-              angular.forEach(scope.urlCtrl.$error, function (value, name) {
-                scope.urlCtrl.$setValidity(name, null);
+              angular.forEach(scope.ngModelCtrl.$error, function (value, name) {
+                scope.ngModelCtrl.$setValidity(name, null);
               });
             };
           }

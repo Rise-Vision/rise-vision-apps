@@ -30,7 +30,7 @@ describe('directive: url field', function() {
     expect($scope.hideStorage).to.be.ok;
     expect($scope.companyId).to.be.ok;
     expect($scope.storageType).to.be.ok;
-    expect($scope.urlCtrl).to.be.ok;
+    expect($scope.ngModelCtrl).to.be.ok;
     expect($scope.doValidation).to.be.true;
     expect($scope.forcedValid).to.be.false;
   });
