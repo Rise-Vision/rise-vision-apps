@@ -45,7 +45,7 @@ angular.module('risevision.template-editor.directives')
                 $scope.targetTime = $scope.getAvailableAttributeData($scope.componentId, 'time');
 
                 $scope.targetUnit = $scope.targetTime ? 'targetTime' : 'targetDate';
-              }
+              };
 
               $scope.save = function () {
                 if ($scope.targetUnit === 'targetDate') {
