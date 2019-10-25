@@ -50,7 +50,7 @@ describe('controller: TemplateEditor : Chrome Bar', function() {
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module('risevision.template-editor.services'));
   beforeEach(module('risevision.editor.services'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.factory('templateEditorFactory', function() {
       return factory;

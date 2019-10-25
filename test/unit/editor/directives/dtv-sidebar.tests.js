@@ -7,7 +7,7 @@ describe('directive: sidebar', function() {
   beforeEach(module('risevision.editor.controllers'));
   beforeEach(module('risevision.editor.services'));
   beforeEach(module('risevision.editor.directives'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('placeholderFactory', function() {
       return {};

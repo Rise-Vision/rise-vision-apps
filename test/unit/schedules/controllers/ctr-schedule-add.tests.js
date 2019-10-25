@@ -3,7 +3,7 @@ describe('controller: schedule add', function() {
   var scheduleId = 1234;
   beforeEach(module('risevision.schedules.controllers'));
   beforeEach(module('risevision.schedules.services'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('scheduleFactory',function(){
       return {

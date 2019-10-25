@@ -6,7 +6,7 @@ describe('directive: templateBrandingColors', function() {
       factory;
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('brandingFactory', function() {
       return factory = {

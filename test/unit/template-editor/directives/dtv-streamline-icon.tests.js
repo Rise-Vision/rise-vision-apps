@@ -4,7 +4,7 @@ describe('directive: streamline-icon', function() {
   var element;
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
 
   beforeEach(inject(function($compile, $rootScope){
     element = $compile('<streamline-icon name="checkmark" width="64" height="64"></streamline-icon>')($rootScope);

@@ -5,7 +5,7 @@ describe('controller: HtmlEditor', function() {
 	}
 	beforeEach(module('risevision.editor.controllers'));
 	beforeEach(module('risevision.editor.services'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
 	beforeEach(module(function ($provide) {
 		$provide.factory('editorFactory',function(){
 			return { 

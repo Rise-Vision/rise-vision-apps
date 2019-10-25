@@ -5,7 +5,7 @@ describe('directive: basicStorageSelector', function() {
       $scope, $loading, storage, element;
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('$loading', function() {
       return {

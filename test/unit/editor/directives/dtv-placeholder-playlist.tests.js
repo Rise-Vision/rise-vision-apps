@@ -8,7 +8,7 @@ describe('directive: placeholder-playlist', function() {
   beforeEach(module('risevision.editor.controllers'));
   beforeEach(module('risevision.editor.services'));
   beforeEach(module('risevision.editor.directives'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('placeholderPlaylistFactory', function() {
       return {

@@ -6,7 +6,7 @@ describe('controller: display details', function() {
 
   beforeEach(module('risevision.displays.services'));
   beforeEach(module('risevision.displays.controllers'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
     $provide.service('displayFactory', function() {

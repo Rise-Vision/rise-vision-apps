@@ -4,7 +4,7 @@ describe('directive: templateEditorFileEntry', function() {
   var sandbox = sinon.sandbox.create(), $scope, element, removeAction;
 
   beforeEach(module('risevision.template-editor.directives'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorUtils', function() {
       return {

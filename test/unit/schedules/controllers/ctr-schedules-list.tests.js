@@ -2,7 +2,7 @@
 describe('controller: schedules list', function() {
   beforeEach(module('risevision.schedules.controllers'));
   beforeEach(module('risevision.schedules.services'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('userState',userState);
     $provide.service('schedule',function(){

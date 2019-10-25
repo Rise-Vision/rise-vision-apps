@@ -3,7 +3,7 @@
 describe('controller: Store Products Modal', function() {
   beforeEach(module('risevision.editor.controllers'));
   beforeEach(module('risevision.editor.services'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.value('STORE_AUTHORIZATION_URL','http://www.example.com/api/auth')
     $provide.service('ScrollingListService', function() {

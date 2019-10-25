@@ -2,7 +2,7 @@
 
 describe('service: blueprint factory', function() {
   beforeEach(module('risevision.template-editor.services'));
-  beforeEach(module(mockTranlate()));
+  beforeEach(module(mockTranslate()));
 
   var SAMPLE_COMPONENTS = [
     {
