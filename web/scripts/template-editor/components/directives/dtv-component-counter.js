@@ -32,14 +32,14 @@ angular.module('risevision.template-editor.directives')
                 element: element,
                 show: function () {
                   $scope.componentId = $scope.factory.selected.id;
-                  _load();
+                  $scope.load();
                 },
                 getTitle: function (component) {
                   return 'template.rise-data-counter' + '-' + component.attributes.type.value;
                 }
               });
 
-              function _load () {
+              $scope.load = function () {
                 $scope.counterType = $scope.getAvailableAttributeData($scope.componentId, 'type');
                 $scope.targetDate = $scope.getAvailableAttributeData($scope.componentId, 'date');
                 $scope.targetTime = $scope.getAvailableAttributeData($scope.componentId, 'time');
@@ -51,7 +51,7 @@ angular.module('risevision.template-editor.directives')
                 if ($scope.targetUnit === 'targetDate') {
                   $scope.setAttributeData($scope.componentId, 'date', $scope.targetDate);
                   $scope.setAttributeData($scope.componentId, 'time', null);
-                } else {
+                } else if ($scope.targetUnit === 'targetTime') {
                   $scope.setAttributeData($scope.componentId, 'date', null);
                   $scope.setAttributeData($scope.componentId, 'time', $scope.targetTime);
                 }
