@@ -29,7 +29,9 @@ describe('service: fileExistenceCheckService:', function() {
     });
   }));
 
-  var TEST_FILE = 'risemedialibrary-7fa5ee92-7deb-450b-a8d5-e5ed648c575f/file1.png';
+  var TEST_BUCKET = 'risemedialibrary-7fa5ee92-7deb-450b-a8d5-e5ed648c575f/';
+  var DEFAULT_TEST_FILE = TEST_BUCKET + 'Template Library/file1.png';
+  var TEST_FILE = TEST_BUCKET + 'file1.png';
   var fileExistenceCheckService;
 
   beforeEach(function() {
@@ -87,6 +89,25 @@ describe('service: fileExistenceCheckService:', function() {
             file: TEST_FILE,
             exists: true,
             'time-created': 100,
+            'thumbnail-url': 'http://default-url'
+          }
+        ]);
+
+        done();
+      })
+      .catch(function(err) {
+        expect.fail(err);
+      });
+    });
+
+    it('should mark file as existing with default thumbnail if it\'s a default file in test environment', function(done) {
+      fileExistenceCheckService.requestMetadataFor(DEFAULT_TEST_FILE, 'http://default-url')
+      .then(function(metadata) {
+        expect(metadata).to.deep.equal([
+          {
+            file: DEFAULT_TEST_FILE,
+            exists: true,
+            'time-created': '',
             'thumbnail-url': 'http://default-url'
           }
         ]);

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .service('fileExistenceCheckService', ['$q', '$log', 'storageAPILoader', 'fileMetadataUtilsService',
-    function ($q, $log, storageAPILoader, fileMetadataUtilsService) {
+  .service('fileExistenceCheckService', ['$q', '$log', 'storageAPILoader', 'fileMetadataUtilsService', 'APPS_ENV',
+    function ($q, $log, storageAPILoader, fileMetadataUtilsService, APPS_ENV) {
       var service = {};
 
       function _requestFileData(companyId, file) {
@@ -15,6 +15,17 @@ angular.module('risevision.template-editor.services')
           .then(function (storageApi) {
             return storageApi.files.get(search);
           });
+      }
+
+      function _isDefaultImageOnTestAppsEnvironment(fileName) {
+        if (APPS_ENV !== 'TEST') {
+          return false;
+        }
+
+        // all default files for Rise Vision templates are defined under this GCS bucket
+        var regex = /^risemedialibrary-7fa5ee92-7deb-450b-a8d5-e5ed648c575f[/]Template Library[/].+/;
+
+        return regex.test(fileName);
       }
 
       function _getThumbnailDataFor(fileName, defaultThumbnailUrl) {
@@ -30,6 +41,12 @@ angular.module('risevision.template-editor.services')
           $log.error('Filename is not a valid Rise Storage path: ' + fileName);
 
           return $q.resolve(invalidThumbnailData);
+        } else if (_isDefaultImageOnTestAppsEnvironment(fileName)) {
+          return $q.resolve({
+            exists: true,
+            timeCreated: '',
+            url: defaultThumbnailUrl
+          });
         }
 
         return _requestFileData(match[1], match[2])
