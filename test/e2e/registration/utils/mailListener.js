@@ -4,6 +4,7 @@
   var MailListener2 = require("mail-listener2-updated");
 
   var MailListener = function (emailAddressToFilter, password) {
+    var _this = this;
     var mailListener2 = new MailListener2({
       username: "jenkins.rise@hotmail.com",
       password: password, 
@@ -21,8 +22,16 @@
       mailListener2.on("server:disconnected", function(){
         console.log("Mail listener disconnected");
       });
+      mailListener2.on("error", function(err) {
+        console.log("Mail listener error. Manual action is required. Please check if Hotmail Login failed.");
+        _this.stop();
+
+        // Throw to stop test execution
+        throw(err);
+      });
+
       console.log('Starting MailListener for ' + emailAddressToFilter);
-      mailListener2.start();      
+      mailListener2.start();
     };
 
     this.stop = function() {
