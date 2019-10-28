@@ -132,17 +132,11 @@
       proLicenseCount: 0
     }])
     .factory('plansFactory', ['$q', '$log', '$modal', '$templateCache',
-      'userState', 'subscriptionStatusService', 'storeAuthorization', 'PLANS_LIST',
-      function ($q, $log, $modal, $templateCache, userState,
-        subscriptionStatusService, storeAuthorization, PLANS_LIST) {
+      'userState', 'storeAuthorization', 'PLANS_LIST',
+      function ($q, $log, $modal, $templateCache, userState, storeAuthorization, PLANS_LIST) {
         var _factory = {};
-        var _plansCodesList = _.map(PLANS_LIST, 'productCode');
         var _plansByType = _.keyBy(PLANS_LIST, 'type');
         var _plansByCode = _.keyBy(PLANS_LIST, 'productCode');
-        var _plansList = [
-          _plansByType.free, _plansByType.starter, _plansByType.basic, _plansByType.advanced, _plansByType
-          .enterprise
-        ];
 
         _factory.showPlansModal = function () {
           if (!_factory.isPlansModalOpen) {
@@ -160,38 +154,7 @@
           }
         };
 
-        var _getCompanyPlanStatus = function () {
-          $log.debug('getCompanyPlanStatus called.');
-
-          return subscriptionStatusService.list(_plansCodesList.slice(1), userState.getSelectedCompanyId())
-            .then(function (resp) {
-              $log.debug('getCompanyPlanStatus response.', resp);
-
-              var plansMap = _.keyBy(resp, 'pc');
-
-              return plansMap;
-            });
-        };
-
-        _factory.getPlansDetails = function () {
-          var plans = _.cloneDeep(_plansList);
-
-          return _getCompanyPlanStatus()
-            .then(function (plansStatusMap) {
-              plans.forEach(function (p) {
-                var plan = plansStatusMap[p.productCode] || p;
-                p.status = plan.status;
-                p.statusCode = plan.statusCode;
-              });
-
-              return plans;
-            })
-            .catch(function (err) {
-              $log.debug('Failed to load plans', err);
-            });
-        };
-
-        _factory.startTrial = function (plan) {
+        var _startTrial = function (plan) {
           return storeAuthorization.startTrial(plan.productCode)
             .then(function () {
               var selectedCompany = userState.getCopyOfSelectedCompany(true);
@@ -213,7 +176,7 @@
         };
 
         _factory.startVolumePlanTrial = function () {
-          return _factory.startTrial(_plansByType.volume);
+          return _startTrial(_plansByType.volume);
         };
 
         return _factory;
