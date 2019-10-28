@@ -46,7 +46,7 @@
       it("should show user information", function() {
         expect(userSettingsModalPage.getFirstNameField().getAttribute('value')).to.eventually.equal("Jenkins");
         expect(userSettingsModalPage.getLastNameField().getAttribute('value')).to.eventually.equal("Rise");
-        expect(userSettingsModalPage.getEmailField().getAttribute('value')).to.eventually.equal("jenkins@risevision.com");
+        expect(userSettingsModalPage.getEmailField().getAttribute('value')).to.eventually.equal(browser.params.login.user1);
         expect(userSettingsModalPage.getPhoneField().getAttribute('value')).to.eventually.equal("000-000-0000");
 
         expect(userSettingsModalPage.getCeCheckbox().isSelected()).to.eventually.be.true;

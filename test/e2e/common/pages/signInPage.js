@@ -6,6 +6,7 @@ var helper = require('rv-common-e2e').helper;
 var expect = require('rv-common-e2e').expect;
 
 var SignInPage = function() {
+  var _this = this;
   var commonHeaderPage = new CommonHeaderPage();
   var googleAuthPage = new GoogleAuthPage();
   var homepage = new HomePage();
@@ -21,6 +22,9 @@ var SignInPage = function() {
   var signinButton = element(by.cssContainingText('button.btn-primary', 'Sign In'));
   var incorrectCredentialsError = element(by.cssContainingText('.bg-danger', 'incorrect'));
   var emailNotConfirmedInfo = element(by.cssContainingText('.bg-info', 'Your email address has not been confirmed.'));
+
+  var USERNAME1 = browser.params.login.user1;
+  var PASSWORD1 = browser.params.login.pass1;
 
   this.get = function() {
     browser.get(url);
@@ -63,21 +67,27 @@ var SignInPage = function() {
   };
 
   this.customAuthSignIn = function(username,password) {
+    username = username || USERNAME1;
+    password = password || PASSWORD1;
     //wait for spinner to go away.
     helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - Before Custom Sign In');
 
-    this.getUsernameTextBox().clear();
-    this.getUsernameTextBox().sendKeys(username);
+    this.getUsernameTextBox().isPresent().then(function (state) {
+      if (state) {
+        _this.getUsernameTextBox().clear();
+        _this.getUsernameTextBox().sendKeys(username);
 
-    var enter = "\ue007";
-    this.getPasswordTextBox().clear();
-    this.getPasswordTextBox().sendKeys(password + enter);
-    
-    helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - After Custom Sign In');
+        var enter = "\ue007";
+        _this.getPasswordTextBox().clear();
+        _this.getPasswordTextBox().sendKeys(password + enter);
 
-    emailNotConfirmedInfo.isPresent().then(function (isPresent) {
-      if (isPresent) {
-        expect.fail('Email has not been not confirmed. Manual action is required. Please confirm the email or remove the account.');
+        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - After Custom Sign In');
+
+        emailNotConfirmedInfo.isPresent().then(function (isPresent) {
+  	      if (isPresent) {
+  	        expect.fail('Email has not been not confirmed. Manual action is required. Please confirm the email or remove the account.');
+  	      }
+  	    });
       }
     });
   };
@@ -103,7 +113,7 @@ var SignInPage = function() {
     
   };
 
-  this.signIn = this.googleSignIn;
+  this.signIn = this.customAuthSignIn;
 
 };
 

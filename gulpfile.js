@@ -337,6 +337,8 @@ gulp.task("test:e2e:core", ["test:webdrive_update"],factory.testE2EAngular({
   browser: "chrome",
   loginUser: process.env.E2E_USER,
   loginPass: process.env.E2E_PASS,
+  loginUser1: process.env.E2E_USER1,
+  loginPass1: process.env.E2E_PASS1,
   stageEnv: process.env.STAGE_ENV || os.userInfo().username || 'local',
   twitterUser: process.env.TWITTER_USER,
   twitterPass: process.env.TWITTER_PASS,
