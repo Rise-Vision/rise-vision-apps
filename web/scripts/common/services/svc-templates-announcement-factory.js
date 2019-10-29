@@ -2,8 +2,8 @@
 
 angular.module('risevision.apps.services')
   .factory('templatesAnnouncementFactory', ['localStorageService', 'userState', 'CachedRequest', 'presentation', '$q',
-    '$rootScope', '$templateCache', '$modal', 'segmentAnalytics', 'bigQueryLogging',
-    function (localStorageService, userState, CachedRequest, presentation, $q, $rootScope, $templateCache, $modal,
+    '$templateCache', '$modal', 'segmentAnalytics', 'bigQueryLogging',
+    function (localStorageService, userState, CachedRequest, presentation, $q, $templateCache, $modal,
       segmentAnalytics, bigQueryLogging) {
       var dismissedKey = 'templatesAnnouncement.dismissed';
       var factory = {};
@@ -60,7 +60,7 @@ angular.module('risevision.apps.services')
 
       var _isOlderThan15Days = function () {
         var company = userState.getCopyOfSelectedCompany();
-        var creationDate = ((company && company.creationDate) ? (new Date(company.creationDate)) : (new Date()));
+        var creationDate = (company && company.creationDate) ? new Date(company.creationDate) : new Date();
         return _daysDiff(new Date(), creationDate) > 15;
       };
 
