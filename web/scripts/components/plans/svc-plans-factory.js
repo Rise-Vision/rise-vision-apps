@@ -131,9 +131,8 @@
       productCode: 'd521f5bfbc1eef109481eebb79831e11c7804ad8',
       proLicenseCount: 0
     }])
-    .factory('plansFactory', ['$q', '$log', '$modal', '$templateCache',
-      'userState', 'storeAuthorization', 'PLANS_LIST',
-      function ($q, $log, $modal, $templateCache, userState, storeAuthorization, PLANS_LIST) {
+    .factory('plansFactory', ['$modal', '$templateCache', 'userState', 'PLANS_LIST',
+      function ($modal, $templateCache, userState, PLANS_LIST) {
         var _factory = {};
         var _plansByType = _.keyBy(PLANS_LIST, 'type');
         var _plansByCode = _.keyBy(PLANS_LIST, 'productCode');
@@ -154,29 +153,18 @@
           }
         };
 
-        var _startTrial = function (plan) {
-          return storeAuthorization.startTrial(plan.productCode)
-            .then(function () {
-              var selectedCompany = userState.getCopyOfSelectedCompany(true);
-              var licenses = _plansByCode[plan.productCode].proLicenseCount;
+        _factory.initVolumePlanTrial = function () {
+          var plan = _plansByType.volume;
+          var selectedCompany = userState.getCopyOfSelectedCompany(true);
+          var licenses = _plansByCode[plan.productCode].proLicenseCount;
 
-              selectedCompany.planProductCode = plan.productCode;
-              selectedCompany.planTrialPeriod = plan.trialPeriod;
-              selectedCompany.planSubscriptionStatus = 'Trial';
-              selectedCompany.playerProTotalLicenseCount = licenses;
-              selectedCompany.playerProAvailableLicenseCount = licenses;
+          selectedCompany.planProductCode = plan.productCode;
+          selectedCompany.planTrialPeriod = plan.trialPeriod;
+          selectedCompany.planSubscriptionStatus = 'Trial';
+          selectedCompany.playerProTotalLicenseCount = licenses;
+          selectedCompany.playerProAvailableLicenseCount = licenses;
 
-              userState.updateCompanySettings(selectedCompany);
-            })
-            .catch(function (err) {
-              $log.debug('Failed to start trial', err);
-
-              throw err;
-            });
-        };
-
-        _factory.startVolumePlanTrial = function () {
-          return _startTrial(_plansByType.volume);
+          userState.updateCompanySettings(selectedCompany);
         };
 
         return _factory;

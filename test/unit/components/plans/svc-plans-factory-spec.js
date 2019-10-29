@@ -2,23 +2,12 @@
 "use strict";
 
 describe("Services: plans factory", function() {
-  var storeApiFailure;
 
   beforeEach(module("risevision.common.components.plans"));
   beforeEach(module(function ($provide) {
-    storeApiFailure = false;
-
-    $provide.service("$q", function() {return Q;});
     $provide.service("$modal", function() {
       return {
         open: sinon.stub().returns({result: Q.defer().promise })
-      };
-    });
-    $provide.service("storeAuthorization", function() {
-      return storeAuthorization = {
-        startTrial: sinon.spy(function() {
-          return (startTrial ? Q.resolve() : Q.reject("error"));
-        })
       };
     });
     $provide.service("userState", function () {
@@ -35,15 +24,13 @@ describe("Services: plans factory", function() {
     });
   }));
 
-  var sandbox, $rootScope, $modal, userState, plansFactory;
-  var storeAuthorization, startTrial;
+  var sandbox, $modal, userState, plansFactory;
   var VOLUME_PLAN;
 
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
 
-    inject(function($injector, _$rootScope_) {
-      $rootScope = _$rootScope_;
+    inject(function($injector) {
       $modal = $injector.get("$modal");
       userState =  $injector.get("userState");
       plansFactory = $injector.get("plansFactory");
@@ -61,7 +48,7 @@ describe("Services: plans factory", function() {
   it("should exist", function() {
     expect(plansFactory).to.be.ok;
     expect(plansFactory.showPlansModal).to.be.a('function');
-    expect(plansFactory.startVolumePlanTrial).to.be.a('function');
+    expect(plansFactory.initVolumePlanTrial).to.be.a('function');
   });
 
   describe("showPlansModal: ", function() {
@@ -94,52 +81,15 @@ describe("Services: plans factory", function() {
     
   });
 
-  describe("startVolumePlanTrial: ", function() {
-    beforeEach(function() {
-      startTrial = true;
-    });
+  it("initVolumePlanTrial: ", function() {
+    plansFactory.initVolumePlanTrial();
 
-    it("should start trial: ", function(done) {
-      plansFactory.startVolumePlanTrial()
-        .then(function() {
-          storeAuthorization.startTrial.should.have.been.calledWith(VOLUME_PLAN.productCode);
-
-          done();
-        }, done);
-    });
-
-    it("should update company settings", function(done) {
-      plansFactory.startVolumePlanTrial()
-        .then(function() {
-          storeAuthorization.startTrial.should.have.been.called;
-
-          userState.updateCompanySettings.should.have.been.calledWith({
-            planProductCode: VOLUME_PLAN.productCode,
-            planTrialPeriod: VOLUME_PLAN.trialPeriod,
-            planSubscriptionStatus: "Trial",
-            playerProTotalLicenseCount: VOLUME_PLAN.proLicenseCount,
-            playerProAvailableLicenseCount: VOLUME_PLAN.proLicenseCount
-          });
-
-          done();
-        });
-    });
-
-    it("should handle failure to start the trial", function(done) {
-      startTrial = false;
-
-      plansFactory.startVolumePlanTrial()
-        .then(function() {
-          done("fail");
-        }, function(err) {
-          expect(err).to.equal("error");
-
-          storeAuthorization.startTrial.should.have.been.called;
-
-          userState.updateCompanySettings.should.not.have.been.called;
-
-          done();
-        });
+    userState.updateCompanySettings.should.have.been.calledWith({
+      planProductCode: VOLUME_PLAN.productCode,
+      planTrialPeriod: VOLUME_PLAN.trialPeriod,
+      planSubscriptionStatus: "Trial",
+      playerProTotalLicenseCount: VOLUME_PLAN.proLicenseCount,
+      playerProAvailableLicenseCount: VOLUME_PLAN.proLicenseCount
     });
   });
 

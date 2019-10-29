@@ -83,11 +83,7 @@ angular.module('risevision.common.header')
                 userState.refreshProfile()
                   .finally(function () {
                     if ($scope.newUser) {
-                      plansFactory.startVolumePlanTrial();
-                      $rootScope.$broadcast('risevision.user.authorized');
-
-                      $modalInstance.close('success');
-                      $loading.stop('registration-modal');
+                      plansFactory.initVolumePlanTrial();
                     }
 
                     analyticsEvents.identify();
@@ -98,13 +94,10 @@ angular.module('risevision.common.header')
                     });
                     bigQueryLogging.logEvent('User Registered');
 
-                    if (!$scope.newUser) {
-                      $rootScope.$broadcast(
-                        'risevision.user.authorized');
+                    $rootScope.$broadcast('risevision.user.authorized');
 
-                      $modalInstance.close('success');
-                      $loading.stop('registration-modal');
-                    }
+                    $modalInstance.close('success');
+                    $loading.stop('registration-modal');
                   });
               },
               function (err) {
