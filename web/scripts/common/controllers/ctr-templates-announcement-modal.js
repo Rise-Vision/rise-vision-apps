@@ -5,7 +5,7 @@ angular.module('risevision.apps.controllers')
     function ($scope, $modalInstance, userState) {
 
       $scope.name = userState.getCopyOfProfile().firstName;
-     
+
       $scope.thumbsUp = function () {
         $modalInstance.close(true);
       };
