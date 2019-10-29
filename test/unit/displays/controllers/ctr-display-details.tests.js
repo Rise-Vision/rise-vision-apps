@@ -71,10 +71,6 @@ describe('controller: display details', function() {
         stop: function(){}
       };
     });
-    $provide.service('storeAuthorization',function(){
-      return {
-      };
-    });
     $provide.service('userState',function(){
       return {
           getSelectedCompanyId: function() {return "company1"},

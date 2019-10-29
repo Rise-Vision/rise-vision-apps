@@ -57,19 +57,6 @@ describe('service: display:', function() {
         return deferred.promise;
       };
     });
-    $provide.factory('subscriptionStatusService', function($q) {
-      return {
-        get: function(productCode, companyId) {
-          var deferred = $q.defer();
-
-          $timeout(function() {
-            deferred.resolve({ status: 'Subscribed' });
-          });
-
-          return deferred.promise;
-        }
-      };
-    });
     $provide.factory('screenshotRequester', function($q) {
       return function(ids) {
         return screenshotRequesterMock($q);
