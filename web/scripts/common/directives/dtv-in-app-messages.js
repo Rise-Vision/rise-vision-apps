@@ -11,7 +11,7 @@ angular.module('risevision.apps.directives')
           $scope.inAppMessagesFactory = inAppMessagesFactory;
           inAppMessagesFactory.pickMessage();
 
-          templatesAnnouncementFactory.showTemplatesAnnouncementIfNeeded();
+          templatesAnnouncementFactory.showAnnouncementIfNeeded();
         }
       };
     }
