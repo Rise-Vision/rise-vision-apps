@@ -39,13 +39,14 @@
                readonly="true"
                id="targetTime"
                name="targetTime"
-               time-picker-popup
                ng-model="targetTime"
                ng-change="save()"
                ng-click="openTimePicker($event)"
+               time-picker-popup
+               is-open="targetTimePicker.isOpen"
                />
         <span class="input-group-btn">
-          <button type="button" class="btn btn-primary" ng-click="openTimePicker($event)"><i class="fa fa-calendar"></i></button>
+          <button type="button" class="btn btn-primary" ng-click="openTimePicker($event)"><i class="fa fa-clock-o"></i></button>
         </span>
       </div>
     </div>

@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('timePicker', [function () {
+  .directive('timePicker', [
+    function () {
       return {
         restrict: 'A',
         templateUrl: 'partials/template-editor/time-picker.html',
@@ -78,19 +79,29 @@ angular.module('risevision.template-editor.directives')
       };
     }
   ])
-  .directive('timePickerPopup', ['$compile', function ($compile) {
+  .directive('timePickerPopup', ['$compile', '$document',
+    function ($compile, $document) {
       return {
         require: 'ngModel',
         restrict: 'A',
         scope: {
+          isOpen: '='
         },
         link: function ($scope, element, attrs, ngModelController) {
-          var popupEl = angular.element('<div><div time-picker time="time"></div></div>');
-          var popup = $compile(popupEl)($scope);
+          var popupElement = angular.element('<div><div time-picker time="time"></div></div>');
+          var popupCompiled = $compile(popupElement)($scope);
 
           ngModelController.$formatters.push(function(value) {
             $scope.time = value;
             return value;
+          });
+
+          $scope.$watch('isOpen', function (newValue) {
+            if (newValue) {
+              $document.on('click', _documentClickHandler);
+            } else {
+              $document.off('click', _documentClickHandler);
+            }
           });
 
           $scope.$watch('time', function (newValue, oldValue) {
@@ -100,7 +111,23 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
-          element.after(popup);
+          element.after(popupCompiled);
+
+          function _documentClickHandler() {
+            if (!$scope.isOpen && $scope.disabled) {
+              return;
+            }
+
+            var popup = popupCompiled[0];
+            var dpContainsTarget = element[0].contains(event.target);
+            var popupContainsTarget = popup.contains !== undefined && popup.contains(event.target);
+
+            if ($scope.isOpen && !(dpContainsTarget || popupContainsTarget)) {
+              $scope.$apply(function() {
+                $scope.isOpen = false;
+              });
+            }
+          }
         }
       };
     }
