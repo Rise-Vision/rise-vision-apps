@@ -54,7 +54,7 @@ describe("controller: registration modal", function() {
     
     var registrationService = function(calledFrom){
       return function() {
-        newUser = calledFrom === "registerAccount";
+        newUser = calledFrom === "addAccount";
         var deferred = Q.defer();
         
         if(registerUser){
@@ -66,8 +66,8 @@ describe("controller: registration modal", function() {
       };
     };
     
-    $provide.service("registerAccount", function(){
-      return registrationService("registerAccount");
+    $provide.service("addAccount", function(){
+      return registrationService("addAccount");
     });
     $provide.service("agreeToTermsAndUpdateUser", function() {
       return registrationService("agreeToTerms");
@@ -152,7 +152,7 @@ describe("controller: registration modal", function() {
         userState : userState,
         updateCompany: $injector.get("updateCompany"),
         agreeToTermsAndUpdateUser:$injector.get("agreeToTermsAndUpdateUser"),
-        registerAccount:$injector.get("registerAccount"),
+        addAccount:$injector.get("addAccount"),
         account: account
       });
       $scope.$digest();

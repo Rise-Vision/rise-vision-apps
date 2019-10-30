@@ -116,37 +116,6 @@ describe("Services: account", function() {
       });
     });
   });  
-
-  describe("registerAccount: ", function() {
-    var registerAccount;
-    
-    beforeEach(function() {      
-      inject(function($injector){
-        registerAccount = $injector.get("registerAccount");
-      });
-    });
-
-    it("should exist", function() {      
-      expect(registerAccount).to.be.ok;
-      expect(registerAccount).to.be.a("function");
-    });    
-
-    it("should succeed", function(done) {
-      registerAccount().then(function() {
-        done();
-      })
-      .then(null, done);
-    });
-    
-    it("should fail", function(done) {
-      riseApiFailure = true;
-      registerAccount().then(function() {
-        done("success");
-      }, function() {
-        done();
-      });
-    });
-  });
   
   describe("addAccount: ", function() {
     var addAccount;
