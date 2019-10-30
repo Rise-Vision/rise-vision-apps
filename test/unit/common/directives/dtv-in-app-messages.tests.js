@@ -9,7 +9,6 @@ describe('directive: in-app-messages', function() {
       inAppMessagesFactory;
   beforeEach(module('risevision.apps.directives'));
   beforeEach(module(function ($provide) {
-    $provide.value('CHECK_TEMPLATES_ANNOUNCEMENT','true');
     $provide.service('inAppMessagesFactory', function() {
       return {
         pickMessage: sandbox.stub().returns(Q.resolve('message')),

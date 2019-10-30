@@ -2,9 +2,9 @@
 
 angular.module('risevision.apps.services')
   .factory('templatesAnnouncementFactory', ['localStorageService', 'userState', 'CachedRequest', 'presentation', '$q',
-    '$templateCache', '$modal', 'segmentAnalytics', 'bigQueryLogging',
+    '$templateCache', '$modal', 'segmentAnalytics', 'bigQueryLogging', 'CHECK_TEMPLATES_ANNOUNCEMENT',
     function (localStorageService, userState, CachedRequest, presentation, $q, $templateCache, $modal,
-      segmentAnalytics, bigQueryLogging) {
+      segmentAnalytics, bigQueryLogging, CHECK_TEMPLATES_ANNOUNCEMENT) {
       var dismissedKey = 'templatesAnnouncement.dismissed';
       var factory = {};
       var search = {
@@ -36,7 +36,7 @@ angular.module('risevision.apps.services')
       };
 
       var _shouldShowAnnouncement = function () {
-        if (_isDismissed() || !_isOlderThan15Days()) {
+        if (CHECK_TEMPLATES_ANNOUNCEMENT !== 'true' || !userState.isEducationCustomer() || _isDismissed() || !_isOlderThan15Days()) {
           return $q.reject();
         }
 

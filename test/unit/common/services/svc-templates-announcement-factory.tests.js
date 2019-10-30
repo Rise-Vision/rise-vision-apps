@@ -6,6 +6,7 @@ describe('service: templates-announcement-factory', function() {
   beforeEach(module('risevision.apps.services'));
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
+    $provide.value('CHECK_TEMPLATES_ANNOUNCEMENT','true');
     $provide.service('$q', function() {return Q;});
     $provide.service('presentation', function() {
       return {};
@@ -15,7 +16,7 @@ describe('service: templates-announcement-factory', function() {
         getCopyOfSelectedCompany: function() {
           return selectedCompany;
         },
-        isEducationCustomer: sandbox.stub().returns(false),
+        isEducationCustomer: sandbox.stub().returns(true),
         _restoreState: sandbox.stub(),
         getSelectedCompanyId: sandbox.stub().returns('')
       };
@@ -91,6 +92,15 @@ describe('service: templates-announcement-factory', function() {
           backdrop: 'static',
           keyboard: false
         });
+        done();
+      },10);
+    });
+
+    it('should not show announcement if customer is non Education',function(done) {
+      userState.isEducationCustomer.returns(false);
+      factory.showAnnouncementIfNeeded();
+      setTimeout(function(){
+        expect($modal.open).to.not.have.been.called;
         done();
       },10);
     });
