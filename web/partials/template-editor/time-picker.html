@@ -87,36 +87,10 @@
     <div class="btn-group">
       <button class="btn btn-default text-center"
               ng-class="{ 'active-button': meridian === 'AM' }"
-              ng-click="toggleMeridian('AM')">AM</button>
+              ng-click="setMeridian('AM')">AM</button>
       <button class="btn btn-default text-center"
               ng-class="{ 'active-button': meridian === 'PM' }"
-              ng-click="toggleMeridian('PM')">PM</button>
+              ng-click="setMeridian('PM')">PM</button>
     </div>
   </div>
-
-  <!--
-  <table>
-    <tr class="text-center">
-      <td class="hours-col"><i class="fa fa-chevron-up"></i></td>
-      <td></td>
-      <td><i class="fa fa-chevron-up"></i></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td class="form-group">10</td>
-      <td>:</td>
-      <td class="form-group">35</td>
-      <td>
-        <button class="btn btn-default text-center">AM</button>
-        <button class="btn btn-default text-center">PM</button>
-      </td>
-    </tr>
-    <tr class="text-center">
-      <td><i class="fa fa-chevron-down"></i></td>
-      <td></td>
-      <td><i class="fa fa-chevron-down"></i></td>
-      <td></td>
-    </tr>
-  </table>
-  -->
 </div>

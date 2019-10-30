@@ -93,15 +93,15 @@ describe('directive: templateComponentCounter', function() {
       expect($scope.getAvailableAttributeData.getCall(2).args[1]).to.equal('time');
 
       expect($scope.targetDate).to.equal(null);
-      expect($scope.targetTime).to.equal('18:30');
+      expect($scope.targetTime).to.equal('06:30 PM');
       expect($scope.targetUnit).to.equal('targetTime');
     });
   });
 
   describe('save', function () {
     beforeEach(function () {
-      $scope.targetDate = '2019-10-25';
-      $scope.targetTime = '18:30';
+      $scope.targetDate = 'October 25, 2019';
+      $scope.targetTime = '06:30 PM';
     });
 
     it('should only save the date', function () {
@@ -139,6 +139,25 @@ describe('directive: templateComponentCounter', function() {
 
       $scope.openDatePicker(event);
       expect($scope.targetDatePicker.isOpen).to.be.false;
+    });
+  });
+
+  describe('timePicker', function () {
+    it('timePicker should toggle visibility', function () {
+      var event = {
+        preventDefault: sandbox.stub(),
+        stopPropagation: sandbox.stub()
+      };
+
+      expect($scope.targetTimePicker.isOpen).to.be.falsey;
+
+      $scope.openTimePicker(event);
+      expect($scope.targetTimePicker.isOpen).to.be.true;
+      expect(event.preventDefault).to.have.been.called;
+      expect(event.stopPropagation).to.have.been.called;
+
+      $scope.openTimePicker(event);
+      expect($scope.targetTimePicker.isOpen).to.be.false;
     });
   });
 });

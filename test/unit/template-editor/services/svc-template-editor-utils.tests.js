@@ -211,5 +211,56 @@ describe('service: templateEditorUtils:', function() {
       expect(templateEditorUtils.getValidExtensionsMessage(['.gif', '.jpg', '.png'])).to.equal('Rise Vision supports .GIF, .JPG and .PNG.');
     });
   });
-  
+
+  describe('repeat', function () {
+    it('should repeat the element as many times as requested', function () {
+      expect(templateEditorUtils.repeat(1, 0)).to.deep.equal([]);
+      expect(templateEditorUtils.repeat(1, 1)).to.deep.equal([1]);
+      expect(templateEditorUtils.repeat(1, 2)).to.deep.equal([1,1]);
+    });
+  });
+
+  describe('padNumber', function () {
+    it('should pad the provided numbers with as many leading zeros as neded', function () {
+      expect(templateEditorUtils.padNumber(1, 0)).to.equal('1');
+      expect(templateEditorUtils.padNumber(1, 1)).to.equal('1');
+      expect(templateEditorUtils.padNumber(1, 2)).to.equal('01');
+      expect(templateEditorUtils.padNumber(1, 3)).to.equal('001');
+    });
+  });
+
+  describe('formatISODate', function () {
+    it('should return the date in YYYY-MM-dd format', function () {
+      expect(templateEditorUtils.formatISODate('')).to.equal(null);
+      expect(templateEditorUtils.formatISODate('aaa')).to.equal(null);
+      expect(templateEditorUtils.formatISODate('October 25, 2019')).to.equal('2019-10-25');
+      expect(templateEditorUtils.formatISODate('2019-10-25')).to.equal('2019-10-25');
+    });
+  });
+
+  describe('absoluteTimeToMeridian', function () {
+    it('should convert from "HH:mm" to "hh:mm aa", returning null for invalid inputs', function () {
+      expect(templateEditorUtils.absoluteTimeToMeridian('133:334')).to.equal(null);
+      expect(templateEditorUtils.absoluteTimeToMeridian('44:64')).to.equal(null);
+      expect(templateEditorUtils.absoluteTimeToMeridian('1:4')).to.equal('01:04 AM');
+      expect(templateEditorUtils.absoluteTimeToMeridian('1:34')).to.equal('01:34 AM');
+      expect(templateEditorUtils.absoluteTimeToMeridian('15:22')).to.equal('03:22 PM');
+      expect(templateEditorUtils.absoluteTimeToMeridian('00:22')).to.equal('12:22 AM');
+      expect(templateEditorUtils.absoluteTimeToMeridian('12:22')).to.equal('12:22 PM');
+    });
+  });
+
+  describe('meridianTimeToAbsolute', function () {
+    it('should convert from "hh:mm aa" to "HH:mm", returning null for invalid inputs', function () {
+      expect(templateEditorUtils.meridianTimeToAbsolute('133:334 AM')).to.equal(null);
+      expect(templateEditorUtils.meridianTimeToAbsolute('44:64 AM')).to.equal(null);
+      expect(templateEditorUtils.meridianTimeToAbsolute('12:30 CM')).to.equal(null);
+      expect(templateEditorUtils.meridianTimeToAbsolute('12:30')).to.equal(null);
+      expect(templateEditorUtils.meridianTimeToAbsolute('1:4 AM')).to.equal('01:04');
+      expect(templateEditorUtils.meridianTimeToAbsolute('1:34 AM')).to.equal('01:34');
+      expect(templateEditorUtils.meridianTimeToAbsolute('03:22 PM')).to.equal('15:22');
+      expect(templateEditorUtils.meridianTimeToAbsolute('12:22 AM')).to.equal('00:22');
+      expect(templateEditorUtils.meridianTimeToAbsolute('12:22 PM')).to.equal('12:22');
+    });
+  });
 });

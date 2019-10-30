@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('timePicker', [
-    function () {
+  .directive('timePicker', ['templateEditorUtils',
+    function (utils) {
       return {
         restrict: 'A',
         templateUrl: 'partials/template-editor/time-picker.html',
@@ -43,21 +43,17 @@ angular.module('risevision.template-editor.directives')
             $scope.updateTime();
           };
 
-          $scope.toggleMeridian = function (meridian) {
+          $scope.setMeridian = function (meridian) {
             $scope.meridian = meridian;
             $scope.updateTime();
           };
 
           $scope.updateTime = function () {
-            $scope.time = $scope.padNumber($scope.hours) + ':' + $scope.padNumber($scope.minutes) + ' ' + $scope.meridian;
+            $scope.time = utils.padNumber($scope.hours, 2) + ':' + utils.padNumber($scope.minutes, 2) + ' ' + $scope.meridian;
           };
 
           $scope.padNumber = function (number) {
-            if (number < 10) {
-              return '0' + number;
-            } else {
-              return number;
-            }
+            return utils.padNumber(number, 2);
           };
 
           function _increaseValue(val, min, max) {

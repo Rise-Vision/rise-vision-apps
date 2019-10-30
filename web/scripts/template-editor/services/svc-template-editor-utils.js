@@ -102,6 +102,95 @@ angular.module('risevision.template-editor.services')
         return 'Rise Vision supports ' + prefix.join(', ').toUpperCase() + suffix + '.';
       };
 
+      svc.repeat = function (value, times) {
+        var items = [];
+
+        for (var i = 0; i < times; i++) {
+          items.push(value);
+        }
+
+        return items;
+      };
+
+      svc.padNumber = function (number, minLength) {
+        var numberStr = String(number);
+        var numberLen = numberStr.length || 0;
+
+        if (numberLen < minLength) {
+          return svc.repeat('0', minLength - numberLen).join('') + numberStr;
+        } else {
+          return numberStr;
+        }
+      };
+
+      svc.formatISODate = function (dateString) {
+        var date = new Date(dateString);
+
+        if (isNaN(date.getTime())) {
+          return null;
+        } else {
+          return date && date.toISOString().substr(0, 10);
+        }
+      };
+
+      svc.absoluteTimeToMeridian = function (timeString) {
+        var regex = /^(\d{1,2}):(\d{1,2})$/;
+        var parts = regex.exec(timeString);
+
+        if (parts) {
+          var hours = Number(parts[1]);
+          var minutes = Number(parts[2]);
+          var meridian = hours >= 12 ? 'PM' : 'AM';
+
+          if (hours >= 24) {
+            return null;
+          } else if (hours === 0) {
+            hours = 12;
+          } else if (hours > 12) {
+            hours = hours % 12;
+          }
+
+          if (minutes >= 60) {
+            return null;
+          }
+
+          return svc.padNumber(hours, 2) + ':' + svc.padNumber(minutes, 2) + ' ' + meridian;
+        } else {
+          return null;
+        }
+      };
+
+      svc.meridianTimeToAbsolute = function (timeString) {
+        var regex = /^(\d{1,2}):(\d{1,2}) (\D{2})$/;
+        var parts = regex.exec(timeString);
+
+        if (parts) {
+          var meridian = parts[3];
+          var hours = Number(parts[1]) + (meridian === 'PM' ? 12 : 0);
+          var minutes = Number(parts[2]);
+
+          if (hours > 24) {
+            return null;
+          } else if (hours === 12) {
+            hours = 0;
+          } else if (hours === 24) {
+            hours = 12;
+          }
+
+          if (minutes >= 60) {
+            return null;
+          }
+
+          if (meridian !== 'AM' && meridian !== 'PM') {
+            return null;
+          }
+
+          return svc.padNumber(hours, 2) + ':' + svc.padNumber(minutes, 2);
+        } else {
+          return null;
+        }
+      };
+
       return svc;
     }
   ]);

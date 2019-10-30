@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentCounter', ['templateEditorFactory',
-    function (templateEditorFactory) {
+  .directive('templateComponentCounter', ['templateEditorFactory', 'templateEditorUtils',
+    function (templateEditorFactory, utils) {
       return {
         restrict: 'E',
         scope: true,
@@ -48,18 +48,21 @@ angular.module('risevision.template-editor.directives')
                 $scope.targetDate = $scope.getAvailableAttributeData($scope.componentId, 'date');
                 $scope.targetTime = $scope.getAvailableAttributeData($scope.componentId, 'time');
 
-                //$scope.targetTime = '11:27';
-
-                $scope.targetUnit = $scope.targetTime ? 'targetTime' : 'targetDate';
+                if ($scope.targetDate) {
+                  $scope.targetUnit = 'targetDate';
+                } else if ($scope.targetTime) {
+                  $scope.targetTime = utils.absoluteTimeToMeridian($scope.targetTime);
+                  $scope.targetUnit = 'targetTime';
+                }
               };
 
               $scope.save = function () {
                 if ($scope.targetUnit === 'targetDate') {
-                  $scope.setAttributeData($scope.componentId, 'date', $scope.targetDate);
+                  $scope.setAttributeData($scope.componentId, 'date', utils.formatISODate($scope.targetDate));
                   $scope.setAttributeData($scope.componentId, 'time', null);
                 } else if ($scope.targetUnit === 'targetTime') {
                   $scope.setAttributeData($scope.componentId, 'date', null);
-                  $scope.setAttributeData($scope.componentId, 'time', $scope.targetTime);
+                  $scope.setAttributeData($scope.componentId, 'time', utils.meridianTimeToAbsolute($scope.targetTime));
                 }
               };
 
