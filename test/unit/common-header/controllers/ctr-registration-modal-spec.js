@@ -121,6 +121,9 @@ describe("controller: registration modal", function() {
       };
     });
 
+    $provide.factory("messageBox", function() {
+      return function() {};
+    });
     $translateProvider.useLoader("customLoader");
         
   }));

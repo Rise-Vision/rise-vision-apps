@@ -15,6 +15,8 @@ describe("Services: util", function() {
       expect(humanReadableError).to.be.ok;
       expect(humanReadableError).to.be.a("function");
 
+      expect(humanReadableError()).to.equal("Unknown Error");
+      expect(humanReadableError("string")).to.equal("string");
       expect(humanReadableError(message1)).to.equal(JSON.stringify(message1.message));
       expect(humanReadableError(message2)).to.equal(JSON.stringify(message2.error.message));
       expect(humanReadableError(message3)).to.equal(JSON.stringify(message3.error));
