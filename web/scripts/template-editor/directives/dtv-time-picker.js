@@ -6,20 +6,19 @@ angular.module('risevision.template-editor.directives')
         restrict: 'A',
         templateUrl: 'partials/template-editor/time-picker.html',
         link: function ($scope) {
+          var regex = /^(\d{1,2}):(\d{1,2}) (\D{2})$/;
+
           $scope.$watch('time', function(newValue, oldValue) {
-            if (newValue && newValue !== oldValue) {
-              var parts = _parseTime(newValue);
-              var _hours = isNaN(parts[0]) ? 12 : Number(parts[0]);
+            if (newValue && newValue !== oldValue && regex.test(newValue)) {
+              var parts = regex.exec(newValue);
+              var _hours = Number(parts[1]);
+              var _minutes = Number(parts[2]);
 
-              $scope.hours = _hours % 12 === 0 ? 12 : _hours;
-              $scope.minutes = isNaN(parts[1]) ? 0 : Number(parts[1]);
-              $scope.meridian = _hours > 12 ? 'PM' : 'AM';
-
-              if (isNaN(parts[0]) || isNaN(parts[1])) {
-                $scope.updateTime();
-              }
+              $scope.hours = Math.min(_hours, 12);
+              $scope.minutes = Math.min(_minutes, 59);
+              $scope.meridian = parts[3];
             } else {
-              $scope.time = '12:00';
+              $scope.time = '12:00 PM';
             }
           });
 
@@ -49,9 +48,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.updateTime = function () {
-            var hours = $scope.hours + ($scope.meridian === 'PM' ? 12 : 0);
-
-            $scope.time = $scope.padNumber(hours) + ':' + $scope.padNumber($scope.minutes);
+            $scope.time = $scope.padNumber($scope.hours) + ':' + $scope.padNumber($scope.minutes) + ' ' + $scope.meridian;
           };
 
           $scope.padNumber = function (number) {
@@ -76,10 +73,6 @@ angular.module('risevision.template-editor.directives')
             } else {
               return max;
             }
-          }
-
-          function _parseTime(time) {
-            return time.split(':');
           }
         }
       };
