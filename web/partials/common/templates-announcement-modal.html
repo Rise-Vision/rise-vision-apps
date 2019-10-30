@@ -1,0 +1,24 @@
+<div id="templatesAnnouncementModal">
+  <div class="modal-header">
+    <h3 class="modal-title" translate>Save Time with Our Templates!</h3>
+  </div>
+  <div class="modal-body" stop-event="touchend">
+    <p>Hey {{name || 'there'}}! You haven’t used our time saving Templates at all. Take 1.5 minutes and learn how they could save you 16 hours.</p>
+    <h3>&#128071;&#128071;&#128071;</h3>
+    <div align="center" class="panel panel-default panel-thick-shadow embed-responsive embed-responsive-16by9">
+      <video controls class="embed-responsive-item">
+          <source src="https://storage.googleapis.com/risemedialibrary-7fa5ee92-7deb-450b-a8d5-e5ed648c575f/apps/in-app-template-announcement2.mp4" type="video/mp4" />
+      </video>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary btn-fixed-width" ng-click="thumbsUp()">
+      &#128077;
+      <span translate>Awesome!</span>
+    </button>
+    <button class="btn btn-default btn-fixed-width" ng-click="thumbsDown()">
+      &#128078;
+      <span translate>I Don’t Want To Save Time</span>
+    </button>
+  </div>
+</div>
