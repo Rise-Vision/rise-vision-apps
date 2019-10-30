@@ -21,6 +21,10 @@ angular.module('risevision.template-editor.directives')
                 isOpen: false,
                 initDate: null
               };
+
+              $scope.targetTimePicker = {
+                isOpen: false
+              };
             },
             post: function ($scope, element) {
               $scope.factory = templateEditorFactory;
@@ -44,6 +48,8 @@ angular.module('risevision.template-editor.directives')
                 $scope.targetDate = $scope.getAvailableAttributeData($scope.componentId, 'date');
                 $scope.targetTime = $scope.getAvailableAttributeData($scope.componentId, 'time');
 
+                //$scope.targetTime = '11:27';
+
                 $scope.targetUnit = $scope.targetTime ? 'targetTime' : 'targetDate';
               };
 
@@ -62,6 +68,13 @@ angular.module('risevision.template-editor.directives')
                 $event.stopPropagation();
 
                 $scope.targetDatePicker.isOpen = !$scope.targetDatePicker.isOpen;
+              };
+
+              $scope.openTimePicker = function ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+
+                $scope.targetTimePicker.isOpen = !$scope.targetTimePicker.isOpen;
               };
             }
           };

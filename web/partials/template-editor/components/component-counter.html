@@ -33,6 +33,21 @@
       <label for="specificTime">
         A specific time, every day:
       </label>
+      <div class="input-group rise-date-picker radio-nested-input-group" ng-show="targetUnit == 'targetTime'">
+        <input type="text"
+               class="form-control"
+               readonly="true"
+               id="targetTime"
+               name="targetTime"
+               time-picker-popup
+               ng-model="targetTime"
+               ng-change="save()"
+               ng-click="openTimePicker($event)"
+               />
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-primary" ng-click="openTimePicker($event)"><i class="fa fa-calendar"></i></button>
+        </span>
+      </div>
     </div>
   </div>
 </div>

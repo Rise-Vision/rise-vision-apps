@@ -1,0 +1,119 @@
+<style>
+  .rise-time-picker {
+    position: absolute;
+    padding: 15px;
+    top: 42px;
+    right: 0px;
+    width: 260px;
+    height: 100px;
+    text-align: center;
+
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    background-clip: padding-box;
+  }
+
+  .hours-col {
+    width: 60px;
+    float: left;
+    margin-left: -15px;
+  }
+
+  .delimiter-col {
+    width: 10px;
+    float: left;
+    padding-top: 23px;
+  }
+
+  .minutes-col {
+    width: 60px;
+    float: left;
+  }
+
+  .meridian-col {
+    width: 100px;
+    float: left;
+    margin-top: 14px;
+    margin-left: 5px;
+  }
+
+  .meridian-col .btn-group {
+    border: 1px solid #107dda;
+    border-radius: 5px;
+  }
+
+  .meridian-col button {
+    float: left;
+  }
+
+  .tp-arrow-up {
+    color: #107dda;
+    margin-bottom: 5px;
+  }
+
+  .tp-arrow-down {
+    color: #107dda;
+    margin-top: 5px;
+  }
+
+  .tp-label {
+    font-weight: bold;
+  }
+
+  .active-button {
+    background-color: #107dda !important;
+    color: white !important;
+  }
+</style>
+<div class="rise-time-picker">
+  <div class="hours-col">
+    <div class="tp-arrow-up" ng-click="increaseHours()"><i class="fa fa-chevron-up"></i></div>
+    <div class="tp-label">{{padNumber(hours)}}</div>
+    <div class="tp-arrow-down" ng-click="decreaseHours()"><i class="fa fa-chevron-down"></i></div>
+  </div>
+  <div class="delimiter-col">
+    <div class="tp-label">:</div>
+  </div>
+  <div class="minutes-col">
+    <div class="tp-arrow-up" ng-click="increaseMinutes()"><i class="fa fa-chevron-up"></i></div>
+    <div class="tp-label">{{padNumber(minutes)}}</div>
+    <div class="tp-arrow-down" ng-click="decreaseMinutes()"><i class="fa fa-chevron-down"></i></div>
+  </div>
+  <div class="meridian-col">
+    <div class="btn-group">
+      <button class="btn btn-default text-center"
+              ng-class="{ 'active-button': meridian === 'AM' }"
+              ng-click="toggleMeridian('AM')">AM</button>
+      <button class="btn btn-default text-center"
+              ng-class="{ 'active-button': meridian === 'PM' }"
+              ng-click="toggleMeridian('PM')">PM</button>
+    </div>
+  </div>
+
+  <!--
+  <table>
+    <tr class="text-center">
+      <td class="hours-col"><i class="fa fa-chevron-up"></i></td>
+      <td></td>
+      <td><i class="fa fa-chevron-up"></i></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td class="form-group">10</td>
+      <td>:</td>
+      <td class="form-group">35</td>
+      <td>
+        <button class="btn btn-default text-center">AM</button>
+        <button class="btn btn-default text-center">PM</button>
+      </td>
+    </tr>
+    <tr class="text-center">
+      <td><i class="fa fa-chevron-down"></i></td>
+      <td></td>
+      <td><i class="fa fa-chevron-down"></i></td>
+      <td></td>
+    </tr>
+  </table>
+  -->
+</div>
