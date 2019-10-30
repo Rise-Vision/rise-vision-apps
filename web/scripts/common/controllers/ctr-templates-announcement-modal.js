@@ -13,9 +13,5 @@ angular.module('risevision.apps.controllers')
       $scope.thumbsDown = function () {
         $modalInstance.close(false);
       };
-
-      // $scope.dismiss = function () {
-      //   $modalInstance.dismiss();
-      // };
     }
   ]);

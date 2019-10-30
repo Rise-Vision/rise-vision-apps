@@ -5,6 +5,7 @@ describe('directive: in-app-messages', function() {
       $rootScope,
       $scope,
       element,
+      templatesAnnouncementFactory,
       inAppMessagesFactory;
   beforeEach(module('risevision.apps.directives'));
   beforeEach(module(function ($provide) {
@@ -13,11 +14,17 @@ describe('directive: in-app-messages', function() {
         pickMessage: sandbox.stub().returns(Q.resolve('message')),
         dismissMessage: sandbox.stub()
       };
-    });  
+    });
+    $provide.service('templatesAnnouncementFactory', function() {
+      return {
+        showAnnouncementIfNeeded: sandbox.stub()
+      };
+    });
   }));
   beforeEach(inject(function(_$compile_, _$rootScope_, $templateCache, $injector){
     $compile = _$compile_;
     $rootScope = _$rootScope_;
+    templatesAnnouncementFactory = $injector.get('templatesAnnouncementFactory');
     inAppMessagesFactory = $injector.get('inAppMessagesFactory');
     $templateCache.put('partials/common/in-app-messages.html', '<p>mock</p>');
   }));
@@ -47,6 +54,10 @@ describe('directive: in-app-messages', function() {
       expect(inAppMessagesFactory.pickMessage).to.have.been.called;
     });
 
+    it('should check and show templates announcement', function() {
+      expect(templatesAnnouncementFactory.showAnnouncementIfNeeded).to.have.been.called;
+    });
+    
   });
 
 });
