@@ -121,6 +121,23 @@ describe('directive: templateComponentCounter', function() {
       expect($scope.setAttributeData.getCall(1).args[1]).to.equal('time');
       expect($scope.setAttributeData.getCall(1).args[2]).to.equal('18:30');
     });
+
+    it('should save completion if type === "down"', function () {
+      $scope.targetUnit = 'targetDate';
+      $scope.counterType = 'down';
+      $scope.completionMessage = 'Test message';
+      $scope.save();
+      expect($scope.setAttributeData.getCall(2).args[1]).to.equal('completion');
+      expect($scope.setAttributeData.getCall(2).args[2]).to.equal('Test message');
+    });
+
+    it('should save completion if type === "down"', function () {
+      $scope.targetUnit = 'targetTime';
+      $scope.counterType = 'up';
+      $scope.completionMessage = 'Test message';
+      $scope.save();
+      expect($scope.setAttributeData.getCall(2)).to.be.null;
+    });
   });
 
   describe('datePicker', function () {
