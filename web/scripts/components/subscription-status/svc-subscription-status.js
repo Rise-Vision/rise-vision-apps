@@ -2,33 +2,14 @@
   'use strict';
 
   angular.module('risevision.common.components.subscription-status.service')
-    .service('subscriptionStatusService', ['$http', '$q', 'storeProduct', 'STORE_SERVER_URL',
-      'AUTH_PATH_URL',
-      function ($http, $q, storeProduct, STORE_SERVER_URL, AUTH_PATH_URL) {
+    .service('subscriptionStatusService', ['$http', '$q', 'storeProduct', 'storeAuthorization',
+      function ($http, $q, storeProduct, storeAuthorization) {
         var _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
         // a and b are javascript Date objects
         function dateDiffInDays(a, b) {
           return Math.ceil((b.getTime() - a.getTime()) / _MS_PER_DAY);
         }
-
-        var checkAuthorizedStatus = function (productCode, companyId) {
-          var deferred = $q.defer();
-
-          var url = STORE_SERVER_URL +
-            AUTH_PATH_URL.replace('companyId', companyId) +
-            productCode;
-
-          $http.get(url).then(function (response) {
-            if (response && response.data) {
-              deferred.resolve(response.data.authorized);
-            } else {
-              deferred.resolve(false);
-            }
-          });
-
-          return deferred.promise;
-        };
 
         var isSubscribed = function (subscriptionStatus) {
           switch (subscriptionStatus) {
@@ -59,13 +40,12 @@
             subscriptionStatus.statusCode = subscriptionStatus.status.toLowerCase().replace(' ', '-');
           }
 
-          subscriptionStatus.subscribed = isSubscribed(subscriptionStatus.status);
           subscriptionStatus.isSubscribed = isSubscribed(subscriptionStatus.status);
 
           if (subscriptionStatus.statusCode === 'not-subscribed' &&
             subscriptionStatus.trialPeriod && subscriptionStatus.trialPeriod > 0) {
             subscriptionStatus.statusCode = 'trial-available';
-            subscriptionStatus.subscribed = true;
+            subscriptionStatus.trialAvailable = true;
           }
 
           if (subscriptionStatus.expiry && subscriptionStatus.statusCode ===
@@ -111,17 +91,21 @@
             });
         };
 
-        this.get = function (productCode, companyId) {
+        this.get = function (productCode) {
           return checkSubscriptionStatus([productCode])
             .then(function (statusList) {
               var subscriptionStatus = statusList[0];
 
-              if (subscriptionStatus.subscribed === false) {
+              if (subscriptionStatus.isSubscribed === false) {
                 // double check store authorization in case they're authorized
-                return checkAuthorizedStatus(productCode, companyId)
+                return storeAuthorization.check(productCode)
                   .then(function (authorized) {
-                    subscriptionStatus.subscribed = authorized;
+                    subscriptionStatus.isSubscribed = authorized;
 
+                    return subscriptionStatus;
+                  }, function(authorized) {
+                    // storeAuthorization rejects if authorized=FALSE
+                    // In case of error, fail gracefully
                     return subscriptionStatus;
                   });
               } else {

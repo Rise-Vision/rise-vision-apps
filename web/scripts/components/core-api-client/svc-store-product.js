@@ -2,7 +2,9 @@
 
 /*jshint camelcase: false */
 
-angular.module('risevision.store.product', [])
+angular.module('risevision.store.product', [
+    'risevision.common.gapi'
+  ])
   .service('storeProduct', ['$q', '$log', 'storeAPILoader', 'userState',
     function ($q, $log, storeAPILoader, userState) {
       var service = {

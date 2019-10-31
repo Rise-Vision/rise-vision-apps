@@ -18,7 +18,7 @@
   </a>
 </div>
 
-<div class="subscription-status cancelled" ng-show="subscriptionStatus.statusCode === 'cancelled' && !subscriptionStatus.subscribed">
+<div class="subscription-status cancelled" ng-show="subscriptionStatus.statusCode === 'cancelled' && !subscriptionStatus.isSubscribed">
  <span translate="subscription-status.expanded-cancelled"></span>
  <a type="button" class="btn btn-primary u_margin-left" ng-href="{{storeUrl}}" target="_blank" ng-show="!customOnClick">
   <span translate="subscription-status.subscribe-now"></span>

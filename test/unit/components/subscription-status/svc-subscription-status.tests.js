@@ -8,9 +8,9 @@ describe("Services: subscriptionStatusService", function() {
   beforeEach(module(function ($provide) {
     $provide.service("$q", function() {return Q;});
 
-    $provide.service("$http", function() {
+    $provide.service("storeAuthorization", function() {
       return {
-        get: sinon.stub().returns(Q.resolve({ data: { authorized: false }}))
+        check: sinon.stub().returns(Q.reject(false))
       };
     });
 
@@ -22,7 +22,7 @@ describe("Services: subscriptionStatusService", function() {
 
   }));
 
-  var subscriptionStatusService, $http, storeProduct, response;
+  var subscriptionStatusService, storeAuthorization, storeProduct, response;
 
   beforeEach(function(){
     response = {
@@ -33,7 +33,7 @@ describe("Services: subscriptionStatusService", function() {
     };
 
     inject(function($injector){
-      $http = $injector.get('$http');
+      storeAuthorization = $injector.get('storeAuthorization');
       storeProduct = $injector.get('storeProduct');
       subscriptionStatusService = $injector.get('subscriptionStatusService');
     });
@@ -44,15 +44,15 @@ describe("Services: subscriptionStatusService", function() {
   });
 
   it("should call product status api", function() {
-    subscriptionStatusService.get("1", "12345");
+    subscriptionStatusService.get("1");
 
     storeProduct.status.should.have.been.calledWith(["1"]);
   });
 
   it("should call not call authorization api if subscribed", function(done) {
-    subscriptionStatusService.get("1", "12345").then(function(data){
+    subscriptionStatusService.get("1").then(function(data){
       storeProduct.status.should.have.been.calledWith(["1"]);
-      $http.get.should.not.have.been.called;
+      storeAuthorization.check.should.not.have.been.called;
 
       done();
     });
@@ -61,7 +61,7 @@ describe("Services: subscriptionStatusService", function() {
   it("should handle blank responses", function(done) {
     response.items = undefined;
 
-    subscriptionStatusService.get("1", "12345").then(function(){
+    subscriptionStatusService.get("1").then(function(){
       done("Failed");
     })
     .catch(function(err) {
@@ -74,7 +74,7 @@ describe("Services: subscriptionStatusService", function() {
   it("should handle subscription status api failure", function(done) {
     storeProduct.status.returns(Q.reject("API Failed"));
 
-    subscriptionStatusService.get("1", "12345").then(function(){
+    subscriptionStatusService.get("1").then(function(){
       done("Failed");
     })
     .catch(function(err) {
@@ -87,9 +87,9 @@ describe("Services: subscriptionStatusService", function() {
   it("should call authorization api if subscription status returns false", function(done) {
     response.items[0].status = "Cancelled";
 
-    subscriptionStatusService.get("1", "12345").then(function(data){
+    subscriptionStatusService.get("1").then(function(data){
       storeProduct.status.should.have.been.calledWith(["1"]);
-      $http.get.should.have.been.called;
+      storeAuthorization.check.should.have.been.calledWith("1");
 
       done();
     });
@@ -99,11 +99,11 @@ describe("Services: subscriptionStatusService", function() {
     it("should return free product", function(done) {
       response.items[0].status = "Free";
 
-      subscriptionStatusService.get("1", "12345").then(function(data){
+      subscriptionStatusService.get("1").then(function(data){
         expect(data).be.defined;
         expect(data.status).be.equal("Free");
         expect(data.statusCode).be.equal("free");
-        expect(data.subscribed).be.equal(true);
+        expect(data.isSubscribed).be.be.true;
 
         done();
       });
@@ -112,11 +112,11 @@ describe("Services: subscriptionStatusService", function() {
     it("should return expired product", function(done) {
       response.items[0].status = "Trial Expired";
 
-      subscriptionStatusService.get("2", "12345").then(function(data){
+      subscriptionStatusService.get("2").then(function(data){
         expect(data).be.defined;
         expect(data.status).be.equal("Trial Expired");
         expect(data.statusCode).be.equal("trial-expired");
-        expect(data.subscribed).be.equal(false);
+        expect(data.isSubscribed).be.be.false;
 
         done();
       });
@@ -124,13 +124,44 @@ describe("Services: subscriptionStatusService", function() {
 
     it("should return active subscription for cancelled product", function(done) {
       response.items[0].status = "Cancelled";
-      $http.get.returns(Q.resolve({ data: { authorized: true }}));
+      storeAuthorization.check.returns(Q.resolve(true));
 
-      subscriptionStatusService.get("3", "12345").then(function(data){
+      subscriptionStatusService.get("3").then(function(data){
         expect(data).be.defined;
         expect(data.status).be.equal("Cancelled");
         expect(data.statusCode).be.equal("cancelled");
-        expect(data.subscribed).be.equal(true);
+        expect(data.isSubscribed).be.be.true;
+
+        done();
+      });
+    });
+
+    it("should return inactive subscription if authorization fails", function(done) {
+      response.items[0].status = "Cancelled";
+      storeAuthorization.check.returns(Q.reject("error"));
+
+      subscriptionStatusService.get("3").then(function(data){
+        expect(data).be.defined;
+        expect(data.status).be.equal("Cancelled");
+        expect(data.statusCode).be.equal("cancelled");
+        expect(data.isSubscribed).be.be.false;
+
+        done();
+      });
+    });
+
+    it("should return trial available", function(done) {
+      response.items[0] = {
+        status: "Not Subscribed",
+        trialPeriod: 5
+      };
+
+      subscriptionStatusService.get("3").then(function(data){
+        expect(data).be.defined;
+        expect(data.status).be.equal("Not Subscribed");
+        expect(data.statusCode).be.equal("trial-available");
+        expect(data.isSubscribed).be.be.false;
+        expect(data.trialAvailable).be.be.true;
 
         done();
       });
@@ -142,7 +173,7 @@ describe("Services: subscriptionStatusService", function() {
         { pc: 2, status: "Trial Expired" },
         { pc: 3, status: "Cancelled" }];
 
-      subscriptionStatusService.list(["1", "2", "3"], "12345").then(function(data){
+      subscriptionStatusService.list(["1", "2", "3"]).then(function(data){
         expect(data).be.defined;
         expect(data.length).be.equal(3);
         expect(data[0].status).be.equal("Free");

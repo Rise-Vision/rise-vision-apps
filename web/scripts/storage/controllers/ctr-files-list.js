@@ -66,8 +66,7 @@ angular.module('risevision.storage.controllers')
       $rootScope.$on('subscription-status:changed',
         function (e, subscriptionStatus) {
           $scope.subscriptionStatus = subscriptionStatus;
-          $scope.trialAvailable =
-            subscriptionStatus.statusCode === 'trial-available';
+          $scope.trialAvailable = subscriptionStatus.trialAvailable;
         });
 
       var trashLabel;

@@ -13,8 +13,7 @@
 
   angular.module('risevision.common.components.subscription-status.config', [])
     .value('IN_RVA_PATH', 'product/productId/?cid=companyId')
-    .value('ACCOUNT_PATH', 'account?cid=companyId')
-    .value('AUTH_PATH_URL', 'v1/widget/auth?cid=companyId&pc=');
+    .value('ACCOUNT_PATH', 'account?cid=companyId');
 
   angular.module('risevision.common.components.subscription-status.filters', [
     'risevision.common.i18n'
@@ -36,6 +35,7 @@
   ]);
 
   angular.module('risevision.common.components.subscription-status.service', [
+    'risevision.store.authorization',
     'risevision.store.product',
     'risevision.common.config',
     'risevision.common.components.subscription-status.config'
