@@ -22,19 +22,12 @@ var DisplaysListPage = function() {
   var tableHeaderStatus = element(by.id('tableHeaderStatus'));
   var displayItems = element.all(by.repeater('display in displays.items.list'));
   var displaysLoader = element(by.xpath('//div[@spinner-key="displays-list-loader"]'));
-  var displayStatusError = element(by.cssContainingText('#errorBox strong', 'Failed to load displays connection status.'));
 
   this.searchDisplay = function(displayName) {
     helper.wait(searchFilterField, 'Search Filter Field');
     searchFilterField.sendKeys(displayName);
     helper.wait(displaysLoader, 'Displays loader');
     helper.waitDisappear(displaysLoader, 'Displays loader');
-
-    displayItems.count().then(function(count) {
-      if (count > 0) {
-        helper.wait(displayStatusError, 'Connection Status Load error');
-      }
-    });
   };
 
   this.clearSearch = function() {
@@ -42,12 +35,6 @@ var DisplaysListPage = function() {
     searchFilterField.clear();
     helper.wait(displaysLoader, 'Displays loader');
     helper.waitDisappear(displaysLoader, 'Displays loader');
-
-    displayItems.count().then(function(count) {
-      if (count > 0) {
-        helper.wait(displayStatusError, 'Connection Status Load error');
-      }
-    });
   };
 
   this.deleteDisplayIfExists = function() {
