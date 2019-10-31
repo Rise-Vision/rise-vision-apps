@@ -4,7 +4,12 @@
 
     .value('humanReadableError', function (resp) {
       var message;
-      if (resp.message) {
+
+      if (!resp) {
+        return 'Unknown Error';
+      } else if (typeof resp === 'string') {
+        return resp;
+      } else if (resp.message) {
         message = resp.message;
       } else if (resp.error) {
         if (resp.error.message) {

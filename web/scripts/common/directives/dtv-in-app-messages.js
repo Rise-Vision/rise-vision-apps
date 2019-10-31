@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.apps.directives')
-  .directive('inAppMessages', ['inAppMessagesFactory',
-    function (inAppMessagesFactory) {
+  .directive('inAppMessages', ['inAppMessagesFactory', 'templatesAnnouncementFactory',
+    function (inAppMessagesFactory, templatesAnnouncementFactory) {
       return {
         restrict: 'E',
         scope: {},
@@ -10,6 +10,8 @@ angular.module('risevision.apps.directives')
         link: function ($scope) {
           $scope.inAppMessagesFactory = inAppMessagesFactory;
           inAppMessagesFactory.pickMessage();
+
+          templatesAnnouncementFactory.showAnnouncementIfNeeded();
         }
       };
     }

@@ -9,7 +9,7 @@ angular.module('risevision.template-editor.directives')
         templateUrl: 'partials/template-editor/components/component-counter.html',
         compile: function () {
           return {
-            pre: function($scope) {
+            pre: function ($scope) {
               $scope.dateOptions = {
                 formatYear: 'yy',
                 startingDay: 1,

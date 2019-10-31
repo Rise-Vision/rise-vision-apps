@@ -54,7 +54,7 @@ describe("controller: registration modal", function() {
     
     var registrationService = function(calledFrom){
       return function() {
-        newUser = calledFrom === "registerAccount";
+        newUser = calledFrom === "addAccount";
         var deferred = Q.defer();
         
         if(registerUser){
@@ -66,8 +66,8 @@ describe("controller: registration modal", function() {
       };
     };
     
-    $provide.service("registerAccount", function(){
-      return registrationService("registerAccount");
+    $provide.service("addAccount", function(){
+      return registrationService("addAccount");
     });
     $provide.service("agreeToTermsAndUpdateUser", function() {
       return registrationService("agreeToTerms");
@@ -75,7 +75,7 @@ describe("controller: registration modal", function() {
 
     $provide.service("plansFactory", function() {
       return plansFactory = {
-        startVolumePlanTrial: sinon.spy()
+        initVolumePlanTrial: sinon.spy()
       };
     });
     
@@ -121,6 +121,9 @@ describe("controller: registration modal", function() {
       };
     });
 
+    $provide.factory("messageBox", function() {
+      return function() {};
+    });
     $translateProvider.useLoader("customLoader");
         
   }));
@@ -152,7 +155,7 @@ describe("controller: registration modal", function() {
         userState : userState,
         updateCompany: $injector.get("updateCompany"),
         agreeToTermsAndUpdateUser:$injector.get("agreeToTermsAndUpdateUser"),
-        registerAccount:$injector.get("registerAccount"),
+        addAccount:$injector.get("addAccount"),
         account: account
       });
       $scope.$digest();
@@ -207,7 +210,7 @@ describe("controller: registration modal", function() {
       var profileSpy = sinon.spy(userState, "refreshProfile");
       setTimeout(function() {
         expect(newUser).to.be.true;
-        plansFactory.startVolumePlanTrial.should.have.been.called;
+        plansFactory.initVolumePlanTrial.should.have.been.called;
         identifySpy.should.have.been.called;
         expect(trackerCalled).to.equal("User Registered");
         expect(bqCalled).to.equal("User Registered");
@@ -229,7 +232,7 @@ describe("controller: registration modal", function() {
       var profileSpy = sinon.spy(userState, "refreshProfile");
       setTimeout(function(){
         expect(newUser).to.be.true;
-        plansFactory.startVolumePlanTrial.should.not.have.been.called;
+        plansFactory.initVolumePlanTrial.should.not.have.been.called;
         identifySpy.should.not.have.been.called;
         expect(trackerCalled).to.not.be.ok;
         expect(bqCalled).to.not.be.ok;
@@ -263,7 +266,7 @@ describe("controller: registration modal", function() {
       var profileSpy = sinon.spy(userState, "refreshProfile");
       setTimeout(function() {
         expect(newUser).to.be.false;
-        plansFactory.startVolumePlanTrial.should.not.have.been.called;
+        plansFactory.initVolumePlanTrial.should.not.have.been.called;
         identifySpy.should.have.been.called;
         expect(trackerCalled).to.equal("User Registered");
         expect(bqCalled).to.equal("User Registered");

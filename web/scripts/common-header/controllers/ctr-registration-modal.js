@@ -3,12 +3,12 @@
 angular.module('risevision.common.header')
   .controller('RegistrationModalCtrl', [
     '$q', '$scope', '$rootScope', '$modalInstance',
-    '$loading', 'registerAccount', '$log', '$cookies',
+    '$loading', 'addAccount', '$log', '$cookies',
     'userState', 'pick', 'uiFlowManager', 'messageBox', 'humanReadableError',
     'agreeToTermsAndUpdateUser', 'account', 'segmentAnalytics',
     'bigQueryLogging', 'analyticsEvents', 'updateCompany', 'plansFactory',
     'COMPANY_INDUSTRY_FIELDS', 'urlStateService',
-    function ($q, $scope, $rootScope, $modalInstance, $loading, registerAccount,
+    function ($q, $scope, $rootScope, $modalInstance, $loading, addAccount,
       $log, $cookies, userState, pick, uiFlowManager, messageBox, humanReadableError,
       agreeToTermsAndUpdateUser, account, segmentAnalytics, bigQueryLogging,
       analyticsEvents, updateCompany, plansFactory, COMPANY_INDUSTRY_FIELDS,
@@ -71,7 +71,7 @@ angular.module('risevision.common.header')
 
           var action;
           if ($scope.newUser) {
-            action = registerAccount($scope.profile.firstName, $scope.profile.lastName, $scope.company.name, $scope
+            action = addAccount($scope.profile.firstName, $scope.profile.lastName, $scope.company.name, $scope
               .company.companyIndustry, $scope.profile.telephone, $scope.profile.mailSyncEnabled);
           } else {
             action = agreeToTermsAndUpdateUser(userState.getUsername(),
@@ -80,40 +80,34 @@ angular.module('risevision.common.header')
 
           action
             .then(function () {
-                userState.refreshProfile()
-                  .finally(function () {
-                    if ($scope.newUser) {
-                      plansFactory.startVolumePlanTrial();
-                      $rootScope.$broadcast('risevision.user.authorized');
+              userState.refreshProfile()
+                .finally(function () {
+                  if ($scope.newUser) {
+                    plansFactory.initVolumePlanTrial();
+                  }
 
-                      $modalInstance.close('success');
-                      $loading.stop('registration-modal');
-                    }
-
-                    analyticsEvents.identify();
-                    segmentAnalytics.track('User Registered', {
-                      'companyId': userState.getUserCompanyId(),
-                      'companyName': userState.getUserCompanyName(),
-                      'isNewCompany': $scope.newUser
-                    });
-                    bigQueryLogging.logEvent('User Registered');
-
-                    if (!$scope.newUser) {
-                      $rootScope.$broadcast(
-                        'risevision.user.authorized');
-
-                      $modalInstance.close('success');
-                      $loading.stop('registration-modal');
-                    }
+                  analyticsEvents.identify();
+                  segmentAnalytics.track('User Registered', {
+                    'companyId': userState.getUserCompanyId(),
+                    'companyName': userState.getUserCompanyName(),
+                    'isNewCompany': $scope.newUser
                   });
-              },
-              function (err) {
-                messageBox('Error', humanReadableError(err));
-                console.error(err);
-              })
+                  bigQueryLogging.logEvent('User Registered');
+
+                  $rootScope.$broadcast('risevision.user.authorized');
+
+                  $modalInstance.close('success');
+                  $loading.stop('registration-modal');
+                });
+            })
+            .catch(function (err) {
+              messageBox('Error', humanReadableError(err));
+              console.error(err);
+
+              userState.refreshProfile();
+            })
             .finally(function () {
               $scope.registering = false;
-              userState.refreshProfile();
             });
         }
 

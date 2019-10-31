@@ -131,18 +131,11 @@
       productCode: 'd521f5bfbc1eef109481eebb79831e11c7804ad8',
       proLicenseCount: 0
     }])
-    .factory('plansFactory', ['$q', '$log', '$modal', '$templateCache',
-      'userState', 'subscriptionStatusService', 'storeAuthorization', 'PLANS_LIST',
-      function ($q, $log, $modal, $templateCache, userState,
-        subscriptionStatusService, storeAuthorization, PLANS_LIST) {
+    .factory('plansFactory', ['$modal', '$templateCache', 'userState', 'PLANS_LIST',
+      function ($modal, $templateCache, userState, PLANS_LIST) {
         var _factory = {};
-        var _plansCodesList = _.map(PLANS_LIST, 'productCode');
         var _plansByType = _.keyBy(PLANS_LIST, 'type');
         var _plansByCode = _.keyBy(PLANS_LIST, 'productCode');
-        var _plansList = [
-          _plansByType.free, _plansByType.starter, _plansByType.basic, _plansByType.advanced, _plansByType
-          .enterprise
-        ];
 
         _factory.showPlansModal = function () {
           if (!_factory.isPlansModalOpen) {
@@ -160,60 +153,18 @@
           }
         };
 
-        var _getCompanyPlanStatus = function () {
-          $log.debug('getCompanyPlanStatus called.');
+        _factory.initVolumePlanTrial = function () {
+          var plan = _plansByType.volume;
+          var selectedCompany = userState.getCopyOfSelectedCompany(true);
+          var licenses = _plansByCode[plan.productCode].proLicenseCount;
 
-          return subscriptionStatusService.list(_plansCodesList.slice(1), userState.getSelectedCompanyId())
-            .then(function (resp) {
-              $log.debug('getCompanyPlanStatus response.', resp);
+          selectedCompany.planProductCode = plan.productCode;
+          selectedCompany.planTrialPeriod = plan.trialPeriod;
+          selectedCompany.planSubscriptionStatus = 'Trial';
+          selectedCompany.playerProTotalLicenseCount = licenses;
+          selectedCompany.playerProAvailableLicenseCount = licenses;
 
-              var plansMap = _.keyBy(resp, 'pc');
-
-              return plansMap;
-            });
-        };
-
-        _factory.getPlansDetails = function () {
-          var plans = _.cloneDeep(_plansList);
-
-          return _getCompanyPlanStatus()
-            .then(function (plansStatusMap) {
-              plans.forEach(function (p) {
-                var plan = plansStatusMap[p.productCode] || p;
-                p.status = plan.status;
-                p.statusCode = plan.statusCode;
-              });
-
-              return plans;
-            })
-            .catch(function (err) {
-              $log.debug('Failed to load plans', err);
-            });
-        };
-
-        _factory.startTrial = function (plan) {
-          return storeAuthorization.startTrial(plan.productCode)
-            .then(function () {
-              var selectedCompany = userState.getCopyOfSelectedCompany(true);
-              var licenses = _plansByCode[plan.productCode].proLicenseCount;
-
-              selectedCompany.planProductCode = plan.productCode;
-              selectedCompany.planTrialPeriod = plan.trialPeriod;
-              selectedCompany.planSubscriptionStatus = 'Trial';
-              selectedCompany.playerProTotalLicenseCount = licenses;
-              selectedCompany.playerProAvailableLicenseCount = licenses;
-
-              userState.updateCompanySettings(selectedCompany);
-            })
-            .catch(function (err) {
-              $log.debug('Failed to start trial', err);
-
-              throw err;
-            });
-        };
-
-        _factory.startVolumePlanTrial = function () {
-          return _factory.startTrial(_plansByType.volume);
+          userState.updateCompanySettings(selectedCompany);
         };
 
         return _factory;

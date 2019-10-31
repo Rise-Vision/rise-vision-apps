@@ -12,6 +12,7 @@ var StorageSelectorModalPage = function() {
   var byURLButton = element(by.id('byURLButton'));
   var closeButton = element(by.id('closeButton'));
   var startTrialButton = element(by.id('startTrialButton'));
+  var activeTrialBanner = element(by.css('.subscription-status.trial'));
   var overwriteConfirmationModal = element(by.css('.confirm-overwrite-modal'));
   var overwriteFilesButton = element(by.css('.confirm-overwrite-modal')).element(by.buttonText('Yes, overwrite files'));
   
@@ -58,6 +59,10 @@ var StorageSelectorModalPage = function() {
 
   this.getStartTrialButton = function() {
     return startTrialButton;
+  };
+
+  this.getActiveTrialBanner = function() {
+    return activeTrialBanner;
   };
 
   this.getOverwriteConfirmationModal = function() {

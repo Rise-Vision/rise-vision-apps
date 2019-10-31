@@ -49,24 +49,6 @@
       }
     ])
 
-    .factory('registerAccount', ['$q', '$log',
-      'addAccount', 'updateUser',
-      function ($q, $log, addAccount, updateUser) {
-        return function (userFirst, userLast, companyName, companyIndustry, userPhone, mailSyncEnabled) {
-          $log.debug('registerAccount called.', userFirst, userLast, companyName, companyIndustry, userPhone,
-            mailSyncEnabled);
-          var deferred = $q.defer();
-          addAccount(userFirst, userLast, companyName, companyIndustry, userPhone, mailSyncEnabled).then(
-            function () {
-              deferred.resolve();
-            }).finally(function () {
-            deferred.reject();
-          });
-          return deferred.promise;
-        };
-      }
-    ])
-
     .factory('addAccount', ['$q', 'riseAPILoader', '$log',
       function ($q, riseAPILoader, $log) {
         return function (userFirst, userLast, companyName, companyIndustry, userPhone, mailSyncEnabled) {
@@ -87,7 +69,7 @@
               if (resp.result) {
                 deferred.resolve();
               } else {
-                deferred.reject('addAccount');
+                deferred.reject(resp);
               }
             });
           });
