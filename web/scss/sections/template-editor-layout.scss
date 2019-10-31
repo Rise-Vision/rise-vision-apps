@@ -1358,7 +1358,7 @@ $maderio-green-disabled: #a2dbb2;
       margin-left: 5px;
 
       .btn-group {
-        border: 1px solid #107dda;
+        border: 1px solid $rise-blue;
         border-radius: 5px;
       }
 
@@ -1368,13 +1368,13 @@ $maderio-green-disabled: #a2dbb2;
     }
 
     .tp-arrow-up {
-      color: #107dda;
+      color: $rise-blue;
       margin-bottom: 5px;
       cursor: pointer;
     }
 
     .tp-arrow-down {
-      color: #107dda;
+      color: $rise-blue;
       margin-top: 5px;
       cursor: pointer;
     }
@@ -1385,7 +1385,7 @@ $maderio-green-disabled: #a2dbb2;
     }
 
     .active-button {
-      background-color: #107dda !important;
+      background-color: $rise-blue !important;
       color: white !important;
     }
   }
