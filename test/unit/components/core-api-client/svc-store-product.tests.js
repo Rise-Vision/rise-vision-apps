@@ -1,6 +1,6 @@
 'use strict';
-describe('service: store:', function() {
-  beforeEach(module('risevision.editor.services'));
+describe('service: storeProduct:', function() {
+  beforeEach(module('risevision.store.product'));
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
     $provide.service('userState',function(){
@@ -77,7 +77,7 @@ describe('service: store:', function() {
     });
 
   }));
-  var store, returnList, searchString, sortString, returnStatus;
+  var storeProduct, returnList, searchString, sortString, returnStatus;
   beforeEach(function(){
     returnList = true;
     returnStatus = true;
@@ -85,18 +85,18 @@ describe('service: store:', function() {
     sortString='';
     
     inject(function($injector){
-      store = $injector.get('store');
+      storeProduct = $injector.get('storeProduct');
     });
   });
 
   it('should exist',function(){
-    expect(store).to.be.truely;
-    expect(store.product.list).to.be.a('function');
+    expect(storeProduct).to.be.ok;
+    expect(storeProduct.list).to.be.a('function');
   });
 
   describe('get:', function() {
    it('should return a product',function(done) {
-      store.product.get('productCode1', 'code')
+      storeProduct.get('productCode1', 'code')
       .then(function(result) {
         expect(result).to.be.truely;
         expect(result.productId).to.equal('productId1');
@@ -108,7 +108,7 @@ describe('service: store:', function() {
     it('should handle failure to get a product correctly', function(done) {
       returnStatus = false;
 
-      store.product.get('invalidProductId')
+      storeProduct.get('invalidProductId')
       .then(function(product) {
         done(product);
       })
@@ -122,7 +122,7 @@ describe('service: store:', function() {
 
   describe('list:',function(){
     it('should return a list of products',function(done){
-      store.product.list({})
+      storeProduct.list({})
       .then(function(result){
         expect(result).to.be.truely;
         expect(result.items).to.be.an.array;
@@ -133,7 +133,7 @@ describe('service: store:', function() {
     });
     
     it('should create default search string',function(done){
-      store.product.list({category:'Content'})
+      storeProduct.list({category:'Content'})
       .then(function(result){
         expect(searchString).to.equal('(visibleTo:ALL OR visibleTo:TEST_COMP_ID) AND (productTag:Content)');
 
@@ -143,7 +143,7 @@ describe('service: store:', function() {
     });
 
     it('should set default sort & order',function(done){
-      store.product.list({})
+      storeProduct.list({})
         .then(function(result){
           expect(sortString).to.equal('defaultOrderWeight ASC');
 
@@ -153,7 +153,7 @@ describe('service: store:', function() {
     });
 
     it('should output a proper search string',function(done){
-      store.product.list({query: 'str',category:'Content'})
+      storeProduct.list({query: 'str',category:'Content'})
         .then(function(result){
           expect(searchString).to.equal('(visibleTo:ALL OR visibleTo:TEST_COMP_ID) AND (productTag:Content) AND \"str\"');
 
@@ -163,7 +163,7 @@ describe('service: store:', function() {
     });
 
     it('should apply filter to search',function(done){
-      store.product.list({filter: 'templateOfTheWeek:1',category:'Content'})
+      storeProduct.list({filter: 'templateOfTheWeek:1',category:'Content'})
         .then(function(result){
           expect(searchString).to.equal('(visibleTo:ALL OR visibleTo:TEST_COMP_ID) AND (productTag:Content) AND templateOfTheWeek:1');
 
@@ -173,7 +173,7 @@ describe('service: store:', function() {
     });
     
     it('should search by rvaEntityId',function(done){
-      store.product.list({category:'Presentations',rvaEntityId:'presentationId'})
+      storeProduct.list({category:'Presentations',rvaEntityId:'presentationId'})
         .then(function(result){
           expect(searchString).to.equal('(visibleTo:ALL OR visibleTo:TEST_COMP_ID) AND (productTag:Presentations) AND (rvaEntityId:presentationId)');
 
@@ -185,7 +185,7 @@ describe('service: store:', function() {
     it('should handle failure to get list correctly',function(done){
       returnList = false;
 
-      store.product.list({})
+      storeProduct.list({})
       .then(function(products) {
         done(products);
       })
@@ -199,7 +199,7 @@ describe('service: store:', function() {
 
   describe('status:',function(){
    it('should return a list of status',function(done){
-      store.product.status({})
+      storeProduct.status({})
       .then(function(result){
         expect(result).to.be.truely;
         expect(result.items).to.be.an.array;
@@ -213,7 +213,7 @@ describe('service: store:', function() {
     it('should handle failure to get status correctly',function(done){
       returnStatus = false;
 
-      store.product.status({})
+      storeProduct.status({})
       .then(function(products) {
         done(products);
       })

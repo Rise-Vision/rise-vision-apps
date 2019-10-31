@@ -106,7 +106,7 @@ describe('service: templateEditorFactory:', function() {
   }));
 
   var $state, $modal, templateEditorFactory, templateEditorUtils, financialLicenseFactory, blueprintFactory, presentation, processErrorCode,
-    HTML_PRESENTATION_TYPE, storeAuthorize, checkTemplateAccessSpy, store, plansFactory, scheduleFactory, brandingFactory;
+    HTML_PRESENTATION_TYPE, storeAuthorize, checkTemplateAccessSpy, storeProduct, plansFactory, scheduleFactory, brandingFactory;
 
   beforeEach(function() {
     inject(function($injector, checkTemplateAccess) {
@@ -119,7 +119,7 @@ describe('service: templateEditorFactory:', function() {
       plansFactory = $injector.get('plansFactory');
       scheduleFactory = $injector.get('scheduleFactory');
       brandingFactory = $injector.get('brandingFactory');
-      store = $injector.get('store');
+      storeProduct = $injector.get('storeProduct');
       templateEditorUtils = $injector.get('templateEditorUtils');
       processErrorCode = $injector.get('processErrorCode');
       HTML_PRESENTATION_TYPE = $injector.get('HTML_PRESENTATION_TYPE');

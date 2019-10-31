@@ -565,6 +565,8 @@ angular.module('risevision.displays.controllers', []);
 angular.module('risevision.editor.services', [
   'risevision.common.header',
   'risevision.common.gapi',
+  'risevision.store.product',
+  'risevision.common.components.subscription-status',
   'risevision.apps.config',
   'risevision.displays.services'
 ]);

@@ -8,12 +8,12 @@ angular.module('risevision.editor.services')
   )
   .factory('editorFactory', ['$q', '$state', 'userState', 'userAuthFactory',
     'presentation', 'presentationParser', 'distributionParser',
-    'presentationTracker', 'store', 'checkTemplateAccess', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
+    'presentationTracker', 'storeProduct', 'checkTemplateAccess', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
     'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT',
     '$modal', '$rootScope', '$window', 'scheduleFactory', 'plansFactory', 'processErrorCode', 'messageBox',
     '$templateCache', '$log', 'presentationUtils',
     function ($q, $state, userState, userAuthFactory, presentation,
-      presentationParser, distributionParser, presentationTracker, store, checkTemplateAccess,
+      presentationParser, distributionParser, presentationTracker, storeProduct, checkTemplateAccess,
       VIEWER_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED,
       DEFAULT_LAYOUT, $modal, $rootScope, $window,
       scheduleFactory, plansFactory, processErrorCode, messageBox, $templateCache, $log,
@@ -406,7 +406,7 @@ angular.module('risevision.editor.services')
       };
 
       factory.addFromProductId = function (productId) {
-        return store.product.get(productId)
+        return storeProduct.get(productId)
           .then(function (productDetails) {
             if (productDetails.productCode) {
               return $q.resolve(productDetails);

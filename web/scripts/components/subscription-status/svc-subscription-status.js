@@ -2,13 +2,9 @@
   'use strict';
 
   angular.module('risevision.common.components.subscription-status.service')
-    .service('subscriptionStatusService', ['$http', '$q', 'STORE_SERVER_URL',
-      'PATH_URL', 'AUTH_PATH_URL',
-      function ($http, $q, STORE_SERVER_URL, PATH_URL, AUTH_PATH_URL) {
-        var responseType = ['On Trial', 'Trial Expired', 'Subscribed',
-          'Suspended', 'Cancelled', 'Free', 'Not Subscribed',
-          'Product Not Found', 'Company Not Found', 'Error'
-        ];
+    .service('subscriptionStatusService', ['$http', '$q', 'storeProduct', 'STORE_SERVER_URL',
+      'AUTH_PATH_URL',
+      function ($http, $q, storeProduct, STORE_SERVER_URL, AUTH_PATH_URL) {
         var _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
         // a and b are javascript Date objects
@@ -34,77 +30,89 @@
           return deferred.promise;
         };
 
-        var checkSubscriptionStatus = function (productCodes, companyId) {
-          var deferred = $q.defer();
+        var isSubscribed = function (subscriptionStatus) {
+          switch (subscriptionStatus) {
+          case 'On Trial':
+          case 'Subscribed':
+          case 'Free':
+            return true;
+          case 'Not Subscribed':
+          case 'Trial Expired':
+          case 'Cancelled':
+          case 'Suspended':
+          case 'Product Not Found':
+          case 'Company Not Found':
+          case 'Error':
+            return false;
+          default:
+            return false;
+          }
+        };
 
-          productCodes = Array.isArray(productCodes) ? productCodes : [
-            productCodes
-          ];
+        var updateStatus = function (subscriptionStatus) {
+          subscriptionStatus.plural = '';
 
-          var url = STORE_SERVER_URL +
-            PATH_URL.replace('companyId', companyId) +
-            productCodes.join(',');
+          if (!subscriptionStatus.status) {
+            subscriptionStatus.status = 'N/A';
+            subscriptionStatus.statusCode = 'na';
+          } else {
+            subscriptionStatus.statusCode = subscriptionStatus.status.toLowerCase().replace(' ', '-');
+          }
 
-          $http.get(url).then(function (response) {
-            if (response && response.data && response.data.length) {
-              var statusList = [];
+          subscriptionStatus.subscribed = isSubscribed(subscriptionStatus.status);
+          subscriptionStatus.isSubscribed = isSubscribed(subscriptionStatus.status);
 
-              for (var i = 0; i < response.data.length; i++) {
-                var subscriptionStatus = response.data[i];
+          if (subscriptionStatus.statusCode === 'not-subscribed' &&
+            subscriptionStatus.trialPeriod && subscriptionStatus.trialPeriod > 0) {
+            subscriptionStatus.statusCode = 'trial-available';
+            subscriptionStatus.subscribed = true;
+          }
 
-                statusList.push(subscriptionStatus);
-                subscriptionStatus.plural = '';
-                subscriptionStatus.statusCode = subscriptionStatus.status
-                  .toLowerCase().replace(' ', '-');
+          if (subscriptionStatus.expiry && subscriptionStatus.statusCode ===
+            'on-trial') {
+            subscriptionStatus.expiry = new Date(subscriptionStatus.expiry);
 
-                if (subscriptionStatus.status === '') {
-                  subscriptionStatus.status = 'N/A';
-                  subscriptionStatus.statusCode = 'na';
-                  subscriptionStatus.subscribed = false;
-                } else if (subscriptionStatus.status === responseType[0] ||
-                  subscriptionStatus.status === responseType[2] ||
-                  subscriptionStatus.status === responseType[5]) {
-                  subscriptionStatus.subscribed = true;
-                } else {
-                  subscriptionStatus.subscribed = false;
-                }
-
-                if (subscriptionStatus.statusCode === 'not-subscribed' &&
-                  subscriptionStatus.trialPeriod && subscriptionStatus.trialPeriod >
-                  0) {
-                  subscriptionStatus.statusCode = 'trial-available';
-                  subscriptionStatus.subscribed = true;
-                }
-
-                if (subscriptionStatus.expiry && subscriptionStatus.statusCode ===
-                  'on-trial') {
-                  subscriptionStatus.expiry = new Date(subscriptionStatus.expiry);
-
-                  if (subscriptionStatus.expiry instanceof Date &&
-                    !isNaN(subscriptionStatus.expiry.valueOf())) {
-                    subscriptionStatus.expiry = dateDiffInDays(new Date(),
-                      subscriptionStatus.expiry);
-                  }
-
-                  if (subscriptionStatus.expiry === 0) {
-                    subscriptionStatus.plural = '-zero';
-                  } else if (subscriptionStatus.expiry > 1) {
-                    subscriptionStatus.plural = '-many';
-                  }
-                }
-              }
-
-              deferred.resolve(statusList);
-            } else {
-              deferred.reject('No response');
+            if (subscriptionStatus.expiry instanceof Date &&
+              !isNaN(subscriptionStatus.expiry.valueOf())) {
+              subscriptionStatus.expiry = dateDiffInDays(new Date(),
+                subscriptionStatus.expiry);
             }
-          });
 
-          return deferred.promise;
+            if (subscriptionStatus.expiry === 0) {
+              subscriptionStatus.plural = '-zero';
+            } else if (subscriptionStatus.expiry > 1) {
+              subscriptionStatus.plural = '-many';
+            }
+          }
+        };
+
+        var checkSubscriptionStatus = function (productCodes) {
+          return storeProduct.status(productCodes)
+            .then(function (result) {
+              if (result && result.items) {
+                var statusList = [];
+
+                for (var i = 0; i < result.items.length; i++) {
+                  var subscriptionStatus = result.items[i];
+
+                  updateStatus(subscriptionStatus);
+
+                  statusList.push(subscriptionStatus);
+                }
+
+                return $q.resolve(statusList);
+              } else {
+                return $q.reject('No results.');
+              }
+            })
+            .catch(function (e) {
+              console.error('Failed to get status of products.', e);
+              return $q.reject(e);
+            });
         };
 
         this.get = function (productCode, companyId) {
-          return checkSubscriptionStatus(productCode, companyId)
+          return checkSubscriptionStatus([productCode])
             .then(function (statusList) {
               var subscriptionStatus = statusList[0];
 
@@ -122,8 +130,8 @@
             });
         };
 
-        this.list = function (productCodes, companyId) {
-          return checkSubscriptionStatus(productCodes, companyId);
+        this.list = function (productCodes) {
+          return checkSubscriptionStatus(productCodes);
         };
 
       }
