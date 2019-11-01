@@ -157,9 +157,13 @@
           var plan = _plansByType.volume;
           var selectedCompany = userState.getCopyOfSelectedCompany(true);
           var licenses = _plansByCode[plan.productCode].proLicenseCount;
+          var trialExpiry = new Date();
+          // Round down for the date
+          trialExpiry.setDate(trialExpiry.getDate() + plan.trialPeriod - 1);
 
           selectedCompany.planProductCode = plan.productCode;
           selectedCompany.planTrialPeriod = plan.trialPeriod;
+          selectedCompany.planTrialExpiryDate = trialExpiry;
           selectedCompany.planSubscriptionStatus = 'Trial';
           selectedCompany.playerProTotalLicenseCount = licenses;
           selectedCompany.playerProAvailableLicenseCount = licenses;

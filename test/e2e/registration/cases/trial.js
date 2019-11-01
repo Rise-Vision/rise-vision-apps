@@ -39,12 +39,9 @@ var TrialScenarios = function() {
     describe('Given a user that just signed up for Rise Vision', function () {
 
       before(function () {
-        // Add delay waiting for Trial to start
-        browser.sleep(30000);
+        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
-        homepage.getStorage();
-
-        signInPage.customAuthSignIn(commonHeaderPage.getStageEmailAddress(), commonHeaderPage.getPassword());
+        helper.clickWhenClickable(homepage.getStorageLink(), 'Storage link');
       });
       
       it('should load Storage Home', function () {
@@ -55,7 +52,7 @@ var TrialScenarios = function() {
         helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
       });
 
-      it('should not show Storage Trial on Storage home', function () {
+      it('should show Storage Trial on Storage home', function () {
         helper.wait(storageSelectorModalPage.getActiveTrialBanner(), 'Active Trial Banner');
 
         expect(storageSelectorModalPage.getActiveTrialBanner().isDisplayed()).to.eventually.be.true;
@@ -86,8 +83,21 @@ var TrialScenarios = function() {
         storageSelectorModalPage.getCloseButton().click();
       });
 
+      it('should show Strage trial after page refresh', function () {
+        homepage.getStorage();
+
+        helper.wait(storageHomePage.getStorageAppContainer(), 'Storage Apps Container');
+        helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
+
+        helper.wait(storageSelectorModalPage.getActiveTrialBanner(), 'Active Trial Banner');
+
+        expect(storageSelectorModalPage.getActiveTrialBanner().isDisplayed()).to.eventually.be.true;
+        expect(storageSelectorModalPage.getStartTrialButton().isDisplayed()).to.eventually.be.false;
+
+        expect(storageHomePage.getNewFolderButton().isDisplayed()).to.eventually.be.true;
+      });
+
       after(function() {
-        homepage.get();
         commonHeaderPage.signOut(true);
       });
 

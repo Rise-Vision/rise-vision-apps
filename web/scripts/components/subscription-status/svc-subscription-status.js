@@ -2,8 +2,8 @@
   'use strict';
 
   angular.module('risevision.common.components.subscription-status.service')
-    .service('subscriptionStatusService', ['$http', '$q', 'storeProduct', 'storeAuthorization',
-      function ($http, $q, storeProduct, storeAuthorization) {
+    .service('subscriptionStatusService', ['$http', '$q', 'currentPlanFactory', 'storeProduct', 'storeAuthorization',
+      function ($http, $q, currentPlanFactory, storeProduct, storeAuthorization) {
         var _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
         // a and b are javascript Date objects
@@ -66,29 +66,71 @@
           }
         };
 
+        var mapPlanStatus = function (planStatus) {
+          var status = 'Not Subscribed';
+
+          if (currentPlanFactory.isCancelled()) {
+            // Cancelled or CancelledActive
+            status = 'Cancelled';
+          } else if (currentPlanFactory.isFree()) {
+            status = 'Free';
+          } else if (currentPlanFactory.isSubscribed()) {
+            status = 'Subscribed';
+          } else if (currentPlanFactory.isOnTrial()) {
+            status = 'On Trial';
+          } else if (currentPlanFactory.isTrialExpired()) {
+            status = 'Trial Expired';
+          } else if (currentPlanFactory.isSuspended()) {
+            status = 'Suspended';
+          }
+
+          return status;
+        };
+
+        var mapCurrentPlan = function (productCodes) {
+          var statusList = [];
+          for (var i = 0; i < productCodes.length; i++) {
+            var subscriptionStatus = {
+              pc: productCodes[i],
+              status: mapPlanStatus(currentPlanFactory.currentPlan.status),
+              expiry: currentPlanFactory.currentPlan.trialExpiryDate
+            };
+
+            updateStatus(subscriptionStatus);
+
+            statusList.push(subscriptionStatus);
+          };
+
+          return statusList;
+        };
+
         var checkSubscriptionStatus = function (productCodes) {
-          return storeProduct.status(productCodes)
-            .then(function (result) {
-              if (result && result.items) {
-                var statusList = [];
+          if (currentPlanFactory.isPlanActive() || currentPlanFactory.isCancelledActive()) {
+            return $q.resolve(mapCurrentPlan(productCodes));
+          } else {
+            return storeProduct.status(productCodes)
+              .then(function (result) {
+                if (result && result.items) {
+                  var statusList = [];
 
-                for (var i = 0; i < result.items.length; i++) {
-                  var subscriptionStatus = result.items[i];
+                  for (var i = 0; i < result.items.length; i++) {
+                    var subscriptionStatus = result.items[i];
 
-                  updateStatus(subscriptionStatus);
+                    updateStatus(subscriptionStatus);
 
-                  statusList.push(subscriptionStatus);
+                    statusList.push(subscriptionStatus);
+                  }
+
+                  return $q.resolve(statusList);
+                } else {
+                  return $q.reject('No results.');
                 }
-
-                return $q.resolve(statusList);
-              } else {
-                return $q.reject('No results.');
-              }
-            })
-            .catch(function (e) {
-              console.error('Failed to get status of products.', e);
-              return $q.reject(e);
-            });
+              })
+              .catch(function (e) {
+                console.error('Failed to get status of products.', e);
+                return $q.reject(e);
+              });
+          }
         };
 
         this.get = function (productCode) {
@@ -103,7 +145,7 @@
                     subscriptionStatus.isSubscribed = authorized;
 
                     return subscriptionStatus;
-                  }, function(authorized) {
+                  }, function (authorized) {
                     // storeAuthorization rejects if authorized=FALSE
                     // In case of error, fail gracefully
                     return subscriptionStatus;

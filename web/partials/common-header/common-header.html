@@ -38,8 +38,8 @@
 							<span class="env-name-label">{{ENV_NAME}}</span>
 						</li>
 						<li ng-repeat="opt in navOptions">
-							<a ng-if="opt.cid" ng-href="{{opt.link}}" link-cid target="{{opt.target}}" ng-class="{'selected': opt.states && opt.states.indexOf(navSelected) > -1}">{{opt.title}}</a>
-							<a ng-if="!opt.cid" ng-href="{{opt.link}}" target="{{opt.target}}" ng-class="{'selected': opt.states && opt.states.indexOf(navSelected) > -1}">{{opt.title}}</a>
+							<a id="{{opt.title + 'Link'}}" ng-if="opt.cid" ng-href="{{opt.link}}" link-cid target="{{opt.target}}" ng-class="{'selected': opt.states && opt.states.indexOf(navSelected) > -1}">{{opt.title}}</a>
+							<a id="{{opt.title + 'Link'}}" ng-if="!opt.cid" ng-href="{{opt.link}}" target="{{opt.target}}" ng-class="{'selected': opt.states && opt.states.indexOf(navSelected) > -1}">{{opt.title}}</a>
 						</li>
 						
 						<li ng-if="!inRVAFrame && !hideHelpMenu">
