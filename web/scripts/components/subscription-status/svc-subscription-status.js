@@ -72,16 +72,17 @@
           if (currentPlanFactory.isCancelled()) {
             // Cancelled or CancelledActive
             status = 'Cancelled';
-          } else if (currentPlanFactory.isFree()) {
-            status = 'Free';
           } else if (currentPlanFactory.isSubscribed()) {
             status = 'Subscribed';
           } else if (currentPlanFactory.isOnTrial()) {
             status = 'On Trial';
-          } else if (currentPlanFactory.isTrialExpired()) {
-            status = 'Trial Expired';
-          } else if (currentPlanFactory.isSuspended()) {
-            status = 'Suspended';
+          // Unreachable cases
+          // } else if (currentPlanFactory.isFree()) {
+          //   status = 'Free';
+          // } else if (currentPlanFactory.isTrialExpired()) {
+          //   status = 'Trial Expired';
+          // } else if (currentPlanFactory.isSuspended()) {
+          //   status = 'Suspended';
           }
 
           return status;
@@ -99,7 +100,7 @@
             updateStatus(subscriptionStatus);
 
             statusList.push(subscriptionStatus);
-          };
+          }
 
           return statusList;
         };

@@ -8,6 +8,16 @@ describe("Services: subscriptionStatusService", function() {
   beforeEach(module(function ($provide) {
     $provide.service("$q", function() {return Q;});
 
+    $provide.service("currentPlanFactory", function() {
+      return {
+        currentPlan: {
+          trialExpiryDate: new Date()
+        },
+        isPlanActive: sinon.stub().returns(false),
+        isCancelledActive: sinon.stub().returns(false)
+      };
+    });
+
     $provide.service("storeAuthorization", function() {
       return {
         check: sinon.stub().returns(Q.reject(false))
@@ -22,7 +32,7 @@ describe("Services: subscriptionStatusService", function() {
 
   }));
 
-  var subscriptionStatusService, storeAuthorization, storeProduct, response;
+  var subscriptionStatusService, currentPlanFactory, storeAuthorization, storeProduct, response;
 
   beforeEach(function(){
     response = {
@@ -33,6 +43,7 @@ describe("Services: subscriptionStatusService", function() {
     };
 
     inject(function($injector){
+      currentPlanFactory = $injector.get('currentPlanFactory');
       storeAuthorization = $injector.get('storeAuthorization');
       storeProduct = $injector.get('storeProduct');
       subscriptionStatusService = $injector.get('subscriptionStatusService');
@@ -43,55 +54,163 @@ describe("Services: subscriptionStatusService", function() {
     expect(subscriptionStatusService).be.defined;
   });
 
-  it("should call product status api", function() {
-    subscriptionStatusService.get("1");
+  describe("Plan: ", function() {
+    describe("should check Plan", function() {
+      beforeEach(function() {
+        currentPlanFactory.isCancelled = sinon.stub().returns(true);
+      });
 
-    storeProduct.status.should.have.been.calledWith(["1"]);
+      it("should use active plan", function() {
+        currentPlanFactory.isPlanActive.returns(true);
+
+        subscriptionStatusService.get("1");
+
+        storeProduct.status.should.not.have.been.called;
+      });
+
+      it("should use cancelled but active plan", function() {
+        currentPlanFactory.isCancelledActive.returns(true);
+
+        subscriptionStatusService.get("1");
+
+        storeProduct.status.should.not.have.been.called;
+      });      
+    });
+
+    describe("should map Plan to Subscription Status", function() {
+      beforeEach(function() {
+        currentPlanFactory.isPlanActive.returns(true);
+
+        currentPlanFactory.isCancelled = sinon.stub().returns(false);
+        currentPlanFactory.isSubscribed = sinon.stub().returns(false);
+        currentPlanFactory.isOnTrial = sinon.stub().returns(false);
+      });
+
+      it("should default to Not Subscribed", function(done) {
+        subscriptionStatusService.get("1").then(function(subscriptionStatus) {
+          expect(subscriptionStatus).to.be.an('Object');
+          expect(subscriptionStatus.pc).to.equal("1");
+          expect(subscriptionStatus.status).to.equal("Not Subscribed");
+          expect(subscriptionStatus.expiry).to.equal(currentPlanFactory.currentPlan.trialExpiryDate);
+
+          done();
+        });
+      });
+
+      it("should map a list of products", function(done) {
+        subscriptionStatusService.list(["1", "2"]).then(function(statusList) {
+          expect(statusList).to.be.an('Array');
+          expect(statusList[0].pc).to.equal("1");
+          expect(statusList[1].pc).to.equal("2");
+
+          done();
+        });
+      });
+
+      it("should map Cancelled Plan", function(done) {
+        currentPlanFactory.isCancelled = sinon.stub().returns(true);
+
+        subscriptionStatusService.get("1").then(function(subscriptionStatus) {
+          expect(subscriptionStatus).to.be.an('Object');
+          expect(subscriptionStatus.pc).to.equal("1");
+          expect(subscriptionStatus.status).to.equal("Cancelled");
+
+          done();
+        });
+      });
+
+      it("should map Subscribed Plan", function(done) {
+        currentPlanFactory.isSubscribed = sinon.stub().returns(true);
+
+        subscriptionStatusService.get("1").then(function(subscriptionStatus) {
+          expect(subscriptionStatus).to.be.an('Object');
+          expect(subscriptionStatus.pc).to.equal("1");
+          expect(subscriptionStatus.status).to.equal("Subscribed");
+
+          done();
+        });
+      });
+
+      it("should map Plan Trial", function(done) {
+        currentPlanFactory.isOnTrial = sinon.stub().returns(true);
+
+        subscriptionStatusService.get("1").then(function(subscriptionStatus) {
+          expect(subscriptionStatus).to.be.an('Object');
+          expect(subscriptionStatus.pc).to.equal("1");
+          expect(subscriptionStatus.status).to.equal("On Trial");
+
+          done();
+        });
+      });
+
+      it("should calculate Trial expiry", function(done) {
+        var trialExpiry = new Date();
+        trialExpiry.setDate(trialExpiry.getDate() + 5);
+        currentPlanFactory.currentPlan.trialExpiryDate = trialExpiry;
+        currentPlanFactory.isOnTrial = sinon.stub().returns(true);
+
+        subscriptionStatusService.get("1").then(function(subscriptionStatus) {
+          expect(subscriptionStatus.status).to.equal("On Trial");
+          expect(subscriptionStatus.expiry).to.equal(6);
+
+          done();
+        });
+      });
+
+    });
   });
 
-  it("should not call authorization api if subscribed", function(done) {
-    subscriptionStatusService.get("1").then(function(data){
+  describe("No Plan: ", function() {
+    it("should call product status api", function() {
+      subscriptionStatusService.get("1");
+
       storeProduct.status.should.have.been.calledWith(["1"]);
-      storeAuthorization.check.should.not.have.been.called;
-
-      done();
     });
-  });
 
-  it("should handle blank responses", function(done) {
-    response.items = undefined;
+    it("should not call authorization api if subscribed", function(done) {
+      subscriptionStatusService.get("1").then(function(data){
+        storeProduct.status.should.have.been.calledWith(["1"]);
+        storeAuthorization.check.should.not.have.been.called;
 
-    subscriptionStatusService.get("1").then(function(){
-      done("Failed");
-    })
-    .catch(function(err) {
-      expect(err).to.equal("No results.");
-
-      done();
+        done();
+      });
     });
-  });
 
-  it("should handle subscription status api failure", function(done) {
-    storeProduct.status.returns(Q.reject("API Failed"));
+    it("should handle blank responses", function(done) {
+      response.items = undefined;
 
-    subscriptionStatusService.get("1").then(function(){
-      done("Failed");
-    })
-    .catch(function(err) {
-      expect(err).to.equal("API Failed");
+      subscriptionStatusService.get("1").then(function(){
+        done("Failed");
+      })
+      .catch(function(err) {
+        expect(err).to.equal("No results.");
 
-      done();
+        done();
+      });
     });
-  });
 
-  it("should call authorization api if subscription status returns false", function(done) {
-    response.items[0].status = "Cancelled";
+    it("should handle subscription status api failure", function(done) {
+      storeProduct.status.returns(Q.reject("API Failed"));
 
-    subscriptionStatusService.get("1").then(function(data){
-      storeProduct.status.should.have.been.calledWith(["1"]);
-      storeAuthorization.check.should.have.been.calledWith("1");
+      subscriptionStatusService.get("1").then(function(){
+        done("Failed");
+      })
+      .catch(function(err) {
+        expect(err).to.equal("API Failed");
 
-      done();
+        done();
+      });
+    });
+
+    it("should call authorization api if subscription status returns false", function(done) {
+      response.items[0].status = "Cancelled";
+
+      subscriptionStatusService.get("1").then(function(data){
+        storeProduct.status.should.have.been.calledWith(["1"]);
+        storeAuthorization.check.should.have.been.calledWith("1");
+
+        done();
+      });
     });
   });
 
