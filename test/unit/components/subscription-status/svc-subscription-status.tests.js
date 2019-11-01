@@ -146,12 +146,13 @@ describe("Services: subscriptionStatusService", function() {
       it("should calculate Trial expiry", function(done) {
         var trialExpiry = new Date();
         trialExpiry.setDate(trialExpiry.getDate() + 5);
+        trialExpiry.setHours(trialExpiry.getHours() - 1);
         currentPlanFactory.currentPlan.trialExpiryDate = trialExpiry;
         currentPlanFactory.isOnTrial = sinon.stub().returns(true);
 
         subscriptionStatusService.get("1").then(function(subscriptionStatus) {
           expect(subscriptionStatus.status).to.equal("On Trial");
-          expect(subscriptionStatus.expiry).to.equal(6);
+          expect(subscriptionStatus.expiry).to.equal(5);
 
           done();
         });
