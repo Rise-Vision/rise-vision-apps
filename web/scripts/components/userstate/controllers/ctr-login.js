@@ -39,41 +39,43 @@ angular.module('risevision.common.components.userstate')
               urlStateService.redirectToState($stateParams.state);
             })
             .catch(function (err) {
-              if (err.status === 400) {
-                $scope.messages.isGoogleAccount = true;
-              } else if (err.status === 409) {
-                $scope.errors.unconfirmedError = true;
+                if (err.status === 400) {
+                  $scope.messages.isGoogleAccount = true;
+                } else if (err.status === 409) {
+                  $scope.errors.unconfirmedError = true;
+                } else if (err.status === 403) {
+                  $scope.errors.userAccountLockoutError = true;
+                }
               } else { // No special case for 404, for security reasons
                 console.error(err);
                 $scope.errors.loginError = true;
               }
             })
-            .finally(function () {
-              $loading.stopGlobal('auth-buttons-login');
-              uiFlowManager.invalidateStatus(endStatus);
-            });
-        }
-      };
+        .finally(function () {
+          $loading.stopGlobal('auth-buttons-login');
+          uiFlowManager.invalidateStatus(endStatus);
+        });
+      }
+    };
 
-      $scope.createAccount = function (endStatus) {
-        $scope.errors = {};
-        $scope.messages = {};
+    $scope.createAccount = function (endStatus) {
+      $scope.errors = {};
+      $scope.messages = {};
 
-        if ($scope.forms.loginForm.$valid) {
-          $loading.startGlobal('auth-buttons-login');
+      if ($scope.forms.loginForm.$valid) {
+        $loading.startGlobal('auth-buttons-login');
 
-          customAuthFactory.addUser($scope.credentials)
-            .then(function () {
-              $scope.errors.confirmationRequired = true;
-            })
-            .then(null, function () {
-              $scope.errors.duplicateError = true;
-            })
-            .finally(function () {
-              $loading.stopGlobal('auth-buttons-login');
-              uiFlowManager.invalidateStatus(endStatus);
-            });
-        }
-      };
-    }
-  ]);
+        customAuthFactory.addUser($scope.credentials)
+          .then(function () {
+            $scope.errors.confirmationRequired = true;
+          })
+          .then(null, function () {
+            $scope.errors.duplicateError = true;
+          })
+          .finally(function () {
+            $loading.stopGlobal('auth-buttons-login');
+            uiFlowManager.invalidateStatus(endStatus);
+          });
+      }
+    };
+  }]);

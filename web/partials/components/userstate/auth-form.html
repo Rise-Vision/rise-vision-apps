@@ -5,15 +5,27 @@
     <div class="panel-body bg-danger u_margin-sm-top" ng-show="errors.duplicateError">
       <p class="u_remove-bottom">
         <i class="fa fa-warning icon-left"></i>
-        <span id="already-registered-warning">This email address is already registered. You can <a ui-sref="common.auth.unauthorized">sign in</a> with this address.</span> 
-      </p> 
+        <span id="already-registered-warning">This email address is already registered. You can <a ui-sref="common.auth.unauthorized">sign in</a> with this address.</span>
+      </p>
     </div>
 
     <!-- ERROR PANEL 2 -->
     <div class="panel-body bg-danger u_margin-sm-top" ng-show="errors.loginError">
       <p class="u_remove-bottom">
         <i class="fa fa-warning icon-left"></i>
-        <span id="incorrect-credentials-error">Your email address/password combination is incorrect. <br/>If you are having problems signing in, please check this <a href="https://help.risevision.com/hc/en-us/articles/115001402743-I-am-having-trouble-logging-in-what-can-I-do-" target="_blank">Help Center article</a>.</span> 
+        <span id="incorrect-credentials-error">Your email address/password combination is incorrect. <br/>If you are having problems signing in, please check this <a href="https://help.risevision.com/hc/en-us/articles/115001402743-I-am-having-trouble-logging-in-what-can-I-do-" target="_blank">Help Center article</a>.</span>
+      </p>
+    </div>
+
+    <!-- ERROR PANEL 3 -->
+    <div class="panel-body bg-danger u_margin-sm-top" ng-show="errors.userAccountLockoutError">
+      <p class="u_remove-bottom">
+        <i class="fa fa-warning icon-left"></i>
+        <span id="user-account-lockout-error">
+          Access to your account has been blocked because the maximum number of failed login attempts was reached.
+          <br/>
+          Please try again after 24 hours.
+        </span>
       </p>
     </div>
 
@@ -21,7 +33,7 @@
     <div class="panel-body bg-info u_margin-sm-top" ng-show="errors.unconfirmedError">
       <p class="u_remove-bottom">
         <i class="fa fa-warning icon-left"></i>
-        <span>Your email address has not been confirmed. <br/> <a ui-sref="common.auth.requestconfirmationemail">Resend Email Confirmation</a></span> 
+        <span>Your email address has not been confirmed. <br/> <a ui-sref="common.auth.requestconfirmationemail">Resend Email Confirmation</a></span>
       </p>
     </div>
 
@@ -29,7 +41,7 @@
     <div class="panel-body bg-info u_margin-sm-top" ng-show="errors.confirmationRequired">
       <p class="u_remove-bottom">
         <i class="fa fa-warning icon-left"></i>
-        <span>We've sent a confirmation email to {{credentials.username}}. <br/> Please check your inbox to complete your account registration.</span> 
+        <span>We've sent a confirmation email to {{credentials.username}}. <br/> Please check your inbox to complete your account registration.</span>
       </p>
     </div>
 
@@ -59,7 +71,7 @@
   </div>
 
   <div class="u_margin-sm-top" ng-show="!errors.confirmationRequired">
-  
+
     <div class="form-group" ng-class="{'has-error': (forms.loginForm.$submitted && forms.loginForm.username.$invalid)}" show-errors>
       <label class="control-label">Email</label>
       <input type="email" class="form-control" placeholder="Enter Your Email Address" id="username" name="username" ng-model="credentials.username" required focus-me="true" autocomplete="email">
