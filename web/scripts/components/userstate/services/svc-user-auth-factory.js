@@ -61,8 +61,8 @@
           } else if (_state.userToken) {
             _authenticateDeferred = null;
 
-            //make sure user is not signed out of Google account outside of the CH enabled apps
-            authenticate(false).finally(function () {
+            // make sure user is not signed out
+            authenticate().finally(function () {
               if (!_state.userToken) {
                 $log.error('Authentication Failed. User no longer signed in.');
 
@@ -174,15 +174,12 @@
           }
         };
 
-        var authenticate = function (forceAuth, credentials) {
+        var authenticate = function (forceAuth) {
           var authenticateDeferred;
-          var isRiseAuthUser = false;
 
           // Clear User state
           if (forceAuth) {
             _authenticateDeferred = null;
-
-            _resetUserState();
           }
 
           // Return cached promise
@@ -197,18 +194,26 @@
           authenticateDeferred = _authenticateDeferred;
           $log.debug('authentication called');
 
-          var _proceed = function () {
-            var authenticationPromise;
+          if (forceAuth) {
+            $loading.startGlobal('risevision.user.authenticate');
+          }
 
-            // Credentials or Token provided; assume authenticated
-            if (credentials || _state.userToken && _state.userToken.token &&
-              !FORCE_GOOGLE_AUTH) {
+          // pre-load gapi to prevent popup blocker issues
+          auth2APILoader().finally(function () {
+            var authenticationPromise,
+              isRiseAuthUser = false;
+
+            // Check for Token
+            if (_state.userToken && _state.userToken.token && !FORCE_GOOGLE_AUTH) {
               isRiseAuthUser = true;
-              authenticationPromise = customAuthFactory.authenticate(
-                credentials);
+              authenticationPromise = customAuthFactory.authenticate();
             } else {
-              authenticationPromise = googleAuthFactory.authenticate(
-                forceAuth);
+              // Clear User state before redirect
+              if (forceAuth) {
+                _resetUserState();
+              }
+
+              authenticationPromise = googleAuthFactory.authenticate(forceAuth);
             }
 
             authenticationPromise
@@ -236,13 +241,7 @@
 
                 _logPageLoad('authenticated user');
               });
-          };
-          // pre-load gapi to prevent popup blocker issues
-          auth2APILoader().finally(_proceed);
-
-          if (forceAuth) {
-            $loading.startGlobal('risevision.user.authenticate');
-          }
+          });
 
           return authenticateDeferred.promise;
         };
