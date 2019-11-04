@@ -78,7 +78,7 @@
 
     <div class="form-group" ng-class="{'has-error': (forms.loginForm.$submitted && forms.loginForm.password.$invalid && isSignUp), 'has-message': forms.loginForm.password.$valid && isSignUp}" show-errors>
       <label class="control-label">{{ isSignUp ? 'Create ' : ''}}Password</label>
-      <input type="password" class="form-control" placeholder="Enter Password" id="password" name="password" ng-model="credentials.password" required minlength="12" />
+      <input type="password" class="form-control" placeholder="Enter Password" id="password" name="password" ng-model="credentials.password" required minlength="{{ isSignUp ? 12 : 4}}" />
       <p class="text-danger" ng-show="forms.loginForm.$submitted && forms.loginForm.password.$error.minlength && isSignUp">
         New Password must be at least 12 characters long.
       </p>
