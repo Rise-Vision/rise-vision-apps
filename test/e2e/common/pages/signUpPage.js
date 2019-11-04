@@ -18,6 +18,7 @@ var SignUpPage = function() {
   var passwordTextBox = element(by.id('password'));
   var signupButton = element(by.id('sign-up-button'));
   var passwordStrengthWarning = element(by.cssContainingText('.text-warning', 'strong password'));
+  var alreadyRegisteredError = element(by.id('already-registered-warning'));
   var confirmEmailNotice = element(by.cssContainingText('.panel-body', 'check your inbox to complete your account registration'));
   var emailConfirmedNotice = element(by.cssContainingText('.panel-body', 'Account successfully confirmed'));
 
@@ -62,6 +63,10 @@ var SignUpPage = function() {
 
   this.getPasswordStrengthWarning = function() {
     return passwordStrengthWarning;
+  };
+
+  this.getAlreadyRegisteredError = function() {
+    return alreadyRegisteredError;
   };
 
   this.getConfirmEmailNotice = function() {
