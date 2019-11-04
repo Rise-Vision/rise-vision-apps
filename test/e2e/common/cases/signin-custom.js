@@ -40,23 +40,9 @@ var SigninCustomScenarios = function() {
 
     it('should show password strength warning', function() {
       signUpPage.getUsernameTextBox().sendKeys('test@test.com');
-      signUpPage.getPasswordTextBox().sendKeys('password');
+      signUpPage.getPasswordTextBox().sendKeys('longpassword');
 
       expect(signUpPage.getPasswordStrengthWarning().isDisplayed()).to.eventually.be.true;
-    });
-
-    it('should ensure passwords match', function() {
-      expect(signUpPage.getMatchingPasswordsError().isDisplayed()).to.eventually.be.false;
-
-      signUpPage.getConfirmPasswordTextBox().sendKeys('invalidpassword');
-      signUpPage.getSignupButton().click();
-
-      expect(signUpPage.getMatchingPasswordsError().isDisplayed()).to.eventually.be.true;
-
-      signUpPage.getPasswordTextBox().clear();
-      signUpPage.getConfirmPasswordTextBox().sendKeys('PASSWORD2');
-
-      expect(signUpPage.getMatchingPasswordsError().isDisplayed()).to.eventually.be.false;
     });
 
     it('should show error when trying to signup', function() {

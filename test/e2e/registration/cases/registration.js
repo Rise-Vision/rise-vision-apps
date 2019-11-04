@@ -9,7 +9,6 @@
   var RegistrationModalPage = require('./../pages/registrationModalPage.js');
   var SignInPage = require('./../../common/pages/signInPage.js');
   var SignUpPage = require('./../../common/pages/signUpPage.js');
-  var MailListener = require('./../utils/mailListener.js');
 
   var RegistrationScenarios = function() {
 
@@ -20,10 +19,30 @@
         commonHeaderPage, 
         registrationModalPage,
         signInPage,
-        signUpPage,
-        mailListener,
-        confirmationLink;
+        signUpPage;
       
+      function detectAndFixUserAlreadyRegistered() {
+        signInPage.get();
+        signInPage.customAuthSignIn(EMAIL_ADDRESS, PASSWORD);
+        helper.waitForSpinner();
+
+        signInPage.getIncorrectCredentialsError().isDisplayed().then(function(isDisplayed){
+          console.log('Login failed. Assume account not present.');
+        }).catch(function() {
+          console.log('Login succeeded. Attempting to delete an sign up again.');
+
+          // if user belongs to a new company, removes the company
+          // if it was added to jenkins company, removes only the user
+          commonHeaderPage.getMainCompanyNameSpan().getText().then(function(text){
+            if (text === NEW_COMPANY_NAME) {
+              commonHeaderPage.deleteCurrentCompany(NEW_COMPANY_NAME);
+            } else {
+              commonHeaderPage.deleteCurrentUser(EMAIL_ADDRESS);
+            }
+          });
+        });
+      }
+
       before(function (){
         commonHeaderPage = new CommonHeaderPage();
         registrationModalPage = new RegistrationModalPage();
@@ -34,34 +53,10 @@
         PASSWORD = commonHeaderPage.getPassword();
         NEW_COMPANY_NAME = commonHeaderPage.addStageSuffix("Public School");
 
-        mailListener = new MailListener(EMAIL_ADDRESS,PASSWORD);
-        mailListener.start();
+        detectAndFixUserAlreadyRegistered();
 
         signUpPage.get();
       });
-
-      function detectAndFixUserAlreadyRegistered() {
-        signUpPage.getAlreadyRegisteredError().isDisplayed().then(function(isDisplayed){
-          if (isDisplayed) {
-            console.log('User already registered. Attempting to delete an sign up again.');
-            signInPage.get();
-            signInPage.customAuthSignIn(EMAIL_ADDRESS, PASSWORD);
-
-            // if user belongs to a new company, removes the company
-            // if it was added to jenkins company, removes only the user
-            commonHeaderPage.getMainCompanyNameSpan().getText().then(function(text){
-              if (text === NEW_COMPANY_NAME) {
-                commonHeaderPage.deleteCurrentCompany(NEW_COMPANY_NAME);
-              } else {
-                commonHeaderPage.deleteCurrentUser(EMAIL_ADDRESS);
-              }
-            });
-            signUpPage.get();
-            helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-            signUpPage.customAuthSignUp(EMAIL_ADDRESS, PASSWORD);
-          }
-        });
-      }
 
       it('should show create account page', function() {
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
@@ -71,34 +66,11 @@
       });
 
       it('should register user', function() {
-        signUpPage.customAuthSignUp(EMAIL_ADDRESS, PASSWORD);
-        
-        detectAndFixUserAlreadyRegistered();
-
-        expect(signUpPage.getConfirmEmailNotice().isDisplayed()).to.eventually.be.true;
+        signUpPage.customAuthSignUp(EMAIL_ADDRESS, PASSWORD);        
+        helper.waitForSpinner();
       });
 
-      it('should wait for confirmation email', function() {
-        browser.controlFlow().wait(signUpPage.getConfirmationLink(mailListener), 60000).then(function(link){
-          confirmationLink = link;
-          expect(confirmationLink).to.contain("http://localhost:8099/confirmaccount/"+EMAIL_ADDRESS);
-        });             
-      });
-
-      it('should confirm email address',function(){
-        browser.get(confirmationLink);
-        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-
-        expect(signInPage.getUsernameTextBox().isPresent()).to.eventually.be.true;
-        expect(signInPage.getPasswordTextBox().isPresent()).to.eventually.be.true;        
-        expect(signInPage.getSigninButton().isPresent()).to.eventually.be.true;
-
-        expect(signUpPage.getEmailConfirmedNotice().isDisplayed()).to.eventually.be.true;
-      });
-
-      it('should sign in user and show T&C Dialog on new Account', function() {
-        signInPage.customAuthSignIn(EMAIL_ADDRESS, PASSWORD);
-        
+      it('should sign in user and show T&C Dialog on new Account', function() {        
         helper.wait(registrationModalPage.getRegistrationModal(), "Registration Modal");
 
         expect(registrationModalPage.getRegistrationModal().isPresent()).to.eventually.be.true;
@@ -143,10 +115,6 @@
 
       it("should update auth button", function () {
         expect(commonHeaderPage.getProfilePic().isDisplayed()).to.eventually.be.true;
-      });
-
-      after(function(){
-        mailListener.stop();
       });
 
     });
