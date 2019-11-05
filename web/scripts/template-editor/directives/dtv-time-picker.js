@@ -95,8 +95,10 @@ angular.module('risevision.template-editor.directives')
           $scope.$watch('isOpen', function (newValue) {
             if (newValue) {
               $document.on('click', _documentClickHandler);
+              $document.on('touchstart', _documentClickHandler);
             } else {
               $document.off('click', _documentClickHandler);
+              $document.off('touchstart', _documentClickHandler);
             }
           });
 
