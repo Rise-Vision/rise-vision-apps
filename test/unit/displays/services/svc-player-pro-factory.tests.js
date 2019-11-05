@@ -11,18 +11,12 @@ describe('service: playerProFactory:', function() {
         trackerCalled = name;
       };
     });
-    $provide.service('storeAuthorization',function(){
-      return {
-        startTrial: function(){}
-      };
-    });
     $provide.service('userState',function(){
       return {
           getSelectedCompanyId: function() {return "company1"},
           _restoreState: function(){}
       };
     });
-    $provide.value('PLAYER_PRO_PRODUCT_CODE','PLAYER_PRO_PRODUCT_CODE');
     $provide.factory('getLatestPlayerVersion', function() {
       return function() {
         return Q.resolve(latestPlayerVersion);
@@ -30,14 +24,13 @@ describe('service: playerProFactory:', function() {
     });
 
   }));
-  var playerProFactory, $rootScope, $modal, trackerCalled, storeAuthorization;
+  var playerProFactory, $rootScope, $modal, trackerCalled;
   beforeEach(function(){
     trackerCalled = undefined;
     latestPlayerVersion = new Date(2017, 6, 15, 0, 0);
 
     inject(function($injector){
       playerProFactory = $injector.get('playerProFactory');
-      storeAuthorization = $injector.get('storeAuthorization');
       $modal = $injector.get('$modal');
       $rootScope = $injector.get('$rootScope');
     });
@@ -46,7 +39,6 @@ describe('service: playerProFactory:', function() {
   it('should exist',function(){
     expect(playerProFactory).to.be.ok;
     
-    expect(playerProFactory.getProductLink).to.be.a('function');
     expect(playerProFactory.is3rdPartyPlayer).to.be.a('function');
     expect(playerProFactory.isElectronPlayer).to.be.a('function');
     expect(playerProFactory.isOutdatedPlayer).to.be.a('function');
@@ -55,10 +47,6 @@ describe('service: playerProFactory:', function() {
     expect(playerProFactory.isOfflinePlayCompatiblePayer).to.be.a('function');
     expect(playerProFactory.isDisplayControlCompatiblePlayer).to.be.a('function');
   });
-  
-  it('getProductLink: ', function() {
-    expect(playerProFactory.getProductLink()).to.equal('https://store.risevision.com/product/2048/?cid=company1');
-  })
 
   it('is3rdPartyPlayer:',function(){
     expect(playerProFactory.is3rdPartyPlayer()).to.be.false;

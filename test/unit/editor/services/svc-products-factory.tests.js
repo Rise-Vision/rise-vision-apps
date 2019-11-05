@@ -4,13 +4,11 @@ describe('service: productsFactory: ', function() {
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
 
-    $provide.service('store',function () {
-      return store = {
-        product: {
-          list: sinon.spy(function() {
-            return Q.resolve(storeProducts);
-          })
-        }
+    $provide.service('storeProduct',function () {
+      return storeProduct = {
+        list: sinon.spy(function() {
+          return Q.resolve(storeProducts);
+        })
       };
     });
 
@@ -24,7 +22,7 @@ describe('service: productsFactory: ', function() {
 
   }));
   var productCode = 'd3a418f1a3acaed42cf452fefb1eaed198a1c620';
-  var productsFactory, storeProducts, store, statusResponse, UNLISTED_STORE_PRODUCTS;
+  var productsFactory, storeProducts, storeProduct, statusResponse, UNLISTED_STORE_PRODUCTS;
 
   beforeEach(function(){
     statusResponse = {pc: productCode, isSubscribed: false};
@@ -48,7 +46,7 @@ describe('service: productsFactory: ', function() {
   describe('listProducts: ', function() {
     it('should apply search and cursor parameter', function(done) {
       productsFactory.loadProducts('search', 'cursor').then(function() {
-        store.product.list.should.have.been.calledWith('search', 'cursor');
+        storeProduct.list.should.have.been.calledWith('search', 'cursor');
 
         done();
       });      

@@ -10,6 +10,12 @@ var HomePage = function() {
   var schedulesUrl = config.rootUrl + '/schedules/list';
   var storageUrl = config.rootUrl + '/storage';
 
+  var homeLink = element(by.css('.nav.navbar-nav #HomeLink'));
+  var displaysLink = element(by.css('.nav.navbar-nav #DisplaysLink'));
+  var editorLink = element(by.css('.nav.navbar-nav #PresentationsLink'));
+  var schedulesLink = element(by.css('.nav.navbar-nav #SchedulesLink'));
+  var storageLink = element(by.css('.nav.navbar-nav #StorageLink'));
+
   var appLauncherContainer = element(by.id('appLauncherContainer'));
 
   var presentationAddButton = element(by.id('presentationAddButton'));
@@ -78,6 +84,26 @@ var HomePage = function() {
   this.getProtectedPageUrl = function() {
     return displaysUrl;
   }
+
+  this.getHomeLink = function() {
+    return homeLink;
+  };
+
+  this.getDisplaysLink = function() {
+    return displaysLink;
+  };
+
+  this.getEditorLink = function() {
+    return editorLink;
+  };
+
+  this.getSchedulesLink = function() {
+    return schedulesLink;
+  };
+
+  this.getStorageLink = function() {
+    return storageLink;
+  };
 
   this.getAppLauncherContainer = function() {
     return appLauncherContainer;

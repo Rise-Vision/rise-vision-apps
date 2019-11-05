@@ -145,10 +145,6 @@
         expect(commonHeaderPage.getProfilePic().isDisplayed()).to.eventually.be.true;
       });
 
-      it("should sign out", function() {
-        commonHeaderPage.signOut(true);
-      });
-
       after(function(){
         mailListener.stop();
       });

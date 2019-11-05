@@ -3,16 +3,16 @@
 angular.module('risevision.store.authorization', [
     'risevision.common.gapi'
   ])
-  .factory('storeAuthorization', ['$q', '$log', '$http',
-    'STORE_SERVER_URL', 'userState',
-    function ($q, $log, $http, STORE_SERVER_URL, userState) {
+  .value('AUTH_PATH_URL', 'v1/widget/auth')
+  .factory('storeAuthorization', ['$q', '$log', '$http', 'userState', 'STORE_SERVER_URL', 'AUTH_PATH_URL',
+    function ($q, $log, $http, userState, STORE_SERVER_URL, AUTH_PATH_URL) {
       var factory = {};
 
       factory.check = function (productCode) {
         var deferred = $q.defer();
 
         $http({
-          url: STORE_SERVER_URL + '/v1/widget/auth',
+          url: STORE_SERVER_URL + AUTH_PATH_URL,
           method: 'GET',
           params: {
             cid: userState.getSelectedCompanyId(),

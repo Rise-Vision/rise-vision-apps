@@ -65,6 +65,7 @@ describe("Services: current plan factory", function() {
         planProductCode: BASIC_PLAN_CODE,
         planSubscriptionStatus: "Subscribed",
         planCurrentPeriodEndDate: "Jan 1, 2018",
+        planTrialExpiryDate: "Jan 14, 2018",
         playerProTotalLicenseCount: 3,
         playerProAvailableLicenseCount: 1,
         shareCompanyPlan: true,
@@ -82,6 +83,7 @@ describe("Services: current plan factory", function() {
         expect(currentPlanFactory.currentPlan.type).to.equal("basic");
         expect(currentPlanFactory.currentPlan.status).to.equal("Subscribed");
         expect(currentPlanFactory.currentPlan.currentPeriodEndDate.getTime()).to.equal(new Date("Jan 1, 2018").getTime());
+        expect(currentPlanFactory.currentPlan.trialExpiryDate.getTime()).to.equal(new Date("Jan 14, 2018").getTime());
         expect(currentPlanFactory.currentPlan.playerProTotalLicenseCount).to.equal(3);
         expect(currentPlanFactory.currentPlan.playerProAvailableLicenseCount).to.equal(1);
 

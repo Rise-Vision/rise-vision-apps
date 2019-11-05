@@ -14,9 +14,6 @@
             productId: '@',
             productCode: '@',
             companyId: '@',
-            displayId: '@',
-            expandedFormat: '@',
-            showStoreModal: '=?',
             customProductLink: '@',
             customOnClick: '&'
           },
@@ -42,8 +39,8 @@
             };
 
             function checkSubscriptionStatus() {
-              if ($scope.productCode && $scope.productId && ($scope.companyId || $scope.displayId)) {
-                subscriptionStatusService.get($scope.productCode, $scope.companyId, $scope.displayId)
+              if ($scope.productCode && $scope.productId && $scope.companyId) {
+                subscriptionStatusService.get($scope.productCode, $scope.companyId)
                   .then(function (subscriptionStatus) {
                       if (subscriptionStatus) {
                         if (!$scope.subscriptionStatus || $scope.subscriptionStatus.status !== subscriptionStatus

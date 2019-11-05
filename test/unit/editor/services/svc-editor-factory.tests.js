@@ -103,14 +103,12 @@ describe('service: editorFactory:', function() {
         trackerCalled = name;
       };
     });
-    $provide.service('store', function() {
-      return store = {
-        product: {
-          list: function() {
-            return Q.resolve({items:[{productCode: 'test'}]});
-          },
-          get: function () {}
-        }
+    $provide.service('storeProduct', function() {
+      return storeProduct = {
+        list: function() {
+          return Q.resolve({items:[{productCode: 'test'}]});
+        },
+        get: function () {}
       };
     });
     $provide.service('checkTemplateAccess',function(){
@@ -185,7 +183,7 @@ describe('service: editorFactory:', function() {
   }));
   var editorFactory, trackerCalled, updatePresentation, currentState, $state, stateParams,
     presentationParser, $window, $modal, processErrorCode, scheduleFactory, userAuthFactory,
-    $rootScope, plansFactory, store, storeAuthorize;
+    $rootScope, plansFactory, storeProduct, storeAuthorize;
   beforeEach(function(){
     trackerCalled = undefined;
     currentState = undefined;
@@ -667,7 +665,7 @@ describe('service: editorFactory:', function() {
 
     it('should create a new presentation when provided a productId', function(done) {
       storeAuthorize = true;
-      sandbox.stub(store.product, 'get').returns(Q.resolve(sampleProduct));
+      sandbox.stub(storeProduct, 'get').returns(Q.resolve(sampleProduct));
       sandbox.stub(editorFactory, 'addFromProduct').returns(Q.resolve({}));
 
       editorFactory.addFromProductId('test-product-id')
@@ -682,7 +680,7 @@ describe('service: editorFactory:', function() {
 
     it('should fail to create a new presentation when not subscribed', function(done) {
       storeAuthorize = false;
-      sandbox.stub(store.product, 'get').returns(Q.resolve(sampleProduct));
+      sandbox.stub(storeProduct, 'get').returns(Q.resolve(sampleProduct));
       sandbox.stub(editorFactory, 'addFromProduct').returns(Q.resolve({}));
 
       editorFactory.addFromProductId('test-product-id')
@@ -698,7 +696,7 @@ describe('service: editorFactory:', function() {
 
     it('should fail to create a new presentation if productId does not exist', function(done) {
       storeAuthorize = true;
-      sandbox.stub(store.product, 'get').returns(Q.resolve({}));
+      sandbox.stub(storeProduct, 'get').returns(Q.resolve({}));
       sandbox.stub(editorFactory, 'addFromProduct').returns(Q.resolve({}));
 
       editorFactory.addFromProductId('test-product-id')
