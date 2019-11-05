@@ -49,7 +49,7 @@ describe("Services: subscriptionStatusService", function() {
     storeProduct.status.should.have.been.calledWith(["1"]);
   });
 
-  it("should call not call authorization api if subscribed", function(done) {
+  it("should not call authorization api if subscribed", function(done) {
     subscriptionStatusService.get("1").then(function(data){
       storeProduct.status.should.have.been.calledWith(["1"]);
       storeAuthorization.check.should.not.have.been.called;
