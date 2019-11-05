@@ -52,5 +52,9 @@
         </span>
       </div>
     </div>
+    <div class="form-group mt-4" ng-show="counterType == 'down'">
+      <label class="control-label" for="completionMessage">Enter countdown completion message:</label>
+      <input type="text" id="completionMessage" class="form-control u_ellipsis" ng-model="completionMessage" ng-change="save()" placeholder="Eg. &quot;It's time for...&quot;">
+    </div>
   </div>
 </div>

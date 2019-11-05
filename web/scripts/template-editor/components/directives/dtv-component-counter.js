@@ -47,6 +47,7 @@ angular.module('risevision.template-editor.directives')
                 $scope.counterType = $scope.getAvailableAttributeData($scope.componentId, 'type');
                 $scope.targetDate = $scope.getAvailableAttributeData($scope.componentId, 'date');
                 $scope.targetTime = $scope.getAvailableAttributeData($scope.componentId, 'time');
+                $scope.completionMessage = $scope.getAvailableAttributeData($scope.componentId, 'completion');
 
                 if ($scope.targetDate) {
                   $scope.targetUnit = 'targetDate';
@@ -63,6 +64,10 @@ angular.module('risevision.template-editor.directives')
                 } else if ($scope.targetUnit === 'targetTime') {
                   $scope.setAttributeData($scope.componentId, 'date', null);
                   $scope.setAttributeData($scope.componentId, 'time', utils.meridianTimeToAbsolute($scope.targetTime));
+                }
+
+                if ($scope.counterType === 'down') {
+                  $scope.setAttributeData($scope.componentId, 'completion', $scope.completionMessage);
                 }
               };
 

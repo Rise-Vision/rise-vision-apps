@@ -10,7 +10,7 @@
       password: password, 
       host: "outlook.office365.com",
       port: 993,
-      searchFilter: ["UNSEEN",['TO', emailAddressToFilter]],
+      searchFilter: ["UNSEEN"],
       tls: true,
       fetchUnreadOnStart: true
     });
@@ -42,20 +42,13 @@
     this.getLastEmail = function(subjectFilter) {
       var deferred = protractor.promise.defer();
       console.log("Waiting for an email...");
-      if (!subjectFilter) {
-        mailListener2.once("mail", function(mail, seqno, attributes){
-          console.log("Mail received: " + mail.subject);
+      mailListener2.on("mail", function(mail, seqno, attributes){
+        console.log("Mail received: ", mail.subject, mail.headers.to);
+        if (mail.headers.to === emailAddressToFilter && (!subjectFilter || mail.subject === subjectFilter)) {
+          mailListener2.removeAllListeners("mail");
           deferred.fulfill(mail);
-        });
-      } else {
-        mailListener2.on("mail", function(mail, seqno, attributes){
-          console.log("Mail received: " + mail.subject);
-          if (mail.subject === subjectFilter) {
-            mailListener2.removeAllListeners("mail");
-            deferred.fulfill(mail);
-          }
-        });
-      }
+        }
+      });
       return deferred.promise;
     };   
   };
