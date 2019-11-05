@@ -12,9 +12,13 @@ angular.module('risevision.common.header.directives')
         },
         template: $templateCache.get('partials/common-header/newsletter-signup.html'),
         link: function ($scope) {
+          var alreadyOptedIn = $scope.mailSyncEnabled;
+
           $scope.showNewsletterSignup = function () {
-            return ($scope.companyIndustry === 'PRIMARY_SECONDARY_EDUCATION' ||
-              $scope.companyIndustry === 'HIGHER_EDUCATION');
+            var isEducation = $scope.companyIndustry === 'PRIMARY_SECONDARY_EDUCATION' ||
+              $scope.companyIndustry === 'HIGHER_EDUCATION';
+
+            return isEducation && !alreadyOptedIn;
           };
 
         }
