@@ -129,7 +129,7 @@ angular.module('risevision.template-editor.services')
         if (isNaN(date.getTime())) {
           return null;
         } else {
-          return date && date.toISOString().substr(0, 10);
+          return svc.padNumber(date.getUTCFullYear(), 4) + '-' + svc.padNumber(date.getUTCMonth() + 1, 2) + '-' + svc.padNumber(date.getUTCDate(), 2);
         }
       };
 
