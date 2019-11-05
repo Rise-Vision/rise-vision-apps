@@ -223,7 +223,7 @@ describe("Services: subscriptionStatusService", function() {
         expect(data).be.defined;
         expect(data.status).be.equal("Free");
         expect(data.statusCode).be.equal("free");
-        expect(data.isSubscribed).be.be.true;
+        expect(data.isSubscribed).to.be.true;
 
         done();
       });
@@ -236,7 +236,7 @@ describe("Services: subscriptionStatusService", function() {
         expect(data).be.defined;
         expect(data.status).be.equal("Trial Expired");
         expect(data.statusCode).be.equal("trial-expired");
-        expect(data.isSubscribed).be.be.false;
+        expect(data.isSubscribed).to.be.false;
 
         done();
       });
@@ -250,7 +250,7 @@ describe("Services: subscriptionStatusService", function() {
         expect(data).be.defined;
         expect(data.status).be.equal("Cancelled");
         expect(data.statusCode).be.equal("cancelled");
-        expect(data.isSubscribed).be.be.true;
+        expect(data.isSubscribed).to.be.true;
 
         done();
       });
@@ -264,7 +264,7 @@ describe("Services: subscriptionStatusService", function() {
         expect(data).be.defined;
         expect(data.status).be.equal("Cancelled");
         expect(data.statusCode).be.equal("cancelled");
-        expect(data.isSubscribed).be.be.false;
+        expect(data.isSubscribed).to.be.false;
 
         done();
       });
@@ -280,8 +280,8 @@ describe("Services: subscriptionStatusService", function() {
         expect(data).be.defined;
         expect(data.status).be.equal("Not Subscribed");
         expect(data.statusCode).be.equal("trial-available");
-        expect(data.isSubscribed).be.be.false;
-        expect(data.trialAvailable).be.be.true;
+        expect(data.isSubscribed).to.be.false;
+        expect(data.trialAvailable).to.be.true;
 
         done();
       });
