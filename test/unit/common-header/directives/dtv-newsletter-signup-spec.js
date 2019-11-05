@@ -8,7 +8,7 @@ describe("directive: newsletter signup", function() {
 
   beforeEach(inject(function($compile, $rootScope) {
     $scope = $rootScope.$new();
-    var validHTML = 
+    var validHTML =
       "<form name=\"form\">" +
       "  <newsletter-signup ng-model=\"user.mailSyncEnabled\" company-industry=\"company.companyIndustry\" />" +
       "</form>";
@@ -34,6 +34,8 @@ describe("directive: newsletter signup", function() {
 
   describe("showNewsletterSignup:", function() {
     it("should return false for other Industries for K-12 and Higher Education", function () {
+      $scope.user.mailSyncEnabled = false;
+
       $scope.company.companyIndustry = "";
       $scope.$digest();
       expect(elemScope.showNewsletterSignup()).to.be.false;
@@ -45,6 +47,8 @@ describe("directive: newsletter signup", function() {
     });
 
     it("should return true for K-12 and Higher Education", function () {
+      $scope.user.mailSyncEnabled = false;
+
       $scope.company.companyIndustry = "PRIMARY_SECONDARY_EDUCATION";
       $scope.$digest();
       expect(elemScope.showNewsletterSignup()).to.be.true;
@@ -55,6 +59,18 @@ describe("directive: newsletter signup", function() {
 
     });
 
+    it("should return false if mailSyncEnabled is true", function (done) {
+      $scope.user.mailSyncEnabled = true;
+      $scope.company.companyIndustry = "PRIMARY_SECONDARY_EDUCATION";
+
+      $scope.$digest();
+
+      setTimeout(function() {
+        expect(elemScope.showNewsletterSignup()).to.be.false;
+        done();
+      });
+    });
+
   });
-  
+
 });
