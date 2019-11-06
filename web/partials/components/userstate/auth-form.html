@@ -77,6 +77,13 @@
       <p class="text-warning" ng-show="forms.loginForm.password.$valid && isSignUp">
         A strong password is at least 8 characters, includes uppercase/lowercase letters, and one or more numbers.
       </p>
+
+      <p class="text-warning" ng-show="passwordStrength && isSignUp">
+        strength: {{passwordStrength.score/4 * 100}} %
+        <br/>{{passwordStrength.feedback.warning}}<br/>
+        <span ng-repeat="suggestion in passwordStrength.feedback.suggestions">{{suggestion}} </span>
+      </p>
+
     </div>
     <div class="form-group"
          ng-class="{ 'has-error' : (forms.loginForm.$submitted && forms.loginForm.confirmPassword.$invalid) }"

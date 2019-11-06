@@ -20,6 +20,7 @@
 
   angular.module('risevision.common.components.userstate', [
       'ui.router',
+      'oc.lazyLoad',
       'angular-md5',
       'risevision.common.components.ui-flow',
       'risevision.common.components.util',
@@ -101,6 +102,11 @@
             params: {
               isSignUp: true,
               joinAccount: false
+            },
+            resolve: {
+              loadDependencies: ['$ocLazyLoad', function($ocLazyLoad) {
+                return $ocLazyLoad.load('vendor/zxcvbn/zxcvbn.js');
+              }]
             }
           })
 
