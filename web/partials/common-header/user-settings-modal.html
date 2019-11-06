@@ -89,22 +89,6 @@ rv-spinner-start-active="1">
           <p class="text-warning" ng-show="forms.userSettingsForm.newPassword.$valid">
             A strong password is at least 8 characters, includes uppercase/lowercase letters, and one or more numbers.
           </p>
-        </div>
-        <div class="form-group"
-             ng-class="{ 'has-error' : (forms.resetPasswordForm.$submitted && forms.resetPasswordForm.confirmPassword.$invalid) }">
-          <label for="user-settings-confirm-password">
-            Confirm Password *
-          </label>
-          <input id="user-settings-confirm-password"
-                 type="password" name="confirmPassword"
-                 class="form-control"
-                 ng-model="userPassword.confirmPassword" required confirm-password-validator="userPassword.newPassword" />
-          <p ng-show="forms.userSettingsForm.$submitted && forms.userSettingsForm.confirmPassword.$error.required" class="text-danger">
-            Confirm Password is required.
-          </p>
-          <p ng-show="forms.userSettingsForm.$submitted && forms.userSettingsForm.confirmPassword.$error.passwordMatch" class="text-danger">
-            New Password and Confirm Password must match.
-          </p>
           <hr />
         </div>
       </div>
