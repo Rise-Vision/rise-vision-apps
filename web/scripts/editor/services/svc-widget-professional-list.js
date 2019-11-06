@@ -223,6 +223,6 @@ angular.module('risevision.editor.services')
       imageAlt: 'add facebook feed widget',
       gadgetType: 'Widget',
       id: '5dba4bee-b26d-4592-9f22-a7b46b1bd693',
-      url: 'http://rep.smartplayds.com/plugin/facebook-widget/widget.html'
+      url: 'https://rep.smartplayds.com/plugin/facebook-widget/widget.html'
     }
   ]);
