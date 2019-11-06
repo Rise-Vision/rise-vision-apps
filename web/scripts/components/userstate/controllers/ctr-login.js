@@ -47,6 +47,8 @@ angular.module('risevision.common.components.userstate')
             .catch(function (err) {
               if (err && err.status === 400) {
                 $scope.messages.isGoogleAccount = true;
+              } else if (err.status === 403) {
+                $scope.errors.userAccountLockoutError = true;
               } else { // No special case for 404, for security reasons
                 console.error(err);
                 $scope.errors.loginError = true;

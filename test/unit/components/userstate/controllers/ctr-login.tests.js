@@ -13,7 +13,7 @@ describe("controller: Log In", function() {
         login: sinon.stub().returns(Q.reject({}))
       };
     });
-    
+
     $provide.service("urlStateService", function() {
       return urlStateService = {
         redirectToState: sinon.spy()
@@ -37,14 +37,14 @@ describe("controller: Log In", function() {
         stopGlobal : sinon.spy()
       };
     });
-    
+
   }));
   var $scope, $loading, uiFlowManager, urlStateService, customAuthFactory, userAuthFactory;
   beforeEach(function () {
     
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
-      
+
       $loading = $injector.get("$loading");
       uiFlowManager = $injector.get("uiFlowManager");
       customAuthFactory = $injector.get("customAuthFactory");
@@ -57,14 +57,14 @@ describe("controller: Log In", function() {
         uiFlowManager: uiFlowManager
       });
       $scope.$digest();
-      
+
       $scope.credentials = {
         username: "testUser"
       };
       $scope.forms = {
         loginForm: {
           $valid: true
-        }  
+        }
       };
     });
   });
@@ -86,7 +86,7 @@ describe("controller: Log In", function() {
       userAuthFactory.authenticate.returns(Q.resolve());
 
       $scope.googleLogin("endStatus");
-      
+
       $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
 
       setTimeout(function(){
@@ -96,10 +96,10 @@ describe("controller: Log In", function() {
         done();
       },10);
     });
-    
+
     it("should handle login failure", function(done) {
       $scope.googleLogin("endStatus");
-      
+
       $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
 
       setTimeout(function(){
@@ -110,7 +110,7 @@ describe("controller: Log In", function() {
       },10);
     });
   });
-  
+
   describe("customLogin: ", function() {
     it("should clear previous errors", function() {
       $scope.errors = {
@@ -124,7 +124,7 @@ describe("controller: Log In", function() {
     it("should not submit if form is invalid", function(done) {
       $scope.forms.loginForm.$valid = false;
       $scope.customLogin("endStatus");
-      
+
       $loading.startGlobal.should.not.have.been.called;
 
       setTimeout(function(){
@@ -138,7 +138,7 @@ describe("controller: Log In", function() {
       customAuthFactory.login.returns(Q.resolve());
 
       $scope.customLogin("endStatus");
-      
+
       $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
       customAuthFactory.login.should.have.been.calledWith($scope.credentials);
 
@@ -151,14 +151,15 @@ describe("controller: Log In", function() {
         uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
 
         expect($scope.errors.loginError).to.not.be.ok;
+        expect($scope.errors.userAccountLockoutError).to.not.be.ok;
 
         done();
       },10);
     });
-    
+
     it("should handle login failure", function(done) {
       $scope.customLogin("endStatus");
-      
+
       $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
 
       setTimeout(function(){
@@ -168,6 +169,27 @@ describe("controller: Log In", function() {
         uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
 
         expect($scope.errors.loginError).to.be.true;
+        expect($scope.errors.userAccountLockoutError).to.be.falsey;
+        expect($scope.messages.isGoogleAccount).to.be.falsey;
+        expect($scope.errors.unconfirmedError).to.be.falsey;
+
+        done();
+      },10);
+    });
+
+    it("should handle user account lockout", function(done) {
+      customAuthFactory.login.returns(Q.reject({ status: 403 }));
+
+      $scope.customLogin("endStatus");
+
+      $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+
+      setTimeout(function(){
+        $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
+        uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
+
+        expect($scope.errors.loginError).to.be.falsey;
+        expect($scope.errors.userAccountLockoutError).to.be.true;
         expect($scope.messages.isGoogleAccount).to.be.falsey;
 
         done();
@@ -230,7 +252,7 @@ describe("controller: Log In", function() {
     it("should not submit if form is invalid", function(done) {
       $scope.forms.loginForm.$valid = false;
       $scope.createAccount("endStatus");
-      
+
       $loading.startGlobal.should.not.have.been.called;
 
       setTimeout(function(){
@@ -244,7 +266,7 @@ describe("controller: Log In", function() {
       customAuthFactory.addUser.returns(Q.resolve());
 
       $scope.createAccount("endStatus");
-      
+
       $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
       customAuthFactory.addUser.should.have.been.calledWith($scope.credentials);
 
@@ -264,7 +286,7 @@ describe("controller: Log In", function() {
     
     it("should handle failure to create account", function(done) {
       $scope.createAccount("endStatus");
-      
+
       $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
 
       setTimeout(function(){
