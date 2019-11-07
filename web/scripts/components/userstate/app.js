@@ -103,11 +103,11 @@
               isSignUp: true,
               joinAccount: false
             },
-            resolve: {
-              loadDependencies: ['$ocLazyLoad', function($ocLazyLoad) {
-                return $ocLazyLoad.load('vendor/zxcvbn/zxcvbn.js');
-              }]
-            }
+            // resolve: {
+            //   loadDependencies: ['$ocLazyLoad', function($ocLazyLoad) {
+            //     return $ocLazyLoad.load('vendor/zxcvbn/zxcvbn.js');
+            //   }]
+            // }
           })
 
           .state('common.auth.joinaccount', {
