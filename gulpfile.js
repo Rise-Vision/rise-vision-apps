@@ -66,6 +66,7 @@ var unitTestFiles = [
   "web/bower_components/angular-ui-codemirror/ui-codemirror.js",
   "web/bower_components/angular-truncate/src/truncate.js",
   "web/bower_components/angular-slugify/angular-slugify.js",
+  'web/bower_components/oclazyload/dist/ocLazyLoad.js',
   'web/bower_components/Sortable/Sortable.js',
   "web/bower_components/rv-angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js",
   "web/bower_components/widget-settings-ui-components/dist/js/angular/position-setting.js",

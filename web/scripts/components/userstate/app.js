@@ -26,7 +26,7 @@
       'risevision.common.components.rvtokenstore',
       'risevision.common.components.logging',
       'risevision.common.components.loading',
-      'risevision.common.components.password-meter',
+      'risevision.common.components.password-input',
       'risevision.common.config',
       'risevision.common.gapi', 'LocalStorageModule',
       'risevision.core.cache',

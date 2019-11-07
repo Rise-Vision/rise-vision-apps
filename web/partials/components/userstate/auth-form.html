@@ -90,15 +90,9 @@
         Please enter an Email
       </p>
     </div>
+      
+    <password-input name="password" ng-model="credentials.password" is-creating="isSignUp" minlength="{{ isSignUp ? 12 : 4}}" required></password-input>
 
-    <div class="form-group" ng-class="{'has-error': ((forms.loginForm.$submitted || forms.loginForm.$dirty) && forms.loginForm.password.$invalid && isSignUp), 'has-message': forms.loginForm.password.$valid && isSignUp}" show-errors>
-      <label class="control-label">{{ isSignUp ? 'Create ' : ''}}Password</label>
-      <input type="password" class="form-control" placeholder="Enter Password" id="password" name="password" ng-model="credentials.password" required minlength="{{ isSignUp ? 12 : 4}}" />
-      <ng-messages role="alert" for="forms.loginForm.password.$error" ng-if="forms.loginForm.password.$invalid && forms.loginForm.password.$dirty">
-        <p ng-message="required" class="text-danger">Please provide a password.</p>
-        <p ng-message="minlength" class="text-danger">New Password must be at least 12 characters long.</p>
-      </ng-messages>
-      <password-meter ng-if="isSignUp && forms.loginForm.password.$dirty" watch-value="forms.loginForm.password.$viewValue"></password-meter>
     </div>
   </div>
 
