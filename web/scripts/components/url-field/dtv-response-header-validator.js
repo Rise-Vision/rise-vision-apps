@@ -21,33 +21,4 @@ angular.module('risevision.widget.common.url-field.response-header-validator', [
         }
       };
     }
-  ])
-
-
-
-.directive('zxcvbnValidator', ['$ocLazyLoad', '$q',
-    function ($ocLazyLoad, $q) {
-      return {
-        require: 'ngModel',
-        scope: {
-          zxcvbnValidator: '='
-        },
-        restrict: 'A',
-        link: function (scope, elem, attr, ngModelCtrl) {
-          ngModelCtrl.$asyncValidators.zxcvbnValidator = function (modelValue, viewValue) {
-            console.log('validating')
-            var value = modelValue || viewValue;
-            return $ocLazyLoad.load('vendor/zxcvbn/zxcvbn.js').then(function() {
-              var result = zxcvbn(value);
-              console.log('validating res', result);
-              scope.zxcvbnValidator = result;
-              return result.score >=2;
-            });
-          };
-        }
-      };
-    }
-  ])
-
-
-  ;
+  ]);

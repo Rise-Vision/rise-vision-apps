@@ -20,13 +20,13 @@
 
   angular.module('risevision.common.components.userstate', [
       'ui.router',
-      'oc.lazyLoad',
       'angular-md5',
       'risevision.common.components.ui-flow',
       'risevision.common.components.util',
       'risevision.common.components.rvtokenstore',
       'risevision.common.components.logging',
       'risevision.common.components.loading',
+      'risevision.common.components.password-meter',
       'risevision.common.config',
       'risevision.common.gapi', 'LocalStorageModule',
       'risevision.core.cache',

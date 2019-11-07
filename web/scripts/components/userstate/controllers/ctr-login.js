@@ -75,11 +75,5 @@ angular.module('risevision.common.components.userstate')
             });
         }
       };
-
-      // $scope.$watch('credentials.password',function(password){
-      //   if (password) {
-      //     $scope.passwordStrength = zxcvbn(password);
-      //   }
-      // });
     }
   ]);
