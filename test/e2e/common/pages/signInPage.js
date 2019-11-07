@@ -21,7 +21,6 @@ var SignInPage = function() {
   var passwordTextBox = element(by.id('password'));
   var signinButton = element(by.cssContainingText('button.btn-primary', 'Sign In'));
   var incorrectCredentialsError = element(by.cssContainingText('.bg-danger', 'incorrect'));
-  var emailNotConfirmedInfo = element(by.cssContainingText('.bg-info', 'Your email address has not been confirmed.'));
 
   var USERNAME1 = browser.params.login.user1;
   var PASSWORD1 = browser.params.login.pass1;
@@ -82,12 +81,6 @@ var SignInPage = function() {
         _this.getPasswordTextBox().sendKeys(password + enter);
 
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - After Custom Sign In');
-
-        emailNotConfirmedInfo.isPresent().then(function (isPresent) {
-  	      if (isPresent) {
-  	        expect.fail('Email has not been not confirmed. Manual action is required. Please confirm the email or remove the account.');
-  	      }
-  	    });
       }
     });
   };

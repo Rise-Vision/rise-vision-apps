@@ -20,7 +20,7 @@
               })
               .then(function (resp) {
                 $log.debug('added user credentials', resp);
-                deferred.resolve(resp.result);
+                deferred.resolve(resp);
               })
               .then(null, function (e) {
                 console.error('Failed to add credentials.', e);
@@ -43,7 +43,7 @@
               })
               .then(function (resp) {
                 $log.debug('update user credentials resp', resp);
-                deferred.resolve(resp.result);
+                deferred.resolve(resp);
               })
               .then(null, function (e) {
                 console.error('Failed to update credentials.', e);

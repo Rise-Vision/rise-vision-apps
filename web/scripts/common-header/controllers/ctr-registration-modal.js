@@ -3,13 +3,13 @@
 angular.module('risevision.common.header')
   .controller('RegistrationModalCtrl', [
     '$q', '$scope', '$rootScope', '$modalInstance',
-    '$loading', 'addAccount', '$log', '$cookies',
+    '$loading', 'addAccount', '$log',
     'userState', 'pick', 'uiFlowManager', 'messageBox', 'humanReadableError',
     'agreeToTermsAndUpdateUser', 'account', 'segmentAnalytics',
     'bigQueryLogging', 'analyticsEvents', 'updateCompany', 'plansFactory',
     'COMPANY_INDUSTRY_FIELDS', 'urlStateService',
     function ($q, $scope, $rootScope, $modalInstance, $loading, addAccount,
-      $log, $cookies, userState, pick, uiFlowManager, messageBox, humanReadableError,
+      $log, userState, pick, uiFlowManager, messageBox, humanReadableError,
       agreeToTermsAndUpdateUser, account, segmentAnalytics, bigQueryLogging,
       analyticsEvents, updateCompany, plansFactory, COMPANY_INDUSTRY_FIELDS,
       urlStateService) {
@@ -20,9 +20,6 @@ angular.module('risevision.common.header')
       var copyOfProfile = account ? account : userState.getCopyOfProfile() || {};
 
       $scope.company = {};
-
-      //remove cookie so that it will show next time user refreshes page
-      $cookies.remove('surpressRegistration');
 
       $scope.profile = pick(copyOfProfile, 'email', 'mailSyncEnabled',
         'firstName', 'lastName');

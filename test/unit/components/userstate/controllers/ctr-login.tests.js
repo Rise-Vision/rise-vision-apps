@@ -4,45 +4,13 @@ describe("controller: Log In", function() {
   beforeEach(module(function ($provide) {
     $provide.service("userAuthFactory", function() {
       return {
-        authenticate: function(forceAuth, credentials) {
-          var deferred = Q.defer();
-
-          expect(forceAuth).to.be.true;
-
-          if (credentials) {
-            expect(credentials).to.be.ok;
-            expect(credentials.username).to.equal("testUser");
-          }
-
-          if( httpStatus ) {
-            deferred.reject({ status: httpStatus });
-          }
-          if (loginSuccess) {
-            deferred.resolve();
-          } else {
-            deferred.reject({});
-          }
-
-          return deferred.promise;
-        }
+        authenticate: sinon.stub().returns(Q.resolve({}))
       };
     });
     $provide.service("customAuthFactory", function() {
       return {
-        addUser: function(credentials) {
-          var deferred = Q.defer();
-
-          expect(credentials).to.be.ok;
-          expect(credentials.username).to.equal("testUser");
-
-          if (loginSuccess) {
-            deferred.resolve();
-          } else {
-            deferred.reject();
-          }
-
-          return deferred.promise;
-        }
+        addUser: sinon.stub().returns(Q.reject({})),
+        login: sinon.stub().returns(Q.reject({}))
       };
     });
 
@@ -71,16 +39,15 @@ describe("controller: Log In", function() {
     });
 
   }));
-  var $scope, $loading, httpStatus, loginSuccess, uiFlowManager, urlStateService, userAuthFactory;
+  var $scope, $loading, uiFlowManager, urlStateService, customAuthFactory, userAuthFactory;
   beforeEach(function () {
-    httpStatus = null;
-    loginSuccess = false;
-
+    
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
 
       $loading = $injector.get("$loading");
       uiFlowManager = $injector.get("uiFlowManager");
+      customAuthFactory = $injector.get("customAuthFactory");
       userAuthFactory = $injector.get("userAuthFactory");
 
       $controller("LoginCtrl", {
@@ -116,7 +83,7 @@ describe("controller: Log In", function() {
 
   describe("googleLogin: ", function() {
     it("should handle successful login", function(done) {
-      loginSuccess = true;
+      userAuthFactory.authenticate.returns(Q.resolve());
 
       $scope.googleLogin("endStatus");
 
@@ -168,13 +135,16 @@ describe("controller: Log In", function() {
     });
 
     it("should handle successful login", function(done) {
-      loginSuccess = true;
+      customAuthFactory.login.returns(Q.resolve());
 
       $scope.customLogin("endStatus");
 
       $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+      customAuthFactory.login.should.have.been.calledWith($scope.credentials);
 
       setTimeout(function(){
+        userAuthFactory.authenticate.should.have.been.calledWith(true);
+
         urlStateService.redirectToState.should.have.been.calledWith("currentState");
 
         $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
@@ -193,6 +163,8 @@ describe("controller: Log In", function() {
       $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
 
       setTimeout(function(){
+        userAuthFactory.authenticate.should.not.have.been.called;
+
         $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
         uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
 
@@ -206,7 +178,7 @@ describe("controller: Log In", function() {
     });
 
     it("should handle user account lockout", function(done) {
-      httpStatus = 403;
+      customAuthFactory.login.returns(Q.reject({ status: 403 }));
 
       $scope.customLogin("endStatus");
 
@@ -219,47 +191,52 @@ describe("controller: Log In", function() {
         expect($scope.errors.loginError).to.be.falsey;
         expect($scope.errors.userAccountLockoutError).to.be.true;
         expect($scope.messages.isGoogleAccount).to.be.falsey;
-        expect($scope.errors.unconfirmedError).to.be.falsey;
+
+        done();
+      },10);
+    });
+
+    it("should handle authenticate failure", function(done) {
+      customAuthFactory.login.returns(Q.resolve());
+      userAuthFactory.authenticate.returns(Q.reject({}));
+
+      $scope.customLogin("endStatus");
+      
+      $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+      customAuthFactory.login.should.have.been.calledWith($scope.credentials);
+
+      setTimeout(function(){
+        userAuthFactory.authenticate.should.have.been.calledWith(true);
+
+        $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
+        uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
+
+        expect($scope.errors.loginError).to.be.true;
+        expect($scope.messages.isGoogleAccount).to.be.falsey;
 
         done();
       },10);
     });
 
     it("should reject login of Google accounts", function(done) {
-      sinon.stub(userAuthFactory, "authenticate").returns(Q.reject({ status: 400 }));
+      customAuthFactory.login.returns(Q.reject({ status: 400 }));
       $scope.customLogin("endStatus");
 
       $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
 
       setTimeout(function(){
+        userAuthFactory.authenticate.should.not.have.been.called;
+
         $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
         uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
 
         expect($scope.errors.loginError).to.be.falsey;
         expect($scope.messages.isGoogleAccount).to.be.true;
-        expect($scope.errors.unconfirmedError).to.be.falsey;
 
         done();
       },10);
     });
 
-    it("should reject login of unconfirmed accounts", function(done) {
-      sinon.stub(userAuthFactory, "authenticate").returns(Q.reject({ status: 409 }));
-      $scope.customLogin("endStatus");
-
-      $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
-
-      setTimeout(function(){
-        $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
-        uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
-
-        expect($scope.errors.loginError).to.be.falsey;
-        expect($scope.messages.isGoogleAccount).to.be.falsey;
-        expect($scope.errors.unconfirmedError).to.be.true;
-
-        done();
-      },10);
-    });
   });
 
   describe("createAccount: ", function() {
@@ -272,44 +249,100 @@ describe("controller: Log In", function() {
       expect($scope.errors.someError).to.not.be.ok;
     });
 
-    it("should not submit if form is invalid", function() {
+    it("should not submit if form is invalid", function(done) {
       $scope.forms.loginForm.$valid = false;
       $scope.createAccount("endStatus");
 
       $loading.startGlobal.should.not.have.been.called;
-    });
-
-    it("should create account", function(done) {
-      loginSuccess = true;
-
-      $scope.createAccount("endStatus");
-
-      $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
 
       setTimeout(function(){
-        $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
-        uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
-
-        expect($scope.errors.confirmationRequired).to.be.true;
+        expect($scope.errors.loginError).to.not.be.ok;
 
         done();
       },10);
     });
 
+    it("should handle successful account creation and login user", function(done) {
+      customAuthFactory.addUser.returns(Q.resolve());
+
+      $scope.createAccount("endStatus");
+
+      $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+      customAuthFactory.addUser.should.have.been.calledWith($scope.credentials);
+
+      setTimeout(function(){
+        userAuthFactory.authenticate.should.have.been.calledWith(true);
+
+        urlStateService.redirectToState.should.have.been.calledWith("currentState");
+
+        $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
+        uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
+
+        expect($scope.errors.loginError).to.not.be.ok;
+
+        done();
+      },10);
+    });
+    
     it("should handle failure to create account", function(done) {
       $scope.createAccount("endStatus");
 
       $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
 
       setTimeout(function(){
+        userAuthFactory.authenticate.should.not.have.been.called;
+
         $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
         uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
 
+        expect($scope.errors.signupError).to.be.true;
+        expect($scope.errors.duplicateError).to.be.falsey;
+
+        done();
+      },10);
+    });
+
+    it("should handle authenticate failure", function(done) {
+      customAuthFactory.addUser.returns(Q.resolve());
+      userAuthFactory.authenticate.returns(Q.reject({}));
+
+      $scope.createAccount("endStatus");
+      
+      $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+      customAuthFactory.addUser.should.have.been.calledWith($scope.credentials);
+
+      setTimeout(function(){
+        userAuthFactory.authenticate.should.have.been.calledWith(true);
+
+        $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
+        uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
+
+        expect($scope.errors.signupError).to.be.true;
+        expect($scope.errors.duplicateError).to.be.falsey;
+
+        done();
+      },10);
+    });
+
+    it("should reject on failure to register user", function(done) {
+      customAuthFactory.addUser.returns(Q.reject({ status: 409 }));
+      $scope.createAccount("endStatus");
+
+      $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+
+      setTimeout(function(){
+        userAuthFactory.authenticate.should.not.have.been.called;
+
+        $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
+        uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
+
+        expect($scope.errors.signupError).to.be.falsey;
         expect($scope.errors.duplicateError).to.be.true;
 
         done();
       },10);
     });
+
   });
 
 });

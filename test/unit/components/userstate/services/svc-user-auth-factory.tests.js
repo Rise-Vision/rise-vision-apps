@@ -142,15 +142,20 @@ describe("Services: userAuthFactory", function() {
       auth2APILoader.should.have.been.calledOnce;
     });
 
-    it("should resetState, return new promise and start spinner if forceAuth", function() {
+    it("should resetState, return new promise and start spinner if forceAuth", function(done) {
       var initialPromise = userAuthFactory.authenticate();
 
       expect(userAuthFactory.authenticate(true)).to.not.equal(initialPromise);
 
-      userState._resetState.should.have.been.calledOnce;
       $loading.startGlobal.should.have.been.calledOnce;
       $loading.startGlobal.should.have.been.calledWith("risevision.user.authenticate");
       auth2APILoader.should.have.been.calledTwice;
+
+      setTimeout(function() {
+        userState._resetState.should.have.been.calledOnce;
+
+        done();
+      }, 10);
     });
     
     describe("googleAuthFactory: ", function() {
@@ -181,27 +186,15 @@ describe("Services: userAuthFactory", function() {
     });
     
     describe("customAuthFactory", function() {
-      it("should call factory when credentials are provided", function(done) {
-        var credentials = {username: ""};
-        userAuthFactory.authenticate(true, credentials);
-
-        setTimeout(function() {
-          customAuthFactory.authenticate.should.have.been.calledWith(credentials);
-          googleAuthFactory.authenticate.should.not.have.been.called;
-
-          done();
-        }, 10);
-      });
-
       it("should call factory when a userToken.token is available", function(done) {
         userState._state.userToken = {
           token: "testToken"
         };
 
-        userAuthFactory.authenticate(false);
+        userAuthFactory.authenticate(true);
 
         setTimeout(function() {
-          customAuthFactory.authenticate.should.have.been.calledWith(undefined);
+          customAuthFactory.authenticate.should.have.been.called;
           googleAuthFactory.authenticate.should.not.have.been.called;
 
           done();

@@ -28,21 +28,25 @@ angular.module('risevision.common.components.userstate')
           });
       };
 
+      var _authenticate = function() {
+        return userAuthFactory.authenticate(true)
+          .then(function() {
+            urlStateService.redirectToState($stateParams.state);
+          });
+      };
+
       $scope.customLogin = function (endStatus) {
         $scope.errors = {};
         $scope.messages = {};
 
         if ($scope.forms.loginForm.$valid) {
           $loading.startGlobal('auth-buttons-login');
-          userAuthFactory.authenticate(true, $scope.credentials)
-            .then(function () {
-              urlStateService.redirectToState($stateParams.state);
-            })
+
+          customAuthFactory.login($scope.credentials)
+            .then(_authenticate)
             .catch(function (err) {
-              if (err.status === 400) {
+              if (err && err.status === 400) {
                 $scope.messages.isGoogleAccount = true;
-              } else if (err.status === 409) {
-                $scope.errors.unconfirmedError = true;
               } else if (err.status === 403) {
                 $scope.errors.userAccountLockoutError = true;
               } else { // No special case for 404, for security reasons
@@ -65,11 +69,14 @@ angular.module('risevision.common.components.userstate')
           $loading.startGlobal('auth-buttons-login');
 
           customAuthFactory.addUser($scope.credentials)
-            .then(function () {
-              $scope.errors.confirmationRequired = true;
-            })
-            .then(null, function () {
-              $scope.errors.duplicateError = true;
+            .then(_authenticate)
+            .catch(function (err) {
+              if (err && err.status === 409) {
+                $scope.errors.duplicateError = true;
+              } else { // No special cases, for security reasons
+                console.error(err);
+                $scope.errors.signupError = true;
+              }
             })
             .finally(function () {
               $loading.stopGlobal('auth-buttons-login');

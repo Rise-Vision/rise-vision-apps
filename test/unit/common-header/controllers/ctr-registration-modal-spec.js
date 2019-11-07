@@ -78,17 +78,7 @@ describe("controller: registration modal", function() {
         initVolumePlanTrial: sinon.spy()
       };
     });
-    
-    $provide.factory("$cookies", function() {
-      return {
-        put: function() {
-          cookieStored = true;
-        },
-        remove: function() {
-          cookieStored = false;
-        }
-      };
-    });
+
     $provide.service("segmentAnalytics", function() { 
       return {
         track: function(name) {
@@ -127,7 +117,7 @@ describe("controller: registration modal", function() {
     $translateProvider.useLoader("customLoader");
         
   }));
-  var $scope, userProfile, userState, $modalInstance, cookieStored, newUser;
+  var $scope, userProfile, userState, $modalInstance, newUser;
   var registerUser, account, trackerCalled, bqCalled, identifySpy,
     updateCompanyCalled, plansFactory;
   
@@ -183,8 +173,6 @@ describe("controller: registration modal", function() {
       mailSyncEnabled: false,
       accepted: false
     });
-    
-    expect(cookieStored).to.be.false;
 
     expect($scope.registering).to.be.false;
 

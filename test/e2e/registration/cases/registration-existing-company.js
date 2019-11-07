@@ -11,7 +11,6 @@
   var UserSettingsModalPage = require("./../../common-header/pages/userSettingsModalPage.js");
   var SignInPage = require('./../../common/pages/signInPage.js');
   var SignUpPage = require('./../../common/pages/signUpPage.js');
-  var MailListener = require('./../utils/mailListener.js');
 
   var RegistrationExistingCompanyScenarios = function() {
 
@@ -26,7 +25,6 @@
       var signUpPage;
       var EMAIL_ADDRESS;
       var PASSWORD;
-      var mailListener;
 
       before(function (){
         commonHeaderPage = new CommonHeaderPage();
@@ -39,9 +37,6 @@
 
         EMAIL_ADDRESS = commonHeaderPage.getStageEmailAddress();
         PASSWORD = commonHeaderPage.getPassword();
-
-        mailListener = new MailListener(EMAIL_ADDRESS,PASSWORD);
-        mailListener.start();
 
         homepage.get();
         signInPage.signIn();
@@ -76,13 +71,6 @@
           expect(userSettingsModalPage.getUserSettingsModal().isPresent()).to.eventually.be.false;
         });
 
-        it('should send an email to the added user',function(){
-          browser.controlFlow().wait(mailListener.getLastEmail("You've been added to a Rise Vision account!"), 60000)
-            .then(function (email) {
-              expect(email.subject).to.equal("You've been added to a Rise Vision account!");
-            }); 
-        });
-        
         it("Company Users Dialog Should Close", function () {
           companyUsersModalPage.closeCompanyUsersModal();
 
@@ -99,31 +87,13 @@
       });
 
       describe("New User Logs in and Registers", function() {
-        var confirmationLink;
-
         it('should register user',function(){
           signUpPage.get();
 
           signUpPage.customAuthSignUp(EMAIL_ADDRESS, PASSWORD);
-
-          expect(signUpPage.getConfirmEmailNotice().isDisplayed()).to.eventually.be.true;
-        });
-
-        it('should wait for confirmation email', function() {        
-          browser.controlFlow().wait(signUpPage.getConfirmationLink(mailListener), 60000).then(function(link){
-            confirmationLink = link;
-            expect(confirmationLink).to.contain("http://localhost:8099/confirmaccount/"+EMAIL_ADDRESS);
-          });
-        });
-
-        it('should confirm email address',function(){
-          browser.get(confirmationLink);
-          helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-          expect(signUpPage.getEmailConfirmedNotice().isDisplayed()).to.eventually.be.true;
         });
 
         it('should sign in user and show T&C Dialog on new Account', function() {
-          signInPage.customAuthSignIn(EMAIL_ADDRESS,PASSWORD);         
           helper.wait(registrationModalPage.getRegistrationModal(), "Registration Modal");
           expect(registrationModalPage.getRegistrationModal().isPresent()).to.eventually.be.true;
         });
@@ -193,10 +163,6 @@
           expect(signInPage.getSignInGoogleLink().isDisplayed()).to.eventually.be.true;
         });
         
-      });
-
-      after(function(){
-        mailListener.stop();
       });
 
     });

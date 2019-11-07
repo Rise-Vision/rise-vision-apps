@@ -137,7 +137,7 @@
     };
 
     this.getStageEmailAddress = function () {
-      return 'jenkins.rise+'+this.getStageEnv()+'@hotmail.com';
+      return 'jenkins.rise+'+this.getStageEnv()+'@gmail.com';
     };
 
     this.getPassword = function () {
