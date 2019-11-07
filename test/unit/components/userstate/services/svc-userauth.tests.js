@@ -136,7 +136,8 @@ describe("service: userauth:", function() {
       userauth.add("username", "newpass")
         .then(function(resp){
           expect(resp).to.be.ok;
-          expect(resp).to.equal("username");
+          expect(resp.result).to.be.ok;
+          expect(resp.result).to.equal("username");
 
           done();
         })
@@ -162,7 +163,8 @@ describe("service: userauth:", function() {
       userauth.updatePassword("username", "oldpass", "newpass")
         .then(function(resp){
           expect(resp).to.be.ok;
-          expect(resp).to.equal("username");
+          expect(resp.result).to.be.ok;
+          expect(resp.result).to.equal("username");
 
           done();
         })

@@ -7,69 +7,71 @@
       'userauth', 'userState',
       function ($q, $log, gapiLoader, userauth, userState) {
         var factory = {};
-
-        factory.authenticate = function (credentials) {
-          var deferred = $q.defer();
+        
+        factory.authenticate = function () {
           var _state = userState._state;
 
-          if (credentials && credentials.username && credentials.password) {
-            $q.all([gapiLoader(), userauth.login(credentials.username,
-                credentials.password)])
-              .then(function (result) {
-                var gApi = result[0];
-                var loginInfo = result[1] && result[1].result;
-
-                $log.debug('JWT login result:', loginInfo);
-                if (loginInfo && loginInfo.item) {
-                  var token = {
-                    access_token: loginInfo.item,
-                    expires_in: '3600',
-                    token_type: 'Bearer'
-                  };
-                  gApi.auth.setToken(token);
-
-                  deferred.resolve({
-                    email: credentials.username,
-                    token: token
-                  });
-                } else {
-                  deferred.reject('Invalid Auth Token (JWT)');
-                }
-              })
-              .then(null, function (err) {
-                deferred.reject(err);
-              });
-          } else if (_state.userToken && _state.userToken.token) {
-            gapiLoader().then(function (gApi) {
+          if (_state.userToken && _state.userToken.token) {
+            return gapiLoader().then(function (gApi) {
               gApi.auth.setToken(_state.userToken.token);
 
               // TODO: Validate token?
 
-              deferred.resolve(_state.userToken);
+              return _state.userToken;
             });
           } else {
-            deferred.reject();
+            return $q.reject();
           }
+        };
 
-          return deferred.promise;
+        var _updateToken = function (username, loginInfo) {
+          $log.debug('JWT login result:', loginInfo);
+
+          if (loginInfo && loginInfo.item) {
+            return gapiLoader().then(function(gApi) {
+              var token = {
+                access_token: loginInfo.item,
+                expires_in: '3600',
+                token_type: 'Bearer'
+              };
+              var userToken = {
+                email: username,
+                token: token
+              };
+
+              gApi.auth.setToken(token);
+
+              userState._state.userToken = userToken;
+            });
+          } else {
+            return $q.reject('Invalid Auth Token (JWT)');
+          }
+        };
+
+        factory.login = function (credentials) {
+          if (credentials && credentials.username && credentials.password) {
+            return userauth.login(credentials.username, credentials.password)
+              .then(function (result) {
+                var loginInfo = result && result.result;
+
+                return _updateToken(credentials.username, loginInfo);
+              });
+          } else {
+            return $q.reject();
+          }
         };
 
         factory.addUser = function (credentials) {
-          var deferred = $q.defer();
-
           if (credentials && credentials.username && credentials.password) {
-            userauth.add(credentials.username, credentials.password)
+            return userauth.add(credentials.username, credentials.password)
               .then(function (result) {
-                deferred.resolve(result);
-              })
-              .then(null, function () {
-                deferred.reject();
+                var loginInfo = result && result.result;
+
+                return _updateToken(credentials.username, loginInfo);
               });
           } else {
-            deferred.reject();
+            return $q.reject();
           }
-
-          return deferred.promise;
         };
 
         return factory;

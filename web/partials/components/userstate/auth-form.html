@@ -5,15 +5,38 @@
     <div class="panel-body bg-danger u_margin-sm-top" ng-show="errors.duplicateError">
       <p class="u_remove-bottom">
         <i class="fa fa-warning icon-left"></i>
-        <span id="already-registered-warning">This email address is already registered. You can <a ui-sref="common.auth.unauthorized">sign in</a> with this address.</span> 
-      </p> 
+        <span id="already-registered-warning">This email address is already registered. You can <a ui-sref="common.auth.unauthorized">sign in</a> with this address.</span>
+      </p>
     </div>
 
     <!-- ERROR PANEL 2 -->
+    <div class="panel-body bg-danger u_margin-sm-top" ng-show="errors.signupError">
+      <p class="u_remove-bottom">
+        <i class="fa fa-warning icon-left"></i>
+        <span id="signup-failure-error">Registration failed. <br/>If you are having problems registering, please check this <a href="https://help.risevision.com/hc/en-us/articles/115001402743-I-am-having-trouble-logging-in-what-can-I-do-" target="_blank">Help Center article</a>.</span> 
+      </p>
+    </div>
+
+    <!-- ERROR PANEL 3 -->
     <div class="panel-body bg-danger u_margin-sm-top" ng-show="errors.loginError">
       <p class="u_remove-bottom">
         <i class="fa fa-warning icon-left"></i>
-        <span id="incorrect-credentials-error">Your email address/password combination is incorrect. <br/>If you are having problems signing in, please check this <a href="https://help.risevision.com/hc/en-us/articles/115001402743-I-am-having-trouble-logging-in-what-can-I-do-" target="_blank">Help Center article</a>.</span> 
+        <span id="incorrect-credentials-error">Your email address/password combination is incorrect. <br/>If you are having problems signing in, please check this <a href="https://help.risevision.com/hc/en-us/articles/115001402743-I-am-having-trouble-logging-in-what-can-I-do-" target="_blank">Help Center article</a>.</span>
+      </p>
+    </div>
+
+    <!-- ERROR PANEL 3 -->
+    <div class="panel-body bg-danger u_margin-sm-top" ng-show="errors.userAccountLockoutError">
+      <p class="u_remove-bottom">
+        <i class="fa fa-warning icon-left"></i>
+        <span id="user-account-lockout-error">
+          Hmm ... you've had too many failed login attempts.
+          As a security precaution, we've blocked access to your account.
+          You can try again in 24 hours.
+          <br/>
+          Feel like your account shouldn't be blocked?
+          Please <a target="_blank" href="mailto:support@risevision.com">reach out to our support team</a>.
+        </span>
       </p>
     </div>
 
@@ -21,7 +44,7 @@
     <div class="panel-body bg-info u_margin-sm-top" ng-show="errors.unconfirmedError">
       <p class="u_remove-bottom">
         <i class="fa fa-warning icon-left"></i>
-        <span>Your email address has not been confirmed. <br/> <a ui-sref="common.auth.requestconfirmationemail">Resend Email Confirmation</a></span> 
+        <span>Your email address has not been confirmed. <br/> <a ui-sref="common.auth.requestconfirmationemail">Resend Email Confirmation</a></span>
       </p>
     </div>
 
@@ -29,7 +52,7 @@
     <div class="panel-body bg-info u_margin-sm-top" ng-show="errors.confirmationRequired">
       <p class="u_remove-bottom">
         <i class="fa fa-warning icon-left"></i>
-        <span>We've sent a confirmation email to {{credentials.username}}. <br/> Please check your inbox to complete your account registration.</span> 
+        <span>We've sent a confirmation email to {{credentials.username}}. <br/> Please check your inbox to complete your account registration.</span>
       </p>
     </div>
 
@@ -59,7 +82,7 @@
   </div>
 
   <div class="u_margin-sm-top" ng-show="!errors.confirmationRequired">
-  
+
     <div class="form-group" ng-class="{'has-error': (forms.loginForm.$submitted && forms.loginForm.username.$invalid)}" show-errors>
       <label class="control-label">Email</label>
       <input type="email" class="form-control" placeholder="Enter Your Email Address" id="username" name="username" ng-model="credentials.username" required focus-me="true" autocomplete="email">
@@ -70,25 +93,11 @@
 
     <div class="form-group" ng-class="{'has-error': (forms.loginForm.$submitted && forms.loginForm.password.$invalid && isSignUp), 'has-message': forms.loginForm.password.$valid && isSignUp}" show-errors>
       <label class="control-label">{{ isSignUp ? 'Create ' : ''}}Password</label>
-      <input type="password" class="form-control" placeholder="Enter Password" id="password" name="password" ng-model="credentials.password" required minlength="4" zxcvbn-validator="passwordStrength" />
-      <p class="text-danger" ng-show="forms.loginForm.$submitted && forms.loginForm.password.$error.minlength && isSignUp">
-        New Password must be at least 4 characters long.
+      <input type="password" class="form-control" placeholder="Enter Password" id="password" name="password" ng-model="credentials.password" required minlength="{{ isSignUp ? 12 : 4}}" />
+      <p class="text-warning" ng-show="forms.loginForm.password.$dirty && isSignUp">
+        A strong password is at least 12 characters, includes uppercase/lowercase letters, and one or more numbers.
       </p>
       <password-meter ng-if="isSignUp && forms.loginForm.password.$dirty" ng-model="credentials.password"></password-meter>
-    </div>
-    <div class="form-group"
-         ng-class="{ 'has-error' : (forms.loginForm.$submitted && forms.loginForm.confirmPassword.$invalid) }"
-         ng-if="isSignUp">
-      <label class="control-label" for="confirm-password">
-        Confirm Password
-      </label>
-      <input id="confirmPassword" type="password" name="confirmPassword" class="form-control" placeholder="Re-type Password" ng-model="credentials.confirmPassword" required confirm-password-validator="credentials.password" />
-      <p ng-show="forms.loginForm.$submitted && forms.loginForm.confirmPassword.$error.required" class="text-danger">
-        Confirm Password is required.
-      </p>
-      <p ng-show="forms.loginForm.$submitted && forms.loginForm.confirmPassword.$error.passwordMatch" class="text-danger">
-        New Password and Confirm Password must match.
-      </p>
     </div>
   </div>
 

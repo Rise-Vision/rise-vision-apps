@@ -16,10 +16,8 @@ var SignUpPage = function() {
   var signUpGoogleLink = element(by.id('sign-up-google-link'));
   var usernameTextBox = element(by.id('username'));
   var passwordTextBox = element(by.id('password'));
-  var confirmPasswordTextBox = element(by.id('confirmPassword'));
   var signupButton = element(by.id('sign-up-button'));
   var passwordStrengthWarning = element(by.cssContainingText('.text-warning', 'strong password'));
-  var matchingPasswordsError = element(by.cssContainingText('.text-danger', 'must match'));
   var alreadyRegisteredError = element(by.id('already-registered-warning'));
   var confirmEmailNotice = element(by.cssContainingText('.panel-body', 'check your inbox to complete your account registration'));
   var emailConfirmedNotice = element(by.cssContainingText('.panel-body', 'Account successfully confirmed'));
@@ -58,10 +56,6 @@ var SignUpPage = function() {
   this.getPasswordTextBox = function() {
     return passwordTextBox;
   };
-  
-  this.getConfirmPasswordTextBox = function() {
-    return confirmPasswordTextBox;
-  };
 
   this.getSignupButton = function() {
     return signupButton;
@@ -69,10 +63,6 @@ var SignUpPage = function() {
 
   this.getPasswordStrengthWarning = function() {
     return passwordStrengthWarning;
-  };
-
-  this.getMatchingPasswordsError = function() {
-    return matchingPasswordsError;
   };
 
   this.getAlreadyRegisteredError = function() {
@@ -104,33 +94,11 @@ var SignUpPage = function() {
     signInPage.getSignInGoogleLink().click();
   };
 
-  function decodeHtml (str) {
-    return str.replace(/&#(\d+);/g, function(match, dec) {
-      return String.fromCharCode(dec);
-    });
-  }
-
-  this.getConfirmationLink = function(mailListener) {
-    var deferred = protractor.promise.defer();
-
-    mailListener.getLastEmail('Confirm account').then(function (email) {
-      var pattern = /href="(https:\/\/apps-stage-0\.risevision\.com\/confirmaccount\/.*?)"/g;
-      var confirmationLink = pattern.exec(email.html)[1];
-      confirmationLink = confirmationLink.replace('https://apps-stage-0.risevision.com','http://localhost:8099');
-      confirmationLink = decodeHtml(confirmationLink);
-      console.log("Confirmation link: "+confirmationLink);
-
-      deferred.fulfill(confirmationLink);
-    });
-    return deferred.promise;
-  };
-
   this.customAuthSignUp = function(email, password){
     helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
     this.getUsernameTextBox().sendKeys(email);
     this.getPasswordTextBox().sendKeys(password);
-    this.getConfirmPasswordTextBox().sendKeys(password);
 
     this.getSignupButton().click();
 
