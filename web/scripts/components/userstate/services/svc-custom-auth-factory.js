@@ -7,7 +7,7 @@
       'userauth', 'userState',
       function ($q, $log, gapiLoader, userauth, userState) {
         var factory = {};
-        
+
         factory.authenticate = function () {
           var _state = userState._state;
 
@@ -28,7 +28,7 @@
           $log.debug('JWT login result:', loginInfo);
 
           if (loginInfo && loginInfo.item) {
-            return gapiLoader().then(function(gApi) {
+            return gapiLoader().then(function (gApi) {
               var token = {
                 access_token: loginInfo.item,
                 expires_in: '3600',

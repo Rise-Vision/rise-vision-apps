@@ -4,8 +4,8 @@
   angular.module('risevision.common.components.password-input', [
       'oc.lazyLoad'
     ])
-    .directive('passwordInput', ['$templateCache', '$ocLazyLoad',
-      function ($templateCache, $ocLazyLoad) {
+    .directive('passwordInput', ['$templateCache', '$ocLazyLoad', '$window',
+      function ($templateCache, $ocLazyLoad, $window) {
         return {
           restrict: 'E',
           require: '?ngModel',
@@ -22,17 +22,17 @@
               if (newValue !== oldValue) {
                 scope.ngModelCtrl.$setDirty(true);
               }
-              if (scope.isCreating) {                
-                $ocLazyLoad.load('vendor/zxcvbn/zxcvbn.js').then(function(){
-                  var result = zxcvbn(newValue);
+              if (scope.isCreating) {
+                $ocLazyLoad.load('vendor/zxcvbn/zxcvbn.js').then(function () {
+                  var result = $window.zxcvbn(newValue);
                   scope.feedback = result.feedback.warning;
                   _updateStrength(scope.ngModelCtrl.$invalid ? 0 : result.score);
-                });               
+                });
               }
             });
 
-            var _updateStrength = function(score) {
-              scope.scorePercentage = Math.max(25, score/4 * 100);
+            var _updateStrength = function (score) {
+              scope.scorePercentage = Math.max(25, score / 4 * 100);
               if (score === 4) {
                 scope.strength = 'Great';
                 scope.strengthClass = 'success';
@@ -48,4 +48,4 @@
         };
       }
     ]);
-}())
+}());

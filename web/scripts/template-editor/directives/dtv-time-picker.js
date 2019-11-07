@@ -9,7 +9,7 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope) {
           var regex = /^(\d{1,2}):(\d{1,2}) (\D{2})$/;
 
-          $scope.$watch('time', function(newValue, oldValue) {
+          $scope.$watch('time', function (newValue, oldValue) {
             if (newValue && newValue !== oldValue && regex.test(newValue)) {
               var parts = regex.exec(newValue);
               var _hours = Number(parts[1]);
@@ -49,7 +49,8 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.updateTime = function () {
-            $scope.time = utils.padNumber($scope.hours, 2) + ':' + utils.padNumber($scope.minutes, 2) + ' ' + $scope.meridian;
+            $scope.time = utils.padNumber($scope.hours, 2) + ':' + utils.padNumber($scope.minutes, 2) + ' ' +
+              $scope.meridian;
           };
 
           $scope.padNumber = function (number) {
@@ -87,7 +88,7 @@ angular.module('risevision.template-editor.directives')
           var popupElement = angular.element('<div><div time-picker time="time"></div></div>');
           var popupCompiled = $compile(popupElement)($scope);
 
-          ngModelController.$formatters.push(function(value) {
+          ngModelController.$formatters.push(function (value) {
             $scope.time = value;
             return value;
           });
@@ -121,7 +122,7 @@ angular.module('risevision.template-editor.directives')
             var popupContainsTarget = popup.contains !== undefined && popup.contains(event.target);
 
             if ($scope.isOpen && !(dpContainsTarget || popupContainsTarget)) {
-              $scope.$apply(function() {
+              $scope.$apply(function () {
                 $scope.isOpen = false;
               });
             }

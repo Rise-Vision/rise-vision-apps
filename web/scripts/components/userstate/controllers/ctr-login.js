@@ -28,9 +28,9 @@ angular.module('risevision.common.components.userstate')
           });
       };
 
-      var _authenticate = function() {
+      var _authenticate = function () {
         return userAuthFactory.authenticate(true)
-          .then(function() {
+          .then(function () {
             urlStateService.redirectToState($stateParams.state);
           });
       };

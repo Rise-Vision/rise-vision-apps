@@ -76,13 +76,13 @@
             status = 'Subscribed';
           } else if (currentPlanFactory.isOnTrial()) {
             status = 'On Trial';
-          // Unreachable cases
-          // } else if (currentPlanFactory.isFree()) {
-          //   status = 'Free';
-          // } else if (currentPlanFactory.isTrialExpired()) {
-          //   status = 'Trial Expired';
-          // } else if (currentPlanFactory.isSuspended()) {
-          //   status = 'Suspended';
+            // Unreachable cases
+            // } else if (currentPlanFactory.isFree()) {
+            //   status = 'Free';
+            // } else if (currentPlanFactory.isTrialExpired()) {
+            //   status = 'Trial Expired';
+            // } else if (currentPlanFactory.isSuspended()) {
+            //   status = 'Suspended';
           }
 
           return status;

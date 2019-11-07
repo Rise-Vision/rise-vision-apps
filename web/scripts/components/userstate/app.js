@@ -102,12 +102,7 @@
             params: {
               isSignUp: true,
               joinAccount: false
-            },
-            // resolve: {
-            //   loadDependencies: ['$ocLazyLoad', function($ocLazyLoad) {
-            //     return $ocLazyLoad.load('vendor/zxcvbn/zxcvbn.js');
-            //   }]
-            // }
+            }
           })
 
           .state('common.auth.joinaccount', {

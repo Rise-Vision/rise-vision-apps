@@ -65,7 +65,8 @@ angular.module('risevision.template-editor.directives')
                   $scope.setAttributeData($scope.componentId, 'time', null);
                 } else if ($scope.targetUnit === 'targetTime') {
                   $scope.setAttributeData($scope.componentId, 'date', null);
-                  $scope.setAttributeData($scope.componentId, 'time', utils.meridianTimeToAbsolute($scope.targetTime));
+                  $scope.setAttributeData($scope.componentId, 'time', utils.meridianTimeToAbsolute($scope
+                    .targetTime));
                 }
 
                 if ($scope.counterType === 'down') {
@@ -87,7 +88,7 @@ angular.module('risevision.template-editor.directives')
                 $scope.targetTimePicker.isOpen = !$scope.targetTimePicker.isOpen;
               };
 
-              function _registerDatePickerClosingWatch () {
+              function _registerDatePickerClosingWatch() {
                 $scope.$watch('targetDatePicker.isOpen', function (isOpen) {
                   $timeout(function () {
                     if (isOpen) {
@@ -99,7 +100,7 @@ angular.module('risevision.template-editor.directives')
                 });
               }
 
-              function _datePickerClickOutsideHander (event) {
+              function _datePickerClickOutsideHander(event) {
                 if (!$scope.targetDatePicker.isOpen) {
                   return;
                 }
@@ -110,7 +111,7 @@ angular.module('risevision.template-editor.directives')
                 var popupContainsTarget = datePickerPopup.contains(event.target);
 
                 if (!(dpContainsTarget || popupContainsTarget)) {
-                  $scope.$apply(function() {
+                  $scope.$apply(function () {
                     $scope.targetDatePicker.isOpen = false;
                   });
                 }
