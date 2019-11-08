@@ -85,10 +85,10 @@ gulp test:unit
 
 ### Protractor End-to-End Testing
 
-E2E tests require `E2E_USER` and `E2E_PASS` environment variables to be defined with the Google account used for testing:
+E2E tests require some environment variables to be defined for the accounts used for testing. The variables are `E2E_USER` / `E2E_PASS` for Google Authentication and `E2E_USER1` / `E2E_PASS1` for Custom Authentication. The command would be as follows:
 
 ```
-E2E_USER=jenkins@risevision.com E2E_PASS=... gulp test:e2e
+E2E_USER=jenkins.rise@gmail.com E2E_PASS=... E2E_USER1=jenkins.rise+custom@gmail.com E2E_PASS1=... gulp test:e2e
 ```
 
 #### Susbcribed vs Non Susbscribed Test Companies
@@ -101,26 +101,22 @@ Tests that may cause conflicts when running in parallel are isolated by appendin
 #### User Registration Tests 
 In similar fashion, when running user registration tests, the stage name is appended to create a unique user per stage environment, to prevent conflicts.
 
-This is achieved by using [plus addressing](https://will.koffel.org/post/2014/using-email-plus-addressing/). In summary, from single email account you can have multiple 'aliases' by appending `+` and an identifier. In our case, we use `jenkins.rise@homail.com` as the main account and `jenkins.rise+stage1@hotmail.com`, `jenkins.rise+stage2@hotmail.com`, etc, for the user registration tests on respective staging environments.
-
-#### Mail Listener
-Some funtionalities like registering a new user or adding a new user to a company send emails to users.
-To test that emails are properly delivered, E2E tests use the [MailListener](https://github.com/Rise-Vision/rise-vision-apps/blob/master/test/e2e/common-header/utils/mailListener.js) service, which connects via IMAP and checks user emails. 
-Same as above, it will use `jenkins.rise@homail.com` and filter received emails per stage environment, so that tests can be safely run in parallel without retrieving email messages from other environments.
+This is achieved by using [plus addressing](https://will.koffel.org/post/2014/using-email-plus-addressing/). In summary, from single email account you can have multiple 'aliases' by appending `+` and an identifier. In our case, we use `jenkins.rise@gmail.com` as the main account and `jenkins.rise+stage1@gmail.com`, `jenkins.rise+stage2@gmail.com`, etc, for the user registration tests on respective staging environments.
 
 #### Restoring Jenkins company
 
 In case the Jenkins Company gets removed, which causes all e2e tests to fail, the steps to recreate it are:
 
-- Login with jenkins@risevision.com
+- Login with jenkins.rise@gmail.com
 - Create a new company with a non-education industry
-- Subscribe to a plan (any plan would do). Not a trial, a renewable Subscription. This needs to be done as jenkins@risevision.com
+- Subscribe to a plan (any plan would do). Not a trial, a renewable Subscription. This needs to be done as jenkins.rise@gmail.com
 - Go to Company Settings and uncheck *"Share Company Plan”*
 - Create an empty presentation named *TEST_E2E_PRESENTATION*
 - In Storage, upload an image file named *logo.gif*
 - In Storage, create a folder named *E2E_TEST_FOLDER*
 - Create a new Subcompany *"Jenkins Subscribed Subcompany"*, susbcribe to a plan with it and confirm it has `Share Company Plan` checked.
 - Create a new  subcompany *"Jenkins Unsubscribed Subcompany"*
+- Under *"Jenkins Unsubscribed Subcompany"* create a new  subcompany *"E2E SUBCOMPANY - UNSUBSCRIBED"*
 
 ## Submitting Issues
 If you encounter problems or find defects we really want to hear about them. If you could take the time to add them as issues to this Repository it would be most appreciated. When reporting issues please use the following format where applicable:
@@ -158,5 +154,4 @@ If you would like more information on developing applications for Rise Vision pl
 
 **Facilitator**
 
-[Rodrigo Serviuc Pavezi](https://github.com/rodrigopavezi "Rodrigo Serviuc Pavezi")
-
+[Rise Vision](https://github.com/rise-vision "Rise Vision")
