@@ -288,6 +288,14 @@ gulp.task("images", function () {
     })
 });
 
+gulp.task("vendor", function () {
+  return gulp.src(['./web/vendor/**/*.*'])
+    .pipe(gulp.dest("dist/vendor"))
+    .on('error',function(e){
+      console.error(String(e));
+    })
+});
+
 gulp.task("static-html", function() {
   return gulp.src(['./web/loading-preview.html', './web/pricing-component.js', './web/pricing-component.css'])
     .pipe(gulp.dest('dist/'));
@@ -307,7 +315,7 @@ gulp.task('build-pieces', function (cb) {
 });
 
 gulp.task('build', function (cb) {
-  runSequence(["clean", ], ['build-pieces', 'pretty'], ["html", "static-html", "images"], cb);
+  runSequence(["clean", ], ['build-pieces', 'pretty'], ["html", "static-html", "images", "vendor"], cb);
 });
 
 /*---- testing ----*/
