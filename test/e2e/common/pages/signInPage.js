@@ -21,6 +21,8 @@ var SignInPage = function() {
   var passwordTextBox = element(by.id('password'));
   var signinButton = element(by.cssContainingText('button.btn-primary', 'Sign In'));
   var incorrectCredentialsError = element(by.cssContainingText('.bg-danger', 'incorrect'));
+  var passwordMinLengthError = element(by.cssContainingText('.text-danger', 'Password needs to be 4 or more characters in length.'));
+  var passwordRequiredError = element(by.cssContainingText('.text-danger', 'Oops, don\'t leave this blank.'));
 
   var USERNAME1 = browser.params.login.user1;
   var PASSWORD1 = browser.params.login.pass1;
@@ -63,6 +65,14 @@ var SignInPage = function() {
 
   this.getIncorrectCredentialsError = function() {
     return incorrectCredentialsError;
+  };
+
+  this.getPasswordMinLengthError = function() {
+    return passwordMinLengthError;
+  };
+
+  this.getPasswordRequiredError = function() {
+    return passwordRequiredError;
   };
 
   this.customAuthSignIn = function(username,password) {

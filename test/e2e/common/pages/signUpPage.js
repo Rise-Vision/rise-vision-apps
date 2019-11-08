@@ -17,8 +17,13 @@ var SignUpPage = function() {
   var usernameTextBox = element(by.id('username'));
   var passwordTextBox = element(by.id('password'));
   var signupButton = element(by.id('sign-up-button'));
-  var passwordStrengthWarning = element(by.cssContainingText('.text-warning', 'strong password'));
+  var passwordMinLengthError = element(by.cssContainingText('.text-danger', 'Password needs to be 12 or more characters in length.'));
+  var passwordRequiredError = element(by.cssContainingText('.text-danger', 'Oops, don\'t leave this blank.'));
   var alreadyRegisteredError = element(by.id('already-registered-warning'));
+  var passwordStrengthText = element(by.id('strengthText'));
+  var passwordMeter = element(by.id('passwordMeter'));
+  var passwordFeedbackText = element(by.id('passwordFeedback'));  
+  
   var confirmEmailNotice = element(by.cssContainingText('.panel-body', 'check your inbox to complete your account registration'));
   var emailConfirmedNotice = element(by.cssContainingText('.panel-body', 'Account successfully confirmed'));
 
@@ -61,8 +66,24 @@ var SignUpPage = function() {
     return signupButton;
   };
 
-  this.getPasswordStrengthWarning = function() {
-    return passwordStrengthWarning;
+  this.getPasswordMinLengthError = function() {
+    return passwordMinLengthError;
+  };
+
+  this.getPasswordRequiredError = function() {
+    return passwordRequiredError;
+  };
+
+  this.getPasswordStrengthText = function() {
+    return passwordStrengthText;
+  };
+
+  this.getPasswordMeter = function() {
+    return passwordMeter;
+  };
+
+  this.getPasswordFeedbackText = function() {
+    return passwordFeedbackText;
   };
 
   this.getAlreadyRegisteredError = function() {

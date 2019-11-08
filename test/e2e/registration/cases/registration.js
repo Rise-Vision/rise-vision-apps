@@ -64,8 +64,45 @@
         expect(signUpPage.getSignUpPageContainer().isPresent()).to.eventually.be.true;
         expect(signUpPage.getSignUpCTA().isPresent()).to.eventually.be.true;
       });
+  
+      it('should show both sign up options', function() {
+        expect(signUpPage.getSignUpGoogleLink().isPresent()).to.eventually.be.true;
+        expect(signUpPage.getUsernameTextBox().isPresent()).to.eventually.be.true;
+        expect(signUpPage.getPasswordTextBox().isPresent()).to.eventually.be.true;
+
+        expect(signUpPage.getSignupButton().isPresent()).to.eventually.be.true;
+      });
+
+      it('should show minimum length error', function() {
+        signUpPage.getUsernameTextBox().sendKeys('test@test.com');
+        signUpPage.getPasswordTextBox().sendKeys('pass');
+
+        expect(signUpPage.getPasswordMinLengthError().isDisplayed()).to.eventually.be.true;
+      });
+
+      it('should show password meter', function() {
+        helper.wait(signUpPage.getPasswordMeter(), 'Password Meter Strength');
+
+        expect(signUpPage.getPasswordStrengthText().getText()).to.eventually.equal('Weak');
+        expect(signUpPage.getPasswordFeedbackText().getText()).to.eventually.equal('This is a top-100 common password');
+        expect(signUpPage.getPasswordMeter().isDisplayed()).to.eventually.be.true;
+      });
+
+      it('should show required field error', function() {
+        signUpPage.getPasswordTextBox().clear();
+
+        expect(signUpPage.getPasswordRequiredError().isDisplayed()).to.eventually.be.true;
+      });
+
+      it('should report strong password', function() {
+        signUpPage.getPasswordTextBox().sendKeys('strngPass@*3');
+
+        expect(signUpPage.getPasswordStrengthText().getText()).to.eventually.equal('Great');
+      });
 
       it('should register user', function() {
+        signUpPage.getUsernameTextBox().clear();
+        signUpPage.getPasswordTextBox().clear();
         signUpPage.customAuthSignUp(EMAIL_ADDRESS, PASSWORD);        
         helper.waitForSpinner();
       });
