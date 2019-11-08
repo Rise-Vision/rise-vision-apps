@@ -100,6 +100,14 @@
         expect(signUpPage.getPasswordStrengthText().getText()).to.eventually.equal('Great');
       });
 
+      it('should show error when trying to signup with existing user account', function() {
+        signUpPage.getSignupButton().click();
+
+        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+
+        expect(signUpPage.getAlreadyRegisteredError().isDisplayed()).to.eventually.be.true;
+      });
+
       it('should register user', function() {
         signUpPage.getUsernameTextBox().clear();
         signUpPage.getPasswordTextBox().clear();
