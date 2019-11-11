@@ -12,7 +12,9 @@
           require: '?ngModel',
           scope: {
             ngModel: '=',
-            isCreating: '='
+            isCreating: '=',
+            label: '@',
+            placeholder: '@'
           },
           template: $templateCache.get(
             'partials/components/password-input/password-input.html'),

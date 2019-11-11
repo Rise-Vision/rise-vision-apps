@@ -41,7 +41,7 @@ describe('directive: password input', function() {
     $scope = $rootScope.$new();
     $scope.password = "password";
     $scope.isCreating = true;
-    element = $compile('<password-input ng-model="password" is-creating="isCreating"></password-input>')($scope);
+    element = $compile('<password-input ng-model="password" is-creating="isCreating" label="label-text" placeholder="placehodler-text"></password-input>')($scope);
     $scope = element.isolateScope();
     $scope.$digest();
   }));
@@ -49,7 +49,16 @@ describe('directive: password input', function() {
   it('should exist', function() {
     expect($scope).to.be.ok;
     expect($scope.ngModel).to.be.ok;
-    expect($scope.isCreating).to.be.true;    
+    expect($scope.isCreating).to.be.true;
+    expect($scope.label).to.be.ok;
+    expect($scope.placeholder).to.be.ok;
+  });
+
+  it('should init', function() {
+    expect($scope.ngModel).to.equal('password');
+    expect($scope.isCreating).to.be.true;
+    expect($scope.label).to.equal('label-text');
+    expect($scope.placeholder).to.equal('placehodler-text');
   });
 
   it('should replace the element with the appropriate content', function() {

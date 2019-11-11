@@ -71,9 +71,15 @@ describe("controller: user settings", function() {
       return function() { return filterStub; };
     });
 
+    $provide.service("userauth", function() {
+      return {
+        updatePassword: sandbox.stub().returns(Q.resolve())
+      };
+    });
+
   }));
   var $scope, userProfile, savedUser, userState, $modalInstance, createUserError,
-  trackerCalled, deleteUserStub, messageBoxStub, confirmModalStub, filterStub;
+  trackerCalled, deleteUserStub, messageBoxStub, confirmModalStub, filterStub, userauth;
   var isRiseAdmin = true, isUserAdmin = true, isRiseVisionUser = true, isRiseAuthUser = false;
   beforeEach(function(){
     createUserError = false;
@@ -128,6 +134,7 @@ describe("controller: user settings", function() {
       $scope = $rootScope.$new();
       $modalInstance = $injector.get("$modalInstance");
       userState = $injector.get("userState");
+      userauth = $injector.get('userauth');
 
       filterStub = sinon.stub();
 
@@ -180,6 +187,9 @@ describe("controller: user settings", function() {
         email: {},
         firstName: {},
         lastName: {},
+        currentPassword: {
+          $setValidity: sandbox.stub()
+        },
         $valid: true
       };
       setTimeout(function(){
@@ -252,6 +262,30 @@ describe("controller: user settings", function() {
 
         done();
       },10);
+    });
+
+    describe('change password:', function() {
+      it('should clear error on success', function(done) {
+        $scope.showChangePassword = true;
+        $scope.save();
+
+        setTimeout(function() {
+          expect($scope.forms.userSettingsForm.currentPassword.$setValidity).to.have.been.calledWith('currentPasswordNotValid',true);
+          done();
+        },10);
+
+      });
+
+      it('should set error on failure', function(done) {
+        userauth.updatePassword.returns(Q.reject({result: {error: {code: 409}}}));
+        $scope.showChangePassword = true;
+        $scope.save();
+
+        setTimeout(function() {
+          expect($scope.forms.userSettingsForm.currentPassword.$setValidity).to.have.been.calledWith('currentPasswordNotValid',false);
+          done();
+        },10);
+      });
     });
   });
 

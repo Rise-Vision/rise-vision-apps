@@ -55,25 +55,20 @@ rv-spinner-start-active="1">
         </div>
       </div>
       <div id="passwordForm" class="animated" ng-if="editingYourself && !isAdd && isRiseAuthUser && showChangePassword" ng-class="{ 'fadeIn': showChangePassword }">
-        <div class="form-group"
-             ng-class="{ 'has-error' : (forms.resetPasswordForm.$submitted && forms.resetPasswordForm.newPassword.$invalid) || currentPasswordNotValid }">
-          <label for="user-settings-current-password">
-            Current Password *
-          </label>
-          <input id="user-settings-current-password"
-                 type="password" name="currentPassword"
-                 placeholder="Enter Current Password" 
-                 class="form-control"
-                 ng-model="userPassword.currentPassword" required />
-          <p class="text-danger" ng-show="forms.userSettingsForm.$submitted && forms.userSettingsForm.currentPassword.$error.required">
-            Current Password is required.
-          </p>
-          <p ng-show="currentPasswordNotValid" class="help-block validation-error-message-mail">
-            Current Password is not valid.
-          </p>
-        </div>
+
+        <password-input 
+          id="user-settings-current-password"
+          name="currentPassword"
+          ng-model="userPassword.currentPassword"
+          label="Current Password *"
+          placeholder="Enter Current Password"
+          minlength="4" required>
+        </password-input>
+      
         <password-input 
           name="newPassword"
+          label="New Password *"
+          placeholder="Enter New Password"
           ng-model="userPassword.newPassword"
           is-creating="true" minlength="12" required>
         </password-input>
