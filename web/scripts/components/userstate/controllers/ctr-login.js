@@ -25,19 +25,14 @@ angular.module('risevision.common.components.userstate')
         var message = error.message ? error.message :
           'Please try again or <a target="_blank" href="mailto:support@risevision.com">reach out to our Support team</a> if the problem persists.';
 
-        if (!e) {
-          $scope.errors.messageTitle = messageTitle;
-          $scope.errors.message = message;
-        } else if (e.status >= 400 && e.status < 500) {
+        if (e && e.status >= 400 && e.status < 500) {
           $scope.errors.genericError = true;
-        } else if (e.status === 500 || e.status === 503) {
-          $scope.errors.messageTitle = messageTitle;
-          $scope.errors.message = message;
-        } else if (e.status === -1 || error.code === -1 || error.code === 0) {
+        } else if (e && (e.status === -1 || error.code === -1 || error.code === 0)) {
           $scope.errors.messageTitle = 'Hmm, we can\'t sign you ' + actionName +
             ' because there\'s a problem with your connectivity.';
           $scope.errors.message = 'Please check your connection and proxy or firewall settings and try again.';
         } else {
+          // Catch all errors including !e, e.status === 500, e.status === 503, etc
           $scope.errors.messageTitle = messageTitle;
           $scope.errors.message = message;
         }
