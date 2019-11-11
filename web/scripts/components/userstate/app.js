@@ -27,6 +27,7 @@
       'risevision.common.components.logging',
       'risevision.common.components.loading',
       'risevision.common.components.password-input',
+      'risevision.common.components.scrolling-list',
       'risevision.common.config',
       'risevision.common.gapi', 'LocalStorageModule',
       'risevision.core.cache',

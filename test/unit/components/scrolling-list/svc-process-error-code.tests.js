@@ -19,26 +19,10 @@ describe("service: process error code:", function() {
 
   var itemName = "Presentation";
   var action = "add";
-  
-  it("should process empty error objects", function() {
-    expect(processErrorCode(itemName, action)).to.equal("An Error has Occurred");
-    expect(processErrorCode(itemName, action, {})).to.equal("An Error has Occurred");
-  });
 
-  it("should process all flavors of errors", function() {
-    var e = { code: -1 };
-    expect(processErrorCode(itemName, action, e)).to.equal("apps-common.errors.checkConnection");
-    expect(processErrorCode(itemName, action, {
-      error: e
-    })).to.equal("apps-common.errors.checkConnection");
-    expect(processErrorCode(itemName, action, {
-      result: e
-    })).to.equal("apps-common.errors.checkConnection");
-    expect(processErrorCode(itemName, action, {
-      result: {
-        error: e
-      }
-    })).to.equal("apps-common.errors.checkConnection");
+  it("should exist", function() {
+    expect(processErrorCode).to.be.ok;
+    expect(processErrorCode).to.be.a('function');
   });
 
   it("should attempt to internationalize Storage errors", function() {

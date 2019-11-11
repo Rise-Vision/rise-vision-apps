@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.common.components.scrolling-list')
-  .service('processErrorCode', ['$filter',
-    function ($filter) {
+  .service('processErrorCode', ['$filter', 'getError',
+    function ($filter, getError) {
       var actionsMap = {
         get: 'loaded',
         load: 'loaded',
@@ -18,28 +18,10 @@ angular.module('risevision.common.components.scrolling-list')
         reboot: 'rebooted'
       };
 
-      var _getError = function (e) {
-        if (e) {
-          if (e.result) {
-            if (e.result.error) {
-              return e.result.error;
-            } else {
-              return e.result;
-            }
-          } else if (e.error) {
-            return e.error;
-          } else {
-            return e;
-          }
-        } else {
-          return {};
-        }
-      };
-
       return function (itemName, action, e) {
         var tryAgainMessage = $filter('translate')('apps-common.errors.tryAgain');
         var actionName = actionsMap[action];
-        var error = _getError(e);
+        var error = getError(e);
         var errorString = error.message ? error.message : 'An Error has Occurred';
         var messagePrefix = $filter('translate')('apps-common.errors.actionFailed', {
           itemName: itemName,
