@@ -51,14 +51,13 @@
 
     .factory('addAccount', ['$q', 'riseAPILoader', '$log',
       function ($q, riseAPILoader, $log) {
-        return function (userFirst, userLast, companyName, companyIndustry, userPhone, mailSyncEnabled) {
+        return function (userFirst, userLast, companyName, companyIndustry, mailSyncEnabled) {
           $log.debug('addAccount called.');
           var deferred = $q.defer();
           riseAPILoader().then(function (riseApi) {
             var request = riseApi.account.addWithDetails({
               userFirst: userFirst,
               userLast: userLast,
-              userPhone: userPhone,
               companyName: companyName,
               companyIndustry: companyIndustry,
               mailSyncEnabled: mailSyncEnabled
