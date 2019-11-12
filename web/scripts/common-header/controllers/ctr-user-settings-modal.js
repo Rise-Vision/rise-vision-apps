@@ -40,6 +40,12 @@ angular.module('risevision.common.header')
         }
       });
 
+      $scope.$watch('userPassword.currentPassword', function () {
+        if ($scope.showChangePassword) {
+          $scope.forms.userSettingsForm.currentPassword.$setValidity('currentPasswordNotValid', true);
+        }
+      });
+
       $scope.isUserAdmin = userState.isUserAdmin();
       $scope.username = username;
 

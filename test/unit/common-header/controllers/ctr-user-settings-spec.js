@@ -265,8 +265,11 @@ describe("controller: user settings", function() {
     });
 
     describe('change password:', function() {
-      it('should clear error on success', function(done) {
+      beforeEach(function(){
         $scope.showChangePassword = true;
+      });
+
+      it('should clear error on success', function(done) {
         $scope.save();
 
         setTimeout(function() {
@@ -278,7 +281,7 @@ describe("controller: user settings", function() {
 
       it('should set error on failure', function(done) {
         userauth.updatePassword.returns(Q.reject({result: {error: {code: 409}}}));
-        $scope.showChangePassword = true;
+
         $scope.save();
 
         setTimeout(function() {
@@ -286,6 +289,13 @@ describe("controller: user settings", function() {
           done();
         },10);
       });
+
+      it('should clear invalid password error on input changed',function(){
+        $scope.userPassword.currentPassword = 'changedPassword';
+        $scope.$digest();
+
+        expect($scope.forms.userSettingsForm.currentPassword.$setValidity).to.have.been.calledWith('currentPasswordNotValid',true);
+      })
     });
   });
 
