@@ -3,9 +3,9 @@
 angular.module('risevision.common.components.userstate')
   .controller('LoginCtrl', ['$scope', '$loading', '$stateParams',
     '$state', 'userAuthFactory', 'customAuthFactory', 'uiFlowManager',
-    'urlStateService', 'userState', 'FORCE_GOOGLE_AUTH',
+    'urlStateService', 'userState', 'getError', 'FORCE_GOOGLE_AUTH',
     function ($scope, $loading, $stateParams, $state, userAuthFactory,
-      customAuthFactory, uiFlowManager, urlStateService, userState,
+      customAuthFactory, uiFlowManager, urlStateService, userState, getError,
       FORCE_GOOGLE_AUTH) {
       $scope.forms = {};
       $scope.credentials = {};
@@ -18,6 +18,25 @@ angular.module('risevision.common.components.userstate')
       $scope.companyName = $stateParams.companyName;
       $scope.messages.passwordReset = $stateParams.passwordReset;
       $scope.messages.accountConfirmed = $stateParams.accountConfirmed;
+
+      var _processErrorCode = function (e, actionName) {
+        var error = getError(e);
+        var messageTitle = 'Oops, an error occurred while trying to sign you ' + actionName + '.';
+        var message = error.message ? error.message :
+          'Please try again or <a target="_blank" href="mailto:support@risevision.com">reach out to our Support team</a> if the problem persists.';
+
+        if (e && e.status >= 400 && e.status < 500) {
+          $scope.errors.genericError = true;
+        } else if (e && (e.status === -1 || error.code === -1 || error.code === 0)) {
+          $scope.errors.messageTitle = 'Hmm, we can\'t sign you ' + actionName +
+            ' because there\'s a problem with your connectivity.';
+          $scope.errors.message = 'Please check your connection and proxy or firewall settings and try again.';
+        } else {
+          // Catch all errors including !e, e.status === 500, e.status === 503, etc
+          $scope.errors.messageTitle = messageTitle;
+          $scope.errors.message = message;
+        }
+      };
 
       $scope.googleLogin = function (endStatus) {
         $loading.startGlobal('auth-buttons-login');
@@ -47,11 +66,11 @@ angular.module('risevision.common.components.userstate')
             .catch(function (err) {
               if (err && err.status === 400) {
                 $scope.messages.isGoogleAccount = true;
-              } else if (err.status === 403) {
+              } else if (err && err.status === 403) {
                 $scope.errors.userAccountLockoutError = true;
               } else { // No special case for 404, for security reasons
                 console.error(err);
-                $scope.errors.loginError = true;
+                _processErrorCode(err, 'in');
               }
             })
             .finally(function () {
@@ -75,7 +94,7 @@ angular.module('risevision.common.components.userstate')
                 $scope.errors.duplicateError = true;
               } else { // No special cases, for security reasons
                 console.error(err);
-                $scope.errors.signupError = true;
+                _processErrorCode(err, 'up');
               }
             })
             .finally(function () {

@@ -69,7 +69,7 @@ angular.module('risevision.common.header')
           var action;
           if ($scope.newUser) {
             action = addAccount($scope.profile.firstName, $scope.profile.lastName, $scope.company.name, $scope
-              .company.companyIndustry, $scope.profile.telephone, $scope.profile.mailSyncEnabled);
+              .company.companyIndustry, $scope.profile.mailSyncEnabled);
           } else {
             action = agreeToTermsAndUpdateUser(userState.getUsername(),
               $scope.profile);

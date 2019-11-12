@@ -10,7 +10,7 @@
     </div>
 
     <!-- ERROR PANEL 2 -->
-    <div class="panel-body bg-danger u_margin-sm-top" ng-show="errors.signupError">
+    <div class="panel-body bg-danger u_margin-sm-top" ng-show="errors.genericError && isSignUp">
       <p class="u_remove-bottom">
         <i class="fa fa-warning icon-left"></i>
         <span id="signup-failure-error">Registration failed. <br/>If you are having problems registering, please check this <a href="https://help.risevision.com/hc/en-us/articles/115001402743-I-am-having-trouble-logging-in-what-can-I-do-" target="_blank">Help Center article</a>.</span> 
@@ -18,41 +18,31 @@
     </div>
 
     <!-- ERROR PANEL 3 -->
-    <div class="panel-body bg-danger u_margin-sm-top" ng-show="errors.loginError">
+    <div class="panel-body bg-danger u_margin-sm-top" ng-show="errors.genericError && !isSignUp">
       <p class="u_remove-bottom">
         <i class="fa fa-warning icon-left"></i>
         <span id="incorrect-credentials-error">Your email address/password combination is incorrect. <br/>If you are having problems signing in, please check this <a href="https://help.risevision.com/hc/en-us/articles/115001402743-I-am-having-trouble-logging-in-what-can-I-do-" target="_blank">Help Center article</a>.</span>
       </p>
     </div>
 
-    <!-- ERROR PANEL 3 -->
+    <!-- ERROR PANEL 4 -->
+    <div class="panel-body bg-danger u_margin-sm-top" ng-show="errors.message">
+      <p><strong>{{errors.messageTitle}}</strong></p>
+      <p class="u_remove-bottom">{{errors.message}}</p>
+    </div>
+
+    <!-- ERROR PANEL 5 -->
     <div class="panel-body bg-danger u_margin-sm-top" ng-show="errors.userAccountLockoutError">
       <p class="u_remove-bottom">
         <i class="fa fa-warning icon-left"></i>
         <span id="user-account-lockout-error">
-          Hmm ... you've had too many failed login attempts.
+          Hmm, you've had too many failed login attempts.
           As a security precaution, we've blocked access to your account.
           You can try again in 24 hours.
           <br/>
           Feel like your account shouldn't be blocked?
-          Please <a target="_blank" href="mailto:support@risevision.com">reach out to our support team</a>.
+          Please <a target="_blank" href="mailto:support@risevision.com">reach out to our Support team</a>.
         </span>
-      </p>
-    </div>
-
-    <!-- INFO PANEL 1 -->
-    <div class="panel-body bg-info u_margin-sm-top" ng-show="errors.unconfirmedError">
-      <p class="u_remove-bottom">
-        <i class="fa fa-warning icon-left"></i>
-        <span>Your email address has not been confirmed. <br/> <a ui-sref="common.auth.requestconfirmationemail">Resend Email Confirmation</a></span>
-      </p>
-    </div>
-
-    <!-- INFO PANEL 2 -->
-    <div class="panel-body bg-info u_margin-sm-top" ng-show="errors.confirmationRequired">
-      <p class="u_remove-bottom">
-        <i class="fa fa-warning icon-left"></i>
-        <span>We've sent a confirmation email to {{credentials.username}}. <br/> Please check your inbox to complete your account registration.</span>
       </p>
     </div>
 
@@ -81,7 +71,7 @@
     </div>
   </div>
 
-  <div class="u_margin-sm-top" ng-show="!errors.confirmationRequired">
+  <div class="u_margin-sm-top">
 
     <div class="form-group" ng-class="{'has-error': (forms.loginForm.$submitted && forms.loginForm.username.$invalid)}" show-errors>
       <label class="control-label">Email</label>
