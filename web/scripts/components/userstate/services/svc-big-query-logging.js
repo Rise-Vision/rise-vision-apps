@@ -13,8 +13,8 @@ angular.module('risevision.common.components.logging')
       };
 
       var _stringify = function(object) {
-        if (object && object instanceof String) {
-          return exception;
+        if (typeof object === 'string') {
+          return object;
         } else {
           try {
             return JSON.stringify(object);  
@@ -26,16 +26,18 @@ angular.module('risevision.common.components.logging')
 
       factory.logException = function(exception, cause, caught) {
         var eventName = caught ? 'Exception' : 'Uncaught Exception';
-        var message = 'exception: ';
+        var message = '';
 
-        if (exception instanceof Error) {
-          message += exception.toString();
+        if (exception && exception instanceof Error) {
+          message += 'error: ' + exception.toString();
+        } else if (exception && exception.code) {
+          message += 'response: ' + exception.code + ': ' + exception.message;
         } else {
-          message += _stringify(exception);
+          message += 'value: ' + _stringify(exception);
         }
 
         if (cause) {
-          message += ' cause: ' + _stringify(cause);
+          message += '; cause: ' + _stringify(cause);
         }
 
         factory.logEvent(eventName, message);

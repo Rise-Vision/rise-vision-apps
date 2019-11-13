@@ -69,4 +69,63 @@ describe("Services: bigQueryLogging", function() {
     });    
   }); 
 
+  describe("logException:", function(){
+    beforeEach(function() {
+      sinon.stub(bigQueryLogging, "logEvent");
+    });
+
+    it("should handle caught exceptions",function() {
+      bigQueryLogging.logException("exception","details", true);
+
+      bigQueryLogging.logEvent.should.have.been.calledWith('Exception', sinon.match.string);
+    });
+
+    it("should handle uncaught exceptions",function() {
+      bigQueryLogging.logException("exception","details", false);
+
+      bigQueryLogging.logEvent.should.have.been.calledWith('Uncaught Exception', sinon.match.string);
+    });
+
+    it("should handle exception cause",function() {
+      bigQueryLogging.logException("exception","details", true);
+
+      bigQueryLogging.logEvent.should.have.been.calledWith(sinon.match.string, 'value: exception; cause: details');
+    });
+
+    it("should parse errors",function() {
+      var error = new Error("failure");
+      bigQueryLogging.logException(error, null, false);
+
+      bigQueryLogging.logEvent.should.have.been.calledWith(sinon.match.string, 'error: Error: failure');
+    });
+
+    it("should parse responses",function() {
+      var response = {
+        code: "404",
+        message: "Not found"
+      };
+      bigQueryLogging.logException(response, null, false);
+
+      bigQueryLogging.logEvent.should.have.been.calledWith(sinon.match.string, 'response: 404: Not found');
+    });
+
+    it("should stringify other objects",function() {
+      var exception = {
+        message: "Not found"
+      };
+      bigQueryLogging.logException(exception, null, false);
+
+      bigQueryLogging.logEvent.should.have.been.calledWith(sinon.match.string, 'value: {"message":"Not found"}');
+    });
+
+    it("should handle failure to stringify",function() {
+      var circularReference = {otherData: 123};
+      circularReference.myself = circularReference;
+
+      bigQueryLogging.logException(circularReference, null, false);
+
+      bigQueryLogging.logEvent.should.have.been.calledWith(sinon.match.string, 'value: [object Object]');
+    });
+
+  }); 
 });
