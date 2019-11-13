@@ -181,7 +181,7 @@ angular.module('risevision.common.header', [
     }
   ])
 
-  .factory('$exceptionHandler', ['$log', '$injector', function($log, $injector) {
+  .factory('$exceptionHandler', ['$log', '$injector', function ($log, $injector) {
     return function customExceptionHandler(exception, cause, caught) {
       // Prevents circular reference
       // https://stackoverflow.com/questions/22332130/injecting-http-into-angular-factoryexceptionhandler-results-in-a-circular-de

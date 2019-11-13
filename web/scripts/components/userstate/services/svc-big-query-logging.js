@@ -12,19 +12,19 @@ angular.module('risevision.common.components.logging')
         );
       };
 
-      var _stringify = function(object) {
+      var _stringify = function (object) {
         if (typeof object === 'string') {
           return object;
         } else {
           try {
-            return JSON.stringify(object);  
-          } catch(e) {
+            return JSON.stringify(object);
+          } catch (e) {
             return object;
           }
         }
-      }
+      };
 
-      factory.logException = function(exception, cause, caught) {
+      factory.logException = function (exception, cause, caught) {
         var eventName = caught ? 'Exception' : 'Uncaught Exception';
         var message = '';
 
