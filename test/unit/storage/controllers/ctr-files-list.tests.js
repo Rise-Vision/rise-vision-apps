@@ -123,7 +123,7 @@ describe('controller: Files List', function() {
   });
   
   it('should update subscription status', function(done) {
-    var subscriptionStatus = {statusCode: 'trial-available'};
+    var subscriptionStatus = {trialAvailable: true};
     $scope.$emit('subscription-status:changed', subscriptionStatus);
     
     setTimeout(function() {

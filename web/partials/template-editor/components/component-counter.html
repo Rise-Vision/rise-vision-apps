@@ -4,7 +4,7 @@
     <label ng-show="counterType == 'up'" class="u_margin-sm-top">Count up from:</label>
     <div class="radio">
       <input type="radio" ng-model="targetUnit" value="targetDate" id="specificDate" name="specificDate" ng-change="save()" aria-required="true" tabindex="1" required>
-      <label for="specificDate">
+      <label for="specificDate" id="specificDateLabel">
         A specific date:
       </label>
       <div class="input-group rise-date-picker radio-nested-input-group" ng-show="targetUnit == 'targetDate'">
@@ -23,14 +23,14 @@
                init-date="targetDatePicker.initDate"
                min-date="today"/>
         <span class="input-group-btn">
-          <button type="button" class="btn btn-primary" ng-click="openDatePicker($event)"><i class="fa fa-calendar"></i></button>
+          <button type="button" id="datePickerButton" class="btn btn-primary" ng-click="openDatePicker($event)"><i class="fa fa-calendar"></i></button>
         </span>
       </div>
     </div>
 
     <div class="radio">
       <input type="radio" ng-model="targetUnit" value="targetTime" id="specificTime" name="specificTime" ng-change="save()" aria-required="true" tabindex="1" required>
-      <label for="specificTime">
+      <label for="specificTime" id="specificTimeLabel">
         A specific time, every day:
       </label>
       <div class="input-group rise-date-picker radio-nested-input-group" ng-show="targetUnit == 'targetTime'">
@@ -46,7 +46,7 @@
                is-open="targetTimePicker.isOpen"
                />
         <span class="input-group-btn">
-          <button type="button" class="btn btn-primary" ng-click="openTimePicker($event)">
+          <button type="button" id="timePickerButton" class="btn btn-primary" ng-click="openTimePicker($event)">
             <streamline-icon name="clock"></streamline-icon>
           </button>
         </span>

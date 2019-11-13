@@ -47,9 +47,8 @@
       }
     ])
 
-    .factory('registeredAsRiseVisionUser', ['$q', 'getUserProfile',
-      '$cookies', '$log', 'userState',
-      function ($q, getUserProfile, $cookies, $log, userState) {
+    .factory('registeredAsRiseVisionUser', ['$q', '$log', 'getUserProfile', 'userState',
+      function ($q, $log, getUserProfile, userState) {
         return function () {
           var deferred = $q.defer();
 
@@ -57,19 +56,13 @@
             if (angular.isDefined(profile.email) &&
               angular.isDefined(profile.mailSyncEnabled)) {
               deferred.resolve(profile);
-            } else if ($cookies.get('surpressRegistration')) {
-              deferred.resolve({});
             } else {
               deferred.reject('registeredAsRiseVisionUser');
             }
           }, function (err) {
             if (err && err.code === 403) {
-              if ($cookies.get('surpressRegistration')) {
-                deferred.resolve({});
-              } else {
-                $log.debug('registeredAsRiseVisionUser rejected', err);
-                deferred.reject('registeredAsRiseVisionUser');
-              }
+              $log.debug('registeredAsRiseVisionUser rejected', err);
+              deferred.reject('registeredAsRiseVisionUser');
             } else {
               deferred.reject();
             }

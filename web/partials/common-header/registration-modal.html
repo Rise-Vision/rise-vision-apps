@@ -37,12 +37,6 @@
               class="help-block validation-error-message-company-name">Enter organization.</p>
           </div>
 
-          <!-- Phone Number -->
-          <div class="form-group">
-            <label for="phoneNumber">Phone Number</label>
-            <input type="tel" class="form-control" name="phoneNumber" id="phoneNumber" tabindex="1" ng-model="profile.telephone">
-          </div>
-
           <!-- Industry -->
           <div class="form-group" ng-class="{'has-error': forms.registrationForm.companyIndustry.$invalid && !forms.registrationForm.companyIndustry.$pristine}" ng-show="newUser">
             <label for="companyIndustry">Tell us your Industry to help us make your Display look great *</label>

@@ -6,14 +6,6 @@ describe("controller: register button ", function() {
   beforeEach(module("risevision.common.header"));
   beforeEach(module(function ($provide, $translateProvider) {
     
-    $provide.factory("$cookies", function() {
-      return {
-        remove: function() {
-          cookieStored = false;
-        }
-      };
-    });
-    
     $provide.factory("uiFlowManager", function(){
       return {
         invalidateStatus : function(status){
@@ -38,16 +30,14 @@ describe("controller: register button ", function() {
 
     $translateProvider.useLoader("customLoader");
   }));
-  var $scope, cookieStored, invalidatedStatus;
+  var $scope, invalidatedStatus;
   
   beforeEach(function() {
-    cookieStored = true;
     inject(function($injector, $rootScope, $controller){
       $scope = $rootScope.$new();
 
       $controller("RegisterButtonCtrl", {
         $scope : $scope,
-        $cookies : $injector.get("$cookies"),
         uiFlowManager: $injector.get("uiFlowManager")
       });
       $scope.$digest();
@@ -55,14 +45,13 @@ describe("controller: register button ", function() {
   });
   
   it("should initialize",function(){
-    expect($scope).to.be.truely;
-    expect($scope.register).to.exist;
+    expect($scope).to.be.ok;
+    expect($scope.register).to.be.a("function");
   });
 
   it("should initiate registration: ", function() {
     $scope.register();
 
-    expect(cookieStored).to.be.false;
     expect(invalidatedStatus).to.equal("registrationComplete");
   });
 });

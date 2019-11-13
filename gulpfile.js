@@ -66,6 +66,7 @@ var unitTestFiles = [
   "web/bower_components/angular-ui-codemirror/ui-codemirror.js",
   "web/bower_components/angular-truncate/src/truncate.js",
   "web/bower_components/angular-slugify/angular-slugify.js",
+  'web/bower_components/oclazyload/dist/ocLazyLoad.js',
   'web/bower_components/Sortable/Sortable.js',
   "web/bower_components/rv-angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js",
   "web/bower_components/widget-settings-ui-components/dist/js/angular/position-setting.js",
@@ -287,6 +288,14 @@ gulp.task("images", function () {
     })
 });
 
+gulp.task("vendor", function () {
+  return gulp.src(['./web/vendor/**/*.*'])
+    .pipe(gulp.dest("dist/vendor"))
+    .on('error',function(e){
+      console.error(String(e));
+    })
+});
+
 gulp.task("static-html", function() {
   return gulp.src(['./web/loading-preview.html', './web/pricing-component.js', './web/pricing-component.css'])
     .pipe(gulp.dest('dist/'));
@@ -306,7 +315,7 @@ gulp.task('build-pieces', function (cb) {
 });
 
 gulp.task('build', function (cb) {
-  runSequence(["clean", ], ['build-pieces', 'pretty'], ["html", "static-html", "images"], cb);
+  runSequence(["clean", ], ['build-pieces', 'pretty'], ["html", "static-html", "images", "vendor"], cb);
 });
 
 /*---- testing ----*/

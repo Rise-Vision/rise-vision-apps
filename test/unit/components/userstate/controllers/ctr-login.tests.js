@@ -4,45 +4,16 @@ describe("controller: Log In", function() {
   beforeEach(module(function ($provide) {
     $provide.service("userAuthFactory", function() {
       return {
-        authenticate: function(forceAuth, credentials) {
-          var deferred = Q.defer();
-
-          expect(forceAuth).to.be.true;
-
-          if (credentials) {
-            expect(credentials).to.be.ok;
-            expect(credentials.username).to.equal("testUser");
-          }
-          
-          if (loginSuccess) {
-            deferred.resolve();
-          } else {
-            deferred.reject({});
-          }
-
-          return deferred.promise;
-        }
+        authenticate: sinon.stub().returns(Q.resolve({}))
       };
     });
     $provide.service("customAuthFactory", function() {
       return {
-        addUser: function(credentials) {
-          var deferred = Q.defer();
-
-          expect(credentials).to.be.ok;
-          expect(credentials.username).to.equal("testUser");
-          
-          if (loginSuccess) {
-            deferred.resolve();
-          } else {
-            deferred.reject();
-          }
-
-          return deferred.promise;
-        }
+        addUser: sinon.stub().returns(Q.reject({})),
+        login: sinon.stub().returns(Q.reject({}))
       };
     });
-    
+
     $provide.service("urlStateService", function() {
       return urlStateService = {
         redirectToState: sinon.spy()
@@ -66,17 +37,17 @@ describe("controller: Log In", function() {
         stopGlobal : sinon.spy()
       };
     });
-    
+
   }));
-  var $scope, $loading, loginSuccess, uiFlowManager, urlStateService, userAuthFactory;
+  var $scope, $loading, uiFlowManager, urlStateService, customAuthFactory, userAuthFactory;
   beforeEach(function () {
-    loginSuccess = false;
     
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
-      
+
       $loading = $injector.get("$loading");
       uiFlowManager = $injector.get("uiFlowManager");
+      customAuthFactory = $injector.get("customAuthFactory");
       userAuthFactory = $injector.get("userAuthFactory");
 
       $controller("LoginCtrl", {
@@ -86,14 +57,14 @@ describe("controller: Log In", function() {
         uiFlowManager: uiFlowManager
       });
       $scope.$digest();
-      
+
       $scope.credentials = {
         username: "testUser"
       };
       $scope.forms = {
         loginForm: {
           $valid: true
-        }  
+        }
       };
     });
   });
@@ -112,10 +83,10 @@ describe("controller: Log In", function() {
 
   describe("googleLogin: ", function() {
     it("should handle successful login", function(done) {
-      loginSuccess = true;
+      userAuthFactory.authenticate.returns(Q.resolve());
 
       $scope.googleLogin("endStatus");
-      
+
       $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
 
       setTimeout(function(){
@@ -125,10 +96,10 @@ describe("controller: Log In", function() {
         done();
       },10);
     });
-    
+
     it("should handle login failure", function(done) {
       $scope.googleLogin("endStatus");
-      
+
       $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
 
       setTimeout(function(){
@@ -139,7 +110,7 @@ describe("controller: Log In", function() {
       },10);
     });
   });
-  
+
   describe("customLogin: ", function() {
     it("should clear previous errors", function() {
       $scope.errors = {
@@ -153,87 +124,228 @@ describe("controller: Log In", function() {
     it("should not submit if form is invalid", function(done) {
       $scope.forms.loginForm.$valid = false;
       $scope.customLogin("endStatus");
-      
+
       $loading.startGlobal.should.not.have.been.called;
 
       setTimeout(function(){
-        expect($scope.errors.loginError).to.not.be.ok;
+        expect($scope.errors).to.deep.equal({});
 
         done();
       },10);
     });
 
     it("should handle successful login", function(done) {
-      loginSuccess = true;
+      customAuthFactory.login.returns(Q.resolve());
 
       $scope.customLogin("endStatus");
-      
+
       $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+      customAuthFactory.login.should.have.been.calledWith($scope.credentials);
 
       setTimeout(function(){
+        userAuthFactory.authenticate.should.have.been.calledWith(true);
+
         urlStateService.redirectToState.should.have.been.calledWith("currentState");
 
         $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
         uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
 
-        expect($scope.errors.loginError).to.not.be.ok;
+        expect($scope.errors).to.deep.equal({});
 
         done();
       },10);
     });
-    
-    it("should handle login failure", function(done) {
-      $scope.customLogin("endStatus");
+
+    describe("errors:", function() {
+      it("should handle login failure", function(done) {
+        $scope.customLogin("endStatus");
+
+        $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+
+        setTimeout(function(){
+          userAuthFactory.authenticate.should.not.have.been.called;
+
+          $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
+          uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
+
+          expect($scope.errors.messageTitle).to.equal('Oops, an error occurred while trying to sign you in.');
+          expect($scope.errors.message).to.equal('Please try again or <a target="_blank" href="mailto:support@risevision.com">reach out to our Support team</a> if the problem persists.');
+          expect($scope.errors.genericError).to.be.falsey;
+          expect($scope.errors.userAccountLockoutError).to.be.falsey;
+          expect($scope.messages.isGoogleAccount).to.be.falsey;
+
+          done();
+        },10);
+      });
+
+      it("should handle generic 400 error", function(done) {
+        customAuthFactory.login.returns(Q.reject({ status: 499 }));
+
+        $scope.customLogin("endStatus");
+
+        $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+
+        setTimeout(function(){
+          userAuthFactory.authenticate.should.not.have.been.called;
+
+          $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
+          uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
+
+          expect($scope.errors.genericError).to.be.true;
+          expect($scope.errors.userAccountLockoutError).to.be.falsey;
+          expect($scope.messages.isGoogleAccount).to.be.falsey;
+
+          done();
+        },10);
+      });
       
-      $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+      it("should reject login of Google accounts", function(done) {
+        customAuthFactory.login.returns(Q.reject({ status: 400 }));
+        $scope.customLogin("endStatus");
 
-      setTimeout(function(){
-        $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
-        uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
+        $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
 
-        expect($scope.errors.loginError).to.be.true;
-        expect($scope.messages.isGoogleAccount).to.be.falsey;
-        expect($scope.errors.unconfirmedError).to.be.falsey;
+        setTimeout(function(){
+          userAuthFactory.authenticate.should.not.have.been.called;
 
-        done();
-      },10);
+          $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
+          uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
+
+          expect($scope.errors.genericError).to.be.falsey;
+          expect($scope.messages.isGoogleAccount).to.be.true;
+
+          done();
+        },10);
+      });
+
+      it("should handle user account lockout", function(done) {
+        customAuthFactory.login.returns(Q.reject({ status: 403 }));
+
+        $scope.customLogin("endStatus");
+
+        $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+
+        setTimeout(function(){
+          $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
+          uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
+
+          expect($scope.errors.genericError).to.be.falsey;
+          expect($scope.errors.userAccountLockoutError).to.be.true;
+          expect($scope.messages.isGoogleAccount).to.be.falsey;
+
+          done();
+        },10);
+      });
+
+      it("should handle authenticate failure", function(done) {
+        customAuthFactory.login.returns(Q.resolve());
+        userAuthFactory.authenticate.returns(Q.reject({}));
+
+        $scope.customLogin("endStatus");
+        
+        $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+        customAuthFactory.login.should.have.been.calledWith($scope.credentials);
+
+        setTimeout(function(){
+          userAuthFactory.authenticate.should.have.been.calledWith(true);
+
+          $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
+          uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
+
+          expect($scope.errors.messageTitle).to.equal('Oops, an error occurred while trying to sign you in.');
+          expect($scope.errors.message).to.equal('Please try again or <a target="_blank" href="mailto:support@risevision.com">reach out to our Support team</a> if the problem persists.');
+          expect($scope.errors.genericError).to.be.falsey;
+          expect($scope.messages.isGoogleAccount).to.be.falsey;
+
+          done();
+        },10);
+      });
+
+      it("should handle no error", function(done) {
+        customAuthFactory.login.returns(Q.reject());
+
+        $scope.customLogin("endStatus");
+
+        $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+
+        setTimeout(function(){
+          userAuthFactory.authenticate.should.not.have.been.called;
+
+          $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
+          uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
+
+          expect($scope.errors.messageTitle).to.equal('Oops, an error occurred while trying to sign you in.');
+          expect($scope.errors.message).to.equal('Please try again or <a target="_blank" href="mailto:support@risevision.com">reach out to our Support team</a> if the problem persists.');
+          expect($scope.errors.genericError).to.be.falsey;
+          expect($scope.errors.userAccountLockoutError).to.be.falsey;
+          expect($scope.messages.isGoogleAccount).to.be.falsey;
+
+          done();
+        },10);
+      });
+
+      it("should handle server errors", function(done) {
+        customAuthFactory.login.returns(Q.reject({ status: 500 }));
+
+        $scope.customLogin("endStatus");
+
+        $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+
+        setTimeout(function(){
+          $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
+          uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
+
+          expect($scope.errors.messageTitle).to.equal('Oops, an error occurred while trying to sign you in.');
+          expect($scope.errors.message).to.equal('Please try again or <a target="_blank" href="mailto:support@risevision.com">reach out to our Support team</a> if the problem persists.');
+          expect($scope.errors.genericError).to.be.falsey;
+          expect($scope.messages.isGoogleAccount).to.be.falsey;
+
+          done();
+        },10);
+      });
+
+      it("should handle server errors with a custom message", function(done) {
+        customAuthFactory.login.returns(Q.reject({ status: 500, message: "Server error" }));
+
+        $scope.customLogin("endStatus");
+
+        $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+
+        setTimeout(function(){
+          $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
+          uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
+
+          expect($scope.errors.messageTitle).to.equal('Oops, an error occurred while trying to sign you in.');
+          expect($scope.errors.message).to.equal('Server error');
+          expect($scope.errors.genericError).to.be.falsey;
+          expect($scope.messages.isGoogleAccount).to.be.falsey;
+
+          done();
+        },10);
+      });
+
+      it("should handle network errors", function(done) {
+        customAuthFactory.login.returns(Q.reject({ status: -1, message: "Server error" }));
+
+        $scope.customLogin("endStatus");
+
+        $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+
+        setTimeout(function(){
+          $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
+          uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
+
+          expect($scope.errors.messageTitle).to.equal('Hmm, we can\'t sign you in because there\'s a problem with your connectivity.');
+          expect($scope.errors.message).to.equal('Please check your connection and proxy or firewall settings and try again.');
+          expect($scope.errors.genericError).to.be.falsey;
+          expect($scope.messages.isGoogleAccount).to.be.falsey;
+
+          done();
+        },10);
+      });
+
     });
 
-    it("should reject login of Google accounts", function(done) {
-      sinon.stub(userAuthFactory, "authenticate").returns(Q.reject({ status: 400 }));
-      $scope.customLogin("endStatus");
-
-      $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
-
-      setTimeout(function(){
-        $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
-        uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
-
-        expect($scope.errors.loginError).to.be.falsey;
-        expect($scope.messages.isGoogleAccount).to.be.true;
-        expect($scope.errors.unconfirmedError).to.be.falsey;
-
-        done();
-      },10);
-    });
-
-    it("should reject login of unconfirmed accounts", function(done) {
-      sinon.stub(userAuthFactory, "authenticate").returns(Q.reject({ status: 409 }));
-      $scope.customLogin("endStatus");
-
-      $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
-
-      setTimeout(function(){
-        $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
-        uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
-
-        expect($scope.errors.loginError).to.be.falsey;
-        expect($scope.messages.isGoogleAccount).to.be.falsey;
-        expect($scope.errors.unconfirmedError).to.be.true;
-
-        done();
-      },10);
-    });
   });
 
   describe("createAccount: ", function() {
@@ -245,37 +357,89 @@ describe("controller: Log In", function() {
 
       expect($scope.errors.someError).to.not.be.ok;
     });
-    
-    it("should not submit if form is invalid", function() {
+
+    it("should not submit if form is invalid", function(done) {
       $scope.forms.loginForm.$valid = false;
       $scope.createAccount("endStatus");
-      
+
       $loading.startGlobal.should.not.have.been.called;
-    });
-
-    it("should create account", function(done) {
-      loginSuccess = true;
-
-      $scope.createAccount("endStatus");
-      
-      $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
 
       setTimeout(function(){
-        $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
-        uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
-
-        expect($scope.errors.confirmationRequired).to.be.true;
+        expect($scope.errors).to.deep.equal({});
 
         done();
       },10);
     });
 
+    it("should handle successful account creation and login user", function(done) {
+      customAuthFactory.addUser.returns(Q.resolve());
+
+      $scope.createAccount("endStatus");
+
+      $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+      customAuthFactory.addUser.should.have.been.calledWith($scope.credentials);
+
+      setTimeout(function(){
+        userAuthFactory.authenticate.should.have.been.calledWith(true);
+
+        urlStateService.redirectToState.should.have.been.calledWith("currentState");
+
+        $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
+        uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
+
+        expect($scope.errors).to.deep.equal({});
+
+        done();
+      },10);
+    });
+    
     it("should handle failure to create account", function(done) {
       $scope.createAccount("endStatus");
-      
+
       $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
 
       setTimeout(function(){
+        userAuthFactory.authenticate.should.not.have.been.called;
+
+        $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
+        uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
+
+        expect($scope.errors.messageTitle).to.equal('Oops, an error occurred while trying to sign you up.');
+
+        done();
+      },10);
+    });
+
+    it("should handle authenticate failure", function(done) {
+      customAuthFactory.addUser.returns(Q.resolve());
+      userAuthFactory.authenticate.returns(Q.reject({}));
+
+      $scope.createAccount("endStatus");
+      
+      $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+      customAuthFactory.addUser.should.have.been.calledWith($scope.credentials);
+
+      setTimeout(function(){
+        userAuthFactory.authenticate.should.have.been.calledWith(true);
+
+        $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
+        uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
+
+        expect($scope.errors.messageTitle).to.equal('Oops, an error occurred while trying to sign you up.');
+
+        done();
+      },10);
+    });
+
+    it("should reject on failure to register user", function(done) {
+      customAuthFactory.addUser.returns(Q.reject({ status: 409 }));
+      $scope.createAccount("endStatus");
+
+      $loading.startGlobal.should.have.been.calledWith("auth-buttons-login");
+
+      setTimeout(function(){
+        userAuthFactory.authenticate.should.not.have.been.called;
+
         $loading.stopGlobal.should.have.been.calledWith("auth-buttons-login");
         uiFlowManager.invalidateStatus.should.have.been.calledWith("endStatus");
 
@@ -284,6 +448,7 @@ describe("controller: Log In", function() {
         done();
       },10);
     });
+
   });
 
 });

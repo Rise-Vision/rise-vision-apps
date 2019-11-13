@@ -9,7 +9,7 @@
 </div>
 
 <!-- GOOGLE API -->
-<div class="col-xs-12 col-md-8" ng-show="!errors.confirmationRequired">
+<div class="col-xs-12 col-md-8">
   <button class="btn btn-google-auth btn-hg" id="sign-up-google-link" ng-click="googleLogin('registrationComplete')">
     <span>
       <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg">
@@ -18,7 +18,7 @@
   </button>
 </div>
 
-<div class="section-divider col-xs-12 col-md-8 u_margin-md-top" ng-show="!errors.confirmationRequired" ng-if="!FORCE_GOOGLE_AUTH">
+<div class="section-divider col-xs-12 col-md-8 u_margin-md-top" ng-if="!FORCE_GOOGLE_AUTH">
   <div></div>
     <span>OR</span>
     <div></div>
@@ -28,7 +28,7 @@
 <div class="col-md-8 col-xs-12" ng-if="!FORCE_GOOGLE_AUTH">
 	<div ng-include="'partials/components/userstate/auth-form.html'"></div>
 
-	<div class="form-group" ng-show="!errors.confirmationRequired">
+	<div class="form-group">
 		<button id="sign-up-button" class="btn btn-primary btn-hg" type="submit" form="forms.loginForm" ng-click="createAccount('registrationComplete')">
 			<span translate="Sign Up"></span>
 		</button>

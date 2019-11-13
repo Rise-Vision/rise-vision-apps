@@ -36,7 +36,8 @@ angular.module('risevision.apps.services')
       };
 
       var _shouldShowAnnouncement = function () {
-        if (CHECK_TEMPLATES_ANNOUNCEMENT !== 'true' || !userState.isEducationCustomer() || _isDismissed() || !_isOlderThan15Days()) {
+        if (CHECK_TEMPLATES_ANNOUNCEMENT !== 'true' || !userState.isEducationCustomer() || _isDismissed() ||
+          !_isOlderThan15Days()) {
           return $q.reject();
         }
 

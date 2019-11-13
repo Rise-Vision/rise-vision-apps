@@ -8,6 +8,7 @@
   var SlidesComponentScenarios = require('./cases/components/slides.js');
   var VideoComponentScenarios = require('./cases/components/video.js');
   var RssComponentScenarios = require('./cases/components/rss.js');
+  var CounterComponentScenarios = require('./cases/components/counter.js');
 
   describe('Template Editor 2', function() {
 
@@ -34,6 +35,7 @@
     var slidesComponentScenarios = new SlidesComponentScenarios();
     var videoComponentScenarios = new VideoComponentScenarios();
     var rssComponentScenarios = new RssComponentScenarios();
+    var counterComponentScenarios = new CounterComponentScenarios();
 
     after(function() {
       // Loading the Presentation List is a workaround to a Chrome Driver issue that has it fail to click on elements over the Preview iframe

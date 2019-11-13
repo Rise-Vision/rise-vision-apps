@@ -65,11 +65,12 @@ describe("service: customAuthFactory:", function() {
   it("should exist",function(){
     expect(customAuthFactory).to.be.ok;
     expect(customAuthFactory.authenticate).to.be.a("function");
+    expect(customAuthFactory.login).to.be.a("function");
     expect(customAuthFactory.addUser).to.be.a("function");
   });
-  
-  describe("authenticate", function() {
-    it("should reject if no credentials are provided and no token exists",function(done){
+
+  describe("authenticate:", function() {
+    it("should reject if no token exists",function(done){
       customAuthFactory.authenticate()
         .then(function() {
           done("authenticated");
@@ -96,6 +97,18 @@ describe("service: customAuthFactory:", function() {
           done("error");
         });
     });
+  });  
+
+  describe("login:", function() {
+    it("should reject if no credentials are provided",function(done){
+      customAuthFactory.login()
+        .then(function() {
+          done("authenticated");
+        })
+        .then(null, function() {
+          done();
+        });
+    });
 
     it("should resolve if correct username/password are provided",function(done){
       authenticateResult = { 
@@ -104,7 +117,7 @@ describe("service: customAuthFactory:", function() {
         }
       };
 
-      customAuthFactory.authenticate({username: "testUser", password: "testPass"})
+      customAuthFactory.login({username: "testUser", password: "testPass"})
         .then(function(userToken) {
           var token = {
             access_token: "newToken",
@@ -115,7 +128,7 @@ describe("service: customAuthFactory:", function() {
           gapiLoader.should.have.been.called;
           gapiAuth.setToken.should.have.been.calledWith(token);
 
-          expect(userToken).to.deep.equal({
+          expect(userState._state.userToken).to.deep.equal({
             email: "testUser",
             token: token
           });
@@ -127,10 +140,10 @@ describe("service: customAuthFactory:", function() {
         });
     });
     
-    it("should reject if authenticate call fails",function(done){
+    it("should reject if login call fails",function(done){
       authenticateResult = false;
 
-      customAuthFactory.authenticate({username: "testUser", password: "testPass"})
+      customAuthFactory.login({username: "testUser", password: "testPass"})
         .then(function() {
           done("authenticated");
         })
@@ -139,12 +152,12 @@ describe("service: customAuthFactory:", function() {
         });
     });
     
-    it("should reject if no token is provided",function(done){
+    it("should reject if no token is returned",function(done){
       authenticateResult = { 
         result: {}
       };
 
-      customAuthFactory.authenticate({username: "testUser", password: "testPass"})
+      customAuthFactory.login({username: "testUser", password: "testPass"})
         .then(function() {
           done("authenticated");
         })
@@ -166,17 +179,37 @@ describe("service: customAuthFactory:", function() {
         });
     });
 
-    it("should add user", function(done) {
+    it("should resolve and authenticate if user is added successfully",function(done){
+      authenticateResult = { 
+        result: {
+          item: "newToken"
+        }
+      };
+
       customAuthFactory.addUser({username: "newUser", password: "newPass"})
-        .then(function(){
+        .then(function(userToken) {
+          var token = {
+            access_token: "newToken",
+            expires_in: "3600",
+            token_type: "Bearer"
+          };
+
+          gapiLoader.should.have.been.called;
+          gapiAuth.setToken.should.have.been.calledWith(token);
+
+          expect(userState._state.userToken).to.deep.equal({
+            email: "newUser",
+            token: token
+          });
+
           done();
         })
         .then(null, function() {
           done("error");
         });
     });
-
-    it("should handle failure to add user if newUser variable is true",function(done){
+    
+    it("should reject if add user call fails",function(done){
       authenticateResult = false;
 
       customAuthFactory.addUser({username: "newUser", password: "newPass"})
@@ -187,6 +220,21 @@ describe("service: customAuthFactory:", function() {
           done();
         });
     });
+    
+    it("should reject if no token is returned",function(done){
+      authenticateResult = { 
+        result: {}
+      };
+
+      customAuthFactory.addUser({username: "newUser", password: "newPass"})
+        .then(function() {
+          done("authenticated");
+        })
+        .then(null, function() {
+          done();
+        });
+    });
+
   });
 
 });

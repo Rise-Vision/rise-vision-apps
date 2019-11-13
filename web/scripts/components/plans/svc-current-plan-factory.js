@@ -18,6 +18,7 @@
             plan.status = company.planSubscriptionStatus;
             plan.trialPeriod = company.planTrialPeriod;
             plan.currentPeriodEndDate = new Date(company.planCurrentPeriodEndDate);
+            plan.trialExpiryDate = new Date(company.planTrialExpiryDate);
 
           } else {
             plan = _.cloneDeep(_plansByType.free);

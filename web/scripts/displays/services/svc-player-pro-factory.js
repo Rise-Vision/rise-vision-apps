@@ -9,13 +9,13 @@ angular.module('risevision.displays.services')
   .value('CHROMEOS_SCREENSHOT_PLAYER_VERSION', '2018.08.17.8388')
   .factory('playerProFactory', ['$q', '$modal', 'userState',
     'parsePlayerDate',
-    'getLatestPlayerVersion', 'STORE_URL', 'IN_RVA_PATH',
-    'PLAYER_PRO_PRODUCT_ID', 'PLAYER_VERSION_DATE_REGEX',
+    'getLatestPlayerVersion',
+    'PLAYER_VERSION_DATE_REGEX',
     'SCREENSHOT_PLAYER_VERSION', 'OFFLINE_PLAY_PLAYER_VERSION', 'DISPLAY_CONTROL_PLAYER_VERSION',
     'CHROMEOS_PLAYER_VERSION', 'CHROMEOS_SCREENSHOT_PLAYER_VERSION',
     function ($q, $modal, userState,
       parsePlayerDate, getLatestPlayerVersion,
-      STORE_URL, IN_RVA_PATH, PLAYER_PRO_PRODUCT_ID, PLAYER_VERSION_DATE_REGEX,
+      PLAYER_VERSION_DATE_REGEX,
       SCREENSHOT_PLAYER_VERSION, OFFLINE_PLAY_PLAYER_VERSION, DISPLAY_CONTROL_PLAYER_VERSION,
       CHROMEOS_PLAYER_VERSION, CHROMEOS_SCREENSHOT_PLAYER_VERSION) {
       var factory = {};
@@ -32,12 +32,6 @@ angular.module('risevision.displays.services')
       };
 
       _loadPlayerVersion();
-
-      factory.getProductLink = function () {
-        return (STORE_URL + IN_RVA_PATH
-          .replace('productId', PLAYER_PRO_PRODUCT_ID)
-          .replace('companyId', userState.getSelectedCompanyId()));
-      };
 
       var _compareVersion = function (minimumVersion, currentVersion) {
         return PLAYER_VERSION_DATE_REGEX.test(currentVersion) && currentVersion >= minimumVersion;

@@ -1,7 +1,7 @@
 "use strict";
 describe("service: storeAuthorization:", function() {
-  var STORE_SERVER_URL = "http://example.com";
-  var STORE_AUTHORIZATION_URL = STORE_SERVER_URL + "/v1/widget/auth";
+  var STORE_SERVER_URL = "http://example.com/";
+  var STORE_AUTHORIZATION_URL = STORE_SERVER_URL + "v1/widget/auth";
   
   beforeEach(module("risevision.store.authorization"));
 

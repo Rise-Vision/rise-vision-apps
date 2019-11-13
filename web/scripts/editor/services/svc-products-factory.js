@@ -3,9 +3,9 @@
 angular.module('risevision.editor.services')
   .constant('TEMPLATES_TYPE', 'Templates')
   .constant('HTML_TEMPLATE_TYPE', 'HTMLTemplates')
-  .factory('productsFactory', ['$q', '$filter', 'store', 'subscriptionStatusFactory', 'TEMPLATES_TYPE',
+  .factory('productsFactory', ['$q', '$filter', 'storeProduct', 'subscriptionStatusFactory', 'TEMPLATES_TYPE',
     'UNLISTED_STORE_PRODUCTS',
-    function ($q, $filter, store, subscriptionStatusFactory, TEMPLATES_TYPE, UNLISTED_STORE_PRODUCTS) {
+    function ($q, $filter, storeProduct, subscriptionStatusFactory, TEMPLATES_TYPE, UNLISTED_STORE_PRODUCTS) {
       var factory = {};
 
       factory.isUnlistedProduct = function (productCode) {
@@ -34,7 +34,7 @@ angular.module('risevision.editor.services')
           unlistedProducts = _getUnlistedProducts();
         }
 
-        return $q.all([store.product.list(search, cursor), unlistedProducts])
+        return $q.all([storeProduct.list(search, cursor), unlistedProducts])
           .then(function (results) {
             var filteredUnlistedProducts = search ? $filter('filter')(results[1], search.query) : results[1];
 

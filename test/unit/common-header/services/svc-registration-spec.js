@@ -99,10 +99,10 @@ describe("Services: Registration", function() {
     
   describe("registeredAsRiseVisionUser: ", function() {
     var registeredAsRiseVisionUser;
-    var registered, error, supressed;
+    var registered, error;
     
     beforeEach(module(function($provide) {
-      registered = false, error = false, supressed = false;
+      registered = false, error = false;
       
       $provide.factory("getUserProfile", [function() {
         return function() {
@@ -122,14 +122,6 @@ describe("Services: Registration", function() {
           return deferred.promise;
         };
       }]);
-      
-      $provide.factory("$cookies", function() {
-        return {
-          get: function() {
-            return supressed;
-          }
-        };
-      });
     }));
     
     beforeEach(function() {      
@@ -166,18 +158,6 @@ describe("Services: Registration", function() {
       .then(null,done);
     });
 
-    it("profile data missing & supressed should succeed", function(done) {
-      registered = false;
-      supressed = true;
-      
-      registeredAsRiseVisionUser().then(function(result) {
-        expect(result).to.deep.equal({});
-        
-        done();
-      })
-      .then(null,done);
-    });
-
     it("profile not found should fail on 403 error", function(done) {
       error = {code: 403};
       
@@ -199,18 +179,6 @@ describe("Services: Registration", function() {
       }, function(result) {
         expect(result).to.not.be.ok;
 
-        done();
-      })
-      .then(null,done);
-    });
-
-    it("profile data missing & supressed should succeed", function(done) {
-      error = true;
-      supressed = true;
-      
-      registeredAsRiseVisionUser().then(function(result) {
-        expect(result).to.deep.equal({});
-        
         done();
       })
       .then(null,done);

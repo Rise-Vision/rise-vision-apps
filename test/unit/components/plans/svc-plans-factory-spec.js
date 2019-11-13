@@ -81,15 +81,30 @@ describe("Services: plans factory", function() {
     
   });
 
-  it("initVolumePlanTrial: ", function() {
-    plansFactory.initVolumePlanTrial();
+  describe("initVolumePlanTrial:", function() {
+    it("should update company settings", function() {
+      plansFactory.initVolumePlanTrial();
 
-    userState.updateCompanySettings.should.have.been.calledWith({
-      planProductCode: VOLUME_PLAN.productCode,
-      planTrialPeriod: VOLUME_PLAN.trialPeriod,
-      planSubscriptionStatus: "Trial",
-      playerProTotalLicenseCount: VOLUME_PLAN.proLicenseCount,
-      playerProAvailableLicenseCount: VOLUME_PLAN.proLicenseCount
+      userState.updateCompanySettings.should.have.been.calledWith({
+        planProductCode: VOLUME_PLAN.productCode,
+        planTrialPeriod: VOLUME_PLAN.trialPeriod,
+        planTrialExpiryDate: sinon.match.date,
+        planSubscriptionStatus: "Trial",
+        playerProTotalLicenseCount: VOLUME_PLAN.proLicenseCount,
+        playerProAvailableLicenseCount: VOLUME_PLAN.proLicenseCount
+      });
+
+    });
+    
+    it("should calculate trial expiry", function() {
+      plansFactory.initVolumePlanTrial();
+
+      var plan = userState.updateCompanySettings.getCall(0).args[0];
+      var daysDiff = function (date1, date2) {
+        return Math.ceil(Math.abs((date1 - date2) / 1000 / 60 / 60 / 24));
+      };
+
+      expect(daysDiff(plan.planTrialExpiryDate, new Date())).to.equal(plan.planTrialPeriod);
     });
   });
 

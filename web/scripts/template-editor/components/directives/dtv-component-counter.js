@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentCounter', ['templateEditorFactory', 'templateEditorUtils',
-    function (templateEditorFactory, utils) {
+  .directive('templateComponentCounter', ['$document', '$timeout', 'templateEditorFactory', 'templateEditorUtils',
+    function ($document, $timeout, templateEditorFactory, utils) {
       return {
         restrict: 'E',
         scope: true,
@@ -55,6 +55,8 @@ angular.module('risevision.template-editor.directives')
                   $scope.targetTime = utils.absoluteTimeToMeridian($scope.targetTime);
                   $scope.targetUnit = 'targetTime';
                 }
+
+                _registerDatePickerClosingWatch();
               };
 
               $scope.save = function () {
@@ -63,7 +65,8 @@ angular.module('risevision.template-editor.directives')
                   $scope.setAttributeData($scope.componentId, 'time', null);
                 } else if ($scope.targetUnit === 'targetTime') {
                   $scope.setAttributeData($scope.componentId, 'date', null);
-                  $scope.setAttributeData($scope.componentId, 'time', utils.meridianTimeToAbsolute($scope.targetTime));
+                  $scope.setAttributeData($scope.componentId, 'time', utils.meridianTimeToAbsolute($scope
+                    .targetTime));
                 }
 
                 if ($scope.counterType === 'down') {
@@ -84,6 +87,35 @@ angular.module('risevision.template-editor.directives')
 
                 $scope.targetTimePicker.isOpen = !$scope.targetTimePicker.isOpen;
               };
+
+              function _registerDatePickerClosingWatch() {
+                $scope.$watch('targetDatePicker.isOpen', function (isOpen) {
+                  $timeout(function () {
+                    if (isOpen) {
+                      $document.on('touchstart', _datePickerClickOutsideHander);
+                    } else {
+                      $document.off('touchstart', _datePickerClickOutsideHander);
+                    }
+                  }, 100);
+                });
+              }
+
+              function _datePickerClickOutsideHander(event) {
+                if (!$scope.targetDatePicker.isOpen) {
+                  return;
+                }
+
+                var datePicker = $document[0].querySelector('.counter-container [datepicker]');
+                var datePickerPopup = $document[0].querySelector('.counter-container [datepicker-popup-wrap]');
+                var dpContainsTarget = datePicker.contains(event.target);
+                var popupContainsTarget = datePickerPopup.contains(event.target);
+
+                if (!(dpContainsTarget || popupContainsTarget)) {
+                  $scope.$apply(function () {
+                    $scope.targetDatePicker.isOpen = false;
+                  });
+                }
+              }
             }
           };
         }

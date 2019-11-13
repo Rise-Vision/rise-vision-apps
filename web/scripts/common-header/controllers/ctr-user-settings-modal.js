@@ -40,6 +40,12 @@ angular.module('risevision.common.header')
         }
       });
 
+      $scope.$watch('userPassword.currentPassword', function () {
+        if ($scope.showChangePassword) {
+          $scope.forms.userSettingsForm.currentPassword.$setValidity('currentPasswordNotValid', true);
+        }
+      });
+
       $scope.isUserAdmin = userState.isUserAdmin();
       $scope.username = username;
 
@@ -90,7 +96,7 @@ angular.module('risevision.common.header')
 
       $scope.save = function () {
         if ($scope.showChangePassword) {
-          $scope.currentPasswordNotValid = false;
+          $scope.forms.userSettingsForm.currentPassword.$setValidity('currentPasswordNotValid', true);
         }
 
         if ($scope.forms.userSettingsForm.$valid) {
@@ -112,7 +118,7 @@ angular.module('risevision.common.header')
                 var newError = err.result.error;
 
                 if (newError.code === 409) {
-                  $scope.currentPasswordNotValid = true;
+                  $scope.forms.userSettingsForm.currentPassword.$setValidity('currentPasswordNotValid', false);
                   newError.changePassword = true;
                 }
                 return $q.reject(newError);
