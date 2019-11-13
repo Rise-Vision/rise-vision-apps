@@ -181,6 +181,14 @@ angular.module('risevision.common.header', [
     }
   ])
 
+  .factory('$exceptionHandler', ['$log', '$injector', function($log, $injector) {
+    return function customExceptionHandler(exception, cause) {
+      var bigQueryLogging = $injector.get('bigQueryLogging');
+      bigQueryLogging.logEvent('Uncaught Exception', JSON.stringify(exception), JSON.stringify(cause));
+      $log.error.apply($log, arguments);
+    };
+  }])
+
   .run(['segmentAnalytics', 'SEGMENT_API_KEY', 'analyticsEvents', '$document',
     function (segmentAnalytics, SEGMENT_API_KEY, analyticsEvents, $document) {
       analyticsEvents.initialize();
