@@ -29,7 +29,7 @@
     "gulp-bower": "0.0.15",
     "gulp-concat": "^2.4.1",
     "gulp-folders": "^1.0.0",
-    "gulp-jsbeautifier": "1.0.0",
+    "gulp-jsbeautifier": "^3.0.1",
     "gulp-jshint": "^1.11.2 ",
     "gulp-jsoncombine": "^1.0.0",
     "gulp-jsonminify": "^0.0.2",
