@@ -1,10 +1,8 @@
 'use strict';
 angular.module('risevision.displays.controllers')
   .controller('DisplayControlModalCtrl', ['$scope', '$modalInstance',
-    'displayControlFactory', '$loading', 'DISPLAY_CONTROL_PLAYER_VERSION',
-    function ($scope, $modalInstance, displayControlFactory, $loading,
-      DISPLAY_CONTROL_PLAYER_VERSION) {
-      $scope.playerVersion = DISPLAY_CONTROL_PLAYER_VERSION;
+    'displayControlFactory', '$loading',
+    function ($scope, $modalInstance, displayControlFactory, $loading) {
       $scope.formData = {};
 
       var _loadConfiguration = function () {

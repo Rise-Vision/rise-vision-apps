@@ -194,7 +194,6 @@
         "unsupported": "Your Rise Player version doesn't support <b>Display Control</b>.",
         "configureModal": {
           "title": "Configure Display Control",
-          "disclaimer": "<b>DISCLAIMER:</b> Display Control is currently in beta release and is only compatible on Displays running Rise Player version RisePlayerElectron {{playerVersion}} or higher.",
           "help": "Need help configuring Display Control?",
           "reset": "Reset To Defaults"
         }
