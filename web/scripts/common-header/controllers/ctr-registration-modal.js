@@ -7,12 +7,12 @@ angular.module('risevision.common.header')
     'userState', 'pick', 'uiFlowManager', 'messageBox', 'humanReadableError',
     'agreeToTermsAndUpdateUser', 'account', 'segmentAnalytics',
     'bigQueryLogging', 'analyticsEvents', 'updateCompany', 'plansFactory',
-    'COMPANY_INDUSTRY_FIELDS', 'urlStateService',
+    'COMPANY_INDUSTRY_FIELDS', 'urlStateService', 'getAccount',
     function ($q, $scope, $rootScope, $modalInstance, $loading, addAccount,
       $log, userState, pick, uiFlowManager, messageBox, humanReadableError,
       agreeToTermsAndUpdateUser, account, segmentAnalytics, bigQueryLogging,
       analyticsEvents, updateCompany, plansFactory, COMPANY_INDUSTRY_FIELDS,
-      urlStateService) {
+      urlStateService, getAccount) {
 
       $scope.newUser = !account;
       $scope.DROPDOWN_INDUSTRY_FIELDS = COMPANY_INDUSTRY_FIELDS;
@@ -33,6 +33,14 @@ angular.module('risevision.common.header')
       if (!angular.isDefined($scope.profile.mailSyncEnabled)) {
         //'no sign up' by default
         $scope.profile.mailSyncEnabled = false;
+      }
+
+      if ($scope.newUser) {
+        getAccount($scope.profile.email).then(function (account) {
+          if (account && account.mailSyncEnabled) {
+            $scope.profile.mailSyncEnabled = true;
+          }
+        });
       }
 
       // check status, load spinner, or close dialog if registration is complete

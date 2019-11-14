@@ -79,11 +79,17 @@
 
     .factory('getAccount', ['$q', 'riseAPILoader', '$log',
       function ($q, riseAPILoader, $log) {
-        return function () {
+        return function (email) {
           $log.debug('getAccount called.');
           var deferred = $q.defer();
+
+          var criteria = {};
+          if (email) {
+            criteria.email = email;
+          }
+
           riseAPILoader().then(function (riseApi) {
-            var request = riseApi.account.get();
+            var request = riseApi.account.get(criteria);
             request.execute(function (resp) {
               $log.debug('getAccount resp', resp);
               if (resp.item) {
