@@ -35,10 +35,12 @@ angular.module('risevision.common.header')
         $scope.profile.mailSyncEnabled = false;
       }
 
+      $scope.profile.alreadyOptedIn = $scope.profile.mailSyncEnabled;
+
       if ($scope.newUser) {
         getAccount($scope.profile.email).then(function (account) {
           if (account && account.mailSyncEnabled) {
-            $scope.profile.mailSyncEnabled = true;
+            $scope.profile.alreadyOptedIn = true;
           }
         });
       }
