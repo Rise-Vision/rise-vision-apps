@@ -10,12 +10,12 @@ describe("controller: registration modal", function() {
       return {
         _closed: false,
         close: function(reason) {
-          expect(reason).to.equal("success");          
+          expect(reason).to.equal("success");
           this._closed = true;
         }
       };
     });
-  
+
     $provide.service("userState", function(){
       return {
         getCopyOfProfile : function(){
@@ -25,7 +25,7 @@ describe("controller: registration modal", function() {
           return "e@mail.com";
         },
         _restoreState : function(){
-          
+
         },
         getUserCompanyId : function(){
           return "some_company_id";
@@ -36,9 +36,9 @@ describe("controller: registration modal", function() {
         updateCompanySettings: sinon.stub(),
         refreshProfile: function() {
           var deferred = Q.defer();
-          
+
           deferred.resolve({});
-          
+
           return deferred.promise;
         }
       };
@@ -51,12 +51,12 @@ describe("controller: registration modal", function() {
         return Q.resolve("companyResult");
       };
     });
-    
+
     var registrationService = function(calledFrom){
       return function() {
         newUser = calledFrom === "addAccount";
         var deferred = Q.defer();
-        
+
         if(registerUser){
           deferred.resolve("registered");
         }else{
@@ -65,7 +65,7 @@ describe("controller: registration modal", function() {
         return deferred.promise;
       };
     };
-    
+
     $provide.service("addAccount", function(){
       return registrationService("addAccount");
     });
@@ -79,7 +79,7 @@ describe("controller: registration modal", function() {
       };
     });
 
-    $provide.service("segmentAnalytics", function() { 
+    $provide.service("segmentAnalytics", function() {
       return {
         track: function(name) {
           trackerCalled = name;
@@ -88,7 +88,7 @@ describe("controller: registration modal", function() {
       };
     });
 
-    $provide.service("bigQueryLogging", function() { 
+    $provide.service("bigQueryLogging", function() {
       return {
         logEvent: function(name) {
           bqCalled = name;
@@ -96,7 +96,7 @@ describe("controller: registration modal", function() {
       };
     });
 
-    $provide.service("analyticsEvents", function() { 
+    $provide.service("analyticsEvents", function() {
       return {
         initialize: function() {},
         identify: function() {}
@@ -115,12 +115,12 @@ describe("controller: registration modal", function() {
       return function() {};
     });
     $translateProvider.useLoader("customLoader");
-        
+
   }));
   var $scope, userProfile, userState, $modalInstance, newUser;
   var registerUser, account, trackerCalled, bqCalled, identifySpy,
     updateCompanyCalled, plansFactory;
-  
+
   beforeEach(function() {
     registerUser = true;
     trackerCalled = undefined;
@@ -131,7 +131,7 @@ describe("controller: registration modal", function() {
       lastName : "last",
       telephone : "telephone"
     };
-    
+
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
       $modalInstance = $injector.get("$modalInstance");
@@ -161,16 +161,17 @@ describe("controller: registration modal", function() {
       };
     });
   });
-  
+
   it("should initialize",function(){
     expect($scope).to.be.truely;
     expect($scope.profile).to.be.truely;
-    
+
     expect($scope.profile).to.deep.equal({
       email: "e@mail.com",
       firstName: "first",
       lastName: "last",
       mailSyncEnabled: false,
+      alreadyOptedIn: false,
       accepted: false
     });
 
@@ -178,23 +179,23 @@ describe("controller: registration modal", function() {
 
     expect($scope.save).to.exist;
   });
-  
-  describe("save new user: ", function() {      
+
+  describe("save new user: ", function() {
     it("should not save if form is invalid", function() {
       $scope.forms.registrationForm.$invalid = true;
       $scope.save();
-      expect($scope.registering).to.be.false;        
+      expect($scope.registering).to.be.false;
     });
 
     it("should use username as email",function(){
       expect($scope.profile.email).to.be.equal("e@mail.com");
     });
-    
+
     it("should register user and close the modal",function(done){
       $scope.forms.registrationForm.$invalid = false;
       $scope.save();
       expect($scope.registering).to.be.true;
-      
+
       var profileSpy = sinon.spy(userState, "refreshProfile");
       setTimeout(function() {
         expect(newUser).to.be.true;
@@ -216,7 +217,7 @@ describe("controller: registration modal", function() {
       registerUser = false;
       $scope.forms.registrationForm.$invalid = false;
       $scope.save();
-      
+
       var profileSpy = sinon.spy(userState, "refreshProfile");
       setTimeout(function(){
         expect(newUser).to.be.true;
@@ -232,25 +233,25 @@ describe("controller: registration modal", function() {
         done();
       },10);
     });
-  
+
   });
-    
+
   describe("save existing user: ", function() {
     beforeEach(function() {
       account = userProfile;
     });
-    
+
     it("should not save if form is invalid", function() {
       $scope.forms.registrationForm.$invalid = true;
       $scope.save();
-      expect($scope.registering).to.be.false;        
+      expect($scope.registering).to.be.false;
     });
-    
+
     it("should register user and close the modal",function(done){
       $scope.forms.registrationForm.$invalid = false;
       $scope.save();
       expect($scope.registering).to.be.true;
-      
+
       var profileSpy = sinon.spy(userState, "refreshProfile");
       setTimeout(function() {
         expect(newUser).to.be.false;
@@ -266,12 +267,12 @@ describe("controller: registration modal", function() {
         done();
       },10);
     });
-    
+
     it("should handle failure to create user",function(done){
       registerUser = false;
       $scope.forms.registrationForm.$invalid = false;
       $scope.save();
-      
+
       var profileSpy = sinon.spy(userState, "refreshProfile");
       setTimeout(function(){
         expect(newUser).to.be.false;
@@ -285,8 +286,7 @@ describe("controller: registration modal", function() {
         done();
       },10);
     });
-      
+
   });
 
 });
-  

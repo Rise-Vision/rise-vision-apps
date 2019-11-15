@@ -10,9 +10,9 @@ describe("directive: newsletter signup", function() {
     $scope = $rootScope.$new();
     var validHTML =
       "<form name=\"form\">" +
-      "  <newsletter-signup ng-model=\"user.mailSyncEnabled\" company-industry=\"company.companyIndustry\" />" +
+      "  <newsletter-signup ng-model=\"user.mailSyncEnabled\" already-opted-in=\"user.alreadyOptedIn\" company-industry=\"company.companyIndustry\" />" +
       "</form>";
-    $scope.user = {};
+    $scope.user = { alreadyOptedIn: false };
     $scope.company = {};
     var elem = $compile(validHTML)($scope);
     elemScope = elem.children().isolateScope();
@@ -68,9 +68,9 @@ describe("directive: newsletter already opted in", function() {
     $scope = $rootScope.$new();
     var validHTML =
       "<form name=\"form\">" +
-      "  <newsletter-signup ng-model=\"user.mailSyncEnabled\" company-industry=\"company.companyIndustry\" />" +
+      "  <newsletter-signup ng-model=\"user.mailSyncEnabled\" already-opted-in=\"user.alreadyOptedIn\" company-industry=\"company.companyIndustry\" />" +
       "</form>";
-    $scope.user = { mailSyncEnabled: true };
+    $scope.user = { mailSyncEnabled: true, alreadyOptedIn: true };
     $scope.company = {};
     var elem = $compile(validHTML)($scope);
     elemScope = elem.children().isolateScope();
