@@ -8,6 +8,7 @@ angular.module('risevision.common.header')
 
       $scope.company = company;
       $scope.user = user;
+      $scope.alreadyOptedIn = user.mailSyncEnabled;
       $scope.DROPDOWN_INDUSTRY_FIELDS = COMPANY_INDUSTRY_FIELDS;
 
       $scope.save = function () {
