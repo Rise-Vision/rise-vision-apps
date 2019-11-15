@@ -171,7 +171,6 @@ describe("controller: registration modal", function() {
       firstName: "first",
       lastName: "last",
       mailSyncEnabled: false,
-      alreadyOptedIn: false,
       accepted: false
     });
 
