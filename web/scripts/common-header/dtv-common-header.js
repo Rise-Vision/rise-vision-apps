@@ -181,17 +181,6 @@ angular.module('risevision.common.header', [
     }
   ])
 
-  .factory('$exceptionHandler', ['$log', '$injector', function ($log, $injector) {
-    return function customExceptionHandler(exception, cause, caught) {
-      // Prevents circular reference
-      // https://stackoverflow.com/questions/22332130/injecting-http-into-angular-factoryexceptionhandler-results-in-a-circular-de
-      var bigQueryLogging = $injector.get('bigQueryLogging');
-
-      bigQueryLogging.logException(exception, cause, caught);
-      $log.error.apply($log, arguments);
-    };
-  }])
-
   .run(['segmentAnalytics', 'SEGMENT_API_KEY', 'analyticsEvents', '$document',
     function (segmentAnalytics, SEGMENT_API_KEY, analyticsEvents, $document) {
       analyticsEvents.initialize();
