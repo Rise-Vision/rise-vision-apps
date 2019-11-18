@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.common.components.logging')
-  .factory('$exceptionHandler', ['$log', '$injector',
-    function ($log, $injector) {
+  .factory('$exceptionHandler', ['$log', '$injector', 'getError',
+    function ($log, $injector, getError) {
       var _stringify = function (object) {
         if (typeof object === 'string') {
           return object;
@@ -21,13 +21,14 @@ angular.module('risevision.common.components.logging')
         var bigQueryLogging = $injector.get('bigQueryLogging');
         var segmentAnalytics = $injector.get('segmentAnalytics');
 
+        var error = getError(exception);
         var eventName = caught ? 'Exception' : 'Uncaught Exception';
         var message = '';
 
         if (exception && exception instanceof Error) {
           message += 'error: ' + exception.toString();
-        } else if (exception && exception.code) {
-          message += 'response: ' + exception.code + ': ' + exception.message;
+        } else if (error && error.code) {
+          message += 'response: ' + error.code + ': ' + error.message;
         } else {
           message += 'value: ' + _stringify(exception);
         }
