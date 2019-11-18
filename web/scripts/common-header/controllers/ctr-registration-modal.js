@@ -3,13 +3,13 @@
 angular.module('risevision.common.header')
   .controller('RegistrationModalCtrl', [
     '$q', '$scope', '$rootScope', '$modalInstance',
-    '$loading', 'addAccount', '$log',
+    '$loading', 'addAccount', '$exceptionHandler',
     'userState', 'pick', 'uiFlowManager', 'messageBox', 'humanReadableError',
     'agreeToTermsAndUpdateUser', 'account', 'segmentAnalytics',
     'bigQueryLogging', 'analyticsEvents', 'updateCompany', 'plansFactory',
     'COMPANY_INDUSTRY_FIELDS', 'urlStateService', 'getAccount',
     function ($q, $scope, $rootScope, $modalInstance, $loading, addAccount,
-      $log, userState, pick, uiFlowManager, messageBox, humanReadableError,
+      $exceptionHandler, userState, pick, uiFlowManager, messageBox, humanReadableError,
       agreeToTermsAndUpdateUser, account, segmentAnalytics, bigQueryLogging,
       analyticsEvents, updateCompany, plansFactory, COMPANY_INDUSTRY_FIELDS,
       urlStateService, getAccount) {
@@ -109,7 +109,7 @@ angular.module('risevision.common.header')
             })
             .catch(function (err) {
               messageBox('Error', humanReadableError(err));
-              console.error(err);
+              $exceptionHandler(err, 'User registration failed.', true);
 
               userState.refreshProfile();
             })

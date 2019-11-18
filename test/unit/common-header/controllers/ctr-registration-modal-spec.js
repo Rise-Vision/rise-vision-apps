@@ -88,6 +88,10 @@ describe("controller: registration modal", function() {
       };
     });
 
+    $provide.service("$exceptionHandler",function(){
+      return sinon.spy();
+    });
+
     $provide.service("bigQueryLogging", function() { 
       return {
         logEvent: function(name) {
