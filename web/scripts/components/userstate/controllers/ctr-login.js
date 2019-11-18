@@ -91,6 +91,7 @@ angular.module('risevision.common.components.userstate')
             .then(_authenticate)
             .catch(function (err) {
               if (err && err.status === 409) {
+                $exceptionHandler(err, 'Account already Registered: ' + $scope.credentials.username, true);
                 $scope.errors.duplicateError = true;
               } else { // No special cases, for security reasons
                 $exceptionHandler(err, 'Failed to Create Account.', true);
