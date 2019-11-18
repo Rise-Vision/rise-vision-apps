@@ -61,7 +61,7 @@ angular.module('risevision.template-editor.directives')
 
               $scope.save = function () {
                 if ($scope.targetUnit === 'targetDate') {
-                  $scope.setAttributeData($scope.componentId, 'date', utils.formatISODate($scope.targetDate));
+                  $scope.setAttributeData($scope.componentId, 'date', utils.formatISODate(document.querySelector('.counter-container #targetDate').value));
                   $scope.setAttributeData($scope.componentId, 'time', null);
                 } else if ($scope.targetUnit === 'targetTime') {
                   $scope.setAttributeData($scope.componentId, 'date', null);
