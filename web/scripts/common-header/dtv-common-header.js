@@ -175,12 +175,6 @@ angular.module('risevision.common.header', [
     }
   ])
 
-  .config(['$qProvider',
-    function ($qProvider) {
-      $qProvider.errorOnUnhandledRejections(false);
-    }
-  ])
-
   .run(['segmentAnalytics', 'SEGMENT_API_KEY', 'analyticsEvents', '$document',
     function (segmentAnalytics, SEGMENT_API_KEY, analyticsEvents, $document) {
       analyticsEvents.initialize();

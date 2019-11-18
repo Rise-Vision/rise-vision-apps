@@ -1,6 +1,12 @@
 'use strict';
 
 angular.module('risevision.common.components.logging')
+  .config(['$qProvider',
+    function ($qProvider) {
+      $qProvider.errorOnUnhandledRejections(false);
+    }
+  ])
+
   .factory('$exceptionHandler', ['$log', '$injector', 'getError',
     function ($log, $injector, getError) {
       var _stringify = function (object) {
