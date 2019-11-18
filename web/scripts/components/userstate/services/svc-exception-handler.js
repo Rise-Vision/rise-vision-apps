@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.common.components.logging')
-  .factory('$exceptionHandler', ['$log', '$injector', 
+  .factory('$exceptionHandler', ['$log', '$injector',
     function ($log, $injector) {
       var _stringify = function (object) {
         if (typeof object === 'string') {
@@ -19,6 +19,7 @@ angular.module('risevision.common.components.logging')
         // Prevents circular reference
         // https://stackoverflow.com/questions/22332130/injecting-http-into-angular-factoryexceptionhandler-results-in-a-circular-de
         var bigQueryLogging = $injector.get('bigQueryLogging');
+        var segmentAnalytics = $injector.get('segmentAnalytics');
 
         var eventName = caught ? 'Exception' : 'Uncaught Exception';
         var message = '';
@@ -35,6 +36,7 @@ angular.module('risevision.common.components.logging')
           message += '; cause: ' + _stringify(cause);
         }
 
+        segmentAnalytics.track(eventName, {message: message});
         bigQueryLogging.logEvent(eventName, message);
       };
 
