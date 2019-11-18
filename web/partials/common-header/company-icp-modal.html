@@ -2,7 +2,7 @@
   <div class="modal-header">
     <h2 id="icpModalTitle" class="modal-title">Help us personalize your experience</h2>
   </div>
-  <div class="modal-body" stop-event="touchend">    
+  <div class="modal-body" stop-event="touchend">
     <form id="forms.companyIcpForm" role="form" name="forms.companyIcpForm">
       <div class="form-group">
         <label for="company-industry" class="control-label">
@@ -15,17 +15,17 @@
       </div>
 
       <!-- Newsletter -->
-      <newsletter-signup ng-model="user.mailSyncEnabled" company-industry="company.companyIndustry"></newsletter-signup>
+      <newsletter-signup ng-model="user.mailSyncEnabled" already-opted-in="alreadyOptedIn" company-industry="company.companyIndustry"></newsletter-signup>
 
     </form>
 
   </div> <!-- //Modal Body -->
 
-  <div class="modal-footer"> 
+  <div class="modal-footer">
     <button id="saveButton" type="submit" class="btn btn-primary btn-lg btn-block ng-binding" aria-label="Apply" tabindex="1" form="forms.companyIcpForm" ng-click="save()" ng-disabled="forms.companyIcpForm.$invalid">
-      Apply 
+      Apply
       <i class="fa fa-check icon-right"></i>
-    </button> 
+    </button>
   </div>
 
 </div>

@@ -3,7 +3,7 @@
     <h2 class="modal-title">One last step!</h2>
   </div>
   <div id="registration-modal" class="modal-body" stop-event="touchend">
-    
+
     <form id="forms.registrationForm" novalidate role="form" name="forms.registrationForm" autocomplete="on">
       <div class="row">
         <div class="col-xs-12">
@@ -51,7 +51,7 @@
           </div>
 
           <!-- Newsletter -->
-          <newsletter-signup ng-model="profile.mailSyncEnabled" company-industry="company.companyIndustry"></newsletter-signup>
+          <newsletter-signup ng-model="profile.mailSyncEnabled" already-opted-in="alreadyOptedIn" company-industry="company.companyIndustry"></newsletter-signup>
 
           <!-- Terms of Service and Privacy -->
           <div class="form-group">
@@ -59,9 +59,9 @@
               <label for="accepted">
                 <input type="checkbox" id="accepted" name="accepted" class="accept-terms-checkbox" ng-model="profile.accepted" tabindex="1" required />
                 <span>
-                   I accept the 
-                   <a href="https://help.risevision.com/hc/en-us/articles/360000924446-Terms-of-Service" target="_blank" tabindex="1">Terms of Service</a> 
-                   and 
+                   I accept the
+                   <a href="https://help.risevision.com/hc/en-us/articles/360000924446-Terms-of-Service" target="_blank" tabindex="1">Terms of Service</a>
+                   and
                    <a href="https://help.risevision.com/hc/en-us/articles/360000915023-Privacy-Policy" target="_blank" tabindex="1">Privacy Policy</a> *
                 </span
               </label>
@@ -77,7 +77,7 @@
 
   </div> <!-- //Modal Body -->
 
-  <div class="modal-footer"> 
+  <div class="modal-footer">
     <!-- buttons -->
     <div class="row">
       <div class="col-xs-12 u_margin-sm-top">
