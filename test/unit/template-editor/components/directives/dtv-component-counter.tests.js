@@ -64,8 +64,8 @@ describe('directive: templateComponentCounter', function() {
   describe('load', function () {
     function _initLoad(type, date, time) {
       $scope.getAvailableAttributeData = sandbox.stub();
-      $scope.getAvailableAttributeData.onCall(0).returns(type);
-      $scope.getAvailableAttributeData.onCall(1).returns(date);
+      $scope.getAvailableAttributeData.onCall(0).returns(date);
+      $scope.getAvailableAttributeData.onCall(1).returns(type);
       $scope.getAvailableAttributeData.onCall(2).returns(time);
     }
 
@@ -74,11 +74,14 @@ describe('directive: templateComponentCounter', function() {
 
       $scope.load();
 
-      expect($scope.getAvailableAttributeData.getCall(0).args[1]).to.equal('type');
-      expect($scope.getAvailableAttributeData.getCall(1).args[1]).to.equal('date');
+      expect($scope.getAvailableAttributeData.getCall(0).args[1]).to.equal('date');
+      expect($scope.getAvailableAttributeData.getCall(1).args[1]).to.equal('type');
       expect($scope.getAvailableAttributeData.getCall(2).args[1]).to.equal('time');
 
-      expect($scope.targetDate).to.equal('2019-10-25');
+      var expectedDate = new Date('2019-10-25');
+      expectedDate.setMinutes(expectedDate.getMinutes() + expectedDate.getTimezoneOffset());
+
+      expect($scope.targetDate).to.deep.equal(expectedDate);
       expect($scope.targetTime).to.equal(null);
       expect($scope.targetUnit).to.equal('targetDate');
     });
@@ -88,11 +91,11 @@ describe('directive: templateComponentCounter', function() {
 
       $scope.load();
 
-      expect($scope.getAvailableAttributeData.getCall(0).args[1]).to.equal('type');
-      expect($scope.getAvailableAttributeData.getCall(1).args[1]).to.equal('date');
+      expect($scope.getAvailableAttributeData.getCall(0).args[1]).to.equal('date');
+      expect($scope.getAvailableAttributeData.getCall(1).args[1]).to.equal('type');
       expect($scope.getAvailableAttributeData.getCall(2).args[1]).to.equal('time');
 
-      expect($scope.targetDate).to.equal(null);
+      expect($scope.targetDate).to.not.be.ok;
       expect($scope.targetTime).to.equal('06:30 PM');
       expect($scope.targetUnit).to.equal('targetTime');
     });
