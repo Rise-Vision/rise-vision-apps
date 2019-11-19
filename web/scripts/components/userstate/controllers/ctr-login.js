@@ -2,9 +2,9 @@
 
 angular.module('risevision.common.components.userstate')
   .controller('LoginCtrl', ['$scope', '$loading', '$stateParams',
-    '$state', 'userAuthFactory', 'customAuthFactory', 'uiFlowManager',
+    '$state', '$exceptionHandler', 'userAuthFactory', 'customAuthFactory', 'uiFlowManager',
     'urlStateService', 'userState', 'getError', 'FORCE_GOOGLE_AUTH',
-    function ($scope, $loading, $stateParams, $state, userAuthFactory,
+    function ($scope, $loading, $stateParams, $state, $exceptionHandler, userAuthFactory,
       customAuthFactory, uiFlowManager, urlStateService, userState, getError,
       FORCE_GOOGLE_AUTH) {
       $scope.forms = {};
@@ -91,9 +91,10 @@ angular.module('risevision.common.components.userstate')
             .then(_authenticate)
             .catch(function (err) {
               if (err && err.status === 409) {
+                $exceptionHandler(err, 'Account already Registered: ' + $scope.credentials.username, true);
                 $scope.errors.duplicateError = true;
               } else { // No special cases, for security reasons
-                console.error(err);
+                $exceptionHandler(err, 'Failed to Create Account.', true);
                 _processErrorCode(err, 'up');
               }
             })

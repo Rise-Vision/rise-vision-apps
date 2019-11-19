@@ -38,6 +38,10 @@ describe("controller: Log In", function() {
       };
     });
 
+    $provide.service("$exceptionHandler",function(){
+      return sinon.spy();
+    });
+
   }));
   var $scope, $loading, uiFlowManager, urlStateService, customAuthFactory, userAuthFactory;
   beforeEach(function () {

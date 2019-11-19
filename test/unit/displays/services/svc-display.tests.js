@@ -282,7 +282,7 @@ describe('service: display:', function() {
       var items;
       var broadcastSpy = sinon.spy($rootScope,'$broadcast');
 
-      return display.list({})
+      display.list({})
       .then(function(result){
         expect(result).to.be.truely;
         expect(result.items).to.be.an.array;

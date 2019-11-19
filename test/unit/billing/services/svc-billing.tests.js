@@ -66,7 +66,7 @@ describe('service: billing:', function() {
     it('should return a list of subscriptions', function(done) {
       failedResponse = false;
 
-      return billing.getSubscriptions({})
+      billing.getSubscriptions({})
       .then(function(result) {
         expect(result).to.be.ok;
         expect(result.items).to.be.ok;
@@ -93,7 +93,7 @@ describe('service: billing:', function() {
     it('should return a list of invoices', function(done) {
       failedResponse = false;
 
-      return billing.getUnpaidInvoices({})
+      billing.getUnpaidInvoices({})
       .then(function(result) {
         expect(result).to.be.ok;
         expect(result.items).to.be.ok;
