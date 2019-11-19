@@ -43,7 +43,9 @@ angular.module('risevision.common.components.logging')
           message += '; cause: ' + _stringify(cause);
         }
 
-        segmentAnalytics.track(eventName, {message: message});
+        segmentAnalytics.track(eventName, {
+          message: message
+        });
         bigQueryLogging.logEvent(eventName, message);
       };
 

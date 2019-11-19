@@ -47,6 +47,8 @@ angular.module('risevision.template-editor.directives')
                 $scope.counterType = $scope.getAvailableAttributeData($scope.componentId, 'type');
                 $scope.targetDate = $scope.getAvailableAttributeData($scope.componentId, 'date');
                 $scope.targetTime = $scope.getAvailableAttributeData($scope.componentId, 'time');
+                $scope.nonCompletion = $scope.getAvailableAttributeData($scope.componentId,
+                  'non-completion') === '';
                 $scope.completionMessage = $scope.getAvailableAttributeData($scope.componentId, 'completion');
 
                 if ($scope.targetDate) {
@@ -69,7 +71,7 @@ angular.module('risevision.template-editor.directives')
                     .targetTime));
                 }
 
-                if ($scope.counterType === 'down') {
+                if ($scope.counterType === 'down' && !$scope.nonCompletion) {
                   $scope.setAttributeData($scope.componentId, 'completion', $scope.completionMessage);
                 }
               };
