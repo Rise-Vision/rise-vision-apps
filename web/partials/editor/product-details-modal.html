@@ -1,4 +1,4 @@
-<div id="productDetailsModal" class="">
+<div id="productDetailsModal">
   <div class="modal-header"> <button id="closeButton" type="button" class="close" ng-click="dismiss()"> <i class="fa fa-times"></i> </button> 
     <h3 class="modal-title">{{product.name}}</h3>
   </div>
@@ -10,26 +10,10 @@
         <p class="u_margin-md-top">{{product.descriptionShort}}</p>
         <p><a id="previewTemplate" ng-if="showPreviewLink" href="http://preview.risevision.com/?type=presentation&id={{product.rvaEntityId}}&showui=false" target="_blank" translate>editor-app.templatesLibrary.details.preview</a></p>
       </div>
-      <div class="col-md-4 col-xs-12" rv-spinner rv-spinner-key="loading-price">
-        <div ng-if="canUseProduct">
-          <a id="useProductButton" ng-if="canUseProduct" href="" class="btn btn-primary btn-lg btn-block" ng-click="select()">
-            {{'editor-app.storeProduct.templates.start' | translate}} <i class="fa fa-plus icon-right"></i>
-          </a>
-        </div>
-        <div ng-if="!canUseProduct" class="u_padding-sm u_bordered">
-          <a id="startTrialButton" href="" class="btn btn-primary btn-lg btn-block btn-multi-line" ng-click="startTemplateTrial()"
-            rv-spinner rv-spinner-key="loading-trial" rv-spinner-start-active="0">
-            <span translate>editor-app.templatesLibrary.details.free</span>
-            <span translate>editor-app.templatesLibrary.details.freeWithTrial</span>
-          </a>
-          <span class="btn btn-link btn-block" ng-click="toggleDetails()" id="reveal-product" translate>editor-app.templatesLibrary.details.details-list-title</span>
-          <ul id="details-list" ng-show="detailsOpen" class="u_padding-sm " style="list-style-type: square; padding-left: 40px;">
-            <li translate>editor-app.templatesLibrary.details.details-list-1</li>
-            <li translate>editor-app.templatesLibrary.details.details-list-2</li>
-            <li translate>editor-app.templatesLibrary.details.details-list-3</li>
-          </ul>
-
-        </div>
+      <div class="col-md-4 col-xs-12">
+        <a id="useProductButton" href="" class="btn btn-primary btn-lg btn-block" ng-click="select()">
+          {{'editor-app.storeProduct.templates.start' | translate}} <i class="fa fa-plus icon-right"></i>
+        </a>
       </div>
     </div>
   </div>

@@ -4,32 +4,8 @@ describe('controller: ProductDetailsModalController', function() {
   beforeEach(module(function ($provide) {
     $provide.service('$modalInstance',function(){
       return {
-        close : function(){},
-        dismiss : function(){}
-      }
-    });
-    $provide.service('userState',function(){
-      return {
-        getCopyOfUserCompany : function(){
-          return {
-          };
-        }
-      }
-    });
-    $provide.service('checkTemplateAccess',function(){
-      return sinon.spy(function () {
-        return storeAuthorize ? Q.resolve() : Q.reject();
-      });
-    });
-    $provide.service('$loading',function(){
-      return $loading = {
-        start: sinon.spy(),
-        stop: sinon.spy()
-      };
-    });
-    $provide.service('plansFactory', function(){
-      return {
-        showPlansModal: function() {}
+        close : sinon.stub(),
+        dismiss : sinon.stub()
       }
     });
     $provide.service('presentationUtils',function(){
@@ -40,28 +16,15 @@ describe('controller: ProductDetailsModalController', function() {
       }
     });
   }));
-  var $scope, $modalInstance, $modalInstanceDismissSpy, $modalInstanceCloseSpy, product,
-    $loading, checkTemplateAccessSpy, storeAuthorize, htmlTemplate;
+  var $scope, $modalInstance, product, htmlTemplate;
 
   function initController(paymentTerms) {
-    inject(function($injector,$rootScope, $controller, checkTemplateAccess){
+    inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
       $modalInstance = $injector.get('$modalInstance');
 
-      checkTemplateAccessSpy = checkTemplateAccess;
-
-      $modalInstanceDismissSpy = sinon.spy($modalInstance, 'dismiss');
-      $modalInstanceCloseSpy = sinon.spy($modalInstance, 'close');
-
       product = {
-        paymentTerms: paymentTerms ? paymentTerms: 'free',
-        productCode: '1',
-        pricing:[
-          {
-            priceUSD: '10',
-            priceCAD: '12'
-          }
-        ]
+        productCode: '1'
       };
 
       $controller('ProductDetailsModalController', {
@@ -84,19 +47,13 @@ describe('controller: ProductDetailsModalController', function() {
   it('should close modal on select',function(){
     initController();
     $scope.select();
-    $modalInstanceCloseSpy.should.have.been.calledWith(product);
+    $modalInstance.close.should.have.been.calledWith(product);
   });
 
   it('should dismiss modal',function(){
     initController();
     $scope.dismiss();
-    $modalInstanceDismissSpy.should.have.been.called;
-  });
-
-  it('should allow free product',function(){
-    initController();
-
-    expect($scope.canUseProduct).to.be.true;
+    $modalInstance.dismiss.should.have.been.called;
   });
 
   it( 'should not show preview link when product is HTML Template', function() {
@@ -112,37 +69,5 @@ describe('controller: ProductDetailsModalController', function() {
 
     expect($scope.showPreviewLink).to.be.true;
   } );
-
-  it('should retrieve premium product status',function(){
-    initController('premium');
-
-    expect($scope.canUseProduct).to.be.false;
-    $loading.start.should.have.been.calledWith('loading-price');
-    checkTemplateAccessSpy.should.have.been.called;
-  });
-
-  it('should allow owned products',function(done){
-    storeAuthorize = true;
-    initController('premium');
-
-    checkTemplateAccessSpy.should.have.been.called;
-    setTimeout(function() {
-      expect($scope.canUseProduct).to.be.true;
-      $loading.stop.should.have.been.calledWith('loading-price');
-      done();
-    }, 10);
-  });
-
-  it('should not enable not owned products',function(done){
-    storeAuthorize = false;
-    initController('premium');
-
-    setTimeout(function() {
-      expect($scope.canUseProduct).to.be.false;
-
-      $loading.stop.should.have.been.calledWith('loading-price');
-      done();
-    }, 10);
-  });
 
 });
