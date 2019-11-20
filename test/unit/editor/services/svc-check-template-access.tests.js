@@ -2,7 +2,6 @@
 
 describe('service: checkTemplateAccess:', function() {
   var TEMPLATE_LIBRARY_PRODUCT_CODE = "templates-library";
-  var TEMPLATE_TEST_CODE = "template-test";
 
   beforeEach(module('risevision.editor.services'));
 
@@ -12,30 +11,34 @@ describe('service: checkTemplateAccess:', function() {
 
     $provide.service('subscriptionStatusFactory', function() {
       return {
-        check: function(templateCode) {
-          var deferred = Q.defer();
-          var status = returnStatusArray[0];
-          returnStatusArray = returnStatusArray.slice(1);
-          if(status) {
-            deferred.resolve(returnStatusArray);
-          } else {
-            deferred.reject('API Error');
-          }            
-          return deferred.promise;
-        }
+        check: sinon.stub().returns(Q.resolve())
       };
     });
     
+    $provide.factory('$modal', function() {
+      var modalInstance = { result: Q.resolve(), dismiss: sinon.stub() };
+      return {
+        modalInstance: modalInstance,
+        open: sinon.stub().returns(modalInstance)
+      };
+    });
     
+    $provide.service('plansFactory',function() {
+      return {
+        showPlansModal: sinon.stub()
+      };
+    });
+
   }));
   
-  var checkTemplateAccess, returnStatusArray;
+  var checkTemplateAccess, $modal, storeAuthorization, plansFactory;
 
   beforeEach(function(){
-    returnStatusArray = [];
-
     inject(function($injector){
       checkTemplateAccess = $injector.get('checkTemplateAccess');
+      $modal = $injector.get('$modal');
+      storeAuthorization = $injector.get('storeAuthorization');
+      plansFactory = $injector.get('plansFactory');
     });
   });
 
@@ -44,33 +47,56 @@ describe('service: checkTemplateAccess:', function() {
   });
 
   it('should give access to premium templates if subscribed to Templates Library', function(done) {
-    
-    returnStatusArray = [true];
-
-    checkTemplateAccess(TEMPLATE_TEST_CODE)
+    checkTemplateAccess()
     .then(function() {
+      storeAuthorization.check.should.have.been.calledWith(TEMPLATE_LIBRARY_PRODUCT_CODE);
+      $modal.open.should.not.have.been.called;
+
       done();
     });
   });
 
-  it('should give access to premium templates if subscribed to the template', function(done) {
-    
-    returnStatusArray = [false, true];
+  it('should show license modal for Templates if not subscribed to Templates Library', function(done) {
+    storeAuthorization.check.returns(Q.reject());
 
-    checkTemplateAccess(TEMPLATE_TEST_CODE)
+    checkTemplateAccess(true)
     .then(function() {
+      $modal.open.should.have.been.calledWithMatch({
+        templateUrl: 'partials/template-editor/more-info-modal.html',
+        controller: "confirmModalController",
+        windowClass: 'madero-style centered-modal display-license-required-message'
+      });
+
       done();
     });
   });
 
-  it('should reject access to premium templates if not subscribed to Templates Library or to the template', function(done) {
-    
-    returnStatusArray = [false, false];
+  it('should show license modal for Presentations if not subscribed to Templates Library', function(done) {
+    storeAuthorization.check.returns(Q.reject());
 
-    checkTemplateAccess(TEMPLATE_TEST_CODE)
-    .then(null, function() {
+    checkTemplateAccess()
+    .then(function() {
+      $modal.open.should.have.been.calledWithMatch({
+        templateUrl: 'partials/components/confirm-modal/confirm-modal.html',
+        controller: 'confirmModalController',
+        windowClass: 'display-license-required-message'
+      });
+
       done();
     });
+  });
+
+  it('should dismiss and open plansModal on page confirm', function(done){
+    storeAuthorization.check.returns(Q.reject());
+
+    checkTemplateAccess();
+
+    setTimeout(function() {
+      $modal.modalInstance.dismiss.should.have.been.called;
+      plansFactory.showPlansModal.should.have.been.called;
+
+      done();
+    }, 10);
   });
 
 });

@@ -3,11 +3,11 @@
 angular.module('risevision.template-editor.services')
   .constant('HTML_TEMPLATE_DOMAIN', 'https://widgets.risevision.com')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', 'presentation',
-    'processErrorCode', 'userState', 'checkTemplateAccess', '$modal', 'scheduleFactory', 'plansFactory',
+    'processErrorCode', 'userState', 'checkTemplateAccess', 'scheduleFactory',
     'templateEditorUtils', 'brandingFactory', 'blueprintFactory', 'financialLicenseFactory', 'presentationTracker',
     'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
     function ($q, $log, $state, $rootScope, presentation, processErrorCode, userState,
-      checkTemplateAccess, $modal, scheduleFactory, plansFactory, templateEditorUtils, brandingFactory,
+      checkTemplateAccess, scheduleFactory, templateEditorUtils, brandingFactory,
       blueprintFactory, financialLicenseFactory,
       presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {
@@ -43,37 +43,6 @@ angular.module('risevision.template-editor.services')
         return presentationVal;
       };
 
-      var _openExpiredModal = function () {
-        var modalInstance = $modal.open({
-          templateUrl: 'partials/template-editor/more-info-modal.html',
-          controller: 'confirmModalController',
-          windowClass: 'madero-style centered-modal',
-          resolve: {
-            confirmationTitle: function () {
-              return 'template.expired-modal.expired-title';
-            },
-            confirmationMessage: function () {
-              return 'template.expired-modal.expired-message';
-            },
-            confirmationButton: function () {
-              return 'template.expired-modal.confirmation-button';
-            },
-            cancelButton: null
-          }
-        });
-
-        modalInstance.result.then(function () {
-          plansFactory.showPlansModal();
-        });
-      };
-
-      var _checkTemplateAccess = function (productCode) {
-        checkTemplateAccess(productCode)
-          .catch(function () {
-            _openExpiredModal();
-          });
-      };
-
       factory.addFromProduct = function (productDetails) {
         _clearMessages();
 
@@ -94,7 +63,11 @@ angular.module('risevision.template-editor.services')
 
         return blueprintFactory.load(factory.presentation.productCode)
           .then(function () {
-            financialLicenseFactory.checkFinancialDataLicenseMessage();
+            if (financialLicenseFactory.needsFinancialDataLicense()) {
+              financialLicenseFactory.showFinancialDataLicenseRequiredMessage();
+            } else {
+              checkTemplateAccess(true);
+            }
           })
           .then(null, function (e) {
             _showErrorMessage('add', e);
@@ -198,8 +171,6 @@ angular.module('risevision.template-editor.services')
             return blueprintFactory.load(factory.presentation.productCode);
           })
           .then(function () {
-            _checkTemplateAccess(factory.presentation.productCode);
-
             deferred.resolve();
           })
           .then(null, function (e) {

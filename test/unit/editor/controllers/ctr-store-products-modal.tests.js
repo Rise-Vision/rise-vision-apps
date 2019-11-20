@@ -5,7 +5,6 @@ describe('controller: Store Products Modal', function() {
   beforeEach(module('risevision.editor.services'));
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
-    $provide.value('STORE_AUTHORIZATION_URL','http://www.example.com/api/auth')
     $provide.service('ScrollingListService', function() {
       return function() {
         return scrollingListService
@@ -62,12 +61,6 @@ describe('controller: Store Products Modal', function() {
         getProfessionalWidgets : function(){ return 'professionalWidgets'; }
       }
     });
-    $provide.service('checkTemplateAccess',function(){
-      return function () {
-        return productAuthorized ? Q.resolve() : Q.reject();
-      };
-    });
-
     $provide.service('userState',function(){
       return {
         isEducationCustomer : function(){ return isEducationCustomer; },
@@ -81,12 +74,10 @@ describe('controller: Store Products Modal', function() {
   var $scope, $loading, $loadingStartSpy, $loadingStopSpy;
   var $modalInstance, $modalInstanceDismissSpy, $modalInstanceCloseSpy, $q;
   var $modal, playlistItemAddWidgetByUrlSpy, scrollingListService;
-  var productAuthorized, isEducationCustomer = false;
+  var isEducationCustomer = false;
 
 
   function initController(paymentTerms) {
-    productAuthorized = true;
-
     scrollingListService = {
       search: {},
       loadingItems: false,
@@ -107,7 +98,6 @@ describe('controller: Store Products Modal', function() {
       $loadingStopSpy = sinon.spy($loading, 'stop');
       $controller('storeProductsModal', {
         $scope : $scope,
-        $rootScope: $rootScope,
         $modalInstance : $modalInstance,
         productsFactory: $injector.get('productsFactory'),
         category: $injector.get('category'),
@@ -194,22 +184,6 @@ describe('controller: Store Products Modal', function() {
 
       setTimeout(function() {
         $modalInstanceCloseSpy.should.have.been.calledWith(product);
-        done();
-      }, 0);
-    });
-
-    it('quickSelect: should show product details when clicked and not authorized',function(done){
-      var modalOpenSpy = sinon.spy($modal, 'open');
-      var product = {paymentTerms: 'premium'};
-
-      productAuthorized = false;
-      $scope.quickSelect(product);
-
-      setTimeout(function() {
-        modalOpenSpy.should.have.been.called;
-        expect(modalOpenSpy.getCall(0).args[0].templateUrl).to.equal('partials/editor/product-details-modal.html');
-        expect(modalOpenSpy.getCall(0).args[0].controller).to.equal('ProductDetailsModalController');
-
         done();
       }, 0);
     });

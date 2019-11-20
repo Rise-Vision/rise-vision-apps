@@ -19,12 +19,6 @@ describe('service: templateEditorFactory:', function() {
       };
     });
 
-    $provide.service('plansFactory',function() {
-      return {
-        showPlansModal: sandbox.stub()
-      };
-    });
-
     $provide.service('$state',function() {
       return {
         go: sandbox.stub().returns(Q.resolve())
@@ -45,9 +39,7 @@ describe('service: templateEditorFactory:', function() {
     });
 
     $provide.service('checkTemplateAccess',function(){
-      return sandbox.spy(function () {
-        return storeAuthorize ? Q.resolve() : Q.reject();
-      });
+      return sandbox.spy();
     });
 
     $provide.factory('templateEditorUtils', function() {
@@ -74,7 +66,8 @@ describe('service: templateEditorFactory:', function() {
 
     $provide.factory('financialLicenseFactory', function() {
       return financialLicenseFactory = {
-        checkFinancialDataLicenseMessage: sandbox.spy()
+        needsFinancialDataLicense: sandbox.stub().returns(false),
+        showFinancialDataLicenseRequiredMessage: sandbox.spy()
       };
     });
 
@@ -88,32 +81,16 @@ describe('service: templateEditorFactory:', function() {
       };
     });
 
-    $provide.factory('$modal', function() {
-      return {
-        open: function(params){
-          modalOpenCalled = true;
-          expect(params).to.be.ok;
-          return {
-            result: {
-              then: function(func) {
-                expect(func).to.be.a('function');
-              }
-            }
-          };
-        }
-      };
-    });
   }));
 
-  var $state, $modal, templateEditorFactory, templateEditorUtils, financialLicenseFactory, blueprintFactory, presentation, processErrorCode,
-    HTML_PRESENTATION_TYPE, storeAuthorize, checkTemplateAccessSpy, storeProduct, plansFactory, scheduleFactory, brandingFactory;
+  var $state, templateEditorFactory, templateEditorUtils, financialLicenseFactory, blueprintFactory, presentation, processErrorCode,
+    HTML_PRESENTATION_TYPE, checkTemplateAccess, storeProduct, plansFactory, scheduleFactory, brandingFactory;
 
   beforeEach(function() {
-    inject(function($injector, checkTemplateAccess) {
+    inject(function($injector) {
       $state = $injector.get('$state');
-      $modal = $injector.get('$modal');
       templateEditorFactory = $injector.get('templateEditorFactory');
-      checkTemplateAccessSpy = checkTemplateAccess;
+      checkTemplateAccess = $injector.get('checkTemplateAccess');
 
       presentation = $injector.get('presentation');
       plansFactory = $injector.get('plansFactory');
@@ -158,12 +135,16 @@ describe('service: templateEditorFactory:', function() {
         expect(templateEditorFactory.presentation.name).to.equal('Copy of Test HTML Template');
         expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_PRESENTATION_TYPE);
         expect(presentationTracker).to.have.been.calledWith('HTML Template Copied', 'test-id', 'Test HTML Template');
+        expect(financialLicenseFactory.needsFinancialDataLicense).to.have.been.called;
+        expect(financialLicenseFactory.showFinancialDataLicenseRequiredMessage).to.not.have.been.called;
+        expect(checkTemplateAccess).to.have.been.calledWith(true);
 
         done();
       });
     });
 
     it('should open Financial Data License message if Template uses rise-data-financial', function(done) {
+      financialLicenseFactory.needsFinancialDataLicense.returns(true);
       blueprintFactory.blueprintData.components = [
         {
           type: 'rise-data-financial',
@@ -178,7 +159,9 @@ describe('service: templateEditorFactory:', function() {
         expect(templateEditorFactory.presentation.name).to.equal('Copy of Test HTML Template');
         expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_PRESENTATION_TYPE);
 
-        expect(financialLicenseFactory.checkFinancialDataLicenseMessage).to.have.been.called;
+        expect(financialLicenseFactory.needsFinancialDataLicense).to.have.been.called;
+        expect(financialLicenseFactory.showFinancialDataLicenseRequiredMessage).to.have.been.called;
+        expect(checkTemplateAccess).to.not.have.been.called;
 
         done();
       });
@@ -467,23 +450,11 @@ describe('service: templateEditorFactory:', function() {
         }
       ];
 
-      var modalOpenStub = sandbox.stub($modal, 'open', function () {
-        return {
-          result: {
-            then: function() {}
-          }
-        }
-      });
-
-      storeAuthorize = true;
-
       templateEditorFactory.getPresentation('presentationId')
       .then(function() {
         expect(templateEditorFactory.presentation).to.be.truely;
         expect(templateEditorFactory.presentation.name).to.equal('Test Presentation');
         expect(templateEditorFactory.presentation.templateAttributeData.attribute1).to.equal('value1');
-        expect(checkTemplateAccessSpy).to.have.been.calledWith('test-id');
-        expect(modalOpenStub).to.not.have.been.called;
 
         setTimeout(function() {
           expect(templateEditorFactory.loadingPresentation).to.be.false;
@@ -506,13 +477,10 @@ describe('service: templateEditorFactory:', function() {
         }
       }));
 
-      storeAuthorize = true;
-
       templateEditorFactory.getPresentation('presentationId')
       .then(function() {
         expect(templateEditorFactory.presentation).to.be.truely;
         expect(templateEditorFactory.presentation.templateAttributeData).to.be.truely;
-        expect(checkTemplateAccessSpy).to.have.been.calledWith('test-id');
 
         setTimeout(function() {
           done();
@@ -526,7 +494,6 @@ describe('service: templateEditorFactory:', function() {
 
     it('should handle failure to get presentation correctly', function(done) {
       sandbox.stub(presentation, 'get').returns(Q.reject({ name: 'Test Presentation' }));
-      storeAuthorize = true;
 
       templateEditorFactory.getPresentation()
       .then(function(result) {
@@ -574,48 +541,6 @@ describe('service: templateEditorFactory:', function() {
       });
     });
 
-    it( 'should open expired/cancelled modal when not authorized', function(done) {
-      sandbox.stub(presentation, 'get').returns(Q.resolve({
-        item: {
-          name: 'Test Presentation',
-          productCode: 'test-id',
-          templateAttributeData: '{ "attribute1": "value1" }'
-        }
-      }));
-
-      blueprintFactory.blueprintData.components = [
-        {
-          type: 'rise-image',
-          id: 'rise-image-01',
-          attributes: {}
-        }
-      ];
-
-      var modalOpenStub = sandbox.stub($modal, 'open', function () {
-        return {
-          result: {
-            then: function() {}
-          }
-        }
-      });
-
-      storeAuthorize = false;
-
-      templateEditorFactory.getPresentation('presentationId')
-        .then(function() {
-          expect(checkTemplateAccessSpy).to.have.been.calledWith('test-id');
-
-          expect(modalOpenStub).to.have.been.called;
-
-          setTimeout(function() {
-            done();
-          }, 10);
-        })
-        .then(null, function(err) {
-          done(err);
-        })
-        .then(null, done);
-    } );
   });
 
   describe('deletePresentation:', function() {

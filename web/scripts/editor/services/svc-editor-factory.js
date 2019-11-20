@@ -10,13 +10,13 @@ angular.module('risevision.editor.services')
     'presentation', 'presentationParser', 'distributionParser',
     'presentationTracker', 'storeProduct', 'checkTemplateAccess', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
     'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT',
-    '$modal', '$rootScope', '$window', 'scheduleFactory', 'plansFactory', 'processErrorCode', 'messageBox',
+    '$modal', '$rootScope', '$window', 'scheduleFactory', 'processErrorCode', 'messageBox',
     '$templateCache', '$log', 'presentationUtils',
     function ($q, $state, userState, userAuthFactory, presentation,
       presentationParser, distributionParser, presentationTracker, storeProduct, checkTemplateAccess,
       VIEWER_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED,
       DEFAULT_LAYOUT, $modal, $rootScope, $window,
-      scheduleFactory, plansFactory, processErrorCode, messageBox, $templateCache, $log,
+      scheduleFactory, processErrorCode, messageBox, $templateCache, $log,
       presentationUtils) {
       var factory = {};
       var JSON_PARSE_ERROR = 'JSON parse error';
@@ -64,6 +64,8 @@ angular.module('risevision.editor.services')
 
       factory.newPresentation = function () {
         presentationTracker('New Presentation');
+
+        checkTemplateAccess();
 
         _init();
       };
@@ -421,17 +423,7 @@ angular.module('risevision.editor.services')
             }
           })
           .then(function (productDetails) {
-            return checkTemplateAccess(productDetails.productCode)
-              .then(function () {
-                return factory.addFromProduct(productDetails);
-              })
-              .catch(function (err) {
-                plansFactory.showPlansModal('editor-app.templatesLibrary.access-warning');
-
-                $state.go('apps.editor.list');
-                $log.error('checkTemplateAccess', err);
-                return $q.reject(err);
-              });
+            return factory.addFromProduct(productDetails);
           }, function (err) {
             _showErrorMessage('add', err);
             $state.go('apps.editor.list');
@@ -463,15 +455,10 @@ angular.module('risevision.editor.services')
 
         return factory.getPresentation(rvaEntityId)
           .then(factory.copyPresentation)
-          .catch(function (e) {
-            // 403 Status indicates Premium Template needs purchase
-            if (e && e.status === 403) {
-              plansFactory.showPlansModal('editor-app.templatesLibrary.access-warning');
-
-              $rootScope.$on('risevision.company.trial.started', function () {
-                $window.location.reload();
-              });
-            }
+          .then(checkTemplateAccess)
+          .catch(function (err) {
+            $state.go('apps.editor.list');
+            return $q.reject(err);
           });
       };
 

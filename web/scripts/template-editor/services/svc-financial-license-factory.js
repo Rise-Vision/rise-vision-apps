@@ -8,7 +8,7 @@ angular.module('risevision.template-editor.services')
     function ($window, $modal, $templateCache, blueprintFactory, NEED_FINANCIAL_DATA_LICENSE, CONTACT_US_URL) {
       var factory = {};
 
-      var _needsFinancialDataLicense = function () {
+      factory.needsFinancialDataLicense = function () {
         if (!blueprintFactory.blueprintData) {
           return false;
         }
@@ -18,7 +18,7 @@ angular.module('risevision.template-editor.services')
         });
       };
 
-      var _showFinancialDataLicenseRequiredMessage = function () {
+      factory.showFinancialDataLicenseRequiredMessage = function () {
         var modalInstance = $modal.open({
           template: $templateCache.get('partials/template-editor/more-info-modal.html'),
           controller: 'confirmModalController',
@@ -43,13 +43,6 @@ angular.module('risevision.template-editor.services')
           modalInstance.dismiss();
           $window.open(CONTACT_US_URL, '_blank');
         });
-      };
-
-
-      factory.checkFinancialDataLicenseMessage = function () {
-        if (_needsFinancialDataLicense()) {
-          _showFinancialDataLicenseRequiredMessage();
-        }
       };
 
       return factory;
