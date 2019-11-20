@@ -3,9 +3,9 @@
 angular.module('risevision.template-editor.controllers')
   .controller('TemplateEditorController', ['$scope', '$q', '$filter', '$loading', '$state', '$timeout', '$window',
     'templateEditorFactory', 'brandingFactory', 'blueprintFactory', 'scheduleFactory', 'AutoSaveService',
-    'presentationUtils',
+    'presentationUtils', 'userState',
     function ($scope, $q, $filter, $loading, $state, $timeout, $window, templateEditorFactory, brandingFactory,
-      blueprintFactory, scheduleFactory, AutoSaveService, presentationUtils) {
+      blueprintFactory, scheduleFactory, AutoSaveService, presentationUtils, userState) {
       var autoSaveService = new AutoSaveService(templateEditorFactory.save);
 
       $scope.factory = templateEditorFactory;
@@ -52,12 +52,16 @@ angular.module('risevision.template-editor.controllers')
         return $scope.factory.savingPresentation || $scope.factory.isUnsaved() || isNotRevised;
       };
 
+      $scope.hasContentEditorRole = function () {
+        return userState.hasRole('ce');
+      };
+
       var _bypassUnsaved = false,
         _initializing = false;
       var _setUnsavedChanges = function (state) {
         $scope.factory.hasUnsavedChanges = state;
 
-        if ($scope.factory.hasUnsavedChanges) {
+        if ($scope.factory.hasUnsavedChanges && $scope.hasContentEditorRole()) {
           autoSaveService.save();
         }
       };
@@ -77,6 +81,9 @@ angular.module('risevision.template-editor.controllers')
       }
 
       $scope.$watch('factory.presentation', function (newValue, oldValue) {
+        if (!$scope.hasContentEditorRole()) {
+          return;
+        }
         var ignoredFields = [
           'id', 'companyId', 'revisionStatus', 'revisionStatusName',
           'changeDate', 'changedBy', 'creationDate', 'publish', 'layout'
@@ -106,7 +113,7 @@ angular.module('risevision.template-editor.controllers')
       $scope.$on('presentationDeleted', _setUnsavedChanges.bind(null, false));
       $scope.$on('presentationPublished', _setUnsavedChangesAsync.bind(null, false));
 
-      $scope.$on('risevision.template-editor.brandingUnsavedChanges', autoSaveService.save);
+      $scope.$on('risevision.template-editor.brandingUnsavedChanges', _setUnsavedChangesAsync.bind(null, true));
 
       $scope.$on('$stateChangeStart', function (event, toState, toParams) {
         if (_bypassUnsaved) {
@@ -118,7 +125,8 @@ angular.module('risevision.template-editor.controllers')
 
           autoSaveService.clearSaveTimeout();
 
-          var savePromise = $scope.factory.isUnsaved() ? $scope.factory.save() : $q.resolve();
+          var savePromise = $scope.factory.isUnsaved() && $scope.hasContentEditorRole() ? $scope.factory.save() :
+            $q.resolve();
 
           savePromise
             .finally(function () {

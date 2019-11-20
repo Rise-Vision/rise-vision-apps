@@ -30,7 +30,7 @@ describe('controller: TemplateEditor', function() {
     }
   ];
 
-  var $rootScope, $scope, $modal, $timeout, $window, $state, factory, scheduleFactory, blueprintFactory;
+  var $rootScope, $scope, $modal, $timeout, $window, $state, factory, scheduleFactory, blueprintFactory, userState;
   var sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
@@ -72,6 +72,12 @@ describe('controller: TemplateEditor', function() {
         hasSchedules: function () {}
       };
     });
+    $provide.factory('userState',function() {
+      return {
+        _restoreState: sandbox.stub(), 
+        hasRole: sandbox.stub().returns(true)
+      };
+    });
     $provide.factory('$modal', function() {
       return {
         open: function(params){
@@ -101,6 +107,7 @@ describe('controller: TemplateEditor', function() {
       factory = $injector.get('templateEditorFactory');
       blueprintFactory = $injector.get('blueprintFactory');
       scheduleFactory = $injector.get('scheduleFactory');
+      userState = $injector.get('userState');
 
       $controller('TemplateEditorController', {
         $scope: $scope,
@@ -176,6 +183,18 @@ describe('controller: TemplateEditor', function() {
 
   });
 
+  describe('hasContentEditorRole', function() {
+    it('should return true if user has ce role',function() {
+      expect($scope.hasContentEditorRole()).to.be.true;
+    });
+
+    it('should return false if user does not have ce role',function() {
+      userState.hasRole.returns(false);
+
+      expect($scope.hasContentEditorRole()).to.be.false;
+    });
+  });
+
   describe('unsaved changes', function () {
     it('should flag unsaved changes to presentation', function () {
       expect($scope.factory.hasUnsavedChanges).to.be.false;
@@ -185,6 +204,23 @@ describe('controller: TemplateEditor', function() {
       $timeout.flush();
 
       expect($scope.factory.hasUnsavedChanges).to.be.true;
+    });
+
+    it('should save presentation if no id is provided', function () {
+      sandbox.stub(factory, 'save').returns(Q.resolve());
+      factory.presentation.name = 'New Name';
+      $scope.$apply();
+
+      expect(factory.save).to.have.been.called;
+    });
+
+    it('should not save presentation if user has no Content Editor role', function () {
+      userState.hasRole.returns(false)
+      sandbox.stub(factory, 'save').returns(Q.resolve());
+      factory.presentation.name = 'New Name';
+      $scope.$apply();
+
+      expect(factory.save).to.not.have.been.called;
     });
 
     it('should clear unsaved changes flag after saving presentation', function () {
@@ -229,6 +265,22 @@ describe('controller: TemplateEditor', function() {
       $scope.$apply();
 
       saveStub.should.have.been.called;
+    });
+
+    it('should not notify unsaved changes when changing URL and user is not Content Editor', function () {
+      userState.hasRole.returns(false);
+      factory.presentation.id = '1234';
+      factory.presentation.name = 'New Name';
+      $scope.$apply();
+      $timeout.flush();
+      var saveStub = sinon.stub(factory, 'save', function(){
+        return Q.resolve();
+      });
+
+      $rootScope.$broadcast('$stateChangeStart', { name: 'newState' });
+      $scope.$apply();
+
+      saveStub.should.not.have.been.called;
     });
 
     it('should not notify unsaved changes when changing URL on delete', function () {
