@@ -33,12 +33,8 @@ var HomepageScenarios = function() {
       expect(signInPage.getSignInPageContainer().isPresent()).to.eventually.be.true;
     });
 
-    it('should sign in the user through google and load launch page',function(){
-      helper.wait(signInPage.getSignInGoogleLink(), 'Sign In Google Link');
-      signInPage.getSignInGoogleLink().click().then(function () {
-        googleAuthPage.signin();
-        helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-      });
+    it('should sign in the user and load launch page',function(){
+      signInPage.signIn();
 
       expect(homepage.getAppLauncherContainer().isDisplayed()).to.eventually.be.true;
     });
@@ -179,7 +175,7 @@ var HomepageScenarios = function() {
 
     after('Should sign out user', function() {
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-      commonHeaderPage.signOut();
+      commonHeaderPage.signOut(true);
     });
   });
 };
