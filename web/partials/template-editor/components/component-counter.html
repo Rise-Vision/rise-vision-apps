@@ -5,7 +5,7 @@
     <div class="radio">
       <input type="radio" ng-model="targetUnit" value="targetDate" id="specificDate" name="specificDate" ng-change="save()" aria-required="true" tabindex="1" required>
       <label for="specificDate" id="specificDateLabel">
-        A specific date:
+        A specific date and time:
       </label>
       <div class="input-group rise-date-picker radio-nested-input-group" ng-show="targetUnit == 'targetDate'">
         <input type="text"
@@ -24,6 +24,24 @@
                min-date="today"/>
         <span class="input-group-btn">
           <button type="button" id="datePickerButton" class="btn btn-primary" ng-click="openDatePicker($event)"><i class="fa fa-calendar"></i></button>
+        </span>
+      </div>
+      <div class="input-group rise-date-picker radio-nested-input-group" ng-show="targetUnit == 'targetDate'">
+        <input type="text"
+               class="form-control"
+               readonly="true"
+               id="targetDateTime"
+               name="targetDateTime"
+               ng-model="targetDateTime"
+               ng-change="save()"
+               ng-click="openTimePicker($event)"
+               time-picker-popup
+               is-open="targetDateTimePicker.isOpen"
+        />
+        <span class="input-group-btn">
+          <button type="button" id="dateTimePickerButton" class="btn btn-primary" ng-click="openTimePicker($event)">
+            <streamline-icon name="clock"></streamline-icon>
+          </button>
         </span>
       </div>
     </div>
