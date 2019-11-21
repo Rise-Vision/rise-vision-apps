@@ -8,41 +8,21 @@
   <div class="modal-body u_padding-lg" stop-event="touchend">
     <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>
 
-    <div ng-hide="factory.search.category === 'Templates'">
-      <h4 class="u_margin-md-top">{{ 'editor-app.storeProduct.professional.title' | translate }} - <a href="https://help.risevision.com/hc/en-us/articles/115003830563" target="_blank" translate="editor-app.storeProduct.professional.learnMore"></a></h4>
+    <section id="productList" class="product-grid" 
+        scrolling-list="factory.load()"
+        rv-spinner rv-spinner-key="product-list-loader"
+        rv-spinner-start-active="1">
 
-      <div class="professional-content panel panel-default" ng-class="{ 'professional-content--locked' : !playerLicenseFactory.hasProfessionalLicenses(), 'professional-content--unlocked' : playerLicenseFactory.hasProfessionalLicenses() }">
+      <div class="professional-content panel panel-default u_margin-md-top">
         <div class="panel-body">
           <div class="product-grid">
             <div class="row">
 
-              <ng-repeat ng-repeat="widget in filteredProfessionalWidgets = (professionalWidgets | filter: search.query)">
+              <ng-repeat ng-repeat="widget in filteredProfessionalWidgets = (professionalWidgets | filter: search.query)" ng-if="factory.search.category === 'Content'">
                 <div class="col-sm-6 col-md-4 col-lg-3">
 
-                  <div class="product-grid_item panel panel-default" ng-if="!playerLicenseFactory.hasProfessionalLicenses()" ng-click="showPlansModal()">
-                    <figure class="product-grid_image u_clickable product-grid_image--locked">
-                      <img class="img-responsive" ng-src={{widget.imageUrl}} alt="{{widget.imageAlt}}"> 
-                    </figure><!--template-image-->
-                    <div class="product-grid_details">
-                      <div class="row">
-                        <div class="col-xs-8">
-                          <h4>{{widget.name | characters: 25}}</h4>
-                          
-                        </div><!-- end col -->
-                        <div class="col-xs-4">
-                          <button id="unlockButton" class="btn btn-default btn-sm btn-block">
-                            {{ 'editor-app.storeProduct.professional.unlock' | translate }}
-                          </button>
-                        </div><!-- end col -->
-                        <div class="col-xs-12">
-                          <p class="text-muted" translate="editor-app.storeProduct.professional.widgetType"></p>
-                        </div>
-                      </div><!-- end row -->
-                    </div>
-                  </div><!--product-grid-item-->
-
-                  <div class="product-grid_item panel panel-default" ng-if="playerLicenseFactory.hasProfessionalLicenses()" ng-click="quickSelect(widget)">
-                    <figure class="product-grid_image u_clickable product-grid_image--unlocked">
+                  <div class="product-grid_item panel panel-default" ng-click="quickSelect(widget)">
+                    <figure class="product-grid_image u_clickable">
                       <img class="img-responsive" ng-src={{widget.imageUrl}} alt="{{widget.imageAlt}}"> 
                     </figure><!--template-image-->
                     <div class="product-grid_details">
@@ -56,106 +36,76 @@
                             {{ 'editor-app.storeProduct.add' | translate }}
                           </button>
                         </div><!-- end col -->
-                        <div class="col-xs-12">
-                          <p class="text-muted" translate="editor-app.storeProduct.professional.widgetType"></p>
-                        </div>
                       </div><!-- end row -->
                     </div>
                   </div><!--product-grid-item-->
 
                 </div><!--col-->
               </ng-repeat>
-              <div ng-show="filteredProfessionalWidgets.length === 0 && search.query">
-                <div class="text-muted text-center u_padding-lg"><span translate>editor-app.storeProduct.professional.noResults</span></div>
+
+              <ng-repeat ng-repeat="product in factory.items.list">
+                <div id="storeProduct" class="col-sm-6 col-md-4 col-lg-3" ng-click="select(product)">
+                  <div class="product-grid_item panel panel-default">
+
+                    <figure class="product-grid_image u_clickable">
+                      <img ng-src="{{product.imageUrl}}" class="img-responsive" alt="{{product.name}}">
+                    </figure> 
+
+                    <div class="product-grid_details">
+                      <div class="row">
+                        <div class="col-xs-8">
+                          <h4 id="productName">{{product.name | characters: 25}}</h4>
+                        </div><!--end col-->
+                        <div class="col-xs-4">
+                          <button class="btn btn-primary btn-block btn-sm" id="{{product.name | slugify}}" ng-click="quickSelect(product); $event.stopPropagation()">Add</button>
+                        </div><!--end col-->
+                      </div><!--end row-->  
+                    </div><!-- end product-grid_details -->
+                  </div>
+                </div>
+              </ng-repeat>
+
+              <div class="col-sm-6 col-md-4 col-lg-3" ng-if="factory.search.category === 'Templates' && !factory.loadingItems">
+                <div class="product-grid_item panel panel-default">
+                  <figure class="product-grid_image u_clickable" ui-sref="apps.editor.workspace.artboard" ng-click="dismiss();">
+                    <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/UI/blank-landscape.png" alt="add blank presentation"> 
+                  </figure><!--template-image-->
+                  <div class="product-grid_details">
+                    <div class="row">
+                      <div class="col-xs-8">
+                        <h4>{{'editor-app.storeProduct.templates.blank' | translate}}</h4>
+                      </div><!-- end col -->
+                      <div class="col-xs-4">
+                        <button class="btn btn-primary btn-sm btn-block" id="newPresentationButton" ui-sref="apps.editor.workspace.artboard" ng-click="dismiss();">
+                          Add
+                        </button>
+                      </div><!-- end col -->
+                    </div><!-- end row -->
+                    
+                  </div>
+                </div><!--product-grid-item-->
               </div>
 
-              <!-- Hide if there are validation errors -->
-              <div class="col-sm-6 col-md-6 col-lg-6" ng-hide="filteredProfessionalWidgets.length === 0 && search.query">
-                <div class="plan-promotion" ng-if="!playerLicenseFactory.hasProfessionalLicenses()">
-                  <h2 translate="editor-app.storeProduct.professional.promotion"></h2>
-                  <p translate="editor-app.storeProduct.professional.promotionTrial"></p>
-                  <button id="promotionTrialButton" ng-click="showPlansModal()" class="btn btn-white btn-lg" translate="editor-app.storeProduct.professional.promotionTrialButton"></button>
-                </div>
-                <div class="pro-display-promotion" ng-if="playerLicenseFactory.hasProfessionalLicenses() && !playerLicenseFactory.areAllProLicensesUsed()">
-                  <h2 translate="editor-app.storeProduct.professional.promotion"></h2>
-                  <p translate="editor-app.storeProduct.professional.promotionPlan"></p>
-                  <a id="displaysListLink" ui-sref="apps.displays.list" link-cid target="_blank" class="btn btn-default btn-lg" translate="editor-app.storeProduct.professional.promotionDisplaysButton"></a>
-                </div>
-              </div><!--col-->
+              <!-- If no search results -->
+              <div class="col-sm-12" ng-show="factory.items.list.length === 0 && search.query && !factory.loadingItems">
+                <div class="text-muted text-center u_padding-lg"><span translate>editor-app.storeProduct.content.noResults</span></div>
+              </div>
+
             </div>
           </div>
         </div><!--panel-body-->
       </div><!--panel-->
 
-      <h4 class="u_margin-sm-top" translate="editor-app.storeProduct.content.otherWidgets"></h4>
-    </div>
-
-    <section id="productList" class="product-grid" 
-        scrolling-list="factory.load()"
-        rv-spinner rv-spinner-key="product-list-loader"
-        rv-spinner-start-active="1">
-
-      <div class="row u_margin-md-top">
-        <ng-repeat ng-repeat="product in factory.items.list">
-          <div id="storeProduct" class="col-sm-6 col-md-4 col-lg-3" ng-click="select(product)">
-            <div class="product-grid_item panel panel-default">
-
-              <figure class="product-grid_image u_clickable">
-                <img ng-src="{{product.imageUrl}}" class="img-responsive" alt="{{product.name}}">
-              </figure> 
-
-              <div class="product-grid_details">
-                <div class="row">
-                  <div class="col-xs-8">
-                    <h4 id="productName">{{product.name | characters: 25}}</h4>
-                  </div><!--end col-->
-                  <div class="col-xs-4">
-                    <button class="btn btn-primary btn-block btn-sm" id="{{product.name | slugify}}" ng-click="quickSelect(product); $event.stopPropagation()">Add</button>
-                  </div><!--end col-->
-                </div><!--end row-->  
-              </div><!-- end product-grid_details -->
-            </div>
-          </div>
-        </ng-repeat>
-
-        <div class="col-sm-6 col-md-4 col-lg-3" ng-if="factory.search.category === 'Templates' && !factory.loadingItems">
-          <div class="product-grid_item panel panel-default">
-            <figure class="product-grid_image u_clickable" ui-sref="apps.editor.workspace.artboard" ng-click="dismiss();">
-              <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/UI/blank-landscape.png" alt="add blank presentation"> 
-            </figure><!--template-image-->
-            <div class="product-grid_details">
-              <div class="row">
-                <div class="col-xs-8">
-                  <h4>{{'editor-app.storeProduct.templates.blank' | translate}}</h4>
-                </div><!-- end col -->
-                <div class="col-xs-4">
-                  <button class="btn btn-primary btn-sm btn-block" id="newPresentationButton" ui-sref="apps.editor.workspace.artboard" ng-click="dismiss();">
-                    Add
-                  </button>
-                </div><!-- end col -->
-              </div><!-- end row -->
-              
-            </div>
-          </div><!--product-grid-item-->
-        </div>
-
-        <!-- If no search results -->
-        <div class="col-sm-12" ng-show="factory.items.list.length === 0 && search.query && !factory.loadingItems">
-          <div class="text-muted text-center u_padding-lg"><span translate>editor-app.storeProduct.content.noResults</span></div>
-        </div>
-
-      </div><!-- end row -->
-
     </section>
 
-    <div id="suggestTemplate" class="text-center" ng-if="factory.search.category == 'Templates' && isEducationCustomer && !factory.loadingItems">
+    <div id="suggestTemplate" class="text-center" ng-if="factory.search.category === 'Templates' && isEducationCustomer && !factory.loadingItems">
       <h3 translate>editor-app.storeProduct.templates.cantFind</h3>
       <a translate href="https://docs.google.com/forms/d/1slHKxGxywkiSakMukDr4dMGLmhzhYhoU0F2BHP8FSd4/viewform" target="_blank">
         editor-app.storeProduct.templates.suggest
       </a>
     </div>
 
-    <a id="addWidgetByUrl" class="btn btn-default" href="#" ng-click="addWidgetByUrl()" ng-if="factory.search.category == 'Content'">
+    <a id="addWidgetByUrl" class="btn btn-default" href="#" ng-click="addWidgetByUrl()" ng-if="factory.search.category === 'Content'">
       {{'editor-app.addWidget.title' | translate}} <i class="fa fa-code icon-right"></i>
     </a>    
     

@@ -68,7 +68,6 @@ describe('controller: Store Products Modal', function() {
       }
     });
     
-    $provide.service('playerLicenseFactory', function() {});
   }));
   
   var $scope, $loading, $loadingStartSpy, $loadingStopSpy;

@@ -2,14 +2,12 @@
 angular.module('risevision.editor.controllers')
   .controller('storeProductsModal', ['$scope', '$loading', '$filter', '$modal', '$modalInstance',
     'ScrollingListService', 'productsFactory', 'playlistItemFactory', 'widgetUtils',
-    'plansFactory', 'playerLicenseFactory', 'category', 'TEMPLATES_TYPE', 'userState',
+    'category', 'TEMPLATES_TYPE', 'userState',
     function ($scope, $loading, $filter, $modal, $modalInstance,
       ScrollingListService, productsFactory, playlistItemFactory, widgetUtils,
-      plansFactory, playerLicenseFactory, category, TEMPLATES_TYPE, userState) {
+      category, TEMPLATES_TYPE, userState) {
       var defaultCount = 1000;
 
-      $scope.playerLicenseFactory = playerLicenseFactory;
-      $scope.showPlansModal = plansFactory.showPlansModal;
       $scope.isEducationCustomer = userState.isEducationCustomer();
 
       $scope.search = {
