@@ -37,6 +37,17 @@ angular.module('risevision.common.components.subscription-status.service')
             return null;
           });
       };
+      
+      factory.check = function (productCode) {
+        return factory.checkProductCode(productCode)
+          .then(function(statusItem) {
+            if (statusItem.isSubscribed) {
+              return $q.resolve(true);
+            } else {
+              return $q.reject(false);
+            }
+          });
+      };
 
       factory.checkProductCodes = function (productCodes) {
         var cachedItems = [];
