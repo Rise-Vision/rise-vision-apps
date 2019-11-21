@@ -22,6 +22,10 @@ angular.module('risevision.template-editor.directives')
                 initDate: null
               };
 
+              $scope.targetDateTimePicker = {
+                isOpen: false
+              };
+
               $scope.targetTimePicker = {
                 isOpen: false
               };
@@ -44,13 +48,15 @@ angular.module('risevision.template-editor.directives')
               });
 
               $scope.load = function () {
+                var counterType = $scope.getAvailableAttributeData($scope.componentId, 'type');
                 var targetDate = $scope.getAvailableAttributeData($scope.componentId, 'date');
+                var targetTime = $scope.getAvailableAttributeData($scope.componentId, 'time');
+                var nonCompletion = $scope.getAvailableAttributeData($scope.componentId, 'non-completion');
+                var completion = $scope.getAvailableAttributeData($scope.componentId, 'completion');
 
-                $scope.counterType = $scope.getAvailableAttributeData($scope.componentId, 'type');
-                $scope.targetTime = $scope.getAvailableAttributeData($scope.componentId, 'time');
-                $scope.nonCompletion = $scope.getAvailableAttributeData($scope.componentId,
-                  'non-completion') === '';
-                $scope.completionMessage = $scope.getAvailableAttributeData($scope.componentId, 'completion');
+                $scope.counterType = counterType;
+                $scope.nonCompletion = nonCompletion === '';
+                $scope.completionMessage = completion;
 
                 if (targetDate) {
                   var localDate = new Date(targetDate);
@@ -60,9 +66,11 @@ angular.module('risevision.template-editor.directives')
                   // Set init-date attribute to fix issue with Date initialization
                   // https://github.com/angular-ui/bootstrap/issues/5081
                   $scope.targetDatePicker.initDate = localDate;
+
                   $scope.targetDate = localDate;
-                } else if ($scope.targetTime) {
-                  $scope.targetTime = utils.absoluteTimeToMeridian($scope.targetTime);
+                  $scope.targetDateTime = utils.absoluteTimeToMeridian(targetTime);
+                } else if (targetTime) {
+                  $scope.targetTime = utils.absoluteTimeToMeridian(targetTime);
                   $scope.targetUnit = 'targetTime';
                 }
 
@@ -75,7 +83,8 @@ angular.module('risevision.template-editor.directives')
                   localDate.setMinutes(localDate.getMinutes() - localDate.getTimezoneOffset());
 
                   $scope.setAttributeData($scope.componentId, 'date', utils.formatISODate(localDate));
-                  $scope.setAttributeData($scope.componentId, 'time', null);
+                  $scope.setAttributeData($scope.componentId, 'time', utils.meridianTimeToAbsolute($scope
+                    .targetDateTime));
                 } else if ($scope.targetUnit === 'targetTime') {
                   $scope.setAttributeData($scope.componentId, 'date', null);
                   $scope.setAttributeData($scope.componentId, 'time', utils.meridianTimeToAbsolute($scope
@@ -94,11 +103,13 @@ angular.module('risevision.template-editor.directives')
                 $scope.targetDatePicker.isOpen = !$scope.targetDatePicker.isOpen;
               };
 
-              $scope.openTimePicker = function ($event) {
+              $scope.openTimePicker = function ($event, type) {
+                var picker = type === 'date' ? 'targetDateTimePicker' : 'targetTimePicker';
+
                 $event.preventDefault();
                 $event.stopPropagation();
 
-                $scope.targetTimePicker.isOpen = !$scope.targetTimePicker.isOpen;
+                $scope[picker].isOpen = !$scope[picker].isOpen;
               };
 
               function _registerDatePickerClosingWatch() {

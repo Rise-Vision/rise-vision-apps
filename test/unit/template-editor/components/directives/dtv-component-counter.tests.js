@@ -64,8 +64,8 @@ describe('directive: templateComponentCounter', function() {
   describe('load', function () {
     function _initLoad(type, date, time) {
       $scope.getAvailableAttributeData = sandbox.stub();
-      $scope.getAvailableAttributeData.onCall(0).returns(date);
-      $scope.getAvailableAttributeData.onCall(1).returns(type);
+      $scope.getAvailableAttributeData.onCall(0).returns(type);
+      $scope.getAvailableAttributeData.onCall(1).returns(date);
       $scope.getAvailableAttributeData.onCall(2).returns(time);
     }
 
@@ -74,15 +74,32 @@ describe('directive: templateComponentCounter', function() {
 
       $scope.load();
 
-      expect($scope.getAvailableAttributeData.getCall(0).args[1]).to.equal('date');
-      expect($scope.getAvailableAttributeData.getCall(1).args[1]).to.equal('type');
+      expect($scope.getAvailableAttributeData.getCall(0).args[1]).to.equal('type');
+      expect($scope.getAvailableAttributeData.getCall(1).args[1]).to.equal('date');
       expect($scope.getAvailableAttributeData.getCall(2).args[1]).to.equal('time');
 
       var expectedDate = new Date('2019-10-25');
       expectedDate.setMinutes(expectedDate.getMinutes() + expectedDate.getTimezoneOffset());
 
       expect($scope.targetDate).to.deep.equal(expectedDate);
-      expect($scope.targetTime).to.equal(null);
+      expect($scope.targetDateTime).to.equal(null);
+      expect($scope.targetUnit).to.equal('targetDate');
+    });
+
+    it('should load the date and time', function () {
+      _initLoad('down', '2019-10-25', '15:27');
+
+      $scope.load();
+
+      expect($scope.getAvailableAttributeData.getCall(0).args[1]).to.equal('type');
+      expect($scope.getAvailableAttributeData.getCall(1).args[1]).to.equal('date');
+      expect($scope.getAvailableAttributeData.getCall(2).args[1]).to.equal('time');
+
+      var expectedDate = new Date('2019-10-25');
+      expectedDate.setMinutes(expectedDate.getMinutes() + expectedDate.getTimezoneOffset());
+
+      expect($scope.targetDate).to.deep.equal(expectedDate);
+      expect($scope.targetDateTime).to.equal('03:27 PM');
       expect($scope.targetUnit).to.equal('targetDate');
     });
 
@@ -91,8 +108,8 @@ describe('directive: templateComponentCounter', function() {
 
       $scope.load();
 
-      expect($scope.getAvailableAttributeData.getCall(0).args[1]).to.equal('date');
-      expect($scope.getAvailableAttributeData.getCall(1).args[1]).to.equal('type');
+      expect($scope.getAvailableAttributeData.getCall(0).args[1]).to.equal('type');
+      expect($scope.getAvailableAttributeData.getCall(1).args[1]).to.equal('date');
       expect($scope.getAvailableAttributeData.getCall(2).args[1]).to.equal('time');
 
       expect($scope.targetDate).to.not.be.ok;
@@ -114,6 +131,16 @@ describe('directive: templateComponentCounter', function() {
       expect($scope.setAttributeData.getCall(0).args[2]).to.equal('2019-10-25');
       expect($scope.setAttributeData.getCall(1).args[1]).to.equal('time');
       expect($scope.setAttributeData.getCall(1).args[2]).to.equal(null);
+    });
+
+    it('should save the date and time', function () {
+      $scope.targetDateTime = '03:27 PM';
+      $scope.targetUnit = 'targetDate';
+      $scope.save();
+      expect($scope.setAttributeData.getCall(0).args[1]).to.equal('date');
+      expect($scope.setAttributeData.getCall(0).args[2]).to.equal('2019-10-25');
+      expect($scope.setAttributeData.getCall(1).args[1]).to.equal('time');
+      expect($scope.setAttributeData.getCall(1).args[2]).to.equal('15:27');
     });
 
     it('should only save the time', function () {
