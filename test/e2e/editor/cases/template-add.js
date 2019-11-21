@@ -80,9 +80,6 @@ var TemplateAddScenarios = function() {
       helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader(), 'Store products loader');
 
       expect(storeProductsModalPage.getStoreProducts().count()).to.eventually.be.above(0);
-      
-      expect(storeProductsModalPage.getFreeProducts().count()).to.eventually.be.above(0);
-      expect(storeProductsModalPage.getPremiumProducts().count()).to.eventually.be.above(0);
     });
 
     it('should show Add Blank Presentation',function(){
@@ -93,30 +90,14 @@ var TemplateAddScenarios = function() {
       expect(storeProductsModalPage.getSuggestTemplate().isDisplayed()).to.eventually.be.true;
     });
 
-    xit('should show preview modal when selecting a free template',function(){
-      storeProductsModalPage.getFreeProducts().get(0).click();
-
-      helper.wait(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
-
-      expect(productDetailsModalPage.getProductDetailsModal().isDisplayed()).to.eventually.be.true;
-      expect(productDetailsModalPage.getUseProductButton().isDisplayed()).to.eventually.be.true;
-      expect(productDetailsModalPage.getUseProductButton().getText()).to.eventually.equal('Start with this Template');
-      expect(productDetailsModalPage.getCloseButton().isDisplayed()).to.eventually.be.true;
-      productDetailsModalPage.getCloseButton().click();
-
-      helper.waitDisappear(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
-    });
-
     it('should show pricing component modal',function(){
       browser.call(()=>console.log("should show pricing component modal"));
-      storeProductsModalPage.getPremiumProducts().get(0).click();
+      storeProductsModalPage.getAddBlankPresentation().click();
 
-      helper.wait(productDetailsModalPage.getProductDetailsModal(), 'Product Details Modal');
+      helper.wait(workspacePage.getDisplayLicenseRequiredModal(), 'Display License Notification');
+      browser.sleep(500);
+      workspacePage.getDisplayLicenseRequiredSubscribeButton().click();
 
-      helper.waitDisappear(productDetailsModalPage.getPricingLoader(), 'Pricing loader');
-      expect(productDetailsModalPage.getProductDetailsModal().isDisplayed()).to.eventually.be.true;
-      expect(productDetailsModalPage.getStartTrialButton().isDisplayed()).to.eventually.be.true;
-      productDetailsModalPage.getStartTrialButton().click();
       browser.call(()=>console.log("waiting for pricing component frame"));
       helper.wait(pricingComponentModalPage.getSubscribeButton(), 'Pricing Component Modal');
       browser.call(()=>console.log("subscribing"));

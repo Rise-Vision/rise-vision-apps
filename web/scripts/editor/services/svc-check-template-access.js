@@ -2,9 +2,9 @@
 
 angular.module('risevision.editor.services')
   .value('TEMPLATE_LIBRARY_PRODUCT_CODE', '61dd6aa64152a228522ddf5950e5abb526416f27')
-  .factory('checkTemplateAccess', ['$modal', 'storeAuthorization', 'plansFactory',
+  .factory('checkTemplateAccess', ['$modal', 'subscriptionStatusFactory', 'plansFactory',
     'TEMPLATE_LIBRARY_PRODUCT_CODE',
-    function ($modal, storeAuthorization, plansFactory, TEMPLATE_LIBRARY_PRODUCT_CODE) {
+    function ($modal, subscriptionStatusFactory, plansFactory, TEMPLATE_LIBRARY_PRODUCT_CODE) {
       var _openExpiredModal = function (isHtmlTemplate) {
         var modalObject = {
           controller: 'confirmModalController',
@@ -18,7 +18,9 @@ angular.module('risevision.editor.services')
             confirmationButton: function () {
               return 'Subscribe';
             },
-            cancelButton: null
+            cancelButton: function () {
+              return 'Close';
+            }
           }
         };
 
@@ -31,7 +33,7 @@ angular.module('risevision.editor.services')
         }
 
         var modalInstance = $modal.open(modalObject);
-        
+
         modalInstance.result.then(function () {
           modalInstance.dismiss();
           plansFactory.showPlansModal();
@@ -39,7 +41,7 @@ angular.module('risevision.editor.services')
       };
 
       return function (isHtmlTemplate) {
-        return storeAuthorization.check(TEMPLATE_LIBRARY_PRODUCT_CODE)
+        return subscriptionStatusFactory.check(TEMPLATE_LIBRARY_PRODUCT_CODE)
           .catch(function () {
             _openExpiredModal(isHtmlTemplate);
           });

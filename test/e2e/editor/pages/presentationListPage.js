@@ -20,7 +20,7 @@ var PresentationListPage = function() {
 
   var presentationsLoader = element(by.xpath('//div[@spinner-key="presentation-list-loader"]'));
 
-  this.openNewPresentation = function() {
+  this.openNewPresentation = function(isNotSubscribed) {
     var storeProductsModalPage = new StoreProductsModalPage();
     var workspacePage = new WorkspacePage();
 
@@ -31,6 +31,13 @@ var PresentationListPage = function() {
     storeProductsModalPage.getAddBlankPresentation().click();
     
     helper.wait(workspacePage.getWorkspaceContainer(), 'Workspace Container');
+
+    if (isNotSubscribed) {
+      helper.wait(workspacePage.getDisplayLicenseRequiredModal(), 'Display License Notification');
+      browser.sleep(500);
+      workspacePage.getDisplayLicenseRequiredCloseButton().click();
+    }
+
     browser.sleep(500);
   }
 

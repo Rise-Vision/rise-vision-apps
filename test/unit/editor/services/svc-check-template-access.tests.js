@@ -31,13 +31,13 @@ describe('service: checkTemplateAccess:', function() {
 
   }));
   
-  var checkTemplateAccess, $modal, storeAuthorization, plansFactory;
+  var checkTemplateAccess, $modal, subscriptionStatusFactory, plansFactory;
 
   beforeEach(function(){
     inject(function($injector){
       checkTemplateAccess = $injector.get('checkTemplateAccess');
       $modal = $injector.get('$modal');
-      storeAuthorization = $injector.get('storeAuthorization');
+      subscriptionStatusFactory = $injector.get('subscriptionStatusFactory');
       plansFactory = $injector.get('plansFactory');
     });
   });
@@ -49,7 +49,7 @@ describe('service: checkTemplateAccess:', function() {
   it('should give access to premium templates if subscribed to Templates Library', function(done) {
     checkTemplateAccess()
     .then(function() {
-      storeAuthorization.check.should.have.been.calledWith(TEMPLATE_LIBRARY_PRODUCT_CODE);
+      subscriptionStatusFactory.check.should.have.been.calledWith(TEMPLATE_LIBRARY_PRODUCT_CODE);
       $modal.open.should.not.have.been.called;
 
       done();
@@ -57,7 +57,7 @@ describe('service: checkTemplateAccess:', function() {
   });
 
   it('should show license modal for Templates if not subscribed to Templates Library', function(done) {
-    storeAuthorization.check.returns(Q.reject());
+    subscriptionStatusFactory.check.returns(Q.reject());
 
     checkTemplateAccess(true)
     .then(function() {
@@ -72,7 +72,7 @@ describe('service: checkTemplateAccess:', function() {
   });
 
   it('should show license modal for Presentations if not subscribed to Templates Library', function(done) {
-    storeAuthorization.check.returns(Q.reject());
+    subscriptionStatusFactory.check.returns(Q.reject());
 
     checkTemplateAccess()
     .then(function() {
@@ -87,7 +87,7 @@ describe('service: checkTemplateAccess:', function() {
   });
 
   it('should dismiss and open plansModal on page confirm', function(done){
-    storeAuthorization.check.returns(Q.reject());
+    subscriptionStatusFactory.check.returns(Q.reject());
 
     checkTemplateAccess();
 

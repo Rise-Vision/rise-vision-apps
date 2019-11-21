@@ -192,8 +192,7 @@
   "templatesLibrary": {
     "details": {
       "preview": "Preview this Template"
-    },
-    "access-warning": "You need a Plan subscription to use this Template. Get access to all Templates with any 14-day Plan Trial, and with any Plan Subscription thereafter."
+    }
   },
   "title": "Editor",
   "workspace": {
