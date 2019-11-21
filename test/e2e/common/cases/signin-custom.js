@@ -35,11 +35,11 @@ var SigninCustomScenarios = function() {
       expect(signInPage.getSigninButton().isPresent()).to.eventually.be.true;
     });
 
-    it('should show minimum length error', function() {
+    it('should not show minimum length error', function() {
       signInPage.getUsernameTextBox().sendKeys('test@test.com');
       signInPage.getPasswordTextBox().sendKeys('pas');
 
-      expect(signInPage.getPasswordMinLengthError().isDisplayed()).to.eventually.be.true;
+      expect(signInPage.getPasswordMinLengthError().isPresent()).to.eventually.be.false;
     });
 
     it('should show required field error', function() {

@@ -76,7 +76,8 @@ describe('controller: display details', function() {
           getSelectedCompanyId: function() {return "company1"},
           getCopyOfSelectedCompany: function() {return company;},
           _restoreState: function(){},
-          updateCompanySettings: sandbox.stub()
+          updateCompanySettings: sandbox.stub(),
+          hasRole: sandbox.stub().returns(true)
       };
     });
     
@@ -501,6 +502,12 @@ describe('controller: display details', function() {
       sandbox.stub($scope, 'areAllProLicensesUsed').returns(true);
 
       currentPlanFactory.currentPlan.isPurchasedByParent = true;
+
+      expect($scope.isProToggleEnabled()).to.be.false;
+    });
+
+    it('should return false if user is not display administrator', function () {
+      userState.hasRole.returns(false);
 
       expect($scope.isProToggleEnabled()).to.be.false;
     });

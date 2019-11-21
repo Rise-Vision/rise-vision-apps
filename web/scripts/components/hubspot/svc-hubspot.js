@@ -13,7 +13,9 @@
 
         service.loadAs = function (email) {
           if (!loaded) {
-             _hsq.push(['identify',{ email: email }]);
+            _hsq.push(['identify', {
+              email: email
+            }]);
 
             var e = document.createElement('script');
             e.type = 'text/javascript';
