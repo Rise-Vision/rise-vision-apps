@@ -10,7 +10,7 @@ describe('service: checkTemplateAccess:', function() {
     $provide.value("TEMPLATE_LIBRARY_PRODUCT_CODE", TEMPLATE_LIBRARY_PRODUCT_CODE);
     $provide.service('$q', function() {return Q;});
 
-    $provide.service('storeAuthorization', function() {
+    $provide.service('subscriptionStatusFactory', function() {
       return {
         check: function(templateCode) {
           var deferred = Q.defer();

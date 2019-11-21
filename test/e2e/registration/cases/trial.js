@@ -84,12 +84,28 @@ var TrialScenarios = function() {
       });
 
       it('should show Strage trial after page refresh', function () {
+        var _getTrialWithRetries = function(retries) {
+          helper.wait(storageSelectorModalPage.getActiveTrialBanner(), 'Active Trial')
+            .catch(function (e) {
+              retries = typeof(retries) === 'undefined' ? 3 : retries;
+
+              if (retries > 0) {
+                browser.call(()=>console.log("waiting for trial to appear, attempt: " + (4 - retries)));
+
+                browser.driver.navigate().refresh();
+
+                helper.waitDisappear(commonHeaderPage.getLoader(), 'CH Spinner Loader');
+
+                _getTrialWithRetries(retries - 1);
+              } else {
+                throw e;
+              }
+            });
+        };
+
         homepage.getStorage();
 
-        helper.wait(storageHomePage.getStorageAppContainer(), 'Storage Apps Container');
-        helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
-
-        helper.wait(storageSelectorModalPage.getActiveTrialBanner(), 'Active Trial Banner');
+        _getTrialWithRetries();
 
         expect(storageSelectorModalPage.getActiveTrialBanner().isDisplayed()).to.eventually.be.true;
         expect(storageSelectorModalPage.getStartTrialButton().isDisplayed()).to.eventually.be.false;

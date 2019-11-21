@@ -30,6 +30,7 @@ describe('service: subscriptionStatusFactory:', function() {
   it('should exist',function(){
     expect(subscriptionStatusFactory).to.be.truely;
     expect(subscriptionStatusFactory.checkProductCode).to.be.a('function');
+    expect(subscriptionStatusFactory.check).to.be.a('function');
     expect(subscriptionStatusFactory.checkProductCodes).to.be.a('function');
   });
 
@@ -135,6 +136,37 @@ describe('service: subscriptionStatusFactory:', function() {
         expect(err).to.be.equal("Failure");
         done();
       }); 
+    });
+
+  });
+
+  describe('check:', function() {
+    var pc = "pc1";
+
+    it('should resolve if subscribed', function(done) {
+      sinon.stub(subscriptionStatusFactory, 'checkProductCode').returns(Q.resolve({isSubscribed: true}));
+
+      subscriptionStatusFactory.check(pc).then(function(status){
+        expect(status).to.be.true;
+
+        done();
+      },function(err){
+        done('Should not reject');
+      }); 
+
+    });
+
+    it('should reject if unsubscribed', function(done) {
+      sinon.stub(subscriptionStatusFactory, 'checkProductCode').returns(Q.resolve({isSubscribed: false}));
+
+      subscriptionStatusFactory.check(pc).then(function(){
+        done('Should not resolve');
+      },function(status){
+        expect(status).to.be.false;
+
+        done();
+      }); 
+
     });
 
   });
