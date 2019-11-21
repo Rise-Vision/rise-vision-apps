@@ -18,7 +18,7 @@
     .constant('LOCALES_SUFIX', '.json');
 
   angular.module('risevision.common.config')
-    .value('CORE_URL', 'https://add-template-dot-rvacore-test.appspot.com/_ah/api'); // override default core value
+    .value('CORE_URL', 'https://rvacore-test.appspot.com/_ah/api'); // override default core value
 
   angular.module('risevision.apps.config', [])
     .value('APPS_ENV', 'TEST')
