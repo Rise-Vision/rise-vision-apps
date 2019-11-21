@@ -2,7 +2,7 @@
   <div class="attribute-editor-row counter-container">
     <label ng-show="counterType == 'down'" class="u_margin-sm-top">Countdown to:</label>
     <label ng-show="counterType == 'up'" class="u_margin-sm-top">Count up from:</label>
-    <div class="radio">
+    <div class="radio" id="dateRadio">
       <input type="radio" ng-model="targetUnit" value="targetDate" id="specificDate" name="specificDate" ng-change="save()" aria-required="true" tabindex="1" required>
       <label for="specificDate" id="specificDateLabel">
         A specific date and time:
@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <div class="radio">
+    <div class="radio" id="timeRadio">
       <input type="radio" ng-model="targetUnit" value="targetTime" id="specificTime" name="specificTime" ng-change="save()" aria-required="true" tabindex="1" required>
       <label for="specificTime" id="specificTimeLabel">
         A specific time, every day:

@@ -51,6 +51,22 @@ var CounterComponentScenarios = function () {
 
         expect(counterComponentPage.getTargetDate().getAttribute('value')).to.eventually.not.equal('');
 
+        helper.wait(counterComponentPage.getDateTimePickerButton(), 'Target time button');
+        counterComponentPage.getDateTimePickerButton().click();
+
+        helper.wait(counterComponentPage.getIncreaseHours('date'), 'Increase hours');
+        counterComponentPage.getIncreaseHours('date').click();
+        counterComponentPage.getIncreaseHours('date').click();
+        counterComponentPage.getIncreaseHours('date').click();
+
+        helper.wait(counterComponentPage.getDecreaseMinutes('date'), 'Decrease hours');
+        counterComponentPage.getDecreaseMinutes('date').click();
+
+        // Close time picker
+        counterComponentPage.getDateTimePickerButton().click();
+
+        expect(counterComponentPage.getTargetDateTime().getAttribute('value')).to.eventually.equal('03:59 PM');
+
         //wait for presentation to be auto-saved
         templateEditorPage.waitForAutosave();
       });
@@ -62,13 +78,13 @@ var CounterComponentScenarios = function () {
         helper.wait(counterComponentPage.getTimePickerButton(), 'Target time button');
         counterComponentPage.getTimePickerButton().click();
 
-        helper.wait(counterComponentPage.getIncreaseHours(), 'Increase hours');
-        counterComponentPage.getIncreaseHours().click();
+        helper.wait(counterComponentPage.getIncreaseHours('time'), 'Increase hours');
+        counterComponentPage.getIncreaseHours('time').click();
 
-        helper.wait(counterComponentPage.getDecreaseMinutes(), 'Decrease hours');
-        counterComponentPage.getDecreaseMinutes().click();
-        counterComponentPage.getDecreaseMinutes().click();
-        counterComponentPage.getDecreaseMinutes().click();
+        helper.wait(counterComponentPage.getDecreaseMinutes('time'), 'Decrease hours');
+        counterComponentPage.getDecreaseMinutes('time').click();
+        counterComponentPage.getDecreaseMinutes('time').click();
+        counterComponentPage.getDecreaseMinutes('time').click();
 
         // Close time picker
         counterComponentPage.getTimePickerButton().click();
