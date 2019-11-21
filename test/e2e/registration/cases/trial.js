@@ -96,7 +96,7 @@ var TrialScenarios = function() {
 
                 helper.waitDisappear(commonHeaderPage.getLoader(), 'CH Spinner Loader');
 
-                _this.waitForPlanUpdate(retries - 1);
+                _getTrialWithRetries(retries - 1);
               } else {
                 throw e;
               }
