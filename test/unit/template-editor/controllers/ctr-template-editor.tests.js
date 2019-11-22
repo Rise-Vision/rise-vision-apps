@@ -323,6 +323,17 @@ describe('controller: TemplateEditor', function() {
       expect(result).to.equal('common.saveBeforeLeave');
     });
 
+    it('should not notify unsaved changes when closing window if user is not Content Editor', function () {
+      userState.hasRole.returns(false);
+      factory.presentation.id = '1234';
+      factory.presentation.name = 'New Name';
+      $scope.$apply();
+      $timeout.flush();
+
+      var result = $window.onbeforeunload();
+      expect(result).to.equal(undefined);
+    });
+
     it('should not notify unsaved changes when closing window if there are no changes', function() {
       var result = $window.onbeforeunload();
       expect(result).to.equal(undefined);

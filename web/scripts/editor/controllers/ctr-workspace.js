@@ -107,7 +107,7 @@ angular.module('risevision.editor.controllers')
       });
 
       $window.onbeforeunload = function () {
-        if ($scope.hasUnsavedChanges) {
+        if ($scope.hasUnsavedChanges && $scope.hasContentEditorRole()) {
           return $filter('translate')('common.saveBeforeLeave');
         }
       };
