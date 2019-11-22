@@ -222,12 +222,6 @@ angular.module('risevision.editor.services')
         });
       };
 
-      factory.isProfessionalWidget = function (widgetId) {
-        return !!_.find(PROFESSIONAL_WIDGETS, {
-          id: widgetId
-        });
-      };
-
       return factory;
     }
   ]);

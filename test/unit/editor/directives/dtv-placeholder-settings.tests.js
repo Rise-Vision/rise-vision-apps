@@ -8,8 +8,6 @@ describe('directive: placeholder settings', function() {
     placeholderFactory = {
       placeholder: {
         id: 'ph1'
-      },
-      updateSubscriptionStatus: function() {
       }
     };
     $provide.service('placeholderFactory', function (){

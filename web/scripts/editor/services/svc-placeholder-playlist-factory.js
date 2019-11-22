@@ -22,8 +22,6 @@ angular.module('risevision.editor.services')
       factory.updateItem = function (item) {
         if (_getItemIndex(item) === -1) {
           factory.getItems().push(item);
-
-          placeholderFactory.updateSubscriptionStatus();
         }
       };
 

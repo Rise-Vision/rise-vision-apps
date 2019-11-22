@@ -21,7 +21,6 @@ describe('service: widgetUtils:', function() {
     expect(widgetUtils.getSvgIcon).to.be.a('function');
     expect(widgetUtils.getWidgetId).to.be.a('function');
     expect(widgetUtils.getProfessionalWidgets).to.be.a('function');
-    expect(widgetUtils.isProfessionalWidget).to.be.a('function');
   });
   
   it('isRenderingAllowed: ', function() {
@@ -107,16 +106,6 @@ describe('service: widgetUtils:', function() {
       expect(widgets[1].name).to.contain('Embedded');
       expect(widgets[1].env).to.be.undefined;
     });
-  });
-
-  it('isProfessionalWidget: ',function () {
-    // Twitter Test
-    expect(widgetUtils.isProfessionalWidget('83850b51-9040-445d-aa3b-d25946a725c5')).to.be.true;
-    // Twitter Prod
-    expect(widgetUtils.isProfessionalWidget('67e511ae-62b5-4a44-9551-077f63596079')).to.be.true;
-    
-    expect(widgetUtils.isProfessionalWidget('presentation')).to.be.true;
-    expect(widgetUtils.isProfessionalWidget('67e511ae')).to.be.false;
   });
 
 });

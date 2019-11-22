@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.editor.services')
-  .factory('placeholderFactory', ['$rootScope', 'gadgetFactory',
-    function ($rootScope, gadgetFactory) {
+  .factory('placeholderFactory', ['$rootScope',
+    function ($rootScope) {
       var factory = {};
 
       factory.setPlaceholder = function (placeholder) {
@@ -11,12 +11,6 @@ angular.module('risevision.editor.services')
 
       factory.clearPlaceholder = function () {
         factory.placeholder = undefined;
-      };
-
-      factory.updateSubscriptionStatus = function () {
-        if (factory.placeholder && factory.placeholder.items) {
-          gadgetFactory.updateItemsStatus(factory.placeholder.items);
-        }
       };
 
       $rootScope.$on('$stateChangeSuccess', function (event, toState) {

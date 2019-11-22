@@ -2,10 +2,8 @@
 
 angular.module('risevision.editor.services')
   .value('EMBEDDED_PRESENTATIONS_CODE', 'd3a418f1a3acaed42cf452fefb1eaed198a1c620')
-  .factory('gadgetFactory', ['$q', 'gadget', 'BaseList', 'subscriptionStatusFactory',
-    'widgetUtils', 'playerLicenseFactory', 'EMBEDDED_PRESENTATIONS_CODE',
-    function ($q, gadget, BaseList, subscriptionStatusFactory, widgetUtils,
-      playerLicenseFactory, EMBEDDED_PRESENTATIONS_CODE) {
+  .factory('gadgetFactory', ['$q', 'gadget', 'BaseList', 'EMBEDDED_PRESENTATIONS_CODE',
+    function ($q, gadget, BaseList, EMBEDDED_PRESENTATIONS_CODE) {
       var factory = {};
 
       var _gadgets = [{
@@ -103,117 +101,6 @@ angular.module('risevision.editor.services')
               factory.loadingGadget = false;
             });
         }
-
-        return deferred.promise;
-      };
-
-      var _getGadgetByItemCached = function (item) {
-        var gadgetId;
-        if (item.type === 'presentation') {
-          gadgetId = 'presentation';
-        } else {
-          gadgetId = item.objectReference;
-        }
-
-        return _getGadgetByIdCached(gadgetId);
-      };
-
-      var _getGadgets = function (items) {
-        var deferred = $q.defer();
-
-        var nonCachedIds = [];
-        for (var i = 0; i < items.length; i++) {
-          var cachedGadget = _getGadgetByItemCached(items[i]);
-          if (cachedGadget) {
-            items[i].gadget = cachedGadget;
-          } else {
-            if (nonCachedIds.indexOf(items[i].objectReference) === -1) {
-              nonCachedIds.push(items[i].objectReference);
-            }
-          }
-        }
-        if (nonCachedIds.length === 0) {
-          deferred.resolve();
-        } else {
-          //show loading spinner
-          factory.loadingGadget = true;
-
-          gadget.list({
-              ids: nonCachedIds
-            })
-            .then(function (result) {
-              if (result.items) {
-                for (var i = 0; i < result.items.length; i++) {
-                  _updateGadgetCache(result.items[i]);
-                }
-              }
-            })
-            .then(null, function (e) {
-              factory.apiError = e.message ? e.message : e.toString();
-            })
-            .finally(function () {
-              for (var i = 0; i < items.length; i++) {
-                if (!items[i].gadget) {
-                  items[i].gadget = _getGadgetByItemCached(items[i]);
-
-                  // resolve potential NPE
-                  if (!items[i].gadget) {
-                    items[i].gadget = {};
-                  }
-                }
-              }
-
-              factory.loadingGadget = false;
-
-              // Always resolve to return (even impartial) list
-              deferred.resolve();
-            });
-        }
-
-        return deferred.promise;
-      };
-
-      factory.updateItemsStatus = function (items) {
-        var deferred = $q.defer();
-
-        _getGadgets(items).then(function () {
-          var productCodeItemMap = {};
-          for (var i = 0; i < items.length; i++) {
-            var gadget = items[i].gadget;
-            gadget.statusMessage = '';
-            if (gadget.productCode) {
-              productCodeItemMap[gadget.productCode] = items[i];
-            }
-          }
-          var productCodes = Object.keys(productCodeItemMap);
-          if (productCodes.length > 0) {
-            subscriptionStatusFactory.checkProductCodes(productCodes)
-              .then(function (statusItems) {
-                for (var i = 0; i < statusItems.length; i++) {
-                  var statusItem = statusItems[i];
-                  var gadget = productCodeItemMap[statusItem.pc].gadget;
-                  if (!statusItem.isSubscribed && widgetUtils.isProfessionalWidget(gadget.id) &&
-                    playerLicenseFactory.hasProfessionalLicenses()) {
-                    gadget.isSubscribed = true;
-                    gadget.subscriptionStatus = 'Subscribed';
-                    gadget.isLicensed = true;
-                  } else {
-                    gadget.isSubscribed = statusItem.isSubscribed;
-                    gadget.subscriptionStatus = statusItem.status;
-                    gadget.isLicensed = false;
-                  }
-                  gadget.expiry = statusItem.expiry;
-                  gadget.trialPeriod = statusItem.trialPeriod;
-                }
-                deferred.resolve();
-              }, function (e) {
-                factory.apiError = e.message ? e.message : e.toString();
-                deferred.reject();
-              });
-          } else {
-            deferred.resolve();
-          }
-        });
 
         return deferred.promise;
       };
