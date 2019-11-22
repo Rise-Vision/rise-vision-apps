@@ -11,14 +11,18 @@ angular.module('risevision.editor.controllers')
   .controller('WorkspaceController', ['$scope', 'editorFactory',
     'artboardFactory', 'placeholderFactory', '$modal',
     '$templateCache', '$location', '$stateParams', '$window', 'RVA_URL',
-    'IGNORE_FIELDS', '$timeout', '$state', '$filter',
+    'IGNORE_FIELDS', '$timeout', '$state', '$filter', 'userState',
     function ($scope, editorFactory, artboardFactory, placeholderFactory,
       $modal, $templateCache, $location, $stateParams, $window,
-      RVA_URL, IGNORE_FIELDS, $timeout, $state, $filter) {
+      RVA_URL, IGNORE_FIELDS, $timeout, $state, $filter, userState) {
       $scope.factory = editorFactory;
       $scope.artboardFactory = artboardFactory;
       $scope.placeholderFactory = placeholderFactory;
       $scope.hasUnsavedChanges = false;
+
+      $scope.hasContentEditorRole = function () {
+        return userState.hasRole('ce');
+      };
 
       var _isEqualIgnoringFields = function (o1, o2) {
         if (typeof o1 === 'object') {
@@ -86,7 +90,7 @@ angular.module('risevision.editor.controllers')
           _bypass = false;
           return;
         }
-        if ($scope.hasUnsavedChanges && (toState.name !==
+        if ($scope.hasUnsavedChanges && $scope.hasContentEditorRole() && (toState.name !==
             'apps.editor.workspace.artboard' && toState.name !==
             'apps.editor.workspace.htmleditor')) {
           event.preventDefault();

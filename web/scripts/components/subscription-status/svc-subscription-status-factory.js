@@ -37,10 +37,10 @@ angular.module('risevision.common.components.subscription-status.service')
             return null;
           });
       };
-      
+
       factory.check = function (productCode) {
         return factory.checkProductCode(productCode)
-          .then(function(statusItem) {
+          .then(function (statusItem) {
             if (statusItem.isSubscribed) {
               return $q.resolve(true);
             } else {
