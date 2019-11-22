@@ -3,32 +3,23 @@
 angular.module('risevision.editor.controllers')
   .controller('PlaylistItemModalController', ['$scope',
     'placeholderPlaylistFactory', 'settingsFactory', 'gadgetFactory', '$modalInstance',
-    'item', 'editorFactory', 'userState', 'plansFactory', 'RVA_URL', 'EMBEDDED_PRESENTATIONS_CODE',
+    'item', 'editorFactory', 'userState', 'RVA_URL',
     function ($scope, placeholderPlaylistFactory, settingsFactory, gadgetFactory,
-      $modalInstance, item, editorFactory, userState, plansFactory, RVA_URL, EMBEDDED_PRESENTATIONS_CODE) {
-      var plansProductCodes = [EMBEDDED_PRESENTATIONS_CODE];
-
+      $modalInstance, item, editorFactory, userState, RVA_URL) {
       $scope.PREVIOUS_EDITOR_URL = RVA_URL + '/#/PRESENTATION_MANAGE' + ((
           editorFactory.presentation.id) ? '/id=' + editorFactory.presentation
         .id : '') + '?cid=' + userState.getSelectedCompanyId();
       $scope.item = angular.copy(item);
-      $scope.showPlansModal = plansFactory.showPlansModal;
 
       if (item.type === 'presentation') {
         $scope.widgetName = 'editor-app.playlistItem.presentation.name';
       } else if (!item.objectReference && item.settingsUrl) {
         $scope.widgetName = item.name;
-      } else {
-        if (item.objectReference && item.type === 'widget') {
-          if (item.gadget && plansProductCodes.indexOf(item.gadget.productCode) >= 0) {
-            $scope.isPlansProductCode = true;
-          }
-
-          gadgetFactory.getGadgetById(item.objectReference)
-            .then(function (gadget) {
-              $scope.widgetName = gadget.name;
-            });
-        }
+      } else if (item.objectReference && item.type === 'widget') {
+        gadgetFactory.getGadgetById(item.objectReference)
+          .then(function (gadget) {
+            $scope.widgetName = gadget.name;
+          });
       }
 
       $scope.showSettingsModal = function () {

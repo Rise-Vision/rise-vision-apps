@@ -1,8 +1,0 @@
-<div ng-if="item.gadget.productCode" class="subscription-status {{className}}">
-	<span id="statusMessage">{{item.gadget | subscriptionStatusMessage}}</span>
-	<span ng-if="!item.gadget.isLicensed">
-		<a ng-if="showSubscribe && !useCustomOnClick" class="btn btn-primary u_margin-left" href="{{storeUrl}}/product-status/{{item.gadget.productCode}}?cid={{companyId}}" target="_blank">{{'editor-app.subscription.subscribe' | translate}}</a>
-		<a ng-if="showSubscribe && useCustomOnClick" class="btn btn-primary u_margin-left" ng-click="customOnClick()">{{'editor-app.subscription.subscribe' | translate}}</a>
-		<a ng-if="showAccountButton" class="btn btn-primary" href="{{storeUrl}}/account?cid={{companyId}}" target="_blank" >{{'editor-app.subscription.viewAccount' | translate}}</a>
-	</span>
-</div>

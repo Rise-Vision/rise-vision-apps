@@ -168,14 +168,6 @@
       "title": "Add a New Presentation"
     }
   },
-  "subscription": {
-    "buy": "Buy",
-    "subscribe": "Subscribe",
-    "status": {
-      "professional": "For Licensed Displays"
-    },
-    "viewAccount": "View Account"
-  },
   "templatesLibrary": {
     "details": {
       "preview": "Preview this Template"
