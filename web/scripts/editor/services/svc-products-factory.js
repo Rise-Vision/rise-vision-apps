@@ -3,52 +3,67 @@
 angular.module('risevision.editor.services')
   .constant('TEMPLATES_TYPE', 'Templates')
   .constant('HTML_TEMPLATE_TYPE', 'HTMLTemplates')
-  .factory('productsFactory', ['$q', '$filter', 'storeProduct', 'subscriptionStatusFactory', 'TEMPLATES_TYPE',
-    'UNLISTED_STORE_PRODUCTS',
-    function ($q, $filter, storeProduct, subscriptionStatusFactory, TEMPLATES_TYPE, UNLISTED_STORE_PRODUCTS) {
+  .constant('UNLISTED_STORE_PRODUCT', {
+    'productId': '111',
+    'productOrderWeight': 5,
+    'name': 'U.S. Stocks - Streaming Watchlist',
+    'descriptionShort': 'Create a streaming watchlist of up to 30 U.S. equities.',
+    'imageUrl': 'https://s3.amazonaws.com/Store-Products/StockTrak/widget_918_image_edit1.png',
+    'paymentTerms': 'Subscription',
+    'trialPeriod': 7,
+    'productCode': '7949cc2b1ab2b77f2ce48d23c5aae55b9d4d27d6'
+  })
+  .factory('productsFactory', ['$q', '$filter', 'widgetUtils', 'storeProduct', 'storeAuthorization',
+    'TEMPLATES_TYPE', 'UNLISTED_STORE_PRODUCT',
+    function ($q, $filter, widgetUtils, storeProduct, storeAuthorization, 
+      TEMPLATES_TYPE, UNLISTED_STORE_PRODUCT) {
       var factory = {};
 
-      factory.isUnlistedProduct = function (productCode) {
-        return !!_.find(UNLISTED_STORE_PRODUCTS, {
-          productCode: productCode
-        });
-      };
+      var professionalWidgets = widgetUtils.getProfessionalWidgets();
 
       var _getUnlistedProducts = function () {
-        var productCodes = _.map(UNLISTED_STORE_PRODUCTS, 'productCode');
+        var productCode = UNLISTED_STORE_PRODUCT.productCode;
 
-        return subscriptionStatusFactory.checkProductCodes(productCodes)
-          .then(function (statusItems) {
-            return _.filter(UNLISTED_STORE_PRODUCTS, function (product) {
-              var statusItem = _.find(statusItems, {
-                pc: product.productCode
-              });
-              return !statusItem || statusItem.isSubscribed;
-            });
+        return storeAuthorization.check(productCode)
+          .then(function () {
+            return [UNLISTED_STORE_PRODUCT];
+          })
+          .catch(function() {
+            return [];
           });
+      };
+
+      var _filter = function(results, search) {
+        if (search && search.query) {
+          return $filter('filter')(results, search.query);
+        } else {
+          return results;
+        }
       };
 
       factory.loadProducts = function (search, cursor) {
         var unlistedProducts = [];
+        var filteredProfessionalWidgets = [];
         if (search && search.category !== TEMPLATES_TYPE) {
           unlistedProducts = _getUnlistedProducts();
+          filteredProfessionalWidgets = _filter(professionalWidgets, search);
         }
 
         return $q.all([storeProduct.list(search, cursor), unlistedProducts])
           .then(function (results) {
-            var filteredUnlistedProducts = search ? $filter('filter')(results[1], search.query) : results[1];
+            var dummyProductCode = 1;
+            var filteredStoreProducts = results[0].items || [];
+            var filteredUnlistedProducts = _filter(results[1], search);
+            var result = {
+              items: []
+            };
 
-            _.each(filteredUnlistedProducts, function (product) {
-              if (!results[0].items) {
-                results[0].items = [product];
-              } else if (results[0].items.length > product.productOrderWeight) {
-                results[0].items.splice(product.productOrderWeight, 0, product);
-              } else {
-                results[0].items.push(product);
-              }
+            result.items = _.union(filteredProfessionalWidgets, filteredUnlistedProducts, filteredStoreProducts);
+            result.items = _.uniqBy(result.items, function(product) {
+              return product.productCode || dummyProductCode++;
             });
 
-            return results[0];
+            return result;
           });
       };
 
