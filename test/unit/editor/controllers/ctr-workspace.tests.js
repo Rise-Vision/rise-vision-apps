@@ -1,5 +1,7 @@
 'use strict';
 describe('controller: Workspace', function() {
+  var sandbox = sinon.sandbox.create();
+
   beforeEach(module('risevision.editor.controllers'));
   beforeEach(module('risevision.editor.services'));
   beforeEach(module(mockTranslate()));
@@ -36,8 +38,21 @@ describe('controller: Workspace', function() {
         }
       };
     });
+    $provide.factory('userState',function(){
+      return {
+        hasRole: sandbox.stub().returns(true),
+        _restoreState: sandbox.stub(),
+        getCopyOfSelectedCompany: sandbox.stub().returns({})
+      };
+    });
   }));
-  var $scope, editorFactory, modalOpenCalled, $rootScope, $timeout, $modal, $window, $state;
+
+  afterEach(function() {
+    sandbox.restore();
+  });
+
+  var $scope, editorFactory, modalOpenCalled, $rootScope, $timeout, $modal, $window, $state, userState;
+
   beforeEach(function(){
     inject(function($injector,$controller){
       $rootScope = $injector.get('$rootScope');
@@ -45,6 +60,7 @@ describe('controller: Workspace', function() {
       $modal = $injector.get('$modal');
       $window = $injector.get('$window');
       $state = $injector.get('$state');
+      userState = $injector.get('userState');
       modalOpenCalled = false;
       $scope = $rootScope.$new();
       editorFactory = $injector.get('editorFactory');
@@ -64,6 +80,17 @@ describe('controller: Workspace', function() {
     expect($scope.factory).to.be.ok;
     expect($scope.artboardFactory).to.be.ok;
     expect($scope.factory).to.deep.equal(editorFactory);
+  });
+
+  describe('hasContentEditorRole', function() {
+    it('should return true if user has ce role',function() {
+      expect($scope.hasContentEditorRole()).to.be.true;
+    });
+
+    it('should return false if user does not have ce role',function() {
+      userState.hasRole.returns(false);
+      expect($scope.hasContentEditorRole()).to.be.false;
+    });
   });
 
   it('should show warning if presentation has deprecated items',function(){
@@ -166,6 +193,18 @@ describe('controller: Workspace', function() {
     $scope.$apply();
 
     modalOpenStub.should.have.been.called;
+  });
+
+  it('should not notify unsaved changes when changing URL if user is not Content Editor', function(){
+    userState.hasRole.returns(false);
+    sandbox.stub($modal, 'open').returns({result: Q.resolve()});
+    editorFactory.presentation.name = "New Name";
+    $scope.$apply();
+
+    $rootScope.$broadcast('$stateChangeStart',{name:'newState'});
+    $scope.$apply();
+
+    $modal.open.should.not.have.been.called;
   });
 
   it('should not notify unsaved changes when changing URL if there are no changes',function(){
