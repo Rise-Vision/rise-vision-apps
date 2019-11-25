@@ -2,10 +2,10 @@
   <div class="attribute-editor-row counter-container">
     <label ng-show="counterType == 'down'" class="u_margin-sm-top">Countdown to:</label>
     <label ng-show="counterType == 'up'" class="u_margin-sm-top">Count up from:</label>
-    <div class="radio">
+    <div class="radio" id="dateRadio">
       <input type="radio" ng-model="targetUnit" value="targetDate" id="specificDate" name="specificDate" ng-change="save()" aria-required="true" tabindex="1" required>
       <label for="specificDate" id="specificDateLabel">
-        A specific date:
+        A specific date and time:
       </label>
       <div class="input-group rise-date-picker radio-nested-input-group" ng-show="targetUnit == 'targetDate'">
         <input type="text"
@@ -26,9 +26,27 @@
           <button type="button" id="datePickerButton" class="btn btn-primary" ng-click="openDatePicker($event)"><i class="fa fa-calendar"></i></button>
         </span>
       </div>
+      <div class="input-group rise-date-picker radio-nested-input-group mt-3" ng-show="targetUnit == 'targetDate'">
+        <input type="text"
+               class="form-control"
+               readonly="true"
+               id="targetDateTime"
+               name="targetDateTime"
+               ng-model="targetDateTime"
+               ng-change="save()"
+               ng-click="openTimePicker($event, 'date')"
+               time-picker-popup
+               is-open="targetDateTimePicker.isOpen"
+        />
+        <span class="input-group-btn">
+          <button type="button" id="dateTimePickerButton" class="btn btn-primary" ng-click="openTimePicker($event, 'date')">
+            <streamline-icon name="clock"></streamline-icon>
+          </button>
+        </span>
+      </div>
     </div>
 
-    <div class="radio">
+    <div class="radio" id="timeRadio">
       <input type="radio" ng-model="targetUnit" value="targetTime" id="specificTime" name="specificTime" ng-change="save()" aria-required="true" tabindex="1" required>
       <label for="specificTime" id="specificTimeLabel">
         A specific time, every day:
