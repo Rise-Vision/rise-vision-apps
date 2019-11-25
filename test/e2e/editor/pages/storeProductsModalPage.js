@@ -14,8 +14,6 @@ var StoreProductsModalPage = function() {
   var suggestTemplate = element(by.id('suggestTemplate'));  
   var productNameFields = element.all(by.id('productName'));
   var statusFields = element.all(by.id('status'));
-  var freeProducts = element.all(by.cssContainingText('p#status', 'Free'));
-  var premiumProducts = element.all(by.cssContainingText('p#status', 'For Licensed Displays'));
   var displayBanner = element(by.id('displayBanner'));
 
   var professionalWidgets = element.all(by.repeater('widget in filteredProfessionalWidgets = (professionalWidgets | filter: search.query)'));
@@ -27,14 +25,6 @@ var StoreProductsModalPage = function() {
 
   var addWidgetByUrlButton = element(by.id('addWidgetByUrl'));
   var closeButton = element(by.css('.close'));
-
-  this.getFreeProducts = function() {
-    return freeProducts;
-  }
-
-  this.getPremiumProducts = function() {
-    return premiumProducts;
-  }
 
   this.getStoreProductsModal = function () {
     return storeProductsModal;

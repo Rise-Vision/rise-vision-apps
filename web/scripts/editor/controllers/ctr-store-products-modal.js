@@ -1,11 +1,11 @@
 'use strict';
 angular.module('risevision.editor.controllers')
   .controller('storeProductsModal', ['$scope', '$loading', '$filter', '$modal', '$modalInstance',
-    'ScrollingListService', 'productsFactory', 'playlistItemFactory', 'widgetUtils', 'checkTemplateAccess',
-    'plansFactory', 'playerLicenseFactory', 'category', 'STORE_URL', 'TEMPLATES_TYPE', 'userState',
+    'ScrollingListService', 'productsFactory', 'playlistItemFactory', 'widgetUtils',
+    'plansFactory', 'playerLicenseFactory', 'category', 'TEMPLATES_TYPE', 'userState',
     function ($scope, $loading, $filter, $modal, $modalInstance,
-      ScrollingListService, productsFactory, playlistItemFactory, widgetUtils, checkTemplateAccess,
-      plansFactory, playerLicenseFactory, category, STORE_URL, TEMPLATES_TYPE, userState) {
+      ScrollingListService, productsFactory, playlistItemFactory, widgetUtils,
+      plansFactory, playerLicenseFactory, category, TEMPLATES_TYPE, userState) {
       var defaultCount = 1000;
 
       $scope.playerLicenseFactory = playerLicenseFactory;
@@ -19,7 +19,6 @@ angular.module('risevision.editor.controllers')
 
       $scope.professionalWidgets = widgetUtils.getProfessionalWidgets();
 
-      $scope.storeUrl = STORE_URL;
       $scope.factory = new ScrollingListService(productsFactory.loadProducts,
         $scope.search);
 
@@ -60,17 +59,7 @@ angular.module('risevision.editor.controllers')
       };
 
       $scope.quickSelect = function (product) {
-        if (category === TEMPLATES_TYPE) {
-          return checkTemplateAccess(product.productCode)
-            .then(function () {
-              $modalInstance.close(product);
-            })
-            .catch(function () {
-              $scope.select(product);
-            });
-        } else {
-          $modalInstance.close(product);
-        }
+        $modalInstance.close(product);
       };
 
       $scope.addWidgetByUrl = function () {

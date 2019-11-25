@@ -112,21 +112,13 @@
                   <div class="col-xs-4">
                     <button class="btn btn-primary btn-block btn-sm" id="{{product.name | slugify}}" ng-click="quickSelect(product); $event.stopPropagation()">Add</button>
                   </div><!--end col-->
-                  <div class="col-xs-12">
-                    <p id="status" class="text-muted" ng-show="product.trialPeriod === 0">
-                      {{'editor-app.storeProduct.category.' + product.paymentTerms.toLowerCase() | translate}}
-                    </p>
-                    <p id="status" class="text-muted" ng-show="product.trialPeriod > 0">
-                      {{product.trialPeriod}} Days Trial
-                    </p>
-                  </div>
                 </div><!--end row-->  
               </div><!-- end product-grid_details -->
             </div>
           </div>
         </ng-repeat>
 
-        <div class="col-sm-6 col-md-4 col-lg-3" ng-if="factory.search.category == 'Templates' && !factory.loadingItems">
+        <div class="col-sm-6 col-md-4 col-lg-3" ng-if="factory.search.category === 'Templates' && !factory.loadingItems">
           <div class="product-grid_item panel panel-default">
             <figure class="product-grid_image u_clickable" ui-sref="apps.editor.workspace.artboard" ng-click="dismiss();">
               <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/UI/blank-landscape.png" alt="add blank presentation"> 
@@ -135,17 +127,12 @@
               <div class="row">
                 <div class="col-xs-8">
                   <h4>{{'editor-app.storeProduct.templates.blank' | translate}}</h4>
-                  
                 </div><!-- end col -->
                 <div class="col-xs-4">
-
                   <button class="btn btn-primary btn-sm btn-block" id="newPresentationButton" ui-sref="apps.editor.workspace.artboard" ng-click="dismiss();">
                     Add
                   </button>
                 </div><!-- end col -->
-                <div class="col-xs-12">
-                  <p class="text-muted">&nbsp;</p>
-                </div>
               </div><!-- end row -->
               
             </div>

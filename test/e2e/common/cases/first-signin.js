@@ -127,6 +127,15 @@ var FirstSigninScenarios = function() {
         expect(workspacePage.getWorkspaceContainer().isDisplayed()).to.eventually.be.true;
       });
 
+      it('should show Display License Required message', function() {
+        helper.wait(workspacePage.getDisplayLicenseRequiredModal(), 'Display License Notification');
+        
+        expect(workspacePage.getDisplayLicenseRequiredModal().isDisplayed()).to.eventually.be.true;
+        browser.sleep(500);
+
+        workspacePage.getDisplayLicenseRequiredCloseButton().click();
+      });
+
       it('should show Change Template button', function () {
         expect(workspacePage.getChangeTemplateButton().isDisplayed()).to.eventually.be.true;
       });      

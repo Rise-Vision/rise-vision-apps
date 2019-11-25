@@ -112,9 +112,7 @@ describe('service: editorFactory:', function() {
       };
     });
     $provide.service('checkTemplateAccess',function(){
-      return sinon.spy(function () {
-        return storeAuthorize ? Q.resolve() : Q.reject();
-      });
+      return sinon.spy();
     });
     $provide.service('$state',function(){
       return {
@@ -161,11 +159,6 @@ describe('service: editorFactory:', function() {
         createFirstSchedule: sinon.stub()
       };
     });
-    $provide.service('plansFactory', function() {
-      return plansFactory = {
-        showPlansModal: sinon.stub()
-      }
-    })
     $provide.service('$window', function() {
       return {
         open: function(url, target) {
@@ -183,7 +176,7 @@ describe('service: editorFactory:', function() {
   }));
   var editorFactory, trackerCalled, updatePresentation, currentState, $state, stateParams,
     presentationParser, $window, $modal, processErrorCode, scheduleFactory, userAuthFactory,
-    $rootScope, plansFactory, storeProduct, storeAuthorize;
+    $rootScope, storeProduct, checkTemplateAccess;
   beforeEach(function(){
     trackerCalled = undefined;
     currentState = undefined;
@@ -195,6 +188,7 @@ describe('service: editorFactory:', function() {
       $window = $injector.get('$window');
       $modal = $injector.get('$modal');
       $state = $injector.get('$state');
+      checkTemplateAccess = $injector.get('checkTemplateAccess');
       scheduleFactory = $injector.get('scheduleFactory');
       userAuthFactory = $injector.get('userAuthFactory');
       $rootScope = $injector.get('$rootScope');
@@ -240,6 +234,8 @@ describe('service: editorFactory:', function() {
     editorFactory.newPresentation();
 
     expect(trackerCalled).to.equal('New Presentation');
+
+    checkTemplateAccess.should.have.been.called;
 
     expect(editorFactory.presentation.layout).to.be.ok;
     expect(editorFactory.presentation.parsed).to.be.true;
@@ -664,30 +660,12 @@ describe('service: editorFactory:', function() {
     var sampleProduct = { productCode: 'test-product-code', name: 'Test HTML Template from productId' };
 
     it('should create a new presentation when provided a productId', function(done) {
-      storeAuthorize = true;
       sandbox.stub(storeProduct, 'get').returns(Q.resolve(sampleProduct));
       sandbox.stub(editorFactory, 'addFromProduct').returns(Q.resolve({}));
 
       editorFactory.addFromProductId('test-product-id')
       .then(function () {
         expect(editorFactory.addFromProduct).to.have.been.calledWith(sampleProduct);
-        expect(plansFactory.showPlansModal).to.not.have.been.called;
-        expect(messageBoxStub).to.not.have.been.called;
-
-        done();
-      });
-    });
-
-    it('should fail to create a new presentation when not subscribed', function(done) {
-      storeAuthorize = false;
-      sandbox.stub(storeProduct, 'get').returns(Q.resolve(sampleProduct));
-      sandbox.stub(editorFactory, 'addFromProduct').returns(Q.resolve({}));
-
-      editorFactory.addFromProductId('test-product-id')
-      .catch(function () {
-        expect(editorFactory.addFromProduct).to.not.have.been.called;
-        expect(plansFactory.showPlansModal).to.have.been.called;
-        expect($state.go).to.have.been.calledWith('apps.editor.list');
         expect(messageBoxStub).to.not.have.been.called;
 
         done();
@@ -695,14 +673,12 @@ describe('service: editorFactory:', function() {
     });
 
     it('should fail to create a new presentation if productId does not exist', function(done) {
-      storeAuthorize = true;
       sandbox.stub(storeProduct, 'get').returns(Q.resolve({}));
       sandbox.stub(editorFactory, 'addFromProduct').returns(Q.resolve({}));
 
       editorFactory.addFromProductId('test-product-id')
       .catch(function (err) {
         expect(editorFactory.addFromProduct).to.not.have.been.called;
-        expect(plansFactory.showPlansModal).to.not.have.been.called;
         expect(err.result.error.message).to.equal('Invalid Product Id');
         expect(messageBoxStub).to.have.been.called;
 
@@ -779,42 +755,25 @@ describe('service: editorFactory:', function() {
       editorFactory.copyTemplate('presentationId');
 
       setTimeout(function() {
+        checkTemplateAccess.should.have.been.called;
         editorFactory.copyPresentation.should.have.been.called;
 
         done();
       }, 10);
     });
 
-    it('if API returns 403, show plans modal', function(done) {
-      var $modalOpenSpy = sinon.spy($modal, 'open');
+    it('should handle failure to copy template', function(done) {
+      sinon.stub(editorFactory, 'getPresentation').returns(Q.reject());
 
-      updatePresentation = false;
-      editorFactory.copyTemplate('presentationId');
-
-      setTimeout(function() {
+      editorFactory.copyTemplate('presentationId')
+      .catch(function (err) {
+        checkTemplateAccess.should.not.have.been.called;
         editorFactory.copyPresentation.should.not.have.been.called;
 
-        plansFactory.showPlansModal.should.have.been.calledWith('editor-app.templatesLibrary.access-warning');
-        done();
-      }, 10);
-    });
-
-    it('if API returns 403, and a trial is started, should reload page', function(done) {
-      var $modalOpenSpy = sinon.spy($modal, 'open');
-
-      updatePresentation = false;
-      editorFactory.copyTemplate('presentationId');
-
-      setTimeout(function() {
-        plansFactory.showPlansModal.should.have.been.calledWith('editor-app.templatesLibrary.access-warning');
-
-        $rootScope.$emit('risevision.company.trial.started');
-        $rootScope.$digest();
-
-        $window.location.reload.should.have.been.called;
+        expect(currentState).to.equal('apps.editor.list');
 
         done();
-      }, 10);
+      });
     });
 
   });

@@ -9,11 +9,6 @@
   "message-box": {
     "confirmation-message": "Okay I Got It"
   },
-  "expired-modal": {
-    "expired-title": "Your Rise Vision Plan is no longer active",
-    "expired-message": "You are now on the Free plan and can edit and preview this Template but it will not show on your Display until you subscribe to a plan.",
-    "confirmation-button": "Subscribe Now"
-  },
   "image": {
     "upload": "Upload Images"
   },

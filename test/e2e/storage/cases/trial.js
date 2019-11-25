@@ -51,7 +51,7 @@ var StorageTrialScenarios = function() {
       it('should open a new Presentation', function () {
         commonHeaderPage.getCommonHeaderMenuItems().get(1).click();
 
-        presentationListPage.openNewPresentation();
+        presentationListPage.openNewPresentation(true);
       });
 
       it('should show Storage Trial when adding an Image', function () {

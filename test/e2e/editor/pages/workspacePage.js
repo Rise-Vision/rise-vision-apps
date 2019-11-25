@@ -2,6 +2,9 @@
 var WorkspacePage = function() {
   var workspaceContainer = element(by.id('workspace'));
   var artboardContainer = element(by.id('artboard'));
+  var displayLicenseRequiredModal = element(by.css('.display-license-required-message'));
+  var displayLicenseRequiredCloseButton = displayLicenseRequiredModal.element(by.cssContainingText('button', 'Close'));
+  var displayLicenseRequiredSubscribeButton = displayLicenseRequiredModal.element(by.cssContainingText('button', 'Subscribe'));
 
   var expandArtboardButton = element(by.id('expandArtboardButton'));
   var presentationPropertiesButton = element(by.id('presentationPropertiesButton'));
@@ -34,6 +37,18 @@ var WorkspacePage = function() {
 
   this.getArtboardContainer = function() {
     return artboardContainer;
+  };
+
+  this.getDisplayLicenseRequiredModal = function() {
+    return displayLicenseRequiredModal;
+  };
+
+  this.getDisplayLicenseRequiredCloseButton = function() {
+    return displayLicenseRequiredCloseButton;
+  };
+
+  this.getDisplayLicenseRequiredSubscribeButton = function() {
+    return displayLicenseRequiredSubscribeButton;
   };
 
   this.getExpandArtboardButton = function() {

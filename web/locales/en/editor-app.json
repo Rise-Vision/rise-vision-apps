@@ -141,13 +141,6 @@
   },
   "storeProduct": {
     "add": "Add",
-    "category": {
-      "all": "All",
-      "free": "Free",
-      "metered": "For Licensed Displays",
-      "premium": "For Licensed Displays",
-      "subscription": "For Licensed Displays"
-    },
     "content": {
       "search": "Search for Widget",
       "title": "Add Widget",
@@ -198,15 +191,8 @@
   },
   "templatesLibrary": {
     "details": {
-      "details-list-1": "Get access to all Templates with any 14-day Plan Trial, and with any Plan Subscription thereafter.",
-      "details-list-2": "There's no contract, and you can cancel at any time.",
-      "details-list-3": "New Templates added every month.",
-      "details-list-title": "Subscription Details",
-      "free": "FREE",
-      "freeWithTrial": "with a Plan Trial or Subscription",
       "preview": "Preview this Template"
-    },
-    "access-warning": "You need a Plan subscription to use this Template. Get access to all Templates with any 14-day Plan Trial, and with any Plan Subscription thereafter."
+    }
   },
   "title": "Editor",
   "workspace": {
