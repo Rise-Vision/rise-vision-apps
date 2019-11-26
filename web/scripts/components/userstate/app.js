@@ -121,17 +121,6 @@
             }
           })
 
-          .state('common.auth.requestconfirmationemail', {
-            templateProvider: ['$templateCache',
-              function ($templateCache) {
-                return $templateCache.get(
-                  'partials/components/userstate/request-confirmation-email.html');
-              }
-            ],
-            url: '/requestconfirmationemail',
-            controller: 'RequestConfirmationEmailCtrl'
-          })
-
           .state('common.auth.requestpasswordreset', {
             templateProvider: ['$templateCache',
               function ($templateCache) {
