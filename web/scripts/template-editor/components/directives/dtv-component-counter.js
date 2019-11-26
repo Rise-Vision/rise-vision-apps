@@ -72,6 +72,10 @@ angular.module('risevision.template-editor.directives')
                 } else if (targetTime) {
                   $scope.targetTime = utils.absoluteTimeToMeridian(targetTime);
                   $scope.targetUnit = 'targetTime';
+                } else {
+                  $scope.targetDate = null;
+                  $scope.targetTime = null;
+                  $scope.targetUnit = null;
                 }
 
                 _registerDatePickerClosingWatch();
