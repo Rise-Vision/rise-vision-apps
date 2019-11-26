@@ -82,7 +82,7 @@ angular.module('risevision.template-editor.directives')
               };
 
               $scope.save = function () {
-                if ($scope.targetUnit === 'targetDate') {
+                if ($scope.targetUnit === 'targetDate' && $scope.targetDate && $scope.targetDateTime) {
                   var formattedDateTime = utils.meridianTimeToAbsolute($scope.targetDateTime);
                   var localDate = new Date($scope.targetDate);
                   localDate.setMinutes(localDate.getMinutes() - localDate.getTimezoneOffset());
