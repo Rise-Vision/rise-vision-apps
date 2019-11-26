@@ -113,13 +113,18 @@ describe("service: userauth:", function() {
       };
     });
 
+    $provide.service('$exceptionHandler', function() {
+      return sinon.spy();
+    })
+
   }));
-  var userauth, returnResult;
+  var userauth, $exceptionHandler, returnResult;
   beforeEach(function(){
     returnResult = true;
 
     inject(function($injector){
       userauth = $injector.get("userauth");
+      $exceptionHandler = $injector.get("$exceptionHandler");
     });
   });
 
@@ -243,6 +248,7 @@ describe("service: userauth:", function() {
         .then(function(resp){
           expect(resp).to.be.ok;
           expect(resp).to.equal("user confirmed");
+          expect($exceptionHandler).to.not.have.been.called;
 
           done();
         })
@@ -257,6 +263,8 @@ describe("service: userauth:", function() {
         })
         .then(null, function(error) {
           expect(error).to.deep.equal("confirmUserCreation Failed");
+          expect($exceptionHandler).to.have.been.called;
+
           done();
         })
         .then(null,done);
@@ -269,6 +277,7 @@ describe("service: userauth:", function() {
         .then(function(resp){
           expect(resp).to.be.ok;
           expect(resp).to.equal("requested confirmation email");
+          expect($exceptionHandler).to.not.have.been.called;
 
           done();
         })
@@ -283,6 +292,8 @@ describe("service: userauth:", function() {
         })
         .then(null, function(error) {
           expect(error).to.deep.equal("requestConfirmationEmail Failed");
+          expect($exceptionHandler).to.have.been.called;
+
           done();
         })
         .then(null,done);

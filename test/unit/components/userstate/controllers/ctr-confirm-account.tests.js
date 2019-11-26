@@ -1,5 +1,5 @@
 "use strict";
-describe.only("controller: Confirm Account", function() {
+describe("controller: Confirm Account", function() {
   beforeEach(module("risevision.common.components.userstate"));
   beforeEach(module(function ($provide) {
     $provide.service("$loading",function() {
@@ -8,12 +8,9 @@ describe.only("controller: Confirm Account", function() {
         stopGlobal: sandbox.spy()
       };
     });
-    $provide.service("$exceptionHandler",function() {
-      return sandbox.spy();
-    });
   }));
 
-  var $scope, $loading, $exceptionHandler, userauth, sandbox, initializeController;
+  var $scope, $loading, userauth, sandbox, initializeController;
 
   beforeEach(function () {
     sandbox = sinon.sandbox.create();
@@ -22,13 +19,11 @@ describe.only("controller: Confirm Account", function() {
       $scope = $rootScope.$new();
 
       $loading = $injector.get("$loading");
-      $exceptionHandler = $injector.get("$exceptionHandler");
       userauth = $injector.get("userauth");
 
       initializeController = function() {
         $controller("ConfirmAccountCtrl", {
           $scope: $scope,
-          $exceptionHandler: $exceptionHandler,
           $stateParams: { user: "username", token: "token" },
           userauth: userauth
         });
@@ -62,7 +57,7 @@ describe.only("controller: Confirm Account", function() {
         expect(userauth.confirmUserCreation).to.have.been.calledWith("username", "token");
         expect($loading.startGlobal).to.have.been.called;
         expect($loading.stopGlobal).to.have.been.called;
-        expect($exceptionHandler).to.not.have.been.called;
+        expect($scope.apiError).to.not.be.ok;
         done();
       }, 0);
     });
@@ -75,7 +70,7 @@ describe.only("controller: Confirm Account", function() {
         expect(userauth.confirmUserCreation).to.have.been.calledWith("username", "token");
         expect($loading.startGlobal).to.have.been.called;
         expect($loading.stopGlobal).to.have.been.called;
-        expect($exceptionHandler).to.have.been.called;
+        expect($scope.apiError).to.be.ok;
         done();
       }, 0);
     });

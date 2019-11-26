@@ -7,7 +7,6 @@ describe('directive: confirm-email', function() {
       element,
       userState,
       userauth,
-      $exceptionHandler,
       messageBox;
   beforeEach(module('risevision.apps.directives'));
   beforeEach(module(function ($provide) {
@@ -22,9 +21,6 @@ describe('directive: confirm-email', function() {
         requestConfirmationEmail: sandbox.stub().returns(Q.resolve())
       };
     });
-    $provide.service('$exceptionHandler', function() {
-      return sandbox.spy();
-    })
     $provide.service('messageBox', function() {
       return sandbox.spy();
     });
@@ -35,7 +31,6 @@ describe('directive: confirm-email', function() {
     $rootScope = _$rootScope_;
     userState = $injector.get('userState');
     userauth = $injector.get('userauth');
-    $exceptionHandler = $injector.get('$exceptionHandler');
     messageBox = $injector.get('messageBox');
 
     $templateCache.put('partials/common/confirm-email.html', '<p>mock</p>');
@@ -93,7 +88,6 @@ describe('directive: confirm-email', function() {
 
       $scope.requestConfirmationEmail()
         .then(function() {
-          expect($exceptionHandler).to.have.been.called;
           expect(messageBox).to.have.been.called;
           expect($scope.emailSent).to.not.be.true;
 

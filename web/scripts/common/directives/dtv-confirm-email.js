@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.apps.directives')
-  .directive('confirmEmail', ['$exceptionHandler', 'userState', 'userauth', 'getError', 'messageBox',
-    function ($exceptionHandler, userState, userauth, getError, messageBox) {
+  .directive('confirmEmail', ['userState', 'userauth', 'getError', 'messageBox',
+    function (userState, userauth, getError, messageBox) {
       return {
         restrict: 'E',
         scope: {},
@@ -22,7 +22,6 @@ angular.module('risevision.apps.directives')
                 var apiError = error.message || 
                   'Please try again or <a target="_blank" href="mailto:support@risevision.com">reach out to our Support team</a> if the problem persists.';
 
-                $exceptionHandler(e, errorMessage, true);
                 messageBox(errorMessage, apiError);
               })
               .finally(function() {
