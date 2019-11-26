@@ -138,6 +138,24 @@ describe('directive: templateComponentCounter', function() {
       $scope.targetTime = '06:30 PM';
     });
 
+    it('should not save date if null', function () {
+      $scope.targetDate = null;
+      $scope.targetTime = null;
+      $scope.targetUnit = 'targetDate';
+
+      $scope.save();
+      expect($scope.setAttributeData).to.have.not.been.called;
+    });
+
+    it('should not save time if null', function () {
+      $scope.targetDate = null;
+      $scope.targetTime = null;
+      $scope.targetUnit = 'targetTime';
+
+      $scope.save();
+      expect($scope.setAttributeData).to.have.not.been.called;
+    });
+
     it('should only save the date', function () {
       $scope.targetUnit = 'targetDate';
       $scope.save();
