@@ -23,12 +23,12 @@ angular.module('risevision.apps.services')
           factory.messageToShow = 'pricingChanges';
         } else {
           presentationListReq.execute(forceReload).then(function (resp) {
-           if (_shouldShowPromoteTraining(resp.items)) {
-             factory.messageToShow = 'promoteTraining';
-           } else {
-             factory.messageToShow = undefined;
-           }
-         });
+            if (_shouldShowPromoteTraining(resp.items)) {
+              factory.messageToShow = 'promoteTraining';
+            } else {
+              factory.messageToShow = undefined;
+            }
+          });
         }
       };
 

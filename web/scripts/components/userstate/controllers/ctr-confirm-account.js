@@ -10,7 +10,7 @@ angular.module('risevision.common.components.userstate')
       userauth.confirmUserCreation($stateParams.user, $stateParams.token)
         .catch(function (e) {
           var error = getError(e);
-          $scope.apiError = error.message || 
+          $scope.apiError = error.message ||
             'Please refresh this page or <a target="_blank" href="mailto:support@risevision.com">reach out to our Support team</a> if the problem persists.';
         })
         .finally(function () {

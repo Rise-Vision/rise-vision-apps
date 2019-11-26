@@ -198,8 +198,8 @@
         $rootScope.$on('risevision.user.authorized', function () {
           var currentState = $state.current.name;
 
-          if (currentState.indexOf('common.auth') !== -1 && currentState !== 'common.auth.unsubscribe'
-            && currentState !== 'common.auth.confirmaccount') {
+          if (currentState.indexOf('common.auth') !== -1 && currentState !== 'common.auth.unsubscribe' &&
+            currentState !== 'common.auth.confirmaccount') {
             urlStateService.redirectToState($stateParams.state);
           }
         });
