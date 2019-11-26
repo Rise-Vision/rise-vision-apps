@@ -11,6 +11,7 @@ angular.module('risevision.apps.directives')
           $scope.username = userState.getUsername();
 
           $scope.requestConfirmationEmail = function() {
+            $scope.emailSending = true;
             return userauth.requestConfirmationEmail(userState.getUsername())
               .then(function() {
                 $scope.emailSent = true;
@@ -23,6 +24,9 @@ angular.module('risevision.apps.directives')
 
                 $exceptionHandler(errorMessage, e, true);
                 messageBox(errorMessage, apiError);
+              })
+              .finally(function() {
+                $scope.emailSending = false;
               });
           };
         }

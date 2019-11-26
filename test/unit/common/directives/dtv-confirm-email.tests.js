@@ -77,6 +77,17 @@ describe('directive: confirm-email', function() {
 
     });
 
+    it('should show and clear emailSending wording', function(done) {
+      $scope.requestConfirmationEmail()
+        .then(function() {
+          expect($scope.emailSending).to.be.false;
+
+          done();
+        });
+
+      expect($scope.emailSending).to.be.true;
+    });
+
     it('should handle failure to request email', function(done) {
       userauth.requestConfirmationEmail.returns(Q.reject());
 
