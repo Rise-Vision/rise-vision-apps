@@ -1,5 +1,5 @@
 "use strict";
-describe("controller: Confirm Account", function() {
+describe.only("controller: Confirm Account", function() {
   beforeEach(module("risevision.common.components.userstate"));
   beforeEach(module(function ($provide) {
     $provide.service("$loading",function() {
@@ -8,20 +8,12 @@ describe("controller: Confirm Account", function() {
         stopGlobal: sandbox.spy()
       };
     });
-    $provide.service("$log",function() {
-      return {
-        log: sandbox.spy(),
-        error: sandbox.spy()
-      };
-    });
-    $provide.service("$state",function() {
-      return {
-        go: sandbox.spy()
-      };
+    $provide.service("$exceptionHandler",function() {
+      return sandbox.spy();
     });
   }));
 
-  var $scope, $loading, $log, $state, userauth, sandbox, initializeController;
+  var $scope, $loading, $exceptionHandler, userauth, sandbox, initializeController;
 
   beforeEach(function () {
     sandbox = sinon.sandbox.create();
@@ -30,15 +22,13 @@ describe("controller: Confirm Account", function() {
       $scope = $rootScope.$new();
 
       $loading = $injector.get("$loading");
-      $log = $injector.get("$log");
-      $state = $injector.get("$state");
+      $exceptionHandler = $injector.get("$exceptionHandler");
       userauth = $injector.get("userauth");
 
       initializeController = function() {
         $controller("ConfirmAccountCtrl", {
           $scope: $scope,
-          $log: $log,
-          $state: $state,
+          $exceptionHandler: $exceptionHandler,
           $stateParams: { user: "username", token: "token" },
           userauth: userauth
         });
@@ -56,6 +46,13 @@ describe("controller: Confirm Account", function() {
     expect($scope).to.be.ok;
   });
 
+  it("should initialize scope", function() {
+    sandbox.stub(userauth, "confirmUserCreation").returns(Q.resolve());
+    initializeController();
+
+    expect($scope.username).to.equal('username');
+  });
+
   describe("confirmUserCreation: ", function() {
     it("should redirect to login on success", function(done) {
       sandbox.stub(userauth, "confirmUserCreation").returns(Q.resolve());
@@ -63,10 +60,9 @@ describe("controller: Confirm Account", function() {
 
       setTimeout(function() {
         expect(userauth.confirmUserCreation).to.have.been.calledWith("username", "token");
-        expect($state.go).to.have.been.calledWith("common.auth.unauthorized");
         expect($loading.startGlobal).to.have.been.called;
         expect($loading.stopGlobal).to.have.been.called;
-        expect($log.log).to.have.been.called;
+        expect($exceptionHandler).to.not.have.been.called;
         done();
       }, 0);
     });
@@ -77,10 +73,9 @@ describe("controller: Confirm Account", function() {
 
       setTimeout(function() {
         expect(userauth.confirmUserCreation).to.have.been.calledWith("username", "token");
-        expect($state.go).to.have.been.calledWith("common.auth.unauthorized");
         expect($loading.startGlobal).to.have.been.called;
         expect($loading.stopGlobal).to.have.been.called;
-        expect($log.log).to.not.have.been.called;
+        expect($exceptionHandler).to.have.been.called;
         done();
       }, 0);
     });

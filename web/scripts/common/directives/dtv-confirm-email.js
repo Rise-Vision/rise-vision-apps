@@ -22,7 +22,7 @@ angular.module('risevision.apps.directives')
                 var apiError = error.message || 
                   'Please try again or <a target="_blank" href="mailto:support@risevision.com">reach out to our Support team</a> if the problem persists.';
 
-                $exceptionHandler(errorMessage, e, true);
+                $exceptionHandler(e, errorMessage, true);
                 messageBox(errorMessage, apiError);
               })
               .finally(function() {

@@ -89,8 +89,7 @@
             controller: 'LoginCtrl',
             params: {
               isSignUp: false,
-              passwordReset: null,
-              accountConfirmed: null
+              passwordReset: null
             }
           })
 
@@ -120,12 +119,6 @@
               isSignUp: true,
               joinAccount: true
             }
-          })
-
-          .state('common.auth.confirmaccount', {
-            controller: 'ConfirmAccountCtrl',
-            template: '<div ui-view></div>',
-            url: '/confirmaccount/:user/:token'
           })
 
           .state('common.auth.requestconfirmationemail', {
@@ -159,6 +152,17 @@
             ],
             url: '/resetpassword/:user/:token',
             controller: 'ResetPasswordConfirmCtrl'
+          })
+
+          .state('common.auth.confirmaccount', {
+            templateProvider: ['$templateCache',
+              function ($templateCache) {
+                return $templateCache.get(
+                  'partials/components/userstate/confirm-account.html');
+              }
+            ],
+            controller: 'ConfirmAccountCtrl',
+            url: '/confirmaccount/:user/:token'
           })
 
           .state('common.auth.unsubscribe', {
@@ -205,7 +209,8 @@
         $rootScope.$on('risevision.user.authorized', function () {
           var currentState = $state.current.name;
 
-          if (currentState.indexOf('common.auth') !== -1 && currentState !== 'common.auth.unsubscribe') {
+          if (currentState.indexOf('common.auth') !== -1 && currentState !== 'common.auth.unsubscribe'
+            && currentState !== 'common.auth.confirmaccount') {
             urlStateService.redirectToState($stateParams.state);
           }
         });
