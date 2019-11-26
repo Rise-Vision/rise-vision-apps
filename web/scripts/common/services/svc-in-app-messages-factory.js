@@ -17,17 +17,19 @@ angular.module('risevision.apps.services')
       });
 
       factory.pickMessage = function (forceReload) {
-        presentationListReq.execute(forceReload).then(function (resp) {
-          if (_shouldShowConfirmEmail()) {
-            factory.messageToShow = 'confirmEmail';
-          } else if (_shouldShowPricingChanges()) {
-            factory.messageToShow = 'pricingChanges';
-          } else if (_shouldShowPromoteTraining(resp.items)) {
-            factory.messageToShow = 'promoteTraining';
-          } else {
-            factory.messageToShow = undefined;
-          }
-        });
+        if (_shouldShowConfirmEmail()) {
+          factory.messageToShow = 'confirmEmail';
+        } else if (_shouldShowPricingChanges()) {
+          factory.messageToShow = 'pricingChanges';
+        } else {
+          presentationListReq.execute(forceReload).then(function (resp) {
+           if (_shouldShowPromoteTraining(resp.items)) {
+             factory.messageToShow = 'promoteTraining';
+           } else {
+             factory.messageToShow = undefined;
+           }
+         });
+        }
       };
 
       factory.canDismiss = function () {
@@ -51,7 +53,7 @@ angular.module('risevision.apps.services')
       var _shouldShowConfirmEmail = function () {
         var userProfile = userState.getCopyOfProfile();
 
-        return userState.isRiseAuthUser() && userProfile ? !userProfile.userConfirmed : false;
+        return userState.isRiseAuthUser() && userProfile ? (userProfile.userConfirmed === false) : false;
       };
 
       var _shouldShowPricingChanges = function () {
