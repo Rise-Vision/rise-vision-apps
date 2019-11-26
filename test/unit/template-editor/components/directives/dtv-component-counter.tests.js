@@ -116,6 +116,20 @@ describe('directive: templateComponentCounter', function() {
       expect($scope.targetTime).to.equal('06:30 PM');
       expect($scope.targetUnit).to.equal('targetTime');
     });
+
+    it('should not load anything', function () {
+      _initLoad('down', null, null);
+
+      $scope.load();
+
+      expect($scope.getAvailableAttributeData.getCall(0).args[1]).to.equal('type');
+      expect($scope.getAvailableAttributeData.getCall(1).args[1]).to.equal('date');
+      expect($scope.getAvailableAttributeData.getCall(2).args[1]).to.equal('time');
+
+      expect($scope.targetDate).to.not.be.ok;
+      expect($scope.targetDateTime).to.not.be.ok;
+      expect($scope.targetUnit).to.not.be.ok;
+    });
   });
 
   describe('save', function () {
