@@ -530,7 +530,9 @@ angular.module('risevision.apps.services', [
 angular.module('risevision.apps.controllers', [
   'risevision.common.config'
 ]);
-angular.module('risevision.apps.directives', []);
+angular.module('risevision.apps.directives', [
+  'risevision.common.components.scrolling-list'
+]);
 
 angular.module('risevision.apps.launcher.controllers', []);
 angular.module('risevision.apps.launcher.directives', []);

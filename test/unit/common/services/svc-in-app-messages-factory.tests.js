@@ -18,7 +18,9 @@ describe('service: in-app-messages-factory', function() {
         },
         isEducationCustomer: sandbox.stub().returns(false),
         _restoreState: sandbox.stub(),
-        getSelectedCompanyId: sandbox.stub().returns('')
+        getSelectedCompanyId: sandbox.stub().returns(''),
+        getCopyOfProfile: sandbox.stub().returns(null),
+        isRiseAuthUser: sandbox.stub().returns(false)
       };
     });
 
@@ -63,35 +65,81 @@ describe('service: in-app-messages-factory', function() {
       },10);
     });
 
+    describe('confirmEmail:', function() {
+      it('should not show for Google auth users', function() {
+        factory.pickMessage();
+
+        expect(factory.messageToShow).to.be.undefined;
+        executeStub.should.have.been.called;
+      });
+
+      it('should not show if user profile is not available', function() {
+        userState.isRiseAuthUser.returns(true);
+        factory.pickMessage();
+
+        expect(factory.messageToShow).to.be.undefined;
+        executeStub.should.have.been.called;
+      });
+
+      it('should not show if userConfirmed value is not there', function() {
+        userState.isRiseAuthUser.returns(true);
+        userState.getCopyOfProfile.returns({});
+        factory.pickMessage();
+
+        expect(factory.messageToShow).to.be.undefined;
+        executeStub.should.have.been.called;
+      });
+
+      it('should show account has not been confirmed', function() {
+        userState.isRiseAuthUser.returns(true);
+        userState.getCopyOfProfile.returns({
+          userConfirmed: false
+        });
+        factory.pickMessage();
+
+        expect(factory.messageToShow).to.equal('confirmEmail');
+        executeStub.should.not.have.been.called;
+      });
+
+      it('should not show if account has been confirmed', function() {
+        userState.isRiseAuthUser.returns(true);
+        userState.getCopyOfProfile.returns({
+          userConfirmed: true
+        });
+        factory.pickMessage();
+
+        expect(factory.messageToShow).to.be.undefined;
+        executeStub.should.have.been.called;
+      });
+
+    });
+
     describe('pricingChanges message',function(){
-      it('should not show notice if company creationDate is after Jun 25', function(done) {
+      it('should not show notice if company creationDate is after Jun 25', function() {
         selectedCompany.creationDate = 'Jun 26, 2019';
         factory.pickMessage();
-        setTimeout(function(){
-          expect(factory.messageToShow).to.be.undefined;
-          done();
-        },10);
+
+        expect(factory.messageToShow).to.be.undefined;
+        executeStub.should.have.been.called;
       });      
 
-      it('should show notice if company creationDate is before Jun 25',function(done) {
+      it('should show notice if company creationDate is before Jun 25',function() {
         selectedCompany.creationDate = 'Jun 24, 2019';        
         factory.pickMessage();
-        setTimeout(function(){
-          expect(factory.messageToShow).to.equal('pricingChanges');
-          done();
-        },10);
+
+        expect(factory.messageToShow).to.equal('pricingChanges');
+        executeStub.should.not.have.been.called;
       });  
 
-      it('should not show notice if dismissed',function(done) {
+      it('should not show notice if dismissed',function() {
         selectedCompany.creationDate = 'Jun 24, 2019';
 
         localStorageService.get.withArgs('pricingChangesAlert.dismissed').returns(true);
 
         factory.pickMessage();
-        setTimeout(function(){
-          expect(factory.messageToShow).to.be.undefined;
-          done();
-        },10); 
+
+        expect(factory.messageToShow).to.be.undefined;
+        executeStub.should.have.been.called;
       });    
     });
 
@@ -185,6 +233,20 @@ describe('service: in-app-messages-factory', function() {
       expect(factory.messageToShow).to.be.undefined;
       expect(factory.pickMessage).to.have.been.calledWith(true);
     })
-  })
+  });
 
+  describe('canDismiss:', function() {
+    it('should not show dismiss message for confirmEmail', function() {
+      factory.messageToShow = 'confirmEmail';
+
+      expect(factory.canDismiss()).to.be.false;
+    });
+
+    it('should show dismiss message for other messages', function() {
+      factory.messageToShow = 'randomMessage';
+
+      expect(factory.canDismiss()).to.be.true;
+    });
+
+  });
 });

@@ -17,7 +17,6 @@ angular.module('risevision.common.components.userstate')
       $scope.joinAccount = $stateParams.joinAccount;
       $scope.companyName = $stateParams.companyName;
       $scope.messages.passwordReset = $stateParams.passwordReset;
-      $scope.messages.accountConfirmed = $stateParams.accountConfirmed;
 
       var _processErrorCode = function (e, actionName) {
         var error = getError(e);

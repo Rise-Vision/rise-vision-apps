@@ -15,7 +15,7 @@ angular.module('risevision.editor.services')
   })
   .factory('productsFactory', ['$q', '$filter', 'widgetUtils', 'storeProduct', 'storeAuthorization',
     'TEMPLATES_TYPE', 'UNLISTED_STORE_PRODUCT',
-    function ($q, $filter, widgetUtils, storeProduct, storeAuthorization, 
+    function ($q, $filter, widgetUtils, storeProduct, storeAuthorization,
       TEMPLATES_TYPE, UNLISTED_STORE_PRODUCT) {
       var factory = {};
 
@@ -28,12 +28,12 @@ angular.module('risevision.editor.services')
           .then(function () {
             return [UNLISTED_STORE_PRODUCT];
           })
-          .catch(function() {
+          .catch(function () {
             return [];
           });
       };
 
-      var _filter = function(results, search) {
+      var _filter = function (results, search) {
         if (search && search.query) {
           return $filter('filter')(results, search.query);
         } else {
@@ -59,7 +59,7 @@ angular.module('risevision.editor.services')
             };
 
             result.items = _.union(filteredProfessionalWidgets, filteredUnlistedProducts, filteredStoreProducts);
-            result.items = _.uniqBy(result.items, function(product) {
+            result.items = _.uniqBy(result.items, function (product) {
               return product.productCode || dummyProductCode++;
             });
 

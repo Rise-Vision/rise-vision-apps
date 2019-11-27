@@ -2,8 +2,8 @@
   'use strict';
 
   angular.module('risevision.common.components.userstate')
-    .service('userauth', ['$q', '$log', 'riseAPILoader',
-      function ($q, $log, riseAPILoader) {
+    .service('userauth', ['$q', '$log', '$exceptionHandler', 'riseAPILoader',
+      function ($q, $log, $exceptionHandler, riseAPILoader) {
 
         var service = {
           add: function (username, password) {
@@ -114,7 +114,7 @@
                 deferred.resolve(resp);
               })
               .then(null, function (e) {
-                console.error('Failed to confirm user creation.', e);
+                $exceptionHandler(e, 'Failed to confirm account.', true);
                 deferred.reject(e);
               });
 
@@ -137,8 +137,7 @@
                 deferred.resolve(resp);
               })
               .then(null, function (e) {
-                console.error('Failed to request confirmation email.',
-                  e);
+                $exceptionHandler(e, 'Failed to request confirmation email.', true);
                 deferred.reject(e);
               });
 

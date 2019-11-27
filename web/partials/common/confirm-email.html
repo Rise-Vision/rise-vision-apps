@@ -1,0 +1,8 @@
+<div>
+  We’ve sent a verification email to {{username}} — please follow it’s instructions.
+  <a href="#" class="alert-link" ng-click="requestConfirmationEmail()" ng-if="!emailSent && !emailSending">
+    Resend email.
+  </a>
+  <span ng-if="emailSending">Sending...</span>
+  <span ng-if="emailSent">Email resent.</span>
+</div>
