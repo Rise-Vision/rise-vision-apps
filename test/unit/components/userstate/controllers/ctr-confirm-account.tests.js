@@ -8,9 +8,17 @@ describe("controller: Confirm Account", function() {
         stopGlobal: sandbox.spy()
       };
     });
+    $provide.service("userState", function() {
+      return {
+        getCopyOfProfile: sandbox.stub().returns({}),
+        updateUserProfile: sandbox.spy(),
+        _restoreState: function() {}
+      };
+    });
+
   }));
 
-  var $scope, $loading, userauth, sandbox, initializeController;
+  var $scope, $loading, userauth, userState, sandbox, initializeController;
 
   beforeEach(function () {
     sandbox = sinon.sandbox.create();
@@ -20,6 +28,7 @@ describe("controller: Confirm Account", function() {
 
       $loading = $injector.get("$loading");
       userauth = $injector.get("userauth");
+      userState = $injector.get("userState");
 
       initializeController = function() {
         $controller("ConfirmAccountCtrl", {
@@ -58,6 +67,18 @@ describe("controller: Confirm Account", function() {
         expect($loading.startGlobal).to.have.been.called;
         expect($loading.stopGlobal).to.have.been.called;
         expect($scope.apiError).to.not.be.ok;
+        done();
+      }, 0);
+    });
+
+    it("should update profile on success", function(done) {
+      sandbox.stub(userauth, "confirmUserCreation").returns(Q.resolve());
+      initializeController();
+
+      setTimeout(function() {
+        userState.getCopyOfProfile.should.have.been.calledWith(true);
+        userState.updateUserProfile.should.have.been.calledWith({userConfirmed: true});
+
         done();
       }, 0);
     });
