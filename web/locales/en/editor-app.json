@@ -37,8 +37,7 @@
   },
   "list": {
     "actions": {
-      "add": "Add Presentation",
-      "fromTemplate": "From Template",
+      "add": "Add Template",
       "new": "New"
     },
     "empty": "You haven't created any Presentations yet.",
@@ -164,7 +163,7 @@
       "search": "Search for Templates",
       "start": "Start with this Template",
       "suggest": "Suggest a Template!",
-      "title": "Add a New Presentation"
+      "title": "Add a New Template"
     }
   },
   "templatesLibrary": {
