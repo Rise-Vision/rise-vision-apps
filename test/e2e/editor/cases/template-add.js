@@ -64,7 +64,7 @@ var TemplateAddScenarios = function() {
     });
 
     it('should show modal title', function () {
-      expect(storeProductsModalPage.getModalTitle().getText()).to.eventually.equal('Add a New Presentation');
+      expect(storeProductsModalPage.getModalTitle().getText()).to.eventually.equal('Add a New Template');
     });
 
     it('should show a search box', function () {
