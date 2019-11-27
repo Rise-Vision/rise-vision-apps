@@ -23,6 +23,13 @@ describe('directive: time-picker', function() {
     expect($scope.updateTime).is.a.function;
   });
 
+  it('should initialize time even if provided value is not valid', function () {
+    $scope.time = 'invalid date';
+    $scope.$digest();
+    expect($scope.hours).to.equal(12);
+    expect($scope.minutes).to.equal(0);
+  });
+
   describe('operations', function() {
     beforeEach(function () {
       $scope.time = '11:59 PM';

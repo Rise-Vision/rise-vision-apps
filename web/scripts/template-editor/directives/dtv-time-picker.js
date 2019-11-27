@@ -19,7 +19,7 @@ angular.module('risevision.template-editor.directives')
               $scope.minutes = Math.min(_minutes, 59);
               $scope.meridian = parts[3];
             } else {
-              $scope.time = '12:00 PM';
+              $scope.time = '12:00 AM';
             }
           });
 

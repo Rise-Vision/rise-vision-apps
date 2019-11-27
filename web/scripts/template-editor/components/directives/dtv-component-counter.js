@@ -82,17 +82,18 @@ angular.module('risevision.template-editor.directives')
               };
 
               $scope.save = function () {
-                if ($scope.targetUnit === 'targetDate') {
+                if ($scope.targetUnit === 'targetDate' && $scope.targetDate && $scope.targetDateTime) {
+                  var formattedDateTime = utils.meridianTimeToAbsolute($scope.targetDateTime);
                   var localDate = new Date($scope.targetDate);
                   localDate.setMinutes(localDate.getMinutes() - localDate.getTimezoneOffset());
 
                   $scope.setAttributeData($scope.componentId, 'date', utils.formatISODate(localDate));
-                  $scope.setAttributeData($scope.componentId, 'time', utils.meridianTimeToAbsolute($scope
-                    .targetDateTime));
-                } else if ($scope.targetUnit === 'targetTime') {
+                  $scope.setAttributeData($scope.componentId, 'time', formattedDateTime);
+                } else if ($scope.targetUnit === 'targetTime' && $scope.targetTime) {
+                  var formattedTime = utils.meridianTimeToAbsolute($scope.targetTime);
+
                   $scope.setAttributeData($scope.componentId, 'date', null);
-                  $scope.setAttributeData($scope.componentId, 'time', utils.meridianTimeToAbsolute($scope
-                    .targetTime));
+                  $scope.setAttributeData($scope.componentId, 'time', formattedTime);
                 }
 
                 if ($scope.counterType === 'down' && !$scope.nonCompletion) {

@@ -36,7 +36,7 @@ var CounterComponentScenarios = function () {
         expect(counterComponentPage.getSpecificDateLabel().isEnabled()).to.eventually.be.true;
         expect(counterComponentPage.getSpecificTimeLabel().isEnabled()).to.eventually.be.true;
         expect(counterComponentPage.getTargetDate().getAttribute('value')).to.eventually.equal('');
-        expect(counterComponentPage.getTargetTime().getAttribute('value')).to.eventually.equal('12:00 PM');
+        expect(counterComponentPage.getTargetTime().getAttribute('value')).to.eventually.equal('12:00 AM');
       });
 
       it('should select a date', function () {
@@ -65,7 +65,7 @@ var CounterComponentScenarios = function () {
         // Close time picker
         counterComponentPage.getDateTimePickerButton().click();
 
-        expect(counterComponentPage.getTargetDateTime().getAttribute('value')).to.eventually.equal('03:59 PM');
+        expect(counterComponentPage.getTargetDateTime().getAttribute('value')).to.eventually.equal('03:59 AM');
 
         //wait for presentation to be auto-saved
         templateEditorPage.waitForAutosave();
@@ -89,7 +89,7 @@ var CounterComponentScenarios = function () {
         // Close time picker
         counterComponentPage.getTimePickerButton().click();
 
-        expect(counterComponentPage.getTargetTime().getAttribute('value')).to.eventually.equal('01:57 PM');
+        expect(counterComponentPage.getTargetTime().getAttribute('value')).to.eventually.equal('01:57 AM');
 
         //wait for presentation to be auto-saved
         templateEditorPage.waitForAutosave();
@@ -108,7 +108,7 @@ var CounterComponentScenarios = function () {
         presentationsListPage.loadPresentation(presentationName);
         templateEditorPage.selectComponent(componentLabel);
         expect(counterComponentPage.getTargetDate().getAttribute('value')).to.eventually.equal('');
-        expect(counterComponentPage.getTargetTime().getAttribute('value')).to.eventually.equal('01:57 PM');
+        expect(counterComponentPage.getTargetTime().getAttribute('value')).to.eventually.equal('01:57 AM');
         expect(counterComponentPage.getCompletionMessage().getAttribute('value')).to.eventually.equal('Test message');
       });
     });

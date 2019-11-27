@@ -135,7 +135,26 @@ describe('directive: templateComponentCounter', function() {
   describe('save', function () {
     beforeEach(function () {
       $scope.targetDate = 'October 25, 2019';
+      $scope.targetDateTime = '06:30 PM';
       $scope.targetTime = '06:30 PM';
+    });
+
+    it('should not save date if null', function () {
+      $scope.targetDate = null;
+      $scope.targetTime = null;
+      $scope.targetUnit = 'targetDate';
+
+      $scope.save();
+      expect($scope.setAttributeData).to.have.not.been.called;
+    });
+
+    it('should not save time if null', function () {
+      $scope.targetDate = null;
+      $scope.targetTime = null;
+      $scope.targetUnit = 'targetTime';
+
+      $scope.save();
+      expect($scope.setAttributeData).to.have.not.been.called;
     });
 
     it('should only save the date', function () {
@@ -144,7 +163,7 @@ describe('directive: templateComponentCounter', function() {
       expect($scope.setAttributeData.getCall(0).args[1]).to.equal('date');
       expect($scope.setAttributeData.getCall(0).args[2]).to.equal('2019-10-25');
       expect($scope.setAttributeData.getCall(1).args[1]).to.equal('time');
-      expect($scope.setAttributeData.getCall(1).args[2]).to.equal(null);
+      expect($scope.setAttributeData.getCall(1).args[2]).to.equal('18:30');
     });
 
     it('should save the date and time', function () {
