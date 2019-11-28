@@ -31,16 +31,41 @@
         }).catch(function() {
           console.log('Login succeeded. Attempting to delete an sign up again.');
 
-          // if user belongs to a new company, removes the company
-          // if it was added to jenkins company, removes only the user
-          commonHeaderPage.getMainCompanyNameSpan().getText().then(function(text){
-            if (text === NEW_COMPANY_NAME) {
-              commonHeaderPage.deleteCurrentCompany(NEW_COMPANY_NAME);
-            } else {
-              commonHeaderPage.deleteCurrentUser(EMAIL_ADDRESS);
+          registrationModalPage.getRegistrationModal().isPresent().then(function(isPresent){
+            if (isPresent) {
+              console.log('Registration Modal is present. Completing registration before deleting account.');
+              enterRegistrationDetailsAndProceed();
             }
+            
+          }).finally(function(){
+            // if user belongs to a new company, removes the company
+            // if it was added to jenkins company, removes only the user
+            commonHeaderPage.getMainCompanyNameSpan().getText().then(function(text){
+              if (text === NEW_COMPANY_NAME) {
+                commonHeaderPage.deleteCurrentCompany(NEW_COMPANY_NAME);
+              } else {
+                commonHeaderPage.deleteCurrentUser(EMAIL_ADDRESS);
+              }
+            });
           });
         });
+      }
+
+      function enterRegistrationDetailsAndProceed() {
+        registrationModalPage.getFirstNameField().sendKeys("John");
+        registrationModalPage.getLastNameField().sendKeys("Doe");
+        registrationModalPage.getCompanyNameField().sendKeys(NEW_COMPANY_NAME);
+        registrationModalPage.getCompanyIndustryOptions().then(function(options){
+          options[2].click(); //select random option
+        }); 
+        //click authorize
+        registrationModalPage.getTermsCheckbox().click();
+        
+        // No need to sign up for newsletter
+        // registrationModalPage.getNewsletterCheckbox().click();
+        registrationModalPage.getSaveButton().click();
+        
+        helper.waitRemoved(registrationModalPage.getRegistrationModal(), "Registration Modal");
       }
 
       before(function (){
@@ -141,20 +166,7 @@
       });
 
       it("should complete the registration process", function () {
-        registrationModalPage.getFirstNameField().sendKeys("John");
-        registrationModalPage.getLastNameField().sendKeys("Doe");
-        registrationModalPage.getCompanyNameField().sendKeys(NEW_COMPANY_NAME);
-        registrationModalPage.getCompanyIndustryOptions().then(function(options){
-          options[2].click(); //select random option
-        }); 
-        //click authorize
-        registrationModalPage.getTermsCheckbox().click();
-        
-        // No need to sign up for newsletter
-        // registrationModalPage.getNewsletterCheckbox().click();
-        registrationModalPage.getSaveButton().click();
-        
-        helper.waitRemoved(registrationModalPage.getRegistrationModal(), "Registration Modal");
+        enterRegistrationDetailsAndProceed();
 
         expect(registrationModalPage.getRegistrationModal().isPresent()).to.eventually.be.false;
       });
