@@ -10,7 +10,7 @@
     "files-plural": "{{count}} files are about to be permanently deleted.",
     "files-singular": "One file is about to be permanently deleted.",
     "folders-plural": "{{count}} folders are about to be permanently deleted.",
-    "folders-singular": "One folder is about to be permanently deleted." 
+    "folders-singular": "One folder is about to be permanently deleted."
   },
   "download-status": "Download Status",
   "empty-state": {
@@ -81,6 +81,7 @@
       "must-be-different": "The new name must be different.",
       "no-matches-found": "No matching files found.",
       "parent-must-exist": "Destination parent directory must exist.",
+      "potentially-dangerous-file": "Potentially dangerous file name.",
       "root-not-valid": "Source and destination cannot point to the root folder.",
       "subfolders-not-valid": "Source and destination cannot be subfolders of each other.",
       "unknown": "An error occured while renaming. Please try again."
