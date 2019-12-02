@@ -81,7 +81,7 @@
       "must-be-different": "The new name must be different.",
       "no-matches-found": "No matching files found.",
       "parent-must-exist": "Destination parent directory must exist.",
-      "potentially-dangerous-file": "Potentially dangerous file name.",
+      "potentially-dangerous-file": "This does not appear to be a supported media (video, image) file.",
       "root-not-valid": "Source and destination cannot point to the root folder.",
       "subfolders-not-valid": "Source and destination cannot be subfolders of each other.",
       "unknown": "An error occured while renaming. Please try again."
