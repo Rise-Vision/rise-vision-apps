@@ -30,6 +30,7 @@
           console.log('Login failed. Assume account not present.');
         }).catch(function() {
           console.log('Login succeeded. Attempting to delete an sign up again.');
+          browser.sleep(500);
 
           registrationModalPage.getRegistrationModal().isPresent().then(function(isPresent){
             if (isPresent) {
@@ -52,12 +53,18 @@
       }
 
       function enterRegistrationDetailsAndProceed() {
-        registrationModalPage.getFirstNameField().sendKeys("John");
-        registrationModalPage.getLastNameField().sendKeys("Doe");
-        registrationModalPage.getCompanyNameField().sendKeys(NEW_COMPANY_NAME);
-        registrationModalPage.getCompanyIndustryOptions().then(function(options){
-          options[2].click(); //select random option
-        }); 
+        // If it is a new signup, Company Name field is displayed and we need to enter all details.
+        // If user is being added to an existing company, Company Name is hidden and other fields are already populated.
+        registrationModalPage.getCompanyNameField().isDisplayed().then(function(isDisplayed){
+          if (isDisplayed) {
+            registrationModalPage.getFirstNameField().sendKeys("John");
+            registrationModalPage.getLastNameField().sendKeys("Doe");
+            registrationModalPage.getCompanyNameField().sendKeys(NEW_COMPANY_NAME);
+            registrationModalPage.getCompanyIndustryOptions().then(function(options){
+              options[2].click(); //select random option
+            }); 
+          }
+        });
         //click authorize
         registrationModalPage.getTermsCheckbox().click();
         
