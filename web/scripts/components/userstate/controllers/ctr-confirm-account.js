@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.common.components.userstate')
-  .controller('ConfirmAccountCtrl', ['$scope', '$loading', '$stateParams', 
+  .controller('ConfirmAccountCtrl', ['$scope', '$loading', '$stateParams',
     'userauth', 'userState', 'getError',
     function ($scope, $loading, $stateParams, userauth, userState, getError) {
       $scope.username = $stateParams.user;
@@ -9,7 +9,7 @@ angular.module('risevision.common.components.userstate')
       $loading.startGlobal('auth-confirm-account');
 
       userauth.confirmUserCreation($stateParams.user, $stateParams.token)
-        .then(function() {
+        .then(function () {
           var profileCopyNoFollow = userState.getCopyOfProfile(true);
           profileCopyNoFollow.userConfirmed = true;
 

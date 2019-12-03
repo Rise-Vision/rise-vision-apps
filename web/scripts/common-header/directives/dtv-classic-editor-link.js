@@ -9,7 +9,7 @@ angular.module('risevision.common.header.directives')
         scope: true,
         link: function ($scope, elem) {
           var editorLink = elem.find('a');
-          
+
           editorLink.bind('click', function () {
             var companyId = userState.getSelectedCompanyId();
             var url = CLASSIC_EDITOR_URL + (companyId ? '?cid=' + companyId : '');
@@ -17,7 +17,7 @@ angular.module('risevision.common.header.directives')
             $window.open(url, '_blank');
           });
 
-          var _isShowingLink = function() {
+          var _isShowingLink = function () {
             var company = userState.getCopyOfSelectedCompany();
             var creationDate = ((company && company.creationDate) ? (new Date(company.creationDate)) : (
               new Date()));
