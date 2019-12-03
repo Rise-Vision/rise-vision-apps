@@ -46,4 +46,15 @@ describe('directive: templateComponentTimeDate', function() {
     expect(directive.show).to.be.a('function');
   });
 
+  it('should return the correct title', function () {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+    var timeDateInstance = { attributes: { type: { value: 'timedate' } } };
+    var timeInstance = { attributes: { type: { value: 'time' } } };
+    var dateInstance = { attributes: { type: { value: 'date' } } };
+
+    expect(directive.getTitle(timeDateInstance)).to.equal('template.rise-time-date-timedate');
+    expect(directive.getTitle(timeInstance)).to.equal('template.rise-time-date-time');
+    expect(directive.getTitle(dateInstance)).to.equal('template.rise-time-date-date');
+  });
+
 });

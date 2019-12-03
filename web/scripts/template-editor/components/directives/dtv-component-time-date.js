@@ -18,6 +18,9 @@ angular.module('risevision.template-editor.directives')
             show: function () {
               element.show();
               $scope.componentId = $scope.factory.selected.id;
+            },
+            getTitle: function (component) {
+              return 'template.rise-time-date' + '-' + component.attributes.type.value;
             }
           });
 
