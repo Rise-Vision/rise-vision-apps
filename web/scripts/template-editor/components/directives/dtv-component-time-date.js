@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentCounter', ['templateEditorFactory',
+  .directive('templateComponentTimeDate', ['templateEditorFactory',
     function (templateEditorFactory) {
       return {
         restrict: 'E',
