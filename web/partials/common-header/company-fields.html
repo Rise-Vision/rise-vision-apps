@@ -121,7 +121,11 @@
     <option value="{{c[1]}}" ng-repeat="c in timezones">{{c[0]}}</option>
   </select>
 </div>
-<div class="form-group" ng-show="company.isChargebee">
+<div class="form-group" ng-show="company.isChargebee" ng-class="{'has-error': forms.companyForm.billingContactEmails.$invalid}">
   <label class="form-control-label">Billing Notifications Email</label>
-  <emails-field ng-model="company.billingContactEmails" />
+  <emails-field name="billingContactEmails" ng-model="company.billingContactEmails" require-emails-on-change="true"></emails-field>
+  <ng-messages role="alert" for="forms.companyForm.billingContactEmails.$error">
+    <p ng-message="emails" class="help-block">Please provide a valid email.</p>
+    <p ng-message="require-emails" class="help-block">Please enter at least one email.</p>
+  </ng-messages>
 </div>

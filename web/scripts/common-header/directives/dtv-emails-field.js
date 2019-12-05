@@ -10,7 +10,8 @@ angular.module('risevision.common.header.directives')
         restrict: 'E',
         require: 'ngModel',
         scope: {
-          emails: '=ngModel'
+          emails: '=ngModel',
+          requireEmailsOnChange: '='
         },
         template: $templateCache.get('partials/common-header/emails-field.html'),
         link: function ($scope, elem, attr, ngModel) {
@@ -34,6 +35,7 @@ angular.module('risevision.common.header.directives')
               $timeout(function () {
                 if (spanField.text() === 'Add an email') {
                   _setValid(true);
+                  _checkRequireEmailsOnChange();
                   $scope.$digest();
                 }
               });
@@ -56,6 +58,7 @@ angular.module('risevision.common.header.directives')
             _setValid(true);
             updatingEmails = true;
             $scope.emails = _emailsModelToStrings();
+            _checkRequireEmailsOnChange();
           };
 
           $scope.invalidateModel = function () {
@@ -71,6 +74,14 @@ angular.module('risevision.common.header.directives')
                 .text) ===
               -1);
           };
+
+          function _checkRequireEmailsOnChange() {
+            if ($scope.requireEmailsOnChange && (!$scope.emails || $scope.emails.length < 1)) {
+              ngModel.$setValidity('require-emails', false);
+            } else {
+              ngModel.$setValidity('require-emails', true);
+            }
+          }
 
           function _emailsModelToStrings() {
             return $scope.emailsList.map(function (t) {
