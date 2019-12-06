@@ -57,4 +57,8 @@ describe('directive: templateComponentTimeDate', function() {
     expect(directive.getTitle(dateInstance)).to.equal('template.rise-time-date-date');
   });
 
+
+  it('should load the correct list of formats', function () {
+    expect($scope.dateFormats.length).to.equal(4);
+  });
 });

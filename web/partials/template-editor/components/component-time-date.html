@@ -1,3 +1,13 @@
-<div>
-  Time & Date settings
+<div class="attribute-editor-component">
+  <div class="attribute-editor-row" ng-show="type === 'timedate' || type === 'date'">
+    <div class="form-group">
+      <label class="control-label" for="te-td-date-format">Date format:</label>
+      <select id="te-td-date-format"
+              class="form-control"
+              ng-model="dateFormat"
+              ng-options="df.format as df.date for df in dateFormats"
+              ng-change="saveChanges()">
+      </select>
+    </div>
+  </div>
 </div>
