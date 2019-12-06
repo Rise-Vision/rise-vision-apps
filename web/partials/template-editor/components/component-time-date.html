@@ -10,4 +10,21 @@
       </select>
     </div>
   </div>
+  <div class="attribute-editor-row" ng-show="type === 'timedate' || type === 'time'">
+    <label class="u_margin-sm-top mb-0">Time format:</label>
+
+    <div class="radio" id="time12HoursRadio">
+      <input type="radio" ng-model="timeFormat" value="time12Hours" id="time12Hours" name="time12Hours" ng-change="save()" aria-required="true" required>
+      <label for="time12Hours" id="time12HoursLabel">
+        12 hour.
+      </label>
+    </div>
+
+    <div class="radio" id="time24HoursRadio">
+      <input type="radio" ng-model="timeFormat" value="time24Hours" id="time24Hours" name="time24Hours" ng-change="save()" aria-required="true" required>
+      <label for="time24Hours" id="time24HoursLabel">
+        24 hour.
+      </label>
+    </div>
+  </div>
 </div>
