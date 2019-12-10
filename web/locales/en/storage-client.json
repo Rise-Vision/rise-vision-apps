@@ -37,7 +37,8 @@
     },
     "server-error": "An error has occured.",
     "signed-download-uri-request-failed": "Download failed. Please try again.",
-    "upload-failed": "Upload failed. Please try again."
+    "upload-failed": "Upload failed. Please try again.",
+    "upload-file-not-supported": "File type not supported. File did not upload."
   },
   "warning": {
     "video-not-supported": "File <b>{{fileName}}</b> is not supported by Video Widget. <a href=\"https://help.risevision.com/hc/en-us/articles/201788630-Video-Widget-supported-formats\" target=\"__blank\" class=\"alert-link\">View supported file types</a>.",
