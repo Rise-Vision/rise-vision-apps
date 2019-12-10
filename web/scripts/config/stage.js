@@ -22,7 +22,7 @@
   angular.module('risevision.apps.config', [])
     .value('APPS_ENV', 'TEST')
     .value('STORAGE_API_ROOT',
-      'https://storage-dot-rvacore-test.appspot.com/_ah/api')
+      'https://prevent-dangerous-uploads-dot-storage-dot-rvacore-test.appspot.com/_ah/api')
     .value('STORE_ENDPOINT_URL',
       'https://store-dot-rvacore-test.appspot.com/_ah/api') // override default Store server value
     .value('STORE_SERVER_URL', 'https://store-dot-rvacore-test.appspot.com/')
@@ -32,7 +32,7 @@
       'https://rvacore-test.appspot.com/alerts/cap')
     .value('SEGMENT_API_KEY', null)
     .value('STORAGE_ENDPOINT_URL',
-      'https://storage-dot-rvacore-test.appspot.com/_ah/api')
+      'https://prevent-dangerous-uploads-dot-storage-dot-rvacore-test.appspot.com/_ah/api')
     .value('MESSAGING_PRIMUS_URL',
       'https://services-stage.risevision.com/messaging/primus?displayId=apps&machineId=1')
     .value('MESSAGING_PRESENCE_URL', 'https://services-stage.risevision.com/messaging/presence')
