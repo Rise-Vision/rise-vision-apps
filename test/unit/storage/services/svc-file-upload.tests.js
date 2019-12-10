@@ -27,7 +27,7 @@ describe('Services: uploader', function() {
       return ExifStripper = { strip: function() {} };
     })
   }));
-  
+
   var uploader, lastAddedFileItem, $timeout, XHRFactory, ExifStripper;
 
   beforeEach(function() {
@@ -49,7 +49,7 @@ describe('Services: uploader', function() {
   });
 
   it('should exist', function () {
-      expect(uploader).be.defined;      
+      expect(uploader).be.defined;
   });
 
   describe('addToQueue:', function(){
@@ -97,7 +97,7 @@ describe('Services: uploader', function() {
       uploader.addToQueue([ fileItem ]);
 
       onAddingFilesSpy.should.have.been.called;
-      spy.should.have.been.called;  
+      spy.should.have.been.called;
 
     });
   });
@@ -113,7 +113,7 @@ describe('Services: uploader', function() {
 
     expect(uploader.queue.length).to.equal(uploader.queueLimit);
     expect(uploader.queue[0].file.name).to.equal('folder/test1.txt');
-    
+
     uploader.removeAll();
 
     expect(uploader.queue.length).to.equal(0);
@@ -134,15 +134,15 @@ describe('Services: uploader', function() {
       setTimeout(function() {
         spy.should.have.been.called;
 
-        done();      
-      }, 10);   
+        done();
+      }, 10);
     });
 
-    describe('Content-Range header: ', function() {      
+    describe('Content-Range header: ', function() {
       it('should set correct header', function() {
         var fileItem = { file: { name: 'test1.jpg', size: 200 }, domFileItem: { slice: function() {} } };
         uploader.addToQueue([ fileItem ]);
-        
+
         lastAddedFileItem.chunkSize = 10000;
         uploader.uploadItem(lastAddedFileItem);
 
@@ -152,7 +152,7 @@ describe('Services: uploader', function() {
       it('should handle 0 byte file', function() {
         var fileItem = { file: { name: 'test1.jpg', size: 0, type: 'JPEG' }, domFileItem: { slice: function() {} } };
         uploader.addToQueue([ fileItem ]);
-        
+
         lastAddedFileItem.chunkSize = 10000;
         uploader.uploadItem(lastAddedFileItem);
 
@@ -162,7 +162,7 @@ describe('Services: uploader', function() {
       it('should chunk large file', function() {
         var fileItem = { file: { name: 'test1.jpg', size: 10000, type: 'JPEG'}, domFileItem: { slice: function() {} } };
         uploader.addToQueue([ fileItem ]);
-        
+
         lastAddedFileItem.chunkSize = 1000;
         uploader.uploadItem(lastAddedFileItem);
 
@@ -175,7 +175,7 @@ describe('Services: uploader', function() {
       var fileItem;
 
       beforeEach(function() {
-        uploader.notifyErrorItem = sinon.spy();
+        sinon.spy(uploader, 'notifyErrorItem');
         uploader.notifySuccessItem = sinon.spy();
         uploader.notifyCompleteItem = sinon.spy();
 
@@ -202,6 +202,21 @@ describe('Services: uploader', function() {
         uploader.notifySuccessItem.should.not.have.been.called;
         uploader.notifyErrorItem.should.have.been.called;
         uploader.notifyCompleteItem.should.have.been.called;
+
+        expect(lastAddedFileItem.isError).to.be.true;
+        expect(lastAddedFileItem.isUnsupportedFile).to.be.false;
+      });
+
+      it('should detect unsupported files', function() {
+        XHRFactory.status = 409;
+        XHRFactory.onload();
+
+        uploader.notifySuccessItem.should.not.have.been.called;
+        uploader.notifyErrorItem.should.have.been.called;
+        uploader.notifyCompleteItem.should.have.been.called;
+
+        expect(lastAddedFileItem.isError).to.be.true;
+        expect(lastAddedFileItem.isUnsupportedFile).to.be.true;
       });
 
       it('should request next byte on 503 (Service Unavailable) errors', function() {
@@ -290,7 +305,7 @@ describe('Services: uploader', function() {
 
     it('should remove exif data of JPEG images', function () {
       var files = [{ name: 'image.jpg', size: 200, type: 'image/jpeg' }];
-      
+
       return uploader.removeExif(files).then(function () {
         ExifStripper.strip.should.have.been.called;
       });
@@ -308,7 +323,7 @@ describe('Services: uploader', function() {
 
     it('should return a fileItem for jpeg files', function () {
       var files = [{ name: 'image.jpg', webkitRelativePath: 'folder/image.jpg', size: 200, type: 'image/jpeg' }];
-      
+
       return uploader.removeExif(files).then(function (fileItems) {
         ExifStripper.strip.should.have.been.called;
         expect(fileItems[0].file.name).to.equal('folder/image.jpg');
@@ -317,7 +332,7 @@ describe('Services: uploader', function() {
 
     it('should return a fileItem for non jpeg files', function () {
       var files = [{ name: 'image.png', webkitRelativePath: 'folder/image.png', size: 200, type: 'image/png' }];
-      
+
       return uploader.removeExif(files).then(function (fileItems) {
         ExifStripper.strip.should.not.have.been.called;
         expect(fileItems[0].file.name).to.equal('folder/image.png');
@@ -325,5 +340,5 @@ describe('Services: uploader', function() {
     });
 
   });
-  
+
 });
