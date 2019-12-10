@@ -6,7 +6,9 @@ angular.module('risevision.storage.services')
 
       svc.getURI = function getURI(file) {
         if (!file.name) {
-          return $q.reject('Invalid Params');
+          return $q.reject({
+            message: 'Invalid Params'
+          });
         }
 
         return storage.getResumableUploadURI(file.name, file.type)
@@ -17,7 +19,10 @@ angular.module('risevision.storage.services')
             var type = file.type === 'folder' ? 'Folder' : 'File';
             var message = processErrorCode(type, 'upload', e);
 
-            return $q.reject(message);
+            return $q.reject({
+              message: message,
+              status: e.status
+            });
           });
       };
 
