@@ -6,7 +6,7 @@
               class="form-control"
               ng-model="dateFormat"
               ng-options="df.format as df.date for df in dateFormats"
-              ng-change="saveChanges()">
+              ng-change="save()">
       </select>
     </div>
   </div>
@@ -14,15 +14,15 @@
     <label class="u_margin-sm-top mb-0">Time format:</label>
 
     <div class="radio" id="time12HoursRadio">
-      <input type="radio" ng-model="timeFormat" value="time12Hours" id="time12Hours" name="time12Hours" ng-change="save()" aria-required="true" required>
-      <label for="time12Hours" id="time12HoursLabel">
+      <input type="radio" ng-model="timeFormat" value="Hours12" id="Hours12" name="Hours12" ng-change="save()" aria-required="true" required>
+      <label for="Hours12" id="Hours12Label">
         12 hour.
       </label>
     </div>
 
     <div class="radio" id="time24HoursRadio">
-      <input type="radio" ng-model="timeFormat" value="time24Hours" id="time24Hours" name="time24Hours" ng-change="save()" aria-required="true" required>
-      <label for="time24Hours" id="time24HoursLabel">
+      <input type="radio" ng-model="timeFormat" value="Hours24" id="Hours24" name="Hours24" ng-change="save()" aria-required="true" required>
+      <label for="Hours24" id="Hours24Label">
         24 hour.
       </label>
     </div>
