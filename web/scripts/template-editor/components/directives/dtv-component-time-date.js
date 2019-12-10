@@ -8,7 +8,7 @@ angular.module('risevision.template-editor.directives')
         scope: true,
         templateUrl: 'partials/template-editor/components/component-time-date.html',
         link: function ($scope, element) {
-          var DATE_FORMATS = [ 'MMMM DD, YYYY', 'MMM DD YYYY', 'MM/DD/YYYY', 'DD/MM/YYYY' ];
+          var DATE_FORMATS = ['MMMM DD, YYYY', 'MMM DD YYYY', 'MM/DD/YYYY', 'DD/MM/YYYY'];
 
           $scope.factory = templateEditorFactory;
           $scope.dateFormats = DATE_FORMATS.map(function (format) {
@@ -37,32 +37,32 @@ angular.module('risevision.template-editor.directives')
             var type = $scope.getAvailableAttributeData($scope.componentId, 'type');
             var timeFormat = $scope.getAvailableAttributeData($scope.componentId, 'time');
             var dateFormat = $scope.getAvailableAttributeData($scope.componentId, 'date');
-            var timeFormatVal = timeFormat || "Hours12";
+            var timeFormatVal = timeFormat || 'Hours12';
             var dateFormatVal = dateFormat || $scope.dateFormats[0].format;
 
             $scope.type = type;
 
-            if ( $scope.type === "time" ) {
-              return $scope.timeFormat = timeFormatVal;
+            if ($scope.type === 'time') {
+              $scope.timeFormat = timeFormatVal;
             }
 
-            if ( $scope.type === "date" ) {
-              return $scope.dateFormat = dateFormatVal;
+            if ($scope.type === 'date') {
+              $scope.dateFormat = dateFormatVal;
             }
 
-            if ( $scope.type === "timedate" ) {
+            if ($scope.type === 'timedate') {
               $scope.timeFormat = timeFormatVal;
               $scope.dateFormat = dateFormatVal;
             }
           };
 
           $scope.save = function () {
-            if ( $scope.type === "timedate" ) {
+            if ($scope.type === 'timedate') {
               $scope.setAttributeData($scope.componentId, 'time', $scope.timeFormat);
               $scope.setAttributeData($scope.componentId, 'date', $scope.dateFormat);
-            } else if ( $scope.type === "time" ) {
+            } else if ($scope.type === 'time') {
               $scope.setAttributeData($scope.componentId, 'time', $scope.timeFormat);
-            } else if ( $scope.type === "date" ) {
+            } else if ($scope.type === 'date') {
               $scope.setAttributeData($scope.componentId, 'date', $scope.dateFormat);
             }
 
