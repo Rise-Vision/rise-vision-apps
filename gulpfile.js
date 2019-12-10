@@ -73,6 +73,7 @@ var unitTestFiles = [
   "web/bower_components/widget-settings-ui-components/dist/js/angular/tooltip.js",
   "web/bower_components/widget-settings-ui-components/dist/js/angular/file-selector.js",
   "web/bower_components/widget-settings-ui-components/dist/js/angular/widget-button-toolbar.js",
+  "web/bower_components/moment/moment.js",
   "node_modules/widget-tester/mocks/translate-mock.js",
   "web/tmp/partials.js",
   "web/scripts/components/**/*.js",

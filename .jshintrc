@@ -30,7 +30,8 @@
     "expect": false,
     "it": false,
     "inject": false,
-    "Draggable": false
+    "Draggable": false,
+    "moment": false
   },
   "predef":["angular","_"]
 }
