@@ -2,9 +2,9 @@
 
 angular.module('risevision.editor.controllers')
   .controller('PresentationItemModalController', ['$scope', '$timeout', '$log', '$modal',
-    '$modalInstance', 'presentationFactory', 'item', 'PRESENTATION_SEARCH',
+    '$modalInstance', 'presentationFactory', 'item', 'PRESENTATION_SEARCH', 'HTML_PRESENTATION_TYPE',
     function ($scope, $timeout, $log, $modal, $modalInstance, presentationFactory,
-      item, PRESENTATION_SEARCH) {
+      item, PRESENTATION_SEARCH, HTML_PRESENTATION_TYPE) {
       var initialPresentationName;
       $scope.item = angular.copy(item);
 
@@ -17,12 +17,17 @@ angular.module('risevision.editor.controllers')
       };
 
       $scope.$watch('presentationId', function (id) {
+        $scope.presentationItemFields.presentationId.$setValidity('template', true);
         $scope.apiWarning = false;
 
         if (id && !$scope.presentationItemFields.presentationId.$error.guid) {
           $scope.item.objectData = id;
           presentationFactory.getPresentationCached(id)
             .then(function (presentation) {
+              if (presentation && presentation.presentationType === HTML_PRESENTATION_TYPE) {
+                $scope.presentationItemFields.presentationId.$setValidity('template', false);                
+              }
+
               if (presentation && presentation.name) {
                 $scope.presentationName = presentation.name;
               }

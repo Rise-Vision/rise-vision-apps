@@ -41,6 +41,8 @@ describe('controller: presentation item modal', function() {
         })
       };
     });
+    $provide.value('HTML_PRESENTATION_TYPE', 'HTML Template');
+
 
   }));
   var $scope, $modalInstance, $modal, $timeout, presentationFactory, returnPresentation, itemProperties, itemType, PRESENTATION_SEARCH;
@@ -58,7 +60,8 @@ describe('controller: presentation item modal', function() {
       $scope = $rootScope.$new();
       $scope.presentationItemFields = {
         presentationId: {
-          $error: {}
+          $error: {},
+          $setValidity: sinon.stub()
         }
       };
     });
@@ -115,6 +118,29 @@ describe('controller: presentation item modal', function() {
       }, 10);
     });
 
+    it('should show template error for HTML Templates', function(done) {
+      presentationFactory.getPresentationCached = sinon.spy(function() {
+        return Q.resolve({
+          name: 'presentationName',
+          presentationType: 'HTML Template'
+        });
+      });
+
+      $scope.presentationId = 'newId';
+
+      $scope.$digest();
+
+      expect($scope.item.objectData).to.equal('newId');
+
+      setTimeout(function() {
+        $scope.$digest();
+
+        $scope.presentationItemFields.presentationId.$setValidity.should.have.been.calledWith('template', false);
+
+        done();
+      }, 10);
+    });
+
     it('should not load Id if blank or invalid', function() {
       $scope.presentationItemFields.presentationId.$error.guid = true;
       $scope.presentationId = 'newId';
@@ -146,11 +172,13 @@ describe('controller: presentation item modal', function() {
       }, 10);
     });
     
-    it('should reset warning when Id is changed', function(done) {
+    it('should reset warnings when Id is changed', function(done) {
       returnPresentation = false;
       $scope.presentationId = 'newId';
       
       $scope.$digest();
+
+      $scope.presentationItemFields.presentationId.$setValidity.should.have.been.calledWith('template', true);
 
       setTimeout(function() {
         $scope.presentationId = '';

@@ -50,6 +50,8 @@
 	      </p>
 	      <p id="invalidGuidValidation" class="text-danger" ng-if="!showPresentationId" ng-show="presentationItemFields.$invalid" translate="editor-app.playlistItem.presentation.error.noneSelected">
 	      </p>
+				<p id="htmlTemplateValidation" class="text-danger" ng-if="showPresentationId" ng-show="!presentationItemFields.presentationId.$pristine && presentationItemFields.presentationId.$error.template" translate="editor-app.playlistItem.presentation.error.noTemplate">
+	      </p>
 
 	      <div class="alert alert-warning" ng-show="apiWarning" translate="editor-app.playlistItem.presentation.error.noAccess">
 	      </div>

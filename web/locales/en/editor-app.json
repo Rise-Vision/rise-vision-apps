@@ -79,6 +79,7 @@
         "invalidId": "Presentation ID is not valid. Please enter a valid ID.",
         "noAccess": "There was an error accessing the Presentation. This could indicate it does not exist or you cannot access it.",
         "noId": "Please enter a Presentation ID",
+        "noTemplate": "Templates cannot be embedded in a Presentation. Please enter a valid Presentation ID.",
         "noneSelected": "No Presentation selected. Please select a Presentation or enter an ID."
       },
       "name": "Embedded Presentation",
