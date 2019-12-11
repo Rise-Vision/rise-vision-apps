@@ -10,7 +10,7 @@
     "files-plural": "{{count}} files are about to be permanently deleted.",
     "files-singular": "One file is about to be permanently deleted.",
     "folders-plural": "{{count}} folders are about to be permanently deleted.",
-    "folders-singular": "One folder is about to be permanently deleted." 
+    "folders-singular": "One folder is about to be permanently deleted."
   },
   "download-status": "Download Status",
   "empty-state": {
@@ -37,7 +37,8 @@
     },
     "server-error": "An error has occured.",
     "signed-download-uri-request-failed": "Download failed. Please try again.",
-    "upload-failed": "Upload failed. Please try again."
+    "upload-failed": "Upload failed. Please try again.",
+    "upload-file-not-supported": "File type not supported. File did not upload."
   },
   "warning": {
     "video-not-supported": "File <b>{{fileName}}</b> is not supported by Video Widget. <a href=\"https://help.risevision.com/hc/en-us/articles/201788630-Video-Widget-supported-formats\" target=\"__blank\" class=\"alert-link\">View supported file types</a>.",
@@ -81,6 +82,7 @@
       "must-be-different": "The new name must be different.",
       "no-matches-found": "No matching files found.",
       "parent-must-exist": "Destination parent directory must exist.",
+      "potentially-dangerous-file": "This does not appear to be a supported media (video, image) file.",
       "root-not-valid": "Source and destination cannot point to the root folder.",
       "subfolders-not-valid": "Source and destination cannot be subfolders of each other.",
       "unknown": "An error occured while renaming. Please try again."

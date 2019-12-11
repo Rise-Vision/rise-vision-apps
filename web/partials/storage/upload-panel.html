@@ -1,19 +1,19 @@
 <div>
-  
+
   <alert class="animated fadeInDown" ng-repeat="warning in warnings" type="warning">
     <span translate translate-values="{ fileName: warning.fileName }">{{warning.message}}</span>
   </alert>
 
   <div id="uploadPanel" class="panel animated fadeInDown progress-panel u_margin-md-bottom" ng-show="uploader.queue.length > 0">
-    
+
       <div ng-click="isCollapsed = !isCollapsed">
         <div class="panel-header"> <!-- //TODO: IS this a needed class? -->
           <span class="collapse-control">
             <i class="fa" ng-class="{false: 'fa-chevron-up', true:'fa-chevron-down'}[!isCollapsed]"></i>
           </span>
           <p>
-            <strong translate="storage-client.uploading-count-files"></strong> 
-            <!-- 
+            <strong translate="storage-client.uploading-count-files"></strong>
+            <!--
             TODO: To FIX: activeUploadCount does not take into account all files being uploaded but just the queue size of 10
             <strong translate="storage-client.upload-status"></strong>:
             <span ng-show="activeUploadCount() === 1" translate="storage-client.uploading-one-file"></span>
@@ -29,8 +29,8 @@
             <span translate="storage-client.retry-failed-uploads"></span>
             </button>
           </div>
-          
-        </div><!--panel-header--> 
+
+        </div><!--panel-header-->
 
       </div>
       <div ng-show="!isCollapsed">
@@ -40,10 +40,13 @@
             <a class="pull-right" href="#" ng-click="removeItem(item)">
               <span translate="common.lremove"></span>
             </a>
-            <a class="pull-right u_margin-right" href="#" ng-click="retryFailedUpload(item)" ng-show="item.isError">
+            <a class="pull-right u_margin-right" href="#" ng-click="retryFailedUpload(item)" ng-show="item.isError && !item.isUnsupportedFile">
               <span translate="common.lretry"></span>
             </a>
             <span class="pull-right text-muted u_margin-left u_margin-right"> {{ item.file.size|fileSizeFilter }}</span>
+            <span class="pull-right text-danger" ng-show="item.isUnsupportedFile">
+              {{ 'storage-client.error.upload-file-not-supported' | translate }}
+            </span>
             <span class="u_ellipsis-lg" ng-class="{'text-danger': item.isError }">
               <i class="fa fa-exclamation u_icon-red icon-left" ng-show="item.isError"></i>
               {{item.file.name}}

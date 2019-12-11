@@ -105,8 +105,8 @@ angular.module('risevision.template-editor.directives')
               })
               .then(null, function (resp) {
                 console.log('getURI error', resp);
-                FileUploader.notifyErrorItem(fileItem);
-                $scope.status.message = resp;
+                FileUploader.notifyErrorItem(fileItem, resp.status);
+                $scope.status.message = resp.message;
               });
           };
 

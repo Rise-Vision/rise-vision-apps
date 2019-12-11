@@ -3,10 +3,10 @@ describe('service: UploadURIService', function() {
   beforeEach(module('risevision.storage.services'));
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
-    
+
     $provide.factory('storage',function () {
       return {
-        getResumableUploadURI: function(fileName, fileType) {            
+        getResumableUploadURI: function(fileName, fileType) {
           var def = Q.defer();
           if (returnResult) {
             def.resolve({
@@ -22,14 +22,14 @@ describe('service: UploadURIService', function() {
     $provide.service('processErrorCode', function() {
       return function(type, item, error) { return type + item + error; };
     });
- 
+
   }));
   var uploadURIService, storage, returnResult, $rootScope, storageRequestObj;
   beforeEach(function(){
     returnResult = true;
-    
+
     inject(function($injector){
-      $rootScope = $injector.get('$rootScope');      
+      $rootScope = $injector.get('$rootScope');
       storage = $injector.get('storage');
       uploadURIService = $injector.get('UploadURIService');
     });
@@ -39,7 +39,7 @@ describe('service: UploadURIService', function() {
     expect(uploadURIService).to.be.truely;
     expect(uploadURIService.getURI).to.be.a('function');
   });
-  
+
   describe('getURI:',function(){
     it('should get Resumable Upload URI',function(done){
       var spy = sinon.spy(storage,'getResumableUploadURI');
@@ -59,10 +59,11 @@ describe('service: UploadURIService', function() {
 
       var file = {name: "fileName", type: "fileType"};
       uploadURIService.getURI(file).then(function(result) {
+        fail('getURI should had thrown error');
         done(result);
       })
       .then(null, function(error) {
-        expect(error).to.deep.equal('FileuploadAPI Failed');
+        expect(error.message).to.deep.equal('FileuploadAPI Failed');
         done();
       })
       .then(null,done);

@@ -323,11 +323,12 @@ angular.module('risevision.storage.services')
           item.progress = 100;
         };
 
-        svc.notifyErrorItem = function (item) {
+        svc.notifyErrorItem = function (item, status) {
           item.isReady = false;
           item.isUploading = false;
           item.isUploaded = true;
           item.isError = true;
+          item.isUnsupportedFile = status === 409;
         };
 
         svc.xhrTransport = function (item) {
@@ -460,6 +461,7 @@ angular.module('risevision.storage.services')
             isSuccess: false,
             isCancel: false,
             isError: false,
+            isUnsupportedFile: false,
             progress: 0,
             index: null
           });
