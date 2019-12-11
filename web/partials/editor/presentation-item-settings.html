@@ -1,67 +1,67 @@
 <div id="presentationItemModal">
-	<div class="modal-header">
-		<button type="button" class="close" ng-click="dismiss()">
-			<i class="fa fa-times"></i>
-		</button>
-		<h3 class="modal-title" translate="editor-app.playlistItem.presentation.title"></h3>
-	</div>
-	<div class="modal-body">
-		<h4>Presentation</h4>
-		<div class="row">
-			<div class="col-md-12">
-				<button id="selectPresentationButton" ng-click="showPresentationId = false; selectPresentation()" type="button" class="btn btn-default" ng-class="{'active' : !showPresentationId}">
-					<span translate="editor-app.playlistItem.presentation.select"></span>
-				</button>
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="dismiss()">
+      <i class="fa fa-times"></i>
+    </button>
+    <h3 class="modal-title" translate="editor-app.playlistItem.presentation.title"></h3>
+  </div>
+  <div class="modal-body">
+    <h4>Presentation</h4>
+    <div class="row">
+      <div class="col-md-12">
+        <button id="selectPresentationButton" ng-click="showPresentationId = false; selectPresentation()" type="button" class="btn btn-default" ng-class="{'active' : !showPresentationId}">
+          <span translate="editor-app.playlistItem.presentation.select"></span>
+        </button>
 
-				<span class="u_padding-sm-horizontal text-muted" translate="common.or"></span>
+        <span class="u_padding-sm-horizontal text-muted" translate="common.or"></span>
 
-				<button id="enterPresentationIdButton" ng-click="showPresentationId = true" type="button" class="btn btn-default" ng-class="{'active' : showPresentationId}">
-					<span translate="editor-app.playlistItem.presentation.enterId"></span>
-				</button>
-			
-			</div><!--col-->
-		</div><!--row-->
+        <button id="enterPresentationIdButton" ng-click="showPresentationId = true" type="button" class="btn btn-default" ng-class="{'active' : showPresentationId}">
+          <span translate="editor-app.playlistItem.presentation.enterId"></span>
+        </button>
+      
+      </div><!--col-->
+    </div><!--row-->
 
-		<div class="form-group u_margin-sm-top">
-			<form role="form" name="presentationItemFields" novalidate>
+    <div class="form-group u_margin-sm-top">
+      <form role="form" name="presentationItemFields" novalidate>
 
-				<div class="row">
-					<div class="col-sm-9">
+        <div class="row">
+          <div class="col-sm-9">
 
-						<div class="input-group u_margin-sm-bottom">
-							<input id="presentationId" name="presentationId" type="text" class="form-control" ng-show="showPresentationId" ng-model="presentationId" required guid-validator />
-							<input id="presentationName" name="presentationName" type="text" class="form-control" ng-show="!showPresentationId" ng-model="presentationName" readonly="readonly" />
-							<span class="input-group-addon" ng-click="clearSelection()">
-								<i class="fa fa-times"></i>
-							</span>
-						</div>
+            <div class="input-group u_margin-sm-bottom">
+              <input id="presentationId" name="presentationId" type="text" class="form-control" ng-show="showPresentationId" ng-model="presentationId" required guid-validator />
+              <input id="presentationName" name="presentationName" type="text" class="form-control" ng-show="!showPresentationId" ng-model="presentationName" readonly="readonly" />
+              <span class="input-group-addon" ng-click="clearSelection()">
+                <i class="fa fa-times"></i>
+              </span>
+            </div>
 
-					</div>
-					<div class="col-sm-3">
-						<a class="btn btn-default btn-block" ng-disabled="apiWarning || presentationItemFields.$invalid" ui-sref="apps.editor.workspace.artboard({presentationId: item.objectData})" target="_blank" translate="editor-app.playlistItem.presentation.open">
-							<i class="fa fa-external-link icon-right"></i>
-						</a>
-					</div>
-				</div>
+          </div>
+          <div class="col-sm-3">
+            <a class="btn btn-default btn-block" ng-disabled="apiWarning || presentationItemFields.$invalid" ui-sref="apps.editor.workspace.artboard({presentationId: item.objectData})" target="_blank" translate="editor-app.playlistItem.presentation.open">
+              <i class="fa fa-external-link icon-right"></i>
+            </a>
+          </div>
+        </div>
 
-				<p id="requiredValidation" class="text-danger" ng-if="showPresentationId" ng-show="!presentationItemFields.presentationId.$pristine && presentationItemFields.presentationId.$error.required"  translate="editor-app.playlistItem.presentation.error.noId">
-				</p>
-				<p id="invalidGuidValidation" class="text-danger" ng-if="showPresentationId" ng-show="!presentationItemFields.presentationId.$pristine && presentationItemFields.presentationId.$error.guid" translate="editor-app.playlistItem.presentation.error.invalidId">
-				</p>
-				<p id="invalidGuidValidation" class="text-danger" ng-if="!showPresentationId" ng-show="presentationItemFields.$invalid" translate="editor-app.playlistItem.presentation.error.noneSelected">
-				</p>
-				<p id="htmlTemplateValidation" class="text-danger" ng-if="showPresentationId" ng-show="!presentationItemFields.presentationId.$pristine && presentationItemFields.presentationId.$error.template" translate="editor-app.playlistItem.presentation.error.noTemplate">
-				</p>
+        <p id="requiredValidation" class="text-danger" ng-if="showPresentationId" ng-show="!presentationItemFields.presentationId.$pristine && presentationItemFields.presentationId.$error.required"  translate="editor-app.playlistItem.presentation.error.noId">
+        </p>
+        <p id="invalidGuidValidation" class="text-danger" ng-if="showPresentationId" ng-show="!presentationItemFields.presentationId.$pristine && presentationItemFields.presentationId.$error.guid" translate="editor-app.playlistItem.presentation.error.invalidId">
+        </p>
+        <p id="invalidGuidValidation" class="text-danger" ng-if="!showPresentationId" ng-show="presentationItemFields.$invalid" translate="editor-app.playlistItem.presentation.error.noneSelected">
+        </p>
+        <p id="htmlTemplateValidation" class="text-danger" ng-if="showPresentationId" ng-show="!presentationItemFields.presentationId.$pristine && presentationItemFields.presentationId.$error.template" translate="editor-app.playlistItem.presentation.error.noTemplate">
+        </p>
 
-				<div class="alert alert-warning" ng-show="apiWarning" translate="editor-app.playlistItem.presentation.error.noAccess">
-				</div>
+        <div class="alert alert-warning" ng-show="apiWarning" translate="editor-app.playlistItem.presentation.error.noAccess">
+        </div>
 
-			</form>
-		</div><!--form-group-->
+      </form>
+    </div><!--form-group-->
 
-	</div><!--modal-body-->
-	<div class="modal-footer">
-		<button id="presentationItemSave" class="btn btn-primary btn-fixed-width" ng-click="save()" ng-disabled="presentationItemFields.$invalid">{{isNew ? 'common.add' : 'common.apply' | translate}} <i class="fa fa-check icon-right"></i></button>
-		<button class="btn btn-default btn-fixed-width" ng-click="dismiss()">{{'common.cancel' | translate}} <i class="fa fa-times icon-right"></i></button>
-	</div>
+  </div><!--modal-body-->
+  <div class="modal-footer">
+    <button id="presentationItemSave" class="btn btn-primary btn-fixed-width" ng-click="save()" ng-disabled="presentationItemFields.$invalid">{{isNew ? 'common.add' : 'common.apply' | translate}} <i class="fa fa-check icon-right"></i></button>
+    <button class="btn btn-default btn-fixed-width" ng-click="dismiss()">{{'common.cancel' | translate}} <i class="fa fa-times icon-right"></i></button>
+  </div>
 </div>
