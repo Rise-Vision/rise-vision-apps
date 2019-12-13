@@ -260,19 +260,6 @@
       <option value="270" translate>displays-app.fields.player.orientation.270</option>
     </select>
   </div>
-
-  <div class="form-group form-inline" ng-show="factory.showBrowserUpgradeMode">
-    <label class="control-label" translate>displays-app.fields.player.browser.upgrade.name</label>
-    <select class="form-control" ng-model="display.browserUpgradeMode" integer-parser ng-disabled="!display.playerName && !display.playerVersion">
-      <option value="0" translate>displays-app.fields.player.browser.upgrade.autoUpgrade</option>
-      <option value="1" translate>displays-app.fields.player.browser.upgrade.userManaged</option>
-    </select>
-  </div>
-
-  <div class="form-group form-inline" ng-show="display.browserUpgradeMode !== 0">
-    <label class="control-label" translate>displays-app.fields.player.browser.recommended</label>
-    <div class="form-control-static">{{display.recommendedBrowserVersion}}</div>
-  </div>
 </div>
 
 <div class="form-group">

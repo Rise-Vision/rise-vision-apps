@@ -177,15 +177,6 @@
       "required": "Required"
     },
     "player": {
-      "browser": {
-        "installed": "Browser Version:",
-        "recommended": "Recommended Browser:",
-        "upgrade": {
-          "autoUpgrade": "Auto Upgrade",
-          "name": "Browser Upgrade:",
-          "userManaged": "User Managed"
-        }
-      },
       "browserVersion": "Browser Version",
       "displayControl": {
         "label": "Display Control",

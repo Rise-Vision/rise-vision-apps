@@ -9,7 +9,7 @@
     .constant('DISPLAY_WRITABLE_FIELDS', [
       'name', 'status', 'useCompanyAddress', 'addressDescription', 'street',
       'unit', 'city', 'province', 'country', 'postalCode', 'timeZoneOffset',
-      'restartEnabled', 'restartTime', 'browserUpgradeMode', 'width',
+      'restartEnabled', 'restartTime', 'width',
       'height', 'orientation', 'monitoringEnabled', 'monitoringEmails', 'monitoringSchedule'
     ])
     .constant('DISPLAY_SEARCH_FIELDS', [

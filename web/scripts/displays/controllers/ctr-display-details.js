@@ -188,10 +188,5 @@ angular.module('risevision.displays.controllers')
         startTrialListener();
       });
 
-      $scope.$watch('display.browserUpgradeMode', function () {
-        if ($scope.display && $scope.display.browserUpgradeMode !== 0) {
-          $scope.display.browserUpgradeMode = 1;
-        }
-      });
     }
   ]);

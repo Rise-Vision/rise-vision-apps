@@ -10,8 +10,7 @@ describe('service: displayFactory:', function() {
       return {
         _display: {
           id: "displayId",
-          name: "some display",
-          browserUpgradeMode: 1
+          name: "some display"
         },
         list: function() {
           var deferred = Q.defer();
@@ -254,19 +253,7 @@ describe('service: displayFactory:', function() {
       })
       .then(null,done);
     });
-    
-    it("showBrowserUpgradeMode: ",function(done){
-      displayFactory.getDisplay("displayId")
-      .then(function() {
-        expect(displayFactory.showBrowserUpgradeMode).to.be.true;
 
-        done();
-      })
-      .then(null, function() {
-        done("error");
-      })
-      .then(null,done);
-    });
   });
   
   describe('addDisplay:',function(){

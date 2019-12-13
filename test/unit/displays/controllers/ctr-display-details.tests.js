@@ -224,27 +224,6 @@ describe('controller: display details', function() {
 
   });
 
-  describe('browserUpgradeMode:',function(){
-    it('should watch display.browserUpgradeMode',function(){
-      expect($scope.$$watchers[0].exp).to.equal('display.browserUpgradeMode');
-    });
-
-    it('should change to User Managed (1) any value different than Auto Upgrade (0)',function(){
-      $scope.display = {id:123, browserUpgradeMode: 2};
-      $scope.$digest();
-      expect($scope.display.browserUpgradeMode).to.equal(1);
-      $scope.display = {id:123, browserUpgradeMode: 1};
-      $scope.$digest();
-      expect($scope.display.browserUpgradeMode).to.equal(1);
-    });
-
-    it('should not change Auto Upgrade (0)',function(){
-      $scope.display = {id:123, browserUpgradeMode: 0};
-      $scope.$digest();
-      expect($scope.display.browserUpgradeMode).to.equal(0);
-    });
-  });
-
   describe('toggleProAuthorized', function () {
     it('should show the plans modal', function () {
       $scope.display = {};
