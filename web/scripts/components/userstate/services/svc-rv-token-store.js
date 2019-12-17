@@ -26,7 +26,8 @@
           } else {
             $cookies.put(TOKEN_STORE_KEY, JSON.stringify(value), {
               domain: baseDomain,
-              path: '/'
+              path: '/',
+              secure: true
             });
           }
         };
