@@ -40,8 +40,8 @@ describe('directive: password input', function() {
     $templateCache.put('partials/components/password-input/password-input.html', '<p>mock</p>');
     $scope = $rootScope.$new();
     $scope.password = "password";
-    $scope.isCreating = true;
-    element = $compile('<password-input ng-model="password" is-creating="isCreating" label="label-text" placeholder="placehodler-text"></password-input>')($scope);
+    $scope.showPasswordMeter = true;
+    element = $compile('<password-input ng-model="password" show-password-meter="showPasswordMeter" label="label-text" placeholder="placehodler-text"></password-input>')($scope);
     $scope = element.isolateScope();
     $scope.$digest();
   }));
@@ -49,16 +49,17 @@ describe('directive: password input', function() {
   it('should exist', function() {
     expect($scope).to.be.ok;
     expect($scope.ngModel).to.be.ok;
-    expect($scope.isCreating).to.be.true;
+    expect($scope.showPasswordMeter).to.be.true;
     expect($scope.label).to.be.ok;
     expect($scope.placeholder).to.be.ok;
   });
 
   it('should init', function() {
     expect($scope.ngModel).to.equal('password');
-    expect($scope.isCreating).to.be.true;
+    expect($scope.showPasswordMeter).to.be.true;
     expect($scope.label).to.equal('label-text');
     expect($scope.placeholder).to.equal('placehodler-text');
+    expect($scope.minlength).to.equal(0);
   });
 
   it('should replace the element with the appropriate content', function() {
@@ -79,7 +80,7 @@ describe('directive: password input', function() {
     });
   });
 
-  describe('isCreating',function(){
+  describe('showPasswordMeter',function(){
     it('should load zxcvbn library when field is defining a new password', function() {
       expect($ocLazyLoad.load).to.have.been.calledWith('vendor/zxcvbn/zxcvbn.js');
     });
