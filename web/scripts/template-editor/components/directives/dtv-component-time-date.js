@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentTimeDate', ['TIMEZONES', 'templateEditorFactory',
-    function (TIMEZONES, templateEditorFactory) {
+  .directive('templateComponentTimeDate', ['WORLD_TIMEZONES', 'templateEditorFactory',
+    function (WORLD_TIMEZONES, templateEditorFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -17,7 +17,7 @@ angular.module('risevision.template-editor.directives')
               date: moment().format(format)
             };
           });
-          $scope.timezones = TIMEZONES;
+          $scope.timezones = WORLD_TIMEZONES;
 
           $scope.registerDirective({
             type: 'rise-time-date',

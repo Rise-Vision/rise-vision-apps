@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .constant('TIMEZONES', [
+  .constant('WORLD_TIMEZONES', [
     'Africa/Abidjan',
     'Africa/Accra',
     'Africa/Addis_Ababa',
