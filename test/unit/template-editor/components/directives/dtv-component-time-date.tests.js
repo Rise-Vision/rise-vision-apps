@@ -74,6 +74,10 @@ describe('directive: templateComponentTimeDate', function() {
       expect($scope.dateFormats.length).to.equal(4);
     });
 
+    it('should load the correct list of timezones', function () {
+      expect($scope.timezones.length).to.be.above(0);
+    });
+
     it('should initialize the time format from data', function () {
       _initLoad('time', 'Hours24', null);
 

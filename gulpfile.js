@@ -74,7 +74,6 @@ var unitTestFiles = [
   "web/bower_components/widget-settings-ui-components/dist/js/angular/file-selector.js",
   "web/bower_components/widget-settings-ui-components/dist/js/angular/widget-button-toolbar.js",
   "web/bower_components/moment/moment.js",
-  "web/bower_components/moment-timezone/moment-timezone.js",
   "node_modules/widget-tester/mocks/translate-mock.js",
   "web/tmp/partials.js",
   "web/scripts/components/**/*.js",
