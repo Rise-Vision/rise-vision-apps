@@ -17,6 +17,7 @@ angular.module('risevision.template-editor.directives')
               date: moment().format(format)
             };
           });
+          $scope.timezones = moment.tz.names();
 
           $scope.registerDirective({
             type: 'rise-time-date',
