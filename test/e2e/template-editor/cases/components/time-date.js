@@ -65,6 +65,8 @@ var TimeDateComponentScenarios = function () {
         helper.wait(timeDateComponentPage.getDateFormat(), 'Date format');
 
         expect(timeDateComponentPage.getDateFormat().getAttribute('value')).to.eventually.equal('string:MMM DD YYYY');
+        expect(timeDateComponentPage.getHours24().isSelected()).to.eventually.be.true;
+        expect(timeDateComponentPage.getSpecificTz().isSelected()).to.eventually.be.true;
         expect(timeDateComponentPage.getTimeZone().getAttribute('value')).to.eventually.equal('string:America/Argentina/Buenos_Aires');
       });
     });
