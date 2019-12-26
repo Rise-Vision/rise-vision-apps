@@ -31,7 +31,7 @@ var TimeDateComponentScenarios = function () {
     });
 
     describe('basic operations', function () {
-      it('should open properties of Counter Component', function () {
+      it('should open properties of Time and Date Component', function () {
         templateEditorPage.selectComponent(componentLabel);
         expect(timeDateComponentPage.getDateFormat().isEnabled()).to.eventually.be.true;
         expect(timeDateComponentPage.getHours12().isEnabled()).to.eventually.be.true;
