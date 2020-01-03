@@ -4,11 +4,10 @@ angular.module('risevision.template-editor.services')
   .constant('HTML_TEMPLATE_DOMAIN', 'https://widgets.risevision.com')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', 'presentation',
     'processErrorCode', 'userState', 'scheduleFactory',
-    'templateEditorUtils', 'brandingFactory', 'blueprintFactory', 'financialLicenseFactory', 'presentationTracker',
+    'templateEditorUtils', 'brandingFactory', 'blueprintFactory', 'presentationTracker',
     'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
     function ($q, $log, $state, $rootScope, presentation, processErrorCode, userState,
-      scheduleFactory, templateEditorUtils, brandingFactory,
-      blueprintFactory, financialLicenseFactory,
+      scheduleFactory, templateEditorUtils, brandingFactory, blueprintFactory,
       presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {
         hasUnsavedChanges: false
@@ -62,11 +61,6 @@ angular.module('risevision.template-editor.services')
         presentationTracker('HTML Template Copied', productDetails.productCode, productDetails.name);
 
         return blueprintFactory.load(factory.presentation.productCode)
-          .then(function () {
-            if (financialLicenseFactory.needsFinancialDataLicense()) {
-              financialLicenseFactory.showFinancialDataLicenseRequiredMessage();
-            }
-          })
           .then(null, function (e) {
             _showErrorMessage('add', e);
             return $q.reject(e);

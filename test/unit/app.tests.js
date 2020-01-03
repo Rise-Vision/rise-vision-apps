@@ -30,6 +30,13 @@ describe('app:', function() {
           };
         });
 
+        $provide.factory('financialLicenseFactory', function() {
+          return {
+            needsFinancialDataLicense: sinon.stub().returns(false),
+            showFinancialDataLicenseRequiredMessage: sinon.spy()
+          };
+        });
+
         $provide.service('templateEditorFactory',function(){
           return {
             addFromProduct: sinon.spy(),
@@ -56,6 +63,7 @@ describe('app:', function() {
         canAccessApps = $injector.get('canAccessApps');
         checkTemplateAccess = $injector.get('checkTemplateAccess');
         editorFactory = $injector.get('editorFactory');
+        financialLicenseFactory = $injector.get('financialLicenseFactory');
         templateEditorFactory = $injector.get('templateEditorFactory');
         displayFactory = $injector.get('displayFactory');
         plansFactory = $injector.get('plansFactory');
@@ -65,7 +73,7 @@ describe('app:', function() {
   });
 
 
-  var $state, canAccessApps, checkTemplateAccess, editorFactory, templateEditorFactory, displayFactory, plansFactory, $rootScope, $location;
+  var $state, canAccessApps, checkTemplateAccess, editorFactory, financialLicenseFactory, templateEditorFactory, displayFactory, plansFactory, $rootScope, $location;
 
   describe('state apps.editor.add:',function(){
 
@@ -270,7 +278,7 @@ describe('app:', function() {
     });
 
     it('should only check access once', function(done) {
-      $state.get('apps.editor.templates.edit').resolve.presentationInfo[5]({}, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess);
+      $state.get('apps.editor.templates.edit').resolve.presentationInfo[6]({}, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess, financialLicenseFactory);
       setTimeout(function() {
         canAccessApps.should.have.been.called.once;
         canAccessApps.should.have.been.calledWith();
@@ -279,29 +287,92 @@ describe('app:', function() {
       }, 10);
     });
 
-    describe('checkTemplateAccess:', function() {
-      it('should check access', function(done) {
-        $state.get('apps.editor.templates.edit').resolve.presentationInfo[5]({}, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess);
-        setTimeout(function() {
-          checkTemplateAccess.should.have.been.called;
+    describe('subscription warnings:', function() {
+      describe('showFinancialDataLicenseRequiredMessage:', function() {
+        it('should show financial license required message', function(done) {
+          financialLicenseFactory.needsFinancialDataLicense.returns(true);
+          var $stateParams = {
+            presentationId: 'new'
+          }
 
-          done();
-        }, 10);
+          $state.get('apps.editor.templates.edit').resolve.presentationInfo[6]($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess, financialLicenseFactory);
+          setTimeout(function() {
+            financialLicenseFactory.needsFinancialDataLicense.should.have.been.called;
+            financialLicenseFactory.showFinancialDataLicenseRequiredMessage.should.have.been.called;
+
+            checkTemplateAccess.should.not.have.been.called;
+
+            done();
+          }, 10);
+        });
+
+        it('should not show financial license required message if no financial components exist', function(done) {
+          financialLicenseFactory.needsFinancialDataLicense.returns(false);
+          var $stateParams = {
+            presentationId: 'new'
+          }
+
+          $state.get('apps.editor.templates.edit').resolve.presentationInfo[6]($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess, financialLicenseFactory);
+          setTimeout(function() {
+            financialLicenseFactory.needsFinancialDataLicense.should.have.been.called;
+            financialLicenseFactory.showFinancialDataLicenseRequiredMessage.should.not.have.been.called;
+
+            checkTemplateAccess.should.have.been.called;
+
+            done();
+          }, 10);
+        });
+
+        it('should not show financial license required message for existing templates', function(done) {
+          financialLicenseFactory.needsFinancialDataLicense.returns(true);
+          var $stateParams = {
+            presentationId: 'existing id'
+          }
+
+          $state.get('apps.editor.templates.edit').resolve.presentationInfo[6]($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess, financialLicenseFactory);
+          setTimeout(function() {
+            financialLicenseFactory.needsFinancialDataLicense.should.not.have.been.called;
+            financialLicenseFactory.showFinancialDataLicenseRequiredMessage.should.not.have.been.called;
+
+            checkTemplateAccess.should.have.been.called;
+
+            done();
+          }, 10);
+
+        });
+
       });
 
-      it('should not check access if the parameter is true', function(done) {
-        var $stateParams = {
-          skipAccessNotice: true
-        }
+      describe('checkTemplateAccess:', function() {
+        it('should check access', function(done) {
+          $state.get('apps.editor.templates.edit').resolve.presentationInfo[6]({}, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess, financialLicenseFactory);
+          setTimeout(function() {
+            financialLicenseFactory.needsFinancialDataLicense.should.not.have.been.called;
+            financialLicenseFactory.showFinancialDataLicenseRequiredMessage.should.not.have.been.called;
 
-        $state.get('apps.editor.templates.edit').resolve.presentationInfo[5]($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess);
-        setTimeout(function() {
-          checkTemplateAccess.should.not.have.been.called;
+            checkTemplateAccess.should.have.been.called;
 
-          done();
-        }, 10);
+            done();
+          }, 10);
+        });
+
+        it('should not check access if the parameter is true', function(done) {
+          var $stateParams = {
+            skipAccessNotice: true
+          }
+
+          $state.get('apps.editor.templates.edit').resolve.presentationInfo[6]($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess, financialLicenseFactory);
+          setTimeout(function() {
+            financialLicenseFactory.needsFinancialDataLicense.should.not.have.been.called;
+            financialLicenseFactory.showFinancialDataLicenseRequiredMessage.should.not.have.been.called;
+
+            checkTemplateAccess.should.not.have.been.called;
+
+            done();
+          }, 10);
+        });
+
       });
-
     });
 
     it('should redirect to signup for templates', function(done) {
@@ -310,7 +381,7 @@ describe('app:', function() {
         productId: 'productId'
       }
 
-      $state.get('apps.editor.templates.edit').resolve.presentationInfo[5]($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess);
+      $state.get('apps.editor.templates.edit').resolve.presentationInfo[6]($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess, financialLicenseFactory);
       setTimeout(function() {
         canAccessApps.should.have.been.calledWith(true);
 
@@ -324,7 +395,7 @@ describe('app:', function() {
           presentationId: 'presentationId'
         };
 
-        $state.get('apps.editor.templates.edit').resolve.presentationInfo[5]($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess)
+        $state.get('apps.editor.templates.edit').resolve.presentationInfo[6]($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess, financialLicenseFactory)
           .then(function() {
             templateEditorFactory.getPresentation.should.have.been.calledWith('presentationId');
 
@@ -339,7 +410,7 @@ describe('app:', function() {
           productDetails: 'productDetails'
         };
 
-        $state.get('apps.editor.templates.edit').resolve.presentationInfo[5]($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess)
+        $state.get('apps.editor.templates.edit').resolve.presentationInfo[6]($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess, financialLicenseFactory)
           .then(function() {
             templateEditorFactory.addFromProduct.should.have.been.calledWith('productDetails');
 
@@ -353,7 +424,7 @@ describe('app:', function() {
           productId: 'templateId'
         };
 
-        $state.get('apps.editor.templates.edit').resolve.presentationInfo[5]($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess)
+        $state.get('apps.editor.templates.edit').resolve.presentationInfo[6]($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess, financialLicenseFactory)
           .then(function() {
             editorFactory.addFromProductId.should.have.been.calledWith('templateId');
 

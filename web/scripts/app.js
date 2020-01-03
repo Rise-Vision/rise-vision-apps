@@ -386,11 +386,6 @@ angular.module('risevision.apps', [
 
                 return canAccessApps(signup)
                   .then(function () {
-                    if (!$stateParams.skipAccessNotice) {
-                      return checkTemplateAccess();
-                    }
-                  })
-                  .then(function () {
                     if ($stateParams.presentationId && $stateParams.presentationId !== 'new') {
                       return editorFactory.getPresentation($stateParams.presentationId);
                     } else if ($stateParams.copyOf) {
@@ -402,6 +397,13 @@ angular.module('risevision.apps', [
                     } else {
                       return editorFactory.newPresentation();
                     }
+                  })
+                  .then(function (presentationInfo) {
+                    if (!$stateParams.skipAccessNotice) {
+                      checkTemplateAccess();
+                    }
+
+                    return presentationInfo;
                   });
               }
             ]
@@ -445,8 +447,8 @@ angular.module('risevision.apps', [
           },
           resolve: {
             presentationInfo: ['$stateParams', 'canAccessApps', 'editorFactory', 'templateEditorFactory',
-              'checkTemplateAccess',
-              function ($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess) {
+              'checkTemplateAccess', 'financialLicenseFactory',
+              function ($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess, financialLicenseFactory) {
                 var signup = false;
 
                 if ($stateParams.presentationId === 'new' && $stateParams.productId) {
@@ -454,11 +456,6 @@ angular.module('risevision.apps', [
                 }
 
                 return canAccessApps(signup)
-                  .then(function () {
-                    if (!$stateParams.skipAccessNotice) {
-                      return checkTemplateAccess(true);
-                    }
-                  })
                   .then(function () {
                     if ($stateParams.presentationId === 'new') {
                       if ($stateParams.productDetails) {
@@ -468,6 +465,13 @@ angular.module('risevision.apps', [
                       }
                     } else {
                       return templateEditorFactory.getPresentation($stateParams.presentationId);
+                    }
+                  })
+                  .then(function () {
+                    if ($stateParams.presentationId === 'new' && financialLicenseFactory.needsFinancialDataLicense()) {
+                      financialLicenseFactory.showFinancialDataLicenseRequiredMessage();
+                    } else if (!$stateParams.skipAccessNotice) {
+                      checkTemplateAccess(true);
                     }
                   });
               }
