@@ -22,7 +22,9 @@ describe('service: onboardingFactory:', function() {
         isEducationCustomer: sinon.stub().returns(true),
         _restoreState: function(){},
         getUsername: sinon.stub().returns('username'),
-        updateUserProfile: sinon.stub()
+        updateUserProfile: sinon.stub(),
+        getSelectedCompanyId: sinon.stub().returns('companyId'),
+        updateCompanySettings: sinon.stub()
       }
     });
 
@@ -36,9 +38,13 @@ describe('service: onboardingFactory:', function() {
       return updateUser = sinon.stub().returns(Q.resolve({}));
     });
 
+    $provide.service("updateCompany", function() {
+      return updateCompany = sinon.stub().returns(Q.resolve({}));
+    });
+
   }));
   
-  var onboardingFactory, userState, companyAssetsFactory, segmentAnalytics, updateUser, $rootScope;
+  var onboardingFactory, userState, companyAssetsFactory, segmentAnalytics, updateUser, $rootScope, updateCompany;
   beforeEach(function() {
     inject(function($injector) {
       userState = $injector.get('userState');
@@ -82,7 +88,23 @@ describe('service: onboardingFactory:', function() {
       expect(onboardingFactory.isOnboarding()).to.be.true;
     });
 
-    it('should return false if user has already completed onboarding', function() {
+    it('should return true if company has not completed onboarding', function() {
+      userState.getCopyOfSelectedCompany.returns({
+        creationDate: 'Nov 25, 2010',
+        settings:{
+          onboardingCompleted: "false"
+        }
+      });
+      expect(onboardingFactory.isOnboarding()).to.be.false;
+    });
+
+    it('should return false if user and company have completed onboarding', function() {
+      userState.getCopyOfSelectedCompany.returns({
+        creationDate: 'Nov 25, 2010',
+        settings:{
+          onboardingCompleted: "true"
+        }
+      });
       userState.getCopyOfProfile.returns({
         settings:{
           onboardingCompleted: "true"
@@ -277,13 +299,19 @@ describe('service: onboardingFactory:', function() {
             'onboardingCompleted': 'true'
           }
         });
-
+        expect(updateCompany).to.have.been.calledWith('companyId',{
+          'settings': {
+            'onboardingCompleted': 'true'
+          }
+        });
         expect(onboardingFactory.isCurrentStep('promoteTraining')).to.be.true;
         expect(onboardingFactory.isCurrentTab(3)).to.be.true;
         expect(onboardingFactory.isTabCompleted(3)).to.be.true;
         expect(onboardingFactory.alreadySubscribed).to.be.true;
 
-        expect(segmentAnalytics.track).to.have.been.calledWith('Onboarding Newsletter Signup Completed')
+        expect(segmentAnalytics.track).to.have.been.calledWith('Onboarding Newsletter Signup Completed');
+        expect(userState.updateCompanySettings).to.have.been.called;
+        expect(userState.updateUserProfile).to.have.been.called;
         
         done();
       });
@@ -301,15 +329,20 @@ describe('service: onboardingFactory:', function() {
             'onboardingCompleted': 'true'
           }
         });
-
+        expect(updateCompany).to.have.been.calledWith('companyId',{
+          'settings': {
+            'onboardingCompleted': 'true'
+          }
+        });
         expect(onboardingFactory.isCurrentStep('promoteTraining')).to.be.true;
         expect(onboardingFactory.isCurrentTab(3)).to.be.true;
         expect(onboardingFactory.isTabCompleted(3)).to.be.true;
         expect(onboardingFactory.alreadySubscribed).to.be.undefined;
 
-        expect($rootScope.$emit).to.have.been.calledWith('risevision.user.userUpdated');
-        expect(segmentAnalytics.track).to.have.been.calledWith('Onboarding Newsletter Signup Completed')
-        
+        expect(segmentAnalytics.track).to.have.been.calledWith('Onboarding Newsletter Signup Completed');
+        expect(userState.updateCompanySettings).to.have.been.called;
+        expect(userState.updateUserProfile).to.have.been.called;
+
         done();
       },10);
     });
@@ -324,14 +357,19 @@ describe('service: onboardingFactory:', function() {
             'onboardingCompleted': 'true'
           }
         });
-
+        expect(updateCompany).to.have.been.calledWith('companyId',{
+          'settings': {
+            'onboardingCompleted': 'true'
+          }
+        });
         expect(onboardingFactory.isCurrentStep('promoteTraining')).to.be.true;
         expect(onboardingFactory.isCurrentTab(3)).to.be.true;
         expect(onboardingFactory.isTabCompleted(3)).to.be.true;
         expect(onboardingFactory.alreadySubscribed).to.be.undefined;
 
-        expect($rootScope.$emit).to.have.been.calledWith('risevision.user.userUpdated');
-        expect(segmentAnalytics.track).to.have.been.calledWith('Onboarding Newsletter Signup Completed')
+        expect(segmentAnalytics.track).to.have.been.calledWith('Onboarding Newsletter Signup Completed');
+        expect(userState.updateCompanySettings).to.have.been.called;
+        expect(userState.updateUserProfile).to.have.been.called;
         
         done();
       },10);

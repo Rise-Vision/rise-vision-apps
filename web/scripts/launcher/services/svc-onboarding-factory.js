@@ -30,8 +30,9 @@ angular.module('risevision.apps.launcher.services')
     }
   ])
   .factory('onboardingFactory', ['$q', 'userState', 'companyAssetsFactory', 'updateUser', '$rootScope',
-    'segmentAnalytics', '$exceptionHandler',
-    function ($q, userState, companyAssetsFactory, updateUser, $rootScope, segmentAnalytics, $exceptionHandler) {
+    'segmentAnalytics', '$exceptionHandler', 'updateCompany',
+    function ($q, userState, companyAssetsFactory, updateUser, $rootScope, segmentAnalytics, $exceptionHandler,
+      updateCompany) {
       var factory = {};
       var onboarding = {
         currentStep: -1,
@@ -175,9 +176,12 @@ angular.module('risevision.apps.launcher.services')
 
       factory.isOnboarding = function () {
         var profile = userState.getCopyOfProfile();
-        var completed = profile && profile.settings && profile.settings.onboardingCompleted === 'true';
+        var userCompleted = profile && profile.settings && profile.settings.onboardingCompleted === 'true';
 
-        return userState.isEducationCustomer() && _checkCreationDate() && !completed;
+        var company = userState.getCopyOfSelectedCompany();
+        var companyCompleted = company && company.settings && company.settings.onboardingCompleted === 'true';
+
+        return userState.isEducationCustomer() && _checkCreationDate() && !(companyCompleted && userCompleted);
       };
 
       factory.isTemplateOnboarding = function () {
@@ -234,9 +238,18 @@ angular.module('risevision.apps.launcher.services')
         _completeOnboarding(signupToNewsletter);
       };
 
-      var _completeOnboarding = function (signupToNewsletter) {
-        factory.loading = true;
+      var _completeCompanyOnboarding = function () {
+        return updateCompany(userState.getSelectedCompanyId(), {
+            settings: {
+              'onboardingCompleted': 'true'
+            }
+          })
+          .then(function (updatedCompany) {
+            userState.updateCompanySettings(updatedCompany);
+          });
+      };
 
+      var _completeUserOnboarding = function (signupToNewsletter) {
         return updateUser(userState.getUsername(), {
             'mailSyncEnabled': signupToNewsletter,
             'settings': {
@@ -245,8 +258,14 @@ angular.module('risevision.apps.launcher.services')
           })
           .then(function (resp) {
             userState.updateUserProfile(resp.item);
-            $rootScope.$emit('risevision.user.userUpdated');
+          });
+      };
 
+      var _completeOnboarding = function (signupToNewsletter) {
+        factory.loading = true;
+
+        return $q.all([_completeCompanyOnboarding(), _completeUserOnboarding(signupToNewsletter)])
+          .then(function (resp) {
             _setCurrentStep('promoteTraining');
             _completeTabsUpTo(3);
 
@@ -255,7 +274,7 @@ angular.module('risevision.apps.launcher.services')
             });
           })
           .catch(function (err) {
-            $exceptionHandler(err, 'Onboarding user update failed.', true);
+            $exceptionHandler(err, 'Onboarding update failed.', true);
           })
           .finally(function () {
             factory.loading = false;
