@@ -89,9 +89,8 @@ describe('service: checkTemplateAccess:', function() {
   it('should dismiss and open plansModal on page confirm', function(done){
     subscriptionStatusFactory.check.returns(Q.reject());
 
-    checkTemplateAccess();
-
-    setTimeout(function() {
+    checkTemplateAccess()
+    .then(function() {
       $modal.modalInstance.dismiss.should.have.been.called;
       plansFactory.showPlansModal.should.have.been.called;
 

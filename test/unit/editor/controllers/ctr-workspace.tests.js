@@ -16,28 +16,6 @@ describe('controller: Workspace', function() {
     $provide.factory('artboardFactory', function() {
       return {};
     });
-    $provide.factory('$stateParams',function(){
-      return { };
-    });
-    $provide.value('RVA_URL',"http://rva-test.appspot.com");
-    $provide.factory('$modal',function(){
-      return {
-        open: function(params){
-          modalOpenCalled = true;
-          expect(params).to.be.ok;
-          expect(params.resolve.confirmationTitle()).to.equal('editor-app.workspace.legacyWarning.title');
-          expect(params.resolve.confirmationMessage()).to.equal('editor-app.workspace.legacyWarning.message');
-          expect(params.resolve.confirmationButton()).to.equal('editor-app.workspace.legacyWarning.confirmation');          
-          return {
-            result:{
-              then:function(func){
-                expect(func).to.be.a('function');
-              }
-            }
-          };
-        }
-      };
-    });
     $provide.factory('userState',function(){
       return {
         hasRole: sandbox.stub().returns(true),
@@ -91,12 +69,6 @@ describe('controller: Workspace', function() {
       userState.hasRole.returns(false);
       expect($scope.hasContentEditorRole()).to.be.false;
     });
-  });
-
-  it('should show warning if presentation has deprecated items',function(){
-    editorFactory.hasLegacyItems = true;
-    $scope.$digest();
-    expect(modalOpenCalled).to.be.true;
   });
 
   it('should flag unsaved changes to presentation',function(){

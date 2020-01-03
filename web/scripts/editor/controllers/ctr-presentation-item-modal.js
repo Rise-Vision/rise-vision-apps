@@ -25,7 +25,7 @@ angular.module('risevision.editor.controllers')
           presentationFactory.getPresentationCached(id)
             .then(function (presentation) {
               if (presentation && presentation.presentationType === HTML_PRESENTATION_TYPE) {
-                $scope.presentationItemFields.presentationId.$setValidity('template', false);                
+                $scope.presentationItemFields.presentationId.$setValidity('template', false);
               }
 
               if (presentation && presentation.name) {

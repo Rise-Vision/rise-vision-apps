@@ -111,7 +111,7 @@ describe('service: editorFactory:', function() {
         get: function () {}
       };
     });
-    $provide.service('checkTemplateAccess',function(){
+    $provide.service('showLegacyWarning',function(){
       return sinon.spy();
     });
     $provide.service('$state',function(){
@@ -176,7 +176,7 @@ describe('service: editorFactory:', function() {
   }));
   var editorFactory, trackerCalled, updatePresentation, currentState, $state, stateParams,
     presentationParser, $window, $modal, processErrorCode, scheduleFactory, userAuthFactory,
-    $rootScope, storeProduct, checkTemplateAccess;
+    $rootScope, storeProduct, showLegacyWarning;
   beforeEach(function(){
     trackerCalled = undefined;
     currentState = undefined;
@@ -188,7 +188,7 @@ describe('service: editorFactory:', function() {
       $window = $injector.get('$window');
       $modal = $injector.get('$modal');
       $state = $injector.get('$state');
-      checkTemplateAccess = $injector.get('checkTemplateAccess');
+      showLegacyWarning = $injector.get('showLegacyWarning');
       scheduleFactory = $injector.get('scheduleFactory');
       userAuthFactory = $injector.get('userAuthFactory');
       $rootScope = $injector.get('$rootScope');
@@ -234,8 +234,6 @@ describe('service: editorFactory:', function() {
     editorFactory.newPresentation();
 
     expect(trackerCalled).to.equal('New Presentation');
-
-    checkTemplateAccess.should.have.been.called;
 
     expect(editorFactory.presentation.layout).to.be.ok;
     expect(editorFactory.presentation.parsed).to.be.true;
@@ -292,8 +290,8 @@ describe('service: editorFactory:', function() {
       presentationParser.hasLegacyItems = true;
       editorFactory.getPresentation("presentationId")
       .then(function() {
-        expect(editorFactory.presentation).to.be.truely;
-        expect(editorFactory.hasLegacyItems).to.be.true;
+        expect(editorFactory.presentation).to.be.ok;
+        showLegacyWarning.should.have.been.calledWith(editorFactory.presentation);
 
         setTimeout(function() {
           expect(editorFactory.loadingPresentation).to.be.false;
@@ -755,7 +753,6 @@ describe('service: editorFactory:', function() {
       editorFactory.copyTemplate('presentationId');
 
       setTimeout(function() {
-        checkTemplateAccess.should.have.been.called;
         editorFactory.copyPresentation.should.have.been.called;
 
         done();
@@ -767,7 +764,6 @@ describe('service: editorFactory:', function() {
 
       editorFactory.copyTemplate('presentationId')
       .catch(function (err) {
-        checkTemplateAccess.should.not.have.been.called;
         editorFactory.copyPresentation.should.not.have.been.called;
 
         expect(currentState).to.equal('apps.editor.list');

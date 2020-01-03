@@ -38,10 +38,6 @@ describe('service: templateEditorFactory:', function() {
       return sandbox.spy(function() { return 'error'; });
     });
 
-    $provide.service('checkTemplateAccess',function(){
-      return sandbox.spy();
-    });
-
     $provide.factory('templateEditorUtils', function() {
       return {
         showMessageWindow: sandbox.stub()
@@ -84,13 +80,12 @@ describe('service: templateEditorFactory:', function() {
   }));
 
   var $state, templateEditorFactory, templateEditorUtils, financialLicenseFactory, blueprintFactory, presentation, processErrorCode,
-    HTML_PRESENTATION_TYPE, checkTemplateAccess, storeProduct, plansFactory, scheduleFactory, brandingFactory;
+    HTML_PRESENTATION_TYPE, storeProduct, plansFactory, scheduleFactory, brandingFactory;
 
   beforeEach(function() {
     inject(function($injector) {
       $state = $injector.get('$state');
       templateEditorFactory = $injector.get('templateEditorFactory');
-      checkTemplateAccess = $injector.get('checkTemplateAccess');
 
       presentation = $injector.get('presentation');
       plansFactory = $injector.get('plansFactory');
@@ -137,7 +132,6 @@ describe('service: templateEditorFactory:', function() {
         expect(presentationTracker).to.have.been.calledWith('HTML Template Copied', 'test-id', 'Test HTML Template');
         expect(financialLicenseFactory.needsFinancialDataLicense).to.have.been.called;
         expect(financialLicenseFactory.showFinancialDataLicenseRequiredMessage).to.not.have.been.called;
-        expect(checkTemplateAccess).to.have.been.calledWith(true);
 
         done();
       });
@@ -161,7 +155,6 @@ describe('service: templateEditorFactory:', function() {
 
         expect(financialLicenseFactory.needsFinancialDataLicense).to.have.been.called;
         expect(financialLicenseFactory.showFinancialDataLicenseRequiredMessage).to.have.been.called;
-        expect(checkTemplateAccess).to.not.have.been.called;
 
         done();
       });

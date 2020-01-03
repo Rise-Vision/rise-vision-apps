@@ -8,13 +8,10 @@ angular.module('risevision.editor.controllers')
     'statusMessage',
     'subscriptionStatus'
   ])
-  .controller('WorkspaceController', ['$scope', 'editorFactory',
-    'artboardFactory', 'placeholderFactory', '$modal',
-    '$templateCache', '$location', '$stateParams', '$window', 'RVA_URL',
-    'IGNORE_FIELDS', '$timeout', '$state', '$filter', 'userState',
-    function ($scope, editorFactory, artboardFactory, placeholderFactory,
-      $modal, $templateCache, $location, $stateParams, $window,
-      RVA_URL, IGNORE_FIELDS, $timeout, $state, $filter, userState) {
+  .controller('WorkspaceController', ['$scope', '$window', '$timeout', '$filter', '$modal', '$state',
+    'userState', 'editorFactory', 'artboardFactory', 'placeholderFactory', 'IGNORE_FIELDS',
+    function ($scope, $window, $timeout, $filter, $modal, $state,
+      userState, editorFactory, artboardFactory, placeholderFactory, IGNORE_FIELDS) {
       $scope.factory = editorFactory;
       $scope.artboardFactory = artboardFactory;
       $scope.placeholderFactory = placeholderFactory;
@@ -116,34 +113,5 @@ angular.module('risevision.editor.controllers')
         $window.onbeforeunload = undefined;
       });
 
-      $scope.$watch('factory.hasLegacyItems', function (newValue) {
-        if (newValue) {
-          $scope.modalInstance = $modal.open({
-            template: $templateCache.get(
-              'partials/components/confirm-modal/confirm-modal.html'),
-            controller: 'confirmModalController',
-            windowClass: 'modal-custom',
-            resolve: {
-              confirmationTitle: function () {
-                return 'editor-app.workspace.legacyWarning.title';
-              },
-              confirmationMessage: function () {
-                return 'editor-app.workspace.legacyWarning.message';
-              },
-              confirmationButton: function () {
-                var confirmation =
-                  'editor-app.workspace.legacyWarning.confirmation';
-                return confirmation;
-              },
-              cancelButton: null
-            }
-          });
-          $scope.modalInstance.result.then(function () {
-            $window.location.href = RVA_URL +
-              '/#/PRESENTATION_MANAGE/id=' + $stateParams.presentationId +
-              '?cid=' + $location.search().cid;
-          });
-        }
-      });
     }
   ]); //ctr

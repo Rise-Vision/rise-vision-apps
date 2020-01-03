@@ -3,11 +3,11 @@
 angular.module('risevision.template-editor.services')
   .constant('HTML_TEMPLATE_DOMAIN', 'https://widgets.risevision.com')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', 'presentation',
-    'processErrorCode', 'userState', 'checkTemplateAccess', 'scheduleFactory',
+    'processErrorCode', 'userState', 'scheduleFactory',
     'templateEditorUtils', 'brandingFactory', 'blueprintFactory', 'financialLicenseFactory', 'presentationTracker',
     'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
     function ($q, $log, $state, $rootScope, presentation, processErrorCode, userState,
-      checkTemplateAccess, scheduleFactory, templateEditorUtils, brandingFactory,
+      scheduleFactory, templateEditorUtils, brandingFactory,
       blueprintFactory, financialLicenseFactory,
       presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {
@@ -65,8 +65,6 @@ angular.module('risevision.template-editor.services')
           .then(function () {
             if (financialLicenseFactory.needsFinancialDataLicense()) {
               financialLicenseFactory.showFinancialDataLicenseRequiredMessage();
-            } else {
-              checkTemplateAccess(true);
             }
           })
           .then(null, function (e) {
@@ -87,7 +85,8 @@ angular.module('risevision.template-editor.services')
 
               $state.go('apps.editor.templates.edit', {
                 presentationId: resp.item.id,
-                productId: undefined
+                productId: undefined,
+                skipAccessNotice: true
               }, {
                 notify: false,
                 location: 'replace'

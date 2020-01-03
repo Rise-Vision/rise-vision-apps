@@ -372,30 +372,37 @@ angular.module('risevision.apps', [
           }],
           controller: 'WorkspaceController',
           params: {
-            isLoaded: false
+            isLoaded: false,
+            skipAccessNotice: false
           },
           resolve: {
-            presentationInfo: ['canAccessApps', 'editorFactory', '$stateParams',
-              function (canAccessApps, editorFactory, $stateParams) {
+            presentationInfo: ['canAccessApps', 'editorFactory', '$stateParams', 'checkTemplateAccess',
+              function (canAccessApps, editorFactory, $stateParams, checkTemplateAccess) {
                 var signup = false;
 
                 if ($stateParams.copyOf) {
                   signup = true;
                 }
 
-                return canAccessApps(signup).then(function () {
-                  if ($stateParams.presentationId && $stateParams.presentationId !== 'new') {
-                    return editorFactory.getPresentation($stateParams.presentationId);
-                  } else if ($stateParams.copyOf) {
-                    if ($stateParams.isLoaded) {
-                      return editorFactory.presentation;
-                    } else {
-                      return editorFactory.copyTemplate($stateParams.copyOf);
+                return canAccessApps(signup)
+                  .then(function () {
+                    if (!$stateParams.skipAccessNotice) {
+                      return checkTemplateAccess();
                     }
-                  } else {
-                    return editorFactory.newPresentation();
-                  }
-                });
+                  })
+                  .then(function () {
+                    if ($stateParams.presentationId && $stateParams.presentationId !== 'new') {
+                      return editorFactory.getPresentation($stateParams.presentationId);
+                    } else if ($stateParams.copyOf) {
+                      if ($stateParams.isLoaded) {
+                        return editorFactory.presentation;
+                      } else {
+                        return editorFactory.copyTemplate($stateParams.copyOf);
+                      }
+                    } else {
+                      return editorFactory.newPresentation();
+                    }
+                  });
               }
             ]
           }
@@ -433,28 +440,36 @@ angular.module('risevision.apps', [
           reloadOnSearch: false,
           controller: 'TemplateEditorController',
           params: {
-            productDetails: null
+            productDetails: null,
+            skipAccessNotice: false
           },
           resolve: {
             presentationInfo: ['$stateParams', 'canAccessApps', 'editorFactory', 'templateEditorFactory',
-              function ($stateParams, canAccessApps, editorFactory, templateEditorFactory) {
+              'checkTemplateAccess',
+              function ($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess) {
                 var signup = false;
 
                 if ($stateParams.presentationId === 'new' && $stateParams.productId) {
                   signup = true;
                 }
 
-                return canAccessApps(signup).then(function () {
-                  if ($stateParams.presentationId === 'new') {
-                    if ($stateParams.productDetails) {
-                      return templateEditorFactory.addFromProduct($stateParams.productDetails);
-                    } else {
-                      return editorFactory.addFromProductId($stateParams.productId);
+                return canAccessApps(signup)
+                  .then(function () {
+                    if (!$stateParams.skipAccessNotice) {
+                      return checkTemplateAccess(true);
                     }
-                  } else {
-                    return templateEditorFactory.getPresentation($stateParams.presentationId);
-                  }
-                });
+                  })
+                  .then(function () {
+                    if ($stateParams.presentationId === 'new') {
+                      if ($stateParams.productDetails) {
+                        return templateEditorFactory.addFromProduct($stateParams.productDetails);
+                      } else {
+                        return editorFactory.addFromProductId($stateParams.productId);
+                      }
+                    } else {
+                      return templateEditorFactory.getPresentation($stateParams.presentationId);
+                    }
+                  });
               }
             ]
           }
