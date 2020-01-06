@@ -1,4 +1,4 @@
-<div class="attribute-editor-component">
+<div class="attribute-editor-component time-date-container">
   <div class="attribute-editor-row" ng-show="type === 'timedate' || type === 'date'">
     <div class="form-group">
       <label class="control-label" for="te-td-date-format">Date format:</label>
@@ -25,6 +25,31 @@
       <label for="Hours24" id="Hours24Label">
         24 hour.
       </label>
+    </div>
+  </div>
+
+  <div class="attribute-editor-row">
+    <label class="u_margin-sm-top mb-0">Show the time and date according to:</label>
+
+    <div class="radio" id="displayTzRadio">
+      <input type="radio" ng-model="timezoneType" value="DisplayTz" id="DisplayTz" name="DisplayTz" ng-change="save()" aria-required="true" required>
+      <label for="DisplayTz" id="DisplayTzLabel">
+        The Display's time zone.
+      </label>
+    </div>
+
+    <div class="radio" id="specificTzRadio">
+      <input type="radio" ng-model="timezoneType" value="SpecificTz" id="SpecificTz" name="SpecificTz" ng-change="save()" aria-required="true" required>
+      <label for="SpecificTz" id="SpecificTzLabel">
+        A specific time zone.
+      </label>
+      <select id="te-td-timezone"
+              class="form-control timezone-input-group"
+              ng-show="timezoneType === 'SpecificTz'"
+              ng-model="timezone"
+              ng-options="tz for tz in timezones"
+              ng-change="save()">
+      </select>
     </div>
   </div>
 </div>
