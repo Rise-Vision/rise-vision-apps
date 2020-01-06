@@ -38,10 +38,13 @@ angular.module('risevision.template-editor.directives')
             var type = $scope.getAvailableAttributeData($scope.componentId, 'type');
             var timeFormat = $scope.getAvailableAttributeData($scope.componentId, 'time');
             var dateFormat = $scope.getAvailableAttributeData($scope.componentId, 'date');
+            var timezone = $scope.getAvailableAttributeData($scope.componentId, 'timezone');
             var timeFormatVal = timeFormat || 'Hours12';
             var dateFormatVal = dateFormat || $scope.dateFormats[0].format;
 
             $scope.type = type;
+            $scope.timezoneType = !timezone ? 'DisplayTz' : 'SpecificTz';
+            $scope.timezone = timezone;
 
             if ($scope.type === 'time') {
               $scope.timeFormat = timeFormatVal;
@@ -58,6 +61,10 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.save = function () {
+            if ($scope.timezoneType === 'DisplayTz' || !$scope.timezone) {
+              $scope.timezone = null;
+            }
+
             if ($scope.type === 'timedate') {
               $scope.setAttributeData($scope.componentId, 'time', $scope.timeFormat);
               $scope.setAttributeData($scope.componentId, 'date', $scope.dateFormat);
@@ -66,6 +73,8 @@ angular.module('risevision.template-editor.directives')
             } else if ($scope.type === 'date') {
               $scope.setAttributeData($scope.componentId, 'date', $scope.dateFormat);
             }
+
+            $scope.setAttributeData($scope.componentId, 'timezone', $scope.timezone);
           };
         }
       };
