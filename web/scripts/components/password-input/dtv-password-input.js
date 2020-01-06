@@ -12,7 +12,7 @@
           require: '?ngModel',
           scope: {
             ngModel: '=',
-            isCreating: '=',
+            showPasswordMeter: '=',
             label: '@',
             placeholder: '@'
           },
@@ -20,12 +20,13 @@
             'partials/components/password-input/password-input.html'),
           link: function (scope, element, attrs, ctrl) {
             scope.ngModelCtrl = ctrl;
+            scope.minlength = attrs.minlength || 0;
 
             scope.$watch('ngModel', function (newValue, oldValue) {
               if (newValue !== oldValue) {
                 scope.ngModelCtrl.$setDirty(true);
               }
-              if (scope.isCreating) {
+              if (scope.showPasswordMeter) {
                 $ocLazyLoad.load(ZXCVBN_PATH).then(function () {
                   var result = $window.zxcvbn(newValue);
                   scope.feedback = result.feedback.warning;
