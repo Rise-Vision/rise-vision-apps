@@ -16,7 +16,7 @@ describe('service: onboardingFactory:', function() {
     $provide.service('userState',function(){
       return {
         getCopyOfSelectedCompany: sinon.stub().returns({
-          creationDate: 'Jan 1, 2020'
+          creationDate: 'Jan 8, 2020'
         }),
         getCopyOfProfile: sinon.stub(),
         isEducationCustomer: sinon.stub().returns(true),

@@ -483,7 +483,8 @@ angular.module('risevision.apps', [
           resolve: {
             presentationInfo: ['$stateParams', 'canAccessApps', 'editorFactory', 'templateEditorFactory',
               'checkTemplateAccess', 'financialLicenseFactory',
-              function ($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess, financialLicenseFactory) {
+              function ($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess,
+                financialLicenseFactory) {
                 var signup = false;
 
                 if ($stateParams.presentationId === 'new' && $stateParams.productId) {
@@ -503,7 +504,8 @@ angular.module('risevision.apps', [
                     }
                   })
                   .then(function () {
-                    if ($stateParams.presentationId === 'new' && financialLicenseFactory.needsFinancialDataLicense()) {
+                    if ($stateParams.presentationId === 'new' && financialLicenseFactory
+                      .needsFinancialDataLicense()) {
                       financialLicenseFactory.showFinancialDataLicenseRequiredMessage();
                     } else if (!$stateParams.skipAccessNotice) {
                       checkTemplateAccess(true);
