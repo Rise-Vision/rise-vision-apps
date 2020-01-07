@@ -30,7 +30,7 @@ angular.module('risevision.apps.launcher.services')
       var displaysListListener, activeDisplayCompleted;
 
       var _sendUpdateEvent = function () {
-        $rootScope.$emit('companyAssetsUpdated');
+        $rootScope.$broadcast('companyAssetsUpdated');
       };
 
       factory.hasPresentations = function (forceReload) {
