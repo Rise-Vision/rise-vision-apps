@@ -8,16 +8,16 @@ angular.module('risevision.editor.services')
   )
   .factory('editorFactory', ['$q', '$state', 'userState', 'userAuthFactory',
     'presentation', 'presentationParser', 'distributionParser',
-    'presentationTracker', 'storeProduct', 'checkTemplateAccess', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
+    'presentationTracker', 'storeProduct', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
     'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT',
     '$modal', '$rootScope', '$window', 'scheduleFactory', 'processErrorCode', 'messageBox',
-    '$templateCache', '$log', 'presentationUtils',
+    '$templateCache', '$log', 'presentationUtils', 'showLegacyWarning',
     function ($q, $state, userState, userAuthFactory, presentation,
-      presentationParser, distributionParser, presentationTracker, storeProduct, checkTemplateAccess,
+      presentationParser, distributionParser, presentationTracker, storeProduct,
       VIEWER_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED,
       DEFAULT_LAYOUT, $modal, $rootScope, $window,
       scheduleFactory, processErrorCode, messageBox, $templateCache, $log,
-      presentationUtils) {
+      presentationUtils, showLegacyWarning) {
       var factory = {};
       var JSON_PARSE_ERROR = 'JSON parse error';
 
@@ -54,7 +54,6 @@ angular.module('risevision.editor.services')
           isTemplate: false,
           isStoreProduct: false
         };
-        factory.hasLegacyItems = false;
         presentationParser.parsePresentation(factory.presentation);
 
         _clearMessages();
@@ -65,8 +64,6 @@ angular.module('risevision.editor.services')
       factory.newPresentation = function () {
         presentationTracker('New Presentation');
 
-        checkTemplateAccess();
-
         _init();
       };
 
@@ -76,7 +73,6 @@ angular.module('risevision.editor.services')
         presentationParser.parsePresentation(factory.presentation);
         distributionParser.parseDistribution(factory.presentation);
 
-        factory.hasLegacyItems = presentationParser.hasLegacyItems;
         $rootScope.$broadcast('presentationUpdated');
       };
 
@@ -91,6 +87,11 @@ angular.module('risevision.editor.services')
         presentation.get(presentationId)
           .then(function (result) {
             _updatePresentation(result.item);
+          })
+          .then(function () {
+            if (presentationParser.hasLegacyItems) {
+              showLegacyWarning(factory.presentation);
+            }
 
             deferred.resolve();
           })
@@ -186,7 +187,8 @@ angular.module('risevision.editor.services')
 
               $state.go('apps.editor.workspace.artboard', {
                 presentationId: resp.item.id,
-                copyOf: undefined
+                copyOf: undefined,
+                skipAccessNotice: true
               }, {
                 notify: false,
                 location: 'replace'
@@ -455,7 +457,6 @@ angular.module('risevision.editor.services')
 
         return factory.getPresentation(rvaEntityId)
           .then(factory.copyPresentation)
-          .then(checkTemplateAccess)
           .catch(function (err) {
             $state.go('apps.editor.list');
             return $q.reject(err);

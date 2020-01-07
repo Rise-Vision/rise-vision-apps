@@ -108,12 +108,18 @@
 
       it('should show minimum length error', function() {
         signUpPage.getUsernameTextBox().sendKeys('test@test.com');
-        signUpPage.getPasswordTextBox().sendKeys('pass');
+        signUpPage.getPasswordTextBox().sendKeys('pa');
 
         expect(signUpPage.getPasswordMinLengthError().isDisplayed()).to.eventually.be.true;
       });
 
-      it('should show password meter', function() {
+      it('should dismiss minimum length error after 4 characters', function() {
+        signUpPage.getPasswordTextBox().sendKeys('ss');
+
+        expect(signUpPage.getPasswordMinLengthError().isPresent()).to.eventually.be.false;
+      });
+
+      xit('should show password meter', function() {
         helper.wait(signUpPage.getPasswordMeter(), 'Password Meter Strength');
 
         expect(signUpPage.getPasswordStrengthText().getText()).to.eventually.equal('Weak');
@@ -127,13 +133,14 @@
         expect(signUpPage.getPasswordRequiredError().isDisplayed()).to.eventually.be.true;
       });
 
-      it('should report strong password', function() {
+      xit('should report strong password', function() {
         signUpPage.getPasswordTextBox().sendKeys('strngPass@*3');
 
         expect(signUpPage.getPasswordStrengthText().getText()).to.eventually.equal('Great');
       });
 
       it('should show error when trying to signup with existing user account', function() {
+        signUpPage.getPasswordTextBox().sendKeys('strngPass@*3');
         signUpPage.getSignupButton().click();
 
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');

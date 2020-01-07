@@ -38,10 +38,6 @@ describe('service: templateEditorFactory:', function() {
       return sandbox.spy(function() { return 'error'; });
     });
 
-    $provide.service('checkTemplateAccess',function(){
-      return sandbox.spy();
-    });
-
     $provide.factory('templateEditorUtils', function() {
       return {
         showMessageWindow: sandbox.stub()
@@ -64,13 +60,6 @@ describe('service: templateEditorFactory:', function() {
       };
     });
 
-    $provide.factory('financialLicenseFactory', function() {
-      return financialLicenseFactory = {
-        needsFinancialDataLicense: sandbox.stub().returns(false),
-        showFinancialDataLicenseRequiredMessage: sandbox.spy()
-      };
-    });
-
     $provide.factory('presentationTracker', function() {
       return presentationTracker;
     });
@@ -83,14 +72,13 @@ describe('service: templateEditorFactory:', function() {
 
   }));
 
-  var $state, templateEditorFactory, templateEditorUtils, financialLicenseFactory, blueprintFactory, presentation, processErrorCode,
-    HTML_PRESENTATION_TYPE, checkTemplateAccess, storeProduct, plansFactory, scheduleFactory, brandingFactory;
+  var $state, templateEditorFactory, templateEditorUtils, blueprintFactory, presentation, processErrorCode,
+    HTML_PRESENTATION_TYPE, storeProduct, plansFactory, scheduleFactory, brandingFactory;
 
   beforeEach(function() {
     inject(function($injector) {
       $state = $injector.get('$state');
       templateEditorFactory = $injector.get('templateEditorFactory');
-      checkTemplateAccess = $injector.get('checkTemplateAccess');
 
       presentation = $injector.get('presentation');
       plansFactory = $injector.get('plansFactory');
@@ -135,33 +123,6 @@ describe('service: templateEditorFactory:', function() {
         expect(templateEditorFactory.presentation.name).to.equal('Copy of Test HTML Template');
         expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_PRESENTATION_TYPE);
         expect(presentationTracker).to.have.been.calledWith('HTML Template Copied', 'test-id', 'Test HTML Template');
-        expect(financialLicenseFactory.needsFinancialDataLicense).to.have.been.called;
-        expect(financialLicenseFactory.showFinancialDataLicenseRequiredMessage).to.not.have.been.called;
-        expect(checkTemplateAccess).to.have.been.calledWith(true);
-
-        done();
-      });
-    });
-
-    it('should open Financial Data License message if Template uses rise-data-financial', function(done) {
-      financialLicenseFactory.needsFinancialDataLicense.returns(true);
-      blueprintFactory.blueprintData.components = [
-        {
-          type: 'rise-data-financial',
-          id: 'rise-data-financial-01',
-          attributes: {}
-        }
-      ];
-
-      templateEditorFactory.addFromProduct({ productCode: 'test-id', name: 'Test HTML Template' }).then(function () {
-        expect(templateEditorFactory.presentation.id).to.be.undefined;
-        expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
-        expect(templateEditorFactory.presentation.name).to.equal('Copy of Test HTML Template');
-        expect(templateEditorFactory.presentation.presentationType).to.equal(HTML_PRESENTATION_TYPE);
-
-        expect(financialLicenseFactory.needsFinancialDataLicense).to.have.been.called;
-        expect(financialLicenseFactory.showFinancialDataLicenseRequiredMessage).to.have.been.called;
-        expect(checkTemplateAccess).to.not.have.been.called;
 
         done();
       });

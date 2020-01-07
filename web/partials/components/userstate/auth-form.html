@@ -73,7 +73,12 @@
       </p>
     </div>
       
-    <password-input name="password" ng-model="credentials.password" is-creating="isSignUp" minlength="{{ isSignUp ? 12 : 0}}" required></password-input>
+    <password-input 
+      name="password"
+      ng-model="credentials.password" 
+      label="{{isSignUp ? 'Create Password' : 'Password'}}"
+      minlength="{{ isSignUp ? 4 : 0}}" required>
+    </password-input>
 
     </div>
   </div>

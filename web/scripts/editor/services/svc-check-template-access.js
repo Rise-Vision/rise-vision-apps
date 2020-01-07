@@ -13,7 +13,7 @@ angular.module('risevision.editor.services')
               return 'Display License Required';
             },
             confirmationMessage: function () {
-              return 'Starting January 1, 2020 this Presentation or Template will require a Display License to show on your Display(s). Please subscribe or contact <a href="mailto:sales@risevision.com">sales@risevision.com</a> for a quote.';
+              return 'This Presentation or Template will require a Display License to show on your Display(s). Please subscribe or contact <a href="mailto:sales@risevision.com">sales@risevision.com</a> for a quote.';
             },
             confirmationButton: function () {
               return 'Subscribe';
@@ -34,16 +34,18 @@ angular.module('risevision.editor.services')
 
         var modalInstance = $modal.open(modalObject);
 
-        modalInstance.result.then(function () {
-          modalInstance.dismiss();
-          plansFactory.showPlansModal();
-        });
+        return modalInstance.result
+          .then(function () {
+            modalInstance.dismiss();
+            plansFactory.showPlansModal();
+          })
+          .catch(function () {});
       };
 
       return function (isHtmlTemplate) {
         return subscriptionStatusFactory.check(TEMPLATE_LIBRARY_PRODUCT_CODE)
           .catch(function () {
-            _openExpiredModal(isHtmlTemplate);
+            return _openExpiredModal(isHtmlTemplate);
           });
       };
     }
