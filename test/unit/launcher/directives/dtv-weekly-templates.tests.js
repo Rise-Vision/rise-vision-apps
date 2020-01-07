@@ -29,6 +29,11 @@ describe('directive: weekly-templates', function() {
       return {
         isEducationCustomer: function() {
           return isEducationCustomer;
+        },
+        getCopyOfProfile: function() {
+          return {
+            mailSyncEnabled: true
+          };
         }
       };
     });
@@ -76,6 +81,7 @@ describe('directive: weekly-templates', function() {
       expect($scope.factory).to.be.a.function;
       expect($scope.toggleView).to.be.a.function;
       expect($scope.select).to.be.a.function;
+      expect($scope.alreadyOptedIn).to.be.true;
     });
 
     it('should use session storage value for fullView',function() {
