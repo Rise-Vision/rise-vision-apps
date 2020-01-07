@@ -135,6 +135,29 @@ describe('service: onboardingFactory:', function() {
     });
   });
 
+  
+  describe("loading:",function(){
+    beforeEach(function() {
+      sinon.stub(onboardingFactory, 'refresh');
+    });
+
+    it("should refresh on companyAssetsUpdated event",function(){
+      $rootScope.$emit('companyAssetsUpdated');
+      $rootScope.$digest();
+
+      onboardingFactory.refresh.should.have.been.called;
+    });
+
+    it("should refresh on selectedCompanyChanged event and reset details",function(){
+      $rootScope.$emit('risevision.company.selectedCompanyChanged');
+      $rootScope.$digest();
+
+      onboardingFactory.refresh.should.have.been.called;
+      onboardingFactory.refresh.should.have.been.calledWith(true);
+    });
+
+  });
+
   describe('refresh:', function() {
     it('should go to initial step', function(done) {
       expect(onboardingFactory.isCurrentStep('addTemplate')).to.be.false;
