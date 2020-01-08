@@ -165,7 +165,7 @@ angular.module('risevision.apps.launcher.services')
         var company = userState.getCopyOfSelectedCompany();
         var creationDate = ((company && company.creationDate) ? (new Date(company.creationDate)) : (
           new Date()));
-        return creationDate > new Date('Jan 7, 2020');
+        return creationDate > new Date('Dec 3, 2010');
       };
 
       var _isMailSyncEnabled = function () {
