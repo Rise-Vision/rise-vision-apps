@@ -1,11 +1,15 @@
 .onboarding-container {
-	a, a:hover, .nav>li>a, .nav>li>a:hover {
+	a, .nav>li>a, .panel-body a strong {
 		color: $madero-light-blue;
 		text-decoration: underline;
 	}
 
 	.nav>li.active>a {
 		color: $madero-black;
+		text-decoration: none;
+	}
+
+	a.btn {
 		text-decoration: none;
 	}
 
@@ -22,4 +26,5 @@
 	.text-muted {
 		color: $madero-gray;
 	}
+
 }
