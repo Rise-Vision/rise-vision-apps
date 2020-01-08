@@ -17,6 +17,7 @@ var HomePage = function() {
   var storageLink = element(by.css('.nav.navbar-nav #StorageLink'));
 
   var appLauncherContainer = element(by.id('appLauncherContainer'));
+  var appLauncherLoader = element(by.xpath('//div[@spinner-key="launcher-loader"]'));
 
   var presentationAddButton = element(by.id('presentationAddButton'));
   var presentationsList = element(by.id('presentationsList'));
@@ -107,6 +108,10 @@ var HomePage = function() {
 
   this.getAppLauncherContainer = function() {
     return appLauncherContainer;
+  };
+
+  this.getAppLauncherLoader = function() {
+    return appLauncherLoader;
   };
 
   this.getPresentationAddButton = function() {

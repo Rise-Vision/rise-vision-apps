@@ -118,7 +118,11 @@ var HomepageScenarios = function() {
       });
     });
 
-    describe('Presentations:',function(){
+    describe('Presentations:',function() {
+      before(function() {
+        helper.waitDisappear(homepage.getAppLauncherLoader(), 'App Launcher Loader');
+      });
+
       it('should show Presentations list',function(){
         helper.waitDisappear(homepage.getPresentationsListLoader(), 'Presentations list loader');
 
