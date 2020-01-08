@@ -37,17 +37,6 @@ describe('controller: display details', function() {
         isElectronPlayer: function(){ return true;}
       };
     });
-    $provide.service('$state',function(){
-      return {
-        _state : '',
-        go : function(state, params){
-          if (state){
-            this._state = state;
-          }
-          return this._state;
-        }
-      };
-    });
     $provide.service('$modal',function(){
       return {
         open : function(obj){
@@ -89,6 +78,11 @@ describe('controller: display details', function() {
         getCompanyProStatus: function() {
           return Q.resolve({status: 'Subscribed', statusCode: 'subscribed'});
         }
+      }
+    });
+    $provide.service('$state', function() {
+      return {
+        go: sandbox.stub()
       }
     });
     $provide.service('screenshotFactory', function() {
@@ -232,6 +226,19 @@ describe('controller: display details', function() {
 
       $scope.toggleProAuthorized();
       expect($scope.showPlansModal).to.have.been.called;
+      expect(enableCompanyProduct).to.not.have.been.called;
+    });
+
+    it('should forward to billing if has a plan but no available licenses', function () {
+      $scope.display = {};
+      sandbox.stub($scope, 'isProAvailable').returns(false);
+      sandbox.stub($scope, 'showPlansModal');
+      sandbox.stub($scope, 'getProLicenseCount').returns(1);
+      sandbox.stub($scope, 'areAllProLicensesUsed').returns(true);
+
+      $scope.toggleProAuthorized();      
+      expect($state.go).to.have.been.calledWith('apps.billing.home');
+      expect($scope.showPlansModal).to.not.have.been.called;
       expect(enableCompanyProduct).to.not.have.been.called;
     });
 
