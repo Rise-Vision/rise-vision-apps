@@ -29,6 +29,7 @@
 
 	.panel, .panel-footer, .nav-tabs.nav-justified>li.active>a {
 		border-color: $madero-gray;
+		box-shadow: none;
 	}
 
 	@media (min-width: $screen-sm) {
