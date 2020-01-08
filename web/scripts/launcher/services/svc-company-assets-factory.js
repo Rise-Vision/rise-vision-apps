@@ -141,7 +141,7 @@ angular.module('risevision.apps.launcher.services')
         });
       };
 
-      factory.hasDisplays = function () {
+      factory.hasDisplays = function (forceReload) {
         if (addDisplayCompleted && activeDisplayCompleted) {
           return $q.resolve({
             hasDisplays: addDisplayCompleted,
@@ -151,7 +151,7 @@ angular.module('risevision.apps.launcher.services')
 
         var deferred = $q.defer();
 
-        return displayListRequest.execute().then(function (resp) {
+        return displayListRequest.execute(forceReload).then(function (resp) {
           addDisplayCompleted = !!(resp && resp.items && resp.items.length > 0);
 
           if (!addDisplayCompleted) {
