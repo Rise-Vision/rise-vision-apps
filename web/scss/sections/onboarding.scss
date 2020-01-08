@@ -44,4 +44,10 @@
 			border-bottom-color: $white;	
 		}
 	}
+
+	.has-error {
+		.text-danger {
+			margin-top: 5px;
+		}
+	}
 }
