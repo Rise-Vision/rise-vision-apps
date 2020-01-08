@@ -32,6 +32,10 @@
 		box-shadow: none;
 	}
 
+	.product-grid_item.panel-default {
+		border-color: #ddd;
+	}
+
 	@media (min-width: $screen-sm) {
 		.nav-tabs.nav-justified>li>a {
 			border-bottom-color: $madero-gray;	

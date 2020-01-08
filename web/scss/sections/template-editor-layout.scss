@@ -933,6 +933,10 @@ $short-phone-height: 570px;
     &:focus {
       outline: none;
     }
+
+    &:active {
+      box-shadow: none;
+    }
   }
 
   .btn-default {
