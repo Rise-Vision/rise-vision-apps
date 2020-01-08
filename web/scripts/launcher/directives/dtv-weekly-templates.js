@@ -37,6 +37,8 @@ angular.module('risevision.apps.launcher.directives')
             editorFactory.addFromProduct(product);
           };
 
+          $scope.alreadyOptedIn = userState.getCopyOfProfile() && userState.getCopyOfProfile().mailSyncEnabled;
+
         } //link()
       };
     }
