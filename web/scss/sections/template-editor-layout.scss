@@ -969,6 +969,20 @@ $short-phone-height: 570px;
     }
   }
 
+  .btn-toggle-blue-on {
+    background-color: $madero-light-blue;
+    border-color: $madero-light-blue;
+  }
+
+  .btn-toggle-blue-off {
+    color: $madero-light-blue;
+    background-color: transparent;
+    border-color: $madero-light-blue;
+    &:hover, &:active, &:focus {
+      background-color: transparent;
+    }
+  } 
+
   .radio {
     margin-top: 0px;
     margin-bottom: 0px;
