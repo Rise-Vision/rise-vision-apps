@@ -910,6 +910,10 @@ $short-phone-height: 570px;
     }
   }
 
+  .text-lg {
+    font-size: 16px;
+  }
+
   label {
     margin-bottom: 5px;
     font-size: 14px;
@@ -1395,6 +1399,10 @@ $short-phone-height: 570px;
       background-color: $rise-blue !important;
       color: $white !important;
     }
+  }
+
+  .display-id {
+    font-size: 18px;
   }
 }
 

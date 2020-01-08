@@ -4,10 +4,10 @@ angular.module('risevision.displays.controllers')
   .controller('displayDetails', ['$scope', '$rootScope', '$q',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'enableCompanyProduct', 'userState', 'plansFactory',
-    'currentPlanFactory', 'playerLicenseFactory', 'PLAYER_PRO_PRODUCT_CODE',
+    'currentPlanFactory', 'playerLicenseFactory', 'PLAYER_PRO_PRODUCT_CODE', '$state',
     function ($scope, $rootScope, $q, displayFactory, display, screenshotFactory, playerProFactory,
       $loading, $log, $modal, $templateCache, displayId, enableCompanyProduct, userState,
-      plansFactory, currentPlanFactory, playerLicenseFactory, PLAYER_PRO_PRODUCT_CODE) {
+      plansFactory, currentPlanFactory, playerLicenseFactory, PLAYER_PRO_PRODUCT_CODE, $state) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
@@ -38,7 +38,11 @@ angular.module('risevision.displays.controllers')
       $scope.toggleProAuthorized = function () {
         if (!$scope.isProAvailable()) {
           $scope.display.playerProAuthorized = false;
-          $scope.showPlansModal();
+          if ($scope.getProLicenseCount() > 0 && $scope.areAllProLicensesUsed()) {
+            $state.go('apps.billing.home');
+          } else {
+            $scope.showPlansModal();
+          }
         } else {
           var apiParams = {};
           var playerProAuthorized = $scope.display.playerProAuthorized;

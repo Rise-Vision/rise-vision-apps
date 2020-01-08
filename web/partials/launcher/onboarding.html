@@ -1,4 +1,4 @@
-<div id="onboardingContainer" rv-spinner rv-spinner-key="onboarding-loader" rv-spinner-start-active="1">
+<div id="onboardingContainer" class="onboarding-container" rv-spinner rv-spinner-key="onboarding-loader" rv-spinner-start-active="1">
   <div class="app-header my-4">
       <!-- App Title -->
       <h1 class="app-header-title" id="title" translate>Get Started</h1>
@@ -7,29 +7,17 @@
   <ul class="nav nav-tabs nav-justified nav-tabs-justified">
       <li role="presentation" ng-class="{active : factory.isCurrentTab(1)}">
         <a href="#" ng-click="factory.setCurrentTab(1)">
-          <span ng-if="factory.isTabCompleted(1)">
-            <i class="fa fa-check-circle checkmark"></i>
-          </span>
-          <span ng-if="!factory.isTabCompleted(1)" class="badge">1</span>
-          <strong>Pick a Template.</strong>
+          <span ng-if="factory.isTabCompleted(1)"><i class="fa fa-check-circle checkmark u_margin-right"></i></span><span ng-if="!factory.isTabCompleted(1)" class="badge u_margin-right">1</span><strong>Pick a Template.</strong>
         </a>
       </li>
       <li role="presentation" ng-class="{active : factory.isCurrentTab(2)}">
         <a href="#" ng-click="factory.setCurrentTab(2)">
-          <span ng-if="factory.isTabCompleted(2)">
-            <i class="fa fa-check-circle checkmark"></i>
-          </span>
-          <span ng-if="!factory.isTabCompleted(2)" class="badge">2</span>
-          <strong>Plug in your Display.</strong>
+          <span ng-if="factory.isTabCompleted(2)"><i class="fa fa-check-circle checkmark u_margin-right"></i></span><span ng-if="!factory.isTabCompleted(2)" class="badge u_margin-right">2</span><strong>Plug in your Display.</strong>
         </a>
       </li>
       <li role="presentation" ng-class="{active : factory.isCurrentTab(3)}">
         <a href="#" ng-click="factory.setCurrentTab(3)">
-          <span ng-if="factory.isTabCompleted(3)">
-            <i class="fa fa-check-circle checkmark"></i>
-          </span>
-          <span ng-if="!factory.isTabCompleted(3)" class="badge">3</span>
-          <strong>Keep it interesting.</strong>
+          <span ng-if="factory.isTabCompleted(3)"><i class="fa fa-check-circle checkmark u_margin-right"></i></span><span ng-if="!factory.isTabCompleted(3)" class="badge u_margin-right">3</span><strong>Keep it interesting.</strong>
         </a>
       </li>
     </ul>
@@ -38,10 +26,10 @@
       <div id="onboardingAddTemplate" class="animated fadeIn" ng-show="factory.isCurrentStep('addTemplate')">
         <div class="row">
           <div class="col-sm-12">
-            <p>
+            <p class="text-lg">
               Welcome to the Rise Vision Get Started Guide! The first thing you need to do to start communicating better is to pick a Template.
             </p>
-            <p>
+            <p class="text-lg">
               Pick from our most popular Templates:
             </p>
           </div>
@@ -52,7 +40,7 @@
             <ng-repeat ng-repeat="product in featuredTemplates">
               <div id="storeProduct" class="col-sm-6 col-md-4 col-lg-3 col-centered u_margin-md-bottom">
                 <div class="product-grid_item panel panel-default u_margin-sm-bottom">
-                  <figure class="product-grid_image">
+                  <figure class="product-grid_image" ng-click="select(product)">
                     <img ng-src="{{product.imageUrl}}" class="img-responsive" alt="{{product.name}}">
                   </figure> 
                 </div>
@@ -68,10 +56,10 @@
           <div class="col-sm-12">
             <div class="panel mb-0">
               <div class="panel-body text-center">
-                <p>
+                <p class="text-lg">
                   <strong>Don’t see what you’re looking for?</strong>
                 </p>
-                <p>
+                <p class="text-lg">
                   <a id="browse-templates" href="#" ng-click="editorFactory.addPresentationModal()">
                     Browse the Template Gallery
                   </a>
@@ -85,7 +73,7 @@
       <div id="onboardingTemplateAdded" class="animated fadeIn" ng-show="factory.isCurrentStep('templateAdded')">
         <div class="row">
           <div class="col-sm-12">
-            <p>
+            <p class="text-lg">
               Great job! You’ve successfully picked a template. Proceed to the next step!
             </p>
           </div>
@@ -103,7 +91,7 @@
       <div id="onboardingTemplateNotAdded" class="animated fadeIn" ng-show="factory.isCurrentStep('templateNotAdded1') || factory.isCurrentStep('templateNotAdded2')">
         <div class="row">
           <div class="col-sm-12">
-            <p>
+            <p class="text-lg">
               Oops, you need to select a Template first. Go back to the previous step.
             </p>
           </div>
@@ -125,7 +113,7 @@
       <div id="onboardingDisplayActivated" class="animated fadeIn" ng-show="factory.isCurrentStep('displayActivated')">
         <div class="row">
           <div class="col-sm-12">
-            <p>
+            <p class="text-lg">
               Excellent! You’ve successfully activated a Display. You’re making great progress. We’re proud of you! Proceed to the next step.
             </p>
           </div>
@@ -143,7 +131,7 @@
       <div id="onboardingDisplayNotActivated" class="animated fadeIn" ng-show="factory.isCurrentStep('displayNotActivated')">
         <div class="row">
           <div class="col-sm-12">
-            <p>
+            <p class="text-lg">
               Oops, you need to activate a Display first. Go back to the previous step.
             </p>
           </div>
@@ -161,7 +149,7 @@
       <div id="onboardingPlaybookSignup" class="animated fadeIn" ng-show="factory.isCurrentStep('promotePlaybook')">
         <div class="row">
           <div class="col-sm-12">
-            <p>
+            <p class="text-lg">
               Okay, the last step is to keep it interesting. “Keep it interesting” means picking new Templates to put on 
               your Display each week. To do this, you need to subscribe to our Weekly Playbook email for fresh Template recommendations. 
             </p>
@@ -170,7 +158,7 @@
 
         <div class="row">
           <div class="col-xs-12 u_margin-sm-top">
-            <p>
+            <p class="text-lg">
               <strong>Want Template recommendations for your school each week?</strong>
             </p>
           </div>
@@ -204,13 +192,13 @@
         <div class="row">
           <div class="col-sm-12">
 
-            <p ng-show="playbookSignup && !factory.alreadySubscribed">
+            <p class="text-lg" ng-show="playbookSignup && !factory.alreadySubscribed">
               Done! You’re well on your way to communicating better.
             </p>
-            <p ng-show="!playbookSignup">
+            <p class="text-lg" ng-show="!playbookSignup">
               Okay! Noted.
             </p>
-            <p ng-show="factory.alreadySubscribed">
+            <p class="text-lg" ng-show="factory.alreadySubscribed">
               You’ve already subscribed to our Weekly Playbook email, so this step is done! “Keep it interesting” means
               picking new Templates to put on your Display each week. Our Weekly Playbook email gives you fresh Template recommendations.
             </p>
@@ -220,7 +208,7 @@
 
         <div class="row">
           <div class="col-sm-12">
-            <p>
+            <p class="text-lg">
               Did you know we offer free training each week?
               <a href="https://www.risevision.com/webinars" target="_blank">Register for a free training webinar.</a>
             </p>
@@ -229,7 +217,7 @@
 
         <div class="row">
           <div class="col-xs-12 u_margin-sm-top">
-            <p>
+            <p class="text-lg">
               <strong>Can’t wait? Watch a training video now!</strong>
             </p>
           </div>

@@ -1,0 +1,30 @@
+.onboarding-container {
+	a, .nav>li>a, .panel-body a strong {
+		color: $madero-light-blue;
+		text-decoration: underline;
+	}
+
+	.nav>li.active>a {
+		color: $madero-black;
+		text-decoration: none;
+	}
+
+	a.btn {
+		text-decoration: none;
+	}
+
+	.app-header-title {
+		color: $madero-black;
+		font-size: 24px;
+		font-weight: bold;
+	}
+
+	.product-grid_image {
+		cursor: pointer;
+	}
+
+	.text-muted {
+		color: $madero-gray;
+	}
+
+}
