@@ -27,4 +27,16 @@
 		color: $madero-gray;
 	}
 
+	.panel, .panel-footer, .nav-tabs.nav-justified>li.active>a {
+		border-color: $madero-gray;
+	}
+
+	@media (min-width: $screen-sm) {
+		.nav-tabs.nav-justified>li>a {
+			border-bottom-color: $madero-gray;	
+		}
+		.nav-tabs.nav-justified>li.active>a {
+			border-bottom-color: $white;	
+		}
+	}
 }
