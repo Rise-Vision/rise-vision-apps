@@ -40,7 +40,7 @@
             <ng-repeat ng-repeat="product in featuredTemplates">
               <div id="storeProduct" class="col-sm-6 col-md-4 col-lg-3 col-centered u_margin-md-bottom">
                 <div class="product-grid_item panel panel-default u_margin-sm-bottom">
-                  <figure class="product-grid_image">
+                  <figure class="product-grid_image" ng-click="select(product)">
                     <img ng-src="{{product.imageUrl}}" class="img-responsive" alt="{{product.name}}">
                   </figure> 
                 </div>
