@@ -20,14 +20,5 @@ angular.module('risevision.apps.launcher.controllers')
         }
       });
 
-      $scope.$on('companyAssetsUpdated', function () {
-        onboardingFactory.refresh();
-      });
-
-      $scope.$on('risevision.company.selectedCompanyChanged', function () {
-        onboardingFactory.refresh(true);
-      });
-
-      onboardingFactory.refresh();
     }
   ]); //ctr

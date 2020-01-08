@@ -71,26 +71,4 @@ describe('controller: Onboarding', function() {
     });    
   });
 
-  describe("loading:",function(){
-    it("should refresh onboardingFactory",function(){
-      onboardingFactory.refresh.should.have.been.called;
-    });
-
-    it("should refresh on companyAssetsUpdated event",function(){
-      $scope.$emit('companyAssetsUpdated');
-      $scope.$digest();
-
-      onboardingFactory.refresh.should.have.been.calledTwice;
-    });
-
-    it("should refresh on selectedCompanyChanged event and reset details",function(){
-      $scope.$emit('risevision.company.selectedCompanyChanged');
-      $scope.$digest();
-
-      onboardingFactory.refresh.should.have.been.calledTwice;
-      onboardingFactory.refresh.should.have.been.calledWith(true);
-    });
-
-  });
-
 });

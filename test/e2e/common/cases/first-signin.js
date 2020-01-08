@@ -67,6 +67,8 @@ var FirstSigninScenarios = function() {
       it('should show the Get Started page', function() {
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
+        helper.waitDisappear(homepage.getAppLauncherLoader(), 'App Launcher Loader');
+
         expect(getStartedPage.getGetStartedContainer().isDisplayed()).to.eventually.be.true;
       });
       
