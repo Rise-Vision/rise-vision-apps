@@ -1,0 +1,11 @@
+.onboarding-container {
+	a, a:hover, .nav>li>a, .nav>li>a:hover {
+		color: $madero-light-blue;
+		text-decoration: underline;
+	}
+
+	.nav>li.active>a {
+		color: $madero-black;
+		text-decoration: none;
+	}
+}
