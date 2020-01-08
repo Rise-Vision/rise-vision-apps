@@ -281,6 +281,14 @@ angular.module('risevision.apps.launcher.services')
           });
       };
 
+      $rootScope.$on('companyAssetsUpdated', function () {
+        factory.refresh();
+      });
+
+      $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
+        factory.refresh(true);
+      });
+
       _defaults();
 
       return factory;

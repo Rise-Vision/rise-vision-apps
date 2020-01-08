@@ -97,7 +97,7 @@
           </tr>
           <tr class="table-body__row">
             <td class="table-body__cell"><span translate>displays-app.fields.player.resolution</span></td>
-            <td class="table-body__cell"><span>{{display.width | resolution: display.height}}</span></td>
+            <td class="table-body__cell"><span ng-show="display.playerVersion">{{display.width | resolution: display.height}}</span></td>
           </tr>
           <tr class="table-body__row">
             <td class="table-body__cell"><span translate>displays-app.fields.player.ipAddress</span></td>
@@ -111,18 +111,19 @@
             <td class="table-body__cell"><span translate>displays-app.fields.player.macAddress</span></td>
             <td class="table-body__cell"><span>{{display.macAddress}}</span></td>
           </tr>
-          <tr class="table-body__row" ng-class="{'alert-warning':playerProFactory.isOutdatedPlayer(display), 'alert-danger':playerProFactory.isUnsupportedPlayer(display)}">
+          <tr class="table-body__row" ng-class="{'alert-warning': display.playerVersion && playerProFactory.isOutdatedPlayer(display), 'alert-danger': display.playerVersion && playerProFactory.isUnsupportedPlayer(display)}">
             <td class="table-body__cell"><span translate>displays-app.fields.player.playerVersion</span></td>
-            <td class="table-body__cell" ng-if="playerProFactory.isOutdatedPlayer(display)">
-              <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "") + (display.offlineSubscription ? 'Licensed' : 'Free')}}</span>
+            <td class="table-body__cell" ng-if="!display.playerVersion"></td>
+            <td class="table-body__cell" ng-if="display.playerVersion && playerProFactory.isOutdatedPlayer(display)">
+              <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "") + (display.playerProAuthorized ? 'Licensed' : 'Free')}}</span>
               <a href="https://help.risevision.com/hc/en-us/articles/115004250723-Why-is-Rise-Player-version-not-current-" target="_blank" translate>displays-app.fields.player.version.notCurrent</a>
             </td>
-            <td class="table-body__cell" ng-if="playerProFactory.isUnsupportedPlayer(display)">
+            <td class="table-body__cell" ng-if="display.playerVersion && playerProFactory.isUnsupportedPlayer(display)">
               <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "")}}</span>
               <a href="" ng-click="factory.addDisplayModal(display)"><span class="text-danger" translate>displays-app.fields.player.version.unsupported</span> - {{'displays-app.fields.player.version.upgrade' | translate}}</a>
             </td>
-            <td class="table-body__cell" ng-if="!playerProFactory.isOutdatedPlayer(display) && !playerProFactory.isUnsupportedPlayer(display)">
-              <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "") + (display.offlineSubscription ? 'Licensed' : 'Free')}}</span>
+            <td class="table-body__cell" ng-if="display.playerVersion && !playerProFactory.isOutdatedPlayer(display) && !playerProFactory.isUnsupportedPlayer(display)">
+              <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "") + (display.playerProAuthorized ? 'Licensed' : 'Free')}}</span>
             </td>
           </tr>
           <tr class="table-body__row">
