@@ -926,8 +926,10 @@ $short-phone-height: 570px;
   }
 
   @media (max-width: 767px) {
-    [class*="col-"]:not(:first-child) {
-      margin-top: 5px;
+    .col-spacing-on-sm {
+      [class*="col-"]:not(:first-child) {
+        margin-top: 5px;
+      }
     }
   }
 
