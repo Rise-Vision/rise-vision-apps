@@ -38,9 +38,9 @@ angular.module('risevision.apps.launcher.controllers')
         }
       };
 
-      $scope.$watch(function() {
+      $scope.$watch(function () {
         return onboardingFactory.isCurrentStep('activateDisplay');
-      }, function(isActivateDisplay) {
+      }, function (isActivateDisplay) {
         if (isActivateDisplay) {
           _startActiveDisplayPolling();
         } else {
