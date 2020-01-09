@@ -46,10 +46,8 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="btn-group w-100" role="group" aria-label="Do you have a Media Player?">
-            <button id="preconfiguredPlayerButton" type="button" class="btn w-50" ng-click="hasOwnPlayer = false" ng-class="{'btn-toggle-blue-off' : hasOwnPlayer, 'btn-toggle-blue-on' : !hasOwnPlayer}">
+      <div class="btn-group btn-group-justified hidden-xs">
+          <button id="preconfiguredPlayerButton" type="button" class="btn w-50" ng-click="hasOwnPlayer = false" ng-class="{'btn-toggle-blue-off' : hasOwnPlayer, 'btn-toggle-blue-on' : !hasOwnPlayer}">
               <streamline-icon name="checkmark" ng-show="!hasOwnPlayer"></streamline-icon>
               I don’t have a Media Player.
             </button>
@@ -57,9 +55,18 @@
               <streamline-icon name="checkmark" ng-show="hasOwnPlayer"></streamline-icon>
               I have a Media Player.
             </button>
-          </div>
-        </div>
       </div>
+      <div class="btn-group-vertical btn-group-justified visible-xs">
+          <button id="preconfiguredPlayerButton" type="button" class="btn w-100" ng-click="hasOwnPlayer = false" ng-class="{'btn-toggle-blue-off' : hasOwnPlayer, 'btn-toggle-blue-on' : !hasOwnPlayer}">
+            <streamline-icon name="checkmark" ng-show="!hasOwnPlayer"></streamline-icon>
+            I don’t have a Media Player.
+          </button>
+          <button id="ownPlayerButton" type="button" class="btn w-100" ng-click="hasOwnPlayer = true" ng-class="{'btn-toggle-blue-off' : !hasOwnPlayer, 'btn-toggle-blue-on' : hasOwnPlayer}">
+            <streamline-icon name="checkmark" ng-show="hasOwnPlayer"></streamline-icon>
+            I have a Media Player.
+          </button>
+      </div>
+      
     </div>
 
     <div class="panel-footer">
