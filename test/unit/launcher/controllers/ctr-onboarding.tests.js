@@ -1,7 +1,7 @@
 'use strict';
 describe('controller: Onboarding', function() {
   beforeEach(module('risevision.apps.launcher.controllers'));
-  var $scope, $loading, onboardingFactory, editorFactory;
+  var $scope, $loading, $interval, onboardingFactory, companyAssetsFactory, editorFactory;
   beforeEach(function(){
     module(function ($provide) {
       $provide.service('$loading', function() {
@@ -12,7 +12,12 @@ describe('controller: Onboarding', function() {
       });
       $provide.service('onboardingFactory', function() {
         return {
-          refresh: sinon.spy()
+          isCurrentStep: sinon.stub()
+        };
+      });
+      $provide.service('companyAssetsFactory', function() {
+        return {
+          hasDisplays: sinon.spy()
         };
       });
       $provide.service('editorFactory', function() {
@@ -23,8 +28,10 @@ describe('controller: Onboarding', function() {
     })
     inject(function($injector,$rootScope, $controller) {
       onboardingFactory = $injector.get('onboardingFactory');
+      companyAssetsFactory = $injector.get('companyAssetsFactory');
       editorFactory = $injector.get('editorFactory');
       $loading = $injector.get('$loading');
+      $interval = $injector.get('$interval');
 
       $scope = $rootScope.$new();
       $controller('OnboardingCtrl', {
@@ -71,4 +78,75 @@ describe('controller: Onboarding', function() {
     });    
   });
 
+  describe('activateDisplay', function() {
+    var clock;
+
+    beforeEach(function(){
+      clock = sinon.useFakeTimers();
+    });
+
+    afterEach(function () {
+      clock.restore();
+    });
+
+    it('should watch current step', function() {
+      onboardingFactory.isCurrentStep.reset();
+      $scope.$digest();
+
+      onboardingFactory.isCurrentStep.should.have.been.calledOnce;
+      onboardingFactory.isCurrentStep.should.have.been.calledWith('activateDisplay');
+    });
+
+    it('should poll every 30 seconds', function() {
+      onboardingFactory.isCurrentStep.returns(true);
+      $scope.$digest();
+
+      companyAssetsFactory.hasDisplays.should.not.have.been.called;
+
+      $interval.flush(30 * 1000);
+
+      companyAssetsFactory.hasDisplays.should.have.been.calledWith(true);
+
+      $interval.flush(30 * 1000);
+
+      companyAssetsFactory.hasDisplays.should.have.been.calledTwice;
+    });
+
+    it('should cancel polling if step changes', function() {
+      onboardingFactory.isCurrentStep.returns(true);
+      $scope.$digest();
+
+      companyAssetsFactory.hasDisplays.should.not.have.been.called;
+
+      $interval.flush(30 * 1000);
+
+      companyAssetsFactory.hasDisplays.should.have.been.calledWith(true);
+
+      onboardingFactory.isCurrentStep.returns(false);
+      $scope.$digest();
+
+      $interval.flush(60 * 1000);
+
+      companyAssetsFactory.hasDisplays.should.have.been.calledOnce;
+    });
+
+    it('should cancel polling if controller is destroyed', function() {
+      onboardingFactory.isCurrentStep.returns(true);
+      $scope.$digest();
+
+      companyAssetsFactory.hasDisplays.should.not.have.been.called;
+
+      $interval.flush(30 * 1000);
+
+      companyAssetsFactory.hasDisplays.should.have.been.calledWith(true);
+
+      $scope.$destroy();
+      $scope.$digest();
+
+      $interval.flush(60 * 1000);
+
+      companyAssetsFactory.hasDisplays.should.have.been.calledOnce;
+    });    
+
+  });
 });

@@ -89,6 +89,14 @@ describe('service: company assets factory:', function() {
         });
     });
 
+    it('should force refresh list if flag is set to true', function() {
+      requestExecute.returns(Q.resolve());
+
+      companyAssetsFactory.hasPresentations(true);
+
+      requestExecute.should.have.been.calledWith(true);
+    });
+
     it('should resolve false if Company does not have templates', function(done) {
       requestExecute.returns(Q.resolve({
         items: []
@@ -231,6 +239,14 @@ describe('service: company assets factory:', function() {
         .catch(function() {
           done('error');
         });
+    });
+
+    it('should force refresh list if flag is set to true', function() {
+      requestExecute.returns(Q.resolve());
+
+      companyAssetsFactory.hasDisplays(true);
+
+      requestExecute.should.have.been.calledWith(true);
     });
 
     it('should indicate if Company has activated displays', function(done) {
