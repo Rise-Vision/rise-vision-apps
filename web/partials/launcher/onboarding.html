@@ -6,18 +6,18 @@
 
   <ul class="nav nav-tabs nav-justified nav-tabs-justified">
       <li role="presentation" ng-class="{active : factory.isCurrentTab(1)}">
-        <a href="#" ng-click="factory.setCurrentTab(1)">
-          <span ng-if="factory.isTabCompleted(1)"><i class="fa fa-check-circle checkmark u_margin-right"></i></span><span ng-if="!factory.isTabCompleted(1)" class="badge u_margin-right">1</span><strong>Pick a Template.</strong>
+        <a href="" ng-click="factory.setCurrentTab(1)">
+          <img ng-if="factory.isTabCompleted(1)" src="../images/onboarding/circle-checkmark.svg"/><img ng-if="!factory.isTabCompleted(1) && factory.isCurrentTab(1)" src="../images/onboarding/circle-number-one.svg"/><img ng-if="!factory.isTabCompleted(1) && !factory.isCurrentTab(1)" src="../images/onboarding/circle-number-one-blue.svg"/><strong>Pick a Template.</strong>
         </a>
       </li>
       <li role="presentation" ng-class="{active : factory.isCurrentTab(2)}">
-        <a href="#" ng-click="factory.setCurrentTab(2)">
-          <span ng-if="factory.isTabCompleted(2)"><i class="fa fa-check-circle checkmark u_margin-right"></i></span><span ng-if="!factory.isTabCompleted(2)" class="badge u_margin-right">2</span><strong>Plug in your Display.</strong>
+        <a href="" ng-click="factory.setCurrentTab(2)">
+          <img ng-if="factory.isTabCompleted(2)" src="../images/onboarding/circle-checkmark.svg"/><img ng-if="!factory.isTabCompleted(2) && factory.isCurrentTab(2)" src="../images/onboarding/circle-number-two.svg"/><img ng-if="!factory.isTabCompleted(2) && !factory.isCurrentTab(2)" src="../images/onboarding/circle-number-two-blue.svg"/><strong>Plug in your Display.</strong>
         </a>
       </li>
       <li role="presentation" ng-class="{active : factory.isCurrentTab(3)}">
-        <a href="#" ng-click="factory.setCurrentTab(3)">
-          <span ng-if="factory.isTabCompleted(3)"><i class="fa fa-check-circle checkmark u_margin-right"></i></span><span ng-if="!factory.isTabCompleted(3)" class="badge u_margin-right">3</span><strong>Keep it interesting.</strong>
+        <a href="" ng-click="factory.setCurrentTab(3)">
+          <img ng-if="factory.isTabCompleted(3)" src="../images/onboarding/circle-checkmark.svg"/><img ng-if="!factory.isTabCompleted(3) && factory.isCurrentTab(3)" src="../images/onboarding/circle-number-three.svg"/><img ng-if="!factory.isTabCompleted(3) && !factory.isCurrentTab(3)" src="../images/onboarding/circle-number-three-blue.svg"/><strong>Keep it interesting.</strong>
         </a>
       </li>
     </ul>
