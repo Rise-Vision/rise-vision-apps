@@ -925,6 +925,12 @@ $short-phone-height: 570px;
     }
   }
 
+  @media (max-width: 767px) {
+    [class*="col-"]:not(:first-child) {
+      margin-top: 5px;
+    }
+  }
+
   .btn {
     font-weight: bold;
     min-height: 40px;
