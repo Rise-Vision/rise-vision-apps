@@ -11,19 +11,17 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-xs-12 u_margin-sm-top">
-          <div class="mt-4 mb-3 text-right">
-            <div class="pull-left">
-              <strong ng-show="currentPage === 'osDetailsWindows'">Download Rise Player for Windows:</strong>
-              <strong ng-show="currentPage === 'osDetailsLinux'">Download Rise Player for Linux:</strong>
-              <strong ng-show="currentPage === 'osDetailsChromeOs'">Download Rise Player for Chrome OS:</strong>
-              <strong ng-show="currentPage === 'osDetailsRaspberryPi'">Download Rise Player for Raspberry Pi:</strong>
-            </div>
-            <a href="#" ng-click="setCurrentPage('userMediaPlayer')">
-              Choose a different operating system
-            </a>
-          </div>
+      <div class="row u_margin-sm-bottom">
+        <div class="col-sm-6">
+          <strong ng-show="currentPage === 'osDetailsWindows'">Download Rise Player for Windows:</strong>
+          <strong ng-show="currentPage === 'osDetailsLinux'">Download Rise Player for Linux:</strong>
+          <strong ng-show="currentPage === 'osDetailsChromeOs'">Download Rise Player for Chrome OS:</strong>
+          <strong ng-show="currentPage === 'osDetailsRaspberryPi'">Download Rise Player for Raspberry Pi:</strong>
+        </div>
+        <div class="col-sm-6 text-right">
+          <a href="#" ng-click="setCurrentPage('userMediaPlayer')">
+            Choose a different operating system
+          </a>
         </div>
       </div>
 
