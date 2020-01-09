@@ -120,6 +120,9 @@ angular.module('risevision.apps', [
                 });
               }
             ]
+          },
+          data: {
+            bodyClasses: 'white-bg'
           }
         })
 
@@ -562,6 +565,14 @@ angular.module('risevision.apps', [
       $rootScope.$on('$stateChangeStart', function (event) {
         if (userState.isRiseVisionUser()) {
           $modalStack.dismissAll();
+        }
+      });
+
+      $rootScope.$on('$stateChangeSuccess', function(event, toState){
+        if (toState && toState.data && toState.data.bodyClasses) {
+          $rootScope.bodyClasses = toState.data.bodyClasses;
+        } else {
+          $rootScope.bodyClasses = '';
         }
       });
 

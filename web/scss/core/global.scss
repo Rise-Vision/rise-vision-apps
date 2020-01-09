@@ -35,6 +35,10 @@ body::-webkit-scrollbar-thumb {
   background: gray;
 }
 
+body.white-bg {
+  background-color: $white;
+}
+
 /**    
 * Start of workaround for Bootstrap bug where content shifts when modal   
 * is opened.
