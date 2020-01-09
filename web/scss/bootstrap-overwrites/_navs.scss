@@ -1,6 +1,12 @@
 .nav-tabs-justified {
   >li>a {
+    background: none;
     font-size: 18px;
+    &:hover,
+    &:focus {
+      border: 1px solid transparent;
+      background: none;
+    }
     .badge {
       background-color: $blue-border-color;
     }
@@ -20,10 +26,14 @@
 @media (min-width: $screen-sm) {
   .nav-tabs-justified {
     >li>a {
+      border: 1px solid transparent;
+      border-bottom: 1px solid #ddd;
       padding: 15px 6px 15px 8px;
       &:hover,
       &:focus {
-        background-color: $lighter-gray;
+        border: 1px solid transparent;
+        border-bottom: 1px solid #ddd;
+        background: none;
       }
     }
     >li.active>a {
@@ -31,7 +41,7 @@
       border-bottom-color: $white;
       &:hover,
       &:focus {
-        border-bottom: 0px;
+        border-bottom: 1px solid transparent;
       } 
     }
   }

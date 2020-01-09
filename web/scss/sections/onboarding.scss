@@ -27,4 +27,31 @@
 		color: $madero-gray;
 	}
 
+	.panel, .panel-footer, .nav-tabs.nav-justified>li.active>a {
+		border-color: $madero-gray;
+		box-shadow: none;
+	}
+
+	.product-grid_item.panel-default {
+		border-color: #ddd;
+	}
+
+	@media (min-width: $screen-sm) {
+		.nav-tabs.nav-justified>li>a {
+			border-bottom-color: $madero-gray;	
+		}
+		.nav-tabs.nav-justified>li.active>a {
+			border-bottom-color: $white;	
+		}
+	}
+
+	.has-error {
+		.text-danger {
+			margin-top: 5px;
+		}
+	}
+
+	.panel-body, .panel-footer {
+		padding: 20px;
+	}
 }
