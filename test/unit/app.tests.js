@@ -677,6 +677,20 @@ describe('app:', function() {
         }, 10);
       });
     });
+  });
+
+  describe('showWhiteBackground:', function(){
+    it('should show white background for onboarding page',function() {
+      $rootScope.$broadcast('$stateChangeSuccess', {name:'apps.launcher.onboarding'});
+      $rootScope.$digest();
+      expect($rootScope.showWhiteBackground).to.be.true;
+    });
+
+    it('should not show white background for other pages',function() {
+      $rootScope.$broadcast('$stateChangeSuccess', {name:'apps.launcher.home'});
+      $rootScope.$digest();
+      expect($rootScope.showWhiteBackground).to.be.false;
+    });
 
   });
 });

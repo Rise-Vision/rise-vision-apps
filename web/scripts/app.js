@@ -120,9 +120,6 @@ angular.module('risevision.apps', [
                 });
               }
             ]
-          },
-          data: {
-            bodyClasses: 'white-bg'
           }
         })
 
@@ -569,10 +566,10 @@ angular.module('risevision.apps', [
       });
 
       $rootScope.$on('$stateChangeSuccess', function(event, toState){
-        if (toState && toState.data && toState.data.bodyClasses) {
-          $rootScope.bodyClasses = toState.data.bodyClasses;
+        if (toState.name == 'apps.launcher.onboarding') {
+          $rootScope.showWhiteBackground = true;
         } else {
-          $rootScope.bodyClasses = '';
+          $rootScope.showWhiteBackground = false;
         }
       });
 
