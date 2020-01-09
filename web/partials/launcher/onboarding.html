@@ -168,11 +168,11 @@
           <div class="col-xs-12">
             <div class="btn-group w-100" role="group" aria-label="Want Template recommendations for your school each week?" ng-init="playbookSignup = true">
               <button type="button" class="btn w-50" ng-click="playbookSignup = true" ng-class="{'btn-toggle-blue-off' : !playbookSignup, 'btn-toggle-blue-on' : playbookSignup}">
-                <i class="fa fa-white fa-check icon-left" ng-show="playbookSignup"></i>
+                <streamline-icon name="checkmark" ng-show="playbookSignup"></streamline-icon>
                 Yes, sign me up.
               </button>
               <button type="button" class="btn w-50" ng-click="playbookSignup = false" ng-class="{'btn-toggle-blue-off' : playbookSignup, 'btn-toggle-blue-on' : !playbookSignup}">
-                <i class="fa fa-white fa-check icon-left" ng-show="!playbookSignup"></i>
+                <streamline-icon name="checkmark" ng-show="!playbookSignup"></streamline-icon>
                 No, don’t sign me up.
               </button>
             </div>

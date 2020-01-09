@@ -972,6 +972,14 @@ $short-phone-height: 570px;
   .btn-toggle-blue-on {
     background-color: $madero-light-blue;
     border-color: $madero-light-blue;
+
+    svg {
+      fill: $white;
+      width: 15px;
+      height: 15px;
+      vertical-align: text-top;
+      margin-right: 7px;
+    }
   }
 
   .btn-toggle-blue-off {
