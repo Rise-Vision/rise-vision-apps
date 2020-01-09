@@ -48,6 +48,10 @@
           }
         };
 
+        factory.loginGoogle = function(token) {
+          return _updateToken(null, {item: token});
+        };
+
         factory.login = function (credentials) {
           if (credentials && credentials.username && credentials.password) {
             return userauth.login(credentials.username, credentials.password)

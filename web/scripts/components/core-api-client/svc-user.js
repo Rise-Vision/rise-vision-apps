@@ -38,11 +38,11 @@
             _cachedPromises[username] = deferred = $q.defer();
           }
 
-          if (!username) {
-            deferred.reject(
-              'getUserProfile failed: username param is required.');
-            $log.debug('getUserProfile failed: username param is required.');
-          } else {
+          // if (!username) {
+          //   deferred.reject(
+          //     'getUserProfile failed: username param is required.');
+          //   $log.debug('getUserProfile failed: username param is required.');
+          // } else {
 
             var criteria = {};
             if (username) {
@@ -61,7 +61,7 @@
                 }
               });
             }, deferred.reject);
-          }
+          // }
           return deferred.promise;
         };
       }

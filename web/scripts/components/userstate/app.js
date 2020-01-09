@@ -42,11 +42,13 @@
           .when(/\/.*&id_token=.*&client_id=.*/, function () {
             console.log('Google Auth result received');
           })
-          .when('/', ['$location',
-            function ($location) {
+          .when('/', ['$location', 'customAuthFactory',
+            function ($location, customAuthFactory) {
               var hash = $location.hash();
 
               if (hash && hash.match(/\/.*&id_token=.*&client_id=.*/)) {
+                var token = hash.split('&')[1].split('=')[1];
+                customAuthFactory.loginGoogle(token);
                 console.log('Google Auth result received');
               } else {
                 return false;

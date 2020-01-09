@@ -128,8 +128,7 @@
           }
 
           if (authenticatedUser) {
-            if (!_state.user.username || !_state.profile.username ||
-              _state.user.username !== authenticatedUser.email) {
+            if (!_state.user.username || !_state.profile.username) {
               _authorizeDeferred = $q.defer();
 
               //populate user
