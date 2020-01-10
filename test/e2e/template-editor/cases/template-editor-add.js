@@ -87,10 +87,6 @@ var TemplateAddScenarios = function() {
         presentationsListPage.loadCurrentCompanyPresentationList();
         presentationsListPage.createNewPresentationFromTemplate('Example Financial Template V4', 'example-financial-template-v4');
         templateEditorPage.dismissFinancialDataLicenseMessage();
-
-        //workaround as protactor can't click on top of iframes
-        //decrease window size to hide template preview        
-        browser.driver.manage().window().setSize(500, 800); 
       });
 
       it('should delete the Presentation', function () {
@@ -99,7 +95,7 @@ var TemplateAddScenarios = function() {
 
         browser.sleep(500);
         helper.wait(templateEditorPage.getDeleteForeverButton(), 'Template Delete Forever Button');      
-        helper.clickWhenClickable(templateEditorPage.getDeleteForeverButton(), 'Template Delete Forever Button');
+        helper.clickOverIFrame(templateEditorPage.getDeleteForeverButton());
 
         helper.wait(presentationsListPage.getTitle(), 'Presentation List');
       });
@@ -110,10 +106,6 @@ var TemplateAddScenarios = function() {
         expect(templateEditorPage.getErrorModal().isPresent()).to.eventually.be.false;
       });
 
-      after(function(){
-        //revert workaround
-        browser.driver.manage().window().setSize(1920, 1080); 
-      });
     });    
 
   });
