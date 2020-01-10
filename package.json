@@ -52,7 +52,7 @@
     "run-sequence": "^1.1.1",
     "rv-common-e2e": "git://github.com/Rise-Vision/rv-common-e2e.git#feature/iframe-click",
     "terser": "^4.0.0",
-    "widget-tester": "git://github.com/Rise-Vision/widget-tester.git"
+    "widget-tester": "git://github.com/Rise-Vision/widget-tester.git#fix/web-security"
   },
   "repository": {
     "type": "git",
