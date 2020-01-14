@@ -32,7 +32,7 @@
     .value('VIEWER_URL', 'http://stage-test-dot-rvaviewer-test.appspot.com')
     .value('ALERTS_WS_URL',
       'https://rvacore-test.appspot.com/alerts/cap')
-    .value('SEGMENT_API_KEY', null)
+    .value('SEGMENT_API_KEY', 'MF5R8bbFBdtOmuRUiBcY5LsLPTXQF8QB')
     .value('STORAGE_ENDPOINT_URL',
       'https://storage-dot-rvacore-test.appspot.com/_ah/api')
     .value('MESSAGING_PRIMUS_URL',
