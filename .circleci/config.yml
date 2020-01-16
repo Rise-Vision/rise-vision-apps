@@ -222,33 +222,63 @@ workflows:
       - test_unit:
           requires:
             - test_build
+          filters:
+            branches:
+              ignore: /(stage).*/
       - e2e_schedules:
           requires:
             - test_build
+          filters:
+            branches:
+              ignore: /(stage).*/
       - e2e_common:
           requires:
             - test_build
+          filters:
+            branches:
+              ignore: /(stage).*/
       - e2e_common_header:
           requires:
             - test_build
+          filters:
+            branches:
+              ignore: /(stage).*/
       - e2e_registration:
           requires:
             - test_build
+          filters:
+            branches:
+              ignore: /(stage).*/
       - e2e_editor:
           requires:
             - test_build
+          filters:
+            branches:
+              ignore: /(stage).*/
       - e2e_displays:
           requires:
             - test_build
+          filters:
+            branches:
+              ignore: /(stage).*/
       - e2e_storage:
           requires:
             - test_build
+          filters:
+            branches:
+              ignore: /(stage).*/
       - e2e_template_editor:
           requires:
             - test_build
+          filters:
+            branches:
+              ignore: /(stage).*/
       - e2e_template_editor2:
           requires:
             - test_build
+          filters:
+            branches:
+              ignore: /(stage).*/
       - test_e2e:
           requires:
             - e2e_schedules
@@ -260,6 +290,9 @@ workflows:
             - e2e_storage
             - e2e_template_editor
             - e2e_template_editor2
+          filters:
+            branches:
+              ignore: /(stage).*/
       - deploy_production:
           requires:
             - test_unit
@@ -272,7 +305,7 @@ workflows:
             - test_build
           filters:
             branches:
-              only: /(feature|fix|chore).*/
+              only: /(feature|fix|chore|stage).*/
       - deploy_beta:
           requires:
             - test_unit
