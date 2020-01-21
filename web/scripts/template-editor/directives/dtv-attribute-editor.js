@@ -15,7 +15,7 @@ angular.module('risevision.template-editor.directives')
           $scope.panels = [];
           $scope.factory.selected = null;
 
-          window.addEventListener( "message", _handleMessageFromTemplate );
+          window.addEventListener('message', _handleMessageFromTemplate);
 
           $scope.registerDirective = function (directive) {
             directive.element.hide();
@@ -87,8 +87,6 @@ angular.module('risevision.template-editor.directives')
             };
             var iframe = $window.document.getElementById('template-editor-preview');
             iframe.contentWindow.postMessage(JSON.stringify(message), HTML_TEMPLATE_DOMAIN);
-            console.log("posted");
-
           };
 
           $scope.isHeaderBottomRuleVisible = function (component) {
@@ -189,12 +187,12 @@ angular.module('risevision.template-editor.directives')
           }
           
           function _handleMessageFromTemplate(event) {
-            const data = JSON.parse(event.data);
+            var data = JSON.parse(event.data);
 
             switch (data.type) {
-            case "editComponent":
+            case 'editComponent':
               console.log(data.value);
-              var component = blueprintFactory.blueprintData.components.find(element => element.id === data.value);
+              var component = blueprintFactory.blueprintData.components.find(function (element) { return element.id === data.value; });
               if (component) {
                 if ($scope.factory.selected) {
                   $scope.backToList();
