@@ -8,14 +8,18 @@ angular.module('risevision.template-editor.directives')
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/attribute-editor.html',
-        link: function ($scope) {
+        link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
           $scope.showAttributeList = true;
           $scope.directives = {};
           $scope.panels = [];
           $scope.factory.selected = null;
 
-          window.addEventListener('message', _handleMessageFromTemplate);
+          $window.addEventListener('message', _handleMessageFromTemplate);
+
+          element.on('$destroy', function () {
+            $window.removeEventListener('message', _handleMessageFromTemplate);
+          });
 
           $scope.registerDirective = function (directive) {
             directive.element.hide();

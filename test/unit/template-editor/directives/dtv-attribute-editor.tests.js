@@ -5,6 +5,7 @@ describe('directive: TemplateAttributeEditor', function() {
       element,
       factory,
       timeout,
+      window,
       sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
@@ -19,6 +20,15 @@ describe('directive: TemplateAttributeEditor', function() {
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
       return factory;
+    });
+
+    window = {
+      addEventListener: sandbox.spy(),
+      removeEventListener: sandbox.spy()
+    };
+
+    $provide.service('$window', function() {
+      return window;
     });
   }));
 
@@ -57,6 +67,15 @@ describe('directive: TemplateAttributeEditor', function() {
     expect($scope.onBackButton).to.be.a('function');
     expect($scope.backToList).to.be.a('function');
     expect($scope.getComponentIcon).to.be.a('function');
+  });
+
+  it('Handles message from templates', function() {
+    sinon.assert.calledWith(window.addEventListener, 'message');
+  });
+
+  it('Clears window event listener when element is destroyed', function() {
+    element.remove();
+    sinon.assert.calledWith(window.removeEventListener, 'message');
   });
 
   it('Registers a directive', function() {
