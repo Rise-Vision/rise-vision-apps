@@ -4,7 +4,8 @@ describe('directive: TemplateAttributeEditor', function() {
   var $scope,
       element,
       factory,
-      timeout;
+      timeout,
+      sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
     factory = {};
@@ -28,6 +29,10 @@ describe('directive: TemplateAttributeEditor', function() {
     element = $compile("<template-attribute-editor></template-attribute-editor>")($scope);
     $scope.$digest();
   }));
+
+  afterEach(function () {
+    sandbox.restore();
+  });
 
   it('should exist', function() {
     expect($scope).to.be.ok;
@@ -59,7 +64,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub()
+        hide: sandbox.stub()
       },
       show: function() {}
     };
@@ -78,9 +83,9 @@ describe('directive: TemplateAttributeEditor', function() {
       icon: 'fa-test',
       element: {
         hide: function() {},
-        show: sinon.stub()
+        show: sandbox.stub()
       },
-      show: sinon.stub()
+      show: sandbox.stub()
     };
 
     var component = {
@@ -109,7 +114,7 @@ describe('directive: TemplateAttributeEditor', function() {
         hide: function() {},
         show: function() {}
       },
-      onPresentationOpen: sinon.stub()
+      onPresentationOpen: sandbox.stub()
     };
 
     $scope.registerDirective(directive);
@@ -122,7 +127,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub(),
+        hide: sandbox.stub(),
         show: function() {}
       },
       show: function() {}
@@ -152,7 +157,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub(),
+        hide: sandbox.stub(),
         show: function() {}
       },
       show: function() {}
@@ -182,7 +187,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub(),
+        hide: sandbox.stub(),
         show: function() {}
       },
       show: function() {},
@@ -213,7 +218,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub(),
+        hide: sandbox.stub(),
         show: function() {}
       },
       show: function() {},
@@ -240,7 +245,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub(),
+        hide: sandbox.stub(),
         show: function() {}
       },
       show: function() {},
@@ -265,7 +270,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub(),
+        hide: sandbox.stub(),
         show: function() {}
       },
       show: function() {},
@@ -291,7 +296,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub(),
+        hide: sandbox.stub(),
         show: function() {}
       },
       show: function() {},
