@@ -63,6 +63,9 @@ angular.module('risevision.template-editor.directives')
                 $scope.setPanelIcon('riseStorage', 'riseSvg');
                 $scope.setPanelTitle('Rise Storage');
               }
+            },
+            reset: function () {
+              // for override
             }
           };
           $scope.values = {};
@@ -70,6 +73,7 @@ angular.module('risevision.template-editor.directives')
           function _reset() {
             _setSelectedImages([]);
             $scope.isUploading = false;
+            $scope.storageManager.reset();
           }
 
           function _addFilesToMetadata(files, alwaysAppend) {
