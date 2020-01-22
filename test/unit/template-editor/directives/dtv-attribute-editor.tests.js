@@ -6,6 +6,7 @@ describe('directive: TemplateAttributeEditor', function() {
       factory,
       timeout,
       window,
+      blueprintFactory,
       sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
@@ -29,6 +30,12 @@ describe('directive: TemplateAttributeEditor', function() {
 
     $provide.service('$window', function() {
       return window;
+    });
+
+    blueprintFactory = {};
+
+    $provide.service('blueprintFactory', function() {
+      return blueprintFactory;
     });
   }));
 
@@ -115,6 +122,85 @@ describe('directive: TemplateAttributeEditor', function() {
     $scope.editComponent(component);
 
     expect(factory.selected).to.deep.equal(component);
+
+    expect(directive.element.show).to.have.been.called;
+    expect(directive.show).to.have.been.called;
+
+    expect($scope.showAttributeList).to.be.true;
+
+    timeout.flush();
+    expect($scope.showAttributeList).to.be.false;
+  });
+
+  it('Edits a highlighted component', function() {
+    var directive = {
+      type: 'rise-test',
+      icon: 'fa-test',
+      element: {
+        hide: function() {},
+        show: sandbox.stub()
+      },
+      show: sandbox.stub()
+    };
+
+    var component = {
+      id: 'test',
+      type: 'rise-test'
+    }
+
+    blueprintFactory.blueprintData = {
+      components: [component]
+    };
+
+    $scope.registerDirective(directive);
+    $scope.editHighlightedComponent(component.id);
+
+    expect(factory.selected).to.deep.equal(component);
+
+    expect(directive.element.show).to.have.been.called;
+    expect(directive.show).to.have.been.called;
+
+    expect($scope.showAttributeList).to.be.true;
+
+    timeout.flush();
+    expect($scope.showAttributeList).to.be.false;
+  });
+
+  it('Resets selected panels when editing a highlighted component', function() {
+    var directive = {
+      type: 'rise-test',
+      icon: 'fa-test',
+      element: {
+        hide: function() {},
+        show: sandbox.stub()
+      },
+      show: sandbox.stub()
+    };
+
+    var component = {
+      id: 'test',
+      type: 'rise-test'
+    }
+    
+    $scope.registerDirective(directive);
+
+    blueprintFactory.blueprintData = {
+      components: [component]
+    };
+
+    factory.selected = component;
+    $scope.panels = [{}, {}, {}];
+    $scope.setPanelIcon('previous-icon', 'streamline');
+    $scope.setPanelTitle('Previous Title');
+    
+    $scope.editHighlightedComponent(component.id);
+
+    expect(factory.selected).to.deep.equal(component);
+
+    expect($scope.panels).to.be.empty;
+    expect($scope.panelIcon).to.be.null;
+    expect($scope.panelIconType).to.be.null;
+    expect($scope.panelTitle).to.be.null;
 
     expect(directive.element.show).to.have.been.called;
     expect(directive.show).to.have.been.called;

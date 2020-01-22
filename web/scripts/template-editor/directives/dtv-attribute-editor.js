@@ -142,6 +142,18 @@ angular.module('risevision.template-editor.directives')
             $scope.panelTitle = panelTitle;
           };
 
+          $scope.editHighlightedComponent = function (componentId) {
+            var component = _.find(blueprintFactory.blueprintData.components, function (element) { return element.id === componentId; });
+            if (component) {
+              if ($scope.factory.selected) {
+                $scope.backToList();
+                $scope.panels = [];
+                $scope.resetPanelHeader();
+              }
+              $scope.editComponent(component);
+            }
+          };
+
           function _showAttributeList(value, delay) {
             $timeout(function () {
               $scope.showAttributeList = value;
@@ -195,16 +207,7 @@ angular.module('risevision.template-editor.directives')
 
             switch (data.type) {
             case 'editComponent':
-              console.log(data.value);
-              var component = blueprintFactory.blueprintData.components.find(function (element) { return element.id === data.value; });
-              if (component) {
-                if ($scope.factory.selected) {
-                  $scope.backToList();
-                  $scope.panels = [];
-                  $scope.resetPanelHeader();
-                }
-                $scope.editComponent(component);
-              }
+              $scope.editHighlightedComponent(data.value);
               break;
             default:
               break;
