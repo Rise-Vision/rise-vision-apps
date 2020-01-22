@@ -201,6 +201,7 @@ angular.module('risevision.template-editor.directives')
                 if ($scope.factory.selected) {
                   $scope.backToList();
                   $scope.panels = [];
+                  $scope.resetPanelHeader();
                 }
                 $scope.editComponent(component);
               }
