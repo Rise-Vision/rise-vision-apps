@@ -35,9 +35,18 @@ angular.module('risevision.apps.billing.controllers')
 
       $rootScope.$on('chargebee.subscriptionChanged', _reloadSubscriptions);
       $rootScope.$on('chargebee.subscriptionCancelled', _reloadSubscriptions);
+      $rootScope.$on('risevision.company.planStarted', function() {
+        $scope.subscriptions.doSearch();
+      });
 
       $scope.viewPastInvoices = function () {
         $scope.chargebeeFactory.openBillingHistory(userState.getSelectedCompanyId());
+      };
+
+      $scope.checkCreationDate = function () {
+        var creationDate = (($scope.company && $scope.company.creationDate) ? 
+          (new Date($scope.company.creationDate)) : (new Date()));
+        return creationDate < new Date('Sep 1, 2018');
       };
 
       $scope.viewPastInvoicesStore = function () {

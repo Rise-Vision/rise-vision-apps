@@ -114,6 +114,25 @@ describe('controller: BillingCtrl', function () {
 
   });
 
+  describe('checkCreationDate: ', function() {
+    it('should return false if creation date is null', function() {
+      expect($scope.checkCreationDate()).to.be.false;
+    });
+
+    it('should return false if company was created after the launch date', function() {
+      $scope.company.creationDate = 'Sep 25, 2018';
+
+      expect($scope.checkCreationDate()).to.be.false;
+    });
+
+    it('should return true if company has not completed onboarding', function() {
+      $scope.company.creationDate = 'Aug 25, 2015';
+
+      expect($scope.checkCreationDate()).to.be.true;
+    });
+
+  });
+
   describe('hasUnpaidInvoices: ', function() {
     it('should default to false', function() {
       expect($scope.invoices).to.be.an('object');
@@ -192,7 +211,7 @@ describe('controller: BillingCtrl', function () {
     });
   });
 
-  describe('chargebee events', function () {
+  describe('events: ', function () {
     it('should reload Subscriptions when Subscription is updated on Customer Portal', function () {
       $rootScope.$emit('chargebee.subscriptionChanged');
       $timeout.flush();
@@ -200,6 +219,13 @@ describe('controller: BillingCtrl', function () {
       expect($loading.stopGlobal).to.be.calledOnce;
       expect(listServiceInstance.doSearch).to.be.calledOnce;
     });
+
+    it('should reload Subscriptions when Subscription is started', function () {
+      $rootScope.$emit('risevision.company.planStarted');
+      $rootScope.$digest();
+      expect(listServiceInstance.doSearch).to.be.calledOnce;
+    });
+
   });
 
   describe('data formatting', function () {

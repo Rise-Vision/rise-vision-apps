@@ -594,7 +594,7 @@ describe("Services: purchase factory", function() {
           userState.reloadSelectedCompany.should.have.been.called;
 
           setTimeout(function() {
-            $rootScope.$emit.should.have.been.calledWith("risevision.company.trial.started");
+            $rootScope.$emit.should.have.been.calledWith("risevision.company.planStarted");
             expect(purchaseFactory.purchase.reloadingCompany).to.be.false;
 
             done();

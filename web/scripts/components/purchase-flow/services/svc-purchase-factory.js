@@ -277,7 +277,7 @@
                   return userState.reloadSelectedCompany();
                 })
                 .then(function () {
-                  $rootScope.$emit('risevision.company.trial.started');
+                  $rootScope.$emit('risevision.company.planStarted');
                 })
                 .catch(function (err) {
                   $log.debug('Failed to reload company', err);
