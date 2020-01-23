@@ -10,7 +10,7 @@ angular.module('risevision.apps.storage.storage-selector', [
     'risevision.common.components.scrolling-list',
     'risevision.common.components.focus-me',
     'risevision.common.components.confirm-modal',
-    'risevision.common.components.analytics',
+    'risevision.common.components.logging',
     'risevision.common.components.svg',
     'risevision.common.components.subscription-status',
     'risevision.common.components.plans',

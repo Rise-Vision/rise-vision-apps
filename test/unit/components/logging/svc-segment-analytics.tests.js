@@ -3,7 +3,7 @@
 
 describe("Services: segment analytics", function() {
 
-  beforeEach(module("risevision.common.components.analytics"));
+  beforeEach(module("risevision.common.components.logging"));
   beforeEach(module(function ($provide) {
     $provide.factory("userState", [function () {
       return {

@@ -2,8 +2,7 @@
 
   'use strict';
 
-  angular.module('risevision.common.components.hubspot', [])
-
+  angular.module('risevision.common.components.logging')
     .factory('hubspot', ['$window', 'HUBSPOT_ACCOUNT',
       function ($window, hubspotAccount) {
         var service = {};

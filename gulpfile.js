@@ -78,7 +78,6 @@ var unitTestFiles = [
   "web/tmp/partials.js",
   "web/scripts/components/**/*.js",
   "web/scripts/common-header/**/*.js",
-  "node_modules/widget-tester/mocks/segment-analytics-mock.js",
   "web/scripts/storage-selector-app.js",
   "web/scripts/app.js",
   "web/scripts/billing/**/*.js",
