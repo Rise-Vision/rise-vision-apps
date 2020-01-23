@@ -272,6 +272,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test'
     }
 
+    $scope.highlightComponent = sandbox.stub();
     $scope.registerDirective(directive);
     $scope.editComponent(component);
     timeout.flush();
@@ -280,6 +281,7 @@ describe('directive: TemplateAttributeEditor', function() {
 
     expect(factory.selected).to.be.null;
     expect(directive.element.hide).to.have.been.called.twice;
+    expect($scope.highlightComponent).to.have.been.called.once;
 
     expect($scope.showAttributeList).to.be.false;
 
@@ -303,6 +305,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test'
     }
 
+    $scope.highlightComponent = sandbox.stub();
     $scope.registerDirective(directive);
     $scope.editComponent(component);
     timeout.flush();
@@ -311,6 +314,7 @@ describe('directive: TemplateAttributeEditor', function() {
 
     expect(factory.selected).to.be.null;
     expect(directive.element.hide).to.have.been.called.twice;
+    expect($scope.highlightComponent).to.have.been.called.once;
 
     expect($scope.showAttributeList).to.be.false;
 
@@ -334,6 +338,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test'
     }
 
+    $scope.highlightComponent = sandbox.stub();
     $scope.registerDirective(directive);
     $scope.editComponent(component);
     timeout.flush();
@@ -342,6 +347,7 @@ describe('directive: TemplateAttributeEditor', function() {
 
     expect(factory.selected).to.not.be.null;
     expect(directive.element.hide).to.have.been.called.once;
+    expect($scope.highlightComponent).to.have.been.called.once;
     expect($scope.showAttributeList).to.be.false;
   });
 
