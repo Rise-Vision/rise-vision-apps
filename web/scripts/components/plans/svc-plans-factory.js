@@ -49,6 +49,34 @@
         'RELIGIOUS_INSTITUTIONS'
       ]
     }, {
+      name: 'Volume for Education',
+      // cannot use type 'volume', it may interfere with the other plan
+      type: 'volume for education',
+      order: 1,
+      productId: '2320',
+      productCode: '88725121a2c7a57deefcf06688ffc8e84cc4f93b',
+      proLicenseCount: 3,
+      monthly: {
+        priceDisplayMonth: 10,
+        billAmount: 10,
+        save: 0
+      },
+      yearly: {
+        priceDisplayMonth: 10,
+        priceDisplayYear: 110,
+        billAmount: 110,
+        save: 10
+      },
+      trialPeriod: 14,
+      discountIndustries: [
+        'PRIMARY_SECONDARY_EDUCATION',
+        'HIGHER_EDUCATION',
+        'LIBRARIES',
+        'PHILANTHROPY',
+        'NON_PROFIT_ORGANIZATION_MANAGEMENT',
+        'RELIGIOUS_INSTITUTIONS'
+      ]
+    }, {
       name: 'Starter',
       type: 'starter',
       order: 1,
