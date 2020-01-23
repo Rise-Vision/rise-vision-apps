@@ -46,6 +46,8 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.onBackButton = function () {
+            $scope.highlightComponent(null);
+
             var component = $scope.factory.selected;
             var directive = $scope.directives[component.type];
 
