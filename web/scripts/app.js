@@ -19,8 +19,7 @@ angular.module('risevision.apps', [
     'risevision.common.components.confirm-modal',
     'risevision.common.components.timeline',
     'risevision.common.components.timeline-basic',
-    'risevision.common.components.analytics',
-    'risevision.common.components.hubspot',
+    'risevision.common.components.logging',
     'risevision.common.components.distribution-selector',
     'risevision.common.components.background-image-setting',
     'risevision.common.components.message-box',
@@ -591,7 +590,7 @@ angular.module('risevision.apps', [
     }
   ]);
 
-angular.module('risevision.common.components.analytics')
+angular.module('risevision.common.components.logging')
   .value('GA_LINKER_USE_ANCHOR', false);
 
 angular.module('risevision.apps.services', [

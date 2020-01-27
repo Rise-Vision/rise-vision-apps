@@ -3,7 +3,7 @@
 
 describe("Services: hubspot", function() {
 
-  beforeEach(module("risevision.common.components.hubspot"));
+  beforeEach(module("risevision.common.components.logging"));
   beforeEach(module(function ($provide) {
     $provide.factory("HUBSPOT_ACCOUNT", [function () {
       return "0000";
