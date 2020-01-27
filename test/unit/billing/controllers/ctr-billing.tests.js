@@ -229,52 +229,67 @@ describe('controller: BillingCtrl', function () {
   });
 
   describe('data formatting', function () {
-    it('should format subscription name', function () {
-      expect($scope.getSubscriptionDesc({
-        productName: 'Enterprise Plan',
-        quantity: 1,
-        unit: 'per Company per Month',
-        currencyCode: 'usd'
-      })).to.equal('Enterprise Plan (Monthly/USD)');
+    describe('getSubscriptionDesc: ', function() {
+      it('should format legacy subscription names', function () {
+        expect($scope.getSubscriptionDesc({
+          productName: 'Enterprise Plan',
+          quantity: 1,
+          unit: 'per Company per Month'
+        })).to.equal('Enterprise Plan Monthly');
 
-      expect($scope.getSubscriptionDesc({
-        productName: 'Enterprise Plan',
-        quantity: 3,
-        unit: 'per Display per month',
-        currencyCode: 'cad'
-      })).to.equal('3 x Enterprise Plan (Monthly/CAD)');
+        expect($scope.getSubscriptionDesc({
+          productName: 'Enterprise Plan',
+          quantity: 3,
+          unit: 'per Display per month'
+        })).to.equal('3 x Enterprise Plan Monthly');
 
-      expect($scope.getSubscriptionDesc({
-        productName: 'Advanced Plan',
-        quantity: 1,
-        unit: 'per Company per Year',
-        billingPeriod: 0,
-        currencyCode: 'usd'
-      })).to.equal('Advanced Plan (Yearly/USD)');
+        expect($scope.getSubscriptionDesc({
+          productName: 'Advanced Plan',
+          quantity: 1,
+          unit: 'per Company per Year',
+          billingPeriod: 0
+        })).to.equal('Advanced Plan Yearly');
 
-      expect($scope.getSubscriptionDesc({
-        productName: 'Basic Plan',
-        quantity: 2,
-        unit: 'per Company per Year',
-        billingPeriod: 1,
-        currencyCode: 'cad'
-      })).to.equal('2 x Basic Plan (Yearly/CAD)');
+        expect($scope.getSubscriptionDesc({
+          productName: 'Basic Plan',
+          quantity: 2,
+          unit: 'per Company per Year',
+          billingPeriod: 1
+        })).to.equal('2 x Basic Plan Yearly');
 
-      expect($scope.getSubscriptionDesc({
-        productName: 'Basic Plan',
-        quantity: 2,
-        unit: 'per Company per Year',
-        billingPeriod: 3,
-        currencyCode: 'cad'
-      })).to.equal('2 x Basic Plan (3 Year/CAD)');
+        expect($scope.getSubscriptionDesc({
+          productName: 'Basic Plan',
+          quantity: 2,
+          unit: 'per Company per Year',
+          billingPeriod: 3
+        })).to.equal('2 x Basic Plan 3 Year');
 
-      expect($scope.getSubscriptionDesc({
-        productName: 'Additional Licenses',
-        quantity: 1,
-        unit: 'per Display per Year',
-        currencyCode: 'cad',
-        productCode: 'pppc'
-      })).to.equal('1 x Additional Licenses (Yearly/CAD)');
+        expect($scope.getSubscriptionDesc({
+          productName: 'Additional Licenses',
+          quantity: 1,
+          unit: 'per Display per Year',
+          productCode: 'pppc'
+        })).to.equal('1 x Additional Licenses Yearly');
+
+      });
+
+      it('should format volume plan names', function () {
+        expect($scope.getSubscriptionDesc({
+          productName: 'Volume Plan',
+          quantity: 1,
+          unit: 'per Company per Month',
+          productCode: '34e8b511c4cc4c2affa68205cd1faaab427657dc'
+        })).to.equal('1 x Display Licenses Monthly Plan');
+
+        expect($scope.getSubscriptionDesc({
+          productName: 'Volume Plan for Education',
+          quantity: 3,
+          unit: 'per Company per Year',
+          productCode: '88725121a2c7a57deefcf06688ffc8e84cc4f93b'
+        })).to.equal('3 x Display Licenses for Education Yearly Plan');
+
+      });
+
     });
 
     it('should calculate total price', function () {

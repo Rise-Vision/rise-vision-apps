@@ -611,8 +611,12 @@ angular.module('risevision.apps.launcher.services', [
   'ngStorage'
 ]);
 
-angular.module('risevision.apps.billing.controllers', []);
-angular.module('risevision.apps.billing.services', []);
+angular.module('risevision.apps.billing.controllers', [
+  'risevision.apps.billing.services'
+]);
+angular.module('risevision.apps.billing.services', [
+  'risevision.common.components.plans'
+]);
 
 angular.module('risevision.schedules.services', [
   'risevision.common.header',

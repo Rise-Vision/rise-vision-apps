@@ -22,7 +22,7 @@
         save: 0
       }
     }, {
-      name: 'Volume',
+      name: 'Display Licenses',
       type: 'volume',
       order: 1,
       productId: '2317',
@@ -49,7 +49,7 @@
         'RELIGIOUS_INSTITUTIONS'
       ]
     }, {
-      name: 'Volume for Education',
+      name: 'Display Licenses for Education',
       // cannot use type 'volume', it may interfere with the other plan
       type: 'volume for education',
       order: 1,

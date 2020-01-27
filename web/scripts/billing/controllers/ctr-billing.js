@@ -5,10 +5,10 @@ angular.module('risevision.apps.billing.controllers')
   .value('UNPAID_INVOICES_PATH', 'account/view/invoicesDue?cid=companyId')
   .controller('BillingCtrl', ['$rootScope', '$scope', '$loading', '$window', '$timeout',
     'ScrollingListService', 'userState', 'currentPlanFactory', 'ChargebeeFactory', 'billing',
-    'STORE_URL', 'PAST_INVOICES_PATH', 'UNPAID_INVOICES_PATH', 'companySettingsFactory',
+    'STORE_URL', 'PAST_INVOICES_PATH', 'UNPAID_INVOICES_PATH', 'PLANS_LIST', 'companySettingsFactory',
     function ($rootScope, $scope, $loading, $window, $timeout, ScrollingListService, userState,
       currentPlanFactory, ChargebeeFactory, billing, STORE_URL, PAST_INVOICES_PATH, UNPAID_INVOICES_PATH,
-      companySettingsFactory) {
+      PLANS_LIST, companySettingsFactory) {
 
       $scope.search = {
         count: $scope.listLimit,
@@ -83,18 +83,28 @@ angular.module('risevision.apps.billing.controllers')
         $scope.chargebeeFactory.openSubscriptionDetails(userState.getSelectedCompanyId(), subscriptionId);
       };
 
+      var _getVolumePlan = function(subscription) {
+        var volumePlan = _.find(PLANS_LIST, function(plan) {
+          return plan.productCode === subscription.productCode &&
+            plan.type.indexOf('volume') !== -1;
+        });
+
+        return volumePlan;
+      };
+
       $scope.getSubscriptionDesc = function (subscription) {
         var prefix = subscription.quantity > 1 ? subscription.quantity + ' x ' : '';
+        var volumePlan = _getVolumePlan(subscription);
 
         // Show `1` quantity for Per Display subscriptions
-        if (_isPerDisplay(subscription) && subscription.quantity > 0) {
+        if ((_isPerDisplay(subscription) || volumePlan) && subscription.quantity > 0) {
           prefix = subscription.quantity + ' x ';
         }
 
         var period = _getPeriod(subscription);
-        var currency = _getCurrency(subscription);
+        var name =  volumePlan ? volumePlan.name : subscription.productName;
 
-        return prefix + subscription.productName + ' (' + period + '/' + currency + ')';
+        return prefix + name + ' ' + period + (volumePlan ? ' Plan' : '');
       };
 
       $scope.getSubscriptionPrice = function (subscription) {
@@ -122,10 +132,6 @@ angular.module('risevision.apps.billing.controllers')
           $loading.stopGlobal('subscriptions-changed-loader');
           $scope.subscriptions.doSearch();
         }, 10000);
-      }
-
-      function _getCurrency(subscription) {
-        return subscription.currencyCode.toUpperCase();
       }
 
       function _getPeriod(subscription) {
