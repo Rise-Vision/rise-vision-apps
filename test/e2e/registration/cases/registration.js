@@ -119,7 +119,7 @@
         expect(signUpPage.getPasswordMinLengthError().isPresent()).to.eventually.be.false;
       });
 
-      xit('should show password meter', function() {
+      it('should show password meter', function() {
         helper.wait(signUpPage.getPasswordMeter(), 'Password Meter Strength');
 
         expect(signUpPage.getPasswordStrengthText().getText()).to.eventually.equal('Weak');
@@ -133,14 +133,13 @@
         expect(signUpPage.getPasswordRequiredError().isDisplayed()).to.eventually.be.true;
       });
 
-      xit('should report strong password', function() {
+      it('should report strong password', function() {
         signUpPage.getPasswordTextBox().sendKeys('strngPass@*3');
 
         expect(signUpPage.getPasswordStrengthText().getText()).to.eventually.equal('Great');
       });
 
       it('should show error when trying to signup with existing user account', function() {
-        signUpPage.getPasswordTextBox().sendKeys('strngPass@*3');
         signUpPage.getSignupButton().click();
 
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
