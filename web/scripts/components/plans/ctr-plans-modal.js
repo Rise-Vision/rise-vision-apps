@@ -7,9 +7,9 @@ angular.module('risevision.common.components.plans')
     function ($scope, $modalInstance, currentPlanFactory, userState, purchaseFactory,
       PLANS_LIST, CHARGEBEE_PLANS_USE_PROD) {
 
-      var volumePlan = PLANS_LIST.filter(function (plan) {
-        return plan.name === 'Volume';
-      })[0];
+      var volumePlan = _.find(PLANS_LIST, {
+        type: 'volume'
+      });
 
       $scope.pricingAtLeastOneDisplay = true;
       $scope.currentPlan = currentPlanFactory.currentPlan;
