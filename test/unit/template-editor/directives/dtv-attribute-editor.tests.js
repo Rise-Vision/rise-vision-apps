@@ -4,7 +4,10 @@ describe('directive: TemplateAttributeEditor', function() {
   var $scope,
       element,
       factory,
-      timeout;
+      timeout,
+      window,
+      blueprintFactory,
+      sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
     factory = {};
@@ -19,6 +22,21 @@ describe('directive: TemplateAttributeEditor', function() {
     $provide.service('templateEditorFactory', function() {
       return factory;
     });
+
+    window = {
+      addEventListener: sandbox.spy(),
+      removeEventListener: sandbox.spy()
+    };
+
+    $provide.service('$window', function() {
+      return window;
+    });
+
+    blueprintFactory = {};
+
+    $provide.service('blueprintFactory', function() {
+      return blueprintFactory;
+    });
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $timeout){
@@ -28,6 +46,10 @@ describe('directive: TemplateAttributeEditor', function() {
     element = $compile("<template-attribute-editor></template-attribute-editor>")($scope);
     $scope.$digest();
   }));
+
+  afterEach(function () {
+    sandbox.restore();
+  });
 
   it('should exist', function() {
     expect($scope).to.be.ok;
@@ -54,12 +76,21 @@ describe('directive: TemplateAttributeEditor', function() {
     expect($scope.getComponentIcon).to.be.a('function');
   });
 
+  it('Handles message from templates', function() {
+    sinon.assert.calledWith(window.addEventListener, 'message');
+  });
+
+  it('Clears window event listener when element is destroyed', function() {
+    element.remove();
+    sinon.assert.calledWith(window.removeEventListener, 'message');
+  });
+
   it('Registers a directive', function() {
     var directive = {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub()
+        hide: sandbox.stub()
       },
       show: function() {}
     };
@@ -78,9 +109,9 @@ describe('directive: TemplateAttributeEditor', function() {
       icon: 'fa-test',
       element: {
         hide: function() {},
-        show: sinon.stub()
+        show: sandbox.stub()
       },
-      show: sinon.stub()
+      show: sandbox.stub()
     };
 
     var component = {
@@ -101,6 +132,85 @@ describe('directive: TemplateAttributeEditor', function() {
     expect($scope.showAttributeList).to.be.false;
   });
 
+  it('Edits a highlighted component', function() {
+    var directive = {
+      type: 'rise-test',
+      icon: 'fa-test',
+      element: {
+        hide: function() {},
+        show: sandbox.stub()
+      },
+      show: sandbox.stub()
+    };
+
+    var component = {
+      id: 'test',
+      type: 'rise-test'
+    }
+
+    blueprintFactory.blueprintData = {
+      components: [component]
+    };
+
+    $scope.registerDirective(directive);
+    $scope.editHighlightedComponent(component.id);
+
+    expect(factory.selected).to.deep.equal(component);
+
+    expect(directive.element.show).to.have.been.called;
+    expect(directive.show).to.have.been.called;
+
+    expect($scope.showAttributeList).to.be.true;
+
+    timeout.flush();
+    expect($scope.showAttributeList).to.be.false;
+  });
+
+  it('Resets selected panels when editing a highlighted component', function() {
+    var directive = {
+      type: 'rise-test',
+      icon: 'fa-test',
+      element: {
+        hide: function() {},
+        show: sandbox.stub()
+      },
+      show: sandbox.stub()
+    };
+
+    var component = {
+      id: 'test',
+      type: 'rise-test'
+    }
+    
+    $scope.registerDirective(directive);
+
+    blueprintFactory.blueprintData = {
+      components: [component]
+    };
+
+    factory.selected = component;
+    $scope.panels = [{}, {}, {}];
+    $scope.setPanelIcon('previous-icon', 'streamline');
+    $scope.setPanelTitle('Previous Title');
+    
+    $scope.editHighlightedComponent(component.id);
+
+    expect(factory.selected).to.deep.equal(component);
+
+    expect($scope.panels).to.be.empty;
+    expect($scope.panelIcon).to.be.null;
+    expect($scope.panelIconType).to.be.null;
+    expect($scope.panelTitle).to.be.null;
+
+    expect(directive.element.show).to.have.been.called;
+    expect(directive.show).to.have.been.called;
+
+    expect($scope.showAttributeList).to.be.true;
+
+    timeout.flush();
+    expect($scope.showAttributeList).to.be.false;
+  });
+
   it('Runs the open presentation handler', function() {
     var directive = {
       type: 'rise-test',
@@ -109,7 +219,7 @@ describe('directive: TemplateAttributeEditor', function() {
         hide: function() {},
         show: function() {}
       },
-      onPresentationOpen: sinon.stub()
+      onPresentationOpen: sandbox.stub()
     };
 
     $scope.registerDirective(directive);
@@ -122,7 +232,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub(),
+        hide: sandbox.stub(),
         show: function() {}
       },
       show: function() {}
@@ -152,7 +262,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub(),
+        hide: sandbox.stub(),
         show: function() {}
       },
       show: function() {}
@@ -162,6 +272,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test'
     }
 
+    $scope.highlightComponent = sandbox.stub();
     $scope.registerDirective(directive);
     $scope.editComponent(component);
     timeout.flush();
@@ -170,6 +281,7 @@ describe('directive: TemplateAttributeEditor', function() {
 
     expect(factory.selected).to.be.null;
     expect(directive.element.hide).to.have.been.called.twice;
+    expect($scope.highlightComponent).to.have.been.called.once;
 
     expect($scope.showAttributeList).to.be.false;
 
@@ -182,7 +294,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub(),
+        hide: sandbox.stub(),
         show: function() {}
       },
       show: function() {},
@@ -193,6 +305,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test'
     }
 
+    $scope.highlightComponent = sandbox.stub();
     $scope.registerDirective(directive);
     $scope.editComponent(component);
     timeout.flush();
@@ -201,6 +314,7 @@ describe('directive: TemplateAttributeEditor', function() {
 
     expect(factory.selected).to.be.null;
     expect(directive.element.hide).to.have.been.called.twice;
+    expect($scope.highlightComponent).to.have.been.called.once;
 
     expect($scope.showAttributeList).to.be.false;
 
@@ -213,7 +327,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub(),
+        hide: sandbox.stub(),
         show: function() {}
       },
       show: function() {},
@@ -224,6 +338,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test'
     }
 
+    $scope.highlightComponent = sandbox.stub();
     $scope.registerDirective(directive);
     $scope.editComponent(component);
     timeout.flush();
@@ -232,6 +347,7 @@ describe('directive: TemplateAttributeEditor', function() {
 
     expect(factory.selected).to.not.be.null;
     expect(directive.element.hide).to.have.been.called.once;
+    expect($scope.highlightComponent).to.have.been.called.once;
     expect($scope.showAttributeList).to.be.false;
   });
 
@@ -240,7 +356,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub(),
+        hide: sandbox.stub(),
         show: function() {}
       },
       show: function() {},
@@ -265,7 +381,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub(),
+        hide: sandbox.stub(),
         show: function() {}
       },
       show: function() {},
@@ -291,7 +407,7 @@ describe('directive: TemplateAttributeEditor', function() {
       type: 'rise-test',
       icon: 'fa-test',
       element: {
-        hide: sinon.stub(),
+        hide: sandbox.stub(),
         show: function() {}
       },
       show: function() {},

@@ -397,6 +397,10 @@ $short-phone-height: 570px;
     border-bottom: none;
   }
 
+  & .attribute-row-hover:hover {
+    background: #f5f5f5;
+  }
+
   & .attribute-desc {
     white-space: nowrap;
     overflow: hidden;

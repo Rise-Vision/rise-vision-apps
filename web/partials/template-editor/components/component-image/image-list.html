@@ -12,8 +12,7 @@
 </div>
 <div class="image-component-list file-component-list te-scrollable-container"
      ng-class="{'active-duration' : selectedImages.length > 1 && !isUploading}"
-     rv-spinner rv-spinner-key="template-editor-loader"
-     rv-spinner-start-active="1">
+     rv-spinner rv-spinner-key="template-editor-loader">
   <template-editor-file-entry
     ng-repeat="image in selectedImages track by $index"
     ng-show="selectedImages.length > 0 && !isUploading"

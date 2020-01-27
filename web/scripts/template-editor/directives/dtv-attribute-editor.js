@@ -1,17 +1,25 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateAttributeEditor', ['$timeout', 'templateEditorFactory', 'templateEditorUtils',
-    function ($timeout, templateEditorFactory, templateEditorUtils) {
+  .directive('templateAttributeEditor', ['$timeout', 'templateEditorFactory', 'templateEditorUtils', 
+  'blueprintFactory', '$window', 'HTML_TEMPLATE_DOMAIN',
+    function ($timeout, templateEditorFactory, templateEditorUtils, blueprintFactory, $window, 
+      HTML_TEMPLATE_DOMAIN) {
       return {
         restrict: 'E',
         templateUrl: 'partials/template-editor/attribute-editor.html',
-        link: function ($scope) {
+        link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
           $scope.showAttributeList = true;
           $scope.directives = {};
           $scope.panels = [];
           $scope.factory.selected = null;
+
+          $window.addEventListener('message', _handleMessageFromTemplate);
+
+          element.on('$destroy', function () {
+            $window.removeEventListener('message', _handleMessageFromTemplate);
+          });
 
           $scope.registerDirective = function (directive) {
             directive.element.hide();
@@ -38,6 +46,8 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.onBackButton = function () {
+            $scope.highlightComponent(null);
+
             var component = $scope.factory.selected;
             var directive = $scope.directives[component.type];
 
@@ -74,6 +84,15 @@ angular.module('risevision.template-editor.directives')
             }
 
             return 'template.' + component.type;
+          };
+
+          $scope.highlightComponent = function (componentId) {
+            var message = {
+              type: 'highlightComponent',
+              value: componentId
+            };
+            var iframe = $window.document.getElementById('template-editor-preview');
+            iframe.contentWindow.postMessage(JSON.stringify(message), HTML_TEMPLATE_DOMAIN);
           };
 
           $scope.isHeaderBottomRuleVisible = function (component) {
@@ -125,6 +144,18 @@ angular.module('risevision.template-editor.directives')
             $scope.panelTitle = panelTitle;
           };
 
+          $scope.editHighlightedComponent = function (componentId) {
+            var component = _.find(blueprintFactory.blueprintData.components, function (element) { return element.id === componentId; });
+            if (component) {
+              if ($scope.factory.selected) {
+                $scope.backToList();
+                $scope.panels = [];
+                $scope.resetPanelHeader();
+              }
+              $scope.editComponent(component);
+            }
+          };
+
           function _showAttributeList(value, delay) {
             $timeout(function () {
               $scope.showAttributeList = value;
@@ -172,6 +203,15 @@ angular.module('risevision.template-editor.directives')
             _showElement(swappedInSelector, 'left');
             _hideElement(swappedOutSelector);
           }
+          
+          function _handleMessageFromTemplate(event) {
+            var data = JSON.parse(event.data);
+
+            if (data.type === 'editComponent') {
+              $scope.editHighlightedComponent(data.value);
+            }
+          }
+
         }
       };
     }

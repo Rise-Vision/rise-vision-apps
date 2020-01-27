@@ -46,7 +46,8 @@ angular.module('risevision.template-editor.directives')
 
                 return true;
               }
-            }
+            },
+            reset: _reset
           });
 
           function _reset() {
