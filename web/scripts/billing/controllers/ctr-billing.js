@@ -35,7 +35,7 @@ angular.module('risevision.apps.billing.controllers')
 
       $rootScope.$on('chargebee.subscriptionChanged', _reloadSubscriptions);
       $rootScope.$on('chargebee.subscriptionCancelled', _reloadSubscriptions);
-      $rootScope.$on('risevision.company.planStarted', function() {
+      $rootScope.$on('risevision.company.planStarted', function () {
         $scope.subscriptions.doSearch();
       });
 
@@ -44,7 +44,7 @@ angular.module('risevision.apps.billing.controllers')
       };
 
       $scope.checkCreationDate = function () {
-        var creationDate = (($scope.company && $scope.company.creationDate) ? 
+        var creationDate = (($scope.company && $scope.company.creationDate) ?
           (new Date($scope.company.creationDate)) : (new Date()));
         return creationDate < new Date('Sep 1, 2018');
       };
@@ -83,8 +83,8 @@ angular.module('risevision.apps.billing.controllers')
         $scope.chargebeeFactory.openSubscriptionDetails(userState.getSelectedCompanyId(), subscriptionId);
       };
 
-      var _getVolumePlan = function(subscription) {
-        var volumePlan = _.find(PLANS_LIST, function(plan) {
+      var _getVolumePlan = function (subscription) {
+        var volumePlan = _.find(PLANS_LIST, function (plan) {
           return plan.productCode === subscription.productCode &&
             plan.type.indexOf('volume') !== -1;
         });
@@ -102,7 +102,7 @@ angular.module('risevision.apps.billing.controllers')
         }
 
         var period = _getPeriod(subscription);
-        var name =  volumePlan ? volumePlan.name : subscription.productName;
+        var name = volumePlan ? volumePlan.name : subscription.productName;
 
         return prefix + name + ' ' + period + (volumePlan ? ' Plan' : '');
       };

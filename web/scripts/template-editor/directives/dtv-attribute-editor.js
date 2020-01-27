@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateAttributeEditor', ['$timeout', 'templateEditorFactory', 'templateEditorUtils', 
-  'blueprintFactory', '$window', 'HTML_TEMPLATE_DOMAIN',
-    function ($timeout, templateEditorFactory, templateEditorUtils, blueprintFactory, $window, 
+  .directive('templateAttributeEditor', ['$timeout', 'templateEditorFactory', 'templateEditorUtils',
+    'blueprintFactory', '$window', 'HTML_TEMPLATE_DOMAIN',
+    function ($timeout, templateEditorFactory, templateEditorUtils, blueprintFactory, $window,
       HTML_TEMPLATE_DOMAIN) {
       return {
         restrict: 'E',
@@ -145,7 +145,9 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.editHighlightedComponent = function (componentId) {
-            var component = _.find(blueprintFactory.blueprintData.components, function (element) { return element.id === componentId; });
+            var component = _.find(blueprintFactory.blueprintData.components, function (element) {
+              return element.id === componentId;
+            });
             if (component) {
               if ($scope.factory.selected) {
                 $scope.backToList();
@@ -203,7 +205,7 @@ angular.module('risevision.template-editor.directives')
             _showElement(swappedInSelector, 'left');
             _hideElement(swappedOutSelector);
           }
-          
+
           function _handleMessageFromTemplate(event) {
             var data = JSON.parse(event.data);
 
