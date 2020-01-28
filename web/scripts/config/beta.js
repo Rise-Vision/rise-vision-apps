@@ -24,6 +24,7 @@
     .value('VIEWER_URL', 'http://preview.risevision.com')
     .value('ALERTS_WS_URL',
       'https://rvaserver2.appspot.com/alerts/cap')
+    .value('SEGMENT_API_KEY', 'pFutwqoxdVfhEF0J948V28YuzNLIP3MY')
     .value('STORAGE_ENDPOINT_URL',
       'https://storage-dot-rvaserver2.appspot.com/_ah/api')
     .value('MESSAGING_PRIMUS_URL',
