@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('risevision.schedules.services')
+angular.module('risevision.common.components.logging')
   .value('SCHEDULE_EVENTS_TO_BQ', [
     'Schedule Created'
   ])

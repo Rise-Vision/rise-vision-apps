@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('risevision.displays.services')
+angular.module('risevision.common.components.logging')
   .value('DISPLAY_EVENTS_TO_BQ', [
     'Display Created',
     'Player Download'

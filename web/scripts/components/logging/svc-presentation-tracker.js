@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('risevision.editor.services')
+angular.module('risevision.common.components.logging')
   .value('PRESENTATION_EVENTS_TO_BQ', [
     'Presentation Created',
     'New Presentation',

@@ -1,6 +1,6 @@
 'use strict';
 describe('service: presentation tracker:', function() {
-  beforeEach(module('risevision.editor.services'));
+  beforeEach(module('risevision.common.components.logging'));
 
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});

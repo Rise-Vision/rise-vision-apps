@@ -1,6 +1,6 @@
 'use strict';
-describe('service: display tracker:', function() {
-  beforeEach(module('risevision.displays.services'));
+describe('service: schedule tracker:', function() {
+  beforeEach(module('risevision.common.components.logging'));
 
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
@@ -28,42 +28,37 @@ describe('service: display tracker:', function() {
     });
   }));
   
-  var displayTracker, eventName, eventData, bQSpy;
+  var scheduleTracker, eventName, eventData, bQSpy;
   beforeEach(function(){
     eventName = undefined;
     eventData = undefined;
     inject(function($injector){
-      displayTracker = $injector.get('displayTracker');
+      scheduleTracker = $injector.get('scheduleTracker');
       var bigQueryLogging = $injector.get('bigQueryLogging');
       bQSpy = sinon.spy(bigQueryLogging,'logEvent');
     });
   });
 
   it('should exist',function(){
-    expect(displayTracker).to.be.truely;
-    expect(displayTracker).to.be.a('function');
+    expect(scheduleTracker).to.be.truely;
+    expect(scheduleTracker).to.be.a('function');
   });
   
   it('should call segment analytics service',function(){
-    displayTracker('Display Updated', 'displayId', 'displayName', 'downloadType');
+    scheduleTracker('Schedule Updated', 'scheduleId', 'scheduleName');
 
-    expect(eventName).to.equal('Display Updated');
-    expect(eventData).to.deep.equal({displayId: 'displayId', displayName: 'displayName', companyId: 'companyId', downloadType: 'downloadType'});
+    expect(eventName).to.equal('Schedule Updated');
+    expect(eventData).to.deep.equal({scheduleId: 'scheduleId', scheduleName: 'scheduleName', companyId: 'companyId'});
     bQSpy.should.not.have.been.called;
   });
 
-  it('should track Player Download event to BQ',function(){
-    displayTracker('Player Download', 'displayId', 'displayName', 'downloadType');
-    bQSpy.should.have.been.calledWith('Player Download', 'displayId');
-  });
-
-  it('should track Display Created event to BQ',function(){
-    displayTracker('Display Created', 'displayId', 'displayName', 'downloadType');
-    bQSpy.should.have.been.calledWith('Display Created', 'displayId');
+  it('should track Schedule Created event to BQ',function(){
+    scheduleTracker('Schedule Created', 'scheduleId', 'scheduleName');
+    bQSpy.should.have.been.calledWith('Schedule Created', 'scheduleId');
   });
 
   it('should not call segment w/ blank event',function(){
-    displayTracker();
+    scheduleTracker();
 
     expect(eventName).to.not.be.ok;
     expect(eventData).to.not.be.ok;

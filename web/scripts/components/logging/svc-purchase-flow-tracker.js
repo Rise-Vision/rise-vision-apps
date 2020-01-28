@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('risevision.common.components.purchase-flow')
+angular.module('risevision.common.components.logging')
   .factory('purchaseFlowTracker', ['segmentAnalytics',
     function (segmentAnalytics) {
       var factory = {};

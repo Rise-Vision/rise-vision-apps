@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('risevision.apps.launcher.services')
+angular.module('risevision.common.components.logging')
   .factory('launcherTracker', ['userState', 'segmentAnalytics',
     function (userState, segmentAnalytics) {
       return function (eventName) {
