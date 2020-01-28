@@ -3,11 +3,11 @@
 angular.module('risevision.common.header')
   .controller('AddUserModalCtrl', ['$scope', '$filter', 'addUser',
     '$modalInstance', 'companyId', 'userState', 'userRoleMap',
-    'humanReadableError', 'messageBox', '$loading', 'segmentAnalytics',
+    'humanReadableError', 'messageBox', '$loading', 'userTracker',
     'COMPANY_ROLE_FIELDS',
     function ($scope, $filter, addUser, $modalInstance, companyId,
       userState, userRoleMap, humanReadableError, messageBox, $loading,
-      segmentAnalytics, COMPANY_ROLE_FIELDS) {
+      userTracker, COMPANY_ROLE_FIELDS) {
       $scope.isAdd = true;
       $scope.COMPANY_ROLE_FIELDS = COMPANY_ROLE_FIELDS;
       $scope.isUserAdmin = userState.isUserAdmin();
@@ -41,10 +41,7 @@ angular.module('risevision.common.header')
           $scope.loading = true;
           addUser(companyId, $scope.user.username, $scope.user)
             .then(function () {
-                segmentAnalytics.track('User Created', {
-                  userId: $scope.user.username,
-                  companyId: companyId
-                });
+                userTracker('User Created', $scope.user.username);
 
                 $modalInstance.close('success');
               },

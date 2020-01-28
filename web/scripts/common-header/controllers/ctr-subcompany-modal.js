@@ -5,11 +5,11 @@ angular.module('risevision.common.header')
   .controller('SubCompanyModalCtrl', ['$scope', '$modalInstance', '$modal',
     '$templateCache', 'createCompany', 'countries', 'REGIONS_CA',
     'REGIONS_US', 'TIMEZONES', 'userState', '$loading', 'messageBox', 'humanReadableError',
-    'segmentAnalytics', 'bigQueryLogging', 'COMPANY_INDUSTRY_FIELDS',
+    'companyTracker', 'bigQueryLogging', 'COMPANY_INDUSTRY_FIELDS',
     'COMPANY_SIZE_FIELDS',
     function ($scope, $modalInstance, $modal, $templateCache,
       createCompany, countries, REGIONS_CA, REGIONS_US, TIMEZONES, userState,
-      $loading, messageBox, humanReadableError, segmentAnalytics, bigQueryLogging,
+      $loading, messageBox, humanReadableError, companyTracker, bigQueryLogging,
       COMPANY_INDUSTRY_FIELDS, COMPANY_SIZE_FIELDS) {
 
       $scope.company = {};
@@ -35,14 +35,9 @@ angular.module('risevision.common.header')
       };
       $scope.save = function () {
         $scope.loading = true;
-        createCompany(userState.getSelectedCompanyId(),
-            $scope.company).then(function (company) {
-            segmentAnalytics.track('Company Created', {
-              companyId: company.id,
-              companyName: company.name
-            });
-            bigQueryLogging.logEvent('Company Created', company.name, null,
-              userState.getUsername(), company.id);
+        createCompany(userState.getSelectedCompanyId(), $scope.company)
+          .then(function (company) {
+            companyTracker('Company Created', company.id, company.name);
 
             $modalInstance.close('success');
           }, function (err) {

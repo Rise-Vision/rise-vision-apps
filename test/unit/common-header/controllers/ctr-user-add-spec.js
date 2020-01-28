@@ -39,13 +39,8 @@ describe("controller: user add", function() {
         return deferred.promise;
       };
     });
-    $provide.service("segmentAnalytics", function() { 
-      return {
-        track: function(name) {
-          trackerCalled = name;
-        },
-        load: function() {}
-      };
+    $provide.service("userTracker", function() { 
+      return sinon.spy();
     });
 
     $provide.factory("customLoader", function ($q) {
@@ -67,11 +62,10 @@ describe("controller: user add", function() {
 
   }));
   var $scope, userState, $modalInstance, createUserError,
-  trackerCalled, messageBoxStub, filterStub;
+  userTracker, messageBoxStub, filterStub;
   var isRiseAdmin = true, isUserAdmin = true, isRiseVisionUser = true;
   beforeEach(function(){
     createUserError = false;
-    trackerCalled = undefined;
     userState = function(){
       return {
         _restoreState : function(){
@@ -98,6 +92,7 @@ describe("controller: user add", function() {
       $scope = $rootScope.$new();
       $modalInstance = $injector.get("$modalInstance");
       userState = $injector.get("userState");
+      userTracker = $injector.get('userTracker');
       
       messageBoxStub = sinon.stub();
       filterStub = sinon.stub();
@@ -107,7 +102,7 @@ describe("controller: user add", function() {
         $modalInstance: $modalInstance,
         userState : userState,
         addUser:$injector.get("addUser"),
-        segmentAnalytics:$injector.get("segmentAnalytics"),
+        userTracker: userTracker,
       });
       $scope.$digest();
     });
@@ -152,7 +147,7 @@ describe("controller: user add", function() {
       $scope.save();
       expect($scope.loading).to.be.false;
 
-      expect(trackerCalled).to.not.be.ok;
+      userTracker.should.not.have.been.called;
       expect($modalInstance._closed).to.be.false;
     });
     
@@ -162,7 +157,7 @@ describe("controller: user add", function() {
       setTimeout(function() {
         expect($scope.loading).to.be.false;
 
-        expect(trackerCalled).to.equal("User Created");
+        userTracker.should.have.been.calledWith('User Created');
         expect($modalInstance._closed).to.be.true;
         
         done();

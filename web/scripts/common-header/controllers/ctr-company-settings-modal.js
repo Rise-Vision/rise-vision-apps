@@ -5,12 +5,12 @@ angular.module('risevision.common.header')
     'updateCompany', 'companyId', 'countries', 'REGIONS_CA', 'REGIONS_US',
     'TIMEZONES', 'getCompany', 'regenerateCompanyField', '$loading',
     'humanReadableError', 'userState', 'userAuthFactory', 'deleteCompany',
-    'segmentAnalytics', 'confirmModal', '$modal', '$templateCache',
+    'companyTracker', 'confirmModal', '$modal', '$templateCache',
     'COMPANY_INDUSTRY_FIELDS', 'COMPANY_SIZE_FIELDS', 'addressFactory',
     function ($scope, $modalInstance, updateCompany, companyId,
       countries, REGIONS_CA, REGIONS_US, TIMEZONES, getCompany,
       regenerateCompanyField, $loading, humanReadableError,
-      userState, userAuthFactory, deleteCompany, segmentAnalytics, confirmModal,
+      userState, userAuthFactory, deleteCompany, companyTracker, confirmModal,
       $modal, $templateCache, COMPANY_INDUSTRY_FIELDS, COMPANY_SIZE_FIELDS, addressFactory) {
 
       $scope.company = {
@@ -65,11 +65,8 @@ angular.module('risevision.common.header')
             return updateCompany($scope.company.id, company)
               .then(
                 function () {
-                  segmentAnalytics.track('Company Updated', {
-                    companyId: userState.getSelectedCompanyId(),
-                    companyName: userState.getSelectedCompanyName(),
-                    isUserCompany: !userState.isSubcompanySelected()
-                  });
+                  companyTracker('Company Updated', userState.getSelectedCompanyId(),
+                    userState.getSelectedCompanyName(), !userState.isSubcompanySelected());
 
                   userState.updateCompanySettings($scope.company);
                   $modalInstance.close('success');
@@ -96,11 +93,8 @@ angular.module('risevision.common.header')
           deleteCompany($scope.company.id)
             .then(
               function () {
-                segmentAnalytics.track('Company Deleted', {
-                  companyId: userState.getSelectedCompanyId(),
-                  companyName: userState.getSelectedCompanyName(),
-                  isUserCompany: !userState.isSubcompanySelected()
-                });
+                companyTracker('Company Deleted', userState.getSelectedCompanyId(),
+                  userState.getSelectedCompanyName(), !userState.isSubcompanySelected());
 
                 if (userState.getUserCompanyId() === $scope.company.id) {
                   userAuthFactory.signOut();

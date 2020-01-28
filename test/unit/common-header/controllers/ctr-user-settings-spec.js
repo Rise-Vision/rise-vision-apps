@@ -41,13 +41,8 @@ describe("controller: user settings", function() {
     $provide.service('deleteUser', function() {
       return deleteUserStub = sinon.stub();
     });
-    $provide.service("segmentAnalytics", function() { 
-      return {
-        track: function(name) {
-          trackerCalled = name;
-        },
-        load: function() {}
-      };
+    $provide.service("userTracker", function() { 
+      return sinon.spy();
     });
 
     $provide.factory("customLoader", function ($q) {
@@ -79,11 +74,10 @@ describe("controller: user settings", function() {
 
   }));
   var $scope, userProfile, savedUser, userState, $modalInstance, createUserError,
-  trackerCalled, deleteUserStub, messageBoxStub, confirmModalStub, filterStub, userauth;
+  userTracker, deleteUserStub, messageBoxStub, confirmModalStub, filterStub, userauth;
   var isRiseAdmin = true, isUserAdmin = true, isRiseVisionUser = true, isRiseAuthUser = false;
   beforeEach(function(){
     createUserError = false;
-    trackerCalled = undefined;
     userProfile = {
       id : "RV_user_id",
       username: "user@example.io",
@@ -135,6 +129,7 @@ describe("controller: user settings", function() {
       $modalInstance = $injector.get("$modalInstance");
       userState = $injector.get("userState");
       userauth = $injector.get('userauth');
+      userTracker = $injector.get('userTracker');
 
       filterStub = sinon.stub();
 
@@ -145,7 +140,7 @@ describe("controller: user settings", function() {
         userState : userState,
         getUserProfile:$injector.get("getUserProfile"),
         updateUser:$injector.get("updateUser"),
-        segmentAnalytics:$injector.get("segmentAnalytics")
+        userTracker: userTracker
       });
       $scope.$digest();
     });
@@ -204,7 +199,7 @@ describe("controller: user settings", function() {
       $scope.save();
       expect($scope.loading).to.be.false;
 
-      expect(trackerCalled).to.not.be.ok;
+      userTracker.should.not.have.been.called;
       $modalInstance.close.should.not.have.been.called;
     });
 
@@ -221,7 +216,7 @@ describe("controller: user settings", function() {
         expect($scope.loading).to.be.false;
         userProfileSpy.should.have.been.once;
 
-        expect(trackerCalled).to.equal("User Updated");
+        userTracker.should.have.been.calledWith('User Updated');
         $modalInstance.close.should.have.been.calledWith('success');
         
         done();
@@ -347,7 +342,7 @@ describe("controller: user settings", function() {
       setTimeout(function() {
         expect($scope.loading).to.be.false;
         
-        expect(trackerCalled).to.equal("User Deleted");
+        userTracker.should.have.been.calledWith('User Deleted');
         $modalInstance.dismiss.should.have.been.calledWith('deleted');
 
         done();
@@ -365,7 +360,7 @@ describe("controller: user settings", function() {
         
         messageBoxStub.should.have.been.called;
 
-        expect(trackerCalled).to.not.be.ok;
+        userTracker.should.not.have.been.called;
         $modalInstance.dismiss.should.not.have.been.called;
 
         done();

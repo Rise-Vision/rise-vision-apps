@@ -6,11 +6,11 @@ angular.module('risevision.common.header')
     '$scope', '$filter', '$modalInstance', 'updateUser', 'getUserProfile',
     'deleteUser', 'username', 'userRoleMap', '$log', '$loading', 'userState',
     'userAuthFactory', 'uiFlowManager', 'humanReadableError', 'messageBox', 'confirmModal',
-    '$rootScope', 'segmentAnalytics', 'userauth', '$q', 'COMPANY_ROLE_FIELDS',
+    '$rootScope', 'userTracker', 'userauth', '$q', 'COMPANY_ROLE_FIELDS',
     function ($scope, $filter, $modalInstance, updateUser, getUserProfile,
       deleteUser, username, userRoleMap, $log, $loading, userState,
       userAuthFactory, uiFlowManager, humanReadableError, messageBox, confirmModal,
-      $rootScope, segmentAnalytics, userauth, $q, COMPANY_ROLE_FIELDS) {
+      $rootScope, userTracker, userauth, $q, COMPANY_ROLE_FIELDS) {
       $scope.user = {};
       $scope.userPassword = {};
       $scope.showChangePassword = false;
@@ -69,11 +69,7 @@ angular.module('risevision.common.header')
 
             deleteUser($scope.username)
               .then(function () {
-                segmentAnalytics.track('User Deleted', {
-                  userId: $scope.username,
-                  companyId: userState.getSelectedCompanyId(),
-                  isSelf: userState.checkUsername(username)
-                });
+                userTracker('User Deleted', $scope.username, userState.checkUsername(username));
 
                 if (userState.checkUsername(username)) {
                   userAuthFactory.signOut().then().finally(function () {
@@ -134,11 +130,7 @@ angular.module('risevision.common.header')
                 userState.updateUserProfile(resp.item);
               }
 
-              segmentAnalytics.track('User Updated', {
-                userId: $scope.username,
-                companyId: userState.getSelectedCompanyId(),
-                isSelf: userState.checkUsername(username)
-              });
+              userTracker('User Updated', $scope.username, userState.checkUsername(username));
 
               $modalInstance.close('success');
             })
