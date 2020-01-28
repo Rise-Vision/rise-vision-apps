@@ -14,8 +14,7 @@ angular.module('risevision.common.components.logging')
             isSelf: isSelf
           });
           if (USER_EVENTS_TO_BQ.indexOf(eventName) !== -1) {
-            bigQueryLogging.logEvent(eventName, userName, null,
-              userState.getUsername(), userId);
+            bigQueryLogging.logEvent(eventName);
           }
         }
       };
