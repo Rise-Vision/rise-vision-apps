@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('risevision.common.components.logging')
-  .value('USER_EVENTS_TO_BQ', [
-  ])
+  .value('USER_EVENTS_TO_BQ', [])
   .factory('userTracker', ['userState', 'segmentAnalytics',
     'bigQueryLogging', 'USER_EVENTS_TO_BQ',
     function (userState, segmentAnalytics, bigQueryLogging,
