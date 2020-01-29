@@ -139,9 +139,8 @@ angular.module('risevision.editor.services')
           presentationParser.parsePresentation(factory.presentation);
         } else {
           presentationParser.updatePresentation(factory.presentation);
+          distributionParser.updateDistribution(factory.presentation);
         }
-
-        distributionParser.updateDistribution(factory.presentation);
 
         _updateEmbeddedIds(factory.presentation);
       };

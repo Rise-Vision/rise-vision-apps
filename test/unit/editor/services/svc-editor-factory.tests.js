@@ -78,24 +78,14 @@ describe('service: editorFactory:', function() {
         validatePresentation: function(presentation) {
           return true;
         },
-        parsePresentation: function(presentation) {
-          presentation.parsed = true;
-          return {};
-        },
-
-        updatePresentation: function(presentation) {
-          presentation.updated = true;
-        }
+        parsePresentation: sinon.spy(),
+        updatePresentation: sinon.spy()
       };
     });
     $provide.service('distributionParser', function() {
       return {
-        parseDistribution: function(presentation) {
-          presentation.distributionParsed = true;
-        },
-        updateDistribution: function(presentation) {
-          presentation.distributionUpdated = true;
-        }
+        parseDistribution: sinon.spy(),
+        updateDistribution: sinon.spy()
       };
     });
     $provide.service('presentationTracker', function() {
@@ -175,7 +165,7 @@ describe('service: editorFactory:', function() {
     });
   }));
   var editorFactory, trackerCalled, updatePresentation, currentState, $state, stateParams,
-    presentationParser, $window, $modal, processErrorCode, scheduleFactory, userAuthFactory,
+    presentationParser, distributionParser, $window, $modal, processErrorCode, scheduleFactory, userAuthFactory,
     $rootScope, storeProduct, showLegacyWarning;
   beforeEach(function(){
     trackerCalled = undefined;
@@ -185,6 +175,7 @@ describe('service: editorFactory:', function() {
     inject(function($injector){
       editorFactory = $injector.get('editorFactory');
       presentationParser = $injector.get('presentationParser');
+      distributionParser = $injector.get('distributionParser')
       $window = $injector.get('$window');
       $modal = $injector.get('$modal');
       $state = $injector.get('$state');
@@ -223,7 +214,7 @@ describe('service: editorFactory:', function() {
 
   it('should initialize',function(){
     expect(editorFactory.presentation.layout).to.be.ok;
-    expect(editorFactory.presentation.parsed).to.be.true;
+    presentationParser.parsePresentation.should.have.been.called;
     expect(editorFactory.presentationId).to.not.be.ok;
   });
 
@@ -236,7 +227,7 @@ describe('service: editorFactory:', function() {
     expect(trackerCalled).to.equal('New Presentation');
 
     expect(editorFactory.presentation.layout).to.be.ok;
-    expect(editorFactory.presentation.parsed).to.be.true;
+    presentationParser.parsePresentation.should.have.been.called;
     expect(editorFactory.presentationId).to.not.be.ok;
   });
 
@@ -246,8 +237,8 @@ describe('service: editorFactory:', function() {
       .then(function() {
         expect(editorFactory.presentation).to.be.truely;
         expect(editorFactory.presentation.name).to.equal("some presentation");
-        expect(editorFactory.presentation.parsed).to.be.true;
-        expect(editorFactory.presentation.distributionParsed).to.be.true;
+        presentationParser.parsePresentation.should.have.been.called;
+        distributionParser.parseDistribution.should.have.been.called;
 
         setTimeout(function() {
           expect(editorFactory.loadingPresentation).to.be.false;
@@ -309,13 +300,11 @@ describe('service: editorFactory:', function() {
     it('should add the presentation',function(done){
       updatePresentation = true;
 
-      sandbox.stub(presentationParser, "parsePresentation").returns(true);
-
       editorFactory.addPresentation()
         .then(function() {
           expect(messageBoxStub).to.not.have.been.called;
-          expect(editorFactory.presentation.updated).to.be.true;
-          expect(editorFactory.presentation.distributionUpdated).to.be.true;
+          presentationParser.updatePresentation.should.have.been.called;
+          distributionParser.updateDistribution.should.have.been.called;
           expect(editorFactory.savingPresentation).to.be.true;
           expect(editorFactory.loadingPresentation).to.be.true;
 
@@ -349,8 +338,6 @@ describe('service: editorFactory:', function() {
 
       var $modalOpenSpy = sinon.spy($modal, 'open');
 
-      sandbox.stub(presentationParser, "parsePresentation").returns(true);
-
       editorFactory.addPresentation();
 
       setTimeout(function(){
@@ -364,27 +351,28 @@ describe('service: editorFactory:', function() {
       updatePresentation = true;
       currentState = 'apps.editor.workspace.htmleditor';
 
-      sandbox.stub(presentationParser, "parsePresentation").returns(true);
-
       editorFactory.addPresentation()
         .then(function() {
-          expect(editorFactory.presentation.parsed).to.be.true;
-          expect(editorFactory.presentation.distributionUpdated).to.be.true;
+          presentationParser.parsePresentation.should.have.been.called;
+          presentationParser.updatePresentation.should.not.have.been.called;
+          distributionParser.updateDistribution.should.not.have.been.called;
 
           expect(editorFactory.savingPresentation).to.be.true;
           expect(editorFactory.loadingPresentation).to.be.true;
-        });
 
-      setTimeout(function(){
-        expect(currentState).to.equal('apps.editor.workspace.artboard');
-        expect(trackerCalled).to.equal('Presentation Created');
-        expect(editorFactory.savingPresentation).to.be.false;
-        expect(editorFactory.loadingPresentation).to.be.false;
-        expect(editorFactory.errorMessage).to.not.be.ok;
-        expect(editorFactory.apiError).to.not.be.ok;
+          setTimeout(function(){
+            expect(currentState).to.equal('apps.editor.workspace.artboard');
+            expect(trackerCalled).to.equal('Presentation Created');
+            expect(editorFactory.savingPresentation).to.be.false;
+            expect(editorFactory.loadingPresentation).to.be.false;
+            expect(editorFactory.errorMessage).to.not.be.ok;
+            expect(editorFactory.apiError).to.not.be.ok;
 
-        done();
-      },10);
+            done();
+          },10);
+
+        }, done);
+
     });
 
     it('should show an error if fails to create presentation',function(done){
@@ -433,8 +421,6 @@ describe('service: editorFactory:', function() {
         }
       ];
 
-      sandbox.stub(presentationParser, "parsePresentation").returns(true);
-
       editorFactory.addPresentation()
         .then(function() {
           expect(editorFactory.presentation.embeddedIds).to.deep.equal(['presentation2', 'presentation1']);
@@ -447,27 +433,27 @@ describe('service: editorFactory:', function() {
       updatePresentation = true;
       currentState = 'apps.editor.workspace.artboard';
 
-      editorFactory.presentation.updated = false;
-
-      sandbox.stub(presentationParser, "parsePresentation").returns(true);
-
       editorFactory.updatePresentation()
         .then(function() {
           expect(messageBoxStub).to.not.have.been.called;
-          expect(editorFactory.presentation.updated).to.be.true;
-          expect(editorFactory.presentation.distributionUpdated).to.be.true;
+
+          presentationParser.updatePresentation.should.have.been.called;
+          distributionParser.updateDistribution.should.have.been.called;
+
           expect(editorFactory.savingPresentation).to.be.true;
           expect(editorFactory.loadingPresentation).to.be.true;
-        });
 
-      setTimeout(function(){
-        expect(trackerCalled).to.equal('Presentation Updated');
-        expect(editorFactory.savingPresentation).to.be.false;
-        expect(editorFactory.loadingPresentation).to.be.false;
-        expect(editorFactory.errorMessage).to.not.be.ok;
-        expect(editorFactory.apiError).to.not.be.ok;
-        done();
-      },10);
+          setTimeout(function(){
+            expect(trackerCalled).to.equal('Presentation Updated');
+
+            expect(editorFactory.savingPresentation).to.be.false;
+            expect(editorFactory.loadingPresentation).to.be.false;
+            expect(editorFactory.errorMessage).to.not.be.ok;
+            expect(editorFactory.apiError).to.not.be.ok;
+            done();
+          },10);
+
+        });
     });
 
     it('should fail to update the presentation because of validation errors',function(done){
@@ -486,27 +472,25 @@ describe('service: editorFactory:', function() {
       updatePresentation = true;
       currentState = 'apps.editor.workspace.htmleditor';
 
-      editorFactory.presentation.parsed = false;
-
-      sandbox.stub(presentationParser, "parsePresentation").returns(true);
-
       editorFactory.updatePresentation()
         .then(function() {
-          expect(editorFactory.presentation.parsed).to.be.true;
-          expect(editorFactory.presentation.distributionUpdated).to.be.true;
+          presentationParser.parsePresentation.should.have.been.called;
+          presentationParser.updatePresentation.should.not.have.been.called;
+          distributionParser.updateDistribution.should.not.have.been.called;
 
           expect(editorFactory.savingPresentation).to.be.true;
           expect(editorFactory.loadingPresentation).to.be.true;
+
+          setTimeout(function(){
+            expect(trackerCalled).to.equal('Presentation Updated');
+            expect(editorFactory.savingPresentation).to.be.false;
+            expect(editorFactory.loadingPresentation).to.be.false;
+            expect(editorFactory.errorMessage).to.not.be.ok;
+            expect(editorFactory.apiError).to.not.be.ok;
+            done();
+          },10);
         });
 
-      setTimeout(function(){
-        expect(trackerCalled).to.equal('Presentation Updated');
-        expect(editorFactory.savingPresentation).to.be.false;
-        expect(editorFactory.loadingPresentation).to.be.false;
-        expect(editorFactory.errorMessage).to.not.be.ok;
-        expect(editorFactory.apiError).to.not.be.ok;
-        done();
-      },10);
     });
 
     it('should show an error if fails to update the presentation',function(done){
@@ -811,8 +795,6 @@ describe('service: editorFactory:', function() {
       var addEventSpy = sinon.spy(userAuthFactory, 'addEventListenerVisibilityAPI');
       var removeEventSpy = sinon.spy(userAuthFactory, 'removeEventListenerVisibilityAPI');
 
-      sandbox.stub(presentationParser, "parsePresentation").returns(true);
-
       editorFactory.saveAndPreview()
         .then(function() {
           expect(messageBoxStub).to.not.have.been.called;
@@ -830,8 +812,6 @@ describe('service: editorFactory:', function() {
 
     it('should save and preview existing presentation', function(done) {
       var $windowOpenSpy = sinon.spy($window, 'open');
-
-      sandbox.stub(presentationParser, "parsePresentation").returns(true);
 
       editorFactory.getPresentation("presentationId").then(function() {
         editorFactory.saveAndPreview()
@@ -957,8 +937,10 @@ describe('service: editorFactory:', function() {
         expect(editorFactory.loadingPresentation).to.be.false;
         expect(editorFactory.presentation).to.be.truely;
         expect(editorFactory.presentation.name).to.equal("restored presentation");
-        expect(editorFactory.presentation.parsed).to.be.true;
-        expect(editorFactory.presentation.distributionParsed).to.be.true;
+
+        presentationParser.parsePresentation.should.have.been.called;
+        distributionParser.parseDistribution.should.have.been.called;
+
         expect(editorFactory.errorMessage).to.not.be.ok;
         expect(editorFactory.apiError).to.not.be.ok;
         done();
