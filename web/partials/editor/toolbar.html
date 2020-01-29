@@ -45,11 +45,11 @@
     <i class="fa fa-th icon-right"></i>
   </button>
   <span class="text-muted u_margin-left u_margin-right" ng-if="!factory.presentation.id" translate >editor-app.workspace.toolbar.or</span>
-  <button id="previewButton" ng-if="!(hasUnsavedChanges && hasContentEditorRole())" class="btn btn-primary" ng-click="factory.preview(factory.presentation.id)" ng-disabled="!factory.presentation.id">
+  <button id="previewButton" ng-if="!(hasUnsavedChanges && hasContentEditorRole())" class="btn btn-primary" ng-click="factory.preview(factory.presentation.id)" ng-disabled="!factory.presentation.id || factory.savingPresentation">
     {{'editor-app.workspace.toolbar.preview' | translate}}
     <i class="fa fa-play icon-right"></i>
   </button>
-  <button id="saveAndPreviewButton" class="btn btn-primary u_margin-left" ng-if="hasUnsavedChanges && hasContentEditorRole()"  ng-click="factory.saveAndPreview()">
+  <button id="saveAndPreviewButton" class="btn btn-primary u_margin-left" ng-if="hasUnsavedChanges && hasContentEditorRole()"  ng-click="factory.saveAndPreview()" ng-disabled="factory.savingPresentation">
     {{'editor-app.workspace.toolbar.saveAndPreview' | translate}}
     <i class="fa fa-play icon-right"></i>
   </button>
