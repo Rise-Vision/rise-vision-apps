@@ -9,13 +9,13 @@
   <span class="save-status u_margin-right" ng-show="factory.presentation.id">
     <last-revised revision-status-name="factory.presentation.revisionStatusName" change-date="factory.presentation.changeDate" changed-by="factory.presentation.changedBy"></last-revised>
   </span>
-  <button id="restoreButton" require-role="cp" class="btn btn-default" ng-disabled="!factory.presentation.id || (!factory.isRevised() && !hasUnsavedChanges)" ng-click="factory.confirmRestorePresentation()" >{{'common.restore' | translate}}</button>
+  <button id="restoreButton" require-role="cp" class="btn btn-default" ng-disabled="!factory.presentation.id || (!factory.isRevised() && !hasUnsavedChanges)" ng-click="factory.confirmRestorePresentation()" ng-disabled="factory.savingPresentation">{{'common.restore' | translate}}</button>
 
   <!-- Indicates a successful or positive action -->
-  <button id="saveButton" require-role="ce cp" type="submit" class="btn btn-primary btn-fixed-width" ng-click="factory.save()">
+  <button id="saveButton" require-role="ce cp" type="submit" class="btn btn-primary btn-fixed-width" ng-click="factory.save()" ng-disabled="factory.savingPresentation">
     {{ factory.savingPresentation ? ('common.saving' | translate) : ('common.save' | translate)}}
     <i class="fa fa-check icon-right"></i>
   </button>
 
-  <button id="publishButton" require-role="cp" class="btn btn-primary" ng-disabled="hasUnsavedChanges || !factory.isRevised()" ng-click="factory.publishPresentation()" >{{'common.publish' | translate}}</button>
+  <button id="publishButton" require-role="cp" class="btn btn-primary" ng-disabled="hasUnsavedChanges || !factory.isRevised()" ng-click="factory.publishPresentation()" ng-disabled="factory.savingPresentation">{{'common.publish' | translate}}</button>
 </div>
