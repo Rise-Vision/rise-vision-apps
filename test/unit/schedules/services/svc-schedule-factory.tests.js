@@ -77,6 +77,11 @@ describe('service: scheduleFactory:', function() {
         isTemplateOnboarding: sinon.stub().returns(false)
       };
     });
+    $provide.service('blueprintFactory', function() {
+      return {
+        isPlayUntilDone: sinon.stub()
+      };
+    });
 
     $provide.service('processErrorCode', function() {
       return processErrorCode = sinon.spy(function() { return 'error'; });
@@ -85,7 +90,7 @@ describe('service: scheduleFactory:', function() {
 
   }));
   var scheduleFactory, trackerCalled, updateSchedule, $state, returnList, scheduleListSpy, scheduleAddSpy, processErrorCode, $modal;
-  var $rootScope, onboardingFactory;
+  var $rootScope, onboardingFactory, blueprintFactory;
   beforeEach(function(){
     trackerCalled = undefined;
     updateSchedule = true;
@@ -102,6 +107,7 @@ describe('service: scheduleFactory:', function() {
       sinon.spy($rootScope, '$emit');
       $state = $injector.get('$state');
       onboardingFactory = $injector.get('onboardingFactory');
+      blueprintFactory = $injector.get('blueprintFactory');
     });
   });
 
@@ -317,22 +323,32 @@ describe('service: scheduleFactory:', function() {
   });
 
   describe('createFirstSchedule:', function(){
-    var firstScheduleSample = {
-      name: 'All Displays - 24/7',
-      content: [{
+    var samplePresentation, firstScheduleSample;
+
+    beforeEach(function() {
+      samplePresentation = {
         name: 'presentationName',
-        objectReference: 'presentationId',
-        duration: 10,
-        timeDefined: false,
-        type: 'presentation'
-      }],
-      distributeToAll: true,
-      timeDefined: false
-    };
+        id: 'presentationId'
+      };
+      firstScheduleSample = {
+        name: 'All Displays - 24/7',
+        content: [{
+          name: 'presentationName',
+          objectReference: 'presentationId',
+          playUntilDone: false,
+          duration: 10,
+          timeDefined: false,
+          type: 'presentation'
+        }],
+        distributeToAll: true,
+        timeDefined: false
+      };
+      
+    });
 
     it('should create first schedule and show modal', function(done) {
       returnList = {};
-      scheduleFactory.createFirstSchedule('presentationId','presentationName')
+      scheduleFactory.createFirstSchedule(samplePresentation)
       // .then(function(){
       setTimeout(function() {
         scheduleListSpy.should.have.been.calledWith({count:1});
@@ -347,15 +363,63 @@ describe('service: scheduleFactory:', function() {
 
         expect($modal.open.getCall(0).args[0].templateUrl).to.equal('partials/schedules/auto-schedule-modal.html');
         expect($modal.open.getCall(0).args[0].controller).to.equal('AutoScheduleModalController');
+        expect($modal.open.getCall(0).args[0].resolve.presentationName()).to.equal('presentationName');
 
         done();
       }, 100);
     });
 
+    describe('HTML_PRESENTATION_TYPE:', function() {
+      beforeEach(function() {
+        samplePresentation.presentationType = 'HTML Template';
+        firstScheduleSample.content[0].presentationType = 'HTML Template';
+
+        blueprintFactory.isPlayUntilDone.returns(Q.resolve(false));
+      });
+
+      it('should set correct presentation type', function(done) {
+        returnList = {};
+        scheduleFactory.createFirstSchedule(samplePresentation)
+        // .then(function(){
+        setTimeout(function() {
+          scheduleAddSpy.should.have.been.calledWith(firstScheduleSample);
+
+          done();
+        }, 100);
+      });
+
+      it('should retrieve and update playUntilDone', function(done) {
+        blueprintFactory.isPlayUntilDone.returns(Q.resolve(true));
+        firstScheduleSample.content[0].playUntilDone = true;
+
+        returnList = {};
+        scheduleFactory.createFirstSchedule(samplePresentation)
+        // .then(function(){
+        setTimeout(function() {
+          scheduleAddSpy.should.have.been.calledWith(firstScheduleSample);
+
+          done();
+        }, 100);
+      });
+
+      it('should handle failure to retrieve blueprint', function(done) {
+        blueprintFactory.isPlayUntilDone.returns(Q.reject());
+
+        returnList = {};
+        scheduleFactory.createFirstSchedule(samplePresentation)
+        // .then(function(){
+        setTimeout(function() {
+          scheduleAddSpy.should.have.been.calledWith(firstScheduleSample);
+
+          done();
+        }, 100);
+      });
+    });
+
     it('should create first schedule and redirect to onboarding', function(done) {
       returnList = {};
       onboardingFactory.isTemplateOnboarding.returns(true);
-      scheduleFactory.createFirstSchedule('presentationId','presentationName')
+      scheduleFactory.createFirstSchedule(samplePresentation)
       .then(function(){
         scheduleListSpy.should.have.been.calledWith({count:1});
 
@@ -373,7 +437,7 @@ describe('service: scheduleFactory:', function() {
 
     it('should not create twice', function(done) {
       returnList = {};
-      scheduleFactory.createFirstSchedule('presentationId','presentationName')
+      scheduleFactory.createFirstSchedule(samplePresentation)
       .then(function(){
         scheduleListSpy.should.have.been.calledWith({count:1});
 
@@ -382,7 +446,7 @@ describe('service: scheduleFactory:', function() {
         $rootScope.$emit.should.have.been.calledWith('scheduleCreated');
         expect(trackerCalled).to.equal('Schedule Created');
 
-        scheduleFactory.createFirstSchedule('presentationId','presentationName').then(function(){
+        scheduleFactory.createFirstSchedule(samplePresentation).then(function(){
           done("Error: schedule created again");
         },function(){
           scheduleListSpy.should.have.been.calledOnce;
@@ -394,7 +458,7 @@ describe('service: scheduleFactory:', function() {
 
     it('should handle error loading list', function(done) {
       returnList = false;
-      scheduleFactory.createFirstSchedule('presentationId','presentationName')
+      scheduleFactory.createFirstSchedule(samplePresentation)
       .then(null,function(){
         scheduleListSpy.should.have.been.calledOnce;
         done();
@@ -404,7 +468,7 @@ describe('service: scheduleFactory:', function() {
     it('should handle error saving schedule', function(done) {
       returnList = {};
       updateSchedule = false;
-      scheduleFactory.createFirstSchedule('presentationId','presentationName')
+      scheduleFactory.createFirstSchedule(samplePresentation)
       .then(null,function(){
         scheduleListSpy.should.have.been.calledOnce;
         done();
@@ -413,7 +477,7 @@ describe('service: scheduleFactory:', function() {
 
     it('should not create if already have schedules',function(done){
       returnList = { items: [{name:'schedule'}] };
-      scheduleFactory.createFirstSchedule('presentationId','presentationName')
+      scheduleFactory.createFirstSchedule(samplePresentation)
       .then(null, function(){
         scheduleListSpy.should.have.been.calledWith({count:1});
 
@@ -427,13 +491,13 @@ describe('service: scheduleFactory:', function() {
 
     it('should cache result',function(done){
       returnList = { items: [{name:'schedule'}] };
-      scheduleFactory.createFirstSchedule('presentationId','presentationName')
+      scheduleFactory.createFirstSchedule(samplePresentation)
       .then(null, function(){
         scheduleListSpy.should.have.been.calledWith({count:1});
         scheduleAddSpy.should.not.have.been.called;
         expect(trackerCalled).to.not.be.ok;
 
-        scheduleFactory.createFirstSchedule('presentationId','presentationName').then(function(){
+        scheduleFactory.createFirstSchedule(samplePresentation).then(function(){
           done("Error: schedule created again");
         },function(){
           scheduleListSpy.should.have.been.calledOnce;

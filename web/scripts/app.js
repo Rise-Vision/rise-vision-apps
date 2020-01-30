@@ -621,7 +621,8 @@ angular.module('risevision.apps.billing.services', [
 angular.module('risevision.schedules.services', [
   'risevision.common.header',
   'risevision.common.gapi',
-  'risevision.apps.launcher.services'
+  'risevision.apps.launcher.services',
+  'risevision.template-editor.services'
 ]);
 angular.module('risevision.schedules.filters', []);
 angular.module('risevision.schedules.directives', [

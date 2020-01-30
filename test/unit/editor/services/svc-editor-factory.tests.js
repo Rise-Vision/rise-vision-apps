@@ -341,7 +341,7 @@ describe('service: editorFactory:', function() {
       editorFactory.addPresentation();
 
       setTimeout(function(){
-        scheduleFactory.createFirstSchedule.should.have.been.called;
+        scheduleFactory.createFirstSchedule.should.have.been.calledWith(sinon.match.object);
 
         done();
       },100);

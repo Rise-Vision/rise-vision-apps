@@ -704,7 +704,7 @@ describe('service: templateEditorFactory:', function() {
         templateEditorFactory.publish(templateEditorFactory)
           .then(function() {
             setTimeout(function() {
-              scheduleFactory.createFirstSchedule.should.have.been.called;
+              scheduleFactory.createFirstSchedule.should.have.been.calledWith(templateEditorFactory.presentation);
 
               done();
             });

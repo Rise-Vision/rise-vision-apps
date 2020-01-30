@@ -41,14 +41,14 @@ angular.module('risevision.schedules.controllers')
 
           presentation.get($scope.playlistItem.objectReference).then(function (result) {
 
-              return blueprintFactory.load(result.item.productCode);
+              return blueprintFactory.isPlayUntilDone(result.item.productCode);
             })
-            .then(function () {
-              if (blueprintFactory.isPlayUntilDone() && $scope.isNew) {
+            .then(function (playUntilDone) {
+              if (playUntilDone && $scope.isNew) {
                 //When user schedules a PUD template, then set schedule item to PUD by default.
                 $scope.playlistItem.playUntilDone = true;
               }
-              if (!blueprintFactory.isPlayUntilDone()) {
+              if (!playUntilDone) {
                 $scope.playUntilDoneSupported = false;
                 $scope.playlistItem.playUntilDone = false;
               }
