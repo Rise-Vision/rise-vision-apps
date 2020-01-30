@@ -143,7 +143,7 @@ angular.module('risevision.schedules.services')
               return schedule;
             });
         } else {
-          return schedule;
+          return $q.resolve(schedule);
         }
 
       };
