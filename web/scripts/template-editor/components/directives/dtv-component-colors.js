@@ -10,6 +10,10 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
 
+          $scope.save = function () {
+            $scope.setAttributeData($scope.componentId, 'override', $scope.override);
+          };
+
           $scope.registerDirective({
             type: 'rise-data-colors',
             iconType: 'streamline',
@@ -18,8 +22,13 @@ angular.module('risevision.template-editor.directives')
             show: function () {
               element.show();
               $scope.componentId = $scope.factory.selected.id;
+              $scope.load();
             }
           });
+
+          $scope.load = function () {
+            $scope.override = $scope.getAvailableAttributeData($scope.componentId, 'override');
+          };
 
         }
       };
