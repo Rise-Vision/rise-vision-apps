@@ -143,7 +143,7 @@ angular.module('risevision.schedules.services')
               return schedule;
             });
         } else {
-          return schedule;          
+          return schedule;
         }
 
       };
@@ -154,7 +154,7 @@ angular.module('risevision.schedules.services')
           .then(function (result) {
             return _initFirstSchedule(presentation);
           })
-          .then(function(firstSchedule) {
+          .then(function (firstSchedule) {
             return schedule.add(firstSchedule);
           })
           .then(function (resp) {
@@ -180,7 +180,7 @@ angular.module('risevision.schedules.services')
                 controller: 'AutoScheduleModalController',
                 resolve: {
                   presentationName: function () {
-                    return presentationName;
+                    return presentation.name;
                   }
                 }
               });

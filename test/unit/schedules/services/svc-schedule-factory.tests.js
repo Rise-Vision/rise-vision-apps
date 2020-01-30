@@ -363,6 +363,7 @@ describe('service: scheduleFactory:', function() {
 
         expect($modal.open.getCall(0).args[0].templateUrl).to.equal('partials/schedules/auto-schedule-modal.html');
         expect($modal.open.getCall(0).args[0].controller).to.equal('AutoScheduleModalController');
+        expect($modal.open.getCall(0).args[0].resolve.presentationName()).to.equal('presentationName');
 
         done();
       }, 100);
