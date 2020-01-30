@@ -11,6 +11,8 @@ angular.module('risevision.template-editor.directives')
           $scope.factory = templateEditorFactory;
 
           $scope.save = function () {
+            $scope.setAttributeData($scope.componentId, 'base', $scope.baseColor);
+            $scope.setAttributeData($scope.componentId, 'accent', $scope.accentColor);
             $scope.setAttributeData($scope.componentId, 'override', $scope.override);
           };
 
@@ -27,6 +29,8 @@ angular.module('risevision.template-editor.directives')
           });
 
           $scope.load = function () {
+            $scope.baseColor = $scope.getAvailableAttributeData($scope.componentId, 'base');
+            $scope.accentColor = $scope.getAvailableAttributeData($scope.componentId, 'accent');
             $scope.override = $scope.getAvailableAttributeData($scope.componentId, 'override');
           };
 

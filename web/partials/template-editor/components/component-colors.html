@@ -7,5 +7,29 @@
       <label class="control-label" for="overrideBranding">Override Branding</label>
     </span>
   </div>
+</div>
+
+<div class="attribute-list-container">
+
+  <label class="control-label" for="base-color">Base Color:</label>
+  <p>Pick a dark color.</p>
+  <div class="input-group" colorpicker="rgba" colorpicker-position="bottom"
+       ng-model="baseColor">
+    <input id="base-color" type="text" class="form-control"
+           ng-model="baseColor"
+           placeholder="Enter a hex value, eg. #00FF00" ng-blur="save()">
+    <span class="input-group-addon color-wheel"></span>
+  </div>
+
+  <label class="control-label u_margin-md-top" for="accent-color">Accent Color:</label>
+  <p>Pick a light color.</p>
+  <div class="input-group" colorpicker="rgba" colorpicker-position="bottom"
+       ng-model="accentColor">
+    <input id="accent-color" type="text" class="form-control"
+           ng-model="accentColor"
+           placeholder="Enter a hex value, eg. #00FF00"
+           ng-blur="save()">
+    <span class="input-group-addon color-wheel"></span>
+  </div>
 
 </div>
