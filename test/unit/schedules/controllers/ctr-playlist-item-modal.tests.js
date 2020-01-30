@@ -50,13 +50,7 @@ describe('controller: Playlist Item Modal', function() {
     });
     $provide.service('blueprintFactory',function(){
       return {
-        isPlayUntilDone: function() {
-          return this.playUntilDone;
-        },
-        load: function(){
-          this.playUntilDone = playUntilDone;
-          return Q.resolve();
-        }
+        isPlayUntilDone: sinon.stub()
       };
     });
     $provide.service('$loading',function(){
@@ -69,7 +63,7 @@ describe('controller: Playlist Item Modal', function() {
     $provide.constant('HTML_PRESENTATION_TYPE', 'HTML Template');
   }));
 
-  var $scope, $modalInstance, $modalInstanceDismissSpy, itemUpdated, playlistItem, presentationType, playUntilDone;
+  var $scope, $modalInstance, $modalInstanceDismissSpy, itemUpdated, playlistItem, presentationType, blueprintFactory;
 
   beforeEach(function(){
     itemUpdated = false;
@@ -84,6 +78,8 @@ describe('controller: Playlist Item Modal', function() {
       $scope = $rootScope.$new();
       $modalInstance = $injector.get('$modalInstance');
       $modalInstanceDismissSpy = sinon.spy($modalInstance, 'dismiss');
+      blueprintFactory = $injector.get('blueprintFactory');
+
       $controller('playlistItemModal', {
         $scope : $scope,
         $rootScope: $rootScope,
@@ -135,70 +131,73 @@ describe('controller: Playlist Item Modal', function() {
     }, 10);
   });
 
-  it('should set playUntilDoneSupported to FALSE for HTML template', function(done) {
+  describe('playUntilDone: ', function() {
+    it('should set playUntilDoneSupported to FALSE for HTML template', function(done) {
 
-    presentationType = 'HTML Template';
-    playUntilDone = false;
+      presentationType = 'HTML Template';
+      blueprintFactory.isPlayUntilDone.returns(Q.resolve(false));
 
-    $scope.selectPresentation();
+      $scope.selectPresentation();
 
-    setTimeout(function() {
-      expect($scope.playlistItem.objectReference).to.equal('presentationId');
-      expect($scope.playUntilDoneSupported).to.equal(false);
-      
-      done();
-    }, 10);
-  });
+      setTimeout(function() {
+        expect($scope.playlistItem.objectReference).to.equal('presentationId');
+        expect($scope.playUntilDoneSupported).to.equal(false);
+        
+        done();
+      }, 10);
+    });
 
-  it('should set playUntilDoneSupported to TRUE for HTML template', function(done) {
+    it('should set playUntilDoneSupported to TRUE for HTML template', function(done) {
 
-    presentationType = 'HTML Template';
-    playUntilDone = true;
+      presentationType = 'HTML Template';
+      blueprintFactory.isPlayUntilDone.returns(Q.resolve(true));
 
-    $scope.selectPresentation();
+      $scope.selectPresentation();
 
-    setTimeout(function() {
-      expect($scope.playlistItem.objectReference).to.equal('presentationId');
-      expect($scope.playUntilDoneSupported).to.equal(true);
-      
-      done();
-    }, 10);
-  });
+      setTimeout(function() {
+        expect($scope.playlistItem.objectReference).to.equal('presentationId');
+        expect($scope.playUntilDoneSupported).to.equal(true);
+        
+        done();
+      }, 10);
+    });
 
-  it('should set playlistItem.playUntilDone to TRUE when adding a new HTML template that is PUD', function(done) {
+    it('should set playlistItem.playUntilDone to TRUE when adding a new HTML template that is PUD', function(done) {
 
-    presentationType = 'HTML Template';
-    playUntilDone = true;
-    $scope.playlistItem.playUntilDone = undefined;
-    $scope.isNew = true;
+      presentationType = 'HTML Template';
+      blueprintFactory.isPlayUntilDone.returns(Q.resolve(true));
+      $scope.playlistItem.playUntilDone = undefined;
+      $scope.isNew = true;
 
-    $scope.selectPresentation();
+      $scope.selectPresentation();
 
-    setTimeout(function() {
-      expect($scope.playlistItem.objectReference).to.equal('presentationId');
-      expect($scope.playUntilDoneSupported).to.equal(true);
-      expect($scope.playlistItem.playUntilDone).to.equal(true);
-      
-      done();
-    }, 10);
-  });
+      setTimeout(function() {
+        expect($scope.playlistItem.objectReference).to.equal('presentationId');
+        expect($scope.playUntilDoneSupported).to.equal(true);
+        expect($scope.playlistItem.playUntilDone).to.equal(true);
+        
+        done();
+      }, 10);
+    });
 
-  it('should not set playlistItem.playUntilDone to TRUE when editing existing HTML template that is PUD', function(done) {
+    it('should not set playlistItem.playUntilDone to TRUE when editing existing HTML template that is PUD', function(done) {
 
-    presentationType = 'HTML Template';
-    playUntilDone = true;
-    $scope.playlistItem.playUntilDone = false;
-    $scope.isNew = false;
+      presentationType = 'HTML Template';
+      blueprintFactory.isPlayUntilDone.returns(Q.resolve(true));
+      $scope.playlistItem.playUntilDone = false;
+      $scope.isNew = false;
 
-    $scope.selectPresentation();
+      $scope.selectPresentation();
 
-    setTimeout(function() {
-      expect($scope.playlistItem.objectReference).to.equal('presentationId');
-      expect($scope.playUntilDoneSupported).to.equal(true);
-      expect($scope.playlistItem.playUntilDone).to.equal(false);
-      
-      done();
-    }, 10);
+      setTimeout(function() {
+        expect($scope.playlistItem.objectReference).to.equal('presentationId');
+        expect($scope.playUntilDoneSupported).to.equal(true);
+        expect($scope.playlistItem.playUntilDone).to.equal(false);
+        
+        done();
+      }, 10);
+    });
+    
   });
 
 });

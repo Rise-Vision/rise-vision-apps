@@ -89,9 +89,20 @@ describe('service: blueprint factory', function() {
   });
 
   describe('isPlayUntilDone: ', function() {
+    beforeEach(function() {
+      sinon.stub(blueprintFactory, 'load').returns(Q.resolve());
+    });
+
+    it('should return a promise',function() {
+      expect(blueprintFactory.isPlayUntilDone('productCode').then).to.be.a('function');
+
+      blueprintFactory.load.should.have.been.calledWith('productCode');
+    });
 
     it('should return false if blueprintData is not populated',function() {
-      expect(blueprintFactory.isPlayUntilDone()).to.be.false;
+      return blueprintFactory.isPlayUntilDone().then(function(result) {
+        expect(result).to.be.false;
+      });
     });
 
     it('should return true if blueprintData.playUntilDone is true',function() {
@@ -99,7 +110,9 @@ describe('service: blueprint factory', function() {
         playUntilDone: true
       };
 
-      expect(blueprintFactory.isPlayUntilDone()).to.be.true;
+      return blueprintFactory.isPlayUntilDone().then(function(result) {
+        expect(result).to.be.true;
+      });
     });
 
     it('should return true if blueprintData.playUntilDone exists',function() {
@@ -107,7 +120,9 @@ describe('service: blueprint factory', function() {
         playUntilDone: "something"
       };
 
-      expect(blueprintFactory.isPlayUntilDone()).to.be.true;
+      return blueprintFactory.isPlayUntilDone().then(function(result) {
+        expect(result).to.be.true;
+      });
     });
 
     it('should return false otherwise',function() {
@@ -115,7 +130,9 @@ describe('service: blueprint factory', function() {
         playUntilDone: false
       };
 
-      expect(blueprintFactory.isPlayUntilDone()).to.be.false;
+      return blueprintFactory.isPlayUntilDone().then(function(result) {
+        expect(result).to.be.false;
+      });
     });
   });
 

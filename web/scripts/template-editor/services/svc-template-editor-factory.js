@@ -310,8 +310,7 @@ angular.module('risevision.template-editor.services')
       };
 
       var _createFirstSchedule = function () {
-        return scheduleFactory.createFirstSchedule(factory.presentation.id, factory.presentation.name, factory
-            .presentation.presentationType)
+        return scheduleFactory.createFirstSchedule(factory.presentation)
           .catch(function (err) {
             return err === 'Already have Schedules' ? $q.resolve() : $q.reject(err);
           });

@@ -2,9 +2,9 @@
 
 angular.module('risevision.schedules.services')
   .factory('scheduleFactory', ['$q', '$state', '$log', '$modal', '$rootScope', 'schedule', 'scheduleTracker',
-    'onboardingFactory', 'processErrorCode', 'VIEWER_URL',
+    'onboardingFactory', 'blueprintFactory', 'processErrorCode', 'VIEWER_URL', 'HTML_PRESENTATION_TYPE',
     function ($q, $state, $log, $modal, $rootScope, schedule, scheduleTracker, onboardingFactory,
-      processErrorCode, VIEWER_URL) {
+      blueprintFactory, processErrorCode, VIEWER_URL, HTML_PRESENTATION_TYPE) {
       var factory = {};
       var _hasSchedules;
       var _scheduleId;
@@ -109,33 +109,52 @@ angular.module('risevision.schedules.services')
         return deferred.promise;
       };
 
-      var _initFirstSchedule = function (presentationId, presentationName, presentationType) {
+      var _initFirstSchedule = function (presentation) {
         var item = {
-          name: presentationName,
-          objectReference: presentationId,
+          name: presentation.name,
+          objectReference: presentation.id,
+          playUntilDone: false,
           duration: 10,
           timeDefined: false,
           type: 'presentation'
         };
-
-        if (presentationType) {
-          item.presentationType = presentationType;
-        }
-
-        return {
+        var schedule = {
           name: 'All Displays - 24/7',
           content: [item],
           distributeToAll: true,
           timeDefined: false
         };
+
+        if (presentation.presentationType) {
+          item.presentationType = presentation.presentationType;
+        }
+
+        if (presentation.presentationType === HTML_PRESENTATION_TYPE) {
+          return blueprintFactory.isPlayUntilDone(presentation.productCode)
+            .then(function (playUntilDone) {
+              if (playUntilDone) {
+                item.playUntilDone = true;
+              }
+            })
+            .catch(function (e) {
+              $log.error(factory.errorMessage, e);
+            })
+            .then(function () {
+              return schedule;
+            });
+        } else {
+          return schedule;          
+        }
+
       };
 
-      factory.createFirstSchedule = function (presentationId, presentationName, presentationType) {
+      factory.createFirstSchedule = function (presentation) {
 
         return _checkFirstSchedule()
           .then(function (result) {
-            var firstSchedule = _initFirstSchedule(presentationId, presentationName, presentationType);
-
+            return _initFirstSchedule(presentation);
+          })
+          .then(function(firstSchedule) {
             return schedule.add(firstSchedule);
           })
           .then(function (resp) {

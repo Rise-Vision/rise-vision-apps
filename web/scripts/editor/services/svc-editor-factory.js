@@ -192,7 +192,7 @@ angular.module('risevision.editor.services')
                 notify: false,
                 location: 'replace'
               }).then(function () {
-                scheduleFactory.createFirstSchedule(resp.item.id, resp.item.name, resp.item.presentationType);
+                scheduleFactory.createFirstSchedule(resp.item);
               });
               deferred.resolve(resp.item.id);
             }
