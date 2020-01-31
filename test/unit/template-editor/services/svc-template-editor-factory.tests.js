@@ -64,16 +64,14 @@ describe('service: templateEditorFactory:', function() {
       return presentationTracker;
     });
 
-    $provide.service('scheduleFactory', function() {
-      return {
-        createFirstSchedule: sandbox.stub()
-      };
+    $provide.service('createFirstSchedule', function() {
+      return sandbox.stub();
     });
 
   }));
 
   var $state, templateEditorFactory, templateEditorUtils, blueprintFactory, presentation, processErrorCode,
-    HTML_PRESENTATION_TYPE, storeProduct, plansFactory, scheduleFactory, brandingFactory;
+    HTML_PRESENTATION_TYPE, storeProduct, plansFactory, createFirstSchedule, brandingFactory;
 
   beforeEach(function() {
     inject(function($injector) {
@@ -82,7 +80,7 @@ describe('service: templateEditorFactory:', function() {
 
       presentation = $injector.get('presentation');
       plansFactory = $injector.get('plansFactory');
-      scheduleFactory = $injector.get('scheduleFactory');
+      createFirstSchedule = $injector.get('createFirstSchedule');
       brandingFactory = $injector.get('brandingFactory');
       storeProduct = $injector.get('storeProduct');
       templateEditorUtils = $injector.get('templateEditorUtils');
@@ -590,7 +588,7 @@ describe('service: templateEditorFactory:', function() {
 
   describe('publish: ', function() {
     beforeEach(function (done) {
-      scheduleFactory.createFirstSchedule.returns(Q.resolve());
+      createFirstSchedule.returns(Q.resolve());
       sandbox.stub(presentation, 'get').returns(Q.resolve({
         item: {
           id: 'presentationId',
@@ -704,7 +702,7 @@ describe('service: templateEditorFactory:', function() {
         templateEditorFactory.publish(templateEditorFactory)
           .then(function() {
             setTimeout(function() {
-              scheduleFactory.createFirstSchedule.should.have.been.calledWith(templateEditorFactory.presentation);
+              createFirstSchedule.should.have.been.calledWith(templateEditorFactory.presentation);
 
               done();
             });

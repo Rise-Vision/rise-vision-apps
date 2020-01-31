@@ -2,9 +2,9 @@
 
 angular.module('risevision.schedules.controllers')
   .controller('playlistItemModal', ['$scope', '$modal', '$modalInstance', '$loading',
-    'playlistFactory', 'playlistItem', 'userState', 'presentation', 'blueprintFactory', 'HTML_PRESENTATION_TYPE',
+    'playlistFactory', 'playlistItem', 'userState', 'presentationFactory',
     function ($scope, $modal, $modalInstance, $loading, playlistFactory, playlistItem,
-      userState, presentation, blueprintFactory, HTML_PRESENTATION_TYPE) {
+      userState, presentationFactory) {
       $scope.companyId = userState.getSelectedCompanyId();
       $scope.playlistItem = angular.copy(playlistItem);
       $scope.isNew = playlistFactory.isNew(playlistItem);
@@ -32,38 +32,19 @@ angular.module('risevision.schedules.controllers')
       };
 
       function configurePlayUntilDone() {
-
         $scope.playUntilDoneSupported = true;
+        $scope.loadingTemplate = true;
 
-        if ($scope.playlistItem.presentationType === HTML_PRESENTATION_TYPE) {
-
-          $scope.loadingTemplate = true;
-
-          presentation.get($scope.playlistItem.objectReference).then(function (result) {
-
-              return blueprintFactory.isPlayUntilDone(result.item.productCode);
-            })
-            .then(function (playUntilDone) {
-              if (playUntilDone && $scope.isNew) {
-                //When user schedules a PUD template, then set schedule item to PUD by default.
-                $scope.playlistItem.playUntilDone = true;
-              }
-              if (!playUntilDone) {
-                $scope.playUntilDoneSupported = false;
-                $scope.playlistItem.playUntilDone = false;
-              }
-            })
-            .catch(function () {
-              $scope.playUntilDoneSupported = false;
-              $scope.playlistItem.playUntilDone = false;
-            })
-            .finally(function () {
-              $scope.loadingTemplate = false;
-            });
-
-        } else {
-          $scope.loadingTemplate = false;
-        }
+        presentationFactory.getPresentationCached($scope.playlistItem.objectReference)
+          .then(function (presentation) {
+            return playlistFactory.initPlayUntilDone($scope.playlistItem, presentation, $scope.isNew);
+          })
+          .then(function (playUntilDone) {
+            $scope.playUntilDoneSupported = playUntilDone;
+          })
+          .finally(function () {
+            $scope.loadingTemplate = false;
+          });
       }
 
       $scope.save = function () {

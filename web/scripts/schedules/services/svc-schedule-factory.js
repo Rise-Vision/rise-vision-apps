@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('risevision.schedules.services')
-  .factory('scheduleFactory', ['$q', '$state', '$log', '$modal', '$rootScope', 'schedule', 'scheduleTracker',
-    'onboardingFactory', 'blueprintFactory', 'processErrorCode', 'VIEWER_URL', 'HTML_PRESENTATION_TYPE',
-    function ($q, $state, $log, $modal, $rootScope, schedule, scheduleTracker, onboardingFactory,
-      blueprintFactory, processErrorCode, VIEWER_URL, HTML_PRESENTATION_TYPE) {
+  .factory('scheduleFactory', ['$q', '$state', '$log', '$rootScope', 'schedule', 'scheduleTracker',
+    'processErrorCode', 'VIEWER_URL', 'HTML_PRESENTATION_TYPE',
+    function ($q, $state, $log, $rootScope, schedule, scheduleTracker, processErrorCode,
+      VIEWER_URL, HTML_PRESENTATION_TYPE) {
       var factory = {};
       var _hasSchedules;
       var _scheduleId;
@@ -23,7 +23,8 @@ angular.module('risevision.schedules.services')
         factory.schedule = {
           content: [],
           distributeToAll: false,
-          distribution: []
+          distribution: [],
+          timeDefined: false
         };
 
         _clearMessages();
@@ -31,8 +32,10 @@ angular.module('risevision.schedules.services')
 
       _init();
 
-      factory.newSchedule = function () {
-        scheduleTracker('Add Schedule');
+      factory.newSchedule = function (skipTracking) {
+        if (!skipTracking) {
+          scheduleTracker('Add Schedule');
+        }
 
         _init();
       };
@@ -49,6 +52,8 @@ angular.module('risevision.schedules.services')
 
         schedule.get(_scheduleId)
           .then(function (result) {
+            _hasSchedules = true;
+
             factory.schedule = result.item;
 
             deferred.resolve();
@@ -71,7 +76,7 @@ angular.module('risevision.schedules.services')
 
           // Load status in background. Used by Template Editor to enable/disable Publish button for first time users
           // The objective is being able to associate the Auto Schedule Modal with a user action (in this case, Publish)
-          _checkFirstSchedule()
+          factory.checkFirstSchedule()
             .then(function () {
               _hasSchedules = false;
             })
@@ -85,7 +90,7 @@ angular.module('risevision.schedules.services')
         return _hasSchedules;
       };
 
-      var _checkFirstSchedule = function () {
+      factory.checkFirstSchedule = function () {
         var deferred = $q.defer();
 
         if (!_hasSchedules) {
@@ -109,54 +114,14 @@ angular.module('risevision.schedules.services')
         return deferred.promise;
       };
 
-      var _initFirstSchedule = function (presentation) {
-        var item = {
-          name: presentation.name,
-          objectReference: presentation.id,
-          playUntilDone: false,
-          duration: 10,
-          timeDefined: false,
-          type: 'presentation'
-        };
-        var schedule = {
-          name: 'All Displays - 24/7',
-          content: [item],
-          distributeToAll: true,
-          timeDefined: false
-        };
+      factory.addSchedule = function () {
+        _clearMessages();
 
-        if (presentation.presentationType) {
-          item.presentationType = presentation.presentationType;
-        }
+        //show loading spinner
+        factory.loadingSchedule = true;
+        factory.savingSchedule = true;
 
-        if (presentation.presentationType === HTML_PRESENTATION_TYPE) {
-          return blueprintFactory.isPlayUntilDone(presentation.productCode)
-            .then(function (playUntilDone) {
-              if (playUntilDone) {
-                item.playUntilDone = true;
-              }
-            })
-            .catch(function (e) {
-              $log.error(factory.errorMessage, e);
-            })
-            .then(function () {
-              return schedule;
-            });
-        } else {
-          return $q.resolve(schedule);
-        }
-
-      };
-
-      factory.createFirstSchedule = function (presentation) {
-
-        return _checkFirstSchedule()
-          .then(function (result) {
-            return _initFirstSchedule(presentation);
-          })
-          .then(function (firstSchedule) {
-            return schedule.add(firstSchedule);
-          })
+        return schedule.add(factory.schedule)
           .then(function (resp) {
             if (resp && resp.item && resp.item.id) {
               _hasSchedules = true;
@@ -165,46 +130,11 @@ angular.module('risevision.schedules.services')
 
               scheduleTracker('Schedule Created', resp.item.id, resp.item.name);
 
-              return $q.resolve();
-            } else {
-              return $q.reject('Error adding Schedule');
-            }
-          })
-          .then(function () {
-            if (onboardingFactory.isTemplateOnboarding()) {
-              $state.go('apps.launcher.onboarding');
-            } else {
-              $modal.open({
-                templateUrl: 'partials/schedules/auto-schedule-modal.html',
-                size: 'md',
-                controller: 'AutoScheduleModalController',
-                resolve: {
-                  presentationName: function () {
-                    return presentation.name;
-                  }
-                }
-              });
-            }
-          });
-      };
-
-      factory.addSchedule = function () {
-        _clearMessages();
-
-        //show loading spinner
-        factory.loadingSchedule = true;
-        factory.savingSchedule = true;
-
-        schedule.add(factory.schedule)
-          .then(function (resp) {
-            if (resp && resp.item && resp.item.id) {
-              $rootScope.$emit('scheduleCreated');
-
-              scheduleTracker('Schedule Created', resp.item.id, resp.item.name);
-
-              $state.go('apps.schedules.details', {
-                scheduleId: resp.item.id
-              });
+              if ($state.current.name === 'apps.schedules.add') {
+                $state.go('apps.schedules.details', {
+                  scheduleId: resp.item.id
+                });
+              }
             }
           })
           .then(null, function (e) {
@@ -250,7 +180,7 @@ angular.module('risevision.schedules.services')
         //show loading spinner
         factory.loadingSchedule = true;
 
-        schedule.delete(_scheduleId)
+        return schedule.delete(_scheduleId)
           .then(function () {
             _hasSchedules = undefined;
             scheduleTracker('Schedule Deleted', _scheduleId, factory.schedule.name);

@@ -9,10 +9,20 @@ angular.module('risevision.editor.services')
       factory.loadingPresentation = false;
       factory.apiError = '';
 
-      factory.getPresentationCached = function (presentationId) {
-        var presentation = _.find(_presentations, {
+      var _find = function (presentationId) {
+        return _.find(_presentations, {
           id: presentationId
         });
+      };
+
+      factory.setPresentation = function (presentation) {
+        if (presentation.id && !_find(presentation.id)) {
+          _presentations.push(presentation);
+        }
+      };
+
+      factory.getPresentationCached = function (presentationId) {
+        var presentation = _find(presentationId);
 
         if (presentation) {
           return $q.resolve(presentation);
@@ -29,7 +39,7 @@ angular.module('risevision.editor.services')
 
         presentation.get(presentationId)
           .then(function (result) {
-            _presentations.push(result.item);
+            factory.setPresentation(result.item);
 
             deferred.resolve(result.item);
           })

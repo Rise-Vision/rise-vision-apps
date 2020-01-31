@@ -4,14 +4,9 @@ describe('controller: Playlist Item Modal', function() {
   beforeEach(module(function ($provide) {
     $provide.service('$modal',function(){
       return {
-        open : function(){
-          var deferred = Q.defer();
-          deferred.resolve(['presentationId', 'name', presentationType]);
-
-          return {
-            result: deferred.promise
-          };
-        }
+        open: sinon.stub().returns({
+          result: Q.resolve(['presentationId', 'name', presentationType])
+        })
       };
     });
     $provide.service('$modalInstance',function(){
@@ -31,7 +26,8 @@ describe('controller: Playlist Item Modal', function() {
         },
         isNew: function() {
           return true;
-        }
+        },
+        initPlayUntilDone: sinon.stub().returns(Q.resolve())
       }
     });
     $provide.service('userState', function() {
@@ -41,16 +37,9 @@ describe('controller: Playlist Item Modal', function() {
         }
       };
     });
-    $provide.service('presentation',function(){
+    $provide.service('presentationFactory',function(){
       return {
-        get: function(){
-          return Q.resolve({item: {productCode: '123'}});
-        }
-      };
-    });
-    $provide.service('blueprintFactory',function(){
-      return {
-        isPlayUntilDone: sinon.stub()
+        getPresentationCached: sinon.stub().returns(Q.resolve('presentation'))
       };
     });
     $provide.service('$loading',function(){
@@ -60,16 +49,16 @@ describe('controller: Playlist Item Modal', function() {
       };
     });
     $provide.value('playlistItem', playlistItem);
-    $provide.constant('HTML_PRESENTATION_TYPE', 'HTML Template');
   }));
 
-  var $scope, $modalInstance, $modalInstanceDismissSpy, itemUpdated, playlistItem, presentationType, blueprintFactory;
+  var $scope, $modalInstance, $modalInstanceDismissSpy, itemUpdated, playlistItem, presentationType, playlistFactory, presentationFactory;
 
   beforeEach(function(){
     itemUpdated = false;
     playlistItem = {
       name: 'Some Item',
-      type: 'url'
+      type: 'url',
+      objectReference: 'objectReference'
     };
     
     presentationType= '';
@@ -78,7 +67,8 @@ describe('controller: Playlist Item Modal', function() {
       $scope = $rootScope.$new();
       $modalInstance = $injector.get('$modalInstance');
       $modalInstanceDismissSpy = sinon.spy($modalInstance, 'dismiss');
-      blueprintFactory = $injector.get('blueprintFactory');
+      playlistFactory = $injector.get('playlistFactory');
+      presentationFactory = $injector.get('presentationFactory');
 
       $controller('playlistItemModal', {
         $scope : $scope,
@@ -86,7 +76,7 @@ describe('controller: Playlist Item Modal', function() {
         $modalInstance : $modalInstance,
         $modal : $injector.get('$modal'),
         userState: $injector.get('userState'),
-        playlistFactory: $injector.get('playlistFactory'),
+        playlistFactory: playlistFactory,
         playlistItem: $injector.get('playlistItem')
       });
       $scope.$digest();
@@ -120,79 +110,59 @@ describe('controller: Playlist Item Modal', function() {
     $modalInstanceDismissSpy.should.have.been.called;
   });
   
-  it('should populate open presentation selector and update id', function(done) {
-    $scope.selectPresentation();
+  describe('selectPresentation:', function(done) {
+    it('should get cached presentation:', function(done) {
+      $scope.selectPresentation();
 
-    setTimeout(function() {
-      expect($scope.playlistItem.objectReference).to.equal('presentationId');
-      expect($scope.playUntilDoneSupported).to.equal(true);
-      
-      done();
-    }, 10);
+      expect($scope.loadingTemplate).to.be.true;
+
+      setTimeout(function() {
+        expect($scope.loadingTemplate).to.be.false;
+
+        presentationFactory.getPresentationCached.should.have.been.calledWith('objectReference');
+        
+        done();
+      }, 10);
+    });
+
+    it('should init playlist item playUntilDone', function(done) {
+      $scope.selectPresentation();
+
+      setTimeout(function() {
+        var updatedPlaylistItem = angular.copy(playlistItem);
+        updatedPlaylistItem.objectReference = 'presentationId';
+        updatedPlaylistItem.presentationType = '';
+
+        playlistFactory.initPlayUntilDone.should.have.been.calledWith(updatedPlaylistItem, 'presentation', true);
+
+        expect($scope.playUntilDoneSupported).to.not.be.ok;
+        
+        done();
+      }, 10);
+    });
+
   });
 
-  describe('playUntilDone: ', function() {
-    it('should set playUntilDoneSupported to FALSE for HTML template', function(done) {
-
-      presentationType = 'HTML Template';
-      blueprintFactory.isPlayUntilDone.returns(Q.resolve(false));
+  describe('_configurePlayUntilDone:', function() {
+    it('should set playUntilDoneSupported to FALSE if initPlayUntilDone resolves false', function(done) {
+      playlistFactory.initPlayUntilDone.returns(Q.resolve(false));
 
       $scope.selectPresentation();
 
       setTimeout(function() {
-        expect($scope.playlistItem.objectReference).to.equal('presentationId');
-        expect($scope.playUntilDoneSupported).to.equal(false);
+        expect($scope.playUntilDoneSupported).to.be.false;
         
         done();
       }, 10);
     });
 
-    it('should set playUntilDoneSupported to TRUE for HTML template', function(done) {
-
-      presentationType = 'HTML Template';
-      blueprintFactory.isPlayUntilDone.returns(Q.resolve(true));
+    it('should set playUntilDoneSupported to TRUE if initPlayUntilDone resolves true', function(done) {
+      playlistFactory.initPlayUntilDone.returns(Q.resolve(true));
 
       $scope.selectPresentation();
 
       setTimeout(function() {
-        expect($scope.playlistItem.objectReference).to.equal('presentationId');
-        expect($scope.playUntilDoneSupported).to.equal(true);
-        
-        done();
-      }, 10);
-    });
-
-    it('should set playlistItem.playUntilDone to TRUE when adding a new HTML template that is PUD', function(done) {
-
-      presentationType = 'HTML Template';
-      blueprintFactory.isPlayUntilDone.returns(Q.resolve(true));
-      $scope.playlistItem.playUntilDone = undefined;
-      $scope.isNew = true;
-
-      $scope.selectPresentation();
-
-      setTimeout(function() {
-        expect($scope.playlistItem.objectReference).to.equal('presentationId');
-        expect($scope.playUntilDoneSupported).to.equal(true);
-        expect($scope.playlistItem.playUntilDone).to.equal(true);
-        
-        done();
-      }, 10);
-    });
-
-    it('should not set playlistItem.playUntilDone to TRUE when editing existing HTML template that is PUD', function(done) {
-
-      presentationType = 'HTML Template';
-      blueprintFactory.isPlayUntilDone.returns(Q.resolve(true));
-      $scope.playlistItem.playUntilDone = false;
-      $scope.isNew = false;
-
-      $scope.selectPresentation();
-
-      setTimeout(function() {
-        expect($scope.playlistItem.objectReference).to.equal('presentationId');
-        expect($scope.playUntilDoneSupported).to.equal(true);
-        expect($scope.playlistItem.playUntilDone).to.equal(false);
+        expect($scope.playUntilDoneSupported).to.be.true;
         
         done();
       }, 10);
