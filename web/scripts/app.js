@@ -135,6 +135,7 @@ angular.module('risevision.apps', [
                   plansFactory.showPlansModal();
                 }
 
+                $location.replace();
                 $state.go('apps.launcher.home');
               });
             }
@@ -143,9 +144,10 @@ angular.module('risevision.apps', [
 
         .state('common.auth.signin', {
           url: '/signin',
-          controller: ['$state', 'canAccessApps',
-            function ($state, canAccessApps) {
+          controller: ['$state', 'canAccessApps', '$location',
+            function ($state, canAccessApps, $location) {
               canAccessApps().then(function () {
+                $location.replace();
                 $state.go('apps.launcher.home');
               });
             }
@@ -192,9 +194,10 @@ angular.module('risevision.apps', [
 
         .state('apps.schedules.home', {
           url: '/schedules',
-          controller: ['canAccessApps', '$state',
-            function (canAccessApps, $state) {
+          controller: ['canAccessApps', '$state', '$location',
+            function (canAccessApps, $state, $location) {
               canAccessApps().then(function () {
+                $location.replace();
                 $state.go('apps.schedules.list');
               });
             }
@@ -262,9 +265,10 @@ angular.module('risevision.apps', [
 
         .state('apps.displays.home', {
           url: '/displays',
-          controller: ['canAccessApps', '$state',
-            function (canAccessApps, $state) {
+          controller: ['canAccessApps', '$state', '$location',
+            function (canAccessApps, $state, $location) {
               canAccessApps().then(function () {
+                $location.replace();
                 $state.go('apps.displays.list');
               });
             }
@@ -353,9 +357,10 @@ angular.module('risevision.apps', [
 
         .state('apps.editor.home', {
           url: '/editor',
-          controller: ['canAccessApps', '$state',
-            function (canAccessApps, $state) {
+          controller: ['canAccessApps', '$state', '$location',
+            function (canAccessApps, $state, $location) {
               canAccessApps().then(function () {
+                $location.replace();
                 $state.go('apps.editor.list');
               });
             }
