@@ -60,7 +60,7 @@ angular.module('risevision.template-editor.services')
 
         presentationTracker('HTML Template Copied', productDetails.productCode, productDetails.name);
 
-        return blueprintFactory.load(factory.presentation.productCode)
+        return blueprintFactory.getBlueprintCached(factory.presentation.productCode)
           .then(null, function (e) {
             _showErrorMessage('add', e);
             return $q.reject(e);
@@ -161,7 +161,7 @@ angular.module('risevision.template-editor.services')
           .then(function (result) {
             _setPresentation(result.item);
 
-            return blueprintFactory.load(factory.presentation.productCode);
+            return blueprintFactory.getBlueprintCached(factory.presentation.productCode);
           })
           .then(function () {
             deferred.resolve();
