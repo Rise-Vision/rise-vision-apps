@@ -1,8 +1,8 @@
-/*jshint expr, );true */
+/*jshint expr:true */
 
 'use strict';
 
-describe.only('directive, ); page title', function() {
+describe('directive: page title', function() {
   beforeEach(module('risevision.apps.directives'));
 
   var $rootScope, $timeout, $state, elem;
