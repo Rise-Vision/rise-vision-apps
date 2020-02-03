@@ -16,6 +16,8 @@ angular.module('risevision.template-editor.directives')
             $scope.setAttributeData($scope.componentId, 'override', $scope.override);
           };
 
+          $scope.$on('colorpicker-selected', $scope.save);
+
           $scope.registerDirective({
             type: 'rise-data-colors',
             iconType: 'streamline',
