@@ -110,9 +110,8 @@ describe('directive: page title', function() {
     checkState('apps.editor.workspace', 'Edit Presentation');
     checkState('apps.editor.workspace.artboard', 'Edit Presentation');
     checkState('apps.editor.workspace.htmleditor', 'Edit Presentation');
-
-    checkState('apps.editor.templates', 'Edit HTML Presentation');
-    checkState('apps.editor.templates.edit', 'Edit HTML Presentation');
+    checkState('apps.editor.templates', 'Edit Presentation');
+    checkState('apps.editor.templates.edit', 'Edit Presentation');
 
     checkState('apps.storage', 'Storage');
     checkState('apps.storage.home', 'Storage');
