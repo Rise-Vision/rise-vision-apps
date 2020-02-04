@@ -47,7 +47,7 @@ describe('service: templateEditorFactory:', function() {
     $provide.factory('blueprintFactory', function() {
       return blueprintFactory = {
         blueprintData: {},
-        load: function() {
+        getBlueprintCached: function() {
           return Q.resolve(blueprintFactory.blueprintData);
         }
       };
@@ -485,7 +485,7 @@ describe('service: templateEditorFactory:', function() {
           templateAttributeData: '{ "attribute1": "value1" }'
         }
       }));
-      sandbox.stub(blueprintFactory, 'load').rejects();
+      sandbox.stub(blueprintFactory, 'getBlueprintCached').rejects();
 
       templateEditorFactory.getPresentation('presentationId')
       .then(function() {
