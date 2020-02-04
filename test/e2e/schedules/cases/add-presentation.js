@@ -59,7 +59,7 @@ var AddPresentationScenarios = function() {
         describe('Given a user clicks on the Presentation button', function () {
           before(function () {
             scheduleAddPage.getAddPresentationItemButton().click();
-            helper.wait(presentationModalPage.getAddPresentationModal(), 'Add Presentation Modal');
+            helper.wait(presentationModalPage.getAddPresentationModal(), 'Add Presentations Modal');
           });
 
           it('should open the Add Presentation Modal', function () {
@@ -68,7 +68,7 @@ var AddPresentationScenarios = function() {
 
           it('should show modal title', function () {
 
-            expect(presentationModalPage.getModalTitle().getText()).to.eventually.equal('Select Presentation');
+            expect(presentationModalPage.getModalTitle().getText()).to.eventually.equal('Select Presentations');
           });
 
           it('should show a search box', function () {
@@ -95,20 +95,14 @@ var AddPresentationScenarios = function() {
                 presentationModalPage.getPresentationItems().get(0).click();
               });
             });
-            it('should show the playlist item dialog', function () {
-              helper.wait(playlistItemModalPage.getPlaylistItemModal(), 'Playlist Item Modal').then(function () {
-                expect(playlistItemModalPage.getPlaylistItemModal().isDisplayed()).to.eventually.be.true;
-                expect(playlistItemModalPage.getModalTitle().getText()).to.eventually.equal('Add Playlist Item');
-                expect(playlistItemModalPage.getNameTextbox().getAttribute('value')).to.eventually.equal(presentationItemName);
-                helper.wait(playlistItemModalPage.getPresentationNameField(), 'Playlist Item Modal').then(function () {
-                  expect(playlistItemModalPage.getPresentationNameField().getText()).to.eventually.equal(presentationItemName);
-                });
-              });
+
+            it('should select the presentation and close modal', function() {
+              presentationModalPage.getSelectPresentationsButton().click();
+
+              helper.waitDisappear(presentationModalPage.getAddPresentationModal(), 'Add Presentations Modal');
             });
 
             it('should add the playlist item', function () {
-              playlistItemModalPage.getSaveButton().click();
-
               expect(scheduleAddPage.getPlaylistItems().get(0).isDisplayed()).to.eventually.be.true;
               expect(playlistPage.getPresentationNameCell().get(0).getText()).to.eventually.equal(presentationItemName);
             });

@@ -10,13 +10,13 @@ angular.module('risevision.editor.services')
     'presentation', 'presentationParser', 'distributionParser',
     'presentationTracker', 'storeProduct', 'VIEWER_URL', 'REVISION_STATUS_REVISED',
     'REVISION_STATUS_PUBLISHED', 'DEFAULT_LAYOUT',
-    '$modal', '$rootScope', '$window', 'scheduleFactory', 'processErrorCode', 'messageBox',
+    '$modal', '$rootScope', '$window', 'createFirstSchedule', 'processErrorCode', 'messageBox',
     '$templateCache', '$log', 'presentationUtils', 'showLegacyWarning',
     function ($q, $state, userState, userAuthFactory, presentation,
       presentationParser, distributionParser, presentationTracker, storeProduct,
       VIEWER_URL, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED,
       DEFAULT_LAYOUT, $modal, $rootScope, $window,
-      scheduleFactory, processErrorCode, messageBox, $templateCache, $log,
+      createFirstSchedule, processErrorCode, messageBox, $templateCache, $log,
       presentationUtils, showLegacyWarning) {
       var factory = {};
       var JSON_PARSE_ERROR = 'JSON parse error';
@@ -192,7 +192,7 @@ angular.module('risevision.editor.services')
                 notify: false,
                 location: 'replace'
               }).then(function () {
-                scheduleFactory.createFirstSchedule(resp.item);
+                createFirstSchedule(resp.item);
               });
               deferred.resolve(resp.item.id);
             }

@@ -1,4 +1,5 @@
 'use strict';
+
 describe('service: scheduleFactory:', function() {
   beforeEach(module('risevision.schedules.services'));
   beforeEach(module(function ($provide) {
@@ -7,8 +8,8 @@ describe('service: scheduleFactory:', function() {
     $provide.service('schedule',function () {
       return {
         _schedule: {
-          id: "scheduleId",
-          name: "some schedule"
+          id: 'scheduleId',
+          name: 'some schedule'
         },
         list: function() {
           var deferred = Q.defer();
@@ -64,18 +65,9 @@ describe('service: scheduleFactory:', function() {
     });
     $provide.service('$state',function(){
       return {
-        go : sinon.stub()
+        go : sinon.stub(),
+        current: {}
       }
-    });
-    $provide.service('$modal',function(){
-      return {
-        open: sinon.stub()
-      };
-    });
-    $provide.service('onboardingFactory', function() {
-      return {
-        isTemplateOnboarding: sinon.stub().returns(false)
-      };
     });
     $provide.service('blueprintFactory', function() {
       return {
@@ -89,8 +81,8 @@ describe('service: scheduleFactory:', function() {
     $provide.value('VIEWER_URL', 'http://rvaviewer-test.appspot.com');
 
   }));
-  var scheduleFactory, trackerCalled, updateSchedule, $state, returnList, scheduleListSpy, scheduleAddSpy, processErrorCode, $modal;
-  var $rootScope, onboardingFactory, blueprintFactory;
+  var scheduleFactory, trackerCalled, updateSchedule, $state, returnList, scheduleListSpy, scheduleAddSpy, processErrorCode;
+  var $rootScope, blueprintFactory;
   beforeEach(function(){
     trackerCalled = undefined;
     updateSchedule = true;
@@ -102,22 +94,20 @@ describe('service: scheduleFactory:', function() {
       scheduleListSpy = sinon.spy(schedule,'list');
       scheduleAddSpy = sinon.spy(schedule,'add');
 
-      $modal = $injector.get('$modal');
       $rootScope = $injector.get('$rootScope');
       sinon.spy($rootScope, '$emit');
       $state = $injector.get('$state');
-      onboardingFactory = $injector.get('onboardingFactory');
       blueprintFactory = $injector.get('blueprintFactory');
     });
   });
 
   it('should exist',function(){
-    expect(scheduleFactory).to.be.truely;
+    expect(scheduleFactory).to.be.ok;
 
-    expect(scheduleFactory.schedule).to.be.truely;
+    expect(scheduleFactory.schedule).to.be.ok;
     expect(scheduleFactory.loadingSchedule).to.be.false;
     expect(scheduleFactory.savingSchedule).to.be.false;
-    expect(scheduleFactory.apiError).to.not.be.truely;
+    expect(scheduleFactory.apiError).to.not.be.ok;
 
     expect(scheduleFactory.newSchedule).to.be.a('function');
     expect(scheduleFactory.getSchedule).to.be.a('function');
@@ -128,28 +118,34 @@ describe('service: scheduleFactory:', function() {
   });
 
   it('should initialize',function(){
-    expect(scheduleFactory.schedule).to.deep.equal({content: [], distributeToAll: false, distribution: []});
-    expect(scheduleFactory.scheduleId).to.not.be.truely;
+    expect(scheduleFactory.schedule).to.deep.equal({content: [], distributeToAll: false, distribution: [], timeDefined: false});
   });
 
-  it('newSchedule: should reset the schedule',function(){
-    scheduleFactory.schedule.id = 'scheduleId';
-    scheduleFactory.scheduleId = 'scheduleId';
+  describe('newSchedule:', function() {
+    it('should reset the schedule',function(){
+      scheduleFactory.schedule.id = 'scheduleId';
 
-    scheduleFactory.newSchedule();
+      scheduleFactory.newSchedule();
 
-    expect(trackerCalled).to.equal('Add Schedule');
+      expect(trackerCalled).to.equal('Add Schedule');
 
-    expect(scheduleFactory.schedule).to.deep.equal({content: [], distributeToAll: false, distribution: []});
-    expect(scheduleFactory.scheduleId).to.not.be.truely;
+      expect(scheduleFactory.schedule).to.deep.equal({content: [], distributeToAll: false, distribution: [], timeDefined: false});
+    });
+
+    it('should not call tracker if param is true',function(){
+      scheduleFactory.newSchedule(true);
+
+      expect(trackerCalled).to.not.be.ok;
+    });
+    
   });
 
   describe('getSchedule:',function(){
-    it("should get the schedule",function(done){
-      scheduleFactory.getSchedule("scheduleId")
+    it('should get the schedule',function(done){
+      scheduleFactory.getSchedule('scheduleId')
       .then(function() {
-        expect(scheduleFactory.schedule).to.be.truely;
-        expect(scheduleFactory.schedule.name).to.equal("some schedule");
+        expect(scheduleFactory.schedule).to.be.ok;
+        expect(scheduleFactory.schedule.name).to.equal('some schedule');
 
         setTimeout(function() {
           expect(scheduleFactory.loadingSchedule).to.be.false;
@@ -158,12 +154,12 @@ describe('service: scheduleFactory:', function() {
         }, 10);
       })
       .then(null, function() {
-        done("error");
+        done('error');
       })
       .then(null,done);
     });
 
-    it("should handle failure to get schedule correctly",function(done){
+    it('should handle failure to get schedule correctly',function(done){
       updateSchedule = false;
 
       scheduleFactory.getSchedule()
@@ -172,7 +168,7 @@ describe('service: scheduleFactory:', function() {
       })
       .then(null, function() {
         expect(scheduleFactory.errorMessage).to.be.ok;
-        expect(scheduleFactory.errorMessage).to.equal("Failed to get Schedule.");
+        expect(scheduleFactory.errorMessage).to.equal('Failed to get Schedule.');
         processErrorCode.should.have.been.calledWith('Schedule', 'get', sinon.match.object);
         expect(scheduleFactory.apiError).to.be.ok;
 
@@ -196,13 +192,26 @@ describe('service: scheduleFactory:', function() {
       expect(scheduleFactory.loadingSchedule).to.be.true;
 
       setTimeout(function(){
-        $state.go.should.have.been.calledWith('apps.schedules.details');
+        $state.go.should.not.have.been.called;
         $rootScope.$emit.should.have.been.calledWith('scheduleCreated');
         expect(trackerCalled).to.equal('Schedule Created');
         expect(scheduleFactory.savingSchedule).to.be.false;
         expect(scheduleFactory.loadingSchedule).to.be.false;
         expect(scheduleFactory.errorMessage).to.not.be.ok;
         expect(scheduleFactory.apiError).to.not.be.ok;
+
+        done();
+      },10);
+    });
+
+    it('should only redirect from apps.schedules.add',function(done){
+      $state.current.name = 'apps.schedules.add';
+      updateSchedule = true;
+
+      scheduleFactory.addSchedule();
+
+      setTimeout(function(){
+        $state.go.should.have.been.calledWith('apps.schedules.details');
 
         done();
       },10);
@@ -309,7 +318,7 @@ describe('service: scheduleFactory:', function() {
   it('getPreviewUrl: ', function(done) {
     expect(scheduleFactory.getPreviewUrl()).to.not.be.ok;
 
-    scheduleFactory.getSchedule("scheduleId")
+    scheduleFactory.getSchedule('scheduleId')
       .then(function() {
         expect(scheduleFactory.getPreviewUrl()).to.be.ok;
         expect(scheduleFactory.getPreviewUrl()).to.equal('http://rvaviewer-test.appspot.com/?type=schedule&id=scheduleId');
@@ -322,153 +331,89 @@ describe('service: scheduleFactory:', function() {
       .then(null,done);
   });
 
-  describe('createFirstSchedule:', function(){
-    var samplePresentation, firstScheduleSample;
+  describe('checkFirstSchedule:', function(){
 
-    beforeEach(function() {
-      samplePresentation = {
-        name: 'presentationName',
-        id: 'presentationId'
-      };
-      firstScheduleSample = {
-        name: 'All Displays - 24/7',
-        content: [{
-          name: 'presentationName',
-          objectReference: 'presentationId',
-          playUntilDone: false,
-          duration: 10,
-          timeDefined: false,
-          type: 'presentation'
-        }],
-        distributeToAll: true,
-        timeDefined: false
-      };
-      
-    });
-
-    it('should create first schedule and show modal', function(done) {
+    it('should check first schedule', function(done) {
       returnList = {};
-      scheduleFactory.createFirstSchedule(samplePresentation)
-      // .then(function(){
-      setTimeout(function() {
-        scheduleListSpy.should.have.been.calledWith({count:1});
+      scheduleFactory.checkFirstSchedule()
+        .then(function(){
+          scheduleListSpy.should.have.been.calledWith({count:1});
 
-        scheduleAddSpy.should.have.been.calledWith(firstScheduleSample);
-
-        $rootScope.$emit.should.have.been.calledWith('scheduleCreated');
-        expect(trackerCalled).to.equal('Schedule Created');
-
-        $state.go.should.not.have.been.called;
-        $modal.open.should.have.been.called;
-
-        expect($modal.open.getCall(0).args[0].templateUrl).to.equal('partials/schedules/auto-schedule-modal.html');
-        expect($modal.open.getCall(0).args[0].controller).to.equal('AutoScheduleModalController');
-        expect($modal.open.getCall(0).args[0].resolve.presentationName()).to.equal('presentationName');
-
-        done();
-      }, 100);
-    });
-
-    describe('HTML_PRESENTATION_TYPE:', function() {
-      beforeEach(function() {
-        samplePresentation.presentationType = 'HTML Template';
-        firstScheduleSample.content[0].presentationType = 'HTML Template';
-
-        blueprintFactory.isPlayUntilDone.returns(Q.resolve(false));
-      });
-
-      it('should set correct presentation type', function(done) {
-        returnList = {};
-        scheduleFactory.createFirstSchedule(samplePresentation)
-        // .then(function(){
-        setTimeout(function() {
-          scheduleAddSpy.should.have.been.calledWith(firstScheduleSample);
-
-          done();
-        }, 100);
-      });
-
-      it('should retrieve and update playUntilDone', function(done) {
-        blueprintFactory.isPlayUntilDone.returns(Q.resolve(true));
-        firstScheduleSample.content[0].playUntilDone = true;
-
-        returnList = {};
-        scheduleFactory.createFirstSchedule(samplePresentation)
-        // .then(function(){
-        setTimeout(function() {
-          scheduleAddSpy.should.have.been.calledWith(firstScheduleSample);
-
-          done();
-        }, 100);
-      });
-
-      it('should handle failure to retrieve blueprint', function(done) {
-        blueprintFactory.isPlayUntilDone.returns(Q.reject());
-
-        returnList = {};
-        scheduleFactory.createFirstSchedule(samplePresentation)
-        // .then(function(){
-        setTimeout(function() {
-          scheduleAddSpy.should.have.been.calledWith(firstScheduleSample);
-
-          done();
-        }, 100);
-      });
-    });
-
-    it('should create first schedule and redirect to onboarding', function(done) {
-      returnList = {};
-      onboardingFactory.isTemplateOnboarding.returns(true);
-      scheduleFactory.createFirstSchedule(samplePresentation)
-      .then(function(){
-        scheduleListSpy.should.have.been.calledWith({count:1});
-
-        scheduleAddSpy.should.have.been.calledWith(firstScheduleSample);
-
-        $rootScope.$emit.should.have.been.calledWith('scheduleCreated');
-        expect(trackerCalled).to.equal('Schedule Created');
-
-        $state.go.should.have.been.calledWith('apps.launcher.onboarding');
-        $modal.open.should.not.have.been.called;
-
-        done();
-      });
-    });
-
-    it('should not create twice', function(done) {
-      returnList = {};
-      scheduleFactory.createFirstSchedule(samplePresentation)
-      .then(function(){
-        scheduleListSpy.should.have.been.calledWith({count:1});
-
-        scheduleAddSpy.should.have.been.calledWith(firstScheduleSample);
-
-        $rootScope.$emit.should.have.been.calledWith('scheduleCreated');
-        expect(trackerCalled).to.equal('Schedule Created');
-
-        scheduleFactory.createFirstSchedule(samplePresentation).then(function(){
-          done("Error: schedule created again");
-        },function(){
-          scheduleListSpy.should.have.been.calledOnce;
-          scheduleAddSpy.should.have.been.calledOnce
           done();
         });
+    });
+
+    it('should reject (schedule exists) after Get', function(done) {
+      updateSchedule = true;
+
+      scheduleFactory.getSchedule()
+        .then(function() {
+          scheduleFactory.checkFirstSchedule()
+            .catch(function(){
+              scheduleListSpy.should.not.have.been.called;
+
+              done();
+            });
+        });
+    });
+
+    it('should reject (schedule exists) after Add', function(done) {
+      updateSchedule = true;
+
+      scheduleFactory.addSchedule()
+        .then(function() {
+          scheduleFactory.checkFirstSchedule()
+            .catch(function(){
+              scheduleListSpy.should.not.have.been.called;
+
+              done();
+            });
+        });
+    });
+
+    it('should get list after Delete', function(done) {
+      updateSchedule = true;
+      returnList = {};
+
+      // Add first
+      scheduleFactory.addSchedule()
+        .then(function() {
+          // Delete second
+          scheduleFactory.deleteSchedule()
+            .then(function() {
+              scheduleFactory.checkFirstSchedule()
+                .then(function(){
+                  scheduleListSpy.should.have.been.called;
+
+                  done();
+                });              
+            });
+        });
+    });
+
+    it('should reset after selectedCompanyChanged',function(done){
+      returnList = { items: [{name:'schedule'}] };
+      scheduleFactory.checkFirstSchedule()
+      .then(null, function(){
+        scheduleListSpy.should.have.been.calledWith({count:1});
+
+        $rootScope.$broadcast('risevision.company.selectedCompanyChanged');
+        $rootScope.$digest();
+
+        returnList = {};
+
+        scheduleFactory.checkFirstSchedule()
+          .then(function(){
+            scheduleListSpy.should.have.been.calledTwice;
+
+            done();
+          });
       });
     });
 
     it('should handle error loading list', function(done) {
       returnList = false;
-      scheduleFactory.createFirstSchedule(samplePresentation)
-      .then(null,function(){
-        scheduleListSpy.should.have.been.calledOnce;
-        done();
-      });
-    });
-
-    it('should handle error saving schedule', function(done) {
-      returnList = {};
-      updateSchedule = false;
-      scheduleFactory.createFirstSchedule(samplePresentation)
+      scheduleFactory.checkFirstSchedule()
       .then(null,function(){
         scheduleListSpy.should.have.been.calledOnce;
         done();
@@ -477,34 +422,11 @@ describe('service: scheduleFactory:', function() {
 
     it('should not create if already have schedules',function(done){
       returnList = { items: [{name:'schedule'}] };
-      scheduleFactory.createFirstSchedule(samplePresentation)
+      scheduleFactory.checkFirstSchedule()
       .then(null, function(){
         scheduleListSpy.should.have.been.calledWith({count:1});
-
-        scheduleAddSpy.should.not.have.been.called;
-
-        expect(trackerCalled).to.not.be.ok;
 
         done();
-      });
-    });
-
-    it('should cache result',function(done){
-      returnList = { items: [{name:'schedule'}] };
-      scheduleFactory.createFirstSchedule(samplePresentation)
-      .then(null, function(){
-        scheduleListSpy.should.have.been.calledWith({count:1});
-        scheduleAddSpy.should.not.have.been.called;
-        expect(trackerCalled).to.not.be.ok;
-
-        scheduleFactory.createFirstSchedule(samplePresentation).then(function(){
-          done("Error: schedule created again");
-        },function(){
-          scheduleListSpy.should.have.been.calledOnce;
-          scheduleAddSpy.should.not.have.been.called;
-          expect(trackerCalled).to.not.be.ok;
-          done();
-        });
       });
     });
 

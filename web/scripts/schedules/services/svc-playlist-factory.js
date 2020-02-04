@@ -3,13 +3,14 @@
 angular.module('risevision.schedules.services')
   .constant('TYPE_URL', 'url')
   .constant('TYPE_PRESENTATION', 'presentation')
-  .factory('playlistFactory', ['scheduleFactory', 'scheduleTracker',
-    'TYPE_URL', 'TYPE_PRESENTATION',
-    function (scheduleFactory, scheduleTracker, TYPE_URL, TYPE_PRESENTATION) {
+  .factory('playlistFactory', ['$q', 'scheduleFactory', 'scheduleTracker', 'presentationFactory', 'blueprintFactory',
+    'TYPE_URL', 'TYPE_PRESENTATION', 'HTML_PRESENTATION_TYPE',
+    function ($q, scheduleFactory, scheduleTracker, presentationFactory, blueprintFactory,
+      TYPE_URL, TYPE_PRESENTATION, HTML_PRESENTATION_TYPE) {
       var DEFAULT_DURATION = 10;
       var factory = {};
 
-      factory.getNewPresentationItem = function () {
+      var _newPresentationItem = function () {
         scheduleTracker('Add Presentation to Schedule',
           scheduleFactory.schedule.id, scheduleFactory.schedule.name
         );
@@ -18,6 +19,54 @@ angular.module('risevision.schedules.services')
           duration: DEFAULT_DURATION,
           type: TYPE_PRESENTATION
         };
+      };
+
+      factory.initPlayUntilDone = function (item, presentation, isNew) {
+        if (presentation.presentationType === HTML_PRESENTATION_TYPE) {
+          return blueprintFactory.isPlayUntilDone(presentation.productCode)
+            .then(function (playUntilDone) {
+              if (playUntilDone && isNew) {
+                //When user schedules a PUD template, then set schedule item to PUD by default.
+                item.playUntilDone = true;
+              }
+              if (!playUntilDone) {
+                item.playUntilDone = false;
+              }
+
+              return $q.resolve(playUntilDone);
+            })
+            .catch(function (e) {
+              console.error('Failed to check HTML Template Play Until Done', e);
+
+              item.playUntilDone = false;
+
+              return $q.resolve(false);
+            });
+        } else {
+          return $q.resolve(true);
+        }
+      };
+
+      factory.addPresentationItem = function (presentation) {
+        var playlistItem = _newPresentationItem(presentation);
+
+        // Cache presentation to avoid API call for the name
+        presentationFactory.setPresentation(presentation);
+
+        playlistItem.objectReference = presentation.id;
+        playlistItem.name = presentation.name;
+        playlistItem.presentationType = presentation.presentationType;
+
+        return factory.initPlayUntilDone(playlistItem, presentation, true)
+          .then(function () {
+            factory.updatePlaylistItem(playlistItem);
+          });
+      };
+
+      factory.addPresentationItems = function (presentations) {
+        for (var i in presentations) {
+          factory.addPresentationItem(presentations[i]);
+        }
       };
 
       factory.getNewUrlItem = function () {

@@ -23,7 +23,7 @@
                   <div class="product-grid_item panel panel-default">
 
                     <figure class="product-grid_image u_clickable">
-                      <img ng-src="{{product.imageUrl}}" class="img-responsive" alt="{{product.imageAlt || product.name}}">
+                      <img loading="lazy" ng-src="{{product.imageUrl}}" class="img-responsive" alt="{{product.imageAlt || product.name}}">
                     </figure> 
 
                     <div class="product-grid_details">
@@ -43,7 +43,7 @@
               <div class="col-sm-6 col-md-4 col-lg-3" ng-if="factory.search.category === 'Templates' && !factory.loadingItems">
                 <div class="product-grid_item panel panel-default">
                   <figure class="product-grid_image u_clickable" ui-sref="apps.editor.workspace.artboard" ng-click="dismiss();">
-                    <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/UI/blank-landscape.png" alt="add blank presentation"> 
+                    <img loading="lazy" class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/UI/blank-landscape.png" alt="add blank presentation"> 
                   </figure><!--template-image-->
                   <div class="product-grid_details">
                     <div class="row">

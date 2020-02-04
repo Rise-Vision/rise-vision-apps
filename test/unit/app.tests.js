@@ -458,13 +458,15 @@ describe('app:', function() {
       var $location = {
         search: function() { 
           return {};
-        }
+        },
+        replace: sinon.spy()
       };
 
       sinon.spy($state,'go');
       
       $state.get('common.auth.signup').controller[4]($location, $state, canAccessApps, plansFactory);
       setTimeout(function() {
+        $location.replace.should.have.been.called;
         $state.go.should.have.been.calledWith('apps.launcher.home');
 
         done();
@@ -525,9 +527,14 @@ describe('app:', function() {
       };
 
       sinon.spy($state,'go');
-      
-      $state.get('common.auth.signin').controller[2]($state, canAccessApps);
+
+      var $location = {
+        replace: sinon.spy()
+      };
+
+      $state.get('common.auth.signin').controller[3]($state, canAccessApps, $location);
       setTimeout(function() {
+        $location.replace.should.have.been.called;
         $state.go.should.have.been.calledWith('apps.launcher.home');
 
         done();
@@ -540,9 +547,14 @@ describe('app:', function() {
       };
 
       sinon.spy($state,'go');
-      $state.get('common.auth.signin').controller[2]($state, canAccessApps);
 
+      var $location = {
+        replace: sinon.spy()
+      };
+
+      $state.get('common.auth.signin').controller[3]($state, canAccessApps, $location);
       setTimeout(function() {
+        $location.replace.should.not.have.been.called;
         $state.go.should.not.have.been.called;
 
         done();

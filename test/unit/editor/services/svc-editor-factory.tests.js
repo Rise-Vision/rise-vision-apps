@@ -144,10 +144,8 @@ describe('service: editorFactory:', function() {
     $provide.service('processErrorCode', function() {
       return processErrorCode = sinon.spy(function() { return 'error'; });
     });
-    $provide.service('scheduleFactory', function() {
-      return {
-        createFirstSchedule: sinon.stub()
-      };
+    $provide.service('createFirstSchedule', function() {
+      return sinon.stub();
     });
     $provide.service('$window', function() {
       return {
@@ -165,7 +163,7 @@ describe('service: editorFactory:', function() {
     });
   }));
   var editorFactory, trackerCalled, updatePresentation, currentState, $state, stateParams,
-    presentationParser, distributionParser, $window, $modal, processErrorCode, scheduleFactory, userAuthFactory,
+    presentationParser, distributionParser, $window, $modal, processErrorCode, createFirstSchedule, userAuthFactory,
     $rootScope, storeProduct, showLegacyWarning;
   beforeEach(function(){
     trackerCalled = undefined;
@@ -180,7 +178,7 @@ describe('service: editorFactory:', function() {
       $modal = $injector.get('$modal');
       $state = $injector.get('$state');
       showLegacyWarning = $injector.get('showLegacyWarning');
-      scheduleFactory = $injector.get('scheduleFactory');
+      createFirstSchedule = $injector.get('createFirstSchedule');
       userAuthFactory = $injector.get('userAuthFactory');
       $rootScope = $injector.get('$rootScope');
     });
@@ -341,7 +339,7 @@ describe('service: editorFactory:', function() {
       editorFactory.addPresentation();
 
       setTimeout(function(){
-        scheduleFactory.createFirstSchedule.should.have.been.calledWith(sinon.match.object);
+        createFirstSchedule.should.have.been.calledWith(sinon.match.object);
 
         done();
       },100);

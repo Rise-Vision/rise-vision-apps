@@ -1,0 +1,15 @@
+<div id="addPresentationModal">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="dismiss()" aria-hidden="true">
+      <i class="fa fa-times"></i>
+    </button>
+    <h3 class="modal-title">Select Presentations</h3>
+  </div>
+  <div class="modal-body" stop-event="touchend" ng-include src="'partials/editor/presentation-multi-selector-list.html'">
+  </div>
+
+  <div class="modal-footer">
+    <button id="selectPresentations" class="btn btn-primary" ng-click="add()">Add Selected<i class="fa fa-check icon-right"></i></button>
+  </div>
+
+</div>
