@@ -1,5 +1,24 @@
 <div class="attribute-editor-component">
-  <div class="attribute-editor-row attribute-row-first attribute-row-last">
-    <input id="text-component-input" type="text" class="form-control" ng-model="value" placeholder="Enter your text" ng-change="save()">
+  <div class="attribute-editor-row">
+    <label>Text</label>
+    <div class="row">
+      <div class="col-xs-12">
+        <input id="text-component-input" type="text" class="form-control" ng-model="value" placeholder="Enter your text" ng-change="save()">
+      </div>
+    </div>
+  </div>
+  <div class="attribute-editor-row">
+    <div>
+      <label>Font Size</label>
+      <div class="row">
+        <div class="col-xs-12">
+          <input min="1" max="200" type="range"
+            ng-model="fontsize"
+            ng-change="save()"
+          >
+        </div>
+      </div>
+      <p class="range-value">{{ fontsize }}</p>
+    </di>
   </div>
 </div>

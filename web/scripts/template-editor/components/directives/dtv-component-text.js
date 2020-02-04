@@ -12,10 +12,12 @@ angular.module('risevision.template-editor.directives')
 
           function _load() {
             $scope.value = $scope.getAvailableAttributeData($scope.componentId, 'value');
+            $scope.fontsize = $scope.getAvailableAttributeData($scope.componentId, 'fontsize');
           }
 
           $scope.save = function () {
             $scope.setAttributeData($scope.componentId, 'value', $scope.value);
+            $scope.setAttributeData($scope.componentId, 'fontsize', $scope.fontsize);
           };
 
           $scope.registerDirective({
