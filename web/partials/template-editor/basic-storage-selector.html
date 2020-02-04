@@ -15,7 +15,7 @@
         </div>
         <div class="file-entry" ng-if="!isFolder(item.name) && fileType != 'video'" ng-click="selectItem(item)">
           <a href="#">
-            <img src="{{ thumbnailFor(item) }}"></img>
+            <img loading="lazy" src="{{ thumbnailFor(item) }}"></img>
           </a>
         </div>
         <div class="video-entry" ng-if="!isFolder(item.name) && fileType == 'video'" ng-click="selectItem(item)">
