@@ -1,23 +1,46 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('blueprintFactory', ['$http', 'BLUEPRINT_URL',
-    function ($http, BLUEPRINT_URL) {
+  .factory('blueprintFactory', ['$q', '$http', 'BLUEPRINT_URL',
+    function ($q, $http, BLUEPRINT_URL) {
       var factory = {};
 
-      factory.load = function (productCode) {
+      var _blueprints = {};
+      factory.loadingBlueprint = false;
+
+      factory.getBlueprintCached = function (productCode) {
+        var blueprint = _blueprints[productCode];
+
+        if (blueprint) {
+          factory.blueprintData = blueprint;
+
+          return $q.resolve(blueprint);
+        } else {
+          return _getBlueprint(productCode);
+        }
+      };
+
+      var _getBlueprint = function (productCode) {
         var url = BLUEPRINT_URL.replace('PRODUCT_CODE', productCode);
+
+        //show loading spinner
+        factory.loadingBlueprint = true;
 
         return $http.get(url)
           .then(function (response) {
             factory.blueprintData = response.data;
 
+            _blueprints[productCode] = factory.blueprintData;
+
             return factory.blueprintData;
+          })
+          .finally(function () {
+            factory.loadingBlueprint = false;
           });
       };
 
       factory.isPlayUntilDone = function (productCode) {
-        return factory.load(productCode)
+        return factory.getBlueprintCached(productCode)
           .then(function () {
             return !!(factory.blueprintData && factory.blueprintData.playUntilDone);
           });

@@ -29,7 +29,7 @@ describe('service: presentationFactory: ', function() {
     returnPresentation = true;
     apiCalls = 0;
     
-    inject(function($injector){  
+    inject(function($injector){
       presentationFactory = $injector.get('presentationFactory');
     });
   });
@@ -37,10 +37,51 @@ describe('service: presentationFactory: ', function() {
   it('should exist',function(){
     expect(presentationFactory).to.be.ok;
     
+    expect(presentationFactory.setPresentation).to.be.a('function');
     expect(presentationFactory.getPresentationCached).to.be.a('function');
     expect(presentationFactory.loadingPresentation).to.be.false;
   });
   
+  describe('setPresentation:', function() {
+    it('should return cached presentation', function(done) {
+      var presentation = {
+        id: 'presentationId',
+        name: 'some presentation',
+        revisionStatus: 0
+      };
+
+      presentationFactory.setPresentation(presentation);
+
+      presentationFactory.getPresentationCached('presentationId')
+        .then(function(result) {
+          expect(result).to.equal(presentation);
+
+          expect(apiCalls).to.equal(0);
+
+          done();
+        });
+    });
+
+    it('should not add presentation if already exists', function(done) {
+      var presentation = {
+        id: 'presentationId',
+        name: 'some presentation',
+        revisionStatus: 0
+      };
+
+      presentationFactory.setPresentation(presentation);
+      presentationFactory.setPresentation({id: 'presentationId'});
+
+      presentationFactory.getPresentationCached('presentationId')
+        .then(function(result) {
+          expect(result).to.equal(presentation);
+
+          done();
+        });
+    });
+
+  });
+
   describe('getPresentationCached: ', function() {
     it('should get the presentation',function(done){
       presentationFactory.getPresentationCached('presentationId')

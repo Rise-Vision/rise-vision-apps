@@ -28,17 +28,12 @@ angular.module('risevision.schedules.directives')
 
           $scope.addPresentationItem = function () {
             var modalInstance = $modal.open({
-              templateUrl: 'partials/editor/presentation-selector-modal.html',
-              controller: 'PresentationSelectorModal'
+              templateUrl: 'partials/editor/presentation-multi-selector-modal.html',
+              controller: 'PresentationMultiSelectorModal'
             });
 
-            modalInstance.result.then(function (presentationDetails) {
-              var playlistItem = playlistFactory.getNewPresentationItem();
-              playlistItem.objectReference = presentationDetails[0];
-              playlistItem.name = presentationDetails[1];
-              playlistItem.presentationType = presentationDetails[2];
-
-              openPlaylistModal(playlistItem);
+            modalInstance.result.then(function (presentations) {
+              playlistFactory.addPresentationItems(presentations);
             });
           };
 

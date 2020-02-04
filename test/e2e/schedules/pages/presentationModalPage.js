@@ -7,6 +7,7 @@ var PresentationModalPage = function() {
   var presentationItems = element.all(by.repeater('presentation in factory.items.list'));
   var presentationListLoader = element(by.xpath('//div[@spinner-key="presentation-list-loader"]'));
   var presentationNames = element.all(by.css('#addPresentationModal #presentationName'));
+  var selectPresentationsButton = element(by.id('selectPresentations'));
   var closeButton = element(by.css('#addPresentationModal > div.modal-header > button'));
 
   this.getAddPresentationModal = function() {
@@ -35,6 +36,10 @@ var PresentationModalPage = function() {
   
   this.getPresentationNames = function() {
     return presentationNames;
+  };
+
+  this.getSelectPresentationsButton = function() {
+    return selectPresentationsButton;
   };
   
   this.getCloseButton = function() {

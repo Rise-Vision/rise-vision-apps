@@ -3,11 +3,11 @@
 angular.module('risevision.template-editor.services')
   .constant('HTML_TEMPLATE_DOMAIN', 'https://widgets.risevision.com')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', 'presentation',
-    'processErrorCode', 'userState', 'scheduleFactory',
+    'processErrorCode', 'userState', 'createFirstSchedule',
     'templateEditorUtils', 'brandingFactory', 'blueprintFactory', 'presentationTracker',
     'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
     function ($q, $log, $state, $rootScope, presentation, processErrorCode, userState,
-      scheduleFactory, templateEditorUtils, brandingFactory, blueprintFactory,
+      createFirstSchedule, templateEditorUtils, brandingFactory, blueprintFactory,
       presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {
         hasUnsavedChanges: false
@@ -60,7 +60,7 @@ angular.module('risevision.template-editor.services')
 
         presentationTracker('HTML Template Copied', productDetails.productCode, productDetails.name);
 
-        return blueprintFactory.load(factory.presentation.productCode)
+        return blueprintFactory.getBlueprintCached(factory.presentation.productCode)
           .then(null, function (e) {
             _showErrorMessage('add', e);
             return $q.reject(e);
@@ -161,7 +161,7 @@ angular.module('risevision.template-editor.services')
           .then(function (result) {
             _setPresentation(result.item);
 
-            return blueprintFactory.load(factory.presentation.productCode);
+            return blueprintFactory.getBlueprintCached(factory.presentation.productCode);
           })
           .then(function () {
             deferred.resolve();
@@ -310,7 +310,7 @@ angular.module('risevision.template-editor.services')
       };
 
       var _createFirstSchedule = function () {
-        return scheduleFactory.createFirstSchedule(factory.presentation)
+        return createFirstSchedule(factory.presentation)
           .catch(function (err) {
             return err === 'Already have Schedules' ? $q.resolve() : $q.reject(err);
           });
