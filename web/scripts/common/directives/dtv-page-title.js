@@ -80,11 +80,9 @@ angular.module('risevision.apps.directives')
             case 'apps.editor.workspace':
             case 'apps.editor.workspace.artboard':
             case 'apps.editor.workspace.htmleditor':
-              return 'Edit Presentation';
-
             case 'apps.editor.templates':
             case 'apps.editor.templates.edit':
-              return 'Edit HTML Presentation';
+              return 'Edit Presentation';
 
             case 'apps.storage':
             case 'apps.storage.home':
