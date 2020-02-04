@@ -10,9 +10,9 @@
    ng-if="storageFactory.storageFull || !storageUtils.fileIsTrash(file)" 
    title="{{file.name | fileNameFilter:filesFactory.folderPath}}{{ file.isThrottled? ' - '+('storage-client.error.blocked-file' | translate) : '' }}" data-toggle="tooltip" data-placement="top" tooltip>
 
-    <img class="list-item-icon" ng-if="isSvg" ng-src="{{imgSrc}}">
+    <img class="list-item-icon" ng-if="isSvg" loading="lazy" ng-src="{{imgSrc}}">
     
-    <img ng-if="!isSvg"  ng-src="{{imgSrc}}"/>
+    <img ng-if="!isSvg" loading="lazy" ng-src="{{imgSrc}}"/>
 
     <div ng-if="!file.metadata.thumbnail || file.isThrottled" class="list-item-label">
       {{file.name | fileNameFilter:filesFactory.folderPath}}
