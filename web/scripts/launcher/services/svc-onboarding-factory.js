@@ -127,12 +127,10 @@ angular.module('risevision.apps.launcher.services')
       };
 
       factory.setCurrentTab = function (tab) {
-        // Broken when the last step is the Congratulatory (last step)
-        // of a tab. It should come back to the next step after that when
-        // tabbing
-
         var index;
         var activeStep = onboarding.steps[onboarding.activeStep];
+        var nextStepAfterActive = onboarding.steps[(onboarding.steps.indexOf(activeStep) + 1)];
+        var activeIsFinalStepOfTab = nextStepAfterActive && nextStepAfterActive.tab !== activeStep.tab;
 
         if (activeStep && tab < activeStep.tab) {
           index = _.findLastIndex(onboarding.steps, {
@@ -146,11 +144,18 @@ angular.module('risevision.apps.launcher.services')
         } else if (activeStep && tab === activeStep.tab) {
           onboarding.currentStep = onboarding.activeStep;
         } else if (activeStep && tab > activeStep.tab) {
-          index = _.findIndex(onboarding.steps, {
-            tab: tab,
-            active: false
-          });
-
+          if (activeIsFinalStepOfTab) {
+            index = _.findIndex(onboarding.steps, {
+              tab: tab,
+              active: true
+            });
+            onboarding.activeStep = index;
+          } else {
+            index = _.findIndex(onboarding.steps, {
+              tab: tab,
+              active: false
+            });
+          }
           if (index !== -1) {
             if (activeStep.tab === 2) {
               index++;
