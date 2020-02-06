@@ -14,36 +14,72 @@
         var analytics = $window.analytics;
         analytics.SNIPPET_VERSION = '4.0.0';
 
-        analytics.factory = function (t) {
-          function addUrl(methodName, args) {
-            if ('track' === t && args && args.length > 1 && args[1] &&
-              typeof args[1] === 'object') {
-              args[1].url = $location.host();
-            }
-          }
-          return function () {
-            var e = Array.prototype.slice.call(arguments);
-            addUrl(t, e);
-            e.unshift(t);
-            $window.analytics.push(e);
+        // analytics.factory = function (t) {
+        //   function addUrl(methodName, args) {
+        //     if ('track' === t && args && args.length > 1 && args[1] &&
+        //       typeof args[1] === 'object') {
+        //       args[1].url = $location.host();
+        //     }
+        //   }
+        //   return function () {
+        //     var e = Array.prototype.slice.call(arguments);
+        //     addUrl(t, e);
+        //     e.unshift(t);
+        //     $window.analytics.push(e);
 
-            $log.debug('Segment Tracker', e);
+        //     $log.debug('Segment Tracker', e);
 
-            return $window.analytics;
-          };
+        //     return $window.analytics;
+        //   };
+        // };
+        // analytics.methods = ['trackSubmit', 'trackClick', 'trackLink',
+        //   'trackForm',
+        //   'pageview', 'identify', 'group', 'track', 'ready', 'alias',
+        //   'page',
+        //   'once', 'off', 'on'
+        // ];
+        // for (var i = 0; i < analytics.methods.length; i++) {
+        //   var method = analytics.methods[i];
+        //   service[method] = analytics.factory(method);
+        // }
+
+        service.track = function (eventName, properties) {
+          $window.dataLayer.push({
+            event: eventName,
+            properties: properties
+          });
         };
-        analytics.methods = ['trackSubmit', 'trackClick', 'trackLink',
-          'trackForm',
-          'pageview', 'identify', 'group', 'track', 'ready', 'alias',
-          'page',
-          'once', 'off', 'on'
-        ];
-        for (var i = 0; i < analytics.methods.length; i++) {
-          var method = analytics.methods[i];
-          service[method] = analytics.factory(method);
-        }
 
-        service.ready(function () {
+        service.identify = function (userId, properties) {
+          $window.dataLayer.push({
+            event: 'Identify',
+            userId: userId,
+            properties: properties
+          });
+        };
+
+
+
+        // service.ready(function () {
+        //   var ga = $window.ga;
+        //   if (ga) {
+        //     ga('require', 'linker');
+        //     ga('linker:autoLink', ['community.risevision.com',
+        //       'store.risevision.com', 'help.risevision.com',
+        //       'apps.risevision.com', 'risevision.com',
+        //       'preview.risevision.com', 'rva.risevision.com'
+        //     ], GA_LINKER_USE_ANCHOR);
+        //   }
+        // });
+
+        /**
+         * @description
+         * Load Segment.io analytics script
+         * @param apiKey The key API to use
+         */
+        service.load = function (apiKey) {
+          trackPageviews();
+
           var ga = $window.ga;
           if (ga) {
             ga('require', 'linker');
@@ -53,29 +89,20 @@
               'preview.risevision.com', 'rva.risevision.com'
             ], GA_LINKER_USE_ANCHOR);
           }
-        });
+          // if (apiKey && !loaded) {
 
-        /**
-         * @description
-         * Load Segment.io analytics script
-         * @param apiKey The key API to use
-         */
-        service.load = function (apiKey) {
-          if (apiKey && !loaded) {
 
-            trackPageviews();
+          //   var e = document.createElement('script');
+          //   e.type = 'text/javascript';
+          //   e.async = !0;
+          //   e.src = ('https:' === document.location.protocol ? 'https://' :
+          //       'http://') + 'cdn.segment.com/analytics.js/v1/' + apiKey +
+          //     '/analytics.min.js';
+          //   var n = document.getElementsByTagName('script')[0];
+          //   n.parentNode.insertBefore(e, n);
 
-            var e = document.createElement('script');
-            e.type = 'text/javascript';
-            e.async = !0;
-            e.src = ('https:' === document.location.protocol ? 'https://' :
-                'http://') + 'cdn.segment.com/analytics.js/v1/' + apiKey +
-              '/analytics.min.js';
-            var n = document.getElementsByTagName('script')[0];
-            n.parentNode.insertBefore(e, n);
-
-            loaded = true;
-          }
+          //   loaded = true;
+          // }
         };
 
         function trackPageviews() {
@@ -89,7 +116,11 @@
               if ($location.search().nooverride) {
                 properties.referrer = '';
               }
-              service.page(properties);
+              // service.page(properties);
+              $window.dataLayer.push({
+                event: 'Page View',
+                properties: properties
+              });
             }
           });
         }
