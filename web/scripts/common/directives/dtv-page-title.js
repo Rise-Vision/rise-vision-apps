@@ -2,14 +2,14 @@
 
 angular.module('risevision.apps.directives')
   .directive('pageTitle', ['$rootScope', '$state', '$timeout',
-    function($rootScope, $state, $timeout) {
+    function ($rootScope, $state, $timeout) {
       return {
-        link: function($scope, element) {
+        link: function ($scope, element) {
 
-          var _getTitle = function(stateName) {
-            switch ($state.current.name)  {
+          var _getTitle = function (stateName) {
+            switch ($state.current.name) {
 
-            // userstate routes:
+              // userstate routes:
             case 'common':
             case 'common.auth':
             case 'common.auth.unauthorized':
@@ -29,7 +29,7 @@ angular.module('risevision.apps.directives')
             case 'common.auth.unsubscribe':
               return 'Unsubscribe';
 
-            // Apps auth routes:
+              // Apps auth routes:
             case 'common.auth.signin':
               return 'Sign In';
 
@@ -37,7 +37,7 @@ angular.module('risevision.apps.directives')
             case 'common.auth.unregistered':
               return 'Sign Up';
 
-            // Apps routes:
+              // Apps routes:
             case 'apps':
             case 'apps.launcher':
             case 'apps.launcher.home':
@@ -94,11 +94,11 @@ angular.module('risevision.apps.directives')
 
           };
 
-          var _updateTitle = function() {
+          var _updateTitle = function () {
             var title = _getTitle();
             title = title ? (title + ' | ') : '';
 
-            $timeout(function() {
+            $timeout(function () {
               element.text(title + 'Rise Vision Apps');
             }, 0, false);
           };

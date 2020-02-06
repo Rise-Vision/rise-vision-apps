@@ -400,4 +400,42 @@ describe('service: onboardingFactory:', function() {
     
   });
 
+  describe('setCurrentTab', function() {
+
+    it('should show message to complete previous step on navigatin to a future step',function(done){
+      companyAssetsFactory.hasSchedules.returns(Q.resolve(false));
+      
+      onboardingFactory.refresh().then(function(){
+        expect(onboardingFactory.isCurrentStep('addTemplate')).to.be.true;
+
+        onboardingFactory.setCurrentTab(2);
+
+        expect(onboardingFactory.isCurrentTab(2)).to.be.true;
+        expect(onboardingFactory.isCurrentStep('templateNotAdded1')).to.be.true;
+        expect(onboardingFactory.isTabCompleted(2)).to.be.false;
+        done();
+      });
+    });
+
+    it('should proceed to first step of a tab after congratulatory step',function(done){
+      companyAssetsFactory.hasSchedules.returns(Q.resolve(false));
+      onboardingFactory.refresh().then(function(){
+        expect(onboardingFactory.isCurrentStep('addTemplate')).to.be.true;
+        
+        companyAssetsFactory.hasSchedules.returns(Q.resolve(true));
+        onboardingFactory.refresh().then(function(){
+          expect(onboardingFactory.isCurrentStep('templateAdded')).to.be.true;
+          
+          onboardingFactory.setCurrentTab(2);
+
+          expect(onboardingFactory.isCurrentStep('addDisplay')).to.be.true;
+          expect(onboardingFactory.isCurrentTab(2)).to.be.true;          
+          expect(onboardingFactory.isTabCompleted(1)).to.be.true;
+          expect(onboardingFactory.isTabCompleted(2)).to.be.false;
+          done()
+        });
+      });
+    });
+  });
+
 });
