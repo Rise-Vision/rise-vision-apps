@@ -3,10 +3,8 @@
   'use strict';
 
   angular.module('risevision.common.components.logging')
-    .value('GA_LINKER_USE_ANCHOR', true)
     .factory('segmentAnalytics', ['$rootScope', '$window', '$log', '$location',
-      'GA_LINKER_USE_ANCHOR',
-      function ($rootScope, $window, $log, $location, GA_LINKER_USE_ANCHOR) {
+      function ($rootScope, $window, $log, $location) {
         var service = {};
         var loaded;
 
