@@ -14,23 +14,24 @@
 
         service.track = function (eventName, properties) {
           $window.dataLayer.push({
-            event: eventName,
-            properties: properties
+            event: 'analytics.track',
+            eventName: eventName,
+            trackingProperties: properties
           });
         };
 
         service.identify = function (userId, properties) {
           $window.dataLayer.push({
-            event: 'Identify',
+            event: 'analytics.identify',
             userId: userId,
-            properties: properties
+            trackingProperties: properties
           });
         };
 
         service.page = function (properties) {
           $window.dataLayer.push({
-            event: 'Page View',
-            properties: properties
+            event: 'analytics.page',
+            trackingProperties: properties
           });
         };
 

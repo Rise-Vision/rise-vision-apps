@@ -57,24 +57,10 @@ describe("Services: segment analytics", function() {
   });
   
   it("should exist, also methods", function() {
-    expect(segmentAnalytics.load).to.be.ok;
-    ["load", "trackSubmit", "trackClick", "trackLink",
-      "trackForm",
-      "pageview", "identify", "group", "track", "ready", "alias",
-      "page",
-      "once", "off", "on"].forEach(
-    function (method) {
-      expect(segmentAnalytics).to.have.property(method);
-      expect(segmentAnalytics[method]).to.be.a("function");
-    });
-    expect($window.analytics.SNIPPET_VERSION).to.equal("4.0.0");
-  });
-
-  it("should register ready callback", function() {
-    expect($window.analytics).to.be.an("array");
-
-    expect($window.analytics).to.have.length.greaterThan(1);
-    expect($window.analytics[0][0]).to.equal("ready");
+    expect(segmentAnalytics.load).to.be.a('function');
+    expect(segmentAnalytics.track).to.be.a('function');
+    expect(segmentAnalytics.identify).to.be.a('function');
+    expect(segmentAnalytics.page).to.be.a('function');
   });
 
   it("should identify user", function(done) {
@@ -83,7 +69,7 @@ describe("Services: segment analytics", function() {
     analyticsEvents.identify();
     
     setTimeout(function() {
-      identifySpy.should.have.been.calledWith("username",{
+      var expectProperties = {
         company: { id: "companyId", name: "companyName", companyIndustry: "K-12 Education" },
         companyId: "companyId",
         companyName: "companyName",
@@ -91,7 +77,13 @@ describe("Services: segment analytics", function() {
         email: undefined,
         firstName: "",
         lastName: ""
-      });
+      };
+      identifySpy.should.have.been.calledWith("username",expectProperties);
+
+      expect($window.dataLayer[$window.dataLayer.length-1].event).to.equal("analytics.identify");
+      expect($window.dataLayer[$window.dataLayer.length-1].userId).to.equal("username");
+      expect($window.dataLayer[$window.dataLayer.length-1].trackingProperties).to.deep.equal(expectProperties);
+
       done();
     }, 10);
   });
@@ -141,20 +133,25 @@ describe("Services: segment analytics", function() {
     $scope.$digest();
     
     setTimeout(function() {
-      pageSpy.should.have.been.calledWith({url:"/somepath", path:"/somepath", referrer:""});
+      var expectProperties = {url:"/somepath", path:"/somepath", referrer:""};
+           
+      pageSpy.should.have.been.calledWith(expectProperties);
       expect(segmentAnalytics.location).to.equal("/somepath");
+
+      expect($window.dataLayer[$window.dataLayer.length-1].event).to.equal("analytics.page");
+      expect($window.dataLayer[$window.dataLayer.length-1].trackingProperties).to.deep.equal(expectProperties);
       
       done();
     }, 10);
   });
 
-  it("should add url property", function() {
-    var res = segmentAnalytics.track("test", {});
-
-    var addedEvent = res.pop();
-    var eventProps = addedEvent[2];
-
-    expect(eventProps.url).to.equal("test.com");
+  it("should track events", function() {
+    var properties = {name:"name"};
+    segmentAnalytics.track("test", properties);
+    
+    expect($window.dataLayer[$window.dataLayer.length-1].event).to.equal("analytics.track");
+    expect($window.dataLayer[$window.dataLayer.length-1].eventName).to.equal("test");
+    expect($window.dataLayer[$window.dataLayer.length-1].trackingProperties).to.equal(properties);
   });
 
 });
