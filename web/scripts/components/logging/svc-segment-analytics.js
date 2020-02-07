@@ -35,19 +35,6 @@
           });
         };
 
-        // TODO: move to Tag Manager
-        // service.ready(function () {
-        //   var ga = $window.ga;
-        //   if (ga) {
-        //     ga('require', 'linker');
-        //     ga('linker:autoLink', ['community.risevision.com',
-        //       'store.risevision.com', 'help.risevision.com',
-        //       'apps.risevision.com', 'risevision.com',
-        //       'preview.risevision.com', 'rva.risevision.com'
-        //     ], GA_LINKER_USE_ANCHOR);
-        //   }
-        // });
-
         service.load = function (gtmContainerId) {
           if (gtmContainerId && !loaded) {
 
