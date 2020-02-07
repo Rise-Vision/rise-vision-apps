@@ -33,6 +33,10 @@
       });
 
       describe("checkout: ", function() {
+        before(function() {
+          helper.waitDisappear(homepage.getAppLauncherLoader(), 'App Launcher Loader');
+        });
+
         it("should show Subscribe button", function() {
           expect(purchaseFlowModalPage.getPlanSubscribeLink().isDisplayed()).to.eventually.be.true;
         });
