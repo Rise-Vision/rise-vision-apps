@@ -2,8 +2,8 @@
 
   "use strict";
 
-  // This mock disables the segment.io tracking script by
+  // This mock disables Google Tag Manager tracking script by
   // resetting the API key
   angular.module("risevision.common.components.logging")
-    .value("SEGMENT_API_KEY", null);
+    .value("TAG_MANAGER_CONTAINER_ID", null);
 })(angular);
