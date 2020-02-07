@@ -10,38 +10,7 @@
         var service = {};
         var loaded;
 
-        $window.analytics = $window.analytics || [];
-        var analytics = $window.analytics;
-        analytics.SNIPPET_VERSION = '4.0.0';
-
-        // analytics.factory = function (t) {
-        //   function addUrl(methodName, args) {
-        //     if ('track' === t && args && args.length > 1 && args[1] &&
-        //       typeof args[1] === 'object') {
-        //       args[1].url = $location.host();
-        //     }
-        //   }
-        //   return function () {
-        //     var e = Array.prototype.slice.call(arguments);
-        //     addUrl(t, e);
-        //     e.unshift(t);
-        //     $window.analytics.push(e);
-
-        //     $log.debug('Segment Tracker', e);
-
-        //     return $window.analytics;
-        //   };
-        // };
-        // analytics.methods = ['trackSubmit', 'trackClick', 'trackLink',
-        //   'trackForm',
-        //   'pageview', 'identify', 'group', 'track', 'ready', 'alias',
-        //   'page',
-        //   'once', 'off', 'on'
-        // ];
-        // for (var i = 0; i < analytics.methods.length; i++) {
-        //   var method = analytics.methods[i];
-        //   service[method] = analytics.factory(method);
-        // }
+        $window.dataLayer = $window.dataLayer || [];
 
         service.track = function (eventName, properties) {
           $window.dataLayer.push({
@@ -58,8 +27,14 @@
           });
         };
 
+        service.page = function (properties) {
+          $window.dataLayer.push({
+            event: 'Page View',
+            properties: properties
+          });
+        };
 
-
+        // TODO: move to Tag Manager
         // service.ready(function () {
         //   var ga = $window.ga;
         //   if (ga) {
@@ -72,37 +47,28 @@
         //   }
         // });
 
-        /**
-         * @description
-         * Load Segment.io analytics script
-         * @param apiKey The key API to use
-         */
-        service.load = function (apiKey) {
-          trackPageviews();
+        service.load = function (gtmContainerId) {
+          if (gtmContainerId && !loaded) {
 
-          var ga = $window.ga;
-          if (ga) {
-            ga('require', 'linker');
-            ga('linker:autoLink', ['community.risevision.com',
-              'store.risevision.com', 'help.risevision.com',
-              'apps.risevision.com', 'risevision.com',
-              'preview.risevision.com', 'rva.risevision.com'
-            ], GA_LINKER_USE_ANCHOR);
+            //Google Tag Manager snippet
+            (function (w, d, s, l, i) {
+              w[l] = w[l] || [];
+              w[l].push({
+                'gtm.start': new Date().getTime(),
+                event: 'gtm.js'
+              });
+              var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+              j.async = true;
+              j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+              f.parentNode.insertBefore(j, f);
+            })($window, $window.document, 'script', 'dataLayer', gtmContainerId);
+
+            loaded = true;
+            trackPageviews();
           }
-          // if (apiKey && !loaded) {
-
-
-          //   var e = document.createElement('script');
-          //   e.type = 'text/javascript';
-          //   e.async = !0;
-          //   e.src = ('https:' === document.location.protocol ? 'https://' :
-          //       'http://') + 'cdn.segment.com/analytics.js/v1/' + apiKey +
-          //     '/analytics.min.js';
-          //   var n = document.getElementsByTagName('script')[0];
-          //   n.parentNode.insertBefore(e, n);
-
-          //   loaded = true;
-          // }
         };
 
         function trackPageviews() {
@@ -116,11 +82,7 @@
               if ($location.search().nooverride) {
                 properties.referrer = '';
               }
-              // service.page(properties);
-              $window.dataLayer.push({
-                event: 'Page View',
-                properties: properties
-              });
+              service.page(properties);
             }
           });
         }

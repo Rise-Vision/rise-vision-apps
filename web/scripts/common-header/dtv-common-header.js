@@ -179,10 +179,10 @@ angular.module('risevision.common.header', [
     }
   ])
 
-  .run(['segmentAnalytics', 'SEGMENT_API_KEY', 'analyticsEvents',
-    function (segmentAnalytics, SEGMENT_API_KEY, analyticsEvents) {
+  .run(['segmentAnalytics', 'analyticsEvents', 'TAG_MANAGER_CONTAINER_ID',
+    function (segmentAnalytics, analyticsEvents, TAG_MANAGER_CONTAINER_ID) {
       analyticsEvents.initialize();
-      segmentAnalytics.load(SEGMENT_API_KEY);
+      segmentAnalytics.load(TAG_MANAGER_CONTAINER_ID);
     }
   ])
 
