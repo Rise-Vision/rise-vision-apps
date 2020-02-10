@@ -11,8 +11,10 @@ angular.module('risevision.template-editor.directives')
           $scope.factory = templateEditorFactory;
 
           function _load() {
+            var fontsize = $scope.getAvailableAttributeData($scope.componentId, 'fontsize');
+
             $scope.value = $scope.getAvailableAttributeData($scope.componentId, 'value');
-            $scope.fontsize = $scope.getAvailableAttributeData($scope.componentId, 'fontsize');
+            $scope.fontsize = Number(fontsize) || 101;
           }
 
           $scope.save = function () {
