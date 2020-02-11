@@ -14,7 +14,11 @@
           $window.dataLayer.push({
             event: 'analytics.track',
             eventName: eventName,
-            trackingProperties: properties
+            analytics: {
+              event: {
+                properties: properties
+              }
+            }
           });
         };
 
@@ -22,15 +26,16 @@
           $window.dataLayer.push({
             event: 'analytics.identify',
             userId: userId,
-            trackingProperties: properties
+            analytics: {
+              user: {
+                properties: properties
+              }
+            }
           });
         };
 
         service.page = function (properties) {
-          $window.dataLayer.push({
-            event: 'analytics.page',
-            trackingProperties: properties
-          });
+          service.track('page viewed', properties);
         };
 
         service.load = function (gtmContainerId) {
@@ -48,9 +53,10 @@
                 dl = l !== 'dataLayer' ? '&l=' + l : '';
               j.async = true;
               j.src =
-                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl +
+                '&gtm_auth=Ry3lxk_Xrlx2qhbXmLA-Pg&gtm_preview=env-254&gtm_cookies_win=x';
               f.parentNode.insertBefore(j, f);
-            })($window, $window.document, 'script', 'dataLayer', gtmContainerId);
+            })($window, $window.document, 'script', 'dataLayer', 'GTM-MMTK3JH');
 
             loaded = true;
             trackPageviews();
