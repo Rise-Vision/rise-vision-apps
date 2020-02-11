@@ -76,16 +76,6 @@ angular.module('risevision.template-editor.directives')
               $scope.directives[component.type].iconType : '';
           };
 
-          $scope.getComponentTitle = function (component) {
-            var directive = $scope.directives[component.type];
-
-            if (directive.getTitle) {
-              return directive.getTitle(component);
-            }
-
-            return 'template.' + component.type;
-          };
-
           $scope.highlightComponent = function (componentId) {
             var message = {
               type: 'highlightComponent',
