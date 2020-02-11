@@ -14,7 +14,7 @@ var TemplateEditorPage = function() {
   var deleteForeverButton = element(by.buttonText('Delete Forever'));
   var errorModal = element(by.xpath('//h4[contains(text(), "Failed to")]'));
   var publishButton = element(by.id('publishButtonDesktop'));
-  var imageComponentSelector = '//div[div/span[contains(text(), "Image - ")]]';
+  var imageComponentSelector = '//div[div/span[contains(text(), "Test Instance")]]';
   var imageComponent = element(by.xpath('(' + imageComponentSelector + ')[1]'));
   var imageComponentEdit = element(by.xpath('(' + imageComponentSelector + '/div/a)[1]'));
   var backToComponentsButton = element(by.css('[ng-click="onBackButton();"]'));
@@ -122,7 +122,7 @@ var TemplateEditorPage = function() {
         //wait for presentation to be auto-saved
         helper.waitDisappear(dirtyText);
         helper.waitDisappear(savingText, 'Template Editor auto-saving');
-        helper.wait(savedText, 'Template Editor auto-saved');        
+        helper.wait(savedText, 'Template Editor auto-saved');
       }
     });
   };
