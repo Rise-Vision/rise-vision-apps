@@ -12,7 +12,7 @@ var CounterComponentScenarios = function () {
     var presentationsListPage;
     var templateEditorPage;
     var counterComponentPage;
-    var componentLabel = 'Count Down - Countdown Example';
+    var componentLabel = 'Countdown Example';
 
     before(function () {
       presentationsListPage = new PresentationListPage();
