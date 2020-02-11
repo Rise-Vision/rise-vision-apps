@@ -38,7 +38,7 @@
           service.track('page viewed', properties);
         };
 
-        service.load = function (gtmContainerId) {
+        service.load = function (gtmContainerId, gtmAuth, gtmEnv) {
           if (gtmContainerId && !loaded) {
 
             //Google Tag Manager snippet
@@ -52,11 +52,12 @@
                 j = d.createElement(s),
                 dl = l !== 'dataLayer' ? '&l=' + l : '';
               j.async = true;
-              j.src =
-                'https://www.googletagmanager.com/gtm.js?id=' + i + dl +
-                '&gtm_auth=Ry3lxk_Xrlx2qhbXmLA-Pg&gtm_preview=env-254&gtm_cookies_win=x';
+              j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+              if (gtmAuth && gtmEnv) {
+                j.src += '&gtm_auth='+gtmAuth+'&gtm_preview='+gtmEnv+'&gtm_cookies_win=x';
+              }
               f.parentNode.insertBefore(j, f);
-            })($window, $window.document, 'script', 'dataLayer', 'GTM-MMTK3JH');
+            })($window, $window.document, 'script', 'dataLayer', gtmContainerId);
 
             loaded = true;
             trackPageviews();

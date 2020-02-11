@@ -33,6 +33,8 @@
     .value('ALERTS_WS_URL',
       'https://rvacore-test.appspot.com/alerts/cap')
     .value('TAG_MANAGER_CONTAINER_ID', null)
+    .value('TAG_MANAGER_AUTH', null)
+    .value('TAG_MANAGER_ENV', null)
     .value('STORAGE_ENDPOINT_URL',
       'https://storage-dot-rvacore-test.appspot.com/_ah/api')
     .value('MESSAGING_PRIMUS_URL',

@@ -82,7 +82,7 @@ describe("Services: segment analytics", function() {
 
       expect($window.dataLayer[$window.dataLayer.length-1].event).to.equal("analytics.identify");
       expect($window.dataLayer[$window.dataLayer.length-1].userId).to.equal("username");
-      expect($window.dataLayer[$window.dataLayer.length-1].trackingProperties).to.deep.equal(expectProperties);
+      expect($window.dataLayer[$window.dataLayer.length-1].analytics.user.properties).to.deep.equal(expectProperties);
 
       done();
     }, 10);
@@ -138,8 +138,8 @@ describe("Services: segment analytics", function() {
       pageSpy.should.have.been.calledWith(expectProperties);
       expect(segmentAnalytics.location).to.equal("/somepath");
 
-      expect($window.dataLayer[$window.dataLayer.length-1].event).to.equal("analytics.page");
-      expect($window.dataLayer[$window.dataLayer.length-1].trackingProperties).to.deep.equal(expectProperties);
+      expect($window.dataLayer[$window.dataLayer.length-1].event).to.equal("analytics.track");
+      expect($window.dataLayer[$window.dataLayer.length-1].analytics.event.properties).to.deep.equal(expectProperties);
       
       done();
     }, 10);
@@ -151,7 +151,7 @@ describe("Services: segment analytics", function() {
     
     expect($window.dataLayer[$window.dataLayer.length-1].event).to.equal("analytics.track");
     expect($window.dataLayer[$window.dataLayer.length-1].eventName).to.equal("test");
-    expect($window.dataLayer[$window.dataLayer.length-1].trackingProperties).to.equal(properties);
+    expect($window.dataLayer[$window.dataLayer.length-1].analytics.event.properties).to.equal(properties);
   });
 
 });
