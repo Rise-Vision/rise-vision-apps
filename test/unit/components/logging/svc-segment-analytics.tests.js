@@ -126,7 +126,7 @@ describe("Services: segment analytics", function() {
     }, 10);
   });
   
-  it("should call page()", function(done) {
+  it("should track page views", function(done) {
     var pageSpy = sinon.spy(segmentAnalytics, "page");
 
     $scope.$broadcast("$viewContentLoaded");
@@ -138,7 +138,8 @@ describe("Services: segment analytics", function() {
       pageSpy.should.have.been.calledWith(expectProperties);
       expect(segmentAnalytics.location).to.equal("/somepath");
 
-      expect($window.dataLayer[$window.dataLayer.length-1].event).to.equal("analytics.track");
+      expect($window.dataLayer[$window.dataLayer.length-1].event).to.equal("analytics.page");
+      expect($window.dataLayer[$window.dataLayer.length-1].eventName).to.equal("page viewed");
       expect($window.dataLayer[$window.dataLayer.length-1].analytics.event.properties).to.deep.equal(expectProperties);
       
       done();

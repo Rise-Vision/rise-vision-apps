@@ -35,7 +35,15 @@
         };
 
         service.page = function (properties) {
-          service.track('page viewed', properties);
+          $window.dataLayer.push({
+            event: 'analytics.page',
+            eventName: 'page viewed',
+            analytics: {
+              event: {
+                properties: properties
+              }
+            }
+          });
         };
 
         service.load = function (gtmContainerId, gtmAuth, gtmEnv) {
