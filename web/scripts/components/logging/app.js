@@ -9,7 +9,7 @@
 
   angular.module('risevision.common.config')
     .value('ENABLE_EXTERNAL_LOGGING', true)
-    // Google Tag Manager Stage environment
+    // Google Tag Manager Live environment
     .value('TAG_MANAGER_CONTAINER_ID', 'GTM-MMTK3JH')
     .value('TAG_MANAGER_AUTH', null)
     .value('TAG_MANAGER_ENV', null);
