@@ -13,6 +13,7 @@ var TextComponentScenarios = function () {
     var presentationsListPage;
     var templateEditorPage;
     var textComponentPage;
+    var componentLabel = "Title";
 
     before(function () {
       presentationsListPage = new PresentationListPage();
@@ -32,7 +33,7 @@ var TextComponentScenarios = function () {
 
     describe('basic operations', function () {
       it('should open properties of Text Component', function () {
-        templateEditorPage.selectComponent("Text - Title");
+        templateEditorPage.selectComponent(componentLabel);
 
         expect(textComponentPage.getTextInput().getAttribute('value')).to.eventually.equal("Financial Literacy");
       });
@@ -51,7 +52,7 @@ var TextComponentScenarios = function () {
       it('should reload the Presentation, and validate changes were saved', function () {
         presentationsListPage.loadPresentation(presentationName);
 
-        templateEditorPage.selectComponent("Text - Title");
+        templateEditorPage.selectComponent(componentLabel);
         expect(textComponentPage.getTextInput().isEnabled()).to.eventually.be.true;
         expect(textComponentPage.getTextInput().getAttribute('value')).to.eventually.equal("Changed Text");
       });

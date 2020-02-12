@@ -12,7 +12,7 @@ var RssComponentScenarios = function () {
     var presentationsListPage;
     var templateEditorPage;
     var rssComponentPage;
-    var componentLabel = 'RSS - Top left';
+    var componentLabel = 'Top left';
 
     before(function () {
       presentationsListPage = new PresentationListPage();

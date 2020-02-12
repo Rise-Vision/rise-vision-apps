@@ -12,7 +12,7 @@ var TimeDateComponentScenarios = function () {
     var presentationsListPage;
     var templateEditorPage;
     var timeDateComponentPage;
-    var componentLabel = ' Time and Date - Time and Date Example';
+    var componentLabel = 'Time and Date Example';
 
     before(function () {
       presentationsListPage = new PresentationListPage();

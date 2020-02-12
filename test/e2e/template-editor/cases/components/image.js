@@ -12,6 +12,7 @@ var ImageComponentScenarios = function () {
     var presentationsListPage;
     var templateEditorPage;
     var imageComponentPage;
+    var componentLabel = 'Test Instance';
 
     before(function () {
       presentationsListPage = new PresentationListPage();
@@ -31,7 +32,7 @@ var ImageComponentScenarios = function () {
 
     describe('basic operations', function () {
       it('should list the duration and images for the first Image Component', function () {
-        templateEditorPage.selectComponent('Image - ');
+        templateEditorPage.selectComponent(componentLabel);
         helper.wait(imageComponentPage.getListDurationComponent(), 'List Duration');
         expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(4);
       });
@@ -111,7 +112,7 @@ var ImageComponentScenarios = function () {
     describe('save and validations', function () {
       it('should save the Presentation, reload it, and validate changes were saved', function () {
         presentationsListPage.loadPresentation(presentationName);
-        templateEditorPage.selectComponent('Image - ');
+        templateEditorPage.selectComponent(componentLabel);
 
         expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(2);
       });
@@ -125,7 +126,7 @@ var ImageComponentScenarios = function () {
       });
 
       it('should list the duration and images for the first Image Component', function () {
-        templateEditorPage.selectComponent('Image - ');
+        templateEditorPage.selectComponent(componentLabel);
         helper.wait(imageComponentPage.getListDurationComponent(), 'List Duration');
         expect(imageComponentPage.getSelectedImagesMain().count()).to.eventually.equal(4);
 

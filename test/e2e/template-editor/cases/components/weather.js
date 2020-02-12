@@ -32,7 +32,7 @@ var WeatherComponentScenarios = function () {
     describe('basic operations', function () {
 
       it('should open properties of Weather Component', function () {
-        templateEditorPage.selectComponent("Weather - Weather Forecast");
+        templateEditorPage.selectComponent("Weather Forecast");
         expect(weatherComponentPage.getFarenheitOption().isSelected()).to.eventually.not.be.true;
         expect(weatherComponentPage.getCelsiusOption().isSelected()).to.eventually.be.true;
       });
@@ -51,7 +51,7 @@ var WeatherComponentScenarios = function () {
       it('should save the Presentation, reload it, and validate changes were saved', function () {
         //load presentation
         presentationsListPage.loadPresentation(presentationName);
-        templateEditorPage.selectComponent("Weather - Weather Forecast");
+        templateEditorPage.selectComponent("Weather Forecast");
 
         expect(weatherComponentPage.getFarenheitOption().isSelected()).to.eventually.be.true;
         expect(weatherComponentPage.getCelsiusOption().isSelected()).to.eventually.not.be.true;

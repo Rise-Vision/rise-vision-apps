@@ -12,7 +12,7 @@ var SlidesComponentScenarios = function () {
     var presentationsListPage;
     var templateEditorPage;
     var slidesComponentPage;
-    var componentLabel = "Google Slides - Slides with default URL";
+    var componentLabel = "Slides with default URL";
 
     before(function () {
       presentationsListPage = new PresentationListPage();
