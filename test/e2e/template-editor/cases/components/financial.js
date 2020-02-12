@@ -12,6 +12,7 @@ var FinancialComponentScenarios = function () {
     var presentationsListPage;
     var templateEditorPage;
     var financialComponentPage;
+    var componentLabel = 'Currencies';
 
     before(function () {
       presentationsListPage = new PresentationListPage();
@@ -37,7 +38,7 @@ var FinancialComponentScenarios = function () {
       });
 
       it('should show one Financial Component', function () {
-        templateEditorPage.selectComponent("Financial - ");
+        templateEditorPage.selectComponent(componentLabel);
         expect(financialComponentPage.getInstrumentItems().count()).to.eventually.equal(3);
       });
 
@@ -67,7 +68,7 @@ var FinancialComponentScenarios = function () {
 
       it('should save the Presentation, reload it, and validate changes were saved', function () {
         presentationsListPage.loadPresentation(presentationName);
-        templateEditorPage.selectComponent("Financial - ");
+        templateEditorPage.selectComponent(componentLabel);
 
         expect(financialComponentPage.getInstrumentItems().count()).to.eventually.equal(4);
       });

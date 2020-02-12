@@ -20,6 +20,7 @@ var VideoComponentScenarios = function () {
     var presentationsListPage;
     var templateEditorPage;
     var videoComponentPage;
+    var componentLabel = 'Fullscreen';
 
     before(function () {
       presentationsListPage = new PresentationListPage();
@@ -38,7 +39,7 @@ var VideoComponentScenarios = function () {
 
     describe('basic operations', function () {
       it('should list the volume and videos for the first Video Component', function () {
-        templateEditorPage.selectComponent('Video - ');
+        templateEditorPage.selectComponent(componentLabel);
         helper.wait(videoComponentPage.getVolumeComponent(), 'Volume');
         expect(videoComponentPage.getSelectedVideosMain().count()).to.eventually.equal(2);
       });
@@ -114,7 +115,7 @@ var VideoComponentScenarios = function () {
     describe('save and validations', function () {
       it('should save the Presentation, reload it, and validate changes were saved', function () {
         presentationsListPage.loadPresentation(presentationName);
-        templateEditorPage.selectComponent('Video - ');
+        templateEditorPage.selectComponent(componentLabel);
 
         expect(videoComponentPage.getSelectedVideosMain().count()).to.eventually.equal(2);
       });
@@ -127,7 +128,7 @@ var VideoComponentScenarios = function () {
       });
 
       it('should list the volume and videos for the first Video Component', function () {
-        templateEditorPage.selectComponent('Video - ');
+        templateEditorPage.selectComponent(componentLabel);
         helper.wait(videoComponentPage.getVolumeComponent(), 'Volume');
         expect(videoComponentPage.getSelectedVideosMain().count()).to.eventually.equal(2);
 
@@ -220,7 +221,7 @@ var VideoComponentScenarios = function () {
             // Reload presentation so user agent is applied
 
             presentationsListPage.loadPresentation(presentationName);
-            templateEditorPage.selectComponent('Video - ');
+            templateEditorPage.selectComponent(componentLabel);
 
             videoComponentPage.getUploadInputMain().getAttribute('accept').then(accept => {
               expect(accept).to.equal('video/*')
