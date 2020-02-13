@@ -10,6 +10,10 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
 
+          $scope.initiateConnection = function() {
+            // TODO: coming soon
+          };
+
           $scope.registerDirective({
             type: 'rise-data-twitter',
             iconType: 'streamline',
