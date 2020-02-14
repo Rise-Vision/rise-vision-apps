@@ -12,7 +12,7 @@ describe('service: user tracker:', function() {
         _restoreState: function(){}
       }
     });
-    $provide.service('segmentAnalytics',function(){
+    $provide.service('analyticsFactory',function(){
       return {
         track: function(newEventName, newEventData) {
           eventName = newEventName;
@@ -44,7 +44,7 @@ describe('service: user tracker:', function() {
     expect(userTracker).to.be.a('function');
   });
   
-  it('should call segment analytics service',function(){
+  it('should call analytics service',function(){
     userTracker('User Updated', 'userId', true);
 
     expect(eventName).to.equal('User Updated');
@@ -52,7 +52,7 @@ describe('service: user tracker:', function() {
     bQSpy.should.not.have.been.called;
   });
 
-  it('should not call segment w/ blank event',function(){
+  it('should not call w/ blank event',function(){
     userTracker();
 
     expect(eventName).to.not.be.ok;

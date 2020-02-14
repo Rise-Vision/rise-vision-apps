@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('risevision.common.components.logging')
-  .factory('launcherTracker', ['userState', 'segmentAnalytics',
-    function (userState, segmentAnalytics) {
+  .factory('launcherTracker', ['userState', 'analyticsFactory',
+    function (userState, analyticsFactory) {
       return function (eventName) {
         if (eventName) {
-          segmentAnalytics.track(eventName, {
+          analyticsFactory.track(eventName, {
             companyId: userState.getSelectedCompanyId()
           });
         }
