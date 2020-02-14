@@ -12,7 +12,7 @@ describe('service: presentation tracker:', function() {
         _restoreState: function(){}
       }
     });
-    $provide.service('analyticsFactory',function(){
+    $provide.service('segmentAnalytics',function(){
       return {
         track: function(newEventName, newEventData) {
           eventName = newEventName;
@@ -44,7 +44,7 @@ describe('service: presentation tracker:', function() {
     expect(presentationTracker).to.be.a('function');
   });
   
-  it('should call analytics service',function(){
+  it('should call segment analytics service',function(){
     presentationTracker('Presentation Updated', 'presentationId', 'presentationName');
 
     expect(eventName).to.equal('Presentation Updated');
@@ -82,7 +82,7 @@ describe('service: presentation tracker:', function() {
     
   });
 
-  it('should not call w/ blank event',function(){
+  it('should not call segment w/ blank event',function(){
     presentationTracker();
 
     expect(eventName).to.not.be.ok;

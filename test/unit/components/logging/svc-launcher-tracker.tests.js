@@ -12,7 +12,7 @@ describe('service: launcher tracker:', function() {
         _restoreState: function(){}
       }
     });
-    $provide.service('analyticsFactory',function(){
+    $provide.service('segmentAnalytics',function(){
       return {
         track: function(newEventName, newEventData) {
           eventName = newEventName;
@@ -37,14 +37,14 @@ describe('service: launcher tracker:', function() {
     expect(launcherTracker).to.be.a('function');
   });
   
-  it('should call analytics service',function(){
+  it('should call segment analytics service',function(){
     launcherTracker('Add Presentation');
 
     expect(eventName).to.equal('Add Presentation');
     expect(eventData).to.deep.equal({companyId: 'companyId'});
   });
 
-  it('should not call w/ blank event',function(){
+  it('should not call segment w/ blank event',function(){
     launcherTracker();
 
     expect(eventName).to.not.be.ok;

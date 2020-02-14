@@ -25,7 +25,7 @@ angular.module('risevision.common.components.logging')
         // Prevents circular reference
         // https://stackoverflow.com/questions/22332130/injecting-http-into-angular-factoryexceptionhandler-results-in-a-circular-de
         var bigQueryLogging = $injector.get('bigQueryLogging');
-        var analyticsFactory = $injector.get('analyticsFactory');
+        var segmentAnalytics = $injector.get('segmentAnalytics');
 
         var error = getError(exception);
         var eventName = caught ? 'Exception' : 'Uncaught Exception';
@@ -43,7 +43,7 @@ angular.module('risevision.common.components.logging')
           message += '; cause: ' + _stringify(cause);
         }
 
-        analyticsFactory.track(eventName, {
+        segmentAnalytics.track(eventName, {
           message: message
         });
         bigQueryLogging.logEvent(eventName, message);

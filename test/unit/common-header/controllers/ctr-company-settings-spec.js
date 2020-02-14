@@ -45,7 +45,7 @@ describe("controller: company settings", function() {
         return deferred.promise;
       };
     });
-    $provide.service("analyticsFactory", function() {
+    $provide.service("segmentAnalytics", function() {
       return {
         track: function(name) {
           trackerCalled = name;

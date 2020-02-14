@@ -12,7 +12,7 @@ describe('service: schedule tracker:', function() {
         _restoreState: function(){}
       }
     });
-    $provide.service('analyticsFactory',function(){
+    $provide.service('segmentAnalytics',function(){
       return {
         track: function(newEventName, newEventData) {
           eventName = newEventName;
@@ -44,7 +44,7 @@ describe('service: schedule tracker:', function() {
     expect(scheduleTracker).to.be.a('function');
   });
   
-  it('should call analytics service',function(){
+  it('should call segment analytics service',function(){
     scheduleTracker('Schedule Updated', 'scheduleId', 'scheduleName');
 
     expect(eventName).to.equal('Schedule Updated');
@@ -57,7 +57,7 @@ describe('service: schedule tracker:', function() {
     bQSpy.should.have.been.calledWith('Schedule Created', 'scheduleId');
   });
 
-  it('should not call w/ blank event',function(){
+  it('should not call segment w/ blank event',function(){
     scheduleTracker();
 
     expect(eventName).to.not.be.ok;

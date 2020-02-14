@@ -32,7 +32,7 @@ describe("Services: Zendesk", function() {
       getUserCompanyName: function() { return "Rich Inc."; },
       getSelectedCompanyId: function() { return "abcdefg"; },
     });
-    $provide.service("analyticsFactory", function() {
+    $provide.service("segmentAnalytics", function() {
       return {
         identify: function() {},
       };

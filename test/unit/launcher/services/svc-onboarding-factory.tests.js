@@ -28,7 +28,7 @@ describe('service: onboardingFactory:', function() {
       }
     });
 
-    $provide.service('analyticsFactory',function(){
+    $provide.service('segmentAnalytics',function(){
       return {
         track: sinon.stub()
       }
@@ -44,12 +44,12 @@ describe('service: onboardingFactory:', function() {
 
   }));
   
-  var onboardingFactory, userState, companyAssetsFactory, analyticsFactory, updateUser, $rootScope, updateCompany;
+  var onboardingFactory, userState, companyAssetsFactory, segmentAnalytics, updateUser, $rootScope, updateCompany;
   beforeEach(function() {
     inject(function($injector) {
       userState = $injector.get('userState');
       companyAssetsFactory = $injector.get('companyAssetsFactory');
-      analyticsFactory = $injector.get('analyticsFactory');
+      segmentAnalytics = $injector.get('segmentAnalytics');
       $rootScope = $injector.get('$rootScope');
       
       onboardingFactory = $injector.get('onboardingFactory');
@@ -332,7 +332,7 @@ describe('service: onboardingFactory:', function() {
         expect(onboardingFactory.isTabCompleted(3)).to.be.true;
         expect(onboardingFactory.alreadySubscribed).to.be.true;
 
-        expect(analyticsFactory.track).to.have.been.calledWith('Onboarding Newsletter Signup Completed');
+        expect(segmentAnalytics.track).to.have.been.calledWith('Onboarding Newsletter Signup Completed');
         expect(userState.updateCompanySettings).to.have.been.called;
         expect(userState.updateUserProfile).to.have.been.called;
         
@@ -362,7 +362,7 @@ describe('service: onboardingFactory:', function() {
         expect(onboardingFactory.isTabCompleted(3)).to.be.true;
         expect(onboardingFactory.alreadySubscribed).to.be.undefined;
 
-        expect(analyticsFactory.track).to.have.been.calledWith('Onboarding Newsletter Signup Completed');
+        expect(segmentAnalytics.track).to.have.been.calledWith('Onboarding Newsletter Signup Completed');
         expect(userState.updateCompanySettings).to.have.been.called;
         expect(userState.updateUserProfile).to.have.been.called;
 
@@ -390,7 +390,7 @@ describe('service: onboardingFactory:', function() {
         expect(onboardingFactory.isTabCompleted(3)).to.be.true;
         expect(onboardingFactory.alreadySubscribed).to.be.undefined;
 
-        expect(analyticsFactory.track).to.have.been.calledWith('Onboarding Newsletter Signup Completed');
+        expect(segmentAnalytics.track).to.have.been.calledWith('Onboarding Newsletter Signup Completed');
         expect(userState.updateCompanySettings).to.have.been.called;
         expect(userState.updateUserProfile).to.have.been.called;
         

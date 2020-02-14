@@ -2,13 +2,13 @@
 
 angular.module('risevision.common.components.logging')
   .value('USER_EVENTS_TO_BQ', [])
-  .factory('userTracker', ['userState', 'analyticsFactory',
+  .factory('userTracker', ['userState', 'segmentAnalytics',
     'bigQueryLogging', 'USER_EVENTS_TO_BQ',
-    function (userState, analyticsFactory, bigQueryLogging,
+    function (userState, segmentAnalytics, bigQueryLogging,
       USER_EVENTS_TO_BQ) {
       return function (eventName, userId, isSelf) {
         if (eventName) {
-          analyticsFactory.track(eventName, {
+          segmentAnalytics.track(eventName, {
             userId: userId,
             companyId: userState.getSelectedCompanyId(),
             isSelf: isSelf

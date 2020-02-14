@@ -1,7 +1,7 @@
 /*jshint expr:true */
 "use strict";
 
-describe("Services: analyticsFactory", function() {
+describe("Services: segment analytics", function() {
 
   beforeEach(module("risevision.common.components.logging"));
   beforeEach(module(function ($provide) {
@@ -42,29 +42,29 @@ describe("Services: analyticsFactory", function() {
     }]);
   }));
   
-  var analyticsFactory, analyticsEvents, $scope, companyId, $window;
+  var segmentAnalytics, analyticsEvents, $scope, companyId, $window;
   beforeEach(function(){
     inject(function($rootScope, $injector){
       $scope = $rootScope;
       companyId = "companyId";
       
-      analyticsFactory = $injector.get("analyticsFactory");
+      segmentAnalytics = $injector.get("segmentAnalytics");
       $window = $injector.get("$window");
-      analyticsFactory.load(true);
+      segmentAnalytics.load(true);
       analyticsEvents = $injector.get("analyticsEvents");
       analyticsEvents.initialize();
     });
   });
   
   it("should exist, also methods", function() {
-    expect(analyticsFactory.load).to.be.a('function');
-    expect(analyticsFactory.track).to.be.a('function');
-    expect(analyticsFactory.identify).to.be.a('function');
-    expect(analyticsFactory.page).to.be.a('function');
+    expect(segmentAnalytics.load).to.be.a('function');
+    expect(segmentAnalytics.track).to.be.a('function');
+    expect(segmentAnalytics.identify).to.be.a('function');
+    expect(segmentAnalytics.page).to.be.a('function');
   });
 
   it("should identify user", function(done) {
-    var identifySpy = sinon.spy(analyticsFactory, "identify");    
+    var identifySpy = sinon.spy(segmentAnalytics, "identify");    
 
     analyticsEvents.identify();
     
@@ -89,7 +89,7 @@ describe("Services: analyticsFactory", function() {
   });
 
   it("should identify user when authorized", function(done) {
-    var identifySpy = sinon.spy(analyticsFactory, "identify");    
+    var identifySpy = sinon.spy(segmentAnalytics, "identify");    
 
     $scope.$broadcast("risevision.user.authorized");
     $scope.$digest();
@@ -109,7 +109,7 @@ describe("Services: analyticsFactory", function() {
   });
 
   it("should not send company information if company is undefined", function(done) {
-    var identifySpy = sinon.spy(analyticsFactory, "identify");    
+    var identifySpy = sinon.spy(segmentAnalytics, "identify");    
 
     companyId = null;
     
@@ -127,7 +127,7 @@ describe("Services: analyticsFactory", function() {
   });
   
   it("should track page views", function(done) {
-    var pageSpy = sinon.spy(analyticsFactory, "page");
+    var pageSpy = sinon.spy(segmentAnalytics, "page");
 
     $scope.$broadcast("$viewContentLoaded");
     $scope.$digest();
@@ -136,7 +136,7 @@ describe("Services: analyticsFactory", function() {
       var expectProperties = {url:"/somepath", path:"/somepath", referrer:""};
            
       pageSpy.should.have.been.calledWith(expectProperties);
-      expect(analyticsFactory.location).to.equal("/somepath");
+      expect(segmentAnalytics.location).to.equal("/somepath");
 
       expect($window.dataLayer[$window.dataLayer.length-1].event).to.equal("analytics.page");
       expect($window.dataLayer[$window.dataLayer.length-1].eventName).to.equal("page viewed");
@@ -148,7 +148,7 @@ describe("Services: analyticsFactory", function() {
 
   it("should track events", function() {
     var properties = {name:"name"};
-    analyticsFactory.track("test", properties);
+    segmentAnalytics.track("test", properties);
     
     expect($window.dataLayer[$window.dataLayer.length-1].event).to.equal("analytics.track");
     expect($window.dataLayer[$window.dataLayer.length-1].eventName).to.equal("test");

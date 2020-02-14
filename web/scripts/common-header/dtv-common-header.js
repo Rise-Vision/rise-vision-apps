@@ -179,10 +179,10 @@ angular.module('risevision.common.header', [
     }
   ])
 
-  .run(['analyticsFactory', 'analyticsEvents', 'TAG_MANAGER_CONTAINER_ID', 'TAG_MANAGER_AUTH', 'TAG_MANAGER_ENV',
-    function (analyticsFactory, analyticsEvents, TAG_MANAGER_CONTAINER_ID, TAG_MANAGER_AUTH, TAG_MANAGER_ENV) {
+  .run(['segmentAnalytics', 'analyticsEvents', 'TAG_MANAGER_CONTAINER_ID', 'TAG_MANAGER_AUTH', 'TAG_MANAGER_ENV',
+    function (segmentAnalytics, analyticsEvents, TAG_MANAGER_CONTAINER_ID, TAG_MANAGER_AUTH, TAG_MANAGER_ENV) {
       analyticsEvents.initialize();
-      analyticsFactory.load(TAG_MANAGER_CONTAINER_ID, TAG_MANAGER_AUTH, TAG_MANAGER_ENV);
+      segmentAnalytics.load(TAG_MANAGER_CONTAINER_ID, TAG_MANAGER_AUTH, TAG_MANAGER_ENV);
     }
   ])
 

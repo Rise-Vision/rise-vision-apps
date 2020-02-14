@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('risevision.common.components.logging')
-  .factory('purchaseFlowTracker', ['analyticsFactory',
-    function (analyticsFactory) {
+  .factory('purchaseFlowTracker', ['segmentAnalytics',
+    function (segmentAnalytics) {
       var factory = {};
 
       factory.trackProductAdded = function (plan) {
-        analyticsFactory.track('Product Added', {
+        segmentAnalytics.track('Product Added', {
           id: plan.productCode,
           name: plan.name,
           price: plan.isMonthly ? plan.monthly.billAmount : plan.yearly.billAmount,
@@ -17,7 +17,7 @@ angular.module('risevision.common.components.logging')
       };
 
       factory.trackPlaceOrderClicked = function (estimate) {
-        analyticsFactory.track('Place Order Clicked', {
+        segmentAnalytics.track('Place Order Clicked', {
           amount: estimate.total,
           currency: estimate.currency,
           inApp: false
@@ -25,7 +25,7 @@ angular.module('risevision.common.components.logging')
       };
 
       factory.trackOrderPayNowClicked = function (estimate) {
-        analyticsFactory.track('Order Pay Now Clicked', {
+        segmentAnalytics.track('Order Pay Now Clicked', {
           amount: estimate.total,
           currency: estimate.currency,
           inApp: false

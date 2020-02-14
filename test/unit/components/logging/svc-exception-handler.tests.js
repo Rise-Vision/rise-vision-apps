@@ -2,7 +2,7 @@
 
 describe("Services: $exceptionHandler", function() {
   beforeEach(module('risevision.common.components.logging'));
-  var $exceptionHandler, bigQueryLogging, analyticsFactory;
+  var $exceptionHandler, bigQueryLogging, segmentAnalytics;
 
   beforeEach(module(function($provide) {
     $provide.service("$q", function() {return Q;});
@@ -11,7 +11,7 @@ describe("Services: $exceptionHandler", function() {
         logEvent: sinon.stub()
       };
     }]);
-    $provide.factory("analyticsFactory", [function () {
+    $provide.factory("segmentAnalytics", [function () {
       return {
         track: sinon.stub()
       };
@@ -23,7 +23,7 @@ describe("Services: $exceptionHandler", function() {
     inject(function($injector){
       $exceptionHandler = $injector.get("$exceptionHandler");
       bigQueryLogging = $injector.get("bigQueryLogging");
-      analyticsFactory = $injector.get("analyticsFactory");
+      segmentAnalytics = $injector.get("segmentAnalytics");
     });
   });
 
@@ -36,7 +36,7 @@ describe("Services: $exceptionHandler", function() {
       $exceptionHandler("exception","details", true);
 
       bigQueryLogging.logEvent.should.have.been.calledWith('Exception', sinon.match.string);
-      analyticsFactory.track.should.have.been.calledWith('Exception', sinon.match.object);
+      segmentAnalytics.track.should.have.been.calledWith('Exception', sinon.match.object);
     });
 
     it("should handle uncaught exceptions",function() {

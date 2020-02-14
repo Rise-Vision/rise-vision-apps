@@ -7,13 +7,13 @@ angular.module('risevision.common.components.logging')
     'Template Copied',
     'HTML Template Copied'
   ])
-  .factory('presentationTracker', ['userState', 'analyticsFactory',
+  .factory('presentationTracker', ['userState', 'segmentAnalytics',
     'bigQueryLogging', 'PRESENTATION_EVENTS_TO_BQ',
-    function (userState, analyticsFactory, bigQueryLogging,
+    function (userState, segmentAnalytics, bigQueryLogging,
       PRESENTATION_EVENTS_TO_BQ) {
       return function (eventName, presentationId, presentationName) {
         if (eventName) {
-          analyticsFactory.track(eventName, {
+          segmentAnalytics.track(eventName, {
             presentationId: presentationId,
             presentationName: presentationName,
             companyId: userState.getSelectedCompanyId()

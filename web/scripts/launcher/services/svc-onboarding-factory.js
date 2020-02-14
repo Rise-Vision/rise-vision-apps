@@ -30,8 +30,8 @@ angular.module('risevision.apps.launcher.services')
     }
   ])
   .factory('onboardingFactory', ['$q', 'userState', 'companyAssetsFactory', 'updateUser', '$rootScope',
-    'analyticsFactory', '$exceptionHandler', 'updateCompany',
-    function ($q, userState, companyAssetsFactory, updateUser, $rootScope, analyticsFactory, $exceptionHandler,
+    'segmentAnalytics', '$exceptionHandler', 'updateCompany',
+    function ($q, userState, companyAssetsFactory, updateUser, $rootScope, segmentAnalytics, $exceptionHandler,
       updateCompany) {
       var factory = {};
       var onboarding = {
@@ -227,7 +227,7 @@ angular.module('risevision.apps.launcher.services')
               } else if (!resp[2]) {
                 _setCurrentStep('promotePlaybook');
                 _completeTabsUpTo(2);
-                analyticsFactory.track('Onboarding Newsletter Signup Visited');
+                segmentAnalytics.track('Onboarding Newsletter Signup Visited');
               } else {
                 factory.alreadySubscribed = true;
                 return _completeOnboarding(true);
@@ -274,7 +274,7 @@ angular.module('risevision.apps.launcher.services')
             _setCurrentStep('promoteTraining');
             _completeTabsUpTo(3);
 
-            analyticsFactory.track('Onboarding Newsletter Signup Completed', {
+            segmentAnalytics.track('Onboarding Newsletter Signup Completed', {
               subscribed: signupToNewsletter
             });
           })
