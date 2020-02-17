@@ -15,7 +15,7 @@ describe('service: company tracker:', function() {
         _restoreState: function(){}
       }
     });
-    $provide.service('segmentAnalytics',function(){
+    $provide.service('analyticsFactory',function(){
       return {
         track: function(newEventName, newEventData) {
           eventName = newEventName;
@@ -47,7 +47,7 @@ describe('service: company tracker:', function() {
     expect(companyTracker).to.be.a('function');
   });
   
-  it('should call segment analytics service',function(){
+  it('should call analytics service',function(){
     companyTracker('Company Updated', 'companyId', 'companyName', true);
 
     expect(eventName).to.equal('Company Updated');
@@ -60,7 +60,7 @@ describe('service: company tracker:', function() {
     bQSpy.should.have.been.calledWith('Company Created', 'companyName', null, 'username', 'companyId');
   });
 
-  it('should not call segment w/ blank event',function(){
+  it('should not call w/ blank event',function(){
     companyTracker();
 
     expect(eventName).to.not.be.ok;

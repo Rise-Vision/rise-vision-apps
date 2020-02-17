@@ -5,13 +5,13 @@ angular.module('risevision.common.components.logging')
     'Display Created',
     'Player Download'
   ])
-  .factory('displayTracker', ['userState', 'segmentAnalytics',
+  .factory('displayTracker', ['userState', 'analyticsFactory',
     'bigQueryLogging', 'DISPLAY_EVENTS_TO_BQ',
-    function (userState, segmentAnalytics, bigQueryLogging,
+    function (userState, analyticsFactory, bigQueryLogging,
       DISPLAY_EVENTS_TO_BQ) {
       return function (eventName, displayId, displayName, downloadType) {
         if (eventName) {
-          segmentAnalytics.track(eventName, {
+          analyticsFactory.track(eventName, {
             displayId: displayId,
             displayName: displayName,
             companyId: userState.getSelectedCompanyId(),

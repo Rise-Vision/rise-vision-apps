@@ -12,7 +12,7 @@ describe('service: display tracker:', function() {
         _restoreState: function(){}
       }
     });
-    $provide.service('segmentAnalytics',function(){
+    $provide.service('analyticsFactory',function(){
       return {
         track: function(newEventName, newEventData) {
           eventName = newEventName;
@@ -44,7 +44,7 @@ describe('service: display tracker:', function() {
     expect(displayTracker).to.be.a('function');
   });
   
-  it('should call segment analytics service',function(){
+  it('should call analytics service',function(){
     displayTracker('Display Updated', 'displayId', 'displayName', 'downloadType');
 
     expect(eventName).to.equal('Display Updated');
@@ -62,7 +62,7 @@ describe('service: display tracker:', function() {
     bQSpy.should.have.been.calledWith('Display Created', 'displayId');
   });
 
-  it('should not call segment w/ blank event',function(){
+  it('should not call w/ blank event',function(){
     displayTracker();
 
     expect(eventName).to.not.be.ok;

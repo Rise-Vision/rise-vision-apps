@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('risevision.common.components.logging')
-    .factory('segmentAnalytics', ['$rootScope', '$window', '$log', '$location',
+    .factory('analyticsFactory', ['$rootScope', '$window', '$log', '$location',
       function ($rootScope, $window, $log, $location) {
         var service = {};
         var loaded;
@@ -62,7 +62,7 @@
               j.async = true;
               j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
               if (gtmAuth && gtmEnv) {
-                j.src += '&gtm_auth='+gtmAuth+'&gtm_preview='+gtmEnv+'&gtm_cookies_win=x';
+                j.src += '&gtm_auth=' + gtmAuth + '&gtm_preview=' + gtmEnv + '&gtm_cookies_win=x';
               }
               f.parentNode.insertBefore(j, f);
             })($window, $window.document, 'script', 'dataLayer', gtmContainerId);
@@ -92,9 +92,9 @@
       }
     ])
 
-    .factory('analyticsEvents', ['$rootScope', 'segmentAnalytics',
+    .factory('analyticsEvents', ['$rootScope', 'analyticsFactory',
       'userState',
-      function ($rootScope, segmentAnalytics, userState) {
+      function ($rootScope, analyticsFactory, userState) {
         var service = {};
 
         service.identify = function () {
@@ -119,7 +119,7 @@
               };
             }
 
-            segmentAnalytics.identify(userState.getUsername(), properties);
+            analyticsFactory.identify(userState.getUsername(), properties);
           }
         };
 
