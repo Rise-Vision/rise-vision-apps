@@ -18,6 +18,15 @@ angular.module('risevision.template-editor.directives')
 
           $scope.folderItems = [];
           $scope.selectedItems = [];
+          $scope.filterConfig = {
+            placeholder: 'Search Rise Storage',
+            id: 'basicStorageSearchInput'
+          };
+          $scope.search = {
+            doSearch: function () {},
+            reverse: false
+          };
+          
           $scope.storageUploadManager = {
             folderPath: '',
             onUploadStatus: function (isUploading) {
