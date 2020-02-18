@@ -1,10 +1,13 @@
 <div class="attribute-editor-component">
-  <div class="attribute-editor-row">
-    <div>
-      <button class="btn btn-primary btn-block" ng-click="initiateConnection()">
-        <span>Connect to Twitter</span>
-      </button>
-    </div>
+  <div class="attribute-editor-row" ng-show="connectionFailure">
+    <p class="text-error">
+      <span>We're having trouble connecting to your Twitter account.</span>
+    </p>
+  </div>
+  <div class="attribute-editor-row" ng-show="!connected">
+    <button class="btn btn-primary btn-block" ng-click="connectToTwitter()">
+      <span>Connect to Twitter</span>
+    </button>
   </div>
 </div>
 
