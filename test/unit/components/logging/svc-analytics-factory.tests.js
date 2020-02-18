@@ -133,7 +133,7 @@ describe("Services: analyticsFactory", function() {
     $scope.$digest();
     
     setTimeout(function() {
-      var expectProperties = {url:"/somepath", path:"/somepath", referrer:""};
+      var expectProperties = {url:"/somepath", path:"/somepath", referrer:"", category: "apps"};
            
       pageSpy.should.have.been.calledWith(expectProperties);
       expect(analyticsFactory.location).to.equal("/somepath");
@@ -152,6 +152,7 @@ describe("Services: analyticsFactory", function() {
     
     expect($window.dataLayer[$window.dataLayer.length-1].event).to.equal("analytics.track");
     expect($window.dataLayer[$window.dataLayer.length-1].eventName).to.equal("test");
+    properties.category = "apps";
     expect($window.dataLayer[$window.dataLayer.length-1].analytics.event.properties).to.equal(properties);
   });
 
