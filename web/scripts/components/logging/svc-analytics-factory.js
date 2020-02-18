@@ -12,7 +12,7 @@
 
         service.track = function (eventName, properties) {
           properties = properties || {};
-          properties.category = "apps";
+          properties.category = 'apps';
           $window.dataLayer.push({
             event: 'analytics.track',
             eventName: eventName,
@@ -38,7 +38,7 @@
 
         service.page = function (properties) {
           properties = properties || {};
-          properties.category = "apps";
+          properties.category = 'apps';
           $window.dataLayer.push({
             event: 'analytics.page',
             eventName: 'page viewed',
