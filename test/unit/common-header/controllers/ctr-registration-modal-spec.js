@@ -79,7 +79,7 @@ describe("controller: registration modal", function() {
       };
     });
 
-    $provide.service("segmentAnalytics", function() { 
+    $provide.service("analyticsFactory", function() { 
       return {
         track: function(name) {
           trackerCalled = name;
