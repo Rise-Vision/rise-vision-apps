@@ -1,10 +1,10 @@
 'use strict';
 angular.module('risevision.editor.controllers')
   .controller('storeProductsModal', ['$scope', '$loading', '$filter', '$modal', '$modalInstance',
-    'userState', 'ScrollingListService', 'productsFactory', 'playlistItemFactory',
+    'userState', 'ScrollingListService', 'productsFactory', 'playlistItemFactory', 'templateCategoryFilter',
     'category', 'TEMPLATES_TYPE',
     function ($scope, $loading, $filter, $modal, $modalInstance,
-      userState, ScrollingListService, productsFactory, playlistItemFactory,
+      userState, ScrollingListService, productsFactory, playlistItemFactory, templateCategoryFilter,
       category, TEMPLATES_TYPE) {
       var defaultCount = 1000;
 
@@ -25,11 +25,24 @@ angular.module('risevision.editor.controllers')
         id: 'storeProductsSearchInput'
       };
 
+      var _updateProductFilters = function () {
+        if (category === TEMPLATES_TYPE && !$scope.categoryFilters && $scope.factory.items.list.length) {
+          $scope.categoryFilters = {
+            templateIndustries: templateCategoryFilter($scope.factory.items.list, 'templateIndustries'),
+            templateCategories: templateCategoryFilter($scope.factory.items.list, 'templateCategories'),
+            templateLocations: templateCategoryFilter($scope.factory.items.list, 'templateLocations'),
+            templateContentTypes: templateCategoryFilter($scope.factory.items.list, 'templateContentTypes')
+          };
+        }
+      };
+
       $scope.$watch('factory.loadingItems', function (loading) {
         if (loading) {
           $loading.start('product-list-loader');
         } else {
           $loading.stop('product-list-loader');
+
+          _updateProductFilters();
         }
       });
 

@@ -7,7 +7,7 @@ describe('controller: Store Products Modal', function() {
   beforeEach(module(function ($provide) {
     $provide.service('ScrollingListService', function() {
       return function() {
-        return scrollingListService
+        return scrollingListService;
       };
     });
     $provide.service('productsFactory',function(){
@@ -56,6 +56,11 @@ describe('controller: Store Products Modal', function() {
         addWidgetByUrl : function(){}
       }
     });
+    $provide.service('templateCategoryFilter', function() {
+      return function(list, category) {
+        return category;
+      };
+    });
     $provide.service('userState',function(){
       return {
         isEducationCustomer : function(){ return isEducationCustomer; },
@@ -75,7 +80,10 @@ describe('controller: Store Products Modal', function() {
     scrollingListService = {
       search: {},
       loadingItems: false,
-      doSearch: function() {}
+      doSearch: function() {},
+      items: {
+        list: []
+      }
     };
 
     inject(function($injector,$rootScope, $controller){
@@ -156,6 +164,29 @@ describe('controller: Store Products Modal', function() {
         done();
       }, 10);
     });
+
+    describe('templateCategories:', function() {
+      it('should not populate categories if list is empty', function() {
+        expect($scope.categoryFilters).to.not.be.ok;
+      });
+
+      it('should populate categories when list is loaded', function(done) {
+        $scope.factory.items.list = ['product'];
+        $scope.factory.loadingItems = null;
+        $scope.$digest();
+        setTimeout(function() {
+          expect($scope.categoryFilters).to.deep.equal({
+            templateIndustries: 'templateIndustries',
+            templateCategories: 'templateCategories',
+            templateLocations: 'templateLocations',
+            templateContentTypes: 'templateContentTypes'
+          });
+
+          done();
+        }, 10);
+      });
+    });
+
   });
 
   describe('$modalInstance functionality: ', function() {
