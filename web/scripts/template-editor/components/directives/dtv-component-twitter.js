@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentTwitter', ['templateEditorFactory',
-    function (templateEditorFactory) {
+  .directive('templateComponentTwitter', ['templateEditorFactory', 'TwitterOAuthService',
+    function (templateEditorFactory, TwitterOAuthService) {
       return {
         restrict: 'E',
         scope: true,
@@ -10,12 +10,17 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
 
-          // temporarily set values to show all authenticate UI for validation
-          $scope.connectionFailure = true;
+          $scope.connectionFailure = false;
           $scope.connected = false;
 
           $scope.connectToTwitter = function() {
-            // TODO: coming soon
+            TwitterOAuthService.authenticate()
+              .then(function (key) {
+                $scope.connected = true;
+              }, function () {
+                $scope.connected = false;
+                $scope.connectionFailure = true;
+              });
           };
 
           $scope.registerDirective({
