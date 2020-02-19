@@ -12,7 +12,8 @@
     // Google Tag Manager Live environment
     .value('TAG_MANAGER_CONTAINER_ID', 'GTM-MMTK3JH')
     .value('TAG_MANAGER_AUTH', null)
-    .value('TAG_MANAGER_ENV', null);
+    .value('TAG_MANAGER_ENV', null)
+    .value('HUBSPOT_ACCOUNT', '2700250');
 
   angular.module('risevision.common.components.logging', [
     'risevision.common.components.scrolling-list'
