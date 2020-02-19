@@ -13,8 +13,8 @@ angular.module('risevision.template-editor.directives')
           $scope.connectionFailure = false;
           $scope.connected = false;
 
-          $scope.connectToTwitter = function() {
-            TwitterOAuthService.authenticate()
+          $scope.connectToTwitter = function () {
+            return TwitterOAuthService.authenticate()
               .then(function (key) {
                 $scope.connected = true;
                 $scope.connectionFailure = false;

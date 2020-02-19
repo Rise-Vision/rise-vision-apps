@@ -3,10 +3,12 @@
 describe('directive: templateComponentTwitter', function() {
   var $scope,
     element,
-    factory;
+    factory,
+    oauthService;
 
   beforeEach(function() {
     factory = { selected: { id: "TEST-ID" } };
+    oauthService = {};
   });
 
   beforeEach(module('risevision.template-editor.directives'));
@@ -17,6 +19,10 @@ describe('directive: templateComponentTwitter', function() {
   beforeEach(module(function ($provide) {
     $provide.service('templateEditorFactory', function() {
       return factory;
+    });
+
+    $provide.service('TwitterOAuthService', function() {
+      return oauthService;
     });
   }));
 
@@ -44,6 +50,22 @@ describe('directive: templateComponentTwitter', function() {
     expect(directive.iconType).to.equal('streamline');
     expect(directive.icon).to.exist;
     expect(directive.show).to.be.a('function');
+  });
+
+  it('should set flags when oauth service connection works', function(done) {
+    oauthService.authenticate = function() {
+      return Q.resolve();
+    };
+
+    expect($scope.connected).to.be.false;
+    expect($scope.connectionFailure).to.be.false;
+
+    $scope.connectToTwitter().then( function() {
+      expect($scope.connected).to.be.true;
+      expect($scope.connectionFailure).to.be.false;
+
+      done();
+    });
   });
 
 });
