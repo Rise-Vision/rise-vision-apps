@@ -7,31 +7,31 @@
   </div>
   <div class="modal-body u_padding-lg" stop-event="touchend">
     
-    <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch" ng-hide="categoryFilters"></search-filter>
+    <div class="u_margin-md-bottom" ng-if="!categoryFilters">
+      <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>
+    </div>
 
-    <div class="row" ng-show="categoryFilters">
-      <div class="col-md-8">
+    <div class="row" ng-if="categoryFilters">
+      <div class="col-md-8 u_margin-sm-bottom">
         <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>
       </div>
-      <div class="col-md-4 form-inline">
-        <div class="form-group pull-right">
-          <label for="filter-templates" class="u_margin-right">Filter Templates:</label>
-          <select id="filter-templates" class="form-control selectpicker" ng-model="factory.templatesFilter">
-            <option value="">Show All</option>
-            <optgroup label="Industry" ng-if="categoryFilters.templateIndustries.length">
-              <option ng-repeat="industry in categoryFilters.templateIndustries" value="{{industry}}">{{industry}}</option>
-            </optgroup>
-            <optgroup label="Category" ng-if="categoryFilters.templateCategories.length">
-              <option ng-repeat="category in categoryFilters.templateCategories" value="{{category}}">{{category}}</option>
-            </optgroup>
-            <optgroup label="Locations" ng-if="categoryFilters.templateLocations.length">
-              <option ng-repeat="location in categoryFilters.templateLocations" value="{{location}}">{{location}}</option>
-            </optgroup>
-            <optgroup label="Content" ng-if="categoryFilters.templateContentTypes.length">
-              <option ng-repeat="contentType in categoryFilters.templateContentTypes" value="{{contentType}}">{{contentType}}</option>
-            </optgroup>
-          </select>
-        </div>
+      <div class="col-md-4 u_margin-md-bottom aligner">
+        <label for="filter-templates" class="u_remove-bottom u_nowrap u_margin-right">Filter Templates:</label>
+        <select id="filter-templates" class="form-control selectpicker" ng-model="factory.templatesFilter">
+          <option value="">Show All</option>
+          <optgroup label="Industry" ng-if="categoryFilters.templateIndustries.length">
+            <option ng-repeat="industry in categoryFilters.templateIndustries" value="{{industry}}">{{industry}}</option>
+          </optgroup>
+          <optgroup label="Category" ng-if="categoryFilters.templateCategories.length">
+            <option ng-repeat="category in categoryFilters.templateCategories" value="{{category}}">{{category}}</option>
+          </optgroup>
+          <optgroup label="Locations" ng-if="categoryFilters.templateLocations.length">
+            <option ng-repeat="location in categoryFilters.templateLocations" value="{{location}}">{{location}}</option>
+          </optgroup>
+          <optgroup label="Content" ng-if="categoryFilters.templateContentTypes.length">
+            <option ng-repeat="contentType in categoryFilters.templateContentTypes" value="{{contentType}}">{{contentType}}</option>
+          </optgroup>
+        </select>
       </div>
     </div>
 
@@ -40,7 +40,7 @@
         rv-spinner rv-spinner-key="product-list-loader"
         rv-spinner-start-active="1">
 
-      <div class="professional-content panel panel-default u_margin-md-top">
+      <div class="professional-content panel panel-default">
         <div class="panel-body">
           <div class="product-grid">
             <div class="row">
