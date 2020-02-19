@@ -68,4 +68,20 @@ describe('directive: templateComponentTwitter', function() {
     });
   });
 
+  it('should detect failure when oauth service connection does not work', function(done) {
+    oauthService.authenticate = function() {
+      return Q.reject();
+    };
+
+    expect($scope.connected).to.be.false;
+    expect($scope.connectionFailure).to.be.false;
+
+    $scope.connectToTwitter().then( function() {
+      expect($scope.connected).to.be.false;
+      expect($scope.connectionFailure).to.be.true;
+
+      done();
+    });
+  });
+
 });
