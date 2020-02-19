@@ -17,6 +17,7 @@ angular.module('risevision.template-editor.directives')
             TwitterOAuthService.authenticate()
               .then(function (key) {
                 $scope.connected = true;
+                $scope.connectionFailure = false;
               }, function () {
                 $scope.connected = false;
                 $scope.connectionFailure = true;
