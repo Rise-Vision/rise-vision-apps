@@ -14,7 +14,7 @@ angular.module('risevision.template-editor.directives')
           $scope.connectionFailure = true;
           $scope.connected = false;
 
-          $scope.connectToTwitter = function() {
+          $scope.connectToTwitter = function () {
             // TODO: coming soon
           };
 
