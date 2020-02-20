@@ -120,6 +120,7 @@ describe('controller: Store Products Modal', function() {
     expect($scope.filterConfig).to.be.ok;
     expect($scope.isEducationCustomer).to.be.false;
 
+    expect($scope.getTemplatesFilter).to.be.a('function');
     expect($scope.select).to.be.a('function');
     expect($scope.dismiss).to.be.a('function');
     expect($scope.addWidgetByUrl).to.be.a('function');
@@ -176,7 +177,6 @@ describe('controller: Store Products Modal', function() {
         $scope.$digest();
         setTimeout(function() {
           expect($scope.categoryFilters).to.deep.equal({
-            templateIndustries: 'templateIndustries',
             templateCategories: 'templateCategories',
             templateLocations: 'templateLocations',
             templateContentTypes: 'templateContentTypes'
@@ -185,6 +185,23 @@ describe('controller: Store Products Modal', function() {
           done();
         }, 10);
       });
+    });
+
+  });
+
+  describe('getTemplatesFilter:', function() {
+    it('should return a filter object with the category and value selected', function() {
+      $scope.search.templatesFilter = 'templateCategories|sampleCategory';
+
+      expect($scope.getTemplatesFilter()).to.deep.equal({
+        templateCategories: 'sampleCategory'
+      });
+    });
+
+    it('should return a blank filter if nothing is selected', function() {
+      $scope.search.templatesFilter = null;
+
+      expect($scope.getTemplatesFilter()).to.deep.equal({});
     });
 
   });

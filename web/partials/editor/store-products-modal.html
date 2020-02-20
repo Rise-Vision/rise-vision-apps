@@ -17,19 +17,16 @@
       </div>
       <div class="col-md-4 u_margin-md-bottom aligner">
         <label for="filter-templates" class="u_remove-bottom u_nowrap u_margin-right">Filter Templates:</label>
-        <select id="filter-templates" class="form-control selectpicker" ng-model="factory.templatesFilter">
+        <select id="filter-templates" class="form-control selectpicker" ng-model="search.templatesFilter">
           <option value="">Show All</option>
-          <optgroup label="Industry" ng-if="categoryFilters.templateIndustries.length">
-            <option ng-repeat="industry in categoryFilters.templateIndustries" value="{{industry}}">{{industry}}</option>
-          </optgroup>
           <optgroup label="Category" ng-if="categoryFilters.templateCategories.length">
-            <option ng-repeat="category in categoryFilters.templateCategories" value="{{category}}">{{category}}</option>
+            <option ng-repeat="category in categoryFilters.templateCategories" value="{{'templateCategories|' + category}}">{{category}}</option>
           </optgroup>
           <optgroup label="Locations" ng-if="categoryFilters.templateLocations.length">
-            <option ng-repeat="location in categoryFilters.templateLocations" value="{{location}}">{{location}}</option>
+            <option ng-repeat="location in categoryFilters.templateLocations" value="{{'templateLocations|' + location}}">{{location}}</option>
           </optgroup>
           <optgroup label="Content" ng-if="categoryFilters.templateContentTypes.length">
-            <option ng-repeat="contentType in categoryFilters.templateContentTypes" value="{{contentType}}">{{contentType}}</option>
+            <option ng-repeat="contentType in categoryFilters.templateContentTypes" value="{{'templateContentTypes|' + contentType}}">{{contentType}}</option>
           </optgroup>
         </select>
       </div>
@@ -45,7 +42,7 @@
           <div class="product-grid">
             <div class="row">
 
-              <ng-repeat ng-repeat="product in factory.items.list | filter:factory.templatesFilter">
+              <ng-repeat ng-repeat="product in factory.items.list | filter: getTemplatesFilter()">
                 <div id="storeProduct" class="col-sm-6 col-md-4 col-lg-3" ng-click="select(product)">
                   <div class="product-grid_item panel panel-default">
 

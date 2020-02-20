@@ -25,10 +25,20 @@ angular.module('risevision.editor.controllers')
         id: 'storeProductsSearchInput'
       };
 
+      $scope.getTemplatesFilter = function() {
+        var filter = {};
+
+        if ($scope.search.templatesFilter) {
+          var values = $scope.search.templatesFilter.split('|');
+          filter[values[0]] = values[1];          
+        }
+
+        return filter;
+      };
+
       var _updateProductFilters = function () {
         if (category === TEMPLATES_TYPE && !$scope.categoryFilters && $scope.factory.items.list.length) {
           $scope.categoryFilters = {
-            templateIndustries: templateCategoryFilter($scope.factory.items.list, 'templateIndustries'),
             templateCategories: templateCategoryFilter($scope.factory.items.list, 'templateCategories'),
             templateLocations: templateCategoryFilter($scope.factory.items.list, 'templateLocations'),
             templateContentTypes: templateCategoryFilter($scope.factory.items.list, 'templateContentTypes')
