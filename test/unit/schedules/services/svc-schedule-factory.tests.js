@@ -430,45 +430,6 @@ describe('service: scheduleFactory:', function() {
       });
     });
 
-    describe('scheduleHasTransitions', function() {
-      it('should return false if the schedule does not have transitions', function() {
-        expect(scheduleFactory.scheduleHasTransitions({})).to.be.false;
-        expect(scheduleFactory.scheduleHasTransitions({ content: [] })).to.be.false;
-        expect(scheduleFactory.scheduleHasTransitions({ content: [{}] })).to.be.false;
-        expect(scheduleFactory.scheduleHasTransitions({ content: [{ transitionType: 'normal' }] })).to.be.false;
-      });
-
-      it('should return true if the schedule has transitions', function() {
-        expect(scheduleFactory.scheduleHasTransitions({ content: [{ transitionType: 'fadeIn' }] })).to.be.true;
-      });
-    });
-
-    describe('logTransitionUsage', function() {
-      var presentationWithTransitions = { content: [{ transitionType: 'fadeIn' }] };
-
-      it('should not call scheduleTracker if transitions were not added', function() {
-        scheduleFactory.logTransitionUsage({}, {});
-
-        expect(trackerCalled).to.be.falsey;
-      });
-
-      it('should not call scheduleTracker if transitions existed and were not removed', function() {
-        scheduleFactory.logTransitionUsage(presentationWithTransitions, presentationWithTransitions);
-
-        expect(trackerCalled).to.be.falsey;
-      });
-
-      it('should call scheduleTracker if transitions were added', function() {
-        scheduleFactory.logTransitionUsage(presentationWithTransitions, {});
-
-        expect(trackerCalled).to.equal('Transitions Added');
-      });
-
-      it('should call scheduleTracker if transitions were removed', function() {
-        scheduleFactory.logTransitionUsage({}, presentationWithTransitions);
-
-        expect(trackerCalled).to.equal('Transitions Removed');
-      });
-    });
   });
+
 });

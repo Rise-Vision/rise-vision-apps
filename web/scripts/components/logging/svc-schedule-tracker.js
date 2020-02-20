@@ -2,7 +2,7 @@
 
 angular.module('risevision.common.components.logging')
   .value('SCHEDULE_EVENTS_TO_BQ', [
-    'Schedule Created', 'Transitions Added', 'Transitions Removed'
+    'Schedule Created'
   ])
   .factory('scheduleTracker', ['userState', 'analyticsFactory',
     'bigQueryLogging', 'SCHEDULE_EVENTS_TO_BQ',

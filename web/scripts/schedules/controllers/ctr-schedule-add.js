@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.schedules.controllers')
-  .controller('scheduleAdd', ['$scope', 'scheduleFactory', '$loading',
-    function ($scope, scheduleFactory, $loading) {
+  .controller('scheduleAdd', ['$scope', 'scheduleFactory', '$loading', '$log',
+    function ($scope, scheduleFactory, $loading, $log) {
       $scope.factory = scheduleFactory;
       $scope.schedule = scheduleFactory.schedule;
 

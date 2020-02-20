@@ -15,8 +15,7 @@ describe('controller: schedule details', function() {
         },
         deleteSchedule: function() {
           deleteCalled = true;
-        },
-        logTransitionUsage: function() {}
+        }
       }
     });
     $provide.service('$state',function(){
