@@ -604,7 +604,7 @@ $short-phone-height: 570px;
 
 .storage-selector-component {
   --storage-column-width: 100%;
-  --storage-selector-search-height: 75px;
+  --storage-selector-search-height: 65px;
 
   height: calc(var(--storage-selector-body-height) - var(--storage-selector-search-height) - var(--storage-selector-button-bar-height));
   overflow-x: hidden;
