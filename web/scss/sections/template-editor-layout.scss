@@ -1307,6 +1307,10 @@ $short-phone-height: 570px;
       &:last-child {
         border-left: none;
       }
+
+      svg {
+        fill: $madero-gray;
+      }
     }
 
     &:focus-within .input-group-addon {

@@ -9,7 +9,8 @@ angular.module('risevision.common.components.search-filter', [])
         scope: {
           filterConfig: '=',
           search: '=',
-          doSearch: '='
+          doSearch: '=',
+          iconSet: '@'
         },
         templateUrl: 'partials/components/search-filter/search-filter.html',
         link: function ($scope) {
