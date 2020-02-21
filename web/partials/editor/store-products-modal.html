@@ -20,13 +20,13 @@
         <select id="filter-templates" class="form-control selectpicker" ng-model="search.templatesFilter">
           <option value="">Show All</option>
           <optgroup label="Category" ng-if="categoryFilters.templateCategories.length">
-            <option ng-repeat="category in categoryFilters.templateCategories" value="{{'templateCategories|' + category}}">{{category}}</option>
+            <option ng-repeat="category in categoryFilters.templateCategories | orderBy:category" value="{{'templateCategories|' + category}}">{{category}}</option>
           </optgroup>
           <optgroup label="Locations" ng-if="categoryFilters.templateLocations.length">
-            <option ng-repeat="location in categoryFilters.templateLocations" value="{{'templateLocations|' + location}}">{{location}}</option>
+            <option ng-repeat="location in categoryFilters.templateLocations | orderBy:location" value="{{'templateLocations|' + location}}">{{location}}</option>
           </optgroup>
           <optgroup label="Content" ng-if="categoryFilters.templateContentTypes.length">
-            <option ng-repeat="contentType in categoryFilters.templateContentTypes" value="{{'templateContentTypes|' + contentType}}">{{contentType}}</option>
+            <option ng-repeat="contentType in categoryFilters.templateContentTypes | orderBy:contentType" value="{{'templateContentTypes|' + contentType}}">{{contentType}}</option>
           </optgroup>
         </select>
       </div>
