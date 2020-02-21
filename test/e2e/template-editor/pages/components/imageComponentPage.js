@@ -9,11 +9,13 @@ var ImageComponentPage = function() {
   var uploadInputMain = element(by.id('image-list-uploader'));
   var uploadPanelMain = element(by.id('upload-panel-image-list-uploader'));
   var storageSpinner = element(by.id('storage-image-storage-spinner'));
-  var storageItemsSelector = 'item in folderItems track by $index';
+  var storageItemsSelector = 'item in folderItems | filter:search.query | orderBy:search.sortBy:search.reverse as filteredItems track by $index';
   var storageItems = element.all(by.repeater(storageItemsSelector));
   var storageButtonMain = element(by.id('image-list-storage-button'));
   var storageAddSelected = element(by.id('image-storage-add-selected'));
   var storageNewFile = element(by.repeater(storageItemsSelector).row(1));
+  var storageSearchInput = element(by.id('basicStorageSearchInput'));
+  var noSearchResultContainer = element(by.id('noSearchResult'));
   var uploadButtonStorage = element(by.id('image-storage-uploader-label'));
   var uploadInputStorage = element(by.id('image-storage-uploader'));
   var uploadPanelStorage = element(by.id('upload-panel-image-storage-uploader'));
@@ -57,6 +59,14 @@ var ImageComponentPage = function() {
 
   this.getStorageNewFile = function () {
     return storageNewFile;
+  };
+
+  this.getStorageSearchInput = function () {
+    return storageSearchInput;
+  };
+
+  this.getNoSearchResultContainer = function () {
+    return noSearchResultContainer;
   };
 
   this.getUploadButtonStorage = function () {

@@ -93,6 +93,22 @@ var ImageComponentScenarios = function () {
           expect(imageComponentPage.getStorageItems().count()).to.eventually.equal(2);
         });
 
+        it('should search and filter results',function() {
+          imageComponentPage.getStorageSearchInput().sendKeys('e2e-upload-image-2');
+          expect(imageComponentPage.getStorageItems().count()).to.eventually.equal(1);
+        });
+
+        it('should show message when no results',function() {
+          imageComponentPage.getStorageSearchInput().sendKeys('non-existing-file');
+          expect(imageComponentPage.getNoSearchResultContainer().isDisplayed()).to.eventually.be.true;
+          expect(imageComponentPage.getStorageItems().count()).to.eventually.equal(0);
+        });
+
+        it('should clear search',function() {
+          imageComponentPage.getStorageSearchInput().clear();
+          expect(imageComponentPage.getStorageItems().count()).to.eventually.equal(2);
+        });
+
         it('should select one file and add it to Image List', function() {
           helper.clickWhenClickable(imageComponentPage.getStorageNewFile(), 'Storage New File');
           browser.sleep(500);
