@@ -5,12 +5,12 @@ angular.module('risevision.common.header')
     '$q', '$scope', '$rootScope', '$modalInstance',
     '$loading', 'addAccount', '$exceptionHandler',
     'userState', 'pick', 'uiFlowManager', 'messageBox', 'humanReadableError',
-    'agreeToTermsAndUpdateUser', 'account', 'segmentAnalytics',
+    'agreeToTermsAndUpdateUser', 'account', 'analyticsFactory',
     'bigQueryLogging', 'analyticsEvents', 'updateCompany', 'plansFactory',
     'COMPANY_INDUSTRY_FIELDS', 'urlStateService', 'getAccount',
     function ($q, $scope, $rootScope, $modalInstance, $loading, addAccount,
       $exceptionHandler, userState, pick, uiFlowManager, messageBox, humanReadableError,
-      agreeToTermsAndUpdateUser, account, segmentAnalytics, bigQueryLogging,
+      agreeToTermsAndUpdateUser, account, analyticsFactory, bigQueryLogging,
       analyticsEvents, updateCompany, plansFactory, COMPANY_INDUSTRY_FIELDS,
       urlStateService, getAccount) {
 
@@ -94,7 +94,7 @@ angular.module('risevision.common.header')
                   }
 
                   analyticsEvents.identify();
-                  segmentAnalytics.track('User Registered', {
+                  analyticsFactory.track('User Registered', {
                     'companyId': userState.getUserCompanyId(),
                     'companyName': userState.getUserCompanyName(),
                     'isNewCompany': $scope.newUser
