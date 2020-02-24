@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentTwitter', ['templateEditorFactory', 'TwitterOAuthService', 'twitterCredentialsValidation',
-    function (templateEditorFactory, TwitterOAuthService, twitterCredentialsValidation) {
+  .directive('templateComponentTwitter', ['templateEditorFactory', 'TwitterOAuthService', '$loading',
+    'twitterCredentialsValidation',
+    function (templateEditorFactory, TwitterOAuthService, $loading, twitterCredentialsValidation) {
       return {
         restrict: 'E',
         scope: true,
@@ -60,11 +61,13 @@ angular.module('risevision.template-editor.directives')
 
             twitterCredentialsValidation.verifyCredentials($scope.factory.presentation.companyId)
               .then(function (hasCredentials) {
-                console.log("has credentials: ", hasCredentials);
+                console.log('has credentials: ', hasCredentials);
                 $scope.connected = hasCredentials;
                 $scope.connectionFailure = !hasCredentials;
               })
-              .catch(function(err) {handleConnectionFailure();})
+              .catch(function (err) {
+                handleConnectionFailure();
+              })
               .finally(function () {
                 $scope.spinner = false;
               });
