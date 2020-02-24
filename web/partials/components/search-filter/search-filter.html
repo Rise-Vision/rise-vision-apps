@@ -1,6 +1,12 @@
 <div class="input-group">
-  <span class="input-group-addon" ng-click="doSearch()"><i class="fa fa-search"></i></span>
+  <span ng-if="iconSet !== 'madero'" class="input-group-addon" ng-click="doSearch()"><i class="fa fa-search"></i></span>
+  <span ng-if="iconSet === 'madero'" class="input-group-addon" ng-click="doSearch()">
+	<streamline-icon name="magnifier" width="16" height="16"></streamline-icon>
+  </span>
   <input id="{{ filterConfig.id }}" type="text" class="form-control" placeholder="{{ filterConfig.placeholder }}"
     ng-model="search.query" ng-enter="delay(doSearch, 0)" ng-change="delay(doSearch, 1000)">
-  <span class="input-group-addon" ng-click="reset()"><i class="fa fa-times"></i></span>
+  <span ng-if="iconSet !== 'madero'" class="input-group-addon" ng-click="reset()"><i class="fa fa-times"></i></span>
+  <span ng-if="iconSet === 'madero'" class="input-group-addon" ng-click="reset()">
+  	<streamline-icon name="close" width="12" height="12"></streamline-icon>
+  </span>
 </div>

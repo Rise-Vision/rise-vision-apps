@@ -1,11 +1,19 @@
+
+<div class="row storage-selector-search-container">
+  <div class="col-xs-12">
+    <search-filter filter-config="filterConfig" search="search" do-search="search.doSearch" icon-set="madero"></search-filter>
+  </div> 
+</div>
+
 <div class="storage-selector-component te-scrollable-container"
   ng-class="{ 'no-files': !hasRegularFileItems() }"
   rv-spinner
   rv-spinner-key="storage-{{storageSelectorId}}-spinner"
   rv-spinner-start-active="1"
 >
-  <div class="storage-selector-list" ng-show="folderItems.length > 0 && !isUploading">
-    <div class="storage-row" ng-repeat="item in folderItems track by $index">
+
+  <div class="storage-selector-list" ng-show="folderItems.length > 0 && !isUploading">  
+    <div class="storage-row" ng-repeat="item in folderItems | filter:search.query | orderBy:search.sortBy:search.reverse as filteredItems track by $index">
       <div>
         <div class="folder-entry" ng-if="isFolder(item.name)" ng-click="loadItems(item.name)">
           <a href="#">
@@ -29,6 +37,10 @@
           <p class="overlay-text">{{ fileNameOf(item.name) }}</p>
         </div>
       </div>
+    </div>
+
+    <div id="noSearchResult" ng-if="filteredItems.length === 0">
+      <p>No Results Found</p>
     </div>
   </div>
 

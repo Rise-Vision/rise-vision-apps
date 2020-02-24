@@ -48,12 +48,21 @@ describe('directive: basicStorageSelector', function() {
 
   it('should exist', function () {
     expect($scope).to.be.ok;
+    expect($scope.filterConfig).to.be.ok;
+    expect($scope.search).to.be.ok;
     expect($scope.isFolder).to.be.a.function;
     expect($scope.fileNameOf).to.be.a.function;
     expect($scope.selectItem).to.be.a.function;
     expect($scope.isSelected).to.be.a.function;
     expect($scope.addSelected).to.be.a.function;
     expect($scope.loadItems).to.be.a.function;
+  });
+
+  it('should init default values', function() {
+    expect($scope.filterConfig.placeholder).to.be.equal('Search Rise Storage');
+    expect($scope.filterConfig.id).to.be.equal('basicStorageSearchInput');
+    expect($scope.search.reverse).to.equal(false);
+    expect($scope.search.doSearch).to.be.a.function;
   });
 
   it('should receive attributes', function () {
