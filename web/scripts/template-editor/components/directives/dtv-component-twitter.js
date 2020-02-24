@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentTwitter', ['templateEditorFactory', 'TwitterOAuthService',
-    function (templateEditorFactory, TwitterOAuthService) {
+  .directive('templateComponentTwitter', ['templateEditorFactory', 'TwitterOAuthService', 'twitterCredentialsValidation',
+    function (templateEditorFactory, TwitterOAuthService, twitterCredentialsValidation) {
       return {
         restrict: 'E',
         scope: true,
@@ -10,17 +10,31 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
 
+          $scope.$watch('spinner', function (loading) {
+            if (loading) {
+              $loading.start('twitter-editor-loader');
+            } else {
+              $loading.stop('twitter-editor-loader');
+            }
+          });
+
+          $scope.spinner = false;
+
           $scope.connectionFailure = false;
           $scope.connected = false;
 
           $scope.connectToTwitter = function () {
+            $scope.spinner = true;
+
             return TwitterOAuthService.authenticate()
               .then(function (key) {
                 $scope.connected = true;
                 $scope.connectionFailure = false;
               }, function () {
-                $scope.connected = false;
-                $scope.connectionFailure = true;
+                handleConnectionFailure();
+              })
+              .finally(function () {
+                $scope.spinner = false;
               });
           };
 
@@ -32,8 +46,29 @@ angular.module('risevision.template-editor.directives')
             show: function () {
               element.show();
               $scope.componentId = $scope.factory.selected.id;
+              _validateCredentials();
             }
           });
+
+          function handleConnectionFailure() {
+            $scope.connected = false;
+            $scope.connectionFailure = true;
+          }
+
+          function _validateCredentials() {
+            $scope.spinner = true;
+
+            twitterCredentialsValidation.verifyCredentials($scope.factory.presentation.companyId)
+              .then(function (hasCredentials) {
+                console.log("has credentials: ", hasCredentials);
+                $scope.connected = hasCredentials;
+                $scope.connectionFailure = !hasCredentials;
+              })
+              .catch(function(err) {handleConnectionFailure();})
+              .finally(function () {
+                $scope.spinner = false;
+              });
+          }
 
         }
       };
