@@ -596,10 +596,17 @@ $short-phone-height: 570px;
   }
 }
 
+.storage-selector-search-container {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding: 0 20px;  
+}
+
 .storage-selector-component {
   --storage-column-width: 100%;
+  --storage-selector-search-height: 65px;
 
-  height: calc(var(--storage-selector-body-height) - var(--storage-selector-button-bar-height));
+  height: calc(var(--storage-selector-body-height) - var(--storage-selector-search-height) - var(--storage-selector-button-bar-height));
   overflow-x: hidden;
   overflow-y: auto;
 
@@ -1299,6 +1306,10 @@ $short-phone-height: 570px;
 
       &:last-child {
         border-left: none;
+      }
+
+      svg {
+        fill: $madero-gray;
       }
     }
 

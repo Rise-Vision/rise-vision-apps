@@ -6,19 +6,43 @@
     <h3 id="storeModalTitle" class="modal-title">{{ 'editor-app.storeProduct.' + (factory.search.category === 'Content' ? 'content' : 'templates') + '.title' | translate }}</h3>
   </div>
   <div class="modal-body u_padding-lg" stop-event="touchend">
-    <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>
+    
+    <div class="u_margin-md-bottom" ng-if="!categoryFilters">
+      <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>
+    </div>
+
+    <div class="row" ng-if="categoryFilters">
+      <div class="col-md-8 u_margin-sm-bottom">
+        <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>
+      </div>
+      <div class="col-md-4 u_margin-md-bottom aligner">
+        <label for="filter-templates" class="u_remove-bottom u_nowrap u_margin-right">Filter Templates:</label>
+        <select id="filter-templates" class="form-control selectpicker" ng-model="search.templatesFilter">
+          <option value="">Show All</option>
+          <optgroup label="Category" ng-if="categoryFilters.templateCategories.length">
+            <option ng-repeat="category in categoryFilters.templateCategories | orderBy:category" value="{{'templateCategories|' + category}}">{{category}}</option>
+          </optgroup>
+          <optgroup label="Locations" ng-if="categoryFilters.templateLocations.length">
+            <option ng-repeat="location in categoryFilters.templateLocations | orderBy:location" value="{{'templateLocations|' + location}}">{{location}}</option>
+          </optgroup>
+          <optgroup label="Content" ng-if="categoryFilters.templateContentTypes.length">
+            <option ng-repeat="contentType in categoryFilters.templateContentTypes | orderBy:contentType" value="{{'templateContentTypes|' + contentType}}">{{contentType}}</option>
+          </optgroup>
+        </select>
+      </div>
+    </div>
 
     <section id="productList" class="product-grid" 
         scrolling-list="factory.load()"
         rv-spinner rv-spinner-key="product-list-loader"
         rv-spinner-start-active="1">
 
-      <div class="professional-content panel panel-default u_margin-md-top">
+      <div class="professional-content panel panel-default">
         <div class="panel-body">
           <div class="product-grid">
             <div class="row">
 
-              <ng-repeat ng-repeat="product in factory.items.list">
+              <ng-repeat ng-repeat="product in factory.items.list | filter: getTemplatesFilter()">
                 <div id="storeProduct" class="col-sm-6 col-md-4 col-lg-3" ng-click="select(product)">
                   <div class="product-grid_item panel panel-default">
 
