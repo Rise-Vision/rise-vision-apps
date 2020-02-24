@@ -13,6 +13,8 @@ angular.module('risevision.template-editor.services')
         $http({
           url: TWITTER_SERVICE_URL + VERIFY_CREDENTIALS,
           method: 'GET',
+          withCredentials: true,
+          responseType: 'json',
           params: {
             companyId: companyId
           }
