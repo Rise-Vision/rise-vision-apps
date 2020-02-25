@@ -4,11 +4,14 @@ describe('directive: templateComponentTwitter', function() {
   var $scope,
     element,
     factory,
-    oauthService;
+    oauthService,
+    twitterCredentialsValidation,
+    sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" } };
+    factory = { selected: { id: "TEST-ID" }, presentation: {companyId: "abc123"} };
     oauthService = {};
+    twitterCredentialsValidation = {};
   });
 
   beforeEach(module('risevision.template-editor.directives'));
@@ -23,6 +26,10 @@ describe('directive: templateComponentTwitter', function() {
 
     $provide.service('TwitterOAuthService', function() {
       return oauthService;
+    });
+
+    $provide.service('twitterCredentialsValidation', function() {
+      return twitterCredentialsValidation;
     });
   }));
 
@@ -41,7 +48,7 @@ describe('directive: templateComponentTwitter', function() {
   it('should exist', function() {
     expect($scope).to.be.ok;
     expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } });
+    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" }, presentation: {companyId: "abc123"} });
     expect($scope.registerDirective).to.have.been.called;
 
     var directive = $scope.registerDirective.getCall(0).args[0];
@@ -82,6 +89,70 @@ describe('directive: templateComponentTwitter', function() {
 
       done();
     });
+  });
+
+  it('should attempt to verify credentials when Twitter is shown', function() {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+
+    twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
+
+    directive.show();
+
+    expect(twitterCredentialsValidation.verifyCredentials).to.have.been.called;
+  });
+
+  it('should detect when no credentials exist or token is invalid/expired', function(done) {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+
+    twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(false));
+
+    directive.show();
+
+    expect($scope.connectionFailure).to.be.false;
+    expect($scope.connected).to.be.false;
+
+    setTimeout(function(){
+      expect($scope.connected).to.be.false;
+      expect($scope.connectionFailure).to.be.false;
+
+      done();
+    }, 200);
+  });
+
+  it('should detect when credentials exist', function(done) {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+
+    twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
+
+    directive.show();
+
+    expect($scope.connectionFailure).to.be.false;
+    expect($scope.connected).to.be.false;
+
+    setTimeout(function(){
+      expect($scope.connected).to.be.true;
+      expect($scope.connectionFailure).to.be.false;
+
+      done();
+    }, 200);
+  });
+
+  it('should detect when a verifying credentials encountered a problem', function(done) {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+
+    twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.reject());
+
+    directive.show();
+
+    expect($scope.connectionFailure).to.be.false;
+    expect($scope.connected).to.be.false;
+
+    setTimeout(function(){
+      expect($scope.connected).to.be.false;
+      expect($scope.connectionFailure).to.be.true;
+
+      done();
+    }, 200);
   });
 
 });

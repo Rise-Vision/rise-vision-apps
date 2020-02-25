@@ -61,9 +61,8 @@ angular.module('risevision.template-editor.directives')
 
             twitterCredentialsValidation.verifyCredentials($scope.factory.presentation.companyId)
               .then(function (hasCredentials) {
-                console.log('has credentials: ', hasCredentials);
                 $scope.connected = hasCredentials;
-                $scope.connectionFailure = !hasCredentials;
+                $scope.connectionFailure = false;
               })
               .catch(function (err) {
                 handleConnectionFailure();
