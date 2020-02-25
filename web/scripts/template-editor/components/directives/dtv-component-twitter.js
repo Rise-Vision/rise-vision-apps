@@ -32,7 +32,7 @@ angular.module('risevision.template-editor.directives')
                 $scope.connected = true;
                 $scope.connectionFailure = false;
               }, function () {
-                handleConnectionFailure();
+                _handleConnectionFailure();
               })
               .finally(function () {
                 $scope.spinner = false;
@@ -51,7 +51,7 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
-          function handleConnectionFailure() {
+          function _handleConnectionFailure() {
             $scope.connected = false;
             $scope.connectionFailure = true;
           }
@@ -65,7 +65,7 @@ angular.module('risevision.template-editor.directives')
                 $scope.connectionFailure = false;
               })
               .catch(function (err) {
-                handleConnectionFailure();
+                _handleConnectionFailure();
               })
               .finally(function () {
                 $scope.spinner = false;
