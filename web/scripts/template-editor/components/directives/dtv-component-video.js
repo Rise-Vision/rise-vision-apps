@@ -206,6 +206,14 @@ angular.module('risevision.template-editor.directives')
           $scope.showSettingsUI = function () {
             return $scope.selectedFiles.length > 0 && !$scope.isUploading;
           };
+
+          $scope.sortItem = function (evt) {
+            var oldIndex = evt.data.oldIndex;
+            var newIndex = evt.data.newIndex;
+
+            $scope.selectedFiles.splice(newIndex, 0, $scope.selectedFiles.splice(oldIndex, 1)[0]);
+          };
+
         }
       };
     }

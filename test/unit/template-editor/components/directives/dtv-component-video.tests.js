@@ -52,6 +52,7 @@ describe('directive: templateComponentVideo', function() {
     expect($scope.factory).to.be.ok;
     expect($scope.factory).to.deep.equal({ selected: { id: 'TEST-ID' } })
     expect($scope.registerDirective).to.have.been.called;
+    expect($scope.sortItem).to.be.a('function');
 
     var directive = $scope.registerDirective.getCall(0).args[0];
     expect(directive).to.be.ok;
@@ -430,6 +431,41 @@ describe('directive: templateComponentVideo', function() {
         'TEST-ID', 'volume', 100
       ), 'set volume attribute').to.be.true;
     });
+  });
+
+  describe('sortItem: ', function() {
+    var _callSort = function(oldIndex, newIndex) {
+      $scope.sortItem({
+        data: {
+          oldIndex: oldIndex,
+          newIndex: newIndex
+        }
+      });
+    };
+
+    beforeEach(function() {
+      $scope.selectedFiles = [
+        'file0',
+        'file1',
+        'file2',
+        'file3'
+      ];
+    });
+
+    it('should move item up/down: ', function() {
+      _callSort(0, 1);
+
+      expect($scope.selectedFiles.indexOf('file0')).to.equal(1);
+
+      _callSort(2, 1);
+
+      expect($scope.selectedFiles.indexOf('file2')).to.equal(1);
+      expect($scope.selectedFiles.indexOf('file0')).to.equal(2);
+
+      _callSort(2, 0);
+      expect($scope.selectedFiles.indexOf('file0')).to.equal(0);
+    });
+
   });
 
 });

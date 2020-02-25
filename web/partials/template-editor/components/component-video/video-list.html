@@ -26,13 +26,17 @@
      rv-spinner-start-active="1"
      ng-class="{ 'not-empty': selectedFiles.length > 0 }"
 >
-  <template-editor-file-entry
-     ng-repeat="file in selectedFiles track by $index"
-     ng-show="showSettingsUI()"
-     entry="file"
-     file-type="video"
-     remove-action="removeFileFromList">
-  </template-editor-file-entry>
+  <div rv-sortable on-sort="sortItem(evt)" append-to=".component-container" class="sortable-list">
+
+    <template-editor-file-entry
+       ng-repeat="file in selectedFiles track by $index"
+       ng-show="showSettingsUI()"
+       entry="file"
+       file-type="video"
+       remove-action="removeFileFromList"
+       show-grip-handle="selectedFiles.length > 1">
+    </template-editor-file-entry>
+  </div>
 
   <template-editor-empty-file-list file-type="video"
      ng-hide="isUploading || selectedFiles.length !== 0 || factory.loadingPresentation">
