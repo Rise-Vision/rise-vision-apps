@@ -95,6 +95,7 @@ describe('directive: TemplateComponentImage', function() {
     expect($scope.factory).to.be.ok;
     expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } });
     expect($scope.isEditingLogo).to.be.a('function');
+    expect($scope.sortItem).to.be.a('function');
 
     expect($scope.registerDirective).to.have.been.called;
 
@@ -438,4 +439,40 @@ describe('directive: TemplateComponentImage', function() {
       expect($scope.storageManager.isSingleFileSelector()).be.false;
     });
   });
+
+  describe('sortItem: ', function() {
+    var _callSort = function(oldIndex, newIndex) {
+      $scope.sortItem({
+        data: {
+          oldIndex: oldIndex,
+          newIndex: newIndex
+        }
+      });
+    };
+
+    beforeEach(function() {
+      $scope.selectedImages = [
+        'image0',
+        'image1',
+        'image2',
+        'image3'
+      ];
+    });
+
+    it('should move item up/down: ', function() {
+      _callSort(0, 1);
+
+      expect($scope.selectedImages.indexOf('image0')).to.equal(1);
+
+      _callSort(2, 1);
+
+      expect($scope.selectedImages.indexOf('image2')).to.equal(1);
+      expect($scope.selectedImages.indexOf('image0')).to.equal(2);
+
+      _callSort(2, 0);
+      expect($scope.selectedImages.indexOf('image0')).to.equal(0);
+    });
+
+  });
+
 });

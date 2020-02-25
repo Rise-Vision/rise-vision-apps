@@ -292,6 +292,14 @@ angular.module('risevision.template-editor.directives')
               _setSelectedImages(updatedMetadata);
             });
           };
+
+          $scope.sortItem = function (evt) {
+            var oldIndex = evt.data.oldIndex;
+            var newIndex = evt.data.newIndex;
+
+            $scope.selectedImages.splice(newIndex, 0, $scope.selectedImages.splice(oldIndex, 1)[0]);
+          };
+
         }
       };
     }

@@ -27,7 +27,7 @@ describe('directive: templateEditorFileEntry', function() {
       $rootScope.removeAction = removeAction;
 
       $templateCache.put('partials/template-editor/file-entry.html', '<p>mock</p>');
-      element = $compile('<template-editor-file-entry file-type="image" entry="entry" remove-action="removeAction"></template-editor-file-entry>')($rootScope);
+      element = $compile('<template-editor-file-entry file-type="image" entry="entry" remove-action="removeAction" show-grip-handle="true"></template-editor-file-entry>')($rootScope);
       $rootScope.$apply();
 
       $scope = element.isolateScope();
@@ -44,6 +44,7 @@ describe('directive: templateEditorFileEntry', function() {
       expect($scope.getStreamlineIcon).to.be.a.function;
       expect($scope.fileType).to.equal('image');
       expect($scope.entry).to.deep.equal(testEntry);
+      expect($scope.showGripHandle).to.be.true;
     });
 
     it('should have a file name', function () {
