@@ -2,7 +2,7 @@
   <div id="upload-panel-{{uploaderId}}" class="storage-upload-panel" ng-show="activeUploadCount() > 0">
     <div class="storage-upload-body te-scrollable-container">
       <div ng-repeat="item in uploader.queue">
-        <div class="file-row">
+        <div class="storage-upload-file-row">
           <div class="file-entry" ng-class="{'is-error': item.isError}">
             <div class="file-text">
                 <div class="file-name">{{ fileNameOf(item.file.name) }}</div>

@@ -13,13 +13,17 @@
 <div class="image-component-list file-component-list te-scrollable-container"
      ng-class="{'active-duration' : selectedImages.length > 1 && !isUploading}"
      rv-spinner rv-spinner-key="template-editor-loader">
-  <template-editor-file-entry
-    ng-repeat="image in selectedImages track by $index"
-    ng-show="selectedImages.length > 0 && !isUploading"
-    entry="image"
-    file-type="image"
-    remove-action="removeImageFromList">
-  </template-editor-file-entry>
+  <div rv-sortable on-sort="sortItem(evt)" append-to=".component-container" class="sortable-list">
+
+    <template-editor-file-entry
+      ng-repeat="image in selectedImages track by $index"
+      ng-show="selectedImages.length > 0 && !isUploading"
+      entry="image"
+      file-type="image"
+      remove-action="removeImageFromList"
+      show-grip-handle="selectedImages.length > 1">
+    </template-editor-file-entry>
+  </div>
 
   <template-editor-empty-file-list file-type="image" is-editing-logo="isEditingLogo"
      ng-hide="isUploading || selectedImages.length !== 0 || factory.loadingPresentation">

@@ -836,18 +836,6 @@ $short-phone-height: 570px;
     float: right;
   }
 
-  .file-row {
-    @extend .template-editor-file-row;
-
-    flex-direction: column;
-    padding-top: 16px;
-    padding-bottom: 17px;
-
-    .file-entry {
-      width: 100%;
-    }
-  }
-
   .progress {
     height: 10px;
     box-shadow: none;
@@ -867,9 +855,19 @@ $short-phone-height: 570px;
   }
 }
 
-.file-component-list {
-  --thumbnail-width: 80px;
+.storage-upload-file-row {
+  @extend .template-editor-file-row;
 
+  flex-direction: column;
+  padding-top: 16px;
+  padding-bottom: 17px;
+
+  .file-entry {
+    width: 100%;
+  }
+}
+
+.file-component-list {
   overflow-x: hidden;
   overflow-y: auto;
   width: var(--sidebar-width);
@@ -877,11 +875,17 @@ $short-phone-height: 570px;
   @media (max-width: $screen-sm) {
     width: 100%;
   }
+}
 
-  .file-row {
-    @extend .template-editor-file-row;
+.file-component-list-file-row {
+  --thumbnail-width: 80px;
+
+  @extend .template-editor-file-row;
+
+  .list-grip {
+    cursor: move;
+    cursor: -webkit-grabbing;
   }
-
 }
 
 .file-component-list-action-button-bar {

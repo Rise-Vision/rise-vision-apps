@@ -5,10 +5,12 @@ angular.module('risevision.template-editor.directives')
     function (templateEditorFactory, templateEditorUtils) {
       return {
         restrict: 'E',
+        replace: true,
         scope: {
           fileType: '@',
           entry: '=',
-          removeAction: '='
+          removeAction: '=',
+          showGripHandle: '=',
         },
         templateUrl: 'partials/template-editor/file-entry.html',
         link: function ($scope) {
