@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 68);
+/******/ 	return __webpack_require__(__webpack_require__.s = 66);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -105,7 +105,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _AbstractEvent = __webpack_require__(66);
+var _AbstractEvent = __webpack_require__(64);
 
 var _AbstractEvent2 = _interopRequireDefault(_AbstractEvent);
 
@@ -124,7 +124,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _AbstractPlugin = __webpack_require__(62);
+var _AbstractPlugin = __webpack_require__(60);
 
 var _AbstractPlugin2 = _interopRequireDefault(_AbstractPlugin);
 
@@ -143,7 +143,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _closest = __webpack_require__(53);
+var _closest = __webpack_require__(51);
 
 Object.defineProperty(exports, 'closest', {
   enumerable: true,
@@ -152,21 +152,12 @@ Object.defineProperty(exports, 'closest', {
   }
 });
 
-var _requestNextAnimationFrame = __webpack_require__(51);
+var _requestNextAnimationFrame = __webpack_require__(49);
 
 Object.defineProperty(exports, 'requestNextAnimationFrame', {
   enumerable: true,
   get: function () {
     return _interopRequireDefault(_requestNextAnimationFrame).default;
-  }
-});
-
-var _distance = __webpack_require__(49);
-
-Object.defineProperty(exports, 'distance', {
-  enumerable: true,
-  get: function () {
-    return _interopRequireDefault(_distance).default;
   }
 });
 
@@ -477,7 +468,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Announcement = __webpack_require__(64);
+var _Announcement = __webpack_require__(62);
 
 Object.defineProperty(exports, 'Announcement', {
   enumerable: true,
@@ -492,7 +483,7 @@ Object.defineProperty(exports, 'defaultAnnouncementOptions', {
   }
 });
 
-var _Focusable = __webpack_require__(61);
+var _Focusable = __webpack_require__(59);
 
 Object.defineProperty(exports, 'Focusable', {
   enumerable: true,
@@ -501,7 +492,7 @@ Object.defineProperty(exports, 'Focusable', {
   }
 });
 
-var _Mirror = __webpack_require__(59);
+var _Mirror = __webpack_require__(57);
 
 Object.defineProperty(exports, 'Mirror', {
   enumerable: true,
@@ -516,7 +507,7 @@ Object.defineProperty(exports, 'defaultMirrorOptions', {
   }
 });
 
-var _Scrollable = __webpack_require__(55);
+var _Scrollable = __webpack_require__(53);
 
 Object.defineProperty(exports, 'Scrollable', {
   enumerable: true,
@@ -544,7 +535,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _DraggableEvent = __webpack_require__(65);
+var _DraggableEvent = __webpack_require__(63);
 
 Object.keys(_DraggableEvent).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -567,7 +558,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _DragEvent = __webpack_require__(67);
+var _DragEvent = __webpack_require__(65);
 
 Object.keys(_DragEvent).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -1989,7 +1980,7 @@ class SortableSortEvent extends SortableEvent {
    * @readonly
    */
   get over() {
-    return this.data.over;
+    return this.data.oldIndex;
   }
 
   /**
@@ -1999,7 +1990,7 @@ class SortableSortEvent extends SortableEvent {
    * @readonly
    */
   get overContainer() {
-    return this.data.dragEvent.overContainer;
+    return this.data.newIndex;
   }
 }
 
@@ -3097,7 +3088,6 @@ const defaultOptions = exports.defaultOptions = {
   draggable: '.draggable-source',
   handle: null,
   delay: 100,
-  distance: 0,
   placedTimeout: 800,
   plugins: [],
   sensors: []
@@ -4093,8 +4083,6 @@ class DragSensor extends _Sensor2.default {
     this.trigger(container, dragStopEvent);
 
     this.dragging = false;
-    this.delayOver = false;
-    this.startEvent = null;
 
     this[reset]();
   }
@@ -4139,10 +4127,7 @@ class DragSensor extends _Sensor2.default {
       return;
     }
 
-    this.startEvent = event;
-
     this.mouseDownTimeout = setTimeout(() => {
-      this.delayOver = true;
       target.draggable = true;
       this.draggableElement = target;
     }, this.options.delay);
@@ -4225,10 +4210,9 @@ var _SensorEvent = __webpack_require__(3);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const onTouchStart = Symbol('onTouchStart');
+const onTouchHold = Symbol('onTouchHold');
 const onTouchEnd = Symbol('onTouchEnd');
 const onTouchMove = Symbol('onTouchMove');
-const startDrag = Symbol('startDrag');
-const onDistanceChange = Symbol('onDistanceChange');
 
 /**
  * Prevents scrolling when set to true
@@ -4284,10 +4268,9 @@ class TouchSensor extends _Sensor2.default {
     this.touchMoved = false;
 
     this[onTouchStart] = this[onTouchStart].bind(this);
+    this[onTouchHold] = this[onTouchHold].bind(this);
     this[onTouchEnd] = this[onTouchEnd].bind(this);
     this[onTouchMove] = this[onTouchMove].bind(this);
-    this[startDrag] = this[startDrag].bind(this);
-    this[onDistanceChange] = this[onDistanceChange].bind(this);
   }
 
   /**
@@ -4316,69 +4299,43 @@ class TouchSensor extends _Sensor2.default {
       return;
     }
 
-    this.startEvent = event;
-
     document.addEventListener('touchmove', this[onTouchMove]);
     document.addEventListener('touchend', this[onTouchEnd]);
     document.addEventListener('touchcancel', this[onTouchEnd]);
-    document.addEventListener('touchmove', this[onDistanceChange]);
     container.addEventListener('contextmenu', onContextMenu);
 
-    if (this.options.distance) {
-      preventScrolling = true;
-    }
-
     this.currentContainer = container;
-    this.tapTimeout = setTimeout(() => {
-      this.delayOver = true;
-      if (this.touchMoved || this.distance < this.options.distance) {
+    this.tapTimeout = setTimeout(this[onTouchHold](event, container), this.options.delay);
+  }
+
+  /**
+   * Touch hold handler
+   * @private
+   * @param {Event} event - Touch start event
+   * @param {HTMLElement} container - Container element
+   */
+  [onTouchHold](event, container) {
+    return () => {
+      if (this.touchMoved) {
         return;
       }
-      this[startDrag]();
-    }, this.options.delay);
-  }
 
-  /**
-   * Start the drag
-   * @private
-   */
-  [startDrag]() {
-    const startEvent = this.startEvent;
-    const container = this.currentContainer;
-    const touch = startEvent.touches[0] || startEvent.changedTouches[0];
+      const touch = event.touches[0] || event.changedTouches[0];
+      const target = event.target;
 
-    const dragStartEvent = new _SensorEvent.DragStartSensorEvent({
-      clientX: touch.pageX,
-      clientY: touch.pageY,
-      target: startEvent.target,
-      container,
-      originalEvent: startEvent
-    });
+      const dragStartEvent = new _SensorEvent.DragStartSensorEvent({
+        clientX: touch.pageX,
+        clientY: touch.pageY,
+        target,
+        container,
+        originalEvent: event
+      });
 
-    this.trigger(this.currentContainer, dragStartEvent);
+      this.trigger(container, dragStartEvent);
 
-    this.dragging = !dragStartEvent.canceled();
-    preventScrolling = this.dragging;
-  }
-
-  /**
-   * Detect change in distance
-   * @private
-   * @param {Event} event - Touch move event
-   */
-  [onDistanceChange](event) {
-    if (this.dragging || !this.options.distance) {
-      return;
-    }
-
-    const tap = this.startEvent.touches[0] || this.startEvent.changedTouches[0];
-    const touch = event.touches[0] || event.changedTouches[0];
-
-    this.distance = (0, _utils.distance)(tap.pageX, tap.pageY, touch.pageX, touch.pageY);
-
-    if (this.delayOver && this.distance >= this.options.distance) {
-      this[startDrag]();
-    }
+      this.dragging = !dragStartEvent.canceled();
+      preventScrolling = this.dragging;
+    };
   }
 
   /**
@@ -4419,7 +4376,6 @@ class TouchSensor extends _Sensor2.default {
     document.removeEventListener('touchend', this[onTouchEnd]);
     document.removeEventListener('touchcancel', this[onTouchEnd]);
     document.removeEventListener('touchmove', this[onTouchMove]);
-    document.removeEventListener('touchmove', this[onDistanceChange]);
 
     if (this.currentContainer) {
       this.currentContainer.removeEventListener('contextmenu', onContextMenu);
@@ -4448,9 +4404,6 @@ class TouchSensor extends _Sensor2.default {
 
     this.currentContainer = null;
     this.dragging = false;
-    this.distance = 0;
-    this.delayOver = false;
-    this.startEvent = null;
   }
 }
 
@@ -4632,8 +4585,6 @@ const onContextMenuWhileDragging = Symbol('onContextMenuWhileDragging');
 const onMouseDown = Symbol('onMouseDown');
 const onMouseMove = Symbol('onMouseMove');
 const onMouseUp = Symbol('onMouseUp');
-const startDrag = Symbol('startDrag');
-const onDistanceChange = Symbol('onDistanceChange');
 
 /**
  * This sensor picks up native browser mouse events and dictates drag operations
@@ -4652,18 +4603,30 @@ class MouseSensor extends _Sensor2.default {
     super(containers, options);
 
     /**
+     * Indicates if mouse button is still down
+     * @property mouseDown
+     * @type {Boolean}
+     */
+    this.mouseDown = false;
+
+    /**
      * Mouse down timer which will end up triggering the drag start operation
      * @property mouseDownTimeout
      * @type {Number}
      */
     this.mouseDownTimeout = null;
 
+    /**
+     * Indicates if context menu has been opened during drag operation
+     * @property openedContextMenu
+     * @type {Boolean}
+     */
+    this.openedContextMenu = false;
+
     this[onContextMenuWhileDragging] = this[onContextMenuWhileDragging].bind(this);
     this[onMouseDown] = this[onMouseDown].bind(this);
     this[onMouseMove] = this[onMouseMove].bind(this);
     this[onMouseUp] = this[onMouseUp].bind(this);
-    this[startDrag] = this[startDrag].bind(this);
-    this[onDistanceChange] = this[onDistanceChange].bind(this);
   }
 
   /**
@@ -4690,12 +4653,10 @@ class MouseSensor extends _Sensor2.default {
       return;
     }
 
-    this.startEvent = event;
-
     document.addEventListener('mouseup', this[onMouseUp]);
-    document.addEventListener('mousemove', this[onDistanceChange]);
 
-    const container = (0, _utils.closest)(event.target, this.containers);
+    const target = document.elementFromPoint(event.clientX, event.clientY);
+    const container = (0, _utils.closest)(target, this.containers);
 
     if (!container) {
       return;
@@ -4703,54 +4664,32 @@ class MouseSensor extends _Sensor2.default {
 
     document.addEventListener('dragstart', preventNativeDragStart);
 
-    this.currentContainer = container;
+    this.mouseDown = true;
+
+    clearTimeout(this.mouseDownTimeout);
     this.mouseDownTimeout = setTimeout(() => {
-      this.delayOver = true;
-      if (this.distance < this.options.distance) {
+      if (!this.mouseDown) {
         return;
       }
-      this[startDrag]();
+
+      const dragStartEvent = new _SensorEvent.DragStartSensorEvent({
+        clientX: event.clientX,
+        clientY: event.clientY,
+        target,
+        container,
+        originalEvent: event
+      });
+
+      this.trigger(container, dragStartEvent);
+
+      this.currentContainer = container;
+      this.dragging = !dragStartEvent.canceled();
+
+      if (this.dragging) {
+        document.addEventListener('contextmenu', this[onContextMenuWhileDragging]);
+        document.addEventListener('mousemove', this[onMouseMove]);
+      }
     }, this.options.delay);
-  }
-
-  /**
-   * Start the drag
-   * @private
-   */
-  [startDrag]() {
-    const startEvent = this.startEvent;
-    const container = this.currentContainer;
-
-    const dragStartEvent = new _SensorEvent.DragStartSensorEvent({
-      clientX: startEvent.clientX,
-      clientY: startEvent.clientY,
-      target: startEvent.target,
-      container,
-      originalEvent: startEvent
-    });
-
-    this.trigger(this.currentContainer, dragStartEvent);
-
-    this.dragging = !dragStartEvent.canceled();
-
-    if (this.dragging) {
-      document.addEventListener('contextmenu', this[onContextMenuWhileDragging], true);
-      document.addEventListener('mousemove', this[onMouseMove]);
-    }
-  }
-
-  /**
-   * Detect change in distance
-   * @private
-   * @param {Event} event - Mouse move event
-   */
-  [onDistanceChange](event) {
-    if (this.dragging) return;
-    this.distance = (0, _utils.distance)(this.startEvent.pageX, this.startEvent.pageY, event.pageX, event.pageY);
-
-    if (this.delayOver && this.distance >= this.options.distance) {
-      this[startDrag]();
-    }
   }
 
   /**
@@ -4782,15 +4721,15 @@ class MouseSensor extends _Sensor2.default {
    * @param {Event} event - Mouse up event
    */
   [onMouseUp](event) {
-    clearTimeout(this.mouseDownTimeout);
+    this.mouseDown = Boolean(this.openedContextMenu);
 
-    if (event.button !== 0) {
+    if (this.openedContextMenu) {
+      this.openedContextMenu = false;
       return;
     }
 
     document.removeEventListener('mouseup', this[onMouseUp]);
     document.removeEventListener('dragstart', preventNativeDragStart);
-    document.removeEventListener('mousemove', this[onDistanceChange]);
 
     if (!this.dragging) {
       return;
@@ -4808,14 +4747,11 @@ class MouseSensor extends _Sensor2.default {
 
     this.trigger(this.currentContainer, dragStopEvent);
 
-    document.removeEventListener('contextmenu', this[onContextMenuWhileDragging], true);
+    document.removeEventListener('contextmenu', this[onContextMenuWhileDragging]);
     document.removeEventListener('mousemove', this[onMouseMove]);
 
     this.currentContainer = null;
     this.dragging = false;
-    this.distance = 0;
-    this.delayOver = false;
-    this.startEvent = null;
   }
 
   /**
@@ -4825,6 +4761,7 @@ class MouseSensor extends _Sensor2.default {
    */
   [onContextMenuWhileDragging](event) {
     event.preventDefault();
+    this.openedContextMenu = true;
   }
 }
 
@@ -4905,27 +4842,6 @@ class Sensor {
      * @type {HTMLElement}
      */
     this.currentContainer = null;
-
-    /**
-     * The distance moved from the first pointer down location, no longer updated after the drag has started
-     * @property distance
-     * @type {Number}
-     */
-    this.distance = 0;
-
-    /**
-     * Indicates whether the delay has ended
-     * @property delayOver
-     * @type {Boolean}
-     */
-    this.delayOver = false;
-
-    /**
-     * The event of the initial sensor down
-     * @property startEvent
-     * @type {Event}
-     */
-    this.startEvent = null;
   }
 
   /**
@@ -4989,17 +4905,11 @@ exports.default = Sensor;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = distance;
-/**
- * Returns the distance between two points
- * @param  {Number} x1 The X position of the first point
- * @param  {Number} y1 The Y position of the first point
- * @param  {Number} x2 The X position of the second point
- * @param  {Number} y2 The Y position of the second point
- * @return {Number}
- */
-function distance(x1, y1, x2, y2) {
-  return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+exports.default = requestNextAnimationFrame;
+function requestNextAnimationFrame(callback) {
+  return requestAnimationFrame(() => {
+    requestAnimationFrame(callback);
+  });
 }
 
 /***/ }),
@@ -5013,43 +4923,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _distance = __webpack_require__(48);
-
-var _distance2 = _interopRequireDefault(_distance);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _distance2.default;
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = requestNextAnimationFrame;
-function requestNextAnimationFrame(callback) {
-  return requestAnimationFrame(() => {
-    requestAnimationFrame(callback);
-  });
-}
-
-/***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _requestNextAnimationFrame = __webpack_require__(50);
+var _requestNextAnimationFrame = __webpack_require__(48);
 
 var _requestNextAnimationFrame2 = _interopRequireDefault(_requestNextAnimationFrame);
 
@@ -5058,7 +4932,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = _requestNextAnimationFrame2.default;
 
 /***/ }),
-/* 52 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5126,7 +5000,7 @@ function closest(element, value) {
 }
 
 /***/ }),
-/* 53 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5136,7 +5010,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _closest = __webpack_require__(52);
+var _closest = __webpack_require__(50);
 
 var _closest2 = _interopRequireDefault(_closest);
 
@@ -5145,7 +5019,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = _closest2.default;
 
 /***/ }),
-/* 54 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5467,7 +5341,7 @@ function getDocumentScrollingElement() {
 }
 
 /***/ }),
-/* 55 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5478,7 +5352,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.defaultOptions = undefined;
 
-var _Scrollable = __webpack_require__(54);
+var _Scrollable = __webpack_require__(52);
 
 var _Scrollable2 = _interopRequireDefault(_Scrollable);
 
@@ -5488,7 +5362,7 @@ exports.default = _Scrollable2.default;
 exports.defaultOptions = _Scrollable.defaultOptions;
 
 /***/ }),
-/* 56 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5647,24 +5521,6 @@ class MirrorMoveEvent extends MirrorEvent {
   get mirror() {
     return this.data.mirror;
   }
-
-  /**
-   * Sensor has exceeded mirror's threshold on x axis
-   * @type {Boolean}
-   * @readonly
-   */
-  get passedThreshX() {
-    return this.data.passedThreshX;
-  }
-
-  /**
-   * Sensor has exceeded mirror's threshold on y axis
-   * @type {Boolean}
-   * @readonly
-   */
-  get passedThreshY() {
-    return this.data.passedThreshY;
-  }
 }
 
 exports.MirrorMoveEvent = MirrorMoveEvent; /**
@@ -5693,7 +5549,7 @@ MirrorDestroyEvent.type = 'mirror:destroy';
 MirrorDestroyEvent.cancelable = true;
 
 /***/ }),
-/* 57 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5703,7 +5559,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _MirrorEvent = __webpack_require__(56);
+var _MirrorEvent = __webpack_require__(54);
 
 Object.keys(_MirrorEvent).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -5716,7 +5572,7 @@ Object.keys(_MirrorEvent).forEach(function (key) {
 });
 
 /***/ }),
-/* 58 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5733,7 +5589,7 @@ var _AbstractPlugin = __webpack_require__(1);
 
 var _AbstractPlugin2 = _interopRequireDefault(_AbstractPlugin);
 
-var _MirrorEvent = __webpack_require__(57);
+var _MirrorEvent = __webpack_require__(55);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5762,9 +5618,7 @@ const defaultOptions = exports.defaultOptions = {
   xAxis: true,
   yAxis: true,
   cursorOffsetX: null,
-  cursorOffsetY: null,
-  thresholdX: null,
-  thresholdY: null
+  cursorOffsetY: null
 };
 
 /**
@@ -5860,12 +5714,6 @@ class Mirror extends _AbstractPlugin2.default {
 
     const { source, originalSource, sourceContainer, sensorEvent } = dragEvent;
 
-    // Last sensor position of mirror move
-    this.lastMirrorMovedClient = {
-      x: sensorEvent.clientX,
-      y: sensorEvent.clientY
-    };
-
     const mirrorCreateEvent = new _MirrorEvent.MirrorCreateEvent({
       source,
       originalSource,
@@ -5913,38 +5761,13 @@ class Mirror extends _AbstractPlugin2.default {
 
     const { source, originalSource, sourceContainer, sensorEvent } = dragEvent;
 
-    let passedThreshX = true;
-    let passedThreshY = true;
-
-    if (this.options.thresholdX || this.options.thresholdY) {
-      const { x: lastX, y: lastY } = this.lastMirrorMovedClient;
-
-      if (Math.abs(lastX - sensorEvent.clientX) < this.options.thresholdX) {
-        passedThreshX = false;
-      } else {
-        this.lastMirrorMovedClient.x = sensorEvent.clientX;
-      }
-
-      if (Math.abs(lastY - sensorEvent.clientY) < this.options.thresholdY) {
-        passedThreshY = false;
-      } else {
-        this.lastMirrorMovedClient.y = sensorEvent.clientY;
-      }
-
-      if (!passedThreshX && !passedThreshY) {
-        return;
-      }
-    }
-
     const mirrorMoveEvent = new _MirrorEvent.MirrorMoveEvent({
       source,
       originalSource,
       sourceContainer,
       sensorEvent,
       dragEvent,
-      mirror: this.mirror,
-      passedThreshX,
-      passedThreshY
+      mirror: this.mirror
     });
 
     this.draggable.trigger(mirrorMoveEvent);
@@ -6002,8 +5825,6 @@ class Mirror extends _AbstractPlugin2.default {
       this.mirrorOffset = mirrorOffset;
       this.initialX = initialX;
       this.initialY = initialY;
-      this.lastMovedX = initialX;
-      this.lastMovedY = initialY;
       return _extends({ mirrorOffset, initialX, initialY }, args);
     };
 
@@ -6013,9 +5834,7 @@ class Mirror extends _AbstractPlugin2.default {
       sensorEvent,
       mirrorClass,
       scrollOffset: this.scrollOffset,
-      options: this.options,
-      passedThreshX: true,
-      passedThreshY: true
+      options: this.options
     };
 
     return Promise.resolve(initialState)
@@ -6034,16 +5853,6 @@ class Mirror extends _AbstractPlugin2.default {
       return null;
     }
 
-    const setState = (_ref2) => {
-      let { lastMovedX, lastMovedY } = _ref2,
-          args = _objectWithoutProperties(_ref2, ['lastMovedX', 'lastMovedY']);
-
-      this.lastMovedX = lastMovedX;
-      this.lastMovedY = lastMovedY;
-
-      return _extends({ lastMovedX, lastMovedY }, args);
-    };
-
     const initialState = {
       mirror: mirrorEvent.mirror,
       sensorEvent: mirrorEvent.sensorEvent,
@@ -6051,14 +5860,10 @@ class Mirror extends _AbstractPlugin2.default {
       options: this.options,
       initialX: this.initialX,
       initialY: this.initialY,
-      scrollOffset: this.scrollOffset,
-      passedThreshX: mirrorEvent.passedThreshX,
-      passedThreshY: mirrorEvent.passedThreshY,
-      lastMovedX: this.lastMovedX,
-      lastMovedY: this.lastMovedY
+      scrollOffset: this.scrollOffset
     };
 
-    return Promise.resolve(initialState).then(positionMirror({ raf: true })).then(setState);
+    return Promise.resolve(initialState).then(positionMirror({ raf: true }));
   }
 
   /**
@@ -6092,9 +5897,9 @@ exports.default = Mirror; /**
                            * @private
                            */
 
-function computeMirrorDimensions(_ref3) {
-  let { source } = _ref3,
-      args = _objectWithoutProperties(_ref3, ['source']);
+function computeMirrorDimensions(_ref2) {
+  let { source } = _ref2,
+      args = _objectWithoutProperties(_ref2, ['source']);
 
   return withPromise(resolve => {
     const sourceRect = source.getBoundingClientRect();
@@ -6111,9 +5916,9 @@ function computeMirrorDimensions(_ref3) {
  * @return {Promise}
  * @private
  */
-function calculateMirrorOffset(_ref4) {
-  let { sensorEvent, sourceRect, options } = _ref4,
-      args = _objectWithoutProperties(_ref4, ['sensorEvent', 'sourceRect', 'options']);
+function calculateMirrorOffset(_ref3) {
+  let { sensorEvent, sourceRect, options } = _ref3,
+      args = _objectWithoutProperties(_ref3, ['sensorEvent', 'sourceRect', 'options']);
 
   return withPromise(resolve => {
     const top = options.cursorOffsetY === null ? sensorEvent.clientY - sourceRect.top : options.cursorOffsetY;
@@ -6134,9 +5939,9 @@ function calculateMirrorOffset(_ref4) {
  * @return {Promise}
  * @private
  */
-function resetMirror(_ref5) {
-  let { mirror, source, options } = _ref5,
-      args = _objectWithoutProperties(_ref5, ['mirror', 'source', 'options']);
+function resetMirror(_ref4) {
+  let { mirror, source, options } = _ref4,
+      args = _objectWithoutProperties(_ref4, ['mirror', 'source', 'options']);
 
   return withPromise(resolve => {
     let offsetHeight;
@@ -6171,9 +5976,9 @@ function resetMirror(_ref5) {
  * @return {Promise}
  * @private
  */
-function addMirrorClasses(_ref6) {
-  let { mirror, mirrorClass } = _ref6,
-      args = _objectWithoutProperties(_ref6, ['mirror', 'mirrorClass']);
+function addMirrorClasses(_ref5) {
+  let { mirror, mirrorClass } = _ref5,
+      args = _objectWithoutProperties(_ref5, ['mirror', 'mirrorClass']);
 
   return withPromise(resolve => {
     mirror.classList.add(mirrorClass);
@@ -6188,9 +5993,9 @@ function addMirrorClasses(_ref6) {
  * @return {Promise}
  * @private
  */
-function removeMirrorID(_ref7) {
-  let { mirror } = _ref7,
-      args = _objectWithoutProperties(_ref7, ['mirror']);
+function removeMirrorID(_ref6) {
+  let { mirror } = _ref6,
+      args = _objectWithoutProperties(_ref6, ['mirror']);
 
   return withPromise(resolve => {
     mirror.removeAttribute('id');
@@ -6212,21 +6017,9 @@ function removeMirrorID(_ref7) {
  * @private
  */
 function positionMirror({ withFrame = false, initial = false } = {}) {
-  return (_ref8) => {
-    let {
-      mirror,
-      sensorEvent,
-      mirrorOffset,
-      initialY,
-      initialX,
-      scrollOffset,
-      options,
-      passedThreshX,
-      passedThreshY,
-      lastMovedX,
-      lastMovedY
-    } = _ref8,
-        args = _objectWithoutProperties(_ref8, ['mirror', 'sensorEvent', 'mirrorOffset', 'initialY', 'initialX', 'scrollOffset', 'options', 'passedThreshX', 'passedThreshY', 'lastMovedX', 'lastMovedY']);
+  return (_ref7) => {
+    let { mirror, sensorEvent, mirrorOffset, initialY, initialX, scrollOffset, options } = _ref7,
+        args = _objectWithoutProperties(_ref7, ['mirror', 'sensorEvent', 'mirrorOffset', 'initialY', 'initialX', 'scrollOffset', 'options']);
 
     return withPromise(resolve => {
       const result = _extends({
@@ -6237,8 +6030,8 @@ function positionMirror({ withFrame = false, initial = false } = {}) {
       }, args);
 
       if (mirrorOffset) {
-        const x = passedThreshX ? Math.round((sensorEvent.clientX - mirrorOffset.left - scrollOffset.x) / (options.thresholdX || 1)) * (options.thresholdX || 1) : lastMovedX;
-        const y = passedThreshY ? Math.round((sensorEvent.clientY - mirrorOffset.top - scrollOffset.y) / (options.thresholdY || 1)) * (options.thresholdY || 1) : lastMovedY;
+        const x = sensorEvent.clientX - mirrorOffset.left - scrollOffset.x;
+        const y = sensorEvent.clientY - mirrorOffset.top - scrollOffset.y;
 
         if (options.xAxis && options.yAxis || initial) {
           mirror.style.transform = `translate3d(${x}px, ${y}px, 0)`;
@@ -6252,9 +6045,6 @@ function positionMirror({ withFrame = false, initial = false } = {}) {
           result.initialX = x;
           result.initialY = y;
         }
-
-        result.lastMovedX = x;
-        result.lastMovedY = y;
       }
 
       resolve(result);
@@ -6292,7 +6082,7 @@ function isNativeDragEvent(sensorEvent) {
 }
 
 /***/ }),
-/* 59 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6303,7 +6093,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.defaultOptions = undefined;
 
-var _Mirror = __webpack_require__(58);
+var _Mirror = __webpack_require__(56);
 
 var _Mirror2 = _interopRequireDefault(_Mirror);
 
@@ -6313,7 +6103,7 @@ exports.default = _Mirror2.default;
 exports.defaultOptions = _Mirror.defaultOptions;
 
 /***/ }),
-/* 60 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6458,7 +6248,7 @@ function stripElement(element) {
 }
 
 /***/ }),
-/* 61 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6468,7 +6258,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Focusable = __webpack_require__(60);
+var _Focusable = __webpack_require__(58);
 
 var _Focusable2 = _interopRequireDefault(_Focusable);
 
@@ -6477,7 +6267,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = _Focusable2.default;
 
 /***/ }),
-/* 62 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6526,7 +6316,7 @@ class AbstractPlugin {
 exports.default = AbstractPlugin;
 
 /***/ }),
-/* 63 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6721,7 +6511,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /***/ }),
-/* 64 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6732,7 +6522,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.defaultOptions = undefined;
 
-var _Announcement = __webpack_require__(63);
+var _Announcement = __webpack_require__(61);
 
 var _Announcement2 = _interopRequireDefault(_Announcement);
 
@@ -6742,7 +6532,7 @@ exports.default = _Announcement2.default;
 exports.defaultOptions = _Announcement.defaultOptions;
 
 /***/ }),
-/* 65 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6801,7 +6591,7 @@ exports.DraggableDestroyEvent = DraggableDestroyEvent;
 DraggableDestroyEvent.type = 'draggable:destroy';
 
 /***/ }),
-/* 66 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6902,7 +6692,7 @@ AbstractEvent.type = 'event';
 AbstractEvent.cancelable = false;
 
 /***/ }),
-/* 67 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7152,7 +6942,7 @@ exports.DragStopEvent = DragStopEvent;
 DragStopEvent.type = 'drag:stop';
 
 /***/ }),
-/* 68 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
