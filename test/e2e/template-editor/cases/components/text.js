@@ -40,11 +40,8 @@ var TextComponentScenarios = function () {
 
       it('should clear and update the component text', function () {
         helper.wait(textComponentPage.getTextInput(), 'Text component input');
-        // Note: Disconnect from Angular to prevent Autosave timeout from interrupting edits
-        browser.waitForAngularEnabled(false);
         textComponentPage.getTextInput().clear();
         textComponentPage.getTextInput().sendKeys("Changed Text" + protractor.Key.ENTER);
-        browser.waitForAngularEnabled(true);
 
         //wait for presentation to be auto-saved
         templateEditorPage.waitForAutosave();
