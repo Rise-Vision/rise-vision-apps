@@ -605,12 +605,13 @@ $short-phone-height: 570px;
 .storage-selector-component {
   --storage-column-width: 100%;
   --storage-selector-search-height: 65px;
+  --storage-selector-grid-toggle-height: 13px;
 
-  height: calc(var(--storage-selector-body-height) - var(--storage-selector-search-height) - var(--storage-selector-button-bar-height));
+  height: calc(var(--storage-selector-body-height) - var(--storage-selector-search-height) - var(--storage-selector-button-bar-height) - var(--storage-selector-grid-toggle-height));
   overflow-x: hidden;
   overflow-y: auto;
 
-  .storage-selector-list {
+  .storage-selector-grid {
     column-count: 2;
     column-gap: 5px;
     margin: 10px 20px 0;
@@ -888,6 +889,11 @@ $short-phone-height: 570px;
   }
 }
 
+.file-component-list-header {
+  @extend .file-component-list-file-row;
+  @extend .font-weight-bold;
+}
+
 .file-component-list-action-button-bar {
   height: var(--image-component-list-button-bar-height);
   padding: 0px 20px;
@@ -1014,17 +1020,17 @@ $short-phone-height: 570px;
     }
   } 
 
-  .radio {
+  .radio, .checkbox {
     margin-top: 0px;
     margin-bottom: 0px;
     min-height: 25px;
   }
 
-  .radio label {
+  .radio, .checkbox label {
     padding-left: 0px;
   }
 
-  input[type=radio] {
+  input[type=radio], input[type=checkbox] {
     position: absolute;
     top: auto;
     overflow: hidden;
@@ -1035,12 +1041,12 @@ $short-phone-height: 570px;
     white-space: nowrap;
   }
 
-  input[type=radio] + label {
+  input[type=radio], input[type=checkbox] + label {
     display: block;
     padding-top: 5px;
   }
 
-  input[type=radio] + label:before {
+  input[type=radio], input[type=checkbox] + label:before {
     content: '';
     background: #fff;
     border: .15em solid $madero-gray;
@@ -1065,6 +1071,29 @@ $short-phone-height: 570px;
     background-color: $madero-light-blue;
     border: .15em solid $madero-light-blue;
     box-shadow: inset 0 0 0 0.23em rgba(255, 255, 255, .95);
+  }
+
+  // Requires checkmark svg in the label element
+  input[type=checkbox] + label:before {
+    border-radius: 2px;
+    margin-right: -3px;
+  }
+
+  input[type=checkbox]:checked + label:before {
+    border: .15em solid $madero-light-blue;
+  }
+
+  input[type=checkbox] + label {
+    svg {
+      fill: #fff;
+      transform: translate(-14px, 2px);
+    }
+  }
+
+  input[type=checkbox]:checked + label {
+    svg {
+      fill: $madero-light-blue;
+    }
   }
 
   input[type='range'] {

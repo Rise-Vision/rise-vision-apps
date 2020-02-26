@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('basicStorageSelector', ['$loading', 'storage', 'templateEditorUtils',
-    function ($loading, storage, templateEditorUtils) {
+  .directive('basicStorageSelector', ['$loading', 'filterFilter', 'storage', 'basicStorageSelectorFactory',
+    'templateEditorUtils',
+    function ($loading, filterFilter, storage, basicStorageSelectorFactory, templateEditorUtils) {
       return {
         restrict: 'E',
         scope: {
@@ -16,6 +17,7 @@ angular.module('risevision.template-editor.directives')
           var spinnerId = 'storage-' + $scope.storageSelectorId + '-spinner';
           var validExtensionsList = $scope.validExtensions ? $scope.validExtensions.split(',') : [];
 
+          $scope.basicStorageSelectorFactory = basicStorageSelectorFactory;
           $scope.folderItems = [];
           $scope.selectedItems = [];
           $scope.filterConfig = {
@@ -40,6 +42,8 @@ angular.module('risevision.template-editor.directives')
           };
           $scope.storageManager = angular.extend($scope.storageManager, {
             refresh: function () {
+              basicStorageSelectorFactory.isListView = true;
+
               $scope.loadItems($scope.storageUploadManager.folderPath);
             },
             onBackHandler: function () {
@@ -125,6 +129,30 @@ angular.module('risevision.template-editor.directives')
             }
           };
 
+          $scope.selectAllItems = function () {
+            var filteredFiles = filterFilter($scope.folderItems, $scope.search.query);
+
+            $scope.search.selectAll = !$scope.search.selectAll;
+
+            for (var i = 0; i < $scope.folderItems.length; ++i) {
+              var item = $scope.folderItems[i];
+
+              if ($scope.isFolder(item.name)) {
+                continue;
+              }
+
+              var idx = _.findIndex($scope.selectedItems, {
+                name: item.name
+              });
+
+              if ($scope.search.selectAll && filteredFiles.indexOf(item) >= 0 && idx === -1) {
+                $scope.selectedItems.push(item);
+              } else if (!$scope.search.selectAll && idx >= 0) {
+                $scope.selectedItems.splice(idx, 1);
+              }
+            }
+          };
+
           $scope.isSelected = function (item) {
             return _.findIndex($scope.selectedItems, {
               name: item.name
@@ -135,6 +163,25 @@ angular.module('risevision.template-editor.directives')
             $scope.storageManager.addSelectedItems($scope.selectedItems);
             _reset();
           };
+          
+          $scope.sortBy = function (cat) {
+            if (cat !== $scope.search.sortBy) {
+              $scope.search.sortBy = cat;
+            } else {
+              $scope.search.reverse = !$scope.search.reverse;
+            }
+          };
+
+          $scope.dateModifiedOrderFunction = function (file) {
+            return file.updated ? file.updated.value : '';
+          };
+
+          $scope.fileNameOrderFunction = function (file) {
+            return file.name.toLowerCase().split(' (').join('/(');
+          };
+
+          $scope.search.sortBy = $scope.fileNameOrderFunction;
+
         }
       };
     }
