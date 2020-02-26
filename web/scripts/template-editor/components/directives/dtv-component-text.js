@@ -12,8 +12,13 @@ angular.module('risevision.template-editor.directives')
 
           function _load() {
             var fontsize = $scope.getAvailableAttributeData($scope.componentId, 'fontsize');
+            var minfontsize = $scope.getAvailableAttributeData($scope.componentId, 'minfontsize');
+            var maxfontsize = $scope.getAvailableAttributeData($scope.componentId, 'maxfontsize');
+
             var fontsizeInt = templateEditorUtils.intValueFor(fontsize, null);
 
+            $scope.minFontSize = templateEditorUtils.intValueFor(minfontsize, 1);
+            $scope.maxFontSize = templateEditorUtils.intValueFor(maxfontsize, 200);
             $scope.value = $scope.getAvailableAttributeData($scope.componentId, 'value');
             $scope.fontsize = fontsizeInt;
             $scope.showFontSize = !!fontsizeInt;
