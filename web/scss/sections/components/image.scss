@@ -1,7 +1,7 @@
 @media (min-width: $screen-sm) {
   .image-component-container {
     --image-component-list-button-bar-height: 115px;
-    --image-component-list-duration-height: 80px;
+    --image-component-list-attributes-height: 80px;
     --image-component-body-height: calc(100vh - var(--body-height) - var(--component-header-height));
   }
 }
@@ -9,7 +9,7 @@
 @media (max-width: $screen-sm) {
   .image-component-container {
     --image-component-list-button-bar-height: 120px;
-    --image-component-list-duration-height: 85px;
+    --image-component-list-attributes-height: 85px;
     --image-component-body-height: calc(100vh - var(--body-height));
   }
 }
@@ -18,12 +18,12 @@
   height: calc(var(--image-component-body-height) - var(--image-component-list-button-bar-height));
 
   &.active-duration {
-    height: calc(var(--image-component-body-height) - var(--image-component-list-duration-height) - var(--image-component-list-button-bar-height));
+    height: calc(var(--image-component-body-height) - var(--image-component-list-attributes-height) - var(--image-component-list-button-bar-height));
   }
 }
 
 .image-component-list-duration {
-  height: var(--image-component-list-duration-height);
+  height: var(--image-component-list-attributes-height);
   padding: 10px 20px 0;
   background: $white;
 
