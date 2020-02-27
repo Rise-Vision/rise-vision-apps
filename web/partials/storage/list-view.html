@@ -3,7 +3,7 @@
     <tr class="table-header__row u_clickable">
       <th class="col-sm-6 table-header__cell">
         <input type="checkbox" class="u_margin-right" ng-model="selectAll">
-        <label ng-click="filesFactory.selectAllCheckboxes(query)" ng-show="storageFactory.isMultipleSelector()"></label>
+        <label ng-click="filesFactory.selectAllCheckboxes(search.query)" ng-show="storageFactory.isMultipleSelector()"></label>
         <span id="tableHeaderName" ng-click="sortBy(fileNameOrderFunction)">
           <span translate="common.file-name"></span>
           <!-- ngIf: search.sortBy = fileNameOrderFunction -->
