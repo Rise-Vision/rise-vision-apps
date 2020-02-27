@@ -21,7 +21,7 @@ angular.module('risevision.template-editor.directives')
           $scope.registerDirective({
             type: 'rise-playlist',
             iconType: 'streamline',
-            icon: 'playlist',
+            icon: 'embedded-template',
             element: element,
             show: function () {
               $scope.componentId = $scope.factory.selected.id;
