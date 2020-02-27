@@ -25,12 +25,12 @@ angular.module('risevision.editor.controllers')
         id: 'storeProductsSearchInput'
       };
 
-      $scope.getTemplatesFilter = function() {
+      $scope.getTemplatesFilter = function () {
         var filter = {};
 
         if ($scope.search.templatesFilter) {
           var values = $scope.search.templatesFilter.split('|');
-          filter[values[0]] = values[1];          
+          filter[values[0]] = values[1];
         }
 
         return filter;

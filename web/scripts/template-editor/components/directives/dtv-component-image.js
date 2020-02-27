@@ -116,6 +116,14 @@ angular.module('risevision.template-editor.directives')
             $scope.values.duration = (duration && !isNaN(duration)) ? duration : 10;
           }
 
+          function _loadTransition() {
+            var transition = imageFactory.getTransition();
+            if (!transition) {
+              transition = _getBlueprint('transition');
+            }
+            $scope.values.transition = transition;
+          }
+
           function _getBlueprint(key) {
             return imageFactory.getBlueprintData(key);
           }
@@ -181,6 +189,10 @@ angular.module('risevision.template-editor.directives')
             imageFactory.setDuration($scope.values.duration);
           };
 
+          $scope.saveTransition = function () {
+            imageFactory.setTransition($scope.values.transition);
+          };
+
           $scope.registerDirective({
             type: 'rise-image',
             iconType: 'streamline',
@@ -201,6 +213,7 @@ angular.module('risevision.template-editor.directives')
 
               _loadSelectedImages();
               _loadDuration();
+              _loadTransition();
             },
             onBackHandler: function () {
               if ($scope.getCurrentPanel() !== storagePanelSelector) {

@@ -201,4 +201,18 @@ describe('service: logoImageFactory', function() {
     });
   });
 
+  describe('getTransition: ', function() {
+    it('should return null, as it does not apply to logo', function() {
+      var data = logoImageFactory.getTransition();      
+      expect(data).to.be.null;
+    });
+  });
+
+  describe('setTransition: ', function() {
+    it('should not perform any action, as it does not apply to logo', function() {
+      logoImageFactory.setTransition('fadeIn');      
+      expect(logoImageFactory.getTransition()).to.be.null;
+    });
+  });
+
 });

@@ -15,8 +15,16 @@ angular.module('risevision.template-editor.services')
         return _getAttributeData('duration');
       };
 
+      factory.getTransition = function () {
+        return _getAttributeData('transition');
+      };
+
       factory.setDuration = function (duration) {
         _setAttributeData('duration', duration);
+      };
+
+      factory.setTransition = function (transition) {
+        _setAttributeData('transition', transition);
       };
 
       factory.getBlueprintData = function (key) {

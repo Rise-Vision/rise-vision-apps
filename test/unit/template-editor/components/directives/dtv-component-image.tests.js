@@ -31,7 +31,8 @@ describe('directive: TemplateComponentImage', function() {
         getBlueprintData: sandbox.stub().returns({}),
         getImagesAsMetadata: sandbox.stub().returns([]),
         areChecksCompleted: sandbox.stub().returns(true),
-        getDuration: sandbox.stub().returns(10)
+        getDuration: sandbox.stub().returns(10),
+        getTransition: sandbox.stub().returns(null)
       };
     });
     $provide.service('baseImageFactory', function() {
@@ -40,8 +41,10 @@ describe('directive: TemplateComponentImage', function() {
         getImagesAsMetadata: sandbox.stub().returns([]),
         areChecksCompleted: sandbox.stub().returns(true),
         getDuration: sandbox.stub().returns(10),
+        getTransition: sandbox.stub().returns(null),
         removeImage: sandbox.stub().returns(Q.resolve()),
-        isSetAsLogo: sandbox.stub().returns(false)
+        isSetAsLogo: sandbox.stub().returns(false),
+        setTransition: sandbox.stub()
       };
     });
     $provide.service('storageAPILoader', function() {
@@ -96,6 +99,8 @@ describe('directive: TemplateComponentImage', function() {
     expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } });
     expect($scope.isEditingLogo).to.be.a('function');
     expect($scope.sortItem).to.be.a('function');
+    expect($scope.saveDuration).to.be.a('function');
+    expect($scope.saveTransition).to.be.a('function');
 
     expect($scope.registerDirective).to.have.been.called;
 
@@ -473,6 +478,14 @@ describe('directive: TemplateComponentImage', function() {
       expect($scope.selectedImages.indexOf('image0')).to.equal(0);
     });
 
+  });
+
+  describe('saveTransition:', function() {
+    it('should forward call to imageFactory', function() {
+      $scope.values.transition = 'fadeIn';
+      $scope.saveTransition();
+      expect(baseImageFactory.setTransition).to.have.been.calledWith('fadeIn');
+    });
   });
 
 });

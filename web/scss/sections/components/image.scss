@@ -1,7 +1,7 @@
 @media (min-width: $screen-sm) {
   .image-component-container {
     --image-component-list-button-bar-height: 115px;
-    --image-component-list-duration-height: 80px;
+    --image-component-list-duration-height: 155px;
     --image-component-body-height: calc(100vh - var(--body-height) - var(--component-header-height));
   }
 }
@@ -9,7 +9,7 @@
 @media (max-width: $screen-sm) {
   .image-component-container {
     --image-component-list-button-bar-height: 120px;
-    --image-component-list-duration-height: 85px;
+    --image-component-list-duration-height: 160px;
     --image-component-body-height: calc(100vh - var(--body-height));
   }
 }
@@ -31,7 +31,6 @@
     height: 40px;
     color: $gray-dark;
     border: 1px solid $mid-gray;
-    border-right: 0;
     box-shadow: none;
     transition: none;
 

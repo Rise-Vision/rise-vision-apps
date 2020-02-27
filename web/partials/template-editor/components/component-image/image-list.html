@@ -9,6 +9,21 @@
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="form-group">
+        <label class="control-label u_margin-sm-top">Transition:</label>
+        <select class="form-control" ng-model="values.transition" ng-change="saveTransition()">
+          <option value="">No Transition</option>
+          <option value="fadeIn">Fade In</option>
+          <option value="slideRight">Slide Right</option>
+          <option value="slideLeft">Slide Left</option>
+          <option value="slideUp">Slide Up</option>
+          <option value="slideDown">Slide Down</option>
+        </select>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="image-component-list file-component-list te-scrollable-container"
      ng-class="{'active-duration' : selectedImages.length > 1 && !isUploading}"

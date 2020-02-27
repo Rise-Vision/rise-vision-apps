@@ -56,6 +56,8 @@ describe('service: baseImageFactory', function() {
     expect(baseImageFactory.areChecksCompleted).to.be.a('function');
     expect(baseImageFactory.removeImage).to.be.a('function');
     expect(baseImageFactory.updateMetadata).to.be.a('function');
+    expect(baseImageFactory.getTransition).to.be.a('function');
+    expect(baseImageFactory.setTransition).to.be.a('function');
   });
 
   describe('getImagesAsMetadata: ', function() {
@@ -206,6 +208,23 @@ describe('service: baseImageFactory', function() {
         templateEditorFactory.getAttributeData.returns(false);
         expect(baseImageFactory.isSetAsLogo()).to.equals(false);
       });
+    });
+  });
+
+  describe('getTransition: ', function() {
+    it('should return Template Editor transition attribute', function() {
+      var data = baseImageFactory.getTransition();
+
+      expect(data).to.equals('data');
+      templateEditorFactory.getAttributeData.should.have.been.calledWith('componentId','transition');
+    });
+  });
+
+  describe('setTransition: ', function() {
+    it('should set Template Editor transition attribute', function() {
+      baseImageFactory.setTransition('fadeIn');      
+
+      templateEditorFactory.setAttributeData.should.have.been.calledWith('componentId','transition','fadeIn');
     });
   });
 

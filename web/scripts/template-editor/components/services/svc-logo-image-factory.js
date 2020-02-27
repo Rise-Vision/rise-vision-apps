@@ -23,7 +23,15 @@ angular.module('risevision.template-editor.services')
         return null;
       };
 
+      factory.getTransition = function () {
+        return null;
+      };
+
       factory.setDuration = function (duration) {
+        return;
+      };
+
+      factory.setTransition = function (transition) {
         return;
       };
 

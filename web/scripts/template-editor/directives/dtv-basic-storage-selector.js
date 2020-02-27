@@ -26,7 +26,7 @@ angular.module('risevision.template-editor.directives')
             doSearch: function () {},
             reverse: false
           };
-          
+
           $scope.storageUploadManager = {
             folderPath: '',
             onUploadStatus: function (isUploading) {
