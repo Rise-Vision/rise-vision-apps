@@ -80,6 +80,13 @@ angular.module('risevision.template-editor.services')
         });
       };
 
+      factory.getHelpText = function (componentId) {
+        var component = _.find(factory.blueprintData.components, {
+          id: componentId
+        });
+        return component && component.helpText;
+      };
+
       return factory;
     }
   ]);

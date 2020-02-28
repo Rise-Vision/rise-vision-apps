@@ -1,3 +1,9 @@
+<div ng-if="helpText" class="attribute-editor-component">
+  <div class="text-sm attribute-editor-row u_margin-sm-bottom">
+    {{helpText}}
+  </div> 
+</div>
+
 <div class="image-component-list-duration"
      ng-show="selectedImages.length > 1 && !isUploading">
   <label>Show each image for:</label>
@@ -26,7 +32,7 @@
   </div>
 </div>
 <div class="image-component-list file-component-list te-scrollable-container"
-     ng-class="{'active-duration' : selectedImages.length > 1 && !isUploading}"
+     ng-class="{'active-duration' : selectedImages.length > 1 && !isUploading, 'active-help-text': helpText}"
      rv-spinner rv-spinner-key="template-editor-loader">
   <div rv-sortable on-sort="sortItem(evt)" append-to=".component-container" class="sortable-list">
 

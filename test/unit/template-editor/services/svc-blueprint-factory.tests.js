@@ -275,4 +275,25 @@ describe('service: blueprint factory', function() {
 
   });
 
+  describe('getHelpText', function() {
+    it('should return component help text', function() {
+      blueprintFactory.blueprintData = {
+        components: [
+          { type: 'rise-image', id: 'rise-image-01', helpText: 'help text' },
+        ]
+      };
+      expect(blueprintFactory.getHelpText('rise-image-01')).to.equal('help text');
+    });
+
+    it('should return undefined if component does not have help text', function() {
+      blueprintFactory.blueprintData = { components: SAMPLE_COMPONENTS };
+      expect(blueprintFactory.getHelpText('rise-image-01')).to.be.undefined;
+    });
+
+    it('should return undefined if component does not exist', function() {
+      blueprintFactory.blueprintData = { components: SAMPLE_COMPONENTS };
+      expect(blueprintFactory.getHelpText('invalid-01')).to.be.undefined;
+    });
+  });
+
 });
