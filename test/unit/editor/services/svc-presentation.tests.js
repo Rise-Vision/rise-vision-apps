@@ -546,4 +546,22 @@ describe('service: presentation:', function() {
         .then(null,done);
     });
   });
+
+  describe('buildFilterString:',function(){
+    it('should combine query and filter',function(){
+      var res = presentation.buildFilterString('query', 'filter');
+      expect(res).to.equal('(name:~"query" OR id:~"query" OR revisionStatusName:~"query") AND (filter)');
+    });
+
+    it('should not add "AND" to when no query',function(){
+      var res = presentation.buildFilterString('query', 'filter');
+      expect(res).to.equal('(name:~"query" OR id:~"query" OR revisionStatusName:~"query") AND (filter)');
+    });
+
+    it('should not add "AND" to when no filter',function(){
+      var res = presentation.buildFilterString('', 'filter');
+      expect(res).to.equal('(filter)');
+    });
+
+  });
 });
