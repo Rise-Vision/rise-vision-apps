@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentPlaylist', ['templateEditorFactory', 'presentation', '$log',
-    function (templateEditorFactory, presentation, $log) {
+  .constant('FILTER_HTML_TEMPLATES', 'presentationType:"HTML Template"')
+  .directive('templateComponentPlaylist', ['templateEditorFactory', 'presentation', '$log', 'FILTER_HTML_TEMPLATES',
+    function (templateEditorFactory, presentation, $log, FILTER_HTML_TEMPLATES) {
       return {
         restrict: 'E',
         scope: true,
@@ -46,8 +47,7 @@ angular.module('risevision.template-editor.directives')
             $scope.canAddTemplate = false;
 
             var search = {
-              query: $scope.searchKeyword,
-              filter: 'presentationType:"HTML Template"'
+              filter: presentation.buildFilterString($scope.searchKeyword, FILTER_HTML_TEMPLATES)
             };
 
             presentation.list(search)
@@ -60,6 +60,19 @@ angular.module('risevision.template-editor.directives')
               $log.error(err);
               $scope.searching = false;
             });
+          };
+
+          $scope.searchKeyPressed = function (keyEvent) {
+            // handle enter key
+            if (keyEvent.which === 13) {
+              $scope.searchTemplates();
+            }
+          };
+
+          $scope.resetSearch = function () {
+            $scope.searchKeyword = '';
+            $scope.templatesSearch = [];
+            $scope.searchTemplates();
           };
 
         }
