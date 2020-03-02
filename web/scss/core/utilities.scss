@@ -165,6 +165,11 @@ All utilities have a prefix u_ added to them
   padding-right: 8px;
 }
 
+.u_padding-xs-horizontal {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
 .u_padding-lg-vertical {
   padding-top: 32px;
   padding-bottom: 32px;
@@ -178,6 +183,11 @@ All utilities have a prefix u_ added to them
 .u_padding-sm-vertical {
   padding-top: 8px;
   padding-bottom: 8px;
+}
+
+.u_padding-xs-vertical {
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
 /* Margin Utilities
