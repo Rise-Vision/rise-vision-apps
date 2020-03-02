@@ -1,27 +1,39 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentText', ['templateEditorFactory', 'templateEditorUtils',
-    function (templateEditorFactory, templateEditorUtils) {
+  .directive('templateComponentText', ['$timeout', 'templateEditorFactory', 'templateEditorUtils',
+    function ($timeout, templateEditorFactory, templateEditorUtils) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/components/component-text.html',
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
+          $scope.sliderOptions = {
+            hideLimitLabels: true
+          };
 
           function _load() {
+            var value = $scope.getAvailableAttributeData($scope.componentId, 'value');
             var fontsize = $scope.getAvailableAttributeData($scope.componentId, 'fontsize');
             var minfontsize = $scope.getAvailableAttributeData($scope.componentId, 'minfontsize');
             var maxfontsize = $scope.getAvailableAttributeData($scope.componentId, 'maxfontsize');
 
             var fontsizeInt = templateEditorUtils.intValueFor(fontsize, null);
+            var minFontSize = templateEditorUtils.intValueFor(minfontsize, 1);
+            var maxFontSize = templateEditorUtils.intValueFor(maxfontsize, 200);
 
-            $scope.minFontSize = templateEditorUtils.intValueFor(minfontsize, 1);
-            $scope.maxFontSize = templateEditorUtils.intValueFor(maxfontsize, 200);
-            $scope.value = $scope.getAvailableAttributeData($scope.componentId, 'value');
+            $scope.sliderOptions.floor = minFontSize;
+            $scope.sliderOptions.ceil = maxFontSize;
+            $scope.sliderOptions.onEnd = $scope.save;
+
+            $scope.value = value;
             $scope.fontsize = fontsizeInt;
             $scope.showFontSize = !!fontsizeInt;
+
+            $timeout(function () {
+              $(window).trigger('resize');
+            }, 400);
           }
 
           $scope.save = function () {

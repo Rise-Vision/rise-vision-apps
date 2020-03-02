@@ -12,10 +12,7 @@
       <label class="u_margin-md-top">Font size:</label>
       <div class="row">
         <div class="col-xs-12">
-          <input min="{{minFontSize}}" max="{{maxFontSize}}" step="1" type="range"
-            ng-model="fontsize"
-            ng-change="save()"
-          >
+          <rzslider rz-slider-model="fontsize" rz-slider-options="sliderOptions"></rzslider>
         </div>
       </div>
       <p class="range-value">{{ fontsize }}px</p>
