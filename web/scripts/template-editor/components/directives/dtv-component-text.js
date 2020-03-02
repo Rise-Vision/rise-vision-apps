@@ -10,7 +10,8 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
           $scope.sliderOptions = {
-            hideLimitLabels: true
+            hideLimitLabels: true,
+            hidePointerLabels: true
           };
 
           function _load() {

@@ -1,0 +1,16 @@
+.rzslider {
+  .rz-pointer {
+    top: -10px !important;
+    width: 24px !important;
+    height: 24px !important;
+    background-color: $brand-primary !important;
+
+    .rz-pointer-min {
+      outline: none;
+    }
+  }
+
+  .rz-pointer:after {
+    background: $brand-primary !important;
+  }
+}
