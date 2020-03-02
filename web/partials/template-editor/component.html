@@ -15,18 +15,17 @@
                   type="{{ panelIconType }}"
                   class="component-icon">
   </component-icon>
-  <div class="mr-auto">
-    <span ng-show="!panelTitle">{{ factory.selected.label }}</span>
-    <span ng-show="panelTitle">{{ panelTitle }}</span>
-  </div>
+  <span class="u_text-ellipsis mr-auto" ng-show="!panelTitle">{{ factory.selected.label }}</span>
+  <span class="u_text-ellipsis mr-auto" ng-show="panelTitle">{{ panelTitle }}</span>
   <div class="btn-group" ng-if="getCurrentPanel() === '.storage-selector-container'">
-      <button id="listViewButton" type="button" class="btn w-50" ng-click="basicStorageSelectorFactory.isListView = true" ng-class="{'btn-toggle-blue-off' : !basicStorageSelectorFactory.isListView, 'btn-toggle-blue-on' : basicStorageSelectorFactory.isListView}">
-        <img class="img-responsive" ng-src="../images/icon-list{{!basicStorageSelectorFactory.isListView ? '' : '-inv'}}.svg">
-      </button>
-      <button id="gridViewButton" type="button" class="btn w-50" ng-click="basicStorageSelectorFactory.isListView = false" ng-class="{'btn-toggle-blue-off' : basicStorageSelectorFactory.isListView, 'btn-toggle-blue-on' : !basicStorageSelectorFactory.isListView}">
-        <img class="img-responsive" ng-src="../images/icon-module{{basicStorageSelectorFactory.isListView ? '' : '-inv'}}.svg">
-      </button>
+    <button id="listViewButton" type="button" class="btn w-50" ng-click="basicStorageSelectorFactory.isListView = true" ng-class="{'btn-toggle-blue-off' : !basicStorageSelectorFactory.isListView, 'btn-toggle-blue-on' : basicStorageSelectorFactory.isListView}">
+      <img ng-src="../images/icon-list{{!basicStorageSelectorFactory.isListView ? '' : '-inv'}}.svg">
+    </button>
+    <button id="gridViewButton" type="button" class="btn w-50" ng-click="basicStorageSelectorFactory.isListView = false" ng-class="{'btn-toggle-blue-off' : basicStorageSelectorFactory.isListView, 'btn-toggle-blue-on' : !basicStorageSelectorFactory.isListView}">
+      <img ng-src="../images/icon-module{{basicStorageSelectorFactory.isListView ? '' : '-inv'}}.svg">
+    </button>
   </div>
+
 </div>
 <div class="component-container">
   <template-component-branding></template-component-branding>
