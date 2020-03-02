@@ -12,13 +12,14 @@
   </div>
 
   <!-- "add-templates" view -->
-  <div ng-show="view === 'add-templates'">
+  <div class="attribute-editor-component" ng-show="view === 'add-templates'"
+  rv-spinner rv-spinner-key="rise-playlist-templates-loader" rv-spinner-start-active="1">
     <div class="input-group templates-selector-search-box">
       <span class="input-group-addon" ng-click="searchTemplates()">
         <streamline-icon name="magnifier" width="16" height="16"></streamline-icon>
       </span>
       <input type="text" class="form-control"
-            ng-model="searchKeyword" ng-disabled="searching" ng-keyup="searchKeyPressed($event)"
+            ng-model="searchKeyword" ng-keyup="searchKeyPressed($event)"
             placeholder="Search Templates"
             aria-label="Search Templates">
       <span class="input-group-addon" ng-click="resetSearch()">
@@ -26,13 +27,14 @@
       </span>
     </div>
 
-    <div class="templates-selector te-scrollable-container">
-      <div class="templates-selector-no-results" ng-show="!templatesSearch.length || templatesSearch.length === 0">
+    <div class="templates-selector te-scrollable-container"
+    scrolling-list="templatesFactory.load()">
+      <div class="templates-selector-no-results" ng-show="!(templatesFactory.items.list.length > 0)">
         No Results Found
       </div>
 
-      <div class="row templates-row" ng-show="templatesSearch.length > 0"
-          ng-repeat="(key, value) in templatesSearch"
+      <div class="row templates-row" ng-show="templatesFactory.items.list.length > 0"
+          ng-repeat="(key, value) in templatesFactory.items.list"
           ng-click="selecttemplates(key)"
           ng-class="{'templates-row--is-selected' : value.isSelected}">
         <div class="col-xs-12 pl-0 pr-0">
