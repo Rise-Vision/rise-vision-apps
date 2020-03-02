@@ -465,6 +465,10 @@ $short-phone-height: 570px;
         height: 16px;
       }
     }
+
+    & .btn-group {
+      flex: 0 0 auto;
+    }
   }
 
   & .component-container {
