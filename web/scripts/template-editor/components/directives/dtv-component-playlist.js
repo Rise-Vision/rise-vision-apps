@@ -2,8 +2,10 @@
 
 angular.module('risevision.template-editor.directives')
   .constant('FILTER_HTML_TEMPLATES', 'presentationType:"HTML Template"')
-  .directive('templateComponentPlaylist', ['templateEditorFactory', 'presentation', '$log', 'FILTER_HTML_TEMPLATES',
-    function (templateEditorFactory, presentation, $log, FILTER_HTML_TEMPLATES) {
+  .directive('templateComponentPlaylist', ['templateEditorFactory', 'presentation', '$log', '$loading',
+  'FILTER_HTML_TEMPLATES', 'ScrollingListService',
+    function (templateEditorFactory, presentation, $log, $loading,
+      FILTER_HTML_TEMPLATES, ScrollingListService) {
       return {
         restrict: 'E',
         scope: true,
@@ -11,7 +13,9 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
           $scope.searchKeyword = '';
-          $scope.templatesSearch = [];
+          $scope.templatesSearch = {
+            sortBy: 'changeDate'
+          };
 
           function _load() {
             //
@@ -43,23 +47,13 @@ angular.module('risevision.template-editor.directives')
 
           $scope.searchTemplates = function () {
 
-            $scope.searching = true;
-            $scope.canAddTemplate = false;
-
-            var search = {
-              filter: presentation.buildFilterString($scope.searchKeyword, FILTER_HTML_TEMPLATES)
-            };
-
-            presentation.list(search)
-            .then(function (result) {
-              $scope.templatesSearch = angular.copy(result.items);
-
-              $scope.searching = false;
-            })
-            .catch(function (err) {
-              $log.error(err);
-              $scope.searching = false;
-            });
+            $scope.templatesSearch.filter = presentation.buildFilterString($scope.searchKeyword, FILTER_HTML_TEMPLATES);
+  
+            if (!$scope.templatesFactory) {
+              $scope.initTemplatesFactory();
+            } else {
+              $scope.templatesFactory.doSearch();
+            }
           };
 
           $scope.searchKeyPressed = function (keyEvent) {
@@ -71,8 +65,21 @@ angular.module('risevision.template-editor.directives')
 
           $scope.resetSearch = function () {
             $scope.searchKeyword = '';
-            $scope.templatesSearch = [];
             $scope.searchTemplates();
+          };
+
+          $scope.initTemplatesFactory = function () {
+
+            $scope.templatesFactory = new ScrollingListService(presentation.list, $scope.templatesSearch);
+
+            $scope.$watch('templatesFactory.loadingItems', 
+            function (loading) {
+              if (loading) {
+                $loading.start('rise-playlist-templates-loader');
+              } else {
+                $loading.stop('rise-playlist-templates-loader');
+              }
+            });
           };
 
         }
