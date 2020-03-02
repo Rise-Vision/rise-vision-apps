@@ -889,6 +889,14 @@ $short-phone-height: 570px;
   }
 }
 
+.file-component-list-folder-row {
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  @extend .file-component-list-file-row;
+}
+
+
 .file-component-list-header {
   @extend .file-component-list-file-row;
   @extend .font-weight-bold;
@@ -1078,9 +1086,13 @@ $short-phone-height: 570px;
   }
 
   // Requires checkmark svg in the label element
-  input[type=checkbox] + label:before {
-    border-radius: 2px;
-    margin-right: -3px;
+  input[type=checkbox] + label {
+    margin-bottom: 7px;
+
+    &:before {
+      border-radius: 2px;
+      margin-right: -3px;
+    }
   }
 
   input[type=checkbox]:checked + label:before {
