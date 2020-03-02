@@ -100,6 +100,15 @@ describe('directive: basicStorageSelector', function() {
 
       expect($scope.basicStorageSelectorFactory.isListView).to.be.true;
     });
+
+    it('should not return to list view on refresh if skipReset is true', function() {
+      sandbox.stub($scope, 'loadItems');
+      $scope.basicStorageSelectorFactory.isListView = false;
+
+      $scope.storageManager.refresh(true);
+
+      expect($scope.basicStorageSelectorFactory.isListView).to.be.false;
+    });
     
   });
 
@@ -210,11 +219,13 @@ describe('directive: basicStorageSelector', function() {
     it('should call storageManager.addSelectedItems and reset the internal status', function () {
       var item = { name: 'test.jpg' };
       var selectedItems = [item];
+      $scope.search.selectAll = true;
 
       $scope.selectItem(item);
       expect($scope.selectedItems).to.have.lengthOf(1);
       $scope.addSelected();
       expect($scope.selectedItems).to.be.empty;
+      expect($scope.search.selectAll).to.be.false;
       expect($scope.storageManager.addSelectedItems).to.have.been.calledWith(selectedItems);
     });
   });

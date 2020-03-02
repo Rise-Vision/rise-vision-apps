@@ -41,8 +41,10 @@ angular.module('risevision.template-editor.directives')
             }
           };
           $scope.storageManager = angular.extend($scope.storageManager, {
-            refresh: function () {
-              basicStorageSelectorFactory.isListView = true;
+            refresh: function (skipReset) {
+              if (!skipReset) {
+                basicStorageSelectorFactory.isListView = true;
+              }
 
               $scope.loadItems($scope.storageUploadManager.folderPath);
             },
@@ -55,7 +57,7 @@ angular.module('risevision.template-editor.directives')
                 // Since paths are of the 'folder/' form, the last item is the empty string
                 parts.splice(parts.length - 2, 2);
                 $scope.storageUploadManager.folderPath = parts.length > 0 ? parts.join('/') + '/' : '';
-                $scope.storageManager.refresh();
+                $scope.storageManager.refresh(true);
 
                 return true;
               }
@@ -66,6 +68,7 @@ angular.module('risevision.template-editor.directives')
           function _reset() {
             $scope.folderItems = [];
             $scope.selectedItems = [];
+            $scope.search.selectAll = false;
             $scope.storageUploadManager.folderPath = '';
           }
 
@@ -95,6 +98,7 @@ angular.module('risevision.template-editor.directives')
               })
               .then(function (items) {
                 $scope.selectedItems = [];
+                $scope.search.selectAll = false;
                 $scope.storageUploadManager.folderPath = newFolderPath;
 
                 if (items.files) {
