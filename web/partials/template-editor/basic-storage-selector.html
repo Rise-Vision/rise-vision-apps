@@ -12,7 +12,7 @@
   rv-spinner-start-active="1"
 >
 
-  <div class="image-component-list file-component-list" ng-show="folderItems.length > 0 && !isUploading" ng-if="basicStorageSelectorFactory.isListView">
+  <div class="file-component-list" ng-show="folderItems.length > 0 && !isUploading" ng-if="basicStorageSelectorFactory.isListView">
     <div class="pl-0 file-component-list-header" ng-hide="filteredItems.length === 0">
       <div class="file-entry">
         <div class="checkbox" ng-if="!storageManager.isSingleFileSelector()" ng-click="selectAllItems()">
