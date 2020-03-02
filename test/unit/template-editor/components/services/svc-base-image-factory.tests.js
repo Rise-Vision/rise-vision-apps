@@ -9,7 +9,8 @@ describe('service: baseImageFactory', function() {
   beforeEach(module(function($provide) {
     $provide.service('blueprintFactory', function() {
       return {
-        getBlueprintData: sandbox.stub().returns('data')
+        getBlueprintData: sandbox.stub().returns('data'),
+        getHelpText: sandbox.stub().returns('help text')
       };
     });
     $provide.service('templateEditorFactory', function() {
@@ -225,6 +226,13 @@ describe('service: baseImageFactory', function() {
       baseImageFactory.setTransition('fadeIn');      
 
       templateEditorFactory.setAttributeData.should.have.been.calledWith('componentId','transition','fadeIn');
+    });
+  });
+
+  describe('getHelpText: ', function() {
+    it('should return blueprint help text', function() {
+      expect(baseImageFactory.getHelpText()).to.equals('help text');
+      blueprintFactory.getHelpText.should.have.been.calledWith('componentId');
     });
   });
 

@@ -35,6 +35,10 @@ angular.module('risevision.template-editor.services')
         return;
       };
 
+      factory.getHelpText = function () {
+        return null;
+      };
+
       factory.updateMetadata = function (metadata) {
         if (metadata && metadata.length > 0) {
           var item = metadata[metadata.length - 1];

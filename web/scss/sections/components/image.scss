@@ -2,6 +2,7 @@
   .image-component-container {
     --image-component-list-button-bar-height: 115px;
     --image-component-list-attributes-height: 80px;
+    --image-component-list-help-text-height: 40px;
     --image-component-body-height: calc(100vh - var(--body-height) - var(--component-header-height));
   }
 }
@@ -10,6 +11,7 @@
   .image-component-container {
     --image-component-list-button-bar-height: 120px;
     --image-component-list-attributes-height: 85px;
+    --image-component-list-help-text-height: 40px;
     --image-component-body-height: calc(100vh - var(--body-height));
   }
 }
@@ -19,6 +21,13 @@
 
   &.active-duration {
     height: calc(var(--image-component-body-height) - var(--image-component-list-attributes-height) - var(--image-component-list-button-bar-height));
+
+    &.active-help-text {
+      height: calc(var(--image-component-body-height) - var(--image-component-list-attributes-height) - var(--image-component-list-help-text-height) - var(--image-component-list-button-bar-height));
+    }
+  }
+  &.active-help-text {
+    height: calc(var(--image-component-body-height) - var(--image-component-list-button-bar-height) - var(--image-component-list-help-text-height)) ;
   }
 }
 
