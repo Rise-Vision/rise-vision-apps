@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentText', ['$timeout', 'templateEditorFactory', 'templateEditorUtils',
-    function ($timeout, templateEditorFactory, templateEditorUtils) {
+  .directive('templateComponentText', ['$timeout', '$window', 'templateEditorFactory', 'templateEditorUtils',
+    function ($timeout, $window, templateEditorFactory, templateEditorUtils) {
       return {
         restrict: 'E',
         scope: true,
@@ -32,7 +32,7 @@ angular.module('risevision.template-editor.directives')
             $scope.showFontSize = !!fontsizeInt;
 
             $timeout(function () {
-              $(window).trigger('resize');
+              $window.dispatchEvent(new Event('resize'));
             }, 400);
           }
 
