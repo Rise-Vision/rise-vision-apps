@@ -33,6 +33,12 @@ angular.module('risevision.template-editor.directives')
             show: function () {
               $scope.componentId = $scope.factory.selected.id;
               _load();
+            },
+            onBackHandler: function () {
+              if ($scope.view) {
+                $scope.showSelectedTemplates();
+                return true;
+              }
             }
           });
 
