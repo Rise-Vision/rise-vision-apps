@@ -88,6 +88,14 @@ angular.module('risevision.template-editor.directives')
             });
           };
 
+          $scope.selectTemplate = function (key) {
+            console.log('selectTemplate');
+            $scope.templatesFactory.items.list[key].isSelected = !$scope.templatesFactory.items.list[key].isSelected;
+            // $scope.canAddInstrument = _.some($scope.instrumentSearch, function (item) {
+            //   return item.isSelected === true;
+            // });
+          };
+
         }
       };
     }
