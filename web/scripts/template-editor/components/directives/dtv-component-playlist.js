@@ -12,6 +12,7 @@ angular.module('risevision.template-editor.directives')
         templateUrl: 'partials/template-editor/components/component-playlist.html',
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
+          $scope.selectedTemplates = [];
           $scope.searchKeyword = '';
           $scope.templatesSearch = {
             sortBy: 'changeDate'
@@ -43,6 +44,7 @@ angular.module('risevision.template-editor.directives')
           });
 
           $scope.showAddTemplates = function () {
+            $scope.canAddTemplates = false;
             $scope.view = 'add-templates';
             $scope.searchTemplates();
           };
@@ -86,6 +88,30 @@ angular.module('risevision.template-editor.directives')
                 $loading.stop('rise-playlist-templates-loader');
               }
             });
+          };
+
+          $scope.selectTemplate = function (key) {
+            $scope.templatesFactory.items.list[key].isSelected = !$scope.templatesFactory.items.list[key].isSelected;
+            $scope.canAddTemplates = _.some($scope.templatesFactory.items.list, function (item) {
+              return item.isSelected;
+            });
+          };
+
+          $scope.addTemplates = function () {
+            var itemsToAdd = _.filter($scope.templatesFactory.items.list, function (item) {
+              return item.isSelected;
+            });
+
+            $scope.selectedTemplates = $scope.selectedTemplates.concat(itemsToAdd);
+
+            $scope.showSelectedTemplates();
+          };
+
+          $scope.sortItem = function (evt) {
+            var oldIndex = evt.data.oldIndex;
+            var newIndex = evt.data.newIndex;
+
+            $scope.selectedTemplates.splice(newIndex, 0, $scope.selectedTemplates.splice(oldIndex, 1)[0]);
           };
 
         }
