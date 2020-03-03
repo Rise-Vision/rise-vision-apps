@@ -24,7 +24,7 @@ angular.module('risevision.template-editor.directives')
           $scope.connectionFailure = false;
           $scope.connected = false;
           $scope.username = null;
-          $scope.validationResult = null;
+          $scope.usernameStatus = null;
 
           $scope.connectToTwitter = function () {
             $scope.spinner = true;
@@ -92,10 +92,10 @@ angular.module('risevision.template-editor.directives')
             var usernameRegex = /^@?(\w){1,15}$/;
 
             if (username && usernameRegex.test(username)) {
-              $scope.validationResult = 'VALID';
+              $scope.usernameStatus = 'VALID';
               return true;
             } else {
-              $scope.validationResult = 'INVALID_USERNAME';
+              $scope.usernameStatus = 'INVALID_USERNAME';
               return false;
             }
           }

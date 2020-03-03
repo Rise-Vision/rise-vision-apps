@@ -169,7 +169,7 @@ describe('directive: templateComponentTwitter', function() {
       directive.show();
 
       expect($scope.username).to.equal('@twitterHandle');
-      expect($scope.validationResult).to.equal('VALID');
+      expect($scope.usernameStatus).to.equal('VALID');
     });
 
     it('should load data and indicate the username is not valid', function() {
@@ -181,7 +181,7 @@ describe('directive: templateComponentTwitter', function() {
       directive.show();
 
       expect($scope.username).to.equal('@twitterHandleButReallyLongAndNotValid');
-      expect($scope.validationResult).to.equal('INVALID_USERNAME');
+      expect($scope.usernameStatus).to.equal('INVALID_USERNAME');
     });
   });
 
@@ -194,7 +194,7 @@ describe('directive: templateComponentTwitter', function() {
 
       expect($scope.setAttributeData).to.have.been.called;
       expect($scope.setAttributeData.lastCall.args[2]).to.equal('twitterHandle');
-      expect($scope.validationResult).to.equal('VALID');
+      expect($scope.usernameStatus).to.equal('VALID');
     });
 
     it('should load data and indicate the username is not valid', function() {
@@ -204,7 +204,7 @@ describe('directive: templateComponentTwitter', function() {
       $scope.save();
 
       expect($scope.setAttributeData).to.not.have.been.called;
-      expect($scope.validationResult).to.equal('INVALID_USERNAME');
+      expect($scope.usernameStatus).to.equal('INVALID_USERNAME');
     });
   });
 });
