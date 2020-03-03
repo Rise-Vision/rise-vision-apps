@@ -193,6 +193,7 @@ describe('directive: templateComponentTwitter', function() {
       $scope.save();
 
       expect($scope.setAttributeData).to.have.been.called;
+      expect($scope.setAttributeData.lastCall.args[2]).to.equal('twitterHandle');
       expect($scope.validationResult).to.equal('VALID');
     });
 
