@@ -124,6 +124,10 @@ angular.module('risevision.template-editor.directives')
             $scope.values.transition = transition;
           }
 
+          function _loadHelpText() {
+            $scope.helpText = imageFactory.getHelpText();
+          }
+
           function _getBlueprint(key) {
             return imageFactory.getBlueprintData(key);
           }
@@ -214,6 +218,7 @@ angular.module('risevision.template-editor.directives')
               _loadSelectedImages();
               _loadDuration();
               _loadTransition();
+              _loadHelpText();
             },
             onBackHandler: function () {
               if ($scope.getCurrentPanel() !== storagePanelSelector) {

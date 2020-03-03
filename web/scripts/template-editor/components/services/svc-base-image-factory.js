@@ -27,6 +27,10 @@ angular.module('risevision.template-editor.services')
         _setAttributeData('transition', transition);
       };
 
+      factory.getHelpText = function () {
+        return blueprintFactory.getHelpText(factory.componentId);
+      };
+
       factory.getBlueprintData = function (key) {
         return blueprintFactory.getBlueprintData(factory.componentId, key);
       };

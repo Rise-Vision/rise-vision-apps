@@ -215,4 +215,11 @@ describe('service: logoImageFactory', function() {
     });
   });
 
+  describe('getHelpText: ', function() {
+    it('should return null, as it does not apply to logo', function() {
+      var text = logoImageFactory.getHelpText();      
+      expect(text).to.be.null;
+    });
+  });
+
 });
