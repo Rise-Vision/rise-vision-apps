@@ -16,6 +16,12 @@
               <div class="templates-status" ng-class="{'templates-status-revised' : value.revisionStatusName === 'Revised'}">{{ value.revisionStatusName }}</div>
             </span>
           </div>
+          <div class="col-xs-2 pr-0 template-actions">
+            <a href="#"
+               ng-click="removeTemplate(key)">
+               <streamline-icon class="u_margin-left streamline-component-icon" name="trash" width="16" height="16"></streamline-icon>
+              </a>
+          </div>
         </div>
       </div>
 
