@@ -10,6 +10,7 @@ angular.module('risevision.apps', [
     'ngTagsInput',
     'ngStorage',
     'ngMessages',
+    'rzSlider',
     'risevision.common.header',
     'risevision.common.components.last-modified',
     'risevision.common.components.loading',
