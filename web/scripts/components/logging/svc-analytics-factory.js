@@ -121,6 +121,10 @@
                 name: company.name,
                 companyIndustry: company.companyIndustry
               };
+              properties.subscriptionStatus = company.planSubscriptionStatus ? company.planSubscriptionStatus :
+                'Free';
+              properties.subscriptionRenewalDate = company.planCurrentPeriodEndDate;
+              properties.subscriptionTrialExpiryDate = company.planTrialExpiryDate;
             }
 
             analyticsFactory.identify(userState.getUsername(), properties);

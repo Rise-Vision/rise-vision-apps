@@ -76,7 +76,10 @@ describe("Services: analyticsFactory", function() {
         companyIndustry: "K-12 Education",
         email: undefined,
         firstName: "",
-        lastName: ""
+        lastName: "",
+        subscriptionRenewalDate: undefined,
+        subscriptionStatus: "Free",
+        subscriptionTrialExpiryDate: undefined
       };
       identifySpy.should.have.been.calledWith("username",expectProperties);
 
@@ -102,7 +105,10 @@ describe("Services: analyticsFactory", function() {
         companyIndustry: "K-12 Education",
         email: undefined,
         firstName: "",
-        lastName: ""
+        lastName: "",
+        subscriptionRenewalDate: undefined,
+        subscriptionStatus: "Free",
+        subscriptionTrialExpiryDate: undefined
       });
       done();
     }, 10);
