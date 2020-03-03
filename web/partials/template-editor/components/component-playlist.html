@@ -2,6 +2,24 @@
 
   <!-- default view -->
   <div ng-show="!view">
+    <div class="templates-selector te-scrollable-container">
+
+      <div rv-sortable on-sort="sortItem(evt)" append-to=".component-container" class="sortable-list">
+        <div class="row templates-row  rv-sortable-item" ng-show="selectedTemplates.length > 0"
+            ng-repeat="(key, value) in selectedTemplates">
+          <div class="list-grip pr-4 rv-sortable-handle">
+            <img class="img-responsive" src="../images/navigation-menu-vertical.svg">
+          </div>
+          <div class="col-xs-12 pl-0 pr-0">
+            <span class="templates-selector-name">
+              <div class="templates-name">{{ value.name }}</div>
+              <div class="templates-status" ng-class="{'templates-status-revised' : value.revisionStatusName === 'Revised'}">{{ value.revisionStatusName }}</div>
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
     <div class="playlist-action-button-bar">
       <div>
         <button class="btn btn-primary btn-block" ng-click="showAddTemplates()">
