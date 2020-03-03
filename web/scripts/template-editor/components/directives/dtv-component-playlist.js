@@ -19,11 +19,14 @@ angular.module('risevision.template-editor.directives')
           };
 
           function _load() {
-            //
+            var itemsJson = $scope.getAvailableAttributeData($scope.componentId, 'items');
+            var itemsArray = $scope.jsonToSelectedTemplates(itemsJson);
+            $scope.loadTemplateNames(itemsArray);
           }
 
           $scope.save = function () {
-            //
+            var itemsJson = $scope.selectedTemplatesToJson();
+            $scope.setAttributeData($scope.componentId, 'items', itemsJson);
           };
 
           $scope.registerDirective({
@@ -43,6 +46,53 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
+          $scope.jsonToSelectedTemplates = function (json) {
+            var result = [];
+            var parsedItems;
+
+            if (json) {
+              parsedItems = JSON.parse(json);
+            }
+
+            if (Array.isArray(parsedItems)) {
+              _.forEach(parsedItems, function (item) {
+                var playlistItem = 
+                {
+                  'duration': item.duration,
+                  'play-until-done': item['play-until-done'],
+                  'transition-type': item['transition-type'],
+                  'id': item.element && item.element.attributes ? item.element.attributes['presentation-id'] : undefined,
+                  'productCode': item.element && item.element.attributes ? item.element.attributes['template-id'] : undefined
+                };
+  
+                result.push(playlistItem);
+              });
+            }
+
+            return result;
+          };
+
+          $scope.selectedTemplatesToJson = function () {
+            var playlistItems = [];
+            _.forEach($scope.selectedTemplates, function (item) {
+              playlistItems.push(
+                {
+                  'duration': item.duration,
+                  'play-until-done': item['play-until-done'],
+                  'transition-type': item['transition-type'],
+                  'element': {
+                    'tagName': 'rise-embedded-template',
+                    'attributes': {
+                      'template-id': item.productCode,
+                      'presentation-id': item.id
+                    }
+                  }
+                }
+              );
+            });
+            return JSON.stringify(playlistItems);
+          };
+
           $scope.showAddTemplates = function () {
             $scope.canAddTemplates = false;
             $scope.view = 'add-templates';
@@ -51,6 +101,35 @@ angular.module('risevision.template-editor.directives')
 
           $scope.showSelectedTemplates = function () {
             $scope.view = '';
+          };
+
+          $scope.loadTemplateNames = function (templates) {
+
+            if (!templates || !templates.length) {
+              return;
+            }
+
+            var presentationIds = [];
+            _.forEach(templates, function (item) {
+              presentationIds.push('id:' + item.id);
+            });
+
+            var search = {filter: presentationIds.join(' OR ')};
+
+            presentation.list(search)
+            .then(function(res) {
+              if (res.items) {
+                _.forEach(templates, function (template) {
+                  _.forEach(res.items, function (item) {
+                    if (template.id === item.id) {
+                      template.name = item.name;
+                      template.revisionStatusName = item.revisionStatusName;
+                    }
+                  });
+                });
+              }
+              $scope.selectedTemplates = templates;
+            });
           };
 
           $scope.searchTemplates = function () {
@@ -104,11 +183,15 @@ angular.module('risevision.template-editor.directives')
 
             $scope.selectedTemplates = $scope.selectedTemplates.concat(itemsToAdd);
 
+            $scope.save();
+
             $scope.showSelectedTemplates();
           };
 
           $scope.removeTemplate = function (key) {
             $scope.selectedTemplates.splice(key, 1);
+
+            $scope.save();
           };
 
           $scope.sortItem = function (evt) {
@@ -116,6 +199,8 @@ angular.module('risevision.template-editor.directives')
             var newIndex = evt.data.newIndex;
 
             $scope.selectedTemplates.splice(newIndex, 0, $scope.selectedTemplates.splice(oldIndex, 1)[0]);
+
+            $scope.save();
           };
 
         }
