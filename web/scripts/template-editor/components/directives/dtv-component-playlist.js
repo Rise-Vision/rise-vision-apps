@@ -43,6 +43,7 @@ angular.module('risevision.template-editor.directives')
           });
 
           $scope.showAddTemplates = function () {
+            $scope.canAddTemplates = false;
             $scope.view = 'add-templates';
             $scope.searchTemplates();
           };
@@ -91,11 +92,20 @@ angular.module('risevision.template-editor.directives')
           $scope.selectTemplate = function (key) {
             console.log('selectTemplate');
             $scope.templatesFactory.items.list[key].isSelected = !$scope.templatesFactory.items.list[key].isSelected;
-            // $scope.canAddInstrument = _.some($scope.instrumentSearch, function (item) {
-            //   return item.isSelected === true;
-            // });
+            $scope.canAddTemplates = _.some($scope.templatesFactory.items.list, function (item) {
+              return item.isSelected === true;
+            });
           };
 
+          $scope.addTemplates = function () {
+            var itemsToAdd = _.filter($scope.templatesFactory.items.list, function (item) {
+              return item.isSelected;
+            });
+
+            console.log(itemsToAdd);
+
+            $scope.showSelectedTemplates();
+          };
         }
       };
     }
