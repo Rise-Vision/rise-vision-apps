@@ -12,7 +12,60 @@
   rv-spinner-start-active="1"
 >
 
-  <div class="storage-selector-list" ng-show="folderItems.length > 0 && !isUploading">  
+  <div class="file-component-list" ng-show="folderItems.length > 0 && !isUploading" ng-if="basicStorageSelectorFactory.isListView">
+    <div class="pl-0 file-component-list-header" ng-hide="filteredItems.length === 0">
+      <div class="file-entry">
+        <div class="checkbox" ng-if="!storageManager.isSingleFileSelector()" ng-click="selectAllItems()">
+          <input type="checkbox" ng-model="search.selectAll" tabindex="1">
+          <label>
+            <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
+          </label>
+        </div>
+        <div class="mr-auto u_clickable" ng-click="sortBy(fileNameOrderFunction)">
+          File name
+          <i ng-if="search.sortBy === fileNameOrderFunction" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
+        </div>
+        <div class="u_clickable" ng-click="sortBy(dateModifiedOrderFunction)">
+          Last modified
+          <i ng-if="search.sortBy === dateModifiedOrderFunction" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
+        </div>
+      </div>
+    </div>
+
+    <div ng-repeat="item in folderItems | filter:search.query | orderBy:search.sortBy:search.reverse as filteredItems track by $index">
+
+      <div class="pl-0 file-component-list-folder-row u_clickable" ng-class="{'active': isSelected(item)}" ng-if="isFolder(item.name)" ng-click="loadItems(item.name)">
+        <div class="file-entry" ng-class="{'ml-5': !storageManager.isSingleFileSelector()}">
+          <div class="file-text">
+            <div class="file-name">{{fileNameOf(item.name)}}/</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pl-0 file-component-list-file-row u_clickable" ng-if="!isFolder(item.name)" ng-click="selectItem(item)">
+        <div class="file-entry">
+          <div class="checkbox" ng-if="!storageManager.isSingleFileSelector()">
+            <input type="checkbox" ng-checked="isSelected(item)" tabindex="1">
+            <label>
+              <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
+            </label>
+          </div>
+          <div class="file-text mr-auto">
+            <div class="file-name">{{fileNameOf(item.name)}}</div>
+          </div>
+          <div ng-hide="item.kind === 'folder'">
+            {{item.updated.value | date:'MMM d, yyyy'}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="noSearchResult" class="item-list-empty" ng-if="filteredItems.length === 0">
+      No Results Found
+    </div>
+  </div>
+
+  <div class="storage-selector-grid" ng-show="folderItems.length > 0 && !isUploading" ng-if="!basicStorageSelectorFactory.isListView">  
     <div class="storage-row" ng-repeat="item in folderItems | filter:search.query | orderBy:search.sortBy:search.reverse as filteredItems track by $index">
       <div>
         <div class="folder-entry" ng-if="isFolder(item.name)" ng-click="loadItems(item.name)">

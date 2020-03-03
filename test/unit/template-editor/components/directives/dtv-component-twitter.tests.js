@@ -95,6 +95,7 @@ describe('directive: templateComponentTwitter', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
     twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
+    $scope.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
 
     directive.show();
 
@@ -105,6 +106,7 @@ describe('directive: templateComponentTwitter', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
     twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(false));
+    $scope.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
 
     directive.show();
 
@@ -123,6 +125,7 @@ describe('directive: templateComponentTwitter', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
     twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
+    $scope.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
 
     directive.show();
 
@@ -141,6 +144,7 @@ describe('directive: templateComponentTwitter', function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
     twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.reject());
+    $scope.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
 
     directive.show();
 
@@ -155,4 +159,52 @@ describe('directive: templateComponentTwitter', function() {
     }, 200);
   });
 
+  describe('load', function () {
+    it('should load data and indicate the username is valid', function() {
+      var directive = $scope.registerDirective.getCall(0).args[0];
+
+      $scope.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
+      twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
+
+      directive.show();
+
+      expect($scope.username).to.equal('@twitterHandle');
+      expect($scope.usernameStatus).to.equal('VALID');
+    });
+
+    it('should load data and indicate the username is not valid', function() {
+      var directive = $scope.registerDirective.getCall(0).args[0];
+
+      $scope.getAvailableAttributeData = sandbox.stub().returns('@twitterHandleButReallyLongAndNotValid');
+      twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
+
+      directive.show();
+
+      expect($scope.username).to.equal('@twitterHandleButReallyLongAndNotValid');
+      expect($scope.usernameStatus).to.equal('INVALID_USERNAME');
+    });
+  });
+
+  describe('save', function () {
+    it('should save data and indicate the username is valid', function() {
+      $scope.setAttributeData = sandbox.stub();
+      $scope.username = '@twitterHandle';
+
+      $scope.save();
+
+      expect($scope.setAttributeData).to.have.been.called;
+      expect($scope.setAttributeData.lastCall.args[2]).to.equal('twitterHandle');
+      expect($scope.usernameStatus).to.equal('VALID');
+    });
+
+    it('should load data and indicate the username is not valid', function() {
+      $scope.setAttributeData = sandbox.stub();
+      $scope.username = '@twitterHandleButReallyLongAndNotValid';
+
+      $scope.save();
+
+      expect($scope.setAttributeData).to.not.have.been.called;
+      expect($scope.usernameStatus).to.equal('INVALID_USERNAME');
+    });
+  });
 });

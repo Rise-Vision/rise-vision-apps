@@ -23,6 +23,8 @@ angular.module('risevision.template-editor.directives')
 
           $scope.connectionFailure = false;
           $scope.connected = false;
+          $scope.username = null;
+          $scope.usernameStatus = null;
 
           $scope.connectToTwitter = function () {
             $scope.spinner = true;
@@ -39,6 +41,12 @@ angular.module('risevision.template-editor.directives')
               });
           };
 
+          $scope.save = function () {
+            if (_validateUsername($scope.username)) {
+              $scope.setAttributeData($scope.componentId, 'username', $scope.username.replace('@', ''));
+            }
+          };
+
           $scope.registerDirective({
             type: 'rise-data-twitter',
             iconType: 'streamline',
@@ -48,8 +56,16 @@ angular.module('risevision.template-editor.directives')
               element.show();
               $scope.componentId = $scope.factory.selected.id;
               _validateCredentials();
+              _load();
             }
           });
+
+          function _load() {
+            var username = $scope.getAvailableAttributeData($scope.componentId, 'username');
+
+            $scope.username = username && username.indexOf('@') === -1 ? '@' + username : username;
+            _validateUsername($scope.username);
+          }
 
           function _handleConnectionFailure() {
             $scope.connected = false;
@@ -72,6 +88,17 @@ angular.module('risevision.template-editor.directives')
               });
           }
 
+          function _validateUsername(username) {
+            var usernameRegex = /^@?(\w){1,15}$/;
+
+            if (username && usernameRegex.test(username)) {
+              $scope.usernameStatus = 'VALID';
+              return true;
+            } else {
+              $scope.usernameStatus = 'INVALID_USERNAME';
+              return false;
+            }
+          }
         }
       };
     }

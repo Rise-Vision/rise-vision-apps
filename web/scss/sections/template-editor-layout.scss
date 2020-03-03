@@ -465,6 +465,11 @@ $short-phone-height: 570px;
         height: 16px;
       }
     }
+
+    & .btn-group {
+      flex: 0 0 auto;
+      margin-left: 10px;
+    }
   }
 
   & .component-container {
@@ -605,12 +610,13 @@ $short-phone-height: 570px;
 .storage-selector-component {
   --storage-column-width: 100%;
   --storage-selector-search-height: 65px;
+  --storage-selector-grid-toggle-height: 13px;
 
-  height: calc(var(--storage-selector-body-height) - var(--storage-selector-search-height) - var(--storage-selector-button-bar-height));
+  height: calc(var(--storage-selector-body-height) - var(--storage-selector-search-height) - var(--storage-selector-button-bar-height) - var(--storage-selector-grid-toggle-height));
   overflow-x: hidden;
   overflow-y: auto;
 
-  .storage-selector-list {
+  .storage-selector-grid {
     column-count: 2;
     column-gap: 5px;
     margin: 10px 20px 0;
@@ -888,6 +894,19 @@ $short-phone-height: 570px;
   }
 }
 
+.file-component-list-folder-row {
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  @extend .file-component-list-file-row;
+}
+
+
+.file-component-list-header {
+  @extend .file-component-list-file-row;
+  @extend .font-weight-bold;
+}
+
 .file-component-list-action-button-bar {
   height: var(--image-component-list-button-bar-height);
   padding: 0px 20px;
@@ -1018,17 +1037,17 @@ $short-phone-height: 570px;
     }
   } 
 
-  .radio {
+  .radio, .checkbox {
     margin-top: 0px;
     margin-bottom: 0px;
     min-height: 25px;
   }
 
-  .radio label {
+  .radio label, .checkbox label {
     padding-left: 0px;
   }
 
-  input[type=radio] {
+  input[type=radio], input[type=checkbox] {
     position: absolute;
     top: auto;
     overflow: hidden;
@@ -1039,25 +1058,25 @@ $short-phone-height: 570px;
     white-space: nowrap;
   }
 
-  input[type=radio] + label {
+  input[type=radio] + label, input[type=checkbox] + label {
     display: block;
     padding-top: 5px;
-  }
 
-  input[type=radio] + label:before {
-    content: '';
-    background: #fff;
-    border: .15em solid $madero-gray;
-    background-color: rgba(255, 255, 255, .8);
-    display: block;
-    box-sizing: border-box;
-    float: left;
-    width: 20px;
-    height: 20px;
-    vertical-align: top;
-    cursor: pointer;
-    text-align: center;
-    transition: all .1s ease-out;
+    &:before {
+      content: '';
+      background: #fff;
+      border: .15em solid $madero-gray;
+      background-color: rgba(255, 255, 255, .8);
+      display: block;
+      box-sizing: border-box;
+      float: left;
+      width: 20px;
+      height: 20px;
+      vertical-align: top;
+      cursor: pointer;
+      text-align: center;
+      transition: all .1s ease-out;      
+    }
   }
 
   input[type=radio] + label:before {
@@ -1069,6 +1088,33 @@ $short-phone-height: 570px;
     background-color: $madero-light-blue;
     border: .15em solid $madero-light-blue;
     box-shadow: inset 0 0 0 0.23em rgba(255, 255, 255, .95);
+  }
+
+  // Requires checkmark svg in the label element
+  input[type=checkbox] + label {
+    margin-bottom: 7px;
+
+    &:before {
+      border-radius: 2px;
+      margin-right: -3px;
+    }
+  }
+
+  input[type=checkbox]:checked + label:before {
+    border: .15em solid $madero-light-blue;
+  }
+
+  input[type=checkbox] + label {
+    svg {
+      fill: #fff;
+      transform: translate(-14px, 2px);
+    }
+  }
+
+  input[type=checkbox]:checked + label {
+    svg {
+      fill: $madero-light-blue;
+    }
   }
 
   input[type='range'] {
