@@ -93,7 +93,7 @@ angular.module('risevision.template-editor.directives')
           $scope.selectTemplate = function (key) {
             $scope.templatesFactory.items.list[key].isSelected = !$scope.templatesFactory.items.list[key].isSelected;
             $scope.canAddTemplates = _.some($scope.templatesFactory.items.list, function (item) {
-              return item.isSelected === true;
+              return item.isSelected;
             });
           };
 
