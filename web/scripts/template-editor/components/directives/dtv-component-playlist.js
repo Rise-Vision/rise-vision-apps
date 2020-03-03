@@ -107,6 +107,10 @@ angular.module('risevision.template-editor.directives')
             $scope.showSelectedTemplates();
           };
 
+          $scope.removeTemplate = function (key) {
+            $scope.selectedTemplates.splice(key, 1);
+          };
+
           $scope.sortItem = function (evt) {
             var oldIndex = evt.data.oldIndex;
             var newIndex = evt.data.newIndex;
