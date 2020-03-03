@@ -11,11 +11,21 @@
   </div>
   <div class="attribute-editor-row" ng-show="connected">
     <div class="form-group has-feedback" ng-class="{ 'has-error': usernameStatus && usernameStatus !== 'VALID', 'has-success': usernameStatus === 'VALID' && username !== '' }">
-      <label class="control-label" for="twitter-username">Enter a username:</label>
-      <input type="text" id="twitter-username" class="form-control u_ellipsis" ng-model="username" placeholder="@RiseVision" ng-change="save()">
+      <label class="control-label" for="twitterUsername">Enter a username:</label>
+      <input type="text" id="twitterUsername"  class="form-control u_ellipsis" ng-model="username" placeholder="@RiseVision" ng-change="save()">
       <streamline-icon class="overlay-icon form-control-feedback" aria-hidden="true" name="{{usernameStatus && usernameStatus !== 'VALID' ? 'exclamation' : 'checkmark'}}" width="14" height="12"></streamline-icon>
       <p class="help-block" ng-switch on="usernameStatus">
         <span ng-switch-when="INVALID_USERNAME">Please provide a valid username.</span>
+      </p>
+    </div>
+  </div>
+  <div class="attribute-editor-row" ng-show="connected">
+    <div class="form-group has-feedback" ng-class="{ 'has-error': maxitemsStatus && maxitemsStatus !== 'VALID', 'has-success': maxitemsStatus === 'VALID' && maxitems }">
+      <label class="control-label" for="twitterMaxitems">Number of Tweets in queue:</label>
+      <input type="text" id="twitterMaxitems" class="form-control u_ellipsis" ng-model="maxitems" placeholder="Max 50" ng-change="save()">
+      <streamline-icon class="overlay-icon form-control-feedback" aria-hidden="true" name="{{maxitemsStatus && maxitemsStatus !== 'VALID' ? 'exclamation' : 'checkmark'}}" width="14" height="12"></streamline-icon>
+      <p class="help-block" ng-switch on="maxitemsStatus">
+        <span ng-switch-when="INVALID_RANGE">Please provide a number between 1 and 50.</span>
       </p>
     </div>
   </div>
