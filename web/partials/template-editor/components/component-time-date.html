@@ -13,14 +13,14 @@
   <div class="attribute-editor-row" ng-show="type === 'timedate' || type === 'time'">
     <label class="u_margin-sm-top mb-0">Time format:</label>
 
-    <div class="radio" id="time12HoursRadio">
+    <div class="madero-radio" id="time12HoursRadio">
       <input type="radio" ng-model="timeFormat" value="Hours12" id="Hours12" name="Hours12" ng-change="save()" aria-required="true" required>
       <label for="Hours12" id="Hours12Label">
         12 hour.
       </label>
     </div>
 
-    <div class="radio" id="time24HoursRadio">
+    <div class="madero-radio" id="time24HoursRadio">
       <input type="radio" ng-model="timeFormat" value="Hours24" id="Hours24" name="Hours24" ng-change="save()" aria-required="true" required>
       <label for="Hours24" id="Hours24Label">
         24 hour.
@@ -31,14 +31,14 @@
   <div class="attribute-editor-row">
     <label class="u_margin-sm-top mb-0">Show the time and date according to:</label>
 
-    <div class="radio" id="displayTzRadio">
+    <div class="madero-radio" id="displayTzRadio">
       <input type="radio" ng-model="timezoneType" value="DisplayTz" id="DisplayTz" name="DisplayTz" ng-change="save()" aria-required="true" required>
       <label for="DisplayTz" id="DisplayTzLabel">
         The Display's time zone.
       </label>
     </div>
 
-    <div class="radio" id="specificTzRadio">
+    <div class="madero-radio" id="specificTzRadio">
       <input type="radio" ng-model="timezoneType" value="SpecificTz" id="SpecificTz" name="SpecificTz" ng-change="save()" aria-required="true" required>
       <label for="SpecificTz" id="SpecificTzLabel">
         A specific time zone.
