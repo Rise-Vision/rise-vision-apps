@@ -418,6 +418,10 @@ describe("Services: purchase factory", function() {
     });
 
     it("should populate estimate object if call succeeds", function(done) {
+      purchaseFactory.purchase.plan.name = "myPlan";
+      purchaseFactory.purchase.plan.displays = 3;
+      purchaseFactory.purchase.paymentMethods = {paymentMethod: "card"};
+
       purchaseFactory.getEstimate()
       .then(function() {
         expect(purchaseFactory.purchase.estimate).to.deep.equal({
@@ -428,10 +432,18 @@ describe("Services: purchase factory", function() {
           subTotal: "subTotal",
           couponAmount: "couponAmount",
           totalTax: "totalTax",
-          shippingTotal: "shippingTotal"
+          shippingTotal: "shippingTotal",
         }, "not deep equal");
 
-        expect(purchaseFlowTracker.trackPlaceOrderClicked).to.have.been.called;
+        expect(purchaseFlowTracker.trackPlaceOrderClicked).to.have.been.calledWith({
+          currency: "usd",
+          discount: "couponAmount",
+          displaysCount: 3,
+          paymentMethod: "card",
+          paymentTerm: "monthly",
+          revenueTotal: "total",
+          subscriptionPlan: "myPlan"
+        });
 
         done();
       })
@@ -502,7 +514,8 @@ describe("Services: purchase factory", function() {
             junkProperty: "junkValue"
           },
           purchaseOrderNumber: "purchaseOrderNumber"
-        }
+        },
+        estimate: {}
       };
 
       sinon.spy($rootScope, "$emit");
