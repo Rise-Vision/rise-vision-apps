@@ -22,10 +22,10 @@
   <div class="attribute-editor-row" ng-show="connected">
     <div class="form-group has-feedback" ng-class="{ 'has-error': maxitemsStatus && maxitemsStatus !== 'VALID', 'has-success': maxitemsStatus === 'VALID' && maxitems }">
       <label class="control-label" for="twitterMaxitems">Number of Tweets in queue:</label>
-      <input type="text" id="twitterMaxitems" class="form-control u_ellipsis" ng-model="maxitems" placeholder="Max 50" ng-change="save()">
+      <input type="text" id="twitterMaxitems" class="form-control u_ellipsis" ng-model="maxitems" placeholder="Max {{MAX_ITEMS}}" ng-change="save()">
       <streamline-icon class="overlay-icon form-control-feedback" aria-hidden="true" name="{{maxitemsStatus && maxitemsStatus !== 'VALID' ? 'exclamation' : 'checkmark'}}" width="14" height="12"></streamline-icon>
       <p class="help-block" ng-switch on="maxitemsStatus">
-        <span ng-switch-when="INVALID_RANGE">Please provide a number between 1 and 50.</span>
+        <span ng-switch-when="INVALID_RANGE">Please provide a number between 1 and {{MAX_ITEMS}}.</span>
       </p>
     </div>
   </div>

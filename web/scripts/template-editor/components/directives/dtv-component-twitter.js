@@ -10,6 +10,7 @@ angular.module('risevision.template-editor.directives')
         templateUrl: 'partials/template-editor/components/component-twitter.html',
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
+          $scope.MAX_ITEMS = 100;
 
           $scope.$watch('spinner', function (loading) {
             if (loading) {
@@ -47,7 +48,7 @@ angular.module('risevision.template-editor.directives')
             }
 
             if (_validateMaxitems($scope.maxitems)) {
-              $scope.setAttributeData($scope.componentId, 'maxitems', $scope.maxitems);
+              $scope.setAttributeData($scope.componentId, 'maxitems', Number($scope.maxitems));
             }
           };
 
@@ -108,7 +109,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           function _validateMaxitems(maxitems) {
-            if (maxitems && maxitems >= 1 && maxitems <= 50) {
+            if (maxitems && maxitems >= 1 && maxitems <= $scope.MAX_ITEMS) {
               $scope.maxitemsStatus = 'VALID';
               return true;
             } else if (maxitems) {
