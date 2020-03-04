@@ -55,7 +55,6 @@ angular.module('risevision.apps', [
     'risevision.widgets.controllers',
     'risevision.widgets.directives',
     'risevision.widgets.filters',
-    'risevision.widgets.image',
     'risevision.widgets.twitter',
     'risevision.template-editor.services',
     'risevision.template-editor.directives',

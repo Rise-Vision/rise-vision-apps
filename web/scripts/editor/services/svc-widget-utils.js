@@ -13,10 +13,6 @@ angular.module('risevision.editor.services')
     },
     IMAGE: {
       render: true,
-      inAppSettings: {
-        partial: 'partials/widgets/image-settings.html',
-        type: 'imageWidget'
-      },
       ids: {
         PROD: '5233a598-35ce-41a4-805c-fd2147f144a3',
         TEST: '2707fc05-5051-4d7b-bcde-01fafd6eaa5e'
@@ -115,10 +111,7 @@ angular.module('risevision.editor.services')
 
           if (WIDGETS_INFO[i].inAppSettings) {
             for (j in WIDGETS_INFO[i].ids) {
-              // NOTE: Disable for the Image Widget even though configured
-              if (WIDGETS_INFO[i] !== WIDGETS_INFO.IMAGE) {
-                IN_APP_SETTINGS[WIDGETS_INFO[i].ids[j]] = WIDGETS_INFO[i].inAppSettings;
-              }
+              IN_APP_SETTINGS[WIDGETS_INFO[i].ids[j]] = WIDGETS_INFO[i].inAppSettings;
             }
           }
 
