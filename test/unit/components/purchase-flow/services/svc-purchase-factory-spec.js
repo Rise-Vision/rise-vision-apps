@@ -497,6 +497,7 @@ describe("Services: purchase factory", function() {
           junkProperty: "junkValue"
         },
         plan: {
+          name: "myPlan",
           isMonthly: true,
           productCode: "productCode",
           monthly: {
@@ -505,9 +506,11 @@ describe("Services: purchase factory", function() {
           yearly: {
             priceDisplayYear: 99
           },
-          additionalDisplayLicenses: 3
+          additionalDisplayLicenses: 3,
+          displays: 3
         },
         paymentMethods: {
+          paymentMethod: "card",
           selectedCard: {
             id: "cardId",
             isDefault: true,
@@ -515,7 +518,11 @@ describe("Services: purchase factory", function() {
           },
           purchaseOrderNumber: "purchaseOrderNumber"
         },
-        estimate: {}
+        estimate: {
+          currency: "usd",
+          total: "total",
+          couponAmount: "couponAmount"
+        }
       };
 
       sinon.spy($rootScope, "$emit");
@@ -553,7 +560,8 @@ describe("Services: purchase factory", function() {
           street: "shippingStreet"
         },
         items: [{
-          id: "productCode-cad01m"
+          id: "productCode-cad01m",
+          qty: 3
         } , {
           id: "c4b368be86245bf9501baaa6e0b00df9719869fd-cad01mpro",
           qty: 3
@@ -587,7 +595,15 @@ describe("Services: purchase factory", function() {
       purchaseFactory.completePayment()
       .then(function() {
         expect(purchaseFactory.purchase.checkoutError).to.not.be.ok;
-        expect(purchaseFlowTracker.trackOrderPayNowClicked).to.have.been.called;
+        expect(purchaseFlowTracker.trackOrderPayNowClicked).to.have.been.calledWith({
+          currency: "usd",
+          discount: "couponAmount",
+          displaysCount: 3,
+          paymentMethod: "card",
+          paymentTerm: "monthly",
+          revenueTotal: "total",
+          subscriptionPlan: "myPlan"
+        });
 
         done();
       })
