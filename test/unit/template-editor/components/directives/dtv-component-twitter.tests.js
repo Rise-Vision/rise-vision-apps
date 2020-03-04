@@ -245,7 +245,7 @@ describe('directive: templateComponentTwitter', function() {
         $scope.save();
 
         expect($scope.setAttributeData).to.have.been.called;
-        expect($scope.setAttributeData.lastCall.args[2]).to.equal('20');
+        expect($scope.setAttributeData.lastCall.args[2]).to.equal(20);
         expect($scope.maxitemsStatus).to.equal('VALID');
       });
 
