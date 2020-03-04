@@ -892,6 +892,11 @@ $short-phone-height: 570px;
     cursor: move;
     cursor: -webkit-grabbing;
   }
+
+  &.draggable-mirror {
+    border-top: 1px solid $madero-gray;
+    background: rgba(242, 242, 242, 0.85);
+  }
 }
 
 .file-component-list-folder-row {
