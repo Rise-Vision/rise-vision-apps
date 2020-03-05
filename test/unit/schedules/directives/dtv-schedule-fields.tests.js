@@ -19,6 +19,7 @@ describe('directive: scheduleFields', function() {
     $provide.service('playlistFactory', function() {
       return {
         getNewUrlItem: sinon.stub().returns('urlItem'),
+        newPresentationItem: sinon.stub().returns('presentationItem'),
         addPresentationItems: sinon.spy()
       };
     });
@@ -66,22 +67,58 @@ describe('directive: scheduleFields', function() {
     expect($modal.open.getCall(0).args[0].resolve.playlistItem()).to.equal('urlItem');
   });
 
-  it('addPresentationItem:', function(done) {
-    $modal.open.returns({result: Q.resolve('presentations')});
 
-    $scope.addPresentationItem();
+  describe('addPresentationItem:', function() {
 
-    $modal.open.should.have.been.calledWithMatch({
-      templateUrl: 'partials/editor/presentation-multi-selector-modal.html',
-      controller: 'PresentationMultiSelectorModal'
+    it('should open the Playlist Item modal for a single item', function(done) {
+      $modal.open.returns({result: Q.resolve(['presentation1'])});
+
+      $scope.addPresentationItem();
+
+      $modal.open.should.have.been.calledOnce;
+      $modal.open.should.have.been.calledWithMatch({
+        templateUrl: 'partials/editor/presentation-multi-selector-modal.html',
+        controller: 'PresentationMultiSelectorModal'
+      });
+
+      setTimeout(function() {
+        $modal.open.should.have.been.calledTwice;
+        $modal.open.should.have.been.calledWithMatch({
+          templateUrl: 'partials/schedules/playlist-item.html',
+          controller: 'playlistItemModal',
+          size: 'md'
+        });
+
+        expect($modal.open.getCall(1).args[0].resolve.playlistItem()).to.equal('presentationItem');
+
+        playlistFactory.addPresentationItems.should.not.have.been.called;
+
+        done();
+      }, 10);
+
     });
 
-    setTimeout(function() {
-      playlistFactory.addPresentationItems.should.have.been.calledWith('presentations');
+    it('should add multiple items to the list', function(done) {
+      var presentations = ['presentation1', 'presentation2'];
+      $modal.open.returns({result: Q.resolve(presentations)});
 
-      done();
-    }, 10);
+      $scope.addPresentationItem();
 
+      $modal.open.should.have.been.calledOnce;
+      $modal.open.should.have.been.calledWithMatch({
+        templateUrl: 'partials/editor/presentation-multi-selector-modal.html',
+        controller: 'PresentationMultiSelectorModal'
+      });
+
+      setTimeout(function() {
+        $modal.open.should.have.been.calledOnce;
+
+        playlistFactory.addPresentationItems.should.have.been.calledWith(presentations);
+
+        done();
+      }, 10);
+
+    });
   });
 
   describe('isPreviewAvailable:', function() {

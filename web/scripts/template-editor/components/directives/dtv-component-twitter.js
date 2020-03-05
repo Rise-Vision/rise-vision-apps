@@ -10,6 +10,7 @@ angular.module('risevision.template-editor.directives')
         templateUrl: 'partials/template-editor/components/component-twitter.html',
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
+          $scope.MAX_ITEMS = 100;
 
           $scope.$watch('spinner', function (loading) {
             if (loading) {
@@ -45,6 +46,10 @@ angular.module('risevision.template-editor.directives')
             if (_validateUsername($scope.username)) {
               $scope.setAttributeData($scope.componentId, 'username', $scope.username.replace('@', ''));
             }
+
+            if (_validateMaxitems($scope.maxitems)) {
+              $scope.setAttributeData($scope.componentId, 'maxitems', Number($scope.maxitems));
+            }
           };
 
           $scope.registerDirective({
@@ -62,9 +67,12 @@ angular.module('risevision.template-editor.directives')
 
           function _load() {
             var username = $scope.getAvailableAttributeData($scope.componentId, 'username');
+            var maxitems = $scope.getAvailableAttributeData($scope.componentId, 'maxitems');
 
             $scope.username = username && username.indexOf('@') === -1 ? '@' + username : username;
+            $scope.maxitems = maxitems;
             _validateUsername($scope.username);
+            _validateMaxitems($scope.maxitems);
           }
 
           function _handleConnectionFailure() {
@@ -96,6 +104,19 @@ angular.module('risevision.template-editor.directives')
               return true;
             } else {
               $scope.usernameStatus = 'INVALID_USERNAME';
+              return false;
+            }
+          }
+
+          function _validateMaxitems(maxitems) {
+            if (maxitems && maxitems >= 1 && maxitems <= $scope.MAX_ITEMS) {
+              $scope.maxitemsStatus = 'VALID';
+              return true;
+            } else if (maxitems) {
+              $scope.maxitemsStatus = 'INVALID_RANGE';
+              return false;
+            } else {
+              $scope.maxitemsStatus = null;
               return false;
             }
           }

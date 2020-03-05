@@ -160,51 +160,104 @@ describe('directive: templateComponentTwitter', function() {
   });
 
   describe('load', function () {
-    it('should load data and indicate the username is valid', function() {
-      var directive = $scope.registerDirective.getCall(0).args[0];
+    describe('username', function () {
+      it('should load data and indicate the username is valid', function() {
+        var directive = $scope.registerDirective.getCall(0).args[0];
 
-      $scope.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
-      twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
+        $scope.getAvailableAttributeData = sandbox.stub().returns('@twitterHandle');
+        twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
 
-      directive.show();
+        directive.show();
 
-      expect($scope.username).to.equal('@twitterHandle');
-      expect($scope.usernameStatus).to.equal('VALID');
+        expect($scope.username).to.equal('@twitterHandle');
+        expect($scope.usernameStatus).to.equal('VALID');
+      });
+
+      it('should load data and indicate the username is not valid', function() {
+        var directive = $scope.registerDirective.getCall(0).args[0];
+
+        $scope.getAvailableAttributeData = sandbox.stub().returns('@twitterHandleButReallyLongAndNotValid');
+        twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
+
+        directive.show();
+
+        expect($scope.username).to.equal('@twitterHandleButReallyLongAndNotValid');
+        expect($scope.usernameStatus).to.equal('INVALID_USERNAME');
+      });
     });
 
-    it('should load data and indicate the username is not valid', function() {
-      var directive = $scope.registerDirective.getCall(0).args[0];
+    describe('maxitems', function () {
+      it('should load data and indicate maxitems is valid', function() {
+        var directive = $scope.registerDirective.getCall(0).args[0];
 
-      $scope.getAvailableAttributeData = sandbox.stub().returns('@twitterHandleButReallyLongAndNotValid');
-      twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
+        $scope.getAvailableAttributeData = sandbox.stub().returns('20');
+        twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
 
-      directive.show();
+        directive.show();
 
-      expect($scope.username).to.equal('@twitterHandleButReallyLongAndNotValid');
-      expect($scope.usernameStatus).to.equal('INVALID_USERNAME');
+        expect($scope.maxitems).to.equal('20');
+        expect($scope.maxitemsStatus).to.equal('VALID');
+      });
+
+      it('should load data and indicate maxitems is not valid', function() {
+        var directive = $scope.registerDirective.getCall(0).args[0];
+
+        $scope.getAvailableAttributeData = sandbox.stub().returns('300');
+        twitterCredentialsValidation.verifyCredentials = sandbox.stub().returns(Q.resolve(true));
+
+        directive.show();
+
+        expect($scope.maxitems).to.equal('300');
+        expect($scope.maxitemsStatus).to.equal('INVALID_RANGE');
+      });
     });
   });
 
   describe('save', function () {
-    it('should save data and indicate the username is valid', function() {
-      $scope.setAttributeData = sandbox.stub();
-      $scope.username = '@twitterHandle';
+    describe('username', function () {
+      it('should save data and indicate the username is valid', function() {
+        $scope.setAttributeData = sandbox.stub();
+        $scope.username = '@twitterHandle';
 
-      $scope.save();
+        $scope.save();
 
-      expect($scope.setAttributeData).to.have.been.called;
-      expect($scope.setAttributeData.lastCall.args[2]).to.equal('twitterHandle');
-      expect($scope.usernameStatus).to.equal('VALID');
+        expect($scope.setAttributeData).to.have.been.called;
+        expect($scope.setAttributeData.lastCall.args[2]).to.equal('twitterHandle');
+        expect($scope.usernameStatus).to.equal('VALID');
+      });
+
+      it('should load data and indicate the username is not valid', function() {
+        $scope.setAttributeData = sandbox.stub();
+        $scope.username = '@twitterHandleButReallyLongAndNotValid';
+
+        $scope.save();
+
+        expect($scope.setAttributeData).to.not.have.been.called;
+        expect($scope.usernameStatus).to.equal('INVALID_USERNAME');
+      });
     });
 
-    it('should load data and indicate the username is not valid', function() {
-      $scope.setAttributeData = sandbox.stub();
-      $scope.username = '@twitterHandleButReallyLongAndNotValid';
+    describe('maxitems', function () {
+      it('should save data and indicate maxitems is valid', function() {
+        $scope.setAttributeData = sandbox.stub();
+        $scope.maxitems = '20';
 
-      $scope.save();
+        $scope.save();
 
-      expect($scope.setAttributeData).to.not.have.been.called;
-      expect($scope.usernameStatus).to.equal('INVALID_USERNAME');
+        expect($scope.setAttributeData).to.have.been.called;
+        expect($scope.setAttributeData.lastCall.args[2]).to.equal(20);
+        expect($scope.maxitemsStatus).to.equal('VALID');
+      });
+
+      it('should load data and indicate maxitems is not valid', function() {
+        $scope.setAttributeData = sandbox.stub();
+        $scope.maxitems = '300';
+
+        $scope.save();
+
+        expect($scope.setAttributeData).to.not.have.been.called;
+        expect($scope.maxitemsStatus).to.equal('INVALID_RANGE');
+      });
     });
   });
 });
