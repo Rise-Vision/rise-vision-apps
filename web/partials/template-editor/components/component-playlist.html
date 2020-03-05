@@ -65,7 +65,9 @@
             <input id="{{value.id}}" type="checkbox"
                   ng-click="selectTemplate(key)"
                   ng-checked="value.isSelected">
-            <label for="{{value.id}}"></label>
+            <label for="{{value.id}}">
+              <span></span>
+            </label>
           </span>
           <span class="templates-selector-name">
             <div class="templates-name">{{ value.name }}</div>
