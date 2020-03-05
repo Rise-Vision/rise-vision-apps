@@ -70,10 +70,14 @@
   }
 }
 
+.templates-selector-search-label {
+  padding: 0px 0px 2px;
+  margin: 0px 20px 0px;
+}
+
 .templates-selector-search-box {
   padding: 0px 0px 20px;
   margin: 0px 20px 0px;
-  border-bottom: 1px solid #999999;
 
   svg {
     fill: #999999;
@@ -153,7 +157,6 @@
 .templates-selector {
   & .templates-row {
     cursor: pointer;
-    padding-left: 10px;
   }
 }
 
