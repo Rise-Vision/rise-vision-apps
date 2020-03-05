@@ -46,16 +46,11 @@ angular.module('risevision.template-editor.directives')
             }
           });
 
-          $scope.jsonToSelectedTemplates = function (json) {
+          $scope.jsonToSelectedTemplates = function (playlistItems) {
             var result = [];
-            var parsedItems;
 
-            if (json) {
-              parsedItems = JSON.parse(json);
-            }
-
-            if (Array.isArray(parsedItems)) {
-              result = _.map(parsedItems, function (item) {
+            if (Array.isArray(playlistItems)) {
+              result = _.map(playlistItems, function (item) {
                 return {
                   'duration': item.duration,
                   'play-until-done': item['play-until-done'],
@@ -82,10 +77,10 @@ angular.module('risevision.template-editor.directives')
                     'presentation-id': item.id
                   }
                 }
-              }
+              };
             });
 
-            return JSON.stringify(playlistItems);
+            return playlistItems;
           };
 
           $scope.showAddTemplates = function () {
@@ -108,7 +103,6 @@ angular.module('risevision.template-editor.directives')
               return 'id:' + item.id;
             });
 
-            console.log(presentationIds);
             var search = {filter: presentationIds.join(' OR ')};
 
             presentation.list(search)
