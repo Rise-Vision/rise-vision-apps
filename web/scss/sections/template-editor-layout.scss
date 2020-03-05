@@ -892,6 +892,11 @@ $short-phone-height: 570px;
     cursor: move;
     cursor: -webkit-grabbing;
   }
+
+  &.draggable-mirror {
+    border-top: 1px solid $madero-gray;
+    background: rgba(242, 242, 242, 0.85);
+  }
 }
 
 .file-component-list-folder-row {
@@ -1036,86 +1041,6 @@ $short-phone-height: 570px;
       background-color: transparent;
     }
   } 
-
-  .radio, .checkbox {
-    margin-top: 0px;
-    margin-bottom: 0px;
-    min-height: 25px;
-  }
-
-  .radio label, .checkbox label {
-    padding-left: 0px;
-  }
-
-  input[type=radio], input[type=checkbox] {
-    position: absolute;
-    top: auto;
-    overflow: hidden;
-    clip: rect(1px 1px 1px 1px); /* IE 6/7 */
-    clip: rect(1px, 1px, 1px, 1px);
-    width: 1px;
-    height: 1px;
-    white-space: nowrap;
-  }
-
-  input[type=radio] + label, input[type=checkbox] + label {
-    display: block;
-    padding-top: 5px;
-
-    &:before {
-      content: '';
-      background: #fff;
-      border: .15em solid $madero-gray;
-      background-color: rgba(255, 255, 255, .8);
-      display: block;
-      box-sizing: border-box;
-      float: left;
-      width: 20px;
-      height: 20px;
-      vertical-align: top;
-      cursor: pointer;
-      text-align: center;
-      transition: all .1s ease-out;      
-    }
-  }
-
-  input[type=radio] + label:before {
-    border-radius: 100%;
-    margin-right: 10px;
-  }
-
-  input[type=radio]:checked + label:before {
-    background-color: $madero-light-blue;
-    border: .15em solid $madero-light-blue;
-    box-shadow: inset 0 0 0 0.23em rgba(255, 255, 255, .95);
-  }
-
-  // Requires checkmark svg in the label element
-  input[type=checkbox] + label {
-    margin-bottom: 7px;
-
-    &:before {
-      border-radius: 2px;
-      margin-right: -3px;
-    }
-  }
-
-  input[type=checkbox]:checked + label:before {
-    border: .15em solid $madero-light-blue;
-  }
-
-  input[type=checkbox] + label {
-    svg {
-      fill: #fff;
-      transform: translate(-14px, 2px);
-    }
-  }
-
-  input[type=checkbox]:checked + label {
-    svg {
-      fill: $madero-light-blue;
-    }
-  }
 
   input[type='range'] {
     margin: 0;
@@ -1506,6 +1431,86 @@ $short-phone-height: 570px;
 
   .display-id {
     font-size: 18px;
+  }
+}
+
+.madero-radio, .madero-checkbox {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  min-height: 25px;
+
+  & label, & label {
+    padding-left: 0px;
+  }
+
+  input[type=radio], input[type=checkbox] {
+    position: absolute;
+    top: auto;
+    overflow: hidden;
+    clip: rect(1px 1px 1px 1px); /* IE 6/7 */
+    clip: rect(1px, 1px, 1px, 1px);
+    width: 1px;
+    height: 1px;
+    white-space: nowrap;
+  }
+
+  input[type=radio] + label, input[type=checkbox] + label {
+    display: block;
+    padding-top: 5px;
+
+    &:before {
+      content: '';
+      background: #fff;
+      border: .15em solid $madero-gray;
+      background-color: rgba(255, 255, 255, .8);
+      display: block;
+      box-sizing: border-box;
+      float: left;
+      width: 20px;
+      height: 20px;
+      vertical-align: top;
+      cursor: pointer;
+      text-align: center;
+      transition: all .1s ease-out;      
+    }
+  }
+
+  input[type=radio] + label:before {
+    border-radius: 100%;
+    margin-right: 10px;
+  }
+
+  input[type=radio]:checked + label:before {
+    background-color: $madero-light-blue;
+    border: .15em solid $madero-light-blue;
+    box-shadow: inset 0 0 0 0.23em rgba(255, 255, 255, .95);
+  }
+
+  // Requires checkmark svg in the label element
+  input[type=checkbox] + label {
+    margin-bottom: 7px;
+
+    &:before {
+      border-radius: 2px;
+      margin-right: -3px;
+    }
+  }
+
+  input[type=checkbox]:checked + label:before {
+    border: .15em solid $madero-light-blue;
+  }
+
+  input[type=checkbox] + label {
+    svg {
+      fill: #fff;
+      transform: translate(-14px, 2px);
+    }
+  }
+
+  input[type=checkbox]:checked + label {
+    svg {
+      fill: $madero-light-blue;
+    }
   }
 }
 

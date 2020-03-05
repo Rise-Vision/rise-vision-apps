@@ -116,11 +116,17 @@
               properties.companyId = company.id;
               properties.companyName = company.name;
               properties.companyIndustry = company.companyIndustry;
+              properties.parentId = company.parentId;
               properties.company = {
                 id: company.id,
                 name: company.name,
-                companyIndustry: company.companyIndustry
+                companyIndustry: company.companyIndustry,
+                parentId: company.parentId
               };
+              properties.subscriptionStatus = company.planSubscriptionStatus ? company.planSubscriptionStatus :
+                'Free';
+              properties.subscriptionRenewalDate = company.planCurrentPeriodEndDate;
+              properties.subscriptionTrialExpiryDate = company.planTrialExpiryDate;
             }
 
             analyticsFactory.identify(userState.getUsername(), properties);

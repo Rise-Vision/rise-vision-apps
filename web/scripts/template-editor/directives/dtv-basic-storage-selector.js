@@ -167,7 +167,7 @@ angular.module('risevision.template-editor.directives')
             $scope.storageManager.addSelectedItems($scope.selectedItems);
             _reset();
           };
-          
+
           $scope.sortBy = function (cat) {
             if (cat !== $scope.search.sortBy) {
               $scope.search.sortBy = cat;

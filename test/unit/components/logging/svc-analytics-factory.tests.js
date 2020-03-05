@@ -20,7 +20,8 @@ describe("Services: analyticsFactory", function() {
           return {
             id: companyId,
             name: "companyName",
-            companyIndustry: "K-12 Education"
+            companyIndustry: "K-12 Education",
+            parentId: "parent123"
           };
         }
       };
@@ -70,13 +71,17 @@ describe("Services: analyticsFactory", function() {
     
     setTimeout(function() {
       var expectProperties = {
-        company: { id: "companyId", name: "companyName", companyIndustry: "K-12 Education" },
+        company: { id: "companyId", name: "companyName", companyIndustry: "K-12 Education", parentId: "parent123" },
         companyId: "companyId",
         companyName: "companyName",
         companyIndustry: "K-12 Education",
+        parentId: "parent123",
         email: undefined,
         firstName: "",
-        lastName: ""
+        lastName: "",
+        subscriptionRenewalDate: undefined,
+        subscriptionStatus: "Free",
+        subscriptionTrialExpiryDate: undefined
       };
       identifySpy.should.have.been.calledWith("username",expectProperties);
 
@@ -96,13 +101,17 @@ describe("Services: analyticsFactory", function() {
     
     setTimeout(function() {
       identifySpy.should.have.been.calledWith("username",{
-        company: { id: "companyId", name: "companyName", companyIndustry: "K-12 Education" },
+        company: { id: "companyId", name: "companyName", companyIndustry: "K-12 Education", parentId: "parent123" },
         companyId: "companyId",
         companyName: "companyName",
         companyIndustry: "K-12 Education",
+        parentId: "parent123",
         email: undefined,
         firstName: "",
-        lastName: ""
+        lastName: "",
+        subscriptionRenewalDate: undefined,
+        subscriptionStatus: "Free",
+        subscriptionTrialExpiryDate: undefined
       });
       done();
     }, 10);

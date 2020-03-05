@@ -16,20 +16,12 @@ angular.module('risevision.common.components.logging')
         });
       };
 
-      factory.trackPlaceOrderClicked = function (estimate) {
-        analyticsFactory.track('Place Order Clicked', {
-          amount: estimate.total,
-          currency: estimate.currency,
-          inApp: false
-        });
+      factory.trackPlaceOrderClicked = function (properties) {
+        analyticsFactory.track('Place Order Clicked', properties);
       };
 
-      factory.trackOrderPayNowClicked = function (estimate) {
-        analyticsFactory.track('Order Pay Now Clicked', {
-          amount: estimate.total,
-          currency: estimate.currency,
-          inApp: false
-        });
+      factory.trackOrderPayNowClicked = function (properties) {
+        analyticsFactory.track('Order Pay Now Clicked', properties);
       };
 
       return factory;

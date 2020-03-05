@@ -196,6 +196,18 @@
             factory.purchase.plan.productCode.substring(0, 3);
         };
 
+        var _getTrackingProperties = function() {
+          return {
+            displaysCount: factory.purchase.plan.displays,
+            paymentTerm: factory.purchase.plan.isMonthly ? 'monthly' : 'yearly',
+            paymentMethod: factory.purchase.paymentMethods.paymentMethod,
+            discount: factory.purchase.estimate.couponAmount,
+            subscriptionPlan:  factory.purchase.plan.name,
+            currency: factory.purchase.estimate.currency,
+            revenueTotal: factory.purchase.estimate.total
+          };
+        };
+
         factory.getEstimate = function () {
           factory.purchase.estimate = {
             currency: _getCurrency()
@@ -218,7 +230,7 @@
               estimate.totalTax = result.totalTax;
               estimate.shippingTotal = result.shippingTotal;
 
-              purchaseFlowTracker.trackPlaceOrderClicked(estimate);
+              purchaseFlowTracker.trackPlaceOrderClicked(_getTrackingProperties());
             })
             .catch(function (result) {
               factory.purchase.estimate.estimateError = result && result.message ? result.message :
@@ -270,7 +282,7 @@
             .then(function () {
               factory.purchase.reloadingCompany = true;
 
-              purchaseFlowTracker.trackOrderPayNowClicked(factory.purchase.estimate);
+              purchaseFlowTracker.trackOrderPayNowClicked(_getTrackingProperties());
 
               $timeout(10000)
                 .then(function () {

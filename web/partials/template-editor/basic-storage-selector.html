@@ -15,7 +15,7 @@
   <div class="file-component-list" ng-show="folderItems.length > 0 && !isUploading" ng-if="basicStorageSelectorFactory.isListView">
     <div class="pl-0 file-component-list-header" ng-hide="filteredItems.length === 0">
       <div class="file-entry">
-        <div class="checkbox" ng-if="!storageManager.isSingleFileSelector()" ng-click="selectAllItems()">
+        <div class="madero-checkbox" ng-if="!storageManager.isSingleFileSelector()" ng-click="selectAllItems()">
           <input type="checkbox" ng-model="search.selectAll" tabindex="1">
           <label>
             <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
@@ -44,7 +44,7 @@
 
       <div class="pl-0 file-component-list-file-row u_clickable" ng-if="!isFolder(item.name)" ng-click="selectItem(item)">
         <div class="file-entry">
-          <div class="checkbox" ng-if="!storageManager.isSingleFileSelector()">
+          <div class="madero-checkbox" ng-if="!storageManager.isSingleFileSelector()">
             <input type="checkbox" ng-checked="isSelected(item)" tabindex="1">
             <label>
               <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
