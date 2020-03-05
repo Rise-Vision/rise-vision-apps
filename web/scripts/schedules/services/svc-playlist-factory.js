@@ -10,14 +10,20 @@ angular.module('risevision.schedules.services')
       var DEFAULT_DURATION = 10;
       var factory = {};
 
-      var _newPresentationItem = function () {
+      factory.newPresentationItem = function (presentation) {
         scheduleTracker('Add Presentation to Schedule',
           scheduleFactory.schedule.id, scheduleFactory.schedule.name
         );
 
+        // Cache presentation to avoid API call for the name
+        presentationFactory.setPresentation(presentation);
+
         return {
           duration: DEFAULT_DURATION,
-          type: TYPE_PRESENTATION
+          type: TYPE_PRESENTATION,
+          objectReference: presentation.id,
+          name: presentation.name,
+          presentationType: presentation.presentationType
         };
       };
 
@@ -48,14 +54,7 @@ angular.module('risevision.schedules.services')
       };
 
       factory.addPresentationItem = function (presentation) {
-        var playlistItem = _newPresentationItem(presentation);
-
-        // Cache presentation to avoid API call for the name
-        presentationFactory.setPresentation(presentation);
-
-        playlistItem.objectReference = presentation.id;
-        playlistItem.name = presentation.name;
-        playlistItem.presentationType = presentation.presentationType;
+        var playlistItem = factory.newPresentationItem(presentation);
 
         return factory.initPlayUntilDone(playlistItem, presentation, true)
           .then(function () {

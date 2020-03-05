@@ -33,7 +33,11 @@ angular.module('risevision.schedules.directives')
             });
 
             modalInstance.result.then(function (presentations) {
-              playlistFactory.addPresentationItems(presentations);
+              if (presentations && presentations.length === 1) {
+                openPlaylistModal(playlistFactory.newPresentationItem(presentations[0]));
+              } else {
+                playlistFactory.addPresentationItems(presentations);                
+              }
             });
           };
 

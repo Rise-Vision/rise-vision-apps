@@ -60,10 +60,14 @@ describe('service: playlistFactory:', function() {
 
   it('should exist',function(){
     expect(playlistFactory).to.be.ok;
-    
+
+    expect(playlistFactory.newPresentationItem).to.be.a('function');    
+    expect(playlistFactory.initPlayUntilDone).to.be.a('function');
+    expect(playlistFactory.addPresentationItem).to.be.a('function');
+    expect(playlistFactory.addPresentationItems).to.be.a('function');
     expect(playlistFactory.getPlaylist).to.be.a('function');
     expect(playlistFactory.isNew).to.be.a('function');    
-    expect(playlistFactory.getNewUrlItem).to.be.a('function');    
+    expect(playlistFactory.getNewUrlItem).to.be.a('function');
     expect(playlistFactory.removePlaylistItem).to.be.a('function');
     expect(playlistFactory.duplicatePlaylistItem).to.be.a('function');    
     expect(playlistFactory.updatePlaylistItem).to.be.a('function');
@@ -102,90 +106,8 @@ describe('service: playlistFactory:', function() {
     expect(playlistItem.name).to.equal('URL Item');
   });
 
-  describe('initPlayUntilDone:', function() {
-    var item;
 
-    beforeEach(function() {
-      item = {};
-    });
-
-    it('should resolve to true if item is not HTML_PRESENTATION_TYPE', function(done) {
-      playlistFactory.initPlayUntilDone(item, {presentationType: 'legacy'}, true)
-        .then(function(result) {
-          expect(result).to.be.true;
-
-          blueprintFactory.isPlayUntilDone.should.not.have.been.called;
-
-          done();
-        });
-    });
-
-    it('should resolve to true if HTML Template supports playUntilDone', function(done) {
-      playlistFactory.initPlayUntilDone(item, {presentationType: 'HTML Template', productCode: 'productCode'}, true)
-        .then(function(result) {
-          expect(result).to.be.true;
-          expect(item.playUntilDone).to.be.true;
-
-          blueprintFactory.isPlayUntilDone.should.have.been.calledWith('productCode');
-
-          done();
-        });
-    });
-
-    it('should not update item if existing', function(done) {
-      item.playUntilDone = false;
-
-      playlistFactory.initPlayUntilDone(item, {presentationType: 'HTML Template', productCode: 'productCode'}, false)
-        .then(function(result) {
-          expect(result).to.be.true;
-          expect(item.playUntilDone).to.be.false;
-
-          done();
-        });
-    });
-
-    it('should not overwrite if item playUntilDone is false', function(done) {
-      item.playUntilDone = false;
-
-      playlistFactory.initPlayUntilDone(item, {presentationType: 'HTML Template', productCode: 'productCode'}, false)
-        .then(function(result) {
-          expect(result).to.be.true;
-          expect(item.playUntilDone).to.be.false;
-
-          done();
-        });
-    });
-
-    it('should resolve to false if HTML Template does not support playUntilDone', function(done) {
-      blueprintFactory.isPlayUntilDone.returns(Q.resolve(false));
-
-      playlistFactory.initPlayUntilDone(item, {presentationType: 'HTML Template', productCode: 'productCode'}, true)
-        .then(function(result) {
-          expect(result).to.be.false;
-          expect(item.playUntilDone).to.be.false;
-
-          done();
-        });
-    });
-
-    it('should update to false if playUntilDone retrieval fails', function(done) {
-      item.playUntilDone = true;
-      blueprintFactory.isPlayUntilDone.returns(Q.reject('error'));
-
-      playlistFactory.initPlayUntilDone(item, {presentationType: 'HTML Template', productCode: 'productCode'}, false)
-        .then(function(result) {
-          expect(result).to.be.false;
-          expect(item.playUntilDone).to.be.false;
-
-          blueprintFactory.isPlayUntilDone.should.have.been.calledWith('productCode');
-
-          done();
-        });
-    });
-
-  });
-
-  describe('addPresentationItem:', function() {
+  describe('presentationItem', function() {
     var presentation, mockPlaylistItem;
 
     beforeEach(function() {
@@ -200,47 +122,141 @@ describe('service: playlistFactory:', function() {
         name: 'presentationName',
         objectReference: 'presentationId',
         presentationType: 'presentationType'
-      }
-
-
-      sinon.stub(playlistFactory, 'initPlayUntilDone').returns(Q.resolve());
-      sinon.stub(playlistFactory, 'updatePlaylistItem');      
+      };
     });
 
-    it('should cache presentation', function() {
-      playlistFactory.addPresentationItem(presentation);
+    describe('newPresentationItem:', function() {
+      it('should cache presentation', function() {
+        playlistFactory.newPresentationItem(presentation);
 
-      expect(trackerCalled).to.equal('Add Presentation to Schedule');
+        expect(trackerCalled).to.equal('Add Presentation to Schedule');
 
-      presentationFactory.setPresentation.should.have.been.calledWith(presentation);
+        presentationFactory.setPresentation.should.have.been.calledWith(presentation);
+      });
+
+      it('should return playlistItem', function() {
+        expect(playlistFactory.newPresentationItem(presentation)).to.deep.equal(mockPlaylistItem);
+      });
+
     });
 
-    it('should init playUntilDone', function() {
-      playlistFactory.addPresentationItem(presentation);
+    describe('initPlayUntilDone:', function() {
+      var item;
 
-      playlistFactory.initPlayUntilDone.should.have.been.calledWith(mockPlaylistItem, presentation, true);
+      beforeEach(function() {
+        item = {};
+      });
+
+      it('should resolve to true if item is not HTML_PRESENTATION_TYPE', function(done) {
+        playlistFactory.initPlayUntilDone(item, {presentationType: 'legacy'}, true)
+          .then(function(result) {
+            expect(result).to.be.true;
+
+            blueprintFactory.isPlayUntilDone.should.not.have.been.called;
+
+            done();
+          });
+      });
+
+      it('should resolve to true if HTML Template supports playUntilDone', function(done) {
+        playlistFactory.initPlayUntilDone(item, {presentationType: 'HTML Template', productCode: 'productCode'}, true)
+          .then(function(result) {
+            expect(result).to.be.true;
+            expect(item.playUntilDone).to.be.true;
+
+            blueprintFactory.isPlayUntilDone.should.have.been.calledWith('productCode');
+
+            done();
+          });
+      });
+
+      it('should not update item if existing', function(done) {
+        item.playUntilDone = false;
+
+        playlistFactory.initPlayUntilDone(item, {presentationType: 'HTML Template', productCode: 'productCode'}, false)
+          .then(function(result) {
+            expect(result).to.be.true;
+            expect(item.playUntilDone).to.be.false;
+
+            done();
+          });
+      });
+
+      it('should not overwrite if item playUntilDone is false', function(done) {
+        item.playUntilDone = false;
+
+        playlistFactory.initPlayUntilDone(item, {presentationType: 'HTML Template', productCode: 'productCode'}, false)
+          .then(function(result) {
+            expect(result).to.be.true;
+            expect(item.playUntilDone).to.be.false;
+
+            done();
+          });
+      });
+
+      it('should resolve to false if HTML Template does not support playUntilDone', function(done) {
+        blueprintFactory.isPlayUntilDone.returns(Q.resolve(false));
+
+        playlistFactory.initPlayUntilDone(item, {presentationType: 'HTML Template', productCode: 'productCode'}, true)
+          .then(function(result) {
+            expect(result).to.be.false;
+            expect(item.playUntilDone).to.be.false;
+
+            done();
+          });
+      });
+
+      it('should update to false if playUntilDone retrieval fails', function(done) {
+        item.playUntilDone = true;
+        blueprintFactory.isPlayUntilDone.returns(Q.reject('error'));
+
+        playlistFactory.initPlayUntilDone(item, {presentationType: 'HTML Template', productCode: 'productCode'}, false)
+          .then(function(result) {
+            expect(result).to.be.false;
+            expect(item.playUntilDone).to.be.false;
+
+            blueprintFactory.isPlayUntilDone.should.have.been.calledWith('productCode');
+
+            done();
+          });
+      });
+
     });
 
-    it('should add item', function(done) {
-      playlistFactory.addPresentationItem(presentation)
-        .then(function() {
-          playlistFactory.updatePlaylistItem.should.have.been.calledWith(mockPlaylistItem);
+    describe('addPresentationItem:', function() {
+      beforeEach(function() {
+        sinon.stub(playlistFactory, 'initPlayUntilDone').returns(Q.resolve());
+        sinon.stub(playlistFactory, 'updatePlaylistItem');      
+      });
 
-          done();
-        });
+      it('should init playUntilDone', function() {
+        playlistFactory.addPresentationItem(presentation);
+
+        playlistFactory.initPlayUntilDone.should.have.been.calledWith(mockPlaylistItem, presentation, true);
+      });
+
+      it('should add item', function(done) {
+        playlistFactory.addPresentationItem(presentation)
+          .then(function() {
+            playlistFactory.updatePlaylistItem.should.have.been.calledWith(mockPlaylistItem);
+
+            done();
+          });
+      });
+
     });
 
-  });
+    it('addPresentationItems:', function() {
+      sinon.stub(playlistFactory, 'addPresentationItem');
 
-  it('addPresentationItems:', function() {
-    sinon.stub(playlistFactory, 'addPresentationItem');
+      playlistFactory.addPresentationItems([1, 2]);
 
-    playlistFactory.addPresentationItems([1, 2]);
+      playlistFactory.addPresentationItem.should.have.been.calledTwice;
 
-    playlistFactory.addPresentationItem.should.have.been.calledTwice;
+      expect(playlistFactory.addPresentationItem.getCall(0).args[0]).to.equal(1);
+      expect(playlistFactory.addPresentationItem.getCall(1).args[0]).to.equal(2);
+    });
 
-    expect(playlistFactory.addPresentationItem.getCall(0).args[0]).to.equal(1);
-    expect(playlistFactory.addPresentationItem.getCall(1).args[0]).to.equal(2);
   });
 
   describe('removePlaylistItem: ',function(){
