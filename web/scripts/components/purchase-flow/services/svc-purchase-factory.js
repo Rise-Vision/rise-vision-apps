@@ -196,13 +196,13 @@
             factory.purchase.plan.productCode.substring(0, 3);
         };
 
-        var _getTrackingProperties = function() {
+        var _getTrackingProperties = function () {
           return {
             displaysCount: factory.purchase.plan.displays,
             paymentTerm: factory.purchase.plan.isMonthly ? 'monthly' : 'yearly',
             paymentMethod: factory.purchase.paymentMethods.paymentMethod,
             discount: factory.purchase.estimate.couponAmount,
-            subscriptionPlan:  factory.purchase.plan.name,
+            subscriptionPlan: factory.purchase.plan.name,
             currency: factory.purchase.estimate.currency,
             revenueTotal: factory.purchase.estimate.total
           };

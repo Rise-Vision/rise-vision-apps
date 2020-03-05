@@ -6,7 +6,7 @@
         'risevision.common.i18n',
         'colorpicker.module',
         'risevision.widget.common.url-field',
-        'risevision.widget.common.position-setting',
+        'risevision.common.components.position-setting',
         'risevision.common.components.background-image',
         'risevision.common.components.repeat-setting'
       ])

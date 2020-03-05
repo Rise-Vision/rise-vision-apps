@@ -1,0 +1,16 @@
+<div class="{{parentContainerClass || 'row'}}">
+  <div class="{{containerClass || 'col-md-4'}}">
+    <label ng-if="!hideLabel"> {{'widgets.alignment' | translate}}</label>
+    <select name="position" ng-model="position" class="form-control">
+      <option value="top-left">{{'position.top.left' | translate}}</option>
+      <option value="top-center">{{'position.top.center' | translate}}</option>
+      <option value="top-right">{{'position.top.right' | translate}}</option>
+      <option value="middle-left">{{'position.middle.left' | translate}}</option>
+      <option value="middle-center">{{'position.middle.center' | translate}}</option>
+      <option value="middle-right">{{'position.middle.right' | translate}}</option>
+      <option value="bottom-left">{{'position.bottom.left' | translate}}</option>
+      <option value="bottom-center">{{'position.bottom.center' | translate}}</option>
+      <option value="bottom-right">{{'position.bottom.right' | translate}}</option>
+    </select>
+  </div>
+</div>
