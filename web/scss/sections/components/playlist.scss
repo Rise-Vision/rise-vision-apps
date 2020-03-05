@@ -178,24 +178,23 @@
 
 .templates-selector-checkbox {
   position: absolute;
-  margin-top: 0.2em;
 
   input[type=checkbox] { display:none; }
 
-  input[type=checkbox] + label:before {
-    font-family: FontAwesome;
-    display: inline-block;
-    vertical-align: middle;
-    text-align: center;
-    content: '\f096';
+  label {
     cursor: pointer;
-    font-size: 20px;
-    color: #999999;
   }
 
-  input[type=checkbox]:checked + label:before {
-    color: #107cda;
-    content: '\f046';
+  input[type="checkbox"] + label span {
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+    height: 35px;
+    background: url('../images/checkbox.svg') 0px center no-repeat;
+  }
+
+  input[type=checkbox]:checked + label span {
+    background: url('../images/checkbox-selected.svg') 0px center no-repeat;
   }
 }
 
