@@ -55,17 +55,14 @@ angular.module('risevision.template-editor.directives')
             }
 
             if (Array.isArray(parsedItems)) {
-              _.forEach(parsedItems, function (item) {
-                var playlistItem = 
-                {
+              result = _.map(parsedItems, function (item) {
+                return {
                   'duration': item.duration,
                   'play-until-done': item['play-until-done'],
                   'transition-type': item['transition-type'],
                   'id': item.element && item.element.attributes ? item.element.attributes['presentation-id'] : undefined,
                   'productCode': item.element && item.element.attributes ? item.element.attributes['template-id'] : undefined
                 };
-  
-                result.push(playlistItem);
               });
             }
 
@@ -73,23 +70,21 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.selectedTemplatesToJson = function () {
-            var playlistItems = [];
-            _.forEach($scope.selectedTemplates, function (item) {
-              playlistItems.push(
-                {
-                  'duration': item.duration,
-                  'play-until-done': item['play-until-done'],
-                  'transition-type': item['transition-type'],
-                  'element': {
-                    'tagName': 'rise-embedded-template',
-                    'attributes': {
-                      'template-id': item.productCode,
-                      'presentation-id': item.id
-                    }
+            var playlistItems = _.map($scope.selectedTemplates, function (item) {
+              return {
+                'duration': item.duration,
+                'play-until-done': item['play-until-done'],
+                'transition-type': item['transition-type'],
+                'element': {
+                  'tagName': 'rise-embedded-template',
+                  'attributes': {
+                    'template-id': item.productCode,
+                    'presentation-id': item.id
                   }
                 }
-              );
+              }
             });
+
             return JSON.stringify(playlistItems);
           };
 
@@ -109,11 +104,11 @@ angular.module('risevision.template-editor.directives')
               return;
             }
 
-            var presentationIds = [];
-            _.forEach(templates, function (item) {
-              presentationIds.push('id:' + item.id);
+            var presentationIds = _.map(templates, function (item) {
+              return 'id:' + item.id;
             });
 
+            console.log(presentationIds);
             var search = {filter: presentationIds.join(' OR ')};
 
             presentation.list(search)
