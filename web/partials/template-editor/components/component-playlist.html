@@ -38,6 +38,9 @@
   <!-- "add-templates" view -->
   <div class="attribute-editor-component" ng-show="view === 'add-templates'"
   rv-spinner rv-spinner-key="rise-playlist-templates-loader" rv-spinner-start-active="1">
+    <div class="templates-selector-search-label">
+      <label>Choose A Template</label>
+    </div>
     <div class="input-group templates-selector-search-box">
       <span class="input-group-addon" ng-click="searchTemplates()">
         <streamline-icon name="magnifier" width="16" height="16"></streamline-icon>
