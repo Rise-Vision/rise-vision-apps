@@ -41,7 +41,7 @@ angular.module('risevision.common.header')
           $scope.loading = true;
           addUser(companyId, $scope.user.username, $scope.user)
             .then(function () {
-                userTracker('User Created', $scope.user.username);
+                userTracker('User Created', userState.getUsername(), false, $scope.user.username);
 
                 $modalInstance.close('success');
               },

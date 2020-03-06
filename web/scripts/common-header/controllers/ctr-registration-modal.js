@@ -94,10 +94,15 @@ angular.module('risevision.common.header')
                   }
 
                   analyticsEvents.identify();
+                  var userCompany = userState.getCopyOfUserCompany();
+                  var userProfile = userState.getCopyOfProfile();
                   analyticsFactory.track('User Registered', {
                     'companyId': userState.getUserCompanyId(),
                     'companyName': userState.getUserCompanyName(),
-                    'isNewCompany': $scope.newUser
+                    'parentId': userCompany.parentId,
+                    'isNewCompany': $scope.newUser,
+                    'registeredDate': userProfile.creationDate,
+                    'invitationAcceptedDate': $scope.newUser ? null : new Date()
                   });
                   bigQueryLogging.logEvent('User Registered');
 

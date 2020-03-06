@@ -52,6 +52,14 @@ describe('service: user tracker:', function() {
     bQSpy.should.not.have.been.called;
   });
 
+  it('should call analytics service with invitedEmail if present',function(){
+    userTracker('User Created', 'userId', false, 'invitedEmail');
+
+    expect(eventName).to.equal('User Created');
+    expect(eventData).to.deep.equal({userId: 'userId', companyId: 'companyId', isSelf: false, invitedEmail: 'invitedEmail'});
+    bQSpy.should.not.have.been.called;
+  });
+
   it('should not call w/ blank event',function(){
     userTracker();
 

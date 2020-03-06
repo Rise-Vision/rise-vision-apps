@@ -71,6 +71,9 @@ describe("controller: user add", function() {
         _restoreState : function(){
           
         },
+        getUsername: function() {
+          return 'username';
+        },
         isRiseAdmin: function() {
           return isRiseAdmin;
         },
@@ -157,7 +160,7 @@ describe("controller: user add", function() {
       setTimeout(function() {
         expect($scope.loading).to.be.false;
 
-        userTracker.should.have.been.calledWith('User Created');
+        userTracker.should.have.been.calledWith('User Created', 'username', false, 'user@example.io');
         expect($modalInstance._closed).to.be.true;
         
         done();

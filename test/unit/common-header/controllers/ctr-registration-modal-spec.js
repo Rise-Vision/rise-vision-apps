@@ -40,6 +40,11 @@ describe("controller: registration modal", function() {
           deferred.resolve({});
           
           return deferred.promise;
+        },
+        getCopyOfUserCompany: function() {
+          return {
+            parentId: "parentId"
+          };
         }
       };
     });
@@ -81,9 +86,7 @@ describe("controller: registration modal", function() {
 
     $provide.service("analyticsFactory", function() { 
       return {
-        track: function(name) {
-          trackerCalled = name;
-        },
+        track: sinon.stub(),
         load: function() {}
       };
     });
@@ -122,18 +125,18 @@ describe("controller: registration modal", function() {
         
   }));
   var $scope, userProfile, userState, $modalInstance, newUser;
-  var registerUser, account, trackerCalled, bqCalled, identifySpy,
+  var registerUser, account, analyticsFactory, bqCalled, identifySpy,
     updateCompanyCalled, plansFactory;
   
   beforeEach(function() {
     registerUser = true;
-    trackerCalled = undefined;
     bqCalled = undefined;
     userProfile = {
       id : "RV_user_id",
       firstName : "first",
       lastName : "last",
-      telephone : "telephone"
+      telephone : "telephone",
+      creationDate: "creationDate"
     };
     
     inject(function($injector,$rootScope, $controller){
@@ -141,6 +144,7 @@ describe("controller: registration modal", function() {
       $modalInstance = $injector.get("$modalInstance");
       var analyticsEvents = $injector.get("analyticsEvents");
       identifySpy = sinon.spy(analyticsEvents,"identify");
+      analyticsFactory = $injector.get("analyticsFactory");
       userState = $injector.get("userState");
       $controller("RegistrationModalCtrl", {
         $scope : $scope,
@@ -204,7 +208,14 @@ describe("controller: registration modal", function() {
         expect(newUser).to.be.true;
         plansFactory.initVolumePlanTrial.should.have.been.called;
         identifySpy.should.have.been.called;
-        expect(trackerCalled).to.equal("User Registered");
+        expect(analyticsFactory.track).to.have.been.calledWith("User Registered",{
+          companyId: "some_company_id",
+          companyName: "company_name",
+          parentId: "parentId",
+          isNewCompany: true,
+          registeredDate: "creationDate",
+          invitationAcceptedDate: null
+        });
         expect(bqCalled).to.equal("User Registered");
 
         expect($scope.registering).to.be.false;
@@ -226,7 +237,7 @@ describe("controller: registration modal", function() {
         expect(newUser).to.be.true;
         plansFactory.initVolumePlanTrial.should.not.have.been.called;
         identifySpy.should.not.have.been.called;
-        expect(trackerCalled).to.not.be.ok;
+        expect(analyticsFactory.track).to.not.have.been.called;
         expect(bqCalled).to.not.be.ok;
         expect($scope.registering).to.be.false;
         expect($modalInstance._closed).to.be.false;
@@ -260,7 +271,14 @@ describe("controller: registration modal", function() {
         expect(newUser).to.be.false;
         plansFactory.initVolumePlanTrial.should.not.have.been.called;
         identifySpy.should.have.been.called;
-        expect(trackerCalled).to.equal("User Registered");
+        expect(analyticsFactory.track).to.have.been.calledWithMatch("User Registered",{
+          companyId: "some_company_id",
+          companyName: "company_name",
+          parentId: "parentId",
+          isNewCompany: false,
+          registeredDate: "creationDate"
+        });
+        expect(analyticsFactory.track.getCall(0).args[1].invitationAcceptedDate).to.be.a('date');
         expect(bqCalled).to.equal("User Registered");
         expect($scope.registering).to.be.false;
         expect($modalInstance._closed).to.be.true;
@@ -279,7 +297,7 @@ describe("controller: registration modal", function() {
       var profileSpy = sinon.spy(userState, "refreshProfile");
       setTimeout(function(){
         expect(newUser).to.be.false;
-        expect(trackerCalled).to.not.be.ok;
+        expect(analyticsFactory.track).to.not.have.been.called;
         expect(bqCalled).to.not.be.ok;
         expect($scope.registering).to.be.false;
         expect($modalInstance._closed).to.be.false;

@@ -10,7 +10,7 @@ angular.module('risevision.common.components.logging')
           id: plan.productCode,
           name: plan.name,
           price: plan.isMonthly ? plan.monthly.billAmount : plan.yearly.billAmount,
-          quantity: 1,
+          displaysCount: plan.displays,
           category: 'Plans',
           inApp: false
         });

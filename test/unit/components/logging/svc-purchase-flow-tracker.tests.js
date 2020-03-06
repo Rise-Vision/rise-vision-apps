@@ -36,6 +36,7 @@ describe('service: purchase flow tracker:', function() {
         productCode: '123',
         name: 'plan123',
         isMonthly: true,
+        displays: 2,
         monthly: { billAmount: 10 }
       };
       purchaseFlowTracker.trackProductAdded(plan);
@@ -43,7 +44,7 @@ describe('service: purchase flow tracker:', function() {
         id: '123',
         name: 'plan123',
         price: 10,
-        quantity: 1,
+        displaysCount: 2,
         category: 'Plans',
         inApp: false
       });
