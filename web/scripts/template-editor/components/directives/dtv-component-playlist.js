@@ -192,6 +192,10 @@ angular.module('risevision.template-editor.directives')
             $scope.save();
           };
 
+          $scope.durationToText = function (item) {
+            return item['play-until-done'] ? 'PUD' : (item.duration ? item.duration : '10') + ' seconds';
+          };
+
         }
       };
     }
