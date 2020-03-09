@@ -98,4 +98,56 @@
 
   </div>
 
+  <!-- "edit" view -->
+  <div class="attribute-editor-component" ng-show="view === 'edit'">
+    <div class="attribute-editor-row">
+      <!-- Use the <form> tag in order to handle "debounce" option correctly for the <input ng-model="...">.
+           That way the model value is processed immeditly on Form submit and saveSrc() is called only once. -->
+      <form>
+        <div class="form-group has-feedback">
+          <label class="control-label" for="te-playlist-item-duration">Duration:</label>
+
+          <div class="madero-radio">
+            <input type="radio" ng-model="selectedItem['play-until-done']" value="true" name="pud" id="te-playlist-item-pud-true" ng-change="saveProperties()" aria-required="true" required>
+            <label for="te-playlist-item-pud-true">
+              Play until done (PUD).
+            </label>
+          </div>
+
+          <div class="madero-radio">
+            <input type="radio" ng-model="selectedItem['play-until-done']" value="false" name="pud" id="te-playlist-item-pud-false" ng-change="saveProperties()" aria-required="true" required>
+            <label for="te-playlist-item-pud-false">
+              A specific time period.
+            </label>
+          </div>
+
+          <!-- <div class="attribute-editor-row"> -->
+            <div class="input-group input-duration">
+              <input type="text" id="te-playlist-item-duration" class="form-control" ng-model="selectedItem.duration" placeholder="Enter duration" ng-model-options="{ debounce: 1000 }" ng-change="saveProperties()">
+              <span class="input-group-addon">seconds</span>
+            </div>
+          <!-- </div> -->
+
+          <label class="control-label" for="te-playlist-item-order">Play order:</label>
+          <input type="text" id="te-playlist-item-position" class="form-control" ng-model="selectedItem.position" placeholder="Enter play order" ng-model-options="{ debounce: 1000 }" ng-change="saveProperties()">
+
+          <label class="control-label" for="te-playlist-item-transition">Transition:</label>
+          <select id="te-playlist-item-transition" ng-model="selectedItem['transition-type']" class="form-control" ng-change="saveProperties()">
+            <option value="normal">No transition</option>
+            <option value="fadeIn">Fade in</option>
+            <option value="slideFromLeft">Slide from left</option>
+            <option value="slideFromRight">Slide from right</option>
+            <option value="slideFromTop">Slide from top</option>
+            <option value="slideFromBottom">Slide from bottom</option>
+            <option value="stripesHorizontal">Stripes horizontal</option>
+            <option value="stripesVertical">Stripes vertical</option>
+            <option value="zoomIn">Zoom in</option>
+          </select>
+
+        </div>
+      </form>
+    </div>
+  </div>
+
+
 </div>
