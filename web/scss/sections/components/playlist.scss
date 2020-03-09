@@ -1,7 +1,7 @@
 @media (min-width: $screen-sm) {
   .rise-playlist-container {
     --playlist-button-bar-height: 70px;
-    --selector-search-box-height: 55px;
+    --selector-search-box-height: 95px;
     --playlist-body-height: calc(100vh - var(--body-height) - var(--component-header-height) - var(--playlist-button-bar-height));
     --selector-body-height: calc(100vh - var(--body-height) - var(--component-header-height) - var(--playlist-button-bar-height) - var(--selector-search-box-height));
   }
@@ -10,7 +10,7 @@
 @media (max-width: $screen-sm) {
   .rise-playlist-container {
     --playlist-button-bar-height: 75px;
-    --selector-search-box-height: 55px;
+    --selector-search-box-height: 95px;
     --playlist-body-height: calc(100vh - var(--body-height) - var(--playlist-button-bar-height));
     --selector-body-height: calc(100vh - var(--body-height) - var(--playlist-button-bar-height) - var(--selector-search-box-height));
   }
