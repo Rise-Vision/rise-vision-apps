@@ -6,15 +6,18 @@ angular.module('risevision.common.header')
     '$scope', '$filter', '$modalInstance', 'updateUser', 'getUserProfile',
     'deleteUser', 'username', 'userRoleMap', '$log', '$loading', 'userState',
     'userAuthFactory', 'uiFlowManager', 'humanReadableError', 'messageBox', 'confirmModal',
-    '$rootScope', 'userTracker', 'userauth', '$q', 'COMPANY_ROLE_FIELDS',
+    '$rootScope', 'userTracker', 'userauth', '$q',
+    'COMPANY_ROLE_FIELDS', 'EDUCATION_COMPANY_ROLE_FIELDS',
     function ($scope, $filter, $modalInstance, updateUser, getUserProfile,
       deleteUser, username, userRoleMap, $log, $loading, userState,
       userAuthFactory, uiFlowManager, humanReadableError, messageBox, confirmModal,
-      $rootScope, userTracker, userauth, $q, COMPANY_ROLE_FIELDS) {
+      $rootScope, userTracker, userauth, $q,
+      COMPANY_ROLE_FIELDS, EDUCATION_COMPANY_ROLE_FIELDS) {
       $scope.user = {};
       $scope.userPassword = {};
       $scope.showChangePassword = false;
       $scope.isRiseAuthUser = userState.isRiseAuthUser();
+      $scope.editingYourself = userState.checkUsername(username);
       $scope.$watch('loading', function (loading) {
         if (loading) {
           $loading.start('user-settings-modal');
@@ -31,7 +34,12 @@ angular.module('risevision.common.header')
           name: v
         });
       });
-      $scope.COMPANY_ROLE_FIELDS = COMPANY_ROLE_FIELDS;
+
+      if (userState.isEducationCustomer($scope.editingYourself)) {
+        $scope.COMPANY_ROLE_FIELDS = EDUCATION_COMPANY_ROLE_FIELDS;
+      } else {
+        $scope.COMPANY_ROLE_FIELDS = COMPANY_ROLE_FIELDS;        
+      }
 
       // convert string to numbers
       $scope.$watch('user.status', function (status) {
@@ -52,8 +60,6 @@ angular.module('risevision.common.header')
       $scope.loading = true;
       getUserProfile(username).then(function (user) {
         $scope.user = user;
-        $scope.editingYourself = userState.checkUsername(user.username);
-
       }).finally(function () {
         $scope.loading = false;
       });

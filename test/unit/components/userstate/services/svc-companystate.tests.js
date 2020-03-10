@@ -325,6 +325,16 @@ describe("Services: company state", function() {
 
         expect(companyState.isEducationCustomer()).to.be.false;
       });    
+
+      it("should use own company if parameter is true", function() {
+        companyWithNewSettings.companyIndustry = "HIGHER_EDUCATION";
+        subCompanyWithNewSettings.companyIndustry = "MARKETING";
+        
+        companyState.updateCompanySettings(companyWithNewSettings);
+        companyState.updateCompanySettings(subCompanyWithNewSettings);
+
+        expect(companyState.isEducationCustomer(true)).to.be.true;
+      });
     });
   });
 });

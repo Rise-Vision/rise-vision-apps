@@ -4,13 +4,18 @@ angular.module('risevision.common.header')
   .controller('AddUserModalCtrl', ['$scope', '$filter', 'addUser',
     '$modalInstance', 'companyId', 'userState', 'userRoleMap',
     'humanReadableError', 'messageBox', '$loading', 'userTracker',
-    'COMPANY_ROLE_FIELDS',
+    'COMPANY_ROLE_FIELDS', 'EDUCATION_COMPANY_ROLE_FIELDS',
     function ($scope, $filter, addUser, $modalInstance, companyId,
       userState, userRoleMap, humanReadableError, messageBox, $loading,
-      userTracker, COMPANY_ROLE_FIELDS) {
+      userTracker, COMPANY_ROLE_FIELDS, EDUCATION_COMPANY_ROLE_FIELDS) {
       $scope.isAdd = true;
-      $scope.COMPANY_ROLE_FIELDS = COMPANY_ROLE_FIELDS;
       $scope.isUserAdmin = userState.isUserAdmin();
+
+      if (userState.isEducationCustomer()) {
+        $scope.COMPANY_ROLE_FIELDS = EDUCATION_COMPANY_ROLE_FIELDS;
+      } else {
+        $scope.COMPANY_ROLE_FIELDS = COMPANY_ROLE_FIELDS;        
+      }
 
       //push roles into array
       $scope.availableRoles = [];

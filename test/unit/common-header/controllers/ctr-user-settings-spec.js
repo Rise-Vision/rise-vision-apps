@@ -89,9 +89,9 @@ describe("controller: user settings", function() {
     savedUser = userProfile;
     userState = function(){
       return {
-        checkUsername: function(username){
+        checkUsername: sinon.spy(function(username) {
           return username === "user@example.io";
-        },
+        }),
         getAccessToken : function(){
           return{access_token: "TEST_TOKEN"};
         },
@@ -121,6 +121,7 @@ describe("controller: user settings", function() {
         isSelectedCompanyChargebee: function () {
           return false;
         },
+        isEducationCustomer: sinon.stub().returns(true),
         _state: {}
       };
     };
@@ -164,6 +165,13 @@ describe("controller: user settings", function() {
     expect($scope.deleteUser).to.exist;
     expect($scope.editRoleAllowed).to.exist;
     expect($scope.editRoleVisible).to.exist;
+  });
+
+  it("should configure company roles by checking if customer is education", function() {
+    userState.checkUsername.should.have.been.calledWith('user@example.io');
+    userState.isEducationCustomer.should.have.been.calledWith(true);
+
+    expect($scope.COMPANY_ROLE_FIELDS[0]).to.deep.equal(['IT', 'education_it']);
   });
 
   it("should load current user",function(done){
