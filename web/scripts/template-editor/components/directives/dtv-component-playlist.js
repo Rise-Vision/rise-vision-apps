@@ -204,8 +204,11 @@ angular.module('risevision.template-editor.directives')
           $scope.editProperties = function (key) {
             $scope.selectedItem = angular.copy($scope.selectedTemplates[key]);
             $scope.selectedItem.key = key;
-            //make sure value is true or false in order to radio buttons to work
+
+            //set default values
+            $scope.selectedItem.duration = Number.isInteger($scope.selectedItem.duration) ? $scope.selectedItem.duration : 10;
             $scope.selectedItem['play-until-done'] = $scope.selectedItem['play-until-done'] ? "true" : "false";
+            $scope.selectedItem['transition-type'] = $scope.selectedItem['transition-type'] ? $scope.selectedItem['transition-type'] : "normal";
 
             $scope.showProperties();
           };
@@ -213,7 +216,7 @@ angular.module('risevision.template-editor.directives')
           $scope.saveProperties = function () {
             var item = $scope.selectedTemplates[$scope.selectedItem.key];
 
-            item.duration = $scope.selectedItem.duration;
+            item.duration = Number.isInteger($scope.selectedItem.duration) ? $scope.selectedItem.duration : 10;
             item['play-until-done'] = $scope.selectedItem['play-until-done'] === "true";
             item['transition-type'] = $scope.selectedItem['transition-type'];
 
