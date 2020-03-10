@@ -128,9 +128,6 @@
             </div>
           <!-- </div> -->
 
-          <label class="control-label" for="te-playlist-item-order">Play order:</label>
-          <input type="text" id="te-playlist-item-position" class="form-control" ng-model="selectedItem.position" placeholder="Enter play order" ng-model-options="{ debounce: 1000 }" ng-change="saveProperties()">
-
           <label class="control-label" for="te-playlist-item-transition">Transition:</label>
           <select id="te-playlist-item-transition" ng-model="selectedItem['transition-type']" class="form-control" ng-change="saveProperties()">
             <option value="normal">No transition</option>
