@@ -188,7 +188,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.sortItem = function (evt) {
-            $scope.moveItem(evt.data.oldIndex, evt.data.newIndex)
+            $scope.moveItem(evt.data.oldIndex, evt.data.newIndex);
 
             $scope.save();
           };
@@ -207,8 +207,8 @@ angular.module('risevision.template-editor.directives')
 
             //set default values
             $scope.selectedItem.duration = Number.isInteger($scope.selectedItem.duration) ? $scope.selectedItem.duration : 10;
-            $scope.selectedItem['play-until-done'] = $scope.selectedItem['play-until-done'] ? "true" : "false";
-            $scope.selectedItem['transition-type'] = $scope.selectedItem['transition-type'] ? $scope.selectedItem['transition-type'] : "normal";
+            $scope.selectedItem['play-until-done'] = $scope.selectedItem['play-until-done'] ? 'true' : 'false';
+            $scope.selectedItem['transition-type'] = $scope.selectedItem['transition-type'] ? $scope.selectedItem['transition-type'] : 'normal';
 
             $scope.showProperties();
           };
@@ -217,7 +217,7 @@ angular.module('risevision.template-editor.directives')
             var item = $scope.selectedTemplates[$scope.selectedItem.key];
 
             item.duration = Number.isInteger($scope.selectedItem.duration) ? $scope.selectedItem.duration : 10;
-            item['play-until-done'] = $scope.selectedItem['play-until-done'] === "true";
+            item['play-until-done'] = $scope.selectedItem['play-until-done'] === 'true';
             item['transition-type'] = $scope.selectedItem['transition-type'];
 
             $scope.save();
