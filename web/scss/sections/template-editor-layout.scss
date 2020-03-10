@@ -1226,6 +1226,11 @@ $short-phone-height: 570px;
     }
   }
 
+  textarea.form-control {
+    height: auto;
+    display: initial;
+  }
+
   .control-label {
     font-weight: bold;
     color: $madero-black;
