@@ -22,7 +22,7 @@
   <div class="attribute-editor-row">
     <label class="control-label" for="te-slides-duration">Show each slide for:</label>
     <div class="input-group input-duration">
-      <input type="number" id="te-slides-duration" class="form-control" ng-model="duration" placeholder="10" ng-change="saveDuration()">
+      <input type="number" id="te-slides-duration" class="form-control" min="1" ng-model="duration" placeholder="10" ng-change="saveDuration()">
       <span class="input-group-addon">seconds</span>
     </div>
   </div>

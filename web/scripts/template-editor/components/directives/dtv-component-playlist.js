@@ -93,6 +93,10 @@ angular.module('risevision.template-editor.directives')
             $scope.view = '';
           };
 
+          $scope.showProperties = function () {
+            $scope.view = 'edit';
+          };
+
           $scope.loadTemplateNames = function (templates) {
 
             if (!templates || !templates.length) {
@@ -184,16 +188,39 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.sortItem = function (evt) {
-            var oldIndex = evt.data.oldIndex;
-            var newIndex = evt.data.newIndex;
-
-            $scope.selectedTemplates.splice(newIndex, 0, $scope.selectedTemplates.splice(oldIndex, 1)[0]);
+            $scope.moveItem(evt.data.oldIndex, evt.data.newIndex);
 
             $scope.save();
           };
 
+          $scope.moveItem = function (oldIndex, newIndex) {
+            $scope.selectedTemplates.splice(newIndex, 0, $scope.selectedTemplates.splice(oldIndex, 1)[0]);
+          };
+
           $scope.durationToText = function (item) {
             return item['play-until-done'] ? 'PUD' : (item.duration ? item.duration : '10') + ' seconds';
+          };
+
+          $scope.editProperties = function (key) {
+            $scope.selectedItem = angular.copy($scope.selectedTemplates[key]);
+            $scope.selectedItem.key = key;
+
+            //set default values
+            $scope.selectedItem.duration = Number.isInteger($scope.selectedItem.duration) ? $scope.selectedItem.duration : 10;
+            $scope.selectedItem['play-until-done'] = $scope.selectedItem['play-until-done'] ? 'true' : 'false';
+            $scope.selectedItem['transition-type'] = $scope.selectedItem['transition-type'] ? $scope.selectedItem['transition-type'] : 'normal';
+
+            $scope.showProperties();
+          };
+
+          $scope.saveProperties = function () {
+            var item = $scope.selectedTemplates[$scope.selectedItem.key];
+
+            item.duration = Number.isInteger($scope.selectedItem.duration) ? $scope.selectedItem.duration : 10;
+            item['play-until-done'] = $scope.selectedItem['play-until-done'] === 'true';
+            item['transition-type'] = $scope.selectedItem['transition-type'];
+
+            $scope.save();
           };
 
         }

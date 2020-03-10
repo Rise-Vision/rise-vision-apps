@@ -16,6 +16,14 @@
   }
 }
 
+.rise-playlist-container {
+  --duration-group-offset: 29px;
+
+  .duration-input-group {
+    width: calc(100% - var(--duration-group-offset));
+    margin-left: var(--duration-group-offset);
+  }
+
 .templates-list {
   height: var(--playlist-body-height);
   overflow-x: hidden;
@@ -281,4 +289,6 @@
     padding: 18px 0 0 0;
     border-top: 1px solid #999999;
   }
+}
+
 }
