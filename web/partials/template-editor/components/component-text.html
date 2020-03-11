@@ -1,10 +1,11 @@
 <div class="attribute-editor-component">
   <div class="attribute-editor-row">
     <label>Text:</label>
-    <p class="text-sm">Hit enter to add a line break.</p>
-    <div class="row">
+    <input ng-if="!isMultiline" id="text-component-input" type="text" class="form-control" ng-model="value" placeholder="Enter your text" ng-change="save()">
+    <p ng-if="isMultiline" class="text-sm">Hit enter to add a line break.</p>
+    <div ng-if="isMultiline" class="row">
       <div class="col-xs-12">
-        ​<textarea id="text-component-input" class="form-control" rows="2" ng-model="value" placeholder="Enter your text" ng-change="save()"></textarea>
+        ​<textarea id="text-component-input-multiline" class="form-control" rows="2" ng-model="value" placeholder="Enter your text" ng-change="save()"></textarea>
       </div>
     </div>
   </div>
