@@ -14,6 +14,21 @@ angular.module('risevision.common.header')
     ['Developer', 'developer'],
     ['Other', 'other']
   ])
+  .value('EDUCATION_COMPANY_ROLE_FIELDS', [
+    ['IT', 'education_it'],
+    ['Librarian', 'education_librarian'],
+    ['Marketing/Communications', 'education_marketing_communications'],
+    ['Other', 'education_other'],
+    ['Principal', 'education_principal'],
+    ['Media Specialist', 'education_media_specialist'],
+    ['Learning/Technology Coach', 'education_learning_technology_coach'],
+    ['Receptionist/Admin', 'education_receptionist_admin'],
+    ['Superintendent', 'education_superintendent'],
+    ['Teacher', 'education_teacher'],
+    ['Professor', 'education_professor'],
+    ['Dean', 'education_dean'],
+    ['Student', 'education_student']
+  ])
   .value('COMPANY_INDUSTRY_FIELDS', [
     ['K-12 Education', 'PRIMARY_SECONDARY_EDUCATION',
       'https://cdn2.hubspot.net/hubfs/2700250/Assets%20May%5B17%5D/university.svg'

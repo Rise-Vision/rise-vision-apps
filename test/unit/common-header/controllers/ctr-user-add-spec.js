@@ -88,7 +88,8 @@ describe("controller: user add", function() {
         },
         isSelectedCompanyChargebee: function () {
           return false;
-        }
+        },
+        isEducationCustomer: sinon.stub().returns(true)
       };
     };
     inject(function($injector,$rootScope, $controller){
@@ -124,6 +125,12 @@ describe("controller: user add", function() {
     expect($scope.COMPANY_ROLE_FIELDS).to.exist;
 
     expect($scope.isUserAdmin).to.be.true;
+  });
+
+  it("should configure company roles by checking if customer is education", function() {
+    userState.isEducationCustomer.should.have.been.called;
+
+    expect($scope.COMPANY_ROLE_FIELDS[0]).to.deep.equal(['IT', 'education_it']);
   });
   
   describe("save: ",function(){

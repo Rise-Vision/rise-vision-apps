@@ -171,9 +171,11 @@
           isSelectedCompanyChargebee: function () {
             return _state.selectedCompany && _state.selectedCompany.origin === 'Chargebee';
           },
-          isEducationCustomer: function () {
-            return _state.selectedCompany && (_state.selectedCompany.companyIndustry ===
-              'PRIMARY_SECONDARY_EDUCATION' || _state.selectedCompany.companyIndustry === 'HIGHER_EDUCATION');
+          isEducationCustomer: function (checkUserCompany) {
+            var company = checkUserCompany ? _state.userCompany : _state.selectedCompany;
+
+            return company && (company.companyIndustry === 'PRIMARY_SECONDARY_EDUCATION' || 
+              company.companyIndustry === 'HIGHER_EDUCATION');
           }
         };
 
