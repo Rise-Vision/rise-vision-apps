@@ -179,7 +179,11 @@ angular.module('risevision.common.header')
 
         user = pick(user, COMPANY_ROLE_WRITABLE_FIELDS);
 
-        updateUser(username, user).then(function () {
+        updateUser(username, user).then(function (resp) {
+          if (resp && resp.item) {
+            userState.updateUserProfile(resp.item);            
+          }
+
           $log.debug('User Profile updated');
         });
       };

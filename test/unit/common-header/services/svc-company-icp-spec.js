@@ -12,6 +12,7 @@ describe("service: companyIcpFactory:", function() {
         getCopyOfProfile: function() {
           return userProfile;
         },
+        updateUserProfile: sinon.spy(),
         getCopyOfSelectedCompany: function() {
           return companyProfile;
         },
@@ -35,7 +36,7 @@ describe("service: companyIcpFactory:", function() {
       return sinon.stub().returns(Q.resolve());
     });
     $provide.service("updateUser", function() {
-      return sinon.stub().returns(Q.resolve());
+      return sinon.stub().returns(Q.resolve({ item: 'user' }));
     });
     $provide.service("$modal",function(){
       return {
@@ -320,6 +321,8 @@ describe("service: companyIcpFactory:", function() {
         updateUser.should.have.been.calledWith("username", {
           companyRole: "companyRole"
         });
+
+        userState.updateUserProfile.should.have.been.calledWith('user');
 
         done();
       }, 10);
