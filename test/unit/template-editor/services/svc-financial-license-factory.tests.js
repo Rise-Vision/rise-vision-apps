@@ -8,17 +8,17 @@ describe('service: financialLicenseFactory:', function() {
   beforeEach(module(function ($provide) {
     $provide.service('blueprintFactory', function() { 
       return {
-        blueprintData: blueprintData
+        blueprintData: {}
       };
     });
   }));
 
-  var financialLicenseFactory, $modal, $window, blueprintData;
+  var financialLicenseFactory, $modal, $window, blueprintFactory;
 
   beforeEach(function() {
-    blueprintData = {};
     inject(function($injector) {
       financialLicenseFactory = $injector.get('financialLicenseFactory');
+      blueprintFactory = $injector.get('blueprintFactory');
       $modal = $injector.get('$modal');
       $window = $injector.get('$window');
     });
@@ -37,21 +37,26 @@ describe('service: financialLicenseFactory:', function() {
 
   describe('needsFinancialDataLicense', function() {
     it('should open modal if rise-data-financial component is present',function() {
-      blueprintData.components = [{type: 'rise-data-financial'}];
+      blueprintFactory.blueprintData.components = [{type: 'rise-data-financial'}];
       expect(financialLicenseFactory.needsFinancialDataLicense()).to.be.true;
 
-      blueprintData.components = [{type: 'rise-data-financial'},{type: 'rise-data-financial'}];
+      blueprintFactory.blueprintData.components = [{type: 'rise-data-financial'},{type: 'rise-data-financial'}];
       expect(financialLicenseFactory.needsFinancialDataLicense()).to.be.true;
 
-      blueprintData.components = [{type: 'rise-image'},{type: 'rise-data-financial'}];
+      blueprintFactory.blueprintData.components = [{type: 'rise-image'},{type: 'rise-data-financial'}];
       expect(financialLicenseFactory.needsFinancialDataLicense()).to.be.true;
     });
 
+    it('should not do anything if there is no blueprint data',function() {
+      delete blueprintFactory.blueprintData;
+      expect(financialLicenseFactory.needsFinancialDataLicense()).to.be.false;
+    });
+
     it('should not do anything if there are no rise-data-financial components',function() {
-      blueprintData.components = [{type: 'rise-image'}];
+      blueprintFactory.blueprintData.components = [{type: 'rise-image'}];
       expect(financialLicenseFactory.needsFinancialDataLicense()).to.be.false;
 
-      blueprintData.components = [];
+      blueprintFactory.blueprintData.components = [];
       expect(financialLicenseFactory.needsFinancialDataLicense()).to.be.false;
     });
 
@@ -71,6 +76,13 @@ describe('service: financialLicenseFactory:', function() {
         controller: "confirmModalController",
         windowClass: 'madero-style centered-modal financial-data-license-message'
       });
+
+      var resolve = $modal.open.getCall(0).args[0].resolve;
+      
+      expect(resolve.confirmationTitle()).to.be.a('string');
+      expect(resolve.confirmationMessage()).to.be.a('string');
+      expect(resolve.confirmationButton()).to.be.a('string');
+      expect(resolve.cancelButton()).to.be.a('string');
     });
 
     it('should dismiss and open Contact Us on page confirm', function(done){
