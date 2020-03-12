@@ -14,13 +14,5 @@ angular.module('risevision.common.header')
         });
       };
 
-      $scope.selectRole = function (roleValue) {
-        if (user.companyRole !== roleValue) {
-          user.companyRole = roleValue;
-        } else {
-          user.companyRole = '';
-        }
-      };
-
     }
   ]);

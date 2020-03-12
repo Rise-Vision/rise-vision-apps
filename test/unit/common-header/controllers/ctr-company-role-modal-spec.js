@@ -46,7 +46,6 @@ describe("controller: Company Role Modal", function() {
     expect($scope).to.have.property("COMPANY_ROLE_FIELDS");
 
     expect($scope.save).to.exist;
-    expect($scope.selectRole).to.exist;
   });
 
   it("should initialize", function() {
@@ -63,17 +62,6 @@ describe("controller: Company Role Modal", function() {
         username: "user@example.io"
       }
     });
-  });
-  
-  it("selectRole: ", function() {
-    $scope.selectRole("Role1");
-    expect($scope.user.companyRole).to.equal("Role1");
-
-    $scope.selectRole("Role2");
-    expect($scope.user.companyRole).to.equal("Role2");
-
-    $scope.selectRole("Role2");
-    expect($scope.user.companyRole).to.equal("");
   });
 
 });

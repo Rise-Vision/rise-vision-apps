@@ -50,7 +50,6 @@ describe("controller: Company ICP Modal", function() {
     expect($scope).to.have.property("DROPDOWN_INDUSTRY_FIELDS");
 
     expect($scope.save).to.exist;
-    expect($scope.selectIndustry).to.exist;
   });
 
   it("should initialize", function() {
@@ -72,17 +71,6 @@ describe("controller: Company ICP Modal", function() {
         companyIndustry: "HOSPITALITY"
       }  
     });
-  });
-  
-  it("selectIndustry: ", function() {
-    $scope.selectIndustry("Industry1");
-    expect($scope.company.companyIndustry).to.equal("Industry1");
-
-    $scope.selectIndustry("Industry2");
-    expect($scope.company.companyIndustry).to.equal("Industry2");
-
-    $scope.selectIndustry("Industry2");
-    expect($scope.company.companyIndustry).to.equal("");
   });
 
 });
