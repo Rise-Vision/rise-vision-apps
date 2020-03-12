@@ -1,0 +1,27 @@
+<div id="companyRoleModal">
+  <div class="modal-header">
+    <h2 id="companyRoleTitle" class="modal-title">Help us personalize your experience</h2>
+  </div>
+  <div class="modal-body" stop-event="touchend">
+    <form id="forms.companyRoleForm" role="form" name="forms.companyRoleForm">
+      <div class="form-group">
+        <label for="company-role" class="control-label">
+          Tell us your Company Role to help us make your experience great *
+        </label>
+        <select id="company-role" class="form-control selectpicker" ng-model="user.companyRole" aria-required="true" tabindex="1" autofocus required>
+          <option value="" ng-show="false">&lt; Select Role &gt;</option>
+          <option ng-repeat="role in COMPANY_ROLE_FIELDS" value="{{role[1]}}">{{role[0]}}</option>
+        </select>
+      </div>
+    </form>
+
+  </div> <!-- //Modal Body -->
+
+  <div class="modal-footer">
+    <button id="saveButton" type="submit" class="btn btn-primary btn-lg btn-block ng-binding" aria-label="Apply" tabindex="1" form="forms.companyRoleForm" ng-click="save()" ng-disabled="forms.companyRoleForm.$invalid">
+      Apply
+      <i class="fa fa-check icon-right"></i>
+    </button>
+  </div>
+
+</div>

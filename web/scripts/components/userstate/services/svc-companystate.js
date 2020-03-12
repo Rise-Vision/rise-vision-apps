@@ -174,7 +174,7 @@
           isEducationCustomer: function (checkUserCompany) {
             var company = checkUserCompany ? _state.userCompany : _state.selectedCompany;
 
-            return company && (company.companyIndustry === 'PRIMARY_SECONDARY_EDUCATION' || 
+            return company && (company.companyIndustry === 'PRIMARY_SECONDARY_EDUCATION' ||
               company.companyIndustry === 'HIGHER_EDUCATION');
           }
         };

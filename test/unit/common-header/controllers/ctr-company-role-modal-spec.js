@@ -2,7 +2,7 @@
 
 /*jshint -W030 */
 
-describe("controller: Company ICP Modal", function() {
+describe("controller: Company Role Modal", function() {
   beforeEach(module("risevision.common.header"));
   beforeEach(module(function ($provide, $translateProvider) {
     $provide.service("$modalInstance",function(){
@@ -11,11 +11,8 @@ describe("controller: Company ICP Modal", function() {
       };
     });
     $provide.value("user", {
-      username: "user@example.io"
-    });
-    $provide.value("company", {
-      name: "Test Company",
-      companyIndustry: "HOSPITALITY"
+      username: "user@example.io",
+      
     });
 
     $provide.factory("customLoader", function ($q) {
@@ -34,7 +31,7 @@ describe("controller: Company ICP Modal", function() {
       $scope = $rootScope.$new();
       $modalInstance = $injector.get("$modalInstance");
 
-      $controller("CompanyIcpModalCtrl", {
+      $controller("CompanyRoleModalCtrl", {
         $scope : $scope,
         $modalInstance: $modalInstance,
       });
@@ -45,31 +42,25 @@ describe("controller: Company ICP Modal", function() {
   it("should exist", function() {
     expect($scope).to.be.ok;
     expect($scope.user).to.be.ok;
-    expect($scope.company).to.be.ok;
 
-    expect($scope).to.have.property("DROPDOWN_INDUSTRY_FIELDS");
+    expect($scope).to.have.property("COMPANY_ROLE_FIELDS");
 
     expect($scope.save).to.exist;
   });
 
   it("should initialize", function() {
     expect($scope.user.username).to.equal("user@example.io");
-    expect($scope.company.name).to.equal("Test Company");
     
-    expect($scope.DROPDOWN_INDUSTRY_FIELDS).to.have.length(18);
+    expect($scope.COMPANY_ROLE_FIELDS).to.have.length(13);
   });
   
-  it("should close modal on save and send user/company objects", function() {
+  it("should close modal on save and send user objects", function() {
     $scope.save();
 
     $modalInstance.close.should.have.been.calledWith({
       user: {
         username: "user@example.io"
-      }, 
-      company: {
-        name: "Test Company",
-        companyIndustry: "HOSPITALITY"
-      }  
+      }
     });
   });
 

@@ -18,13 +18,5 @@ angular.module('risevision.common.header')
         });
       };
 
-      $scope.selectIndustry = function (industryValue) {
-        if (company.companyIndustry !== industryValue) {
-          company.companyIndustry = industryValue;
-        } else {
-          company.companyIndustry = '';
-        }
-      };
-
     }
   ]);
