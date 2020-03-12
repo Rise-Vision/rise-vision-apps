@@ -86,19 +86,27 @@ angular.module('risevision.common.header')
   .constant('COMPANY_ICP_WRITABLE_FIELDS', [
     'companyIndustry'
   ])
-  .factory('companyIcpFactory', ['$rootScope', '$q', '$log', 'userState',
+  .constant('COMPANY_ROLE_WRITABLE_FIELDS', [
+    'companyRole'
+  ])
+  .factory('companyIcpFactory', ['$rootScope', '$q', '$log', '$state', 'userState',
     'updateCompany', 'updateUser', '$modal', 'pick',
-    'USER_ICP_WRITABLE_FIELDS', 'COMPANY_ICP_WRITABLE_FIELDS', '$state',
-    function ($rootScope, $q, $log, userState, updateCompany, updateUser,
-      $modal, pick, USER_ICP_WRITABLE_FIELDS, COMPANY_ICP_WRITABLE_FIELDS, $state) {
+    'USER_ICP_WRITABLE_FIELDS', 'COMPANY_ICP_WRITABLE_FIELDS', 'COMPANY_ROLE_WRITABLE_FIELDS',
+    function ($rootScope, $q, $log, $state, userState, updateCompany, updateUser, $modal, pick,
+      USER_ICP_WRITABLE_FIELDS, COMPANY_ICP_WRITABLE_FIELDS, COMPANY_ROLE_WRITABLE_FIELDS) {
       var factory = {};
 
       factory.init = function () {
-        $rootScope.$on(
-          'risevision.company.selectedCompanyChanged',
-          function () {
-            _checkIcpCollection();
-          });
+        $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
+          //make sure user registration process is complete
+          if ($state.current.name.indexOf('common.auth') !== -1) {
+            return false;
+          }
+
+          if (!_checkIcpCollection()) {
+            _checkRoleCollection();
+          }
+        });
       };
 
       var _saveIcpData = function (result) {
@@ -119,23 +127,17 @@ angular.module('risevision.common.header')
       };
 
       var _checkIcpCollection = function () {
-
-        //make sure user registration process is complete
-        if ($state.current.name.indexOf('common.auth') !== -1) {
-          return;
-        }
-
         var user = userState.getCopyOfProfile(true);
         var company = userState.getCopyOfSelectedCompany(true);
 
         //Rise user should not be asked to confirm industry of a sub-company
         if (userState.isRiseAdmin()) {
-          return;
+          return false;
         }
 
         // Has industry been collected?
         if (company.companyIndustry) {
-          return;
+          return false;
         }
 
         var modalInstance = $modal.open({
@@ -154,8 +156,61 @@ angular.module('risevision.common.header')
           }
         });
 
-        modalInstance.result.then(function (user, company) {
-          _saveIcpData(user, company);
+        modalInstance.result.then(function (result) {
+          _saveIcpData(result);
+        });
+
+        return true;
+      };
+
+      var _checkUserCreationDate = function (user) {
+        var creationDate = ((user && user.termsAcceptanceDate) ?
+          (new Date(user.termsAcceptanceDate)) : (new Date()));
+
+        var yesterdayDate = new Date();
+        yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+
+        return creationDate < yesterdayDate;
+      };
+
+      var _saveRoleData = function (result) {
+        var user = result.user;
+        var username = user.username;
+
+        user = pick(user, COMPANY_ROLE_WRITABLE_FIELDS);
+
+        updateUser(username, user).then(function () {
+          $log.debug('User Profile updated');
+        });
+      };
+
+      var _checkRoleCollection = function () {
+        var user = userState.getCopyOfProfile(true);
+
+        if (!userState.isEducationCustomer(true) || !_checkUserCreationDate(user)) {
+          return;
+        }
+
+        // Has company role been collected?
+        if (user.companyRole) {
+          return;
+        }
+
+        var modalInstance = $modal.open({
+          templateUrl: 'partials/common-header/company-role-modal.html',
+          controller: 'CompanyRoleModalCtrl',
+          size: 'md',
+          backdrop: 'static', //prevent from closing modal by clicking outside
+          keyboard: false, //prevent from closing modal by pressing escape
+          resolve: {
+            user: function () {
+              return user;
+            }
+          }
+        });
+
+        modalInstance.result.then(function (result) {
+          _saveRoleData(result);
         });
 
       };

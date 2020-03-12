@@ -38,7 +38,7 @@ angular.module('risevision.common.header')
       if (userState.isEducationCustomer($scope.editingYourself)) {
         $scope.COMPANY_ROLE_FIELDS = EDUCATION_COMPANY_ROLE_FIELDS;
       } else {
-        $scope.COMPANY_ROLE_FIELDS = COMPANY_ROLE_FIELDS;        
+        $scope.COMPANY_ROLE_FIELDS = COMPANY_ROLE_FIELDS;
       }
 
       // convert string to numbers
