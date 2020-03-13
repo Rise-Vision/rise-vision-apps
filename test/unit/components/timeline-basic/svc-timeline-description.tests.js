@@ -1,4 +1,5 @@
 "use strict";
+
 describe("service: timelineBasicDescription ", function() {
   beforeEach(module("risevision.common.components.timeline-basic.services"));
   var timelineBasicDescription, timeline;
@@ -37,7 +38,7 @@ describe("service: timelineBasicDescription ", function() {
 
     var label = timelineBasicDescription.updateLabel(timeline);
 
-    expect(label).to.equal("10:55 AM to 06:24 PM every day");
+    expect(label).to.equal("10:55 AM UTC to 06:24 PM UTC every day");
   });
 
   it("should have a label with All day on Tuesday and Sunday",function(){
@@ -61,7 +62,7 @@ describe("service: timelineBasicDescription ", function() {
 
     var label = timelineBasicDescription.updateLabel(timeline);
 
-    expect(label).to.equal("10:55 AM to 06:24 PM every Tuesday Sunday");
+    expect(label).to.equal("10:55 AM UTC to 06:24 PM UTC every Tuesday Sunday");
   });
 
 });
