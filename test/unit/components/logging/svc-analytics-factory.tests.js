@@ -64,8 +64,9 @@ describe("Services: analyticsFactory", function() {
     expect(analyticsFactory.page).to.be.a('function');
   });
 
-  it("should identify user", function(done) {
-    var identifySpy = sinon.spy(analyticsFactory, "identify");    
+  it("should identify user and track logged in event", function(done) {
+    var identifySpy = sinon.spy(analyticsFactory, "identify");
+    var trackSpy = sinon.spy(analyticsFactory, "track");
 
     analyticsEvents.identify();
     
@@ -76,6 +77,7 @@ describe("Services: analyticsFactory", function() {
         companyName: "companyName",
         companyIndustry: "K-12 Education",
         parentId: "parent123",
+        userId: "username",
         email: undefined,
         firstName: "",
         lastName: "",
@@ -85,34 +87,49 @@ describe("Services: analyticsFactory", function() {
       };
       identifySpy.should.have.been.calledWith("username",expectProperties);
 
-      expect($window.dataLayer[$window.dataLayer.length-1].event).to.equal("analytics.identify");
-      expect($window.dataLayer[$window.dataLayer.length-1].userId).to.equal("username");
-      expect($window.dataLayer[$window.dataLayer.length-1].analytics.user.properties).to.deep.equal(expectProperties);
+      expect($window.dataLayer[$window.dataLayer.length-2].event).to.equal("analytics.identify");
+      expect($window.dataLayer[$window.dataLayer.length-2].userId).to.equal("username");
+      expect($window.dataLayer[$window.dataLayer.length-2].analytics.user.properties).to.deep.equal(expectProperties);
+
+      trackSpy.should.have.been.calledWithMatch("logged in",expectProperties);
+      expect($window.dataLayer[$window.dataLayer.length-1].event).to.equal("analytics.track");
+      var actualProperties = $window.dataLayer[$window.dataLayer.length-1].analytics.event.properties;
+      Object.keys(expectProperties).forEach(function(key) {
+        expect(actualProperties[key]).to.deep.equal(expectProperties[key]);
+      });
+      expect(actualProperties.loginDate).to.be.a("date");
 
       done();
     }, 10);
   });
 
-  it("should identify user when authorized", function(done) {
-    var identifySpy = sinon.spy(analyticsFactory, "identify");    
+  it("should identify user when authorized and track logged in event", function(done) {
+    var identifySpy = sinon.spy(analyticsFactory, "identify");
+    var trackSpy = sinon.spy(analyticsFactory, "track");
 
     $scope.$broadcast("risevision.user.authorized");
     $scope.$digest();
     
     setTimeout(function() {
-      identifySpy.should.have.been.calledWith("username",{
+      var expectedProperties = {
         company: { id: "companyId", name: "companyName", companyIndustry: "K-12 Education", parentId: "parent123" },
         companyId: "companyId",
         companyName: "companyName",
         companyIndustry: "K-12 Education",
         parentId: "parent123",
+        userId: "username",
         email: undefined,
         firstName: "",
         lastName: "",
         subscriptionRenewalDate: undefined,
         subscriptionStatus: "Free",
         subscriptionTrialExpiryDate: undefined
-      });
+      };
+
+      identifySpy.should.have.been.calledWith("username",expectedProperties);
+
+      trackSpy.should.have.been.calledWithMatch("logged in",expectedProperties);
+
       done();
     }, 10);
   });
@@ -127,6 +144,7 @@ describe("Services: analyticsFactory", function() {
     
     setTimeout(function() {
       identifySpy.should.have.been.calledWith("username",{
+        userId: "username",
         email: undefined,
         firstName: "",
         lastName: ""

@@ -106,6 +106,7 @@
             var profile = userState.getCopyOfProfile();
 
             var properties = {
+              userId: userState.getUsername(),
               email: profile.email,
               firstName: profile.firstName ? profile.firstName : '',
               lastName: profile.lastName ? profile.lastName : '',
@@ -130,6 +131,10 @@
             }
 
             analyticsFactory.identify(userState.getUsername(), properties);
+
+            var loggedInProperties = angular.copy(properties);
+            loggedInProperties.loginDate = new Date();
+            analyticsFactory.track('logged in', loggedInProperties);
           }
         };
 
