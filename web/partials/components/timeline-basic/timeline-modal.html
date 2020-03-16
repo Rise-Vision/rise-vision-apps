@@ -17,13 +17,13 @@
           </label>
           <div class="row form-group" ng-hide="timeline.allDay">
             <div class="col-sm-4">
-              <label class="control-label">Start Time (UTC)</label>
+              <label class="control-label">Start Time UTC</label>
               <div class="time-picker">
                 <timepicker id="startTime" ng-model="timeline.startTime" ng-change="changed()" hour-step="1" minute-step="15" show-meridian="true" datepicker-localdate="{{timeline.useLocaldate}}"></timepicker>
               </div>
             </div><!--col-sm-4-->
             <div class="col-sm-4">
-              <label class="control-label">End Time (UTC)</label>
+              <label class="control-label">End Time UTC</label>
               <div class="time-picker">
                 <timepicker id="endTime" ng-model="timeline.endTime" ng-change="changed()" hour-step="1" minute-step="15" show-meridian="true" datepicker-localdate="{{timeline.useLocaldate}}"></timepicker>
               </div>

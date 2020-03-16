@@ -31,10 +31,10 @@ angular.module('risevision.common.components.timeline-basic.services')
         } else {
           if (tl.startTime) {
             var shortTimeformat = 'hh:mm a';
-            label = label + _filterDateFormat(tl.startTime, tl.useLocaldate, shortTimeformat) + ' ';
+            label = label + _filterDateFormat(tl.startTime, tl.useLocaldate, shortTimeformat) + ' UTC ';
 
             if (tl.endTime) {
-              label = label + 'to ' + _filterDateFormat(tl.endTime, tl.useLocaldate, shortTimeformat) + ' ';
+              label = label + 'to ' + _filterDateFormat(tl.endTime, tl.useLocaldate, shortTimeformat) + ' UTC ';
             }
           }
         }
