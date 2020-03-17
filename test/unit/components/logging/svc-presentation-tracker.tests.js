@@ -52,6 +52,14 @@ describe('service: presentation tracker:', function() {
     bQSpy.should.not.have.been.called;
   });
 
+  it('should call analytics service with additional properties',function(){
+    presentationTracker('Presentation Created', 'presentationId', 'presentationName', {extra: 'property'});
+
+    expect(eventName).to.equal('Presentation Created');
+    expect(eventData).to.deep.equal({presentationId: 'presentationId', presentationName: 'presentationName', companyId: 'companyId', extra: 'property'});
+    bQSpy.should.have.been.calledWith('Presentation Created', 'presentationId');
+  });
+
   describe('big query logging: ', function() {
     it('should log Presentation Created to BQ',function(){
       presentationTracker('Presentation Created', 'presentationId', 'presentationName');

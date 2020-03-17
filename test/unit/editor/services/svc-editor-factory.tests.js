@@ -89,9 +89,7 @@ describe('service: editorFactory:', function() {
       };
     });
     $provide.service('presentationTracker', function() {
-      return function(name) {
-        trackerCalled = name;
-      };
+      return sinon.stub();
     });
     $provide.service('storeProduct', function() {
       return storeProduct = {
@@ -162,11 +160,10 @@ describe('service: editorFactory:', function() {
       return messageBoxStub;
     });
   }));
-  var editorFactory, trackerCalled, updatePresentation, currentState, $state, stateParams,
+  var editorFactory, presentationTracker, updatePresentation, currentState, $state, stateParams,
     presentationParser, distributionParser, $window, $modal, processErrorCode, createFirstSchedule, userAuthFactory,
     $rootScope, storeProduct, showLegacyWarning;
   beforeEach(function(){
-    trackerCalled = undefined;
     currentState = undefined;
     updatePresentation = true;
 
@@ -181,6 +178,7 @@ describe('service: editorFactory:', function() {
       createFirstSchedule = $injector.get('createFirstSchedule');
       userAuthFactory = $injector.get('userAuthFactory');
       $rootScope = $injector.get('$rootScope');
+      presentationTracker = $injector.get('presentationTracker');
     });
   });
 
@@ -222,7 +220,7 @@ describe('service: editorFactory:', function() {
 
     editorFactory.newPresentation();
 
-    expect(trackerCalled).to.equal('New Presentation');
+    expect(presentationTracker).to.have.been.calledWith('New Presentation');
 
     expect(editorFactory.presentation.layout).to.be.ok;
     presentationParser.parsePresentation.should.have.been.called;
@@ -308,7 +306,11 @@ describe('service: editorFactory:', function() {
 
           setTimeout(function(){
             expect(currentState).to.equal('apps.editor.workspace.artboard');
-            expect(trackerCalled).to.equal('Presentation Created');
+            expect(presentationTracker).to.have.been.calledWith('Presentation Created',
+              'presentationId', 'some presentation', {
+                presentationType: 'Presentation',
+                sharedTemplate: 'blank'
+            });
             expect(editorFactory.savingPresentation).to.be.false;
             expect(editorFactory.loadingPresentation).to.be.false;
             expect(editorFactory.errorMessage).to.not.be.ok;
@@ -360,7 +362,11 @@ describe('service: editorFactory:', function() {
 
           setTimeout(function(){
             expect(currentState).to.equal('apps.editor.workspace.artboard');
-            expect(trackerCalled).to.equal('Presentation Created');
+            expect(presentationTracker).to.have.been.calledWith('Presentation Created',
+              'presentationId', 'some presentation', {
+                presentationType: 'Presentation',
+                sharedTemplate: 'blank'
+            });
             expect(editorFactory.savingPresentation).to.be.false;
             expect(editorFactory.loadingPresentation).to.be.false;
             expect(editorFactory.errorMessage).to.not.be.ok;
@@ -383,7 +389,7 @@ describe('service: editorFactory:', function() {
 
       setTimeout(function(){
         expect(currentState).to.be.empty;
-        expect(trackerCalled).to.not.be.ok;
+        expect(presentationTracker).to.not.have.been.called;
         expect(editorFactory.savingPresentation).to.be.false;
         expect(editorFactory.loadingPresentation).to.be.false;
 
@@ -442,7 +448,7 @@ describe('service: editorFactory:', function() {
           expect(editorFactory.loadingPresentation).to.be.true;
 
           setTimeout(function(){
-            expect(trackerCalled).to.equal('Presentation Updated');
+            expect(presentationTracker).to.have.been.calledWith('Presentation Updated');
 
             expect(editorFactory.savingPresentation).to.be.false;
             expect(editorFactory.loadingPresentation).to.be.false;
@@ -480,7 +486,7 @@ describe('service: editorFactory:', function() {
           expect(editorFactory.loadingPresentation).to.be.true;
 
           setTimeout(function(){
-            expect(trackerCalled).to.equal('Presentation Updated');
+            expect(presentationTracker).to.have.been.calledWith('Presentation Updated');
             expect(editorFactory.savingPresentation).to.be.false;
             expect(editorFactory.loadingPresentation).to.be.false;
             expect(editorFactory.errorMessage).to.not.be.ok;
@@ -500,7 +506,7 @@ describe('service: editorFactory:', function() {
       expect(editorFactory.loadingPresentation).to.be.true;
 
       setTimeout(function(){
-        expect(trackerCalled).to.not.be.ok;
+        expect(presentationTracker).to.not.have.been.called;
         expect(editorFactory.savingPresentation).to.be.false;
         expect(editorFactory.loadingPresentation).to.be.false;
 
@@ -549,7 +555,7 @@ describe('service: editorFactory:', function() {
         expect(editorFactory.loadingPresentation).to.be.false;
         expect(editorFactory.errorMessage).to.not.be.ok;
         expect(editorFactory.apiError).to.not.be.ok;
-        expect(trackerCalled).to.equal('Presentation Deleted');
+        expect(presentationTracker).to.have.been.calledWith('Presentation Deleted');
         expect(currentState).to.equal('apps.editor.list');
         broadcastSpy.should.have.been.calledWith('presentationDeleted');
         done();
@@ -565,7 +571,7 @@ describe('service: editorFactory:', function() {
 
       setTimeout(function(){
         expect(currentState).to.be.empty;
-        expect(trackerCalled).to.not.be.ok;
+        expect(presentationTracker).to.not.have.been.called;
         expect(editorFactory.loadingPresentation).to.be.false;
 
         expect(editorFactory.errorMessage).to.be.ok;
@@ -590,7 +596,7 @@ describe('service: editorFactory:', function() {
       expect(editorFactory.presentation.id).to.not.be.ok;
       expect(editorFactory.presentation.name).to.equal('Copy of New Presentation');
 
-      expect(trackerCalled).to.equal('Presentation Copied');
+      expect(presentationTracker).to.have.been.calledWith('Presentation Copied');
       expect(currentState).to.equal('apps.editor.workspace.artboard');
       expect(stateParams).to.deep.equal({
         presentationId: 'new',
@@ -613,7 +619,7 @@ describe('service: editorFactory:', function() {
       expect(editorFactory.presentation.name).to.equal('Copy of New Presentation');
       expect(editorFactory.presentation.isTemplate).to.be.false;
 
-      expect(trackerCalled).to.equal('Template Copied');
+      expect(presentationTracker).to.have.been.calledWith('Template Copied');
       expect(currentState).to.equal('apps.editor.workspace.artboard');
       expect(stateParams).to.deep.equal({
         presentationId: 'new',
@@ -627,7 +633,7 @@ describe('service: editorFactory:', function() {
     sinon.stub(editorFactory, 'addFromProduct');
 
     editorFactory.addPresentationModal();
-    expect(trackerCalled).to.equal("Add Presentation");
+    expect(presentationTracker).to.have.been.calledWith("Add Presentation");
 
     setTimeout(function() {
       editorFactory.addFromProduct.should.have.been.called;
@@ -760,7 +766,7 @@ describe('service: editorFactory:', function() {
     var $modalOpenSpy = sinon.spy($modal, 'open');
 
     editorFactory.addFromSharedTemplateModal();
-    expect(trackerCalled).to.equal("Add Presentation from Shared Template");
+    expect(presentationTracker).to.have.been.calledWith("Add Presentation from Shared Template");
 
     $modalOpenSpy.should.have.been.calledWith({
       templateUrl: 'partials/editor/shared-templates-modal.html',
@@ -774,7 +780,7 @@ describe('service: editorFactory:', function() {
       expect(editorFactory.presentation.id).to.not.be.ok;
       expect(editorFactory.presentation.name).to.equal('Copy of some presentation');
 
-      expect(trackerCalled).to.equal('Presentation Copied');
+      expect(presentationTracker).to.have.been.calledWith('Presentation Copied');
       expect(currentState).to.equal('apps.editor.workspace.artboard');
       expect(stateParams).to.deep.equal({
         presentationId: 'new',
@@ -862,7 +868,7 @@ describe('service: editorFactory:', function() {
       expect(editorFactory.loadingPresentation).to.be.true;
 
       setTimeout(function(){
-        expect(trackerCalled).to.equal('Presentation Published');
+        expect(presentationTracker).to.have.been.calledWith('Presentation Published');
         expect(editorFactory.presentation.revisionStatusName).to.equal('Published');
         expect(editorFactory.presentation.changeDate).to.be.gte(timeBeforePublish);
         expect(editorFactory.presentation.changedBy).to.equal("testusername");
@@ -883,7 +889,7 @@ describe('service: editorFactory:', function() {
       expect(editorFactory.loadingPresentation).to.be.true;
 
       setTimeout(function(){
-        expect(trackerCalled).to.not.be.ok;
+        expect(presentationTracker).to.not.have.been.called;
         expect(editorFactory.savingPresentation).to.be.false;
         expect(editorFactory.loadingPresentation).to.be.false;
         expect(editorFactory.errorMessage).to.be.ok;
@@ -902,7 +908,11 @@ describe('service: editorFactory:', function() {
       editorFactory.save();
 
       setTimeout(function(){
-        expect(trackerCalled).to.equal("Presentation Created");
+        expect(presentationTracker).to.have.been.calledWith('Presentation Created',
+          'presentationId', 'some presentation', {
+            presentationType: 'Presentation',
+            sharedTemplate: 'blank'
+        });
         broadcastSpy.should.have.been.calledWith('presentationCreated');
 
         done();
@@ -915,7 +925,7 @@ describe('service: editorFactory:', function() {
       editorFactory.save();
 
       setTimeout(function(){
-        expect(trackerCalled).to.equal("Presentation Updated");
+        expect(presentationTracker).to.have.been.calledWith("Presentation Updated");
 
         done();
       }, 10);
@@ -931,7 +941,7 @@ describe('service: editorFactory:', function() {
       expect(editorFactory.loadingPresentation).to.be.true;
 
       setTimeout(function(){
-        expect(trackerCalled).to.equal('Presentation Restored');
+        expect(presentationTracker).to.have.been.calledWith('Presentation Restored');
         expect(editorFactory.loadingPresentation).to.be.false;
         expect(editorFactory.presentation).to.be.truely;
         expect(editorFactory.presentation.name).to.equal("restored presentation");
@@ -953,7 +963,7 @@ describe('service: editorFactory:', function() {
       expect(editorFactory.loadingPresentation).to.be.true;
 
       setTimeout(function(){
-        expect(trackerCalled).to.not.be.ok;
+        expect(presentationTracker).to.not.have.been.called;
         expect(editorFactory.loadingPresentation).to.be.false;
         expect(editorFactory.errorMessage).to.be.ok;
         expect(editorFactory.apiError).to.be.ok;

@@ -157,7 +157,8 @@ describe('service: templateEditorFactory:', function() {
       sandbox.stub(presentation, 'add').returns(Q.resolve({
         item: {
           name: 'Test Presentation',
-          id: 'presentationId'
+          id: 'presentationId',
+          productCode: 'test-id'
         }
       }));
 
@@ -311,7 +312,10 @@ describe('service: templateEditorFactory:', function() {
             expect($state.go).to.have.been.calledWith('apps.editor.templates.edit');
             expect(presentation.add.getCall(0).args[0].templateAttributeData).to.equal('{}');
             expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
-            expect(presentationTracker).to.have.been.calledWith('Presentation Created', 'presentationId', 'Test Presentation');
+            expect(presentationTracker).to.have.been.calledWith('Presentation Created', 'presentationId', 'Test Presentation', {
+              presentationType: 'HTML Template',
+              sharedTemplate: 'test-id'
+            });
 
             done();
           })
