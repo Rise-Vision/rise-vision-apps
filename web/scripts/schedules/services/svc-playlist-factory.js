@@ -12,7 +12,10 @@ angular.module('risevision.schedules.services')
 
       factory.newPresentationItem = function (presentation) {
         scheduleTracker('Add Presentation to Schedule',
-          scheduleFactory.schedule.id, scheduleFactory.schedule.name
+          scheduleFactory.schedule.id, scheduleFactory.schedule.name, {
+            presentationId: presentation.id,
+            presentationName: presentation.name
+          }
         );
 
         // Cache presentation to avoid API call for the name
