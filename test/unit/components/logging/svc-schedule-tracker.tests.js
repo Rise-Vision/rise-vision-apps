@@ -45,10 +45,10 @@ describe('service: schedule tracker:', function() {
   });
   
   it('should call analytics service',function(){
-    scheduleTracker('Schedule Updated', 'scheduleId', 'scheduleName');
+    scheduleTracker('Schedule Updated', 'scheduleId', 'scheduleName', {extra: 'property'});
 
     expect(eventName).to.equal('Schedule Updated');
-    expect(eventData).to.deep.equal({scheduleId: 'scheduleId', scheduleName: 'scheduleName', companyId: 'companyId'});
+    expect(eventData).to.deep.equal({scheduleId: 'scheduleId', scheduleName: 'scheduleName', companyId: 'companyId', extra: 'property'});
     bQSpy.should.not.have.been.called;
   });
 

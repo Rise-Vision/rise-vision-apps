@@ -181,7 +181,7 @@ angular.module('risevision.common.header')
 
         updateUser(username, user).then(function (resp) {
           if (resp && resp.item) {
-            userState.updateUserProfile(resp.item);            
+            userState.updateUserProfile(resp.item);
           }
 
           $log.debug('User Profile updated');

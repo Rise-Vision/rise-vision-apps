@@ -75,7 +75,10 @@ angular.module('risevision.template-editor.services')
             if (resp && resp.item && resp.item.id) {
               $rootScope.$broadcast('presentationCreated');
 
-              presentationTracker('Presentation Created', resp.item.id, resp.item.name);
+              presentationTracker('Presentation Created', resp.item.id, resp.item.name, {
+                presentationType: 'HTML Template',
+                sharedTemplate: resp.item.productCode
+              });
 
               $state.go('apps.editor.templates.edit', {
                 presentationId: resp.item.id,

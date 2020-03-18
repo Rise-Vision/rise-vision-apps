@@ -92,6 +92,9 @@ describe("controller: user settings", function() {
         checkUsername: sinon.spy(function(username) {
           return username === "user@example.io";
         }),
+        getUsername: function() {
+          return "user@example.io";
+        },
         getAccessToken : function(){
           return{access_token: "TEST_TOKEN"};
         },
@@ -224,8 +227,8 @@ describe("controller: user settings", function() {
         expect($scope.loading).to.be.false;
         userProfileSpy.should.have.been.once;
 
-        userTracker.should.have.been.calledWith('User Updated');
-        $modalInstance.close.should.have.been.calledWith('success');
+        userTracker.should.have.been.calledWith("User Updated", "user@example.io", true, {updatedUserId: "user@example.io"});
+        $modalInstance.close.should.have.been.calledWith("success");
         
         done();
       },10);
@@ -350,8 +353,8 @@ describe("controller: user settings", function() {
       setTimeout(function() {
         expect($scope.loading).to.be.false;
         
-        userTracker.should.have.been.calledWith('User Deleted');
-        $modalInstance.dismiss.should.have.been.calledWith('deleted');
+        userTracker.should.have.been.calledWith("User Deleted", "user@example.io", true, {deletedUserId: "user@example.io"});
+        $modalInstance.dismiss.should.have.been.calledWith("deleted");
 
         done();
       }, 10);

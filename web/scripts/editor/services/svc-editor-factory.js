@@ -179,8 +179,10 @@ angular.module('risevision.editor.services')
           })
           .then(function (resp) {
             if (resp && resp.item && resp.item.id) {
-              presentationTracker('Presentation Created', resp.item.id,
-                resp.item.name);
+              presentationTracker('Presentation Created', resp.item.id, resp.item.name, {
+                presentationType: 'Presentation',
+                sharedTemplate: 'blank'
+              });
 
               $rootScope.$broadcast('presentationCreated');
 

@@ -38,16 +38,13 @@ describe('service: playlistFactory:', function() {
       };
     });
     $provide.service('scheduleTracker', function() { 
-      return function(name) {
-        trackerCalled = name;
-      };
+      return sinon.spy();
     });
   }));
   var playlist, playlistItem, playlistItem0, playlistItem2, playlistFactory, blueprintFactory, presentationFactory;
-  var trackerCalled, updateSchedule, currentState;
+  var scheduleTracker, updateSchedule, currentState;
   var scheduleFactory;
   beforeEach(function(){
-    trackerCalled = undefined;
     currentState = undefined;
     updateSchedule = true;
     
@@ -55,6 +52,7 @@ describe('service: playlistFactory:', function() {
       playlistFactory = $injector.get('playlistFactory');
       blueprintFactory = $injector.get('blueprintFactory');
       presentationFactory = $injector.get('presentationFactory');
+      scheduleTracker = $injector.get('scheduleTracker');
     });
   });
 
@@ -100,7 +98,7 @@ describe('service: playlistFactory:', function() {
   it('getNewUrlItem: ', function() {
     var playlistItem = playlistFactory.getNewUrlItem();
     
-    expect(trackerCalled).to.equal('Add URL Item to Schedule');
+    expect(scheduleTracker).to.have.been.calledWith('Add URL Item to Schedule');
     expect(playlistItem.duration).to.equal(10);
     expect(playlistItem.type).to.equal('url');
     expect(playlistItem.name).to.equal('URL Item');
@@ -129,7 +127,11 @@ describe('service: playlistFactory:', function() {
       it('should cache presentation', function() {
         playlistFactory.newPresentationItem(presentation);
 
-        expect(trackerCalled).to.equal('Add Presentation to Schedule');
+        expect(scheduleTracker).to.have.been.calledWith( 'Add Presentation to Schedule', 
+          scheduleFactory.schedule.id, scheduleFactory.schedule.name, {
+          presentationId: presentation.id,
+          presentationName: presentation.name
+        });
 
         presentationFactory.setPresentation.should.have.been.calledWith(presentation);
       });

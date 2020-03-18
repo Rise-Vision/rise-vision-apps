@@ -75,7 +75,9 @@ angular.module('risevision.common.header')
 
             deleteUser($scope.username)
               .then(function () {
-                userTracker('User Deleted', $scope.username, userState.checkUsername(username));
+                userTracker('User Deleted', userState.getUsername(), userState.checkUsername(username), {
+                  deletedUserId: username
+                });
 
                 if (userState.checkUsername(username)) {
                   userAuthFactory.signOut().then().finally(function () {
@@ -136,7 +138,9 @@ angular.module('risevision.common.header')
                 userState.updateUserProfile(resp.item);
               }
 
-              userTracker('User Updated', $scope.username, userState.checkUsername(username));
+              userTracker('User Updated', userState.getUsername(), userState.checkUsername(username), {
+                updatedUserId: username
+              });
 
               $modalInstance.close('success');
             })

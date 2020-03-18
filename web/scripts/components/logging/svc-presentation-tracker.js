@@ -11,13 +11,14 @@ angular.module('risevision.common.components.logging')
     'bigQueryLogging', 'PRESENTATION_EVENTS_TO_BQ',
     function (userState, analyticsFactory, bigQueryLogging,
       PRESENTATION_EVENTS_TO_BQ) {
-      return function (eventName, presentationId, presentationName) {
+      return function (eventName, presentationId, presentationName, extraProperties) {
         if (eventName) {
-          analyticsFactory.track(eventName, {
-            presentationId: presentationId,
-            presentationName: presentationName,
-            companyId: userState.getSelectedCompanyId()
-          });
+          var properties = extraProperties || {};
+          properties.presentationId = presentationId;
+          properties.presentationName = presentationName;
+          properties.companyId = userState.getSelectedCompanyId();
+
+          analyticsFactory.track(eventName, properties);
           if (PRESENTATION_EVENTS_TO_BQ.indexOf(eventName) !== -1) {
             bigQueryLogging.logEvent(eventName, presentationId);
           }
