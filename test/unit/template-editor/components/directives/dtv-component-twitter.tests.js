@@ -73,6 +73,7 @@ describe('directive: templateComponentTwitter', function() {
 
       expect($scope.setAttributeData).to.have.been.called;
       expect($scope.setAttributeData.lastCall.args[1]).to.equal('credentialsUpdated');
+      expect($scope.setAttributeData.lastCall.args[2]).to.be.ok;
 
       done();
     });
