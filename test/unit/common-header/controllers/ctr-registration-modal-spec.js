@@ -103,13 +103,6 @@ describe("controller: registration modal", function() {
       };
     });
 
-    $provide.service("analyticsEvents", function() { 
-      return {
-        initialize: function() {},
-        identify: function() {}
-      };
-    });
-
     $provide.factory("customLoader", function ($q) {
       return function () {
         var deferred = $q.defer();
@@ -125,7 +118,7 @@ describe("controller: registration modal", function() {
         
   }));
   var $scope, userProfile, userState, $modalInstance, newUser;
-  var registerUser, account, analyticsFactory, bqCalled, identifySpy,
+  var registerUser, account, analyticsFactory, bqCalled,
     updateCompanyCalled, plansFactory;
   
   beforeEach(function() {
@@ -142,8 +135,6 @@ describe("controller: registration modal", function() {
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
       $modalInstance = $injector.get("$modalInstance");
-      var analyticsEvents = $injector.get("analyticsEvents");
-      identifySpy = sinon.spy(analyticsEvents,"identify");
       analyticsFactory = $injector.get("analyticsFactory");
       userState = $injector.get("userState");
       $controller("RegistrationModalCtrl", {
@@ -207,7 +198,6 @@ describe("controller: registration modal", function() {
       setTimeout(function() {
         expect(newUser).to.be.true;
         plansFactory.initVolumePlanTrial.should.have.been.called;
-        identifySpy.should.have.been.called;
         expect(analyticsFactory.track).to.have.been.calledWith("User Registered",{
           companyId: "some_company_id",
           companyName: "company_name",
@@ -236,7 +226,6 @@ describe("controller: registration modal", function() {
       setTimeout(function(){
         expect(newUser).to.be.true;
         plansFactory.initVolumePlanTrial.should.not.have.been.called;
-        identifySpy.should.not.have.been.called;
         expect(analyticsFactory.track).to.not.have.been.called;
         expect(bqCalled).to.not.be.ok;
         expect($scope.registering).to.be.false;
@@ -270,7 +259,6 @@ describe("controller: registration modal", function() {
       setTimeout(function() {
         expect(newUser).to.be.false;
         plansFactory.initVolumePlanTrial.should.not.have.been.called;
-        identifySpy.should.have.been.called;
         expect(analyticsFactory.track).to.have.been.calledWithMatch("User Registered",{
           companyId: "some_company_id",
           companyName: "company_name",
