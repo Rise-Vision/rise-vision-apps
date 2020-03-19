@@ -39,6 +39,7 @@ angular.module('risevision.template-editor.directives')
               })
               .finally(function () {
                 $scope.spinner = false;
+                $scope.setAttributeData($scope.componentId, 'credentialsUpdated', Date.now());
               });
           };
 
