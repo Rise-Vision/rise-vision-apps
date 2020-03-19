@@ -90,8 +90,7 @@ describe('directive: templateComponentTwitter', function() {
       expect($scope.connected).to.be.false;
       expect($scope.connectionFailure).to.be.true;
 
-      expect($scope.setAttributeData).to.have.been.called;
-      expect($scope.setAttributeData.lastCall.args[1]).to.equal('credentialsUpdated');
+      expect($scope.setAttributeData).to.have.not.been.called;
 
       done();
     });

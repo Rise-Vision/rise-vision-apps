@@ -34,12 +34,13 @@ angular.module('risevision.template-editor.directives')
               .then(function (key) {
                 $scope.connected = true;
                 $scope.connectionFailure = false;
+
+                $scope.setAttributeData($scope.componentId, 'credentialsUpdated', Date.now());
               }, function () {
                 _handleConnectionFailure();
               })
               .finally(function () {
                 $scope.spinner = false;
-                $scope.setAttributeData($scope.componentId, 'credentialsUpdated', Date.now());
               });
           };
 
