@@ -63,6 +63,13 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     $provide.service('userState', function() {
       return userState;
     });
+    $provide.service('templateEditorFactory', function() {
+      return {
+        trustAsResourceUrl: function(url) {
+          return url;
+        }
+      };
+    });
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $window, _$timeout_,$injector){
