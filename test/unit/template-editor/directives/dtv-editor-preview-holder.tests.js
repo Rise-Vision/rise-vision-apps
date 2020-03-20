@@ -63,7 +63,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     $provide.service('userState', function() {
       return userState;
     });
-    $provide.service('templateEditorFactory', function() {
+    $provide.service('$sce', function() {
       return {
         trustAsResourceUrl: function(url) {
           return url;
