@@ -9,6 +9,17 @@
 </div>
 <div class="row">
   <div class="col-md-6">
+    <div class="form-group" ng-class="{'has-error': forms.companyForm.companyIndustry.$invalid && !forms.companyForm.companyIndustry.$pristine}">
+      <label for="company-industry" class="control-label">
+        Industry *
+      </label>
+      <select id="company-industry" class="form-control selectpicker" ng-model="company.companyIndustry" name="companyIndustry" required>
+        <option value="" ng-show="true">&lt; Select Industry &gt;</option>
+        <option ng-repeat="industry in COMPANY_INDUSTRY_FIELDS | orderBy:industry[0]" value="{{industry[1]}}">{{industry[0]}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-md-6">
     <div class="form-group">
       <label for="company-size" class="control-label">
         Company Size
@@ -16,17 +27,6 @@
       <select id="company-size" class="form-control" ng-model="company.companySize">
         <option value="" ng-show="false">&lt; Select Size &gt;</option>
         <option ng-repeat="size in COMPANY_SIZE_FIELDS" value="{{size[1]}}">{{size[0]}}</option>
-      </select>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="form-group">
-      <label for="company-industry" class="control-label">
-        Industry
-      </label>
-      <select id="company-industry" class="form-control selectpicker" ng-model="company.companyIndustry">
-        <option value="" ng-show="false">&lt; Select Industry &gt;</option>
-        <option ng-repeat="industry in COMPANY_INDUSTRY_FIELDS | orderBy:industry[0]" value="{{industry[1]}}">{{industry[0]}}</option>
       </select>
     </div>
   </div>
