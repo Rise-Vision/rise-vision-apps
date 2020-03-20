@@ -14,7 +14,7 @@
         Industry *
       </label>
       <select id="company-industry" class="form-control selectpicker" ng-model="company.companyIndustry" name="companyIndustry" required>
-        <option value="" ng-show="true">&lt; Select Industry &gt;</option>
+        <option value="" ng-show="false">&lt; Select Industry &gt;</option>
         <option ng-repeat="industry in COMPANY_INDUSTRY_FIELDS | orderBy:industry[0]" value="{{industry[1]}}">{{industry[0]}}</option>
       </select>
     </div>
