@@ -63,13 +63,6 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     $provide.service('userState', function() {
       return userState;
     });
-    $provide.service('$sce', function() {
-      return {
-        trustAsResourceUrl: function(url) {
-          return url;
-        }
-      };
-    });
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $window, _$timeout_,$injector){
@@ -294,7 +287,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     it('should include presentation id in template URL', function() {
       var url = $scope.getEditorPreviewUrl('AAAA');
 
-      expect(url).to.equal('https://widgets.risevision.com/staging/templates/AAAA/src/template.html?presentationId=xxxxyyyy');
+      expect(url.toString()).to.equal('https://widgets.risevision.com/staging/templates/AAAA/src/template.html?presentationId=xxxxyyyy');
     });
   });
 
