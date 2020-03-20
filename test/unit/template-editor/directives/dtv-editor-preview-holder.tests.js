@@ -283,7 +283,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     });
   });
 
-  describe('getDesktopWidth', function() {
+  describe('getEditorPreviewUrl', function() {
     it('should include presentation id in template URL', function() {
       var url = $scope.getEditorPreviewUrl('AAAA');
 
