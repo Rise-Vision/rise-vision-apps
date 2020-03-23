@@ -36,27 +36,27 @@ var TwitterComponentScenarios = function () {
         expect(twitterComponentPage.getUsername().isEnabled()).to.eventually.be.true;
         expect(twitterComponentPage.getMaxitems().isEnabled()).to.eventually.be.true;
       });
-    });
 
-    it('should change username and maxitems', function () {
-      helper.wait(twitterComponentPage.getUsername(), 'Username');
-      browser.sleep(500);
-      twitterComponentPage.getUsername().clear();
-      browser.sleep(500);
-      twitterComponentPage.getUsername().sendKeys("risevision" + protractor.Key.ENTER);
+      it('should change username and maxitems', function () {
+        helper.wait(twitterComponentPage.getUsername(), 'Username');
+        browser.sleep(500);
+        twitterComponentPage.getUsername().clear();
+        browser.sleep(500);
+        twitterComponentPage.getUsername().sendKeys("risevision" + protractor.Key.ENTER);
 
-      //wait for presentation to be auto-saved
-      templateEditorPage.waitForAutosave();
-    });
+        //wait for presentation to be auto-saved
+        templateEditorPage.waitForAutosave();
+      });
 
-    it('should reload the Presentation, and validate changes were saved', function () {
-      // Load presentation
-      presentationsListPage.loadPresentation(presentationName);
-      templateEditorPage.selectComponent(componentLabel);
+      it('should reload the Presentation, and validate changes were saved', function () {
+        // Load presentation
+        presentationsListPage.loadPresentation(presentationName);
+        templateEditorPage.selectComponent(componentLabel);
 
-      helper.wait(twitterComponentPage.getUsername(), 'Username');
+        helper.wait(twitterComponentPage.getUsername(), 'Username');
 
-      expect(twitterComponentPage.getUsername().getAttribute('value')).to.eventually.equal('risevision');
+        expect(twitterComponentPage.getUsername().getAttribute('value')).to.eventually.equal('risevision');
+      });
     });
   });
 };
