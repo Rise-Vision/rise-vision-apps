@@ -33,12 +33,12 @@
       commonHeaderPage.selectSubCompany(subCompanyName);
     });
 
-    //var imageComponentScenarios = new ImageComponentScenarios();
-    //var slidesComponentScenarios = new SlidesComponentScenarios();
-    //var videoComponentScenarios = new VideoComponentScenarios();
-    //var rssComponentScenarios = new RssComponentScenarios();
-    //var counterComponentScenarios = new CounterComponentScenarios();
-    //var timeDateComponentScenarios = new TimeDateComponentScenarios();
+    var imageComponentScenarios = new ImageComponentScenarios();
+    var slidesComponentScenarios = new SlidesComponentScenarios();
+    var videoComponentScenarios = new VideoComponentScenarios();
+    var rssComponentScenarios = new RssComponentScenarios();
+    var counterComponentScenarios = new CounterComponentScenarios();
+    var timeDateComponentScenarios = new TimeDateComponentScenarios();
     var twitterComponentScenarios = new TwitterComponentScenarios();
 
     after(function() {
