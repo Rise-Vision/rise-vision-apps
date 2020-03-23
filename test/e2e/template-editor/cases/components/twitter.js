@@ -38,7 +38,7 @@ var TwitterComponentScenarios = function () {
       });
 
       it('should change username and maxitems', function () {
-        helper.wait(twitterComponentPage.getUsername(), 'Username');
+        expect(twitterComponentPage.getUsername().isEnabled()).to.eventually.be.true;
         browser.sleep(500);
         twitterComponentPage.getUsername().clear();
         browser.sleep(500);
@@ -53,8 +53,7 @@ var TwitterComponentScenarios = function () {
         presentationsListPage.loadPresentation(presentationName);
         templateEditorPage.selectComponent(componentLabel);
 
-        helper.wait(twitterComponentPage.getUsername(), 'Username');
-
+        expect(twitterComponentPage.getUsername().isEnabled()).to.eventually.be.true;
         expect(twitterComponentPage.getUsername().getAttribute('value')).to.eventually.equal('risevision');
       });
     });
