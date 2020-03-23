@@ -8,7 +8,7 @@ describe("Services: analyticsFactory", function() {
     $provide.factory("userState", [function () {
       return {
         getCopyOfProfile: function() {
-          return {};
+          return profile;
         },
         getUsername: function() {
           return "username";
@@ -43,11 +43,14 @@ describe("Services: analyticsFactory", function() {
     }]);
   }));
   
-  var analyticsFactory, analyticsEvents, $scope, companyId, $window;
+  var analyticsFactory, analyticsEvents, $scope, companyId, $window, profile;
   beforeEach(function(){
     inject(function($rootScope, $injector){
       $scope = $rootScope;
       companyId = "companyId";
+      profile = {
+        termsAcceptanceDate: "2020-01-01"
+      };
       
       analyticsFactory = $injector.get("analyticsFactory");
       $window = $injector.get("$window");
@@ -81,6 +84,7 @@ describe("Services: analyticsFactory", function() {
         email: undefined,
         firstName: "",
         lastName: "",
+        registeredDate: "2020-01-01",
         subscriptionRenewalDate: undefined,
         subscriptionStatus: "Free",
         subscriptionTrialExpiryDate: undefined
@@ -103,6 +107,38 @@ describe("Services: analyticsFactory", function() {
     }, 10);
   });
 
+  it("should identify user but not send 'logged in' event if user has not finalized registration", function(done) {
+    var identifySpy = sinon.spy(analyticsFactory, "identify");
+    var trackSpy = sinon.spy(analyticsFactory, "track");
+
+    profile.termsAcceptanceDate = undefined;
+
+    analyticsEvents.identify();
+    
+    setTimeout(function() {
+      var expectProperties = {
+        company: { id: "companyId", name: "companyName", companyIndustry: "K-12 Education", parentId: "parent123" },
+        companyId: "companyId",
+        companyName: "companyName",
+        companyIndustry: "K-12 Education",
+        parentId: "parent123",
+        userId: "username",
+        email: undefined,
+        firstName: "",
+        lastName: "",
+        registeredDate: undefined,
+        subscriptionRenewalDate: undefined,
+        subscriptionStatus: "Free",
+        subscriptionTrialExpiryDate: undefined
+      };
+      identifySpy.should.have.been.calledWith("username",expectProperties);
+
+      trackSpy.should.not.have.been.called;
+      
+      done();
+    }, 10);
+  });
+
   it("should identify user when authorized and track logged in event", function(done) {
     var identifySpy = sinon.spy(analyticsFactory, "identify");
     var trackSpy = sinon.spy(analyticsFactory, "track");
@@ -121,6 +157,7 @@ describe("Services: analyticsFactory", function() {
         email: undefined,
         firstName: "",
         lastName: "",
+        registeredDate: "2020-01-01",
         subscriptionRenewalDate: undefined,
         subscriptionStatus: "Free",
         subscriptionTrialExpiryDate: undefined
@@ -147,7 +184,8 @@ describe("Services: analyticsFactory", function() {
         userId: "username",
         email: undefined,
         firstName: "",
-        lastName: ""
+        lastName: "",
+        registeredDate: "2020-01-01"
       });
       done();
     }, 10);
