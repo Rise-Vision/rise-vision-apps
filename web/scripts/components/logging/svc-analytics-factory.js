@@ -110,6 +110,7 @@
               email: profile.email,
               firstName: profile.firstName ? profile.firstName : '',
               lastName: profile.lastName ? profile.lastName : '',
+              registeredDate: profile.termsAcceptanceDate
             };
             if (userState.getUserCompanyId()) {
               var company = userState.getCopyOfUserCompany();
@@ -132,9 +133,12 @@
 
             analyticsFactory.identify(userState.getUsername(), properties);
 
-            var loggedInProperties = angular.copy(properties);
-            loggedInProperties.loginDate = new Date();
-            analyticsFactory.track('logged in', loggedInProperties);
+            //send 'logged in' event only if user has finalized sign up
+            if (profile.termsAcceptanceDate) {
+              var loggedInProperties = angular.copy(properties);
+              loggedInProperties.loginDate = new Date();
+              analyticsFactory.track('logged in', loggedInProperties);
+            }
           }
         };
 

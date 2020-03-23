@@ -38,6 +38,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     $provide.service('templateEditorFactory', function() {
       return {
         presentation: {
+          id: 'xxxxyyyy',
           templateAttributeData: {
             components: [
               {id:'image', metadata: 'originalMetadata1'},
@@ -61,7 +62,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     });
     $provide.service('userState', function() {
       return userState;
-    });    
+    });
   }));
 
   beforeEach(inject(function($compile, $rootScope, $templateCache, $window, _$timeout_,$injector){
@@ -130,7 +131,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
         done();
       },10);
-    });    
+    });
 
     it('posts display data when branding colors have changed', function(done) {
       iframe.onload();
@@ -146,7 +147,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
         done();
       },10);
-    });    
+    });
   });
 
   describe('_updateLogoData', function() {
@@ -272,13 +273,21 @@ describe('directive: TemplateEditorPreviewHolder', function() {
     it('should setup components on load',function(){
 
       iframe.onload();
-      
+
       //send attributes data
       expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal([ '{"type":"attributeData","value":{"components":[{"id":"image","metadata":"originalMetadata1"},{"id":"logo","metadata":"logoMetadata"}]}}', 'https://widgets.risevision.com' ]);
       //send start event
       expect(iframe.contentWindow.postMessage.getCall(1).args).to.deep.equal([ '{"type":"sendStartEvent"}', 'https://widgets.risevision.com' ]);
       //send display data
       expect(iframe.contentWindow.postMessage.getCall(2).args).to.deep.equal([ '{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"baseColor":"baseColor","accentColor":"accentColor"}}}', 'https://widgets.risevision.com' ]);
+    });
+  });
+
+  describe('getEditorPreviewUrl', function() {
+    it('should include presentation id in template URL', function() {
+      var url = $scope.getEditorPreviewUrl('AAAA');
+
+      expect(url.toString()).to.equal('https://widgets.risevision.com/staging/templates/AAAA/src/template.html?presentationId=xxxxyyyy');
     });
   });
 

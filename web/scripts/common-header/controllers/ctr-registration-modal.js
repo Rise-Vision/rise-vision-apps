@@ -6,13 +6,12 @@ angular.module('risevision.common.header')
     '$loading', 'addAccount', '$exceptionHandler',
     'userState', 'pick', 'uiFlowManager', 'messageBox', 'humanReadableError',
     'agreeToTermsAndUpdateUser', 'account', 'analyticsFactory',
-    'bigQueryLogging', 'analyticsEvents', 'updateCompany', 'plansFactory',
+    'bigQueryLogging', 'updateCompany', 'plansFactory',
     'COMPANY_INDUSTRY_FIELDS', 'urlStateService', 'getAccount',
     function ($q, $scope, $rootScope, $modalInstance, $loading, addAccount,
       $exceptionHandler, userState, pick, uiFlowManager, messageBox, humanReadableError,
       agreeToTermsAndUpdateUser, account, analyticsFactory, bigQueryLogging,
-      analyticsEvents, updateCompany, plansFactory, COMPANY_INDUSTRY_FIELDS,
-      urlStateService, getAccount) {
+      updateCompany, plansFactory, COMPANY_INDUSTRY_FIELDS, urlStateService, getAccount) {
 
       $scope.newUser = !account;
       $scope.DROPDOWN_INDUSTRY_FIELDS = COMPANY_INDUSTRY_FIELDS;
@@ -93,7 +92,6 @@ angular.module('risevision.common.header')
                     plansFactory.initVolumePlanTrial();
                   }
 
-                  analyticsEvents.identify();
                   var userCompany = userState.getCopyOfUserCompany();
                   var userProfile = userState.getCopyOfProfile();
                   analyticsFactory.track('User Registered', {
