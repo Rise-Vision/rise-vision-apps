@@ -1,15 +1,15 @@
-<div class="form-group" ng-class="{'has-error': forms.companyForm.name.$invalid && !forms.companyForm.name.$pristine}">
-  <label for="company-settings-name">
+<div class="form-group" ng-class="{'has-error': (forms.companyForm.name.$dirty || forms.companyForm.$submitted) && forms.companyForm.name.$invalid }">
+  <label for="company-settings-name" class="control-label">
     Company Name *
   </label>
   <input required id="company-settings-name" type="text" class="form-control"
     ng-model="company.name" name="name" />
-  <p ng-show="forms.companyForm.name.$invalid && !forms.companyForm.name.$pristine"
+  <p ng-show="(forms.companyForm.name.$dirty || forms.companyForm.$submitted) && forms.companyForm.name.$invalid"
     class="help-block validation-error-message-name">Company Name is required.</p>
 </div>
 <div class="row">
   <div class="col-md-6">
-    <div class="form-group" ng-class="{'has-error': forms.companyForm.companyIndustry.$invalid && !forms.companyForm.companyIndustry.$pristine}">
+    <div class="form-group" ng-class="{'has-error': (forms.companyForm.companyIndustry.$dirty || forms.companyForm.$submitted) && forms.companyForm.companyIndustry.$invalid }">
       <label for="company-industry" class="control-label">
         Industry *
       </label>
@@ -17,6 +17,8 @@
         <option value="" ng-show="false">&lt; Select Industry &gt;</option>
         <option ng-repeat="industry in COMPANY_INDUSTRY_FIELDS | orderBy:industry[0]" value="{{industry[1]}}">{{industry[0]}}</option>
       </select>
+      <p ng-show="(forms.companyForm.companyIndustry.$dirty || forms.companyForm.$submitted) && forms.companyForm.companyIndustry.$invalid"
+        class="help-block validation-error-message-name">Please select an Industry.</p>
     </div>
   </div>
   <div class="col-md-6">
@@ -122,7 +124,7 @@
   </select>
 </div>
 <div class="form-group" ng-show="company.isChargebee" ng-class="{'has-error': forms.companyForm.billingContactEmails.$invalid}">
-  <label class="form-control-label">Billing Notifications Email</label>
+  <label class="control-label">Billing Notifications Email</label>
   <emails-field name="billingContactEmails" ng-model="company.billingContactEmails" require-emails-on-change="true"></emails-field>
   <ng-messages role="alert" for="forms.companyForm.billingContactEmails.$error">
     <p ng-message="emails" class="help-block">Please provide a valid email.</p>
