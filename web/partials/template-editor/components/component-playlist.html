@@ -10,15 +10,15 @@
       <div rv-sortable on-sort="sortItem(evt)" append-to=".component-container" class="sortable-list">
         <div class="row templates-row  rv-sortable-item" ng-show="selectedTemplates.length > 0"
             ng-repeat="(key, value) in selectedTemplates">
-          <div class="list-grip pr-4 rv-sortable-handle">
-            <img class="img-responsive" src="../images/navigation-menu-vertical.svg">
+          <div class="col-xs-1 pl-0 pr-0">
+            <div class="list-grip pr-4 rv-sortable-handle">
+              <img class="img-responsive" src="../images/navigation-menu-vertical.svg">
+            </div>
           </div>
-          <div class="col-xs-10 pl-0 pr-0">
-            <span class="playlist-item-name">
-              <div class="templates-name">{{ value.name }}</div>
-              <div class="templates-status templates-status-inline" ng-class="{'templates-status-revised' : value.revisionStatusName === 'Revised'}">{{ value.revisionStatusName }}</div>
-              <div class="templates-status templates-status-inline" > • {{ durationToText(value) }}</div>
-            </span>
+          <div class="col-xs-9 pl-0 pr-0">
+            <div class="u_text-ellipsis templates-name" >{{ value.name }}</div>
+            <div class="templates-status templates-status-inline" ng-class="{'templates-status-revised' : value.revisionStatusName === 'Revised'}">{{ value.revisionStatusName }}</div>
+            <div class="templates-status templates-status-inline" > • {{ durationToText(value) }}</div>
           </div>
           <div class="col-xs-2 pr-0 playlist-item-actions">
             <a href="#"

@@ -24,10 +24,6 @@
     margin-left: var(--duration-group-offset);
   }
 
-  .playlist-item-name {
-    display: inline-block;
-  }
-
   .templates-selector {
     height: var(--selector-body-height);
     padding-top: 0px;
@@ -75,12 +71,6 @@
     font-weight: bold;
     letter-spacing: 0px;
     line-height: 20px;
-  }
-
-  .templates-name-ellipsis {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .templates-status {
