@@ -52,7 +52,7 @@
     "run-sequence": "^1.1.1",
     "rv-common-e2e": "git://github.com/Rise-Vision/rv-common-e2e.git",
     "terser": "^4.0.0",
-    "widget-tester": "git://github.com/Rise-Vision/widget-tester.git#chore/update-depdendencies"
+    "widget-tester": "git://github.com/Rise-Vision/widget-tester.git"
   },
   "repository": {
     "type": "git",
