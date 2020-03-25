@@ -30,47 +30,25 @@ angular.module('risevision.common.header')
     ['Student', 'education_student']
   ])
   .value('COMPANY_INDUSTRY_FIELDS', [
-    ['K-12 Education', 'PRIMARY_SECONDARY_EDUCATION',
-      'https://cdn2.hubspot.net/hubfs/2700250/Assets%20May%5B17%5D/university.svg'
-    ],
-    ['Higher Education', 'HIGHER_EDUCATION',
-      'https://www.risevision.com/hubfs/mortarboard-2.svg?t=1502211789708'
-    ],
-    ['Religious', 'RELIGIOUS_INSTITUTIONS',
-      'https://www.risevision.com/hubfs/Assets%20May%5B17%5D/religious.svg?t=1502211789708'
-    ],
-    ['Nonprofit', 'PHILANTHROPY',
-      'https://cdn2.hubspot.net/hubfs/2700250/Assets%20May%5B17%5D/donation-1.svg'
-    ],
-    ['Retail', 'RETAIL',
-      'https://www.risevision.com/hubfs/business-1.svg'
-    ],
-    ['Restaurants and Bars', 'RESTAURANTS',
-      'https://cdn2.hubspot.net/hubfs/2700250/Assets%20May%5B17%5D/restaurants.svg'
-    ],
-    ['Hospital and Healthcare', 'HOSPITAL_HEALTH_CARE',
-      'https://www.risevision.com/hubfs/hospitality-2.svg?t=1502211789708'
-    ],
-    ['Libraries', 'LIBRARIES',
-      'https://cdn2.hubspot.net/hubfs/2700250/Assets%20May%5B17%5D/teamwork.svg'
-    ],
-    ['Financial Services', 'FINANCIAL_SERVICES',
-      'https://www.risevision.com/hubfs/Assets%20May%5B17%5D/finance.svg?t=1502211789708'
-    ],
-    ['Gyms and Fitness', 'HEALTH_WELLNESS_AND_FITNESS',
-      'https://www.risevision.com/hubfs/health-2.svg?t=1502211789708'
-    ],
+    ['K-12 Education', 'PRIMARY_SECONDARY_EDUCATION'],
+    ['Higher Education', 'HIGHER_EDUCATION',],
+    ['Religious', 'RELIGIOUS_INSTITUTIONS',],
+    ['Nonprofit', 'PHILANTHROPY',],
+    ['Retail', 'RETAIL',],
+    ['Restaurants and Bars', 'RESTAURANTS',],
+    ['Hospital and Healthcare', 'HOSPITAL_HEALTH_CARE',],
+    ['Libraries', 'LIBRARIES',],
+    ['Financial Services', 'FINANCIAL_SERVICES',],
+    ['Gyms and Fitness', 'HEALTH_WELLNESS_AND_FITNESS',],
     ['Hotels and Hospitality', 'HOSPITALITY'],
     ['Corporate Offices', 'EXECUTIVE_OFFICE'],
     ['Manufacturing', 'INDUSTRIAL_AUTOMATION'],
     ['Government', 'GOVERNMENT_ADMINISTRATION'],
-    ['Auto Dealerships', 'AUTOMOTIVE',
-      'https://cdn2.hubspot.net/hubfs/2700250/automobile-1.svg'
-    ],
-    ['Marketing and Advertising', 'MARKETING_AND_ADVERTISING',
-      'https://cdn2.hubspot.net/hubfs/2700250/Assets%20May%5B17%5D/telemarketer.svg'
-    ],
+    ['Auto Dealerships', 'AUTOMOTIVE',],
+    ['Marketing and Advertising', 'MARKETING_AND_ADVERTISING',],
     ['Technology and Integrator', 'INFORMATION_TECHNOLOGY_AND_SERVICES'],
+    ['Warehousing', 'WAREHOUSING'],
+    ['Logistics and Supply Chain', 'LOGISTICS_AND_SUPPLY_CHAIN'],
     ['Other', 'OTHER']
   ])
   .value('COMPANY_SIZE_FIELDS', [
