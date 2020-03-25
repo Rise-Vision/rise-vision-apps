@@ -39,7 +39,7 @@
         billAmount: 110,
         save: 10
       },
-      trialPeriod: 90,
+      trialPeriod: 14,
       discountIndustries: [
         'PRIMARY_SECONDARY_EDUCATION',
         'HIGHER_EDUCATION',
@@ -67,7 +67,7 @@
         billAmount: 110,
         save: 10
       },
-      trialPeriod: 90,
+      trialPeriod: 14,
       discountIndustries: [
         'PRIMARY_SECONDARY_EDUCATION',
         'HIGHER_EDUCATION',
