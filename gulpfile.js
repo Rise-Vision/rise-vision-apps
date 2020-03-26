@@ -338,8 +338,11 @@ gulp.task("server", factory.testServer({
   rootPath: "./web"
 }));
 gulp.task("server-close", factory.testServerClose());
-gulp.task("test:webdrive_update", factory.webdriveUpdate());
-gulp.task("test:e2e:core", ["test:webdrive_update"],factory.testE2EAngular({
+gulp.task("test:webdriver_update", factory.webdriverUpdateSpecific({
+    browsers: ["gecko=false"]
+  }
+));
+gulp.task("test:e2e:core", ["test:webdriver_update"],factory.testE2EAngular({
   browser: "chrome",
   loginUser: process.env.E2E_USER,
   loginPass: process.env.E2E_PASS,
