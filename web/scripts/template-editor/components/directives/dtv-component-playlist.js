@@ -3,9 +3,9 @@
 angular.module('risevision.template-editor.directives')
   .constant('FILTER_HTML_TEMPLATES', 'presentationType:"HTML Template"')
   .directive('templateComponentPlaylist', ['templateEditorFactory', 'presentation', '$loading',
-  'FILTER_HTML_TEMPLATES', 'ScrollingListService',
+  'FILTER_HTML_TEMPLATES', 'ScrollingListService', 'editorFactory',
     function (templateEditorFactory, presentation, $loading,
-      FILTER_HTML_TEMPLATES, ScrollingListService) {
+      FILTER_HTML_TEMPLATES, ScrollingListService, editorFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -223,6 +223,9 @@ angular.module('risevision.template-editor.directives')
             $scope.save();
           };
 
+          $scope.createNewTemplate = function () {
+            editorFactory.addPresentationModal();
+          };
         }
       };
     }
