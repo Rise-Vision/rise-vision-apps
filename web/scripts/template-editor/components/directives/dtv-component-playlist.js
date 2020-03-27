@@ -2,9 +2,9 @@
 
 angular.module('risevision.template-editor.directives')
   .constant('FILTER_HTML_TEMPLATES', 'presentationType:"HTML Template"')
-  .directive('templateComponentPlaylist', ['templateEditorFactory', 'presentation', '$log', '$loading',
+  .directive('templateComponentPlaylist', ['templateEditorFactory', 'presentation', '$loading',
   'FILTER_HTML_TEMPLATES', 'ScrollingListService',
-    function (templateEditorFactory, presentation, $log, $loading,
+    function (templateEditorFactory, presentation, $loading,
       FILTER_HTML_TEMPLATES, ScrollingListService) {
       return {
         restrict: 'E',
