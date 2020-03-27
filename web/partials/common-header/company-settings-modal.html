@@ -9,7 +9,7 @@
   <h2 id="company-settings-label" class="modal-title">Company Settings</h2>
 </div>
 <div class="modal-body company-settings-modal" stop-event="touchend">
-  <form id="companyForm" role="form" name="forms.companyForm" novalidate>
+  <form id="forms.companyForm" role="form" name="forms.companyForm" autocomplete="on" novalidate>
     <div id="errorBox" class="alert alert-danger" role="alert" ng-show="formError">
       <strong>{{formError}}</strong> {{apiError}}
     </div>
@@ -140,9 +140,8 @@
     </button>
     <div class="pull-right">
       <span class="hidden-xs"><last-modified change-date="company.changeDate" changed-by="company.changedBy"></last-modified></span>
-      <button type="button" id="save-button"
-        class="btn btn-primary btn-fixed-width" ng-click="save()"
-        ng-disabled="forms.companyForm.$invalid">Save
+      <button type="submit" form="forms.companyForm" id="save-button"
+        class="btn btn-primary btn-fixed-width" ng-click="save()">Save
         <i class="fa fa-white fa-check icon-right"></i>
       </button>
       <button type="button" id="close-button"

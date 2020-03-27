@@ -55,33 +55,39 @@ angular.module('risevision.common.header')
         $modalInstance.dismiss('cancel');
       };
       $scope.save = function () {
-        $scope.loading = true;
         _clearErrorMessages();
 
-        addressFactory.isValidOrEmptyAddress($scope.company).then(function () {
-            var company = angular.copy($scope.company);
+        if (!$scope.forms.companyForm.$valid) {
+          console.info('form not valid: ', $scope.forms.companyForm.$error);
+        } else {
+          $scope.loading = true;
 
-            verifyAdmin(company);
-            return updateCompany($scope.company.id, company)
-              .then(
-                function () {
-                  companyTracker('Company Updated', userState.getSelectedCompanyId(),
-                    userState.getSelectedCompanyName(), !userState.isSubcompanySelected());
+          addressFactory.isValidOrEmptyAddress($scope.company).then(function () {
+              var company = angular.copy($scope.company);
 
-                  userState.updateCompanySettings($scope.company);
-                  $modalInstance.close('success');
-                }).catch(function (error) {
-                _showErrorMessage('update', error);
-              });
-          })
-          .catch(function (error) {
-            $scope.formError = 'We couldn\'t update your address.';
-            $scope.apiError = humanReadableError(error);
-          })
-          .finally(function () {
-            $scope.loading = false;
-          });
+              verifyAdmin(company);
+              return updateCompany($scope.company.id, company)
+                .then(
+                  function () {
+                    companyTracker('Company Updated', userState.getSelectedCompanyId(),
+                      userState.getSelectedCompanyName(), !userState.isSubcompanySelected());
+
+                    userState.updateCompanySettings($scope.company);
+                    $modalInstance.close('success');
+                  }).catch(function (error) {
+                  _showErrorMessage('update', error);
+                });
+            })
+            .catch(function (error) {
+              $scope.formError = 'We couldn\'t update your address.';
+              $scope.apiError = humanReadableError(error);
+            })
+            .finally(function () {
+              $scope.loading = false;
+            });
+        }
       };
+
       $scope.deleteCompany = function () {
         _clearErrorMessages();
         var instance = $modal.open({

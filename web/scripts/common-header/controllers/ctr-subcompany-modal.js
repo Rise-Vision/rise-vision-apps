@@ -3,12 +3,12 @@
 
 angular.module('risevision.common.header')
   .controller('SubCompanyModalCtrl', ['$scope', '$modalInstance', '$modal',
-    '$templateCache', 'createCompany', 'countries', 'REGIONS_CA',
+    '$templateCache', 'createCompany', 'addressFactory', 'countries', 'REGIONS_CA',
     'REGIONS_US', 'TIMEZONES', 'userState', '$loading', 'messageBox', 'humanReadableError',
     'companyTracker', 'bigQueryLogging', 'COMPANY_INDUSTRY_FIELDS',
     'COMPANY_SIZE_FIELDS',
     function ($scope, $modalInstance, $modal, $templateCache,
-      createCompany, countries, REGIONS_CA, REGIONS_US, TIMEZONES, userState,
+      createCompany, addressFactory, countries, REGIONS_CA, REGIONS_US, TIMEZONES, userState,
       $loading, messageBox, humanReadableError, companyTracker, bigQueryLogging,
       COMPANY_INDUSTRY_FIELDS, COMPANY_SIZE_FIELDS) {
 
@@ -33,20 +33,36 @@ angular.module('risevision.common.header')
       $scope.closeModal = function () {
         $modalInstance.dismiss('cancel');
       };
-      $scope.save = function () {
-        $scope.loading = true;
-        createCompany(userState.getSelectedCompanyId(), $scope.company)
-          .then(function (company) {
-            companyTracker('Company Created', company.id, company.name);
 
-            $modalInstance.close('success');
-          }, function (err) {
-            messageBox('Error', humanReadableError(err));
-          })
-          .finally(function () {
-            $scope.loading = false;
-          });
+      $scope.save = function () {
+        if (!$scope.forms.companyForm.$valid) {
+          console.info('form not valid: ', $scope.forms.companyForm.$error);
+        } else {
+          $scope.loading = true;
+
+          addressFactory.isValidOrEmptyAddress($scope.company)
+            .then(function () {
+              createCompany(userState.getSelectedCompanyId(), $scope.company)
+                .then(function (company) {
+                  companyTracker('Company Created', company.id, company.name);
+
+                  $modalInstance.close('success');
+                }, function (err) {
+                  messageBox('Error', humanReadableError(err));
+                })
+                .finally(function () {
+                  $scope.loading = false;
+                });
+
+            })
+            .catch(function (error) {
+              $scope.loading = false;
+
+              messageBox('We couldn\'t validate your address.', humanReadableError(error));
+            });
+        }
       };
+
       // Show Move Company Modal
       $scope.moveCompany = function (size) {
         // var modalInstance =

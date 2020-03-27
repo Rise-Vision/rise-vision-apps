@@ -45,22 +45,17 @@ describe("controller: company settings", function() {
         return deferred.promise;
       };
     });
-    $provide.service("analyticsFactory", function() {
-      return {
-        track: function(name) {
-          trackerCalled = name;
-        },
-        load: function() {}
-      };
+    $provide.service("companyTracker", function() {
+      return sinon.stub();
     });
     $provide.service("addressFactory", function() {
       return {
-        isValidOrEmptyAddress: function() {
+        isValidOrEmptyAddress: sinon.spy(function() {
           if (validateAddress) {
             return Q.resolve();  
           }
           return Q.reject("ERROR; invalid address");
-        }
+        })
       };
     });
     $provide.service('$loading', function() {
@@ -87,13 +82,12 @@ describe("controller: company settings", function() {
 
   }));
 
-  var $scope, userProfile, userCompany, savedCompany, company, userState, $modalInstance, createCompany,
-  trackerCalled, validateAddress, $loading, confirmModalStub, regenerateCompanyFieldStub;
+  var $scope, userProfile, userCompany, addressFactory, savedCompany, company, userState, $modalInstance, createCompany,
+  companyTracker, validateAddress, $loading, confirmModalStub, regenerateCompanyFieldStub;
   var isStoreAdmin = true;
   beforeEach(function(){
     createCompany = true;
     validateAddress = true;
-    trackerCalled = undefined;
     userProfile = {
       id : "RV_user_id",
       firstName : "first",
@@ -158,13 +152,16 @@ describe("controller: company settings", function() {
       $scope = $rootScope.$new();
       $modalInstance = $injector.get("$modalInstance");
       $loading = $injector.get("$loading");
+      addressFactory = $injector.get("addressFactory");
+      companyTracker = $injector.get("companyTracker");
+
       $controller("CompanySettingsModalCtrl", {
         $scope : $scope,
         $modalInstance: $modalInstance,
         companyId: $injector.get("companyId"),
         userState : $injector.get("userState"),
         companyDetails:$injector.get("getCompany"),
-        updateCompany:$injector.get("updateCompany")
+        updateCompany: $injector.get("updateCompany")
       });
       $scope.$digest();
     });
@@ -182,6 +179,7 @@ describe("controller: company settings", function() {
     expect($scope).to.have.property("COMPANY_INDUSTRY_FIELDS");
     expect($scope).to.have.property("COMPANY_SIZE_FIELDS");
     expect($scope).to.have.property("isRiseStoreAdmin");
+    expect($scope.forms).to.be.ok;
     expect($scope.loading).to.be.true;
     expect($scope.formError).to.be.null;
     expect($scope.apiError).to.be.null;
@@ -205,11 +203,24 @@ describe("controller: company settings", function() {
   describe("submit: ",function(){
     beforeEach(function(done){
       $scope.isRiseStoreAdmin = true;
+      $scope.forms.companyForm = {
+        $valid: true
+      };
 
       setTimeout(function(){
         expect($scope.loading).to.be.false;
         done();
       },10);
+    });
+
+    it("should not save if the form is invalid", function() {
+      $scope.forms.companyForm.$valid = false;
+
+      $scope.save();
+
+      expect($scope.loading).to.be.false;
+      addressFactory.isValidOrEmptyAddress.should.not.have.been.called;
+
     });
 
     it("should save the company and close the modal",function(done){
@@ -218,7 +229,7 @@ describe("controller: company settings", function() {
       setTimeout(function() {
         expect($scope.loading).to.be.false;
         expect($scope.formError).to.be.null;
-        expect(trackerCalled).to.equal("Company Updated");
+        companyTracker.should.have.been.calledWith("Company Updated");
         expect($modalInstance._closed).to.be.true;
 
         expect($scope.company).to.have.property("name");

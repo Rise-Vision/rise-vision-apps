@@ -56,7 +56,7 @@ describe("controller: Company ICP Modal", function() {
     expect($scope.user.username).to.equal("user@example.io");
     expect($scope.company.name).to.equal("Test Company");
     
-    expect($scope.DROPDOWN_INDUSTRY_FIELDS).to.have.length(18);
+    expect($scope.DROPDOWN_INDUSTRY_FIELDS).to.have.length(20);
   });
   
   it("should close modal on save and send user/company objects", function() {

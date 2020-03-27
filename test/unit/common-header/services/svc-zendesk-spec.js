@@ -32,11 +32,6 @@ describe("Services: Zendesk", function() {
       getUserCompanyName: function() { return "Rich Inc."; },
       getSelectedCompanyId: function() { return "abcdefg"; },
     });
-    $provide.service("analyticsFactory", function() {
-      return {
-        identify: function() {},
-      };
-    });
     $provide.service("userAuthFactory", function() {
       return {
         authenticate: function() {
