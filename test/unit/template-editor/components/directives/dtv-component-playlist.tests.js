@@ -92,7 +92,12 @@ describe("directive: templateComponentPlaylist", function() {
         addPresentationModal: sandbox.stub()
       };
     });
-  
+
+    $provide.service("blueprintFactory", function() {
+      return {
+        isPlayUntilDone: function() {return Q.resolve(true)}
+      };
+    });
   }));
 
   beforeEach(inject(function($injector, $compile, $rootScope, $templateCache){
@@ -269,7 +274,7 @@ describe("directive: templateComponentPlaylist", function() {
     expect($scope.canAddTemplates).to.equal(false);
   });
 
-  it("should add selected templates to playlist", function() {
+  it("should add selected templates to playlist and assign default PUD value", function(done) {
     $scope.templatesFactory = sampleTemplatesFactory;
     $scope.selectedTemplates = [];
     sandbox.stub($scope, "save");
@@ -279,8 +284,20 @@ describe("directive: templateComponentPlaylist", function() {
 
     $scope.addTemplates();
 
-    expect($scope.selectedTemplates.length).to.equal(1);
-    expect($scope.selectedTemplates[0].id).to.equal("id2");
+    setTimeout(function() {
+      // Propagate $q.all promise resolution using $apply()
+      $scope.$apply();
+
+      expect($scope.selectedTemplates.length).to.equal(1);
+      expect($scope.selectedTemplates[0].id).to.equal("id2");
+
+      //confirm PUD value is copied from the blueprint
+      expect($scope.selectedTemplates[0]["play-until-done"]).to.equal(true);
+
+      expect($loading.start).to.be.calledOnce;
+      expect($loading.stop).to.be.calledOnce;
+      done();
+    }, 10);
   });
 
   it("should remove templates from playlist", function() {

@@ -3,9 +3,9 @@
 angular.module('risevision.template-editor.directives')
   .constant('FILTER_HTML_TEMPLATES', 'presentationType:"HTML Template"')
   .directive('templateComponentPlaylist', ['templateEditorFactory', 'presentation', '$loading',
-  'FILTER_HTML_TEMPLATES', 'ScrollingListService', 'editorFactory',
+  '$q', 'FILTER_HTML_TEMPLATES', 'ScrollingListService', 'editorFactory', 'blueprintFactory',
     function (templateEditorFactory, presentation, $loading,
-      FILTER_HTML_TEMPLATES, ScrollingListService, editorFactory) {
+      $q, FILTER_HTML_TEMPLATES, ScrollingListService, editorFactory, blueprintFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -178,11 +178,32 @@ angular.module('risevision.template-editor.directives')
               return item.isSelected;
             });
 
-            $scope.selectedTemplates = $scope.selectedTemplates.concat(itemsToAdd);
+            //if template supports PUD, then set it to PUD automatically
 
-            $scope.save();
+            var promises = [];
+            _.forEach(itemsToAdd, function (item) {
+              promises.push(blueprintFactory.isPlayUntilDone(item.productCode));
+            });
 
-            $scope.showSelectedTemplates();
+            $loading.start('rise-playlist-templates-loader');
+
+            $q.all(promises)
+            .then(function (playUntilDoneValues) {
+
+              for (var i = 0; i < playUntilDoneValues.length; i++) {
+                itemsToAdd[i]['play-until-done'] = playUntilDoneValues[i];
+              }
+
+              $scope.selectedTemplates = $scope.selectedTemplates.concat(itemsToAdd);
+              $scope.save();
+
+              $loading.stop('rise-playlist-templates-loader');
+
+              $scope.showSelectedTemplates();
+              })
+            .catch(function (e) {
+              $loading.stop('rise-playlist-templates-loader');
+            });
           };
 
           $scope.removeTemplate = function (key) {
