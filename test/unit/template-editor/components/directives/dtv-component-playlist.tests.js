@@ -252,6 +252,11 @@ describe("directive: templateComponentPlaylist", function() {
     expect($scope.searchTemplates).to.be.calledOnce;
   });
 
+  it("should sort templates by last modified date in descending order", function() {
+    expect($scope.templatesSearch.sortBy).to.equal("changeDate");
+    expect($scope.templatesSearch.reverse).to.equal(true);
+  });
+
   it("should select / deselect a template", function() {
     $scope.templatesFactory = sampleTemplatesFactory;
 
