@@ -15,7 +15,8 @@ angular.module('risevision.template-editor.directives')
           $scope.selectedTemplates = [];
           $scope.searchKeyword = '';
           $scope.templatesSearch = {
-            sortBy: 'changeDate'
+            sortBy: 'changeDate',
+            reverse: true
           };
 
           function _load() {
