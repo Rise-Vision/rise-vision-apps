@@ -128,7 +128,10 @@ angular.module('risevision.template-editor.directives')
           $scope.searchTemplates = function () {
 
             $scope.templatesSearch.filter = presentation.buildFilterString($scope.searchKeyword, FILTER_HTML_TEMPLATES);
-  
+ 
+            //exclude a template that is being edited
+            $scope.templatesSearch.filter += ' AND NOT id:' + $scope.factory.presentation.id;
+
             if (!$scope.templatesFactory) {
               $scope.initTemplatesFactory();
             } else {

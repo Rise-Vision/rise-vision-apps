@@ -19,7 +19,10 @@ describe("directive: templateComponentPlaylist", function() {
   };
 
   beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" } };
+    factory = {
+      selected: { id: "TEST-ID" },
+      presentation: { id: "TEST-ID" }
+    };
 
     sampleAttributeData = {
       "items": [
@@ -73,7 +76,7 @@ describe("directive: templateComponentPlaylist", function() {
     $provide.service("presentation", function() {
       return {
         list: function() {return Q.resolve({items:[{id: "presentation-id-1", name: "some name"}]})},
-        buildFilterString: function() {}
+        buildFilterString: function() { return ""; }
       };
     });
 
@@ -109,7 +112,7 @@ describe("directive: templateComponentPlaylist", function() {
   it("should exist", function() {
     expect($scope).to.be.ok;
     expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } })
+    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" }, presentation: { id: "TEST-ID" }});
     expect($scope.registerDirective).to.have.been.called;
 
     var directive = $scope.registerDirective.getCall(0).args[0];
@@ -229,6 +232,7 @@ describe("directive: templateComponentPlaylist", function() {
     $scope.searchTemplates();
 
     expect($scope.initTemplatesFactory).to.be.calledOnce;
+    expect($scope.templatesSearch.filter).to.equal(" AND NOT id:TEST-ID");
   });
 
   it("searchTemplates should call doSearch if factory is initialized", function() {
