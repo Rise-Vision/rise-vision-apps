@@ -6,6 +6,7 @@ describe("directive: templateComponentPlaylist", function() {
       $loading,
       element,
       factory,
+      editorFactory,
       sampleAttributeData,
       sampleSelectedTemplates,
       sampleTemplatesFactory;
@@ -82,12 +83,20 @@ describe("directive: templateComponentPlaylist", function() {
         stop: sandbox.stub()
       };
     });
+
+    $provide.service("editorFactory", function() {
+      return {
+        addPresentationModal: sandbox.stub()
+      };
+    });
+  
   }));
 
   beforeEach(inject(function($injector, $compile, $rootScope, $templateCache){
     $templateCache.put("partials/template-editor/components/component-playlist.html", "<p>mock</p>");
     $scope = $rootScope.$new();
     $loading = $injector.get('$loading');
+    editorFactory = $injector.get('editorFactory');
 
     $scope.registerDirective = sinon.stub();
     $scope.setAttributeData = sinon.stub();
@@ -333,6 +342,12 @@ describe("directive: templateComponentPlaylist", function() {
     expect($scope.selectedTemplates[0]["duration"]).to.equal(30);
     expect($scope.selectedTemplates[0]["transition-type"]).to.equal("some-transition");
     expect($scope.save).to.be.calledOnce;
+  });
+
+  it("should call editorFactory.addPresentationModal()", function() {
+    $scope.createNewTemplate();
+
+    expect(editorFactory.addPresentationModal).to.be.calledOnce;
   });
 
 });

@@ -228,33 +228,8 @@
   font-size: 0.9em;
   margin: 20px;
 
-  & > div {
-    margin: 0 0 10px;
-  }
-
-  & > h2 {
-    font-size: 1.2em;
-    font-weight: 700;
-    padding: 20px 0px;
-    margin-top: 0px;
-  }
-
-  & > div:first-of-type {
-    font-weight: bold;
-  }
-
-  & i {
-    font-size: 15pt;
-    color: $rise-green;
-    margin-right: 5px;
-  }
-
   & a {
-    color: $dark-gray;
-
-    &:hover > span {
-      text-decoration: underline;
-    }
+    color: $rise-blue;
   }
 
 }
