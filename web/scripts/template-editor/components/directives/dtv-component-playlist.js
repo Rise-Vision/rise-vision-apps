@@ -37,6 +37,7 @@ angular.module('risevision.template-editor.directives')
             element: element,
             show: function () {
               $scope.componentId = $scope.factory.selected.id;
+              $scope.selectedTemplates = [];
               _load();
             },
             onBackHandler: function () {
