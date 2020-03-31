@@ -110,6 +110,8 @@ angular.module('risevision.template-editor.directives')
 
             var search = {filter: presentationIds.join(' OR ')};
 
+            $loading.start('rise-playlist-templates-loader');
+
             presentation.list(search)
             .then(function(res) {
               if (res.items) {
@@ -123,6 +125,10 @@ angular.module('risevision.template-editor.directives')
                 });
               }
               $scope.selectedTemplates = templates;
+              $loading.stop('rise-playlist-templates-loader');
+            })
+            .catch(function () {
+              $loading.stop('rise-playlist-templates-loader');
             });
           };
 
