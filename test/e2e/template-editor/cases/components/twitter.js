@@ -44,8 +44,11 @@ var TwitterComponentScenarios = function (subCompanyName) {
     });
 
     describe('connected UI', function () {
+      var connectedPresentationName = 'Test Example Twitter Component';
       var commonHeaderPage;
       var homePage;
+      var expectedUsername;
+      var expectedMaxitems;
 
       before(function () {
         commonHeaderPage = new CommonHeaderPage();
@@ -77,7 +80,7 @@ var TwitterComponentScenarios = function (subCompanyName) {
       });
 
       it('selects presentation on subscribed company', function () {
-        presentationsListPage.loadPresentation('Test Example Twitter Component');
+        presentationsListPage.loadPresentation(connectedPresentationName);
 
         templateEditorPage.selectComponent(componentLabel);
         expect(twitterComponentPage.getUsername().isEnabled()).to.eventually.be.true;
@@ -87,6 +90,30 @@ var TwitterComponentScenarios = function (subCompanyName) {
         expect(twitterComponentPage.getConnectButton().isDisplayed()).to.eventually.be.false;
         expect(twitterComponentPage.getUsername().isDisplayed()).to.eventually.be.true;
         expect(twitterComponentPage.getMaxitems().isDisplayed()).to.eventually.be.true;
+      });
+
+      it('changes username and maxitems', function () {
+        var username = twitterComponentPage.getUsername().getAttribute('value');
+        var maxitems = twitterComponentPage.getMaxitems().getAttribute('value');
+
+        expectedUsername = username === '@mashable' ? '@risevision' : '@mashable';
+        expectedMaxitems = maxitems === '5' ? '14' : '5';
+
+        twitterComponentPage.getUsername().sendKeys(expectedUsername + protractor.Key.ENTER);
+        twitterComponentPage.getMaxitems().sendKeys(expectedMaxitems + protractor.Key.ENTER);
+
+        templateEditorPage.waitForAutosave();
+      });
+
+      it('should reload the Presentation, and validate changes were saved', function () {
+        presentationsListPage.loadPresentation(connectedPresentationName);
+        templateEditorPage.selectComponent(componentLabel);
+
+        expect(twitterComponentPage.getUsername().isDisplayed()).to.eventually.be.true;
+        expect(twitterComponentPage.getUsername().getAttribute('value')).to.eventually.equal(expectedUsername);
+
+        expect(twitterComponentPage.getMaxitems().isDisplayed()).to.eventually.be.true;
+        expect(twitterComponentPage.getMaxitems().getAttribute('value')).to.eventually.equal(expectedMaxitems);
       });
     });
   });
