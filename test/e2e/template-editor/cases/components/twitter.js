@@ -53,7 +53,10 @@ var TwitterComponentScenarios = function (subCompanyName) {
 
         presentationsListPage.loadCurrentCompanyPresentationList();
 
-        homePage.getSwitchToMyCompanyLink().click();
+        commonHeaderPage.getProfilePic().click();
+
+        expect(homePage.getResetSubcompanyButton().isDisplayed()).to.eventually.be.true;
+        homePage.getResetSubcompanyButton().click();
 
         helper.waitDisappear(homePage.getSubcompanyAlert(), "Subcompany Alert");
 
@@ -63,7 +66,10 @@ var TwitterComponentScenarios = function (subCompanyName) {
       after(function () {
         presentationsListPage.loadCurrentCompanyPresentationList();
 
-        homePage.getSwitchToMyCompanyLink().click();
+        commonHeaderPage.getProfilePic().click();
+
+        expect(homePage.getResetSubcompanyButton().isDisplayed()).to.eventually.be.true;
+        homePage.getResetSubcompanyButton().click();
 
         helper.waitDisappear(homePage.getSubcompanyAlert(), "Subcompany Alert");
 
