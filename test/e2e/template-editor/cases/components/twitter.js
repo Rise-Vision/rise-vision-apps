@@ -47,8 +47,8 @@ var TwitterComponentScenarios = function (subCompanyName) {
       var connectedPresentationName = 'Test Example Twitter Component';
       var commonHeaderPage;
       var homePage;
-      var expectedUsername;
-      var expectedMaxitems;
+      var expectedUsername = "@rise" + (Date.now() % 1000000);
+      var expectedMaxitems = "" + Math.max(1, Date.now() % 100);
 
       before(function () {
         commonHeaderPage = new CommonHeaderPage();
@@ -92,14 +92,15 @@ var TwitterComponentScenarios = function (subCompanyName) {
         expect(twitterComponentPage.getMaxitems().isDisplayed()).to.eventually.be.true;
       });
 
-      it('changes username and maxitems', function () {
-        var username = twitterComponentPage.getUsername().getAttribute('value');
-        var maxitems = twitterComponentPage.getMaxitems().getAttribute('value');
-
-        expectedUsername = username === '@mashable' ? '@risevision' : '@mashable';
-        expectedMaxitems = maxitems === '5' ? '14' : '5';
-
+      it('changes username', function () {
+        twitterComponentPage.getUsername().clear();
         twitterComponentPage.getUsername().sendKeys(expectedUsername + protractor.Key.ENTER);
+
+        templateEditorPage.waitForAutosave();
+      });
+
+      it('changes maxitems', function () {
+        twitterComponentPage.getMaxitems().clear();
         twitterComponentPage.getMaxitems().sendKeys(expectedMaxitems + protractor.Key.ENTER);
 
         templateEditorPage.waitForAutosave();
