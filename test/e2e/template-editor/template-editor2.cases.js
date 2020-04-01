@@ -33,13 +33,13 @@
       commonHeaderPage.selectSubCompany(subCompanyName);
     });
 
-    var imageComponentScenarios = new ImageComponentScenarios();
+    /*var imageComponentScenarios = new ImageComponentScenarios();
     var slidesComponentScenarios = new SlidesComponentScenarios();
     var videoComponentScenarios = new VideoComponentScenarios();
     var rssComponentScenarios = new RssComponentScenarios();
     var counterComponentScenarios = new CounterComponentScenarios();
-    var timeDateComponentScenarios = new TimeDateComponentScenarios();
-    var twitterComponentScenarios = new TwitterComponentScenarios();
+    var timeDateComponentScenarios = new TimeDateComponentScenarios();*/
+    var twitterComponentScenarios = new TwitterComponentScenarios(subCompanyName);
 
     after(function() {
       // Loading the Presentation List is a workaround to a Chrome Driver issue that has it fail to click on elements over the Preview iframe

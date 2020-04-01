@@ -25,6 +25,7 @@
     var testCompanyAlert = element(by.css(".sub-company-alert.test-company-alert"));
 
     var alertSettingsButton = element(by.css(".alert-settings-button"));
+    var switchToMyCompanyLink = subcompanyAlert.element(by.tagName("a"));
 
     var freePlanBanner = element(by.id("free-plan-banner"));
     var freePlansModalLink = freePlanBanner.element(by.tagName("a"));
@@ -102,6 +103,10 @@
 
     this.getTrialPlansModalLink = function() {
       return trialPlansModalLink;
+    };
+
+    this.getSwitchToMyCompanyLink = function() {
+      return switchToMyCompanyLink;
     };
 
   };

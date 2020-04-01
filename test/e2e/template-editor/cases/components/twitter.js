@@ -3,11 +3,12 @@
 var expect = require('rv-common-e2e').expect;
 var helper = require('rv-common-e2e').helper;
 var CommonHeaderPage = require('./../../../common-header/pages/commonHeaderPage.js');
+var HomePage = require('./../../../common-header/pages/homepage.js');
 var PresentationListPage = require('./../../pages/presentationListPage.js');
 var TemplateEditorPage = require('./../../pages/templateEditorPage.js');
 var TwitterComponentPage = require('./../../pages/components/twitterComponentPage.js');
 
-var TwitterComponentScenarios = function () {
+var TwitterComponentScenarios = function (subCompanyName) {
   describe('Twitter Component', function () {
     var presentationName;
     var presentationsListPage;
@@ -44,14 +45,32 @@ var TwitterComponentScenarios = function () {
 
     describe('connected UI', function () {
       var commonHeaderPage;
+      var homePage;
 
       before(function () {
         commonHeaderPage = new CommonHeaderPage();
+        homePage = new HomePage();
+
+        presentationsListPage.loadCurrentCompanyPresentationList();
+
+        homePage.getSwitchToMyCompanyLink().click();
+
+        helper.waitDisappear(homePage.getSubcompanyAlert(), "Subcompany Alert");
+
+        commonHeaderPage.selectSubscribedSubCompany();
       });
 
-      it('select presentation on connected company', function () {
-        commonHeaderPage.selectSubscribedSubCompany();
+      after(function () {
+        presentationsListPage.loadCurrentCompanyPresentationList();
 
+        homePage.getSwitchToMyCompanyLink().click();
+
+        helper.waitDisappear(homePage.getSubcompanyAlert(), "Subcompany Alert");
+
+        commonHeaderPage.selectSubCompany(subCompanyName);
+      });
+
+      it('selects presentation on subscribed company', function () {
         presentationsListPage.loadPresentation('Test Example Twitter Component');
 
         templateEditorPage.selectComponent(componentLabel);
