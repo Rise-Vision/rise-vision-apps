@@ -28,6 +28,7 @@ angular.module('risevision.template-editor.directives')
           $scope.usernameStatus = null;
 
           $scope.connectToTwitter = function () {
+            // testing
             $scope.spinner = true;
 
             return TwitterOAuthService.authenticate()
