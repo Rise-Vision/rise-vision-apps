@@ -2,6 +2,7 @@
 
 var expect = require('rv-common-e2e').expect;
 var helper = require('rv-common-e2e').helper;
+var CommonHeaderPage = require('./../../../common-header/pages/commonHeaderPage.js');
 var PresentationListPage = require('./../../pages/presentationListPage.js');
 var TemplateEditorPage = require('./../../pages/templateEditorPage.js');
 var TwitterComponentPage = require('./../../pages/components/twitterComponentPage.js');
@@ -30,7 +31,7 @@ var TwitterComponentScenarios = function () {
       });
     });
 
-    describe('basic operations', function () {
+    describe('not connected UI', function () {
       it('should open properties of Twitter Component', function () {
         templateEditorPage.selectComponent(componentLabel);
         expect(twitterComponentPage.getUsername().isEnabled()).to.eventually.be.true;
@@ -38,6 +39,29 @@ var TwitterComponentScenarios = function () {
 
         expect(twitterComponentPage.getConnectButton().isEnabled()).to.eventually.be.true;
         expect(twitterComponentPage.getConnectButton().isDisplayed()).to.eventually.be.true;
+      });
+    });
+
+    describe('connected UI', function () {
+      var commonHeaderPage;
+
+      before(function () {
+        commonHeaderPage = new CommonHeaderPage();
+      });
+
+      it('select presentation on connected company', function () {
+        commonHeaderPage.selectSubscribedSubCompany();
+
+        presentationsListPage.loadPresentation('Test Example Twitter Component');
+
+        templateEditorPage.selectComponent(componentLabel);
+        expect(twitterComponentPage.getUsername().isEnabled()).to.eventually.be.true;
+        expect(twitterComponentPage.getMaxitems().isEnabled()).to.eventually.be.true;
+        expect(twitterComponentPage.getConnectButton().isEnabled()).to.eventually.be.true;
+
+        expect(twitterComponentPage.getConnectButton().isDisplayed()).to.eventually.be.false;
+        expect(twitterComponentPage.getUsername().isDisplayed()).to.eventually.be.true;
+        expect(twitterComponentPage.getMaxitems().isDisplayed()).to.eventually.be.true;
       });
     });
   });
