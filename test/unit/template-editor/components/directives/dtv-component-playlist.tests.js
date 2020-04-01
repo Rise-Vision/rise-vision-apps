@@ -135,9 +135,12 @@ describe("directive: templateComponentPlaylist", function() {
       return sampleAttributeData[attributeName];
     };
 
+    $scope.selectedTemplates = sampleSelectedTemplates; //some garbage data from past session
+
     directive.show();
 
     expect($scope.componentId).to.equal("TEST-ID");
+    expect($scope.selectedTemplates).to.eql([]);
 
     setTimeout(function() {
 
