@@ -36,7 +36,7 @@ rv-spinner rv-spinner-key="rise-playlist-templates-loader">
 
     <div class="playlist-action-button-bar">
       <div class="select-templates" ng-class="{'no-selected-templates' : !selectedTemplates.length || selectedTemplates.length === 0}">
-        <button class="btn btn-primary btn-block" ng-click="showAddTemplates()">
+        <button id="te-playlist-select-templates" class="btn btn-primary btn-block" ng-click="showAddTemplates()">
           Select Templates
         </button>
       </div>
@@ -52,7 +52,7 @@ rv-spinner rv-spinner-key="rise-playlist-templates-loader">
       <span class="input-group-addon" ng-click="searchTemplates()">
         <streamline-icon name="magnifier" width="16" height="16"></streamline-icon>
       </span>
-      <input type="text" class="form-control"
+      <input id="te-playlist-search" type="text" class="form-control"
             ng-model="searchKeyword" ng-keyup="searchKeyPressed($event)"
             placeholder="Search Templates"
             aria-label="Search Templates">
@@ -63,7 +63,7 @@ rv-spinner rv-spinner-key="rise-playlist-templates-loader">
 
     <div class="templates-selector te-scrollable-container active-search"
          scrolling-list="templatesFactory.load()">
-      <div class="templates-selector-no-results" ng-show="!(templatesFactory.items.list.length > 0)">
+      <div id="te-playlist-no-results" class="templates-selector-no-results" ng-show="!(templatesFactory.items.list.length > 0)">
         No Templates found. To create a new Template <a ng-click="createNewTemplate()">click here</a>. 
       </div>
 
@@ -89,7 +89,7 @@ rv-spinner rv-spinner-key="rise-playlist-templates-loader">
 
     <div class="playlist-action-button-bar">
       <div class="add-templates">
-        <button class="btn btn-primary btn-block" ng-click="addTemplates()" ng-disabled="!canAddTemplates">
+        <button id="te-playlist-add-template" class="btn btn-primary btn-block" ng-click="addTemplates()" ng-disabled="!canAddTemplates">
           Add Template
         </button>
       </div>

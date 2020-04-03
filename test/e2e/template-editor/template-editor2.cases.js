@@ -11,6 +11,7 @@
   var CounterComponentScenarios = require('./cases/components/counter.js');
   var TimeDateComponentScenarios = require('./cases/components/time-date.js');
   var TwitterComponentScenarios = require('./cases/components/twitter.js');
+  var PlaylistComponentScenarios = require('./cases/components/playlist.js');
 
   describe('Template Editor 2', function() {
 
@@ -40,6 +41,7 @@
     var counterComponentScenarios = new CounterComponentScenarios();
     var timeDateComponentScenarios = new TimeDateComponentScenarios();
     var twitterComponentScenarios = new TwitterComponentScenarios();
+    var playlistComponentScenarios = new PlaylistComponentScenarios();
 
     after(function() {
       // Loading the Presentation List is a workaround to a Chrome Driver issue that has it fail to click on elements over the Preview iframe
