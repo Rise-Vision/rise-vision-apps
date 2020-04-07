@@ -117,12 +117,22 @@ angular.module('risevision.template-editor.directives')
             .then(function(res) {
               if (res.items) {
                 _.forEach(templates, function (template) {
+                  var found = false;
+
                   _.forEach(res.items, function (item) {
                     if (template.id === item.id) {
+                      found = true;
                       template.name = item.name;
                       template.revisionStatusName = item.revisionStatusName;
+                      template.removed = false;
                     }
                   });
+
+                  if (!found) {
+                    template.name = "Unknown";
+                    template.revisionStatusName = "Template not found.";
+                    template.removed = true;
+                  }
                 });
               }
               $scope.selectedTemplates = templates;
@@ -136,7 +146,7 @@ angular.module('risevision.template-editor.directives')
           $scope.searchTemplates = function () {
 
             $scope.templatesSearch.filter = presentation.buildFilterString($scope.searchKeyword, FILTER_HTML_TEMPLATES);
- 
+
             //exclude a template that is being edited
             $scope.templatesSearch.filter += ' AND NOT id:' + $scope.factory.presentation.id;
 
@@ -163,7 +173,7 @@ angular.module('risevision.template-editor.directives')
 
             $scope.templatesFactory = new ScrollingListService(presentation.list, $scope.templatesSearch);
 
-            $scope.$watch('templatesFactory.loadingItems', 
+            $scope.$watch('templatesFactory.loadingItems',
             function (loading) {
               if (loading) {
                 $loading.start('rise-playlist-templates-loader');
