@@ -41,10 +41,11 @@
               });
           },
           calculateTaxes: function (companyId, planId, planQty, addonId, addonQty,
-            shippingAddress) {
+            shippingAddress, couponCode) {
             var deferred = $q.defer();
             var obj = {
               companyId: companyId,
+              couponCode: couponCode,
               shipToId: shippingAddress.id,
               planId: planId,
               planQty: planQty,

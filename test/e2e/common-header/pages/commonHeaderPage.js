@@ -218,6 +218,10 @@
       });
     };
 
+    this.selectSubscribedSubCompany = function() {
+      this.selectSubCompany(JENKINS_SUBSCRIBED, false, true);
+    };
+
     this.selectUnsubscribedSubCompany = function() {
       this.selectSubCompany(E2E_UNSUBSCRIBED, false, true);
     };

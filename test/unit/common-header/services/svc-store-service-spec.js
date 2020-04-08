@@ -210,11 +210,12 @@ describe("Services: storeService", function() {
     });
 
     it("should create the request object", function(done) {
-      storeService.calculateTaxes("companyId", "planId", displayCount, "addonId", "addonQty", addressObject)
+      storeService.calculateTaxes("companyId", "planId", displayCount, "addonId", "addonQty", addressObject, "save50")
       .then(function() {
         storeApi.tax.estimate.should.have.been.called;
         storeApi.tax.estimate.should.have.been.calledWith({
           companyId: "companyId",
+          couponCode: "save50",
           shipToId: "ship-to-id",
           planId: "planId",
           planQty: displayCount,

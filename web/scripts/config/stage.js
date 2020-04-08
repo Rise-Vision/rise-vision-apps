@@ -28,7 +28,7 @@
       'https://store-dot-rvacore-test.appspot.com/_ah/api') // override default Store server value
     .value('STORE_SERVER_URL', 'https://store-dot-rvacore-test.appspot.com/')
     .value('RVA_URL', 'http://rva-test.appspot.com')
-    .value('VIEWER_URL', 'http://stage-test-dot-rvaviewer-test.appspot.com')
+    .value('VIEWER_URL', 'http://viewer-test.risevision.com')
     .value('ALERTS_WS_URL',
       'https://rvacore-test.appspot.com/alerts/cap')
     .value('TAG_MANAGER_CONTAINER_ID', 'GTM-MMTK3JH')

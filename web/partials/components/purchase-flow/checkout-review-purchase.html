@@ -91,11 +91,11 @@
     <div class="col-sm-6 col-xs-6 text-right">
       <p>
         {{purchase.plan.name}}<br>
-          <span ng-show="purchase.estimate.couponAmount > 0">Education and Non-profit discount<br></span>
+          <span ng-show="purchase.estimate.couponAmount > 0">Promotions and discounts<br></span>
           <span ng-repeat="tax in purchase.estimate.taxes">
             {{tax.taxName}}<br>
           </span>
-          Total Tax:
+          Total tax
       </p>
       <span class="order-total">Order Total:</span>
     </div>

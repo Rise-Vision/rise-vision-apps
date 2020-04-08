@@ -159,13 +159,21 @@
       </div>
     </div>
 
+    <hr ng-show="!purchase.plan.isMonthly">
+
+    <div class="row" ng-show="!purchase.plan.isMonthly">
+      <div class="col-xs-12 text-center u_margin-sm-bottom">
+        <label for="coupon-code" class="control-label">Coupon Code</label>
+        <input id="coupon-code" aria-required="false" type="text" class="form-control" name="couponCode" ng-model="purchase.couponCode">
+      </div>
+    </div>
+
     <hr>
 
     <div class="row">
       <div class="col-xs-12 text-center u_margin-sm-bottom">
         <a id="showTaxExemption" href="#" aria-label="Are you Tax Exempt?" ng-click="showTaxExemptionModal()" ng-show="!purchase.taxExemptionSent" translate>Are you Tax Exempt?</a>
         <h5 ng-show="purchase.taxExemptionSent">Tax Exemption Submitted</h5>
-
       </div>
     </div>
 

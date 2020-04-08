@@ -19,6 +19,7 @@
         var _init = function (plan, isMonthly) {
           factory.purchase = {};
 
+          factory.purchase.couponCode = '';
           factory.purchase.plan = angular.copy(plan);
           factory.purchase.plan.additionalDisplayLicenses = parseInt(plan.additionalDisplayLicenses) || 0;
           factory.purchase.plan.isMonthly = isMonthly;
@@ -218,7 +219,7 @@
           return storeService.calculateTaxes(factory.purchase.billingAddress.id, _getChargebeePlanId(),
               factory.purchase.plan.displays,
               _getChargebeeAddonId(),
-              factory.purchase.plan.additionalDisplayLicenses, factory.purchase.shippingAddress)
+              factory.purchase.plan.additionalDisplayLicenses, factory.purchase.shippingAddress, factory.purchase.couponCode)
             .then(function (result) {
               var estimate = factory.purchase.estimate;
 
@@ -262,6 +263,7 @@
           var obj = {
             billTo: addressService.copyAddress(factory.purchase.billingAddress),
             shipTo: addressService.copyAddress(factory.purchase.shippingAddress),
+            couponCode: factory.purchase.couponCode,
             items: newItems,
             purchaseOrderNumber: paymentMethods.purchaseOrderNumber,
             card: cardData,
