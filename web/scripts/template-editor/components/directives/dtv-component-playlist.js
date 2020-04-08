@@ -3,7 +3,7 @@
 angular.module('risevision.template-editor.directives')
   .constant('FILTER_HTML_TEMPLATES', 'presentationType:"HTML Template"')
   .directive('templateComponentPlaylist', ['templateEditorFactory', 'presentation', '$loading',
-  '$q', 'FILTER_HTML_TEMPLATES', 'ScrollingListService', 'editorFactory', 'blueprintFactory',
+    '$q', 'FILTER_HTML_TEMPLATES', 'ScrollingListService', 'editorFactory', 'blueprintFactory',
     function (templateEditorFactory, presentation, $loading,
       $q, FILTER_HTML_TEMPLATES, ScrollingListService, editorFactory, blueprintFactory) {
       return {
@@ -57,8 +57,10 @@ angular.module('risevision.template-editor.directives')
                   'duration': item.duration,
                   'play-until-done': item['play-until-done'],
                   'transition-type': item['transition-type'],
-                  'id': item.element && item.element.attributes ? item.element.attributes['presentation-id'] : undefined,
-                  'productCode': item.element && item.element.attributes ? item.element.attributes['template-id'] : undefined
+                  'id': item.element && item.element.attributes ? item.element.attributes['presentation-id'] :
+                    undefined,
+                  'productCode': item.element && item.element.attributes ? item.element.attributes[
+                    'template-id'] : undefined
                 };
               });
             }
@@ -109,34 +111,47 @@ angular.module('risevision.template-editor.directives')
               return 'id:' + item.id;
             });
 
-            var search = {filter: presentationIds.join(' OR ')};
+            var search = {
+              filter: presentationIds.join(' OR ')
+            };
 
             $loading.start('rise-playlist-templates-loader');
 
             presentation.list(search)
-            .then(function(res) {
-              if (res.items) {
-                _.forEach(templates, function (template) {
-                  _.forEach(res.items, function (item) {
-                    if (template.id === item.id) {
-                      template.name = item.name;
-                      template.revisionStatusName = item.revisionStatusName;
+              .then(function (res) {
+                if (res.items) {
+                  _.forEach(templates, function (template) {
+                    var found = false;
+
+                    _.forEach(res.items, function (item) {
+                      if (template.id === item.id) {
+                        found = true;
+                        template.name = item.name;
+                        template.revisionStatusName = item.revisionStatusName;
+                        template.removed = false;
+                      }
+                    });
+
+                    if (!found) {
+                      template.name = 'Unknown';
+                      template.revisionStatusName = 'Template not found.';
+                      template.removed = true;
                     }
                   });
-                });
-              }
-              $scope.selectedTemplates = templates;
-              $loading.stop('rise-playlist-templates-loader');
-            })
-            .catch(function () {
-              $loading.stop('rise-playlist-templates-loader');
-            });
+                }
+                $scope.selectedTemplates = templates;
+                $loading.stop('rise-playlist-templates-loader');
+              })
+              .catch(function () {
+                $loading.stop('rise-playlist-templates-loader');
+              });
           };
 
           $scope.searchTemplates = function () {
 
-            $scope.templatesSearch.filter = presentation.buildFilterString($scope.searchKeyword, FILTER_HTML_TEMPLATES);
- 
+            $scope.templatesSearch.filter = presentation.buildFilterString($scope.searchKeyword,
+              FILTER_HTML_TEMPLATES);
+
             //exclude a template that is being edited
             $scope.templatesSearch.filter += ' AND NOT id:' + $scope.factory.presentation.id;
 
@@ -163,18 +178,19 @@ angular.module('risevision.template-editor.directives')
 
             $scope.templatesFactory = new ScrollingListService(presentation.list, $scope.templatesSearch);
 
-            $scope.$watch('templatesFactory.loadingItems', 
-            function (loading) {
-              if (loading) {
-                $loading.start('rise-playlist-templates-loader');
-              } else {
-                $loading.stop('rise-playlist-templates-loader');
-              }
-            });
+            $scope.$watch('templatesFactory.loadingItems',
+              function (loading) {
+                if (loading) {
+                  $loading.start('rise-playlist-templates-loader');
+                } else {
+                  $loading.stop('rise-playlist-templates-loader');
+                }
+              });
           };
 
           $scope.selectTemplate = function (key) {
-            $scope.templatesFactory.items.list[key].isSelected = !$scope.templatesFactory.items.list[key].isSelected;
+            $scope.templatesFactory.items.list[key].isSelected = !$scope.templatesFactory.items.list[key]
+              .isSelected;
             $scope.canAddTemplates = _.some($scope.templatesFactory.items.list, function (item) {
               return item.isSelected;
             });
@@ -195,22 +211,22 @@ angular.module('risevision.template-editor.directives')
             $loading.start('rise-playlist-templates-loader');
 
             $q.all(promises)
-            .then(function (playUntilDoneValues) {
+              .then(function (playUntilDoneValues) {
 
-              for (var i = 0; i < playUntilDoneValues.length; i++) {
-                itemsToAdd[i]['play-until-done'] = playUntilDoneValues[i];
-              }
+                for (var i = 0; i < playUntilDoneValues.length; i++) {
+                  itemsToAdd[i]['play-until-done'] = playUntilDoneValues[i];
+                }
 
-              $scope.selectedTemplates = $scope.selectedTemplates.concat(itemsToAdd);
-              $scope.save();
+                $scope.selectedTemplates = $scope.selectedTemplates.concat(itemsToAdd);
+                $scope.save();
 
-              $loading.stop('rise-playlist-templates-loader');
+                $loading.stop('rise-playlist-templates-loader');
 
-              $scope.showSelectedTemplates();
+                $scope.showSelectedTemplates();
               })
-            .catch(function (e) {
-              $loading.stop('rise-playlist-templates-loader');
-            });
+              .catch(function (e) {
+                $loading.stop('rise-playlist-templates-loader');
+              });
           };
 
           $scope.removeTemplate = function (key) {
@@ -238,9 +254,11 @@ angular.module('risevision.template-editor.directives')
             $scope.selectedItem.key = key;
 
             //set default values
-            $scope.selectedItem.duration = Number.isInteger($scope.selectedItem.duration) ? $scope.selectedItem.duration : 10;
+            $scope.selectedItem.duration = Number.isInteger($scope.selectedItem.duration) ? $scope.selectedItem
+              .duration : 10;
             $scope.selectedItem['play-until-done'] = $scope.selectedItem['play-until-done'] ? 'true' : 'false';
-            $scope.selectedItem['transition-type'] = $scope.selectedItem['transition-type'] ? $scope.selectedItem['transition-type'] : 'normal';
+            $scope.selectedItem['transition-type'] = $scope.selectedItem['transition-type'] ? $scope.selectedItem[
+              'transition-type'] : 'normal';
 
             $scope.showProperties();
           };
