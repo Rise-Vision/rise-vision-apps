@@ -296,6 +296,7 @@ workflows:
             - e2e_storage
             - e2e_template_editor
             - e2e_template_editor2
+            - e2e_template_editor3
           filters:
             branches:
               ignore: /(stage).*/
