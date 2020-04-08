@@ -13,8 +13,8 @@ describe("directive: templateComponentPlaylist", function() {
 
   //add polyfill for Number.isInteger if phantomjs does not have it
   Number.isInteger = Number.isInteger || function(value) {
-    return typeof value === "number" && 
-      isFinite(value) && 
+    return typeof value === "number" &&
+      isFinite(value) &&
       Math.floor(value) === value;
   };
 
@@ -42,10 +42,10 @@ describe("directive: templateComponentPlaylist", function() {
     };
 
     sampleSelectedTemplates = [{
-      "duration": 20, 
-      "play-until-done": true, 
+      "duration": 20,
+      "play-until-done": true,
       "transition-type": "fadeIn",
-      "id": "presentation-id-1", 
+      "id": "presentation-id-1",
       "productCode": "template-id-1"
     }];
 
@@ -56,7 +56,7 @@ describe("directive: templateComponentPlaylist", function() {
           {id: "id2"}
         ]
       }
-    };;
+    };
   });
 
   beforeEach(module("risevision.template-editor.directives"));
@@ -158,6 +158,41 @@ describe("directive: templateComponentPlaylist", function() {
 
   });
 
+  it("should indicate any templates that are now 'Unknown' from being deleted", function(done) {
+    var directive = $scope.registerDirective.getCall(0).args[0],
+        copySampleAttributeData = angular.copy(sampleAttributeData);
+
+    // add deleted item
+    copySampleAttributeData.items.push({
+      "duration": 10,
+      "element": {
+        "attributes": {
+          "presentation-id": "presentation-id-2",
+          "template-id": "template-id-2"
+        },
+        "tagName": "rise-embedded-template"
+      },
+      "play-until-done": true,
+      "transition-type": "fadeIn"
+    });
+
+    $scope.getAvailableAttributeData = function(componentId, attributeName) {
+      return copySampleAttributeData[attributeName];
+    };
+
+    directive.show();
+
+    setTimeout(function() {
+      expect($scope.selectedTemplates[1]["id"]).to.equal("presentation-id-2");
+      expect($scope.selectedTemplates[1]["productCode"]).to.equal("template-id-2");
+      expect($scope.selectedTemplates[1]["name"]).to.equal("Unknown");
+      expect($scope.selectedTemplates[1]["revisionStatusName"]).to.equal("Template not found.");
+      expect($scope.selectedTemplates[1]["removed"]).to.be.true;
+
+      done();
+    }, 10);
+  });
+
   it("should save items to attribute data", function() {
     $scope.componentId = "TEST-ID";
     sandbox.stub($scope, "selectedTemplatesToJson").callsFake(function(){ return "fake data"; });
@@ -255,7 +290,7 @@ describe("directive: templateComponentPlaylist", function() {
   it("should search templates when user presses enter", function() {
     sandbox.stub($scope, "searchTemplates");
 
-    $scope.searchKeyPressed({which: 13}); 
+    $scope.searchKeyPressed({which: 13});
 
     expect($scope.searchTemplates).to.be.calledOnce;
   });
@@ -345,7 +380,7 @@ describe("directive: templateComponentPlaylist", function() {
 
   it("should edit properties of a playlist item", function() {
     $scope.selectedTemplates = sampleSelectedTemplates;
-    
+
     $scope.editProperties(0);
 
     expect($scope.selectedItem["key"]).to.equal(0);
@@ -362,7 +397,7 @@ describe("directive: templateComponentPlaylist", function() {
       "play-until-done": false,
       "transition-type": "some-transition"
     };
-    
+
     sandbox.stub($scope, "save");
 
     $scope.saveProperties();
