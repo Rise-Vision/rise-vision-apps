@@ -158,11 +158,11 @@ describe("directive: templateComponentPlaylist", function() {
 
   });
 
-  it("should indicate any templates that are now 'Unknown' from being deleted", function() {
+  it("should indicate any templates that are now 'Unknown' from being deleted", function(done) {
     var directive = $scope.registerDirective.getCall(0).args[0],
-      copySampleAttributeData = JSON.parse(JSON.stringify(sampleAttributeData)),
-      copySelectedTemplates = sampleSelectedTemplates.slice();
+        copySampleAttributeData = angular.copy(sampleAttributeData);
 
+    // add deleted item
     copySampleAttributeData.items.push({
       "duration": 10,
       "element": {
@@ -176,19 +176,9 @@ describe("directive: templateComponentPlaylist", function() {
       "transition-type": "fadeIn"
     });
 
-    copySelectedTemplates.push({
-      "duration": 20,
-      "play-until-done": true,
-      "transition-type": "fadeIn",
-      "id": "presentation-id-2",
-      "productCode": "template-id-2"
-    });
-
     $scope.getAvailableAttributeData = function(componentId, attributeName) {
       return copySampleAttributeData[attributeName];
     };
-
-    $scope.selectedTemplates = copySelectedTemplates;
 
     directive.show();
 
