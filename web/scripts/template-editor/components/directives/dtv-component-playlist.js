@@ -25,6 +25,12 @@ angular.module('risevision.template-editor.directives')
             $scope.loadTemplateNames(itemsArray);
           }
 
+          function _configureUnknown(template) {
+            template.name = 'Unknown';
+            template.revisionStatusName = 'Template not found.';
+            template.removed = true;
+          }
+
           $scope.save = function () {
             var itemsJson = $scope.selectedTemplatesToJson();
             $scope.setAttributeData($scope.componentId, 'items', itemsJson);
@@ -133,10 +139,12 @@ angular.module('risevision.template-editor.directives')
                     });
 
                     if (!found) {
-                      template.name = 'Unknown';
-                      template.revisionStatusName = 'Template not found.';
-                      template.removed = true;
+                      _configureUnknown(template);
                     }
+                  });
+                } else {
+                  _.forEach(templates, function (template) {
+                    _configureUnknown(template);
                   });
                 }
                 $scope.selectedTemplates = templates;
