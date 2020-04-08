@@ -13,8 +13,8 @@ describe("directive: templateComponentPlaylist", function() {
 
   //add polyfill for Number.isInteger if phantomjs does not have it
   Number.isInteger = Number.isInteger || function(value) {
-    return typeof value === "number" && 
-      isFinite(value) && 
+    return typeof value === "number" &&
+      isFinite(value) &&
       Math.floor(value) === value;
   };
 
@@ -37,16 +37,34 @@ describe("directive: templateComponentPlaylist", function() {
           },
           "play-until-done": true,
           "transition-type": "fadeIn"
+        },
+        {
+          "duration": 10,
+          "element": {
+            "attributes": {
+              "presentation-id": "presentation-id-2",
+              "template-id": "template-id-2"
+            },
+            "tagName": "rise-embedded-template"
+          },
+          "play-until-done": true,
+          "transition-type": "fadeIn"
         }
       ]
     };
 
     sampleSelectedTemplates = [{
-      "duration": 20, 
-      "play-until-done": true, 
+      "duration": 20,
+      "play-until-done": true,
       "transition-type": "fadeIn",
-      "id": "presentation-id-1", 
+      "id": "presentation-id-1",
       "productCode": "template-id-1"
+    },{
+      "duration": 20,
+      "play-until-done": true,
+      "transition-type": "fadeIn",
+      "id": "presentation-id-2",
+      "productCode": "template-id-2"
     }];
 
     sampleTemplatesFactory = {
@@ -56,7 +74,7 @@ describe("directive: templateComponentPlaylist", function() {
           {id: "id2"}
         ]
       }
-    };;
+    };
   });
 
   beforeEach(module("risevision.template-editor.directives"));
@@ -158,22 +176,23 @@ describe("directive: templateComponentPlaylist", function() {
 
   });
 
-  it("should indicate in UI any items that are unknown", function() {
+  it("should indicate any templates that are now 'Unknown' from being deleted", function() {
     var directive = $scope.registerDirective.getCall(0).args[0];
 
     $scope.getAvailableAttributeData = function(componentId, attributeName) {
-      return [];
+      return sampleAttributeData[attributeName];
     };
 
-    $scope.selectedTemplates = sampleSelectedTemplates; //some garbage data from past session
+    $scope.selectedTemplates = sampleSelectedTemplates;
 
     directive.show();
 
     setTimeout(function() {
-
-      expect($scope.selectedTemplates[0]["name"]).to.equal("Unknown");
-      expect($scope.selectedTemplates[0]["revisionStatusName"]).to.equal("Template not found.");
-      expect($scope.selectedTemplates[0]["removed"]).to.be.true;
+      expect($scope.selectedTemplates[1]["id"]).to.equal("presentation-id-2");
+      expect($scope.selectedTemplates[1]["productCode"]).to.equal("template-id-2");
+      expect($scope.selectedTemplates[1]["name"]).to.equal("Unknown");
+      expect($scope.selectedTemplates[1]["revisionStatusName"]).to.equal("Template not found.");
+      expect($scope.selectedTemplates[1]["removed"]).to.be.true;
 
       done();
     }, 10);
@@ -276,7 +295,7 @@ describe("directive: templateComponentPlaylist", function() {
   it("should search templates when user presses enter", function() {
     sandbox.stub($scope, "searchTemplates");
 
-    $scope.searchKeyPressed({which: 13}); 
+    $scope.searchKeyPressed({which: 13});
 
     expect($scope.searchTemplates).to.be.calledOnce;
   });
@@ -366,7 +385,7 @@ describe("directive: templateComponentPlaylist", function() {
 
   it("should edit properties of a playlist item", function() {
     $scope.selectedTemplates = sampleSelectedTemplates;
-    
+
     $scope.editProperties(0);
 
     expect($scope.selectedItem["key"]).to.equal(0);
@@ -383,7 +402,7 @@ describe("directive: templateComponentPlaylist", function() {
       "play-until-done": false,
       "transition-type": "some-transition"
     };
-    
+
     sandbox.stub($scope, "save");
 
     $scope.saveProperties();
