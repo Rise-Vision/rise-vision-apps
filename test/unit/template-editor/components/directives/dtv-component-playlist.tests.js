@@ -37,18 +37,6 @@ describe("directive: templateComponentPlaylist", function() {
           },
           "play-until-done": true,
           "transition-type": "fadeIn"
-        },
-        {
-          "duration": 10,
-          "element": {
-            "attributes": {
-              "presentation-id": "presentation-id-2",
-              "template-id": "template-id-2"
-            },
-            "tagName": "rise-embedded-template"
-          },
-          "play-until-done": true,
-          "transition-type": "fadeIn"
         }
       ]
     };
@@ -59,12 +47,6 @@ describe("directive: templateComponentPlaylist", function() {
       "transition-type": "fadeIn",
       "id": "presentation-id-1",
       "productCode": "template-id-1"
-    },{
-      "duration": 20,
-      "play-until-done": true,
-      "transition-type": "fadeIn",
-      "id": "presentation-id-2",
-      "productCode": "template-id-2"
     }];
 
     sampleTemplatesFactory = {
@@ -177,13 +159,36 @@ describe("directive: templateComponentPlaylist", function() {
   });
 
   it("should indicate any templates that are now 'Unknown' from being deleted", function() {
-    var directive = $scope.registerDirective.getCall(0).args[0];
+    var directive = $scope.registerDirective.getCall(0).args[0],
+      copySampleAttributeData = JSON.parse(JSON.stringify(sampleAttributeData)),
+      copySelectedTemplates = sampleSelectedTemplates.slice();
+
+    copySampleAttributeData.items.push({
+      "duration": 10,
+      "element": {
+        "attributes": {
+          "presentation-id": "presentation-id-2",
+          "template-id": "template-id-2"
+        },
+        "tagName": "rise-embedded-template"
+      },
+      "play-until-done": true,
+      "transition-type": "fadeIn"
+    });
+
+    copySelectedTemplates.push({
+      "duration": 20,
+      "play-until-done": true,
+      "transition-type": "fadeIn",
+      "id": "presentation-id-2",
+      "productCode": "template-id-2"
+    });
 
     $scope.getAvailableAttributeData = function(componentId, attributeName) {
-      return sampleAttributeData[attributeName];
+      return copySampleAttributeData[attributeName];
     };
 
-    $scope.selectedTemplates = sampleSelectedTemplates;
+    $scope.selectedTemplates = copySelectedTemplates;
 
     directive.show();
 
