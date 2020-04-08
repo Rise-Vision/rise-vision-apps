@@ -158,6 +158,27 @@ describe("directive: templateComponentPlaylist", function() {
 
   });
 
+  it("should indicate in UI any items that are unknown", function() {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+
+    $scope.getAvailableAttributeData = function(componentId, attributeName) {
+      return [];
+    };
+
+    $scope.selectedTemplates = sampleSelectedTemplates; //some garbage data from past session
+
+    directive.show();
+
+    setTimeout(function() {
+
+      expect($scope.selectedTemplates[0]["name"]).to.equal("Unknown");
+      expect($scope.selectedTemplates[0]["revisionStatusName"]).to.equal("Template not found.");
+      expect($scope.selectedTemplates[0]["removed"]).to.be.true;
+
+      done();
+    }, 10);
+  });
+
   it("should save items to attribute data", function() {
     $scope.componentId = "TEST-ID";
     sandbox.stub($scope, "selectedTemplatesToJson").callsFake(function(){ return "fake data"; });
