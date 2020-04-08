@@ -279,6 +279,12 @@ workflows:
           filters:
             branches:
               ignore: /(stage).*/
+      - e2e_template_editor3:
+          requires:
+            - test_build
+          filters:
+            branches:
+              ignore: /(stage).*/
       - test_e2e:
           requires:
             - e2e_schedules
