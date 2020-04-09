@@ -25,12 +25,6 @@ angular.module('risevision.template-editor.directives')
             $scope.loadTemplateNames(itemsArray);
           }
 
-          function _configureUnknown(template) {
-            template.name = 'Unknown';
-            template.revisionStatusName = 'Template not found.';
-            template.removed = true;
-          }
-
           $scope.save = function () {
             var itemsJson = $scope.selectedTemplatesToJson();
             $scope.setAttributeData($scope.componentId, 'items', itemsJson);
@@ -125,10 +119,10 @@ angular.module('risevision.template-editor.directives')
 
             presentation.list(search)
               .then(function (res) {
-                if (res.items) {
-                  _.forEach(templates, function (template) {
-                    var found = false;
+                _.forEach(templates, function (template) {
+                  var found = false;
 
+                  if (res.items) {
                     _.forEach(res.items, function (item) {
                       if (template.id === item.id) {
                         found = true;
@@ -137,16 +131,14 @@ angular.module('risevision.template-editor.directives')
                         template.removed = false;
                       }
                     });
+                  }
 
-                    if (!found) {
-                      _configureUnknown(template);
-                    }
-                  });
-                } else {
-                  _.forEach(templates, function (template) {
-                    _configureUnknown(template);
-                  });
-                }
+                  if (!found) {
+                    template.name = 'Unknown';
+                    template.revisionStatusName = 'Template not found.';
+                    template.removed = true;
+                  }
+                });
                 $scope.selectedTemplates = templates;
                 $loading.stop('rise-playlist-templates-loader');
               })
