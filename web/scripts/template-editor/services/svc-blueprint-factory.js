@@ -8,19 +8,21 @@ angular.module('risevision.template-editor.services')
       var _blueprints = {};
       factory.loadingBlueprint = false;
 
-      factory.getBlueprintCached = function (productCode) {
+      factory.getBlueprintCached = function (productCode, readOnly) {
         var blueprint = _blueprints[productCode];
 
         if (blueprint) {
-          factory.blueprintData = blueprint;
+          if (!readOnly) {
+            factory.blueprintData = blueprint;
+          }
 
           return $q.resolve(blueprint);
         } else {
-          return _getBlueprint(productCode);
+          return _getBlueprint(productCode, readOnly);
         }
       };
 
-      var _getBlueprint = function (productCode) {
+      var _getBlueprint = function (productCode, readOnly) {
         var url = BLUEPRINT_URL.replace('PRODUCT_CODE', productCode);
 
         //show loading spinner
@@ -28,11 +30,13 @@ angular.module('risevision.template-editor.services')
 
         return $http.get(url)
           .then(function (response) {
-            factory.blueprintData = response.data;
+            if (!readOnly) {
+              factory.blueprintData = response.data;
+            }
 
-            _blueprints[productCode] = factory.blueprintData;
+            _blueprints[productCode] = response.data;
 
-            return factory.blueprintData;
+            return response.data;
           })
           .finally(function () {
             factory.loadingBlueprint = false;
@@ -40,9 +44,9 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.isPlayUntilDone = function (productCode) {
-        return factory.getBlueprintCached(productCode)
-          .then(function () {
-            return !!(factory.blueprintData && factory.blueprintData.playUntilDone);
+        return factory.getBlueprintCached(productCode, true)
+          .then(function (result) {
+            return !!(result && result.playUntilDone);
           });
       };
 
