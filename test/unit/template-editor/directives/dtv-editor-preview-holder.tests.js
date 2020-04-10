@@ -56,6 +56,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
         brandingSettings: {
           baseColor: 'baseColor',
           accentColor: 'accentColor',
+          logoFile: 'logoFile',
           logoFileMetadata: 'logoMetadata'
         }
       };
@@ -112,7 +113,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
       setTimeout(function(){
         iframe.contentWindow.postMessage.should.have.been.called;
-        expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"baseColor":"baseColor","accentColor":"accentColor"}}}', 'https://widgets.risevision.com']);
+        expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"logoFile":"logoFile","baseColor":"baseColor","accentColor":"accentColor"}}}', 'https://widgets.risevision.com']);
 
         done();
       },10);
@@ -127,7 +128,7 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
       setTimeout(function(){
         iframe.contentWindow.postMessage.should.have.been.called;
-        expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"baseColor":"baseColor","accentColor":"accentColor"}}}', 'https://widgets.risevision.com']);
+        expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"logoFile":"logoFile","baseColor":"baseColor","accentColor":"accentColor"}}}', 'https://widgets.risevision.com']);
 
         done();
       },10);
@@ -143,7 +144,22 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
       setTimeout(function(){
         iframe.contentWindow.postMessage.should.have.been.called;
-        expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"baseColor":"newBaseColor","accentColor":"newAccentColor"}}}', 'https://widgets.risevision.com']);
+        expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"logoFile":"logoFile","baseColor":"newBaseColor","accentColor":"newAccentColor"}}}', 'https://widgets.risevision.com']);
+
+        done();
+      },10);
+    });
+
+    it('posts display data when logo has changed', function(done) {
+      iframe.onload();
+      iframe.contentWindow.postMessage.reset();
+      brandingFactory.brandingSettings.logoFile = "newLogoFile";
+      $scope.$digest();
+      $timeout.flush();
+
+      setTimeout(function(){
+        iframe.contentWindow.postMessage.should.have.been.called;
+        expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal(['{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"logoFile":"newLogoFile","baseColor":"baseColor","accentColor":"accentColor"}}}', 'https://widgets.risevision.com']);
 
         done();
       },10);
@@ -274,12 +290,12 @@ describe('directive: TemplateEditorPreviewHolder', function() {
 
       iframe.onload();
 
-      //send attributes data
-      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal([ '{"type":"attributeData","value":{"components":[{"id":"image","metadata":"originalMetadata1"},{"id":"logo","metadata":"logoMetadata"}]}}', 'https://widgets.risevision.com' ]);
-      //send start event
-      expect(iframe.contentWindow.postMessage.getCall(1).args).to.deep.equal([ '{"type":"sendStartEvent"}', 'https://widgets.risevision.com' ]);
       //send display data
-      expect(iframe.contentWindow.postMessage.getCall(2).args).to.deep.equal([ '{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"baseColor":"baseColor","accentColor":"accentColor"}}}', 'https://widgets.risevision.com' ]);
+      expect(iframe.contentWindow.postMessage.getCall(0).args).to.deep.equal([ '{"type":"displayData","value":{"displayAddress":{},"companyBranding":{"logoFile":"logoFile","baseColor":"baseColor","accentColor":"accentColor"}}}', 'https://widgets.risevision.com' ]);
+      //send attributes data
+      expect(iframe.contentWindow.postMessage.getCall(1).args).to.deep.equal([ '{"type":"attributeData","value":{"components":[{"id":"image","metadata":"originalMetadata1"},{"id":"logo","metadata":"logoMetadata"}]}}', 'https://widgets.risevision.com' ]);
+      //send start event
+      expect(iframe.contentWindow.postMessage.getCall(2).args).to.deep.equal([ '{"type":"sendStartEvent"}', 'https://widgets.risevision.com' ]);      
     });
   });
 
