@@ -117,46 +117,32 @@ describe('service: blueprint factory', function() {
   });
 
   describe('isPlayUntilDone: ', function() {
-    beforeEach(function() {
-      sinon.stub(blueprintFactory, 'getBlueprintCached').returns(Q.resolve());
-    });
 
     it('should return a promise',function() {
+      sinon.stub(blueprintFactory, 'getBlueprintCached').returns(Q.resolve());
       expect(blueprintFactory.isPlayUntilDone('productCode').then).to.be.a('function');
 
-      blueprintFactory.getBlueprintCached.should.have.been.calledWith('productCode');
+      blueprintFactory.getBlueprintCached.should.have.been.calledWith('productCode', true);
     });
 
     it('should return false if blueprintData is not populated',function() {
+      sinon.stub(blueprintFactory, 'getBlueprintCached').returns(Q.resolve());
+
       return blueprintFactory.isPlayUntilDone().then(function(result) {
         expect(result).to.be.false;
       });
     });
 
-    it('should return true if blueprintData.playUntilDone is true',function() {
-      blueprintFactory.blueprintData = {
-        playUntilDone: true
-      };
+    it('should return true if blueprintData exists and playUntilDone is true',function() {
+      sinon.stub(blueprintFactory, 'getBlueprintCached').returns(Q.resolve({playUntilDone: true}));
 
       return blueprintFactory.isPlayUntilDone().then(function(result) {
         expect(result).to.be.true;
       });
     });
 
-    it('should return true if blueprintData.playUntilDone exists',function() {
-      blueprintFactory.blueprintData = {
-        playUntilDone: "something"
-      };
-
-      return blueprintFactory.isPlayUntilDone().then(function(result) {
-        expect(result).to.be.true;
-      });
-    });
-
-    it('should return false otherwise',function() {
-      blueprintFactory.blueprintData = {
-        playUntilDone: false
-      };
+    it('should return true if blueprintData exists and playUntilDone is not true',function() {
+      sinon.stub(blueprintFactory, 'getBlueprintCached').returns(Q.resolve({}));
 
       return blueprintFactory.isPlayUntilDone().then(function(result) {
         expect(result).to.be.false;
