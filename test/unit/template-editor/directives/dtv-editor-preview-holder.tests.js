@@ -284,10 +284,10 @@ describe('directive: TemplateEditorPreviewHolder', function() {
   });
 
   describe('getEditorPreviewUrl', function() {
-    it('should include presentation id in template URL', function() {
+    it('should include presentation id and type preview in template URL', function() {
       var url = $scope.getEditorPreviewUrl('AAAA');
 
-      expect(url.toString()).to.equal('https://widgets.risevision.com/staging/templates/AAAA/src/template.html?presentationId=xxxxyyyy');
+      expect(url.toString()).to.equal('https://widgets.risevision.com/staging/templates/AAAA/src/template.html?type=preview&presentationId=xxxxyyyy');
     });
   });
 
