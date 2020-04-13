@@ -256,11 +256,20 @@ angular.module('risevision.template-editor.directives')
             //set default values
             $scope.selectedItem.duration = Number.isInteger($scope.selectedItem.duration) ? $scope.selectedItem
               .duration : 10;
-            $scope.selectedItem['play-until-done'] = $scope.selectedItem['play-until-done'] ? 'true' : 'false';
             $scope.selectedItem['transition-type'] = $scope.selectedItem['transition-type'] ? $scope.selectedItem[
               'transition-type'] : 'normal';
 
-            $scope.showProperties();
+            blueprintFactory.isPlayUntilDone($scope.selectedItem.productCode)
+              .then(function (res) {
+                $scope.selectedItem['play-until-done-supported'] = res;
+              })
+              .catch(function () {})
+              .finally(function () {
+                $scope.selectedItem['play-until-done'] = $scope.selectedItem['play-until-done-supported'] &&
+                  $scope.selectedItem['play-until-done'] ? 'true' : 'false';
+
+                $scope.showProperties();
+              });
           };
 
           $scope.saveProperties = function () {
