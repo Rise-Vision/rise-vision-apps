@@ -4,7 +4,6 @@ describe('directive: weekly-templates', function() {
       $rootScope,
       $scope,
       element,
-      isEducationCustomer,
       sessionStorage,
       editorFactory;
   beforeEach(module('risevision.apps.launcher.directives'));
@@ -27,9 +26,6 @@ describe('directive: weekly-templates', function() {
     });  
     $provide.service('userState', function() {
       return {
-        isEducationCustomer: function() {
-          return isEducationCustomer;
-        },
         getCopyOfProfile: function() {
           return {
             mailSyncEnabled: true
@@ -43,7 +39,6 @@ describe('directive: weekly-templates', function() {
     
   }));
   beforeEach(inject(function(_$compile_, _$rootScope_, $templateCache){
-    isEducationCustomer = true;
     sessionStorage = {
         $default: sinon.stub(),
         weeklyTemplatesFullView: true
@@ -78,9 +73,10 @@ describe('directive: weekly-templates', function() {
           count: 4
         }
       );
-      expect($scope.factory).to.be.a.function;
-      expect($scope.toggleView).to.be.a.function;
-      expect($scope.select).to.be.a.function;
+      expect($scope.factory).to.be.ok;
+      expect($scope.factory.doSearch).to.be.a('function');
+      expect($scope.toggleView).to.be.a('function');
+      expect($scope.select).to.be.a('function');
       expect($scope.alreadyOptedIn).to.be.true;
     });
 
@@ -90,19 +86,6 @@ describe('directive: weekly-templates', function() {
       compileDirective();
       expect($scope.fullView).to.be.false;
     })
-
-    it('should load Templates if Education',function() {
-      expect($scope.factory).to.be.a.function;
-      isEducationCustomer = true;
-      compileDirective();
-      expect($scope.factory).to.be.a.function;
-    });
-
-    it('should not load Templates if not Education',function() {
-      isEducationCustomer = false;
-      compileDirective();
-      expect($scope.factory).to.not.be.a.function;
-    });
 
   });
 

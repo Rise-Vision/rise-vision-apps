@@ -23,10 +23,8 @@ angular.module('risevision.apps.launcher.directives')
             count: 4
           };
 
-          if (userState.isEducationCustomer()) {
-            $scope.factory = new ScrollingListService(productsFactory.loadProducts,
-              $scope.search);
-          }
+          $scope.factory = new ScrollingListService(productsFactory.loadProducts,
+            $scope.search);
 
           $scope.toggleView = function () {
             $scope.fullView = !$scope.fullView;
