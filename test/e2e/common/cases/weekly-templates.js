@@ -30,9 +30,10 @@ var WeeklyTemplatesScenarios = function() {
     });
 
     // Jenkins account is not an Education company
-    it('should not show Weekly Templates for Non-Education customers',function(){
-      expect(weeklyTemplatesPage.getWeeklyTemplatesMainPanel().isPresent()).to.eventually.be.false;
-      expect(weeklyTemplatesPage.getWeeklyTemplatesExpandedView().isPresent()).to.eventually.be.false;
+    it('should show Weekly Templates for Non-Education customers',function(){
+      helper.wait(weeklyTemplatesPage.getWeeklyTemplatesMainPanel(), 'Notice View');
+      expect(weeklyTemplatesPage.getWeeklyTemplatesMainPanel().isDisplayed()).to.eventually.be.true;
+      expect(weeklyTemplatesPage.getWeeklyTemplatesExpandedView().isDisplayed()).to.eventually.be.true;
       expect(weeklyTemplatesPage.getWeeklyTemplatesNoticeView().isPresent()).to.eventually.be.false;
     });
 
