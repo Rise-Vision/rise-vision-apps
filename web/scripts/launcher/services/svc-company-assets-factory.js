@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('risevision.apps.launcher.services')
-  .factory('companyAssetsFactory', ['$rootScope', '$q', 'CachedRequest',
-    'presentation', 'schedule', 'display',
-    function ($rootScope, $q, CachedRequest, presentation, schedule, display) {
+  .factory('companyAssetsFactory', ['$rootScope', '$q', 'CachedRequest', 'ScrollingListService',
+    'presentation', 'schedule', 'display', 'productsFactory',
+    function ($rootScope, $q, CachedRequest, ScrollingListService, presentation, schedule, display,
+    productsFactory) {
       var factory = {};
 
       var presentationSearch = {
@@ -21,13 +22,22 @@ angular.module('risevision.apps.launcher.services')
         reverse: true,
         count: 20
       };
+      var weeklyTemplatesSearch = {
+        // sortBy: 'templateReleaseDate DESC',
+        filter: 'templateOfTheWeek:1',
+        category: 'Templates',
+        count: 4
+      };
+
       var presentationListRequest = new CachedRequest(presentation.list, presentationSearch);
       var scheduleListRequest = new CachedRequest(schedule.list, scheduleSearch);
       var displayListRequest = new CachedRequest(display.list, displaySearch);
-
+      
       var addScheduleListener, addScheduleCompleted;
       var addDisplayListener, addDisplayCompleted;
       var displaysListListener, activeDisplayCompleted;
+
+      factory.weeklyTemplates = new ScrollingListService(productsFactory.loadProducts, weeklyTemplatesSearch);
 
       var _sendUpdateEvent = function () {
         $rootScope.$broadcast('companyAssetsUpdated');

@@ -1,4 +1,5 @@
 'use strict';
+
 describe('service: company assets factory:', function() {
   beforeEach(module('risevision.apps.launcher.services'));
 
@@ -30,13 +31,25 @@ describe('service: company assets factory:', function() {
       });
     });
 
+    $provide.service('productsFactory', function() {
+      return {
+        loadProducts: 'loadProducts'
+      };
+    }); 
+    $provide.service('ScrollingListService', function() {
+      return sinon.stub().returns({
+        listService: 'listService'
+      });
+    });
+
   }));
   
-  var companyAssetsFactory, CachedRequest, requestExecute, $rootScope, requestReset;
+  var companyAssetsFactory, CachedRequest, requestExecute, $rootScope, requestReset, ScrollingListService;
   beforeEach(function() {
     inject(function($injector) {
       companyAssetsFactory = $injector.get('companyAssetsFactory');
       CachedRequest = $injector.get('CachedRequest');
+      ScrollingListService = $injector.get('ScrollingListService');
       $rootScope = $injector.get('$rootScope');
     });
   });
@@ -399,6 +412,18 @@ describe('service: company assets factory:', function() {
       $rootScope.$digest();
 
       requestReset.should.have.been.calledThrice;
+    });
+  });
+
+  it('weeklyTemplates:', function() {
+    ScrollingListService.should.have.been.calledWith('loadProducts', {
+      filter: 'templateOfTheWeek:1',
+      category: 'Templates',
+      count: 4
+    });
+
+    expect(companyAssetsFactory.weeklyTemplates).to.deep.equal({
+      listService: 'listService'
     });
   });
 

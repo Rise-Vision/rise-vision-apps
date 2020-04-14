@@ -1,10 +1,9 @@
 'use strict';
 
 angular.module('risevision.apps.launcher.directives')
-  .directive('weeklyTemplates', ['productsFactory', 'ScrollingListService',
-    'editorFactory', 'userState', '$sessionStorage',
-    function (productsFactory, ScrollingListService, editorFactory,
-      userState, $sessionStorage) {
+  .directive('weeklyTemplates', ['companyAssetsFactory', 'editorFactory', 'userState',
+    '$sessionStorage',
+    function (companyAssetsFactory, editorFactory, userState, $sessionStorage) {
       return {
         restrict: 'E',
         scope: {},
@@ -14,17 +13,9 @@ angular.module('risevision.apps.launcher.directives')
             weeklyTemplatesFullView: true
           });
 
+          $scope.weeklyTemplates = companyAssetsFactory.weeklyTemplates;
+
           $scope.fullView = $sessionStorage.weeklyTemplatesFullView;
-
-          $scope.search = {
-            // sortBy: 'templateReleaseDate DESC',
-            filter: 'templateOfTheWeek:1',
-            category: 'Templates',
-            count: 4
-          };
-
-          $scope.factory = new ScrollingListService(productsFactory.loadProducts,
-            $scope.search);
 
           $scope.toggleView = function () {
             $scope.fullView = !$scope.fullView;

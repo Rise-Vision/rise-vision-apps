@@ -1,4 +1,4 @@
-<div id="TemplateList1" class="weekly-templates panel panel-default u_margin-sm-top" ng-if="factory.items.list.length">
+<div id="TemplateList1" class="weekly-templates panel panel-default u_margin-sm-top" ng-if="weeklyTemplates.items.list.length">
   <div class="panel-body">
 
     <div id="weekly-templates-notice" ng-if="!fullView" class="u_clickable" ng-click="toggleView()">
@@ -21,7 +21,7 @@
 
       <div class="row" >
         <div class="u_margin-sm-top">
-          <ng-repeat ng-repeat="product in factory.items.list">
+          <ng-repeat ng-repeat="product in weeklyTemplates.items.list">
             <div id="storeProduct" class="col-sm-6 col-md-4 col-lg-3 col-centered" ng-click="select(product)">
               <div class="product-grid_item panel panel-default">
                 <figure class="product-grid_image u_clickable">

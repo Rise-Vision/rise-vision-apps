@@ -8,19 +8,11 @@ describe('directive: weekly-templates', function() {
       editorFactory;
   beforeEach(module('risevision.apps.launcher.directives'));
   beforeEach(module(function ($provide) {
-    $provide.service('productsFactory', function() {
+    $provide.service('companyAssetsFactory', function() {
       return {
+        weeklyTemplates: 'weeklyTemplates'
       };
-    }); 
-    $provide.service('ScrollingListService', function() {
-      return function() {
-        return {
-          search: {},
-          loadingItems: false,
-          doSearch: sinon.stub()
-        };
-      };
-    });
+    });  
     $provide.service('editorFactory', function() {
       return editorFactory;
     });  
@@ -67,14 +59,7 @@ describe('directive: weekly-templates', function() {
 
     it('should initialize scope', function() {
       expect($scope.fullView).to.be.true;
-      expect($scope.search).to.deep.equal({
-          filter: 'templateOfTheWeek:1',
-          category: 'Templates',
-          count: 4
-        }
-      );
-      expect($scope.factory).to.be.ok;
-      expect($scope.factory.doSearch).to.be.a('function');
+      expect($scope.weeklyTemplates).to.equal('weeklyTemplates');
       expect($scope.toggleView).to.be.a('function');
       expect($scope.select).to.be.a('function');
       expect($scope.alreadyOptedIn).to.be.true;
