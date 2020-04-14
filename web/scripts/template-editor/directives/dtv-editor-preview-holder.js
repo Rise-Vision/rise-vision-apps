@@ -30,11 +30,12 @@ angular.module('risevision.template-editor.directives')
           iframe.onload = function () {
             iframeLoaded = true;
 
+            _postDisplayData();
+
             _postAttributeData();
 
             _postStartEvent();
 
-            _postDisplayData();
           };
 
           $scope.getEditorPreviewUrl = function (productCode) {
@@ -181,6 +182,7 @@ angular.module('risevision.template-editor.directives')
           }, true);
 
           $scope.$watchGroup([
+            'brandingFactory.brandingSettings.logoFile',
             'brandingFactory.brandingSettings.baseColor',
             'brandingFactory.brandingSettings.accentColor'
           ], function () {
@@ -250,6 +252,7 @@ angular.module('risevision.template-editor.directives')
                   postalCode: company.postalCode
                 },
                 companyBranding: {
+                  logoFile: brandingFactory.brandingSettings.logoFile,
                   baseColor: brandingFactory.brandingSettings.baseColor,
                   accentColor: brandingFactory.brandingSettings.accentColor
                 }
