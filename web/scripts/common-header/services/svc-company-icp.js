@@ -49,6 +49,7 @@ angular.module('risevision.common.header')
     ['Technology and Integrator', 'INFORMATION_TECHNOLOGY_AND_SERVICES'],
     ['Warehousing', 'WAREHOUSING'],
     ['Logistics and Supply Chain', 'LOGISTICS_AND_SUPPLY_CHAIN'],
+    ['Supermarkets', 'SUPERMARKETS'],
     ['Other', 'OTHER']
   ])
   .value('COMPANY_SIZE_FIELDS', [
