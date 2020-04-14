@@ -103,17 +103,19 @@ rv-spinner rv-spinner-key="rise-playlist-templates-loader">
 
       <div class="attribute-editor-row">
         <label class="control-label" for="te-playlist-item-duration">Duration:</label>
-        <div class="madero-radio">
-          <input type="radio" ng-model="selectedItem['play-until-done']" value="true" name="pud" id="te-playlist-item-pud-true" ng-change="saveProperties()" aria-required="true" required>
-          <label for="te-playlist-item-pud-true">
-            Play until done (PUD).
-          </label>
-        </div>
-        <div class="madero-radio">
-          <input type="radio" ng-model="selectedItem['play-until-done']" value="false" name="pud" id="te-playlist-item-pud-false" ng-change="saveProperties()" aria-required="true" required>
-          <label for="te-playlist-item-pud-false">
-            A specific time period.
-          </label>
+        <div  ng-show="selectedItem['play-until-done-supported']">
+          <div class="madero-radio">
+            <input type="radio" ng-model="selectedItem['play-until-done']" value="true" name="pud" id="te-playlist-item-pud-true" ng-change="saveProperties()" aria-required="true" required>
+            <label for="te-playlist-item-pud-true">
+              Play until done (PUD).
+            </label>
+          </div>
+          <div class="madero-radio">
+            <input type="radio" ng-model="selectedItem['play-until-done']" value="false" name="pud" id="te-playlist-item-pud-false" ng-change="saveProperties()" aria-required="true" required>
+            <label for="te-playlist-item-pud-false">
+              A specific time period.
+            </label>
+          </div>
         </div>
       </div>
 
@@ -122,7 +124,7 @@ rv-spinner rv-spinner-key="rise-playlist-templates-loader">
         That way the model value is processed immeditly on Form submit and saveProperties() is called only once. -->
         <form>
           <div class="input-group">
-            <input type="number" id="te-playlist-item-duration" class="form-control duration-input-group" ng-model="selectedItem.duration" placeholder="Enter duration" ng-model-options="{ debounce: 1000 }" ng-change="saveProperties()">
+            <input type="number" id="te-playlist-item-duration" class="form-control" ng-class="{duration-input-group : selectedItem['play-until-done-supported']}" ng-model="selectedItem.duration" placeholder="Enter duration" ng-model-options="{ debounce: 1000 }" ng-change="saveProperties()">
             <span class="input-group-addon">seconds</span>
           </div>
         </form>

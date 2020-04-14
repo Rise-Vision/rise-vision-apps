@@ -7,6 +7,7 @@ describe("directive: templateComponentPlaylist", function() {
       element,
       factory,
       editorFactory,
+      blueprintFactory,
       sampleAttributeData,
       sampleSelectedTemplates,
       sampleTemplatesFactory;
@@ -105,6 +106,7 @@ describe("directive: templateComponentPlaylist", function() {
     $scope = $rootScope.$new();
     $loading = $injector.get('$loading');
     editorFactory = $injector.get('editorFactory');
+    blueprintFactory = $injector.get('blueprintFactory');
 
     $scope.registerDirective = sinon.stub();
     $scope.setAttributeData = sinon.stub();
@@ -378,15 +380,40 @@ describe("directive: templateComponentPlaylist", function() {
     expect($scope.durationToText(item)).to.equal("12345 seconds");
   });
 
-  it("should edit properties of a playlist item", function() {
+  it("should edit properties of a playlist item", function(done) {
     $scope.selectedTemplates = sampleSelectedTemplates;
 
     $scope.editProperties(0);
 
-    expect($scope.selectedItem["key"]).to.equal(0);
-    expect($scope.selectedItem["play-until-done"]).to.equal("true");
-    expect($scope.selectedItem["duration"]).to.equal(20);
-    expect($scope.selectedItem["transition-type"]).to.equal("fadeIn");
+    setTimeout(function() {
+      expect($scope.selectedItem["key"]).to.equal(0);
+      expect($scope.selectedItem["play-until-done"]).to.equal("true");
+      expect($scope.selectedItem["play-until-done-supported"]).to.equal(true);
+      expect($scope.selectedItem["duration"]).to.equal(20);
+      expect($scope.selectedItem["transition-type"]).to.equal("fadeIn");
+
+      done();
+    }, 10);
+
+  });
+
+  it("should set play-until-done-supported to false", function(done) {
+    $scope.selectedTemplates = sampleSelectedTemplates;
+
+    blueprintFactory.isPlayUntilDone = function() {return Q.resolve(false)};
+
+    $scope.editProperties(0);
+
+    setTimeout(function() {
+      expect($scope.selectedItem["key"]).to.equal(0);
+      expect($scope.selectedItem["play-until-done"]).to.equal("false");
+      expect($scope.selectedItem["play-until-done-supported"]).to.equal(false);
+      expect($scope.selectedItem["duration"]).to.equal(20);
+      expect($scope.selectedItem["transition-type"]).to.equal("fadeIn");
+
+      done();
+    }, 10);
+
   });
 
   it("should save properties of a playlist item", function() {
