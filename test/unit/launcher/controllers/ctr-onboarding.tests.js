@@ -1,5 +1,5 @@
 'use strict';
-describe.only('controller: Onboarding', function() {
+describe('controller: Onboarding', function() {
   beforeEach(module('risevision.apps.launcher.controllers'));
   var $rootScope, $controller, $scope, $loading, $interval, onboardingFactory,
     companyAssetsFactory, editorFactory, userState;
