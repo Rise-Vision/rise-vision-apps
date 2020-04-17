@@ -2,7 +2,7 @@
 var expect = require('rv-common-e2e').expect;
 var PresentationListPage = require('./../pages/presentationListPage.js');
 var TemplateEditorPage = require('./../pages/templateEditorPage.js');
-var AutoScheduleModalPage = require('./../../schedules/pages/autoScheduleModalPage.js');
+var OnboardingPage = require('./../../common/pages/onboardingPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var TemplateAddScenarios = function() {
@@ -11,12 +11,12 @@ var TemplateAddScenarios = function() {
     var presentationName = 'Example Presentation - ' + testStartTime;
     var presentationsListPage;
     var templateEditorPage;
-    var autoScheduleModalPage;
+    var onboardingPage;
 
     before(function () {
       presentationsListPage = new PresentationListPage();
       templateEditorPage = new TemplateEditorPage();
-      autoScheduleModalPage = new AutoScheduleModalPage();
+      onboardingPage = new OnboardingPage();
     });
 
     describe('basic operations', function () {
@@ -36,21 +36,6 @@ var TemplateAddScenarios = function() {
 
           done();
         });
-      });
-
-      it('should auto create Schedule when publishing Presentation', function () {
-        helper.clickWhenClickable(templateEditorPage.getPublishButton(), 'Publish Button');
-
-        browser.sleep(500);
-
-        helper.wait(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
-
-        expect(autoScheduleModalPage.getAutoScheduleModal().isDisplayed()).to.eventually.be.true;
-
-        helper.clickWhenClickable(autoScheduleModalPage.getCloseButton(), 'Auto Schedule Modal - Close Button');
-
-        helper.waitDisappear(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
-        helper.waitDisappear(presentationsListPage.getTemplateEditorLoader());
       });
 
       it('should show more than one component', function () {
@@ -78,6 +63,14 @@ var TemplateAddScenarios = function() {
       it('should not have auto-published the Presentation when navigating', function () {
         // prevents reoccurrence of issue 1186
         expect(templateEditorPage.getPublishButton().isEnabled()).to.eventually.be.true;
+      });
+
+      it('should proceed with Onboarding when publishing the Presentation', function () {
+        helper.clickWhenClickable(templateEditorPage.getPublishButton(), 'Publish Button');
+
+        helper.wait(onboardingPage.getOnboardingContainer(), 'Onboarding Page');
+
+        expect(onboardingPage.getOnboardingContainer().isDisplayed()).to.eventually.be.true;        
       });
 
     });
