@@ -19,7 +19,6 @@ describe('service: onboardingFactory:', function() {
           creationDate: 'Jan 8, 2020'
         }),
         getCopyOfProfile: sinon.stub(),
-        isEducationCustomer: sinon.stub().returns(true),
         _restoreState: function(){},
         getUsername: sinon.stub().returns('username'),
         updateUserProfile: sinon.stub(),
@@ -70,10 +69,8 @@ describe('service: onboardingFactory:', function() {
   });
 
   describe('isOnboarding:', function() {
-    it('should return false if not an education customer', function() {
-      userState.isEducationCustomer.returns(false);
-
-      expect(onboardingFactory.isOnboarding()).to.be.false;
+    it('should return true for customers of any industry', function() {
+      expect(onboardingFactory.isOnboarding()).to.be.true;
     });
 
     it('should return false if company was created before the launch date', function() {
