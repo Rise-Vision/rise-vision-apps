@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.apps.launcher.services')
-  .constant('FEATURED_TEMPLATES', [{
+  .constant('FEATURED_TEMPLATES_EDUCATION', [{
       'productId': 'welcome_v2',
       'name': 'Welcome',
       'imageUrl': 'https://s3.amazonaws.com/Store-Products/Rise-Vision/TemplateLibrary/html-template-welcome2.png',
@@ -20,13 +20,32 @@ angular.module('risevision.apps.launcher.services')
       'productCode': 'da323a98f097d8aca0a8b9671c9d4143d045ef87'
     },
     {
-      'productId': 'office-greeting_v1',
-      'name': 'Office Greeting',
-      'imageUrl': 'https://storage.googleapis.com/risemedialibrary-7fa5ee92-7deb-450b-a8d5-e5ed648c575f/Template%20Library/Office%20Greeting/office-greeting-bezel.jpg',
+      'productId': 'zoned-minimal-slides_v1',
+      'name': 'Zoned Minimal Slides',
+      'imageUrl': 'https://storage.googleapis.com/risemedialibrary-7fa5ee92-7deb-450b-a8d5-e5ed648c575f/Template%20Library/Zoned%20Minimal%20Slides/zoned-minimal-slides-bezel.jpg',
       'productTag': [
         'HTMLTemplates'
       ],
-      'productCode': '601ee80f3fe2950b7e4f15c57d88bf0963efb57a'
+      'productCode': '0c0d413fba196ffa9544c211b583eb001ac397ef'
+    }
+  ])
+  .constant('FEATURED_TEMPLATES_NON_EDUCATION', [{
+      'productId': 'fullscreen-image_v1',
+      'name': 'Image Full Screen',
+      'imageUrl': 'https://s3.amazonaws.com/Store-Products/Rise-Vision/TemplateLibrary/html-template-fullscreen-image2.png',
+      'productTag': [
+        'HTMLTemplates'
+      ],
+      'productCode': 'da323a98f097d8aca0a8b9671c9d4143d045ef87'
+    },
+    {
+      'productId': 'covid19-landscape_v1',
+      'name': 'Coronavirus / COVID-19 Advice',
+      'imageUrl': 'https://www.risevision.com/hubfs/template-gallery/html-template-covid-cdc.png',
+      'productTag': [
+        'HTMLTemplates'
+      ],
+      'productCode': '4db6809bd3e05c72d01e34e51c04704e0c691a22'
     }
   ])
   .factory('onboardingFactory', ['$q', 'userState', 'companyAssetsFactory', 'updateUser', '$rootScope',

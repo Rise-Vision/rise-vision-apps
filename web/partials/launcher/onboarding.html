@@ -37,6 +37,16 @@
 
         <div class="row weekly-templates">
           <div class="u_margin-sm-top text-center">
+            <div ng-if="featureBlankPresentation" class="col-sm-6 col-md-4 col-lg-3 col-centered u_margin-md-bottom">
+              <div class="product-grid_item panel panel-default u_margin-sm-bottom">
+                <figure class="product-grid_image" ui-sref="apps.editor.workspace.artboard">
+                  <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/UI/blank-landscape.png" alt="add blank presentation">
+                </figure> 
+              </div>
+              <button id="selectProduct" class="btn btn-default w-100" ui-sref="apps.editor.workspace.artboard">
+                Pick This Template
+              </button>
+            </div>
             <ng-repeat ng-repeat="product in featuredTemplates">
               <div id="storeProduct" class="col-sm-6 col-md-4 col-lg-3 col-centered u_margin-md-bottom">
                 <div class="product-grid_item panel panel-default u_margin-sm-bottom">

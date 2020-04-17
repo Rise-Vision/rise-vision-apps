@@ -1,7 +1,8 @@
 'use strict';
-describe('controller: Onboarding', function() {
+describe.only('controller: Onboarding', function() {
   beforeEach(module('risevision.apps.launcher.controllers'));
-  var $scope, $loading, $interval, onboardingFactory, companyAssetsFactory, editorFactory;
+  var $rootScope, $controller, $scope, $loading, $interval, onboardingFactory,
+    companyAssetsFactory, editorFactory, userState;
   beforeEach(function(){
     module(function ($provide) {
       $provide.service('$loading', function() {
@@ -25,13 +26,21 @@ describe('controller: Onboarding', function() {
           addFromProduct: sinon.spy()
         };
       });
+      $provide.service('userState', function() {
+        return {
+          isEducationCustomer: sinon.stub().returns(true)
+        };
+      });
     })
-    inject(function($injector,$rootScope, $controller) {
+    inject(function($injector) {
       onboardingFactory = $injector.get('onboardingFactory');
       companyAssetsFactory = $injector.get('companyAssetsFactory');
       editorFactory = $injector.get('editorFactory');
+      userState = $injector.get('userState');
       $loading = $injector.get('$loading');
       $interval = $injector.get('$interval');
+      $rootScope = $injector.get('$rootScope');
+      $controller = $injector.get('$controller');
 
       $scope = $rootScope.$new();
       $controller('OnboardingCtrl', {
@@ -45,10 +54,24 @@ describe('controller: Onboarding', function() {
     expect($scope).to.be.ok;
     expect($scope.factory).to.be.ok;
     expect($scope.editorFactory).to.be.ok;
+    expect($scope.featureBlankPresentation).to.be.false;
     expect($scope.featuredTemplates).to.be.an('array');
     expect($scope.featuredTemplates).to.have.length(3);
 
     expect($scope.select).to.be.a('function');
+  });
+
+  it('should initilize non-ed featured templates if user is not from Education', function() {
+    userState.isEducationCustomer.returns(false);
+    $scope = $rootScope.$new();
+    $controller('OnboardingCtrl', {
+      $scope: $scope
+    });
+    $scope.$digest();
+
+    expect($scope.featureBlankPresentation).to.be.true;    
+    expect($scope.featuredTemplates).to.be.an('array');
+    expect($scope.featuredTemplates).to.have.length(2);
   });
 
   it('select:', function() {

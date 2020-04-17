@@ -2,12 +2,18 @@
 
 angular.module('risevision.apps.launcher.controllers')
   .controller('OnboardingCtrl', ['$scope', '$interval', '$loading', 'onboardingFactory', 'companyAssetsFactory',
-    'editorFactory', 'FEATURED_TEMPLATES',
+    'editorFactory', 'userState', 'FEATURED_TEMPLATES_EDUCATION', 'FEATURED_TEMPLATES_NON_EDUCATION',
     function ($scope, $interval, $loading, onboardingFactory, companyAssetsFactory,
-      editorFactory, FEATURED_TEMPLATES) {
+      editorFactory, userState, FEATURED_TEMPLATES_EDUCATION, FEATURED_TEMPLATES_NON_EDUCATION) {
       $scope.factory = onboardingFactory;
       $scope.editorFactory = editorFactory;
-      $scope.featuredTemplates = FEATURED_TEMPLATES;
+      if (userState.isEducationCustomer()) {
+        $scope.featureBlankPresentation = false;
+        $scope.featuredTemplates = FEATURED_TEMPLATES_EDUCATION;
+      } else {
+        $scope.featureBlankPresentation = true;
+        $scope.featuredTemplates = FEATURED_TEMPLATES_NON_EDUCATION;        
+      }
 
       var activeDisplayPolling;
 
