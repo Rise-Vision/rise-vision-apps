@@ -4,10 +4,10 @@ var helper = require('rv-common-e2e').helper;
 var HomePage = require('./../pages/homepage.js');
 var SignInPage = require('./../pages/signInPage.js');
 var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
-var GetStartedPage = require('./../pages/getStartedPage.js');
-var WorkspacePage = require('./../../editor/pages/workspacePage.js');
-var StoreProductsModalPage = require('./../../editor/pages/storeProductsModalPage.js');
+var TemplateEditorPage = require('./../../template-editor/pages/templateEditorPage.js');
+var DisplayAddModalPage = require('./../../displays/pages/displayAddModalPage.js');
 var OnboardingPage = require('./../pages/onboardingPage.js');
+
 
 var FirstSigninScenarios = function() {
 
@@ -17,17 +17,15 @@ var FirstSigninScenarios = function() {
     var homepage;
     var signInPage;
     var commonHeaderPage;
-    var getStartedPage;
-    var workspacePage;
-    var storeProductsModalPage;
+    var templateEditorPage;
+    var displayAddModalPage;
     var onboardingPage;
     before(function () {
       homepage = new HomePage();
       signInPage = new SignInPage();
       commonHeaderPage = new CommonHeaderPage();
-      getStartedPage = new GetStartedPage();
-      workspacePage = new WorkspacePage();
-      storeProductsModalPage = new StoreProductsModalPage()
+      templateEditorPage = new TemplateEditorPage();
+      displayAddModalPage = new DisplayAddModalPage();
       onboardingPage = new OnboardingPage();
     });
 
@@ -72,87 +70,77 @@ var FirstSigninScenarios = function() {
         expect(onboardingPage.getOnboardingContainer().isDisplayed()).to.eventually.be.true;
       });
       
-      // it('should show the First Step', function() {
-      //   browser.sleep(500);
-      //   expect(getStartedPage.getWizardStep1().isDisplayed()).to.eventually.be.true;
-        
-      //   expect(getStartedPage.getGetStartedButton1().isDisplayed()).to.eventually.be.true;
-      // });
+      it('should show Step 1', function() {
+        expect(onboardingPage.getStepsTabs().get(0).isDisplayed()).to.eventually.be.true;
+        expect(onboardingPage.getStepsTabs().get(0).getAttribute('class')).to.eventually.contain('active'); 
+      });
 
-      // it('should progress to the Second Step', function() {
-      //   helper.clickWhenClickable(getStartedPage.getGetStartedButton1(), 'Get Started Button 1');
-      //   browser.sleep(500);
+      it('should show recommended Templates', function() {
+        expect(onboardingPage.getAddTemplateStep().isDisplayed()).to.eventually.be.true;
+      });
 
-      //   expect(getStartedPage.getWizardStep2().isDisplayed()).to.eventually.be.true;
-        
-      //   expect(getStartedPage.getGetStartedButton2().isDisplayed()).to.eventually.be.true;
-      // });
+      it('should show `go back to previous step` if I click other steps', function() {
+        onboardingPage.getStepsTabs().get(1).click();
 
-      // it('should progress to the Third Step', function() {
-      //   helper.clickWhenClickable(getStartedPage.getGetStartedButton2(), 'Get Started Button 2');
-      //   browser.sleep(500);
+        expect(onboardingPage.getPreviousStepButton().isDisplayed()).to.eventually.be.true;
+      });
 
-      //   expect(getStartedPage.getWizardStep3().isDisplayed()).to.eventually.be.true;
-        
-      //   expect(getStartedPage.getGetStartedButton3().isDisplayed()).to.eventually.be.true;
-      // });
+      it('should allow user to pick a Template', function() {
+        onboardingPage.getPreviousStepButton().click();
 
-      // it('should progress to the Last Step', function() {
-      //   helper.clickWhenClickable(getStartedPage.getGetStartedButton3(), 'Get Started Button 3');
-      //   browser.sleep(500);
+        expect(onboardingPage.getPickTemplateButtons().get(0).isDisplayed()).to.eventually.be.true;
 
-      //   expect(getStartedPage.getWizardStep4().isDisplayed()).to.eventually.be.true;
-        
-      //   expect(getStartedPage.getGetStartedAddPresentation().isDisplayed()).to.eventually.be.true;
-      // });
+        onboardingPage.getPickTemplateButtons().get(0).click();
+      });
 
-      // it('should show last step after reload',function(){
-      //   browser.refresh();
-      //   helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+      it('should show Display License Required message', function() {
+        helper.wait(templateEditorPage.getLicenseRequiredMessage(), 'Display License Required Message');
 
-      //   // wait for transition
-      //   browser.sleep(1000);
-        
-      //   expect(getStartedPage.getWizardStep4().isDisplayed()).to.eventually.be.true;
-        
-      //   expect(getStartedPage.getGetStartedAddPresentation().isDisplayed()).to.eventually.be.true;
-      // });
+        expect(templateEditorPage.getLicenseRequiredMessage().isDisplayed()).to.eventually.be.true;
+        templateEditorPage.dismissLicenseRequiredMessage();
+      });
 
-      // it('should start a new presentation', function () {
-      //   helper.clickWhenClickable(getStartedPage.getGetStartedAddPresentation(), 'Get Started Add Presentation');
+      it('should go back to Onboarding after publishing the Template', function() {
+        helper.clickWhenClickable(templateEditorPage.getPublishButton(), 'Publish Button');
 
-      //   helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
-      //   helper.waitDisappear(storeProductsModalPage.getStoreProductsLoader());
-      //   helper.clickWhenClickable(storeProductsModalPage.getAddBlankPresentation(), 'Add Blank Presentation');
-        
-      //   helper.wait(workspacePage.getWorkspaceContainer(), 'Workspace Container');
-      //   expect(workspacePage.getWorkspaceContainer().isDisplayed()).to.eventually.be.true;
-      // });
+        helper.wait(onboardingPage.getOnboardingContainer(), 'Onboarding Page');
 
-      // it('should show Display License Required message', function() {
-      //   helper.wait(workspacePage.getDisplayLicenseRequiredModal(), 'Display License Notification');
-        
-      //   expect(workspacePage.getDisplayLicenseRequiredModal().isDisplayed()).to.eventually.be.true;
-      //   browser.sleep(500);
+        expect(onboardingPage.getOnboardingContainer().isDisplayed()).to.eventually.be.true;  
+      });
 
-      //   workspacePage.getDisplayLicenseRequiredCloseButton().click();
-      // });
+      it('should show Next Step button', function() {
+        expect(onboardingPage.getNextStepButton().isDisplayed()).to.eventually.be.true;
+        onboardingPage.getNextStepButton().click();
+      });
 
-      // it('should show Change Template button', function () {
-      //   expect(workspacePage.getChangeTemplateButton().isDisplayed()).to.eventually.be.true;
-      // });      
+      it('should show Step 2', function() {
+        expect(onboardingPage.getStepsTabs().get(1).getAttribute('class')).to.eventually.contain('active');
+        expect(onboardingPage.getAddDisplayStep().isDisplayed()).to.eventually.be.true;
+      });
 
-      // it('should no longer show the Get Started Page', function () {
-      //   homepage.get();
-      //   signInPage.signIn();
-      //   _waitFullPageLoad();
+      it('should add display', function () {
+        var displayName = 'TEST_E2E_DISPLAY ' + commonHeaderPage.getStageEnv();
+        displayAddModalPage.getDisplayNameField().sendKeys(displayName);
+        expect(displayAddModalPage.getNextButton().isEnabled()).to.eventually.be.true;
+        displayAddModalPage.getNextButton().click();
+      });
 
-      //   commonHeaderPage.selectSubCompany(subCompanyName);
+      it('should show display activation instructions', function() {
+        helper.wait(displayAddModalPage.getDisplayAddedPage(), 'Display Added page');
 
-      //   _waitFullPageLoad();
+        expect(displayAddModalPage.getDisplayAddedPage().isDisplayed()).to.eventually.be.true;
+        expect(displayAddModalPage.getPreconfiguredPlayerButton().isDisplayed()).to.eventually.be.true;
+        expect(displayAddModalPage.getOwnPlayerButton().isDisplayed()).to.eventually.be.true;
+      });
 
-      //   expect(getStartedPage.getGetStartedContainer().isDisplayed()).to.eventually.be.false;
-      // });
+      it('should show instructions on how to configure Own Media Player', function() {
+        displayAddModalPage.getOwnPlayerButton().click();
+        displayAddModalPage.getNextButton().click();
+
+        helper.wait(displayAddModalPage.getUserPlayerPage(), 'User Player page');      
+        expect(displayAddModalPage.getUserPlayerPage().isDisplayed()).to.eventually.be.true;
+        expect(displayAddModalPage.getPickWindowsLink().isDisplayed()).to.eventually.be.true;
+      });
 
       after(function() {
         commonHeaderPage.deleteCurrentCompany();

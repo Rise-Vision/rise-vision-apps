@@ -4,7 +4,7 @@
       <h1 class="app-header-title" id="title" translate>Get Started</h1>
   </div>
 
-  <ul class="nav nav-tabs nav-justified nav-tabs-justified">
+  <ul id="stepsTabs" class="nav nav-tabs nav-justified nav-tabs-justified">
       <li role="presentation" ng-class="{active : factory.isCurrentTab(1)}">
         <a href="" ng-click="factory.setCurrentTab(1)">
           <img ng-if="factory.isTabCompleted(1)" src="../images/onboarding/circle-checkmark.svg"/><img ng-if="!factory.isTabCompleted(1) && factory.isCurrentTab(1)" src="../images/onboarding/circle-number-one.svg"/><img ng-if="!factory.isTabCompleted(1) && !factory.isCurrentTab(1)" src="../images/onboarding/circle-number-one-blue.svg"/><strong>Pick a Template.</strong>
@@ -43,7 +43,7 @@
                   <img class="img-responsive" src="https://s3.amazonaws.com/Rise-Images/UI/blank-landscape.png" alt="add blank presentation">
                 </figure> 
               </div>
-              <button id="selectProduct" class="btn btn-default w-100" ui-sref="apps.editor.workspace.artboard">
+              <button id="selectBlank" class="btn btn-default w-100" ui-sref="apps.editor.workspace.artboard">
                 Pick This Template
               </button>
             </div>
@@ -109,7 +109,7 @@
 
         <div class="row">
           <div class="col-sm-12 u_margin-sm-top">
-            <button id="nextStep" class="btn btn-primary w-100" ng-click="factory.refresh()">
+            <button id="previousStep" class="btn btn-primary w-100" ng-click="factory.refresh()">
               ← Previous Step
             </button>
           </div>

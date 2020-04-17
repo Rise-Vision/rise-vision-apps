@@ -20,6 +20,7 @@ var TemplateEditorPage = function() {
   var backToComponentsButton = element(by.css('[ng-click="onBackButton();"]'));
   var financialDataLicenseMessage = element(by.css('.financial-data-license-message'));
   var financialDataLicenseCloseButton = element(by.css('#confirmForm .close'));
+  var licenseRequiredMessage = element(by.css('.display-license-required-message'));
   var brandingContainer = element(by.id('branding'));
   var brandingEditLink = element(by.id('branding-edit'));
 
@@ -108,6 +109,10 @@ var TemplateEditorPage = function() {
     return financialDataLicenseCloseButton;
   }
 
+  this.getLicenseRequiredMessage = function() {
+    return licenseRequiredMessage;
+  };
+
   this.getBrandingContainer = function () {
     return brandingContainer;
   };
@@ -133,6 +138,11 @@ var TemplateEditorPage = function() {
     //workaround as protractor doesn't click a modal in front of the preview iframe
     financialDataLicenseCloseButton.sendKeys(protractor.Key.ESCAPE);
     // helper.clickWhenClickable(financialDataLicenseCloseButton, 'Financial Data License Close Button');
+  }
+
+  this.dismissLicenseRequiredMessage = function() {
+    helper.wait(licenseRequiredMessage, 'Display License Required Message');
+    licenseRequiredMessage.sendKeys(protractor.Key.ESCAPE);
   }
 
   this.selectComponent = function (selectorLabel) {
