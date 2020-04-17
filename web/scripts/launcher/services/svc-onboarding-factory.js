@@ -186,7 +186,7 @@ angular.module('risevision.apps.launcher.services')
         var company = userState.getCopyOfSelectedCompany();
         var companyCompleted = company && company.settings && company.settings.onboardingCompleted === 'true';
 
-        return userState.isEducationCustomer() && _checkCreationDate() && !(companyCompleted && userCompleted);
+        return _checkCreationDate() && !(companyCompleted && userCompleted);
       };
 
       factory.isTemplateOnboarding = function () {
