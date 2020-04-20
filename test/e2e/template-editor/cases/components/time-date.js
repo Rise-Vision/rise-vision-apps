@@ -41,9 +41,6 @@ var TimeDateComponentScenarios = function () {
       });
 
       it('should select date, time and timezone formatting', function () {
-        helper.wait(timeDateComponentPage.getDateFormat(), 'Date format');
-        timeDateComponentPage.selectOption(timeDateComponentPage.getDateFormatOptions().get(1).getText());
-
         helper.wait(timeDateComponentPage.getHours24Label(), '24 hours');
         timeDateComponentPage.getHours24Label().click();
 
@@ -52,6 +49,11 @@ var TimeDateComponentScenarios = function () {
 
         helper.wait(timeDateComponentPage.getTimeZone(), 'Time Zone');
         timeDateComponentPage.selectOption(timeDateComponentPage.getTimeZoneOptions().get(60).getText());
+
+        templateEditorPage.waitForAutosave();
+
+        helper.wait(timeDateComponentPage.getDateFormat(), 'Date format');
+        timeDateComponentPage.selectOption(timeDateComponentPage.getDateFormatOptions().get(1).getText());
 
         //wait for presentation to be auto-saved
         templateEditorPage.waitForAutosave();

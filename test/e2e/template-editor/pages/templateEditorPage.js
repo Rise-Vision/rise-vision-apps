@@ -122,9 +122,6 @@ var TemplateEditorPage = function() {
   };
 
   this.waitForAutosave = function() {
-    //allow time for the dirtyText to appear
-    browser.sleep(100);
-
     savedText.isDisplayed().then(function(isDisplayed) {
       if (!isDisplayed) {
         //wait for presentation to be auto-saved
