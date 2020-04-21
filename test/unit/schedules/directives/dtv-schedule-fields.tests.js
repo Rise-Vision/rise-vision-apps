@@ -50,7 +50,6 @@ describe('directive: scheduleFields', function() {
 
     expect($scope.addUrlItem).to.be.a('function');
     expect($scope.addPresentationItem).to.be.a("function");
-    expect($scope.isPreviewAvailable).to.be.a('function');
 
     expect($scope.previewUrl).to.equal('previewUrl');
   });
@@ -118,24 +117,6 @@ describe('directive: scheduleFields', function() {
         done();
       }, 10);
 
-    });
-  });
-
-  describe('isPreviewAvailable:', function() {
-    it('should have Preview button available', function() {
-      $scope.schedule.content = [];
-      expect($scope.isPreviewAvailable()).to.be.true;
-      $scope.schedule.content = [ classicPres1, classicPres2 ];
-      expect($scope.isPreviewAvailable()).to.be.true;
-    });
-
-    it('should not have Preview button available', function() {
-      $scope.schedule.content = [ htmlPres1 ];
-      expect($scope.isPreviewAvailable()).to.be.false;
-      $scope.schedule.content = [ classicPres1, htmlPres1 ];
-      expect($scope.isPreviewAvailable()).to.be.false;
-      $scope.schedule.content = [ classicPres1, classicPres2, htmlPres1 ];
-      expect($scope.isPreviewAvailable()).to.be.false;
     });
   });
 });
