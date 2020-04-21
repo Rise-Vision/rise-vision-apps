@@ -40,6 +40,14 @@ angular.module('risevision.schedules.directives')
               }
             });
           };
+
+          $scope.isPreviewAvailable = function () {
+            var htmlPresentations = _.filter($scope.schedule.content, function (presentation) {
+              return presentationUtils.isHtmlPresentation(presentation);
+            });
+
+            return htmlPresentations.length === 0;
+          };
         } //link()
       };
     }
