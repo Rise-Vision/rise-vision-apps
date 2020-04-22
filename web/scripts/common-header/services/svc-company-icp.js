@@ -50,6 +50,9 @@ angular.module('risevision.common.header')
     ['Warehousing', 'WAREHOUSING'],
     ['Logistics and Supply Chain', 'LOGISTICS_AND_SUPPLY_CHAIN'],
     ['Supermarkets', 'SUPERMARKETS'],
+    ['Construction', 'CONSTRUCTION'],
+    ['Senior Living', 'SENIOR_LIVING'],
+    ['Real Estate', 'REAL_ESTATE'],
     ['Other', 'OTHER']
   ])
   .value('COMPANY_SIZE_FIELDS', [
