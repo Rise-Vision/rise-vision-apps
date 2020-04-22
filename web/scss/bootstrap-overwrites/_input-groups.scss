@@ -37,3 +37,9 @@
 .input-group > .input-group-btn > .btn {
   height: 34px;
 }
+
+textarea.form-control {
+  &.resize-vertical {
+    resize: vertical;
+  }
+}

@@ -32,6 +32,9 @@
   <div class="pull-left">
     <h3 class="u_remove-top" style="line-height:33px;" translate>schedules-app.playlist.title</h3>
   </div>
+  <button class="btn btn-default" id="shareScheduleButton" ng-click="openSharedScheduleModal()" ng-if="ENV_NAME === 'DEV' || ENV_NAME === 'STAGE'">
+    Share Schedule
+  </button>
   <div class="btn-group" dropdown>
     <button id="addPlaylistItemButton" dropdown-toggle class="dropdown-toggle btn btn-primary">{{'schedules-app.playlist.add-playlist-item' | translate}} <i class="fa fa-plus icon-right"></i></button>
     <div class="dropdown-menu playlist-menu" role="menu">
@@ -48,7 +51,7 @@
       </li>
       </ul>
     </div>
-  </div>
+  </div>  
   <a class="btn btn-default" id="previewButton" target="_blank" ng-href="{{previewUrl}}" ng-show="previewUrl && isPreviewAvailable()">
     {{'schedules-app.actions.preview' | translate}} <i class="fa fa-play icon-right"></i>
   </a>

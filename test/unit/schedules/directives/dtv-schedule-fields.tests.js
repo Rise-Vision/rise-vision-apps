@@ -138,4 +138,17 @@ describe('directive: scheduleFields', function() {
       expect($scope.isPreviewAvailable()).to.be.false;
     });
   });
+
+  describe('openSharedScheduleModal:', function(){
+    it('should open Shared Schedule modal', function() {
+      $scope.openSharedScheduleModal();
+
+      $modal.open.should.have.been.calledOnce;
+      $modal.open.should.have.been.calledWith({
+        templateUrl: 'partials/schedules/shared-schedule-modal.html',
+        controller: 'SharedScheduleModalController',
+        size: 'md'
+      });
+    })
+  });
 });

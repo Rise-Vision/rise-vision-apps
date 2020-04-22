@@ -1,13 +1,14 @@
 'use strict';
 
 angular.module('risevision.schedules.directives')
-  .directive('scheduleFields', ['$modal', 'scheduleFactory', 'playlistFactory', 'presentationUtils',
-    function ($modal, scheduleFactory, playlistFactory, presentationUtils) {
+  .directive('scheduleFields', ['$modal', 'scheduleFactory', 'playlistFactory', 'presentationUtils', 'ENV_NAME',
+    function ($modal, scheduleFactory, playlistFactory, presentationUtils, ENV_NAME) {
       return {
         restrict: 'E',
         templateUrl: 'partials/schedules/schedule-fields.html',
         link: function ($scope) {
           $scope.previewUrl = scheduleFactory.getPreviewUrl();
+          $scope.ENV_NAME = ENV_NAME;
 
           var openPlaylistModal = function (playlistItem) {
             $modal.open({
@@ -38,6 +39,14 @@ angular.module('risevision.schedules.directives')
               } else {
                 playlistFactory.addPresentationItems(presentations);
               }
+            });
+          };
+
+          $scope.openSharedScheduleModal = function() {
+            $modal.open({
+              templateUrl: 'partials/schedules/shared-schedule-modal.html',
+              controller: 'SharedScheduleModalController',
+              size: 'md'
             });
           };
 

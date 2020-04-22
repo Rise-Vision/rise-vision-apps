@@ -1229,10 +1229,6 @@ $short-phone-height: 570px;
   textarea.form-control {
     height: auto;
     display: initial;
-
-    &.resize-vertical {
-      resize: vertical;
-    }
   }
 
   .control-label {

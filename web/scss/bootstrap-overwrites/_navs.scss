@@ -42,3 +42,21 @@
     border-top-right-radius: 0px;
   }
 }
+
+.nav-tabs-justified.nav-tabs-no-border {
+  >li>a {
+    font-size: 14px;
+    padding: 5px;
+    border: 0;
+    border-bottom: 5px solid #e6e6e6;
+    &:hover,
+    &:focus {
+      border-bottom: 5px solid #BBB;
+    }
+  }
+  >li.active>a {
+    background-color: #fcfcfc;
+    border: 0;
+    border-bottom: 5px solid #1ebb53;
+  }
+}

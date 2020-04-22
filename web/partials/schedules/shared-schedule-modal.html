@@ -1,0 +1,164 @@
+<div id="sharedScheduleModal">
+
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="dismiss()" aria-hidden="true">
+    <i class="fa fa-times"></i>
+    </button>
+    <h3 class="modal-title">Share your Schedule</h3>
+  </div>
+
+  <div class="modal-body" stop-event="touchend">
+    <p>Make your Schedule available to anyone by sharing it. You can link to or embed your Schedule.</p>
+    <p>Presentations built with Widgets, Templates that include videos or financial data, and HTTP URLs will be excluded from the Schedule when it’s viewed with a link or embedded.</p>
+    
+    <ul class="nav nav-tabs nav-justified nav-tabs-no-border hidden-xs">
+      <li ng-class="{ active: currentTab == 'link' }">
+        <a href="" ng-click="currentTab = 'link'">Link</a>
+      </li>
+      <li ng-class="{ active: currentTab == 'embedCode' }">
+        <a href="" ng-click="currentTab = 'embedCode'">Embed Code</a>
+      </li>
+      <li ng-class="{ active: currentTab == 'socialMedia' }">
+        <a href="" ng-click="currentTab = 'socialMedia'">Social Media</a>
+      </li>
+      <li ng-class="{ active: currentTab == 'chromeExtension' }">
+        <a href="" ng-click="currentTab = 'chromeExtension'">Chrome Extension</a>
+      </li>
+    </ul>
+    <select ng-model="currentTab" class="form-control visible-xs">
+      <option value="link">Link</option>
+      <option value="embedCode">Embed Code</option>
+      <option value="socialMedia">Social Media</option>
+      <option value="chromeExtension">Chrome Extension</option>
+    </select>
+
+    <div ng-show="currentTab === 'link'" class="row u_margin-sm-top u_margin-sm-bottom">
+      <div class="col-xs-12">
+        <label>Link:</label>
+        <div class="input-group">
+          <input class="form-control" type="text" disabled="disabled" value="https://preview.risevision.com/?type=sharedschedule&id={{schedule.id}}" />
+          <div class="input-group-btn">
+            <button id="copyUrlButton" class="btn btn-primary" ng-click="copyUrl()" aria-label="Copy">Copy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div ng-show="currentTab === 'embedCode'" class="row u_margin-sm-top u_margin-sm-bottom">
+      <div class="col-xs-12">
+        <label>Embed Code:</label>
+        <textarea class="form-control u_margin-sm-bottom resize-vertical" rows="5" disabled="disabled">
+&lt;div style=&quot;position:relative;padding-bottom:56.25%;&quot;&gt;
+   &lt;iframe style=&quot;width:100%;height:100%;position:absolute;left:0px;top:0px;&quot;
+      frameborder=&quot;0&quot; width=&quot;100%&quot; height=&quot;100%&quot; 
+      src=&quot;https://preview.risevision.com/?type=sharedschedule&amp;id={{schedule.id}}&quot;&gt;
+   &lt;/iframe&gt;
+&lt;/div&gt;
+&lt;div style=&quot;background:#f2f2f2;color:#020620;font-family:Helvetica;font-size:12px;padding:5px;text-align:center;&quot;&gt;
+   Powered by &lt;a href=&quot;https://www.risevision.com&quot; target=&quot;_blank&quot;&gt;risevision.com&lt;/a&gt;.
+&lt;/div&gt;</textarea>
+        <button id="copyEmbedCodeButton" class="btn btn-primary" ng-click="copyEmbedCode()" aria-label="Copy">Copy</button>
+      </div>
+    </div>
+
+    <div ng-show="currentTab === 'socialMedia'" class="row u_margin-sm-top u_margin-sm-bottom">
+      <div class="col-xs-12">
+        <label>Post to:</label>
+        <div class="row">
+          <div class="u_margin-sm-top text-center sideways-panels">
+            <div class="panel panel-default u_bordered-hover u_remove-bottom u_clickable">
+              <a  href="">
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <img src="../images/shared-schedule/twitter.svg" height="32">
+                    </div>
+                  </div>
+                  <div class="row u_margin-md-top">
+                    <div class="col-xs-12">
+                      <span>Twitter</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="panel panel-default u_bordered-hover u_remove-bottom u_clickable">
+              <a href="">
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <img src="../images/shared-schedule/facebook.svg" height="32">
+                    </div>
+                  </div>
+                  <div class="row u_margin-md-top">
+                    <div class="col-xs-12">
+                      <span>Facebook</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="panel panel-default u_bordered-hover u_remove-bottom u_clickable">
+              <a href="">
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <img src="../images/shared-schedule/linkedin.svg" height="32">
+                    </div>
+                  </div>
+                  <div class="row u_margin-md-top">
+                    <div class="col-xs-12">
+                      <span>LinkedIn</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="panel panel-default u_bordered-hover u_remove-bottom u_clickable">
+              <a href="">
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <img src="../images/shared-schedule/google-classroom.svg" height="32">
+                    </div>
+                  </div>
+                  <div class="row u_margin-md-top">
+                    <div class="col-xs-12">
+                      <span>Google Classroom</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div ng-show="currentTab === 'chromeExtension'" class="row u_margin-sm-top u_margin-sm-bottom">
+      <div class="col-xs-12">
+        <p>Have your audience install our Chrome Extension so they can see your Schedule every time they open a new tab.</p>
+        <div class="panel panel-default u_bordered-hover u_remove-bottom u_clickable text-center">
+          <a href="">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-12">
+                  <img src="../images/shared-schedule/chrome-web-store.png" height="32">
+                </div>
+              </div>
+              <div class="row u_margin-md-top">
+                <div class="col-xs-12">
+                  <span>Install From The Chrome Web Store</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button id="doneButton" class="btn btn-primary btn-block" ng-click="dismiss()" aria-label="Done">Done</button>
+  </div>
+</div>
