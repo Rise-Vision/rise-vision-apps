@@ -204,7 +204,7 @@ angular.module('risevision.editor.services')
         },
         buildFilterString: function (query, filter) {
           var result;
-          
+
           result = query ?
             '(' + createSearchQuery(PRESENTAION_SEARCH_FIELDS, query) + ')' : '';
 

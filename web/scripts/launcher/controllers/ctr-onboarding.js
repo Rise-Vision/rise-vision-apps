@@ -12,7 +12,7 @@ angular.module('risevision.apps.launcher.controllers')
         $scope.featuredTemplates = FEATURED_TEMPLATES_EDUCATION;
       } else {
         $scope.featureBlankPresentation = true;
-        $scope.featuredTemplates = FEATURED_TEMPLATES_NON_EDUCATION;        
+        $scope.featuredTemplates = FEATURED_TEMPLATES_NON_EDUCATION;
       }
 
       var activeDisplayPolling;

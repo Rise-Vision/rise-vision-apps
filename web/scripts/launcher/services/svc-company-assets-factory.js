@@ -4,7 +4,7 @@ angular.module('risevision.apps.launcher.services')
   .factory('companyAssetsFactory', ['$rootScope', '$q', 'CachedRequest', 'ScrollingListService',
     'presentation', 'schedule', 'display', 'productsFactory',
     function ($rootScope, $q, CachedRequest, ScrollingListService, presentation, schedule, display,
-    productsFactory) {
+      productsFactory) {
       var factory = {};
 
       var presentationSearch = {
@@ -32,7 +32,7 @@ angular.module('risevision.apps.launcher.services')
       var presentationListRequest = new CachedRequest(presentation.list, presentationSearch);
       var scheduleListRequest = new CachedRequest(schedule.list, scheduleSearch);
       var displayListRequest = new CachedRequest(display.list, displaySearch);
-      
+
       var addScheduleListener, addScheduleCompleted;
       var addDisplayListener, addDisplayCompleted;
       var displaysListListener, activeDisplayCompleted;

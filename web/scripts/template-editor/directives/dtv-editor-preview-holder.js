@@ -43,7 +43,7 @@ angular.module('risevision.template-editor.directives')
               $scope.factory.presentation && $scope.factory.presentation.id;
 
             var url = HTML_TEMPLATE_URL.replace('PRODUCT_CODE', productCode) + '?type=preview&presentationId=' +
-            presentationId;
+              presentationId;
 
             return $sce.trustAsResourceUrl(url);
           };

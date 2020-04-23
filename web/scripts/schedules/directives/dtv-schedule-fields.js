@@ -42,7 +42,7 @@ angular.module('risevision.schedules.directives')
             });
           };
 
-          $scope.openSharedScheduleModal = function() {
+          $scope.openSharedScheduleModal = function () {
             $modal.open({
               templateUrl: 'partials/schedules/shared-schedule-modal.html',
               controller: 'SharedScheduleModalController',

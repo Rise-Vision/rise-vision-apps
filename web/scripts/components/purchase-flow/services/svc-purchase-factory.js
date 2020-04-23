@@ -219,7 +219,8 @@
           return storeService.calculateTaxes(factory.purchase.billingAddress.id, _getChargebeePlanId(),
               factory.purchase.plan.displays,
               _getChargebeeAddonId(),
-              factory.purchase.plan.additionalDisplayLicenses, factory.purchase.shippingAddress, factory.purchase.couponCode)
+              factory.purchase.plan.additionalDisplayLicenses, factory.purchase.shippingAddress, factory.purchase
+              .couponCode)
             .then(function (result) {
               var estimate = factory.purchase.estimate;
 
