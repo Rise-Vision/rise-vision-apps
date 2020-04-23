@@ -82,4 +82,42 @@ describe('controller: SharedScheduleModalController', function() {
     });
   });
 
+  describe('shareOnSocial', function() {
+    beforeEach(function() {
+      sinon.stub($window, 'open');
+    });
+    afterEach(function() {
+      $window.open.restore();
+    });
+
+    it('should open a popup with the correct sharing url', function() {
+      $scope.shareOnSocial('twitter');
+
+      $window.open.should.have.been.calledWith('https://twitter.com/share?via=RiseVision&url=https%3A%2F%2Fpreview.risevision.com%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId', '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=400,width=600');
+    });
+
+    it('should use the correct social network url', function() {
+      $scope.shareOnSocial('twitter');
+      $window.open.should.have.been.calledWith('https://twitter.com/share?via=RiseVision&url=https%3A%2F%2Fpreview.risevision.com%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId');
+      $window.open.resetHistory();
+
+      $scope.shareOnSocial('facebook');
+      $window.open.should.have.been.calledWith('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fpreview.risevision.com%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId');
+      $window.open.resetHistory();
+
+      $scope.shareOnSocial('linkedin');
+      $window.open.should.have.been.calledWith('https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fpreview.risevision.com%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId');
+      $window.open.resetHistory();
+
+      $scope.shareOnSocial('classroom');
+      $window.open.should.have.been.calledWith('https://classroom.google.com/share?url=https%3A%2F%2Fpreview.risevision.com%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId');
+    });
+
+    it('should not open popup for invalid/unsupported social networks', function() {
+      $scope.shareOnSocial('google+');
+
+      $window.open.should.not.have.been.called;
+    });
+  });
+
 });

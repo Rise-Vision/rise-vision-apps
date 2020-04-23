@@ -16,8 +16,9 @@ angular.module('risevision.schedules.controllers')
     function ($scope, $modalInstance, scheduleFactory, $window, SHARED_SCHEDULE_URL, SHARED_SCHEDULE_EMBED_CODE) {
       $scope.schedule = scheduleFactory.schedule;
       $scope.currentTab = 'link';
-      $scope.sharedScheduleLink = SHARED_SCHEDULE_URL.replace('SCHEDULE_ID',scheduleFactory.schedule.id);
-      $scope.sharedScheduleEmbedCode = SHARED_SCHEDULE_EMBED_CODE.replace('SHARED_SCHEDULE_URL', $scope.sharedScheduleLink);
+      $scope.sharedScheduleLink = SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', scheduleFactory.schedule.id);
+      $scope.sharedScheduleEmbedCode = SHARED_SCHEDULE_EMBED_CODE.replace('SHARED_SCHEDULE_URL', $scope
+        .sharedScheduleLink);
 
       $scope.dismiss = function () {
         $modalInstance.dismiss();
@@ -37,7 +38,7 @@ angular.module('risevision.schedules.controllers')
           url = 'https://twitter.com/share?via=RiseVision&url=' + encodedLink;
           break;
         case 'facebook':
-          url = 'https://www.facebook.com/sharer/sharer.php?u=' + encodedLink
+          url = 'https://www.facebook.com/sharer/sharer.php?u=' + encodedLink;
           break;
         case 'linkedin':
           url = 'https://www.linkedin.com/shareArticle?mini=true&url=' + encodedLink;
@@ -45,6 +46,8 @@ angular.module('risevision.schedules.controllers')
         case 'classroom':
           url = 'https://classroom.google.com/share?url=' + encodedLink;
           break;
+        default:
+          return;
         }
         $window.open(url, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=400,width=600');
       };
