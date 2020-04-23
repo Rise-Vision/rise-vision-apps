@@ -36,9 +36,9 @@
       <div class="col-xs-12">
         <label>Link:</label>
         <div class="input-group">
-          <input class="form-control" type="text" disabled="disabled" value="https://preview.risevision.com/?type=sharedschedule&id={{schedule.id}}" />
+          <input class="form-control" type="text" disabled="disabled" value="{{sharedScheduleLink}}" />
           <div class="input-group-btn">
-            <button id="copyUrlButton" class="btn btn-primary" ng-click="copyUrl()" aria-label="Copy">Copy</button>
+            <button id="copyUrlButton" class="btn btn-primary" ng-click="copyToClipboard(sharedScheduleLink)" aria-label="Copy">Copy</button>
           </div>
         </div>
       </div>
@@ -47,17 +47,8 @@
     <div ng-show="currentTab === 'embedCode'" class="row u_margin-sm-top u_margin-sm-bottom">
       <div class="col-xs-12">
         <label>Embed Code:</label>
-        <textarea class="form-control u_margin-sm-bottom resize-vertical" rows="5" disabled="disabled">
-&lt;div style=&quot;position:relative;padding-bottom:56.25%;&quot;&gt;
-   &lt;iframe style=&quot;width:100%;height:100%;position:absolute;left:0px;top:0px;&quot;
-      frameborder=&quot;0&quot; width=&quot;100%&quot; height=&quot;100%&quot; 
-      src=&quot;https://preview.risevision.com/?type=sharedschedule&amp;id={{schedule.id}}&quot;&gt;
-   &lt;/iframe&gt;
-&lt;/div&gt;
-&lt;div style=&quot;background:#f2f2f2;color:#020620;font-family:Helvetica;font-size:12px;padding:5px;text-align:center;&quot;&gt;
-   Powered by &lt;a href=&quot;https://www.risevision.com&quot; target=&quot;_blank&quot;&gt;risevision.com&lt;/a&gt;.
-&lt;/div&gt;</textarea>
-        <button id="copyEmbedCodeButton" class="btn btn-primary" ng-click="copyEmbedCode()" aria-label="Copy">Copy</button>
+        <textarea class="form-control u_margin-sm-bottom resize-vertical" rows="5" disabled="disabled">{{sharedScheduleEmbedCode}}</textarea>
+        <button id="copyEmbedCodeButton" class="btn btn-primary" ng-click="copyToClipboard(sharedScheduleEmbedCode)" aria-label="Copy">Copy</button>
       </div>
     </div>
 
@@ -139,7 +130,7 @@
       <div class="col-xs-12">
         <p>Have your audience install our Chrome Extension so they can see your Schedule every time they open a new tab.</p>
         <div class="panel panel-default u_bordered-hover u_remove-bottom u_clickable text-center">
-          <a href="">
+          <a href="https://chrome.google.com/webstore/detail/rise-vision-anywhere/dkoohkdagjpgjheoaaegomjhdccfbcle" target="_blank">
             <div class="panel-body">
               <div class="row">
                 <div class="col-xs-12">
