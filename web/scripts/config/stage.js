@@ -29,6 +29,7 @@
     .value('STORE_SERVER_URL', 'https://store-dot-rvacore-test.appspot.com/')
     .value('RVA_URL', 'http://rva-test.appspot.com')
     .value('VIEWER_URL', 'http://viewer-test.risevision.com')
+    .value('SHARED_SCHEDULE_URL', 'https://viewer-test.risevision.com/?type=sharedschedule&id=SCHEDULE_ID')
     .value('ALERTS_WS_URL',
       'https://rvacore-test.appspot.com/alerts/cap')
     .value('TAG_MANAGER_CONTAINER_ID', 'GTM-MMTK3JH')

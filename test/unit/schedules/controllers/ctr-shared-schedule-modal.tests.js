@@ -4,6 +4,8 @@ describe('controller: SharedScheduleModalController', function() {
   beforeEach(module(function ($provide) {
     schedule = {id: 'scheduleId'};
 
+    $provide.value('SHARED_SCHEDULE_URL','https://preview.risevision.com/?type=sharedschedule&id=SCHEDULE_ID');
+
     $provide.service('$modalInstance',function(){
       return {
         dismiss : function(){}
