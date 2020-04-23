@@ -30,5 +30,25 @@ angular.module('risevision.schedules.controllers')
           $window.navigator.clipboard.writeText(text);
         }
       };
+
+      $scope.shareOnSocial = function (network) {
+        var encodedLink = encodeURIComponent($scope.sharedScheduleLink);
+        var url;
+        switch (network) {
+        case 'twitter':
+          url = 'https://twitter.com/share?via=RiseVision&url=' + encodedLink;
+          break;
+        case 'facebook':
+          url = 'https://www.facebook.com/sharer/sharer.php?u=' + encodedLink
+          break;
+        case 'linkedin':
+          url = 'https://www.linkedin.com/shareArticle?mini=true&url=' + encodedLink;
+          break;
+        case 'classroom':
+          url = 'https://classroom.google.com/share?url=' + encodedLink;
+          break;
+        }
+        $window.open(url, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=400,width=600');
+      };
     }
   ]); //ctr
