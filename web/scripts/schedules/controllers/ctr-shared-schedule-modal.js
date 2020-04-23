@@ -1,3 +1,4 @@
+/*jshint multistr: true */
 'use strict';
 
 angular.module('risevision.schedules.controllers')
@@ -28,6 +29,6 @@ angular.module('risevision.schedules.controllers')
         if ($window.navigator.clipboard) {
           $window.navigator.clipboard.writeText(text);
         }
-      }
+      };
     }
   ]); //ctr
