@@ -108,4 +108,18 @@ describe("Services: plans factory", function() {
     });
   });
 
+  describe("showUnlockThisFeatureModal:", function() {
+    it('should open Unlock This Feature Modal', function(){
+      plansFactory.showUnlockThisFeatureModal();
+
+      expect($modal.open).to.have.been.calledOnce;
+      expect($modal.open).to.have.been.calledWith({
+        templateUrl: 'partials/components/plans/unlock-this-feature-modal.html',
+        controller: 'UnlockThisFeatureModalCtrl',
+        windowClass: 'madero-style centered-modal unlock-this-feature-modal',
+        size: 'sm'
+      });
+    });
+  });
+
 });

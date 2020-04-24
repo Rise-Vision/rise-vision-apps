@@ -2,7 +2,9 @@
 
 angular.module('risevision.schedules.directives')
   .directive('scheduleFields', ['$modal', 'scheduleFactory', 'playlistFactory', 'presentationUtils', 'ENV_NAME',
-    function ($modal, scheduleFactory, playlistFactory, presentationUtils, ENV_NAME) {
+    'currentPlanFactory', 'plansFactory',
+    function ($modal, scheduleFactory, playlistFactory, presentationUtils, ENV_NAME, currentPlanFactory,
+    plansFactory) {
       return {
         restrict: 'E',
         templateUrl: 'partials/schedules/schedule-fields.html',
@@ -43,11 +45,15 @@ angular.module('risevision.schedules.directives')
           };
 
           $scope.openSharedScheduleModal = function () {
-            $modal.open({
-              templateUrl: 'partials/schedules/shared-schedule-modal.html',
-              controller: 'SharedScheduleModalController',
-              size: 'md'
-            });
+            if (currentPlanFactory.isPlanActive() || currentPlanFactory.isCancelledActive()) {
+              $modal.open({
+                templateUrl: 'partials/schedules/shared-schedule-modal.html',
+                controller: 'SharedScheduleModalController',
+                size: 'md'
+              });
+            } else {
+              plansFactory.showUnlockThisFeatureModal();
+            }
           };
 
           $scope.isPreviewAvailable = function () {

@@ -1148,6 +1148,10 @@ $short-phone-height: 570px;
     &.centered-modal {
       & .modal-dialog {
         width: 460px;
+
+        &.modal-sm {
+          width: 365px;
+        }
       }
     }
   }
@@ -1191,6 +1195,28 @@ $short-phone-height: 570px;
       p {
         margin-bottom: 0px;
         font-size: 12px;
+      }
+
+      .plan-features {
+        text-align: left;
+        font-size: 12px;
+        line-height: 18px;
+        margin-top: 10px;
+
+        p {
+          margin-bottom: 10px;
+        }
+
+        li {
+          margin-bottom: 5px;
+
+          svg {
+            fill: $madero-green;
+            height: 8px;
+            width: 9px;
+            margin-right: 10px;
+          }
+        }
       }
     }
 

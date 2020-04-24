@@ -1,6 +1,6 @@
 'use strict';
 describe('directive: scheduleFields', function() {
-  var $scope, $rootScope, playlistFactory, $modal;
+  var $scope, $rootScope, playlistFactory, $modal, currentPlanFactory, plansFactory;
   var classicPres1 = { name: 'classic1' };
   var classicPres2 = { name: 'classic2' };
   var htmlPres1 = { name: 'html1', presentationType: 'HTML Template' };
@@ -30,11 +30,24 @@ describe('directive: scheduleFields', function() {
         }
       };
     });
+    $provide.service('currentPlanFactory', function() {
+      return {
+        isPlanActive: sinon.stub().returns(false),
+        isCancelledActive: sinon.stub().returns(false)
+      };
+    });
+    $provide.service('plansFactory', function() {
+      return {
+        showUnlockThisFeatureModal: sinon.stub()
+      };
+    });
   }));
 
   beforeEach(inject(function($compile, _$rootScope_, $templateCache, $injector){
     $modal = $injector.get('$modal');
     playlistFactory = $injector.get('playlistFactory');
+    currentPlanFactory = $injector.get('currentPlanFactory');
+    plansFactory = $injector.get('plansFactory');
 
     $templateCache.put('partials/schedules/schedule-fields.html', '<p>mock</p>');
     $rootScope = _$rootScope_;
@@ -140,7 +153,9 @@ describe('directive: scheduleFields', function() {
   });
 
   describe('openSharedScheduleModal:', function(){
-    it('should open Shared Schedule modal', function() {
+    it('should open Shared Schedule modal if has an active plan', function() {
+      currentPlanFactory.isPlanActive.returns(true);
+
       $scope.openSharedScheduleModal();
 
       $modal.open.should.have.been.calledOnce;
@@ -149,6 +164,24 @@ describe('directive: scheduleFields', function() {
         controller: 'SharedScheduleModalController',
         size: 'md'
       });
-    })
+    });
+
+    it('should open Shared Schedule modal if has a still active cancelled plan', function() {
+      currentPlanFactory.isCancelledActive.returns(true);
+      
+      $scope.openSharedScheduleModal();
+
+      $modal.open.should.have.been.calledWith({
+        templateUrl: 'partials/schedules/shared-schedule-modal.html',
+        controller: 'SharedScheduleModalController',
+        size: 'md'
+      });
+    });
+
+    it('should show Unlock This Feature modal if user is not subscribed to a plan', function() {      
+      $scope.openSharedScheduleModal();
+
+      plansFactory.showUnlockThisFeatureModal.should.have.been.called;
+    });
   });
 });

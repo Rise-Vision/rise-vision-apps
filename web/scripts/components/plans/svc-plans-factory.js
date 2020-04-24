@@ -179,6 +179,15 @@
           }
         };
 
+        _factory.showUnlockThisFeatureModal = function () {
+          $modal.open({
+            templateUrl: 'partials/components/plans/unlock-this-feature-modal.html',
+            controller: 'UnlockThisFeatureModalCtrl',
+            windowClass: 'madero-style centered-modal unlock-this-feature-modal',
+            size: 'sm'
+          });
+        };
+
         _factory.initVolumePlanTrial = function () {
           var plan = _.find(PLANS_LIST, {
             type: 'volume'
