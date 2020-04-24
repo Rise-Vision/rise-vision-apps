@@ -37,7 +37,7 @@
 
       describe("checkout: ", function() {
         before(function() {
-          helper.waitDisappear(launcherPage.getAppLauncherLoader(), 'App Launcher Loader');
+          helper.waitDisappear(launcherPage.getOnboardingLoader(), 'Onboarding Loader');
         });
 
         it("should show Subscribe button", function() {
@@ -45,6 +45,7 @@
         });
 
         it("should open plans modal", function() {
+
           helper.clickWhenClickable(purchaseFlowModalPage.getPlanSubscribeLink(), 'Subscribe Button');
 
           helper.wait(pricingComponentModalPage.getSubscribeButton(), 'Pricing Component Modal');

@@ -18,6 +18,7 @@ var HomePage = function() {
 
   var appLauncherContainer = element(by.id('appLauncherContainer'));
   var appLauncherLoader = element(by.xpath('//div[@spinner-key="launcher-loader"]'));
+  var onboardingLoader = element(by.xpath('//div[@spinner-key="onboarding-loader"]'));
 
   var presentationAddButton = element(by.id('presentationAddButton'));
   var presentationsList = element(by.id('presentationsList'));
@@ -112,6 +113,10 @@ var HomePage = function() {
 
   this.getAppLauncherLoader = function() {
     return appLauncherLoader;
+  };
+
+  this.getOnboardingLoader = function() {
+    return onboardingLoader;
   };
 
   this.getPresentationAddButton = function() {
