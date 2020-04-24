@@ -7,7 +7,7 @@
   var helper = require('rv-common-e2e').helper;
   var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
   var HomePage = require('./../../common-header/pages/homepage.js');
-  var LauncherPage = require('./../../common/pages/homepage.js');
+  var OnboardingPage = require('./../../common/pages/onboardingPage.js');
   var SignInPage = require('./../../common/pages/signInPage.js');
   var PurchaseFlowModalPage = require('./../pages/purchaseFlowModalPage.js');
   var PricingComponentModalPage = require('./../pages/pricingComponentModalPage.js');
@@ -20,7 +20,7 @@
         signInPage,
         purchaseFlowModalPage,
         pricingComponentModalPage,
-        launcherPage;
+        onboardingPage;
                 
       before(function (){
         commonHeaderPage = new CommonHeaderPage();
@@ -28,7 +28,7 @@
         signInPage = new SignInPage();
         purchaseFlowModalPage = new PurchaseFlowModalPage();
         pricingComponentModalPage = new PricingComponentModalPage();
-        launcherPage = new LauncherPage();
+        onboardingPage = new OnboardingPage();
 
         homepage.get();
 
@@ -37,7 +37,7 @@
 
       describe("checkout: ", function() {
         before(function() {
-          helper.waitDisappear(launcherPage.getOnboardingLoader(), 'Onboarding Loader');
+          helper.waitDisappear(onboardingPage.getOnboardingLoader(), 'Onboarding Loader');
         });
 
         it("should show Subscribe button", function() {

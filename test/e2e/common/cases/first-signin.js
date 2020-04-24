@@ -64,6 +64,7 @@ var FirstSigninScenarios = function() {
 
       it('should show the Onboarding page', function() {
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+        helper.waitDisappear(onboardingPage.getOnboardingLoader(), 'Onboarding Loader');
 
         helper.wait(onboardingPage.getOnboardingContainer(), 'Onboarding Page');
 

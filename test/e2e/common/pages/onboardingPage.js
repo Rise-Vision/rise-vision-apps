@@ -1,6 +1,7 @@
 'use strict';
 var OnboardinPage = function() {
   var onboardingContainer = element(by.id('onboardingContainer'));
+  var onboardingLoader = element(by.xpath('//div[@spinner-key="onboarding-loader"]'));
 
   var stepsTabs = element.all(by.css('#stepsTabs li'));
   var addTemplateStep = element(by.id('onboardingAddTemplate'));
@@ -15,6 +16,10 @@ var OnboardinPage = function() {
   this.getOnboardingContainer = function() {
     return onboardingContainer;
   };
+
+  this.getOnboardingLoader = function() {
+    return onboardingLoader;
+  }
 
   this.getStepsTabs = function() {
     return stepsTabs;
