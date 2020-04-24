@@ -10,7 +10,7 @@
     <ng-messages-include src="partials/components/url-field/messages.html"></ng-messages-include>
   </ng-messages>
   
-  <div class="checkbox" ng-show="forcedValid || (ngModelCtrl.$invalid && ngModelCtrl.$dirty)">
+  <div class="checkbox" ng-show="showSkipValidation()">
     <label class="input-url-remove-validation">
       <input name="validate-url" ng-click="doValidation = !doValidation" type="checkbox"
              value="validate-url"> {{"url.validate.label" | translate}}
