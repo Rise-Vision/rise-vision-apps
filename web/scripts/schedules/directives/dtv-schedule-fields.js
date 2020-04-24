@@ -4,7 +4,7 @@ angular.module('risevision.schedules.directives')
   .directive('scheduleFields', ['$modal', 'scheduleFactory', 'playlistFactory', 'presentationUtils', 'ENV_NAME',
     'currentPlanFactory', 'plansFactory',
     function ($modal, scheduleFactory, playlistFactory, presentationUtils, ENV_NAME, currentPlanFactory,
-    plansFactory) {
+      plansFactory) {
       return {
         restrict: 'E',
         templateUrl: 'partials/schedules/schedule-fields.html',
