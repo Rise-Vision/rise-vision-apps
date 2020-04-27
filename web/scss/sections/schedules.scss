@@ -5,15 +5,15 @@
 }
 
 .shared-schedule-modal {
-	.copy-text-box {
-		background-color: #f0f0f0;
-	}
+  .copy-text-box {
+    background-color: #f0f0f0;
+  }
 
-	.u_bordered-hover {
-		color: $link-color;
+  .u_bordered-hover {
+    color: $link-color;
 
-		&:hover {
-			color: $link-hover-color;
-		}
-	}
+    &:hover {
+      color: $link-hover-color;
+    }
+  }
 }
