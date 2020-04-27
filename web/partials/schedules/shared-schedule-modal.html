@@ -36,7 +36,7 @@
       <div class="col-xs-12">
         <label>Link:</label>
         <div class="input-group">
-          <input class="form-control" type="text" disabled="disabled" value="{{sharedScheduleLink}}" />
+          <input class="form-control" type="text" readonly="readonly" value="{{sharedScheduleLink}}" ng-focus="onTextFocus($event)" focus-me="currentTab === 'link'"/>
           <div class="input-group-btn">
             <button id="copyUrlButton" class="btn btn-primary" ng-click="copyToClipboard(sharedScheduleLink)" aria-label="Copy">Copy</button>
           </div>
@@ -47,7 +47,7 @@
     <div ng-show="currentTab === 'embedCode'" class="row u_margin-sm-top u_margin-sm-bottom">
       <div class="col-xs-12">
         <label>Embed Code:</label>
-        <textarea class="form-control u_margin-sm-bottom resize-vertical" rows="5" disabled="disabled">{{sharedScheduleEmbedCode}}</textarea>
+        <textarea class="form-control u_margin-sm-bottom resize-vertical" rows="5" readonly="readonly" ng-focus="onTextFocus($event)" focus-me="currentTab === 'embedCode'">{{sharedScheduleEmbedCode}}</textarea>
         <button id="copyEmbedCodeButton" class="btn btn-primary" ng-click="copyToClipboard(sharedScheduleEmbedCode)" aria-label="Copy">Copy</button>
       </div>
     </div>

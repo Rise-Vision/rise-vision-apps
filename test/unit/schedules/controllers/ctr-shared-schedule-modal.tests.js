@@ -82,6 +82,20 @@ describe('controller: SharedScheduleModalController', function() {
     });
   });
 
+  describe('onTextFocus', function() {
+    it('should select target element text', function() {
+      var event = {
+        target: {
+          select: sinon.stub()
+        }
+      };
+
+      $scope.onTextFocus(event);
+
+      event.target.select.should.have.been.called;
+    });
+  });
+
   describe('shareOnSocial', function() {
     beforeEach(function() {
       sinon.stub($window, 'open');

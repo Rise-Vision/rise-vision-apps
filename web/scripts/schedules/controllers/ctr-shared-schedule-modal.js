@@ -30,6 +30,10 @@ angular.module('risevision.schedules.controllers')
         }
       };
 
+      $scope.onTextFocus = function (event) {
+        event.target.select();
+      };
+
       $scope.shareOnSocial = function (network) {
         var encodedLink = encodeURIComponent($scope.sharedScheduleLink);
         var url;
