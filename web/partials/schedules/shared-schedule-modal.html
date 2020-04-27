@@ -1,4 +1,4 @@
-<div id="sharedScheduleModal">
+<div id="sharedScheduleModal" class="shared-schedule-modal">
 
   <div class="modal-header">
     <button type="button" class="close" ng-click="dismiss()" aria-hidden="true">
@@ -8,8 +8,8 @@
   </div>
 
   <div class="modal-body" stop-event="touchend">
-    <p>Make your Schedule available to anyone by sharing it. You can link to or embed your Schedule.</p>
-    <p>Presentations built with Widgets, Templates that include videos or financial data, and HTTP URLs will be excluded from the Schedule when it’s viewed with a link or embedded.</p>
+    <p class="u_margin-md-bottom">Make your Schedule available to anyone by sharing it. You can link to or embed your Schedule.</p>
+    <p class="u_margin-md-bottom">Presentations built with Widgets, Templates that include videos or financial data, and HTTP URLs will be excluded from the Schedule when it’s viewed with a link or embedded.</p>
     
     <ul class="nav nav-tabs nav-justified nav-tabs-no-border hidden-xs">
       <li ng-class="{ active: currentTab == 'link' }">
@@ -32,11 +32,11 @@
       <option value="chromeExtension">Chrome Extension</option>
     </select>
 
-    <div ng-show="currentTab === 'link'" class="row u_margin-sm-top u_margin-sm-bottom">
-      <div class="col-xs-12">
+    <div ng-show="currentTab === 'link'" class="row u_margin-sm-top u_margin-md-bottom">
+      <div class="col-xs-12 u_margin-sm-top">
         <label>Link:</label>
         <div class="input-group">
-          <input class="form-control" type="text" readonly="readonly" value="{{sharedScheduleLink}}" ng-focus="onTextFocus($event)" focus-me="currentTab === 'link'"/>
+          <input class="form-control copy-text-box" type="text" readonly="readonly" value="{{sharedScheduleLink}}" ng-focus="onTextFocus($event)" focus-me="currentTab === 'link'"/>
           <div class="input-group-btn">
             <button id="copyUrlButton" class="btn btn-primary" ng-click="copyToClipboard(sharedScheduleLink)" aria-label="Copy">Copy</button>
           </div>
@@ -44,16 +44,16 @@
       </div>
     </div>
 
-    <div ng-show="currentTab === 'embedCode'" class="row u_margin-sm-top u_margin-sm-bottom">
-      <div class="col-xs-12">
+    <div ng-show="currentTab === 'embedCode'" class="row u_margin-sm-top u_margin-md-bottom">
+      <div class="col-xs-12 u_margin-sm-top">
         <label>Embed Code:</label>
-        <textarea class="form-control u_margin-sm-bottom resize-vertical" rows="5" readonly="readonly" ng-focus="onTextFocus($event)" focus-me="currentTab === 'embedCode'">{{sharedScheduleEmbedCode}}</textarea>
+        <textarea class="form-control copy-text-box u_margin-sm-bottom resize-vertical" rows="5" readonly="readonly" ng-focus="onTextFocus($event)" focus-me="currentTab === 'embedCode'">{{sharedScheduleEmbedCode}}</textarea>
         <button id="copyEmbedCodeButton" class="btn btn-primary" ng-click="copyToClipboard(sharedScheduleEmbedCode)" aria-label="Copy">Copy</button>
       </div>
     </div>
 
-    <div ng-show="currentTab === 'socialMedia'" class="row u_margin-sm-top u_margin-sm-bottom">
-      <div class="col-xs-12">
+    <div ng-show="currentTab === 'socialMedia'" class="row u_margin-sm-top u_margin-md-bottom">
+      <div class="col-xs-12 u_margin-sm-top">
         <label>Post to:</label>
         <div class="row">
           <div class="col-xs-12 u_margin-sm-top text-center sideways-panels">
@@ -118,8 +118,8 @@
       </div>
     </div>
 
-    <div ng-show="currentTab === 'chromeExtension'" class="row u_margin-sm-top u_margin-sm-bottom">
-      <div class="col-xs-12">
+    <div ng-show="currentTab === 'chromeExtension'" class="row u_margin-sm-top u_margin-md-bottom">
+      <div class="col-xs-12 u_margin-sm-top">
         <p>Have your audience install our Chrome Extension so they can see your Schedule every time they open a new tab.</p>
         <div class="panel panel-default u_bordered-hover u_remove-bottom u_clickable text-center">
           <a href="https://chrome.google.com/webstore/detail/rise-vision-anywhere/dkoohkdagjpgjheoaaegomjhdccfbcle" target="_blank">
