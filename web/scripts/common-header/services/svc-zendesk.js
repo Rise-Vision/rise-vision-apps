@@ -77,6 +77,7 @@
           }
 
           _changeBorderStyle();
+          _enableSuggestions();
         }
 
         function _changeBorderStyle() {
@@ -88,11 +89,11 @@
           previousUsername = '';
         }
 
-        function enableSuggestions() {
+        function _enableSuggestions() {
           if ($window.zE) {
             $window.zE(function () {
               $window.zE.setHelpCenterSuggestions({
-                url: true
+                labels: ['help_widget_top_suggestions']
               });
             });
           }
@@ -127,7 +128,6 @@
           displayButton: displayButton,
           hideWidget: hideWidget,
           activateWidget: activateWidget,
-          enableSuggestions: enableSuggestions,
           logout: logout
         };
 
@@ -158,10 +158,6 @@
 
           $rootScope.$on('risevision.user.signedOut', function () {
             _showWebWidget();
-          });
-
-          $rootScope.$on('$stateChangeStart', function () {
-            zendesk.enableSuggestions();
           });
         }
 

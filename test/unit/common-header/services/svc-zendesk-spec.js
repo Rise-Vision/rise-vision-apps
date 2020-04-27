@@ -55,6 +55,7 @@ describe("Services: Zendesk", function() {
           zeSpy.show = function() {};
           windowObj.zE = zeSpy;
           windowObj.zE.identify = function() {};
+          windowObj.zE.setHelpCenterSuggestions = sandbox.stub()
         } },
         createElement: function() {
           return {
@@ -93,6 +94,7 @@ describe("Services: Zendesk", function() {
     inject(function(zendesk) {
       zendesk.initializeWidget().then(function(){
         expect(zeSpy).to.have.been.called;
+        expect(windowObj.zE.setHelpCenterSuggestions).to.have.been.calledWith({labels: ['help_widget_top_suggestions']});
         done();
       }, done);
     });
