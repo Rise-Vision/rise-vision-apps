@@ -5,7 +5,7 @@ angular.module('risevision.schedules.controllers')
   .value('SHARED_SCHEDULE_EMBED_CODE', '<div style="position:relative;padding-bottom:56.25%;">\n\
    <iframe style="width:100%;height:100%;position:absolute;left:0px;top:0px;"\n\
       frameborder="0" width="100%" height="100%"\n\
-      src="SHARED_SCHEDULE_URL">\n\
+      src="SHARED_SCHEDULE_URL&env=embed">\n\
    </iframe>\n\
 </div>\n\
 <div style="background:#f2f2f2;color:#020620;font-family:Helvetica;font-size:12px;padding:5px;text-align:center;">\n\
