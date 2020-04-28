@@ -12,8 +12,9 @@ angular.module('risevision.schedules.controllers')
    Powered by <a href="https://www.risevision.com" target="_blank">risevision.com</a>.\n\
 </div>')
   .controller('SharedScheduleModalController', ['$scope', '$modalInstance', 'scheduleFactory', '$window',
-    'SHARED_SCHEDULE_URL', 'SHARED_SCHEDULE_EMBED_CODE',
-    function ($scope, $modalInstance, scheduleFactory, $window, SHARED_SCHEDULE_URL, SHARED_SCHEDULE_EMBED_CODE) {
+    'SHARED_SCHEDULE_URL', 'SHARED_SCHEDULE_EMBED_CODE', 'scheduleTracker',
+    function ($scope, $modalInstance, scheduleFactory, $window, SHARED_SCHEDULE_URL, SHARED_SCHEDULE_EMBED_CODE,
+      scheduleTracker) {
       $scope.schedule = scheduleFactory.schedule;
       $scope.currentTab = 'link';
       $scope.sharedScheduleLink = SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', scheduleFactory.schedule.id);
@@ -25,6 +26,8 @@ angular.module('risevision.schedules.controllers')
       };
 
       $scope.copyToClipboard = function (text) {
+        $scope.trackScheduleShared();
+
         if ($window.navigator.clipboard) {
           $window.navigator.clipboard.writeText(text);
         }
@@ -35,6 +38,9 @@ angular.module('risevision.schedules.controllers')
       };
 
       $scope.shareOnSocial = function (network) {
+        $scope.trackScheduleShared({
+          network: network
+        });
         var encodedLink = encodeURIComponent($scope.sharedScheduleLink);
         var url;
         switch (network) {
@@ -54,6 +60,13 @@ angular.module('risevision.schedules.controllers')
           return;
         }
         $window.open(url, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=400,width=600');
+      };
+
+      $scope.trackScheduleShared = function (extraProperties) {
+        var properties = extraProperties || {};
+        properties.source = $scope.currentTab;
+
+        scheduleTracker('schedule shared', $scope.schedule.id, $scope.schedule.name, properties);
       };
     }
   ]); //ctr

@@ -36,11 +36,12 @@
               scope.$emit('urlFieldBlur');
             };
 
-            scope.showSkipValidation = function() {
-              var skipValidation = scope.forcedValid || (scope.ngModelCtrl.$invalid && scope.ngModelCtrl.$dirty);
+            scope.showSkipValidation = function () {
+              var skipValidation = scope.forcedValid || (scope.ngModelCtrl.$invalid && scope.ngModelCtrl
+              .$dirty);
               var unskippable = false;
 
-              angular.forEach(scope.ngModelCtrl.$error, function(value, name) {
+              angular.forEach(scope.ngModelCtrl.$error, function (value, name) {
                 if (name === 'required' || name === 'noPreviewUrl') {
                   unskippable = true;
                 }
