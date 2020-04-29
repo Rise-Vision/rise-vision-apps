@@ -32,7 +32,7 @@
   <div class="pull-left">
     <h3 class="u_remove-top" style="line-height:33px;" translate>schedules-app.playlist.title</h3>
   </div>
-  <button class="btn btn-default" id="shareScheduleButton" ng-click="openSharedScheduleModal()" ng-show="schedule.id && (ENV_NAME === 'DEV' || ENV_NAME === 'STAGE')">
+  <button class="btn btn-default" id="shareScheduleButton" ng-click="openSharedScheduleModal()" ng-show="schedule.id && (ENV_NAME === 'DEV' || ENV_NAME === 'STAGE' || ENV_NAME === 'TEST')">
     Share Schedule
   </button>
   <div class="btn-group" dropdown>

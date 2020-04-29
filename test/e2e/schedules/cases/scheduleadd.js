@@ -56,6 +56,8 @@ var ScheduleAddScenarios = function() {
       scheduleAddPage.getScheduleNameField().sendKeys(scheduleName);
       scheduleAddPage.getSaveButton().click();
       helper.wait(scheduleAddPage.getDeleteButton(), 'Delete Button');
+      helper.wait(scheduleAddPage.getShareScheduleButton(), 'Share Schedule Button');
+      
       expect(scheduleAddPage.getDeleteButton().isDisplayed()).to.eventually.be.true;
       expect(scheduleAddPage.getPreviewButton().isDisplayed()).to.eventually.be.true;
       expect(scheduleAddPage.getShareScheduleButton().isDisplayed()).to.eventually.be.true;
