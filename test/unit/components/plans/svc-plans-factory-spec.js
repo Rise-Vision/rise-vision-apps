@@ -10,6 +10,11 @@ describe("Services: plans factory", function() {
         open: sinon.stub().returns({result: Q.defer().promise })
       };
     });
+    $provide.service("analyticsFactory", function() {
+      return {
+        track: sinon.stub()
+      };
+    });
     $provide.service("userState", function () {
       return {
         _restoreState: function () {},
@@ -24,7 +29,7 @@ describe("Services: plans factory", function() {
     });
   }));
 
-  var sandbox, $modal, userState, plansFactory;
+  var sandbox, $modal, userState, plansFactory, analyticsFactory;
   var VOLUME_PLAN;
 
   beforeEach(function() {
@@ -34,6 +39,7 @@ describe("Services: plans factory", function() {
       $modal = $injector.get("$modal");
       userState =  $injector.get("userState");
       plansFactory = $injector.get("plansFactory");
+      analyticsFactory = $injector.get("analyticsFactory");
 
       var plansByType = _.keyBy($injector.get("PLANS_LIST"), "type");
 
@@ -124,6 +130,10 @@ describe("Services: plans factory", function() {
         },
         windowClass: 'madero-style centered-modal unlock-this-feature-modal',
         size: 'sm'
+      });
+
+      expect(analyticsFactory.track).to.have.been.calledWith('free user popup seen', {
+        source: 'share schedule button'
       });
     });
 
