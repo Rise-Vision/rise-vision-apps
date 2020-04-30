@@ -159,8 +159,8 @@
       productCode: 'd521f5bfbc1eef109481eebb79831e11c7804ad8',
       proLicenseCount: 0
     }])
-    .factory('plansFactory', ['$modal', '$templateCache', 'userState', 'PLANS_LIST',
-      function ($modal, $templateCache, userState, PLANS_LIST) {
+    .factory('plansFactory', ['$modal', '$templateCache', 'userState', 'PLANS_LIST', 'analyticsFactory',
+      function ($modal, $templateCache, userState, PLANS_LIST, analyticsFactory) {
         var _factory = {};
 
         _factory.showPlansModal = function () {
@@ -180,6 +180,9 @@
         };
 
         _factory.showUnlockThisFeatureModal = function () {
+          analyticsFactory.track('free user popup seen', {
+            source: 'share schedule button'
+          });
           $modal.open({
             templateUrl: 'partials/components/plans/unlock-this-feature-modal.html',
             controller: 'confirmModalController',

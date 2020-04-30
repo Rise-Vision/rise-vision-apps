@@ -2,7 +2,10 @@
 describe('controller: SharedScheduleModalController', function() {
   beforeEach(module('risevision.schedules.controllers'));
   beforeEach(module(function ($provide) {
-    schedule = {id: 'scheduleId'};
+    schedule = {
+      id: 'scheduleId',
+      name: 'scheduleName'
+    };
 
     $provide.value('SHARED_SCHEDULE_URL','https://preview.risevision.com/?type=sharedschedule&id=SCHEDULE_ID');
 
@@ -15,15 +18,19 @@ describe('controller: SharedScheduleModalController', function() {
       return scheduleFactory = {
         schedule: schedule
       }
-    });    
+    });
+    $provide.service("scheduleTracker", function() {
+       return sinon.stub();
+     });
   }));
-  var $scope, $modalInstance, scheduleFactory, schedule, $window;
+  var $scope, $modalInstance, scheduleFactory, schedule, $window, scheduleTracker;
 
   beforeEach(function(){
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
       $modalInstance = $injector.get('$modalInstance');
       $window = $injector.get('$window');
+      scheduleTracker = $injector.get('scheduleTracker');
 
       sinon.spy($modalInstance, 'dismiss');
 
@@ -79,6 +86,7 @@ describe('controller: SharedScheduleModalController', function() {
     it('should copy to clipboard', function(){
       $scope.copyToClipboard('text');
       $window.navigator.clipboard.writeText.should.have.been.calledWith('text');
+      scheduleTracker.should.have.been.calledWith('schedule shared', 'scheduleId', 'scheduleName', {source: 'link'});
     });
   });
 
@@ -98,6 +106,7 @@ describe('controller: SharedScheduleModalController', function() {
 
   describe('shareOnSocial', function() {
     beforeEach(function() {
+      $scope.currentTab = 'socialMedia';
       sinon.stub($window, 'open');
     });
     afterEach(function() {
@@ -108,29 +117,52 @@ describe('controller: SharedScheduleModalController', function() {
       $scope.shareOnSocial('twitter');
 
       $window.open.should.have.been.calledWith('https://twitter.com/share?via=RiseVision&url=https%3A%2F%2Fpreview.risevision.com%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId', '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=400,width=600');
+
+      scheduleTracker.should.have.been.calledWith('schedule shared', 'scheduleId', 'scheduleName', {source: 'socialMedia', network: 'twitter'});
     });
 
     it('should use the correct social network url', function() {
       $scope.shareOnSocial('twitter');
       $window.open.should.have.been.calledWith('https://twitter.com/share?via=RiseVision&url=https%3A%2F%2Fpreview.risevision.com%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId');
+      scheduleTracker.should.have.been.calledWith('schedule shared', 'scheduleId', 'scheduleName', {source: 'socialMedia', network: 'twitter'});
+      scheduleTracker.resetHistory();
       $window.open.resetHistory();
+
 
       $scope.shareOnSocial('facebook');
       $window.open.should.have.been.calledWith('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fpreview.risevision.com%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId');
+      scheduleTracker.should.have.been.calledWith('schedule shared', 'scheduleId', 'scheduleName', {source: 'socialMedia', network: 'facebook'});
+      scheduleTracker.resetHistory();
       $window.open.resetHistory();
 
       $scope.shareOnSocial('linkedin');
       $window.open.should.have.been.calledWith('https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fpreview.risevision.com%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId');
+      scheduleTracker.should.have.been.calledWith('schedule shared', 'scheduleId', 'scheduleName', {source: 'socialMedia', network: 'linkedin'});
+      scheduleTracker.resetHistory();
       $window.open.resetHistory();
 
       $scope.shareOnSocial('classroom');
       $window.open.should.have.been.calledWith('https://classroom.google.com/share?url=https%3A%2F%2Fpreview.risevision.com%2F%3Ftype%3Dsharedschedule%26id%3DscheduleId');
+      scheduleTracker.should.have.been.calledWith('schedule shared', 'scheduleId', 'scheduleName', {source: 'socialMedia', network: 'classroom'});
     });
 
     it('should not open popup for invalid/unsupported social networks', function() {
       $scope.shareOnSocial('google+');
 
       $window.open.should.not.have.been.called;
+    });
+  });
+
+  describe('trackScheduleShared:', function() {
+    it('should track event setting "source" as current tab', function(){
+      $scope.trackScheduleShared();
+      scheduleTracker.should.have.been.calledWith('schedule shared', 'scheduleId', 'scheduleName', {source: 'link'});
+
+      scheduleTracker.resetHistory();
+      $scope.currentTab = 'chromeExtension';
+
+      $scope.trackScheduleShared();
+      scheduleTracker.should.have.been.calledWith('schedule shared', 'scheduleId', 'scheduleName', {source: 'chromeExtension'});
     });
   });
 
