@@ -5,6 +5,7 @@ var SignInPage = require('./../../common/pages/signInPage.js');
 var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
 var SchedulesListPage = require('./../pages/schedulesListPage.js');
 var ScheduleAddPage = require('./../pages/scheduleAddPage.js');
+var SharedScheduleModalPage = require('./../pages/sharedScheduleModalPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var ScheduleAddScenarios = function() {
@@ -17,6 +18,7 @@ var ScheduleAddScenarios = function() {
     var commonHeaderPage;
     var schedulesListPage;
     var scheduleAddPage;
+    var sharedScheduleModalPage;
 
     before(function () {
       homepage = new HomePage();
@@ -24,6 +26,7 @@ var ScheduleAddScenarios = function() {
       schedulesListPage = new SchedulesListPage();
       scheduleAddPage = new ScheduleAddPage();
       commonHeaderPage = new CommonHeaderPage();
+      sharedScheduleModalPage = new SharedScheduleModalPage();
 
       homepage.getSchedules();
       signInPage.signIn();
@@ -35,8 +38,9 @@ var ScheduleAddScenarios = function() {
       expect(scheduleAddPage.getScheduleNameField().isPresent()).to.eventually.be.true;
     });
 
-    it('should not show Preview Button', function () {
+    it('should not show Preview and Share Schedule buttons', function () {
       expect(scheduleAddPage.getPreviewButton().isDisplayed()).to.eventually.be.false;
+      expect(scheduleAddPage.getShareScheduleButton().isDisplayed()).to.eventually.be.false;
     });
 
     it('should show Save Button', function () {
@@ -52,8 +56,46 @@ var ScheduleAddScenarios = function() {
       scheduleAddPage.getScheduleNameField().sendKeys(scheduleName);
       scheduleAddPage.getSaveButton().click();
       helper.wait(scheduleAddPage.getDeleteButton(), 'Delete Button');
+      helper.wait(scheduleAddPage.getShareScheduleButton(), 'Share Schedule Button');
+      
       expect(scheduleAddPage.getDeleteButton().isDisplayed()).to.eventually.be.true;
       expect(scheduleAddPage.getPreviewButton().isDisplayed()).to.eventually.be.true;
+      expect(scheduleAddPage.getShareScheduleButton().isDisplayed()).to.eventually.be.true;
+    });
+
+    describe('Share Schedule cases:', function() {
+      it('should open Share Schedule modal', function() {
+        scheduleAddPage.getShareScheduleButton().click();
+        helper.wait(sharedScheduleModalPage.getSharedScheduleModal(), 'Shared Schedule Modal');
+
+        expect(sharedScheduleModalPage.getSharedScheduleModal().isDisplayed()).to.eventually.be.true;
+      });
+
+      it('should show copy link button', function() {
+        expect(sharedScheduleModalPage.getCopyLinkButton().isDisplayed()).to.eventually.be.true;
+      });
+
+      it('should navigate to Embed Code and show Copy Embed Code button', function() {
+        sharedScheduleModalPage.getEmbedCodeTabLink().click();
+        expect(sharedScheduleModalPage.getCopyEmbedCodeButton().isDisplayed()).to.eventually.be.true;
+      });
+
+      it('should navigate to Social Media and show sharing buttons', function() {
+        sharedScheduleModalPage.getSocialMediaTabLink().click();
+        expect(sharedScheduleModalPage.getTwitterShareButton().isDisplayed()).to.eventually.be.true;
+      });
+
+      it('should navigate to Chrome Extension and show Extension link', function() {
+        sharedScheduleModalPage.getChromeExtensionTabLink().click();
+        expect(sharedScheduleModalPage.getChromeExtensionLink().isDisplayed()).to.eventually.be.true;
+        expect(sharedScheduleModalPage.getChromeExtensionLink().getAttribute('href')).to.eventually.equal('https://chrome.google.com/webstore/detail/rise-vision-anywhere/dkoohkdagjpgjheoaaegomjhdccfbcle');
+      });
+
+      it('should close Share Schedule modal', function() {
+        sharedScheduleModalPage.getCloseButton().click();
+
+        expect(sharedScheduleModalPage.getSharedScheduleModal().isPresent()).to.eventually.be.false; 
+      });
     });
 
     after(function () {
