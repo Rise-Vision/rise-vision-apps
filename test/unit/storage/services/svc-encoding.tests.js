@@ -2,7 +2,7 @@
 describe('service: encoding:', function() {
   beforeEach(module('risevision.storage.services'));
 
-  let encoding;
+  var encoding;
   beforeEach(function(){
     inject(function($injector){
       encoding = $injector.get('encoding');

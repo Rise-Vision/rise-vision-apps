@@ -79,7 +79,7 @@ angular.module('risevision.storage.services')
     }
   ])
   .factory('fileUploaderFactory', ['$rootScope', '$q', 'XHRFactory', 'encoding', 'ExifStripper', '$timeout',
-    function ($rootScope, $q, XHRFactory, ExifStripper, $timeout) {
+    function ($rootScope, $q, XHRFactory, encoding, ExifStripper, $timeout) {
       return function () {
         var svc = {};
         var loadBatchTimer = null;
