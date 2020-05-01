@@ -78,7 +78,7 @@ angular.module('risevision.storage.services')
       return fileUploaderFactory();
     }
   ])
-  .factory('fileUploaderFactory', ['$rootScope', '$q', 'XHRFactory', 'ExifStripper', '$timeout',
+  .factory('fileUploaderFactory', ['$rootScope', '$q', 'XHRFactory', 'encoding', 'ExifStripper', '$timeout',
     function ($rootScope, $q, XHRFactory, ExifStripper, $timeout) {
       return function () {
         var svc = {};
