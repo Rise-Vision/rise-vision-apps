@@ -88,8 +88,7 @@ describe("Services: current plan factory", function() {
         expect(currentPlanFactory.currentPlan.playerProAvailableLicenseCount).to.equal(1);
 
         expect(currentPlanFactory.currentPlan.shareCompanyPlan).to.be.true;
-        expect(currentPlanFactory.currentPlan.parentPlan).to.be.ok;
-        expect(currentPlanFactory.currentPlan.parentPlan.type).to.equal("advanced");
+        expect(currentPlanFactory.currentPlan.parentPlan).to.not.be.ok;
         expect(currentPlanFactory.currentPlan.parentPlanCompanyName).to.equal("parentName");
         expect(currentPlanFactory.currentPlan.parentPlanContactEmail).to.equal("administratorEmail");
 
@@ -97,7 +96,7 @@ describe("Services: current plan factory", function() {
       }, 0);
     });
 
-    it("should load Parent Company plan even if no Plan is available for the Company", function(done) {
+    it("should use shared Parent Company plan if no Plan is available for the Company", function(done) {
       sandbox.spy($rootScope, "$emit");
       sandbox.stub(userState, "getSelectedCompanyId").returns("companyId");
       sandbox.stub(userState, "getCopyOfSelectedCompany").returns({
@@ -116,14 +115,13 @@ describe("Services: current plan factory", function() {
       setTimeout(function () {
         expect($rootScope.$emit).to.have.been.called;
         expect(currentPlanFactory.currentPlan).to.be.not.null;
-        expect(currentPlanFactory.currentPlan.type).to.equal("free");
+        expect(currentPlanFactory.currentPlan.type).to.equal("advanced");
         expect(currentPlanFactory.currentPlan.status).to.equal("Active");
         expect(currentPlanFactory.currentPlan.playerProTotalLicenseCount).to.equal(3);
         expect(currentPlanFactory.currentPlan.playerProAvailableLicenseCount).to.equal(1);
 
         expect(currentPlanFactory.currentPlan.shareCompanyPlan).to.be.true;
-        expect(currentPlanFactory.currentPlan.parentPlan).to.be.ok;
-        expect(currentPlanFactory.currentPlan.parentPlan.type).to.equal("advanced");
+        expect(currentPlanFactory.currentPlan.parentPlan).to.be.true;
         expect(currentPlanFactory.currentPlan.parentPlanCompanyName).to.equal("parentName");
         expect(currentPlanFactory.currentPlan.parentPlanContactEmail).to.equal("administratorEmail");
 
@@ -345,7 +343,7 @@ describe("Services: current plan factory", function() {
 
   describe("Parent plan: ", function() {
     it("should return the plan is inherited from the Parent", function() {
-      currentPlanFactory.currentPlan = { parentPlan: {} };
+      currentPlanFactory.currentPlan = { parentPlan: true };
       expect(currentPlanFactory.isParentPlan()).to.be.true;
     });
 

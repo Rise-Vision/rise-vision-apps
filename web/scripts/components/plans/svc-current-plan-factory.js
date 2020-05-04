@@ -20,6 +20,11 @@
             plan.currentPeriodEndDate = new Date(company.planCurrentPeriodEndDate);
             plan.trialExpiryDate = new Date(company.planTrialExpiryDate);
 
+          } else if (company.id && company.parentPlanProductCode) {
+            plan = _.cloneDeep(_plansByCode[company.parentPlanProductCode]);
+            plan.parentPlan = true;
+            plan.status = 'Active';
+
           } else {
             plan = _.cloneDeep(_plansByType.free);
           }
@@ -30,10 +35,6 @@
           plan.playerProAvailableLicenseCount = company.playerProAvailableLicenseCount;
 
           plan.shareCompanyPlan = company.shareCompanyPlan;
-
-          if (company.parentPlanProductCode) {
-            plan.parentPlan = _.cloneDeep(_plansByCode[company.parentPlanProductCode]);
-          }
 
           plan.isPurchasedByParent = !!company.planBillToId && !!company.planShipToId && (company.planBillToId !==
             company.planShipToId) && (_factory.isSubscribed() || _factory.isCancelledActive());
