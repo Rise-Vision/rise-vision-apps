@@ -17,7 +17,8 @@
     "pricing-data-component": "github:Rise-Vision/pricing-data-component",
     "pricing-grid-component": "github:Rise-Vision/pricing-grid-component",
     "pricing-selector-component": "github:Rise-Vision/pricing-selector-component",
-    "pricing-summary-component": "github:Rise-Vision/pricing-summary-component"
+    "pricing-summary-component": "github:Rise-Vision/pricing-summary-component",
+    "tus-js-client": "^2.0.0-1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
