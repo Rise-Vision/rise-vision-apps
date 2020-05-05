@@ -1,19 +1,14 @@
 'use strict';
 describe('service: in-app-messages-factory', function() {
   var sandbox = sinon.sandbox.create();
-  var factory, selectedCompany, localStorageService, companyAssetsFactory, userState, $rootScope;
+  var factory, localStorageService, companyAssetsFactory, userState, $rootScope;
 
   beforeEach(module('risevision.apps.services'));
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
 
-
     $provide.service('userState', function() {
       return {
-        getCopyOfSelectedCompany: function() {
-          return selectedCompany;
-        },
-        isEducationCustomer: sandbox.stub().returns(false),
         _restoreState: sandbox.stub(),
         getSelectedCompanyId: sandbox.stub().returns(''),
         getCopyOfProfile: sandbox.stub().returns(null),
@@ -43,7 +38,6 @@ describe('service: in-app-messages-factory', function() {
       localStorageService = $injector.get('localStorageService');
       $rootScope = $injector.get('$rootScope');
       companyAssetsFactory = $injector.get('companyAssetsFactory');
-      selectedCompany = {};
     });
   });
 
@@ -52,15 +46,6 @@ describe('service: in-app-messages-factory', function() {
   });
 
   describe('pickMessage:', function() {
-    it('should not show message if company is missing',function(done) {
-      selectedCompany = undefined;
-      factory.pickMessage();
-      setTimeout(function(){
-        expect(factory.messageToShow).to.be.undefined;
-        done();
-      },10);
-    });
-
     describe('confirmEmail:', function() {
       it('should not show for Google auth users', function() {
         factory.pickMessage();
@@ -110,58 +95,13 @@ describe('service: in-app-messages-factory', function() {
 
     });
 
-    describe('pricingChanges message',function(){
-      it('should not show notice if company creationDate is after Jun 25', function() {
-        selectedCompany.creationDate = 'Jun 26, 2019';
-        factory.pickMessage();
-
-        expect(factory.messageToShow).to.be.undefined;
-        companyAssetsFactory.hasPresentations.should.have.been.called;
-      });      
-
-      it('should show notice if company creationDate is before Jun 25',function() {
-        selectedCompany.creationDate = 'Jun 24, 2019';        
-        factory.pickMessage();
-
-        expect(factory.messageToShow).to.equal('pricingChanges');
-        companyAssetsFactory.hasPresentations.should.not.have.been.called;
-      });  
-
-      it('should not show notice if dismissed',function() {
-        selectedCompany.creationDate = 'Jun 24, 2019';
-
-        localStorageService.get.withArgs('pricingChangesAlert.dismissed').returns(true);
-
-        factory.pickMessage();
-
-        expect(factory.messageToShow).to.be.undefined;
-        companyAssetsFactory.hasPresentations.should.have.been.called;
-      });    
-    });
-
     describe('promoteTraining:',function(){
-      beforeEach(function(){
-        localStorageService.get.withArgs('pricingChangesAlert.dismissed').returns(true);
-      });
-
-      it('should show training message for education customers if pricing message was dismissed and company has created presentations',function(done){
-        userState.isEducationCustomer.returns(true);
-
+      it('should show training message if the company has created presentations',function(done){
         factory.pickMessage();
         setTimeout(function(){
           expect(factory.messageToShow).to.equal('promoteTraining');
           done();
         },10);
-      });
-
-      it('should not show training message if not an education customer',function(done){
-        userState.isEducationCustomer.returns(false);
-
-        factory.pickMessage();
-        setTimeout(function(){
-          expect(factory.messageToShow).to.be.undefined;
-          done();
-        },10); 
       });
 
       it('should not show training message if company does not have presentations',function(done){
@@ -188,33 +128,21 @@ describe('service: in-app-messages-factory', function() {
 
   describe('dismissMessage:',function() {
     it('should dsimiss message and update local storage value', function(done) {
-      selectedCompany.creationDate = 'Jun 24, 2019';        
-        factory.pickMessage();
-        setTimeout(function(){
-          expect(factory.messageToShow).to.equal('pricingChanges');
+      factory.pickMessage();
+      setTimeout(function(){
+        expect(factory.messageToShow).to.equal('promoteTraining');
 
-          factory.dismissMessage();
+        factory.dismissMessage();
 
-          localStorageService.set.should.have.been.calledWith('pricingChangesAlert.dismissed', true);
-          expect(factory.messageToShow).to.be.undefined;
+        localStorageService.set.should.have.been.calledWith('promoteTrainingAlert.dismissed', true);
+        expect(factory.messageToShow).to.be.undefined;
 
-          done();
-        },10);
+        done();
+      },10);
     });
   });
 
   describe('$rootScope.$watches', function() {
-    it('should reload message on company updated', function() {
-      sandbox.stub(factory,'pickMessage');
-
-      factory.messageToShow = 'fakeMessage';
-      $rootScope.$broadcast('risevision.company.updated');
-      $rootScope.$digest();
-
-      expect(factory.messageToShow).to.be.undefined;
-      expect(factory.pickMessage).to.have.been.calledWith(true);
-    })
-
     it('should reload message on selected company changed', function() {
       sandbox.stub(factory,'pickMessage');
 

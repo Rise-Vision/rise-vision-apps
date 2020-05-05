@@ -11,15 +11,10 @@ angular.module('risevision.apps.services')
       $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
         _reset();
       });
-      $rootScope.$on('risevision.company.updated', function () {
-        _reset();
-      });
 
       factory.pickMessage = function (forceReload) {
         if (_shouldShowConfirmEmail()) {
           factory.messageToShow = 'confirmEmail';
-        } else if (_shouldShowPricingChanges()) {
-          factory.messageToShow = 'pricingChanges';
         } else {
           companyAssetsFactory.hasPresentations(forceReload).then(function (hasAddedPresentation) {
             if (_shouldShowPromoteTraining(hasAddedPresentation)) {
@@ -55,17 +50,8 @@ angular.module('risevision.apps.services')
         return userState.isRiseAuthUser() && userProfile ? (userProfile.userConfirmed === false) : false;
       };
 
-      var _shouldShowPricingChanges = function () {
-        var company = userState.getCopyOfSelectedCompany();
-        var creationDate = ((company && company.creationDate) ? (new Date(company.creationDate)) : (
-          new Date()));
-        var isPastCreationDate = creationDate < new Date('June 25, 2019');
-
-        return isPastCreationDate && !_isDismissed('pricingChanges');
-      };
-
       var _shouldShowPromoteTraining = function (hasAddedPresentation) {
-        return userState.isEducationCustomer() && hasAddedPresentation && !_isDismissed('promoteTraining');
+        return hasAddedPresentation && !_isDismissed('promoteTraining');
       };
 
       var _isDismissed = function (key) {
