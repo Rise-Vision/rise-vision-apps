@@ -1,7 +1,7 @@
 'use strict';
 angular.module('risevision.storage.services')
-  .factory('UploadURIService', ['$q', '$log', 'storage', 'processErrorCode',
-    function uploadURIService($q, $log, storage, processErrorCode) {
+  .factory('UploadURIService', ['$q', '$log', 'storage', 'encoding', 'processErrorCode',
+    function uploadURIService($q, $log, storage, encoding, processErrorCode) {
       var svc = {};
 
       svc.getURI = function getURI(file) {
@@ -11,7 +11,11 @@ angular.module('risevision.storage.services')
           });
         }
 
-        return storage.getResumableUploadURI(file.name, file.type)
+        return encoding.isApplicable(file.type)
+          .then(function (useEncoding) {
+            var applicableService = useEncoding ? encoding : storage;
+            return applicableService.getResumableUploadURI(file.name, file.type);
+          })
           .then(function (resp) {
             return resp;
           })
@@ -19,6 +23,7 @@ angular.module('risevision.storage.services')
             var type = file.type === 'folder' ? 'Folder' : 'File';
             var message = processErrorCode(type, 'upload', e);
 
+            $log.debug('Failed upload uri request');
             return $q.reject({
               message: message,
               status: e.status
