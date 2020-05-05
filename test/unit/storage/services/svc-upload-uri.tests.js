@@ -19,18 +19,30 @@ describe('service: UploadURIService', function() {
         }
       };
     });
+
+    $provide.service('encoding', function () {
+      return {
+        getResumableUploadURI: function(fileName, fileType) {
+          return Q.resolve(true);
+        },
+        isApplicable: function(fileType) { return Q.resolve(encodingApplicable); }
+      };
+    });
+
     $provide.service('processErrorCode', function() {
       return function(type, item, error) { return type + item + error; };
     });
 
   }));
-  var uploadURIService, storage, returnResult, $rootScope, storageRequestObj;
+  var uploadURIService, storage, encoding, encodingApplicable, returnResult, $rootScope, storageRequestObj;
   beforeEach(function(){
     returnResult = true;
+    encodingApplicable = false;
 
     inject(function($injector){
       $rootScope = $injector.get('$rootScope');
       storage = $injector.get('storage');
+      encoding = $injector.get('encoding');
       uploadURIService = $injector.get('UploadURIService');
     });
   });
@@ -67,6 +79,17 @@ describe('service: UploadURIService', function() {
         done();
       })
       .then(null,done);
+    });
+
+    it("should use encoder service when uploading video and encoder master switch is on",function(done){
+      encodingApplicable = true;
+
+      var file = {name: "fileName", type: "video/mp4"};
+      var spy = sinon.spy(encoding,'getResumableUploadURI');
+      uploadURIService.getURI(file).then(function(result) {
+        spy.should.have.been.calledWith(file.name, file.type);
+        done();
+      });
     });
   });
 });
