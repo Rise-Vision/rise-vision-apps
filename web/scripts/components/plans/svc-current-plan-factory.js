@@ -22,7 +22,7 @@
 
           } else if (company.id && company.parentPlanProductCode) {
             plan = _.cloneDeep(_plansByCode[company.parentPlanProductCode]);
-            plan.parentPlan = true;
+            plan.isParentPlan = true;
             plan.status = 'Active';
 
           } else {
@@ -69,7 +69,7 @@
         };
 
         _factory.isParentPlan = function () {
-          return !!_factory.currentPlan.parentPlan;
+          return !!_factory.currentPlan.isParentPlan;
         };
 
         _factory.isEnterpriseSubCompany = function () {

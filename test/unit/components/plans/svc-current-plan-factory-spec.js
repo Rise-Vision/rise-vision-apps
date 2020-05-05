@@ -88,7 +88,7 @@ describe("Services: current plan factory", function() {
         expect(currentPlanFactory.currentPlan.playerProAvailableLicenseCount).to.equal(1);
 
         expect(currentPlanFactory.currentPlan.shareCompanyPlan).to.be.true;
-        expect(currentPlanFactory.currentPlan.parentPlan).to.not.be.ok;
+        expect(currentPlanFactory.currentPlan.isParentPlan).to.not.be.ok;
         expect(currentPlanFactory.currentPlan.parentPlanCompanyName).to.equal("parentName");
         expect(currentPlanFactory.currentPlan.parentPlanContactEmail).to.equal("administratorEmail");
 
@@ -121,7 +121,7 @@ describe("Services: current plan factory", function() {
         expect(currentPlanFactory.currentPlan.playerProAvailableLicenseCount).to.equal(1);
 
         expect(currentPlanFactory.currentPlan.shareCompanyPlan).to.be.true;
-        expect(currentPlanFactory.currentPlan.parentPlan).to.be.true;
+        expect(currentPlanFactory.currentPlan.isParentPlan).to.be.true;
         expect(currentPlanFactory.currentPlan.parentPlanCompanyName).to.equal("parentName");
         expect(currentPlanFactory.currentPlan.parentPlanContactEmail).to.equal("administratorEmail");
 
@@ -343,7 +343,7 @@ describe("Services: current plan factory", function() {
 
   describe("Parent plan: ", function() {
     it("should return the plan is inherited from the Parent", function() {
-      currentPlanFactory.currentPlan = { parentPlan: true };
+      currentPlanFactory.currentPlan = { isParentPlan: true };
       expect(currentPlanFactory.isParentPlan()).to.be.true;
     });
 
