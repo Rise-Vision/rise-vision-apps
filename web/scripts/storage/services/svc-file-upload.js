@@ -195,7 +195,39 @@ angular.module('risevision.storage.services')
           }
 
           svc.isUploading = true;
-          svc.xhrTransport(item);
+          return item.taskToken ? svc.tusUpload(item) : svc.xhrTransport(item);
+        };
+
+        svc.tusUpload = function(item) {
+          var tusUpload = new tus.Upload(item.domFileItem, {
+            endpoint: [item.url, item.taskToken].join('/'),
+            retryDelays: [0, 2000, 6000, 9000],
+            removeFingerprintOnSuccess: true,
+            metadata: {
+              filename: item.file.name,
+              filetype: item.file.type
+            },
+            onError: function(e) {
+              svc.notifyErrorItem(item, e.status);
+              svc.notifyCompleteItem(item);
+            },
+            onProgress: function(bytesUploaded, bytesTotal) {
+              var pct = (bytesUploaded / bytesTotal * 100).toFixed(2);
+              svc.notifyProgressItem(item, pct);
+            },
+            onSuccess: function() {
+              item.tusURL = tusUpload.url;
+              svc.startEncoding(item);
+            }
+          });
+
+          svc.notifyBeforeUploadItem(item);
+          tusUpload.start();
+        };
+
+        svc.startEncoding = function (item) {
+          svc.notifySuccessItem(item);
+          svc.notifyCompleteItem(item);
         };
 
         svc.cancelItem = function (value) {
@@ -297,11 +329,11 @@ angular.module('risevision.storage.services')
           item.isUploading = false;
           item.isCancel = true;
 
-          svc.onCancelItem(item, status);
+          svc.onCancelItem(item);
         };
 
-        svc.notifyCompleteItem = function (item, status) {
-          svc.onCompleteItem(item, status);
+        svc.notifyCompleteItem = function (item) {
+          svc.onCompleteItem(item);
 
           var nextItem = svc.getReadyItems()[0];
           svc.isUploading = false;
@@ -387,18 +419,18 @@ angular.module('risevision.storage.services')
               xhr.requestNextStartByte();
             } else {
               svc[method](item, xhr.status);
-              svc.notifyCompleteItem(item, xhr.status);
+              svc.notifyCompleteItem(item);
             }
           };
 
           xhr.onerror = function () {
             svc.notifyErrorItem(item, xhr.status);
-            svc.notifyCompleteItem(item, xhr.status);
+            svc.notifyCompleteItem(item);
           };
 
           xhr.onabort = function () {
-            svc.notifyCancelItem(item, xhr.status);
-            svc.notifyCompleteItem(item, xhr.status);
+            svc.notifyCancelItem(item);
+            svc.notifyCompleteItem(item);
           };
 
           xhr.requestNextStartByte = function () {
