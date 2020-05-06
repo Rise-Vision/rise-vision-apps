@@ -12,18 +12,18 @@
           var company = userState.getCopyOfSelectedCompany();
           var plan = null;
 
-          if (company.id && company.planProductCode) {
+          if (company.id && company.parentPlanProductCode) {
+            plan = _.cloneDeep(_plansByCode[company.parentPlanProductCode]);
+            plan.isParentPlan = true;
+            plan.status = 'Active';
+
+          } else if (company.id && company.planProductCode) {
             plan = _.cloneDeep(_plansByCode[company.planProductCode]);
 
             plan.status = company.planSubscriptionStatus;
             plan.trialPeriod = company.planTrialPeriod;
             plan.currentPeriodEndDate = new Date(company.planCurrentPeriodEndDate);
             plan.trialExpiryDate = new Date(company.planTrialExpiryDate);
-
-          } else if (company.id && company.parentPlanProductCode) {
-            plan = _.cloneDeep(_plansByCode[company.parentPlanProductCode]);
-            plan.isParentPlan = true;
-            plan.status = 'Active';
 
           } else {
             plan = _.cloneDeep(_plansByType.free);

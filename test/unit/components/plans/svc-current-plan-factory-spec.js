@@ -67,11 +67,7 @@ describe("Services: current plan factory", function() {
         planCurrentPeriodEndDate: "Jan 1, 2018",
         planTrialExpiryDate: "Jan 14, 2018",
         playerProTotalLicenseCount: 3,
-        playerProAvailableLicenseCount: 1,
-        shareCompanyPlan: true,
-        parentPlanProductCode: ADVANCED_PLAN_CODE,
-        parentPlanCompanyName: "parentName",
-        parentPlanContactEmail: "administratorEmail"
+        playerProAvailableLicenseCount: 1
       });
 
       $rootScope.$emit("risevision.company.selectedCompanyChanged");
@@ -87,10 +83,7 @@ describe("Services: current plan factory", function() {
         expect(currentPlanFactory.currentPlan.playerProTotalLicenseCount).to.equal(3);
         expect(currentPlanFactory.currentPlan.playerProAvailableLicenseCount).to.equal(1);
 
-        expect(currentPlanFactory.currentPlan.shareCompanyPlan).to.be.true;
         expect(currentPlanFactory.currentPlan.isParentPlan).to.not.be.ok;
-        expect(currentPlanFactory.currentPlan.parentPlanCompanyName).to.equal("parentName");
-        expect(currentPlanFactory.currentPlan.parentPlanContactEmail).to.equal("administratorEmail");
 
         done();
       }, 0);
@@ -101,6 +94,43 @@ describe("Services: current plan factory", function() {
       sandbox.stub(userState, "getSelectedCompanyId").returns("companyId");
       sandbox.stub(userState, "getCopyOfSelectedCompany").returns({
         id: "companyId",
+        playerProTotalLicenseCount: 3,
+        playerProAvailableLicenseCount: 1,
+        shareCompanyPlan: true,
+        parentPlanProductCode: ADVANCED_PLAN_CODE,
+        parentPlanCompanyName: "parentName",
+        parentPlanContactEmail: "administratorEmail"
+      });
+
+      $rootScope.$emit("risevision.company.selectedCompanyChanged");
+      $rootScope.$digest();
+
+      setTimeout(function () {
+        expect($rootScope.$emit).to.have.been.called;
+        expect(currentPlanFactory.currentPlan).to.be.not.null;
+        expect(currentPlanFactory.currentPlan.type).to.equal("advanced");
+        expect(currentPlanFactory.currentPlan.status).to.equal("Active");
+        expect(currentPlanFactory.currentPlan.playerProTotalLicenseCount).to.equal(3);
+        expect(currentPlanFactory.currentPlan.playerProAvailableLicenseCount).to.equal(1);
+
+        expect(currentPlanFactory.currentPlan.shareCompanyPlan).to.be.true;
+        expect(currentPlanFactory.currentPlan.isParentPlan).to.be.true;
+        expect(currentPlanFactory.currentPlan.parentPlanCompanyName).to.equal("parentName");
+        expect(currentPlanFactory.currentPlan.parentPlanContactEmail).to.equal("administratorEmail");
+
+        done();
+      }, 0);
+    });
+
+    it("should give priority to Parent Company plan when available", function(done) {
+      sandbox.spy($rootScope, "$emit");
+      sandbox.stub(userState, "getSelectedCompanyId").returns("companyId");
+      sandbox.stub(userState, "getCopyOfSelectedCompany").returns({
+        id: "companyId",
+        planProductCode: BASIC_PLAN_CODE,
+        planSubscriptionStatus: "Subscribed",
+        planCurrentPeriodEndDate: "Jan 1, 2018",
+        planTrialExpiryDate: "Jan 14, 2018",
         playerProTotalLicenseCount: 3,
         playerProAvailableLicenseCount: 1,
         shareCompanyPlan: true,
