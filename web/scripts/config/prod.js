@@ -37,7 +37,7 @@
     .value('APPS_URL', '')
     .value('OAUTH_TOKEN_PROVIDER_URL', 'https://services.risevision.com/oauthtokenprovider/')
     .value('TWITTER_SERVICE_URL',
-      'https://services-stage.risevision.com/twitter/') // TODO: change to production when ready
+      'https://services.risevision.com/twitter/')
     .value('OAUTH_PUBLIC_KEY', 'EJMI-lB9hB55OYEsYmjXDNfRGoY')
     .value('CHARGEBEE_TEST_SITE', 'risevision-test')
     .value('CHARGEBEE_PROD_SITE', 'risevision')
