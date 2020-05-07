@@ -4,7 +4,7 @@ angular.module('risevision.storage.services')
   .service('encoding', ['$q', '$log', '$http', 'storageAPILoader', 'userState',
     function ($q, $log, $http, storageAPILoader, userState) {
       $log.debug('Loading encoding service');
-      var switchURL = 'https://storage.googleapis.com/risemedialibrary/encoding-switch';
+      var switchURL = 'https://storage.googleapis.com/risemedialibrary/encoding-switch-on';
       var masterSwitchPromise = $http({method: 'HEAD', url: switchURL});
 
       var service = {};
@@ -39,6 +39,44 @@ angular.module('risevision.storage.services')
         });
 
         return deferred.promise;
+      };
+
+      service.startEncoding = function(item) {
+        var deferred = $q.defer();
+        var obj = {
+          taskToken: item.taskToken,
+          fileUUID: item.tusURL.split('/').pop(),
+          fileName: item.file.name,
+          companyId: userState.getSelectedCompanyId()
+        };
+
+        $log.debug('Requesting encoding start', obj);
+
+        storageAPILoader().then(function (storageApi) {
+          return storageApi.startEncodingTask(obj);
+        })
+        .then(function (resp) {
+          deferred.resolve({
+            statusURL: resp.result.message,
+            fileName: resp.result.fileName
+          });
+        })
+        .then(null, function (e) {
+          $log.error('Error starting encoding task', e);
+          deferred.reject(e);
+        });
+
+        return deferred.promise;
+      };
+
+      service.monitorStatus = function(item, onProgress) {
+        var statusURL = item.encodingStatusURL;
+
+        $log.debug('Checking status at ' + statusURL);
+
+      };
+
+      service.acceptEncodedFile = function() {
       };
 
       return service;
