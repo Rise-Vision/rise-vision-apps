@@ -3,7 +3,8 @@
 angular.module('risevision.template-editor.directives')
   .directive('templateComponentTwitter', ['templateEditorFactory', 'TwitterOAuthService', '$loading',
     'twitterCredentialsValidation', 'templateEditorUtils',
-    function (templateEditorFactory, TwitterOAuthService, $loading, twitterCredentialsValidation, templateEditorUtils) {
+    function (templateEditorFactory, TwitterOAuthService, $loading, twitterCredentialsValidation,
+      templateEditorUtils) {
       return {
         restrict: 'E',
         scope: true,

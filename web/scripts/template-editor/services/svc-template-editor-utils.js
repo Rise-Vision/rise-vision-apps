@@ -52,13 +52,13 @@ angular.module('risevision.template-editor.services')
         try {
           var hostname = window.location.hostname;
 
-          return hostname.includes("apps-stage-");
+          return hostname.includes('apps-stage-');
         } catch (err) {
-          console.log("can't access hostname of window.location")
+          console.log('can\'t access hostname of window.location');
         }
 
         return false;
-      }
+      };
 
       svc.fileNameOf = function (path) {
         var parts = path.split('/');
