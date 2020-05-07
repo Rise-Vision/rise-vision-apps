@@ -2,8 +2,8 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('templateComponentTwitter', ['templateEditorFactory', 'TwitterOAuthService', '$loading',
-    'twitterCredentialsValidation',
-    function (templateEditorFactory, TwitterOAuthService, $loading, twitterCredentialsValidation) {
+    'twitterCredentialsValidation', 'templateEditorUtils',
+    function (templateEditorFactory, TwitterOAuthService, $loading, twitterCredentialsValidation, templateEditorUtils) {
       return {
         restrict: 'E',
         scope: true,
@@ -36,6 +36,7 @@ angular.module('risevision.template-editor.directives')
                 $scope.connectionFailure = false;
 
                 $scope.setAttributeData($scope.componentId, 'credentialsUpdated', Date.now());
+                $scope.setAttributeData($scope.componentId, 'isStaging', templateEditorUtils.isStaging());
               }, function () {
                 _handleConnectionFailure();
               })
