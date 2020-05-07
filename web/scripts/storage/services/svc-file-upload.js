@@ -213,21 +213,24 @@ angular.module('risevision.storage.services')
             },
             onProgress: function(bytesUploaded, bytesTotal) {
               var pct = (bytesUploaded / bytesTotal * 100).toFixed(2);
-              svc.notifyProgressItem(item, pct);
+              svc.notifyProgressItem(item, pct / 2); // Arbitrarily expect encoding to take as long as uploading
             },
             onSuccess: function() {
               item.tusURL = tusUpload.url;
-              svc.startEncoding(item);
+              encoding.startEncoding(item)
+              .then(function(resp) {
+                item.encodingStatusURL = resp.statusURL;
+                item.encodedFileName = resp.fileName;
+              })
+              .then(null, function(e) {
+                svc.notifyErrorItem(item);
+                svc.notifyCompleteItem(item);
+              });
             }
           });
 
           svc.notifyBeforeUploadItem(item);
           tusUpload.start();
-        };
-
-        svc.startEncoding = function (item) {
-          svc.notifySuccessItem(item);
-          svc.notifyCompleteItem(item);
         };
 
         svc.cancelItem = function (value) {
