@@ -33,7 +33,7 @@ describe('service: encoding:', function() {
   });
 
   it('should be applicable if file is video', function() {
-    $httpBackend.when('HEAD', /.*encoding-switch/).respond(200, {});
+    $httpBackend.when('HEAD', /.*encoding-switch-on/).respond(200, {});
 
     return encoding.isApplicable('video/subtype')
     .then(function(resp) {
@@ -42,7 +42,7 @@ describe('service: encoding:', function() {
   });
 
   it('should not be applicable if file is not video', function() {
-    $httpBackend.when('HEAD', /.*encoding-switch/).respond(200, {});
+    $httpBackend.when('HEAD', /.*encoding-switch-on/).respond(200, {});
 
     return encoding.isApplicable('text/subtype')
     .then(function(resp) {
@@ -51,7 +51,7 @@ describe('service: encoding:', function() {
   });
 
   it('should not be applicable if master switch is off', function() {
-    $httpBackend.when('HEAD', /.*encoding-switch/).respond(403, {});
+    $httpBackend.when('HEAD', /.*encoding-switch-on/).respond(403, {});
 
     return encoding.isApplicable('video/subtype')
     .then(function(resp) {
@@ -60,7 +60,7 @@ describe('service: encoding:', function() {
   });
 
   it('should retrieve encoder upload uri from storage server api', function() {
-    $httpBackend.when('HEAD', /.*encoding-switch/).respond(200, {});
+    $httpBackend.when('HEAD', /.*encoding-switch-on/).respond(200, {});
 
     return encoding.getResumableUploadURI('filename')
     .then(function(resp) {
