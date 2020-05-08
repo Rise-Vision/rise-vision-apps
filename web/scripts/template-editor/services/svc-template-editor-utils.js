@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('templateEditorUtils', ['messageBox',
-    function (messageBox) {
+  .factory('templateEditorUtils', ['messageBox', '$window',
+    function (messageBox, $window) {
       var svc = {};
 
       svc.intValueFor = function (providedValue, defaultValue) {
@@ -50,7 +50,7 @@ angular.module('risevision.template-editor.services')
 
       svc.isStaging = function () {
         try {
-          var hostname = window.location.hostname;
+          var hostname = $window.location.hostname;
 
           return hostname.includes('apps-stage-');
         } catch (err) {
