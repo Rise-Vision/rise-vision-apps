@@ -6,12 +6,14 @@ describe('directive: templateComponentTwitter', function() {
     factory,
     oauthService,
     twitterCredentialsValidation,
+    templateEditorUtils,
     sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
     factory = { selected: { id: "TEST-ID" }, presentation: {companyId: "abc123"} };
     oauthService = {};
     twitterCredentialsValidation = {};
+    templateEditorUtils = {};
   });
 
   beforeEach(module('risevision.template-editor.directives'));
@@ -30,6 +32,10 @@ describe('directive: templateComponentTwitter', function() {
 
     $provide.service('twitterCredentialsValidation', function() {
       return twitterCredentialsValidation;
+    });
+
+    $provide.service('templateEditorUtils', function() {
+      return templateEditorUtils;
     });
   }));
 
@@ -220,6 +226,10 @@ describe('directive: templateComponentTwitter', function() {
   });
 
   describe('save', function () {
+    beforeEach(function() {
+      templateEditorUtils.isStaging = sandbox.stub();
+    });
+
     describe('username', function () {
       it('should save data and indicate the username is valid', function() {
         $scope.setAttributeData = sandbox.stub();
@@ -238,7 +248,7 @@ describe('directive: templateComponentTwitter', function() {
 
         $scope.save();
 
-        expect($scope.setAttributeData).to.not.have.been.called;
+        expect($scope.setAttributeData.callCount).to.equal(1);
         expect($scope.usernameStatus).to.equal('INVALID_USERNAME');
       });
     });
@@ -261,8 +271,34 @@ describe('directive: templateComponentTwitter', function() {
 
         $scope.save();
 
-        expect($scope.setAttributeData).to.not.have.been.called;
+        expect($scope.setAttributeData.callCount).to.equal(1);
         expect($scope.maxitemsStatus).to.equal('INVALID_RANGE');
+      });
+    });
+
+    describe('isStaging', function () {
+      it('should save isStaging to true', function() {
+        $scope.setAttributeData = sandbox.stub();
+        templateEditorUtils.isStaging = sandbox.stub().returns(true);
+        $scope.username = '@twitterHandle';
+
+        $scope.save();
+
+        expect($scope.setAttributeData.callCount).to.equal(2);
+        console.log($scope.setAttributeData.firstCall.args);
+        expect($scope.setAttributeData.firstCall.args[2]).to.be.true;
+      });
+
+      it('should save isStaging to false', function() {
+        $scope.setAttributeData = sandbox.stub();
+        templateEditorUtils.isStaging = sandbox.stub().returns(false);
+        $scope.username = '@twitterHandle';
+
+        $scope.save();
+
+        expect($scope.setAttributeData.callCount).to.equal(2);
+        console.log($scope.setAttributeData.firstCall.args);
+        expect($scope.setAttributeData.firstCall.args[2]).to.be.false;
       });
     });
   });
