@@ -37,7 +37,6 @@ angular.module('risevision.template-editor.directives')
                 $scope.connectionFailure = false;
 
                 $scope.setAttributeData($scope.componentId, 'credentialsUpdated', Date.now());
-                $scope.setAttributeData($scope.componentId, 'isStaging', templateEditorUtils.isStaging());
               }, function () {
                 _handleConnectionFailure();
               })
@@ -47,6 +46,8 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.save = function () {
+            $scope.setAttributeData($scope.componentId, 'isStaging', templateEditorUtils.isStaging());
+
             if (_validateUsername($scope.username)) {
               $scope.setAttributeData($scope.componentId, 'username', $scope.username.replace('@', ''));
             }
