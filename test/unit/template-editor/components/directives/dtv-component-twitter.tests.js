@@ -13,7 +13,7 @@ describe('directive: templateComponentTwitter', function() {
     factory = { selected: { id: "TEST-ID" }, presentation: {companyId: "abc123"} };
     oauthService = {};
     twitterCredentialsValidation = {};
-    templateEditorUtils = {};
+    templateEditorUtils = {isStaging: sandbox.stub()};
   });
 
   beforeEach(module('risevision.template-editor.directives'));
@@ -279,7 +279,7 @@ describe('directive: templateComponentTwitter', function() {
     describe('isStaging', function () {
       it('should save isStaging to true', function() {
         $scope.setAttributeData = sandbox.stub();
-        templateEditorUtils.isStaging = sandbox.stub().returns(true);
+        $scope.isStaging = true;
         $scope.username = '@twitterHandle';
 
         $scope.save();
@@ -291,7 +291,7 @@ describe('directive: templateComponentTwitter', function() {
 
       it('should save isStaging to false', function() {
         $scope.setAttributeData = sandbox.stub();
-        templateEditorUtils.isStaging = sandbox.stub().returns(false);
+        $scope.isStaging = false;
         $scope.username = '@twitterHandle';
 
         $scope.save();

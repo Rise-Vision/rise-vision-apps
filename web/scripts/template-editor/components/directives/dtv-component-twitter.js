@@ -27,6 +27,7 @@ angular.module('risevision.template-editor.directives')
           $scope.connected = false;
           $scope.username = null;
           $scope.usernameStatus = null;
+          $scope.isStaging = templateEditorUtils.isStaging();
 
           $scope.connectToTwitter = function () {
             $scope.spinner = true;
@@ -46,7 +47,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.save = function () {
-            $scope.setAttributeData($scope.componentId, 'isStaging', templateEditorUtils.isStaging());
+            $scope.setAttributeData($scope.componentId, 'isStaging', $scope.isStaging);
 
             if (_validateUsername($scope.username)) {
               $scope.setAttributeData($scope.componentId, 'username', $scope.username.replace('@', ''));
