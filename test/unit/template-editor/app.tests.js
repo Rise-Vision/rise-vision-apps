@@ -182,7 +182,7 @@ describe('app:', function() {
     });
 
     describe('states: ', function() {
-      it('should retrieve existing presentation', function(done) {
+      it('should retrieve presentation by id', function(done) {
         var $stateParams = {
           presentationId: 'presentationId'
         };
@@ -190,6 +190,38 @@ describe('app:', function() {
         $state.get('apps.editor.templates.edit').resolve.presentationInfo[6]($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess, financialLicenseFactory)
           .then(function() {
             templateEditorFactory.getPresentation.should.have.been.calledWith('presentationId');
+
+            done();
+          });
+      });
+
+      it('should not retrieve existing presentation', function(done) {
+        var $stateParams = {
+          presentationId: 'presentationId'
+        };
+        templateEditorFactory.presentation = {
+          id: 'presentationId'
+        };
+
+        $state.get('apps.editor.templates.edit').resolve.presentationInfo[6]($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess, financialLicenseFactory)
+          .then(function() {
+            templateEditorFactory.getPresentation.should.not.have.been.called;
+
+            done();
+          });
+      });
+
+      it('should retrieve a different presentation', function(done) {
+        var $stateParams = {
+          presentationId: 'otherPresentationId'
+        };
+        templateEditorFactory.presentation = {
+          id: 'presentationId'
+        };
+
+        $state.get('apps.editor.templates.edit').resolve.presentationInfo[6]($stateParams, canAccessApps, editorFactory, templateEditorFactory, checkTemplateAccess, financialLicenseFactory)
+          .then(function() {
+            templateEditorFactory.getPresentation.should.have.been.calledWith('otherPresentationId');
 
             done();
           });

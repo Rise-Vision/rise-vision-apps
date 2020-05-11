@@ -61,6 +61,7 @@ angular.module('risevision.template-editor.services')
         presentationTracker('HTML Template Copied', productDetails.productCode, productDetails.name);
 
         return blueprintFactory.getBlueprintCached(factory.presentation.productCode)
+          .then(factory.save)
           .then(null, function (e) {
             _showErrorMessage('add', e);
             return $q.reject(e);
@@ -75,6 +76,8 @@ angular.module('risevision.template-editor.services')
             if (resp && resp.item && resp.item.id) {
               $rootScope.$broadcast('presentationCreated');
 
+              _setPresentation(resp.item);
+
               presentationTracker('Presentation Created', resp.item.id, resp.item.name, {
                 presentationType: 'HTML Template',
                 sharedTemplate: resp.item.productCode
@@ -85,7 +88,6 @@ angular.module('risevision.template-editor.services')
                 productId: undefined,
                 skipAccessNotice: true
               }, {
-                notify: false,
                 location: 'replace'
               });
 

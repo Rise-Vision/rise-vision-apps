@@ -11,7 +11,7 @@ describe('service: templateEditorFactory:', function() {
 
     $provide.service('presentation',function () {
       return {
-        add : function() {},
+        add : sinon.stub().returns(Q.resolve()),
         update : function() {},
         get: function() {},
         delete: function () {},
@@ -116,6 +116,8 @@ describe('service: templateEditorFactory:', function() {
       ];
 
       templateEditorFactory.addFromProduct({ productCode: 'test-id', name: 'Test HTML Template' }).then(function () {
+        expect(presentation.add).to.have.been.called;
+
         expect(templateEditorFactory.presentation.id).to.be.undefined;
         expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
         expect(templateEditorFactory.presentation.name).to.equal('Copy of Test HTML Template');
@@ -154,7 +156,7 @@ describe('service: templateEditorFactory:', function() {
 
   describe('save: ', function() {
     beforeEach(function() {
-      sandbox.stub(presentation, 'add').returns(Q.resolve({
+      presentation.add.returns(Q.resolve({
         item: {
           name: 'Test Presentation',
           id: 'presentationId',
@@ -169,10 +171,7 @@ describe('service: templateEditorFactory:', function() {
         }
       }));
 
-      templateEditorFactory.addFromProduct({ productCode: 'test-id', name: 'Test HTML Template' });
-      expect(templateEditorFactory.presentation.id).to.be.undefined;
-      expect(templateEditorFactory.presentation.productCode).to.equal('test-id');
-      expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({});
+      templateEditorFactory.presentation.templateAttributeData = {};
     });
 
     it('should wait for both promises to resolve', function(done) {
