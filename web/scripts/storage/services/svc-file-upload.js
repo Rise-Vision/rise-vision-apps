@@ -213,7 +213,9 @@ angular.module('risevision.storage.services')
             },
             onProgress: function(bytesUploaded, bytesTotal) {
               var pct = (bytesUploaded / bytesTotal * 100).toFixed(2);
-              svc.notifyProgressItem(item, pct / 2); // Arbitrarily expect encoding to take as long as uploading
+
+              // Arbitrarily expect encoding to take as long as uploading
+              svc.notifyProgressItem(item, pct / 2);
             },
             onSuccess: function() {
               item.tusURL = tusUpload.url;
@@ -221,6 +223,17 @@ angular.module('risevision.storage.services')
               .then(function(resp) {
                 item.encodingStatusURL = resp.statusURL;
                 item.encodedFileName = resp.fileName;
+
+                return encoding.monitorStatus(item, function(pct) {
+                  // Arbitrarily expect upload was first 50% of progress,
+                  // and encoding is remaining 50%
+                  svc.notifyProgressItem(item, 50 + pct / 2);
+                });
+              })
+              .then(encoding.acceptEncodedFile)
+              .then(function() {
+                svc.notifySuccessItem(item);
+                svc.notifyCompleteItem(item);
               })
               .then(null, function(e) {
                 svc.notifyErrorItem(item);

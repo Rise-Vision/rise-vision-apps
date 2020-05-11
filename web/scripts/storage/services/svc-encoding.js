@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.storage.services')
-  .service('encoding', ['$q', '$log', '$http', 'storageAPILoader', 'userState',
-    function ($q, $log, $http, storageAPILoader, userState) {
+  .service('encoding', ['$q', '$log', '$http', 'storageAPILoader', 'userState', '$timeout',
+    function ($q, $log, $http, storageAPILoader, userState, $timeout) {
       $log.debug('Loading encoding service');
       var switchURL = 'https://storage.googleapis.com/risemedialibrary/encoding-switch-on';
       var masterSwitchPromise = $http({method: 'HEAD', url: switchURL});
@@ -69,11 +69,52 @@ angular.module('risevision.storage.services')
         return deferred.promise;
       };
 
-      service.monitorStatus = function(item, onProgress) {
+      service.monitorStatus = function(item, onProgress, retry) {
         var statusURL = item.encodingStatusURL;
+        var headers = {'Content-Type': 'application/x-www-form-urlencoded'};
+        if (retry === undefined) {retry = 0;}
 
         $log.debug('Checking status at ' + statusURL);
 
+        return $timeout(5000)
+        .then(function() {
+          return $http({
+            method: 'POST',
+            headers: headers,
+            url: statusURL,
+            data: 'task_tokens=' + item.taskToken
+          });
+        })
+        .then(function(resp) {
+          $log.debug('Status: ', resp.data);
+
+          if (resp.data.error) {return $q.reject(resp.data.error);}
+
+          var taskStatus = resp.data.statuses[item.taskToken];
+          if (!taskStatus) {
+            return service.monitorStatus(item, onProgress, retry + 1);
+          }
+
+          if (taskStatus.status_url) { // jshint ignore:line
+            item.encodingStatusURL = taskStatus.status_url; // jshint ignore:line
+          }
+
+          if (taskStatus.error) {
+            return $q.reject(taskStatus.error_description); // jshint ignore:line
+          }
+
+          if (taskStatus.percent !== 100) {
+            onProgress(taskStatus.percent);
+
+            return service.monitorStatus(item, onProgress);
+          }
+
+          onProgress(taskStatus.percent);
+        })
+        .then(null, function(e) {
+          if (retry > 2) {return $q.reject(e);}
+          return service.monitorStatus(item, onProgress, retry + 1);
+        });
       };
 
       service.acceptEncodedFile = function() {
