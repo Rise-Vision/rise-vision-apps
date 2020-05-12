@@ -30,7 +30,7 @@ describe('controller: TemplateEditor', function() {
     }
   ];
 
-  var $rootScope, $scope, $modal, $timeout, $window, $state, factory, scheduleFactory, blueprintFactory, userState;
+  var $rootScope, $scope, $modal, $timeout, $window, $state, factory, blueprintFactory, userState;
   var sandbox = sinon.sandbox.create();
 
   beforeEach(function() {
@@ -67,11 +67,6 @@ describe('controller: TemplateEditor', function() {
         getBlueprintData: sandbox.stub().returns('blueprintData')
       };
     });
-    $provide.factory('scheduleFactory',function() {
-      return {
-        hasSchedules: function () {}
-      };
-    });
     $provide.factory('userState',function() {
       return {
         _restoreState: sandbox.stub(), 
@@ -106,7 +101,6 @@ describe('controller: TemplateEditor', function() {
       $state = $injector.get('$state');
       factory = $injector.get('templateEditorFactory');
       blueprintFactory = $injector.get('blueprintFactory');
-      scheduleFactory = $injector.get('scheduleFactory');
       userState = $injector.get('userState');
 
       $controller('TemplateEditorController', {

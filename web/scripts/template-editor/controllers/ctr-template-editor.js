@@ -2,10 +2,10 @@
 
 angular.module('risevision.template-editor.controllers')
   .controller('TemplateEditorController', ['$scope', '$q', '$filter', '$loading', '$state', '$timeout', '$window',
-    'templateEditorFactory', 'brandingFactory', 'blueprintFactory', 'scheduleFactory', 'AutoSaveService',
+    'templateEditorFactory', 'blueprintFactory', 'AutoSaveService',
     'presentationUtils', 'userState',
-    function ($scope, $q, $filter, $loading, $state, $timeout, $window, templateEditorFactory, brandingFactory,
-      blueprintFactory, scheduleFactory, AutoSaveService, presentationUtils, userState) {
+    function ($scope, $q, $filter, $loading, $state, $timeout, $window, templateEditorFactory,
+      blueprintFactory, AutoSaveService, presentationUtils, userState) {
       var autoSaveService = new AutoSaveService(templateEditorFactory.save);
 
       $scope.factory = templateEditorFactory;
@@ -43,13 +43,6 @@ angular.module('risevision.template-editor.controllers')
         return _.map(filteredComponents, function (component) {
           return component.id;
         });
-      };
-
-      $scope.isPublishDisabled = function () {
-        var isNotRevised = !$scope.factory.isRevised() && !brandingFactory.isRevised() &&
-          scheduleFactory.hasSchedules();
-
-        return $scope.factory.savingPresentation || $scope.factory.isUnsaved() || isNotRevised;
       };
 
       $scope.hasContentEditorRole = function () {

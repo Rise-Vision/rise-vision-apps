@@ -4,10 +4,10 @@ angular.module('risevision.template-editor.services')
   .constant('HTML_TEMPLATE_DOMAIN', 'https://widgets.risevision.com')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', 'presentation',
     'processErrorCode', 'userState', 'createFirstSchedule',
-    'templateEditorUtils', 'brandingFactory', 'blueprintFactory', 'presentationTracker',
+    'templateEditorUtils', 'brandingFactory', 'blueprintFactory', 'scheduleFactory', 'presentationTracker',
     'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
     function ($q, $log, $state, $rootScope, presentation, processErrorCode, userState,
-      createFirstSchedule, templateEditorUtils, brandingFactory, blueprintFactory,
+      createFirstSchedule, templateEditorUtils, brandingFactory, blueprintFactory, scheduleFactory,
       presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {
         hasUnsavedChanges: false
@@ -221,6 +221,13 @@ angular.module('risevision.template-editor.services')
         return factory.presentation.revisionStatusName === REVISION_STATUS_REVISED;
       };
 
+      factory.isPublishDisabled = function () {
+        var isNotRevised = !factory.isRevised() && !brandingFactory.isRevised() &&
+          scheduleFactory.hasSchedules();
+
+        return factory.savingPresentation || factory.isUnsaved() || isNotRevised;
+      };
+
       factory.publish = function () {
         var deferred = $q.defer();
 
@@ -298,7 +305,7 @@ angular.module('risevision.template-editor.services')
       var _publishPresentation = function () {
         if (!factory.isRevised()) {
           // template is already published
-          return $q.resolve();
+          return _createFirstSchedule();
         }
 
         return presentation.publish(factory.presentation.id)

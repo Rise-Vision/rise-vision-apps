@@ -16,7 +16,7 @@
     <div class="text-danger">You don’t have permission to edit</div>
   </div>
   <button id="publishButton" require-role="cp" class="btn btn-primary btn-block"
-          ng-disabled="isPublishDisabled()"
+          ng-disabled="factory.isPublishDisabled()"
           ng-click="factory.publish()">
     Publish To Display
   </button>
