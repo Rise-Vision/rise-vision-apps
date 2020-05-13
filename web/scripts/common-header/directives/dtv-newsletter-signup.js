@@ -8,16 +8,12 @@ angular.module('risevision.common.header.directives')
         require: 'ngModel',
         scope: {
           alreadyOptedIn: '=',
-          mailSyncEnabled: '=ngModel',
-          companyIndustry: '='
+          mailSyncEnabled: '=ngModel'
         },
         template: $templateCache.get('partials/common-header/newsletter-signup.html'),
         link: function ($scope) {
           $scope.showNewsletterSignup = function () {
-            var isEducation = $scope.companyIndustry === 'PRIMARY_SECONDARY_EDUCATION' ||
-              $scope.companyIndustry === 'HIGHER_EDUCATION';
-
-            return isEducation && !$scope.alreadyOptedIn;
+            return !$scope.alreadyOptedIn;
           };
 
         }
