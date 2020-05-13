@@ -57,8 +57,7 @@ angular.module('risevision.storage.services')
         })
         .then(function (resp) {
           deferred.resolve({
-            statusURL: resp.result.message,
-            fileName: resp.result.fileName
+            statusURL: resp.result.message
           });
         })
         .then(null, function (e) {
@@ -117,7 +116,27 @@ angular.module('risevision.storage.services')
         });
       };
 
-      service.acceptEncodedFile = function() {
+      service.acceptEncodedFile = function(fileName) {
+        var deferred = $q.defer();
+        var obj = {
+          companyId: userState.getSelectedCompanyId(),
+          fileName: fileName,
+        };
+
+        $log.debug('Accepting encoded file', obj);
+
+        storageAPILoader().then(function (storageApi) {
+          return storageApi.acceptEncodedFile(obj);
+        })
+        .then(function (resp) {
+          deferred.resolve(resp.result);
+        })
+        .then(null, function (e) {
+          $log.error('Error accepting encoded file', e);
+          deferred.reject(e);
+        });
+
+        return deferred.promise;
       };
 
       return service;

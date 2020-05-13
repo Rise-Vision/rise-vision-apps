@@ -115,6 +115,7 @@
                   uploadOverwriteWarning.checkOverwrite(resp).then(function () {
                     fileItem.url = resp.message;
                     fileItem.taskToken = resp.taskToken;
+                    fileItem.encodingFileName = resp.newFileName;
                     fileItem.chunkSize =
                       STORAGE_UPLOAD_CHUNK_SIZE;
                     FileUploader.uploadItem(fileItem);

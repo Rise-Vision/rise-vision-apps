@@ -10,7 +10,8 @@ describe('service: encoding:', function() {
     $provide.service('storageAPILoader', function () {
       return function() {
         return Q.resolve({
-          getEncodingUploadURI: function(obj) {return {result: true};}
+          getEncodingUploadURI: function(obj) {return {result: true};},
+          acceptEncodedFile: function(obj) {return {result: true};}
         });
       };
     });
@@ -61,6 +62,9 @@ describe('service: encoding:', function() {
       });
     });
 
+  });
+
+  describe('upload uri', function() {
     it('should retrieve encoder upload uri from storage server api', function() {
       $httpBackend.when('HEAD', /.*encoding-switch-on/).respond(200, {});
 
@@ -126,6 +130,17 @@ describe('service: encoding:', function() {
 
       return statusPromise.then(function() {
         assert('Two status calls', statusChecks === 2);
+      });
+    });
+  });
+
+  describe('file acceptance', function() {
+    it('should accept the file after encoding', function() {
+      $httpBackend.when('HEAD', /.*encoding-switch-on/).respond(200, {});
+
+      return encoding.acceptEncodedFile('companyid', 'filename')
+      .then(function(resp) {
+        expect(resp).to.be.true;
       });
     });
   });
