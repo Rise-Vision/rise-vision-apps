@@ -35,17 +35,17 @@ var TextComponentScenarios = function () {
       it('should open properties of Text Component', function () {
         templateEditorPage.selectComponent(componentLabel);
 
-        expect(textComponentPage.getTextInput().getAttribute('value')).to.eventually.equal("Financial Literacy");
+        expect(textComponentPage.getTextArea().getAttribute('value')).to.eventually.equal("Financial Literacy");
       });
 
       it('should clear and update the component text', function () {
         // Note: Disconnect from Angular to prevent Autosave timeout from interrupting edits
         browser.waitForAngularEnabled(false);
-        helper.wait(textComponentPage.getTextInput(), 'Text component input');
+        helper.wait(textComponentPage.getTextArea(), 'Text component Text Area');
         browser.sleep(500);
-        textComponentPage.getTextInput().clear();
+        textComponentPage.getTextArea().clear();
         browser.sleep(500);
-        textComponentPage.getTextInput().sendKeys("Changed Text" + protractor.Key.ENTER);
+        textComponentPage.getTextArea().sendKeys("Changed Text");
         browser.waitForAngularEnabled(true);
 
         //wait for presentation to be auto-saved
@@ -56,8 +56,8 @@ var TextComponentScenarios = function () {
         presentationsListPage.loadPresentation(presentationName);
 
         templateEditorPage.selectComponent(componentLabel);
-        expect(textComponentPage.getTextInput().isEnabled()).to.eventually.be.true;
-        expect(textComponentPage.getTextInput().getAttribute('value')).to.eventually.equal("Changed Text");
+        expect(textComponentPage.getTextArea().isEnabled()).to.eventually.be.true;
+        expect(textComponentPage.getTextArea().getAttribute('value')).to.eventually.equal("Changed Text");
       });
 
     });

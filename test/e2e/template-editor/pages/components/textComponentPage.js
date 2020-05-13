@@ -1,10 +1,10 @@
 'use strict';
 
 var TextComponentPage = function() {
-  var textInput = element(by.id('text-component-input'));
+  var textArea = element(by.id('text-component-input-multiline'));
 
-  this.getTextInput = function () {
-    return textInput;
+  this.getTextArea = function () {
+    return textArea;
   };
 };
 
