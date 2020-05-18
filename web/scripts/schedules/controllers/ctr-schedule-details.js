@@ -2,9 +2,9 @@
 
 angular.module('risevision.schedules.controllers')
   .controller('scheduleDetails', ['$scope', '$q', '$state',
-    'scheduleFactory', '$loading', '$log', '$modal', '$templateCache',
+    'scheduleFactory', '$loading', '$log', '$modal', '$templateCache', 'display',
     function ($scope, $q, $state, scheduleFactory, $loading, $log, $modal,
-      $templateCache) {
+      $templateCache, display) {
       $scope.factory = scheduleFactory;
       $scope.schedule = scheduleFactory.schedule;
 
@@ -87,6 +87,8 @@ angular.module('risevision.schedules.controllers')
 
           return $q.reject();
         } else {
+          display.hasFreeDisplays($scope.schedule.companyId,
+            $scope.schedule.distributeToAll ? null : $scope.schedule.distribution);
           return scheduleFactory.updateSchedule()
             .then(function () {
               scheduleFactory.logTransitionUsage($scope.schedule, _oldSchedule);

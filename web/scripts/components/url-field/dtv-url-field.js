@@ -38,7 +38,7 @@
 
             scope.showSkipValidation = function () {
               var skipValidation = scope.forcedValid || (scope.ngModelCtrl.$invalid && scope.ngModelCtrl
-              .$dirty);
+                .$dirty);
               var unskippable = false;
 
               angular.forEach(scope.ngModelCtrl.$error, function (value, name) {

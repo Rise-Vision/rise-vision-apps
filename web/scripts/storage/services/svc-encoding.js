@@ -1,26 +1,40 @@
 'use strict';
 
 angular.module('risevision.storage.services')
-  .service('encoding', ['ENCODING_MASTER_SWITCH_URL', '$q', '$log', '$http', 'storageAPILoader', 'userState', '$timeout',
+  .service('encoding', ['ENCODING_MASTER_SWITCH_URL', '$q', '$log', '$http', 'storageAPILoader', 'userState',
+    '$timeout',
     function (switchURL, $q, $log, $http, storageAPILoader, userState, $timeout) {
       $log.debug('Loading encoding service');
-      var masterSwitchPromise = $http({method: 'HEAD', url: switchURL});
+      var masterSwitchPromise = $http({
+        method: 'HEAD',
+        url: switchURL
+      });
 
       var service = {};
 
-      service.isApplicable = function(fileType, fileName) {
+      service.isApplicable = function (fileType, fileName) {
         $log.debug('Checking encoding applicability for ' + fileType);
 
-        if (fileType.indexOf('video/') !== 0) { return $q.resolve(false); }
-        if (fileName && fileName.indexOf('#') >= 0) { return $q.resolve(false); }
+        if (fileType.indexOf('video/') !== 0) {
+          return $q.resolve(false);
+        }
+        if (fileName && fileName.indexOf('#') >= 0) {
+          return $q.resolve(false);
+        }
 
-        if (sessionStorage.getItem('force-upload-encoding') === 'true') {return $q.resolve(true);}
+        if (sessionStorage.getItem('force-upload-encoding') === 'true') {
+          return $q.resolve(true);
+        }
 
         return masterSwitchPromise
-        .then(function() {return true;}, function() {return false;});
+          .then(function () {
+            return true;
+          }, function () {
+            return false;
+          });
       };
 
-      service.getResumableUploadURI = function(fileName) {
+      service.getResumableUploadURI = function (fileName) {
         var deferred = $q.defer();
         var obj = {
           companyId: userState.getSelectedCompanyId(),
@@ -30,20 +44,20 @@ angular.module('risevision.storage.services')
         $log.debug('Retrieving encoding upload destination', obj);
 
         storageAPILoader().then(function (storageApi) {
-          return storageApi.getEncodingUploadURI(obj);
-        })
-        .then(function (resp) {
-          deferred.resolve(resp.result);
-        })
-        .then(null, function (e) {
-          $log.error('Error getting resumable upload URI', e);
-          deferred.reject(e);
-        });
+            return storageApi.getEncodingUploadURI(obj);
+          })
+          .then(function (resp) {
+            deferred.resolve(resp.result);
+          })
+          .then(null, function (e) {
+            $log.error('Error getting resumable upload URI', e);
+            deferred.reject(e);
+          });
 
         return deferred.promise;
       };
 
-      service.startEncoding = function(item) {
+      service.startEncoding = function (item) {
         var deferred = $q.defer();
         var obj = {
           taskToken: item.taskToken,
@@ -55,70 +69,78 @@ angular.module('risevision.storage.services')
         $log.debug('Requesting encoding start', obj);
 
         storageAPILoader().then(function (storageApi) {
-          return storageApi.startEncodingTask(obj);
-        })
-        .then(function (resp) {
-          deferred.resolve({
-            statusURL: resp.result.message
+            return storageApi.startEncodingTask(obj);
+          })
+          .then(function (resp) {
+            deferred.resolve({
+              statusURL: resp.result.message
+            });
+          })
+          .then(null, function (e) {
+            $log.error('Error starting encoding task', e);
+            deferred.reject(e);
           });
-        })
-        .then(null, function (e) {
-          $log.error('Error starting encoding task', e);
-          deferred.reject(e);
-        });
 
         return deferred.promise;
       };
 
-      service.monitorStatus = function(item, onProgress, retry) {
+      service.monitorStatus = function (item, onProgress, retry) {
         var statusURL = item.encodingStatusURL;
-        var headers = {'Content-Type': 'application/x-www-form-urlencoded'};
-        if (retry === undefined) {retry = 0;}
+        var headers = {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        };
+        if (retry === undefined) {
+          retry = 0;
+        }
 
         $log.debug('Checking status at ' + statusURL);
 
         return $timeout(5000)
-        .then(function() {
-          return $http({
-            method: 'POST',
-            headers: headers,
-            url: statusURL,
-            data: 'task_tokens=' + item.taskToken
-          });
-        })
-        .then(function(resp) {
-          $log.debug('Status: ', resp.data);
+          .then(function () {
+            return $http({
+              method: 'POST',
+              headers: headers,
+              url: statusURL,
+              data: 'task_tokens=' + item.taskToken
+            });
+          })
+          .then(function (resp) {
+            $log.debug('Status: ', resp.data);
 
-          if (resp.data.error) {return $q.reject(resp.data.error);}
+            if (resp.data.error) {
+              return $q.reject(resp.data.error);
+            }
 
-          var taskStatus = resp.data.statuses[item.taskToken];
-          if (!taskStatus) {
-            return service.monitorStatus(item, onProgress, retry + 1);
-          }
+            var taskStatus = resp.data.statuses[item.taskToken];
+            if (!taskStatus) {
+              return service.monitorStatus(item, onProgress, retry + 1);
+            }
 
-          if (taskStatus.status_url) { // jshint ignore:line
-            item.encodingStatusURL = taskStatus.status_url; // jshint ignore:line
-          }
+            if (taskStatus.status_url) { // jshint ignore:line
+              item.encodingStatusURL = taskStatus.status_url; // jshint ignore:line
+            }
 
-          if (taskStatus.error) {
-            return $q.reject(taskStatus.error_description); // jshint ignore:line
-          }
+            if (taskStatus.error) {
+              return $q.reject(taskStatus.error_description); // jshint ignore:line
+            }
 
-          if (taskStatus.percent !== 100) {
+            if (taskStatus.percent !== 100) {
+              onProgress(taskStatus.percent);
+
+              return service.monitorStatus(item, onProgress);
+            }
+
             onProgress(taskStatus.percent);
-
-            return service.monitorStatus(item, onProgress);
-          }
-
-          onProgress(taskStatus.percent);
-        })
-        .then(null, function(e) {
-          if (retry > 2) {return $q.reject(e);}
-          return service.monitorStatus(item, onProgress, retry + 1);
-        });
+          })
+          .then(null, function (e) {
+            if (retry > 2) {
+              return $q.reject(e);
+            }
+            return service.monitorStatus(item, onProgress, retry + 1);
+          });
       };
 
-      service.acceptEncodedFile = function(fileName) {
+      service.acceptEncodedFile = function (fileName) {
         var deferred = $q.defer();
         var obj = {
           companyId: userState.getSelectedCompanyId(),
@@ -128,15 +150,15 @@ angular.module('risevision.storage.services')
         $log.debug('Accepting encoded file', obj);
 
         storageAPILoader().then(function (storageApi) {
-          return storageApi.acceptEncodedFile(obj);
-        })
-        .then(function (resp) {
-          deferred.resolve(resp.result);
-        })
-        .then(null, function (e) {
-          $log.error('Error accepting encoded file', e);
-          deferred.reject(e);
-        });
+            return storageApi.acceptEncodedFile(obj);
+          })
+          .then(function (resp) {
+            deferred.resolve(resp.result);
+          })
+          .then(null, function (e) {
+            $log.error('Error accepting encoded file', e);
+            deferred.reject(e);
+          });
 
         return deferred.promise;
       };

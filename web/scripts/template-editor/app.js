@@ -43,12 +43,14 @@ angular.module('risevision.apps')
                       } else {
                         return editorFactory.addFromProductId($stateParams.productId);
                       }
-                    } else if (!templateEditorFactory.presentation || templateEditorFactory.presentation.id !== $stateParams.presentationId) {
+                    } else if (!templateEditorFactory.presentation || templateEditorFactory.presentation.id !==
+                      $stateParams.presentationId) {
                       return templateEditorFactory.getPresentation($stateParams.presentationId);
                     }
                   })
                   .then(function () {
-                    if ($stateParams.presentationId === 'new' && financialLicenseFactory.needsFinancialDataLicense()) {
+                    if ($stateParams.presentationId === 'new' && financialLicenseFactory
+                      .needsFinancialDataLicense()) {
                       financialLicenseFactory.showFinancialDataLicenseRequiredMessage();
                     } else if (!$stateParams.skipAccessNotice) {
                       checkTemplateAccess(true);

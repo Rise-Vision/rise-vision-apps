@@ -207,18 +207,29 @@ describe('service: display:', function() {
               return def.promise;
             },
             sendSetupEmail: function(obj) {
-                expect(obj).to.be.ok;
+              expect(obj).to.be.ok;
 
-                var def = Q.defer();
-                if (obj.id) {
-                  def.resolve({
-                    item: {}
-                  });
-                } else {
-                  def.reject("API Failed");
-                }
-                return def.promise;
+              var def = Q.defer();
+              if (obj.id) {
+                def.resolve({
+                  item: {}
+                });
+              } else {
+                def.reject("API Failed");
               }
+              return def.promise;
+            },
+            hasFreeDisplays: function(obj) {
+              expect(obj).to.be.ok;
+
+              var def = Q.defer();
+              if (obj.companyId) {
+                def.resolve("true");
+              } else {
+                def.reject("API Failed");
+              }
+              return def.promise;
+            }
           }
         });
         return deferred.promise;
@@ -609,5 +620,23 @@ describe('service: display:', function() {
 	    .then(null,done);
 	    });
 	});
+
+  describe('hasFreeDisplays', function() {
+
+    it('should check if has free displays', function(done) {
+      display.hasFreeDisplays('companyId', ['displayId']).then(function(result) {
+        expect(result).to.equal("true");
+        done();
+      });
+    });
+
+    it('should handle has free displays failures', function(done) {
+      display.hasFreeDisplays().then(function() {
+        done('it should have failed');
+      },function(){
+        done();
+      });
+    });
+  });
 
 });

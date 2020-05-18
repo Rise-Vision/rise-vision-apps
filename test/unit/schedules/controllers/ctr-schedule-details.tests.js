@@ -30,6 +30,11 @@ describe('controller: schedule details', function() {
         }
       }
     });
+    $provide.service('display',function(){
+      return {
+        hasFreeDisplays: function() {}
+      }
+    });
     $provide.service('$modal',function(){
       return {
         open : function(obj){

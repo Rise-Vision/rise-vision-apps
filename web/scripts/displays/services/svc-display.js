@@ -332,6 +332,29 @@
               });
 
             return deferred.promise;
+          },
+          hasFreeDisplays: function (companyId, displayIDs) {
+            var deferred = $q.defer();
+
+            $log.debug('hasFreeDisplays called with', companyId, displayIDs);
+            coreAPILoader().then(function (coreApi) {
+                return coreApi.display.hasFreeDisplays({
+                  'companyId': companyId,
+                  'data': {
+                    'displayIDs': displayIDs
+                  }
+                });
+              })
+              .then(function (resp) {
+                $log.debug('hasFreeDisplays resp', resp);
+                deferred.resolve(resp);
+              })
+              .then(null, function (e) {
+                console.error('Failed to retrieve hasFreeDisplays.', e);
+                deferred.reject(e);
+              });
+
+            return deferred.promise;
           }
         };
 

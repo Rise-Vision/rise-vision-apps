@@ -198,7 +198,7 @@ angular.module('risevision.storage.services')
           return item.taskToken ? svc.tusUpload(item) : svc.xhrTransport(item);
         };
 
-        svc.tusUpload = function(item) {
+        svc.tusUpload = function (item) {
           var tusUpload = new tus.Upload(item.domFileItem, {
             endpoint: [item.url, item.taskToken].join('/'),
             retryDelays: [0, 2000, 6000, 9000],
@@ -207,37 +207,37 @@ angular.module('risevision.storage.services')
               filename: item.file.name,
               filetype: item.file.type
             },
-            onError: function(e) {
+            onError: function (e) {
               svc.notifyErrorItem(item, e.status);
               svc.notifyCompleteItem(item);
             },
-            onProgress: function(bytesUploaded, bytesTotal) {
+            onProgress: function (bytesUploaded, bytesTotal) {
               var pct = (bytesUploaded / bytesTotal * 100).toFixed(2);
 
               // Arbitrarily expect encoding to take as long as uploading
               svc.notifyProgressItem(item, pct / 2);
             },
-            onSuccess: function() {
+            onSuccess: function () {
               item.tusURL = tusUpload.url;
               encoding.startEncoding(item)
-              .then(function(resp) {
-                item.encodingStatusURL = resp.statusURL;
+                .then(function (resp) {
+                  item.encodingStatusURL = resp.statusURL;
 
-                return encoding.monitorStatus(item, function(pct) {
-                  // Arbitrarily expect upload was first 50% of progress,
-                  // and encoding is remaining 50%
-                  svc.notifyProgressItem(item, 50 + pct / 2);
+                  return encoding.monitorStatus(item, function (pct) {
+                    // Arbitrarily expect upload was first 50% of progress,
+                    // and encoding is remaining 50%
+                    svc.notifyProgressItem(item, 50 + pct / 2);
+                  });
+                })
+                .then(encoding.acceptEncodedFile.bind(null, item.encodingFileName))
+                .then(function () {
+                  svc.notifySuccessItem(item);
+                  svc.notifyCompleteItem(item);
+                })
+                .then(null, function (e) {
+                  svc.notifyErrorItem(item);
+                  svc.notifyCompleteItem(item);
                 });
-              })
-              .then(encoding.acceptEncodedFile.bind(null, item.encodingFileName))
-              .then(function() {
-                svc.notifySuccessItem(item);
-                svc.notifyCompleteItem(item);
-              })
-              .then(null, function(e) {
-                svc.notifyErrorItem(item);
-                svc.notifyCompleteItem(item);
-              });
             }
           });
 
