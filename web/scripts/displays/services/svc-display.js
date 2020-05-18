@@ -333,15 +333,15 @@
 
             return deferred.promise;
           },
-          hasFreeDisplays: function (companyId, displayIDs) {
+          hasFreeDisplays: function (companyId, displayIds) {
             var deferred = $q.defer();
 
-            $log.debug('hasFreeDisplays called with', companyId, displayIDs);
+            $log.debug('hasFreeDisplays called with', companyId, displayIds);
             coreAPILoader().then(function (coreApi) {
                 return coreApi.display.hasFreeDisplays({
                   'companyId': companyId,
                   'data': {
-                    'displayIDs': displayIDs
+                    'displayIds': displayIds
                   }
                 });
               })
