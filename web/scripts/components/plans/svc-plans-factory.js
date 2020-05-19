@@ -160,7 +160,8 @@
       proLicenseCount: 0
     }])
     .factory('plansFactory', ['$modal', '$templateCache', 'userState', 'PLANS_LIST', 'analyticsFactory',
-      function ($modal, $templateCache, userState, PLANS_LIST, analyticsFactory) {
+      'currentPlanFactory', '$state',
+      function ($modal, $templateCache, userState, PLANS_LIST, analyticsFactory, currentPlanFactory, $state) {
         var _factory = {};
 
         _factory.showPlansModal = function () {
@@ -196,6 +197,34 @@
             }
           }).result.then(function () {
             _factory.showPlansModal();
+          });
+        };
+
+        _factory.showLicenseRequiredToUpdateModal = function () {
+          $modal.open({
+            templateUrl: 'partials/template-editor/more-info-modal.html',
+            controller: 'confirmModalController',
+            windowClass: 'madero-style centered-modal',
+            resolve: {
+              confirmationTitle: function () {
+                return 'Missing Display License';
+              },
+              confirmationMessage: function () {
+                return 'A Display License is required to automatically update your Display. Please restart it to apply the latest changes.';
+              },
+              confirmationButton: function () {
+                return 'Buy a License';
+              },
+              cancelButton: function () {
+                return 'Okay';
+              }
+            }
+          }).result.then(function () {
+            if (currentPlanFactory.isPlanActive() || currentPlanFactory.isCancelledActive()) {
+              $state.go('apps.billing.home');
+            } else {
+              _factory.showPlansModal();
+            }
           });
         };
 
