@@ -87,8 +87,9 @@ angular.module('risevision.schedules.controllers')
 
           return $q.reject();
         } else {
+          var distribution = $scope.schedule.distribution ? $scope.schedule.distribution: [];
           display.hasFreeDisplays($scope.schedule.companyId,
-            $scope.schedule.distributeToAll ? null : $scope.schedule.distribution);
+            $scope.schedule.distributeToAll ? null : distribution);
           return scheduleFactory.updateSchedule()
             .then(function () {
               scheduleFactory.logTransitionUsage($scope.schedule, _oldSchedule);
