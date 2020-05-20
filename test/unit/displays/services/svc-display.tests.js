@@ -224,7 +224,11 @@ describe('service: display:', function() {
 
               var def = Q.defer();
               if (obj.companyId) {
-                def.resolve("true");
+                def.resolve({
+                  result: {
+                    item: "true"
+                  }
+                });
               } else {
                 def.reject("API Failed");
               }
@@ -625,7 +629,7 @@ describe('service: display:', function() {
 
     it('should check if has free displays', function(done) {
       display.hasFreeDisplays('companyId', ['displayId']).then(function(result) {
-        expect(result).to.equal("true");
+        expect(result).to.equal(true);
         done();
       });
     });

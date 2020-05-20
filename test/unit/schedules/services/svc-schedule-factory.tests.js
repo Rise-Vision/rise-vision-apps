@@ -74,15 +74,23 @@ describe('service: scheduleFactory:', function() {
         isPlayUntilDone: sinon.stub()
       };
     });
-
     $provide.service('processErrorCode', function() {
       return processErrorCode = sinon.spy(function() { return 'error'; });
     });
     $provide.value('VIEWER_URL', 'http://rvaviewer-test.appspot.com');
-
+    $provide.service('display', function() {
+      return {
+        hasFreeDisplays: sinon.stub().returns(Q.resolve(true))
+      };
+    });
+    $provide.service('plansFactory', function() {
+      return {
+        showLicenseRequiredToUpdateModal: sinon.stub()
+      };
+    });
   }));
   var scheduleFactory, trackerCalled, updateSchedule, $state, returnList, scheduleListSpy, scheduleAddSpy, processErrorCode;
-  var $rootScope, blueprintFactory;
+  var $rootScope, blueprintFactory, display, plansFactory;
   beforeEach(function(){
     trackerCalled = undefined;
     updateSchedule = true;
@@ -98,6 +106,8 @@ describe('service: scheduleFactory:', function() {
       sinon.spy($rootScope, '$emit');
       $state = $injector.get('$state');
       blueprintFactory = $injector.get('blueprintFactory');
+      display = $injector.get('display');
+      plansFactory = $injector.get('plansFactory');
     });
   });
 
@@ -237,6 +247,37 @@ describe('service: scheduleFactory:', function() {
         done();
       },10);
     });
+
+    it('should check if distrubuted to free displays and show notice if true',function(done){
+      updateSchedule = true;
+      scheduleFactory.schedule.companyId = 'companyId';
+      scheduleFactory.schedule.distribution = ['display1'];
+
+      scheduleFactory.addSchedule();
+
+      display.hasFreeDisplays.should.have.been.calledWith('companyId',['display1']);
+      expect(scheduleFactory.savingSchedule).to.be.true;
+
+      setTimeout(function(){
+        plansFactory.showLicenseRequiredToUpdateModal.should.have.been.called;
+        
+        expect(scheduleFactory.savingSchedule).to.be.false;
+        done();
+      },10);
+    });
+
+    it('should check if distrubuted to free displays and do not show notice if false',function(done){
+      updateSchedule = true;
+      display.hasFreeDisplays.returns(Q.resolve(false));
+
+      scheduleFactory.addSchedule();
+
+      display.hasFreeDisplays.should.have.been.called;
+      setTimeout(function(){
+        plansFactory.showLicenseRequiredToUpdateModal.should.not.have.been.called;
+        done();
+      },10);
+    });
   });
 
   describe('updateSchedule: ',function(){
@@ -273,6 +314,37 @@ describe('service: scheduleFactory:', function() {
 
         expect(scheduleFactory.errorMessage).to.be.ok;
         expect(scheduleFactory.apiError).to.be.ok;
+        done();
+      },10);
+    });
+
+    it('should check if distrubuted to free displays and show notice if true',function(done){
+      updateSchedule = true;
+      scheduleFactory.schedule.companyId = 'companyId';
+      scheduleFactory.schedule.distribution = ['display1'];
+
+      scheduleFactory.updateSchedule();
+
+      display.hasFreeDisplays.should.have.been.calledWith('companyId',['display1']);
+      expect(scheduleFactory.savingSchedule).to.be.true;
+
+      setTimeout(function(){
+        plansFactory.showLicenseRequiredToUpdateModal.should.have.been.called;
+        
+        expect(scheduleFactory.savingSchedule).to.be.false;
+        done();
+      },10);
+    });
+
+    it('should check if distrubuted to free displays and do not show notice if false',function(done){
+      updateSchedule = true;
+      display.hasFreeDisplays.returns(Q.resolve(false));
+
+      scheduleFactory.updateSchedule();
+
+      display.hasFreeDisplays.should.have.been.called;
+      setTimeout(function(){
+        plansFactory.showLicenseRequiredToUpdateModal.should.not.have.been.called;
         done();
       },10);
     });
