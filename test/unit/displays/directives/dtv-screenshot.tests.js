@@ -28,6 +28,10 @@ describe('directive: screenshot', function() {
         }
       };
     });
+
+    $provide.service('plansFactory', function() {
+      return {};
+    });
   }));
   
   var elm, $scope, $compile, screenshotFactory, screenshotCompatible, isChromeOS, display;
@@ -68,28 +72,37 @@ describe('directive: screenshot', function() {
       it('status loading', function() {
         display.statusLoading = true;
 
-        expect($scope.screenshotState({})).to.equal('loading');        
+        expect($scope.screenshotState({
+          playerProAuthorized: true
+        })).to.equal('loading');        
       });
 
       it('screenshot loading', function() {
         screenshotFactory.screenshotLoading = true;
 
-        expect($scope.screenshotState({})).to.equal('loading');        
+        expect($scope.screenshotState({
+          playerProAuthorized: true
+        })).to.equal('loading');        
       });
       
       it('should show next status', function() {
-        expect($scope.screenshotState({})).to.equal('not-installed');        
+        expect($scope.screenshotState({
+          playerProAuthorized: true,
+        })).to.equal('not-installed');        
       });
     });
     
     it('misc', function() {
       screenshotCompatible = false;
-      expect($scope.screenshotState({ playerVersion: '2018', os: 'cros-x64' })).to.equal('os-not-supported');
-      expect($scope.screenshotState({ playerVersion: '2018', os: 'Microsoft' })).to.equal('upgrade-player');
-      expect($scope.screenshotState({ playerVersion: '2018' })).to.equal('upgrade-player');
+      expect($scope.screenshotState({ })).to.equal('no-license');
+      expect($scope.screenshotState({ playerProAuthorized: false })).to.equal('no-license');
+      expect($scope.screenshotState({ playerProAuthorized: true, playerVersion: '2018', os: 'cros-x64' })).to.equal('os-not-supported');
+      expect($scope.screenshotState({ playerProAuthorized: true, playerVersion: '2018', os: 'Microsoft' })).to.equal('upgrade-player');
+      expect($scope.screenshotState({ playerProAuthorized: true, playerVersion: '2018' })).to.equal('upgrade-player');
       screenshotCompatible = true;
-      expect($scope.screenshotState({ playerVersion: '2018', playerErrorCode: 0 })).to.equal('no-schedule');
+      expect($scope.screenshotState({ playerProAuthorized: true, playerVersion: '2018', playerErrorCode: 0 })).to.equal('no-schedule');
       expect($scope.screenshotState({
+        playerProAuthorized: true,
         playerVersion: '2018',
         playerErrorCode: 0,
         playerName: 'RisePlayerElectron',
@@ -98,6 +111,7 @@ describe('directive: screenshot', function() {
 
       screenshotFactory.screenshot = { status: 200, lastModified: new Date().toISOString() };
       expect($scope.screenshotState({
+        playerProAuthorized: true,
         playerVersion: '2018',
         playerErrorCode: 0,
         scheduleId: 1,
@@ -106,6 +120,7 @@ describe('directive: screenshot', function() {
 
       screenshotFactory.screenshot = { status: 404 };
       expect($scope.screenshotState({
+        playerProAuthorized: true,
         playerVersion: '2018',
         playerErrorCode: 0,
         scheduleId: 1,
@@ -114,6 +129,7 @@ describe('directive: screenshot', function() {
       
       screenshotFactory.screenshot = { status: 403 };
       expect($scope.screenshotState({
+        playerProAuthorized: true,
         playerVersion: '2018',
         playerErrorCode: 0,
         scheduleId: 1,
@@ -122,6 +138,7 @@ describe('directive: screenshot', function() {
 
       screenshotFactory.screenshot = { error: 'error' };
       expect($scope.screenshotState({
+        playerProAuthorized: true,
         playerVersion: '2018',
         playerErrorCode: 0,
         scheduleId: 1,
@@ -136,10 +153,11 @@ describe('directive: screenshot', function() {
     it('should return the correct state', function() {
       expect($scope.reloadScreenshotDisabled()).to.be.true;
       expect($scope.reloadScreenshotDisabled({})).to.be.true;
-      expect($scope.reloadScreenshotDisabled({ os: 'cros-x64' })).to.be.true;
+      expect($scope.reloadScreenshotDisabled({ playerProAuthorized: true, os: 'cros-x64' })).to.be.true;
 
       screenshotFactory.screenshot = { status: 404 };
       expect($scope.reloadScreenshotDisabled({
+        playerProAuthorized: true,
         playerVersion: '2018',
         playerErrorCode: 0,
         scheduleId: 1,
@@ -148,6 +166,7 @@ describe('directive: screenshot', function() {
 
       screenshotFactory.screenshot = { status: 200, lastModified: new Date() };
       expect($scope.reloadScreenshotDisabled({
+        playerProAuthorized: true,
         playerVersion: '2018',
         playerErrorCode: 0,
         scheduleId: 1,
@@ -156,6 +175,7 @@ describe('directive: screenshot', function() {
 
       screenshotFactory.screenshot = { status: 200, lastModified: '' };
       expect($scope.reloadScreenshotDisabled({
+        playerProAuthorized: true,
         playerVersion: '2018',
         playerErrorCode: 0,
         scheduleId: 1,

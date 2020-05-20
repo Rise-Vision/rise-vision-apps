@@ -6,6 +6,10 @@
     </button>
   </div>
   <div class="panel panel-default u_margin-sm-bottom text-center">
+    <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'no-license'">
+      <p class="text-muted"><a href="#" ng-click="plansFactory.showPlansModal()">Click here to License this Display and enable all functions, including screenshot, restart, reboot and emergency alert broadcasts.</a></p>
+      <p class="text-muted"><strong>Use the code “SAVE50” to get 50% off an annual plan.</strong></p>
+    </div>
     <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'no-schedule'">
       <p class="text-muted">{{ 'displays-app.fields.screenshot.notAvailable' | translate }}</p>
       <p class="text-muted">{{ 'displays-app.fields.screenshot.notScheduled' | translate }}</p>
