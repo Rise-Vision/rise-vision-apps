@@ -239,13 +239,17 @@
                 padding: 2px 8px;
                 }
     }
+    .row--disabled  {
+      background-color: #EEE;
+      opacity: .5;
+      cursor: not-allowed !important;
+    }
     &.table--disabled { 
          .table-body .table-body__row:not(:first-child)  {
-                background-color: #EEE;
-                opacity: .5;
-                cursor: not-allowed !important;
+                @extend .row--disabled
                 }
     }
+
         
 } // end .table
 
