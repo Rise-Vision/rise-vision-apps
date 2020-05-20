@@ -20,6 +20,7 @@ describe('service: screenshotFactory:', function() {
     });
     $provide.factory('displayFactory', function() {
       return {
+        showUnlockThisFeatureModal: sinon.stub().returns(false),
         display: {
           id: '123'
         }
@@ -27,7 +28,7 @@ describe('service: screenshotFactory:', function() {
     });
 
   }));
-  var screenshotFactory, display;
+  var screenshotFactory, display, displayFactory;
   var imageBlobLoaderMock, success;
 
   beforeEach(function(){
@@ -35,12 +36,13 @@ describe('service: screenshotFactory:', function() {
       success = true;
 
       display = $injector.get('display');
+      displayFactory = $injector.get('displayFactory');
       screenshotFactory = $injector.get('screenshotFactory');
     });
   });
 
   it('should exist',function(){
-    expect(screenshotFactory).to.be.truely;
+    expect(screenshotFactory).to.be.ok;
     expect(screenshotFactory.requestScreenshot).to.be.a('function');
     expect(screenshotFactory.loadScreenshot).to.be.a('function');
   });
@@ -50,6 +52,15 @@ describe('service: screenshotFactory:', function() {
       sinon.stub(screenshotFactory, 'loadScreenshot', function() {
         return Q.resolve();
       });
+    });
+
+    it('should not proceed if Display is not licensed',function(){
+      displayFactory.showUnlockThisFeatureModal.returns(true);
+
+      screenshotFactory.requestScreenshot();
+
+      display.requestScreenshot.should.not.have.been.called;
+      expect(screenshotFactory.screenshotLoading).to.not.be.ok;
     });
 
     it('should start loading', function() {

@@ -3,9 +3,9 @@
 angular.module('risevision.displays.services')
   .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal', '$loading', '$log',
     'display', 'displayTracker', 'playerLicenseFactory', 'processErrorCode', 'storeService',
-    'humanReadableError',
+    'humanReadableError', 'plansFactory',
     function ($rootScope, $q, $state, $modal, $loading, $log, display, displayTracker,
-      playerLicenseFactory, processErrorCode, storeService, humanReadableError) {
+      playerLicenseFactory, processErrorCode, storeService, humanReadableError, plansFactory) {
       var factory = {};
       var _displayId;
 
@@ -200,6 +200,30 @@ angular.module('risevision.displays.services')
         factory.apiError = processErrorCode('Display', action, e);
 
         $log.error(factory.errorMessage, e);
+      };
+
+      factory.showUnlockThisFeatureModal = function () {
+        if (!factory.display || factory.display.playerProAuthorized) {
+          return false;
+
+        } else {
+          $modal.open({
+            templateUrl: 'partials/displays/unlock-display-feature-modal.html',
+            controller: 'confirmModalController',
+            windowClass: 'madero-style centered-modal unlock-this-feature-modal',
+            size: 'sm',
+            resolve: {
+              confirmationTitle: null,
+              confirmationMessage: null,
+              confirmationButton: null,
+              cancelButton: null
+            }
+          }).result.then(function () {
+            plansFactory.showPlansModal();
+          });
+
+          return true;
+        }
       };
 
       return factory;

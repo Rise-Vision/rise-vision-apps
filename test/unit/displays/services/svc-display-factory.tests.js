@@ -64,6 +64,11 @@ describe('service: displayFactory:', function() {
         trackerCalled = name;
       };
     });
+    $provide.service('$modal', function() {
+      return {
+        open: sinon.stub().returns({result: Q.resolve()})
+      }
+    });
     $provide.service('$state',function(){
       return {
         go : function(state, params){
@@ -80,6 +85,11 @@ describe('service: displayFactory:', function() {
         areAllProLicensesUsed: function () {}
       };
     });
+    $provide.factory('plansFactory', function() {
+      return {
+        showPlansModal: sinon.spy()
+      };
+    })
     $provide.service('processErrorCode', function() {
       return processErrorCode = sinon.spy(function() { return 'error'; });
     });
@@ -98,7 +108,7 @@ describe('service: displayFactory:', function() {
     });
   }));
   var displayFactory, $rootScope, $modal, trackerCalled, updateDisplay, currentState, returnList, 
-  displayListSpy, displayAddSpy, playerLicenseFactory, display, processErrorCode, validateAddress, storeService;
+  displayListSpy, displayAddSpy, playerLicenseFactory, plansFactory, display, processErrorCode, validateAddress, storeService;
   beforeEach(function(){
     trackerCalled = undefined;
     currentState = undefined;
@@ -109,6 +119,7 @@ describe('service: displayFactory:', function() {
     inject(function($injector){
       displayFactory = $injector.get('displayFactory');
       playerLicenseFactory = $injector.get('playerLicenseFactory');
+      plansFactory = $injector.get('plansFactory');
       storeService = $injector.get('storeService');
       display = $injector.get('display');
       $modal = $injector.get('$modal');
@@ -123,12 +134,12 @@ describe('service: displayFactory:', function() {
   });
 
   it('should exist',function(){
-    expect(displayFactory).to.be.truely;
+    expect(displayFactory).to.be.ok;
     
-    expect(displayFactory.display).to.be.truely;
+    expect(displayFactory.display).to.be.ok;
     expect(displayFactory.loadingDisplay).to.be.false;
     expect(displayFactory.savingDisplay).to.be.false;
-    expect(displayFactory.apiError).to.not.be.truely;
+    expect(displayFactory.apiError).to.not.be.ok;
     
     expect(displayFactory.init).to.be.a('function');
     expect(displayFactory.addDisplayModal).to.be.a('function');
@@ -136,6 +147,8 @@ describe('service: displayFactory:', function() {
     expect(displayFactory.addDisplay).to.be.a('function');
     expect(displayFactory.updateDisplay).to.be.a('function');
     expect(displayFactory.deleteDisplay).to.be.a('function'); 
+    
+    expect(displayFactory.showUnlockThisFeatureModal).to.be.a('function'); 
   });
   
   it('should initialize',function(){
@@ -148,43 +161,38 @@ describe('service: displayFactory:', function() {
       'monitoringEnabled': true,
       'useCompanyAddress': true
     });
-    expect(displayFactory.displayId).to.not.be.truely;
   });
   
   describe('addDisplayModal: ', function() {
     it('should open modal', function() {
-      var $modalSpy = sinon.spy($modal, 'open');
-      
       displayFactory.addDisplayModal();      
       
-      $modalSpy.should.have.been.calledWithMatch({
+      $modal.open.should.have.been.calledWithMatch({
     	  controller: "displayAddModal",
     	  size: "lg",
     	  templateUrl: "partials/displays/display-add-modal.html"
     	});
 
-      expect($modalSpy.lastCall.args[0].resolve.downloadOnly()).to.be.falsey;
+      expect($modal.open.lastCall.args[0].resolve.downloadOnly()).to.be.falsey;
     });
 
     it('should open modal on download only mode', function() {
-      var $modalSpy = sinon.spy($modal, 'open');
       var testDisplay = { id: 'test', name: 'test' };
 
       displayFactory.addDisplayModal(testDisplay);
 
-      $modalSpy.should.have.been.calledWithMatch({
+      $modal.open.should.have.been.calledWithMatch({
     	  controller: "displayAddModal",
     	  size: "lg",
     	  templateUrl: "partials/displays/display-add-modal.html"
     	});
 
-      expect($modalSpy.lastCall.args[0].resolve.downloadOnly()).to.be.truely;
+      expect($modal.open.lastCall.args[0].resolve.downloadOnly()).to.be.ok;
       expect(displayFactory.display).to.deep.equal(testDisplay);
     });
 
     it('should reset the display',function(){
       displayFactory.display.id = 'displayId';
-      displayFactory.displayId = 'displayId';
       
       displayFactory.addDisplayModal();
       
@@ -199,7 +207,6 @@ describe('service: displayFactory:', function() {
         'monitoringEnabled': true,
         'useCompanyAddress': true
       });
-      expect(displayFactory.displayId).to.not.be.truely;
     });
 
     it('should set the display to parameter if it exists',function(){
@@ -218,7 +225,7 @@ describe('service: displayFactory:', function() {
     it("should get the display",function(done){
       displayFactory.getDisplay("displayId")
       .then(function() {
-        expect(displayFactory.display).to.be.truely;
+        expect(displayFactory.display).to.be.ok;
         expect(displayFactory.display.name).to.equal("some display");
 
         setTimeout(function() {
@@ -504,6 +511,37 @@ describe('service: displayFactory:', function() {
         done();
       },10);
     });
+  });
+
+  describe('showUnlockThisFeatureModal: ', function() {
+    it('should not open modal and return false if Display is licensed', function() {
+      displayFactory.display.playerProAuthorized = true;
+      
+      expect(displayFactory.showUnlockThisFeatureModal()).to.be.false;
+      
+      $modal.open.should.not.have.been.called;
+    });
+
+    it('should open modal on download only mode', function() {
+      expect(displayFactory.showUnlockThisFeatureModal()).to.be.true;
+
+      $modal.open.should.have.been.calledWithMatch({
+    	  controller: "confirmModalController",
+    	  size: "sm",
+    	  templateUrl: "partials/displays/unlock-display-feature-modal.html"
+    	});
+    });
+
+    it('should open plans modal if user confirms', function(done) {
+      displayFactory.showUnlockThisFeatureModal();
+
+      setTimeout(function() {
+        plansFactory.showPlansModal.should.have.been.called;
+
+        done();
+      }, 10);
+    });
+
   });
 
 });
