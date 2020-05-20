@@ -66,7 +66,9 @@
               var fileName = fileItem.file.name;
               var extension = fileName && fileName.split('.').pop();
               if (videoTypesNotSupported.indexOf(extension) !== -1) {
-                if (fileItem.encodingFileName) {return;}
+                if (fileItem.encodingFileName) {
+                  return;
+                }
                 $scope.warnings.push({
                   fileName: fileName,
                   message: 'storage-client.warning.video-not-supported'
