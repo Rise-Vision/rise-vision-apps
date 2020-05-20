@@ -8,6 +8,11 @@ describe('service: FileSelectorFactory (aka FilesFactory):', function() {
     $provide.service('processErrorCode', function() {
       return function() { return 'error'; };
     });
+    $provide.factory("plansFactory", function() {
+      return {
+        showPlansModal: sinon.stub()
+      };
+    });
   }));
   var filesResponse, returnFiles, filesFactory, storageFactory, storageUtils, $rootScope, $broadcastSpy;
   beforeEach(function(){

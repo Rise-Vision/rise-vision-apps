@@ -38,9 +38,15 @@ describe("Services: plans factory", function() {
         go: sinon.stub()
       };
     });
+    $provide.service("playerLicenseFactory", function() {
+      return {
+        hasProfessionalLicenses: sinon.stub().returns(false)
+      };
+    });
+    
   }));
 
-  var sandbox, $modal, userState, plansFactory, analyticsFactory, currentPlanFactory, $state;
+  var sandbox, $modal, userState, plansFactory, analyticsFactory, currentPlanFactory, $state, playerLicenseFactory;
   var VOLUME_PLAN;
 
   beforeEach(function() {
@@ -53,6 +59,7 @@ describe("Services: plans factory", function() {
       analyticsFactory = $injector.get("analyticsFactory");
       currentPlanFactory  = $injector.get("currentPlanFactory");
       $state = $injector.get("$state");
+      playerLicenseFactory = $injector.get("playerLicenseFactory");
 
       var plansByType = _.keyBy($injector.get("PLANS_LIST"), "type");
 
@@ -186,9 +193,26 @@ describe("Services: plans factory", function() {
       });
       expect($modal.open.getCall(0).args[0].resolve.confirmationTitle()).to.equal('Missing Display License');
       expect($modal.open.getCall(0).args[0].resolve.confirmationMessage()).to.equal('A Display License is required to automatically update your Display. Please restart it to apply the latest changes.');
+      expect($modal.open.getCall(0).args[0].resolve.confirmationButton()).to.equal('Buy a License');
     });
 
-    it('should go to billing page on confimation if company has a plan', function(done) {
+    it('should go to display list on confimation if company has available licenses', function(done) {
+      $modal.open.returns({result: Q.resolve()});
+      playerLicenseFactory.hasProfessionalLicenses.returns(true);
+
+      plansFactory.showLicenseRequiredToUpdateModal();
+
+      setTimeout(function(){
+        expect($modal.open).to.have.been.calledOnce;
+        expect($modal.open).to.have.been.calledWithMatch({controller: "confirmModalController"});
+        expect($modal.open.getCall(0).args[0].resolve.confirmationButton()).to.equal('Manage Display Licenses');
+
+        expect($state.go).to.have.been.calledWith('apps.displays.list');
+        done();
+      },10);
+    });
+
+    it('should go to billing page on confimation if company has a plan but no available licenses', function(done) {
       $modal.open.returns({result: Q.resolve()});
 
       plansFactory.showLicenseRequiredToUpdateModal();
@@ -202,7 +226,7 @@ describe("Services: plans factory", function() {
       },10);
     });
 
-    it('should open Plans Modal on confimation', function(done) {
+    it('should open Plans Modal on confimation if company does not have a plan', function(done) {
       $modal.open.returns({result: Q.resolve()});
       currentPlanFactory.isPlanActive.returns(false);
 
