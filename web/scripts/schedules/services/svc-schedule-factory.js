@@ -2,9 +2,9 @@
 
 angular.module('risevision.schedules.services')
   .factory('scheduleFactory', ['$q', '$state', '$log', '$rootScope', 'schedule', 'scheduleTracker',
-    'processErrorCode', 'VIEWER_URL', 'HTML_PRESENTATION_TYPE',
+    'processErrorCode', 'VIEWER_URL', 'HTML_PRESENTATION_TYPE', 'display', 'plansFactory',
     function ($q, $state, $log, $rootScope, schedule, scheduleTracker, processErrorCode,
-      VIEWER_URL, HTML_PRESENTATION_TYPE) {
+      VIEWER_URL, HTML_PRESENTATION_TYPE, display, plansFactory) {
       var factory = {};
       var _hasSchedules;
       var _scheduleId;
@@ -114,6 +114,18 @@ angular.module('risevision.schedules.services')
         return deferred.promise;
       };
 
+      var _retrieveHasFreeDisplays = function () {
+        var distribution = factory.schedule.distribution ? factory.schedule.distribution : [];
+        return display.hasFreeDisplays(factory.schedule.companyId,
+          factory.schedule.distributeToAll ? null : distribution);
+      };
+
+      var _showFreeDisplaysMessageIfNeeded = function (hasFreeDisplays) {
+        if (hasFreeDisplays) {
+          plansFactory.showLicenseRequiredToUpdateModal();
+        }
+      };
+
       factory.addSchedule = function () {
         _clearMessages();
 
@@ -121,8 +133,11 @@ angular.module('risevision.schedules.services')
         factory.loadingSchedule = true;
         factory.savingSchedule = true;
 
-        return schedule.add(factory.schedule)
-          .then(function (resp) {
+        return $q.all([_retrieveHasFreeDisplays(), schedule.add(factory.schedule)])
+          .then(function (results) {
+            _showFreeDisplaysMessageIfNeeded(results[0]);
+
+            var resp = results[1];
             if (resp && resp.item && resp.item.id) {
               _hasSchedules = true;
 
@@ -156,8 +171,10 @@ angular.module('risevision.schedules.services')
         factory.loadingSchedule = true;
         factory.savingSchedule = true;
 
-        schedule.update(_scheduleId, factory.schedule)
-          .then(function (scheduleId) {
+        $q.all([_retrieveHasFreeDisplays(), schedule.update(_scheduleId, factory.schedule)])
+          .then(function (results) {
+            _showFreeDisplaysMessageIfNeeded(results[0]);
+
             scheduleTracker('Schedule Updated', _scheduleId, factory.schedule.name);
 
             deferred.resolve();
