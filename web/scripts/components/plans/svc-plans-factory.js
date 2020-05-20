@@ -201,6 +201,7 @@
         };
 
         _factory.showLicenseRequiredToUpdateModal = function () {
+          var hasAvailableLicenses = currentPlanFactory.currentPlan.playerProAvailableLicenseCount > 0;
           $modal.open({
             templateUrl: 'partials/template-editor/more-info-modal.html',
             controller: 'confirmModalController',
@@ -213,14 +214,16 @@
                 return 'A Display License is required to automatically update your Display. Please restart it to apply the latest changes.';
               },
               confirmationButton: function () {
-                return 'Buy a License';
+                return hasAvailableLicenses ? 'Manage Display Licenses' : 'Buy a License';
               },
               cancelButton: function () {
                 return 'Okay';
               }
             }
           }).result.then(function () {
-            if (currentPlanFactory.isPlanActive() || currentPlanFactory.isCancelledActive()) {
+            if (hasAvailableLicenses) {
+              $state.go('apps.displays.list');
+            } else if (currentPlanFactory.isPlanActive() || currentPlanFactory.isCancelledActive()) {
               $state.go('apps.billing.home');
             } else {
               _factory.showPlansModal();
