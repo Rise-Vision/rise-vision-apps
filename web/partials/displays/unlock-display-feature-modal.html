@@ -1,0 +1,35 @@
+<form id="confirmForm">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="dismiss()" data-dismiss="modal" aria-hidden="true">
+      <streamline-icon name="close" width="12" height="12"></streamline-icon>
+    </button>
+  </div>
+  <div class="modal-body" stop-event="touchend">
+    <h4>Missing Display License</h4>
+    <div class="plan-features">
+      <p>Unlock this feature by purchasing a license and get access to:</p>
+      <ul>
+        <li><streamline-icon name="checkmark"></streamline-icon>Get a screenshot of your Display.</li>
+        <li><streamline-icon name="checkmark"></streamline-icon>Schedule when your screens turn on and off.</li>
+        <li><streamline-icon name="checkmark"></streamline-icon>Restart and reboot your Display.</li>
+        <li><streamline-icon name="checkmark"></streamline-icon>Receive and show emergency alerts from your CAP provider.</li>
+        <li><streamline-icon name="checkmark"></streamline-icon>Free, world-class email and phone support.</li>
+      </ul>
+      <p><strong>Use the code “SAVE50” at checkout to to get 50% off an annual plan</strong></p>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <button class="btn btn-default w-100" ng-click="dismiss()">
+          <span>Cancel</span>
+        </button>
+      </div>
+      <div class="col-xs-6">
+        <button id="confirm-primary" class="btn btn-primary w-100" ng-click="ok()">
+          <span>Buy A License</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,4 +1,5 @@
 'use strict';
+
 describe('controller: display controls', function() {
   var displayId = 1234;
   beforeEach(module('risevision.displays.controllers'));
@@ -30,6 +31,11 @@ describe('controller: display controls', function() {
         }
       }
     });
+    $provide.service('displayFactory', function() { 
+      return {
+        showUnlockThisFeatureModal: sinon.stub().returns(false)
+      };
+    });
     $provide.service('displayTracker', function() { 
       return function(name) {
         trackerCalled = name;
@@ -40,8 +46,8 @@ describe('controller: display controls', function() {
     });
     $provide.service('$modal',function(){
       return {
-        open : function(obj){
-          expect(obj).to.be.truely;
+        open : sinon.spy(function(obj) {
+          expect(obj).to.be.ok;
           var deferred = Q.defer();
           if(confirmResponse){
             deferred.resolve();
@@ -52,12 +58,12 @@ describe('controller: display controls', function() {
           return {
             result: deferred.promise
           };
-        }
+        })
       }
     });
   }));
-  var $scope, userState, $location, updateDisplay, confirmResponse, functionCalled,
-  trackerCalled, processErrorCode;
+  var $scope, $modal, userState, $location, updateDisplay, confirmResponse, functionCalled,
+  trackerCalled, processErrorCode, displayFactory;
   beforeEach(function(){
     updateDisplay = true;
     confirmResponse = false;
@@ -80,26 +86,39 @@ describe('controller: display controls', function() {
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
       $location = $injector.get('$location');
+      displayFactory = $injector.get('displayFactory');
+      $modal = $injector.get('$modal');
+
       $controller('displayControls', {
         $scope : $scope,
         userState : $injector.get('userState'),
         display:$injector.get('display'),
-        $modal:$injector.get('$modal'),
+        $modal:$modal,
         $log : $injector.get('$log')});
       $scope.$digest();
     });
   });
   
   it('should exist',function(){
-    expect($scope).to.be.truely;
+    expect($scope).to.be.ok;
 
     expect($scope.confirm).to.be.a('function');
   });
 
   describe('restart: ',function(){
+    it('should not proceed if Display is not licensed',function(){
+      displayFactory.showUnlockThisFeatureModal.returns(true);
+
+      $scope.confirm('1234', 'restart');
+
+      $modal.open.should.not.have.been.called;
+      expect(functionCalled).to.not.be.ok;
+    });
+
     it('should return early the user does not confirm',function(){
       $scope.confirm('1234', 'restart');
       
+      $modal.open.should.have.been.called;
       expect(functionCalled).to.not.be.ok;
     });
     
@@ -134,9 +153,19 @@ describe('controller: display controls', function() {
   });
   
   describe('reboot: ',function() {
+    it('should not proceed if Display is not licensed',function(){
+      displayFactory.showUnlockThisFeatureModal.returns(true);
+
+      $scope.confirm('1234', 'reboot');
+
+      $modal.open.should.not.have.been.called;
+      expect(functionCalled).to.not.be.ok;
+    });
+
     it('should return early the user does not confirm', function () {
       $scope.confirm('1234', 'reboot');
 
+      $modal.open.should.have.been.called;
       expect(functionCalled).to.not.be.ok;
     });
 

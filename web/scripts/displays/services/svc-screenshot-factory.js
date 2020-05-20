@@ -6,6 +6,10 @@ angular.module('risevision.displays.services')
       var factory = {};
 
       factory.requestScreenshot = function () {
+        if (displayFactory.showUnlockThisFeatureModal()) {
+          return;
+        }
+
         factory.screenshotLoading = true;
 
         return display.requestScreenshot(displayFactory.display.id)

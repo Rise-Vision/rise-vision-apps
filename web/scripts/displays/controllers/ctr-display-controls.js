@@ -4,8 +4,9 @@
 angular.module('risevision.displays.controllers')
   .controller('displayControls', ['$scope', 'display',
     '$log', '$modal', '$templateCache', 'processErrorCode', 'displayTracker',
+    'displayFactory',
     function ($scope, display, $log, $modal, $templateCache, processErrorCode,
-      displayTracker) {
+      displayTracker, displayFactory) {
       $scope.displayTracker = displayTracker;
 
       var _restart = function (displayId, displayName) {
@@ -49,6 +50,10 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.confirm = function (displayId, displayName, mode) {
+        if (displayFactory.showUnlockThisFeatureModal()) {
+          return;
+        }
+
         $scope.modalInstance = $modal.open({
           template: $templateCache.get(
             'partials/components/confirm-modal/confirm-modal.html'),
