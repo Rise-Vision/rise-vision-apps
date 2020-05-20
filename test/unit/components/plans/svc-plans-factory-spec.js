@@ -29,7 +29,6 @@ describe("Services: plans factory", function() {
     });
     $provide.service("currentPlanFactory", function() {
       return {
-        currentPlan: {},
         isPlanActive: sinon.stub().returns(true),
         isCancelledActive: sinon.stub().returns(false)
       };
@@ -39,9 +38,15 @@ describe("Services: plans factory", function() {
         go: sinon.stub()
       };
     });
+    $provide.service("playerLicenseFactory", function() {
+      return {
+        hasProfessionalLicenses: sinon.stub().returns(false)
+      };
+    });
+    
   }));
 
-  var sandbox, $modal, userState, plansFactory, analyticsFactory, currentPlanFactory, $state;
+  var sandbox, $modal, userState, plansFactory, analyticsFactory, currentPlanFactory, $state, playerLicenseFactory;
   var VOLUME_PLAN;
 
   beforeEach(function() {
@@ -54,6 +59,7 @@ describe("Services: plans factory", function() {
       analyticsFactory = $injector.get("analyticsFactory");
       currentPlanFactory  = $injector.get("currentPlanFactory");
       $state = $injector.get("$state");
+      playerLicenseFactory = $injector.get("playerLicenseFactory");
 
       var plansByType = _.keyBy($injector.get("PLANS_LIST"), "type");
 
@@ -192,7 +198,7 @@ describe("Services: plans factory", function() {
 
     it('should go to display list on confimation if company has available licenses', function(done) {
       $modal.open.returns({result: Q.resolve()});
-      currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 1;
+      playerLicenseFactory.hasProfessionalLicenses.returns(true);
 
       plansFactory.showLicenseRequiredToUpdateModal();
 

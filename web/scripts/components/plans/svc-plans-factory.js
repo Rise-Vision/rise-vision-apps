@@ -160,8 +160,9 @@
       proLicenseCount: 0
     }])
     .factory('plansFactory', ['$modal', '$templateCache', 'userState', 'PLANS_LIST', 'analyticsFactory',
-      'currentPlanFactory', '$state',
-      function ($modal, $templateCache, userState, PLANS_LIST, analyticsFactory, currentPlanFactory, $state) {
+      'currentPlanFactory', '$state', 'playerLicenseFactory',
+      function ($modal, $templateCache, userState, PLANS_LIST, analyticsFactory, currentPlanFactory, $state,
+        playerLicenseFactory) {
         var _factory = {};
 
         _factory.showPlansModal = function () {
@@ -201,7 +202,7 @@
         };
 
         _factory.showLicenseRequiredToUpdateModal = function () {
-          var hasAvailableLicenses = currentPlanFactory.currentPlan.playerProAvailableLicenseCount > 0;
+          var hasAvailableLicenses = playerLicenseFactory.hasProfessionalLicenses();
           $modal.open({
             templateUrl: 'partials/template-editor/more-info-modal.html',
             controller: 'confirmModalController',
