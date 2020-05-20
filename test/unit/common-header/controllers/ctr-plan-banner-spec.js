@@ -25,6 +25,11 @@ describe("controller: plan banner", function() {
         isSelectedCompanyChargebee: sinon.stub().returns(true)
       };
     });
+    $provide.factory("plansFactory", function() {
+      return {
+        showPlansModal: sinon.stub()
+      };
+    });
   }));
 
   var sandbox, $scope, $rootScope, currentPlanFactory, userState;

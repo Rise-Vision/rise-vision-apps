@@ -30,6 +30,12 @@ describe('service: FilesFactory:', function() {
       return function() { return 'error'; };
     });
 
+    $provide.factory("plansFactory", function() {
+      return {
+        showPlansModal: sinon.stub()
+      };
+    });
+
   }));
   var filesResponse, filesFactory, storageFactory, storageUtils, returnFiles;
   beforeEach(function(){
