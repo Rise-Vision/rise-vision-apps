@@ -50,7 +50,7 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.confirm = function (displayId, displayName, mode) {
-        if (displayFactory.showUnlockThisFeatureModal()) {
+        if (displayFactory.showUnlockDisplayFeatureModal()) {
           return;
         }
 

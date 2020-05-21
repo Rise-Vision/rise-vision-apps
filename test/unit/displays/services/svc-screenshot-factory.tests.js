@@ -20,7 +20,7 @@ describe('service: screenshotFactory:', function() {
     });
     $provide.factory('displayFactory', function() {
       return {
-        showUnlockThisFeatureModal: sinon.stub().returns(false),
+        showUnlockDisplayFeatureModal: sinon.stub().returns(false),
         display: {
           id: '123'
         }
@@ -55,7 +55,7 @@ describe('service: screenshotFactory:', function() {
     });
 
     it('should not proceed if Display is not licensed',function(){
-      displayFactory.showUnlockThisFeatureModal.returns(true);
+      displayFactory.showUnlockDisplayFeatureModal.returns(true);
 
       screenshotFactory.requestScreenshot();
 

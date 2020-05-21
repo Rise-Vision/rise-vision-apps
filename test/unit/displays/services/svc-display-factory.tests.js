@@ -154,7 +154,7 @@ describe('service: displayFactory:', function() {
 
     expect(displayFactory.showLicenseRequired).to.be.a('function');
     expect(displayFactory.showLicenseUpdate).to.be.a('function');
-    expect(displayFactory.showUnlockThisFeatureModal).to.be.a('function'); 
+    expect(displayFactory.showUnlockDisplayFeatureModal).to.be.a('function'); 
   });
   
   it('should initialize',function(){
@@ -575,21 +575,22 @@ describe('service: displayFactory:', function() {
     });
   });
 
-  describe('showUnlockThisFeatureModal: ', function() {
+  describe('showUnlockDisplayFeatureModal: ', function() {
     beforeEach(function() {
+      sinon.stub(displayFactory, 'showLicenseRequired').returns(true);
       sinon.stub(displayFactory, 'showLicenseUpdate');
     });
 
-    it('should not open modal and return false if Display is licensed', function() {
-      displayFactory.display.playerProAuthorized = true;
-      
-      expect(displayFactory.showUnlockThisFeatureModal()).to.be.false;
+    it('should not open modal and return false if a license is not required', function() {
+      displayFactory.showLicenseRequired.returns(false);
+
+      expect(displayFactory.showUnlockDisplayFeatureModal()).to.be.false;
       
       $modal.open.should.not.have.been.called;
     });
 
-    it('should open modal on download only mode', function() {
-      expect(displayFactory.showUnlockThisFeatureModal()).to.be.true;
+    it('should open modal if a license is required', function() {
+      expect(displayFactory.showUnlockDisplayFeatureModal()).to.be.true;
 
       $modal.open.should.have.been.calledWithMatch({
     	  controller: "confirmModalController",
@@ -600,7 +601,7 @@ describe('service: displayFactory:', function() {
 
     it('should show license update if user confirms', function(done) {
       playerLicenseFactory.getProLicenseCount.returns(0);
-      displayFactory.showUnlockThisFeatureModal();
+      displayFactory.showUnlockDisplayFeatureModal();
 
       setTimeout(function() {
         displayFactory.showLicenseUpdate.should.have.been.called;

@@ -214,8 +214,8 @@ angular.module('risevision.displays.services')
         }
       };
 
-      factory.showUnlockThisFeatureModal = function () {
-        if (!factory.display || factory.display.playerProAuthorized) {
+      factory.showUnlockDisplayFeatureModal = function () {
+        if (!factory.showLicenseRequired(factory.display)) {
           return false;
 
         } else {

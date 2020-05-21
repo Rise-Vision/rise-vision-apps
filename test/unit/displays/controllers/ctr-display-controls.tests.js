@@ -33,7 +33,7 @@ describe('controller: display controls', function() {
     });
     $provide.service('displayFactory', function() { 
       return {
-        showUnlockThisFeatureModal: sinon.stub().returns(false)
+        showUnlockDisplayFeatureModal: sinon.stub().returns(false)
       };
     });
     $provide.service('displayTracker', function() { 
@@ -107,7 +107,7 @@ describe('controller: display controls', function() {
 
   describe('restart: ',function(){
     it('should not proceed if Display is not licensed',function(){
-      displayFactory.showUnlockThisFeatureModal.returns(true);
+      displayFactory.showUnlockDisplayFeatureModal.returns(true);
 
       $scope.confirm('1234', 'restart');
 
@@ -154,7 +154,7 @@ describe('controller: display controls', function() {
   
   describe('reboot: ',function() {
     it('should not proceed if Display is not licensed',function(){
-      displayFactory.showUnlockThisFeatureModal.returns(true);
+      displayFactory.showUnlockDisplayFeatureModal.returns(true);
 
       $scope.confirm('1234', 'reboot');
 
