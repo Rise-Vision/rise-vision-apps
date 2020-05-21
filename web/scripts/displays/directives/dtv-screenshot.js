@@ -2,14 +2,14 @@
 
 angular.module('risevision.displays.directives')
   .directive('screenshot', ['$filter', 'display', 'screenshotFactory',
-    'playerProFactory', 'plansFactory',
-    function ($filter, displayService, screenshotFactory, playerProFactory, plansFactory) {
+    'playerProFactory', 'displayFactory',
+    function ($filter, displayService, screenshotFactory, playerProFactory, displayFactory) {
       return {
         restrict: 'E',
         templateUrl: 'partials/displays/screenshot.html',
         link: function ($scope) {
           $scope.screenshotFactory = screenshotFactory;
-          $scope.plansFactory = plansFactory;
+          $scope.displayFactory = displayFactory;
 
           $scope.screenshotState = function (display) {
             var statusFilter = $filter('status');

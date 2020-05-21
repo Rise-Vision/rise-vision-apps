@@ -92,7 +92,7 @@ describe('controller: display details', function() {
     });
     $provide.factory('plansFactory', function() {
       return {
-        showPlansModal: function () {}
+        showPlansModal: sinon.spy()
       };
     });
     $provide.factory('currentPlanFactory', function() {
@@ -117,7 +117,7 @@ describe('controller: display details', function() {
   }));
   var $scope, $state, updateCalled, deleteCalled, confirmDelete;
   var resolveLoadScreenshot, resolveRequestScreenshot, enableCompanyProduct, userState,
-  $rootScope, $loading, displayFactory, playerLicenseFactory, playerProFactory, currentPlanFactory;
+  $rootScope, $loading, displayFactory, playerLicenseFactory, playerProFactory, plansFactory, currentPlanFactory;
   var company;
   beforeEach(function(){
     company = {};
@@ -130,6 +130,7 @@ describe('controller: display details', function() {
       displayFactory = $injector.get('displayFactory');
       playerLicenseFactory = $injector.get('playerLicenseFactory');
       playerProFactory = $injector.get('playerProFactory');
+      plansFactory = $injector.get('plansFactory');
       currentPlanFactory = $injector.get('currentPlanFactory');
       enableCompanyProduct = $injector.get('enableCompanyProduct');
       userState = $injector.get('userState');
@@ -222,29 +223,26 @@ describe('controller: display details', function() {
     it('should show the plans modal', function () {
       $scope.display = {};
       sandbox.stub($scope, 'isProAvailable').returns(false);
-      sandbox.stub($scope, 'showPlansModal');
 
       $scope.toggleProAuthorized();
-      expect($scope.showPlansModal).to.have.been.called;
+      expect(plansFactory.showPlansModal).to.have.been.called;
       expect(enableCompanyProduct).to.not.have.been.called;
     });
 
     it('should forward to billing if has a plan but no available licenses', function () {
       $scope.display = {};
       sandbox.stub($scope, 'isProAvailable').returns(false);
-      sandbox.stub($scope, 'showPlansModal');
       sandbox.stub($scope, 'getProLicenseCount').returns(1);
       sandbox.stub($scope, 'areAllProLicensesUsed').returns(true);
 
       $scope.toggleProAuthorized();      
       expect($state.go).to.have.been.calledWith('apps.billing.home');
-      expect($scope.showPlansModal).to.not.have.been.called;
+      expect(plansFactory.showPlansModal).to.not.have.been.called;
       expect(enableCompanyProduct).to.not.have.been.called;
     });
 
     it('should activate Pro status', function (done) {
       sandbox.stub($scope, 'isProAvailable').returns(true);
-      sandbox.stub($scope, 'showPlansModal');
       sandbox.stub(playerLicenseFactory, 'toggleDisplayLicenseLocal');
       enableCompanyProduct.returns(Q.resolve());
 
@@ -266,7 +264,7 @@ describe('controller: display details', function() {
           expect($scope.display.playerProAuthorized).to.be.true;
 
           expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(true);
-          expect($scope.showPlansModal).to.have.not.been.called;
+          expect(plansFactory.showPlansModal).to.have.not.been.called;
           done();        
         }, 0);
       }, 0);
@@ -274,7 +272,6 @@ describe('controller: display details', function() {
 
     it('should not activate Pro status if licenses are not available', function (done) {
       sandbox.stub($scope, 'isProAvailable').returns(true);
-      sandbox.stub($scope, 'showPlansModal');
       sandbox.stub(playerLicenseFactory, 'toggleDisplayLicenseLocal');
       enableCompanyProduct.returns(Q.resolve());
 
@@ -296,7 +293,7 @@ describe('controller: display details', function() {
           expect($scope.display.playerProAuthorized).to.be.false;
 
           expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(true);
-          expect($scope.showPlansModal).to.have.not.been.called;
+          expect(plansFactory.showPlansModal).to.have.not.been.called;
           done();        
         }, 0);
       }, 0);
@@ -304,7 +301,6 @@ describe('controller: display details', function() {
 
     it('should deactivate Pro status', function (done) {
       sandbox.stub($scope, 'isProAvailable').returns(true);
-      sandbox.stub($scope, 'showPlansModal');
       sandbox.stub(playerLicenseFactory, 'toggleDisplayLicenseLocal');
       enableCompanyProduct.returns(Q.resolve());
 
@@ -325,7 +321,7 @@ describe('controller: display details', function() {
           expect($scope.display.playerProAuthorized).to.be.false;
 
           expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(false);
-          expect($scope.showPlansModal).to.have.not.been.called;
+          expect(plansFactory.showPlansModal).to.have.not.been.called;
           done();
         }, 0);
       }, 0);
@@ -333,7 +329,6 @@ describe('controller: display details', function() {
 
     it('should fail to activate Pro status', function (done) {
       sandbox.stub($scope, 'isProAvailable').returns(true);
-      sandbox.stub($scope, 'showPlansModal');
       enableCompanyProduct.returns(Q.reject());
 
       setTimeout(function () {
@@ -353,7 +348,7 @@ describe('controller: display details', function() {
           expect($scope.display.playerProAuthorized).to.be.true;
 
           expect(userState.updateCompanySettings).to.not.have.been.called;
-          expect($scope.showPlansModal).to.have.not.been.called;
+          expect(plansFactory.showPlansModal).to.have.not.been.called;
           done();
         }, 0);
       });

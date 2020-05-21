@@ -29,7 +29,7 @@ describe('directive: screenshot', function() {
       };
     });
 
-    $provide.service('plansFactory', function() {
+    $provide.service('displayFactory', function() {
       return {};
     });
   }));
