@@ -2,9 +2,9 @@
 
 angular.module('risevision.displays.services')
   .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal', '$loading', '$log',
-    'display', 'displayTracker', 'playerLicenseFactory', 'processErrorCode', 'storeService',
+    'userState', 'display', 'displayTracker', 'playerLicenseFactory', 'processErrorCode', 'storeService',
     'humanReadableError', 'plansFactory',
-    function ($rootScope, $q, $state, $modal, $loading, $log, display, displayTracker,
+    function ($rootScope, $q, $state, $modal, $loading, $log, userState, display, displayTracker,
       playerLicenseFactory, processErrorCode, storeService, humanReadableError, plansFactory) {
       var factory = {};
       var _displayId;
@@ -200,6 +200,10 @@ angular.module('risevision.displays.services')
         factory.apiError = processErrorCode('Display', action, e);
 
         $log.error(factory.errorMessage, e);
+      };
+
+      factory.showLicenseRequired = function (display) {
+        return display && !display.playerProAuthorized && !userState.isRiseVisionUser();
       };
 
       factory.showLicenseUpdate = function() {
