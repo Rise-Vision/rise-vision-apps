@@ -75,6 +75,12 @@ describe('service: displayFactory:', function() {
         go : sinon.spy()
       }
     });
+    $provide.factory('userState', function() {
+      return {
+        isRiseAdmin: sandbox.stub().returns(false),
+        _restoreState: function(){}
+      }
+    });
     $provide.factory('playerLicenseFactory', function() {
       return {
         toggleDisplayLicenseLocal: function () {},
@@ -104,7 +110,7 @@ describe('service: displayFactory:', function() {
       }
     });
   }));
-  var displayFactory, $rootScope, $modal, $state, trackerCalled, updateDisplay, returnList, 
+  var displayFactory, $rootScope, $modal, $state, userState, trackerCalled, updateDisplay, returnList, 
   displayListSpy, displayAddSpy, playerLicenseFactory, plansFactory, display, processErrorCode, validateAddress, storeService;
   beforeEach(function(){
     trackerCalled = undefined;
@@ -121,6 +127,7 @@ describe('service: displayFactory:', function() {
       $modal = $injector.get('$modal');
       $rootScope = $injector.get('$rootScope');
       $state = $injector.get('$state');
+      userState = $injector.get('userState');
       displayListSpy = sinon.spy(display,'list');
       displayAddSpy = sinon.spy(display,'add');
     });
@@ -145,6 +152,7 @@ describe('service: displayFactory:', function() {
     expect(displayFactory.updateDisplay).to.be.a('function');
     expect(displayFactory.deleteDisplay).to.be.a('function'); 
 
+    expect(displayFactory.showLicenseRequired).to.be.a('function');
     expect(displayFactory.showLicenseUpdate).to.be.a('function');
     expect(displayFactory.showUnlockThisFeatureModal).to.be.a('function'); 
   });
@@ -513,6 +521,38 @@ describe('service: displayFactory:', function() {
         done();
       },10);
     });
+  });
+  
+  describe('showLicenseRequired:', function() {
+    it('should not show for null display', function() {
+      expect(displayFactory.showLicenseRequired(null)).to.not.be.true;
+    });
+
+    it('should show for unlicensed display', function() {
+      var display = {
+        playerProAuthorized: false
+      };
+
+      expect(displayFactory.showLicenseRequired(display)).to.be.true;
+    });
+
+    it('should not show for licensed display', function() {
+      var display = {
+        playerProAuthorized: true
+      };
+
+      expect(displayFactory.showLicenseRequired(display)).to.be.false;
+    });
+
+    it('should not show for Rise Users', function() {
+      userState.isRiseAdmin.returns(true);
+      var display = {
+        playerProAuthorized: false
+      };
+
+      expect(displayFactory.showLicenseRequired(display)).to.be.false;
+    });
+
   });
 
   describe('showLicenseUpdate:', function() {

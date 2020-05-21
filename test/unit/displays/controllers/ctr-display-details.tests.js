@@ -541,4 +541,5 @@ describe('controller: display details', function() {
       expect($scope.display.playerProAuthorized).to.be.false;
     });
   });
+
 });

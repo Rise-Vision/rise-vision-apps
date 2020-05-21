@@ -83,12 +83,12 @@
               </span>
             </td>
           </tr>
-          <tr class="table-body__row" ng-class="{ 'row--disabled': !display.playerProAuthorized }">
+          <tr class="table-body__row" ng-class="{ 'row--disabled': factory.showLicenseRequired(display) }">
             <td class="table-body__cell" translate><span>displays-app.fields.player.status</span></td>
-            <td class="table-body__cell" ng-if="!display.playerProAuthorized">
+            <td class="table-body__cell" ng-if="factory.showLicenseRequired(display)">
               License Required
             </td>
-            <td class="table-body__cell" ng-if="display.playerProAuthorized">
+            <td class="table-body__cell" ng-if="!factory.showLicenseRequired(display)">
                 <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
                 <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline</span>
                 <a ng-show="!displayService.statusLoading && (display | status) === 'offline'" href="https://help.risevision.com/hc/en-us/articles/115002694906-Why-is-my-Display-status-offline-" target="_blank">Why is my Display offline?</a>
@@ -98,30 +98,30 @@
                 </a>
             </td>
           </tr>
-          <tr class="table-body__row" ng-class="{ 'row--disabled': !display.playerProAuthorized }">
+          <tr class="table-body__row" ng-class="{ 'row--disabled': factory.showLicenseRequired(display) }">
             <td class="table-body__cell"><span translate>displays-app.fields.player.lastConnection</span></td>
-            <td class="table-body__cell" ng-if="!display.playerProAuthorized">
+            <td class="table-body__cell" ng-if="factory.showLicenseRequired(display)">
               License Required
             </td>
-            <td class="table-body__cell" ng-if="display.playerProAuthorized">
+            <td class="table-body__cell" ng-if="!factory.showLicenseRequired(display)">
               <span>{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span>
             </td>
           </tr>
-          <tr class="table-body__row" ng-class="{ 'row--disabled': !display.playerProAuthorized }">
+          <tr class="table-body__row" ng-class="{ 'row--disabled': factory.showLicenseRequired(display) }">
             <td class="table-body__cell"><span translate>displays-app.fields.player.ipAddress</span></td>
-            <td class="table-body__cell" ng-if="!display.playerProAuthorized">
+            <td class="table-body__cell" ng-if="factory.showLicenseRequired(display)">
               License Required
             </td>
-            <td class="table-body__cell" ng-if="display.playerProAuthorized">
+            <td class="table-body__cell" ng-if="!factory.showLicenseRequired(display)">
               <span>{{display.playerLocalIpAddress}}</span>
             </td>
           </tr>
-          <tr class="table-body__row" ng-show="display.macAddress" ng-class="{ 'row--disabled': !display.playerProAuthorized }">
+          <tr class="table-body__row" ng-show="display.macAddress" ng-class="{ 'row--disabled': factory.showLicenseRequired(display) }">
             <td class="table-body__cell"><span translate>displays-app.fields.player.macAddress</span></td>
-            <td class="table-body__cell" ng-if="!display.playerProAuthorized">
+            <td class="table-body__cell" ng-if="factory.showLicenseRequired(display)">
               License Required
             </td>
-            <td class="table-body__cell" ng-if="display.playerProAuthorized">
+            <td class="table-body__cell" ng-if="!factory.showLicenseRequired(display)">
               <span>{{display.macAddress}}</span></td>
           </tr>
           <tr class="table-body__row">
@@ -283,7 +283,7 @@
 <div class="form-group">
   <div class="checkbox">
     <label class="control-label">
-      <input type="checkbox" ng-model="display.useCompanyAddress" ng-disabled="!display.playerProAuthorized">
+      <input type="checkbox" ng-model="display.useCompanyAddress" ng-disabled="factory.showLicenseRequired(display)">
       <strong translate>displays-app.fields.address.useCompany</strong>
     </label>
   </div>
@@ -358,9 +358,9 @@
 <div class="form-group reboot-time">
   <div class="checkbox">
     <label class="control-label">
-      <input type="checkbox" ng-model="display.restartEnabled" ng-disabled="!display.playerProAuthorized">
+      <input type="checkbox" ng-model="display.restartEnabled" ng-disabled="factory.showLicenseRequired(display)">
       <strong translate>displays-app.fields.reboot</strong>
     </label>
   </div>
-  <time-picker ng-model="display.restartTime" ng-disabled="!display.restartEnabled || !display.playerProAuthorized"></time-picker>
+  <time-picker ng-model="display.restartTime" ng-disabled="!display.restartEnabled || factory.showLicenseRequired(display)"></time-picker>
 </div>
