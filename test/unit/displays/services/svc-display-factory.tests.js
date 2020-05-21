@@ -77,7 +77,7 @@ describe('service: displayFactory:', function() {
     });
     $provide.factory('userState', function() {
       return {
-        isRiseVisionUser: sandbox.stub().returns(false),
+        isRiseAdmin: sandbox.stub().returns(false),
         _restoreState: function(){}
       }
     });
@@ -545,7 +545,7 @@ describe('service: displayFactory:', function() {
     });
 
     it('should not show for Rise Users', function() {
-      userState.isRiseVisionUser.returns(true);
+      userState.isRiseAdmin.returns(true);
       var display = {
         playerProAuthorized: false
       };

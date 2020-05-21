@@ -203,7 +203,7 @@ angular.module('risevision.displays.services')
       };
 
       factory.showLicenseRequired = function (display) {
-        return display && !display.playerProAuthorized && !userState.isRiseVisionUser();
+        return display && !display.playerProAuthorized && !userState.isRiseAdmin();
       };
 
       factory.showLicenseUpdate = function() {
