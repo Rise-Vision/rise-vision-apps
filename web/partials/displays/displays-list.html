@@ -112,23 +112,34 @@
             </a>
           </td>
           <td class="table-body__cell display-status">
-            <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
-            <span class="text-danger" ng-if="!displayService.statusLoading && playerOffline(display)">
+            <!-- Not Licensed and Installed -->
+            <span class="text-muted" ng-if="!display.playerProAuthorized && !playerNotInstalled(display)">
+              License Required
+            </span>
+            <!-- Licensed and Loading Status -->
+            <i ng-if="displayService.statusLoading && display.playerProAuthorized" class="fa fa-spinner fa-spin fa-fw"></i>
+            <!-- Licensed and Offline -->
+            <span class="text-danger" ng-if="!displayService.statusLoading && display.playerProAuthorized && playerOffline(display)">
               <i class="fa fa-times"></i> Offline
               <a href="https://help.risevision.com/hc/en-us/articles/115002694906-Why-is-my-Display-status-offline-" target="_blank" translate>
                 displays-app.list.status.whyOffline
               </a>
             </span>
-
-            <span class="text-success" ng-if="!displayService.statusLoading && playerOnline(display)"> <i class="fa fa-check"></i> Online</span>
-
+            <!-- Licensed and Online -->
+            <span class="text-success" ng-if="!displayService.statusLoading && display.playerProAuthorized && playerOnline(display)">
+              <i class="fa fa-check"></i> Online
+            </span>
+            <!-- Not Installed and finished Loading -->
             <a class="u_icon-hover" ng-if="!displayService.statusLoading && playerNotInstalled(display)" ng-click="displayFactory.addDisplayModal(display)">
               {{ 'displays-app.list.status.notActivated' | translate }}
             </a>
           </td>
           <td class="table-body__cell u_nowrap hidden-xs hidden-sm">
-            <span>
-              <span>{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span>
+            <span class="text-muted" ng-if="!display.playerProAuthorized">
+              License Required
+            </span>
+            <span ng-if="display.playerProAuthorized">
+              {{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}
             </span>
           </td>
         </tr>
