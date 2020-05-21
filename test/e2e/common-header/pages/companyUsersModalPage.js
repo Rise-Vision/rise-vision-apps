@@ -54,9 +54,14 @@
 
     this.searchUser = function(username) {
       helper.waitDisappear(this.getLoader(), "Company Users Loaded");
-      this.getUsersModalFilter().clear();
+      this.getUsersModalFilter().getAttribute("value").then(function (value) {
+        if (value !== "") {
+          usersModalFilter.clear();
+          helper.wait(loader, "Load Company Users");
+          helper.waitDisappear(loader, "Company Users Loaded");
+        }
+      });
       this.getUsersModalFilter().sendKeys(username);
-      browser.sleep(1000); //wait for search to be triggered
       helper.wait(this.getLoader(), "Load Company Users");
       helper.waitDisappear(this.getLoader(), "Company Users Loaded");
     };
