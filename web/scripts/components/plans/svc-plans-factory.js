@@ -160,9 +160,8 @@
       proLicenseCount: 0
     }])
     .factory('plansFactory', ['$modal', '$templateCache', 'userState', 'PLANS_LIST', 'analyticsFactory',
-      'currentPlanFactory', '$state', 'playerLicenseFactory',
-      function ($modal, $templateCache, userState, PLANS_LIST, analyticsFactory, currentPlanFactory, $state,
-        playerLicenseFactory) {
+      'currentPlanFactory', '$state',
+      function ($modal, $templateCache, userState, PLANS_LIST, analyticsFactory, currentPlanFactory, $state) {
         var _factory = {};
 
         _factory.showPlansModal = function () {
@@ -202,7 +201,6 @@
         };
 
         _factory.showLicenseRequiredToUpdateModal = function () {
-          var hasAvailableLicenses = playerLicenseFactory.hasProfessionalLicenses();
           $modal.open({
             templateUrl: 'partials/template-editor/more-info-modal.html',
             controller: 'confirmModalController',
@@ -215,16 +213,14 @@
                 return 'A Display License is required to automatically update your Display. Please restart it to apply the latest changes.';
               },
               confirmationButton: function () {
-                return hasAvailableLicenses ? 'Manage Display Licenses' : 'Buy a License';
+                return 'Buy a License';
               },
               cancelButton: function () {
                 return 'Okay';
               }
             }
           }).result.then(function () {
-            if (hasAvailableLicenses) {
-              $state.go('apps.displays.list');
-            } else if (currentPlanFactory.isPlanActive() || currentPlanFactory.isCancelledActive()) {
+            if (currentPlanFactory.isPlanActive() || currentPlanFactory.isCancelledActive()) {
               $state.go('apps.billing.home');
             } else {
               _factory.showPlansModal();

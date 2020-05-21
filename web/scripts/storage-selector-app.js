@@ -19,7 +19,6 @@ angular.module('risevision.apps.storage.storage-selector', [
     'risevision.apps.config',
     'risevision.apps.services',
     'risevision.apps.controllers',
-    'risevision.displays.services',
     'risevision.storage.services',
     'risevision.storage.controllers',
     'risevision.storage.directives',
@@ -96,7 +95,7 @@ angular.module('risevision.apps.storage.storage-selector', [
 
 angular.module('risevision.apps.services', []);
 angular.module('risevision.apps.controllers', []);
-angular.module('risevision.displays.services', []);
+
 
 angular.module('risevision.storage.services', [
   'risevision.common.components.userstate'
