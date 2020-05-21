@@ -41,7 +41,7 @@ angular.module('risevision.displays.controllers')
           if ($scope.getProLicenseCount() > 0 && $scope.areAllProLicensesUsed()) {
             $state.go('apps.billing.home');
           } else {
-            $scope.showPlansModal();
+            plansFactory.showPlansModal();
           }
         } else {
           var apiParams = {};

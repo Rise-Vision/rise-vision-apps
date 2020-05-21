@@ -202,6 +202,14 @@ angular.module('risevision.displays.services')
         $log.error(factory.errorMessage, e);
       };
 
+      factory.showLicenseUpdate = function() {
+        if (playerLicenseFactory.getProLicenseCount() > 0) {
+          $state.go('apps.billing.home');
+        } else {
+          plansFactory.showPlansModal();
+        }
+      };
+
       factory.showUnlockThisFeatureModal = function () {
         if (!factory.display || factory.display.playerProAuthorized) {
           return false;
@@ -219,7 +227,7 @@ angular.module('risevision.displays.services')
               cancelButton: null
             }
           }).result.then(function () {
-            plansFactory.showPlansModal();
+            factory.showLicenseUpdate();
           });
 
           return true;

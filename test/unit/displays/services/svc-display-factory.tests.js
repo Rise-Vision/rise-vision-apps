@@ -1,4 +1,5 @@
 'use strict';
+
 describe('service: displayFactory:', function() {
   var sandbox = sinon.sandbox.create();
 
@@ -71,18 +72,14 @@ describe('service: displayFactory:', function() {
     });
     $provide.service('$state',function(){
       return {
-        go : function(state, params){
-          if (state){
-            currentState = state;
-          }
-          return currentState;
-        }
+        go : sinon.spy()
       }
     });
     $provide.factory('playerLicenseFactory', function() {
       return {
         toggleDisplayLicenseLocal: function () {},
-        areAllProLicensesUsed: function () {}
+        getProLicenseCount: sinon.stub(),
+        areAllProLicensesUsed: sinon.stub().returns(true)
       };
     });
     $provide.factory('plansFactory', function() {
@@ -107,11 +104,10 @@ describe('service: displayFactory:', function() {
       }
     });
   }));
-  var displayFactory, $rootScope, $modal, trackerCalled, updateDisplay, currentState, returnList, 
+  var displayFactory, $rootScope, $modal, $state, trackerCalled, updateDisplay, returnList, 
   displayListSpy, displayAddSpy, playerLicenseFactory, plansFactory, display, processErrorCode, validateAddress, storeService;
   beforeEach(function(){
     trackerCalled = undefined;
-    currentState = undefined;
     updateDisplay = true;
     validateAddress = true;
     returnList = null;
@@ -124,6 +120,7 @@ describe('service: displayFactory:', function() {
       display = $injector.get('display');
       $modal = $injector.get('$modal');
       $rootScope = $injector.get('$rootScope');
+      $state = $injector.get('$state');
       displayListSpy = sinon.spy(display,'list');
       displayAddSpy = sinon.spy(display,'add');
     });
@@ -147,7 +144,8 @@ describe('service: displayFactory:', function() {
     expect(displayFactory.addDisplay).to.be.a('function');
     expect(displayFactory.updateDisplay).to.be.a('function');
     expect(displayFactory.deleteDisplay).to.be.a('function'); 
-    
+
+    expect(displayFactory.showLicenseUpdate).to.be.a('function');
     expect(displayFactory.showUnlockThisFeatureModal).to.be.a('function'); 
   });
   
@@ -269,7 +267,7 @@ describe('service: displayFactory:', function() {
       updateDisplay = true;
       var broadcastSpy = sinon.spy($rootScope,'$broadcast');
       sandbox.stub(playerLicenseFactory, 'toggleDisplayLicenseLocal');
-      sandbox.stub(playerLicenseFactory, 'areAllProLicensesUsed').returns(false);
+      playerLicenseFactory.areAllProLicensesUsed.returns(false);
       display._display.playerProAuthorized = true;
 
       displayFactory.addDisplay();
@@ -316,7 +314,8 @@ describe('service: displayFactory:', function() {
       })
       .then(null, function() {
         setTimeout(function(){
-          expect(currentState).to.be.empty;
+          $state.go.should.not.have.been.called;
+
           expect(trackerCalled).to.not.be.ok;
           expect(displayFactory.savingDisplay).to.be.false;
           expect(displayFactory.loadingDisplay).to.be.false;
@@ -473,7 +472,9 @@ describe('service: displayFactory:', function() {
         expect(displayFactory.errorMessage).to.not.be.ok;
         expect(displayFactory.apiError).to.not.be.ok;
         expect(trackerCalled).to.equal('Display Deleted');
-        expect(currentState).to.equal('apps.displays.list');
+
+        $state.go.should.have.been.calledWith('apps.displays.list');
+
         expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(false);
         done();
       },10);
@@ -502,7 +503,8 @@ describe('service: displayFactory:', function() {
       expect(displayFactory.loadingDisplay).to.be.true;
 
       setTimeout(function(){
-        expect(currentState).to.be.empty;
+        $state.go.should.not.have.been.called;
+
         expect(trackerCalled).to.not.be.ok;
         expect(displayFactory.loadingDisplay).to.be.false;
         
@@ -513,7 +515,31 @@ describe('service: displayFactory:', function() {
     });
   });
 
+  describe('showLicenseUpdate:', function() {
+    it('should open plans modal if user confirms and they do not have licenses', function() {
+      playerLicenseFactory.getProLicenseCount.returns(0);
+      displayFactory.showLicenseUpdate();
+
+      plansFactory.showPlansModal.should.have.been.called;
+
+      $state.go.should.not.have.been.called;
+    });
+
+    it('should show the billing page if user confirms and they have licenses', function() {
+      playerLicenseFactory.getProLicenseCount.returns(1);
+      displayFactory.showLicenseUpdate();
+
+      plansFactory.showPlansModal.should.not.have.been.called;
+
+      $state.go.should.have.been.calledWith('apps.billing.home');
+    });
+  });
+
   describe('showUnlockThisFeatureModal: ', function() {
+    beforeEach(function() {
+      sinon.stub(displayFactory, 'showLicenseUpdate');
+    });
+
     it('should not open modal and return false if Display is licensed', function() {
       displayFactory.display.playerProAuthorized = true;
       
@@ -532,11 +558,12 @@ describe('service: displayFactory:', function() {
     	});
     });
 
-    it('should open plans modal if user confirms', function(done) {
+    it('should show license update if user confirms', function(done) {
+      playerLicenseFactory.getProLicenseCount.returns(0);
       displayFactory.showUnlockThisFeatureModal();
 
       setTimeout(function() {
-        plansFactory.showPlansModal.should.have.been.called;
+        displayFactory.showLicenseUpdate.should.have.been.called;
 
         done();
       }, 10);
