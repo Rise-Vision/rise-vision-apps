@@ -104,17 +104,20 @@ describe('service: encoding:', function() {
       $httpBackend.when('POST', /.*status/).respond(200, statusResponse);
 
       var statusPromise = encoding.monitorStatus(item, onProgressSetStatusComplete);
-      $timeout.flush(); // progress through first status check at 50%
 
       function onProgressSetStatusComplete(pct) {
         console.log('Encoding status: ' + pct + '%');
 
         statusResponse.statuses[taskToken].percent = 100;
+        statusResponse.statuses[taskToken].status = 'completed';
 
+        if (pct === 100) { return; }
         setTimeout(function() {$timeout.flush();}, 50); // second check
         setTimeout(function() {$httpBackend.flush();}, 60);
       }
 
+      setTimeout(function() {$timeout.flush();}, 50); // progress through first status check at 50%
+      setTimeout(function() {$httpBackend.flush();}, 60); // progress through first status check at 50%
       return statusPromise;
     });
 
@@ -122,7 +125,7 @@ describe('service: encoding:', function() {
       $httpBackend.when('HEAD', /.*encoding/).respond(200, {});
 
       var statusResponse = {statuses: {}};
-      statusResponse.statuses[taskToken] = {percent: 100};
+      statusResponse.statuses[taskToken] = {percent: 100, status: 'completed'};
 
       var mockResp = $httpBackend.when('POST', /.*status/).respond(500, {});
 

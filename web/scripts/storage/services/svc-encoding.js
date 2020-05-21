@@ -124,7 +124,7 @@ angular.module('risevision.storage.services')
               return $q.reject(taskStatus.error_description); // jshint ignore:line
             }
 
-            if (taskStatus.percent !== 100) {
+            if (taskStatus.percent !== 100 || taskStatus.status !== 'completed') {
               onProgress(taskStatus.percent);
 
               return service.monitorStatus(item, onProgress);
