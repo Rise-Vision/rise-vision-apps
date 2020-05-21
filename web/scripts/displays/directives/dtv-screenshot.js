@@ -14,7 +14,7 @@ angular.module('risevision.displays.directives')
           $scope.screenshotState = function (display) {
             var statusFilter = $filter('status');
 
-            if (display && displayFactory.showLicenseRequired(display)) {
+            if (displayFactory.showLicenseRequired(display)) {
               return 'no-license';
             } else if (!display || displayService.statusLoading || screenshotFactory.screenshotLoading) {
               return 'loading';
