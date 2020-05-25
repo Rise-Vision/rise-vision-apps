@@ -2,9 +2,9 @@
 
 angular.module('risevision.schedules.services')
   .factory('scheduleFactory', ['$q', '$state', '$log', '$rootScope', 'schedule', 'scheduleTracker',
-    'processErrorCode', 'VIEWER_URL', 'HTML_PRESENTATION_TYPE', 'display', 'plansFactory',
+    'processErrorCode', 'VIEWER_URL', 'HTML_PRESENTATION_TYPE', 'display', 'plansFactory', 'userState',
     function ($q, $state, $log, $rootScope, schedule, scheduleTracker, processErrorCode,
-      VIEWER_URL, HTML_PRESENTATION_TYPE, display, plansFactory) {
+      VIEWER_URL, HTML_PRESENTATION_TYPE, display, plansFactory, userState) {
       var factory = {};
       var _hasSchedules;
       var _scheduleId;
@@ -21,6 +21,7 @@ angular.module('risevision.schedules.services')
         _scheduleId = undefined;
 
         factory.schedule = {
+          companyId: userState.getSelectedCompanyId(),
           content: [],
           distributeToAll: false,
           distribution: [],

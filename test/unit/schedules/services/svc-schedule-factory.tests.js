@@ -88,6 +88,13 @@ describe('service: scheduleFactory:', function() {
         showLicenseRequiredToUpdateModal: sinon.stub()
       };
     });
+    $provide.service('userState', function() {
+      return {
+        getSelectedCompanyId: sinon.stub().returns('companyId'),
+        getUsername: sinon.stub().returns('username'),
+        _restoreState: sinon.stub()
+      };
+    });
   }));
   var scheduleFactory, trackerCalled, updateSchedule, $state, returnList, scheduleListSpy, scheduleAddSpy, processErrorCode;
   var $rootScope, blueprintFactory, display, plansFactory;
@@ -128,7 +135,7 @@ describe('service: scheduleFactory:', function() {
   });
 
   it('should initialize',function(){
-    expect(scheduleFactory.schedule).to.deep.equal({content: [], distributeToAll: false, distribution: [], timeDefined: false});
+    expect(scheduleFactory.schedule).to.deep.equal({companyId: 'companyId',content: [], distributeToAll: false, distribution: [], timeDefined: false});
   });
 
   describe('newSchedule:', function() {
@@ -139,7 +146,7 @@ describe('service: scheduleFactory:', function() {
 
       expect(trackerCalled).to.equal('Add Schedule');
 
-      expect(scheduleFactory.schedule).to.deep.equal({content: [], distributeToAll: false, distribution: [], timeDefined: false});
+      expect(scheduleFactory.schedule).to.deep.equal({companyId: 'companyId', content: [], distributeToAll: false, distribution: [], timeDefined: false});
     });
 
     it('should not call tracker if param is true',function(){
@@ -250,7 +257,6 @@ describe('service: scheduleFactory:', function() {
 
     it('should check if distrubuted to free displays and show notice if true',function(done){
       updateSchedule = true;
-      scheduleFactory.schedule.companyId = 'companyId';
       scheduleFactory.schedule.distribution = ['display1'];
 
       scheduleFactory.addSchedule();
@@ -320,7 +326,6 @@ describe('service: scheduleFactory:', function() {
 
     it('should check if distrubuted to free displays and show notice if true',function(done){
       updateSchedule = true;
-      scheduleFactory.schedule.companyId = 'companyId';
       scheduleFactory.schedule.distribution = ['display1'];
 
       scheduleFactory.updateSchedule();
