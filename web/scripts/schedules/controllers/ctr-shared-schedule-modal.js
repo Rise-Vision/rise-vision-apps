@@ -9,7 +9,7 @@ angular.module('risevision.schedules.controllers')
    </iframe>\n\
 </div>\n\
 <div style="background:#f2f2f2;color:#020620;font-family:Helvetica;font-size:12px;padding:5px;text-align:center;">\n\
-   Powered by <a href="https://www.risevision.com" target="_blank">risevision.com</a>.\n\
+   Powered by <a href="https://www.risevision.com" target="_blank">Rise Vision</a>\n\
 </div>')
   .controller('SharedScheduleModalController', ['$scope', '$modalInstance', 'scheduleFactory', '$window',
     'SHARED_SCHEDULE_URL', 'SHARED_SCHEDULE_EMBED_CODE', 'scheduleTracker',
