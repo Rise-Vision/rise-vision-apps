@@ -25,7 +25,7 @@ angular.module('risevision.editor.services')
         };
 
         if (isHtmlTemplate) {
-          modalObject.templateUrl = 'partials/template-editor/more-info-modal.html';
+          modalObject.templateUrl = 'partials/components/confirm-modal/madero-confirm-modal.html';
           modalObject.windowClass = 'madero-style centered-modal display-license-required-message';
         } else {
           modalObject.templateUrl = 'partials/components/confirm-modal/confirm-modal.html';

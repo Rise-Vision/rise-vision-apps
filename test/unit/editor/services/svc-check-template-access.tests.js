@@ -62,7 +62,7 @@ describe('service: checkTemplateAccess:', function() {
     checkTemplateAccess(true)
     .then(function() {
       $modal.open.should.have.been.calledWithMatch({
-        templateUrl: 'partials/template-editor/more-info-modal.html',
+        templateUrl: 'partials/components/confirm-modal/madero-confirm-modal.html',
         controller: "confirmModalController",
         windowClass: 'madero-style centered-modal display-license-required-message'
       });

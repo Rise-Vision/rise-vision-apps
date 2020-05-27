@@ -180,7 +180,7 @@ describe("Services: plans factory", function() {
 
       expect($modal.open).to.have.been.calledOnce;
       expect($modal.open).to.have.been.calledWithMatch({
-        templateUrl: 'partials/template-editor/more-info-modal.html',
+        templateUrl: 'partials/components/confirm-modal/madero-confirm-modal.html',
         controller: "confirmModalController",
         windowClass: 'madero-style centered-modal'
       });

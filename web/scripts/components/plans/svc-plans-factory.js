@@ -202,7 +202,7 @@
 
         _factory.showLicenseRequiredToUpdateModal = function () {
           $modal.open({
-            templateUrl: 'partials/template-editor/more-info-modal.html',
+            templateUrl: 'partials/components/confirm-modal/madero-confirm-modal.html',
             controller: 'confirmModalController',
             windowClass: 'madero-style centered-modal',
             resolve: {
