@@ -178,7 +178,7 @@ describe('service: logoImageFactory', function() {
       logoImageFactory._canRemoveImage().then(function(){
         $modal.open.should.have.been.calledWithMatch({
           controller: "confirmModalController",
-          windowClass: 'primary-btn-danger madero-style centered-modal'
+          windowClass: 'madero-style centered-modal'
         });        
         done();
       }).catch(function(){
@@ -194,7 +194,7 @@ describe('service: logoImageFactory', function() {
       }).catch(function(){
         $modal.open.should.have.been.calledWithMatch({
           controller: "confirmModalController",
-          windowClass: 'primary-btn-danger madero-style centered-modal'
+          windowClass: 'madero-style centered-modal'
         });        
         done();
       });

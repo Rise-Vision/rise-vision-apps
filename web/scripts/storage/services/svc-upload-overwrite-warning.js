@@ -11,11 +11,11 @@ angular.module('risevision.storage.services')
           if (!factory.confirmOverwriteModal) {
             factory.confirmOverwriteModal = $modal.open({
               template: $templateCache.get(isMaderoStyle ?
-                'partials/template-editor/confirm-modal.html' :
+                'partials/components/confirm-modal/madero-confirm-danger-modal.html' :
                 'partials/components/confirm-modal/confirm-modal.html'),
               controller: 'confirmModalController',
               windowClass: isMaderoStyle ?
-                'primary-btn-danger madero-style centered-modal' : 'modal-custom confirm-overwrite-modal',
+                'madero-style centered-modal' : 'modal-custom confirm-overwrite-modal',
               resolve: {
                 confirmationTitle: function () {
                   return isMaderoStyle ? 'Are you sure you want to overwrite your files?' : 'Warning';

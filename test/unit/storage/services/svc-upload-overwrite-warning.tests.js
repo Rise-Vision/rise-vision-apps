@@ -22,7 +22,7 @@ describe('service: uploadOverwriteWarning', function() {
       var $templateCache = $injector.get('$templateCache');
 
       $templateCache.put('partials/components/confirm-modal/confirm-modal.html', 'confirm-modal');
-      $templateCache.put('partials/template-editor/confirm-modal.html', 'confirm-modal-madero');
+      $templateCache.put('partials/components/confirm-modal/madero-confirm-danger-modal.html', 'confirm-modal-madero');
     });
   });
 
@@ -83,7 +83,7 @@ describe('service: uploadOverwriteWarning', function() {
           expect($modal.open).to.have.been.called;
           expect($modal.open.getCall(0).args[0].template).to.equal('confirm-modal-madero');
           expect($modal.open.getCall(0).args[0].controller).to.equal('confirmModalController');
-          expect($modal.open.getCall(0).args[0].windowClass).to.equal('primary-btn-danger madero-style centered-modal');      
+          expect($modal.open.getCall(0).args[0].windowClass).to.equal('madero-style centered-modal');      
           expect($modal.open.getCall(0).args[0].resolve).to.be.ok;
 
           done();

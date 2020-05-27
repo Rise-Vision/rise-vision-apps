@@ -37,7 +37,7 @@ describe('directive: toolbar', function() {
     };
 
     $templateCache.put('partials/template-editor/toolbar.html', '<form><input type="text" ng-model="presentationName" class="presentation-name"></form>');
-    $templateCache.put('partials/template-editor/confirm-modal.html', '<p>modal</p>');
+    $templateCache.put('partials/components/confirm-modal/madero-confirm-danger-modal.html', '<p>modal</p>');
 
     $scope = $rootScope.$new();
     $scope.presentationName = 'presentationName';
@@ -150,7 +150,7 @@ describe('directive: toolbar', function() {
       $modal.open.should.have.been.calledWith({
         template: sinon.match.string,
         controller: 'confirmModalController',
-        windowClass: 'primary-btn-danger madero-style centered-modal',
+        windowClass: 'madero-style centered-modal',
         resolve: sinon.match.object
       });
 
