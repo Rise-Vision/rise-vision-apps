@@ -116,31 +116,31 @@
 
                   if (resp.message === 'Unencodable overwrite') {
                     return UploadURIService.getURI(fileItem.file, true)
-                    .then(uploadFile);
+                      .then(uploadFile);
                   }
 
                   FileUploader.notifyErrorItem(fileItem, resp.status);
                   $scope.status.message = resp.message;
                 });
 
-                function uploadFile(resp) {
-                  $rootScope.$emit('refreshSubscriptionStatus',
-                    'trial-available');
+              function uploadFile(resp) {
+                $rootScope.$emit('refreshSubscriptionStatus',
+                  'trial-available');
 
-                  fileItem.url = resp.message;
-                  fileItem.taskToken = resp.taskToken;
-                  fileItem.encodingFileName = resp.newFileName;
-                  fileItem.chunkSize =
-                    STORAGE_UPLOAD_CHUNK_SIZE;
+                fileItem.url = resp.message;
+                fileItem.taskToken = resp.taskToken;
+                fileItem.encodingFileName = resp.newFileName;
+                fileItem.chunkSize =
+                  STORAGE_UPLOAD_CHUNK_SIZE;
 
-                  chekFileType(fileItem);
+                chekFileType(fileItem);
 
-                  return uploadOverwriteWarning.checkOverwrite(resp).then(function () {
-                    FileUploader.uploadItem(fileItem);
-                  }).catch(function () {
-                    FileUploader.removeFromQueue(fileItem);
-                  });
-                }
+                return uploadOverwriteWarning.checkOverwrite(resp).then(function () {
+                  FileUploader.uploadItem(fileItem);
+                }).catch(function () {
+                  FileUploader.removeFromQueue(fileItem);
+                });
+              }
             };
 
             FileUploader.onBeforeUploadItem = function (item) {

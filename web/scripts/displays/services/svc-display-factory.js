@@ -206,7 +206,7 @@ angular.module('risevision.displays.services')
         return display && !display.playerProAuthorized && !userState.isRiseAdmin();
       };
 
-      factory.showLicenseUpdate = function() {
+      factory.showLicenseUpdate = function () {
         if (playerLicenseFactory.getProLicenseCount() > 0) {
           $state.go('apps.billing.home');
         } else {

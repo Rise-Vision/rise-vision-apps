@@ -125,7 +125,9 @@ angular.module('risevision.template-editor.directives')
               fileItem.encodingFileName = resp.newFileName;
               fileItem.chunkSize = STORAGE_UPLOAD_CHUNK_SIZE;
 
-              if (checkFileType(fileItem)) {return FileUploader.removeFromQueue(fileItem);}
+              if (checkFileType(fileItem)) {
+                return FileUploader.removeFromQueue(fileItem);
+              }
 
               return uploadOverwriteWarning.checkOverwrite(resp, true).then(function () {
                 FileUploader.uploadItem(fileItem);

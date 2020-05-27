@@ -15,7 +15,9 @@ angular.module('risevision.storage.services')
           .then(function (useEncoding) {
             var applicableService = useEncoding ? encoding : storage;
 
-            if (forceStorage) {applicableService = storage;}
+            if (forceStorage) {
+              applicableService = storage;
+            }
             return applicableService.getResumableUploadURI(file.name, file.type);
           })
           .then(function (resp) {

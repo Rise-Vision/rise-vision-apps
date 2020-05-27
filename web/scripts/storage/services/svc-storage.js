@@ -184,8 +184,8 @@ angular.module('risevision.storage.services')
           $log.debug('getting resumable upload URI: ', obj);
 
           storageAPILoader().then(function (storageApi) {
-            return storageApi.getResumableUploadURI(obj);
-          })
+              return storageApi.getResumableUploadURI(obj);
+            })
             .then(function (resp) {
               $log.debug('getting resumable upload URI finished', resp);
 
