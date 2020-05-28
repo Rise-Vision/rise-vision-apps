@@ -70,7 +70,7 @@ angular.module('risevision.apps')
           controller: 'WorkspaceController',
           params: {
             isLoaded: false,
-            skipAccessNotice: false
+            skipAccessNotice: true
           },
           resolve: {
             presentationInfo: ['canAccessApps', 'editorFactory', '$stateParams', 'checkTemplateAccess',
