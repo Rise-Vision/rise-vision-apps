@@ -40,12 +40,12 @@ var SharedTemplatesScenarios = function() {
     });
 
     it('should show modal title', function () {
-      expect(sharedTemplatesModalPage.getModalTitle().getText()).to.eventually.equal('Shared Templates');
+      expect(sharedTemplatesModalPage.getModalTitle().getText()).to.eventually.equal('Shared Presentations');
     });
 
     it('should show a search box', function () {
       expect(sharedTemplatesModalPage.getSearchFilter().isDisplayed()).to.eventually.be.true;
-      expect(sharedTemplatesModalPage.getSearchInput().getAttribute('placeholder')).to.eventually.equal('Search for Shared Templates');
+      expect(sharedTemplatesModalPage.getSearchInput().getAttribute('placeholder')).to.eventually.equal('Search for Shared Presentations');
     });
 
     it('should show a list of templates', function () {
