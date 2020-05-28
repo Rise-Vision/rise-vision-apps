@@ -37,7 +37,7 @@
   },
   "list": {
     "actions": {
-      "add": "Add Template",
+      "add": "Add From Template",
       "new": "New"
     },
     "empty": "You haven't created any Presentations yet.",
@@ -104,7 +104,7 @@
       "name": "Name",
       "playUntilDone": "Play Until Done Placeholder",
       "resolution": "Resolution",
-      "shareAsTemplate": "Share this Presentation as a Template with your Sub-Companies",
+      "shareAsTemplate": "Share this Presentation with your Sub-Companies",
       "width": "Width"
     },
     "title": "Presentation Properties",
@@ -136,8 +136,8 @@
   "sharedTemplates": {
     "name": "Name",
     "preview": "Preview",
-    "search": "Search for Shared Templates",
-    "title": "Shared Templates"
+    "search": "Search for Shared Presentations",
+    "title": "Shared Presentations"
   },
   "storeProduct": {
     "content": {
@@ -164,7 +164,7 @@
       "search": "Search for Templates",
       "start": "Start with this Template",
       "suggest": "Suggest a Template!",
-      "title": "Add a New Template"
+      "title": "Add From Template"
     }
   },
   "templatesLibrary": {
