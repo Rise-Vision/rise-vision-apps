@@ -2,7 +2,7 @@
   <div class="attribute-editor-row">
     <p ng-show="!hasValidAddress && !canEditCompany">Set an address to see the weather. Please contact your System Administrator to set an address to your company.</p>
     <p ng-show="!hasValidAddress && canEditCompany">Set an address to see the weather. Navigate to <a href="" ng-click="companySettingsFactory.openCompanySettings()">Company Settings</a>, enter your address and click Save.</p>
-    <p ng-show="hasValidAddress">This Template will show the weather for the Address of the Display it is playing on.</p>    
+    <p ng-show="hasValidAddress">This Presentation will show the weather for the Address of the Display it is playing on.</p>    
     <label class="u_margin-sm-top">Display weather in:</label>
     <div class="madero-radio">
       <input type="radio" ng-model="scale" value="F" id="farenheit" name="farenheit" ng-change="save()" aria-required="true" tabindex="1" required>
