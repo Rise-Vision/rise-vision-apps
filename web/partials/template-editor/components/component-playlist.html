@@ -46,7 +46,7 @@ rv-spinner rv-spinner-key="rise-playlist-templates-loader">
   <!-- "add-templates" view -->
   <div ng-show="view === 'add-templates'">
     <div class="playlist-templates-title active-search">
-      <label>Choose A Template</label>
+      <label>Choose A Presentation</label>
     </div>
     <div class="input-group templates-selector-search-box">
       <span class="input-group-addon" ng-click="searchTemplates()">
@@ -54,8 +54,8 @@ rv-spinner rv-spinner-key="rise-playlist-templates-loader">
       </span>
       <input id="te-playlist-search" type="text" class="form-control"
             ng-model="searchKeyword" ng-keyup="searchKeyPressed($event)"
-            placeholder="Search Templates"
-            aria-label="Search Templates">
+            placeholder="Search Presentations"
+            aria-label="Search Presentations">
       <span class="input-group-addon" ng-click="resetSearch()">
         <streamline-icon name="close" width="12" height="12"></streamline-icon>
       </span>
@@ -64,7 +64,7 @@ rv-spinner rv-spinner-key="rise-playlist-templates-loader">
     <div class="templates-selector te-scrollable-container active-search"
          scrolling-list="templatesFactory.load()">
       <div id="te-playlist-no-results" class="templates-selector-no-results" ng-show="!(templatesFactory.items.list.length > 0)">
-        No Templates found. To create a new Template <a ng-click="createNewTemplate()">click here</a>. 
+        No Presentations found. To create a new Presentation click here. <a ng-click="createNewTemplate()">click here</a>. 
       </div>
 
       <div class="row templates-row" ng-show="templatesFactory.items.list.length > 0"
@@ -90,7 +90,7 @@ rv-spinner rv-spinner-key="rise-playlist-templates-loader">
     <div class="playlist-action-button-bar">
       <div class="add-templates">
         <button id="te-playlist-add-template" class="btn btn-primary btn-block" ng-click="addTemplates()" ng-disabled="!canAddTemplates">
-          Add Template
+          Add Presentation
         </button>
       </div>
     </div>
