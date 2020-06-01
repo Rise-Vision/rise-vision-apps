@@ -140,11 +140,6 @@ var TemplateEditorPage = function() {
     // helper.clickWhenClickable(financialDataLicenseCloseButton, 'Financial Data License Close Button');
   }
 
-  this.dismissLicenseRequiredMessage = function() {
-    helper.wait(licenseRequiredMessage, 'Display License Required Message');
-    licenseRequiredMessage.sendKeys(protractor.Key.ESCAPE);
-  }
-
   this.selectComponent = function (selectorLabel) {
     var componentEditLink = element(by.xpath('//div[div/span[contains(text(), "' + selectorLabel + '")]]/div/a'));
 

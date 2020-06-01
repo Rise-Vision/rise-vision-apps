@@ -32,12 +32,6 @@ var PresentationListPage = function() {
     
     helper.wait(workspacePage.getWorkspaceContainer(), 'Workspace Container');
 
-    if (isNotSubscribed) {
-      helper.wait(workspacePage.getDisplayLicenseRequiredModal(), 'Display License Notification');
-      browser.sleep(500);
-      workspacePage.getDisplayLicenseRequiredCloseButton().click();
-    }
-
     browser.sleep(500);
   }
 
