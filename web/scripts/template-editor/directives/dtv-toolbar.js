@@ -48,7 +48,8 @@ angular.module('risevision.template-editor.directives')
 
           $scope.confirmDelete = function () {
             $scope.modalInstance = $modal.open({
-              template: $templateCache.get('partials/components/confirm-modal/madero-confirm-danger-modal.html'),
+              template: $templateCache.get(
+                'partials/components/confirm-modal/madero-confirm-danger-modal.html'),
               controller: 'confirmModalController',
               windowClass: 'madero-style centered-modal',
               resolve: {

@@ -157,7 +157,7 @@ angular.module('risevision.schedules.services')
       };
 
       factory.getItemTimeline = function (playlistItem) {
-        if(playlistItem.timeDefined){
+        if (playlistItem.timeDefined) {
           var timeline = TimelineFactory.getTimeline(
             playlistItem.useLocaldate,
             playlistItem.timeDefined,
@@ -174,10 +174,10 @@ angular.module('risevision.schedules.services')
             playlistItem.recurrenceMonthOfYear,
             playlistItem.recurrenceDaysOfWeek);
           return timelineDescription.updateLabel(timeline);
-        }else{
-          return "Always"
+        } else {
+          return 'Always';
         }
-      }
+      };
 
       return factory;
     }
