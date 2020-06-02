@@ -157,23 +157,26 @@ angular.module('risevision.schedules.services')
       };
 
       factory.getItemTimeline = function (playlistItem) {
-        var timeline = TimelineFactory.getTimeline(
-          playlistItem.useLocaldate,
-          playlistItem.timeDefined,
-          playlistItem.startDate,
-          playlistItem.endDate,
-          playlistItem.startTime,
-          playlistItem.endTime,
-          playlistItem.recurrenceType,
-          playlistItem.recurrenceFrequency,
-          playlistItem.recurrenceAbsolute,
-          playlistItem.recurrenceDayOfWeek,
-          playlistItem.recurrenceDayOfMonth,
-          playlistItem.recurrenceWeekOfMonth,
-          playlistItem.recurrenceMonthOfYear,
-          playlistItem.recurrenceDaysOfWeek);
-
-        return timelineDescription.updateLabel(timeline);
+        if(playlistItem.timeDefined){
+          var timeline = TimelineFactory.getTimeline(
+            playlistItem.useLocaldate,
+            playlistItem.timeDefined,
+            playlistItem.startDate,
+            playlistItem.endDate,
+            playlistItem.startTime,
+            playlistItem.endTime,
+            playlistItem.recurrenceType,
+            playlistItem.recurrenceFrequency,
+            playlistItem.recurrenceAbsolute,
+            playlistItem.recurrenceDayOfWeek,
+            playlistItem.recurrenceDayOfMonth,
+            playlistItem.recurrenceWeekOfMonth,
+            playlistItem.recurrenceMonthOfYear,
+            playlistItem.recurrenceDaysOfWeek);
+          return timelineDescription.updateLabel(timeline);
+        }else{
+          return "Always"
+        }
       }
 
       return factory;
