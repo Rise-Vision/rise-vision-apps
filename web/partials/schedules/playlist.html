@@ -20,6 +20,7 @@
 
         <div ng-click="manage(playlistItem)" class="name-container">
           <p class="playlist-item-name u_remove-bottom"><strong>{{playlistItem.name}}</strong></p>
+          <p class="playlist-item-name u_remove-bottom" timeline="playlistItem">Timeline: {{factory.getItemTimeline(playlistItem)}}</p>
           <div class="hidden-xs">
             <p class="playlist-item-reference text-muted u_remove-bottom" id="presentationNameCell" ng-if="playlistItem.type === 'presentation'" presentation-name="playlistItem.objectReference"></p>
             <p class="playlist-item-reference text-muted u_remove-bottom" ng-if="playlistItem.type === 'url'">{{playlistItem.objectReference}}</p>

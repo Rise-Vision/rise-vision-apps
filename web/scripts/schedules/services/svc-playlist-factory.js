@@ -4,9 +4,10 @@ angular.module('risevision.schedules.services')
   .constant('TYPE_URL', 'url')
   .constant('TYPE_PRESENTATION', 'presentation')
   .factory('playlistFactory', ['$q', 'scheduleFactory', 'scheduleTracker', 'presentationFactory', 'blueprintFactory',
-    'TYPE_URL', 'TYPE_PRESENTATION', 'HTML_PRESENTATION_TYPE',
+    'TYPE_URL', 'TYPE_PRESENTATION', 'HTML_PRESENTATION_TYPE', 'TimelineFactory',
+    'timelineDescription',
     function ($q, scheduleFactory, scheduleTracker, presentationFactory, blueprintFactory,
-      TYPE_URL, TYPE_PRESENTATION, HTML_PRESENTATION_TYPE) {
+      TYPE_URL, TYPE_PRESENTATION, HTML_PRESENTATION_TYPE, TimelineFactory, timelineDescription) {
       var DEFAULT_DURATION = 10;
       var factory = {};
 
@@ -154,6 +155,26 @@ angular.module('risevision.schedules.services')
 
         playlist.splice(newIndex, 0, playlist.splice(currIndex, 1)[0]);
       };
+
+      factory.getItemTimeline = function (playlistItem) {
+        var timeline = TimelineFactory.getTimeline(
+          playlistItem.useLocaldate,
+          playlistItem.timeDefined,
+          playlistItem.startDate,
+          playlistItem.endDate,
+          playlistItem.startTime,
+          playlistItem.endTime,
+          playlistItem.recurrenceType,
+          playlistItem.recurrenceFrequency,
+          playlistItem.recurrenceAbsolute,
+          playlistItem.recurrenceDayOfWeek,
+          playlistItem.recurrenceDayOfMonth,
+          playlistItem.recurrenceWeekOfMonth,
+          playlistItem.recurrenceMonthOfYear,
+          playlistItem.recurrenceDaysOfWeek);
+
+        return timelineDescription.updateLabel(timeline);
+      }
 
       return factory;
     }
