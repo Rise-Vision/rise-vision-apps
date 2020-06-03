@@ -23,6 +23,12 @@ describe('service: encoding:', function() {
         _restoreState: function(){}
       };
     });
+
+    $provide.service('bigQueryLogging', function () {
+      return {
+        logEvent: function() {return;}
+      };
+    });
   }));
 
   beforeEach(function(){
@@ -31,15 +37,23 @@ describe('service: encoding:', function() {
       $timeout = $injector.get('$timeout');
 
       encoding = $injector.get('encoding');
-      setTimeout(function() {$httpBackend.flush();});
     });
   });
 
   describe('applicability', function() {
-    console.log('service: encoding: applicability');
+    it('should not be applicable if there was a previous error', function() {
+      encoding.disableEncoding();
+
+      return encoding.isApplicable('video/subtype')
+      .then(function(resp) {
+        expect(resp).to.be.false;
+      });
+    });
+
     it('should be applicable if file is video', function() {
       $httpBackend.when('HEAD', /.*encoding/).respond(200, {});
 
+      setTimeout($httpBackend.flush, 0);
       return encoding.isApplicable('video/subtype')
       .then(function(resp) {
         expect(resp).to.be.ok;
@@ -67,6 +81,7 @@ describe('service: encoding:', function() {
     it('should not be applicable if master switch is off', function() {
       $httpBackend.when('HEAD', /.*encoding/).respond(403, {});
 
+      setTimeout($httpBackend.flush, 0);
       return encoding.isApplicable('video/subtype')
       .then(function(resp) {
         expect(resp).to.not.be.ok;
@@ -76,7 +91,6 @@ describe('service: encoding:', function() {
   });
 
   describe('upload uri', function() {
-    console.log('service: encoding: upload uri');
     it('should retrieve encoder upload uri from storage server api', function() {
       $httpBackend.when('HEAD', /.*encoding/).respond(200, {});
 
@@ -88,7 +102,6 @@ describe('service: encoding:', function() {
   });
 
   describe('task status checks', function() {
-    console.log('service: encoding: ');
     var taskToken = '12345';
 
     var item = {
@@ -135,8 +148,9 @@ describe('service: encoding:', function() {
 
       setTimeout(function() {
         mockResp.respond(200, statusResponse); // set second request success
-        setTimeout(function() {$timeout.flush();}, 5);
-        setTimeout(function() {$httpBackend.flush();}, 10);
+        setTimeout(function() {try{$httpBackend.flush();}catch(e){}}, 5);
+        setTimeout(function() {try{$timeout.flush();}catch(e){}}, 10);
+        setTimeout(function() {try{$httpBackend.flush();}catch(e){}}, 15);
       }, 50);
 
       function onProgress(pct) {
@@ -151,7 +165,6 @@ describe('service: encoding:', function() {
   });
 
   describe('file acceptance', function() {
-    console.log('service: encoding: file acceptance');
     it('should accept the file after encoding', function() {
       $httpBackend.when('HEAD', /.*encoding/).respond(200, {});
 

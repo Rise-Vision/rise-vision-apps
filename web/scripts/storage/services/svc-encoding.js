@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('risevision.storage.services')
-  .service('encoding', ['ENCODING_MASTER_SWITCH_URL', '$q', '$log', '$http', 'storageAPILoader', 'userState',
-    '$timeout',
-    function (switchURL, $q, $log, $http, storageAPILoader, userState, $timeout) {
+  .service('encoding', ['ENCODING_MASTER_SWITCH_URL', '$q', '$log', '$http', 'storageAPILoader', 'userState', 'bigQueryLogging', '$timeout',
+    function (switchURL, $q, $log, $http, storageAPILoader, userState, bigQueryLogging, $timeout) {
       $log.debug('Loading encoding service');
       var masterSwitchPromise = $http({
         method: 'HEAD',
@@ -11,9 +10,16 @@ angular.module('risevision.storage.services')
       });
 
       var service = {};
+      var disabled = false;
 
       service.isApplicable = function (fileType, fileName) {
         $log.debug('Checking encoding applicability for ' + fileType);
+
+        if (disabled) {
+          $log.debug('Encoding disabled due to previous error');
+          bigQueryLogging.logEvent('encoding disabled', fileName);
+          return $q.resolve(false);
+        }
 
         if (fileType.indexOf('video/') !== 0) {
           return $q.resolve(false);
@@ -32,6 +38,10 @@ angular.module('risevision.storage.services')
           }, function () {
             return false;
           });
+      };
+
+      service.disableEncoding = function () {
+        disabled = true;
       };
 
       service.getResumableUploadURI = function (fileName) {
