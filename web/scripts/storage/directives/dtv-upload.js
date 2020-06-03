@@ -30,6 +30,10 @@
               FileUploader.removeFromQueue(item);
             };
 
+            $scope.someEncoding = function () {
+              return FileUploader.someEncoding();
+            };
+
             $scope.activeUploadCount = function () {
               return FileUploader.queue.filter(function (file) {
                 return !file.isUploaded || file.isError;

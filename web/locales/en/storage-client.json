@@ -116,5 +116,6 @@
   "upload-status": "Upload Status",
   "uploading": "Uploading {{filename}}",
   "uploading-count-files": "Uploading {{count}} files",
+  "uploading-count-files-encoding": "Uploading and optimizing files - Depending on the size of your files, this might take a moment",
   "uploading-one-file": "Uploading 1 file"
 }

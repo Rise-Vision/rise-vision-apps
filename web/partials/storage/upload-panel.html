@@ -12,7 +12,8 @@
             <i class="fa" ng-class="{false: 'fa-chevron-up', true:'fa-chevron-down'}[!isCollapsed]"></i>
           </span>
           <p>
-            <strong translate="storage-client.uploading-count-files"></strong>
+            <strong ng-show="someEncoding()" translate="storage-client.uploading-count-files-encoding"></strong>
+            <strong ng-show="!someEncoding()" translate="storage-client.uploading-count-files"></strong>
             <!--
             TODO: To FIX: activeUploadCount does not take into account all files being uploaded but just the queue size of 10
             <strong translate="storage-client.upload-status"></strong>:
