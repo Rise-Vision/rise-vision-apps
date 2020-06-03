@@ -210,6 +210,7 @@ angular.module('risevision.storage.services')
             onError: function (e) {
               svc.notifyErrorItem(item, e.status);
               svc.notifyCompleteItem(item);
+              encoding.disableEncoding();
             },
             onProgress: function (bytesUploaded, bytesTotal) {
               var pct = (bytesUploaded / bytesTotal * 100).toFixed(2);
@@ -237,6 +238,7 @@ angular.module('risevision.storage.services')
                 .then(null, function (e) {
                   svc.notifyErrorItem(item);
                   svc.notifyCompleteItem(item);
+                  encoding.disableEncoding();
                 });
             }
           });
