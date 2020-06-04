@@ -62,6 +62,12 @@ describe('Services: uploader', function() {
       expect(uploader.queue.length).to.equal(2);
     });
 
+    it('should indicate whether some files are to be encoded', function () {
+      uploader.addToQueue([{ taskToken: 'abc', file: {name: 'test1.txt', size: 200, type: 'text' }}]);
+      expect(uploader.queue.length).to.equal(1);
+      expect(uploader.someEncoding()).to.be.true;
+    });
+
     it('should add one file inside a folder to the queue', function () {
       uploader.addToQueue([{file:{name: 'folder/test1.txt', size: 200, type: 'text' }}]);
       expect(uploader.queue.length).to.equal(1);
