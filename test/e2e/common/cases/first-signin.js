@@ -94,14 +94,9 @@ var FirstSigninScenarios = function() {
         onboardingPage.getPickTemplateButtons().get(0).click();
       });
 
-      it('should show Display License Required message', function() {
-        helper.wait(templateEditorPage.getLicenseRequiredMessage(), 'Display License Required Message');
-
-        expect(templateEditorPage.getLicenseRequiredMessage().isDisplayed()).to.eventually.be.true;
-        templateEditorPage.dismissLicenseRequiredMessage();
-      });
-
       it('should go back to Onboarding after publishing the Template', function() {
+        helper.wait(templateEditorPage.getPublishButton(), 'Publish Button');
+
         helper.clickWhenClickable(templateEditorPage.getPublishButton(), 'Publish Button');
 
         helper.wait(onboardingPage.getOnboardingContainer(), 'Onboarding Page');

@@ -90,28 +90,6 @@ var TemplateAddScenarios = function() {
       expect(storeProductsModalPage.getSuggestTemplate().isDisplayed()).to.eventually.be.true;
     });
 
-    it('should show pricing component modal',function(){
-      browser.call(()=>console.log("should show pricing component modal"));
-      storeProductsModalPage.getAddBlankPresentation().click();
-
-      helper.wait(workspacePage.getDisplayLicenseRequiredModal(), 'Display License Notification');
-      browser.sleep(500);
-      workspacePage.getDisplayLicenseRequiredSubscribeButton().click();
-
-      browser.call(()=>console.log("waiting for pricing component frame"));
-      helper.wait(pricingComponentModalPage.getSubscribeButton(), 'Pricing Component Modal');
-      browser.call(()=>console.log("subscribing"));
-    });
-
-    it('should initialize purchase flow', function() {
-      browser.call(()=>console.log("waiting for getSubscribeButton"));
-      helper.wait(pricingComponentModalPage.getSubscribeButton(), 'Subscribe Button');
-
-      expect(pricingComponentModalPage.getSubscribeButton().isDisplayed()).to.eventually.be.true;
-
-      // Note: No purchase here; we test purchase subscription and adding a template in other tests
-    });
-
   });
 };
 module.exports = TemplateAddScenarios;
