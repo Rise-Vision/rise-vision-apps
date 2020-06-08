@@ -18,6 +18,7 @@ angular.module('risevision.template-editor.directives')
             $scope.isMultiline = $scope.getBlueprintData($scope.componentId, 'multiline');
             var value = $scope.getAvailableAttributeData($scope.componentId, 'value');
             var fontsize = $scope.getAvailableAttributeData($scope.componentId, 'fontsize');
+            var fontName = $scope.getAvailableAttributeData($scope.componentId, 'fontName');
             var minfontsize = $scope.getAvailableAttributeData($scope.componentId, 'minfontsize');
             var maxfontsize = $scope.getAvailableAttributeData($scope.componentId, 'maxfontsize');
 
@@ -31,6 +32,7 @@ angular.module('risevision.template-editor.directives')
 
             $scope.value = value;
             $scope.fontsize = fontsizeInt;
+            $scope.fontName = fontName;
             $scope.showFontSize = !!fontsizeInt;
 
             $timeout(function () {
@@ -40,6 +42,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.save = function () {
             $scope.setAttributeData($scope.componentId, 'value', $scope.value);
+            $scope.setAttributeData($scope.componentId, 'fontName', $scope.fontName);
 
             if ($scope.showFontSize) {
               $scope.setAttributeData($scope.componentId, 'fontsize', $scope.fontsize);
