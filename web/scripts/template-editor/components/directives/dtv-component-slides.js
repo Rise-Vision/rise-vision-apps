@@ -33,7 +33,9 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.saveDuration = function () {
-            $scope.setAttributeData($scope.componentId, 'duration', $scope.duration);
+            if($scope.duration > 0){
+              $scope.setAttributeData($scope.componentId, 'duration', $scope.duration);
+            }
           };
 
           $scope.saveSrc = function () {
