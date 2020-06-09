@@ -1,25 +1,11 @@
 <div class="attribute-editor-component">
   <div class="attribute-editor-row">
     <label>Text:</label>
-    <input ng-hide="isMultiline" id="text-component-input" type="text" class="form-control" ng-model="value"
-      placeholder="Enter your text" ng-change="save()">
+    <input ng-hide="isMultiline" id="text-component-input" type="text" class="form-control" ng-model="value" placeholder="Enter your text" ng-change="save()">
     <p ng-show="isMultiline" class="text-sm">Hit enter to add a line break.</p>
     <div ng-show="isMultiline" class="row">
       <div class="col-xs-12">
-        ​<textarea id="text-component-input-multiline" class="form-control resize-vertical" rows="2" ng-model="value"
-          placeholder="Enter your text" ng-change="save()"></textarea>
-      </div>
-    </div>
-  </div>
-  <div class="attribute-editor-row">
-    <div>
-      <label class="u_margin-md-top">Font:</label>
-      <div class="row">
-        <select id="text-component-fontname" class="form-control" ng-model="fontName" aria-required="true" tabindex="1" ng-change="save()">
-          <option value="" ng-show="false">Select Font</option>
-          <option value="arial">Arial</option>
-          <option value="helvetica">Helvetica</option>
-        </select>
+        ​<textarea id="text-component-input-multiline" class="form-control resize-vertical" rows="2" ng-model="value" placeholder="Enter your text" ng-change="save()"></textarea>
       </div>
     </div>
   </div>
