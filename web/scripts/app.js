@@ -58,7 +58,8 @@ angular.module('risevision.apps', [
     'risevision.widgets.twitter',
     'risevision.template-editor.services',
     'risevision.template-editor.directives',
-    'risevision.template-editor.controllers'
+    'risevision.template-editor.controllers',
+    'ngQuill'
   ])
   // Set up our mappings between URLs, templates, and controllers
   .config(['$stateProvider',
@@ -124,6 +125,9 @@ angular.module('risevision.apps', [
       $localStorageProvider.setKeyPrefix('RiseVision-');
     }
   ])
+  .config(['ngQuillConfigProvider', function (ngQuillConfigProvider) {
+    ngQuillConfigProvider.set();
+  }])
   .run(['$rootScope', '$state', '$modalStack', 'userState', 'displayFactory', '$window',
     function ($rootScope, $state, $modalStack, userState, displayFactory, $window) {
 

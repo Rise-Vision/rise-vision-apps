@@ -32,6 +32,7 @@ angular.module('risevision.template-editor.directives')
             $scope.value = value;
             $scope.fontsize = fontsizeInt;
             $scope.showFontSize = !!fontsizeInt;
+            $scope.text = 'Test Text';
 
             $timeout(function () {
               $window.dispatchEvent(new Event('resize'));
@@ -44,6 +45,23 @@ angular.module('risevision.template-editor.directives')
             if ($scope.showFontSize) {
               $scope.setAttributeData($scope.componentId, 'fontsize', $scope.fontsize);
             }
+          };
+
+          $scope.modelJSON = { ops: [
+            { insert: 'Test' },
+            { insert: 'Text!', attributes: { bold: true } },
+            { insert: '\n' }
+          ]};
+
+          $scope.editorCreated = function (editor) {
+            console.log(editor);
+          };
+          $scope.contentChanged = function (editor, html, text, content, delta, oldDelta, source) {
+            console.log('editor: ', editor, 'html: ', html, 'text:', text, 'content:', content, 'delta: ', delta, 'oldDelta:', oldDelta, 'source:', source);
+          };
+
+          $scope.selectionChanged = function (editor, range, oldRange, source) {
+            console.log('editor: ', editor, 'range: ', range, 'oldRange:', oldRange, 'source:', source);
           };
 
           $scope.registerDirective({
