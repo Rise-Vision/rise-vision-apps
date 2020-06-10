@@ -14,6 +14,7 @@
     "@polymer/polymer": "^3.2.0",
     "@shopify/draggable": "1.0.0-beta.8",
     "bower": "^1.5.3",
+    "ng-quill": "^4.5.3",
     "pricing-data-component": "github:Rise-Vision/pricing-data-component",
     "pricing-grid-component": "github:Rise-Vision/pricing-grid-component",
     "pricing-selector-component": "github:Rise-Vision/pricing-selector-component",
