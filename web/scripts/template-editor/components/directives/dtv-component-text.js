@@ -32,6 +32,7 @@ angular.module('risevision.template-editor.directives')
             $scope.value = value;
             $scope.fontsize = fontsizeInt;
             $scope.showFontSize = !!fontsizeInt;
+            $scope.text = 'Test Text';
 
             $timeout(function () {
               $window.dispatchEvent(new Event('resize'));
