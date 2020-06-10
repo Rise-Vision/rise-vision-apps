@@ -21,6 +21,13 @@
     </div>
   </div>
   <div class="attribute-editor-row">
-      <ng-quill-editor ng-model="text"></ng-quill-editor>
-  </div>
+      <ng-quill-editor format="object" ng-model="modelJSON" placeholder="'override default placeholder'" on-content-changed="contentChanged(
+        editor,
+        html,
+        text,
+        content,
+        delta,
+        oldDelta,
+        source
+      )" on-selection-changed="selectionChanged(editor, range, oldRange, source)"></ng-quill-editor>  </div>
 </div>

@@ -47,6 +47,20 @@ angular.module('risevision.template-editor.directives')
             }
           };
 
+          $scope.modelJSON = { ops: [
+            { insert: 'Hello ' },
+            { insert: 'World!', attributes: { bold: true } },
+            { insert: '\n' }
+          ]};
+
+          $scope.contentChanged = function (editor, html, text, content, delta, oldDelta, source) {
+            console.log('editor: ', editor, 'html: ', html, 'text:', text, 'content:', content, 'delta: ', delta, 'oldDelta:', oldDelta, 'source:', source);
+          };
+
+          $scope.selectionChanged = function (editor, range, oldRange, source) {
+            console.log('editor: ', editor, 'range: ', range, 'oldRange:', oldRange, 'source:', source);
+          };
+
           $scope.registerDirective({
             type: 'rise-text',
             iconType: 'streamline',
