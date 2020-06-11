@@ -58,6 +58,7 @@ angular.module('risevision.template-editor.directives')
           };
           $scope.contentChanged = function (editor, html, text, content, delta, oldDelta, source) {
             console.log('editor: ', editor, 'html: ', html, 'text:', text, 'content:', content, 'delta: ', delta, 'oldDelta:', oldDelta, 'source:', source);
+            console.log('CONTENTTTT', JSON.stringify(content));
           };
 
           $scope.selectionChanged = function (editor, range, oldRange, source) {
