@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html ng-app="risevision.apps" itemscope itemtype="http://schema.org/WebApplication" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
 <head lang="en">
-  <script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.2.10/webcomponents-loader.js"></script>
   <base href="/">
   <meta name="fragment" content="!">
   <meta charset="UTF-8">
@@ -57,10 +56,6 @@
   <common-header nav-options="navOptions" nav-selected="navSelected" ng-controller="AppCtrl"></common-header>
 
   <div ui-view></div>
-
-  <!-- external libraries -->
-  <script src="https://js.chargebee.com/v2/chargebee.js" async></script>
-  <script src="https://js.stripe.com/v3/" async></script>
 
   <!-- build:js js/website.min.js -->
   <script src="/pricing-component.js"></script>
@@ -594,5 +589,10 @@
   <script src="scripts/widgets/twitter/controllers/ctr-twitter-settings.js"></script>
 
   <!-- endbuild -->
+
+  <!-- external libraries -->
+  <script src="https://js.chargebee.com/v2/chargebee.js" async></script>
+  <script src="https://js.stripe.com/v3/" async></script>
+  <script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.2.10/webcomponents-loader.js" async></script>
 </body>
 </html>
