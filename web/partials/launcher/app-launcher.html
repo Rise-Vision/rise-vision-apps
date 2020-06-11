@@ -12,7 +12,7 @@
 
       <div class="col-sm-4">
         <button id="presentationAddButton" class="btn btn-link pull-right visible-lg" ng-click="editorFactory.addPresentationModal()">{{'editor-app.list.actions.add' |translate}} <i class="fa fa-plus icon-right"></i></button>
-        <h3><a ui-sref="apps.editor.list"><img src="https://s3.amazonaws.com/Rise-Images/Icons/presentations-icon.png" class="u_margin-right">{{'editor-app.list.title' |translate}}</a></h3>
+        <h3><a ui-sref="apps.editor.list"><img loading="lazy" src="https://s3.amazonaws.com/Rise-Images/Icons/presentations-icon.png" class="u_margin-right">{{'editor-app.list.title' |translate}}</a></h3>
         <button class="btn btn-default btn-sm btn-block hidden-lg" ng-click="editorFactory.addPresentationModal()">{{'editor-app.list.actions.add' |translate}} <i class="fa fa-plus icon-right"></i></button>
           <div id="presentationsList" class="scrollable-list" rv-spinner rv-spinner-key="presentation-list-loader" rv-spinner-start-active="1"> 
 
@@ -37,7 +37,7 @@
 
       <div class="col-sm-4">
         <a id="scheduleAddButton" class="btn btn-link pull-right visible-lg" ui-sref="apps.schedules.add">{{ 'schedules-app.actions.new' | translate }} <i class="fa fa-plus icon-right"></i></a>
-        <h3><a ui-sref="apps.schedules.list"><img src="https://s3.amazonaws.com/Rise-Images/Icons/schedules-icon.png" class="u_margin-right">{{'schedules-app.title' | translate}}</a></h3>
+        <h3><a ui-sref="apps.schedules.list"><img loading="lazy" src="https://s3.amazonaws.com/Rise-Images/Icons/schedules-icon.png" class="u_margin-right">{{'schedules-app.title' | translate}}</a></h3>
         <a class="btn btn-default btn-sm btn-block hidden-lg" ui-sref="apps.schedules.add">{{ 'schedules-app.actions.new' | translate }} <i class="fa fa-plus icon-right"></i></a>
           <div id="schedulesList" class="scrollable-list" rv-spinner rv-spinner-key="schedules-list-loader" rv-spinner-start-active="1"> 
 
@@ -62,7 +62,7 @@
 
       <div class="col-sm-4">
         <a id="displayAddButton" class="btn btn-link pull-right visible-lg" ng-click="displayFactory.addDisplayModal()">{{ 'displays-app.actions.new' | translate }} <i class="fa fa-plus icon-right"></i></a>
-        <h3><a ui-sref="apps.displays.list"><img src="https://s3.amazonaws.com/Rise-Images/Icons/displays-icon.png" class="u_margin-right">{{ 'displays-app.title' | translate}}</a></h3>
+        <h3><a ui-sref="apps.displays.list"><img loading="lazy" src="https://s3.amazonaws.com/Rise-Images/Icons/displays-icon.png" class="u_margin-right">{{ 'displays-app.title' | translate}}</a></h3>
         <a class="btn btn-default btn-sm btn-block hidden-lg" ng-click="displayFactory.addDisplayModal()">{{ 'displays-app.actions.new' | translate }} <i class="fa fa-plus icon-right"></i></a>
           <div id="displaysList" class="scrollable-list" rv-spinner rv-spinner-key="displays-list-loader" rv-spinner-start-active="1"> 
 
