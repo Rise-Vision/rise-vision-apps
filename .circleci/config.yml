@@ -147,7 +147,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: NODE_ENV=stage npm run ci-build
+      - run: NODE_ENV=prod npm run ci-build
       - run: ssh -o StrictHostKeyChecking=no apps@webserver-stage.risevision.com 'mkdir -p /rise-front-end/apps';
       # We have 10 stage environments, apps-stage-0.risevision.com to apps-stage-9.risevision.com
       # To deploy to one of these environments a tag must be added to the commit message. For instance, [stage-0] for apps-stage-0.risevision.com.

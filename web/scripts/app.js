@@ -124,8 +124,9 @@ angular.module('risevision.apps', [
       $localStorageProvider.setKeyPrefix('RiseVision-');
     }
   ])
-  .run(['$rootScope', '$state', '$modalStack', 'userState', 'displayFactory', '$window',
-    function ($rootScope, $state, $modalStack, userState, displayFactory, $window) {
+  .run(['$rootScope', '$state', '$modalStack', 'userState', 'displayFactory', '$window', 'userAuthFactory',
+    function ($rootScope, $state, $modalStack, userState, displayFactory, $window, userAuthFactory) {
+      userAuthFactory.authenticate(false);
 
       if ($window.Stretchy) {
         $window.Stretchy.selectors.filter = '.input-stretchy, .input-stretchy *';
