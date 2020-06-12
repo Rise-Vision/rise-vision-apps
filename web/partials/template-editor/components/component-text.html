@@ -1,4 +1,36 @@
 <div class="attribute-editor-component">
   <div class="attribute-editor-row">
-      <ng-quill-editor ng-model="richText" placeholder="'override default placeholder'" on-editor-created="editorCreated(editor)" on-content-changed="save()" on-selection-changed="save()"></ng-quill-editor>  </div>
+      <ng-quill-editor ng-model="richText" placeholder="'override default placeholder'" on-editor-created="editorCreated(editor)" on-content-changed="save()" on-selection-changed="save()">
+      <ng-quill-toolbar>
+        <div>
+          <span class="ql-format-group">
+            <select class="ql-font">
+              <option value="sans-serif">sans-serif</option>
+              <option value="arial" selected>Arial</option>
+            </select>
+            <select class="ql-size">
+              <option value="10px">Small</option>
+              <option value="13px" selected>Normal</option>
+              <option value="18px">Large</option>
+              <option value="32px">Huge</option>
+            </select>
+          </span>
+          <span class="ql-format-group">
+            <button class="ql-bold" title="Bold"></button>
+            <button class="ql-italic" title="Italic"></button>
+            <button class="ql-underline" title="Underline"></button>
+          </span>
+          <span class="ql-format-group">
+            <button class="ql-align" value="" ng-attr-title="Left"></button>
+            <button class="ql-align" value="center" ng-attr-title="Center"></button>
+            <button class="ql-align" value="right" ng-attr-title="Right"></button>
+          </span>
+          <span class="ql-format-group">
+            <button class="ql-list" value="orderd" title="List"></button>
+            <button class="ql-list" value="bullet" title="Bullet"></button>
+            <button class="ql-clean" title="Clear Formatting"></button>
+          </span>
+        </div>
+      </ng-quill-toolbar>
+    </ng-quill-editor>  </div>
 </div>

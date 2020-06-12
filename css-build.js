@@ -11,6 +11,7 @@ var paths = {
   sass: ["./web/scss/**/*.scss", "./web/scss/*.scss"],
   appSass: "./web/scss/app.scss",
   alignmentSass: "./web/scss/ui-components/alignment.scss",
+  quillCss: ["./node_modules/quill/dist/quill.core.css", "./node_modules/quill/dist/quill.snow.css"],
   tmpFonts: "./web/tmp/fonts",
   tmpCss: "./web/tmp/css",
   distFonts: "./dist/fonts",
@@ -38,7 +39,13 @@ gulp.task("css-build-alignment", function () {
     .pipe(gulp.dest(paths.distCss));
 });
 
-gulp.task("css-build", ["css-build-alignment", "fonts-copy"], function() {
+gulp.task("css-build-quill", function () {
+  return gulp.src(paths.quillCss)
+    .pipe(gulp.dest(paths.tmpCss))
+    .pipe(gulp.dest(paths.distCss));
+});
+
+gulp.task("css-build", ["css-build-alignment", "css-build-quill", "fonts-copy"], function() {
   console.log("[SASS] recompiling".yellow);
   gulp.src(paths.appSass)
     .pipe(sass({

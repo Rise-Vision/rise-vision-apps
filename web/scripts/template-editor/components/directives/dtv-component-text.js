@@ -20,6 +20,8 @@ angular.module('risevision.template-editor.directives')
             var fontsize = $scope.getAvailableAttributeData($scope.componentId, 'fontsize');
             var minfontsize = $scope.getAvailableAttributeData($scope.componentId, 'minfontsize');
             var maxfontsize = $scope.getAvailableAttributeData($scope.componentId, 'maxfontsize');
+            var richText = $scope.getAvailableAttributeData($scope.componentId, 'richText');
+
 
             var fontsizeInt = templateEditorUtils.intValueFor(fontsize, null);
             var minFontSize = templateEditorUtils.intValueFor(minfontsize, 1);
@@ -32,7 +34,7 @@ angular.module('risevision.template-editor.directives')
             $scope.value = value;
             $scope.fontsize = fontsizeInt;
             $scope.showFontSize = !!fontsizeInt;
-            $scope.text = 'Test Text';
+            $scope.richText = richText;
 
             $timeout(function () {
               $window.dispatchEvent(new Event('resize'));
@@ -47,7 +49,7 @@ angular.module('risevision.template-editor.directives')
             }
           };
 
-          $scope.quillValue = "";
+          $scope.quillValue = '';
 
           $scope.editorCreated = function (editor) {
             console.log(editor);
