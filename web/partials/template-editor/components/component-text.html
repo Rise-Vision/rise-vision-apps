@@ -1,35 +1,6 @@
 <div class="attribute-editor-component">
   <div class="attribute-editor-row">
-    <label>Text:</label>
-    <input ng-hide="isMultiline" id="text-component-input" type="text" class="form-control" ng-model="value" placeholder="Enter your text" ng-change="save()">
-    <p ng-show="isMultiline" class="text-sm">Hit enter to add a line break.</p>
-    <div ng-show="isMultiline" class="row">
-      <div class="col-xs-12">
-        ​<textarea id="text-component-input-multiline" class="form-control resize-vertical" rows="2" ng-model="value" placeholder="Enter your text" ng-change="save()"></textarea>
-      </div>
-    </div>
-  </div>
-  <div class="attribute-editor-row" ng-show="showFontSize">
-    <div>
-      <label class="u_margin-md-top">Font size:</label>
-      <div class="row">
-        <div class="col-xs-12">
-          <rzslider rz-slider-model="fontsize" rz-slider-options="sliderOptions"></rzslider>
-        </div>
-      </div>
-      <p class="range-value">{{ fontsize }}px</p>
-    </div>
-  </div>
-  <div class="attribute-editor-row">
-      <ng-quill-editor format="object" ng-model="modelJSON" placeholder="'override default placeholder'" on-editor-created="editorCreated(editor)" on-content-changed="contentChanged(
-        editor,
-        html,
-        text,
-        content,
-        delta,
-        oldDelta,
-        source
-      )" on-selection-changed="selectionChanged(editor, range, oldRange, source)">
+      <ng-quill-editor ng-model="richText" placeholder="'override default placeholder'" on-editor-created="editorCreated(editor)" on-content-changed="save()" on-selection-changed="save()">
       <ng-quill-toolbar>
         <div>
           <span class="ql-format-group">

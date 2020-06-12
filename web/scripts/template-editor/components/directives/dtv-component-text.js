@@ -20,6 +20,8 @@ angular.module('risevision.template-editor.directives')
             var fontsize = $scope.getAvailableAttributeData($scope.componentId, 'fontsize');
             var minfontsize = $scope.getAvailableAttributeData($scope.componentId, 'minfontsize');
             var maxfontsize = $scope.getAvailableAttributeData($scope.componentId, 'maxfontsize');
+            var richText = $scope.getAvailableAttributeData($scope.componentId, 'richText');
+
 
             var fontsizeInt = templateEditorUtils.intValueFor(fontsize, null);
             var minFontSize = templateEditorUtils.intValueFor(minfontsize, 1);
@@ -32,7 +34,7 @@ angular.module('risevision.template-editor.directives')
             $scope.value = value;
             $scope.fontsize = fontsizeInt;
             $scope.showFontSize = !!fontsizeInt;
-            $scope.text = 'Test Text';
+            $scope.richText = richText;
 
             $timeout(function () {
               $window.dispatchEvent(new Event('resize'));
@@ -41,24 +43,20 @@ angular.module('risevision.template-editor.directives')
 
           $scope.save = function () {
             $scope.setAttributeData($scope.componentId, 'value', $scope.value);
-
+            $scope.setAttributeData($scope.componentId, 'richText', $scope.richText);
             if ($scope.showFontSize) {
               $scope.setAttributeData($scope.componentId, 'fontsize', $scope.fontsize);
             }
           };
 
-          $scope.modelJSON = { ops: [
-            { insert: 'Test' },
-            { insert: 'Text!', attributes: { bold: true } },
-            { insert: '\n' }
-          ]};
+          $scope.quillValue = '';
 
           $scope.editorCreated = function (editor) {
             console.log(editor);
           };
           $scope.contentChanged = function (editor, html, text, content, delta, oldDelta, source) {
             console.log('editor: ', editor, 'html: ', html, 'text:', text, 'content:', content, 'delta: ', delta, 'oldDelta:', oldDelta, 'source:', source);
-            console.log('CONTENTTTT', JSON.stringify(content));
+            console.log('CONTENTTTT', $scope.richText);
           };
 
           $scope.selectionChanged = function (editor, range, oldRange, source) {
