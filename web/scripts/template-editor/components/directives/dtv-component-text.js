@@ -41,24 +41,20 @@ angular.module('risevision.template-editor.directives')
 
           $scope.save = function () {
             $scope.setAttributeData($scope.componentId, 'value', $scope.value);
-
+            $scope.setAttributeData($scope.componentId, 'quillValue', $scope.quillValue);
             if ($scope.showFontSize) {
               $scope.setAttributeData($scope.componentId, 'fontsize', $scope.fontsize);
             }
           };
 
-          $scope.modelJSON = { ops: [
-            { insert: 'Test' },
-            { insert: 'Text!', attributes: { bold: true } },
-            { insert: '\n' }
-          ]};
+          $scope.quillValue = "";
 
           $scope.editorCreated = function (editor) {
             console.log(editor);
           };
           $scope.contentChanged = function (editor, html, text, content, delta, oldDelta, source) {
             console.log('editor: ', editor, 'html: ', html, 'text:', text, 'content:', content, 'delta: ', delta, 'oldDelta:', oldDelta, 'source:', source);
-            console.log('CONTENTTTT', JSON.stringify(content));
+            console.log('CONTENTTTT', $scope.quillValue);
           };
 
           $scope.selectionChanged = function (editor, range, oldRange, source) {
