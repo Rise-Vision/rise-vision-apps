@@ -283,7 +283,11 @@ gulp.task("ngquill", function() {
 
 gulp.task("quilljs", function() {
   return gulp.src("node_modules/quill/dist/quill.js")
-    .pipe(gulp.dest("web/vendor/quill"));
+    .pipe(gulp.dest("web/vendor/quill"))
+});
+
+gulp.task('quill', function (cb) {
+  runSequence(['ngquill', 'quilljs'], cb);
 });
 
 gulp.task("html2js", function() {
@@ -333,7 +337,7 @@ gulp.task("config", function() {
 });
 
 gulp.task('build-pieces', function (cb) {
-  runSequence(["clean"], ['config', 'i18n-build', 'css-build', 'pricing', 'html2js', 'tus', 'ngquill', 'quilljs'], cb);
+  runSequence(["clean"], ['config', 'i18n-build', 'css-build', 'pricing', 'html2js', 'tus', 'quill'], cb);
 });
 
 gulp.task('build', function (cb) {
