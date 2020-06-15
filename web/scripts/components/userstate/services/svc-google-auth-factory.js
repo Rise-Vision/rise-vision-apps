@@ -21,7 +21,15 @@
 
               $log.debug('auth2.isSignedIn result:', authResult);
               if (authResult) {
-                deferred.resolve(authResult);
+                var profile = auth2.getAuthInstance().currentUser.get().getBasicProfile();
+
+                var user = {
+                  id: profile.getId(),
+                  email: profile.getEmail(),
+                  picture: profile.getImageUrl()
+                };
+
+                deferred.resolve(user);
               } else {
                 deferred.reject('Failed to authorize user (auth2)');
               }
@@ -39,7 +47,6 @@
           var deferred = $q.defer();
 
           _gapiAuthorize()
-            .then(getOAuthUserInfo)
             .then(function (oauthUserInfo) {
               if (userState._state.redirectState) {
                 urlStateService.redirectToState(userState._state.redirectState);
