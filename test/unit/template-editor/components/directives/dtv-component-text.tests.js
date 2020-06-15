@@ -59,6 +59,17 @@ describe('directive: templateComponentText', function() {
     expect($scope.value).to.equal(sampleValue);
   });
 
+  it('should set the richText value', function() {
+    var directive = $scope.registerDirective.getCall(0).args[0];
+    var sampleValue = "test text";
+    $scope.getAvailableAttributeData.returns(sampleValue);
+
+    directive.show();
+
+    expect($scope.componentId).to.equal("TEST-ID");
+    expect($scope.richText).to.equal(sampleValue);
+  });
+
   it('should load multiline attribute from blueprint', function() {
     $scope.getBlueprintData.returns(true);
     var directive = $scope.registerDirective.getCall(0).args[0];
