@@ -61,15 +61,10 @@ describe("Services: userState", function() {
       };
     });
     
-    $provide.factory("userInfoCache", function() {
-      return userInfoCache = {
-        removeAll: sinon.spy()
-      };
-    });
   }));
   
   var userState, companyState, userMethods, companyMethods, returnResult, 
-  localStorageService, userInfoCache, $broadcastSpy;
+  localStorageService, $broadcastSpy;
   
   beforeEach(function() {
     returnResult = true;
@@ -486,8 +481,6 @@ describe("Services: userState", function() {
       companyState.resetCompanyState = sinon.spy();
 
       userState._resetState();
-
-      userInfoCache.removeAll.should.have.been.called;
 
       expect(userState._state.user).to.deep.equal({});
       expect(userState._state.profile).to.deep.equal({});

@@ -24,8 +24,7 @@
       'risevision.common.components.scrolling-list',
       'risevision.common.config',
       'risevision.common.gapi', 'LocalStorageModule',
-      'risevision.core.cache',
-      'risevision.core.oauth2', 'risevision.core.company',
+      'risevision.core.company',
       'risevision.core.util', 'risevision.core.userprofile'
     ])
 

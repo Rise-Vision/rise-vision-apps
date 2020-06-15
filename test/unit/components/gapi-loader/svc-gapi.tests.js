@@ -158,18 +158,6 @@ describe("Services: gapi loader", function() {
     });
   });
 
-  describe("oauth2APILoader", function () {
-    it("should load", function(done) {
-      inject(function (oauth2APILoader, $window) {
-        expect(oauth2APILoader).to.be.ok;
-        oauth2APILoader().then(function () {
-          expect($window.gapi.client.oauth2).to.be.ok;
-          done();
-        }, done);
-      });
-    });
-  });
-  
   describe("coreAPILoader", function () {
     it("should load", function(done) {
       inject(function (coreAPILoader, $window) {

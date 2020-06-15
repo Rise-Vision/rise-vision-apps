@@ -6,10 +6,10 @@
     .value('PROFILE_PICTURE_URL',
       'https://www.gravatar.com/avatar/{emailMD5}?d=mm')
     .factory('userState', [
-      '$q', '$rootScope', '$window', '$log', '$location', 'userInfoCache',
+      '$q', '$rootScope', '$window', '$log', '$location',
       'getUserProfile', 'companyState', 'objectHelper',
       'localStorageService', 'rvTokenStore', 'md5', 'PROFILE_PICTURE_URL',
-      function ($q, $rootScope, $window, $log, $location, userInfoCache,
+      function ($q, $rootScope, $window, $log, $location,
         getUserProfile, companyState, objectHelper,
         localStorageService, rvTokenStore, md5, PROFILE_PICTURE_URL) {
         //singleton factory that represents userState throughout application
@@ -76,8 +76,6 @@
         };
 
         var _resetState = function () {
-          userInfoCache.removeAll();
-
           objectHelper.clearObj(_state.user);
           objectHelper.clearObj(_state.profile);
           _state.roleMap = {};
