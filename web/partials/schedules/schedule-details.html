@@ -13,7 +13,7 @@
 <div rv-spinner rv-spinner-key="schedule-loader" rv-spinner-start-active="0"></div>
 
 <div>
-  <form role="form" name="scheduleDetails" novalidate>
+  <form role="form" name="scheduleDetails" ng-submit="save()" novalidate>
     
     <schedule-fields></schedule-fields>
 
@@ -30,12 +30,12 @@
       <div>
       <span class="hidden-xs u_margin-right"><last-modified change-date="schedule.changeDate" changed-by="schedule.changedBy"></last-modified></span>
         <!-- Indicates a successful or positive action -->
-        <button type="submit" class="btn btn-primary" ng-click="save()" ng-disabled="scheduleDetails.$invalid || factory.savingSchedule" require-role="cp">
+        <button id="saveButton" type="submit" class="btn btn-primary" ng-disabled="scheduleDetails.$invalid || factory.savingSchedule" require-role="cp">
           {{ factory.savingSchedule ? ('common.saving' | translate) : ('common.save' | translate)}} 
           <i class="fa fa-check icon-right"></i>
         </button>
         <!-- Indicates cancel or non-destructive action -->
-        <button ui-sref="apps.schedules.list" class="btn btn-default">
+        <button type="button" ui-sref="apps.schedules.list" class="btn btn-default">
           {{'common.cancel' | translate}}
           <i class="fa fa-times icon-right"></i>
         </button>
