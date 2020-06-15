@@ -219,6 +219,9 @@ workflows:
       - test_build:
           requires:
             - dependencies
+          filters:
+            branches:
+              ignore: /(stage).*/
       - test_unit:
           requires:
             - test_build
@@ -309,7 +312,7 @@ workflows:
               only: master
       - deploy_staging:
           requires:
-            - test_build
+            - dependencies
           filters:
             branches:
               only: /(feature|fix|chore|stage).*/
