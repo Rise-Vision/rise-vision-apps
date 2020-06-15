@@ -11,6 +11,22 @@
       function ($rootScope, $q, $log, $window, $stateParams, auth2APILoader,
         uiFlowManager, userState, urlStateService) {
 
+        var _getUserProfile = function(authInstance) {
+          if (!authInstance.currentUser) {
+            return null;
+          }
+
+          var profile = authInstance.currentUser.get().getBasicProfile();
+
+          var user = {
+            id: profile.getId(),
+            email: profile.getEmail(),
+            picture: profile.getImageUrl()
+          };
+
+          return user;
+        };
+
         var _gapiAuthorize = function () {
           var deferred = $q.defer();
 
@@ -21,15 +37,8 @@
 
               $log.debug('auth2.isSignedIn result:', authResult);
               if (authResult) {
-                var profile = auth2.getAuthInstance().currentUser.get().getBasicProfile();
 
-                var user = {
-                  id: profile.getId(),
-                  email: profile.getEmail(),
-                  picture: profile.getImageUrl()
-                };
-
-                deferred.resolve(user);
+                deferred.resolve(_getUserProfile(auth2.getAuthInstance()));
               } else {
                 deferred.reject('Failed to authorize user (auth2)');
               }
