@@ -7,13 +7,13 @@
 
         <div class="pull-right">
           <span class="btn-group btn-group-sm">
-            <button class="btn btn-default" id="moveUpButton" ng-click="factory.movePlaylistItemUp(playlistItem)" ng-disabled="!factory.canPlaylistItemMoveUp(playlistItem)"><i class="fa fa-arrow-up"></i></button>
-            <button class="btn btn-default" id="moveDownButton" ng-click="factory.movePlaylistItemDown(playlistItem)" ng-disabled="!factory.canPlaylistItemMoveDown(playlistItem)"><i class="fa fa-arrow-down"></i></button>
+            <button type="button" class="btn btn-default" id="moveUpButton" ng-click="factory.movePlaylistItemUp(playlistItem)" ng-disabled="!factory.canPlaylistItemMoveUp(playlistItem)"><i class="fa fa-arrow-up"></i></button>
+            <button type="button" class="btn btn-default" id="moveDownButton" ng-click="factory.movePlaylistItemDown(playlistItem)" ng-disabled="!factory.canPlaylistItemMoveDown(playlistItem)"><i class="fa fa-arrow-down"></i></button>
           </span>
-          <button class="btn btn-sm btn-default" id="duplicateButton" ng-click="factory.duplicatePlaylistItem(playlistItem)">
+          <button type="button" class="btn btn-sm btn-default" id="duplicateButton" ng-click="factory.duplicatePlaylistItem(playlistItem)">
             <i class="fa fa-copy"></i>
           </button>
-          <button class="btn btn-sm btn-default" id="removeButton" ng-click="remove(playlistItem)">
+          <button type="button" class="btn btn-sm btn-default" id="removeButton" ng-click="remove(playlistItem)">
             <i class="fa fa-trash-o"></i>
           </button>
         </div>

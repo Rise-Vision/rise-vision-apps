@@ -63,6 +63,12 @@ var ScheduleAddScenarios = function() {
       expect(scheduleAddPage.getShareScheduleButton().isDisplayed()).to.eventually.be.true;
     });
 
+    it('should save the Schedule on Enter pressed', function() {
+      scheduleAddPage.getScheduleNameField().sendKeys(protractor.Key.ENTER);
+      helper.waitForElementTextToChange(scheduleAddPage.getSaveButton(),'Save', 'Schedules Suve Button');
+      expect(scheduleAddPage.getSaveButton().getText()).to.eventually.equal('Save');
+    });
+
     describe('Share Schedule cases:', function() {
       it('should open Share Schedule modal', function() {
         scheduleAddPage.getShareScheduleButton().click();
