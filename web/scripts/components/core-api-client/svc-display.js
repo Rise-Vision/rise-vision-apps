@@ -3,7 +3,6 @@
 
   angular.module('risevision.core.display', [
       'risevision.common.gapi',
-      'risevision.core.cache',
       'risevision.core.util'
     ])
 

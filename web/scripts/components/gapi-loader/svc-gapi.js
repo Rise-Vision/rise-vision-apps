@@ -161,12 +161,6 @@ angular.module('risevision.common.gapi', [
     }
   ])
 
-  .factory('oauth2APILoader', ['gapiClientLoaderGenerator',
-    function (gapiClientLoaderGenerator) {
-      return gapiClientLoaderGenerator('oauth2', 'v2');
-    }
-  ])
-
   .factory('coreAPILoader', ['CORE_URL', 'gapiClientLoaderGenerator',
     '$location',
     function (CORE_URL, gapiClientLoaderGenerator, $location) {

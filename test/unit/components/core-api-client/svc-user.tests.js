@@ -38,12 +38,8 @@ describe("User Profile: getUserProfile", function() {
       deffered.resolve(gapi);
       return deffered.promise;
     });
-    $provide.value("oauth2APILoader", function() {
-      var deffered = Q.defer();
-      deffered.resolve({});
-      return deffered.promise;
-    });
     $provide.value("CORE_URL", "");
+
   }));
 
   it("should exist", function(done) {

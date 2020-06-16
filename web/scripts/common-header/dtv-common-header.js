@@ -6,7 +6,6 @@ angular.module('risevision.common.header', [
     'risevision.common.account',
     'risevision.common.gapi',
     'risevision.common.config',
-    'risevision.core.cache',
     'risevision.core.company',
     'risevision.common.cookie',
     'risevision.common.header.directives',
@@ -14,7 +13,6 @@ angular.module('risevision.common.header', [
     'risevision.common.header.services',
     'risevision.common.i18n',
     'risevision.core.countries',
-    'risevision.core.oauth2',
     'risevision.store.authorization',
     'risevision.store.services',
     'risevision.common.geodata',
@@ -99,11 +97,11 @@ angular.module('risevision.common.header', [
   ])
 
   .directive('commonHeader', ['$rootScope', '$q', '$loading',
-    '$interval', 'oauth2APILoader', '$log',
+    '$interval', '$log',
     '$templateCache', 'userState', '$location', 'bindToScopeWithWatch',
     '$document', 'cookieTester', 'companyIcpFactory', 'ENV_NAME', '$window', 'APPS_URL',
     function ($rootScope, $q, $loading, $interval,
-      oauth2APILoader, $log, $templateCache, userState, $location,
+      $log, $templateCache, userState, $location,
       bindToScopeWithWatch, $document, cookieTester, companyIcpFactory,
       ENV_NAME, $window, APPS_URL) {
       return {
