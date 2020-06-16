@@ -10,7 +10,7 @@ angular.module('risevision.apps')
         .state('apps.launcher', {
           url: '?cid',
           abstract: true,
-          template: '<div class="container app-launcher" ui-view></div>'
+          template: '<div class="app-launcher" ui-view></div>'
         })
 
         .state('apps.launcher.home', {
@@ -29,6 +29,22 @@ angular.module('risevision.apps')
                     $state.go('apps.launcher.onboarding');
                   }
                 });
+              }
+            ]
+          }
+        })
+
+        .state('apps.launcher.apphome', {
+          url: '/apphome',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get(
+              'partials/launcher/app-home.html');
+          }],
+          controller: 'AppHomeCtrl',
+          resolve: {
+            canAccessApps: ['canAccessApps',
+              function (canAccessApps) {
+                return canAccessApps();
               }
             ]
           }
