@@ -275,8 +275,15 @@
 	}
 
 	.mobile-footer {
-		border-top: 1px solid $light-gray;		
-		padding-bottom: 10px;
-		padding-top: 10px;
+		padding-left: 20px;
+		padding-right: 20px;
+		.container {
+			padding: 20px 0px;
+			border-top: 1px solid $madero-gray;
+
+			.btn-default {
+				margin-bottom: 10px;
+			}
+		}
 	}
 }
