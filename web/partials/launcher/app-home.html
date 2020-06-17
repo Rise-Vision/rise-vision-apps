@@ -1,7 +1,9 @@
-<div id="app-home-container" class="madero-style">
+<div id="app-home-container" class="full-page-flex-container madero-style" common-header-height>
+
+<div class="scrollable-content">
 
 	<div class="row">
-		<div class="col-sm-12">
+		<div class="col-xs-12">
 			<in-app-messages></in-app-messages>
 			<weekly-templates></weekly-templates>
 		</div>
@@ -29,9 +31,18 @@
 
 	<div class="container">
 		<div class="schedule-embed">
-		   <iframe frameborder="0"
-		      src="https://viewer-test.risevision.com/?type=sharedschedule&id=73f5b08c-1fc1-431a-8034-a452233a95d0&env=embed">
+		   <iframe frameborder="0" src="https://viewer-test.risevision.com/?type=sharedschedule&id=73f5b08c-1fc1-431a-8034-a452233a95d0&env=embed">
 		   </iframe>
 		</div>
 	</div>
+</div>
+
+
+<div class="mobile-footer visible-xs">
+	<div class="container">
+	    <button type="button" class="btn btn-default btn-block">Edit Schedule</button> 
+		<button type="button" class="btn btn-primary btn-block">Share</button>	
+	</div>	
+ </div>
+
 </div>

@@ -211,27 +211,55 @@
 	}
 }
 
-#app-home-container {
-	padding-top: 10px;
-	padding-left: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
 
-	.action-buttons .btn {
-		min-width: 160px;
+.full-page-flex-container {
+	position: absolute;
+	top: var(--common-header-height);
+	bottom: 0;
+	left: 0;
+	right: 0;
+	display: flex;
+	flex-direction: column;
+	/* for Firefox */
+	min-height: 0;
+
+	.scrollable-content {
+		flex-grow: 1; 
+		overflow: auto;  
+		/* for Firefox */
+		min-height: 0;
+	}
+}
+
+#app-home-container {
+	.scrollable-content {
+		padding-top: 10px;
+		padding-left: 20px;
+		padding-right: 20px;
+		padding-bottom: 20px;
+
+		.action-buttons .btn {
+			min-width: 160px;
+		}
+
+		.schedule-embed {
+			position: relative;
+			padding-bottom: 56.25%;
+			border: 1px solid $light-gray;
+
+			iframe {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				left: 0px;
+				top: 0px;
+			}
+		}
 	}
 
-	.schedule-embed {
-		position: relative;
-		padding-bottom: 56.25%;
-		border: 1px solid $light-gray;
-
-		iframe {
-			position: absolute;
-			width: 100%;
-			height: 100%;
-			left: 0px;
-			top: 0px;
-		}
+	.mobile-footer {
+		border-top: 1px solid $light-gray;
+		padding-bottom: 10px;
+		padding-top: 10px;
 	}
 }
