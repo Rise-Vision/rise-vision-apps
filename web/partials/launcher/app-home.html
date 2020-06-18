@@ -11,35 +11,8 @@
 	<div class="row">
 		<div class="form-inline schedules-toolbar">
 			<span class="hidden-xs pull-right action-buttons">
-				<button type="button" class="btn btn-default">Edit Schedule</button>
-
-				<script>
-					var lookAtMe = document.getElementById('shareButton'),
-    				hone = new Hone({
-							classPrefix: 'madero-style tooltip-backdrop',
-							borderRadius: 4,
-							padding: '10px'
-						});
-				</script>
-
-				<script type="text/ng-template" id="myTooltipTemplate.html">
-					<span>
-						<strong>Communicate Everywhere</strong><br>
-						<span class="u_margin-md-top">
-							Keep your community connected anywhere they are. Share your message to digital signage, websites, personal computers, and more.
-						</span>
-						<span class="u_margin-md-top">
-							<a href="">Got it.</a>
-						</span>
-					</span>
-				</script>
-				<button id="shareButton" type="button" class="btn btn-primary"
-				onclick="hone.position(lookAtMe);hone.show()"
-				tooltip-template="'myTooltipTemplate.html'"
-				tooltip-placement="bottom" 
-				tooltip-class="madero-style"
-				tooltip-trigger="click"
-				>Share</button>
+				<button type="button" class="btn btn-default" ng-click="showTooltipOverlay=true;">Edit Schedule</button>
+				<button id="shareButton" type="button" class="btn btn-primary" tooltip-overlay is-showing="showTooltipOverlay" ng-click="dismiss()">Share</button>
 			</span>
 		  	<div class="form-group">
 			    <label for="schedule-selector">Preview A Schedule:</label>
