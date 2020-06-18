@@ -1473,20 +1473,21 @@ $short-phone-height: 570px;
 
   &.tooltip {
     opacity: 1;
-    margin-left: -50px;
+    margin-left: -100px;
     margin-top: 8px;
 
     .tooltip-inner {
       text-align: left;
-      padding: 9px;
+      padding: 20px;
       border: 1px solid rgb(153, 153, 153);
       box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
       opacity: 1;
+      max-width: 356px;
     }
 
     &.bottom .tooltip-arrow {
       margin-top: 1px;
-      margin-left: 50px;
+      margin-left: 100px;
     }
 
     /* styles for arrow border */
