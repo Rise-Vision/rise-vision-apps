@@ -38,6 +38,7 @@
     "oclazyload": "^1.1.0",
     "Sortable": "^1.4.2",
     "stretchy": "https://github.com/Rise-Vision/stretchy.git#gh-pages",
+    "tinymce": "4.5.7",
     "xmlToJSON.js": "^1.3.2",
     "moment": "^2.24.0",
     "angularjs-slider": "^7.0.0"
