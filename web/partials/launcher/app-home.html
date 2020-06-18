@@ -9,12 +9,12 @@
 	</div>
 
 	<div class="row">
-		<div id="errorBox" ng-if="apiError" class="text-danger u_padding-md" role="alert">
+		<div id="errorBox" ng-show="apiError" class="text-danger u_padding-md" role="alert">
 	      <i class="fa fa-times icon-left"></i>
 	      <strong>{{errorMessage}}</strong> {{apiError}}
 	    </div>
 
-		<div class="form-inline schedules-toolbar" ng-if="!apiError">
+		<div class="form-inline schedules-toolbar" ng-hide="apiError">
 			<span class="hidden-xs pull-right action-buttons">
 				<button type="button" class="btn btn-default">Edit Schedule</button>
 
@@ -55,7 +55,7 @@
 		</div>
 	</div>
 
-	<div class="container" ng-if="!apiError">
+	<div class="container" ng-hide="apiError">
 		<div class="schedule-embed">
 		   <iframe frameborder="0" ng-src="{{getEmbedUrl(selectedScheduleId)}}">
 		   </iframe>
@@ -63,7 +63,7 @@
 	</div>
 </div>
 
-<div class="mobile-footer visible-xs" ng-if="!apiError">
+<div class="mobile-footer visible-xs" ng-hide="apiError">
 	<div class="container">
 	    <button type="button" class="btn btn-default btn-block">Edit Schedule</button> 
 		<button type="button" class="btn btn-primary btn-block">Share</button>	
