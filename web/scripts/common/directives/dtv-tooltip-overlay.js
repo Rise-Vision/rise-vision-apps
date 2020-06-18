@@ -6,7 +6,7 @@ angular.module('risevision.apps.directives')
       return {
         restrict: 'A',
         scope: {
-          isShowing: '='
+          isShowing: '=tooltipOverlay'
         },
         terminal: true,
         priority: 1000,
@@ -15,6 +15,7 @@ angular.module('risevision.apps.directives')
           element.attr('tooltip-placement', 'bottom');
           element.attr('tooltip-class', 'madero-style');
           element.attr('tooltip-trigger', 'show');
+          element.attr('ng-click', 'dismiss()');
           element.removeAttr('tooltip-overlay'); //remove the attribute to avoid infinite loop
 
           return {
@@ -36,6 +37,8 @@ angular.module('risevision.apps.directives')
 
               $scope.dismiss = function() {
                 $scope.isShowing = false;
+
+                $scope.$emit('tooltipOverlay.dismissed');
               };
             }
           };
