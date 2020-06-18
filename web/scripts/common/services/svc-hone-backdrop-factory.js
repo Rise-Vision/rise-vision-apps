@@ -3,16 +3,16 @@
 angular.module('risevision.apps.services')
   .factory('honeBackdropFactory', ['$window', '$document',
     function ($window, $document) {
-      var service = {},
-        $body = angular.element($document[0].body),
-        preventDefault = function (e) {
-          e.preventDefault();
-        },
-        hone = new $window.Hone({
-          classPrefix: 'madero-style tooltip-backdrop',
-          borderRadius: 4,
-          padding: '10px'
-        });
+      var service = {};
+      var $body = angular.element($document[0].body);
+      var preventDefault = function (e) {
+        e.preventDefault();
+      };
+      var hone = new $window.Hone({
+        classPrefix: 'madero-style tooltip-backdrop',
+        borderRadius: 4,
+        padding: '10px'
+      });
 
       function preventScrolling() {
         $body.addClass('no-scrolling');
@@ -41,7 +41,7 @@ angular.module('risevision.apps.services')
         service.shouldPreventScrolling(false);
       };
 
-      service.shouldPreventScrolling = function (shouldPreventScrolling = true) {
+      service.shouldPreventScrolling = function (shouldPreventScrolling) {
         if (shouldPreventScrolling) {
           preventScrolling();
         } else {
