@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('risevision.apps.services')
-  .factory('honeBackdropFactory', ['$document',
-    function ($document) {
+  .factory('honeBackdropFactory', ['$window', '$document',
+    function ($window, $document) {
       var service = {},
         $body = angular.element($document[0].body),
         preventDefault = function (e) {
           e.preventDefault();
         },
-        hone = new Hone({
+        hone = new $window.Hone({
           classPrefix: 'madero-style tooltip-backdrop',
           borderRadius: 4,
           padding: '10px'
@@ -50,7 +50,7 @@ angular.module('risevision.apps.services')
       };
 
       service.reposition = function () {
-        if (hone.status === Hone.status.VISIBLE) {
+        if (hone.status === $window.Hone.status.VISIBLE) {
           hone.position();
         }
       };
