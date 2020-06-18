@@ -9,10 +9,11 @@
 	</div>
 
 	<div class="row">
-		<div id="errorBox" ng-show="apiError" class="text-danger u_padding-md" role="alert">
-	      <i class="fa fa-times icon-left"></i>
-	      <strong>{{errorMessage}}</strong> {{apiError}}
-	    </div>
+		<div class="col-xs-12">
+			<div id="errorBox" ng-show="apiError" class="alert alert-danger" role="alert">
+		      <strong>{{errorMessage}}</strong> {{apiError}}
+		    </div>
+		</div>
 
 		<div class="form-inline schedules-toolbar" ng-hide="apiError">
 			<span class="hidden-xs pull-right action-buttons">
