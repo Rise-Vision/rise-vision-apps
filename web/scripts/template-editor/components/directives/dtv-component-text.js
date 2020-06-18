@@ -15,112 +15,14 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.tinymceOptions = {
-            plugins: "code colorpicker textcolor wordcount",
-            skin_url: "//s3.amazonaws.com/rise-common/styles/tinymce/rise",
-            font_formats: getFontFormats(),
-            formats: {
-              fontsize: { inline: "span", split: false, styles: { fontSize: "%value" } },
-              lineHeight: { inline: "span", styles: { lineHeight: "%value" } },
-              paragraph: { block: "p", styles: { margin: "0" } }
-            },
-            content_css: _googleFontUrls,
-            style_formats_merge: true,
-            fontsize_formats: FONT_SIZES,
-            min_height: 175,
+            plugins: 'code colorpicker textcolor wordcount',
             menubar: false,
-            toolbar1: "fontselect fontsizeselect | " +
-              "forecolor backcolor | " +
-              "bold italic underline | " +
-              "alignleft aligncenter alignright alignjustify | " +
-              "bullist numlist indent outdent lineheight | " +
-              "removeformat code",
-            setup: function(editor) {
-              editor.addButton("lineheight", {
-                type: "listbox",
-                text: "Line Height",
-                title: "Line Height",
-                icon: false,
-                values: [
-                  {text:"Single", value: "1"},
-                  {text:"Double", value: "2"}
-                ],
-                onselect: function () {
-                  applyLineHeight(editor, this.value());
-                },
-                onPostRender: function () {
-                  _lineHeightTool = this;
-                }
-              });
-  
-              editor.on("init", function() {
-                var mceContainerDivWidth = document.querySelector(".mce-container-body").offsetWidth;
-                var placeholderWidth = _prefs.getInt("rsW");
-  
-                if (placeholderWidth > mceContainerDivWidth) {
-                  document.querySelector(".mce-edit-area iframe").contentDocument.body.style.width = placeholderWidth + "px";
-                } else {
-                  document.querySelector(".mce-edit-area iframe").style.width = placeholderWidth + "px";
-                }
-  
-                  addCustomFontsToFrame(editor);
-  
-                if (_isLoading) {
-                  addCustomFontsToDocument($scope.settings.additionalParams.customFonts.fonts);
-                    if(!$scope.settings.additionalParams.data) {
-                    editor.execCommand("FontName", false, "verdana,geneva,sans-serif");
-                    editor.execCommand("FontSize", false, "24px");
-                  }
-                    editor.formatter.apply("paragraph");
-                    editor.formatter.register("lineHeight", {inline : "span", styles : {lineHeight : "%value"}});
-                  _lineHeightTool.value("2");
-                  _lineHeightTool.value("1");
-                    applyLineHeight(editor, "1");
-                }
-                else {
-                  editor.selection.select(editor.getBody(), true);
-                  editor.selection.collapse(false);
-  
-                  if (_customFontToSelect) {
-                    editor.execCommand("FontName", false, _customFontToSelect.replace(/'/g, "\\'").toLowerCase() + ",sans-serif");
-                    _customFontToSelect = "";
-                  }
-                }
-  
-                _isLoading = false;
-              });
-  
-              editor.on("ExecCommand", function(args) {
-                initCommands(editor, args);
-              });
-  
-              editor.on("NodeChange", function() {
-                updateLineHeight(editor);
-              });
-  
-            },
-            init_instance_callback: function(editor) {
-              var oldApply = editor.formatter.apply,
-                oldRemove = editor.formatter.remove;
-                editor.formatter.apply = function apply(name, vars, node) {
-                var args = {
-                  command: name,
-                  value: vars.value
-                };
-  
-                oldApply(name, vars, node);
-                editor.fire("ExecCommand", args);
-              };
-  
-              editor.formatter.remove = function remove(name, vars, node) {
-                var args = {
-                  command: name,
-                  value: (vars && vars.value) ? vars.value : null
-                };
-  
-                oldRemove(name, vars, node);
-                editor.fire("ExecCommand", args);
-              };
-            }
+            toolbar1: 'fontselect fontsizeselect | ' +
+              'forecolor backcolor | ' +
+              'bold italic underline | ' +
+              'alignleft aligncenter alignright alignjustify | ' +
+              'bullist numlist indent outdent lineheight | ' +
+              'removeformat code'
           };
 
           function _load() {
