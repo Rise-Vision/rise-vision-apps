@@ -12,14 +12,18 @@ angular.module('risevision.apps.launcher.controllers')
         reverse: true,
       };
 
-      $scope.showTooltipOverlay = localStorageService.get(tooltipDismissedKey) !== true;
+      $scope.showTooltipOverlay = false;
+      $scope.showWeeklyTemplates = false;
 
-      if ($scope.showTooltipOverlay) {
-        var handler = $scope.$on('tooltipOverlay.dismissed', function() {
-          localStorageService.set(tooltipDismissedKey, true);
-          handler();
-        });        
-      }
+      var triggerOverlay = function () {
+        $scope.showTooltipOverlay = localStorageService.get(tooltipDismissedKey) !== true
+        if ($scope.showTooltipOverlay) {
+          var handler = $scope.$on('tooltipOverlay.dismissed', function() {
+            localStorageService.set(tooltipDismissedKey, true);
+            handler();
+          });        
+        }
+      };
 
       $scope.$watch('loadingItems', function (loading) {
         if (loading) {
@@ -47,6 +51,8 @@ angular.module('risevision.apps.launcher.controllers')
             $scope.schedules = result.items || [];
             if ($scope.schedules.length > 0) {
               $scope.selectedScheduleId = $scope.schedules[0].id;
+
+              triggerOverlay();
             }
           })
           .catch(function (e) {
@@ -56,6 +62,8 @@ angular.module('risevision.apps.launcher.controllers')
           })
           .finally(function () {
             $scope.loadingItems = false;
+
+            $scope.showWeeklyTemplates = !$scope.showTooltipOverlay;
           });
       };
 

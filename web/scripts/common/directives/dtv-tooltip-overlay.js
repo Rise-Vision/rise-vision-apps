@@ -22,6 +22,7 @@ angular.module('risevision.apps.directives')
               $compile(iElement)($scope);
 
               var digestWrapper = function() {
+                // trigger $digest cycle to reposition tooltip
                 $scope.$digest();
               };
 
