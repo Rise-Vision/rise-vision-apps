@@ -12,8 +12,6 @@ angular.module('risevision.apps.directives')
         priority: 1000,
         compile: function(element, attrs) {
           element.attr('tooltip-template', '"partials/launcher/share-tooltip.html"');
-          element.attr('tooltip-placement', 'bottom');
-          element.attr('tooltip-class', 'madero-style');
           element.attr('tooltip-trigger', 'show');
           element.attr('ng-click', 'dismiss()');
           element.removeAttr('tooltip-overlay'); //remove the attribute to avoid infinite loop
@@ -26,6 +24,8 @@ angular.module('risevision.apps.directives')
               $scope.$watch('isShowing', function() {
                 $timeout(function() {
                   if ($scope.isShowing) {
+                    if (element.is(":hidden")) { return; }
+
                     honeBackdropFactory.createForElement(element, {});
                     element.trigger('show');
                   } else {
