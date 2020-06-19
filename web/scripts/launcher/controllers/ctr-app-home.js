@@ -1,15 +1,25 @@
 'use strict';
 
 angular.module('risevision.apps.launcher.controllers')
-  .controller('AppHomeCtrl', ['$scope', 'schedule', '$loading', 'processErrorCode', '$log', '$sce',
-    'SHARED_SCHEDULE_URL',
-    function ($scope, schedule, $loading, processErrorCode, $log, $sce, SHARED_SCHEDULE_URL) {
+  .controller('AppHomeCtrl', ['$scope', 'localStorageService', 'schedule', '$loading', 'processErrorCode',
+    '$log', '$sce', 'SHARED_SCHEDULE_URL',
+    function ($scope, localStorageService, schedule, $loading, processErrorCode, $log, $sce, SHARED_SCHEDULE_URL) {
       $scope.schedules = [];
+      var tooltipDismissedKey = 'ShareTooltip.dismissed';
       var search = {
         sortBy: 'changeDate',
         count: 10,
         reverse: true,
       };
+
+      $scope.showTooltipOverlay = localStorageService.get(tooltipDismissedKey) !== true;
+
+      if ($scope.showTooltipOverlay) {
+        var handler = $scope.$on('tooltipOverlay.dismissed', function() {
+          localStorageService.set(tooltipDismissedKey, true);
+          handler();
+        });        
+      }
 
       $scope.$watch('loadingItems', function (loading) {
         if (loading) {

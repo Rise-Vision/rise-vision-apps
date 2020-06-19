@@ -71,6 +71,7 @@ var unitTestFiles = [
   "web/bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js",
   "web/bower_components/moment/moment.js",
   "web/bower_components/angularjs-slider/dist/rzslider.min.js",
+  "web/bower_components/hone/hone.js",
   "node_modules/widget-tester/mocks/translate-mock.js",
   "web/tmp/partials.js",
   "web/scripts/components/**/*.js",

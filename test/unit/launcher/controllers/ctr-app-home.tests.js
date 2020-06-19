@@ -23,6 +23,13 @@ describe('controller: AppHomeCtrl', function() {
           trustAsResourceUrl: sinon.stub().returns('http://trustedUrl')
         }
       });
+      $provide.service('localStorageService', function() {
+        return {
+          get: sinon.stub(),
+          set: sinon.stub()
+        };
+      });
+
       $provide.value('SHARED_SCHEDULE_URL','https://preview.risevision.com/?type=sharedschedule&id=SCHEDULE_ID');
     })
     inject(function($injector) {
