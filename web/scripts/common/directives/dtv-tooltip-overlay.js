@@ -24,7 +24,7 @@ angular.module('risevision.apps.directives')
               $scope.$watch('isShowing', function() {
                 $timeout(function() {
                   if ($scope.isShowing) {
-                    if (element.is(":hidden")) { return; }
+                    if (element.is(':hidden')) { return; }
 
                     honeBackdropFactory.createForElement(element, {});
                     element.trigger('show');
