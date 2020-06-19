@@ -33,7 +33,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.saveDuration = function () {
-            if($scope.duration > 0){
+            if ($scope.duration > 0) {
               $scope.setAttributeData($scope.componentId, 'duration', $scope.duration);
             }
           };

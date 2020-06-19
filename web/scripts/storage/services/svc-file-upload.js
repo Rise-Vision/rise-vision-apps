@@ -179,7 +179,7 @@ angular.module('risevision.storage.services')
           }
         };
 
-        svc.someEncoding = function() {
+        svc.someEncoding = function () {
           return svc.queue.some(function (item) {
             return !!item.taskToken;
           });
