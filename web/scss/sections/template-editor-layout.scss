@@ -1473,8 +1473,14 @@ $short-phone-height: 570px;
 
   &.tooltip {
     opacity: 1;
-    margin-left: -100px;
-    margin-top: 8px;
+
+    &.tooltip-pull-left {
+      margin-left: -100px;
+
+      &.bottom .tooltip-arrow {
+        margin-left: 100px;
+      }
+    }
 
     .tooltip-inner {
       text-align: left;
@@ -1485,9 +1491,20 @@ $short-phone-height: 570px;
       max-width: 356px;
     }
 
+    &.bottom {
+      margin-top: 8px;
+    }
+
     &.bottom .tooltip-arrow {
       margin-top: 1px;
-      margin-left: 100px;
+    }
+
+    &.top {
+      margin-top: -8px;
+    }
+
+    &.top .tooltip-arrow {
+      margin-bottom: 1px;
     }
 
     /* styles for arrow border */
@@ -1507,6 +1524,14 @@ $short-phone-height: 570px;
       border-width: 0 calc(#{$tooltip-arrow-width} + 1px) calc(#{$tooltip-arrow-width} + 1px);
       border-bottom-color: rgb(153, 153, 153);
     }
+
+    &.top .tooltip-arrow:after {
+      margin-top: -7px;
+      margin-left: calc(-#{$tooltip-arrow-width} - 1px);
+      border-width: calc(#{$tooltip-arrow-width} + 1px) calc(#{$tooltip-arrow-width} + 1px) 0;
+      border-top-color: rgb(153, 153, 153);
+    }
+
   }
 }
 
