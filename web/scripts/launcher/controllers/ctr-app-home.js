@@ -16,7 +16,8 @@ angular.module('risevision.apps.launcher.controllers')
       $scope.showWeeklyTemplates = false;
 
       var triggerOverlay = function () {
-        $scope.showTooltipOverlay = localStorageService.get(tooltipDismissedKey) !== true
+        $scope.showTooltipOverlay = localStorageService.get(tooltipDismissedKey) !== true;
+
         if ($scope.showTooltipOverlay) {
           var handler = $scope.$on('tooltipOverlay.dismissed', function() {
             localStorageService.set(tooltipDismissedKey, true);
