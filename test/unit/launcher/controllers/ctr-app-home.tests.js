@@ -65,6 +65,11 @@ describe('controller: AppHomeCtrl', function() {
       expect($scope.getEmbedUrl('ID')).to.equal('http://trustedUrl');
       $sce.trustAsResourceUrl.should.have.been.calledWith('https://preview.risevision.com/?type=sharedschedule&id=ID&env=embed');
     });
+
+    it('should return null, to not render iframe, when scheduleId is not provided', function() {
+      expect($scope.getEmbedUrl(null)).to.equal(null);
+      $sce.trustAsResourceUrl.should.not.have.been.called;
+    });
   });
 
   describe('load:', function() {
