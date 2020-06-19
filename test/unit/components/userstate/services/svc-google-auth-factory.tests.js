@@ -54,7 +54,16 @@ describe("Services: googleAuthFactory", function() {
         } else {
           return Q.reject("popup closed");
         }
-      })
+      }),
+      currentUser: {
+        get: sinon.stub().returns({
+          getBasicProfile: sinon.stub().returns({
+            getId: sinon.stub().returns("userId"),
+            getEmail: sinon.stub().returns("userEmail"),
+            getImageUrl: sinon.stub().returns("imageUrl"),
+          })
+        })
+      }
     };
 
     $provide.service("auth2APILoader", function () {
@@ -67,32 +76,16 @@ describe("Services: googleAuthFactory", function() {
       });
     });
 
-    $provide.service("getOAuthUserInfo", function() {
-      return function() {
-        var deferred = Q.defer();
-        if (failOAuthUser) {
-          deferred.reject("oauth failure");
-        } else {
-          deferred.resolve({
-            email: "someuser@awesome.io"
-          });
-        }
-        
-        return deferred.promise;
-      };
-    });
-
   }));
   
   var googleAuthFactory, userState, uiFlowManager, $window, $rootScope, 
     urlStateService, auth2APILoader, authInstance;
     
-  var isSignedIn, failOAuthUser;
+  var isSignedIn;
   
   describe("authenticate: ", function() {
     beforeEach(function() {
       isSignedIn = true;
-      failOAuthUser = false;
 
       inject(function($injector) {
         $rootScope = $injector.get("$rootScope");
@@ -139,25 +132,16 @@ describe("Services: googleAuthFactory", function() {
       });
     });
     
-    describe("getOAuthUserInfo: ", function() {
-      it("should handle failure to retrieve oauthUserInfo", function(done) {
-        failOAuthUser = true;
-
-        googleAuthFactory.authenticate().then(function(resp) {
-          done(resp);
-        })
-        .then(null, function(error) {
-          expect(error).to.equal("oauth failure");
-          done();
-        })
-        .then(null,done);
-      });
-
-      it("should retrieve oauthUserInfo correctly", function(done) {
+    describe("_getUserProfile: ", function() {
+      it("should retrieve user profile correctly", function(done) {
         googleAuthFactory.authenticate().then(function(resp) {
           urlStateService.redirectToState.should.not.have.been.called;
 
-          expect(resp).to.deep.equal({ email: "someuser@awesome.io" });
+          expect(resp).to.deep.equal({ 
+            id: "userId",
+            email: "userEmail",
+            picture: "imageUrl"
+          });
 
           done();
         })
@@ -292,13 +276,16 @@ describe("Services: googleAuthFactory", function() {
       userState._state.inRVAFrame = true;
 
       isSignedIn = true;
-      failOAuthUser = false;
 
       googleAuthFactory.authenticate(true).then(function(resp) {
         authInstance.signIn.should.have.been.called;
         authInstance.isSignedIn.get.should.have.been.called;
 
-        expect(resp).to.deep.equal({ email: "someuser@awesome.io" });
+        expect(resp).to.deep.equal({ 
+          id: "userId",
+          email: "userEmail",
+          picture: "imageUrl"
+        });
 
         done();
       })

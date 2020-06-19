@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('risevision.core.userprofile', [
-      'risevision.common.gapi', 'risevision.core.oauth2'
+      'risevision.common.gapi'
     ])
 
     .value('userRoleMap', {

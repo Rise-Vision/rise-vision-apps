@@ -3,12 +3,11 @@
   'use strict';
   angular.module('risevision.common.account', [
       'risevision.common.gapi',
-      'risevision.core.userprofile',
-      'risevision.core.cache'
+      'risevision.core.userprofile'
     ])
 
-    .factory('agreeToTerms', ['$q', 'riseAPILoader', '$log', 'userInfoCache',
-      function ($q, riseAPILoader, $log, userInfoCache) {
+    .factory('agreeToTerms', ['$q', 'riseAPILoader', '$log',
+      function ($q, riseAPILoader, $log) {
         return function () {
           $log.debug('agreeToTerms called.');
           var deferred = $q.defer();
@@ -16,7 +15,6 @@
             var request = riseApi.account.agreeToTerms();
             request.execute(function (resp) {
               $log.debug('agreeToTerms resp', resp);
-              userInfoCache.removeAll();
               if (!resp.error) {
                 deferred.resolve();
               } else {

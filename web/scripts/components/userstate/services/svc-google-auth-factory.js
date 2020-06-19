@@ -6,10 +6,26 @@
   angular.module('risevision.common.components.userstate')
     // constants (you can override them in your app as needed)
     .factory('googleAuthFactory', ['$rootScope', '$q', '$log', '$window',
-      '$stateParams', 'auth2APILoader', 'getOAuthUserInfo', 'uiFlowManager',
+      '$stateParams', 'auth2APILoader', 'uiFlowManager',
       'userState', 'urlStateService',
       function ($rootScope, $q, $log, $window, $stateParams, auth2APILoader,
-        getOAuthUserInfo, uiFlowManager, userState, urlStateService) {
+        uiFlowManager, userState, urlStateService) {
+
+        var _getUserProfile = function(authInstance) {
+          if (!authInstance.currentUser) {
+            return null;
+          }
+
+          var profile = authInstance.currentUser.get().getBasicProfile();
+
+          var user = {
+            id: profile.getId(),
+            email: profile.getEmail(),
+            picture: profile.getImageUrl()
+          };
+
+          return user;
+        };
 
         var _gapiAuthorize = function () {
           var deferred = $q.defer();
@@ -21,7 +37,8 @@
 
               $log.debug('auth2.isSignedIn result:', authResult);
               if (authResult) {
-                deferred.resolve(authResult);
+
+                deferred.resolve(_getUserProfile(auth2.getAuthInstance()));
               } else {
                 deferred.reject('Failed to authorize user (auth2)');
               }
@@ -39,7 +56,6 @@
           var deferred = $q.defer();
 
           _gapiAuthorize()
-            .then(getOAuthUserInfo)
             .then(function (oauthUserInfo) {
               if (userState._state.redirectState) {
                 urlStateService.redirectToState(userState._state.redirectState);
