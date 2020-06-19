@@ -75,7 +75,8 @@ angular.module('risevision.template-editor.services', [
 angular.module('risevision.template-editor.filters', []);
 angular.module('risevision.template-editor.directives', [
   'risevision.template-editor.services',
-  'risevision.template-editor.filters'
+  'risevision.template-editor.filters',
+  'ui.tinymce'
 ]);
 
 angular.module('risevision.template-editor.controllers', [

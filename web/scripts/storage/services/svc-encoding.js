@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('risevision.storage.services')
-  .service('encoding', ['ENCODING_MASTER_SWITCH_URL', '$q', '$log', '$http', 'storageAPILoader', 'userState', 'bigQueryLogging', '$timeout',
+  .service('encoding', ['ENCODING_MASTER_SWITCH_URL', '$q', '$log', '$http', 'storageAPILoader', 'userState',
+    'bigQueryLogging', '$timeout',
     function (switchURL, $q, $log, $http, storageAPILoader, userState, bigQueryLogging, $timeout) {
       $log.debug('Loading encoding service');
       var masterSwitchPromise = $http({
