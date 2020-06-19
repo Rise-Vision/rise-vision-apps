@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.apps.directives')
-  .directive('tooltipOverlay', ['$compile', '$timeout', 'honeBackdropFactory',
-    function ($compile, $timeout, honeBackdropFactory) {
+  .directive('tooltipOverlay', ['$window', '$compile', '$timeout', 'honeBackdropFactory',
+    function ($window, $compile, $timeout, honeBackdropFactory) {
       return {
         restrict: 'A',
         scope: {
@@ -21,16 +21,30 @@ angular.module('risevision.apps.directives')
             post: function postLink($scope, iElement, iAttrs, controller) {  
               $compile(iElement)($scope);
 
+              var digestWrapper = function() {
+                $scope.$digest();
+              };
+
+              var show = function() {
+                if (element.is(':hidden')) { return; }
+
+                honeBackdropFactory.createForElement(element, {});
+                element.trigger('show');                
+                angular.element($window).bind('resize', digestWrapper);
+              };
+
+              var hide = function() {
+                honeBackdropFactory.hide();
+                element.trigger('hide');
+                angular.element($window).unbind('resize', digestWrapper);
+              };
+
               $scope.$watch('isShowing', function() {
                 $timeout(function() {
                   if ($scope.isShowing) {
-                    if (element.is(':hidden')) { return; }
-
-                    honeBackdropFactory.createForElement(element, {});
-                    element.trigger('show');
+                    show();
                   } else {
-                    honeBackdropFactory.hide();
-                    element.trigger('hide');
+                    hide();
                   }                  
                 });
               });
