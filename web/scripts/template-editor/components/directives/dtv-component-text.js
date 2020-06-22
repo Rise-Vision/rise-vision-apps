@@ -55,7 +55,8 @@ angular.module('risevision.template-editor.directives')
 
           $scope.save = function () {
             $scope.setAttributeData($scope.componentId, 'richText', $scope.richText);
-
+            $scope.setAttributeData($scope.componentId, 'value', undefined);
+            
             if ($scope.showFontSize) {
               $scope.setAttributeData($scope.componentId, 'fontsize', $scope.fontsize);
             }
