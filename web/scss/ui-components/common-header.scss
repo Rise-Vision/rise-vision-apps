@@ -47,11 +47,10 @@
         >li {
             >a {
               padding: 6px;
-              &.btn,
-                &.company-buttons-icon-mobile {
-                    margin-top: 8px;
-                    margin-bottom: 0;
-                }
+              &.btn {
+                  margin-top: 8px;
+                  margin-bottom: 0;
+              }
             }
             button {
               @extend .navbar-btn;
@@ -119,34 +118,6 @@
     margin-bottom: 0;
   }
 }
-
-
-.app-navigation {
-    ul {
-        >li>a {
-            display: block;
-            .image {
-                height: 16px;
-                margin-right: 8px;
-                float: left;
-                img {
-                    height: 100%;
-                }
-            }
-        }
-    }
-    svg {
-        width: 24px;
-        height: 24px;
-    }
-    & path:first-child {
-        fill: #4AB767;
-    }
-    & path:last-child {
-        fill: #2D60AD;
-    }
-}
-
 
 /* Small Devices, Tablets */
 
