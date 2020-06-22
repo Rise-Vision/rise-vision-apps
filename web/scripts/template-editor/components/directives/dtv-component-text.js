@@ -15,7 +15,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.tinymceOptions = {
-            plugins: 'code colorpicker textcolor wordcount',
+            plugins: 'colorpicker textcolor',
             menubar: false,
             toolbar1: 'fontselect fontsizeselect | ' +
               'forecolor backcolor | ' +
@@ -30,7 +30,8 @@ angular.module('risevision.template-editor.directives')
           function _load() {
             $scope.isMultiline = $scope.getBlueprintData($scope.componentId, 'multiline');
             var value = $scope.getAvailableAttributeData($scope.componentId, 'value');
-            var richText = $scope.getAvailableAttributeData($scope.componentId, 'richText') ? $scope.getAvailableAttributeData($scope.componentId, 'richText') : value;
+            var richText = $scope.getAvailableAttributeData($scope.componentId, 'richText') ? $scope
+              .getAvailableAttributeData($scope.componentId, 'richText') : value;
             var fontsize = $scope.getAvailableAttributeData($scope.componentId, 'fontsize');
             var minfontsize = $scope.getAvailableAttributeData($scope.componentId, 'minfontsize');
             var maxfontsize = $scope.getAvailableAttributeData($scope.componentId, 'maxfontsize');
@@ -56,7 +57,7 @@ angular.module('risevision.template-editor.directives')
           $scope.save = function () {
             $scope.setAttributeData($scope.componentId, 'richText', $scope.richText);
             $scope.setAttributeData($scope.componentId, 'value', undefined);
-            
+
             if ($scope.showFontSize) {
               $scope.setAttributeData($scope.componentId, 'fontsize', $scope.fontsize);
             }
