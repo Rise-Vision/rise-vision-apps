@@ -22,7 +22,24 @@ angular.module('risevision.template-editor.directives')
               'bold italic underline | ' +
               'alignleft aligncenter alignright alignjustify | ' +
               'bullist numlist indent outdent lineheight | ' +
-              'removeformat code'
+              'removeformat code',
+            setup: function (editor) {
+              editor.addButton('lineheight', {
+                type: 'listbox',
+                text: 'Line Height',
+                title: 'Line Height',
+                icon: false,
+                values: [{
+                    text: 'Single',
+                    value: '1'
+                  },
+                  {
+                    text: 'Double',
+                    value: '2'
+                  }
+                ]
+              });
+            }
           };
 
           $scope.richText = '';
@@ -30,7 +47,8 @@ angular.module('risevision.template-editor.directives')
           function _load() {
             $scope.isMultiline = $scope.getBlueprintData($scope.componentId, 'multiline');
             var value = $scope.getAvailableAttributeData($scope.componentId, 'value');
-            var richText = $scope.getAvailableAttributeData($scope.componentId, 'richText') ? $scope.getAvailableAttributeData($scope.componentId, 'richText') : value;
+            var richText = $scope.getAvailableAttributeData($scope.componentId, 'richText') ? $scope
+              .getAvailableAttributeData($scope.componentId, 'richText') : value;
             var fontsize = $scope.getAvailableAttributeData($scope.componentId, 'fontsize');
             var minfontsize = $scope.getAvailableAttributeData($scope.componentId, 'minfontsize');
             var maxfontsize = $scope.getAvailableAttributeData($scope.componentId, 'maxfontsize');
