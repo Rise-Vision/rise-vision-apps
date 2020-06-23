@@ -1,55 +1,53 @@
 <div id="app-home-container" class="full-page-flex-container madero-style" common-header-height>
 
-<div class="scrollable-content" rv-spinner rv-spinner-key="app-home-loader" rv-spinner-start-active="1">
-	<div class="row">
-		<div class="col-xs-12">
-			<in-app-messages></in-app-messages>
-			<weekly-templates class="hidden-xs" ng-if="showWeeklyTemplates"></weekly-templates>
-		</div>
-	</div>
+  <div class="scrollable-content" rv-spinner rv-spinner-key="app-home-loader" rv-spinner-start-active="1">
+    <div class="row">
+      <div class="col-xs-12">
+        <in-app-messages></in-app-messages>
+        <weekly-templates class="hidden-xs" ng-if="showWeeklyTemplates"></weekly-templates>
+      </div>
+    </div>
 
-	<div class="row">
-		<div class="col-xs-12">
-			<div id="errorBox" ng-show="apiError" class="alert alert-danger" role="alert">
-				<strong>{{errorMessage}}</strong> {{apiError}}
-			</div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div id="errorBox" ng-show="apiError" class="alert alert-danger" role="alert">
+          <strong>{{errorMessage}}</strong> {{apiError}}
+        </div>
 
-			<div ng-show="schedules.length === 0 && !loadingItems && !apiError" class="alert alert-warning" role="alert">
-				<strong>You haven't created any Schedules yet.</strong>
-				Keep your community connected anywhere they are. Share your message to digital signage, websites, personal computers, and more.
-				<a ui-sref="apps.schedules.add">Add a new Schedule.</a>
-			</div>
-		</div>
+        <div ng-show="schedules.length === 0 && !loadingItems && !apiError" class="alert alert-warning" role="alert">
+          <strong>You haven't created any Schedules yet.</strong> Keep your community connected anywhere they are. Share
+          your message to digital signage, websites, personal computers, and more.
+          <a ui-sref="apps.schedules.add">Add a new Schedule.</a>
+        </div>
+      </div>
 
-		<div class="form-inline schedules-toolbar" ng-show="selectedScheduleId">
-			<span class="hidden-xs pull-right action-buttons">
+      <div class="form-inline schedules-toolbar" ng-show="selectedScheduleId">
+        <span class="hidden-xs pull-right action-buttons">
 				<button type="button" class="btn btn-default" ng-click="showTooltipOverlay=true;">Edit Schedule</button>
-				<button id="shareButton" type="button" class="btn btn-primary" tooltip-overlay="showTooltipOverlay" tooltip-placement="bottom" tooltip-class="madero-style tooltip-pull-left">Share1</button>
+				<button id="shareButton" type="button" class="btn btn-primary" tooltip-overlay="showTooltipOverlay" tooltip-placement="bottom" tooltip-class="madero-style tooltip-pull-left">Share</button>
 				<share-schedule-button schedule-id="selectedScheduleId"></share-schedule-button>
 			</span>
-		  	<div class="form-group">
-			    <label for="schedule-selector">Preview A Schedule:</label>
-			    <select id="schedule-selector" class="form-control" ng-model="selectedScheduleId"
-			    	ng-options="schedule.id as schedule.name for schedule in schedules" >
+        <div class="form-group">
+          <label for="schedule-selector">Preview A Schedule:</label>
+          <select id="schedule-selector" class="form-control" ng-model="selectedScheduleId" ng-options="schedule.id as schedule.name for schedule in schedules">
 			    </select>
-			</div>
-		</div>
-	</div>
+        </div>
+      </div>
+    </div>
 
-	<div class="container" ng-show="selectedScheduleId">
-		<div class="schedule-embed">
-		   <iframe frameborder="0" ng-src="{{getEmbedUrl(selectedScheduleId)}}">
+    <div class="container" ng-show="selectedScheduleId">
+      <div class="schedule-embed">
+        <iframe frameborder="0" ng-src="{{getEmbedUrl(selectedScheduleId)}}">
 		   </iframe>
-		</div>
-	</div>
-</div>
+      </div>
+    </div>
+  </div>
 
-<div class="mobile-footer visible-xs" ng-show="selectedScheduleId" >
-	<div class="container">
-	    <button type="button" class="btn btn-default btn-block" ng-click="showTooltipOverlay=true;">Edit Schedule</button> 
-		<button type="button" class="btn btn-primary btn-block" tooltip-overlay="showTooltipOverlay" tooltip-placement="top" tooltip-class="madero-style">Share1</button>
-
-		<share-schedule-button schedule-id="selectedScheduleId"></share-schedule-button>
-	</div>
- </div>
+  <div class="mobile-footer visible-xs" ng-show="selectedScheduleId">
+    <div class="container">
+      <button type="button" class="btn btn-default btn-block" ng-click="showTooltipOverlay=true;">Edit Schedule</button>
+      <button type="button" class="btn btn-primary btn-block" tooltip-overlay="showTooltipOverlay" tooltip-placement="top" tooltip-class="madero-style">Share</button>
+      <share-schedule-button schedule-id="selectedScheduleId"></share-schedule-button>
+    </div>
+  </div>
 </div>

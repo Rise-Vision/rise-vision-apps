@@ -8,11 +8,19 @@ angular.module('risevision.apps.services')
       var preventDefault = function (e) {
         e.preventDefault();
       };
-      var hone = new $window.Hone({
-        classPrefix: 'madero-style tooltip-backdrop',
-        borderRadius: 4,
-        padding: '10px'
-      });
+      var hone;
+
+      function getHone() {
+        if (!hone) {
+          hone = new $window.Hone({
+            classPrefix: 'madero-style tooltip-backdrop',
+            borderRadius: 4,
+            padding: '10px'
+          });
+        }
+
+        return hone;
+      }
 
       function preventScrolling() {
         $body.addClass('no-scrolling');
@@ -25,9 +33,9 @@ angular.module('risevision.apps.services')
       }
 
       service.createForElement = function (element, backdropOptions) {
-        hone.setOptions(backdropOptions);
-        hone.position(element[0]);
-        hone.show();
+        getHone().setOptions(backdropOptions);
+        getHone().position(element[0]);
+        getHone().show();
 
         if (backdropOptions.preventScrolling) {
           service.shouldPreventScrolling(true);
@@ -37,7 +45,7 @@ angular.module('risevision.apps.services')
       };
 
       service.hide = function () {
-        hone.hide();
+        getHone().hide();
         service.shouldPreventScrolling(false);
       };
 
@@ -50,8 +58,8 @@ angular.module('risevision.apps.services')
       };
 
       service.reposition = function () {
-        if (hone.status === $window.Hone.status.VISIBLE) {
-          hone.position();
+        if (getHone().status === $window.Hone.status.VISIBLE) {
+          getHone().position();
         }
       };
 
