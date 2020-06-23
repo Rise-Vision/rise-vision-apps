@@ -8,6 +8,8 @@
 .navbar {
   z-index: 1000;
   margin-bottom: 0;
+  border: 0px;
+  box-shadow: 0 3px 4px 0px rgba(0,0,0,.3);
   &.navbar-default {
     .navbar-nav>.open>a {
         background: #FFF;
@@ -114,7 +116,7 @@
 
   /* Medium Devices, Desktops */
   @media (min-width: $screen-md) {
-    padding: 2px 0;
+    padding: 0;
     margin-bottom: 0;
   }
 }
