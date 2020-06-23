@@ -58,20 +58,9 @@
     background-color: rgba(150, 150, 150, 0.1);
     color: $rise-blue;
   }
-  .dropdown-menu > ul > li > a.old-app,
-  .dropdown-menu > ul > li > a.old-app {
-    background-color: #EEE;
-    margin-right: 0;
-  }
-  .dropdown-menu > ul > li > a.old-app:focus,
-  .dropdown-menu > ul > li > a.old-app:hover {
-    color: #000;
-    background-color: #DDD;
-  }
   .dropdown-menu > ul > .active > a,
   .dropdown-menu > ul > .active > a:hover,
   .dropdown-menu > ul > .active > a:focus {
     background-color: #357ebd
   }
 }
-
