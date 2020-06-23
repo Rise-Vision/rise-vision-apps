@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.schedules.directives')
-.directive('shareScheduleButton', ['$timeout',
+  .directive('shareScheduleButton', ['$timeout',
     function ($timeout) {
       return {
         restrict: 'E',
@@ -16,22 +16,22 @@ angular.module('risevision.schedules.directives')
           var isActionSheetOpen = false;
           var actionSheetButton = angular.element(element[0].querySelector('#actionSheetButton'));
 
-          $scope.dismiss = function() {
-            $timeout(function() {
+          $scope.dismiss = function () {
+            $timeout(function () {
               if (isTooltipOpen) {
                 isTooltipOpen = false;
                 tooltipButton.trigger('hide');
               }
 
-              if(isActionSheetOpen) {
+              if (isActionSheetOpen) {
                 isActionSheetOpen = false;
                 actionSheetButton.trigger('toggle');
               }
             });
           };
 
-          $scope.toggleTooltip = function() {
-            $timeout(function() {
+          $scope.toggleTooltip = function () {
+            $timeout(function () {
               if (isTooltipOpen) {
                 isTooltipOpen = false;
                 tooltipButton.trigger('hide');
@@ -42,7 +42,7 @@ angular.module('risevision.schedules.directives')
             });
           };
 
-          $scope.toggleActionSheet = function() {
+          $scope.toggleActionSheet = function () {
             if (isActionSheetOpen) {
               isActionSheetOpen = false;
               actionSheetButton.trigger('toggle');
