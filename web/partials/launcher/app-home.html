@@ -23,7 +23,7 @@
 
       <div class="form-inline schedules-toolbar" ng-show="selectedScheduleId">
         <span class="hidden-xs pull-right action-buttons">
-				<button type="button" class="btn btn-default" ng-click="showTooltipOverlay=true;">Edit Schedule</button>
+				<a type="button" class="btn btn-default" ui-sref="apps.schedules.details({scheduleId: selectedScheduleId})">Edit Schedule</a>
 				<button id="shareButton" type="button" class="btn btn-primary" tooltip-overlay="showTooltipOverlay" tooltip-placement="bottom" tooltip-class="madero-style tooltip-pull-left">Share</button>
 			</span>
         <div class="form-group">
@@ -44,7 +44,7 @@
 
   <div class="mobile-footer visible-xs" ng-show="selectedScheduleId">
     <div class="container">
-      <button type="button" class="btn btn-default btn-block" ng-click="showTooltipOverlay=true;">Edit Schedule</button>
+      <a type="button" class="btn btn-default btn-block" ui-sref="apps.schedules.details({scheduleId: selectedScheduleId})">Edit Schedule</a>
       <button type="button" class="btn btn-primary btn-block" tooltip-overlay="showTooltipOverlay" tooltip-placement="top" tooltip-class="madero-style">Share</button>
     </div>
   </div>
