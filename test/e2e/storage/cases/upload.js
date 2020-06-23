@@ -37,7 +37,7 @@ var UploadScenarios = function() {
       });
 
       it('should hide Upload panel when finished',function(){
-        this.timeout(25000);
+        this.timeout(55000);
         helper.waitDisappear(storageSelectorModalPage.getUploadPanel(), 'Storage Upload Panel');
         expect(storageSelectorModalPage.getUploadPanel().isDisplayed()).to.eventually.be.false;
       });
@@ -63,7 +63,7 @@ var UploadScenarios = function() {
       describe('Upload File:', describeUpload);
     });
     
-    describe('And he is using Storage Home with encoding enabled:',function(){
+    xdescribe('And he is using Storage Home with encoding enabled:',function(){
       before(function () {
         StorageHelper.setupStorageHomeWithEncoding();
         uploadFilePath = process.cwd() + '/web/videos/e2e-upload-video-1.mp4';
