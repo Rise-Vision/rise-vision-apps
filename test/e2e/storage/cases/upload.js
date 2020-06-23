@@ -63,7 +63,7 @@ var UploadScenarios = function() {
       describe('Upload File:', describeUpload);
     });
     
-    describe('And he is using Storage Home with encoding enabled:',function(){
+    xdescribe('And he is using Storage Home with encoding enabled:',function(){
       before(function () {
         StorageHelper.setupStorageHomeWithEncoding();
         uploadFilePath = process.cwd() + '/web/videos/e2e-upload-video-1.mp4';
