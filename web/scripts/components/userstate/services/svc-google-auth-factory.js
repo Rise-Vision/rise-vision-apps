@@ -11,7 +11,7 @@
       function ($rootScope, $q, $log, $window, $stateParams, auth2APILoader,
         uiFlowManager, userState, urlStateService) {
 
-        var _getUserProfile = function(authInstance) {
+        var _getUserProfile = function (authInstance) {
           if (!authInstance.currentUser) {
             return null;
           }

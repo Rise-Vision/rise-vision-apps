@@ -19,10 +19,10 @@ angular.module('risevision.apps.launcher.controllers')
         $scope.showTooltipOverlay = localStorageService.get(tooltipDismissedKey) !== true;
 
         if ($scope.showTooltipOverlay) {
-          var handler = $scope.$on('tooltipOverlay.dismissed', function() {
+          var handler = $scope.$on('tooltipOverlay.dismissed', function () {
             localStorageService.set(tooltipDismissedKey, true);
             handler();
-          });        
+          });
         }
       };
 
@@ -35,9 +35,9 @@ angular.module('risevision.apps.launcher.controllers')
       });
 
       $scope.getEmbedUrl = function (scheduleId) {
-      	if (!scheduleId) {
-      		return null;
-      	}
+        if (!scheduleId) {
+          return null;
+        }
         var url = SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', scheduleId) + '&env=embed';
         return $sce.trustAsResourceUrl(url);
       };

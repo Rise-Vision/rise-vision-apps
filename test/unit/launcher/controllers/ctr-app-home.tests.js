@@ -1,7 +1,7 @@
 'use strict';
 describe('controller: AppHomeCtrl', function() {
   beforeEach(module('risevision.apps.launcher.controllers'));
-  var $rootScope, $controller, $scope, $loading, schedule, $sce;
+  var $rootScope, $controller, $scope, $loading, schedule, localStorageService, $sce;
   beforeEach(function(){
     module(function ($provide) {
       $provide.service('$loading', function() {
@@ -35,6 +35,7 @@ describe('controller: AppHomeCtrl', function() {
     inject(function($injector) {
       $loading = $injector.get('$loading');
       schedule = $injector.get('schedule');
+      localStorageService = $injector.get('localStorageService');
       $sce = $injector.get('$sce');
       $rootScope = $injector.get('$rootScope');
       $controller = $injector.get('$controller');
@@ -52,6 +53,9 @@ describe('controller: AppHomeCtrl', function() {
     expect($scope.schedules).to.be.ok;
     expect($scope.getEmbedUrl).to.be.a('function');
     expect($scope.load).to.be.a('function');
+
+    expect($scope.showTooltipOverlay).to.be.false;
+    expect($scope.showWeeklyTemplates).to.be.false;
   });
 
   describe('spinner:', function() {
@@ -112,9 +116,116 @@ describe('controller: AppHomeCtrl', function() {
         expect($scope.errorMessage).to.equal('Failed to load Schedules.');
         expect($scope.apiError).to.equal('API_ERROR');
         expect($scope.loadingItems).to.be.false;
+
         done();
       },10);
     });
+  });
+  
+  describe('showTooltipOverlay/showWeeklyTemplates', function() {
+    beforeEach(function(done) {
+      setTimeout(function() {
+        // clean up hardcoded init() call
+        $scope.schedules = [];
+
+        $scope.showTooltipOverlay = false;
+        $scope.showWeeklyTemplates = false;        
+
+        // clean up handlers
+        $scope.$emit('tooltipOverlay.dismissed');
+
+        $scope.$digest();
+
+        localStorageService.set.reset();
+
+        done();
+      }, 10);
+    });
+
+    it('should trigger overlay on API results', function(done) {
+      $scope.load();
+
+      setTimeout(function() {
+        localStorageService.get.should.have.been.calledWith('ShareTooltip.dismissed');
+
+        expect($scope.showTooltipOverlay).to.be.true;
+        expect($scope.showWeeklyTemplates).to.be.false;
+
+        done();
+      },10);
+    });
+
+    it('should close overlay event handler', function(done) {
+      $scope.load();
+
+      setTimeout(function() {
+        $scope.$emit('tooltipOverlay.dismissed');
+        $scope.$digest();
+
+        localStorageService.set.should.have.been.calledWith('ShareTooltip.dismissed', true);
+
+        done();
+      },10);
+    });
+
+    it('should not handle event more than once', function(done) {
+      $scope.load();
+
+      setTimeout(function() {
+        $scope.$emit('tooltipOverlay.dismissed');
+
+        $scope.$digest();
+
+        $scope.$emit('tooltipOverlay.dismissed');
+
+        $scope.$digest();
+
+        localStorageService.set.should.have.been.calledOnce;
+
+        done();
+      },10);
+    });
+
+    it('should not show overlay if previously dismissed', function(done) {
+      localStorageService.get.returns(true);
+
+      $scope.load();
+
+      setTimeout(function() {
+        localStorageService.get.should.have.been.calledWith('ShareTooltip.dismissed');
+
+        expect($scope.showTooltipOverlay).to.be.false;
+        expect($scope.showWeeklyTemplates).to.be.true;
+
+        done();
+      },10);
+    });
+
+    it('should not show overlay and show templates if list is empty', function(done) {
+      schedule.list.returns(Q.resolve({items: []}));
+
+      $scope.load();
+
+      setTimeout(function() {
+        expect($scope.showTooltipOverlay).to.be.false;
+        expect($scope.showWeeklyTemplates).to.be.true;
+
+        done();
+      },10);
+    });
+
+    it('should not show overlay and show templates on API failure', function(done) {
+      schedule.list.returns(Q.reject());
+
+      $scope.load();
+
+      setTimeout(function() {
+        expect($scope.showTooltipOverlay).to.be.false;
+        expect($scope.showWeeklyTemplates).to.be.true;
+
+        done();
+      },10);
+    });    
   });
 
 });
