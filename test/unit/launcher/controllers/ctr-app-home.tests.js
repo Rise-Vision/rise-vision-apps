@@ -163,6 +163,7 @@ describe('controller: AppHomeCtrl', function() {
         $scope.$digest();
 
         localStorageService.set.should.have.been.calledWith('ShareTooltip.dismissed', true);
+        expect($scope.showTooltipOverlay).to.be.false;
 
         done();
       },10);
@@ -181,6 +182,7 @@ describe('controller: AppHomeCtrl', function() {
         $scope.$digest();
 
         localStorageService.set.should.have.been.calledOnce;
+        expect($scope.showTooltipOverlay).to.be.false;
 
         done();
       },10);
