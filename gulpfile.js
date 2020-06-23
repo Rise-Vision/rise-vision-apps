@@ -276,6 +276,15 @@ gulp.task("tus", function() {
     .pipe(gulp.dest("web/vendor/tus"));
 });
 
+gulp.task("tinymce", function() {
+  var files = [
+    "web/bower_components/tinymce/themes/modern/theme.min.js",
+    "web/bower_components/tinymce/skins/**/*"
+  ];
+  return gulp.src(files, {base: "web/bower_components/"})
+    .pipe(gulp.dest("web/vendor"));
+});
+
 gulp.task("html2js", function() {
   return gulp.src(partialsHTMLFiles)
     .pipe(minifyHtml({
@@ -323,7 +332,7 @@ gulp.task("config", function() {
 });
 
 gulp.task('build-pieces', function (cb) {
-  runSequence(["clean"], ['config', 'i18n-build', 'css-build', 'pricing', 'html2js', 'tus'], cb);
+  runSequence(["clean"], ['config', 'i18n-build', 'css-build', 'pricing', 'html2js', 'tus', 'tinymce'], cb);
 });
 
 gulp.task('build', function (cb) {
