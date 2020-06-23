@@ -25,7 +25,7 @@
         <span class="hidden-xs pull-right action-buttons">
         <button type="button" class="btn btn-default" ng-click="showTooltipOverlay=true;">Edit Schedule</button>
         <ng-show ng-show="showTooltipOverlay">
-          <button id="shareButton" type="button" class="btn btn-primary" tooltip-overlay="showTooltipOverlay" tooltip-placement="bottom" tooltip-class="madero-style tooltip-pull-left">Share</button>
+          <button id="shareButton" type="button" class="btn btn-primary" tooltip-overlay="showTooltipOverlay" tooltip-placement="bottom" tooltip-class="madero-style tooltip-pull-left" tooltip-digest-on-resize>Share</button>
         </ng-show>
         <share-schedule-button schedule-id="selectedScheduleId" ng-hide="showTooltipOverlay"></share-schedule-button>
       </span>

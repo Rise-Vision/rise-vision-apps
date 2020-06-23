@@ -88,19 +88,6 @@ describe('directive: tooltip-overlay', function() {
 
       $timeout.flush();
     });
-
-    it('should trigger digest cycle on resize', function() {
-      $scope.isShowing = true;
-      $scope.$digest();
-
-      $timeout.flush();
-
-      $scope.$digest.reset();
-
-      angular.element($window).trigger('resize');
-
-      $scope.$digest.should.have.been.called;
-    });
   });
 
   describe('hide', function() {
@@ -142,19 +129,6 @@ describe('directive: tooltip-overlay', function() {
       $scope.$digest();
 
       $timeout.flush();
-    });
-
-    it('should remove resize handler', function() {
-      $scope.isShowing = false;
-      $scope.$digest();
-
-      $timeout.flush();
-
-      $scope.$digest.reset();
-
-      angular.element($window).trigger('resize');
-
-      $scope.$digest.should.not.have.been.called;
     });
   });
 
