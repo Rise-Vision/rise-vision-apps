@@ -23,14 +23,16 @@
 
       <div class="form-inline schedules-toolbar" ng-show="selectedScheduleId">
         <span class="hidden-xs pull-right action-buttons">
-				<button type="button" class="btn btn-default" ng-click="showTooltipOverlay=true;">Edit Schedule</button>
-				<button id="shareButton" type="button" class="btn btn-primary" tooltip-overlay="showTooltipOverlay" tooltip-placement="bottom" tooltip-class="madero-style tooltip-pull-left">Share</button>
-				<share-schedule-button schedule-id="selectedScheduleId"></share-schedule-button>
-			</span>
+        <button type="button" class="btn btn-default" ng-click="showTooltipOverlay=true;">Edit Schedule</button>
+        <ng-show ng-show="showTooltipOverlay">
+          <button id="shareButton" type="button" class="btn btn-primary" tooltip-overlay="showTooltipOverlay" tooltip-placement="bottom" tooltip-class="madero-style tooltip-pull-left">Share</button>
+        </ng-show>
+        <share-schedule-button schedule-id="selectedScheduleId" ng-hide="showTooltipOverlay"></share-schedule-button>
+      </span>
         <div class="form-group">
           <label for="schedule-selector">Preview A Schedule:</label>
           <select id="schedule-selector" class="form-control" ng-model="selectedScheduleId" ng-options="schedule.id as schedule.name for schedule in schedules">
-			    </select>
+          </select>
         </div>
       </div>
     </div>
@@ -38,7 +40,7 @@
     <div class="container" ng-show="selectedScheduleId">
       <div class="schedule-embed">
         <iframe frameborder="0" ng-src="{{getEmbedUrl(selectedScheduleId)}}">
-		   </iframe>
+       </iframe>
       </div>
     </div>
   </div>
@@ -46,8 +48,10 @@
   <div class="mobile-footer visible-xs" ng-show="selectedScheduleId">
     <div class="container">
       <button type="button" class="btn btn-default btn-block" ng-click="showTooltipOverlay=true;">Edit Schedule</button>
-      <button type="button" class="btn btn-primary btn-block" tooltip-overlay="showTooltipOverlay" tooltip-placement="top" tooltip-class="madero-style">Share</button>
-      <share-schedule-button schedule-id="selectedScheduleId"></share-schedule-button>
+      <ng-show ng-show="showTooltipOverlay">
+        <button type="button" class="btn btn-primary btn-block" tooltip-overlay="showTooltipOverlay" tooltip-placement="top" tooltip-class="madero-style">Share</button>
+      </ng-show>
+      <share-schedule-button schedule-id="selectedScheduleId" ng-hide="showTooltipOverlay"></share-schedule-button>
     </div>
   </div>
 </div>
