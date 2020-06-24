@@ -15,8 +15,11 @@ describe('directive: share-schedule-button', function() {
     sandbox.stub(angular,'element').returns(innerElementStub);
 
     $scope = $rootScope.$new();
+    $rootScope.selectedSchedule = {
+      id: 123
+    };
 
-    element = $compile('<share-schedule-button schedule-id="123"></share-schedule-button>')($scope);
+    element = $compile('<share-schedule-button schedule="selectedSchedule"></share-schedule-button>')($scope);
 
     $rootScope.$digest();
     $scope = element.isolateScope();   
@@ -29,14 +32,14 @@ describe('directive: share-schedule-button', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.scheduleId).to.equal(123);
+    expect($scope.schedule.id).to.equal(123);
     expect($scope.dismiss).to.be.a('function');
     expect($scope.toggleTooltip).to.be.a('function');
     expect($scope.toggleActionSheet).to.be.a('function');
   });
 
   it('should compile', function() {
-    expect(element[0].outerHTML).to.equal('<share-schedule-button schedule-id="123" class="ng-scope ng-isolate-scope"><div id="tooltipButton"></div><div id="actionSheetButton"></div></share-schedule-button>');
+    expect(element[0].outerHTML).to.equal('<share-schedule-button schedule="selectedSchedule" class="ng-scope ng-isolate-scope"><div id="tooltipButton"></div><div id="actionSheetButton"></div></share-schedule-button>');
   });
 
   describe('toggleTooltip:', function() {

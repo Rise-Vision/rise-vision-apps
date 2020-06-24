@@ -21,37 +21,37 @@
         </div>
       </div>
 
-      <div class="form-inline schedules-toolbar" ng-show="selectedScheduleId">
+      <div class="form-inline schedules-toolbar" ng-show="selectedSchedule">
         <span class="hidden-xs pull-right action-buttons">
-        <a type="button" class="btn btn-default" ui-sref="apps.schedules.details({scheduleId: selectedScheduleId})">Edit Schedule</a>
+        <a type="button" class="btn btn-default" ui-sref="apps.schedules.details({scheduleId: selectedSchedule.id})">Edit Schedule</a>
         <ng-show ng-show="showTooltipOverlay">
           <button id="shareButton" type="button" class="btn btn-primary" tooltip-overlay="showTooltipOverlay" tooltip-placement="bottom" tooltip-class="madero-style tooltip-share-guide" tooltip-digest-on-resize>Share</button>
         </ng-show>
-        <share-schedule-button schedule-id="selectedScheduleId" ng-hide="showTooltipOverlay"></share-schedule-button>
+        <share-schedule-button schedule="selectedSchedule" ng-hide="showTooltipOverlay"></share-schedule-button>
       </span>
         <div class="form-group">
           <label for="schedule-selector">Preview A Schedule:</label>
-          <select id="schedule-selector" class="form-control" ng-model="selectedScheduleId" ng-options="schedule.id as schedule.name for schedule in schedules">
+          <select id="schedule-selector" class="form-control" ng-model="selectedSchedule" ng-options="schedule as schedule.name for schedule in schedules">
           </select>
         </div>
       </div>
     </div>
 
-    <div class="container" ng-show="selectedScheduleId">
+    <div class="container" ng-show="selectedSchedule">
       <div class="schedule-embed">
-        <iframe frameborder="0" ng-src="{{getEmbedUrl(selectedScheduleId)}}">
+        <iframe frameborder="0" ng-src="{{getEmbedUrl(selectedSchedule.id)}}">
         </iframe>
       </div>
     </div>
   </div>
 
-  <div class="mobile-footer visible-xs" ng-show="selectedScheduleId">
+  <div class="mobile-footer visible-xs" ng-show="selectedSchedule">
     <div class="container">
-      <a type="button" class="btn btn-default btn-block" ui-sref="apps.schedules.details({scheduleId: selectedScheduleId})">Edit Schedule</a>
+      <a type="button" class="btn btn-default btn-block" ui-sref="apps.schedules.details({scheduleId: selectedSchedule.id})">Edit Schedule</a>
       <ng-show ng-show="showTooltipOverlay">
         <button type="button" class="btn btn-primary btn-block" tooltip-overlay="showTooltipOverlay" tooltip-placement="top" tooltip-class="madero-style tooltip-share-guide">Share</button>
       </ng-show>
-      <share-schedule-button schedule-id="selectedScheduleId" ng-hide="showTooltipOverlay"></share-schedule-button>
+      <share-schedule-button schedule-id="selectedSchedule.id" ng-hide="showTooltipOverlay"></share-schedule-button>
     </div>
   </div>
 </div>

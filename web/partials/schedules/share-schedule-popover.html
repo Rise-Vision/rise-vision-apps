@@ -1,18 +1,23 @@
-<div id="shareSchedulePopover" class="share-schedule-popover">
+<div id="shareSchedulePopover" shared-schedule-popover class="share-schedule-popover">
   <div class="row">
     <div class="col-xs-12">
       <button type="button" class="close" ng-click="dismiss()" aria-hidden="true">
         <streamline-icon name="close" width="10" height="10"></streamline-icon>
       </button>
-      <span class="text-sm font-weight-bold">Share</h3>
+      <span class="text-sm font-weight-bold" ng-show="currentTab === 'link'">Share</span>
+      <a class="text-sm font-weight-bold u_float-left" href="#" ng-click="currentTab = 'link'" ng-show="currentTab !== 'link'">Go Back</a>
+      <div>
+        <span class="text-sm font-weight-bold aligner" ng-show="currentTab === 'chromeExtension'">Chrome Extension</span>
+        <span class="text-sm font-weight-bold aligner" ng-show="currentTab === 'embedCode'">Embed</span>
+      </div>
     </div>
   </div>
 
-  <div ng-show="currentTab !== 'socialMedia'" class="row">
-    <div class="col-xs-12 u_margin-sm-top">
+  <div ng-show="currentTab === 'link'" class="row u_margin-sm-top">
+    <div class="col-xs-12">
 
       <div class="u_scroll-x text-center sideways-panels">
-        <div id="extensionButton" class="panel panel-default u_bordered-hover u_remove-bottom u_clickable" ng-click="chromeExtension()">
+        <div id="extensionButton" class="panel panel-default u_bordered-hover u_remove-bottom u_clickable" ng-click="currentTab = 'chromeExtension'">
           <div class="panel-body">
             <div class="row">
               <div class="col-xs-12">
@@ -26,7 +31,7 @@
             </div>
           </div>
         </div>
-        <div id="embedButton" class="panel panel-default u_bordered-hover u_remove-bottom u_clickable" ng-click="embed()">
+        <div id="embedButton" class="panel panel-default u_bordered-hover u_remove-bottom u_clickable" ng-click="currentTab = 'embedCode'">
           <div class="panel-body">
             <div class="row">
               <div class="col-xs-12">
@@ -101,14 +106,33 @@
     </div>
   </div>
 
-  <div ng-show="currentTab !== 'link'" class="row u_margin-sm-top">
-    <div class="col-xs-12 u_margin-sm-top">
+  <div ng-show="currentTab === 'link'" class="row u_margin-sm-top">
+    <div class="col-xs-12">
       <div class="input-group">
-        <input class="form-control copy-text-box" type="text" readonly="readonly" value="{{sharedScheduleLink}}" ng-focus="onTextFocus($event)" focus-me="currentTab === 'link'"/>
+        <input class="form-control copy-text-box" type="text" readonly="readonly" value="{{getLink()}}" ng-focus="onTextFocus($event)" focus-me="currentTab === 'link'"/>
         <div class="input-group-btn">
-          <button id="copyUrlButton" class="btn btn-primary" ng-click="copyToClipboard(sharedScheduleLink)" aria-label="Copy">Copy</button>
+          <button id="copyUrlButton" class="btn btn-primary" ng-click="copyToClipboard(getLink())" aria-label="Copy">Copy</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div ng-show="currentTab === 'embedCode'" class="row u_margin-sm-top">
+    <div class="col-xs-12">
+      <span class="text-sm font-weight-bold">Embed Code:</span>
+      <br>
+      <textarea class="form-control copy-text-box u_margin-sm-top w-100 resize-vertical" rows="10" readonly="readonly" ng-focus="onTextFocus($event)" focus-me="currentTab === 'embedCode'">{{getEmbedCode()}}</textarea>
+      <button id="copyEmbedCodeButton" class="btn btn-primary u_margin-sm-top w-100" ng-click="copyToClipboard(getEmbedCode())" aria-label="Copy">Copy</button>
+    </div>
+  </div>
+
+  <div ng-show="currentTab === 'chromeExtension'" class="row u_margin-sm-top">
+    <div class="col-xs-12">
+      <span class="text-sm font-weight-bold">Invite Message:</span>
+      <br>
+      <textarea class="form-control copy-text-box u_margin-sm-top w-100 resize-vertical" rows="10" readonly="readonly" ng-focus="onTextFocus($event)" focus-me="currentTab === 'embedCode'">{{getInviteMessage()}}</textarea>
+      <button id="copyInviteMessageButton" class="btn btn-primary u_margin-sm-top w-100" ng-click="copyToClipboard(getInviteMessage())" aria-label="Copy">Copy</button>
+      <a id="chromeExtensionLink" class="btn btn-default u_margin-sm-top w-100"  href="https://chrome.google.com/webstore/detail/rise-vision-anywhere/dkoohkdagjpgjheoaaegomjhdccfbcle" target="_blank" aria-label="Install Chrome Extension" ng-click="trackScheduleShared()">Install Chrome Extension</a>
     </div>
   </div>
 

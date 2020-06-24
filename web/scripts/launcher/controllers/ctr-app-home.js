@@ -52,7 +52,7 @@ angular.module('risevision.apps.launcher.controllers')
           .then(function (result) {
             $scope.schedules = result.items || [];
             if ($scope.schedules.length > 0) {
-              $scope.selectedScheduleId = $scope.schedules[0].id;
+              $scope.selectedSchedule = $scope.schedules[0];
 
               triggerOverlay();
             }
