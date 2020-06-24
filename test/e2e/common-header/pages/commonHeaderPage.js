@@ -72,11 +72,7 @@
       //wait for spinner to go away.
       helper.waitDisappear(loader, 'CH spinner loader');
 
-      homePage.getShareTooltipDismiss().isPresent().then(function(isTooltipPresent) {
-        if (isTooltipPresent) {
-          helper.clickOverIFrame(homePage.getShareTooltipDismiss(), 'Tooltip Dismiss Button');
-        }
-
+      homePage.dismissFeatureTour().then(function() {
         helper.wait(profilePic, 'Profile Picture');
         helper.clickWhenClickable(profilePic, 'Profile Picture');
 

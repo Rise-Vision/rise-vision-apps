@@ -1,5 +1,6 @@
 'use strict';
 var config = require('../../config/config.json');
+var helper = require('rv-common-e2e').helper;
 
 var HomePage = function() {
   var _this = this;
@@ -39,7 +40,15 @@ var HomePage = function() {
   var signUpText = element(by.id('sign-up-text'));
   var signInText = element(by.id('sign-in-text'));
   var signUpLink = element(by.id('sign-up-link'));
-  var signInLink = element(by.id('sign-in-link'));  
+  var signInLink = element(by.id('sign-in-link'));
+
+  this.dismissFeatureTour = function() {
+    return shareTooltipDismiss.isPresent().then(function(isTooltipPresent) {
+      if (isTooltipPresent) {
+        helper.clickOverIFrame(shareTooltipDismiss, 'Tooltip Dismiss Button');
+      }
+    });
+  }  
 
   this.confirmGet = function(url) {
     return browser.get(url)

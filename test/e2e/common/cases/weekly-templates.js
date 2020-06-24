@@ -27,11 +27,8 @@ var WeeklyTemplatesScenarios = function() {
 
       homepage.get();
       signInPage.signIn();
-      homepage.getShareTooltipDismiss().isPresent().then(function(isTooltipPresent) {
-        if (isTooltipPresent) {
-          helper.clickOverIFrame(homepage.getShareTooltipDismiss(), 'Tooltip Dismiss Button');
-          homepage.get();
-        }
+      homepage.dismissFeatureTour().then(function() {
+        homepage.get();
       });
     });
 

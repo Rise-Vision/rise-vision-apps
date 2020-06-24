@@ -43,8 +43,7 @@ var DismissModalScenarios = function() {
         commonHeaderPage.getCommonHeaderMenuItems().get(0).click(); //Launcher
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
-        helper.wait(homePage.getShareTooltipDismiss(), 'Feature Tour');
-        helper.clickOverIFrame(homePage.getShareTooltipDismiss(), 'Tooltip Dismiss');
+        homePage.dismissFeatureTour();
 
         commonHeaderPage.getCommonHeaderMenuItems().get(4).click(); //Storage
         helper.wait(storageHomePage.getStorageAppContainer(), 'Storage Apps Container');
