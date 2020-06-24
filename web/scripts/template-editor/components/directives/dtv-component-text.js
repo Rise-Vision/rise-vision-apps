@@ -22,7 +22,7 @@ angular.module('risevision.template-editor.directives')
               'alignleft aligncenter alignright alignjustify | ' +
               'bullist numlist | ' + 'link | ' +
               'removeformat code',
-            fontsize_formats: '8px 10px 12px 14px 18px 24px 36px',
+            fontsize_formats: '24px 36px 48px 60px 72px 84px 96px 108px 120px 150px 200px 300px',
             force_p_newlines : false,
             forced_root_block : '',
             setup: function(editor) {
