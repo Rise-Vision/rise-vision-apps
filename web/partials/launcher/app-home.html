@@ -1,4 +1,4 @@
-<div id="app-home-container" class="full-page-flex-container madero-style" common-header-height>
+<div id="apps-home-container" class="full-page-flex-container madero-style" common-header-height>
 
   <div class="scrollable-content" rv-spinner rv-spinner-key="app-home-loader" rv-spinner-start-active="1">
     <div class="row">
@@ -25,7 +25,7 @@
         <span class="hidden-xs pull-right action-buttons">
         <a type="button" class="btn btn-default" ui-sref="apps.schedules.details({scheduleId: selectedScheduleId})">Edit Schedule</a>
         <ng-show ng-show="showTooltipOverlay">
-          <button id="shareButton" type="button" class="btn btn-primary" tooltip-overlay="showTooltipOverlay" tooltip-placement="bottom" tooltip-class="madero-style tooltip-pull-left" tooltip-digest-on-resize>Share</button>
+          <button id="shareButton" type="button" class="btn btn-primary" tooltip-overlay="showTooltipOverlay" tooltip-placement="bottom" tooltip-class="madero-style tooltip-share-guide" tooltip-digest-on-resize>Share</button>
         </ng-show>
         <share-schedule-button schedule-id="selectedScheduleId" ng-hide="showTooltipOverlay"></share-schedule-button>
       </span>
@@ -49,7 +49,7 @@
     <div class="container">
       <a type="button" class="btn btn-default btn-block" ui-sref="apps.schedules.details({scheduleId: selectedScheduleId})">Edit Schedule</a>
       <ng-show ng-show="showTooltipOverlay">
-        <button type="button" class="btn btn-primary btn-block" tooltip-overlay="showTooltipOverlay" tooltip-placement="top" tooltip-class="madero-style">Share</button>
+        <button type="button" class="btn btn-primary btn-block" tooltip-overlay="showTooltipOverlay" tooltip-placement="top" tooltip-class="madero-style tooltip-share-guide">Share</button>
       </ng-show>
       <share-schedule-button schedule-id="selectedScheduleId" ng-hide="showTooltipOverlay"></share-schedule-button>
     </div>
