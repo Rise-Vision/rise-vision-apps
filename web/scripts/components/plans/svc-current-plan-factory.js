@@ -61,7 +61,7 @@
         };
 
         _factory.isPlanActive = function () {
-          return _factory.isSubscribed() || _factory.isOnTrial();
+          return _factory.isSubscribed() || _factory.isOnTrial() || _factory.isCancelledActive();
         };
 
         _factory.isFree = function () {
