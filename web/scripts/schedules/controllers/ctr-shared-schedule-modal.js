@@ -1,4 +1,3 @@
-/*jshint multistr: true */
 'use strict';
 
 angular.module('risevision.schedules.controllers')
