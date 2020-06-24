@@ -21,6 +21,7 @@ angular.module('risevision.apps.launcher.controllers')
         if ($scope.showTooltipOverlay) {
           var handler = $scope.$on('tooltipOverlay.dismissed', function () {
             localStorageService.set(tooltipDismissedKey, true);
+            $scope.showTooltipOverlay = false;
             handler();
           });
         }

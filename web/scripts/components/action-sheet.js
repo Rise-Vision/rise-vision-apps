@@ -13,14 +13,19 @@ angular.module('risevision.common.components.action-sheet', [])
           var body = $document.find('body').eq(0);
           var isVisible = false;
           var backdropDomEl = document.getElementById('action-sheet-backdrop');
+          var showBackdrop = iAttrs.actionSheetBackdrop !== 'false';
+          var bindClick = iAttrs.actionSheetBindClick !== 'false';
 
-          if (!angular.isObject(backdropDomEl)) {
-            backdropDomEl = angular.element(
-              '<div id="action-sheet-backdrop" class="modal-backdrop"></div>'
-            );
-            body.append(backdropDomEl);
-          } else {
-            backdropDomEl = angular.element(backdropDomEl);
+
+          if (showBackdrop) {
+            if (!angular.isObject(backdropDomEl)) {
+              backdropDomEl = angular.element(
+                '<div id="action-sheet-backdrop" class="modal-backdrop"></div>'
+              );
+              body.append(backdropDomEl);
+            } else {
+              backdropDomEl = angular.element(backdropDomEl);
+            }
           }
 
           scope.templateUrl = scope.$eval(iAttrs.actionSheet);
@@ -42,24 +47,30 @@ angular.module('risevision.common.components.action-sheet', [])
               actionSheetDomEl.toggleClass('is-action-sheet-closed');
               $timeout(function () {
                 actionSheetDomEl.toggleClass('is-action-sheet-opened');
-                backdropDomEl.toggleClass('is-action-sheet-opened');
+                if (showBackdrop) {
+                  backdropDomEl.toggleClass('is-action-sheet-opened');
+                }
               });
             } else {
               //apply transformation first, then hide element
               actionSheetDomEl.toggleClass('is-action-sheet-opened');
-              backdropDomEl.toggleClass('is-action-sheet-opened');
+              if (showBackdrop) {
+                backdropDomEl.toggleClass('is-action-sheet-opened');
+              }
               $timeout(function () {
                 actionSheetDomEl.toggleClass('is-action-sheet-closed');
               }, 500);
             }
             //fix for #298 - END
 
-            if (isVisible) {
-              backdropDomEl.bind('tap', toggle);
-              backdropDomEl.bind('click', toggle);
-            } else {
-              backdropDomEl.unbind('tap');
-              backdropDomEl.unbind('click');
+            if (showBackdrop) {
+              if (isVisible && bindClick) {
+                backdropDomEl.bind('tap', toggle);
+                backdropDomEl.bind('click', toggle);
+              } else {
+                backdropDomEl.unbind('tap');
+                backdropDomEl.unbind('click');
+              }
             }
           };
 
@@ -71,10 +82,14 @@ angular.module('risevision.common.components.action-sheet', [])
             });
           }
 
-          iElement.bind('tap', toggle);
-          iElement.bind('click', toggle);
-          angularDomEl.bind('tap', toggle);
-          angularDomEl.bind('click', toggle);
+          if (bindClick) {
+            iElement.bind('tap', toggle);
+            iElement.bind('click', toggle);
+            angularDomEl.bind('tap', toggle);
+            angularDomEl.bind('click', toggle);
+          } else {
+            iElement.bind('toggle', toggle);
+          }
         }
       };
     }
