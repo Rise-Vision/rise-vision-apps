@@ -1754,6 +1754,16 @@ All utilities have a prefix u_ added to them
   }
 }
 
+// Misc utilities
+
+.u_scroll-x {
+  overflow-x: scroll;
+}
+
+.u_scroll-y {
+  overflow-y: scroll;
+}
+
 .img-fluid {
   width: 100%;
 }

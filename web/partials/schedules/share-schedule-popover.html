@@ -1,119 +1,116 @@
 <div id="shareSchedulePopover" class="share-schedule-popover">
-  <div class="col-xs-12">
-    <div class="row">
+  <div class="row">
+    <div class="col-xs-12">
       <button type="button" class="close" ng-click="dismiss()" aria-hidden="true">
-        <i class="fa fa-times"></i>
+        <streamline-icon name="close" width="10" height="10"></streamline-icon>
       </button>
-      <h3 class="modal-title">Share</h3>
+      <span class="text-sm font-weight-bold">Share</h3>
     </div>
   </div>
 
   <div ng-show="currentTab !== 'socialMedia'" class="row">
-    <div class="col-xs-12">
+    <div class="col-xs-12 u_margin-sm-top">
 
-      <div class="row">
-        <div class="col-xs-12 u_margin-sm-top text-center sideways-panels">
-          <div id="extensionButton" class="panel panel-default u_bordered-hover u_remove-bottom u_clickable" ng-click="chromeExtension()">
-            <div class="panel-body">
-              <div class="row">
-                <div class="col-xs-12">
-                  <img src="../images/shared-schedule/google-chrome.svg" height="32">
-                </div>
+      <div class="u_scroll-x text-center sideways-panels">
+        <div id="extensionButton" class="panel panel-default u_bordered-hover u_remove-bottom u_clickable" ng-click="chromeExtension()">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-xs-12">
+                <img src="../images/shared-schedule/google-chrome.svg" height="32">
               </div>
-              <div class="row u_margin-md-top">
-                <div class="col-xs-12">
-                  <span>Chrome Extension</span>
-                </div>
+            </div>
+            <div class="row u_margin-md-top">
+              <div class="col-xs-12">
+                <span>Chrome Extension</span>
               </div>
             </div>
           </div>
-          <div id="embedButton" class="panel panel-default u_bordered-hover u_remove-bottom u_clickable" ng-click="embed()">
-            <div class="panel-body">
-              <div class="row">
-                <div class="col-xs-12">
-                  <img src="../images/shared-schedule/embed-icon.svg" height="32">
-                </div>
+        </div>
+        <div id="embedButton" class="panel panel-default u_bordered-hover u_remove-bottom u_clickable" ng-click="embed()">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-xs-12">
+                <img src="../images/shared-schedule/embed-icon.svg" height="32">
               </div>
-              <div class="row u_margin-md-top">
-                <div class="col-xs-12">
-                  <span>Embed</span>
-                </div>
+            </div>
+            <div class="row u_margin-md-top">
+              <div class="col-xs-12">
+                <span>Embed</span>
               </div>
             </div>
           </div>
-          <div class="panel panel-default u_bordered-hover u_remove-bottom u_clickable" ng-click="shareOnSocial('classroom')">
-            <div class="panel-body">
-              <div class="row">
-                <div class="col-xs-12">
-                  <img src="../images/shared-schedule/google-classroom.svg" height="32">
-                </div>
+        </div>
+        <div class="panel panel-default u_bordered-hover u_remove-bottom u_clickable" ng-click="shareOnSocial('classroom')">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-xs-12">
+                <img src="../images/shared-schedule/google-classroom.svg" height="32">
               </div>
-              <div class="row u_margin-md-top">
-                <div class="col-xs-12">
-                  <span>Google Classroom</span>
-                </div>
+            </div>
+            <div class="row u_margin-md-top">
+              <div class="col-xs-12">
+                <span>Google Classroom</span>
               </div>
             </div>
           </div>
-          <div id="twitterShareButton" class="panel panel-default u_bordered-hover u_remove-bottom u_clickable" ng-click="shareOnSocial('twitter')">
-            <div class="panel-body">
-              <div class="row">
-                <div class="col-xs-12">
-                  <img src="../images/shared-schedule/twitter.svg" height="32">
-                </div>
+        </div>
+        <div id="twitterShareButton" class="panel panel-default u_bordered-hover u_remove-bottom u_clickable" ng-click="shareOnSocial('twitter')">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-xs-12">
+                <img src="../images/shared-schedule/twitter.svg" height="32">
               </div>
-              <div class="row u_margin-md-top">
-                <div class="col-xs-12">
-                  <span>Twitter</span>
-                </div>
+            </div>
+            <div class="row u_margin-md-top">
+              <div class="col-xs-12">
+                <span>Twitter</span>
               </div>
             </div>
           </div>
-          <div class="panel panel-default u_bordered-hover u_remove-bottom u_clickable" ng-click="shareOnSocial('linkedin')">
-            <div class="panel-body">
-              <div class="row">
-                <div class="col-xs-12">
-                  <img src="../images/shared-schedule/linkedin.svg" height="32">
-                </div>
+        </div>
+        <div class="panel panel-default u_bordered-hover u_remove-bottom u_clickable" ng-click="shareOnSocial('linkedin')">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-xs-12">
+                <img src="../images/shared-schedule/linkedin.svg" height="32">
               </div>
-              <div class="row u_margin-md-top">
-                <div class="col-xs-12">
-                  <span>LinkedIn</span>
-                </div>
+            </div>
+            <div class="row u_margin-md-top">
+              <div class="col-xs-12">
+                <span>LinkedIn</span>
               </div>
             </div>
           </div>
-          <div class="panel panel-default u_bordered-hover u_remove-bottom u_clickable" ng-click="shareOnSocial('facebook')">
-            <div class="panel-body">
-              <div class="row">
-                <div class="col-xs-12">
-                  <img src="../images/shared-schedule/facebook.svg" height="32">
-                </div>
+        </div>
+        <div class="panel panel-default u_bordered-hover u_remove-bottom u_clickable" ng-click="shareOnSocial('facebook')">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-xs-12">
+                <img src="../images/shared-schedule/facebook.svg" height="32">
               </div>
-              <div class="row u_margin-md-top">
-                <div class="col-xs-12">
-                  <span>Facebook</span>
-                </div>
+            </div>
+            <div class="row u_margin-md-top">
+              <div class="col-xs-12">
+                <span>Facebook</span>
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
     </div>
-
-    <div ng-show="currentTab !== 'link'" class="row u_margin-sm-top">
-      <div class="col-xs-12 u_margin-sm-top">
-        <div class="input-group">
-          <input class="form-control copy-text-box" type="text" readonly="readonly" value="{{sharedScheduleLink}}" ng-focus="onTextFocus($event)" focus-me="currentTab === 'link'"/>
-          <div class="input-group-btn">
-            <button id="copyUrlButton" class="btn btn-primary" ng-click="copyToClipboard(sharedScheduleLink)" aria-label="Copy">Copy</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
+
+  <div ng-show="currentTab !== 'link'" class="row u_margin-sm-top">
+    <div class="col-xs-12 u_margin-sm-top">
+      <div class="input-group">
+        <input class="form-control copy-text-box" type="text" readonly="readonly" value="{{sharedScheduleLink}}" ng-focus="onTextFocus($event)" focus-me="currentTab === 'link'"/>
+        <div class="input-group-btn">
+          <button id="copyUrlButton" class="btn btn-primary" ng-click="copyToClipboard(sharedScheduleLink)" aria-label="Copy">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 </div>
