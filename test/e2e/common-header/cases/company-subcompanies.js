@@ -41,7 +41,7 @@
         safeDeleteModalPage = new SafeDeleteModalPage();
         signInPage = new SignInPage();
 
-        homepage.get();
+        homepage.getEditor();
         signInPage.signIn();
 
         // In case move succeeded and deletion failed
@@ -219,7 +219,7 @@
       
       describe("Delete Company", function () {
         before(function() {
-          homepage.get();
+          homepage.getEditor();
         });
 
         it("Switch to sub-company", function() {
@@ -271,7 +271,7 @@
 
       describe("Clean up other subcompany", function() {
         before(function() {
-          homepage.get();
+          homepage.getEditor();
         });
 
         it("Switch to sub-company and delete it", function() {

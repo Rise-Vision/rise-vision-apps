@@ -42,6 +42,10 @@ var DismissModalScenarios = function() {
         StorageHelper.setupStorageHome();
         commonHeaderPage.getCommonHeaderMenuItems().get(0).click(); //Launcher
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
+
+        helper.wait(homePage.getShareTooltipDismiss(), 'Feature Tour');
+        helper.clickOverIFrame(homePage.getShareTooltipDismiss(), 'Tooltip Dismiss');
+
         commonHeaderPage.getCommonHeaderMenuItems().get(4).click(); //Storage
         helper.wait(storageHomePage.getStorageAppContainer(), 'Storage Apps Container');
         helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');

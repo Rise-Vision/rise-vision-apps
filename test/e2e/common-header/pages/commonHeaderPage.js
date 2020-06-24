@@ -3,6 +3,7 @@
 (function(module) {
   'use strict';
 
+  var HomePage = require('./../../common/pages/homepage.js');
   var LoginPage = require('./loginPage.js');
   var CompanySettingsModalPage = require('./companySettingsModalPage.js');
   var UserSettingsModalPage = require('./userSettingsModalPage.js');
@@ -16,6 +17,7 @@
     var JENKINS_UNSUBSCRIBED = 'Jenkins Unsubscribed Subcompany';
     var E2E_UNSUBSCRIBED = 'E2E SUBCOMPANY - UNSUBSCRIBED';
 
+    var homePage = new HomePage();
     var loginPage = new LoginPage();
     var companySettingsModalPage = new CompanySettingsModalPage();
     var userSettingsModalPage = new UserSettingsModalPage();
@@ -70,18 +72,24 @@
       //wait for spinner to go away.
       helper.waitDisappear(loader, 'CH spinner loader');
 
-      helper.wait(profilePic, 'Profile Picture');
-      helper.clickWhenClickable(profilePic, 'Profile Picture');
+      homePage.getShareTooltipDismiss().isPresent().then(function(isTooltipPresent) {
+        if (isTooltipPresent) {
+          helper.clickOverIFrame(homePage.getShareTooltipDismiss(), 'Tooltip Dismiss Button');
+        }
 
-      helper.wait(profileMenu, 'Profile Menu');
+        helper.wait(profilePic, 'Profile Picture');
+        helper.clickWhenClickable(profilePic, 'Profile Picture');
+
+        helper.wait(profileMenu, 'Profile Menu');
+      });
     };
 
     this.clickSubcompanyButton = function() {
       selectSubcompanyButton.isDisplayed().then(function(value) {
         if (value) {
-          helper.clickWhenClickable(selectSubcompanyButton, 'Select Sub Company Button');
+          helper.clickOverIFrame(selectSubcompanyButton, 'Select Sub Company Button');
         } else {
-          helper.clickWhenClickable(changeSubcompanyButton, 'Change Sub Company Button');
+          helper.clickOverIFrame(changeSubcompanyButton, 'Change Sub Company Button');
         }
       });
     };
@@ -163,14 +171,14 @@
 
       selfCommonHeaderPage.openProfileMenu();
 
-      helper.clickWhenClickable(addSubcompanyButton, 'Add Sub Company Button');
+      helper.clickOverIFrame(addSubcompanyButton, 'Add Sub Company Button');
       helper.wait(addSubcompanyModal, "Add Subcompany Modal");
 
       addSubcompanyModalNameField.sendKeys(selfCommonHeaderPage.addStageSuffix(name));
       if (industryValue) {
         addSubcompanyModalIndustryField.$('[value="'+industryValue+'"]').click(); 
       }
-      helper.clickWhenClickable(addSubcompanyModalSaveButton, 'Add Sub Company Modal Save Button');
+      helper.clickOverIFrame(addSubcompanyModalSaveButton, 'Add Sub Company Modal Save Button');
       helper.waitRemoved(addSubcompanyModal, "Add Subcompany Modal");
     };
 
@@ -201,14 +209,14 @@
         if (count > 0) {
           var name = skipSuffix ? subCompanyName : selfCommonHeaderPage.addStageSuffix(subCompanyName);
 
-          helper.clickWhenClickable(selectSubcompanyModalCompanies.get(0), "First matching Subcompany");
+          helper.clickOverIFrame(selectSubcompanyModalCompanies.get(0), "First matching Subcompany");
           helper.wait(subcompanyAlert, "Subcompany Alert");
           helper.waitForElementTextToChange(subcompanyAlert, name, 'Subcompany Selected');
 
           helper.waitDisappear(loader, 'CH spinner loader');
         }
         else if (!avoidRetry) {
-          helper.clickWhenClickable(selectSubcompanyModalCloseButton, "Subcompany Modal Close Button");
+          helper.clickOverIFrame(selectSubcompanyModalCloseButton, "Subcompany Modal Close Button");
           browser.sleep(10000);
           selfCommonHeaderPage.selectSubCompany(subCompanyName, true, skipSuffix);
         }
@@ -233,14 +241,14 @@
         if (count > 0) {
           console.log('Found matching Subcompany, deleting');
 
-          helper.clickWhenClickable(selectSubcompanyModalCompanies.get(0), "First matching Subcompany");
+          helper.clickOverIFrame(selectSubcompanyModalCompanies.get(0), "First matching Subcompany");
           helper.wait(subcompanyAlert, "Subcompany Alert");
           selfCommonHeaderPage.deleteCurrentCompany(subCompanyName);
         }
         else {
           console.log('Matching Subcompany not found');
 
-          helper.clickWhenClickable(selectSubcompanyModalCloseButton, "Subcompany Modal Close Button");
+          helper.clickOverIFrame(selectSubcompanyModalCloseButton, "Subcompany Modal Close Button");
         }
       });
     };
@@ -291,7 +299,8 @@
     this.selectAlerts = function() {
       this.openProfileMenu();
 
-      helper.clickWhenClickable(alertSettingsButton, "Alert settings button");
+      helper.wait(alertSettingsButton, "Alert settings button");
+      helper.clickOverIFrame(alertSettingsButton, "Alert settings button");
       helper.wait(turnOnAlertsButton, "Turn on alerts button");
     };
 

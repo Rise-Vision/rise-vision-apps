@@ -16,8 +16,10 @@ var HomePage = function() {
   var schedulesLink = element(by.css('.nav.navbar-nav #SchedulesLink'));
   var storageLink = element(by.css('.nav.navbar-nav #StorageLink'));
 
-  var appLauncherContainer = element(by.id('appLauncherContainer'));
-  var appLauncherLoader = element(by.xpath('//div[@spinner-key="launcher-loader"]'));
+  var appsHomeContainer = element(by.id('apps-home-container'));
+  var appsHomeLoader = element(by.xpath('//div[@spinner-key="apps-home-loader"]'));
+
+  var shareTooltipDismiss = element(by.id('share-tooltip-dismiss'));
 
   var presentationAddButton = element(by.id('presentationAddButton'));
   var presentationsList = element(by.id('presentationsList'));
@@ -106,13 +108,17 @@ var HomePage = function() {
     return storageLink;
   };
 
-  this.getAppLauncherContainer = function() {
-    return appLauncherContainer;
+  this.getAppsHomeContainer = function() {
+    return appsHomeContainer;
   };
 
-  this.getAppLauncherLoader = function() {
-    return appLauncherLoader;
+  this.getAppsHomeLoader = function() {
+    return appsHomeLoader;
   };
+
+  this.getShareTooltipDismiss = function() {
+    return shareTooltipDismiss;
+  }
 
   this.getPresentationAddButton = function() {
     return presentationAddButton;

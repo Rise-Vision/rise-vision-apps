@@ -27,6 +27,12 @@ var WeeklyTemplatesScenarios = function() {
 
       homepage.get();
       signInPage.signIn();
+      homepage.getShareTooltipDismiss().isPresent().then(function(isTooltipPresent) {
+        if (isTooltipPresent) {
+          helper.clickOverIFrame(homepage.getShareTooltipDismiss(), 'Tooltip Dismiss Button');
+          homepage.get();
+        }
+      });
     });
 
     // Jenkins account is not an Education company
