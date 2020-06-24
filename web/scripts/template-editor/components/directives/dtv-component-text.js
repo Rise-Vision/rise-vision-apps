@@ -14,7 +14,7 @@ angular.module('risevision.template-editor.directives')
             hidePointerLabels: true
           };
 
-          /* jshint ignore:start */
+          /*jshint camelcase: false */
           $scope.tinymceOptions = {
             baseURL: '/vendor/tinymce/', //set path to load theme and skin files
             plugins: 'colorpicker textcolor lists link',
@@ -37,7 +37,7 @@ angular.module('risevision.template-editor.directives')
               });
             }
           };
-          /* jshint ignore:end */
+          /*jshint camelcase: true */
 
           $scope.data = {
             richText: ''
