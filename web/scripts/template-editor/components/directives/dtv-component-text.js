@@ -16,7 +16,7 @@ angular.module('risevision.template-editor.directives')
 
           /* jshint ignore:start */
           $scope.tinymceOptions = {
-            baseURL: '/vendor/tinymce/',
+            baseURL: '/vendor/tinymce/', //set path to load theme and skin files
             plugins: 'colorpicker textcolor lists link',
             menubar: false,
             toolbar1: 'fontselect fontsizeselect | ' +
@@ -25,7 +25,17 @@ angular.module('risevision.template-editor.directives')
               'alignleft aligncenter alignright alignjustify | ' +
               'bullist numlist | ' + 'link | ' +
               'removeformat code',
-            fontsize_formats: '8px 10px 12px 14px 18px 24px 36px'
+            fontsize_formats: '8px 10px 12px 14px 18px 24px 36px',
+            setup: function(editor) {
+              editor.on('paste', function(e) {
+                //paste does not trigger change event
+                //editor.getContent() needs timeout in order to include the change
+                setTimeout(function() {
+                  $scope.data.richText = editor.getContent();
+                  $scope.save();
+                }, 100);
+              });
+            }
           };
           /* jshint ignore:end */
 
