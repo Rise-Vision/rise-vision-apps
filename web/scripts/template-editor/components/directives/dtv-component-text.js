@@ -18,13 +18,13 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.tinymceOptions = {
-            plugins: 'colorpicker textcolor',
+            plugins: 'colorpicker textcolor lists link',
             menubar: false,
             toolbar1: 'fontselect fontsizeselect | ' +
               'forecolor backcolor | ' +
               'bold italic underline | ' +
               'alignleft aligncenter alignright alignjustify | ' +
-              'bullist numlist indent outdent lineheight | ' +
+              'bullist numlist | ' + 'link |' +
               'removeformat code'
           };
 
