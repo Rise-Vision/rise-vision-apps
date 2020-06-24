@@ -1,9 +1,6 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .value('uiTinymceConfig', {
-    baseUrl: '/vendor/tinymce/'
-  })
   .directive('templateComponentText', ['$timeout', '$window', 'templateEditorFactory', 'templateEditorUtils',
     function ($timeout, $window, templateEditorFactory, templateEditorUtils) {
       return {
@@ -19,6 +16,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.tinymceOptions = {
             plugins: 'colorpicker textcolor lists link',
+            baseURL: '/vendor/tinymce/',
             menubar: false,
             toolbar1: 'fontselect fontsizeselect | ' +
               'forecolor backcolor | ' +
