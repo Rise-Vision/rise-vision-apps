@@ -14,17 +14,20 @@ angular.module('risevision.template-editor.directives')
             hidePointerLabels: true
           };
 
+          /* jshint ignore:start */
           $scope.tinymceOptions = {
             baseURL: '/vendor/tinymce/',
-            plugins: 'colorpicker textcolor',
+            plugins: 'colorpicker textcolor lists link',
             menubar: false,
             toolbar1: 'fontselect fontsizeselect | ' +
               'forecolor backcolor | ' +
               'bold italic underline | ' +
               'alignleft aligncenter alignright alignjustify | ' +
-              'bullist numlist indent outdent lineheight | ' +
-              'removeformat code'
+              'bullist numlist | ' + 'link | ' +
+              'removeformat code',
+            fontsize_formats: '8px 10px 12px 14px 18px 24px 36px'
           };
+          /* jshint ignore:end */
 
           $scope.richText = '';
 
