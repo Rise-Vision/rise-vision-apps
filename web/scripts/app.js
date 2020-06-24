@@ -155,7 +155,8 @@ angular.module('risevision.apps', [
       });
 
       $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
-        if ($state.current.name === 'apps.schedules.list' ||
+        if ($state.current.name === 'apps.launcher.apphome' ||
+          $state.current.name === 'apps.schedules.list' ||
           $state.current.name === 'apps.editor.list' ||
           $state.current.name === 'apps.displays.list' ||
           $state.current.name === 'apps.displays.alerts' ||
