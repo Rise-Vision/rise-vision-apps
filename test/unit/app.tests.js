@@ -171,7 +171,7 @@ describe('app:', function() {
       var state = $state.get('apps.launcher');
       expect(state).to.be.ok;
       expect(state.abstract).to.be.true;
-      expect(state.template).to.equal('<div class="container app-launcher" ui-view></div>');
+      expect(state.template).to.equal('<div class="app-launcher" ui-view></div>');
       expect(state.url).to.equal('?cid');
     });
 

@@ -1463,6 +1463,76 @@ $short-phone-height: 570px;
   .display-id {
     font-size: 18px;
   }
+  
+  &.tooltip-backdrop {
+    background: rgba(2, 6, 32, 0.5);
+    z-index: 1001;
+    fill: rgb(2, 6, 32);
+    fill-opacity: 0.5;
+  }
+
+  &.tooltip {
+    opacity: 1;
+
+    &.tooltip-pull-left {
+      margin-left: -100px;
+
+      &.bottom .tooltip-arrow {
+        margin-left: 100px;
+      }
+    }
+
+    .tooltip-inner {
+      text-align: left;
+      padding: 20px;
+      border: 1px solid rgb(153, 153, 153);
+      box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
+      opacity: 1;
+      max-width: 356px;
+    }
+
+    &.bottom {
+      margin-top: 8px;
+    }
+
+    &.bottom .tooltip-arrow {
+      margin-top: 1px;
+    }
+
+    &.top {
+      margin-top: -8px;
+    }
+
+    &.top .tooltip-arrow {
+      margin-bottom: 1px;
+    }
+
+    /* styles for arrow border */
+    .tooltip-arrow:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-color: transparent;
+      border-style: solid;
+      z-index: -1;
+    }
+
+    &.bottom .tooltip-arrow:after {
+      margin-top: -2px;
+      margin-left: calc(-#{$tooltip-arrow-width} - 1px);
+      border-width: 0 calc(#{$tooltip-arrow-width} + 1px) calc(#{$tooltip-arrow-width} + 1px);
+      border-bottom-color: rgb(153, 153, 153);
+    }
+
+    &.top .tooltip-arrow:after {
+      margin-top: -7px;
+      margin-left: calc(-#{$tooltip-arrow-width} - 1px);
+      border-width: calc(#{$tooltip-arrow-width} + 1px) calc(#{$tooltip-arrow-width} + 1px) 0;
+      border-top-color: rgb(153, 153, 153);
+    }
+
+  }
 }
 
 .madero-radio, .madero-checkbox {
