@@ -29,7 +29,9 @@ angular.module('risevision.template-editor.directives')
           };
           /* jshint ignore:end */
 
-          $scope.richText = '';
+          $scope.data = {
+            richText: ''
+          };
 
           function _load() {
             $scope.isMultiline = $scope.getBlueprintData($scope.componentId, 'multiline');
@@ -49,7 +51,7 @@ angular.module('risevision.template-editor.directives')
             $scope.sliderOptions.onEnd = $scope.save;
 
             $scope.value = value;
-            $scope.richText = richText;
+            $scope.data.richText = richText;
             $scope.fontsize = fontsizeInt;
             $scope.showFontSize = !!fontsizeInt;
 
@@ -59,7 +61,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.save = function () {
-            $scope.setAttributeData($scope.componentId, 'richText', $scope.richText);
+            $scope.setAttributeData($scope.componentId, 'richText', $scope.data.richText);
             $scope.setAttributeData($scope.componentId, 'value', undefined);
 
             if ($scope.showFontSize) {
