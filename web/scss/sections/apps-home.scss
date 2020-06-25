@@ -210,5 +210,12 @@
         }
       }
     }
+
+    .copy-text-box {
+      background-color: $lighter-gray;
+      color: $madero-gray;
+      font-size: 12px;
+      padding: 15px;
+    }
   }
 }
