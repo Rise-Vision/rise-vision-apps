@@ -22,10 +22,10 @@
       </div>
 
       <div class="form-inline schedules-toolbar" ng-show="selectedSchedule">
-        <span class="hidden-xs pull-right action-buttons">
-        <a type="button" class="btn btn-default" ui-sref="apps.schedules.details({scheduleId: selectedSchedule.id})">Edit Schedule</a>
+        <span class="hidden-xs pull-right">
+        <a type="button" class="btn btn-default schedules-toolbar-btn" ui-sref="apps.schedules.details({scheduleId: selectedSchedule.id})">Edit Schedule</a>
         <ng-show ng-show="showTooltipOverlay">
-          <button id="shareButton" type="button" class="btn btn-primary" tooltip-overlay="showTooltipOverlay" tooltip-placement="bottom" tooltip-class="madero-style tooltip-share-guide" tooltip-digest-on-resize>Share</button>
+          <button id="shareButton" type="button" class="btn btn-primary schedules-toolbar-btn" tooltip-overlay="showTooltipOverlay" tooltip-placement="bottom" tooltip-class="madero-style tooltip-share-guide" tooltip-digest-on-resize>Share</button>
         </ng-show>
         <share-schedule-button schedule="selectedSchedule" ng-hide="showTooltipOverlay"></share-schedule-button>
       </span>

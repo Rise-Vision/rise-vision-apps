@@ -39,7 +39,7 @@
 				margin-right: 10px;
 			}
 
-			.action-buttons .btn {
+			.schedules-toolbar-btn, share-schedule-button > button {
 				min-width: 160px;
 				margin-left: 8px;
 			}	
@@ -162,6 +162,10 @@
           svg {
             fill: rgb(153, 153, 153);
           }
+        }
+
+        .input-group-btn {
+          width: 1%;
         }
       }
 
