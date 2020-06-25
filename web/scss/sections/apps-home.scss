@@ -192,4 +192,22 @@
       }
     }
   }
+
+  &.tooltip-share-options {
+    .sideways-panels {
+      .panel {
+        border-color: rgb(153, 153, 153);
+        @extend .mr-2;
+
+        &:last-child{
+          @extend .u_remove-right;
+        }
+
+        .panel-body {
+          width: 90px;
+          padding: 10px;
+        }
+      }
+    }
+  }
 }
