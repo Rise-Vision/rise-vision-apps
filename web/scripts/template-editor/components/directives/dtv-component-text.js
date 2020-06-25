@@ -20,17 +20,18 @@ angular.module('risevision.template-editor.directives')
             plugins: 'colorpicker textcolor lists link',
             menubar: false,
             toolbar1: 'fontselect fontsizeselect | ' +
-              'forecolor backcolor | ' +
               'bold italic underline | ' +
-              'alignleft aligncenter alignright alignjustify | ' +
-              'bullist numlist | ' + 'link | ' +
+              'forecolor backcolor | ' +
+              'link | ' +
+              'bullist numlist | ' +
+              'alignleft aligncenter alignright | ' +
               'removeformat code',
             fontsize_formats: '8px 10px 12px 14px 18px 24px 36px',
-            setup: function(editor) {
-              editor.on('paste', function(e) {
+            setup: function (editor) {
+              editor.on('paste', function (e) {
                 //paste does not trigger change event
                 //editor.getContent() needs timeout in order to include the change
-                setTimeout(function() {
+                setTimeout(function () {
                   $scope.data.richText = editor.getContent();
                   $scope.save();
                 }, 100);
