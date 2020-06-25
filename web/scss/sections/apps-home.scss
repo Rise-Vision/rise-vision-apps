@@ -87,12 +87,6 @@
     opacity: 1;
 
     &.tooltip-share-guide {
-      margin-left: -100px;
-
-      &.bottom .tooltip-arrow {
-        margin-left: 100px;
-      }
-
       .tooltip-inner {
         text-align: left;
         padding: 20px;
@@ -104,18 +98,34 @@
 
       &.bottom {
         margin-top: 8px;
-      }
+        margin-left: -100px;
 
-      &.bottom .tooltip-arrow {
-        margin-top: 1px;
+        .tooltip-arrow {
+          margin-left: 100px;
+          margin-top: 1px;
+        }
+
+        .tooltip-arrow:after {
+          margin-top: -2px;
+          margin-left: calc(-#{$tooltip-arrow-width} - 1px);
+          border-width: 0 calc(#{$tooltip-arrow-width} + 1px) calc(#{$tooltip-arrow-width} + 1px);
+          border-bottom-color: rgb(153, 153, 153);
+        }
       }
 
       &.top {
         margin-top: -8px;
-      }
 
-      &.top .tooltip-arrow {
-        margin-bottom: 1px;
+        .tooltip-arrow {
+          margin-bottom: 1px;
+        }
+
+        .tooltip-arrow:after {
+          margin-top: -7px;
+          margin-left: calc(-#{$tooltip-arrow-width} - 1px);
+          border-width: calc(#{$tooltip-arrow-width} + 1px) calc(#{$tooltip-arrow-width} + 1px) 0;
+          border-top-color: rgb(153, 153, 153);
+        }
       }
 
       /* styles for arrow border */
@@ -127,20 +137,6 @@
         border-color: transparent;
         border-style: solid;
         z-index: -1;
-      }
-
-      &.bottom .tooltip-arrow:after {
-        margin-top: -2px;
-        margin-left: calc(-#{$tooltip-arrow-width} - 1px);
-        border-width: 0 calc(#{$tooltip-arrow-width} + 1px) calc(#{$tooltip-arrow-width} + 1px);
-        border-bottom-color: rgb(153, 153, 153);
-      }
-
-      &.top .tooltip-arrow:after {
-        margin-top: -7px;
-        margin-left: calc(-#{$tooltip-arrow-width} - 1px);
-        border-width: calc(#{$tooltip-arrow-width} + 1px) calc(#{$tooltip-arrow-width} + 1px) 0;
-        border-top-color: rgb(153, 153, 153);
       }
     }
 
@@ -204,7 +200,7 @@
         }
 
         .panel-body {
-          width: 90px;
+          min-width: 90px;
           padding: 10px;
         }
       }
