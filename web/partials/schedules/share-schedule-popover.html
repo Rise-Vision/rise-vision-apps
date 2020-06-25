@@ -130,7 +130,7 @@
     <div class="col-xs-12">
       <span class="text-sm font-weight-bold">Invite Message:</span>
       <br>
-      <textarea class="form-control copy-text-box u_margin-sm-top w-100 resize-vertical" rows="10" readonly="readonly" ng-focus="onTextFocus($event)" focus-me="currentTab === 'embedCode'">{{getInviteMessage()}}</textarea>
+      <textarea class="form-control copy-text-box u_margin-sm-top w-100 resize-vertical" rows="10" readonly="readonly" ng-focus="onTextFocus($event)" focus-me="currentTab === 'chromeExtension'">{{getInviteMessage()}}</textarea>
       <button id="copyInviteMessageButton" class="btn btn-primary u_remove-left u_margin-sm-top w-100" ng-click="copyToClipboard(getInviteMessage())" aria-label="Copy">Copy</button>
       <a id="chromeExtensionLink" class="btn btn-default u_remove-left u_margin-sm-top w-100"  href="https://chrome.google.com/webstore/detail/rise-vision-anywhere/dkoohkdagjpgjheoaaegomjhdccfbcle" target="_blank" aria-label="Install Chrome Extension" ng-click="trackScheduleShared()">Install Chrome Extension</a>
     </div>
