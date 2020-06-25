@@ -158,6 +158,10 @@
         .close {
           height: 10px;
           width: 10px;
+
+          svg {
+            fill: rgb(153, 153, 153);
+          }
         }
       }
 
@@ -169,6 +173,23 @@
         display: none;
       }
     }
+  }
 
+  &.action-sheet {
+    &.tooltip-share-options {
+      padding: 20px;
+      box-shadow: 0px 0px 5px 0px rgba(2, 6, 32, 0.5);
+
+      .close {
+        height: 15px;
+        width: 15px;
+
+        svg {
+          fill: rgb(153, 153, 153);
+          height: 15px;
+          width: 15px;
+        }
+      }
+    }
   }
 }

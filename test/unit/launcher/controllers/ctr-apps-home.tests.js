@@ -101,7 +101,7 @@ describe('controller: AppsHomeCtrl', function() {
       expect($scope.loadingItems).to.be.true;
       setTimeout(function() {
         expect($scope.schedules).to.deep.equal([{id: '123'}]);
-        expect($scope.selectedScheduleId).to.equal('123');
+        expect($scope.selectedSchedule.id).to.equal('123');
         expect($scope.loadingItems).to.be.false;
         done();
       },10);

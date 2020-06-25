@@ -1,13 +1,29 @@
 'use strict';
 describe('directive: share-schedule-button', function() {
-  var $scope, $rootScope, element, $timeout, innerElementStub, sandbox = sinon.sandbox.create();
+  var $scope, $rootScope, element, $timeout, innerElementStub, currentPlanFactory, plansFactory,
+    sandbox = sinon.sandbox.create();
+
 
   beforeEach(module('risevision.schedules.directives'));
+  beforeEach(module(function ($provide) {
+    $provide.service('currentPlanFactory', function() {
+      return {
+        isPlanActive: sinon.stub().returns(true)
+      };
+    });
+    $provide.service('plansFactory', function() {
+      return {
+        showUnlockThisFeatureModal: sinon.stub()
+      };
+    });
+  }));
 
   beforeEach(inject(function($compile, $templateCache, $injector){
     $templateCache.put('partials/schedules/share-schedule-button.html', '<div id="tooltipButton"></div><div id="actionSheetButton"></div>');
     $rootScope = $injector.get('$rootScope');
     $timeout = $injector.get('$timeout');
+    currentPlanFactory = $injector.get('currentPlanFactory');
+    plansFactory = $injector.get('plansFactory');
 
     innerElementStub = {
       trigger: sandbox.stub()
@@ -15,8 +31,11 @@ describe('directive: share-schedule-button', function() {
     sandbox.stub(angular,'element').returns(innerElementStub);
 
     $scope = $rootScope.$new();
+    $rootScope.selectedSchedule = {
+      id: 123
+    };
 
-    element = $compile('<share-schedule-button schedule-id="123"></share-schedule-button>')($scope);
+    element = $compile('<share-schedule-button schedule="selectedSchedule"></share-schedule-button>')($scope);
 
     $rootScope.$digest();
     $scope = element.isolateScope();   
@@ -29,14 +48,14 @@ describe('directive: share-schedule-button', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.scheduleId).to.equal(123);
+    expect($scope.schedule.id).to.equal(123);
     expect($scope.dismiss).to.be.a('function');
     expect($scope.toggleTooltip).to.be.a('function');
     expect($scope.toggleActionSheet).to.be.a('function');
   });
 
   it('should compile', function() {
-    expect(element[0].outerHTML).to.equal('<share-schedule-button schedule-id="123" class="ng-scope ng-isolate-scope"><div id="tooltipButton"></div><div id="actionSheetButton"></div></share-schedule-button>');
+    expect(element[0].outerHTML).to.equal('<share-schedule-button schedule="selectedSchedule" class="ng-scope ng-isolate-scope"><div id="tooltipButton"></div><div id="actionSheetButton"></div></share-schedule-button>');
   });
 
   describe('toggleTooltip:', function() {
@@ -59,6 +78,13 @@ describe('directive: share-schedule-button', function() {
 
       innerElementStub.trigger.should.have.been.calledWith('hide');
     });
+
+    it('should show Unlock This Feature modal if user is not subscribed to a plan', function() {
+      currentPlanFactory.isPlanActive.returns(false);
+      $scope.toggleTooltip();
+
+      plansFactory.showUnlockThisFeatureModal.should.have.been.called;
+    });
   });
 
   describe('toggleActionSheet:', function() {
@@ -68,7 +94,7 @@ describe('directive: share-schedule-button', function() {
       innerElementStub.trigger.should.have.been.calledWith('toggle');
     });
 
-    it('should close close if open', function() {
+    it('should close action sheet if open', function() {
       //open
       $scope.toggleActionSheet();
       innerElementStub.trigger.resetHistory();
@@ -77,6 +103,13 @@ describe('directive: share-schedule-button', function() {
       $scope.toggleActionSheet();
 
       innerElementStub.trigger.should.have.been.calledWith('toggle');
+    });
+
+    it('should show Unlock This Feature modal if user is not subscribed to a plan', function() {
+      currentPlanFactory.isPlanActive.returns(false);
+      $scope.toggleActionSheet();
+      
+      plansFactory.showUnlockThisFeatureModal.should.have.been.called;
     });
   });
 
