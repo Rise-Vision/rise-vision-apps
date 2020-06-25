@@ -9,10 +9,7 @@ angular.module('risevision.template-editor.directives')
         templateUrl: 'partials/template-editor/components/component-text.html',
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
-          $scope.sliderOptions = {
-            hideLimitLabels: true,
-            hidePointerLabels: true
-          };
+          $scope.data = {};
 
           /*jshint camelcase: false */
           $scope.tinymceOptions = {
@@ -26,9 +23,11 @@ angular.module('risevision.template-editor.directives')
               'bullist numlist | ' +
               'alignleft aligncenter alignright | ' +
               'removeformat code',
-            fontsize_formats: '8px 10px 12px 14px 18px 24px 36px',
-            setup: function (editor) {
-              editor.on('paste', function (e) {
+            fontsize_formats: '24px 36px 48px 60px 72px 84px 96px 108px 120px 150px 200px 300px',
+            force_p_newlines : false,
+            forced_root_block : '',
+            setup: function(editor) {
+              editor.on('paste', function(e) {
                 //paste does not trigger change event
                 //editor.getContent() needs timeout in order to include the change
                 setTimeout(function () {
@@ -40,15 +39,10 @@ angular.module('risevision.template-editor.directives')
           };
           /*jshint camelcase: true */
 
-          $scope.data = {
-            richText: ''
-          };
-
           function _load() {
             $scope.isMultiline = $scope.getBlueprintData($scope.componentId, 'multiline');
             var value = $scope.getAvailableAttributeData($scope.componentId, 'value');
-            var richText = $scope.getAvailableAttributeData($scope.componentId, 'richText') ? $scope
-              .getAvailableAttributeData($scope.componentId, 'richText') : value;
+            var richText = $scope.getAvailableAttributeData($scope.componentId, 'richText');
             var fontsize = $scope.getAvailableAttributeData($scope.componentId, 'fontsize');
             var minfontsize = $scope.getAvailableAttributeData($scope.componentId, 'minfontsize');
             var maxfontsize = $scope.getAvailableAttributeData($scope.componentId, 'maxfontsize');
@@ -57,14 +51,13 @@ angular.module('risevision.template-editor.directives')
             var minFontSize = templateEditorUtils.intValueFor(minfontsize, 1);
             var maxFontSize = templateEditorUtils.intValueFor(maxfontsize, 200);
 
-            $scope.sliderOptions.floor = minFontSize;
-            $scope.sliderOptions.ceil = maxFontSize;
-            $scope.sliderOptions.onEnd = $scope.save;
-
-            $scope.value = value;
-            $scope.data.richText = richText;
-            $scope.fontsize = fontsizeInt;
-            $scope.showFontSize = !!fontsizeInt;
+            if (richText !== null && typeof richText !== 'undefined') {
+              $scope.data.richText = richText;
+            } else if (!!fontsizeInt) {
+              $scope.data.richText = '<span style="font-size: ' + fontsizeInt + 'px;">' + value + '</span>';
+            } else {
+              $scope.data.richText = value;
+            }
 
             $timeout(function () {
               $window.dispatchEvent(new Event('resize'));
@@ -74,10 +67,6 @@ angular.module('risevision.template-editor.directives')
           $scope.save = function () {
             $scope.setAttributeData($scope.componentId, 'richText', $scope.data.richText);
             $scope.setAttributeData($scope.componentId, 'value', undefined);
-
-            if ($scope.showFontSize) {
-              $scope.setAttributeData($scope.componentId, 'fontsize', $scope.fontsize);
-            }
           };
 
           $scope.registerDirective({
