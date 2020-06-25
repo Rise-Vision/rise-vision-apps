@@ -334,6 +334,22 @@ All utilities have a prefix u_ added to them
   display: inline-block;
 }
 
+.u_float-right {
+  float: right;
+}
+
+.u_float-left {
+  float: left;
+}
+
+.u_scroll-x {
+  overflow-x: scroll;
+}
+
+.u_scroll-y {
+  overflow-y: scroll;
+}
+
 .row.sm-gutter {
   margin-left: -4px;
   margin-right: -4px;
@@ -386,7 +402,9 @@ All utilities have a prefix u_ added to them
   white-space: nowrap;
 }
 
-
+.img-fluid {
+  width: 100%;
+}
 
 
 
@@ -1752,8 +1770,4 @@ All utilities have a prefix u_ added to them
   .mx-xl-auto {
     margin-left: auto !important;
   }
-}
-
-.img-fluid {
-  width: 100%;
 }

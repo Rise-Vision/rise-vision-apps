@@ -1,18 +1,33 @@
+/*jshint multistr: true */
 'use strict';
 
 angular.module('risevision.schedules.controllers')
-  .controller('SharedScheduleModalController', ['$scope', '$modalInstance', 'scheduleFactory', '$window',
-    'SHARED_SCHEDULE_URL', 'SHARED_SCHEDULE_EMBED_CODE', 'scheduleTracker',
-    function ($scope, $modalInstance, scheduleFactory, $window, SHARED_SCHEDULE_URL, SHARED_SCHEDULE_EMBED_CODE,
-      scheduleTracker) {
-      $scope.schedule = scheduleFactory.schedule;
+  .value('SHARED_SCHEDULE_EMBED_CODE', '<div style="position:relative;padding-bottom:56.25%;">\n\
+   <iframe style="width:100%;height:100%;position:absolute;left:0px;top:0px;"\n\
+      frameborder="0" width="100%" height="100%"\n\
+      src="SHARED_SCHEDULE_URL&env=embed">\n\
+   </iframe>\n\
+</div>\n\
+<div style="background:#f2f2f2;color:#020620;font-family:Helvetica;font-size:12px;padding:5px;text-align:center;">\n\
+   Powered by <a href="https://www.risevision.com" target="_blank">Rise Vision</a>\n\
+</div>')
+  .value('SHARED_SCHEDULE_INVITE_MESSAGE', '')
+  .controller('SharedSchedulePopoverController', ['$scope', '$window', 'scheduleTracker',
+    'SHARED_SCHEDULE_URL', 'SHARED_SCHEDULE_EMBED_CODE', 'SHARED_SCHEDULE_INVITE_MESSAGE',
+    function ($scope, $window, scheduleTracker,
+      SHARED_SCHEDULE_URL, SHARED_SCHEDULE_EMBED_CODE, SHARED_SCHEDULE_INVITE_MESSAGE) {
       $scope.currentTab = 'link';
-      $scope.sharedScheduleLink = SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', scheduleFactory.schedule.id);
-      $scope.sharedScheduleEmbedCode = SHARED_SCHEDULE_EMBED_CODE.replace('SHARED_SCHEDULE_URL', $scope
-        .sharedScheduleLink);
 
-      $scope.dismiss = function () {
-        $modalInstance.dismiss();
+      $scope.getLink = function() {
+        return $scope.schedule ? SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', $scope.schedule.id) : '';
+      };
+
+      $scope.getEmbedCode = function() {
+        return $scope.schedule ? SHARED_SCHEDULE_EMBED_CODE.replace('SHARED_SCHEDULE_URL', $scope.getLink()) : '';
+      };
+
+      $scope.getInviteMessage = function() {
+        return $scope.schedule ? SHARED_SCHEDULE_INVITE_MESSAGE.replace('SHARED_SCHEDULE_URL', $scope.getLink()) : '';
       };
 
       $scope.copyToClipboard = function (text) {
@@ -31,7 +46,7 @@ angular.module('risevision.schedules.controllers')
         $scope.trackScheduleShared({
           network: network
         });
-        var encodedLink = encodeURIComponent($scope.sharedScheduleLink);
+        var encodedLink = encodeURIComponent($scope.getLink());
         var url;
         switch (network) {
         case 'twitter':
@@ -59,4 +74,4 @@ angular.module('risevision.schedules.controllers')
         scheduleTracker('schedule shared', $scope.schedule.id, $scope.schedule.name, properties);
       };
     }
-  ]); //ctr
+  ]);
