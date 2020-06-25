@@ -20,9 +20,9 @@ angular.module('risevision.template-editor.directives')
               'bold italic underline | ' +
               'forecolor backcolor | ' +
               'link | ' +
-              'bullist numlist | ' +
+              'numlist bullist | ' +
               'alignleft aligncenter alignright | ' +
-              'removeformat code',
+              'removeformat',
             fontsize_formats: '24px 36px 48px 60px 72px 84px 96px 108px 120px 150px 200px 300px',
             force_p_newlines : false,
             forced_root_block : '',
