@@ -1,13 +1,29 @@
 'use strict';
 describe('directive: share-schedule-button', function() {
-  var $scope, $rootScope, element, $timeout, innerElementStub, sandbox = sinon.sandbox.create();
+  var $scope, $rootScope, element, $timeout, innerElementStub, currentPlanFactory, plansFactory,
+    sandbox = sinon.sandbox.create();
+
 
   beforeEach(module('risevision.schedules.directives'));
+  beforeEach(module(function ($provide) {
+    $provide.service('currentPlanFactory', function() {
+      return {
+        isPlanActive: sinon.stub().returns(true)
+      };
+    });
+    $provide.service('plansFactory', function() {
+      return {
+        showUnlockThisFeatureModal: sinon.stub()
+      };
+    });
+  }));
 
   beforeEach(inject(function($compile, $templateCache, $injector){
     $templateCache.put('partials/schedules/share-schedule-button.html', '<div id="tooltipButton"></div><div id="actionSheetButton"></div>');
     $rootScope = $injector.get('$rootScope');
     $timeout = $injector.get('$timeout');
+    currentPlanFactory = $injector.get('currentPlanFactory');
+    plansFactory = $injector.get('plansFactory');
 
     innerElementStub = {
       trigger: sandbox.stub()
@@ -62,6 +78,13 @@ describe('directive: share-schedule-button', function() {
 
       innerElementStub.trigger.should.have.been.calledWith('hide');
     });
+
+    it('should show Unlock This Feature modal if user is not subscribed to a plan', function() {
+      currentPlanFactory.isPlanActive.returns(false);
+      $scope.toggleTooltip();
+
+      plansFactory.showUnlockThisFeatureModal.should.have.been.called;
+    });
   });
 
   describe('toggleActionSheet:', function() {
@@ -71,7 +94,7 @@ describe('directive: share-schedule-button', function() {
       innerElementStub.trigger.should.have.been.calledWith('toggle');
     });
 
-    it('should close close if open', function() {
+    it('should close action sheet if open', function() {
       //open
       $scope.toggleActionSheet();
       innerElementStub.trigger.resetHistory();
@@ -80,6 +103,13 @@ describe('directive: share-schedule-button', function() {
       $scope.toggleActionSheet();
 
       innerElementStub.trigger.should.have.been.calledWith('toggle');
+    });
+
+    it('should show Unlock This Feature modal if user is not subscribed to a plan', function() {
+      currentPlanFactory.isPlanActive.returns(false);
+      $scope.toggleActionSheet();
+      
+      plansFactory.showUnlockThisFeatureModal.should.have.been.called;
     });
   });
 

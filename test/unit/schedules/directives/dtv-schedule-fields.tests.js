@@ -32,8 +32,7 @@ describe('directive: scheduleFields', function() {
     });
     $provide.service('currentPlanFactory', function() {
       return {
-        isPlanActive: sinon.stub().returns(false),
-        isCancelledActive: sinon.stub().returns(false)
+        isPlanActive: sinon.stub().returns(false)
       };
     });
     $provide.service('plansFactory', function() {
@@ -159,18 +158,6 @@ describe('directive: scheduleFields', function() {
       $scope.openSharedScheduleModal();
 
       $modal.open.should.have.been.calledOnce;
-      $modal.open.should.have.been.calledWith({
-        templateUrl: 'partials/schedules/shared-schedule-modal.html',
-        controller: 'SharedScheduleModalController',
-        size: 'md'
-      });
-    });
-
-    it('should open Shared Schedule modal if has a still active cancelled plan', function() {
-      currentPlanFactory.isCancelledActive.returns(true);
-      
-      $scope.openSharedScheduleModal();
-
       $modal.open.should.have.been.calledWith({
         templateUrl: 'partials/schedules/shared-schedule-modal.html',
         controller: 'SharedScheduleModalController',

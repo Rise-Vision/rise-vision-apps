@@ -353,6 +353,11 @@ describe("Services: current plan factory", function() {
       expect(currentPlanFactory.isPlanActive()).to.be.true;
     });
 
+    it("should return the plan is active when canceled but still active", function() {
+      sandbox.stub(currentPlanFactory, "isCancelledActive").returns(true);
+      expect(currentPlanFactory.isPlanActive()).to.be.true;
+    });
+
     it("should return the plan is not active otherwise", function() {
       sandbox.stub(currentPlanFactory, "isTrialExpired").returns(true);
       expect(currentPlanFactory.isPlanActive()).to.be.false;
