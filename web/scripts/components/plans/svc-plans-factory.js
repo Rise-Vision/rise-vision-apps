@@ -220,7 +220,7 @@
               }
             }
           }).result.then(function () {
-            if (currentPlanFactory.isPlanActive() || currentPlanFactory.isCancelledActive()) {
+            if (currentPlanFactory.isPlanActive()) {
               $state.go('apps.billing.home');
             } else {
               _factory.showPlansModal();

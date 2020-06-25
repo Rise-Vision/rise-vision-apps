@@ -602,9 +602,9 @@ $modal-content-border-color:                   rgba(0,0,0,.2);
 $modal-content-fallback-border-color:          #999;
 
 //** Modal backdrop background color
-$modal-backdrop-bg:           #fff;
+$modal-backdrop-bg:           $madero-black;
 //** Modal backdrop opacity
-$modal-backdrop-opacity:      .7;
+$modal-backdrop-opacity:      .5;
 //** Modal header border color
 $modal-header-border-color:   #e5e5e5;
 //** Modal footer border color

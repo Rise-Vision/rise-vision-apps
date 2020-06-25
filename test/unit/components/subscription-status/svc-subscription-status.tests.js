@@ -13,8 +13,7 @@ describe("Services: subscriptionStatusService", function() {
         currentPlan: {
           trialExpiryDate: new Date()
         },
-        isPlanActive: sinon.stub().returns(false),
-        isCancelledActive: sinon.stub().returns(false)
+        isPlanActive: sinon.stub().returns(false)
       };
     });
 
@@ -66,15 +65,7 @@ describe("Services: subscriptionStatusService", function() {
         subscriptionStatusService.get("1");
 
         storeProduct.status.should.not.have.been.called;
-      });
-
-      it("should use cancelled but active plan", function() {
-        currentPlanFactory.isCancelledActive.returns(true);
-
-        subscriptionStatusService.get("1");
-
-        storeProduct.status.should.not.have.been.called;
-      });      
+      });  
     });
 
     describe("should map Plan to Subscription Status", function() {
