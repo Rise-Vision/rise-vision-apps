@@ -24,7 +24,7 @@
         companySettingsModalPage = new CompanySettingsModalPage();
         signInPage = new SignInPage();
 
-        homepage.get();
+        homepage.getEditor();
         signInPage.signIn();
 
         homepage.getNavMenuOptions().get(1).click();

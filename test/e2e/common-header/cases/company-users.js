@@ -32,7 +32,7 @@
         initialUsername = commonHeaderPage.getStageEnv() + "user@somecompany.com";
         updatedUsername = commonHeaderPage.getStageEnv() + "updated@somecompany.com";
 
-        homepage.get();
+        homepage.getEditor();
         signInPage.signIn();
 
         companyUsersModalPage.deleteUserIfExists(initialUsername);

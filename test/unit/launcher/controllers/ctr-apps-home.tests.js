@@ -1,5 +1,5 @@
 'use strict';
-describe('controller: AppHomeCtrl', function() {
+describe('controller: AppsHomeCtrl', function() {
   beforeEach(module('risevision.apps.launcher.controllers'));
   var $rootScope, $controller, $scope, $loading, schedule, localStorageService, $sce;
   beforeEach(function(){
@@ -41,7 +41,7 @@ describe('controller: AppHomeCtrl', function() {
       $controller = $injector.get('$controller');
 
       $scope = $rootScope.$new();
-      $controller('AppHomeCtrl', {
+      $controller('AppsHomeCtrl', {
         $scope: $scope
       });
       $scope.$digest();
@@ -60,14 +60,14 @@ describe('controller: AppHomeCtrl', function() {
 
   describe('spinner:', function() {
     it("should show spinner at startup",function(){
-      $loading.start.should.have.been.calledWith('app-home-loader');
+      $loading.start.should.have.been.calledWith('apps-home-loader');
     });
 
     it("should hide spinner when load is complete",function(){
       $scope.loadingItems = false;
       $scope.$digest();
 
-      $loading.stop.should.have.been.calledWith('app-home-loader');
+      $loading.stop.should.have.been.calledWith('apps-home-loader');
     });    
   });
 
