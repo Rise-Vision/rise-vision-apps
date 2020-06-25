@@ -1,14 +1,15 @@
 'use strict';
 
 angular.module('risevision.apps.services')
-  .factory('honeBackdropFactory', ['$window', '$document',
-    function ($window, $document) {
+  .factory('honeBackdropFactory', ['$rootScope', '$window', '$document',
+    function ($rootScope, $window, $document) {
       var service = {};
       var $body = angular.element($document[0].body);
       var preventDefault = function (e) {
         e.preventDefault();
       };
       var hone;
+      var digestWatch;
 
       function getHone() {
         if (!hone) {
@@ -42,11 +43,18 @@ angular.module('risevision.apps.services')
         } else {
           service.shouldPreventScrolling(false);
         }
+
+        digestWatch = $rootScope.$watch(service.reposition);
       };
 
       service.hide = function () {
         getHone().hide();
         service.shouldPreventScrolling(false);
+
+        if (digestWatch) {
+          digestWatch();
+          digestWatch = null;
+        }
       };
 
       service.shouldPreventScrolling = function (shouldPreventScrolling) {
