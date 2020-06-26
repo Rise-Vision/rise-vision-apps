@@ -347,6 +347,10 @@ gulp.task("config-e2e", function() {
     .pipe(gulp.dest("test/e2e/config"));
 });
 
+gulp.task("test:unit:nocoverage", factory.testUnitAngular({
+    testFiles: unitTestFiles
+}));
+
 gulp.task("test:unit", factory.testUnitAngular({
     coverageFiles: "../../web/scripts/**/*.js",
     testFiles: unitTestFiles
