@@ -63,14 +63,20 @@ var UploadScenarios = function() {
       describe('Upload File:', describeUpload);
     });
     
-    xdescribe('And he is using Storage Home with encoding enabled:',function(){
+    describe('And he is using Storage Home with encoding enabled:',function(){
+      var intervalHandle;
+
       before(function () {
+        intervalHandle = storageSelectorModalPage.clickRetryOnFailure();
         StorageHelper.setupStorageHomeWithEncoding();
         uploadFilePath = process.cwd() + '/web/videos/e2e-upload-video-1.mp4';
       });
+
       after(function () {
         uploadFilePath = null;
+        clearInterval(intervalHandle);
       });
+
       describe('Upload File:', describeUpload);
     });
   });
