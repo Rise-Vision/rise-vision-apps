@@ -55,6 +55,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.uploadSelectedFiles = function (selectedFiles) {
             return $scope.uploader.removeExif(selectedFiles)
+              .then($scope.uploader.compress)
               .then(function (fileItems) {
                 return $scope.uploader.addToQueue(fileItems);
               });

@@ -66,10 +66,28 @@ angular.module('risevision.storage.services')
       }
     };
   }])
-  .factory('JPGCompressor', [function () {
+  .factory('JPGCompressor', ['$q', function ($q) {
     return {
       compress: function (fileItem) {
-        new Compressor(fileItem.domFileItem, {});
+        var deferred = $q.defer();
+
+        if (fileItem.file.type !== 'image/jpeg') { return deferred.resolve(); }
+
+        new Compressor(fileItem.domFileItem, {
+          quality: 0.7,
+          checkOrientation: false,
+          success: function(result) {
+            fileItem.domFileItem = result;
+            fileItem.file.size = result.size;
+            return deferred.resolve();
+          },
+          error: function (err) {
+            console.error(err);
+            return deferred.resolve();
+          }
+        });
+
+        return deferred.promise;
       }
     };
   }])
@@ -85,8 +103,8 @@ angular.module('risevision.storage.services')
       return fileUploaderFactory();
     }
   ])
-  .factory('fileUploaderFactory', ['$rootScope', '$q', 'XHRFactory', 'encoding', 'ExifStripper', '$timeout',
-    function ($rootScope, $q, XHRFactory, encoding, ExifStripper, $timeout) {
+  .factory('fileUploaderFactory', ['$rootScope', '$q', 'XHRFactory', 'encoding', 'ExifStripper', '$timeout', 'JPGCompressor',
+    function ($rootScope, $q, XHRFactory, encoding, ExifStripper, $timeout, JPGCompressor) {
       return function () {
         var svc = {};
         var loadBatchTimer = null;
@@ -104,6 +122,15 @@ angular.module('risevision.storage.services')
         svc.withCredentials = false;
         svc.isUploading = false;
         svc.nextIndex = 0;
+
+        svc.compress = function (fileItems) {
+          return fileItems.reduce(function (pChain, fileItem) {
+            return pChain.then(function () {
+              return JPGCompressor.compress(fileItem);
+            });
+          }, $q.resolve())
+          .then(function () { return fileItems; });
+        };
 
         svc.removeExif = function (files) {
           var promises = [];

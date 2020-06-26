@@ -1,6 +1,6 @@
 /*jshint expr:true */
 
-describe.only('Services: uploader', function() {
+describe('Services: uploader', function() {
   'use strict';
 
   beforeEach(module('risevision.apps.config'));
@@ -29,7 +29,7 @@ describe.only('Services: uploader', function() {
     })
   }));
 
-  var uploader, lastAddedFileItem, $timeout, XHRFactory, ExifStripper, Compressor;
+  var uploader, lastAddedFileItem, $timeout, XHRFactory, ExifStripper, JPGCompressor;
 
   beforeEach(function() {
     inject(function($injector) {
@@ -45,7 +45,7 @@ describe.only('Services: uploader', function() {
       uploader.onCancelItem = function() {};
       uploader.onCompleteItem = function() {};
 
-      Compressor = $injector.get('JPGCompressor');
+      JPGCompressor = $injector.get('JPGCompressor');
       $timeout = $injector.get('$timeout');
     });
   });
@@ -351,15 +351,25 @@ describe.only('Services: uploader', function() {
 
   describe('jpg compression:', function () {
     beforeEach(function () {
-      window.Compressor = function () {
-        return {
-          compress: sinon.stub()
-        };
+      window.Compressor = function (file, opts) {
+        file.processed = true;
+        opts.success();
       };
     });
 
     it('has the compressor', function () {
-      Compressor.compress({domfileItem: {}});
+      JPGCompressor.compress({file: {type: 'image/jpeg'}, domFileItem: {}});
+    });
+
+    it('processes an array of fileItems and returns a promise', function () {
+      var domFileItem = {};
+
+      return uploader.compress([{
+        file: {type: 'image/jpeg'},
+        domFileItem: domFileItem
+      }]).then(function () {
+        assert(domFileItem.processed);
+      });
     });
   });
 
