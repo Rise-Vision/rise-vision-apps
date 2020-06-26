@@ -1,6 +1,6 @@
 /*jshint expr:true */
 
-describe('Services: uploader', function() {
+describe.only('Services: uploader', function() {
   'use strict';
 
   beforeEach(module('risevision.apps.config'));
@@ -29,10 +29,10 @@ describe('Services: uploader', function() {
     })
   }));
 
-  var uploader, lastAddedFileItem, $timeout, XHRFactory, ExifStripper;
+  var uploader, lastAddedFileItem, $timeout, XHRFactory, ExifStripper, Compressor;
 
   beforeEach(function() {
-  	inject(function($injector) {
+    inject(function($injector) {
       lastAddedFileItem = null;
 
       uploader = $injector.get('FileUploader');
@@ -45,8 +45,9 @@ describe('Services: uploader', function() {
       uploader.onCancelItem = function() {};
       uploader.onCompleteItem = function() {};
 
+      Compressor = $injector.get('JPGCompressor');
       $timeout = $injector.get('$timeout');
-  	});
+    });
   });
 
   it('should exist', function () {
@@ -346,6 +347,20 @@ describe('Services: uploader', function() {
       });
     });
 
+  });
+
+  describe('jpg compression:', function () {
+    beforeEach(function () {
+      window.Compressor = function () {
+        return {
+          compress: sinon.stub()
+        };
+      };
+    });
+
+    it('has the compressor', function () {
+      Compressor.compress({domfileItem: {}});
+    });
   });
 
 });

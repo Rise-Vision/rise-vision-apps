@@ -66,6 +66,13 @@ angular.module('risevision.storage.services')
       }
     };
   }])
+  .factory('JPGCompressor', [function () {
+    return {
+      compress: function (fileItem) {
+        new Compressor(fileItem.domFileItem, {});
+      }
+    };
+  }])
   .factory('XHRFactory', [function () {
     return {
       get: function () {
