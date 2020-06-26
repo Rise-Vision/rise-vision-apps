@@ -272,6 +272,11 @@ gulp.task('pricing', function() {
   });
 });
 
+gulp.task("jpgcompressor", function() {
+  return gulp.src("node_modules/compressorjs/dist/compressor.min.js")
+    .pipe(gulp.dest("web/vendor/compressor"));
+});
+
 gulp.task("tus", function() {
   return gulp.src("node_modules/tus-js-client/dist/tus.min.js")
     .pipe(gulp.dest("web/vendor/tus"));
@@ -324,7 +329,7 @@ gulp.task("config", function() {
 });
 
 gulp.task('build-pieces', function (cb) {
-  runSequence(["clean"], ['config', 'i18n-build', 'css-build', 'pricing', 'html2js', 'tus'], cb);
+  runSequence(["clean"], ['config', 'i18n-build', 'css-build', 'pricing', 'html2js', 'tus', 'jpgcompressor'], cb);
 });
 
 gulp.task('build', function (cb) {
