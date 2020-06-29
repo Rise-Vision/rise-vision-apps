@@ -55,7 +55,6 @@ describe('controller: AppsHomeCtrl', function() {
     expect($scope.load).to.be.a('function');
 
     expect($scope.showTooltipOverlay).to.be.false;
-    expect($scope.showWeeklyTemplates).to.be.false;
   });
 
   describe('spinner:', function() {
@@ -122,14 +121,13 @@ describe('controller: AppsHomeCtrl', function() {
     });
   });
   
-  describe('showTooltipOverlay/showWeeklyTemplates', function() {
+  describe('showTooltipOverlay', function() {
     beforeEach(function(done) {
       setTimeout(function() {
         // clean up hardcoded init() call
         $scope.schedules = [];
 
         $scope.showTooltipOverlay = false;
-        $scope.showWeeklyTemplates = false;        
 
         // clean up handlers
         $scope.$emit('tooltipOverlay.dismissed');
@@ -149,7 +147,6 @@ describe('controller: AppsHomeCtrl', function() {
         localStorageService.get.should.have.been.calledWith('ShareTooltip.dismissed');
 
         expect($scope.showTooltipOverlay).to.be.true;
-        expect($scope.showWeeklyTemplates).to.be.false;
 
         done();
       },10);
@@ -197,33 +194,30 @@ describe('controller: AppsHomeCtrl', function() {
         localStorageService.get.should.have.been.calledWith('ShareTooltip.dismissed');
 
         expect($scope.showTooltipOverlay).to.be.false;
-        expect($scope.showWeeklyTemplates).to.be.true;
 
         done();
       },10);
     });
 
-    it('should not show overlay and show templates if list is empty', function(done) {
+    it('should not show overlay if list is empty', function(done) {
       schedule.list.returns(Q.resolve({items: []}));
 
       $scope.load();
 
       setTimeout(function() {
         expect($scope.showTooltipOverlay).to.be.false;
-        expect($scope.showWeeklyTemplates).to.be.true;
 
         done();
       },10);
     });
 
-    it('should not show overlay and show templates on API failure', function(done) {
+    it('should not show overlay on API failure', function(done) {
       schedule.list.returns(Q.reject());
 
       $scope.load();
 
       setTimeout(function() {
         expect($scope.showTooltipOverlay).to.be.false;
-        expect($scope.showWeeklyTemplates).to.be.true;
 
         done();
       },10);

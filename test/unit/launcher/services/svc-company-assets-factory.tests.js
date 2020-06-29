@@ -6,12 +6,6 @@ describe('service: company assets factory:', function() {
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
 
-    $provide.service('presentation', function() {
-      return {
-        list: 'presentationList'
-      };
-    });
-
     $provide.service('display', function() {
       return {
         list: 'displayList'
@@ -56,20 +50,13 @@ describe('service: company assets factory:', function() {
 
   it('should exist', function() {
     expect(companyAssetsFactory).to.be.ok;
-    expect(companyAssetsFactory.hasPresentations).to.be.a('function');
     expect(companyAssetsFactory.hasSchedules).to.be.a('function');
     expect(companyAssetsFactory.getFirstDisplay).to.be.a('function');
     expect(companyAssetsFactory.hasDisplays).to.be.a('function');
   });
 
   it('should initialize CachedRequest services', function() {
-    CachedRequest.should.have.been.calledThrice;
-    CachedRequest.should.have.been.calledWith('presentationList', {
-      sortBy: 'changeDate',
-      reverse: true,
-      count: 1
-    });
-
+    CachedRequest.should.have.been.calledTwice;
     CachedRequest.should.have.been.calledWith('scheduleList', {
       count: 1,
       reverse: true,
@@ -81,67 +68,6 @@ describe('service: company assets factory:', function() {
       reverse: true,
       count: 20
     });
-  });
-  
-  describe('hasPresentations:', function() {
-    it('should resolve true if Company has presentations', function(done) {
-      requestExecute.returns(Q.resolve({
-        items: [1]
-      }));
-
-      companyAssetsFactory.hasPresentations()
-        .then(function(response) {
-          requestExecute.should.have.been.calledWith(undefined);
-
-          expect(response).to.be.true;
-
-          done();
-        })
-        .catch(function() {
-          done('error');
-        });
-    });
-
-    it('should force refresh list if flag is set to true', function() {
-      requestExecute.returns(Q.resolve());
-
-      companyAssetsFactory.hasPresentations(true);
-
-      requestExecute.should.have.been.calledWith(true);
-    });
-
-    it('should resolve false if Company does not have templates', function(done) {
-      requestExecute.returns(Q.resolve({
-        items: []
-      }));
-
-      companyAssetsFactory.hasPresentations()
-        .then(function(response) {
-          requestExecute.should.have.been.calledWith(undefined);
-
-          expect(response).to.be.false;
-
-          done();
-        })
-        .catch(function() {
-          done('error');
-        });
-    });
-
-    it('should reject if request fails', function(done) {
-      requestExecute.returns(Q.reject('error'));
-
-      companyAssetsFactory.hasPresentations()
-        .then(function() {
-          done('failed');
-        })
-        .catch(function(error) {
-          expect(error).to.equal('error');
-
-          done();
-        });
-    });
-
   });
 
   describe('hasSchedules:', function() {
@@ -411,7 +337,7 @@ describe('service: company assets factory:', function() {
       $rootScope.$emit('risevision.company.selectedCompanyChanged');
       $rootScope.$digest();
 
-      requestReset.should.have.been.calledThrice;
+      requestReset.should.have.been.calledTwice;
     });
   });
 

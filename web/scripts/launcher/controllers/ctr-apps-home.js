@@ -13,7 +13,6 @@ angular.module('risevision.apps.launcher.controllers')
       };
 
       $scope.showTooltipOverlay = false;
-      $scope.showWeeklyTemplates = false;
 
       var triggerOverlay = function () {
         $scope.showTooltipOverlay = localStorageService.get(tooltipDismissedKey) !== true;
@@ -64,8 +63,6 @@ angular.module('risevision.apps.launcher.controllers')
           })
           .finally(function () {
             $scope.loadingItems = false;
-
-            $scope.showWeeklyTemplates = !$scope.showTooltipOverlay;
           });
       };
 
