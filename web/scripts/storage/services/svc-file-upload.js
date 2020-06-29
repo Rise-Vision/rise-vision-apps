@@ -67,11 +67,13 @@ angular.module('risevision.storage.services')
     };
   }])
   .factory('JPGCompressor', ['$q', 'bigQueryLogging', '$log', function ($q, bigQueryLogging, $log) {
+    var disabled = false;
+
     return {
       compress: function (fileItem, folderPath) {
         var deferred = $q.defer();
 
-        if (fileItem.file.type !== 'image/jpeg') { return deferred.resolve(); }
+        if (disabled || fileItem.file.type !== 'image/jpeg') { return deferred.resolve(); }
 
         new Compressor(fileItem.domFileItem, {
           quality: 0.7,
@@ -86,6 +88,7 @@ angular.module('risevision.storage.services')
           error: function (err) {
             $log.debug(err);
             bigQueryLogging.logEvent('image compress error', folderPath + fileItem.file.name + ' | ' + err.message);
+            disabled = true;
             return deferred.resolve();
           }
         });
