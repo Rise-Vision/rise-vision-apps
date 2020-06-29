@@ -237,6 +237,10 @@
       
     	/* Opera doesn't support this in the shorthand */
     	background-attachment: local, local, scroll, scroll;
+
+      @media (max-width: $screen-sm) {
+        background-size: 20px 112px, 20px 112px, 20px 112px, 20px 112px;
+      }
     }
 
     // Using white/transparencies requires a ::before element
