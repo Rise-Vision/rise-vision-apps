@@ -11,10 +11,19 @@ angular.module('risevision.schedules.controllers')
 <div style="background:#f2f2f2;color:#020620;font-family:Helvetica;font-size:12px;padding:5px;text-align:center;">\n\
    Powered by <a href="https://www.risevision.com" target="_blank">Rise Vision</a>\n\
 </div>')
-  .value('SHARED_SCHEDULE_INVITE_MESSAGE', '')
-  .controller('SharedSchedulePopoverController', ['$scope', '$window', 'scheduleTracker',
+  .value('SHARED_SCHEDULE_INVITE_MESSAGE', 'I\'m using Rise Vision to help keep you in the loop. I\'d like for you to install the Rise Chrome Extension. Once installed, you\'ll see important information when you open a new tab.\n\n\
+Here\'s how to install (promise, it only takes 2 minutes):\n\
+ 1. Click the following link to open the Rise Chrome Extension in the Chrome Store:\n\
+    https://chrome.google.com/webstore/detail/rise-chrome-extension/dkoohkdagjpgjheoaaegomjhdccfbcle?hl=en\n\
+ 2. Click "Add to Chrome" in the top right\n\
+ 3. When prompted, copy and paste the following URL into the area provided:\n\
+    SHARED_SCHEDULE_URL\n\n\
+Let me know if you have any questions.\n\
+Regards,\n\
+USER_FIRST_NAME')
+  .controller('SharedSchedulePopoverController', ['$scope', '$window', 'scheduleTracker', 'userState',
     'SHARED_SCHEDULE_URL', 'SHARED_SCHEDULE_EMBED_CODE', 'SHARED_SCHEDULE_INVITE_MESSAGE',
-    function ($scope, $window, scheduleTracker,
+    function ($scope, $window, scheduleTracker, userState,
       SHARED_SCHEDULE_URL, SHARED_SCHEDULE_EMBED_CODE, SHARED_SCHEDULE_INVITE_MESSAGE) {
       $scope.currentTab = 'link';
 
@@ -27,7 +36,14 @@ angular.module('risevision.schedules.controllers')
       };
 
       $scope.getInviteMessage = function() {
-        return $scope.schedule ? SHARED_SCHEDULE_INVITE_MESSAGE.replace('SHARED_SCHEDULE_URL', $scope.getLink()) : '';
+        if (!$scope.schedule) {
+          return '';
+        }
+        var profile = userState.getCopyOfProfile();
+        var firstName =  profile.firstName ? profile.firstName : '';
+        return SHARED_SCHEDULE_INVITE_MESSAGE
+          .replace('SHARED_SCHEDULE_URL', $scope.getLink())
+          .replace('USER_FIRST_NAME',firstName);
       };
 
       $scope.copyToClipboard = function (text) {

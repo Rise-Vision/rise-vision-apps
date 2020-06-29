@@ -63,8 +63,8 @@
           userSettingsModalPage.getLastNameField().sendKeys("User");
           userSettingsModalPage.getEmailField().sendKeys(EMAIL_ADDRESS);
           // Set as User Administrator so they can delete themselves
-          userSettingsModalPage.getUaCheckbox().click();
-          userSettingsModalPage.getSaveButton().click();
+          helper.clickOverIFrame(userSettingsModalPage.getUaCheckbox(), "UA Checkbox");
+          helper.clickOverIFrame(userSettingsModalPage.getSaveButton(), "Save Button");
           
           helper.waitDisappear(userSettingsModalPage.getUserSettingsModal(), "User Settings Modal");        
 
@@ -133,7 +133,7 @@
           commonHeaderPage.openProfileMenu();
 
           expect(homepage.getUserSettingsButton().isDisplayed()).to.eventually.be.true;
-          homepage.getUserSettingsButton().click();
+          helper.clickOverIFrame(homepage.getUserSettingsButton(), "User Settings Button");
 
           helper.wait(userSettingsModalPage.getUserSettingsModal(), "User Settings Modal");
           helper.waitDisappear(userSettingsModalPage.getLoader(), "User Settings Modal Loader");
@@ -147,11 +147,11 @@
           expect(userSettingsModalPage.getUsernameLabel().getText()).to.eventually.equal(EMAIL_ADDRESS);
           expect(userSettingsModalPage.getDeleteButton().isPresent()).to.eventually.be.true;
 
-          helper.clickWhenClickable(userSettingsModalPage.getDeleteButton(), 'User Delete Button');
+          helper.clickOverIFrame(userSettingsModalPage.getDeleteButton(), 'User Delete Button');
 
           browser.sleep(500);
           helper.wait(userSettingsModalPage.getDeleteForeverButton(), 'User Delete Forever Button');      
-          helper.clickWhenClickable(userSettingsModalPage.getDeleteForeverButton(), 'User Delete Forever Button');
+          helper.clickOverIFrame(userSettingsModalPage.getDeleteForeverButton(), 'User Delete Forever Button');
 
           helper.waitDisappear(userSettingsModalPage.getLoader(), "User Settings Modal");
           helper.waitDisappear(userSettingsModalPage.getUserSettingsModal(), "User Settings Modal");

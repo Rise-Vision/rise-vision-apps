@@ -24,7 +24,7 @@
         userSettingsModalPage = new UserSettingsModalPage();
         signInPage = new SignInPage();
 
-        homepage.get();
+        homepage.getEditor();
         signInPage.signIn();
       });
 

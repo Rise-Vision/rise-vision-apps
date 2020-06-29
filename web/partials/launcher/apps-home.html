@@ -1,10 +1,10 @@
 <div id="apps-home-container" class="full-page-flex-container madero-style" common-header-height>
 
-  <div class="scrollable-content" rv-spinner rv-spinner-key="app-home-loader" rv-spinner-start-active="1">
+  <div class="scrollable-content" rv-spinner rv-spinner-key="apps-home-loader" rv-spinner-start-active="1">
     <div class="row">
       <div class="col-xs-12">
         <in-app-messages></in-app-messages>
-        <weekly-templates class="hidden-xs" ng-if="showWeeklyTemplates"></weekly-templates>
+        <weekly-templates class="hidden-xs"></weekly-templates>
       </div>
     </div>
 
@@ -22,10 +22,10 @@
       </div>
 
       <div class="form-inline schedules-toolbar" ng-show="selectedSchedule">
-        <span class="hidden-xs pull-right action-buttons">
-        <a type="button" class="btn btn-default" ui-sref="apps.schedules.details({scheduleId: selectedSchedule.id})">Edit Schedule</a>
+        <span class="hidden-xs pull-right">
+        <a type="button" class="btn btn-default schedules-toolbar-btn" ui-sref="apps.schedules.details({scheduleId: selectedSchedule.id})">Edit Schedule</a>
         <ng-show ng-show="showTooltipOverlay">
-          <button id="shareButton" type="button" class="btn btn-primary" tooltip-overlay="showTooltipOverlay" tooltip-placement="bottom" tooltip-class="madero-style tooltip-share-guide" tooltip-digest-on-resize>Share</button>
+          <button id="shareButton" type="button" class="btn btn-primary schedules-toolbar-btn" tooltip-overlay="showTooltipOverlay" tooltip-placement="bottom" tooltip-class="madero-style tooltip-share-guide" tooltip-digest-on-resize>Share</button>
         </ng-show>
         <share-schedule-button schedule="selectedSchedule" ng-hide="showTooltipOverlay"></share-schedule-button>
       </span>
@@ -51,7 +51,7 @@
       <ng-show ng-show="showTooltipOverlay">
         <button type="button" class="btn btn-primary btn-block" tooltip-overlay="showTooltipOverlay" tooltip-placement="top" tooltip-class="madero-style tooltip-share-guide">Share</button>
       </ng-show>
-      <share-schedule-button schedule-id="selectedSchedule.id" ng-hide="showTooltipOverlay"></share-schedule-button>
+      <share-schedule-button schedule="selectedSchedule" ng-hide="showTooltipOverlay"></share-schedule-button>
     </div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.apps.launcher.controllers')
-  .controller('AppHomeCtrl', ['$scope', 'localStorageService', 'schedule', '$loading', 'processErrorCode',
+  .controller('AppsHomeCtrl', ['$scope', 'localStorageService', 'schedule', '$loading', 'processErrorCode',
     '$log', '$sce', 'SHARED_SCHEDULE_URL',
     function ($scope, localStorageService, schedule, $loading, processErrorCode, $log, $sce, SHARED_SCHEDULE_URL) {
       $scope.schedules = [];
@@ -13,7 +13,6 @@ angular.module('risevision.apps.launcher.controllers')
       };
 
       $scope.showTooltipOverlay = false;
-      $scope.showWeeklyTemplates = false;
 
       var triggerOverlay = function () {
         $scope.showTooltipOverlay = localStorageService.get(tooltipDismissedKey) !== true;
@@ -29,9 +28,9 @@ angular.module('risevision.apps.launcher.controllers')
 
       $scope.$watch('loadingItems', function (loading) {
         if (loading) {
-          $loading.start('app-home-loader');
+          $loading.start('apps-home-loader');
         } else {
-          $loading.stop('app-home-loader');
+          $loading.stop('apps-home-loader');
         }
       });
 
@@ -64,8 +63,6 @@ angular.module('risevision.apps.launcher.controllers')
           })
           .finally(function () {
             $scope.loadingItems = false;
-
-            $scope.showWeeklyTemplates = !$scope.showTooltipOverlay;
           });
       };
 

@@ -8,6 +8,7 @@
     var url = config.rootUrl + '/';
     // var url = "http://localhost:8000/test/e2e";
     var urlFakePage = url + "/#/fake-page";
+    var editorUrl = config.rootUrl + '/editor/list';
 
     var navMenuItems = element.all(by.repeater('opt in navOptions'));
 
@@ -34,6 +35,10 @@
 
     this.get = function() {
       browser.get(url);
+    };
+
+    this.getEditor = function() {
+      browser.get(editorUrl);
     };
 
     this.getFakePage = function() {

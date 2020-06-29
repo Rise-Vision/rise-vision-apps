@@ -7,6 +7,13 @@ describe('controller: SharedSchedulePopoverController', function() {
     $provide.service("scheduleTracker", function() {
        return sinon.stub();
      });
+
+    $provide.service('userState', function() {
+      return {
+        getCopyOfProfile: sinon.stub().returns({firstName:'userFirstName'}),
+        _restoreState: sinon.stub()
+      };
+    });
   }));
   var $scope, $window, scheduleTracker;
 
@@ -64,7 +71,7 @@ describe('controller: SharedSchedulePopoverController', function() {
   });
 
   it('getInviteMessage', function() {
-    expect($scope.getInviteMessage()).to.equal('');
+    expect($scope.getInviteMessage()).to.equal('I\'m using Rise Vision to help keep you in the loop. I\'d like for you to install the Rise Chrome Extension. Once installed, you\'ll see important information when you open a new tab.\n\nHere\'s how to install (promise, it only takes 2 minutes):\n 1. Click the following link to open the Rise Chrome Extension in the Chrome Store:\n    https://chrome.google.com/webstore/detail/rise-chrome-extension/dkoohkdagjpgjheoaaegomjhdccfbcle?hl=en\n 2. Click "Add to Chrome" in the top right\n 3. When prompted, copy and paste the following URL into the area provided:\n    https://preview.risevision.com/?type=sharedschedule&id=scheduleId\n\nLet me know if you have any questions.\nRegards,\nuserFirstName');
   });
 
   describe('copyToClipboard:', function() {

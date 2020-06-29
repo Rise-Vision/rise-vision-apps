@@ -39,7 +39,7 @@
 				margin-right: 10px;
 			}
 
-			.action-buttons .btn {
+			.schedules-toolbar-btn, share-schedule-button > button {
 				min-width: 160px;
 				margin-left: 8px;
 			}	
@@ -87,12 +87,6 @@
     opacity: 1;
 
     &.tooltip-share-guide {
-      margin-left: -100px;
-
-      &.bottom .tooltip-arrow {
-        margin-left: 100px;
-      }
-
       .tooltip-inner {
         text-align: left;
         padding: 20px;
@@ -104,18 +98,34 @@
 
       &.bottom {
         margin-top: 8px;
-      }
+        margin-left: -100px;
 
-      &.bottom .tooltip-arrow {
-        margin-top: 1px;
+        .tooltip-arrow {
+          margin-left: 100px;
+          margin-top: 1px;
+        }
+
+        .tooltip-arrow:after {
+          margin-top: -2px;
+          margin-left: calc(-#{$tooltip-arrow-width} - 1px);
+          border-width: 0 calc(#{$tooltip-arrow-width} + 1px) calc(#{$tooltip-arrow-width} + 1px);
+          border-bottom-color: rgb(153, 153, 153);
+        }
       }
 
       &.top {
         margin-top: -8px;
-      }
 
-      &.top .tooltip-arrow {
-        margin-bottom: 1px;
+        .tooltip-arrow {
+          margin-bottom: 1px;
+        }
+
+        .tooltip-arrow:after {
+          margin-top: -7px;
+          margin-left: calc(-#{$tooltip-arrow-width} - 1px);
+          border-width: calc(#{$tooltip-arrow-width} + 1px) calc(#{$tooltip-arrow-width} + 1px) 0;
+          border-top-color: rgb(153, 153, 153);
+        }
       }
 
       /* styles for arrow border */
@@ -127,20 +137,6 @@
         border-color: transparent;
         border-style: solid;
         z-index: -1;
-      }
-
-      &.bottom .tooltip-arrow:after {
-        margin-top: -2px;
-        margin-left: calc(-#{$tooltip-arrow-width} - 1px);
-        border-width: 0 calc(#{$tooltip-arrow-width} + 1px) calc(#{$tooltip-arrow-width} + 1px);
-        border-bottom-color: rgb(153, 153, 153);
-      }
-
-      &.top .tooltip-arrow:after {
-        margin-top: -7px;
-        margin-left: calc(-#{$tooltip-arrow-width} - 1px);
-        border-width: calc(#{$tooltip-arrow-width} + 1px) calc(#{$tooltip-arrow-width} + 1px) 0;
-        border-top-color: rgb(153, 153, 153);
       }
     }
 
@@ -154,10 +150,19 @@
         box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
         opacity: 1;
         max-width: 374px;
+        width: 374px;
 
         .close {
           height: 10px;
           width: 10px;
+
+          svg {
+            fill: rgb(153, 153, 153);
+          }
+        }
+
+        .input-group-btn {
+          width: 1%;
         }
       }
 
@@ -169,6 +174,48 @@
         display: none;
       }
     }
+  }
 
+  &.action-sheet {
+    &.tooltip-share-options {
+      padding: 20px;
+      box-shadow: 0px 0px 5px 0px rgba(2, 6, 32, 0.5);
+
+      .close {
+        height: 15px;
+        width: 15px;
+
+        svg {
+          fill: rgb(153, 153, 153);
+          height: 15px;
+          width: 15px;
+        }
+      }
+    }
+  }
+
+  &.tooltip-share-options {
+    .sideways-panels {
+      .panel {
+        border-color: rgb(153, 153, 153);
+        @extend .mr-2;
+
+        &:last-child{
+          @extend .u_remove-right;
+        }
+
+        .panel-body {
+          min-width: 90px;
+          padding: 10px;
+        }
+      }
+    }
+
+    .copy-text-box {
+      background-color: $lighter-gray;
+      color: $madero-gray;
+      font-size: 12px;
+      padding: 15px;
+    }
   }
 }

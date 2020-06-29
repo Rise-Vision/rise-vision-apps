@@ -3,11 +3,12 @@
 describe('service: honeBackdropFactory:', function() {
   beforeEach(module('risevision.apps.services'));
 
-  var $window, $body, honeBackdropFactory, hone;
+  var $rootScope, $window, $body, honeBackdropFactory, hone;
   var originalHone;
 
   beforeEach(function(){
     inject(function($injector){
+      $rootScope = $injector.get('$rootScope');
       $window = $injector.get('$window');
       var $document = $injector.get('$document');
 
@@ -166,6 +167,33 @@ describe('service: honeBackdropFactory:', function() {
       honeBackdropFactory.reposition();
 
       hone.position.should.not.have.been.called;
+    });
+
+    describe('reposition on digest', function() {
+      beforeEach(function() {
+        sinon.stub(honeBackdropFactory, 'reposition');
+      })
+
+      afterEach(function() {
+        honeBackdropFactory.reposition.restore();
+      })
+
+      it('should reposition on $digest cycles', function() {
+        honeBackdropFactory.createForElement(['element'], 'options');
+
+        $rootScope.$digest();
+
+        honeBackdropFactory.reposition.should.have.been.called;
+      });
+
+      it('should not reposition on $digest cycles if hidden', function() {
+        honeBackdropFactory.createForElement(['element'], 'options');
+        honeBackdropFactory.hide();
+
+        $rootScope.$digest();
+
+        honeBackdropFactory.reposition.should.not.have.been.called;
+      });
     });
   });
 

@@ -147,7 +147,7 @@ angular.module('risevision.apps', [
 
       $rootScope.$on('$stateChangeSuccess', function (event, toState) {
         if (toState.name === 'apps.launcher.onboarding' ||
-          toState.name === 'apps.launcher.apphome') {
+          toState.name === 'apps.launcher.home') {
           $rootScope.showWhiteBackground = true;
         } else {
           $rootScope.showWhiteBackground = false;
@@ -155,8 +155,7 @@ angular.module('risevision.apps', [
       });
 
       $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
-        if ($state.current.name === 'apps.launcher.apphome' ||
-          $state.current.name === 'apps.schedules.list' ||
+        if ($state.current.name === 'apps.schedules.list' ||
           $state.current.name === 'apps.editor.list' ||
           $state.current.name === 'apps.displays.list' ||
           $state.current.name === 'apps.displays.alerts' ||
