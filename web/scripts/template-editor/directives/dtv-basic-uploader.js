@@ -139,6 +139,10 @@ angular.module('risevision.template-editor.directives')
             }
           };
 
+          FileUploader.currentFilePath = function () {
+            return $scope.uploadManager.folderPath;
+          };
+
           FileUploader.onBeforeUploadItem = function (item) {
             console.log('Attempting to upload', item.file.name);
           };

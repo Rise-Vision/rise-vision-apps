@@ -11,6 +11,18 @@ describe('Services: uploader', function() {
       return Q;
     });
 
+    $provide.service('$log', function() {
+      return { debug: sinon.stub() };
+    });
+
+    $provide.service('bigQueryLogging', function() {
+      return { logEvent: sinon.stub() };
+    });
+
+    $provide.service('FilesFactory', function() {
+      return { folderPath: '' };
+    });
+
     $provide.service('XHRFactory', function() {
       return {
         get: function() {
@@ -44,6 +56,7 @@ describe('Services: uploader', function() {
       uploader.onBeforeUploadItem = function() {};
       uploader.onCancelItem = function() {};
       uploader.onCompleteItem = function() {};
+      uploader.currentFilePath = function() {};
 
       JPGCompressor = $injector.get('JPGCompressor');
       $timeout = $injector.get('$timeout');
@@ -353,7 +366,7 @@ describe('Services: uploader', function() {
     beforeEach(function () {
       window.Compressor = function (file, opts) {
         file.processed = true;
-        opts.success();
+        opts.success({});
       };
     });
 

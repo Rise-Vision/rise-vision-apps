@@ -66,9 +66,9 @@ angular.module('risevision.storage.services')
       }
     };
   }])
-  .factory('JPGCompressor', ['$q', function ($q) {
+  .factory('JPGCompressor', ['$q', 'bigQueryLogging', '$log', function ($q, bigQueryLogging, $log) {
     return {
-      compress: function (fileItem) {
+      compress: function (fileItem, folderPath) {
         var deferred = $q.defer();
 
         if (fileItem.file.type !== 'image/jpeg') { return deferred.resolve(); }
@@ -77,12 +77,15 @@ angular.module('risevision.storage.services')
           quality: 0.7,
           checkOrientation: false,
           success: function(result) {
+            bigQueryLogging.logEvent('image compressed', folderPath + fileItem.file.name, result.size / fileItem.file.size);
+
             fileItem.domFileItem = result;
             fileItem.file.size = result.size;
             return deferred.resolve();
           },
           error: function (err) {
-            console.error(err);
+            $log.debug(err);
+            bigQueryLogging.logEvent('image compress error', folderPath + fileItem.file.name + ' | ' + err.message);
             return deferred.resolve();
           }
         });
@@ -126,7 +129,7 @@ angular.module('risevision.storage.services')
         svc.compress = function (fileItems) {
           return fileItems.reduce(function (pChain, fileItem) {
             return pChain.then(function () {
-              return JPGCompressor.compress(fileItem);
+              return JPGCompressor.compress(fileItem, svc.currentFilePath());
             });
           }, $q.resolve())
           .then(function () { return fileItems; });
