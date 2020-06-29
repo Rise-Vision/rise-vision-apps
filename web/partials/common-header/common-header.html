@@ -41,7 +41,10 @@
 							<a id="{{opt.title + 'Link'}}" ng-if="opt.cid" ng-href="{{opt.link}}" link-cid target="{{opt.target}}" ng-class="{'selected': opt.states && opt.states.indexOf(navSelected) > -1}">{{opt.title}}</a>
 							<a id="{{opt.title + 'Link'}}" ng-if="!opt.cid" ng-href="{{opt.link}}" target="{{opt.target}}" ng-class="{'selected': opt.states && opt.states.indexOf(navSelected) > -1}">{{opt.title}}</a>
 						</li>
-						
+            <li>
+              <a id="trainingLink" href="https://risevision.com/webinars?utm_source=app&utm_medium=web&utm_campaign=in_app_training_notification" target="_blank">Training</a>
+            </li>
+
 						<li ng-if="!inRVAFrame && !hideHelpMenu">
 							<a href="http://www.risevision.com/help/" target="_blank">
 								Help
@@ -122,6 +125,10 @@
 				<a ng-if="opt.cid" ng-href="{{opt.link}}" link-cid target="{{opt.target}}">{{opt.title}}</a>
 				<a ng-if="!opt.cid" ng-href="{{opt.link}}" target="{{opt.target}}">{{opt.title}}</a>
 			</li>
+      <li>
+        <a id="trainingLink" href="https://risevision.com/webinars?utm_source=app&utm_medium=web&utm_campaign=in_app_training_notification" target="_blank">Training</a>
+      </li>
+
 			<li ng-if="!hideHelpMenu">
 				<a target="_blank" href="http://www.risevision.com/help">Help</a>
 			</li>
