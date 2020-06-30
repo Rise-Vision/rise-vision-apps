@@ -1,0 +1,8 @@
+<div class="attribute-editor-component">
+  <div class="attribute-editor-row">
+    <label>Which schedule(s) should this presentation show on?</label>
+    <select id="schedule-selector" class="form-control" ng-model="selectedSchedules" ng-options="schedule as schedule.name for schedule in factory.selectedSchedules">
+      <option value="" disabled selected>Select your option</option>
+    </select>
+  </div>
+</div>
