@@ -176,7 +176,7 @@ angular.module('risevision.common.header')
       function _clearErrorMessages() {
         $scope.formError = null;
         $scope.apiError = null;
-        $scope.isAddressError = null;
+        $scope.isAddressError = false;
       }
 
       function _showErrorMessage(action, error) {

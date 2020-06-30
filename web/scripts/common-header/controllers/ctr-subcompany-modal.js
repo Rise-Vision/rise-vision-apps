@@ -35,6 +35,8 @@ angular.module('risevision.common.header')
       };
 
       $scope.save = function () {
+        _clearErrorMessages();
+
         if (!$scope.forms.companyForm.$valid) {
           console.info('form not valid: ', $scope.forms.companyForm.$error);
         } else {
@@ -48,7 +50,8 @@ angular.module('risevision.common.header')
 
                   $modalInstance.close('success');
                 }, function (err) {
-                  messageBox('Error', humanReadableError(err));
+                  $scope.formError = 'Failed to Add Sub-Company.';
+                  $scope.apiError = humanReadableError(err);
                 })
                 .finally(function () {
                   $scope.loading = false;
@@ -58,7 +61,9 @@ angular.module('risevision.common.header')
             .catch(function (error) {
               $scope.loading = false;
 
-              messageBox('We couldn\'t validate your address.', humanReadableError(error));
+              $scope.formError = 'We couldn\'t update your address.';
+              $scope.apiError = humanReadableError(error);
+              $scope.isAddressError = true;
             });
         }
       };
@@ -72,5 +77,11 @@ angular.module('risevision.common.header')
           size: size
         });
       };
+
+      function _clearErrorMessages() {
+        $scope.formError = null;
+        $scope.apiError = null;
+        $scope.isAddressError = false;
+      }
     }
   ]);
