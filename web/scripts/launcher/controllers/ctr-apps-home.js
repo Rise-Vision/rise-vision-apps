@@ -38,7 +38,7 @@ angular.module('risevision.apps.launcher.controllers')
         if (!scheduleId) {
           return null;
         }
-        var url = SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', scheduleId) + '&env=embed';
+        var url = SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', scheduleId) + '&env=apps_home';
         return $sce.trustAsResourceUrl(url);
       };
 
