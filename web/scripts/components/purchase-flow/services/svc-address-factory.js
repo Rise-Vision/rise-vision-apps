@@ -155,7 +155,7 @@ angular.module('risevision.common.components.purchase-flow')
 
       factory.confirmAndSetGeneralDelivery = function(addressObject) {
         return confirmModal('Address Information', 
-          'The address you provided couldn’t be validated. This can happen if the address does not exist in the USPS records. If you’re sure the address is correct you can specify this address as General Delivery and we’ll only validate the City, State and Zip Code.<br/>Would you like to specify this address as General Delivery?',
+          'The address you provided couldn\'t be validated. This can happen if the address does not exist in the USPS records. If you\'re sure the address is correct you can specify this address as General Delivery and we\'ll only validate the City, State and Zip Code.<br/>Would you like to specify this address as General Delivery?',
           'Yes',
           'Cancel',
           'general-delivery-modal')

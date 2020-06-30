@@ -4,12 +4,12 @@
 angular.module('risevision.common.header')
   .controller('SubCompanyModalCtrl', ['$scope', '$modalInstance', '$modal',
     '$templateCache', 'createCompany', 'addressFactory', 'countries', 'REGIONS_CA',
-    'REGIONS_US', 'TIMEZONES', 'userState', '$loading', 'messageBox', 'humanReadableError',
+    'REGIONS_US', 'TIMEZONES', 'userState', '$loading', 'humanReadableError',
     'companyTracker', 'bigQueryLogging', 'COMPANY_INDUSTRY_FIELDS',
     'COMPANY_SIZE_FIELDS',
     function ($scope, $modalInstance, $modal, $templateCache,
       createCompany, addressFactory, countries, REGIONS_CA, REGIONS_US, TIMEZONES, userState,
-      $loading, messageBox, humanReadableError, companyTracker, bigQueryLogging,
+      $loading, humanReadableError, companyTracker, bigQueryLogging,
       COMPANY_INDUSTRY_FIELDS, COMPANY_SIZE_FIELDS) {
 
       $scope.company = {};
@@ -19,6 +19,7 @@ angular.module('risevision.common.header')
       $scope.timezones = TIMEZONES;
       $scope.COMPANY_INDUSTRY_FIELDS = COMPANY_INDUSTRY_FIELDS;
       $scope.COMPANY_SIZE_FIELDS = COMPANY_SIZE_FIELDS;
+      _clearErrorMessages();
 
       $scope.forms = {};
 

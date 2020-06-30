@@ -67,10 +67,6 @@ describe('controller: subcompany modal', function() {
     $provide.factory('humanReadableError', function() {
       return sinon.stub().returns('humanError');
     });
-    $provide.factory('messageBox', function() {
-      return sinon.stub();
-    });
-
     $provide.factory('customLoader', function ($q) {
       return function () {
         var deferred = $q.defer();
@@ -84,7 +80,7 @@ describe('controller: subcompany modal', function() {
   }));
 
   var $scope, addressFactory, $modal, $modalInstance, createCompany,
-  companyTracker, validateAddress, $loading, humanReadableError, messageBox;
+  companyTracker, validateAddress, $loading, humanReadableError;
   beforeEach(function(){
     validateAddress = true;
 
@@ -96,7 +92,6 @@ describe('controller: subcompany modal', function() {
       addressFactory = $injector.get('addressFactory');
       createCompany = $injector.get('createCompany');
       humanReadableError = $injector.get('humanReadableError');
-      messageBox = $injector.get('messageBox');
       companyTracker = $injector.get('companyTracker');
 
       $controller('SubCompanyModalCtrl', {
@@ -119,6 +114,9 @@ describe('controller: subcompany modal', function() {
     expect($scope).to.have.property('COMPANY_INDUSTRY_FIELDS');
     expect($scope).to.have.property('COMPANY_SIZE_FIELDS');
     expect($scope.forms).to.be.ok;
+    expect($scope.formError).to.be.null;
+    expect($scope.apiError).to.be.null;
+    expect($scope.isAddressError).to.be.false;
 
     expect($scope.closeModal).to.exist;
     expect($scope.save).to.exist;
@@ -186,7 +184,9 @@ describe('controller: subcompany modal', function() {
         createCompany.should.have.been.called;
 
         humanReadableError.should.have.been.calledWith('ERROR; could not create company');
-        messageBox.should.have.been.calledWith('Error', 'humanError');
+        expect($scope.formError).to.be.equal("Failed to Add Sub-Company.");
+        expect($scope.apiError).to.be.equal("humanError");
+        expect($scope.isAddressError).to.be.false;
 
         done();
       },10);
@@ -197,6 +197,8 @@ describe('controller: subcompany modal', function() {
 
       $scope.$digest();
       $scope.save();
+
+      expect($scope.isAddressError).to.be.false;
       setTimeout(function(){
         expect($scope.loading).to.be.false;
         expect($modalInstance._closed).to.be.false;
@@ -205,7 +207,9 @@ describe('controller: subcompany modal', function() {
         createCompany.should.not.have.been.called;
 
         humanReadableError.should.have.been.calledWith('ERROR; invalid address');
-        messageBox.should.have.been.calledWith('We couldn\'t validate your address.', 'humanError');
+        expect($scope.formError).to.be.equal("We couldn't update your address.");
+        expect($scope.apiError).to.be.equal("humanError");
+        expect($scope.isAddressError).to.be.true;
 
         done();
       },10);
@@ -220,8 +224,7 @@ describe('controller: subcompany modal', function() {
   it('moveCompany:', function() {
     $scope.moveCompany('size');
 
-    $modal.open.should.have.been.calledWith({
-      template: undefined,
+    $modal.open.should.have.been.calledWithMatch({
       controller: 'MoveCompanyModalCtrl',
       size: 'size',
     });
