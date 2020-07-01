@@ -6,7 +6,7 @@ angular.module('risevision.template-editor.directives')
       return {
         restrict: 'E',
         scope: true,
-        templateUrl: 'partials/template-editor/components/component-schedules.html',
+        templateUrl: 'partials/template-editor/components/component-schedules/component-schedules.html',
         link: function ($scope, element) {
           $scope.factory = schedulesComponentFactory;
 
