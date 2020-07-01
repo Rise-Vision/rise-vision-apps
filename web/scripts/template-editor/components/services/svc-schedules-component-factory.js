@@ -60,7 +60,7 @@ angular.module('risevision.template-editor.services')
 
       factory.doSearch = function() {
         factory.loadNonSelectedSchedules();
-      }
+      };
 
       factory.getSchedulesComponent = function () {
         _loadSelectedSchedules();

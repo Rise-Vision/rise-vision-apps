@@ -33,6 +33,9 @@ angular.module('risevision.template-editor.directives')
               $scope.setPanelTitle('Schedule Settings');
 
               _load();
+            },
+            onBackHandler: function () {
+              // TODO: close tooltip if open
             }
           });
 
