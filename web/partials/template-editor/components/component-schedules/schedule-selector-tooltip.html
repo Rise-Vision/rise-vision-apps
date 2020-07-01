@@ -1,23 +1,43 @@
 <span>
   <div class="row storage-selector-search-container">
     <div class="col-xs-12">
-      <search-filter filter-config="filterConfig" search="search" do-search="search.doSearch" icon-set="madero"></search-filter>
+      <search-filter filter-config="filterConfig" search="factory.search" do-search="factory.doSearch" icon-set="madero"></search-filter>
     </div> 
   </div>
 
   <div class="storage-selector-component te-scrollable-container"
     rv-spinner
-    rv-spinner-key="storage-{{storageSelectorId}}-spinner"
+    rv-spinner-key="selected-schedules-spinner"
     rv-spinner-start-active="0"
   >
     <div class="file-component-list">
 
       <div ng-repeat="item in factory.selectedSchedules | filter:search.query | orderBy:search.sortBy:search.reverse as filteredItems track by $index">
 
-        <div class="pl-0 file-component-list-file-row u_clickable" ng-click="selectItem(item)">
+        <div class="pl-0 file-component-list-file-row u_clickable" ng-click="factory.selectItem(item, true)">
           <div class="file-entry">
             <div class="madero-checkbox">
-              <input type="checkbox" ng-checked="isSelected(item)" tabindex="1">
+              <input type="checkbox" ng-checked="factory.isSelected(item, true)" tabindex="1">
+              <label>
+                <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
+              </label>
+            </div>
+            <div class="file-text mr-auto">
+              <div class="file-name">{{item.name}}</div>
+            </div>
+            <div class="u_float-left">
+              Edit
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div ng-repeat="item in factory.nonSelectedSchedules | filter:search.query | orderBy:search.sortBy:search.reverse as filteredItems track by $index">
+
+        <div class="pl-0 file-component-list-file-row u_clickable" ng-click="factory.selectItem(item, false)">
+          <div class="file-entry">
+            <div class="madero-checkbox">
+              <input type="checkbox" ng-checked="factory.isSelected(item, false)" tabindex="1">
               <label>
                 <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
               </label>

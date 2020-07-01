@@ -36,6 +36,7 @@ angular.module('risevision.schedules.services')
 
           var query = search.query ?
             createSearchQuery(SCHEDULE_SEARCH_FIELDS, search.query) : '';
+          query += search.filter ? (search.query ? ' AND ' : '') + search.filter : '';
 
           var obj = {
             'companyId': userState.getSelectedCompanyId(),

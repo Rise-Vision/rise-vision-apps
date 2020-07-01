@@ -1,49 +1,95 @@
 'use strict';
 
 angular.module('risevision.template-editor.services')
-  .factory('schedulesComponentFactory', ['$rootScope', '$filter', '$q', '$log', 'schedule',
-  'processErrorCode',
-    function ($rootScope, $filter, $q, $log, schedule, processErrorCode) {
+  .factory('schedulesComponentFactory', ['$filter', '$q', '$log',
+  'templateEditorFactory', 'schedule', 'processErrorCode',
+    function ($filter, $q, $log, templateEditorFactory, schedule, processErrorCode) {
       var schedulesComponent = {
         type: 'rise-schedules',
         hasSelectedSchedules: true
       };
+
       var factory = {
-        selectedSchedules: null
+        search: {
+          sortBy: 'name'
+        },
+        selectedSchedules: null,
+        nonSelectedSchedules: null
       };
 
-      var _loadSchedules = function (forceRefresh) {
-        if (!factory.selectedSchedules || forceRefresh) {
-          factory.loadingSchedules = true;
-          factory.selectedSchedules = [];
-          schedulesComponent.hasSelectedSchedules = true;
+      var _loadSchedules = function(includesPresentation) {
+        var search = angular.copy(factory.search);
+        search.filter = (includesPresentation ? '' : 'NOT ') + 
+          'presentationIds:~\"' + templateEditorFactory.presentation.id + '\"';
 
-          schedule.list({})
-            .then(function (result) {
-              factory.selectedSchedules = result.items ? result.items : [];
+        factory.loadingSchedules = true;
 
-              schedulesComponent.hasSelectedSchedules = !!factory.selectedSchedules.length;
-            })
-            .then(null, function (e) {
-              factory.errorMessage = $filter('translate')('schedules-app.list.error');
-              factory.apiError = processErrorCode('Schedules', 'load', e);
+        return schedule.list(search)
+          .then(null, function (e) {
+            factory.errorMessage = $filter('translate')('schedules-app.list.error');
+            factory.apiError = processErrorCode('Schedules', 'load', e);
 
-              $log.error(factory.errorMessage, e);
-            })
-            .finally(function () {
-              factory.loadingSchedules = false;
-            });
+            $log.error(factory.errorMessage, e);
+          })
+          .finally(function () {
+            factory.loadingSchedules = false;
+          });
+      };
+
+      var _loadSelectedSchedules = function () {
+        schedulesComponent.hasSelectedSchedules = true;
+
+        factory.selectedSchedules = [];
+
+        _loadSchedules(true)
+          .then(function (result) {
+            factory.selectedSchedules = result.items ? result.items : [];
+
+            schedulesComponent.hasSelectedSchedules = !!factory.selectedSchedules.length;
+          });
+      };
+
+      factory.loadNonSelectedSchedules = function () {
+        factory.nonSelectedSchedules = [];
+
+        _loadSchedules(false)
+          .then(function (result) {
+            factory.nonSelectedSchedules = result.items ? result.items : [];
+          });
+      };
+
+      factory.doSearch = function() {
+        factory.loadNonSelectedSchedules();
+      }
+
+      factory.getSchedulesComponent = function () {
+        _loadSelectedSchedules();
+
+        return schedulesComponent;
+      };
+
+      factory.selectItem = function (item, inSelectedSchedules) {
+        if (item.isSelected === true) {
+          item.isSelected = false;
+        } else if (item.isSelected === false) {
+          item.isSelected = true;
+        } else {
+          item.isSelected = !inSelectedSchedules;
         }
       };
 
-      $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
-        _loadSchedules(true);
-      });
+      factory.isSelected = function (item, inSelectedSchedules) {
+        if (item.isSelected === true) {
+          return true;
+        } else if (item.isSelected === false) {
+          return false;
+        } else {
+          return inSelectedSchedules;
+        }
+      };
 
-      factory.getSchedulesComponent = function () {
-        _loadSchedules();
-
-        return schedulesComponent;
+      factory.save = function () {
+        
       };
 
       return factory;
