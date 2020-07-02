@@ -235,30 +235,15 @@ angular.module('risevision.template-editor.services')
       var _checkAssignedToSchedules = function() {
         var deferred = $q.defer();
         scheduleFactory.isAssignedToSchedule(factory.presentation.id).then(function(isAssigned) {
-          factory.isNotAssignedToSchedule = isAssigned;
+          factory.isNotAssignedToSchedule = !isAssigned;
           if (isAssigned) {
             deferred.resolve();
           } else {
             var modalInstance = $modal.open({
-              templateUrl: 'partials/components/confirm-modal/madero-confirm-modal.html',
-              controller: 'confirmModalController',
+              templateUrl: 'partials/template-editor/add-to-schedule-modal.html',
+              controller: 'AddToScheduleModalController',
               windowClass: 'madero-style centered-modal',
-              resolve: {
-                confirmationTitle: function () {
-                  return 'Almost there!';
-                },
-                confirmationMessage: function () {
-                  return 'Before your can publish, you need to add this presentation to a schedule.';
-                },
-                confirmationButton: function () {
-                  return 'Publish';
-                },
-                cancelButton: function () {
-                  return 'Cancel';
-                }
-              }
             });
-
             modalInstance.result.then(function() {
               deferred.resolve();
             }).catch(function(){
@@ -268,15 +253,12 @@ angular.module('risevision.template-editor.services')
           }
         })
         .catch(function(err) {
-          //network error?
           deferred.reject(err);
         });
         return deferred.promise;
       };
 
       var _publish = function () {
-        console.log("PUBLISH");
-
         var deferred = $q.defer();
 
         _clearMessages();
@@ -300,6 +282,11 @@ angular.module('risevision.template-editor.services')
           });
 
         return deferred.promise;
+      };
+
+      factory.assignToSchedules = function(scheduleIds) {
+        console.log('assignToSchedules', scheduleIds);
+        factory.isNotAssignedToSchedule = scheduleIds.length === 0;
       };
 
       factory.getAttributeData = function (componentId, attributeKey) {

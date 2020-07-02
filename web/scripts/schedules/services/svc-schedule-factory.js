@@ -219,7 +219,7 @@ angular.module('risevision.schedules.services')
       factory.isAssignedToSchedule = function(presentationId) {
         var search = {
           filter: 'presentationIds:~\"' + presentationId + '\"'
-        }
+        };
         return schedule.list(search)
           .then(function (result) {
             return result.items && result.items.length > 0;
