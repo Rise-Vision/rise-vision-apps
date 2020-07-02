@@ -5,10 +5,10 @@ angular.module('risevision.template-editor.services')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', 'presentation',
     'processErrorCode', 'userState', 'createFirstSchedule',
     'templateEditorUtils', 'brandingFactory', 'blueprintFactory', 'scheduleFactory', 'presentationTracker',
-    'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
+    'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED', '$modal',
     function ($q, $log, $state, $rootScope, presentation, processErrorCode, userState,
       createFirstSchedule, templateEditorUtils, brandingFactory, blueprintFactory, scheduleFactory,
-      presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
+      presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED, $modal) {
       var factory = {
         hasUnsavedChanges: false
       };
@@ -229,6 +229,54 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.publish = function () {
+        return _checkAssignedToSchedules().then(_publish);
+      };
+
+      var _checkAssignedToSchedules = function() {
+        var deferred = $q.defer();
+        scheduleFactory.isAssignedToSchedule(factory.presentation.id).then(function(isAssigned) {
+          factory.isNotAssignedToSchedule = isAssigned;
+          if (isAssigned) {
+            deferred.resolve();
+          } else {
+            var modalInstance = $modal.open({
+              templateUrl: 'partials/components/confirm-modal/madero-confirm-modal.html',
+              controller: 'confirmModalController',
+              windowClass: 'madero-style centered-modal',
+              resolve: {
+                confirmationTitle: function () {
+                  return 'Almost there!';
+                },
+                confirmationMessage: function () {
+                  return 'Before your can publish, you need to add this presentation to a schedule.';
+                },
+                confirmationButton: function () {
+                  return 'Publish';
+                },
+                cancelButton: function () {
+                  return 'Cancel';
+                }
+              }
+            });
+
+            modalInstance.result.then(function() {
+              deferred.resolve();
+            }).catch(function(){
+              deferred.reject();
+              factory.isNotAssignedToSchedule = true;
+            });
+          }
+        })
+        .catch(function(err) {
+          //network error?
+          deferred.reject(err);
+        });
+        return deferred.promise;
+      };
+
+      var _publish = function () {
+        console.log("PUBLISH");
+
         var deferred = $q.defer();
 
         _clearMessages();
