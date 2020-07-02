@@ -11,6 +11,7 @@
         link: function ($scope, element) {
           element.bind('change', function () {
             $scope.uploader.removeExif(this.files)
+              .then($scope.uploader.compress)
               .then(function (fileItems) {
                 return $scope.uploader.addToQueue(fileItems);
               })

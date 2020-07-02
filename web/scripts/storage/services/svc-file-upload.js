@@ -66,6 +66,37 @@ angular.module('risevision.storage.services')
       }
     };
   }])
+  .factory('JPGCompressor', ['$q', 'bigQueryLogging', '$log', function ($q, bigQueryLogging, $log) {
+    var disabled = false;
+
+    return {
+      compress: function (fileItem, folderPath) {
+        var deferred = $q.defer();
+
+        if (disabled || fileItem.file.type !== 'image/jpeg') { return deferred.resolve(); }
+
+        new Compressor(fileItem.domFileItem, {
+          quality: 0.7,
+          checkOrientation: false,
+          success: function(result) {
+            bigQueryLogging.logEvent('image compressed', folderPath + fileItem.file.name, result.size / fileItem.file.size);
+
+            fileItem.domFileItem = result;
+            fileItem.file.size = result.size;
+            return deferred.resolve();
+          },
+          error: function (err) {
+            $log.debug(err);
+            bigQueryLogging.logEvent('image compress error', folderPath + fileItem.file.name + ' | ' + err.message);
+            disabled = true;
+            return deferred.resolve();
+          }
+        });
+
+        return deferred.promise;
+      }
+    };
+  }])
   .factory('XHRFactory', [function () {
     return {
       get: function () {
@@ -78,8 +109,8 @@ angular.module('risevision.storage.services')
       return fileUploaderFactory();
     }
   ])
-  .factory('fileUploaderFactory', ['$rootScope', '$q', 'XHRFactory', 'encoding', 'ExifStripper', '$timeout',
-    function ($rootScope, $q, XHRFactory, encoding, ExifStripper, $timeout) {
+  .factory('fileUploaderFactory', ['$rootScope', '$q', 'XHRFactory', 'encoding', 'ExifStripper', '$timeout', 'JPGCompressor',
+    function ($rootScope, $q, XHRFactory, encoding, ExifStripper, $timeout, JPGCompressor) {
       return function () {
         var svc = {};
         var loadBatchTimer = null;
@@ -97,6 +128,15 @@ angular.module('risevision.storage.services')
         svc.withCredentials = false;
         svc.isUploading = false;
         svc.nextIndex = 0;
+
+        svc.compress = function (fileItems) {
+          return fileItems.reduce(function (pChain, fileItem) {
+            return pChain.then(function () {
+              return JPGCompressor.compress(fileItem, svc.currentFilePath());
+            });
+          }, $q.resolve())
+          .then(function () { return fileItems; });
+        };
 
         svc.removeExif = function (files) {
           var promises = [];
