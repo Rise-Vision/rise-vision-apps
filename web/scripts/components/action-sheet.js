@@ -90,6 +90,10 @@ angular.module('risevision.common.components.action-sheet', [])
           } else {
             iElement.bind('toggle', toggle);
           }
+
+          scope.$on('$destroy', function() {
+            actionSheetDomEl.remove();
+          });
         }
       };
     }
