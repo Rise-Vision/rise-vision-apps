@@ -1,8 +1,13 @@
 'use strict';
 
 angular.module('risevision.schedules.services')
-   .factory('scheduleSelectorFactory', ['$filter', '$q', '$log', 'schedule', 'processErrorCode',
-    function ($filter, $q, $log, schedule, processErrorCode) {
+   .factory('scheduleSelectorFactory', ['$filter', '$q', '$log', 'schedule', 'processErrorCode', '$injector',
+    function ($filter, $q, $log, schedule, processErrorCode, $injector) {
+       var schedulesComponent = {
+        type: 'rise-schedules',
+        hasSelectedSchedules: true
+      };
+
       var factory = {
         search: {
           sortBy: 'name'
@@ -12,9 +17,10 @@ angular.module('risevision.schedules.services')
       };
 
       var _loadSchedules = function(includesPresentation) {
+        var templateEditorFactory = $injector.get('templateEditorFactory');
         var search = angular.copy(factory.search);
-        // search.filter = (includesPresentation ? '' : 'NOT ') + 
-        //   'presentationIds:~\"' + templateEditorFactory.presentation.id + '\"';
+        search.filter = (includesPresentation ? '' : 'NOT ') + 
+          'presentationIds:~\"' + templateEditorFactory.presentation.id + '\"';
 
         factory.loadingSchedules = true;
 
@@ -31,7 +37,7 @@ angular.module('risevision.schedules.services')
       };
 
       var _loadSelectedSchedules = function () {
-        factory.hasSelectedSchedules = true;
+        schedulesComponent.hasSelectedSchedules = true;
 
         factory.selectedSchedules = [];
 
@@ -39,7 +45,7 @@ angular.module('risevision.schedules.services')
           .then(function (result) {
             factory.selectedSchedules = result.items ? result.items : [];
 
-            factory.hasSelectedSchedules = !!factory.selectedSchedules.length;
+            schedulesComponent.hasSelectedSchedules = !!factory.selectedSchedules.length;
           });
       };
 
@@ -54,6 +60,12 @@ angular.module('risevision.schedules.services')
 
       factory.doSearch = function() {
         factory.loadNonSelectedSchedules();
+      };
+
+      factory.getSchedulesComponent = function () {
+        _loadSelectedSchedules();
+
+        return schedulesComponent;
       };
 
       factory.selectItem = function (item, inSelectedSchedules) {
