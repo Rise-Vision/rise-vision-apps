@@ -2,8 +2,8 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('templateAttributeList', ['templateEditorFactory', 'brandingFactory',
-  'schedulesComponentFactory', 'blueprintFactory',
-    function (templateEditorFactory, brandingFactory, schedulesComponentFactory, blueprintFactory) {
+    'blueprintFactory', 'scheduleSelectorFactory',
+    function (templateEditorFactory, brandingFactory, blueprintFactory, scheduleSelectorFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -12,7 +12,7 @@ angular.module('risevision.template-editor.directives')
           $scope.factory = templateEditorFactory;
 
           $scope.brandingComponent = brandingFactory.getBrandingComponent();
-          $scope.schedulesComponent = schedulesComponentFactory.getSchedulesComponent();
+          $scope.schedulesComponent = scheduleSelectorFactory.getSchedulesComponent();
 
           $scope.components = blueprintFactory.blueprintData.components
             .filter(function (c) {

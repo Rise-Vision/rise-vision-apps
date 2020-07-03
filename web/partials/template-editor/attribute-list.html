@@ -22,13 +22,13 @@
 </div>
 
 <div class="attribute-row attribute-row-hover">
-  <div class="col-xs-10 pl-0 attribute-desc" ng-class="{'red' : !schedulesComponent.hasSelectedSchedules }">
+  <div class="col-xs-10 pl-0 attribute-desc" ng-class="{'text-error' : !schedulesComponent.hasSelectedSchedules }">
     <span>
       Schedules
     </span>
-    <span ng-show="!schedulesComponent.hasSelectedSchedules">
+    <div class="text-sm" ng-show="!schedulesComponent.hasSelectedSchedules">
       Before you can publish, you need to select one or more schedules to put this presentation on.
-    </span>
+    </div>
   </div>
   <div class="col-xs-2 pr-0 align-right">
     <a ng-click="editComponent(schedulesComponent);">
