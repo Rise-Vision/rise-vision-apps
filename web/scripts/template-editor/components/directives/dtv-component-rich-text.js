@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentRichText', ['$timeout', '$window', 'templateEditorFactory', 'templateEditorUtils',
-    function ($timeout, $window, templateEditorFactory, templateEditorUtils) {
+  .directive('templateComponentRichText', ['$timeout', '$window', 'templateEditorFactory',
+    function ($timeout, $window, templateEditorFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -41,24 +41,7 @@ angular.module('risevision.template-editor.directives')
           /*jshint camelcase: true */
 
           function _load() {
-            $scope.isMultiline = $scope.getBlueprintData($scope.componentId, 'multiline');
-            var value = $scope.getAvailableAttributeData($scope.componentId, 'value');
-            var richText = $scope.getAvailableAttributeData($scope.componentId, 'richText');
-            var fontsize = $scope.getAvailableAttributeData($scope.componentId, 'fontsize');
-            var minfontsize = $scope.getAvailableAttributeData($scope.componentId, 'minfontsize');
-            var maxfontsize = $scope.getAvailableAttributeData($scope.componentId, 'maxfontsize');
-
-            var fontsizeInt = templateEditorUtils.intValueFor(fontsize, null);
-            var minFontSize = templateEditorUtils.intValueFor(minfontsize, 1);
-            var maxFontSize = templateEditorUtils.intValueFor(maxfontsize, 200);
-
-            if (richText !== null && typeof richText !== 'undefined') {
-              $scope.data.richText = richText;
-            } else if (!!fontsizeInt) {
-              $scope.data.richText = '<span style="font-size: ' + fontsizeInt + 'px;">' + value + '</span>';
-            } else {
-              $scope.data.richText = value;
-            }
+            $scope.data.richText = $scope.getAvailableAttributeData($scope.componentId, 'rich-text');
 
             $timeout(function () {
               $window.dispatchEvent(new Event('resize'));
@@ -66,8 +49,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.save = function () {
-            $scope.setAttributeData($scope.componentId, 'richText', $scope.data.richText);
-            $scope.setAttributeData($scope.componentId, 'value', undefined);
+            $scope.setAttributeData($scope.componentId, 'rich-text', $scope.data.richText);
           };
 
           $scope.registerDirective({
