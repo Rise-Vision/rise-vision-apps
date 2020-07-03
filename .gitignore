@@ -12,6 +12,7 @@ tmp
 web/tmp
 web/scripts/config/config.js
 web/vendor/tus
+web/vendor/compressor
 test/e2e/config/config.json
 .DS_Store
 .project

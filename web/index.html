@@ -96,6 +96,7 @@
   <script src="vendor/@shopify/draggable/draggable.bundle.js"></script>
   <script src="bower_components/stretchy/stretchy.js"></script>
   <script src="bower_components/xmlToJSON.js/lib/xmlToJSON.js"></script>
+  <script src="bower_components/hone/hone.js"></script>
 
   <!-- Background image settings widget component -->
   <script src="bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js"></script>
@@ -274,6 +275,7 @@
   <script src="scripts/components/purchase-flow/directives/dtv-review-purchase.js"></script>
   <script src="scripts/components/purchase-flow/directives/dtv-review-subscription.js"></script>
   <script src="scripts/components/purchase-flow/directives/dtv-shipping-address.js"></script>
+  <script src="scripts/components/purchase-flow/directives/dtv-suggest-general-delivery.js"></script>
   <script src="scripts/components/purchase-flow/directives/dtv-year-selector.js"></script>
   <script src="scripts/components/purchase-flow/filters/ftr-card-last-four.js"></script>
   <script src="scripts/components/purchase-flow/filters/ftr-country-name.js"></script>
@@ -338,18 +340,24 @@
   <!-- common -->
   <script src="scripts/common/app.js"></script>
   <script src="scripts/common/controllers/ctr-app.js"></script>
+
   <script src="scripts/common/directives/dtv-page-title.js"></script>
   <script src="scripts/common/directives/dtv-rv-sortable.js"></script>
   <script src="scripts/common/directives/dtv-guid-validator.js"></script>
   <script src="scripts/common/directives/dtv-in-app-messages.js"></script>
   <script src="scripts/common/directives/dtv-confirm-email.js"></script>
+  <script src="scripts/common/directives/dtv-tooltip-digest-on-resize.js"></script>
+  <script src="scripts/common/directives/dtv-tooltip-overlay.js"></script>
+
   <script src="scripts/common/services/svc-cached-request.js"></script>
   <script src="scripts/common/services/svc-gadgets-api.js"></script>
   <script src="scripts/common/services/svc-in-app-messages-factory.js"></script>
   <script src="scripts/common/services/svc-resource-loader.js"></script>
+  <script src="scripts/common/services/svc-hone-backdrop-factory.js"></script>
 
   <!-- launcher -->
   <script src="scripts/launcher/app.js"></script>
+  <script src="scripts/launcher/controllers/ctr-apps-home.js"></script>
   <script src="scripts/launcher/controllers/ctr-home.js"></script>
   <script src="scripts/launcher/controllers/ctr-get-started.js"></script>
   <script src="scripts/launcher/controllers/ctr-onboarding.js"></script>
@@ -375,6 +383,7 @@
   <script src="scripts/schedules/services/svc-create-first-schedule.js"></script>
 
   <script src="scripts/schedules/directives/dtv-schedule-fields.js"></script>
+  <script src="scripts/schedules/directives/dtv-share-schedule-button.js"></script>
   <script src="scripts/schedules/directives/dtv-playlist.js"></script>
   <script src="scripts/schedules/controllers/ctr-schedules-list.js"></script>
   <script src="scripts/schedules/controllers/ctr-schedule-details.js"></script>
@@ -382,6 +391,7 @@
   <script src="scripts/schedules/controllers/ctr-playlist-item-modal.js"></script>
   <script src="scripts/schedules/controllers/ctr-auto-schedule-modal.js"></script>
   <script src="scripts/schedules/controllers/ctr-shared-schedule-modal.js"></script>
+  <script src="scripts/schedules/controllers/ctr-shared-schedule-popover.js"></script>
 
   <!-- displays -->
   <script src="scripts/displays/app.js"></script>
@@ -553,6 +563,7 @@
   <script src="scripts/storage/services/svc-pending-operations-factory.js"></script>
   <script src="scripts/storage/services/svc-encoding.js"></script>
   <script src="vendor/tus/tus.min.js"></script>
+  <script src="vendor/compressor/compressor.min.js"></script>
 
   <script src="scripts/storage/filters/ftr-filters.js"></script>
   <script src="scripts/storage/directives/dtv-storage-selector.js"></script>

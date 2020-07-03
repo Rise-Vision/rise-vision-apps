@@ -1,5 +1,6 @@
 'use strict';
 var config = require('../../config/config.json');
+var helper = require('rv-common-e2e').helper;
 
 var HomePage = function() {
   var _this = this;
@@ -16,8 +17,10 @@ var HomePage = function() {
   var schedulesLink = element(by.css('.nav.navbar-nav #SchedulesLink'));
   var storageLink = element(by.css('.nav.navbar-nav #StorageLink'));
 
-  var appLauncherContainer = element(by.id('appLauncherContainer'));
-  var appLauncherLoader = element(by.xpath('//div[@spinner-key="launcher-loader"]'));
+  var appsHomeContainer = element(by.id('apps-home-container'));
+  var appsHomeLoader = element(by.xpath('//div[@spinner-key="apps-home-loader"]'));
+
+  var shareTooltipDismiss = element(by.id('share-tooltip-dismiss'));
 
   var presentationAddButton = element(by.id('presentationAddButton'));
   var presentationsList = element(by.id('presentationsList'));
@@ -37,7 +40,15 @@ var HomePage = function() {
   var signUpText = element(by.id('sign-up-text'));
   var signInText = element(by.id('sign-in-text'));
   var signUpLink = element(by.id('sign-up-link'));
-  var signInLink = element(by.id('sign-in-link'));  
+  var signInLink = element(by.id('sign-in-link'));
+
+  this.dismissFeatureTour = function() {
+    return shareTooltipDismiss.isPresent().then(function(isTooltipPresent) {
+      if (isTooltipPresent) {
+        helper.clickOverIFrame(shareTooltipDismiss, 'Tooltip Dismiss Button');
+      }
+    });
+  }  
 
   this.confirmGet = function(url) {
     return browser.get(url)
@@ -106,13 +117,17 @@ var HomePage = function() {
     return storageLink;
   };
 
-  this.getAppLauncherContainer = function() {
-    return appLauncherContainer;
+  this.getAppsHomeContainer = function() {
+    return appsHomeContainer;
   };
 
-  this.getAppLauncherLoader = function() {
-    return appLauncherLoader;
+  this.getAppsHomeLoader = function() {
+    return appsHomeLoader;
   };
+
+  this.getShareTooltipDismiss = function() {
+    return shareTooltipDismiss;
+  }
 
   this.getPresentationAddButton = function() {
     return presentationAddButton;

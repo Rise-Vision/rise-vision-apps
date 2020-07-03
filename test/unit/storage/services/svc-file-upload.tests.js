@@ -11,6 +11,18 @@ describe('Services: uploader', function() {
       return Q;
     });
 
+    $provide.service('$log', function() {
+      return { debug: sinon.stub() };
+    });
+
+    $provide.service('bigQueryLogging', function() {
+      return { logEvent: sinon.stub() };
+    });
+
+    $provide.service('FilesFactory', function() {
+      return { folderPath: '' };
+    });
+
     $provide.service('XHRFactory', function() {
       return {
         get: function() {
@@ -29,10 +41,10 @@ describe('Services: uploader', function() {
     })
   }));
 
-  var uploader, lastAddedFileItem, $timeout, XHRFactory, ExifStripper;
+  var uploader, lastAddedFileItem, $timeout, XHRFactory, ExifStripper, JPGCompressor;
 
   beforeEach(function() {
-  	inject(function($injector) {
+    inject(function($injector) {
       lastAddedFileItem = null;
 
       uploader = $injector.get('FileUploader');
@@ -44,9 +56,11 @@ describe('Services: uploader', function() {
       uploader.onBeforeUploadItem = function() {};
       uploader.onCancelItem = function() {};
       uploader.onCompleteItem = function() {};
+      uploader.currentFilePath = function() {};
 
+      JPGCompressor = $injector.get('JPGCompressor');
       $timeout = $injector.get('$timeout');
-  	});
+    });
   });
 
   it('should exist', function () {
@@ -346,6 +360,30 @@ describe('Services: uploader', function() {
       });
     });
 
+  });
+
+  describe('jpg compression:', function () {
+    beforeEach(function () {
+      window.Compressor = function (file, opts) {
+        file.processed = true;
+        opts.success({});
+      };
+    });
+
+    it('has the compressor', function () {
+      JPGCompressor.compress({file: {type: 'image/jpeg'}, domFileItem: {}});
+    });
+
+    it('processes an array of fileItems and returns a promise', function () {
+      var domFileItem = {};
+
+      return uploader.compress([{
+        file: {type: 'image/jpeg'},
+        domFileItem: domFileItem
+      }]).then(function () {
+        assert(domFileItem.processed);
+      });
+    });
   });
 
 });

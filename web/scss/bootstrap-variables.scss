@@ -514,13 +514,13 @@ $state-danger-border:            darken(adjust-hue($state-danger-bg, -10), 5%);
 //** Tooltip max width
 $tooltip-max-width:           200px;
 //** Tooltip text color
-$tooltip-color:               #fff;
+$tooltip-color:               $text-color;
 //** Tooltip background color
-$tooltip-bg:                  #000;
+$tooltip-bg:                  #fff;
 $tooltip-opacity:             .9;
 
 //** Tooltip arrow width
-$tooltip-arrow-width:         5px;
+$tooltip-arrow-width:         8px;
 //** Tooltip arrow color
 $tooltip-arrow-color:         $tooltip-bg;
 
@@ -602,9 +602,9 @@ $modal-content-border-color:                   rgba(0,0,0,.2);
 $modal-content-fallback-border-color:          #999;
 
 //** Modal backdrop background color
-$modal-backdrop-bg:           #fff;
+$modal-backdrop-bg:           $madero-black;
 //** Modal backdrop opacity
-$modal-backdrop-opacity:      .7;
+$modal-backdrop-opacity:      .5;
 //** Modal header border color
 $modal-header-border-color:   #e5e5e5;
 //** Modal footer border color

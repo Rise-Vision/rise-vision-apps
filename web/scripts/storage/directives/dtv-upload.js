@@ -100,6 +100,10 @@
               uploadOverwriteWarning.resetConfirmation();
             };
 
+            FileUploader.currentFilePath = function () {
+              return $scope.filesFactory.folderPath;
+            };
+
             FileUploader.onAfterAddingFile = function (fileItem) {
               console.info('onAfterAddingFile', fileItem.file.name);
 

@@ -106,7 +106,7 @@
         };
 
         var checkSubscriptionStatus = function (productCodes) {
-          if (currentPlanFactory.isPlanActive() || currentPlanFactory.isCancelledActive()) {
+          if (currentPlanFactory.isPlanActive()) {
             return $q.resolve(mapCurrentPlan(productCodes));
           } else {
             return storeProduct.status(productCodes)

@@ -83,6 +83,8 @@ Because of the way git works (mainly, references to remote repositories), it's i
 gulp test:unit
 ```
 
+If gulp fails with something like `..contextify.cc:628:static void node::contextify::ContextifyScript:` try switching to nodejs 9 and rebuilding node_modules.
+
 ### Protractor End-to-End Testing
 
 E2E tests require some environment variables to be defined for the accounts used for testing. The variables are `E2E_USER` / `E2E_PASS` for Google Authentication and `E2E_USER1` / `E2E_PASS1` for Custom Authentication. The command would be as follows:

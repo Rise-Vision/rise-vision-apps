@@ -27,6 +27,9 @@ var WeeklyTemplatesScenarios = function() {
 
       homepage.get();
       signInPage.signIn();
+      homepage.dismissFeatureTour().then(function() {
+        homepage.get();
+      });
     });
 
     // Jenkins account is not an Education company

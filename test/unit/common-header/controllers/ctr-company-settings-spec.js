@@ -183,6 +183,7 @@ describe("controller: company settings", function() {
     expect($scope.loading).to.be.true;
     expect($scope.formError).to.be.null;
     expect($scope.apiError).to.be.null;
+    expect($scope.isAddressError).to.be.false;
 
     expect($scope.closeModal).to.exist;
     expect($scope.save).to.exist;
@@ -280,6 +281,7 @@ describe("controller: company settings", function() {
         expect($modalInstance._closed).to.be.false;
         expect($scope.formError).to.be.equal("Failed to update Company.");
         expect($scope.apiError).to.be.equal("ERROR; could not create company");
+        expect($scope.isAddressError).to.be.false;
 
         done();
       },10);
@@ -290,11 +292,14 @@ describe("controller: company settings", function() {
 
       $scope.$digest();
       $scope.save();
+
+      expect($scope.isAddressError).to.be.false;
       setTimeout(function(){
         expect($scope.loading).to.be.false;
         expect($modalInstance._closed).to.be.false;
         expect($scope.formError).to.be.equal("We couldn't update your address.");
         expect($scope.apiError).to.be.equal("ERROR; invalid address");
+        expect($scope.isAddressError).to.be.true;
 
         done();
       },10);

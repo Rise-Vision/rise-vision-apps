@@ -71,6 +71,7 @@ var unitTestFiles = [
   "web/bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js",
   "web/bower_components/moment/moment.js",
   "web/bower_components/angularjs-slider/dist/rzslider.min.js",
+  "web/bower_components/hone/hone.js",
   "node_modules/widget-tester/mocks/translate-mock.js",
   "web/tmp/partials.js",
   "web/scripts/components/**/*.js",
@@ -271,6 +272,11 @@ gulp.task('pricing', function() {
   });
 });
 
+gulp.task("jpgcompressor", function() {
+  return gulp.src("node_modules/compressorjs/dist/compressor.min.js")
+    .pipe(gulp.dest("web/vendor/compressor"));
+});
+
 gulp.task("tus", function() {
   return gulp.src("node_modules/tus-js-client/dist/tus.min.js")
     .pipe(gulp.dest("web/vendor/tus"));
@@ -332,7 +338,7 @@ gulp.task("config", function() {
 });
 
 gulp.task('build-pieces', function (cb) {
-  runSequence(["clean"], ['config', 'i18n-build', 'css-build', 'pricing', 'html2js', 'tus', 'tinymce'], cb);
+  runSequence(["clean"], ['config', 'i18n-build', 'css-build', 'pricing', 'html2js', 'tus', 'tinymce', 'jpgcompressor'], cb);
 });
 
 gulp.task('build', function (cb) {
@@ -349,6 +355,10 @@ gulp.task("config-e2e", function() {
     .pipe(rename("config.json"))
     .pipe(gulp.dest("test/e2e/config"));
 });
+
+gulp.task("test:unit:nocoverage", factory.testUnitAngular({
+    testFiles: unitTestFiles
+}));
 
 gulp.task("test:unit", factory.testUnitAngular({
     coverageFiles: "../../web/scripts/**/*.js",

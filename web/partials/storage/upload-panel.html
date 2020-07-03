@@ -26,7 +26,7 @@
             <button class="btn btn-default btn-sm" type="button" ng-click="cancelAllUploads()" title="{{'storage-client.cancel-uploads' | translate}}">
               <span translate="storage-client.cancel-uploads"></span>
             </button>
-            <button class="btn btn-default btn-sm" type="button" ng-click="retryFailedUploads()" ng-show="getErrorCount() > 0 && getNotErrorCount() === 0" title="{{'storage-client.retry-failed-uploads' | translate}}">
+            <button id="retryAll" class="btn btn-default btn-sm" type="button" ng-click="retryFailedUploads()" ng-show="getErrorCount() > 0 && getNotErrorCount() === 0" title="{{'storage-client.retry-failed-uploads' | translate}}">
             <span translate="storage-client.retry-failed-uploads"></span>
             </button>
           </div>

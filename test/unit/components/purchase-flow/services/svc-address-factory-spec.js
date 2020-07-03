@@ -41,7 +41,6 @@ describe("Services: address factory", function() {
         }
       });
     });
-
     $provide.service("userState",function() {
       return userState = {
         getCopyOfUserCompany: sinon.stub().returns({}),
@@ -55,10 +54,19 @@ describe("Services: address factory", function() {
         getCopyOfProfile: sinon.stub().returns({})
       };
     });
+    $provide.service("confirmModal", function() {
+      return confirmModal = sinon.spy(function() {
+        if (confirmModalSuccess) {
+          return Q.resolve("success");
+        } else {
+          return Q.reject("failure");
+        }
+      });
+    });
 
   }));
 
-  var $log, addressObject, addressFactory, storeService, addressService, userState, updateCompany, updateUser, updateSuccess;
+  var $log, addressObject, addressFactory, storeService, addressService, userState, updateCompany, updateUser, updateSuccess, confirmModal, confirmModalSuccess;
 
   beforeEach(function() {
     updateSuccess = true;
@@ -572,6 +580,52 @@ describe("Services: address factory", function() {
       addressObject.resolve = false;
       addressFactory.isValidOrEmptyAddress(addressObject).then(null,function(){
         storeService.validateAddress.should.have.been.called;
+        done();
+      });
+    });
+  });
+
+  describe("confirmAndSetGeneralDelivery:", function() {
+    it("should show a confirmation popup", function() {
+      addressFactory.confirmAndSetGeneralDelivery();
+      confirmModal.should.have.been.calledWith(
+        "Address Information",
+        "The address you provided couldn't be validated. This can happen if the address does not exist in the USPS records. If you're sure the address is correct you can specify this address as General Delivery and we'll only validate the City, State and Zip Code.<br/>Would you like to specify this address as General Delivery?",
+        "Yes",
+        "Cancel",
+        "general-delivery-modal"
+      );
+    });
+
+    it("should update address unit on confirmation", function(done) {
+      confirmModalSuccess = true;
+      var addressObject = {
+        unit: null
+      }
+      addressFactory.confirmAndSetGeneralDelivery(addressObject).then(function() {
+        expect(addressObject.unit).to.equal("General Delivery");
+        done();
+      });
+    });
+
+    it("should append to address unit if unit is already provided", function(done) {
+      confirmModalSuccess = true;
+      var addressObject = {
+        unit: "Room 51"
+      }
+      addressFactory.confirmAndSetGeneralDelivery(addressObject).then(function() {
+        expect(addressObject.unit).to.equal("Room 51 - General Delivery");
+        done();
+      });
+    });
+
+    it("should not update unit if dismissed", function(done) {
+      confirmModalSuccess = false;
+      var addressObject = {
+        unit: null
+      }
+      addressFactory.confirmAndSetGeneralDelivery(addressObject).then(null, function() {
+        expect(addressObject.unit).to.be.null;
         done();
       });
     });

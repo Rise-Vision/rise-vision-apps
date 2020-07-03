@@ -10,16 +10,16 @@ angular.module('risevision.apps')
         .state('apps.launcher', {
           url: '?cid',
           abstract: true,
-          template: '<div class="container app-launcher" ui-view></div>'
+          template: '<div class="app-launcher" ui-view></div>'
         })
 
         .state('apps.launcher.home', {
           url: '/',
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get(
-              'partials/launcher/app-launcher.html');
+              'partials/launcher/apps-home.html');
           }],
-          controller: 'HomeCtrl',
+          controller: 'AppsHomeCtrl',
           resolve: {
             canAccessApps: ['$state', '$location', 'canAccessApps', 'onboardingFactory',
               function ($state, $location, canAccessApps, onboardingFactory) {

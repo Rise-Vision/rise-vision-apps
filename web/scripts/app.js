@@ -146,7 +146,8 @@ angular.module('risevision.apps', [
       });
 
       $rootScope.$on('$stateChangeSuccess', function (event, toState) {
-        if (toState.name === 'apps.launcher.onboarding') {
+        if (toState.name === 'apps.launcher.onboarding' ||
+          toState.name === 'apps.launcher.home') {
           $rootScope.showWhiteBackground = true;
         } else {
           $rootScope.showWhiteBackground = false;
