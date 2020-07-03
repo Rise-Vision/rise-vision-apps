@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentText', ['$timeout', '$window', 'templateEditorFactory', 'templateEditorUtils',
+  .directive('templateComponentRichText', ['$timeout', '$window', 'templateEditorFactory', 'templateEditorUtils',
     function ($timeout, $window, templateEditorFactory, templateEditorUtils) {
       return {
         restrict: 'E',
         scope: true,
-        templateUrl: 'partials/template-editor/components/component-text.html',
+        templateUrl: 'partials/template-editor/components/component-rich-text.html',
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
           $scope.data = {};
@@ -72,7 +72,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.registerDirective({
-            type: 'rise-text',
+            type: 'rise-rich-text',
             iconType: 'streamline',
             icon: 'text',
             element: element,
