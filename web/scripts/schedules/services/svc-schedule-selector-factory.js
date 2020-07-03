@@ -84,7 +84,7 @@ angular.module('risevision.schedules.services')
       };
 
       var _updateSelectedSchedules = function () {
-        var filteredSchedules = _.filter(factory.nonSelectedSchedules.items.list, function (item) {
+        var filteredSchedules = _.filter(factory.unselectedSchedules.items.list, function (item) {
           return item.isSelected;
         });
         var scheduleIds = _.map(filteredSchedules, function (item) {
