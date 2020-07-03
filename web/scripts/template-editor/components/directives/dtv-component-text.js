@@ -19,7 +19,6 @@ angular.module('risevision.template-editor.directives')
             toolbar1: 'fontselect fontsizeselect | ' +
               'bold italic underline | ' +
               'forecolor backcolor | ' +
-              'link | ' +
               'numlist bullist | ' +
               'alignleft aligncenter alignright | ' +
               'removeformat',
