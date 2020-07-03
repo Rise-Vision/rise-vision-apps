@@ -2,9 +2,9 @@
 
 angular.module('risevision.schedules.services')
   .factory('scheduleSelectorFactory', ['$filter', '$q', '$log', 'schedule', 'processErrorCode',
-  'templateEditorFactory', 'playlistFactory', 'ScrollingListService',
+    'templateEditorFactory', 'playlistFactory', 'ScrollingListService',
     function ($filter, $q, $log, schedule, processErrorCode, templateEditorFactory, playlistFactory,
-    ScrollingListService) {
+      ScrollingListService) {
       var schedulesComponent = {
         type: 'rise-schedules',
         hasSelectedSchedules: true
@@ -91,9 +91,11 @@ angular.module('risevision.schedules.services')
           return item.id;
         });
 
-        if (!scheduleIds.length) { return; }
+        if (!scheduleIds.length) {
+          return;
+        }
 
-        var playlistItem = playlistFactory.newPresentationItem(templateEditorFactory.presentation)
+        var playlistItem = playlistFactory.newPresentationItem(templateEditorFactory.presentation);
 
         return playlistFactory.initPlayUntilDone(playlistItem, templateEditorFactory.presentation, true)
           .then(function () {
@@ -109,7 +111,9 @@ angular.module('risevision.schedules.services')
           return item.id;
         });
 
-        if (!scheduleIds.length) { return; }
+        if (!scheduleIds.length) {
+          return;
+        }
 
         schedule.removePresentation(scheduleIds, templateEditorFactory.presentation.id);
       };
