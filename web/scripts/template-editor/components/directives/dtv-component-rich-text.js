@@ -41,7 +41,7 @@ angular.module('risevision.template-editor.directives')
           /*jshint camelcase: true */
 
           function _load() {
-            $scope.data.richText = $scope.getAvailableAttributeData($scope.componentId, 'rich-text');
+            $scope.data.richText = $scope.getAvailableAttributeData($scope.componentId, 'richtext');
 
             $timeout(function () {
               $window.dispatchEvent(new Event('resize'));
@@ -49,7 +49,7 @@ angular.module('risevision.template-editor.directives')
           }
 
           $scope.save = function () {
-            $scope.setAttributeData($scope.componentId, 'rich-text', $scope.data.richText);
+            $scope.setAttributeData($scope.componentId, 'richtext', $scope.data.richText);
           };
 
           $scope.registerDirective({
