@@ -14,7 +14,7 @@ angular.module('risevision.template-editor.directives')
             $scope.factory.loadNonSelectedSchedules();
           }
 
-          $scope.$watch('factory.loadingSchedules', function() {
+          $scope.$watch('factory.loadingSchedules', function () {
             if ($scope.factory.loadingSchedules) {
               $loading.start('selected-schedules-spinner');
             } else {

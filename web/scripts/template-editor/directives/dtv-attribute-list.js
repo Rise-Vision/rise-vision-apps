@@ -2,7 +2,7 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('templateAttributeList', ['templateEditorFactory', 'brandingFactory',
-  'blueprintFactory', 'scheduleSelectorFactory',
+    'blueprintFactory', 'scheduleSelectorFactory',
     function (templateEditorFactory, brandingFactory, blueprintFactory, scheduleSelectorFactory) {
       return {
         restrict: 'E',

@@ -10,24 +10,23 @@ angular.module('risevision.schedules.directives')
         link: function ($scope, element) {
           var tooltipElement = angular.element(element[0].querySelector('#schedule-selector'));
           $scope.factory = scheduleSelectorFactory;
-          $scope.factory.loadNonSelectedSchedules();
 
-          $scope.showTooltip = function($event) {
-            $timeout(function() {
+          $scope.showTooltip = function ($event) {
+            $timeout(function () {
               tooltipElement.trigger('show');
             });
           };
 
-          $scope.closeTooltip = function() {
-            $timeout(function() {
+          $scope.closeTooltip = function () {
+            $timeout(function () {
               tooltipElement.trigger('hide');
             });
           };
 
-          $scope.select = function() {
+          $scope.select = function () {
             console.log($scope.factory.getSelectedIds());
             $scope.closeTooltip();
-          }
+          };
 
           $scope.factory.loadNonSelectedSchedules();
         }

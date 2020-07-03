@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.schedules.services')
-   .factory('scheduleSelectorFactory', ['$filter', '$q', '$log', 'schedule', 'processErrorCode', 'templateEditorFactory',
+  .factory('scheduleSelectorFactory', ['$filter', '$q', '$log', 'schedule', 'processErrorCode', 'templateEditorFactory',
     function ($filter, $q, $log, schedule, processErrorCode, templateEditorFactory) {
-       var schedulesComponent = {
+      var schedulesComponent = {
         type: 'rise-schedules',
         hasSelectedSchedules: true
       };
@@ -16,9 +16,9 @@ angular.module('risevision.schedules.services')
         nonSelectedSchedules: null
       };
 
-      var _loadSchedules = function(includesPresentation) {
+      var _loadSchedules = function (includesPresentation) {
         var search = angular.copy(factory.search);
-        search.filter = (includesPresentation ? '' : 'NOT ') + 
+        search.filter = (includesPresentation ? '' : 'NOT ') +
           'presentationIds:~\"' + templateEditorFactory.presentation.id + '\"';
 
         factory.loadingSchedules = true;
@@ -57,7 +57,7 @@ angular.module('risevision.schedules.services')
           });
       };
 
-      factory.doSearch = function() {
+      factory.doSearch = function () {
         factory.loadNonSelectedSchedules();
       };
 
@@ -90,7 +90,7 @@ angular.module('risevision.schedules.services')
       factory.getSelectedIds = function () {
         return _.filter(factory.nonSelectedSchedules, function (item) {
           return item.isSelected;
-        });  
+        });
       };
 
       return factory;
