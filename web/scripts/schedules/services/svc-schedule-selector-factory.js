@@ -2,7 +2,8 @@
 
 angular.module('risevision.schedules.services')
   .factory('scheduleSelectorFactory', ['$filter', '$q', '$log', 'schedule', 'processErrorCode', 'templateEditorFactory',
-    function ($filter, $q, $log, schedule, processErrorCode, templateEditorFactory) {
+    'ScrollingListService',
+    function ($filter, $q, $log, schedule, processErrorCode, templateEditorFactory, ScrollingListService) {
       var schedulesComponent = {
         type: 'rise-schedules',
         hasSelectedSchedules: true
@@ -49,16 +50,10 @@ angular.module('risevision.schedules.services')
       };
 
       factory.loadNonSelectedSchedules = function () {
-        factory.nonSelectedSchedules = [];
+        var search = angular.copy(factory.search);
+        search.filter = 'NOT presentationIds:~\"' + templateEditorFactory.presentation.id + '\"';
 
-        _loadSchedules(false)
-          .then(function (result) {
-            factory.nonSelectedSchedules = result.items ? result.items : [];
-          });
-      };
-
-      factory.doSearch = function () {
-        factory.loadNonSelectedSchedules();
+        factory.nonSelectedSchedules = new ScrollingListService(schedule.list, search);
       };
 
       factory.getSchedulesComponent = function () {
@@ -87,9 +82,20 @@ angular.module('risevision.schedules.services')
         }
       };
 
-      factory.getSelectedIds = function () {
-        return _.filter(factory.nonSelectedSchedules, function (item) {
+      factory.select = function () {
+        console.log('TODO: Schedules to Assign:', _getNewlySelectedIds());
+        console.log('TODO: Schedules to Remove from:', _getNewlyDeselectedIds());
+      };
+
+      var _getNewlySelectedIds = function () {
+        return _.filter(factory.nonSelectedSchedules.items.list, function (item) {
           return item.isSelected;
+        });
+      };
+
+      var _getNewlyDeselectedIds = function () {
+        return _.filter(factory.selectedSchedules, function (item) {
+          return item.isSelected === false;
         });
       };
 

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateComponentSchedules', ['$loading', 'scheduleSelectorFactory',
-    function ($loading, scheduleSelectorFactory) {
+  .directive('templateComponentSchedules', ['scheduleSelectorFactory',
+    function (scheduleSelectorFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -13,14 +13,6 @@ angular.module('risevision.template-editor.directives')
           function _load() {
             $scope.factory.loadNonSelectedSchedules();
           }
-
-          $scope.$watch('factory.loadingSchedules', function () {
-            if ($scope.factory.loadingSchedules) {
-              $loading.start('selected-schedules-spinner');
-            } else {
-              $loading.stop('selected-schedules-spinner');
-            }
-          });
 
           $scope.save = function () {
             $scope.factory.save();

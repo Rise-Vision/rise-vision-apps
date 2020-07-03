@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.schedules.directives')
-  .directive('scheduleSelector', ['scheduleSelectorFactory', '$timeout',
-    function (scheduleSelectorFactory, $timeout) {
+  .directive('scheduleSelector', ['scheduleSelectorFactory', '$timeout', '$loading',
+    function (scheduleSelectorFactory, $timeout, $loading) {
       return {
         restrict: 'E',
         templateUrl: 'partials/schedules/schedule-selector.html',
@@ -10,6 +10,17 @@ angular.module('risevision.schedules.directives')
         link: function ($scope, element) {
           var tooltipElement = angular.element(element[0].querySelector('#schedule-selector'));
           $scope.factory = scheduleSelectorFactory;
+
+          $scope.$watchGroup([
+            'factory.loadingSchedules',
+            'factory.nonSelectedSchedules.loadingItems'
+          ], function (values) {
+            if (values[0] || values[1]) {
+              $loading.start('selected-schedules-spinner');
+            } else {
+              $loading.stop('selected-schedules-spinner');
+            }
+          });
 
           $scope.showTooltip = function ($event) {
             $timeout(function () {
@@ -24,11 +35,9 @@ angular.module('risevision.schedules.directives')
           };
 
           $scope.select = function () {
-            console.log($scope.factory.getSelectedIds());
+            $scope.factory.select();
             $scope.closeTooltip();
           };
-
-          $scope.factory.loadNonSelectedSchedules();
         }
       };
     }
