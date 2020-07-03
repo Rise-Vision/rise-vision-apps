@@ -5,10 +5,10 @@ angular.module('risevision.template-editor.services')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', 'presentation',
     'processErrorCode', 'userState', 'createFirstSchedule',
     'templateEditorUtils', 'brandingFactory', 'blueprintFactory', 'scheduleFactory', 'presentationTracker',
-    'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED', '$modal',
+    'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
     function ($q, $log, $state, $rootScope, presentation, processErrorCode, userState,
       createFirstSchedule, templateEditorUtils, brandingFactory, blueprintFactory, scheduleFactory,
-      presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED, $modal) {
+      presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
       var factory = {
         hasUnsavedChanges: false
       };
@@ -229,36 +229,6 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.publish = function () {
-        return _checkAssignedToSchedules().then(_publish);
-      };
-
-      var _checkAssignedToSchedules = function() {
-        var deferred = $q.defer();
-        scheduleFactory.isAssignedToSchedule(factory.presentation.id).then(function(isAssigned) {
-          factory.isNotAssignedToSchedule = !isAssigned;
-          if (isAssigned) {
-            deferred.resolve();
-          } else {
-            var modalInstance = $modal.open({
-              templateUrl: 'partials/template-editor/add-to-schedule-modal.html',
-              controller: 'AddToScheduleModalController',
-              windowClass: 'madero-style centered-modal',
-            });
-            modalInstance.result.then(function() {
-              deferred.resolve();
-            }).catch(function(){
-              deferred.reject();
-              factory.isNotAssignedToSchedule = true;
-            });
-          }
-        })
-        .catch(function(err) {
-          deferred.reject(err);
-        });
-        return deferred.promise;
-      };
-
-      var _publish = function () {
         var deferred = $q.defer();
 
         _clearMessages();
@@ -282,11 +252,6 @@ angular.module('risevision.template-editor.services')
           });
 
         return deferred.promise;
-      };
-
-      factory.assignToSchedules = function(scheduleIds) {
-        console.log('assignToSchedules', scheduleIds);
-        factory.isNotAssignedToSchedule = scheduleIds.length === 0;
       };
 
       factory.getAttributeData = function (componentId, attributeKey) {

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.schedules.services')
-   .factory('scheduleSelectorFactory', ['$filter', '$q', '$log', 'schedule', 'processErrorCode', '$injector',
-    function ($filter, $q, $log, schedule, processErrorCode, $injector) {
+   .factory('scheduleSelectorFactory', ['$filter', '$q', '$log', 'schedule', 'processErrorCode', 'templateEditorFactory',
+    function ($filter, $q, $log, schedule, processErrorCode, templateEditorFactory) {
        var schedulesComponent = {
         type: 'rise-schedules',
         hasSelectedSchedules: true
@@ -17,7 +17,6 @@ angular.module('risevision.schedules.services')
       };
 
       var _loadSchedules = function(includesPresentation) {
-        var templateEditorFactory = $injector.get('templateEditorFactory');
         var search = angular.copy(factory.search);
         search.filter = (includesPresentation ? '' : 'NOT ') + 
           'presentationIds:~\"' + templateEditorFactory.presentation.id + '\"';

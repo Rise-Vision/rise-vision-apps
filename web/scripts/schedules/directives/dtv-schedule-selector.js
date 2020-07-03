@@ -6,9 +6,7 @@ angular.module('risevision.schedules.directives')
       return {
         restrict: 'E',
         templateUrl: 'partials/schedules/schedule-selector.html',
-        scope: {
-          onSelect: '='
-        },
+        scope: true,
         link: function ($scope, element) {
           var tooltipElement = angular.element(element[0].querySelector('#schedule-selector'));
           $scope.factory = scheduleSelectorFactory;
@@ -27,7 +25,7 @@ angular.module('risevision.schedules.directives')
           };
 
           $scope.select = function() {
-            $scope.onSelect($scope.factory.getSelectedIds());
+            console.log($scope.factory.getSelectedIds());
             $scope.closeTooltip();
           }
 
