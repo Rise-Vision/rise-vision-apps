@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('risevision.schedules.services')
-  .factory('scheduleSelectorFactory', ['$filter', '$q', '$log', 'schedule', 'processErrorCode', 'templateEditorFactory',
-    'ScrollingListService',
-    function ($filter, $q, $log, schedule, processErrorCode, templateEditorFactory, ScrollingListService) {
+  .factory('scheduleSelectorFactory', ['$filter', '$q', '$log', 'schedule', 'processErrorCode',
+    'templateEditorFactory', 'playlistFactory', 'ScrollingListService',
+    function ($filter, $q, $log, schedule, processErrorCode, templateEditorFactory, playlistFactory,
+      ScrollingListService) {
       var schedulesComponent = {
         type: 'rise-schedules',
         hasSelectedSchedules: true
@@ -82,21 +83,44 @@ angular.module('risevision.schedules.services')
         }
       };
 
-      factory.select = function () {
-        console.log('TODO: Schedules to Assign:', _getNewlySelectedIds());
-        console.log('TODO: Schedules to Remove from:', _getNewlyDeselectedIds());
-      };
-
-      var _getNewlySelectedIds = function () {
-        return _.filter(factory.unselectedSchedules.items.list, function (item) {
+      var _updateSelectedSchedules = function () {
+        var filteredSchedules = _.filter(factory.nonSelectedSchedules.items.list, function (item) {
           return item.isSelected;
         });
+        var scheduleIds = _.map(filteredSchedules, function (item) {
+          return item.id;
+        });
+
+        if (!scheduleIds.length) {
+          return;
+        }
+
+        var playlistItem = playlistFactory.newPresentationItem(templateEditorFactory.presentation);
+
+        return playlistFactory.initPlayUntilDone(playlistItem, templateEditorFactory.presentation, true)
+          .then(function () {
+            schedule.addPresentation(scheduleIds, JSON.stringify(playlistItem));
+          });
       };
 
-      var _getNewlyDeselectedIds = function () {
-        return _.filter(factory.selectedSchedules, function (item) {
+      var _updateUnselectedSchedules = function () {
+        var filteredSchedules = _.filter(factory.selectedSchedules, function (item) {
           return item.isSelected === false;
         });
+        var scheduleIds = _.map(filteredSchedules, function (item) {
+          return item.id;
+        });
+
+        if (!scheduleIds.length) {
+          return;
+        }
+
+        schedule.removePresentation(scheduleIds, templateEditorFactory.presentation.id);
+      };
+
+      factory.select = function () {
+        _updateSelectedSchedules();
+        _updateUnselectedSchedules();
       };
 
       return factory;

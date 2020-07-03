@@ -149,6 +149,52 @@ angular.module('risevision.schedules.services')
             });
 
           return deferred.promise;
+        },
+        addPresentation: function (scheduleIds, playlistItem) {
+          var deferred = $q.defer();
+
+          var obj = {
+            'scheduleIds': scheduleIds,
+            'playlistItem': playlistItem
+          };
+
+          $log.debug('addPresentation to schedule called with', scheduleIds);
+          coreAPILoader().then(function (coreApi) {
+              return coreApi.schedule.addPresentation(obj);
+            })
+            .then(function (resp) {
+              $log.debug('addPresentation to schedule resp', resp);
+              deferred.resolve(resp);
+            })
+            .then(null, function (e) {
+              console.error('Failed to add presentation to schedule.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
+        removePresentation: function (scheduleIds, presentationId) {
+          var deferred = $q.defer();
+
+          var obj = {
+            'scheduleIds': scheduleIds,
+            'presentationId': presentationId
+          };
+
+          $log.debug('removePresentation from schedule called with', scheduleIds);
+          coreAPILoader().then(function (coreApi) {
+              return coreApi.schedule.removePresentation(obj);
+            })
+            .then(function (resp) {
+              $log.debug('removePresentation from schedule resp', resp);
+              deferred.resolve(resp);
+            })
+            .then(null, function (e) {
+              console.error('Failed to remove presentation from schedule.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
         }
       };
 
