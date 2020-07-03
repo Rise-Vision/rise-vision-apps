@@ -14,7 +14,7 @@ angular.module('risevision.template-editor.directives')
           /*jshint camelcase: false */
           $scope.tinymceOptions = {
             baseURL: '/vendor/tinymce/', //set path to load theme and skin files
-            plugins: 'colorpicker textcolor lists link',
+            plugins: 'colorpicker textcolor lists',
             menubar: false,
             toolbar1: 'fontselect fontsizeselect | ' +
               'bold italic underline | ' +
