@@ -13,7 +13,7 @@ angular.module('risevision.schedules.directives')
 
           $scope.$watchGroup([
             'factory.loadingSchedules',
-            'factory.nonSelectedSchedules.loadingItems'
+            'factory.unselectedSchedules.loadingItems'
           ], function (values) {
             if (values[0] || values[1]) {
               $loading.start('selected-schedules-spinner');

@@ -11,7 +11,7 @@ angular.module('risevision.template-editor.directives')
           $scope.factory = scheduleSelectorFactory;
 
           function _load() {
-            $scope.factory.loadNonSelectedSchedules();
+            $scope.factory.loadUnselectedSchedules();
           }
 
           $scope.save = function () {

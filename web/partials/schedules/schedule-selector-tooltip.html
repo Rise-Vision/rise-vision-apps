@@ -3,12 +3,12 @@
 <span class="schedule-selector-tooltip">
   <div class="row">
     <div class="col-xs-12">
-      <search-filter filter-config="filterConfig" search="factory.nonSelectedSchedules.search" do-search="factory.nonSelectedSchedules.doSearch" icon-set="madero"></search-filter>
+      <search-filter filter-config="filterConfig" search="factory.unselectedSchedules.search" do-search="factory.unselectedSchedules.doSearch" icon-set="madero"></search-filter>
     </div> 
   </div>
 
   <div class="scrollable-list"
-    scrolling-list="factory.nonSelectedSchedules.load()"
+    scrolling-list="factory.unselectedSchedules.load()"
     rv-spinner
     rv-spinner-key="selected-schedules-spinner"
     rv-spinner-start-active="0"
@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <div class="flex-row" ng-repeat="schedule in factory.nonSelectedSchedules.items.list">
+    <div class="flex-row" ng-repeat="schedule in factory.unselectedSchedules.items.list">
       <div class="row-entry">
         <div class="madero-checkbox u_clickable" ng-click="factory.selectItem(schedule, false)">
           <input type="checkbox" ng-checked="factory.isSelected(schedule, false)" tabindex="1">
@@ -51,10 +51,10 @@
       </div>
     </div>
 
-    <div id="noItems" class="schedule-list-empty" ng-if="!factory.nonSelectedSchedules.loadingItems && !factory.nonSelectedSchedules.search.query && ((factory.selectedSchedules.length + factory.nonSelectedSchedules.items.list.length) === 0)">
+    <div id="noItems" class="schedule-list-empty" ng-if="!factory.unselectedSchedules.loadingItems && !factory.unselectedSchedules.search.query && ((factory.selectedSchedules.length + factory.unselectedSchedules.items.list.length) === 0)">
       No Schedules
     </div>
-    <div id="noSearchResult" class="schedule-list-no-results" ng-if="!factory.nonSelectedSchedules.loadingItems && factory.nonSelectedSchedules.search.query && ((factory.selectedSchedules.length + factory.nonSelectedSchedules.items.list.length) === 0)">
+    <div id="noSearchResult" class="schedule-list-no-results" ng-if="!factory.unselectedSchedules.loadingItems && factory.unselectedSchedules.search.query && ((factory.selectedSchedules.length + factory.unselectedSchedules.items.list.length) === 0)">
       No Results Found
     </div>
   </div>

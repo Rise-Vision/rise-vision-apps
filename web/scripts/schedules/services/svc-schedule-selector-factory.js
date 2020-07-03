@@ -14,7 +14,7 @@ angular.module('risevision.schedules.services')
           sortBy: 'name'
         },
         selectedSchedules: null,
-        nonSelectedSchedules: null
+        unselectedSchedules: null
       };
 
       var _loadSchedules = function (includesPresentation) {
@@ -49,11 +49,11 @@ angular.module('risevision.schedules.services')
           });
       };
 
-      factory.loadNonSelectedSchedules = function () {
+      factory.loadUnselectedSchedules = function () {
         var search = angular.copy(factory.search);
         search.filter = 'NOT presentationIds:~\"' + templateEditorFactory.presentation.id + '\"';
 
-        factory.nonSelectedSchedules = new ScrollingListService(schedule.list, search);
+        factory.unselectedSchedules = new ScrollingListService(schedule.list, search);
       };
 
       factory.getSchedulesComponent = function () {
@@ -88,7 +88,7 @@ angular.module('risevision.schedules.services')
       };
 
       var _getNewlySelectedIds = function () {
-        return _.filter(factory.nonSelectedSchedules.items.list, function (item) {
+        return _.filter(factory.unselectedSchedules.items.list, function (item) {
           return item.isSelected;
         });
       };
