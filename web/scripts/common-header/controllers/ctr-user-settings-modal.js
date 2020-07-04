@@ -139,7 +139,8 @@ angular.module('risevision.common.header')
               }
 
               userTracker('User Updated', userState.getUsername(), userState.checkUsername(username), {
-                updatedUserId: username
+                updatedUserId: username,
+                updatedUserCompanyRole: $scope.user.companyRole ? $scope.user.companyRole : ''
               });
 
               $modalInstance.close('success');

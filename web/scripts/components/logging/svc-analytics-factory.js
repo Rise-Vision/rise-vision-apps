@@ -110,6 +110,7 @@
               email: profile.email,
               firstName: profile.firstName ? profile.firstName : '',
               lastName: profile.lastName ? profile.lastName : '',
+              companyRole: profile.companyRole ? profile.companyRole : '',
               registeredDate: profile.termsAcceptanceDate
             };
             if (userState.getUserCompanyId()) {
