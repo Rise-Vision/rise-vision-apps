@@ -10,6 +10,9 @@ angular.module('risevision.schedules.directives')
         link: function ($scope, element) {
           var tooltipElement = angular.element(element[0].querySelector('#schedule-selector'));
           $scope.factory = scheduleSelectorFactory;
+          $scope.filterConfig = {
+            placeholder: 'Search schedules'
+          };
 
           $scope.$watchGroup([
             'factory.loadingSchedules',
