@@ -18,6 +18,17 @@
   }
 }
 
+.madero-style {
+  .btn-select {
+    text-align: left;
+    font-weight: normal;
+
+    .text-muted {
+      color: $madero-gray;
+    }
+  }
+}
+
 .schedule-selector-tooltip {
   .scrollable-list {
     max-height: 156px;
