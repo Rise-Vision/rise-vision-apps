@@ -86,7 +86,8 @@
                 deferred.reject(resp);
               } else if (resp.result) {
                 getUserProfile(username, true).then(function () {
-                  userTracker('User Updated', userState.getUsername(), userState.checkUsername(username), {
+                  userTracker('User Updated', userState.getUsername(), userState.checkUsername(
+                    username), {
                     updatedUserId: username,
                     updatedUserCompanyRole: profile.companyRole ? profile.companyRole : ''
                   });

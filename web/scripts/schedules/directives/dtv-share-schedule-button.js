@@ -52,19 +52,19 @@ angular.module('risevision.schedules.directives')
               _closeActionSheet();
             } else {
               isActionSheetOpen = true;
-              angular.element($window).bind('resize',$scope.toggleActionSheet);
+              angular.element($window).bind('resize', $scope.toggleActionSheet);
               actionSheetButton.trigger('toggle');
             }
           };
 
-          var _closeActionSheet = function() {
+          var _closeActionSheet = function () {
             isActionSheetOpen = false;
-            angular.element($window).unbind('resize',$scope.toggleActionSheet);
+            angular.element($window).unbind('resize', $scope.toggleActionSheet);
             actionSheetButton.trigger('toggle');
           };
 
-          $scope.$on('$destroy', function() {
-            angular.element($window).unbind('resize',$scope.toggleActionSheet);
+          $scope.$on('$destroy', function () {
+            angular.element($window).unbind('resize', $scope.toggleActionSheet);
           });
         }
       };

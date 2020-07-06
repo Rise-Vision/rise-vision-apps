@@ -137,7 +137,7 @@ angular.module('risevision.common.header')
               if (userState.checkUsername(username)) {
                 userState.updateUserProfile(resp.item);
               }
-              
+
               $modalInstance.close('success');
             })
             .catch(function (error) {
