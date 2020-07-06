@@ -91,7 +91,7 @@ angular.module('risevision.common.components.action-sheet', [])
             iElement.bind('toggle', toggle);
           }
 
-          scope.$on('$destroy', function() {
+          scope.$on('$destroy', function () {
             actionSheetDomEl.remove();
           });
         }
