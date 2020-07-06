@@ -182,6 +182,12 @@
         max-width: 360px;
         width: 360px;
         padding: 15px;
+
+        hr {
+          border-top: 1px solid $madero-gray;
+          margin-top: 15px;
+          margin-bottom: 15px;
+        }
       }
     }
   }
