@@ -94,7 +94,7 @@ angular.module('risevision.schedules.services')
 
         return playlistFactory.initPlayUntilDone(playlistItem, templateEditorFactory.presentation, true)
           .then(function () {
-            schedule.addPresentation(scheduleIds, JSON.stringify(playlistItem));
+            return schedule.addPresentation(scheduleIds, JSON.stringify(playlistItem));
           });
       };
 
