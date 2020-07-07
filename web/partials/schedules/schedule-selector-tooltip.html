@@ -62,7 +62,7 @@
       <button type="button" class="btn btn-default btn-block" ng-click="toggleTooltip()">Cancel</button>
     </div>
     <div class="col-xs-6">
-      <button type="button" class="btn btn-primary btn-block" ng-click="select()">Select</button>
+      <button type="button" class="btn btn-primary btn-block" ng-click="select()" ng-disabled="factory.selectedCount === 0">Select</button>
     </div>
   </div>
   <hr/>
