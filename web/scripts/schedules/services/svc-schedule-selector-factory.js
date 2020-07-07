@@ -83,12 +83,6 @@ angular.module('risevision.schedules.services')
         });
       };
 
-      var _getPlaylistItem = function() {
-        var playlistItem = playlistFactory.newPresentationItem(templateEditorFactory.presentation);
-
-        return playlistFactory.initPlayUntilDone(playlistItem, templateEditorFactory.presentation, true);
-      };
-
       var _updateSelectedSchedules = function () {
         var scheduleIds = _getSelectedScheduleIds();
 
@@ -96,7 +90,9 @@ angular.module('risevision.schedules.services')
           return $q.resolve();
         }
 
-        return _getPlaylistItem()
+        var playlistItem = playlistFactory.newPresentationItem(templateEditorFactory.presentation);
+
+        return playlistFactory.initPlayUntilDone(playlistItem, templateEditorFactory.presentation, true)
           .then(function () {
             schedule.addPresentation(scheduleIds, JSON.stringify(playlistItem));
           });
