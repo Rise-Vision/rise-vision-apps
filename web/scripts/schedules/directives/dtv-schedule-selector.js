@@ -7,7 +7,7 @@ angular.module('risevision.schedules.directives')
         restrict: 'E',
         templateUrl: 'partials/schedules/schedule-selector.html',
         scope: {
-          showTooltip: '=',
+          showTooltip: '=?',
           additionalTooltipClass: '@'
         },
         link: function ($scope, element) {
