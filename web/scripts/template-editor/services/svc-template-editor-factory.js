@@ -5,10 +5,10 @@ angular.module('risevision.template-editor.services')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', 'presentation',
     'processErrorCode', 'userState', 'createFirstSchedule',
     'templateEditorUtils', 'brandingFactory', 'blueprintFactory', 'scheduleFactory', 'presentationTracker',
-    'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
+    'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED', '$modal',
     function ($q, $log, $state, $rootScope, presentation, processErrorCode, userState,
       createFirstSchedule, templateEditorUtils, brandingFactory, blueprintFactory, scheduleFactory,
-      presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
+      presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED, $modal) {
       var factory = {
         hasUnsavedChanges: false
       };
@@ -229,6 +229,23 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.publish = function () {
+        return _checkAssignedToSchedules().then(_publish);
+      };
+
+      var _checkAssignedToSchedules = function() {
+        if (!scheduleFactory.hasSchedules()) {
+          return $q.resolve();
+        }
+        var modalInstance = $modal.open({
+          templateUrl: 'partials/template-editor/add-to-schedule-modal.html',
+          controller: 'AddToScheduleModalController',
+          windowClass: 'madero-style centered-modal',
+          size: 'sm'
+        });
+        return modalInstance.result;
+      };
+
+      var _publish = function () {        
         var deferred = $q.defer();
 
         _clearMessages();

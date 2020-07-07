@@ -173,6 +173,12 @@
       .tooltip-arrow {
         display: none;
       }
+
+      &.tooltip-sm {
+        .tooltip-inner {
+          width: 303px;
+        }
+      }
     }
 
     &.tooltip-schedule-selector {
