@@ -164,7 +164,7 @@ angular.module('risevision.schedules.services')
             })
             .then(function (resp) {
               $log.debug('addPresentation to schedule resp', resp);
-              deferred.resolve(resp);
+              deferred.resolve(resp.result);
             })
             .then(null, function (e) {
               console.error('Failed to add presentation to schedule.', e);
@@ -187,7 +187,7 @@ angular.module('risevision.schedules.services')
             })
             .then(function (resp) {
               $log.debug('removePresentation from schedule resp', resp);
-              deferred.resolve(resp);
+              deferred.resolve(resp.result);
             })
             .then(null, function (e) {
               console.error('Failed to remove presentation from schedule.', e);
