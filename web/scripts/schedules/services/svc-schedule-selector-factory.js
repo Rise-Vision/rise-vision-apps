@@ -15,17 +15,35 @@ angular.module('risevision.schedules.services')
           sortBy: 'name'
         },
         selectedSchedules: null,
-        unselectedSchedules: null
+        unselectedSchedules: null,
+        selectedCount: 0
       };
 
-      var _loadSchedules = function (includesPresentation) {
-        var search = angular.copy(factory.search);
-        search.filter = (includesPresentation ? '' : 'NOT ') +
-          'presentationIds:~\"' + templateEditorFactory.presentation.id + '\"';
+      var _reset = function() {
+        // reset search query
+        factory.search = {
+          sortBy: 'name'
+        };
+        factory.selectedCount = 0;
+      };
 
+      var _loadSelectedSchedules = function () {
+        var search = {
+          sortBy: 'name',
+          filter: 'presentationIds:~\"' + templateEditorFactory.presentation.id + '\"'
+        };
+
+        schedulesComponent.hasSelectedSchedules = true;
+
+        factory.selectedSchedules = [];
         factory.loadingSchedules = true;
 
-        return schedule.list(search)
+        schedule.list(search)
+          .then(function (result) {
+            factory.selectedSchedules = result.items ? result.items : [];
+
+            schedulesComponent.hasSelectedSchedules = !!factory.selectedSchedules.length;
+          })
           .then(null, function (e) {
             factory.errorMessage = $filter('translate')('schedules-app.list.error');
             factory.apiError = processErrorCode('Schedules', 'load', e);
@@ -37,30 +55,71 @@ angular.module('risevision.schedules.services')
           });
       };
 
-      var _loadSelectedSchedules = function () {
-        schedulesComponent.hasSelectedSchedules = true;
-
-        factory.selectedSchedules = [];
-
-        _loadSchedules(true)
-          .then(function (result) {
-            factory.selectedSchedules = result.items ? result.items : [];
-
-            schedulesComponent.hasSelectedSchedules = !!factory.selectedSchedules.length;
-          });
-      };
-
-      factory.loadUnselectedSchedules = function () {
-        var search = angular.copy(factory.search);
-        search.filter = 'NOT presentationIds:~\"' + templateEditorFactory.presentation.id + '\"';
-
-        factory.unselectedSchedules = new ScrollingListService(schedule.list, search);
-      };
-
       factory.getSchedulesComponent = function () {
         _loadSelectedSchedules();
 
         return schedulesComponent;
+      };
+
+      var _loadUnselectedSchedules = function () {
+        factory.search.filter = 'NOT presentationIds:~\"' + templateEditorFactory.presentation.id + '\"';
+
+        factory.unselectedSchedules = new ScrollingListService(schedule.list, factory.search);
+      };
+
+      factory.load = function () {
+        _reset();
+
+        _loadUnselectedSchedules();
+      };
+
+      var _getSelectedScheduleIds = function() {
+        var filteredSchedules = _.filter(factory.unselectedSchedules.items.list, function (item) {
+          return item.isSelected;
+        });
+
+        return _.map(filteredSchedules, function (item) {
+          return item.id;
+        });
+      };
+
+      var _updateSelectedSchedules = function () {
+        var scheduleIds = _getSelectedScheduleIds();
+
+        if (!scheduleIds.length) {
+          return $q.resolve();
+        }
+
+        var playlistItem = playlistFactory.newPresentationItem(templateEditorFactory.presentation);
+
+        return playlistFactory.initPlayUntilDone(playlistItem, templateEditorFactory.presentation, true)
+          .then(function () {
+            return schedule.addPresentation(scheduleIds, JSON.stringify(playlistItem));
+          });
+      };
+
+      var _getUnselectedScheduleIds = function() {
+        var filteredSchedules = _.filter(factory.selectedSchedules, function (item) {
+          return item.isSelected === false;
+        });
+
+        return _.map(filteredSchedules, function (item) {
+          return item.id;
+        });
+      };
+
+      var _updateUnselectedSchedules = function () {
+        var scheduleIds = _getUnselectedScheduleIds();
+
+        if (!scheduleIds.length) {
+          return $q.resolve();
+        }
+
+        return schedule.removePresentation(scheduleIds, templateEditorFactory.presentation.id);
+      };
+
+      var _updateSelectedCount = function() {
+        factory.selectedCount = _getSelectedScheduleIds().length + _getUnselectedScheduleIds().length;
       };
 
       factory.selectItem = function (item, inSelectedSchedules) {
@@ -71,6 +130,8 @@ angular.module('risevision.schedules.services')
         } else {
           item.isSelected = !inSelectedSchedules;
         }
+
+        _updateSelectedCount();
       };
 
       factory.isSelected = function (item, inSelectedSchedules) {
@@ -83,44 +144,15 @@ angular.module('risevision.schedules.services')
         }
       };
 
-      var _updateSelectedSchedules = function () {
-        var filteredSchedules = _.filter(factory.unselectedSchedules.items.list, function (item) {
-          return item.isSelected;
-        });
-        var scheduleIds = _.map(filteredSchedules, function (item) {
-          return item.id;
-        });
-
-        if (!scheduleIds.length) {
-          return;
-        }
-
-        var playlistItem = playlistFactory.newPresentationItem(templateEditorFactory.presentation);
-
-        return playlistFactory.initPlayUntilDone(playlistItem, templateEditorFactory.presentation, true)
-          .then(function () {
-            schedule.addPresentation(scheduleIds, JSON.stringify(playlistItem));
-          });
-      };
-
-      var _updateUnselectedSchedules = function () {
-        var filteredSchedules = _.filter(factory.selectedSchedules, function (item) {
-          return item.isSelected === false;
-        });
-        var scheduleIds = _.map(filteredSchedules, function (item) {
-          return item.id;
-        });
-
-        if (!scheduleIds.length) {
-          return;
-        }
-
-        schedule.removePresentation(scheduleIds, templateEditorFactory.presentation.id);
-      };
-
       factory.select = function () {
-        _updateSelectedSchedules();
-        _updateUnselectedSchedules();
+        if (factory.selectedCount === 0) {
+          return;
+        }
+
+        factory.loadingSchedules = true;
+
+        return $q.all([_updateSelectedSchedules(), _updateUnselectedSchedules()])
+          .then(_loadSelectedSchedules);
       };
 
       return factory;

@@ -7,10 +7,12 @@ angular.module('risevision.schedules.directives')
         restrict: 'E',
         templateUrl: 'partials/schedules/schedule-selector.html',
         scope: {
+          showTooltip: '=',
           additionalTooltipClass: '@'
         },
         link: function ($scope, element) {
           var tooltipElement = angular.element(element[0].querySelector('#schedule-selector'));
+          $scope.showTooltip = false;
           $scope.factory = scheduleSelectorFactory;
           $scope.filterConfig = {
             placeholder: 'Search schedules'
@@ -27,21 +29,27 @@ angular.module('risevision.schedules.directives')
             }
           });
 
-          $scope.showTooltip = function ($event) {
-            $timeout(function () {
-              tooltipElement.trigger('show');
-            });
-          };
+          $scope.$watch('showTooltip', function() {
+            if ($scope.showTooltip) {
+              $timeout(function () {
+                tooltipElement.trigger('show');
 
-          $scope.closeTooltip = function () {
-            $timeout(function () {
-              tooltipElement.trigger('hide');
-            });
+                $scope.factory.load();
+              });
+            } else {
+              $timeout(function () {
+                tooltipElement.trigger('hide');
+              });
+            }
+          });
+
+          $scope.toggleTooltip = function ($event) {
+            $scope.showTooltip = !$scope.showTooltip;
           };
 
           $scope.select = function () {
             $scope.factory.select();
-            $scope.closeTooltip();
+            $scope.toggleTooltip();
           };
         }
       };

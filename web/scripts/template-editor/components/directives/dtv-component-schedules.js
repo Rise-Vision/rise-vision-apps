@@ -10,24 +10,14 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope, element) {
           $scope.factory = scheduleSelectorFactory;
 
-          function _load() {
-            $scope.factory.loadUnselectedSchedules();
-          }
-
-          $scope.save = function () {
-            $scope.factory.save();
-          };
-
           $scope.registerDirective({
             type: 'rise-schedules',
             element: element,
             show: function () {
               $scope.setPanelTitle('Schedules');
-
-              _load();
             },
             onBackHandler: function () {
-              // TODO: close tooltip if open
+              $scope.showTooltip = false;
             }
           });
 

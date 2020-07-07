@@ -1,7 +1,7 @@
 <span class="schedule-selector-tooltip">
   <div class="row">
     <div class="col-xs-12">
-      <search-filter filter-config="filterConfig" search="factory.unselectedSchedules.search" do-search="factory.unselectedSchedules.doSearch" icon-set="madero"></search-filter>
+      <search-filter filter-config="filterConfig" search="factory.search" do-search="factory.unselectedSchedules.doSearch" icon-set="madero"></search-filter>
     </div> 
   </div>
 
@@ -11,7 +11,7 @@
     rv-spinner-key="selected-schedules-spinner"
     rv-spinner-start-active="0"
   >
-    <div class="flex-row" ng-repeat="schedule in factory.selectedSchedules track by $index">
+    <div class="flex-row" ng-repeat="schedule in factory.selectedSchedules | filter:factory.search.query track by $index">
       <div class="row-entry">
         <div class="madero-checkbox u_clickable" ng-click="factory.selectItem(schedule, false)">
           <input type="checkbox" ng-checked="factory.isSelected(schedule, true)" tabindex="1">
@@ -59,10 +59,10 @@
 
   <div class="row">
     <div class="col-xs-6">
-      <button type="button" class="btn btn-default btn-block" ng-click="closeTooltip()">Cancel</button>
+      <button type="button" class="btn btn-default btn-block" ng-click="toggleTooltip()">Cancel</button>
     </div>
     <div class="col-xs-6">
-      <button type="button" class="btn btn-primary btn-block" ng-click="select()">Select</button>
+      <button type="button" class="btn btn-primary btn-block" ng-click="select()" ng-disabled="factory.selectedCount === 0">Select</button>
     </div>
   </div>
   <hr/>
