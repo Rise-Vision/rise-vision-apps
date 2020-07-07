@@ -284,7 +284,8 @@ gulp.task("tus", function() {
 
 gulp.task("tinymce", function() {
   var files = [
-    "web/bower_components/tinymce/themes/modern/theme.min.js",
+    "web/bower_components/tinymce/themes/silver/theme.min.js",
+    "web/bower_components/tinymce/icons/default/icons.min.js",
     "web/bower_components/tinymce/skins/**/*"
   ];
   return gulp.src(files, {base: "web/bower_components/"})
