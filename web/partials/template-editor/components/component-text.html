@@ -1,6 +1,23 @@
-
 <div class="attribute-editor-component">
-  <div class="attribute-editor-row" ng-if="tinymceOptions">
-    <textarea ui-tinymce="tinymceOptions" ng-model="data.richText" ng-change="save()"></textarea>
+  <div class="attribute-editor-row">
+    <label>Text:</label>
+    <input ng-hide="isMultiline" id="text-component-input" type="text" class="form-control" ng-model="value" placeholder="Enter your text" ng-change="save()">
+    <p ng-show="isMultiline" class="text-sm">Hit enter to add a line break.</p>
+    <div ng-show="isMultiline" class="row">
+      <div class="col-xs-12">
+        ​<textarea id="text-component-input-multiline" class="form-control resize-vertical" rows="2" ng-model="value" placeholder="Enter your text" ng-change="save()"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="attribute-editor-row" ng-show="showFontSize">
+    <div>
+      <label class="u_margin-md-top">Font size:</label>
+      <div class="row">
+        <div class="col-xs-12">
+          <rzslider rz-slider-model="fontsize" rz-slider-options="sliderOptions"></rzslider>
+        </div>
+      </div>
+      <p class="range-value">{{ fontsize }}px</p>
+    </div>
   </div>
 </div>

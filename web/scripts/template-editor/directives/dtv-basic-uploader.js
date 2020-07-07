@@ -55,6 +55,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.uploadSelectedFiles = function (selectedFiles) {
             return $scope.uploader.removeExif(selectedFiles)
+              .then($scope.uploader.compress)
               .then(function (fileItems) {
                 return $scope.uploader.addToQueue(fileItems);
               });
@@ -136,6 +137,10 @@ angular.module('risevision.template-editor.directives')
                 $scope.uploadManager.onUploadStatus(_isUploading());
               });
             }
+          };
+
+          FileUploader.currentFilePath = function () {
+            return $scope.uploadManager.folderPath;
           };
 
           FileUploader.onBeforeUploadItem = function (item) {

@@ -8,7 +8,7 @@
     var authKeyField = element(by.id("auth-key"));
     
     var retrieveDetailsButton = element(by.css(".retrieve-company-details-button"));
-    var notFoundMessage = element(by.css(".alert.alert-danger"));
+    var notFoundMessage = element(by.css(".move-company-modal .alert.alert-danger"));
     var companyDetailsMessage = element(by.css(".company-details-info"));
     var successMessage = element(by.css(".alert.alert-success"));
     

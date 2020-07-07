@@ -1,0 +1,19 @@
+<button id="tooltipButton" type="button" class="btn btn-primary hidden-xs" 
+  tooltip-placement="bottom"
+  tooltip-class="madero-style tooltip-share-options"
+  tooltip-trigger="show"
+  tooltip-animation="false"
+  tooltip-template="'partials/schedules/share-schedule-popover.html'" 
+  tooltip-digest-on-resize
+  ng-click="toggleTooltip()">
+  Share
+</button>
+
+<button id="actionSheetButton" type="button" class="btn btn-primary btn-block visible-xs" 
+  action-sheet-class="madero-style tooltip-share-options"
+  action-sheet-backdrop="false"
+  action-sheet-bind-click="false"
+  action-sheet="'partials/schedules/share-schedule-popover.html'"
+  ng-click="toggleActionSheet()">
+  Share
+</button>

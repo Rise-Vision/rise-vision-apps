@@ -32,7 +32,8 @@
     "inject": false,
     "Draggable": false,
     "moment": false,
-    "tus": false
+    "tus": false,
+    "Compressor": false
   },
   "predef":["angular","_"]
 }

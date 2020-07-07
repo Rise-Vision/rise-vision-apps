@@ -29,8 +29,7 @@ describe("Services: plans factory", function() {
     });
     $provide.service("currentPlanFactory", function() {
       return {
-        isPlanActive: sinon.stub().returns(true),
-        isCancelledActive: sinon.stub().returns(false)
+        isPlanActive: sinon.stub().returns(true)
       };
     });
     $provide.service("$state", function() {

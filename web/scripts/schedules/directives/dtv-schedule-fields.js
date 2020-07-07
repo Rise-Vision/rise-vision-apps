@@ -44,7 +44,7 @@ angular.module('risevision.schedules.directives')
           };
 
           $scope.openSharedScheduleModal = function () {
-            if (currentPlanFactory.isPlanActive() || currentPlanFactory.isCancelledActive()) {
+            if (currentPlanFactory.isPlanActive()) {
               $modal.open({
                 templateUrl: 'partials/schedules/shared-schedule-modal.html',
                 controller: 'SharedScheduleModalController',

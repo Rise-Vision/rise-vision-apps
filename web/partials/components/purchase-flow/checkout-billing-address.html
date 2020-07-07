@@ -6,6 +6,7 @@
     </div>
     <div id="errorBox" class="alert alert-danger" role="alert" ng-show="billingAddress.validationError">
       <strong>Address Validation Error</strong> {{billingAddress.validationError}}
+      <suggest-general-delivery address-object="billingAddress"></suggest-general-delivery>
     </div>
 
     <div class="row">

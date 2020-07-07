@@ -25,11 +25,11 @@
     var closeButton = element(by.css("button.close-company-users-button"));
 
     this.openCompanyUsersModal = function() {
-      commonHeaderPage.getProfilePic().click();
+      commonHeaderPage.openProfileMenu();
 
       helper.wait(homepage.getCompanyUsersButton(), "Company Users Button");
 
-      homepage.getCompanyUsersButton().click();
+      helper.clickOverIFrame(homepage.getCompanyUsersButton(), "Company Users Button");
 
       helper.wait(companyUsersModal, "Company Users Modal");
 
@@ -41,13 +41,13 @@
 
       helper.waitDisappear(loader, "Load Company Users");
 
-      closeButton.click();
+      helper.clickOverIFrame(closeButton, "Close Button");
 
       helper.waitDisappear(companyUsersModal, "Company Users Modal");
     };
 
     this.openAddUserDialog = function() {
-      addUserButton.click();
+      helper.clickOverIFrame(addUserButton, "Add User Button");
       
       helper.wait(userSettingsModalPage.getUserSettingsModal(), "User Settings Modal");
     };
@@ -75,18 +75,18 @@
         if (count > 0) {
           console.log('Found matching User, deleting');
 
-          helper.clickWhenClickable(users.get(0), "First matching User");
+          helper.clickOverIFrame(users.get(0), "First matching User");
 
           helper.wait(userSettingsModalPage.getUserSettingsModal(), "User Settings Modal");
           helper.waitDisappear(userSettingsModalPage.getLoader(), "User Settings Modal Loader");
 
           expect(userSettingsModalPage.getUsernameLabel().getText()).to.eventually.equal(username);
 
-          userSettingsModalPage.getDeleteButton().click();
+          helper.clickOverIFrame(userSettingsModalPage.getDeleteButton(), "User Delete Button");
           
           browser.sleep(500);
           helper.wait(userSettingsModalPage.getDeleteForeverButton(), 'User Delete Forever Button');      
-          helper.clickWhenClickable(userSettingsModalPage.getDeleteForeverButton(), 'User Delete Forever Button');
+          helper.clickOverIFrame(userSettingsModalPage.getDeleteForeverButton(), 'User Delete Forever Button');
           
           helper.waitDisappear(userSettingsModalPage.getUserSettingsModal(), "User Settings Modal");
         }

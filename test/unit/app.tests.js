@@ -171,7 +171,7 @@ describe('app:', function() {
       var state = $state.get('apps.launcher');
       expect(state).to.be.ok;
       expect(state.abstract).to.be.true;
-      expect(state.template).to.equal('<div class="container app-launcher" ui-view></div>');
+      expect(state.template).to.equal('<div class="app-launcher" ui-view></div>');
       expect(state.url).to.equal('?cid');
     });
 
@@ -180,7 +180,7 @@ describe('app:', function() {
         var state = $state.get('apps.launcher.home');
         expect(state).to.be.ok;
         expect(state.url).to.equal('/');
-        expect(state.controller).to.equal('HomeCtrl');
+        expect(state.controller).to.equal('AppsHomeCtrl');
       });
 
       it('should redirect to onboarding', function(done) {
@@ -302,8 +302,14 @@ describe('app:', function() {
       expect($rootScope.showWhiteBackground).to.be.true;
     });
 
-    it('should not show white background for other pages',function() {
+    it('should show white background for Apps Home page',function() {
       $rootScope.$broadcast('$stateChangeSuccess', {name:'apps.launcher.home'});
+      $rootScope.$digest();
+      expect($rootScope.showWhiteBackground).to.be.true;
+    });
+
+    it('should not show white background for other pages',function() {
+      $rootScope.$broadcast('$stateChangeSuccess', {name:'apps.editor.list'});
       $rootScope.$digest();
       expect($rootScope.showWhiteBackground).to.be.false;
     });

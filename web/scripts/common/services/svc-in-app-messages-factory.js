@@ -1,28 +1,17 @@
 'use strict';
 
 angular.module('risevision.apps.services')
-  .factory('inAppMessagesFactory', ['localStorageService', 'userState', 'companyAssetsFactory', '$q',
-    '$rootScope',
-    function (localStorageService, userState, companyAssetsFactory, $q, $rootScope) {
+  .factory('inAppMessagesFactory', ['localStorageService', 'userState',
+    function (localStorageService, userState) {
       var factory = {
         messageToShow: undefined
       };
 
-      $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
-        _reset();
-      });
-
-      factory.pickMessage = function (forceReload) {
+      factory.pickMessage = function () {
         if (_shouldShowConfirmEmail()) {
           factory.messageToShow = 'confirmEmail';
         } else {
-          companyAssetsFactory.hasPresentations(forceReload).then(function (hasAddedPresentation) {
-            if (_shouldShowPromoteTraining(hasAddedPresentation)) {
-              factory.messageToShow = 'promoteTraining';
-            } else {
-              factory.messageToShow = undefined;
-            }
-          });
+          factory.messageToShow = undefined;
         }
       };
 
@@ -48,10 +37,6 @@ angular.module('risevision.apps.services')
         var userProfile = userState.getCopyOfProfile();
 
         return userState.isRiseAuthUser() && userProfile ? (userProfile.userConfirmed === false) : false;
-      };
-
-      var _shouldShowPromoteTraining = function (hasAddedPresentation) {
-        return hasAddedPresentation && !_isDismissed('promoteTraining');
       };
 
       var _isDismissed = function (key) {

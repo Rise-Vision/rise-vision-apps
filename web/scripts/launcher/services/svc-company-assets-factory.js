@@ -2,16 +2,11 @@
 
 angular.module('risevision.apps.launcher.services')
   .factory('companyAssetsFactory', ['$rootScope', '$q', 'CachedRequest', 'ScrollingListService',
-    'presentation', 'schedule', 'display', 'productsFactory',
-    function ($rootScope, $q, CachedRequest, ScrollingListService, presentation, schedule, display,
+    'schedule', 'display', 'productsFactory',
+    function ($rootScope, $q, CachedRequest, ScrollingListService, schedule, display,
       productsFactory) {
       var factory = {};
 
-      var presentationSearch = {
-        sortBy: 'changeDate',
-        reverse: true,
-        count: 1
-      };
       var scheduleSearch = {
         sortBy: 'changeDate',
         reverse: true,
@@ -29,7 +24,6 @@ angular.module('risevision.apps.launcher.services')
         count: 4
       };
 
-      var presentationListRequest = new CachedRequest(presentation.list, presentationSearch);
       var scheduleListRequest = new CachedRequest(schedule.list, scheduleSearch);
       var displayListRequest = new CachedRequest(display.list, displaySearch);
 
@@ -41,12 +35,6 @@ angular.module('risevision.apps.launcher.services')
 
       var _sendUpdateEvent = function () {
         $rootScope.$broadcast('companyAssetsUpdated');
-      };
-
-      factory.hasPresentations = function (forceReload) {
-        return presentationListRequest.execute(forceReload).then(function (resp) {
-          return !!(resp && resp.items && resp.items.length > 0);
-        });
       };
 
       var _clearScheduleListener = function () {
@@ -179,7 +167,6 @@ angular.module('risevision.apps.launcher.services')
       };
 
       $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
-        presentationListRequest.reset();
         scheduleListRequest.reset();
         displayListRequest.reset();
 

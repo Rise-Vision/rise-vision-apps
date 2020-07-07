@@ -14,6 +14,7 @@ var StorageSelectorModalPage = function() {
   var startTrialButton = element(by.id('startTrialButton'));
   var activeTrialBanner = element(by.css('.subscription-status.trial'));
   var overwriteConfirmationModal = element(by.css('.confirm-overwrite-modal'));
+  var retryAllButton = element(by.css('button#retryAll'));
   var overwriteFilesButton = element(by.css('.confirm-overwrite-modal')).element(by.buttonText('Yes, overwrite files'));
   
 
@@ -71,6 +72,18 @@ var StorageSelectorModalPage = function() {
 
   this.getOverwriteFilesButton = function() {
      return overwriteFilesButton;
+  }
+
+  this.clickRetryOnFailure = function() {
+    return setInterval(function() {
+      retryAllButton.isPresent().then(function(present) {
+        return present && retryAllButton.isDisplayed();
+      })
+      .then(function(readyToClick) {
+        if (readyToClick) { retryAllButton.click(); }
+      })
+      .catch(console.error);
+    }, 3000);
   }
 
 };

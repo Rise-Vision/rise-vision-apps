@@ -1,0 +1,271 @@
+.full-page-flex-container {
+	position: absolute;
+	top: var(--common-header-height);
+	bottom: 0;
+	left: 0;
+	right: 0;
+	display: flex;
+	flex-direction: column;
+	/* for Firefox */
+	min-height: 0;
+
+	.scrollable-content {
+		flex-grow: 1; 
+		overflow: auto;  
+		/* for Firefox */
+		min-height: 0;
+	}
+}
+
+#apps-home-container {
+	.scrollable-content {
+		padding-top: 10px;
+		padding-left: 20px;
+		padding-right: 20px;
+		padding-bottom: 20px;
+
+		.schedules-toolbar {
+			padding-bottom: 20px;
+			margin-left: 10px;
+    		margin-right: 10px;
+			margin-bottom: 20px;
+			border-bottom: 1px solid $madero-gray;
+
+			@media (max-width: $screen-sm) {
+				padding-bottom: 10px;
+			}
+
+			label {
+				margin-right: 10px;
+			}
+
+			.schedules-toolbar-btn, share-schedule-button > button {
+				min-width: 160px;
+				margin-left: 8px;
+			}	
+		}
+
+		.schedule-embed {
+			position: relative;
+			padding-bottom: 56.25%;
+
+			iframe {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				left: 0px;
+				top: 0px;
+			}
+		}
+	}
+
+	.mobile-footer {
+		padding-left: 20px;
+		padding-right: 20px;
+		.container {
+			padding: 20px 0px;
+			border-top: 1px solid $madero-gray;
+
+			.btn-default {
+				margin-bottom: 10px;
+			}
+		}
+	}
+}
+
+
+.madero-style {
+
+  &.tooltip-backdrop {
+    background: rgba(2, 6, 32, 0.5);
+    z-index: 1001;
+    fill: rgb(2, 6, 32);
+    fill-opacity: 0.5;
+  }
+
+  &.tooltip {
+    opacity: 1;
+
+    &.tooltip-share-guide {
+      .tooltip-inner {
+        text-align: left;
+        padding: 20px;
+        border: 1px solid rgb(153, 153, 153);
+        box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
+        opacity: 1;
+        max-width: 356px;
+      }
+
+      &.bottom {
+        margin-top: 8px;
+        margin-left: -100px;
+
+        .tooltip-arrow {
+          margin-left: 100px;
+          margin-top: 1px;
+        }
+
+        .tooltip-arrow:after {
+          margin-top: -2px;
+          margin-left: calc(-#{$tooltip-arrow-width} - 1px);
+          border-width: 0 calc(#{$tooltip-arrow-width} + 1px) calc(#{$tooltip-arrow-width} + 1px);
+          border-bottom-color: rgb(153, 153, 153);
+        }
+      }
+
+      &.top {
+        margin-top: -8px;
+
+        .tooltip-arrow {
+          margin-bottom: 1px;
+        }
+
+        .tooltip-arrow:after {
+          margin-top: -7px;
+          margin-left: calc(-#{$tooltip-arrow-width} - 1px);
+          border-width: calc(#{$tooltip-arrow-width} + 1px) calc(#{$tooltip-arrow-width} + 1px) 0;
+          border-top-color: rgb(153, 153, 153);
+        }
+      }
+
+      /* styles for arrow border */
+      .tooltip-arrow:after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+        z-index: -1;
+      }
+    }
+
+    &.tooltip-share-options {
+      margin-left: -106px;
+
+      .tooltip-inner {
+        text-align: left;
+        padding: 10px;
+        border: 1px solid rgb(153, 153, 153);
+        box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
+        opacity: 1;
+        max-width: 374px;
+        width: 374px;
+
+        .close {
+          height: 10px;
+          width: 10px;
+
+          svg {
+            fill: rgb(153, 153, 153);
+          }
+        }
+
+        .input-group-btn {
+          width: 1%;
+        }
+      }
+
+      &.bottom {
+        margin-top: -8px;
+      }
+
+      .tooltip-arrow {
+        display: none;
+      }
+    }
+  }
+
+  &.action-sheet {
+    &.tooltip-share-options {
+      padding: 20px;
+      box-shadow: 0px 0px 5px 0px rgba(2, 6, 32, 0.5);
+
+      .close {
+        height: 15px;
+        width: 15px;
+
+        svg {
+          fill: rgb(153, 153, 153);
+          height: 15px;
+          width: 15px;
+        }
+      }
+    }
+  }
+
+  &.tooltip-share-options {
+    .sideways-panels {
+      .panel {
+        border-color: rgb(153, 153, 153);
+        background-color: transparent;
+
+        @extend .mr-2;
+
+        &:last-child{
+          @extend .u_remove-right;
+        }
+
+        .panel-body {
+          min-width: 90px;
+          padding: 10px;
+        }
+      }
+    }
+
+    .copy-text-box {
+      background-color: $lighter-gray;
+      color: $madero-gray;
+      font-size: 12px;
+      padding: 15px;
+    }
+
+    // from https://codepen.io/vakhula/pen/OJVqBOK
+    .scrollbox {
+      background-image: 
+        /* Shadows */ 
+        linear-gradient(to right, white, white),
+        linear-gradient(to right, white, white),
+      
+        /* Shadow covers */ 
+        linear-gradient(to right, rgba(0,0,0,.25), rgba(255,255,255,0)),
+        linear-gradient(to left, rgba(0,0,0,.25), rgba(255,255,255,0));   
+      
+      background-position: left top, right top, left top, right top;
+    	background-repeat: no-repeat;
+    	background-size: 20px 106px, 20px 106px, 20px 106px, 20px 106px;
+      
+    	/* Opera doesn't support this in the shorthand */
+    	background-attachment: local, local, scroll, scroll;
+
+      @media (max-width: $screen-sm) {
+        background-size: 20px 112px, 20px 112px, 20px 112px, 20px 112px;
+      }
+    }
+
+    // Using white/transparencies requires a ::before element
+    // however since it's a separate element the `background-attachment: scroll`
+    // doesn't work so the background is static 
+    // .scrollbox::before {
+    //   position: absolute;
+    //   content: '';
+    //   z-index: 2;
+    //   width: 352px;
+    //   height: 100%;
+    //   pointer-events: none;
+    // 
+    //   background-image: 
+    //     /* Shadows */ 
+    //     linear-gradient(to right, rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 100%),
+    //     linear-gradient(to left, rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 100%);
+    // 
+    //   background-position: left top, right top;
+    // 	 background-repeat: no-repeat;
+    //   background-size: 20px 106px, 20px 106px;
+    // 
+    // 	 /* Opera doesn't support this in the shorthand */
+    //   background-attachment: scroll, scroll;
+    // }
+
+  }
+}
