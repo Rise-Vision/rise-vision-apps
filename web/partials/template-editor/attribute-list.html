@@ -21,12 +21,12 @@
   <label class="u_margin-md-top">Settings for this Presentation:</label>
 </div>
 
-<div class="attribute-row attribute-row-hover">
-  <div class="col-xs-10 pl-0 attribute-desc" ng-class="{'text-error' : !schedulesComponent.hasSelectedSchedules }">
+<div class="attribute-row attribute-row-hover schedules-attribute-row mt-2">
+  <div class="col-xs-10 pl-0 attribute-desc" ng-class="{'danger' : !schedulesComponent.hasSelectedSchedules }">
     <span>
       Schedules
     </span>
-    <div class="text-sm" ng-show="!schedulesComponent.hasSelectedSchedules">
+    <div class="error-message mb-3" ng-show="!schedulesComponent.hasSelectedSchedules">
       Before you can publish, you need to select one or more schedules to put this presentation on.
     </div>
   </div>

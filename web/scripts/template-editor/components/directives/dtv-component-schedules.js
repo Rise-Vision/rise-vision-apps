@@ -22,7 +22,7 @@ angular.module('risevision.template-editor.directives')
             type: 'rise-schedules',
             element: element,
             show: function () {
-              $scope.setPanelTitle('Schedule Settings');
+              $scope.setPanelTitle('Schedules');
 
               _load();
             },

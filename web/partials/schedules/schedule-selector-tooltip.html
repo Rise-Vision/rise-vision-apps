@@ -1,5 +1,3 @@
-<a href="" class="btn btn-default" ng-click="closeTooltip()">Cancel</a>
-<a href="" class="btn btn-primary" ng-click="select()">Select</a>
 <span class="schedule-selector-tooltip">
   <div class="row">
     <div class="col-xs-12">
@@ -7,7 +5,7 @@
     </div> 
   </div>
 
-  <div class="scrollable-list"
+  <div class="scrollable-list mt-3 mb-3"
     scrolling-list="factory.unselectedSchedules.load()"
     rv-spinner
     rv-spinner-key="selected-schedules-spinner"
@@ -24,7 +22,7 @@
         <div class="mr-auto u_clickable" ng-click="factory.selectItem(schedule, false)">
           {{schedule.name}}
         </div>
-        <div class="u_float-left">
+        <div class="u_float-left mr-3">
           <a ui-sref="apps.schedules.details({scheduleId: schedule.id})" link-cid>
             Edit
           </a>
@@ -43,7 +41,7 @@
         <div class="mr-auto u_clickable" ng-click="factory.selectItem(schedule, false)">
           {{schedule.name}}
         </div>
-        <div class="u_float-left">
+        <div class="u_float-left mr-3">
           <a ui-sref="apps.schedules.details({scheduleId: schedule.id})" link-cid>
             Edit
           </a>
@@ -58,4 +56,21 @@
       No Results Found
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-xs-6">
+      <button type="button" class="btn btn-default btn-block" ng-click="closeTooltip()">Cancel</button>
+    </div>
+    <div class="col-xs-6">
+      <button type="button" class="btn btn-primary btn-block" ng-click="select()">Select</button>
+    </div>
+  </div>
+  <hr/>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <button type="button" class="btn btn-default btn-block" ui-sref="apps.schedules.add">Create Schedule</button>
+    </div>
+  </div>
+
 </span>
