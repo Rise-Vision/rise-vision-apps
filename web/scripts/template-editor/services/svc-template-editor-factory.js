@@ -5,10 +5,10 @@ angular.module('risevision.template-editor.services')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', 'presentation',
     'processErrorCode', 'userState', 'createFirstSchedule',
     'templateEditorUtils', 'brandingFactory', 'blueprintFactory', 'scheduleFactory', 'presentationTracker',
-    'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED', '$modal',
+    'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED', '$modal', 'scheduleSelectorFactory',
     function ($q, $log, $state, $rootScope, presentation, processErrorCode, userState,
       createFirstSchedule, templateEditorUtils, brandingFactory, blueprintFactory, scheduleFactory,
-      presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED, $modal) {
+      presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED, $modal, scheduleSelectorFactory) {
       var factory = {
         hasUnsavedChanges: false
       };
@@ -233,7 +233,8 @@ angular.module('risevision.template-editor.services')
       };
 
       var _checkAssignedToSchedules = function() {
-        if (!scheduleFactory.hasSchedules()) {
+        //if there are no schedules in the company, we assume it is onboarding and skip the Add To Schedule modal
+        if (!scheduleFactory.hasSchedules() || scheduleSelectorFactory.hasSelectedSchedules) {
           return $q.resolve();
         }
         var modalInstance = $modal.open({
