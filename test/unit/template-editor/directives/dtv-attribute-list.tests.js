@@ -1,7 +1,7 @@
 'use strict';
 
 describe('directive: attribute-list', function() {
-  var element, $scope;
+  var element, compileDirective, $scope, userState;
   var components = [
     {id: 'cp1', nonEditable: true},
     {id: 'cp2', nonEditable: false},
@@ -26,13 +26,26 @@ describe('directive: attribute-list', function() {
         }
       };
     });
+
+    $provide.service('scheduleSelectorFactory', function() {
+      return {
+        getSchedulesComponent: function() {
+          return 'schedulesComponent';
+        }
+      };
+    });
   }));
 
-  beforeEach(inject(function($compile, $rootScope, $templateCache){
+  beforeEach(inject(function($compile, $rootScope, $templateCache, $injector){
+    userState = $injector.get('userState');
+
     $templateCache.put('partials/template-editor/attribute-list.html', '<p>mock</p>');
-    element = $compile('<template-attribute-list></template-attribute-list>')($rootScope.$new());
-    $scope = element.scope();
-    $scope.$digest();
+    compileDirective = function() {
+      element = $compile('<template-attribute-list></template-attribute-list>')($rootScope.$new());
+      $scope = element.scope();
+      $scope.$digest();      
+    };
+    compileDirective();
   }));
 
   it('should exist', function() {
@@ -50,6 +63,34 @@ describe('directive: attribute-list', function() {
 
   it('should retrieve branding component', function() {
     expect($scope.brandingComponent).to.equal('brandingComponent');
+  });
+
+  describe('schedulesComponent', function() {
+    beforeEach(function() {
+      sinon.stub(userState, 'hasRole').returns(true);
+    });
+
+    afterEach(function() {
+      userState.hasRole.restore();
+    });
+
+    it('should retrieve schedules component', function() {
+      compileDirective();
+
+      userState.hasRole.should.have.been.calledWith('cp');
+
+      expect($scope.schedulesComponent).to.equal('schedulesComponent');
+    });
+
+    it('should not retrieve schedules component if user does not have cp role', function() {
+      userState.hasRole.returns(false);
+
+      compileDirective();
+
+      userState.hasRole.should.have.been.calledWith('cp');
+
+      expect($scope.schedulesComponent).to.not.be.ok;
+    });
   });
 
 });
