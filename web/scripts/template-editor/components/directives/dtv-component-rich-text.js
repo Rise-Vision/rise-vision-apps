@@ -27,6 +27,7 @@ angular.module('risevision.template-editor.directives')
             fontsize_formats: '24px 36px 48px 60px 72px 84px 96px 108px 120px 150px 200px 300px',
             force_p_newlines: false,
             forced_root_block: '',
+            elementpath: false,
             content_style: '@import url("' + getGoogleFontsUrl() + '");',
             font_formats: getSortedFontFormats(),
             setup: function (editor) {
