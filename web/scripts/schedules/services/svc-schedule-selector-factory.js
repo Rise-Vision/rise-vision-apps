@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.schedules.services')
-  .factory('scheduleSelectorFactory', ['$filter', '$q', '$log', 'schedule', 'processErrorCode',
+  .factory('scheduleSelectorFactory', ['$filter', '$q', '$log', '$state', 'schedule', 'processErrorCode',
     'templateEditorFactory', 'playlistFactory', 'ScrollingListService',
-    function ($filter, $q, $log, schedule, processErrorCode, templateEditorFactory, playlistFactory,
+    function ($filter, $q, $log, $state, schedule, processErrorCode, templateEditorFactory, playlistFactory,
       ScrollingListService) {
       var schedulesComponent = {
         type: 'rise-schedules',
@@ -153,6 +153,12 @@ angular.module('risevision.schedules.services')
 
         return $q.all([_updateSelectedSchedules(), _updateUnselectedSchedules()])
           .then(_loadSelectedSchedules);
+      };
+
+      factory.addSchedule = function () {
+        $state.go('apps.schedules.add', {
+          presentationItem: templateEditorFactory.presentation
+        });
       };
 
       return factory;

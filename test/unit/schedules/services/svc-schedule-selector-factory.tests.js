@@ -31,6 +31,11 @@ describe('service: scheduleSelectorFactory:', function() {
         listService: 'listService'
       });
     });
+    $provide.service('$state', function() {
+      return {
+        go: sinon.spy()
+      };
+    });
     $provide.service('processErrorCode', function() {
       return processErrorCode = sinon.spy(function() { return 'error'; });
     });
@@ -40,13 +45,14 @@ describe('service: scheduleSelectorFactory:', function() {
       };
     });
   }));
-  var scheduleSelectorFactory, schedule, templateEditorFactory, playlistFactory, ScrollingListService, processErrorCode;
+  var scheduleSelectorFactory, schedule, templateEditorFactory, playlistFactory, $state, ScrollingListService, processErrorCode;
   beforeEach(function(){
     inject(function($injector){  
       scheduleSelectorFactory = $injector.get('scheduleSelectorFactory');
       schedule = $injector.get('schedule');
       templateEditorFactory = $injector.get('templateEditorFactory');
       playlistFactory = $injector.get('playlistFactory');
+      $state = $injector.get('$state');
       ScrollingListService = $injector.get('ScrollingListService');
       processErrorCode = $injector.get('processErrorCode');
     });
@@ -60,6 +66,7 @@ describe('service: scheduleSelectorFactory:', function() {
     expect(scheduleSelectorFactory.selectItem).to.be.a('function');
     expect(scheduleSelectorFactory.isSelected).to.be.a('function');
     expect(scheduleSelectorFactory.select).to.be.a('function');
+    expect(scheduleSelectorFactory.addSchedule).to.be.a('function');
   });
 
   it('should init values',function(){
@@ -388,7 +395,14 @@ describe('service: scheduleSelectorFactory:', function() {
         done();
       }, 10);
     });
+  });
 
+  it('addSchedule:', function() {
+    scheduleSelectorFactory.addSchedule();
+
+    $state.go.should.have.been.calledWith('apps.schedules.add', {
+      presentationItem: templateEditorFactory.presentation
+    });
   });
 
 });
