@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('risevision.template-editor.controllers')
+angular.module('risevision.schedules.controllers')
   .controller('AddToScheduleModalController', ['$scope', '$modalInstance', 'scheduleSelectorFactory', '$loading',
     function ($scope, $modalInstance, scheduleSelectorFactory, $loading) {
       $scope.factory = scheduleSelectorFactory;

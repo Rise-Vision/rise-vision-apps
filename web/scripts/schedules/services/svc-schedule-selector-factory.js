@@ -2,10 +2,8 @@
 
 angular.module('risevision.schedules.services')
   .factory('scheduleSelectorFactory', ['$filter', '$q', '$log', 'schedule', 'processErrorCode',
-    'playlistFactory', 'ScrollingListService',
-    function ($filter, $q, $log, schedule, processErrorCode, playlistFactory, ScrollingListService) {
-      var presentation = null;
-
+    'playlistFactory', 'ScrollingListService', '$modal',
+    function ($filter, $q, $log, schedule, processErrorCode, playlistFactory, ScrollingListService, $modal) {
       var factory = {
         search: {
           sortBy: 'name'
@@ -31,7 +29,7 @@ angular.module('risevision.schedules.services')
       var _loadSelectedSchedules = function () {
         var search = {
           sortBy: 'name',
-          filter: 'presentationIds:~\"' + presentation.id + '\"'
+          filter: 'presentationIds:~\"' + factory.presentation.id + '\"'
         };
 
         factory.hasSelectedSchedules = true;
@@ -57,14 +55,14 @@ angular.module('risevision.schedules.services')
       };
 
       factory.getSchedulesComponent = function (currentPresentation) {
-        presentation = currentPresentation;
+        factory.presentation = currentPresentation;
         _loadSelectedSchedules();
 
         return schedulesComponent;
       };
 
       var _loadUnselectedSchedules = function () {
-        factory.search.filter = 'NOT presentationIds:~\"' + presentation.id + '\"';
+        factory.search.filter = 'NOT presentationIds:~\"' + factory.presentation.id + '\"';
 
         factory.unselectedSchedules = new ScrollingListService(schedule.list, factory.search);
       };
@@ -92,9 +90,9 @@ angular.module('risevision.schedules.services')
           return $q.resolve();
         }
 
-        var playlistItem = playlistFactory.newPresentationItem(presentation);
+        var playlistItem = playlistFactory.newPresentationItem(factory.presentation);
 
-        return playlistFactory.initPlayUntilDone(playlistItem, presentation, true)
+        return playlistFactory.initPlayUntilDone(playlistItem, factory.presentation, true)
           .then(function () {
             return schedule.addPresentation(scheduleIds, JSON.stringify(playlistItem));
           });
@@ -117,7 +115,7 @@ angular.module('risevision.schedules.services')
           return $q.resolve();
         }
 
-        return schedule.removePresentation(scheduleIds, presentation.id);
+        return schedule.removePresentation(scheduleIds, factory.presentation.id);
       };
 
       var _updateSelectedCount = function() {
@@ -155,6 +153,19 @@ angular.module('risevision.schedules.services')
 
         return $q.all([_updateSelectedSchedules(), _updateUnselectedSchedules()])
           .then(_loadSelectedSchedules);
+      };
+
+      factory.checkAssignedToSchedules = function() {
+        if (factory.hasSelectedSchedules) {
+          return $q.resolve();
+        }
+        var modalInstance = $modal.open({
+          templateUrl: 'partials/schedules/add-to-schedule-modal.html',
+          controller: 'AddToScheduleModalController',
+          windowClass: 'madero-style centered-modal',
+          size: 'sm'
+        });
+        return modalInstance.result;
       };
 
       return factory;

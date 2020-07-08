@@ -22,11 +22,11 @@
 </div>
 
 <div class="attribute-row attribute-row-hover schedules-attribute-row mt-2" require-role="cp">
-  <div class="col-xs-10 pl-0 attribute-desc" ng-class="{'danger' : !schedulesComponent.factory.hasSelectedSchedules }">
+  <div class="col-xs-10 pl-0 attribute-desc" ng-class="{'danger' : !factory.isAssignedToSchedules }">
     <span>
       Schedules
     </span>
-    <div class="error-message mb-3" ng-show="!schedulesComponent.factory.hasSelectedSchedules">
+    <div class="error-message mb-3" ng-show="!factory.isAssignedToSchedules">
       Before you can publish, you need to select one or more schedules to put this presentation on.
     </div>
   </div>

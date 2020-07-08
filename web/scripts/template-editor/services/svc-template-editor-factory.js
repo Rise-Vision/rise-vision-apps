@@ -5,12 +5,13 @@ angular.module('risevision.template-editor.services')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', 'presentation',
     'processErrorCode', 'userState', 'createFirstSchedule',
     'templateEditorUtils', 'brandingFactory', 'blueprintFactory', 'scheduleFactory', 'presentationTracker',
-    'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED', '$modal', 'scheduleSelectorFactory',
+    'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED', 'scheduleSelectorFactory',
     function ($q, $log, $state, $rootScope, presentation, processErrorCode, userState,
       createFirstSchedule, templateEditorUtils, brandingFactory, blueprintFactory, scheduleFactory,
-      presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED, $modal, scheduleSelectorFactory) {
+      presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED, scheduleSelectorFactory) {
       var factory = {
-        hasUnsavedChanges: false
+        hasUnsavedChanges: false,
+        isAssignedToSchedules: true
       };
 
       var _setPresentation = function (presentation, isUpdate) {
@@ -229,21 +230,11 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.publish = function () {
-        return _checkAssignedToSchedules().then(_publish);
-      };
-
-      var _checkAssignedToSchedules = function() {
-        //if there are no schedules in the company, we assume it is onboarding and skip the Add To Schedule modal
-        if (!scheduleFactory.hasSchedules() || scheduleSelectorFactory.hasSelectedSchedules) {
-          return $q.resolve();
-        }
-        var modalInstance = $modal.open({
-          templateUrl: 'partials/template-editor/add-to-schedule-modal.html',
-          controller: 'AddToScheduleModalController',
-          windowClass: 'madero-style centered-modal',
-          size: 'sm'
-        });
-        return modalInstance.result;
+        return scheduleSelectorFactory.checkAssignedToSchedules()
+          .then(_publish)
+          .catch(function() {
+            factory.isAssignedToSchedules = scheduleSelectorFactory.hasSelectedSchedules;    
+          });
       };
 
       var _publish = function () {        
