@@ -26,7 +26,9 @@ describe('directive: share-schedule-button', function() {
     plansFactory = $injector.get('plansFactory');
 
     innerElementStub = {
-      trigger: sandbox.stub()
+      trigger: sandbox.stub(),
+      bind: sandbox.stub(),
+      unbind: sandbox.stub()
     };
     sandbox.stub(angular,'element').returns(innerElementStub);
 
@@ -111,6 +113,20 @@ describe('directive: share-schedule-button', function() {
       
       plansFactory.showUnlockThisFeatureModal.should.have.been.called;
     });
+
+    it('should bind to window resize on open', function() {
+      $scope.toggleActionSheet();
+
+      innerElementStub.bind.should.have.been.calledWith('resize',$scope.toggleActionSheet);
+    });
+
+    it('should unbind from window resize when closing', function() {
+      $scope.toggleActionSheet();
+      innerElementStub.trigger.resetHistory();
+      $scope.toggleActionSheet();
+
+      innerElementStub.unbind.should.have.been.calledWith('resize',$scope.toggleActionSheet);
+    });
   });
 
   describe('dismiss:', function() {
@@ -125,7 +141,7 @@ describe('directive: share-schedule-button', function() {
       innerElementStub.trigger.should.have.been.calledWith('hide');
     });
 
-    it('should close action sheet if open', function() {
+    it('should close action sheet if open and unbind from window resize', function() {
       $scope.toggleActionSheet();
       $timeout.flush();
       innerElementStub.trigger.resetHistory();
@@ -134,6 +150,7 @@ describe('directive: share-schedule-button', function() {
       $timeout.flush();
 
       innerElementStub.trigger.should.have.been.calledWith('toggle');
+      innerElementStub.unbind.should.have.been.calledWith('resize',$scope.toggleActionSheet);
     });
   });
 });

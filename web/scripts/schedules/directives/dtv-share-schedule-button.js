@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.schedules.directives')
-  .directive('shareScheduleButton', ['$timeout', 'currentPlanFactory', 'plansFactory',
-    function ($timeout, currentPlanFactory, plansFactory) {
+  .directive('shareScheduleButton', ['$timeout', 'currentPlanFactory', 'plansFactory', '$window',
+    function ($timeout, currentPlanFactory, plansFactory, $window) {
       return {
         restrict: 'E',
         templateUrl: 'partials/schedules/share-schedule-button.html',
@@ -24,8 +24,7 @@ angular.module('risevision.schedules.directives')
               }
 
               if (isActionSheetOpen) {
-                isActionSheetOpen = false;
-                actionSheetButton.trigger('toggle');
+                _closeActionSheet();
               }
             });
           };
@@ -50,13 +49,23 @@ angular.module('risevision.schedules.directives')
               return plansFactory.showUnlockThisFeatureModal();
             }
             if (isActionSheetOpen) {
-              isActionSheetOpen = false;
-              actionSheetButton.trigger('toggle');
+              _closeActionSheet();
             } else {
               isActionSheetOpen = true;
+              angular.element($window).bind('resize', $scope.toggleActionSheet);
               actionSheetButton.trigger('toggle');
             }
           };
+
+          var _closeActionSheet = function () {
+            isActionSheetOpen = false;
+            angular.element($window).unbind('resize', $scope.toggleActionSheet);
+            actionSheetButton.trigger('toggle');
+          };
+
+          $scope.$on('$destroy', function () {
+            angular.element($window).unbind('resize', $scope.toggleActionSheet);
+          });
         }
       };
     }

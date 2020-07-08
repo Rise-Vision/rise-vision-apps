@@ -677,7 +677,7 @@ describe('service: templateEditorFactory:', function() {
       sandbox.stub(presentation, 'publish').returns(publishTemplateDeferred.promise);
       brandingFactory.publishBranding.returns(publishBrandingDeferred.promise);
 
-      templateEditorFactory.publish()
+      templateEditorFactory.publish();
       setTimeout(function() {
         presentation.publish.should.have.been.called;
         brandingFactory.publishBranding.should.have.been.called;

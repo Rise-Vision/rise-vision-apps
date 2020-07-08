@@ -29,6 +29,11 @@ describe('service: scheduleSelectorFactory:', function() {
         listService: 'listService'
       });
     });
+    $provide.service('$state', function() {
+      return {
+        go: sinon.spy()
+      };
+    });
     $provide.service('processErrorCode', function() {
       return processErrorCode = sinon.spy(function() { return 'error'; });
     });
@@ -47,7 +52,7 @@ describe('service: scheduleSelectorFactory:', function() {
     });
   }));
   var scheduleSelectorFactory, schedule, companyAssetsFactory, playlistFactory, ScrollingListService,
-    processErrorCode, presentation, $modal, modalResult;
+    processErrorCode, presentation, $modal, modalResult, $state;
   beforeEach(function(){
     inject(function($injector){  
       presentation = {
@@ -57,6 +62,7 @@ describe('service: scheduleSelectorFactory:', function() {
       schedule = $injector.get('schedule');
       companyAssetsFactory = $injector.get('companyAssetsFactory');
       playlistFactory = $injector.get('playlistFactory');
+      $state = $injector.get('$state');
       ScrollingListService = $injector.get('ScrollingListService');
       processErrorCode = $injector.get('processErrorCode');
       $modal = $injector.get('$modal');
@@ -71,6 +77,7 @@ describe('service: scheduleSelectorFactory:', function() {
     expect(scheduleSelectorFactory.selectItem).to.be.a('function');
     expect(scheduleSelectorFactory.isSelected).to.be.a('function');
     expect(scheduleSelectorFactory.select).to.be.a('function');
+    expect(scheduleSelectorFactory.addSchedule).to.be.a('function');
   });
 
   it('should init values',function(){
@@ -404,6 +411,14 @@ describe('service: scheduleSelectorFactory:', function() {
       }, 10);
     });
 
+  });
+
+  it('addSchedule:', function() {
+    scheduleSelectorFactory.addSchedule();
+
+    $state.go.should.have.been.calledWith('apps.schedules.add', {
+      presentationItem: scheduleSelectorFactory.presentation
+    });
   });
 
   describe('checkAssignedToSchedules:', function() {    

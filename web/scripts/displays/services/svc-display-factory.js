@@ -15,6 +15,7 @@ angular.module('risevision.displays.services')
 
         factory.errorMessage = '';
         factory.apiError = '';
+        factory.isAddressError = false;
       };
 
       factory.init = function () {
@@ -159,6 +160,7 @@ angular.module('risevision.displays.services')
           .catch(function (e) {
             factory.errorMessage = 'We couldn\'t update your address.';
             factory.apiError = humanReadableError(e);
+            factory.isAddressError = true;
             $log.error(factory.errorMessage, e);
           })
           .finally(function () {

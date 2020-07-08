@@ -2,8 +2,9 @@
 
 angular.module('risevision.common.components.purchase-flow')
   .service('addressFactory', ['$q', '$log', 'userState', 'storeService', 'updateCompany', 'updateUser',
-    'addressService', 'contactService',
-    function ($q, $log, userState, storeService, updateCompany, updateUser, addressService, contactService) {
+    'addressService', 'contactService', 'confirmModal',
+    function ($q, $log, userState, storeService, updateCompany, updateUser, addressService, contactService,
+      confirmModal) {
       var factory = {};
 
       var _addressesAreIdentical = function (src, result) {
@@ -151,6 +152,18 @@ angular.module('risevision.common.components.purchase-flow')
         }
 
         return deferred.promise;
+      };
+
+      factory.confirmAndSetGeneralDelivery = function (addressObject) {
+        return confirmModal('Address Information',
+            'The address you provided couldn\'t be validated. This can happen if the address does not exist in the USPS records. If you\'re sure the address is correct you can specify this address as General Delivery and we\'ll only validate the City, State and Zip Code.<br/>Would you like to specify this address as General Delivery?',
+            'Yes',
+            'Cancel',
+            'general-delivery-modal')
+          .then(function () {
+            addressObject.unit = addressObject.unit ? addressObject.unit + ' - General Delivery' :
+              'General Delivery';
+          });
       };
 
       return factory;

@@ -72,6 +72,7 @@
 
       <div id="errorBox" ng-show="factory.apiError" class="alert alert-danger" role="alert">
         <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
+        <suggest-general-delivery ng-if="factory.isAddressError" address-object="display"></suggest-general-delivery>
       </div>
 
       <div class="button-row text-right">

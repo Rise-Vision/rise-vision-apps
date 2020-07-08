@@ -144,6 +144,7 @@ describe('service: displayFactory:', function() {
     expect(displayFactory.loadingDisplay).to.be.false;
     expect(displayFactory.savingDisplay).to.be.false;
     expect(displayFactory.apiError).to.not.be.ok;
+    expect(displayFactory.isAddressError).to.be.false;
     
     expect(displayFactory.init).to.be.a('function');
     expect(displayFactory.addDisplayModal).to.be.a('function');
@@ -376,6 +377,7 @@ describe('service: displayFactory:', function() {
 
         expect(displayFactory.errorMessage).to.equal("Failed to update Display.");
         expect(displayFactory.apiError).to.be.ok;
+        expect(displayFactory.isAddressError).to.be.false;        
         done();
       },10);
     });
@@ -390,7 +392,7 @@ describe('service: displayFactory:', function() {
       
       expect(displayFactory.savingDisplay).to.be.true;
       expect(displayFactory.loadingDisplay).to.be.true;
-
+      expect(displayFactory.isAddressError).to.be.false;
 
       setTimeout(function(){
         expect(trackerCalled).to.not.be.ok;
@@ -399,6 +401,7 @@ describe('service: displayFactory:', function() {
 
         expect(displayFactory.errorMessage).to.equal("We couldn\'t update your address.");
         expect(displayFactory.apiError).to.be.ok;
+        expect(displayFactory.isAddressError).to.be.true;
         done();
       },10);
     });
@@ -443,6 +446,7 @@ describe('service: displayFactory:', function() {
 
       setTimeout(function(){
         expect(displayFactory.errorMessage).to.equal("We couldn\'t update your address.");
+        expect(displayFactory.isAddressError).to.be.true;
         done();
       },10);
     });
