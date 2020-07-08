@@ -2,8 +2,8 @@
 
 angular.module('risevision.schedules.services')
   .factory('scheduleSelectorFactory', ['$filter', '$q', '$log', 'schedule', 'processErrorCode',
-    'playlistFactory', 'ScrollingListService', '$modal', 'companyAssetsFactory',
-    function ($filter, $q, $log, schedule, processErrorCode, playlistFactory, ScrollingListService, $modal, companyAssetsFactory) {
+    'playlistFactory', 'ScrollingListService', '$modal', 'companyAssetsFactory', '$state',
+    function ($filter, $q, $log, schedule, processErrorCode, playlistFactory, ScrollingListService, $modal, companyAssetsFactory, $state) {
       var factory = {
         search: {
           sortBy: 'name'
@@ -157,7 +157,7 @@ angular.module('risevision.schedules.services')
 
       factory.addSchedule = function () {
         $state.go('apps.schedules.add', {
-          presentationItem: templateEditorFactory.presentation
+          presentationItem: factory.presentation
         });
       };
 
