@@ -81,6 +81,7 @@ angular.module('risevision.common.header')
             .catch(function (error) {
               $scope.formError = 'We couldn\'t update your address.';
               $scope.apiError = humanReadableError(error);
+              $scope.isAddressError = true;
             })
             .finally(function () {
               $scope.loading = false;
@@ -175,6 +176,7 @@ angular.module('risevision.common.header')
       function _clearErrorMessages() {
         $scope.formError = null;
         $scope.apiError = null;
+        $scope.isAddressError = false;
       }
 
       function _showErrorMessage(action, error) {

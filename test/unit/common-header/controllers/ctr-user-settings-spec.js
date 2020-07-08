@@ -84,7 +84,8 @@ describe("controller: user settings", function() {
       firstName : "first",
       lastName : "last",
       telephone : "telephone",
-      email : "e@mail.com"
+      email : "e@mail.com",
+      companyRole : "companyRole"
     };
     savedUser = userProfile;
     userState = function(){
@@ -210,7 +211,6 @@ describe("controller: user settings", function() {
       $scope.save();
       expect($scope.loading).to.be.false;
 
-      userTracker.should.not.have.been.called;
       $modalInstance.close.should.not.have.been.called;
     });
 
@@ -227,7 +227,6 @@ describe("controller: user settings", function() {
         expect($scope.loading).to.be.false;
         userProfileSpy.should.have.been.once;
 
-        userTracker.should.have.been.calledWith("User Updated", "user@example.io", true, {updatedUserId: "user@example.io"});
         $modalInstance.close.should.have.been.calledWith("success");
         
         done();

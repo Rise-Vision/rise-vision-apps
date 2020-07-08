@@ -32,13 +32,31 @@ describe("User Profile: getUserProfile", function() {
                 }, 0);
               }
             };
-          }
+          },
+          patch: function() {
+            return {
+              execute: function (callback) {
+                setTimeout(function () {
+                  callback({result: true});
+                }, 0);
+              }
+            };
+          } 
         }
       };
       deffered.resolve(gapi);
       return deffered.promise;
     });
     $provide.value("CORE_URL", "");
+    $provide.service("userTracker", function() { 
+      return sinon.spy();
+    });
+    $provide.service("userState", function() { 
+      return {
+        getUsername: sinon.stub().returns("username"),
+        checkUsername: sinon.stub().returns(true)
+      }
+    });
 
   }));
 
@@ -91,6 +109,26 @@ describe("User Profile: getUserProfile", function() {
           done();
         });
       });      
+    });
+  });
+
+  describe("updateUser", function() {
+    beforeEach(module(function ($provide) {
+      $provide.value("getUserProfile", function(username,clear) {
+        return Q.resolve();
+      });
+    }));
+
+    it("should update user and track event", function(done) {
+      inject(function (updateUser, userTracker) {
+        var profile = {
+          companyRole: "other"
+        };
+        updateUser("username", profile).then(function(){
+          userTracker.should.have.been.calledWith("User Updated", "username", true, {updatedUserId: "username", updatedUserCompanyRole: "other"});
+          done();
+        });
+      });
     });
   });
 

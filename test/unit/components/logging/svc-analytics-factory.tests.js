@@ -84,6 +84,52 @@ describe("Services: analyticsFactory", function() {
         email: undefined,
         firstName: "",
         lastName: "",
+        companyRole: "",
+        registeredDate: "2020-01-01",
+        subscriptionRenewalDate: undefined,
+        subscriptionStatus: "Free",
+        subscriptionTrialExpiryDate: undefined
+      };
+      identifySpy.should.have.been.calledWith("username",expectProperties);
+
+      expect($window.dataLayer[$window.dataLayer.length-2].event).to.equal("analytics.identify");
+      expect($window.dataLayer[$window.dataLayer.length-2].userId).to.equal("username");
+      expect($window.dataLayer[$window.dataLayer.length-2].analytics.user.properties).to.deep.equal(expectProperties);
+
+      trackSpy.should.have.been.calledWithMatch("logged in",expectProperties);
+      expect($window.dataLayer[$window.dataLayer.length-1].event).to.equal("analytics.track");
+      var actualProperties = $window.dataLayer[$window.dataLayer.length-1].analytics.event.properties;
+      Object.keys(expectProperties).forEach(function(key) {
+        expect(actualProperties[key]).to.deep.equal(expectProperties[key]);
+      });
+      expect(actualProperties.loginDate).to.be.a("date");
+
+      done();
+    }, 10);
+  });
+
+  it("should identify user and track logged in event with correct profile data", function(done) {
+    var identifySpy = sinon.spy(analyticsFactory, "identify");
+    var trackSpy = sinon.spy(analyticsFactory, "track");
+    profile.firstName = "firstName";
+    profile.lastName = "lastName";
+    profile.companyRole = "companyRole";
+    profile.email = "user@email.com";
+
+    analyticsEvents.identify();
+    
+    setTimeout(function() {
+      var expectProperties = {
+        company: { id: "companyId", name: "companyName", companyIndustry: "K-12 Education", parentId: "parent123" },
+        companyId: "companyId",
+        companyName: "companyName",
+        companyIndustry: "K-12 Education",
+        parentId: "parent123",
+        userId: "username",
+        email: "user@email.com",
+        firstName: "firstName",
+        lastName: "lastName",
+        companyRole: "companyRole",
         registeredDate: "2020-01-01",
         subscriptionRenewalDate: undefined,
         subscriptionStatus: "Free",
@@ -126,6 +172,7 @@ describe("Services: analyticsFactory", function() {
         email: undefined,
         firstName: "",
         lastName: "",
+        companyRole: "",
         registeredDate: undefined,
         subscriptionRenewalDate: undefined,
         subscriptionStatus: "Free",
@@ -157,6 +204,7 @@ describe("Services: analyticsFactory", function() {
         email: undefined,
         firstName: "",
         lastName: "",
+        companyRole: "",
         registeredDate: "2020-01-01",
         subscriptionRenewalDate: undefined,
         subscriptionStatus: "Free",
@@ -185,6 +233,7 @@ describe("Services: analyticsFactory", function() {
         email: undefined,
         firstName: "",
         lastName: "",
+        companyRole: "",
         registeredDate: "2020-01-01"
       });
       done();

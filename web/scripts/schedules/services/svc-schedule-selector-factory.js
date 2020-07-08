@@ -83,21 +83,6 @@ angular.module('risevision.schedules.services')
         });
       };
 
-      var _updateSelectedSchedules = function () {
-        var scheduleIds = _getSelectedScheduleIds();
-
-        if (!scheduleIds.length) {
-          return $q.resolve();
-        }
-
-        var playlistItem = playlistFactory.newPresentationItem(factory.presentation);
-
-        return playlistFactory.initPlayUntilDone(playlistItem, factory.presentation, true)
-          .then(function () {
-            return schedule.addPresentation(scheduleIds, JSON.stringify(playlistItem));
-          });
-      };
-
       var _getUnselectedScheduleIds = function() {
         var filteredSchedules = _.filter(factory.selectedSchedules, function (item) {
           return item.isSelected === false;
@@ -106,16 +91,6 @@ angular.module('risevision.schedules.services')
         return _.map(filteredSchedules, function (item) {
           return item.id;
         });
-      };
-
-      var _updateUnselectedSchedules = function () {
-        var scheduleIds = _getUnselectedScheduleIds();
-
-        if (!scheduleIds.length) {
-          return $q.resolve();
-        }
-
-        return schedule.removePresentation(scheduleIds, factory.presentation.id);
       };
 
       var _updateSelectedCount = function() {
@@ -144,6 +119,31 @@ angular.module('risevision.schedules.services')
         }
       };
 
+      var _updateSelectedSchedules = function () {
+        var scheduleIds = _getSelectedScheduleIds();
+
+        if (!scheduleIds.length) {
+          return $q.resolve();
+        }
+
+        var playlistItem = playlistFactory.newPresentationItem(factory.presentation);
+
+        return playlistFactory.initPlayUntilDone(playlistItem, factory.presentation, true)
+          .then(function () {
+            return schedule.addPresentation(scheduleIds, JSON.stringify(playlistItem));
+          });
+      };
+
+      var _updateUnselectedSchedules = function () {
+        var scheduleIds = _getUnselectedScheduleIds();
+
+        if (!scheduleIds.length) {
+          return $q.resolve();
+        }
+
+        return schedule.removePresentation(scheduleIds, factory.presentation.id);
+      };
+
       factory.select = function () {
         if (factory.selectedCount === 0) {
           return;
@@ -153,6 +153,12 @@ angular.module('risevision.schedules.services')
 
         return $q.all([_updateSelectedSchedules(), _updateUnselectedSchedules()])
           .then(_loadSelectedSchedules);
+      };
+
+      factory.addSchedule = function () {
+        $state.go('apps.schedules.add', {
+          presentationItem: templateEditorFactory.presentation
+        });
       };
 
       factory.checkAssignedToSchedules = function() {

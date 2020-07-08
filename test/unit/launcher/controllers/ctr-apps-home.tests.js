@@ -73,7 +73,7 @@ describe('controller: AppsHomeCtrl', function() {
   describe('getEmbedUrl:', function() {
     it('should return a trusted embed URL', function() {     
       expect($scope.getEmbedUrl('ID')).to.equal('http://trustedUrl');
-      $sce.trustAsResourceUrl.should.have.been.calledWith('https://preview.risevision.com/?type=sharedschedule&id=ID&env=embed');
+      $sce.trustAsResourceUrl.should.have.been.calledWith('https://preview.risevision.com/?type=sharedschedule&id=ID&env=apps_home');
     });
 
     it('should return null, to not render iframe, when scheduleId is not provided', function() {

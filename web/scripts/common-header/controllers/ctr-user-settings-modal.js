@@ -138,10 +138,6 @@ angular.module('risevision.common.header')
                 userState.updateUserProfile(resp.item);
               }
 
-              userTracker('User Updated', userState.getUsername(), userState.checkUsername(username), {
-                updatedUserId: username
-              });
-
               $modalInstance.close('success');
             })
             .catch(function (error) {
