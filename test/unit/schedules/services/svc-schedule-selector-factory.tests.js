@@ -1,5 +1,5 @@
 'use strict';
-xdescribe('service: scheduleSelectorFactory:', function() {
+describe('service: scheduleSelectorFactory:', function() {
   beforeEach(module('risevision.schedules.services'));
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
@@ -19,11 +19,9 @@ xdescribe('service: scheduleSelectorFactory:', function() {
         initPlayUntilDone: sinon.stub().returns(Q.resolve(true))
       };
     });
-    $provide.service('templateEditorFactory', function() {
+    $provide.service('companyAssetsFactory', function() {
       return {
-        presentation: {
-          id: 'presentationId'
-        }
+        hasSchedules: sinon.stub().returns(Q.resolve(true))
       };
     });
     $provide.service('ScrollingListService', function() {
@@ -44,17 +42,30 @@ xdescribe('service: scheduleSelectorFactory:', function() {
         return key;
       };
     });
+    $provide.service('$modal', function(){
+      return {
+        open : sinon.stub().returns({
+            result: modalResult = sinon.stub().returns(Q.resolve())
+          }
+        )
+      };
+    });
   }));
-  var scheduleSelectorFactory, schedule, templateEditorFactory, playlistFactory, $state, ScrollingListService, processErrorCode;
+  var scheduleSelectorFactory, schedule, companyAssetsFactory, playlistFactory, ScrollingListService,
+    processErrorCode, presentation, $modal, modalResult, $state;
   beforeEach(function(){
     inject(function($injector){  
+      presentation = {
+        id: 'presentationId'
+      };
       scheduleSelectorFactory = $injector.get('scheduleSelectorFactory');
       schedule = $injector.get('schedule');
-      templateEditorFactory = $injector.get('templateEditorFactory');
+      companyAssetsFactory = $injector.get('companyAssetsFactory');
       playlistFactory = $injector.get('playlistFactory');
       $state = $injector.get('$state');
       ScrollingListService = $injector.get('ScrollingListService');
       processErrorCode = $injector.get('processErrorCode');
+      $modal = $injector.get('$modal');
     });
   });
 
@@ -77,27 +88,27 @@ xdescribe('service: scheduleSelectorFactory:', function() {
 
   describe('getSchedulesComponent:', function() {
     it('should return the component object', function() {
-      expect(scheduleSelectorFactory.getSchedulesComponent()).to.deep.equal({
+      expect(scheduleSelectorFactory.getSchedulesComponent(presentation)).to.deep.equal({
         type: 'rise-schedules',
-        hasSelectedSchedules: true
+        factory: scheduleSelectorFactory
       });
     });
 
     it('should load selected schedules', function(done) {
-      var component = scheduleSelectorFactory.getSchedulesComponent();
+      var component = scheduleSelectorFactory.getSchedulesComponent(presentation);
 
-      expect(component.hasSelectedSchedules).to.be.true;
+      expect(scheduleSelectorFactory.hasSelectedSchedules).to.be.true;
       expect(scheduleSelectorFactory.selectedSchedules).to.deep.equal([]);
       expect(scheduleSelectorFactory.loadingSchedules).to.be.true;
 
       schedule.list.should.have.been.calledWith({
         sortBy: 'name',
-        filter: 'presentationIds:~\"' + templateEditorFactory.presentation.id + '\"'
+        filter: 'presentationIds:~\"' + scheduleSelectorFactory.presentation.id + '\"'
       });
       
       setTimeout(function() {
         expect(scheduleSelectorFactory.selectedSchedules).to.deep.equal([1, 2]);
-        expect(component.hasSelectedSchedules).to.be.true;
+        expect(scheduleSelectorFactory.hasSelectedSchedules).to.be.true;
 
         expect(scheduleSelectorFactory.loadingSchedules).to.be.false;
 
@@ -109,7 +120,7 @@ xdescribe('service: scheduleSelectorFactory:', function() {
     it('should handle failure to get selected schedules',function(done){
       schedule.list.returns(Q.reject({result: {error: { message: 'ERROR; could not load schedules'}}}));
 
-      var component = scheduleSelectorFactory.getSchedulesComponent();
+      var component = scheduleSelectorFactory.getSchedulesComponent(presentation);
 
       setTimeout(function() {
         expect(scheduleSelectorFactory.errorMessage).to.be.ok;
@@ -125,6 +136,9 @@ xdescribe('service: scheduleSelectorFactory:', function() {
   });
 
   describe('load:', function() {
+    beforeEach(function() {
+      scheduleSelectorFactory.presentation = presentation;
+    });
     it('should reset search and selected count', function() {
       scheduleSelectorFactory.search = 'oldSearch';
       scheduleSelectorFactory.selectedCount = 4;
@@ -133,7 +147,7 @@ xdescribe('service: scheduleSelectorFactory:', function() {
 
       expect(scheduleSelectorFactory.search).to.deep.equal({
         sortBy: 'name',
-        filter: 'NOT presentationIds:~\"' + templateEditorFactory.presentation.id + '\"'
+        filter: 'NOT presentationIds:~\"' + scheduleSelectorFactory.presentation.id + '\"'
       });
       expect(scheduleSelectorFactory.selectedCount).to.equal(0);
     });
@@ -239,6 +253,7 @@ xdescribe('service: scheduleSelectorFactory:', function() {
 
   describe('select:', function() {
     beforeEach(function() {
+      scheduleSelectorFactory.presentation = presentation;
       scheduleSelectorFactory.selectedSchedules = [];
       scheduleSelectorFactory.unselectedSchedules = {
         items: {
@@ -269,11 +284,11 @@ xdescribe('service: scheduleSelectorFactory:', function() {
       scheduleSelectorFactory.select();
 
       expect(scheduleSelectorFactory.loadingSchedules).to.be.true;
-      playlistFactory.newPresentationItem.should.have.been.calledWith(templateEditorFactory.presentation);
-      playlistFactory.initPlayUntilDone.should.have.been.calledWith({id: 'playlistItemId'}, templateEditorFactory.presentation, true);
+      playlistFactory.newPresentationItem.should.have.been.calledWith(scheduleSelectorFactory.presentation);
+      playlistFactory.initPlayUntilDone.should.have.been.calledWith({id: 'playlistItemId'}, scheduleSelectorFactory.presentation, true);
 
       schedule.removePresentation.should.have.been.called;
-      schedule.removePresentation.should.have.been.calledWith(['item1'], templateEditorFactory.presentation.id);
+      schedule.removePresentation.should.have.been.calledWith(['item1'], scheduleSelectorFactory.presentation.id);
       
       setTimeout(function() {
         schedule.addPresentation.should.have.been.called;
@@ -311,7 +326,7 @@ xdescribe('service: scheduleSelectorFactory:', function() {
       playlistFactory.initPlayUntilDone.should.not.have.been.called;
 
       schedule.removePresentation.should.have.been.called;
-      schedule.removePresentation.should.have.been.calledWith(['item1'], templateEditorFactory.presentation.id);
+      schedule.removePresentation.should.have.been.calledWith(['item1'], scheduleSelectorFactory.presentation.id);
       
       setTimeout(function() {
         schedule.addPresentation.should.not.have.been.called;
@@ -345,8 +360,8 @@ xdescribe('service: scheduleSelectorFactory:', function() {
       scheduleSelectorFactory.select();
 
       expect(scheduleSelectorFactory.loadingSchedules).to.be.true;
-      playlistFactory.newPresentationItem.should.have.been.calledWith(templateEditorFactory.presentation);
-      playlistFactory.initPlayUntilDone.should.have.been.calledWith({id: 'playlistItemId'}, templateEditorFactory.presentation, true);
+      playlistFactory.newPresentationItem.should.have.been.calledWith(scheduleSelectorFactory.presentation);
+      playlistFactory.initPlayUntilDone.should.have.been.calledWith({id: 'playlistItemId'}, scheduleSelectorFactory.presentation, true);
 
       schedule.removePresentation.should.not.have.been.called;
       
@@ -395,13 +410,53 @@ xdescribe('service: scheduleSelectorFactory:', function() {
         done();
       }, 10);
     });
+
   });
 
   it('addSchedule:', function() {
     scheduleSelectorFactory.addSchedule();
 
     $state.go.should.have.been.calledWith('apps.schedules.add', {
-      presentationItem: templateEditorFactory.presentation
+      presentationItem: scheduleSelectorFactory.presentation
+    });
+  });
+
+  describe('checkAssignedToSchedules:', function() {    
+    it('should resolve if company does not have schedules (i.e. is onboarding)', function(done) {
+      companyAssetsFactory.hasSchedules.returns(Q.resolve(false));
+
+      scheduleSelectorFactory.checkAssignedToSchedules().then(done);
+    });
+
+    it('should show Add To Schedules modal if Presentation is not assigned to Schedules', function(done) {
+      scheduleSelectorFactory.hasSelectedSchedules = false;
+
+      scheduleSelectorFactory.checkAssignedToSchedules()
+      .then(function() {
+        $modal.open.should.have.been.calledWith({
+          templateUrl: 'partials/schedules/add-to-schedule-modal.html',
+          controller: 'AddToScheduleModalController',
+          windowClass: 'madero-style centered-modal',
+          size: 'sm'
+        });
+        done();
+      });
+    });
+
+    it('should resolve and not show Add To Schedules modal if Presentation is assigned to Schedules', function(done) {
+      scheduleSelectorFactory.hasSelectedSchedules = true;
+
+      scheduleSelectorFactory.checkAssignedToSchedules()
+      .then(function() {
+        $modal.open.should.not.have.been.called;
+        done();
+      });
+    });
+
+    it('should reject on hasSchedules error', function(done) {
+      companyAssetsFactory.hasSchedules.returns(Q.reject());
+
+      scheduleSelectorFactory.checkAssignedToSchedules().catch(done);
     });
   });
 

@@ -84,7 +84,7 @@ describe('service: templateEditorFactory:', function() {
   }));
 
   var $state, templateEditorFactory, templateEditorUtils, blueprintFactory, presentation, processErrorCode,
-    HTML_PRESENTATION_TYPE, storeProduct, createFirstSchedule, scheduleFactory, brandingFactory;
+    HTML_PRESENTATION_TYPE, storeProduct, createFirstSchedule, scheduleFactory, brandingFactory, scheduleSelectorFactory;
 
   beforeEach(function() {
     inject(function($injector) {
@@ -98,6 +98,7 @@ describe('service: templateEditorFactory:', function() {
       storeProduct = $injector.get('storeProduct');
       templateEditorUtils = $injector.get('templateEditorUtils');
       processErrorCode = $injector.get('processErrorCode');
+      scheduleSelectorFactory = $injector.get('scheduleSelectorFactory');
       HTML_PRESENTATION_TYPE = $injector.get('HTML_PRESENTATION_TYPE');
     });
   });
@@ -670,32 +671,34 @@ describe('service: templateEditorFactory:', function() {
       });
     });
 
-    xit('should wait for both promises to resolve', function(done) {
+    it('should wait for both promises to resolve', function(done) {
       var publishTemplateDeferred = Q.defer();
       var publishBrandingDeferred = Q.defer();
       sandbox.stub(presentation, 'publish').returns(publishTemplateDeferred.promise);
       brandingFactory.publishBranding.returns(publishBrandingDeferred.promise);
 
       templateEditorFactory.publish();
-
-      presentation.publish.should.have.been.called;
-      brandingFactory.publishBranding.should.have.been.called;
-
-      expect(templateEditorFactory.savingPresentation).to.be.true;
-
-      publishTemplateDeferred.resolve();
-
       setTimeout(function() {
-        expect(templateEditorFactory.savingPresentation).to.be.true;  
+        presentation.publish.should.have.been.called;
+        brandingFactory.publishBranding.should.have.been.called;
 
-        publishBrandingDeferred.resolve();
-        
+        expect(templateEditorFactory.savingPresentation).to.be.true;
+
+        publishTemplateDeferred.resolve();
+
         setTimeout(function() {
-          expect(templateEditorFactory.savingPresentation).to.be.false;  
+          expect(templateEditorFactory.savingPresentation).to.be.true;  
 
-          done();
+          publishBrandingDeferred.resolve();
+          
+          setTimeout(function() {
+            expect(templateEditorFactory.savingPresentation).to.be.false;  
+
+            done();
+          });
         });
       });
+
     });
 
     describe('publishTemplate: ', function() {
@@ -745,7 +748,20 @@ describe('service: templateEditorFactory:', function() {
           .then(null, done);
       });
 
-      xit('should show an error if fails to publish the presentation', function(done) {
+      it('should flag and not publish if presentation is not assigned to schedules', function(done) {
+        scheduleSelectorFactory.hasSelectedSchedules = false;
+        scheduleSelectorFactory.checkAssignedToSchedules.returns(Q.reject());
+
+        expect(templateEditorFactory.isAssignedToSchedules).to.be.true;
+
+        templateEditorFactory.publish()
+          .then(null, function() {
+            expect(templateEditorFactory.isAssignedToSchedules).to.be.false;
+            done();
+          });
+      });
+
+      it('should show an error if fails to publish the presentation', function(done) {
         presentation.publish.returns(Q.reject());
 
         templateEditorFactory.publish()
@@ -801,13 +817,14 @@ describe('service: templateEditorFactory:', function() {
         sandbox.stub(presentation, 'publish').returns(Q.resolve());
       });
 
-      xit('should publish the branding settings', function() {
-        templateEditorFactory.publish();
-
-        brandingFactory.publishBranding.should.have.been.called;
+      it('should publish the branding settings', function(done) {
+        templateEditorFactory.publish().then(function(){
+          brandingFactory.publishBranding.should.have.been.called;
+          done();
+        });
       });
 
-      xit('should show an error if fails to publish the presentation', function(done) {
+      it('should show an error if fails to publish the presentation', function(done) {
         brandingFactory.publishBranding.returns(Q.reject());
 
         templateEditorFactory.publish()

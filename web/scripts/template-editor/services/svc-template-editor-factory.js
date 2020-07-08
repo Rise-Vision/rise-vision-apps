@@ -233,7 +233,8 @@ angular.module('risevision.template-editor.services')
         return scheduleSelectorFactory.checkAssignedToSchedules()
           .then(_publish)
           .catch(function() {
-            factory.isAssignedToSchedules = scheduleSelectorFactory.hasSelectedSchedules;    
+            factory.isAssignedToSchedules = scheduleSelectorFactory.hasSelectedSchedules;
+            return $q.reject();
           });
       };
 
