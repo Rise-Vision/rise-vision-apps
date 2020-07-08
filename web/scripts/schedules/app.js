@@ -67,11 +67,20 @@ angular.module('risevision.apps')
             return $templateCache.get(
               'partials/schedules/schedule-add.html');
           }],
+          params: {
+            presentationItem: null
+          },
           controller: 'scheduleAdd',
           resolve: {
-            scheduleInfo: ['canAccessApps', 'scheduleFactory',
-              function (canAccessApps, scheduleFactory) {
-                return canAccessApps().then(scheduleFactory.newSchedule);
+            scheduleInfo: ['$stateParams', 'canAccessApps', 'scheduleFactory', 'playlistFactory',
+              function ($stateParams, canAccessApps, scheduleFactory, playlistFactory) {
+                return canAccessApps().then(function() {
+                  scheduleFactory.newSchedule();
+
+                  if ($stateParams.presentationItem) {
+                    return playlistFactory.addPresentationItem($stateParams.presentationItem);
+                  }
+                });
               }
             ]
           }
