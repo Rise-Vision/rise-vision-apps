@@ -13,35 +13,8 @@ angular.module('risevision.template-editor.directives')
           $scope.factory = templateEditorFactory;
           $scope.data = {};
 
-          /*jshint camelcase: false */
-          $scope.tinymceOptions = {
-            baseURL: '/vendor/tinymce/', //set path to load theme and skin files
-            plugins: 'colorpicker textcolor lists',
-            menubar: false,
-            toolbar1: 'fontselect fontsizeselect | ' +
-              'bold italic underline | ' +
-              'forecolor backcolor | ' +
-              'numlist bullist | ' +
-              'alignleft aligncenter alignright | ' +
-              'removeformat',
-            fontsize_formats: '24px 36px 48px 60px 72px 84px 96px 108px 120px 150px 200px 300px',
-            force_p_newlines: false,
-            forced_root_block: '',
-            elementpath: false,
-            content_style: '@import url("' + getGoogleFontsUrl() + '");',
-            font_formats: getSortedFontFormats(),
-            setup: function (editor) {
-              editor.on('paste', function (e) {
-                //paste does not trigger change event
-                //editor.getContent() needs timeout in order to include the change
-                setTimeout(function () {
-                  $scope.data.richText = editor.getContent();
-                  $scope.save();
-                }, 100);
-              });
-            }
-          };
-          /*jshint camelcase: true */
+          loadGoogleFonts();
+          initTinyMce();
 
           function _load() {
             $scope.data.richText = $scope.getAvailableAttributeData($scope.componentId, 'richtext');
@@ -63,6 +36,38 @@ angular.module('risevision.template-editor.directives')
               _load();
             }
           });
+
+          function initTinyMce() {
+            /*jshint camelcase: false */
+            $scope.tinymceOptions = {
+              baseURL: '/vendor/tinymce/', //set path to load theme and skin files
+              plugins: 'colorpicker textcolor lists',
+              menubar: false,
+              toolbar1: 'fontselect fontsizeselect | ' +
+                'bold italic underline | ' +
+                'forecolor backcolor | ' +
+                'numlist bullist | ' +
+                'alignleft aligncenter alignright | ' +
+                'removeformat',
+              fontsize_formats: '24px 36px 48px 60px 72px 84px 96px 108px 120px 150px 200px 300px',
+              force_p_newlines: false,
+              forced_root_block: '',
+              elementpath: false,
+              content_style: '@import url("' + getGoogleFontsUrl() + '");',
+              font_formats: getSortedFontFormats(),
+              setup: function (editor) {
+                editor.on('paste', function (e) {
+                  //paste does not trigger change event
+                  //editor.getContent() needs timeout in order to include the change
+                  setTimeout(function () {
+                    $scope.data.richText = editor.getContent();
+                    $scope.save();
+                  }, 100);
+                });
+              }
+            };
+            /*jshint camelcase: true */
+          }
 
           function getAllFontsUsed(richText) {
             var wrapper = document.createElement('div'),
@@ -120,6 +125,19 @@ angular.module('risevision.template-editor.directives')
             });
 
             return result;
+          }
+
+          //lazy load Google fonts
+          function loadGoogleFonts() {
+            var linkId = 'mostPopularGoogleFonts';
+            if (!document.getElementById(linkId)) {
+              var link = document.createElement('link');
+              link.rel = 'stylesheet';
+              link.type = 'text/css';
+              link.id = linkId;
+              link.href = getGoogleFontsUrl();
+              document.head.appendChild(link);
+            }
           }
 
         }
