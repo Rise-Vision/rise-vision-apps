@@ -748,19 +748,6 @@ describe('service: templateEditorFactory:', function() {
           .then(null, done);
       });
 
-      it('should flag and not publish if presentation is not assigned to schedules', function(done) {
-        scheduleSelectorFactory.hasSelectedSchedules = false;
-        scheduleSelectorFactory.checkAssignedToSchedules.returns(Q.reject());
-
-        expect(templateEditorFactory.isAssignedToSchedules).to.be.true;
-
-        templateEditorFactory.publish()
-          .then(null, function() {
-            expect(templateEditorFactory.isAssignedToSchedules).to.be.false;
-            done();
-          });
-      });
-
       it('should show an error if fails to publish the presentation', function(done) {
         presentation.publish.returns(Q.reject());
 

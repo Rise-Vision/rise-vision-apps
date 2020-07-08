@@ -10,8 +10,7 @@ angular.module('risevision.template-editor.services')
       createFirstSchedule, templateEditorUtils, brandingFactory, blueprintFactory, scheduleFactory,
       presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED, scheduleSelectorFactory) {
       var factory = {
-        hasUnsavedChanges: false,
-        isAssignedToSchedules: true
+        hasUnsavedChanges: false
       };
 
       var _setPresentation = function (presentation, isUpdate) {
@@ -230,12 +229,7 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.publish = function () {
-        return scheduleSelectorFactory.checkAssignedToSchedules()
-          .then(_publish)
-          .catch(function() {
-            factory.isAssignedToSchedules = scheduleSelectorFactory.hasSelectedSchedules;
-            return $q.reject();
-          });
+        return scheduleSelectorFactory.checkAssignedToSchedules().then(_publish);
       };
 
       var _publish = function () {        
