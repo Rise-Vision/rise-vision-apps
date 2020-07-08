@@ -2,8 +2,8 @@
 
 angular.module('risevision.schedules.services')
   .factory('scheduleSelectorFactory', ['$filter', '$q', '$log', 'schedule', 'processErrorCode',
-    'playlistFactory', 'ScrollingListService', '$modal',
-    function ($filter, $q, $log, schedule, processErrorCode, playlistFactory, ScrollingListService, $modal) {
+    'playlistFactory', 'ScrollingListService', '$modal', 'companyAssetsFactory',
+    function ($filter, $q, $log, schedule, processErrorCode, playlistFactory, ScrollingListService, $modal, companyAssetsFactory) {
       var factory = {
         search: {
           sortBy: 'name'
@@ -156,9 +156,18 @@ angular.module('risevision.schedules.services')
       };
 
       factory.checkAssignedToSchedules = function() {
-        if (factory.hasSelectedSchedules) {
-          return $q.resolve();
-        }
+        return companyAssetsFactory.hasSchedules().then(function(hasSchedules) {
+          if (hasSchedules && !factory.hasSelectedSchedules) {
+            return _showAddToScheduleModal();
+          } else {
+            return $q.resolve();
+          }
+        }).catch(function() {
+          return $q.reject();
+        });
+      };
+
+      var _showAddToScheduleModal = function() {
         var modalInstance = $modal.open({
           templateUrl: 'partials/schedules/add-to-schedule-modal.html',
           controller: 'AddToScheduleModalController',
