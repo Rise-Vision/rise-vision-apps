@@ -45,10 +45,6 @@ angular.module('risevision.template-editor.directives')
 
           function _load() {
             $scope.data.richText = $scope.getAvailableAttributeData($scope.componentId, 'richtext');
-
-            $timeout(function () {
-              $window.dispatchEvent(new Event('resize'));
-            }, 400);
           }
 
           $scope.save = function () {
