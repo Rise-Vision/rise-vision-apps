@@ -49,7 +49,7 @@ describe('app:', function() {
       });
     });
 
-    it('should init add presentation modal',function(done){
+    it('should add new schedule',function(done){
       $state.get('apps.schedules.add').resolve.scheduleInfo[4]({}, canAccessApps, scheduleFactory, playlistFactory);
       setTimeout(function() {
         canAccessApps.should.have.been.called;
@@ -61,7 +61,7 @@ describe('app:', function() {
       }, 10);
     });
 
-    it('should add by productId',function(done){
+    it('should add new schedule with a presentation item',function(done){
       $state.get('apps.schedules.add').resolve.scheduleInfo[4]({presentationItem: 'item'}, canAccessApps, scheduleFactory, playlistFactory);
       setTimeout(function() {
         canAccessApps.should.have.been.called;
