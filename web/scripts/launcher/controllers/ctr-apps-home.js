@@ -2,8 +2,8 @@
 
 angular.module('risevision.apps.launcher.controllers')
   .controller('AppsHomeCtrl', ['$scope', 'schedule', '$loading', 'processErrorCode',
-    '$log', '$sce', 'tourFactory', 'SHARED_SCHEDULE_URL',
-    function ($scope, schedule, $loading, processErrorCode, $log, $sce, tourFactory, SHARED_SCHEDULE_URL) {
+    '$log', '$sce', 'SHARED_SCHEDULE_URL',
+    function ($scope, schedule, $loading, processErrorCode, $log, $sce, SHARED_SCHEDULE_URL) {
       $scope.schedules = [];
       var search = {
         sortBy: 'changeDate',
@@ -11,19 +11,8 @@ angular.module('risevision.apps.launcher.controllers')
         reverse: true,
       };
 
-      var tooltipKey = 'ShareTooltip';
-      $scope.showTooltipOverlay = false;
-
       var triggerOverlay = function () {
-        $scope.showTooltipOverlay = tourFactory.isShowing(tooltipKey);
-
-        if ($scope.showTooltipOverlay) {
-          var handler = $scope.$on('tooltipOverlay.dismissed', function () {
-            tourFactory.dismissed(tooltipKey);
-            $scope.showTooltipOverlay = false;
-            handler();
-          });
-        }
+        $scope.tooltipKey = 'ShareTooltip';
       };
 
       $scope.$watch('loadingItems', function (loading) {
