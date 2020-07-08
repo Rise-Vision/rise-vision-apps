@@ -10,6 +10,7 @@ angular.module('risevision.apps.directives')
         compile: function (element, attrs) {
           element.attr('tooltip-trigger', 'show');
           element.attr('ng-click', 'dismiss()');
+          element.attr('tooltip-animation', 'false');
           element.attr('tooltip-digest-on-resize', '');
           element.removeAttr('tooltip-overlay'); //remove the attribute to avoid infinite loop
 
