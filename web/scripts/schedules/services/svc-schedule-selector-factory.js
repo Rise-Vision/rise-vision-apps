@@ -83,21 +83,6 @@ angular.module('risevision.schedules.services')
         });
       };
 
-      var _updateSelectedSchedules = function () {
-        var scheduleIds = _getSelectedScheduleIds();
-
-        if (!scheduleIds.length) {
-          return $q.resolve();
-        }
-
-        var playlistItem = playlistFactory.newPresentationItem(templateEditorFactory.presentation);
-
-        return playlistFactory.initPlayUntilDone(playlistItem, templateEditorFactory.presentation, true)
-          .then(function () {
-            return schedule.addPresentation(scheduleIds, JSON.stringify(playlistItem));
-          });
-      };
-
       var _getUnselectedScheduleIds = function() {
         var filteredSchedules = _.filter(factory.selectedSchedules, function (item) {
           return item.isSelected === false;
@@ -106,16 +91,6 @@ angular.module('risevision.schedules.services')
         return _.map(filteredSchedules, function (item) {
           return item.id;
         });
-      };
-
-      var _updateUnselectedSchedules = function () {
-        var scheduleIds = _getUnselectedScheduleIds();
-
-        if (!scheduleIds.length) {
-          return $q.resolve();
-        }
-
-        return schedule.removePresentation(scheduleIds, templateEditorFactory.presentation.id);
       };
 
       var _updateSelectedCount = function() {
@@ -142,6 +117,31 @@ angular.module('risevision.schedules.services')
         } else {
           return inSelectedSchedules;
         }
+      };
+
+      var _updateSelectedSchedules = function () {
+        var scheduleIds = _getSelectedScheduleIds();
+
+        if (!scheduleIds.length) {
+          return $q.resolve();
+        }
+
+        var playlistItem = playlistFactory.newPresentationItem(templateEditorFactory.presentation);
+
+        return playlistFactory.initPlayUntilDone(playlistItem, templateEditorFactory.presentation, true)
+          .then(function () {
+            return schedule.addPresentation(scheduleIds, JSON.stringify(playlistItem));
+          });
+      };
+
+      var _updateUnselectedSchedules = function () {
+        var scheduleIds = _getUnselectedScheduleIds();
+
+        if (!scheduleIds.length) {
+          return $q.resolve();
+        }
+
+        return schedule.removePresentation(scheduleIds, templateEditorFactory.presentation.id);
       };
 
       factory.select = function () {
