@@ -1,6 +1,7 @@
 'use strict';
 describe('controller: AppsHomeCtrl', function() {
   beforeEach(module('risevision.apps.launcher.controllers'));
+  beforeEach(module('risevision.apps.services'));
   var $rootScope, $controller, $scope, $loading, schedule, localStorageService, $sce;
   beforeEach(function(){
     module(function ($provide) {

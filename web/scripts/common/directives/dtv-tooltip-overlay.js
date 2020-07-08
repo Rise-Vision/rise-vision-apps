@@ -11,9 +11,9 @@ angular.module('risevision.apps.directives')
         terminal: true,
         priority: 1000,
         compile: function (element, attrs) {
-          element.attr('tooltip-template', '"partials/launcher/share-tooltip.html"');
           element.attr('tooltip-trigger', 'show');
           element.attr('ng-click', 'dismiss()');
+          element.attr('tooltip-digest-on-resize', '');
           element.removeAttr('tooltip-overlay'); //remove the attribute to avoid infinite loop
 
           return {

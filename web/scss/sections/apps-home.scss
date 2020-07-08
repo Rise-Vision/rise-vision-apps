@@ -86,7 +86,7 @@
   &.tooltip {
     opacity: 1;
 
-    &.tooltip-share-guide {
+    &.tooltip-guide {
       .tooltip-inner {
         text-align: left;
         padding: 20px;
@@ -98,10 +98,8 @@
 
       &.bottom {
         margin-top: 8px;
-        margin-left: -100px;
 
         .tooltip-arrow {
-          margin-left: 100px;
           margin-top: 1px;
         }
 
@@ -137,6 +135,16 @@
         border-color: transparent;
         border-style: solid;
         z-index: -1;
+      }
+    }
+
+    &.tooltip-share-guide {
+      &.bottom {
+        margin-left: -100px;
+      }
+
+      .tooltip-arrow {
+        margin-left: 100px;
       }
     }
 

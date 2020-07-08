@@ -25,7 +25,10 @@
         <span class="hidden-xs pull-right">
         <a type="button" class="btn btn-default schedules-toolbar-btn" ui-sref="apps.schedules.details({scheduleId: selectedSchedule.id})">Edit Schedule</a>
         <ng-show ng-show="showTooltipOverlay">
-          <button id="shareButton" type="button" class="btn btn-primary schedules-toolbar-btn" tooltip-overlay="showTooltipOverlay" tooltip-placement="bottom" tooltip-class="madero-style tooltip-share-guide" tooltip-digest-on-resize>Share</button>
+          <button id="shareButton" type="button" class="btn btn-primary schedules-toolbar-btn" 
+          tooltip-overlay="showTooltipOverlay" tooltip-template="'partials/launcher/share-tooltip.html'" tooltip-placement="bottom" tooltip-class="madero-style tooltip-guide tooltip-share-guide">
+            Share
+          </button>
         </ng-show>
         <share-schedule-button schedule="selectedSchedule" ng-hide="showTooltipOverlay"></share-schedule-button>
       </span>

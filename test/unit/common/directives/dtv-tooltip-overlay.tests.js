@@ -50,7 +50,7 @@ describe('directive: tooltip-overlay', function() {
   });
 
   it('should compile', function() {
-    expect(element[0].outerHTML).to.equal('<div tooltip-template="&quot;partials/launcher/share-tooltip.html&quot;" tooltip-trigger="show" ng-click="dismiss()" class="ng-scope ng-isolate-scope"></div>');
+    expect(element[0].outerHTML).to.equal('<div tooltip-trigger="show" ng-click="dismiss()" tooltip-digest-on-resize="" class="ng-scope ng-isolate-scope"></div>');
   });
 
   describe('show', function() {

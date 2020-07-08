@@ -2,8 +2,8 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('templateAttributeList', ['userState', 'templateEditorFactory', 'brandingFactory',
-    'blueprintFactory', 'scheduleSelectorFactory',
-    function (userState, templateEditorFactory, brandingFactory, blueprintFactory, scheduleSelectorFactory) {
+    'blueprintFactory', 'scheduleSelectorFactory', 'tourFactory',
+    function (userState, templateEditorFactory, brandingFactory, blueprintFactory, scheduleSelectorFactory, tourFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -21,6 +21,17 @@ angular.module('risevision.template-editor.directives')
             .filter(function (c) {
               return !c.nonEditable;
             });
+
+          var tooltipKey = 'ScheduleSelectorTooltip';
+          $scope.showTooltipOverlay = tourFactory.isShowing(tooltipKey);
+
+          if ($scope.showTooltipOverlay) {
+            var handler = $scope.$on('tooltipOverlay.dismissed', function () {
+              tourFactory.dismissed(tooltipKey);
+              $scope.showTooltipOverlay = false;
+              handler();
+            });
+          }
         }
       };
     }
