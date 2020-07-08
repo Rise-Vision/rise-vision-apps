@@ -372,6 +372,19 @@ All utilities have a prefix u_ added to them
   padding-left: 0px;
 }
 
+.flex-row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+
+  .row-entry {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    overflow: hidden;
+  }
+}
+
 .aligner {
   display: flex;
   align-items: center;

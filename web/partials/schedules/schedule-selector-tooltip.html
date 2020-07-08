@@ -1,0 +1,76 @@
+<span class="schedule-selector-tooltip">
+  <div class="row">
+    <div class="col-xs-12">
+      <search-filter filter-config="filterConfig" search="factory.search" do-search="factory.unselectedSchedules.doSearch" icon-set="madero"></search-filter>
+    </div> 
+  </div>
+
+  <div class="scrollable-list mt-3 mb-3"
+    scrolling-list="factory.unselectedSchedules.load()"
+    rv-spinner
+    rv-spinner-key="selected-schedules-spinner"
+    rv-spinner-start-active="0"
+  >
+    <div class="flex-row" ng-repeat="schedule in factory.selectedSchedules | filter:factory.search.query track by $index">
+      <div class="row-entry">
+        <div class="madero-checkbox u_clickable" ng-click="factory.selectItem(schedule, true)">
+          <input type="checkbox" ng-checked="factory.isSelected(schedule, true)" tabindex="1">
+          <label>
+            <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
+          </label>
+        </div>
+        <div class="mr-auto u_clickable" ng-click="factory.selectItem(schedule, true)">
+          {{schedule.name}}
+        </div>
+        <div class="u_float-left mr-3">
+          <a ui-sref="apps.schedules.details({scheduleId: schedule.id})" link-cid>
+            Edit
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-row" ng-repeat="schedule in factory.unselectedSchedules.items.list">
+      <div class="row-entry">
+        <div class="madero-checkbox u_clickable" ng-click="factory.selectItem(schedule, false)">
+          <input type="checkbox" ng-checked="factory.isSelected(schedule, false)" tabindex="1">
+          <label>
+            <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
+          </label>
+        </div>
+        <div class="mr-auto u_clickable" ng-click="factory.selectItem(schedule, false)">
+          {{schedule.name}}
+        </div>
+        <div class="u_float-left mr-3">
+          <a ui-sref="apps.schedules.details({scheduleId: schedule.id})" link-cid>
+            Edit
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div id="noItems" class="schedule-list-empty" ng-if="!factory.unselectedSchedules.loadingItems && !factory.unselectedSchedules.search.query && ((factory.selectedSchedules.length + factory.unselectedSchedules.items.list.length) === 0)">
+      No Schedules
+    </div>
+    <div id="noSearchResult" class="schedule-list-no-results" ng-if="!factory.unselectedSchedules.loadingItems && factory.unselectedSchedules.search.query && ((factory.selectedSchedules.length + factory.unselectedSchedules.items.list.length) === 0)">
+      No Results Found
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-6">
+      <button type="button" class="btn btn-default btn-block" ng-click="toggleTooltip()">Cancel</button>
+    </div>
+    <div class="col-xs-6">
+      <button type="button" class="btn btn-primary btn-block" ng-click="select()" ng-disabled="factory.selectedCount === 0">Select</button>
+    </div>
+  </div>
+  <hr/>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <button type="button" class="btn btn-default btn-block" ng-click="factory.addSchedule()">Create Schedule</button>
+    </div>
+  </div>
+
+</span>

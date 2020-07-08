@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('risevision.template-editor.directives')
-  .directive('templateAttributeList', ['templateEditorFactory', 'brandingFactory', 'blueprintFactory',
-    function (templateEditorFactory, brandingFactory, blueprintFactory) {
+  .directive('templateAttributeList', ['userState', 'templateEditorFactory', 'brandingFactory',
+    'blueprintFactory', 'scheduleSelectorFactory',
+    function (userState, templateEditorFactory, brandingFactory, blueprintFactory, scheduleSelectorFactory) {
       return {
         restrict: 'E',
         scope: true,
@@ -11,6 +12,10 @@ angular.module('risevision.template-editor.directives')
           $scope.factory = templateEditorFactory;
 
           $scope.brandingComponent = brandingFactory.getBrandingComponent();
+
+          if (userState.hasRole('cp')) {
+            $scope.schedulesComponent = scheduleSelectorFactory.getSchedulesComponent();            
+          }
 
           $scope.components = blueprintFactory.blueprintData.components
             .filter(function (c) {
