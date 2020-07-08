@@ -53,6 +53,17 @@ angular.module('risevision.template-editor.directives')
               .data.richText)));
           };
 
+          $scope.registerDirective({
+            type: 'rise-rich-text',
+            iconType: 'streamline',
+            icon: 'text',
+            element: element,
+            show: function () {
+              $scope.componentId = $scope.factory.selected.id;
+              _load();
+            }
+          });
+
           function getAllFontsUsed(richText) {
             var wrapper = document.createElement('div'),
               families = '',
@@ -89,17 +100,6 @@ angular.module('risevision.template-editor.directives')
 
             return googleFontsUsed;
           }
-
-          $scope.registerDirective({
-            type: 'rise-rich-text',
-            iconType: 'streamline',
-            icon: 'text',
-            element: element,
-            show: function () {
-              $scope.componentId = $scope.factory.selected.id;
-              _load();
-            }
-          });
 
           function getSortedFontFormats() {
             var allFonts = COMMON_FONT_FAMILIES.concat(getGoogleFontsFamilies());
