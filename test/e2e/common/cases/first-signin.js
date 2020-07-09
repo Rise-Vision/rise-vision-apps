@@ -97,6 +97,8 @@ var FirstSigninScenarios = function() {
       it('should go back to Onboarding after publishing the Template', function() {
         helper.wait(templateEditorPage.getPublishButton(), 'Publish Button');
 
+        templateEditorPage.dismissFeatureTour();
+
         helper.clickWhenClickable(templateEditorPage.getPublishButton(), 'Publish Button');
 
         helper.wait(onboardingPage.getOnboardingContainer(), 'Onboarding Page');
