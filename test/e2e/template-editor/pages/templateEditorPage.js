@@ -24,10 +24,20 @@ var TemplateEditorPage = function() {
   var brandingContainer = element(by.id('branding'));
   var brandingEditLink = element(by.id('branding-edit'));
 
+  var schedulesTooltipDismiss = element(by.id('schedules-tooltip-dismiss'));
+
   var autoSaveXPath = '//div[@id="autoSavingDesktop"]//div[contains(text(), "TEXT")]';
   var dirtyText = element(by.xpath(autoSaveXPath.replace('TEXT', 'Unsaved changes')));
   var savedText = element(by.xpath(autoSaveXPath.replace('TEXT', 'All changes saved')));
   var savingText = element(by.xpath(autoSaveXPath.replace('TEXT', 'Saving changes')));
+
+  this.dismissFeatureTour = function() {
+    return schedulesTooltipDismiss.isPresent().then(function(isTooltipPresent) {
+      if (isTooltipPresent) {
+        helper.clickOverIFrame(schedulesTooltipDismiss, 'Tooltip Dismiss Button');
+      }
+    });
+  };
 
   this.seePlansLink = function () {
     return seePlansLink;
