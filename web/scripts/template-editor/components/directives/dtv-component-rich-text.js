@@ -53,7 +53,7 @@ angular.module('risevision.template-editor.directives')
               force_p_newlines: false,
               forced_root_block: '',
               elementpath: false,
-              content_style: '@import url("' + getGoogleFontsUrl() + '");',
+              content_style: getContentStyle(),
               font_formats: getSortedFontFormats(),
               setup: function (editor) {
                 editor.on('paste', function (e) {
@@ -138,6 +138,13 @@ angular.module('risevision.template-editor.directives')
               link.href = getGoogleFontsUrl();
               document.head.appendChild(link);
             }
+          }
+
+          function getContentStyle() {
+            var googleFontsCss = '@import url("' + getGoogleFontsUrl() + '");';
+            //zoom calculation: 400px (attribute editor width) / 1920px (temaplte width) = ~20%
+            var scaleEditorCss = 'body {transform-origin: top left; transform: scale(0.2); width: 500%;}';
+            return googleFontsCss + scaleEditorCss;
           }
 
         }
