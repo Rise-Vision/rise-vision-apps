@@ -1,11 +1,9 @@
 'use strict';
 
 angular.module('risevision.apps.services')
-  .service('tourFactory', ['$rootScope', 'localStorageService',
-    function ($rootScope, localStorageService) {
-      var factory = {
-        loading: false
-      };
+  .service('tourFactory', ['localStorageService',
+    function (localStorageService) {
+      var factory = {};
 
       var _getDismissedKey = function(key) {
         return key + '.dismissed';

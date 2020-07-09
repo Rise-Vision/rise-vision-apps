@@ -15,7 +15,7 @@ angular.module('risevision.template-editor.directives')
           $scope.brandingComponent = brandingFactory.getBrandingComponent();
 
           if (userState.hasRole('cp')) {
-            $scope.schedulesComponent = scheduleSelectorFactory.getSchedulesComponent();            
+            $scope.schedulesComponent = scheduleSelectorFactory.getSchedulesComponent(templateEditorFactory.presentation);
           }
 
           $scope.components = blueprintFactory.blueprintData.components
