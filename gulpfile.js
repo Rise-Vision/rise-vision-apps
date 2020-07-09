@@ -389,7 +389,7 @@ gulp.task("test:e2e", function (cb) {
 });
 
 gulp.task("test",  function (cb) {
-  runSequence(["build-pieces"], "test:unit", "coveralls", cb);
+  runSequence(["build-pieces", "lint"], "test:unit", "coveralls", cb);
 });
 
 //------------------------ Global ---------------------------------
