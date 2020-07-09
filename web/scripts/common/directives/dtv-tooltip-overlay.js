@@ -1,18 +1,16 @@
 'use strict';
 
 angular.module('risevision.apps.directives')
-  .directive('tooltipOverlay', ['$compile', '$timeout', 'honeBackdropFactory',
-    function ($compile, $timeout, honeBackdropFactory) {
+  .directive('tooltipOverlay', ['$compile', '$timeout', 'tourFactory', 'honeBackdropFactory',
+    function ($compile, $timeout, tourFactory, honeBackdropFactory) {
       return {
         restrict: 'A',
-        scope: {
-          isShowing: '=tooltipOverlay'
-        },
         terminal: true,
         priority: 1000,
         compile: function (element, attrs) {
           element.attr('tooltip-trigger', 'show');
           element.attr('ng-click', 'dismiss()');
+          element.attr('tooltip-animation', 'false');
           element.attr('tooltip-digest-on-resize', '');
           element.removeAttr('tooltip-overlay'); //remove the attribute to avoid infinite loop
 
@@ -22,33 +20,38 @@ angular.module('risevision.apps.directives')
               $compile(iElement)($scope);
 
               var show = function () {
-                if (element.is(':hidden')) {
-                  return;
-                }
+                $timeout(function () {
+                  if (element.is(':hidden')) {
+                    return;
+                  }
 
-                honeBackdropFactory.createForElement(element, {});
-                element.trigger('show');
+                  honeBackdropFactory.createForElement(element, {});
+                  element.trigger('show');
+                });
               };
 
               var hide = function () {
-                honeBackdropFactory.hide();
-                element.trigger('hide');
+                $timeout(function () {
+                  honeBackdropFactory.hide();
+                  element.trigger('hide');
+                });
               };
 
-              $scope.$watch('isShowing', function () {
-                $timeout(function () {
-                  if ($scope.isShowing) {
-                    show();
-                  } else {
-                    hide();
-                  }
-                });
+              $scope.$watch('tooltipKey', function () {
+                if (!$scope.tooltipKey) { return; }
+
+                if (tourFactory.isShowing($scope.tooltipKey)) {
+                  show();
+                } else {
+                  $scope.tooltipKey = '';
+                }
               });
 
               $scope.dismiss = function () {
-                $scope.isShowing = false;
+                hide();
 
-                $scope.$emit('tooltipOverlay.dismissed');
+                tourFactory.dismissed($scope.tooltipKey);
+                $scope.tooltipKey = '';
               };
             }
           };

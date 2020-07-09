@@ -48,7 +48,7 @@ var HomePage = function() {
         helper.clickOverIFrame(shareTooltipDismiss, 'Tooltip Dismiss Button');
       }
     });
-  }  
+  };
 
   this.confirmGet = function(url) {
     return browser.get(url)
