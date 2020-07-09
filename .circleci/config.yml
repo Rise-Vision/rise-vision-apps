@@ -36,12 +36,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install npm
-          command: npm install
-      - run: 
-          name: install bower
-          command: bower install
-      - run:
           name: Set environment variables
           command: |
             # Set +e flag to fix issue where no stage environment is specified
@@ -55,6 +49,12 @@ jobs:
               exit 1
             fi;
             echo "$STAGE_ENV" > stage.txt
+      - run:
+          name: Install npm
+          command: npm install
+      - run: 
+          name: install bower
+          command: bower install
       - persist_to_workspace:
           root: ~/
           paths:
