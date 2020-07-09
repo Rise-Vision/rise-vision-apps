@@ -3,7 +3,8 @@
 angular.module('risevision.schedules.services')
   .factory('scheduleSelectorFactory', ['$filter', '$q', '$log', 'schedule', 'processErrorCode',
     'playlistFactory', 'ScrollingListService', '$modal', 'companyAssetsFactory', '$state',
-    function ($filter, $q, $log, schedule, processErrorCode, playlistFactory, ScrollingListService, $modal, companyAssetsFactory, $state) {
+    function ($filter, $q, $log, schedule, processErrorCode, playlistFactory, ScrollingListService, $modal,
+      companyAssetsFactory, $state) {
       var factory = {
         search: {
           sortBy: 'name'
@@ -19,7 +20,7 @@ angular.module('risevision.schedules.services')
         showNoSchedulesError: false
       };
 
-      var _reset = function() {
+      var _reset = function () {
         // reset search query
         factory.search = {
           sortBy: 'name'
@@ -75,7 +76,7 @@ angular.module('risevision.schedules.services')
         _loadUnselectedSchedules();
       };
 
-      var _getSelectedScheduleIds = function() {
+      var _getSelectedScheduleIds = function () {
         var filteredSchedules = _.filter(factory.unselectedSchedules.items.list, function (item) {
           return item.isSelected;
         });
@@ -85,7 +86,7 @@ angular.module('risevision.schedules.services')
         });
       };
 
-      var _getUnselectedScheduleIds = function() {
+      var _getUnselectedScheduleIds = function () {
         var filteredSchedules = _.filter(factory.selectedSchedules, function (item) {
           return item.isSelected === false;
         });
@@ -95,7 +96,7 @@ angular.module('risevision.schedules.services')
         });
       };
 
-      var _updateSelectedCount = function() {
+      var _updateSelectedCount = function () {
         factory.selectedCount = _getSelectedScheduleIds().length + _getUnselectedScheduleIds().length;
       };
 
@@ -163,19 +164,19 @@ angular.module('risevision.schedules.services')
         });
       };
 
-      factory.checkAssignedToSchedules = function() {
-        return companyAssetsFactory.hasSchedules().then(function(hasSchedules) {
+      factory.checkAssignedToSchedules = function () {
+        return companyAssetsFactory.hasSchedules().then(function (hasSchedules) {
           if (hasSchedules && !factory.hasSelectedSchedules) {
             return _showAddToScheduleModal();
           } else {
             return $q.resolve();
           }
-        }).catch(function() {
+        }).catch(function () {
           return $q.reject();
         });
       };
 
-      var _showAddToScheduleModal = function() {
+      var _showAddToScheduleModal = function () {
         schedulesComponent.showNoSchedulesError = true;
         var modalInstance = $modal.open({
           templateUrl: 'partials/schedules/add-to-schedule-modal.html',

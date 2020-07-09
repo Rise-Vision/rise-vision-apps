@@ -74,7 +74,7 @@ angular.module('risevision.apps')
           resolve: {
             scheduleInfo: ['$stateParams', 'canAccessApps', 'scheduleFactory', 'playlistFactory',
               function ($stateParams, canAccessApps, scheduleFactory, playlistFactory) {
-                return canAccessApps().then(function() {
+                return canAccessApps().then(function () {
                   scheduleFactory.newSchedule();
 
                   if ($stateParams.presentationItem) {

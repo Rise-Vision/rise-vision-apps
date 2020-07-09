@@ -29,7 +29,7 @@ angular.module('risevision.schedules.directives')
             }
           });
 
-          $scope.$watch('showTooltip', function() {
+          $scope.$watch('showTooltip', function () {
             if ($scope.showTooltip) {
               $timeout(function () {
                 tooltipElement.trigger('show');
