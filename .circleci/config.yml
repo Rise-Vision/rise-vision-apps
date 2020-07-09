@@ -49,6 +49,7 @@ jobs:
               exit 1
             fi;
             echo "$STAGE_ENV" > stage.txt
+            echo "Stage Environment: $STAGE_ENV";
       - run:
           name: Install npm
           command: npm install
