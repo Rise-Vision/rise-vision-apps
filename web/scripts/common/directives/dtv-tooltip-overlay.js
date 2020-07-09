@@ -38,7 +38,9 @@ angular.module('risevision.apps.directives')
               };
 
               $scope.$watch('tooltipKey', function () {
-                if (!$scope.tooltipKey) { return; }
+                if (!$scope.tooltipKey) {
+                  return;
+                }
 
                 if (tourFactory.isShowing($scope.tooltipKey)) {
                   show();
