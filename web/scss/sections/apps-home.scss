@@ -173,6 +173,33 @@
       .tooltip-arrow {
         display: none;
       }
+
+      &.tooltip-sm {
+        .tooltip-inner {
+          width: 303px;
+        }
+      }
+    }
+
+    &.tooltip-schedule-selector {
+      @extend .tooltip-share-options;
+
+      .tooltip-inner {
+        max-width: 360px;
+        width: 360px;
+        padding: 15px;
+        font-size: 14px;
+
+        hr {
+          border-top: 1px solid $madero-gray;
+          margin-top: 15px;
+          margin-bottom: 15px;
+        }
+      }
+
+      &.bottom {
+        margin-top: -9px;
+      }
     }
 
     &.tooltip-schedule-selector {

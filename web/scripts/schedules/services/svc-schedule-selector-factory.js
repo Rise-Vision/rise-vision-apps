@@ -1,15 +1,9 @@
 'use strict';
 
 angular.module('risevision.schedules.services')
-  .factory('scheduleSelectorFactory', ['$filter', '$q', '$log', '$state', 'schedule', 'processErrorCode',
-    'templateEditorFactory', 'playlistFactory', 'ScrollingListService',
-    function ($filter, $q, $log, $state, schedule, processErrorCode, templateEditorFactory, playlistFactory,
-      ScrollingListService) {
-      var schedulesComponent = {
-        type: 'rise-schedules',
-        hasSelectedSchedules: true
-      };
-
+  .factory('scheduleSelectorFactory', ['$filter', '$q', '$log', 'schedule', 'processErrorCode',
+    'playlistFactory', 'ScrollingListService', '$modal', 'companyAssetsFactory', '$state',
+    function ($filter, $q, $log, schedule, processErrorCode, playlistFactory, ScrollingListService, $modal, companyAssetsFactory, $state) {
       var factory = {
         search: {
           sortBy: 'name'
@@ -17,6 +11,12 @@ angular.module('risevision.schedules.services')
         selectedSchedules: null,
         unselectedSchedules: null,
         selectedCount: 0
+      };
+
+      var schedulesComponent = {
+        type: 'rise-schedules',
+        factory: factory,
+        showNoSchedulesError: false
       };
 
       var _reset = function() {
@@ -30,10 +30,10 @@ angular.module('risevision.schedules.services')
       var _loadSelectedSchedules = function () {
         var search = {
           sortBy: 'name',
-          filter: 'presentationIds:~\"' + templateEditorFactory.presentation.id + '\"'
+          filter: 'presentationIds:~\"' + factory.presentation.id + '\"'
         };
 
-        schedulesComponent.hasSelectedSchedules = true;
+        factory.hasSelectedSchedules = true;
 
         factory.selectedSchedules = [];
         factory.loadingSchedules = true;
@@ -42,7 +42,7 @@ angular.module('risevision.schedules.services')
           .then(function (result) {
             factory.selectedSchedules = result.items ? result.items : [];
 
-            schedulesComponent.hasSelectedSchedules = !!factory.selectedSchedules.length;
+            factory.hasSelectedSchedules = !!factory.selectedSchedules.length;
           })
           .then(null, function (e) {
             factory.errorMessage = $filter('translate')('schedules-app.list.error');
@@ -55,14 +55,16 @@ angular.module('risevision.schedules.services')
           });
       };
 
-      factory.getSchedulesComponent = function () {
+      factory.getSchedulesComponent = function (currentPresentation) {
+        factory.presentation = currentPresentation;
+        schedulesComponent.showNoSchedulesError = false;
         _loadSelectedSchedules();
 
         return schedulesComponent;
       };
 
       var _loadUnselectedSchedules = function () {
-        factory.search.filter = 'NOT presentationIds:~\"' + templateEditorFactory.presentation.id + '\"';
+        factory.search.filter = 'NOT presentationIds:~\"' + factory.presentation.id + '\"';
 
         factory.unselectedSchedules = new ScrollingListService(schedule.list, factory.search);
       };
@@ -126,9 +128,9 @@ angular.module('risevision.schedules.services')
           return $q.resolve();
         }
 
-        var playlistItem = playlistFactory.newPresentationItem(templateEditorFactory.presentation);
+        var playlistItem = playlistFactory.newPresentationItem(factory.presentation);
 
-        return playlistFactory.initPlayUntilDone(playlistItem, templateEditorFactory.presentation, true)
+        return playlistFactory.initPlayUntilDone(playlistItem, factory.presentation, true)
           .then(function () {
             return schedule.addPresentation(scheduleIds, JSON.stringify(playlistItem));
           });
@@ -141,7 +143,7 @@ angular.module('risevision.schedules.services')
           return $q.resolve();
         }
 
-        return schedule.removePresentation(scheduleIds, templateEditorFactory.presentation.id);
+        return schedule.removePresentation(scheduleIds, factory.presentation.id);
       };
 
       factory.select = function () {
@@ -157,8 +159,31 @@ angular.module('risevision.schedules.services')
 
       factory.addSchedule = function () {
         $state.go('apps.schedules.add', {
-          presentationItem: templateEditorFactory.presentation
+          presentationItem: factory.presentation
         });
+      };
+
+      factory.checkAssignedToSchedules = function() {
+        return companyAssetsFactory.hasSchedules().then(function(hasSchedules) {
+          if (hasSchedules && !factory.hasSelectedSchedules) {
+            return _showAddToScheduleModal();
+          } else {
+            return $q.resolve();
+          }
+        }).catch(function() {
+          return $q.reject();
+        });
+      };
+
+      var _showAddToScheduleModal = function() {
+        schedulesComponent.showNoSchedulesError = true;
+        var modalInstance = $modal.open({
+          templateUrl: 'partials/schedules/add-to-schedule-modal.html',
+          controller: 'AddToScheduleModalController',
+          windowClass: 'madero-style centered-modal',
+          size: 'sm'
+        });
+        return modalInstance.result;
       };
 
       return factory;
