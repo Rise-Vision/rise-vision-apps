@@ -31,7 +31,7 @@ angular.module('risevision.template-editor.services')
               });
             }
           }, MINIMUM_INTERVAL_BETWEEN_SAVES);
-        };
+        }
 
         var _reprogramSave = function () {
           factory.clearSaveTimeout();

@@ -67,6 +67,9 @@ jobs:
       - attach_workspace:
           at: ~/
       - run: 
+          name: test_build
+          command: NODE_ENV=test npm run ci-build
+      - run: 
           name: unit_tests
           command: NODE_ENV=test npm run test
       - store_test_results:
