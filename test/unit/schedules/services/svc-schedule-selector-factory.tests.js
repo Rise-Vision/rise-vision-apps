@@ -90,7 +90,8 @@ describe('service: scheduleSelectorFactory:', function() {
     it('should return the component object', function() {
       expect(scheduleSelectorFactory.getSchedulesComponent(presentation)).to.deep.equal({
         type: 'rise-schedules',
-        factory: scheduleSelectorFactory
+        factory: scheduleSelectorFactory,
+        showNoSchedulesError: false
       });
     });
 
@@ -429,18 +430,25 @@ describe('service: scheduleSelectorFactory:', function() {
     });
 
     it('should show Add To Schedules modal if Presentation is not assigned to Schedules', function(done) {
-      scheduleSelectorFactory.hasSelectedSchedules = false;
+      var component = scheduleSelectorFactory.getSchedulesComponent(presentation);
 
-      scheduleSelectorFactory.checkAssignedToSchedules()
-      .then(function() {
-        $modal.open.should.have.been.calledWith({
-          templateUrl: 'partials/schedules/add-to-schedule-modal.html',
-          controller: 'AddToScheduleModalController',
-          windowClass: 'madero-style centered-modal',
-          size: 'sm'
+      setTimeout(function() {
+        scheduleSelectorFactory.hasSelectedSchedules = false;
+        expect(component.showNoSchedulesError).to.be.false;
+
+        scheduleSelectorFactory.checkAssignedToSchedules()
+        .then(function() {
+          $modal.open.should.have.been.calledWith({
+            templateUrl: 'partials/schedules/add-to-schedule-modal.html',
+            controller: 'AddToScheduleModalController',
+            windowClass: 'madero-style centered-modal',
+            size: 'sm'
+          });
+          expect(component.showNoSchedulesError).to.be.true;
+          done();
         });
-        done();
-      });
+      })
+
     });
 
     it('should resolve and not show Add To Schedules modal if Presentation is assigned to Schedules', function(done) {

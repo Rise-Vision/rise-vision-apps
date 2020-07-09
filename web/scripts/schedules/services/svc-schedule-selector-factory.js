@@ -15,7 +15,8 @@ angular.module('risevision.schedules.services')
 
       var schedulesComponent = {
         type: 'rise-schedules',
-        factory: factory
+        factory: factory,
+        showNoSchedulesError: false
       };
 
       var _reset = function() {
@@ -56,6 +57,7 @@ angular.module('risevision.schedules.services')
 
       factory.getSchedulesComponent = function (currentPresentation) {
         factory.presentation = currentPresentation;
+        schedulesComponent.showNoSchedulesError = false;
         _loadSelectedSchedules();
 
         return schedulesComponent;
@@ -174,6 +176,7 @@ angular.module('risevision.schedules.services')
       };
 
       var _showAddToScheduleModal = function() {
+        schedulesComponent.showNoSchedulesError = true;
         var modalInstance = $modal.open({
           templateUrl: 'partials/schedules/add-to-schedule-modal.html',
           controller: 'AddToScheduleModalController',
