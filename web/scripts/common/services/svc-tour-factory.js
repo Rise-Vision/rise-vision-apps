@@ -1,12 +1,40 @@
 'use strict';
 
 angular.module('risevision.apps.services')
-  .service('tourFactory', ['localStorageService', '$sessionStorage',
-    function (localStorageService, $sessionStorage) {
+  .service('tourFactory', ['$sessionStorage', 'userState', 'updateUser',
+    function ($sessionStorage, userState, updateUser) {
       var factory = {};
 
       var _getStorageKey = function (key) {
         return key + 'Seen';
+      };
+
+      var _getCount = function (storageKey) {
+        var profile = userState.getCopyOfProfile();
+
+        if (profile && profile.settings && profile.settings[storageKey]) {
+          var value = profile.settings[storageKey];
+          var count = parseInt(value);
+          if (isNaN(count)) {
+            count = 0;
+          }
+
+          return count;
+        } else {
+          return 0;
+        }
+      };
+
+      var _updateCount = function (storageKey, value) {
+        var settings = {};
+        settings[storageKey] = value;
+
+        return updateUser(userState.getUsername(), {
+            settings: settings
+          })
+          .then(function (resp) {
+            userState.updateUserProfile(resp.item);
+          });
       };
 
       factory.isShowing = function (key) {
@@ -15,12 +43,12 @@ angular.module('risevision.apps.services')
           return false;
         }
 
-        var count = localStorageService.get(storageKey) || 0;
+        var count = _getCount(storageKey);
         if (count > 5) {
           return false;
         }
 
-        localStorageService.set(storageKey, count + 1);
+        _updateCount(storageKey, count + 1);
 
         return true;
       };

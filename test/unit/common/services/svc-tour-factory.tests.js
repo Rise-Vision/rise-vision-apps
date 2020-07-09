@@ -1,22 +1,32 @@
 'use strict';
 describe('service: tourFactory:', function() {
   beforeEach(module('risevision.apps.services'));
-  var tourFactory, localStorageService, $sessionStorage;
+  var tourFactory, $sessionStorage, userState, updateUser;
   beforeEach(function(){
     module(function ($provide) {
-      $provide.service('localStorageService', function() {
-        return {
-          get: sinon.stub(),
-          set: sinon.stub()
-        };
-      });
       $provide.value('$sessionStorage', {});
-    })
+
+      $provide.service('userState',function(){
+        return {
+          getCopyOfProfile: sinon.stub(),
+          _restoreState: function(){},
+          getUsername: sinon.stub().returns('username'),
+          updateUserProfile: sinon.stub()
+        }
+      });
+
+      $provide.service('updateUser', function() {
+        return sinon.stub().returns(Q.resolve({
+          item: 'userProfile'
+        }));
+      });
+    });
 
     inject(function($injector) {
       tourFactory = $injector.get('tourFactory');
-      localStorageService = $injector.get('localStorageService');
       $sessionStorage = $injector.get('$sessionStorage');
+      userState = $injector.get('userState');
+      updateUser = $injector.get('updateUser');
     });
   });
 
@@ -27,48 +37,98 @@ describe('service: tourFactory:', function() {
   });
 
   describe('isShowing:', function() {
-    beforeEach(function() {
-      localStorageService.get.reset();
-      localStorageService.set.reset();
-    });
-
-    it("should check session storage if the tour was seen",function(){
+    it('should check session storage if the tour was seen',function(){
       $sessionStorage.tooltipKeySeen = true;
 
       expect(tourFactory.isShowing('tooltipKey')).to.be.false;
 
-      localStorageService.get.should.not.have.been.called;
-      localStorageService.set.should.not.have.been.called;
+      userState.getCopyOfProfile.should.not.have.been.called;
+      updateUser.should.not.have.been.called;
     });
 
-    it("should check how many times the tour was seen",function(){
+    it('should check how many times the tour was seen',function(){
       $sessionStorage.tooltipKeySeen = false;
-      localStorageService.get.returns(6);
+      userState.getCopyOfProfile.returns({
+        settings: {
+          tooltipKeySeen: '6'
+        }
+      });
 
       expect(tourFactory.isShowing('tooltipKey')).to.be.false;
 
-      localStorageService.get.should.have.been.calledWith('tooltipKeySeen');
-      localStorageService.set.should.not.have.been.called;
+      userState.getCopyOfProfile.should.have.been.called;
+      updateUser.should.not.have.been.called;
     });
 
-    it("should show and initialize the number of times the tour was seen",function(){
+    it('should show and initialize the number of times the tour was seen',function(){
       $sessionStorage.tooltipKeySeen = false;
-      localStorageService.get.returns(null);
+      userState.getCopyOfProfile.returns({
+        settings: {}
+      });
 
       expect(tourFactory.isShowing('tooltipKey')).to.be.true;
 
-      localStorageService.get.should.have.been.calledWith('tooltipKeySeen');
-      localStorageService.set.should.have.been.calledWith('tooltipKeySeen', 1);
+      userState.getCopyOfProfile.should.have.been.called;
+      updateUser.should.have.been.calledWith('username', {
+        settings: {
+          tooltipKeySeen: 1
+        }
+      });
     });
 
-    it("should show and increment the number of times the tour was seen",function(){
+    it('should show and increment the number of times the tour was seen',function(){
       $sessionStorage.tooltipKeySeen = false;
-      localStorageService.get.returns(2);
+      userState.getCopyOfProfile.returns({
+        settings: {
+          tooltipKeySeen: '2'
+        }
+      });
 
       expect(tourFactory.isShowing('tooltipKey')).to.be.true;
 
-      localStorageService.get.should.have.been.calledWith('tooltipKeySeen');
-      localStorageService.set.should.have.been.calledWith('tooltipKeySeen', 3);
+      userState.getCopyOfProfile.should.have.been.called;
+      updateUser.should.have.been.calledWith('username', {
+        settings: {
+          tooltipKeySeen: 3
+        }
+      });
+    });
+
+    it('should handle NaN when parsing',function(){
+      $sessionStorage.tooltipKeySeen = false;
+      userState.getCopyOfProfile.returns({
+        settings: {
+          tooltipKeySeen: 'two'
+        }
+      });
+
+      expect(tourFactory.isShowing('tooltipKey')).to.be.true;
+
+      userState.getCopyOfProfile.should.have.been.called;
+      updateUser.should.have.been.calledWith('username', {
+        settings: {
+          tooltipKeySeen: 1
+        }
+      });
+    });
+
+    it('should update user profile', function(done) {
+      $sessionStorage.tooltipKeySeen = false;
+      userState.getCopyOfProfile.returns({});
+
+      expect(tourFactory.isShowing('tooltipKey')).to.be.true;
+
+      updateUser.should.have.been.calledWith('username', {
+        settings: {
+          tooltipKeySeen: 1
+        }
+      });
+
+      setTimeout(function(){
+        expect(userState.updateUserProfile).to.have.been.calledWith('userProfile');
+        
+        done();
+      },10);
     });
   });
 
