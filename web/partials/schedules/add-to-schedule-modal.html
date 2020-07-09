@@ -1,0 +1,28 @@
+<form rv-spinner rv-spinner-key="add-to-schedule-spinner" rv-spinner-start-active="0">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="dismiss()" data-dismiss="modal" aria-hidden="true">
+      <streamline-icon name="close" width="12" height="12"></streamline-icon>
+    </button>
+  </div>
+  <div class="modal-body" stop-event="touchend">
+    <h4>Almost there!</h4>
+    <p class="text-left mb-3 mt-3">Before your can publish, you need to add this presentation to a schedule.</p>
+
+    <schedule-selector additional-tooltip-class="tooltip-sm"></schedule-selector>
+
+  </div>
+  <div class="modal-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <button class="btn btn-default w-100" ng-click="dismiss()">
+          <span>Cancel</span>
+        </button>
+      </div>
+      <div class="col-xs-6">
+        <button id="confirm-primary" class="btn btn-primary w-100" ng-click="ok()" ng-disabled="!factory.hasSelectedSchedules">
+          <span>Publish</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
