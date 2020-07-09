@@ -31,14 +31,6 @@ var TemplateEditorPage = function() {
   var savedText = element(by.xpath(autoSaveXPath.replace('TEXT', 'All changes saved')));
   var savingText = element(by.xpath(autoSaveXPath.replace('TEXT', 'Saving changes')));
 
-  this.dismissFeatureTour = function() {
-    return schedulesTooltipDismiss.isPresent().then(function(isTooltipPresent) {
-      if (isTooltipPresent) {
-        helper.clickOverIFrame(schedulesTooltipDismiss, 'Tooltip Dismiss Button');
-      }
-    });
-  };
-
   this.seePlansLink = function () {
     return seePlansLink;
   };
@@ -138,6 +130,14 @@ var TemplateEditorPage = function() {
         helper.waitDisappear(dirtyText);
         helper.waitDisappear(savingText, 'Template Editor auto-saving');
         helper.wait(savedText, 'Template Editor auto-saved');
+      }
+    });
+  };
+
+  this.dismissFeatureTour = function() {
+    return schedulesTooltipDismiss.isPresent().then(function(isTooltipPresent) {
+      if (isTooltipPresent) {
+        helper.clickOverIFrame(schedulesTooltipDismiss, 'Tooltip Dismiss Button');
       }
     });
   };
