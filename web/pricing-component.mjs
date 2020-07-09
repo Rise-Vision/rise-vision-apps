@@ -74,10 +74,19 @@ class PricingComponent extends PolymerElement {
         span.promo {
           background-color: #FFE8AE;
         }
+
+        h3.coupon {
+          text-align: center;
+          font-size: 24px;
+          margin-top: 15px;
+          margin-bottom: 15px;
+        }
       </style>
 
       <section hidden$=[[!dataLoaded]]>
-        <p class="promo"><strong>Special offer</strong>: digital signage can help keep people safe. To help make it accessible to everyone, <span class="promo">we're offering 50% off your first year</span> if you purchase an annual plan. <span class="promo">Use the code SAVE50 at checkout</span>.</p>
+        <p class="promo"><strong>Special offer</strong>: digital signage can help keep people safe. To help make it accessible to everyone, <span class="promo">we're offering 50% off your first year</span> if you purchase an annual plan.</p>
+
+        <h3 class="coupon"><span class="promo">Use the code SAVE50 at checkout</span>.</h3>
 
         <pricing-data-component prod-env=[[prodEnv]] pricing-data={{pricingData}}></pricing-data-component>
 

@@ -1,22 +1,32 @@
 'use strict';
 
 angular.module('risevision.apps.services')
-  .service('tourFactory', ['localStorageService',
-    function (localStorageService) {
+  .service('tourFactory', ['localStorageService', '$sessionStorage',
+    function (localStorageService, $sessionStorage) {
       var factory = {};
 
-      var _getDismissedKey = function(key) {
-        return key + '.dismissed';
+      var _getStorageKey = function (key) {
+        return key + 'Seen';
       };
 
-      factory.isShowing = function(key) {
-        return localStorageService.get(_getDismissedKey(key)) !== true;
+      factory.isShowing = function (key) {
+        var storageKey = _getStorageKey(key);
+        if ($sessionStorage[storageKey] === true) {
+          return false;
+        }
+
+        var count = localStorageService.get(storageKey) || 0;
+        if (count > 5) {
+          return false;
+        }
+
+        localStorageService.set(storageKey, count + 1);
+
+        return true;
       };
 
       factory.dismissed = function (key) {
-        var dismissedKey = key + '.dismissed';
-
-        localStorageService.set(_getDismissedKey(key), true);
+        $sessionStorage[_getStorageKey(key)] = true;
       };
 
       return factory;
