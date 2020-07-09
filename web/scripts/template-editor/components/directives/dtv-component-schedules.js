@@ -10,7 +10,7 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope, element) {
           $scope.factory = scheduleSelectorFactory;
 
-          $scope.$watch('factory.loadingSchedules', function(isLoading) {
+          $scope.$watch('factory.loadingSchedules', function (isLoading) {
             if (isLoading) {
               $loading.start('schedules-component-spinner');
             } else {

@@ -5,7 +5,7 @@ angular.module('risevision.schedules.controllers')
     function ($scope, $modalInstance, scheduleSelectorFactory, $loading) {
       $scope.factory = scheduleSelectorFactory;
 
-      $scope.$watch('factory.loadingSchedules', function(isLoading) {
+      $scope.$watch('factory.loadingSchedules', function (isLoading) {
         if (isLoading) {
           $loading.start('add-to-schedule-spinner');
         } else {
