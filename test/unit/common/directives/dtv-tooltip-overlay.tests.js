@@ -5,14 +5,21 @@ describe('directive: tooltip-overlay', function() {
     $window,
     $timeout,
     honeBackdropFactory,
+    tourFactory,
     sandbox = sinon.sandbox.create();
 
   beforeEach(module('risevision.apps.directives'));
   beforeEach(module(function ($provide) {
     $provide.service('honeBackdropFactory', function() {
       return {
-        createForElement: sinon.stub(),
-        hide: sinon.stub()
+        createForElement: sandbox.stub(),
+        hide: sandbox.stub()
+      };
+    });
+    $provide.service('tourFactory', function() {
+      return {
+        isShowing: sandbox.stub().returns(true),
+        dismissed: sandbox.spy()
       };
     });
   }));
@@ -23,19 +30,17 @@ describe('directive: tooltip-overlay', function() {
     $window = $injector.get('$window');
     $timeout = $injector.get('$timeout');
     honeBackdropFactory = $injector.get('honeBackdropFactory');
+    tourFactory = $injector.get('tourFactory');
 
     var $document = $injector.get('$document');
     var $body = angular.element($document[0].body);
 
-    element = $compile('<div tooltip-overlay="isShowing"></div>')($scope);
+    element = $compile('<div tooltip-overlay="tooltipKey"></div>')($scope);
 
     $body.append(element);
 
     $scope = element.scope();
     $scope.$digest();
-
-    sinon.spy($scope, '$digest');
-    sinon.stub($scope, '$emit');
   }));
 
   afterEach(function () {
@@ -50,25 +55,47 @@ describe('directive: tooltip-overlay', function() {
   });
 
   it('should compile', function() {
-    expect(element[0].outerHTML).to.equal('<div tooltip-template="&quot;partials/launcher/share-tooltip.html&quot;" tooltip-trigger="show" ng-click="dismiss()" class="ng-scope ng-isolate-scope"></div>');
+    expect(element[0].outerHTML).to.equal('<div tooltip-trigger="show" ng-click="dismiss()" tooltip-animation="false" tooltip-digest-on-resize="" class="ng-scope"></div>');
   });
 
-  describe('show', function() {
-    it('should show asynchronously when isShowing is true', function() {
-      $scope.isShowing = true;
+  describe('tooltipKey:', function() {
+    it('should show if tooltipKey is valid and tour isShowing', function() {
+      $scope.tooltipKey = 'tooltipKey';
       $scope.$digest();
-
-      honeBackdropFactory.createForElement.should.not.have.been.called;
-
       $timeout.flush();
 
+      tourFactory.isShowing.should.have.been.calledWith('tooltipKey');
       honeBackdropFactory.createForElement.should.have.been.calledWith(element, {});
+    });
+
+    it('should not show if tour is not showing and clear tooltip key', function() {
+      tourFactory.isShowing.returns(false);
+
+      $scope.tooltipKey = 'tooltipKey';
+      $scope.$digest();
+
+      $timeout.verifyNoPendingTasks();
+
+      tourFactory.isShowing.should.have.been.calledWith('tooltipKey');
+      honeBackdropFactory.createForElement.should.not.have.been.called;
+
+      expect($scope.tooltipKey).to.not.be.ok;      
+    });
+
+    it('should not show if tooltip key is blank', function() {
+      $scope.tooltipKey = '';
+      $scope.$digest();
+
+      $timeout.verifyNoPendingTasks();
+
+      tourFactory.isShowing.should.not.have.been.called;
+      honeBackdropFactory.createForElement.should.not.have.been.called;
     });
 
     it('should not show if element is hidden', function() {
       element.hide();
 
-      $scope.isShowing = true;
+      $scope.tooltipKey = 'tooltipKey';
       $scope.$digest();
 
       honeBackdropFactory.createForElement.should.not.have.been.called;
@@ -83,24 +110,25 @@ describe('directive: tooltip-overlay', function() {
         done();
       });
 
-      $scope.isShowing = true;
+      $scope.tooltipKey = 'tooltipKey';
       $scope.$digest();
 
       $timeout.flush();
     });
   });
 
-  describe('hide', function() {
-    beforeEach(function() {
-      $scope.isShowing = true;
-      $scope.$digest();
+  describe('dismiss:', function() {
+    it('should reset tooltip and update factory', function() {
+      $scope.tooltipKey = 'tooltipKey';
 
-      $timeout.flush();
+      $scope.dismiss();
+
+      tourFactory.dismissed.should.have.been.calledWith('tooltipKey');
+      expect($scope.tooltipKey).to.not.be.ok;      
     });
 
-    it('should hide asynchronously when isShowing is false', function() {
-      $scope.isShowing = false;
-      $scope.$digest();
+    it('should hide asynchronously', function() {
+      $scope.dismiss();
 
       honeBackdropFactory.hide.should.not.have.been.called;
 
@@ -109,35 +137,15 @@ describe('directive: tooltip-overlay', function() {
       honeBackdropFactory.hide.should.have.been.called;
     });
 
-    it('should hide even if element is hidden', function() {
-      element.hide();
-
-      $scope.isShowing = false;
-      $scope.$digest();
-
-      $timeout.flush();
-
-      honeBackdropFactory.hide.should.have.been.called;
-    });
-
-    it('should trigger show event', function(done) {
+    it('should trigger hide event', function(done) {
       element.on('hide', function() {
         done();
       });
 
-      $scope.isShowing = false;
-      $scope.$digest();
+      $scope.dismiss();
 
       $timeout.flush();
     });
-  });
-
-  it('dismiss:', function() {
-    $scope.dismiss();
-
-    expect($scope.isShowing).to.be.false;
-
-    $scope.$emit.should.have.been.calledWith('tooltipOverlay.dismissed');
   });
 
 });
