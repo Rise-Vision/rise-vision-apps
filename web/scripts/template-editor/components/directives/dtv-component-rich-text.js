@@ -143,7 +143,7 @@ angular.module('risevision.template-editor.directives')
           function getContentStyle() {
             var googleFontsCss = '@import url("' + getGoogleFontsUrl() + '");';
             //zoom calculation: 400px (attribute editor width) / 1920px (temaplte width) = ~20%
-            var scaleEditorCss = 'body {zoom: 20%}';
+            var scaleEditorCss = 'body {transform-origin: top left; transform: scale(0.2); width: 500%;}';
             return googleFontsCss + scaleEditorCss;
           }
 
