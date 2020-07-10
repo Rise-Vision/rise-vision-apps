@@ -128,7 +128,7 @@ describe('controller: AppsHomeCtrl', function() {
       $scope.load();
 
       setTimeout(function() {
-        expect($scope.tooltipKey).to.equal('ShareTooltip');
+        expect($scope.tooltipKey).to.equal('ShareEnterpriseTooltip');
 
         done();
       },10);

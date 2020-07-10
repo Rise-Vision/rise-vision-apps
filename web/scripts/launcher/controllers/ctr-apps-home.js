@@ -12,7 +12,7 @@ angular.module('risevision.apps.launcher.controllers')
       };
 
       var triggerOverlay = function () {
-        $scope.tooltipKey = 'ShareTooltip';
+        $scope.tooltipKey = 'ShareEnterpriseTooltip';
       };
 
       $scope.$watch('loadingItems', function (loading) {
