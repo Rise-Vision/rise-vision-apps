@@ -32,11 +32,6 @@ var FirstSigninScenarios = function() {
     function _waitFullPageLoad(retries) {
       browser.sleep(10000);
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH Spinner Loader')
-      .then(function () {
-        helper.waitDisappear(homepage.getPresentationsListLoader(), 'Presentations List Loader');
-        helper.waitDisappear(homepage.getSchedulesListLoader(), 'Schedules List Loader');
-        helper.waitDisappear(homepage.getDisplaysListLoader(), 'Displays List Loader');
-      })
       .catch(function () {
         retries = typeof(retries) === 'undefined' ? 3 : retries;
 

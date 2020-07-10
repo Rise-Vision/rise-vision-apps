@@ -2,7 +2,6 @@
 var expect = require('rv-common-e2e').expect;
 var SignInPage = require('./../pages/signInPage.js');
 var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
-var HomePage = require('./../pages/homepage.js');
 var helper = require('rv-common-e2e').helper;
 
 var SigninCustomScenarios = function() {
@@ -10,11 +9,9 @@ var SigninCustomScenarios = function() {
   browser.driver.manage().window().setSize(1920, 1080);
   describe('Signin Custom', function() {
     this.timeout(2000);// to allow for protactor to load the seperate page
-    var homepage;
     var signInPage;
     var commonHeaderPage;
     before(function (){
-      homepage = new HomePage();
       signInPage = new SignInPage();
       commonHeaderPage = new CommonHeaderPage();
       signInPage.get();

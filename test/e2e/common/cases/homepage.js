@@ -5,7 +5,6 @@ var SignInPage = require('./../pages/signInPage.js');
 var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
 var GoogleAuthPage = require('rv-common-e2e').googleAuthPage;
 var helper = require('rv-common-e2e').helper;
-var StoreProductsModalPage = require('./../../editor/pages/storeProductsModalPage.js');
 
 var HomepageScenarios = function() {
   
@@ -16,13 +15,11 @@ var HomepageScenarios = function() {
     var signInPage;
     var commonHeaderPage;
     var googleAuthPage;
-    var storeProductsModalPage;
     before(function (){
       homepage = new HomePage();
       signInPage = new SignInPage();
       commonHeaderPage = new CommonHeaderPage();
       googleAuthPage = new GoogleAuthPage();
-      storeProductsModalPage = new StoreProductsModalPage();
 
       homepage.get();
       //wait for spinner to go away.
@@ -115,65 +112,6 @@ var HomepageScenarios = function() {
         expect(homepage.getMetaByProperty('og:description').getAttribute('content')).to.eventually.equal('We have a couple of apps that will allow you to manage your Digital Signage. Managing from the content creation to its delivery on an unlimited number of displays anywhere in the world.');
         expect(homepage.getMetaByProperty('article:publisher').getAttribute('content')).to.eventually.equal('https://www.facebook.com/risevision');
         expect(homepage.getMetaByProperty('og:site_name').getAttribute('content')).to.eventually.equal('Rise Vision | Apps');
-      });
-    });
-
-    xdescribe('Presentations:',function() {
-      before(function() {
-        helper.waitDisappear(homepage.getAppLauncherLoader(), 'App Launcher Loader');
-      });
-
-      it('should show Presentations list',function(){
-        helper.waitDisappear(homepage.getPresentationsListLoader(), 'Presentations list loader');
-
-        expect(homepage.getPresentationsList().isDisplayed()).to.eventually.be.true;
-      });
-
-      it('should show Add Presentation button',function(){
-        expect(homepage.getPresentationAddButton().isDisplayed()).to.eventually.be.true;
-      });
-
-      it('should show View All Presentations button',function(){
-        expect(homepage.getPresentationsViewAll().isDisplayed()).to.eventually.be.true;
-      });
-
-      it('should open Templates modal when adding new presentation',function(){
-        homepage.getPresentationAddButton().click();
-        helper.wait(storeProductsModalPage.getStoreProductsModal(), 'Select Content Modal');
-        expect(storeProductsModalPage.getStoreProductsModal().isDisplayed()).to.eventually.be.true;
-        storeProductsModalPage.getCloseButton().click();
-      });
-    });
-
-    xdescribe('Schedules:',function(){
-      it('should show Schedules list',function(){
-        helper.waitDisappear(homepage.getSchedulesListLoader(), 'Schedules list loader');
-
-        expect(homepage.getSchedulesList().isDisplayed()).to.eventually.be.true;
-      });
-
-      it('should show Add Schedule button',function(){
-        expect(homepage.getScheduleAddButton().isDisplayed()).to.eventually.be.true;
-      });
-
-      it('should show View All Schedules button',function(){
-        expect(homepage.getSchedulesViewAll().isDisplayed()).to.eventually.be.true;
-      });
-    });
-
-    xdescribe('Displays:',function(){
-      it('should show Displays list',function(){
-        helper.waitDisappear(homepage.getDisplaysListLoader(), 'Displays list loader');
-
-        expect(homepage.getDisplaysList().isDisplayed()).to.eventually.be.true;
-      });
-
-      it('should show Add Display button',function(){
-        expect(homepage.getDisplayAddButton().isDisplayed()).to.eventually.be.true;
-      });
-
-      it('should show View All Displays button',function(){
-        expect(homepage.getDisplaysViewAll().isDisplayed()).to.eventually.be.true;
       });
     });
 
