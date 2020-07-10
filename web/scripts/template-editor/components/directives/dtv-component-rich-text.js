@@ -153,7 +153,7 @@ angular.module('risevision.template-editor.directives')
             var result = '';
 
             for (var i = 24; i <= 300; i += 6) {
-              result += (result ? ' ' : '') + i + 'px';
+              result += (result ? ' ' : '') + i + '=' + i + 'px';
             }
 
             return result;
