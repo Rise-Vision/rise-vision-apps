@@ -1,7 +1,7 @@
 'use strict';
 describe('controller: AppsHomeCtrl', function() {
   beforeEach(module('risevision.apps.launcher.controllers'));
-  var $rootScope, $controller, $scope, $loading, schedule, localStorageService, $sce;
+  var $rootScope, $controller, $scope, $loading, schedule, $sce;
   beforeEach(function(){
     module(function ($provide) {
       $provide.service('$loading', function() {
@@ -23,19 +23,12 @@ describe('controller: AppsHomeCtrl', function() {
           trustAsResourceUrl: sinon.stub().returns('http://trustedUrl')
         }
       });
-      $provide.service('localStorageService', function() {
-        return {
-          get: sinon.stub(),
-          set: sinon.stub()
-        };
-      });
 
       $provide.value('SHARED_SCHEDULE_URL','https://preview.risevision.com/?type=sharedschedule&id=SCHEDULE_ID');
     })
     inject(function($injector) {
       $loading = $injector.get('$loading');
       schedule = $injector.get('schedule');
-      localStorageService = $injector.get('localStorageService');
       $sce = $injector.get('$sce');
       $rootScope = $injector.get('$rootScope');
       $controller = $injector.get('$controller');
@@ -54,7 +47,7 @@ describe('controller: AppsHomeCtrl', function() {
     expect($scope.getEmbedUrl).to.be.a('function');
     expect($scope.load).to.be.a('function');
 
-    expect($scope.showTooltipOverlay).to.be.false;
+    expect($scope.tooltipKey).to.not.be.ok;
   });
 
   describe('spinner:', function() {
@@ -125,16 +118,7 @@ describe('controller: AppsHomeCtrl', function() {
     beforeEach(function(done) {
       setTimeout(function() {
         // clean up hardcoded init() call
-        $scope.schedules = [];
-
-        $scope.showTooltipOverlay = false;
-
-        // clean up handlers
-        $scope.$emit('tooltipOverlay.dismissed');
-
-        $scope.$digest();
-
-        localStorageService.set.reset();
+        $scope.tooltipKey = undefined;        
 
         done();
       }, 10);
@@ -144,56 +128,7 @@ describe('controller: AppsHomeCtrl', function() {
       $scope.load();
 
       setTimeout(function() {
-        localStorageService.get.should.have.been.calledWith('ShareTooltip.dismissed');
-
-        expect($scope.showTooltipOverlay).to.be.true;
-
-        done();
-      },10);
-    });
-
-    it('should close overlay event handler', function(done) {
-      $scope.load();
-
-      setTimeout(function() {
-        $scope.$emit('tooltipOverlay.dismissed');
-        $scope.$digest();
-
-        localStorageService.set.should.have.been.calledWith('ShareTooltip.dismissed', true);
-        expect($scope.showTooltipOverlay).to.be.false;
-
-        done();
-      },10);
-    });
-
-    it('should not handle event more than once', function(done) {
-      $scope.load();
-
-      setTimeout(function() {
-        $scope.$emit('tooltipOverlay.dismissed');
-
-        $scope.$digest();
-
-        $scope.$emit('tooltipOverlay.dismissed');
-
-        $scope.$digest();
-
-        localStorageService.set.should.have.been.calledOnce;
-        expect($scope.showTooltipOverlay).to.be.false;
-
-        done();
-      },10);
-    });
-
-    it('should not show overlay if previously dismissed', function(done) {
-      localStorageService.get.returns(true);
-
-      $scope.load();
-
-      setTimeout(function() {
-        localStorageService.get.should.have.been.calledWith('ShareTooltip.dismissed');
-
-        expect($scope.showTooltipOverlay).to.be.false;
+        expect($scope.tooltipKey).to.equal('ShareTooltip');
 
         done();
       },10);
@@ -205,7 +140,7 @@ describe('controller: AppsHomeCtrl', function() {
       $scope.load();
 
       setTimeout(function() {
-        expect($scope.showTooltipOverlay).to.be.false;
+        expect($scope.tooltipKey).to.not.be.ok;
 
         done();
       },10);
@@ -217,7 +152,7 @@ describe('controller: AppsHomeCtrl', function() {
       $scope.load();
 
       setTimeout(function() {
-        expect($scope.showTooltipOverlay).to.be.false;
+        expect($scope.tooltipKey).to.not.be.ok;
 
         done();
       },10);

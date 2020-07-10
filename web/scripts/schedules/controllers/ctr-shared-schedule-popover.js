@@ -27,23 +27,23 @@ USER_FIRST_NAME')
       SHARED_SCHEDULE_URL, SHARED_SCHEDULE_EMBED_CODE, SHARED_SCHEDULE_INVITE_MESSAGE) {
       $scope.currentTab = 'link';
 
-      $scope.getLink = function() {
+      $scope.getLink = function () {
         return $scope.schedule ? SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', $scope.schedule.id) : '';
       };
 
-      $scope.getEmbedCode = function() {
+      $scope.getEmbedCode = function () {
         return $scope.schedule ? SHARED_SCHEDULE_EMBED_CODE.replace('SHARED_SCHEDULE_URL', $scope.getLink()) : '';
       };
 
-      $scope.getInviteMessage = function() {
+      $scope.getInviteMessage = function () {
         if (!$scope.schedule) {
           return '';
         }
         var profile = userState.getCopyOfProfile();
-        var firstName =  profile.firstName ? profile.firstName : '';
+        var firstName = profile.firstName ? profile.firstName : '';
         return SHARED_SCHEDULE_INVITE_MESSAGE
           .replace('SHARED_SCHEDULE_URL', $scope.getLink())
-          .replace('USER_FIRST_NAME',firstName);
+          .replace('USER_FIRST_NAME', firstName);
       };
 
       $scope.copyToClipboard = function (text) {

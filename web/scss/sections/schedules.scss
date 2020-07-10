@@ -17,3 +17,21 @@
     }
   }
 }
+
+.madero-style {
+  .btn-select {
+    text-align: left;
+    font-weight: normal;
+
+    .text-muted {
+      color: $madero-gray;
+    }
+  }
+}
+
+.schedule-selector-tooltip {
+  .scrollable-list {
+    min-height: 150px;
+    max-height: 150px;
+  }
+}

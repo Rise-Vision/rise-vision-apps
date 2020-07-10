@@ -119,9 +119,10 @@ angular.module('risevision.apps', [
       });
     }
   ])
-  .config(['$localStorageProvider',
-    function ($localStorageProvider) {
+  .config(['$localStorageProvider', '$sessionStorageProvider',
+    function ($localStorageProvider, $sessionStorageProvider) {
       $localStorageProvider.setKeyPrefix('RiseVision-');
+      $sessionStorageProvider.setKeyPrefix('RiseVision-');
     }
   ])
   .run(['$rootScope', '$state', '$modalStack', 'userState', 'displayFactory', '$window',

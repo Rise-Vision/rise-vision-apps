@@ -5,10 +5,11 @@ angular.module('risevision.template-editor.services')
   .factory('templateEditorFactory', ['$q', '$log', '$state', '$rootScope', 'presentation',
     'processErrorCode', 'userState', 'createFirstSchedule',
     'templateEditorUtils', 'brandingFactory', 'blueprintFactory', 'scheduleFactory', 'presentationTracker',
-    'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED',
+    'HTML_PRESENTATION_TYPE', 'REVISION_STATUS_REVISED', 'REVISION_STATUS_PUBLISHED', 'scheduleSelectorFactory',
     function ($q, $log, $state, $rootScope, presentation, processErrorCode, userState,
       createFirstSchedule, templateEditorUtils, brandingFactory, blueprintFactory, scheduleFactory,
-      presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED) {
+      presentationTracker, HTML_PRESENTATION_TYPE, REVISION_STATUS_REVISED, REVISION_STATUS_PUBLISHED,
+      scheduleSelectorFactory) {
       var factory = {
         hasUnsavedChanges: false
       };
@@ -229,6 +230,10 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.publish = function () {
+        return scheduleSelectorFactory.checkAssignedToSchedules().then(_publish);
+      };
+
+      var _publish = function () {
         var deferred = $q.defer();
 
         _clearMessages();

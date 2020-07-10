@@ -68,9 +68,9 @@
     ])
 
     .factory('updateUser', ['$q', 'coreAPILoader', '$log',
-      'getUserProfile', 'pick', 'USER_WRITABLE_FIELDS',
+      'getUserProfile', 'pick', 'USER_WRITABLE_FIELDS', 'userTracker', 'userState',
       function ($q, coreAPILoader, $log, getUserProfile, pick,
-        USER_WRITABLE_FIELDS) {
+        USER_WRITABLE_FIELDS, userTracker, userState) {
         return function (username, profile) {
           var deferred = $q.defer();
           profile = pick(profile, USER_WRITABLE_FIELDS);
@@ -86,6 +86,11 @@
                 deferred.reject(resp);
               } else if (resp.result) {
                 getUserProfile(username, true).then(function () {
+                  userTracker('User Updated', userState.getUsername(), userState.checkUsername(
+                    username), {
+                    updatedUserId: username,
+                    updatedUserCompanyRole: profile.companyRole ? profile.companyRole : ''
+                  });
                   deferred.resolve(resp);
                 });
               } else {

@@ -36,6 +36,7 @@ var AlertsScenarios = function() {
       before(function () {
         homepage.get();
         signInPage.signIn();
+        homepage.dismissFeatureTour();
         commonHeaderPage.selectAlerts();
       });
 

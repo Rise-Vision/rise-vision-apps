@@ -86,7 +86,7 @@
   &.tooltip {
     opacity: 1;
 
-    &.tooltip-share-guide {
+    &.tooltip-guide {
       .tooltip-inner {
         text-align: left;
         padding: 20px;
@@ -98,10 +98,8 @@
 
       &.bottom {
         margin-top: 8px;
-        margin-left: -100px;
 
         .tooltip-arrow {
-          margin-left: 100px;
           margin-top: 1px;
         }
 
@@ -140,14 +138,24 @@
       }
     }
 
+    &.tooltip-share-guide {
+      &.bottom {
+        margin-left: -100px;
+      }
+
+      .tooltip-arrow {
+        margin-left: 100px;
+      }
+    }
+
     &.tooltip-share-options {
       margin-left: -106px;
 
       .tooltip-inner {
         text-align: left;
         padding: 10px;
-        border: 1px solid rgb(153, 153, 153);
-        box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
+        border: 0px;
+        box-shadow: 0px 0px 5px 0px rgba(2, 6, 32, 0.5);
         opacity: 1;
         max-width: 374px;
         width: 374px;
@@ -172,6 +180,54 @@
 
       .tooltip-arrow {
         display: none;
+      }
+
+      &.tooltip-sm {
+        .tooltip-inner {
+          width: 303px;
+        }
+      }
+    }
+
+    &.tooltip-schedule-selector {
+      @extend .tooltip-share-options;
+
+      .tooltip-inner {
+        max-width: 360px;
+        width: 360px;
+        padding: 15px;
+        font-size: 14px;
+
+        hr {
+          border-top: 1px solid $madero-gray;
+          margin-top: 15px;
+          margin-bottom: 15px;
+        }
+      }
+
+      &.bottom {
+        margin-top: -9px;
+      }
+    }
+
+    &.tooltip-schedule-selector {
+      @extend .tooltip-share-options;
+
+      .tooltip-inner {
+        max-width: 360px;
+        width: 360px;
+        padding: 15px;
+        font-size: 14px;
+
+        hr {
+          border-top: 1px solid $madero-gray;
+          margin-top: 15px;
+          margin-bottom: 15px;
+        }
+      }
+
+      &.bottom {
+        margin-top: -9px;
       }
     }
   }
