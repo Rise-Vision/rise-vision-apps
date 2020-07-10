@@ -1,8 +1,6 @@
 <div id="appLauncherContainer" class="container" rv-spinner rv-spinner-key="launcher-loader" rv-spinner-start-active="1">
 
   <in-app-messages></in-app-messages>
-
-  <ng-include ng-show="!launcherFactory.presentations.loadingItems && launcherFactory.presentations.list.length === 0 && !launcherFactory.presentations.apiError" src="'partials/launcher/get-started-cta.html'"></ng-include>
   
   <div ng-show="launcherFactory.presentations.list.length > 0 || launcherFactory.presentations.apiError">
 
