@@ -49,7 +49,7 @@ angular.module('risevision.template-editor.directives')
                 'numlist bullist | ' +
                 'alignleft aligncenter alignright | ' +
                 'removeformat',
-              fontsize_formats: '24px 36px 48px 60px 72px 84px 96px 108px 120px 150px 200px 300px',
+              fontsize_formats: getFontSizes(),
               force_p_newlines: false,
               forced_root_block: '',
               elementpath: false,
@@ -147,6 +147,16 @@ angular.module('risevision.template-editor.directives')
               //set default font size
               'font-size: 96px !important;}';
             return googleFontsCss + scaleEditorCss;
+          }
+
+          function getFontSizes() {
+            var result = '';
+
+            for (var i = 24; i <= 300; i += 6) {
+              result += (result ? ' ' : '') + i + 'px';
+            }
+
+            return result;
           }
 
         }
