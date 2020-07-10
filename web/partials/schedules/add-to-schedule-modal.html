@@ -6,7 +6,7 @@
   </div>
   <div class="modal-body" stop-event="touchend">
     <h4>Almost there!</h4>
-    <p class="text-left mb-3 mt-3">Before you can publish, you need to add this presentation to a schedule.</p>
+    <p class="text-left mb-3 mt-3">Do you want to create or select a schedule for this presentation, or publish without one?</p>
 
     <schedule-selector additional-tooltip-class="tooltip-sm"></schedule-selector>
 
@@ -19,7 +19,7 @@
         </button>
       </div>
       <div class="col-xs-6">
-        <button id="confirm-primary" class="btn btn-primary w-100" ng-click="ok()" ng-disabled="!factory.hasSelectedSchedules">
+        <button id="confirm-primary" class="btn btn-primary w-100" ng-click="ok()">
           <span>Publish</span>
         </button>
       </div>
