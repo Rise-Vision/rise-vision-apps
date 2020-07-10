@@ -93,7 +93,7 @@ describe('directive: templateComponentRichText', function() {
   });
 
   it('should configure font sizes', function() {
-    expect($scope.tinymceOptions.fontsize_formats).to.include(" 96px");
-    expect($scope.tinymceOptions.fontsize_formats).to.include(" 300px");
+    expect($scope.tinymceOptions.fontsize_formats).to.include(" 96=96px");
+    expect($scope.tinymceOptions.fontsize_formats).to.include(" 300=300px");
   });
 });
