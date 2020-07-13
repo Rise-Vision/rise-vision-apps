@@ -35,7 +35,7 @@
     <div ng-repeat="item in folderItems | filter:search.query | orderBy:search.sortBy:search.reverse as filteredItems track by $index">
 
       <div class="pl-0 file-component-list-folder-row u_clickable" ng-class="{'active': isSelected(item)}" ng-if="isFolder(item.name)" ng-click="loadItems(item.name)">
-        <div class="file-entry" ng-class="{'ml-5': !storageManager.isSingleFileSelector()}">
+        <div class="file-entry ml-5">
           <div class="file-text">
             <div class="file-name">{{fileNameOf(item.name)}}/</div>
           </div>
@@ -44,7 +44,7 @@
 
       <div class="pl-0 file-component-list-file-row u_clickable" ng-if="!isFolder(item.name)" ng-click="selectItem(item)">
         <div class="file-entry">
-          <div class="madero-checkbox" ng-if="!storageManager.isSingleFileSelector()">
+          <div class="madero-checkbox">
             <input type="checkbox" ng-checked="isSelected(item)" tabindex="1">
             <label>
               <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
