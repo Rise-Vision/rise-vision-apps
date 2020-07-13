@@ -58,6 +58,17 @@ describe('controller: SharedSchedulePopoverController', function() {
     expect($scope.getLink()).to.equal('https://preview.risevision.com/?type=sharedschedule&id=scheduleId');
   });
 
+  describe('getEnterpriseLink', function() {
+    it('should get schedule link with enterprise env', function() {
+      expect($scope.getEnterpriseLink()).to.equal('https://preview.risevision.com/?type=sharedschedule&id=scheduleId&env=enterprise'); 
+    });
+
+    it('should return blank if no schedule defined', function() {
+      $scope.schedule = null;
+      expect($scope.getEnterpriseLink()).to.equal(''); 
+    });
+  });
+
   it('getEmbedCode', function() {
     expect($scope.getEmbedCode()).to.be.contain('<div style="position:relative;padding-bottom:56.25%;">\n\
    <iframe style="width:100%;height:100%;position:absolute;left:0px;top:0px;"\n\
