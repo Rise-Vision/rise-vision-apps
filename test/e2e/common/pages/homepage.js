@@ -22,21 +22,6 @@ var HomePage = function() {
 
   var shareTooltipDismiss = element(by.id('share-tooltip-dismiss'));
 
-  var presentationAddButton = element(by.id('presentationAddButton'));
-  var presentationsList = element(by.id('presentationsList'));
-  var presentationsListLoader = element(by.xpath('//div[@spinner-key="presentation-list-loader"]'));
-  var presentationsViewAll = element(by.id('presentationsViewAll'));
-
-  var scheduleAddButton = element(by.id('scheduleAddButton'));
-  var schedulesList = element(by.id('schedulesList'));
-  var schedulesListLoader = element(by.xpath('//div[@spinner-key="schedules-list-loader"]'));
-  var schedulesViewAll = element(by.id('schedulesViewAll'));
-
-  var displayAddButton = element(by.id('displayAddButton'));
-  var displaysList = element(by.id('displaysList'));
-  var displaysListLoader = element(by.xpath('//div[@spinner-key="displays-list-loader"]'));
-  var displaysViewAll = element(by.id('displaysViewAll'));
-
   var signUpText = element(by.id('sign-up-text'));
   var signInText = element(by.id('sign-in-text'));
   var signUpLink = element(by.id('sign-up-link'));
@@ -129,54 +114,6 @@ var HomePage = function() {
 
   this.getShareTooltipDismiss = function() {
     return shareTooltipDismiss;
-  }
-
-  this.getPresentationAddButton = function() {
-    return presentationAddButton;
-  };
-
-  this.getPresentationsList = function() {
-    return presentationsList;
-  };
-  
-  this.getPresentationsListLoader = function() {
-    return presentationsListLoader;
-  };
-
-  this.getPresentationsViewAll = function() {
-    return presentationsViewAll;
-  };
-
-  this.getScheduleAddButton = function() {
-    return scheduleAddButton;
-  };
-
-  this.getSchedulesList = function() {
-    return schedulesList;
-  };
-
-  this.getSchedulesListLoader = function() {
-    return schedulesListLoader;
-  };
-
-  this.getSchedulesViewAll = function() {
-    return schedulesViewAll;
-  };
-
-  this.getDisplayAddButton = function() {
-    return displayAddButton;
-  };
-
-  this.getDisplaysList = function() {
-    return displaysList;
-  };
-
-  this.getDisplaysListLoader = function() {
-    return displaysListLoader;
-  };
-
-  this.getDisplaysViewAll = function() {
-    return displaysViewAll;
   };
 
   this.getSignUpText = function() {
