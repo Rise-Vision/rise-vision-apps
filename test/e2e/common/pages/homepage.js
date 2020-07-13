@@ -43,6 +43,8 @@ var HomePage = function() {
   var signInLink = element(by.id('sign-in-link'));
 
   this.dismissFeatureTour = function() {
+    helper.waitDisappear(appsHomeLoader, 'Apps Home Loader');
+
     return shareTooltipDismiss.isPresent().then(function(isTooltipPresent) {
       if (isTooltipPresent) {
         helper.clickOverIFrame(shareTooltipDismiss, 'Tooltip Dismiss Button');
