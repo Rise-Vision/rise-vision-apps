@@ -151,8 +151,8 @@
     <div class="col-xs-12">
       <span class="text-sm font-weight-bold">Share URL:</span>
       <div class="aligner mt-1">
-        <input class="form-control copy-text-box w-100" type="text" readonly="readonly" value="{{getLink()}}" ng-focus="onTextFocus($event)" focus-me="currentTab === 'chromeEnterprise'"/>
-        <button id="copyUrlButton" class="btn btn-default ml-2" ng-click="copyToClipboard(getLink())" aria-label="Copy">Copy</button>
+        <input class="form-control copy-text-box w-100" type="text" readonly="readonly" value="{{getEnterpriseLink()}}" ng-focus="onTextFocus($event)" focus-me="currentTab === 'chromeEnterprise'"/>
+        <button id="copyUrlButton" class="btn btn-default ml-2" ng-click="copyToClipboard(getEnterpriseLink())" aria-label="Copy">Copy</button>
       </div>
       <p class="text-sm mt-4 mb-0"><a id="chromeEnterpriseHelpLink" href="https://help.risevision.com/hc/en-us" target="_blank">Click here</a> for instructions on how you can deploy this schedule to your managed devices.</p>
     </div>
