@@ -86,6 +86,11 @@
   &.tooltip {
     opacity: 1;
 
+    .scrollable-list {
+      min-height: 150px;
+      max-height: 150px;
+    }    
+
     &.tooltip-guide {
       .tooltip-inner {
         text-align: left;
