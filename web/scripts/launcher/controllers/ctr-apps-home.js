@@ -2,7 +2,7 @@
 
 angular.module('risevision.apps.launcher.controllers')
   .controller('AppsHomeCtrl', ['$scope', '$filter', 'ScrollingListService', 'schedule', '$loading', '$sce',
-  'SHARED_SCHEDULE_URL',
+    'SHARED_SCHEDULE_URL',
     function ($scope, $filter, ScrollingListService, schedule, $loading, $sce, SHARED_SCHEDULE_URL) {
       $scope.search = {
         sortBy: 'changeDate',
@@ -22,7 +22,7 @@ angular.module('risevision.apps.launcher.controllers')
       $scope.$watch('schedules.loadingItems', function (loading) {
         if (loading) {
           if (!$scope.selectedSchedule) {
-            $loading.start('apps-home-loader');            
+            $loading.start('apps-home-loader');
           }
         } else {
           if (!$scope.selectedSchedule && $scope.schedules.items.list.length > 0) {

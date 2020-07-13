@@ -33,35 +33,24 @@
           <share-schedule-button schedule="selectedSchedule" ng-hide="tooltipKey"></share-schedule-button>
         </span>
 
-        <div class="form-group" preview-selector="selectedSchedule">
-
+        <div class="form-group" preview-selector>
           <label for="preview-selector">Preview A Schedule:</label>
-          <ng-show ng-hide="tooltipKey">
-            <button id="preview-selector" class="form-control btn-select btn-schedule-selector flex-row"
-              tooltip-template="'partials/schedules/preview-selector-tooltip.html'"
-              tooltip-trigger="show"
-              ng-click="toggleTooltip($event)" 
-              tooltip-animation="false"
-              tooltip-placement="bottom" 
-              tooltip-class="madero-style tooltip-schedule-selector ml-0"
-              tooltip-append-to-body="true"
-              tooltip-digest-on-resize
-            >
-            	<div class="row-entry">
-                <span class="text-muted mr-auto" ng-if="!selectedSchedule">Create or select a schedule</span>
-                <span class="u_text-ellipsis mr-auto" ng-if="selectedSchedule">{{selectedSchedule.name}}</span>
-              	<span class="text-muted pl-2"><i class="fa fa-sort"></i></span>
-              </div>
-            </button>
-          </ng-show>
-          <button id="preview-selector-dummy" class="form-control btn-select btn-schedule-selector flex-row" ng-show="tooltipKey">
-            <div class="row-entry">
+          <button id="preview-selector" class="form-control btn-select btn-schedule-selector flex-row"
+            tooltip-template="'partials/schedules/preview-selector-tooltip.html'"
+            tooltip-trigger="show"
+            ng-click="toggleTooltip($event)" 
+            tooltip-animation="false"
+            tooltip-placement="bottom" 
+            tooltip-class="madero-style tooltip-schedule-selector ml-0"
+            tooltip-append-to-body="true"
+            tooltip-digest-on-resize
+          >
+          	<div class="row-entry">
               <span class="text-muted mr-auto" ng-if="!selectedSchedule">Create or select a schedule</span>
               <span class="u_text-ellipsis mr-auto" ng-if="selectedSchedule">{{selectedSchedule.name}}</span>
               <span class="text-muted pl-2"><i class="fa fa-sort"></i></span>
             </div>
           </button>
-
         </div>
       </div>
     </div>
