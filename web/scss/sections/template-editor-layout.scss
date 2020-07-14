@@ -940,6 +940,12 @@ $short-phone-height: 570px;
   font-family: Helvetica, Arial, sans-serif;
   color: $madero-black;
 
+  h1 {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 40px;
+  }
+
   h4 {
     font-size: 18px;
     font-weight: bold;
@@ -980,6 +986,10 @@ $short-phone-height: 570px;
         margin-top: 5px;
       }
     }
+  }
+
+  .border-bottom {
+    border-bottom: 1px solid $madero-gray;
   }
 
   .btn {
@@ -1024,6 +1034,11 @@ $short-phone-height: 570px;
       border-color: $maderio-green-disabled;
       color: $white;
     }
+  }
+
+  .btn-toolbar {
+    min-width: 160px;
+    margin-left: 8px;
   }
 
   .btn-toggle-blue-on {
