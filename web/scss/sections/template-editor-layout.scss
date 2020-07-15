@@ -58,22 +58,9 @@ $short-phone-height: 570px;
     font-size: 18px;
   }
 
-  & .presentation-name {
+  & .input-stretchy.presentation-name {
     font-size: 24px;
-    font-weight: bold;
-    margin: 0;
-    padding: 0;
     line-height: 32px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    border: none;
-    white-space: nowrap;
-
-    &.disabled,
-    &[disabled],
-    fieldset[disabled] & {
-      background-color: transparent;
-    }
 
     @media (max-width: $screen-sm) {
       font-size: 18px;
@@ -1063,6 +1050,35 @@ $short-phone-height: 570px;
     }
   } 
 
+  .btn-icon {
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    -webkit-appearance: none;
+
+    &:hover {
+      text-decoration: none;
+      cursor: pointer;
+      opacity: 0.65;
+      filter: alpha(opacity=65);
+    }
+
+    &:focus {
+      outline: 0;
+    }
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+      cursor: not-allowed;
+      pointer-events: none;
+      opacity: .50;
+      filter: alpha(opacity=50);
+      -webkit-box-shadow: none;
+      box-shadow: none;
+    }
+  }
+
   input[type='range'] {
     margin: 0;
     outline: none;
@@ -1347,6 +1363,24 @@ $short-phone-height: 570px;
     &:focus-within .input-group-addon {
       border-color: $madero-light-blue;
       box-shadow: none;
+    }
+  }
+
+  .input-stretchy {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    line-height: 24px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: none;
+    white-space: nowrap;
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+      background-color: transparent;
     }
   }
 

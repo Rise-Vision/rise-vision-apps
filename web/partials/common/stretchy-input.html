@@ -1,0 +1,10 @@
+<div class="flex-row">
+
+  <input type="text" id="scheduleName" class="input-stretchy" ng-keyup="inputKeyUp($event)"
+         ng-model="ngModel" ng-blur="onInputBlur()" ng-disabled="!isEditingInput">
+  <div>
+    <button id="editNameButton" ng-disabled="isEditingInput" type="button" class="btn-icon pr-0" ng-click="isEditingInput=true">
+      <streamline-icon class="u_margin-left streamline-component-icon" name="pencil" width="11" height="11"></streamline-icon>
+    </button>
+  </div>
+</div>

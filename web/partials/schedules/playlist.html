@@ -1,36 +1,29 @@
 <div class="panel u_margin-sm-top">
   <div rv-sortable on-sort="sortItem(evt)" class="editor-playlist scrollable-list sortable-list">
-    <div class="editor-playlist-item u_clickable list-group-item rv-sortable-item" ng-repeat="playlistItem in playlistItems track by $index">
-        <div class="list-grip rv-sortable-handle">
-          <i class="fa fa-grip-large fa-rotate-grip grip-indicator"></i>
+    <div class="editor-playlist-item u_clickable list-group-item rv-sortable-item flex-row" ng-repeat="playlistItem in playlistItems track by $index">
+      <div class="row-entry">
+        <div class="pr-4 rv-sortable-handle">
+          <img class="img-responsive" src="../images/navigation-menu-vertical.svg">
         </div>
 
-        <div class="pull-right">
-          <span class="btn-group btn-group-sm">
-            <button type="button" class="btn btn-default" id="moveUpButton" ng-click="factory.movePlaylistItemUp(playlistItem)" ng-disabled="!factory.canPlaylistItemMoveUp(playlistItem)"><i class="fa fa-arrow-up"></i></button>
-            <button type="button" class="btn btn-default" id="moveDownButton" ng-click="factory.movePlaylistItemDown(playlistItem)" ng-disabled="!factory.canPlaylistItemMoveDown(playlistItem)"><i class="fa fa-arrow-down"></i></button>
-          </span>
-          <button type="button" class="btn btn-sm btn-default" id="duplicateButton" ng-click="factory.duplicatePlaylistItem(playlistItem)">
+        <div ng-click="manage(playlistItem)" class="name-container mr-auto">
+          <p class="playlist-item-name u_remove-bottom"><strong>{{playlistItem.name}}</strong></p>
+          <p class="playlist-item-description text-sm text-muted u_remove-bottom">{{ factory.getItemTimeline(playlistItem) }} • {{ playlistItem.playUntilDone ? 'Play Until Done' : playlistItem.duration + 's' }} • {{playlistItem.transitionType || 'No Transition'}}</p>
+        </div>
+        <div class="u_float-left mr-3">
+          <button type="button" class="btn-icon u_align-middle" id="duplicateButton" ng-click="factory.duplicatePlaylistItem(playlistItem)">
             <i class="fa fa-copy"></i>
           </button>
-          <button type="button" class="btn btn-sm btn-default" id="removeButton" ng-click="remove(playlistItem)">
-            <i class="fa fa-trash-o"></i>
-          </button>
-        </div>
-
-        <div ng-click="manage(playlistItem)" class="name-container">
-          <p class="playlist-item-name u_remove-bottom"><strong>{{playlistItem.name}}</strong></p>
-          <p class="playlist-item-name u_remove-bottom">Timeline: {{factory.getItemTimeline(playlistItem)}}</p>
-          <div class="hidden-xs">
-            <p class="playlist-item-reference text-muted u_remove-bottom" id="presentationNameCell" ng-if="playlistItem.type === 'presentation'" presentation-name="playlistItem.objectReference"></p>
-            <p class="playlist-item-reference text-muted u_remove-bottom" ng-if="playlistItem.type === 'url'">{{playlistItem.objectReference}}</p>
-          </div>
+          <button type="button" class="btn-icon u_align-middle pl-0" id="removeButton" ng-click="remove(playlistItem)">
+             <streamline-icon class="u_margin-left" name="trash" width="16" height="18"></streamline-icon>
+           </button>
         </div>
       </div>
-      <div ng-hide="playlistItems.length">
-        <div class="panel-body">
-          <p class="text-muted text-center u_remove-bottom" translate>schedules-app.playlist.empty</p>
-        </div>
+    </div>
+    <div ng-hide="playlistItems.length">
+      <div class="panel-body">
+        <p class="text-muted text-center u_remove-bottom" translate>schedules-app.playlist.empty</p>
       </div>
+    </div>
   </div>
 </div><!--panel-->
