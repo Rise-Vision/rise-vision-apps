@@ -58,12 +58,19 @@ $short-phone-height: 570px;
     font-size: 18px;
   }
 
-  & .input-stretchy.presentation-name {
-    font-size: 24px;
-    line-height: 32px;
+  & .presentation-name {
+    & .input-stretchy {
+      font-size: 24px;
+      line-height: 32px;
 
-    @media (max-width: $screen-sm) {
-      font-size: 18px;
+      @media (max-width: $screen-sm) {
+        font-size: 18px;
+      }
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
     }
   }
 
