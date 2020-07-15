@@ -5,7 +5,7 @@
         <streamline-icon name="close" width="10" height="10"></streamline-icon>
       </button>
       <span class="text-sm font-weight-bold" ng-show="currentTab === 'link'">Share</span>
-      <a class="text-sm font-weight-bold u_float-left" href="#" ng-click="currentTab = 'link'" ng-show="currentTab !== 'link'">← Go Back</a>
+      <a id="shareSchedulePopoverGoBack" class="text-sm font-weight-bold u_float-left" href="#" ng-click="currentTab = 'link'" ng-show="currentTab !== 'link'">← Go Back</a>
       <div>
         <span class="text-sm font-weight-bold aligner" ng-show="currentTab === 'chromeExtension'">Chrome Extension</span>
         <span class="text-sm font-weight-bold aligner" ng-show="currentTab === 'embedCode'">Embed</span>
@@ -109,7 +109,7 @@
   <div ng-show="currentTab === 'link'" class="row u_margin-sm-top">
     <div class="col-xs-12 aligner">
       <input class="form-control copy-text-box w-100" type="text" readonly="readonly" value="{{getLink()}}" ng-focus="onTextFocus($event)" focus-me="currentTab === 'link'"/>
-      <button id="copyUrlButton" class="btn btn-primary ml-2" ng-click="copyToClipboard(getLink())" aria-label="Copy">Copy</button>
+      <button type="button" id="copyUrlButton" class="btn btn-primary ml-2" ng-click="copyToClipboard(getLink())" aria-label="Copy">Copy</button>
     </div>
   </div>
 
@@ -118,7 +118,7 @@
       <span class="text-sm font-weight-bold">Embed Code:</span>
       <br>
       <textarea class="form-control copy-text-box u_margin-sm-top w-100 resize-vertical" rows="10" readonly="readonly" ng-focus="onTextFocus($event)" focus-me="currentTab === 'embedCode'">{{getEmbedCode()}}</textarea>
-      <button id="copyEmbedCodeButton" class="btn btn-primary u_remove-left u_margin-sm-top w-100" ng-click="copyToClipboard(getEmbedCode())" aria-label="Copy">Copy</button>
+      <button type="button" id="copyEmbedCodeButton" class="btn btn-primary u_remove-left u_margin-sm-top w-100" ng-click="copyToClipboard(getEmbedCode())" aria-label="Copy">Copy</button>
     </div>
   </div>
 
@@ -127,7 +127,7 @@
       <span class="text-sm font-weight-bold">Invite Message:</span>
       <br>
       <textarea class="form-control copy-text-box u_margin-sm-top w-100 resize-vertical" rows="10" readonly="readonly" ng-focus="onTextFocus($event)" focus-me="currentTab === 'chromeExtension'">{{getInviteMessage()}}</textarea>
-      <button id="copyInviteMessageButton" class="btn btn-primary u_remove-left u_margin-sm-top w-100" ng-click="copyToClipboard(getInviteMessage())" aria-label="Copy">Copy</button>
+      <button type="button" id="copyInviteMessageButton" class="btn btn-primary u_remove-left u_margin-sm-top w-100" ng-click="copyToClipboard(getInviteMessage())" aria-label="Copy">Copy</button>
       <a id="chromeExtensionLink" class="btn btn-default u_remove-left u_margin-sm-top w-100"  href="https://chrome.google.com/webstore/detail/rise-vision-anywhere/dkoohkdagjpgjheoaaegomjhdccfbcle" target="_blank" aria-label="Install Chrome Extension" ng-click="trackScheduleShared()">Install Chrome Extension</a>
     </div>
   </div>

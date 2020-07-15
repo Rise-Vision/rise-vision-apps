@@ -1,13 +1,12 @@
 'use strict';
-var SharedScheduleModalPage = function() {
-  var sharedScheduleModal = element(by.id('sharedScheduleModal'));
+var ShareSchedulePopoverPage = function() {
+  var shareSchedulePopover = element(by.id('shareSchedulePopover'));
 
-  var modalTitle = element(by.css('.modal-title'));
-  var closeButton = element(by.css(".modal-header .close"));
+  var closeButton = element(by.css("#shareSchedulePopover .close"));
+  var goBackButton = element(by.id("shareSchedulePopoverGoBack"));
 
-  var embedCodeTabLink = element(by.id('embedCodeTabLink'));
-  var socialMediaTabLink = element(by.id('socialMediaTabLink'));
-  var chromeExtensionTabLink = element(by.id('chromeExtensionTabLink')); 
+  var embedCodeTabLink = element(by.id('embedButton'));
+  var chromeExtensionTabLink = element(by.id('extensionButton')); 
 
   var copyLinkButton = element(by.id('copyUrlButton'));
   var copyEmbedCodeButton = element(by.id('copyEmbedCodeButton'));
@@ -17,24 +16,20 @@ var SharedScheduleModalPage = function() {
   var chromeExtensionLink = element(by.id('chromeExtensionLink'));
 
 
-  this.getSharedScheduleModal = function() {
-    return sharedScheduleModal;
-  };
-
-  this.getModalTitle = function() {
-    return modalTitle;
+  this.getShareSchedulePopover = function() {
+    return shareSchedulePopover;
   };
 
   this.getCloseButton = function() {
     return closeButton;
   };
 
-  this.getEmbedCodeTabLink = function() {
-    return embedCodeTabLink;
+  this.getGoBackButton = function() {
+    return goBackButton;
   };
 
-  this.getSocialMediaTabLink = function() {
-    return socialMediaTabLink;
+  this.getEmbedCodeTabLink = function() {
+    return embedCodeTabLink;
   };
 
   this.getChromeExtensionTabLink = function() {
@@ -59,4 +54,4 @@ var SharedScheduleModalPage = function() {
 
 };
 
-module.exports = SharedScheduleModalPage;
+module.exports = ShareSchedulePopoverPage;

@@ -5,7 +5,7 @@ var SignInPage = require('./../../common/pages/signInPage.js');
 var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
 var SchedulesListPage = require('./../pages/schedulesListPage.js');
 var ScheduleAddPage = require('./../pages/scheduleAddPage.js');
-var SharedScheduleModalPage = require('./../pages/sharedScheduleModalPage.js');
+var ShareSchedulePopoverPage = require('./../pages/shareSchedulePopoverPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var ScheduleAddScenarios = function() {
@@ -18,7 +18,7 @@ var ScheduleAddScenarios = function() {
     var commonHeaderPage;
     var schedulesListPage;
     var scheduleAddPage;
-    var sharedScheduleModalPage;
+    var shareSchedulePopoverPage;
 
     before(function () {
       homepage = new HomePage();
@@ -26,7 +26,7 @@ var ScheduleAddScenarios = function() {
       schedulesListPage = new SchedulesListPage();
       scheduleAddPage = new ScheduleAddPage();
       commonHeaderPage = new CommonHeaderPage();
-      sharedScheduleModalPage = new SharedScheduleModalPage();
+      shareSchedulePopoverPage = new ShareSchedulePopoverPage();
 
       homepage.getSchedules();
       signInPage.signIn();
@@ -72,41 +72,46 @@ var ScheduleAddScenarios = function() {
     describe('Share Schedule cases:', function() {
       it('should open Share Schedule modal', function() {
         scheduleAddPage.getShareScheduleButton().click();
-        helper.wait(sharedScheduleModalPage.getSharedScheduleModal(), 'Shared Schedule Modal');
+        helper.wait(shareSchedulePopoverPage.getShareSchedulePopover(), 'Shared Schedule Modal');
 
-        expect(sharedScheduleModalPage.getSharedScheduleModal().isDisplayed()).to.eventually.be.true;
+        expect(shareSchedulePopoverPage.getShareSchedulePopover().isDisplayed()).to.eventually.be.true;
       });
 
       it('should show copy link button', function() {
-        expect(sharedScheduleModalPage.getCopyLinkButton().isDisplayed()).to.eventually.be.true;
+        expect(shareSchedulePopoverPage.getCopyLinkButton().isDisplayed()).to.eventually.be.true;
+      });
+
+      it('should show Social Media sharing buttons', function() {
+        expect(shareSchedulePopoverPage.getTwitterShareButton().isDisplayed()).to.eventually.be.true;
       });
 
       it('should navigate to Embed Code and show Copy Embed Code button', function() {
-        sharedScheduleModalPage.getEmbedCodeTabLink().click();
-        expect(sharedScheduleModalPage.getCopyEmbedCodeButton().isDisplayed()).to.eventually.be.true;
+        shareSchedulePopoverPage.getEmbedCodeTabLink().click();
+        expect(shareSchedulePopoverPage.getCopyEmbedCodeButton().isDisplayed()).to.eventually.be.true;
+        expect(shareSchedulePopoverPage.getGoBackButton().isDisplayed()).to.eventually.be.true;
       });
 
-      it('should navigate to Social Media and show sharing buttons', function() {
-        sharedScheduleModalPage.getSocialMediaTabLink().click();
-        expect(sharedScheduleModalPage.getTwitterShareButton().isDisplayed()).to.eventually.be.true;
+      it('should navigate back to main tab', function() {
+        shareSchedulePopoverPage.getGoBackButton().click();
+        expect(shareSchedulePopoverPage.getCopyLinkButton().isDisplayed()).to.eventually.be.true;
       });
 
       it('should navigate to Chrome Extension and show Extension link', function() {
-        sharedScheduleModalPage.getChromeExtensionTabLink().click();
-        expect(sharedScheduleModalPage.getChromeExtensionLink().isDisplayed()).to.eventually.be.true;
-        expect(sharedScheduleModalPage.getChromeExtensionLink().getAttribute('href')).to.eventually.equal('https://chrome.google.com/webstore/detail/rise-vision-anywhere/dkoohkdagjpgjheoaaegomjhdccfbcle');
+        shareSchedulePopoverPage.getChromeExtensionTabLink().click();
+        expect(shareSchedulePopoverPage.getChromeExtensionLink().isDisplayed()).to.eventually.be.true;
+        expect(shareSchedulePopoverPage.getChromeExtensionLink().getAttribute('href')).to.eventually.equal('https://chrome.google.com/webstore/detail/rise-vision-anywhere/dkoohkdagjpgjheoaaegomjhdccfbcle');
       });
 
       it('should close Share Schedule modal', function() {
-        sharedScheduleModalPage.getCloseButton().click();
+        shareSchedulePopoverPage.getCloseButton().click();
 
-        expect(sharedScheduleModalPage.getSharedScheduleModal().isPresent()).to.eventually.be.false; 
+        expect(shareSchedulePopoverPage.getShareSchedulePopover().isDisplayed()).to.eventually.be.false; 
       });
     });
 
     after(function () {
-      helper.clickWhenClickable(scheduleAddPage.getDeleteButton(), 'Display Delete Button').then(function () {
-        helper.clickWhenClickable(scheduleAddPage.getDeleteForeverButton(), 'Display Delete Forever Button').then(function () {
+      helper.clickWhenClickable(scheduleAddPage.getDeleteButton(), 'Schedule Delete Button').then(function () {
+        helper.clickWhenClickable(scheduleAddPage.getDeleteForeverButton(), 'Schedule Delete Forever Button').then(function () {
         });
       });
     });
