@@ -7,6 +7,7 @@
       <span class="text-sm font-weight-bold" ng-show="currentTab === 'link'">Share</span>
       <a id="shareSchedulePopoverGoBack" class="text-sm font-weight-bold u_float-left" href="#" ng-click="currentTab = 'link'" ng-show="currentTab !== 'link'">← Go Back</a>
       <div>
+        <span class="text-sm font-weight-bold aligner" ng-show="currentTab === 'chromeEnterprise'">Chrome Enterprise</span>
         <span class="text-sm font-weight-bold aligner" ng-show="currentTab === 'chromeExtension'">Chrome Extension</span>
         <span class="text-sm font-weight-bold aligner" ng-show="currentTab === 'embedCode'">Embed</span>
       </div>
@@ -17,6 +18,20 @@
     <div class="col-xs-12">
 
       <div class="u_scroll-x text-center sideways-panels scrollbox pb-4">
+        <div id="chromeEnterpriseButton" class="panel panel-default u_remove-bottom u_clickable" ng-click="currentTab = 'chromeEnterprise'">
+          <div class="panel-body">
+            <div class="row pt-2">
+              <div class="col-xs-12">
+                <img src="../images/shared-schedule/chrome-enterprise.svg" height="32">
+              </div>
+            </div>
+            <div class="row pt-4">
+              <div class="col-xs-12">
+                <a class="text-sm font-weight-bold" href="#">Chrome Enterprise</a>
+              </div>
+            </div>
+          </div>
+        </div>
         <div id="extensionButton" class="panel panel-default u_remove-bottom u_clickable" ng-click="currentTab = 'chromeExtension'">
           <div class="panel-body">
             <div class="row pt-2">
@@ -129,6 +144,17 @@
       <textarea class="form-control copy-text-box u_margin-sm-top w-100 resize-vertical" rows="10" readonly="readonly" ng-focus="onTextFocus($event)" focus-me="currentTab === 'chromeExtension'">{{getInviteMessage()}}</textarea>
       <button type="button" id="copyInviteMessageButton" class="btn btn-primary u_remove-left u_margin-sm-top w-100" ng-click="copyToClipboard(getInviteMessage())" aria-label="Copy">Copy</button>
       <a id="chromeExtensionLink" class="btn btn-default u_remove-left u_margin-sm-top w-100"  href="https://chrome.google.com/webstore/detail/rise-vision-anywhere/dkoohkdagjpgjheoaaegomjhdccfbcle" target="_blank" aria-label="Install Chrome Extension" ng-click="trackScheduleShared()">Install Chrome Extension</a>
+    </div>
+  </div>
+
+  <div ng-show="currentTab === 'chromeEnterprise'" class="row u_margin-sm-top">
+    <div class="col-xs-12">
+      <span class="text-sm font-weight-bold">Share URL:</span>
+      <div class="aligner mt-1">
+        <input class="form-control copy-text-box w-100" type="text" readonly="readonly" value="{{getEnterpriseLink()}}" ng-focus="onTextFocus($event)" focus-me="currentTab === 'chromeEnterprise'"/>
+        <button id="copyUrlButton" class="btn btn-default ml-2" ng-click="copyToClipboard(getEnterpriseLink())" aria-label="Copy">Copy</button>
+      </div>
+      <p class="text-sm mt-4 mb-0"><a id="chromeEnterpriseHelpLink" href="https://help.risevision.com/hc/en-us/articles/360045820332" target="_blank">Click here</a> for instructions on how you can deploy this schedule to your managed devices.</p>
     </div>
   </div>
 

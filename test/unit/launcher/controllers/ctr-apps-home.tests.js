@@ -105,7 +105,7 @@ describe('controller: AppsHomeCtrl', function() {
         $scope.schedules.loadingItems = false;
         $scope.$digest();
 
-        expect($scope.tooltipKey).to.equal('ShareTooltip');
+        expect($scope.tooltipKey).to.equal('ShareEnterpriseTooltip');
       });
 
       it('should not show overlay if list is empty', function() {
