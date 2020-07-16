@@ -46,11 +46,12 @@
       signInPage.signIn();
       helper.wait(storageHomePage.getStorageAppContainer(), 'Storage Apps Container');
       helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
+      browser.driver.executeScript('sessionStorage.setItem("bypass-upload-encoding", true)');
     },
 
     setupStorageHomeWithEncoding: function() {
-      browser.driver.executeScript('sessionStorage.setItem("force-upload-encoding", true)');
       factory.setupStorageHome();
+      browser.driver.executeScript('sessionStorage.setItem("bypass-upload-encoding", false)');
     },
 
     setupAppsSingleFileSelector: function(){
