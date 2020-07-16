@@ -31,7 +31,7 @@ describe('directive: stretchy input', function() {
     expect($scope.defaultInputWidth).to.equal('');
 
     expect($scope.onInputBlur).to.be.a('function');
-    expect($scope.inputKeyUp).to.be.a('function');
+    expect($scope.inputKeyDown).to.be.a('function');
   });
 
   it('should render content', function() {
@@ -99,25 +99,33 @@ describe('directive: stretchy input', function() {
 
   });
 
-  describe('inputKeyUp:', function() {
+  describe('inputKeyDown:', function() {
     it('should reset editing on enter', function() {
+      var keyEvent = {
+        which: 13,
+        preventDefault: sinon.spy()
+      };
+
       $scope.isEditingInput = true;
 
-      $scope.inputKeyUp({
-        which: 13
-      });
+      $scope.inputKeyDown(keyEvent);
 
       $scope.isEditingInput = false;
+      keyEvent.preventDefault.should.have.been.called;
     });
 
     it('should not reset editing on other keys', function() {
+      var keyEvent = {
+        which: 23,
+        preventDefault: sinon.spy()
+      };
+
       $scope.isEditingInput = true;
 
-      $scope.inputKeyUp({
-        which: 23
-      });
+      $scope.inputKeyDown(keyEvent);
 
       $scope.isEditingInput = true;
+      keyEvent.preventDefault.should.not.have.been.called;
     });
   });
 

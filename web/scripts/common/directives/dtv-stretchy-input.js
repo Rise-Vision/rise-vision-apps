@@ -48,10 +48,12 @@ angular.module('risevision.apps.directives')
             $scope.isEditingInput = false;
           };
 
-          $scope.inputKeyUp = function (keyEvent) {
+          $scope.inputKeyDown = function (keyEvent) {
             // handle enter key
             if (keyEvent.which === 13 && $scope.isEditingInput) {
               $scope.isEditingInput = false;
+
+              keyEvent.preventDefault();
             }
           };
 

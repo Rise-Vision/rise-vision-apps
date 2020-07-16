@@ -51,11 +51,6 @@ var ScheduleAddScenarios = function() {
       expect(scheduleAddPage.getCancelButton().isPresent()).to.eventually.be.true;
     });
 
-    xit('should rename schedule', function() {
-      var scheduleName = 'TEST_E2E_SCHEDULE';
-      scheduleAddPage.getScheduleNameField().sendKeys(scheduleName);
-    });
-
     it('should add schedule', function () {
       scheduleAddPage.getSaveButton().click();
       helper.wait(scheduleAddPage.getDeleteButton(), 'Delete Button');
@@ -66,7 +61,12 @@ var ScheduleAddScenarios = function() {
       expect(scheduleAddPage.getShareScheduleButton().isDisplayed()).to.eventually.be.true;
     });
 
-    xit('should save the Schedule on Enter pressed', function() {
+    xit('should rename schedule', function() {
+      var scheduleName = 'TEST_E2E_SCHEDULE';
+      scheduleAddPage.getScheduleNameField().sendKeys(scheduleName);
+    });
+
+    xit('should save the Schedule', function() {
       scheduleAddPage.getScheduleNameField().sendKeys(protractor.Key.ENTER);
       helper.waitForElementTextToChange(scheduleAddPage.getSaveButton(),'Save', 'Schedules Suve Button');
       expect(scheduleAddPage.getSaveButton().getText()).to.eventually.equal('Save');
