@@ -1,20 +1,10 @@
 'use strict';
 var PlaylistPage = function() {
-  var moveUpButtons = element.all(by.id('moveUpButton'));
-  var moveDownButtons = element.all(by.id('moveDownButton'));
   var removeButtons = element.all(by.id('removeButton'));
   var removeItemButton = element(by.id('confirmForm')).element(by.buttonText('Remove'));
   var duplicateItemButton = element.all(by.id('duplicateButton'));
-  var presentationNameCell = element.all(by.id('presentationNameCell'));
+  var playlistItemNameCell = element.all(by.css('.playlist-item-name'));
 
-  this.getMoveUpButtons = function() {
-    return moveUpButtons;
-  };
-  
-  this.getMoveDownButtons = function() {
-    return moveDownButtons;
-  };
-  
   this.getRemoveButtons = function() {
     return removeButtons;
   };
@@ -27,8 +17,8 @@ var PlaylistPage = function() {
     return duplicateItemButton;
   };
   
-  this.getPresentationNameCell = function() {
-    return presentationNameCell;
+  this.getPlaylistItemNameCell = function() {
+    return playlistItemNameCell;
   };
   
 };
