@@ -31,6 +31,10 @@ USER_FIRST_NAME')
         return $scope.schedule ? SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', $scope.schedule.id) : '';
       };
 
+      $scope.getEnterpriseLink = function () {
+        return $scope.schedule ? $scope.getLink() + '&env=enterprise' : '';
+      };
+
       $scope.getEmbedCode = function () {
         return $scope.schedule ? SHARED_SCHEDULE_EMBED_CODE.replace('SHARED_SCHEDULE_URL', $scope.getLink()) : '';
       };

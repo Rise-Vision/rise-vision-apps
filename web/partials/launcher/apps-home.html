@@ -30,7 +30,7 @@
               Share
             </button>
           </ng-show>
-          <share-schedule-button schedule="selectedSchedule" ng-hide="tooltipKey"></share-schedule-button>
+          <share-schedule-button schedule="selectedSchedule" button-class="btn-primary" ng-hide="tooltipKey"></share-schedule-button>
         </span>
 
         <div class="form-group" preview-selector>
@@ -67,9 +67,9 @@
     <div class="container">
       <a type="button" class="btn btn-default btn-block" ui-sref="apps.schedules.details({scheduleId: selectedSchedule.id})">Edit Schedule</a>
       <ng-show ng-show="tooltipKey">
-        <button type="button" class="btn btn-primary btn-block" tooltip-overlay tooltip-placement="top" tooltip-class="madero-style tooltip-share-guide">Share</button>
+        <button type="button" class="btn btn-primary btn-block" tooltip-overlay tooltip-template="'partials/launcher/share-tooltip.html'" tooltip-placement="top" tooltip-class="madero-style tooltip-share-guide">Share</button>
       </ng-show>
-      <share-schedule-button schedule="selectedSchedule" ng-hide="tooltipKey"></share-schedule-button>
+      <share-schedule-button schedule="selectedSchedule" button-class="btn-primary btn-block" ng-hide="tooltipKey"></share-schedule-button>
     </div>
   </div>
 </div>
