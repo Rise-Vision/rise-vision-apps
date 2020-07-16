@@ -1278,6 +1278,14 @@ $short-phone-height: 570px;
     color: $madero-black;
   }
 
+  .control-label-secondary {
+    font-weight: normal;
+  }
+
+  .control-label.timeline-label, distribution-selector .control-label:not(.control-label-secondary) {
+    width: 129px;
+  }
+
   .form-control-feedback {
     top: 31px;
     fill: #f2f2f2;
