@@ -106,7 +106,7 @@ var AddPresentationScenarios = function() {
               helper.wait(playlistItemModalPage.getPlaylistItemModal(), 'Playlist Item Modal').then(function () {
                 expect(playlistItemModalPage.getPlaylistItemModal().isDisplayed()).to.eventually.be.true;
                 expect(playlistItemModalPage.getModalTitle().getText()).to.eventually.equal('Add Playlist Item');
-                expect(playlistItemModalPage.getNameTextbox().getAttribute('value')).to.eventually.equal(presentationItemName);
+                expect(playlistItemModalPage.getNameTextbox().isPresent()).to.eventually.be.false;
                 helper.wait(playlistItemModalPage.getPresentationNameField(), 'Playlist Item Modal').then(function () {
                   expect(playlistItemModalPage.getPresentationNameField().getText()).to.eventually.equal(presentationItemName);
                 });
@@ -117,7 +117,7 @@ var AddPresentationScenarios = function() {
               playlistItemModalPage.getSaveButton().click();
 
               expect(scheduleAddPage.getPlaylistItems().get(0).isDisplayed()).to.eventually.be.true;
-              expect(playlistPage.getPlaylistItemNameCell().get(0).getText()).to.eventually.equal(presentationItemName);
+              expect(playlistPage.getPresentationNameCell().get(0).getText()).to.eventually.equal(presentationItemName);
             });
           });
 

@@ -1,6 +1,6 @@
 <div class="flex-row">
 
-  <input type="text" class="input-stretchy" ng-keyup="inputKeyUp($event)"
+  <input type="text" class="input-stretchy" ng-keydown="inputKeyDown($event)"
     ng-model="ngModel" ng-blur="onInputBlur()" ng-disabled="!isEditingInput">
   <div>
     <button id="editButton" ng-disabled="isEditingInput" type="button" class="btn-icon pr-0" ng-click="isEditingInput=true">

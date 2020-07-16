@@ -7,7 +7,8 @@
         </div>
 
         <div ng-click="manage(playlistItem)" class="name-container mr-auto">
-          <p class="playlist-item-name u_remove-bottom"><strong>{{playlistItem.name}}</strong></p>
+          <p class="playlist-item-name u_remove-bottom" id="playlistItemNameCell" ng-if="playlistItem.type !== 'presentation'"><strong>{{playlistItem.name}}</strong></p>
+          <p class="playlist-item-reference u_remove-bottom" id="presentationNameCell" ng-if="playlistItem.type === 'presentation'"><strong presentation-name="playlistItem.objectReference">Presentation Item</strong></p>
           <p class="playlist-item-description text-sm text-muted u_remove-bottom">{{ factory.getItemTimeline(playlistItem) }} • {{ playlistItem.playUntilDone ? 'Play Until Done' : playlistItem.duration + 's' }} • {{playlistItem.transitionType || 'No Transition'}}</p>
         </div>
         <div class="u_float-left mr-3">
