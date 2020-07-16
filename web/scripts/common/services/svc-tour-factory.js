@@ -44,7 +44,7 @@ angular.module('risevision.apps.services')
         }
 
         var count = _getCount(storageKey);
-        if (count > 5) {
+        if (count > 3) {
           return false;
         }
 
