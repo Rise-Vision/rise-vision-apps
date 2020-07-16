@@ -1,0 +1,57 @@
+<span class="preview-selector-tooltip">
+  <div class="row">
+    <div class="col-xs-12">
+      <search-filter filter-config="filterConfig" search="search" do-search="schedules.doSearch" icon-set="madero"></search-filter>
+    </div> 
+  </div>
+
+  <div class="scrollable-list mt-3 mb-3"
+    scrolling-list="schedules.load()"
+    rv-spinner
+    rv-spinner-key="preview-selector-spinner"
+    rv-spinner-start-active="0"
+  >
+    <div class="flex-row" ng-repeat="schedule in schedules.items.list">
+      <div class="row-entry">
+        <div class="madero-checkbox u_clickable" ng-click="selectSchedule(schedule)">
+          <input type="checkbox" ng-checked="isSelected(schedule)" tabindex="1">
+          <label>
+            <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
+          </label>
+        </div>
+        <div class="mr-auto u_clickable u_text-ellipsis" ng-click="selectSchedule(schedule)">
+          {{schedule.name}}
+        </div>
+        <div class="u_float-left mr-3">
+          <a ui-sref="apps.schedules.details({scheduleId: schedule.id})" link-cid>
+            Edit
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div id="noItems" class="schedule-list-empty" ng-if="!schedules.loadingItems && !schedules.search.query && schedules.items.list.length === 0">
+      No Schedules
+    </div>
+    <div id="noSearchResult" class="schedule-list-no-results" ng-if="!schedules.loadingItems && schedules.search.query && schedules.items.list.length === 0">
+      No Results Found
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-6">
+      <button type="button" class="btn btn-default btn-block" ng-click="toggleTooltip()">Cancel</button>
+    </div>
+    <div class="col-xs-6">
+      <button type="button" class="btn btn-primary btn-block" ng-click="select()">Select</button>
+    </div>
+  </div>
+  <hr/>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <a type="button" class="btn btn-default btn-block" ui-sref="apps.schedules.add" link-cid>Create Schedule</a>
+    </div>
+  </div>
+
+</span>

@@ -36,39 +36,39 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install npm
-          command: npm install
-      - run: 
-          name: install bower
-          command: bower install
-      - run:
           name: Set environment variables
           command: |
             # Set +e flag to fix issue where no stage environment is specified
             set +e
             STAGE_ENV="$(git log -1 --pretty=%B | grep '\[.*\]' |sed -e 's/.*\[\(.*\)\].*/\1/g')";
-            if [ "$STAGE_ENV" == '' ] || [ "$CIRCLE_BRANCH" == "master" ]; then
+            if [ "$CIRCLE_BRANCH" == "master" ] || [ `echo $CIRCLE_BRANCH | grep -c "beta/" ` -gt 0 ]; then
               STAGE_ENV='stage-0';
             fi;
+            if [ "$STAGE_ENV" == '' ]; then
+              echo "Stage Environment is not defined";
+              exit 1
+            fi;
             echo "$STAGE_ENV" > stage.txt
+            echo "Stage Environment: $STAGE_ENV";
+      - run:
+          name: Install npm
+          command: npm install
+      - run: 
+          name: install bower
+          command: bower install
       - persist_to_workspace:
           root: ~/
           paths:
             - rise-vision-apps/*
-  test_build:
-    working_directory: ~/rise-vision-apps
-    docker: *BUILDIMAGE
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run: 
-          command: NODE_ENV=test npm run ci-build
   test_unit:
     working_directory: ~/rise-vision-apps
     docker: *BUILDIMAGE
     steps:
       - attach_workspace:
           at: ~/
+      - run: 
+          name: test_build
+          command: NODE_ENV=test npm run ci-build
       - run: 
           name: unit_tests
           command: NODE_ENV=test npm run test
@@ -216,75 +216,69 @@ workflows:
   test_and_deploy:
     jobs: 
       - dependencies
-      - test_build:
+      - test_unit:
           requires:
             - dependencies
           filters:
             branches:
               ignore: /(stage).*/
-      - test_unit:
-          requires:
-            - test_build
-          filters:
-            branches:
-              ignore: /(stage).*/
       - e2e_schedules:
           requires:
-            - test_build
+            - test_unit
           filters:
             branches:
               ignore: /(stage).*/
       - e2e_common:
           requires:
-            - test_build
+            - test_unit
           filters:
             branches:
               ignore: /(stage).*/
       - e2e_common_header:
           requires:
-            - test_build
+            - test_unit
           filters:
             branches:
               ignore: /(stage).*/
       - e2e_registration:
           requires:
-            - test_build
+            - test_unit
           filters:
             branches:
               ignore: /(stage).*/
       - e2e_editor:
           requires:
-            - test_build
+            - test_unit
           filters:
             branches:
               ignore: /(stage).*/
       - e2e_displays:
           requires:
-            - test_build
+            - test_unit
           filters:
             branches:
               ignore: /(stage).*/
       - e2e_storage:
           requires:
-            - test_build
+            - test_unit
           filters:
             branches:
               ignore: /(stage).*/
       - e2e_template_editor:
           requires:
-            - test_build
+            - test_unit
           filters:
             branches:
               ignore: /(stage).*/
       - e2e_template_editor2:
           requires:
-            - test_build
+            - test_unit
           filters:
             branches:
               ignore: /(stage).*/
       - e2e_template_editor3:
           requires:
-            - test_build
+            - test_unit
           filters:
             branches:
               ignore: /(stage).*/
@@ -305,7 +299,6 @@ workflows:
               ignore: /(stage).*/
       - deploy_production:
           requires:
-            - test_unit
             - test_e2e
           filters:
             branches:
@@ -315,10 +308,11 @@ workflows:
             - dependencies
           filters:
             branches:
-              only: /(feature|fix|chore|stage).*/
+              only: 
+                - master
+                - /(feature|fix|chore|stage).*/
       - deploy_beta:
           requires:
-            - test_unit
             - test_e2e
           filters:
             branches:

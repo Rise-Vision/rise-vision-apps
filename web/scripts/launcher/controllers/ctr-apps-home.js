@@ -1,24 +1,36 @@
 'use strict';
 
 angular.module('risevision.apps.launcher.controllers')
-  .controller('AppsHomeCtrl', ['$scope', 'schedule', '$loading', 'processErrorCode',
-    '$log', '$sce', 'SHARED_SCHEDULE_URL',
-    function ($scope, schedule, $loading, processErrorCode, $log, $sce, SHARED_SCHEDULE_URL) {
-      $scope.schedules = [];
-      var search = {
+  .controller('AppsHomeCtrl', ['$scope', '$filter', 'ScrollingListService', 'schedule', '$loading', '$sce',
+    'SHARED_SCHEDULE_URL',
+    function ($scope, $filter, ScrollingListService, schedule, $loading, $sce, SHARED_SCHEDULE_URL) {
+      $scope.search = {
         sortBy: 'changeDate',
-        count: 10,
         reverse: true,
       };
+
+      $scope.schedules = new ScrollingListService(schedule.list, $scope.search);
 
       var triggerOverlay = function () {
         $scope.tooltipKey = 'ShareEnterpriseTooltip';
       };
 
-      $scope.$watch('loadingItems', function (loading) {
+      $scope.filterConfig = {
+        placeholder: $filter('translate')('schedules-app.list.filter.placeholder')
+      };
+
+      $scope.$watch('schedules.loadingItems', function (loading) {
         if (loading) {
-          $loading.start('apps-home-loader');
+          if (!$scope.selectedSchedule) {
+            $loading.start('apps-home-loader');
+          }
         } else {
+          if (!$scope.selectedSchedule && $scope.schedules.items.list.length > 0) {
+            $scope.selectedSchedule = $scope.schedules.items.list[0];
+
+            triggerOverlay();
+          }
+
           $loading.stop('apps-home-loader');
         }
       });
@@ -31,30 +43,5 @@ angular.module('risevision.apps.launcher.controllers')
         return $sce.trustAsResourceUrl(url);
       };
 
-      $scope.load = function () {
-        $scope.errorMessage = '';
-        $scope.apiError = '';
-        $scope.loadingItems = true;
-
-        schedule.list(search)
-          .then(function (result) {
-            $scope.schedules = result.items || [];
-            if ($scope.schedules.length > 0) {
-              $scope.selectedSchedule = $scope.schedules[0];
-
-              triggerOverlay();
-            }
-          })
-          .catch(function (e) {
-            $scope.errorMessage = 'Failed to load Schedules.';
-            $scope.apiError = processErrorCode('Schedules', 'load', e);
-            $log.error($scope.errorMessage, e);
-          })
-          .finally(function () {
-            $scope.loadingItems = false;
-          });
-      };
-
-      $scope.load();
     }
   ]); //ctr

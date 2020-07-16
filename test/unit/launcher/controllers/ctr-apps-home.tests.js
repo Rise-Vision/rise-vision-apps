@@ -1,7 +1,7 @@
 'use strict';
 describe('controller: AppsHomeCtrl', function() {
   beforeEach(module('risevision.apps.launcher.controllers'));
-  var $rootScope, $controller, $scope, $loading, schedule, $sce;
+  var $rootScope, $controller, $scope, $loading, schedule, ScrollingListService, $sce;
   beforeEach(function(){
     module(function ($provide) {
       $provide.service('$loading', function() {
@@ -12,16 +12,25 @@ describe('controller: AppsHomeCtrl', function() {
       });
       $provide.service('schedule', function() {
         return {
-          list: sinon.stub().returns(Q.resolve({items: [{id: '123'}]}))
+          list: sinon.stub()
         };
       });
-      $provide.service('processErrorCode', function() {
-        return sinon.stub().returns('API_ERROR');
+      $provide.service('ScrollingListService', function() {
+        return sinon.stub().returns({
+          items: {
+            list: []
+          }
+        });
       });
       $provide.service('$sce', function() {
         return {
           trustAsResourceUrl: sinon.stub().returns('http://trustedUrl')
         }
+      });
+      $provide.service('translateFilter', function(){
+        return function(key){
+          return key;
+        };
       });
 
       $provide.value('SHARED_SCHEDULE_URL','https://preview.risevision.com/?type=sharedschedule&id=SCHEDULE_ID');
@@ -29,6 +38,7 @@ describe('controller: AppsHomeCtrl', function() {
     inject(function($injector) {
       $loading = $injector.get('$loading');
       schedule = $injector.get('schedule');
+      ScrollingListService = $injector.get('ScrollingListService');
       $sce = $injector.get('$sce');
       $rootScope = $injector.get('$rootScope');
       $controller = $injector.get('$controller');
@@ -43,24 +53,69 @@ describe('controller: AppsHomeCtrl', function() {
 
   it('should exist',function(){
     expect($scope).to.be.ok;
-    expect($scope.schedules).to.be.ok;
     expect($scope.getEmbedUrl).to.be.a('function');
-    expect($scope.load).to.be.a('function');
+  });
+
+  it('should initialize',function(){
+    expect($scope.schedules).to.be.ok;
+    ScrollingListService.should.have.been.calledWith(schedule.list, $scope.search);
 
     expect($scope.tooltipKey).to.not.be.ok;
+    expect($scope.search).to.deep.equal({
+      sortBy: 'changeDate',
+      reverse: true
+    });
+    expect($scope.filterConfig).to.deep.equal({
+      placeholder: 'schedules-app.list.filter.placeholder'
+    });
   });
 
   describe('spinner:', function() {
-    it("should show spinner at startup",function(){
+    it("should show spinner when list is loading",function(){
+      $scope.schedules.loadingItems = true;
+      $scope.$digest();
+
       $loading.start.should.have.been.calledWith('apps-home-loader');
     });
 
-    it("should hide spinner when load is complete",function(){
-      $scope.loadingItems = false;
+    it("should not show spinner when schedule has been initialized",function(){
+      $scope.selectedSchedule = {};
+      $scope.schedules.loadingItems = true;
       $scope.$digest();
 
+      $loading.start.should.not.have.been.called;
+    });
+
+    it("should hide spinner when load is complete",function(){
       $loading.stop.should.have.been.calledWith('apps-home-loader');
     });    
+
+    it('should configure selectedSchedule as the first item', function() {
+      $scope.schedules.items.list.push('schedule1');
+      $scope.schedules.items.list.push('schedule2');
+      $scope.schedules.loadingItems = false;
+      $scope.$digest();
+
+      expect($scope.selectedSchedule).to.equal('schedule1');
+    });
+    
+    describe('triggerOverlay', function() {
+      it('should trigger overlay on API results', function() {
+        $scope.schedules.items.list.push('item');
+        $scope.schedules.loadingItems = false;
+        $scope.$digest();
+
+        expect($scope.tooltipKey).to.equal('ShareTooltip');
+      });
+
+      it('should not show overlay if list is empty', function() {
+        $scope.schedules.loadingItems = false;
+        $scope.$digest();
+
+        expect($scope.tooltipKey).to.not.be.ok;
+      });
+
+    });
   });
 
   describe('getEmbedUrl:', function() {
@@ -73,90 +128,6 @@ describe('controller: AppsHomeCtrl', function() {
       expect($scope.getEmbedUrl(null)).to.equal(null);
       $sce.trustAsResourceUrl.should.not.have.been.called;
     });
-  });
-
-  describe('load:', function() {
-    it('should load Schedules and clear messages', function(done) {
-      $scope.errorMessage = 'ERROR';
-      $scope.apiError = 'ERROR';
-      $scope.loadingItems = false;
-
-      $scope.load();
-
-      schedule.list.should.have.been.calledWith({
-        sortBy: 'changeDate',
-        count: 10,
-        reverse: true,
-      });
-      expect($scope.errorMessage).to.equal('');
-      expect($scope.apiError).to.equal('');
-      expect($scope.loadingItems).to.be.true;
-      setTimeout(function() {
-        expect($scope.schedules).to.deep.equal([{id: '123'}]);
-        expect($scope.selectedSchedule.id).to.equal('123');
-        expect($scope.loadingItems).to.be.false;
-        done();
-      },10);
-    });
-
-    it('should handle API failures', function(done) {
-      schedule.list.returns(Q.reject());
-
-      $scope.load();
-
-      setTimeout(function() {
-        expect($scope.errorMessage).to.equal('Failed to load Schedules.');
-        expect($scope.apiError).to.equal('API_ERROR');
-        expect($scope.loadingItems).to.be.false;
-
-        done();
-      },10);
-    });
-  });
-  
-  describe('showTooltipOverlay', function() {
-    beforeEach(function(done) {
-      setTimeout(function() {
-        // clean up hardcoded init() call
-        $scope.tooltipKey = undefined;        
-
-        done();
-      }, 10);
-    });
-
-    it('should trigger overlay on API results', function(done) {
-      $scope.load();
-
-      setTimeout(function() {
-        expect($scope.tooltipKey).to.equal('ShareEnterpriseTooltip');
-
-        done();
-      },10);
-    });
-
-    it('should not show overlay if list is empty', function(done) {
-      schedule.list.returns(Q.resolve({items: []}));
-
-      $scope.load();
-
-      setTimeout(function() {
-        expect($scope.tooltipKey).to.not.be.ok;
-
-        done();
-      },10);
-    });
-
-    it('should not show overlay on API failure', function(done) {
-      schedule.list.returns(Q.reject());
-
-      $scope.load();
-
-      setTimeout(function() {
-        expect($scope.tooltipKey).to.not.be.ok;
-
-        done();
-      },10);
-    });    
   });
 
 });
