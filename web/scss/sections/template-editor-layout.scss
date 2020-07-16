@@ -58,42 +58,21 @@ $short-phone-height: 570px;
     font-size: 18px;
   }
 
-  & .input-stretchy.presentation-name {
-    font-size: 24px;
-    line-height: 32px;
+  & .presentation-name {
+    & .input-stretchy {
+      font-size: 24px;
+      line-height: 32px;
 
-    @media (max-width: $screen-sm) {
-      font-size: 18px;
+      @media (max-width: $screen-sm) {
+        font-size: 18px;
+      }
     }
+
   }
 
-  & .edit-name, .delete-presentation {
-    cursor: pointer;
-    background: transparent;
-    border: 0;
-    -webkit-appearance: none;
-
-    &:hover {
-      text-decoration: none;
-      cursor: pointer;
-      opacity: 0.65;
-      filter: alpha(opacity=65);
-    }
-
-    &:focus {
-      outline: 0;
-    }
-
-    &.disabled,
-    &[disabled],
-    fieldset[disabled] & {
-      cursor: not-allowed;
-      pointer-events: none;
-      opacity: .50;
-      filter: alpha(opacity=50);
-      -webkit-box-shadow: none;
-      box-shadow: none;
-    }
+  & .streamline-component-icon svg {
+    width: 16px;
+    height: 16px;
   }
 
   & .toolbar-right {
