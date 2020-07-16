@@ -117,7 +117,7 @@ var AddPresentationScenarios = function() {
               playlistItemModalPage.getSaveButton().click();
 
               expect(scheduleAddPage.getPlaylistItems().get(0).isDisplayed()).to.eventually.be.true;
-              expect(playlistPage.getPresentationNameCell().get(0).getText()).to.eventually.equal(presentationItemName);
+              expect(playlistPage.getPlaylistItemNameCell().get(0).getText()).to.eventually.equal(presentationItemName);
             });
           });
 

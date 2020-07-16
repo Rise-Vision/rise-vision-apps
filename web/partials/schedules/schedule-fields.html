@@ -1,9 +1,7 @@
-<div class="form-group" ng-class="{'has-error': !scheduleDetails.name.$pristine && scheduleDetails.name.$invalid}" show-errors>
-  <label class="control-label">{{'schedules-app.fields.name.name' | translate}} *</label>
-  <input type="text" class="form-control" placeholder="{{'schedules-app.fields.name.placeholder' | translate}}" id="name" name="name" ng-model="schedule.name" required focus-me="!scheduleId">
-  <p class="text-danger" ng-show="!scheduleDetails.name.$pristine && scheduleDetails.name.$error.required" translate>
-    schedules-app.fields.name.required
-  </p>
+<stretchy-input ng-model="schedule.name"></stretchy-input>
+
+<div class="form-group mt-5 mb-4">
+  <label>Schedule Details</label>
 </div>
 
 <div class="form-group">
@@ -26,7 +24,7 @@
   ></timeline-textbox>
 </div><!--form-group-->
 
-<distribution-selector distribution="schedule.distribution" distribute-to-all="schedule.distributeToAll"></distribution-selector>
+<distribution-selector distribution="schedule.distribution" distribute-to-all="schedule.distributeToAll" hide-cta="true"></distribution-selector>
 
 <div class="u_margin-md-top text-right">
   <div class="pull-left">

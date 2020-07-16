@@ -135,7 +135,7 @@ describe('service: scheduleFactory:', function() {
   });
 
   it('should initialize',function(){
-    expect(scheduleFactory.schedule).to.deep.equal({companyId: 'companyId',content: [], distributeToAll: false, distribution: [], timeDefined: false});
+    expect(scheduleFactory.schedule).to.deep.equal({name: 'New Schedule', companyId: 'companyId',content: [], distributeToAll: false, distribution: [], timeDefined: false});
   });
 
   describe('newSchedule:', function() {
@@ -146,7 +146,7 @@ describe('service: scheduleFactory:', function() {
 
       expect(trackerCalled).to.equal('Add Schedule');
 
-      expect(scheduleFactory.schedule).to.deep.equal({companyId: 'companyId', content: [], distributeToAll: false, distribution: [], timeDefined: false});
+      expect(scheduleFactory.schedule).to.deep.equal({name: 'New Schedule', companyId: 'companyId', content: [], distributeToAll: false, distribution: [], timeDefined: false});
     });
 
     it('should not call tracker if param is true',function(){

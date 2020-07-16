@@ -21,6 +21,7 @@ angular.module('risevision.schedules.services')
         _scheduleId = undefined;
 
         factory.schedule = {
+          name: 'New Schedule',
           companyId: userState.getSelectedCompanyId(),
           content: [],
           distributeToAll: false,
