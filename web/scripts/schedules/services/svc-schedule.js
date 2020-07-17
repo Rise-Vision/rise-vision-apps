@@ -103,14 +103,15 @@ angular.module('risevision.schedules.services')
             });
           return deferred.promise;
         },
-        update: function (scheduleId, schedule) {
+        update: function (scheduleId, schedule, options) {
           var deferred = $q.defer();
 
           var fields = pick.apply(this, [schedule].concat(
             SCHEDULE_WRITABLE_FIELDS));
           var obj = {
             'id': scheduleId,
-            'data': fields
+            'data': fields,
+            'options': options
           };
 
           $log.debug('update schedule called with', scheduleId);

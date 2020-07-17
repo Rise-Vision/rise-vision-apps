@@ -3,8 +3,9 @@
 angular.module('risevision.schedules.services')
   .factory('scheduleFactory', ['$q', '$state', '$log', '$rootScope', 'schedule', 'scheduleTracker',
     'processErrorCode', 'VIEWER_URL', 'HTML_PRESENTATION_TYPE', 'display', 'plansFactory', 'userState',
+    'confirmModal',
     function ($q, $state, $log, $rootScope, schedule, scheduleTracker, processErrorCode,
-      VIEWER_URL, HTML_PRESENTATION_TYPE, display, plansFactory, userState) {
+      VIEWER_URL, HTML_PRESENTATION_TYPE, display, plansFactory, userState, confirmModal) {
       var factory = {};
       var _hasSchedules;
       var _scheduleId;
@@ -172,7 +173,7 @@ angular.module('risevision.schedules.services')
         factory.loadingSchedule = true;
         factory.savingSchedule = true;
 
-        $q.all([_retrieveHasFreeDisplays(), schedule.update(_scheduleId, factory.schedule)])
+        $q.all([_retrieveHasFreeDisplays(), _updateSchedule()])
           .then(function (results) {
             _showFreeDisplaysMessageIfNeeded(results[0]);
 
@@ -191,6 +192,27 @@ angular.module('risevision.schedules.services')
           });
 
         return deferred.promise;
+      };
+
+      var _updateSchedule = function () {
+        return schedule.update(_scheduleId, factory.schedule).catch(function (err) {
+          if (err.result.error.message.indexOf('distributed to the same displays') > 0) {
+            return confirmModal('The selected displays already have schedules.',
+                'Some of the displays you selected are already assigned to another schedule. Would you like to re-assign them to this schedule?',
+                'Yes', 'No', 'madero-style centered-modal',
+                'partials/components/confirm-modal/madero-confirm-modal.html')
+              .then(function () {
+                return schedule.update(_scheduleId, factory.schedule, {
+                  forceDistribution: true
+                });
+              }).catch(function () {
+                return $q.reject({
+                  message: 'Some of the displays are already assigned to another schedule.'
+                });
+              });
+          }
+          return $q.reject(err);
+        });
       };
 
       factory.deleteSchedule = function () {
