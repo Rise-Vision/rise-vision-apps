@@ -2,12 +2,14 @@
 
 angular.module('risevision.schedules.controllers')
   .controller('playlistItemModal', ['$scope', '$modal', '$modalInstance', '$loading',
-    'playlistFactory', 'playlistItem', 'userState', 'presentationFactory',
+    'playlistFactory', 'playlistItem', 'userState', 'presentationFactory', 'TRANSITION_TYPES',
     function ($scope, $modal, $modalInstance, $loading, playlistFactory, playlistItem,
-      userState, presentationFactory) {
+      userState, presentationFactory, TRANSITION_TYPES) {
+      $scope.transitionTypes = TRANSITION_TYPES;
       $scope.companyId = userState.getSelectedCompanyId();
       $scope.playlistItem = angular.copy(playlistItem);
       $scope.isNew = playlistFactory.isNew(playlistItem);
+
       configurePlayUntilDone();
 
       $scope.$watch('loadingTemplate', function (loading) {

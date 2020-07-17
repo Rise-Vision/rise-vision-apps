@@ -12,7 +12,7 @@ angular.module('risevision.apps.launcher.controllers')
       $scope.schedules = new ScrollingListService(schedule.list, $scope.search);
 
       var triggerOverlay = function () {
-        $scope.tooltipKey = 'ShareTooltip';
+        $scope.tooltipKey = 'ShareEnterpriseTooltip';
       };
 
       $scope.filterConfig = {

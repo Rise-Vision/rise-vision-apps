@@ -40,7 +40,7 @@
     "viewAll": "View All Schedules"
   },
   "playlist": {
-    "add-playlist-item": "Add Playlist Item",
+    "add-playlist-item": "Create Playlist Item",
     "empty": "You haven't added any items to your Playlist yet.",
     "item": {
       "distribution": "Distribution",

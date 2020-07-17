@@ -7,7 +7,8 @@ angular.module('risevision.schedules.directives')
         restrict: 'E',
         templateUrl: 'partials/schedules/share-schedule-button.html',
         scope: {
-          schedule: '='
+          schedule: '=',
+          buttonClass: '@'
         },
         link: function ($scope, element) {
           var isTooltipOpen = false;
