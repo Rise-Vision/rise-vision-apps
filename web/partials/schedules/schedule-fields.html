@@ -27,14 +27,10 @@
 <distribution-selector distribution="schedule.distribution" distribute-to-all="schedule.distributeToAll" hide-cta="true"></distribution-selector>
 
 <div class="u_margin-md-top text-right">
-  <div class="pull-left">
-    <h3 class="u_remove-top" style="line-height:33px;" translate>schedules-app.playlist.title</h3>
-  </div>
-  <button type="button" class="btn btn-default" id="shareScheduleButton" ng-click="openSharedScheduleModal()" ng-show="schedule.id">
-    Share Schedule
-  </button>
+  <label class="pull-left mt-3 mb-0" translate>schedules-app.playlist.title</label>
+
   <div class="btn-group" dropdown>
-    <button id="addPlaylistItemButton" type="button" dropdown-toggle class="dropdown-toggle btn btn-default">{{'schedules-app.playlist.add-playlist-item' | translate}}</button>
+    <button id="addPlaylistItemButton" type="button" dropdown-toggle class="dropdown-toggle btn btn-default btn-toolbar">{{'schedules-app.playlist.add-playlist-item' | translate}}</button>
     <div class="dropdown-menu playlist-menu" role="menu">
       <ul>
       <li>
@@ -50,9 +46,11 @@
       </ul>
     </div>
   </div>  
-  <a class="btn btn-default" id="previewButton" target="_blank" ng-href="{{previewUrl}}" ng-show="previewUrl && isPreviewAvailable()">
-    {{'schedules-app.actions.preview' | translate}} <i class="fa fa-play icon-right"></i>
+  <a class="btn btn-default btn-toolbar" id="previewButton" target="_blank" ng-href="{{previewUrl}}" ng-show="previewUrl && isPreviewAvailable()">
+    {{'schedules-app.actions.preview' | translate}}
   </a>
+  <share-schedule-button schedule="schedule" button-class="btn-default btn-toolbar" ng-show="schedule.id"></share-schedule-button>
+
 </div>
 
 <playlist playlist-items="schedule.content"></playlist>

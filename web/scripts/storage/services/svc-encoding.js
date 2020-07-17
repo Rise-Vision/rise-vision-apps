@@ -33,6 +33,10 @@ angular.module('risevision.storage.services')
           return $q.resolve(true);
         }
 
+        if (sessionStorage.getItem('bypass-upload-encoding') === 'true') {
+          return $q.resolve(false);
+        }
+
         return masterSwitchPromise
           .then(function () {
             return true;
