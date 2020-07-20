@@ -60,6 +60,17 @@
           border-top: 1px solid $madero-gray;
           background: rgba(242, 242, 242, 0.85);
         }
+
+        .list-group-item {
+          height: 62px;
+          padding-top: 0px;
+          padding-bottom: 0px;
+        }
+
+        .name-container {
+          margin-top: 0px;
+          height: auto;
+        }
       }
     }
   }
