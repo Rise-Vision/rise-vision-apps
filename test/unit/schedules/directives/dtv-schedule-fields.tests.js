@@ -47,8 +47,6 @@ describe('directive: scheduleFields', function() {
     expect($scope.addUrlItem).to.be.a('function');
     expect($scope.addPresentationItem).to.be.a("function");
     expect($scope.getEmbedUrl).to.be.a('function');
-
-    expect($scope.previewUrl).to.equal('previewUrl');
   });
 
   it('addUrlItem:', function() {
