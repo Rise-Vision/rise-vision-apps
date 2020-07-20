@@ -26,8 +26,8 @@
 
 <distribution-selector distribution="schedule.distribution" distribute-to-all="schedule.distributeToAll" hide-cta="true"></distribution-selector>
 
-<div class="template-editor-body">
-  <div class="attribute-editor">
+<div class="schedule-fields-body">
+  <div class="playlist-container">
     <div class="text-right py-4">
       <label class="pull-left mt-3 mb-0" translate>schedules-app.playlist.title</label>
 
@@ -53,14 +53,14 @@
     <playlist playlist-items="schedule.content"></playlist>
   </div>
   <!-- presentationIds field is only updated when the Schedule is saved -->
-  <div class="preview-holder" ng-if="schedule.id && schedule.presentationIds.length">
+  <div class="preview-container" ng-if="schedule.id && schedule.presentationIds.length">
     <div class="text-right border-bottom py-4 mb-4">
       <label class="pull-left mt-3 mb-0">Schedule Preview</label>
 
       <share-schedule-button schedule="schedule" button-class="btn-default btn-toolbar"></share-schedule-button>
     </div>
 
-    <div class="schedule-embed">
+    <div class="preview-embed">
       <iframe frameborder="0" ng-src="{{getEmbedUrl()}}">
       </iframe>
     </div>

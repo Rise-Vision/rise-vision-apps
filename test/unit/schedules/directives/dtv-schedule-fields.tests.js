@@ -1,6 +1,6 @@
 'use strict';
 describe('directive: scheduleFields', function() {
-  var $scope, $rootScope, playlistFactory, $modal;
+  var $scope, $rootScope, playlistFactory, $modal, $sce;
   var classicPres1 = { name: 'classic1' };
   var classicPres2 = { name: 'classic2' };
   var htmlPres1 = { name: 'html1', presentationType: 'HTML Template' };
@@ -23,18 +23,14 @@ describe('directive: scheduleFields', function() {
         addPresentationItems: sinon.spy()
       };
     });
-    $provide.service('scheduleFactory', function() {
-      return {
-        getPreviewUrl: function () {
-          return 'previewUrl';
-        }
-      };
-    });
+
+    $provide.value('SHARED_SCHEDULE_URL','https://preview.risevision.com/?type=sharedschedule&id=SCHEDULE_ID');
   }));
 
   beforeEach(inject(function($compile, _$rootScope_, $templateCache, $injector){
     $modal = $injector.get('$modal');
     playlistFactory = $injector.get('playlistFactory');
+    $sce = $injector.get('$sce');
 
     $templateCache.put('partials/schedules/schedule-fields.html', '<p>mock</p>');
     $rootScope = _$rootScope_;
@@ -50,7 +46,7 @@ describe('directive: scheduleFields', function() {
 
     expect($scope.addUrlItem).to.be.a('function');
     expect($scope.addPresentationItem).to.be.a("function");
-    expect($scope.isPreviewAvailable).to.be.a('function');
+    expect($scope.getEmbedUrl).to.be.a('function');
 
     expect($scope.previewUrl).to.equal('previewUrl');
   });
@@ -121,21 +117,29 @@ describe('directive: scheduleFields', function() {
     });
   });
 
-  describe('isPreviewAvailable:', function() {
-    it('should have Preview button available', function() {
-      $scope.schedule.content = [];
-      expect($scope.isPreviewAvailable()).to.be.true;
-      $scope.schedule.content = [ classicPres1, classicPres2 ];
-      expect($scope.isPreviewAvailable()).to.be.true;
+  describe('getEmbedUrl:', function() {
+    beforeEach(function() {
+      sinon.stub($sce, 'trustAsResourceUrl').returns('http://trustedUrl');
     });
 
-    it('should not have Preview button available', function() {
-      $scope.schedule.content = [ htmlPres1 ];
-      expect($scope.isPreviewAvailable()).to.be.false;
-      $scope.schedule.content = [ classicPres1, htmlPres1 ];
-      expect($scope.isPreviewAvailable()).to.be.false;
-      $scope.schedule.content = [ classicPres1, classicPres2, htmlPres1 ];
-      expect($scope.isPreviewAvailable()).to.be.false;
+    afterEach(function() {
+      $sce.trustAsResourceUrl.restore();
     });
+
+    it('should return a trusted embed URL', function() {
+      $scope.schedule.id = 'ID';
+
+      expect($scope.getEmbedUrl()).to.equal('http://trustedUrl');
+      $sce.trustAsResourceUrl.should.have.been.calledWith('https://preview.risevision.com/?type=sharedschedule&id=ID&env=apps_schedule');
+    });
+
+    it('should return null, to not render iframe, when schedule id is not provided', function() {
+      $scope.schedule = null;
+
+      expect($scope.getEmbedUrl()).to.equal(null);
+      $sce.trustAsResourceUrl.should.not.have.been.called;
+    });
+
   });
+
 });

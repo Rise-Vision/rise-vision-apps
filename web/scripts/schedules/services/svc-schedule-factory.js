@@ -2,9 +2,9 @@
 
 angular.module('risevision.schedules.services')
   .factory('scheduleFactory', ['$q', '$state', '$log', '$rootScope', 'schedule', 'scheduleTracker',
-    'processErrorCode', 'VIEWER_URL', 'HTML_PRESENTATION_TYPE', 'display', 'plansFactory', 'userState',
+    'processErrorCode', 'HTML_PRESENTATION_TYPE', 'display', 'plansFactory', 'userState',
     function ($q, $state, $log, $rootScope, schedule, scheduleTracker, processErrorCode,
-      VIEWER_URL, HTML_PRESENTATION_TYPE, display, plansFactory, userState) {
+      HTML_PRESENTATION_TYPE, display, plansFactory, userState) {
       var factory = {};
       var _hasSchedules;
       var _scheduleId;
@@ -215,13 +215,6 @@ angular.module('risevision.schedules.services')
           .finally(function () {
             factory.loadingSchedule = false;
           });
-      };
-
-      factory.getPreviewUrl = function () {
-        if (_scheduleId) {
-          return VIEWER_URL + '/?type=schedule&id=' + _scheduleId;
-        }
-        return null;
       };
 
       factory.scheduleHasTransitions = function (schedule) {
