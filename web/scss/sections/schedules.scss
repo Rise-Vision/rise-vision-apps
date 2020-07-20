@@ -14,3 +14,36 @@
     }
   }
 }
+
+@media (min-width: 768px) {
+  .attribute-editor {
+    --sidebar-width: 450px;
+
+    .scrollable-list {
+      max-height: calc(100vh - 387px);
+      min-height: 387px;
+
+      .draggable-mirror {
+        border-top: 1px solid $madero-gray;
+        background: rgba(242, 242, 242, 0.85);
+      }
+    }
+  }
+
+  .preview-holder {
+    @extend .ml-md-5;
+  }
+}
+
+.schedule-embed {
+  position: relative;
+  padding-bottom: 56.25%;
+
+  iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+  }
+}
