@@ -202,8 +202,9 @@ angular.module('risevision.schedules.services')
                 'Yes', 'No', 'madero-style centered-modal',
                 'partials/components/confirm-modal/madero-confirm-modal.html')
               .then(function () {
-                return schedule.update(_scheduleId, factory.schedule, {
-                  forceDistribution: true
+                return schedule.reassignDistribution(_scheduleId, {
+                  distributeToAll: factory.schedule.distributeToAll,
+                  distribution: factory.schedule.distribution
                 });
               }).catch(function () {
                 return $q.reject({

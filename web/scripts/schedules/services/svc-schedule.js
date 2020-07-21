@@ -103,15 +103,14 @@ angular.module('risevision.schedules.services')
             });
           return deferred.promise;
         },
-        update: function (scheduleId, schedule, options) {
+        update: function (scheduleId, schedule) {
           var deferred = $q.defer();
 
           var fields = pick.apply(this, [schedule].concat(
             SCHEDULE_WRITABLE_FIELDS));
           var obj = {
             'id': scheduleId,
-            'data': fields,
-            'options': options
+            'data': fields
           };
 
           $log.debug('update schedule called with', scheduleId);
@@ -192,6 +191,29 @@ angular.module('risevision.schedules.services')
             })
             .then(null, function (e) {
               console.error('Failed to remove presentation from schedule.', e);
+              deferred.reject(e);
+            });
+
+          return deferred.promise;
+        },
+        reassignDistribution: function (scheduleId, data) {
+          var deferred = $q.defer();
+
+          var obj = {
+            'id': scheduleId,
+            'data': data
+          };
+
+          $log.debug('reassignDistribution from schedule called with', scheduleId);
+          coreAPILoader().then(function (coreApi) {
+              return coreApi.schedule.reassignDistribution(obj);
+            })
+            .then(function (resp) {
+              $log.debug('reassignDistribution from schedule resp', resp);
+              deferred.resolve(resp.result);
+            })
+            .then(null, function (e) {
+              console.error('Failed to reassign distribution from schedule.', e);
               deferred.reject(e);
             });
 
