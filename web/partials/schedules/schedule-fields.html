@@ -28,10 +28,10 @@
 
 <div class="schedule-fields-body">
   <div class="playlist-container">
-    <div class="text-right py-4">
-      <label class="pull-left mt-3 mb-0" translate>schedules-app.playlist.title</label>
+    <div class="py-4 flex-row">
+      <label class="mb-0 mr-auto" translate>schedules-app.playlist.title</label>
 
-      <div class="btn-group" dropdown>
+      <div class="btn-group" dropdown ng-if="schedule.content.length">
         <button id="addPlaylistItemButton" type="button" dropdown-toggle class="dropdown-toggle btn btn-default btn-toolbar">{{'schedules-app.playlist.add-playlist-item' | translate}}</button>
         <div class="dropdown-menu playlist-menu" role="menu">
           <ul>
@@ -47,10 +47,34 @@
           </li>
           </ul>
         </div>
-      </div>  
+      </div>
     </div>
 
-    <playlist playlist-items="schedule.content"></playlist>
+    <playlist playlist-items="schedule.content" ng-show="schedule.content.length"></playlist>
+    <div class="border-container text-center" ng-if="!schedule.content.length">
+      <div class="panel-body">
+        <div class="form-group my-4">
+          <label translate>schedules-app.playlist.empty</label>
+        </div>
+        <div class="btn-group pb-2" dropdown>
+          <button id="addPlaylistItemButton" type="button" dropdown-toggle class="dropdown-toggle btn btn-default btn-toolbar">{{'schedules-app.playlist.add-playlist-item' | translate}}</button>
+          <div class="dropdown-menu playlist-menu" role="menu">
+            <ul>
+            <li>
+              <a class="u_clickable" id="addPresentationItemButton" ng-click="addPresentationItem()">
+                <span translate>schedules-app.playlist.item.presentation</span>
+              </a>
+            </li>
+            <li>
+              <a class="u_clickable" id="addUrlItemButton" ng-click="addUrlItem()">
+                <span translate>schedules-app.playlist.item.url</span>
+              </a>
+            </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- presentationIds field is only updated when the Schedule is saved -->
   <div class="preview-container" ng-if="schedule.id && schedule.content.length">
