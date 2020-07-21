@@ -21,7 +21,7 @@ angular.module('risevision.template-editor.directives')
 
           $scope.colorsComponent = {
             type: 'rise-data-colors'
-          }
+          };
 
           $scope.components = blueprintFactory.blueprintData.components
             .filter(function (c) {
