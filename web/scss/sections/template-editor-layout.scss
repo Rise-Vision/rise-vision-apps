@@ -991,6 +991,12 @@ $short-phone-height: 570px;
     }
   }
 
+  .open > .btn-default.dropdown-toggle {
+    background: $white;
+    color: $madero-green;
+    border-color: $madero-green;
+  }
+
   .btn-primary {
     &, &:hover, &:active, &:focus {
       color: $white;

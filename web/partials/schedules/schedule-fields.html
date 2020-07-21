@@ -26,31 +26,43 @@
 
 <distribution-selector distribution="schedule.distribution" distribute-to-all="schedule.distributeToAll" hide-cta="true"></distribution-selector>
 
-<div class="u_margin-md-top text-right">
-  <label class="pull-left mt-3 mb-0" translate>schedules-app.playlist.title</label>
+<div class="schedule-fields-body">
+  <div class="playlist-container">
+    <div class="text-right py-4">
+      <label class="pull-left mt-3 mb-0" translate>schedules-app.playlist.title</label>
 
-  <div class="btn-group" dropdown>
-    <button id="addPlaylistItemButton" type="button" dropdown-toggle class="dropdown-toggle btn btn-default btn-toolbar">{{'schedules-app.playlist.add-playlist-item' | translate}}</button>
-    <div class="dropdown-menu playlist-menu" role="menu">
-      <ul>
-      <li>
-        <a class="u_clickable" id="addPresentationItemButton" ng-click="addPresentationItem()">
-          <span translate>schedules-app.playlist.item.presentation</span>
-        </a>
-      </li>
-      <li>
-        <a class="u_clickable" id="addUrlItemButton" ng-click="addUrlItem()">
-          <span translate>schedules-app.playlist.item.url</span>
-        </a>
-      </li>
-      </ul>
+      <div class="btn-group" dropdown>
+        <button id="addPlaylistItemButton" type="button" dropdown-toggle class="dropdown-toggle btn btn-default btn-toolbar">{{'schedules-app.playlist.add-playlist-item' | translate}}</button>
+        <div class="dropdown-menu playlist-menu" role="menu">
+          <ul>
+          <li>
+            <a class="u_clickable" id="addPresentationItemButton" ng-click="addPresentationItem()">
+              <span translate>schedules-app.playlist.item.presentation</span>
+            </a>
+          </li>
+          <li>
+            <a class="u_clickable" id="addUrlItemButton" ng-click="addUrlItem()">
+              <span translate>schedules-app.playlist.item.url</span>
+            </a>
+          </li>
+          </ul>
+        </div>
+      </div>  
     </div>
-  </div>  
-  <a class="btn btn-default btn-toolbar" id="previewButton" target="_blank" ng-href="{{previewUrl}}" ng-show="previewUrl && isPreviewAvailable()">
-    {{'schedules-app.actions.preview' | translate}}
-  </a>
-  <share-schedule-button schedule="schedule" button-class="btn-default btn-toolbar" ng-show="schedule.id"></share-schedule-button>
 
+    <playlist playlist-items="schedule.content"></playlist>
+  </div>
+  <!-- presentationIds field is only updated when the Schedule is saved -->
+  <div class="preview-container" ng-if="schedule.id && schedule.content.length">
+    <div class="text-right border-bottom py-4 mb-4">
+      <label class="pull-left mt-3 mb-0">Schedule Preview</label>
+
+      <share-schedule-button schedule="schedule" button-class="btn-default btn-toolbar"></share-schedule-button>
+    </div>
+
+    <div class="preview-embed">
+      <iframe frameborder="0" ng-src="{{getEmbedUrl()}}">
+      </iframe>
+    </div>
+  </div>
 </div>
-
-<playlist playlist-items="schedule.content"></playlist>

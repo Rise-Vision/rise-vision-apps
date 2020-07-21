@@ -1,14 +1,12 @@
 'use strict';
 
 angular.module('risevision.schedules.directives')
-  .directive('scheduleFields', ['$modal', 'scheduleFactory', 'playlistFactory', 'presentationUtils',
-    function ($modal, scheduleFactory, playlistFactory, presentationUtils) {
+  .directive('scheduleFields', ['$modal', 'playlistFactory', '$sce', 'SHARED_SCHEDULE_URL',
+    function ($modal, playlistFactory, $sce, SHARED_SCHEDULE_URL) {
       return {
         restrict: 'E',
         templateUrl: 'partials/schedules/schedule-fields.html',
         link: function ($scope) {
-          $scope.previewUrl = scheduleFactory.getPreviewUrl();
-
           var openPlaylistModal = function (playlistItem) {
             $modal.open({
               templateUrl: 'partials/schedules/playlist-item.html',
@@ -41,12 +39,12 @@ angular.module('risevision.schedules.directives')
             });
           };
 
-          $scope.isPreviewAvailable = function () {
-            var htmlPresentations = _.filter($scope.schedule.content, function (presentation) {
-              return presentationUtils.isHtmlPresentation(presentation);
-            });
-
-            return htmlPresentations.length === 0;
+          $scope.getEmbedUrl = function () {
+            if (!$scope.schedule) {
+              return null;
+            }
+            var url = SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', $scope.schedule.id) + '&env=apps_schedule';
+            return $sce.trustAsResourceUrl(url);
           };
         } //link()
       };

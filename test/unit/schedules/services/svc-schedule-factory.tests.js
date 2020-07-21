@@ -77,7 +77,6 @@ describe('service: scheduleFactory:', function() {
     $provide.service('processErrorCode', function() {
       return processErrorCode = sinon.spy(function() { return 'error'; });
     });
-    $provide.value('VIEWER_URL', 'http://rvaviewer-test.appspot.com');
     $provide.service('display', function() {
       return {
         hasFreeDisplays: sinon.stub().returns(Q.resolve(true))
@@ -131,7 +130,6 @@ describe('service: scheduleFactory:', function() {
     expect(scheduleFactory.addSchedule).to.be.a('function');
     expect(scheduleFactory.updateSchedule).to.be.a('function');
     expect(scheduleFactory.deleteSchedule).to.be.a('function');
-    expect(scheduleFactory.getPreviewUrl).to.be.a('function');
   });
 
   it('should initialize',function(){
@@ -390,22 +388,6 @@ describe('service: scheduleFactory:', function() {
         done();
       },10);
     });
-  });
-
-  it('getPreviewUrl: ', function(done) {
-    expect(scheduleFactory.getPreviewUrl()).to.not.be.ok;
-
-    scheduleFactory.getSchedule('scheduleId')
-      .then(function() {
-        expect(scheduleFactory.getPreviewUrl()).to.be.ok;
-        expect(scheduleFactory.getPreviewUrl()).to.equal('http://rvaviewer-test.appspot.com/?type=schedule&id=scheduleId');
-
-        done();
-      })
-      .then(null, function(e) {
-        done(e);
-      })
-      .then(null,done);
   });
 
   describe('checkFirstSchedule:', function(){
