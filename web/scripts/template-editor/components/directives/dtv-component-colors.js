@@ -10,6 +10,8 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
 
+          // TODO: refactor logic for Override Brand Settings epic
+
           $scope.saveOverride = function () {
             $scope.setAttributeData($scope.componentId, 'override', $scope.override);
           };
