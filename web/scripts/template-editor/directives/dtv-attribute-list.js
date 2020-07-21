@@ -19,6 +19,10 @@ angular.module('risevision.template-editor.directives')
               .presentation);
           }
 
+          $scope.colorsComponent = {
+            type: 'rise-data-colors'
+          }
+
           $scope.components = blueprintFactory.blueprintData.components
             .filter(function (c) {
               return !c.nonEditable;
