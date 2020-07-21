@@ -41,7 +41,7 @@
   },
   "playlist": {
     "add-playlist-item": "Create Playlist Item",
-    "empty": "You haven't added any items to your Playlist yet.",
+    "empty": "Start by creating playlist items.",
     "item": {
       "distribution": "Distribution",
       "duration": "Duration (seconds)",
