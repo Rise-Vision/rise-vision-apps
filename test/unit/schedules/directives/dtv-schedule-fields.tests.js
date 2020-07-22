@@ -131,6 +131,14 @@ describe('directive: scheduleFields', function() {
       $sce.trustAsResourceUrl.should.have.been.calledWith('https://preview.risevision.com/?type=sharedschedule&id=ID&env=apps_schedule');
     });
 
+    it('should indicate core data retrieval and append cachebuster parameter to force refresh', function() {
+      $scope.schedule.id = 'ID';
+      $scope.schedule.changeCount = 3;
+
+      expect($scope.getEmbedUrl()).to.equal('http://trustedUrl');
+      $sce.trustAsResourceUrl.should.have.been.calledWith('https://preview.risevision.com/?type=sharedschedule&id=ID&env=apps_schedule&dataSource=core&versioncount=3');
+    });
+
     it('should return null, to not render iframe, when schedule id is not provided', function() {
       $scope.schedule = null;
 
