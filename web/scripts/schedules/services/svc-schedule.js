@@ -196,12 +196,13 @@ angular.module('risevision.schedules.services')
 
           return deferred.promise;
         },
-        reassignDistribution: function (scheduleId, data) {
+        reassignDistribution: function (scheduleId, schedule) {
           var deferred = $q.defer();
 
+          var fields = pick.apply(this, [schedule].concat(SCHEDULE_WRITABLE_FIELDS));
           var obj = {
             'id': scheduleId,
-            'data': data
+            'data': fields
           };
 
           $log.debug('reassignDistribution from schedule called with', scheduleId);
