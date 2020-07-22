@@ -44,6 +44,11 @@ angular.module('risevision.schedules.directives')
               return null;
             }
             var url = SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', $scope.schedule.id) + '&env=apps_schedule';
+
+            if ($scope.schedule.changeCount) {
+              url += '&dataSource=core&versioncount=' + $scope.schedule.changeCount;
+            }
+
             return $sce.trustAsResourceUrl(url);
           };
         } //link()

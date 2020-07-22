@@ -195,6 +195,7 @@ describe('service: scheduleFactory:', function() {
       })
       .then(null,done);
     });
+
   });
 
   describe('addSchedule:',function(){
@@ -487,6 +488,43 @@ describe('service: scheduleFactory:', function() {
 
         done();
       });
+    });
+  });
+
+  describe('changeCount:', function() {
+    it('get should reset changeCount for preview', function(done) {
+      scheduleFactory.getSchedule('scheduleId')
+      .then(function() {
+        expect(scheduleFactory.schedule.changeCount).to.equal(0);
+
+        done();
+      });
+    });
+
+    it('update should increment changeCount to refresh preview',function(done){
+      scheduleFactory.schedule.changeCount = 3;
+      updateSchedule = true;
+
+      scheduleFactory.updateSchedule();
+
+      setTimeout(function(){
+        expect(scheduleFactory.schedule.changeCount).to.equal(4);
+
+        done();
+      },10);
+    });
+
+    it('update should handle invalid changeCount',function(done){
+      scheduleFactory.schedule.changeCount = 's';
+      updateSchedule = true;
+
+      scheduleFactory.updateSchedule();
+
+      setTimeout(function(){
+        expect(scheduleFactory.schedule.changeCount).to.equal(0);
+
+        done();
+      },10);
     });
   });
 

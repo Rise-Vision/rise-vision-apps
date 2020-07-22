@@ -57,6 +57,7 @@ angular.module('risevision.schedules.services')
             _hasSchedules = true;
 
             factory.schedule = result.item;
+            factory.schedule.changeCount = 0;
 
             deferred.resolve();
           })
@@ -176,6 +177,12 @@ angular.module('risevision.schedules.services')
         $q.all([_retrieveHasFreeDisplays(), schedule.update(_scheduleId, factory.schedule)])
           .then(function (results) {
             _showFreeDisplaysMessageIfNeeded(results[0]);
+
+            if (isNaN(factory.schedule.changeCount)) {
+              factory.schedule.changeCount = 0;
+            } else {
+              factory.schedule.changeCount++;
+            }
 
             scheduleTracker('Schedule Updated', _scheduleId, factory.schedule.name);
 
