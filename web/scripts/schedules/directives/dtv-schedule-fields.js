@@ -7,6 +7,8 @@ angular.module('risevision.schedules.directives')
         restrict: 'E',
         templateUrl: 'partials/schedules/schedule-fields.html',
         link: function ($scope) {
+          $scope.applyTimeline = false;
+
           var openPlaylistModal = function (playlistItem) {
             $modal.open({
               templateUrl: 'partials/schedules/playlist-item.html',
@@ -45,12 +47,17 @@ angular.module('risevision.schedules.directives')
             }
             var url = SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', $scope.schedule.id) + '&env=apps_schedule';
 
+            if (!$scope.applyTimeline) {
+              url += '&applyTimeline=false';
+            }
+
             if ($scope.schedule.changeCount) {
               url += '&dataSource=core&versioncount=' + $scope.schedule.changeCount;
             }
 
             return $sce.trustAsResourceUrl(url);
           };
+
         } //link()
       };
     }
