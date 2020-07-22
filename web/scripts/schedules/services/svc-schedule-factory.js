@@ -197,17 +197,22 @@ angular.module('risevision.schedules.services')
       var _updateSchedule = function () {
         return schedule.update(_scheduleId, factory.schedule).catch(function (err) {
           if (err.result.error.code === 409) {
-            return confirmModal('The selected displays already have schedules.',
+            var deferred = $q.defer();
+
+            confirmModal('The selected displays already have schedules.',
                 'Some of the displays you selected are already assigned to another schedule. Would you like to re-assign them to this schedule?',
                 'Yes', 'No', 'madero-style centered-modal',
                 'partials/components/confirm-modal/madero-confirm-modal.html')
               .then(function () {
-                return schedule.reassignDistribution(_scheduleId, factory.schedule);
-              }).catch(function () {
-                return $q.reject({
+                deferred.resolve(schedule.reassignDistribution(_scheduleId, factory.schedule));
+              })
+              .catch(function () {
+                deferred.reject({
                   message: 'Some of the displays are already assigned to another schedule.'
                 });
               });
+
+            return deferred.promise;
           }
           return $q.reject(err);
         });
