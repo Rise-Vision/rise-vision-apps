@@ -3,7 +3,7 @@ var ScheduleAddPage = function() {
   var schedulesAppContainer = element(by.css('.schedules-app'));
   var title = element(by.id('title'));
 
-  var displayNameField = element(by.model('schedule.name'));
+  var displayNameField = element(by.model('factory.schedule.name'));
 
   var timelineAlwaysCheckbox = element(by.model('timeline.always'));
   var timelineField = element(by.id('timelineTextbox'));
