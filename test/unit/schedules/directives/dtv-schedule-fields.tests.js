@@ -47,6 +47,8 @@ describe('directive: scheduleFields', function() {
     expect($scope.addUrlItem).to.be.a('function');
     expect($scope.addPresentationItem).to.be.a("function");
     expect($scope.getEmbedUrl).to.be.a('function');
+
+    expect($scope.applyTimeline).to.be.false;
   });
 
   it('addUrlItem:', function() {
@@ -128,6 +130,14 @@ describe('directive: scheduleFields', function() {
       $scope.schedule.id = 'ID';
 
       expect($scope.getEmbedUrl()).to.equal('http://trustedUrl');
+      $sce.trustAsResourceUrl.should.have.been.calledWith('https://preview.risevision.com/?type=sharedschedule&id=ID&env=apps_schedule&applyTimeline=false');
+    });
+
+    it('should apply timelines if user selects the option', function() {
+      $scope.schedule.id = 'ID';
+      $scope.applyTimeline = true;
+
+      expect($scope.getEmbedUrl()).to.equal('http://trustedUrl');
       $sce.trustAsResourceUrl.should.have.been.calledWith('https://preview.risevision.com/?type=sharedschedule&id=ID&env=apps_schedule');
     });
 
@@ -136,7 +146,7 @@ describe('directive: scheduleFields', function() {
       $scope.schedule.changeCount = 3;
 
       expect($scope.getEmbedUrl()).to.equal('http://trustedUrl');
-      $sce.trustAsResourceUrl.should.have.been.calledWith('https://preview.risevision.com/?type=sharedschedule&id=ID&env=apps_schedule&dataSource=core&versioncount=3');
+      $sce.trustAsResourceUrl.should.have.been.calledWith('https://preview.risevision.com/?type=sharedschedule&id=ID&env=apps_schedule&applyTimeline=false&dataSource=core&versioncount=3');
     });
 
     it('should return null, to not render iframe, when schedule id is not provided', function() {

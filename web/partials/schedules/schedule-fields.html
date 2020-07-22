@@ -77,11 +77,20 @@
     </div>
   </div>
   <!-- presentationIds field is only updated when the Schedule is saved -->
-  <div class="preview-container" ng-if="schedule.id && schedule.content.length">
-    <div class="text-right border-bottom py-4 mb-4">
-      <label class="pull-left mt-3 mb-0">Schedule Preview</label>
+  <div class="preview-container" ng-show="schedule.id && schedule.content.length">
+    <div class="flex-row border-bottom py-4 mb-4">
+      <div class="row-entry">
+        <label class="pull-left mr-auto mb-0">Schedule Preview</label>
+        <div class="madero-checkbox u_clickable" ng-click="applyTimeline = !applyTimeline">
+          <input type="checkbox" ng-checked="applyTimeline" tabindex="1">
+          <label>
+            <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
+          </label>
+        </div>
+        <span class="mr-3">Apply Timeline to preview.</span>
 
-      <share-schedule-button schedule="schedule" button-class="btn-default btn-toolbar"></share-schedule-button>
+        <share-schedule-button schedule="schedule" button-class="btn-default btn-toolbar"></share-schedule-button>
+      </div>
     </div>
 
     <div class="preview-embed">
