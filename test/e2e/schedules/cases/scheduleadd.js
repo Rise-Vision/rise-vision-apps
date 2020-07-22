@@ -42,7 +42,7 @@ var ScheduleAddScenarios = function() {
     });
 
     it('should not show Share Schedule buttons', function () {
-      expect(scheduleAddPage.getShareScheduleButton().isPresent()).to.eventually.be.false;
+      expect(scheduleAddPage.getShareScheduleButton().isDisplayed()).to.eventually.be.false;
     });
 
     it('should show Save Button', function () {
