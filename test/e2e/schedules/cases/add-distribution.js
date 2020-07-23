@@ -131,16 +131,12 @@ var AddDistributionScenarios = function() {
         });
 
         describe('Choose all displays given a display is already set to a schedule', function () {
-          before(function () {
-            var scheduleName = 'TEST_E2E_SCHEDULE_WITH_DISTRIBUTION';
-            scheduleAddPage.getScheduleNameField().sendKeys(scheduleName);
-            helper.clickWhenClickable(scheduleAddPage.getSaveButton()).then(function () {
-            });
-          });
-
           it('should show an error saying another user has already set a display to a schedule', function () {
             var expectResultPart1 = 'Failed to add Schedule. The Schedule could not be added. Another schedule (';
             var expectResultPart2 = ') is also set to be distributed to'
+
+            helper.clickWhenClickable(scheduleAddPage.getSaveButton());
+
             helper.wait(scheduleAddPage.getErrorBox(), 'Error box').then(function () {
               expect(scheduleAddPage.getErrorBox().getText()).to.eventually.string(expectResultPart1);
               expect(scheduleAddPage.getErrorBox().getText()).to.eventually.string(expectResultPart2);

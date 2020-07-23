@@ -49,6 +49,7 @@ describe('controller: Playlist Item Modal', function() {
       };
     });
     $provide.value('playlistItem', playlistItem);
+    $provide.value('TRANSITION_TYPES', []);
   }));
 
   var $scope, $modalInstance, $modalInstanceDismissSpy, itemUpdated, playlistItem, presentationType, playlistFactory, presentationFactory;
@@ -86,6 +87,7 @@ describe('controller: Playlist Item Modal', function() {
   it('should exist',function(){
     expect($scope).to.be.truely;
     
+    expect($scope.transitionTypes).to.be.ok;
     expect($scope.companyId).to.equal('companyId');
     expect($scope.isNew).to.be.true;
     expect($scope.playlistItem).to.deep.equal(playlistItem);

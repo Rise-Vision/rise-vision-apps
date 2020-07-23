@@ -8,7 +8,7 @@
 
   <div class="modal-body" stop-event="touchend" rv-spinner rv-spinner-key="playlist-item-modal-loader" rv-spinner-start-active="1">
     <form role="form" name="playlistItemFields" ng-enter="save()" novalidate>
-      <div class="form-group">
+      <div class="form-group" ng-if="playlistItem.type !== 'presentation'">
         <label class="control-label" translate>schedules-app.playlist.item.name</label>
         <input type="text" class="form-control" id="itemName" placeholder="Item Name" ng-model="playlistItem.name"> 
       </div>      
@@ -25,6 +25,9 @@
       <div class="form-group" ng-if="playlistItem.type === 'presentation'">
         <label class="control-label u_margin-right" >{{'schedules-app.playlist.item.presentation' | translate}}:</label>
         <a class="u_clickable" id="presentationName" ng-click="selectPresentation()" presentation-name="playlistItem.objectReference"></a>
+        <br>
+        <a id="presentationLink" ng-if="playlistItem.presentationType !== 'HTML Template'" ui-sref="apps.editor.workspace.artboard({presentationId: playlistItem.objectReference})" link-cid>Edit Presentation</a>
+        <a id="htmlPresentationLink" ng-if="playlistItem.presentationType === 'HTML Template'" ui-sref="apps.editor.templates.edit({presentationId: playlistItem.objectReference})" link-cid>Edit Presentation</a>
       </div>
 
       <hr>
@@ -70,16 +73,7 @@
 
       <div class="form-group">
         <label class="control-label">Transition</label>
-        <select class="form-control" ng-model="playlistItem.transitionType">
-          <option value="normal">No transition</option>
-          <option value="fadeIn">Fade in</option>
-          <option value="slideFromLeft">Slide from left</option>
-          <option value="slideFromRight">Slide from right</option>
-          <option value="slideFromTop">Slide from top</option>
-          <option value="slideFromBottom">Slide from bottom</option>
-          <option value="stripesHorizontal">Stripes horizontal</option>
-          <option value="stripesVertical">Stripes vertical</option>
-          <option value="zoomIn">Zoom in</option>
+        <select class="form-control" ng-model="playlistItem.transitionType" ng-options="t[0] as t[1] for t in transitionTypes">
         </select>
       </div>
     </form>

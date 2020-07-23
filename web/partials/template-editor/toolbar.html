@@ -1,11 +1,8 @@
 <!-- Presentation Name -->
-<input type="text" id="presentationName" class="input-stretchy presentation-name" ng-keyup="presentationNameKeyUp($event)"
-       ng-model="factory.presentation.name" ng-blur="onPresentationNameBlur()" ng-disabled="!isEditingName">
+<stretchy-input class="presentation-name" ng-model="factory.presentation.name"></stretchy-input>
+
 <div>
-  <button id="editNameButton" ng-disabled="isEditingName" type="button" class="edit-name pr-0" ng-click="isEditingName=true">
-    <streamline-icon class="u_margin-left streamline-component-icon" name="pencil" width="16" height="16"></streamline-icon>
-  </button>
-  <button id="deleteButton" ng-disabled="isEditingName || !factory.presentation.id" ng-click="confirmDelete()" class="delete-presentation pl-0">
+  <button id="deleteButton" ng-disabled="isEditingName || !factory.presentation.id" ng-click="confirmDelete()" class="btn-icon pl-0">
     <streamline-icon class="u_margin-left streamline-component-icon" name="trash" width="16" height="16"></streamline-icon>
   </button>
 </div>
