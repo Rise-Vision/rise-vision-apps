@@ -28,6 +28,9 @@ var ScheduleAddPage = function() {
 
   var errorBox = element(by.id('errorBox'));
 
+  var reassignDistribtionModal = element(by.css('.reassign-distribtion-modal'));
+  var closeReassignButton = element(by.css('.reassign-distribtion-modal .close'));
+
   var scheduleLoader = element(by.xpath('//div[@spinner-key="schedule-loader"]'));
 
 
@@ -97,6 +100,14 @@ var ScheduleAddPage = function() {
 
   this.getErrorBox = function () {
     return errorBox;
+  };
+
+  this.getReassignDistribtionModal = function() {
+    return reassignDistribtionModal;
+  };
+
+  this.getCloseReassignButton = function() {
+    return closeReassignButton;
   };
 
   this.getScheduleLoader = function () {

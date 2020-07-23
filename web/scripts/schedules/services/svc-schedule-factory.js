@@ -136,7 +136,7 @@ angular.module('risevision.schedules.services')
         factory.loadingSchedule = true;
         factory.savingSchedule = true;
 
-        return $q.all([_retrieveHasFreeDisplays(), _updateAndCheckConflicts(true)])
+        return $q.all([_retrieveHasFreeDisplays(), _addSchedule()])
           .then(function (results) {
             _showFreeDisplaysMessageIfNeeded(results[0]);
 
@@ -228,7 +228,7 @@ angular.module('risevision.schedules.services')
       var _showDistributionConflictModal = function () {
         return confirmModal('The selected displays already have schedules.',
             'Some of the displays you selected are already assigned to another schedule. Would you like to re-assign them to this schedule?',
-            'Yes', 'No', 'madero-style centered-modal',
+            'Yes', 'No', 'madero-style centered-modal reassign-distribtion-modal',
             'partials/components/confirm-modal/madero-confirm-modal.html')
           .catch(function () {
             return $q.reject({
