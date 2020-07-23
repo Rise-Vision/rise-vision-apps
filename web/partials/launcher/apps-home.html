@@ -10,11 +10,11 @@
 
     <div class="row">
       <div class="col-xs-12">
-        <div id="errorBox" ng-show="schedules.apiError" class="alert alert-danger" role="alert">
+        <div id="errorBox" ng-show="schedules.apiError" class="madero-style alert alert-danger" role="alert">
           <strong>{{schedules.errorMessage}}</strong> {{schedules.apiError}}
         </div>
 
-        <div ng-show="schedules.items.list.length === 0 && !schedules.loadingItems && !schedules.apiError" class="alert alert-warning" role="alert">
+        <div ng-show="schedules.items.list.length === 0 && !schedules.loadingItems && !schedules.apiError" class="madero-style alert alert-warning" role="alert">
           <strong>You haven't created any Schedules yet.</strong> Keep your community connected anywhere they are. Share
           your message to digital signage, websites, personal computers, and more.
           <a ui-sref="apps.schedules.add" link-cid>Add a new Schedule.</a>
