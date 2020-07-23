@@ -22,7 +22,8 @@ angular.module('risevision.apps.directives')
 
             if (!$scope.defaultInputWidth) {
               // first time editing, store the width of the field when default name is displayed
-              $scope.defaultInputWidth = $window.getComputedStyle(stretchyInputElement[0]).getPropertyValue('width');
+              $scope.defaultInputWidth = $window.getComputedStyle(stretchyInputElement[0]).getPropertyValue(
+                'width');
             }
           };
 

@@ -162,7 +162,7 @@ angular.module('risevision.schedules.services')
       };
 
       factory.getItemTransition = function (playlistItem) {
-        var transition = _.find(TRANSITION_TYPES, function(t) {
+        var transition = _.find(TRANSITION_TYPES, function (t) {
           return playlistItem.transitionType === t[0];
         });
 
