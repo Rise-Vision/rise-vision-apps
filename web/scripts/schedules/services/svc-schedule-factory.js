@@ -2,10 +2,9 @@
 
 angular.module('risevision.schedules.services')
   .factory('scheduleFactory', ['$q', '$state', '$log', '$rootScope', 'schedule', 'scheduleTracker',
-    'processErrorCode', 'VIEWER_URL', 'HTML_PRESENTATION_TYPE', 'display', 'plansFactory', 'userState',
-    'confirmModal',
+    'processErrorCode', 'HTML_PRESENTATION_TYPE', 'display', 'plansFactory', 'userState', 'confirmModal',
     function ($q, $state, $log, $rootScope, schedule, scheduleTracker, processErrorCode,
-      VIEWER_URL, HTML_PRESENTATION_TYPE, display, plansFactory, userState, confirmModal) {
+      HTML_PRESENTATION_TYPE, display, plansFactory, userState, confirmModal) {
       var factory = {};
       var _hasSchedules;
       var _scheduleId;
@@ -22,6 +21,7 @@ angular.module('risevision.schedules.services')
         _scheduleId = undefined;
 
         factory.schedule = {
+          name: 'New Schedule',
           companyId: userState.getSelectedCompanyId(),
           content: [],
           distributeToAll: false,
@@ -57,6 +57,7 @@ angular.module('risevision.schedules.services')
             _hasSchedules = true;
 
             factory.schedule = result.item;
+            factory.schedule.changeCount = 0;
 
             deferred.resolve();
           })
@@ -177,6 +178,12 @@ angular.module('risevision.schedules.services')
           .then(function (results) {
             _showFreeDisplaysMessageIfNeeded(results[0]);
 
+            if (isNaN(factory.schedule.changeCount)) {
+              factory.schedule.changeCount = 0;
+            } else {
+              factory.schedule.changeCount++;
+            }
+
             scheduleTracker('Schedule Updated', _scheduleId, factory.schedule.name);
 
             deferred.resolve();
@@ -249,13 +256,6 @@ angular.module('risevision.schedules.services')
           .finally(function () {
             factory.loadingSchedule = false;
           });
-      };
-
-      factory.getPreviewUrl = function () {
-        if (_scheduleId) {
-          return VIEWER_URL + '/?type=schedule&id=' + _scheduleId;
-        }
-        return null;
       };
 
       factory.scheduleHasTransitions = function (schedule) {

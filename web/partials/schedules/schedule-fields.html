@@ -1,13 +1,11 @@
-<div class="form-group" ng-class="{'has-error': !scheduleDetails.name.$pristine && scheduleDetails.name.$invalid}" show-errors>
-  <label class="control-label">{{'schedules-app.fields.name.name' | translate}} *</label>
-  <input type="text" class="form-control" placeholder="{{'schedules-app.fields.name.placeholder' | translate}}" id="name" name="name" ng-model="schedule.name" required focus-me="!scheduleId">
-  <p class="text-danger" ng-show="!scheduleDetails.name.$pristine && scheduleDetails.name.$error.required" translate>
-    schedules-app.fields.name.required
-  </p>
+<stretchy-input ng-model="schedule.name"></stretchy-input>
+
+<div class="form-group mt-5 mb-4">
+  <label>Schedule Details</label>
 </div>
 
 <div class="form-group">
-  <label class="control-label" translate>schedules-app.fields.timeline</label>
+  <label class="control-label timeline-label" translate>schedules-app.fields.timeline</label>
   <timeline-textbox
   use-localdate = "true"
   time-defined = "schedule.timeDefined"
@@ -26,33 +24,78 @@
   ></timeline-textbox>
 </div><!--form-group-->
 
-<distribution-selector distribution="schedule.distribution" distribute-to-all="schedule.distributeToAll"></distribution-selector>
+<distribution-selector distribution="schedule.distribution" distribute-to-all="schedule.distributeToAll" hide-cta="true"></distribution-selector>
 
-<div class="u_margin-md-top text-right">
-  <div class="pull-left">
-    <h3 class="u_remove-top" style="line-height:33px;" translate>schedules-app.playlist.title</h3>
-  </div>
-  <share-schedule-button schedule="schedule" button-class="btn-default" ng-show="schedule.id"></share-schedule-button>
-  <div class="btn-group" dropdown>
-    <button id="addPlaylistItemButton" type="button" dropdown-toggle class="dropdown-toggle btn btn-primary">{{'schedules-app.playlist.add-playlist-item' | translate}} <i class="fa fa-plus icon-right"></i></button>
-    <div class="dropdown-menu playlist-menu" role="menu">
-      <ul>
-      <li>
-        <a class="u_clickable" id="addPresentationItemButton" ng-click="addPresentationItem()">
-          <span translate>schedules-app.playlist.item.presentation</span>
-        </a>
-      </li>
-      <li>
-        <a class="u_clickable" id="addUrlItemButton" ng-click="addUrlItem()">
-          <span translate>schedules-app.playlist.item.url</span>
-        </a>
-      </li>
-      </ul>
+<div class="schedule-fields-body">
+  <div class="playlist-container">
+    <div class="py-4 flex-row">
+      <label class="mb-0 mr-auto" translate>schedules-app.playlist.title</label>
+
+      <div class="btn-group" dropdown ng-if="schedule.content.length">
+        <button id="addPlaylistItemButton" type="button" dropdown-toggle class="dropdown-toggle btn btn-default btn-toolbar">{{'schedules-app.playlist.add-playlist-item' | translate}}</button>
+        <div class="dropdown-menu playlist-menu" role="menu">
+          <ul>
+          <li>
+            <a class="u_clickable" id="addPresentationItemButton" ng-click="addPresentationItem()">
+              <span translate>schedules-app.playlist.item.presentation</span>
+            </a>
+          </li>
+          <li>
+            <a class="u_clickable" id="addUrlItemButton" ng-click="addUrlItem()">
+              <span translate>schedules-app.playlist.item.url</span>
+            </a>
+          </li>
+          </ul>
+        </div>
+      </div>
     </div>
-  </div>  
-  <a class="btn btn-default" id="previewButton" target="_blank" ng-href="{{previewUrl}}" ng-show="previewUrl && isPreviewAvailable()">
-    {{'schedules-app.actions.preview' | translate}} <i class="fa fa-play icon-right"></i>
-  </a>
-</div>
 
-<playlist playlist-items="schedule.content"></playlist>
+    <playlist playlist-items="schedule.content" ng-show="schedule.content.length"></playlist>
+    <div class="border-container text-center" ng-if="!schedule.content.length">
+      <div class="panel-body">
+        <div class="form-group my-4">
+          <label translate>schedules-app.playlist.empty</label>
+        </div>
+        <div class="btn-group pb-2" dropdown>
+          <button id="addPlaylistItemButton" type="button" dropdown-toggle class="dropdown-toggle btn btn-default btn-toolbar">{{'schedules-app.playlist.add-playlist-item' | translate}}</button>
+          <div class="dropdown-menu playlist-menu" role="menu">
+            <ul>
+            <li>
+              <a class="u_clickable" id="addPresentationItemButton" ng-click="addPresentationItem()">
+                <span translate>schedules-app.playlist.item.presentation</span>
+              </a>
+            </li>
+            <li>
+              <a class="u_clickable" id="addUrlItemButton" ng-click="addUrlItem()">
+                <span translate>schedules-app.playlist.item.url</span>
+              </a>
+            </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- presentationIds field is only updated when the Schedule is saved -->
+  <div class="preview-container" ng-show="schedule.id && schedule.content.length">
+    <div class="flex-row border-bottom py-4 mb-4">
+      <div class="row-entry">
+        <label class="pull-left mr-auto mb-0">Schedule Preview</label>
+        <div class="madero-checkbox u_clickable" ng-click="applyTimeline = !applyTimeline">
+          <input type="checkbox" ng-checked="applyTimeline" tabindex="1">
+          <label>
+            <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
+          </label>
+        </div>
+        <span class="mr-3">Apply Timeline to preview.</span>
+
+        <share-schedule-button schedule="schedule" button-class="btn-default btn-toolbar"></share-schedule-button>
+      </div>
+    </div>
+
+    <div class="preview-embed">
+      <iframe frameborder="0" ng-src="{{getEmbedUrl()}}">
+      </iframe>
+    </div>
+  </div>
+</div>

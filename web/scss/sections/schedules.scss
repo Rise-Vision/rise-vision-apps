@@ -14,3 +14,75 @@
     }
   }
 }
+
+.schedule-fields-body {
+  margin-left: 0px;
+  margin-right: 0px;
+  display: flex;
+  flex-flow: column-reverse;
+
+  @media (min-width: $screen-md) {
+    display: flex;
+    flex-flow: row;
+    height: calc(100vh - var(--body-height));
+  }
+
+  .preview-container {
+    width: 100%;
+    overflow: auto;
+
+    @media (min-width: $screen-md) {
+      @extend .ml-lg-5;
+
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .playlist-container {
+    --sidebar-width: 450px;
+
+    height: 100%;
+
+    @media (min-width: $screen-md) {
+      flex-grow: 1;
+      flex-shrink: 0;
+      flex-basis: var(--sidebar-width);
+      width: var(--sidebar-width);
+
+      .scrollable-list {
+        max-height: calc(100vh - 387px);
+        min-height: 387px;
+
+        .draggable-mirror {
+          border-top: 1px solid $madero-gray;
+          background: rgba(242, 242, 242, 0.85);
+        }
+
+        .list-group-item {
+          height: 62px;
+          padding-top: 0px;
+          padding-bottom: 0px;
+        }
+
+        .name-container {
+          margin-top: 0px;
+          height: auto;
+        }
+      }
+    }
+  }
+}
+
+.preview-embed {
+  position: relative;
+  padding-bottom: 56.25%;
+
+  iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+  }
+}

@@ -3,11 +3,22 @@
 angular.module('risevision.schedules.services')
   .constant('TYPE_URL', 'url')
   .constant('TYPE_PRESENTATION', 'presentation')
+  .constant('TRANSITION_TYPES', [
+    ['normal', 'No transition'],
+    ['fadeIn', 'Fade in'],
+    ['slideFromLeft', 'Slide from left'],
+    ['slideFromRight', 'Slide from right'],
+    ['slideFromTop', 'Slide from top'],
+    ['slideFromBottom', 'Slide from bottom'],
+    ['stripesHorizontal', 'Stripes horizontal'],
+    ['stripesVertical', 'Stripes vertical'],
+    ['zoomIn', 'Zoom in']
+  ])
   .factory('playlistFactory', ['$q', 'scheduleFactory', 'scheduleTracker', 'presentationFactory', 'blueprintFactory',
     'TYPE_URL', 'TYPE_PRESENTATION', 'HTML_PRESENTATION_TYPE', 'TimelineFactory',
-    'timelineDescription',
+    'timelineDescription', 'TRANSITION_TYPES',
     function ($q, scheduleFactory, scheduleTracker, presentationFactory, blueprintFactory,
-      TYPE_URL, TYPE_PRESENTATION, HTML_PRESENTATION_TYPE, TimelineFactory, timelineDescription) {
+      TYPE_URL, TYPE_PRESENTATION, HTML_PRESENTATION_TYPE, TimelineFactory, timelineDescription, TRANSITION_TYPES) {
       var DEFAULT_DURATION = 10;
       var factory = {};
 
@@ -121,35 +132,6 @@ angular.module('risevision.schedules.services')
         }
       };
 
-      factory.canPlaylistItemMoveDown = function (playlistItem) {
-        var index = _getItemIndex(playlistItem);
-
-        return index > -1 && index < factory.getPlaylist().length - 1;
-      };
-
-      factory.canPlaylistItemMoveUp = function (playlistItem) {
-        return _getItemIndex(playlistItem) > 0;
-      };
-
-      var _moveItem = function (playlistItem, newIndex) {
-        var index = _getItemIndex(playlistItem);
-        var playlist = factory.getPlaylist();
-
-        playlist.splice(newIndex, 0, playlist.splice(index, 1)[0]);
-      };
-
-      factory.movePlaylistItemDown = function (playlistItem) {
-        if (factory.canPlaylistItemMoveDown(playlistItem)) {
-          _moveItem(playlistItem, _getItemIndex(playlistItem) + 1);
-        }
-      };
-
-      factory.movePlaylistItemUp = function (playlistItem) {
-        if (factory.canPlaylistItemMoveUp(playlistItem)) {
-          _moveItem(playlistItem, _getItemIndex(playlistItem) - 1);
-        }
-      };
-
       factory.moveItem = function (currIndex, newIndex) {
         var playlist = factory.getPlaylist();
 
@@ -177,6 +159,14 @@ angular.module('risevision.schedules.services')
         } else {
           return 'Always';
         }
+      };
+
+      factory.getItemTransition = function (playlistItem) {
+        var transition = _.find(TRANSITION_TYPES, function(t) {
+          return playlistItem.transitionType === t[0];
+        });
+
+        return transition ? transition[1] : TRANSITION_TYPES[0][1];
       };
 
       return factory;

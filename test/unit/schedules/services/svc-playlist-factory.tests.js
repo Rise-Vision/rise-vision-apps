@@ -69,10 +69,9 @@ describe('service: playlistFactory:', function() {
     expect(playlistFactory.removePlaylistItem).to.be.a('function');
     expect(playlistFactory.duplicatePlaylistItem).to.be.a('function');    
     expect(playlistFactory.updatePlaylistItem).to.be.a('function');
-    expect(playlistFactory.canPlaylistItemMoveDown).to.be.a('function');
-    expect(playlistFactory.canPlaylistItemMoveUp).to.be.a('function');
-    expect(playlistFactory.movePlaylistItemDown).to.be.a('function');
-    expect(playlistFactory.movePlaylistItemUp).to.be.a('function');
+    expect(playlistFactory.moveItem).to.be.a('function');
+    expect(playlistFactory.getItemTimeline).to.be.a('function');
+    expect(playlistFactory.getItemTransition).to.be.a('function');
   });
   
   describe('getPlaylist: ', function() {
@@ -303,28 +302,6 @@ describe('service: playlistFactory:', function() {
       expect(playlist[2].name).to.equal('Copy of Item 1')
     });
   });
-  
-  it('canPlaylistItemMoveUp/Down: ', function() {
-    expect(playlistFactory.canPlaylistItemMoveDown(playlistItem0)).to.be.true;
-    expect(playlistFactory.canPlaylistItemMoveDown(playlistItem2)).to.be.false;
-    
-    expect(playlistFactory.canPlaylistItemMoveUp(playlistItem0)).to.be.false;
-    expect(playlistFactory.canPlaylistItemMoveUp(playlistItem2)).to.be.true;
-  }); 
-  
-  it('movePlaylistItemUp/Down: ', function() {
-    playlistFactory.movePlaylistItemDown(playlistItem0);
-    
-    expect(playlist.indexOf(playlistItem0)).to.equal(1);
-    
-    playlistFactory.movePlaylistItemUp(playlistItem2);
-    
-    expect(playlist.indexOf(playlistItem2)).to.equal(1);
-    expect(playlist.indexOf(playlistItem0)).to.equal(2);
-
-    playlistFactory.movePlaylistItemDown(playlistItem0);
-    expect(playlist.indexOf(playlistItem0)).to.equal(2);
-  }); 
 
   describe('moveItem: ', function() {
     it('movePlaylistItemUp/Down: ', function() {
@@ -341,4 +318,17 @@ describe('service: playlistFactory:', function() {
       expect(playlist.indexOf(playlistItem0)).to.equal(0);
     });
   });
+
+  it('getItemTransition:', function() {
+    expect(playlistFactory.getItemTransition({})).to.equal('No transition');
+
+    expect(playlistFactory.getItemTransition({
+      transitionType: 'normal'
+    })).to.equal('No transition');
+
+    expect(playlistFactory.getItemTransition({
+      transitionType: 'slideFromTop'
+    })).to.equal('Slide from top');
+  });
+
 });
