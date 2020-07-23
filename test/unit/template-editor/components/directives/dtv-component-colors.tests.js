@@ -6,7 +6,7 @@ describe('directive: templateComponentColors', function() {
     factory;
 
   beforeEach(function() {
-    factory = { selected: { id: "TEST-ID" } };
+    factory = { selected: { id: 'TEST-ID' } };
   });
 
   beforeEach(module('risevision.template-editor.directives'));
@@ -25,9 +25,10 @@ describe('directive: templateComponentColors', function() {
     $scope = $rootScope.$new();
 
     $scope.registerDirective = sinon.stub();
-    $scope.setAttributeData = sinon.stub();
+    $scope.setAttributeDataGlobal = sinon.stub();
+    $scope.getAttributeDataGlobal = sinon.stub();
 
-    element = $compile("<template-component-colors></template-component-colors>")($scope);
+    element = $compile('<template-component-colors></template-component-colors>')($scope);
     $scope = element.scope();
     $scope.$digest();
   }));
@@ -35,7 +36,7 @@ describe('directive: templateComponentColors', function() {
   it('should exist', function() {
     expect($scope).to.be.ok;
     expect($scope.factory).to.be.ok;
-    expect($scope.factory).to.deep.equal({ selected: { id: "TEST-ID" } });
+    expect($scope.factory).to.deep.equal({ selected: { id: 'TEST-ID' } });
     expect($scope.registerDirective).to.have.been.called;
 
     var directive = $scope.registerDirective.getCall(0).args[0];
@@ -44,6 +45,62 @@ describe('directive: templateComponentColors', function() {
     expect(directive.iconType).to.equal('streamline');
     expect(directive.icon).to.exist;
     expect(directive.show).to.be.a('function');
+  });
+
+  it('should save colors if override is true', function() {
+    $scope.override = true;
+    $scope.baseColor = 'red';
+    $scope.accentColor = 'green';
+    $scope.save();
+    expect($scope.setAttributeDataGlobal.calledWith('brandingOverride', {baseColor: 'red', accentColor: 'green'})).to.be.true;
+  });
+
+  it('should not save colors if override is false', function() {
+    $scope.override = false;
+    $scope.baseColor = 'red';
+    $scope.accentColor = 'green';
+    $scope.save();
+    expect($scope.setAttributeDataGlobal.calledWith('brandingOverride', null)).to.be.true;
+  });
+
+  it('should load colors and set override to true', function() {
+    $scope.getAttributeDataGlobal.returns({baseColor: 'red', accentColor: 'green'});
+    $scope.load();
+    expect($scope.override).to.be.true;
+    expect($scope.baseColor).to.equal('red');
+    expect($scope.accentColor).to.equal('green');
+  });
+
+  it('should set override to false', function() {
+    $scope.getAttributeDataGlobal.returns(null);
+    $scope.load();
+    expect($scope.override).to.be.false;
+  });
+
+  it('should save baseColor on change', function() {
+    $scope.getAttributeDataGlobal.returns({baseColor: 'red', accentColor: 'green'});
+    $scope.load(); //register $watch for baseColor
+    $scope.$digest();
+
+    $scope.save = sinon.stub();
+
+    $scope.baseColor = 'blue';
+    $scope.$digest();
+
+    expect($scope.save).to.be.calledOnce;
+  });
+
+  it('should save accentColor on change', function() {
+    $scope.getAttributeDataGlobal.returns({baseColor: 'red', accentColor: 'green'});
+    $scope.load(); //register $watch for accentColor
+    $scope.$digest();
+
+    $scope.save = sinon.stub();
+
+    $scope.accentColor = 'blue';
+    $scope.$digest();
+
+    expect($scope.save).to.be.calledOnce;
   });
 
 });
