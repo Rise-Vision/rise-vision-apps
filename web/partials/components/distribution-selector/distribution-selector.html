@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="form-group" ng-hide="distributionStyle === 'madero'">
   <label class="control-label u_margin-right">Distribution</label>
   <label class="control-label control-label-secondary">
     <input type="checkbox" ng-model="distributeToAll" ng-checked="distributeToAll" class="ng-valid ng-dirty" checked="checked">
@@ -8,4 +8,23 @@
     <div class="label label-tag"><span id="distributionFieldText" ng-bind="distributionSelectionMessage"></span></div>
     <span ng-hide="hideCta" class="input-group-addon btn btn-primary">Select Display(s)</span>
   </div>
+</div>
+
+<div class="form-group" ng-show="distributionStyle === 'madero'">
+  <div class="flex-row">
+    <div class="row-entry">
+      <label class="control-label pull-left mb-0">Distribution</label>
+
+      <div id="allDisplaysCheckboxMask" class="madero-checkbox u_clickable u_margin-left" ng-click="distributeToAll = !distributeToAll">
+        <input type="checkbox" id="allDisplaysCheckbox" ng-model="distributeToAll" tabindex="1">
+        <label>
+          <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
+        </label>
+      </div>
+      <span class="mr-3">Show on all displays.</span>
+    </div>
+  </div>
+  <span id="distributionFieldMadero" class="madero-link u_clickable" timeline="timeline" ng-click="manage()" ng-show="!distributeToAll">
+    <span id="distributionFieldTextMadero" ng-bind="distributionSelectionMessage"></span>
+  </span>
 </div>

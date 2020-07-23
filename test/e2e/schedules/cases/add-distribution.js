@@ -39,9 +39,8 @@ var AddDistributionScenarios = function() {
       });
 
       it('should show All Displays checkbox', function () {
-        expect(scheduleAddPage.getDistributionAllDisplaysCheckbox().isDisplayed()).to.eventually.be.true;
-        expect(scheduleAddPage.getDistributionAllDisplaysCheckbox().isSelected())
-          .to.eventually.be.false;
+        expect(scheduleAddPage.getDistributionAllDisplaysCheckboxMask().isDisplayed()).to.eventually.be.true;
+        expect(scheduleAddPage.getDistributionAllDisplaysCheckbox().isSelected()).to.eventually.be.false;
       });
 
       describe('Click on the Distribution field', function () {
@@ -123,7 +122,7 @@ var AddDistributionScenarios = function() {
 
         describe('Choose all displays', function () {
           before(function () {
-            scheduleAddPage.getDistributionAllDisplaysCheckbox().click();
+            helper.clickOverIFrame(scheduleAddPage.getDistributionAllDisplaysCheckbox(), 'All Displays checkbox');
           });
           it('should hide displays field', function () {
             expect(distributionModalPage.getEditDistributionModal().isPresent()).to.eventually.be.false;

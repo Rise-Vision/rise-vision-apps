@@ -8,6 +8,7 @@ angular.module('risevision.common.components.distribution-selector')
         scope: {
           distribution: '=',
           distributeToAll: '=',
+          distributionStyle: '@',
           hideCta: '='
         },
         templateUrl: 'partials/components/distribution-selector/distribution-selector.html',
