@@ -135,7 +135,7 @@ angular.module('risevision.schedules.services')
         factory.loadingSchedule = true;
         factory.savingSchedule = true;
 
-        return $q.all([_retrieveHasFreeDisplays(), schedule.add(factory.schedule)])
+        return $q.all([_retrieveHasFreeDisplays(), _updateAndCheckConflicts(true)])
           .then(function (results) {
             _showFreeDisplaysMessageIfNeeded(results[0]);
 
@@ -173,7 +173,7 @@ angular.module('risevision.schedules.services')
         factory.loadingSchedule = true;
         factory.savingSchedule = true;
 
-        $q.all([_retrieveHasFreeDisplays(), _updateSchedule()])
+        $q.all([_retrieveHasFreeDisplays(), _updateAndCheckConflicts()])
           .then(function (results) {
             _showFreeDisplaysMessageIfNeeded(results[0]);
 
@@ -194,8 +194,14 @@ angular.module('risevision.schedules.services')
         return deferred.promise;
       };
 
-      var _updateSchedule = function () {
-        return schedule.update(_scheduleId, factory.schedule).catch(function (err) {
+      var _updateAndCheckConflicts = function (isNewSchedule) {
+        var initialRequest;
+        if (isNewSchedule) {
+          initialRequest = schedule.add(factory.schedule);
+        } else {
+          initialRequest = schedule.update(_scheduleId, factory.schedule);
+        }
+        return initialRequest.catch(function (err) {
           if (err.result.error.code === 409) {
             var deferred = $q.defer();
 
@@ -204,7 +210,11 @@ angular.module('risevision.schedules.services')
                 'Yes', 'No', 'madero-style centered-modal',
                 'partials/components/confirm-modal/madero-confirm-modal.html')
               .then(function () {
-                deferred.resolve(schedule.reassignDistribution(_scheduleId, factory.schedule));
+                if (isNewSchedule) {
+                  deferred.resolve(schedule.add(factory.schedule, true));
+                } else {
+                  deferred.resolve(schedule.update(_scheduleId, factory.schedule, true));  
+                }                
               })
               .catch(function () {
                 deferred.reject({

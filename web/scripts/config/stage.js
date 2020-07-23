@@ -18,7 +18,7 @@
 
   angular.module('risevision.common.config')
     .value('CORE_URL',
-    'https://reassign-as-schedule-dot-rvacore-test.appspot.com/_ah/api') // override default core value
+    'https://reassign-distribution-dot-rvacore-test.appspot.com/_ah/api') // override default core value
     .value('COOKIE_CHECK_URL', '//storage-dot-rvacore-test.appspot.com');
 
   angular.module('risevision.apps.config', [])

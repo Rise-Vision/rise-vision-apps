@@ -81,11 +81,11 @@ angular.module('risevision.schedules.services')
 
           return deferred.promise;
         },
-        add: function (schedule) {
+        add: function (schedule, forceDistribution) {
           var deferred = $q.defer();
 
-          var fields = pick.apply(this, [schedule].concat(
-            SCHEDULE_WRITABLE_FIELDS));
+          var fields = pick.apply(this, [schedule].concat(SCHEDULE_WRITABLE_FIELDS));
+          fields.forceDistribution = forceDistribution;
           var obj = {
             'companyId': userState.getSelectedCompanyId(),
             'data': fields
@@ -103,11 +103,12 @@ angular.module('risevision.schedules.services')
             });
           return deferred.promise;
         },
-        update: function (scheduleId, schedule) {
+        update: function (scheduleId, schedule, forceDistribution) {
           var deferred = $q.defer();
 
-          var fields = pick.apply(this, [schedule].concat(
-            SCHEDULE_WRITABLE_FIELDS));
+          var fields = pick.apply(this, [schedule].concat(SCHEDULE_WRITABLE_FIELDS));
+          fields.forceDistribution = forceDistribution;
+          
           var obj = {
             'id': scheduleId,
             'data': fields
@@ -191,30 +192,6 @@ angular.module('risevision.schedules.services')
             })
             .then(null, function (e) {
               console.error('Failed to remove presentation from schedule.', e);
-              deferred.reject(e);
-            });
-
-          return deferred.promise;
-        },
-        reassignDistribution: function (scheduleId, schedule) {
-          var deferred = $q.defer();
-
-          var fields = pick.apply(this, [schedule].concat(SCHEDULE_WRITABLE_FIELDS));
-          var obj = {
-            'id': scheduleId,
-            'data': fields
-          };
-
-          $log.debug('reassignDistribution from schedule called with', scheduleId);
-          coreAPILoader().then(function (coreApi) {
-              return coreApi.schedule.reassignDistribution(obj);
-            })
-            .then(function (resp) {
-              $log.debug('reassignDistribution from schedule resp', resp);
-              deferred.resolve(resp.result);
-            })
-            .then(null, function (e) {
-              console.error('Failed to reassign distribution from schedule.', e);
               deferred.reject(e);
             });
 
