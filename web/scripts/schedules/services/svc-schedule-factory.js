@@ -201,42 +201,6 @@ angular.module('risevision.schedules.services')
         return deferred.promise;
       };
 
-      var _updateSchedule = function () {
-        return schedule.update(_scheduleId, factory.schedule).catch(function (err) {
-          if (err.result.error.code === 409) {
-            return _showDistributionConflictModal()
-              .then(function () {
-                return $q.resolve(schedule.update(_scheduleId, factory.schedule, true));
-              });
-          }
-          return $q.reject(err);
-        });
-      };
-
-      var _addSchedule = function () {
-        return schedule.add(factory.schedule).catch(function (err) {
-          if (err.result.error.code === 409) {
-            return _showDistributionConflictModal()
-              .then(function () {
-                return $q.resolve(schedule.add(factory.schedule, true));
-              });
-          }
-          return $q.reject(err);
-        });
-      };
-
-      var _showDistributionConflictModal = function () {
-        return confirmModal('The selected displays already have schedules.',
-            'Some of the displays you selected are already assigned to another schedule. Would you like to re-assign them to this schedule?',
-            'Yes', 'No', 'madero-style centered-modal reassign-distribtion-modal',
-            'partials/components/confirm-modal/madero-confirm-modal.html')
-          .catch(function () {
-            return $q.reject({
-              message: 'Some of the displays are already assigned to another schedule.'
-            });
-          });;
-      };
-
       factory.deleteSchedule = function () {
         _clearMessages();
 
@@ -284,6 +248,42 @@ angular.module('risevision.schedules.services')
       $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
         _hasSchedules = undefined;
       });
+
+      var _updateSchedule = function () {
+        return schedule.update(_scheduleId, factory.schedule).catch(function (err) {
+          if (err.result.error.code === 409) {
+            return _showDistributionConflictModal()
+              .then(function () {
+                return $q.resolve(schedule.update(_scheduleId, factory.schedule, true));
+              });
+          }
+          return $q.reject(err);
+        });
+      };
+
+      var _addSchedule = function () {
+        return schedule.add(factory.schedule).catch(function (err) {
+          if (err.result.error.code === 409) {
+            return _showDistributionConflictModal()
+              .then(function () {
+                return $q.resolve(schedule.add(factory.schedule, true));
+              });
+          }
+          return $q.reject(err);
+        });
+      };
+
+      var _showDistributionConflictModal = function () {
+        return confirmModal('The selected displays already have schedules.',
+            'Some of the displays you selected are already assigned to another schedule. Would you like to re-assign them to this schedule?',
+            'Yes', 'No', 'madero-style centered-modal reassign-distribtion-modal',
+            'partials/components/confirm-modal/madero-confirm-modal.html')
+          .catch(function () {
+            return $q.reject({
+              message: 'Some of the displays are already assigned to another schedule.'
+            });
+          });
+      };
 
       var _showErrorMessage = function (action, e) {
         factory.errorMessage = 'Failed to ' + action + ' Schedule.';

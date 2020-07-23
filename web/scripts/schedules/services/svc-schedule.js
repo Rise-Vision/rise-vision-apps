@@ -86,6 +86,7 @@ angular.module('risevision.schedules.services')
 
           var fields = pick.apply(this, [schedule].concat(SCHEDULE_WRITABLE_FIELDS));
           fields.forceDistribution = forceDistribution;
+
           var obj = {
             'companyId': userState.getSelectedCompanyId(),
             'data': fields
