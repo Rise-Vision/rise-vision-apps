@@ -17,7 +17,7 @@ angular.module('risevision.template-editor.directives')
           };
 
           $scope.registerDirective({
-            type: 'rise-data-colors',
+            type: 'rise-override-brand-colors',
             iconType: 'streamline',
             icon: 'palette',
             element: element,
