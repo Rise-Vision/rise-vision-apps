@@ -22,6 +22,7 @@ angular.module('risevision.template-editor.directives')
             icon: 'palette',
             element: element,
             show: function () {
+              $scope.setPanelTitle('Override Brand Colors');
               element.show();
               $scope.componentId = $scope.factory.selected.id;
               $scope.load();

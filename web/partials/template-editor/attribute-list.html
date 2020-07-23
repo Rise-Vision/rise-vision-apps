@@ -40,6 +40,26 @@
     </a>
   </div>
 </div>
+
+<div id="overrideColors">
+  <div class="attribute-row">
+    <div class="col-xs-10 pl-0 attribute-desc">
+      <component-icon icon="{{ getComponentIcon(colorsComponent) }}" type="{{ getComponentIconType(colorsComponent) }}"></component-icon>
+      <span>
+        Override Brand Colors
+      </span>
+    </div>
+    <div class="col-xs-2 pr-0 align-right">
+      <a id="override-colors-edit" ng-click="editComponent(colorsComponent);">
+        <span class="attribute-edit text-nowrap">
+          <span translate>template.attribute-editor.edit-component</span>
+          <i class="fa fa-lg fa-angle-right arrow-icon"></i>
+        </span>
+      </a>
+    </div>
+  </div>
+</div>
+
 <div ng-mouseleave="highlightComponent(null)">
   <div class="attribute-row attribute-row-hover" ng-repeat="comp in components track by $index">
     <div class="col-xs-10 pl-0 attribute-desc" ng-mouseover="highlightComponent(comp.id)">
