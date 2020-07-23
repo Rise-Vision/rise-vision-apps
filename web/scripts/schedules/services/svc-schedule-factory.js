@@ -57,7 +57,6 @@ angular.module('risevision.schedules.services')
             _hasSchedules = true;
 
             factory.schedule = result.item;
-            factory.schedule.changeCount = 0;
 
             deferred.resolve();
           })
@@ -178,11 +177,7 @@ angular.module('risevision.schedules.services')
           .then(function (results) {
             _showFreeDisplaysMessageIfNeeded(results[0]);
 
-            if (isNaN(factory.schedule.changeCount)) {
-              factory.schedule.changeCount = 0;
-            } else {
-              factory.schedule.changeCount++;
-            }
+            factory.schedule = results[1].item;
 
             scheduleTracker('Schedule Updated', _scheduleId, factory.schedule.name);
 

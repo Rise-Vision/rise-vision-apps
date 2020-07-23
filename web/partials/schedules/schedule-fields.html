@@ -1,4 +1,4 @@
-<stretchy-input ng-model="schedule.name"></stretchy-input>
+<stretchy-input ng-model="factory.schedule.name"></stretchy-input>
 
 <div class="form-group mt-5 mb-4">
   <label>Schedule Details</label>
@@ -8,30 +8,30 @@
   <label class="control-label timeline-label" translate>schedules-app.fields.timeline</label>
   <timeline-textbox
   use-localdate = "true"
-  time-defined = "schedule.timeDefined"
-  start-date = "schedule.startDate"
-  end-date = "schedule.endDate"
-  start-time = "schedule.startTime"
-  end-time = "schedule.endTime"
-  recurrence-type = "schedule.recurrenceType"
-  recurrence-frequency = "schedule.recurrenceFrequency"
-  recurrence-absolute = "schedule.recurrenceAbsolute"
-  recurrence-day-of-week = "schedule.recurrenceDayOfWeek"
-  recurrence-day-of-month = "schedule.recurrenceDayOfMonth"
-  recurrence-week-of-month = "schedule.recurrenceWeekOfMonth"
-  recurrence-month-of-year = "schedule.recurrenceMonthOfYear"
-  recurrence-days-of-week = "schedule.recurrenceDaysOfWeek"
+  time-defined = "factory.schedule.timeDefined"
+  start-date = "factory.schedule.startDate"
+  end-date = "factory.schedule.endDate"
+  start-time = "factory.schedule.startTime"
+  end-time = "factory.schedule.endTime"
+  recurrence-type = "factory.schedule.recurrenceType"
+  recurrence-frequency = "factory.schedule.recurrenceFrequency"
+  recurrence-absolute = "factory.schedule.recurrenceAbsolute"
+  recurrence-day-of-week = "factory.schedule.recurrenceDayOfWeek"
+  recurrence-day-of-month = "factory.schedule.recurrenceDayOfMonth"
+  recurrence-week-of-month = "factory.schedule.recurrenceWeekOfMonth"
+  recurrence-month-of-year = "factory.schedule.recurrenceMonthOfYear"
+  recurrence-days-of-week = "factory.schedule.recurrenceDaysOfWeek"
   ></timeline-textbox>
 </div><!--form-group-->
 
-<distribution-selector distribution="schedule.distribution" distribute-to-all="schedule.distributeToAll" hide-cta="true"></distribution-selector>
+<distribution-selector distribution="factory.schedule.distribution" distribute-to-all="factory.schedule.distributeToAll" hide-cta="true"></distribution-selector>
 
 <div class="schedule-fields-body">
   <div class="playlist-container">
     <div class="py-4 flex-row">
       <label class="mb-0 mr-auto" translate>schedules-app.playlist.title</label>
 
-      <div class="btn-group" dropdown ng-if="schedule.content.length">
+      <div class="btn-group" dropdown ng-if="factory.schedule.content.length">
         <button id="addPlaylistItemButton" type="button" dropdown-toggle class="dropdown-toggle btn btn-default btn-toolbar">{{'schedules-app.playlist.add-playlist-item' | translate}}</button>
         <div class="dropdown-menu playlist-menu" role="menu">
           <ul>
@@ -50,8 +50,8 @@
       </div>
     </div>
 
-    <playlist playlist-items="schedule.content" ng-show="schedule.content.length"></playlist>
-    <div class="border-container text-center" ng-if="!schedule.content.length">
+    <playlist playlist-items="factory.schedule.content" ng-show="factory.schedule.content.length"></playlist>
+    <div class="border-container text-center" ng-if="!factory.schedule.content.length">
       <div class="panel-body">
         <div class="form-group my-4">
           <label translate>schedules-app.playlist.empty</label>
@@ -77,7 +77,7 @@
     </div>
   </div>
   <!-- presentationIds field is only updated when the Schedule is saved -->
-  <div class="preview-container" ng-show="schedule.id && schedule.content.length">
+  <div class="preview-container" ng-show="factory.schedule.id && factory.schedule.content.length">
     <div class="flex-row border-bottom py-4 mb-4">
       <div class="row-entry">
         <label class="pull-left mr-auto mb-0">Schedule Preview</label>
