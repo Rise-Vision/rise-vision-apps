@@ -1523,6 +1523,17 @@ $short-phone-height: 570px;
   }
 }
 
+.madero-link {
+  @extend a;
+
+  color: #107DDA;
+  text-decoration: underline;
+
+  &:visited, &:hover, &:active {
+    color: #107DDA;
+  }
+}
+
 .madero-radio, .madero-checkbox {
   margin-top: 0px;
   margin-bottom: 0px;

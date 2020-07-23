@@ -81,7 +81,7 @@ var PlaylistScenarios = function() {
         });
 
         it('should open properties', function () {
-          scheduleAddPage.getPlaylistItems().get(0).element(by.css('.playlist-item-name')).click();
+          scheduleAddPage.getPlaylistItems().get(0).element(by.id('playlistItemNameCell')).click();
 
           helper.wait(playlistItemModalPage.getPlaylistItemModal(), 'Edit Playist Modal');
 
