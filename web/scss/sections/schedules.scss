@@ -51,8 +51,7 @@
       width: var(--sidebar-width);
 
       .scrollable-list {
-        max-height: calc(100vh - 387px);
-        min-height: 387px;
+        height: 275px;
 
         .draggable-mirror {
           border-top: 1px solid $madero-gray;
@@ -69,6 +68,12 @@
           margin-top: 0px;
           height: auto;
         }
+      }
+    }
+
+    @media (min-width: $screen-lg) {
+      .scrollable-list {
+        height: 387px;
       }
     }
   }
