@@ -12,8 +12,17 @@ angular.module('risevision.template-editor.directives')
 
           // TODO: refactor logic for Override Brand Settings epic
 
-          $scope.saveOverride = function () {
-            $scope.setAttributeData($scope.componentId, 'override', $scope.override);
+          $scope.save = function () {
+            var brandingOverride = null;
+
+            if ($scope.override) {
+              brandingOverride = {
+                'baseColor': $scope.baseColor,
+                'accentColor': $scope.accentColor
+              };
+            }
+
+            $scope.setAttributeDataGlobal('brandingOverride', brandingOverride);
           };
 
           $scope.registerDirective({
@@ -30,19 +39,22 @@ angular.module('risevision.template-editor.directives')
           });
 
           $scope.load = function () {
-            $scope.baseColor = $scope.getAvailableAttributeData($scope.componentId, 'base');
-            $scope.accentColor = $scope.getAvailableAttributeData($scope.componentId, 'accent');
-            $scope.override = $scope.getAvailableAttributeData($scope.componentId, 'override');
+
+            var brandingOverride = $scope.getAttributeDataGlobal('brandingOverride');
+
+            $scope.override = !!brandingOverride;
+            $scope.baseColor = $scope.override ? brandingOverride.baseColor : null;
+            $scope.accentColor = $scope.override ? brandingOverride.accentColor : null;
 
             $scope.$watch('baseColor', function (newVal, oldVal) {
               if (newVal && newVal !== oldVal) {
-                $scope.setAttributeData($scope.componentId, 'base', $scope.baseColor);
+                $scope.save();
               }
             });
 
             $scope.$watch('accentColor', function (newVal, oldVal) {
               if (newVal && newVal !== oldVal) {
-                $scope.setAttributeData($scope.componentId, 'accent', $scope.accentColor);
+                $scope.save();
               }
             });
           };

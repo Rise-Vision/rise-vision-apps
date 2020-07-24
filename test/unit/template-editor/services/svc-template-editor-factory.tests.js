@@ -898,4 +898,28 @@ describe('service: templateEditorFactory:', function() {
 
   });
   
+  describe('getAttributeDataGlobal / setAttributeDataGlobal', function () {
+
+    beforeEach(function(){
+      templateEditorFactory.presentation = { templateAttributeData: {} };
+    });
+
+    it('should set an attribute data value',function() {
+      templateEditorFactory.setAttributeDataGlobal('brandingOverride', {baseColor: 'red', accentColor: 'green'});
+
+      expect(templateEditorFactory.presentation.templateAttributeData).to.deep.equal({
+        brandingOverride: {baseColor: 'red', accentColor: 'green'}
+      });
+    });
+
+    it('should get an attribute data value',function() {
+      templateEditorFactory.setAttributeDataGlobal('brandingOverride', {baseColor: 'red', accentColor: 'green'});
+
+      var data = templateEditorFactory.getAttributeDataGlobal('brandingOverride');
+
+      expect(data).to.deep.equal({baseColor: 'red', accentColor: 'green'});
+    });
+
+  });
+
 });
