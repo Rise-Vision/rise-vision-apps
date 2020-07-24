@@ -60,28 +60,8 @@ var PlaylistScenarios = function() {
         it('should have 2 items the Playlist', function () {
           expect(scheduleAddPage.getPlaylistItems().count()).to.eventually.equal(2);
 
-          expect(scheduleAddPage.getPlaylistItems().get(0).getText()).to.eventually.contain('content1.html');
-          expect(scheduleAddPage.getPlaylistItems().get(1).getText()).to.eventually.contain('content2.html');
-        });
-
-        it('arrows should be disabled', function () {
-          expect(playlistPage.getMoveUpButtons().get(0).isEnabled()).to.eventually.be.false;
-          expect(playlistPage.getMoveDownButtons().get(1).isEnabled()).to.eventually.be.false;
-
-          expect(playlistPage.getMoveUpButtons().get(1).isEnabled()).to.eventually.be.true;
-          expect(playlistPage.getMoveDownButtons().get(0).isEnabled()).to.eventually.be.true;
-        });
-
-        it('items should move up and down', function () {
-          playlistPage.getMoveUpButtons().get(1).click();
-
-          expect(scheduleAddPage.getPlaylistItems().get(0).getText()).to.eventually.contain('content2.html');
-          expect(scheduleAddPage.getPlaylistItems().get(1).getText()).to.eventually.contain('content1.html');
-
-          playlistPage.getMoveDownButtons().get(0).click();
-
-          expect(scheduleAddPage.getPlaylistItems().get(0).getText()).to.eventually.contain('content1.html');
-          expect(scheduleAddPage.getPlaylistItems().get(1).getText()).to.eventually.contain('content2.html');
+          expect(scheduleAddPage.getPlaylistItems().get(0).getText()).to.eventually.contain('URL Item');
+          expect(scheduleAddPage.getPlaylistItems().get(1).getText()).to.eventually.contain('URL Item');
         });
 
         it('should remove item', function (done) {
@@ -101,7 +81,7 @@ var PlaylistScenarios = function() {
         });
 
         it('should open properties', function () {
-          scheduleAddPage.getPlaylistItems().get(0).element(by.css('.playlist-item-name')).click();
+          scheduleAddPage.getPlaylistItems().get(0).element(by.id('playlistItemNameCell')).click();
 
           helper.wait(playlistItemModalPage.getPlaylistItemModal(), 'Edit Playist Modal');
 

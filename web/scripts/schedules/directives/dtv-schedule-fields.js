@@ -1,13 +1,14 @@
 'use strict';
 
 angular.module('risevision.schedules.directives')
-  .directive('scheduleFields', ['$modal', 'scheduleFactory', 'playlistFactory', 'presentationUtils',
-    function ($modal, scheduleFactory, playlistFactory, presentationUtils) {
+  .directive('scheduleFields', ['$modal', 'scheduleFactory', 'playlistFactory', '$sce', 'SHARED_SCHEDULE_URL',
+    function ($modal, scheduleFactory, playlistFactory, $sce, SHARED_SCHEDULE_URL) {
       return {
         restrict: 'E',
         templateUrl: 'partials/schedules/schedule-fields.html',
         link: function ($scope) {
-          $scope.previewUrl = scheduleFactory.getPreviewUrl();
+          var originalChangeDate = scheduleFactory.schedule.changeDate;
+          $scope.applyTimeline = false;
 
           var openPlaylistModal = function (playlistItem) {
             $modal.open({
@@ -41,13 +42,23 @@ angular.module('risevision.schedules.directives')
             });
           };
 
-          $scope.isPreviewAvailable = function () {
-            var htmlPresentations = _.filter($scope.schedule.content, function (presentation) {
-              return presentationUtils.isHtmlPresentation(presentation);
-            });
+          $scope.getEmbedUrl = function () {
+            if (!scheduleFactory.schedule) {
+              return null;
+            }
+            var url = SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', scheduleFactory.schedule.id) + '&env=apps_schedule';
 
-            return htmlPresentations.length === 0;
+            if (!$scope.applyTimeline) {
+              url += '&applyTimeline=false';
+            }
+
+            if (originalChangeDate !== scheduleFactory.schedule.changeDate) {
+              url += '&dataSource=core&changeDate=' + scheduleFactory.schedule.changeDate;
+            }
+
+            return $sce.trustAsResourceUrl(url);
           };
+
         } //link()
       };
     }

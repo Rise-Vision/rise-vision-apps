@@ -1,13 +1,11 @@
 'use strict';
 describe('controller: schedule details', function() {
-  var scheduleId = 1234;
   beforeEach(module('risevision.schedules.controllers'));
-  beforeEach(module('risevision.schedules.services'));
-  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('scheduleFactory',function(){
       return {
         schedule: {},
+        loadingSchedule: true,
         updateSchedule : function(){
           updateCalled = true;
           
@@ -38,7 +36,7 @@ describe('controller: schedule details', function() {
     $provide.service('$modal',function(){
       return {
         open : function(obj){
-          expect(obj).to.be.truely;
+          expect(obj).to.be.ok;
           var deferred = Q.defer();
           if(confirmDelete){
             deferred.resolve();
@@ -52,8 +50,15 @@ describe('controller: schedule details', function() {
         }
       }
     });
+    $provide.service('$loading',function(){
+      return {
+        start : sinon.spy(),
+        stop : sinon.spy()
+      }
+    });
+
   }));
-  var $scope, $state, updateCalled, deleteCalled, confirmDelete;
+  var $scope, $state, $loading, scheduleFactory, updateCalled, deleteCalled, confirmDelete;
   beforeEach(function(){
     updateCalled = false;
     deleteCalled = false;
@@ -61,9 +66,10 @@ describe('controller: schedule details', function() {
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
       $state = $injector.get('$state');
+      $loading = $injector.get('$loading');
+      scheduleFactory = $injector.get('scheduleFactory');
       $controller('scheduleDetails', {
         $scope : $scope,
-        scheduleFactory:$injector.get('scheduleFactory'),
         $modal:$injector.get('$modal'),
         $state : $state,
         $log : $injector.get('$log')});
@@ -72,12 +78,23 @@ describe('controller: schedule details', function() {
   });
   
   it('should exist',function(){
-    expect($scope).to.be.truely;
-    expect($scope.factory).to.be.truely;
-    expect($scope.schedule).to.be.truely;
+    expect($scope).to.be.ok;
+    expect($scope.factory).to.be.ok;
 
     expect($scope.save).to.be.a('function');
     expect($scope.confirmDelete).to.be.a('function');
+  });
+
+  it('should show/hide loading spinner if loading', function(done) {
+    $scope.$digest();
+    $loading.start.should.have.been.calledWith('schedule-loader');
+
+    scheduleFactory.loadingSchedule = false;
+    $scope.$digest();
+    setTimeout(function(){
+      $loading.stop.should.have.been.calledWith('schedule-loader');
+      done();
+    },10);
   });
 
   describe('submit: ',function(){
@@ -92,7 +109,6 @@ describe('controller: schedule details', function() {
     it('should save the schedule',function(){
       $scope.scheduleDetails = {};
       $scope.scheduleDetails.$valid = true;
-      $scope.schedule = {id:123};
       $scope.save();
 
       expect(updateCalled).to.be.true;
@@ -112,7 +128,6 @@ describe('controller: schedule details', function() {
     
     it('should delete the schedule',function(done){
       confirmDelete = true;
-      $scope.schedule = {id:123};
       
       $scope.confirmDelete();
 

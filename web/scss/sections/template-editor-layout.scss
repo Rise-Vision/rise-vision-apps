@@ -59,54 +59,20 @@ $short-phone-height: 570px;
   }
 
   & .presentation-name {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 0;
-    padding: 0;
-    line-height: 32px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    border: none;
-    white-space: nowrap;
+    & .input-stretchy {
+      font-size: 24px;
+      line-height: 32px;
 
-    &.disabled,
-    &[disabled],
-    fieldset[disabled] & {
-      background-color: transparent;
+      @media (max-width: $screen-sm) {
+        font-size: 18px;
+      }
     }
 
-    @media (max-width: $screen-sm) {
-      font-size: 18px;
-    }
   }
 
-  & .edit-name, .delete-presentation {
-    cursor: pointer;
-    background: transparent;
-    border: 0;
-    -webkit-appearance: none;
-
-    &:hover {
-      text-decoration: none;
-      cursor: pointer;
-      opacity: 0.65;
-      filter: alpha(opacity=65);
-    }
-
-    &:focus {
-      outline: 0;
-    }
-
-    &.disabled,
-    &[disabled],
-    fieldset[disabled] & {
-      cursor: not-allowed;
-      pointer-events: none;
-      opacity: .50;
-      filter: alpha(opacity=50);
-      -webkit-box-shadow: none;
-      box-shadow: none;
-    }
+  & .streamline-component-icon svg {
+    width: 16px;
+    height: 16px;
   }
 
   & .toolbar-right {
@@ -940,6 +906,12 @@ $short-phone-height: 570px;
   font-family: Helvetica, Arial, sans-serif;
   color: $madero-black;
 
+  h1 {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 40px;
+  }
+
   h4 {
     font-size: 18px;
     font-weight: bold;
@@ -982,6 +954,15 @@ $short-phone-height: 570px;
     }
   }
 
+  .border-container {
+    border: 1px solid $madero-gray;
+    border-radius: 4px;
+  }
+
+  .border-bottom {
+    border-bottom: 1px solid $madero-gray;
+  }
+
   .btn {
     font-weight: bold;
     min-height: 40px;
@@ -1010,6 +991,12 @@ $short-phone-height: 570px;
     }
   }
 
+  .open > .btn-default.dropdown-toggle {
+    background: $white;
+    color: $madero-green;
+    border-color: $madero-green;
+  }
+
   .btn-primary {
     &, &:hover, &:active, &:focus {
       color: $white;
@@ -1024,6 +1011,16 @@ $short-phone-height: 570px;
       border-color: $maderio-green-disabled;
       color: $white;
     }
+  }
+
+  .btn-danger {
+    background: $danger;
+    border-color: $danger;
+  }
+
+  .btn-toolbar {
+    min-width: 160px;
+    margin-left: auto;
   }
 
   .btn-toggle-blue-on {
@@ -1047,6 +1044,35 @@ $short-phone-height: 570px;
       background-color: transparent;
     }
   } 
+
+  .btn-icon {
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    -webkit-appearance: none;
+
+    &:hover {
+      text-decoration: none;
+      cursor: pointer;
+      opacity: 0.65;
+      filter: alpha(opacity=65);
+    }
+
+    &:focus {
+      outline: 0;
+    }
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+      cursor: not-allowed;
+      pointer-events: none;
+      opacity: .50;
+      filter: alpha(opacity=50);
+      -webkit-box-shadow: none;
+      box-shadow: none;
+    }
+  }
 
   input[type='range'] {
     margin: 0;
@@ -1268,6 +1294,14 @@ $short-phone-height: 570px;
     color: $madero-black;
   }
 
+  .control-label-secondary {
+    font-weight: normal;
+  }
+
+  .control-label.timeline-label, distribution-selector .control-label:not(.control-label-secondary) {
+    width: 129px;
+  }
+
   .form-control-feedback {
     top: 31px;
     fill: #f2f2f2;
@@ -1332,6 +1366,24 @@ $short-phone-height: 570px;
     &:focus-within .input-group-addon {
       border-color: $madero-light-blue;
       box-shadow: none;
+    }
+  }
+
+  .input-stretchy {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    line-height: 24px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: none;
+    white-space: nowrap;
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+      background-color: transparent;
     }
   }
 
@@ -1468,6 +1520,17 @@ $short-phone-height: 570px;
 
   .display-id {
     font-size: 18px;
+  }
+}
+
+.madero-link {
+  @extend a;
+
+  color: #107DDA;
+  text-decoration: underline;
+
+  &:visited, &:hover, &:active {
+    color: #107DDA;
   }
 }
 

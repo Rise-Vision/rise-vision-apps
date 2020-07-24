@@ -32,7 +32,9 @@ describe('service: scheduleFactory:', function() {
         update : function(schedule){
           var deferred = Q.defer();
           if(updateSchedule){
-            deferred.resolve({item: this._schedule});
+            deferred.resolve({item: {
+              name: 'Updated Schedule'
+            }});
           }else{
             deferred.reject({result: {error: { message: 'ERROR; could not update schedule'}}});
           }
@@ -77,7 +79,6 @@ describe('service: scheduleFactory:', function() {
     $provide.service('processErrorCode', function() {
       return processErrorCode = sinon.spy(function() { return 'error'; });
     });
-    $provide.value('VIEWER_URL', 'http://rvaviewer-test.appspot.com');
     $provide.service('display', function() {
       return {
         hasFreeDisplays: sinon.stub().returns(Q.resolve(true))
@@ -131,11 +132,10 @@ describe('service: scheduleFactory:', function() {
     expect(scheduleFactory.addSchedule).to.be.a('function');
     expect(scheduleFactory.updateSchedule).to.be.a('function');
     expect(scheduleFactory.deleteSchedule).to.be.a('function');
-    expect(scheduleFactory.getPreviewUrl).to.be.a('function');
   });
 
   it('should initialize',function(){
-    expect(scheduleFactory.schedule).to.deep.equal({companyId: 'companyId',content: [], distributeToAll: false, distribution: [], timeDefined: false});
+    expect(scheduleFactory.schedule).to.deep.equal({name: 'New Schedule', companyId: 'companyId',content: [], distributeToAll: false, distribution: [], timeDefined: false});
   });
 
   describe('newSchedule:', function() {
@@ -146,7 +146,7 @@ describe('service: scheduleFactory:', function() {
 
       expect(trackerCalled).to.equal('Add Schedule');
 
-      expect(scheduleFactory.schedule).to.deep.equal({companyId: 'companyId', content: [], distributeToAll: false, distribution: [], timeDefined: false});
+      expect(scheduleFactory.schedule).to.deep.equal({name: 'New Schedule', companyId: 'companyId', content: [], distributeToAll: false, distribution: [], timeDefined: false});
     });
 
     it('should not call tracker if param is true',function(){
@@ -197,6 +197,7 @@ describe('service: scheduleFactory:', function() {
       })
       .then(null,done);
     });
+
   });
 
   describe('addSchedule:',function(){
@@ -296,6 +297,8 @@ describe('service: scheduleFactory:', function() {
       expect(scheduleFactory.loadingSchedule).to.be.true;
 
       setTimeout(function(){
+        expect(scheduleFactory.schedule.name).to.equal('Updated Schedule');
+
         expect(trackerCalled).to.equal('Schedule Updated');
         expect(scheduleFactory.savingSchedule).to.be.false;
         expect(scheduleFactory.loadingSchedule).to.be.false;
@@ -390,22 +393,6 @@ describe('service: scheduleFactory:', function() {
         done();
       },10);
     });
-  });
-
-  it('getPreviewUrl: ', function(done) {
-    expect(scheduleFactory.getPreviewUrl()).to.not.be.ok;
-
-    scheduleFactory.getSchedule('scheduleId')
-      .then(function() {
-        expect(scheduleFactory.getPreviewUrl()).to.be.ok;
-        expect(scheduleFactory.getPreviewUrl()).to.equal('http://rvaviewer-test.appspot.com/?type=schedule&id=scheduleId');
-
-        done();
-      })
-      .then(null, function(e) {
-        done(e);
-      })
-      .then(null,done);
   });
 
   describe('checkFirstSchedule:', function(){

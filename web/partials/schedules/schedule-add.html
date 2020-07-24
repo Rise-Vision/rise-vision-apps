@@ -1,33 +1,31 @@
-<div class="app-header">
-  <div class="title-block">
+<div class="madero-style">
+  <div class="app-header py-4 mb-5 border-bottom">
     <!-- App Title -->
-    <h1 id="title" translate>schedules-app.actions.new</h1>
+    <h1 class="app-header-title" id="title" translate>schedules-app.title</h1>
   </div>
+
+  <div rv-spinner rv-spinner-key="schedule-loader" rv-spinner-start-active="0"></div>
+
+  <div>
+    <form id="scheduleAdd" role="form" name="scheduleDetails" ng-submit="save()" novalidate>
+      
+      <schedule-fields></schedule-fields>
+      
+      <div id="errorBox" ng-show="factory.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
+        <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
+      </div> 
+
+        <div class="button-row text-right">
+          <!-- Indicates cancel or non-destructive action -->
+          <button id="cancelButton" type="button" ui-sref="apps.schedules.list" class="btn btn-default btn-toolbar">
+            {{'common.cancel' | translate}}
+          </button>
+          <!-- Indicates a successful or positive action -->
+          <button id="saveButton" type="submit" class="btn btn-primary btn-toolbar" ng-disabled="scheduleDetails.$invalid || factory.savingSchedule" require-role="cp">
+            {{ factory.savingSchedule ? ('common.saving' | translate) : ('common.save' | translate)}} 
+          </button>
+        </div><!--button-row-->
+
+    </form><!-- scheduleDetails -->
+  </div><!--container-->
 </div>
-
-<div rv-spinner rv-spinner-key="schedule-loader" rv-spinner-start-active="0"></div>
-
-<div>
-  <form id="scheduleAdd" role="form" name="scheduleDetails" ng-submit="save()" novalidate>
-    
-    <schedule-fields></schedule-fields>
-    
-    <div id="errorBox" ng-show="factory.apiError" class="alert alert-danger" role="alert">
-      <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
-    </div> 
-
-      <div class="button-row text-right">
-        <!-- Indicates a successful or positive action -->
-        <button id="saveButton" type="submit" class="btn btn-primary" ng-disabled="scheduleDetails.$invalid || factory.savingSchedule" require-role="cp">
-          {{ factory.savingSchedule ? ('common.saving' | translate) : ('common.save' | translate)}} 
-          <i class="fa fa-check icon-right"></i>
-        </button>
-        <!-- Indicates cancel or non-destructive action -->
-        <button id="cancelButton" type="button" ui-sref="apps.schedules.list" class="btn btn-default">
-          {{'common.cancel' | translate}}
-          <i class="fa fa-times icon-right"></i>
-        </button>
-      </div><!--button-row-->
-
-  </form><!-- scheduleDetails -->
-</div><!--container-->

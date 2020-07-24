@@ -4,7 +4,6 @@ angular.module('risevision.schedules.controllers')
   .controller('scheduleAdd', ['$scope', 'scheduleFactory', '$loading',
     function ($scope, scheduleFactory, $loading) {
       $scope.factory = scheduleFactory;
-      $scope.schedule = scheduleFactory.schedule;
 
       $scope.$watch('factory.loadingSchedule', function (loading) {
         if (loading) {

@@ -3,7 +3,7 @@ var ScheduleAddPage = function() {
   var schedulesAppContainer = element(by.css('.schedules-app'));
   var title = element(by.id('title'));
 
-  var displayNameField = element(by.model('schedule.name'));
+  var displayNameField = element(by.model('factory.schedule.name'));
 
   var timelineAlwaysCheckbox = element(by.model('timeline.always'));
   var timelineField = element(by.id('timelineTextbox'));
@@ -19,7 +19,6 @@ var ScheduleAddPage = function() {
 
   var playlistItems = element.all(by.repeater('playlistItem in playlistItems'));
 
-  var previewButton = element(by.id('previewButton'));
   var shareScheduleButton = element(by.id('tooltipButton'));
 
   var saveButton = element(by.id('saveButton'));
@@ -42,10 +41,6 @@ var ScheduleAddPage = function() {
 
   this.getScheduleNameField = function() {
     return displayNameField;
-  };
-
-  this.getPreviewButton = function() {
-    return previewButton;
   };
 
   this.getShareScheduleButton = function() {

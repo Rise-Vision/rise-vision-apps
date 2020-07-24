@@ -1,45 +1,44 @@
-<div class="app-header my-4">
+<div class="madero-style">
+  <div class="app-header py-4 mb-5 border-bottom">
     <!-- App Title -->
     <h1 class="app-header-title" translate>schedules-app.title</h1>
 
-  <div class="ml-auto" require-role="cp">
-    <button ng-click="addSchedule()" class="btn btn-lg btn-primary">     
-      {{ 'schedules-app.actions.new' | translate }}
-      <i class="fa fa-plus icon-right"></i> 
-    </button>
-  </div>
-</div>
-
-<div rv-spinner rv-spinner-key="schedule-loader" rv-spinner-start-active="0"></div>
-
-<div>
-  <form role="form" name="scheduleDetails" ng-submit="save()" novalidate>
-    
-    <schedule-fields></schedule-fields>
-
-    <div id="errorBox" ng-show="factory.apiError" class="alert alert-danger" role="alert">
-      <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
-    </div> 
-    
-    <div class="button-row text-right">
-      <p class="visible-xs text-right"><last-modified change-date="schedule.changeDate" changed-by="schedule.changedBy"></last-modified></p>
-      <!-- Indicates delete or destructive action -->
-      <button id="deleteButton" type="button" class="btn btn-danger pull-left" ng-click="confirmDelete()">
-        {{'common.delete' | translate}} <i class="fa fa-white fa-trash-o icon-right"></i>
+    <div class="ml-auto" require-role="cp">
+      <button ng-click="addSchedule()" class="btn btn-default">
+        Create New Schedule
       </button>
-      <div>
-      <span class="hidden-xs u_margin-right"><last-modified change-date="schedule.changeDate" changed-by="schedule.changedBy"></last-modified></span>
-        <!-- Indicates a successful or positive action -->
-        <button id="saveButton" type="submit" class="btn btn-primary" ng-disabled="scheduleDetails.$invalid || factory.savingSchedule" require-role="cp">
-          {{ factory.savingSchedule ? ('common.saving' | translate) : ('common.save' | translate)}} 
-          <i class="fa fa-check icon-right"></i>
-        </button>
-        <!-- Indicates cancel or non-destructive action -->
-        <button type="button" ui-sref="apps.schedules.list" class="btn btn-default">
-          {{'common.cancel' | translate}}
-          <i class="fa fa-times icon-right"></i>
-        </button>
-      </div>
     </div>
-  </form><!-- ticketDetails -->
-</div><!--container-->
+  </div>
+
+  <div rv-spinner rv-spinner-key="schedule-loader" rv-spinner-start-active="0"></div>
+
+  <div>
+    <form role="form" name="scheduleDetails" ng-submit="save()" novalidate>
+      
+      <schedule-fields></schedule-fields>
+
+      <div id="errorBox" ng-show="factory.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
+        <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
+      </div> 
+      
+      <div class="button-row text-right">
+        <p class="visible-sm visible-xs text-right"><last-modified change-date="factory.schedule.changeDate" changed-by="factory.schedule.changedBy"></last-modified></p>
+        <!-- Indicates delete or destructive action -->
+        <button id="deleteButton" type="button" class="btn btn-danger btn-toolbar pull-left" ng-click="confirmDelete()">
+          Delete Schedule
+        </button>
+        <div>
+        <span class="hidden-sm hidden-xs u_margin-right"><last-modified change-date="factory.schedule.changeDate" changed-by="factory.schedule.changedBy"></last-modified></span>
+          <!-- Indicates cancel or non-destructive action -->
+          <button type="button" ui-sref="apps.schedules.list" class="btn btn-default btn-toolbar mr-2">
+            {{'common.cancel' | translate}}
+          </button>
+          <!-- Indicates a successful or positive action -->
+          <button id="saveButton" type="submit" class="btn btn-primary btn-toolbar" ng-disabled="scheduleDetails.$invalid || factory.savingSchedule" require-role="cp">
+            {{ factory.savingSchedule ? ('common.saving' | translate) : ('common.save' | translate)}} 
+          </button>
+        </div>
+      </div>
+    </form><!-- ticketDetails -->
+  </div><!--container-->
+</div>

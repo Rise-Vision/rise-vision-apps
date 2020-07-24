@@ -2,7 +2,7 @@
   <label class="control-label u_margin-right">Distribution</label>
   <label class="control-label control-label-secondary">
     <input type="checkbox" ng-model="distributeToAll" ng-checked="distributeToAll" class="ng-valid ng-dirty" checked="checked">
-    <span id="distributeToAllText">Select All Displays</span>
+    <span id="distributeToAllText">Show on all displays.</span>
   </label>
   <div id="distributionField" ng-class="{'input-group': !hideCta}" class="panel-editable u_clickable" ng-click="manage()" ng-if="!distributeToAll">
     <div class="label label-tag"><span id="distributionFieldText" ng-bind="distributionSelectionMessage"></span></div>
