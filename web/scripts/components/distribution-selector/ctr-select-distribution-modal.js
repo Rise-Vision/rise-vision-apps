@@ -1,13 +1,17 @@
 'use strict';
 
 angular.module('risevision.common.components.distribution-selector')
-  .controller('selectDistributionModal', ['$scope', '$modalInstance',
+  .controller('selectDistributionModal', ['$scope', '$rootScope', '$modalInstance',
     'distribution',
-    function ($scope, $modalInstance, distribution) {
+    function ($scope, $rootScope, $modalInstance, distribution) {
       $scope.parameters = {};
 
       $scope.parameters.distribution = (distribution) ? angular.copy(
         distribution) : [];
+
+      $scope.addDisplay = function () {
+        $rootScope.$broadcast('distributionSelector.addDisplay');
+      };
 
       $scope.apply = function () {
         console.debug('Selected Distribution: ', $scope.parameters.distribution);
