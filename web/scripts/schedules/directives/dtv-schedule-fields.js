@@ -9,6 +9,7 @@ angular.module('risevision.schedules.directives')
         link: function ($scope) {
           var originalChangeDate = scheduleFactory.schedule.changeDate;
           $scope.applyTimeline = false;
+          $scope.tooltipKey = 'ShareEnterpriseTooltip';
 
           var openPlaylistModal = function (playlistItem) {
             $modal.open({

@@ -87,7 +87,14 @@ recurrence-days-of-week = "factory.schedule.recurrenceDaysOfWeek"
         </div>
         <span class="mr-3">Apply Timeline to preview.</span>
 
-        <share-schedule-button schedule="factory.schedule" button-class="btn-default btn-toolbar"></share-schedule-button>
+        <ng-show ng-show="tooltipKey">
+          <button id="shareButton" type="button" class="btn btn-default btn-toolbar" 
+          tooltip-overlay tooltip-template="'partials/schedules/share-schedule-tooltip.html'" tooltip-placement="bottom" tooltip-class="madero-style tooltip-guide tooltip-share-guide">
+            Share
+          </button>
+        </ng-show>
+        <share-schedule-button schedule="factory.schedule" button-class="btn-default btn-toolbar" ng-hide="tooltipKey"></share-schedule-button>
+
       </div>
     </div>
 
