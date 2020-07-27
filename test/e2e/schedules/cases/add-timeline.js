@@ -39,30 +39,26 @@ describe('Add Timeline', function() {
     });
     
     it('always checkbox should be checked', function() {
-      expect(scheduleAddPage.getTimelineAlwaysCheckbox().isSelected())
-        .to.eventually.be.true;
+      expect(scheduleAddPage.getTimelineAlwaysCheckbox().isSelected()).to.eventually.be.true;
         
-      expect(scheduleAddPage.getTimelineField().isDisplayed())
-        .to.eventually.be.false;
+      expect(scheduleAddPage.getTimelineField().isDisplayed()).to.eventually.be.false;
     });
     
     it('should show timeline text box when checking off Always', function() {
-      scheduleAddPage.getTimelineAlwaysCheckbox().click();
+      helper.clickOverIFrame(scheduleAddPage.getTimelineAlwaysCheckboxMask(), 'Always checkbox');
       
-      expect(scheduleAddPage.getTimelineField().isDisplayed())
-        .to.eventually.be.true;
+      expect(scheduleAddPage.getTimelineField().isDisplayed()).to.eventually.be.true;
     });
     
     it('should hide timeline text box when checking Always', function() {
-      scheduleAddPage.getTimelineAlwaysCheckbox().click();
+      helper.clickOverIFrame(scheduleAddPage.getTimelineAlwaysCheckboxMask(), 'Always checkbox');
       
-      expect(scheduleAddPage.getTimelineField().isDisplayed())
-        .to.eventually.be.false;
+      expect(scheduleAddPage.getTimelineField().isDisplayed()).to.eventually.be.false;
     });
 
     describe('Given a user clicks on the Timeline field', function () {
       before(function () {
-        scheduleAddPage.getTimelineAlwaysCheckbox().click();
+        helper.clickOverIFrame(scheduleAddPage.getTimelineAlwaysCheckboxMask(), 'Always checkbox');
         scheduleAddPage.getTimelineField().click();
         helper.wait(timelineModalPage.getEditTimelineModal(), 'Edit Timeline Modal');
       });
