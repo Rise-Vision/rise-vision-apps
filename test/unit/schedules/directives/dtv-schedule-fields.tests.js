@@ -54,6 +54,7 @@ describe('directive: scheduleFields', function() {
     expect($scope.getEmbedUrl).to.be.a('function');
 
     expect($scope.applyTimeline).to.be.false;
+    expect($scope.tooltipKey).to.equal('ShareEnterpriseTooltip');
   });
 
   it('addUrlItem:', function() {
