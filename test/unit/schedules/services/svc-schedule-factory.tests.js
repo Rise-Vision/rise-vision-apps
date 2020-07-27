@@ -84,11 +84,6 @@ describe('service: scheduleFactory:', function() {
         hasFreeDisplays: sinon.stub().returns(Q.resolve(true))
       };
     });
-    $provide.service('plansFactory', function() {
-      return {
-        showLicenseRequiredToUpdateModal: sinon.stub()
-      };
-    });
     $provide.service('userState', function() {
       return {
         getSelectedCompanyId: sinon.stub().returns('companyId'),
@@ -101,7 +96,7 @@ describe('service: scheduleFactory:', function() {
     });
   }));
   var scheduleFactory, trackerCalled, updateSchedule, $state, returnList, scheduleListSpy, scheduleAddSpy, processErrorCode, confirmModal;
-  var $rootScope, blueprintFactory, display, plansFactory, apiError;
+  var $rootScope, blueprintFactory, display, apiError;
   beforeEach(function(){
     apiError = { message: 'ERROR; could not create schedule'};
     trackerCalled = undefined;
@@ -119,7 +114,6 @@ describe('service: scheduleFactory:', function() {
       $state = $injector.get('$state');
       blueprintFactory = $injector.get('blueprintFactory');
       display = $injector.get('display');
-      plansFactory = $injector.get('plansFactory');
     });
   });
 
@@ -204,6 +198,59 @@ describe('service: scheduleFactory:', function() {
 
   });
 
+  describe('hasFreeDisplays:', function() {
+    it('should return true if distributed to free displays',function(done){
+      scheduleFactory.schedule.distribution = ['display1'];
+
+      scheduleFactory.hasFreeDisplays()
+        .then(function(result) {
+          expect(result).to.be.true;
+
+          done();
+        });
+
+      display.hasFreeDisplays.should.have.been.calledWith('companyId',['display1']);
+    });
+
+    it('should return false if distributed to licensed displays',function(done){
+      scheduleFactory.schedule.distribution = ['display1'];
+
+      display.hasFreeDisplays.returns(Q.resolve(false));
+
+      scheduleFactory.hasFreeDisplays()
+        .then(function(result) {
+          expect(result).to.be.false;
+
+          done();
+        });
+
+      display.hasFreeDisplays.should.have.been.called;
+    });
+
+    it('should check if distrubuted to all displays',function(){
+      scheduleFactory.schedule.distributeToAll = true;
+
+      scheduleFactory.hasFreeDisplays();
+
+      display.hasFreeDisplays.should.have.been.calledWith('companyId', null);
+    });
+
+    it('should not check if distrubuted to free displays and do not show notice if false',function(done){
+      scheduleFactory.schedule.distributeToAll = false;
+      scheduleFactory.schedule.distribution = [];
+
+      scheduleFactory.hasFreeDisplays()
+        .then(function(result) {
+          expect(result).to.be.false;
+
+          done();
+        });
+
+      display.hasFreeDisplays.should.not.have.been.called;
+    });
+
+  });
+
   describe('addSchedule:',function(){
     it('should add the schedule',function(done){
       updateSchedule = true;
@@ -272,35 +319,6 @@ describe('service: scheduleFactory:', function() {
       },10);
     });
 
-    it('should check if distrubuted to free displays and show notice if true',function(done){
-      updateSchedule = true;
-      scheduleFactory.schedule.distribution = ['display1'];
-
-      scheduleFactory.addSchedule();
-
-      display.hasFreeDisplays.should.have.been.calledWith('companyId',['display1']);
-      expect(scheduleFactory.savingSchedule).to.be.true;
-
-      setTimeout(function(){
-        plansFactory.showLicenseRequiredToUpdateModal.should.have.been.called;
-        
-        expect(scheduleFactory.savingSchedule).to.be.false;
-        done();
-      },10);
-    });
-
-    it('should check if distrubuted to free displays and do not show notice if false',function(done){
-      updateSchedule = true;
-      display.hasFreeDisplays.returns(Q.resolve(false));
-
-      scheduleFactory.addSchedule();
-
-      display.hasFreeDisplays.should.have.been.called;
-      setTimeout(function(){
-        plansFactory.showLicenseRequiredToUpdateModal.should.not.have.been.called;
-        done();
-      },10);
-    });
   });
 
   describe('updateSchedule: ',function(){
@@ -355,35 +373,6 @@ describe('service: scheduleFactory:', function() {
       },10);
     });
 
-    it('should check if distrubuted to free displays and show notice if true',function(done){
-      updateSchedule = true;
-      scheduleFactory.schedule.distribution = ['display1'];
-
-      scheduleFactory.updateSchedule();
-
-      display.hasFreeDisplays.should.have.been.calledWith('companyId',['display1']);
-      expect(scheduleFactory.savingSchedule).to.be.true;
-
-      setTimeout(function(){
-        plansFactory.showLicenseRequiredToUpdateModal.should.have.been.called;
-        
-        expect(scheduleFactory.savingSchedule).to.be.false;
-        done();
-      },10);
-    });
-
-    it('should check if distrubuted to free displays and do not show notice if false',function(done){
-      updateSchedule = true;
-      display.hasFreeDisplays.returns(Q.resolve(false));
-
-      scheduleFactory.updateSchedule();
-
-      display.hasFreeDisplays.should.have.been.called;
-      setTimeout(function(){
-        plansFactory.showLicenseRequiredToUpdateModal.should.not.have.been.called;
-        done();
-      },10);
-    });
   });
 
   describe('deleteSchedule: ',function(){

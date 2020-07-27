@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('risevision.schedules.directives')
-  .directive('scheduleFields', ['$modal', 'scheduleFactory', 'playlistFactory', '$sce', 'SHARED_SCHEDULE_URL',
-    function ($modal, scheduleFactory, playlistFactory, $sce, SHARED_SCHEDULE_URL) {
+  .directive('scheduleFields', ['$modal', 'scheduleFactory', 'playlistFactory', 'plansFactory', '$sce', 
+    'SHARED_SCHEDULE_URL',
+    function ($modal, scheduleFactory, playlistFactory, plansFactory, $sce, SHARED_SCHEDULE_URL) {
       return {
         restrict: 'E',
         templateUrl: 'partials/schedules/schedule-fields.html',
@@ -10,6 +11,15 @@ angular.module('risevision.schedules.directives')
           var originalChangeDate = scheduleFactory.schedule.changeDate;
           $scope.applyTimeline = false;
           $scope.tooltipKey = 'ShareEnterpriseTooltip';
+          $scope.factory = scheduleFactory;
+          $scope.plansFactory = plansFactory;
+
+          $scope.$watchGroup(['factory.schedule.distribution', 'factory.schedule.distributeToAll'], function () {
+            scheduleFactory.hasFreeDisplays()
+              .then(function(result) {
+                $scope.hasFreeDisplays = result;
+              });
+          });
 
           var openPlaylistModal = function (playlistItem) {
             $modal.open({

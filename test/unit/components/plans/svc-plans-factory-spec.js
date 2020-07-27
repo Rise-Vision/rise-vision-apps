@@ -66,6 +66,7 @@ describe("Services: plans factory", function() {
   it("should exist", function() {
     expect(plansFactory).to.be.ok;
     expect(plansFactory.showPlansModal).to.be.a('function');
+    expect(plansFactory.showPurchaseOptions).to.be.a('function');
     expect(plansFactory.initVolumePlanTrial).to.be.a('function');
   });
 
@@ -97,6 +98,32 @@ describe("Services: plans factory", function() {
       }, 10);
     });
     
+  });
+  
+  describe("showPurchaseOptions: ", function() {
+    it('should go to billing page on confimation if company has a plan', function(done) {
+      plansFactory.showPurchaseOptions();
+
+      setTimeout(function(){
+        expect($modal.open).to.not.have.been.called;
+
+        expect($state.go).to.have.been.calledWith('apps.billing.home');
+        done();
+      },10);
+    });
+
+    it('should open Plans Modal on confimation', function(done) {
+      currentPlanFactory.isPlanActive.returns(false);
+
+      plansFactory.showPurchaseOptions();
+
+      setTimeout(function(){
+        expect($modal.open).to.have.been.called;
+        expect($modal.open).to.have.been.calledWithMatch({controller: 'PlansModalCtrl'});
+
+        done();
+      },10);
+    });
   });
 
   describe("initVolumePlanTrial:", function() {
@@ -174,6 +201,10 @@ describe("Services: plans factory", function() {
   });
 
   describe("showLicenseRequiredToUpdateModal:", function() {
+    beforeEach(function() {
+      sinon.stub(plansFactory, 'showPurchaseOptions');
+    });
+
     it('should open License Required To Update Modal', function(){
       plansFactory.showLicenseRequiredToUpdateModal();
 
@@ -187,43 +218,28 @@ describe("Services: plans factory", function() {
       expect($modal.open.getCall(0).args[0].resolve.confirmationMessage()).to.equal('A Display License is required to automatically update your Display. Please restart it to apply the latest changes.');
     });
 
-    it('should go to billing page on confimation if company has a plan', function(done) {
+    it('should show purchase options on confimation', function(done) {
       $modal.open.returns({result: Q.resolve()});
 
       plansFactory.showLicenseRequiredToUpdateModal();
 
-      setTimeout(function(){
-        expect($modal.open).to.have.been.calledOnce;
-        expect($modal.open).to.have.been.calledWithMatch({controller: "confirmModalController"});
+      setTimeout(function() {
+        plansFactory.showPurchaseOptions.should.have.been.called;
 
-        expect($state.go).to.have.been.calledWith('apps.billing.home');
         done();
-      },10);
+      }, 10);
     });
 
-    it('should open Plans Modal on confimation', function(done) {
-      $modal.open.returns({result: Q.resolve()});
-      currentPlanFactory.isPlanActive.returns(false);
-
-      plansFactory.showLicenseRequiredToUpdateModal();
-
-      setTimeout(function(){
-        expect($modal.open).to.have.been.calledTwice;
-        expect($modal.open).to.have.been.calledWithMatch({controller: "confirmModalController"});
-        expect($modal.open).to.have.been.calledWithMatch({controller: 'PlansModalCtrl'});
-        done();
-      },10);
-    });
-
-    it('should not open Plans Modal or billing page if dismissed', function() {
+    it('should not show purchase options if dismissed', function(done) {
       $modal.open.returns({result: Q.reject()});
 
       plansFactory.showLicenseRequiredToUpdateModal();
 
-      expect($modal.open).to.have.been.calledOnce;
-      expect($modal.open).to.have.been.calledWithMatch({controller: "confirmModalController"});
-      expect($modal.open).to.not.have.been.calledWithMatch({controller: 'PlansModalCtrl'});
-      expect($state.go).to.not.have.been.called;
+      setTimeout(function() {
+        plansFactory.showPurchaseOptions.should.not.have.been.called;
+
+        done();
+      }, 10);
     });
   });
 
