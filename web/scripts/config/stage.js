@@ -17,8 +17,7 @@
     .constant('LOCALES_SUFIX', '.json');
 
   angular.module('risevision.common.config')
-    .value('CORE_URL',
-      'https://reassign-distribution-dot-rvacore-test.appspot.com/_ah/api') // override default core value
+    .value('CORE_URL', 'https://rvacore-test.appspot.com/_ah/api') // override default core value
     .value('COOKIE_CHECK_URL', '//storage-dot-rvacore-test.appspot.com');
 
   angular.module('risevision.apps.config', [])
