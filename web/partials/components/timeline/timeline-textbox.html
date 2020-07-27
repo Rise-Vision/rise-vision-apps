@@ -1,8 +1,25 @@
-<label class="control-label control-label-secondary u_margin-left">
+<label class="control-label control-label-secondary u_margin-left" ng-hide="timelineStyle === 'madero'">
   <input ng-model="timeline.always" type="checkbox"> Show all the time.
 </label>
-<div id="timelineTextbox" class="panel-editable u_remove-bottom u_clickable" ng-click="openModal()" ng-show="!timeline.always">
+<div id="timelineTextbox" class="panel-editable u_remove-bottom u_clickable" ng-click="openModal()" ng-show="!timeline.always && timelineStyle !== 'madero'">
   <div class="label label-tag">
     <span id="timelineLabel" timeline="timeline">{{timeline.label}}</span>
   </div>
 </div>  
+
+<div class="form-group" ng-show="timelineStyle === 'madero'">
+  <div class="flex-row">
+    <div class="row-entry">
+      <label class="control-label timeline-label pull-left mb-0">Timeline</label>
+
+      <div id="alwaysCheckboxMask" class="madero-checkbox u_clickable u_margin-left" ng-click="timeline.always = !timeline.always">
+        <input type="checkbox" id="alwaysCheckbox" ng-model="timeline.always" tabindex="1">
+        <label>
+          <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
+        </label>
+      </div>
+      <span class="mr-3">Show all the time.</span>
+    </div>
+  </div>
+  <span id="timelineLabelMadero" class="madero-link u_clickable" timeline="timeline" ng-click="openModal()" ng-show="!timeline.always">{{timeline.label}}</span>
+</div>

@@ -3,15 +3,16 @@ var ScheduleAddPage = function() {
   var schedulesAppContainer = element(by.css('.schedules-app'));
   var title = element(by.id('title'));
 
-  var displayNameField = element(by.model('schedule.name'));
+  var displayNameField = element(by.model('factory.schedule.name'));
 
-  var timelineAlwaysCheckbox = element(by.model('timeline.always'));
-  var timelineField = element(by.id('timelineTextbox'));
+  var timelineAlwaysCheckboxMask = element(by.id('alwaysCheckboxMask'));
+  var timelineAlwaysCheckbox = element(by.id('alwaysCheckbox'));
+  var timelineField = element(by.id('timelineLabelMadero'));
 
-
-  var distributionAllDisplaysCheckbox = element(by.model('distributeToAll'));
-  var distributionField = element(by.id('distributionField'));
-  var distributionFieldText = element(by.id('distributionFieldText'));
+  var distributionAllDisplaysCheckboxMask = element(by.id('allDisplaysCheckboxMask'));
+  var distributionAllDisplaysCheckbox = element(by.id('allDisplaysCheckbox'));
+  var distributionField = element(by.id('distributionFieldMadero'));
+  var distributionFieldText = element(by.id('distributionFieldTextMadero'));
 
   var addPlaylistItemButton = element(by.id('addPlaylistItemButton'));
   var addUrlItemButton = element(by.id('addUrlItemButton'));
@@ -81,6 +82,10 @@ var ScheduleAddPage = function() {
   this.getPlaylistItems = function() {
     return playlistItems;
   };
+
+  this.getTimelineAlwaysCheckboxMask = function() {
+    return timelineAlwaysCheckboxMask;
+  };
   
   this.getTimelineAlwaysCheckbox = function() {
     return timelineAlwaysCheckbox;
@@ -112,6 +117,10 @@ var ScheduleAddPage = function() {
 
   this.getScheduleLoader = function () {
     return scheduleLoader;
+  };
+
+  this.getDistributionAllDisplaysCheckboxMask = function() {
+    return distributionAllDisplaysCheckboxMask;
   };
 
   this.getDistributionAllDisplaysCheckbox = function() {

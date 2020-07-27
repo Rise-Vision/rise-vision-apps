@@ -32,7 +32,9 @@ describe('service: scheduleFactory:', function() {
         update : function(schedule){
           var deferred = Q.defer();
           if(updateSchedule){
-            deferred.resolve({item: this._schedule});
+            deferred.resolve({item: {
+              name: 'Updated Schedule'
+            }});
           }else{
             deferred.reject({result: {error: apiError}});
           }
@@ -311,6 +313,8 @@ describe('service: scheduleFactory:', function() {
       expect(scheduleFactory.loadingSchedule).to.be.true;
 
       setTimeout(function(){
+        expect(scheduleFactory.schedule.name).to.equal('Updated Schedule');
+
         expect(trackerCalled).to.equal('Schedule Updated');
         expect(scheduleFactory.savingSchedule).to.be.false;
         expect(scheduleFactory.loadingSchedule).to.be.false;
@@ -516,43 +520,6 @@ describe('service: scheduleFactory:', function() {
 
         done();
       });
-    });
-  });
-
-  describe('changeCount:', function() {
-    it('get should reset changeCount for preview', function(done) {
-      scheduleFactory.getSchedule('scheduleId')
-      .then(function() {
-        expect(scheduleFactory.schedule.changeCount).to.equal(0);
-
-        done();
-      });
-    });
-
-    it('update should increment changeCount to refresh preview',function(done){
-      scheduleFactory.schedule.changeCount = 3;
-      updateSchedule = true;
-
-      scheduleFactory.updateSchedule();
-
-      setTimeout(function(){
-        expect(scheduleFactory.schedule.changeCount).to.equal(4);
-
-        done();
-      },10);
-    });
-
-    it('update should handle invalid changeCount',function(done){
-      scheduleFactory.schedule.changeCount = 's';
-      updateSchedule = true;
-
-      scheduleFactory.updateSchedule();
-
-      setTimeout(function(){
-        expect(scheduleFactory.schedule.changeCount).to.equal(0);
-
-        done();
-      },10);
     });
   });
 

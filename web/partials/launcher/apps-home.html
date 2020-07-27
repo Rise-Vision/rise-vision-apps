@@ -10,11 +10,11 @@
 
     <div class="row">
       <div class="col-xs-12">
-        <div id="errorBox" ng-show="schedules.apiError" class="alert alert-danger" role="alert">
+        <div id="errorBox" ng-show="schedules.apiError" class="madero-style alert alert-danger" role="alert">
           <strong>{{schedules.errorMessage}}</strong> {{schedules.apiError}}
         </div>
 
-        <div ng-show="schedules.items.list.length === 0 && !schedules.loadingItems && !schedules.apiError" class="alert alert-warning" role="alert">
+        <div ng-show="schedules.items.list.length === 0 && !schedules.loadingItems && !schedules.apiError" class="madero-style alert alert-warning" role="alert">
           <strong>You haven't created any Schedules yet.</strong> Keep your community connected anywhere they are. Share
           your message to digital signage, websites, personal computers, and more.
           <a ui-sref="apps.schedules.add" link-cid>Add a new Schedule.</a>
@@ -26,7 +26,7 @@
           <a type="button" class="btn btn-default schedules-toolbar-btn" ui-sref="apps.schedules.details({scheduleId: selectedSchedule.id})" link-cid>Edit Schedule</a>
           <ng-show ng-show="tooltipKey">
             <button id="shareButton" type="button" class="btn btn-primary schedules-toolbar-btn" 
-            tooltip-overlay tooltip-template="'partials/launcher/share-tooltip.html'" tooltip-placement="bottom" tooltip-class="madero-style tooltip-guide tooltip-share-guide">
+            tooltip-overlay tooltip-template="'partials/schedules/share-schedule-tooltip.html'" tooltip-placement="bottom" tooltip-class="madero-style tooltip-guide tooltip-share-guide">
               Share
             </button>
           </ng-show>
@@ -67,7 +67,7 @@
     <div class="container">
       <a type="button" class="btn btn-default btn-block" ui-sref="apps.schedules.details({scheduleId: selectedSchedule.id})">Edit Schedule</a>
       <ng-show ng-show="tooltipKey">
-        <button type="button" class="btn btn-primary btn-block" tooltip-overlay tooltip-template="'partials/launcher/share-tooltip.html'" tooltip-placement="top" tooltip-class="madero-style tooltip-share-guide">Share</button>
+        <button type="button" class="btn btn-primary btn-block" tooltip-overlay tooltip-template="'partials/schedules/share-schedule-tooltip.html'" tooltip-placement="top" tooltip-class="madero-style tooltip-guide tooltip-share-guide">Share</button>
       </ng-show>
       <share-schedule-button schedule="selectedSchedule" button-class="btn-primary btn-block" ng-hide="tooltipKey"></share-schedule-button>
     </div>

@@ -1,9 +1,6 @@
 'use strict';
 describe('controller: schedule add', function() {
-  var scheduleId = 1234;
   beforeEach(module('risevision.schedules.controllers'));
-  beforeEach(module('risevision.schedules.services'));
-  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('scheduleFactory',function(){
       return {
@@ -17,17 +14,13 @@ describe('controller: schedule add', function() {
     });
     $provide.service('$loading',function(){
       return {
-        start : function(spinnerKeys){
-          return;
-        },
-        stop : function(spinnerKeys){
-          return;
-        }
+        start : sinon.spy(),
+        stop : sinon.spy()
       }
     });
 
   }));
-  var $scope, scheduleFactory, $loading,$loadingStartSpy, $loadingStopSpy, scheduleAdded;
+  var $scope, scheduleFactory, $loading, scheduleAdded;
   beforeEach(function(){
     scheduleAdded = false;
     
@@ -35,8 +28,6 @@ describe('controller: schedule add', function() {
       $scope = $rootScope.$new();
       scheduleFactory = $injector.get('scheduleFactory');
       $loading = $injector.get('$loading');
-      $loadingStartSpy = sinon.spy($loading, 'start');
-      $loadingStopSpy = sinon.spy($loading, 'stop');
       $controller('scheduleAdd', {
         $scope : $scope,
         scheduleFactory: scheduleFactory,
@@ -48,14 +39,10 @@ describe('controller: schedule add', function() {
   });
   
   it('should exist',function(){
-    expect($scope).to.be.truely;
+    expect($scope).to.be.ok;
 
     expect($scope.save).to.be.a('function');
-  });
-
-  it('should init the correct defaults',function(){
-    expect($scope.schedule).to.be.truely;
-    expect($scope.schedule).to.deep.equal({});
+    expect($scope.factory).to.equal(scheduleFactory);
   });
 
   it('should return early if the form is invalid',function(){
@@ -67,7 +54,6 @@ describe('controller: schedule add', function() {
   it('should save the schedule',function(){
     $scope.scheduleDetails = {};
     $scope.scheduleDetails.$valid = true;
-    $scope.schedule = {id:123};
     $scope.save();
 
     expect(scheduleAdded).to.be.true;
@@ -76,13 +62,14 @@ describe('controller: schedule add', function() {
 
   it('should show/hide loading spinner if loading', function(done) {
     $scope.$digest();
-    $loadingStartSpy.should.have.been.calledWith('schedule-loader');
+    $loading.start.should.have.been.calledWith('schedule-loader');
 
     scheduleFactory.loadingSchedule = false;
     $scope.$digest();
     setTimeout(function(){
-      $loadingStopSpy.should.have.been.calledWith('schedule-loader');
+      $loading.stop.should.have.been.calledWith('schedule-loader');
       done();
     },10);
-  })
+  });
+
 });

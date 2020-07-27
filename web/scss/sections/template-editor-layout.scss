@@ -1013,6 +1013,11 @@ $short-phone-height: 570px;
     }
   }
 
+  .btn-danger {
+    background: $danger;
+    border-color: $danger;
+  }
+
   .btn-toolbar {
     min-width: 160px;
     margin-left: auto;
@@ -1293,7 +1298,7 @@ $short-phone-height: 570px;
     font-weight: normal;
   }
 
-  .control-label.timeline-label, distribution-selector .control-label:not(.control-label-secondary) {
+  .timeline-label, distribution-selector .control-label:not(.control-label-secondary) {
     width: 129px;
   }
 
@@ -1515,6 +1520,17 @@ $short-phone-height: 570px;
 
   .display-id {
     font-size: 18px;
+  }
+}
+
+.madero-link {
+  @extend a;
+
+  color: #107DDA;
+  text-decoration: underline;
+
+  &:visited, &:hover, &:active {
+    color: #107DDA;
   }
 }
 

@@ -6,15 +6,15 @@
       </div>
 
       <div ng-click="manage(playlistItem)" class="name-container mr-auto w-75 u_clickable">
-        <p class="playlist-item-name u_link u_remove-bottom" id="playlistItemNameCell" ng-if="playlistItem.type !== 'presentation'"><strong>{{playlistItem.name}}</strong></p>
-        <p class="playlist-item-reference u_link u_remove-bottom" id="presentationNameCell" ng-if="playlistItem.type === 'presentation'"><strong presentation-name="playlistItem.objectReference">Presentation Item</strong></p>
-        <p class="playlist-item-description text-sm text-muted u_remove-bottom">{{ factory.getItemTimeline(playlistItem) }} • {{ playlistItem.playUntilDone ? 'Play Until Done' : playlistItem.duration + 's' }} • {{ factory.getItemTransition(playlistItem) }}</p>
+        <p class="madero-link u_remove-bottom" id="playlistItemNameCell" ng-if="playlistItem.type !== 'presentation'"><strong>{{playlistItem.name}}</strong></p>
+        <p class="madero-link u_remove-bottom" id="presentationNameCell" ng-if="playlistItem.type === 'presentation'"><strong presentation-name="playlistItem.objectReference">Presentation Item</strong></p>
+        <p class="text-sm text-muted u_remove-bottom">{{ factory.getItemTimeline(playlistItem) }} • {{ playlistItem.playUntilDone ? 'Play Until Done' : playlistItem.duration + 's' }} • {{ factory.getItemTransition(playlistItem) }}</p>
       </div>
       <div class="u_float-left mr-3">
         <button type="button" class="btn-icon u_align-middle" id="duplicateButton" ng-click="factory.duplicatePlaylistItem(playlistItem)">
-          <i class="fa fa-copy"></i>
+          <img src="../images/icon-copy.svg" width="16" height="18">
         </button>
-        <button type="button" class="btn-icon u_align-middle pl-0" id="removeButton" ng-click="remove(playlistItem)">
+        <button type="button" class="btn-icon u_align-middle pl-0 mt-2" id="removeButton" ng-click="remove(playlistItem)">
            <streamline-icon class="u_margin-left" name="trash" width="16" height="18"></streamline-icon>
          </button>
       </div>

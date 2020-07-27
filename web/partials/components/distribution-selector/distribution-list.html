@@ -1,23 +1,23 @@
 <div ng-controller="distributionListController">
-  <search-filter filter-config="filterConfig" search="search" do-search="doSearch"></search-filter>
+  <search-filter filter-config="filterConfig" search="search" do-search="displays.doSearch"></search-filter>
   <div class="panel u_margin-sm-top">
     <div class="scrollable-list"
-         scrolling-list="load()"
+         scrolling-list="displays.load()"
          rv-spinner rv-spinner-key="display-list-loader"
          rv-spinner-start-active="1"
       >
 
-      <div class="text-center u_margin-lg-top" ng-if="!loadingDisplays && displays.list.length === 0">
+      <div class="text-center u_margin-lg-top" ng-if="!loadingDisplays && displays.items.list.length === 0">
         <h4 class="text-muted u_margin-md-bottom u_margin-md-top">No Displays Available</h4> 
         <button ng-click="addDisplay()" class="btn btn-primary btn-lg">
-          Add Display <i class="fa fa-plus icon-right"></i>
+          Create New Display
         </button> 
       </div>
 
-      <table id="displayListTable" class="table table--hover table--selector table--multiple-selector animated fadeIn" ng-if="displays.list.length > 0">
+      <table id="displayListTable" class="table table--hover table--selector table--multiple-selector animated fadeIn" ng-if="displays.items.list.length > 0">
         <thead class="table-header">
           <tr class="table-header__row">
-            <th id="tableHeaderName" ng-click="sortBy('name')" class="table-header__cell u_clickable">
+            <th id="tableHeaderName" ng-click="displays.sortBy('name')" class="table-header__cell u_clickable">
               Name
               <!-- ngIf: search.sortBy == 'name' -->
               <i ng-if="search.sortBy == 'name'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
@@ -33,7 +33,7 @@
         </thead>
 
         <tbody class="table-body">
-          <tr class="table-body__row u_clickable display" ng-click="toggleDisplay(display.id);" ng-class="{'active' : isSelected(display.id) }" ng-repeat="display in displays.list">
+          <tr class="table-body__row u_clickable display" ng-click="toggleDisplay(display.id);" ng-class="{'active' : isSelected(display.id) }" ng-repeat="display in displays.items.list">
             <td id="displayName-{{display.id}}" class="table-body__cell display-name"><span>{{display.name}}</span></td>
             <td id="displayId-{{display.id}}" class="table-body__cell hidden-xs"><span>{{display.id}}</span></td>
             <td id="displayAddress-{{display.id}}" class="table-body__cell display-address hidden-xs"><span class="text-muted u_ellipsis-md">{{display.address}}</span></td>

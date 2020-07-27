@@ -28,3 +28,26 @@
         @include alert-variant($lighter-gray, $lighter-gray, $text-color);
     }
 }
+
+.madero-style {
+    &.alert {
+        background-color: white;
+        padding: 20px;
+
+        &.alert-danger {
+            border-color: $danger;
+
+            strong {
+                color: $danger;
+            }
+        }
+
+        &.alert-warning {
+            border-color: $state-warning-text;
+
+            strong {
+                color: $state-warning-text;
+            }
+        }
+    }
+}
