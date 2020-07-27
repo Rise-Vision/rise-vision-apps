@@ -146,7 +146,6 @@ angular.module('risevision.schedules.services')
               $rootScope.$emit('scheduleCreated');
 
               scheduleTracker('Schedule Created', resp.item.id, resp.item.name);
-              factory.logTransitionUsage(resp.item);
 
               if ($state.current.name === 'apps.schedules.add') {
                 $state.go('apps.schedules.details', {
@@ -217,27 +216,6 @@ angular.module('risevision.schedules.services')
           .finally(function () {
             factory.loadingSchedule = false;
           });
-      };
-
-      factory.scheduleHasTransitions = function (schedule) {
-        var content = schedule && schedule.content;
-
-        return !!_.find(content || [], function (item) {
-          return item.transitionType && item.transitionType !== 'normal';
-        });
-      };
-
-      factory.logTransitionUsage = function (newSchedule, oldSchedule) {
-        var existingTransitions = factory.scheduleHasTransitions(oldSchedule);
-        var addedTransitions = factory.scheduleHasTransitions(newSchedule);
-
-        if (!existingTransitions && addedTransitions) {
-          scheduleTracker('Transitions Added', newSchedule.id, newSchedule.name);
-        } else if (existingTransitions && !addedTransitions) {
-          scheduleTracker('Transitions Removed', newSchedule.id, newSchedule.name);
-        }
-
-        return addedTransitions;
       };
 
       $rootScope.$on('risevision.company.selectedCompanyChanged', function () {

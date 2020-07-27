@@ -7,8 +7,6 @@ angular.module('risevision.schedules.controllers')
       $templateCache) {
       $scope.factory = scheduleFactory;
 
-      var _oldSchedule = _.cloneDeep(scheduleFactory.schedule);
-
       $scope.$watch('factory.loadingSchedule', function (loading) {
         if (loading) {
           $loading.start('schedule-loader');
@@ -86,11 +84,7 @@ angular.module('risevision.schedules.controllers')
 
           return $q.reject();
         } else {
-          return scheduleFactory.updateSchedule()
-            .then(function () {
-              scheduleFactory.logTransitionUsage(scheduleFactory.schedule, _oldSchedule);
-              _oldSchedule = _.cloneDeep(scheduleFactory.schedule);
-            });
+          return scheduleFactory.updateSchedule();
         }
       };
 

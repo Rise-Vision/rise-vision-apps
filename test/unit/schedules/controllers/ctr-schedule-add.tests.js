@@ -8,8 +8,7 @@ describe('controller: schedule add', function() {
         loadingSchedule: true,
         addSchedule : function(){
           scheduleAdded = true;
-        },
-        logTransitionUsage: function() {}
+        }
       };
     });
     $provide.service('$loading',function(){
