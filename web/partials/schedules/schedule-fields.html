@@ -23,8 +23,11 @@ recurrence-days-of-week = "factory.schedule.recurrenceDaysOfWeek"
 ></timeline-textbox>
 
 <distribution-selector distribution="factory.schedule.distribution" distribute-to-all="factory.schedule.distributeToAll" distribution-style="madero"></distribution-selector>
+<div class="danger mt-2" ng-show="hasFreeDisplays">
+  You selected unlicensed displays that won’t show your content. <a href="#" class="madero-link" ng-click="plansFactory.showPurchaseOptions()">License them?</a>
+</div>
 
-<div class="schedule-fields-body">
+<div class="schedule-fields-body mt-4">
   <div class="playlist-container">
     <div class="py-4 flex-row">
       <label class="mb-0 mr-auto" translate>schedules-app.playlist.title</label>

@@ -180,6 +180,14 @@
           }
         };
 
+        _factory.showPurchaseOptions = function() {
+          if (currentPlanFactory.isPlanActive()) {
+            $state.go('apps.billing.home');
+          } else {
+            _factory.showPlansModal();
+          }
+        };
+
         _factory.showUnlockThisFeatureModal = function () {
           analyticsFactory.track('free user popup seen', {
             source: 'share schedule button'
@@ -220,11 +228,7 @@
               }
             }
           }).result.then(function () {
-            if (currentPlanFactory.isPlanActive()) {
-              $state.go('apps.billing.home');
-            } else {
-              _factory.showPlansModal();
-            }
+            _factory.showPurchaseOptions();
           });
         };
 

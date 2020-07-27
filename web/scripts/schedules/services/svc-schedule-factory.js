@@ -2,9 +2,9 @@
 
 angular.module('risevision.schedules.services')
   .factory('scheduleFactory', ['$q', '$state', '$log', '$rootScope', 'schedule', 'scheduleTracker',
-    'processErrorCode', 'HTML_PRESENTATION_TYPE', 'display', 'plansFactory', 'userState', 'confirmModal',
+    'processErrorCode', 'HTML_PRESENTATION_TYPE', 'display', 'userState', 'confirmModal',
     function ($q, $state, $log, $rootScope, schedule, scheduleTracker, processErrorCode,
-      HTML_PRESENTATION_TYPE, display, plansFactory, userState, confirmModal) {
+      HTML_PRESENTATION_TYPE, display, userState, confirmModal) {
       var factory = {};
       var _hasSchedules;
       var _scheduleId;
@@ -116,16 +116,15 @@ angular.module('risevision.schedules.services')
         return deferred.promise;
       };
 
-      var _retrieveHasFreeDisplays = function () {
+      factory.hasFreeDisplays = function () {
         var distribution = factory.schedule.distribution ? factory.schedule.distribution : [];
+
+        if (!distribution.length && !factory.schedule.distributeToAll) {
+          return $q.resolve(false);
+        }
+
         return display.hasFreeDisplays(factory.schedule.companyId,
           factory.schedule.distributeToAll ? null : distribution);
-      };
-
-      var _showFreeDisplaysMessageIfNeeded = function (hasFreeDisplays) {
-        if (hasFreeDisplays) {
-          plansFactory.showLicenseRequiredToUpdateModal();
-        }
       };
 
       factory.addSchedule = function () {
@@ -135,11 +134,8 @@ angular.module('risevision.schedules.services')
         factory.loadingSchedule = true;
         factory.savingSchedule = true;
 
-        return $q.all([_retrieveHasFreeDisplays(), _addSchedule()])
-          .then(function (results) {
-            _showFreeDisplaysMessageIfNeeded(results[0]);
-
-            var resp = results[1];
+        return _addSchedule()
+          .then(function (resp) {
             if (resp && resp.item && resp.item.id) {
               _hasSchedules = true;
 
@@ -172,11 +168,9 @@ angular.module('risevision.schedules.services')
         factory.loadingSchedule = true;
         factory.savingSchedule = true;
 
-        $q.all([_retrieveHasFreeDisplays(), _updateSchedule()])
-          .then(function (results) {
-            _showFreeDisplaysMessageIfNeeded(results[0]);
-
-            factory.schedule = results[1].item;
+        _updateSchedule()
+          .then(function (resp) {
+            factory.schedule = resp.item;
 
             scheduleTracker('Schedule Updated', _scheduleId, factory.schedule.name);
 
