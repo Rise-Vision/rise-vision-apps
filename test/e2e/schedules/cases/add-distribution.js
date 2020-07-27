@@ -130,15 +130,19 @@ var AddDistributionScenarios = function() {
         });
 
         describe('Choose all displays given a display is already set to a schedule', function () {
-          it('should show an error saying another user has already set a display to a schedule', function () {
-            var expectResultPart1 = 'Failed to add Schedule. The Schedule could not be added. Another schedule (';
-            var expectResultPart2 = ') is also set to be distributed to'
-
+          it('should show a modal saying another user has already set a display to a schedule and ask to re-assign', function () {
             helper.clickWhenClickable(scheduleAddPage.getSaveButton());
 
+            helper.wait(scheduleAddPage.getReassignDistribtionModal(), 'Reassign Distribtion Modal');
+
+            expect(scheduleAddPage.getReassignDistribtionModal().isDisplayed()).to.eventually.be.true;            
+          });
+
+          it('should show an error if dismissed', function () {
+            helper.clickWhenClickable(scheduleAddPage.getCloseReassignButton());
+
             helper.wait(scheduleAddPage.getErrorBox(), 'Error box').then(function () {
-              expect(scheduleAddPage.getErrorBox().getText()).to.eventually.string(expectResultPart1);
-              expect(scheduleAddPage.getErrorBox().getText()).to.eventually.string(expectResultPart2);
+              expect(scheduleAddPage.getErrorBox().getText()).to.eventually.string('Some of the displays are already assigned to another schedule.');
             });
           });
         });

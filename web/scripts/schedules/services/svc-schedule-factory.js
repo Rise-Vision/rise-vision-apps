@@ -2,9 +2,9 @@
 
 angular.module('risevision.schedules.services')
   .factory('scheduleFactory', ['$q', '$state', '$log', '$rootScope', 'schedule', 'scheduleTracker',
-    'processErrorCode', 'HTML_PRESENTATION_TYPE', 'display', 'plansFactory', 'userState',
+    'processErrorCode', 'HTML_PRESENTATION_TYPE', 'display', 'plansFactory', 'userState', 'confirmModal',
     function ($q, $state, $log, $rootScope, schedule, scheduleTracker, processErrorCode,
-      HTML_PRESENTATION_TYPE, display, plansFactory, userState) {
+      HTML_PRESENTATION_TYPE, display, plansFactory, userState, confirmModal) {
       var factory = {};
       var _hasSchedules;
       var _scheduleId;
@@ -135,7 +135,7 @@ angular.module('risevision.schedules.services')
         factory.loadingSchedule = true;
         factory.savingSchedule = true;
 
-        return $q.all([_retrieveHasFreeDisplays(), schedule.add(factory.schedule)])
+        return $q.all([_retrieveHasFreeDisplays(), _addSchedule()])
           .then(function (results) {
             _showFreeDisplaysMessageIfNeeded(results[0]);
 
@@ -172,7 +172,7 @@ angular.module('risevision.schedules.services')
         factory.loadingSchedule = true;
         factory.savingSchedule = true;
 
-        $q.all([_retrieveHasFreeDisplays(), schedule.update(_scheduleId, factory.schedule)])
+        $q.all([_retrieveHasFreeDisplays(), _updateSchedule()])
           .then(function (results) {
             _showFreeDisplaysMessageIfNeeded(results[0]);
 
@@ -221,6 +221,42 @@ angular.module('risevision.schedules.services')
       $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
         _hasSchedules = undefined;
       });
+
+      var _updateSchedule = function () {
+        return schedule.update(_scheduleId, factory.schedule).catch(function (err) {
+          if (err.result.error.code === 409) {
+            return _showDistributionConflictModal()
+              .then(function () {
+                return $q.resolve(schedule.update(_scheduleId, factory.schedule, true));
+              });
+          }
+          return $q.reject(err);
+        });
+      };
+
+      var _addSchedule = function () {
+        return schedule.add(factory.schedule).catch(function (err) {
+          if (err.result.error.code === 409) {
+            return _showDistributionConflictModal()
+              .then(function () {
+                return $q.resolve(schedule.add(factory.schedule, true));
+              });
+          }
+          return $q.reject(err);
+        });
+      };
+
+      var _showDistributionConflictModal = function () {
+        return confirmModal('The selected displays already have schedules.',
+            'Some of the displays you selected are already assigned to another schedule. Would you like to re-assign them to this schedule?',
+            'Yes', 'No', 'madero-style centered-modal reassign-distribtion-modal',
+            'partials/components/confirm-modal/madero-confirm-modal.html')
+          .catch(function () {
+            return $q.reject({
+              message: 'Some of the displays are already assigned to another schedule.'
+            });
+          });
+      };
 
       var _showErrorMessage = function (action, e) {
         factory.errorMessage = 'Failed to ' + action + ' Schedule.';

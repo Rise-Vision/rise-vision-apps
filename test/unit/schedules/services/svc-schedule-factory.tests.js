@@ -25,7 +25,7 @@ describe('service: scheduleFactory:', function() {
           if(updateSchedule){
             deferred.resolve({item: this._schedule});
           }else{
-            deferred.reject({result: {error: { message: 'ERROR; could not create schedule'}}});
+            deferred.reject({result: {error: apiError}});
           }
           return deferred.promise;
         },
@@ -36,7 +36,7 @@ describe('service: scheduleFactory:', function() {
               name: 'Updated Schedule'
             }});
           }else{
-            deferred.reject({result: {error: { message: 'ERROR; could not update schedule'}}});
+            deferred.reject({result: {error: apiError}});
           }
           return deferred.promise;
         },
@@ -96,10 +96,14 @@ describe('service: scheduleFactory:', function() {
         _restoreState: sinon.stub()
       };
     });
+    $provide.service('confirmModal', function() {
+      return confirmModal = sinon.stub();
+    });
   }));
-  var scheduleFactory, trackerCalled, updateSchedule, $state, returnList, scheduleListSpy, scheduleAddSpy, processErrorCode;
-  var $rootScope, blueprintFactory, display, plansFactory;
+  var scheduleFactory, trackerCalled, updateSchedule, $state, returnList, scheduleListSpy, scheduleAddSpy, processErrorCode, confirmModal;
+  var $rootScope, blueprintFactory, display, plansFactory, apiError;
   beforeEach(function(){
+    apiError = { message: 'ERROR; could not create schedule'};
     trackerCalled = undefined;
     updateSchedule = true;
     returnList = null;
@@ -256,6 +260,18 @@ describe('service: scheduleFactory:', function() {
       },10);
     });
 
+    it('should prompt to reassign displays in case of distribution conflict', function(done) {
+      updateSchedule = false;
+      apiError = { code: 409 };
+
+      scheduleFactory.addSchedule();
+
+      setTimeout(function(){
+        confirmModal.should.have.been.calledWith('The selected displays already have schedules.');
+        done();
+      },10);
+    });
+
     it('should check if distrubuted to free displays and show notice if true',function(done){
       updateSchedule = true;
       scheduleFactory.schedule.distribution = ['display1'];
@@ -323,6 +339,18 @@ describe('service: scheduleFactory:', function() {
 
         expect(scheduleFactory.errorMessage).to.be.ok;
         expect(scheduleFactory.apiError).to.be.ok;
+        done();
+      },10);
+    });
+
+    it('should prompt to reassign displays in case of distribution conflict', function(done) {
+      updateSchedule = false;
+      apiError = { code: 409 };
+
+      scheduleFactory.updateSchedule();
+
+      setTimeout(function(){
+        confirmModal.should.have.been.calledWith('The selected displays already have schedules.');
         done();
       },10);
     });
