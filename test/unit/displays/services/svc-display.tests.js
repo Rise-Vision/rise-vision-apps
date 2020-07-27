@@ -226,7 +226,7 @@ describe('service: display:', function() {
               if (obj.companyId) {
                 def.resolve({
                   result: {
-                    items: [freeDisplay]
+                    items: ['freeDisplay']
                   }
                 });
               } else {
