@@ -226,7 +226,7 @@ describe('service: display:', function() {
               if (obj.companyId) {
                 def.resolve({
                   result: {
-                    item: "true"
+                    items: [freeDisplay]
                   }
                 });
               } else {
@@ -629,7 +629,7 @@ describe('service: display:', function() {
 
     it('should check if has free displays', function(done) {
       display.hasFreeDisplays('companyId', ['displayId']).then(function(result) {
-        expect(result).to.equal(true);
+        expect(result).to.deep.equal(['freeDisplay']);
         done();
       });
     });

@@ -11,13 +11,14 @@ angular.module('risevision.schedules.directives')
           var originalChangeDate = scheduleFactory.schedule.changeDate;
           $scope.applyTimeline = false;
           $scope.tooltipKey = 'ShareEnterpriseTooltip';
+          $scope.freeDisplays = [];
           $scope.factory = scheduleFactory;
           $scope.plansFactory = plansFactory;
 
           $scope.$watchGroup(['factory.schedule.distribution', 'factory.schedule.distributeToAll'], function () {
             scheduleFactory.hasFreeDisplays()
               .then(function(result) {
-                $scope.hasFreeDisplays = result;
+                $scope.freeDisplays = result;
               });
           });
 

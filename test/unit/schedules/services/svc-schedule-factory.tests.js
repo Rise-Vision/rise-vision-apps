@@ -81,7 +81,7 @@ describe('service: scheduleFactory:', function() {
     });
     $provide.service('display', function() {
       return {
-        hasFreeDisplays: sinon.stub().returns(Q.resolve(true))
+        hasFreeDisplays: sinon.stub().returns(Q.resolve(['freeDisplay']))
       };
     });
     $provide.service('userState', function() {
@@ -204,7 +204,7 @@ describe('service: scheduleFactory:', function() {
 
       scheduleFactory.hasFreeDisplays()
         .then(function(result) {
-          expect(result).to.be.true;
+          expect(result).to.deep.equal(['freeDisplay']);
 
           done();
         });
@@ -215,11 +215,11 @@ describe('service: scheduleFactory:', function() {
     it('should return false if distributed to licensed displays',function(done){
       scheduleFactory.schedule.distribution = ['display1'];
 
-      display.hasFreeDisplays.returns(Q.resolve(false));
+      display.hasFreeDisplays.returns(Q.resolve([]));
 
       scheduleFactory.hasFreeDisplays()
         .then(function(result) {
-          expect(result).to.be.false;
+          expect(result).to.deep.equal([]);
 
           done();
         });
@@ -241,7 +241,7 @@ describe('service: scheduleFactory:', function() {
 
       scheduleFactory.hasFreeDisplays()
         .then(function(result) {
-          expect(result).to.be.false;
+          expect(result).to.deep.equal([]);
 
           done();
         });
