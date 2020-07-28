@@ -47,13 +47,13 @@ angular.module('risevision.template-editor.directives')
             $scope.accentColor = $scope.override ? brandingOverride.accentColor : null;
 
             $scope.$watch('baseColor', function (newVal, oldVal) {
-              if (newVal && newVal !== oldVal) {
+              if (newVal !== oldVal) {
                 $scope.save();
               }
             });
 
             $scope.$watch('accentColor', function (newVal, oldVal) {
-              if (newVal && newVal !== oldVal) {
+              if (newVal !== oldVal) {
                 $scope.save();
               }
             });
