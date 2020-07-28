@@ -268,52 +268,15 @@
       padding: 15px;
     }
 
-    // from https://codepen.io/vakhula/pen/OJVqBOK
+    // from https://codepen.io/mrowa44/pen/xRpMYm
     .scrollbox {
-      background-image: 
-        /* Shadows */ 
-        linear-gradient(to right, white, white),
-        linear-gradient(to right, white, white),
-      
-        /* Shadow covers */ 
-        linear-gradient(to right, rgba(0,0,0,.25), rgba(255,255,255,0)),
-        linear-gradient(to left, rgba(0,0,0,.25), rgba(255,255,255,0));   
-      
-      background-position: left top, right top, left top, right top;
-    	background-repeat: no-repeat;
-    	background-size: 20px 106px, 20px 106px, 20px 106px, 20px 106px;
-      
-    	/* Opera doesn't support this in the shorthand */
-    	background-attachment: local, local, scroll, scroll;
-
-      @media (max-width: $screen-sm) {
-        background-size: 20px 112px, 20px 112px, 20px 112px, 20px 112px;
-      }
+      background:
+        linear-gradient(to right, white 0%, rgba(0, 0, 0, 0)),
+        linear-gradient(to right, rgba(0, 0, 0, 0), white 100%) 0 100%,
+        linear-gradient(to right, black, rgba(0, 0, 0, 0) 6%),
+        linear-gradient(to left, black, rgba(0, 0, 0, 0) 6%);
+      background-attachment: local, local, scroll, scroll;
+      background-clip: padding-box; /* fix right border on Chrome */
     }
-
-    // Using white/transparencies requires a ::before element
-    // however since it's a separate element the `background-attachment: scroll`
-    // doesn't work so the background is static 
-    // .scrollbox::before {
-    //   position: absolute;
-    //   content: '';
-    //   z-index: 2;
-    //   width: 352px;
-    //   height: 100%;
-    //   pointer-events: none;
-    // 
-    //   background-image: 
-    //     /* Shadows */ 
-    //     linear-gradient(to right, rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 100%),
-    //     linear-gradient(to left, rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 100%);
-    // 
-    //   background-position: left top, right top;
-    // 	 background-repeat: no-repeat;
-    //   background-size: 20px 106px, 20px 106px;
-    // 
-    // 	 /* Opera doesn't support this in the shorthand */
-    //   background-attachment: scroll, scroll;
-    // }
-
   }
 }
