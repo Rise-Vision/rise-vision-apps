@@ -64,6 +64,7 @@ describe('directive: scheduleFields', function() {
 
     expect($scope.applyTimeline).to.be.false;
     expect($scope.tooltipKey).to.equal('ShareEnterpriseTooltip');
+    expect($scope.freeDisplays).to.deep.equal([]);
 
     expect($scope.factory).to.equal(scheduleFactory);
     expect($scope.plansFactory).to.equal(plansFactory);
@@ -71,7 +72,7 @@ describe('directive: scheduleFields', function() {
 
   describe('hasFreeDisplays:', function() {
     beforeEach(function() {
-      sinon.stub(scheduleFactory, 'hasFreeDisplays').returns(Q.resolve('hasFreeDisplays'));
+      sinon.stub(scheduleFactory, 'hasFreeDisplays').returns(Q.resolve(['display1']));
     });
 
     it('should watch distribution field', function() {
@@ -96,7 +97,7 @@ describe('directive: scheduleFields', function() {
       $scope.$digest();
 
       setTimeout(function() {
-        expect($scope.hasFreeDisplays).to.equal('hasFreeDisplays');        
+        expect($scope.freeDisplays).to.deep.equal(['display1']);        
 
         done();
       }, 10);

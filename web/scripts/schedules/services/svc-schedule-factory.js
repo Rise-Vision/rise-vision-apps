@@ -120,7 +120,7 @@ angular.module('risevision.schedules.services')
         var distribution = factory.schedule.distribution ? factory.schedule.distribution : [];
 
         if (!distribution.length && !factory.schedule.distributeToAll) {
-          return $q.resolve(false);
+          return $q.resolve([]);
         }
 
         return display.hasFreeDisplays(factory.schedule.companyId,

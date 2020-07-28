@@ -180,7 +180,7 @@
           }
         };
 
-        _factory.showPurchaseOptions = function() {
+        _factory.showPurchaseOptions = function () {
           if (currentPlanFactory.isPlanActive()) {
             $state.go('apps.billing.home');
           } else {

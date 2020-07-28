@@ -347,7 +347,7 @@
               })
               .then(function (resp) {
                 $log.debug('hasFreeDisplays resp', resp);
-                deferred.resolve(resp.result && resp.result.item && resp.result.item === 'true');
+                deferred.resolve(resp.result && resp.result.items);
               })
               .then(null, function (e) {
                 console.error('Failed to retrieve hasFreeDisplays.', e);
