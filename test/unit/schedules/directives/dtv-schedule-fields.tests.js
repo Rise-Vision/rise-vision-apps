@@ -1,6 +1,6 @@
 'use strict';
 describe('directive: scheduleFields', function() {
-  var $scope, $rootScope, scheduleFactory, playlistFactory, $modal, $sce;
+  var $scope, $rootScope, scheduleFactory, playlistFactory, plansFactory, $modal, $sce;
   var classicPres1 = { name: 'classic1' };
   var classicPres2 = { name: 'classic2' };
   var htmlPres1 = { name: 'html1', presentationType: 'HTML Template' };
@@ -25,7 +25,15 @@ describe('directive: scheduleFields', function() {
       return {
         schedule: {
           changeDate: 'changeDate'
+        },
+        hasFreeDisplays: function() {
+          return Q.resolve();
         }
+      };
+    });
+    $provide.service('plansFactory', function() {
+      return {
+        showPurchaseOptions: sinon.spy()
       };
     });
 
@@ -36,6 +44,7 @@ describe('directive: scheduleFields', function() {
     $modal = $injector.get('$modal');
     scheduleFactory = $injector.get('scheduleFactory');
     playlistFactory = $injector.get('playlistFactory');
+    plansFactory = $injector.get('plansFactory');
     $sce = $injector.get('$sce');
 
     $templateCache.put('partials/schedules/schedule-fields.html', '<p>mock</p>');
@@ -54,6 +63,46 @@ describe('directive: scheduleFields', function() {
     expect($scope.getEmbedUrl).to.be.a('function');
 
     expect($scope.applyTimeline).to.be.false;
+    expect($scope.tooltipKey).to.equal('ShareEnterpriseTooltip');
+    expect($scope.freeDisplays).to.deep.equal([]);
+
+    expect($scope.factory).to.equal(scheduleFactory);
+    expect($scope.plansFactory).to.equal(plansFactory);
+  });
+
+  describe('hasFreeDisplays:', function() {
+    beforeEach(function() {
+      sinon.stub(scheduleFactory, 'hasFreeDisplays').returns(Q.resolve(['display1']));
+    });
+
+    it('should watch distribution field', function() {
+      scheduleFactory.schedule.distribution = ['displayId'];
+
+      $scope.$digest();
+
+      scheduleFactory.hasFreeDisplays.should.have.been.called;
+    });
+
+    it('should watch distributeToAll field', function() {
+      scheduleFactory.schedule.distributeToAll = true;
+
+      $scope.$digest();
+
+      scheduleFactory.hasFreeDisplays.should.have.been.called;
+    });
+
+    it('should update scope variable with response', function(done) {
+      scheduleFactory.schedule.distributeToAll = true;
+
+      $scope.$digest();
+
+      setTimeout(function() {
+        expect($scope.freeDisplays).to.deep.equal(['display1']);        
+
+        done();
+      }, 10);
+    });
+
   });
 
   it('addUrlItem:', function() {
@@ -67,7 +116,6 @@ describe('directive: scheduleFields', function() {
 
     expect($modal.open.getCall(0).args[0].resolve.playlistItem()).to.equal('urlItem');
   });
-
 
   describe('addPresentationItem:', function() {
 

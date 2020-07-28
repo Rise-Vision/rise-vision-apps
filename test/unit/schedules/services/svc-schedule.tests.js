@@ -69,7 +69,7 @@ describe('service: schedule:', function() {
         }
         return def.promise;
       },
-      add: function(obj) {
+      add: scheduleApiAddSpy = sinon.spy(function(obj) {
         expect(obj).to.be.ok;
         expect(obj.companyId).to.equal('TEST_COMP_ID');
         expect(obj).to.have.property("data");
@@ -90,8 +90,8 @@ describe('service: schedule:', function() {
           def.reject("API Failed");
         }
         return def.promise;
-      },
-      patch: function(obj) {
+      }),
+      patch: scheduleApiUpdateSpy = sinon.spy(function(obj) {
         expect(obj).to.be.ok;
         expect(obj.id).to.equal('schedule1');
         expect(obj.data).to.be.ok;
@@ -109,7 +109,7 @@ describe('service: schedule:', function() {
           def.reject("API Failed");
         }
         return def.promise;
-      },
+      }),
       delete: function(obj) {
         expect(obj).to.be.ok;
 
@@ -139,7 +139,7 @@ describe('service: schedule:', function() {
     });
 
   }));
-  var schedule, scheduleApi, returnList, searchString, sortString;
+  var schedule, scheduleApi, returnList, searchString, sortString, scheduleApiAddSpy, scheduleApiUpdateSpy;
   beforeEach(function(){
     returnList = true;
     searchString = '';
@@ -278,14 +278,33 @@ describe('service: schedule:', function() {
     };
     
     it('should add a schedule',function(done){
+      var expectedData = angular.copy(scheduleObject);
+      expectedData.forceDistribution = undefined;
+
       schedule.add(scheduleObject)
       .then(function(result){
+        scheduleApiAddSpy.should.have.been.calledWithMatch({ data: expectedData });
+
         expect(result).to.be.ok;
         expect(result.item).to.be.ok;
         expect(result.item).to.have.property("name");
         expect(result.item).to.have.property("id");
         expect(result.item.id).to.equal("schedule1");
         
+        done();
+      })
+      .then(null,done);
+    });
+
+    it('should include forceDistribution in the request when provided', function(done) {
+      var expectedData = angular.copy(scheduleObject);
+      expectedData.forceDistribution = true;
+
+      schedule.add(scheduleObject, true)
+      .then(function(result){
+        scheduleApiAddSpy.should.have.been.calledWithMatch({ data: expectedData });
+        expect(result.item.id).to.equal("schedule1");
+
         done();
       })
       .then(null,done);
@@ -329,6 +348,21 @@ describe('service: schedule:', function() {
         expect(result.item).to.be.ok;
         expect(result.item).to.not.have.property("connected");
         
+        done();
+      })
+      .then(null,done);
+    });
+
+    it('should include forceDistribution in the request when provided', function(done) {
+      var expectedData = angular.copy(scheduleObject);
+      expectedData.forceDistribution = true;
+
+      schedule.update(scheduleObject.id, scheduleObject, true)
+      .then(function(result){
+        scheduleApiUpdateSpy.should.have.been.calledWithMatch({ data: {forceDistribution: true, name: scheduleObject.name}, id: scheduleObject.id });
+
+        expect(result.item).to.be.ok;
+
         done();
       })
       .then(null,done);

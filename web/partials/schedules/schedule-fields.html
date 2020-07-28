@@ -4,29 +4,30 @@
   <label>Schedule Details</label>
 </div>
 
-<div class="form-group">
-  <label class="control-label timeline-label" translate>schedules-app.fields.timeline</label>
-  <timeline-textbox
-  use-localdate = "true"
-  time-defined = "factory.schedule.timeDefined"
-  start-date = "factory.schedule.startDate"
-  end-date = "factory.schedule.endDate"
-  start-time = "factory.schedule.startTime"
-  end-time = "factory.schedule.endTime"
-  recurrence-type = "factory.schedule.recurrenceType"
-  recurrence-frequency = "factory.schedule.recurrenceFrequency"
-  recurrence-absolute = "factory.schedule.recurrenceAbsolute"
-  recurrence-day-of-week = "factory.schedule.recurrenceDayOfWeek"
-  recurrence-day-of-month = "factory.schedule.recurrenceDayOfMonth"
-  recurrence-week-of-month = "factory.schedule.recurrenceWeekOfMonth"
-  recurrence-month-of-year = "factory.schedule.recurrenceMonthOfYear"
-  recurrence-days-of-week = "factory.schedule.recurrenceDaysOfWeek"
-  ></timeline-textbox>
-</div><!--form-group-->
+<timeline-textbox
+timeline-style = "madero"
+use-localdate = "true"
+time-defined = "factory.schedule.timeDefined"
+start-date = "factory.schedule.startDate"
+end-date = "factory.schedule.endDate"
+start-time = "factory.schedule.startTime"
+end-time = "factory.schedule.endTime"
+recurrence-type = "factory.schedule.recurrenceType"
+recurrence-frequency = "factory.schedule.recurrenceFrequency"
+recurrence-absolute = "factory.schedule.recurrenceAbsolute"
+recurrence-day-of-week = "factory.schedule.recurrenceDayOfWeek"
+recurrence-day-of-month = "factory.schedule.recurrenceDayOfMonth"
+recurrence-week-of-month = "factory.schedule.recurrenceWeekOfMonth"
+recurrence-month-of-year = "factory.schedule.recurrenceMonthOfYear"
+recurrence-days-of-week = "factory.schedule.recurrenceDaysOfWeek"
+></timeline-textbox>
 
-<distribution-selector distribution="factory.schedule.distribution" distribute-to-all="factory.schedule.distributeToAll" hide-cta="true"></distribution-selector>
+<distribution-selector distribution="factory.schedule.distribution" distribute-to-all="factory.schedule.distributeToAll" distribution-style="madero"></distribution-selector>
+<div class="danger mt-2" ng-show="freeDisplays.length">
+  You selected {{freeDisplays.length}} unlicensed display{{freeDisplays.length > 1 ? 's' : ''}} that won’t show your content. <a href="#" class="madero-link" ng-click="plansFactory.showPurchaseOptions()">License {{freeDisplays.length > 1 ? 'them' : 'it'}}?</a>
+</div>
 
-<div class="schedule-fields-body">
+<div class="schedule-fields-body mt-4">
   <div class="playlist-container">
     <div class="py-4 flex-row">
       <label class="mb-0 mr-auto" translate>schedules-app.playlist.title</label>
@@ -89,7 +90,14 @@
         </div>
         <span class="mr-3">Apply Timeline to preview.</span>
 
-        <share-schedule-button schedule="factory.schedule" button-class="btn-default btn-toolbar"></share-schedule-button>
+        <ng-show ng-show="tooltipKey">
+          <button id="shareButton" type="button" class="btn btn-default btn-toolbar" 
+          tooltip-overlay tooltip-template="'partials/schedules/share-schedule-tooltip.html'" tooltip-placement="bottom" tooltip-class="madero-style tooltip-guide tooltip-share-guide">
+            Share
+          </button>
+        </ng-show>
+        <share-schedule-button schedule="factory.schedule" button-class="btn-default btn-toolbar" ng-hide="tooltipKey"></share-schedule-button>
+
       </div>
     </div>
 

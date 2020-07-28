@@ -25,7 +25,7 @@ describe('service: scheduleFactory:', function() {
           if(updateSchedule){
             deferred.resolve({item: this._schedule});
           }else{
-            deferred.reject({result: {error: { message: 'ERROR; could not create schedule'}}});
+            deferred.reject({result: {error: apiError}});
           }
           return deferred.promise;
         },
@@ -36,7 +36,7 @@ describe('service: scheduleFactory:', function() {
               name: 'Updated Schedule'
             }});
           }else{
-            deferred.reject({result: {error: { message: 'ERROR; could not update schedule'}}});
+            deferred.reject({result: {error: apiError}});
           }
           return deferred.promise;
         },
@@ -81,12 +81,7 @@ describe('service: scheduleFactory:', function() {
     });
     $provide.service('display', function() {
       return {
-        hasFreeDisplays: sinon.stub().returns(Q.resolve(true))
-      };
-    });
-    $provide.service('plansFactory', function() {
-      return {
-        showLicenseRequiredToUpdateModal: sinon.stub()
+        hasFreeDisplays: sinon.stub().returns(Q.resolve(['freeDisplay']))
       };
     });
     $provide.service('userState', function() {
@@ -96,10 +91,14 @@ describe('service: scheduleFactory:', function() {
         _restoreState: sinon.stub()
       };
     });
+    $provide.service('confirmModal', function() {
+      return confirmModal = sinon.stub();
+    });
   }));
-  var scheduleFactory, trackerCalled, updateSchedule, $state, returnList, scheduleListSpy, scheduleAddSpy, processErrorCode;
-  var $rootScope, blueprintFactory, display, plansFactory;
+  var scheduleFactory, trackerCalled, updateSchedule, $state, returnList, scheduleListSpy, scheduleAddSpy, processErrorCode, confirmModal;
+  var $rootScope, blueprintFactory, display, apiError;
   beforeEach(function(){
+    apiError = { message: 'ERROR; could not create schedule'};
     trackerCalled = undefined;
     updateSchedule = true;
     returnList = null;
@@ -115,7 +114,6 @@ describe('service: scheduleFactory:', function() {
       $state = $injector.get('$state');
       blueprintFactory = $injector.get('blueprintFactory');
       display = $injector.get('display');
-      plansFactory = $injector.get('plansFactory');
     });
   });
 
@@ -200,6 +198,59 @@ describe('service: scheduleFactory:', function() {
 
   });
 
+  describe('hasFreeDisplays:', function() {
+    it('should return true if distributed to free displays',function(done){
+      scheduleFactory.schedule.distribution = ['display1'];
+
+      scheduleFactory.hasFreeDisplays()
+        .then(function(result) {
+          expect(result).to.deep.equal(['freeDisplay']);
+
+          done();
+        });
+
+      display.hasFreeDisplays.should.have.been.calledWith('companyId',['display1']);
+    });
+
+    it('should return false if distributed to licensed displays',function(done){
+      scheduleFactory.schedule.distribution = ['display1'];
+
+      display.hasFreeDisplays.returns(Q.resolve([]));
+
+      scheduleFactory.hasFreeDisplays()
+        .then(function(result) {
+          expect(result).to.deep.equal([]);
+
+          done();
+        });
+
+      display.hasFreeDisplays.should.have.been.called;
+    });
+
+    it('should check if distrubuted to all displays',function(){
+      scheduleFactory.schedule.distributeToAll = true;
+
+      scheduleFactory.hasFreeDisplays();
+
+      display.hasFreeDisplays.should.have.been.calledWith('companyId', null);
+    });
+
+    it('should not check if distrubuted to free displays and do not show notice if false',function(done){
+      scheduleFactory.schedule.distributeToAll = false;
+      scheduleFactory.schedule.distribution = [];
+
+      scheduleFactory.hasFreeDisplays()
+        .then(function(result) {
+          expect(result).to.deep.equal([]);
+
+          done();
+        });
+
+      display.hasFreeDisplays.should.not.have.been.called;
+    });
+
+  });
+
   describe('addSchedule:',function(){
     it('should add the schedule',function(done){
       updateSchedule = true;
@@ -256,35 +307,18 @@ describe('service: scheduleFactory:', function() {
       },10);
     });
 
-    it('should check if distrubuted to free displays and show notice if true',function(done){
-      updateSchedule = true;
-      scheduleFactory.schedule.distribution = ['display1'];
+    it('should prompt to reassign displays in case of distribution conflict', function(done) {
+      updateSchedule = false;
+      apiError = { code: 409 };
 
       scheduleFactory.addSchedule();
 
-      display.hasFreeDisplays.should.have.been.calledWith('companyId',['display1']);
-      expect(scheduleFactory.savingSchedule).to.be.true;
-
       setTimeout(function(){
-        plansFactory.showLicenseRequiredToUpdateModal.should.have.been.called;
-        
-        expect(scheduleFactory.savingSchedule).to.be.false;
+        confirmModal.should.have.been.calledWith('The selected displays already have schedules.');
         done();
       },10);
     });
 
-    it('should check if distrubuted to free displays and do not show notice if false',function(done){
-      updateSchedule = true;
-      display.hasFreeDisplays.returns(Q.resolve(false));
-
-      scheduleFactory.addSchedule();
-
-      display.hasFreeDisplays.should.have.been.called;
-      setTimeout(function(){
-        plansFactory.showLicenseRequiredToUpdateModal.should.not.have.been.called;
-        done();
-      },10);
-    });
   });
 
   describe('updateSchedule: ',function(){
@@ -327,35 +361,18 @@ describe('service: scheduleFactory:', function() {
       },10);
     });
 
-    it('should check if distrubuted to free displays and show notice if true',function(done){
-      updateSchedule = true;
-      scheduleFactory.schedule.distribution = ['display1'];
+    it('should prompt to reassign displays in case of distribution conflict', function(done) {
+      updateSchedule = false;
+      apiError = { code: 409 };
 
       scheduleFactory.updateSchedule();
 
-      display.hasFreeDisplays.should.have.been.calledWith('companyId',['display1']);
-      expect(scheduleFactory.savingSchedule).to.be.true;
-
       setTimeout(function(){
-        plansFactory.showLicenseRequiredToUpdateModal.should.have.been.called;
-        
-        expect(scheduleFactory.savingSchedule).to.be.false;
+        confirmModal.should.have.been.calledWith('The selected displays already have schedules.');
         done();
       },10);
     });
 
-    it('should check if distrubuted to free displays and do not show notice if false',function(done){
-      updateSchedule = true;
-      display.hasFreeDisplays.returns(Q.resolve(false));
-
-      scheduleFactory.updateSchedule();
-
-      display.hasFreeDisplays.should.have.been.called;
-      setTimeout(function(){
-        plansFactory.showLicenseRequiredToUpdateModal.should.not.have.been.called;
-        done();
-      },10);
-    });
   });
 
   describe('deleteSchedule: ',function(){
@@ -492,47 +509,6 @@ describe('service: scheduleFactory:', function() {
 
         done();
       });
-    });
-  });
-
-  describe('scheduleHasTransitions', function() {
-    it('should return false if the schedule does not have transitions', function() {
-      expect(scheduleFactory.scheduleHasTransitions({})).to.be.false;
-      expect(scheduleFactory.scheduleHasTransitions({ content: [] })).to.be.false;
-      expect(scheduleFactory.scheduleHasTransitions({ content: [{}] })).to.be.false;
-      expect(scheduleFactory.scheduleHasTransitions({ content: [{ transitionType: 'normal' }] })).to.be.false;
-    });
-
-    it('should return true if the schedule has transitions', function() {
-      expect(scheduleFactory.scheduleHasTransitions({ content: [{ transitionType: 'fadeIn' }] })).to.be.true;
-    });
-  });
-
-  describe('logTransitionUsage', function() {
-    var presentationWithTransitions = { content: [{ transitionType: 'fadeIn' }] };
-
-    it('should not call scheduleTracker if transitions were not added', function() {
-      scheduleFactory.logTransitionUsage({}, {});
-
-      expect(trackerCalled).to.be.falsey;
-    });
-
-    it('should not call scheduleTracker if transitions existed and were not removed', function() {
-      scheduleFactory.logTransitionUsage(presentationWithTransitions, presentationWithTransitions);
-
-      expect(trackerCalled).to.be.falsey;
-    });
-
-    it('should call scheduleTracker if transitions were added', function() {
-      scheduleFactory.logTransitionUsage(presentationWithTransitions, {});
-
-      expect(trackerCalled).to.equal('Transitions Added');
-    });
-
-    it('should call scheduleTracker if transitions were removed', function() {
-      scheduleFactory.logTransitionUsage({}, presentationWithTransitions);
-
-      expect(trackerCalled).to.equal('Transitions Removed');
     });
   });
 

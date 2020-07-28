@@ -81,11 +81,12 @@ angular.module('risevision.schedules.services')
 
           return deferred.promise;
         },
-        add: function (schedule) {
+        add: function (schedule, forceDistribution) {
           var deferred = $q.defer();
 
-          var fields = pick.apply(this, [schedule].concat(
-            SCHEDULE_WRITABLE_FIELDS));
+          var fields = pick.apply(this, [schedule].concat(SCHEDULE_WRITABLE_FIELDS));
+          fields.forceDistribution = forceDistribution;
+
           var obj = {
             'companyId': userState.getSelectedCompanyId(),
             'data': fields
@@ -103,11 +104,12 @@ angular.module('risevision.schedules.services')
             });
           return deferred.promise;
         },
-        update: function (scheduleId, schedule) {
+        update: function (scheduleId, schedule, forceDistribution) {
           var deferred = $q.defer();
 
-          var fields = pick.apply(this, [schedule].concat(
-            SCHEDULE_WRITABLE_FIELDS));
+          var fields = pick.apply(this, [schedule].concat(SCHEDULE_WRITABLE_FIELDS));
+          fields.forceDistribution = forceDistribution;
+
           var obj = {
             'id': scheduleId,
             'data': fields
