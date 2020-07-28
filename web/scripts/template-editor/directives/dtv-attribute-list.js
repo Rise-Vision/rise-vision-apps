@@ -2,15 +2,17 @@
 
 angular.module('risevision.template-editor.directives')
   .directive('templateAttributeList', ['userState', 'templateEditorFactory', 'brandingFactory',
-    'blueprintFactory', 'scheduleSelectorFactory',
-    function (userState, templateEditorFactory, brandingFactory, blueprintFactory, scheduleSelectorFactory) {
+    'blueprintFactory', 'scheduleSelectorFactory', 'tourFactory',
+    function (userState, templateEditorFactory, brandingFactory,
+      blueprintFactory, scheduleSelectorFactory, tourFactory) {
       return {
         restrict: 'E',
         scope: true,
         templateUrl: 'partials/template-editor/attribute-list.html',
         link: function ($scope) {
           $scope.factory = templateEditorFactory;
-          $scope.tooltipKey = 'ScheduleSelectorTooltip';
+
+          showFirstActiveTooltip();
 
           $scope.brandingComponent = brandingFactory.getBrandingComponent();
 
@@ -27,6 +29,10 @@ angular.module('risevision.template-editor.directives')
             .filter(function (c) {
               return !c.nonEditable;
             });
+
+          function showFirstActiveTooltip() {
+            $scope.tooltipKey = tourFactory.findActiveKey(['ScheduleSelectorTooltip', 'BrandingOverrideTooltip']);
+          }
         }
       };
     }

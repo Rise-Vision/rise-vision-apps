@@ -37,8 +37,9 @@ angular.module('risevision.apps.services')
           });
       };
 
-      factory.isShowing = function (key) {
+      factory.isShowing = function (key, readOnly) {
         var storageKey = _getStorageKey(key);
+
         if ($sessionStorage[storageKey] === true) {
           return false;
         }
@@ -48,9 +49,23 @@ angular.module('risevision.apps.services')
           return false;
         }
 
-        _updateCount(storageKey, count + 1);
+        if (!readOnly) {
+          _updateCount(storageKey, count + 1);
+        }
 
         return true;
+      };
+
+      factory.findActiveKey = function (keys) {
+        if (angular.isArray(keys)) {
+          for (var i = 0; i < keys.length; i++) {
+            if (factory.isShowing(keys[i], true)) {
+              return keys[i];
+            }
+          }
+        }
+
+        return null;
       };
 
       factory.dismissed = function (key) {

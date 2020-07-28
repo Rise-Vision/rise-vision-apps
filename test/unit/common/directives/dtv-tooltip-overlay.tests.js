@@ -117,6 +117,27 @@ describe('directive: tooltip-overlay', function() {
     });
   });
 
+  describe('tooltip-overlay-key:', function() {
+
+    it('should show if keys match', function() {
+      element[0].setAttribute('tooltip-overlay-key', 'tooltipKey1');
+      $scope.tooltipKey = 'tooltipKey1';
+      $scope.$digest();
+      $timeout.flush();
+
+      honeBackdropFactory.createForElement.should.have.been.calledWith(element, {});
+    });
+
+    it('should not show if keys do not match', function() {
+      element[0].setAttribute('tooltip-overlay-key', 'tooltipKey1');
+      $scope.tooltipKey = 'wrongKey';
+      $scope.$digest();
+
+      honeBackdropFactory.createForElement.should.not.have.been.calledWith(element, {});
+    });
+
+  });
+
   describe('dismiss:', function() {
     it('should reset tooltip and update factory', function() {
       $scope.tooltipKey = 'tooltipKey';
