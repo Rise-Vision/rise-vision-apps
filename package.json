@@ -17,7 +17,7 @@
     "compressorjs": "^1.0.6",
     "pricing-data-component": "github:Rise-Vision/pricing-data-component",
     "pricing-grid-component": "github:Rise-Vision/pricing-grid-component",
-    "pricing-selector-component": "github:Rise-Vision/pricing-selector-component",
+    "pricing-selector-component": "github:Rise-Vision/pricing-selector-component#staging/remove-discount",
     "pricing-summary-component": "github:Rise-Vision/pricing-summary-component",
     "tus-js-client": "^2.0.0-1"
   },
