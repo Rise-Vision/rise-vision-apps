@@ -22,7 +22,9 @@ var TemplateEditorPage = function() {
   var financialDataLicenseCloseButton = element(by.css('#confirmForm .close'));
   var licenseRequiredMessage = element(by.css('.display-license-required-message'));
   var brandingContainer = element(by.id('branding'));
+  var brandingColorsOverrideContainer = element(by.id('branding-colors-override'));
   var brandingEditLink = element(by.id('branding-edit'));
+  var brandingColorsOverrideEditLink = element(by.id('branding-colors-override-edit'));
 
   var schedulesTooltipDismiss = element(by.id('schedules-tooltip-dismiss'));
 
@@ -121,6 +123,14 @@ var TemplateEditorPage = function() {
 
   this.getBrandingEditLink = function () {
     return brandingEditLink;
+  };
+
+  this.getBrandingColorsOverrideContainer = function () {
+    return brandingColorsOverrideContainer;
+  };
+
+  this.getBrandingColorsOverrideEditLink = function () {
+    return brandingColorsOverrideEditLink;
   };
 
   this.waitForAutosave = function() {
