@@ -1,22 +1,3 @@
-.full-page-flex-container {
-	position: absolute;
-	top: var(--common-header-height);
-	bottom: 0;
-	left: 0;
-	right: 0;
-	display: flex;
-	flex-direction: column;
-	/* for Firefox */
-	min-height: 0;
-
-	.scrollable-content {
-		flex-grow: 1; 
-		overflow: auto;  
-		/* for Firefox */
-		min-height: 0;
-	}
-}
-
 #apps-home-container {
 	.scrollable-content {
 		padding-top: 10px;
@@ -24,10 +5,14 @@
 		padding-right: 20px;
 		padding-bottom: 20px;
 
+		@media (max-width: $screen-sm) {
+			padding-bottom: 155px;
+		}
+
 		.schedules-toolbar {
 			padding-bottom: 20px;
 			margin-left: 10px;
-    		margin-right: 10px;
+			margin-right: 10px;
 			margin-bottom: 20px;
 			border-bottom: 1px solid $madero-gray;
 
@@ -39,7 +24,7 @@
 				margin-right: 10px;
 			}
 
-			.schedules-toolbar-btn, share-schedule-button > button {
+			.schedules-toolbar-btn {
 				min-width: 160px;
 				margin-left: 8px;
 			}	
@@ -47,10 +32,13 @@
 	}
 
 	.mobile-footer {
-		padding-left: 20px;
-		padding-right: 20px;
+		position: fixed;
+		width: 100%;
+		bottom: 0px;
+		background: white;
+
 		.container {
-			padding: 20px 0px;
+			padding: 20px;
 			border-top: 1px solid $madero-gray;
 
 			.btn-default {
