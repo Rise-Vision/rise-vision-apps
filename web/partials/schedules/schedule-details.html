@@ -1,5 +1,5 @@
 <div class="madero-style">
-  <div class="app-header py-4 mb-5 border-bottom">
+  <div class="app-header u_padding-20-vertical mb-5 border-bottom">
     <!-- App Title -->
     <h1 class="app-header-title" translate>schedules-app.title</h1>
 
@@ -21,7 +21,7 @@
         <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
       </div> 
       
-      <div class="button-row text-right">
+      <div class="button-row text-right mt-5">
         <p class="visible-sm visible-xs text-right"><last-modified change-date="factory.schedule.changeDate" changed-by="factory.schedule.changedBy"></last-modified></p>
         <!-- Indicates delete or destructive action -->
         <button id="deleteButton" type="button" class="btn btn-danger btn-toolbar pull-left" ng-click="confirmDelete()">
