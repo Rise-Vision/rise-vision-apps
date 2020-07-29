@@ -283,7 +283,7 @@
 <div class="form-group">
   <div class="checkbox">
     <label class="control-label">
-      <input type="checkbox" ng-model="display.useCompanyAddress" ng-disabled="factory.showLicenseRequired(display)">
+      <input type="checkbox" ng-model="display.useCompanyAddress" name="useCompanyAddress" ng-disabled="factory.showLicenseRequired(display)">
       <strong translate>displays-app.fields.address.useCompany</strong>
     </label>
   </div>
@@ -299,13 +299,13 @@
     <div class="col-md-6">
       <div class="form-group">
         <label class="control-label" translate>displays-app.fields.address.street</label>
-        <input type="text" class="form-control" ng-model="display.street">
+        <input type="text" class="form-control" ng-model="display.street" name="street">
       </div>
     </div>
     <div class="col-md-6">
       <div class="form-group">
         <label class="control-label" translate>displays-app.fields.address.unit</label>
-        <input type="text" class="form-control" ng-model="display.unit">
+        <input type="text" class="form-control" ng-model="display.unit" name="unit">
       </div>
     </div>
   </div>
@@ -314,13 +314,13 @@
     <div class="col-md-3">
       <div class="form-group">
         <label class="control-label" translate>displays-app.fields.address.city</label>
-        <input type="text" class="form-control" ng-model="display.city">
+        <input type="text" class="form-control" ng-model="display.city" name="city">
       </div>
     </div>
     <div class="col-md-3">
       <div class="form-group">
         <label class="control-label" translate>displays-app.fields.address.country.name</label>
-        <select class="form-control" ng-model="display.country" ng-options="c.code as c.name for c in countries" empty-select-parser>
+        <select class="form-control" ng-model="display.country" name="country" ng-options="c.code as c.name for c in countries" empty-select-parser>
           <option value="" ng-show="false" translate>displays-app.fields.address.country.placeholder</option>
         </select>
       </div>
@@ -328,11 +328,11 @@
     <div class="col-md-3">
       <div class="form-group">
         <label class="control-label" translate>displays-app.fields.address.province.name</label>
-        <input type="text" class="form-control" ng-model="display.province" ng-hide="display.country == 'US' || display.country == 'CA'" />
-        <select class="form-control selectpicker" ng-model="display.province" ng-options="c[1] as c[0] for c in regionsCA" ng-show="display.country == 'CA'" empty-select-parser>
+        <input type="text" class="form-control" ng-model="display.province" name="province" ng-hide="display.country == 'US' || display.country == 'CA'" />
+        <select class="form-control selectpicker" ng-model="display.province" name="province" ng-options="c[1] as c[0] for c in regionsCA" ng-show="display.country == 'CA'" empty-select-parser>
           <option value="" ng-show="false" translate>displays-app.fields.address.province.provincePlaceholder</option>
         </select>
-        <select class="form-control selectpicker" ng-model="display.province" ng-options="c[1] as c[0] for c in regionsUS" ng-show="display.country == 'US'" empty-select-parser>
+        <select class="form-control selectpicker" ng-model="display.province" name="province" ng-options="c[1] as c[0] for c in regionsUS" ng-show="display.country == 'US'" empty-select-parser>
           <option value="" ng-show="false" translate>displays-app.fields.address.province.statePlaceholder</option>
         </select>
       </div>
@@ -340,7 +340,7 @@
     <div class="col-md-3">
       <div class="form-group">
         <label class="control-label" translate>displays-app.fields.address.postalCode</label>
-        <input type="text" class="form-control" ng-model="display.postalCode">
+        <input type="text" class="form-control" ng-model="display.postalCode" name="postalCode">
       </div>
     </div>
   </div>

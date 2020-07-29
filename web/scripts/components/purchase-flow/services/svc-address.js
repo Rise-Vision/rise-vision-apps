@@ -89,5 +89,17 @@ angular.module('risevision.common.components.purchase-flow')
           !addressObject.province;
       };
 
+      this.isAddressDirty = function(addressForm) {
+        console.log("XX addressForm", addressForm);
+        var addressFields = ['street', 'unit', 'city', 'province', 'country', 'postalCode'];
+        var isDirty = false;
+        angular.forEach(addressFields, function(field) {
+          if (addressForm[field] && addressForm[field].$dirty) {
+            isDirty = true;
+          }
+        });
+        return isDirty;
+      };
+
     }
   ]);

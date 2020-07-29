@@ -56,14 +56,7 @@ angular.module('risevision.common.components.purchase-flow')
 
       factory.validateAddressIfChanged = function (addressForm) {
         var addressFields = ['street', 'unit', 'city', 'province', 'country', 'postalCode'];
-        var isDirty = false;
-        angular.forEach(addressFields, function(field) {
-          if (addressForm[field] && addressForm[field].$dirty) {
-            isDirty = true;
-          }
-        });
-        
-        if (isDirty) {
+        if (addressService.isAddressDirty(addressForm)) {
           console.log("address was changed and needs validation", addressForm);
           var addressObject = {};
           angular.forEach(addressFields, function(field) {
@@ -71,7 +64,7 @@ angular.module('risevision.common.components.purchase-flow')
               addressObject[field] = addressForm[field].$modelValue;
             }
           });
-
+          console.log('XX addressObject', addressObject);
           return factory.isValidOrEmptyAddress(addressObject);
         } else {
           return $q.resolve();
