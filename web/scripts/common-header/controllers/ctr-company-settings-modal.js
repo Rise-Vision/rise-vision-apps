@@ -62,7 +62,7 @@ angular.module('risevision.common.header')
         } else {
           $scope.loading = true;
 
-          addressFactory.validateAddressIfChanged($scope.forms.companyForm).then(function () {
+          addressFactory.validateAddressIfChanged($scope.forms.companyForm, $scope.company).then(function () {
               var company = angular.copy($scope.company);
 
               verifyAdmin(company);
