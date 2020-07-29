@@ -42,7 +42,7 @@ angular.module('risevision.apps.directives')
                   return;
                 }
 
-                //tooltip-overlay-key is optinal. It allows to have more than directive on a page.
+                //tooltip-overlay-key is optional. It allows to have more than directive on a page.
                 if (element.attr('tooltip-overlay-key') &&
                   element.attr('tooltip-overlay-key') !== $scope.tooltipKey) {
                   return;
