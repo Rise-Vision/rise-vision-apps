@@ -7,7 +7,7 @@ describe('directive: display fields', function() {
      $provide.value("REGIONS_CA", [""]);
      $provide.value("REGIONS_US", [""]);
      $provide.value("TIMEZONES", [""]);
-     
+     $provide.value("SHARED_SCHEDULE_URL", [""]);
   }));
   
   var elm, $scope, $compile;
@@ -39,4 +39,3 @@ describe('directive: display fields', function() {
   });
   
 });
-

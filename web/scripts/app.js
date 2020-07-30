@@ -150,7 +150,9 @@ angular.module('risevision.apps', [
         if (toState.name === 'apps.launcher.onboarding' ||
           toState.name === 'apps.launcher.home' ||
           toState.name === 'apps.schedules.details' ||
-          toState.name === 'apps.schedules.add') {
+          toState.name === 'apps.schedules.add' ||
+          toState.name === 'apps.displays.details' ||
+          toState.name === 'apps.displays.add') {
           $rootScope.showWhiteBackground = true;
         } else {
           $rootScope.showWhiteBackground = false;

@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('risevision.displays.directives')
-  .directive('displayFields', ['COUNTRIES', 'REGIONS_CA', 'REGIONS_US',
-    'TIMEZONES',
-    function (COUNTRIES, REGIONS_CA, REGIONS_US, TIMEZONES) {
+  .directive('displayFields', ['$sce', 'COUNTRIES', 'REGIONS_CA', 'REGIONS_US',
+    'TIMEZONES', 'SHARED_SCHEDULE_URL',
+    function ($sce, COUNTRIES, REGIONS_CA, REGIONS_US, TIMEZONES, SHARED_SCHEDULE_URL) {
       return {
         restrict: 'E',
         templateUrl: 'partials/displays/display-fields.html',
@@ -23,6 +23,18 @@ angular.module('risevision.displays.directives')
             return ($scope.isChromeOs(display) || display.playerName !==
               'RisePlayerPackagedApp');
           };
+
+          $scope.getEmbedUrl = function (scheduleId) {
+            if (!scheduleId) {
+              return null;
+            }
+
+            var url = SHARED_SCHEDULE_URL.replace('SCHEDULE_ID', scheduleId) +
+              '&env=apps_display';
+
+            return $sce.trustAsResourceUrl(url);
+          };
+
         } //link()
       };
     }

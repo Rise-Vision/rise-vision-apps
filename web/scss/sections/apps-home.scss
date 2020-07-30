@@ -25,7 +25,8 @@
 			}
 
 			.schedules-toolbar-btn {
-				min-width: 160px;
+        @extend .btn-toolbar;
+
 				margin-left: 8px;
 			}	
 		}
