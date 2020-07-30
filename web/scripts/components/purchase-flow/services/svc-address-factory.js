@@ -55,7 +55,7 @@ angular.module('risevision.common.components.purchase-flow')
       };
 
       factory.validateAddressIfChanged = function (addressForm, addressObject) {
-        if (addressService.isAddressDirty(addressForm)) {
+        if (addressService.isAddressFormDirty(addressForm)) {
           return factory.isValidOrEmptyAddress(addressObject);
         } else {
           return $q.resolve();

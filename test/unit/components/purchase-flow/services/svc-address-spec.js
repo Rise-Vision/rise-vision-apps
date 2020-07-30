@@ -141,4 +141,38 @@ describe("Services: address service", function() {
 
   });
 
+  describe("isAddressFormDirty:", function() {
+    it("should return false if fields are unchanged", function() {
+      expect(addressService.isAddressFormDirty(null)).to.be.false;
+
+      var addressForm = {};
+      expect(addressService.isAddressFormDirty(addressForm)).to.be.false;
+
+      addressForm.city = {};
+      expect(addressService.isAddressFormDirty(addressForm)).to.be.false;
+
+      addressForm.city.$dirty = false;
+      expect(addressService.isAddressFormDirty(addressForm)).to.be.false;
+
+      addressForm.country = {};
+      expect(addressService.isAddressFormDirty(addressForm)).to.be.false;
+
+      addressForm.country.$dirty = false;
+      expect(addressService.isAddressFormDirty(addressForm)).to.be.false;
+    });
+
+    it("should flag dirty fields", function() {
+      var addressForm = { city: { $dirty: true } };      
+      expect(addressService.isAddressFormDirty(addressForm)).to.be.true;
+
+      addressForm = { city: { $dirty: true }, country: { $dirty: false } };
+      expect(addressService.isAddressFormDirty(addressForm)).to.be.true;
+
+      addressForm = { street: { $dirty: true }, country: { $dirty: false }, postalCode: { $dirty: true }};
+      expect(addressService.isAddressFormDirty(addressForm)).to.be.true;
+    });
+
+    
+  });
+
 });

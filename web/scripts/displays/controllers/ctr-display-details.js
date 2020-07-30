@@ -177,7 +177,7 @@ angular.module('risevision.displays.controllers')
 
           return $q.reject();
         } else {
-          var shouldSkipAddressValidation = !addressService.isAddressDirty($scope.displayDetails) && !$scope.displayDetails.useCompanyAddress.$dirty;
+          var shouldSkipAddressValidation = !addressService.isAddressFormDirty($scope.displayDetails) && !$scope.displayDetails.useCompanyAddress.$dirty;
           return displayFactory.updateDisplay( shouldSkipAddressValidation );
         }
       };

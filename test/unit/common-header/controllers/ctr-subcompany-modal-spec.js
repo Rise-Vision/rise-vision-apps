@@ -50,7 +50,7 @@ describe('controller: subcompany modal', function() {
     });
     $provide.service('addressFactory', function() {
       return {
-        isValidOrEmptyAddress: sinon.spy(function() {
+        validateAddressIfChanged: sinon.spy(function() {
           if (validateAddress) {
             return Q.resolve();  
           }
@@ -150,7 +150,7 @@ describe('controller: subcompany modal', function() {
       $scope.save();
 
       expect($scope.loading).to.not.be.ok;
-      addressFactory.isValidOrEmptyAddress.should.not.have.been.called;
+      addressFactory.validateAddressIfChanged.should.not.have.been.called;
 
     });
 
@@ -161,7 +161,7 @@ describe('controller: subcompany modal', function() {
       setTimeout(function() {
         expect($scope.loading).to.be.false;
 
-        addressFactory.isValidOrEmptyAddress.should.have.been.called;
+        addressFactory.validateAddressIfChanged.should.have.been.called;
         createCompany.should.have.been.called;
 
         companyTracker.should.have.been.calledWith('Company Created', 'companyId', 'companyName');
@@ -180,7 +180,7 @@ describe('controller: subcompany modal', function() {
         expect($scope.loading).to.be.false;
         expect($modalInstance._closed).to.be.false;
 
-        addressFactory.isValidOrEmptyAddress.should.have.been.called;
+        addressFactory.validateAddressIfChanged.should.have.been.called;
         createCompany.should.have.been.called;
 
         humanReadableError.should.have.been.calledWith('ERROR; could not create company');
@@ -203,7 +203,7 @@ describe('controller: subcompany modal', function() {
         expect($scope.loading).to.be.false;
         expect($modalInstance._closed).to.be.false;
 
-        addressFactory.isValidOrEmptyAddress.should.have.been.called;
+        addressFactory.validateAddressIfChanged.should.have.been.called;
         createCompany.should.not.have.been.called;
 
         humanReadableError.should.have.been.calledWith('ERROR; invalid address');
