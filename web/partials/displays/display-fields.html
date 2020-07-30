@@ -328,11 +328,11 @@
     <div class="col-md-3">
       <div class="form-group">
         <label class="control-label" translate>displays-app.fields.address.province.name</label>
-        <input type="text" class="form-control" ng-model="display.province" name="province" ng-hide="display.country == 'US' || display.country == 'CA'" />
-        <select class="form-control selectpicker" ng-model="display.province" name="province" ng-options="c[1] as c[0] for c in regionsCA" ng-show="display.country == 'CA'" empty-select-parser>
+        <input type="text" class="form-control" ng-model="display.province" name="province" ng-if="display.country != 'US' && display.country != 'CA'" />
+        <select class="form-control selectpicker" ng-model="display.province" name="province" ng-options="c[1] as c[0] for c in regionsCA" ng-if="display.country == 'CA'" empty-select-parser>
           <option value="" ng-show="false" translate>displays-app.fields.address.province.provincePlaceholder</option>
         </select>
-        <select class="form-control selectpicker" ng-model="display.province" name="province" ng-options="c[1] as c[0] for c in regionsUS" ng-show="display.country == 'US'" empty-select-parser>
+        <select class="form-control selectpicker" ng-model="display.province" name="province" ng-options="c[1] as c[0] for c in regionsUS" ng-if="display.country == 'US'" empty-select-parser>
           <option value="" ng-show="false" translate>displays-app.fields.address.province.statePlaceholder</option>
         </select>
       </div>

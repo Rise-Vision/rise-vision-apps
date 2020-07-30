@@ -77,11 +77,11 @@
       <label for="company-settings-state" class="control-label">
         State/Province/Region
       </label>
-      <input id="company-settings-state" type="text" class="form-control" ng-model="company.province" name="province" ng-hide="company.country == 'US' || company.country == 'CA'" />
-      <select class="form-control selectpicker" ng-model="company.province" name="province" ng-options="c[1] as c[0] for c in regionsCA" ng-show="company.country == 'CA'" empty-select-parser>
+      <input id="company-settings-state" type="text" class="form-control" ng-model="company.province" name="province" ng-if="company.country != 'US' && company.country != 'CA'" />
+      <select class="form-control selectpicker" ng-model="company.province" name="province" ng-options="c[1] as c[0] for c in regionsCA" ng-if="company.country == 'CA'" empty-select-parser>
         <option ng-show="false" value="">&lt; Select Province &gt;</option>
       </select>
-      <select class="form-control selectpicker" ng-model="company.province" name="province" ng-options="c[1] as c[0] for c in regionsUS" ng-show="company.country == 'US'" empty-select-parser>
+      <select class="form-control selectpicker" ng-model="company.province" name="province" ng-options="c[1] as c[0] for c in regionsUS" ng-if="company.country == 'US'" empty-select-parser>
         <option ng-show="false" value="">&lt; Select State &gt;</option>
       </select>
     </div>
