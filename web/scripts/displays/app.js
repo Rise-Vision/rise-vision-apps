@@ -45,18 +45,19 @@ angular.module('risevision.apps')
           url: '/displays/change/:displayId/:companyId',
           controller: ['canAccessApps', 'userState', '$stateParams',
             '$state', '$location',
-            function (canAccessApps, userState, $stateParams, $state,
-              $location) {
+            function (canAccessApps, userState, $stateParams, $state, $location) {
+              var companyChangeRequired = userState.getSelectedCompanyId() !== $stateParams.companyId;
+
               return canAccessApps().then(function () {
-                  if (userState.getSelectedCompanyId() !== $stateParams
-                    .companyId) {
+                  if (companyChangeRequired) {
                     return userState.switchCompany($stateParams.companyId);
-                  } else {
-                    return true;
                   }
                 })
                 .then(function () {
-                  $location.replace();
+                  if (companyChangeRequired) {
+                    $location.replace();
+                  }
+
                   $state.go('apps.displays.details', {
                     displayId: $stateParams.displayId
                   });
