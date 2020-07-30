@@ -630,4 +630,38 @@ describe("Services: address factory", function() {
       });
     });
   });
+
+  describe("validateAddressIfChanged:", function() {
+    it("should validate the address if form is dirty", function() {
+      sinon.stub(addressService, "isAddressFormDirty", function() {
+        return true;
+      });
+      sinon.spy(addressFactory, "isValidOrEmptyAddress");
+
+      var addressForm = { city: { $dirty:true } };
+      var addressObject = { unit: null };
+      addressFactory.validateAddressIfChanged(addressForm, addressObject);
+
+      addressService.isAddressFormDirty.should.have.been.calledWith(addressForm);
+
+      addressFactory.isValidOrEmptyAddress.should.have.been.calledWith(addressObject);
+    });
+
+    it("should resolve otherwise", function() {
+      sinon.stub(addressService, "isAddressFormDirty", function(done) {
+        return false;
+      });
+      sinon.spy(addressFactory, "isValidOrEmptyAddress");
+
+      var addressForm = { city: { $dirty:true } };
+      var addressObject = { unit: null };
+      addressFactory.validateAddressIfChanged(addressForm, addressObject).then(function() {
+        addressService.isAddressFormDirty.should.have.been.calledWith(addressForm);
+
+        addressFactory.isValidOrEmptyAddress.should.not.have.been.calledWith(addressObject);
+
+        done();
+      });
+    });
+  });
 });

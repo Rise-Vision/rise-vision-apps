@@ -40,7 +40,7 @@
       <label for="company-settings-street" class="control-label">
         Street
       </label>
-      <input id="company-settings-street" type="text" class="form-control" ng-model="company.street" />
+      <input id="company-settings-street" type="text" class="form-control" ng-model="company.street" name="street" />
     </div>
   </div>
   <div class="col-md-6">
@@ -48,7 +48,7 @@
       <label for="company-settings-unit" class="control-label">
         Unit
       </label>
-      <input id="company-settings-unit" type="text" class="form-control" ng-model="company.unit" />
+      <input id="company-settings-unit" type="text" class="form-control" ng-model="company.unit" name="unit" />
     </div>
   </div>
 </div>
@@ -58,7 +58,7 @@
       <label for="company-settings-city" class="control-label">
         City
       </label>
-      <input id="company-settings-city" type="text" class="form-control" ng-model="company.city" />
+      <input id="company-settings-city" type="text" class="form-control" ng-model="company.city" name="city" />
     </div>
   </div>
   <div class="col-md-3">
@@ -67,7 +67,7 @@
         Country
       </label>
       <select id="company-settings-country" class="form-control selectpicker"
-        ng-model="company.country" ng-options="c.code as c.name for c in countries" empty-select-parser>
+        ng-model="company.country" name="country" ng-options="c.code as c.name for c in countries" empty-select-parser>
         <option ng-show="false" value="">&lt; Select Country &gt;</option>
       </select>
     </div>
@@ -77,11 +77,11 @@
       <label for="company-settings-state" class="control-label">
         State/Province/Region
       </label>
-      <input id="company-settings-state" type="text" class="form-control" ng-model="company.province" ng-hide="company.country == 'US' || company.country == 'CA'" />
-      <select class="form-control selectpicker" ng-model="company.province" ng-options="c[1] as c[0] for c in regionsCA" ng-show="company.country == 'CA'" empty-select-parser>
+      <input id="company-settings-state" type="text" class="form-control" ng-model="company.province" name="province" ng-if="company.country != 'US' && company.country != 'CA'" />
+      <select class="form-control selectpicker" ng-model="company.province" name="province" ng-options="c[1] as c[0] for c in regionsCA" ng-if="company.country == 'CA'" empty-select-parser>
         <option ng-show="false" value="">&lt; Select Province &gt;</option>
       </select>
-      <select class="form-control selectpicker" ng-model="company.province" ng-options="c[1] as c[0] for c in regionsUS" ng-show="company.country == 'US'" empty-select-parser>
+      <select class="form-control selectpicker" ng-model="company.province" name="province" ng-options="c[1] as c[0] for c in regionsUS" ng-if="company.country == 'US'" empty-select-parser>
         <option ng-show="false" value="">&lt; Select State &gt;</option>
       </select>
     </div>
@@ -91,7 +91,7 @@
       <label for="company-settings-zip" class="control-label">
         ZIP/Postal Code
       </label>
-      <input id="company-settings-zip" type="text" class="form-control" ng-model="company.postalCode" />
+      <input id="company-settings-zip" type="text" class="form-control" ng-model="company.postalCode" name="postalCode" />
     </div>
   </div>
 </div>

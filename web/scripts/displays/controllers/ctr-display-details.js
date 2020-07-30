@@ -4,10 +4,10 @@ angular.module('risevision.displays.controllers')
   .controller('displayDetails', ['$scope', '$rootScope', '$q',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'enableCompanyProduct', 'userState', 'plansFactory',
-    'currentPlanFactory', 'playerLicenseFactory', 'PLAYER_PRO_PRODUCT_CODE', '$state',
+    'currentPlanFactory', 'playerLicenseFactory', 'PLAYER_PRO_PRODUCT_CODE', '$state', 'addressService',
     function ($scope, $rootScope, $q, displayFactory, display, screenshotFactory, playerProFactory,
       $loading, $log, $modal, $templateCache, displayId, enableCompanyProduct, userState,
-      plansFactory, currentPlanFactory, playerLicenseFactory, PLAYER_PRO_PRODUCT_CODE, $state) {
+      plansFactory, currentPlanFactory, playerLicenseFactory, PLAYER_PRO_PRODUCT_CODE, $state, addressService) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
@@ -177,7 +177,8 @@ angular.module('risevision.displays.controllers')
 
           return $q.reject();
         } else {
-          return displayFactory.updateDisplay();
+          var shouldSkipAddressValidation = !addressService.isAddressFormDirty($scope.displayDetails) && !$scope.displayDetails.useCompanyAddress.$dirty;
+          return displayFactory.updateDisplay( shouldSkipAddressValidation );
         }
       };
 

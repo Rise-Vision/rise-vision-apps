@@ -50,7 +50,7 @@ describe("controller: company settings", function() {
     });
     $provide.service("addressFactory", function() {
       return {
-        isValidOrEmptyAddress: sinon.spy(function() {
+        validateAddressIfChanged: sinon.spy(function() {
           if (validateAddress) {
             return Q.resolve();  
           }
@@ -220,7 +220,7 @@ describe("controller: company settings", function() {
       $scope.save();
 
       expect($scope.loading).to.be.false;
-      addressFactory.isValidOrEmptyAddress.should.not.have.been.called;
+      addressFactory.validateAddressIfChanged.should.not.have.been.called;
 
     });
 
