@@ -92,7 +92,7 @@ describe('directive: page title', function() {
 
     checkState('apps.schedules.details', 'Edit Schedule');
 
-    checkState('apps.schedules.add', 'Add Schedule');
+    checkState('apps.schedules.add', 'Create New Schedule');
 
     checkState('apps.displays', 'Displays');
     checkState('apps.displays.list', 'Displays');
