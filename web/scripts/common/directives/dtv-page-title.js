@@ -58,7 +58,7 @@ angular.module('risevision.apps.directives')
               return 'Edit Schedule';
 
             case 'apps.schedules.add':
-              return 'Add Schedule';
+              return 'Create New Schedule';
 
             case 'apps.displays':
             case 'apps.displays.list':
