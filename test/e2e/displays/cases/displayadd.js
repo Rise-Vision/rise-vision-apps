@@ -41,7 +41,7 @@ var DisplayAddScenarios = function() {
       expect(displayAddModalPage.getDisplayNameField().isPresent()).to.eventually.be.true;
 
       browser.sleep(100);
-      expect(displayAddModalPage.getTitle().getText()).to.eventually.equal('Add a Display');
+      expect(displayAddModalPage.getTitle().getText()).to.eventually.equal('Create New Display');
     });
 
     it('should show Next Button', function () {

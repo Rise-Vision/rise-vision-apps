@@ -45,7 +45,7 @@ var ScheduleListScenarios = function() {
 
     it('should show schedule add button', function () {
       expect(schedulesListPage.getScheduleAddButton().isPresent()).to.eventually.be.true;
-      expect(schedulesListPage.getScheduleAddButton().getText()).to.eventually.equal('Add Schedule');
+      expect(schedulesListPage.getScheduleAddButton().getText()).to.eventually.equal('Create New Schedule');
     });
     
     it('schedule add button should be a hyperlink', function () {

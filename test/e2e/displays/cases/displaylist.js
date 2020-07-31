@@ -48,7 +48,7 @@ var DisplayListScenarios = function() {
 
       it('should show display add button', function () {
         expect(displaysListPage.getDisplayAddButton().isPresent()).to.eventually.be.true;
-        expect(displaysListPage.getDisplayAddButton().getText()).to.eventually.equal('Add Display');
+        expect(displaysListPage.getDisplayAddButton().getText()).to.eventually.equal('Create New Display');
       });
 
       it('should show display list table header Name', function () {

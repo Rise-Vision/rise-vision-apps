@@ -45,7 +45,7 @@ var PresentationListScenarios = function() {
 
     it('should show presentation add button', function () {
       expect(presentationsListPage.getPresentationAddButton().isDisplayed()).to.eventually.be.true;
-      expect(presentationsListPage.getPresentationAddButton().getText()).to.eventually.equal('Add From Template');
+      expect(presentationsListPage.getPresentationAddButton().getText()).to.eventually.equal('Create New Presentation');
     });
 
     it('should show presentation list table header Name', function () {
