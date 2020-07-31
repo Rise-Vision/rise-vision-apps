@@ -204,10 +204,10 @@
         </tbody>
       </table>
 
-      <div class="form-group" ng-show="display.playerVersion || display.onlineStatus === 'online'">
-        <div class="form-group form-inline" ng-show="playerProFactory.isCROSLegacy(display) || playerProFactory.isChromeOSPlayer(display)">
-          <label class="control-label" translate>displays-app.fields.player.orientation.name</label>
-          <select class="form-control" ng-model="display.orientation" integer-parser>
+      <div class="list-group-item flex-row form-group mb-0" ng-show="(display.playerVersion || display.onlineStatus === 'online') && (playerProFactory.isCROSLegacy(display) || playerProFactory.isChromeOSPlayer(display))">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.player.orientation.name</label>
+          <select class="form-control mr-auto" ng-model="display.orientation" integer-parser>
             <option value="0" translate>displays-app.fields.player.orientation.0</option>
             <option value="90" translate>displays-app.fields.player.orientation.90</option>
             <option value="180" translate>displays-app.fields.player.orientation.180</option>
@@ -326,36 +326,38 @@
         </div>
       </div>
 
-
-      <table class="table">
-        <tbody class="table-body">
-
-          <tr class="table-body__row" ng-class="{'alert-warning': display.playerVersion && playerProFactory.isOutdatedPlayer(display), 'alert-danger': display.playerVersion && playerProFactory.isUnsupportedPlayer(display)}">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.playerVersion</span></td>
-            <td class="table-body__cell" ng-if="!display.playerVersion"></td>
-            <td class="table-body__cell" ng-if="display.playerVersion && playerProFactory.isOutdatedPlayer(display)">
-              <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "") + (display.playerProAuthorized ? 'Licensed' : 'Free')}}</span>
+      <div class="list-group-item flex-row form-group mb-0">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0 aligner-item--top" translate>displays-app.fields.player.playerVersion</label>
+          <span class="mr-auto">
+            <div ng-show="display.playerName">{{display.playerName}}</div>
+            <div ng-show="display.playerVersion">{{display.playerVersion}}</div>
+            <div ng-if="display.playerVersion && playerProFactory.isOutdatedPlayer(display)">
               <a href="https://help.risevision.com/hc/en-us/articles/115004250723-Why-is-Rise-Player-version-not-current-" target="_blank" translate>displays-app.fields.player.version.notCurrent</a>
-            </td>
-            <td class="table-body__cell" ng-if="display.playerVersion && playerProFactory.isUnsupportedPlayer(display)">
-              <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "")}}</span>
+            </div>
+            <div ng-if="display.playerVersion && playerProFactory.isUnsupportedPlayer(display)">
               <a href="" ng-click="factory.addDisplayModal(display)"><span class="text-danger" translate>displays-app.fields.player.version.unsupported</span> - {{'displays-app.fields.player.version.upgrade' | translate}}</a>
-            </td>
-            <td class="table-body__cell" ng-if="display.playerVersion && !playerProFactory.isOutdatedPlayer(display) && !playerProFactory.isUnsupportedPlayer(display)">
-              <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "") + (display.playerProAuthorized ? 'Licensed' : 'Free')}}</span>
-            </td>
-          </tr>
-          <tr class="table-body__row">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.viewerVersion</span></td>
-            <td class="table-body__cell"><span>{{display.viewerVersion}}</span></td>
-          </tr>
-          <tr class="table-body__row">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.browserVersion</span></td>
-            <td class="table-body__cell"><span>{{(display.browserName ? display.browserName + " " : "") + (display.browserVersion ? display.browserVersion : "")}}</span></td>
-          </tr>
+            </div>
+          </span>
+        </div>
+      </div>
 
-        </tbody>
-      </table>
+      <div class="list-group-item flex-row form-group mb-0" ng-show="display.viewerVersion">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.player.viewerVersion</label>
+          <span class="mr-auto">
+            {{display.viewerVersion}}
+          </span>
+        </div>
+      </div>
+      <div class="list-group-item flex-row form-group mb-0" ng-show="display.browserVersion">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.player.browserVersion</label>
+          <span class="mr-auto">
+            {{(display.browserName ? display.browserName + " " : "") + (display.browserVersion ? display.browserVersion : "")}}
+          </span>
+        </div>
+      </div>
 
       <div class="list-group-item flex-row form-group mb-0" ng-show="display.serialNumber">
         <div class="row-entry">
