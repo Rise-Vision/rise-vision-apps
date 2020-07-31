@@ -58,7 +58,7 @@
                           <h4 id="productName">{{product.name | characters: 25}}</h4>
                         </div><!--end col-->
                         <div class="col-xs-4">
-                          <button class="btn btn-primary btn-block btn-sm" id="{{product.name | slugify}}" ng-click="quickSelect(product); $event.stopPropagation()">Add</button>
+                          <button class="btn btn-primary btn-block btn-sm" id="{{product.name | slugify}}" ng-click="quickSelect(product); $event.stopPropagation()">{{factory.search.category === 'Content' ? 'Add' : 'Create' }}</button>
                         </div><!--end col-->
                       </div><!--end row-->  
                     </div><!-- end product-grid_details -->
