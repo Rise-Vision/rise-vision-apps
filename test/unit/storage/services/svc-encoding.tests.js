@@ -162,6 +162,27 @@ describe('service: encoding:', function() {
         assert('Two status calls', statusChecks === 2);
       });
     });
+
+    it('shows error on encoding error', function() {
+      $httpBackend.when('HEAD', /.*encoding/).respond(200, {});
+
+      var statusResponse = {statuses: {}};
+      statusResponse.statuses[taskToken] = {status: 'completed', error: 1, error_description: 'test_error_desc'};
+
+      var mockResp = $httpBackend.when('POST', /.*status/).respond(200, statusResponse);
+
+      var statusPromise = encoding.monitorStatus(item, function() {});
+      $timeout.flush();
+
+      setTimeout(function() {
+        setTimeout(function() {try{$httpBackend.flush();}catch(e){}}, 5);
+        setTimeout(function() {try{$timeout.flush();}catch(e){}}, 10);
+      }, 50);
+
+      return statusPromise.then(function() {
+        assert('should not pass', false);
+      }).then(null, function() {});
+    });
   });
 
   describe('file acceptance', function() {
