@@ -1,10 +1,10 @@
 {
   "actions": {
-    "new": "Add Display"
+    "new": "Create New Display"
   },
   "add": {
     "activate": "Activate your Display",
-    "title": "Add a Display"
+    "title": "Create New Display"
   },
   "alerts": {
     "acceptTerms": "Please accept Terms and Conditions to enable Alerts",
