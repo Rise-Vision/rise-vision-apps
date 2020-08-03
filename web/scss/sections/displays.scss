@@ -1,3 +1,27 @@
+.display-fields-body {
+  .scrollable-list {
+    @media (min-width: $screen-md) {
+      height: 296px;
+      min-height: 296px;
+      max-height: 296px;
+    }
+
+    @media (min-width: $screen-lg) {
+      height: 408px;
+      min-height: 408px;
+      max-height: 408px;
+    }
+
+    .list-group-item {
+      @extend .u_padding-md;
+    }
+
+    .control-label {
+      width: 241px;
+    }
+  }
+}
+
 .rise-player-list {
   border-radius: 4px;
   border: 1px solid #DDD;

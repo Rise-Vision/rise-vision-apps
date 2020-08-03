@@ -14,6 +14,33 @@
     color: $mid-gray;
   }
 
+  last-modified .text-muted {
+    @extend .text-gray;
+  }
+
+  .border-bottom {
+    border-bottom: 1px solid $madero-gray;
+  }
+
+  .border-top {
+    border-top: 1px solid $madero-gray;
+  }
+
+  .border-container {
+    border: 1px solid $madero-gray;
+    border-radius: 4px;
+
+    &.scrollable-list {
+      .list-group-item {
+        @extend .border-top;
+
+        &:first-child {
+          border-top: 0;
+        }
+      }
+    }
+  }
+
   .button-toolbar {
     .btn-toolbar {
       @extend .mr-3;

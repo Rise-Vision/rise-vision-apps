@@ -54,140 +54,92 @@
       <label class="mb-0 mr-auto" translate>displays-app.displayDetails</label>
     </div>
 
+    <div class="scrollable-list border-container">
 
-    <div class="panel panel-default">
+      <div class="list-group-item flex-row form-group mb-0">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0">License Display?</label>
+
+          <span class="mr-auto" ng-show="updatingRPP">
+            <span translate>displays-app.details.rpp-loading</span> <i class="fa fa-spinner fa-spin fa-fw"></i>
+          </span>
+          <div class="toggle-group mr-auto" ng-hide="updatingRPP">
+            <input type="checkbox" id="on-off-switch" ng-model="display.playerProAuthorized" ng-change="toggleProAuthorized()" ng-disabled="updatingRPP || !isProToggleEnabled()">
+            <div class="onoffswitch" aria-hidden="true">
+                <div class="onoffswitch-label">
+                    <div class="onoffswitch-inner"></div>
+                    <div class="onoffswitch-switch"></div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="list-group-item flex-row form-group mb-0">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.player.id</label>
+          <span class="mr-auto">
+            {{display.id}}
+          </span>
+        </div>
+      </div>
+
+      <div class="list-group-item flex-row form-group mb-0">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.player.resolution</label>
+          <span class="mr-auto">
+            <span ng-show="display.playerVersion">{{display.width | resolution: display.height}}</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="list-group-item flex-row form-group mb-0">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.player.lastConnection</label>
+          <span class="mr-auto" ng-if="factory.showLicenseRequired(display)">
+            License Required
+          </span>
+          <span class="mr-auto" ng-if="!factory.showLicenseRequired(display)">
+            {{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}
+          </span>
+        </div>
+      </div>
+
+      <!-- SCREENSHOT  -->
+      <div ng-if="!playerProFactory.isCROSLegacy(display)">
+        <screenshot></screenshot>
+      </div>
+
+      <div class="list-group-item flex-row form-group mb-0">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.player.status</label>
+          <span class="mr-auto" ng-if="factory.showLicenseRequired(display)">
+            License Required
+          </span>
+          <span class="mr-auto" ng-if="!factory.showLicenseRequired(display)">
+            <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
+            <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline</span>
+            <a ng-show="!displayService.statusLoading && (display | status) === 'offline'" href="https://help.risevision.com/hc/en-us/articles/115002694906-Why-is-my-Display-status-offline-" target="_blank">Why is my Display offline?</a>
+            <span class="text-success" ng-show="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
+            <a id="notActivatedLink" class="u_icon-hover u_clickable" ng-show="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="factory.addDisplayModal(display)">
+              {{ 'displays-app.list.status.notActivated' | translate }}
+            </a>
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group reboot-time">
+        <div class="checkbox">
+          <label class="control-label">
+            <input type="checkbox" ng-model="display.restartEnabled" ng-disabled="factory.showLicenseRequired(display)">
+            <strong translate>displays-app.fields.reboot</strong>
+          </label>
+        </div>
+        <time-picker ng-model="display.restartTime" ng-disabled="!display.restartEnabled || factory.showLicenseRequired(display)"></time-picker>
+      </div>
+
       <table class="table">
         <tbody class="table-body">
-          <tr class="table-body__row">
-            <td class="table-body__cell"><span>License Display?</span></td>
-            <td class="table-body__cell">
-              <span ng-show="updatingRPP">
-                <span translate>displays-app.details.rpp-loading</span> <i class="fa fa-spinner fa-spin fa-fw"></i>
-              </span>
-              <div class="toggle-group ml-auto" ng-hide="updatingRPP">
-                <input type="checkbox" id="on-off-switch" ng-model="display.playerProAuthorized" ng-change="toggleProAuthorized()" ng-disabled="updatingRPP || !isProToggleEnabled()">
-                <div class="onoffswitch" aria-hidden="true">
-                    <div class="onoffswitch-label">
-                        <div class="onoffswitch-inner"></div>
-                        <div class="onoffswitch-switch"></div>
-                    </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-
-          <tr class="table-body__row">
-            <td class="table-body__cell" translate><span>displays-app.fields.player.id</span></td>
-            <td class="table-body__cell"><span> {{display.id}} </span></td>
-          </tr>
-          <tr class="table-body__row">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.resolution</span></td>
-            <td class="table-body__cell"><span ng-show="display.playerVersion">{{display.width | resolution: display.height}}</span></td>
-          </tr>
-          <tr class="table-body__row" ng-class="{ 'row--disabled': factory.showLicenseRequired(display) }">
-            <td class="table-body__cell" translate><span>displays-app.fields.player.status</span></td>
-            <td class="table-body__cell" ng-if="factory.showLicenseRequired(display)">
-              License Required
-            </td>
-            <td class="table-body__cell" ng-if="!factory.showLicenseRequired(display)">
-                <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
-                <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline</span>
-                <a ng-show="!displayService.statusLoading && (display | status) === 'offline'" href="https://help.risevision.com/hc/en-us/articles/115002694906-Why-is-my-Display-status-offline-" target="_blank">Why is my Display offline?</a>
-                <span class="text-success" ng-show="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
-                <a id="notActivatedLink" class="u_icon-hover u_clickable" ng-show="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="factory.addDisplayModal(display)">
-                  {{ 'displays-app.list.status.notActivated' | translate }}
-                </a>
-            </td>
-          </tr>
-          <tr class="table-body__row" ng-class="{ 'row--disabled': factory.showLicenseRequired(display) }">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.lastConnection</span></td>
-            <td class="table-body__cell" ng-if="factory.showLicenseRequired(display)">
-              License Required
-            </td>
-            <td class="table-body__cell" ng-if="!factory.showLicenseRequired(display)">
-              <span>{{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}</span>
-            </td>
-          </tr>
-          <tr class="table-body__row" ng-class="{ 'row--disabled': factory.showLicenseRequired(display) }">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.ipAddress</span></td>
-            <td class="table-body__cell" ng-if="factory.showLicenseRequired(display)">
-              License Required
-            </td>
-            <td class="table-body__cell" ng-if="!factory.showLicenseRequired(display)">
-              <span>{{display.playerLocalIpAddress}}</span>
-            </td>
-          </tr>
-          <tr class="table-body__row" ng-show="display.macAddress" ng-class="{ 'row--disabled': factory.showLicenseRequired(display) }">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.macAddress</span></td>
-            <td class="table-body__cell" ng-if="factory.showLicenseRequired(display)">
-              License Required
-            </td>
-            <td class="table-body__cell" ng-if="!factory.showLicenseRequired(display)">
-              <span>{{display.macAddress}}</span></td>
-          </tr>
-          <tr class="table-body__row">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.operatingSystem</span></td>
-            <td class="table-body__cell"><span>{{display.os}}</span></td>
-          </tr>
-          <tr class="table-body__row" ng-class="{'alert-warning': display.playerVersion && playerProFactory.isOutdatedPlayer(display), 'alert-danger': display.playerVersion && playerProFactory.isUnsupportedPlayer(display)}">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.playerVersion</span></td>
-            <td class="table-body__cell" ng-if="!display.playerVersion"></td>
-            <td class="table-body__cell" ng-if="display.playerVersion && playerProFactory.isOutdatedPlayer(display)">
-              <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "") + (display.playerProAuthorized ? 'Licensed' : 'Free')}}</span>
-              <a href="https://help.risevision.com/hc/en-us/articles/115004250723-Why-is-Rise-Player-version-not-current-" target="_blank" translate>displays-app.fields.player.version.notCurrent</a>
-            </td>
-            <td class="table-body__cell" ng-if="display.playerVersion && playerProFactory.isUnsupportedPlayer(display)">
-              <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "")}}</span>
-              <a href="" ng-click="factory.addDisplayModal(display)"><span class="text-danger" translate>displays-app.fields.player.version.unsupported</span> - {{'displays-app.fields.player.version.upgrade' | translate}}</a>
-            </td>
-            <td class="table-body__cell" ng-if="display.playerVersion && !playerProFactory.isOutdatedPlayer(display) && !playerProFactory.isUnsupportedPlayer(display)">
-              <span>{{(display.playerName ? display.playerName + " " : "") + (display.playerVersion ? display.playerVersion + " " : "") + (display.playerProAuthorized ? 'Licensed' : 'Free')}}</span>
-            </td>
-          </tr>
-          <tr class="table-body__row">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.viewerVersion</span></td>
-            <td class="table-body__cell"><span>{{display.viewerVersion}}</span></td>
-          </tr>
-          <tr class="table-body__row">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.browserVersion</span></td>
-            <td class="table-body__cell"><span>{{(display.browserName ? display.browserName + " " : "") + (display.browserVersion ? display.browserVersion : "")}}</span></td>
-          </tr>
-          <tr class="table-body__row" ng-show="display.serialNumber">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.serialNumber</span></td>
-            <td class="table-body__cell"><span>{{display.serialNumber}}</span></td>
-          </tr>
-          <tr class="table-body__row" ng-show="display.cpu">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.cpu</span></td>
-            <td class="table-body__cell"><span>{{display.cpu}}</span></td>
-          </tr>
-          <tr class="table-body__row" ng-show="display.hostName">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.hostName</span></td>
-            <td class="table-body__cell"><span>{{display.hostName}}</span></td>
-          </tr>
-          <tr class="table-body__row" ng-show="display.productName">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.productName</span></td>
-            <td class="table-body__cell"><span>{{display.productName}}</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- PROFESSIONAL FEATURES -->
-    <div class="u_lh-normal u_margin-sm-bottom">
-      <label class="control-label" translate>displays-app.fields.player.rpp.features</label>
-      <a href="https://help.risevision.com/hc/en-us/articles/115003830563-Get-started-with-Rise-Player-Professional" target="_blank"><i class="fa fa-question-circle icon-right" aria-hidden="true"></i></a>
-    </div>
-    <div class="panel panel-default">
-      <table class="table table--pro-features" ng-class="{ 'table--disabled': !display.playerProAuthorized }">
-        <tbody class="table-body">
-          <tr class="table-body__row text-center u_padding-md" ng-show="!currentPlanFactory.isPlanActive() && !display.playerProAuthorized">
-            <td colspan="2">
-              <span translate>displays-app.fields.player.rpp.unlock</span><br/>
-              <button type="button" ng-click="showPlansModal()" class="btn btn-xs btn-primary u_margin-sm-top" translate>
-                See Our Plans
-              </button>
-            </td>
-          </tr>
 
           <tr class="table-body__row">
             <td class="table-body__cell text-nowrap u_no-border">
@@ -222,7 +174,11 @@
               <timeline-basic-textbox timeline-string="display.monitoringSchedule" ng-disabled="!display.monitoringEnabled" />
             </td>
           </tr>
+        </tbody>
+      </table>
 
+      <table class="table">
+        <tbody class="table-body">
           <tr class="table-body__row" ng-class="{ 'table--disabled': !display.playerProAuthorized }" ng-if="!playerProFactory.isCROSLegacy(display) && !playerProFactory.isChromeOSPlayer(display)">
             <td class="table-body__cell">
               <span translate>displays-app.fields.player.displayControl.label</span>
@@ -245,23 +201,198 @@
               </span>
             </td>
           </tr>
-
-          <tr class="table-body__row" ng-if="!playerProFactory.isCROSLegacy(display) && !playerProFactory.isChromeOSPlayer(display)">
-            <td class="table-body__cell"><span translate>displays-app.fields.player.rpp.offline-play</span></td>
-            <td class="table-body__cell">
-              <span translate>displays-app.fields.player.rpp.offline-play-desc</span>
-            </td>
-          </tr>
-          
         </tbody>
       </table>
-    </div>
 
-    <!-- SCREENSHOT  -->
-    <div ng-if="!playerProFactory.isCROSLegacy(display)">
-      <screenshot></screenshot>
-    </div>
+      <div class="list-group-item flex-row form-group mb-0" ng-show="(display.playerVersion || display.onlineStatus === 'online') && (playerProFactory.isCROSLegacy(display) || playerProFactory.isChromeOSPlayer(display))">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.player.orientation.name</label>
+          <select class="form-control mr-auto" ng-model="display.orientation" integer-parser>
+            <option value="0" translate>displays-app.fields.player.orientation.0</option>
+            <option value="90" translate>displays-app.fields.player.orientation.90</option>
+            <option value="180" translate>displays-app.fields.player.orientation.180</option>
+            <option value="270" translate>displays-app.fields.player.orientation.270</option>
+          </select>
+        </div>
+      </div>
 
+      <div class="form-group">
+        <div class="checkbox">
+          <label class="control-label">
+            <input type="checkbox" ng-model="display.useCompanyAddress" ng-disabled="factory.showLicenseRequired(display)">
+            <strong translate>displays-app.fields.address.useCompany</strong>
+          </label>
+        </div>
+      </div>
+
+      <div ng-hide="display.useCompanyAddress" class="u_margin-md-top u_margin-md-bottom">
+        <div class="form-group">
+          <label class="control-label" translate>displays-app.fields.address.description</label>
+          <input type="text" class="form-control" ng-model="display.addressDescription">
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="control-label" translate>displays-app.fields.address.street</label>
+              <input type="text" class="form-control" ng-model="display.street">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="control-label" translate>displays-app.fields.address.unit</label>
+              <input type="text" class="form-control" ng-model="display.unit">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="control-label" translate>displays-app.fields.address.city</label>
+              <input type="text" class="form-control" ng-model="display.city">
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="control-label" translate>displays-app.fields.address.country.name</label>
+              <select class="form-control" ng-model="display.country" ng-options="c.code as c.name for c in countries" empty-select-parser>
+                <option value="" ng-show="false" translate>displays-app.fields.address.country.placeholder</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="control-label" translate>displays-app.fields.address.province.name</label>
+              <input type="text" class="form-control" ng-model="display.province" ng-hide="display.country == 'US' || display.country == 'CA'" />
+              <select class="form-control selectpicker" ng-model="display.province" ng-options="c[1] as c[0] for c in regionsCA" ng-show="display.country == 'CA'" empty-select-parser>
+                <option value="" ng-show="false" translate>displays-app.fields.address.province.provincePlaceholder</option>
+              </select>
+              <select class="form-control selectpicker" ng-model="display.province" ng-options="c[1] as c[0] for c in regionsUS" ng-show="display.country == 'US'" empty-select-parser>
+                <option value="" ng-show="false" translate>displays-app.fields.address.province.statePlaceholder</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="control-label" translate>displays-app.fields.address.postalCode</label>
+              <input type="text" class="form-control" ng-model="display.postalCode">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" translate>displays-app.fields.address.timezone.name</label>
+          <select class="form-control" ng-model="display.timeZoneOffset" integer-parser>
+            <option value="" ng-show="false" translate>displays-app.fields.address.timezone.placeholder</option>
+            <option value="{{c[1]}}" ng-repeat="c in timezones">{{c[0]}}</option>
+          </select>
+        </div>
+        <hr>
+      </div><!--display address-->
+
+
+
+      <div class="list-group-item flex-row form-group mb-0">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.player.ipAddress</label>
+          <span class="mr-auto" ng-if="factory.showLicenseRequired(display)">
+            License Required
+          </span>
+          <span class="mr-auto" ng-if="!factory.showLicenseRequired(display)">
+            {{display.playerLocalIpAddress}}
+          </span>
+        </div>
+      </div>
+
+      <div class="list-group-item flex-row form-group mb-0" ng-show="display.macAddress">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.player.macAddress</label>
+          <span class="mr-auto" ng-if="factory.showLicenseRequired(display)">
+            License Required
+          </span>
+          <span class="mr-auto" ng-if="!factory.showLicenseRequired(display)">
+            {{display.macAddress}}
+          </span>
+        </div>
+      </div>
+
+      <div class="list-group-item flex-row form-group mb-0">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.player.operatingSystem</label>
+          <span class="mr-auto">
+            {{display.os}}
+          </span>
+        </div>
+      </div>
+
+      <div class="list-group-item flex-row form-group mb-0">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0 aligner-item--top" translate>displays-app.fields.player.playerVersion</label>
+          <span class="mr-auto">
+            <div ng-show="display.playerName">{{display.playerName}}</div>
+            <div ng-show="display.playerVersion">{{display.playerVersion}}</div>
+            <div ng-if="display.playerVersion && playerProFactory.isOutdatedPlayer(display)">
+              <a href="https://help.risevision.com/hc/en-us/articles/115004250723-Why-is-Rise-Player-version-not-current-" target="_blank" translate>displays-app.fields.player.version.notCurrent</a>
+            </div>
+            <div ng-if="display.playerVersion && playerProFactory.isUnsupportedPlayer(display)">
+              <a href="" ng-click="factory.addDisplayModal(display)"><span class="text-danger" translate>displays-app.fields.player.version.unsupported</span> - {{'displays-app.fields.player.version.upgrade' | translate}}</a>
+            </div>
+          </span>
+        </div>
+      </div>
+
+      <div class="list-group-item flex-row form-group mb-0" ng-show="display.viewerVersion">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.player.viewerVersion</label>
+          <span class="mr-auto">
+            {{display.viewerVersion}}
+          </span>
+        </div>
+      </div>
+      <div class="list-group-item flex-row form-group mb-0" ng-show="display.browserVersion">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.player.browserVersion</label>
+          <span class="mr-auto">
+            {{(display.browserName ? display.browserName + " " : "") + (display.browserVersion ? display.browserVersion : "")}}
+          </span>
+        </div>
+      </div>
+
+      <div class="list-group-item flex-row form-group mb-0" ng-show="display.serialNumber">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.player.serialNumber</label>
+          <span class="mr-auto">
+            {{display.serialNumber}}
+          </span>
+        </div>
+      </div>
+      <div class="list-group-item flex-row form-group mb-0" ng-show="display.cpu">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.player.cpu</label>
+          <span class="mr-auto">
+            {{display.cpu}}
+          </span>
+        </div>
+      </div>
+      <div class="list-group-item flex-row form-group mb-0" ng-show="display.hostName">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.player.hostName</label>
+          <span class="mr-auto">
+            {{display.hostName}}
+          </span>
+        </div>
+      </div>
+      <div class="list-group-item flex-row form-group mb-0" ng-show="display.productName">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.player.productName</label>
+          <span class="mr-auto">
+            {{display.productName}}
+          </span>
+        </div>
+      </div>
+
+    </div>
   </div>
 
   <!-- TODO: Remove madero-style once it's global for the page -->
@@ -290,7 +421,7 @@
         </div>
 
         <span class="pull-right button-toolbar">
-          <a type="button" class="btn btn-default btn-toolbar" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })">Edit Schedule</a>
+          <a id="viewSchedule" type="button" class="btn btn-default btn-toolbar" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })">Edit Schedule</a>
           <ng-show ng-show="tooltipKey">
             <button id="shareButton" type="button" class="btn btn-default btn-toolbar" 
             tooltip-overlay tooltip-template="'partials/schedules/share-schedule-tooltip.html'" tooltip-placement="bottom" tooltip-class="madero-style tooltip-guide tooltip-share-guide">
@@ -323,103 +454,4 @@
       </div>
     </div>
   </div>
-</div>
-
-<!--      SETTINGS       -->
-
-<div class="form-group" ng-show="display.playerVersion || display.onlineStatus === 'online'">
-  <div class="form-group form-inline" ng-show="playerProFactory.isCROSLegacy(display) || playerProFactory.isChromeOSPlayer(display)">
-    <label class="control-label" translate>displays-app.fields.player.orientation.name</label>
-    <select class="form-control" ng-model="display.orientation" integer-parser>
-      <option value="0" translate>displays-app.fields.player.orientation.0</option>
-      <option value="90" translate>displays-app.fields.player.orientation.90</option>
-      <option value="180" translate>displays-app.fields.player.orientation.180</option>
-      <option value="270" translate>displays-app.fields.player.orientation.270</option>
-    </select>
-  </div>
-</div>
-
-<div class="form-group">
-  <div class="checkbox">
-    <label class="control-label">
-      <input type="checkbox" ng-model="display.useCompanyAddress" ng-disabled="factory.showLicenseRequired(display)">
-      <strong translate>displays-app.fields.address.useCompany</strong>
-    </label>
-  </div>
-</div>
-
-<div ng-hide="display.useCompanyAddress" class="u_margin-md-top u_margin-md-bottom">
-  <div class="form-group">
-    <label class="control-label" translate>displays-app.fields.address.description</label>
-    <input type="text" class="form-control" ng-model="display.addressDescription">
-  </div>
-
-  <div class="row">
-    <div class="col-md-6">
-      <div class="form-group">
-        <label class="control-label" translate>displays-app.fields.address.street</label>
-        <input type="text" class="form-control" ng-model="display.street">
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="form-group">
-        <label class="control-label" translate>displays-app.fields.address.unit</label>
-        <input type="text" class="form-control" ng-model="display.unit">
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-3">
-      <div class="form-group">
-        <label class="control-label" translate>displays-app.fields.address.city</label>
-        <input type="text" class="form-control" ng-model="display.city">
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="form-group">
-        <label class="control-label" translate>displays-app.fields.address.country.name</label>
-        <select class="form-control" ng-model="display.country" ng-options="c.code as c.name for c in countries" empty-select-parser>
-          <option value="" ng-show="false" translate>displays-app.fields.address.country.placeholder</option>
-        </select>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="form-group">
-        <label class="control-label" translate>displays-app.fields.address.province.name</label>
-        <input type="text" class="form-control" ng-model="display.province" ng-hide="display.country == 'US' || display.country == 'CA'" />
-        <select class="form-control selectpicker" ng-model="display.province" ng-options="c[1] as c[0] for c in regionsCA" ng-show="display.country == 'CA'" empty-select-parser>
-          <option value="" ng-show="false" translate>displays-app.fields.address.province.provincePlaceholder</option>
-        </select>
-        <select class="form-control selectpicker" ng-model="display.province" ng-options="c[1] as c[0] for c in regionsUS" ng-show="display.country == 'US'" empty-select-parser>
-          <option value="" ng-show="false" translate>displays-app.fields.address.province.statePlaceholder</option>
-        </select>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="form-group">
-        <label class="control-label" translate>displays-app.fields.address.postalCode</label>
-        <input type="text" class="form-control" ng-model="display.postalCode">
-      </div>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label class="control-label" translate>displays-app.fields.address.timezone.name</label>
-    <select class="form-control" ng-model="display.timeZoneOffset" integer-parser>
-      <option value="" ng-show="false" translate>displays-app.fields.address.timezone.placeholder</option>
-      <option value="{{c[1]}}" ng-repeat="c in timezones">{{c[0]}}</option>
-    </select>
-  </div>
-  <hr>
-</div><!--display address-->
-
-<div class="form-group reboot-time">
-  <div class="checkbox">
-    <label class="control-label">
-      <input type="checkbox" ng-model="display.restartEnabled" ng-disabled="factory.showLicenseRequired(display)">
-      <strong translate>displays-app.fields.reboot</strong>
-    </label>
-  </div>
-  <time-picker ng-model="display.restartTime" ng-disabled="!display.restartEnabled || factory.showLicenseRequired(display)"></time-picker>
 </div>
