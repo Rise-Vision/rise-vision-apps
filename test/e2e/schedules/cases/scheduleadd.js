@@ -76,14 +76,24 @@ var ScheduleAddScenarios = function() {
       expect(scheduleAddPage.getShareScheduleButton().isDisplayed()).to.eventually.be.true;
     });
 
-    xit('should rename schedule', function() {
+    it('should rename schedule', function() {
+      expect(scheduleAddPage.getScheduleNameField().getAttribute('value')).to.eventually.equal('New Schedule');
+      expect(scheduleAddPage.getScheduleNameField().isEnabled()).to.eventually.be.false;
+      expect(scheduleAddPage.getScheduleNameEditButton().isPresent()).to.eventually.be.true;
+
+      scheduleAddPage.getScheduleNameEditButton().click();
+      expect(scheduleAddPage.getScheduleNameField().isEnabled()).to.eventually.be.true;
+
       var scheduleName = 'TEST_E2E_SCHEDULE';
-      scheduleAddPage.getScheduleNameField().sendKeys(scheduleName);
+      scheduleAddPage.getScheduleNameField().sendKeys(scheduleName + protractor.Key.ENTER);
+
+      expect(scheduleAddPage.getScheduleNameField().isEnabled()).to.eventually.be.false;
+      expect(scheduleAddPage.getScheduleNameField().getAttribute('value')).to.eventually.equal(scheduleName);
     });
 
-    xit('should save the Schedule', function() {
-      scheduleAddPage.getScheduleNameField().sendKeys(protractor.Key.ENTER);
-      helper.waitForElementTextToChange(scheduleAddPage.getSaveButton(),'Save', 'Schedules Suve Button');
+    it('should save the Schedule', function() {
+      scheduleAddPage.getSaveButton().click();
+      helper.waitForElementTextToChange(scheduleAddPage.getSaveButton(),'Save', 'Schedules Save Button');
       expect(scheduleAddPage.getSaveButton().getText()).to.eventually.equal('Save');
     });
 
