@@ -17,6 +17,10 @@
   .text-gray {
     color: $mid-gray;
   }
+
+  last-modified .text-muted {
+    @extend .text-gray;
+  }
 }
 
 .schedule-fields-body {
