@@ -2,7 +2,10 @@
 var DisplayManagePage = function() {
   var displaysAppContainer = element(by.css('.displays-app'));
   var title = element(by.id('title'));
-  var displayNameField = element(by.model('display.name'));
+
+  var displayNameField = element(by.css('display-fields stretchy-input input'));  
+  var displayNameEditButton = element(by.css('display-fields stretchy-input #editButton'));
+
   var notActivatedPlayerLink = element(by.id('notActivatedLink'));
   var installPlayerButton = element(by.id('installPlayer'));
   var displayUseCompanyAddressCheckbox = element(by.model('display.useCompanyAddress'));
@@ -36,6 +39,10 @@ var DisplayManagePage = function() {
 
   this.getDisplayNameField = function() {
     return displayNameField;
+  };
+
+  this.getDisplayNameEditButton = function() {
+    return displayNameEditButton;
   };
 
   this.getNotActivatedPlayerLink = function() {

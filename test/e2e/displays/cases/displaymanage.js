@@ -119,8 +119,24 @@ var DisplayManageScenarios = function() {
         expect(displayManagePage.getDisplayCountrySelect().$('option:checked').getText()).to.eventually.contain('Argentina');
       });
 
-      it('should save the display on Enter and skip address validation', function () {
-        displayManagePage.getDisplayNameField().sendKeys(protractor.Key.ENTER);
+      it('should rename the display', function() {
+        expect(displayManagePage.getDisplayNameEditButton().isPresent()).to.eventually.be.true;
+        expect(displayManagePage.getDisplayNameField().isEnabled()).to.eventually.be.false;
+
+        displayManagePage.getDisplayNameEditButton().click();
+        expect(displayManagePage.getDisplayNameField().isEnabled()).to.eventually.be.true;
+
+        displayManagePage.getDisplayNameField().sendKeys('E2E DSIPLAY NEW NAME' + protractor.Key.ENTER);
+        expect(displayManagePage.getDisplayNameField().isEnabled()).to.eventually.be.false;
+        expect(displayManagePage.getDisplayNameField().getAttribute('value')).to.eventually.equal('E2E DSIPLAY NEW NAME');
+
+        displayManagePage.getDisplayNameEditButton().click();
+        displayManagePage.getDisplayNameField().sendKeys(displayName + protractor.Key.ENTER);
+        expect(displayManagePage.getDisplayNameField().getAttribute('value')).to.eventually.equal(displayName);
+      });
+
+      it('should save the display and skip address validation', function () {
+        displayManagePage.getSaveButton().click();
         helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
         expect(displayManagePage.getSaveButton().getText()).to.eventually.equal('Save');
       });

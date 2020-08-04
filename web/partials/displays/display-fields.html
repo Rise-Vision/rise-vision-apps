@@ -1,10 +1,4 @@
-<div class="form-group u_margin-sm-bottom" ng-class="{'has-error': !displayDetails.name.$pristine && displayDetails.name.$invalid}" show-errors>
-  <label class="control-label">{{'displays-app.fields.name.name' | translate}} *</label>
-  <input type="text" class="form-control" placeholder="Display Name" id="name" name="name" ng-model="display.name" required>
-  <p class="text-danger" ng-show="!displayDetails.name.$pristine && displayDetails.name.$error.required" translate>
-    displays-app.fields.name.required
-  </p>
-</div>
+<stretchy-input class="madero-style" ng-model="display.name"></stretchy-input> 
 
 <div ng-controller="displayControls">
   <!-- DESKTOP BUTTONS -->
