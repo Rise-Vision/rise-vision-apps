@@ -4,176 +4,92 @@
   'use strict';
 
   angular.module('risevision.common.support', [])
-    .value('ZENDESK_WEB_WIDGET_SCRIPT',
-      'window.zE||(function(e,t,s){var n=window.zE=window.zEmbed=function(){n._.push(arguments)},a=n.s=e.createElement(t),r=e.getElementsByTagName(t)[0];n.set=function(e){n.set._.push(e)},n._=[],n.set._=[],a.async=true,a.setAttribute("charset","utf-8"),a.src="https://static.zdassets.com/ekr/asset_composer.js?key="+s,n.t=+new Date,a.type="text/javascript",r.parentNode.insertBefore(a,r)})(document,"script","b8d6bdba-10ea-4b88-b96c-9d3905b85d8f");'
+    .value('HELP_WEB_WIDGET_SCRIPT',
+      '!function(e,l,v,i,o,n){e[i]||(e[i]={}),e[i].account_id=n;var g,h;g=l.createElement(v),g.type="text/javascript",g.async=1,g.src=o+n,h=l.getElementsByTagName(v)[0],h.parentNode.insertBefore(g,h);e[i].q=[];e[i].on=function(z,y){e[i].q.push([z,y])}}(window,document,"script","_elev","https://cdn.elev.io/sdk/bootloader/v4/elevio-bootloader.js?cid=","5f2331387a97f");'
     )
-    .factory('zendesk', ['$q', '$window', 'userState', 'ZENDESK_WEB_WIDGET_SCRIPT',
-      function ($q, $window, userState, ZENDESK_WEB_WIDGET_SCRIPT) {
-
+    .factory('zendesk', ['$q', '$window', 'userState', 'HELP_WEB_WIDGET_SCRIPT',
+      function ($q, $window, userState, HELP_WEB_WIDGET_SCRIPT) {
         var loaded = false;
-        var previousUsername = '';
-        var $ = $window.$;
 
         function ensureScript() {
           if (!loaded) {
-            $window.zESettings = {
-              webWidget: {
-                helpCenter: {
-                  title: {
-                    '*': 'Help'
-                  },
-                  searchPlaceholder: {
-                    '*': 'How can we help?'
-                  },
-                  messageButton: {
-                    '*': 'Open a Support Ticket'
-                  }
-                },
-
-                chat: {
-                  suppress: true
-                },
-
-                contactForm: {
-                  title: {
-                    '*': 'Open a Support Ticket'
-                  }
-                }
-              }
-            };
-
             var scriptElem = $window.document.createElement('script');
-            scriptElem.innerText = ZENDESK_WEB_WIDGET_SCRIPT;
+            scriptElem.innerText = HELP_WEB_WIDGET_SCRIPT;
 
             $window.document.body.appendChild(scriptElem);
+            $window._elev.on('load', function(_elev) {
+              _elev.setSettings({
+                hideLauncher: true
+              });
+            });
             loaded = true;
-
-            hideWidget();
           }
           return $q.when();
         }
 
         function initializeWidget() {
-          return ensureScript()
-            .then(_completeInitialization);
+          return ensureScript();
         }
 
-        function _completeInitialization() {
-          var username = userState.getUsername();
 
-          if (previousUsername !== username) {
-            var identity = {
-              email: username,
-              name: userState.getUserFullName()
-            };
-
-            if (username) {
-              $window.zE(function () {
-                $window.zE.identify(identity);
-              });
-            }
-
-            previousUsername = username;
-          }
-
-          _changeBorderStyle();
-          _enableSuggestions();
-        }
-
-        function _changeBorderStyle() {
-          $('iframe[class^=zEWidget]').contents().find('.Container')
-            .css('border', '1px solid #4ab767');
-        }
-
-        function logout() {
-          previousUsername = '';
-        }
-
-        function _enableSuggestions() {
-          if ($window.zE) {
-            $window.zE(function () {
-              $window.zE.setHelpCenterSuggestions({
-                labels: ['help_widget_top_suggestions']
-              });
-            });
+        function showWidgetButton() {
+          if ($window._elev) {
+            $window._elev.setSettings({hideLauncher: false});
           }
         }
 
-        function displayButton() {
-          if ($window.zE) {
-            $window.zE(function () {
-              $window.zE.show();
-            });
-          }
-        }
-
-        function hideWidget() {
-          if ($window.zE) {
-            $window.zE(function () {
-              $window.zE.hide();
-            });
+        function hideWidgetButton() {
+          if ($window._elev) {
+            $window._elev.setSettings({hideLauncher: true});
           }
         }
 
         function activateWidget() {
-          if ($window.zE) {
-            $window.zE(function () {
-              $window.zE.activate();
-            });
+          if ($window._elev) {
+            $window._elev.openHome();
           }
         }
 
         return {
           initializeWidget: initializeWidget,
-          displayButton: displayButton,
-          hideWidget: hideWidget,
-          activateWidget: activateWidget,
-          logout: logout
+          showWidgetButton: showWidgetButton,
+          hideWidgetButton: hideWidgetButton,
+          activateWidget: activateWidget
         };
 
       }
     ])
 
-    .run(['$rootScope', '$window', 'userState', 'userAuthFactory', 'zendesk', 'ZENDESK_WEB_WIDGET_SCRIPT',
-      function ($rootScope, $window, userState, userAuthFactory, zendesk, ZENDESK_WEB_WIDGET_SCRIPT) {
-        var widgetVisible = false;
-
-        if (ZENDESK_WEB_WIDGET_SCRIPT) {
+    .run(['$rootScope', '$window', 'userState', 'userAuthFactory', 'zendesk', 'HELP_WEB_WIDGET_SCRIPT',
+      function ($rootScope, $window, userState, userAuthFactory, zendesk, HELP_WEB_WIDGET_SCRIPT) {
+        if (HELP_WEB_WIDGET_SCRIPT) {
           zendesk.initializeWidget();
 
           userAuthFactory.authenticate()
             .then(function () {
               if (!userState.isLoggedIn()) {
-                _showWebWidget();
+                _showHelpWidgetButton();
               }
             })
             .catch(function () {
-              _showWebWidget();
+              _showHelpWidgetButton();
             });
 
           $rootScope.$on('risevision.user.authorized', function () {
-            zendesk.initializeWidget(); // Needed to authenticate the user
-            _hideWebWidget();
+            _hideHelpWidgetButton();
           });
 
           $rootScope.$on('risevision.user.signedOut', function () {
-            _showWebWidget();
+            _showHelpWidgetButton();
           });
         }
 
-        function _hideWebWidget() {
-          if (widgetVisible) {
-            zendesk.hideWidget();
-            widgetVisible = false;
-          }
+        function _hideHelpWidgetButton() {
+          zendesk.hideWidgetButton();
         }
 
-        function _showWebWidget() {
-          setTimeout(function () {
-            zendesk.logout();
-            zendesk.displayButton();
-            widgetVisible = true;
-          }, 2000);
+        function _showHelpWidgetButton() {
+          zendesk.showWidgetButton();
         }
       }
     ]);
