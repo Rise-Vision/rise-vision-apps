@@ -19,6 +19,10 @@ angular.module('risevision.template-editor.directives')
               .presentation);
           }
 
+          $scope.colorsComponent = blueprintFactory.hasBranding() ? {
+            type: 'rise-override-brand-colors'
+          } : null;
+
           $scope.components = blueprintFactory.blueprintData.components
             .filter(function (c) {
               return !c.nonEditable;

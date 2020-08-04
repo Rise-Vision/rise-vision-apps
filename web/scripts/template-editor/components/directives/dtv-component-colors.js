@@ -10,16 +10,28 @@ angular.module('risevision.template-editor.directives')
         link: function ($scope, element) {
           $scope.factory = templateEditorFactory;
 
-          $scope.saveOverride = function () {
-            $scope.setAttributeData($scope.componentId, 'override', $scope.override);
+          // TODO: refactor logic for Override Brand Settings epic
+
+          $scope.save = function () {
+            var brandingOverride = null;
+
+            if ($scope.override) {
+              brandingOverride = {
+                'baseColor': $scope.baseColor,
+                'accentColor': $scope.accentColor
+              };
+            }
+
+            $scope.setAttributeDataGlobal('brandingOverride', brandingOverride);
           };
 
           $scope.registerDirective({
-            type: 'rise-data-colors',
+            type: 'rise-override-brand-colors',
             iconType: 'streamline',
             icon: 'palette',
             element: element,
             show: function () {
+              $scope.setPanelTitle('Override Brand Colors');
               element.show();
               $scope.componentId = $scope.factory.selected.id;
               $scope.load();
@@ -27,19 +39,22 @@ angular.module('risevision.template-editor.directives')
           });
 
           $scope.load = function () {
-            $scope.baseColor = $scope.getAvailableAttributeData($scope.componentId, 'base');
-            $scope.accentColor = $scope.getAvailableAttributeData($scope.componentId, 'accent');
-            $scope.override = $scope.getAvailableAttributeData($scope.componentId, 'override');
+
+            var brandingOverride = $scope.getAttributeDataGlobal('brandingOverride');
+
+            $scope.override = !!brandingOverride;
+            $scope.baseColor = $scope.override ? brandingOverride.baseColor : null;
+            $scope.accentColor = $scope.override ? brandingOverride.accentColor : null;
 
             $scope.$watch('baseColor', function (newVal, oldVal) {
-              if (newVal && newVal !== oldVal) {
-                $scope.setAttributeData($scope.componentId, 'base', $scope.baseColor);
+              if (newVal !== oldVal) {
+                $scope.save();
               }
             });
 
             $scope.$watch('accentColor', function (newVal, oldVal) {
-              if (newVal && newVal !== oldVal) {
-                $scope.setAttributeData($scope.componentId, 'accent', $scope.accentColor);
+              if (newVal !== oldVal) {
+                $scope.save();
               }
             });
           };

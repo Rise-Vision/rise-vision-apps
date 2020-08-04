@@ -280,6 +280,14 @@ angular.module('risevision.template-editor.services')
         component[attributeKey] = value;
       };
 
+      factory.getAttributeDataGlobal = function (attributeKey) {
+        return factory.presentation.templateAttributeData[attributeKey];
+      };
+
+      factory.setAttributeDataGlobal = function (attributeKey, value) {
+        factory.presentation.templateAttributeData[attributeKey] = value;
+      };
+
       // updateAttributeData: do not update the object on getAttributeData
       // or it will unnecessarily trigger hasUnsavedChanges = true
       var _componentFor = function (componentId, updateAttributeData) {

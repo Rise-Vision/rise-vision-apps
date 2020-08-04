@@ -25,6 +25,14 @@ angular.module('risevision.template-editor.controllers')
         templateEditorFactory.setAttributeData(componentId, attributeKey, value);
       };
 
+      $scope.getAttributeDataGlobal = function (attributeKey) {
+        return templateEditorFactory.getAttributeDataGlobal(attributeKey);
+      };
+
+      $scope.setAttributeDataGlobal = function (attributeKey, value) {
+        templateEditorFactory.setAttributeDataGlobal(attributeKey, value);
+      };
+
       $scope.getAvailableAttributeData = function (componentId, attributeName) {
         var result = $scope.getAttributeData(componentId, attributeName);
 
