@@ -47,6 +47,8 @@ var VideoComponentScenarios = function () {
 
     describe('upload', function () {
       it('should upload a file and show the corresponding upload panel', function () {
+        browser.driver.executeScript('sessionStorage.setItem("bypass-upload-encoding", true)');
+
         var uploadFilePath = process.cwd() + '/web/videos/e2e-upload-video-1.mp4';
         videoComponentPage.getUploadInputMain().sendKeys(uploadFilePath);
 

@@ -1,25 +1,25 @@
 <div class="attribute-editor-component colors-container" >
   <div class="attribute-editor-row">
     <span class="colors-checkbox">
-      <input id="overrideBranding" type="checkbox" ng-change="saveOverride()" ng-model="override">
-      <label class="control-label" for="overrideBranding">Override Branding</label>
+      <input id="overrideBranding" type="checkbox" ng-change="save()" ng-model="override">
+      <label class="control-label" for="overrideBranding">Override brand colors</label>
     </span>
   </div>
 </div>
 
-<div class="attribute-list-container">
+<div id="branding-colors-override-container" class="attribute-list-container" ng-show="override">
 
-  <label class="control-label" for="base-color">Base Color:</label>
+  <label class="control-label" for="branding-colors-override-base">Base Color:</label>
   <p>Pick a dark color.</p>
   <div class="input-group" colorpicker="rgba" colorpicker-position="bottom" ng-model="baseColor">
-    <input id="base-color" type="text" class="form-control" ng-model="baseColor" placeholder="Enter a hex value, eg. #00FF00">
+    <input id="branding-colors-override-base" type="text" class="form-control" ng-model="baseColor" placeholder="Enter a hex value, eg. #00FF00">
     <span class="input-group-addon color-wheel"></span>
   </div>
 
-  <label class="control-label u_margin-md-top" for="accent-color">Accent Color:</label>
+  <label class="control-label u_margin-md-top" for="branding-colors-override-accent">Accent Color:</label>
   <p>Pick a light color.</p>
   <div class="input-group" colorpicker="rgba" colorpicker-position="bottom" ng-model="accentColor">
-    <input id="accent-color" type="text" class="form-control" ng-model="accentColor" placeholder="Enter a hex value, eg. #00FF00">
+    <input id="branding-colors-override-accent" type="text" class="form-control" ng-model="accentColor" placeholder="Enter a hex value, eg. #00FF00">
     <span class="input-group-addon color-wheel"></span>
   </div>
 

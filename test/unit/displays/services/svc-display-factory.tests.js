@@ -466,6 +466,22 @@ describe('service: displayFactory:', function() {
       },10);
     });
 
+    it('should skip validation if flag is set to skip',function(done){
+      updateDisplay = true;
+      displayFactory.display.useCompanyAddress = false;
+
+      var skipAddressValidation = true;
+
+      displayFactory.updateDisplay(skipAddressValidation);
+
+      storeService.validateAddress.should.not.have.been.called;
+
+      setTimeout(function(){
+        expect(trackerCalled).to.equal('Display Updated');
+        done();
+      },10);
+    });
+
 
   });
   

@@ -6,6 +6,7 @@
 
   var PlaylistComponentScenarios = require('./cases/components/playlist.js');
   var TwitterComponentScenarios = require('./cases/components/twitter.js');
+  var BrandingColorsOverrideComponentScenarios = require('./cases/components/branding-colors-override.js');
 
   describe('Template Editor 3', function() {
 
@@ -30,6 +31,7 @@
 
     var playlistComponentScenarios = new PlaylistComponentScenarios();
     var twitterComponentScenarios = new TwitterComponentScenarios(subCompanyName);
+    var brandingColorsOverrideComponentScenarios = new BrandingColorsOverrideComponentScenarios();
 
     after(function() {
       // Loading the Presentation List is a workaround to a Chrome Driver issue that has it fail to click on elements over the Preview iframe

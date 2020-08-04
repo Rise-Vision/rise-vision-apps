@@ -136,6 +136,7 @@ angular.module('risevision.storage.services')
             }
 
             if (taskStatus.error) {
+              retry = Infinity;
               return $q.reject(taskStatus.error_description); // jshint ignore:line
             }
 

@@ -124,8 +124,8 @@ angular.module('risevision.displays.services')
         return deferred.promise;
       };
 
-      var _validateAddress = function () {
-        if (factory.display.useCompanyAddress ||
+      var _validateAddress = function (skipAddressValidation) {
+        if (skipAddressValidation || factory.display.useCompanyAddress ||
           (factory.display.country !== '' &&
             factory.display.country !== 'CA' &&
             factory.display.country !== 'US')) {
@@ -135,7 +135,7 @@ angular.module('risevision.displays.services')
         }
       };
 
-      factory.updateDisplay = function () {
+      factory.updateDisplay = function (skipAddressValidation) {
         var deferred = $q.defer();
 
         _clearMessages();
@@ -144,7 +144,7 @@ angular.module('risevision.displays.services')
         factory.loadingDisplay = true;
         factory.savingDisplay = true;
 
-        _validateAddress().then(function () {
+        _validateAddress(skipAddressValidation).then(function () {
             return display.update(_displayId, factory.display)
               .then(function (displayId) {
                 displayTracker('Display Updated', _displayId,

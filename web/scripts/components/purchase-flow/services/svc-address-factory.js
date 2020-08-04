@@ -54,6 +54,14 @@ angular.module('risevision.common.components.purchase-flow')
         return storeService.validateAddress(addressObject);
       };
 
+      factory.validateAddressIfChanged = function (addressForm, addressObject) {
+        if (addressService.isAddressFormDirty(addressForm)) {
+          return factory.isValidOrEmptyAddress(addressObject);
+        } else {
+          return $q.resolve();
+        }
+      };
+
       var _updateCompanySettings = function (company, isShipping) {
         if (isShipping) {
           // update Selected company saved in userState

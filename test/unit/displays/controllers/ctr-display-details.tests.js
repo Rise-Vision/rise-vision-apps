@@ -176,7 +176,9 @@ describe('controller: display details', function() {
   describe('submit: ',function() {
     it('should return early if the form is invalid',function(){
       $scope.display = {};
-      $scope.displayDetails = {};
+      $scope.displayDetails = {
+        useCompanyAddress: {}
+      };
       $scope.displayDetails.$valid = false;
       $scope.save();
 
@@ -184,12 +186,43 @@ describe('controller: display details', function() {
     });
 
     it('should save the display',function(){
-      $scope.displayDetails = {};
+      $scope.displayDetails = {
+        useCompanyAddress: {}
+      };
       $scope.displayDetails.$valid = true;
       $scope.display = {id:123};
       $scope.save();
 
       expect(updateCalled).to.be.true;
+    });
+
+    it('should flag unchanged address to skip validation',function(){
+      sandbox.spy(displayFactory, "updateDisplay");
+
+      $scope.displayDetails = {
+        useCompanyAddress: {}
+      };
+      $scope.displayDetails.$valid = true;
+      $scope.display = {id:123};
+      $scope.save();
+
+      expect(updateCalled).to.be.true;
+
+      displayFactory.updateDisplay.should.have.been.calledWith(true);
+    })
+
+    it('should flag changed address to run validation', function() {
+      sandbox.spy(displayFactory, "updateDisplay");
+
+      $scope.displayDetails = {
+        useCompanyAddress: {},
+        city: { $dirty: true }
+      };
+      $scope.displayDetails.$valid = true;
+      $scope.display = {id:123};
+      $scope.save();
+
+      displayFactory.updateDisplay.should.have.been.calledWith(false);
     });
   });
 

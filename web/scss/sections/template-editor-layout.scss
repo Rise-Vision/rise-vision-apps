@@ -986,6 +986,8 @@ $short-phone-height: 570px;
     background: $white;
     color: $madero-green;
     border-color: $madero-green;
+    -webkit-box-shadow: none;
+    box-shadow: none;
   }
 
   .btn-primary {

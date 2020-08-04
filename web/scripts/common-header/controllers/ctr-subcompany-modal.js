@@ -43,7 +43,7 @@ angular.module('risevision.common.header')
         } else {
           $scope.loading = true;
 
-          addressFactory.isValidOrEmptyAddress($scope.company)
+          addressFactory.validateAddressIfChanged($scope.forms.companyForm, $scope.company)
             .then(function () {
               createCompany(userState.getSelectedCompanyId(), $scope.company)
                 .then(function (company) {

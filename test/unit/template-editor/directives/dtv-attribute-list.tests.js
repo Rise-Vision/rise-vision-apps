@@ -7,6 +7,7 @@ describe('directive: attribute-list', function() {
     {id: 'cp2', nonEditable: false},
     {id: 'cp3'}
   ];
+  var hasBranding = true;
 
   beforeEach(module('risevision.template-editor.directives'));
   beforeEach(module(mockTranslate()));
@@ -15,6 +16,9 @@ describe('directive: attribute-list', function() {
       return {
         blueprintData: {
           components: components
+        },
+        hasBranding: function() {
+          return hasBranding;
         }
       };
     });
@@ -64,6 +68,20 @@ describe('directive: attribute-list', function() {
 
   it('should retrieve branding component', function() {
     expect($scope.brandingComponent).to.equal('brandingComponent');
+  });
+
+  it('should set colors component if blueprint specifies branding', function() {
+    expect($scope.colorsComponent).to.deep.equal({type: 'rise-override-brand-colors'});
+  });
+
+  it('should not set colors component if blueprint does not specify branding', function() {
+    hasBranding = false;
+
+    compileDirective();
+
+    expect($scope.colorsComponent).to.be.null;
+
+    hasBranding = true;
   });
 
   describe('schedulesComponent', function() {
