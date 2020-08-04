@@ -126,15 +126,13 @@
       "install": "Install Rise Player",
       "reboot": {
         "name": "Reboot Media Player",
-        "success": "Reboot signal sent",
-        "title": "Rebooting Display",
-        "warning": "The Rise Player on the Display's Computer will reboot and the currently Scheduled Content will be interrupted. Do you wish to proceed?"
+        "title": "Reboot media player?",
+        "warning": "The media player will reboot and the content showing on your display will be interrupted. Do you wish to proceed?"
       },
       "restart": {
         "name": "Restart Rise Player",
-        "success": "Restart signal sent",
-        "title": "Restarting Display",
-        "warning": "The Rise Player on the Display's Computer will restart and the currently Scheduled Content will be interrupted. Do you wish to proceed?"
+        "title": "Restart Rise Player?",
+        "warning": "Rise Player will restart and the content showing on your display will be interrupted. Do you wish to proceed?"
       }
     },
     "email": {

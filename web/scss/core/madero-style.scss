@@ -40,9 +40,19 @@
       }
     }
   }
+  
+  .btn-danger {
+    background: $danger;
+    border-color: $danger;
+  }
+
+  .btn-toolbar {
+    min-width: 160px;
+    margin-left: auto;
+  }
 
   .button-toolbar {
-    .btn-toolbar {
+    & > * {
       @extend .mr-3;
 
       &:last-child{

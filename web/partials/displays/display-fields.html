@@ -1,43 +1,60 @@
-<stretchy-input class="madero-style" ng-model="display.name"></stretchy-input> 
-
-<div ng-controller="displayControls">
-  <!-- DESKTOP BUTTONS -->
+<div class="madero-style fields-container">
   <div class="row">
-    <div class="col-sm-4 col-md-3 col-md-offset-3">
-      <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" require-role="da">
-        {{ 'displays-app.fields.controls.restart.name' | translate }}
-        <i class="fa fa-refresh icon-right"></i>
-      </button>
-    </div>
-    <div class="col-sm-4 col-md-3">
-      <button type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" require-role="da">
-        {{ 'displays-app.fields.controls.reboot.name' | translate }}
-        <i class="fa fa-power-off icon-right"></i>
-      </button>
-    </div>
-    <div class="col-sm-4 col-md-3">
-      <button id="installPlayer" type="button" class="btn btn-default btn-block u_margin-sm-bottom" ng-click="factory.addDisplayModal(display)">
-          {{ 'displays-app.fields.controls.install' | translate }}
-        <i class="fa fa-cloud-download icon-right"></i>
-      </button>
-    </div>
-  </div>
 
-  <!-- DISPLAY ERRORS AND ALERTS -->
-  <div class="row">
-      <div class="col-sm-12">
-          <div ng-show="controlsError" class="alert alert-danger" role="alert">
-              <strong translate>displays-app.fields.controls.error</strong> {{controlsError}}
+    <div class="col-sm-12 col-md-8 pb-2 pb-lg-0">
+      <stretchy-input class="mb-0 mr-auto" ng-model="display.name"></stretchy-input> 
+    </div>
+
+    <div class="col-sm-12 col-md-4 pl-lg-0">
+      <div class="pull-right">
+        <label class="mr-2">Media Player Actions:</label>
+        <div class="btn-group" dropdown>
+          <button id="addPlaylistItemButton" type="button" dropdown-toggle class="form-control btn-select btn-schedule-selector btn-toolbar flex-row">
+            <div class="row-entry">
+              <span class="text-gray mr-auto">Choose an action</span>
+              <span class="text-gray pl-2"><i class="fa fa-sort"></i></span>
+            </div>
+          </button>
+          <div class="dropdown-menu playlist-menu" role="menu" ng-controller="displayControls">
+            <ul>
+              <li>
+                <button type="button" class="u_clickable" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" require-role="da">
+                  <span translate>displays-app.fields.controls.restart.name</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="u_clickable" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" require-role="da">
+                  <span translate>displays-app.fields.controls.reboot.name</span>
+                </button>
+              </li>
+              <li>
+                <a id="installPlayer" class="u_clickable" ng-click="factory.addDisplayModal(display)">
+                  <span translate>displays-app.fields.controls.install</span>
+                </a>
+              </li>
+            </ul>
           </div>
-          <div class="panel animated fadeIn" ng-show="controlsInfo">
-              <div class="panel-body bg-warning">
-                  <strong>{{ controlsInfo | translate }}</strong>
-              </div>
-          </div>
+        </div>
       </div>
+
+    </div>
   </div>
 
 </div>
+<!-- DISPLAY ERRORS AND ALERTS -->
+<div class="row">
+    <div class="col-sm-12">
+        <div ng-show="controlsError" class="alert alert-danger" role="alert">
+            <strong translate>displays-app.fields.controls.error</strong> {{controlsError}}
+        </div>
+        <div class="panel animated fadeIn" ng-show="controlsInfo">
+            <div class="panel-body bg-warning">
+                <strong>{{ controlsInfo | translate }}</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
 <hr>
 
 <div class="fields-preview-panels display-fields-body mt-4">
