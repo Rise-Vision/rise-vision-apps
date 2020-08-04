@@ -1,6 +1,6 @@
 /*jshint expr:true */
 
-describe("Services: Zendesk", function() {
+xdescribe("Services: Zendesk", function() {
   beforeEach(module("risevision.common.support"));
 
   var sandbox, windowObj, zeSpy, widgetShown;
