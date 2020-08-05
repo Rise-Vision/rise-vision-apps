@@ -28,21 +28,24 @@ angular.module('risevision.schedules.directives')
           $scope.remove = function (playlistItem) {
             var modalInstance = $modal.open({
               template: $templateCache.get(
-                'partials/components/confirm-modal/confirm-modal.html'),
+                'partials/components/confirm-modal/madero-confirm-modal.html'),
               controller: 'confirmModalController',
-              windowClass: 'modal-custom',
+              windowClass: 'madero-style centered-modal',
+              size: 'sm',
               resolve: {
                 confirmationTitle: function () {
-                  return 'Remove Playlist Item';
+                  return 'Remove Playlist Item?';
                 },
                 confirmationMessage: function () {
                   return 'Are you sure you want to remove ' +
                     'this item from the Playlist?';
                 },
                 confirmationButton: function () {
-                  return 'Remove';
+                  return 'Yes';
                 },
-                cancelButton: null
+                cancelButton: function () {
+                  return 'No';
+                }
               }
             });
 
