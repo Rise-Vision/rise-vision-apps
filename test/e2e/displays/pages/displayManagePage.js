@@ -24,7 +24,7 @@ var DisplayManagePage = function() {
   var cancelButton = element(by.id('cancelButton'));
 
   var deleteButton = element(by.id('deleteButton'));
-  var deleteForeverButton = element(by.buttonText('Delete Forever'));
+  var deleteForeverButton = element(by.id('confirm-primary'));
 
   var displayLoader = element(by.xpath('//div[@spinner-key="display-loader"]'));
 
