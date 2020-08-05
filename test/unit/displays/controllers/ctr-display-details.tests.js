@@ -285,7 +285,7 @@ describe('controller: display details', function() {
         $scope.display = {
           id: displayId,
           playerProAssigned: false,
-          playerProAuthorized: true
+          playerProAuthorized: false
         };
         company.playerProAvailableLicenseCount = 1;
         $scope.toggleProAuthorized();
@@ -314,7 +314,7 @@ describe('controller: display details', function() {
         $scope.display = {
           id: displayId,
           playerProAssigned: false,
-          playerProAuthorized: true
+          playerProAuthorized: false
         };
         company.playerProAvailableLicenseCount = 0;
         $scope.toggleProAuthorized();
@@ -342,7 +342,7 @@ describe('controller: display details', function() {
         $scope.display = {
           id: displayId,
           playerProAssigned: true,
-          playerProAuthorized: false
+          playerProAuthorized: true
         };
         company.playerProAvailableLicenseCount = 1;
         $scope.toggleProAuthorized();
@@ -369,7 +369,7 @@ describe('controller: display details', function() {
         $scope.display = {
           id: displayId,
           playerProAssigned: true,
-          playerProAuthorized: false
+          playerProAuthorized: true
         };
         company.playerProAvailableLicenseCount = 1;
         $scope.toggleProAuthorized();

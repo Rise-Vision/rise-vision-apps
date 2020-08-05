@@ -45,7 +45,7 @@ angular.module('risevision.displays.controllers')
           }
         } else {
           var apiParams = {};
-          var playerProAuthorized = $scope.display.playerProAuthorized;
+          var playerProAuthorized = !$scope.display.playerProAuthorized;
 
           $scope.updatingRPP = true;
           apiParams[displayId] = playerProAuthorized;

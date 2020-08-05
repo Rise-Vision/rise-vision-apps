@@ -67,21 +67,25 @@
 
     <div class="scrollable-list border-container">
 
-      <div class="list-group-item flex-row form-group mb-0">
+      <div class="list-group-item flex-row form-group mb-0 madero-style">
         <div class="row-entry">
           <label class="control-label pull-left mb-0">License Display?</label>
 
           <span class="mr-auto" ng-show="updatingRPP">
             <span translate>displays-app.details.rpp-loading</span> <i class="fa fa-spinner fa-spin fa-fw"></i>
           </span>
-          <div class="toggle-group mr-auto" ng-hide="updatingRPP">
-            <input type="checkbox" id="on-off-switch" ng-model="display.playerProAuthorized" ng-change="toggleProAuthorized()" ng-disabled="updatingRPP || !isProToggleEnabled()">
-            <div class="onoffswitch" aria-hidden="true">
-                <div class="onoffswitch-label">
-                    <div class="onoffswitch-inner"></div>
-                    <div class="onoffswitch-switch"></div>
-                </div>
-            </div>
+
+          <div class="btn-group btn-group-justified" ng-hide="updatingRPP">
+            <button id="toggleLicenseOn" type="button" class="btn" ng-click="toggleProAuthorized()"  ng-disabled="updatingRPP || !isProToggleEnabled()"
+              ng-class="{'btn-toggle-blue-off' : !display.playerProAuthorized, 'btn-toggle-blue-on' : display.playerProAuthorized}">
+              Yes
+              <streamline-icon name="checkmark" ng-show="display.playerProAuthorized"></streamline-icon>
+            </button>
+            <button id="toggleLicenseOff" type="button" class="btn" ng-click="toggleProAuthorized()" ng-disabled="updatingRPP || !isProToggleEnabled()"
+              ng-class="{'btn-toggle-blue-off' : display.playerProAuthorized, 'btn-toggle-blue-on' : !display.playerProAuthorized}">
+              No
+              <streamline-icon name="checkmark" ng-show="!display.playerProAuthorized"></streamline-icon>
+            </button>
           </div>
         </div>
       </div>

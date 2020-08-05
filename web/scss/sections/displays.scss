@@ -20,6 +20,21 @@
       width: 241px;
     }
   }
+
+  .btn-group-justified {
+    @extend .mb-0;
+
+    width: 167px;
+
+    button {
+      width: 84px;
+      font-weight: normal;
+    }
+
+    streamline-icon {
+      @extend .ml-3;
+    }
+  }
 }
 
 .rise-player-list {
