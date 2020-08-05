@@ -46,17 +46,30 @@
     border-bottom-width: 6px;
     border-bottom-color: #fff;
   }
-  .dropdown-menu > ul > li > a,
+  .dropdown-menu > ul > li > a, .dropdown-menu > ul > li > button,
   .action-sheet > ul > li > a {
     color: $dark-gray;
     display: block;
     padding: 10px;
     margin: 0;
+    background-color: white;
+    border: 0;
   }
-  .dropdown-menu > ul > li > a:hover,
-  .dropdown-menu > ul > li > a:focus {
+  .dropdown-menu > ul > li > button:disabled {
+    color: $madero-gray;
+    cursor: not-allowed;
+  }
+  .dropdown-menu > ul > li > a:hover, .dropdown-menu > ul > li > button:hover:enabled,
+  .dropdown-menu > ul > li > a:focus, .dropdown-menu > ul > li > button:focus:enabled {
     background-color: rgba(150, 150, 150, 0.1);
     color: $rise-blue;
+  }
+  .dropdown-menu > ul > li > button:hover:enabled,
+  .dropdown-menu > ul > li > button:focus:enabled {
+    // duplicate <a> styles
+    text-decoration: underline;
+    text-align: left;
+    width: 100%;
   }
   .dropdown-menu > ul > .active > a,
   .dropdown-menu > ul > .active > a:hover,

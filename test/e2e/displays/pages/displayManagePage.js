@@ -7,6 +7,7 @@ var DisplayManagePage = function() {
   var displayNameEditButton = element(by.css('display-fields stretchy-input #editButton'));
 
   var notActivatedPlayerLink = element(by.id('notActivatedLink'));
+  var displayActionsButton = element(by.id('displayActionsButton'));
   var installPlayerButton = element(by.id('installPlayer'));
   var displayUseCompanyAddressCheckbox = element(by.model('display.useCompanyAddress'));
   var displayRebootCheckbox = element(by.model('display.restartEnabled'));
@@ -23,7 +24,7 @@ var DisplayManagePage = function() {
   var cancelButton = element(by.id('cancelButton'));
 
   var deleteButton = element(by.id('deleteButton'));
-  var deleteForeverButton = element(by.buttonText('Delete Forever'));
+  var deleteForeverButton = element(by.id('confirm-primary'));
 
   var displayLoader = element(by.xpath('//div[@spinner-key="display-loader"]'));
 
@@ -47,6 +48,10 @@ var DisplayManagePage = function() {
 
   this.getNotActivatedPlayerLink = function() {
     return notActivatedPlayerLink;
+  };
+
+  this.getDisplayActionsButton = function() {
+    return displayActionsButton;
   };
 
   this.getInstallPlayerButton = function() {

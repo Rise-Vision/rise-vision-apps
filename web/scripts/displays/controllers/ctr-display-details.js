@@ -45,7 +45,7 @@ angular.module('risevision.displays.controllers')
           }
         } else {
           var apiParams = {};
-          var playerProAuthorized = $scope.display.playerProAuthorized;
+          var playerProAuthorized = !$scope.display.playerProAuthorized;
 
           $scope.updatingRPP = true;
           apiParams[displayId] = playerProAuthorized;
@@ -111,9 +111,10 @@ angular.module('risevision.displays.controllers')
       $scope.confirmDelete = function () {
         $scope.modalInstance = $modal.open({
           template: $templateCache.get(
-            'partials/components/confirm-modal/confirm-modal.html'),
+            'partials/components/confirm-modal/madero-confirm-modal.html'),
           controller: 'confirmModalController',
-          windowClass: 'modal-custom',
+          windowClass: 'madero-style centered-modal',
+          size: 'sm',
           resolve: {
             confirmationTitle: function () {
               return 'displays-app.details.deleteTitle';
@@ -122,9 +123,11 @@ angular.module('risevision.displays.controllers')
               return 'displays-app.details.deleteWarning';
             },
             confirmationButton: function () {
-              return 'common.delete-forever';
+              return 'Yes';
             },
-            cancelButton: null
+            cancelButton: function () {
+              return 'No';
+            }
           }
         });
 
@@ -137,9 +140,10 @@ angular.module('risevision.displays.controllers')
         } else {
           $scope.modalInstance = $modal.open({
             template: $templateCache.get(
-              'partials/components/confirm-modal/confirm-modal.html'),
+              'partials/components/confirm-modal/madero-confirm-modal.html'),
             controller: 'confirmModalController',
-            windowClass: 'modal-custom',
+            windowClass: 'madero-style centered-modal',
+            size: 'sm',
             resolve: {
               confirmationTitle: function () {
                 return 'displays-app.details.unsavedTitle';

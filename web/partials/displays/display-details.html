@@ -4,8 +4,8 @@
   <div class="madero-style">
     <div class="app-header u_padding-20-vertical mb-5 border-bottom">
       <!-- App Title -->
-      <div>
-        <h1 class="app-header-title">Displays</h1>
+      <div class="app-header-title">
+        <h1>Displays</h1>
         <div>
           <span ng-show="getProLicenseCount() > 0">
             {{ getProUsedLicenseCount() }} Licensed Display{{getProUsedLicenseCount() > 1 ? 's' : ''}} | {{ getProAvailableLicenseCount() }} License{{getProAvailableLicenseCount() > 1 ? 's' : ''}} Available
@@ -22,8 +22,8 @@
       </div>
 
       <div class="ml-auto" require-role="cp">
-        <button ng-click="addSchedule()" class="btn btn-default">
-          Create New Display
+        <button ng-click="addDisplay()" class="btn btn-default btn-toolbar">
+          Add Display
         </button>
       </div>
     </div>

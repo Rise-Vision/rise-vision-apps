@@ -2,11 +2,10 @@
 
 // controls Restart/Reboot functionality
 angular.module('risevision.displays.controllers')
-  .controller('displayControls', ['$scope', 'display',
-    '$log', '$modal', '$templateCache', 'processErrorCode', 'displayTracker',
-    'displayFactory',
-    function ($scope, display, $log, $modal, $templateCache, processErrorCode,
-      displayTracker, displayFactory) {
+  .controller('displayControls', ['$scope', 'display', '$log', 'confirmModal', 
+    'processErrorCode', 'displayTracker', 'displayFactory',
+    function ($scope, display, $log, confirmModal, processErrorCode, displayTracker,
+      displayFactory) {
       $scope.displayTracker = displayTracker;
 
       var _restart = function (displayId, displayName) {
@@ -14,15 +13,11 @@ angular.module('risevision.displays.controllers')
           return;
         }
 
-        $scope.controlsInfo = '';
         $scope.controlsError = '';
 
         display.restart(displayId)
           .then(function (resp) {
             displayTracker('Display Restarted', displayId, displayName);
-
-            $scope.controlsInfo =
-              'displays-app.fields.controls.restart.success';
           })
           .then(null, function (e) {
             $scope.controlsError = processErrorCode('Display', 'restart', e);
@@ -34,15 +29,11 @@ angular.module('risevision.displays.controllers')
           return;
         }
 
-        $scope.controlsInfo = '';
         $scope.controlsError = '';
 
         display.reboot(displayId)
           .then(function (resp) {
             displayTracker('Display Rebooted', displayId, displayName);
-
-            $scope.controlsInfo =
-              'displays-app.fields.controls.reboot.success';
           })
           .then(null, function (e) {
             $scope.controlsError = processErrorCode('Display', 'reboot', e);
@@ -54,26 +45,15 @@ angular.module('risevision.displays.controllers')
           return;
         }
 
-        $scope.modalInstance = $modal.open({
-          template: $templateCache.get(
-            'partials/components/confirm-modal/confirm-modal.html'),
-          controller: 'confirmModalController',
-          windowClass: 'modal-custom',
-          resolve: {
-            confirmationTitle: function () {
-              return 'displays-app.fields.controls.' + mode +
-                '.title';
-            },
-            confirmationMessage: function () {
-              return 'displays-app.fields.controls.' + mode +
-                '.warning';
-            },
-            confirmationButton: null,
-            cancelButton: null
-          }
-        });
-
-        $scope.modalInstance.result.then(function () {
+        confirmModal(
+          'displays-app.fields.controls.' + mode + '.title',
+          'displays-app.fields.controls.' + mode + '.warning',
+          'Yes',
+          'No',
+          'madero-style centered-modal',
+          'partials/components/confirm-modal/madero-confirm-modal.html',
+          'sm'
+        ).then(function () {
           // do what you need if user presses ok
           if (mode === 'reboot') {
             _reboot(displayId, displayName);

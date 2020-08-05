@@ -7,7 +7,7 @@
     "error": "Failed to create Schedule!"
   },
   "details": {
-    "deleteTitle": "Deleting Schedule",
+    "deleteTitle": "Delete Schedule?",
     "deleteWarning": "Are you sure you want to delete this Schedule?",
     "error": "Failed to update Schedule!",
     "unsavedTitle": "Unsaved Changes",

@@ -5,7 +5,7 @@ angular.module('risevision.common.components.confirm-modal.services', [
   ])
   .factory('confirmModal', ['$modal', '$templateCache',
     function ($modal, $templateCache) {
-      return function (title, message, confirm, cancel, windowClass, templateUrl) {
+      return function (title, message, confirm, cancel, windowClass, templateUrl, size) {
         var options = {
           controller: 'confirmModalController',
           resolve: {
@@ -30,6 +30,10 @@ angular.module('risevision.common.components.confirm-modal.services', [
           options.template = $templateCache.get('partials/components/confirm-modal/confirm-modal.html');
         } else {
           options.templateUrl = templateUrl;
+        }
+
+        if (size) {
+          options.size = size;
         }
 
         return $modal.open(options).result;

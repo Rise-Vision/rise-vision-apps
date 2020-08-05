@@ -202,6 +202,14 @@ var DisplayManageScenarios = function() {
     });
 
     describe('install player', function() {
+      it('should show the Player Actions button, which opens the Dropdown', function() {
+        helper.wait(displayManagePage.getDisplayActionsButton(), 'Display Actions Button');
+
+        expect(displayManagePage.getDisplayActionsButton().isDisplayed()).to.eventually.be.true;
+
+        helper.clickWhenClickable(displayManagePage.getDisplayActionsButton(), 'Display Actions Button');
+      });
+
       it('should show the Install Player button, which opens the Display Modal', function() {
         helper.wait(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
         expect(displayManagePage.getInstallPlayerButton().isDisplayed()).to.eventually.be.true;
