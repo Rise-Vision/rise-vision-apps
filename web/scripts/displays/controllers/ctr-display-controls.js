@@ -51,7 +51,8 @@ angular.module('risevision.displays.controllers')
           'Yes',
           'No',
           'madero-style centered-modal',
-          'partials/components/confirm-modal/madero-confirm-modal.html'
+          'partials/components/confirm-modal/madero-confirm-modal.html',
+          'sm'
         ).then(function () {
           // do what you need if user presses ok
           if (mode === 'reboot') {
