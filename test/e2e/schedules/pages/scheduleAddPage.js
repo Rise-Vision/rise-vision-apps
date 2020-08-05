@@ -26,7 +26,7 @@ var ScheduleAddPage = function() {
   var saveButton = element(by.id('saveButton'));
   var cancelButton = element(by.id('cancelButton'));
   var deleteButton = element(by.id('deleteButton'));
-  var deleteForeverButton = element(by.buttonText('Delete Forever'));
+  var deleteForeverButton = element(by.id('confirm-primary'));
 
   var errorBox = element(by.id('errorBox'));
 
