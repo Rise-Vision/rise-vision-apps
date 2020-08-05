@@ -59,10 +59,17 @@
     color: $madero-gray;
     cursor: not-allowed;
   }
-  .dropdown-menu > ul > li > a:hover,
-  .dropdown-menu > ul > li > a:focus {
+  .dropdown-menu > ul > li > a:hover, .dropdown-menu > ul > li > button:hover:enabled,
+  .dropdown-menu > ul > li > a:focus, .dropdown-menu > ul > li > button:focus:enabled {
     background-color: rgba(150, 150, 150, 0.1);
     color: $rise-blue;
+  }
+  .dropdown-menu > ul > li > button:hover:enabled,
+  .dropdown-menu > ul > li > button:focus:enabled {
+    // duplicate <a> styles
+    text-decoration: underline;
+    text-align: left;
+    width: 100%;
   }
   .dropdown-menu > ul > .active > a,
   .dropdown-menu > ul > .active > a:hover,
