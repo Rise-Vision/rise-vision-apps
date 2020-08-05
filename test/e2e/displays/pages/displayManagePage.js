@@ -7,6 +7,7 @@ var DisplayManagePage = function() {
   var displayNameEditButton = element(by.css('display-fields stretchy-input #editButton'));
 
   var notActivatedPlayerLink = element(by.id('notActivatedLink'));
+  var displayActionsButton = element(by.id('displayActionsButton'));
   var installPlayerButton = element(by.id('installPlayer'));
   var displayUseCompanyAddressCheckbox = element(by.model('display.useCompanyAddress'));
   var displayRebootCheckbox = element(by.model('display.restartEnabled'));
@@ -47,6 +48,10 @@ var DisplayManagePage = function() {
 
   this.getNotActivatedPlayerLink = function() {
     return notActivatedPlayerLink;
+  };
+
+  this.getDisplayActionsButton = function() {
+    return displayActionsButton;
   };
 
   this.getInstallPlayerButton = function() {
