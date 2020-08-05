@@ -18,12 +18,12 @@
           <div class="dropdown-menu playlist-menu" role="menu" ng-controller="displayControls">
             <ul>
               <li>
-                <button type="button" class="u_clickable" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" require-role="da">
+                <button type="button" class="btn-dropdown u_clickable" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" require-role="da">
                   <span translate>displays-app.fields.controls.restart.name</span>
                 </button>
               </li>
               <li>
-                <button type="button" class="u_clickable" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" require-role="da">
+                <button type="button" class="btn-dropdown u_clickable" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" require-role="da">
                   <span translate>displays-app.fields.controls.reboot.name</span>
                 </button>
               </li>
