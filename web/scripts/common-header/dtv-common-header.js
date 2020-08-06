@@ -99,11 +99,11 @@ angular.module('risevision.common.header', [
   .directive('commonHeader', ['$rootScope', '$q', '$loading',
     '$interval', '$log',
     '$templateCache', 'userState', '$location', 'bindToScopeWithWatch',
-    '$document', 'cookieTester', 'companyIcpFactory', 'ENV_NAME', '$window', 'APPS_URL',
+    '$document', 'cookieTester', 'companyIcpFactory', 'ENV_NAME', '$window', 'APPS_URL', 'helpWidgetFactory',
     function ($rootScope, $q, $loading, $interval,
       $log, $templateCache, userState, $location,
       bindToScopeWithWatch, $document, cookieTester, companyIcpFactory,
-      ENV_NAME, $window, APPS_URL) {
+      ENV_NAME, $window, APPS_URL, helpWidgetFactory) {
       return {
         restrict: 'E',
         template: $templateCache.get('partials/common-header/common-header.html'),
@@ -120,6 +120,7 @@ angular.module('risevision.common.header', [
           $scope.isSubcompanySelected = userState.isSubcompanySelected;
           $scope.isTestCompanySelected = userState.isTestCompanySelected;
           $scope.ENV_NAME = ENV_NAME;
+          $scope.helpWidgetFactory = helpWidgetFactory;
 
           // If nav options not provided use defaults
           if (!$scope[attr.navOptions]) {
