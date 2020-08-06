@@ -51,6 +51,7 @@ var PresentationListPage = function() {
 
   this.loadCurrentCompanyPresentationList = function() {
     helper.clickWhenClickable(templateEditorPage.getPresentationsListLink(), 'Presentations List');
+    helper.wait(this.getPresentationsLoader(), 'Presentation loader');
     helper.waitDisappear(this.getPresentationsLoader(), 'Presentation loader');
   }
 
