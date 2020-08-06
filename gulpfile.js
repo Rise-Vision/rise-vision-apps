@@ -91,7 +91,7 @@ var unitTestFiles = [
   "test/unit/**/mocks/*.js",
   "test/unit/**/*.tests.js",
   "test/unit/**/*-spec.js",
-  "test/unit/common/services/svc-zendesk-override.js"
+  "test/unit/common-header/services/svc-help-widget-override.js"
 ];
 
 //------------------------- Browser Sync --------------------------------
