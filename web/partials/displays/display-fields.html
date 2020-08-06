@@ -418,7 +418,7 @@
         <preview-selector selected-schedule="selectedSchedule" on-schedule-changed="onScheduleChanged" additional-class="pull-left mr-auto mb-0"></preview-selector>
 
         <span class="pull-right button-toolbar">
-          <a id="viewSchedule" type="button" class="btn btn-default btn-toolbar" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })">Edit Schedule</a>
+          <a id="viewSchedule" type="button" class="btn btn-default btn-toolbar" ui-sref="apps.schedules.details({ scheduleId: selectedSchedule.id, cid: selectedSchedule.companyId })">Edit Schedule</a>
           <ng-show ng-show="tooltipKey">
             <button id="shareButton" type="button" class="btn btn-default btn-toolbar" 
             tooltip-overlay tooltip-template="'partials/schedules/share-schedule-tooltip.html'" tooltip-placement="bottom" tooltip-class="madero-style tooltip-guide tooltip-share-guide">
@@ -432,7 +432,7 @@
     </div>
 
     <div class="preview-embed">
-      <iframe frameborder="0" ng-src="{{getEmbedUrl(display.scheduleId)}}">
+      <iframe frameborder="0" ng-src="{{getEmbedUrl(selectedSchedule.id)}}">
       </iframe>
     </div>
   </div>

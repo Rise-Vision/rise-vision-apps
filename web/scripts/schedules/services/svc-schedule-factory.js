@@ -42,6 +42,11 @@ angular.module('risevision.schedules.services')
         _init();
       };
 
+      factory.setSchedule = function (schedule) {
+        _scheduleId = schedule.id;
+        factory.schedule = schedule;
+      };
+
       factory.getSchedule = function (scheduleId) {
         var deferred = $q.defer();
 

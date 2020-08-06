@@ -4,10 +4,10 @@ angular.module('risevision.displays.controllers')
   .controller('displayDetails', ['$scope', '$rootScope', '$q',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'enableCompanyProduct', 'userState', 'plansFactory',
-    'currentPlanFactory', 'playerLicenseFactory', 'PLAYER_PRO_PRODUCT_CODE', '$state', 'addressService',
+    'currentPlanFactory', 'playerLicenseFactory', 'PLAYER_PRO_PRODUCT_CODE', '$state', 'addressService', 'scheduleFactory',
     function ($scope, $rootScope, $q, displayFactory, display, screenshotFactory, playerProFactory,
       $loading, $log, $modal, $templateCache, displayId, enableCompanyProduct, userState,
-      plansFactory, currentPlanFactory, playerLicenseFactory, PLAYER_PRO_PRODUCT_CODE, $state, addressService) {
+      plansFactory, currentPlanFactory, playerLicenseFactory, PLAYER_PRO_PRODUCT_CODE, $state, addressService, scheduleFactory) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
@@ -23,7 +23,8 @@ angular.module('risevision.displays.controllers')
 
         $scope.selectedSchedule = {
           id: $scope.display.scheduleId,
-          name: $scope.display.scheduleName
+          name: $scope.display.scheduleName,
+          companyId: $scope.display.companyId
         };
 
         if (!$scope.display.playerProAuthorized) {
@@ -44,8 +45,6 @@ angular.module('risevision.displays.controllers')
       $scope.onScheduleChanged = function(newSchedule) {
         console.log('onScheduleChanged',newSchedule);
         $scope.selectedSchedule = newSchedule;
-        $scope.display.scheduleId = newSchedule.id;
-        $scope.display.scheduleName = newSchedule.name;
       };
 
       $scope.toggleProAuthorized = function () {
@@ -195,9 +194,29 @@ angular.module('risevision.displays.controllers')
           return $q.reject();
         } else {
           var shouldSkipAddressValidation = !addressService.isAddressFormDirty($scope.displayDetails) && !$scope.displayDetails.useCompanyAddress.$dirty;
-          return displayFactory.updateDisplay( shouldSkipAddressValidation );
+          return displayFactory.updateDisplay( shouldSkipAddressValidation ).then(_saveSchedule);
         }
       };
+
+      var _saveSchedule = function() {
+        if ($scope.selectedSchedule.id === $scope.display.scheduleId) {
+          $log.info('Assigned Schedule has not changed.', $scope.selectedSchedule.id);
+          return $q.resolve();
+        } else {
+          $log.info('Updating assigned Schedule.', $scope.selectedSchedule.id);
+          //add to distribution if not added yet - previous request may have failed.
+          $scope.selectedSchedule.distribution = $scope.selectedSchedule.distribution? $scope.selectedSchedule.distribution: [];
+          if ($scope.selectedSchedule.distribution.indexOf($scope.display.id) === -1) {
+            $scope.selectedSchedule.distribution.push($scope.display.id);
+          }
+          $log.info('Assigned Schedule distribution.', $scope.selectedSchedule.distribution);
+          scheduleFactory.setSchedule($scope.selectedSchedule);
+          return scheduleFactory.updateSchedule().then(function() {
+            $scope.display.scheduleId = $scope.selectedSchedule.id;
+            $scope.display.scheduleName = $scope.selectedSchedule.name;
+          });
+        }
+      }
 
       var startTrialListener = $rootScope.$on('risevision.company.updated', function () {
         var company = userState.getCopyOfSelectedCompany(true);
