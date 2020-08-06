@@ -17,7 +17,7 @@
             scriptElem.innerText = HELP_WIDGET_SCRIPT;
 
             $window.document.body.appendChild(scriptElem);
-            $window._elev.on('load', function(_elev) {
+            $window._elev.on('load', function (_elev) {
               _elev.setSettings({
                 hideLauncher: true
               });
@@ -28,13 +28,17 @@
 
         function showWidgetButton() {
           if ($window._elev) {
-            $window._elev.setSettings({hideLauncher: false});
+            $window._elev.setSettings({
+              hideLauncher: false
+            });
           }
         }
 
         function hideWidgetButton() {
           if ($window._elev) {
-            $window._elev.setSettings({hideLauncher: true});
+            $window._elev.setSettings({
+              hideLauncher: true
+            });
           }
         }
 
