@@ -10,6 +10,32 @@
     }
   }
 
+  .btn-dropdown {
+    // duplicate "dropdown-menu > ul > li > a" styles
+    color: $dark-gray;
+    display: block;
+    padding: 10px;
+    margin: 0;
+    background-color: white;
+    border: 0;
+
+    &:disabled {
+      color: $madero-gray;
+      cursor: not-allowed;
+    }
+
+    &:hover:enabled,
+    &:focus:enabled {
+      // duplicate "dropdown-menu > ul > li > a:hover" styles
+      background-color: rgba(150, 150, 150, 0.1);
+      color: $rise-blue;
+      // duplicate <a> styles
+      text-decoration: underline;
+      text-align: left;
+      width: 100%;
+    }
+  }
+
   .text-gray {
     color: $mid-gray;
   }
