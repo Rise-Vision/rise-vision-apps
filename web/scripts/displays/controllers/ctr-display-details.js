@@ -17,6 +17,7 @@ angular.module('risevision.displays.controllers')
       $scope.monitoringSchedule = {};
       $scope.showPlansModal = plansFactory.showPlansModal;
       $scope.selectedSchedule = null;
+      $scope.scheduleFactory = scheduleFactory;
 
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
@@ -34,16 +35,15 @@ angular.module('risevision.displays.controllers')
         screenshotFactory.loadScreenshot();
       });
 
-      $scope.$watch('factory.loadingDisplay', function (loading) {
-        if (loading) {
-          $loading.start('display-loader');
-        } else {
+      $scope.$watchGroup(['factory.loadingDisplay','scheduleFactory.savingSchedule'], function (loading) {
+        if (!$scope.factory.loadingDisplay && !$scope.scheduleFactory.savingSchedule) {
           $loading.stop('display-loader');
+        } else {
+          $loading.start('display-loader');
         }
       });
 
       $scope.onScheduleChanged = function(newSchedule) {
-        console.log('onScheduleChanged',newSchedule);
         $scope.selectedSchedule = newSchedule;
       };
 
@@ -194,29 +194,32 @@ angular.module('risevision.displays.controllers')
           return $q.reject();
         } else {
           var shouldSkipAddressValidation = !addressService.isAddressFormDirty($scope.displayDetails) && !$scope.displayDetails.useCompanyAddress.$dirty;
-          return displayFactory.updateDisplay( shouldSkipAddressValidation ).then(_saveSchedule);
+          return displayFactory.updateDisplay(shouldSkipAddressValidation).then(_saveSchedule);
         }
       };
 
       var _saveSchedule = function() {
-        if ($scope.selectedSchedule.id === $scope.display.scheduleId) {
-          $log.info('Assigned Schedule has not changed.', $scope.selectedSchedule.id);
+        var schedule = $scope.selectedSchedule;
+        if (schedule.id === $scope.display.scheduleId) {
           return $q.resolve();
         } else {
-          $log.info('Updating assigned Schedule.', $scope.selectedSchedule.id);
-          //add to distribution if not added yet - previous request may have failed.
-          $scope.selectedSchedule.distribution = $scope.selectedSchedule.distribution? $scope.selectedSchedule.distribution: [];
-          if ($scope.selectedSchedule.distribution.indexOf($scope.display.id) === -1) {
-            $scope.selectedSchedule.distribution.push($scope.display.id);
-          }
-          $log.info('Assigned Schedule distribution.', $scope.selectedSchedule.distribution);
-          scheduleFactory.setSchedule($scope.selectedSchedule);
-          return scheduleFactory.updateSchedule().then(function() {
-            $scope.display.scheduleId = $scope.selectedSchedule.id;
-            $scope.display.scheduleName = $scope.selectedSchedule.name;
+          $log.info('Updating assigned Schedule: ', schedule.id);
+          _addToDistribution($scope.display.id, schedule);
+
+          scheduleFactory.setSchedule(schedule);
+          return scheduleFactory.updateSchedule(true).then(function() {
+            $scope.display.scheduleId = schedule.id;
+            $scope.display.scheduleName = schedule.name;
           });
         }
-      }
+      };
+
+      var _addToDistribution = function(displayId, schedule) {
+        schedule.distribution = schedule.distribution ? schedule.distribution : [];
+        if (schedule.distribution.indexOf(displayId) === -1) {
+          schedule.distribution.push(displayId);
+        }
+      };
 
       var startTrialListener = $rootScope.$on('risevision.company.updated', function () {
         var company = userState.getCopyOfSelectedCompany(true);

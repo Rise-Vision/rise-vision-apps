@@ -164,7 +164,7 @@ angular.module('risevision.schedules.services')
           });
       };
 
-      factory.updateSchedule = function () {
+      factory.updateSchedule = function (forceDistribution) {
         var deferred = $q.defer();
 
         _clearMessages();
@@ -173,7 +173,7 @@ angular.module('risevision.schedules.services')
         factory.loadingSchedule = true;
         factory.savingSchedule = true;
 
-        _updateSchedule()
+        _updateSchedule(forceDistribution)
           .then(function (resp) {
             factory.schedule = resp.item;
 
@@ -221,16 +221,20 @@ angular.module('risevision.schedules.services')
         _hasSchedules = undefined;
       });
 
-      var _updateSchedule = function () {
-        return schedule.update(_scheduleId, factory.schedule).catch(function (err) {
-          if (err.result.error.code === 409) {
-            return _showDistributionConflictModal()
-              .then(function () {
-                return $q.resolve(schedule.update(_scheduleId, factory.schedule, true));
-              });
-          }
-          return $q.reject(err);
-        });
+      var _updateSchedule = function (forceDistribution) {
+        if (forceDistribution) {
+          return $q.resolve(schedule.update(_scheduleId, factory.schedule, true));
+        } else {
+          return schedule.update(_scheduleId, factory.schedule).catch(function (err) {
+            if (err.result.error.code === 409) {
+              return _showDistributionConflictModal()
+                .then(function () {
+                  return $q.resolve(schedule.update(_scheduleId, factory.schedule, true));
+                });
+            }
+            return $q.reject(err);
+          });          
+        }
       };
 
       var _addSchedule = function () {
