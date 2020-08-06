@@ -35,6 +35,17 @@
       @extend .ml-3;
     }
   }
+
+  .display-screenshot {
+    height: 235px;
+    background: $light-gray;
+
+    .display-screenshot-info {
+      @extend .text-center;
+      @extend %vertical-align;
+    }  
+  }
+
 }
 
 
