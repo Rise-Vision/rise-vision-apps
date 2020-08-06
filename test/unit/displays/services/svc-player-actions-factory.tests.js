@@ -1,12 +1,8 @@
 'use strict';
+describe('service: playerActionsFactory:', function() {
 
-describe('controller: display controls', function() {
-  var displayId = 1234;
-  beforeEach(module('risevision.displays.controllers'));
   beforeEach(module('risevision.displays.services'));
-  beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
-    $provide.service('userState',userState);
     $provide.service('display',function(){
       return {
         restart: function(displayId) {
@@ -47,61 +43,40 @@ describe('controller: display controls', function() {
     $provide.service('confirmModal',function(){
       return sinon.stub().returns(Q.reject());
     });
+
   }));
-  var $scope, confirmModal, userState, $location, updateDisplay, functionCalled,
+  var playerActionsFactory, confirmModal, updateDisplay, functionCalled,
   trackerCalled, processErrorCode, displayFactory;
   beforeEach(function(){
     updateDisplay = true;
     functionCalled = undefined;
     trackerCalled = undefined;
-    
-    userState = function(){
-      return {
-        getSelectedCompanyId : function(){
-          return 'some_company_id';
-        },
-        _restoreState : function(){
 
-        },
-        isSubcompanySelected : function(){
-          return true;
-        }
-      }
-    };
-    inject(function($injector,$rootScope, $controller){
-      $scope = $rootScope.$new();
-      $location = $injector.get('$location');
+    inject(function($injector){
+      playerActionsFactory = $injector.get('playerActionsFactory');
       displayFactory = $injector.get('displayFactory');
       confirmModal = $injector.get('confirmModal');
-
-      $controller('displayControls', {
-        $scope : $scope,
-        userState : $injector.get('userState'),
-        display:$injector.get('display'),
-        confirmModal:confirmModal,
-        $log : $injector.get('$log')});
-      $scope.$digest();
     });
   });
-  
-  it('should exist',function(){
-    expect($scope).to.be.ok;
 
-    expect($scope.confirm).to.be.a('function');
+  it('should exist',function(){
+    expect(playerActionsFactory).to.be.ok;
+    
+    expect(playerActionsFactory.confirm).to.be.a('function');
   });
 
   describe('restart: ',function(){
     it('should not proceed if Display is not licensed',function(){
       displayFactory.showUnlockDisplayFeatureModal.returns(true);
 
-      $scope.confirm('1234', 'restart');
+      playerActionsFactory.confirm('1234', 'restart');
 
       confirmModal.should.not.have.been.called;
       expect(functionCalled).to.not.be.ok;
     });
 
     it('should return early the user does not confirm',function(){
-      $scope.confirm('1234', 'restart');
+      playerActionsFactory.confirm('1234', 'restart');
       
       confirmModal.should.have.been.called;
       expect(functionCalled).to.not.be.ok;
@@ -111,11 +86,11 @@ describe('controller: display controls', function() {
       confirmModal.returns(Q.resolve());
       updateDisplay = true;
       
-      $scope.confirm('1234', 'Display 1', 'restart');
+      playerActionsFactory.confirm('1234', 'Display 1', 'restart');
       setTimeout(function(){
         expect(functionCalled).to.equal('restart');
         expect(trackerCalled).to.equal('Display Restarted');
-        expect($scope.controlsError).to.not.be.ok;
+        expect(playerActionsFactory.controlsError).to.not.be.ok;
         done();
       },10);
     });
@@ -124,12 +99,12 @@ describe('controller: display controls', function() {
       confirmModal.returns(Q.resolve());
       updateDisplay = false;
       
-      $scope.confirm('1234', 'Display 1', 'restart');
+      playerActionsFactory.confirm('1234', 'Display 1', 'restart');
       setTimeout(function(){
         expect(functionCalled).to.equal('restart');
         expect(trackerCalled).to.not.be.ok;
         processErrorCode.should.have.been.calledWith('Display', 'restart', sinon.match.any);
-        expect($scope.controlsError).to.be.ok;
+        expect(playerActionsFactory.controlsError).to.be.ok;
         done();
       },10);
     });
@@ -139,14 +114,14 @@ describe('controller: display controls', function() {
     it('should not proceed if Display is not licensed',function(){
       displayFactory.showUnlockDisplayFeatureModal.returns(true);
 
-      $scope.confirm('1234', 'reboot');
+      playerActionsFactory.confirm('1234', 'reboot');
 
       confirmModal.should.not.have.been.called;
       expect(functionCalled).to.not.be.ok;
     });
 
     it('should return early the user does not confirm', function () {
-      $scope.confirm('1234', 'reboot');
+      playerActionsFactory.confirm('1234', 'reboot');
 
       confirmModal.should.have.been.called;
       expect(functionCalled).to.not.be.ok;
@@ -156,11 +131,11 @@ describe('controller: display controls', function() {
       confirmModal.returns(Q.resolve());
       updateDisplay = true;
       
-      $scope.confirm('1234', 'Display 1', 'reboot');
+      playerActionsFactory.confirm('1234', 'Display 1', 'reboot');
       setTimeout(function(){
         expect(functionCalled).to.equal('reboot');
         expect(trackerCalled).to.equal('Display Rebooted');
-        expect($scope.controlsError).to.not.be.ok;
+        expect(playerActionsFactory.controlsError).to.not.be.ok;
         done();
       }, 10);
     });
@@ -169,12 +144,12 @@ describe('controller: display controls', function() {
       confirmModal.returns(Q.resolve());
       updateDisplay = false;
       
-      $scope.confirm('1234', 'Display 1', 'reboot');
+      playerActionsFactory.confirm('1234', 'Display 1', 'reboot');
       setTimeout(function(){
         expect(functionCalled).to.equal('reboot');
         expect(trackerCalled).to.not.be.ok;
         processErrorCode.should.have.been.calledWith('Display', 'reboot', sinon.match.any);
-        expect($scope.controlsError).to.be.ok;
+        expect(playerActionsFactory.controlsError).to.be.ok;
         done();
       }, 10);
     });
@@ -183,10 +158,10 @@ describe('controller: display controls', function() {
       confirmModal.returns(Q.resolve());
       updateDisplay = false;
 
-      $scope.confirm(undefined, 'restart');
+      playerActionsFactory.confirm(undefined, 'restart');
       setTimeout(function () {
         expect(functionCalled).to.not.be.ok;
-        expect($scope.controlsError).to.not.be.ok;
+        expect(playerActionsFactory.controlsError).to.not.be.ok;
         done();
       }, 10);
     });
@@ -195,12 +170,13 @@ describe('controller: display controls', function() {
       confirmModal.returns(Q.resolve());
       updateDisplay = false;
 
-      $scope.confirm(undefined, 'reboot');
+      playerActionsFactory.confirm(undefined, 'reboot');
       setTimeout(function () {
         expect(functionCalled).to.not.be.ok;
-        expect($scope.controlsError).to.not.be.ok;
+        expect(playerActionsFactory.controlsError).to.not.be.ok;
         done();
       }, 10);
     });
   });
+
 });

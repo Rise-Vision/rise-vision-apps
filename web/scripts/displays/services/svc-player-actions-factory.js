@@ -1,26 +1,25 @@
 'use strict';
 
-// controls Restart/Reboot functionality
-angular.module('risevision.displays.controllers')
-  .controller('displayControls', ['$scope', 'display', '$log', 'confirmModal', 
-    'processErrorCode', 'displayTracker', 'displayFactory',
-    function ($scope, display, $log, confirmModal, processErrorCode, displayTracker,
+angular.module('risevision.displays.services')
+  .factory('playerActionsFactory', ['display', 'confirmModal',  'processErrorCode', 
+  'displayTracker', 'displayFactory',
+    function (display, confirmModal, processErrorCode, displayTracker,
       displayFactory) {
-      $scope.displayTracker = displayTracker;
+      var service = {};
 
       var _restart = function (displayId, displayName) {
         if (!displayId) {
           return;
         }
 
-        $scope.controlsError = '';
+        service.controlsError = '';
 
         display.restart(displayId)
           .then(function (resp) {
             displayTracker('Display Restarted', displayId, displayName);
           })
           .then(null, function (e) {
-            $scope.controlsError = processErrorCode('Display', 'restart', e);
+            service.controlsError = processErrorCode('Display', 'restart', e);
           });
       };
 
@@ -29,18 +28,18 @@ angular.module('risevision.displays.controllers')
           return;
         }
 
-        $scope.controlsError = '';
+        service.controlsError = '';
 
         display.reboot(displayId)
           .then(function (resp) {
             displayTracker('Display Rebooted', displayId, displayName);
           })
           .then(null, function (e) {
-            $scope.controlsError = processErrorCode('Display', 'reboot', e);
+            service.controlsError = processErrorCode('Display', 'reboot', e);
           });
       };
 
-      $scope.confirm = function (displayId, displayName, mode) {
+      service.confirm = function (displayId, displayName, mode) {
         if (displayFactory.showUnlockDisplayFeatureModal()) {
           return;
         }
@@ -64,5 +63,7 @@ angular.module('risevision.displays.controllers')
           // do what you need to do if user cancels
         });
       };
+
+      return service;
     }
   ]);

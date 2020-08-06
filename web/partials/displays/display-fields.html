@@ -15,15 +15,15 @@
               <span class="text-gray pl-2"><i class="fa fa-sort"></i></span>
             </div>
           </button>
-          <div class="dropdown-menu playlist-menu" role="menu" ng-controller="displayControls">
+          <div class="dropdown-menu playlist-menu" role="menu">
             <ul>
               <li>
-                <button type="button" class="btn-dropdown u_clickable" ng-disabled="!display.playerVersion" ng-click="confirm(display.id, display.name, 'restart')" require-role="da">
+                <button type="button" class="btn-dropdown u_clickable" ng-disabled="!display.playerVersion" ng-click="playerActionsFactory.confirm(display.id, display.name, 'restart')" require-role="da">
                   <span translate>displays-app.fields.controls.restart.name</span>
                 </button>
               </li>
               <li>
-                <button type="button" class="btn-dropdown u_clickable" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="confirm(display.id, display.name, 'reboot')" require-role="da">
+                <button type="button" class="btn-dropdown u_clickable" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="playerActionsFactory.confirm(display.id, display.name, 'reboot')" require-role="da">
                   <span translate>displays-app.fields.controls.reboot.name</span>
                 </button>
               </li>
@@ -44,13 +44,8 @@
 <!-- DISPLAY ERRORS AND ALERTS -->
 <div class="row">
     <div class="col-sm-12">
-        <div ng-show="controlsError" class="alert alert-danger" role="alert">
-            <strong translate>displays-app.fields.controls.error</strong> {{controlsError}}
-        </div>
-        <div class="panel animated fadeIn" ng-show="controlsInfo">
-            <div class="panel-body bg-warning">
-                <strong>{{ controlsInfo | translate }}</strong>
-            </div>
+        <div ng-show="playerActionsFactory.controlsError" class="alert alert-danger" role="alert">
+            <strong translate>displays-app.fields.controls.error</strong> {{playerActionsFactory.controlsError}}
         </div>
     </div>
 </div>

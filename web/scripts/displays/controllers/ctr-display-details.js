@@ -4,15 +4,18 @@ angular.module('risevision.displays.controllers')
   .controller('displayDetails', ['$scope', '$rootScope', '$q',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'enableCompanyProduct', 'userState', 'plansFactory',
-    'currentPlanFactory', 'playerLicenseFactory', 'PLAYER_PRO_PRODUCT_CODE', '$state', 'addressService',
+    'currentPlanFactory', 'playerLicenseFactory', 'playerActionsFactory', 'PLAYER_PRO_PRODUCT_CODE', 
+    '$state', 'addressService',
     function ($scope, $rootScope, $q, displayFactory, display, screenshotFactory, playerProFactory,
       $loading, $log, $modal, $templateCache, displayId, enableCompanyProduct, userState,
-      plansFactory, currentPlanFactory, playerLicenseFactory, PLAYER_PRO_PRODUCT_CODE, $state, addressService) {
+      plansFactory, currentPlanFactory, playerLicenseFactory, playerActionsFactory, 
+      PLAYER_PRO_PRODUCT_CODE, $state, addressService) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
       $scope.playerProFactory = playerProFactory;
       $scope.currentPlanFactory = currentPlanFactory;
+      $scope.playerActionsFactory = playerActionsFactory;
       $scope.updatingRPP = false;
       $scope.monitoringSchedule = {};
       $scope.showPlansModal = plansFactory.showPlansModal;
