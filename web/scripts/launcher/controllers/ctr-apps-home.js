@@ -35,6 +35,10 @@ angular.module('risevision.apps.launcher.controllers')
         }
       });
 
+      $scope.onScheduleChanged = function(newSchedule) {
+        $scope.selectedSchedule = newSchedule;
+      };
+
       $scope.getEmbedUrl = function (scheduleId) {
         if (!scheduleId) {
           return null;

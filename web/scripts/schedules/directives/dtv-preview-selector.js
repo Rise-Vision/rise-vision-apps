@@ -1,14 +1,26 @@
 'use strict';
 
 angular.module('risevision.schedules.directives')
-  .directive('previewSelector', ['$timeout', '$loading',
-    function ($timeout, $loading) {
+  .directive('previewSelector', ['$timeout', '$loading', 'ScrollingListService', 'schedule',
+    function ($timeout, $loading, ScrollingListService, schedule) {
       return {
-        restrict: 'A',
+        restrict: 'E',
+        templateUrl: 'partials/schedules/preview-selector.html',
+        scope: {
+          selectedSchedule: '=',
+          onScheduleChanged: '=',
+          label: '@?',
+          additionalClass: '@?'
+        },
         link: function ($scope, element) {
           var selected;
           var tooltipElement = angular.element(element[0].querySelector('#preview-selector'));
           $scope.showTooltip = false;
+
+          $scope.search = {
+            sortBy: 'changeDate',
+            reverse: true,
+          };
 
           $scope.$watch('schedules.loadingItems', function (loading) {
             if (loading) {
@@ -20,6 +32,7 @@ angular.module('risevision.schedules.directives')
 
           $scope.$watch('showTooltip', function () {
             if ($scope.showTooltip) {
+              $scope.schedules = new ScrollingListService(schedule.list, $scope.search);
               selected = $scope.selectedSchedule;
 
               $timeout(function () {
@@ -45,7 +58,7 @@ angular.module('risevision.schedules.directives')
           };
 
           $scope.select = function () {
-            $scope.selectedSchedule = selected;
+            $scope.onScheduleChanged(selected);
 
             $scope.toggleTooltip();
           };

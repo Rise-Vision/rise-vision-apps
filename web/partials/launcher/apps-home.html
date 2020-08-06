@@ -33,25 +33,7 @@
           <share-schedule-button schedule="selectedSchedule" button-class="btn-primary btn-toolbar" ng-hide="tooltipKey"></share-schedule-button>
         </span>
 
-        <div class="form-group" preview-selector>
-          <label for="preview-selector">Preview A Schedule:</label>
-          <button id="preview-selector" class="form-control btn-select btn-schedule-selector btn-toolbar flex-row"
-            tooltip-template="'partials/schedules/preview-selector-tooltip.html'"
-            tooltip-trigger="show"
-            ng-click="toggleTooltip($event)" 
-            tooltip-animation="false"
-            tooltip-placement="bottom" 
-            tooltip-class="madero-style tooltip-schedule-selector ml-0"
-            tooltip-append-to-body="true"
-            tooltip-digest-on-resize
-          >
-          	<div class="row-entry">
-              <span class="text-muted mr-auto" ng-if="!selectedSchedule">Select or add a new schedule</span>
-              <span class="u_text-ellipsis mr-auto" ng-if="selectedSchedule">{{selectedSchedule.name}}</span>
-              <span class="text-muted pl-2"><i class="fa fa-sort"></i></span>
-            </div>
-          </button>
-        </div>
+        <preview-selector selected-schedule="selectedSchedule" on-schedule-changed="onScheduleChanged" label="Preview A Schedule:"></preview-selector>
       </div>
     </div>
 

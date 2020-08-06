@@ -16,9 +16,15 @@ angular.module('risevision.displays.controllers')
       $scope.updatingRPP = false;
       $scope.monitoringSchedule = {};
       $scope.showPlansModal = plansFactory.showPlansModal;
+      $scope.selectedSchedule = null;
 
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
+
+        $scope.selectedSchedule = {
+          id: $scope.display.scheduleId,
+          name: $scope.display.scheduleName
+        };
 
         if (!$scope.display.playerProAuthorized) {
           $scope.display.monitoringEnabled = false;
@@ -34,6 +40,13 @@ angular.module('risevision.displays.controllers')
           $loading.stop('display-loader');
         }
       });
+
+      $scope.onScheduleChanged = function(newSchedule) {
+        console.log('onScheduleChanged',newSchedule);
+        $scope.selectedSchedule = newSchedule;
+        $scope.display.scheduleId = newSchedule.id;
+        $scope.display.scheduleName = newSchedule.name;
+      };
 
       $scope.toggleProAuthorized = function () {
         if (!$scope.isProAvailable()) {
