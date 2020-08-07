@@ -1,6 +1,6 @@
 'use strict';
 
-describe('directive: preview-selector', function() {
+xdescribe('directive: preview-selector', function() {
   var $scope, $rootScope, element, $loading, $timeout, innerElementStub,
     sandbox = sinon.sandbox.create();
 

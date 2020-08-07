@@ -7,8 +7,7 @@ angular.module('risevision.schedules.directives')
         restrict: 'E',
         templateUrl: 'partials/schedules/preview-selector.html',
         scope: {
-          selectedSchedule: '=',
-          onScheduleChanged: '=',
+          ngModel: '=',
           label: '@?',
           additionalClass: '@?'
         },
@@ -33,7 +32,7 @@ angular.module('risevision.schedules.directives')
           $scope.$watch('showTooltip', function () {
             if ($scope.showTooltip) {
               $scope.schedules = new ScrollingListService(schedule.list, $scope.search);
-              selected = $scope.selectedSchedule;
+              selected = $scope.ngModel;
 
               $timeout(function () {
                 tooltipElement.trigger('show');
@@ -58,7 +57,7 @@ angular.module('risevision.schedules.directives')
           };
 
           $scope.select = function () {
-            $scope.onScheduleChanged(selected);
+            $scope.ngModel = selected;
 
             $scope.toggleTooltip();
           };

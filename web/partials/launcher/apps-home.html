@@ -33,7 +33,7 @@
           <share-schedule-button schedule="selectedSchedule" button-class="btn-primary btn-toolbar" ng-hide="tooltipKey"></share-schedule-button>
         </span>
 
-        <preview-selector selected-schedule="selectedSchedule" on-schedule-changed="onScheduleChanged" label="Preview A Schedule:"></preview-selector>
+        <preview-selector ng-model="selectedSchedule" label="Preview A Schedule:"></preview-selector>
       </div>
     </div>
 
