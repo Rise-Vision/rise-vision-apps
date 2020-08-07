@@ -42,11 +42,6 @@ angular.module('risevision.schedules.services')
         _init();
       };
 
-      factory.setSchedule = function (schedule) {
-        _scheduleId = schedule.id;
-        factory.schedule = schedule;
-      };
-
       factory.getSchedule = function (scheduleId) {
         var deferred = $q.defer();
 
@@ -194,6 +189,40 @@ angular.module('risevision.schedules.services')
         return deferred.promise;
       };
 
+      factory.forceUpdateSchedule = function (providedSchedule) {
+        var scheduleToUpdate = providedSchedule || factory.schedule;
+
+        var deferred = $q.defer();
+
+        _clearMessages();
+
+        //show loading spinner
+        factory.loadingSchedule = true;
+        factory.savingSchedule = true;
+
+        schedule.update(scheduleToUpdate.id, scheduleToUpdate, true)
+          .then(function (resp) {
+            if (!providedSchedule) {
+              factory.schedule = resp.item;
+            }
+
+            scheduleTracker('Schedule Force Updated', scheduleToUpdate.id, scheduleToUpdate.name);
+
+            deferred.resolve();
+          })
+          .then(null, function (e) {
+            _showErrorMessage('update', e);
+
+            deferred.reject();
+          })
+          .finally(function () {
+            factory.loadingSchedule = false;
+            factory.savingSchedule = false;
+          });
+
+        return deferred.promise;
+      };
+
       factory.deleteSchedule = function () {
         _clearMessages();
 
@@ -217,24 +246,41 @@ angular.module('risevision.schedules.services')
           });
       };
 
+      factory.addToDistribution = function(display, schedule) {
+        if (schedule.id === display.scheduleId) {
+          return $q.resolve();
+        } else {
+          $log.info('Adding to Distribution: ', display.id, schedule.id);
+
+          _addToDistributionList(display.id, schedule);
+          return factory.forceUpdateSchedule(schedule).then(function() {
+            display.scheduleId = schedule.id;
+            display.scheduleName = schedule.name;
+          });
+        }
+      };
+
+      var _addToDistributionList = function(displayId, schedule) {
+        schedule.distribution = schedule.distribution ? schedule.distribution : [];
+        if (schedule.distribution.indexOf(displayId) === -1) {
+          schedule.distribution.push(displayId);
+        }
+      };
+
       $rootScope.$on('risevision.company.selectedCompanyChanged', function () {
         _hasSchedules = undefined;
       });
 
-      var _updateSchedule = function (forceDistribution) {
-        if (forceDistribution) {
-          return $q.resolve(schedule.update(_scheduleId, factory.schedule, true));
-        } else {
-          return schedule.update(_scheduleId, factory.schedule).catch(function (err) {
-            if (err.result.error.code === 409) {
-              return _showDistributionConflictModal()
-                .then(function () {
-                  return $q.resolve(schedule.update(_scheduleId, factory.schedule, true));
-                });
-            }
-            return $q.reject(err);
-          });          
-        }
+      var _updateSchedule = function () {
+        return schedule.update(_scheduleId, factory.schedule).catch(function (err) {
+          if (err.result.error.code === 409) {
+            return _showDistributionConflictModal()
+              .then(function () {
+                return $q.resolve(schedule.update(_scheduleId, factory.schedule, true));
+              });
+          }
+          return $q.reject(err);
+        });          
       };
 
       var _addSchedule = function () {

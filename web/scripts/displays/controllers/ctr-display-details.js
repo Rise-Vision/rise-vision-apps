@@ -197,32 +197,11 @@ angular.module('risevision.displays.controllers')
           return $q.reject();
         } else {
           var shouldSkipAddressValidation = !addressService.isAddressFormDirty($scope.displayDetails) && !$scope.displayDetails.useCompanyAddress.$dirty;
-          return displayFactory.updateDisplay(shouldSkipAddressValidation).then(_saveSchedule);
-        }
-      };
-
-      var _saveSchedule = function() {
-        var schedule = $scope.selectedSchedule;
-        if (schedule.id === $scope.display.scheduleId) {
-          return $q.resolve();
-        } else {
-          $log.info('Updating assigned Schedule: ', schedule.id);
-          _addToDistribution($scope.display.id, schedule);
-
-          scheduleFactory.setSchedule(schedule);
-          return scheduleFactory.updateSchedule(true).then(function() {
-            $scope.display.scheduleId = schedule.id;
-            $scope.display.scheduleName = schedule.name;
+          return displayFactory.updateDisplay(shouldSkipAddressValidation).then(function() {
+            scheduleFactory.addToDistribution($scope.display, $scope.selectedSchedule);
           });
         }
-      };
-
-      var _addToDistribution = function(displayId, schedule) {
-        schedule.distribution = schedule.distribution ? schedule.distribution : [];
-        if (schedule.distribution.indexOf(displayId) === -1) {
-          schedule.distribution.push(displayId);
-        }
-      };
+      };      
 
       var startTrialListener = $rootScope.$on('risevision.company.updated', function () {
         var company = userState.getCopyOfSelectedCompany(true);
