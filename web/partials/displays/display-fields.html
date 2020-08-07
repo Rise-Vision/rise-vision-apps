@@ -130,7 +130,7 @@
             <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
             <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'">Offline</span>
             <span class="text-success" ng-show="!displayService.statusLoading && (display | status) === 'online'">Online</span>
-            <a id="notActivatedLink" class="u_icon-hover u_clickable" ng-show="!displayService.statusLoading && (display | status) === 'notinstalled'">
+            <a id="notActivatedLink" class="u_icon-hover u_clickable" ng-show="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="factory.addDisplayModal(display)">
               {{ 'displays-app.list.status.notActivated' | translate }}
             </a>
           </span>

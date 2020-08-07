@@ -9,7 +9,7 @@ var DisplayManagePage = function() {
   var notActivatedPlayerLink = element(by.id('notActivatedLink'));
   var displayActionsButton = element(by.id('displayActionsButton'));
   var installPlayerButton = element(by.id('installPlayer'));
-  var displayUseCompanyAddressCheckbox = element(by.model('display.useCompanyAddress'));
+  var displayUseCompanyAddressCheckbox = element(by.id('useAddressOff'));
   var displayRebootCheckbox = element(by.model('display.restartEnabled'));
   var viewScheduleLink = element(by.id('viewSchedule'));
 
