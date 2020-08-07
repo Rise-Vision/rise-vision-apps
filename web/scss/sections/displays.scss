@@ -36,6 +36,15 @@
     }
   }
 
+  .display-screenshot {
+    height: 235px;
+    background: $light-gray;
+
+    .display-screenshot-info {
+      @extend .text-center;
+      @extend %vertical-align;
+    }  
+
   .address-fields .form-group {
     @extend .mb-3;
   }

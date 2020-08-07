@@ -213,24 +213,6 @@
       "viewerVersion": "Viewer Version"
     },
     "reboot": "Reboot:",
-    "screenshot": {
-      "error1": "There was a problem requesting the screenshot.",
-      "error2": "Please check connectivity.",
-      "learnSupportedOS1": "Learn more about supported",
-      "learnSupportedOS2": "operating systems.",
-      "missing1": "No Screenshot to show.",
-      "missing2": "Click 'Update' above.",
-      "notAvailable": "Screenshot not available.",
-      "notScheduled": "This Display is not scheduled.",
-      "osNotSupported": "Media Player operating system not supported.",
-      "playerInstall": "Install Rise Player",
-      "playerNotInstalled": "Rise Player not installed.",
-      "playerOffline": "This Display is Offline.",
-      "title": "Display Screenshot",
-      "updateScreenshot": "Update",
-      "upgradePlayer": "Upgrade Rise Player",
-      "upgradeRequired": "Rise Player software must be upgraded."
-    },
     "status": {
       "active": "Active",
       "inactive": "Inactive",
