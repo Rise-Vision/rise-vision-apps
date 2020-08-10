@@ -126,9 +126,8 @@
           </span>
           <span class="mr-auto" ng-if="!factory.showLicenseRequired(display)">
             <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
-            <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline</span>
-            <a ng-show="!displayService.statusLoading && (display | status) === 'offline'" href="https://help.risevision.com/hc/en-us/articles/115002694906-Why-is-my-Display-status-offline-" target="_blank">Why is my Display offline?</a>
-            <span class="text-success" ng-show="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
+            <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'">Offline</span>
+            <span class="text-success" ng-show="!displayService.statusLoading && (display | status) === 'online'">Online</span>
             <a id="notActivatedLink" class="u_icon-hover u_clickable" ng-show="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="factory.addDisplayModal(display)">
               {{ 'displays-app.list.status.notActivated' | translate }}
             </a>
@@ -212,10 +211,10 @@
         </tbody>
       </table>
 
-      <div class="list-group-item flex-row form-group mb-0" ng-show="(display.playerVersion || display.onlineStatus === 'online') && (playerProFactory.isCROSLegacy(display) || playerProFactory.isChromeOSPlayer(display))">
+      <div class="list-group-item flex-row form-group mb-0 madero-style" ng-show="(display.playerVersion || display.onlineStatus === 'online') && (playerProFactory.isCROSLegacy(display) || playerProFactory.isChromeOSPlayer(display))">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.orientation.name</label>
-          <select class="form-control mr-auto" ng-model="display.orientation" integer-parser>
+          <select class="form-control mr-auto w-auto" ng-model="display.orientation" integer-parser>
             <option value="0" translate>displays-app.fields.player.orientation.0</option>
             <option value="90" translate>displays-app.fields.player.orientation.90</option>
             <option value="180" translate>displays-app.fields.player.orientation.180</option>
@@ -224,16 +223,26 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <div class="checkbox">
-          <label class="control-label">
-            <input type="checkbox" ng-model="display.useCompanyAddress" name="useCompanyAddress" ng-disabled="factory.showLicenseRequired(display)">
-            <strong translate>displays-app.fields.address.useCompany</strong>
-          </label>
+      <div class="list-group-item flex-row form-group mb-0 madero-style">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.address.useCompany</label>
+
+          <div class="btn-group btn-group-justified">
+            <button id="useAddressOn" type="button" class="btn" ng-click="display.useCompanyAddress = !display.useCompanyAddress" ng-disabled="factory.showLicenseRequired(display)"
+              ng-class="{'btn-toggle-blue-off' : !display.useCompanyAddress, 'btn-toggle-blue-on' : display.useCompanyAddress}">
+              Yes
+              <streamline-icon name="checkmark" ng-show="display.useCompanyAddress"></streamline-icon>
+            </button>
+            <button id="useAddressOff" type="button" class="btn" ng-click="display.useCompanyAddress = !display.useCompanyAddress" ng-disabled="factory.showLicenseRequired(display)"
+              ng-class="{'btn-toggle-blue-off' : display.useCompanyAddress, 'btn-toggle-blue-on' : !display.useCompanyAddress}">
+              No
+              <streamline-icon name="checkmark" ng-show="!display.useCompanyAddress"></streamline-icon>
+            </button>
+          </div>
         </div>
       </div>
 
-      <div ng-hide="display.useCompanyAddress" class="u_margin-md-top u_margin-md-bottom">
+      <div ng-hide="display.useCompanyAddress" class="list-group-item address-fields madero-style">
         <div class="form-group">
           <label class="control-label" translate>displays-app.fields.address.description</label>
           <input type="text" class="form-control" ng-model="display.addressDescription">
@@ -255,13 +264,13 @@
         </div>
 
         <div class="row">
-          <div class="col-md-3">
+          <div class="col-md-6">
             <div class="form-group">
               <label class="control-label" translate>displays-app.fields.address.city</label>
               <input type="text" class="form-control" ng-model="display.city" name="city">
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-6">
             <div class="form-group">
               <label class="control-label" translate>displays-app.fields.address.country.name</label>
               <select class="form-control" ng-model="display.country" name="country" ng-options="c.code as c.name for c in countries" empty-select-parser>
@@ -269,7 +278,9 @@
               </select>
             </div>
           </div>
-          <div class="col-md-3">
+        </div>
+        <div class="row">
+          <div class="col-md-6">
             <div class="form-group">
               <label class="control-label" translate>displays-app.fields.address.province.name</label>
               <input type="text" class="form-control" ng-model="display.province" name="province" ng-if="display.country != 'US' && display.country != 'CA'" />
@@ -281,7 +292,7 @@
               </select>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-6">
             <div class="form-group">
               <label class="control-label" translate>displays-app.fields.address.postalCode</label>
               <input type="text" class="form-control" ng-model="display.postalCode" name="postalCode">
@@ -289,17 +300,15 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group mb-0">
           <label class="control-label" translate>displays-app.fields.address.timezone.name</label>
           <select class="form-control" ng-model="display.timeZoneOffset" integer-parser>
             <option value="" ng-show="false" translate>displays-app.fields.address.timezone.placeholder</option>
             <option value="{{c[1]}}" ng-repeat="c in timezones">{{c[0]}}</option>
           </select>
         </div>
-        <hr>
+
       </div><!--display address-->
-
-
 
       <div class="list-group-item flex-row form-group mb-0">
         <div class="row-entry">
