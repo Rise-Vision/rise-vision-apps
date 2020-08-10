@@ -53,7 +53,7 @@ angular.module('risevision.schedules.directives')
           };
 
           $scope.isSelected = function (schedule) {
-            return selected.id === schedule.id;
+            return selected && selected.id === schedule.id;
           };
 
           $scope.select = function () {
