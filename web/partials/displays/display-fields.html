@@ -406,11 +406,11 @@
   </div>
 
   <!-- TODO: Remove madero-style once it's global for the page -->
-  <div class="madero-style preview-container" ng-show="displayService.hasSchedule(display)">
+  <div class="madero-style preview-container" ng-show="selectedSchedule">
     <div class="flex-row border-bottom u_padding-20-vertical mb-4">
       <div class="row-entry form-inline">
 
-        <preview-selector ng-model="selectedSchedule" additional-class="pull-left mr-auto mb-0"></preview-selector>
+        <preview-selector ng-model="selectedSchedule" additional-class="pull-left mr-auto mb-0" search="previewSelectorSearch"></preview-selector>
 
         <span class="pull-right button-toolbar">
           <a id="viewSchedule" type="button" class="btn btn-default btn-toolbar" ui-sref="apps.schedules.details({ scheduleId: selectedSchedule.id, cid: selectedSchedule.companyId })">Edit Schedule</a>
@@ -432,17 +432,12 @@
     </div>
   </div>
 
-  <div class="madero-style preview-container" ng-hide="displayService.hasSchedule(display)">
+  <div class="madero-style preview-container" ng-hide="selectedSchedule">
     <label class="u_padding-20-vertical mb-0">Schedule:</label>
 
     <div class="border-container text-center">
       <div class="panel-body">
-        <div class="form-group my-4">
-          <label>Nothing is currently showing on your display.</label>
-        </div>
-        <div class="mb-4">
-          <a id="createScheduleButton" class="btn btn-default btn-toolbar" ui-sref="apps.schedules.list({ cid: display.companyId })">Add To Schedule</a>
-        </div>
+        <preview-selector ng-model="selectedSchedule" label="Nothing is currently showing on your display." search="previewSelectorSearch"></preview-selector>
       </div>
     </div>
   </div>

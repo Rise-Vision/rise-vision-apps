@@ -25,11 +25,13 @@ angular.module('risevision.displays.controllers')
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
 
-        $scope.selectedSchedule = {
-          id: $scope.display.scheduleId,
-          name: $scope.display.scheduleName,
-          companyId: $scope.display.companyId
-        };
+        if (display.hasSchedule($scope.display)) {
+          $scope.selectedSchedule = {
+            id: $scope.display.scheduleId,
+            name: $scope.display.scheduleName,
+            companyId: $scope.display.companyId
+          };
+        }
 
         if (!$scope.display.playerProAuthorized) {
           $scope.display.monitoringEnabled = false;
