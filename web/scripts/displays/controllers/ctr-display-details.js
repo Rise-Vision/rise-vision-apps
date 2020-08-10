@@ -46,10 +46,6 @@ angular.module('risevision.displays.controllers')
         }
       });
 
-      $scope.onScheduleChanged = function(newSchedule) {
-        $scope.selectedSchedule = newSchedule;
-      };
-
       $scope.toggleProAuthorized = function () {
         if (!$scope.isProAvailable()) {
           $scope.display.playerProAuthorized = false;

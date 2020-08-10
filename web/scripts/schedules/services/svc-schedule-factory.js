@@ -159,7 +159,7 @@ angular.module('risevision.schedules.services')
           });
       };
 
-      factory.updateSchedule = function (forceDistribution) {
+      factory.updateSchedule = function () {
         var deferred = $q.defer();
 
         _clearMessages();
@@ -168,7 +168,7 @@ angular.module('risevision.schedules.services')
         factory.loadingSchedule = true;
         factory.savingSchedule = true;
 
-        _updateSchedule(forceDistribution)
+        _updateSchedule()
           .then(function (resp) {
             factory.schedule = resp.item;
 
@@ -280,7 +280,7 @@ angular.module('risevision.schedules.services')
               });
           }
           return $q.reject(err);
-        });          
+        });
       };
 
       var _addSchedule = function () {

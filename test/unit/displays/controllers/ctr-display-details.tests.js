@@ -37,6 +37,10 @@ describe('controller: display details', function() {
         isElectronPlayer: function(){ return true;}
       };
     });
+    $provide.service('scheduleFactory', function() {
+      return {
+      };
+    });
     $provide.service('$modal',function(){
       return {
         open : function(obj){
