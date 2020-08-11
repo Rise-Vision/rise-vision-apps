@@ -50,8 +50,6 @@
     </div>
 </div>
 
-<hr>
-
 <div class="fields-preview-panels display-fields-body mt-4">
   <div class="fields-container">
 
@@ -407,10 +405,9 @@
 
   <!-- TODO: Remove madero-style once it's global for the page -->
   <div class="madero-style preview-container" ng-show="selectedSchedule">
-    <div class="flex-row border-bottom u_padding-20-vertical mb-4">
-      <div class="row-entry form-inline">
-
-        <preview-selector ng-model="selectedSchedule" additional-class="pull-left mr-auto mb-0" search="previewSelectorSearch"></preview-selector>
+    <div class="row border-bottom u_padding-20-vertical mx-0 mb-4">
+      <div class="col-sm-12 px-0 form-inline">
+        <preview-selector ng-model="selectedSchedule" additional-class="mr-auto mb-0" search="previewSelectorSearch"></preview-selector>
 
         <span class="pull-right button-toolbar">
           <a id="viewSchedule" type="button" class="btn btn-default btn-toolbar" ui-sref="apps.schedules.details({ scheduleId: selectedSchedule.id, cid: selectedSchedule.companyId })">Edit Schedule</a>
