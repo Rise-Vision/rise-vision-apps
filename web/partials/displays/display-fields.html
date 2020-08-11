@@ -157,7 +157,11 @@
         </div>
       </div>
 
-      <div class="list-group-item">
+      <div class="list-group-item" ng-show="!factory.showLicenseRequired(display) && display.monitoringEnabled">
+        <timeline-basic-textbox timeline-string="display.monitoringSchedule" ng-disabled="!display.monitoringEnabled" />
+      </div>
+
+      <div class="list-group-item" ng-show="!factory.showLicenseRequired(display) && display.monitoringEnabled">
         <div class="flex-row form-group mb-0">
           <div class="row-entry">
             <label class="control-label pull-left mb-0" translate>displays-app.fields.player.rpp.email-recipients</label>
@@ -174,10 +178,6 @@
             displays-app.fields.player.rpp.invalid-email
           </p>
         </div>
-      </div>
-
-      <div class="list-group-item" ng-show="!factory.showLicenseRequired(display) && display.monitoringEnabled">
-        <timeline-basic-textbox timeline-string="display.monitoringSchedule" ng-disabled="!display.monitoringEnabled" />
       </div>
 
       <div class="list-group-item">
