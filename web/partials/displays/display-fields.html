@@ -240,7 +240,7 @@
         <div class="mt-2" ng-show="!factory.showLicenseRequired(display) && playerProFactory.isDisplayControlCompatiblePlayer(display)">
           <span translate>displays-app.fields.player.displayControl.description</span>
         </div>
-        <div class="text-danger" ng-show="!factory.showLicenseRequired(display) && !playerProFactory.isDisplayControlCompatiblePlayer(display)">
+        <div class="text-danger mt-2" ng-show="!factory.showLicenseRequired(display) && !playerProFactory.isDisplayControlCompatiblePlayer(display)">
           <span translate>displays-app.fields.player.displayControl.unsupported</span>
         </div>
       </div>
@@ -386,11 +386,11 @@
           <span class="mr-auto">
             <div ng-show="display.playerName">{{display.playerName}}</div>
             <div ng-show="display.playerVersion">{{display.playerVersion}}</div>
-            <div ng-if="display.playerVersion && playerProFactory.isOutdatedPlayer(display)">
-              <a href="https://help.risevision.com/hc/en-us/articles/115004250723-Why-is-Rise-Player-version-not-current-" target="_blank" translate>displays-app.fields.player.version.notCurrent</a>
+            <div ng-show="display.playerVersion && playerProFactory.isOutdatedPlayer(display)" translate>
+              displays-app.fields.player.version.notCurrent
             </div>
-            <div ng-if="display.playerVersion && playerProFactory.isUnsupportedPlayer(display)">
-              <a href="" ng-click="factory.addDisplayModal(display)"><span class="text-danger" translate>displays-app.fields.player.version.unsupported</span> - {{'displays-app.fields.player.version.upgrade' | translate}}</a>
+            <div ng-show="display.playerVersion && playerProFactory.isUnsupportedPlayer(display)">
+              <span class="text-danger" translate>displays-app.fields.player.version.unsupported</span>
             </div>
           </span>
         </div>
