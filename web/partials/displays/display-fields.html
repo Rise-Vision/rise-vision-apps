@@ -42,15 +42,10 @@
 
 </div>
 <!-- DISPLAY ERRORS AND ALERTS -->
-<div class="row">
-    <div class="col-sm-12">
-        <div ng-show="playerActionsFactory.controlsError" class="alert alert-danger" role="alert">
-            <strong translate>displays-app.fields.controls.error</strong> {{playerActionsFactory.controlsError}}
-        </div>
-    </div>
-</div>
 
-<hr>
+<div ng-show="playerActionsFactory.controlsError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
+  <strong translate>displays-app.fields.controls.error</strong> {{playerActionsFactory.controlsError}}
+</div> 
 
 <div class="fields-preview-panels display-fields-body mt-4">
   <div class="fields-container">

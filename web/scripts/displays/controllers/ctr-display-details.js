@@ -100,12 +100,6 @@ angular.module('risevision.displays.controllers')
           .areAllProLicensesUsed();
       };
 
-      $scope.isProSupported = function () {
-        var unsupported = playerProFactory.isUnsupportedPlayer($scope.display);
-
-        return !unsupported;
-      };
-
       $scope.isProToggleEnabled = function () {
         return userState.hasRole('da') && (($scope.display && $scope.display.playerProAuthorized) ||
           ($scope.areAllProLicensesUsed() ? !currentPlanFactory.currentPlan.isPurchasedByParent : true));

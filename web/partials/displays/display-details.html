@@ -1,31 +1,27 @@
+<div class="madero-style">
+  <div class="app-header u_padding-20-vertical mb-5 border-bottom">
+    <!-- App Title -->
+    <div class="app-header-title">
+      <h1>Displays</h1>
+      <div>
+        <span ng-show="getProLicenseCount() > 0">
+          {{ getProUsedLicenseCount() }} Licensed Display{{getProUsedLicenseCount() > 1 ? 's' : ''}} | {{ getProAvailableLicenseCount() }} License{{getProAvailableLicenseCount() > 1 ? 's' : ''}} Available
+          <a ui-sref="apps.billing.home" class="ml-2" ng-show="areAllProLicensesUsed() && !currentPlanFactory.currentPlan.isPurchasedByParent" aria-label="Get More Display Licenses" translate>displays-app.details.get-more</a>
+        </span>
 
-<div class="madero-style-2">
-  <!-- TODO: temporary madero header to be removed -->
-  <div class="madero-style">
-    <div class="app-header u_padding-20-vertical mb-5 border-bottom">
-      <!-- App Title -->
-      <div class="app-header-title">
-        <h1>Displays</h1>
-        <div>
-          <span ng-show="getProLicenseCount() > 0">
-            {{ getProUsedLicenseCount() }} Licensed Display{{getProUsedLicenseCount() > 1 ? 's' : ''}} | {{ getProAvailableLicenseCount() }} License{{getProAvailableLicenseCount() > 1 ? 's' : ''}} Available
-            <a ui-sref="apps.billing.home" class="ml-2" ng-show="areAllProLicensesUsed() && !currentPlanFactory.currentPlan.isPurchasedByParent" aria-label="Get More Display Licenses" translate>displays-app.details.get-more</a>
-          </span>
-
-          <div class="row" ng-show="areAllProLicensesUsed()">
-            <div class="alert alert-danger mt-2 mb-4" ng-show="currentPlanFactory.currentPlan.isParentPlan || currentPlanFactory.currentPlan.isPurchasedByParent">
-              <p ng-show="currentPlanFactory.currentPlan.parentPlanContactEmail" translate translate-values="{ administratorEmail: currentPlanFactory.currentPlan.parentPlanContactEmail }">displays-app.details.contact-plan-parent-email</p>
-              <p ng-show="!currentPlanFactory.currentPlan.parentPlanContactEmail" translate>displays-app.details.contact-plan-parent-no-email</p>
-            </div>
+        <div class="row" ng-show="areAllProLicensesUsed()">
+          <div class="madero-style alert alert-danger my-2" ng-show="currentPlanFactory.currentPlan.isParentPlan || currentPlanFactory.currentPlan.isPurchasedByParent">
+            <p class="mt-0" ng-show="currentPlanFactory.currentPlan.parentPlanContactEmail" translate translate-values="{ administratorEmail: currentPlanFactory.currentPlan.parentPlanContactEmail }">displays-app.details.contact-plan-parent-email</p>
+            <p class="mt-0" ng-show="!currentPlanFactory.currentPlan.parentPlanContactEmail" translate>displays-app.details.contact-plan-parent-no-email</p>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="ml-auto" require-role="cp">
-        <button ng-click="addDisplay()" class="btn btn-default btn-toolbar">
-          Add Display
-        </button>
-      </div>
+    <div class="ml-auto" require-role="da">
+      <button ng-click="addDisplay()" class="btn btn-default btn-toolbar">
+        Add Display
+      </button>
     </div>
   </div>
 
@@ -34,23 +30,15 @@
   <!-- body -->
   <div>
     <form role="form" name="displayDetails" ng-submit="save()">
-      <div class="row" ng-show="!isProSupported()">
-        <div class="col-sm-12">
-          <div class="alert alert-warning" role="alert">
-            <span translate>displays-app.details.rpp-not-supported</span>
-          </div>
-        </div>
-      </div>
 
       <display-fields></display-fields>
 
-      <div id="errorBox" ng-show="factory.apiError" class="alert alert-danger" role="alert">
+      <div id="errorBox" ng-show="factory.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
         <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
         <suggest-general-delivery ng-if="factory.isAddressError" address-object="display"></suggest-general-delivery>
       </div>
 
-      <!-- TODO: temporary madero footer to be removed -->
-      <div class="madero-style button-row text-right">
+      <div class="button-row text-right">
         <p class="visible-xs"><last-modified change-date="display.changeDate" changed-by="display.changedBy"></last-modified></p>
         <!-- Indicates delete or destructive action -->
         <button id="deleteButton" type="button" class="btn btn-danger btn-toolbar pull-left" ng-click="confirmDelete()" require-role="da">
@@ -67,7 +55,7 @@
         </button>
       </div>
 
-    </form><!-- ticketDetails -->
+    </form><!-- displayDetails -->
   </div><!--container-->
 
 </div>
