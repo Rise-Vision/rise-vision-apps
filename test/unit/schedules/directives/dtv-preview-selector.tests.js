@@ -1,7 +1,7 @@
 'use strict';
 
-xdescribe('directive: preview-selector', function() {
-  var $scope, $rootScope, element, $loading, $timeout, innerElementStub,
+describe('directive: preview-selector', function() {
+  var $scope, $rootScope, element, $loading, $timeout, innerElementStub, listServiceInstance,
     sandbox = sinon.sandbox.create();
 
 
@@ -13,24 +13,40 @@ xdescribe('directive: preview-selector', function() {
         stop: sinon.stub()
       };
     });
+    $provide.service('schedule', function() {
+      return {
+      };
+    });
+    $provide.service('ScrollingListService', function () {
+      return function () {
+        return listServiceInstance;
+      };
+    });
   }));
 
-  beforeEach(inject(function($compile, $injector){
+  beforeEach(inject(function($compile, $injector, $templateCache){
+    $templateCache.put('partials/schedules/preview-selector.html', '<div id="tooltipButton"></div>');
     $rootScope = $injector.get('$rootScope');
     $timeout = $injector.get('$timeout');
     $loading = $injector.get('$loading');
+
+    listServiceInstance = {
+      doSearch: sandbox.stub()
+    };
 
     innerElementStub = {
       trigger: sandbox.stub()
     };
     sandbox.stub(angular,'element').returns(innerElementStub);
 
-    $scope = $rootScope.$new();
-    $scope.schedules = {};
+    $rootScope.mySchedule = {
+      id: 'myScheduleId'
+    };
 
-    element = $compile('<div preview-selector><div id="tooltipButton"></div></div>')($scope);
+    element = $compile('<preview-selector ng-model="mySchedule"></preview-selector>')($rootScope.$new());
 
     $rootScope.$digest();
+    $scope = element.isolateScope();
   }));
 
   afterEach(function () {
@@ -48,12 +64,22 @@ xdescribe('directive: preview-selector', function() {
     expect($scope.showTooltip).to.be.false;
   });
 
+
   it('should compile', function() {
-    expect(element[0].outerHTML).to.equal('<div preview-selector="" class="ng-scope"><div id="tooltipButton"></div></div>');
+    expect(element[0].outerHTML).to.equal('<preview-selector ng-model="mySchedule" class="ng-pristine ng-untouched ng-valid ng-scope ng-isolate-scope ng-not-empty"><div id="tooltipButton"></div></preview-selector>');
+  });
+  
+  it('should initialize', function() {
+    expect($scope.showTooltip).to.be.false;
+    expect($scope.search).to.deep.equal({
+      sortBy: 'changeDate',
+      reverse: true,
+    });
   });
 
   describe('spinner:', function() {
     it('should show spinner when loading selected Schedules', function() {
+      $scope.schedules = {};
       $scope.schedules.loadingItems = true;
       $scope.$digest();
       $loading.start.should.have.been.calledWith('preview-selector-spinner');
@@ -62,6 +88,7 @@ xdescribe('directive: preview-selector', function() {
     it('should hide spinner when finished loading selected Schedules', function() {
       $loading.stop.resetHistory();
 
+      $scope.schedules = {};
       $scope.schedules.loadingItems = true;
       $scope.$digest();
       $scope.schedules.loadingItems = false;
@@ -80,16 +107,14 @@ xdescribe('directive: preview-selector', function() {
       innerElementStub.trigger.should.have.been.calledWith('show');
     });
 
-    it('should initialize selectedSchedule', function() {
-      $scope.selectedSchedule = {
-        id: 'selectedSchedule'
-      };
+    it('should initialize schedules list', function() {
       $scope.toggleTooltip();
       $scope.$digest();
       $timeout.flush();
 
+      expect($scope.schedules).to.equal(listServiceInstance);
       expect($scope.isSelected({
-        id: 'selectedSchedule'
+        id: 'myScheduleId'
       })).to.be.true;
     });
 
@@ -115,13 +140,16 @@ xdescribe('directive: preview-selector', function() {
       sandbox.stub($scope, 'toggleTooltip');
     });
 
-    it('should select and toggle tooltip', function() {
+    it('should set ngModel and clsoe tooltip', function() {
+      var newSchedule = {
+        id: 'newScheduleId'
+      };
       $scope.toggleTooltip.resetHistory();
 
-      $scope.selectSchedule('selectedSchedule');
+      $scope.selectSchedule(newSchedule);
       $scope.select();
 
-      expect($scope.selectedSchedule).to.equal('selectedSchedule');
+      expect($scope.ngModel).to.equal(newSchedule);
       $scope.toggleTooltip.should.have.been.called;
     });
   });
