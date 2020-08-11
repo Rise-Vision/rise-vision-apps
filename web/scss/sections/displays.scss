@@ -1,5 +1,5 @@
 .display-fields-body {
-  .scrollable-list {
+  .scrollable-list, .empty-preview {
     @media (min-width: $screen-md) {
       height: 296px;
       min-height: 296px;
@@ -33,6 +33,29 @@
 
     streamline-icon {
       @extend .ml-3;
+    }
+  }
+
+  .empty-preview {
+    @media (max-width: $screen-md) {
+      height: 296px;
+      min-height: 296px;
+      max-height: 296px;
+    }
+
+    .form-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-flow: column;
+      height: 100%;
+      margin: 0px;
+
+      button {
+        max-width: 250px;
+        margin-left: 0px;
+        @extend .mt-3;
+      }
     }
   }
 }
