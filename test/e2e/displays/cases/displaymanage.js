@@ -56,12 +56,6 @@ var DisplayManageScenarios = function() {
         expect(displayManagePage.getDisplayRebootCheckbox().isPresent()).to.eventually.be.true;
       });
 
-      it('should show Time Selector', function () {
-        expect(displayManagePage.getDisplayHoursField().isPresent()).to.eventually.be.true;
-        expect(displayManagePage.getDisplayMinutesField().isPresent()).to.eventually.be.true;
-        expect(displayManagePage.getDisplayMeridianButton().isPresent()).to.eventually.be.true;
-      });
-
       it('should show the schedule link', function() {
         helper.wait(displayManagePage.getViewScheduleLink(), 'View Schedule Link');
         expect(displayManagePage.getViewScheduleLink().isDisplayed()).to.eventually.be.true;
