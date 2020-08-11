@@ -35,6 +35,13 @@ angular.module('risevision.displays.directives')
             return $sce.trustAsResourceUrl(url);
           };
 
+          $scope.openTimePicker = function($event, picker) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            $scope[picker] = !$scope[picker];
+          };
+
         } //link()
       };
     }

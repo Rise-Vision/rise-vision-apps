@@ -181,14 +181,13 @@
       "playerWarning": "A Player has not been configured for your Display. To configure your Display, select your Operating System below and install the software <b>on the device</b> that will operate your Display. When the Player starts for the first time you will be prompted to enter the Display ID (above) to link the Player with the Display that you have setup here. Further setup details can be <a href=\"https://help.risevision.com/hc/en-us/articles/115000860926\" target=\"_blank\">found here</a>.",
       "resolution": "Resolution",
       "rpp": {
-        "email-recipients": "Email Recipients",
+        "email-recipients": "Monitoring Email Recipients",
         "features": "Licensed Display Features",
         "invalid-email": "A valid email address is required.",
         "monitoring-timeline": "Monitoring Timeline",
-        "monitoring": "Display Monitoring",
+        "monitoring": "Monitoring",
         "offline-play-desc": "Play your Display content without a network connection",
         "offline-play": "Offline Play",
-        "send-email-offline": "Send email notifications when your Display goes offline",
         "unlock": "Unlock Licensed Display with any paid plan!"
       },
       "schedule": {
