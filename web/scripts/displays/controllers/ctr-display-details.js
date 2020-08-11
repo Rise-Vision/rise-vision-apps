@@ -196,7 +196,10 @@ angular.module('risevision.displays.controllers')
         } else {
           var shouldSkipAddressValidation = !addressService.isAddressFormDirty($scope.displayDetails) && !$scope.displayDetails.useCompanyAddress.$dirty;
           return displayFactory.updateDisplay(shouldSkipAddressValidation).then(function() {
-            scheduleFactory.addToDistribution($scope.display, $scope.selectedSchedule);
+            scheduleFactory.addToDistribution($scope.display, $scope.selectedSchedule).catch(function() {
+              displayFactory.errorMessage = scheduleFactory.errorMessage;
+              displayFactory.apiError = scheduleFactory.apiError;
+            });
           });
         }
       };      
