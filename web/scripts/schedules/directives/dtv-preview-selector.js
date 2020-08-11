@@ -9,18 +9,12 @@ angular.module('risevision.schedules.directives')
         scope: {
           ngModel: '=',
           label: '@?',
-          additionalClass: '@?',
-          search: '=?'
+          additionalClass: '@?'
         },
         link: function ($scope, element) {
           var selected;
           var tooltipElement = angular.element(element[0].querySelector('#preview-selector'));
           $scope.showTooltip = false;
-
-          $scope.search = $scope.search || {
-            sortBy: 'changeDate',
-            reverse: true,
-          };
 
           $scope.$watch('schedules.loadingItems', function (loading) {
             if (loading) {

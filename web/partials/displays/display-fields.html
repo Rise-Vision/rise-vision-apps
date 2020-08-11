@@ -410,7 +410,7 @@
     <div class="flex-row border-bottom u_padding-20-vertical mb-4">
       <div class="row-entry form-inline">
 
-        <preview-selector ng-model="selectedSchedule" additional-class="pull-left mr-auto mb-0" search="previewSelectorSearch"></preview-selector>
+        <preview-selector ng-model="selectedSchedule" additional-class="pull-left mr-auto mb-0"></preview-selector>
 
         <span class="pull-right button-toolbar">
           <a id="viewSchedule" type="button" class="btn btn-default btn-toolbar" ui-sref="apps.schedules.details({ scheduleId: selectedSchedule.id, cid: selectedSchedule.companyId })">Edit Schedule</a>
@@ -437,7 +437,7 @@
 
     <div class="border-container text-center">
       <div class="panel-body">
-        <preview-selector ng-model="selectedSchedule" label="Nothing is currently showing on your display." search="previewSelectorSearch"></preview-selector>
+        <preview-selector ng-model="selectedSchedule" label="Nothing is currently showing on your display."></preview-selector>
       </div>
     </div>
   </div>
