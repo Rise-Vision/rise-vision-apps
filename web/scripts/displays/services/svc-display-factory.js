@@ -3,9 +3,9 @@
 angular.module('risevision.displays.services')
   .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal', '$loading', '$log',
     'userState', 'display', 'displayTracker', 'playerLicenseFactory', 'processErrorCode', 'storeService',
-    'humanReadableError', 'plansFactory',
+    'plansFactory',
     function ($rootScope, $q, $state, $modal, $loading, $log, userState, display, displayTracker,
-      playerLicenseFactory, processErrorCode, storeService, humanReadableError, plansFactory) {
+      playerLicenseFactory, processErrorCode, storeService, plansFactory) {
       var factory = {};
       var _displayId;
 
@@ -159,7 +159,7 @@ angular.module('risevision.displays.services')
           })
           .catch(function (e) {
             factory.errorMessage = 'We couldn\'t update your address.';
-            factory.apiError = humanReadableError(e);
+            factory.apiError = processErrorCode(null, null, e);
             factory.isAddressError = true;
             $log.error(factory.errorMessage, e);
           })

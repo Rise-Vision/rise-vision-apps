@@ -2,26 +2,23 @@
   'use strict';
   angular.module('risevision.common.components.util', [])
 
-    .value('humanReadableError', function (resp) {
-      var message;
-
-      if (!resp) {
-        return 'Unknown Error';
-      } else if (typeof resp === 'string') {
-        return resp;
-      } else if (resp.message) {
-        message = resp.message;
-      } else if (resp.error) {
-        if (resp.error.message) {
-          message = resp.error.message;
-        } else {
-          message = resp.error;
-        }
-      } else {
-        message = resp;
-      }
-      return JSON.stringify(message);
-    })
+    .factory('humanReadableError', ['getError',
+      function (getError) {
+        return function (resp) {
+          if (!resp) {
+            return 'Unknown Error';
+          }
+          
+          var error = getError(resp);
+          var message = error.message || error;
+          
+          if (typeof message === 'string') {
+            return message;
+          } else {
+            return JSON.stringify(message);
+          }
+        };
+      }])
 
     .factory('dateIsInRange', [
 
