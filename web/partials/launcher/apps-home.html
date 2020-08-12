@@ -11,7 +11,7 @@
     <div class="row">
       <div class="col-xs-12">
         <div id="errorBox" ng-show="schedules.apiError" class="madero-style alert alert-danger" role="alert">
-          <strong>{{schedules.errorMessage}}</strong> {{schedules.apiError}}
+          <strong>{{schedules.apiError}}</strong>
         </div>
 
         <div ng-show="schedules.items.list.length === 0 && !schedules.loadingItems && !schedules.apiError" class="madero-style alert alert-warning" role="alert">
