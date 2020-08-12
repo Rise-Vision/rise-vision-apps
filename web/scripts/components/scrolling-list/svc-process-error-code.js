@@ -37,7 +37,7 @@ angular.module('risevision.common.components.scrolling-list')
         var tryAgain = messagePrefix + $filter('translate')('apps-common.errors.tryAgain');
         var tryAgainReload = messagePrefix + $filter('translate')('apps-common.errors.tryAgainReload');
         var permissionRequired = $filter('translate')('apps-common.errors.permissionRequired');
-        var checkConnection = messagePrefix + $filter('translate')('apps-common.errors.checkConnection')
+        var checkConnection = messagePrefix + $filter('translate')('apps-common.errors.checkConnection');
 
         e = e || itemName;
         var error = getError(e);
