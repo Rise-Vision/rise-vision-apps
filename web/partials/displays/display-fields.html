@@ -451,62 +451,37 @@
     </div>
   </div>
 
-  <div class="preview-container" ng-if="displayService.hasSchedule(display)">
-    <div class="flex-row border-bottom u_padding-20-vertical mb-4">
-      <div class="row-entry form-inline">
-
-        <div class="pull-left mr-auto mb-0 form-group" preview-selector>
-          <label for="preview-selector" class="mr-3">Schedule: {{display.scheduleName}}</label>
-          <!-- <button id="preview-selector" class="form-control btn-select btn-schedule-selector flex-row"
-            tooltip-template="'partials/schedules/preview-selector-tooltip.html'"
-            tooltip-trigger="show"
-            ng-click="toggleTooltip($event)" 
-            tooltip-animation="false"
-            tooltip-placement="bottom" 
-            tooltip-class="madero-style tooltip-schedule-selector ml-0"
-            tooltip-append-to-body="true"
-            tooltip-digest-on-resize
-          >
-          	<div class="row-entry">
-              <span class="text-muted mr-auto" ng-if="!display.scheduleId">Create or select a schedule</span>
-              <span class="u_text-ellipsis mr-auto" ng-if="display.scheduleId">{{display.scheduleName}}</span>
-              <span class="text-muted pl-2"><i class="fa fa-sort"></i></span>
-            </div>
-          </button> -->
-        </div>
+  <!-- TODO: Remove madero-style once it's global for the page -->
+  <div class="preview-container" ng-show="selectedSchedule">
+    <div class="row border-bottom u_padding-20-vertical mx-0 mb-4">
+      <div class="col-sm-12 px-0 form-inline">
+        <preview-selector ng-model="selectedSchedule" additional-class="mr-auto mb-0"></preview-selector>
 
         <span class="pull-right button-toolbar">
-          <a id="viewSchedule" type="button" class="btn btn-default btn-toolbar" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })">Edit Schedule</a>
+          <a id="viewSchedule" type="button" class="btn btn-default btn-toolbar" ui-sref="apps.schedules.details({ scheduleId: selectedSchedule.id, cid: selectedSchedule.companyId })">Edit Schedule</a>
           <ng-show ng-show="tooltipKey">
             <button id="shareButton" type="button" class="btn btn-default btn-toolbar" 
             tooltip-overlay tooltip-template="'partials/schedules/share-schedule-tooltip.html'" tooltip-placement="bottom" tooltip-class="madero-style tooltip-guide tooltip-share-guide">
               Share
             </button>
           </ng-show>
-          <share-schedule-button schedule="factory.schedule" button-class="btn-default btn-toolbar" ng-hide="tooltipKey"></share-schedule-button>
+          <share-schedule-button schedule="selectedSchedule" button-class="btn-default btn-toolbar" ng-hide="tooltipKey"></share-schedule-button>
         </span>
 
       </div>
     </div>
 
     <div class="preview-embed">
-      <iframe frameborder="0" ng-src="{{getEmbedUrl(display.scheduleId)}}">
+      <iframe frameborder="0" ng-src="{{getEmbedUrl(selectedSchedule.id)}}">
       </iframe>
     </div>
   </div>
 
-  <div class="preview-container" ng-hide="displayService.hasSchedule(display)">
+  <div class="preview-container" ng-hide="selectedSchedule">
     <label class="u_padding-20-vertical mb-0">Schedule:</label>
 
-    <div class="border-container text-center">
-      <div class="panel-body">
-        <div class="form-group my-4">
-          <label>Nothing is currently showing on your display.</label>
-        </div>
-        <div class="mb-4">
-          <a id="createScheduleButton" class="btn btn-default btn-toolbar" ui-sref="apps.schedules.list({ cid: display.companyId })">Add To Schedule</a>
-        </div>
-      </div>
+    <div class="border-container empty-preview text-center">
+      <preview-selector ng-model="selectedSchedule" label="Nothing is currently showing on your display."></preview-selector>
     </div>
   </div>
 </div>
