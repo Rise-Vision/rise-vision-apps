@@ -16,10 +16,6 @@ var DisplayManagePage = function() {
   var displayCountrySelect = element(by.model('display.country'));  
   var displayTimeZoneSelect = element(by.model('display.timeZoneOffset'));  
 
-  var displayHoursField = element(by.model('hours'));
-  var displayMinutesField = element(by.model('minutes'));
-  var displayMeridianButton = element(by.id('meridianButton'));
-
   var saveButton = element(by.id('saveButton'));
   var cancelButton = element(by.id('cancelButton'));
 
@@ -76,18 +72,6 @@ var DisplayManagePage = function() {
 
   this.getDisplayTimeZoneSelect = function() {
     return displayTimeZoneSelect;
-  };
-
-  this.getDisplayHoursField = function() {
-    return displayHoursField;
-  };
-
-  this.getDisplayMinutesField = function() {
-    return displayMinutesField;
-  };
-
-  this.getDisplayMeridianButton = function() {
-    return displayMeridianButton;
   };
 
   this.getSaveButton = function() {

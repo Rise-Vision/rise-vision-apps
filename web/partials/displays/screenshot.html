@@ -1,63 +1,52 @@
-<div>
-  <div class="u_lh-normal u_margin-sm-bottom">
-    <label class="control-label">{{ 'displays-app.fields.screenshot.title' | translate }}</label>
-    <button id="btnUpdateScreenshot" type="button" class="btn btn-default pull-right" ng-click="screenshotFactory.requestScreenshot(displayId)" ng-disabled="reloadScreenshotDisabled(display)">
-      <i class="fa fa-refresh fa-white half-left"></i> {{ 'displays-app.fields.screenshot.updateScreenshot' | translate }}
-    </button>
+<div class="list-group-item">
+
+  <div class="flex-row form-group">
+    <div class="row-entry">
+
+      <label class="control-label pull-left mb-0">Screenshot</label>
+      <span class="mr-auto" ng-show="screenshotState(display) === 'no-license'">
+        <!-- unlicensed -->
+        <a class="u_icon-hover u_clickable" ng-click="screenshotFactory.requestScreenshot(displayId)">
+          License Required
+        </a>
+      </span>
+      <span class="mr-auto" ng-show="reloadScreenshotEnabled(display)">
+        <!-- online -->
+        <a id="btnUpdateScreenshot" class="u_icon-hover u_clickable" ng-click="screenshotFactory.requestScreenshot(displayId)">
+          Update
+        </a>
+      </span>
+      <!-- offline, unsupported, out of date, not-installed? -->
+      <!-- show nothing -->
+    </div>
   </div>
-  <div class="panel panel-default u_margin-sm-bottom text-center">
-    <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'no-license'">
-      <p class="text-muted">License Required</p>
+
+  <div class="display-screenshot" ng-show="!screenshotState(display)">
+    <div class="display-screenshot-info">
+      <p class="text-gray">Screenshot not available.</p>
     </div>
-    <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'no-schedule'">
-      <p class="text-muted">{{ 'displays-app.fields.screenshot.notAvailable' | translate }}</p>
-      <p class="text-muted">{{ 'displays-app.fields.screenshot.notScheduled' | translate }}</p>
-      <a class="btn btn-primary btn-xs" ng-if="!displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
-        {{ 'displays-app.fields.player.schedule.addToSchedule' | translate }} <i class="fa fa-external-link icon-right" aria-hidden="true"></i>
-      </a>
+  </div>
+  <div class="display-screenshot" ng-show="screenshotState(display) === 'no-license'">
+    <div class="display-screenshot-info">
+      <p class="text-gray">License Required</p>
     </div>
-    <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'upgrade-player'">
-      <p>{{ 'displays-app.fields.screenshot.notAvailable' | translate }}</p>
-      <p>{{ 'displays-app.fields.screenshot.upgradeRequired' | translate }}</p>
-      <button type="button" class="btn btn-xs btn-primary" ng-click="factory.addDisplayModal(display)">{{ 'displays-app.fields.screenshot.upgradePlayer' | translate }}</button>
+  </div>
+  <div class="display-screenshot" ng-show="screenshotState(display) === 'screenshot-error'">
+    <div class="display-screenshot-info">
+      <p class="text-gray">There was a problem requesting the screenshot.</p>
     </div>
-    <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'os-not-supported'">
-      <p>{{ 'displays-app.fields.screenshot.notAvailable' | translate }}</p>
-      <p>{{ 'displays-app.fields.screenshot.osNotSupported' | translate }}</p>
-      <button type="button" class="btn btn-link" onclick="window.open('https://help.risevision.com/hc/en-us/articles/115000860926-Displays','_blank')">
-        {{ 'displays-app.fields.screenshot.learnSupportedOS1' | translate }}
-        <br>
-        {{ 'displays-app.fields.screenshot.learnSupportedOS2' | translate }}
-      </button>
-    </div>
-    <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'offline'">
-      <p>{{ 'displays-app.fields.screenshot.notAvailable' | translate }}</p>
-      <p>{{ 'displays-app.fields.screenshot.playerOffline' | translate }}</p>
-    </div>
-    <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'not-installed'">
-      <p class="text-muted">{{ 'displays-app.fields.screenshot.notAvailable' | translate }}</p>
-      <p class="text-muted">{{ 'displays-app.fields.screenshot.playerNotInstalled' | translate }}</p>
-      <button type="button" class="btn btn-xs btn-primary" ng-click="factory.addDisplayModal(display)">{{ 'displays-app.fields.screenshot.playerInstall' | translate }}</button>
-    </div>
-    <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'no-screenshot-available'">
-      <p>{{ 'displays-app.fields.screenshot.missing1' | translate }}</p>
-      <p>{{ 'displays-app.fields.screenshot.missing2' | translate }}</p>
-    </div>
-    <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'screenshot-error'">
-      <p>{{ 'displays-app.fields.screenshot.error1' | translate }}</p>
-      <p>{{ 'displays-app.fields.screenshot.error2' | translate }}</p>
-    </div>
-    <div class="panel-body display-screenshot display-screenshot-available" ng-show="screenshotState(display).indexOf('screenshot-loaded') >= 0">
-      <img class="img-fluid" src="{{screenshotFactory.screenshot.imageUrl}}">
-    </div>
-    <div class="panel-body display-screenshot" ng-show="screenshotState(display) === 'loading'">
+  </div>
+  <div class="display-screenshot" ng-show="screenshotState(display) === 'loading'">
+    <div class="display-screenshot-info">
       <div class="app-loading-dots">
         <i class="fa fa-3x fa-spinner fa-spin fa-fw"></i>
       </div>
     </div>
   </div>
-  <span class="text-muted pull-right" ng-show="screenshotState(display).indexOf('screenshot-loaded') >= 0">
+  <img class="img-fluid" src="{{screenshotFactory.screenshot.imageUrl}}" ng-show="screenshotState(display) === 'screenshot-loaded'">
+
+  <div class="text-gray align-right mt-2" ng-show="screenshotState(display) === 'screenshot-loaded'">
     <small>Updated {{screenshotFactory.screenshot.lastModified | date:'d-MMM-yyyy h:mm a'}}</small>
-  </span>
-  
+  </div>
+
 </div>

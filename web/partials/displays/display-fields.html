@@ -42,15 +42,12 @@
 
 </div>
 <!-- DISPLAY ERRORS AND ALERTS -->
-<div class="row">
-    <div class="col-sm-12">
-        <div ng-show="playerActionsFactory.controlsError" class="alert alert-danger" role="alert">
-            <strong translate>displays-app.fields.controls.error</strong> {{playerActionsFactory.controlsError}}
-        </div>
-    </div>
-</div>
 
-<div class="fields-preview-panels display-fields-body mt-4">
+<div ng-show="playerActionsFactory.controlsError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
+  <strong translate>displays-app.fields.controls.error</strong> {{playerActionsFactory.controlsError}}
+</div> 
+
+<div class="fields-preview-panels display-fields-body mt-4 madero-style">
   <div class="fields-container">
 
     <!-- DISPLAY DETAILS -->
@@ -60,7 +57,7 @@
 
     <div class="scrollable-list border-container">
 
-      <div class="list-group-item flex-row form-group mb-0 madero-style">
+      <div class="list-group-item flex-row form-group mb-0">
         <div class="row-entry">
           <label class="control-label pull-left mb-0">License Display?</label>
 
@@ -114,9 +111,7 @@
       </div>
 
       <!-- SCREENSHOT  -->
-      <div ng-if="!playerProFactory.isCROSLegacy(display)">
-        <screenshot></screenshot>
-      </div>
+      <screenshot></screenshot>
 
       <div class="list-group-item flex-row form-group mb-0">
         <div class="row-entry">
@@ -126,9 +121,8 @@
           </span>
           <span class="mr-auto" ng-if="!factory.showLicenseRequired(display)">
             <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
-            <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'"> <i class="fa fa-times"></i> Offline</span>
-            <a ng-show="!displayService.statusLoading && (display | status) === 'offline'" href="https://help.risevision.com/hc/en-us/articles/115002694906-Why-is-my-Display-status-offline-" target="_blank">Why is my Display offline?</a>
-            <span class="text-success" ng-show="!displayService.statusLoading && (display | status) === 'online'"> <i class="fa fa-check"></i> Online</span>
+            <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'">Offline</span>
+            <span class="text-success" ng-show="!displayService.statusLoading && (display | status) === 'online'">Online</span>
             <a id="notActivatedLink" class="u_icon-hover u_clickable" ng-show="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="factory.addDisplayModal(display)">
               {{ 'displays-app.list.status.notActivated' | translate }}
             </a>
@@ -136,86 +130,125 @@
         </div>
       </div>
 
-      <div class="form-group reboot-time">
-        <div class="checkbox">
-          <label class="control-label">
-            <input type="checkbox" ng-model="display.restartEnabled" ng-disabled="factory.showLicenseRequired(display)">
-            <strong translate>displays-app.fields.reboot</strong>
-          </label>
+      <div class="list-group-item flex-row form-group mb-0">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.player.rpp.monitoring</label>
+          <span class="mr-auto" ng-if="factory.showLicenseRequired(display)">
+            License Required
+          </span>
+
+          <div class="btn-group btn-group-justified" ng-if="!factory.showLicenseRequired(display)">
+            <button id="monitoringOn" type="button" class="btn" ng-click="display.monitoringEnabled = !display.monitoringEnabled" ng-disabled="factory.showLicenseRequired(display)"
+              ng-class="{'btn-toggle-blue-off' : !display.monitoringEnabled, 'btn-toggle-blue-on' : display.monitoringEnabled}">
+              Yes
+              <streamline-icon name="checkmark" ng-show="display.monitoringEnabled"></streamline-icon>
+            </button>
+            <button id="monitoringOff" type="button" class="btn" ng-click="display.monitoringEnabled = !display.monitoringEnabled" ng-disabled="factory.showLicenseRequired(display)"
+              ng-class="{'btn-toggle-blue-off' : display.monitoringEnabled, 'btn-toggle-blue-on' : !display.monitoringEnabled}">
+              No
+              <streamline-icon name="checkmark" ng-show="!display.monitoringEnabled"></streamline-icon>
+            </button>
+          </div>
         </div>
-        <time-picker ng-model="display.restartTime" ng-disabled="!display.restartEnabled || factory.showLicenseRequired(display)"></time-picker>
       </div>
 
-      <table class="table">
-        <tbody class="table-body">
+      <div class="list-group-item" ng-show="!factory.showLicenseRequired(display) && display.monitoringEnabled">
+        <timeline-basic-textbox timeline-string="display.monitoringSchedule" ng-disabled="!display.monitoringEnabled" />
+      </div>
 
-          <tr class="table-body__row">
-            <td class="table-body__cell text-nowrap u_no-border">
-               <div class="checkbox u_remove-margin" id="enableInputs">
-                <label class="">
-                  <input type="checkbox" ng-model="display.monitoringEnabled" ng-disabled="!display.playerProAuthorized">
-                  <span class="no-select" translate>displays-app.fields.player.rpp.monitoring</span>
-                </label>
-              </div></td>
-              <td class="table-body__cell u_no-border">
-              <span translate>displays-app.fields.player.rpp.send-email-offline</span>
-            </td>
-          </tr>
+      <div class="list-group-item" ng-show="!factory.showLicenseRequired(display) && display.monitoringEnabled">
+        <div class="flex-row form-group mb-0">
+          <div class="row-entry">
+            <label class="control-label pull-left mb-0" translate>displays-app.fields.player.rpp.email-recipients</label>
+            <span class="mr-auto" ng-if="factory.showLicenseRequired(display)">
+              License Required
+            </span>
+          </div>
+        </div>
 
-          <tr class="table-body__row">
-            <td class="table-body__cell text-nowrap u_no-border u_align-top">
-              <span translate>displays-app.fields.player.rpp.email-recipients</span>
-            </td>
-            <td class="table-body__cell u_no-border" ng-class="{ 'has-error': !displayDetails.monitoringEmails.$valid }">
-              <emails-field name="monitoringEmails" ng-model="display.monitoringEmails"></emails-field>
-              <p class="help-block validation-error-message-email" ng-show="!displayDetails.monitoringEmails.$valid" translate>
-                displays-app.fields.player.rpp.invalid-email
-              </p>
-            </td>
-          </tr>
+        <div class="mt-2" ng-if="!factory.showLicenseRequired(display)">Separate multiple recipients by a comma.</div>
+        <div class="mt-3" ng-class="{ 'has-error': !displayDetails.monitoringEmails.$valid }" ng-if="!factory.showLicenseRequired(display)">
+          <emails-field name="monitoringEmails" ng-model="display.monitoringEmails"></emails-field>
+          <p class="help-block validation-error-message-email" ng-show="!displayDetails.monitoringEmails.$valid" translate>
+            displays-app.fields.player.rpp.invalid-email
+          </p>
+        </div>
+      </div>
 
-          <tr class="table-body__row">
-            <td class="table-body__cell text-nowrap u_align-top u_no-border">
-              <span translate>displays-app.fields.player.rpp.monitoring-timeline</span>
-            </td>
-            <td class="table-body__cell u_no-border">
-              <timeline-basic-textbox timeline-string="display.monitoringSchedule" ng-disabled="!display.monitoringEnabled" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="list-group-item">
+        <div class="flex-row form-group mb-0">
+          <div class="row-entry">
+            <label class="control-label pull-left mb-0">Reboot Media Player Daily At</label>
+            <span class="mr-auto" ng-if="factory.showLicenseRequired(display)">
+              License Required
+            </span>
 
-      <table class="table">
-        <tbody class="table-body">
-          <tr class="table-body__row" ng-class="{ 'table--disabled': !display.playerProAuthorized }" ng-if="!playerProFactory.isCROSLegacy(display) && !playerProFactory.isChromeOSPlayer(display)">
-            <td class="table-body__cell">
-              <span translate>displays-app.fields.player.displayControl.label</span>
-            </td>
-            <!-- ACTIVE -->
-            <td class="table-body__cell" ng-show="playerProFactory.isDisplayControlCompatiblePlayer(display)">
-              <span translate> displays-app.fields.player.displayControl.description </span>
-              <button type="button" class="btn btn-primary btn-xs" ng-click="playerProFactory.openConfigureDisplayControl(display)" ng-disabled="!display.playerProAuthorized" require-role="da" translate>
-                displays-app.fields.player.displayControl.configure
-              </button>
-            </td>
-            <!-- INACTIVE -->
-            <td class="table-body__cell" ng-hide="playerProFactory.isDisplayControlCompatiblePlayer(display)">
-              <span>
-                <div class="text-danger">
-                  <span translate>
-                    displays-app.fields.player.displayControl.unsupported
-                  </span>
-                </div>
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            <div class="btn-group-checkbox" ng-if="!factory.showLicenseRequired(display)">
+              <input type="checkbox" id="restartEnabled" name="restartEnabled" ng-model="display.restartEnabled" ng-disabled="factory.showLicenseRequired(display)">
+
+              <div class="btn-group btn-group-justified">
+                <button id="restartOn" type="button" class="btn"
+                  ng-class="{'btn-toggle-blue-off' : !display.restartEnabled, 'btn-toggle-blue-on' : display.restartEnabled}">
+                  Yes
+                  <streamline-icon name="checkmark" ng-show="display.restartEnabled"></streamline-icon>
+                </button>
+                <button id="restartOff" type="button" class="btn"
+                  ng-class="{'btn-toggle-blue-off' : display.restartEnabled, 'btn-toggle-blue-on' : !display.restartEnabled}">
+                  No
+                  <streamline-icon name="checkmark" ng-show="!display.restartEnabled"></streamline-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div ng-show="!factory.showLicenseRequired(display) && display.restartEnabled" class="input-group rise-date-picker radio-nested-input-group mt-3">
+          <input type="text"
+                 class="form-control"
+                 readonly="true"
+                 id="restartTime"
+                 name="restartTime"
+                 ng-model="display.restartTime"
+                 ng-click="openTimePicker($event, 'restartTimePickerOpen')"
+                 time-picker-popup
+                 is-open="restartTimePickerOpen"
+          />
+          <span class="input-group-btn">
+            <button type="button" id="restartTimePickerButton" class="btn btn-primary" ng-click="openTimePicker($event, 'restartTimePickerOpen')">
+              <streamline-icon name="clock"></streamline-icon>
+            </button>
+          </span>
+        </div>
+      </div>
+
+      <div class="list-group-item" ng-if="!playerProFactory.isCROSLegacy(display) && !playerProFactory.isChromeOSPlayer(display)">
+        <div class="flex-row form-group mb-0">
+          <div class="row-entry">
+            <label class="control-label pull-left mb-0" translate>displays-app.fields.player.displayControl.label</label>
+            <span class="mr-auto" ng-if="factory.showLicenseRequired(display)">
+              License Required
+            </span>
+
+            <span class="mr-auto" ng-if="!factory.showLicenseRequired(display) && playerProFactory.isDisplayControlCompatiblePlayer(display)">
+              <a class="u_clickable" ng-click="playerProFactory.openConfigureDisplayControl(display)" require-role="da" translate>
+                Edit
+              </a>
+            </span>
+          </div>
+        </div>
+
+        <div class="mt-2" ng-show="!factory.showLicenseRequired(display) && playerProFactory.isDisplayControlCompatiblePlayer(display)">
+          <span translate>displays-app.fields.player.displayControl.description</span>
+        </div>
+        <div class="text-danger mt-2" ng-show="!factory.showLicenseRequired(display) && !playerProFactory.isDisplayControlCompatiblePlayer(display)">
+          <span translate>displays-app.fields.player.displayControl.unsupported</span>
+        </div>
+      </div>
 
       <div class="list-group-item flex-row form-group mb-0" ng-show="(display.playerVersion || display.onlineStatus === 'online') && (playerProFactory.isCROSLegacy(display) || playerProFactory.isChromeOSPlayer(display))">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.orientation.name</label>
-          <select class="form-control mr-auto" ng-model="display.orientation" integer-parser>
+          <select class="form-control mr-auto w-auto" ng-model="display.orientation" integer-parser>
             <option value="0" translate>displays-app.fields.player.orientation.0</option>
             <option value="90" translate>displays-app.fields.player.orientation.90</option>
             <option value="180" translate>displays-app.fields.player.orientation.180</option>
@@ -224,16 +257,29 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <div class="checkbox">
-          <label class="control-label">
-            <input type="checkbox" ng-model="display.useCompanyAddress" name="useCompanyAddress" ng-disabled="factory.showLicenseRequired(display)">
-            <strong translate>displays-app.fields.address.useCompany</strong>
-          </label>
+      <div class="list-group-item flex-row form-group mb-0">
+        <div class="row-entry">
+          <label class="control-label pull-left mb-0" translate>displays-app.fields.address.useCompany</label>
+
+          <div class="btn-group-checkbox">
+            <input type="checkbox" id="useCompanyAddress" name="useCompanyAddress" ng-model="display.useCompanyAddress" ng-disabled="factory.showLicenseRequired(display)">
+            <div class="btn-group btn-group-justified">
+              <button id="useAddressOn" type="button" class="btn" ng-disabled="factory.showLicenseRequired(display)"
+                ng-class="{'btn-toggle-blue-off' : !display.useCompanyAddress, 'btn-toggle-blue-on' : display.useCompanyAddress}">
+                Yes
+                <streamline-icon name="checkmark" ng-show="display.useCompanyAddress"></streamline-icon>
+              </button>
+              <button id="useAddressOff" type="button" class="btn" ng-disabled="factory.showLicenseRequired(display)"
+                ng-class="{'btn-toggle-blue-off' : display.useCompanyAddress, 'btn-toggle-blue-on' : !display.useCompanyAddress}">
+                No
+                <streamline-icon name="checkmark" ng-show="!display.useCompanyAddress"></streamline-icon>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div ng-hide="display.useCompanyAddress" class="u_margin-md-top u_margin-md-bottom">
+      <div ng-hide="display.useCompanyAddress" class="list-group-item address-fields">
         <div class="form-group">
           <label class="control-label" translate>displays-app.fields.address.description</label>
           <input type="text" class="form-control" ng-model="display.addressDescription">
@@ -255,13 +301,13 @@
         </div>
 
         <div class="row">
-          <div class="col-md-3">
+          <div class="col-md-6">
             <div class="form-group">
               <label class="control-label" translate>displays-app.fields.address.city</label>
               <input type="text" class="form-control" ng-model="display.city" name="city">
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-6">
             <div class="form-group">
               <label class="control-label" translate>displays-app.fields.address.country.name</label>
               <select class="form-control" ng-model="display.country" name="country" ng-options="c.code as c.name for c in countries" empty-select-parser>
@@ -269,7 +315,9 @@
               </select>
             </div>
           </div>
-          <div class="col-md-3">
+        </div>
+        <div class="row">
+          <div class="col-md-6">
             <div class="form-group">
               <label class="control-label" translate>displays-app.fields.address.province.name</label>
               <input type="text" class="form-control" ng-model="display.province" name="province" ng-if="display.country != 'US' && display.country != 'CA'" />
@@ -281,7 +329,7 @@
               </select>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-6">
             <div class="form-group">
               <label class="control-label" translate>displays-app.fields.address.postalCode</label>
               <input type="text" class="form-control" ng-model="display.postalCode" name="postalCode">
@@ -289,17 +337,15 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group mb-0">
           <label class="control-label" translate>displays-app.fields.address.timezone.name</label>
           <select class="form-control" ng-model="display.timeZoneOffset" integer-parser>
             <option value="" ng-show="false" translate>displays-app.fields.address.timezone.placeholder</option>
             <option value="{{c[1]}}" ng-repeat="c in timezones">{{c[0]}}</option>
           </select>
         </div>
-        <hr>
+
       </div><!--display address-->
-
-
 
       <div class="list-group-item flex-row form-group mb-0">
         <div class="row-entry">
@@ -340,11 +386,11 @@
           <span class="mr-auto">
             <div ng-show="display.playerName">{{display.playerName}}</div>
             <div ng-show="display.playerVersion">{{display.playerVersion}}</div>
-            <div ng-if="display.playerVersion && playerProFactory.isOutdatedPlayer(display)">
-              <a href="https://help.risevision.com/hc/en-us/articles/115004250723-Why-is-Rise-Player-version-not-current-" target="_blank" translate>displays-app.fields.player.version.notCurrent</a>
+            <div ng-show="display.playerVersion && playerProFactory.isOutdatedPlayer(display)" translate>
+              displays-app.fields.player.version.notCurrent
             </div>
-            <div ng-if="display.playerVersion && playerProFactory.isUnsupportedPlayer(display)">
-              <a href="" ng-click="factory.addDisplayModal(display)"><span class="text-danger" translate>displays-app.fields.player.version.unsupported</span> - {{'displays-app.fields.player.version.upgrade' | translate}}</a>
+            <div ng-show="display.playerVersion && playerProFactory.isUnsupportedPlayer(display)">
+              <span class="text-danger" translate>displays-app.fields.player.version.unsupported</span>
             </div>
           </span>
         </div>
@@ -404,7 +450,7 @@
   </div>
 
   <!-- TODO: Remove madero-style once it's global for the page -->
-  <div class="madero-style preview-container" ng-show="selectedSchedule">
+  <div class="preview-container" ng-show="selectedSchedule">
     <div class="row border-bottom u_padding-20-vertical mx-0 mb-4">
       <div class="col-sm-12 px-0 form-inline">
         <preview-selector ng-model="selectedSchedule" additional-class="mr-auto mb-0"></preview-selector>
@@ -429,7 +475,7 @@
     </div>
   </div>
 
-  <div class="madero-style preview-container" ng-hide="selectedSchedule">
+  <div class="preview-container" ng-hide="selectedSchedule">
     <label class="u_padding-20-vertical mb-0">Schedule:</label>
 
     <div class="border-container empty-preview text-center">

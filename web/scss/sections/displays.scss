@@ -58,6 +58,38 @@
       }
     }
   }
+
+  .btn-group-checkbox {
+    position: relative;
+
+    input[type=checkbox] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 167px;
+      height: 40px;
+      margin: 0;
+      padding: 0;
+      vertical-align: top;
+      z-index: 100;
+      opacity: 0;
+    }
+  }
+
+  .display-screenshot {
+    height: 235px;
+    background: $light-gray;
+
+    .display-screenshot-info {
+      @extend .text-center;
+      @extend %vertical-align;
+    }  
+  }
+
+  .address-fields .form-group {
+    @extend .mb-3;
+  }
+
 }
 
 

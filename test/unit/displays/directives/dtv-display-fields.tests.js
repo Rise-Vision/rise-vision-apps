@@ -31,6 +31,7 @@ describe('directive: display fields', function() {
     expect(elm.html()).to.equal('<p>Fields</p>');
     expect($scope.countries).to.equal(COUNTRIES);
     expect($scope.isChromeOs).to.be.a('function');
+    expect($scope.openTimePicker).to.be.a('function');
   });
 
   it("isChromeOs: ", function() {
@@ -38,4 +39,21 @@ describe('directive: display fields', function() {
     expect($scope.isChromeOs({os: "64-bit Microsoft Windows Embedded Standard"})).to.be.false;
   });
   
+  it('openTimePicker:', function() {
+    var e = {
+      preventDefault: sinon.stub(),
+      stopPropagation: sinon.stub()
+    };
+
+    $scope.openTimePicker(e, 'timePickerKey');
+
+    e.preventDefault.should.have.been.called;
+    e.stopPropagation.should.have.been.called;
+
+    expect($scope.timePickerKey).to.be.true;
+
+    $scope.openTimePicker(e, 'timePickerKey');
+
+    expect($scope.timePickerKey).to.be.false;
+  });
 });
