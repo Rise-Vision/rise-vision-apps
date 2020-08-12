@@ -25,6 +25,24 @@ describe("service: process error code:", function() {
     expect(processErrorCode).to.be.a('function');
   });
 
+  it('should show default message if error is undefined', function() {
+    expect(processErrorCode(itemName, action, null)).to.equal("An Error has Occurred");
+  });
+
+  it('should skip prefix if itemName or action are missing', function() {
+    expect(processErrorCode(null, action, {
+      status: 400
+    })).to.equal("An Error has Occurred");
+
+    expect(processErrorCode(itemName, null, {
+      status: 400
+    })).to.equal("An Error has Occurred");
+
+    expect(processErrorCode(null, null, {
+      status: 400
+    })).to.equal("An Error has Occurred");
+  });
+
   it("should attempt to internationalize Storage errors", function() {
     expect(processErrorCode(itemName, action, {
       result: { error: { message: "i18n-fail" } }
