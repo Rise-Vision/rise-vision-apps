@@ -118,7 +118,6 @@
     },
     "controls": {
       "download": "Download Rise Player",
-      "error": "Error:",
       "howto": "How do I show Presentations on my device?",
       "howtoInstall": "How do I install Rise Player?",
       "install": "Install Rise Player",
@@ -152,7 +151,7 @@
         "label": "Display Control",
         "configure": "Configure",
         "description": "Turn Screen ON/OFF based on Schedule",
-        "unsupported": "Your Rise Player version doesn't support Display Control.",
+        "unsupported": "Display control isn’t supported on this Rise Player version. Please upgrade.",
         "configureModal": {
           "title": "Configure Display Control",
           "help": "Need help configuring Display Control?",
@@ -201,9 +200,7 @@
       "productName": "Product Name",
       "status": "Status",
       "version": {
-        "howGetHelp": "How do I get help?",
-        "notCurrent": "Update Available",
-        "unsupported": "Unsupported"
+        "notCurrent": "Update Available"
       },
       "viewerVersion": "Viewer Version"
     },

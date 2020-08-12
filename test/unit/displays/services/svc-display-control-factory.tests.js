@@ -16,10 +16,15 @@ describe('service: displayControlFactory:', function() {
           uploadControlFile: function() {}
       };
     });
+    $provide.service('$modal', function() {
+      return {
+        open: sinon.stub().returns({result: Q.resolve()})
+      }
+    });
     $provide.value('STORAGE_FILE_URL', 'https://storage.googleapis.com/')
   
   }));
-  var displayControlFactory, $rootScope, $http, displayFactory, displayService;
+  var displayControlFactory, $rootScope, $http, $modal, displayFactory, displayService;
   beforeEach(function(){
     sandbox = sinon.sandbox.create();
 
@@ -29,6 +34,7 @@ describe('service: displayControlFactory:', function() {
       $http = $injector.get('$http');
       displayFactory = $injector.get('displayFactory');
       displayService = $injector.get('display');
+      $modal = $injector.get('$modal');
     });
   });
 
@@ -42,6 +48,8 @@ describe('service: displayControlFactory:', function() {
     expect(displayControlFactory.getConfiguration).to.be.a('function');
     expect(displayControlFactory.updateConfiguration).to.be.a('function');
     expect(displayControlFactory.getDefaultConfiguration).to.be.a('function');
+
+    expect(displayControlFactory.openDisplayControlModal).to.be.a('function');
   });
 
   describe('getConfiguration: ', function() {
@@ -90,6 +98,17 @@ describe('service: displayControlFactory:', function() {
     it('should return default configuration', function() {
       expect(displayControlFactory.getDefaultConfiguration()).to.have.string('interface');
     });
+  });
+
+  it('openDisplayControlModal:', function() {
+    displayControlFactory.openDisplayControlModal();
+
+    $modal.open.should.have.been.calledWithMatch({
+      templateUrl: 'partials/displays/display-control-modal.html',
+      size: 'lg',
+      controller: 'DisplayControlModalCtrl'
+    });
+
   });
 
 });

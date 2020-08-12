@@ -5,11 +5,11 @@ angular.module('risevision.displays.controllers')
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'enableCompanyProduct', 'userState', 'plansFactory',
     'currentPlanFactory', 'playerLicenseFactory', 'playerActionsFactory', 'PLAYER_PRO_PRODUCT_CODE', 
-    '$state', 'addressService',
+    '$state', 'addressService', 'processErrorCode',
     function ($scope, $rootScope, $q, displayFactory, display, screenshotFactory, playerProFactory,
       $loading, $log, $modal, $templateCache, displayId, enableCompanyProduct, userState,
       plansFactory, currentPlanFactory, playerLicenseFactory, playerActionsFactory, 
-      PLAYER_PRO_PRODUCT_CODE, $state, addressService) {
+      PLAYER_PRO_PRODUCT_CODE, $state, addressService, processErrorCode) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
@@ -66,7 +66,7 @@ angular.module('risevision.displays.controllers')
               playerLicenseFactory.toggleDisplayLicenseLocal(playerProAuthorized);
             })
             .catch(function (err) {
-              $scope.errorUpdatingRPP = true;
+              $scope.errorUpdatingRPP = processErrorCode(null, null, err);
 
               $scope.display.playerProAuthorized = !playerProAuthorized;
             })

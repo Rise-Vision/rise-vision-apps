@@ -113,6 +113,11 @@ describe('controller: display details', function() {
     $provide.factory('enableCompanyProduct', function() {
       return sandbox.stub();
     });
+    $provide.factory('processErrorCode', function() {
+      return function(item, type, error) {
+        return 'processed ' + error;
+      };
+    });
     $provide.value('displayId', displayId);
   }));
   var $scope, $state, updateCalled, deleteCalled, confirmDelete;
@@ -345,12 +350,14 @@ describe('controller: display details', function() {
           playerProAuthorized: true
         };
         company.playerProAvailableLicenseCount = 1;
+        $scope.errorUpdatingRPP = 'Licensing error';
+
         $scope.toggleProAuthorized();
 
         setTimeout(function () {
           expect(enableCompanyProduct).to.have.been.called;
 
-          expect($scope.errorUpdatingRPP).to.be.false;
+          expect($scope.errorUpdatingRPP).to.not.be.ok;
 
           expect($scope.display.playerProAssigned).to.be.false;
           expect($scope.display.playerProAuthorized).to.be.false;
@@ -364,9 +371,7 @@ describe('controller: display details', function() {
 
     it('should fail to activate Pro status', function (done) {
       sandbox.stub($scope, 'isProAvailable').returns(true);
-      enableCompanyProduct.returns(Q.reject());
-
-      $scope.errorUpdatingRPP = true;
+      enableCompanyProduct.returns(Q.reject('Licensing error'));
 
       setTimeout(function () {
         // The mocked value of playerProAuthorized AFTER ng-change
@@ -378,12 +383,10 @@ describe('controller: display details', function() {
         company.playerProAvailableLicenseCount = 1;
         $scope.toggleProAuthorized();
 
-        expect($scope.errorUpdatingRPP).to.be.false;
-
         setTimeout(function () {
           expect(enableCompanyProduct).to.have.been.called;
 
-          expect($scope.errorUpdatingRPP).to.be.true;
+          expect($scope.errorUpdatingRPP).to.equal('processed Licensing error');
           expect($scope.display.playerProAssigned).to.be.true;
           expect($scope.display.playerProAuthorized).to.be.true;
 

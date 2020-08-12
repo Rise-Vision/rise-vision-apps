@@ -13,7 +13,6 @@ angular.module('risevision.displays.services')
         factory.loadingDisplay = false;
         factory.savingDisplay = false;
 
-        factory.errorMessage = '';
         factory.apiError = '';
         factory.isAddressError = false;
       };
@@ -158,10 +157,9 @@ angular.module('risevision.displays.services')
               });
           })
           .catch(function (e) {
-            factory.errorMessage = 'We couldn\'t update your address.';
             factory.apiError = processErrorCode(null, null, e);
             factory.isAddressError = true;
-            $log.error(factory.errorMessage, e);
+            $log.error(factory.apiError, e);
           })
           .finally(function () {
             factory.loadingDisplay = false;
@@ -198,10 +196,9 @@ angular.module('risevision.displays.services')
       };
 
       var _showErrorMessage = function (action, e) {
-        factory.errorMessage = 'Failed to ' + action + ' Display.';
         factory.apiError = processErrorCode('Display', action, e);
 
-        $log.error(factory.errorMessage, e);
+        $log.error(factory.apiError, e);
       };
 
       factory.showLicenseRequired = function (display) {

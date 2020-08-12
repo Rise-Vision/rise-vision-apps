@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('risevision.displays.directives')
-  .directive('displayFields', ['$sce', 'COUNTRIES', 'REGIONS_CA', 'REGIONS_US',
-    'TIMEZONES', 'SHARED_SCHEDULE_URL',
-    function ($sce, COUNTRIES, REGIONS_CA, REGIONS_US, TIMEZONES, SHARED_SCHEDULE_URL) {
+  .directive('displayFields', ['$sce', 'playerProFactory', 'displayControlFactory',
+    'COUNTRIES', 'REGIONS_CA', 'REGIONS_US', 'TIMEZONES', 'SHARED_SCHEDULE_URL',
+    function ($sce, playerProFactory, displayControlFactory,
+      COUNTRIES, REGIONS_CA, REGIONS_US, TIMEZONES, SHARED_SCHEDULE_URL) {
       return {
         restrict: 'E',
         templateUrl: 'partials/displays/display-fields.html',
@@ -40,6 +41,14 @@ angular.module('risevision.displays.directives')
             $event.stopPropagation();
 
             $scope[picker] = !$scope[picker];
+          };
+
+          $scope.configureDisplayControl = function(display) {
+            if (playerProFactory.isDisplayControlCompatiblePlayer(display)) {
+              displayControlFactory.openDisplayControlModal();
+            } else {
+              $scope.displayControlError = true;
+            }
           };
 
         } //link()
