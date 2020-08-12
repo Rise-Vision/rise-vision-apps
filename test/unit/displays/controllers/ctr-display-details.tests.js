@@ -350,6 +350,8 @@ describe('controller: display details', function() {
         setTimeout(function () {
           expect(enableCompanyProduct).to.have.been.called;
 
+          expect($scope.errorUpdatingRPP).to.be.false;
+
           expect($scope.display.playerProAssigned).to.be.false;
           expect($scope.display.playerProAuthorized).to.be.false;
 
@@ -364,6 +366,8 @@ describe('controller: display details', function() {
       sandbox.stub($scope, 'isProAvailable').returns(true);
       enableCompanyProduct.returns(Q.reject());
 
+      $scope.errorUpdatingRPP = true;
+
       setTimeout(function () {
         // The mocked value of playerProAuthorized AFTER ng-change
         $scope.display = {
@@ -374,9 +378,12 @@ describe('controller: display details', function() {
         company.playerProAvailableLicenseCount = 1;
         $scope.toggleProAuthorized();
 
+        expect($scope.errorUpdatingRPP).to.be.false;
+
         setTimeout(function () {
           expect(enableCompanyProduct).to.have.been.called;
 
+          expect($scope.errorUpdatingRPP).to.be.true;
           expect($scope.display.playerProAssigned).to.be.true;
           expect($scope.display.playerProAuthorized).to.be.true;
 

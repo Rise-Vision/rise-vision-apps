@@ -39,6 +39,8 @@ angular.module('risevision.displays.controllers')
       });
 
       $scope.toggleProAuthorized = function () {
+        $scope.errorUpdatingRPP = false;
+
         if (!$scope.isProAvailable()) {
           $scope.display.playerProAuthorized = false;
           if ($scope.getProLicenseCount() > 0 && $scope.areAllProLicensesUsed()) {
@@ -64,6 +66,8 @@ angular.module('risevision.displays.controllers')
               playerLicenseFactory.toggleDisplayLicenseLocal(playerProAuthorized);
             })
             .catch(function (err) {
+              $scope.errorUpdatingRPP = true;
+
               $scope.display.playerProAuthorized = !playerProAuthorized;
             })
             .finally(function () {
