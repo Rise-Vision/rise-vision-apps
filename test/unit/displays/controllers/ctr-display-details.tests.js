@@ -119,7 +119,7 @@ describe('controller: display details', function() {
       return sandbox.stub();
     });
     $provide.factory('processErrorCode', function() {
-      return function(item, type, error) {
+      return function(error) {
         return 'processed ' + error;
       };
     });

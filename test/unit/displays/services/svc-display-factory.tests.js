@@ -255,7 +255,7 @@ describe('service: displayFactory:', function() {
         done(result);
       })
       .then(null, function() {
-        processErrorCode.should.have.been.calledWith('Display', 'get', sinon.match.object);
+        processErrorCode.should.have.been.calledWith(sinon.match.object);
         expect(displayFactory.apiError).to.be.ok;
 
         setTimeout(function() {

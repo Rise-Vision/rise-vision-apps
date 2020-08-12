@@ -1,11 +1,11 @@
 <div class="madero-style fields-container">
   <div class="row">
 
-    <div class="col-sm-12 col-md-8 pb-2 pb-lg-0">
+    <div class="col-sm-12 col-md-7 pb-2 pb-lg-0">
       <stretchy-input class="mb-0 mr-auto" ng-model="display.name"></stretchy-input> 
     </div>
 
-    <div class="col-sm-12 col-md-4 pl-lg-0">
+    <div class="col-sm-12 col-md-5 pl-lg-0">
       <div class="pull-right">
         <label class="mr-2">Media Player Actions:</label>
         <div class="btn-group" dropdown>
@@ -44,7 +44,7 @@
 <!-- DISPLAY ERRORS AND ALERTS -->
 
 <div ng-show="playerActionsFactory.controlsError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
-  {{playerActionsFactory.controlsError}}
+  <strong>{{playerActionsFactory.controlsError}}</strong>
 </div> 
 
 <div class="fields-preview-panels display-fields-body mt-4 madero-style">

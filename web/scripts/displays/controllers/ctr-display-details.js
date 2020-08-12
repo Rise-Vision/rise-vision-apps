@@ -76,7 +76,7 @@ angular.module('risevision.displays.controllers')
               playerLicenseFactory.toggleDisplayLicenseLocal(playerProAuthorized);
             })
             .catch(function (err) {
-              $scope.errorUpdatingRPP = processErrorCode(null, null, err);
+              $scope.errorUpdatingRPP = processErrorCode(err);
 
               $scope.display.playerProAuthorized = !playerProAuthorized;
             })

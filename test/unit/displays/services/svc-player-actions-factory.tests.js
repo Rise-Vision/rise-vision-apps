@@ -103,7 +103,7 @@ describe('service: playerActionsFactory:', function() {
       setTimeout(function(){
         expect(functionCalled).to.equal('restart');
         expect(trackerCalled).to.not.be.ok;
-        processErrorCode.should.have.been.calledWith('Display', 'restart', sinon.match.any);
+        processErrorCode.should.have.been.calledWith(sinon.match.any);
         expect(playerActionsFactory.controlsError).to.be.ok;
         done();
       },10);
@@ -148,7 +148,7 @@ describe('service: playerActionsFactory:', function() {
       setTimeout(function(){
         expect(functionCalled).to.equal('reboot');
         expect(trackerCalled).to.not.be.ok;
-        processErrorCode.should.have.been.calledWith('Display', 'reboot', sinon.match.any);
+        processErrorCode.should.have.been.calledWith(sinon.match.any);
         expect(playerActionsFactory.controlsError).to.be.ok;
         done();
       }, 10);

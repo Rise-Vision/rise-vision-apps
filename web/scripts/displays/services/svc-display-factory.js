@@ -157,7 +157,7 @@ angular.module('risevision.displays.services')
               });
           })
           .catch(function (e) {
-            factory.apiError = processErrorCode(null, null, e);
+            factory.apiError = processErrorCode(e);
             factory.isAddressError = true;
             $log.error(factory.apiError, e);
           })
@@ -196,7 +196,7 @@ angular.module('risevision.displays.services')
       };
 
       var _showErrorMessage = function (action, e) {
-        factory.apiError = processErrorCode('Display', action, e);
+        factory.apiError = processErrorCode(e);
 
         $log.error(factory.apiError, e);
       };
