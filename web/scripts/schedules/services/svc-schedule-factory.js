@@ -206,7 +206,7 @@ angular.module('risevision.schedules.services')
               factory.schedule = resp.item;
             }
 
-            scheduleTracker('Schedule Force Updated', scheduleToUpdate.id, scheduleToUpdate.name);
+            scheduleTracker('Schedule Updated', scheduleToUpdate.id, scheduleToUpdate.name);
 
             deferred.resolve();
           })

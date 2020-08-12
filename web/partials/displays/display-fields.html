@@ -407,7 +407,7 @@
   <div class="madero-style preview-container" ng-show="selectedSchedule">
     <div class="row border-bottom u_padding-20-vertical mx-0 mb-4">
       <div class="col-sm-12 px-0 form-inline">
-        <preview-selector ng-model="selectedSchedule" additional-class="mr-auto mb-0" search="previewSelectorSearch"></preview-selector>
+        <preview-selector ng-model="selectedSchedule" additional-class="mr-auto mb-0"></preview-selector>
 
         <span class="pull-right button-toolbar">
           <a id="viewSchedule" type="button" class="btn btn-default btn-toolbar" ui-sref="apps.schedules.details({ scheduleId: selectedSchedule.id, cid: selectedSchedule.companyId })">Edit Schedule</a>
@@ -433,7 +433,7 @@
     <label class="u_padding-20-vertical mb-0">Schedule:</label>
 
     <div class="border-container empty-preview text-center">
-      <preview-selector ng-model="selectedSchedule" label="Nothing is currently showing on your display." search="previewSelectorSearch"></preview-selector>
+      <preview-selector ng-model="selectedSchedule" label="Nothing is currently showing on your display."></preview-selector>
     </div>
   </div>
 </div>
