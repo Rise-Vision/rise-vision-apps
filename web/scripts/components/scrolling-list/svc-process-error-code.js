@@ -23,10 +23,14 @@ angular.module('risevision.common.components.scrolling-list')
         var actionName = actionsMap[action];
         var error = getError(e);
         var errorString = error.message ? error.message : 'An Error has Occurred';
-        var messagePrefix = $filter('translate')('apps-common.errors.actionFailed', {
-          itemName: itemName,
-          actionName: actionName
-        });
+        var messagePrefix = '';
+        
+        if (itemName && actionName) {
+          messagePrefix = $filter('translate')('apps-common.errors.actionFailed', {
+            itemName: itemName,
+            actionName: actionName
+          }) + ' ';
+        }
 
         // Attempt to internationalize Storage error
         var key = 'storage-client.error.' + (action ? action + '.' : '') + error.message;
@@ -39,11 +43,11 @@ angular.module('risevision.common.components.scrolling-list')
           return errorString;
         } else if (e.status === 400) {
           if (errorString.indexOf('is not editable') >= 0) {
-            return messagePrefix + ' ' + errorString;
+            return messagePrefix + errorString;
           } else if (errorString.indexOf('is required') >= 0) {
-            return messagePrefix + ' ' + errorString;
+            return messagePrefix + errorString;
           } else {
-            return messagePrefix + ' ' + errorString;
+            return messagePrefix + errorString;
           }
         } else if (e.status === 401) {
           return $filter('translate')('apps-common.errors.notAuthenticated', {
@@ -52,22 +56,22 @@ angular.module('risevision.common.components.scrolling-list')
           });
         } else if (e.status === 403) {
           if (errorString.indexOf('User is not allowed access') >= 0) {
-            return messagePrefix + ' ' + $filter('translate')('apps-common.errors.parentCompanyAction');
+            return messagePrefix + $filter('translate')('apps-common.errors.parentCompanyAction');
           } else if (errorString.indexOf('User does not have the necessary rights') >= 0) {
-            return messagePrefix + ' ' + $filter('translate')('apps-common.errors.permissionRequired');
+            return messagePrefix + $filter('translate')('apps-common.errors.permissionRequired');
           } else if (errorString.indexOf('Premium Template requires Purchase') >= 0) {
-            return messagePrefix + ' ' + $filter('translate')('apps-common.errors.premiumTemplate');
+            return messagePrefix + $filter('translate')('apps-common.errors.premiumTemplate');
           } else if (errorString.indexOf('Storage requires active subscription') >= 0) {
-            return messagePrefix + ' ' + $filter('translate')('apps-common.errors.storageSubscription');
+            return messagePrefix + $filter('translate')('apps-common.errors.storageSubscription');
           } else {
-            return messagePrefix + ' ' + errorString;
+            return messagePrefix + errorString;
           }
         } else if (e.status === 404) {
           return $filter('translate')('apps-common.errors.notFound', {
             itemName: itemName
           });
         } else if (e.status === 409) {
-          return messagePrefix + ' ' + errorString;
+          return messagePrefix + errorString;
         } else if (e.status === 500 || e.status === 503) {
           return $filter('translate')('apps-common.errors.serverError', {
             itemName: itemName,

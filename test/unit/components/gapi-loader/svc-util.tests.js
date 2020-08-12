@@ -4,26 +4,30 @@
 describe("Services: util", function() {
 
   beforeEach(module("risevision.common.components.util"));
-  
-  it("humanReadableError: ",function(done){
-    var message1 = {"message": "error 1"};
-    var message2 = {"error": {"message": "error 2"}};
-    var message3 = {"error": "error 3"};
-    var message4 = {"random": "error 4"};
-    
-    inject(function(humanReadableError) {
-      expect(humanReadableError).to.be.ok;
-      expect(humanReadableError).to.be.a("function");
+  beforeEach(module("risevision.common.components.scrolling-list"));
 
-      expect(humanReadableError()).to.equal("Unknown Error");
-      expect(humanReadableError("string")).to.equal("string");
-      expect(humanReadableError(message1)).to.equal(JSON.stringify(message1.message));
-      expect(humanReadableError(message2)).to.equal(JSON.stringify(message2.error.message));
-      expect(humanReadableError(message3)).to.equal(JSON.stringify(message3.error));
-      expect(humanReadableError(message4)).to.equal(JSON.stringify(message4));
+  describe("humanReadableError: ",function(){
+    it("original",function(done){
+      var message1 = {"message": "error 1"};
+      var message2 = {"error": {"message": "error 2"}};
+      var message3 = {"error": "error 3"};
+      var message4 = {"random": "error 4"};
       
-      done();
+      inject(function(humanReadableError) {
+        expect(humanReadableError).to.be.ok;
+        expect(humanReadableError).to.be.a("function");
+
+        expect(humanReadableError()).to.equal("Unknown Error");
+        expect(humanReadableError("string")).to.equal("string");
+        expect(humanReadableError(message1)).to.equal(message1.message);
+        expect(humanReadableError(message2)).to.equal(message2.error.message);
+        expect(humanReadableError(message3)).to.equal(message3.error);
+        expect(humanReadableError(message4)).to.equal(JSON.stringify(message4));
+        
+        done();
+      });
     });
+
   });
   
   it("dateIsInRange: ",function(done){
