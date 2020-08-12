@@ -133,7 +133,7 @@ var ScheduleAddScenarios = function() {
       it('should close Share Schedule modal', function() {
         shareSchedulePopoverPage.getCloseButton().click();
 
-        expect(shareSchedulePopoverPage.getShareSchedulePopover().isDisplayed()).to.eventually.be.false; 
+        expect(shareSchedulePopoverPage.getShareSchedulePopover().isPresent()).to.eventually.be.false; 
       });
     });
 
