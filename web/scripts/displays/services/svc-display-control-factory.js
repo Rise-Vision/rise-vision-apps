@@ -3,9 +3,9 @@
 angular.module('risevision.displays.services')
   .value('SCREEN_CONTROL_BUCKET', 'risevision-display-notifications')
   .value('SCREEN_CONTROL_FILENAME', 'screen-control.txt')
-  .factory('displayControlFactory', ['$q', '$http', 'displayFactory', 'display',
+  .factory('displayControlFactory', ['$q', '$http', '$modal', 'displayFactory', 'display',
     'STORAGE_FILE_URL', 'SCREEN_CONTROL_BUCKET', 'SCREEN_CONTROL_FILENAME',
-    function ($q, $http, displayFactory, displayService,
+    function ($q, $http, $modal, displayFactory, displayService,
       STORAGE_FILE_URL, SCREEN_CONTROL_BUCKET, SCREEN_CONTROL_FILENAME) {
       var service = {};
 
@@ -54,6 +54,14 @@ angular.module('risevision.displays.services')
           'serial-flow-control=\n' +
           'serial-screen-on-cmd=\n' +
           'serial-screen-off-cmd=';
+      };
+
+      service.openDisplayControlModal = function () {
+        return $modal.open({
+          templateUrl: 'partials/displays/display-control-modal.html',
+          size: 'lg',
+          controller: 'DisplayControlModalCtrl'
+        });
       };
 
       return service;

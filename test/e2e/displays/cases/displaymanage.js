@@ -105,7 +105,7 @@ var DisplayManageScenarios = function() {
       it('should fail to save the display and show validation error', function () {
         helper.clickWhenClickable(displayManagePage.getSaveButton(), 'Save Button');
         helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
-        expect(displayManagePage.getDisplayErrorBox().getText()).to.eventually.contain('We couldn\'t update your address.');
+        expect(displayManagePage.getDisplayErrorBox().getText()).to.eventually.contain('Are you having problems validating your address?');
       });
 
       it('should select another country',function(){

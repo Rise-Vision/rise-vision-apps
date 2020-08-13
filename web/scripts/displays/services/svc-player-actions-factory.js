@@ -19,7 +19,7 @@ angular.module('risevision.displays.services')
             displayTracker('Display Restarted', displayId, displayName);
           })
           .then(null, function (e) {
-            service.controlsError = processErrorCode('Display', 'restart', e);
+            service.controlsError = processErrorCode(e);
           });
       };
 
@@ -35,7 +35,7 @@ angular.module('risevision.displays.services')
             displayTracker('Display Rebooted', displayId, displayName);
           })
           .then(null, function (e) {
-            service.controlsError = processErrorCode('Display', 'reboot', e);
+            service.controlsError = processErrorCode(e);
           });
       };
 
