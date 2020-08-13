@@ -20,7 +20,8 @@ angular.module('risevision.apps.directives')
 
             $window.Stretchy.resize(stretchyInputElement[0]);
 
-            $scope.defaultInputWidth = $window.getComputedStyle(stretchyInputElement[0]).getPropertyValue('width');
+            $scope.defaultInputWidth = $window.getComputedStyle(stretchyInputElement[0]).getPropertyValue(
+            'width');
           };
 
           $timeout(_initStretchy);
@@ -41,7 +42,7 @@ angular.module('risevision.apps.directives')
             }
           });
 
-          $scope.$watch('ngModel', function() {
+          $scope.$watch('ngModel', function () {
             // resize input if model was externally modified/updated
             if (!$scope.isEditingInput) {
               $scope.defaultInputValue = $scope.ngModel;

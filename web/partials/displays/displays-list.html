@@ -13,16 +13,16 @@
   </div>
 </div>
 
-<span class="my-4" ng-show="playerLicenseFactory.getProLicenseCount() > 0">
+<div class="mb-3" ng-show="playerLicenseFactory.getProLicenseCount() > 0">
   {{ playerLicenseFactory.getProUsedLicenseCount() }} Licensed Display{{playerLicenseFactory.getProUsedLicenseCount() > 1 ? 's' : ''}} | {{ playerLicenseFactory.getProAvailableLicenseCount() }} License{{playerLicenseFactory.getProAvailableLicenseCount() > 1 ? 's' : ''}} Available
-</span>
+</div>
 
-<div ng-show="displays.apiError" class="alert alert-danger my-2" role="alert">
+<div ng-show="displays.apiError" class="alert alert-danger mb-3" role="alert">
   <strong>{{displays.errorMessage}}</strong>
   {{displays.apiError}}
 </div>
 
-<div id="errorBox" ng-show="displayStatusFactory.apiError" class="alert alert-danger my-2" role="alert">
+<div id="errorBox" ng-show="displayStatusFactory.apiError" class="alert alert-danger mb-3" role="alert">
   <strong>{{displayStatusFactory.errorMessage}}</strong>
   {{displayStatusFactory.apiError}}
 </div> 

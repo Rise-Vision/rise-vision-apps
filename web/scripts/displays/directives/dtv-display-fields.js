@@ -1,14 +1,15 @@
 'use strict';
 
 angular.module('risevision.displays.directives')
-  .directive('displayFields', ['$sce', 'playerProFactory', 'displayControlFactory',
+  .directive('displayFields', ['$sce', 'userState', 'playerProFactory', 'displayControlFactory',
     'COUNTRIES', 'REGIONS_CA', 'REGIONS_US', 'TIMEZONES', 'SHARED_SCHEDULE_URL',
-    function ($sce, playerProFactory, displayControlFactory,
+    function ($sce, userState, playerProFactory, displayControlFactory,
       COUNTRIES, REGIONS_CA, REGIONS_US, TIMEZONES, SHARED_SCHEDULE_URL) {
       return {
         restrict: 'E',
         templateUrl: 'partials/displays/display-fields.html',
         link: function ($scope) {
+          $scope.userState = userState;
           $scope.countries = COUNTRIES;
           $scope.regionsCA = REGIONS_CA;
           $scope.regionsUS = REGIONS_US;
@@ -36,14 +37,14 @@ angular.module('risevision.displays.directives')
             return $sce.trustAsResourceUrl(url);
           };
 
-          $scope.openTimePicker = function($event, picker) {
+          $scope.openTimePicker = function ($event, picker) {
             $event.preventDefault();
             $event.stopPropagation();
 
             $scope[picker] = !$scope[picker];
           };
 
-          $scope.configureDisplayControl = function(display) {
+          $scope.configureDisplayControl = function (display) {
             if (playerProFactory.isDisplayControlCompatiblePlayer(display)) {
               displayControlFactory.openDisplayControlModal();
             } else {

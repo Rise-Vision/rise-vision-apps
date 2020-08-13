@@ -6,11 +6,12 @@
       <label class="control-label pull-left mb-0">Screenshot</label>
       <span class="mr-auto" ng-show="screenshotState(display) === 'no-license'">
         <!-- unlicensed -->
-        <a class="u_icon-hover u_clickable" ng-click="screenshotFactory.requestScreenshot(displayId)">
-          License Required
-        </a>
+        License Required
       </span>
-      <span class="mr-auto" ng-show="reloadScreenshotEnabled(display)">
+      <a id="notActivatedLink" class="u_icon-hover u_clickable" ng-show="screenshotState(display) !== 'no-license' && !displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="factory.addDisplayModal(display)">
+        {{ 'displays-app.list.status.notActivated' | translate }}
+      </a>
+      <span class="mr-auto" ng-show="reloadScreenshotEnabled(display) && !(!displayService.statusLoading && (display | status) === 'notinstalled')">
         <!-- online -->
         <a id="btnUpdateScreenshot" class="u_icon-hover u_clickable" ng-click="screenshotFactory.requestScreenshot(displayId)">
           Update

@@ -13,6 +13,11 @@ describe('directive: display fields', function() {
         openDisplayControlModal: sinon.stub()
       };
     });
+    $provide.service('userState', function() {
+      return {        
+        _restoreState: sinon.stub()
+      };
+    });
 
     $provide.value("COUNTRIES", COUNTRIES);
     $provide.value("REGIONS_CA", [""]);
@@ -43,6 +48,7 @@ describe('directive: display fields', function() {
 
   it('should compile html', function() {
     expect(elm.html()).to.equal('<p>Fields</p>');
+    expect($scope.userState).to.be.ok;
     expect($scope.countries).to.equal(COUNTRIES);
     expect($scope.isChromeOs).to.be.a('function');
     expect($scope.openTimePicker).to.be.a('function');

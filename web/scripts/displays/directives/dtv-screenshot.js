@@ -25,12 +25,13 @@ angular.module('risevision.displays.directives')
             return '';
           };
 
-          $scope.reloadScreenshotEnabled = function(display) {
+          $scope.reloadScreenshotEnabled = function (display) {
             var statusFilter = $filter('status');
 
             if (displayFactory.showLicenseRequired(display)) {
               return false;
-            } else if (displayService.statusLoading || screenshotFactory.screenshotLoading || !screenshotFactory.screenshot) {
+            } else if (displayService.statusLoading || screenshotFactory.screenshotLoading || !screenshotFactory
+              .screenshot) {
               return false;
             } else if (display.os && display.os.indexOf('cros') === 0) {
               return false;
@@ -39,7 +40,7 @@ angular.module('risevision.displays.directives')
             } else if (statusFilter(display) === 'online') {
               return true;
             }
-            
+
             return false;
           };
 

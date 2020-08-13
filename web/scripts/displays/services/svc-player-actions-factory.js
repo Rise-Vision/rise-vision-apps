@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.displays.services')
-  .factory('playerActionsFactory', ['display', 'confirmModal',  'processErrorCode', 
-  'displayTracker', 'displayFactory',
+  .factory('playerActionsFactory', ['display', 'confirmModal', 'processErrorCode',
+    'displayTracker', 'displayFactory',
     function (display, confirmModal, processErrorCode, displayTracker,
       displayFactory) {
       var service = {};

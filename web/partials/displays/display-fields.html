@@ -47,6 +47,19 @@
   <strong>{{playerActionsFactory.controlsError}}</strong>
 </div> 
 
+<div class="border-container text-center u_margin-md-top" ng-show="!displayService.statusLoading && (display | status) === 'notinstalled'">
+  <div class="panel-body">
+    <div class="form-group my-4">
+      <label translate>Display not connected.</label>
+      <p>Before content can show on your display, you need to connect a media player to Rise Vision.</p>
+    </div>
+
+    <button type="button" ng-click="factory.addDisplayModal(display)" class="btn btn-default btn-toolbar-wide mb-4">
+      Show Instructions
+    </button>
+  </div>
+</div>
+
 <div class="fields-preview-panels display-fields-body mt-4 madero-style">
   <div class="fields-container">
 
@@ -118,7 +131,7 @@
       <!-- SCREENSHOT  -->
       <screenshot></screenshot>
 
-      <div class="list-group-item flex-row form-group mb-0">
+      <div class="list-group-item flex-row form-group mb-0" ng-hide="!displayService.statusLoading && (display | status) === 'notinstalled'">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.status</label>
           <span class="mr-auto" ng-if="factory.showLicenseRequired(display)">
@@ -128,9 +141,6 @@
             <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
             <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'">Offline</span>
             <span class="text-success" ng-show="!displayService.statusLoading && (display | status) === 'online'">Online</span>
-            <a id="notActivatedLink" class="u_icon-hover u_clickable" ng-show="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-click="factory.addDisplayModal(display)">
-              {{ 'displays-app.list.status.notActivated' | translate }}
-            </a>
           </span>
         </div>
       </div>
@@ -454,7 +464,8 @@
   <div class="preview-container" ng-show="selectedSchedule">
     <div class="row border-bottom u_padding-20-vertical mx-0 mb-4">
       <div class="col-sm-12 px-0 form-inline">
-        <preview-selector ng-model="selectedSchedule" additional-class="mr-auto mb-0"></preview-selector>
+        <label class="mr-auto" ng-show="!userState.hasRole('cp')">Schedule: {{display.scheduleName}}</label>
+        <preview-selector ng-model="selectedSchedule" additional-class="mr-auto mb-0" ng-show="userState.hasRole('cp')"></preview-selector>
 
         <span class="pull-right button-toolbar">
           <a id="viewSchedule" type="button" class="btn btn-default btn-toolbar hidden-md" ui-sref="apps.schedules.details({ scheduleId: selectedSchedule.id, cid: selectedSchedule.companyId })">Edit Schedule</a>
