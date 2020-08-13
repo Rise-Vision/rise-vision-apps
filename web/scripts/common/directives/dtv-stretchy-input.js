@@ -20,11 +20,8 @@ angular.module('risevision.apps.directives')
 
             $window.Stretchy.resize(stretchyInputElement[0]);
 
-            if (!$scope.defaultInputWidth) {
-              // first time editing, store the width of the field when default name is displayed
-              $scope.defaultInputWidth = $window.getComputedStyle(stretchyInputElement[0]).getPropertyValue(
-                'width');
-            }
+            $scope.defaultInputWidth = $window.getComputedStyle(stretchyInputElement[0]).getPropertyValue(
+            'width');
           };
 
           $timeout(_initStretchy);
@@ -42,6 +39,14 @@ angular.module('risevision.apps.directives')
                 $scope.ngModel = $scope.defaultInputValue;
                 stretchyInputElement[0].style.width = $scope.defaultInputWidth;
               }
+            }
+          });
+
+          $scope.$watch('ngModel', function () {
+            // resize input if model was externally modified/updated
+            if (!$scope.isEditingInput) {
+              $scope.defaultInputValue = $scope.ngModel;
+              $timeout(_initStretchy);
             }
           });
 

@@ -4,7 +4,7 @@
     <h1 class="app-header-title" translate>schedules-app.title</h1>
 
     <div class="ml-auto" require-role="cp">
-      <button ng-click="addSchedule()" class="btn btn-default">
+      <button ng-click="addSchedule()" class="btn btn-default btn-toolbar">
         Add Schedule
       </button>
     </div>
@@ -18,8 +18,8 @@
       <schedule-fields></schedule-fields>
 
       <div id="errorBox" ng-show="factory.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
-        <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
-      </div> 
+        <strong>{{factory.apiError}}</strong>
+      </div>
       
       <div class="button-row text-right mt-5">
         <p class="visible-sm visible-xs text-right"><last-modified change-date="factory.schedule.changeDate" changed-by="factory.schedule.changedBy"></last-modified></p>

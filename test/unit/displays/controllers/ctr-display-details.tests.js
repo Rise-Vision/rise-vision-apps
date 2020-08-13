@@ -37,6 +37,11 @@ describe('controller: display details', function() {
         isElectronPlayer: function(){ return true;}
       };
     });
+    $provide.service('scheduleFactory', function() {
+      return {
+        addToDistribution: sandbox.stub()
+      };
+    });
     $provide.service('$modal',function(){
       return {
         open : function(obj){
@@ -56,8 +61,8 @@ describe('controller: display details', function() {
     });
     $provide.service('$loading',function(){
       return {
-        start: function(){},
-        stop: function(){}
+        start: sandbox.stub(),
+        stop: sandbox.stub()
       };
     });
     $provide.service('userState',function(){
@@ -113,11 +118,17 @@ describe('controller: display details', function() {
     $provide.factory('enableCompanyProduct', function() {
       return sandbox.stub();
     });
+    $provide.factory('processErrorCode', function() {
+      return function(error) {
+        return 'processed ' + error;
+      };
+    });
     $provide.value('displayId', displayId);
   }));
   var $scope, $state, updateCalled, deleteCalled, confirmDelete;
   var resolveLoadScreenshot, resolveRequestScreenshot, enableCompanyProduct, userState,
-  $rootScope, $loading, displayFactory, playerLicenseFactory, playerProFactory, plansFactory, currentPlanFactory;
+  $rootScope, $loading, displayFactory, playerLicenseFactory, playerProFactory, plansFactory, currentPlanFactory,
+  scheduleFactory;
   var company;
   beforeEach(function(){
     company = {};
@@ -132,6 +143,7 @@ describe('controller: display details', function() {
       playerProFactory = $injector.get('playerProFactory');
       plansFactory = $injector.get('plansFactory');
       currentPlanFactory = $injector.get('currentPlanFactory');
+      scheduleFactory = $injector.get('scheduleFactory');
       enableCompanyProduct = $injector.get('enableCompanyProduct');
       userState = $injector.get('userState');
       $loading = $injector.get('$loading');
@@ -158,6 +170,7 @@ describe('controller: display details', function() {
     expect($scope).to.be.ok;
     expect($scope.displayId).to.be.ok;
     expect($scope.factory).to.be.ok;
+    expect($scope.scheduleFactory).to.be.ok;
 
     expect($scope.save).to.be.a('function');
     expect($scope.confirmDelete).to.be.a('function');
@@ -168,6 +181,24 @@ describe('controller: display details', function() {
     setTimeout(function() {
       expect($scope.display).to.be.ok;
       expect($scope.display.id).to.equal('1234');
+      expect($scope.selectedSchedule).to.be.null;
+
+      done();
+    }, 10);
+  });
+
+  it('should initialize a display with assigned schedule', function(done) {
+    displayFactory.display.scheduleId = 'scheduleId';
+    displayFactory.display.scheduleName = 'scheduleName';
+
+    setTimeout(function() {
+      expect($scope.display).to.be.ok;
+      expect($scope.display.id).to.equal('1234');
+      expect($scope.selectedSchedule).to.deep.equal({
+        id: 'scheduleId',
+        name: 'scheduleName',
+        companyId: 'company'
+      });
 
       done();
     }, 10);
@@ -194,6 +225,46 @@ describe('controller: display details', function() {
       $scope.save();
 
       expect(updateCalled).to.be.true;
+    });
+
+    it('should change/update schedule on save success',function(done){
+      $scope.selectedSchedule = {id: 'selectedSchedule'};
+      $scope.displayDetails = {
+        useCompanyAddress: {}
+      };
+      $scope.displayDetails.$valid = true;
+      $scope.display = {id:123};
+      $scope.save()
+
+      setTimeout(function() {
+        expect(updateCalled).to.be.true;
+
+        scheduleFactory.addToDistribution.should.have.been.calledWith($scope.display, $scope.selectedSchedule);
+
+        done();
+      },10);
+    });
+
+    it('should report schedule update errors',function(done){
+      scheduleFactory.apiError = 'apiError';
+      scheduleFactory.addToDistribution.returns(Q.reject());
+      $scope.selectedSchedule = {id: 'selectedSchedule'};
+      $scope.displayDetails = {
+        useCompanyAddress: {}
+      };
+      $scope.displayDetails.$valid = true;
+      $scope.display = {id:123};
+      $scope.save()
+
+      setTimeout(function() {
+        expect(updateCalled).to.be.true;
+
+        scheduleFactory.addToDistribution.should.have.been.calledWith($scope.display, $scope.selectedSchedule);
+
+        expect(displayFactory.apiError).to.equal('apiError');
+
+        done();
+      },10);
     });
 
     it('should flag unchanged address to skip validation',function(){
@@ -285,7 +356,7 @@ describe('controller: display details', function() {
         $scope.display = {
           id: displayId,
           playerProAssigned: false,
-          playerProAuthorized: true
+          playerProAuthorized: false
         };
         company.playerProAvailableLicenseCount = 1;
         $scope.toggleProAuthorized();
@@ -314,7 +385,7 @@ describe('controller: display details', function() {
         $scope.display = {
           id: displayId,
           playerProAssigned: false,
-          playerProAuthorized: true
+          playerProAuthorized: false
         };
         company.playerProAvailableLicenseCount = 0;
         $scope.toggleProAuthorized();
@@ -342,13 +413,17 @@ describe('controller: display details', function() {
         $scope.display = {
           id: displayId,
           playerProAssigned: true,
-          playerProAuthorized: false
+          playerProAuthorized: true
         };
         company.playerProAvailableLicenseCount = 1;
+        $scope.errorUpdatingRPP = 'Licensing error';
+
         $scope.toggleProAuthorized();
 
         setTimeout(function () {
           expect(enableCompanyProduct).to.have.been.called;
+
+          expect($scope.errorUpdatingRPP).to.not.be.ok;
 
           expect($scope.display.playerProAssigned).to.be.false;
           expect($scope.display.playerProAuthorized).to.be.false;
@@ -362,14 +437,14 @@ describe('controller: display details', function() {
 
     it('should fail to activate Pro status', function (done) {
       sandbox.stub($scope, 'isProAvailable').returns(true);
-      enableCompanyProduct.returns(Q.reject());
+      enableCompanyProduct.returns(Q.reject('Licensing error'));
 
       setTimeout(function () {
         // The mocked value of playerProAuthorized AFTER ng-change
         $scope.display = {
           id: displayId,
           playerProAssigned: true,
-          playerProAuthorized: false
+          playerProAuthorized: true
         };
         company.playerProAvailableLicenseCount = 1;
         $scope.toggleProAuthorized();
@@ -377,6 +452,7 @@ describe('controller: display details', function() {
         setTimeout(function () {
           expect(enableCompanyProduct).to.have.been.called;
 
+          expect($scope.errorUpdatingRPP).to.equal('processed Licensing error');
           expect($scope.display.playerProAssigned).to.be.true;
           expect($scope.display.playerProAuthorized).to.be.true;
 
@@ -572,6 +648,22 @@ describe('controller: display details', function() {
       $scope.$digest();
 
       expect($scope.display.playerProAuthorized).to.be.false;
+    });
+  });
+
+  describe("scheduleFactory.savingSchedule:", function() {
+    it('should show spinner when saving schedule', function() {
+      $loading.start.should.have.not.been.called;
+      scheduleFactory.savingSchedule = true;
+      $scope.$digest();
+      $loading.start.should.have.been.calledWith('display-loader');
+    });
+
+    it('should hide spinner when finished saving schedule', function() {
+      $loading.stop.reset();
+      scheduleFactory.savingSchedule = false;
+      $scope.$digest();
+      $loading.stop.should.have.been.calledWith('display-loader');
     });
   });
 

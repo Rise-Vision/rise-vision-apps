@@ -1,19 +1,19 @@
 'use strict';
 var ShareSchedulePopoverPage = function() {
-  var shareSchedulePopover = element(by.id('shareSchedulePopover'));
+  var shareSchedulePopover = element(by.css('.tooltip.tooltip-share-options'));
 
-  var closeButton = element(by.css("#shareSchedulePopover .close"));
-  var goBackButton = element(by.id("shareSchedulePopoverGoBack"));
+  var closeButton = element(by.css(".tooltip.tooltip-share-options .close"));
+  var goBackButton = element(by.css(".tooltip.tooltip-share-options #shareSchedulePopoverGoBack"));
 
-  var embedCodeTabLink = element(by.id('embedButton'));
-  var chromeExtensionTabLink = element(by.id('extensionButton')); 
+  var embedCodeTabLink = element(by.css('.tooltip.tooltip-share-options #embedButton'));
+  var chromeExtensionTabLink = element(by.css('.tooltip.tooltip-share-options #extensionButton')); 
 
-  var copyLinkButton = element(by.id('copyUrlButton'));
-  var copyEmbedCodeButton = element(by.id('copyEmbedCodeButton'));
+  var copyLinkButton = element(by.css('.tooltip.tooltip-share-options #copyUrlButton'));
+  var copyEmbedCodeButton = element(by.css('.tooltip.tooltip-share-options #copyEmbedCodeButton'));
 
-  var twitterShareButton = element(by.id('twitterShareButton'));
+  var twitterShareButton = element(by.css('.tooltip.tooltip-share-options #twitterShareButton'));
 
-  var chromeExtensionLink = element(by.id('chromeExtensionLink'));
+  var chromeExtensionLink = element(by.css('.tooltip.tooltip-share-options #chromeExtensionLink'));
 
 
   this.getShareSchedulePopover = function() {

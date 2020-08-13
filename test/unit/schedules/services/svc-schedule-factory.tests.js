@@ -95,7 +95,8 @@ describe('service: scheduleFactory:', function() {
       return confirmModal = sinon.stub();
     });
   }));
-  var scheduleFactory, trackerCalled, updateSchedule, $state, returnList, scheduleListSpy, scheduleAddSpy, processErrorCode, confirmModal;
+  var scheduleFactory, trackerCalled, updateSchedule, $state, returnList, scheduleListSpy,
+  scheduleUpdateSpy, processErrorCode, confirmModal;
   var $rootScope, blueprintFactory, display, apiError;
   beforeEach(function(){
     apiError = { message: 'ERROR; could not create schedule'};
@@ -107,7 +108,7 @@ describe('service: scheduleFactory:', function() {
       scheduleFactory = $injector.get('scheduleFactory');
       var schedule = $injector.get('schedule');
       scheduleListSpy = sinon.spy(schedule,'list');
-      scheduleAddSpy = sinon.spy(schedule,'add');
+      scheduleUpdateSpy = sinon.spy(schedule,'update');
 
       $rootScope = $injector.get('$rootScope');
       sinon.spy($rootScope, '$emit');
@@ -182,9 +183,7 @@ describe('service: scheduleFactory:', function() {
         done(result);
       })
       .then(null, function() {
-        expect(scheduleFactory.errorMessage).to.be.ok;
-        expect(scheduleFactory.errorMessage).to.equal('Failed to get Schedule.');
-        processErrorCode.should.have.been.calledWith('Schedule', 'get', sinon.match.object);
+        processErrorCode.should.have.been.calledWith(sinon.match.object);
         expect(scheduleFactory.apiError).to.be.ok;
 
         setTimeout(function() {
@@ -266,7 +265,6 @@ describe('service: scheduleFactory:', function() {
         expect(trackerCalled).to.equal('Schedule Created');
         expect(scheduleFactory.savingSchedule).to.be.false;
         expect(scheduleFactory.loadingSchedule).to.be.false;
-        expect(scheduleFactory.errorMessage).to.not.be.ok;
         expect(scheduleFactory.apiError).to.not.be.ok;
 
         done();
@@ -301,7 +299,6 @@ describe('service: scheduleFactory:', function() {
         expect(scheduleFactory.savingSchedule).to.be.false;
         expect(scheduleFactory.loadingSchedule).to.be.false;
 
-        expect(scheduleFactory.errorMessage).to.be.ok;
         expect(scheduleFactory.apiError).to.be.ok;
         done();
       },10);
@@ -336,7 +333,6 @@ describe('service: scheduleFactory:', function() {
         expect(trackerCalled).to.equal('Schedule Updated');
         expect(scheduleFactory.savingSchedule).to.be.false;
         expect(scheduleFactory.loadingSchedule).to.be.false;
-        expect(scheduleFactory.errorMessage).to.not.be.ok;
         expect(scheduleFactory.apiError).to.not.be.ok;
         done();
       },10);
@@ -355,7 +351,6 @@ describe('service: scheduleFactory:', function() {
         expect(scheduleFactory.savingSchedule).to.be.false;
         expect(scheduleFactory.loadingSchedule).to.be.false;
 
-        expect(scheduleFactory.errorMessage).to.be.ok;
         expect(scheduleFactory.apiError).to.be.ok;
         done();
       },10);
@@ -375,6 +370,69 @@ describe('service: scheduleFactory:', function() {
 
   });
 
+  describe('forceUpdateSchedule: ',function(){
+    it('should update the schedule with forceDistribution param',function(done){
+      updateSchedule = true;
+
+      scheduleFactory.schedule = {
+        id: 'scheduleId',
+        name: 'scheduleName'
+      };
+
+      scheduleFactory.forceUpdateSchedule();
+
+      scheduleUpdateSpy.should.have.been.calledWith(scheduleFactory.schedule.id,scheduleFactory.schedule, true);
+
+      expect(scheduleFactory.savingSchedule).to.be.true;
+      expect(scheduleFactory.loadingSchedule).to.be.true;
+
+      setTimeout(function(){
+
+        expect(scheduleFactory.schedule.name).to.equal('Updated Schedule');
+
+        expect(trackerCalled).to.equal('Schedule Updated');
+        expect(scheduleFactory.savingSchedule).to.be.false;
+        expect(scheduleFactory.loadingSchedule).to.be.false;
+        expect(scheduleFactory.apiError).to.not.be.ok;
+        done();
+      },10);
+    });  
+
+    it('should show an error if fails to update the schedule',function(done){
+      updateSchedule = false;
+
+      scheduleFactory.forceUpdateSchedule();
+
+      expect(scheduleFactory.savingSchedule).to.be.true;
+      expect(scheduleFactory.loadingSchedule).to.be.true;
+
+      setTimeout(function(){
+        expect(trackerCalled).to.not.be.ok;
+        expect(scheduleFactory.savingSchedule).to.be.false;
+        expect(scheduleFactory.loadingSchedule).to.be.false;
+
+        expect(scheduleFactory.apiError).to.be.ok;
+        done();
+      },10);
+    });
+
+    it('should update the provided schedule if present',function(){
+      updateSchedule = true;
+      scheduleFactory.schedule = {
+        id: 'scheduleId',
+        name: 'scheduleName'
+      };
+      var providedSchedule = {
+        id: 'providedScheduleId',
+        name: 'providedScheduleName'
+      };
+
+      scheduleFactory.forceUpdateSchedule(providedSchedule);
+
+      scheduleUpdateSpy.should.have.been.calledWith(providedSchedule.id,providedSchedule, true);      
+    });
+  });
+
   describe('deleteSchedule: ',function(){
     it('should delete the schedule',function(done){
       updateSchedule = true;
@@ -385,7 +443,6 @@ describe('service: scheduleFactory:', function() {
 
       setTimeout(function(){
         expect(scheduleFactory.loadingSchedule).to.be.false;
-        expect(scheduleFactory.errorMessage).to.not.be.ok;
         expect(scheduleFactory.apiError).to.not.be.ok;
         expect(trackerCalled).to.equal('Schedule Deleted');
         $state.go.should.have.been.calledWith('apps.schedules.list');
@@ -405,7 +462,6 @@ describe('service: scheduleFactory:', function() {
         expect(trackerCalled).to.not.be.ok;
         expect(scheduleFactory.loadingSchedule).to.be.false;
 
-        expect(scheduleFactory.errorMessage).to.be.ok;
         expect(scheduleFactory.apiError).to.be.ok;
         done();
       },10);
@@ -509,6 +565,63 @@ describe('service: scheduleFactory:', function() {
 
         done();
       });
+    });
+  });
+
+  describe('addToDistribution:', function() {
+    beforeEach(function() {
+      sinon.spy(scheduleFactory,'forceUpdateSchedule');
+    });
+
+    afterEach(function() {
+      scheduleFactory.forceUpdateSchedule.restore();
+    })
+
+    it('should add display to distribution and force update schedule', function(done) {
+      var display = { id: 'displayId' };
+      var schedule = { id: 'scheduleId', name: 'scheduleName' };
+
+      scheduleFactory.addToDistribution(display, schedule)
+      setTimeout(function() {
+        expect(schedule.distribution).to.deep.equal(['displayId']);
+
+        expect(display.scheduleId).to.equal('scheduleId');
+        expect(display.scheduleName).to.equal('scheduleName');
+
+        scheduleFactory.forceUpdateSchedule.should.have.been.calledWith(schedule);
+        done();
+      },10);
+    });
+
+    it('should not update if display is already assigned to the schedule', function(done) {
+      var display = { id: 'displayId', scheduleId: 'scheduleId' };
+      var schedule = { id: 'scheduleId' };
+
+      scheduleFactory.addToDistribution(display, schedule)
+      setTimeout(function() {
+        scheduleFactory.forceUpdateSchedule.should.not.have.been.called;
+        done();
+      },10);
+    });
+
+    it('should not add the display to distribution twice', function(done) {
+      var display = { id: 'displayId' };
+      var schedule = {
+        id: 'scheduleId', 
+        name: 'scheduleName',
+        distribution: ['displayId']
+      };
+
+      scheduleFactory.addToDistribution(display, schedule)
+      setTimeout(function() {
+        expect(schedule.distribution).to.deep.equal(['displayId']);
+
+        expect(display.scheduleId).to.equal('scheduleId');
+        expect(display.scheduleName).to.equal('scheduleName');
+
+        scheduleFactory.forceUpdateSchedule.should.have.been.calledWith(schedule);
+        done();
+      },10);
     });
   });
 

@@ -44,12 +44,13 @@ describe('service: confirmModal', function() {
   });
 
   it('should configure confirmation modal', function() {      
-    confirmModal('title', 'message', 'confirm', 'cancel', 'windowClass', 'templateUrl');
+    confirmModal('title', 'message', 'confirm', 'cancel', 'windowClass', 'templateUrl', 'sm');
 
     $modal.open.should.have.been.calledWithMatch({
       controller: 'confirmModalController',
       windowClass: 'windowClass',
-      templateUrl: 'templateUrl'
+      templateUrl: 'templateUrl',
+      size: 'sm'
     });
 
     var params = $modal.open.getCall(0).args[0];

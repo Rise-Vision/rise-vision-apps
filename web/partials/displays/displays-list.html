@@ -13,25 +13,16 @@
   </div>
 </div>
 
-<ul class="display-stats my-4 list-unstyled" ng-show="playerLicenseFactory.getProLicenseCount() > 0">
-  <li class="display-stats-item">
-    <span class="font-weight-bold">{{ playerLicenseFactory.getProUsedLicenseCount() }}</span>
-    Licensed Displays
-  </li>
-  <li class="display-stats-item">
-    <span class="font-weight-bold" ng-class="playerLicenseFactory.getProAvailableLicenseCount() ? 'text-success' : 'text-danger'">
-      {{ playerLicenseFactory.getProAvailableLicenseCount() }}
-    </span>
-    Available Licenses
-  </li>
-</ul>
+<div class="mb-3" ng-show="playerLicenseFactory.getProLicenseCount() > 0">
+  {{ playerLicenseFactory.getProUsedLicenseCount() }} Licensed Display{{playerLicenseFactory.getProUsedLicenseCount() > 1 ? 's' : ''}} | {{ playerLicenseFactory.getProAvailableLicenseCount() }} License{{playerLicenseFactory.getProAvailableLicenseCount() > 1 ? 's' : ''}} Available
+</div>
 
-<div ng-show="displays.apiError" class="alert alert-danger my-2" role="alert">
+<div ng-show="displays.apiError" class="alert alert-danger mb-3" role="alert">
   <strong>{{displays.errorMessage}}</strong>
   {{displays.apiError}}
 </div>
 
-<div id="errorBox" ng-show="displayStatusFactory.apiError" class="alert alert-danger my-2" role="alert">
+<div id="errorBox" ng-show="displayStatusFactory.apiError" class="alert alert-danger mb-3" role="alert">
   <strong>{{displayStatusFactory.errorMessage}}</strong>
   {{displayStatusFactory.apiError}}
 </div> 

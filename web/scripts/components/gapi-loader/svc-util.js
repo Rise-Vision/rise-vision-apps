@@ -8,17 +8,18 @@
           if (!resp) {
             return 'Unknown Error';
           }
-          
+
           var error = getError(resp);
           var message = error.message || error;
-          
+
           if (typeof message === 'string') {
             return message;
           } else {
             return JSON.stringify(message);
           }
         };
-      }])
+      }
+    ])
 
     .factory('dateIsInRange', [
 

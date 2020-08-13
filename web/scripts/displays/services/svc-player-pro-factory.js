@@ -7,14 +7,11 @@ angular.module('risevision.displays.services')
   .value('DISPLAY_CONTROL_PLAYER_VERSION', '2018.01.15.16.31')
   .value('CHROMEOS_PLAYER_VERSION', '2018.07.20.10229')
   .value('CHROMEOS_SCREENSHOT_PLAYER_VERSION', '2018.08.17.8388')
-  .factory('playerProFactory', ['$q', '$modal', 'userState',
-    'parsePlayerDate',
-    'getLatestPlayerVersion',
+  .factory('playerProFactory', ['userState', 'parsePlayerDate', 'getLatestPlayerVersion',
     'PLAYER_VERSION_DATE_REGEX',
     'SCREENSHOT_PLAYER_VERSION', 'OFFLINE_PLAY_PLAYER_VERSION', 'DISPLAY_CONTROL_PLAYER_VERSION',
     'CHROMEOS_PLAYER_VERSION', 'CHROMEOS_SCREENSHOT_PLAYER_VERSION',
-    function ($q, $modal, userState,
-      parsePlayerDate, getLatestPlayerVersion,
+    function (userState, parsePlayerDate, getLatestPlayerVersion,
       PLAYER_VERSION_DATE_REGEX,
       SCREENSHOT_PLAYER_VERSION, OFFLINE_PLAY_PLAYER_VERSION, DISPLAY_CONTROL_PLAYER_VERSION,
       CHROMEOS_PLAYER_VERSION, CHROMEOS_SCREENSHOT_PLAYER_VERSION) {
@@ -102,18 +99,6 @@ angular.module('risevision.displays.services')
         return !!(display && factory.isElectronPlayer(display) &&
           _compareVersion(DISPLAY_CONTROL_PLAYER_VERSION, display.playerVersion) &&
           display.playerProAuthorized);
-      };
-
-      factory.openConfigureDisplayControl = function (display) {
-        var deferred = $q.resolve();
-
-        return deferred.then(function () {
-          return $modal.open({
-            templateUrl: 'partials/displays/display-control-modal.html',
-            size: 'lg',
-            controller: 'DisplayControlModalCtrl'
-          });
-        });
       };
 
       return factory;

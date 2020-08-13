@@ -96,21 +96,6 @@
 	}
 }
 
-// Display page stats
-.display-stats {
-	display: flex;
-	flex-direction: row;
-}
-
-.display-stats-item {
-	padding: 0 1em;
-	border-left: 1px solid #d4d4d4;
-	&:first-child {
-		padding-left: 0;
-		border-left: none;
-	}
-}
-
 // Weekly templates
 .weekly-templates {
 	.collapsed-label {

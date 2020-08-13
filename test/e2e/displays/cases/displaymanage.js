@@ -56,12 +56,6 @@ var DisplayManageScenarios = function() {
         expect(displayManagePage.getDisplayRebootCheckbox().isPresent()).to.eventually.be.true;
       });
 
-      it('should show Time Selector', function () {
-        expect(displayManagePage.getDisplayHoursField().isPresent()).to.eventually.be.true;
-        expect(displayManagePage.getDisplayMinutesField().isPresent()).to.eventually.be.true;
-        expect(displayManagePage.getDisplayMeridianButton().isPresent()).to.eventually.be.true;
-      });
-
       it('should show the schedule link', function() {
         helper.wait(displayManagePage.getViewScheduleLink(), 'View Schedule Link');
         expect(displayManagePage.getViewScheduleLink().isDisplayed()).to.eventually.be.true;
@@ -111,7 +105,7 @@ var DisplayManageScenarios = function() {
       it('should fail to save the display and show validation error', function () {
         helper.clickWhenClickable(displayManagePage.getSaveButton(), 'Save Button');
         helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
-        expect(displayManagePage.getDisplayErrorBox().getText()).to.eventually.contain('We couldn\'t update your address.');
+        expect(displayManagePage.getDisplayErrorBox().getText()).to.eventually.contain('Are you having problems validating your address?');
       });
 
       it('should select another country',function(){
@@ -119,8 +113,24 @@ var DisplayManageScenarios = function() {
         expect(displayManagePage.getDisplayCountrySelect().$('option:checked').getText()).to.eventually.contain('Argentina');
       });
 
-      it('should save the display on Enter and skip address validation', function () {
-        displayManagePage.getDisplayNameField().sendKeys(protractor.Key.ENTER);
+      it('should rename the display', function() {
+        expect(displayManagePage.getDisplayNameEditButton().isPresent()).to.eventually.be.true;
+        expect(displayManagePage.getDisplayNameField().isEnabled()).to.eventually.be.false;
+
+        displayManagePage.getDisplayNameEditButton().click();
+        expect(displayManagePage.getDisplayNameField().isEnabled()).to.eventually.be.true;
+
+        displayManagePage.getDisplayNameField().sendKeys('E2E DSIPLAY NEW NAME' + protractor.Key.ENTER);
+        expect(displayManagePage.getDisplayNameField().isEnabled()).to.eventually.be.false;
+        expect(displayManagePage.getDisplayNameField().getAttribute('value')).to.eventually.equal('E2E DSIPLAY NEW NAME');
+
+        displayManagePage.getDisplayNameEditButton().click();
+        displayManagePage.getDisplayNameField().sendKeys(displayName + protractor.Key.ENTER);
+        expect(displayManagePage.getDisplayNameField().getAttribute('value')).to.eventually.equal(displayName);
+      });
+
+      it('should save the display and skip address validation', function () {
+        displayManagePage.getSaveButton().click();
         helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
         expect(displayManagePage.getSaveButton().getText()).to.eventually.equal('Save');
       });
@@ -186,6 +196,14 @@ var DisplayManageScenarios = function() {
     });
 
     describe('install player', function() {
+      it('should show the Player Actions button, which opens the Dropdown', function() {
+        helper.wait(displayManagePage.getDisplayActionsButton(), 'Display Actions Button');
+
+        expect(displayManagePage.getDisplayActionsButton().isDisplayed()).to.eventually.be.true;
+
+        helper.clickWhenClickable(displayManagePage.getDisplayActionsButton(), 'Display Actions Button');
+      });
+
       it('should show the Install Player button, which opens the Display Modal', function() {
         helper.wait(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
         expect(displayManagePage.getInstallPlayerButton().isDisplayed()).to.eventually.be.true;

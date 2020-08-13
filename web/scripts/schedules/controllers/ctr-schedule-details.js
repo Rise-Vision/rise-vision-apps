@@ -18,9 +18,10 @@ angular.module('risevision.schedules.controllers')
       $scope.confirmDelete = function () {
         $scope.modalInstance = $modal.open({
           template: $templateCache.get(
-            'partials/components/confirm-modal/confirm-modal.html'),
+            'partials/components/confirm-modal/madero-confirm-modal.html'),
           controller: 'confirmModalController',
-          windowClass: 'modal-custom',
+          windowClass: 'madero-style centered-modal',
+          size: 'sm',
           resolve: {
             confirmationTitle: function () {
               return 'schedules-app.details.deleteTitle';
@@ -29,9 +30,11 @@ angular.module('risevision.schedules.controllers')
               return 'schedules-app.details.deleteWarning';
             },
             confirmationButton: function () {
-              return 'common.delete-forever';
+              return 'Yes';
             },
-            cancelButton: null
+            cancelButton: function () {
+              return 'No';
+            }
           }
         });
 
@@ -44,9 +47,10 @@ angular.module('risevision.schedules.controllers')
         } else {
           $scope.modalInstance = $modal.open({
             template: $templateCache.get(
-              'partials/components/confirm-modal/confirm-modal.html'),
+              'partials/components/confirm-modal/madero-confirm-modal.html'),
             controller: 'confirmModalController',
-            windowClass: 'modal-custom',
+            windowClass: 'madero-style centered-modal',
+            size: 'sm',
             resolve: {
               confirmationTitle: function () {
                 return 'schedules-app.details.unsavedTitle';

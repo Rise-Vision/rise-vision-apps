@@ -82,21 +82,34 @@ describe('directive: stretchy input', function() {
     it('should reset value if value is empty, and ignore whitespace', function() {
       var stretchyInputElement = element.find('input.input-stretchy');
 
-      $scope.defaultInputWidth = '20px';
-      $rootScope.inputValue = '';
-      $scope.ngModel = '   ';
-      $scope.$digest();
-
-      // set watch with falsey value
-      $scope.isEditingInput = 0;
+      $scope.isEditingInput = true;
+      $rootScope.inputValue = '   ';
       $scope.$digest();
 
       expect(stretchyInputElement[0].value).to.equal('presentationName');
-      expect(stretchyInputElement[0].style.width).to.equal('20px');
-
       expect($scope.ngModel).to.equal('presentationName');
     });
+  });
 
+  describe('ngModel changed:', function() {
+    it('should reset input if model was changed externaly', function() {
+      var stretchyInputElement = element.find('input.input-stretchy');
+
+      $scope.ngModel = 'newName';
+      $scope.$digest();
+
+      expect($scope.defaultInputValue).to.equal('newName');
+    });
+
+    it('should not change deafult values if it is editing locally', function() {
+      var stretchyInputElement = element.find('input.input-stretchy');
+
+      $scope.isEditingInput = true;
+      $scope.ngModel = 'newName';
+      $scope.$digest();
+
+      expect($scope.defaultInputValue).to.equal('presentationName');
+    });
   });
 
   describe('inputKeyDown:', function() {

@@ -1,0 +1,150 @@
+.madero-style {
+
+  // dropdown selector button
+  .btn-select {
+    text-align: left;
+    font-weight: normal;
+
+    .text-muted {
+      color: $madero-gray;
+    }
+  }
+
+  .btn-dropdown {
+    // duplicate "dropdown-menu > ul > li > a" styles
+    color: $dark-gray;
+    display: block;
+    padding: 10px;
+    margin: 0;
+    background-color: white;
+    border: 0;
+
+    &:disabled {
+      color: $madero-gray;
+      cursor: not-allowed;
+    }
+
+    &:hover:enabled,
+    &:focus:enabled {
+      // duplicate "dropdown-menu > ul > li > a:hover" styles
+      background-color: rgba(150, 150, 150, 0.1);
+      color: $rise-blue;
+      // duplicate <a> styles
+      text-decoration: underline;
+      text-align: left;
+      width: 100%;
+    }
+  }
+
+  .text-danger {
+    color: $danger;
+  }
+
+  .text-gray {
+    color: $mid-gray;
+  }
+
+  last-modified .text-muted {
+    @extend .text-gray;
+  }
+
+  .border-bottom {
+    border-bottom: 1px solid $madero-gray;
+  }
+
+  .border-top {
+    border-top: 1px solid $madero-gray;
+  }
+
+  .border-container {
+    border: 1px solid $madero-gray;
+    border-radius: 4px;
+
+    &.scrollable-list {
+      .list-group-item {
+        @extend .border-top;
+
+        &:first-child {
+          border-top: 0;
+        }
+      }
+    }
+  }
+  
+  .btn-danger {
+    background: $danger;
+    border-color: $danger;
+  }
+
+  .btn-toolbar {
+    min-width: 160px;
+    margin-left: auto;
+  }
+
+  .btn-toolbar-wide {
+    min-width: 200px;
+    margin-left: auto;
+  }
+
+  .button-toolbar {
+    & > * {
+      @extend .mr-3;
+
+      &:last-child{
+        @extend .mr-0;
+      }      
+    }
+  }
+
+  .fields-preview-panels {
+    margin-left: 0px;
+    margin-right: 0px;
+    display: flex;
+    flex-flow: column-reverse;
+
+    @media (min-width: $screen-md) {
+      display: flex;
+      flex-flow: row;
+      height: calc(100vh - var(--body-height));
+    }
+
+    .preview-container {
+      width: 100%;
+      overflow: auto;
+
+      @media (min-width: $screen-md) {
+        @extend .ml-lg-5;
+
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .fields-container {
+      --sidebar-width: 450px;
+
+      height: 100%;
+
+      @media (min-width: $screen-md) {
+        flex-grow: 1;
+        flex-shrink: 0;
+        flex-basis: var(--sidebar-width);
+        width: var(--sidebar-width);
+      }
+    }
+  }
+
+  .preview-embed {
+    position: relative;
+    padding-bottom: 56.25%;
+
+    iframe {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0px;
+      top: 0px;
+    }
+  }
+
+}

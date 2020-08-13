@@ -1,101 +1,53 @@
-<div rv-spinner rv-spinner-key="display-loader" rv-spinner-start-active="1">
-
-  <div class="app-header my-4">
-    <h1 class="app-header-title" translate>displays-app.details.title</h1>
-
-
-      <div class="toggle-group ml-auto">
-
-        <input type="checkbox" id="on-off-switch" ng-model="display.playerProAuthorized" ng-change="toggleProAuthorized()" ng-disabled="updatingRPP || !isProToggleEnabled()">
-        <label for="on-off-switch">
-          <span translate>displays-app.details.rpp-is</span>
-          <span class="bold" ng-class="display.playerProAuthorized ? 'text-green' : 'text-error'" ng-show="!updatingRPP">
-            <span>{{ display.playerProAuthorized ? 'ON' : 'OFF' }}</span>
-
-            <a href="https://help.risevision.com/hc/en-us/articles/115003626863" target="_blank" aria-label="Open Help Article">
-              <i class="fa fa-question-circle icon-right" aria-hidden="true"></i>
-            </a>
-
-          </span>
-
-          <span ng-show="updatingRPP">
-            <span translate>displays-app.details.rpp-loading</span> <i class="fa fa-spinner fa-spin fa-fw"></i>
-          </span>
-        </label>
-
-        <div class="onoffswitch" aria-hidden="true">
-            <div class="onoffswitch-label">
-                <div class="onoffswitch-inner"></div>
-                <div class="onoffswitch-switch"></div>
-            </div>
-        </div>
-      </div>
-    
-  </div><!--app-header-->
-
-  <div>
-
-    <ul class="display-stats my-4 list-unstyled" ng-show="getProLicenseCount() > 0">
-      <li class="display-stats-item">
-        <span class="font-weight-bold">{{ getProUsedLicenseCount() }}</span>
-        Licensed Displays
-      </li>
-      <li class="display-stats-item">
-        <span class="font-weight-bold" ng-class="getProAvailableLicenseCount() ? 'text-success' : 'text-danger'">
-          {{ getProAvailableLicenseCount() }}
+<div class="madero-style">
+  <div class="app-header u_padding-20-vertical mb-5 border-bottom">
+    <!-- App Title -->
+    <div class="app-header-title">
+      <h1 class="mt-0">Displays</h1>
+      <div>
+        <span ng-show="getProLicenseCount() > 0">
+          {{ getProUsedLicenseCount() }} Licensed Display{{getProUsedLicenseCount() > 1 ? 's' : ''}} | {{ getProAvailableLicenseCount() }} License{{getProAvailableLicenseCount() > 1 ? 's' : ''}} Available
         </span>
-        Available Licenses
-        <a ui-sref="apps.billing.home" class="ml-2" ng-show="areAllProLicensesUsed() && !currentPlanFactory.currentPlan.isPurchasedByParent" aria-label="Get More Display Licenses" translate>displays-app.details.get-more</a>
-      </li>
-    </ul>
-
-    <div class="row" ng-show="areAllProLicensesUsed()">
-      <div class="alert alert-danger mt-2 mb-4" ng-show="currentPlanFactory.currentPlan.isParentPlan || currentPlanFactory.currentPlan.isPurchasedByParent">
-        <p ng-show="currentPlanFactory.currentPlan.parentPlanContactEmail" translate translate-values="{ administratorEmail: currentPlanFactory.currentPlan.parentPlanContactEmail }">displays-app.details.contact-plan-parent-email</p>
-        <p ng-show="!currentPlanFactory.currentPlan.parentPlanContactEmail" translate>displays-app.details.contact-plan-parent-no-email</p>
       </div>
     </div>
 
+    <div class="ml-auto" require-role="da">
+      <button ng-click="addDisplay()" class="btn btn-default btn-toolbar-wide">
+        Add Display
+      </button>
+    </div>
   </div>
 
+  <div rv-spinner rv-spinner-key="display-loader" rv-spinner-start-active="1"></div>
+
+  <!-- body -->
   <div>
     <form role="form" name="displayDetails" ng-submit="save()">
-      <div class="row" ng-show="!isProSupported()">
-        <div class="col-sm-12">
-          <div class="alert alert-warning" role="alert">
-            <span translate>displays-app.details.rpp-not-supported</span>
-          </div>
-        </div>
-      </div>
 
       <display-fields></display-fields>
 
-      <div id="errorBox" ng-show="factory.apiError" class="alert alert-danger" role="alert">
-        <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
+      <div id="errorBox" ng-show="factory.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
+        <strong>{{factory.apiError}}</strong>
         <suggest-general-delivery ng-if="factory.isAddressError" address-object="display"></suggest-general-delivery>
       </div>
 
-      <div class="button-row text-right">
-        <p class="visible-xs"><last-modified change-date="display.changeDate" changed-by="display.changedBy"></last-modified></p>
+      <div class="button-row text-right mt-5">
+        <p class="visible-sm visible-xs text-right"><last-modified change-date="display.changeDate" changed-by="display.changedBy"></last-modified></p>
         <!-- Indicates delete or destructive action -->
-        <button id="deleteButton" type="button" class="btn btn-danger pull-left" ng-click="confirmDelete()" require-role="da">
-          {{'common.delete' | translate}}
-          <i class="fa fa-white fa-trash-o icon-right"></i>
+        <button id="deleteButton" type="button" class="btn btn-danger btn-toolbar pull-left" ng-click="confirmDelete()" require-role="da">
+          Delete Display
         </button>
-        <span class="hidden-xs u_margin-right"><last-modified change-date="display.changeDate" changed-by="display.changedBy"></last-modified></span>
-        <!-- Indicates a successful or positive action -->
-        <button id="saveButton" type="submit" class="btn btn-primary" ng-disabled="displayDetails.$invalid || factory.savingDisplay" require-role="da">
-          {{ factory.savingDisplay ? ('common.saving' | translate) : ('common.save' | translate)}}
-          <i class="fa fa-check icon-right"></i>
-        </button>
+        <span class="hidden-sm hidden-xs u_margin-right"><last-modified change-date="display.changeDate" changed-by="display.changedBy"></last-modified></span>
         <!-- Indicates cancel or non-destructive action -->
-        <button id="cancelButton" type="button" ui-sref="apps.displays.list" class="btn btn-default">
+        <button id="cancelButton" type="button" ui-sref="apps.displays.list" class="btn btn-default btn-toolbar mr-2">
           {{'common.cancel' | translate}}
-          <i class="fa fa-times icon-right"></i>
+        </button>
+        <!-- Indicates a successful or positive action -->
+        <button id="saveButton" type="submit" class="btn btn-primary btn-toolbar" ng-disabled="displayDetails.$invalid || factory.savingDisplay" require-role="da">
+          {{ factory.savingDisplay ? ('common.saving' | translate) : ('common.save' | translate)}}
         </button>
       </div>
 
-    </form><!-- ticketDetails -->
+    </form><!-- displayDetails -->
   </div><!--container-->
 
 </div>

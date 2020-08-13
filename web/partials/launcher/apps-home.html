@@ -11,7 +11,7 @@
     <div class="row">
       <div class="col-xs-12">
         <div id="errorBox" ng-show="schedules.apiError" class="madero-style alert alert-danger" role="alert">
-          <strong>{{schedules.errorMessage}}</strong> {{schedules.apiError}}
+          <strong>{{schedules.apiError}}</strong>
         </div>
 
         <div ng-show="schedules.items.list.length === 0 && !schedules.loadingItems && !schedules.apiError" class="madero-style alert alert-warning" role="alert">
@@ -22,36 +22,18 @@
       </div>
 
       <div class="form-inline schedules-toolbar" ng-show="selectedSchedule">
-        <span class="hidden-xs pull-right">
-          <a type="button" class="btn btn-default schedules-toolbar-btn" ui-sref="apps.schedules.details({scheduleId: selectedSchedule.id})" link-cid>Edit Schedule</a>
+        <span class="button-toolbar hidden-xs pull-right">
+          <a type="button" class="btn btn-default btn-toolbar" ui-sref="apps.schedules.details({scheduleId: selectedSchedule.id})" link-cid>Edit Schedule</a>
           <ng-show ng-show="tooltipKey">
-            <button id="shareButton" type="button" class="btn btn-primary schedules-toolbar-btn" 
+            <button id="shareButton" type="button" class="btn btn-primary btn-toolbar" 
             tooltip-overlay tooltip-template="'partials/schedules/share-schedule-tooltip.html'" tooltip-placement="bottom" tooltip-class="madero-style tooltip-guide tooltip-share-guide">
               Share
             </button>
           </ng-show>
-          <share-schedule-button schedule="selectedSchedule" button-class="btn-primary schedules-toolbar-btn" ng-hide="tooltipKey"></share-schedule-button>
+          <share-schedule-button schedule="selectedSchedule" button-class="btn-primary btn-toolbar" ng-hide="tooltipKey"></share-schedule-button>
         </span>
 
-        <div class="form-group" preview-selector>
-          <label for="preview-selector">Preview A Schedule:</label>
-          <button id="preview-selector" class="form-control btn-select btn-schedule-selector flex-row"
-            tooltip-template="'partials/schedules/preview-selector-tooltip.html'"
-            tooltip-trigger="show"
-            ng-click="toggleTooltip($event)" 
-            tooltip-animation="false"
-            tooltip-placement="bottom" 
-            tooltip-class="madero-style tooltip-schedule-selector ml-0"
-            tooltip-append-to-body="true"
-            tooltip-digest-on-resize
-          >
-          	<div class="row-entry">
-              <span class="text-muted mr-auto" ng-if="!selectedSchedule">Select or add a new schedule</span>
-              <span class="u_text-ellipsis mr-auto" ng-if="selectedSchedule">{{selectedSchedule.name}}</span>
-              <span class="text-muted pl-2"><i class="fa fa-sort"></i></span>
-            </div>
-          </button>
-        </div>
+        <preview-selector ng-model="selectedSchedule" label="Preview A Schedule:"></preview-selector>
       </div>
     </div>
 

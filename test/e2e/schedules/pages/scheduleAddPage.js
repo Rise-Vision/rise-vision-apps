@@ -3,7 +3,8 @@ var ScheduleAddPage = function() {
   var schedulesAppContainer = element(by.css('.schedules-app'));
   var title = element(by.id('title'));
 
-  var displayNameField = element(by.model('factory.schedule.name'));
+  var scheduleNameField = element(by.css('schedule-fields stretchy-input input'));  
+  var scheduleNameEditButton = element(by.css('schedule-fields stretchy-input #editButton'));
 
   var timelineAlwaysCheckboxMask = element(by.id('alwaysCheckboxMask'));
   var timelineAlwaysCheckbox = element(by.id('alwaysCheckbox'));
@@ -25,7 +26,7 @@ var ScheduleAddPage = function() {
   var saveButton = element(by.id('saveButton'));
   var cancelButton = element(by.id('cancelButton'));
   var deleteButton = element(by.id('deleteButton'));
-  var deleteForeverButton = element(by.buttonText('Delete Forever'));
+  var deleteForeverButton = element(by.id('confirm-primary'));
 
   var errorBox = element(by.id('errorBox'));
 
@@ -44,7 +45,11 @@ var ScheduleAddPage = function() {
   };
 
   this.getScheduleNameField = function() {
-    return displayNameField;
+    return scheduleNameField;
+  };
+
+  this.getScheduleNameEditButton = function() {
+    return scheduleNameEditButton;
   };
 
   this.getShareScheduleButton = function() {

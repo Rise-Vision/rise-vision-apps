@@ -1,16 +1,10 @@
 {
   "errors": {
-    "tryAgain": "Please try again; you may need to reload the page.",
-    "generalError": "An Error has Occurred",
+    "tryAgain": "Please try again.",
+    "tryAgainReload": "Please reload this page and try again.",
+    "messagePrefix": "Something went wrong.",
     "actionFailed": "The {{itemName}} could not be {{actionName}}.",
-    "notAuthenticated": "You do not have permissions to {{actionName}} the {{itemName}}, because you are not authenticated. Please, sign in.",
-    "parentCompanyAction": "Action required by parent Company.",
-    "permissionRequired": "You do not have the required permissions.",
-    "premiumTemplate": "You need to be subscribed to a Plan to use the Template Library.",
-    "generalAccess": "You may have not have the required permissions, or an action is required by parent Company.",
-    "notFound": "The {{itemName}} could not be found. Please validate it still exists.",
-    "serverError": "An error occurred while trying to {{actionName}} the {{itemName}}.",
-    "checkConnection": "The server could not be reached. Check your connection and proxy or firewall settings.",
-    "storageSubscription": "You need to be subscribed to a Plan to use Storage."
+    "permissionRequired": "You don’t have permission to do this. Please contact your system administrator.",
+    "checkConnection": "Please check your connection, or proxy and firewall settings, and try again."
   }
 }

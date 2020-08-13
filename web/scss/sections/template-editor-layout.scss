@@ -954,15 +954,6 @@ $short-phone-height: 570px;
     }
   }
 
-  .border-container {
-    border: 1px solid $madero-gray;
-    border-radius: 4px;
-  }
-
-  .border-bottom {
-    border-bottom: 1px solid $madero-gray;
-  }
-
   .btn {
     font-weight: bold;
     min-height: 40px;
@@ -1013,16 +1004,6 @@ $short-phone-height: 570px;
       border-color: $maderio-green-disabled;
       color: $white;
     }
-  }
-
-  .btn-danger {
-    background: $danger;
-    border-color: $danger;
-  }
-
-  .btn-toolbar {
-    min-width: 160px;
-    margin-left: auto;
   }
 
   .btn-toggle-blue-on {
@@ -1518,6 +1499,15 @@ $short-phone-height: 570px;
       background-color: $rise-blue !important;
       color: $white !important;
     }
+  }
+
+  .rise-time-picker .btn svg,
+  .rise-date-picker .btn svg {
+    width: 14px;
+    height: 14px;
+    margin-top: 2px;
+    margin-right: -1px;
+    fill: $white;
   }
 
   .display-id {

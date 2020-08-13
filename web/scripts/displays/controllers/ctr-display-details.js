@@ -4,21 +4,34 @@ angular.module('risevision.displays.controllers')
   .controller('displayDetails', ['$scope', '$rootScope', '$q',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'enableCompanyProduct', 'userState', 'plansFactory',
-    'currentPlanFactory', 'playerLicenseFactory', 'PLAYER_PRO_PRODUCT_CODE', '$state', 'addressService',
+    'currentPlanFactory', 'playerLicenseFactory', 'playerActionsFactory', 'PLAYER_PRO_PRODUCT_CODE',
+    '$state', 'addressService', 'scheduleFactory', 'processErrorCode',
     function ($scope, $rootScope, $q, displayFactory, display, screenshotFactory, playerProFactory,
       $loading, $log, $modal, $templateCache, displayId, enableCompanyProduct, userState,
-      plansFactory, currentPlanFactory, playerLicenseFactory, PLAYER_PRO_PRODUCT_CODE, $state, addressService) {
+      plansFactory, currentPlanFactory, playerLicenseFactory, playerActionsFactory,
+      PLAYER_PRO_PRODUCT_CODE, $state, addressService, scheduleFactory, processErrorCode) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
       $scope.playerProFactory = playerProFactory;
       $scope.currentPlanFactory = currentPlanFactory;
+      $scope.playerActionsFactory = playerActionsFactory;
       $scope.updatingRPP = false;
       $scope.monitoringSchedule = {};
       $scope.showPlansModal = plansFactory.showPlansModal;
+      $scope.selectedSchedule = null;
+      $scope.scheduleFactory = scheduleFactory;
 
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
+
+        if (display.hasSchedule($scope.display)) {
+          $scope.selectedSchedule = {
+            id: $scope.display.scheduleId,
+            name: $scope.display.scheduleName,
+            companyId: $scope.display.companyId
+          };
+        }
 
         if (!$scope.display.playerProAuthorized) {
           $scope.display.monitoringEnabled = false;
@@ -27,15 +40,17 @@ angular.module('risevision.displays.controllers')
         screenshotFactory.loadScreenshot();
       });
 
-      $scope.$watch('factory.loadingDisplay', function (loading) {
-        if (loading) {
-          $loading.start('display-loader');
-        } else {
+      $scope.$watchGroup(['factory.loadingDisplay', 'scheduleFactory.savingSchedule'], function (loading) {
+        if (!$scope.factory.loadingDisplay && !$scope.scheduleFactory.savingSchedule) {
           $loading.stop('display-loader');
+        } else {
+          $loading.start('display-loader');
         }
       });
 
       $scope.toggleProAuthorized = function () {
+        $scope.errorUpdatingRPP = false;
+
         if (!$scope.isProAvailable()) {
           $scope.display.playerProAuthorized = false;
           if ($scope.getProLicenseCount() > 0 && $scope.areAllProLicensesUsed()) {
@@ -45,7 +60,7 @@ angular.module('risevision.displays.controllers')
           }
         } else {
           var apiParams = {};
-          var playerProAuthorized = $scope.display.playerProAuthorized;
+          var playerProAuthorized = !$scope.display.playerProAuthorized;
 
           $scope.updatingRPP = true;
           apiParams[displayId] = playerProAuthorized;
@@ -61,6 +76,8 @@ angular.module('risevision.displays.controllers')
               playerLicenseFactory.toggleDisplayLicenseLocal(playerProAuthorized);
             })
             .catch(function (err) {
+              $scope.errorUpdatingRPP = processErrorCode(err);
+
               $scope.display.playerProAuthorized = !playerProAuthorized;
             })
             .finally(function () {
@@ -97,12 +114,6 @@ angular.module('risevision.displays.controllers')
           .areAllProLicensesUsed();
       };
 
-      $scope.isProSupported = function () {
-        var unsupported = playerProFactory.isUnsupportedPlayer($scope.display);
-
-        return !unsupported;
-      };
-
       $scope.isProToggleEnabled = function () {
         return userState.hasRole('da') && (($scope.display && $scope.display.playerProAuthorized) ||
           ($scope.areAllProLicensesUsed() ? !currentPlanFactory.currentPlan.isPurchasedByParent : true));
@@ -111,9 +122,10 @@ angular.module('risevision.displays.controllers')
       $scope.confirmDelete = function () {
         $scope.modalInstance = $modal.open({
           template: $templateCache.get(
-            'partials/components/confirm-modal/confirm-modal.html'),
+            'partials/components/confirm-modal/madero-confirm-modal.html'),
           controller: 'confirmModalController',
-          windowClass: 'modal-custom',
+          windowClass: 'madero-style centered-modal',
+          size: 'sm',
           resolve: {
             confirmationTitle: function () {
               return 'displays-app.details.deleteTitle';
@@ -122,9 +134,11 @@ angular.module('risevision.displays.controllers')
               return 'displays-app.details.deleteWarning';
             },
             confirmationButton: function () {
-              return 'common.delete-forever';
+              return 'Yes';
             },
-            cancelButton: null
+            cancelButton: function () {
+              return 'No';
+            }
           }
         });
 
@@ -137,9 +151,10 @@ angular.module('risevision.displays.controllers')
         } else {
           $scope.modalInstance = $modal.open({
             template: $templateCache.get(
-              'partials/components/confirm-modal/confirm-modal.html'),
+              'partials/components/confirm-modal/madero-confirm-modal.html'),
             controller: 'confirmModalController',
-            windowClass: 'modal-custom',
+            windowClass: 'madero-style centered-modal',
+            size: 'sm',
             resolve: {
               confirmationTitle: function () {
                 return 'displays-app.details.unsavedTitle';
@@ -179,7 +194,11 @@ angular.module('risevision.displays.controllers')
         } else {
           var shouldSkipAddressValidation = !addressService.isAddressFormDirty($scope.displayDetails) && !$scope
             .displayDetails.useCompanyAddress.$dirty;
-          return displayFactory.updateDisplay(shouldSkipAddressValidation);
+          return displayFactory.updateDisplay(shouldSkipAddressValidation).then(function () {
+            scheduleFactory.addToDistribution($scope.display, $scope.selectedSchedule).catch(function () {
+              displayFactory.apiError = scheduleFactory.apiError;
+            });
+          });
         }
       };
 
