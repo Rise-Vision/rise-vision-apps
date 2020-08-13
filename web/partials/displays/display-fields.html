@@ -464,7 +464,7 @@
   <div class="preview-container" ng-show="selectedSchedule">
     <div class="row border-bottom u_padding-20-vertical mx-0 mb-4">
       <div class="col-sm-12 px-0 form-inline">
-        <label class="mr-auto" ng-show="userState.hasRole('cp')">Schedule: {{display.scheduleName}}</label>
+        <label class="mr-auto" ng-show="!userState.hasRole('cp')">Schedule: {{display.scheduleName}}</label>
         <preview-selector ng-model="selectedSchedule" additional-class="mr-auto mb-0" require-role="cp"></preview-selector>
 
         <span class="pull-right button-toolbar">
