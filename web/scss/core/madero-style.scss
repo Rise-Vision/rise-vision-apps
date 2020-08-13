@@ -81,6 +81,11 @@
     margin-left: auto;
   }
 
+  .btn-toolbar-wide {
+    min-width: 200px;
+    margin-left: auto;
+  }
+
   .button-toolbar {
     & > * {
       @extend .mr-3;

@@ -2,7 +2,7 @@
   <div class="app-header u_padding-20-vertical mb-5 border-bottom">
     <!-- App Title -->
     <div class="app-header-title">
-      <h1>Displays</h1>
+      <h1 class="mt-0">Displays</h1>
       <div>
         <span ng-show="getProLicenseCount() > 0">
           {{ getProUsedLicenseCount() }} Licensed Display{{getProUsedLicenseCount() > 1 ? 's' : ''}} | {{ getProAvailableLicenseCount() }} License{{getProAvailableLicenseCount() > 1 ? 's' : ''}} Available
@@ -11,7 +11,7 @@
     </div>
 
     <div class="ml-auto" require-role="da">
-      <button ng-click="addDisplay()" class="btn btn-default btn-toolbar">
+      <button ng-click="addDisplay()" class="btn btn-default btn-toolbar-wide">
         Add Display
       </button>
     </div>
@@ -30,13 +30,13 @@
         <suggest-general-delivery ng-if="factory.isAddressError" address-object="display"></suggest-general-delivery>
       </div>
 
-      <div class="button-row text-right">
-        <p class="visible-xs"><last-modified change-date="display.changeDate" changed-by="display.changedBy"></last-modified></p>
+      <div class="button-row text-right mt-5">
+        <p class="visible-sm visible-xs text-right"><last-modified change-date="display.changeDate" changed-by="display.changedBy"></last-modified></p>
         <!-- Indicates delete or destructive action -->
         <button id="deleteButton" type="button" class="btn btn-danger btn-toolbar pull-left" ng-click="confirmDelete()" require-role="da">
           Delete Display
         </button>
-        <span class="hidden-xs u_margin-right"><last-modified change-date="display.changeDate" changed-by="display.changedBy"></last-modified></span>
+        <span class="hidden-sm hidden-xs u_margin-right"><last-modified change-date="display.changeDate" changed-by="display.changedBy"></last-modified></span>
         <!-- Indicates cancel or non-destructive action -->
         <button id="cancelButton" type="button" ui-sref="apps.displays.list" class="btn btn-default btn-toolbar mr-2">
           {{'common.cancel' | translate}}

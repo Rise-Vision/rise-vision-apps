@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('risevision.common.components.userstate')
-  .controller('LoginCtrl', ['$scope', '$loading', '$stateParams',
+  .controller('LoginCtrl', ['$scope', '$filter', '$loading', '$stateParams',
     '$state', '$exceptionHandler', 'userAuthFactory', 'customAuthFactory', 'uiFlowManager',
     'urlStateService', 'userState', 'getError', 'FORCE_GOOGLE_AUTH',
-    function ($scope, $loading, $stateParams, $state, $exceptionHandler, userAuthFactory,
+    function ($scope, $filter, $loading, $stateParams, $state, $exceptionHandler, userAuthFactory,
       customAuthFactory, uiFlowManager, urlStateService, userState, getError,
       FORCE_GOOGLE_AUTH) {
       $scope.forms = {};
@@ -20,16 +20,15 @@ angular.module('risevision.common.components.userstate')
 
       var _processErrorCode = function (e, actionName) {
         var error = getError(e);
-        var messageTitle = 'Oops, an error occurred while trying to sign you ' + actionName + '.';
+        var messageTitle = $filter('translate')('apps-common.errors.messagePrefix');
         var message = error.message ? error.message :
           'Please try again or <a target="_blank" href="mailto:support@risevision.com">reach out to our Support team</a> if the problem persists.';
 
         if (e && e.status >= 400 && e.status < 500) {
           $scope.errors.genericError = true;
         } else if (e && (e.status === -1 || error.code === -1 || error.code === 0)) {
-          $scope.errors.messageTitle = 'Hmm, we can\'t sign you ' + actionName +
-            ' because there\'s a problem with your connectivity.';
-          $scope.errors.message = 'Please check your connection and proxy or firewall settings and try again.';
+          $scope.errors.messageTitle = messageTitle;
+          $scope.errors.message = $filter('translate')('apps-common.errors.checkConnection');
         } else {
           // Catch all errors including !e, e.status === 500, e.status === 503, etc
           $scope.errors.messageTitle = messageTitle;
