@@ -245,21 +245,21 @@ angular.module('risevision.schedules.services')
           });
       };
 
-      factory.addToDistribution = function(display, schedule) {
+      factory.addToDistribution = function (display, schedule) {
         if (schedule.id === display.scheduleId) {
           return $q.resolve();
         } else {
           $log.info('Adding to Distribution: ', display.id, schedule.id);
 
           _addToDistributionList(display.id, schedule);
-          return factory.forceUpdateSchedule(schedule).then(function() {
+          return factory.forceUpdateSchedule(schedule).then(function () {
             display.scheduleId = schedule.id;
             display.scheduleName = schedule.name;
           });
         }
       };
 
-      var _addToDistributionList = function(displayId, schedule) {
+      var _addToDistributionList = function (displayId, schedule) {
         schedule.distribution = schedule.distribution ? schedule.distribution : [];
         if (schedule.distribution.indexOf(displayId) === -1) {
           schedule.distribution.push(displayId);

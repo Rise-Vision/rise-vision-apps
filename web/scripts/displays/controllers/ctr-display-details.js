@@ -4,11 +4,11 @@ angular.module('risevision.displays.controllers')
   .controller('displayDetails', ['$scope', '$rootScope', '$q',
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'enableCompanyProduct', 'userState', 'plansFactory',
-    'currentPlanFactory', 'playerLicenseFactory', 'playerActionsFactory', 'PLAYER_PRO_PRODUCT_CODE', 
+    'currentPlanFactory', 'playerLicenseFactory', 'playerActionsFactory', 'PLAYER_PRO_PRODUCT_CODE',
     '$state', 'addressService', 'scheduleFactory', 'processErrorCode',
     function ($scope, $rootScope, $q, displayFactory, display, screenshotFactory, playerProFactory,
       $loading, $log, $modal, $templateCache, displayId, enableCompanyProduct, userState,
-      plansFactory, currentPlanFactory, playerLicenseFactory, playerActionsFactory, 
+      plansFactory, currentPlanFactory, playerLicenseFactory, playerActionsFactory,
       PLAYER_PRO_PRODUCT_CODE, $state, addressService, scheduleFactory, processErrorCode) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
@@ -40,7 +40,7 @@ angular.module('risevision.displays.controllers')
         screenshotFactory.loadScreenshot();
       });
 
-      $scope.$watchGroup(['factory.loadingDisplay','scheduleFactory.savingSchedule'], function (loading) {
+      $scope.$watchGroup(['factory.loadingDisplay', 'scheduleFactory.savingSchedule'], function (loading) {
         if (!$scope.factory.loadingDisplay && !$scope.scheduleFactory.savingSchedule) {
           $loading.stop('display-loader');
         } else {
@@ -192,14 +192,15 @@ angular.module('risevision.displays.controllers')
 
           return $q.reject();
         } else {
-          var shouldSkipAddressValidation = !addressService.isAddressFormDirty($scope.displayDetails) && !$scope.displayDetails.useCompanyAddress.$dirty;
-          return displayFactory.updateDisplay(shouldSkipAddressValidation).then(function() {
-            scheduleFactory.addToDistribution($scope.display, $scope.selectedSchedule).catch(function() {
+          var shouldSkipAddressValidation = !addressService.isAddressFormDirty($scope.displayDetails) && !$scope
+            .displayDetails.useCompanyAddress.$dirty;
+          return displayFactory.updateDisplay(shouldSkipAddressValidation).then(function () {
+            scheduleFactory.addToDistribution($scope.display, $scope.selectedSchedule).catch(function () {
               displayFactory.apiError = scheduleFactory.apiError;
             });
           });
         }
-      };      
+      };
 
       var startTrialListener = $rootScope.$on('risevision.company.updated', function () {
         var company = userState.getCopyOfSelectedCompany(true);

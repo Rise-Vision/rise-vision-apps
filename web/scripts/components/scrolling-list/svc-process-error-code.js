@@ -18,7 +18,7 @@ angular.module('risevision.common.components.scrolling-list')
         reboot: 'rebooted'
       };
 
-      var _getPrefix = function(itemName, action) {
+      var _getPrefix = function (itemName, action) {
         var messagePrefix = $filter('translate')('apps-common.errors.messagePrefix') + ' ';
         var actionName = actionsMap[action];
 

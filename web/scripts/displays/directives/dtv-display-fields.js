@@ -37,14 +37,14 @@ angular.module('risevision.displays.directives')
             return $sce.trustAsResourceUrl(url);
           };
 
-          $scope.openTimePicker = function($event, picker) {
+          $scope.openTimePicker = function ($event, picker) {
             $event.preventDefault();
             $event.stopPropagation();
 
             $scope[picker] = !$scope[picker];
           };
 
-          $scope.configureDisplayControl = function(display) {
+          $scope.configureDisplayControl = function (display) {
             if (playerProFactory.isDisplayControlCompatiblePlayer(display)) {
               displayControlFactory.openDisplayControlModal();
             } else {
