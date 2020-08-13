@@ -5,11 +5,11 @@ angular.module('risevision.displays.controllers')
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'enableCompanyProduct', 'userState', 'plansFactory',
     'currentPlanFactory', 'playerLicenseFactory', 'playerActionsFactory', 'PLAYER_PRO_PRODUCT_CODE',
-    '$state', 'addressService', 'scheduleFactory', 'processErrorCode',
+    '$state', 'addressService', 'scheduleFactory', 'processErrorCode', 'confirmModal',
     function ($scope, $rootScope, $q, displayFactory, display, screenshotFactory, playerProFactory,
       $loading, $log, $modal, $templateCache, displayId, enableCompanyProduct, userState,
       plansFactory, currentPlanFactory, playerLicenseFactory, playerActionsFactory,
-      PLAYER_PRO_PRODUCT_CODE, $state, addressService, scheduleFactory, processErrorCode) {
+      PLAYER_PRO_PRODUCT_CODE, $state, addressService, scheduleFactory, processErrorCode, confirmModal) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
@@ -45,6 +45,19 @@ angular.module('risevision.displays.controllers')
           $loading.stop('display-loader');
         } else {
           $loading.start('display-loader');
+        }
+      });
+
+      $scope.$watch('selectedSchedule', function (newSchedule, oldSchedule) {
+        var hasSelectedAnotherSchedule = oldSchedule || (!oldSchedule && !display.hasSchedule($scope.display));
+        if (hasSelectedAnotherSchedule && scheduleFactory.requiresLicense(newSchedule) && !$scope.display.playerProAuthorized) {
+          confirmModal('Assign license?',
+            'You\'ve selected a schedule that contains presentations. In order to show this schedule on this display, you need to license it. Assign license now?',
+            'Yes', 'No', 'madero-style centered-modal',
+            'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
+          .then(function() {
+              $scope.toggleProAuthorized();
+          });
         }
       });
 
