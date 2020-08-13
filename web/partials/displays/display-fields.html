@@ -465,7 +465,7 @@
     <div class="row border-bottom u_padding-20-vertical mx-0 mb-4">
       <div class="col-sm-12 px-0 form-inline">
         <label class="mr-auto" ng-show="!userState.hasRole('cp')">Schedule: {{display.scheduleName}}</label>
-        <preview-selector ng-model="selectedSchedule" additional-class="mr-auto mb-0" require-role="cp"></preview-selector>
+        <preview-selector ng-model="selectedSchedule" additional-class="mr-auto mb-0" ng-show="userState.hasRole('cp')"></preview-selector>
 
         <span class="pull-right button-toolbar">
           <a id="viewSchedule" type="button" class="btn btn-default btn-toolbar hidden-md" ui-sref="apps.schedules.details({ scheduleId: selectedSchedule.id, cid: selectedSchedule.companyId })">Edit Schedule</a>
