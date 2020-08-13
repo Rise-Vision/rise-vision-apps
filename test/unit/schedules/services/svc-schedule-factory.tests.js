@@ -183,9 +183,7 @@ describe('service: scheduleFactory:', function() {
         done(result);
       })
       .then(null, function() {
-        expect(scheduleFactory.errorMessage).to.be.ok;
-        expect(scheduleFactory.errorMessage).to.equal('Failed to get Schedule.');
-        processErrorCode.should.have.been.calledWith('Schedule', 'get', sinon.match.object);
+        processErrorCode.should.have.been.calledWith(sinon.match.object);
         expect(scheduleFactory.apiError).to.be.ok;
 
         setTimeout(function() {
@@ -267,7 +265,6 @@ describe('service: scheduleFactory:', function() {
         expect(trackerCalled).to.equal('Schedule Created');
         expect(scheduleFactory.savingSchedule).to.be.false;
         expect(scheduleFactory.loadingSchedule).to.be.false;
-        expect(scheduleFactory.errorMessage).to.not.be.ok;
         expect(scheduleFactory.apiError).to.not.be.ok;
 
         done();
@@ -302,7 +299,6 @@ describe('service: scheduleFactory:', function() {
         expect(scheduleFactory.savingSchedule).to.be.false;
         expect(scheduleFactory.loadingSchedule).to.be.false;
 
-        expect(scheduleFactory.errorMessage).to.be.ok;
         expect(scheduleFactory.apiError).to.be.ok;
         done();
       },10);
@@ -337,7 +333,6 @@ describe('service: scheduleFactory:', function() {
         expect(trackerCalled).to.equal('Schedule Updated');
         expect(scheduleFactory.savingSchedule).to.be.false;
         expect(scheduleFactory.loadingSchedule).to.be.false;
-        expect(scheduleFactory.errorMessage).to.not.be.ok;
         expect(scheduleFactory.apiError).to.not.be.ok;
         done();
       },10);
@@ -356,7 +351,6 @@ describe('service: scheduleFactory:', function() {
         expect(scheduleFactory.savingSchedule).to.be.false;
         expect(scheduleFactory.loadingSchedule).to.be.false;
 
-        expect(scheduleFactory.errorMessage).to.be.ok;
         expect(scheduleFactory.apiError).to.be.ok;
         done();
       },10);
@@ -399,7 +393,6 @@ describe('service: scheduleFactory:', function() {
         expect(trackerCalled).to.equal('Schedule Updated');
         expect(scheduleFactory.savingSchedule).to.be.false;
         expect(scheduleFactory.loadingSchedule).to.be.false;
-        expect(scheduleFactory.errorMessage).to.not.be.ok;
         expect(scheduleFactory.apiError).to.not.be.ok;
         done();
       },10);
@@ -418,7 +411,6 @@ describe('service: scheduleFactory:', function() {
         expect(scheduleFactory.savingSchedule).to.be.false;
         expect(scheduleFactory.loadingSchedule).to.be.false;
 
-        expect(scheduleFactory.errorMessage).to.be.ok;
         expect(scheduleFactory.apiError).to.be.ok;
         done();
       },10);
@@ -451,7 +443,6 @@ describe('service: scheduleFactory:', function() {
 
       setTimeout(function(){
         expect(scheduleFactory.loadingSchedule).to.be.false;
-        expect(scheduleFactory.errorMessage).to.not.be.ok;
         expect(scheduleFactory.apiError).to.not.be.ok;
         expect(trackerCalled).to.equal('Schedule Deleted');
         $state.go.should.have.been.calledWith('apps.schedules.list');
@@ -471,7 +462,6 @@ describe('service: scheduleFactory:', function() {
         expect(trackerCalled).to.not.be.ok;
         expect(scheduleFactory.loadingSchedule).to.be.false;
 
-        expect(scheduleFactory.errorMessage).to.be.ok;
         expect(scheduleFactory.apiError).to.be.ok;
         done();
       },10);
