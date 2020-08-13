@@ -27,6 +27,9 @@ var TemplateAddScenarios = function() {
       });
 
       it('should auto-save the Presentation after it has been created', function () {
+        //wait for presentation to be auto-saved
+        templateEditorPage.waitForAutosave();
+
         expect(templateEditorPage.getSavedText().isDisplayed()).to.eventually.be.true;
       });
 
