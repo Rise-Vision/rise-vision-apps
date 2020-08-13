@@ -76,7 +76,7 @@ angular.module('risevision.displays.controllers')
               playerLicenseFactory.toggleDisplayLicenseLocal(playerProAuthorized);
             })
             .catch(function (err) {
-              $scope.errorUpdatingRPP = processErrorCode(null, null, err);
+              $scope.errorUpdatingRPP = processErrorCode(err);
 
               $scope.display.playerProAuthorized = !playerProAuthorized;
             })
@@ -195,7 +195,6 @@ angular.module('risevision.displays.controllers')
           var shouldSkipAddressValidation = !addressService.isAddressFormDirty($scope.displayDetails) && !$scope.displayDetails.useCompanyAddress.$dirty;
           return displayFactory.updateDisplay(shouldSkipAddressValidation).then(function() {
             scheduleFactory.addToDistribution($scope.display, $scope.selectedSchedule).catch(function() {
-              displayFactory.errorMessage = scheduleFactory.errorMessage;
               displayFactory.apiError = scheduleFactory.apiError;
             });
           });

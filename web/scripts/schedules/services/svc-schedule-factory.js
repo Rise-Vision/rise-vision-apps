@@ -13,7 +13,6 @@ angular.module('risevision.schedules.services')
         factory.loadingSchedule = false;
         factory.savingSchedule = false;
 
-        factory.errorMessage = '';
         factory.apiError = '';
       };
 
@@ -61,7 +60,7 @@ angular.module('risevision.schedules.services')
             deferred.resolve();
           })
           .then(null, function (e) {
-            _showErrorMessage('get', e);
+            _showErrorMessage(e);
 
             deferred.reject();
           })
@@ -151,7 +150,7 @@ angular.module('risevision.schedules.services')
             }
           })
           .then(null, function (e) {
-            _showErrorMessage('add', e);
+            _showErrorMessage(e);
           })
           .finally(function () {
             factory.loadingSchedule = false;
@@ -177,7 +176,7 @@ angular.module('risevision.schedules.services')
             deferred.resolve();
           })
           .then(null, function (e) {
-            _showErrorMessage('update', e);
+            _showErrorMessage(e);
 
             deferred.reject();
           })
@@ -211,7 +210,7 @@ angular.module('risevision.schedules.services')
             deferred.resolve();
           })
           .then(null, function (e) {
-            _showErrorMessage('update', e);
+            _showErrorMessage(e);
 
             deferred.reject();
           })
@@ -239,7 +238,7 @@ angular.module('risevision.schedules.services')
             $state.go('apps.schedules.list');
           })
           .then(null, function (e) {
-            _showErrorMessage('delete', e);
+            _showErrorMessage(e);
           })
           .finally(function () {
             factory.loadingSchedule = false;
@@ -307,11 +306,10 @@ angular.module('risevision.schedules.services')
           });
       };
 
-      var _showErrorMessage = function (action, e) {
-        factory.errorMessage = 'Failed to ' + action + ' Schedule.';
-        factory.apiError = processErrorCode('Schedule', action, e);
+      var _showErrorMessage = function (e) {
+        factory.apiError = processErrorCode(e);
 
-        $log.error(factory.errorMessage, e);
+        $log.error(factory.apiError, e);
       };
 
       return factory;

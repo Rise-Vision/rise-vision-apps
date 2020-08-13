@@ -119,7 +119,7 @@ describe('controller: display details', function() {
       return sandbox.stub();
     });
     $provide.factory('processErrorCode', function() {
-      return function(item, type, error) {
+      return function(error) {
         return 'processed ' + error;
       };
     });
@@ -247,7 +247,6 @@ describe('controller: display details', function() {
 
     it('should report schedule update errors',function(done){
       scheduleFactory.apiError = 'apiError';
-      scheduleFactory.errorMessage = 'errorMessage';
       scheduleFactory.addToDistribution.returns(Q.reject());
       $scope.selectedSchedule = {id: 'selectedSchedule'};
       $scope.displayDetails = {
@@ -263,7 +262,6 @@ describe('controller: display details', function() {
         scheduleFactory.addToDistribution.should.have.been.calledWith($scope.display, $scope.selectedSchedule);
 
         expect(displayFactory.apiError).to.equal('apiError');
-        expect(displayFactory.errorMessage).to.equal('errorMessage');
 
         done();
       },10);
