@@ -9,25 +9,23 @@ describe('directive: display email', function() {
       }
     });
 
-    $provide.service('userState',function(){
-      return {
-        getUserEmail: function() {
-          return 'user@email.com'
-        }
-      };
-    });
-
     $provide.service('displayEmail',function(){
       return displayEmail = {
         send: sinon.spy(function() {
           if (failSendEmail) {
-            return Q.reject();
+            return Q.reject('error');
           } else {
             return Q.resolve();  
           }          
         }),
         sendingEmail: false
       }
+    });
+
+    $provide.service('processErrorCode', function() {
+      return function(error) {
+        return 'processed ' + error;
+      };
     });
 
   }));
@@ -46,17 +44,15 @@ describe('directive: display email', function() {
     $scope = elm.scope();
 
     $scope.display = {};
+    $scope.emailForm = {
+      $setPristine: sinon.spy()
+    };
   }));
 
   it('should compile html', function() {
     expect(elm.html()).to.equal('<p></p>');
     expect($scope.display).to.be.ok;
-    expect($scope.sendToUserEmail).to.be.a('function');
-    expect($scope.sendToAnotherEmail).to.be.a('function');
-  });
-
-  it('should populate user email', function() {
-    expect($scope.userEmail).to.equal('user@email.com');
+    expect($scope.sendEmail).to.be.a('function');
   });
 
   describe('$loading: ', function() {
@@ -75,18 +71,19 @@ describe('directive: display email', function() {
     });
   });
 
-  describe('sendToAnotherEmail:',function(){
+  describe('sendEmail:',function(){
     it('should send instructions to another email address',function(done){
       $scope.display.id = 'ID';
-      $scope.anotherEmail = 'another@email.com';
-      $scope.sendToAnotherEmail();
+      $scope.email = 'another@email.com';
+      $scope.sendEmail();
 
       displayEmail.send.should.have.been.calledWith('ID', 'another@email.com');
       setTimeout(function() {
-        expect($scope.anotherEmail).to.not.be.ok;
-        expect($scope.error).to.be.false;
-        expect($scope.emailResent).to.be.true;
-        expect($scope.sendAnotherEmail).to.be.false;
+        expect($scope.email).to.not.be.ok;
+        expect($scope.emailError).to.be.false;
+        expect($scope.emailSent).to.be.true;
+        
+        $scope.emailForm.$setPristine.should.have.been.calledWith(true);
 
         done();
       }, 10);
@@ -94,39 +91,14 @@ describe('directive: display email', function() {
 
     it('should handle send failure',function(done){
       failSendEmail = true;
-      $scope.sendToAnotherEmail();
+      $scope.sendEmail();
 
       setTimeout(function() {
-        expect($scope.error).to.be.true;
+        expect($scope.emailError).to.equal('processed error');
 
         done();
       }, 10);
     });
   });
 
-  describe('sendToUserEmail:',function(){
-    it('should send instructions to user email',function(done){
-      $scope.display.id = 'ID';
-      $scope.sendToUserEmail();
-
-      displayEmail.send.should.have.been.calledWith('ID', 'user@email.com');
-      setTimeout(function() {
-        expect($scope.error).to.be.false;
-
-        done();
-      }, 10);
-    });
-
-    it('should handle send failure',function(done){
-      failSendEmail = true;
-      $scope.sendToUserEmail();
-
-      setTimeout(function() {
-        expect($scope.error).to.be.true;
-
-        done();
-      }, 10);
-    });
-  });
-  
 });

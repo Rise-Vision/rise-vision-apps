@@ -1,60 +1,28 @@
 <div id="emailedInstructions" rv-spinner rv-spinner-key="display-email" rv-spinner-start-active="1">
+  <p>
+    These instructions have been sent via email. Send to another address?
+  </p>
 
-  <div class="row">
-    <div class="col-xs-12 u_margin-md-top">
-      <p class="text-lg">
-        <span>
-          These instructions have been sent via email.
-        </span>
+  <ng-form id="emailForm" role="form" name="emailForm" novalidate>
+    <div class="form-group" ng-class="{'has-error': !emailForm.email.$pristine && emailForm.email.$invalid}" show-errors>
+      <div class="sideways-panels">
+        <input type="email" class="form-control w-75 mr-3" placeholder="example@email.com"
+          id="email" name="email" ng-model="email" required>
 
-        <span ng-hide="sendAnotherEmail">
-          <span ng-show="!emailResent">
-            <a href="#" ng-click="sendToUserEmail()">
-             Resend</a>
-            to <strong>{{userEmail}}</strong> or
+        <button class="btn btn-default w-25" type="submit" ng-click="sendEmail()" ng-disabled="emailForm.$invalid || displayEmail.sendingEmail" translate="common.send"></button>
+      </div>
 
-            <a href="#" ng-click="sendAnotherEmail = true">
-              send to different email address?
-            </a>
-          </span>
+      <p class="text-danger text-left" ng-show="!emailForm.email.$pristine && emailForm.email.$invalid" translate>
+        Please enter a valid email address.
+      </p>
 
-          <span ng-show="emailResent">
-            <strong>Sent!</strong>
+      <div ng-show="emailError" class="madero-style alert alert-danger text-left w-100 mt-3" role="alert">
+        <strong>{{emailError}}</strong>
+      </div>
 
-            <a href="#" ng-click="sendAnotherEmail = true">
-              Send to different email address?
-            </a>            
-          </span>
-        </span>
+      <p class="mt-3" ng-show="emailForm.email.$pristine && emailSent">
+        Sent!
       </p>
     </div>
-  </div>
-
-  <div class="row" ng-show="sendAnotherEmail">
-    <form id="anotherEmailForm" role="form" name="anotherEmailForm" novalidate>
-      <div class="col-xs-12 u_margin-sm-top">
-        
-        <div class="form-group" ng-class="{'has-error': !anotherEmailForm.anotherEmail.$pristine && anotherEmailForm.anotherEmail.$invalid}" show-errors>
-          <label for="anotherEmail" class="control-label text-lg">
-            Send these instructions to another address:
-          </label>
-          <div class="sideways-panels">
-            <input type="email" class="form-control w-75 mr-3" placeholder="example@email.com"
-              id="anotherEmail" name="anotherEmail" ng-model="anotherEmail" required focus-me="true">
-
-            <button class="btn btn-primary w-25" type="submit" ng-click="sendToAnotherEmail()" ng-disabled="anotherEmailForm.$invalid || displayEmail.sendingEmail" translate="common.send"></button>
-          </div>
-
-          <p class="text-danger" ng-show="!anotherEmailForm.anotherEmail.$pristine && anotherEmailForm.anotherEmail.$invalid" translate>
-            Please enter a valid email address.
-          </p>
-
-          <div ng-show="error" class="alert alert-danger" role="alert">
-            <strong>Failed to send email instructions.</strong>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
-
+  </ng-form>
 </div>

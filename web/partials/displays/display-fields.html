@@ -48,15 +48,23 @@
 </div> 
 
 <div class="border-container text-center u_margin-md-top" ng-show="!displayService.statusLoading && (display | status) === 'notinstalled'">
-  <div class="panel-body">
-    <div class="form-group my-4">
-      <label translate>Display not connected.</label>
-      <p>Before content can show on your display, you need to connect a media player to Rise Vision.</p>
-    </div>
+  <div class="panel-body display-instructions-panel">
 
-    <button type="button" ng-click="factory.addDisplayModal(display)" class="btn btn-default btn-toolbar-wide mb-4">
-      Show Instructions
-    </button>
+    <div class="form-group my-2">
+      <label translate>Display not activated.</label>
+    </div>
+    <div class="mb-4">
+      <a class="btn btn-default btn-toolbar mr-2" id="purchasePlayerLink" href="https://www.thebookpc.com/risevision-s/97.htm" target="_blank">
+        Purchase A Preconfigured Media Player
+      </a>
+      or
+      <button type="button" ng-click="factory.addDisplayModal(display)" class="btn btn-default btn-toolbar ml-2">
+        Install Rise Player On Your Media Player
+      </button>
+    </div>
+    <p>On startup of your media player enter this ID <strong>{{display.id}}</strong> to activate your display.</p>
+
+    <display-email></display-email>
   </div>
 </div>
 
