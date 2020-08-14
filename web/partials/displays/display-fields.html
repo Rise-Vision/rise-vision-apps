@@ -47,7 +47,7 @@
   <strong>{{playerActionsFactory.controlsError}}</strong>
 </div> 
 
-<div class="border-container text-center u_margin-md-top" ng-show="!displayService.statusLoading && (display | status) === 'notinstalled'">
+<div class="border-container text-center u_margin-md-top" ng-show="!factory.loadingDisplay && !displayService.statusLoading && (display | status) === 'notinstalled'">
   <div class="panel-body display-instructions-panel">
 
     <div class="form-group my-2">
@@ -57,8 +57,9 @@
       <a class="btn btn-default btn-toolbar mr-2" id="purchasePlayerLink" href="https://www.thebookpc.com/risevision-s/97.htm" target="_blank">
         Purchase A Preconfigured Media Player
       </a>
-      or
-      <button type="button" ng-click="factory.addDisplayModal(display)" class="btn btn-default btn-toolbar ml-2">
+      <span class="hidden-xs">or</span>
+      <div class="visible-xs">or</div>
+      <button type="button" ng-click="factory.addDisplayModal(display)" class="btn btn-default btn-toolbar ml-md-2">
         Install Rise Player On Your Media Player
       </button>
     </div>

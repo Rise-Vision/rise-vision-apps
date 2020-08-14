@@ -95,7 +95,7 @@
 .display-instructions-panel {
   @extend .mx-auto;
 
-  width: 701px;
+  max-width: 701px;
 
   .btn-toolbar {
     width: 320px;
