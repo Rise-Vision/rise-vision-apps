@@ -24,8 +24,6 @@ var DisplayManagePage = function() {
 
   var displayLoader = element(by.xpath('//div[@spinner-key="display-loader"]'));
 
-  var displayErrorBox = element(by.id('errorBox'));
-
   this.getDisplaysAppContainer = function() {
     return displaysAppContainer;
   };
@@ -94,9 +92,6 @@ var DisplayManagePage = function() {
     return displayLoader;
   };
 
-  this.getDisplayErrorBox = function() {
-    return displayErrorBox;
-  };
 };
 
 module.exports = DisplayManagePage;

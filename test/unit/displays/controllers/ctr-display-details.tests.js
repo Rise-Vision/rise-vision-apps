@@ -229,9 +229,7 @@ describe('controller: display details', function() {
 
     it('should change/update schedule on save success',function(done){
       $scope.selectedSchedule = {id: 'selectedSchedule'};
-      $scope.displayDetails = {
-        useCompanyAddress: {}
-      };
+      $scope.displayDetails = {};
       $scope.displayDetails.$valid = true;
       $scope.display = {id:123};
       $scope.save()
@@ -249,9 +247,7 @@ describe('controller: display details', function() {
       scheduleFactory.apiError = 'apiError';
       scheduleFactory.addToDistribution.returns(Q.reject());
       $scope.selectedSchedule = {id: 'selectedSchedule'};
-      $scope.displayDetails = {
-        useCompanyAddress: {}
-      };
+      $scope.displayDetails = {};
       $scope.displayDetails.$valid = true;
       $scope.display = {id:123};
       $scope.save()
@@ -267,34 +263,6 @@ describe('controller: display details', function() {
       },10);
     });
 
-    it('should flag unchanged address to skip validation',function(){
-      sandbox.spy(displayFactory, "updateDisplay");
-
-      $scope.displayDetails = {
-        useCompanyAddress: {}
-      };
-      $scope.displayDetails.$valid = true;
-      $scope.display = {id:123};
-      $scope.save();
-
-      expect(updateCalled).to.be.true;
-
-      displayFactory.updateDisplay.should.have.been.calledWith(true);
-    })
-
-    it('should flag changed address to run validation', function() {
-      sandbox.spy(displayFactory, "updateDisplay");
-
-      $scope.displayDetails = {
-        useCompanyAddress: {},
-        city: { $dirty: true }
-      };
-      $scope.displayDetails.$valid = true;
-      $scope.display = {id:123};
-      $scope.save();
-
-      displayFactory.updateDisplay.should.have.been.calledWith(false);
-    });
   });
 
   describe('delete: ',function() {
