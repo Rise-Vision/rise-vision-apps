@@ -49,8 +49,8 @@ angular.module('risevision.displays.controllers')
       });
 
       $scope.$watch('selectedSchedule', function (newSchedule, oldSchedule) {
-        var hasSelectedAnotherSchedule = oldSchedule || (!oldSchedule && !display.hasSchedule($scope.display));
-        if (hasSelectedAnotherSchedule && scheduleFactory.requiresLicense(newSchedule) && !$scope.display.playerProAuthorized) {
+        var isChangingSchedule = oldSchedule || (!oldSchedule && !display.hasSchedule($scope.display));
+        if (isChangingSchedule && scheduleFactory.requiresLicense(newSchedule) && !$scope.display.playerProAuthorized) {
           confirmModal('Assign license?',
             'You\'ve selected a schedule that contains presentations. In order to show this schedule on this display, you need to license it. Assign license now?',
             'Yes', 'No', 'madero-style centered-modal',
