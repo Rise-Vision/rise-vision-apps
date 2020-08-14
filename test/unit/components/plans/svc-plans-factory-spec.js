@@ -200,47 +200,4 @@ describe("Services: plans factory", function() {
     });
   });
 
-  describe("showLicenseRequiredToUpdateModal:", function() {
-    beforeEach(function() {
-      sinon.stub(plansFactory, 'showPurchaseOptions');
-    });
-
-    it('should open License Required To Update Modal', function(){
-      plansFactory.showLicenseRequiredToUpdateModal();
-
-      expect($modal.open).to.have.been.calledOnce;
-      expect($modal.open).to.have.been.calledWithMatch({
-        templateUrl: 'partials/components/confirm-modal/madero-confirm-modal.html',
-        controller: "confirmModalController",
-        windowClass: 'madero-style centered-modal'
-      });
-      expect($modal.open.getCall(0).args[0].resolve.confirmationTitle()).to.equal('Missing Display License');
-      expect($modal.open.getCall(0).args[0].resolve.confirmationMessage()).to.equal('A Display License is required to automatically update your Display. Please restart it to apply the latest changes.');
-    });
-
-    it('should show purchase options on confimation', function(done) {
-      $modal.open.returns({result: Q.resolve()});
-
-      plansFactory.showLicenseRequiredToUpdateModal();
-
-      setTimeout(function() {
-        plansFactory.showPurchaseOptions.should.have.been.called;
-
-        done();
-      }, 10);
-    });
-
-    it('should not show purchase options if dismissed', function(done) {
-      $modal.open.returns({result: Q.reject()});
-
-      plansFactory.showLicenseRequiredToUpdateModal();
-
-      setTimeout(function() {
-        plansFactory.showPurchaseOptions.should.not.have.been.called;
-
-        done();
-      }, 10);
-    });
-  });
-
 });

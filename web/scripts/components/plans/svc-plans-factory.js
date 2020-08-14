@@ -226,30 +226,6 @@
           });
         };
 
-        _factory.showLicenseRequiredToUpdateModal = function () {
-          $modal.open({
-            templateUrl: 'partials/components/confirm-modal/madero-confirm-modal.html',
-            controller: 'confirmModalController',
-            windowClass: 'madero-style centered-modal',
-            resolve: {
-              confirmationTitle: function () {
-                return 'Missing Display License';
-              },
-              confirmationMessage: function () {
-                return 'A Display License is required to automatically update your Display. Please restart it to apply the latest changes.';
-              },
-              confirmationButton: function () {
-                return 'Buy a License';
-              },
-              cancelButton: function () {
-                return 'Okay';
-              }
-            }
-          }).result.then(function () {
-            _factory.showPurchaseOptions();
-          });
-        };
-
         _factory.initVolumePlanTrial = function () {
           var plan = _.find(PLANS_LIST, {
             type: 'volume'
