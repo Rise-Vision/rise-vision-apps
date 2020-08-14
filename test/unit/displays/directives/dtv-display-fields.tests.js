@@ -13,6 +13,9 @@ describe('directive: display fields', function() {
         openDisplayControlModal: sinon.stub()
       };
     });
+    $provide.service('messageBox', function() {
+      return sinon.stub();
+    });
     $provide.service('userState', function() {
       return {        
         _restoreState: sinon.stub()
@@ -23,14 +26,16 @@ describe('directive: display fields', function() {
     $provide.value("REGIONS_CA", [""]);
     $provide.value("REGIONS_US", [""]);
     $provide.value("TIMEZONES", [""]);
-    $provide.value("SHARED_SCHEDULE_URL", [""]);
+    $provide.value('SHARED_SCHEDULE_URL','https://preview.risevision.com/?type=sharedschedule&id=SCHEDULE_ID');
   }));
   
-  var elm, $scope, $compile, playerProFactory, displayControlFactory;
+  var elm, $scope, $compile, $sce, playerProFactory, displayControlFactory, messageBox;
 
   beforeEach(inject(function($rootScope, $injector, _$compile_, $templateCache) {
+    $sce = $injector.get('$sce');
     playerProFactory = $injector.get('playerProFactory');
     displayControlFactory = $injector.get('displayControlFactory');
+    messageBox = $injector.get('messageBox');
 
     $templateCache.put('partials/displays/display-fields.html', '<p>Fields</p>');
     $scope = $rootScope.$new();
@@ -51,8 +56,10 @@ describe('directive: display fields', function() {
     expect($scope.userState).to.be.ok;
     expect($scope.countries).to.equal(COUNTRIES);
     expect($scope.isChromeOs).to.be.a('function');
+    expect($scope.getEmbedUrl).to.be.a('function');
     expect($scope.openTimePicker).to.be.a('function');
     expect($scope.configureDisplayControl).to.be.a('function');
+    expect($scope.installationInstructionsModal).to.be.a('function');
   });
 
   it("isChromeOs: ", function() {
@@ -60,6 +67,26 @@ describe('directive: display fields', function() {
     expect($scope.isChromeOs({os: "64-bit Microsoft Windows Embedded Standard"})).to.be.false;
   });
   
+  describe('getEmbedUrl:', function() {
+    beforeEach(function() {
+      sinon.stub($sce, 'trustAsResourceUrl').returns('http://trustedUrl');
+    });
+
+    afterEach(function() {
+      $sce.trustAsResourceUrl.restore();
+    });
+
+    it('should return a trusted embed URL', function() {     
+      expect($scope.getEmbedUrl('ID')).to.equal('http://trustedUrl');
+      $sce.trustAsResourceUrl.should.have.been.calledWith('https://preview.risevision.com/?type=sharedschedule&id=ID&env=apps_display');
+    });
+
+    it('should return null, to not render iframe, when scheduleId is not provided', function() {
+      expect($scope.getEmbedUrl(null)).to.equal(null);
+      $sce.trustAsResourceUrl.should.not.have.been.called;
+    });
+  });
+
   it('openTimePicker:', function() {
     var e = {
       preventDefault: sinon.stub(),
@@ -95,6 +122,12 @@ describe('directive: display fields', function() {
       expect($scope.displayControlError).to.not.be.ok;
     });
 
+  });
+
+  it('installationInstructionsModal:', function() {
+    $scope.installationInstructionsModal();
+
+    messageBox.should.have.been.calledWith(null, null, null, 'madero-style centered-modal installation-instructions-modal', 'partials/displays/installation-instructions-modal.html', 'sm');
   });
 
 });

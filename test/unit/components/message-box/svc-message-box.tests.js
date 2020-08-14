@@ -44,12 +44,13 @@ describe('service: messageBox', function() {
   });
 
   it('should configure confirmation modal', function() {      
-    messageBox('title', 'message', 'close', 'windowClass', 'templateUrl');
+    messageBox('title', 'message', 'close', 'windowClass', 'templateUrl', 'sm');
 
     $modal.open.should.have.been.calledWithMatch({
       controller: 'messageBoxController',
       windowClass: 'windowClass',
-      templateUrl: 'templateUrl'
+      templateUrl: 'templateUrl',
+      size: 'sm'
     });
 
     var params = $modal.open.getCall(0).args[0];
