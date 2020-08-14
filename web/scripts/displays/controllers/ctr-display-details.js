@@ -61,6 +61,16 @@ angular.module('risevision.displays.controllers')
         }
       });
 
+      $scope.confirmLicensing = function() {
+        return confirmModal('Assign license?',
+          'Do you want to assign one of your licenses to this display?',
+          'Yes', 'No', 'madero-style centered-modal',
+          'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
+        .then(function() {
+          $scope.toggleProAuthorized();
+        });
+      };
+
       $scope.toggleProAuthorized = function () {
         $scope.errorUpdatingRPP = false;
 
