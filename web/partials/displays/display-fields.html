@@ -217,7 +217,9 @@
           </div>
         </div>
 
-        <div ng-show="!factory.showLicenseRequired(display) && display.restartEnabled" class="input-group rise-date-picker radio-nested-input-group mt-3">
+        <time-picker ng-model="display.restartTime" ng-show="!factory.showLicenseRequired(display) && display.restartEnabled"></time-picker>
+
+        <!-- <div ng-show="!factory.showLicenseRequired(display) && display.restartEnabled" class="input-group rise-date-picker radio-nested-input-group mt-3">
           <input type="text"
                  class="form-control"
                  readonly="true"
@@ -233,7 +235,7 @@
               <streamline-icon name="clock"></streamline-icon>
             </button>
           </span>
-        </div>
+        </div> -->
       </div>
 
       <div class="list-group-item" ng-if="!playerProFactory.isCROSLegacy(display) && !playerProFactory.isChromeOSPlayer(display)">
