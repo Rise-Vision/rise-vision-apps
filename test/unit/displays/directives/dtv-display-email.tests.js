@@ -1,6 +1,7 @@
 'use strict';
 describe('directive: display email', function() {
   beforeEach(module('risevision.displays.directives'));
+  beforeEach(module('risevision.common.header.directives'));
   beforeEach(module(function ($provide) {
     $provide.service('$loading',function(){
       return $loading = {
@@ -71,10 +72,41 @@ describe('directive: display email', function() {
     });
   });
 
+  describe('validation:', function() {
+    it('empty email is invalid', function() {
+      $scope.email = '';
+      $scope.$digest();
+      expect($scope.emailInvalid).to.be.true;
+    });
+
+    it('test for invalid emails', function() {
+      $scope.email = 'invalid';
+      $scope.$digest();
+      expect($scope.emailInvalid).to.be.true;
+    });
+
+    it('test for valid emails', function() {
+      $scope.email = 'example@email.com';
+      $scope.$digest();
+      expect($scope.emailInvalid).to.be.false;
+    });
+
+  });
+
   describe('sendEmail:',function(){
+    it('should not send if email is invalid',function(){
+      $scope.emailInvalid = true;
+
+      $scope.sendEmail();
+
+      displayEmail.send.should.not.have.been.called;
+    });
+
     it('should send instructions to another email address',function(done){
       $scope.display.id = 'ID';
       $scope.email = 'another@email.com';
+      $scope.emailInvalid = false;
+
       $scope.sendEmail();
 
       displayEmail.send.should.have.been.calledWith('ID', 'another@email.com');
@@ -91,6 +123,8 @@ describe('directive: display email', function() {
 
     it('should handle send failure',function(done){
       failSendEmail = true;
+      $scope.emailInvalid = false;
+
       $scope.sendEmail();
 
       setTimeout(function() {
