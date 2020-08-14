@@ -717,4 +717,20 @@ describe('controller: display details', function() {
     });
   });
 
+  describe('confirmLicensing:', function() {
+    it('should prompt licensing current display and toggle license on confimation', function(done) {
+      sandbox.spy($scope, 'toggleProAuthorized');
+
+      $scope.confirmLicensing().then(function() {
+        confirmModalStub.should.have.been.calledWith(
+          'Assign license?',
+          'Do you want to assign one of your licenses to this display?',
+          'Yes', 'No', 'madero-style centered-modal',
+          'partials/components/confirm-modal/madero-confirm-modal.html', 'sm');
+        $scope.toggleProAuthorized.should.have.been.called;
+        done();
+      });
+    });
+  });
+
 });

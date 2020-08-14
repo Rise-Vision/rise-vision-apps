@@ -119,9 +119,7 @@
       <div class="list-group-item flex-row form-group mb-0">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.lastConnection</label>
-          <span class="mr-auto" ng-if="factory.showLicenseRequired(display)">
-            License Required
-          </span>
+          <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
           <span class="mr-auto" ng-if="!factory.showLicenseRequired(display)">
             {{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}
           </span>
@@ -134,9 +132,7 @@
       <div class="list-group-item flex-row form-group mb-0" ng-hide="!displayService.statusLoading && (display | status) === 'notinstalled'">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.status</label>
-          <span class="mr-auto" ng-if="factory.showLicenseRequired(display)">
-            License Required
-          </span>
+          <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
           <span class="mr-auto" ng-if="!factory.showLicenseRequired(display)">
             <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
             <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'">Offline</span>
@@ -148,9 +144,7 @@
       <div class="list-group-item flex-row form-group mb-0">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.rpp.monitoring</label>
-          <span class="mr-auto" ng-if="factory.showLicenseRequired(display)">
-            License Required
-          </span>
+          <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
 
           <div class="btn-group btn-group-justified" ng-if="!factory.showLicenseRequired(display)">
             <button id="monitoringOn" type="button" class="btn" ng-click="display.monitoringEnabled = !display.monitoringEnabled" ng-disabled="factory.showLicenseRequired(display)"
@@ -175,9 +169,7 @@
         <div class="flex-row form-group mb-0">
           <div class="row-entry">
             <label class="control-label pull-left mb-0" translate>displays-app.fields.player.rpp.email-recipients</label>
-            <span class="mr-auto" ng-if="factory.showLicenseRequired(display)">
-              License Required
-            </span>
+            <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
           </div>
         </div>
 
@@ -194,9 +186,7 @@
         <div class="flex-row form-group mb-0">
           <div class="row-entry">
             <label class="control-label pull-left mb-0">Reboot Media Player Daily At</label>
-            <span class="mr-auto" ng-if="factory.showLicenseRequired(display)">
-              License Required
-            </span>
+            <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
 
             <div class="btn-group-checkbox" ng-if="!factory.showLicenseRequired(display)">
               <input type="checkbox" id="restartEnabled" name="restartEnabled" ng-model="display.restartEnabled" ng-disabled="factory.showLicenseRequired(display)">
@@ -242,9 +232,7 @@
         <div class="flex-row form-group mb-0">
           <div class="row-entry">
             <label class="control-label pull-left mb-0" translate>displays-app.fields.player.displayControl.label</label>
-            <span class="mr-auto" ng-if="factory.showLicenseRequired(display)">
-              License Required
-            </span>
+            <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
 
             <span class="mr-auto" ng-if="!factory.showLicenseRequired(display)">
               <a class="u_clickable" ng-click="configureDisplayControl(display)" require-role="da" translate>
@@ -277,8 +265,9 @@
       <div class="list-group-item flex-row form-group mb-0">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.address.useCompany</label>
+          <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
 
-          <div class="btn-group-checkbox">
+          <div class="btn-group-checkbox" ng-if="!factory.showLicenseRequired(display)">
             <input type="checkbox" id="useCompanyAddress" name="useCompanyAddress" ng-model="display.useCompanyAddress" ng-disabled="factory.showLicenseRequired(display)">
             <div class="btn-group btn-group-justified">
               <button id="useAddressOn" type="button" class="btn" ng-disabled="factory.showLicenseRequired(display)"
@@ -367,9 +356,7 @@
       <div class="list-group-item flex-row form-group mb-0">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.ipAddress</label>
-          <span class="mr-auto" ng-if="factory.showLicenseRequired(display)">
-            License Required
-          </span>
+          <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
           <span class="mr-auto" ng-if="!factory.showLicenseRequired(display)">
             {{display.playerLocalIpAddress}}
           </span>
@@ -379,9 +366,7 @@
       <div class="list-group-item flex-row form-group mb-0" ng-show="display.macAddress">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.macAddress</label>
-          <span class="mr-auto" ng-if="factory.showLicenseRequired(display)">
-            License Required
-          </span>
+          <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
           <span class="mr-auto" ng-if="!factory.showLicenseRequired(display)">
             {{display.macAddress}}
           </span>
