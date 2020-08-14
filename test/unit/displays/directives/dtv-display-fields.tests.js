@@ -127,7 +127,7 @@ describe('directive: display fields', function() {
   it('installationInstructionsModal:', function() {
     $scope.installationInstructionsModal();
 
-    messageBox.should.have.been.calledWith(null, null, null, 'madero-style centered-modal installation-instructions-modal', 'partials/displays/installation-instructions-modal.html', 'sm');
+    messageBox.should.have.been.calledWith(null, null, null, 'madero-style centered-modal download-player-modal', 'partials/displays/download-player-modal.html', 'sm');
   });
 
 });

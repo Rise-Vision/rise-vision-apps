@@ -5,7 +5,7 @@ var SignInPage = require('./../../common/pages/signInPage.js');
 var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
 var DisplaysListPage = require('./../pages/displaysListPage.js');
 var DisplayManagePage = require('./../pages/displayManagePage.js');
-var DisplayAddModalPage = require('./../pages/displayAddModalPage.js');
+var DownloadPlayerModalPage = require('./../pages/downloadPlayerModalPage.js');
 var helper = require('rv-common-e2e').helper;
 
 var DisplayManageScenarios = function() {
@@ -18,7 +18,7 @@ var DisplayManageScenarios = function() {
     var commonHeaderPage;
     var displaysListPage;
     var displayManagePage;
-    var displayAddModalPage;
+    var downloadPlayerModalPage;
     var displayName;
 
     before(function () {
@@ -26,7 +26,7 @@ var DisplayManageScenarios = function() {
       signInPage = new SignInPage();
       displaysListPage = new DisplaysListPage();
       displayManagePage = new DisplayManagePage();
-      displayAddModalPage = new DisplayAddModalPage();
+      downloadPlayerModalPage = new DownloadPlayerModalPage();
       commonHeaderPage = new CommonHeaderPage();
 
       homepage.getDisplays();
@@ -149,53 +149,36 @@ var DisplayManageScenarios = function() {
     });
 
     describe('display activation', function() {
-      it('should show the Not Activated Display link, which opens the Display Modal', function() {
-        helper.wait(displayManagePage.getNotActivatedPlayerLink(), 'Not Activated Display link');
-        expect(displayManagePage.getNotActivatedPlayerLink().isDisplayed()).to.eventually.be.true;
+      it('should show the Display instructions', function() {
+        helper.wait(displayManagePage.getDisplayInstructionsPanel(), 'Display Instructions Panel');
+        expect(displayManagePage.getDisplayInstructionsPanel().isDisplayed()).to.eventually.be.true;
 
-        // Display modal and validate download button
-        helper.clickWhenClickable(displayManagePage.getNotActivatedPlayerLink(), 'Not Activated Display link');
-
-        helper.wait(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
-
-        expect(displayAddModalPage.getDisplayAddModal().isDisplayed()).to.eventually.be.true;
-
-        browser.sleep(100);
-        expect(displayAddModalPage.getTitle().getText()).to.eventually.equal('Activate your Display');
-
+        expect(displayManagePage.getPurchasePlayerButton().isDisplayed()).to.eventually.be.true;
+        expect(displayManagePage.getInstallPlayerButton().isDisplayed()).to.eventually.be.true;
       });
 
-      it('should allow users to pick Media Player option',function() {
-        helper.wait(displayAddModalPage.getDisplayAddedPage(), 'User Player page');
+      it('should show Download options',function() {
+        helper.clickWhenClickable(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
 
-        expect(displayAddModalPage.getDisplayAddedPage().isDisplayed()).to.eventually.be.true;
-        expect(displayAddModalPage.getPreconfiguredPlayerButton().isDisplayed()).to.eventually.be.true;
-        expect(displayAddModalPage.getOwnPlayerButton().isDisplayed()).to.eventually.be.true;
+        helper.wait(downloadPlayerModalPage.getDownloadPlayerModal(), 'Download Player Modal');
+        
+        expect(downloadPlayerModalPage.getDownloadPlayerModal().isDisplayed()).to.eventually.be.true;
+
+        expect(downloadPlayerModalPage.getTitle().getText()).to.eventually.equal('Install Rise Player');
+        
+        expect(downloadPlayerModalPage.getDownloadWindows64Button().isDisplayed()).to.eventually.be.true;
       });
 
-      it('should show Display Id but hide the Email Instructions', function() {
-        displayAddModalPage.getPreconfiguredPlayerButton().click();
-        displayAddModalPage.getNextButton().click();
+      it('should close modal',function() {
+        helper.clickWhenClickable(downloadPlayerModalPage.getDismissButton(), 'Dismiss Button');
 
-        helper.wait(displayAddModalPage.getPreconfiguredPlayerPage(), 'Preconfigured Player page');
-
-        expect(displayAddModalPage.getDisplayIdField().isDisplayed()).to.eventually.be.true;
-        expect(displayAddModalPage.getDisplayIdField().getText()).to.eventually.have.length.greaterThan(0);
-
-        expect(displayAddModalPage.getEmailedInstructions().isPresent()).to.eventually.be.true;      
+        helper.waitDisappear(downloadPlayerModalPage.getDownloadPlayerModal(), 'Download Player Modal');
+        expect(downloadPlayerModalPage.getDownloadPlayerModal().isPresent()).to.eventually.be.false;
       });
 
-      it('should close the modal', function() {
-        // Close the modal
-        helper.wait(displayAddModalPage.getDismissButton(), 'Dismiss Button');
-        helper.clickWhenClickable(displayAddModalPage.getDismissButton(), 'Dismiss Button');
-
-        helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
-        expect(displayAddModalPage.getDisplayAddModal().isPresent()).to.eventually.be.false;
-      });
     });
 
-    describe('install player', function() {
+    describe('display actions', function() {
       it('should show the Player Actions button, which opens the Dropdown', function() {
         helper.wait(displayManagePage.getDisplayActionsButton(), 'Display Actions Button');
 
@@ -204,28 +187,27 @@ var DisplayManageScenarios = function() {
         helper.clickWhenClickable(displayManagePage.getDisplayActionsButton(), 'Display Actions Button');
       });
 
-      it('should show the Install Player button, which opens the Display Modal', function() {
-        helper.wait(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
-        expect(displayManagePage.getInstallPlayerButton().isDisplayed()).to.eventually.be.true;
+      it('should show the Install Player button, which opens the Install Modal', function() {
+        helper.wait(displayManagePage.getPurchasePlayerActionButton(), 'Purchase Player Action Button');
+        
+        expect(displayManagePage.getPurchasePlayerActionButton().isDisplayed()).to.eventually.be.true;
+        expect(displayManagePage.getInstallPlayerActionButton().isDisplayed()).to.eventually.be.true;
 
         // Display modal and validate download button
-        helper.clickWhenClickable(displayManagePage.getInstallPlayerButton(), 'Install Player Button');
+        helper.clickWhenClickable(displayManagePage.getInstallPlayerActionButton(), 'Install Player Button');
 
-        helper.wait(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
+        helper.wait(downloadPlayerModalPage.getDownloadPlayerModal(), 'Download Player Modal');
 
-        expect(displayAddModalPage.getDisplayAddModal().isDisplayed()).to.eventually.be.true;
-
-        browser.sleep(100);
-        expect(displayAddModalPage.getTitle().getText()).to.eventually.equal('Activate your Display');
+        expect(downloadPlayerModalPage.getDownloadPlayerModal().isDisplayed()).to.eventually.be.true;
       });
 
       it('should close the modal', function() {
         // Close the modal
-        helper.wait(displayAddModalPage.getDismissButton(), 'Dismiss Button');
-        helper.clickWhenClickable(displayAddModalPage.getDismissButton(), 'Dismiss Button');
+        helper.wait(downloadPlayerModalPage.getDismissButton(), 'Dismiss Button');
+        helper.clickWhenClickable(downloadPlayerModalPage.getDismissButton(), 'Dismiss Button');
 
-        helper.waitDisappear(displayAddModalPage.getDisplayAddModal(), 'Display Add Modal');
-        expect(displayAddModalPage.getDisplayAddModal().isPresent()).to.eventually.be.false;
+        helper.waitDisappear(downloadPlayerModalPage.getDownloadPlayerModal(), 'Display Add Modal');
+        expect(downloadPlayerModalPage.getDownloadPlayerModal().isPresent()).to.eventually.be.false;
       });
     });
 
