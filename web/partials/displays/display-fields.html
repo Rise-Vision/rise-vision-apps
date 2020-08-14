@@ -18,18 +18,23 @@
           <div class="dropdown-menu playlist-menu" role="menu">
             <ul>
               <li>
-                <button type="button" class="btn-dropdown u_clickable" ng-disabled="!display.playerVersion" ng-click="playerActionsFactory.confirm(display.id, display.name, 'restart')" require-role="da">
+                <button type="button" class="btn-dropdown u_clickable" ng-hide="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-disabled="!display.playerVersion" ng-click="playerActionsFactory.confirm(display.id, display.name, 'restart')" require-role="da">
                   <span translate>displays-app.fields.controls.restart.name</span>
                 </button>
               </li>
               <li>
-                <button type="button" class="btn-dropdown u_clickable" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="playerActionsFactory.confirm(display.id, display.name, 'reboot')" require-role="da">
+                <button type="button" class="btn-dropdown u_clickable" ng-hide="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="playerActionsFactory.confirm(display.id, display.name, 'reboot')" require-role="da">
                   <span translate>displays-app.fields.controls.reboot.name</span>
                 </button>
               </li>
               <li>
-                <a id="installPlayer" class="u_clickable" ng-click="factory.addDisplayModal(display)">
+                <a id="installPlayer" class="u_clickable" ng-click="installationInstructionsModal()">
                   <span translate>displays-app.fields.controls.install</span>
+                </a>
+              </li>
+              <li>
+                <a class="u_nowrap" id="purchasePlayer" href="https://www.thebookpc.com/risevision-s/97.htm" target="_blank">
+                  Purchase A Preconfigured Media Player
                 </a>
               </li>
             </ul>
@@ -59,7 +64,7 @@
       </a>
       <span class="hidden-xs">or</span>
       <div class="visible-xs">or</div>
-      <button type="button" ng-click="factory.addDisplayModal(display)" class="btn btn-default btn-toolbar ml-md-2">
+      <button type="button" ng-click="installationInstructionsModal()" class="btn btn-default btn-toolbar ml-md-2">
         Install Rise Player On Your Media Player
       </button>
     </div>
@@ -254,7 +259,7 @@
             </span>
 
             <span class="mr-auto" ng-if="!factory.showLicenseRequired(display)">
-              <a class="u_clickable" ng-click="configureDisplayControl(display)" require-role="da" translate>
+              <a class="madero-link u_clickable" ng-click="configureDisplayControl(display)" require-role="da" translate>
                 Edit
               </a>
             </span>
