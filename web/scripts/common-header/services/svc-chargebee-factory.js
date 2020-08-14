@@ -185,11 +185,19 @@ angular.module('risevision.store.services')
             });
         };
 
+        factory.openSubscriptionEdit = function (companyId, subscriptionId) {
+          _openSubscriptionSection(companyId, subscriptionId, 'EDIT_SUBSCRIPTION');
+        };
+
         factory.openSubscriptionDetails = function (companyId, subscriptionId) {
+          _openSubscriptionSection(companyId, subscriptionId, 'SUBSCRIPTION_DETAILS');
+        };
+
+        var _openSubscriptionSection = function (companyId, subscriptionId, section) {
           _getChargebeePortal(companyId)
             .then(function (portal) {
               portal.open(_chargebeeCallbacks, {
-                sectionType: $window.Chargebee.getPortalSections().SUBSCRIPTION_DETAILS,
+                sectionType: $window.Chargebee.getPortalSections()[section],
                 params: {
                   subscriptionId: subscriptionId
                 }
