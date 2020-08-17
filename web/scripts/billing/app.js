@@ -25,7 +25,7 @@ angular.module('risevision.apps')
               function (canAccessApps, $stateParams, ChargebeeFactory, userState) {
                 return canAccessApps().then(function () {
                   if ($stateParams.edit) {
-                    new ChargebeeFactory().openSubscriptionEdit(userState.getSelectedCompanyId(), $stateParams.edit);
+                    new ChargebeeFactory().openEditSubscription(userState.getSelectedCompanyId(), $stateParams.edit);
                   }
                 });
               }

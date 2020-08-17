@@ -18,7 +18,6 @@ angular.module('risevision.displays.controllers')
       $scope.playerActionsFactory = playerActionsFactory;
       $scope.updatingRPP = false;
       $scope.monitoringSchedule = {};
-      $scope.showPlansModal = plansFactory.showPlansModal;
       $scope.selectedSchedule = null;
       $scope.scheduleFactory = scheduleFactory;
 

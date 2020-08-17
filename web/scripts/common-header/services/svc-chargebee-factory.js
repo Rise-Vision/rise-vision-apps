@@ -185,7 +185,7 @@ angular.module('risevision.store.services')
             });
         };
 
-        factory.openSubscriptionEdit = function (companyId, subscriptionId) {
+        factory.openEditSubscription = function (companyId, subscriptionId) {
           _openSubscriptionSection(companyId, subscriptionId, 'EDIT_SUBSCRIPTION');
         };
 

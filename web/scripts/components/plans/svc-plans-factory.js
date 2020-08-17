@@ -188,7 +188,7 @@
           .then(function() {
             _factory.showPurchaseOptions();
           });
-        }
+        };
 
         _factory.showPurchaseOptions = function () {
           if (currentPlanFactory.isPlanActive()) {
