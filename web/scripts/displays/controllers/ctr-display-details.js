@@ -5,11 +5,11 @@ angular.module('risevision.displays.controllers')
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'enableCompanyProduct', 'userState', 'plansFactory',
     'currentPlanFactory', 'playerLicenseFactory', 'playerActionsFactory', 'PLAYER_PRO_PRODUCT_CODE',
-    '$state', 'addressService', 'scheduleFactory', 'processErrorCode',
+    '$state', 'scheduleFactory', 'processErrorCode',
     function ($scope, $rootScope, $q, displayFactory, display, screenshotFactory, playerProFactory,
       $loading, $log, $modal, $templateCache, displayId, enableCompanyProduct, userState,
       plansFactory, currentPlanFactory, playerLicenseFactory, playerActionsFactory,
-      PLAYER_PRO_PRODUCT_CODE, $state, addressService, scheduleFactory, processErrorCode) {
+      PLAYER_PRO_PRODUCT_CODE, $state, scheduleFactory, processErrorCode) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
@@ -192,13 +192,13 @@ angular.module('risevision.displays.controllers')
 
           return $q.reject();
         } else {
-          var shouldSkipAddressValidation = !addressService.isAddressFormDirty($scope.displayDetails) && !$scope
-            .displayDetails.useCompanyAddress.$dirty;
-          return displayFactory.updateDisplay(shouldSkipAddressValidation).then(function () {
-            scheduleFactory.addToDistribution($scope.display, $scope.selectedSchedule).catch(function () {
-              displayFactory.apiError = scheduleFactory.apiError;
+          return displayFactory.updateDisplay()
+            .then(function () {
+              scheduleFactory.addToDistribution($scope.display, $scope.selectedSchedule)
+                .catch(function () {
+                  displayFactory.apiError = scheduleFactory.apiError;
+                });
             });
-          });
         }
       };
 

@@ -102,17 +102,6 @@ var DisplayManageScenarios = function() {
         expect(displayManagePage.getCancelButton().isPresent()).to.eventually.be.true;
       });
 
-      it('should fail to save the display and show validation error', function () {
-        helper.clickWhenClickable(displayManagePage.getSaveButton(), 'Save Button');
-        helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
-        expect(displayManagePage.getDisplayErrorBox().getText()).to.eventually.contain('Are you having problems validating your address?');
-      });
-
-      it('should select another country',function(){
-        displayManagePage.getDisplayCountrySelect().element(by.cssContainingText('option', 'Argentina')).click();
-        expect(displayManagePage.getDisplayCountrySelect().$('option:checked').getText()).to.eventually.contain('Argentina');
-      });
-
       it('should rename the display', function() {
         expect(displayManagePage.getDisplayNameEditButton().isPresent()).to.eventually.be.true;
         expect(displayManagePage.getDisplayNameField().isEnabled()).to.eventually.be.false;
@@ -129,7 +118,7 @@ var DisplayManageScenarios = function() {
         expect(displayManagePage.getDisplayNameField().getAttribute('value')).to.eventually.equal(displayName);
       });
 
-      it('should save the display and skip address validation', function () {
+      it('should save the display', function () {
         displayManagePage.getSaveButton().click();
         helper.waitDisappear(displayManagePage.getDisplayLoader(), 'Display loader');
         expect(displayManagePage.getSaveButton().getText()).to.eventually.equal('Save');
