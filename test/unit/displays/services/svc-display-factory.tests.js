@@ -96,33 +96,19 @@ describe('service: displayFactory:', function() {
     $provide.service('processErrorCode', function() {
       return processErrorCode = sinon.spy(function() { return 'error'; });
     });
-    $provide.service('storeService', function() {
-      return {
-        validateAddress: sandbox.spy(function(displayId) {
-          var deferred = Q.defer();
-          if(validateAddress){
-            deferred.resolve();
-          }else{
-            deferred.reject({result: {error: { message: 'ERROR; could not validate address'}}});
-          }
-          return deferred.promise;
-        })
-      }
-    });
+
   }));
   var displayFactory, $rootScope, $modal, $state, userState, trackerCalled, updateDisplay, returnList, 
-  displayListSpy, displayAddSpy, playerLicenseFactory, plansFactory, display, processErrorCode, validateAddress, storeService;
+  displayListSpy, displayAddSpy, playerLicenseFactory, plansFactory, display, processErrorCode;
   beforeEach(function(){
     trackerCalled = undefined;
     updateDisplay = true;
-    validateAddress = true;
     returnList = null;
 
     inject(function($injector){
       displayFactory = $injector.get('displayFactory');
       playerLicenseFactory = $injector.get('playerLicenseFactory');
       plansFactory = $injector.get('plansFactory');
-      storeService = $injector.get('storeService');
       display = $injector.get('display');
       $modal = $injector.get('$modal');
       $rootScope = $injector.get('$rootScope');
@@ -144,7 +130,6 @@ describe('service: displayFactory:', function() {
     expect(displayFactory.loadingDisplay).to.be.false;
     expect(displayFactory.savingDisplay).to.be.false;
     expect(displayFactory.apiError).to.not.be.ok;
-    expect(displayFactory.isAddressError).to.be.false;
     
     expect(displayFactory.init).to.be.a('function');
     expect(displayFactory.addDisplayModal).to.be.a('function');
@@ -371,109 +356,9 @@ describe('service: displayFactory:', function() {
         expect(displayFactory.loadingDisplay).to.be.false;
 
         expect(displayFactory.apiError).to.be.ok;
-        expect(displayFactory.isAddressError).to.be.false;        
         done();
       },10);
     });
-
-    it('should validate the address if not using company address',function(done){
-      updateDisplay = true;
-      displayFactory.display.useCompanyAddress = false;
-      validateAddress = false;
-
-      displayFactory.updateDisplay();
-      storeService.validateAddress.should.have.been.called;
-      
-      expect(displayFactory.savingDisplay).to.be.true;
-      expect(displayFactory.loadingDisplay).to.be.true;
-      expect(displayFactory.isAddressError).to.be.false;
-
-      setTimeout(function(){
-        expect(trackerCalled).to.not.be.ok;
-        expect(displayFactory.savingDisplay).to.be.false;
-        expect(displayFactory.loadingDisplay).to.be.false;
-
-        expect(displayFactory.apiError).to.be.ok;
-        expect(displayFactory.isAddressError).to.be.true;
-        done();
-      },10);
-    });
-
-    it('should follow validation result from storeService',function(done){
-      updateDisplay = true;
-      displayFactory.display.useCompanyAddress = false;
-      validateAddress = true;
-
-      displayFactory.updateDisplay();
-      storeService.validateAddress.should.have.been.called;
-
-      setTimeout(function(){
-        expect(trackerCalled).to.equal('Display Updated');
-        done();
-      },10);
-    });
-
-    it('should not validate the address if using company address',function(done){
-      updateDisplay = true;
-      displayFactory.display.useCompanyAddress = true;
-
-      displayFactory.updateDisplay();
-
-      storeService.validateAddress.should.not.have.been.called;
-
-      setTimeout(function(){
-        expect(trackerCalled).to.equal('Display Updated');
-        done();
-      },10);
-    });
-
-    it('should flag empty address',function(done){
-      updateDisplay = true;
-      validateAddress = false;
-      displayFactory.display.useCompanyAddress = false;
-      displayFactory.display.country = '';
-
-      displayFactory.updateDisplay();
-
-      storeService.validateAddress.should.have.been.called;
-
-      setTimeout(function(){
-        expect(displayFactory.isAddressError).to.be.true;
-        done();
-      },10);
-    });
-
-    it('should skip validation if country is not US or CA',function(done){
-      updateDisplay = true;
-      displayFactory.display.useCompanyAddress = false;
-      displayFactory.display.country = 'AR';
-
-      displayFactory.updateDisplay();
-
-      storeService.validateAddress.should.not.have.been.called;
-
-      setTimeout(function(){
-        expect(trackerCalled).to.equal('Display Updated');
-        done();
-      },10);
-    });
-
-    it('should skip validation if flag is set to skip',function(done){
-      updateDisplay = true;
-      displayFactory.display.useCompanyAddress = false;
-
-      var skipAddressValidation = true;
-
-      displayFactory.updateDisplay(skipAddressValidation);
-
-      storeService.validateAddress.should.not.have.been.called;
-
-      setTimeout(function(){
-        expect(trackerCalled).to.equal('Display Updated');
-        done();
-      },10);
-    });
-
 
   });
   

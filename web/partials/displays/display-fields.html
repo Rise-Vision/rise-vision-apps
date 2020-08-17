@@ -18,18 +18,23 @@
           <div class="dropdown-menu playlist-menu" role="menu">
             <ul>
               <li>
-                <button type="button" class="btn-dropdown u_clickable" ng-disabled="!display.playerVersion" ng-click="playerActionsFactory.confirm(display.id, display.name, 'restart')" require-role="da">
+                <button type="button" class="btn-dropdown u_clickable" ng-hide="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-disabled="!display.playerVersion" ng-click="playerActionsFactory.confirm(display.id, display.name, 'restart')" require-role="da">
                   <span translate>displays-app.fields.controls.restart.name</span>
                 </button>
               </li>
               <li>
-                <button type="button" class="btn-dropdown u_clickable" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="playerActionsFactory.confirm(display.id, display.name, 'reboot')" require-role="da">
+                <button type="button" class="btn-dropdown u_clickable" ng-hide="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="playerActionsFactory.confirm(display.id, display.name, 'reboot')" require-role="da">
                   <span translate>displays-app.fields.controls.reboot.name</span>
                 </button>
               </li>
               <li>
-                <a id="installPlayer" class="u_clickable" ng-click="factory.addDisplayModal(display)">
+                <a id="installPlayerAction" ng-click="installationInstructionsModal()">
                   <span translate>displays-app.fields.controls.install</span>
+                </a>
+              </li>
+              <li>
+                <a id="purchasePlayerAction" class="u_nowrap" href="https://www.thebookpc.com/risevision-s/97.htm" target="_blank">
+                  Purchase A Preconfigured Media Player
                 </a>
               </li>
             </ul>
@@ -47,16 +52,25 @@
   <strong>{{playerActionsFactory.controlsError}}</strong>
 </div> 
 
-<div class="border-container text-center u_margin-md-top" ng-show="!displayService.statusLoading && (display | status) === 'notinstalled'">
-  <div class="panel-body">
-    <div class="form-group my-4">
-      <label translate>Display not connected.</label>
-      <p>Before content can show on your display, you need to connect a media player to Rise Vision.</p>
-    </div>
+<div class="border-container text-center u_margin-md-top" ng-show="!factory.loadingDisplay && !displayService.statusLoading && (display | status) === 'notinstalled'">
+  <div class="panel-body display-instructions-panel">
 
-    <button type="button" ng-click="factory.addDisplayModal(display)" class="btn btn-default btn-toolbar-wide mb-4">
-      Show Instructions
-    </button>
+    <div class="form-group my-2">
+      <label translate>Display not activated.</label>
+    </div>
+    <div class="mb-4">
+      <a class="btn btn-default btn-toolbar mr-2" id="purchasePlayerButton" href="https://www.thebookpc.com/risevision-s/97.htm" target="_blank">
+        Purchase A Preconfigured Media Player
+      </a>
+      <span class="hidden-xs">or</span>
+      <div class="visible-xs">or</div>
+      <button type="button" id="installPlayerButton" ng-click="installationInstructionsModal()" class="btn btn-default btn-toolbar ml-md-2">
+        Install Rise Player On Your Media Player
+      </button>
+    </div>
+    <p>On startup of your media player enter this ID <strong>{{display.id}}</strong> to activate your display.</p>
+
+    <display-email></display-email>
   </div>
 </div>
 
@@ -235,7 +249,7 @@
             <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
 
             <span class="mr-auto" ng-if="!factory.showLicenseRequired(display)">
-              <a class="u_clickable" ng-click="configureDisplayControl(display)" require-role="da" translate>
+              <a class="madero-link u_clickable" ng-click="configureDisplayControl(display)" require-role="da" translate>
                 Edit
               </a>
             </span>
