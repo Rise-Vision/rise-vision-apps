@@ -6,9 +6,12 @@ var DisplayManagePage = function() {
   var displayNameField = element(by.css('display-fields stretchy-input input'));  
   var displayNameEditButton = element(by.css('display-fields stretchy-input #editButton'));
 
-  var notActivatedPlayerLink = element(by.id('notActivatedLink'));
+  var displayInstructionsPanel = element(by.css('.display-instructions-panel'));
+  var purchasePlayerButton = element(by.id('purchasePlayerButton'));
+  var installPlayerButton = element(by.id('installPlayerButton'));
   var displayActionsButton = element(by.id('displayActionsButton'));
-  var installPlayerButton = element(by.id('installPlayer'));
+  var purchasePlayerActionButton = element(by.id('purchasePlayerAction'));
+  var installPlayerActionButton = element(by.id('installPlayerAction'));
   var displayUseCompanyAddressCheckbox = element(by.model('display.useCompanyAddress'));
   var displayRebootCheckbox = element(by.model('display.restartEnabled'));
   var viewScheduleLink = element(by.id('viewSchedule'));
@@ -23,8 +26,6 @@ var DisplayManagePage = function() {
   var deleteForeverButton = element(by.id('confirm-primary'));
 
   var displayLoader = element(by.xpath('//div[@spinner-key="display-loader"]'));
-
-  var displayErrorBox = element(by.id('errorBox'));
 
   this.getDisplaysAppContainer = function() {
     return displaysAppContainer;
@@ -42,16 +43,28 @@ var DisplayManagePage = function() {
     return displayNameEditButton;
   };
 
-  this.getNotActivatedPlayerLink = function() {
-    return notActivatedPlayerLink;
+  this.getDisplayInstructionsPanel = function() {
+    return displayInstructionsPanel;
+  };
+
+  this.getPurchasePlayerButton = function() {
+    return purchasePlayerButton;
+  };
+
+  this.getInstallPlayerButton = function() {
+    return installPlayerButton;
   };
 
   this.getDisplayActionsButton = function() {
     return displayActionsButton;
   };
 
-  this.getInstallPlayerButton = function() {
-    return installPlayerButton;
+  this.getPurchasePlayerActionButton = function() {
+    return purchasePlayerActionButton;
+  };
+
+  this.getInstallPlayerActionButton = function() {
+    return installPlayerActionButton;
   };
 
   this.getDisplayUseCompanyAddressCheckbox = function() {
@@ -94,9 +107,6 @@ var DisplayManagePage = function() {
     return displayLoader;
   };
 
-  this.getDisplayErrorBox = function() {
-    return displayErrorBox;
-  };
 };
 
 module.exports = DisplayManagePage;

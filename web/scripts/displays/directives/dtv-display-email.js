@@ -1,16 +1,14 @@
 'use strict';
 
 angular.module('risevision.displays.directives')
-  .directive('displayEmail', ['$q', '$loading', 'userState', 'displayEmail',
-    function ($q, $loading, userState, displayEmail) {
+  .directive('displayEmail', ['$loading', 'displayEmail', 'processErrorCode', 'EMAIL_REGEX',
+    function ($loading, displayEmail, processErrorCode, EMAIL_REGEX) {
       return {
         restrict: 'E',
         templateUrl: 'partials/displays/display-email.html',
         scope: true,
         link: function ($scope) {
-          $scope.userEmail = userState.getUserEmail();
-
-          $scope.anotherEmail = null;
+          $scope.email = null;
           $scope.displayEmail = displayEmail;
 
           $scope.$watch('displayEmail.sendingEmail', function (loading) {
@@ -21,31 +19,26 @@ angular.module('risevision.displays.directives')
             }
           });
 
-          var _sendEmail = function (email) {
-            $scope.error = false;
+          $scope.$watch('email', function() {
+            $scope.emailInvalid = !($scope.email && EMAIL_REGEX.test($scope.email));
+          });
 
-            return displayEmail.send($scope.display.id, email)
-              .catch(function (error) {
-                $scope.error = true;
+          $scope.sendEmail = function () {
+            if ($scope.emailInvalid) {
+              return;
+            }
 
-                return $q.reject(error);
-              });
-          };
+            $scope.emailSent = false;
+            $scope.emailError = false;
 
-          $scope.sendToAnotherEmail = function () {
-            _sendEmail($scope.anotherEmail)
+            displayEmail.send($scope.display.id, $scope.email)
               .then(function () {
-                $scope.emailResent = true;
-                $scope.sendAnotherEmail = false;
-                $scope.anotherEmail = null;
-                $scope.anotherEmailForm.$setPristine(true);
-              });
-          };
-
-          $scope.sendToUserEmail = function () {
-            _sendEmail(userState.getUserEmail())
-              .then(function () {
-                $scope.emailResent = true;
+                $scope.emailSent = true;
+                $scope.email = null;
+                $scope.emailForm.$setPristine(true);
+              })
+              .catch(function (e) {
+                $scope.emailError = processErrorCode(e);
               });
           };
 

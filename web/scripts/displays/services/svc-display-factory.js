@@ -2,10 +2,10 @@
 
 angular.module('risevision.displays.services')
   .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal', '$loading', '$log',
-    'userState', 'display', 'displayTracker', 'playerLicenseFactory', 'processErrorCode', 'storeService',
+    'userState', 'display', 'displayTracker', 'playerLicenseFactory', 'processErrorCode',
     'plansFactory',
     function ($rootScope, $q, $state, $modal, $loading, $log, userState, display, displayTracker,
-      playerLicenseFactory, processErrorCode, storeService, plansFactory) {
+      playerLicenseFactory, processErrorCode, plansFactory) {
       var factory = {};
       var _displayId;
 
@@ -14,7 +14,6 @@ angular.module('risevision.displays.services')
         factory.savingDisplay = false;
 
         factory.apiError = '';
-        factory.isAddressError = false;
       };
 
       factory.init = function () {
@@ -123,18 +122,7 @@ angular.module('risevision.displays.services')
         return deferred.promise;
       };
 
-      var _validateAddress = function (skipAddressValidation) {
-        if (skipAddressValidation || factory.display.useCompanyAddress ||
-          (factory.display.country !== '' &&
-            factory.display.country !== 'CA' &&
-            factory.display.country !== 'US')) {
-          return $q.resolve();
-        } else {
-          return storeService.validateAddress(factory.display);
-        }
-      };
-
-      factory.updateDisplay = function (skipAddressValidation) {
+      factory.updateDisplay = function () {
         var deferred = $q.defer();
 
         _clearMessages();
@@ -143,23 +131,16 @@ angular.module('risevision.displays.services')
         factory.loadingDisplay = true;
         factory.savingDisplay = true;
 
-        _validateAddress(skipAddressValidation).then(function () {
-            return display.update(_displayId, factory.display)
-              .then(function (displayId) {
-                displayTracker('Display Updated', _displayId,
-                  factory.display.name);
+        display.update(_displayId, factory.display)
+          .then(function (displayId) {
+            displayTracker('Display Updated', _displayId,
+              factory.display.name);
 
-                deferred.resolve();
-              })
-              .then(null, function (e) {
-                _showErrorMessage('update', e);
-                deferred.reject();
-              });
+            deferred.resolve();
           })
-          .catch(function (e) {
-            factory.apiError = processErrorCode(e);
-            factory.isAddressError = true;
-            $log.error(factory.apiError, e);
+          .then(null, function (e) {
+            _showErrorMessage('update', e);
+            deferred.reject();
           })
           .finally(function () {
             factory.loadingDisplay = false;

@@ -2,8 +2,8 @@
 
 angular.module('risevision.displays.directives')
   .directive('displayFields', ['$sce', 'userState', 'playerProFactory', 'displayControlFactory',
-    'COUNTRIES', 'REGIONS_CA', 'REGIONS_US', 'TIMEZONES', 'SHARED_SCHEDULE_URL',
-    function ($sce, userState, playerProFactory, displayControlFactory,
+    'messageBox', 'COUNTRIES', 'REGIONS_CA', 'REGIONS_US', 'TIMEZONES', 'SHARED_SCHEDULE_URL',
+    function ($sce, userState, playerProFactory, displayControlFactory, messageBox,
       COUNTRIES, REGIONS_CA, REGIONS_US, TIMEZONES, SHARED_SCHEDULE_URL) {
       return {
         restrict: 'E',
@@ -50,6 +50,10 @@ angular.module('risevision.displays.directives')
             } else {
               $scope.displayControlError = true;
             }
+          };
+
+          $scope.installationInstructionsModal = function () {
+            messageBox(null, null, null, 'madero-style centered-modal download-player-modal', 'partials/displays/download-player-modal.html', 'sm');
           };
 
         } //link()

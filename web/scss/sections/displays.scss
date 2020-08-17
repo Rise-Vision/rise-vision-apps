@@ -93,6 +93,32 @@
 
 }
 
+.display-instructions-panel {
+  @extend .mx-auto;
+
+  max-width: 701px;
+
+  .btn-toolbar {
+    width: 320px;
+  }
+}
+
+.download-player-modal {
+  .bullet-list {
+    text-align: left;
+    font-size: 12px;
+    line-height: 18px;
+    margin-top: 10px;
+
+    li {
+      @extend .mt-0;
+
+      a {
+        margin-left: 10px;
+      }
+    }
+  }
+}
 
 /* Deprecate Below
  +   ========================================================================== 

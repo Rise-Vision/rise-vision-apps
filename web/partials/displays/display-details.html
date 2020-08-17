@@ -21,13 +21,12 @@
 
   <!-- body -->
   <div>
-    <form role="form" name="displayDetails" ng-submit="save()">
+    <form role="form" name="displayDetails" ng-submit="save()" novalidate>
 
       <display-fields></display-fields>
 
       <div id="errorBox" ng-show="factory.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
         <strong>{{factory.apiError}}</strong>
-        <suggest-general-delivery ng-if="factory.isAddressError" address-object="display"></suggest-general-delivery>
       </div>
 
       <div class="button-row text-right mt-5">
