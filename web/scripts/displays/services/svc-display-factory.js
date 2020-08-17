@@ -20,6 +20,7 @@ angular.module('risevision.displays.services')
         _displayId = undefined;
 
         factory.display = {
+          'name': 'New Display',
           'width': 1920,
           'height': 1080,
           'status': 1,
@@ -34,25 +35,10 @@ angular.module('risevision.displays.services')
 
       factory.init();
 
-      factory.addDisplayModal = function (display) {
+      factory.newDisplay = function () {
         displayTracker('Add Display');
 
-        if (display) {
-          factory.display = display;
-        } else {
-          factory.init();
-        }
-
-        $modal.open({
-          templateUrl: 'partials/displays/display-add-modal.html',
-          size: 'lg',
-          controller: 'displayAddModal',
-          resolve: {
-            downloadOnly: function () {
-              return display || false;
-            }
-          }
-        });
+        factory.init();
       };
 
       factory.getDisplay = function (displayId) {

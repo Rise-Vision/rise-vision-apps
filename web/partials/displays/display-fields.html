@@ -52,7 +52,7 @@
   <strong>{{playerActionsFactory.controlsError}}</strong>
 </div> 
 
-<div class="border-container text-center u_margin-md-top" ng-show="!factory.loadingDisplay && !displayService.statusLoading && (display | status) === 'notinstalled'">
+<div class="border-container text-center u_margin-md-top" ng-show="!factory.loadingDisplay && display.id && !displayService.statusLoading && (display | status) === 'notinstalled'">
   <div class="panel-body display-instructions-panel">
 
     <div class="form-group my-2">

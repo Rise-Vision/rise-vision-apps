@@ -1,0 +1,38 @@
+<div class="madero-style">
+  <div class="app-header u_padding-20-vertical mb-5 border-bottom">
+    <!-- App Title -->
+    <div class="app-header-title" id="title">
+      <h1 class="mt-0">Displays</h1>
+      <div>
+        <span ng-show="getProLicenseCount() > 0">
+          {{ getProUsedLicenseCount() }} Licensed Display{{getProUsedLicenseCount() > 1 ? 's' : ''}} | {{ getProAvailableLicenseCount() }} License{{getProAvailableLicenseCount() > 1 ? 's' : ''}} Available
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div rv-spinner rv-spinner-key="display-loader" rv-spinner-start-active="0"></div>
+
+  <div>
+    <form id="displayAdd" role="form" name="displayDetails" ng-submit="save()" novalidate>
+      
+      <display-fields></display-fields>
+      
+      <div id="errorBox" ng-show="factory.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
+        <strong>{{factory.apiError}}</strong>
+      </div> 
+
+        <div class="button-row text-right mt-5">
+          <!-- Indicates cancel or non-destructive action -->
+          <button id="cancelButton" type="button" ui-sref="apps.displays.list" class="btn btn-default btn-toolbar">
+            {{'common.cancel' | translate}}
+          </button>
+          <!-- Indicates a successful or positive action -->
+          <button id="saveButton" type="submit" class="btn btn-primary btn-toolbar" ng-disabled="displayDetails.$invalid || factory.savingDisplay" require-role="cp">
+            {{ factory.savingDisplay ? ('common.saving' | translate) : ('common.save' | translate)}} 
+          </button>
+        </div><!--button-row-->
+
+    </form><!-- displayDetails -->
+  </div><!--container-->
+</div>

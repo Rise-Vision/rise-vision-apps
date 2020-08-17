@@ -9,10 +9,6 @@ angular.module('risevision.common.components.distribution-selector')
       $scope.parameters.distribution = (distribution) ? angular.copy(
         distribution) : [];
 
-      $scope.addDisplay = function () {
-        $rootScope.$broadcast('distributionSelector.addDisplay');
-      };
-
       $scope.apply = function () {
         console.debug('Selected Distribution: ', $scope.parameters.distribution);
         $modalInstance.close($scope.parameters.distribution);
