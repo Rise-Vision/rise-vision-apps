@@ -49,25 +49,26 @@ angular.module('risevision.displays.controllers')
 
       $scope.$watch('selectedSchedule', function (newSchedule, oldSchedule) {
         var isChangingSchedule = oldSchedule || (!oldSchedule && !display.hasSchedule($scope.display));
-        if (isChangingSchedule && scheduleFactory.requiresLicense(newSchedule) && !$scope.display.playerProAuthorized) {
+        if (isChangingSchedule && scheduleFactory.requiresLicense(newSchedule) && !$scope.display
+          .playerProAuthorized) {
           confirmModal('Assign license?',
-            'You\'ve selected a schedule that contains presentations. In order to show this schedule on this display, you need to license it. Assign license now?',
-            'Yes', 'No', 'madero-style centered-modal',
-            'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
-          .then(function() {
+              'You\'ve selected a schedule that contains presentations. In order to show this schedule on this display, you need to license it. Assign license now?',
+              'Yes', 'No', 'madero-style centered-modal',
+              'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
+            .then(function () {
               $scope.toggleProAuthorized();
-          });
+            });
         }
       });
 
-      $scope.confirmLicensing = function() {
+      $scope.confirmLicensing = function () {
         return confirmModal('Assign license?',
-          'Do you want to assign one of your licenses to this display?',
-          'Yes', 'No', 'madero-style centered-modal',
-          'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
-        .then(function() {
-          $scope.toggleProAuthorized();
-        });
+            'Do you want to assign one of your licenses to this display?',
+            'Yes', 'No', 'madero-style centered-modal',
+            'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
+          .then(function () {
+            $scope.toggleProAuthorized();
+          });
       };
 
       $scope.toggleProAuthorized = function () {

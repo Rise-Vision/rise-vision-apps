@@ -23,8 +23,8 @@ angular.module('risevision.schedules.directives')
               });
           });
 
-          $scope.licenseFreeDisplays = function() {
-            playerLicenseFactory.confirmAndLicense($scope.freeDisplays).then(function() {
+          $scope.licenseFreeDisplays = function () {
+            playerLicenseFactory.confirmAndLicense($scope.freeDisplays).then(function () {
               $scope.freeDisplays = [];
             });
           };
