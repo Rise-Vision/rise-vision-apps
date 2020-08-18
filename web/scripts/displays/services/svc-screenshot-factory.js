@@ -6,7 +6,7 @@ angular.module('risevision.displays.services')
       var factory = {};
 
       factory.requestScreenshot = function () {
-        if (displayFactory.showUnlockDisplayFeatureModal()) {
+        if (displayFactory.showLicenseRequired()) {
           return;
         }
 

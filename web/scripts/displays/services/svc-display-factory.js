@@ -3,9 +3,9 @@
 angular.module('risevision.displays.services')
   .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal', '$loading', '$log',
     'userState', 'display', 'displayTracker', 'scheduleFactory', 'playerLicenseFactory',
-    'processErrorCode', 'plansFactory',
+    'processErrorCode',
     function ($rootScope, $q, $state, $modal, $loading, $log, userState, display, displayTracker,
-      scheduleFactory, playerLicenseFactory, processErrorCode, plansFactory) {
+      scheduleFactory, playerLicenseFactory, processErrorCode) {
       var factory = {};
       var _displayId;
 
@@ -98,7 +98,13 @@ angular.module('risevision.displays.services')
             _showErrorMessage('add', e);
             deferred.reject();
           })
-          .then(function() {
+          .then(function() {            
+            if ($state.current.name === 'apps.displays.add') {
+              $state.go('apps.displays.details', {
+                displayId: factory.display.id
+              });
+            }
+
             deferred.resolve();
           })
           .catch(function () {
@@ -180,39 +186,9 @@ angular.module('risevision.displays.services')
       };
 
       factory.showLicenseRequired = function (display) {
+        display = display || factory.display;
+
         return display && !display.playerProAuthorized && !userState.isRiseAdmin();
-      };
-
-      factory.showLicenseUpdate = function () {
-        if (playerLicenseFactory.getProLicenseCount() > 0) {
-          $state.go('apps.billing.home');
-        } else {
-          plansFactory.showPlansModal();
-        }
-      };
-
-      factory.showUnlockDisplayFeatureModal = function () {
-        if (!factory.showLicenseRequired(factory.display)) {
-          return false;
-
-        } else {
-          $modal.open({
-            templateUrl: 'partials/displays/unlock-display-feature-modal.html',
-            controller: 'confirmModalController',
-            windowClass: 'madero-style centered-modal unlock-this-feature-modal',
-            size: 'sm',
-            resolve: {
-              confirmationTitle: null,
-              confirmationMessage: null,
-              confirmationButton: null,
-              cancelButton: null
-            }
-          }).result.then(function () {
-            factory.showLicenseUpdate();
-          });
-
-          return true;
-        }
       };
 
       return factory;

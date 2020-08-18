@@ -13,16 +13,16 @@ angular.module('risevision.displays.services')
           ' Available';
       };
       
-      factory.isProAvailable = function () {
-        return factory.hasProfessionalLicenses() && factory.getProLicenseCount() > 0 && 
-          factory.getProAvailableLicenseCount() > 0;
+      factory.isProAvailable = function (display) {
+        return factory.hasProfessionalLicenses() && _getProLicenseCount() > 0 && 
+        !_areAllProLicensesUsed(display);
       };
 
       factory.hasProfessionalLicenses = function () {
         return currentPlanFactory.currentPlan.playerProTotalLicenseCount > 0;
       };
 
-      factory.getProLicenseCount = function () {
+      var _getProLicenseCount = function () {
         return currentPlanFactory.currentPlan.playerProTotalLicenseCount || 0;
       };
 
@@ -31,7 +31,7 @@ angular.module('risevision.displays.services')
       };
 
       factory.getProUsedLicenseCount = function () {
-        return factory.getProLicenseCount() - factory.getProAvailableLicenseCount();
+        return _getProLicenseCount() - factory.getProAvailableLicenseCount();
       };
 
       factory.isProToggleEnabled = function (display) {
@@ -43,7 +43,7 @@ angular.module('risevision.displays.services')
         var allLicensesUsed = !factory.getProAvailableLicenseCount();
         var allProLicensesUsed = allLicensesUsed && !(display && display.playerProAssigned);
 
-        return factory.getProLicenseCount() > 0 && allProLicensesUsed;
+        return _getProLicenseCount() > 0 && allProLicensesUsed;
       };
 
       factory.toggleDisplayLicenseLocal = function (playerProAuthorized) {
