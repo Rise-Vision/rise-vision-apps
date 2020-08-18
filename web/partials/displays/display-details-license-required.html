@@ -1,0 +1,4 @@
+<span class="mr-auto" ng-if="factory.showLicenseRequired(display)">
+	<a href="" ng-click="confirmLicensing()" ng-show="userState.hasRole('da')">License Required</a>
+	<span ng-show="!userState.hasRole('da')">License Required</span>
+</span>

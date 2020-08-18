@@ -5,11 +5,11 @@ angular.module('risevision.displays.controllers')
     'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'enableCompanyProduct', 'userState', 'plansFactory',
     'currentPlanFactory', 'playerLicenseFactory', 'playerActionsFactory', 'PLAYER_PRO_PRODUCT_CODE',
-    '$state', 'scheduleFactory', 'processErrorCode',
+    '$state', 'scheduleFactory', 'processErrorCode', 'confirmModal',
     function ($scope, $rootScope, $q, displayFactory, display, screenshotFactory, playerProFactory,
       $loading, $log, $modal, $templateCache, displayId, enableCompanyProduct, userState,
       plansFactory, currentPlanFactory, playerLicenseFactory, playerActionsFactory,
-      PLAYER_PRO_PRODUCT_CODE, $state, scheduleFactory, processErrorCode) {
+      PLAYER_PRO_PRODUCT_CODE, $state, scheduleFactory, processErrorCode, confirmModal) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
@@ -18,7 +18,6 @@ angular.module('risevision.displays.controllers')
       $scope.playerActionsFactory = playerActionsFactory;
       $scope.updatingRPP = false;
       $scope.monitoringSchedule = {};
-      $scope.showPlansModal = plansFactory.showPlansModal;
       $scope.selectedSchedule = null;
       $scope.scheduleFactory = scheduleFactory;
 
@@ -48,16 +47,35 @@ angular.module('risevision.displays.controllers')
         }
       });
 
+      $scope.$watch('selectedSchedule', function (newSchedule, oldSchedule) {
+        var isChangingSchedule = oldSchedule || (!oldSchedule && !display.hasSchedule($scope.display));
+        if (isChangingSchedule && scheduleFactory.requiresLicense(newSchedule) && !$scope.display.playerProAuthorized) {
+          confirmModal('Assign license?',
+            'You\'ve selected a schedule that contains presentations. In order to show this schedule on this display, you need to license it. Assign license now?',
+            'Yes', 'No', 'madero-style centered-modal',
+            'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
+          .then(function() {
+              $scope.toggleProAuthorized();
+          });
+        }
+      });
+
+      $scope.confirmLicensing = function() {
+        return confirmModal('Assign license?',
+          'Do you want to assign one of your licenses to this display?',
+          'Yes', 'No', 'madero-style centered-modal',
+          'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
+        .then(function() {
+          $scope.toggleProAuthorized();
+        });
+      };
+
       $scope.toggleProAuthorized = function () {
         $scope.errorUpdatingRPP = false;
 
         if (!$scope.isProAvailable()) {
           $scope.display.playerProAuthorized = false;
-          if ($scope.getProLicenseCount() > 0 && $scope.areAllProLicensesUsed()) {
-            $state.go('apps.billing.home');
-          } else {
-            plansFactory.showPlansModal();
-          }
+          plansFactory.confirmAndPurchase();
         } else {
           var apiParams = {};
           var playerProAuthorized = !$scope.display.playerProAuthorized;

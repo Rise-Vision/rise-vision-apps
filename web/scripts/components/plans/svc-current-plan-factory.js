@@ -31,6 +31,7 @@
 
           _factory.currentPlan = plan;
 
+          plan.subscriptionId = company.planSubscriptionId;
           plan.playerProTotalLicenseCount = company.playerProTotalLicenseCount;
           plan.playerProAvailableLicenseCount = company.playerProAvailableLicenseCount;
 

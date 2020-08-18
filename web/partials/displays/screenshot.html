@@ -5,8 +5,8 @@
 
       <label class="control-label pull-left mb-0">Screenshot</label>
       <span class="mr-auto" ng-show="screenshotState(display) === 'no-license'">
-        <!-- unlicensed -->
-        License Required
+        <a href="" ng-click="confirmLicensing()" ng-show="userState.hasRole('da')">License Required</a>
+        <span ng-show="!userState.hasRole('da')">License Required</span>
       </span>
       <span id="notActivated" ng-show="screenshotState(display) !== 'no-license' && !displayService.statusLoading && (display | status) === 'notinstalled'">
         {{ 'displays-app.list.status.notActivated' | translate }}

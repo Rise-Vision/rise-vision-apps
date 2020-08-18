@@ -625,4 +625,40 @@ describe('service: scheduleFactory:', function() {
     });
   });
 
+  describe('requiresLicense:', function() {
+    it('should require license if schedule has presentations', function() {
+      var schedule = {
+        content: [{type:'presentation'}]
+      };
+      expect(scheduleFactory.requiresLicense(schedule)).to.be.true;
+
+      schedule = {
+        content: [
+          {type:'url'},
+          {type:'presentation', presentationType:'HTML Template'}
+        ]
+      };
+      expect(scheduleFactory.requiresLicense(schedule)).to.be.true;
+    });
+
+    it('should not require license if schedule has only url items', function() {
+      var schedule = {
+        content: [{type:'url'}]
+      };
+      expect(scheduleFactory.requiresLicense(schedule)).to.be.false;
+    });
+
+    it('should not require license if schedule content is empty or null', function() {
+      var schedule = {
+        content: []
+      };
+      expect(scheduleFactory.requiresLicense(schedule)).to.be.false;
+
+      schedule = {
+        content: undefined
+      };
+      expect(scheduleFactory.requiresLicense(schedule)).to.be.false;
+    });
+  });
+
 });

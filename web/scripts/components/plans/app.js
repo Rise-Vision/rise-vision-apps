@@ -15,6 +15,8 @@
 
   angular.module('risevision.common.components.plans', [
     'risevision.common.config',
+    'risevision.common.components.confirm-modal',
+    'risevision.common.components.message-box',
     'risevision.common.components.plans.services',
     'risevision.common.components.purchase-flow',
     'risevision.common.components.scrolling-list',

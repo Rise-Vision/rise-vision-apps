@@ -29,6 +29,9 @@ describe("Services: plans factory", function() {
     });
     $provide.service("currentPlanFactory", function() {
       return {
+        currentPlan: {
+          subscriptionId: 'subscriptionId'
+        },
         isPlanActive: sinon.stub().returns(true)
       };
     });
@@ -37,10 +40,16 @@ describe("Services: plans factory", function() {
         go: sinon.stub()
       };
     });
+    $provide.factory('confirmModal', function() {
+       return confirmModalStub = sinon.stub().returns(Q.resolve());
+    });
+    $provide.factory('messageBox', function() {
+       return messageBoxStub = sinon.stub();
+    });
   }));
 
-  var sandbox, $modal, userState, plansFactory, analyticsFactory, currentPlanFactory, $state;
-  var VOLUME_PLAN;
+  var sandbox, $modal, userState, plansFactory, analyticsFactory, currentPlanFactory, $state,
+    confirmModalStub, messageBoxStub, VOLUME_PLAN;
 
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
@@ -101,18 +110,34 @@ describe("Services: plans factory", function() {
   });
   
   describe("showPurchaseOptions: ", function() {
-    it('should go to billing page on confimation if company has a plan', function(done) {
+    it('should go to billing page/edit subscription if company has a plan and manages it', function(done) {
       plansFactory.showPurchaseOptions();
 
       setTimeout(function(){
-        expect($modal.open).to.not.have.been.called;
+        expect($state.go).to.have.been.calledWith('apps.billing.home', {edit: 'subscriptionId'});
 
-        expect($state.go).to.have.been.calledWith('apps.billing.home');
+        expect(messageBoxStub).to.not.have.been.called;
         done();
       },10);
     });
 
-    it('should open Plans Modal on confimation', function(done) {
+    it('should show a message if company has a plan but it is managed by a parent company', function(done) {
+      currentPlanFactory.currentPlan.isPurchasedByParent = true
+      plansFactory.showPurchaseOptions();
+
+      setTimeout(function(){
+        expect(messageBoxStub).to.have.been.calledWith(
+          'You can\'t edit your current plan.',
+          'Your plan is managed by your parent company. Please contact your account administrator for additional licenses.',
+          'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
+        );
+
+        expect($state.go).to.not.have.been.called;
+        done();
+      },10);
+    });
+
+    it('should open Plans Modal if company does not have a plan', function(done) {
       currentPlanFactory.isPlanActive.returns(false);
 
       plansFactory.showPurchaseOptions();
@@ -120,6 +145,40 @@ describe("Services: plans factory", function() {
       setTimeout(function(){
         expect($modal.open).to.have.been.called;
         expect($modal.open).to.have.been.calledWithMatch({controller: 'PlansModalCtrl'});
+
+        done();
+      },10);
+    });
+  });
+
+  describe("confirmAndPurchase:", function(){
+    it("should show confirmation message and proceed to purchase on confirmation", function(done) {
+      sinon.spy(plansFactory, "showPurchaseOptions");
+
+      plansFactory.confirmAndPurchase();
+
+      setTimeout(function() {        
+        expect(confirmModalStub).to.have.been.calledWith(
+          'Almost there!',
+          'There aren\'t any available licenses to assign. Subscribe to additional licenses?',
+          'Yes', 'No', 'madero-style centered-modal',
+          'partials/components/confirm-modal/madero-confirm-modal.html', 'sm'
+        );
+        expect(plansFactory.showPurchaseOptions).to.have.been.called;
+
+        done();
+      },10);
+    });
+
+    it("should not proceed to purchase if dismissed", function(done) {
+      confirmModalStub.returns(Q.reject());
+      sinon.spy(plansFactory, "showPurchaseOptions");
+
+      plansFactory.confirmAndPurchase();
+
+      setTimeout(function() {        
+        expect(confirmModalStub).to.have.been.called;
+        expect(plansFactory.showPurchaseOptions).to.not.have.been.called;
 
         done();
       },10);
@@ -197,49 +256,6 @@ describe("Services: plans factory", function() {
       expect($modal.open).to.have.been.calledOnce;
       expect($modal.open).to.have.been.calledWithMatch({controller: "confirmModalController"});
       expect($modal.open).to.not.have.been.calledWithMatch({controller: 'PlansModalCtrl'});
-    });
-  });
-
-  describe("showLicenseRequiredToUpdateModal:", function() {
-    beforeEach(function() {
-      sinon.stub(plansFactory, 'showPurchaseOptions');
-    });
-
-    it('should open License Required To Update Modal', function(){
-      plansFactory.showLicenseRequiredToUpdateModal();
-
-      expect($modal.open).to.have.been.calledOnce;
-      expect($modal.open).to.have.been.calledWithMatch({
-        templateUrl: 'partials/components/confirm-modal/madero-confirm-modal.html',
-        controller: "confirmModalController",
-        windowClass: 'madero-style centered-modal'
-      });
-      expect($modal.open.getCall(0).args[0].resolve.confirmationTitle()).to.equal('Missing Display License');
-      expect($modal.open.getCall(0).args[0].resolve.confirmationMessage()).to.equal('A Display License is required to automatically update your Display. Please restart it to apply the latest changes.');
-    });
-
-    it('should show purchase options on confimation', function(done) {
-      $modal.open.returns({result: Q.resolve()});
-
-      plansFactory.showLicenseRequiredToUpdateModal();
-
-      setTimeout(function() {
-        plansFactory.showPurchaseOptions.should.have.been.called;
-
-        done();
-      }, 10);
-    });
-
-    it('should not show purchase options if dismissed', function(done) {
-      $modal.open.returns({result: Q.reject()});
-
-      plansFactory.showLicenseRequiredToUpdateModal();
-
-      setTimeout(function() {
-        plansFactory.showPurchaseOptions.should.not.have.been.called;
-
-        done();
-      }, 10);
     });
   });
 

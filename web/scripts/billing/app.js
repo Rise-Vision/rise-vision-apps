@@ -14,16 +14,20 @@ angular.module('risevision.apps')
         })
 
         .state('apps.billing.home', {
-          url: '/billing',
+          url: '/billing?edit',
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get(
               'partials/billing/app-billing.html');
           }],
           controller: 'BillingCtrl',
           resolve: {
-            canAccessApps: ['canAccessApps',
-              function (canAccessApps) {
-                return canAccessApps();
+            canAccessApps: ['canAccessApps', '$stateParams', 'ChargebeeFactory', 'userState',
+              function (canAccessApps, $stateParams, ChargebeeFactory, userState) {
+                return canAccessApps().then(function () {
+                  if ($stateParams.edit) {
+                    new ChargebeeFactory().openEditSubscription(userState.getSelectedCompanyId(), $stateParams.edit);
+                  }
+                });
               }
             ]
           }

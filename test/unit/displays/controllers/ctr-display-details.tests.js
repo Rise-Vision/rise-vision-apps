@@ -39,7 +39,8 @@ describe('controller: display details', function() {
     });
     $provide.service('scheduleFactory', function() {
       return {
-        addToDistribution: sandbox.stub()
+        addToDistribution: sandbox.stub(),
+        requiresLicense: sandbox.stub().returns(true)
       };
     });
     $provide.service('$modal',function(){
@@ -71,7 +72,8 @@ describe('controller: display details', function() {
           getCopyOfSelectedCompany: function() {return company;},
           _restoreState: function(){},
           updateCompanySettings: sandbox.stub(),
-          hasRole: sandbox.stub().returns(true)
+          hasRole: sandbox.stub().returns(true),
+          getUsername: sandbox.stub().returns('username')
       };
     });
     
@@ -97,7 +99,7 @@ describe('controller: display details', function() {
     });
     $provide.factory('plansFactory', function() {
       return {
-        showPlansModal: sinon.spy()
+        confirmAndPurchase: sinon.spy()
       };
     });
     $provide.factory('currentPlanFactory', function() {
@@ -123,12 +125,15 @@ describe('controller: display details', function() {
         return 'processed ' + error;
       };
     });
+    $provide.factory('confirmModal', function() {
+      return confirmModalStub = sandbox.stub().returns(Q.resolve());
+    });
     $provide.value('displayId', displayId);
   }));
   var $scope, $state, updateCalled, deleteCalled, confirmDelete;
   var resolveLoadScreenshot, resolveRequestScreenshot, enableCompanyProduct, userState,
   $rootScope, $loading, displayFactory, playerLicenseFactory, playerProFactory, plansFactory, currentPlanFactory,
-  scheduleFactory;
+  scheduleFactory, confirmModalStub;
   var company;
   beforeEach(function(){
     company = {};
@@ -292,24 +297,12 @@ describe('controller: display details', function() {
   });
 
   describe('toggleProAuthorized', function () {
-    it('should show the plans modal', function () {
+    it('should prompt to subscribe if no licenses are available', function () {
       $scope.display = {};
       sandbox.stub($scope, 'isProAvailable').returns(false);
 
       $scope.toggleProAuthorized();
-      expect(plansFactory.showPlansModal).to.have.been.called;
-      expect(enableCompanyProduct).to.not.have.been.called;
-    });
-
-    it('should forward to billing if has a plan but no available licenses', function () {
-      $scope.display = {};
-      sandbox.stub($scope, 'isProAvailable').returns(false);
-      sandbox.stub($scope, 'getProLicenseCount').returns(1);
-      sandbox.stub($scope, 'areAllProLicensesUsed').returns(true);
-
-      $scope.toggleProAuthorized();      
-      expect($state.go).to.have.been.calledWith('apps.billing.home');
-      expect(plansFactory.showPlansModal).to.not.have.been.called;
+      expect(plansFactory.confirmAndPurchase).to.have.been.called;
       expect(enableCompanyProduct).to.not.have.been.called;
     });
 
@@ -336,7 +329,7 @@ describe('controller: display details', function() {
           expect($scope.display.playerProAuthorized).to.be.true;
 
           expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(true);
-          expect(plansFactory.showPlansModal).to.have.not.been.called;
+          expect(plansFactory.confirmAndPurchase).to.have.not.been.called;
           done();        
         }, 0);
       }, 0);
@@ -365,7 +358,7 @@ describe('controller: display details', function() {
           expect($scope.display.playerProAuthorized).to.be.false;
 
           expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(true);
-          expect(plansFactory.showPlansModal).to.have.not.been.called;
+          expect(plansFactory.confirmAndPurchase).to.have.not.been.called;
           done();        
         }, 0);
       }, 0);
@@ -397,7 +390,7 @@ describe('controller: display details', function() {
           expect($scope.display.playerProAuthorized).to.be.false;
 
           expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(false);
-          expect(plansFactory.showPlansModal).to.have.not.been.called;
+          expect(plansFactory.confirmAndPurchase).to.have.not.been.called;
           done();
         }, 0);
       }, 0);
@@ -425,7 +418,7 @@ describe('controller: display details', function() {
           expect($scope.display.playerProAuthorized).to.be.true;
 
           expect(userState.updateCompanySettings).to.not.have.been.called;
-          expect(plansFactory.showPlansModal).to.have.not.been.called;
+          expect(plansFactory.confirmAndPurchase).to.have.not.been.called;
           done();
         }, 0);
       });
@@ -619,7 +612,7 @@ describe('controller: display details', function() {
     });
   });
 
-  describe("scheduleFactory.savingSchedule:", function() {
+  describe('scheduleFactory.savingSchedule:', function() {
     it('should show spinner when saving schedule', function() {
       $loading.start.should.have.not.been.called;
       scheduleFactory.savingSchedule = true;
@@ -632,6 +625,67 @@ describe('controller: display details', function() {
       scheduleFactory.savingSchedule = false;
       $scope.$digest();
       $loading.stop.should.have.been.calledWith('display-loader');
+    });
+  });
+
+  describe('on selectedSchedule changed:', function() {
+    it('should prompt licensing if new schedule requires license and display is not licensed', function(done) {
+      sandbox.spy($scope, 'toggleProAuthorized');
+      $scope.display = { playerProAuthorized: false};
+      $scope.selectedSchedule = { id: 'newSchedule' };
+      $scope.$digest();
+
+      confirmModalStub.should.have.been.calledWith(
+        'Assign license?',
+        'You\'ve selected a schedule that contains presentations. In order to show this schedule on this display, you need to license it. Assign license now?',
+        'Yes', 'No', 'madero-style centered-modal',
+        'partials/components/confirm-modal/madero-confirm-modal.html', 'sm'
+      );
+
+      setTimeout(function() {
+        $scope.toggleProAuthorized.should.have.been.called;
+        done();
+      });
+    });
+
+    it('should not prompt if display is already licensed', function() {
+      $scope.display = { playerProAuthorized: true};
+      $scope.selectedSchedule = { id: 'newSchedule' };
+      $scope.$digest();
+      confirmModalStub.should.not.have.been.called;
+    });
+
+    it('should not prompt if schedule does not require a license', function() {
+      scheduleFactory.requiresLicense.returns(false);
+      $scope.display = { playerProAuthorized: false};
+      $scope.selectedSchedule = { id: 'newSchedule' };
+      $scope.$digest();
+      confirmModalStub.should.not.have.been.called;
+    });
+
+    it('should not prompt on initial load', function() {
+      $scope.display = { scheduleId: 'scheduleId'};
+      $scope.$digest();
+
+      $scope.selectedSchedule = { id: 'scheduleId' };
+      $scope.$digest();
+      confirmModalStub.should.not.have.been.called;
+    });
+  });
+
+  describe('confirmLicensing:', function() {
+    it('should prompt licensing current display and toggle license on confimation', function(done) {
+      sandbox.spy($scope, 'toggleProAuthorized');
+
+      $scope.confirmLicensing().then(function() {
+        confirmModalStub.should.have.been.calledWith(
+          'Assign license?',
+          'Do you want to assign one of your licenses to this display?',
+          'Yes', 'No', 'madero-style centered-modal',
+          'partials/components/confirm-modal/madero-confirm-modal.html', 'sm');
+        $scope.toggleProAuthorized.should.have.been.called;
+        done();
+      });
     });
   });
 
