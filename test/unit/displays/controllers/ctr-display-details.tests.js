@@ -99,7 +99,7 @@ describe('controller: display details', function() {
     });
     $provide.factory('plansFactory', function() {
       return {
-        showPlansModal: sinon.spy()
+        confirmAndPurchase: sinon.spy()
       };
     });
     $provide.factory('currentPlanFactory', function() {
@@ -297,24 +297,12 @@ describe('controller: display details', function() {
   });
 
   describe('toggleProAuthorized', function () {
-    it('should show the plans modal', function () {
+    it('should prompt to subscribe if no licenses are available', function () {
       $scope.display = {};
       sandbox.stub($scope, 'isProAvailable').returns(false);
 
       $scope.toggleProAuthorized();
-      expect(plansFactory.showPlansModal).to.have.been.called;
-      expect(enableCompanyProduct).to.not.have.been.called;
-    });
-
-    it('should forward to billing if has a plan but no available licenses', function () {
-      $scope.display = {};
-      sandbox.stub($scope, 'isProAvailable').returns(false);
-      sandbox.stub($scope, 'getProLicenseCount').returns(1);
-      sandbox.stub($scope, 'areAllProLicensesUsed').returns(true);
-
-      $scope.toggleProAuthorized();      
-      expect($state.go).to.have.been.calledWith('apps.billing.home');
-      expect(plansFactory.showPlansModal).to.not.have.been.called;
+      expect(plansFactory.confirmAndPurchase).to.have.been.called;
       expect(enableCompanyProduct).to.not.have.been.called;
     });
 
@@ -341,7 +329,7 @@ describe('controller: display details', function() {
           expect($scope.display.playerProAuthorized).to.be.true;
 
           expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(true);
-          expect(plansFactory.showPlansModal).to.have.not.been.called;
+          expect(plansFactory.confirmAndPurchase).to.have.not.been.called;
           done();        
         }, 0);
       }, 0);
@@ -370,7 +358,7 @@ describe('controller: display details', function() {
           expect($scope.display.playerProAuthorized).to.be.false;
 
           expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(true);
-          expect(plansFactory.showPlansModal).to.have.not.been.called;
+          expect(plansFactory.confirmAndPurchase).to.have.not.been.called;
           done();        
         }, 0);
       }, 0);
@@ -402,7 +390,7 @@ describe('controller: display details', function() {
           expect($scope.display.playerProAuthorized).to.be.false;
 
           expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(false);
-          expect(plansFactory.showPlansModal).to.have.not.been.called;
+          expect(plansFactory.confirmAndPurchase).to.have.not.been.called;
           done();
         }, 0);
       }, 0);
@@ -430,7 +418,7 @@ describe('controller: display details', function() {
           expect($scope.display.playerProAuthorized).to.be.true;
 
           expect(userState.updateCompanySettings).to.not.have.been.called;
-          expect(plansFactory.showPlansModal).to.have.not.been.called;
+          expect(plansFactory.confirmAndPurchase).to.have.not.been.called;
           done();
         }, 0);
       });

@@ -63,6 +63,7 @@ describe("Services: current plan factory", function() {
       sandbox.stub(userState, "getCopyOfSelectedCompany").returns({
         id: "companyId",
         planProductCode: BASIC_PLAN_CODE,
+        planSubscriptionId: "subscriptionId",
         planSubscriptionStatus: "Subscribed",
         planCurrentPeriodEndDate: "Jan 1, 2018",
         planTrialExpiryDate: "Jan 14, 2018",
@@ -77,6 +78,7 @@ describe("Services: current plan factory", function() {
         expect($rootScope.$emit).to.have.been.called;
         expect(currentPlanFactory.currentPlan).to.be.not.null;
         expect(currentPlanFactory.currentPlan.type).to.equal("basic");
+        expect(currentPlanFactory.currentPlan.subscriptionId).to.equal("subscriptionId");
         expect(currentPlanFactory.currentPlan.status).to.equal("Subscribed");
         expect(currentPlanFactory.currentPlan.currentPeriodEndDate.getTime()).to.equal(new Date("Jan 1, 2018").getTime());
         expect(currentPlanFactory.currentPlan.trialExpiryDate.getTime()).to.equal(new Date("Jan 14, 2018").getTime());
@@ -98,6 +100,7 @@ describe("Services: current plan factory", function() {
         playerProAvailableLicenseCount: 1,
         shareCompanyPlan: true,
         parentPlanProductCode: ADVANCED_PLAN_CODE,
+        planSubscriptionId: "subscriptionId",
         parentPlanCompanyName: "parentName",
         parentPlanContactEmail: "administratorEmail"
       });
@@ -109,6 +112,7 @@ describe("Services: current plan factory", function() {
         expect($rootScope.$emit).to.have.been.called;
         expect(currentPlanFactory.currentPlan).to.be.not.null;
         expect(currentPlanFactory.currentPlan.type).to.equal("advanced");
+        expect(currentPlanFactory.currentPlan.subscriptionId).to.equal("subscriptionId");
         expect(currentPlanFactory.currentPlan.status).to.equal("Active");
         expect(currentPlanFactory.currentPlan.playerProTotalLicenseCount).to.equal(3);
         expect(currentPlanFactory.currentPlan.playerProAvailableLicenseCount).to.equal(1);

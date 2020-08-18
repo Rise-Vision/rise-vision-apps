@@ -77,7 +77,8 @@ describe("Services: ChargebeeFactory", function() {
             ADDRESS: "ADDRESS",
             BILLING_HISTORY: "BILLING_HISTORY",
             PAYMENT_SOURCES: "PAYMENT_SOURCES",
-            SUBSCRIPTION_DETAILS: "SUBSCRIPTION_DETAILS"
+            SUBSCRIPTION_DETAILS: "SUBSCRIPTION_DETAILS",
+            EDIT_SUBSCRIPTION: "EDIT_SUBSCRIPTION"
           };
         }
       };
@@ -298,6 +299,18 @@ describe("Services: ChargebeeFactory", function() {
       });
     });
 
+    it("should open Edit Subscription section", function(done) {
+      chargebeeFactoryInstance.openEditSubscription("companyId1", "subs1");
+
+      setTimeout(function () {
+        expect(chargebeePortal.open).to.have.been.calledOnce;
+        expect(chargebeePortal.open.getCall(0).args[1].sectionType).to.equal(chargebeeSections.EDIT_SUBSCRIPTION);
+        expect(chargebeePortal.open.getCall(0).args[1].params.subscriptionId).to.equal("subs1");
+        expect(plansFactory.apiError).to.not.be.ok;
+        done();
+      });
+    });
+
     describe("companies with origin=chargebee without Chargebee account", function () {
       beforeEach(function() {
         storeService.createSession.restore(); // Method was already mocked
@@ -362,6 +375,16 @@ describe("Services: ChargebeeFactory", function() {
 
       it("should open Store Account instead of Customer Portal Subscription Details", function(done) {
         chargebeeFactoryInstance.openSubscriptionDetails("companyId1");
+
+        setTimeout(function () {
+          expect(chargebeePortal.open).to.not.have.been.called;
+          expect(plansFactory.showPlansModal).to.have.been.calledOnce;
+          done();
+        });
+      });
+
+      it("should open Store Account instead of Customer Portal Edit Subscription", function(done) {
+        chargebeeFactoryInstance.openEditSubscription("companyId1");
 
         setTimeout(function () {
           expect(chargebeePortal.open).to.not.have.been.called;

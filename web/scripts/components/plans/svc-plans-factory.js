@@ -160,8 +160,8 @@
       proLicenseCount: 0
     }])
     .factory('plansFactory', ['$modal', '$templateCache', 'userState', 'PLANS_LIST', 'analyticsFactory',
-      'currentPlanFactory', '$state',
-      function ($modal, $templateCache, userState, PLANS_LIST, analyticsFactory, currentPlanFactory, $state) {
+      'currentPlanFactory', '$state', 'confirmModal', 'messageBox',
+      function ($modal, $templateCache, userState, PLANS_LIST, analyticsFactory, currentPlanFactory, $state, confirmModal, messageBox) {
         var _factory = {};
 
         _factory.showPlansModal = function () {
@@ -180,9 +180,27 @@
           }
         };
 
+        _factory.confirmAndPurchase = function() {
+          confirmModal( 'Almost there!',
+            'There aren\'t any available licenses to assign. Subscribe to additional licenses?',
+            'Yes', 'No', 'madero-style centered-modal',
+            'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
+          .then(function() {
+            _factory.showPurchaseOptions();
+          });
+        };
+
         _factory.showPurchaseOptions = function () {
           if (currentPlanFactory.isPlanActive()) {
-            $state.go('apps.billing.home');
+            if (currentPlanFactory.currentPlan.isPurchasedByParent) {
+              messageBox(
+                'You can\'t edit your current plan.',
+                'Your plan is managed by your parent company. Please contact your account administrator for additional licenses.',
+                'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
+              );
+            } else {
+              $state.go('apps.billing.home',{edit: currentPlanFactory.currentPlan.subscriptionId});
+            }
           } else {
             _factory.showPlansModal();
           }
@@ -205,30 +223,6 @@
             }
           }).result.then(function () {
             _factory.showPlansModal();
-          });
-        };
-
-        _factory.showLicenseRequiredToUpdateModal = function () {
-          $modal.open({
-            templateUrl: 'partials/components/confirm-modal/madero-confirm-modal.html',
-            controller: 'confirmModalController',
-            windowClass: 'madero-style centered-modal',
-            resolve: {
-              confirmationTitle: function () {
-                return 'Missing Display License';
-              },
-              confirmationMessage: function () {
-                return 'A Display License is required to automatically update your Display. Please restart it to apply the latest changes.';
-              },
-              confirmationButton: function () {
-                return 'Buy a License';
-              },
-              cancelButton: function () {
-                return 'Okay';
-              }
-            }
-          }).result.then(function () {
-            _factory.showPurchaseOptions();
           });
         };
 

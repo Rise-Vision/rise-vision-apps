@@ -18,7 +18,6 @@ angular.module('risevision.displays.controllers')
       $scope.playerActionsFactory = playerActionsFactory;
       $scope.updatingRPP = false;
       $scope.monitoringSchedule = {};
-      $scope.showPlansModal = plansFactory.showPlansModal;
       $scope.selectedSchedule = null;
       $scope.scheduleFactory = scheduleFactory;
 
@@ -76,11 +75,7 @@ angular.module('risevision.displays.controllers')
 
         if (!$scope.isProAvailable()) {
           $scope.display.playerProAuthorized = false;
-          if ($scope.getProLicenseCount() > 0 && $scope.areAllProLicensesUsed()) {
-            $state.go('apps.billing.home');
-          } else {
-            plansFactory.showPlansModal();
-          }
+          plansFactory.confirmAndPurchase();
         } else {
           var apiParams = {};
           var playerProAuthorized = !$scope.display.playerProAuthorized;
