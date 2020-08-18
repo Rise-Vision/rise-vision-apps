@@ -4,16 +4,16 @@
     <div class="row-entry">
 
       <label class="control-label pull-left mb-0">Screenshot</label>
-      <span class="mr-auto" ng-show="screenshotState(display) === 'no-license'">
+      <span class="mr-auto" ng-show="screenshotState() === 'no-license'">
         <a href="" ng-click="confirmLicensing()" ng-show="userState.hasRole('da')">License Required</a>
         <span ng-show="!userState.hasRole('da')">License Required</span>
       </span>
-      <span id="notActivated" ng-show="screenshotState(display) !== 'no-license' && !displayService.statusLoading && (display | status) === 'notinstalled'">
+      <span id="notActivated" ng-show="screenshotState() !== 'no-license' && !displayService.statusLoading && (displayFactory.display | status) === 'notinstalled'">
         {{ 'displays-app.list.status.notActivated' | translate }}
       </span>
-      <span class="mr-auto" ng-show="reloadScreenshotEnabled(display) && !(!displayService.statusLoading && (display | status) === 'notinstalled')">
+      <span class="mr-auto" ng-show="reloadScreenshotEnabled() && !(!displayService.statusLoading && (displayFactory.display | status) === 'notinstalled')">
         <!-- online -->
-        <a id="btnUpdateScreenshot" class="u_icon-hover u_clickable" ng-click="screenshotFactory.requestScreenshot(display.id)">
+        <a id="btnUpdateScreenshot" class="u_icon-hover u_clickable" ng-click="screenshotFactory.requestScreenshot(displayFactory.display.id)">
           Update
         </a>
       </span>
@@ -22,31 +22,31 @@
     </div>
   </div>
 
-  <div class="display-screenshot" ng-show="!screenshotState(display)">
+  <div class="display-screenshot" ng-show="!screenshotState()">
     <div class="display-screenshot-info">
       <p class="text-gray">Screenshot not available.</p>
     </div>
   </div>
-  <div class="display-screenshot" ng-show="screenshotState(display) === 'no-license'">
+  <div class="display-screenshot" ng-show="screenshotState() === 'no-license'">
     <div class="display-screenshot-info">
       <p class="text-gray">License Required</p>
     </div>
   </div>
-  <div class="display-screenshot" ng-show="screenshotState(display) === 'screenshot-error'">
+  <div class="display-screenshot" ng-show="screenshotState() === 'screenshot-error'">
     <div class="display-screenshot-info">
       <p class="text-gray">There was a problem requesting the screenshot.</p>
     </div>
   </div>
-  <div class="display-screenshot" ng-show="screenshotState(display) === 'loading'">
+  <div class="display-screenshot" ng-show="screenshotState() === 'loading'">
     <div class="display-screenshot-info">
       <div class="app-loading-dots">
         <i class="fa fa-3x fa-spinner fa-spin fa-fw"></i>
       </div>
     </div>
   </div>
-  <img class="img-fluid" src="{{screenshotFactory.screenshot.imageUrl}}" ng-show="screenshotState(display) === 'screenshot-loaded'">
+  <img class="img-fluid" src="{{screenshotFactory.screenshot.imageUrl}}" ng-show="screenshotState() === 'screenshot-loaded'">
 
-  <div class="text-gray align-right mt-2" ng-show="screenshotState(display) === 'screenshot-loaded'">
+  <div class="text-gray align-right mt-2" ng-show="screenshotState() === 'screenshot-loaded'">
     <small>Updated {{screenshotFactory.screenshot.lastModified | date:'d-MMM-yyyy h:mm a'}}</small>
   </div>
 

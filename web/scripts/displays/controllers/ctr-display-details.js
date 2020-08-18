@@ -2,27 +2,25 @@
 
 angular.module('risevision.displays.controllers')
   .controller('displayDetails', ['$scope', '$q',
-    'displayFactory', 'display', 'screenshotFactory', '$loading', '$log', '$modal',
-    '$templateCache', 'displayId', 'playerLicenseFactory', '$state',
+    'displayFactory', 'display', 'screenshotFactory', '$loading', '$log', 'confirmModal',
+    'displayId', 'playerLicenseFactory', '$state',
     function ($scope, $q, displayFactory, display, screenshotFactory,
-      $loading, $log, $modal, $templateCache, displayId, playerLicenseFactory, $state) {
-      $scope.displayId = displayId;
+      $loading, $log, confirmModal, displayId, playerLicenseFactory, $state) {
       $scope.factory = displayFactory;
       $scope.playerLicenseFactory = playerLicenseFactory;
+      $scope.selectedSchedule = null;
 
       displayFactory.getDisplay(displayId).then(function () {
-        $scope.display = displayFactory.display;
-
-        if (display.hasSchedule($scope.display)) {
+        if (display.hasSchedule(displayFactory.display)) {
           $scope.selectedSchedule = {
-            id: $scope.display.scheduleId,
-            name: $scope.display.scheduleName,
-            companyId: $scope.display.companyId
+            id: displayFactory.display.scheduleId,
+            name: displayFactory.display.scheduleName,
+            companyId: displayFactory.display.companyId
           };
         }
 
-        if (!$scope.display.playerProAuthorized) {
-          $scope.display.monitoringEnabled = false;
+        if (!displayFactory.display.playerProAuthorized) {
+          displayFactory.display.monitoringEnabled = false;
         }
 
         screenshotFactory.loadScreenshot();
@@ -37,69 +35,34 @@ angular.module('risevision.displays.controllers')
       });
 
       $scope.confirmDelete = function () {
-        $scope.modalInstance = $modal.open({
-          template: $templateCache.get(
-            'partials/components/confirm-modal/madero-confirm-modal.html'),
-          controller: 'confirmModalController',
-          windowClass: 'madero-style centered-modal',
-          size: 'sm',
-          resolve: {
-            confirmationTitle: function () {
-              return 'displays-app.details.deleteTitle';
-            },
-            confirmationMessage: function () {
-              return 'displays-app.details.deleteWarning';
-            },
-            confirmationButton: function () {
-              return 'Yes';
-            },
-            cancelButton: function () {
-              return 'No';
-            }
-          }
-        });
-
-        $scope.modalInstance.result.then(displayFactory.deleteDisplay);
+        confirmModal('displays-app.details.deleteTitle',
+          'displays-app.details.deleteWarning',
+          'Yes', 'No', 'madero-style centered-modal',
+          'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
+          .then(displayFactory.deleteDisplay);
       };
 
       $scope.addDisplay = function () {
         if (!$scope.displayDetails.$dirty) {
           $state.go('apps.displays.add');
         } else {
-          $scope.modalInstance = $modal.open({
-            template: $templateCache.get(
-              'partials/components/confirm-modal/madero-confirm-modal.html'),
-            controller: 'confirmModalController',
-            windowClass: 'madero-style centered-modal',
-            size: 'sm',
-            resolve: {
-              confirmationTitle: function () {
-                return 'displays-app.details.unsavedTitle';
-              },
-              confirmationMessage: function () {
-                return 'displays-app.details.unsavedWarning';
-              },
-              confirmationButton: function () {
-                return 'common.save';
-              },
-              cancelButton: function () {
-                return 'common.discard';
-              }
-            }
-          });
-
-          $scope.modalInstance.result.then(function () {
-            // do what you need if user presses ok
-            $scope.save()
-              .then(function () {
+          confirmModal('displays-app.details.unsavedTitle',
+            'displays-app.details.unsavedWarning',
+            'Yes', 'No', 'madero-style centered-modal',
+            'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
+            .then(function () {
+              // do what you need if user presses ok
+              $scope.save()
+                .then(function () {
+                  $state.go('apps.displays.add');
+                });
+            }, function (value) {
+              // do what you need to do if user cancels
+              if (value) {
                 $state.go('apps.displays.add');
-              });
-          }, function (value) {
-            // do what you need to do if user cancels
-            if (value) {
-              $state.go('apps.displays.add');
-            }
-          });
+              }
+            });
+
         }
       };
 

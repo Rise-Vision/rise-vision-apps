@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('risevision.displays.services')
-  .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal', '$loading', '$log',
+  .factory('displayFactory', ['$rootScope', '$q', '$state', '$log',
     'userState', 'display', 'displayTracker', 'scheduleFactory', 'playerLicenseFactory',
     'processErrorCode',
-    function ($rootScope, $q, $state, $modal, $loading, $log, userState, display, displayTracker,
+    function ($rootScope, $q, $state, $log, userState, display, displayTracker,
       scheduleFactory, playerLicenseFactory, processErrorCode) {
       var factory = {};
       var _displayId;

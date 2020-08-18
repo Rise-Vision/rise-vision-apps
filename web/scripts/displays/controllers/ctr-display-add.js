@@ -4,8 +4,8 @@ angular.module('risevision.displays.controllers')
   .controller('displayAdd', ['$scope', '$loading', 'displayFactory', 'playerLicenseFactory',
     function ($scope, $loading, displayFactory, playerLicenseFactory) {
       $scope.factory = displayFactory;
-      $scope.display = displayFactory.display;
       $scope.playerLicenseFactory = playerLicenseFactory;
+      $scope.selectedSchedule = null;
 
       $scope.$watch('factory.loadingDisplay', function (loading) {
         if (loading) {
