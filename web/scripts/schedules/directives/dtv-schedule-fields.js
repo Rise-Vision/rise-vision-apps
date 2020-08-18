@@ -16,11 +16,18 @@ angular.module('risevision.schedules.directives')
           $scope.playerLicenseFactory = playerLicenseFactory;
 
           $scope.$watchGroup(['factory.schedule.distribution', 'factory.schedule.distributeToAll'], function () {
+            playerLicenseFactory.apiError = '';
             scheduleFactory.hasFreeDisplays()
               .then(function (result) {
                 $scope.freeDisplays = result;
               });
           });
+
+          $scope.licenseFreeDisplays = function() {
+            playerLicenseFactory.confirmAndLicense($scope.freeDisplays).then(function() {
+              $scope.freeDisplays = [];
+            });
+          };
 
           var openPlaylistModal = function (playlistItem) {
             $modal.open({

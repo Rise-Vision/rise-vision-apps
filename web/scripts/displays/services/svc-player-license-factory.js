@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.displays.services')
-  .factory('playerLicenseFactory', ['userState', 'currentPlanFactory', 'plansFactory', 'confirmModal', 'enableCompanyProduct', 'processErrorCode', '$log', 'PLAYER_PRO_PRODUCT_CODE',
-    function (userState, currentPlanFactory, plansFactory, confirmModal, enableCompanyProduct, processErrorCode, $log, PLAYER_PRO_PRODUCT_CODE) {
+  .factory('playerLicenseFactory', ['userState', 'currentPlanFactory', 'plansFactory', 'confirmModal', 'enableCompanyProduct', 'processErrorCode', '$log', 'PLAYER_PRO_PRODUCT_CODE', '$q',
+    function (userState, currentPlanFactory, plansFactory, confirmModal, enableCompanyProduct, processErrorCode, $log, PLAYER_PRO_PRODUCT_CODE, $q) {
       var factory = {};
 
       factory.hasProfessionalLicenses = function () {
@@ -42,28 +42,23 @@ angular.module('risevision.displays.services')
       };
 
       factory.confirmAndLicense = function(displayIds) {
-        var countText = displayIds.length+' display';
-        countText += displayIds.length > 1 ? 's' : '';
-        confirmModal( 'License '+ countText + '?',
+        var countText = displayIds.length+' display' + (displayIds.length > 1 ? 's' : '');
+        return confirmModal( 'License '+ countText + '?',
           'You are about to assign licenses to '+countText+'. Would you like to proceed?',
           'Yes', 'No', 'madero-style centered-modal',
           'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
         .then(function() {
-          console.log("THEN");
           if (factory.getProAvailableLicenseCount() >= displayIds.length) {
-            console.log("licensing...");
-            _licenseDisplays(displayIds).catch(function() {
-              console.log("ERROR licensing - show popup?")
-            });
+            return _licenseDisplays(displayIds)
           } else {
             plansFactory.confirmAndPurchase();
-          }          
+            return $q.reject();
+          }
         });
       };
 
       var _licenseDisplays = function(displayIds) {
-        console.log('License', displayIds);        
-        factory.apiError = null;
+        factory.apiError = '';
         factory.updatingLicense = true;
 
         var apiParams = {};
@@ -78,8 +73,8 @@ angular.module('risevision.displays.services')
         })
         .catch(function (e) {
           factory.apiError = processErrorCode(e);
-
           $log.error(factory.apiError, e);
+          return $q.reject(e);
         })
         .finally(function () {
           factory.updatingLicense = false;
