@@ -102,7 +102,7 @@ angular.module('risevision.displays.services')
             deferred.resolve();
           })
           .catch(function () {
-            displayFactory.apiError = scheduleFactory.apiError;
+            factory.apiError = scheduleFactory.apiError;
             deferred.reject();
           })
           .finally(function () {
@@ -136,7 +136,7 @@ angular.module('risevision.displays.services')
             deferred.resolve();
           })
           .catch(function () {
-            displayFactory.apiError = scheduleFactory.apiError;
+            factory.apiError = scheduleFactory.apiError;
             deferred.reject();
           })
           .finally(function () {
