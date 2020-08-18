@@ -1,21 +1,14 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .controller('displayDetails', ['$scope', '$rootScope', '$q',
+  .controller('displayDetails', ['$scope', '$q',
     'displayFactory', 'display', 'screenshotFactory', '$loading', '$log', '$modal',
-    '$templateCache', 'displayId', 'enableCompanyProduct', 'userState', 'plansFactory',
-    'playerLicenseFactory', 'PLAYER_PRO_PRODUCT_CODE',
-    '$state', 'scheduleFactory', 'processErrorCode', 'confirmModal',
-    function ($scope, $rootScope, $q, displayFactory, display, screenshotFactory,
-      $loading, $log, $modal, $templateCache, displayId, enableCompanyProduct, userState,
-      plansFactory, playerLicenseFactory,
-      PLAYER_PRO_PRODUCT_CODE, $state, scheduleFactory, processErrorCode, confirmModal) {
+    '$templateCache', 'displayId', 'playerLicenseFactory', '$state',
+    function ($scope, $q, displayFactory, display, screenshotFactory,
+      $loading, $log, $modal, $templateCache, displayId, playerLicenseFactory, $state) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
-      $scope.displayService = display;
       $scope.playerLicenseFactory = playerLicenseFactory;
-      $scope.updatingRPP = false;
-      $scope.selectedSchedule = null;
 
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
@@ -35,74 +28,13 @@ angular.module('risevision.displays.controllers')
         screenshotFactory.loadScreenshot();
       });
 
-      $scope.$watchGroup(['factory.loadingDisplay'], function (loading) {
-        if (!$scope.factory.loadingDisplay) {
-          $loading.stop('display-loader');
-        } else {
+      $scope.$watch('factory.loadingDisplay', function (loading) {
+        if (loading) {
           $loading.start('display-loader');
-        }
-      });
-
-      $scope.$watch('selectedSchedule', function (newSchedule, oldSchedule) {
-        var isChangingSchedule = oldSchedule || (!oldSchedule && !display.hasSchedule($scope.display));
-        if (isChangingSchedule && scheduleFactory.requiresLicense(newSchedule) && !$scope.display.playerProAuthorized) {
-          confirmModal('Assign license?',
-            'You\'ve selected a schedule that contains presentations. In order to show this schedule on this display, you need to license it. Assign license now?',
-            'Yes', 'No', 'madero-style centered-modal',
-            'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
-          .then(function() {
-              $scope.toggleProAuthorized();
-          });
-        }
-      });
-
-      $scope.confirmLicensing = function() {
-        return confirmModal('Assign license?',
-          'Do you want to assign one of your licenses to this display?',
-          'Yes', 'No', 'madero-style centered-modal',
-          'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
-        .then(function() {
-          $scope.toggleProAuthorized();
-        });
-      };
-
-      $scope.toggleProAuthorized = function () {
-        $scope.errorUpdatingRPP = false;
-
-        if (!playerLicenseFactory.isProAvailable()) {
-          $scope.display.playerProAuthorized = false;
-          plansFactory.confirmAndPurchase();
         } else {
-          var apiParams = {};
-          var playerProAuthorized = !$scope.display.playerProAuthorized;
-
-          $scope.updatingRPP = true;
-          apiParams[displayId] = playerProAuthorized;
-
-          enableCompanyProduct($scope.display.companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
-            .then(function () {
-              var company = userState.getCopyOfSelectedCompany(true);
-
-              $scope.display.playerProAssigned = playerProAuthorized;
-              $scope.display.playerProAuthorized = company.playerProAvailableLicenseCount > 0 &&
-                playerProAuthorized;
-
-              playerLicenseFactory.toggleDisplayLicenseLocal(playerProAuthorized);
-            })
-            .catch(function (err) {
-              $scope.errorUpdatingRPP = processErrorCode(err);
-
-              $scope.display.playerProAuthorized = !playerProAuthorized;
-            })
-            .finally(function () {
-              if (!playerProAuthorized) {
-                $scope.display.monitoringEnabled = false;
-              }
-
-              $scope.updatingRPP = false;
-            });
+          $loading.stop('display-loader');
         }
-      };
+      });
 
       $scope.confirmDelete = function () {
         $scope.modalInstance = $modal.open({
@@ -180,17 +112,6 @@ angular.module('risevision.displays.controllers')
           return displayFactory.updateDisplay($scope.selectedSchedule);
         }
       };
-
-      var startTrialListener = $rootScope.$on('risevision.company.updated', function () {
-        var company = userState.getCopyOfSelectedCompany(true);
-
-        $scope.display.playerProAuthorized = $scope.display.playerProAuthorized ||
-          company.playerProAvailableLicenseCount > 0 && $scope.display.playerProAssigned;
-      });
-
-      $scope.$on('$destroy', function () {
-        startTrialListener();
-      });
 
     }
   ]);
