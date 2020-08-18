@@ -26,6 +26,10 @@ angular.module('risevision.displays.directives')
           };
 
           $scope.reloadScreenshotEnabled = function (display) {
+            if (!display) {
+              return false;
+            }
+
             var statusFilter = $filter('status');
 
             if (displayFactory.showLicenseRequired(display)) {

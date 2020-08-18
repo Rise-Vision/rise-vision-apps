@@ -5,11 +5,24 @@ angular.module('risevision.displays.services')
     function (userState, currentPlanFactory) {
       var factory = {};
 
+      factory.getUsedLicenseString = function() {
+        return factory.getProUsedLicenseCount() +
+          ' Licensed Display' + (factory.getProUsedLicenseCount() > 1 ? 's' : '') +
+          ' | ' + factory.getProAvailableLicenseCount() +
+          ' License' + (factory.getProAvailableLicenseCount() > 1 ? 's' : '') +
+          ' Available';
+      };
+      
+      factory.isProAvailable = function (display) {
+        return factory.hasProfessionalLicenses() && _getProLicenseCount() > 0 && 
+        !_areAllProLicensesUsed(display);
+      };
+
       factory.hasProfessionalLicenses = function () {
         return currentPlanFactory.currentPlan.playerProTotalLicenseCount > 0;
       };
 
-      factory.getProLicenseCount = function () {
+      var _getProLicenseCount = function () {
         return currentPlanFactory.currentPlan.playerProTotalLicenseCount || 0;
       };
 
@@ -18,11 +31,19 @@ angular.module('risevision.displays.services')
       };
 
       factory.getProUsedLicenseCount = function () {
-        return factory.getProLicenseCount() - factory.getProAvailableLicenseCount();
+        return _getProLicenseCount() - factory.getProAvailableLicenseCount();
       };
 
-      factory.areAllProLicensesUsed = function () {
-        return currentPlanFactory.currentPlan.playerProAvailableLicenseCount <= 0;
+      factory.isProToggleEnabled = function (display) {
+        return userState.hasRole('da') && ((display && display.playerProAuthorized) ||
+          (_areAllProLicensesUsed(display) ? !currentPlanFactory.currentPlan.isPurchasedByParent : true));
+      };
+
+      var _areAllProLicensesUsed = function (display) {
+        var allLicensesUsed = !factory.getProAvailableLicenseCount();
+        var allProLicensesUsed = allLicensesUsed && !(display && display.playerProAssigned);
+
+        return _getProLicenseCount() > 0 && allProLicensesUsed;
       };
 
       factory.toggleDisplayLicenseLocal = function (playerProAuthorized) {

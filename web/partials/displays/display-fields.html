@@ -94,12 +94,12 @@
             </span>
 
             <div class="btn-group btn-group-justified" ng-hide="updatingRPP">
-              <button id="toggleLicenseOn" type="button" class="btn" ng-click="toggleProAuthorized()"  ng-disabled="updatingRPP || !isProToggleEnabled()"
+              <button id="toggleLicenseOn" type="button" class="btn" ng-click="toggleProAuthorized()"  ng-disabled="updatingRPP || !playerLicenseFactory.isProToggleEnabled()"
                 ng-class="{'btn-toggle-blue-off' : !display.playerProAuthorized, 'btn-toggle-blue-on' : display.playerProAuthorized}">
                 Yes
                 <streamline-icon name="checkmark" ng-show="display.playerProAuthorized"></streamline-icon>
               </button>
-              <button id="toggleLicenseOff" type="button" class="btn" ng-click="toggleProAuthorized()" ng-disabled="updatingRPP || !isProToggleEnabled()"
+              <button id="toggleLicenseOff" type="button" class="btn" ng-click="toggleProAuthorized()" ng-disabled="updatingRPP || !playerLicenseFactory.isProToggleEnabled()"
                 ng-class="{'btn-toggle-blue-off' : display.playerProAuthorized, 'btn-toggle-blue-on' : !display.playerProAuthorized}">
                 No
                 <streamline-icon name="checkmark" ng-show="!display.playerProAuthorized"></streamline-icon>

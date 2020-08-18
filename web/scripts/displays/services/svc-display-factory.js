@@ -2,10 +2,10 @@
 
 angular.module('risevision.displays.services')
   .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal', '$loading', '$log',
-    'userState', 'display', 'displayTracker', 'playerLicenseFactory', 'processErrorCode',
-    'plansFactory',
+    'userState', 'display', 'displayTracker', 'scheduleFactory', 'playerLicenseFactory',
+    'processErrorCode',
     function ($rootScope, $q, $state, $modal, $loading, $log, userState, display, displayTracker,
-      playerLicenseFactory, processErrorCode, plansFactory) {
+      scheduleFactory, playerLicenseFactory, processErrorCode) {
       var factory = {};
       var _displayId;
 
@@ -69,7 +69,7 @@ angular.module('risevision.displays.services')
         return deferred.promise;
       };
 
-      factory.addDisplay = function () {
+      factory.addDisplay = function (selectedSchedule) {
         var deferred = $q.defer();
 
         _clearMessages();
@@ -90,14 +90,25 @@ angular.module('risevision.displays.services')
 
               $rootScope.$broadcast('displayCreated', resp.item);
 
-              deferred.resolve();
+              return scheduleFactory.addToDistribution(factory.display, selectedSchedule);
             } else {
-              deferred.reject();
+              return $q.reject();
             }
-          })
-          .then(null, function (e) {
+          }, function (e) {
             _showErrorMessage('add', e);
+            deferred.reject();
+          })
+          .then(function() {            
+            if ($state.current.name === 'apps.displays.add') {
+              $state.go('apps.displays.details', {
+                displayId: factory.display.id
+              });
+            }
 
+            deferred.resolve();
+          })
+          .catch(function () {
+            factory.apiError = scheduleFactory.apiError;
             deferred.reject();
           })
           .finally(function () {
@@ -108,7 +119,7 @@ angular.module('risevision.displays.services')
         return deferred.promise;
       };
 
-      factory.updateDisplay = function () {
+      factory.updateDisplay = function (selectedSchedule) {
         var deferred = $q.defer();
 
         _clearMessages();
@@ -122,10 +133,16 @@ angular.module('risevision.displays.services')
             displayTracker('Display Updated', _displayId,
               factory.display.name);
 
+            return scheduleFactory.addToDistribution(factory.display, selectedSchedule);
+          }, function (e) {
+            _showErrorMessage('update', e);
+            deferred.reject();
+          })
+          .then(function() {
             deferred.resolve();
           })
-          .then(null, function (e) {
-            _showErrorMessage('update', e);
+          .catch(function () {
+            factory.apiError = scheduleFactory.apiError;
             deferred.reject();
           })
           .finally(function () {
@@ -169,39 +186,9 @@ angular.module('risevision.displays.services')
       };
 
       factory.showLicenseRequired = function (display) {
+        display = display || factory.display;
+
         return display && !display.playerProAuthorized && !userState.isRiseAdmin();
-      };
-
-      factory.showLicenseUpdate = function () {
-        if (playerLicenseFactory.getProLicenseCount() > 0) {
-          $state.go('apps.billing.home');
-        } else {
-          plansFactory.showPlansModal();
-        }
-      };
-
-      factory.showUnlockDisplayFeatureModal = function () {
-        if (!factory.showLicenseRequired(factory.display)) {
-          return false;
-
-        } else {
-          $modal.open({
-            templateUrl: 'partials/displays/unlock-display-feature-modal.html',
-            controller: 'confirmModalController',
-            windowClass: 'madero-style centered-modal unlock-this-feature-modal',
-            size: 'sm',
-            resolve: {
-              confirmationTitle: null,
-              confirmationMessage: null,
-              confirmationButton: null,
-              cancelButton: null
-            }
-          }).result.then(function () {
-            factory.showLicenseUpdate();
-          });
-
-          return true;
-        }
       };
 
       return factory;
