@@ -64,7 +64,7 @@ angular.module('risevision.displays.directives')
           };
 
           $scope.toggleProAuthorized = function () {
-            if (!playerLicenseFactory.isProAvailable()) {
+            if (!playerLicenseFactory.isProAvailable(displayFactory.display)) {
               $scope.display.playerProAuthorized = false;
               plansFactory.confirmAndPurchase();
             } else {

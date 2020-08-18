@@ -13,9 +13,9 @@ angular.module('risevision.displays.services')
           ' Available';
       };
       
-      factory.isProAvailable = function () {
+      factory.isProAvailable = function (display) {
         return factory.hasProfessionalLicenses() && _getProLicenseCount() > 0 && 
-          factory.getProAvailableLicenseCount() > 0;
+        !_areAllProLicensesUsed(display);
       };
 
       factory.hasProfessionalLicenses = function () {
