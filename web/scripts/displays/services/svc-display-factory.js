@@ -2,10 +2,10 @@
 
 angular.module('risevision.displays.services')
   .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal', '$loading', '$log',
-    'userState', 'display', 'displayTracker', 'playerLicenseFactory', 'processErrorCode',
-    'plansFactory',
+    'userState', 'display', 'displayTracker', 'scheduleFactory', 'playerLicenseFactory',
+    'processErrorCode', 'plansFactory',
     function ($rootScope, $q, $state, $modal, $loading, $log, userState, display, displayTracker,
-      playerLicenseFactory, processErrorCode, plansFactory) {
+      scheduleFactory, playerLicenseFactory, processErrorCode, plansFactory) {
       var factory = {};
       var _displayId;
 
@@ -69,7 +69,7 @@ angular.module('risevision.displays.services')
         return deferred.promise;
       };
 
-      factory.addDisplay = function () {
+      factory.addDisplay = function (selectedSchedule) {
         var deferred = $q.defer();
 
         _clearMessages();
@@ -90,14 +90,19 @@ angular.module('risevision.displays.services')
 
               $rootScope.$broadcast('displayCreated', resp.item);
 
-              deferred.resolve();
+              return scheduleFactory.addToDistribution(factory.display, selectedSchedule);
             } else {
-              deferred.reject();
+              return $q.reject();
             }
-          })
-          .then(null, function (e) {
+          }, function (e) {
             _showErrorMessage('add', e);
-
+            deferred.reject();
+          })
+          .then(function() {
+            deferred.resolve();
+          })
+          .catch(function () {
+            displayFactory.apiError = scheduleFactory.apiError;
             deferred.reject();
           })
           .finally(function () {
@@ -108,7 +113,7 @@ angular.module('risevision.displays.services')
         return deferred.promise;
       };
 
-      factory.updateDisplay = function () {
+      factory.updateDisplay = function (selectedSchedule) {
         var deferred = $q.defer();
 
         _clearMessages();
@@ -122,10 +127,16 @@ angular.module('risevision.displays.services')
             displayTracker('Display Updated', _displayId,
               factory.display.name);
 
+            return scheduleFactory.addToDistribution(factory.display, selectedSchedule);
+          }, function (e) {
+            _showErrorMessage('update', e);
+            deferred.reject();
+          })
+          .then(function() {
             deferred.resolve();
           })
-          .then(null, function (e) {
-            _showErrorMessage('update', e);
+          .catch(function () {
+            displayFactory.apiError = scheduleFactory.apiError;
             deferred.reject();
           })
           .finally(function () {

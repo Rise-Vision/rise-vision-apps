@@ -246,7 +246,7 @@ angular.module('risevision.schedules.services')
       };
 
       factory.addToDistribution = function (display, schedule) {
-        if (schedule.id === display.scheduleId) {
+        if (!schedule || schedule.id === display.scheduleId) {
           return $q.resolve();
         } else {
           $log.info('Adding to Distribution: ', display.id, schedule.id);

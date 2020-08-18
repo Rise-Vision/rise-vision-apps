@@ -2,9 +2,10 @@
 
 angular.module('risevision.displays.directives')
   .directive('displayFields', ['$sce', 'userState', 'playerProFactory', 'displayControlFactory',
+    'playerActionsFactory',
     'messageBox', 'COUNTRIES', 'REGIONS_CA', 'REGIONS_US', 'TIMEZONES', 'SHARED_SCHEDULE_URL',
-    function ($sce, userState, playerProFactory, displayControlFactory, messageBox,
-      COUNTRIES, REGIONS_CA, REGIONS_US, TIMEZONES, SHARED_SCHEDULE_URL) {
+    function ($sce, userState, playerProFactory, displayControlFactory, playerActionsFactory,
+      messageBox, COUNTRIES, REGIONS_CA, REGIONS_US, TIMEZONES, SHARED_SCHEDULE_URL) {
       return {
         restrict: 'E',
         templateUrl: 'partials/displays/display-fields.html',
@@ -14,6 +15,9 @@ angular.module('risevision.displays.directives')
           $scope.regionsCA = REGIONS_CA;
           $scope.regionsUS = REGIONS_US;
           $scope.timezones = TIMEZONES;
+
+          $scope.playerProFactory = playerProFactory;
+          $scope.playerActionsFactory = playerActionsFactory;
 
           $scope.isChromeOs = function (display) {
             return display && display.os && (display.os.indexOf('cros') !==

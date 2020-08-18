@@ -2,24 +2,20 @@
 
 angular.module('risevision.displays.controllers')
   .controller('displayDetails', ['$scope', '$rootScope', '$q',
-    'displayFactory', 'display', 'screenshotFactory', 'playerProFactory', '$loading', '$log', '$modal',
+    'displayFactory', 'display', 'screenshotFactory', '$loading', '$log', '$modal',
     '$templateCache', 'displayId', 'enableCompanyProduct', 'userState', 'plansFactory',
-    'currentPlanFactory', 'playerLicenseFactory', 'playerActionsFactory', 'PLAYER_PRO_PRODUCT_CODE',
+    'playerLicenseFactory', 'PLAYER_PRO_PRODUCT_CODE',
     '$state', 'scheduleFactory', 'processErrorCode', 'confirmModal',
-    function ($scope, $rootScope, $q, displayFactory, display, screenshotFactory, playerProFactory,
+    function ($scope, $rootScope, $q, displayFactory, display, screenshotFactory,
       $loading, $log, $modal, $templateCache, displayId, enableCompanyProduct, userState,
-      plansFactory, currentPlanFactory, playerLicenseFactory, playerActionsFactory,
+      plansFactory, playerLicenseFactory,
       PLAYER_PRO_PRODUCT_CODE, $state, scheduleFactory, processErrorCode, confirmModal) {
       $scope.displayId = displayId;
       $scope.factory = displayFactory;
       $scope.displayService = display;
-      $scope.playerProFactory = playerProFactory;
-      $scope.currentPlanFactory = currentPlanFactory;
-      $scope.playerActionsFactory = playerActionsFactory;
+      $scope.playerLicenseFactory = playerLicenseFactory;
       $scope.updatingRPP = false;
-      $scope.monitoringSchedule = {};
       $scope.selectedSchedule = null;
-      $scope.scheduleFactory = scheduleFactory;
 
       displayFactory.getDisplay(displayId).then(function () {
         $scope.display = displayFactory.display;
@@ -39,8 +35,8 @@ angular.module('risevision.displays.controllers')
         screenshotFactory.loadScreenshot();
       });
 
-      $scope.$watchGroup(['factory.loadingDisplay', 'scheduleFactory.savingSchedule'], function (loading) {
-        if (!$scope.factory.loadingDisplay && !$scope.scheduleFactory.savingSchedule) {
+      $scope.$watchGroup(['factory.loadingDisplay'], function (loading) {
+        if (!$scope.factory.loadingDisplay) {
           $loading.stop('display-loader');
         } else {
           $loading.start('display-loader');
@@ -73,7 +69,7 @@ angular.module('risevision.displays.controllers')
       $scope.toggleProAuthorized = function () {
         $scope.errorUpdatingRPP = false;
 
-        if (!$scope.isProAvailable()) {
+        if (!playerLicenseFactory.isProAvailable()) {
           $scope.display.playerProAuthorized = false;
           plansFactory.confirmAndPurchase();
         } else {
@@ -106,35 +102,6 @@ angular.module('risevision.displays.controllers')
               $scope.updatingRPP = false;
             });
         }
-      };
-
-      $scope.getProLicenseCount = function () {
-        return playerLicenseFactory.getProLicenseCount();
-      };
-
-      $scope.getProAvailableLicenseCount = function () {
-        return playerLicenseFactory.getProAvailableLicenseCount();
-      };
-
-      $scope.getProUsedLicenseCount = function () {
-        return playerLicenseFactory.getProUsedLicenseCount();
-      };
-
-      $scope.areAllProLicensesUsed = function () {
-        var allLicensesUsed = playerLicenseFactory.areAllProLicensesUsed();
-        var allProLicensesUsed = allLicensesUsed && !($scope.display && $scope.display.playerProAssigned);
-
-        return $scope.getProLicenseCount() > 0 && allProLicensesUsed;
-      };
-
-      $scope.isProAvailable = function () {
-        return playerLicenseFactory.hasProfessionalLicenses() && $scope.getProLicenseCount() > 0 && !$scope
-          .areAllProLicensesUsed();
-      };
-
-      $scope.isProToggleEnabled = function () {
-        return userState.hasRole('da') && (($scope.display && $scope.display.playerProAuthorized) ||
-          ($scope.areAllProLicensesUsed() ? !currentPlanFactory.currentPlan.isPurchasedByParent : true));
       };
 
       $scope.confirmDelete = function () {
@@ -210,13 +177,7 @@ angular.module('risevision.displays.controllers')
 
           return $q.reject();
         } else {
-          return displayFactory.updateDisplay()
-            .then(function () {
-              scheduleFactory.addToDistribution($scope.display, $scope.selectedSchedule)
-                .catch(function () {
-                  displayFactory.apiError = scheduleFactory.apiError;
-                });
-            });
+          return displayFactory.updateDisplay($scope.selectedSchedule);
         }
       };
 

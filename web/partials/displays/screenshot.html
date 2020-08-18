@@ -13,7 +13,7 @@
       </span>
       <span class="mr-auto" ng-show="reloadScreenshotEnabled(display) && !(!displayService.statusLoading && (display | status) === 'notinstalled')">
         <!-- online -->
-        <a id="btnUpdateScreenshot" class="u_icon-hover u_clickable" ng-click="screenshotFactory.requestScreenshot(displayId)">
+        <a id="btnUpdateScreenshot" class="u_icon-hover u_clickable" ng-click="screenshotFactory.requestScreenshot(display.id)">
           Update
         </a>
       </span>

@@ -14,7 +14,7 @@
 </div>
 
 <div class="mb-3" ng-show="playerLicenseFactory.getProLicenseCount() > 0">
-  {{ playerLicenseFactory.getProUsedLicenseCount() }} Licensed Display{{playerLicenseFactory.getProUsedLicenseCount() > 1 ? 's' : ''}} | {{ playerLicenseFactory.getProAvailableLicenseCount() }} License{{playerLicenseFactory.getProAvailableLicenseCount() > 1 ? 's' : ''}} Available
+  {{ playerLicenseFactory.getUsedLicenseString() }}
 </div>
 
 <div ng-show="displays.apiError" class="alert alert-danger mb-3" role="alert">

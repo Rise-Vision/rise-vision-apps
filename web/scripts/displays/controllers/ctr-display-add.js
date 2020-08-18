@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .controller('displayAdd', ['$scope', 'displayFactory', '$loading',
-    function ($scope, displayFactory, $loading) {
+  .controller('displayAdd', ['$scope', '$loading', 'displayFactory', 'playerLicenseFactory',
+    function ($scope, $loading, displayFactory, playerLicenseFactory) {
       $scope.factory = displayFactory;
       $scope.display = displayFactory.display;
+      $scope.playerLicenseFactory = playerLicenseFactory;
 
       $scope.$watch('factory.loadingDisplay', function (loading) {
         if (loading) {
@@ -20,7 +21,7 @@ angular.module('risevision.displays.controllers')
           return;
         }
 
-        displayFactory.addDisplay();
+        displayFactory.addDisplay($scope.selectedSchedule);
       };
 
     }
