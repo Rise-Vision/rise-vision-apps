@@ -28,8 +28,6 @@ angular.module('risevision.displays.directives')
             displayFactory.display.playerProAssigned = playerProAuthorized;
             displayFactory.display.playerProAuthorized = company.playerProAvailableLicenseCount > 0 &&
               playerProAuthorized;
-
-            playerLicenseFactory.toggleDisplayLicenseLocal(playerProAuthorized);
           };
 
           var _updateDisplayLicense = function() {
@@ -43,6 +41,8 @@ angular.module('risevision.displays.directives')
             enableCompanyProduct(displayFactory.display.companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
               .then(function () {
                 _updateDisplayLicenseLocal();
+
+                playerLicenseFactory.toggleDisplayLicenseLocal(displayFactory.display.playerProAuthorized);
               })
               .catch(function (err) {
                 $scope.errorUpdatingRPP = processErrorCode(err);

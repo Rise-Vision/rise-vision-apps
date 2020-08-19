@@ -157,8 +157,8 @@
           add: function (display) {
             var deferred = $q.defer();
 
-            var fields = pick.apply(this, [display].concat(
-              DISPLAY_WRITABLE_FIELDS));
+            var fields = pick.apply(this, [display].concat(DISPLAY_WRITABLE_FIELDS));
+            fields.assignLicense = display.playerProAuthorized;
             var obj = {
               'companyId': userState.getSelectedCompanyId(),
               'data': fields
