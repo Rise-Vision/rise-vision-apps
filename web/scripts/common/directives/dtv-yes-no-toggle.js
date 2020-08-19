@@ -17,7 +17,9 @@ angular.module('risevision.apps.directives')
         link: function ($scope) {
           $scope.onChange = function() {
             // Wait for $digest so ngModel is updated before triggering ngChange
-            $timeout($scope.ngChange);
+            if ($scope.ngChange) {
+              $timeout($scope.ngChange);  
+            }
           };
         }
       };

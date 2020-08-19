@@ -29,7 +29,7 @@ describe('service: playerActionsFactory:', function() {
     });
     $provide.service('displayFactory', function() { 
       return {
-        showUnlockDisplayFeatureModal: sinon.stub().returns(false)
+        showLicenseRequired: sinon.stub().returns(false)
       };
     });
     $provide.service('displayTracker', function() { 
@@ -67,7 +67,7 @@ describe('service: playerActionsFactory:', function() {
 
   describe('restart: ',function(){
     it('should not proceed if Display is not licensed',function(){
-      displayFactory.showUnlockDisplayFeatureModal.returns(true);
+      displayFactory.showLicenseRequired.returns(true);
 
       playerActionsFactory.confirm('1234', 'restart');
 
@@ -112,7 +112,7 @@ describe('service: playerActionsFactory:', function() {
   
   describe('reboot: ',function() {
     it('should not proceed if Display is not licensed',function(){
-      displayFactory.showUnlockDisplayFeatureModal.returns(true);
+      displayFactory.showLicenseRequired.returns(true);
 
       playerActionsFactory.confirm('1234', 'reboot');
 

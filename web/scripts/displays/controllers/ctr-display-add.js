@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .controller('displayAdd', ['$scope', '$loading', 'displayFactory', 'playerLicenseFactory',
-    function ($scope, $loading, displayFactory, playerLicenseFactory) {
+  .controller('displayAdd', ['$scope', '$log', '$loading', 'displayFactory', 'playerLicenseFactory',
+    function ($scope, $log, $loading, displayFactory, playerLicenseFactory) {
       $scope.factory = displayFactory;
       $scope.playerLicenseFactory = playerLicenseFactory;
       $scope.selectedSchedule = null;
@@ -17,7 +17,7 @@ angular.module('risevision.displays.controllers')
 
       $scope.save = function () {
         if (!$scope.displayDetails.$valid) {
-          console.error('form not valid: ', $scope.displayDetails.errors);
+          $log.info('form not valid: ', $scope.displayDetails.errors);
           return;
         }
 

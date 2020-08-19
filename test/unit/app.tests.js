@@ -13,12 +13,6 @@ describe('app:', function() {
           })
         });
 
-        $provide.service('displayFactory',function(){
-          return {
-            addDisplayModal: function(){}
-          };
-        });
-
         $provide.service('plansFactory',function(){
           return {
             showPlansModal: sinon.stub()
@@ -29,23 +23,13 @@ describe('app:', function() {
       inject(function ($injector) {
         $state = $injector.get('$state');
         canAccessApps = $injector.get('canAccessApps');
-        displayFactory = $injector.get('displayFactory');
         plansFactory = $injector.get('plansFactory');
         $rootScope = $injector.get('$rootScope');
         $location = $injector.get('$location');
       });
   });
 
-
-  var $state, canAccessApps, displayFactory, plansFactory, $rootScope, $location;
-
-  it('should open add display modal when addDisplay event is sent',function(){
-    var spy = sinon.spy(displayFactory,'addDisplayModal');
-
-    $rootScope.$broadcast('distributionSelector.addDisplay');
-
-    spy.should.have.been.called;
-  });
+  var $state, canAccessApps, plansFactory, $rootScope, $location;
 
   describe('state common.auth.signup:',function(){
     it('should register state',function(){

@@ -13,12 +13,20 @@ describe('app:', function() {
           })
         });
 
+        $provide.service('displayFactory',function(){
+          return {
+            newDisplay: sinon.spy(),
+            setAssignedSchedule: sinon.spy()
+          }
+        });
+
       });
 
       inject(function ($injector) {
         $state = $injector.get('$state');
         $location = $injector.get('$location');
         userState = $injector.get('userState');
+        displayFactory = $injector.get('displayFactory');
         canAccessApps = $injector.get('canAccessApps');
 
         sinon.stub($state, 'go');
@@ -30,7 +38,7 @@ describe('app:', function() {
       });
   });
 
-  var $state, $location, userState, canAccessApps;
+  var $state, $location, userState, displayFactory, canAccessApps;
 
   describe('state apps.displays.change:',function(){
 
@@ -68,6 +76,43 @@ describe('app:', function() {
         $state.go.should.have.been.calledWith('apps.displays.details', {
           displayId: 'displayId'
         });
+
+        done();
+      }, 10);
+    });
+  });
+
+  describe('state apps.displays.add:',function(){
+
+    it('should register state',function(){
+      var state = $state.get('apps.displays.add');
+      expect(state).to.be.ok;
+      expect(state.url).to.equal('/displays/add');
+      expect(state.controller).to.be.ok;
+      expect(state.params).to.deep.equal({
+        schedule: null
+      });
+    });
+
+    it('should add new schedule',function(done){
+      $state.get('apps.displays.add').resolve.scheduleInfo[3]({}, canAccessApps, displayFactory);
+      setTimeout(function() {
+        canAccessApps.should.have.been.called;
+
+        displayFactory.newDisplay.should.have.been.called;
+        displayFactory.setAssignedSchedule.should.not.have.been.called;
+
+        done();
+      }, 10);
+    });
+
+    it('should add new schedule with a presentation item',function(done){
+      $state.get('apps.displays.add').resolve.scheduleInfo[3]({schedule: 'item'}, canAccessApps, displayFactory);
+      setTimeout(function() {
+        canAccessApps.should.have.been.called;
+
+        displayFactory.newDisplay.should.have.been.called;
+        displayFactory.setAssignedSchedule.should.have.been.calledWith('item');
 
         done();
       }, 10);
