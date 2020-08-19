@@ -26,9 +26,10 @@ describe('directive: scheduleFields', function() {
         schedule: {
           changeDate: 'changeDate'
         },
-        hasFreeDisplays: function() {
+        checkFreeDisplays: function() {
           return Q.resolve();
-        }
+        },
+        requiresLicense: sinon.stub().returns(true)
       };
     });
     $provide.service('plansFactory', function() {
@@ -70,9 +71,9 @@ describe('directive: scheduleFields', function() {
     expect($scope.plansFactory).to.equal(plansFactory);
   });
 
-  describe('hasFreeDisplays:', function() {
+  describe('checkFreeDisplays:', function() {
     beforeEach(function() {
-      sinon.stub(scheduleFactory, 'hasFreeDisplays').returns(Q.resolve(['display1']));
+      sinon.stub(scheduleFactory, 'checkFreeDisplays').returns(Q.resolve(['display1']));
     });
 
     it('should watch distribution field', function() {
@@ -80,7 +81,7 @@ describe('directive: scheduleFields', function() {
 
       $scope.$digest();
 
-      scheduleFactory.hasFreeDisplays.should.have.been.called;
+      scheduleFactory.checkFreeDisplays.should.have.been.called;
     });
 
     it('should watch distributeToAll field', function() {
@@ -88,7 +89,15 @@ describe('directive: scheduleFields', function() {
 
       $scope.$digest();
 
-      scheduleFactory.hasFreeDisplays.should.have.been.called;
+      scheduleFactory.checkFreeDisplays.should.have.been.called;
+    });
+
+    it('should watch requiresLicense value', function() {
+      scheduleFactory.requiresLicense.returns(false);
+
+      $scope.$digest();
+
+      scheduleFactory.checkFreeDisplays.should.have.been.called;
     });
 
     it('should update scope variable with response', function(done) {

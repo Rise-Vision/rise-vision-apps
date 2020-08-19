@@ -15,8 +15,10 @@ angular.module('risevision.schedules.directives')
           $scope.factory = scheduleFactory;
           $scope.plansFactory = plansFactory;
 
-          $scope.$watchGroup(['factory.schedule.distribution', 'factory.schedule.distributeToAll'], function () {
-            scheduleFactory.hasFreeDisplays()
+          $scope.$watchGroup(['factory.schedule.distribution', 'factory.schedule.distributeToAll', function() {
+            return scheduleFactory.requiresLicense();
+          }], function () {
+            scheduleFactory.checkFreeDisplays()
               .then(function (result) {
                 $scope.freeDisplays = result;
               });

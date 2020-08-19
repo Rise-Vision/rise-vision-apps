@@ -126,6 +126,14 @@ angular.module('risevision.schedules.services')
           factory.schedule.distributeToAll ? null : distribution);
       };
 
+      factory.checkFreeDisplays = function() {
+        if (!factory.requiresLicense()) {
+          return $q.resolve([]);
+        }
+
+        return factory.hasFreeDisplays();
+      };
+
       factory.addSchedule = function () {
         _clearMessages();
 
@@ -267,6 +275,8 @@ angular.module('risevision.schedules.services')
       };
 
       factory.requiresLicense = function(schedule) {
+        schedule = schedule || factory.schedule;
+
         if (schedule && schedule.content && schedule.content.length > 0) {
           for(var i=0; i<schedule.content.length; i++) {
             if (schedule.content[i].type === 'presentation') {
