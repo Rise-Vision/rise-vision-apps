@@ -126,7 +126,7 @@ angular.module('risevision.schedules.services')
           factory.schedule.distributeToAll ? null : distribution);
       };
 
-      factory.checkFreeDisplays = function() {
+      factory.checkFreeDisplays = function () {
         if (!factory.requiresLicense()) {
           return $q.resolve([]);
         }
