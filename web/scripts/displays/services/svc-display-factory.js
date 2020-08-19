@@ -27,7 +27,9 @@ angular.module('risevision.displays.services')
           'restartEnabled': true,
           'restartTime': '02:00',
           'monitoringEnabled': true,
-          'useCompanyAddress': true
+          'useCompanyAddress': true,
+          'playerProAssigned': false,
+          'playerProAuthorized': false
         };
 
         _clearMessages();
@@ -90,25 +92,25 @@ angular.module('risevision.displays.services')
 
               $rootScope.$broadcast('displayCreated', resp.item);
 
-              return scheduleFactory.addToDistribution(factory.display, selectedSchedule);
+              return scheduleFactory.addToDistribution(factory.display, selectedSchedule)
+                .then(function() {            
+                  if ($state.current.name === 'apps.displays.add') {
+                    $state.go('apps.displays.details', {
+                      displayId: factory.display.id
+                    });
+                  }
+
+                  deferred.resolve();
+                })
+                .catch(function () {
+                  factory.apiError = scheduleFactory.apiError;
+                  deferred.reject();
+                });
             } else {
               return $q.reject();
             }
           }, function (e) {
             _showErrorMessage('add', e);
-            deferred.reject();
-          })
-          .then(function() {            
-            if ($state.current.name === 'apps.displays.add') {
-              $state.go('apps.displays.details', {
-                displayId: factory.display.id
-              });
-            }
-
-            deferred.resolve();
-          })
-          .catch(function () {
-            factory.apiError = scheduleFactory.apiError;
             deferred.reject();
           })
           .finally(function () {
@@ -133,16 +135,16 @@ angular.module('risevision.displays.services')
             displayTracker('Display Updated', _displayId,
               factory.display.name);
 
-            return scheduleFactory.addToDistribution(factory.display, selectedSchedule);
+            return scheduleFactory.addToDistribution(factory.display, selectedSchedule)
+              .then(function() {
+                deferred.resolve();
+              })
+              .catch(function () {
+                factory.apiError = scheduleFactory.apiError;
+                deferred.reject();
+              });
           }, function (e) {
             _showErrorMessage('update', e);
-            deferred.reject();
-          })
-          .then(function() {
-            deferred.resolve();
-          })
-          .catch(function () {
-            factory.apiError = scheduleFactory.apiError;
             deferred.reject();
           })
           .finally(function () {
