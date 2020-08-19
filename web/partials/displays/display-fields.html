@@ -2,7 +2,7 @@
   <div class="row">
 
     <div class="col-sm-12 col-md-7 pb-2 pb-lg-0">
-      <stretchy-input class="mb-0 mr-auto" ng-model="display.name"></stretchy-input> 
+      <stretchy-input class="mb-0 mr-auto" ng-model="factory.display.name"></stretchy-input> 
     </div>
 
     <div class="col-sm-12 col-md-5 pl-lg-0">
@@ -18,12 +18,12 @@
           <div class="dropdown-menu playlist-menu" role="menu">
             <ul>
               <li>
-                <button type="button" class="btn-dropdown u_clickable" ng-hide="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-disabled="!display.playerVersion" ng-click="playerActionsFactory.confirm(display.id, display.name, 'restart')" require-role="da">
+                <button type="button" class="btn-dropdown u_clickable" ng-hide="!displayService.statusLoading && (factory.display | status) === 'notinstalled'" ng-disabled="!factory.display.playerVersion" ng-click="playerActionsFactory.confirm(factory.display.id, factory.display.name, 'restart')" require-role="da">
                   <span translate>displays-app.fields.controls.restart.name</span>
                 </button>
               </li>
               <li>
-                <button type="button" class="btn-dropdown u_clickable" ng-hide="!displayService.statusLoading && (display | status) === 'notinstalled'" ng-disabled="!display.playerVersion || !canReboot(display)" ng-click="playerActionsFactory.confirm(display.id, display.name, 'reboot')" require-role="da">
+                <button type="button" class="btn-dropdown u_clickable" ng-hide="!displayService.statusLoading && (factory.display | status) === 'notinstalled'" ng-disabled="!factory.display.playerVersion || !canReboot(factory.display)" ng-click="playerActionsFactory.confirm(factory.display.id, factory.display.name, 'reboot')" require-role="da">
                   <span translate>displays-app.fields.controls.reboot.name</span>
                 </button>
               </li>
@@ -52,7 +52,7 @@
   <strong>{{playerActionsFactory.controlsError}}</strong>
 </div> 
 
-<div class="border-container text-center u_margin-md-top" ng-show="!factory.loadingDisplay && display.id && !displayService.statusLoading && (display | status) === 'notinstalled'">
+<div class="border-container text-center u_margin-md-top" ng-show="!factory.loadingDisplay && factory.display.id && !displayService.statusLoading && (factory.display | status) === 'notinstalled'">
   <div class="panel-body display-instructions-panel">
 
     <div class="form-group my-2">
@@ -68,7 +68,7 @@
         Install Rise Player On Your Media Player
       </button>
     </div>
-    <p>On startup of your media player enter this ID <strong>{{display.id}}</strong> to activate your display.</p>
+    <p>On startup of your media player enter this ID <strong>{{factory.display.id}}</strong> to activate your display.</p>
 
     <display-email></display-email>
   </div>
@@ -93,18 +93,7 @@
               <span translate>displays-app.details.rpp-loading</span> <i class="fa fa-spinner fa-spin fa-fw"></i>
             </span>
 
-            <div class="btn-group btn-group-justified" ng-hide="updatingRPP">
-              <button id="toggleLicenseOn" type="button" class="btn" ng-click="toggleProAuthorized()"  ng-disabled="updatingRPP || !playerLicenseFactory.isProToggleEnabled()"
-                ng-class="{'btn-toggle-blue-off' : !display.playerProAuthorized, 'btn-toggle-blue-on' : display.playerProAuthorized}">
-                Yes
-                <streamline-icon name="checkmark" ng-show="display.playerProAuthorized"></streamline-icon>
-              </button>
-              <button id="toggleLicenseOff" type="button" class="btn" ng-click="toggleProAuthorized()" ng-disabled="updatingRPP || !playerLicenseFactory.isProToggleEnabled()"
-                ng-class="{'btn-toggle-blue-off' : display.playerProAuthorized, 'btn-toggle-blue-on' : !display.playerProAuthorized}">
-                No
-                <streamline-icon name="checkmark" ng-show="!display.playerProAuthorized"></streamline-icon>
-              </button>
-            </div>
+            <yes-no-toggle ng-model="factory.display.playerProAuthorized" ng-change="toggleProAuthorized()" ng-disabled="updatingRPP || !playerLicenseFactory.isProToggleEnabled()" ng-hide="updatingRPP"></yes-no-toggle>
           </div>
         </div>
         <div class="text-danger mt-2" ng-show="errorUpdatingRPP">
@@ -116,7 +105,7 @@
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.id</label>
           <span class="mr-auto">
-            {{display.id}}
+            {{factory.display.id}}
           </span>
         </div>
       </div>
@@ -125,7 +114,7 @@
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.resolution</label>
           <span class="mr-auto">
-            <span ng-show="display.playerVersion">{{display.width | resolution: display.height}}</span>
+            <span ng-show="factory.display.playerVersion">{{factory.display.width | resolution: factory.display.height}}</span>
           </span>
         </div>
       </div>
@@ -134,8 +123,8 @@
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.lastConnection</label>
           <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
-          <span class="mr-auto" ng-if="!factory.showLicenseRequired(display)">
-            {{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}
+          <span class="mr-auto" ng-if="!factory.showLicenseRequired()">
+            {{factory.display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}
           </span>
         </div>
       </div>
@@ -143,14 +132,14 @@
       <!-- SCREENSHOT  -->
       <screenshot></screenshot>
 
-      <div class="list-group-item flex-row form-group mb-0" ng-hide="!displayService.statusLoading && (display | status) === 'notinstalled'">
+      <div class="list-group-item flex-row form-group mb-0" ng-hide="!displayService.statusLoading && (factory.display | status) === 'notinstalled'">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.status</label>
           <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
-          <span class="mr-auto" ng-if="!factory.showLicenseRequired(display)">
+          <span class="mr-auto" ng-if="!factory.showLicenseRequired()">
             <i ng-if="displayService.statusLoading" class="fa fa-spinner fa-spin fa-fw"></i>
-            <span class="text-danger" ng-show="!displayService.statusLoading && (display | status) === 'offline'">Offline</span>
-            <span class="text-success" ng-show="!displayService.statusLoading && (display | status) === 'online'">Online</span>
+            <span class="text-danger" ng-show="!displayService.statusLoading && (factory.display | status) === 'offline'">Offline</span>
+            <span class="text-success" ng-show="!displayService.statusLoading && (factory.display | status) === 'online'">Online</span>
           </span>
         </div>
       </div>
@@ -160,26 +149,15 @@
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.rpp.monitoring</label>
           <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
 
-          <div class="btn-group btn-group-justified" ng-if="!factory.showLicenseRequired(display)">
-            <button id="monitoringOn" type="button" class="btn" ng-click="display.monitoringEnabled = !display.monitoringEnabled" ng-disabled="factory.showLicenseRequired(display)"
-              ng-class="{'btn-toggle-blue-off' : !display.monitoringEnabled, 'btn-toggle-blue-on' : display.monitoringEnabled}">
-              Yes
-              <streamline-icon name="checkmark" ng-show="display.monitoringEnabled"></streamline-icon>
-            </button>
-            <button id="monitoringOff" type="button" class="btn" ng-click="display.monitoringEnabled = !display.monitoringEnabled" ng-disabled="factory.showLicenseRequired(display)"
-              ng-class="{'btn-toggle-blue-off' : display.monitoringEnabled, 'btn-toggle-blue-on' : !display.monitoringEnabled}">
-              No
-              <streamline-icon name="checkmark" ng-show="!display.monitoringEnabled"></streamline-icon>
-            </button>
-          </div>
+          <yes-no-toggle ng-model="factory.display.monitoringEnabled" ng-disabled="factory.showLicenseRequired()" ng-if="!factory.showLicenseRequired()"></yes-no-toggle>
         </div>
       </div>
 
-      <div class="list-group-item" ng-show="!factory.showLicenseRequired(display) && display.monitoringEnabled">
-        <timeline-basic-textbox timeline-string="display.monitoringSchedule" ng-disabled="!display.monitoringEnabled" />
+      <div class="list-group-item" ng-show="!factory.showLicenseRequired() && factory.display.monitoringEnabled">
+        <timeline-basic-textbox timeline-string="factory.display.monitoringSchedule" ng-disabled="!factory.display.monitoringEnabled" />
       </div>
 
-      <div class="list-group-item" ng-show="!factory.showLicenseRequired(display) && display.monitoringEnabled">
+      <div class="list-group-item" ng-show="!factory.showLicenseRequired() && factory.display.monitoringEnabled">
         <div class="flex-row form-group mb-0">
           <div class="row-entry">
             <label class="control-label pull-left mb-0" translate>displays-app.fields.player.rpp.email-recipients</label>
@@ -187,9 +165,9 @@
           </div>
         </div>
 
-        <div class="mt-2" ng-if="!factory.showLicenseRequired(display)">Separate multiple recipients by a comma.</div>
-        <div class="mt-3" ng-class="{ 'has-error': !displayDetails.monitoringEmails.$valid }" ng-if="!factory.showLicenseRequired(display)">
-          <emails-field name="monitoringEmails" ng-model="display.monitoringEmails"></emails-field>
+        <div class="mt-2" ng-if="!factory.showLicenseRequired()">Separate multiple recipients by a comma.</div>
+        <div class="mt-3" ng-class="{ 'has-error': !displayDetails.monitoringEmails.$valid }" ng-if="!factory.showLicenseRequired()">
+          <emails-field name="monitoringEmails" ng-model="factory.display.monitoringEmails"></emails-field>
           <p class="help-block validation-error-message-email" ng-show="!displayDetails.monitoringEmails.$valid" translate>
             displays-app.fields.player.rpp.invalid-email
           </p>
@@ -202,34 +180,19 @@
             <label class="control-label pull-left mb-0">Reboot Media Player Daily At</label>
             <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
 
-            <div class="btn-group-checkbox" ng-if="!factory.showLicenseRequired(display)">
-              <input type="checkbox" id="restartEnabled" name="restartEnabled" ng-model="display.restartEnabled" ng-disabled="factory.showLicenseRequired(display)">
-
-              <div class="btn-group btn-group-justified">
-                <button id="restartOn" type="button" class="btn"
-                  ng-class="{'btn-toggle-blue-off' : !display.restartEnabled, 'btn-toggle-blue-on' : display.restartEnabled}">
-                  Yes
-                  <streamline-icon name="checkmark" ng-show="display.restartEnabled"></streamline-icon>
-                </button>
-                <button id="restartOff" type="button" class="btn"
-                  ng-class="{'btn-toggle-blue-off' : display.restartEnabled, 'btn-toggle-blue-on' : !display.restartEnabled}">
-                  No
-                  <streamline-icon name="checkmark" ng-show="!display.restartEnabled"></streamline-icon>
-                </button>
-              </div>
-            </div>
+            <yes-no-toggle ng-model="factory.display.restartEnabled" ng-disabled="factory.showLicenseRequired()" button-id="restartEnabled" ng-if="!factory.showLicenseRequired()"></yes-no-toggle>
           </div>
         </div>
 
-        <time-picker ng-model="display.restartTime" ng-show="!factory.showLicenseRequired(display) && display.restartEnabled"></time-picker>
+        <time-picker ng-model="factory.display.restartTime" ng-show="!factory.showLicenseRequired() && factory.display.restartEnabled"></time-picker>
 
-        <!-- <div ng-show="!factory.showLicenseRequired(display) && display.restartEnabled" class="input-group rise-date-picker radio-nested-input-group mt-3">
+        <!-- <div ng-show="!factory.showLicenseRequired() && factory.display.restartEnabled" class="input-group rise-date-picker radio-nested-input-group mt-3">
           <input type="text"
                  class="form-control"
                  readonly="true"
                  id="restartTime"
                  name="restartTime"
-                 ng-model="display.restartTime"
+                 ng-model="factory.display.restartTime"
                  ng-click="openTimePicker($event, 'restartTimePickerOpen')"
                  time-picker-popup
                  is-open="restartTimePickerOpen"
@@ -242,32 +205,32 @@
         </div> -->
       </div>
 
-      <div class="list-group-item" ng-if="!playerProFactory.isCROSLegacy(display) && !playerProFactory.isChromeOSPlayer(display)">
+      <div class="list-group-item" ng-if="!playerProFactory.isCROSLegacy(factory.display) && !playerProFactory.isChromeOSPlayer(factory.display)">
         <div class="flex-row form-group mb-0">
           <div class="row-entry">
             <label class="control-label pull-left mb-0" translate>displays-app.fields.player.displayControl.label</label>
             <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
 
-            <span class="mr-auto" ng-if="!factory.showLicenseRequired(display)">
-              <a class="madero-link u_clickable" ng-click="configureDisplayControl(display)" require-role="da" translate>
+            <span class="mr-auto" ng-if="!factory.showLicenseRequired()">
+              <a class="madero-link u_clickable" ng-click="configureDisplayControl(factory.display)" require-role="da" translate>
                 Edit
               </a>
             </span>
           </div>
         </div>
 
-        <div class="mt-2" ng-show="!factory.showLicenseRequired(display) && !displayControlError">
+        <div class="mt-2" ng-show="!factory.showLicenseRequired() && !displayControlError">
           <span translate>displays-app.fields.player.displayControl.description</span>
         </div>
-        <div class="text-danger mt-2" ng-show="!factory.showLicenseRequired(display) && displayControlError">
+        <div class="text-danger mt-2" ng-show="!factory.showLicenseRequired() && displayControlError">
           <span translate>displays-app.fields.player.displayControl.unsupported</span>
         </div>
       </div>
 
-      <div class="list-group-item flex-row form-group mb-0" ng-show="(display.playerVersion || display.onlineStatus === 'online') && (playerProFactory.isCROSLegacy(display) || playerProFactory.isChromeOSPlayer(display))">
+      <div class="list-group-item flex-row form-group mb-0" ng-show="(factory.display.playerVersion || factory.display.onlineStatus === 'online') && (playerProFactory.isCROSLegacy(factory.display) || playerProFactory.isChromeOSPlayer(factory.display))">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.orientation.name</label>
-          <select class="form-control mr-auto w-auto" ng-model="display.orientation" integer-parser>
+          <select class="form-control mr-auto w-auto" ng-model="factory.display.orientation" integer-parser>
             <option value="0" translate>displays-app.fields.player.orientation.0</option>
             <option value="90" translate>displays-app.fields.player.orientation.90</option>
             <option value="180" translate>displays-app.fields.player.orientation.180</option>
@@ -281,108 +244,28 @@
           <label class="control-label pull-left mb-0" translate>displays-app.fields.address.useCompany</label>
           <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
 
-          <div class="btn-group-checkbox" ng-if="!factory.showLicenseRequired(display)">
-            <input type="checkbox" id="useCompanyAddress" name="useCompanyAddress" ng-model="display.useCompanyAddress" ng-disabled="factory.showLicenseRequired(display)">
-            <div class="btn-group btn-group-justified">
-              <button id="useAddressOn" type="button" class="btn" ng-disabled="factory.showLicenseRequired(display)"
-                ng-class="{'btn-toggle-blue-off' : !display.useCompanyAddress, 'btn-toggle-blue-on' : display.useCompanyAddress}">
-                Yes
-                <streamline-icon name="checkmark" ng-show="display.useCompanyAddress"></streamline-icon>
-              </button>
-              <button id="useAddressOff" type="button" class="btn" ng-disabled="factory.showLicenseRequired(display)"
-                ng-class="{'btn-toggle-blue-off' : display.useCompanyAddress, 'btn-toggle-blue-on' : !display.useCompanyAddress}">
-                No
-                <streamline-icon name="checkmark" ng-show="!display.useCompanyAddress"></streamline-icon>
-              </button>
-            </div>
-          </div>
+          <yes-no-toggle ng-model="factory.display.useCompanyAddress" ng-disabled="factory.showLicenseRequired()" button-id="useCompanyAddress" ng-if="!factory.showLicenseRequired()"></yes-no-toggle>
         </div>
       </div>
 
-      <div ng-hide="display.useCompanyAddress" class="list-group-item address-fields">
-        <div class="form-group">
-          <label class="control-label" translate>displays-app.fields.address.description</label>
-          <input type="text" class="form-control" ng-model="display.addressDescription">
-        </div>
-
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label class="control-label" translate>displays-app.fields.address.street</label>
-              <input type="text" class="form-control" ng-model="display.street" name="street">
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label class="control-label" translate>displays-app.fields.address.unit</label>
-              <input type="text" class="form-control" ng-model="display.unit" name="unit">
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label class="control-label" translate>displays-app.fields.address.city</label>
-              <input type="text" class="form-control" ng-model="display.city" name="city">
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label class="control-label" translate>displays-app.fields.address.country.name</label>
-              <select class="form-control" ng-model="display.country" name="country" ng-options="c.code as c.name for c in countries" empty-select-parser>
-                <option value="" ng-show="false" translate>displays-app.fields.address.country.placeholder</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label class="control-label" translate>displays-app.fields.address.province.name</label>
-              <input type="text" class="form-control" ng-model="display.province" name="province" ng-if="display.country != 'US' && display.country != 'CA'" />
-              <select class="form-control selectpicker" ng-model="display.province" name="province" ng-options="c[1] as c[0] for c in regionsCA" ng-if="display.country == 'CA'" empty-select-parser>
-                <option value="" ng-show="false" translate>displays-app.fields.address.province.provincePlaceholder</option>
-              </select>
-              <select class="form-control selectpicker" ng-model="display.province" name="province" ng-options="c[1] as c[0] for c in regionsUS" ng-if="display.country == 'US'" empty-select-parser>
-                <option value="" ng-show="false" translate>displays-app.fields.address.province.statePlaceholder</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label class="control-label" translate>displays-app.fields.address.postalCode</label>
-              <input type="text" class="form-control" ng-model="display.postalCode" name="postalCode">
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group mb-0">
-          <label class="control-label" translate>displays-app.fields.address.timezone.name</label>
-          <select class="form-control" ng-model="display.timeZoneOffset" integer-parser>
-            <option value="" ng-show="false" translate>displays-app.fields.address.timezone.placeholder</option>
-            <option value="{{c[1]}}" ng-repeat="c in timezones">{{c[0]}}</option>
-          </select>
-        </div>
-
-      </div><!--display address-->
+      <display-address></display-address>
 
       <div class="list-group-item flex-row form-group mb-0">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.ipAddress</label>
           <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
-          <span class="mr-auto" ng-if="!factory.showLicenseRequired(display)">
-            {{display.playerLocalIpAddress}}
+          <span class="mr-auto" ng-if="!factory.showLicenseRequired()">
+            {{factory.display.playerLocalIpAddress}}
           </span>
         </div>
       </div>
 
-      <div class="list-group-item flex-row form-group mb-0" ng-show="display.macAddress">
+      <div class="list-group-item flex-row form-group mb-0" ng-show="factory.display.macAddress">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.macAddress</label>
           <ng-include src="'partials/displays/display-details-license-required.html'"></ng-include>
-          <span class="mr-auto" ng-if="!factory.showLicenseRequired(display)">
-            {{display.macAddress}}
+          <span class="mr-auto" ng-if="!factory.showLicenseRequired()">
+            {{factory.display.macAddress}}
           </span>
         </div>
       </div>
@@ -391,7 +274,7 @@
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.operatingSystem</label>
           <span class="mr-auto">
-            {{display.os}}
+            {{factory.display.os}}
           </span>
         </div>
       </div>
@@ -400,61 +283,61 @@
         <div class="row-entry">
           <label class="control-label pull-left mb-0 aligner-item--top" translate>displays-app.fields.player.playerVersion</label>
           <span class="mr-auto">
-            <div ng-show="display.playerName">{{display.playerName}}</div>
-            <div ng-show="display.playerVersion">{{display.playerVersion}}</div>
-            <div ng-show="display.playerVersion && playerProFactory.isOutdatedPlayer(display)" translate>
+            <div ng-show="factory.display.playerName">{{factory.display.playerName}}</div>
+            <div ng-show="factory.display.playerVersion">{{factory.display.playerVersion}}</div>
+            <div ng-show="factory.display.playerVersion && playerProFactory.isOutdatedPlayer(factory.display)" translate>
               displays-app.fields.player.version.notCurrent
             </div>
           </span>
         </div>
       </div>
 
-      <div class="list-group-item flex-row form-group mb-0" ng-show="display.viewerVersion">
+      <div class="list-group-item flex-row form-group mb-0" ng-show="factory.display.viewerVersion">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.viewerVersion</label>
           <span class="mr-auto">
-            {{display.viewerVersion}}
+            {{factory.display.viewerVersion}}
           </span>
         </div>
       </div>
-      <div class="list-group-item flex-row form-group mb-0" ng-show="display.browserVersion">
+      <div class="list-group-item flex-row form-group mb-0" ng-show="factory.display.browserVersion">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.browserVersion</label>
           <span class="mr-auto">
-            {{(display.browserName ? display.browserName + " " : "") + (display.browserVersion ? display.browserVersion : "")}}
+            {{(factory.display.browserName ? factory.display.browserName + " " : "") + (factory.display.browserVersion ? factory.display.browserVersion : "")}}
           </span>
         </div>
       </div>
 
-      <div class="list-group-item flex-row form-group mb-0" ng-show="display.serialNumber">
+      <div class="list-group-item flex-row form-group mb-0" ng-show="factory.display.serialNumber">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.serialNumber</label>
           <span class="mr-auto">
-            {{display.serialNumber}}
+            {{factory.display.serialNumber}}
           </span>
         </div>
       </div>
-      <div class="list-group-item flex-row form-group mb-0" ng-show="display.cpu">
+      <div class="list-group-item flex-row form-group mb-0" ng-show="factory.display.cpu">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.cpu</label>
           <span class="mr-auto">
-            {{display.cpu}}
+            {{factory.display.cpu}}
           </span>
         </div>
       </div>
-      <div class="list-group-item flex-row form-group mb-0" ng-show="display.hostName">
+      <div class="list-group-item flex-row form-group mb-0" ng-show="factory.display.hostName">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.hostName</label>
           <span class="mr-auto">
-            {{display.hostName}}
+            {{factory.display.hostName}}
           </span>
         </div>
       </div>
-      <div class="list-group-item flex-row form-group mb-0" ng-show="display.productName">
+      <div class="list-group-item flex-row form-group mb-0" ng-show="factory.display.productName">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.productName</label>
           <span class="mr-auto">
-            {{display.productName}}
+            {{factory.display.productName}}
           </span>
         </div>
       </div>
@@ -465,7 +348,7 @@
   <div class="preview-container" ng-show="selectedSchedule">
     <div class="row border-bottom u_padding-20-vertical mx-0 mb-4">
       <div class="col-sm-12 px-0 form-inline">
-        <label class="mr-auto" ng-show="!userState.hasRole('cp')">Schedule: {{display.scheduleName}}</label>
+        <label class="mr-auto" ng-show="!userState.hasRole('cp')">Schedule: {{factory.display.scheduleName}}</label>
         <preview-selector ng-model="selectedSchedule" additional-class="mr-auto mb-0" ng-show="userState.hasRole('cp')"></preview-selector>
 
         <span class="pull-right button-toolbar">

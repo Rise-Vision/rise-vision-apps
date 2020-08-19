@@ -1,0 +1,16 @@
+<div class="btn-group-checkbox">
+  <input type="checkbox" id="{{buttonId}}" name="{{buttonId}}" ng-model="ngModel" ng-change="onChange()" ng-disabled="ngDisabled">
+
+  <div class="btn-group btn-group-justified">
+    <button type="button" class="btn" ng-disabled="ngDisabled"
+      ng-class="{'btn-toggle-blue-off' : !ngModel, 'btn-toggle-blue-on' : ngModel}">
+      Yes
+      <streamline-icon name="checkmark" ng-show="ngModel"></streamline-icon>
+    </button>
+    <button type="button" class="btn" ng-disabled="ngDisabled"
+      ng-class="{'btn-toggle-blue-off' : ngModel, 'btn-toggle-blue-on' : !ngModel}">
+      No
+      <streamline-icon name="checkmark" ng-show="!ngModel"></streamline-icon>
+    </button>
+  </div>
+</div>

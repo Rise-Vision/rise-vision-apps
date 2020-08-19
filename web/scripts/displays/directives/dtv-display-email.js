@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.displays.directives')
-  .directive('displayEmail', ['$loading', 'displayEmail', 'processErrorCode', 'EMAIL_REGEX',
-    function ($loading, displayEmail, processErrorCode, EMAIL_REGEX) {
+  .directive('displayEmail', ['$loading', 'displayEmail', 'displayFactory', 'processErrorCode', 'EMAIL_REGEX',
+    function ($loading, displayEmail, displayFactory, processErrorCode, EMAIL_REGEX) {
       return {
         restrict: 'E',
         templateUrl: 'partials/displays/display-email.html',
@@ -31,7 +31,7 @@ angular.module('risevision.displays.directives')
             $scope.emailSent = false;
             $scope.emailError = false;
 
-            displayEmail.send($scope.display.id, $scope.email)
+            displayEmail.send(displayFactory.display.id, $scope.email)
               .then(function () {
                 $scope.emailSent = true;
                 $scope.email = null;

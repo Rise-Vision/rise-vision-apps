@@ -30,12 +30,12 @@
       </div>
 
       <div class="button-row text-right mt-5">
-        <p class="visible-sm visible-xs text-right"><last-modified change-date="display.changeDate" changed-by="display.changedBy"></last-modified></p>
+        <p class="visible-sm visible-xs text-right"><last-modified change-date="factory.display.changeDate" changed-by="factory.display.changedBy"></last-modified></p>
         <!-- Indicates delete or destructive action -->
         <button id="deleteButton" type="button" class="btn btn-danger btn-toolbar pull-left" ng-click="confirmDelete()" require-role="da">
           Delete Display
         </button>
-        <span class="hidden-sm hidden-xs u_margin-right"><last-modified change-date="display.changeDate" changed-by="display.changedBy"></last-modified></span>
+        <span class="hidden-sm hidden-xs u_margin-right"><last-modified change-date="factory.display.changeDate" changed-by="factory.display.changedBy"></last-modified></span>
         <!-- Indicates cancel or non-destructive action -->
         <button id="cancelButton" type="button" ui-sref="apps.displays.list" class="btn btn-default btn-toolbar mr-2">
           {{'common.cancel' | translate}}

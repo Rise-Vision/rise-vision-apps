@@ -1,62 +1,57 @@
 'use strict';
 
 angular.module('risevision.displays.directives')
-  .directive('displayFields', ['$sce', 'userState', 'display', 'playerLicenseFactory', 'playerProFactory', 
-    'displayControlFactory', 'playerActionsFactory', 'scheduleFactory', 'enableCompanyProduct', 'plansFactory',
+  .directive('displayFields', ['$sce', 'userState', 'display', 'displayFactory', 'playerLicenseFactory',
+    'playerProFactory', 'displayControlFactory', 'playerActionsFactory', 'scheduleFactory', 
+    'enableCompanyProduct', 'plansFactory',
     'processErrorCode', 'messageBox', 'confirmModal',
-    'COUNTRIES', 'REGIONS_CA', 'REGIONS_US', 'TIMEZONES', 'SHARED_SCHEDULE_URL', 'PLAYER_PRO_PRODUCT_CODE',
-    function ($sce, userState, display, playerLicenseFactory, playerProFactory, displayControlFactory,
-      playerActionsFactory, scheduleFactory, enableCompanyProduct, plansFactory, 
+    'SHARED_SCHEDULE_URL', 'PLAYER_PRO_PRODUCT_CODE',
+    function ($sce, userState, display, displayFactory, playerLicenseFactory, playerProFactory,
+      displayControlFactory, playerActionsFactory, scheduleFactory, enableCompanyProduct, plansFactory, 
       processErrorCode, messageBox, confirmModal,
-      COUNTRIES, REGIONS_CA, REGIONS_US, TIMEZONES, SHARED_SCHEDULE_URL, PLAYER_PRO_PRODUCT_CODE) {
+      SHARED_SCHEDULE_URL, PLAYER_PRO_PRODUCT_CODE) {
       return {
         restrict: 'E',
         templateUrl: 'partials/displays/display-fields.html',
         link: function ($scope) {
           $scope.userState = userState;
-          $scope.countries = COUNTRIES;
-          $scope.regionsCA = REGIONS_CA;
-          $scope.regionsUS = REGIONS_US;
-          $scope.timezones = TIMEZONES;
-
           $scope.displayService = display;
           $scope.playerProFactory = playerProFactory;
           $scope.playerActionsFactory = playerActionsFactory;
 
-          $scope.selectedSchedule = null;
           $scope.updatingRPP = false;
 
           var _updateDisplayLicenseLocal = function() {
-            var playerProAuthorized = !$scope.display.playerProAuthorized;
+            var playerProAuthorized = displayFactory.display.playerProAuthorized;
             var company = userState.getCopyOfSelectedCompany(true);
 
-            $scope.display.playerProAssigned = playerProAuthorized;
-            $scope.display.playerProAuthorized = company.playerProAvailableLicenseCount > 0 &&
+            displayFactory.display.playerProAssigned = playerProAuthorized;
+            displayFactory.display.playerProAuthorized = company.playerProAvailableLicenseCount > 0 &&
               playerProAuthorized;
-
-            playerLicenseFactory.toggleDisplayLicenseLocal(playerProAuthorized);
           };
 
           var _updateDisplayLicense = function() {
             var apiParams = {};
-            var playerProAuthorized = !$scope.display.playerProAuthorized;
+            var playerProAuthorized = displayFactory.display.playerProAuthorized;
 
             $scope.errorUpdatingRPP = false;
             $scope.updatingRPP = true;
-            apiParams[$scope.display.id] = playerProAuthorized;
+            apiParams[displayFactory.display.id] = playerProAuthorized;
 
-            enableCompanyProduct($scope.display.companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
+            enableCompanyProduct(displayFactory.display.companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
               .then(function () {
                 _updateDisplayLicenseLocal();
+
+                playerLicenseFactory.toggleDisplayLicenseLocal(displayFactory.display.playerProAuthorized);
               })
               .catch(function (err) {
                 $scope.errorUpdatingRPP = processErrorCode(err);
 
-                $scope.display.playerProAuthorized = !playerProAuthorized;
+                displayFactory.display.playerProAuthorized = !playerProAuthorized;
               })
               .finally(function () {
                 if (!playerProAuthorized) {
-                  $scope.display.monitoringEnabled = false;
+                  displayFactory.display.monitoringEnabled = false;
                 }
 
                 $scope.updatingRPP = false;
@@ -64,11 +59,11 @@ angular.module('risevision.displays.directives')
           };
 
           $scope.toggleProAuthorized = function () {
-            if (!playerLicenseFactory.isProAvailable($scope.display)) {
-              $scope.display.playerProAuthorized = false;
+            if (!playerLicenseFactory.isProAvailable(displayFactory.display)) {
+              displayFactory.display.playerProAuthorized = false;
               plansFactory.confirmAndPurchase();
             } else {
-              if ($scope.display.id) {
+              if (displayFactory.display.id) {
                 _updateDisplayLicense();
               } else {
                 _updateDisplayLicenseLocal();
@@ -77,8 +72,8 @@ angular.module('risevision.displays.directives')
           };
 
           $scope.$watch('selectedSchedule', function (newSchedule, oldSchedule) {
-            var isChangingSchedule = oldSchedule || (!oldSchedule && !display.hasSchedule($scope.display));
-            if (isChangingSchedule && scheduleFactory.requiresLicense(newSchedule) && !$scope.display.playerProAuthorized) {
+            var isChangingSchedule = oldSchedule || (!oldSchedule && !display.hasSchedule(displayFactory.display));
+            if (isChangingSchedule && scheduleFactory.requiresLicense(newSchedule) && !displayFactory.display.playerProAuthorized) {
               confirmModal('Assign license?',
                 'You\'ve selected a schedule that contains presentations. In order to show this schedule on this display, you need to license it. Assign license now?',
                 'Yes', 'No', 'madero-style centered-modal',
@@ -143,8 +138,8 @@ angular.module('risevision.displays.directives')
           $scope.$on('risevision.company.updated', function () {
             var company = userState.getCopyOfSelectedCompany(true);
 
-            $scope.display.playerProAuthorized = $scope.display.playerProAuthorized ||
-              company.playerProAvailableLicenseCount > 0 && $scope.display.playerProAssigned;
+            displayFactory.display.playerProAuthorized = displayFactory.display.playerProAuthorized ||
+              company.playerProAvailableLicenseCount > 0 && displayFactory.display.playerProAssigned;
           });
 
         } //link()

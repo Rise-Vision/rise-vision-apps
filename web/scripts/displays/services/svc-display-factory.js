@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('risevision.displays.services')
-  .factory('displayFactory', ['$rootScope', '$q', '$state', '$modal', '$loading', '$log',
+  .factory('displayFactory', ['$rootScope', '$q', '$state', '$log',
     'userState', 'display', 'displayTracker', 'scheduleFactory', 'playerLicenseFactory',
     'processErrorCode',
-    function ($rootScope, $q, $state, $modal, $loading, $log, userState, display, displayTracker,
+    function ($rootScope, $q, $state, $log, userState, display, displayTracker,
       scheduleFactory, playerLicenseFactory, processErrorCode) {
       var factory = {};
       var _displayId;
@@ -27,7 +27,9 @@ angular.module('risevision.displays.services')
           'restartEnabled': true,
           'restartTime': '02:00',
           'monitoringEnabled': true,
-          'useCompanyAddress': true
+          'useCompanyAddress': true,
+          'playerProAssigned': false,
+          'playerProAuthorized': false
         };
 
         _clearMessages();
@@ -39,6 +41,11 @@ angular.module('risevision.displays.services')
         displayTracker('Add Display');
 
         factory.init();
+
+        if (playerLicenseFactory.isProAvailable(factory.display)) {
+          factory.display.playerProAssigned = true;
+          factory.display.playerProAuthorized = true;
+        }
       };
 
       factory.getDisplay = function (displayId) {
@@ -81,34 +88,34 @@ angular.module('risevision.displays.services')
         display.add(factory.display)
           .then(function (resp) {
             if (resp && resp.item && resp.item.id) {
-              factory.display = resp.item;
-
-              playerLicenseFactory.toggleDisplayLicenseLocal(true);
+              if (factory.display.playerProAuthorized) {
+                playerLicenseFactory.toggleDisplayLicenseLocal(true);                
+              }
 
               displayTracker('Display Created', resp.item.id, resp.item
                 .name);
 
               $rootScope.$broadcast('displayCreated', resp.item);
 
-              return scheduleFactory.addToDistribution(factory.display, selectedSchedule);
+              return scheduleFactory.addToDistribution(resp.item, selectedSchedule)
+                .then(function() {            
+                  if ($state.current.name === 'apps.displays.add') {
+                    $state.go('apps.displays.details', {
+                      displayId: resp.item.id
+                    });
+                  }
+
+                  deferred.resolve();
+                })
+                .catch(function () {
+                  factory.apiError = scheduleFactory.apiError;
+                  deferred.reject();
+                });
             } else {
               return $q.reject();
             }
           }, function (e) {
             _showErrorMessage('add', e);
-            deferred.reject();
-          })
-          .then(function() {            
-            if ($state.current.name === 'apps.displays.add') {
-              $state.go('apps.displays.details', {
-                displayId: factory.display.id
-              });
-            }
-
-            deferred.resolve();
-          })
-          .catch(function () {
-            factory.apiError = scheduleFactory.apiError;
             deferred.reject();
           })
           .finally(function () {
@@ -133,16 +140,16 @@ angular.module('risevision.displays.services')
             displayTracker('Display Updated', _displayId,
               factory.display.name);
 
-            return scheduleFactory.addToDistribution(factory.display, selectedSchedule);
+            return scheduleFactory.addToDistribution(factory.display, selectedSchedule)
+              .then(function() {
+                deferred.resolve();
+              })
+              .catch(function () {
+                factory.apiError = scheduleFactory.apiError;
+                deferred.reject();
+              });
           }, function (e) {
             _showErrorMessage('update', e);
-            deferred.reject();
-          })
-          .then(function() {
-            deferred.resolve();
-          })
-          .catch(function () {
-            factory.apiError = scheduleFactory.apiError;
             deferred.reject();
           })
           .finally(function () {
