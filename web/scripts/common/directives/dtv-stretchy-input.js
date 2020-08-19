@@ -21,7 +21,7 @@ angular.module('risevision.apps.directives')
             $window.Stretchy.resize(stretchyInputElement[0]);
 
             $scope.defaultInputWidth = $window.getComputedStyle(stretchyInputElement[0]).getPropertyValue(
-            'width');
+              'width');
           };
 
           $timeout(_initStretchy);

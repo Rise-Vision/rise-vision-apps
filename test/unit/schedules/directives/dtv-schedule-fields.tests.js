@@ -1,6 +1,6 @@
 'use strict';
 describe('directive: scheduleFields', function() {
-  var $scope, $rootScope, scheduleFactory, playlistFactory, plansFactory, $modal, $sce;
+  var $scope, $rootScope, scheduleFactory, playlistFactory, playerLicenseFactory, $modal, $sce;
   var classicPres1 = { name: 'classic1' };
   var classicPres2 = { name: 'classic2' };
   var htmlPres1 = { name: 'html1', presentationType: 'HTML Template' };
@@ -32,9 +32,9 @@ describe('directive: scheduleFields', function() {
         requiresLicense: sinon.stub().returns(true)
       };
     });
-    $provide.service('plansFactory', function() {
+    $provide.service('playerLicenseFactory', function() {
       return {
-        showPurchaseOptions: sinon.spy()
+        confirmAndLicense: sinon.stub().returns(Q.resolve())
       };
     });
 
@@ -45,7 +45,7 @@ describe('directive: scheduleFields', function() {
     $modal = $injector.get('$modal');
     scheduleFactory = $injector.get('scheduleFactory');
     playlistFactory = $injector.get('playlistFactory');
-    plansFactory = $injector.get('plansFactory');
+    playerLicenseFactory = $injector.get('playerLicenseFactory');
     $sce = $injector.get('$sce');
 
     $templateCache.put('partials/schedules/schedule-fields.html', '<p>mock</p>');
@@ -68,7 +68,7 @@ describe('directive: scheduleFields', function() {
     expect($scope.freeDisplays).to.deep.equal([]);
 
     expect($scope.factory).to.equal(scheduleFactory);
-    expect($scope.plansFactory).to.equal(plansFactory);
+    expect($scope.playerLicenseFactory).to.equal(playerLicenseFactory);
   });
 
   describe('checkFreeDisplays:', function() {
@@ -76,20 +76,24 @@ describe('directive: scheduleFields', function() {
       sinon.stub(scheduleFactory, 'checkFreeDisplays').returns(Q.resolve(['display1']));
     });
 
-    it('should watch distribution field', function() {
+    it('should watch distribution field & clear playerLicenseFactory errors', function() {
+      playerLicenseFactory.apiError = 'apiError';
       scheduleFactory.schedule.distribution = ['displayId'];
 
       $scope.$digest();
 
       scheduleFactory.checkFreeDisplays.should.have.been.called;
+      expect(playerLicenseFactory.apiError).to.equal('');
     });
 
-    it('should watch distributeToAll field', function() {
+    it('should watch distributeToAll field & clear playerLicenseFactory errors', function() {
+      playerLicenseFactory.apiError = 'apiError';
       scheduleFactory.schedule.distributeToAll = true;
 
       $scope.$digest();
 
       scheduleFactory.checkFreeDisplays.should.have.been.called;
+      expect(playerLicenseFactory.apiError).to.equal('');
     });
 
     it('should watch requiresLicense value', function() {
@@ -98,6 +102,7 @@ describe('directive: scheduleFields', function() {
       $scope.$digest();
 
       scheduleFactory.checkFreeDisplays.should.have.been.called;
+      expect(playerLicenseFactory.apiError).to.equal('');
     });
 
     it('should update scope variable with response', function(done) {
@@ -124,6 +129,22 @@ describe('directive: scheduleFields', function() {
     });
 
     expect($modal.open.getCall(0).args[0].resolve.playlistItem()).to.equal('urlItem');
+  });
+
+  describe('licenseFreeDisplays:', function() {
+    it('should license displays and clear freeDisplays', function(done) {
+      var freeDisplays = ['displayId1', 'displayId2'];
+      $scope.freeDisplays = freeDisplays;
+
+      $scope.licenseFreeDisplays();
+
+      setTimeout(function() {
+        playerLicenseFactory.confirmAndLicense.should.have.been.calledWith(freeDisplays);
+        expect($scope.freeDisplays).to.deep.equal([]);
+
+        done();
+      }, 10);
+    });
   });
 
   describe('addPresentationItem:', function() {

@@ -274,11 +274,11 @@ angular.module('risevision.schedules.services')
         }
       };
 
-      factory.requiresLicense = function(schedule) {
+      factory.requiresLicense = function (schedule) {
         schedule = schedule || factory.schedule;
 
         if (schedule && schedule.content && schedule.content.length > 0) {
-          for(var i=0; i<schedule.content.length; i++) {
+          for (var i = 0; i < schedule.content.length; i++) {
             if (schedule.content[i].type === 'presentation') {
               return true;
             }
