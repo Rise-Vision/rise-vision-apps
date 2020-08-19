@@ -48,7 +48,7 @@ angular.module('risevision.displays.controllers')
         } else {
           confirmModal('displays-app.details.unsavedTitle',
             'displays-app.details.unsavedWarning',
-            'Yes', 'No', 'madero-style centered-modal',
+            'Save', 'Discard', 'madero-style centered-modal',
             'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
             .then(function () {
               // do what you need if user presses ok
