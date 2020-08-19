@@ -160,7 +160,7 @@ describe("Services: plans factory", function() {
       setTimeout(function() {        
         expect(confirmModalStub).to.have.been.calledWith(
           'Almost there!',
-          'There aren\'t any available licenses to assign. Subscribe to additional licenses?',
+          'There aren\'t available licenses to assign. Subscribe to additional licenses?',
           'Yes', 'No', 'madero-style centered-modal',
           'partials/components/confirm-modal/madero-confirm-modal.html', 'sm'
         );
