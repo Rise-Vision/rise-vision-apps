@@ -131,6 +131,10 @@ describe('service: scheduleFactory:', function() {
     expect(scheduleFactory.addSchedule).to.be.a('function');
     expect(scheduleFactory.updateSchedule).to.be.a('function');
     expect(scheduleFactory.deleteSchedule).to.be.a('function');
+
+    expect(scheduleFactory.checkFreeDisplays).to.be.a('function');
+    expect(scheduleFactory.hasFreeDisplays).to.be.a('function');
+    expect(scheduleFactory.requiresLicense).to.be.a('function');
   });
 
   it('should initialize',function(){
@@ -193,6 +197,43 @@ describe('service: scheduleFactory:', function() {
         }, 10);
       })
       .then(null,done);
+    });
+
+  });
+
+  describe('checkFreeDisplays:', function() {
+    beforeEach(function() {
+      sinon.stub(scheduleFactory, 'hasFreeDisplays').returns(Q.resolve(['display1']));
+      sinon.stub(scheduleFactory, 'requiresLicense').returns(false);
+    });
+
+    it('should return false if schedule does not require a license',function(done){
+      scheduleFactory.schedule.content = ['display1'];
+
+      scheduleFactory.checkFreeDisplays()
+        .then(function(result) {
+          expect(result).to.deep.equal([]);
+
+          done();
+        });
+
+      scheduleFactory.requiresLicense.should.have.been.called;
+      scheduleFactory.hasFreeDisplays.should.not.have.been.called;
+    });
+
+    it('should return check if the schedule has free Displays if it requires a license',function(done){
+      scheduleFactory.requiresLicense.returns(true);
+      scheduleFactory.schedule.content = ['display1'];
+
+      scheduleFactory.checkFreeDisplays()
+        .then(function(result) {
+          expect(result).to.deep.equal(['display1']);
+
+          done();
+        });
+
+      scheduleFactory.requiresLicense.should.have.been.called;
+      scheduleFactory.hasFreeDisplays.should.have.been.called;
     });
 
   });
@@ -658,6 +699,18 @@ describe('service: scheduleFactory:', function() {
         content: undefined
       };
       expect(scheduleFactory.requiresLicense(schedule)).to.be.false;
+    });
+
+    it('should use factory object if parameter is not passed', function() {
+      scheduleFactory.schedule = {
+        content: [{type:'presentation'}]
+      };
+      expect(scheduleFactory.requiresLicense()).to.be.true;
+
+      scheduleFactory.schedule = {
+        content: []
+      };
+      expect(scheduleFactory.requiresLicense()).to.be.false;
     });
   });
 

@@ -7,6 +7,7 @@ describe('Services: playerLicenseFactory', function() {
   beforeEach(module(function ($provide) {
     storeApiFailure = false;
 
+    $provide.service('$q', function() {return Q;});
     $provide.service('userState', function () {
       return {
         _restoreState: function () {},
@@ -16,7 +17,7 @@ describe('Services: playerLicenseFactory', function() {
         getCopyOfSelectedCompany: function() {
           return {};
         },
-        updateCompanySettings: sinon.stub()
+        updateCompanySettings: sandbox.stub()
       };
     });
     $provide.service('currentPlanFactory', function() {
@@ -33,9 +34,24 @@ describe('Services: playerLicenseFactory', function() {
         }
       };
     });
+    $provide.service('plansFactory', function() {
+      return plansFactory = {
+        confirmAndPurchase: sandbox.stub()
+      };
+    });
+    $provide.factory('confirmModal', function() {
+      return confirmModal = sandbox.stub().returns(Q.resolve());
+    });
+    $provide.factory('enableCompanyProduct', function() {
+      return enableCompanyProduct = sandbox.stub().returns(Q.resolve());
+    });
+    $provide.factory('processErrorCode', function() {
+      return sandbox.stub().returns('processedError');
+    });
+    
   }));
 
-  var sandbox, userState, playerLicenseFactory, currentPlanFactory;
+  var sandbox, userState, playerLicenseFactory, currentPlanFactory, plansFactory, confirmModal, enableCompanyProduct;
 
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
@@ -164,6 +180,30 @@ describe('Services: playerLicenseFactory', function() {
       });
     });
 
+    it('should decrease Available License count if more than a Display is added', function() {
+      sandbox.stub(userState, 'getCopyOfSelectedCompany').returns({
+        playerProAvailableLicenseCount: 5
+      });
+
+      playerLicenseFactory.toggleDisplayLicenseLocal(true, 3);
+
+      expect(userState.updateCompanySettings).to.have.been.calledWith({
+        playerProAvailableLicenseCount: 2
+      });
+    });
+
+    it('should increase Available License count if more than a Display is removed', function() {
+      sandbox.stub(userState, 'getCopyOfSelectedCompany').returns({
+        playerProAvailableLicenseCount: 4
+      });
+
+      playerLicenseFactory.toggleDisplayLicenseLocal(false, 3);
+
+      expect(userState.updateCompanySettings).to.have.been.calledWith({
+        playerProAvailableLicenseCount: 7
+      });
+    });
+
     it('should not set negative Available License count', function() {
       sandbox.stub(userState, 'getCopyOfSelectedCompany').returns({
         playerProAvailableLicenseCount: 0
@@ -187,9 +227,71 @@ describe('Services: playerLicenseFactory', function() {
         playerProAvailableLicenseCount: 1
       });
     });
-
-
   });
 
+  describe('confirmAndLicense:', function() {
+    it('should prompt users to assign licenses', function(done) {
+      playerLicenseFactory.confirmAndLicense(['displayId']).then(function() {
+        confirmModal.should.have.been.calledWith(
+          'License 1 display?',
+          'You are about to assign licenses to 1 display. Would you like to proceed?',
+          'Yes', 'No', 'madero-style centered-modal',
+          'partials/components/confirm-modal/madero-confirm-modal.html', 'sm'
+        );
+        done();
+      });
+    });
 
+    it('should prompt users with plural message when licensing more than one display', function(done) {
+      currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 3;
+
+      playerLicenseFactory.confirmAndLicense(['displayId', 'displayId2']).then(function() {
+        confirmModal.should.have.been.calledWith(
+          'License 2 displays?',
+          'You are about to assign licenses to 2 displays. Would you like to proceed?',
+          'Yes', 'No', 'madero-style centered-modal',
+          'partials/components/confirm-modal/madero-confirm-modal.html', 'sm'
+        );
+        done();
+      });
+    });
+
+    it('should reject and show purchase options if there are not enough licenses', function(done) {
+      currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 0;
+
+      playerLicenseFactory.confirmAndLicense(['displayId']).catch(function() {
+        confirmModal.should.have.been.called;
+        plansFactory.confirmAndPurchase.should.have.been.called;
+
+        done();
+      });
+    });
+
+    it('should license displays', function(done) {
+      currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 2;
+
+      playerLicenseFactory.confirmAndLicense(['displayId', 'displayId2']).then(function() {
+        
+        enableCompanyProduct.should.have.been.called;
+        expect(playerLicenseFactory.updatingLicense).to.be.false;
+        expect(playerLicenseFactory.apiError).to.equal('');
+
+        done();
+      });      
+    });
+
+    it('should handle licensing failures', function(done) {
+      currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 2;
+      enableCompanyProduct.returns(Q.reject('apiError'));
+
+      playerLicenseFactory.confirmAndLicense(['displayId', 'displayId2']).catch(function() {
+        
+        enableCompanyProduct.should.have.been.called;
+        expect(playerLicenseFactory.updatingLicense).to.be.false;       
+        expect(playerLicenseFactory.apiError).to.equal('processedError');
+
+        done();
+      });
+    });
+  });
 });

@@ -132,7 +132,8 @@ angular.module('risevision.displays.directives')
           };
 
           $scope.installationInstructionsModal = function () {
-            messageBox(null, null, null, 'madero-style centered-modal download-player-modal', 'partials/displays/download-player-modal.html', 'sm');
+            messageBox(null, null, null, 'madero-style centered-modal download-player-modal',
+              'partials/displays/download-player-modal.html', 'sm');
           };
 
           $scope.$on('risevision.company.updated', function () {

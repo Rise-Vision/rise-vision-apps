@@ -19,7 +19,7 @@ angular.module('risevision.displays.directives')
             }
           });
 
-          $scope.$watch('email', function() {
+          $scope.$watch('email', function () {
             $scope.emailInvalid = !($scope.email && EMAIL_REGEX.test($scope.email));
           });
 
