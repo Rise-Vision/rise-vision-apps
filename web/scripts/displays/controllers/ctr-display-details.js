@@ -36,9 +36,9 @@ angular.module('risevision.displays.controllers')
 
       $scope.confirmDelete = function () {
         confirmModal('displays-app.details.deleteTitle',
-          'displays-app.details.deleteWarning',
-          'Yes', 'No', 'madero-style centered-modal',
-          'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
+            'displays-app.details.deleteWarning',
+            'Yes', 'No', 'madero-style centered-modal',
+            'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
           .then(displayFactory.deleteDisplay);
       };
 
@@ -47,9 +47,9 @@ angular.module('risevision.displays.controllers')
           $state.go('apps.displays.add');
         } else {
           confirmModal('displays-app.details.unsavedTitle',
-            'displays-app.details.unsavedWarning',
-            'Save', 'Discard', 'madero-style centered-modal',
-            'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
+              'displays-app.details.unsavedWarning',
+              'Save', 'Discard', 'madero-style centered-modal',
+              'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
             .then(function () {
               // do what you need if user presses ok
               $scope.save()

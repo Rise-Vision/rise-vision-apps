@@ -2,12 +2,12 @@
 
 angular.module('risevision.displays.directives')
   .directive('displayFields', ['$sce', 'userState', 'display', 'displayFactory', 'playerLicenseFactory',
-    'playerProFactory', 'displayControlFactory', 'playerActionsFactory', 'scheduleFactory', 
+    'playerProFactory', 'displayControlFactory', 'playerActionsFactory', 'scheduleFactory',
     'enableCompanyProduct', 'plansFactory',
     'processErrorCode', 'messageBox', 'confirmModal',
     'SHARED_SCHEDULE_URL', 'PLAYER_PRO_PRODUCT_CODE',
     function ($sce, userState, display, displayFactory, playerLicenseFactory, playerProFactory,
-      displayControlFactory, playerActionsFactory, scheduleFactory, enableCompanyProduct, plansFactory, 
+      displayControlFactory, playerActionsFactory, scheduleFactory, enableCompanyProduct, plansFactory,
       processErrorCode, messageBox, confirmModal,
       SHARED_SCHEDULE_URL, PLAYER_PRO_PRODUCT_CODE) {
       return {
@@ -21,7 +21,7 @@ angular.module('risevision.displays.directives')
 
           $scope.updatingRPP = false;
 
-          var _updateDisplayLicenseLocal = function() {
+          var _updateDisplayLicenseLocal = function () {
             var playerProAuthorized = displayFactory.display.playerProAuthorized;
             var company = userState.getCopyOfSelectedCompany(true);
 
@@ -30,7 +30,7 @@ angular.module('risevision.displays.directives')
               playerProAuthorized;
           };
 
-          var _updateDisplayLicense = function() {
+          var _updateDisplayLicense = function () {
             var apiParams = {};
             var playerProAuthorized = displayFactory.display.playerProAuthorized;
 
@@ -72,26 +72,28 @@ angular.module('risevision.displays.directives')
           };
 
           $scope.$watch('selectedSchedule', function (newSchedule, oldSchedule) {
-            var isChangingSchedule = oldSchedule || (!oldSchedule && !display.hasSchedule(displayFactory.display));
-            if (isChangingSchedule && scheduleFactory.requiresLicense(newSchedule) && !displayFactory.display.playerProAuthorized) {
+            var isChangingSchedule = oldSchedule || (!oldSchedule && !display.hasSchedule(displayFactory
+              .display));
+            if (isChangingSchedule && scheduleFactory.requiresLicense(newSchedule) && !displayFactory.display
+              .playerProAuthorized) {
               confirmModal('Assign license?',
-                'You\'ve selected a schedule that contains presentations. In order to show this schedule on this display, you need to license it. Assign license now?',
-                'Yes', 'No', 'madero-style centered-modal',
-                'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
-              .then(function() {
-                $scope.toggleProAuthorized();
-              });
+                  'You\'ve selected a schedule that contains presentations. In order to show this schedule on this display, you need to license it. Assign license now?',
+                  'Yes', 'No', 'madero-style centered-modal',
+                  'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
+                .then(function () {
+                  $scope.toggleProAuthorized();
+                });
             }
           });
 
-          $scope.confirmLicensing = function() {
+          $scope.confirmLicensing = function () {
             return confirmModal('Assign license?',
-              'Do you want to assign one of your licenses to this display?',
-              'Yes', 'No', 'madero-style centered-modal',
-              'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
-            .then(function() {
-              $scope.toggleProAuthorized();
-            });
+                'Do you want to assign one of your licenses to this display?',
+                'Yes', 'No', 'madero-style centered-modal',
+                'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
+              .then(function () {
+                $scope.toggleProAuthorized();
+              });
           };
 
           $scope.isChromeOs = function (display) {

@@ -7,17 +7,17 @@ angular.module('risevision.displays.services')
       PLAYER_PRO_PRODUCT_CODE, $q) {
       var factory = {};
 
-      factory.getUsedLicenseString = function() {
+      factory.getUsedLicenseString = function () {
         return factory.getProUsedLicenseCount() +
           ' Licensed Display' + (factory.getProUsedLicenseCount() !== 1 ? 's' : '') +
           ' | ' + factory.getProAvailableLicenseCount() +
           ' License' + (factory.getProAvailableLicenseCount() !== 1 ? 's' : '') +
           ' Available';
       };
-      
+
       factory.isProAvailable = function (display) {
-        return factory.hasProfessionalLicenses() && factory.getProLicenseCount() > 0 && 
-        !factory.areAllProLicensesUsed(display);
+        return factory.hasProfessionalLicenses() && factory.getProLicenseCount() > 0 &&
+          !factory.areAllProLicensesUsed(display);
       };
 
       factory.hasProfessionalLicenses = function () {
