@@ -31,8 +31,8 @@ angular.module('risevision.schedules.directives')
 
           var _closeTooltip = function(event) {
             var tooltipContent = angular.element('#preview-selector-tooltip');
-            if (tooltipContent && tooltipContent[0].contains(event.target) || 
-              tooltipElement[0].contains(event.target) ) {
+            if (tooltipContent && tooltipContent[0] && tooltipContent[0].contains(event.target) || 
+              tooltipElement && tooltipElement[0] && tooltipElement[0].contains(event.target) ) {
               return;
             }
             $timeout(function () {
