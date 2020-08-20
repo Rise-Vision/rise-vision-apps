@@ -48,7 +48,7 @@ describe('directive: display fields', function() {
     $provide.service('scheduleFactory', function() {
       return {
         addToDistribution: sandbox.stub(),
-        requiresLicense: sandbox.stub().returns(true)
+        requiresLicense: sandbox.stub().returns(false)
       };
     });
     $provide.factory('plansFactory', function() {
@@ -313,7 +313,9 @@ describe('directive: display fields', function() {
     });
 
     it('should prompt licensing if new schedule requires license and display is not licensed', function(done) {
-      sandbox.spy($scope, 'toggleProAuthorized');
+      scheduleFactory.requiresLicense.returns(true);
+
+      sandbox.stub($scope, 'toggleProAuthorized');
       displayFactory.display = { playerProAuthorized: false};
       $scope.selectedSchedule = { id: 'newSchedule' };
       $scope.$digest();
@@ -326,6 +328,7 @@ describe('directive: display fields', function() {
       );
 
       setTimeout(function() {
+        expect(displayFactory.display.playerProAuthorized).to.be.true;
         $scope.toggleProAuthorized.should.have.been.called;
         done();
       });
@@ -333,13 +336,13 @@ describe('directive: display fields', function() {
 
     it('should not prompt if display is already licensed', function() {
       displayFactory.display = { playerProAuthorized: true};
+      scheduleFactory.requiresLicense.returns(true);
       $scope.selectedSchedule = { id: 'newSchedule' };
       $scope.$digest();
       confirmModal.should.not.have.been.called;
     });
 
     it('should not prompt if schedule does not require a license', function() {
-      scheduleFactory.requiresLicense.returns(false);
       displayFactory.display = { playerProAuthorized: false};
       $scope.selectedSchedule = { id: 'newSchedule' };
       $scope.$digest();
@@ -347,6 +350,7 @@ describe('directive: display fields', function() {
     });
 
     it('should not prompt on initial load', function() {
+      scheduleFactory.requiresLicense.returns(true);
       displayFactory.display = { scheduleId: 'scheduleId'};
       $scope.$digest();
 
@@ -358,7 +362,7 @@ describe('directive: display fields', function() {
 
   describe('confirmLicensing:', function() {
     it('should prompt licensing current display and toggle license on confimation', function(done) {
-      sandbox.spy($scope, 'toggleProAuthorized');
+      sandbox.stub($scope, 'toggleProAuthorized');
 
       $scope.confirmLicensing().then(function() {
         confirmModal.should.have.been.calledWith(
@@ -366,6 +370,7 @@ describe('directive: display fields', function() {
           'Do you want to assign one of your licenses to this display?',
           'Yes', 'No', 'madero-style centered-modal',
           'partials/components/confirm-modal/madero-confirm-modal.html', 'sm');
+        expect(displayFactory.display.playerProAuthorized).to.be.true;
         $scope.toggleProAuthorized.should.have.been.called;
         done();
       });

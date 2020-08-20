@@ -72,15 +72,19 @@ angular.module('risevision.displays.directives')
           };
 
           $scope.$watch('selectedSchedule', function (newSchedule, oldSchedule) {
-            var isChangingSchedule = oldSchedule || (!oldSchedule && !display.hasSchedule(displayFactory
-              .display));
-            if (isChangingSchedule && scheduleFactory.requiresLicense(newSchedule) && !displayFactory.display
-              .playerProAuthorized) {
+            var isChangingSchedule = oldSchedule || (!oldSchedule && 
+              !display.hasSchedule(displayFactory.display));
+
+            if (isChangingSchedule && scheduleFactory.requiresLicense(newSchedule) &&
+              !displayFactory.display.playerProAuthorized) {
               confirmModal('Assign license?',
                   'You\'ve selected a schedule that contains presentations. In order to show this schedule on this display, you need to license it. Assign license now?',
                   'Yes', 'No', 'madero-style centered-modal',
                   'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
                 .then(function () {
+                  // Toggle license as if they clicked the checkbox
+                  displayFactory.display.playerProAuthorized = true;
+
                   $scope.toggleProAuthorized();
                 });
             }
@@ -92,6 +96,9 @@ angular.module('risevision.displays.directives')
                 'Yes', 'No', 'madero-style centered-modal',
                 'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
               .then(function () {
+                // Toggle license as if they clicked the checkbox
+                displayFactory.display.playerProAuthorized = true;
+
                 $scope.toggleProAuthorized();
               });
           };
