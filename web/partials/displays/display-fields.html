@@ -463,13 +463,13 @@
   </div>
 
   <div class="preview-container" ng-show="selectedSchedule">
-    <div class="row border-bottom u_padding-20-vertical mx-0 mb-4">
+    <div class="row border-bottom pt-3 mx-0 mb-4">
       <div class="col-sm-12 px-0 form-inline">
-        <label class="mr-auto" ng-show="!userState.hasRole('cp')">Schedule: {{display.scheduleName}}</label>
-        <preview-selector ng-model="selectedSchedule" additional-class="mr-auto mb-0" ng-show="userState.hasRole('cp')"></preview-selector>
+        <label class="mr-auto pt-3" ng-show="!userState.hasRole('cp')">Schedule: {{display.scheduleName}}</label>
+        <preview-selector ng-model="selectedSchedule" additional-class="mr-auto mb-0 pt-3" ng-show="userState.hasRole('cp')"></preview-selector>
 
-        <span class="pull-right button-toolbar">
-          <a id="viewSchedule" type="button" class="btn btn-default btn-toolbar hidden-md" ui-sref="apps.schedules.details({ scheduleId: selectedSchedule.id, cid: selectedSchedule.companyId })">Edit Schedule</a>
+        <span class="pull-right button-toolbar pt-3 u_padding-20-bottom">
+          <a id="viewSchedule" type="button" class="btn btn-default btn-toolbar" ui-sref="apps.schedules.details({ scheduleId: selectedSchedule.id, cid: selectedSchedule.companyId })">Edit Schedule</a>
           <ng-show ng-show="tooltipKey">
             <button id="shareButton" type="button" class="btn btn-default btn-toolbar" 
             tooltip-overlay tooltip-template="'partials/schedules/share-schedule-tooltip.html'" tooltip-placement="bottom" tooltip-class="madero-style tooltip-guide tooltip-share-guide">
