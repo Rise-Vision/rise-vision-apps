@@ -15,9 +15,11 @@ angular.module('risevision.apps.directives')
         },
         templateUrl: 'partials/common/yes-no-toggle.html',
         link: function ($scope) {
-          $scope.onChange = function() {
+          $scope.onChange = function () {
             // Wait for $digest so ngModel is updated before triggering ngChange
-            $timeout($scope.ngChange);
+            if ($scope.ngChange) {
+              $timeout($scope.ngChange);
+            }
           };
         }
       };

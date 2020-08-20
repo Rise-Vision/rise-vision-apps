@@ -17,7 +17,8 @@ describe('Services: playerLicenseFactory', function() {
         getCopyOfSelectedCompany: function() {
           return {};
         },
-        updateCompanySettings: sandbox.stub()
+        updateCompanySettings: sandbox.stub(),
+        hasRole: sandbox.stub().returns(true)
       };
     });
     $provide.service('currentPlanFactory', function() {
@@ -68,13 +69,118 @@ describe('Services: playerLicenseFactory', function() {
 
   it('should exist', function() {
     expect(playerLicenseFactory).to.be.ok;
+
+    expect(playerLicenseFactory.getUsedLicenseString).to.be.a('function');
+    expect(playerLicenseFactory.isProAvailable).to.be.a('function');
     expect(playerLicenseFactory.hasProfessionalLicenses).to.be.a('function');
     expect(playerLicenseFactory.getProLicenseCount).to.be.a('function');
     expect(playerLicenseFactory.getProAvailableLicenseCount).to.be.a('function');
     expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.be.a('function');
     expect(playerLicenseFactory.areAllProLicensesUsed).to.be.a('function');
   });
-  
+
+  describe('getUsedLicenseString:', function() {
+    it('should handle 0 case', function () {
+      currentPlanFactory.currentPlan.playerProTotalLicenseCount = 0;
+      currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 0;
+
+      expect(playerLicenseFactory.getUsedLicenseString()).to.equal('0 Licensed Displays | 0 Licenses Available');
+    });
+
+    it('should handle 1 case', function () {
+      currentPlanFactory.currentPlan.playerProTotalLicenseCount = 2;
+      currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 1;
+
+      expect(playerLicenseFactory.getUsedLicenseString()).to.equal('1 Licensed Display | 1 License Available');
+    });
+
+    it('should handle multiples case', function () {
+      currentPlanFactory.currentPlan.playerProTotalLicenseCount = 4;
+      currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 2;
+
+      expect(playerLicenseFactory.getUsedLicenseString()).to.equal('2 Licensed Displays | 2 Licenses Available');
+    });
+
+  });
+
+  describe('isProAvailable:', function() {
+    var display;
+
+    beforeEach(function() {
+      display = { playerProAuthorized: false };
+    });
+
+    it('should return false if no hasProfessionalLicenses = false', function () {
+      sandbox.stub(playerLicenseFactory, 'hasProfessionalLicenses').returns(false);
+
+      expect(playerLicenseFactory.isProAvailable(display)).to.be.false;
+    });
+
+    it('should return false if available licenses are zero (Free Plan)', function () {
+      sandbox.stub(playerLicenseFactory, 'hasProfessionalLicenses').returns(true);
+      currentPlanFactory.currentPlan.playerProTotalLicenseCount = 0;
+
+      expect(playerLicenseFactory.isProAvailable(display)).to.be.false;
+    });
+
+    it('should return false if all available licenses are used', function () {
+      sandbox.stub(playerLicenseFactory, 'hasProfessionalLicenses').returns(true);
+      currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 0;
+
+      expect(playerLicenseFactory.isProAvailable(display)).to.be.false;
+    });
+
+    it('should return true if there are available licenses', function () {
+      sandbox.stub(playerLicenseFactory, 'hasProfessionalLicenses').returns(true);
+
+      expect(playerLicenseFactory.isProAvailable(display)).to.be.true;
+    });
+  });
+
+  describe('areAllProLicensesUsed:', function() {
+    it('should return false if no licenses are available', function () {
+      var display = {
+        playerProAssigned: false
+      };
+      currentPlanFactory.currentPlan.playerProTotalLicenseCount = 0;
+      currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 0;
+
+      expect(playerLicenseFactory.areAllProLicensesUsed(display)).to.be.false;
+    });
+
+    it('should return false if not all licenses are used', function () {
+      var display = {
+        playerProAssigned: false
+      };
+
+      expect(playerLicenseFactory.areAllProLicensesUsed(display)).to.be.false;
+    });
+
+    it('should handle null display', function () {
+      var display = null;
+
+      expect(playerLicenseFactory.areAllProLicensesUsed(display)).to.be.false;
+    });
+
+    it('should return true if display is not playerProAssigned', function () {
+      var display = {
+        playerProAssigned: false
+      };
+      currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 0;
+
+      expect(playerLicenseFactory.areAllProLicensesUsed(display)).to.be.true;
+    });
+
+    it('should return false if display is playerProAssigned', function () {
+      var display = {
+        playerProAssigned: true
+      };
+      currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 0;
+
+      expect(playerLicenseFactory.areAllProLicensesUsed(display)).to.be.false;
+    });
+  });
+
   describe('hasProfessionalLicenses: ', function() {
     it('should return true if Licenses are available', function() {
       currentPlanFactory.currentPlan.playerProTotalLicenseCount = 5;
@@ -135,24 +241,56 @@ describe('Services: playerLicenseFactory', function() {
 
   });
 
-  describe('areAllProLicensesUsed:', function() {
-    it('should return all licenses are used if no licenses are Available', function () {
+  describe('isProToggleEnabled:', function() {
+    var display;
+
+    beforeEach(function() {
+      display = { playerProAuthorized: false };
+    });
+
+    it('should return true if not authorized', function () {
+      expect(playerLicenseFactory.isProToggleEnabled(display)).to.be.true;
+    });
+
+    it('should return true if playerProAuthorized = true', function () {
+      display = { playerProAuthorized: true };
+
+      expect(playerLicenseFactory.isProToggleEnabled(display)).to.be.true;
+    });
+
+    it('should return true if not all licenses are used, even if plan is purchased by parent', function () {
+      currentPlanFactory.currentPlan.isPurchasedByParent = true;
+
+      expect(playerLicenseFactory.isProToggleEnabled(display)).to.be.true;
+    });
+
+    it('should return true if all licenses are used but plan is not purchased by parent', function () {
       currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 0;
 
-      expect(playerLicenseFactory.areAllProLicensesUsed()).to.be.true;
+      expect(playerLicenseFactory.isProToggleEnabled(display)).to.be.true;
     });
 
-    it('should return all licenses are used if negative licenses are Available (this should not happen)', function () {
-      currentPlanFactory.currentPlan.playerProAvailableLicenseCount = -5;
+    it('should return false if all licenses are used but plan is purchased by parent', function () {
+      currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 0;
+      currentPlanFactory.currentPlan.isPurchasedByParent = true;
 
-      expect(playerLicenseFactory.areAllProLicensesUsed()).to.be.true;
+      expect(playerLicenseFactory.isProToggleEnabled(display)).to.be.false;
+    });
+    
+    it('should return true if authorized even if all licenses are used and the plan is purchased by parent', function () {
+      currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 0;
+      currentPlanFactory.currentPlan.isPurchasedByParent = true;
+      display = { playerProAuthorized: true };
+
+      expect(playerLicenseFactory.isProToggleEnabled(display)).to.be.true;
     });
 
-    it('should return not all licenses are used if assigned list length is lower than license count', function () {
-      currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 3;
+    it('should return false if user is not display administrator', function () {
+      userState.hasRole.returns(false);
 
-      expect(playerLicenseFactory.areAllProLicensesUsed()).to.be.false;
+      expect(playerLicenseFactory.isProToggleEnabled(display)).to.be.false;
     });
+
   });
 
   describe('toggleDisplayLicenseLocal: ', function() {

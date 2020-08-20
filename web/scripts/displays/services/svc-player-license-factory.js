@@ -7,24 +7,24 @@ angular.module('risevision.displays.services')
       PLAYER_PRO_PRODUCT_CODE, $q) {
       var factory = {};
 
-      factory.getUsedLicenseString = function() {
+      factory.getUsedLicenseString = function () {
         return factory.getProUsedLicenseCount() +
-          ' Licensed Display' + (factory.getProUsedLicenseCount() > 1 ? 's' : '') +
+          ' Licensed Display' + (factory.getProUsedLicenseCount() !== 1 ? 's' : '') +
           ' | ' + factory.getProAvailableLicenseCount() +
-          ' License' + (factory.getProAvailableLicenseCount() > 1 ? 's' : '') +
+          ' License' + (factory.getProAvailableLicenseCount() !== 1 ? 's' : '') +
           ' Available';
       };
-      
+
       factory.isProAvailable = function (display) {
-        return factory.hasProfessionalLicenses() && _getProLicenseCount() > 0 && 
-        !_areAllProLicensesUsed(display);
+        return factory.hasProfessionalLicenses() && factory.getProLicenseCount() > 0 &&
+          !factory.areAllProLicensesUsed(display);
       };
 
       factory.hasProfessionalLicenses = function () {
         return currentPlanFactory.currentPlan.playerProTotalLicenseCount > 0;
       };
 
-      var _getProLicenseCount = function () {
+      factory.getProLicenseCount = function () {
         return currentPlanFactory.currentPlan.playerProTotalLicenseCount || 0;
       };
 
@@ -33,19 +33,19 @@ angular.module('risevision.displays.services')
       };
 
       factory.getProUsedLicenseCount = function () {
-        return _getProLicenseCount() - factory.getProAvailableLicenseCount();
+        return factory.getProLicenseCount() - factory.getProAvailableLicenseCount();
       };
 
       factory.isProToggleEnabled = function (display) {
         return userState.hasRole('da') && ((display && display.playerProAuthorized) ||
-          (_areAllProLicensesUsed(display) ? !currentPlanFactory.currentPlan.isPurchasedByParent : true));
+          (factory.areAllProLicensesUsed(display) ? !currentPlanFactory.currentPlan.isPurchasedByParent : true));
       };
 
-      var _areAllProLicensesUsed = function (display) {
+      factory.areAllProLicensesUsed = function (display) {
         var allLicensesUsed = !factory.getProAvailableLicenseCount();
         var allProLicensesUsed = allLicensesUsed && !(display && display.playerProAssigned);
 
-        return _getProLicenseCount() > 0 && allProLicensesUsed;
+        return factory.getProLicenseCount() > 0 && allProLicensesUsed;
       };
 
       factory.toggleDisplayLicenseLocal = function (playerProAuthorized, displaysCount) {

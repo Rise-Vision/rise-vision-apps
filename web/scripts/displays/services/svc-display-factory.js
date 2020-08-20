@@ -89,7 +89,7 @@ angular.module('risevision.displays.services')
           .then(function (resp) {
             if (resp && resp.item && resp.item.id) {
               if (factory.display.playerProAuthorized) {
-                playerLicenseFactory.toggleDisplayLicenseLocal(true);                
+                playerLicenseFactory.toggleDisplayLicenseLocal(true);
               }
 
               displayTracker('Display Created', resp.item.id, resp.item
@@ -98,7 +98,7 @@ angular.module('risevision.displays.services')
               $rootScope.$broadcast('displayCreated', resp.item);
 
               return scheduleFactory.addToDistribution(resp.item, selectedSchedule)
-                .then(function() {            
+                .then(function () {
                   if ($state.current.name === 'apps.displays.add') {
                     $state.go('apps.displays.details', {
                       displayId: resp.item.id
@@ -141,7 +141,7 @@ angular.module('risevision.displays.services')
               factory.display.name);
 
             return scheduleFactory.addToDistribution(factory.display, selectedSchedule)
-              .then(function() {
+              .then(function () {
                 deferred.resolve();
               })
               .catch(function () {

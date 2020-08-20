@@ -28,7 +28,8 @@ describe('directive: screenshot', function() {
 
     $provide.service('displayFactory', function() {
       return {
-        showLicenseRequired: sinon.stub().returns(false)
+        showLicenseRequired: sinon.stub().returns(false),
+        display: {}
       };
     });
   }));
@@ -64,51 +65,55 @@ describe('directive: screenshot', function() {
 
   describe('screenshotState: ', function() {
     it('no-license', function() {
+      displayFactory.display = {};
       displayFactory.showLicenseRequired.returns(true);
 
-      expect($scope.screenshotState({})).to.equal('no-license');
+      expect($scope.screenshotState()).to.equal('no-license');
     });
 
     describe('loading: ', function() {
       it('no display', function() {
+        displayFactory.display = null;
         expect($scope.screenshotState()).to.equal('loading');
       });
 
       it('status loading', function() {
         display.statusLoading = true;
 
-        expect($scope.screenshotState({})).to.equal('loading');
+        expect($scope.screenshotState()).to.equal('loading');
       });
 
       it('screenshot loading', function() {
         screenshotFactory.screenshotLoading = true;
 
-        expect($scope.screenshotState({})).to.equal('loading');
+        expect($scope.screenshotState()).to.equal('loading');
       });
       
       it('should show next status', function() {
-        expect($scope.screenshotState({})).to.not.be.ok;
+        expect($scope.screenshotState()).to.not.be.ok;
       });
     });
 
     it('screenshot-loaded', function() {
-      screenshotFactory.screenshot = { status: 200, lastModified: new Date().toISOString() };
-      expect($scope.screenshotState({
+      displayFactory.display = {
         playerVersion: '2018',
         playerErrorCode: 0,
         scheduleId: 1,
         onlineStatus: 'online'
-      })).to.equal('screenshot-loaded');
+      };
+      screenshotFactory.screenshot = { status: 200, lastModified: new Date().toISOString() };
+      expect($scope.screenshotState()).to.equal('screenshot-loaded');
     });
 
     it('screenshot-error', function() {
-      screenshotFactory.screenshot = { error: 'error' };
-      expect($scope.screenshotState({
+      displayFactory.display = {
         playerVersion: '2018',
         playerErrorCode: 0,
         scheduleId: 1,
         onlineStatus: 'online'
-      })).to.equal('screenshot-error');
+      };
+      screenshotFactory.screenshot = { error: 'error' };
+      expect($scope.screenshotState()).to.equal('screenshot-error');
     });
 
   });
@@ -117,52 +122,57 @@ describe('directive: screenshot', function() {
     it('no-license', function() {
       displayFactory.showLicenseRequired.returns(true);
 
-      expect($scope.reloadScreenshotEnabled({})).to.be.false;
+      expect($scope.reloadScreenshotEnabled()).to.be.false;
     });
 
     describe('loading: ', function() {
       it('status loading', function() {
         display.statusLoading = true;
 
-        expect($scope.reloadScreenshotEnabled({})).to.be.false;
+        expect($scope.reloadScreenshotEnabled()).to.be.false;
       });
 
       it('screenshot loading', function() {
         screenshotFactory.screenshotLoading = true;
 
-        expect($scope.reloadScreenshotEnabled({})).to.be.false;
+        expect($scope.reloadScreenshotEnabled()).to.be.false;
       });
 
       it('screenshot loading', function() {
         screenshotFactory.screenshot = false;
 
-        expect($scope.reloadScreenshotEnabled({})).to.be.false;
+        expect($scope.reloadScreenshotEnabled()).to.be.false;
       });
     });
 
     it('chrome os', function() {
-      expect($scope.reloadScreenshotEnabled({ os: 'cros-x64' })).to.be.false;
+      displayFactory.display = { os: 'cros-x64' };
+      expect($scope.reloadScreenshotEnabled()).to.be.false;
     });
 
     it('not compatible', function() {
+      displayFactory.display = { os: 'windows-x64' };
       playerProFactory.isScreenshotCompatiblePlayer.returns(false);
-      expect($scope.reloadScreenshotEnabled({ os: 'windows-x64' })).to.be.false;
+
+      expect($scope.reloadScreenshotEnabled()).to.be.false;
 
       playerProFactory.isScreenshotCompatiblePlayer.should.have.been.called;
     });
 
     it('online', function() {
-      expect($scope.reloadScreenshotEnabled({
+      displayFactory.display = {
         onlineStatus: 'online'
-      })).to.be.true;
+      };
+      expect($scope.reloadScreenshotEnabled()).to.be.true;
 
       playerProFactory.isScreenshotCompatiblePlayer.should.have.been.called;
     });
 
     it('offline', function() {
-      expect($scope.reloadScreenshotEnabled({
+      displayFactory.display = {
         onlineStatus: 'offline'
-      })).to.be.false;
+      };
+      expect($scope.reloadScreenshotEnabled()).to.be.false;
 
       playerProFactory.isScreenshotCompatiblePlayer.should.have.been.called;
     });

@@ -391,6 +391,7 @@ describe('service: display:', function() {
       "height": 768,
       "restartEnabled": true,
       "restartTime": "02:45",
+      'playerProAuthorized': 'authorized'
     };
 
     it('should add a display',function(done){
@@ -401,6 +402,7 @@ describe('service: display:', function() {
         expect(result.item).to.have.property("name");
         expect(result.item).to.have.property("id");
         expect(result.item.id).to.equal("display1");
+        expect(result.item.assignLicense).to.equal('authorized');
 
         done();
       })
