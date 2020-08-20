@@ -7,6 +7,19 @@ angular.module('risevision.displays.services')
       PLAYER_PRO_PRODUCT_CODE, $q) {
       var factory = {};
 
+      factory.getUsedLicenseString = function () {
+        return factory.getProUsedLicenseCount() +
+          ' Licensed Display' + (factory.getProUsedLicenseCount() !== 1 ? 's' : '') +
+          ' | ' + factory.getProAvailableLicenseCount() +
+          ' License' + (factory.getProAvailableLicenseCount() !== 1 ? 's' : '') +
+          ' Available';
+      };
+
+      factory.isProAvailable = function (display) {
+        return factory.hasProfessionalLicenses() && factory.getProLicenseCount() > 0 &&
+          !factory.areAllProLicensesUsed(display);
+      };
+
       factory.hasProfessionalLicenses = function () {
         return currentPlanFactory.currentPlan.playerProTotalLicenseCount > 0;
       };
@@ -23,8 +36,16 @@ angular.module('risevision.displays.services')
         return factory.getProLicenseCount() - factory.getProAvailableLicenseCount();
       };
 
-      factory.areAllProLicensesUsed = function () {
-        return currentPlanFactory.currentPlan.playerProAvailableLicenseCount <= 0;
+      factory.isProToggleEnabled = function (display) {
+        return userState.hasRole('da') && ((display && display.playerProAuthorized) ||
+          (factory.areAllProLicensesUsed(display) ? !currentPlanFactory.currentPlan.isPurchasedByParent : true));
+      };
+
+      factory.areAllProLicensesUsed = function (display) {
+        var allLicensesUsed = !factory.getProAvailableLicenseCount();
+        var allProLicensesUsed = allLicensesUsed && !(display && display.playerProAssigned);
+
+        return factory.getProLicenseCount() > 0 && allProLicensesUsed;
       };
 
       factory.toggleDisplayLicenseLocal = function (playerProAuthorized, displaysCount) {

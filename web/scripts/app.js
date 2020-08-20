@@ -125,8 +125,8 @@ angular.module('risevision.apps', [
       $sessionStorageProvider.setKeyPrefix('RiseVision-');
     }
   ])
-  .run(['$rootScope', '$state', '$modalStack', 'userState', 'displayFactory', '$window',
-    function ($rootScope, $state, $modalStack, userState, displayFactory, $window) {
+  .run(['$rootScope', '$state', '$modalStack', 'userState', '$window',
+    function ($rootScope, $state, $modalStack, userState, $window) {
 
       if ($window.Stretchy) {
         $window.Stretchy.selectors.filter = '.input-stretchy, .input-stretchy *';
@@ -134,10 +134,6 @@ angular.module('risevision.apps', [
 
       $rootScope.$on('risevision.user.signedOut', function () {
         $state.go('common.auth.unauthorized');
-      });
-
-      $rootScope.$on('distributionSelector.addDisplay', function () {
-        displayFactory.addDisplayModal();
       });
 
       $rootScope.$on('$stateChangeStart', function (event) {

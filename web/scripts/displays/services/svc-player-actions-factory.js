@@ -40,7 +40,7 @@ angular.module('risevision.displays.services')
       };
 
       service.confirm = function (displayId, displayName, mode) {
-        if (displayFactory.showUnlockDisplayFeatureModal()) {
+        if (displayFactory.showLicenseRequired()) {
           return;
         }
 

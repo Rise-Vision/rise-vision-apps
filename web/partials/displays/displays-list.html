@@ -6,15 +6,15 @@
   <h1 class="app-header-title" id="title" translate>displays-app.title</h1>
 
   <div class="ml-auto">
-    <button id="displayAddButton" class="btn btn-lg btn-primary" ng-click="displayFactory.addDisplayModal()">
+    <a id="displayAddButton" class="btn btn-lg btn-primary" ui-sref="apps.displays.add">
       {{ 'displays-app.actions.new' | translate }}
       <i class="fa fa-plus icon-right"></i>
-    </button>
+    </a>
   </div>
 </div>
 
-<div class="mb-3" ng-show="playerLicenseFactory.getProLicenseCount() > 0">
-  {{ playerLicenseFactory.getProUsedLicenseCount() }} Licensed Display{{playerLicenseFactory.getProUsedLicenseCount() > 1 ? 's' : ''}} | {{ playerLicenseFactory.getProAvailableLicenseCount() }} License{{playerLicenseFactory.getProAvailableLicenseCount() > 1 ? 's' : ''}} Available
+<div class="mb-3" ng-show="playerLicenseFactory.hasProfessionalLicenses()">
+  {{ playerLicenseFactory.getUsedLicenseString() }}
 </div>
 
 <div ng-show="displays.apiError" class="alert alert-danger mb-3" role="alert">

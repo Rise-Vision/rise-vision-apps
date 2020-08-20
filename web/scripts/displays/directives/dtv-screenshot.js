@@ -11,10 +11,11 @@ angular.module('risevision.displays.directives')
         link: function ($scope) {
           $scope.screenshotFactory = screenshotFactory;
 
-          $scope.screenshotState = function (display) {
-            if (displayFactory.showLicenseRequired(display)) {
+          $scope.screenshotState = function () {
+            if (displayFactory.showLicenseRequired()) {
               return 'no-license';
-            } else if (!display || displayService.statusLoading || screenshotFactory.screenshotLoading) {
+            } else if (!displayFactory.display || displayService.statusLoading || screenshotFactory
+              .screenshotLoading) {
               return 'loading';
             } else if (screenshotFactory.screenshot && screenshotFactory.screenshot.lastModified) {
               return 'screenshot-loaded';
@@ -25,19 +26,23 @@ angular.module('risevision.displays.directives')
             return '';
           };
 
-          $scope.reloadScreenshotEnabled = function (display) {
+          $scope.reloadScreenshotEnabled = function () {
+            if (!displayFactory.display) {
+              return false;
+            }
+
             var statusFilter = $filter('status');
 
-            if (displayFactory.showLicenseRequired(display)) {
+            if (displayFactory.showLicenseRequired()) {
               return false;
             } else if (displayService.statusLoading || screenshotFactory.screenshotLoading || !screenshotFactory
               .screenshot) {
               return false;
-            } else if (display.os && display.os.indexOf('cros') === 0) {
+            } else if (displayFactory.display.os && displayFactory.display.os.indexOf('cros') === 0) {
               return false;
-            } else if (!playerProFactory.isScreenshotCompatiblePlayer(display)) {
+            } else if (!playerProFactory.isScreenshotCompatiblePlayer(displayFactory.display)) {
               return false;
-            } else if (statusFilter(display) === 'online') {
+            } else if (statusFilter(displayFactory.display) === 'online') {
               return true;
             }
 

@@ -9,9 +9,9 @@
 
       <div class="text-center u_margin-lg-top" ng-if="!loadingDisplays && displays.items.list.length === 0">
         <h4 class="text-muted u_margin-md-bottom u_margin-md-top">No Displays Available</h4> 
-        <button ng-click="addDisplay()" class="btn btn-primary btn-lg">
+        <a class="btn btn-primary btn-lg" ui-sref="apps.displays.add" link-cid>
           Add Display
-        </button> 
+        </a> 
       </div>
 
       <table id="displayListTable" class="table table--hover table--selector table--multiple-selector animated fadeIn" ng-if="displays.items.list.length > 0">

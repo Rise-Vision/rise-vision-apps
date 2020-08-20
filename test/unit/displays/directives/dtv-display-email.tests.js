@@ -23,6 +23,14 @@ describe('directive: display email', function() {
       }
     });
 
+    $provide.service('displayFactory', function() {
+      return {
+        display: {
+          id: 'ID'
+        }
+      };
+    });
+
     $provide.service('processErrorCode', function() {
       return function(error) {
         return 'processed ' + error;
@@ -44,7 +52,6 @@ describe('directive: display email', function() {
     
     $scope = elm.scope();
 
-    $scope.display = {};
     $scope.emailForm = {
       $setPristine: sinon.spy()
     };
@@ -52,7 +59,6 @@ describe('directive: display email', function() {
 
   it('should compile html', function() {
     expect(elm.html()).to.equal('<p></p>');
-    expect($scope.display).to.be.ok;
     expect($scope.sendEmail).to.be.a('function');
   });
 
@@ -103,7 +109,6 @@ describe('directive: display email', function() {
     });
 
     it('should send instructions to another email address',function(done){
-      $scope.display.id = 'ID';
       $scope.email = 'another@email.com';
       $scope.emailInvalid = false;
 

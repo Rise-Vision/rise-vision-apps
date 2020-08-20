@@ -74,10 +74,37 @@ angular.module('risevision.apps')
           }],
           controller: 'displayDetails',
           resolve: {
-            displayId: ['canAccessApps', '$stateParams',
-              function (canAccessApps, $stateParams) {
+            displayId: ['canAccessApps', '$stateParams', 'displayFactory',
+              function (canAccessApps, $stateParams, displayFactory) {
                 return canAccessApps().then(function () {
+                  displayFactory.init();
+
                   return $stateParams.displayId;
+                });
+              }
+            ]
+          }
+        })
+
+        .state('apps.displays.add', {
+          url: '/displays/add',
+          templateProvider: ['$templateCache', function ($templateCache) {
+            return $templateCache.get(
+              'partials/displays/display-add.html');
+          }],
+          params: {
+            schedule: null
+          },
+          controller: 'displayAdd',
+          resolve: {
+            scheduleInfo: ['$stateParams', 'canAccessApps', 'displayFactory',
+              function ($stateParams, canAccessApps, displayFactory) {
+                return canAccessApps().then(function () {
+                  displayFactory.newDisplay();
+
+                  if ($stateParams.schedule) {
+                    displayFactory.setAssignedSchedule($stateParams.schedule);
+                  }
                 });
               }
             ]

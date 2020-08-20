@@ -618,6 +618,27 @@ describe('service: scheduleFactory:', function() {
       scheduleFactory.forceUpdateSchedule.restore();
     })
 
+    it('should handle null schedule', function(done) {
+      var display = { id: 'displayId' };
+
+      scheduleFactory.addToDistribution(display, null);
+      setTimeout(function() {
+        scheduleFactory.forceUpdateSchedule.should.not.have.been.called;
+        done();
+      },10);
+    });
+
+    it('should handle missing schedule id', function(done) {
+      var schedule = {};
+      var display = { id: 'displayId' };
+
+      scheduleFactory.addToDistribution(display, schedule);
+      setTimeout(function() {
+        scheduleFactory.forceUpdateSchedule.should.not.have.been.called;
+        done();
+      },10);
+    });
+
     it('should add display to distribution and force update schedule', function(done) {
       var display = { id: 'displayId' };
       var schedule = { id: 'scheduleId', name: 'scheduleName' };
