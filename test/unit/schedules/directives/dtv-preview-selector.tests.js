@@ -1,7 +1,7 @@
 'use strict';
 
 describe('directive: preview-selector', function() {
-  var $scope, $rootScope, element, $loading, $timeout, innerElementStub, listServiceInstance,
+  var $scope, $rootScope, element, $loading, $timeout, innerElementStub, listServiceInstance, $document,
     sandbox = sinon.sandbox.create();
 
 
@@ -25,10 +25,11 @@ describe('directive: preview-selector', function() {
   }));
 
   beforeEach(inject(function($compile, $injector, $templateCache){
-    $templateCache.put('partials/schedules/preview-selector.html', '<div id="tooltipButton"></div>');
+    $templateCache.put('partials/schedules/preview-selector.html', '<div id="preview-selector-tooltip"></div>');
     $rootScope = $injector.get('$rootScope');
     $timeout = $injector.get('$timeout');
     $loading = $injector.get('$loading');
+    $document = $injector.get('$document');
 
     listServiceInstance = {
       doSearch: sandbox.stub()
@@ -57,8 +58,6 @@ describe('directive: preview-selector', function() {
   it('should exist', function() {
     expect($scope).to.be.ok;
     expect($scope.toggleTooltip).to.be.a('function');
-    expect($scope.selectSchedule).to.be.a('function');
-    expect($scope.isSelected).to.be.a('function');
     expect($scope.select).to.be.a('function');
 
     expect($scope.showTooltip).to.be.false;
@@ -66,7 +65,7 @@ describe('directive: preview-selector', function() {
 
 
   it('should compile', function() {
-    expect(element[0].outerHTML).to.equal('<preview-selector ng-model="mySchedule" class="ng-pristine ng-untouched ng-valid ng-scope ng-isolate-scope ng-not-empty"><div id="tooltipButton"></div></preview-selector>');
+    expect(element[0].outerHTML).to.equal('<preview-selector ng-model="mySchedule" class="ng-pristine ng-untouched ng-valid ng-scope ng-isolate-scope ng-not-empty"><div id="preview-selector-tooltip"></div></preview-selector>');
   });
   
   it('should initialize', function() {
@@ -100,11 +99,16 @@ describe('directive: preview-selector', function() {
 
   describe('toggleTooltip:', function() {
     it('should open tooltip and load', function() {
+      sinon.spy($document,'bind');
+
       $scope.toggleTooltip();
       $scope.$digest();
       $timeout.flush();
 
       innerElementStub.trigger.should.have.been.calledWith('show');
+
+      $document.bind.should.have.been.calledWith('click');
+      $document.bind.should.have.been.calledWith('touchstart');
     });
 
     it('should initialize schedules list', function() {
@@ -113,12 +117,10 @@ describe('directive: preview-selector', function() {
       $timeout.flush();
 
       expect($scope.schedules).to.equal(listServiceInstance);
-      expect($scope.isSelected({
-        id: 'myScheduleId'
-      })).to.be.true;
     });
 
     it('should close tooltip if open', function() {
+      sinon.spy($document,'unbind');
       //open
       $scope.toggleTooltip();
       $scope.$digest();
@@ -131,6 +133,39 @@ describe('directive: preview-selector', function() {
       $timeout.flush();
 
       innerElementStub.trigger.should.have.been.calledWith('hide');
+
+      $document.unbind.should.have.been.calledWith('click');
+      $document.unbind.should.have.been.calledWith('touchstart');
+    });
+
+    it('should close tooltip when clicking outside', function() {
+      $scope.toggleTooltip();
+      $scope.$digest();
+      $timeout.flush();
+      innerElementStub.trigger.reset();
+
+      //click outside
+      $document.trigger('click');
+
+      $scope.$digest();
+      $timeout.flush();
+
+      innerElementStub.trigger.should.have.been.calledWith('hide');
+    });
+
+    it('should not close tooltip when clicking inside', function() {
+      $scope.toggleTooltip();
+      $scope.$digest();
+      $timeout.flush();
+      innerElementStub.trigger.reset();
+
+      //click inside tooltip
+      var event = new CustomEvent('click');
+      var target = angular.element('#preview-selector-tooltip');
+      target.trigger('click');
+
+      $scope.$digest();
+      innerElementStub.trigger.should.not.have.been.calledWith('hide');
     });
 
   });
@@ -146,8 +181,7 @@ describe('directive: preview-selector', function() {
       };
       $scope.toggleTooltip.resetHistory();
 
-      $scope.selectSchedule(newSchedule);
-      $scope.select();
+      $scope.select(newSchedule);
 
       expect($scope.ngModel).to.equal(newSchedule);
       $scope.toggleTooltip.should.have.been.called;
