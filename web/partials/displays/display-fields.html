@@ -28,7 +28,7 @@
                 </button>
               </li>
               <li>
-                <a id="installPlayerAction" ng-click="installationInstructionsModal()">
+                <a id="installPlayerAction" class="u_clickable" ng-click="installationInstructionsModal()">
                   <span translate>displays-app.fields.controls.install</span>
                 </a>
               </li>
@@ -352,7 +352,7 @@
         <preview-selector ng-model="selectedSchedule" additional-class="mr-auto mb-0 pt-3" ng-show="userState.hasRole('cp')"></preview-selector>
 
         <span class="pull-right button-toolbar pt-3 u_padding-20-bottom">
-          <a id="viewSchedule" type="button" class="btn btn-default btn-toolbar" ui-sref="apps.schedules.details({ scheduleId: selectedSchedule.id, cid: selectedSchedule.companyId })">Edit Schedule</a>
+          <a id="viewSchedule" type="button" class="btn btn-default btn-toolbar hidden-md" ui-sref="apps.schedules.details({ scheduleId: selectedSchedule.id, cid: selectedSchedule.companyId })">Edit Schedule</a>
           <ng-show ng-show="tooltipKey">
             <button id="shareButton" type="button" class="btn btn-default btn-toolbar" 
             tooltip-overlay tooltip-template="'partials/schedules/share-schedule-tooltip.html'" tooltip-placement="bottom" tooltip-class="madero-style tooltip-guide tooltip-share-guide">

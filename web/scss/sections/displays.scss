@@ -18,6 +18,10 @@
 
     .control-label {
       width: 241px;
+
+      @media (min-width: $screen-md) {
+        min-width: 241px;
+      }
     }
   }
 
