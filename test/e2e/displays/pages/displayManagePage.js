@@ -12,12 +12,12 @@ var DisplayManagePage = function() {
   var displayActionsButton = element(by.id('displayActionsButton'));
   var purchasePlayerActionButton = element(by.id('purchasePlayerAction'));
   var installPlayerActionButton = element(by.id('installPlayerAction'));
-  var displayUseCompanyAddressCheckbox = element(by.model('display.useCompanyAddress'));
-  var displayRebootCheckbox = element(by.model('display.restartEnabled'));
+  var displayUseCompanyAddressCheckbox = element(by.id('useCompanyAddress'));
+  var displayRebootCheckbox = element(by.id('restartEnabled'));
   var viewScheduleLink = element(by.id('viewSchedule'));
 
-  var displayCountrySelect = element(by.model('display.country'));  
-  var displayTimeZoneSelect = element(by.model('display.timeZoneOffset'));  
+  var displayCountrySelect = element(by.model('factory.display.country'));  
+  var displayTimeZoneSelect = element(by.model('factory.display.timeZoneOffset'));  
 
   var saveButton = element(by.id('saveButton'));
   var cancelButton = element(by.id('cancelButton'));
