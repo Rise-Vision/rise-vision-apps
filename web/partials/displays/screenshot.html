@@ -8,12 +8,12 @@
         <a href="" ng-click="confirmLicensing()" ng-show="userState.hasRole('da')">License Required</a>
         <span ng-show="!userState.hasRole('da')">License Required</span>
       </span>
-      <span id="notActivated" ng-show="screenshotState() !== 'no-license' && !displayService.statusLoading && (displayFactory.display | status) === 'notinstalled'">
+      <span id="notActivated" ng-show="screenshotState() !== 'no-license' && !displayService.statusLoading && (factory.display | status) === 'notinstalled'">
         {{ 'displays-app.list.status.notActivated' | translate }}
       </span>
-      <span class="mr-auto" ng-show="reloadScreenshotEnabled() && !(!displayService.statusLoading && (displayFactory.display | status) === 'notinstalled')">
+      <span class="mr-auto" ng-show="reloadScreenshotEnabled() && !(!displayService.statusLoading && (factory.display | status) === 'notinstalled')">
         <!-- online -->
-        <a id="btnUpdateScreenshot" class="u_icon-hover u_clickable" ng-click="screenshotFactory.requestScreenshot(displayFactory.display.id)">
+        <a id="btnUpdateScreenshot" class="u_icon-hover u_clickable" ng-click="screenshotFactory.requestScreenshot(factory.display.id)">
           Update
         </a>
       </span>

@@ -122,6 +122,8 @@ describe('directive: display fields', function() {
   it('should compile html', function() {
     expect(elm.html()).to.equal('<p>Fields</p>');
     expect($scope.userState).to.be.ok;
+    
+    expect($scope.toggleProAuthorized).to.be.a('function');
     expect($scope.isChromeOs).to.be.a('function');
     expect($scope.getEmbedUrl).to.be.a('function');
     expect($scope.openTimePicker).to.be.a('function');

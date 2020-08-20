@@ -375,7 +375,10 @@
     <label class="u_padding-20-vertical mb-0">Schedule:</label>
 
     <div class="border-container empty-preview text-center">
-      <preview-selector ng-model="selectedSchedule" label="Nothing is currently showing on your display."></preview-selector>
+      <div class="form-group" ng-hide="userState.hasRole('cp')">
+        <label>Nothing is currently showing on your display.</label>
+      </div>
+      <preview-selector ng-model="selectedSchedule" label="Nothing is currently showing on your display." ng-show="userState.hasRole('cp')"></preview-selector>
     </div>
   </div>
 </div>
