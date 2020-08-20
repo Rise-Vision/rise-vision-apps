@@ -20,6 +20,12 @@ describe('app:', function() {
           }
         });
 
+        $provide.service('screenshotFactory',function(){
+          return {
+            screenshot: 'old screenshot'
+          }
+        });
+
       });
 
       inject(function ($injector) {
@@ -27,6 +33,7 @@ describe('app:', function() {
         $location = $injector.get('$location');
         userState = $injector.get('userState');
         displayFactory = $injector.get('displayFactory');
+        screenshotFactory = $injector.get('screenshotFactory');
         canAccessApps = $injector.get('canAccessApps');
 
         sinon.stub($state, 'go');
@@ -38,7 +45,7 @@ describe('app:', function() {
       });
   });
 
-  var $state, $location, userState, displayFactory, canAccessApps;
+  var $state, $location, userState, displayFactory, screenshotFactory, canAccessApps;
 
   describe('state apps.displays.change:',function(){
 
@@ -95,9 +102,11 @@ describe('app:', function() {
     });
 
     it('should add new schedule',function(done){
-      $state.get('apps.displays.add').resolve.scheduleInfo[3]({}, canAccessApps, displayFactory);
+      $state.get('apps.displays.add').resolve.scheduleInfo[4]({}, canAccessApps, displayFactory, screenshotFactory);
       setTimeout(function() {
         canAccessApps.should.have.been.called;
+
+        expect(screenshotFactory.screenshot).to.not.be.ok;
 
         displayFactory.newDisplay.should.have.been.called;
         displayFactory.setAssignedSchedule.should.not.have.been.called;
@@ -107,9 +116,11 @@ describe('app:', function() {
     });
 
     it('should add new schedule with a presentation item',function(done){
-      $state.get('apps.displays.add').resolve.scheduleInfo[3]({schedule: 'item'}, canAccessApps, displayFactory);
+      $state.get('apps.displays.add').resolve.scheduleInfo[4]({schedule: 'item'}, canAccessApps, displayFactory, screenshotFactory);
       setTimeout(function() {
         canAccessApps.should.have.been.called;
+
+        expect(screenshotFactory.screenshot).to.not.be.ok;
 
         displayFactory.newDisplay.should.have.been.called;
         displayFactory.setAssignedSchedule.should.have.been.calledWith('item');
