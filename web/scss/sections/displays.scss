@@ -52,7 +52,7 @@
       margin: 0px;
 
       button {
-        max-width: 250px;
+        max-width: 250px !important;
         margin-left: 0px;
         @extend .mt-3;
       }
