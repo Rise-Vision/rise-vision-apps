@@ -63,16 +63,8 @@ angular.module('risevision.schedules.directives')
             $scope.showTooltip = !$scope.showTooltip;
           };
 
-          $scope.selectSchedule = function (schedule) {
-            selected = schedule;
-          };
-
-          $scope.isSelected = function (schedule) {
-            return selected && selected.id === schedule.id;
-          };
-
-          $scope.select = function () {
-            $scope.ngModel = selected;
+          $scope.select = function (schedule) {
+            $scope.ngModel = schedule;
 
             $scope.toggleTooltip();
           };

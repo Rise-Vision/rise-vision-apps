@@ -12,21 +12,13 @@
     rv-spinner-start-active="1"
   >
     <div class="flex-row" ng-repeat="schedule in schedules.items.list">
-      <div class="row-entry">
-        <div class="madero-checkbox u_clickable" ng-click="selectSchedule(schedule)">
-          <input type="checkbox" ng-checked="isSelected(schedule)" tabindex="1">
-          <label>
-            <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
-          </label>
-        </div>
-        <div class="mr-auto u_clickable u_text-ellipsis" ng-click="selectSchedule(schedule)">
+      <div class="row-entry mb-3">
+        <a class="madero-link mr-auto u_text-ellipsis" href="" ng-click="select(schedule)">
           {{schedule.name}}
-        </div>
-        <div class="u_float-left mr-3">
-          <a class="madero-link" ui-sref="apps.schedules.details({scheduleId: schedule.id})" link-cid>
-            Edit
-          </a>
-        </div>
+        </a>
+        <a class="madero-link mr-3" ui-sref="apps.schedules.details({scheduleId: schedule.id})" link-cid>
+          Edit
+        </a>
       </div>
     </div>
 
@@ -37,16 +29,6 @@
       No Results Found
     </div>
   </div>
-
-  <div class="row">
-    <div class="col-xs-6">
-      <button type="button" class="btn btn-default btn-block" ng-click="toggleTooltip()">Cancel</button>
-    </div>
-    <div class="col-xs-6">
-      <button type="button" class="btn btn-primary btn-block" ng-click="select()">Select</button>
-    </div>
-  </div>
-  <hr/>
 
   <div class="row">
     <div class="col-xs-12">
