@@ -78,21 +78,6 @@
             <div ng-show="getDisplayType(display) === 'standard'">
               <span translate>displays-app.list.player.type.standard</span>
             </div>
-            <div ng-show="getDisplayType(display) === 'unsupported'">
-              <span class="text-danger">
-                <i class="fa fa-times"></i>
-                <span translate>displays-app.list.player.type.unsupported</span>
-              </span>
-              <a ng-click="displayFactory.addDisplayModal(display)" translate>
-                displays-app.list.player.cta.upgrade
-              </a>
-            </div>
-            <div ng-show="getDisplayType(display) === '3rd-party'">
-              <span translate>displays-app.list.player.type.3rdParty</span>
-              <a ng-click="openUnsupportedHelpLink()" translate>
-                displays-app.list.player.cta.getSupport
-              </a>
-            </div>
           </td>
           <td class="table-body__cell hidden-xs display-schedule">
             <a class="u_ellipsis-md u_icon-hover schedule-view" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
@@ -121,7 +106,7 @@
               <i class="fa fa-check"></i> Online
             </span>
             <!-- Not Installed and finished Loading -->
-            <a class="u_icon-hover" ng-if="!displayService.statusLoading && playerNotInstalled(display)" ng-click="displayFactory.addDisplayModal(display)">
+            <a class="u_icon-hover" ng-if="!displayService.statusLoading && playerNotInstalled(display)" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
               {{ 'displays-app.list.status.notActivated' | translate }}
             </a>
           </td>

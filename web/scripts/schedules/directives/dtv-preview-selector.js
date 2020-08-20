@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.schedules.directives')
-  .directive('previewSelector', ['$timeout', '$loading', 'ScrollingListService', 'schedule',
-    function ($timeout, $loading, ScrollingListService, schedule) {
+  .directive('previewSelector', ['$timeout', '$loading', 'ScrollingListService', 'schedule', '$document',
+    function ($timeout, $loading, ScrollingListService, schedule, $document) {
       return {
         restrict: 'E',
         templateUrl: 'partials/schedules/preview-selector.html',
@@ -29,16 +29,31 @@ angular.module('risevision.schedules.directives')
             }
           });
 
+          var _closeTooltip = function(event) {
+            var tooltipContent = angular.element('#preview-selector-tooltip');
+            if (tooltipContent && tooltipContent[0] && tooltipContent[0].contains(event.target) || 
+              tooltipElement && tooltipElement[0] && tooltipElement[0].contains(event.target) ) {
+              return;
+            }
+            $timeout(function () {
+              $scope.toggleTooltip();
+            });
+          };
+
           $scope.$watch('showTooltip', function () {
             if ($scope.showTooltip) {
               $scope.schedules = new ScrollingListService(schedule.list, $scope.search);
               selected = $scope.ngModel;
 
               $timeout(function () {
+                $document.bind('click', _closeTooltip);
+                $document.bind('touchstart', _closeTooltip);
                 tooltipElement.trigger('show');
               });
             } else {
               $timeout(function () {
+                $document.unbind('click', _closeTooltip);
+                $document.unbind('touchstart', _closeTooltip);
                 tooltipElement.trigger('hide');
               });
             }
@@ -48,16 +63,8 @@ angular.module('risevision.schedules.directives')
             $scope.showTooltip = !$scope.showTooltip;
           };
 
-          $scope.selectSchedule = function (schedule) {
-            selected = schedule;
-          };
-
-          $scope.isSelected = function (schedule) {
-            return selected && selected.id === schedule.id;
-          };
-
-          $scope.select = function () {
-            $scope.ngModel = selected;
+          $scope.select = function (schedule) {
+            $scope.ngModel = schedule;
 
             $scope.toggleTooltip();
           };
