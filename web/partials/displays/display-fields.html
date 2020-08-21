@@ -184,7 +184,7 @@
           </div>
         </div>
 
-        <time-picker ng-model="factory.display.restartTime" ng-show="!factory.showLicenseRequired() && factory.display.restartEnabled"></time-picker>
+        <restart-time-picker ng-model="factory.display.restartTime" ng-show="!factory.showLicenseRequired() && factory.display.restartEnabled"></restart-time-picker>
       </div>
 
       <div class="list-group-item" ng-if="!playerProFactory.isCROSLegacy(factory.display) && !playerProFactory.isChromeOSPlayer(factory.display)">
