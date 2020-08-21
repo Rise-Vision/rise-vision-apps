@@ -20,9 +20,6 @@ describe('directive: display fields', function() {
     });
     $provide.service('display', function() {
       return {
-        hasSchedule: function(display) {
-          return display.scheduleId;
-        },
         getCompanyProStatus: function() {
           return Q.resolve({status: 'Subscribed', statusCode: 'subscribed'});
         }
@@ -124,6 +121,7 @@ describe('directive: display fields', function() {
     expect($scope.userState).to.be.ok;
     
     expect($scope.toggleProAuthorized).to.be.a('function');
+    expect($scope.scheduleSelected).to.be.a('function');
     expect($scope.isChromeOs).to.be.a('function');
     expect($scope.getEmbedUrl).to.be.a('function');
     expect($scope.openTimePicker).to.be.a('function');
@@ -308,19 +306,14 @@ describe('directive: display fields', function() {
     });
   });
 
-  describe('on selectedSchedule changed:', function() {
-    beforeEach(function() {
-      confirmModal.reset();
-      confirmModal.returns(Q.resolve());
-    });
-
+  describe('scheduleSelected:', function() {
     it('should prompt licensing if new schedule requires license and display is not licensed', function(done) {
       scheduleFactory.requiresLicense.returns(true);
+      displayFactory.display = { playerProAuthorized: false};
 
       sandbox.stub($scope, 'toggleProAuthorized');
-      displayFactory.display = { playerProAuthorized: false};
-      $scope.selectedSchedule = { id: 'newSchedule' };
-      $scope.$digest();
+
+      $scope.scheduleSelected();
 
       confirmModal.should.have.been.calledWith(
         'Assign license?',
@@ -339,27 +332,20 @@ describe('directive: display fields', function() {
     it('should not prompt if display is already licensed', function() {
       displayFactory.display = { playerProAuthorized: true};
       scheduleFactory.requiresLicense.returns(true);
-      $scope.selectedSchedule = { id: 'newSchedule' };
-      $scope.$digest();
+
+      $scope.scheduleSelected();
+
       confirmModal.should.not.have.been.called;
     });
 
     it('should not prompt if schedule does not require a license', function() {
       displayFactory.display = { playerProAuthorized: false};
-      $scope.selectedSchedule = { id: 'newSchedule' };
-      $scope.$digest();
+
+      $scope.scheduleSelected();
+
       confirmModal.should.not.have.been.called;
     });
 
-    it('should not prompt on initial load', function() {
-      scheduleFactory.requiresLicense.returns(true);
-      displayFactory.display = { scheduleId: 'scheduleId'};
-      $scope.$digest();
-
-      $scope.selectedSchedule = { id: 'scheduleId' };
-      $scope.$digest();
-      confirmModal.should.not.have.been.called;
-    });
   });
 
   describe('confirmLicensing:', function() {

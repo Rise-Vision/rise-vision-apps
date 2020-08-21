@@ -71,12 +71,8 @@ angular.module('risevision.displays.directives')
             }
           };
 
-          $scope.$watch('selectedSchedule', function (newSchedule, oldSchedule) {
-            var isChangingSchedule = oldSchedule || (!oldSchedule && 
-              !display.hasSchedule(displayFactory.display));
-
-            if (isChangingSchedule && scheduleFactory.requiresLicense(newSchedule) &&
-              !displayFactory.display.playerProAuthorized) {
+          $scope.scheduleSelected = function() {
+            if (scheduleFactory.requiresLicense($scope.selectedSchedule) && !displayFactory.display.playerProAuthorized) {
               confirmModal('Assign license?',
                   'You\'ve selected a schedule that contains presentations. In order to show this schedule on this display, you need to license it. Assign license now?',
                   'Yes', 'No', 'madero-style centered-modal',
@@ -88,7 +84,7 @@ angular.module('risevision.displays.directives')
                   $scope.toggleProAuthorized();
                 });
             }
-          });
+          };
 
           $scope.confirmLicensing = function () {
             return confirmModal('Assign license?',
