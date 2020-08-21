@@ -1,4 +1,10 @@
 .product-grid {
+
+  .panel {
+    max-height: calc(100vh - 275px);
+    overflow-y: auto;
+  }
+
   .product-grid_image {
     overflow: hidden;
     background: #222;

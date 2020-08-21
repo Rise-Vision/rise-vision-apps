@@ -73,19 +73,19 @@
                 <div class="text-muted text-center u_padding-lg"><span translate>editor-app.storeProduct.content.noResults</span></div>
               </div>
 
+              <div id="suggestTemplate" class="col-sm-12 text-center" ng-if="factory.search.category === 'Templates' && isEducationCustomer && !factory.loadingItems">
+                <h3 translate>editor-app.storeProduct.templates.cantFind</h3>
+                <a translate href="https://docs.google.com/forms/d/1slHKxGxywkiSakMukDr4dMGLmhzhYhoU0F2BHP8FSd4/viewform" target="_blank">
+                  editor-app.storeProduct.templates.suggest
+                </a>
+              </div>
+
             </div>
           </div>
         </div><!--panel-body-->
       </div><!--panel-->
 
     </section>
-
-    <div id="suggestTemplate" class="text-center" ng-if="factory.search.category === 'Templates' && isEducationCustomer && !factory.loadingItems">
-      <h3 translate>editor-app.storeProduct.templates.cantFind</h3>
-      <a translate href="https://docs.google.com/forms/d/1slHKxGxywkiSakMukDr4dMGLmhzhYhoU0F2BHP8FSd4/viewform" target="_blank">
-        editor-app.storeProduct.templates.suggest
-      </a>
-    </div>
 
     <a id="addWidgetByUrl" class="btn btn-default" href="#" ng-click="addWidgetByUrl()" ng-if="factory.search.category === 'Content'">
       {{'editor-app.addWidget.title' | translate}} <i class="fa fa-code icon-right"></i>
