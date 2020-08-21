@@ -115,6 +115,17 @@ angular.module('risevision.schedules.services')
         return deferred.promise;
       };
 
+      factory.getAllDisplaysSchedule = function () {
+        return schedule.list({
+          filter: 'distributeToAll:true'
+        }).then(function (result) {
+          if (result && result.items && result.items.length > 0) {
+            return result.items[0];
+          }
+        })
+        .catch(function () {});
+      };
+
       factory.hasFreeDisplays = function () {
         var distribution = factory.schedule.distribution ? factory.schedule.distribution : [];
 
@@ -254,7 +265,7 @@ angular.module('risevision.schedules.services')
       };
 
       factory.addToDistribution = function (display, schedule) {
-        if (!schedule || !schedule.id || schedule.id === display.scheduleId) {
+        if (!schedule || !schedule.id || schedule.id === display.scheduleId || schedule.distributeToAll) {
           return $q.resolve();
         } else {
           $log.info('Adding to Distribution: ', display.id, schedule.id);

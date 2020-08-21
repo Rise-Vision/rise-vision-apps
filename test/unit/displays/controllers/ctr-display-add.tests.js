@@ -13,6 +13,15 @@ describe('controller: display add', function() {
         addDisplay: sinon.spy()
       };
     });
+    $provide.service('scheduleFactory', function() {
+      return {
+        getAllDisplaysSchedule: function() {
+          this.deferred = Q.defer();
+
+          return this.deferred.promise;
+        }
+      };
+    });
     $provide.service('$loading',function(){
       return {
         start: sandbox.stub(),
@@ -24,10 +33,11 @@ describe('controller: display add', function() {
     });
 
   }));
-  var $scope, $loading, displayFactory;
+  var $scope, $loading, displayFactory, scheduleFactory;
   beforeEach(function(){
     inject(function($injector, $controller){
       displayFactory = $injector.get('displayFactory');
+      scheduleFactory = $injector.get('scheduleFactory');
       $loading = $injector.get('$loading');
 
       var $rootScope = $injector.get('$rootScope');
@@ -48,17 +58,31 @@ describe('controller: display add', function() {
     expect($scope).to.be.ok;
     expect($scope.factory).to.be.ok;
     expect($scope.playerLicenseFactory).to.be.ok;
+    expect($scope.selectedSchedule).to.be.null;
 
     expect($scope.save).to.be.a('function');
   });
 
-  it('should initialize', function(done) {
+  describe('All Displays Schedule:', function() {
+    it('should initialize the display with the all displays schedule', function(done) {
+      scheduleFactory.deferred.resolve('schedule');
 
-    setTimeout(function() {
-      expect($scope.selectedSchedule).to.be.null;
+      setTimeout(function() {
+        expect($scope.selectedSchedule).to.equal('schedule');
 
-      done();
-    }, 10);
+        done();
+      }, 10);
+    });
+
+    it('should not assign schedule if not found', function(done) {
+      scheduleFactory.deferred.resolve();
+
+      setTimeout(function() {
+        expect($scope.selectedSchedule).to.be.null;
+
+        done();
+      }, 10);
+    });
   });
 
   describe('spinner:', function() {

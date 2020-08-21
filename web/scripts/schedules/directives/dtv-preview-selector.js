@@ -18,6 +18,10 @@ angular.module('risevision.schedules.directives')
           var tooltipElement = angular.element(element[0].querySelector('#preview-selector'));
           $scope.showTooltip = false;
 
+          $scope.filterConfig = {
+            placeholder: 'Search schedules'
+          };
+
           $scope.search = {
             sortBy: 'changeDate',
             reverse: true,

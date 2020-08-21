@@ -132,6 +132,7 @@ describe('service: scheduleFactory:', function() {
     expect(scheduleFactory.updateSchedule).to.be.a('function');
     expect(scheduleFactory.deleteSchedule).to.be.a('function');
 
+    expect(scheduleFactory.getAllDisplaysSchedule).to.be.a('function');
     expect(scheduleFactory.checkFreeDisplays).to.be.a('function');
     expect(scheduleFactory.hasFreeDisplays).to.be.a('function');
     expect(scheduleFactory.requiresLicense).to.be.a('function');
@@ -609,6 +610,49 @@ describe('service: scheduleFactory:', function() {
     });
   });
 
+  describe('getAllDisplaysSchedule:', function(){
+
+    it('should check for all displays schedule', function(done) {
+      var schedule = {};
+      returnList = {
+        items: [
+          schedule
+        ]
+      };
+      scheduleFactory.getAllDisplaysSchedule()
+        .then(function(result){
+          scheduleListSpy.should.have.been.calledWith({filter: 'distributeToAll:true'});
+
+          expect(result).to.equal(schedule);
+
+          done();
+        });
+    });
+
+    it('should return nothing if there is no all displays schedule', function(done) {
+      returnList = {
+        items: []
+      };
+      scheduleFactory.getAllDisplaysSchedule()
+        .then(function(result){
+          expect(result).to.not.be.ok;
+
+          done();
+        });
+    });
+
+    it('should resolve and return nothing if there is an error loading list', function(done) {
+      returnList = false;
+      scheduleFactory.getAllDisplaysSchedule()
+      .then(function(result){
+        expect(result).to.not.be.ok;
+
+        done();
+      });
+    });
+
+  });
+
   describe('addToDistribution:', function() {
     beforeEach(function() {
       sinon.spy(scheduleFactory,'forceUpdateSchedule');
@@ -630,6 +674,20 @@ describe('service: scheduleFactory:', function() {
 
     it('should handle missing schedule id', function(done) {
       var schedule = {};
+      var display = { id: 'displayId' };
+
+      scheduleFactory.addToDistribution(display, schedule);
+      setTimeout(function() {
+        scheduleFactory.forceUpdateSchedule.should.not.have.been.called;
+        done();
+      },10);
+    });
+
+    it('should handle all displays schedule', function(done) {
+      var schedule = {
+        id: 'scheduleId',
+        distributeToAll: true
+      };
       var display = { id: 'displayId' };
 
       scheduleFactory.addToDistribution(display, schedule);
