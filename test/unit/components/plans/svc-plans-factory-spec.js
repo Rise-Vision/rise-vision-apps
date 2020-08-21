@@ -137,6 +137,24 @@ describe("Services: plans factory", function() {
       },10);
     });
 
+    it('should show plan admin email if available', function(done) {
+      currentPlanFactory.currentPlan.isPurchasedByParent = true      
+      currentPlanFactory.currentPlan.parentPlanContactEmail = 'test@email.com';
+
+      plansFactory.showPurchaseOptions();
+
+      setTimeout(function(){
+        expect(messageBoxStub).to.have.been.calledWith(
+          'You can\'t edit your current plan.',
+          'Your plan is managed by your parent company. Please contact your account administrator at test@email.com for additional licenses.',
+          'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
+        );
+
+        expect($state.go).to.not.have.been.called;
+        done();
+      },10);
+    });
+
     it('should open Plans Modal if company does not have a plan', function(done) {
       currentPlanFactory.isPlanActive.returns(false);
 
