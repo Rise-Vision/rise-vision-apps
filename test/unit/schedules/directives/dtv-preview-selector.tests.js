@@ -43,8 +43,9 @@ describe('directive: preview-selector', function() {
     $rootScope.mySchedule = {
       id: 'myScheduleId'
     };
+    $rootScope.selectedCallback = sinon.stub();
 
-    element = $compile('<preview-selector ng-model="mySchedule"></preview-selector>')($rootScope.$new());
+    element = $compile('<preview-selector ng-model="mySchedule" on-select="selectedCallback()"></preview-selector>')($rootScope.$new());
 
     $rootScope.$digest();
     $scope = element.isolateScope();
@@ -65,7 +66,7 @@ describe('directive: preview-selector', function() {
 
 
   it('should compile', function() {
-    expect(element[0].outerHTML).to.equal('<preview-selector ng-model="mySchedule" class="ng-pristine ng-untouched ng-valid ng-scope ng-isolate-scope ng-not-empty"><div id="preview-selector-tooltip"></div></preview-selector>');
+    expect(element[0].outerHTML).to.equal('<preview-selector ng-model="mySchedule" on-select="selectedCallback()" class="ng-pristine ng-untouched ng-valid ng-scope ng-isolate-scope ng-not-empty"><div id="preview-selector-tooltip"></div></preview-selector>');
   });
   
   it('should initialize', function() {
@@ -184,6 +185,7 @@ describe('directive: preview-selector', function() {
       $scope.select(newSchedule);
 
       expect($scope.ngModel).to.equal(newSchedule);
+      $rootScope.selectedCallback.should.have.been.called;
       $scope.toggleTooltip.should.have.been.called;
     });
   });

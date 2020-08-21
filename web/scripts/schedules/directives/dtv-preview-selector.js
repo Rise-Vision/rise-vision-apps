@@ -6,12 +6,14 @@ angular.module('risevision.schedules.directives')
       return {
         restrict: 'E',
         templateUrl: 'partials/schedules/preview-selector.html',
+        require: 'ngModel',
         scope: {
           ngModel: '=',
+          onSelect: '&',
           label: '@?',
           additionalClass: '@?'
         },
-        link: function ($scope, element) {
+        link: function ($scope, element, attrs, ctrl) {
           var selected;
           var tooltipElement = angular.element(element[0].querySelector('#preview-selector'));
           $scope.showTooltip = false;
@@ -64,7 +66,11 @@ angular.module('risevision.schedules.directives')
           };
 
           $scope.select = function (schedule) {
-            $scope.ngModel = schedule;
+            ctrl.$setViewValue(schedule);
+
+            if ($scope.onSelect) {
+              $scope.onSelect();
+            }
 
             $scope.toggleTooltip();
           };
