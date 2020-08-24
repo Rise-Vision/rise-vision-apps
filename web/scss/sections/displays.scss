@@ -63,6 +63,14 @@
     }
   }
 
+  .btn-schedule-selector {
+    span {
+      @media (min-width: $screen-md) {
+        max-width: 170px;
+      }
+    }
+  }
+
   .btn-group-checkbox {
     position: relative;
 
