@@ -12,7 +12,6 @@
     var companyIndustryDropdown = element(by.css("#registration-modal .companyIndustry"));
     var companyIndustryOptions = element.all(by.tagName('option'));
     var termsCheckbox = element(by.css(".accept-terms-checkbox"));
-    var newsletterCheckbox = element(by.css(".sign-up-newsletter-checkbox"));
     
     var validationTermsAccepted = element(by.css(".validation-error-message-accepted"));
     var validationFirstName = element(by.css(".validation-error-message-first-name"));
@@ -54,11 +53,7 @@
     this.getTermsCheckbox = function() {
       return termsCheckbox;
     };
-    
-    this.getNewsletterCheckbox = function() {
-      return newsletterCheckbox;
-    };
-    
+
     this.getValidationTermsAccepted = function() {
       return validationTermsAccepted;
     };

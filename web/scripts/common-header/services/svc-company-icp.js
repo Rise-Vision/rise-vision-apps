@@ -62,9 +62,6 @@ angular.module('risevision.common.header')
     ['51-250 employees', '51'],
     ['More than 250 employees', '250']
   ])
-  .constant('USER_ICP_WRITABLE_FIELDS', [
-    'mailSyncEnabled'
-  ])
   .constant('COMPANY_ICP_WRITABLE_FIELDS', [
     'companyIndustry'
   ])
@@ -73,9 +70,9 @@ angular.module('risevision.common.header')
   ])
   .factory('companyIcpFactory', ['$rootScope', '$q', '$log', '$state', 'userState',
     'updateCompany', 'updateUser', '$modal', 'pick',
-    'USER_ICP_WRITABLE_FIELDS', 'COMPANY_ICP_WRITABLE_FIELDS', 'COMPANY_ROLE_WRITABLE_FIELDS',
+    'COMPANY_ICP_WRITABLE_FIELDS', 'COMPANY_ROLE_WRITABLE_FIELDS',
     function ($rootScope, $q, $log, $state, userState, updateCompany, updateUser, $modal, pick,
-      USER_ICP_WRITABLE_FIELDS, COMPANY_ICP_WRITABLE_FIELDS, COMPANY_ROLE_WRITABLE_FIELDS) {
+      COMPANY_ICP_WRITABLE_FIELDS, COMPANY_ROLE_WRITABLE_FIELDS) {
       var factory = {};
 
       factory.init = function () {
@@ -93,26 +90,20 @@ angular.module('risevision.common.header')
 
       var _saveIcpData = function (result) {
         var company = result.company;
-        var user = result.user;
         var companyId = company.id;
-        var username = user.username;
 
         company = pick(company, COMPANY_ICP_WRITABLE_FIELDS);
-        user = pick(user, USER_ICP_WRITABLE_FIELDS);
 
-        var companyPromise = updateCompany(companyId, company);
-        var userPromise = updateUser(username, user);
-
-        $q.all([companyPromise, userPromise]).then(function () {
-          $log.debug('User & Company Profiles updated');
-        });
+        updateCompany(companyId, company)
+          .then(function () {
+            $log.debug('Company Profiles updated');
+          });
       };
 
       var _checkIcpCollection = function () {
-        var user = userState.getCopyOfProfile(true);
         var company = userState.getCopyOfSelectedCompany(true);
 
-        //Rise user should not be asked to confirm industry of a sub-company
+        // Rise user should not be asked to confirm industry of a sub-company
         if (userState.isRiseAdmin()) {
           return false;
         }
@@ -129,9 +120,6 @@ angular.module('risevision.common.header')
           backdrop: 'static', //prevent from closing modal by clicking outside
           keyboard: false, //prevent from closing modal by pressing escape
           resolve: {
-            user: function () {
-              return user;
-            },
             company: function () {
               return company;
             }

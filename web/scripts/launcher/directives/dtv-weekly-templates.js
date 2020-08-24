@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('risevision.apps.launcher.directives')
-  .directive('weeklyTemplates', ['companyAssetsFactory', 'editorFactory', 'userState',
-    '$sessionStorage',
-    function (companyAssetsFactory, editorFactory, userState, $sessionStorage) {
+  .directive('weeklyTemplates', ['companyAssetsFactory', 'editorFactory', '$sessionStorage',
+    function (companyAssetsFactory, editorFactory, $sessionStorage) {
       return {
         restrict: 'E',
         scope: {},
@@ -25,8 +24,6 @@ angular.module('risevision.apps.launcher.directives')
           $scope.select = function (product) {
             editorFactory.addFromProduct(product);
           };
-
-          $scope.alreadyOptedIn = userState.getCopyOfProfile() && userState.getCopyOfProfile().mailSyncEnabled;
 
         } //link()
       };

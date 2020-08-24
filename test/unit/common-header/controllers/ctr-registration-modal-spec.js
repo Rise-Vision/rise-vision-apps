@@ -169,7 +169,6 @@ describe("controller: registration modal", function() {
       email: "e@mail.com",
       firstName: "first",
       lastName: "last",
-      mailSyncEnabled: false,
       accepted: false
     });
 

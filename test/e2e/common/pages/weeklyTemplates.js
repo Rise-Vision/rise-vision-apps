@@ -5,7 +5,6 @@ var WeeklyTemplatesPage = function() {
   var weeklyTemplatesNoticeView = element(by.id('weekly-templates-notice'));
 
   var weeklyTemplatesCloseButton = element(by.id('weekly-templates-close'));
-  var subscribeToPlaybookLink = element(by.id('susbcribe-playbook'));
   
 
   this.getWeeklyTemplatesMainPanel = function() {
@@ -23,11 +22,6 @@ var WeeklyTemplatesPage = function() {
   this.getWeeklyTemplatesCloseButton = function() {
     return weeklyTemplatesCloseButton;
   };
-
-  this.getSubscribeToPlaybookLink = function() {
-    return subscribeToPlaybookLink;
-  };
-  
   
 };
 
