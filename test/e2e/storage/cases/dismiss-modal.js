@@ -3,7 +3,6 @@ var expect = require('rv-common-e2e').expect;
 var helper = require('rv-common-e2e').helper;
 var StorageSelectorModalPage = require('./../pages/storageSelectorModalPage.js');
 var NewFolderModalPage = require('./../pages/newFolderModalPage.js');
-var HomePage = require('./../../common/pages/homepage.js');
 var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
 var StorageHelper = require('./../pages/helper.js');
 var StorageHomePage = require('./../pages/storageHomePage.js');
@@ -16,7 +15,7 @@ var DismissModalScenarios = function() {
   describe('Dismiss Modal', function () {
     var storageSelectorModalPage = new StorageSelectorModalPage();
     var newFolderModalPage = new NewFolderModalPage();
-    var homePage = new HomePage();
+
     var commonHeaderPage = new CommonHeaderPage();
     var storageHomePage = new StorageHomePage();
     var filesListPage = new FilesListPage();
@@ -42,8 +41,6 @@ var DismissModalScenarios = function() {
         StorageHelper.setupStorageHome();
         commonHeaderPage.getCommonHeaderMenuItems().get(0).click(); //Launcher
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
-
-        homePage.dismissFeatureTour();
 
         commonHeaderPage.getCommonHeaderMenuItems().get(4).click(); //Storage
         helper.wait(storageHomePage.getStorageAppContainer(), 'Storage Apps Container');

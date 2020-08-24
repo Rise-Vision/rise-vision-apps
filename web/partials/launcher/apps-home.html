@@ -24,13 +24,7 @@
       <div class="form-inline schedules-toolbar" ng-show="selectedSchedule">
         <span class="button-toolbar hidden-xs pull-right">
           <a type="button" class="btn btn-default btn-toolbar" ui-sref="apps.schedules.details({scheduleId: selectedSchedule.id})" link-cid>Edit Schedule</a>
-          <ng-show ng-show="tooltipKey">
-            <button id="shareButton" type="button" class="btn btn-primary btn-toolbar" 
-            tooltip-overlay tooltip-template="'partials/schedules/share-schedule-tooltip.html'" tooltip-placement="bottom" tooltip-class="madero-style tooltip-guide tooltip-share-guide">
-              Share
-            </button>
-          </ng-show>
-          <share-schedule-button schedule="selectedSchedule" button-class="btn-primary btn-toolbar" ng-hide="tooltipKey"></share-schedule-button>
+          <share-schedule-button schedule="selectedSchedule" button-class="btn-primary btn-toolbar"></share-schedule-button>
         </span>
 
         <preview-selector ng-model="selectedSchedule" label="Preview A Schedule:"></preview-selector>
@@ -48,10 +42,7 @@
   <div class="mobile-footer visible-xs" ng-show="selectedSchedule">
     <div class="container">
       <a type="button" class="btn btn-default btn-block" ui-sref="apps.schedules.details({scheduleId: selectedSchedule.id})">Edit Schedule</a>
-      <ng-show ng-show="tooltipKey">
-        <button type="button" class="btn btn-primary btn-block" tooltip-overlay tooltip-template="'partials/schedules/share-schedule-tooltip.html'" tooltip-placement="top" tooltip-append-to-body="true" tooltip-class="madero-style tooltip-guide tooltip-share-guide">Share</button>
-      </ng-show>
-      <share-schedule-button schedule="selectedSchedule" button-class="btn-primary btn-block" ng-hide="tooltipKey"></share-schedule-button>
+      <share-schedule-button schedule="selectedSchedule" button-class="btn-primary btn-block"></share-schedule-button>
     </div>
   </div>
 </div>

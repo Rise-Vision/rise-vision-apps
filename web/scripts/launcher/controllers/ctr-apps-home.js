@@ -11,10 +11,6 @@ angular.module('risevision.apps.launcher.controllers')
 
       $scope.schedules = new ScrollingListService(schedule.list, $scope.search);
 
-      var triggerOverlay = function () {
-        $scope.tooltipKey = 'ShareEnterpriseTooltip';
-      };
-
       $scope.filterConfig = {
         placeholder: $filter('translate')('schedules-app.list.filter.placeholder')
       };
@@ -27,8 +23,6 @@ angular.module('risevision.apps.launcher.controllers')
         } else {
           if (!$scope.selectedSchedule && $scope.schedules.items.list.length > 0) {
             $scope.selectedSchedule = $scope.schedules.items.list[0];
-
-            triggerOverlay();
           }
 
           $loading.stop('apps-home-loader');

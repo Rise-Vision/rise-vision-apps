@@ -64,7 +64,6 @@ describe('directive: scheduleFields', function() {
     expect($scope.getEmbedUrl).to.be.a('function');
 
     expect($scope.applyTimeline).to.be.false;
-    expect($scope.tooltipKey).to.equal('ShareEnterpriseTooltip');
     expect($scope.freeDisplays).to.deep.equal([]);
 
     expect($scope.factory).to.equal(scheduleFactory);
