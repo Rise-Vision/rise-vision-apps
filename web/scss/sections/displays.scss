@@ -63,10 +63,12 @@
     }
   }
 
-  .btn-schedule-selector {
-    span {
-      @media (min-width: $screen-md) {
-        max-width: 170px;
+  .form-inline {
+    .btn-schedule-selector {
+      span {
+        @media (min-width: $screen-md) {
+          max-width: 170px;
+        }
       }
     }
   }
