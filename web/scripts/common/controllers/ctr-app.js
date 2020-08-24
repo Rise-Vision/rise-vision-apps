@@ -8,8 +8,7 @@ angular.module('risevision.apps.controllers')
         link: $state.href('apps.launcher.home'),
         cid: true,
         states: [
-          'apps.launcher.home',
-          'apps.launcher.onboarding'
+          'apps.launcher.home'
         ]
       }, {
         title: 'Presentations',

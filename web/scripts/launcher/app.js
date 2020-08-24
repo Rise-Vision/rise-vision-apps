@@ -21,35 +21,9 @@ angular.module('risevision.apps')
           }],
           controller: 'AppsHomeCtrl',
           resolve: {
-            canAccessApps: ['$state', '$location', 'canAccessApps', 'onboardingFactory',
-              function ($state, $location, canAccessApps, onboardingFactory) {
-                return canAccessApps().then(function () {
-                  if (onboardingFactory.isOnboarding()) {
-                    $location.replace();
-                    $state.go('apps.launcher.onboarding');
-                  }
-                });
-              }
-            ]
-          }
-        })
-
-        .state('apps.launcher.onboarding', {
-          url: '/onboarding',
-          templateProvider: ['$templateCache', function ($templateCache) {
-            return $templateCache.get(
-              'partials/launcher/onboarding.html');
-          }],
-          controller: 'OnboardingCtrl',
-          resolve: {
-            canAccessApps: ['$state', '$location', 'canAccessApps', 'onboardingFactory',
-              function ($state, $location, canAccessApps, onboardingFactory) {
-                return canAccessApps().then(function () {
-                  if (!onboardingFactory.isOnboarding()) {
-                    $location.replace();
-                    $state.go('apps.launcher.home');
-                  }
-                });
+            canAccessApps: ['$state', '$location', 'canAccessApps',
+              function ($state, $location, canAccessApps) {
+                return canAccessApps();
               }
             ]
           }

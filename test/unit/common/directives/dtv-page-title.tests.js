@@ -82,8 +82,6 @@ describe('directive: page title', function() {
     checkState('apps.launcher', 'Home');
     checkState('apps.launcher.home', 'Home');
 
-    checkState('apps.launcher.onboarding', 'Onboarding');
-
     checkState('apps.billing', 'Billing');
     checkState('apps.billing.home', 'Billing');
 

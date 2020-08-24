@@ -143,8 +143,7 @@ angular.module('risevision.apps', [
       });
 
       $rootScope.$on('$stateChangeSuccess', function (event, toState) {
-        if (toState.name === 'apps.launcher.onboarding' ||
-          toState.name === 'apps.launcher.home' ||
+        if (toState.name === 'apps.launcher.home' ||
           toState.name === 'apps.schedules.details' ||
           toState.name === 'apps.schedules.add' ||
           toState.name === 'apps.displays.details' ||
@@ -162,7 +161,6 @@ angular.module('risevision.apps', [
           $state.current.name === 'apps.displays.alerts' ||
           $state.current.name === 'apps.storage.home' ||
           $state.current.name === 'apps.launcher.home' ||
-          $state.current.name === 'apps.launcher.onboarding' ||
           $state.current.name === 'apps.billing.home') {
 
           $state.go($state.current, null, {

@@ -56,15 +56,6 @@
 
 				<!-- Action Nav -->
 				<ul class="nav navbar-nav navbar-right actions-nav pull-right u_remove-right">
-					<!-- Get Started Button -->
-					<li class="madero-style hidden-xs">
-					  <button id="onboardingButton" class="btn btn-default btn-navbar u_margin-right" 
-					  	ui-sref="apps.launcher.onboarding"
-					  	ng-if="isApps()" if-onboarding>
-					    Get Started
-					  </button>
-					</li>
-
 					<!-- Help Widget -->
 					<ng-include
 						replace-include
@@ -117,9 +108,6 @@
 	  		<i class="fa fa-times fa-2x pull-right"></i>
 	  		<img loading="lazy" src="//s3.amazonaws.com/rise-common/images/logo-small.png" class="img-responsive logo-small" width="113" height="42" alt="Rise Vision">
 	  	</li>
-	  	<li>
-			<a ui-sref="apps.launcher.onboarding" ng-if="isApps()" if-onboarding>Get Started</a>
-		</li>
 	    <li ng-repeat="opt in navOptions">
 				<a ng-if="opt.cid" ng-href="{{opt.link}}" link-cid target="{{opt.target}}">{{opt.title}}</a>
 				<a ng-if="!opt.cid" ng-href="{{opt.link}}" target="{{opt.target}}">{{opt.title}}</a>

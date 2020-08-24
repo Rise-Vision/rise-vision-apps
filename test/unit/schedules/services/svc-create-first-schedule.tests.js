@@ -27,11 +27,6 @@ describe('service: createFirstSchedule:', function() {
         open: sinon.stub()
       };
     });
-    $provide.service('onboardingFactory', function() {
-      return {
-        isTemplateOnboarding: sinon.stub().returns(false)
-      };
-    });
     $provide.service('blueprintFactory', function() {
       return {
         isPlayUntilDone: sinon.stub()
@@ -40,7 +35,7 @@ describe('service: createFirstSchedule:', function() {
 
   }));
   var createFirstSchedule, $state, scheduleFactory, playlistFactory, $modal;
-  var onboardingFactory, blueprintFactory;
+  var blueprintFactory;
   beforeEach(function(){
 
     inject(function($injector){
@@ -50,7 +45,6 @@ describe('service: createFirstSchedule:', function() {
       $state = $injector.get('$state');
       scheduleFactory = $injector.get('scheduleFactory');
       playlistFactory = $injector.get('playlistFactory');
-      onboardingFactory = $injector.get('onboardingFactory');
       blueprintFactory = $injector.get('blueprintFactory');
     });
   });
@@ -102,17 +96,6 @@ describe('service: createFirstSchedule:', function() {
         expect($modal.open.getCall(0).args[0].templateUrl).to.equal('partials/schedules/auto-schedule-modal.html');
         expect($modal.open.getCall(0).args[0].controller).to.equal('AutoScheduleModalController');
         expect($modal.open.getCall(0).args[0].resolve.presentationName()).to.equal('presentationName');
-
-        done();
-      });
-  });
-
-  it('should create first schedule and redirect to onboarding', function(done) {
-    onboardingFactory.isTemplateOnboarding.returns(true);
-    createFirstSchedule(samplePresentation)
-      .then(function(){
-        $state.go.should.have.been.calledWith('apps.launcher.onboarding');
-        $modal.open.should.not.have.been.called;
 
         done();
       });
