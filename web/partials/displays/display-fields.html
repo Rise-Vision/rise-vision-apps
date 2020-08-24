@@ -184,25 +184,7 @@
           </div>
         </div>
 
-        <time-picker ng-model="factory.display.restartTime" ng-show="!factory.showLicenseRequired() && factory.display.restartEnabled"></time-picker>
-
-        <!-- <div ng-show="!factory.showLicenseRequired() && factory.display.restartEnabled" class="input-group rise-date-picker radio-nested-input-group mt-3">
-          <input type="text"
-                 class="form-control"
-                 readonly="true"
-                 id="restartTime"
-                 name="restartTime"
-                 ng-model="factory.display.restartTime"
-                 ng-click="openTimePicker($event, 'restartTimePickerOpen')"
-                 time-picker-popup
-                 is-open="restartTimePickerOpen"
-          />
-          <span class="input-group-btn">
-            <button type="button" id="restartTimePickerButton" class="btn btn-primary" ng-click="openTimePicker($event, 'restartTimePickerOpen')">
-              <streamline-icon name="clock"></streamline-icon>
-            </button>
-          </span>
-        </div> -->
+        <restart-time-picker ng-model="factory.display.restartTime" ng-show="!factory.showLicenseRequired() && factory.display.restartEnabled"></restart-time-picker>
       </div>
 
       <div class="list-group-item" ng-if="!playerProFactory.isCROSLegacy(factory.display) && !playerProFactory.isChromeOSPlayer(factory.display)">
