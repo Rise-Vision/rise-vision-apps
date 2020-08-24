@@ -9,7 +9,6 @@ var WorkspacePage = function() {
   var expandArtboardButton = element(by.id('expandArtboardButton'));
   var presentationPropertiesButton = element(by.id('presentationPropertiesButton'));
   var addPlaceholderButton = element(by.id('addPlaceholderButton'));
-  var addPlaceholderTooltip = element(by.css('.cta-tooltip.add-placeholder-tooltip'));
   var previewButton = element(by.id('previewButton'));
   var saveAndPreviewButton = element(by.id('saveAndPreviewButton'));
   var changeTemplateButton = element(by.id('changeTemplateButton'));
@@ -93,10 +92,6 @@ var WorkspacePage = function() {
 
   this.getAddPlaceholderButton = function() {
     return addPlaceholderButton;
-  };
-
-  this.getAddPlaceholderTooltip = function() {
-    return addPlaceholderTooltip;
   };
 
   this.getCodemirrorHtmlEditor = function() {
