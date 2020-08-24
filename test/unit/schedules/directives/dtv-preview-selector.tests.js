@@ -71,6 +71,9 @@ describe('directive: preview-selector', function() {
   
   it('should initialize', function() {
     expect($scope.showTooltip).to.be.false;
+    expect($scope.filterConfig).to.deep.equal({
+      placeholder: 'Search schedules'
+    });
     expect($scope.search).to.deep.equal({
       sortBy: 'changeDate',
       reverse: true,
