@@ -120,29 +120,6 @@
 
             return deferred.promise;
           },
-          requestConfirmationEmail: function (username) {
-            var deferred = $q.defer();
-
-            var obj = {
-              data: {
-                username: username
-              }
-            };
-            riseAPILoader().then(function (coreApi) {
-                return coreApi.userauth.requestConfirmationEmail(obj);
-              })
-              .then(function (resp) {
-                $log.debug('Request confirmation email successful',
-                  resp);
-                deferred.resolve(resp);
-              })
-              .then(null, function (e) {
-                $exceptionHandler(e, 'Failed to request confirmation email.', true);
-                deferred.reject(e);
-              });
-
-            return deferred.promise;
-          },
           requestPasswordReset: function (username) {
             var deferred = $q.defer();
 
