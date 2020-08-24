@@ -97,10 +97,11 @@ angular.module('risevision.apps')
           },
           controller: 'displayAdd',
           resolve: {
-            scheduleInfo: ['$stateParams', 'canAccessApps', 'displayFactory',
-              function ($stateParams, canAccessApps, displayFactory) {
+            scheduleInfo: ['$stateParams', 'canAccessApps', 'displayFactory', 'screenshotFactory',
+              function ($stateParams, canAccessApps, displayFactory, screenshotFactory) {
                 return canAccessApps().then(function () {
                   displayFactory.newDisplay();
+                  delete screenshotFactory.screenshot;
 
                   if ($stateParams.schedule) {
                     displayFactory.setAssignedSchedule($stateParams.schedule);
