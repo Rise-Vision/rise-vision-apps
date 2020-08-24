@@ -54,3 +54,40 @@
   color: #262626;
   background-color: #ffff00;
 }
+
+.madero-style {
+
+  .has-error {
+    tags-input {
+      .tags, .tags.focused {
+        border: 1px solid $danger;
+        box-shadow: none;
+      }
+    }
+  } 
+
+  .email-tags {
+    .tags {
+      border-color: $madero-gray;
+      box-shadow: none;
+
+      .input {
+        min-height: 40px;
+        margin: 0px 5px;
+      }
+
+      &.focused {
+        border: 1px solid $rise-blue;
+      }
+
+      .tag-item {
+        background: $rise-blue;
+        border: 1px solid $rise-blue;
+      }
+
+      .invalid-tag {
+        color: $danger;
+      }
+    }
+  }
+}
