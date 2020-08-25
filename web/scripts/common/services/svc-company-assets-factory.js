@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('risevision.apps.launcher.services')
+angular.module('risevision.apps.services')
   .factory('companyAssetsFactory', ['$rootScope', '$q', 'CachedRequest', 'ScrollingListService',
     'schedule', 'display', 'productsFactory',
     function ($rootScope, $q, CachedRequest, ScrollingListService, schedule, display,

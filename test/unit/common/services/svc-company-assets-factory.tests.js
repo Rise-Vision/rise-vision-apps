@@ -1,7 +1,7 @@
 'use strict';
 
 describe('service: company assets factory:', function() {
-  beforeEach(module('risevision.apps.launcher.services'));
+  beforeEach(module('risevision.apps.services'));
 
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
