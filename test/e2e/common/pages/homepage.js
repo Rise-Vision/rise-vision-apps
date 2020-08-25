@@ -11,14 +11,10 @@ var HomePage = function() {
   var schedulesUrl = config.rootUrl + '/schedules/list';
   var storageUrl = config.rootUrl + '/storage';
 
-  var homeLink = element(by.css('.nav.navbar-nav #HomeLink'));
   var displaysLink = element(by.css('.nav.navbar-nav #DisplaysLink'));
   var editorLink = element(by.css('.nav.navbar-nav #PresentationsLink'));
   var schedulesLink = element(by.css('.nav.navbar-nav #SchedulesLink'));
   var storageLink = element(by.css('.nav.navbar-nav #StorageLink'));
-
-  var appsHomeContainer = element(by.id('apps-home-container'));
-  var appsHomeLoader = element(by.xpath('//div[@spinner-key="apps-home-loader"]'));
 
   var signUpText = element(by.id('sign-up-text'));
   var signInText = element(by.id('sign-in-text'));
@@ -90,14 +86,6 @@ var HomePage = function() {
 
   this.getStorageLink = function() {
     return storageLink;
-  };
-
-  this.getAppsHomeContainer = function() {
-    return appsHomeContainer;
-  };
-
-  this.getAppsHomeLoader = function() {
-    return appsHomeLoader;
   };
 
   this.getSignUpText = function() {

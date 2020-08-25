@@ -4,13 +4,6 @@ angular.module('risevision.apps.controllers')
   .controller('AppCtrl', ['$scope', '$rootScope', '$state',
     function ($scope, $rootScope, $state) {
       $scope.navOptions = [{
-        title: 'Home',
-        link: $state.href('apps.launcher.home'),
-        cid: true,
-        states: [
-          'apps.launcher.home'
-        ]
-      }, {
         title: 'Presentations',
         link: $state.href('apps.editor.home'),
         cid: true,
@@ -47,14 +40,13 @@ angular.module('risevision.apps.controllers')
         cid: true,
         states: ['apps.storage.home']
       }];
-      $scope.navSelected = 'apps.launcher.home';
+      $scope.navSelected = 'apps.editor.home';
       $scope.hideCommonHeader = false;
 
       $rootScope.$on('$stateChangeSuccess', function () {
         $scope.navSelected = $state.current.name;
-        $scope.hideCommonHeader = $state.current.name === 'apps.launcher.signup' ||
-          $state.current.name === 'apps.launcher.signin' ||
-          $state.current.name.indexOf('common.auth') !== -1;
+        $scope.hideCommonHeader = 
+        $state.current.name.indexOf('common.auth') !== -1;
       });
     }
   ]); //ctr

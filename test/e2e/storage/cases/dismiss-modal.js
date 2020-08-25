@@ -39,10 +39,10 @@ var DismissModalScenarios = function() {
     describe('From Storage Home:',function(){
       before(function () {        
         StorageHelper.setupStorageHome();
-        commonHeaderPage.getCommonHeaderMenuItems().get(0).click(); //Launcher
+        commonHeaderPage.getPresentationsMenuItem().click(); //Editor
         helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
 
-        commonHeaderPage.getCommonHeaderMenuItems().get(4).click(); //Storage
+        commonHeaderPage.getStorageMenuItem().click(); //Storage
         helper.wait(storageHomePage.getStorageAppContainer(), 'Storage Apps Container');
         helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
       });

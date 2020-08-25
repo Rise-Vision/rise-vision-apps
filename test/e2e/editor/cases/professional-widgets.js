@@ -77,7 +77,7 @@ var ProfessionalWidgetsScenarios = function() {
 
       helper.waitDisappear(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
 
-      commonHeaderPage.getCommonHeaderMenuItems().get(1).click();
+      commonHeaderPage.getPresentationsMenuItem().click();
     });
 
     before('Open New Presentation & Add Placeholder: ', function () {

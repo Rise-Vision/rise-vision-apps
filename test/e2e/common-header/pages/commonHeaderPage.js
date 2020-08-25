@@ -304,6 +304,22 @@
       return commonHeaderMenuItems;
     };
 
+    this.getPresentationsMenuItem = function () {
+      return commonHeaderMenuItems.get(0);
+    };
+
+    this.getSchedulesMenuItem = function () {
+      return commonHeaderMenuItems.get(1);
+    };
+
+    this.getDisplaysMenuItem = function () {
+      return commonHeaderMenuItems.get(2);
+    };
+
+    this.getStorageMenuItem = function () {
+      return commonHeaderMenuItems.get(3);
+    };
+
     this.getSignInButton = function () {
       return signInButton;
     };

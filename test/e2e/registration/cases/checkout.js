@@ -10,6 +10,7 @@
   var SignInPage = require('./../../common/pages/signInPage.js');
   var PurchaseFlowModalPage = require('./../pages/purchaseFlowModalPage.js');
   var PricingComponentModalPage = require('./../pages/pricingComponentModalPage.js');
+  var PresentationListPage = require('./../../editor/pages/presentationListPage.js');
 
   var Checkout = function() {
 
@@ -18,7 +19,8 @@
         homepage, 
         signInPage,
         purchaseFlowModalPage,
-        pricingComponentModalPage;
+        pricingComponentModalPage,
+        presentationListPage;
                 
       before(function (){
         commonHeaderPage = new CommonHeaderPage();
@@ -26,6 +28,7 @@
         signInPage = new SignInPage();
         purchaseFlowModalPage = new PurchaseFlowModalPage();
         pricingComponentModalPage = new PricingComponentModalPage();
+        presentationListPage = new PresentationListPage();
 
         homepage.get();
 
@@ -34,7 +37,7 @@
 
       describe("checkout: ", function() {
         before(function() {
-          helper.waitDisappear(homepage.getAppsHomeLoader(), 'Home Page Loader');
+          helper.waitDisappear(presentationListPage.getPresentationsLoader(), 'Home Page Loader');
         });
 
         it("should show Subscribe button", function() {
