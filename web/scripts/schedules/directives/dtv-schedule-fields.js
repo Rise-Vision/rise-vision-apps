@@ -10,7 +10,6 @@ angular.module('risevision.schedules.directives')
         link: function ($scope) {
           var originalChangeDate = scheduleFactory.schedule.changeDate;
           $scope.applyTimeline = false;
-          $scope.tooltipKey = 'ShareEnterpriseTooltip';
           $scope.freeDisplays = [];
           $scope.factory = scheduleFactory;
           $scope.playerLicenseFactory = playerLicenseFactory;

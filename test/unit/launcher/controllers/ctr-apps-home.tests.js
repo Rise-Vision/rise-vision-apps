@@ -60,7 +60,6 @@ describe('controller: AppsHomeCtrl', function() {
     expect($scope.schedules).to.be.ok;
     ScrollingListService.should.have.been.calledWith(schedule.list, $scope.search);
 
-    expect($scope.tooltipKey).to.not.be.ok;
     expect($scope.search).to.deep.equal({
       sortBy: 'changeDate',
       reverse: true
@@ -99,23 +98,6 @@ describe('controller: AppsHomeCtrl', function() {
       expect($scope.selectedSchedule).to.equal('schedule1');
     });
     
-    describe('triggerOverlay', function() {
-      it('should trigger overlay on API results', function() {
-        $scope.schedules.items.list.push('item');
-        $scope.schedules.loadingItems = false;
-        $scope.$digest();
-
-        expect($scope.tooltipKey).to.equal('ShareEnterpriseTooltip');
-      });
-
-      it('should not show overlay if list is empty', function() {
-        $scope.schedules.loadingItems = false;
-        $scope.$digest();
-
-        expect($scope.tooltipKey).to.not.be.ok;
-      });
-
-    });
   });
 
   describe('getEmbedUrl:', function() {

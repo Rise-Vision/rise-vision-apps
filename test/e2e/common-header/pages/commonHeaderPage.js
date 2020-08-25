@@ -3,7 +3,6 @@
 (function(module) {
   'use strict';
 
-  var HomePage = require('./../../common/pages/homepage.js');
   var LoginPage = require('./loginPage.js');
   var CompanySettingsModalPage = require('./companySettingsModalPage.js');
   var UserSettingsModalPage = require('./userSettingsModalPage.js');
@@ -17,7 +16,6 @@
     var JENKINS_UNSUBSCRIBED = 'Jenkins Unsubscribed Subcompany';
     var E2E_UNSUBSCRIBED = 'E2E SUBCOMPANY - UNSUBSCRIBED';
 
-    var homePage = new HomePage();
     var loginPage = new LoginPage();
     var companySettingsModalPage = new CompanySettingsModalPage();
     var userSettingsModalPage = new UserSettingsModalPage();
@@ -72,12 +70,10 @@
       //wait for spinner to go away.
       helper.waitDisappear(loader, 'CH spinner loader');
 
-      homePage.dismissFeatureTour().then(function() {
-        helper.wait(profilePic, 'Profile Picture');
-        helper.clickWhenClickable(profilePic, 'Profile Picture');
+      helper.wait(profilePic, 'Profile Picture');
+      helper.clickWhenClickable(profilePic, 'Profile Picture');
 
-        helper.wait(profileMenu, 'Profile Menu');
-      });
+      helper.wait(profileMenu, 'Profile Menu');
     };
 
     this.clickSubcompanyButton = function() {

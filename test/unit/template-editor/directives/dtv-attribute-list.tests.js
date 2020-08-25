@@ -56,7 +56,6 @@ describe('directive: attribute-list', function() {
     expect($scope).to.be.ok;
     expect($scope.factory).to.be.ok;
     expect($scope.components).to.be.ok;
-    expect($scope.tooltipKey).to.equal('ScheduleSelectorTooltip');
   });
 
   it('should not list non-editable components', function() {

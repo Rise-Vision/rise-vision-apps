@@ -20,22 +20,10 @@ var HomePage = function() {
   var appsHomeContainer = element(by.id('apps-home-container'));
   var appsHomeLoader = element(by.xpath('//div[@spinner-key="apps-home-loader"]'));
 
-  var shareTooltipDismiss = element(by.id('share-tooltip-dismiss'));
-
   var signUpText = element(by.id('sign-up-text'));
   var signInText = element(by.id('sign-in-text'));
   var signUpLink = element(by.id('sign-up-link'));
   var signInLink = element(by.id('sign-in-link'));
-
-  this.dismissFeatureTour = function() {
-    helper.waitDisappear(appsHomeLoader, 'Apps Home Loader');
-
-    return shareTooltipDismiss.isPresent().then(function(isTooltipPresent) {
-      if (isTooltipPresent) {
-        helper.clickOverIFrame(shareTooltipDismiss, 'Tooltip Dismiss Button');
-      }
-    });
-  };
 
   this.confirmGet = function(url) {
     return browser.get(url)
@@ -110,10 +98,6 @@ var HomePage = function() {
 
   this.getAppsHomeLoader = function() {
     return appsHomeLoader;
-  };
-
-  this.getShareTooltipDismiss = function() {
-    return shareTooltipDismiss;
   };
 
   this.getSignUpText = function() {
