@@ -32,7 +32,7 @@ var ArtboardPlaceholdersScenarios = function() {
       commonHeaderPage = new CommonHeaderPage();
     });
 
-    before(function () {
+    it('should setup test',function () {
       homepage.getEditor();
       signInPage.signIn();
       presentationsListPage.openNewPresentation();
