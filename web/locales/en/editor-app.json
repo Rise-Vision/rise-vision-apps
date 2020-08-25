@@ -194,12 +194,10 @@
         "title": "Edit Placeholder"
       },
       "no-placeholder": "You haven't added any Placeholders to your Presentation yet.",
-      "placeholderTooltip": "Click to change Images, Video, Text, and Widgets",
       "title": "Placeholders"
     },
     "toolbar": {
       "addPlaceholder": "Add Placeholder",
-      "addPlaceholderTooltip": "Click to add Images, Video, Text, and Widgets",
       "changeTemplate": "Change Template",
       "mode": {
         "design": "View Design",

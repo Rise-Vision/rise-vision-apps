@@ -4,14 +4,7 @@
 
 <div class="editor-playlist workspace-sidebar-body">
   <div class="editor-playlist-item u_clickable placeholderFromSideBar" 
-    ng-repeat="placeholder in factory.getPlaceholders() track by $index"
-    tooltip="{{'editor-app.workspace.sidebar.placeholderTooltip' | translate}}" 
-    tooltip-placement="bottom" 
-    tooltip-append-to-body="true"
-    tooltip-trigger="show"
-    tooltip-class="cta-tooltip {{tooltipClasses}}"
-    pop-on-event-enabled="editorFactory.presentation.placeholders.length > 0 && $index === 0"
-    rv-popover>
+    ng-repeat="placeholder in factory.getPlaceholders() track by $index">
     <div class="pull-right">
       <button class="btn btn-xs btn-default" id="duplicateButton" ng-click="factory.duplicatePlaceholder(placeholder)"><i class="fa fa-copy"></i></button>
       <button class="btn btn-xs btn-default" id="removeButton" ng-click="remove(placeholder)"><i class="fa fa-trash-o"></i></button>

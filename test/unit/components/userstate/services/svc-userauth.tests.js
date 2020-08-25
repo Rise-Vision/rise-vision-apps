@@ -74,17 +74,6 @@ describe("service: userauth:", function() {
                 return Q.reject("confirmUserCreation Failed");
               }
             },
-            requestConfirmationEmail: function(obj) {
-              expect(obj).to.be.ok;
-              expect(obj.data).to.be.ok;
-              expect(obj.data.username).to.be.ok;
-
-              if (returnResult) {
-                return Q.resolve("requested confirmation email");
-              } else {
-                return Q.reject("requestConfirmationEmail Failed");
-              }
-            },
             requestPasswordReset: function(obj) {
               expect(obj).to.be.ok;
               expect(obj.data).to.be.ok;
@@ -263,35 +252,6 @@ describe("service: userauth:", function() {
         })
         .then(null, function(error) {
           expect(error).to.deep.equal("confirmUserCreation Failed");
-          expect($exceptionHandler).to.have.been.called;
-
-          done();
-        })
-        .then(null,done);
-    });
-  });
-
-  describe("requestConfirmationEmail:",function(){
-    it("should request a confirmation email",function(done){
-      userauth.requestConfirmationEmail("username")
-        .then(function(resp){
-          expect(resp).to.be.ok;
-          expect(resp).to.equal("requested confirmation email");
-          expect($exceptionHandler).to.not.have.been.called;
-
-          done();
-        })
-        .then(null,done);
-    });
-
-    it("should handle failure to request a confirmation email",function(done){
-      returnResult = false;
-      userauth.requestConfirmationEmail("username")
-        .then(function(resp) {
-          done(resp);
-        })
-        .then(null, function(error) {
-          expect(error).to.deep.equal("requestConfirmationEmail Failed");
           expect($exceptionHandler).to.have.been.called;
 
           done();

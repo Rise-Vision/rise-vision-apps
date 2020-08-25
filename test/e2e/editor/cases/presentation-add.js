@@ -39,10 +39,6 @@ var PresentationAddScenarios = function() {
       expect(workspacePage.getAddPlaceholderButton().isPresent()).to.eventually.be.true;
     });
 
-    it('should show Add Placeholder button tooltip', function () {
-      expect(workspacePage.getAddPlaceholderTooltip().isDisplayed()).to.eventually.be.true;
-    });
-
     it('should show artboard empty state',function() {
       helper.wait(artboardPage.getEmptyState(),'Artboard Empty State');
       expect(artboardPage.getEmptyState().isDisplayed()).to.eventually.be.true;
