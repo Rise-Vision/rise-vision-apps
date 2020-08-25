@@ -79,6 +79,7 @@ var SignInPage = function() {
     username = username || USERNAME1;
     password = password || PASSWORD1;
     //wait for spinner to go away.
+    helper.wait(commonHeaderPage.getLoader(), 'CH spinner loader - Before Custom Sign In');
     helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader - Before Custom Sign In');
 
     this.getUsernameTextBox().isPresent().then(function (state) {
