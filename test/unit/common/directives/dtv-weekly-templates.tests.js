@@ -6,7 +6,7 @@ describe('directive: weekly-templates', function() {
       element,
       sessionStorage,
       editorFactory;
-  beforeEach(module('risevision.apps.launcher.directives'));
+  beforeEach(module('risevision.apps.directives'));
   beforeEach(module(function ($provide) {
     $provide.service('companyAssetsFactory', function() {
       return {
@@ -30,7 +30,7 @@ describe('directive: weekly-templates', function() {
 
     $compile = _$compile_;
     $rootScope = _$rootScope_;
-    $templateCache.put('partials/launcher/weekly-templates.html', '<p>mock</p>');
+    $templateCache.put('partials/common/weekly-templates.html', '<p>mock</p>');
   }));
 
   function compileDirective() {
