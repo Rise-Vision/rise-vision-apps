@@ -89,9 +89,8 @@ var ArtboardPlaceholdersScenarios = function() {
         browser.sleep(500); //wait for transition
 
         artboardPage.getPlaceholderContainer('ph1').getLocation().then(function (location) {
-          // Probably due to rounding, we are seeing 1-3 pixels variation. Adding 5px tolerance to pass the test.
-          expect(Math.abs(Math.round(location.x) - Math.round(left + 20*initialZoom))).to.be.lessThan(5); 
-          expect(Math.abs(Math.round(location.y) - Math.round(top + 20*initialZoom))).to.be.lessThan(5);
+          expect(Math.abs(Math.round(location.x) - Math.round(left))).to.be.greaterThan(15); 
+          expect(Math.abs(Math.round(location.y) - Math.round(top))).to.be.greaterThan(15);
           
           done();
         });
