@@ -10,7 +10,6 @@ angular.module('risevision.template-editor.directives')
         templateUrl: 'partials/template-editor/attribute-list.html',
         link: function ($scope) {
           $scope.factory = templateEditorFactory;
-          $scope.tooltipKey = 'ScheduleSelectorTooltip';
 
           $scope.brandingComponent = brandingFactory.getBrandingComponent();
 

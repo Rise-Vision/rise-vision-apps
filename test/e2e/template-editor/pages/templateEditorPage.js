@@ -26,8 +26,6 @@ var TemplateEditorPage = function() {
   var brandingEditLink = element(by.id('branding-edit'));
   var brandingColorsOverrideEditLink = element(by.id('branding-colors-override-edit'));
 
-  var schedulesTooltipDismiss = element(by.id('schedules-tooltip-dismiss'));
-
   var autoSaveXPath = '//div[@id="autoSavingDesktop"]//div[contains(text(), "TEXT")]';
   var dirtyText = element(by.xpath(autoSaveXPath.replace('TEXT', 'Unsaved changes')));
   var savedText = element(by.xpath(autoSaveXPath.replace('TEXT', 'All changes saved')));
@@ -140,14 +138,6 @@ var TemplateEditorPage = function() {
         helper.waitDisappear(dirtyText);
         helper.waitDisappear(savingText, 'Template Editor auto-saving');
         helper.wait(savedText, 'Template Editor auto-saved');
-      }
-    });
-  };
-
-  this.dismissFeatureTour = function() {
-    return schedulesTooltipDismiss.isPresent().then(function(isTooltipPresent) {
-      if (isTooltipPresent) {
-        helper.clickOverIFrame(schedulesTooltipDismiss, 'Tooltip Dismiss Button');
       }
     });
   };

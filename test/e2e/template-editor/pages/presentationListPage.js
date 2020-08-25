@@ -40,8 +40,6 @@ var PresentationListPage = function() {
 
     //wait for presentation to be auto-saved
     helper.wait(templateEditorPage.getSavedText(), 'Template auto-saved');
-
-    templateEditorPage.dismissFeatureTour();
   };
 
   this.loadPresentationsList = function() {
