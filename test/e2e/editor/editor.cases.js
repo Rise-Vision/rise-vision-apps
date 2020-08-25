@@ -16,19 +16,19 @@
   var ProfessionalWidgetsScenarios = require('./cases/professional-widgets.js');
 
   describe('Editor', function() {
-    var presentationListScenarios = new PresentationListScenarios();
-    var artboardScenarios = new ArtboardScenarios();
-    var presentationPropertiesScenarios = new PresentationPropertiesScenarios();
+    // var presentationListScenarios = new PresentationListScenarios();
+    // var artboardScenarios = new ArtboardScenarios();
+    // var presentationPropertiesScenarios = new PresentationPropertiesScenarios();
     var artboardPlaceholdersScenarios = new ArtboardPlaceholdersScenarios();
-    var placeholdersListScenarios = new PlaceholdersListScenarios();
-    var placeholderSettingsScenarios = new PlaceholderSettingsScenarios();
-    var playlistScenarios = new PlaylistScenarios();
-    var addContentScenarios = new AddContentScenarios();
-    var templateAddScenarios = new TemplateAddScenarios();
-    var htmlEditorScenarios = new HtmlEditorScenarios();
-    var presentationAddScenarios = new PresentationAddScenarios();
-    var sharedTemplatesScenarios = new SharedTemplatesScenarios();
-    var professionalWidgetsScenarios = new ProfessionalWidgetsScenarios();
+    // var placeholdersListScenarios = new PlaceholdersListScenarios();
+    // var placeholderSettingsScenarios = new PlaceholderSettingsScenarios();
+    // var playlistScenarios = new PlaylistScenarios();
+    // var addContentScenarios = new AddContentScenarios();
+    // var templateAddScenarios = new TemplateAddScenarios();
+    // var htmlEditorScenarios = new HtmlEditorScenarios();
+    // var presentationAddScenarios = new PresentationAddScenarios();
+    // var sharedTemplatesScenarios = new SharedTemplatesScenarios();
+    // var professionalWidgetsScenarios = new ProfessionalWidgetsScenarios();
   });
 
 })();
