@@ -1,13 +1,13 @@
 'use strict';
 
-angular.module('risevision.apps.launcher.directives')
+angular.module('risevision.apps.directives')
   .directive('weeklyTemplates', ['companyAssetsFactory', 'editorFactory', 'userState',
     '$sessionStorage',
     function (companyAssetsFactory, editorFactory, userState, $sessionStorage) {
       return {
         restrict: 'E',
         scope: {},
-        templateUrl: 'partials/launcher/weekly-templates.html',
+        templateUrl: 'partials/common/weekly-templates.html',
         link: function ($scope) {
           $sessionStorage.$default({
             weeklyTemplatesFullView: true

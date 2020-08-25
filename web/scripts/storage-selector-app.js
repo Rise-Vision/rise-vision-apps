@@ -50,7 +50,7 @@ angular.module('risevision.apps.storage.storage-selector', [
         .state('common.auth.unregistered', {
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get(
-              'partials/launcher/signup.html');
+              'partials/common/signup.html');
           }],
           url: '/unregistered/:state'
         })
