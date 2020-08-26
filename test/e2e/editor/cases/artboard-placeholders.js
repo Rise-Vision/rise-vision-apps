@@ -89,8 +89,8 @@ var ArtboardPlaceholdersScenarios = function() {
         browser.sleep(500); //wait for transition
 
         artboardPage.getPlaceholderContainer('ph1').getLocation().then(function (location) {
-          expect(Math.round(location.x)).to.be.equal(Math.round(left + 20*initialZoom));
-          expect(Math.round(location.y)).to.be.equal(Math.round(top + 20*initialZoom));
+          expect(Math.abs(Math.round(location.x) - Math.round(left))).to.be.greaterThan(15); 
+          expect(Math.abs(Math.round(location.y) - Math.round(top))).to.be.greaterThan(15);
           
           done();
         });
