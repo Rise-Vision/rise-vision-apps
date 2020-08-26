@@ -63,7 +63,7 @@ var ArtboardScenarios = function() {
 
       describe('Given the user has unsaved changes', function () {
         it('should notify when navigating away from the editor', function () {
-          commonHeaderPage.getSchedulesMenuItem().click(); //Navigating to Scedules
+          commonHeaderPage.getSchedulesMenuItem().click(); //Navigating to Schedules
           helper.wait(unsavedChangesModalPage.getUnsavedChangesModal(),'Unsaved Changed Modal');
           browser.sleep(500);
           expect(unsavedChangesModalPage.getUnsavedChangesModal().isDisplayed()).to.eventually.be.true;
