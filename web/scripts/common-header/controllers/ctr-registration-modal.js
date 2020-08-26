@@ -27,6 +27,8 @@ angular.module('risevision.common.header')
       $scope.profile.accepted =
         angular.isDefined(copyOfProfile.termsAcceptanceDate) &&
         copyOfProfile.termsAcceptanceDate !== null;
+      // Automatically subscribe users on registration
+      $scope.profile.mailSyncEnabled = true;
 
       // check status, load spinner, or close dialog if registration is complete
       var watch = $scope.$watch(
@@ -62,7 +64,7 @@ angular.module('risevision.common.header')
           var action;
           if ($scope.newUser) {
             action = addAccount($scope.profile.firstName, $scope.profile.lastName, $scope.company.name, $scope
-              .company.companyIndustry);
+              .company.companyIndustry, $scope.profile.mailSyncEnabled);
           } else {
             action = agreeToTermsAndUpdateUser(userState.getUsername(), $scope.profile);
           }
