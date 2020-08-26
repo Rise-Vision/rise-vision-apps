@@ -117,10 +117,8 @@ describe("service: companyIcpFactory:", function() {
 
         var resolve = $modal.open.getCall(0).args[0].resolve;
         
-        expect(resolve.user).to.be.a("function");
         expect(resolve.company).to.be.a("function");
 
-        expect(resolve.user()).to.equal(userProfile);
         expect(resolve.company()).to.equal(companyProfile);
 
         done();
@@ -146,10 +144,8 @@ describe("service: companyIcpFactory:", function() {
 
         var resolve = $modal.open.getCall(0).args[0].resolve;
         
-        expect(resolve.user).to.be.a("function");
         expect(resolve.company).to.be.a("function");
 
-        expect(resolve.user()).to.equal(userProfile);
         expect(resolve.company()).to.equal(companyProfile);
 
         done();
@@ -203,10 +199,6 @@ describe("service: companyIcpFactory:", function() {
     });
 
     it("$modal result", function(done) {
-      userProfile = {
-        username: "username",
-        randomField: "123"
-      };
       companyProfile = {
         id: "cid",
         name: "Test Company",
@@ -218,13 +210,9 @@ describe("service: companyIcpFactory:", function() {
 
       setTimeout(function() {
         updateCompany.should.have.been.called;
-        updateUser.should.have.been.called;
 
         updateCompany.should.have.been.calledWith("companyId", {
           companyIndustry: "companyIndustry"
-        });
-        updateUser.should.have.been.calledWith("username", {
-          mailSyncEnabled: true
         });
 
         done();

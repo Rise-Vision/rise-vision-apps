@@ -68,8 +68,6 @@
         //click authorize
         registrationModalPage.getTermsCheckbox().click();
         
-        // No need to sign up for newsletter
-        // registrationModalPage.getNewsletterCheckbox().click();
         registrationModalPage.getSaveButton().click();
         
         helper.waitRemoved(registrationModalPage.getRegistrationModal(), "Registration Modal");

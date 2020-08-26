@@ -80,12 +80,6 @@ var WeeklyTemplatesScenarios = function() {
       expect(weeklyTemplatesPage.getWeeklyTemplatesNoticeView().isPresent()).to.eventually.be.false;
     });
 
-    it('should promote subscribing to Weekly Playbook',function(){
-      expect(weeklyTemplatesPage.getSubscribeToPlaybookLink().isDisplayed()).to.eventually.be.true;
-      expect(weeklyTemplatesPage.getSubscribeToPlaybookLink().getAttribute('target')).to.eventually.equal('_blank');
-      expect(weeklyTemplatesPage.getSubscribeToPlaybookLink().getAttribute('href')).to.eventually.equal('https://www.risevision.com/weekly-playbook');
-    });
-
   });
 };
 

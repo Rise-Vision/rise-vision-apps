@@ -16,15 +16,6 @@ describe('directive: weekly-templates', function() {
     $provide.service('editorFactory', function() {
       return editorFactory;
     });  
-    $provide.service('userState', function() {
-      return {
-        getCopyOfProfile: function() {
-          return {
-            mailSyncEnabled: true
-          };
-        }
-      };
-    });
     $provide.service('$sessionStorage', function() {
       return sessionStorage
     });   
@@ -62,7 +53,6 @@ describe('directive: weekly-templates', function() {
       expect($scope.weeklyTemplates).to.equal('weeklyTemplates');
       expect($scope.toggleView).to.be.a('function');
       expect($scope.select).to.be.a('function');
-      expect($scope.alreadyOptedIn).to.be.true;
     });
 
     it('should use session storage value for fullView',function() {
