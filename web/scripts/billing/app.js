@@ -8,7 +8,6 @@ angular.module('risevision.apps')
       // Use $stateProvider to configure states.
       $stateProvider
         .state('apps.billing', {
-          url: '?cid',
           abstract: true,
           template: '<div class="container billing-app" ui-view></div>'
         })

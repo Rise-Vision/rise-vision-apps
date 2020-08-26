@@ -3,6 +3,7 @@ var expect = require('rv-common-e2e').expect;
 var HomePage = require('./../pages/homepage.js');
 var SignInPage = require('./../pages/signInPage.js');
 var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
+var PresentationListPage = require('./../../editor/pages/presentationListPage.js');
 var GoogleAuthPage = require('rv-common-e2e').googleAuthPage;
 var helper = require('rv-common-e2e').helper;
 
@@ -15,11 +16,13 @@ var HomepageScenarios = function() {
     var signInPage;
     var commonHeaderPage;
     var googleAuthPage;
+    var presentationListPage;
     before(function (){
       homepage = new HomePage();
       signInPage = new SignInPage();
       commonHeaderPage = new CommonHeaderPage();
       googleAuthPage = new GoogleAuthPage();
+      presentationListPage = new PresentationListPage();
 
       homepage.get();
       //wait for spinner to go away.
@@ -30,10 +33,10 @@ var HomepageScenarios = function() {
       expect(signInPage.getSignInPageContainer().isPresent()).to.eventually.be.true;
     });
 
-    it('should sign in the user and load launch page',function(){
+    it('should sign in the user and load presentations page',function(){
       signInPage.signIn();
 
-      expect(homepage.getAppsHomeContainer().isDisplayed()).to.eventually.be.true;
+      expect(presentationListPage.getEditorAppContainer().isDisplayed()).to.eventually.be.true;
     });
 
     it('should show common header',function(){
@@ -43,24 +46,22 @@ var HomepageScenarios = function() {
     describe('NavMenu', function(){
 
       it("should load menu items", function() {
-        // expect 10 menu items (5 for the off-canvas menu)
-        expect(commonHeaderPage.getCommonHeaderMenuItems().count()).to.eventually.equal(10);
+        // expect 8 menu items (4 for the off-canvas menu)
+        expect(commonHeaderPage.getCommonHeaderMenuItems().count()).to.eventually.equal(8);
         
-        expect(commonHeaderPage.getCommonHeaderMenuItems().get(0).getText()).to.eventually.equal('Home');
-        expect(commonHeaderPage.getCommonHeaderMenuItems().get(1).getText()).to.eventually.equal('Presentations');
-        expect(commonHeaderPage.getCommonHeaderMenuItems().get(2).getText()).to.eventually.equal('Schedules');
-        expect(commonHeaderPage.getCommonHeaderMenuItems().get(3).getText()).to.eventually.equal('Displays');
-        expect(commonHeaderPage.getCommonHeaderMenuItems().get(4).getText()).to.eventually.equal('Storage');
+        expect(commonHeaderPage.getCommonHeaderMenuItems().get(0).getText()).to.eventually.equal('Presentations');
+        expect(commonHeaderPage.getCommonHeaderMenuItems().get(1).getText()).to.eventually.equal('Schedules');
+        expect(commonHeaderPage.getCommonHeaderMenuItems().get(2).getText()).to.eventually.equal('Displays');
+        expect(commonHeaderPage.getCommonHeaderMenuItems().get(3).getText()).to.eventually.equal('Storage');
       });
 
       it("off canvas menu should not show", function() {
         expect(commonHeaderPage.getCommonHeaderMenuItems().get(0).isDisplayed()).to.eventually.be.true;
 
+        expect(commonHeaderPage.getCommonHeaderMenuItems().get(4).isDisplayed()).to.eventually.be.false;
         expect(commonHeaderPage.getCommonHeaderMenuItems().get(5).isDisplayed()).to.eventually.be.false;
         expect(commonHeaderPage.getCommonHeaderMenuItems().get(6).isDisplayed()).to.eventually.be.false;
         expect(commonHeaderPage.getCommonHeaderMenuItems().get(7).isDisplayed()).to.eventually.be.false;
-        expect(commonHeaderPage.getCommonHeaderMenuItems().get(8).isDisplayed()).to.eventually.be.false;
-        expect(commonHeaderPage.getCommonHeaderMenuItems().get(9).isDisplayed()).to.eventually.be.false;
       });
 
       it("links target & href should be configured", function(done) {

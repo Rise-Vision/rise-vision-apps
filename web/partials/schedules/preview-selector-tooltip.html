@@ -16,7 +16,7 @@
         <a class="madero-link mr-auto u_text-ellipsis" href="" ng-click="select(schedule)">
           {{schedule.name}}
         </a>
-        <a class="madero-link mr-3" ui-sref="apps.schedules.details({scheduleId: schedule.id})" link-cid>
+        <a class="madero-link mr-3" ui-sref="apps.schedules.details({scheduleId: schedule.id})">
           Edit
         </a>
       </div>
@@ -32,7 +32,7 @@
 
   <div class="row">
     <div class="col-xs-12">
-      <a type="button" class="btn btn-default btn-block" ui-sref="apps.schedules.add" link-cid>Add Schedule</a>
+      <a type="button" class="btn btn-default btn-block" ui-sref="apps.schedules.add">Add Schedule</a>
     </div>
   </div>
 

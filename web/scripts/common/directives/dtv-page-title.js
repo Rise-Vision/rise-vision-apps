@@ -39,8 +39,7 @@ angular.module('risevision.apps.directives')
 
               // Apps routes:
             case 'apps':
-            case 'apps.launcher':
-            case 'apps.launcher.home':
+            case 'apps.home':
               return 'Home';
 
             case 'apps.billing':

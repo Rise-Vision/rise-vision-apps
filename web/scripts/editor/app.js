@@ -8,7 +8,6 @@ angular.module('risevision.apps')
       // Use $stateProvider to configure states.
       $stateProvider
         .state('apps.editor', {
-          url: '?cid',
           abstract: true,
           template: '<div class="editor-app" ui-view></div>'
         })

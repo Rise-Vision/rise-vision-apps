@@ -49,7 +49,7 @@ var StorageTrialScenarios = function() {
       });
 
       it('should open a new Presentation', function () {
-        commonHeaderPage.getCommonHeaderMenuItems().get(1).click();
+        commonHeaderPage.getPresentationsMenuItem().click();
 
         presentationListPage.openNewPresentation(true);
       });
