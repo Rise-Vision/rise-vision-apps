@@ -11,7 +11,6 @@ var PricingComponentModalPage = require('./../../registration/pages/pricingCompo
 var PresentationItemModalPage = require('./../pages/presentationItemModalPage.js');
 var PresentationModalPage = require('./../../schedules/pages/presentationModalPage.js');
 var TwitterSettingsPage = require('./../pages/twitterSettingsPage.js');
-var AutoScheduleModalPage = require('./../../schedules/pages/autoScheduleModalPage.js');
 
 var helper = require('rv-common-e2e').helper;
 
@@ -31,7 +30,6 @@ var ProfessionalWidgetsScenarios = function() {
     var presentationItemModalPage;
     var presentationModalPage;
     var twitterSettingsPage;
-    var autoScheduleModalPage;
 
     function loadEditor() {
       homepage.getEditor();
@@ -50,7 +48,6 @@ var ProfessionalWidgetsScenarios = function() {
       presentationItemModalPage = new PresentationItemModalPage();
       presentationModalPage = new PresentationModalPage();
       twitterSettingsPage = new TwitterSettingsPage();
-      autoScheduleModalPage = new AutoScheduleModalPage();
 
       loadEditor();
       commonHeaderPage.createUnsubscribedSubCompany(subCompanyName);
@@ -70,12 +67,6 @@ var ProfessionalWidgetsScenarios = function() {
       browser.sleep(500);
 
       helper.clickWhenClickable(workspacePage.getSaveButton(), 'Save Button');
-
-      helper.wait(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
-
-      helper.clickWhenClickable(autoScheduleModalPage.getCloseButton(), 'Auto Schedule Modal - Close Button');
-
-      helper.waitDisappear(autoScheduleModalPage.getAutoScheduleModal(), 'Auto Schedule Modal');
 
       commonHeaderPage.getCommonHeaderMenuItems().get(1).click();
     });

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.schedules.services')
-  .factory('createFirstSchedule', ['$q', '$state', '$modal', 'scheduleFactory', 'playlistFactory',
-    function ($q, $state, $modal, scheduleFactory, playlistFactory) {
+  .factory('createFirstSchedule', ['$q', '$state', 'scheduleFactory', 'playlistFactory',
+    function ($q, $state, scheduleFactory, playlistFactory) {
 
       return function (presentation) {
         return scheduleFactory.checkFirstSchedule()
@@ -21,18 +21,6 @@ angular.module('risevision.schedules.services')
             if (scheduleFactory.errorMessage) {
               return $q.reject(scheduleFactory.errorMessage);
             }
-          })
-          .then(function () {
-            $modal.open({
-              templateUrl: 'partials/schedules/auto-schedule-modal.html',
-              size: 'md',
-              controller: 'AutoScheduleModalController',
-              resolve: {
-                presentationName: function () {
-                  return presentation.name;
-                }
-              }
-            });
           });
       };
 
