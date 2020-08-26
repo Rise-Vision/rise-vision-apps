@@ -18,6 +18,8 @@
 
   angular.module('risevision.apps.config', [])
     .value('APPS_ENV', 'PROD')
+    .value('ENCODING_MASTER_SWITCH_URL',
+      'https://storage.googleapis.com/risemedialibrary/encoding-switch-on')
     .value('STORE_ENDPOINT_URL',
       'https://store-dot-rvaserver2.appspot.com/_ah/api')
     .value('RVA_URL', 'http://rva.risevision.com')
