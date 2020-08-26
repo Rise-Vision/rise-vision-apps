@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('risevision.apps.services', [
-  'risevision.common.header'
+  'risevision.common.header',
+  'ngStorage'
 ]);
 angular.module('risevision.apps.controllers', [
   'risevision.common.config'

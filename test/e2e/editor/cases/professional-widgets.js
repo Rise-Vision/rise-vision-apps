@@ -68,7 +68,7 @@ var ProfessionalWidgetsScenarios = function() {
 
       helper.clickWhenClickable(workspacePage.getSaveButton(), 'Save Button');
 
-      commonHeaderPage.getCommonHeaderMenuItems().get(1).click();
+      commonHeaderPage.getPresentationsMenuItem().click();
     });
 
     before('Open New Presentation & Add Placeholder: ', function () {

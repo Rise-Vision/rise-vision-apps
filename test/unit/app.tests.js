@@ -31,6 +31,28 @@ describe('app:', function() {
 
   var $state, canAccessApps, plansFactory, $rootScope, $location;
 
+  describe('state apps.home:',function(){
+    it('should register state',function(){
+      var state = $state.get('apps.home');
+      expect(state).to.be.ok;
+      expect(state.url).to.equal('/');
+      expect(state.controller).to.be.ok;
+    });
+
+    it('should redirect to editor',function(){
+      var $location = {
+        replace: sinon.spy()
+      };
+
+      sinon.spy($state,'go');
+      
+      $state.get('apps.home').controller[2]($location, $state);
+
+      $location.replace.should.have.been.called;
+      $state.go.should.have.been.calledWith('apps.editor.home');
+    });
+  });
+
   describe('state common.auth.signup:',function(){
     it('should register state',function(){
       var state = $state.get('common.auth.signup');
@@ -55,7 +77,7 @@ describe('app:', function() {
       $state.get('common.auth.signup').controller[4]($location, $state, canAccessApps, plansFactory);
       setTimeout(function() {
         $location.replace.should.have.been.called;
-        $state.go.should.have.been.calledWith('apps.launcher.home');
+        $state.go.should.have.been.calledWith('apps.home');
 
         done();
       }, 10);
@@ -123,7 +145,7 @@ describe('app:', function() {
       $state.get('common.auth.signin').controller[3]($state, canAccessApps, $location);
       setTimeout(function() {
         $location.replace.should.have.been.called;
-        $state.go.should.have.been.calledWith('apps.launcher.home');
+        $state.go.should.have.been.calledWith('apps.home');
 
         done();
       }, 10);
@@ -149,30 +171,14 @@ describe('app:', function() {
       }, 10);
     });
   });
-  
-  describe('state apps.launcher:', function() {
-    it('should register launcher state',function(){
-      var state = $state.get('apps.launcher');
-      expect(state).to.be.ok;
-      expect(state.abstract).to.be.true;
-      expect(state.template).to.equal('<div class="app-launcher" ui-view></div>');
-      expect(state.url).to.equal('?cid');
-    });
-
-    describe('launcher.home:', function() {
-      it('should register launcher.home state',function(){
-        var state = $state.get('apps.launcher.home');
-        expect(state).to.be.ok;
-        expect(state.url).to.equal('/');
-        expect(state.controller).to.equal('AppsHomeCtrl');
-      });
-    });
-
-  });
 
   describe('showWhiteBackground:', function(){
-    it('should show white background for Apps Home page',function() {
-      $rootScope.$broadcast('$stateChangeSuccess', {name:'apps.launcher.home'});
+    beforeEach(function() {
+      $rootScope.$digest();
+    });
+
+    it('should show white background for the Schedule page page',function() {
+      $rootScope.$broadcast('$stateChangeSuccess', {name:'apps.schedules.details'});
       $rootScope.$digest();
       expect($rootScope.showWhiteBackground).to.be.true;
     });

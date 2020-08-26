@@ -28,14 +28,14 @@ describe('controller: app', function() {
   });
 
   it('should exist',function(){
-    expect($scope).to.be.truely;
+    expect($scope).to.be.ok;
     expect($scope.hideCommonHeader).to.be.false;
-    expect($scope.navOptions).to.be.truely;
-    expect($scope.navSelected).to.be.truely;
+    expect($scope.navOptions).to.be.ok;
+    expect($scope.navSelected).to.be.ok;
   });
 
   it('should update $scope.navSelected based on state',function(){
-    expect($scope.navSelected).to.equal('apps.launcher.home');
+    expect($scope.navSelected).to.equal('apps.editor.home');
     rootScope.$broadcast('$stateChangeSuccess');
     expect($scope.navSelected).to.equal('apps.display.alerts');
   });
@@ -45,11 +45,7 @@ describe('controller: app', function() {
     rootScope.$broadcast('$stateChangeSuccess');
     expect($scope.hideCommonHeader).to.be.true;
     
-    $state.current.name = 'apps.launcher.signup';
-    rootScope.$broadcast('$stateChangeSuccess');
-    expect($scope.hideCommonHeader).to.be.true;
-
-    $state.current.name = 'apps.launcher.home';
+    $state.current.name = 'apps.home';
     rootScope.$broadcast('$stateChangeSuccess');
     expect($scope.hideCommonHeader).to.be.false;
   });
