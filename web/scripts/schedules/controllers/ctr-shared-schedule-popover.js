@@ -64,6 +64,7 @@ USER_FIRST_NAME')
 
       $scope.shareOnSocial = function (network) {
         $scope.trackScheduleShared({
+          source: 'socialMedia',
           network: network
         });
         var encodedLink = encodeURIComponent($scope.getLink());
@@ -89,7 +90,7 @@ USER_FIRST_NAME')
 
       $scope.trackScheduleShared = function (extraProperties) {
         var properties = extraProperties || {};
-        properties.source = $scope.currentTab;
+        properties.source = properties.source || $scope.currentTab;
 
         scheduleTracker('schedule shared', $scope.schedule.id, $scope.schedule.name, properties);
       };
