@@ -119,7 +119,6 @@ describe('controller: SharedSchedulePopoverController', function() {
 
   describe('shareOnSocial', function() {
     beforeEach(function() {
-      $scope.currentTab = 'socialMedia';
       sinon.stub($window, 'open');
     });
     afterEach(function() {
