@@ -183,6 +183,10 @@ angular.module('risevision.editor.services')
                 presentationType: 'Presentation',
                 sharedTemplate: 'blank'
               });
+              presentationTracker('Presentation Published', resp.item.id, resp.item.name, {
+                presentationType: 'Presentation',
+                sharedTemplate: 'blank'
+              });
 
               $rootScope.$broadcast('presentationCreated');
 

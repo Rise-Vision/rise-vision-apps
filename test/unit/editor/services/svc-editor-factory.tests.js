@@ -306,7 +306,13 @@ describe('service: editorFactory:', function() {
 
           setTimeout(function(){
             expect(currentState).to.equal('apps.editor.workspace.artboard');
+            expect(presentationTracker).to.have.been.calledTwice;
             expect(presentationTracker).to.have.been.calledWith('Presentation Created',
+              'presentationId', 'some presentation', {
+                presentationType: 'Presentation',
+                sharedTemplate: 'blank'
+            });
+            expect(presentationTracker).to.have.been.calledWith('Presentation Published',
               'presentationId', 'some presentation', {
                 presentationType: 'Presentation',
                 sharedTemplate: 'blank'
@@ -362,7 +368,13 @@ describe('service: editorFactory:', function() {
 
           setTimeout(function(){
             expect(currentState).to.equal('apps.editor.workspace.artboard');
+            expect(presentationTracker).to.have.been.calledTwice;
             expect(presentationTracker).to.have.been.calledWith('Presentation Created',
+              'presentationId', 'some presentation', {
+                presentationType: 'Presentation',
+                sharedTemplate: 'blank'
+            });
+            expect(presentationTracker).to.have.been.calledWith('Presentation Published',
               'presentationId', 'some presentation', {
                 presentationType: 'Presentation',
                 sharedTemplate: 'blank'
@@ -908,7 +920,13 @@ describe('service: editorFactory:', function() {
       editorFactory.save();
 
       setTimeout(function(){
+        expect(presentationTracker).to.have.been.calledTwice;
         expect(presentationTracker).to.have.been.calledWith('Presentation Created',
+          'presentationId', 'some presentation', {
+            presentationType: 'Presentation',
+            sharedTemplate: 'blank'
+        });
+        expect(presentationTracker).to.have.been.calledWith('Presentation Published',
           'presentationId', 'some presentation', {
             presentationType: 'Presentation',
             sharedTemplate: 'blank'
