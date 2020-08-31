@@ -62,6 +62,8 @@ var StorageTrialScenarios = function() {
         helper.wait(storageSelectorModalPage.getStorageSelectorModal(), 'Storage Selector Modal');
 
         expect(storageSelectorModalPage.getModalTitle().getText()).to.eventually.equal('Select Images and/or Folders of Images');
+
+        helper.wait(storageSelectorModalPage.getStartTrialButton(), 'Start Trial Button');        
         expect(storageSelectorModalPage.getStartTrialButton().isDisplayed()).to.eventually.be.true;
 
         expect(filesListPage.getSearchInput().isDisplayed()).to.eventually.be.false;
