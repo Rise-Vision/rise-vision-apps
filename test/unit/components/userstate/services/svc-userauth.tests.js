@@ -62,18 +62,6 @@ describe("service: userauth:", function() {
                 return Q.reject("API Failed");
               }
             },
-            confirmUserCreation: function(obj) {
-              expect(obj).to.be.ok;
-              expect(obj.data).to.be.ok;
-              expect(obj.data.username).to.be.ok;
-              expect(obj.data.userConfirmedToken).to.be.ok;
-
-              if (returnResult) {
-                return Q.resolve("user confirmed");
-              } else {
-                return Q.reject("confirmUserCreation Failed");
-              }
-            },
             requestPasswordReset: function(obj) {
               expect(obj).to.be.ok;
               expect(obj.data).to.be.ok;
@@ -225,35 +213,6 @@ describe("service: userauth:", function() {
         })
         .then(null, function(error) {
           expect(error).to.deep.equal("API Failed");
-          done();
-        })
-        .then(null,done);
-    });
-  });
-
-  describe("confirmUserCreation:",function(){
-    it("should confirm user creation",function(done){
-      userauth.confirmUserCreation("username", "confirmationToken")
-        .then(function(resp){
-          expect(resp).to.be.ok;
-          expect(resp).to.equal("user confirmed");
-          expect($exceptionHandler).to.not.have.been.called;
-
-          done();
-        })
-        .then(null,done);
-    });
-
-    it("should handle failure to confirm user creation",function(done){
-      returnResult = false;
-      userauth.confirmUserCreation("username", "badConfirmationToken")
-        .then(function(resp) {
-          done(resp);
-        })
-        .then(null, function(error) {
-          expect(error).to.deep.equal("confirmUserCreation Failed");
-          expect($exceptionHandler).to.have.been.called;
-
           done();
         })
         .then(null,done);

@@ -97,29 +97,6 @@
 
             return deferred.promise;
           },
-          confirmUserCreation: function (username, userConfirmedToken) {
-            var deferred = $q.defer();
-
-            var obj = {
-              data: {
-                username: username,
-                userConfirmedToken: userConfirmedToken
-              }
-            };
-            riseAPILoader().then(function (coreApi) {
-                return coreApi.userauth.confirmUserCreation(obj);
-              })
-              .then(function (resp) {
-                $log.debug('Confirm user creation successful', resp);
-                deferred.resolve(resp);
-              })
-              .then(null, function (e) {
-                $exceptionHandler(e, 'Failed to confirm account.', true);
-                deferred.reject(e);
-              });
-
-            return deferred.promise;
-          },
           requestPasswordReset: function (username) {
             var deferred = $q.defer();
 
