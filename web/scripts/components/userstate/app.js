@@ -134,17 +134,6 @@
             controller: 'ResetPasswordConfirmCtrl'
           })
 
-          .state('common.auth.confirmaccount', {
-            templateProvider: ['$templateCache',
-              function ($templateCache) {
-                return $templateCache.get(
-                  'partials/components/userstate/confirm-account.html');
-              }
-            ],
-            controller: 'ConfirmAccountCtrl',
-            url: '/confirmaccount/:user/:token'
-          })
-
           .state('common.auth.unsubscribe', {
             templateProvider: ['$templateCache',
               function ($templateCache) {
