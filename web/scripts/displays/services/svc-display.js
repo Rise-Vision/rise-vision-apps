@@ -17,10 +17,10 @@
       'postalCode'
     ])
     .service('display', ['$rootScope', '$q', '$log', 'coreAPILoader',
-      'userState', 'displayStatusFactory', 'screenshotRequester', 'pick',
+      'userState', 'displayStatusFactory', 'screenshotRequester', 'pick', 'displayActivationTracker',
       'DISPLAY_WRITABLE_FIELDS', 'DISPLAY_SEARCH_FIELDS', 'PLAYER_PRO_PRODUCT_CODE',
       function ($rootScope, $q, $log, coreAPILoader, userState,
-        displayStatusFactory, screenshotRequester, pick,
+        displayStatusFactory, screenshotRequester, pick, displayActivationTracker,
         DISPLAY_WRITABLE_FIELDS, DISPLAY_SEARCH_FIELDS, PLAYER_PRO_PRODUCT_CODE) {
 
         var companiesStatus = {};
@@ -109,6 +109,8 @@
                     console.error('Failed to load status of displays.', e);
                   })
                   .finally(function () {
+                    displayActivationTracker(result.items);
+
                     service.statusLoading = false;
                   });
               }
@@ -143,6 +145,8 @@
 
                     $rootScope.$broadcast('displaysLoaded', [item]);
                   }).finally(function () {
+                    displayActivationTracker([item]);
+
                     service.statusLoading = false;
                   });
                 }
