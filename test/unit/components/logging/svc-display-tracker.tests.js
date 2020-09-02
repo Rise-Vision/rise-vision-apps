@@ -6,11 +6,12 @@ describe('service: display tracker:', function() {
     $provide.service('$q', function() {return Q;});
     $provide.service('userState',function(){
       return {
-        getSelectedCompanyId: function() {
-          return "companyId";
-        }, 
+        getUsername: sinon.stub().returns('userId'),
+        getUserEmail: sinon.stub().returns('userEmail'),
+        getSelectedCompanyId: sinon.stub().returns('companyId'),
+        getSelectedCompanyName: sinon.stub().returns('companyName'),
         _restoreState: function(){}
-      }
+      };
     });
     $provide.service('analyticsFactory',function(){
       return {
@@ -45,20 +46,43 @@ describe('service: display tracker:', function() {
   });
   
   it('should call analytics service',function(){
-    displayTracker('Display Updated', 'displayId', 'displayName', 'downloadType');
+    displayTracker('Display Updated', 'displayId', 'displayName');
 
     expect(eventName).to.equal('Display Updated');
-    expect(eventData).to.deep.equal({displayId: 'displayId', displayName: 'displayName', companyId: 'companyId', downloadType: 'downloadType'});
+    expect(eventData).to.deep.equal({
+      displayId: 'displayId', 
+      displayName: 'displayName', 
+      userId: 'userId',
+      email: 'userEmail',
+      companyId: 'companyId',
+      companyName: 'companyName'});
     bQSpy.should.not.have.been.called;
   });
 
-  it('should track Player Download event to BQ',function(){
-    displayTracker('Player Download', 'displayId', 'displayName', 'downloadType');
-    bQSpy.should.have.been.calledWith('Player Download', 'displayId');
+  it('should append additional properties',function(){
+    displayTracker('Display Updated', 'displayId', 'displayName', {
+      property1: 'value1',
+      property2: 'value2'
+    });
+
+    expect(eventName).to.equal('Display Updated');
+    expect(eventData).to.deep.equal({
+      displayId: 'displayId', 
+      displayName: 'displayName', 
+      userId: 'userId',
+      email: 'userEmail',
+      companyId: 'companyId',
+      companyName: 'companyName',
+      property1: 'value1',
+      property2: 'value2'
+    });
+
+    bQSpy.should.not.have.been.called;
   });
 
   it('should track Display Created event to BQ',function(){
-    displayTracker('Display Created', 'displayId', 'displayName', 'downloadType');
+    displayTracker('Display Created', 'displayId', 'displayName');
+
     bQSpy.should.have.been.calledWith('Display Created', 'displayId');
   });
 

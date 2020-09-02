@@ -53,19 +53,6 @@
   <div class="instrument-selector te-scrollable-container">
   <div class="instrument-selector-no-results" ng-show="!instrumentSearch.length || instrumentSearch.length === 0">
     <h2 translate>template.financial.no-results.title</h2>
-    <div translate>template.financial.no-results.question</div>
-    <div>
-      <a target="_blank" href="https://help.risevision.com/hc/en-us/articles/115001426846-Verify-a-stock-symbol-is-valid">
-        <i class="fa fa-question-circle"></i>
-        <span translate>template.financial.no-results.verify</span>
-      </a>
-    </div>
-    <div>
-      <a target="_blank" href="mailto:support@risevision.com">
-        <i class="fa fa-question-circle"></i>
-        <span translate>template.financial.no-results.contact</span>
-      </a>
-    </div>
   </div>
 
   <div class="instrument-selector-popular" ng-show="popularResults">{{ getPopularTitle() | translate }}</div>

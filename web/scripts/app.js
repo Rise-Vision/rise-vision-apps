@@ -79,6 +79,30 @@ angular.module('risevision.apps', [
           ]
         })
 
+        .state('apps.plans', {
+          url: '/plans?cid',
+          controller: ['$location', '$state',
+            function ($location, $state) {
+              $location.replace();
+              $state.go('apps.home');
+            }
+          ]
+        })
+        .state('apps.users', {
+          abstract: true,
+          url: '?cid',
+          template: '<div ui-view></div>'
+        })
+        .state('apps.users.add', {
+          url: '/users/add',
+          controller: ['$location', '$state',
+            function ($location, $state) {
+              $location.replace();
+              $state.go('apps.home');
+            }
+          ]
+        })
+
         .state('common.auth.signup', {
           url: '/signup',
           controller: ['$location', '$state', 'canAccessApps', 'plansFactory',
@@ -89,7 +113,7 @@ angular.module('risevision.apps', [
 
               canAccessApps(true).then(function () {
                 if (showProduct) {
-                  plansFactory.showPlansModal();
+                  plansFactory.showPurchaseOptions();
                 }
 
                 $location.replace();
@@ -174,6 +198,37 @@ angular.module('risevision.apps', [
           $state.go($state.current, null, {
             reload: true
           });
+        }
+      });
+    }
+  ])
+  .run(['$rootScope', '$modal', 'canAccessApps', 'userState', 'plansFactory',
+    function ($rootScope, $modal, canAccessApps, userState, plansFactory) {
+      $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+        if (toState.name === 'apps.plans') {
+          canAccessApps().then(function () {
+            plansFactory.showPurchaseOptions();
+          });
+
+          if (fromState.name) {
+            event.preventDefault();            
+          }
+        } else if (toState.name === 'apps.users.add') {
+          canAccessApps().then(function () {
+            $modal.open({
+              templateUrl: 'partials/common-header/user-settings-modal.html',
+              controller: 'AddUserModalCtrl',
+              resolve: {
+                companyId: function () {
+                  return userState.getSelectedCompanyId();
+                }
+              }
+            });
+          });
+          
+          if (fromState.name) {
+            event.preventDefault();            
+          }
         }
       });
     }

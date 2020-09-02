@@ -46,10 +46,7 @@
       "world-indexes": "Most Popular World Indexes"
     },
     "no-results": {
-      "title": "No Results Found",
-      "question": "Can't find what you're looking for?",
-      "verify": "Verify the instrument is valid.",
-      "contact": "Contact support@risevision.com for help."
+      "title": "No Results Found"
     },
     "search-category": {
       "bonds": "Search Bonds",

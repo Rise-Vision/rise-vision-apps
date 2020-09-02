@@ -60,6 +60,9 @@ describe('service: display:', function() {
       }
     });
 
+    $provide.service('displayActivationTracker', function() {
+      return sinon.stub();
+    });
     $provide.service('coreAPILoader',function () {
       return function(){
         var deferred = Q.defer();
@@ -240,7 +243,7 @@ describe('service: display:', function() {
       };
     });
   }));
-  var display, returnList, searchString, sortString, $timeout, $rootScope;
+  var display, returnList, searchString, sortString, $timeout, $rootScope, displayActivationTracker;
   beforeEach(function(){
     returnList = true;
     searchString = '';
@@ -248,13 +251,14 @@ describe('service: display:', function() {
 
     inject(function($injector, _$timeout_){
       display = $injector.get('display');
+      displayActivationTracker = $injector.get('displayActivationTracker');
       $rootScope = $injector.get('$rootScope');
       $timeout = _$timeout_;
     });
   });
 
   it('should exist',function(){
-    expect(display).to.be.truely;
+    expect(display).to.be.ok;
     expect(display.list).to.be.a('function');
     expect(display.get).to.be.a('function');
     expect(display.add).to.be.a('function');
@@ -271,7 +275,7 @@ describe('service: display:', function() {
 
       display.list({})
       .then(function(result){
-        expect(result).to.be.truely;
+        expect(result).to.be.ok;
         expect(result.items).to.be.an.array;
         items = result.items;
         expect(result.items).to.have.length.above(0);
@@ -284,6 +288,8 @@ describe('service: display:', function() {
             });
 
             broadcastSpy.should.have.been.calledWith('displaysLoaded', items);
+
+            displayActivationTracker.should.have.been.calledWith(items);
 
             done();
           });
@@ -353,9 +359,9 @@ describe('service: display:', function() {
 
       display.get('display1')
       .then(function(result){
-        expect(result).to.be.truely;
+        expect(result).to.be.ok;
         item = result.item;
-        expect(result.item).to.be.truely;
+        expect(result.item).to.be.ok;
         expect(result.item).to.have.property("name");
         $timeout.flush();
         setTimeout(function() {
@@ -363,6 +369,8 @@ describe('service: display:', function() {
           expect(item.lastConnectionTime.getTime()).to.not.equal(CONNECTION_TIME);
 
           broadcastSpy.should.have.been.calledWith('displaysLoaded', [item]);
+
+          displayActivationTracker.should.have.been.calledWith([item]);
 
           done();
         });
@@ -397,8 +405,8 @@ describe('service: display:', function() {
     it('should add a display',function(done){
       display.add(displayObject)
       .then(function(result){
-        expect(result).to.be.truely;
-        expect(result.item).to.be.truely;
+        expect(result).to.be.ok;
+        expect(result.item).to.be.ok;
         expect(result.item).to.have.property("name");
         expect(result.item).to.have.property("id");
         expect(result.item.id).to.equal("display1");
@@ -437,8 +445,8 @@ describe('service: display:', function() {
     it('should update a display',function(done){
       display.update(displayObject.id, displayObject)
       .then(function(result){
-        expect(result).to.be.truely;
-        expect(result.item).to.be.truely;
+        expect(result).to.be.ok;
+        expect(result.item).to.be.ok;
 
         done();
       })
@@ -448,8 +456,8 @@ describe('service: display:', function() {
     it('should remove extra properties',function(done){
       display.update(displayObject.id, displayObject)
       .then(function(result){
-        expect(result).to.be.truely;
-        expect(result.item).to.be.truely;
+        expect(result).to.be.ok;
+        expect(result.item).to.be.ok;
         expect(result.item).to.not.have.property("connected");
 
         done();
@@ -474,8 +482,8 @@ describe('service: display:', function() {
     it('should delete a display',function(done){
       display.delete('display1')
         .then(function(result){
-          expect(result).to.be.truely;
-          expect(result.item).to.be.truely;
+          expect(result).to.be.ok;
+          expect(result.item).to.be.ok;
 
           done();
         })
@@ -499,8 +507,8 @@ describe('service: display:', function() {
     it('should restart a display',function(done){
       display.restart('display1')
         .then(function(result){
-          expect(result).to.be.truely;
-          expect(result.item).to.be.truely;
+          expect(result).to.be.ok;
+          expect(result.item).to.be.ok;
 
           done();
         })
@@ -524,8 +532,8 @@ describe('service: display:', function() {
     it('should reboot a display',function(done){
       display.reboot('display1')
         .then(function(result){
-          expect(result).to.be.truely;
-          expect(result.item).to.be.truely;
+          expect(result).to.be.ok;
+          expect(result.item).to.be.ok;
 
           done();
         })
@@ -547,7 +555,7 @@ describe('service: display:', function() {
 
   describe('hasSchedule', function() {
     it('should validate if a display has an associated schedule', function() {
-      expect(display.hasSchedule({ scheduleId: "1" })).to.be.truely;
+      expect(display.hasSchedule({ scheduleId: "1" })).to.be.ok;
       expect(display.hasSchedule({ scheduleId: "" })).to.be.falsey;
       expect(display.hasSchedule({ scheduleId: "DEMO" })).to.be.falsey;
     });
@@ -581,8 +589,8 @@ describe('service: display:', function() {
     it('should upload the control file', function(done) {
       display.uploadControlFile('display1', 'contents')
         .then(function(result) {
-          expect(result).to.be.truely;
-          expect(result.item).to.be.truely;
+          expect(result).to.be.ok;
+          expect(result.item).to.be.ok;
 
           done();
         })
@@ -606,8 +614,8 @@ describe('service: display:', function() {
 	it('should send setup email', function(done) {
 	  display.sendSetupEmail('display1', 'email@company.com')
 	    .then(function(result) {
-	      expect(result).to.be.truely;
-	      expect(result.item).to.be.truely;
+	      expect(result).to.be.ok;
+	      expect(result.item).to.be.ok;
 
 	      done();
 	    })
