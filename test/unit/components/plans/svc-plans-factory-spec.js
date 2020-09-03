@@ -32,7 +32,7 @@ describe("Services: plans factory", function() {
         currentPlan: {
           subscriptionId: 'subscriptionId'
         },
-        isPlanActive: sinon.stub().returns(true)
+        isSubscribed: sinon.stub().returns(true)
       };
     });
     $provide.service("$state", function() {
@@ -155,8 +155,8 @@ describe("Services: plans factory", function() {
       },10);
     });
 
-    it('should open Plans Modal if company does not have a plan', function(done) {
-      currentPlanFactory.isPlanActive.returns(false);
+    it('should open Plans Modal if company is not subscribed to a plan', function(done) {
+      currentPlanFactory.isSubscribed.returns(false);
 
       plansFactory.showPurchaseOptions();
 
