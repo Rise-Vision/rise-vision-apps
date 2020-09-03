@@ -87,7 +87,6 @@ angular.module('risevision.template-editor.services')
               $state.go('apps.editor.templates.edit', {
                 presentationId: resp.item.id,
                 productId: undefined,
-                skipAccessNotice: true
               }, {
                 location: 'replace'
               });

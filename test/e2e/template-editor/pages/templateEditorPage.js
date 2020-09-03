@@ -20,7 +20,6 @@ var TemplateEditorPage = function() {
   var backToComponentsButton = element(by.css('[ng-click="onBackButton();"]'));
   var financialDataLicenseMessage = element(by.css('.financial-data-license-message'));
   var financialDataLicenseCloseButton = element(by.css('#confirmForm .close'));
-  var licenseRequiredMessage = element(by.css('.display-license-required-message'));
   var brandingContainer = element(by.id('branding'));
   var brandingColorsOverrideContainer = element(by.id('branding-colors-override'));
   var brandingEditLink = element(by.id('branding-edit'));
@@ -110,10 +109,6 @@ var TemplateEditorPage = function() {
   this.getFinancialDataLicenseCloseButton = function() {
     return financialDataLicenseCloseButton;
   }
-
-  this.getLicenseRequiredMessage = function() {
-    return licenseRequiredMessage;
-  };
 
   this.getBrandingContainer = function () {
     return brandingContainer;
