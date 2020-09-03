@@ -8,9 +8,7 @@ describe('app:', function() {
 
     module(function ($provide) {
       $provide.service('canAccessApps',function(){
-        return sinon.spy(function() {
-          return Q.resolve("auth");
-        })
+        return sinon.stub().returns(Q.resolve("auth"));
       });
 
       $provide.service('plansFactory',function(){
@@ -110,6 +108,8 @@ describe('app:', function() {
       $rootScope.$digest();
 
       setTimeout(function() {
+        canAccessApps.should.have.been.calledWith(false);
+
         expect(plansFactory.showPurchaseOptions).to.have.been.called;
         expect($modal.open).to.not.have.been.called;
 
@@ -126,6 +126,8 @@ describe('app:', function() {
       $rootScope.$digest();
 
       setTimeout(function() {
+        canAccessApps.should.have.been.calledWith(true);
+
         expect(plansFactory.showPurchaseOptions).to.have.been.called;
         expect($modal.open).to.not.have.been.called;
 
@@ -134,11 +136,13 @@ describe('app:', function() {
 
     });
 
-    it('should not show purchase options for /signup', function(done) {
+    it('should not show purchase options for /signup without show_product', function(done) {
       $state.go('common.auth.signup');
       $rootScope.$digest();
 
       setTimeout(function() {
+        canAccessApps.should.not.have.been.called;
+
         expect(plansFactory.showPurchaseOptions).to.not.have.been.called;
         expect($modal.open).to.not.have.been.called;
 
@@ -153,6 +157,8 @@ describe('app:', function() {
       $rootScope.$digest();
 
       setTimeout(function() {
+        canAccessApps.should.have.been.called;
+
         expect(plansFactory.showPurchaseOptions).to.not.have.been.called;
         $modal.open.should.have.been.calledWith({
           templateUrl: 'partials/common-header/user-settings-modal.html',
@@ -198,19 +204,26 @@ describe('app:', function() {
       expect(state.controller).to.be.ok;
     });
 
-    it('should redirect to home',function(){
+    it('should redirect to home',function(done){
       var $location = {
         replace: sinon.spy()
       };
       sinon.spy($state,'go');
       
-      $state.get('common.auth.signup').controller[2]($location, $state);
+      $state.get('common.auth.signup').controller[3]($location, $state, canAccessApps);
 
       $rootScope.$digest();
 
-      $location.replace.should.have.been.called;
-      $state.go.should.have.been.calledWith('apps.home');
+      canAccessApps.should.have.been.calledWith(true);
+
+      setTimeout(function() {
+        $location.replace.should.have.been.called;
+        $state.go.should.have.been.calledWith('apps.home');
+
+        done();
+      }, 10);
     });
+
   });
 
   describe('state common.auth.signin:',function(){

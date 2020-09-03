@@ -105,10 +105,12 @@ angular.module('risevision.apps', [
 
         .state('common.auth.signup', {
           url: '/signup',
-          controller: ['$location', '$state',
-            function ($location, $state) {
-              $location.replace();
-              $state.go('apps.home');
+          controller: ['$location', '$state', 'canAccessApps',
+            function ($location, $state, canAccessApps) {
+              canAccessApps(true).then(function () {
+                $location.replace();
+                $state.go('apps.home');
+              });
             }
           ]
         })
@@ -200,7 +202,7 @@ angular.module('risevision.apps', [
         // jshint camelcase:true
 
         if (toState.name === 'apps.plans' || (toState.name === 'common.auth.signup' && showProduct)) {
-          canAccessApps().then(function () {
+          canAccessApps(toState.name === 'common.auth.signup').then(function () {
             plansFactory.showPurchaseOptions();
           });
 
