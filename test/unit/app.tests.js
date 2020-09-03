@@ -8,9 +8,7 @@ describe('app:', function() {
 
     module(function ($provide) {
       $provide.service('canAccessApps',function(){
-        return sinon.spy(function() {
-          return Q.resolve("auth");
-        })
+        return sinon.stub().returns(Q.resolve("auth"));
       });
 
       $provide.service('plansFactory',function(){
@@ -31,13 +29,14 @@ describe('app:', function() {
       $state = $injector.get('$state');
       canAccessApps = $injector.get('canAccessApps');
       plansFactory = $injector.get('plansFactory');
+      userState = $injector.get('userState');
       $rootScope = $injector.get('$rootScope');
       $location = $injector.get('$location');
       $modal = $injector.get('$modal');
     });
   });
 
-  var $state, canAccessApps, plansFactory, $rootScope, $location, $modal;
+  var $state, canAccessApps, plansFactory, userState, $rootScope, $location, $modal;
 
   describe('state apps.plans:',function(){
     it('should register state',function(){
@@ -104,11 +103,13 @@ describe('app:', function() {
   });
 
   describe('onboarding links', function() {
-    it('should check next state and show purchase options', function(done) {
+    it('should show purchase options for apps.plans', function(done) {
       $state.go('apps.plans');
       $rootScope.$digest();
 
       setTimeout(function() {
+        canAccessApps.should.have.been.calledWith(false);
+
         expect(plansFactory.showPurchaseOptions).to.have.been.called;
         expect($modal.open).to.not.have.been.called;
 
@@ -117,21 +118,57 @@ describe('app:', function() {
 
     });
 
+    it('should show purchase options for /signup?show_product=true', function(done) {
+      sinon.stub($location, 'search').returns({
+        show_product: true
+      });
+      $state.go('common.auth.signup');
+      $rootScope.$digest();
+
+      setTimeout(function() {
+        canAccessApps.should.have.been.calledWith(true);
+
+        expect(plansFactory.showPurchaseOptions).to.have.been.called;
+        expect($modal.open).to.not.have.been.called;
+
+        done();
+      }, 10);
+
+    });
+
+    it('should not show purchase options for /signup without show_product', function(done) {
+      $state.go('common.auth.signup');
+      $rootScope.$digest();
+
+      setTimeout(function() {
+        canAccessApps.should.not.have.been.called;
+
+        expect(plansFactory.showPurchaseOptions).to.not.have.been.called;
+        expect($modal.open).to.not.have.been.called;
+
+        done();
+      }, 10);
+    });
+
     it('should check next state and show add user modal', function(done) {
+      sinon.stub(userState, 'getSelectedCompanyId').returns('selectedCompanyId');
+
       $state.go('apps.users.add');
       $rootScope.$digest();
 
       setTimeout(function() {
+        canAccessApps.should.have.been.called;
+
         expect(plansFactory.showPurchaseOptions).to.not.have.been.called;
         $modal.open.should.have.been.calledWith({
           templateUrl: 'partials/common-header/user-settings-modal.html',
           controller: 'AddUserModalCtrl',
           resolve: sinon.match.object
         });
+        expect($modal.open.getCall(0).args[0].resolve.companyId()).to.equal('selectedCompanyId');
 
         done();
       }, 10);
-
     });
 
 
@@ -168,19 +205,17 @@ describe('app:', function() {
     });
 
     it('should redirect to home',function(done){
-      var canAccessApps = function() {
-        return Q.resolve();
-      };
       var $location = {
-        search: function() { 
-          return {};
-        },
         replace: sinon.spy()
       };
-
       sinon.spy($state,'go');
       
-      $state.get('common.auth.signup').controller[4]($location, $state, canAccessApps, plansFactory);
+      $state.get('common.auth.signup').controller[3]($location, $state, canAccessApps);
+
+      $rootScope.$digest();
+
+      canAccessApps.should.have.been.calledWith(true);
+
       setTimeout(function() {
         $location.replace.should.have.been.called;
         $state.go.should.have.been.calledWith('apps.home');
@@ -189,44 +224,6 @@ describe('app:', function() {
       }, 10);
     });
 
-    it('should redirect to store product if signed in',function(done){
-      var STORE_URL = "https://store.risevision.com/";
-      var IN_RVA_PATH = "product/productId/?cid=companyId";
-
-      var userState = {
-        getSelectedCompanyId: function() {
-          return 'cid123'
-        }
-      };
-      var canAccessApps = function() {
-        return Q.resolve()
-      };
-      var $location = {search: function() {return {show_product:123}}};
-      var $window = {location:{}}
-
-      $state.get('common.auth.signup').controller[4]($location, $state, canAccessApps, plansFactory);
-      setTimeout(function() {
-        expect(plansFactory.showPurchaseOptions).to.have.been.called;
-        done();
-      }, 10);
-    });
-
-    it('should not redirect to store product if not signed in',function(done){
-      var canAccessApps = function() {
-        return Q.reject();
-      };
-
-      var $location = {search: function() {return {show_product:123}}};
-
-      sinon.spy($state,'go');
-      $state.get('common.auth.signup').controller[4]($location, $state, canAccessApps, plansFactory);
-
-      setTimeout(function() {
-        $state.go.should.not.have.been.called;
-
-        done();
-      }, 10);
-    });
   });
 
   describe('state common.auth.signin:',function(){

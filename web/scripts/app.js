@@ -105,17 +105,9 @@ angular.module('risevision.apps', [
 
         .state('common.auth.signup', {
           url: '/signup',
-          controller: ['$location', '$state', 'canAccessApps', 'plansFactory',
-            function ($location, $state, canAccessApps, plansFactory) {
-              // jshint camelcase:false
-              var showProduct = $location.search().show_product;
-              // jshint camelcase:true
-
+          controller: ['$location', '$state', 'canAccessApps',
+            function ($location, $state, canAccessApps) {
               canAccessApps(true).then(function () {
-                if (showProduct) {
-                  plansFactory.showPurchaseOptions();
-                }
-
                 $location.replace();
                 $state.go('apps.home');
               });
@@ -202,11 +194,15 @@ angular.module('risevision.apps', [
       });
     }
   ])
-  .run(['$rootScope', '$modal', 'canAccessApps', 'userState', 'plansFactory',
-    function ($rootScope, $modal, canAccessApps, userState, plansFactory) {
+  .run(['$rootScope', '$location', '$modal', 'canAccessApps', 'userState', 'plansFactory',
+    function ($rootScope, $location, $modal, canAccessApps, userState, plansFactory) {
       $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-        if (toState.name === 'apps.plans') {
-          canAccessApps().then(function () {
+        // jshint camelcase:false
+        var showProduct = $location.search().show_product;
+        // jshint camelcase:true
+
+        if (toState.name === 'apps.plans' || (toState.name === 'common.auth.signup' && showProduct)) {
+          canAccessApps(toState.name === 'common.auth.signup').then(function () {
             plansFactory.showPurchaseOptions();
           });
 
