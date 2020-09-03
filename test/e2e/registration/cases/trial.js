@@ -43,7 +43,7 @@ var TrialScenarios = function() {
         helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
       });
 
-      it('should show New Folder button', function () {
+      it('should show Upload buttons', function () {
         expect(storageHomePage.getUploadButton().isDisplayed()).to.eventually.be.true;
         expect(storageHomePage.getUploadFolderButton().isDisplayed()).to.eventually.be.true;
 
@@ -51,7 +51,7 @@ var TrialScenarios = function() {
         expect(storageHomePage.getUploadFolderButtonUnsubscribed().isDisplayed()).to.eventually.be.false;
       });
 
-      it('should show Strage trial after page refresh', function () {
+      it('should show Upload buttons after page refresh', function () {
         var _getTrialWithRetries = function(retries) {
           helper.wait(storageHomePage.getUploadButton(), 'Upload Button')
             .catch(function (e) {
@@ -74,8 +74,6 @@ var TrialScenarios = function() {
         homepage.getStorage();
 
         _getTrialWithRetries();
-
-        expect(storageHomePage.getNewFolderButton().isDisplayed()).to.eventually.be.true;
 
         expect(storageHomePage.getUploadButton().isDisplayed()).to.eventually.be.true;
         expect(storageHomePage.getUploadFolderButton().isDisplayed()).to.eventually.be.true;
