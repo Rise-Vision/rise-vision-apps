@@ -61,19 +61,21 @@ describe('controller: Files List', function() {
     $provide.service('FileUploader',function(){
       return {}
     });
-    $provide.service('userState',function(){
+    $provide.service('currentPlanFactory',function(){
       return {
-          getCopyOfSelectedCompany: function() {return {};}
+          isPlanActive: sinon.stub().returns(true)
       };
     });
     $provide.value('SELECTOR_TYPES', {SINGLE_FILE: 'single-file'});
   }));
-  var $scope, onFileSelect, changeFolder, storageFactory;
+  var $scope, onFileSelect, changeFolder, storageFactory, currentPlanFactory;
   beforeEach(function(){
     onFileSelect = changeFolder = false;
     
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
+      currentPlanFactory = $injector.get('currentPlanFactory');
+
       $controller('FilesListController', {
         $scope : $scope,
         $rootScope: $rootScope,
@@ -121,17 +123,20 @@ describe('controller: Files List', function() {
   it('should watch loading variable', function() {
     expect($scope.$$watchers[0].exp).to.equal('filesFactory.loadingItems');
   });
-  
-  it('should update subscription status', function(done) {
-    var subscriptionStatus = {trialAvailable: true};
-    $scope.$emit('subscription-status:changed', subscriptionStatus);
+
+  it('should initialize isPlanActive', function() {
+    currentPlanFactory.isPlanActive.should.have.been.calledOnce;
+    expect($scope.isPlanActive).to.be.true;
+  });
+
+  it('should update isPlanActive on plan updates', function() {
+    currentPlanFactory.isPlanActive.returns(false);
+
+    $scope.$emit('risevision.plan.loaded');
+    $scope.$digest();
     
-    setTimeout(function() {
-      expect($scope.subscriptionStatus).to.equal(subscriptionStatus);
-      expect($scope.trialAvailable).to.be.true;
-      
-      done();
-    }, 10);
+    currentPlanFactory.isPlanActive.should.have.been.calledTwice;
+    expect($scope.isPlanActive).to.be.false;
   });  
   
   it('setSelectorType: ', function() {

@@ -1,13 +1,13 @@
 
-<button id="newFolderButton" class="btn btn-default" ng-click="storageUtils.addFolder(filesFactory)" ng-disabled="filesFactory.isTrashFolder() || !subscriptionStatus.isSubscribed">
+<button id="newFolderButton" class="btn btn-default" ng-click="storageUtils.addFolder(filesFactory)" ng-disabled="filesFactory.isTrashFolder() || !isPlanActive">
   <span translate>storage-client.new-folder</span>
 </button>
 
-<label id="uploadButton" class="btn btn-primary" for="upload-files" ng-disabled="filesFactory.isTrashFolder() || !subscriptionStatus.isSubscribed">
+<label id="uploadButton" class="btn btn-primary" for="upload-files" ng-disabled="filesFactory.isTrashFolder() || !isPlanActive">
   <span translate>storage-client.upload-files</span>
 </label>
 
-<label id="uploadFolderButton" class="btn btn-primary" for="upload-folder" ng-disabled="filesFactory.isTrashFolder() || !subscriptionStatus.isSubscribed">
+<label id="uploadFolderButton" class="btn btn-primary" for="upload-folder" ng-disabled="filesFactory.isTrashFolder() || !isPlanActive">
   <span translate>storage-client.upload-folder</span>
   <i class="fa fa-folder icon-right hidden-xs"></i>
 </label>

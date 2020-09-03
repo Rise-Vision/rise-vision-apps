@@ -1,17 +1,15 @@
 'use strict';
 
 describe('service: checkTemplateAccess:', function() {
-  var TEMPLATE_LIBRARY_PRODUCT_CODE = "templates-library";
 
   beforeEach(module('risevision.editor.services'));
 
   beforeEach(module(function ($provide) {
-    $provide.value("TEMPLATE_LIBRARY_PRODUCT_CODE", TEMPLATE_LIBRARY_PRODUCT_CODE);
     $provide.service('$q', function() {return Q;});
 
-    $provide.service('subscriptionStatusFactory', function() {
+    $provide.service('currentPlanFactory', function() {
       return {
-        check: sinon.stub().returns(Q.resolve())
+        isPlanActive: sinon.stub().returns(true)
       };
     });
     
@@ -25,19 +23,19 @@ describe('service: checkTemplateAccess:', function() {
     
     $provide.service('plansFactory',function() {
       return {
-        showPlansModal: sinon.stub()
+        showPurchaseOptions: sinon.stub()
       };
     });
 
   }));
   
-  var checkTemplateAccess, $modal, subscriptionStatusFactory, plansFactory;
+  var checkTemplateAccess, $modal, currentPlanFactory, plansFactory;
 
   beforeEach(function(){
     inject(function($injector){
       checkTemplateAccess = $injector.get('checkTemplateAccess');
       $modal = $injector.get('$modal');
-      subscriptionStatusFactory = $injector.get('subscriptionStatusFactory');
+      currentPlanFactory = $injector.get('currentPlanFactory');
       plansFactory = $injector.get('plansFactory');
     });
   });
@@ -46,53 +44,45 @@ describe('service: checkTemplateAccess:', function() {
     expect(checkTemplateAccess).to.be.a('function');
   });
 
-  it('should give access to premium templates if subscribed to Templates Library', function(done) {
-    checkTemplateAccess()
-    .then(function() {
-      subscriptionStatusFactory.check.should.have.been.calledWith(TEMPLATE_LIBRARY_PRODUCT_CODE);
-      $modal.open.should.not.have.been.called;
+  it('should give access to premium templates if subscribed to Templates Library', function() {
+    checkTemplateAccess();
 
-      done();
+    currentPlanFactory.isPlanActive.should.have.been.calledWith();
+    $modal.open.should.not.have.been.called;
+  });
+
+  it('should show license modal for Templates if not subscribed to Templates Library', function() {
+    currentPlanFactory.isPlanActive.returns(false);
+
+    checkTemplateAccess(true);
+
+    $modal.open.should.have.been.calledWithMatch({
+      templateUrl: 'partials/components/confirm-modal/madero-confirm-modal.html',
+      controller: "confirmModalController",
+      windowClass: 'madero-style centered-modal display-license-required-message'
     });
   });
 
-  it('should show license modal for Templates if not subscribed to Templates Library', function(done) {
-    subscriptionStatusFactory.check.returns(Q.reject());
+  it('should show license modal for Presentations if not subscribed to Templates Library', function() {
+    currentPlanFactory.isPlanActive.returns(false);
 
-    checkTemplateAccess(true)
-    .then(function() {
-      $modal.open.should.have.been.calledWithMatch({
-        templateUrl: 'partials/components/confirm-modal/madero-confirm-modal.html',
-        controller: "confirmModalController",
-        windowClass: 'madero-style centered-modal display-license-required-message'
-      });
+    checkTemplateAccess();
 
-      done();
-    });
-  });
-
-  it('should show license modal for Presentations if not subscribed to Templates Library', function(done) {
-    subscriptionStatusFactory.check.returns(Q.reject());
-
-    checkTemplateAccess()
-    .then(function() {
-      $modal.open.should.have.been.calledWithMatch({
-        templateUrl: 'partials/components/confirm-modal/confirm-modal.html',
-        controller: 'confirmModalController',
-        windowClass: 'display-license-required-message'
-      });
-
-      done();
+    $modal.open.should.have.been.calledWithMatch({
+      templateUrl: 'partials/components/confirm-modal/confirm-modal.html',
+      controller: 'confirmModalController',
+      windowClass: 'display-license-required-message'
     });
   });
 
   it('should dismiss and open plansModal on page confirm', function(done){
-    subscriptionStatusFactory.check.returns(Q.reject());
+    currentPlanFactory.isPlanActive.returns(false);
 
-    checkTemplateAccess()
-    .then(function() {
+    checkTemplateAccess();
+
+    setTimeout(function() {
       $modal.modalInstance.dismiss.should.have.been.called;
-      plansFactory.showPlansModal.should.have.been.called;
+      plansFactory.showPurchaseOptions.should.have.been.called;
 
       done();
     }, 10);

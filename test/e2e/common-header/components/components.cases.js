@@ -11,8 +11,6 @@
   var ScrollingListScenarios = require('./scrolling-list/scrolling-list.js');
   var SearchFilterScenarios = require('./search-filter/search-filter.js');
 
-  var SubscriptionStatusScenarios = require('./subscription-status/subscription-status.js');
-
   var TimelineTextboxScenarios = require('./timeline/timeline-textbox.js');
 
   browser.driver.manage().window().setSize(1280, 768);
@@ -28,8 +26,6 @@
     var lastModifiedScenarios = new LastModifiedScenarios();
     var scrollingListScenarios = new ScrollingListScenarios();
     var searchFilterScenarios = new SearchFilterScenarios();
-
-    var subscriptionStatusScenarios = new SubscriptionStatusScenarios();
 
     var timelineTextboxScenarios = new TimelineTextboxScenarios();
 

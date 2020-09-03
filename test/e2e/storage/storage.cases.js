@@ -10,7 +10,6 @@
   var TrashScenarios = require('./cases/trash.js');
   var IframeScenarios = require('./cases/iframe.js');
   var DismissModalScenarios = require('./cases/dismiss-modal.js');
-  var TrialScenarios = require('./cases/trial.js');
 
   describe('Storage', function() {
     var storageSelectorScenarios = new StorageSelectorScenarios();
@@ -22,7 +21,6 @@
     var trashScenarios = new TrashScenarios();
     var iframeScenarios = new IframeScenarios();
     var dismissModalScenarios = new DismissModalScenarios();
-    var trialScenarios = new TrialScenarios();
   });
 
 })();
