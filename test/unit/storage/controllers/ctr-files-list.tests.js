@@ -66,6 +66,10 @@ describe('controller: Files List', function() {
           isPlanActive: sinon.stub().returns(true)
       };
     });
+    $provide.service('plansFactory',function(){
+      return {};
+    });
+
     $provide.value('SELECTOR_TYPES', {SINGLE_FILE: 'single-file'});
   }));
   var $scope, onFileSelect, changeFolder, storageFactory, currentPlanFactory;
@@ -107,6 +111,8 @@ describe('controller: Files List', function() {
     expect($scope.fileExtOrderFunction).to.be.a('function');
     expect($scope.fileSizeOrderFunction).to.be.a('function');
     expect($scope.isFileListVisible).to.be.a('function');
+
+    expect($scope.plansFactory).to.be.ok;
   });
   
   it('should initialize search', function() {

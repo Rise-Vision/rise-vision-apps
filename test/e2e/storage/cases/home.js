@@ -47,6 +47,9 @@ var HomeScenarios = function() {
         expect(storageHomePage.getNewFolderButton().isDisplayed()).to.eventually.be.true;
         expect(storageHomePage.getUploadButton().isDisplayed()).to.eventually.be.true;
         expect(storageHomePage.getUploadFolderButton().isDisplayed()).to.eventually.be.true;
+
+        expect(storageHomePage.getUploadButtonUnsubscribed().isDisplayed()).to.eventually.be.false;
+        expect(storageHomePage.getUploadFolderButtonUnsubscribed().isDisplayed()).to.eventually.be.false;
       });
 
       it('should show search input',function(){

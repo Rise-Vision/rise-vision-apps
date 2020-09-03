@@ -2,9 +2,9 @@
 angular.module('risevision.storage.services')
   .value('STORAGE_CLIENT_API', 'https://www.googleapis.com/storage/v1/b/')
   .value('STORAGE_FILE_URL', 'https://storage.googleapis.com/')
-  .factory('storageUtils', ['userState', '$log', '$q', '$modal',
-    'STORAGE_CLIENT_API', 'STORAGE_FILE_URL',
-    function (userState, $log, $q, $modal,
+  .factory('storageUtils', ['userState', '$log', '$q', '$modal', 'currentPlanFactory',
+    'plansFactory', 'STORAGE_CLIENT_API', 'STORAGE_FILE_URL',
+    function (userState, $log, $q, $modal, currentPlanFactory, plansFactory,
       STORAGE_CLIENT_API, STORAGE_FILE_URL) {
       var factory = {};
 
@@ -89,6 +89,10 @@ angular.module('risevision.storage.services')
       };
 
       factory.addFolder = function (filesFactory) {
+        if (!currentPlanFactory.isPlanActive()) {
+          return plansFactory.showUnlockThisFeatureModal();
+        }
+        
         $modal.open({
           templateUrl: 'partials/storage/new-folder-modal.html',
           controller: 'NewFolderModalCtrl',

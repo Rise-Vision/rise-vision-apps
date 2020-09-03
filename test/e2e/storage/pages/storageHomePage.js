@@ -5,6 +5,9 @@ var StorageHomePage = function() {
   var newFolderButton = element(by.id('newFolderButton'));
   var uploadButton = element(by.id('uploadButton'));
   var uploadFolderButton = element(by.id('uploadFolderButton'));
+  var uploadButtonUnsubscribed = element(by.id('uploadButtonUnsubscribed'));
+  var uploadFolderButtonUnsubscribed = element(by.id('uploadFolderButtonUnsubscribed'));
+
   var uploadInput = element(by.id('upload-files'));
   var uploadPanel = element(by.id('uploadPanel'));
   
@@ -44,6 +47,14 @@ var StorageHomePage = function() {
 
   this.getUploadFolderButton = function() {
     return uploadFolderButton;
+  };
+
+  this.getUploadButtonUnsubscribed = function() {
+    return uploadButtonUnsubscribed;
+  };
+
+  this.getUploadFolderButtonUnsubscribed = function() {
+    return uploadFolderButtonUnsubscribed;
   };
 
   this.getUploadInput = function() {
