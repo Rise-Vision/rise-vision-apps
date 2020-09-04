@@ -22,9 +22,11 @@ Let me know if you have any questions.\n\
 Regards,\n\
 USER_FIRST_NAME')
   .controller('SharedSchedulePopoverController', ['$scope', '$window', 'scheduleTracker', 'userState',
-    'SHARED_SCHEDULE_URL', 'SHARED_SCHEDULE_EMBED_CODE', 'SHARED_SCHEDULE_INVITE_MESSAGE',
+    'SHARED_SCHEDULE_URL', 'SHARED_SCHEDULE_EMBED_CODE', 'SHARED_SCHEDULE_INVITE_MESSAGE', '$state',
     function ($scope, $window, scheduleTracker, userState,
-      SHARED_SCHEDULE_URL, SHARED_SCHEDULE_EMBED_CODE, SHARED_SCHEDULE_INVITE_MESSAGE) {
+      SHARED_SCHEDULE_URL, SHARED_SCHEDULE_EMBED_CODE, SHARED_SCHEDULE_INVITE_MESSAGE, $state) {
+      $scope.hasHttpContent = true; //TODO
+      $scope.isScheduleDetails = $state.current.name === 'apps.schedules.details';
       $scope.currentTab = 'link';
 
       $scope.getLink = function () {
