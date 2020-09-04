@@ -169,6 +169,11 @@ angular.module('risevision.schedules.services')
         return transition ? transition[1] : TRANSITION_TYPES[0][1];
       };
 
+      factory.hasInsecureUrl = function (playlistItem) {
+        return !!(playlistItem && playlistItem.type === 'url' && playlistItem.objectReference &&
+          playlistItem.objectReference.startsWith("http://"));
+      };
+
       return factory;
     }
   ]);
