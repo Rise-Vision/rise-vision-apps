@@ -304,7 +304,7 @@ angular.module('risevision.schedules.services')
         if (schedule && schedule.content && schedule.content.length > 0) {
           for (var i = 0; i < schedule.content.length; i++) {
             if (schedule.content[i].type === 'url' && schedule.content[i].objectReference &&
-              schedule.content[i].objectReference.startsWith("http://")) {
+              schedule.content[i].objectReference.startsWith('http://')) {
               return true;
             }
           }

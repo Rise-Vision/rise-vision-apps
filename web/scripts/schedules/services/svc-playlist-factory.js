@@ -171,7 +171,7 @@ angular.module('risevision.schedules.services')
 
       factory.hasInsecureUrl = function (playlistItem) {
         return !!(playlistItem && playlistItem.type === 'url' && playlistItem.objectReference &&
-          playlistItem.objectReference.startsWith("http://"));
+          playlistItem.objectReference.startsWith('http://'));
       };
 
       return factory;
