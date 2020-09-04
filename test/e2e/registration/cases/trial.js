@@ -43,18 +43,17 @@ var TrialScenarios = function() {
         helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
       });
 
-      it('should show Storage Trial on Storage home', function () {
-        helper.wait(storageSelectorModalPage.getActiveTrialBanner(), 'Active Trial Banner');
+      it('should show Upload buttons', function () {
+        expect(storageHomePage.getUploadButton().isDisplayed()).to.eventually.be.true;
+        expect(storageHomePage.getUploadFolderButton().isDisplayed()).to.eventually.be.true;
 
-        expect(storageSelectorModalPage.getActiveTrialBanner().isDisplayed()).to.eventually.be.true;
-        expect(storageSelectorModalPage.getStartTrialButton().isDisplayed()).to.eventually.be.false;
-
-        expect(storageHomePage.getNewFolderButton().isDisplayed()).to.eventually.be.true;
+        expect(storageHomePage.getUploadButtonUnsubscribed().isDisplayed()).to.eventually.be.false;
+        expect(storageHomePage.getUploadFolderButtonUnsubscribed().isDisplayed()).to.eventually.be.false;
       });
 
-      it('should show Strage trial after page refresh', function () {
+      it('should show Upload buttons after page refresh', function () {
         var _getTrialWithRetries = function(retries) {
-          helper.wait(storageSelectorModalPage.getActiveTrialBanner(), 'Active Trial')
+          helper.wait(storageHomePage.getUploadButton(), 'Upload Button')
             .catch(function (e) {
               retries = typeof(retries) === 'undefined' ? 3 : retries;
 
@@ -76,10 +75,11 @@ var TrialScenarios = function() {
 
         _getTrialWithRetries();
 
-        expect(storageSelectorModalPage.getActiveTrialBanner().isDisplayed()).to.eventually.be.true;
-        expect(storageSelectorModalPage.getStartTrialButton().isDisplayed()).to.eventually.be.false;
+        expect(storageHomePage.getUploadButton().isDisplayed()).to.eventually.be.true;
+        expect(storageHomePage.getUploadFolderButton().isDisplayed()).to.eventually.be.true;
 
-        expect(storageHomePage.getNewFolderButton().isDisplayed()).to.eventually.be.true;
+        expect(storageHomePage.getUploadButtonUnsubscribed().isDisplayed()).to.eventually.be.false;
+        expect(storageHomePage.getUploadFolderButtonUnsubscribed().isDisplayed()).to.eventually.be.false;
       });
 
       after(function() {

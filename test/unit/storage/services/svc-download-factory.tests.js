@@ -52,15 +52,6 @@ describe('service: downloadFactory:', function() {
       };
     });
 
-    $provide.service('userState', function() {
-      return {
-        getSelectedCompanyId: function() {
-          return 'companyId';
-        },
-        _restoreState: function() {}
-      };
-    });
-
   }));
   var folderResponse, downloadFactory, returnFiles, $timeout, $window, createElementSpy, folderContents;
   beforeEach(function(){
