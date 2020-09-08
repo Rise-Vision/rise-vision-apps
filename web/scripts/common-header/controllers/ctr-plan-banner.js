@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('risevision.common.header')
+  .value('ACCOUNT_PATH', 'account?cid=companyId')
   .controller('PlanBannerCtrl', ['$scope', '$rootScope', 'userState', 'plansFactory',
     'currentPlanFactory', 'STORE_URL', 'ACCOUNT_PATH',
     function ($scope, $rootScope, userState, plansFactory, currentPlanFactory,

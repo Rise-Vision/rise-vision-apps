@@ -9,20 +9,13 @@
   <div class="modal-body storage-full" stop-event="touchend">
     <div class="u_padding-lg-horizontal">
 
-      <ng-include src="'partials/storage/global-actions.html'" class="pull-right" ng-show="!trialAvailable"></ng-include>
+      <ng-include src="'partials/storage/global-actions.html'" class="pull-right"></ng-include>
 
       <div class="clearfix"></div>
 
-      <div ng-controller="SubscriptionStatusController" class="u_margin-md-top">
-        <div id="subscription-status" subscription-status
-             product-id="{{productId}}" product-code="{{productCode}}" company-id="{{companyId}}"
-             ng-model="subscriptionStatus.result" custom-on-click="showPlansModal()" custom-product-link="{{productLink}}">
-        </div>
-      </div>
-
       <upload files-factory="filesFactory"></upload>
 
-      <search-filter filter-config="filterConfig" search="search" do-search="search.doSearch" ng-show="!trialAvailable"></search-filter>
+      <search-filter filter-config="filterConfig" search="search" do-search="search.doSearch"></search-filter>
 
       <div class="row u_margin-md-top" ng-show="isFileListVisible()">
         <div class="col-md-6 col-xs-12">
@@ -39,8 +32,6 @@
       </div>
 
       <ng-include src="'partials/storage/files-list.html'"></ng-include>
-   	
-      <ng-include src="'partials/storage/start-trial.html'" ng-show="trialAvailable"></ng-include>
   	</div><!--padding-->
   </div><!--modal-body-->
 
@@ -49,10 +40,10 @@
       <button type="button" id="byURLButton" title="select" class="btn btn-primary pull-left" ng-show="enableByURL" ng-click="selectByUrl()">
         <span translate="storage-client.add-by-url"></span> <i class="fa fa-link icon-right"></i>
       </button>
-      <button type="button" id="selectFilesButton" title="select" class="btn btn-primary" ng-click="filesFactory.sendFiles()" ng-show="!trialAvailable" ng-disabled="filesDetails.checkedCount < 1 && filesDetails.folderCheckedCount < 1">
+      <button type="button" id="selectFilesButton" title="select" class="btn btn-primary" ng-click="filesFactory.sendFiles()" ng-disabled="filesDetails.checkedCount < 1 && filesDetails.folderCheckedCount < 1">
         <span translate="common.select"></span> <span class="fa fa-check icon-right"></span>
       </button>
-      <button class="btn btn-default" ng-click="dismiss()" ng-show="enableByURL || !trialAvailable">
+      <button class="btn btn-default" ng-click="dismiss()" ng-show="enableByURL">
         <span translate="common.cancel"></span> <span class="fa fa-times icon-right"></span>
       </button>
     </div>

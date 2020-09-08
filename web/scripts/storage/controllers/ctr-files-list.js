@@ -1,11 +1,9 @@
 'use strict';
 angular.module('risevision.storage.controllers')
-  .controller('FilesListController', ['$scope', '$rootScope',
-    'StorageFactory', 'FilesFactory', 'storageUtils',
-    'FileUploader', '$loading', '$filter', '$translate', '$timeout', 'userState',
-    function ($scope, $rootScope, StorageFactory,
-      FilesFactory, storageUtils, FileUploader, $loading, $filter, $translate,
-      $timeout, userState) {
+  .controller('FilesListController', ['$scope', '$rootScope', 'StorageFactory', 'FilesFactory', 'storageUtils',
+    'FileUploader', '$loading', '$translate', '$timeout', 'currentPlanFactory', 'plansFactory',
+    function ($scope, $rootScope, StorageFactory, FilesFactory, storageUtils, FileUploader, 
+      $loading, $translate, $timeout, currentPlanFactory, plansFactory) {
       $scope.search = {
         doSearch: function () {},
         reverse: false
@@ -19,6 +17,13 @@ angular.module('risevision.storage.controllers')
       $scope.storageUtils = storageUtils;
       $scope.fileUploader = FileUploader;
       $scope.isListView = false;
+
+      $scope.plansFactory = plansFactory;
+      $scope.isPlanActive = currentPlanFactory.isPlanActive();
+
+      $rootScope.$on('risevision.plan.loaded', function () {
+        $scope.isPlanActive = currentPlanFactory.isPlanActive();
+      });
 
       $scope.setSelectorType = function (type, filter) {
         storageFactory.setSelectorType(type, filter);
@@ -46,28 +51,6 @@ angular.module('risevision.storage.controllers')
           $loading.stop('storage-selector-loader');
         }
       });
-
-      $rootScope.$on('risevision.company.updated', function () {
-        var company = userState.getCopyOfSelectedCompany();
-
-        if (company.planSubscriptionStatus === 'Trial') {
-          var subscriptionStatus = {
-            status: 'On Trial',
-            statusCode: 'on-trial',
-            subscribed: true,
-            trialPeriod: company.planTrialPeriod
-          };
-
-          $scope.subscriptionStatus = subscriptionStatus;
-          $scope.trialAvailable = false;
-        }
-      });
-
-      $rootScope.$on('subscription-status:changed',
-        function (e, subscriptionStatus) {
-          $scope.subscriptionStatus = subscriptionStatus;
-          $scope.trialAvailable = subscriptionStatus.trialAvailable;
-        });
 
       var trashLabel;
       var lastClickTime = 0;
@@ -150,8 +133,7 @@ angular.module('risevision.storage.controllers')
 
       $scope.isFileListVisible = function () {
         return !(filesFactory.loadingItems ||
-          $scope.filesDetails.code === 202 || $scope.trialAvailable ||
-          $scope.isEmptyState());
+          $scope.filesDetails.code === 202 || $scope.isEmptyState());
       };
 
       $scope.isEmptyState = function () {

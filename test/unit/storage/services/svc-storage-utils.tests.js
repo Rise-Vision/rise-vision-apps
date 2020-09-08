@@ -2,10 +2,12 @@
   
 describe('service: storageUtils:', function() {
   beforeEach(module('risevision.storage.services'));
-  var storageUtils, SELECTOR_FILTERS;
+  var storageUtils, SELECTOR_FILTERS, currentPlanFactory, plansFactory;
   var $modal, modalSuccess, modalOpenObj;
 
   beforeEach(module(function ($provide) {
+    modalOpenObj = null;
+
     $provide.service('$q', function() {return Q;});
     $provide.service('$modal', function() {
       return {
@@ -42,12 +44,25 @@ describe('service: storageUtils:', function() {
         _restoreState: function() {}
       };
     });
+    $provide.service('currentPlanFactory',function(){
+      return {
+        isPlanActive: sinon.stub().returns(true)
+      };
+    });
+    $provide.service('plansFactory',function(){
+      return {
+        showUnlockThisFeatureModal: sinon.stub()
+      };
+    });
+
   }));
 
   beforeEach(function(){
     inject(function($injector){  
       storageUtils = $injector.get('storageUtils');
       $modal = $injector.get('$modal');
+      currentPlanFactory = $injector.get('currentPlanFactory');
+      plansFactory = $injector.get('plansFactory');
       SELECTOR_FILTERS = $injector.get('SELECTOR_FILTERS');
     });
   });
@@ -160,11 +175,26 @@ describe('service: storageUtils:', function() {
     it('should open modal', function(){
       storageUtils.addFolder();
 
+      currentPlanFactory.isPlanActive.should.have.been.called;
+      plansFactory.showUnlockThisFeatureModal.should.not.have.been.called;
+
       expect(modalOpenObj.templateUrl).to.equal('partials/storage/new-folder-modal.html');
       expect(modalOpenObj.controller).to.equal('NewFolderModalCtrl');
       expect(modalOpenObj.size).to.equal('md');
       expect(modalOpenObj.resolve.filesFactory).to.be.a('function');
     });
+
+    it('should show unlock feature modal if plan is not active', function(){
+      currentPlanFactory.isPlanActive.returns(false);
+
+      storageUtils.addFolder();
+
+      currentPlanFactory.isPlanActive.should.have.been.called;
+      plansFactory.showUnlockThisFeatureModal.should.have.been.called;
+
+      expect(modalOpenObj).to.not.be.ok;
+    });
+
   });
 
 });
