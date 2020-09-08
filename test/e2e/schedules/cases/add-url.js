@@ -101,9 +101,22 @@ var AddUrlScenarios = function() {
             });
           });
 
+          describe('Given the user enters an insecure url', function () {
+            it('should show a required field error',function(){
+              playlistItemModalPage.getUrlInput().sendKeys('http://risevision.com/content.html');
+              browser.sleep(500);
+              expect(playlistItemModalPage.getInsecureUrlMessage().isDisplayed()).to.eventually.be.true;
+            });
+
+            it('Save button should be disabled', function () {
+              expect(playlistItemModalPage.getSaveButton().isEnabled()).to.eventually.be.false;
+            });
+          });
+
           describe('Given the user enters a valid URL', function () {
             before(function () {
-              playlistItemModalPage.getUrlInput().sendKeys('http://risevision.com/content.html');
+              playlistItemModalPage.getUrlInput().clear();
+              playlistItemModalPage.getUrlInput().sendKeys('https://risevision.com/content.html');
               browser.sleep(500);
             });
             it('Save button should be enabled', function () {
