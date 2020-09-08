@@ -13,12 +13,6 @@ describe('app:', function() {
           })
         });
 
-        $provide.service('checkTemplateAccess',function(){
-          return sinon.spy(function() {
-            return Q.resolve();
-          })
-        });
-
         $provide.service('editorFactory',function(){
           return {
             presentation: 'copyPresentation',
@@ -35,14 +29,13 @@ describe('app:', function() {
       inject(function ($injector) {
         $state = $injector.get('$state');
         canAccessApps = $injector.get('canAccessApps');
-        checkTemplateAccess = $injector.get('checkTemplateAccess');
         editorFactory = $injector.get('editorFactory');
         $location = $injector.get('$location');
       });
   });
 
 
-  var $state, canAccessApps, checkTemplateAccess, editorFactory, $location;
+  var $state, canAccessApps, editorFactory, $location;
 
   describe('state apps.editor.add:',function(){
 
@@ -85,7 +78,7 @@ describe('app:', function() {
     });
 
     it('should only check access once', function(done) {
-      $state.get('apps.editor.workspace').resolve.presentationInfo[4](canAccessApps, editorFactory, {}, checkTemplateAccess);
+      $state.get('apps.editor.workspace').resolve.presentationInfo[3](canAccessApps, editorFactory, {});
       setTimeout(function() {
         canAccessApps.should.have.been.called.once;
         canAccessApps.should.have.been.calledWith();
@@ -94,38 +87,13 @@ describe('app:', function() {
       }, 10);
     });
 
-    describe('checkTemplateAccess:', function() {
-      it('should check access', function(done) {
-        $state.get('apps.editor.workspace').resolve.presentationInfo[4](canAccessApps, editorFactory, {}, checkTemplateAccess);
-        setTimeout(function() {
-          checkTemplateAccess.should.have.been.called;
-
-          done();
-        }, 10);
-      });
-
-      it('should not check access if the parameter is true', function(done) {
-        var $stateParams = {
-          skipAccessNotice: true
-        }
-
-        $state.get('apps.editor.workspace').resolve.presentationInfo[4](canAccessApps, editorFactory, $stateParams, checkTemplateAccess);
-        setTimeout(function() {
-          checkTemplateAccess.should.not.have.been.called;
-
-          done();
-        }, 10);
-      });
-
-    });
-
     it('should redirect to signup for templates', function(done) {
       var $stateParams = {
         presentationId: 'new',
         copyOf: 'templateId'
       }
 
-      $state.get('apps.editor.workspace').resolve.presentationInfo[4](canAccessApps, editorFactory, $stateParams, checkTemplateAccess);
+      $state.get('apps.editor.workspace').resolve.presentationInfo[3](canAccessApps, editorFactory, $stateParams);
       setTimeout(function() {
         canAccessApps.should.have.been.calledWith(true);
 
@@ -139,7 +107,7 @@ describe('app:', function() {
           presentationId: 'presentationId'
         };
 
-        $state.get('apps.editor.workspace').resolve.presentationInfo[4](canAccessApps, editorFactory, $stateParams, checkTemplateAccess)
+        $state.get('apps.editor.workspace').resolve.presentationInfo[3](canAccessApps, editorFactory, $stateParams)
           .then(function() {
             editorFactory.getPresentation.should.have.been.calledWith('presentationId');
 
@@ -154,7 +122,7 @@ describe('app:', function() {
           isLoaded: true
         };
 
-        $state.get('apps.editor.workspace').resolve.presentationInfo[4](canAccessApps, editorFactory, $stateParams, checkTemplateAccess)
+        $state.get('apps.editor.workspace').resolve.presentationInfo[3](canAccessApps, editorFactory, $stateParams)
           .then(function(stateResolve) {
             expect(stateResolve).to.equal('copyPresentation');
 
@@ -168,7 +136,7 @@ describe('app:', function() {
           isLoaded: true
         };
 
-        $state.get('apps.editor.workspace').resolve.presentationInfo[4](canAccessApps, editorFactory, $stateParams, checkTemplateAccess)
+        $state.get('apps.editor.workspace').resolve.presentationInfo[3](canAccessApps, editorFactory, $stateParams)
           .then(function(stateResolve) {
             expect(stateResolve).to.equal('copyPresentation');
 
@@ -182,7 +150,7 @@ describe('app:', function() {
           copyOf: 'templateId'
         };
 
-        $state.get('apps.editor.workspace').resolve.presentationInfo[4](canAccessApps, editorFactory, $stateParams, checkTemplateAccess)
+        $state.get('apps.editor.workspace').resolve.presentationInfo[3](canAccessApps, editorFactory, $stateParams)
           .then(function() {
             editorFactory.copyTemplate.should.have.been.calledWith('templateId');
 
@@ -195,7 +163,7 @@ describe('app:', function() {
           copyOf: 'templateId'
         };
 
-        $state.get('apps.editor.workspace').resolve.presentationInfo[4](canAccessApps, editorFactory, $stateParams, checkTemplateAccess)
+        $state.get('apps.editor.workspace').resolve.presentationInfo[3](canAccessApps, editorFactory, $stateParams)
           .then(function() {
             editorFactory.copyTemplate.should.have.been.calledWith('templateId');
 
@@ -206,7 +174,7 @@ describe('app:', function() {
       it('should add new presentation', function(done) {
         var $stateParams = {};
 
-        $state.get('apps.editor.workspace').resolve.presentationInfo[4](canAccessApps, editorFactory, $stateParams, checkTemplateAccess)
+        $state.get('apps.editor.workspace').resolve.presentationInfo[3](canAccessApps, editorFactory, $stateParams)
           .then(function() {
             editorFactory.newPresentation.should.have.been.called;
 

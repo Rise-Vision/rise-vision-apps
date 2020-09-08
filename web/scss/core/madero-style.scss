@@ -64,8 +64,16 @@
       .list-group-item {
         @extend .border-top;
 
+        border-radius: 0px;
+
         &:first-child {
           border-top: 0;
+        }
+
+        &:last-child {
+          @extend .border-bottom;
+
+          margin-bottom: -1px !important;
         }
       }
     }

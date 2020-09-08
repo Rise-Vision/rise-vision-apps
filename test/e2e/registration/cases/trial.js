@@ -4,9 +4,6 @@ var HomePage = require('./../../common/pages/homepage.js');
 var SignInPage = require('./../../common/pages/signInPage.js');
 var CommonHeaderPage = require('./../../common-header/pages/commonHeaderPage.js');
 var helper = require('rv-common-e2e').helper;
-var PresentationListPage = require('./../../editor/pages/presentationListPage.js');
-var WorkspacePage = require('./../../editor/pages/workspacePage.js');
-var PlaceholderPlaylistPage = require('./../../editor/pages/placeholderPlaylistPage.js');
 var StorageHomePage = require('./../../storage/pages/storageHomePage.js');
 var StorageSelectorModalPage = require('./../../storage/pages/storageSelectorModalPage.js');
 var FilesListPage = require('./../../storage/pages/filesListPage.js');
@@ -18,9 +15,6 @@ var TrialScenarios = function() {
     var homepage;
     var signInPage;
     var commonHeaderPage;
-    var presentationListPage;
-    var workspacePage;
-    var placeholderPlaylistPage;
     var storageHomePage;
     var storageSelectorModalPage;
     var filesListPage;
@@ -28,9 +22,6 @@ var TrialScenarios = function() {
       homepage = new HomePage();
       signInPage = new SignInPage();
       commonHeaderPage = new CommonHeaderPage();
-      presentationListPage = new PresentationListPage();
-      workspacePage = new WorkspacePage();
-      placeholderPlaylistPage = new PlaceholderPlaylistPage();
       storageHomePage = new StorageHomePage();
       storageSelectorModalPage = new StorageSelectorModalPage();
       filesListPage = new FilesListPage();
@@ -52,40 +43,17 @@ var TrialScenarios = function() {
         helper.waitDisappear(filesListPage.getFilesListLoader(), 'Storage Files Loader');
       });
 
-      it('should show Storage Trial on Storage home', function () {
-        helper.wait(storageSelectorModalPage.getActiveTrialBanner(), 'Active Trial Banner');
+      it('should show Upload buttons', function () {
+        expect(storageHomePage.getUploadButton().isDisplayed()).to.eventually.be.true;
+        expect(storageHomePage.getUploadFolderButton().isDisplayed()).to.eventually.be.true;
 
-        expect(storageSelectorModalPage.getActiveTrialBanner().isDisplayed()).to.eventually.be.true;
-        expect(storageSelectorModalPage.getStartTrialButton().isDisplayed()).to.eventually.be.false;
-
-        expect(storageHomePage.getNewFolderButton().isDisplayed()).to.eventually.be.true;
+        expect(storageHomePage.getUploadButtonUnsubscribed().isDisplayed()).to.eventually.be.false;
+        expect(storageHomePage.getUploadFolderButtonUnsubscribed().isDisplayed()).to.eventually.be.false;
       });
 
-      it('should open a new Presentation', function () {
-        commonHeaderPage.getPresentationsMenuItem().click();
-
-        presentationListPage.openNewPresentation();
-      });
-
-      it('should show Storage Trial when adding an Image', function () {
-        helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
-        browser.sleep(500);
-        placeholderPlaylistPage.getAddImageButton().click();
-
-        helper.wait(storageSelectorModalPage.getStorageSelectorModal(), 'Storage Selector Modal');
-
-        expect(storageSelectorModalPage.getModalTitle().getText()).to.eventually.equal('Select Images and/or Folders of Images');
-        expect(storageSelectorModalPage.getActiveTrialBanner().isDisplayed()).to.eventually.be.true;
-        expect(storageSelectorModalPage.getStartTrialButton().isDisplayed()).to.eventually.be.false;
-
-        expect(filesListPage.getSearchInput().isDisplayed()).to.eventually.be.true;
-
-        storageSelectorModalPage.getCloseButton().click();
-      });
-
-      it('should show Strage trial after page refresh', function () {
+      it('should show Upload buttons after page refresh', function () {
         var _getTrialWithRetries = function(retries) {
-          helper.wait(storageSelectorModalPage.getActiveTrialBanner(), 'Active Trial')
+          helper.wait(storageHomePage.getUploadButton(), 'Upload Button')
             .catch(function (e) {
               retries = typeof(retries) === 'undefined' ? 3 : retries;
 
@@ -107,10 +75,11 @@ var TrialScenarios = function() {
 
         _getTrialWithRetries();
 
-        expect(storageSelectorModalPage.getActiveTrialBanner().isDisplayed()).to.eventually.be.true;
-        expect(storageSelectorModalPage.getStartTrialButton().isDisplayed()).to.eventually.be.false;
+        expect(storageHomePage.getUploadButton().isDisplayed()).to.eventually.be.true;
+        expect(storageHomePage.getUploadFolderButton().isDisplayed()).to.eventually.be.true;
 
-        expect(storageHomePage.getNewFolderButton().isDisplayed()).to.eventually.be.true;
+        expect(storageHomePage.getUploadButtonUnsubscribed().isDisplayed()).to.eventually.be.false;
+        expect(storageHomePage.getUploadFolderButtonUnsubscribed().isDisplayed()).to.eventually.be.false;
       });
 
       after(function() {

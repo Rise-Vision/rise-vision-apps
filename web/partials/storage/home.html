@@ -1,17 +1,11 @@
 <div class="container storage-full" ng-controller="FilesListController">
-	<div class="app-header my-4" ng-show="!trialAvailable">
+	<div class="app-header my-4">
 		<h1 class="app-header-title" id="title" translate>storage-client.header</h1>
 		
 			<div class="ml-auto">
 				<ng-include src="'partials/storage/global-actions.html'"></ng-include>	
 			</div>			
 		
-	</div>
-	
-	<div ng-controller="SubscriptionStatusController">
-		<div id="subscription-status" subscription-status
-		product-id="{{productId}}" product-code="{{productCode}}" company-id="{{companyId}}"
-		ng-model="subscriptionStatus.result" custom-on-click="showPlansModal()" custom-product-link="{{productLink}}"></div>
 	</div>
 
 	<upload files-factory="filesFactory"></upload>
@@ -36,9 +30,6 @@
 		<pending-operations></pending-operations>
 	</div>
 
-
 	<ng-include src="'partials/storage/files-list.html'"></ng-include>
-
-	<ng-include src="'partials/storage/start-trial.html'" ng-show="trialAvailable"></ng-include>
 
 </div>
