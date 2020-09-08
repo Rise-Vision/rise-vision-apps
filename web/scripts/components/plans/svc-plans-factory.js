@@ -192,7 +192,7 @@
         };
 
         _factory.showPurchaseOptions = function () {
-          if (currentPlanFactory.isPlanActive()) {
+          if (currentPlanFactory.isSubscribed()) {
             if (currentPlanFactory.currentPlan.isPurchasedByParent) {
               var contactInfo = currentPlanFactory.currentPlan.parentPlanContactEmail? ' at '+currentPlanFactory.currentPlan.parentPlanContactEmail : '';
               messageBox(
