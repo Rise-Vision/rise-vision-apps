@@ -4,6 +4,10 @@ describe('controller: SharedSchedulePopoverController', function() {
   beforeEach(module(function ($provide) {
     $provide.value('SHARED_SCHEDULE_URL','https://preview.risevision.com/?type=sharedschedule&id=SCHEDULE_ID');
 
+    $provide.service("scheduleFactory", function() {
+       return {};
+     });
+
     $provide.service("scheduleTracker", function() {
        return sinon.stub();
      });
@@ -45,7 +49,7 @@ describe('controller: SharedSchedulePopoverController', function() {
   
   it('should exist',function(){
     expect($scope).to.be.ok;
-    expect($scope.hasHttpContent).to.be.ok;
+    expect($scope.scheduleFactory).to.be.ok;
     expect($scope.isScheduleDetails).to.be.ok;
     expect($scope.copyToClipboard).to.be.a('function');
     expect($scope.getLink).to.be.a('function');
@@ -55,7 +59,6 @@ describe('controller: SharedSchedulePopoverController', function() {
 
   it('should initilize values', function() {
     expect($scope.currentTab).to.equal('link');
-    expect($scope.hasHttpContent).to.be.true;
     expect($scope.isScheduleDetails).to.be.true;
   });
 
