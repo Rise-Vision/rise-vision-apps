@@ -18,20 +18,29 @@ describe("directive: http validator", function() {
     form = $scope.form;
     
     $scope.$digest();
+
+    $scope.ngModelCtrl = element.children('input').data().$ngModelController;
   }));
+
+  it('should initialize', function() {
+    expect($scope.ngModelCtrl).to.be.ok;
+    expect($scope.ngModelCtrl.warnings).to.be.ok;
+  })
 
   it("should pass with blank value", function() {
     form.url.$setViewValue("");
     $scope.$digest();
     expect($scope.url).to.not.be.ok;
-    expect(form.url.$valid).to.be.true;
+    // expect(form.url.$valid).to.be.true;
+    expect($scope.ngModelCtrl.warnings.httpUrl).to.be.false;
   });
 
   it("should not pass with http urls", function() {
     var expectInvalid = function(value) {
       form.url.$setViewValue(value);
       $scope.$digest();
-      expect(form.url.$valid).to.be.false;
+      // expect(form.url.$valid).to.be.false;
+      expect($scope.ngModelCtrl.warnings.httpUrl).to.be.true;
     };
     expectInvalid("http://");
     expectInvalid("http://shouldfail.com");
@@ -41,7 +50,8 @@ describe("directive: http validator", function() {
     var expectValid = function(value) {
       form.url.$setViewValue(value);
       $scope.$digest();
-      expect(form.url.$valid).to.be.true;
+      // expect(form.url.$valid).to.be.true;
+      expect($scope.ngModelCtrl.warnings.httpUrl).to.be.false;
     };
     expectValid("a");
     expectValid("123");
