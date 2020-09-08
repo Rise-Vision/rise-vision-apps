@@ -33,7 +33,6 @@ angular.module('risevision.common.header', [
     'risevision.common.components.message-box',
     'risevision.common.components.confirm-modal',
     'risevision.common.components.svg',
-    'risevision.common.components.subscription-status',
     'risevision.common.components.plans',
     'risevision.common.components.purchase-flow',
     'risevision.common.support'
