@@ -5,7 +5,7 @@
         <img class="img-responsive" src="../images/navigation-menu-vertical.svg">
       </div>
 
-      <div ng-click="manage(playlistItem)" class="name-container mr-auto w-75 u_clickable">
+      <div ng-click="manage(playlistItem)" class="playlist-item-name mr-auto w-75 u_clickable">
         <p class="madero-link u_remove-bottom" id="playlistItemNameCell" ng-if="playlistItem.type !== 'presentation'"><strong>{{playlistItem.name}}</strong></p>
         <p class="madero-link u_remove-bottom" id="presentationNameCell" ng-if="playlistItem.type === 'presentation'"><strong presentation-name="playlistItem.objectReference">Presentation Item</strong></p>
         <p class="text-sm text-gray u_remove-bottom">
