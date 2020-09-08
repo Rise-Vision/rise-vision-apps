@@ -193,7 +193,6 @@ angular.module('risevision.editor.services')
               $state.go('apps.editor.workspace.artboard', {
                 presentationId: resp.item.id,
                 copyOf: undefined,
-                skipAccessNotice: true
               }, {
                 notify: false,
                 location: 'replace'

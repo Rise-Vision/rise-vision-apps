@@ -69,12 +69,11 @@ angular.module('risevision.apps')
           }],
           controller: 'WorkspaceController',
           params: {
-            isLoaded: false,
-            skipAccessNotice: true
+            isLoaded: false
           },
           resolve: {
-            presentationInfo: ['canAccessApps', 'editorFactory', '$stateParams', 'checkTemplateAccess',
-              function (canAccessApps, editorFactory, $stateParams, checkTemplateAccess) {
+            presentationInfo: ['canAccessApps', 'editorFactory', '$stateParams',
+              function (canAccessApps, editorFactory, $stateParams) {
                 var signup = false;
 
                 if ($stateParams.copyOf) {
@@ -96,10 +95,6 @@ angular.module('risevision.apps')
                     }
                   })
                   .then(function (presentationInfo) {
-                    if (!$stateParams.skipAccessNotice) {
-                      checkTemplateAccess();
-                    }
-
                     return presentationInfo;
                   });
               }
