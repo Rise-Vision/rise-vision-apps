@@ -8,23 +8,19 @@
 
   <div>
     <form id="scheduleAdd" role="form" name="scheduleDetails" ng-submit="save()" novalidate>
-      
-      <schedule-fields></schedule-fields>
-      
-      <div id="errorBox" ng-show="factory.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
-        <strong>{{factory.apiError}}</strong>
-      </div> 
 
-        <div class="button-row text-right mt-5">
-          <!-- Indicates cancel or non-destructive action -->
-          <button id="cancelButton" type="button" ui-sref="apps.schedules.list" class="btn btn-default btn-toolbar">
-            {{'common.cancel' | translate}}
-          </button>
-          <!-- Indicates a successful or positive action -->
-          <button id="saveButton" type="submit" class="btn btn-primary btn-toolbar" ng-disabled="scheduleDetails.$invalid || factory.savingSchedule" require-role="cp">
-            {{ factory.savingSchedule ? ('common.saving' | translate) : ('common.save' | translate)}} 
-          </button>
-        </div><!--button-row-->
+      <schedule-fields></schedule-fields>
+
+      <div class="button-row text-right mt-5">
+        <!-- Indicates cancel or non-destructive action -->
+        <button id="cancelButton" type="button" ui-sref="apps.schedules.list" class="btn btn-default btn-toolbar">
+          {{'common.cancel' | translate}}
+        </button>
+        <!-- Indicates a successful or positive action -->
+        <button id="saveButton" type="submit" class="btn btn-primary btn-toolbar" ng-disabled="scheduleDetails.$invalid || factory.savingSchedule" require-role="cp">
+          {{ factory.savingSchedule ? ('common.saving' | translate) : ('common.save' | translate)}} 
+        </button>
+      </div><!--button-row-->
 
     </form><!-- scheduleDetails -->
   </div><!--container-->

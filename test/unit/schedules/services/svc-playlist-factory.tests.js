@@ -72,6 +72,7 @@ describe('service: playlistFactory:', function() {
     expect(playlistFactory.moveItem).to.be.a('function');
     expect(playlistFactory.getItemTimeline).to.be.a('function');
     expect(playlistFactory.getItemTransition).to.be.a('function');
+    expect(playlistFactory.hasInsecureUrl).to.be.a('function');
   });
   
   describe('getPlaylist: ', function() {
@@ -329,6 +330,43 @@ describe('service: playlistFactory:', function() {
     expect(playlistFactory.getItemTransition({
       transitionType: 'slideFromTop'
     })).to.equal('Slide from top');
+  });
+
+  describe('hasInsecureUrl:', function() {
+    it('should not show if playlistItem is a presentation', function() {
+      var playlistItem = {type:'presentation'};
+
+      expect(playlistFactory.hasInsecureUrl(playlistItem)).to.be.false;
+    });
+
+    it('should show if url has http://', function() {
+      var playlistItem = {type:'url', objectReference: 'http://someinsecure.site'};
+
+      expect(playlistFactory.hasInsecureUrl(playlistItem)).to.be.true;
+    });
+
+    it('should show if url has https:// or no protocol', function() {
+      var playlistItem = {type:'url', objectReference: 'https://risevision.com'};
+
+      expect(playlistFactory.hasInsecureUrl(playlistItem)).to.be.false;
+      
+      playlistItem = {type:'url', objectReference: '://risevision.com'};
+
+      expect(playlistFactory.hasInsecureUrl(playlistItem)).to.be.false;
+    });
+
+    it('should not show if objectReference is blank', function() {
+      var playlistItem = {type:'url'};
+
+      expect(playlistFactory.hasInsecureUrl(playlistItem)).to.be.false;
+    });
+
+    it('should not show if playlistItem content is empty or null', function() {
+      var playlistItem = null;
+
+      expect(playlistFactory.hasInsecureUrl(playlistItem)).to.be.false;
+    });
+
   });
 
 });

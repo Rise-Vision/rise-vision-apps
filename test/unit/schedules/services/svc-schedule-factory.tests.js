@@ -136,6 +136,7 @@ describe('service: scheduleFactory:', function() {
     expect(scheduleFactory.checkFreeDisplays).to.be.a('function');
     expect(scheduleFactory.hasFreeDisplays).to.be.a('function');
     expect(scheduleFactory.requiresLicense).to.be.a('function');
+    expect(scheduleFactory.hasInsecureUrls).to.be.a('function');
   });
 
   it('should initialize',function(){
@@ -790,6 +791,61 @@ describe('service: scheduleFactory:', function() {
         content: []
       };
       expect(scheduleFactory.requiresLicense()).to.be.false;
+    });
+  });
+
+  describe('hasInsecureUrls:', function() {
+    it('should not show if schedule only has presentations', function() {
+      var schedule = {
+        content: [{type:'presentation'}]
+      };
+      expect(scheduleFactory.hasInsecureUrls(schedule)).to.be.false;
+    });
+
+    it('should show if urls have http://', function() {
+      var schedule = {
+        content: [{type:'url', objectReference: 'http://someinsecure.site'}]
+      };
+      expect(scheduleFactory.hasInsecureUrls(schedule)).to.be.true;
+    });
+
+    it('should show if urls have https:// or no protocol', function() {
+      var schedule = {
+        content: [{type:'url', objectReference: 'https://risevision.com'},
+          {type:'url', objectReference: '://risevision.com'}]
+      };
+      expect(scheduleFactory.hasInsecureUrls(schedule)).to.be.false;
+    });
+
+    it('should not show if objectReference is blank', function() {
+      var schedule = {
+        content: [{type:'url'}]
+      };
+      expect(scheduleFactory.hasInsecureUrls(schedule)).to.be.false;
+    });
+
+    it('should not show if schedule content is empty or null', function() {
+      var schedule = {
+        content: []
+      };
+      expect(scheduleFactory.hasInsecureUrls(schedule)).to.be.false;
+
+      schedule = {
+        content: undefined
+      };
+      expect(scheduleFactory.hasInsecureUrls(schedule)).to.be.false;
+    });
+
+    it('should use factory object if parameter is not passed', function() {
+      scheduleFactory.schedule = {
+        content: [{type:'url', objectReference: 'http://someinsecure.site'}]
+      };
+      expect(scheduleFactory.hasInsecureUrls()).to.be.true;
+
+      scheduleFactory.schedule = {
+        content: [{type:'url', objectReference: 'https://risevision.com'}]
+      };
+      expect(scheduleFactory.hasInsecureUrls()).to.be.false;
     });
   });
 
