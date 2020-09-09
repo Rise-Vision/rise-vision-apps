@@ -61,7 +61,7 @@ var ScheduleAddScenarios = function() {
       scheduleAddPage.getAddPlaylistItemButton().click();
       scheduleAddPage.getAddUrlItemButton().click();
 
-      playlistItemModalPage.getUrlInput().sendKeys('http://risevision.com/content2.html');
+      playlistItemModalPage.getUrlInput().sendKeys('https://risevision.com/content2.html');
       playlistItemModalPage.getSaveButton().click();
 
       expect(scheduleAddPage.getPlaylistItems().count()).to.eventually.equal(1);

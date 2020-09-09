@@ -158,5 +158,15 @@
     </div>
   </div>
 
+  <div ng-show="scheduleFactory.hasInsecureUrls(schedule)" class="madero-style alert alert-danger text-md text-danger p-4 mt-3 mb-0" role="alert">
+    <p ng-show="!isScheduleDetails">
+      Some content in this schedule won't be shown.
+      <br/>
+      <a class="madero-link" href="#" ui-sref="apps.schedules.details({ scheduleId: schedule.id, cid: schedule.companyId })">Fix this.</a>
+    </p>
+    <p ng-show="isScheduleDetails" class="mt-0">
+      Some playlist items in your schedule are using an insecure URL (HTTP) and won't be shown. Use secure URLs (HTTPS) instead.
+    </p>
+  </div>
 
 </div>

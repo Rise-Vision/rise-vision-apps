@@ -94,9 +94,13 @@ describe('service: scheduleFactory:', function() {
     $provide.service('confirmModal', function() {
       return confirmModal = sinon.stub();
     });
+    $provide.service('insecureUrl', function() { 
+      return sinon.stub().returns(true);
+    });
+
   }));
   var scheduleFactory, trackerCalled, updateSchedule, $state, returnList, scheduleListSpy,
-  scheduleUpdateSpy, processErrorCode, confirmModal;
+  scheduleUpdateSpy, processErrorCode, confirmModal, insecureUrl;
   var $rootScope, blueprintFactory, display, apiError;
   beforeEach(function(){
     apiError = { message: 'ERROR; could not create schedule'};
@@ -109,6 +113,7 @@ describe('service: scheduleFactory:', function() {
       var schedule = $injector.get('schedule');
       scheduleListSpy = sinon.spy(schedule,'list');
       scheduleUpdateSpy = sinon.spy(schedule,'update');
+      insecureUrl = $injector.get('insecureUrl');
 
       $rootScope = $injector.get('$rootScope');
       sinon.spy($rootScope, '$emit');
@@ -136,6 +141,7 @@ describe('service: scheduleFactory:', function() {
     expect(scheduleFactory.checkFreeDisplays).to.be.a('function');
     expect(scheduleFactory.hasFreeDisplays).to.be.a('function');
     expect(scheduleFactory.requiresLicense).to.be.a('function');
+    expect(scheduleFactory.hasInsecureUrls).to.be.a('function');
   });
 
   it('should initialize',function(){
@@ -790,6 +796,61 @@ describe('service: scheduleFactory:', function() {
         content: []
       };
       expect(scheduleFactory.requiresLicense()).to.be.false;
+    });
+  });
+
+  describe('hasInsecureUrls:', function() {
+    it('should not show if schedule only has presentations', function() {
+      var schedule = {
+        content: [{type:'presentation'}]
+      };
+      expect(scheduleFactory.hasInsecureUrls(schedule)).to.be.false;
+
+      insecureUrl.should.not.have.been.called;
+    });
+
+    it('should show if there are insecure urls', function() {
+      var schedule = {
+        content: [{type:'url', objectReference: 'http://someinsecure.site'}]
+      };
+      expect(scheduleFactory.hasInsecureUrls(schedule)).to.be.true;
+
+      insecureUrl.should.have.been.calledWith(schedule.content[0].objectReference);
+    });
+
+    it('should show if urls have secure urls', function() {
+      insecureUrl.returns(false);
+
+      var schedule = {
+        content: [{type:'url', objectReference: 'https://risevision.com'},
+          {type:'url', objectReference: '://risevision.com'}]
+      };
+      expect(scheduleFactory.hasInsecureUrls(schedule)).to.be.false;
+
+      insecureUrl.should.have.been.calledTwice;
+    });
+
+    it('should not show if schedule content is empty or null', function() {
+      var schedule = {
+        content: []
+      };
+      expect(scheduleFactory.hasInsecureUrls(schedule)).to.be.false;
+
+      schedule = {
+        content: undefined
+      };
+      expect(scheduleFactory.hasInsecureUrls(schedule)).to.be.false;
+
+      insecureUrl.should.not.have.been.called;
+    });
+
+    it('should use factory object if parameter is not passed', function() {
+      scheduleFactory.schedule = {
+        content: [{type:'url', objectReference: 'http://someinsecure.site'}]
+      };
+      expect(scheduleFactory.hasInsecureUrls()).to.be.true;
+
+      insecureUrl.should.have.been.calledWith(scheduleFactory.schedule.content[0].objectReference);
     });
   });
 

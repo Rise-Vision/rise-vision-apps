@@ -14,12 +14,8 @@
 
   <div>
     <form role="form" name="scheduleDetails" ng-submit="save()" novalidate>
-      
-      <schedule-fields></schedule-fields>
 
-      <div id="errorBox" ng-show="factory.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
-        <strong>{{factory.apiError}}</strong>
-      </div>
+      <schedule-fields></schedule-fields>
       
       <div class="button-row text-right mt-5">
         <p class="visible-sm visible-xs text-right"><last-modified change-date="factory.schedule.changeDate" changed-by="factory.schedule.changedBy"></last-modified></p>

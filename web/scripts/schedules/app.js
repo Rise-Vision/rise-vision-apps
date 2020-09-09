@@ -94,7 +94,8 @@ angular.module('risevision.schedules.services', [
   'risevision.common.gapi',
   'risevision.apps.launcher.services',
   'risevision.template-editor.services',
-  'risevision.common.components.timeline.services'
+  'risevision.common.components.timeline.services',
+  'risevision.widget.common.url-field.insecure-url'
 ]);
 angular.module('risevision.schedules.filters', []);
 angular.module('risevision.schedules.directives', [

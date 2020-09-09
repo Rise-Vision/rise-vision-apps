@@ -15,9 +15,9 @@ angular.module('risevision.schedules.services')
     ['zoomIn', 'Zoom in']
   ])
   .factory('playlistFactory', ['$q', 'scheduleFactory', 'scheduleTracker', 'presentationFactory', 'blueprintFactory',
-    'TYPE_URL', 'TYPE_PRESENTATION', 'HTML_PRESENTATION_TYPE', 'TimelineFactory',
+    'insecureUrl', 'TYPE_URL', 'TYPE_PRESENTATION', 'HTML_PRESENTATION_TYPE', 'TimelineFactory',
     'timelineDescription', 'TRANSITION_TYPES',
-    function ($q, scheduleFactory, scheduleTracker, presentationFactory, blueprintFactory,
+    function ($q, scheduleFactory, scheduleTracker, presentationFactory, blueprintFactory, insecureUrl,
       TYPE_URL, TYPE_PRESENTATION, HTML_PRESENTATION_TYPE, TimelineFactory, timelineDescription, TRANSITION_TYPES) {
       var DEFAULT_DURATION = 10;
       var factory = {};
@@ -167,6 +167,10 @@ angular.module('risevision.schedules.services')
         });
 
         return transition ? transition[1] : TRANSITION_TYPES[0][1];
+      };
+
+      factory.hasInsecureUrl = function (playlistItem) {
+        return !!(playlistItem && playlistItem.type === 'url' && insecureUrl(playlistItem.objectReference));
       };
 
       return factory;

@@ -4,7 +4,8 @@
   angular.module('risevision.widget.common.url-field', [
       'risevision.widget.common.url-field.file-type-validator',
       'risevision.widget.common.url-field.response-header-validator',
-      'risevision.widget.common.url-field.url-pattern-validator'
+      'risevision.widget.common.url-field.url-pattern-validator',
+      'risevision.widget.common.url-field.http-validator'
     ])
     .directive('urlField', ['$templateCache',
       function ($templateCache) {

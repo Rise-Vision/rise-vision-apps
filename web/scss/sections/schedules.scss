@@ -23,9 +23,14 @@
       padding-bottom: 0px;
     }
 
-    .name-container {
-      margin-top: 0px;
-      height: auto;
+    .playlist-item-name {
+      display: flex;
+      flex-direction: column;
+      align-items: baseline;
+      justify-content: center;
+      span {
+        vertical-align: middle;
+      }
     }
   }
 }
