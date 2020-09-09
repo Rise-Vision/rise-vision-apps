@@ -108,7 +108,7 @@ var AddUrlScenarios = function() {
               expect(playlistItemModalPage.getInsecureUrlMessage().isDisplayed()).to.eventually.be.true;
             });
 
-            it('Save button should be disabled', function () {
+            xit('Save button should be disabled', function () {
               expect(playlistItemModalPage.getSaveButton().isEnabled()).to.eventually.be.false;
             });
           });

@@ -26,14 +26,22 @@ describe("directive: http validator", function() {
     form = $scope.form;
     
     $scope.$digest();
+
+    $scope.ngModelCtrl = element.children('input').data().$ngModelController;
   }));
+
+  it('should initialize', function() {
+    expect($scope.ngModelCtrl).to.be.ok;
+    expect($scope.ngModelCtrl.warnings).to.be.ok;
+  });
 
   it("should not pass with insecure urls", function() {
     var value = 'http://shouldfail.com';
 
     form.url.$setViewValue(value);
     $scope.$digest();
-    expect(form.url.$valid).to.be.false;
+    // expect(form.url.$valid).to.be.false;
+    expect($scope.ngModelCtrl.warnings.httpUrl).to.be.true;
 
     insecureUrl.should.have.been.calledWith(value);
   });
@@ -45,7 +53,8 @@ describe("directive: http validator", function() {
 
     form.url.$setViewValue(value);
     $scope.$digest();
-    expect(form.url.$valid).to.be.true;
+    // expect(form.url.$valid).to.be.true;
+    expect($scope.ngModelCtrl.warnings.httpUrl).to.be.false;
 
     insecureUrl.should.have.been.calledWith(value);
   });
