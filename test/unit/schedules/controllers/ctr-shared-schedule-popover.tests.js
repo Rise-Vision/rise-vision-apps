@@ -75,7 +75,7 @@ describe('controller: SharedSchedulePopoverController', function() {
   });
 
   describe('isScheduleDetails:', function() {
-    it('should should set isScheduleDetails to false if not in schedule details page', function() {
+    it('should set isScheduleDetails to false if not in schedule details page', function() {
       $state.current.name = 'apps.schedules.list';
       $controller('SharedSchedulePopoverController', {
         $scope: $scope
@@ -84,7 +84,7 @@ describe('controller: SharedSchedulePopoverController', function() {
       expect($scope.isScheduleDetails).to.be.false;
     });
 
-    it('should should set isScheduleDetails to true if visiting schedule details page', function() {
+    it('should set isScheduleDetails to true if visiting schedule details page', function() {
       $state.current.name = 'apps.schedules.details';
       $controller('SharedSchedulePopoverController', {
         $scope: $scope
