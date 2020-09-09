@@ -9,7 +9,6 @@
   <ng-messages role="alert" for="ngModelCtrl.$error" ng-if="ngModelCtrl.$invalid && ngModelCtrl.$dirty">
     <ng-messages-include src="partials/components/url-field/messages.html"></ng-messages-include>
   </ng-messages>
-  <p class="text-danger" ng-show="ngModelCtrl.warnings.httpUrl && !(ngModelCtrl.$invalid && ngModelCtrl.$dirty)">After November 1, 2020, you won't be allowed to use insecure URLs (HTTP). Please use secure URLs (HTTPs) instead.</p>
   
   <div class="checkbox" ng-show="showSkipValidation()">
     <label class="input-url-remove-validation">
