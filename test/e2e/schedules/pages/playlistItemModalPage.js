@@ -12,6 +12,7 @@ var PlaylistItemModalPage = function() {
 
   var invalidUrlMessage = element(by.cssContainingText('form div p', 'Please provide a valid URL.'));
   var requiredFieldMessage = element(by.cssContainingText('form div p', 'This field is required.'));
+  var insecureUrlMessage = element(by.cssContainingText('form div p', 'Please use secure URLs'));
   
   var saveButton = element(by.id('itemSave'));
 
@@ -50,7 +51,11 @@ var PlaylistItemModalPage = function() {
   this.getRequiredFieldMessage = function() {
     return requiredFieldMessage;
   }
-  
+
+  this.getInsecureUrlMessage = function() {
+    return insecureUrlMessage;
+  };
+
   this.getSaveButton = function() {
     return saveButton;
   };
