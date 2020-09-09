@@ -21,10 +21,12 @@ Here\'s how to install (promise, it only takes 2 minutes):\n\
 Let me know if you have any questions.\n\
 Regards,\n\
 USER_FIRST_NAME')
-  .controller('SharedSchedulePopoverController', ['$scope', '$window', 'scheduleTracker', 'userState',
-    'SHARED_SCHEDULE_URL', 'SHARED_SCHEDULE_EMBED_CODE', 'SHARED_SCHEDULE_INVITE_MESSAGE',
-    function ($scope, $window, scheduleTracker, userState,
-      SHARED_SCHEDULE_URL, SHARED_SCHEDULE_EMBED_CODE, SHARED_SCHEDULE_INVITE_MESSAGE) {
+  .controller('SharedSchedulePopoverController', ['$scope', '$window', 'scheduleFactory', 'scheduleTracker', 'userState',
+    'SHARED_SCHEDULE_URL', 'SHARED_SCHEDULE_EMBED_CODE', 'SHARED_SCHEDULE_INVITE_MESSAGE', '$state',
+    function ($scope, $window, scheduleFactory, scheduleTracker, userState,
+      SHARED_SCHEDULE_URL, SHARED_SCHEDULE_EMBED_CODE, SHARED_SCHEDULE_INVITE_MESSAGE, $state) {
+      $scope.scheduleFactory = scheduleFactory;
+      $scope.isScheduleDetails = $state.current.name === 'apps.schedules.details';
       $scope.currentTab = 'link';
 
       $scope.getLink = function () {
