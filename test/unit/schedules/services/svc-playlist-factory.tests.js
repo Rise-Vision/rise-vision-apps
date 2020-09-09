@@ -40,9 +40,13 @@ describe('service: playlistFactory:', function() {
     $provide.service('scheduleTracker', function() { 
       return sinon.spy();
     });
+    $provide.service('insecureUrl', function() { 
+      return sinon.stub().returns(true);
+    });
+
   }));
   var playlist, playlistItem, playlistItem0, playlistItem2, playlistFactory, blueprintFactory, presentationFactory;
-  var scheduleTracker, updateSchedule, currentState;
+  var scheduleTracker, insecureUrl, updateSchedule, currentState;
   var scheduleFactory;
   beforeEach(function(){
     currentState = undefined;
@@ -53,6 +57,7 @@ describe('service: playlistFactory:', function() {
       blueprintFactory = $injector.get('blueprintFactory');
       presentationFactory = $injector.get('presentationFactory');
       scheduleTracker = $injector.get('scheduleTracker');
+      insecureUrl = $injector.get('insecureUrl');
     });
   });
 
@@ -333,38 +338,37 @@ describe('service: playlistFactory:', function() {
   });
 
   describe('hasInsecureUrl:', function() {
+    it('should not show if playlistItem is null', function() {
+      var playlistItem = null;
+
+      expect(playlistFactory.hasInsecureUrl(playlistItem)).to.be.false;
+
+      insecureUrl.should.not.have.been.called;
+    });
+
     it('should not show if playlistItem is a presentation', function() {
       var playlistItem = {type:'presentation'};
 
       expect(playlistFactory.hasInsecureUrl(playlistItem)).to.be.false;
+
+      insecureUrl.should.not.have.been.called;
     });
 
-    it('should show if url has http://', function() {
+    it('should show if url is insecure', function() {
       var playlistItem = {type:'url', objectReference: 'http://someinsecure.site'};
 
       expect(playlistFactory.hasInsecureUrl(playlistItem)).to.be.true;
+
+      insecureUrl.should.have.been.calledWith(playlistItem.objectReference);
     });
 
-    it('should show if url has https:// or no protocol', function() {
+    it('should not show if url is secure', function() {
+      insecureUrl.returns(false);
       var playlistItem = {type:'url', objectReference: 'https://risevision.com'};
 
       expect(playlistFactory.hasInsecureUrl(playlistItem)).to.be.false;
-      
-      playlistItem = {type:'url', objectReference: '://risevision.com'};
 
-      expect(playlistFactory.hasInsecureUrl(playlistItem)).to.be.false;
-    });
-
-    it('should not show if objectReference is blank', function() {
-      var playlistItem = {type:'url'};
-
-      expect(playlistFactory.hasInsecureUrl(playlistItem)).to.be.false;
-    });
-
-    it('should not show if playlistItem content is empty or null', function() {
-      var playlistItem = null;
-
-      expect(playlistFactory.hasInsecureUrl(playlistItem)).to.be.false;
+      insecureUrl.should.have.been.calledWith(playlistItem.objectReference);
     });
 
   });

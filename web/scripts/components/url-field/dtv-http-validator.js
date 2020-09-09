@@ -1,14 +1,16 @@
 'use strict';
 
-angular.module('risevision.widget.common.url-field.http-validator', [])
-  .directive('httpValidator', [
-    function () {
+angular.module('risevision.widget.common.url-field.http-validator', [
+  'risevision.widget.common.url-field.insecure-url'
+])
+  .directive('httpValidator', ['insecureUrl',
+    function (insecureUrl) {
       return {
         require: 'ngModel',
         restrict: 'A',
         link: function (scope, elem, attr, ngModelCtrl) {
           var validator = function (value) {
-            if (value && value.startsWith('http://')) {
+            if (insecureUrl(value)) {
               ngModelCtrl.$setValidity('httpUrl', false);
             } else {
               ngModelCtrl.$setValidity('httpUrl', true);

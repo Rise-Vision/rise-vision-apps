@@ -2,9 +2,9 @@
 
 angular.module('risevision.schedules.services')
   .factory('scheduleFactory', ['$q', '$state', '$log', '$rootScope', 'schedule', 'scheduleTracker',
-    'processErrorCode', 'display', 'userState', 'confirmModal',
+    'processErrorCode', 'display', 'userState', 'confirmModal', 'insecureUrl',
     function ($q, $state, $log, $rootScope, schedule, scheduleTracker, processErrorCode,
-      display, userState, confirmModal) {
+      display, userState, confirmModal, insecureUrl) {
       var factory = {};
       var _hasSchedules;
       var _scheduleId;
@@ -303,8 +303,7 @@ angular.module('risevision.schedules.services')
 
         if (schedule && schedule.content && schedule.content.length > 0) {
           for (var i = 0; i < schedule.content.length; i++) {
-            if (schedule.content[i].type === 'url' && schedule.content[i].objectReference &&
-              schedule.content[i].objectReference.startsWith('http://')) {
+            if (schedule.content[i].type === 'url' && insecureUrl(schedule.content[i].objectReference)) {
               return true;
             }
           }
