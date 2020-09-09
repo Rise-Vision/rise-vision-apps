@@ -20,19 +20,13 @@ describe('Insecure Url', function() {
     expect(insecureUrl).to.be.a('function');
   });
 
-  describe('getOptions', function() {
-    it('should exist', function() {
-      expect(insecureUrl.getOptions).be.defined;
-    });
-  })
-
   it('should show if url has http://', function() {
     expect(insecureUrl('http://someinsecure.site')).to.be.true;
   });
 
-  it('should show if url has https:// or no protocol', function() {
+  it('should not show if url has https:// or no protocol', function() {
     expect(insecureUrl('https://risevision.com')).to.be.false;
-    expect(insecureUrl('://risevision.com')).to.be.false;
+    expect(insecureUrl('//risevision.com')).to.be.false;
   });
 
   it('should not show if url is blank', function() {
