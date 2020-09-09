@@ -4,6 +4,10 @@ describe('controller: SharedSchedulePopoverController', function() {
   beforeEach(module(function ($provide) {
     $provide.value('SHARED_SCHEDULE_URL','https://preview.risevision.com/?type=sharedschedule&id=SCHEDULE_ID');
 
+    $provide.service("scheduleFactory", function() {
+       return {};
+     });
+
     $provide.service("scheduleTracker", function() {
        return sinon.stub();
      });
@@ -14,11 +18,20 @@ describe('controller: SharedSchedulePopoverController', function() {
         _restoreState: sinon.stub()
       };
     });
+
+    $provide.service('$state', function() {
+      return $state = {
+        current: {
+          name: 'apps.schedules.details'
+        }
+      };
+    });
   }));
-  var $scope, $window, scheduleTracker;
+  var $scope, $window, scheduleTracker, $state, $controller;
 
   beforeEach(function(){
-    inject(function($injector,$rootScope, $controller){
+    inject(function($injector,$rootScope){
+      $controller = $injector.get('$controller');
       $scope = $rootScope.$new();
       $window = $injector.get('$window');
       scheduleTracker = $injector.get('scheduleTracker');
@@ -36,6 +49,8 @@ describe('controller: SharedSchedulePopoverController', function() {
   
   it('should exist',function(){
     expect($scope).to.be.ok;
+    expect($scope.scheduleFactory).to.be.ok;
+    expect($scope.isScheduleDetails).to.be.ok;
     expect($scope.copyToClipboard).to.be.a('function');
     expect($scope.getLink).to.be.a('function');
     expect($scope.getEmbedCode).to.be.a('function');
@@ -44,6 +59,7 @@ describe('controller: SharedSchedulePopoverController', function() {
 
   it('should initilize values', function() {
     expect($scope.currentTab).to.equal('link');
+    expect($scope.isScheduleDetails).to.be.true;
   });
 
   it('should handle null schedule:', function() {
@@ -56,6 +72,26 @@ describe('controller: SharedSchedulePopoverController', function() {
 
   it('getLink', function() {
     expect($scope.getLink()).to.equal('https://preview.risevision.com/?type=sharedschedule&id=scheduleId');
+  });
+
+  describe('isScheduleDetails:', function() {
+    it('should should set isScheduleDetails to false if not in schedule details page', function() {
+      $state.current.name = 'apps.schedules.list';
+      $controller('SharedSchedulePopoverController', {
+        $scope: $scope
+      });
+      $scope.$digest();
+      expect($scope.isScheduleDetails).to.be.false;
+    });
+
+    it('should should set isScheduleDetails to true if visiting schedule details page', function() {
+      $state.current.name = 'apps.schedules.details';
+      $controller('SharedSchedulePopoverController', {
+        $scope: $scope
+      });
+      $scope.$digest();
+      expect($scope.isScheduleDetails).to.be.true;
+    });
   });
 
   describe('getEnterpriseLink', function() {
