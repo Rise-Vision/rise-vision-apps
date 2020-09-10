@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('risevision.schedules.services')
-  .factory('createFirstSchedule', ['$q', '$state', '$modal', 'scheduleFactory', 'playlistFactory',
-    'onboardingFactory',
-    function ($q, $state, $modal, scheduleFactory, playlistFactory, onboardingFactory) {
+  .factory('createFirstSchedule', ['$q', '$state', 'scheduleFactory', 'playlistFactory',
+    function ($q, $state, scheduleFactory, playlistFactory) {
 
       return function (presentation) {
         return scheduleFactory.checkFirstSchedule()
@@ -21,22 +20,6 @@ angular.module('risevision.schedules.services')
           .then(function () {
             if (scheduleFactory.errorMessage) {
               return $q.reject(scheduleFactory.errorMessage);
-            }
-          })
-          .then(function () {
-            if (onboardingFactory.isTemplateOnboarding()) {
-              $state.go('apps.launcher.onboarding');
-            } else {
-              $modal.open({
-                templateUrl: 'partials/schedules/auto-schedule-modal.html',
-                size: 'md',
-                controller: 'AutoScheduleModalController',
-                resolve: {
-                  presentationName: function () {
-                    return presentation.name;
-                  }
-                }
-              });
             }
           });
       };

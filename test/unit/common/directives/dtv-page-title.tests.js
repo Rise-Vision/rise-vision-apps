@@ -79,10 +79,7 @@ describe('directive: page title', function() {
 
     // Apps routes:
     checkState('apps', 'Home');
-    checkState('apps.launcher', 'Home');
-    checkState('apps.launcher.home', 'Home');
-
-    checkState('apps.launcher.onboarding', 'Onboarding');
+    checkState('apps.home', 'Home');
 
     checkState('apps.billing', 'Billing');
     checkState('apps.billing.home', 'Billing');

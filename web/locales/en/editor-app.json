@@ -7,12 +7,6 @@
     "title": "Add a Custom Rise Widget",
     "url": "URL"
   },
-  "autoSchedule": {
-    "areYouReady": "Are you ready to add a Display?",
-    "congrats": "Congrats!",
-    "maybeLater": "Maybe Later",
-    "message": "You've saved \"{{presentationName}}\". Since you're a new user, we've added it to a Schedule."
-  },
   "details": {
     "deleteTitle": "Deleting Presentation",
     "deleteWarning": "Are you sure you want to delete this Presentation?",

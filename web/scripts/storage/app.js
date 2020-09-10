@@ -8,7 +8,6 @@ angular.module('risevision.apps')
       // Use $stateProvider to configure states.
       $stateProvider
         .state('apps.storage', {
-          url: '?cid',
           abstract: true,
           template: '<div class="storage-app" ui-view></div>'
         })

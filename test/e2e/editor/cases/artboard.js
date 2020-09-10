@@ -63,7 +63,7 @@ var ArtboardScenarios = function() {
 
       describe('Given the user has unsaved changes', function () {
         it('should notify when navigating away from the editor', function () {
-          commonHeaderPage.getCommonHeaderMenuItems().get(0).click(); //Navigating to Launcher
+          commonHeaderPage.getSchedulesMenuItem().click(); //Navigating to Schedules
           helper.wait(unsavedChangesModalPage.getUnsavedChangesModal(),'Unsaved Changed Modal');
           browser.sleep(500);
           expect(unsavedChangesModalPage.getUnsavedChangesModal().isDisplayed()).to.eventually.be.true;
@@ -82,7 +82,7 @@ var ArtboardScenarios = function() {
         it('should be able to leave without saving',function(){
           helper.clickWhenClickable(workspacePage.getAddPlaceholderButton(), 'Add Placeholder button');
 
-          commonHeaderPage.getCommonHeaderMenuItems().get(0).click();
+          commonHeaderPage.getSchedulesMenuItem().click();
           helper.wait(unsavedChangesModalPage.getUnsavedChangesModal(),'Unsaved Changed Modal');
           browser.sleep(500);
           unsavedChangesModalPage.getDontSaveButton().click();

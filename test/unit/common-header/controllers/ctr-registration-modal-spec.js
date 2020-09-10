@@ -169,8 +169,8 @@ describe("controller: registration modal", function() {
       email: "e@mail.com",
       firstName: "first",
       lastName: "last",
-      mailSyncEnabled: false,
-      accepted: false
+      accepted: false,
+      mailSyncEnabled: true
     });
 
     expect($scope.registering).to.be.false;

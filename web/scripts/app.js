@@ -30,9 +30,6 @@ angular.module('risevision.apps', [
     'risevision.apps.services',
     'risevision.apps.controllers',
     'risevision.apps.directives',
-    'risevision.apps.launcher.controllers',
-    'risevision.apps.launcher.directives',
-    'risevision.apps.launcher.services',
     'risevision.apps.billing.controllers',
     'risevision.apps.billing.services',
     'risevision.schedules.services',
@@ -67,7 +64,19 @@ angular.module('risevision.apps', [
       // Use $stateProvider to configure states.
       $stateProvider
         .state('apps', {
+          url: '?cid',
+          abstract: true,
           template: '<div ui-view></div>'
+        })
+
+        .state('apps.home', {
+          url: '/',
+          controller: ['$location', '$state',
+            function ($location, $state) {
+              $location.replace();
+              $state.go('apps.editor.home');
+            }
+          ]
         })
 
         .state('apps.plans', {
@@ -75,7 +84,7 @@ angular.module('risevision.apps', [
           controller: ['$location', '$state',
             function ($location, $state) {
               $location.replace();
-              $state.go('apps.launcher.home');
+              $state.go('apps.home');
             }
           ]
         })
@@ -89,26 +98,18 @@ angular.module('risevision.apps', [
           controller: ['$location', '$state',
             function ($location, $state) {
               $location.replace();
-              $state.go('apps.launcher.home');
+              $state.go('apps.home');
             }
           ]
         })
 
         .state('common.auth.signup', {
           url: '/signup',
-          controller: ['$location', '$state', 'canAccessApps', 'plansFactory',
-            function ($location, $state, canAccessApps, plansFactory) {
-              // jshint camelcase:false
-              var showProduct = $location.search().show_product;
-              // jshint camelcase:true
-
+          controller: ['$location', '$state', 'canAccessApps',
+            function ($location, $state, canAccessApps) {
               canAccessApps(true).then(function () {
-                if (showProduct) {
-                  plansFactory.showPurchaseOptions();
-                }
-
                 $location.replace();
-                $state.go('apps.launcher.home');
+                $state.go('apps.home');
               });
             }
           ]
@@ -120,7 +121,7 @@ angular.module('risevision.apps', [
             function ($state, canAccessApps, $location) {
               canAccessApps().then(function () {
                 $location.replace();
-                $state.go('apps.launcher.home');
+                $state.go('apps.home');
               });
             }
           ]
@@ -129,7 +130,7 @@ angular.module('risevision.apps', [
         .state('common.auth.unregistered', {
           templateProvider: ['$templateCache', function ($templateCache) {
             return $templateCache.get(
-              'partials/launcher/signup.html');
+              'partials/common/signup.html');
           }],
           url: '/unregistered/:state'
         });
@@ -167,9 +168,7 @@ angular.module('risevision.apps', [
       });
 
       $rootScope.$on('$stateChangeSuccess', function (event, toState) {
-        if (toState.name === 'apps.launcher.onboarding' ||
-          toState.name === 'apps.launcher.home' ||
-          toState.name === 'apps.schedules.details' ||
+        if (toState.name === 'apps.schedules.details' ||
           toState.name === 'apps.schedules.add' ||
           toState.name === 'apps.displays.details' ||
           toState.name === 'apps.displays.add') {
@@ -185,8 +184,7 @@ angular.module('risevision.apps', [
           $state.current.name === 'apps.displays.list' ||
           $state.current.name === 'apps.displays.alerts' ||
           $state.current.name === 'apps.storage.home' ||
-          $state.current.name === 'apps.launcher.home' ||
-          $state.current.name === 'apps.launcher.onboarding' ||
+          $state.current.name === 'apps.home' ||
           $state.current.name === 'apps.billing.home') {
 
           $state.go($state.current, null, {
@@ -196,11 +194,15 @@ angular.module('risevision.apps', [
       });
     }
   ])
-  .run(['$rootScope', '$modal', 'canAccessApps', 'userState', 'plansFactory',
-    function ($rootScope, $modal, canAccessApps, userState, plansFactory) {
+  .run(['$rootScope', '$location', '$modal', 'canAccessApps', 'userState', 'plansFactory',
+    function ($rootScope, $location, $modal, canAccessApps, userState, plansFactory) {
       $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-        if (toState.name === 'apps.plans') {
-          canAccessApps().then(function () {
+        // jshint camelcase:false
+        var showProduct = $location.search().show_product;
+        // jshint camelcase:true
+
+        if (toState.name === 'apps.plans' || (toState.name === 'common.auth.signup' && showProduct)) {
+          canAccessApps(toState.name === 'common.auth.signup').then(function () {
             plansFactory.showPurchaseOptions();
           });
 

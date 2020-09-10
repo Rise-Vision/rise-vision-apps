@@ -27,8 +27,8 @@
         <label class="control-label u_margin-right" >{{'schedules-app.playlist.item.presentation' | translate}}:</label>
         <a class="u_clickable" id="presentationName" ng-click="selectPresentation()" presentation-name="playlistItem.objectReference"></a>
         <br>
-        <a id="presentationLink" ng-if="playlistItem.presentationType !== 'HTML Template'" ui-sref="apps.editor.workspace.artboard({presentationId: playlistItem.objectReference})" link-cid>Edit Presentation</a>
-        <a id="htmlPresentationLink" ng-if="playlistItem.presentationType === 'HTML Template'" ui-sref="apps.editor.templates.edit({presentationId: playlistItem.objectReference})" link-cid>Edit Presentation</a>
+        <a id="presentationLink" ng-if="playlistItem.presentationType !== 'HTML Template'" ui-sref="apps.editor.workspace.artboard({presentationId: playlistItem.objectReference})">Edit Presentation</a>
+        <a id="htmlPresentationLink" ng-if="playlistItem.presentationType === 'HTML Template'" ui-sref="apps.editor.templates.edit({presentationId: playlistItem.objectReference})">Edit Presentation</a>
       </div>
 
       <hr>

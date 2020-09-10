@@ -6,7 +6,7 @@ describe('directive: weekly-templates', function() {
       element,
       sessionStorage,
       editorFactory;
-  beforeEach(module('risevision.apps.launcher.directives'));
+  beforeEach(module('risevision.apps.directives'));
   beforeEach(module(function ($provide) {
     $provide.service('companyAssetsFactory', function() {
       return {
@@ -16,15 +16,6 @@ describe('directive: weekly-templates', function() {
     $provide.service('editorFactory', function() {
       return editorFactory;
     });  
-    $provide.service('userState', function() {
-      return {
-        getCopyOfProfile: function() {
-          return {
-            mailSyncEnabled: true
-          };
-        }
-      };
-    });
     $provide.service('$sessionStorage', function() {
       return sessionStorage
     });   
@@ -39,7 +30,7 @@ describe('directive: weekly-templates', function() {
 
     $compile = _$compile_;
     $rootScope = _$rootScope_;
-    $templateCache.put('partials/launcher/weekly-templates.html', '<p>mock</p>');
+    $templateCache.put('partials/common/weekly-templates.html', '<p>mock</p>');
   }));
 
   function compileDirective() {
@@ -62,7 +53,6 @@ describe('directive: weekly-templates', function() {
       expect($scope.weeklyTemplates).to.equal('weeklyTemplates');
       expect($scope.toggleView).to.be.a('function');
       expect($scope.select).to.be.a('function');
-      expect($scope.alreadyOptedIn).to.be.true;
     });
 
     it('should use session storage value for fullView',function() {

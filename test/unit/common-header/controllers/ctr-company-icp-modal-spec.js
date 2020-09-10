@@ -10,9 +10,6 @@ describe("controller: Company ICP Modal", function() {
         close: sinon.stub()
       };
     });
-    $provide.value("user", {
-      username: "user@example.io"
-    });
     $provide.value("company", {
       name: "Test Company",
       companyIndustry: "HOSPITALITY"
@@ -44,7 +41,6 @@ describe("controller: Company ICP Modal", function() {
     
   it("should exist", function() {
     expect($scope).to.be.ok;
-    expect($scope.user).to.be.ok;
     expect($scope.company).to.be.ok;
 
     expect($scope).to.have.property("DROPDOWN_INDUSTRY_FIELDS");
@@ -53,23 +49,19 @@ describe("controller: Company ICP Modal", function() {
   });
 
   it("should initialize", function() {
-    expect($scope.user.username).to.equal("user@example.io");
     expect($scope.company.name).to.equal("Test Company");
     
     expect($scope.DROPDOWN_INDUSTRY_FIELDS).to.have.length(24);
   });
   
-  it("should close modal on save and send user/company objects", function() {
+  it("should close modal on save and send company objects", function() {
     $scope.save();
 
     $modalInstance.close.should.have.been.calledWith({
-      user: {
-        username: "user@example.io"
-      }, 
       company: {
         name: "Test Company",
         companyIndustry: "HOSPITALITY"
-      }  
+      }
     });
   });
 

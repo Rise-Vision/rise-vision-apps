@@ -41,8 +41,8 @@ var WeeklyTemplatesScenarios = function() {
       commonHeaderPage.selectUnsubscribedSubCompany();
       
       browser.sleep(500);
-      helper.wait(commonHeaderPage.getCommonHeaderMenuItems().get(1), 'Presentations Common Header Menu Item');
-      helper.clickWhenClickable(commonHeaderPage.getCommonHeaderMenuItems().get(1), 'Presentations Common Header Menu Item');
+      helper.wait(commonHeaderPage.getPresentationsMenuItem(), 'Presentations Common Header Menu Item');
+      helper.clickWhenClickable(commonHeaderPage.getPresentationsMenuItem(), 'Presentations Common Header Menu Item');
       helper.waitDisappear(commonHeaderPage.getLoader(), 'CH spinner loader');
       helper.waitDisappear(presentationsListPage.getPresentationsLoader(), 'Presentation loader');
 
@@ -78,12 +78,6 @@ var WeeklyTemplatesScenarios = function() {
       browser.sleep(500);
       expect(weeklyTemplatesPage.getWeeklyTemplatesExpandedView().isDisplayed()).to.eventually.be.true;
       expect(weeklyTemplatesPage.getWeeklyTemplatesNoticeView().isPresent()).to.eventually.be.false;
-    });
-
-    it('should promote subscribing to Weekly Playbook',function(){
-      expect(weeklyTemplatesPage.getSubscribeToPlaybookLink().isDisplayed()).to.eventually.be.true;
-      expect(weeklyTemplatesPage.getSubscribeToPlaybookLink().getAttribute('target')).to.eventually.equal('_blank');
-      expect(weeklyTemplatesPage.getSubscribeToPlaybookLink().getAttribute('href')).to.eventually.equal('https://www.risevision.com/weekly-playbook');
     });
 
   });

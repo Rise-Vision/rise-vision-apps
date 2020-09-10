@@ -8,7 +8,6 @@ angular.module('risevision.apps')
       // Use $stateProvider to configure states.
       $stateProvider
         .state('apps.schedules', {
-          url: '?cid',
           abstract: true,
           template: '<div class="container schedules-app" ui-view></div>'
         })
@@ -92,7 +91,7 @@ angular.module('risevision.apps')
 angular.module('risevision.schedules.services', [
   'risevision.common.header',
   'risevision.common.gapi',
-  'risevision.apps.launcher.services',
+  'risevision.apps.services',
   'risevision.template-editor.services',
   'risevision.common.components.timeline.services',
   'risevision.widget.common.url-field.insecure-url'

@@ -155,4 +155,152 @@
     }
   }
 
+  &.tooltip {
+    opacity: 1;
+
+    .scrollable-list {
+      min-height: 150px;
+      max-height: 150px;
+    }    
+
+    &.tooltip-share-options {
+      margin-left: -106px;
+
+      .tooltip-inner {
+        text-align: left;
+        padding: 10px;
+        border: 0px;
+        box-shadow: 0px 0px 5px 0px rgba(2, 6, 32, 0.5);
+        opacity: 1;
+        max-width: 374px;
+        width: 374px;
+
+        .close {
+          height: 10px;
+          width: 10px;
+
+          svg {
+            fill: rgb(153, 153, 153);
+          }
+        }
+
+        .input-group-btn {
+          width: 1%;
+        }
+      }
+
+      &.bottom {
+        margin-top: -8px;
+      }
+
+      .tooltip-arrow {
+        display: none;
+      }
+
+      &.tooltip-sm {
+        .tooltip-inner {
+          width: 303px;
+        }
+      }
+    }
+
+    &.tooltip-schedule-selector {
+      @extend .tooltip-share-options;
+
+      .tooltip-inner {
+        max-width: 360px;
+        width: 360px;
+        padding: 15px;
+        font-size: 14px;
+
+        hr {
+          border-top: 1px solid $madero-gray;
+          margin-top: 15px;
+          margin-bottom: 15px;
+        }
+      }
+
+      &.bottom {
+        margin-top: -9px;
+      }
+    }
+
+    &.tooltip-schedule-selector {
+      @extend .tooltip-share-options;
+
+      .tooltip-inner {
+        max-width: 360px;
+        width: 360px;
+        padding: 15px;
+        font-size: 14px;
+
+        hr {
+          border-top: 1px solid $madero-gray;
+          margin-top: 15px;
+          margin-bottom: 15px;
+        }
+      }
+
+      &.bottom {
+        margin-top: -9px;
+      }
+    }
+  }
+
+  &.action-sheet {
+    &.tooltip-share-options {
+      padding: 20px;
+      box-shadow: 0px 0px 5px 0px rgba(2, 6, 32, 0.5);
+
+      .close {
+        height: 15px;
+        width: 15px;
+
+        svg {
+          fill: rgb(153, 153, 153);
+          height: 15px;
+          width: 15px;
+        }
+      }
+    }
+  }
+
+  &.tooltip-share-options {
+    .sideways-panels {
+      .panel {
+        border-color: rgb(153, 153, 153);
+        background-color: transparent;
+
+        @extend .mr-2;
+
+        &:last-child{
+          @extend .u_remove-right;
+        }
+
+        .panel-body {
+          min-width: 90px;
+          padding: 10px;
+        }
+      }
+    }
+
+    .copy-text-box {
+      background-color: $lighter-gray;
+      color: $madero-gray;
+      font-size: 12px;
+      padding: 15px;
+    }
+
+    // from https://codepen.io/mrowa44/pen/xRpMYm
+    .scrollbox {
+      background:
+        linear-gradient(to right, white 0%, rgba(0, 0, 0, 0)),
+        linear-gradient(to right, rgba(0, 0, 0, 0), white 100%) 0 100%,
+        linear-gradient(to right, black, rgba(0, 0, 0, 0) 6%),
+        linear-gradient(to left, black, rgba(0, 0, 0, 0) 6%);
+      background-attachment: local, local, scroll, scroll;
+      background-clip: padding-box; /* fix right border on Chrome */
+    }
+  }
+
 }
