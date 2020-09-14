@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.widget.common.url-field.http-validator', [
-  'risevision.widget.common.url-field.insecure-url'
-])
+    'risevision.widget.common.url-field.insecure-url'
+  ])
   .directive('httpValidator', ['insecureUrl',
     function (insecureUrl) {
       return {

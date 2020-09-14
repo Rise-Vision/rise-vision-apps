@@ -14,15 +14,15 @@ angular.module('risevision.displays.directives')
         link: function ($scope, elm, attrs, ctrl) {
           $scope.$watch('time', function () {
             var time = timeParser.parseAmpm($scope.time);
-            
+
             if (time) {
-              ctrl.$setViewValue(time);              
+              ctrl.$setViewValue(time);
             }
           });
 
           $scope.$watch('timeString', function () {
             var time = timeParser.parseMilitary($scope.timeString);
-            
+
             if (time) {
               $scope.time = time;
             }

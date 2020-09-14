@@ -2,7 +2,7 @@
 angular.module('risevision.storage.controllers')
   .controller('FilesListController', ['$scope', '$rootScope', 'StorageFactory', 'FilesFactory', 'storageUtils',
     'FileUploader', '$loading', '$translate', '$timeout', 'currentPlanFactory', 'plansFactory',
-    function ($scope, $rootScope, StorageFactory, FilesFactory, storageUtils, FileUploader, 
+    function ($scope, $rootScope, StorageFactory, FilesFactory, storageUtils, FileUploader,
       $loading, $translate, $timeout, currentPlanFactory, plansFactory) {
       $scope.search = {
         doSearch: function () {},
