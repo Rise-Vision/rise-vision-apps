@@ -3,12 +3,12 @@
 angular.module('risevision.common.header')
   .controller('AuthButtonsCtr', ['$scope', '$modal', '$templateCache',
     'userState', 'userAuthFactory', 'canAccessApps',
-    '$loading', 'hubspot',
+    '$loading',
     '$log', 'uiFlowManager', 'auth2APILoader', 'bindToScopeWithWatch',
     '$window', 'APPS_URL',
     function ($scope, $modal, $templateCache, userState, userAuthFactory,
       canAccessApps,
-      $loading, hubspot, $log, uiFlowManager, auth2APILoader,
+      $loading, $log, uiFlowManager, auth2APILoader,
       bindToScopeWithWatch, $window, APPS_URL) {
 
       window.$loading = $loading; //DEBUG
@@ -43,7 +43,6 @@ angular.module('risevision.common.header')
             if (newStatus === 'registeredAsRiseVisionUser') {
               if (!userState.registrationModalInstance && userState
                 .isLoggedIn()) { // avoid duplicate registration modals
-                hubspot.loadAs(userState.getUsername());
                 userState.registrationModalInstance = $modal.open({
                   template: $templateCache.get('partials/common-header/registration-modal.html'),
                   controller: 'RegistrationModalCtrl',

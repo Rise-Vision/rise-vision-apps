@@ -7,11 +7,11 @@ angular.module('risevision.common.header')
     'userState', 'pick', 'uiFlowManager', 'messageBox', 'humanReadableError',
     'agreeToTermsAndUpdateUser', 'account', 'analyticsFactory',
     'bigQueryLogging', 'updateCompany', 'plansFactory',
-    'COMPANY_INDUSTRY_FIELDS', 'urlStateService',
+    'COMPANY_INDUSTRY_FIELDS', 'urlStateService', 'hubspot',
     function ($q, $scope, $rootScope, $modalInstance, $loading, addAccount,
       $exceptionHandler, userState, pick, uiFlowManager, messageBox, humanReadableError,
       agreeToTermsAndUpdateUser, account, analyticsFactory, bigQueryLogging,
-      updateCompany, plansFactory, COMPANY_INDUSTRY_FIELDS, urlStateService) {
+      updateCompany, plansFactory, COMPANY_INDUSTRY_FIELDS, urlStateService, hubspot) {
 
       $scope.newUser = !account;
       $scope.DROPDOWN_INDUSTRY_FIELDS = COMPANY_INDUSTRY_FIELDS;
@@ -87,6 +87,9 @@ angular.module('risevision.common.header')
                     'registeredDate': userProfile.creationDate,
                     'invitationAcceptedDate': $scope.newUser ? null : new Date()
                   });
+
+                  hubspot.loadAs(userState.getUsername());
+
                   bigQueryLogging.logEvent('User Registered');
 
                   $rootScope.$broadcast('risevision.user.authorized');
