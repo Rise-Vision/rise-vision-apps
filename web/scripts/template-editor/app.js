@@ -48,7 +48,7 @@ angular.module('risevision.apps')
                     }
                   })
                   .then(function () {
-                    if ($stateParams.presentationId === 'new' && 
+                    if ($stateParams.presentationId === 'new' &&
                       financialLicenseFactory.needsFinancialDataLicense()) {
                       financialLicenseFactory.showFinancialDataLicenseRequiredMessage();
                     }

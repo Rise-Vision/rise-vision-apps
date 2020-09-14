@@ -117,13 +117,13 @@ angular.module('risevision.schedules.services')
 
       factory.getAllDisplaysSchedule = function () {
         return schedule.list({
-          filter: 'distributeToAll:true'
-        }).then(function (result) {
-          if (result && result.items && result.items.length > 0) {
-            return result.items[0];
-          }
-        })
-        .catch(function () {});
+            filter: 'distributeToAll:true'
+          }).then(function (result) {
+            if (result && result.items && result.items.length > 0) {
+              return result.items[0];
+            }
+          })
+          .catch(function () {});
       };
 
       factory.hasFreeDisplays = function () {

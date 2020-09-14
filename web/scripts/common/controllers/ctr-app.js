@@ -45,8 +45,8 @@ angular.module('risevision.apps.controllers')
 
       $rootScope.$on('$stateChangeSuccess', function () {
         $scope.navSelected = $state.current.name;
-        $scope.hideCommonHeader = 
-        $state.current.name.indexOf('common.auth') !== -1;
+        $scope.hideCommonHeader =
+          $state.current.name.indexOf('common.auth') !== -1;
       });
     }
   ]); //ctr
