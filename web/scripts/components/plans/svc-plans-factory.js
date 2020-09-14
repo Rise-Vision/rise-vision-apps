@@ -194,10 +194,12 @@
         _factory.showPurchaseOptions = function () {
           if (currentPlanFactory.isSubscribed()) {
             if (currentPlanFactory.currentPlan.isPurchasedByParent) {
-              var contactInfo = currentPlanFactory.currentPlan.parentPlanContactEmail? ' at '+currentPlanFactory.currentPlan.parentPlanContactEmail : '';
+              var contactInfo = currentPlanFactory.currentPlan.parentPlanContactEmail ? ' at ' +
+                currentPlanFactory.currentPlan.parentPlanContactEmail : '';
               messageBox(
                 'You can\'t edit your current plan.',
-                'Your plan is managed by your parent company. Please contact your account administrator'+contactInfo+' for additional licenses.',
+                'Your plan is managed by your parent company. Please contact your account administrator' +
+                contactInfo + ' for additional licenses.',
                 'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
               );
             } else {

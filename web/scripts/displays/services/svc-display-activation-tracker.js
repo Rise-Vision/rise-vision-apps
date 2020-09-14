@@ -4,8 +4,8 @@ angular.module('risevision.displays.services')
   .service('displayActivationTracker', ['$log', 'userState', 'analyticsFactory', 'displayTracker',
     'updateUser',
     function ($log, userState, analyticsFactory, displayTracker, updateUser) {
-      var _checkActiveDisplay = function(displays) {
-        return _.reduce(displays, function(result, display) {
+      var _checkActiveDisplay = function (displays) {
+        return _.reduce(displays, function (result, display) {
           if (!display.lastConnectionTime) {
             return result;
           } else if (!result) {
@@ -13,12 +13,12 @@ angular.module('risevision.displays.services')
           } else {
             var newTime = new Date(display.lastConnectionTime);
             var resultTime = new Date(result.lastConnectionTime);
-            return newTime > resultTime ? result : display;  
+            return newTime > resultTime ? result : display;
           }
         }, null);
       };
 
-      var _updateUserSettings = function(firstDisplayActivationDate) {
+      var _updateUserSettings = function (firstDisplayActivationDate) {
         var settings = {};
         settings.firstDisplayActivationDate = firstDisplayActivationDate;
 

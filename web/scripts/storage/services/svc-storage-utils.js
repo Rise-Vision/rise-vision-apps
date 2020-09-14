@@ -92,7 +92,7 @@ angular.module('risevision.storage.services')
         if (!currentPlanFactory.isPlanActive()) {
           return plansFactory.showUnlockThisFeatureModal();
         }
-        
+
         $modal.open({
           templateUrl: 'partials/storage/new-folder-modal.html',
           controller: 'NewFolderModalCtrl',

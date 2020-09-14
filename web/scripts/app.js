@@ -207,7 +207,7 @@ angular.module('risevision.apps', [
           });
 
           if (fromState.name) {
-            event.preventDefault();            
+            event.preventDefault();
           }
         } else if (toState.name === 'apps.users.add') {
           canAccessApps().then(function () {
@@ -221,9 +221,9 @@ angular.module('risevision.apps', [
               }
             });
           });
-          
+
           if (fromState.name) {
-            event.preventDefault();            
+            event.preventDefault();
           }
         }
       });
