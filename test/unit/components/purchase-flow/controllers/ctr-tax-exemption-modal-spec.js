@@ -20,7 +20,8 @@ describe("controller: tax exemption modal", function() {
         submitCertificate: sinon.spy(function() {
           taxExemptionFactory.taxExemptionError = exemptionError;
           return Q.resolve();
-        })
+        }),
+        init: sinon.spy()
       };
     });
   }));
@@ -55,6 +56,12 @@ describe("controller: tax exemption modal", function() {
     expect($scope.setFile).to.be.a("function");
 
     expect($scope.close).to.be.a("function");
+  });
+
+  it("should init factory", function() {
+    expect($scope.factory).to.be.ok;
+
+    $scope.factory.init.should.have.been.called;
   });
 
   describe("$loading spinner: ", function() {

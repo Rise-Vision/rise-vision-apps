@@ -7,6 +7,8 @@ angular.module('risevision.common.components.purchase-flow')
       $scope.form = {};
       $scope.factory = taxExemptionFactory;
 
+      taxExemptionFactory.init();
+
       // $scope.countries = COUNTRIES;
       // $scope.regionsCA = REGIONS_CA;
       // $scope.regionsUS = REGIONS_US;

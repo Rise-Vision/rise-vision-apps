@@ -4,12 +4,14 @@
   angular.module('risevision.common.components.purchase-flow')
     .factory('taxExemptionFactory', ['storeService',
       function (storeService) {
-        var factory = {
-          taxExemption: {}
-        };
+        var factory = {};
 
         // Stop spinner - workaround for spinner not rendering
         factory.loading = false;
+
+        factory.init = function () {
+          factory.taxExemption = {};
+        };
 
         factory.submitCertificate = function () {
           factory.taxExemptionError = null;
