@@ -114,12 +114,19 @@ describe("controller: registration modal", function() {
     $provide.factory("messageBox", function() {
       return function() {};
     });
+
+    $provide.factory("hubspot", function() {
+      return {
+        loadAs: sinon.stub()
+      };
+    });
+
     $translateProvider.useLoader("customLoader");
         
   }));
   var $scope, userProfile, userState, $modalInstance, newUser;
   var registerUser, account, analyticsFactory, bqCalled,
-    updateCompanyCalled, plansFactory;
+    updateCompanyCalled, plansFactory, hubspot;
   
   beforeEach(function() {
     registerUser = true;
@@ -137,6 +144,7 @@ describe("controller: registration modal", function() {
       $modalInstance = $injector.get("$modalInstance");
       analyticsFactory = $injector.get("analyticsFactory");
       userState = $injector.get("userState");
+      hubspot = $injector.get('hubspot');
       $controller("RegistrationModalCtrl", {
         $scope : $scope,
         $modalInstance: $modalInstance,
@@ -162,8 +170,8 @@ describe("controller: registration modal", function() {
   });
   
   it("should initialize",function(){
-    expect($scope).to.be.truely;
-    expect($scope.profile).to.be.truely;
+    expect($scope).to.be.ok;
+    expect($scope.profile).to.be.ok;
     
     expect($scope.profile).to.deep.equal({
       email: "e@mail.com",
@@ -207,7 +215,7 @@ describe("controller: registration modal", function() {
           invitationAcceptedDate: null
         });
         expect(bqCalled).to.equal("User Registered");
-
+        hubspot.loadAs.should.have.been.calledWith('e@mail.com');
         expect($scope.registering).to.be.false;
         expect($modalInstance._closed).to.be.true;
 
@@ -228,6 +236,7 @@ describe("controller: registration modal", function() {
         plansFactory.initVolumePlanTrial.should.not.have.been.called;
         expect(analyticsFactory.track).to.not.have.been.called;
         expect(bqCalled).to.not.be.ok;
+        hubspot.loadAs.should.not.have.been.called;
         expect($scope.registering).to.be.false;
         expect($modalInstance._closed).to.be.false;
 
@@ -268,6 +277,7 @@ describe("controller: registration modal", function() {
         });
         expect(analyticsFactory.track.getCall(0).args[1].invitationAcceptedDate).to.be.a('date');
         expect(bqCalled).to.equal("User Registered");
+        hubspot.loadAs.should.have.been.calledWith('e@mail.com');
         expect($scope.registering).to.be.false;
         expect($modalInstance._closed).to.be.true;
 
@@ -287,6 +297,7 @@ describe("controller: registration modal", function() {
         expect(newUser).to.be.false;
         expect(analyticsFactory.track).to.not.have.been.called;
         expect(bqCalled).to.not.be.ok;
+        hubspot.loadAs.should.not.have.been.called;
         expect($scope.registering).to.be.false;
         expect($modalInstance._closed).to.be.false;
 
