@@ -29,8 +29,13 @@ describe("Services: tax exemption factory", function() {
   it("should exist", function() {
     expect(taxExemptionFactory).to.be.ok;
     expect(taxExemptionFactory.submitCertificate).to.be.a("function");
+    expect(taxExemptionFactory.init).to.be.a("function");
+  });
 
-    expect(taxExemptionFactory.taxExemption).to.be.a("object");
+  it("init:", function() {
+    taxExemptionFactory.init();
+
+    expect(taxExemptionFactory.taxExemption).to.deep.equal({});
   });
 
   it("should stop spinner on load", function() {
