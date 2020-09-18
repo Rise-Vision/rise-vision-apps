@@ -1,132 +1,136 @@
-<weekly-templates></weekly-templates>
+<div class="madero-style">
+  <weekly-templates></weekly-templates>
 
-<div class="app-header my-4" require-role="da">
-  <h1 class="app-header-title" id="title" translate>displays-app.title</h1>
+  <div class="app-header mb-5">
+    <!-- App Title -->
+    <div class="app-header-title" id="title">
+      <h1 class="m-0">Displays</h1>
+      <div>
+        <span ng-show="playerLicenseFactory.hasProfessionalLicenses()">
+          {{ playerLicenseFactory.getUsedLicenseString() }}
+        </span>
+      </div>
+    </div>
+  </div>
 
-  <div class="ml-auto">
-    <a id="displayAddButton" class="btn btn-lg btn-primary" ui-sref="apps.displays.add">
-      {{ 'displays-app.actions.new' | translate }}
-      <i class="fa fa-plus icon-right"></i>
+  <div ng-show="displays.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
+    <strong>{{displays.errorMessage}}</strong>
+    {{displays.apiError}}
+  </div> 
+
+  <div id="errorBox" ng-show="displayStatusFactory.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
+    <strong>{{displayStatusFactory.errorMessage}}</strong>
+    {{displayStatusFactory.apiError}}
+  </div> 
+
+  <div class="flex-row">
+    <search-filter class="w-100 mr-3" filter-config="filterConfig" search="search" do-search="displays.doSearch" icon-set="madero"></search-filter>
+    <a id="displayAddButton" class="btn btn-primary btn-toolbar-wide" ui-sref="apps.displays.add" translate>
+      displays-app.actions.new
     </a>
   </div>
-</div>
 
-<div class="mb-3" ng-show="playerLicenseFactory.hasProfessionalLicenses()">
-  {{ playerLicenseFactory.getUsedLicenseString() }}
-</div>
+  <div class="madero-style alert alert-warning u_margin-md-top" ng-show="search.query">
+    <strong translate>displays-app.list.searchNotification</strong>
+  </div>
 
-<div ng-show="displays.apiError" class="alert alert-danger mb-3" role="alert">
-  <strong>{{displays.errorMessage}}</strong>
-  {{displays.apiError}}
-</div>
-
-<div id="errorBox" ng-show="displayStatusFactory.apiError" class="alert alert-danger mb-3" role="alert">
-  <strong>{{displayStatusFactory.errorMessage}}</strong>
-  {{displayStatusFactory.apiError}}
-</div> 
-
-<search-filter filter-config="filterConfig" search="search" do-search="displays.doSearch"></search-filter>
-
-<div class="alert alert-warning my-2" ng-show="search.query">
-  <span translate>displays-app.list.searchNotification</span>
-</div>
-
-<div class="panel u_margin-sm-top">
-  <div class="scrollable-list"
-  scrolling-list="displays.load()"
-  rv-spinner rv-spinner-key="displays-list-loader"
-  rv-spinner-start-active="1"
-  >
-    <table id="displaysListTable" class="table">
-      <thead class="table-header">
-        <tr class="table-header__row">
-          <th class="table-header__cell col-sm-1 u_clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
-            <span>
-            {{ 'displays-app.list.heading.name' | translate }}
-            <!-- ngIf: search.sortBy == 'name' -->
-            <i ng-if="search.sortBy == 'name'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
-            <!-- end ngIf: search.sortBy == 'name' -->
-            </span>
-          </th>
-          <th class="table-header__cell" translate>
-            <span>displays-app.list.heading.playerType</span>
-          </th>
-          <th class="table-header__cell col-sm-1 hidden-xs" translate>
-            <span>displays-app.list.heading.schedule</span>
-          </th>
-          <th id="tableHeaderStatus" class="table-header__cell col-sm-2">
-            <span>{{ 'displays-app.list.heading.status' | translate }}</span>
-          </th>
-          <th id="tableHeaderLastConnection" class="table-header__cell hidden-xs hidden-sm">
-            <span>{{ 'displays-app.list.heading.lastConnection' | translate }}</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody class="table-body">
-        <tr class="table-body__row" ng-class="{ 'bg-warning' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list">
-          <td class="table-body__cell">
-            <a class="u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
-            <span class=""><strong>{{display.name}}</strong></span>
-            </a>
-          </td>
-          <td class="table-body__cell display-product">
-            <div ng-show="getDisplayType(display) === 'professional'">
-              <span translate>displays-app.list.player.type.professional</span>
-            </div>
-            <div ng-show="getDisplayType(display) === 'standard'">
-              <span translate>displays-app.list.player.type.standard</span>
-            </div>
-          </td>
-          <td class="table-body__cell hidden-xs display-schedule">
-            <a class="u_ellipsis-md u_icon-hover schedule-view" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
-              {{display.scheduleName}}<i class="fa fa-external-link icon-sm-right"></i>
-            </a>
-            <a ng-if="!playerNotInstalled(display) && !displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
-              <button class="btn btn-primary btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
-            </a>
-          </td>
-          <td class="table-body__cell display-status">
-            <!-- Not Licensed and Installed -->
-            <span class="text-muted" ng-if="displayFactory.showLicenseRequired(display) && !playerNotInstalled(display)">
-              License Required
-            </span>
-            <!-- Licensed and Loading Status -->
-            <i ng-if="displayService.statusLoading && !displayFactory.showLicenseRequired(display)" class="fa fa-spinner fa-spin fa-fw"></i>
-            <!-- Licensed and Offline -->
-            <span class="text-danger" ng-if="!displayService.statusLoading && !displayFactory.showLicenseRequired(display) && playerOffline(display)">
-              <i class="fa fa-times"></i> Offline
-              <a href="https://help.risevision.com/hc/en-us/articles/115002694906-Why-is-my-Display-status-offline-" target="_blank" translate>
-                displays-app.list.status.whyOffline
+  <div class="panel u_margin-md-top">
+    <div class="scrollable-list"
+    scrolling-list="displays.load()"
+    rv-spinner rv-spinner-key="displays-list-loader"
+    rv-spinner-start-active="1"
+    >
+      <table id="displaysListTable" class="table">
+        <thead class="table-header">
+          <tr class="table-header__row">
+            <th class="table-header__cell col-sm-1 u_clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
+              <span>
+              {{ 'displays-app.list.heading.name' | translate }}
+              <!-- ngIf: search.sortBy == 'name' -->
+              <i ng-if="search.sortBy == 'name'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
+              <!-- end ngIf: search.sortBy == 'name' -->
+              </span>
+            </th>
+            <th class="table-header__cell" translate>
+              <span>displays-app.list.heading.playerType</span>
+            </th>
+            <th class="table-header__cell col-sm-1 hidden-xs" translate>
+              <span>displays-app.list.heading.schedule</span>
+            </th>
+            <th id="tableHeaderStatus" class="table-header__cell col-sm-2">
+              <span>{{ 'displays-app.list.heading.status' | translate }}</span>
+            </th>
+            <th id="tableHeaderLastConnection" class="table-header__cell hidden-xs hidden-sm">
+              <span>{{ 'displays-app.list.heading.lastConnection' | translate }}</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="table-body">
+          <tr class="table-body__row" ng-class="{ 'bg-warning' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list">
+            <td class="table-body__cell">
+              <a class="u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
+              <span class=""><strong>{{display.name}}</strong></span>
               </a>
-            </span>
-            <!-- Licensed and Online -->
-            <span class="text-success" ng-if="!displayService.statusLoading && !displayFactory.showLicenseRequired(display) && playerOnline(display)">
-              <i class="fa fa-check"></i> Online
-            </span>
-            <!-- Not Installed and finished Loading -->
-            <a class="u_icon-hover" ng-if="!displayService.statusLoading && playerNotInstalled(display)" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
-              {{ 'displays-app.list.status.notActivated' | translate }}
-            </a>
-          </td>
-          <td class="table-body__cell u_nowrap hidden-xs hidden-sm">
-            <span class="text-muted" ng-if="displayFactory.showLicenseRequired(display)">
-              License Required
-            </span>
-            <span ng-if="!displayFactory.showLicenseRequired(display)">
-              {{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}
-            </span>
-          </td>
-        </tr>
-        <!-- If no displays available -->
-        <tr ng-show="displays.items.list.length === 0 && !search.query">
-          <td colspan="6" class="text-center"><span translate>displays-app.list.empty</span></td>
-        </tr>
-        <!-- If no search results -->
-        <tr ng-show="displays.items.list.length === 0 && search.query">
-          <td colspan="4" class="text-center"><span translate>displays-app.list.no-results</span></td>
-        </tr>
+            </td>
+            <td class="table-body__cell display-product">
+              <div ng-show="getDisplayType(display) === 'professional'">
+                <span translate>displays-app.list.player.type.professional</span>
+              </div>
+              <div ng-show="getDisplayType(display) === 'standard'">
+                <span translate>displays-app.list.player.type.standard</span>
+              </div>
+            </td>
+            <td class="table-body__cell hidden-xs display-schedule">
+              <a class="u_ellipsis-md u_icon-hover schedule-view" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
+                {{display.scheduleName}}<i class="fa fa-external-link icon-sm-right"></i>
+              </a>
+              <a ng-if="!playerNotInstalled(display) && !displayService.hasSchedule(display)" ui-sref="apps.schedules.list({ cid: display.companyId })" target="_blank">
+                <button class="btn btn-primary btn-xs add-schedule">{{ 'displays-app.list.schedule.add' | translate }}</button>
+              </a>
+            </td>
+            <td class="table-body__cell display-status">
+              <!-- Not Licensed and Installed -->
+              <span class="text-muted" ng-if="displayFactory.showLicenseRequired(display) && !playerNotInstalled(display)">
+                License Required
+              </span>
+              <!-- Licensed and Loading Status -->
+              <i ng-if="displayService.statusLoading && !displayFactory.showLicenseRequired(display)" class="fa fa-spinner fa-spin fa-fw"></i>
+              <!-- Licensed and Offline -->
+              <span class="text-danger" ng-if="!displayService.statusLoading && !displayFactory.showLicenseRequired(display) && playerOffline(display)">
+                <i class="fa fa-times"></i> Offline
+                <a href="https://help.risevision.com/hc/en-us/articles/115002694906-Why-is-my-Display-status-offline-" target="_blank" translate>
+                  displays-app.list.status.whyOffline
+                </a>
+              </span>
+              <!-- Licensed and Online -->
+              <span class="text-success" ng-if="!displayService.statusLoading && !displayFactory.showLicenseRequired(display) && playerOnline(display)">
+                <i class="fa fa-check"></i> Online
+              </span>
+              <!-- Not Installed and finished Loading -->
+              <a class="u_icon-hover" ng-if="!displayService.statusLoading && playerNotInstalled(display)" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
+                {{ 'displays-app.list.status.notActivated' | translate }}
+              </a>
+            </td>
+            <td class="table-body__cell u_nowrap hidden-xs hidden-sm">
+              <span class="text-muted" ng-if="displayFactory.showLicenseRequired(display)">
+                License Required
+              </span>
+              <span ng-if="!displayFactory.showLicenseRequired(display)">
+                {{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}
+              </span>
+            </td>
+          </tr>
+          <!-- If no displays available -->
+          <tr ng-show="displays.items.list.length === 0 && !search.query">
+            <td colspan="6" class="text-center"><span translate>displays-app.list.empty</span></td>
+          </tr>
+          <!-- If no search results -->
+          <tr ng-show="displays.items.list.length === 0 && search.query">
+            <td colspan="4" class="text-center"><span translate>displays-app.list.no-results</span></td>
+          </tr>
 
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
