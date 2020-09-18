@@ -446,6 +446,11 @@ $short-phone-height: 570px;
   overflow: hidden;
   white-space: nowrap;
 
+  #autoSavingDesktop {
+    display: inline-block;
+    width: 117px;
+  }
+
   last-modified {
     .text-muted {
       color: $madero-black;      
