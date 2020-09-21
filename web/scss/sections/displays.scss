@@ -176,27 +176,3 @@
     color: $rise-green;
   }
 }
-
-.display-product {
-  padding: 4px 8px !important;
-  & span,
-  a {
-    display: block;
-    cursor: pointer;
-  }
-  & span:nth-child(2) {
-    display: inline;
-  }
-}
-
-.display-status {
-  padding: 4px 8px !important;
-  & span,
-  a {
-    display: block;
-    cursor: pointer;
-  }
-  & .btn-link.btn-xs {
-    display: block;
-  }
-}
