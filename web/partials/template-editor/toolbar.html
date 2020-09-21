@@ -7,22 +7,24 @@
   </button>
 </div>
 
-<div class="toolbar-right hidden-xs">
-  <div id="autoSavingDesktop" class="auto-saving-changes" ng-if="hasContentEditorRole()">
-    <div ng-show="!factory.savingPresentation && factory.isUnsaved()">
-      Unsaved changes
-    </div>
-    <div ng-show="factory.savingPresentation">
-      Saving changes...
-    </div>
-    <div ng-show="!factory.savingPresentation && !factory.isUnsaved()">
-      <div>
+<div class="flex-row ml-auto hidden-xs">
+  <div class="auto-save pr-4">
+    <last-modified change-date="factory.presentation.changeDate" changed-by="factory.presentation.changedBy"></last-modified>
+    •
+    <span id="autoSavingDesktop" ng-if="hasContentEditorRole()">
+      <span ng-show="!factory.savingPresentation && factory.isUnsaved()">
+        Unsaved changes
+      </span>
+      <span ng-show="factory.savingPresentation">
+        Saving changes...
+      </span>
+      <span ng-show="!factory.savingPresentation && !factory.isUnsaved()">
         All changes saved <streamline-icon name="checkmark" width="12" height="12"></streamline-icon>
-      </div>
-    </div>
-  </div>
-  <div class="auto-saving-changes" ng-if="!hasContentEditorRole()">
-    <div class="text-danger">You don’t have permission to edit</div>
+      </span>
+    </span>
+    <span class="text-danger" ng-if="!hasContentEditorRole()">
+      You don’t have permission to edit
+    </span>
   </div>
   <button id="publishButtonDesktop" require-role="cp" class="btn btn-primary btn-fixed-width"
           ng-disabled="factory.isPublishDisabled()"

@@ -25,7 +25,7 @@ var TemplateEditorPage = function() {
   var brandingEditLink = element(by.id('branding-edit'));
   var brandingColorsOverrideEditLink = element(by.id('branding-colors-override-edit'));
 
-  var autoSaveXPath = '//div[@id="autoSavingDesktop"]//div[contains(text(), "TEXT")]';
+  var autoSaveXPath = '//span[@id="autoSavingDesktop"]//span[contains(text(), "TEXT")]';
   var dirtyText = element(by.xpath(autoSaveXPath.replace('TEXT', 'Unsaved changes')));
   var savedText = element(by.xpath(autoSaveXPath.replace('TEXT', 'All changes saved')));
   var savingText = element(by.xpath(autoSaveXPath.replace('TEXT', 'Saving changes')));
