@@ -481,7 +481,7 @@ angular.module('risevision.editor.services')
 
       var _getPreviewUrl = function (presentationId) {
         if (presentationId) {
-          return VIEWER_URL + '/?type=presentation&id=' + presentationId + '&notifyHttpError=true';
+          return VIEWER_URL + '/?type=presentation&id=' + presentationId;
         }
         return null;
       };
