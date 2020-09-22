@@ -61,6 +61,8 @@
     border-radius: 4px;
 
     &.scrollable-list {
+      min-height: auto;
+
       .list-group-item {
         @extend .border-top;
 
@@ -76,9 +78,25 @@
           margin-bottom: -1px !important;
         }
       }
+
+      .table>tbody>tr>td, .table>thead>tr>th {
+        @extend .u_padding-md-vertical;
+        @extend .u_padding-sm-horizontal;
+        @extend .u_nowrap;
+      }
+
+      .table>thead>tr>th {
+        font-weight: bold;
+        border-bottom: 0;
+      }
+
+      .table>tbody>tr>td {
+        @extend .border-top;        
+      }
+
     }
   }
-  
+
   .btn-danger {
     background: $danger;
     border-color: $danger;
