@@ -60,7 +60,7 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.getDisplayType = function (display) {
-        if (display.playerProAuthorized) {
+        if (display && display.playerProAuthorized) {
           return 'professional';
         } else {
           return 'standard';

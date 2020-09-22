@@ -73,7 +73,7 @@ var DisplayListScenarios = function() {
 
       it('should show display list Install Player button', function () {
         helper.wait(displaysListPage.getFirstRowStatus(), 'Install Player Button');
-        expect(displaysListPage.getFirstRowStatus().getAttribute('ui-sref')).to.eventually.equal('apps.displays.change({displayId: display.id, companyId: display.companyId})');
+        expect(displaysListPage.getFirstRowStatus().getText()).to.eventually.equal('Not Activated');
       });
     });
   });
