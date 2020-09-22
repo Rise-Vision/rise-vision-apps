@@ -1,19 +1,23 @@
 <div>
-  <div class="auto-saving-changes" ng-if="hasContentEditorRole()">
-    <div ng-show="!factory.savingPresentation && factory.isUnsaved()">
-      Unsaved changes
+  <div class="auto-save text-center">
+    <div>
+      <last-modified change-date="factory.presentation.changeDate" changed-by="factory.presentation.changedBy"></last-modified>
+      •
+      <span ng-if="hasContentEditorRole()">
+        <span ng-show="!factory.savingPresentation && factory.isUnsaved()">
+          Unsaved changes
+        </span>
+        <span ng-show="factory.savingPresentation">
+          Saving changes...
+        </span>
+        <span ng-show="!factory.savingPresentation && !factory.isUnsaved()">
+          All changes saved <streamline-icon name="checkmark" width="12" height="12"></streamline-icon>
+        </span>
+      </span>
+      <span class="text-danger" ng-if="!hasContentEditorRole()">
+        You don’t have permission to edit
+      </span>
     </div>
-    <div ng-show="factory.savingPresentation">
-      Saving changes...
-    </div>
-    <div class="all-changes-saved-message"
-         ng-show="!factory.savingPresentation && !factory.isUnsaved()">
-      All changes saved
-      <streamline-icon name="checkmark" width="12" height="12"></streamline-icon>
-    </div>
-  </div>
-  <div class="auto-saving-changes" ng-if="!hasContentEditorRole()">
-    <div class="text-danger">You don’t have permission to edit</div>
   </div>
   <button id="publishButton" require-role="cp" class="btn btn-primary btn-block"
           ng-disabled="factory.isPublishDisabled()"

@@ -75,43 +75,6 @@ $short-phone-height: 570px;
     height: 16px;
   }
 
-  & .toolbar-right {
-    display: flex;
-    margin-left: auto;
-    flex-wrap: nowrap;
-    align-items: center;
-
-    .auto-saving-changes {
-      position: relative;
-      width: 180px;
-      height: 33px;
-      margin-right: 20px;
-      overflow: hidden;
-      font-size: 12px;
-      white-space: nowrap;
-
-      div {
-        position: absolute;
-        top: 50%;
-        margin-top: -6px;
-        right: 0px;
-
-        div {
-          width: 114px;
-          margin-top: 0px;
-
-          svg {
-            fill: $madero-black;
-            stroke: none;
-            position: absolute;
-            margin-left: 5px;
-            margin-top: 1px;
-          }
-        }
-      }
-    }
-  }
-
   & .btn {
     width: 152px;
   }
@@ -466,31 +429,43 @@ $short-phone-height: 570px;
     margin: 10px 0px;
   }
 
-  .auto-saving-changes {
-    position: relative;
-    width: 100%;
+  .auto-save {
     height: 25px;
-    overflow: hidden;
-    font-size: 12px;
-    white-space: nowrap;
 
     div {
-      position: absolute;
-      width: 100%;
-      top: 50%;
-      margin-top: -5px;
-      text-align: center;
+      @extend %vertical-align;
+
+      margin-top: 5px;
+    }
+  }
+}
+
+.auto-save {
+  @extend .text-sm;
+
+  overflow: hidden;
+  white-space: nowrap;
+
+  #autoSavingDesktop {
+    display: inline-block;
+    width: 117px;
+  }
+
+  last-modified {
+    .text-muted {
+      color: $madero-black;      
     }
 
-    .all-changes-saved-message {
-      svg {
-        fill: $madero-black;
-        stroke: none;
-        position: absolute;
-        margin-left: 5px;
-        margin-top: 1px;
-      }
+    small {
+      font-size: 100%;
     }
+  }
+
+  svg {
+    fill: $madero-black;
+    stroke: none;
+    margin-left: 5px;
+    margin-top: 1px;
   }
 }
 
