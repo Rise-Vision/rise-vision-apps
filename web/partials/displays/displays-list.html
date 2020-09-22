@@ -24,10 +24,12 @@
   </div> 
 
   <div class="flex-row">
-    <search-filter class="w-100 mr-3" filter-config="filterConfig" search="search" do-search="displays.doSearch" icon-set="madero"></search-filter>
-    <a id="displayAddButton" class="btn btn-primary btn-toolbar-wide" ui-sref="apps.displays.add" translate>
-      displays-app.actions.new
-    </a>
+    <search-filter class="w-100" filter-config="filterConfig" search="search" do-search="displays.doSearch" icon-set="madero"></search-filter>
+    <div class="ml-3" require-role="da">
+      <a id="displayAddButton" class="btn btn-primary btn-toolbar-wide" ui-sref="apps.displays.add" translate>
+        displays-app.actions.new
+      </a>
+    </div>
   </div>
 
   <div class="madero-style alert alert-warning u_margin-md-top" ng-show="search.query">
