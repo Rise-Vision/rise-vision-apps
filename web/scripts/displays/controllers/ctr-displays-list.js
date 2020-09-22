@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .controller('displaysList', ['$scope', '$rootScope', '$window', 'userState', 'display',
-    'ScrollingListService', '$loading', '$filter', 'displayFactory',
-    'displayTracker', 'playerProFactory', 'playerLicenseFactory', 'displayStatusFactory',
-    function ($scope, $rootScope, $window, userState, display, ScrollingListService, $loading,
-      $filter, displayFactory, displayTracker, playerProFactory, playerLicenseFactory, displayStatusFactory) {
+  .controller('displaysList', ['$scope', '$rootScope', 'userState', 'display',
+    'ScrollingListService', '$loading', '$filter', 'displayFactory', 'playerLicenseFactory',
+    'displayStatusFactory',
+    function ($scope, $rootScope, userState, display, ScrollingListService, $loading,
+      $filter, displayFactory, playerLicenseFactory, displayStatusFactory) {
       $scope.search = {
         sortBy: 'name',
         count: $scope.listLimit,
@@ -15,7 +15,6 @@ angular.module('risevision.displays.controllers')
 
       $scope.displays = new ScrollingListService(display.list, $scope.search);
       $scope.selectedCompayId = userState.getSelectedCompanyId();
-      $scope.displayTracker = displayTracker;
       $scope.displayFactory = displayFactory;
       $scope.displayService = display;
       $scope.playerLicenseFactory = playerLicenseFactory;
@@ -42,10 +41,6 @@ angular.module('risevision.displays.controllers')
       $rootScope.$on('risevision.company.planStarted', function () {
         $scope.displays.doSearch();
       });
-
-      $scope.openUnsupportedHelpLink = function () {
-        $window.open('https://risevision.zendesk.com/hc/en-us/articles/115003786306', '_blank');
-      };
 
       $scope.playerNotInstalled = function (display) {
         return $filter('status')(display) === 'notinstalled';

@@ -25,7 +25,7 @@
     "manageSchedulesText": "Schedule delivery of HTML content to your digital signage displays, anywhere, anytime."
   },
   "list": {
-    "empty": "You haven't created any Schedules yet.",
+    "empty": "Add a schedule to start communicating better with your audience!",
     "error": "Failed to load schedules.",
     "filter": {
       "filters": "Filters",
