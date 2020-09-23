@@ -90,10 +90,13 @@
         border-bottom: 0;
       }
 
-      .table>tbody>tr>td {
-        @extend .border-top;        
-      }
+      .table>tbody>tr {
+        @extend .border-top;
 
+        &>td {
+          border-top: none;
+        }
+      }
     }
   }
 

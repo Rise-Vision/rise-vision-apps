@@ -207,7 +207,7 @@
     }
   },
   "list": {
-    "empty": "You haven't created any Displays yet.",
+    "empty": "Add a display to start communicating better with your audience!",
     "filter": {
       "filters": "Filters",
       "placeholder": "Search Displays"
