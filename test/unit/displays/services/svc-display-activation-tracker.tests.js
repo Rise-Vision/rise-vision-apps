@@ -65,7 +65,7 @@ describe('service: display activation tracker', function() {
     });
 
     displayActivationTracker([{
-      lastConnectionTime: '2020-08-21T15:19:02.716Z'
+      lastConnectionTime: new Date('2020-08-21T15:19:02.716Z')
     }]);
 
     userState.isSubcompanySelected.should.have.been.called;
@@ -96,15 +96,15 @@ describe('service: display activation tracker', function() {
       displayActivationTracker([{
         id: 'displayId1',
         name: 'displayName1',
-        lastConnectionTime: '2019-08-21T15:19:02.716Z'
+        lastConnectionTime: new Date('2019-08-21T15:19:02.716Z')
       },{
         id: 'displayId2',
         name: 'displayName2',
-        lastConnectionTime: '2020-08-21T15:19:02.716Z'
+        lastConnectionTime: new Date('2020-08-21T15:19:02.716Z')
       },{
         id: 'displayId3',
         name: 'displayName3',
-        lastConnectionTime: '2017-08-21T15:19:02.716Z'
+        lastConnectionTime: new Date('2017-08-21T15:19:02.716Z')
       }]);
 
       analyticsFactory.identify.should.have.been.calledWith('username', {
@@ -121,7 +121,7 @@ describe('service: display activation tracker', function() {
     displayActivationTracker([{
       id: 'displayId',
       name: 'displayName',
-      lastConnectionTime: '2020-08-21T15:19:02.716Z'
+      lastConnectionTime: new Date('2020-08-21T15:19:02.716Z')
     }]);
 
     analyticsFactory.identify.should.have.been.calledWith('username', {
@@ -137,13 +137,13 @@ describe('service: display activation tracker', function() {
     displayActivationTracker([{
       id: 'displayId',
       name: 'displayName',
-      lastConnectionTime: '2020-08-21T15:19:02.716Z'
+      lastConnectionTime: new Date('2020-08-21T15:19:02.716Z')
     }]);
 
     setTimeout(function() {
       updateUser.should.have.been.calledWith('username', {
         settings: {
-          firstDisplayActivationDate: '2020-08-21T15:19:02.716Z'
+          firstDisplayActivationDate: new Date('2020-08-21T15:19:02.716Z').toISOString()
         }
       });
       userState.updateUserProfile.should.have.been.calledWith('updatedUser');
