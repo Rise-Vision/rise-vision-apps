@@ -1,70 +1,79 @@
-<div class="container">
+<div class="container madero-style">
 
   <weekly-templates></weekly-templates>
 
-  <div class="app-header my-4">
-      <!-- App Title -->
-      <h1 class="app-header-title" id="title" translate>editor-app.list.title</h1>
-
-    <div class="ml-auto">
-        <button id="presentationAddButton" ng-click="editorFactory.addPresentationModal()" class="btn btn-primary btn-lg">
-          {{'editor-app.list.actions.add' | translate}} <i class="fa fa-plus icon-right"></i>
-        </button>
-        <button id="sharedTemplatesButton" ng-click="editorFactory.addFromSharedTemplateModal()" class="dropdown-toggle btn btn-default btn-lg" translate>editor-app.sharedTemplates.title</button>
-    </div>
+  <div class="app-header mb-5">
+    <!-- App Title -->
+    <h1 class="app-header-title" id="title" translate>editor-app.list.title</h1>
   </div>
 
-  <div id="errorBox" ng-show="factory.apiError" class="alert alert-danger" role="alert">
-    <strong>{{factory.errorMessage}}</strong> {{factory.apiError}}
+  <div id="errorBox" ng-show="presentations.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
+    <strong>{{presentations.errorMessage}}</strong> {{presentations.apiError}}
   </div> 
 
-  <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>
-  <div class="panel u_margin-sm-top">
-    <div class="scrollable-list"
-      scrolling-list="factory.load()"
-      rv-spinner rv-spinner-key="presentation-list-loader"
-      rv-spinner-start-active="1"
-      >
-      <table id="presentationListTable" class="table table--hover">
+  <div ng-if="!(!presentations.loadingItems && presentations.items.list.length === 0 && !search.query)">
+
+    <div class="flex-row">
+      <search-filter class="w-100" filter-config="filterConfig" search="search" do-search="presentations.doSearch" icon-set="madero"></search-filter>
+      <div class="ml-3 flex-row" require-role="ce">
+        <button id="sharedTemplatesButton" ng-click="editorFactory.addFromSharedTemplateModal()" class="btn btn-default btn-toolbar-wide" translate>
+          editor-app.sharedTemplates.title
+        </button>
+        <button id="presentationAddButton" ng-click="editorFactory.addPresentationModal()" class="btn btn-primary btn-toolbar-wide ml-3" translate>
+          editor-app.list.actions.add
+        </button>
+      </div>
+    </div>
+
+    <div class="scrollable-list horizontal-scroll border-container u_margin-md-top u_margin-md-bottom"
+      scrolling-list="presentations.load()" rv-spinner rv-spinner-key="presentation-list-loader" rv-spinner-start-active="1">
+
+      <table id="presentationListTable" class="table">
         <thead class="table-header">
           <tr class="table-header__row u_clickable">
-            <th id="tableHeaderName" class="table-header__cell" ng-click="factory.sortBy('name')">
+            <th id="tableHeaderName" class="table-header__cell col-sm-8" ng-click="presentations.sortBy('name')">
               {{'editor-app.list.heading.name' | translate}}
-              <!-- ngIf: search.sortBy == 'name' -->
-              <i ng-if="search.sortBy == 'name'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
-              <!-- end ngIf: search.sortBy == 'name' -->
+              <i ng-if="search.sortBy === 'name'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
-            <th id="tableHeaderStatus" class="table-header__cell hidden-xs"  ng-click="factory.sortBy('revisionStatusName')">
+            <th id="tableHeaderStatus" class="table-header__cell col-sm-2 hidden-xs"  ng-click="presentations.sortBy('revisionStatusName')">
               {{'editor-app.list.heading.status'  | translate}}
-              <!-- ngIf: search.sortBy == 'revisionStatusName' -->
-              <i ng-if="search.sortBy == 'revisionStatusName'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
-              <!-- end ngIf: search.sortBy == 'revisionStatusName' -->
+              <i ng-if="search.sortBy === 'revisionStatusName'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
-            <th id="tableHeaderChangeDate" class="table-header__cell hidden-xs" ng-click="factory.sortBy('changeDate')">
+            <th id="tableHeaderChangeDate" class="table-header__cell col-sm-2 hidden-xs" ng-click="presentations.sortBy('changeDate')">
               {{'editor-app.list.heading.changeDate' | translate}}
-              <!-- ngIf: search.sortBy == 'changeDate' -->
-              <i ng-if="search.sortBy == 'changeDate'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
-              <!-- end ngIf: search.sortBy == 'changeDate' -->
+              <i ng-if="search.sortBy === 'changeDate'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
           </tr>
         </thead>
         <tbody class="table-body">
-          <tr class="table-body__row" ng-repeat="presentation in factory.items.list" ng-click="openPresentation(presentation)">
-            <td class="table-body__cell col-sm-9"><a ng-click="openPresentation(presentation); $event.stopPropagation();"><strong>{{presentation.name}}</strong></a></td>
-            <td class="table-body__cell col-sm-9 hidden-xs"><span ng-click="openPresentation(presentation); $event.stopPropagation();"><span ng-class="{'text-danger': presentation.revisionStatusName==='Revised'}">{{presentation.revisionStatusName | presentationStatus}}</span></span></td>
-            <td class="table-body__cell col-sm-2 hidden-xs u_nowrap" ><span ng-click="openPresentation(presentation); $event.stopPropagation();">{{presentation.changeDate | date:'d-MMM-yyyy h:mm a'}}</span></td>
+          <tr class="table-body__row" ng-repeat="presentation in presentations.items.list">
+            <td class="table-body__cell">
+              <a class="madero-link" ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})" ng-if="!isHtmlPresentation(presentation)"><strong>{{presentation.name}}</strong></a>
+              <a class="madero-link" ui-sref="apps.editor.templates.edit({presentationId: presentation.id})" ng-if="isHtmlPresentation(presentation)"><strong>{{presentation.name}}</strong></a>
+            </td>
+            <td class="table-body__cell hidden-xs"><span ng-class="{'text-danger': presentation.revisionStatusName==='Revised'}">{{presentation.revisionStatusName | presentationStatus}}</span></td>
+            <td class="table-body__cell hidden-xs">{{presentation.changeDate | date:'d-MMM-yyyy h:mm a'}}</td>
           </tr>
-          <!-- If no presentation available -->
-          <tr class="table-body__row" ng-show="factory.items.list.length === 0 && !search.query">
-            <td colspan="3" class="text-center"><span translate>editor-app.list.empty</span></td>
-          </tr>
+
           <!-- If no search results -->
-          <tr class="table-body__row" ng-show="factory.items.list.length === 0 && search.query">
+          <tr class="table-body__row" ng-show="presentations.items.list.length === 0 && search.query">
             <td colspan="3" class="text-center"><span translate>editor-app.list.no-results</span></td>
           </tr>
 
         </tbody>
       </table>
     </div>
-  </div><!--panel-->
+  </div>
+
+  <div class="border-container text-center u_margin-md-bottom" ng-if="!presentations.loadingItems && presentations.items.list.length === 0 && !search.query">
+    <div class="panel-body">
+      <div class="form-group my-4">
+        <label translate>editor-app.list.empty</label>
+      </div>
+      <button id="presentationAddButton" class="btn btn-primary btn-toolbar-wide mb-2" ng-click="editorFactory.addPresentationModal()" translate>
+        editor-app.list.actions.add
+      </button>
+    </div>
+  </div>
+
 </div>

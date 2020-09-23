@@ -38,13 +38,12 @@
         <tbody class="table-body">
           <tr class="table-body__row" ng-repeat="schedule in schedules.items.list">
             <td class="table-body__cell"><a class="madero-link" ui-sref="apps.schedules.details({scheduleId: schedule.id})"><strong>{{schedule.name}}</strong></a></td>
-            <td class="table-body__cell hidden-xs u_nowrap">{{schedule.changeDate | date:'d-MMM-yyyy h:mm a'}}</td>
+            <td class="table-body__cell hidden-xs">{{schedule.changeDate | date:'d-MMM-yyyy h:mm a'}}</td>
           </tr>
           <!-- If no search results -->
           <tr class="table-body__row" ng-show="schedules.items.list.length === 0 && search.query">
             <td colspan="3" class="table-body__cell text-center"><span translate>schedules-app.list.no-results</span></td>
           </tr>
-
         </tbody>
       </table>
     </div>

@@ -1,15 +1,15 @@
 <div ng-controller="PresentationListController">
-  <search-filter filter-config="filterConfig" search="search" do-search="factory.doSearch"></search-filter>
+  <search-filter filter-config="filterConfig" search="search" do-search="presentations.doSearch"></search-filter>
   <div class="panel u_margin-sm-top">
     <div class="scrollable-list" 
-      scrolling-list="factory.load()"
+      scrolling-list="presentations.load()"
       rv-spinner rv-spinner-key="presentation-list-loader"
       rv-spinner-start-active="1"
       >
       <table id="presentationListTable" class="table table--hover">
         <thead class="table-header">
           <tr class="table-header__row">
-            <th id="tableHeaderName" ng-click="factory.sortBy('name')" class="table-header__cell u_clickable">
+            <th id="tableHeaderName" ng-click="presentations.sortBy('name')" class="table-header__cell u_clickable">
               {{'editor-app.list.heading.name' | translate}}
               <!-- ngIf: search.sortBy == 'name' -->
               <i ng-if="search.sortBy == 'name'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
@@ -22,16 +22,16 @@
         </thead>
 
         <tbody class="table-body">
-          <tr class="table-body__row u_clickable" data-ng-click="toggleObject.item = $index; select(presentation.id, presentation.name, presentation.presentationType);" data-ng-class="{'active' : toggleObject.item == $index}" ng-repeat="presentation in factory.items.list">
+          <tr class="table-body__row u_clickable" data-ng-click="toggleObject.item = $index; select(presentation.id, presentation.name, presentation.presentationType);" data-ng-class="{'active' : toggleObject.item == $index}" ng-repeat="presentation in presentations.items.list">
             <td id="presentationName" class="table-body__cell">{{presentation.name}}</td>
             <td class="table-body__cell text-right"><span ng-class="{'text-danger': presentation.revisionStatus==1}">{{presentation.revisionStatusName | presentationStatus}}</span></td>
           </tr>
           <!-- If no presentation available -->
-          <tr class="table-body__row" ng-show="factory.items.list.length === 0 && !search.query">
+          <tr class="table-body__row" ng-show="presentations.items.list.length === 0 && !search.query">
             <td colspan="3" class="text-center"><span translate>editor-app.list.empty</span></td>
           </tr>
           <!-- If no search results -->
-          <tr class="table-body__row" ng-show="factory.items.list.length === 0 && search.query">
+          <tr class="table-body__row" ng-show="presentations.items.list.length === 0 && search.query">
             <td colspan="3" class="text-center"><span translate>editor-app.list.no-results</span></td>
           </tr>
 

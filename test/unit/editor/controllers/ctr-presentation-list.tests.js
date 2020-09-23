@@ -26,12 +26,8 @@ describe('controller: Presentation List', function() {
     });
     $provide.service('$loading',function(){
       return {
-        start : function(spinnerKeys){
-          return;
-        },
-        stop : function(spinnerKeys){
-          return;
-        }
+        start : sinon.spy(),
+        stop : sinon.spy()
       }
     });
     $provide.value('translateFilter', function(){
@@ -39,29 +35,22 @@ describe('controller: Presentation List', function() {
         return key;
       };
     });
-    $provide.service('$state', function() {
-      return {
-        go: sinon.stub()
-      };
-    });
     $provide.service('presentationUtils', function() {
       return {
-        openPresentation: sinon.stub()
+        isHtmlPresentation: sinon.stub()
       };
     });
     $provide.value('PRESENTATION_SEARCH', {
       filter: 'search filter'
     });
   }));
-  var $scope, $loading, $loadingStartSpy, $loadingStopSpy;
+  var $scope, $loading;
   beforeEach(function(){
 
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
       $scope.listLimit = 5;
       $loading = $injector.get('$loading');
-      $loadingStartSpy = sinon.spy($loading, 'start');
-      $loadingStopSpy = sinon.spy($loading, 'stop');
       $controller('PresentationListController', {
         $scope : $scope,
         ScrollingListService: $injector.get('ScrollingListService'),
@@ -75,12 +64,10 @@ describe('controller: Presentation List', function() {
   it('should exist',function(){
     expect($scope).to.be.ok;
 
-    expect($scope.factory).to.be.ok;
-    expect($scope.factory.loadingItems).to.be.false;
+    expect($scope.presentations).to.be.ok;
+    expect($scope.presentations.loadingItems).to.be.false;
     expect($scope.search).to.be.ok;
     expect($scope.filterConfig).to.be.ok;
-    expect($scope.presentationTracker).to.be.ok;
-
   });
 
   it('should init the scope objects',function(){
@@ -91,20 +78,16 @@ describe('controller: Presentation List', function() {
     expect($scope.search.count).to.equal(5);
   });
 
-  it('should attach presentation list to editorFactory',function(){
-    expect($scope.editorFactory.presentations).to.be.ok;
-  });
-
   describe('$loading: ', function() {
     it('should stop spinner', function() {
-      $loadingStopSpy.should.have.been.calledWith('presentation-list-loader');
+      $loading.stop.should.have.been.calledWith('presentation-list-loader');
     });
 
     it('should start spinner', function(done) {
-      $scope.factory.loadingItems = true;
+      $scope.presentations.loadingItems = true;
       $scope.$digest();
       setTimeout(function() {
-        $loadingStartSpy.should.have.been.calledWith('presentation-list-loader');
+        $loading.start.should.have.been.calledWith('presentation-list-loader');
 
         done();
       }, 10);

@@ -4,7 +4,7 @@ var PresentationModalPage = function() {
   var modalTitle = element(by.css('#addPresentationModal .modal-title'));
   var presentationSearchInput = element(by.id('presentationSearchInput'));
   var presentationListTable = element(by.id('presentationListTable'));
-  var presentationItems = element.all(by.repeater('presentation in factory.items.list'));
+  var presentationItems = element.all(by.repeater('presentation in presentations.items.list'));
   var presentationListLoader = element(by.xpath('//div[@spinner-key="presentation-list-loader"]'));
   var presentationNames = element.all(by.css('#addPresentationModal #presentationName'));
   var selectPresentationsButton = element(by.id('selectPresentations'));
