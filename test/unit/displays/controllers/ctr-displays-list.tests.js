@@ -32,12 +32,8 @@ describe('controller: displays list', function() {
 
     $provide.service('$loading',function(){
       return {
-        start : function(spinnerKeys){
-          return;
-        },
-        stop : function(spinnerKeys){
-          return;
-        }
+        start : sinon.spy(),
+        stop : sinon.spy()
       }
     });
     
@@ -50,35 +46,17 @@ describe('controller: displays list', function() {
     $provide.service('displayFactory', function() {
       return {};
     });
-    $provide.service('playerProFactory', function() {
-      return {
-        isOutdatedPlayer: function(display) {
-          return display.outdated;
-        },
-        isUnsupportedPlayer: function(display) {
-          return display.unsupported;
-        },
-        is3rdPartyPlayer: function(display) {
-          return display.thirdParty;
-        },
-        isOfflinePlayCompatiblePayer: function(display) {
-          return !display.notProCompatiblePlayer;
-        }
-      };
-    });
     $provide.service('playerLicenseFactory', function() {
       return {};
     });
   }));
-  var $scope, $loading, $filter, $loadingStartSpy, $loadingStopSpy, $window;
+  var $scope, $loading, $filter, $window;
   beforeEach(function(){
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
       $scope.listLimit = 5;
       $filter = $injector.get('$filter');
       $loading = $injector.get('$loading');
-      $loadingStartSpy = sinon.spy($loading, 'start');
-      $loadingStopSpy = sinon.spy($loading, 'stop');
       $window = $injector.get('$window');
       $controller('displaysList', {
         $scope : $scope,
@@ -102,7 +80,6 @@ describe('controller: displays list', function() {
     expect($scope.search).to.be.ok;
     expect($scope.filterConfig).to.be.ok;
 
-    expect($scope.displayTracker).to.be.ok;
     expect($scope.displayFactory).to.be.ok;
     expect($scope.playerLicenseFactory).to.be.ok;
   });
@@ -116,14 +93,14 @@ describe('controller: displays list', function() {
 
   describe('$loading: ', function() {
     it('should stop spinner', function() {
-      $loadingStopSpy.should.have.been.calledWith('displays-list-loader');
+      $loading.stop.should.have.been.calledWith('displays-list-loader');
     });
     
     it('should start spinner', function(done) {
       $scope.displays.loadingItems = true;
       $scope.$digest();
       setTimeout(function() {
-        $loadingStartSpy.should.have.been.calledWith('displays-list-loader');
+        $loading.start.should.have.been.calledWith('displays-list-loader');
         
         done();
       }, 10);
@@ -136,13 +113,6 @@ describe('controller: displays list', function() {
     $scope.$broadcast('displayCreated');
     $scope.$apply();
     searchSpy.should.have.been.called;
-  });
-
-  it('should open Unsupported link', function() {
-    sandbox.stub($window, "open");
-
-    $scope.openUnsupportedHelpLink();
-    expect($window.open).to.have.been.called;
   });
 
   it('should return correct statuses', function () {

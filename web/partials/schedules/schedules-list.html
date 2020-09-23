@@ -1,60 +1,66 @@
-<weekly-templates></weekly-templates>
+<div class="madero-style">
+  <weekly-templates></weekly-templates>
 
-<div class="app-header my-4">
+  <div class="app-header mb-5">
     <!-- App Title -->
     <h1 class="app-header-title" id="title" translate>schedules-app.title</h1>
-
-  <div class="ml-auto" require-role="cp">
-    <a id="scheduleAddButton" ui-sref="apps.schedules.add" class="btn btn-lg btn-primary">
-      {{ 'schedules-app.actions.new' | translate }}
-      <i class="fa fa-plus icon-right"></i> 
-    </a>
   </div>
+
+  <div id="errorBox" ng-show="apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
+    <strong>{{errorMessage}}</strong> {{apiError}}
+  </div> 
+
+  <div ng-hide="!schedules.loadingItems && schedules.items.list.length === 0 && !search.query">
+
+    <div class="flex-row">
+      <search-filter class="w-100" filter-config="filterConfig" search="search" do-search="schedules.doSearch" icon-set="madero"></search-filter>
+      <div class="ml-3" require-role="cp">
+        <a id="scheduleAddButton" class="btn btn-primary btn-toolbar-wide" ui-sref="apps.schedules.add" translate>
+          schedules-app.actions.new
+        </a>
+      </div>
+    </div>
+
+    <div class="scrollable-list horizontal-scroll border-container u_margin-md-top u_margin-md-bottom"
+      scrolling-list="schedules.load()" rv-spinner rv-spinner-key="schedules-list-loader" rv-spinner-start-active="1">
+
+      <table id="schedulesListTable" class="table">
+        <thead class="table-header">
+          <tr class="table-header__row u_clickable">
+            <th id="tableHeaderName" class="table-header__cell col-sm-9" ng-click="schedules.sortBy('name')">
+              {{ 'schedules-app.list.heading.name' | translate }}
+              <i ng-if="search.sortBy === 'name'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
+            </th>
+            <th id="tableHeaderChangeDate" class="table-header__cell col-sm-3 hidden-xs" ng-click="schedules.sortBy('changeDate')">
+              {{ 'schedules-app.list.heading.changeDate' | translate }}
+              <i ng-if="search.sortBy === 'changeDate'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="table-body">
+          <tr class="table-body__row" ng-repeat="schedule in schedules.items.list">
+            <td class="table-body__cell"><a style="madero-link" ui-sref="apps.schedules.details({scheduleId: schedule.id})"><strong>{{schedule.name}}</strong></a></td>
+            <td class="table-body__cell hidden-xs u_nowrap">{{schedule.changeDate | date:'d-MMM-yyyy h:mm a'}}</td>
+          </tr>
+          <!-- If no search results -->
+          <tr class="table-body__row" ng-show="schedules.items.list.length === 0 && search.query">
+            <td colspan="3" class="table-body__cell text-center"><span translate>schedules-app.list.no-results</span></td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="border-container text-center u_margin-md-bottom" ng-show="!schedules.loadingItems && schedules.items.list.length === 0 && !search.query">
+    <div class="panel-body">
+      <div class="form-group my-4">
+        <label translate>schedules-app.list.empty</label>
+      </div>
+      <a id="scheduleAddButton" class="btn btn-primary btn-toolbar-wide mb-2" ui-sref="apps.schedules.add" translate>
+        schedules-app.actions.new
+      </a>
+    </div>
+  </div>
+
 </div>
-
-<div id="errorBox" ng-show="apiError" class="alert alert-danger" role="alert">
-  <strong>{{errorMessage}}</strong> {{apiError}}
-</div> 
-
-<search-filter filter-config="filterConfig" search="search" do-search="doSearch"></search-filter> 
-<div class="panel u_margin-sm-top">
-  <div class="scrollable-list"
-    scrolling-list="load()"
-    rv-spinner rv-spinner-key="schedules-list-loader"
-    rv-spinner-start-active="1"
-    >
-    <table id="schedulesListTable" class="table table--hover">
-      <thead class="table-header">
-        <tr class="table-header__row u_clickable">
-          <th id="tableHeaderName" class="table-header__cell" ng-click="sortBy('name')">
-            {{ 'schedules-app.list.heading.name' | translate }}
-            <!-- ngIf: search.sortBy == 'name' -->
-            <i ng-if="search.sortBy == 'name'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
-            <!-- end ngIf: search.sortBy == 'name' -->
-          </th>
-          <th id="tableHeaderChangeDate" class="table-header__cell hidden-xs" ng-click="sortBy('changeDate')">
-            {{ 'schedules-app.list.heading.changeDate' | translate }}
-            <!-- ngIf: search.sortBy == 'changeDate' -->
-            <i ng-if="search.sortBy == 'changeDate'" class="fa" ng-class="{false: 'fa-long-arrow-up', true: 'fa-long-arrow-down'}[search.reverse]"></i>
-            <!-- end ngIf: search.sortBy == 'changeDate' -->
-          </th>
-        </tr>
-      </thead>
-      <tbody class="table-body">
-        <tr class="table-body__row" ng-repeat="schedule in schedules.list" ui-sref="apps.schedules.details({scheduleId: schedule.id})">
-          <td class="table-body__cell col-sm-9"><a ui-sref="apps.schedules.details({scheduleId: schedule.id})"><strong>{{schedule.name}}</strong></a></td>
-          <td class="table-body__cell col-sm-2 hidden-xs u_nowrap"><span ui-sref="apps.schedules.details({scheduleId: schedule.id})">{{schedule.changeDate | date:'d-MMM-yyyy h:mm a'}}</span></td>
-        </tr>
-        <!-- If no schedules available -->
-        <tr class="table-body__row" ng-show="schedules.list.length === 0 && !search.query">
-          <td colspan="3" class="table-body__cell text-center"><span translate>schedules-app.list.empty</span></td>
-        </tr>
-        <!-- If no search results -->
-        <tr class="table-body__row" ng-show="schedules.list.length === 0 && search.query">
-          <td colspan="3" class="table-body__cell text-center"><span translate>schedules-app.list.no-results</span></td>
-        </tr>
-        
-      </tbody>
-    </table>
-  </div>
-</div><!--panel-->
