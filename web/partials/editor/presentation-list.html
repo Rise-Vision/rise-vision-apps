@@ -13,13 +13,13 @@
 
   <div ng-if="!(!presentations.loadingItems && presentations.items.list.length === 0 && !search.query)">
 
-    <div class="flex-row">
+    <div class="flex-row button-toolbar-md-folded">
       <search-filter class="w-100" filter-config="filterConfig" search="search" do-search="presentations.doSearch" icon-set="madero"></search-filter>
-      <div class="ml-3 flex-row" require-role="ce">
+      <div class="ml-md-3 button-toolbar flex-row" require-role="ce">
         <button id="sharedTemplatesButton" ng-click="editorFactory.addFromSharedTemplateModal()" class="btn btn-default btn-toolbar-wide" translate>
           editor-app.sharedTemplates.title
         </button>
-        <button id="presentationAddButton" ng-click="editorFactory.addPresentationModal()" class="btn btn-primary btn-toolbar-wide ml-3" translate>
+        <button id="presentationAddButton" ng-click="editorFactory.addPresentationModal()" class="btn btn-primary btn-toolbar-wide" translate>
           editor-app.list.actions.add
         </button>
       </div>

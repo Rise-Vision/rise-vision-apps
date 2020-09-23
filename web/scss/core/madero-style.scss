@@ -125,6 +125,22 @@
     }
   }
 
+  @media (max-width: 768px) {
+    .button-toolbar-md-folded {
+      display: block;
+
+      .button-toolbar {
+        display: block;
+      }
+
+      .btn-toolbar, .btn-toolbar-wide {
+        margin-top: 1rem !important;
+
+        width: 100%;
+      }
+    }
+  }
+
   .fields-preview-panels {
     margin-left: 0px;
     margin-right: 0px;
