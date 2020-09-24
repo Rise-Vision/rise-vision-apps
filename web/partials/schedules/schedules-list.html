@@ -10,9 +10,9 @@
 
   <div ng-if="!(!schedules.loadingItems && schedules.items.list.length === 0 && !search.query)">
 
-    <div class="flex-row">
+    <div class="flex-row button-toolbar-md-folded">
       <search-filter class="w-100" filter-config="filterConfig" search="search" do-search="schedules.doSearch" icon-set="madero"></search-filter>
-      <div class="ml-3" require-role="cp">
+      <div class="ml-md-3" require-role="cp">
         <a id="scheduleAddButton" class="btn btn-primary btn-toolbar-wide" ui-sref="apps.schedules.add" translate>
           schedules-app.actions.new
         </a>

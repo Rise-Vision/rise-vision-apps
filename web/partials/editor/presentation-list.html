@@ -13,13 +13,13 @@
 
   <div ng-if="!(!presentations.loadingItems && presentations.items.list.length === 0 && !search.query)">
 
-    <div class="flex-row">
+    <div class="flex-row button-toolbar-md-folded">
       <search-filter class="w-100" filter-config="filterConfig" search="search" do-search="presentations.doSearch" icon-set="madero"></search-filter>
-      <div class="ml-3 flex-row" require-role="ce">
+      <div class="ml-md-3 button-toolbar flex-row" require-role="ce">
         <button id="sharedTemplatesButton" ng-click="editorFactory.addFromSharedTemplateModal()" class="btn btn-default btn-toolbar-wide" translate>
           editor-app.sharedTemplates.title
         </button>
-        <button id="presentationAddButton" ng-click="editorFactory.addPresentationModal()" class="btn btn-primary btn-toolbar-wide ml-3" translate>
+        <button id="presentationAddButton" ng-click="editorFactory.addPresentationModal()" class="btn btn-primary btn-toolbar-wide" translate>
           editor-app.list.actions.add
         </button>
       </div>
@@ -52,7 +52,7 @@
               <a class="madero-link" ui-sref="apps.editor.templates.edit({presentationId: presentation.id})" ng-if="isHtmlPresentation(presentation)"><strong>{{presentation.name}}</strong></a>
             </td>
             <td class="table-body__cell hidden-xs"><span ng-class="{'text-danger': presentation.revisionStatusName==='Revised'}">{{presentation.revisionStatusName | presentationStatus}}</span></td>
-            <td class="table-body__cell hidden-xs">{{presentation.changeDate | date:'d-MMM-yyyy h:mm a'}}</td>
+            <td class="table-body__cell hidden-xs">{{presentation.changeDate | date:'d-MMM-yyyy h:mm a'}} by {{presentation.changedBy | username}}</td>
           </tr>
 
           <!-- If no search results -->
