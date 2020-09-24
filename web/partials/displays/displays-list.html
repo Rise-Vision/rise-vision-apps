@@ -35,34 +35,37 @@
       <strong translate>displays-app.list.searchNotification</strong>
     </div>
 
-    <div class="scrollable-list border-container u_margin-md-top u_margin-md-bottom"
+    <div class="scrollable-list horizontal-scroll border-container u_margin-md-top u_margin-md-bottom"
       scrolling-list="displays.load()" rv-spinner rv-spinner-key="displays-list-loader" rv-spinner-start-active="1">
 
       <table id="displaysListTable" class="table">
         <thead class="table-header">
           <tr class="table-header__row">
-            <th class="table-header__cell col-sm-4 u_clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
+            <th class="table-header__cell col-xs-4 u_clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
               {{ 'displays-app.list.heading.name' | translate }}
               <i ng-if="search.sortBy === 'name'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
-            <th class="table-header__cell col-sm-1" translate>
+            <th class="table-header__cell col-xs-1" translate>
               Licensed
             </th>
-            <th id="tableHeaderStatus" class="table-header__cell col-sm-1" translate>
+            <th id="tableHeaderStatus" class="table-header__cell col-xs-1" translate>
               displays-app.list.heading.status
             </th>
-            <th id="tableHeaderLastConnection" class="table-header__cell col-sm-2 hidden-xs hidden-sm" translate>
+            <th id="tableHeaderLastConnection" class="table-header__cell col-xs-2" translate>
               displays-app.list.heading.lastConnection
             </th>
-            <th class="table-header__cell col-sm-3 hidden-xs" translate>
+            <th class="table-header__cell col-xs-2" translate>
               displays-app.list.heading.schedule
+            </th>
+            <th class="table-header__cell col-xs-2" translate>
+              Last Modified
             </th>
           </tr>
         </thead>
         <tbody class="table-body">
           <tr class="table-body__row" ng-class="{ 'bg-warning' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list">
             <td class="table-body__cell">
-              <a class="madero-link u_ellipsis-lg" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
+              <a class="madero-link u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
                 <strong>{{display.name}}</strong>
               </a>
             </td>
@@ -94,7 +97,7 @@
                 {{ 'displays-app.list.status.notActivated' | translate }}
               </span>
             </td>
-            <td class="table-body__cell u_nowrap hidden-xs hidden-sm">
+            <td class="table-body__cell">
               <span ng-if="displayFactory.showLicenseRequired(display)">
                 License Required
               </span>
@@ -102,20 +105,22 @@
                 {{display.lastConnectionTime | date:'d-MMM-yyyy h:mm a'}}
               </span>
             </td>
-            <td class="table-body__cell hidden-xs display-schedule">
-              <a class="madero-link u_ellipsis-md u_icon-hover schedule-view" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })" target="_blank">
-                {{display.scheduleName}}<i class="fa fa-external-link icon-sm-right"></i>
+            <td class="table-body__cell display-schedule">
+              <a class="madero-link u_ellipsis-md schedule-view" ng-if="displayService.hasSchedule(display)" ui-sref="apps.schedules.details({ scheduleId: display.scheduleId, cid: display.companyId })">
+                {{display.scheduleName}}
               </a>
-              <span ng-if="!playerNotInstalled(display) && !displayService.hasSchedule(display)">
+              <span class="u_ellipsis-md" ng-if="!playerNotInstalled(display) && !displayService.hasSchedule(display)">
                 No Schedule Selected
               </span>
+            </td>
+            <td class="table-body__cell u_ellipsis-md">
+              {{display.changeDate | date:'d-MMM-yyyy h:mm a'}} by {{display.changedBy | username}}
             </td>
           </tr>
           <!-- If no search results -->
           <tr ng-show="displays.items.list.length === 0 && search.query">
             <td colspan="4" class="text-center"><span translate>displays-app.list.no-results</span></td>
           </tr>
-
         </tbody>
       </table>
 

@@ -46,15 +46,17 @@ angular.module('risevision.displays.services')
         if (activeDisplay && activeDisplay.lastConnectionTime) {
           $log.info('Active display found', activeDisplay);
 
+          var activationDate = activeDisplay.lastConnectionTime.toISOString();
+
           analyticsFactory.identify(userState.getUsername(), {
-            firstDisplayActivationDate: activeDisplay.lastConnectionTime
+            firstDisplayActivationDate: activationDate
           });
 
           displayTracker('first display activated', activeDisplay.id, activeDisplay.name, {
-            firstDisplayActivationDate: activeDisplay.lastConnectionTime
+            firstDisplayActivationDate: activationDate
           });
 
-          _updateUserSettings(activeDisplay.lastConnectionTime);
+          _updateUserSettings(activationDate);
         }
       };
     }
