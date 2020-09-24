@@ -15,12 +15,7 @@
   <div class="file-component-list" ng-show="folderItems.length > 0 && !isUploading" ng-if="basicStorageSelectorFactory.isListView">
     <div class="pl-0 file-component-list-header" ng-hide="filteredItems.length === 0">
       <div class="file-entry">
-        <div class="madero-checkbox" ng-if="!storageManager.isSingleFileSelector()" ng-click="selectAllItems()">
-          <input type="checkbox" ng-model="search.selectAll" tabindex="1">
-          <label>
-            <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
-          </label>
-        </div>
+        <madero-checkbox ng-if="!storageManager.isSingleFileSelector()" ng-click="selectAllItems()" ng-value="search.selectAll"></madero-checkbox>
         <div class="mr-auto u_clickable" ng-click="sortBy(fileNameOrderFunction)">
           File name
           <i ng-if="search.sortBy === fileNameOrderFunction" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
@@ -44,12 +39,7 @@
 
       <div class="pl-0 file-component-list-file-row u_clickable" ng-if="!isFolder(item.name)" ng-click="selectItem(item)">
         <div class="file-entry">
-          <div class="madero-checkbox">
-            <input type="checkbox" ng-checked="isSelected(item)" tabindex="1">
-            <label>
-              <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
-            </label>
-          </div>
+          <madero-checkbox ng-value="isSelected(item)"></madero-checkbox>
           <div class="file-text mr-auto">
             <div class="file-name">{{fileNameOf(item.name)}}</div>
           </div>

@@ -15,12 +15,7 @@
     <div class="row-entry">
       <label class="control-label pull-left mb-0">Distribution</label>
 
-      <div id="allDisplaysCheckboxMask" class="madero-checkbox u_clickable u_margin-left" ng-click="distributeToAll = !distributeToAll">
-        <input type="checkbox" id="allDisplaysCheckbox" ng-model="distributeToAll" tabindex="1">
-        <label>
-          <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
-        </label>
-      </div>
+      <madero-checkbox id="allDisplaysCheckboxMask" class="u_margin-left" ng-model="distributeToAll" checkbox-id="allDisplaysCheckbox"></madero-checkbox>
       <span class="mr-3">Show on all displays.</span>
     </div>
   </div>

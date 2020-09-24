@@ -88,12 +88,7 @@ recurrence-days-of-week = "factory.schedule.recurrenceDaysOfWeek"
     <div class="flex-row border-bottom u_padding-20-vertical mb-4">
       <div class="row-entry">
         <label class="pull-left mr-auto mb-0">Schedule Preview</label>
-        <div class="madero-checkbox u_clickable" ng-click="applyTimeline = !applyTimeline">
-          <input type="checkbox" ng-checked="applyTimeline" tabindex="1">
-          <label>
-            <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
-          </label>
-        </div>
+        <madero-checkbox ng-model="applyTimeline"></madero-checkbox>
         <span class="mr-3">Apply Timeline to preview.</span>
         <share-schedule-button schedule="factory.schedule" button-class="btn-default btn-toolbar"></share-schedule-button>
 

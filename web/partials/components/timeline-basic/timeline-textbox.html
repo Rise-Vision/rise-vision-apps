@@ -2,12 +2,7 @@
   <div class="row-entry">
     <label class="control-label timeline-label pull-left mb-0" translate>displays-app.fields.player.rpp.monitoring-timeline</label>
 
-    <div id="alwaysCheckboxMask" class="madero-checkbox u_clickable" ng-click="timeline.always = !timeline.always">
-      <input type="checkbox" id="alwaysCheckbox" ng-model="timeline.always" tabindex="1">
-      <label>
-        <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
-      </label>
-    </div>
+    <madero-checkbox id="alwaysCheckboxMask" ng-model="timeline.always" checkbox-id="alwaysCheckbox"></madero-checkbox>
     <span class="mr-3">All the time.</span>
   </div>
 </div>
