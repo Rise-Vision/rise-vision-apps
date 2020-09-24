@@ -22,9 +22,9 @@
   </div> 
 
   <div ng-if="!(!displays.loadingItems && displays.items.list.length === 0 && !search.query)">
-    <div class="flex-row">
+    <div class="flex-row button-toolbar-md-folded">
       <search-filter class="w-100" filter-config="filterConfig" search="search" do-search="displays.doSearch" icon-set="madero"></search-filter>
-      <div class="ml-3" require-role="da">
+      <div class="ml-md-3" require-role="da">
         <a id="displayAddButton" class="btn btn-primary btn-toolbar-wide" ui-sref="apps.displays.add" translate>
           displays-app.actions.new
         </a>

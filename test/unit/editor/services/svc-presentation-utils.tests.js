@@ -58,21 +58,4 @@ describe('service: presentationUtils:', function() {
     });
   });
 
-  describe( 'openPresentation:', function() {
-    it( "should route to editor workspace when not a HTML template", function() {
-      presentationUtils.openPresentation({ id: 'test-id', presentationType: 'legacy' });
-
-      expect($state.go).to.have.been.calledWith('apps.editor.workspace.artboard', {presentationId: 'test-id'});
-    } );
-
-    it( "should route to template editor when presentation type is HTML template", function(done) {
-      presentationUtils.openPresentation({ id: 'test-id', presentationType: 'HTML Template', productCode: 'abc123' });
-
-      setTimeout(function() {
-        expect($state.go).to.have.been.calledWith('apps.editor.templates.edit', {presentationId: 'test-id'});
-        done();
-      }, 10);
-
-    } );
-  })
 });
