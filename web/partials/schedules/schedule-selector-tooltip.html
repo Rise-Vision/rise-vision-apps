@@ -13,12 +13,7 @@
   >
     <div class="flex-row" ng-repeat="schedule in factory.selectedSchedules | filter:factory.search.query track by $index">
       <div class="row-entry">
-        <div class="madero-checkbox u_clickable" ng-click="factory.selectItem(schedule, true)">
-          <input type="checkbox" ng-checked="factory.isSelected(schedule, true)" tabindex="1">
-          <label>
-            <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
-          </label>
-        </div>
+        <madero-checkbox ng-click="factory.selectItem(schedule, true)" ng-value="factory.isSelected(schedule, true)"></madero-checkbox>
         <div class="mr-auto u_clickable u_text-ellipsis" ng-click="factory.selectItem(schedule, true)">
           {{schedule.name}}
         </div>
@@ -32,12 +27,7 @@
 
     <div class="flex-row" ng-repeat="schedule in factory.unselectedSchedules.items.list">
       <div class="row-entry">
-        <div class="madero-checkbox u_clickable" ng-click="factory.selectItem(schedule, false)">
-          <input type="checkbox" ng-checked="factory.isSelected(schedule, false)" tabindex="1">
-          <label>
-            <streamline-icon name="checkmark" width="14" height="12"></streamline-icon>
-          </label>
-        </div>
+        <madero-checkbox ng-click="factory.selectItem(schedule, false)" ng-value="factory.isSelected(schedule, false)"></madero-checkbox>
         <div class="mr-auto u_clickable u_text-ellipsis" ng-click="factory.selectItem(schedule, false)">
           {{schedule.name}}
         </div>
