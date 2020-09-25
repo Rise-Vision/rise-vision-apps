@@ -84,6 +84,7 @@ var PlaylistScenarios = function() {
           scheduleAddPage.getPlaylistItems().get(0).element(by.id('playlistItemNameCell')).click();
 
           helper.wait(playlistItemModalPage.getPlaylistItemModal(), 'Edit Playist Modal');
+          browser.sleep(500);
 
           expect(playlistItemModalPage.getPlaylistItemModal().isDisplayed()).to.eventually.be.true;
           expect(playlistItemModalPage.getModalTitle().getText()).to.eventually.equal('Edit Playlist Item');
