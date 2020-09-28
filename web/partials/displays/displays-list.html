@@ -41,9 +41,14 @@
       <table id="displaysListTable" class="table">
         <thead class="table-header">
           <tr class="table-header__row">
-            <th class="table-header__cell col-xs-4 u_clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
-              {{ 'displays-app.list.heading.name' | translate }}
-              <i ng-if="search.sortBy === 'name'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
+            <th class="table-header__cell col-xs-4">
+              <div class="flex-row">
+                <madero-checkbox ng-model="search.selectAll"></madero-checkbox>
+                <div class="u_clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
+                  {{ 'displays-app.list.heading.name' | translate }}
+                  <i ng-if="search.sortBy === 'name'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
+                </div>
+              </div>
             </th>
             <th class="table-header__cell col-xs-1" translate>
               Licensed
@@ -65,9 +70,12 @@
         <tbody class="table-body">
           <tr class="table-body__row" ng-class="{ 'bg-warning' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list">
             <td class="table-body__cell">
-              <a class="madero-link u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
-                <strong>{{display.name}}</strong>
-              </a>
+              <div class="flex-row">
+                <madero-checkbox ng-model="search.selectAll"></madero-checkbox>
+                <a class="madero-link u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
+                  <strong>{{display.name}}</strong>
+                </a>
+              </div>
             </td>
             <td class="table-body__cell">
               <div ng-show="getDisplayType(display) === 'professional'">

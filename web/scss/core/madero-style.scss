@@ -87,6 +87,10 @@
         @extend .u_padding-md-vertical;
         @extend .u_padding-sm-horizontal;
         @extend .u_nowrap;
+
+        .madero-checkbox {
+          @extend .my-0;
+        }
       }
 
       .table>thead>tr>th {

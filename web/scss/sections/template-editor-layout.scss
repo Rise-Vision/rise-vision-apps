@@ -1506,9 +1506,8 @@ $short-phone-height: 570px;
 }
 
 .madero-radio, .madero-checkbox {
-  margin-top: 0px;
-  margin-bottom: 0px;
-  min-height: 25px;
+  @extend .my-2;
+
   min-width: 31px;
 
   & label, & label {
@@ -1528,7 +1527,6 @@ $short-phone-height: 570px;
 
   input[type=radio] + label, input[type=checkbox] + label {
     display: block;
-    padding-top: 5px;
 
     &:before {
       content: '';
@@ -1560,7 +1558,7 @@ $short-phone-height: 570px;
 
   // Requires checkmark svg in the label element
   input[type=checkbox] + label {
-    margin-bottom: 7px;
+    @extend .mb-0;
 
     &:before {
       border-radius: 2px;

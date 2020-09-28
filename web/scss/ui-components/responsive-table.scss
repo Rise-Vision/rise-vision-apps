@@ -14,6 +14,10 @@
             label {
                 margin: 0;
             }
+        }
+    }
+    &.table--selector .table-header {
+        .table-header__row > .table-header__cell {
             input[type=checkbox] {
                 display: none;
             }
