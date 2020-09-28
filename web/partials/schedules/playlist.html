@@ -6,14 +6,14 @@
       </div>
 
       <div ng-click="manage(playlistItem)" class="playlist-item-name mr-auto w-75 u_clickable">
-        <p class="madero-link u_remove-bottom" id="playlistItemNameCell" ng-if="playlistItem.type !== 'presentation'"><strong>{{playlistItem.name}}</strong></p>
-        <p class="madero-link u_remove-bottom" id="presentationNameCell" ng-if="playlistItem.type === 'presentation'"><strong presentation-name="playlistItem.objectReference">Presentation Item</strong></p>
+        <p class="madero-link u_remove-bottom u_ellipsis-lg" id="playlistItemNameCell" ng-if="playlistItem.type !== 'presentation'"><strong>{{playlistItem.name}}</strong></p>
+        <p class="madero-link u_remove-bottom u_ellipsis-lg" id="presentationNameCell" ng-if="playlistItem.type === 'presentation'"><strong presentation-name="playlistItem.objectReference">Presentation Item</strong></p>
         <p class="text-sm text-gray u_remove-bottom">
           <span class="text-gray" ng-show="factory.hasInsecureUrl(playlistItem)"><strong class="text-danger">Insecure URL</strong> • </span>
           {{ factory.getItemTimeline(playlistItem) }} • {{ playlistItem.playUntilDone ? 'Play Until Done' : playlistItem.duration + 's' }} • {{ factory.getItemTransition(playlistItem) }}
         </p>
       </div>
-      <div class="u_float-left mr-0">
+      <div class="u_float-left mr-0 flex-row">
         <button type="button" class="btn-icon u_align-middle" id="duplicateButton" ng-click="factory.duplicatePlaylistItem(playlistItem)">
           <img src="../images/icon-copy.svg" width="16" height="18">
         </button>

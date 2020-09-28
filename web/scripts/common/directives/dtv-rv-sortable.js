@@ -18,8 +18,6 @@ angular.module('risevision.apps.directives')
             mirror: {
               appendTo: $scope.appendTo,
               constrainDimensions: true,
-              cursorOffsetX: 10,
-              cursorOffsetY: 10,
               xAxis: false
             }
           });

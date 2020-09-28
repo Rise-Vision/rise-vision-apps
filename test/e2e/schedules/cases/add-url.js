@@ -54,6 +54,7 @@ var AddUrlScenarios = function() {
           before(function () {
             scheduleAddPage.getAddUrlItemButton().click();
             helper.wait(playlistItemModalPage.getPlaylistItemModal(), 'Add URL Item');
+            browser.sleep(500);
           });
 
           it('should open the Add URL Modal', function () {
