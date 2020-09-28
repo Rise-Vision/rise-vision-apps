@@ -43,7 +43,7 @@
           <tr class="table-header__row">
             <th class="table-header__cell col-xs-4">
               <div class="flex-row">
-                <madero-checkbox ng-model="search.selectAll"></madero-checkbox>
+                <madero-checkbox ng-click="displays.selectAll()" ng-value="search.selectAll"></madero-checkbox>
                 <div class="u_clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
                   {{ 'displays-app.list.heading.name' | translate }}
                   <i ng-if="search.sortBy === 'name'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
@@ -71,7 +71,7 @@
           <tr class="table-body__row" ng-class="{ 'bg-warning' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list">
             <td class="table-body__cell">
               <div class="flex-row">
-                <madero-checkbox ng-model="search.selectAll"></madero-checkbox>
+                <madero-checkbox ng-click="displays.select(display)" ng-value="display.selected"></madero-checkbox>
                 <a class="madero-link u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
                   <strong>{{display.name}}</strong>
                 </a>

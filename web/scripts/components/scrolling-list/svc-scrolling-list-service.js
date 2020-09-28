@@ -14,7 +14,8 @@ angular.module('risevision.common.components.scrolling-list')
           sortBy: 'name',
           count: DB_MAX_COUNT,
           reverse: false,
-          name: 'Items'
+          name: 'Items',
+          selectAll: false
         });
 
         var _clearMessages = function () {
@@ -22,6 +23,11 @@ angular.module('risevision.common.components.scrolling-list')
 
           factory.errorMessage = '';
           factory.apiError = '';
+        };
+
+        var _clearList = function() {
+          factory.search.selectAll = false;
+          factory.items.clear();
         };
 
         factory.load = function () {
@@ -51,7 +57,7 @@ angular.module('risevision.common.components.scrolling-list')
         factory.load();
 
         factory.sortBy = function (cat) {
-          factory.items.clear();
+          _clearList();
 
           if (cat !== factory.search.sortBy) {
             factory.search.sortBy = cat;
@@ -64,9 +70,31 @@ angular.module('risevision.common.components.scrolling-list')
         };
 
         factory.doSearch = function () {
-          factory.items.clear();
+          _clearList();
 
           factory.load();
+        };
+
+        factory.select = function (item) {
+          if (!item) {
+            return;
+          }
+
+          factory.search.selectAll = false;
+
+          item.selected = !item.selected;
+        };
+
+        factory.selectAll = function () {
+          if (!factory.items.list.length) {
+            return;
+          }
+
+          factory.search.selectAll = !factory.search.selectAll;
+
+          factory.items.list.forEach(function(item) {
+            item.selected = factory.search.selectAll;
+          });
         };
 
         return factory;
