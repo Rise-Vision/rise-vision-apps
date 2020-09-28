@@ -168,7 +168,7 @@
         "90": "Portrait",
         "180": "Landscape (flipped)",
         "270": "Portrait (flipped)",
-        "name": "Rotation:"
+        "name": "Rotation"
       },
       "playerVersion": "Player Version",
       "resolution": "Resolution",
