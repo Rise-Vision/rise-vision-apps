@@ -2,39 +2,30 @@
 describe("service: ScrollingListService:", function() {
   beforeEach(module("risevision.common.components.scrolling-list"));
   beforeEach(module(function ($provide) {
-    $provide.service("listService",function(){
-      return {};
-    });
     $provide.service("processErrorCode", function() {
-      return processErrorCode = sinon.spy(function() { return "error"; });
+      return sinon.stub().returns("error");
     });
 
   }));
-  var scrollingListService, returnItems, apiCount, result, processErrorCode;
+  var scrollingListService, ScrollingListService, listService, result, processErrorCode;
   beforeEach(function(){
-    var listService = function() {
-      apiCount++;
-      var deferred = Q.defer();
-      if(returnItems){
-        deferred.resolve(result);
-      }else{
-        deferred.reject({result: {error: { message: "ERROR; could not load list"}}});
-      }
-      return deferred.promise;
-    };
-    
     result = {
       items: [],
       cursor: "asdf"
     };
     for (var i = 1; i <= 40; i++) {
-      result.items.push(i);
+      result.items.push({
+        id: i
+      });
     }
-    apiCount = 0;
-    returnItems = true;
+
+    listService = sinon.stub().callsFake(function() {
+      return Q.resolve(result);
+    });
 
     inject(function($injector){
-      var ScrollingListService = $injector.get("ScrollingListService");
+      ScrollingListService = $injector.get("ScrollingListService");
+      processErrorCode = $injector.get('processErrorCode');
       scrollingListService = new ScrollingListService(listService);
     });
   });
@@ -42,7 +33,7 @@ describe("service: ScrollingListService:", function() {
   beforeEach(function(done) {
     setTimeout(function(){
       expect(scrollingListService.loadingItems).to.be.false;
-      expect(apiCount).to.equal(1);
+      listService.should.have.been.calledOnce;
       expect(scrollingListService.error).to.not.be.ok;
 
       done();
@@ -55,6 +46,9 @@ describe("service: ScrollingListService:", function() {
     expect(scrollingListService.sortBy).to.be.a("function");
     expect(scrollingListService.doSearch).to.be.a("function");
     expect(scrollingListService.load).to.be.a("function");
+    
+    expect(scrollingListService.select).to.be.a("function");
+    expect(scrollingListService.selectAll).to.be.a("function");
   });
 
   it("should init the service objects",function(){
@@ -68,8 +62,33 @@ describe("service: ScrollingListService:", function() {
     expect(scrollingListService.search).to.have.property("sortBy");
     expect(scrollingListService.search).to.have.property("count");
     expect(scrollingListService.search).to.have.property("reverse");
+    expect(scrollingListService.search).to.have.property("selectAll");
   });
 
+  it('should init search', function() {
+    expect(scrollingListService.search).to.deep.equal({
+      sortBy: 'name',
+      count: 40,
+      reverse: false,
+      name: 'Items',
+      selectAll: false
+    });
+  });
+
+  it('should update search with defaults', function() {
+    scrollingListService = new ScrollingListService(listService, {
+      sortBy: 'lastModified',
+      reverse: true
+    });
+
+    expect(scrollingListService.search).to.deep.equal({
+      sortBy: 'lastModified',
+      count: 40,
+      reverse: true,
+      name: 'Items',
+      selectAll: false
+    });
+  });
 
   it("should load the list",function(){
     expect(scrollingListService.loadingItems).to.be.false;
@@ -77,13 +96,9 @@ describe("service: ScrollingListService:", function() {
     expect(scrollingListService.items.list).to.have.length(40);
     expect(scrollingListService.items.cursor).to.be.ok;
     expect(scrollingListService.items.endOfList).to.be.false;
-
   });
-  
-  
-  describe("list functions: ",function(){
-    returnItems = true;
 
+  describe("list functions: ",function(){
     describe("load: ",function(){
       it("should re-load if there are more items",function(done){
         result = {
@@ -95,7 +110,7 @@ describe("service: ScrollingListService:", function() {
         setTimeout(function(){
           expect(scrollingListService.loadingItems).to.be.false;
           expect(scrollingListService.error).to.not.be.ok;
-          expect(apiCount).to.equal(2);
+          listService.should.have.been.calledTwice;
 
           expect(scrollingListService.items.list).to.have.length(41);
           expect(scrollingListService.items.cursor).to.not.be.ok;
@@ -135,7 +150,7 @@ describe("service: ScrollingListService:", function() {
         setTimeout(function(){
           expect(scrollingListService.loadingItems).to.be.false;
           expect(scrollingListService.error).to.not.be.ok;
-          expect(apiCount).to.equal(2);
+          listService.should.have.been.calledTwice;
 
           expect(scrollingListService.items.list).to.have.length(40);
 
@@ -154,7 +169,7 @@ describe("service: ScrollingListService:", function() {
         setTimeout(function(){
           expect(scrollingListService.loadingItems).to.be.false;
           expect(scrollingListService.error).to.not.be.ok;
-          expect(apiCount).to.equal(2);
+          listService.should.have.been.calledTwice;
 
           expect(scrollingListService.items.list).to.have.length(40);
 
@@ -173,7 +188,7 @@ describe("service: ScrollingListService:", function() {
       setTimeout(function(){
         expect(scrollingListService.loadingItems).to.be.false;
         expect(scrollingListService.error).to.not.be.ok;
-        expect(apiCount).to.equal(2);
+        listService.should.have.been.calledTwice;
 
         expect(scrollingListService.items.list).to.have.length(40);
 
@@ -185,7 +200,8 @@ describe("service: ScrollingListService:", function() {
     });
 
     it("should set error if list fails to load",function(done){
-      returnItems = false;
+      listService.returns(Q.reject({result: {error: { message: "ERROR; could not load list"}}}));
+
       scrollingListService.doSearch();
 
       expect(scrollingListService.loadingItems).to.be.true;
@@ -195,7 +211,7 @@ describe("service: ScrollingListService:", function() {
         processErrorCode.should.have.been.calledWith("Items", "load", sinon.match.object);
         expect(scrollingListService.apiError).to.be.ok;
 
-        expect(apiCount).to.equal(2);
+        listService.should.have.been.calledTwice;
         expect(scrollingListService.items.list).to.have.length(0);
 
         done();
@@ -217,5 +233,75 @@ describe("service: ScrollingListService:", function() {
     });
   });
 
+  describe('select:', function() {
+    it('should select item', function() {
+      scrollingListService.select(scrollingListService.items.list[0]);
+
+      expect(scrollingListService.items.list[0].selected).to.be.true;
+    });
+
+    it('should toggle selected item', function() {
+      scrollingListService.select(scrollingListService.items.list[0]);
+
+      expect(scrollingListService.items.list[0].selected).to.be.true;
+
+      scrollingListService.select(scrollingListService.items.list[0]);
+
+      expect(scrollingListService.items.list[0].selected).to.be.false;
+    });
+
+    it('should reset selectAll flag', function() {
+      scrollingListService.search.selectAll = true;
+      scrollingListService.select(scrollingListService.items.list[0]);
+
+      expect(scrollingListService.search.selectAll).to.be.false;
+    });
+
+    it('should not do anything if item is invalid', function() {
+      scrollingListService.items.list = [{id: 0}];
+      scrollingListService.search.selectAll = true;
+
+      scrollingListService.select();
+
+      expect(scrollingListService.items.list[0].selected).to.not.be.ok;
+      expect(scrollingListService.search.selectAll).to.be.true;
+    });
+
+  });
+
+  describe('selectAll:', function() {
+    it('should select all items', function() {
+      scrollingListService.selectAll();
+
+      expect(scrollingListService.search.selectAll).to.be.true;
+      expect(scrollingListService.items.list[0].selected).to.be.true;
+      expect(scrollingListService.items.list[2].selected).to.be.true;
+    });
+
+    it('should toggle select all items', function() {
+      scrollingListService.items.list[2].selected = true;
+
+      scrollingListService.selectAll();
+
+      expect(scrollingListService.items.list[0].selected).to.be.true;
+      expect(scrollingListService.items.list[2].selected).to.be.true;
+
+      scrollingListService.selectAll();
+
+      expect(scrollingListService.search.selectAll).to.be.false;
+      expect(scrollingListService.items.list[0].selected).to.be.false;
+      expect(scrollingListService.items.list[2].selected).to.be.false;
+    });
+
+    it('should not do anything if list is empty', function() {
+      scrollingListService.items.list = [];
+      scrollingListService.search.selectAll = true;
+
+      scrollingListService.selectAll();
+
+      expect(scrollingListService.search.selectAll).to.be.true;
+    });
+
+  });
 
 });
