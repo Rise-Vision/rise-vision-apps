@@ -26,8 +26,8 @@ angular.module('risevision.common.components.scrolling-list')
         };
 
         var _clearList = function() {
-          factory.search.selectAll = false;
           factory.items.clear();
+          factory.search.selectAll = false;
         };
 
         factory.load = function () {
@@ -39,8 +39,9 @@ angular.module('risevision.common.components.scrolling-list')
 
             listService(factory.search, factory.items.cursor)
               .then(function (result) {
-                factory.items.add(result.items ? result.items : [],
-                  result.cursor);
+                factory.items.add(result.items ? result.items : [], result.cursor);
+
+                factory.search.selectAll = false;
               })
               .then(null, function (e) {
                 factory.errorMessage = 'Failed to load ' + factory.search.name + '.';
@@ -80,9 +81,13 @@ angular.module('risevision.common.components.scrolling-list')
             return;
           }
 
-          factory.search.selectAll = false;
-
           item.selected = !item.selected;
+
+          var deselectedIndex = _.findIndex(factory.items.list, function (item) {
+            return !item.selected;
+          });
+
+          factory.search.selectAll = deselectedIndex === -1;          
         };
 
         factory.selectAll = function () {

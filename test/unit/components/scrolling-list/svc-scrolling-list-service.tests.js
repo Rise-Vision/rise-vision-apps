@@ -101,6 +101,8 @@ describe("service: ScrollingListService:", function() {
   describe("list functions: ",function(){
     describe("load: ",function(){
       it("should re-load if there are more items",function(done){
+        scrollingListService.search.selectAll = true;
+
         result = {
           items: [21]
         };
@@ -115,6 +117,8 @@ describe("service: ScrollingListService:", function() {
           expect(scrollingListService.items.list).to.have.length(41);
           expect(scrollingListService.items.cursor).to.not.be.ok;
           expect(scrollingListService.items.endOfList).to.be.true;
+
+          expect(scrollingListService.search.selectAll).to.be.false;
 
           done();
         },10);
@@ -138,12 +142,21 @@ describe("service: ScrollingListService:", function() {
     });
 
     describe("sortBy: ",function(){
-      it("should sort by changeDate in ascending order by default",function(){
+      it("should sort by name in descending order by default",function(){
         expect(scrollingListService.search.sortBy).to.equal("name");
         expect(scrollingListService.search.reverse).to.be.false;
       });
-      
-      it("should toggle descending order (reverse = false)",function(done){
+
+      it("should reset list and selectAll", function() {
+        scrollingListService.search.selectAll = true;
+
+        scrollingListService.sortBy("name");
+
+        expect(scrollingListService.items.list).to.have.length(0);
+        expect(scrollingListService.search.selectAll).to.be.false;
+      });
+
+      it("should toggle ascending order (reverse = true)",function(done){
         scrollingListService.sortBy("name");
 
         expect(scrollingListService.loadingItems).to.be.true;
@@ -162,7 +175,7 @@ describe("service: ScrollingListService:", function() {
 
       });
 
-      it("should reset list and sort by name in descending order",function(done){
+      it("should reset list and sort by changeDate in descending order",function(done){
         scrollingListService.sortBy("changeDate");
 
         expect(scrollingListService.loadingItems).to.be.true;
@@ -179,6 +192,18 @@ describe("service: ScrollingListService:", function() {
           done();
         },10);
       });
+    });
+
+  });
+
+  describe("doSearch:", function() {
+    it("should reset list and selectAll", function() {
+      scrollingListService.search.selectAll = true;
+
+      scrollingListService.doSearch();
+
+      expect(scrollingListService.items.list).to.have.length(0);
+      expect(scrollingListService.search.selectAll).to.be.false;
     });
 
     it("should reset list and doSearch",function(done){
@@ -255,6 +280,19 @@ describe("service: ScrollingListService:", function() {
       scrollingListService.select(scrollingListService.items.list[0]);
 
       expect(scrollingListService.search.selectAll).to.be.false;
+    });
+
+    it('should set selectAll if all items are selected', function() {
+      scrollingListService.items.list = [
+        {id: 0},
+        {id: 1, selected: true},
+        {id: 2, selected: true}
+      ];
+
+      scrollingListService.select(scrollingListService.items.list[0]);
+
+      expect(scrollingListService.items.list[0].selected).to.be.true;
+      expect(scrollingListService.search.selectAll).to.be.true;
     });
 
     it('should not do anything if item is invalid', function() {
