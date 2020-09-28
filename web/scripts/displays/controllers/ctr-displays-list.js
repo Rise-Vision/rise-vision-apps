@@ -3,9 +3,9 @@
 angular.module('risevision.displays.controllers')
   .controller('displaysList', ['$scope', '$rootScope', 'userState', 'display',
     'ScrollingListService', '$loading', '$filter', 'displayFactory', 'playerLicenseFactory',
-    'displayStatusFactory',
+    'displayStatusFactory', 'displaySummaryFactory',
     function ($scope, $rootScope, userState, display, ScrollingListService, $loading,
-      $filter, displayFactory, playerLicenseFactory, displayStatusFactory) {
+      $filter, displayFactory, playerLicenseFactory, displayStatusFactory, displaySummaryFactory) {
       $scope.search = {
         sortBy: 'name',
         count: $scope.listLimit,
@@ -19,6 +19,9 @@ angular.module('risevision.displays.controllers')
       $scope.displayService = display;
       $scope.playerLicenseFactory = playerLicenseFactory;
       $scope.displayStatusFactory = displayStatusFactory;
+      $scope.displaySummaryFactory = displaySummaryFactory;
+
+      displaySummaryFactory.loadSummary();
 
       $scope.filterConfig = {
         placeholder: $filter('translate')(

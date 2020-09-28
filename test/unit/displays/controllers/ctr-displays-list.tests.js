@@ -49,14 +49,20 @@ describe('controller: displays list', function() {
     $provide.service('playerLicenseFactory', function() {
       return {};
     });
+    $provide.service('displaySummaryFactory', function() {
+      return {
+        loadSummary: sandbox.stub()
+      };
+    });
   }));
-  var $scope, $loading, $filter, $window;
+  var $scope, $loading, $filter, $window, displaySummaryFactory;
   beforeEach(function(){
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
       $scope.listLimit = 5;
       $filter = $injector.get('$filter');
       $loading = $injector.get('$loading');
+      displaySummaryFactory = $injector.get('displaySummaryFactory');
       $window = $injector.get('$window');
       $controller('displaysList', {
         $scope : $scope,
@@ -82,6 +88,7 @@ describe('controller: displays list', function() {
 
     expect($scope.displayFactory).to.be.ok;
     expect($scope.playerLicenseFactory).to.be.ok;
+    expect($scope.displaySummaryFactory).to.be.ok;
   });
 
   it('should init the scope objects',function(){
@@ -89,6 +96,8 @@ describe('controller: displays list', function() {
     expect($scope.search).to.have.property('count');
     expect($scope.search).to.have.property('reverse');
     expect($scope.search.count).to.equal(5);
+
+    displaySummaryFactory.loadSummary.should.have.been.caled;
   });
 
   describe('$loading: ', function() {
