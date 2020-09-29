@@ -21,7 +21,7 @@
     {{displayStatusFactory.apiError}}
   </div> 
 
-  <div ng-if="!(!displays.loadingItems && displays.items.list.length === 0 && !search.query)">
+  <div ng-if="!(!displays.loadingItems && displays.items.list.length === 0 && search.query === undefined)">
     <div class="flex-row button-toolbar-md-folded">
       <search-filter class="w-100" filter-config="filterConfig" search="search" do-search="displays.doSearch" icon-set="madero"></search-filter>
       <div class="ml-md-3" require-role="da">
@@ -118,8 +118,8 @@
             </td>
           </tr>
           <!-- If no search results -->
-          <tr ng-show="displays.items.list.length === 0 && search.query">
-            <td colspan="4" class="text-center"><span translate>displays-app.list.no-results</span></td>
+          <tr ng-show="displays.items.list.length === 0 && search.query !== undefined">
+            <td colspan="6" class="text-center"><span translate>displays-app.list.no-results</span></td>
           </tr>
         </tbody>
       </table>
@@ -127,7 +127,7 @@
     </div>
   </div>
 
-  <div class="border-container text-center u_margin-md-bottom" ng-if="!displays.loadingItems && displays.items.list.length === 0 && !search.query">
+  <div class="border-container text-center u_margin-md-bottom" ng-if="!displays.loadingItems && displays.items.list.length === 0 && search.query === undefined">
     <div class="panel-body">
       <div class="form-group my-4">
         <label translate>displays-app.list.empty</label>
