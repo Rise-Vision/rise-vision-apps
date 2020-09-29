@@ -7,10 +7,6 @@ angular.module('risevision.common.header')
       companyId, ScrollingListService) {
 
       $scope.search = {
-        query: ''
-      };
-
-      $scope.search = {
         companyId: companyId,
         sortBy: 'name',
         reverse: false,

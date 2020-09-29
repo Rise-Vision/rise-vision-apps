@@ -11,7 +11,7 @@
     <strong>{{presentations.errorMessage}}</strong> {{presentations.apiError}}
   </div> 
 
-  <div ng-if="!(!presentations.loadingItems && presentations.items.list.length === 0 && !search.query)">
+  <div ng-if="!(!presentations.loadingItems && presentations.items.list.length === 0 && search.query === undefined)">
 
     <div class="flex-row button-toolbar-md-folded">
       <search-filter class="w-100" filter-config="filterConfig" search="search" do-search="presentations.doSearch" icon-set="madero"></search-filter>
@@ -56,7 +56,7 @@
           </tr>
 
           <!-- If no search results -->
-          <tr class="table-body__row" ng-show="presentations.items.list.length === 0 && search.query">
+          <tr class="table-body__row" ng-show="presentations.items.list.length === 0 && search.query !== undefined">
             <td colspan="3" class="text-center"><span translate>editor-app.list.no-results</span></td>
           </tr>
 
@@ -65,7 +65,7 @@
     </div>
   </div>
 
-  <div class="border-container text-center u_margin-md-bottom" ng-if="!presentations.loadingItems && presentations.items.list.length === 0 && !search.query">
+  <div class="border-container text-center u_margin-md-bottom" ng-if="!presentations.loadingItems && presentations.items.list.length === 0 && search.query === undefined">
     <div class="panel-body">
       <div class="form-group my-4">
         <label translate>editor-app.list.empty</label>
