@@ -1507,10 +1507,13 @@ $short-phone-height: 570px;
 
 .madero-radio, .madero-checkbox {
   @extend .my-2;
+  @extend .u_clickable;
 
   min-width: 31px;
 
   & label, & label {
+    @extend .u_clickable;
+
     padding-left: 0px;
   }
 
