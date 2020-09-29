@@ -50,6 +50,7 @@ describe("service: ScrollingListService:", function() {
     expect(scrollingListService.getSelected).to.be.a("function");
     expect(scrollingListService.select).to.be.a("function");
     expect(scrollingListService.selectAll).to.be.a("function");
+    expect(scrollingListService.deselectAll).to.be.a("function");
   });
 
   it("should init the service objects",function(){
@@ -356,6 +357,40 @@ describe("service: ScrollingListService:", function() {
       expect(scrollingListService.search.selectAll).to.be.true;
     });
 
+  });
+
+  describe('deselectAll:', function() {
+    beforeEach(function() {
+      sinon.spy(scrollingListService, 'selectAll');
+    });
+
+    it('should toggle the selectAll flag to false', function() {
+      scrollingListService.search.selectAll = true;
+
+      scrollingListService.deselectAll();
+
+      expect(scrollingListService.search.selectAll).to.be.false;
+    });
+
+    it('should deselect items', function() {
+      scrollingListService.select(scrollingListService.items.list[0]);
+      scrollingListService.select(scrollingListService.items.list[5]);
+
+      scrollingListService.deselectAll();
+
+      expect(scrollingListService.getSelected()).to.have.length(0);
+      expect(scrollingListService.items.list[0].selected).to.be.false;
+      expect(scrollingListService.items.list[5].selected).to.be.false;
+    });
+  });
+
+  it('should not do anything if list is empty', function() {
+    scrollingListService.items.list = [];
+    scrollingListService.search.selectAll = true;
+
+    scrollingListService.deselectAll();
+
+    expect(scrollingListService.search.selectAll).to.be.true;
   });
 
 });

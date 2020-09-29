@@ -112,6 +112,18 @@ angular.module('risevision.common.components.scrolling-list')
           });
         };
 
+        factory.deselectAll = function () {
+          if (!factory.items.list.length) {
+            return;
+          }
+
+          factory.search.selectAll = false;
+
+          factory.items.list.forEach(function(item) {
+            item.selected = false;
+          });
+        };
+
         return factory;
       };
     }

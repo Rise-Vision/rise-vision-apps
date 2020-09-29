@@ -357,6 +357,16 @@
   .multi-actions-panel {
     background-color: $lighter-gray;
     padding: 25px;
+
+    .close {
+      svg {
+        fill: #999;
+      }
+
+      &:hover, &:focus {
+        opacity: 1;
+      }
+    }
   }
 
 }
