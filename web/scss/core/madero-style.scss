@@ -137,13 +137,19 @@
     .button-toolbar-md-folded {
       display: block;
 
+      & > * > * {
+        margin-top: 1rem !important;
+      }
+
+      & > *:first-child > * {
+        margin-top: 0 !important;
+      }
+
       .button-toolbar {
         display: block;
       }
 
       .btn-toolbar, .btn-toolbar-wide {
-        margin-top: 1rem !important;
-
         width: 100%;
       }
     }
@@ -346,6 +352,11 @@
       background-attachment: local, local, scroll, scroll;
       background-clip: padding-box; /* fix right border on Chrome */
     }
+  }
+
+  .multi-actions-panel {
+    background-color: $lighter-gray;
+    padding: 25px;
   }
 
 }

@@ -47,6 +47,7 @@ describe("service: ScrollingListService:", function() {
     expect(scrollingListService.doSearch).to.be.a("function");
     expect(scrollingListService.load).to.be.a("function");
     
+    expect(scrollingListService.getSelected).to.be.a("function");
     expect(scrollingListService.select).to.be.a("function");
     expect(scrollingListService.selectAll).to.be.a("function");
   });
@@ -256,6 +257,21 @@ describe("service: ScrollingListService:", function() {
         done();
       },10);
     });
+  });
+
+  it('getSelected:', function() {
+    expect(scrollingListService.getSelected()).to.have.length(0);
+
+    scrollingListService.select(scrollingListService.items.list[0]);
+    scrollingListService.select(scrollingListService.items.list[5]);
+
+    expect(scrollingListService.getSelected()).to.have.length(2);
+    expect(scrollingListService.getSelected()[1]).to.equal(scrollingListService.items.list[5]);
+
+    scrollingListService.select(scrollingListService.items.list[0]);
+
+    expect(scrollingListService.getSelected()).to.have.length(1);
+    expect(scrollingListService.getSelected()[0]).to.equal(scrollingListService.items.list[5]);
   });
 
   describe('select:', function() {
