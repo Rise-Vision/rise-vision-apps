@@ -76,6 +76,20 @@ angular.module('risevision.common.components.scrolling-list')
           factory.load();
         };
 
+        factory.getSelected = function () {
+          return _.filter(factory.items.list, {
+            selected: true
+          });
+        };
+
+        var _allSelected = function () {
+          var deselectedIndex = _.findIndex(factory.items.list, function (item) {
+            return !item.selected;
+          });
+
+          return deselectedIndex === -1;
+        };
+
         factory.select = function (item) {
           if (!item) {
             return;
@@ -83,11 +97,7 @@ angular.module('risevision.common.components.scrolling-list')
 
           item.selected = !item.selected;
 
-          var deselectedIndex = _.findIndex(factory.items.list, function (item) {
-            return !item.selected;
-          });
-
-          factory.search.selectAll = deselectedIndex === -1;          
+          factory.search.selectAll = _allSelected();
         };
 
         factory.selectAll = function () {
