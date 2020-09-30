@@ -55,8 +55,9 @@
                 </div>
               </div>
             </th>
-            <th class="table-header__cell col-xs-1" translate>
+            <th class="table-header__cell col-xs-1 u_clickable" ng-click="displays.sortBy('licensed')">
               Licensed
+              <i ng-if="search.sortBy === 'licensed'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
             <th id="tableHeaderStatus" class="table-header__cell col-xs-1" translate>
               displays-app.list.heading.status
@@ -64,11 +65,13 @@
             <th id="tableHeaderLastConnection" class="table-header__cell col-xs-2" translate>
               displays-app.list.heading.lastConnection
             </th>
-            <th class="table-header__cell col-xs-2" translate>
-              displays-app.list.heading.schedule
+            <th class="table-header__cell col-xs-2 u_clickable" ng-click="displays.sortBy('scheduleName')">
+              {{ 'displays-app.list.heading.schedule' | translate }}
+              <i ng-if="search.sortBy === 'scheduleName'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
-            <th class="table-header__cell col-xs-2" translate>
+            <th class="table-header__cell col-xs-2 u_clickable" ng-click="displays.sortBy('changeDate')">
               Last Modified
+              <i ng-if="search.sortBy === 'changeDate'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
           </tr>
         </thead>
