@@ -140,6 +140,7 @@ describe('service: displayFactory:', function() {
     expect(displayFactory.getDisplay).to.be.a('function');
     expect(displayFactory.addDisplay).to.be.a('function');
     expect(displayFactory.updateDisplay).to.be.a('function');
+    expect(displayFactory.deleteDisplayByObject).to.be.a('function'); 
     expect(displayFactory.deleteDisplay).to.be.a('function'); 
 
     expect(displayFactory.showLicenseRequired).to.be.a('function');
@@ -450,11 +451,57 @@ describe('service: displayFactory:', function() {
 
   });
   
-  describe('deleteDisplay: ',function(){
+  describe('deleteDisplayByObject: ',function(){
     it('should delete the display and unassign its license',function(done){
-      displayFactory.display.playerProAssigned = true;
       updateDisplay = true;
 
+      displayFactory.deleteDisplayByObject({
+        id: 'displayId',
+        playerProAssigned: true
+      }).then(function(){
+        expect(trackerCalled).to.equal('Display Deleted');
+
+        expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(false);
+        done();
+      }, function() {
+        done('error');
+      });
+    });
+
+    it('should not unassign its license if not licensed',function(done){
+      updateDisplay = true;
+
+      displayFactory.deleteDisplayByObject({
+        id: 'displayId',
+        playerProAssigned: false
+      }).then(function(){
+        expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.not.have.been.called;
+
+        done();
+      }, function() {
+        done('error');
+      });
+    });
+    
+    it('should show an error if fails to delete the display',function(done){
+      updateDisplay = false;
+      
+      displayFactory.deleteDisplayByObject({
+        id: 'displayId'
+      }).then(function(){
+        done('error');
+      }, function() {
+        done();
+      });
+    });
+  });
+
+  describe('deleteDisplay: ',function(){
+    beforeEach(function() {
+      sandbox.stub(displayFactory, 'deleteDisplayByObject').returns(Q.resolve());
+    });
+
+    it('should show spinner and redirect',function(done){
       displayFactory.deleteDisplay();
       
       expect(displayFactory.loadingDisplay).to.be.true;
@@ -462,31 +509,15 @@ describe('service: displayFactory:', function() {
       setTimeout(function(){
         expect(displayFactory.loadingDisplay).to.be.false;
         expect(displayFactory.apiError).to.not.be.ok;
-        expect(trackerCalled).to.equal('Display Deleted');
 
         $state.go.should.have.been.calledWith('apps.displays.list');
-
-        expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.have.been.calledWith(false);
-        done();
-      },10);
-    });
-
-    it('should not unassign its license if not licensed',function(done){
-      displayFactory.display.playerProAssigned = false;
-      updateDisplay = true;
-
-      displayFactory.deleteDisplay();
-      
-
-      setTimeout(function(){
-        expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.not.have.been.called;
 
         done();
       },10);
     });
     
     it('should show an error if fails to delete the display',function(done){
-      updateDisplay = false;
+      displayFactory.deleteDisplayByObject.returns(Q.reject());
       
       displayFactory.deleteDisplay();
       
@@ -495,7 +526,6 @@ describe('service: displayFactory:', function() {
       setTimeout(function(){
         $state.go.should.not.have.been.called;
 
-        expect(trackerCalled).to.not.be.ok;
         expect(displayFactory.loadingDisplay).to.be.false;
         
         expect(displayFactory.apiError).to.be.ok;

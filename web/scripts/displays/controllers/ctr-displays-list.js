@@ -14,6 +14,8 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.displays = new ScrollingListService(display.list, $scope.search);
+      $scope.deleteDisplays = $scope.displays.getSelectedAction(displayFactory.deleteDisplayByObject, true);
+
       $scope.selectedCompayId = userState.getSelectedCompanyId();
       $scope.displayFactory = displayFactory;
       $scope.displayService = display;

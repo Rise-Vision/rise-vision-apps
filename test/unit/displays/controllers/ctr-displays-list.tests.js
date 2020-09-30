@@ -22,7 +22,8 @@ describe('controller: displays list', function() {
         return {
           search: {},
           loadingItems: false,
-          doSearch: function() {}
+          doSearch: function() {},
+          getSelectedAction: sinon.stub().returns('action')
         };
       };
     });
@@ -44,7 +45,9 @@ describe('controller: displays list', function() {
     });
     
     $provide.service('displayFactory', function() {
-      return {};
+      return {
+        deleteDisplayByObject: 'deleteDisplayByObject'
+      };
     });
     $provide.service('playerLicenseFactory', function() {
       return {};
@@ -82,6 +85,13 @@ describe('controller: displays list', function() {
 
     expect($scope.displayFactory).to.be.ok;
     expect($scope.playerLicenseFactory).to.be.ok;
+  });
+
+  it('deleteDisplays:', function() {
+    expect($scope.deleteDisplays).to.be.ok;
+    expect($scope.deleteDisplays).to.equal('action');
+
+    $scope.displays.getSelectedAction.should.have.been.calledWith('deleteDisplayByObject', true)
   });
 
   it('should init the scope objects',function(){
