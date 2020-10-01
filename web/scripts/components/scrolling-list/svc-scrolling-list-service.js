@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.common.components.scrolling-list')
-  .service('ScrollingListService', ['$log', 'BaseList', 'processErrorCode',
-    function ($log, BaseList, processErrorCode) {
+  .service('ScrollingListService', ['$q', '$log', 'BaseList', 'processErrorCode',
+    function ($q, $log, BaseList, processErrorCode) {
       return function (listService, search) {
         var DB_MAX_COUNT = 40; //number of records to load at a time
         var factory = {};
@@ -122,6 +122,54 @@ angular.module('risevision.common.components.scrolling-list')
           factory.items.list.forEach(function(item) {
             item.selected = false;
           });
+        };
+
+        factory.getSelectedAction = function(actionCall, removeFromList) {
+          return function() {
+            var selected = factory.getSelected();
+            var promises;
+            var listError = false;
+
+            if (!selected.length) {
+              return;
+            }
+
+            _clearMessages();
+
+            factory.selectedActionActive = true;
+            factory.selectedActionCount = selected.length;
+            factory.selectedActionCompletedCount = 0;
+
+            promises = _.map(selected, function (item) {
+              return actionCall(item)
+                .then(function() {
+                  if (removeFromList) {
+                    _.remove(factory.items.list, function(listItem) {
+                      return listItem === item;
+                    });
+                  }
+                })
+                .catch(function(e) {
+                  $log.error(processErrorCode(e), e);
+            
+                  listError = true;
+                })
+                .finally(function() {
+                  factory.selectedActionCompletedCount++;
+                });
+            });
+
+            $q.all(promises)
+              .finally(function() {            
+                factory.selectedActionActive = false;
+            
+                if (listError) {
+                  factory.errorMessage = 'Something went wrong.';
+                  factory.apiError = 'We weren’t able to delete one or more of the selected ' + 
+                    factory.search.name.toLowerCase() + '. Please try again.';                  
+                }
+              });
+          };
         };
 
         return factory;

@@ -2,6 +2,8 @@
 describe("service: ScrollingListService:", function() {
   beforeEach(module("risevision.common.components.scrolling-list"));
   beforeEach(module(function ($provide) {
+    $provide.service('$q', function() {return Q;});
+
     $provide.service("processErrorCode", function() {
       return sinon.stub().returns("error");
     });
@@ -51,6 +53,8 @@ describe("service: ScrollingListService:", function() {
     expect(scrollingListService.select).to.be.a("function");
     expect(scrollingListService.selectAll).to.be.a("function");
     expect(scrollingListService.deselectAll).to.be.a("function");
+
+    expect(scrollingListService.getSelectedAction).to.be.a("function");
   });
 
   it("should init the service objects",function(){
@@ -391,6 +395,124 @@ describe("service: ScrollingListService:", function() {
     scrollingListService.deselectAll();
 
     expect(scrollingListService.search.selectAll).to.be.true;
+  });
+
+  describe('getSelectedAction:', function() {
+    it('should return a function', function() {
+      expect(scrollingListService.getSelectedAction()).to.be.a('function');
+    });
+
+    it('should return early if no items are selected', function() {
+      var action = scrollingListService.getSelectedAction(sinon.stub().returns(Q.resolve()));
+
+      action();
+
+      expect(scrollingListService.selectedActionActive).to.be.undefined;
+      expect(scrollingListService.selectedActionCount).to.be.undefined;
+      expect(scrollingListService.selectedActionCompletedCount).to.be.undefined;
+
+    });
+
+    it('should initialize variables if items are selected', function() {
+      scrollingListService.select(scrollingListService.items.list[0]);
+      scrollingListService.select(scrollingListService.items.list[5]);
+
+      var action = scrollingListService.getSelectedAction(sinon.stub().returns(Q.resolve()));
+
+      action();
+
+      expect(scrollingListService.selectedActionActive).to.be.true;
+      expect(scrollingListService.selectedActionCount).to.equal(2);
+      expect(scrollingListService.selectedActionCompletedCount).to.equal(0);
+    });
+
+    it('should clear error messages', function() {
+      scrollingListService.select(scrollingListService.items.list[0]);
+      scrollingListService.select(scrollingListService.items.list[5]);
+
+      scrollingListService.errorMessage = "errorMessage";
+      scrollingListService.apiError = "apiError";
+
+      var action = scrollingListService.getSelectedAction(sinon.stub().returns(Q.resolve()));
+
+      action();
+      
+      expect(scrollingListService.errorMessage).to.not.be.ok;
+      expect(scrollingListService.apiError).to.not.be.ok;
+    });
+
+    it('should call the action for all selected items', function() {
+      scrollingListService.select(scrollingListService.items.list[0]);
+      scrollingListService.select(scrollingListService.items.list[5]);
+
+      var actionCall = sinon.stub().returns(Q.resolve());
+      var action = scrollingListService.getSelectedAction(actionCall);
+
+      action();
+
+      actionCall.should.have.been.calledTwice;
+      actionCall.should.have.been.calledWith(scrollingListService.items.list[0]);
+      actionCall.should.have.been.calledWith(scrollingListService.items.list[5]);
+    });
+
+    it('should update the variables once the actions are performed', function(done) {
+      scrollingListService.select(scrollingListService.items.list[0]);
+      scrollingListService.select(scrollingListService.items.list[5]);
+
+      var actionCall = sinon.stub().returns(Q.resolve());
+      var action = scrollingListService.getSelectedAction(actionCall);
+
+      action();
+
+      setTimeout(function() {
+        expect(scrollingListService.selectedActionActive).to.be.false;
+        expect(scrollingListService.selectedActionCount).to.equal(2);
+        expect(scrollingListService.selectedActionCompletedCount).to.equal(2);
+
+        expect(scrollingListService.errorMessage).to.not.be.ok;
+        expect(scrollingListService.apiError).to.not.be.ok;
+
+        done();
+      }, 10);
+    });
+
+    it('should handle api errors', function(done) {
+      scrollingListService.select(scrollingListService.items.list[0]);
+      scrollingListService.select(scrollingListService.items.list[5]);
+
+      var actionCall = sinon.stub().returns(Q.reject());
+      var action = scrollingListService.getSelectedAction(actionCall);
+
+      action();
+
+      setTimeout(function() {
+        expect(scrollingListService.selectedActionActive).to.be.false;
+        expect(scrollingListService.selectedActionCount).to.equal(2);
+        expect(scrollingListService.selectedActionCompletedCount).to.equal(2);
+
+        expect(scrollingListService.errorMessage).to.be.ok;
+        expect(scrollingListService.apiError).to.be.ok;
+
+        done();
+      }, 10);
+    });
+
+    it('should remove items if flag is set', function(done) {
+      scrollingListService.select(scrollingListService.items.list[0]);
+      scrollingListService.select(scrollingListService.items.list[5]);
+
+      var actionCall = sinon.stub().returns(Q.resolve());
+      var action = scrollingListService.getSelectedAction(actionCall, true);
+
+      action();
+
+      setTimeout(function() {
+        expect(scrollingListService.items.list).to.have.length(38);
+
+        done();
+      }, 10);
+    });
+
   });
 
 });
