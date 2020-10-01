@@ -35,6 +35,7 @@ describe("service: BatchOperations:", function() {
   it("should init the service objects",function(){
     expect(batchOperations.isActive).to.be.false;
     expect(batchOperations.queueLimit).to.be.greaterThan(0);
+    expect(batchOperations.progress).to.equal(0);
     expect(batchOperations.totalItemCount).to.equal(0);
     expect(batchOperations.completedItemCount).to.equal(0);
   });
@@ -48,6 +49,7 @@ describe("service: BatchOperations:", function() {
       batchOperations.batch();
 
       expect(batchOperations.isActive).to.be.false;
+      expect(batchOperations.progress).to.equal(0);
       expect(batchOperations.totalItemCount).to.equal(0);
       expect(batchOperations.completedItemCount).to.equal(0);
     });
@@ -56,6 +58,7 @@ describe("service: BatchOperations:", function() {
       batchOperations.batch([], method);
 
       expect(batchOperations.isActive).to.be.false;
+      expect(batchOperations.progress).to.equal(0);
       expect(batchOperations.totalItemCount).to.equal(0);
       expect(batchOperations.completedItemCount).to.equal(0);
     });
@@ -64,6 +67,7 @@ describe("service: BatchOperations:", function() {
       batchOperations.batch(items);
 
       expect(batchOperations.isActive).to.be.false;
+      expect(batchOperations.progress).to.equal(0);
       expect(batchOperations.totalItemCount).to.equal(0);
       expect(batchOperations.completedItemCount).to.equal(0);
     });
@@ -72,6 +76,7 @@ describe("service: BatchOperations:", function() {
       batchOperations.batch(items, method);
 
       expect(batchOperations.isActive).to.be.true;
+      expect(batchOperations.progress).to.equal(0);
       expect(batchOperations.totalItemCount).to.equal(8);
       expect(batchOperations.completedItemCount).to.equal(0);
     });
@@ -92,6 +97,7 @@ describe("service: BatchOperations:", function() {
 
       setTimeout(function() {
         expect(batchOperations.isActive).to.be.true;
+        expect(batchOperations.progress).to.equal(38);
         expect(batchOperations.totalItemCount).to.equal(8);
         expect(batchOperations.completedItemCount).to.equal(3);
 
@@ -111,6 +117,7 @@ describe("service: BatchOperations:", function() {
 
         setTimeout(function() {
           expect(batchOperations.isActive).to.be.true;
+          expect(batchOperations.progress).to.equal(75);
           expect(batchOperations.totalItemCount).to.equal(8);
           expect(batchOperations.completedItemCount).to.equal(6);
 
@@ -123,6 +130,7 @@ describe("service: BatchOperations:", function() {
     it('should finish the batches and resolve', function(done) {
       batchOperations.batch(items, method).then(function() {
         expect(batchOperations.isActive).to.be.false;
+        expect(batchOperations.progress).to.equal(0);
         expect(batchOperations.totalItemCount).to.equal(0);
         expect(batchOperations.completedItemCount).to.equal(0);
 
@@ -145,6 +153,7 @@ describe("service: BatchOperations:", function() {
           $timeout.verifyNoPendingTasks();
 
           expect(batchOperations.isActive).to.be.true;
+          expect(batchOperations.progress).to.equal(75);
           expect(batchOperations.totalItemCount).to.equal(8);
           expect(batchOperations.completedItemCount).to.equal(6);
         }, 10);
@@ -159,6 +168,7 @@ describe("service: BatchOperations:", function() {
 
       setTimeout(function() {
         expect(batchOperations.isActive).to.be.true;
+        expect(batchOperations.progress).to.equal(25);
         expect(batchOperations.totalItemCount).to.equal(8);
         expect(batchOperations.completedItemCount).to.equal(2);
 
@@ -168,6 +178,7 @@ describe("service: BatchOperations:", function() {
 
         setTimeout(function() {
           expect(batchOperations.isActive).to.be.true;
+          expect(batchOperations.progress).to.equal(50);
           expect(batchOperations.totalItemCount).to.equal(8);
           expect(batchOperations.completedItemCount).to.equal(4);
 
