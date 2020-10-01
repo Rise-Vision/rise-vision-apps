@@ -89,9 +89,8 @@ describe('controller: displays list', function() {
 
   it('deleteDisplays:', function() {
     expect($scope.deleteDisplays).to.be.ok;
-    expect($scope.deleteDisplays).to.equal('action');
-
-    $scope.displays.getSelectedAction.should.have.been.calledWith('deleteDisplayByObject', true)
+    expect($scope.deleteDisplays).to.a('function');
+    // $scope.displays.getSelectedAction.should.have.been.calledWith('deleteDisplayByObject', true)
   });
 
   it('should init the scope objects',function(){
