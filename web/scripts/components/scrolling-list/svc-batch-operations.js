@@ -13,6 +13,7 @@ angular.module('risevision.common.components.scrolling-list')
           queue = [];
 
           svc.isActive = false;
+          svc.progress = 0;
           svc.totalItemCount = 0;
           svc.completedItemCount = 0;
         };
@@ -37,6 +38,7 @@ angular.module('risevision.common.components.scrolling-list')
                 });
 
                 svc.completedItemCount++;
+                svc.progress = Math.round(svc.completedItemCount / svc.totalItemCount * 100);
 
                 if (svc.totalItemCount === svc.completedItemCount) {
                   deferred.resolve();

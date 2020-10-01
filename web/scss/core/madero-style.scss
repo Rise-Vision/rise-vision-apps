@@ -155,6 +155,24 @@
     }
   }
 
+  .progress {
+    height: 10px;
+    box-shadow: none;
+    background-color: transparent;
+    border: 1px solid $madero-gray;
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 0;
+  }
+
+  .progress-bar {
+    width: 50%;
+    background: $madero-green;
+    animation: none;
+    height: 100%;
+    box-shadow: none;
+  }
+
   .fields-preview-panels {
     margin-left: 0px;
     margin-right: 0px;
@@ -356,7 +374,6 @@
 
   .multi-actions-panel {
     background-color: $lighter-gray;
-    padding: 25px;
 
     .close {
       width: auto;
@@ -369,6 +386,12 @@
         opacity: 1;
       }
     }
+  }
+
+  .multi-actions-progress-panel {
+    @extend .mx-auto;
+
+    max-width: 583px;
   }
 
 }
