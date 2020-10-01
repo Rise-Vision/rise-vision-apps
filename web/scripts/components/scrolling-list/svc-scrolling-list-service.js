@@ -1,13 +1,14 @@
 'use strict';
 
 angular.module('risevision.common.components.scrolling-list')
-  .service('ScrollingListService', ['$q', '$log', 'BaseList', 'processErrorCode',
-    function ($q, $log, BaseList, processErrorCode) {
+  .service('ScrollingListService', ['$log', 'BaseList', 'BatchOperations', 'processErrorCode',
+    function ($log, BaseList, BatchOperations, processErrorCode) {
       return function (listService, search) {
         var DB_MAX_COUNT = 40; //number of records to load at a time
         var factory = {};
 
         factory.items = new BaseList(DB_MAX_COUNT);
+        factory.operations = new BatchOperations();
 
         factory.search = search ? search : {};
         _.defaults(factory.search, {
@@ -127,7 +128,6 @@ angular.module('risevision.common.components.scrolling-list')
         factory.getSelectedAction = function(actionCall, removeFromList) {
           return function() {
             var selected = factory.getSelected();
-            var promises;
             var listError = false;
 
             if (!selected.length) {
@@ -136,11 +136,7 @@ angular.module('risevision.common.components.scrolling-list')
 
             _clearMessages();
 
-            factory.selectedActionActive = true;
-            factory.selectedActionCount = selected.length;
-            factory.selectedActionCompletedCount = 0;
-
-            promises = _.map(selected, function (item) {
+            var execute = function (item) {
               return actionCall(item)
                 .then(function() {
                   if (removeFromList) {
@@ -153,16 +149,11 @@ angular.module('risevision.common.components.scrolling-list')
                   $log.error(processErrorCode(e), e);
             
                   listError = true;
-                })
-                .finally(function() {
-                  factory.selectedActionCompletedCount++;
                 });
-            });
+            };
 
-            $q.all(promises)
-              .finally(function() {            
-                factory.selectedActionActive = false;
-            
+            factory.operations.batch(selected, execute)
+              .finally(function() {  
                 if (listError) {
                   factory.errorMessage = 'Something went wrong.';
                   factory.apiError = 'We weren’t able to delete one or more of the selected ' + 
