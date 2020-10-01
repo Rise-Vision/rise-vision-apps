@@ -4,12 +4,20 @@ describe("service: ScrollingListService:", function() {
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});
 
+    $provide.service('BatchOperations', function() {
+      return function() {
+        return {
+          batch: sinon.stub().returns(Q.resolve())
+        };
+      };
+    });
+
     $provide.service("processErrorCode", function() {
       return sinon.stub().returns("error");
     });
 
   }));
-  var scrollingListService, ScrollingListService, listService, result, processErrorCode;
+  var scrollingListService, ScrollingListService, listService, result, BatchOperations, processErrorCode;
   beforeEach(function(){
     result = {
       items: [],
@@ -27,6 +35,7 @@ describe("service: ScrollingListService:", function() {
 
     inject(function($injector){
       ScrollingListService = $injector.get("ScrollingListService");
+      BatchOperations = $injector.get("BatchOperations");
       processErrorCode = $injector.get('processErrorCode');
       scrollingListService = new ScrollingListService(listService);
     });
@@ -54,6 +63,7 @@ describe("service: ScrollingListService:", function() {
     expect(scrollingListService.selectAll).to.be.a("function");
     expect(scrollingListService.deselectAll).to.be.a("function");
 
+    expect(scrollingListService.operations).to.be.ok;
     expect(scrollingListService.getSelectedAction).to.be.a("function");
   });
 
@@ -407,23 +417,22 @@ describe("service: ScrollingListService:", function() {
 
       action();
 
-      expect(scrollingListService.selectedActionActive).to.be.undefined;
-      expect(scrollingListService.selectedActionCount).to.be.undefined;
-      expect(scrollingListService.selectedActionCompletedCount).to.be.undefined;
-
+      scrollingListService.operations.batch.should.not.have.been.called;
     });
 
-    it('should initialize variables if items are selected', function() {
+    it('should call batch if items are selected', function() {
       scrollingListService.select(scrollingListService.items.list[0]);
       scrollingListService.select(scrollingListService.items.list[5]);
 
-      var action = scrollingListService.getSelectedAction(sinon.stub().returns(Q.resolve()));
+      var actionCall = sinon.stub().returns(Q.resolve());
+      var action = scrollingListService.getSelectedAction(actionCall);
 
       action();
 
-      expect(scrollingListService.selectedActionActive).to.be.true;
-      expect(scrollingListService.selectedActionCount).to.equal(2);
-      expect(scrollingListService.selectedActionCompletedCount).to.equal(0);
+      scrollingListService.operations.batch.should.have.been.calledWith([
+        scrollingListService.items.list[0],
+        scrollingListService.items.list[5]
+      ], sinon.match.func);
     });
 
     it('should clear error messages', function() {
@@ -441,70 +450,78 @@ describe("service: ScrollingListService:", function() {
       expect(scrollingListService.apiError).to.not.be.ok;
     });
 
-    it('should call the action for all selected items', function() {
+    it('should not populate error fields if calls were successful', function(done) {
+      var deferred = Q.defer();
+      scrollingListService.operations.batch.returns(deferred.promise);
+
       scrollingListService.select(scrollingListService.items.list[0]);
       scrollingListService.select(scrollingListService.items.list[5]);
 
       var actionCall = sinon.stub().returns(Q.resolve());
       var action = scrollingListService.getSelectedAction(actionCall);
 
+      // call the action
       action();
-
-      actionCall.should.have.been.calledTwice;
-      actionCall.should.have.been.calledWith(scrollingListService.items.list[0]);
-      actionCall.should.have.been.calledWith(scrollingListService.items.list[5]);
-    });
-
-    it('should update the variables once the actions are performed', function(done) {
-      scrollingListService.select(scrollingListService.items.list[0]);
-      scrollingListService.select(scrollingListService.items.list[5]);
-
-      var actionCall = sinon.stub().returns(Q.resolve());
-      var action = scrollingListService.getSelectedAction(actionCall);
-
-      action();
+      // Resolve the batch execute function
+      scrollingListService.operations.batch.getCall(0).args[1](scrollingListService.items.list[0]);
 
       setTimeout(function() {
-        expect(scrollingListService.selectedActionActive).to.be.false;
-        expect(scrollingListService.selectedActionCount).to.equal(2);
-        expect(scrollingListService.selectedActionCompletedCount).to.equal(2);
+        // resolve the batch promise
+        deferred.resolve();
 
-        expect(scrollingListService.errorMessage).to.not.be.ok;
-        expect(scrollingListService.apiError).to.not.be.ok;
+        setTimeout(function() {
+          expect(scrollingListService.errorMessage).to.not.be.ok;
+          expect(scrollingListService.apiError).to.not.be.ok;
 
-        done();
+          done();
+        }, 10);
+
       }, 10);
     });
 
     it('should handle api errors', function(done) {
+      var deferred = Q.defer();
+      scrollingListService.operations.batch.returns(deferred.promise);
+
       scrollingListService.select(scrollingListService.items.list[0]);
       scrollingListService.select(scrollingListService.items.list[5]);
 
       var actionCall = sinon.stub().returns(Q.reject());
       var action = scrollingListService.getSelectedAction(actionCall);
 
+      // call the action
       action();
+      // Resolve the batch execute function
+      scrollingListService.operations.batch.getCall(0).args[1](scrollingListService.items.list[0]);
 
       setTimeout(function() {
-        expect(scrollingListService.selectedActionActive).to.be.false;
-        expect(scrollingListService.selectedActionCount).to.equal(2);
-        expect(scrollingListService.selectedActionCompletedCount).to.equal(2);
+        // resolve the batch promise
+        deferred.resolve();
 
-        expect(scrollingListService.errorMessage).to.be.ok;
-        expect(scrollingListService.apiError).to.be.ok;
+        setTimeout(function() {
+          expect(scrollingListService.errorMessage).to.be.ok;
+          expect(scrollingListService.apiError).to.be.ok;
 
-        done();
+          done();
+        }, 10);
+
       }, 10);
     });
 
     it('should remove items if flag is set', function(done) {
+      scrollingListService.operations.batch.returns(Q.resolve());
+
       scrollingListService.select(scrollingListService.items.list[0]);
       scrollingListService.select(scrollingListService.items.list[5]);
 
       var actionCall = sinon.stub().returns(Q.resolve());
       var action = scrollingListService.getSelectedAction(actionCall, true);
 
+      // call the action
       action();
+      // Resolve the batch execute function for both items
+      scrollingListService.operations.batch.getCall(0).args[1](scrollingListService.items.list[5]);
+      scrollingListService.operations.batch.getCall(0).args[1](scrollingListService.items.list[0]);
 
       setTimeout(function() {
         expect(scrollingListService.items.list).to.have.length(38);
