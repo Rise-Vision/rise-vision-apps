@@ -129,10 +129,10 @@ describe("service: BatchOperations:", function() {
 
     it('should finish the batches and resolve', function(done) {
       batchOperations.batch(items, method).then(function() {
-        expect(batchOperations.isActive).to.be.false;
-        expect(batchOperations.progress).to.equal(0);
-        expect(batchOperations.totalItemCount).to.equal(0);
-        expect(batchOperations.completedItemCount).to.equal(0);
+        expect(batchOperations.isActive).to.be.true;
+        expect(batchOperations.progress).to.equal(100);
+        expect(batchOperations.totalItemCount).to.equal(8);
+        expect(batchOperations.completedItemCount).to.equal(8);
 
         done();
       });
@@ -150,12 +150,38 @@ describe("service: BatchOperations:", function() {
           // flush one more time to validate queue limit
           $timeout.flush(500);
 
-          $timeout.verifyNoPendingTasks();
-
           expect(batchOperations.isActive).to.be.true;
           expect(batchOperations.progress).to.equal(75);
           expect(batchOperations.totalItemCount).to.equal(8);
           expect(batchOperations.completedItemCount).to.equal(6);
+        }, 10);
+
+      }, 10);
+    });
+
+    it('should reset batch after 2 seconds of completion', function(done) {
+      batchOperations.batch(items, method).then(function() {
+        // flush one more time to bypass reset delay
+        $timeout.flush(2000);
+
+        $timeout.verifyNoPendingTasks();
+
+        expect(batchOperations.isActive).to.be.false;
+        expect(batchOperations.progress).to.equal(0);
+        expect(batchOperations.totalItemCount).to.equal(0);
+        expect(batchOperations.completedItemCount).to.equal(0);
+
+        done();
+      });
+
+      setTimeout(function() {
+        $timeout.flush(500);
+
+        setTimeout(function() {
+          $timeout.flush(500);
+
+          // flush one more time to validate queue limit
+          $timeout.flush(500);
         }, 10);
 
       }, 10);
