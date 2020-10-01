@@ -1,0 +1,43 @@
+<form id="confirmForm" class="madero-style">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="dismiss()" data-dismiss="modal" aria-hidden="true">
+      <streamline-icon name="close" width="12" height="12"></streamline-icon>
+    </button>
+  </div>
+
+  <div class="modal-body mb-2" stop-event="touchend">
+    <h4 class="mb-3">Are you sure you want to permanently delete?</h4>
+    <p class="align-left">
+      <span ng-if="companyDisplays">
+        <strong>{{companyDisplays}}</strong> display<span ng-show="companyDisplays > 1">s</span> from your company.
+        <br/>
+      </span>
+      <span ng-if="subCompanyDisplays">
+        <strong>{{subCompanyDisplays}}</strong> display<span ng-show="subCompanyDisplays > 1">s</span> from your sub-companies.
+        <br/>
+      </span>
+      <br/>
+      <strong>Once deleted they cannot be recovered.</strong>
+    </p>
+
+    <div class="align-left mt-4">
+      <p><strong>Type "{{expectedText}}" to confirm deletion:</strong></p>
+      <input class="w-100 form-control" type="text" ng-model="inputText"></input>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <button class="btn btn-default w-100" ng-click="cancel()">
+          Cancel
+        </button>
+      </div>
+      <div class="col-xs-6">
+        <button id="confirm-primary" class="btn btn-danger w-100" ng-click="delete()" ng-disabled="inputText !== expectedText">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

@@ -87,6 +87,10 @@
         @extend .u_padding-md-vertical;
         @extend .u_padding-sm-horizontal;
         @extend .u_nowrap;
+
+        .madero-checkbox {
+          @extend .my-0;
+        }
       }
 
       .table>thead>tr>th {
@@ -133,16 +137,40 @@
     .button-toolbar-md-folded {
       display: block;
 
+      & > * > * {
+        margin-top: 1rem !important;
+      }
+
+      & > *:first-child > * {
+        margin-top: 0 !important;
+      }
+
       .button-toolbar {
         display: block;
       }
 
       .btn-toolbar, .btn-toolbar-wide {
-        margin-top: 1rem !important;
-
         width: 100%;
       }
     }
+  }
+
+  .progress {
+    height: 10px;
+    box-shadow: none;
+    background-color: transparent;
+    border: 1px solid $madero-gray;
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 0;
+  }
+
+  .progress-bar {
+    width: 50%;
+    background: $madero-green;
+    animation: none;
+    height: 100%;
+    box-shadow: none;
   }
 
   .fields-preview-panels {
@@ -342,6 +370,28 @@
       background-attachment: local, local, scroll, scroll;
       background-clip: padding-box; /* fix right border on Chrome */
     }
+  }
+
+  .multi-actions-panel {
+    background-color: $lighter-gray;
+
+    .close {
+      width: auto;
+
+      svg {
+        fill: #999;
+      }
+
+      &:hover, &:focus {
+        opacity: 1;
+      }
+    }
+  }
+
+  .multi-actions-progress-panel {
+    @extend .mx-auto;
+
+    max-width: 583px;
   }
 
 }

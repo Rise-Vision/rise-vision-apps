@@ -3,9 +3,9 @@
 angular.module('risevision.displays.controllers')
   .controller('displaysList', ['$scope', '$rootScope', 'userState', 'display',
     'ScrollingListService', '$loading', '$filter', 'displayFactory', 'playerLicenseFactory',
-    'displayStatusFactory',
+    'displayStatusFactory', '$modal',
     function ($scope, $rootScope, userState, display, ScrollingListService, $loading,
-      $filter, displayFactory, playerLicenseFactory, displayStatusFactory) {
+      $filter, displayFactory, playerLicenseFactory, displayStatusFactory, $modal) {
       $scope.search = {
         sortBy: 'name',
         count: $scope.listLimit,
@@ -14,6 +14,18 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.displays = new ScrollingListService(display.list, $scope.search);
+      $scope.deleteDisplays = function() {
+        $modal.open({
+          templateUrl: 'partials/displays/bulk-delete-confirmation-modal.html',
+          controller: 'BulkDeleteModalCtrl',
+          windowClass: 'madero-style centered-modal',
+          size: 'sm',
+          resolve: {
+            selectedItems: $scope.displays.getSelected
+          }
+        }).result.then($scope.displays.getSelectedAction(displayFactory.deleteDisplayByObject, true));
+      };
+
       $scope.selectedCompayId = userState.getSelectedCompanyId();
       $scope.displayFactory = displayFactory;
       $scope.displayService = display;

@@ -35,15 +35,69 @@
       <strong translate>displays-app.list.searchNotification</strong>
     </div>
 
+    <div class="flex-row multi-actions-panel u_padding-20 u_margin-md-top" ng-show="displays.getSelected().length > 0 && !displays.operations.isActive" require-role="da">
+      <div class="flex-row button-toolbar-md-folded w-100">
+        <div class="col-sm-5 pl-0">
+          <strong>{{displays.getSelected().length}}</strong>
+          <span class="text-gray">
+            Display<span ng-show="displays.getSelected().length > 1">s</span> selected. 
+            <span ng-hide="displays.search.selectAll"><a class="madero-link u_clickable" ng-click="displays.selectAll()"> Select all</a>.</span>
+          </span>
+        </div>
+        <div class="col-sm-7 pl-0">
+          <div>
+            <label class="mr-2">Actions:</label>
+            <div class="btn-group" dropdown>
+              <button id="displaysActionsButton" type="button" dropdown-toggle class="form-control btn-select btn-toolbar-wide flex-row mt-0">
+                <div class="row-entry">
+                  <span class="text-gray mr-auto">Choose an action</span>
+                  <span class="text-gray pl-2"><i class="fa fa-sort"></i></span>
+                </div>
+              </button>
+              <div class="dropdown-menu playlist-menu" role="menu">
+                <ul>
+                  <li>
+                    <button type="button" class="btn-dropdown u_clickable" ng-click="deleteDisplays()">
+                      <span>Delete</span>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="close" ng-click="displays.deselectAll()" data-dismiss="modal" aria-hidden="true">
+        <streamline-icon name="close" width="15" height="15"></streamline-icon>
+      </button>
+    </div>
+
+    <div class="border-container text-center u_padding-20 u_margin-md-top" ng-show="displays.operations.isActive">
+      <div class="multi-actions-progress-panel">
+        <p class="mb-0"><strong>Bulk delete in progress.</strong></p>
+        <p>Please don’t navigate away from this page.</p>
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="{{displays.operations.progress}}.0"
+          aria-valuemin="0" aria-valuemax="100" ng-style="{ 'width': displays.operations.progress + '%' }"></div>
+        </div>
+        <p class="mb-0">{{displays.operations.completedItemCount}} out of {{displays.operations.totalItemCount}} display<span ng-show="displays.operations.totalItemCount > 1">s</span> deleted.</p>
+      </div>
+    </div>
+
     <div class="scrollable-list horizontal-scroll border-container u_margin-md-top u_margin-md-bottom"
       scrolling-list="displays.load()" rv-spinner rv-spinner-key="displays-list-loader" rv-spinner-start-active="1">
 
       <table id="displaysListTable" class="table">
         <thead class="table-header">
           <tr class="table-header__row">
-            <th class="table-header__cell col-xs-4 u_clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
-              {{ 'displays-app.list.heading.name' | translate }}
-              <i ng-if="search.sortBy === 'name'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
+            <th class="table-header__cell col-xs-4">
+              <div class="flex-row">
+                <madero-checkbox ng-click="displays.selectAll()" ng-value="search.selectAll"></madero-checkbox>
+                <div class="u_clickable" id="tableHeaderName" ng-click="displays.sortBy('name')">
+                  {{ 'displays-app.list.heading.name' | translate }}
+                  <i ng-if="search.sortBy === 'name'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
+                </div>
+              </div>
             </th>
             <th class="table-header__cell col-xs-1" translate>
               Licensed
@@ -65,9 +119,12 @@
         <tbody class="table-body">
           <tr class="table-body__row" ng-class="{ 'bg-warning' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list">
             <td class="table-body__cell">
-              <a class="madero-link u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
-                <strong>{{display.name}}</strong>
-              </a>
+              <div class="flex-row">
+                <madero-checkbox ng-click="displays.select(display)" ng-value="display.selected"></madero-checkbox>
+                <a class="madero-link u_ellipsis-md" ui-sref="apps.displays.change({displayId: display.id, companyId: display.companyId})">
+                  <strong>{{display.name}}</strong>
+                </a>
+              </div>
             </td>
             <td class="table-body__cell">
               <div ng-show="getDisplayType(display) === 'professional'">
