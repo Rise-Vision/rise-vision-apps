@@ -64,6 +64,7 @@ var AddDistributionScenarios = function() {
 
         it('should show a table for listing displays', function () {
           helper.waitDisappear(distributionModalPage.getDistributionListLoader()).then(function () {
+            helper.wait(distributionModalPage.getDistributionListTable(), 'Distribution Table');
             expect(distributionModalPage.getDistributionListTable().isDisplayed()).to.eventually.be.true;
           });
           

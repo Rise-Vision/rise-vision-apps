@@ -127,6 +127,7 @@ var TemplateEditorPage = function() {
   };
 
   this.waitForAutosave = function() {
+    browser.sleep(500);
     savedText.isDisplayed().then(function(isDisplayed) {
       if (!isDisplayed) {
         //wait for presentation to be auto-saved

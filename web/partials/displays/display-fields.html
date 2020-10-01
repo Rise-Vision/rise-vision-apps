@@ -212,12 +212,14 @@
       <div class="list-group-item flex-row form-group mb-0" ng-show="(factory.display.playerVersion || factory.display.onlineStatus === 'online') && (playerProFactory.isCROSLegacy(factory.display) || playerProFactory.isChromeOSPlayer(factory.display))">
         <div class="row-entry">
           <label class="control-label pull-left mb-0" translate>displays-app.fields.player.orientation.name</label>
-          <select class="form-control mr-auto w-auto" ng-model="factory.display.orientation" integer-parser>
-            <option value="0" translate>displays-app.fields.player.orientation.0</option>
-            <option value="90" translate>displays-app.fields.player.orientation.90</option>
-            <option value="180" translate>displays-app.fields.player.orientation.180</option>
-            <option value="270" translate>displays-app.fields.player.orientation.270</option>
-          </select>
+          <span class="mr-auto">
+            <select class="form-control" ng-model="factory.display.orientation" integer-parser>
+              <option value="0" translate>displays-app.fields.player.orientation.0</option>
+              <option value="90" translate>displays-app.fields.player.orientation.90</option>
+              <option value="180" translate>displays-app.fields.player.orientation.180</option>
+              <option value="270" translate>displays-app.fields.player.orientation.270</option>
+            </select>
+          </span>
         </div>
       </div>
 
