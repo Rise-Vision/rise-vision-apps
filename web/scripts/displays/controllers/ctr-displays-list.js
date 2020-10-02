@@ -54,18 +54,6 @@ angular.module('risevision.displays.controllers')
         $scope.displays.doSearch();
       });
 
-      $scope.playerNotInstalled = function (display) {
-        return $filter('status')(display) === 'notinstalled';
-      };
-
-      $scope.playerOnline = function (display) {
-        return $filter('status')(display) === 'online';
-      };
-
-      $scope.playerOffline = function (display) {
-        return $filter('status')(display) === 'offline';
-      };
-
       $scope.getDisplayType = function (display) {
         if (display && display.playerProAuthorized) {
           return 'professional';
