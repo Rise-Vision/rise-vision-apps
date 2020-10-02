@@ -52,6 +52,7 @@ var TemplateAddScenarios = function() {
       });
 
       it('should edit the Presentation name', function () {
+        browser.sleep(10000); //TODO: prevent extra Save calls from happening
         presentationsListPage.changePresentationName(presentationName);
         expect(templateEditorPage.getPresentationName().getAttribute('value')).to.eventually.equal(presentationName);
       });
