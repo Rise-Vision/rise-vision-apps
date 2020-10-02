@@ -788,24 +788,6 @@ $short-phone-height: 570px;
     margin-right: -15px;
     float: right;
   }
-
-  .progress {
-    height: 10px;
-    box-shadow: none;
-    background-color: transparent;
-    border: 1px solid $madero-gray;
-    width: 100%;
-    margin-top: 5px;
-    margin-bottom: 0;
-  }
-
-  .progress-bar {
-    width: 50%;
-    background: $madero-green;
-    animation: none;
-    height: 100%;
-    box-shadow: none;
-  }
 }
 
 .storage-upload-file-row {
@@ -1506,12 +1488,14 @@ $short-phone-height: 570px;
 }
 
 .madero-radio, .madero-checkbox {
-  margin-top: 0px;
-  margin-bottom: 0px;
-  min-height: 25px;
+  @extend .my-2;
+  @extend .u_clickable;
+
   min-width: 31px;
 
   & label, & label {
+    @extend .u_clickable;
+
     padding-left: 0px;
   }
 
@@ -1528,7 +1512,6 @@ $short-phone-height: 570px;
 
   input[type=radio] + label, input[type=checkbox] + label {
     display: block;
-    padding-top: 5px;
 
     &:before {
       content: '';
@@ -1560,7 +1543,7 @@ $short-phone-height: 570px;
 
   // Requires checkmark svg in the label element
   input[type=checkbox] + label {
-    margin-bottom: 7px;
+    @extend .mb-0;
 
     &:before {
       border-radius: 2px;
