@@ -40,7 +40,7 @@ angular.module('risevision.displays.directives')
               return false;
             } else if (!playerProFactory.isScreenshotCompatiblePlayer(displayFactory.display)) {
               return false;
-            } else if (displayFactory.onlineStatus === 'online') {
+            } else if (displayFactory.display.onlineStatus === 'online') {
               return true;
             }
 
