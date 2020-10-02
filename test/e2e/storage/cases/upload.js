@@ -37,8 +37,10 @@ var UploadScenarios = function() {
       });
 
       it('should hide Upload panel when finished',function(){
+        browser.driver.manage().timeouts().setScriptTimeout(90000);
         helper.waitDisappear(storageSelectorModalPage.getUploadPanel(), 'Storage Upload Panel', 90000);
         expect(storageSelectorModalPage.getUploadPanel().isDisplayed()).to.eventually.be.false;
+        browser.driver.manage().timeouts().setScriptTimeout(30000);
       });
 
       it('should list uploaded file',function(){
