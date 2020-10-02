@@ -7,7 +7,6 @@ angular.module('risevision.displays.services')
     function ($rootScope, $q, $state, $log, userState, display, displayTracker,
       scheduleFactory, playerLicenseFactory, processErrorCode) {
       var factory = {};
-      var _displayId;
 
       var _clearMessages = function () {
         factory.loadingDisplay = false;
@@ -17,8 +16,6 @@ angular.module('risevision.displays.services')
       };
 
       factory.init = function () {
-        _displayId = undefined;
-
         factory.display = {
           'name': 'New Display',
           'width': 1920,
@@ -52,13 +49,11 @@ angular.module('risevision.displays.services')
         var deferred = $q.defer();
 
         _clearMessages();
-        //load the display based on the url param
-        _displayId = displayId;
 
         //show loading spinner
         factory.loadingDisplay = true;
 
-        display.get(_displayId)
+        display.get(displayId)
           .then(function (result) {
             factory.display = result.item;
 
@@ -135,9 +130,9 @@ angular.module('risevision.displays.services')
         factory.loadingDisplay = true;
         factory.savingDisplay = true;
 
-        display.update(_displayId, factory.display)
+        display.update(factory.display.id, factory.display)
           .then(function (displayId) {
-            displayTracker('Display Updated', _displayId,
+            displayTracker('Display Updated', factory.display.id,
               factory.display.name);
 
             return scheduleFactory.addToDistribution(factory.display, selectedSchedule)
@@ -160,20 +155,25 @@ angular.module('risevision.displays.services')
         return deferred.promise;
       };
 
+      factory.deleteDisplayByObject = function (displayObject) {
+        return display.delete(displayObject.id)
+          .then(function () {
+            displayTracker('Display Deleted', displayObject.id, displayObject.name);
+
+            if (displayObject.playerProAssigned) {
+              playerLicenseFactory.toggleDisplayLicenseLocal(false);
+            }
+          });
+      };
+
       factory.deleteDisplay = function () {
         _clearMessages();
 
         //show loading spinner
         factory.loadingDisplay = true;
 
-        display.delete(_displayId)
+        factory.deleteDisplayByObject(factory.display)
           .then(function () {
-            displayTracker('Display Deleted', _displayId,
-              factory.display.name);
-
-            if (factory.display.playerProAssigned) {
-              playerLicenseFactory.toggleDisplayLicenseLocal(false);
-            }
             factory.display = {};
 
             $state.go('apps.displays.list');
