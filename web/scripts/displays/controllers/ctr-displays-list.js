@@ -18,7 +18,8 @@ angular.module('risevision.displays.controllers')
         name: 'Display',
         operations: [{
           name: 'Delete',
-          actionCall: displayFactory.deleteDisplayByObject
+          actionCall: displayFactory.deleteDisplayByObject,
+          requireRole: 'da'
         }]
       };
 

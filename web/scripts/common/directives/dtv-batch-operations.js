@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.apps.directives')
-  .directive('batchOperations', ['$modal',
-    function ($modal) {
+  .directive('batchOperations', ['$modal', 'userState',
+    function ($modal, userState) {
       return {
         restrict: 'E',
         scope: {
@@ -11,7 +11,17 @@ angular.module('risevision.apps.directives')
         },
         templateUrl: 'partials/common/batch-operations.html',
         link: function ($scope) {
-          if ($scope.listOperations && $scope.listOperations.operations && $scope.listObject) {
+          var _filterByRole = function() {
+            _.remove($scope.listOperations.operations, function(operation) {
+              if (!operation.requireRole) {
+                return false;
+              }
+
+              return !userState.hasRole(operation.requireRole);
+            });            
+          };
+
+          var _updateDelete = function() {
             var deleteOperation = _.find($scope.listOperations.operations, {
               name: 'Delete'
             });
@@ -34,6 +44,11 @@ angular.module('risevision.apps.directives')
                 }).result.then(deleteAction);
               };
             }
+          };
+
+          if ($scope.listOperations && $scope.listOperations.operations && $scope.listObject) {
+            _filterByRole();
+            _updateDelete();
           }
         } //link()
       };

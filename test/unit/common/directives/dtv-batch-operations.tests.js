@@ -4,7 +4,8 @@ describe('directive: batch-operations', function() {
       $rootScope,
       $scope,
       element;
-  var $modal;
+  var deleteAction;
+  var $modal, userState;
   beforeEach(module('risevision.apps.directives'));
   beforeEach(module(function ($provide) {
     $provide.service('$modal', function() {
@@ -12,14 +13,29 @@ describe('directive: batch-operations', function() {
         open: sinon.stub().returns({result: Q.resolve()})
       }
     });
+
+    $provide.service('userState', function() {
+      return {
+        hasRole: sinon.stub().returns(true)
+      }
+    });
   }));
 
   beforeEach(inject(function(_$compile_, _$rootScope_, $injector, $templateCache){
     $modal = $injector.get('$modal');
+    userState = $injector.get('userState');
 
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     $templateCache.put('partials/common/batch-operations.html', '<p>mock</p>');
+
+    deleteAction = sinon.spy();
+
+    $rootScope.listObject = {
+      getSelected: sinon.stub().returns('selectedItems'),
+      getSelectedAction: sinon.stub().returns(deleteAction)
+    };
+
   }));
 
   function compileDirective() {
@@ -30,7 +46,6 @@ describe('directive: batch-operations', function() {
 
   describe('batch-operations:', function () {
     beforeEach(function() {
-      $rootScope.listObject = 'listObject';
       $rootScope.listOperations = 'listOperations';
 
       compileDirective();
@@ -41,7 +56,7 @@ describe('directive: batch-operations', function() {
     });
 
     it('should initialize scope', function() {
-      expect($scope.listObject).to.equal('listObject');
+      expect($scope.listObject).to.equal($rootScope.listObject);
       expect($scope.listOperations).to.equal('listOperations');
     });
 
@@ -49,7 +64,40 @@ describe('directive: batch-operations', function() {
 
   describe('operations:', function() {
     
-    it('should not do anything if operations are not found', function() {
+    describe('requireRole:', function() {
+      it('should filter out operations the user doesnt have access to', function() {
+        $rootScope.listOperations = {
+          name: 'Items',
+          operations: [{
+            name: 'Operation1',
+            actionCall: 'actionCall'
+          },
+          {
+            name: 'Operation2',
+            actionCall: 'actionCall',
+            requireRole: 'badRole'
+          },
+          {
+            name: 'Operation3',
+            actionCall: 'actionCall',
+            requireRole: 'goodRole'
+          }]
+        };
+
+        userState.hasRole.withArgs('badRole').returns(false);
+
+        compileDirective();
+
+        userState.hasRole.should.have.been.calledTwice;
+
+        expect($scope.listOperations.operations).to.have.length(2);
+        expect($scope.listOperations.operations[0].name).to.equal('Operation1');
+        expect($scope.listOperations.operations[1].name).to.equal('Operation3');
+      });
+
+    });
+
+    it('should not do anything if delete operations are not found', function() {
       $rootScope.listOperations = {
         name: 'Items',
         operations: [{
@@ -64,16 +112,8 @@ describe('directive: batch-operations', function() {
     });
 
     describe('Delete:', function() {
-      var deleteAction;
 
       beforeEach(function() {
-        deleteAction = sinon.spy();
-
-        $rootScope.listObject = {
-          getSelected: sinon.stub().returns('selectedItems'),
-          getSelectedAction: sinon.stub().returns(deleteAction)
-        };
-
         $rootScope.listOperations = {
           name: 'Items',
           operations: [{
