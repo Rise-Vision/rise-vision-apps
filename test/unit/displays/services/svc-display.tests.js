@@ -76,7 +76,7 @@ describe('service: display:', function() {
               sortString = obj.sort;
 
               var def = Q.defer();
-              if (returnList) {
+              if (returnResult) {
                 def.resolve({
                   result : {
                     nextPageToken : 1,
@@ -236,6 +236,22 @@ describe('service: display:', function() {
                 def.reject("API Failed");
               }
               return def.promise;
+            },
+            summary: function(obj) {
+              expect(obj).to.be.ok;
+
+              var def = Q.defer();
+              if (returnResult) {
+                def.resolve({
+                  result: {
+                    companyId: obj.companyId,
+                    online: 1
+                  }
+                });
+              } else {
+                def.reject("API Failed");
+              }
+              return def.promise;
             }
           }
         });
@@ -243,9 +259,9 @@ describe('service: display:', function() {
       };
     });
   }));
-  var display, returnList, searchString, sortString, $timeout, $rootScope, displayActivationTracker;
+  var display, returnResult, searchString, sortString, $timeout, $rootScope, displayActivationTracker;
   beforeEach(function(){
-    returnList = true;
+    returnResult = true;
     searchString = '';
     sortString='';
 
@@ -338,7 +354,7 @@ describe('service: display:', function() {
     });
 
     it("should handle failure to get list correctly",function(done){
-      returnList = false;
+      returnResult = false;
 
       display.list({})
       .then(function(displays) {
@@ -645,6 +661,32 @@ describe('service: display:', function() {
     });
 
     it('should handle has free displays failures', function(done) {
+      display.hasFreeDisplays().then(function() {
+        done('it should have failed');
+      },function(){
+        done();
+      });
+    });
+  });
+
+  describe('summary:', function() {
+
+    it('should retrieve summary for provided company', function(done) {
+      display.summary('companyId').then(function(result) {
+        expect(result).to.deep.equal({online: 1, companyId: 'companyId'});
+        done();
+      });
+    });
+
+    it('should retrieve summary with selected company if none is provided', function(done) {
+      display.summary().then(function(result) {
+        expect(result).to.deep.equal({online: 1, companyId: 'TEST_COMP_ID'});
+        done();
+      });
+    });
+
+    it('should handle request failures', function(done) {
+      returnResult = false;
       display.hasFreeDisplays().then(function() {
         done('it should have failed');
       },function(){

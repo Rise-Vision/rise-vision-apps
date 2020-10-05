@@ -3,10 +3,11 @@
     <!-- App Title -->
     <div class="app-header-title">
       <h1 class="m-0" id="title">Displays</h1>
-      <div>
-        <span ng-show="playerLicenseFactory.hasProfessionalLicenses()">
-          {{ playerLicenseFactory.getUsedLicenseString() }}
-        </span>
+      <div ng-show="playerLicenseFactory.hasProfessionalLicenses()">
+        {{ playerLicenseFactory.getUsedLicenseString() }}
+      </div>
+      <div ng-show="displaySummaryFactory.summary">
+        {{displaySummaryFactory.summary.online}} Online Displays / {{displaySummaryFactory.summary.offline}} Offline Displays
       </div>
     </div>
   </div>
