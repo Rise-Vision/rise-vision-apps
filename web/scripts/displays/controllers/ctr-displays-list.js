@@ -14,16 +14,22 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.displays = new ScrollingListService(display.list, $scope.search);
-      $scope.deleteDisplays = function() {
-        $modal.open({
-          templateUrl: 'partials/displays/bulk-delete-confirmation-modal.html',
-          controller: 'BulkDeleteModalCtrl',
-          windowClass: 'madero-style centered-modal',
-          size: 'sm',
-          resolve: {
-            selectedItems: $scope.displays.getSelected
+      $scope.listOperations = {
+        name: 'Display',
+        operations: [{
+          name: 'Delete',
+          actionCall: function() {
+            $modal.open({
+              templateUrl: 'partials/displays/bulk-delete-confirmation-modal.html',
+              controller: 'BulkDeleteModalCtrl',
+              windowClass: 'madero-style centered-modal',
+              size: 'sm',
+              resolve: {
+                selectedItems: $scope.displays.getSelected
+              }
+            }).result.then($scope.displays.getSelectedAction(displayFactory.deleteDisplayByObject, true));
           }
-        }).result.then($scope.displays.getSelectedAction(displayFactory.deleteDisplayByObject, true));
+        }]
       };
 
       $scope.selectedCompayId = userState.getSelectedCompanyId();

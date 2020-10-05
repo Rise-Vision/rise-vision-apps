@@ -94,9 +94,12 @@ describe('controller: displays list', function() {
     expect($scope.displaySummaryFactory).to.be.ok;
   });
 
-  it('deleteDisplays:', function() {
-    expect($scope.deleteDisplays).to.be.ok;
-    expect($scope.deleteDisplays).to.a('function');
+  it('listOperations:', function() {
+    expect($scope.listOperations).to.be.ok;
+    expect($scope.listOperations.name).to.equal('Display');
+    expect($scope.listOperations.operations).to.have.length(1);
+    expect($scope.listOperations.operations[0].name).to.equal('Delete');
+    expect($scope.listOperations.operations[0].actionCall).to.be.a('function');
     // $scope.displays.getSelectedAction.should.have.been.calledWith('deleteDisplayByObject', true)
   });
 
