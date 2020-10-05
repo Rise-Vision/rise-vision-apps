@@ -22,8 +22,7 @@ describe('controller: displays list', function() {
         return {
           search: {},
           loadingItems: false,
-          doSearch: function() {},
-          getSelectedAction: sinon.stub().returns('action')
+          doSearch: function() {}
         };
       };
     });
@@ -94,10 +93,13 @@ describe('controller: displays list', function() {
     expect($scope.displaySummaryFactory).to.be.ok;
   });
 
-  it('deleteDisplays:', function() {
-    expect($scope.deleteDisplays).to.be.ok;
-    expect($scope.deleteDisplays).to.a('function');
-    // $scope.displays.getSelectedAction.should.have.been.calledWith('deleteDisplayByObject', true)
+  it('listOperations:', function() {
+    expect($scope.listOperations).to.be.ok;
+    expect($scope.listOperations.name).to.equal('Display');
+    expect($scope.listOperations.operations).to.have.length(1);
+    expect($scope.listOperations.operations[0].name).to.equal('Delete');
+    expect($scope.listOperations.operations[0].actionCall).to.equal('deleteDisplayByObject');
+    expect($scope.listOperations.operations[0].requireRole).to.equal('da');
   });
 
   it('should init the scope objects',function(){

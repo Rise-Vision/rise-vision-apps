@@ -8,12 +8,12 @@
   <div class="modal-body mb-2" stop-event="touchend">
     <h4 class="mb-3">Are you sure you want to permanently delete?</h4>
     <p class="align-left">
-      <span ng-if="companyDisplays">
-        <strong>{{companyDisplays}}</strong> display<span ng-show="companyDisplays > 1">s</span> from your company.
+      <span ng-if="companyItems">
+        <strong>{{companyItems}}</strong> {{itemName | lowercase}}<span ng-show="companyItems > 1">s</span> from your company.
         <br/>
       </span>
-      <span ng-if="subCompanyDisplays">
-        <strong>{{subCompanyDisplays}}</strong> display<span ng-show="subCompanyDisplays > 1">s</span> from your sub-companies.
+      <span ng-if="subCompanyItems">
+        <strong>{{subCompanyItems}}</strong> {{itemName | lowercase}}<span ng-show="subCompanyItems > 1">s</span> from your sub-companies.
         <br/>
       </span>
       <br/>
