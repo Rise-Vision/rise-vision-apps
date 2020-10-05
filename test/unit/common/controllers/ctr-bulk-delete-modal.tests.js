@@ -1,6 +1,6 @@
 'use strict';
 describe('controller: bulk delete modal', function() {
-  beforeEach(module('risevision.displays.controllers'));
+  beforeEach(module('risevision.apps.controllers'));
   beforeEach(module(function ($provide) {
     $provide.service('$modalInstance',function() {
       return {
@@ -20,9 +20,9 @@ describe('controller: bulk delete modal', function() {
   beforeEach(function() {   
     sandbox = sinon.sandbox.create();
     selectedItems = [
-      {id: 'display1', companyId: 'companyId'},
-      {id: 'display2', companyId: 'subCompanyId'},
-      {id: 'display3', companyId: 'subCompanyId'}
+      {id: 'item1', companyId: 'companyId'},
+      {id: 'item2', companyId: 'subCompanyId'},
+      {id: 'item3', companyId: 'subCompanyId'}
     ];
 
     inject(function($injector, $rootScope, _$controller_) {
@@ -35,7 +35,8 @@ describe('controller: bulk delete modal', function() {
         $scope : $scope,
         $modalInstance: $modalInstance,
         userState: userState,
-        selectedItems: selectedItems
+        selectedItems: selectedItems,
+        itemName: 'Item'
       });
 
       $scope.$digest();
@@ -48,8 +49,9 @@ describe('controller: bulk delete modal', function() {
 
   it('should exist', function() {
     expect($scope).to.be.ok;
-    expect($scope.companyDisplays).to.be.ok;
-    expect($scope.subCompanyDisplays).to.be.ok;
+    expect($scope.itemName).to.equal('Item');
+    expect($scope.companyItems).to.be.ok;
+    expect($scope.subCompanyItems).to.be.ok;
     expect($scope.expectedText).to.be.ok;
     expect($scope.inputText).to.be.null;
     expect($scope.delete).to.be.a('function');
@@ -57,9 +59,9 @@ describe('controller: bulk delete modal', function() {
     expect($scope.dismiss).to.be.a('function');
   });
 
-  it('should count company and subcompany displays', function() {
-    expect($scope.companyDisplays).to.equal(1);
-    expect($scope.subCompanyDisplays).to.equal(2);
+  it('should count company and subcompany items', function() {
+    expect($scope.companyItems).to.equal(1);
+    expect($scope.subCompanyItems).to.equal(2);
     expect($scope.expectedText).to.equal('3');
   });
   

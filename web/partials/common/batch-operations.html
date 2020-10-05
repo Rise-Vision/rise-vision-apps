@@ -3,7 +3,7 @@
     <div class="col-sm-5 pl-0">
       <strong>{{listObject.getSelected().length}}</strong>
       <span class="text-gray">
-        {{listObject.name}}<span ng-show="listObject.getSelected().length > 1">s</span> selected. 
+        {{listOperations.name}}<span ng-show="listObject.getSelected().length > 1">s</span> selected. 
         <span ng-hide="listObject.search.selectAll"><a class="madero-link u_clickable" ng-click="listObject.selectAll()"> Select all</a>.</span>
       </span>
     </div>
@@ -19,7 +19,12 @@
           </button>
           <div class="dropdown-menu playlist-menu" role="menu">
             <ul>
-              <li ng-repeat="operation in listOperations.operations" require-role="da">
+              <li ng-if="!listOperations.operations.length">
+                <div class="btn-dropdown">
+                  <span class="text-gray">None</span>
+                </div>
+              </li>
+              <li ng-repeat="operation in listOperations.operations">
                 <button type="button" class="btn-dropdown u_clickable" ng-click="operation.actionCall()">
                   <span>{{operation.name}}</span>
                 </button>
