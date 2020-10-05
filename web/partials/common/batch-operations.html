@@ -19,7 +19,12 @@
           </button>
           <div class="dropdown-menu playlist-menu" role="menu">
             <ul>
-              <li ng-repeat="operation in listOperations.operations" require-role="da">
+              <li ng-if="!listOperations.operations.length">
+                <div class="btn-dropdown">
+                  <span class="text-gray">None</span>
+                </div>
+              </li>
+              <li ng-repeat="operation in listOperations.operations">
                 <button type="button" class="btn-dropdown u_clickable" ng-click="operation.actionCall()">
                   <span>{{operation.name}}</span>
                 </button>

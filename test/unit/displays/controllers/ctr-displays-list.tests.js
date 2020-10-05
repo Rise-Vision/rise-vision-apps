@@ -99,6 +99,7 @@ describe('controller: displays list', function() {
     expect($scope.listOperations.operations).to.have.length(1);
     expect($scope.listOperations.operations[0].name).to.equal('Delete');
     expect($scope.listOperations.operations[0].actionCall).to.equal('deleteDisplayByObject');
+    expect($scope.listOperations.operations[0].requireRole).to.equal('da');
   });
 
   it('should init the scope objects',function(){
