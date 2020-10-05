@@ -509,7 +509,8 @@ describe("service: ScrollingListService:", function() {
     });
 
     it('should remove items if flag is set', function(done) {
-      scrollingListService.operations.batch.returns(Q.resolve());
+      var deferred = Q.defer();
+      scrollingListService.operations.batch.returns(deferred.promise);
 
       scrollingListService.select(scrollingListService.items.list[0]);
       scrollingListService.select(scrollingListService.items.list[5]);
@@ -525,6 +526,27 @@ describe("service: ScrollingListService:", function() {
 
       setTimeout(function() {
         expect(scrollingListService.items.list).to.have.length(38);
+
+        done();
+      }, 10);
+    });
+
+    it('should refresh items if flag is set', function(done) {
+      sinon.spy(scrollingListService, 'doSearch');
+
+      scrollingListService.operations.batch.returns(Q.resolve());
+
+      scrollingListService.select(scrollingListService.items.list[0]);
+      scrollingListService.select(scrollingListService.items.list[5]);
+
+      var actionCall = sinon.stub().returns(Q.resolve());
+      var action = scrollingListService.getSelectedAction(actionCall, true);
+
+      // call the action
+      action();
+
+      setTimeout(function() {
+        scrollingListService.doSearch.should.have.been.called;
 
         done();
       }, 10);

@@ -152,8 +152,13 @@ angular.module('risevision.common.components.scrolling-list')
                 });
             };
 
-            factory.operations.batch(selected, execute)
+            return factory.operations.batch(selected, execute)
               .finally(function() {  
+                if (removeFromList) {
+                  // reload list
+                  factory.doSearch();                  
+                }
+
                 if (listError) {
                   factory.errorMessage = 'Something went wrong.';
                   factory.apiError = 'We weren’t able to delete one or more of the selected ' + 
