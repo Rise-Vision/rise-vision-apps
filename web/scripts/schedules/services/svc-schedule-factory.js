@@ -241,17 +241,22 @@ angular.module('risevision.schedules.services')
         return deferred.promise;
       };
 
+      factory.deleteScheduleByObject = function (scheduleObject) {
+        return schedule.delete(scheduleObject.id)
+          .then(function () {
+            _hasSchedules = undefined;
+            scheduleTracker('Schedule Deleted', scheduleObject.id, scheduleObject.name);
+          });
+      };
+
       factory.deleteSchedule = function () {
         _clearMessages();
 
         //show loading spinner
         factory.loadingSchedule = true;
 
-        return schedule.delete(_scheduleId)
+        return factory.deleteScheduleByObject(factory.schedule)
           .then(function () {
-            _hasSchedules = undefined;
-            scheduleTracker('Schedule Deleted', _scheduleId, factory.schedule.name);
-
             factory.schedule = {};
 
             $state.go('apps.schedules.list');
