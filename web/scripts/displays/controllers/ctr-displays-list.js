@@ -18,17 +18,7 @@ angular.module('risevision.displays.controllers')
         name: 'Display',
         operations: [{
           name: 'Delete',
-          actionCall: function() {
-            $modal.open({
-              templateUrl: 'partials/displays/bulk-delete-confirmation-modal.html',
-              controller: 'BulkDeleteModalCtrl',
-              windowClass: 'madero-style centered-modal',
-              size: 'sm',
-              resolve: {
-                selectedItems: $scope.displays.getSelected
-              }
-            }).result.then($scope.displays.getSelectedAction(displayFactory.deleteDisplayByObject, true));
-          }
+          actionCall: displayFactory.deleteDisplayByObject
         }]
       };
 

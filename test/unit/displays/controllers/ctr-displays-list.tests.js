@@ -22,8 +22,7 @@ describe('controller: displays list', function() {
         return {
           search: {},
           loadingItems: false,
-          doSearch: function() {},
-          getSelectedAction: sinon.stub().returns('action')
+          doSearch: function() {}
         };
       };
     });
@@ -99,8 +98,7 @@ describe('controller: displays list', function() {
     expect($scope.listOperations.name).to.equal('Display');
     expect($scope.listOperations.operations).to.have.length(1);
     expect($scope.listOperations.operations[0].name).to.equal('Delete');
-    expect($scope.listOperations.operations[0].actionCall).to.be.a('function');
-    // $scope.displays.getSelectedAction.should.have.been.calledWith('deleteDisplayByObject', true)
+    expect($scope.listOperations.operations[0].actionCall).to.equal('deleteDisplayByObject');
   });
 
   it('should init the scope objects',function(){
