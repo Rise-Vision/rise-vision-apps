@@ -30,7 +30,8 @@ angular.module('risevision.displays.controllers')
       $scope.displayStatusFactory = displayStatusFactory;
       $scope.displaySummaryFactory = displaySummaryFactory;
 
-      displaySummaryFactory.loadSummary();
+      // Temporary disable Summary until issue https://github.com/Rise-Vision/core/issues/810 is fixed
+      // displaySummaryFactory.loadSummary();
 
       $scope.filterConfig = {
         placeholder: $filter('translate')(
