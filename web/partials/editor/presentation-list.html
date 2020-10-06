@@ -48,8 +48,8 @@
         <tbody class="table-body">
           <tr class="table-body__row" ng-repeat="presentation in presentations.items.list">
             <td class="table-body__cell">
-              <a class="madero-link" ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})" ng-if="!isHtmlPresentation(presentation)"><strong>{{presentation.name}}</strong></a>
-              <a class="madero-link" ui-sref="apps.editor.templates.edit({presentationId: presentation.id})" ng-if="isHtmlPresentation(presentation)"><strong>{{presentation.name}}</strong></a>
+              <a class="madero-link u_ellipsis-lg" ui-sref="apps.editor.workspace.artboard({presentationId: presentation.id})" ng-if="!isHtmlPresentation(presentation)"><strong>{{presentation.name}}</strong></a>
+              <a class="madero-link u_ellipsis-lg" ui-sref="apps.editor.templates.edit({presentationId: presentation.id})" ng-if="isHtmlPresentation(presentation)"><strong>{{presentation.name}}</strong></a>
             </td>
             <td class="table-body__cell hidden-xs"><span ng-class="{'text-danger': presentation.revisionStatusName==='Revised'}">{{presentation.revisionStatusName | presentationStatus}}</span></td>
             <td class="table-body__cell hidden-xs">{{presentation.changeDate | date:'d-MMM-yyyy h:mm a'}} by {{presentation.changedBy | username}}</td>
