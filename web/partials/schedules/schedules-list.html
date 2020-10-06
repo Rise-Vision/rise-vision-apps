@@ -27,7 +27,7 @@
       <table id="schedulesListTable" class="table">
         <thead class="table-header">
           <tr class="table-header__row u_clickable">
-            <th class="table-header__cell col-sm-9">
+            <th class="table-header__cell col-sm-3">
               <div class="flex-row">
                 <madero-checkbox ng-click="schedules.selectAll()" ng-value="search.selectAll"></madero-checkbox>
                 <div class="u_clickable" id="tableHeaderName" ng-click="schedules.sortBy('name')">
@@ -36,7 +36,15 @@
                 </div>
               </div>
             </th>
-            <th id="tableHeaderChangeDate" class="table-header__cell col-sm-3 hidden-xs" ng-click="schedules.sortBy('changeDate')">
+            <th id="tableHeaderTimeline" class="table-header__cell col-sm-3" ng-click="schedules.sortBy('timeline')">
+              Timeline
+              <i ng-if="search.sortBy === 'timeline'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
+            </th>
+            <th id="tableHeaderDistribution" class="table-header__cell col-sm-3" ng-click="schedules.sortBy('distributionSummary')">
+              Distribution
+              <i ng-if="search.sortBy === 'distributionSummary'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
+            </th>
+            <th id="tableHeaderChangeDate" class="table-header__cell col-sm-3" ng-click="schedules.sortBy('changeDate')">
               {{ 'schedules-app.list.heading.changeDate' | translate }}
               <i ng-if="search.sortBy === 'changeDate'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
@@ -47,12 +55,14 @@
             <td class="table-body__cell">
               <div class="flex-row">
                 <madero-checkbox ng-click="schedules.select(schedule)" ng-value="schedule.selected"></madero-checkbox>
-                <a class="madero-link" ui-sref="apps.schedules.details({scheduleId: schedule.id})">
+                <a class="madero-link u_ellipsis-md" ui-sref="apps.schedules.details({scheduleId: schedule.id})">
                   <strong>{{schedule.name}}</strong>
                 </a>
               </div>
             </td>
-            <td class="table-body__cell hidden-xs">{{schedule.changeDate | date:'d-MMM-yyyy h:mm a'}} by {{schedule.changedBy | username}}</td>
+            <td class="table-body__cell u_ellipsis-lg">{{schedule.timeline}}</td>
+            <td class="table-body__cell">{{schedule.distributionSummary}}</td>
+            <td class="table-body__cell u_ellipsis-md">{{schedule.changeDate | date:'d-MMM-yyyy h:mm a'}} by {{schedule.changedBy | username}}</td>
           </tr>
           <!-- If no search results -->
           <tr class="table-body__row" ng-show="schedules.items.list.length === 0 && search.query !== undefined">
