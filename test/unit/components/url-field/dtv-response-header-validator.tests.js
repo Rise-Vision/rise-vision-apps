@@ -6,6 +6,9 @@ describe('directive: response header validator', function() {
   var sandbox = sinon.sandbox.create();
   beforeEach(module('risevision.widget.common.url-field.response-header-validator'));
   beforeEach(module(function ($provide) {
+    $provide.service('$q', function() {
+      return Q;
+    });
     $provide.service('responseHeaderAnalyzer', function() {
       return {
         validate: sandbox.stub().returns(Q.resolve())
@@ -55,12 +58,13 @@ describe('directive: response header validator', function() {
   });
 
   it('should fail if responseHeaderAnalyzer rejects', function(done) {
-    responseHeaderAnalyzer.validate.returns(Q.reject());
+    responseHeaderAnalyzer.validate.returns(Q.reject('failureReason'));
     form.url.$setViewValue('www.url.com');
     $scope.$digest();
     setTimeout(function(){
       responseHeaderAnalyzer.validate.should.have.been.called;
       expect(form.url.$valid).to.be.false;
+      expect(form.url.responseHeaderValidatorError).to.equal('failureReason');
       done();
     },10);
   });
@@ -70,18 +74,20 @@ describe('directive: response header validator', function() {
     $scope.$digest();
     setTimeout(function(){
       responseHeaderAnalyzer.validate.should.not.have.been.called;
-      expect(form.url.$valid).to.be.true;
+      expect(form.url.$valid).to.be.false;
       done();
     },10);
   });
   
-  it('should proceed with validation if form has errors but it is a previous response-header-validator error', function(done) {
+  it('should proceed with validation if form has errors but it is a previous response-header-validator error and clear previous error', function(done) {
+    form.url.responseHeaderValidatorError = 'failureReason';
     form.url.$error = {'responseHeaderValidator':true};
     form.url.$setViewValue('www.url.com');
     $scope.$digest();
     setTimeout(function(){
       responseHeaderAnalyzer.validate.should.have.been.called;
       expect(form.url.$valid).to.be.true;
+      expect(form.url.responseHeaderValidatorError).to.be.undefined;
       done();
     },10);
   });

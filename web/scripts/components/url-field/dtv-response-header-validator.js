@@ -10,13 +10,18 @@ angular.module('risevision.widget.common.url-field.response-header-validator', [
         restrict: 'A',
         link: function (scope, elem, attr, ngModelCtrl) {
           ngModelCtrl.$asyncValidators.responseHeaderValidator = function (modelValue, viewValue) {
+            delete ngModelCtrl.responseHeaderValidatorError;
             var value = modelValue || viewValue;
             //prevent requests if field is already invalid
             if (!value || (Object.keys(ngModelCtrl.$error).length >= 1 && !ngModelCtrl.$error
                 .responseHeaderValidator)) {
               return $q.resolve();
             }
-            return responseHeaderAnalyzer.validate(value);
+            return responseHeaderAnalyzer.validate(value)
+              .catch(function(err){
+                ngModelCtrl.responseHeaderValidatorError = err;
+                return $q.reject(err);
+              });
           };
         }
       };
