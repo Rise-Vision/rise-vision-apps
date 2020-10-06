@@ -1,17 +1,18 @@
 'use strict';
-angular.module('risevision.displays.controllers')
-  .controller('BulkDeleteModalCtrl', ['$scope', '$modalInstance', 'userState', 'selectedItems', 
-    function ($scope, $modalInstance, userState, selectedItems) {
-      $scope.companyDisplays = 0;
-      $scope.subCompanyDisplays = 0;
+angular.module('risevision.apps.controllers')
+  .controller('BulkDeleteModalCtrl', ['$scope', '$modalInstance', 'userState', 'selectedItems', 'itemName',
+    function ($scope, $modalInstance, userState, selectedItems, itemName) {
+      $scope.itemName = itemName;
+      $scope.companyItems = 0;
+      $scope.subCompanyItems = 0;
       $scope.inputText = null;
       $scope.expectedText = selectedItems.length.toString();
 
       angular.forEach(selectedItems, function(display) {
         if (display.companyId === userState.getSelectedCompanyId()) {
-          $scope.companyDisplays++;
+          $scope.companyItems++;
         } else {
-          $scope.subCompanyDisplays++;
+          $scope.subCompanyItems++;
         }
       });
 

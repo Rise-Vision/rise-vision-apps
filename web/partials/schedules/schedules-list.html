@@ -19,15 +19,22 @@
       </div>
     </div>
 
+    <batch-operations list-object="schedules" list-operations="listOperations"></batch-operations>
+
     <div class="scrollable-list horizontal-scroll border-container u_margin-md-top u_margin-md-bottom"
       scrolling-list="schedules.load()" rv-spinner rv-spinner-key="schedules-list-loader" rv-spinner-start-active="1">
 
       <table id="schedulesListTable" class="table">
         <thead class="table-header">
           <tr class="table-header__row u_clickable">
-            <th id="tableHeaderName" class="table-header__cell col-sm-3" ng-click="schedules.sortBy('name')">
-              {{ 'schedules-app.list.heading.name' | translate }}
-              <i ng-if="search.sortBy === 'name'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
+            <th id="tableHeaderName" class="table-header__cell col-sm-3">
+              <div class="flex-row">
+                <madero-checkbox ng-click="schedules.selectAll()" ng-value="search.selectAll"></madero-checkbox>
+                <div class="u_clickable" id="tableHeaderName" ng-click="schedules.sortBy('name')">
+                  {{ 'schedules-app.list.heading.name' | translate }}
+                  <i ng-if="search.sortBy === 'name'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
+                </div>
+              </div>
             </th>
             <th id="tableHeaderTimeline" class="table-header__cell col-sm-3" ng-click="schedules.sortBy('timeline')">
               Timeline
@@ -45,7 +52,14 @@
         </thead>
         <tbody class="table-body">
           <tr class="table-body__row" ng-repeat="schedule in schedules.items.list">
-            <td class="table-body__cell"><a class="madero-link" ui-sref="apps.schedules.details({scheduleId: schedule.id})"><strong>{{schedule.name}}</strong></a></td>
+            <td class="table-body__cell">
+              <div class="flex-row">
+                <madero-checkbox ng-click="schedules.select(schedule)" ng-value="schedule.selected"></madero-checkbox>
+                <a class="madero-link" ui-sref="apps.schedules.details({scheduleId: schedule.id})">
+                  <strong>{{schedule.name}}</strong>
+                </a>
+              </div>
+            </td>
             <td class="table-body__cell u_ellipsis-lg">{{schedule.timeline}}</td>
             <td class="table-body__cell">{{schedule.distributionSummary}}</td>
             <td class="table-body__cell u_ellipsis-md">{{schedule.changeDate | date:'d-MMM-yyyy h:mm a'}} by {{schedule.changedBy | username}}</td>
