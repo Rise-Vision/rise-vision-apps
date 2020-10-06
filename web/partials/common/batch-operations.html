@@ -1,4 +1,4 @@
-<div class="flex-row multi-actions-panel u_padding-20 u_margin-md-top" ng-show="listObject.getSelected().length > 0 && !listObject.operations.isActive">
+<div class="flex-row multi-actions-panel u_padding-20 u_margin-md-top" ng-show="listObject.getSelected().length > 0 && !listObject.operations.activeOperation">
   <div class="flex-row button-toolbar-md-folded w-100">
     <div class="col-sm-5 pl-0">
       <strong>{{listObject.getSelected().length}}</strong>
@@ -40,9 +40,9 @@
   </button>
 </div>
 
-<div class="border-container text-center u_padding-20 u_margin-md-top" ng-show="listObject.operations.isActive">
+<div class="border-container text-center u_padding-20 u_margin-md-top" ng-show="listObject.operations.activeOperation">
   <div class="multi-actions-progress-panel">
-    <p class="mb-0"><strong>Bulk delete in progress.</strong></p>
+    <p class="mb-0"><strong>Bulk {{listObject.operations.activeOperation | lowercase}} in progress.</strong> <a class="madero-link u_clickable" ng-click="listObject.operations.cancel()">Cancel</a></p>
     <p>Please don’t navigate away from this page.</p>
     <div class="progress my-4">
       <div class="progress-bar" role="progressbar" aria-valuenow="{{listObject.operations.progress}}.0"

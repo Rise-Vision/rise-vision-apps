@@ -12,7 +12,7 @@ angular.module('risevision.common.components.scrolling-list')
         var _reset = function() {
           queue = [];
 
-          svc.isActive = false;
+          svc.activeOperation = '';
           svc.progress = 0;
           svc.totalItemCount = 0;
           svc.completedItemCount = 0;
@@ -20,17 +20,26 @@ angular.module('risevision.common.components.scrolling-list')
 
         _reset();
 
-        svc.batch = function (items, method) {
+        svc.batch = function (items, method, name) {
           if (!items || !items.length || !method) {
             return $q.resolve();
           }
 
+          var cancelled = false;
           var deferred = $q.defer();
           var currItem = 0;
-          svc.isActive = true;        
+          svc.activeOperation = name;
           svc.totalItemCount += items.length;
 
-          var _executeOperation = function (item, method) {
+          var _pushItem = function() {
+            var item = items[currItem++];
+
+            queue.push(item);
+
+            _executeOperation(item);
+          };
+
+          var _executeOperation = function (item) {
             method(item)
               .finally(function() {
                 _.remove(queue, function(listItem) {
@@ -40,29 +49,33 @@ angular.module('risevision.common.components.scrolling-list')
                 svc.completedItemCount++;
                 svc.progress = Math.round(svc.completedItemCount / svc.totalItemCount * 100);
 
-                if (svc.totalItemCount === svc.completedItemCount) {
+                if (cancelled) {
+                  return;
+                } else if (svc.totalItemCount === svc.completedItemCount) {
                   deferred.resolve();
 
-                  $timeout(_reset.bind(null, svc.completedItemCount), 2000);
+                  $timeout(_reset, 2000);
+                } else if (queue.length < svc.queueLimit && currItem < items.length) {
+                  _pushItem();
                 }
               });
           };
 
-          var loadBatch = function () {
-            if (currItem < items.length) {
-              while (queue.length < svc.queueLimit && currItem < items.length) {
-                var item = items[currItem++];
-
-                queue.push(item);
-
-                _executeOperation(item, method);
-              }
-
-              $timeout(loadBatch, 500);
+          var _loadBatch = function () {
+            while (queue.length < svc.queueLimit && currItem < items.length) {
+              _pushItem();
             }
           };
 
-          loadBatch();
+          svc.cancel = function () {
+            cancelled = true;
+
+            _reset();
+
+            deferred.resolve();
+          };
+
+          _loadBatch();
 
           return deferred.promise;
         };

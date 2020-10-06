@@ -21,34 +21,36 @@ angular.module('risevision.apps.directives')
             });            
           };
 
-          var _updateDelete = function() {
-            var deleteOperation = _.find($scope.listOperations.operations, {
-              name: 'Delete'
+          var _updateListActions = function() {
+            _.each($scope.listOperations.operations, function(operation) {
+
+              if (operation.name === 'Delete') {
+                var deleteAction = $scope.listObject.getSelectedAction(operation.actionCall, operation.name, true);
+
+                operation.actionCall = function() {
+                  $modal.open({
+                    templateUrl: 'partials/common/bulk-delete-confirmation-modal.html',
+                    controller: 'BulkDeleteModalCtrl',
+                    windowClass: 'madero-style centered-modal',
+                    size: 'sm',
+                    resolve: {
+                      selectedItems: $scope.listObject.getSelected,
+                      itemName: function() {
+                        return $scope.listOperations.name;
+                      }
+                    }
+                  }).result.then(deleteAction);
+                };
+              } else {
+                operation.actionCall = $scope.listObject.getSelectedAction(operation.actionCall, operation.name);
+              }
             });
 
-            if (deleteOperation) {
-              var deleteAction = $scope.listObject.getSelectedAction(deleteOperation.actionCall, true);
-
-              deleteOperation.actionCall = function() {
-                $modal.open({
-                  templateUrl: 'partials/common/bulk-delete-confirmation-modal.html',
-                  controller: 'BulkDeleteModalCtrl',
-                  windowClass: 'madero-style centered-modal',
-                  size: 'sm',
-                  resolve: {
-                    selectedItems: $scope.listObject.getSelected,
-                    itemName: function() {
-                      return $scope.listOperations.name;
-                    }
-                  }
-                }).result.then(deleteAction);
-              };
-            }
           };
 
           if ($scope.listOperations && $scope.listOperations.operations && $scope.listObject) {
             _filterByRole();
-            _updateDelete();
+            _updateListActions();
           }
         } //link()
       };

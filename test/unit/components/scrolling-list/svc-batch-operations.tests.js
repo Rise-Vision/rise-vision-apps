@@ -15,7 +15,7 @@ describe("service: BatchOperations:", function() {
       });
     }
 
-    method = sinon.stub().returns(Q.resolve());
+    method = sinon.stub().returns(Q.defer().promise);
 
     inject(function($injector){
       BatchOperations = $injector.get("BatchOperations");
@@ -33,7 +33,7 @@ describe("service: BatchOperations:", function() {
   });
 
   it("should init the service objects",function(){
-    expect(batchOperations.isActive).to.be.false;
+    expect(batchOperations.activeOperation).to.not.be.ok;
     expect(batchOperations.queueLimit).to.be.greaterThan(0);
     expect(batchOperations.progress).to.equal(0);
     expect(batchOperations.totalItemCount).to.equal(0);
@@ -48,7 +48,7 @@ describe("service: BatchOperations:", function() {
     it('should return early if no parameters are set', function() {
       batchOperations.batch();
 
-      expect(batchOperations.isActive).to.be.false;
+      expect(batchOperations.activeOperation).to.not.be.ok;
       expect(batchOperations.progress).to.equal(0);
       expect(batchOperations.totalItemCount).to.equal(0);
       expect(batchOperations.completedItemCount).to.equal(0);
@@ -57,7 +57,7 @@ describe("service: BatchOperations:", function() {
     it('should return early if no items are sent', function() {
       batchOperations.batch([], method);
 
-      expect(batchOperations.isActive).to.be.false;
+      expect(batchOperations.activeOperation).to.not.be.ok;
       expect(batchOperations.progress).to.equal(0);
       expect(batchOperations.totalItemCount).to.equal(0);
       expect(batchOperations.completedItemCount).to.equal(0);
@@ -66,23 +66,23 @@ describe("service: BatchOperations:", function() {
     it('should return early if no method is sent', function() {
       batchOperations.batch(items);
 
-      expect(batchOperations.isActive).to.be.false;
+      expect(batchOperations.activeOperation).to.not.be.ok;
       expect(batchOperations.progress).to.equal(0);
       expect(batchOperations.totalItemCount).to.equal(0);
       expect(batchOperations.completedItemCount).to.equal(0);
     });
 
     it('should initialize variables if items are selected', function() {
-      batchOperations.batch(items, method);
+      batchOperations.batch(items, method, 'operationName');
 
-      expect(batchOperations.isActive).to.be.true;
+      expect(batchOperations.activeOperation).to.equal('operationName');
       expect(batchOperations.progress).to.equal(0);
       expect(batchOperations.totalItemCount).to.equal(8);
       expect(batchOperations.completedItemCount).to.equal(0);
     });
 
     it('should call the action for the first batch of items', function() {
-      batchOperations.batch(items, method);
+      batchOperations.batch(items, method, 'operationName');
 
       method.should.have.been.calledThrice;
       method.should.have.been.calledWith(items[0]);
@@ -91,12 +91,16 @@ describe("service: BatchOperations:", function() {
     });
 
     it('should update the variables once the actions are performed', function(done) {
-      batchOperations.batch(items, method).then(function() {
+      method.onCall(0).returns(Q.resolve());
+      method.onCall(1).returns(Q.resolve());
+      method.onCall(2).returns(Q.resolve());
+
+      batchOperations.batch(items, method, 'operationName').then(function() {
         done('not finished');
       });
 
       setTimeout(function() {
-        expect(batchOperations.isActive).to.be.true;
+        expect(batchOperations.activeOperation).to.equal('operationName');
         expect(batchOperations.progress).to.equal(38);
         expect(batchOperations.totalItemCount).to.equal(8);
         expect(batchOperations.completedItemCount).to.equal(3);
@@ -105,68 +109,45 @@ describe("service: BatchOperations:", function() {
       }, 10);
     });
 
-    it('should set the next batch and complete the actions after timeout', function(done) {
-      batchOperations.batch(items, method).then(function() {
+    it('should queue additional calls', function(done) {
+      method.onCall(0).returns(Q.resolve());
+      method.onCall(1).returns(Q.resolve());
+      method.onCall(2).returns(Q.resolve());
+
+      batchOperations.batch(items, method, 'operationName').then(function() {
         done('not finished');
       });
 
       setTimeout(function() {
-        $timeout.flush(500);
-
         expect(method.callCount).to.equal(6);
 
-        setTimeout(function() {
-          expect(batchOperations.isActive).to.be.true;
-          expect(batchOperations.progress).to.equal(75);
-          expect(batchOperations.totalItemCount).to.equal(8);
-          expect(batchOperations.completedItemCount).to.equal(6);
-
-          done();
-        }, 10);
-
+        done();
       }, 10);
     });
 
     it('should finish the batches and resolve', function(done) {
-      batchOperations.batch(items, method).then(function() {
-        expect(batchOperations.isActive).to.be.true;
+      method.returns(Q.resolve());
+
+      batchOperations.batch(items, method, 'operationName').then(function() {
+        expect(batchOperations.activeOperation).to.equal('operationName');
         expect(batchOperations.progress).to.equal(100);
         expect(batchOperations.totalItemCount).to.equal(8);
         expect(batchOperations.completedItemCount).to.equal(8);
 
         done();
       });
-
-      setTimeout(function() {
-        $timeout.flush(500);
-
-        expect(method.callCount).to.equal(6);
-
-        setTimeout(function() {
-          $timeout.flush(500);
-
-          expect(method.callCount).to.equal(8);
-
-          // flush one more time to validate queue limit
-          $timeout.flush(500);
-
-          expect(batchOperations.isActive).to.be.true;
-          expect(batchOperations.progress).to.equal(75);
-          expect(batchOperations.totalItemCount).to.equal(8);
-          expect(batchOperations.completedItemCount).to.equal(6);
-        }, 10);
-
-      }, 10);
     });
 
     it('should reset batch after 2 seconds of completion', function(done) {
-      batchOperations.batch(items, method).then(function() {
+      method.returns(Q.resolve());
+
+      batchOperations.batch(items, method, 'operationName').then(function() {
         // flush one more time to bypass reset delay
         $timeout.flush(2000);
 
         $timeout.verifyNoPendingTasks();
 
-        expect(batchOperations.isActive).to.be.false;
+        expect(batchOperations.activeOperation).to.not.be.ok;
         expect(batchOperations.progress).to.equal(0);
         expect(batchOperations.totalItemCount).to.equal(0);
         expect(batchOperations.completedItemCount).to.equal(0);
@@ -174,47 +155,65 @@ describe("service: BatchOperations:", function() {
         done();
       });
 
-      setTimeout(function() {
-        $timeout.flush(500);
-
-        setTimeout(function() {
-          $timeout.flush(500);
-
-          // flush one more time to validate queue limit
-          $timeout.flush(500);
-        }, 10);
-
-      }, 10);
     });
 
     it('should queue up only as many items as were completed', function(done) {
-      method.onCall(2).returns(Q.defer().promise);
+      method.onCall(0).returns(Q.resolve());
+      method.onCall(1).returns(Q.resolve());
 
-      batchOperations.batch(items, method);
+      batchOperations.batch(items, method, 'operationName');
 
       setTimeout(function() {
-        expect(batchOperations.isActive).to.be.true;
+        expect(batchOperations.activeOperation).to.equal('operationName');
         expect(batchOperations.progress).to.equal(25);
         expect(batchOperations.totalItemCount).to.equal(8);
         expect(batchOperations.completedItemCount).to.equal(2);
 
-        $timeout.flush(500);
-
         expect(method.callCount).to.equal(5);
 
-        setTimeout(function() {
-          expect(batchOperations.isActive).to.be.true;
-          expect(batchOperations.progress).to.equal(50);
-          expect(batchOperations.totalItemCount).to.equal(8);
-          expect(batchOperations.completedItemCount).to.equal(4);
-
-          done();
-        }, 10);
-
+        done();
       }, 10);
     });
 
+  });
 
+  describe('cancel:', function() {
+    it('should not queue additional calls after cancel', function(done) {
+      method.onCall(0).returns(Q.resolve());
+      method.onCall(1).returns(Q.resolve());
+      method.onCall(2).returns(Q.resolve());
+
+      batchOperations.batch(items, method, 'operationName');
+      batchOperations.cancel();
+
+      setTimeout(function() {
+        expect(method.callCount).to.equal(3);
+
+        done();
+      }, 10);
+    });
+
+    it('should resolve and reset activeOperation on cancel', function(done) {
+      method.onCall(0).returns(Q.resolve());
+      method.onCall(1).returns(Q.resolve());
+      method.onCall(2).returns(Q.resolve());
+
+      batchOperations.batch(items, method, 'operationName').then(function() {
+        expect(method.callCount).to.equal(3);
+
+        $timeout.verifyNoPendingTasks();
+
+        expect(batchOperations.activeOperation).to.not.be.ok;
+        expect(batchOperations.totalItemCount).to.equal(0);
+
+        // batchOperations.progress & batchOperations.completedItemCount may not be 0
+        // as active operations may still return results after cancel
+
+        done();
+      });
+      batchOperations.cancel();
+
+    });
   });
 
 });
