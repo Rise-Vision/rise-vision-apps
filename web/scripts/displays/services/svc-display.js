@@ -359,6 +359,28 @@
               });
 
             return deferred.promise;
+          },
+          summary: function(companyId) {
+            companyId = companyId || userState.getSelectedCompanyId();
+            var deferred = $q.defer();
+
+            $log.debug('summary called with', companyId);
+            coreAPILoader().then(function (coreApi) {
+                return coreApi.display.summary({
+                  'companyId': companyId,
+                  'includeSubcompanies': false
+                });
+              })
+              .then(function (resp) {
+                $log.debug('summary resp', resp);
+                deferred.resolve(resp.result);
+              })
+              .then(null, function (e) {
+                console.error('Failed to retrieve summary.', e);
+                deferred.reject(e);
+              });
+
+            return deferred.promise;
           }
         };
 

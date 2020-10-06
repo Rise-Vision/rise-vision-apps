@@ -43,7 +43,7 @@ angular.module('risevision.common.components.scrolling-list')
                 if (svc.totalItemCount === svc.completedItemCount) {
                   deferred.resolve();
 
-                  _reset();
+                  $timeout(_reset.bind(null, svc.completedItemCount), 2000);
                 }
               });
           };

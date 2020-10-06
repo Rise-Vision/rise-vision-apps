@@ -10,7 +10,7 @@ angular.module('risevision.displays.services')
       factory.getUsedLicenseString = function () {
         return factory.getProUsedLicenseCount() +
           ' Licensed Display' + (factory.getProUsedLicenseCount() !== 1 ? 's' : '') +
-          ' | ' + factory.getProAvailableLicenseCount() +
+          ' / ' + factory.getProAvailableLicenseCount() +
           ' Available License' + (factory.getProAvailableLicenseCount() !== 1 ? 's' : '');
       };
 

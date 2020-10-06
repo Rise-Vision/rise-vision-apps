@@ -84,21 +84,21 @@ describe('Services: playerLicenseFactory', function() {
       currentPlanFactory.currentPlan.playerProTotalLicenseCount = 0;
       currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 0;
 
-      expect(playerLicenseFactory.getUsedLicenseString()).to.equal('0 Licensed Displays | 0 Available Licenses');
+      expect(playerLicenseFactory.getUsedLicenseString()).to.equal('0 Licensed Displays / 0 Available Licenses');
     });
 
     it('should handle 1 case', function () {
       currentPlanFactory.currentPlan.playerProTotalLicenseCount = 2;
       currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 1;
 
-      expect(playerLicenseFactory.getUsedLicenseString()).to.equal('1 Licensed Display | 1 Available License');
+      expect(playerLicenseFactory.getUsedLicenseString()).to.equal('1 Licensed Display / 1 Available License');
     });
 
     it('should handle multiples case', function () {
       currentPlanFactory.currentPlan.playerProTotalLicenseCount = 4;
       currentPlanFactory.currentPlan.playerProAvailableLicenseCount = 2;
 
-      expect(playerLicenseFactory.getUsedLicenseString()).to.equal('2 Licensed Displays | 2 Available Licenses');
+      expect(playerLicenseFactory.getUsedLicenseString()).to.equal('2 Licensed Displays / 2 Available Licenses');
     });
 
   });

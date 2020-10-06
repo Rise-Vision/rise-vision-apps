@@ -22,8 +22,7 @@ describe('controller: displays list', function() {
         return {
           search: {},
           loadingItems: false,
-          doSearch: function() {},
-          getSelectedAction: sinon.stub().returns('action')
+          doSearch: function() {}
         };
       };
     });
@@ -52,14 +51,20 @@ describe('controller: displays list', function() {
     $provide.service('playerLicenseFactory', function() {
       return {};
     });
+    $provide.service('displaySummaryFactory', function() {
+      return {
+        loadSummary: sandbox.stub()
+      };
+    });
   }));
-  var $scope, $loading, $filter, $window;
+  var $scope, $loading, $filter, $window, displaySummaryFactory;
   beforeEach(function(){
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
       $scope.listLimit = 5;
       $filter = $injector.get('$filter');
       $loading = $injector.get('$loading');
+      displaySummaryFactory = $injector.get('displaySummaryFactory');
       $window = $injector.get('$window');
       $controller('displaysList', {
         $scope : $scope,
@@ -85,12 +90,16 @@ describe('controller: displays list', function() {
 
     expect($scope.displayFactory).to.be.ok;
     expect($scope.playerLicenseFactory).to.be.ok;
+    expect($scope.displaySummaryFactory).to.be.ok;
   });
 
-  it('deleteDisplays:', function() {
-    expect($scope.deleteDisplays).to.be.ok;
-    expect($scope.deleteDisplays).to.a('function');
-    // $scope.displays.getSelectedAction.should.have.been.calledWith('deleteDisplayByObject', true)
+  it('listOperations:', function() {
+    expect($scope.listOperations).to.be.ok;
+    expect($scope.listOperations.name).to.equal('Display');
+    expect($scope.listOperations.operations).to.have.length(1);
+    expect($scope.listOperations.operations[0].name).to.equal('Delete');
+    expect($scope.listOperations.operations[0].actionCall).to.equal('deleteDisplayByObject');
+    expect($scope.listOperations.operations[0].requireRole).to.equal('da');
   });
 
   it('should init the scope objects',function(){
@@ -98,6 +107,8 @@ describe('controller: displays list', function() {
     expect($scope.search).to.have.property('count');
     expect($scope.search).to.have.property('reverse');
     expect($scope.search.count).to.equal(5);
+
+    displaySummaryFactory.loadSummary.should.have.been.caled;
   });
 
   describe('$loading: ', function() {
