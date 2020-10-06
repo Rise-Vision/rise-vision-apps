@@ -135,6 +135,7 @@ describe('service: scheduleFactory:', function() {
     expect(scheduleFactory.getSchedule).to.be.a('function');
     expect(scheduleFactory.addSchedule).to.be.a('function');
     expect(scheduleFactory.updateSchedule).to.be.a('function');
+    expect(scheduleFactory.deleteScheduleByObject).to.be.a('function');
     expect(scheduleFactory.deleteSchedule).to.be.a('function');
 
     expect(scheduleFactory.getAllDisplaysSchedule).to.be.a('function');
@@ -481,35 +482,66 @@ describe('service: scheduleFactory:', function() {
     });
   });
 
-  describe('deleteSchedule: ',function(){
+  describe('deleteScheduleByObject: ',function(){
     it('should delete the schedule',function(done){
       updateSchedule = true;
 
-      scheduleFactory.deleteSchedule();
+      scheduleFactory.deleteScheduleByObject({
+        id: 'scheduleId'
+      }).then(function(){
+        expect(trackerCalled).to.equal('Schedule Deleted');
 
+        done();
+      }, function() {
+        done('error');
+      });
+    });
+
+    it('should show an error if fails to delete the display',function(done){
+      updateSchedule = false;
+      
+      scheduleFactory.deleteScheduleByObject({
+        id: 'scheduleId'
+      }).then(function(){
+        done('error');
+      }, function() {
+        done();
+      });
+    });
+  });
+
+  describe('deleteSchedule: ',function(){
+    beforeEach(function() {
+      sinon.stub(scheduleFactory, 'deleteScheduleByObject').returns(Q.resolve());
+    });
+
+    it('should show spinner and redirect',function(done){
+      scheduleFactory.deleteSchedule();
+      
       expect(scheduleFactory.loadingSchedule).to.be.true;
 
       setTimeout(function(){
         expect(scheduleFactory.loadingSchedule).to.be.false;
         expect(scheduleFactory.apiError).to.not.be.ok;
-        expect(trackerCalled).to.equal('Schedule Deleted');
+
         $state.go.should.have.been.calledWith('apps.schedules.list');
+
         done();
       },10);
     });
-
-    it('should show an error if fails to delete the schedule',function(done){
-      updateSchedule = false;
-
+    
+    it('should show an error if fails to delete the display',function(done){
+      scheduleFactory.deleteScheduleByObject.returns(Q.reject());
+      
       scheduleFactory.deleteSchedule();
-
+      
       expect(scheduleFactory.loadingSchedule).to.be.true;
 
       setTimeout(function(){
         $state.go.should.not.have.been.called;
-        expect(trackerCalled).to.not.be.ok;
-        expect(scheduleFactory.loadingSchedule).to.be.false;
 
+        expect(scheduleFactory.loadingSchedule).to.be.false;
+        
         expect(scheduleFactory.apiError).to.be.ok;
         done();
       },10);

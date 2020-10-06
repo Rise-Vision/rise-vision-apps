@@ -20,6 +20,12 @@ describe('controller: schedules list', function() {
       };
     });
 
+    $provide.service('scheduleFactory', function() {
+      return {
+        deleteScheduleByObject: 'deleteScheduleByObject'
+      };
+    });
+
     $provide.service('$loading',function(){
       return {
         start : sinon.spy(),
@@ -64,6 +70,15 @@ describe('controller: schedules list', function() {
     expect($scope.search.count).to.equal(5);
   });
   
+  it('listOperations:', function() {
+    expect($scope.listOperations).to.be.ok;
+    expect($scope.listOperations.name).to.equal('Schedule');
+    expect($scope.listOperations.operations).to.have.length(1);
+    expect($scope.listOperations.operations[0].name).to.equal('Delete');
+    expect($scope.listOperations.operations[0].actionCall).to.equal('deleteScheduleByObject');
+    expect($scope.listOperations.operations[0].requireRole).to.equal('cp');
+  });
+
   describe('$loading: ', function() {
     it('should stop spinner', function() {
       $loading.stop.should.have.been.calledWith('schedules-list-loader');
