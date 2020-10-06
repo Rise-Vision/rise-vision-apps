@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('risevision.apps.directives')
-  .directive('batchOperations', ['$modal', 'userState',
-    function ($modal, userState) {
+  .directive('batchOperations', ['$window', '$modal', '$state', 'userState',
+    function ($window, $modal, $state, userState) {
       return {
         restrict: 'E',
         scope: {
@@ -52,6 +52,55 @@ angular.module('risevision.apps.directives')
             _filterByRole();
             _updateListActions();
           }
+
+          var _bypass = false;
+          $scope.$on('$stateChangeStart', function (event, toState, toParams) {
+            if (_bypass) {
+              _bypass = false;
+              return;
+            }
+            if ($scope.listObject.operations.activeOperation) {
+              event.preventDefault();
+              var modalInstance = $modal.open({
+                templateUrl: 'partials/components/confirm-modal/madero-confirm-modal.html',
+                controller: 'confirmModalController',
+                windowClass: 'madero-style centered-modal',
+                size: 'sm',
+                resolve: {
+                  confirmationTitle: function () {
+                    return 'Cancel bulk ' + $scope.listObject.operations.activeOperation.toLowerCase() + '?';
+                  },
+                  confirmationMessage: function () {
+                    return 'A bulk ' + $scope.listObject.operations.activeOperation.toLowerCase() +
+                      ' is in progress. Navigating away from this page will cancel this action. Are you sure you want to cancel?';
+                  },
+                  confirmationButton: function () {
+                    return 'Yes, Cancel';
+                  },
+                  cancelButton: function () {
+                    return 'No';
+                  }
+                }
+              });
+              modalInstance.result.then(function () {
+                $scope.listObject.operations.cancel();
+
+                _bypass = true;
+                $state.go(toState, toParams);
+              });
+            }
+          });
+
+          $window.onbeforeunload = function () {
+            if ($scope.listObject.operations.activeOperation) {
+              return 'Cancel bulk action?';
+            }
+          };
+
+          $scope.$on('$destroy', function () {
+            $window.onbeforeunload = undefined;
+          });
+
         } //link()
       };
     }
