@@ -4,8 +4,8 @@
     <h1 class="app-header-title" id="title" translate>schedules-app.title</h1>
   </div>
 
-  <div id="errorBox" ng-show="apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
-    <strong>{{errorMessage}}</strong> {{apiError}}
+  <div id="errorBox" ng-show="schedules.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
+    <strong>{{schedules.errorMessage}}</strong> {{schedules.apiError}}
   </div> 
 
   <div ng-if="!(!schedules.loadingItems && schedules.items.list.length === 0 && search.query === undefined)">
@@ -66,7 +66,7 @@
           </tr>
           <!-- If no search results -->
           <tr class="table-body__row" ng-show="schedules.items.list.length === 0 && search.query !== undefined">
-            <td colspan="3" class="table-body__cell text-center"><span translate>schedules-app.list.no-results</span></td>
+            <td colspan="4" class="table-body__cell text-center"><span translate>schedules-app.list.no-results</span></td>
           </tr>
         </tbody>
       </table>
