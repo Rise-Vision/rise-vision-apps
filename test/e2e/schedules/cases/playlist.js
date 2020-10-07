@@ -43,7 +43,7 @@ var PlaylistScenarios = function() {
         scheduleAddPage.getAddPlaylistItemButton().click();
         scheduleAddPage.getAddUrlItemButton().click();
 
-        playlistItemModalPage.getUrlInput().sendKeys('https://risevision.com/content1.html');
+        playlistItemModalPage.getUrlInput().sendKeys('https://risevision.com/');
         playlistItemModalPage.getSaveButton().click();
 
         // wait for transitions
@@ -52,7 +52,7 @@ var PlaylistScenarios = function() {
         scheduleAddPage.getAddPlaylistItemButton().click();
         scheduleAddPage.getAddUrlItemButton().click();
 
-        playlistItemModalPage.getUrlInput().sendKeys('https://risevision.com/content2.html');
+        playlistItemModalPage.getUrlInput().sendKeys('https://risevision.com/pricing');
         playlistItemModalPage.getSaveButton().click();
       });
 

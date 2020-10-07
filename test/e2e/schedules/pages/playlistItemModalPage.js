@@ -13,6 +13,8 @@ var PlaylistItemModalPage = function() {
   var invalidUrlMessage = element(by.cssContainingText('form div p', 'Please provide a valid URL.'));
   var requiredFieldMessage = element(by.cssContainingText('form div p', 'This field is required.'));
   var insecureUrlMessage = element(by.cssContainingText('form div p', 'Please use secure URLs'));
+  var nonReacheableUrlMessage = element(by.cssContainingText('form div p', 'The requested URL could not be reached'));
+  
   
   var saveButton = element(by.id('itemSave'));
 
@@ -46,6 +48,10 @@ var PlaylistItemModalPage = function() {
 
   this.getInvalidUrlMessage = function() {
     return invalidUrlMessage;
+  }
+
+  this.getNonReacheableUrlMessage = function() {
+    return nonReacheableUrlMessage;
   }
 
   this.getRequiredFieldMessage = function() {
