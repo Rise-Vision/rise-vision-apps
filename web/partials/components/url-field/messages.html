@@ -3,7 +3,7 @@
 <p ng-message="noPreviewUrl" class="text-danger">Using Preview URLs is not supported. You can place one Presentation into another using Embedded Presentations.</p>
 <p ng-message="responseHeaderValidator" class="text-danger">
 	<span ng-if="ngModelCtrl.responseHeaderValidatorError === 'not-reachable'">The requested URL could not be reached. Please try again.</span>
-	<span ng-if="ngModelCtrl.responseHeaderValidatorError === 'content-type'">Invalid content type. Please provide a webpage, image or video URL.</span>
+	<span ng-if="ngModelCtrl.responseHeaderValidatorError === 'content-type'">Invalid content type. Please provide a webpage, image, audio or video URL.</span>
 	<span ng-if="ngModelCtrl.responseHeaderValidatorError !== 'content-type' && ngModelCtrl.responseHeaderValidatorError !== 'not-reachable'">The owner of the Web Page at the URL provided does not allow the page to be embedded within an iFrame. If possible, please contact the Web Page owner to discuss ( <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/X-Frame-Options">X-Frame-Options</a> / <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors">Content-Security-Policy</a>).</span>
 </p>
 <p ng-message="fileType" class="text-danger">{{ngModelCtrl.customErrorMessage}}</p>

@@ -59,8 +59,7 @@ angular.module('risevision.widget.common.url-field.response-header-analyzer', []
       };
 
       var _isAcceptedContentType = function(contentType) {
-        $log.debug('URL contentType:', contentType);
-        return contentType && contentType.match('(image\/|video\/|text\/).*');
+        return contentType && contentType.match('(image\/|video\/|text\/|audio\/).*');
       };
 
       return factory;
