@@ -413,7 +413,7 @@ describe("service: ScrollingListService:", function() {
     });
 
     it('should return early if no items are selected', function() {
-      var action = scrollingListService.getSelectedAction(sinon.stub().returns(Q.resolve()));
+      var action = scrollingListService.getSelectedAction(sinon.stub().returns(Q.resolve()), 'actionName');
 
       action();
 
@@ -425,14 +425,14 @@ describe("service: ScrollingListService:", function() {
       scrollingListService.select(scrollingListService.items.list[5]);
 
       var actionCall = sinon.stub().returns(Q.resolve());
-      var action = scrollingListService.getSelectedAction(actionCall);
+      var action = scrollingListService.getSelectedAction(actionCall, 'actionName');
 
       action();
 
       scrollingListService.operations.batch.should.have.been.calledWith([
         scrollingListService.items.list[0],
         scrollingListService.items.list[5]
-      ], sinon.match.func);
+      ], sinon.match.func, 'actionName');
     });
 
     it('should clear error messages', function() {
@@ -442,7 +442,7 @@ describe("service: ScrollingListService:", function() {
       scrollingListService.errorMessage = "errorMessage";
       scrollingListService.apiError = "apiError";
 
-      var action = scrollingListService.getSelectedAction(sinon.stub().returns(Q.resolve()));
+      var action = scrollingListService.getSelectedAction(sinon.stub().returns(Q.resolve()), 'actionName');
 
       action();
       
@@ -458,7 +458,7 @@ describe("service: ScrollingListService:", function() {
       scrollingListService.select(scrollingListService.items.list[5]);
 
       var actionCall = sinon.stub().returns(Q.resolve());
-      var action = scrollingListService.getSelectedAction(actionCall);
+      var action = scrollingListService.getSelectedAction(actionCall, 'actionName');
 
       // call the action
       action();
@@ -487,7 +487,7 @@ describe("service: ScrollingListService:", function() {
       scrollingListService.select(scrollingListService.items.list[5]);
 
       var actionCall = sinon.stub().returns(Q.reject());
-      var action = scrollingListService.getSelectedAction(actionCall);
+      var action = scrollingListService.getSelectedAction(actionCall, 'actionName');
 
       // call the action
       action();
@@ -516,7 +516,7 @@ describe("service: ScrollingListService:", function() {
       scrollingListService.select(scrollingListService.items.list[5]);
 
       var actionCall = sinon.stub().returns(Q.resolve());
-      var action = scrollingListService.getSelectedAction(actionCall, true);
+      var action = scrollingListService.getSelectedAction(actionCall, 'actionName', true);
 
       // call the action
       action();
@@ -540,7 +540,7 @@ describe("service: ScrollingListService:", function() {
       scrollingListService.select(scrollingListService.items.list[5]);
 
       var actionCall = sinon.stub().returns(Q.resolve());
-      var action = scrollingListService.getSelectedAction(actionCall, true);
+      var action = scrollingListService.getSelectedAction(actionCall, 'actionName', true);
 
       // call the action
       action();

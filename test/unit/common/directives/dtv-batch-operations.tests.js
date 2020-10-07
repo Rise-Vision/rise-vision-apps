@@ -4,13 +4,18 @@ describe('directive: batch-operations', function() {
       $rootScope,
       $scope,
       element;
-  var deleteAction;
-  var $modal, userState;
+  var $window, $modal, $state, userState;
   beforeEach(module('risevision.apps.directives'));
   beforeEach(module(function ($provide) {
     $provide.service('$modal', function() {
       return {
         open: sinon.stub().returns({result: Q.resolve()})
+      }
+    });
+
+    $provide.service('$state', function() {
+      return {
+        go: sinon.spy()
       }
     });
 
@@ -22,18 +27,18 @@ describe('directive: batch-operations', function() {
   }));
 
   beforeEach(inject(function(_$compile_, _$rootScope_, $injector, $templateCache){
+    $window = $injector.get('$window');
     $modal = $injector.get('$modal');
+    $state = $injector.get('$state');
     userState = $injector.get('userState');
 
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     $templateCache.put('partials/common/batch-operations.html', '<p>mock</p>');
 
-    deleteAction = sinon.spy();
-
     $rootScope.listObject = {
       getSelected: sinon.stub().returns('selectedItems'),
-      getSelectedAction: sinon.stub().returns(deleteAction)
+      getSelectedAction: sinon.stub().returns('selectedAction')
     };
 
   }));
@@ -97,70 +102,220 @@ describe('directive: batch-operations', function() {
 
     });
 
-    it('should not do anything if delete operations are not found', function() {
-      $rootScope.listOperations = {
-        name: 'Items',
-        operations: [{
-          name: 'Operation',
-          actionCall: 'actionCall'
-        }]
-      };
-
-      compileDirective();        
-
-      expect($scope.listOperations.operations[0].actionCall).to.equal('actionCall');
-    });
-
-    describe('Delete:', function() {
-
-      beforeEach(function() {
+    describe('_updateListActions:', function() {
+      it('should update regular actions', function() {
         $rootScope.listOperations = {
           name: 'Items',
           operations: [{
-            name: 'Delete',
+            name: 'Operation',
             actionCall: 'actionCall'
           }]
         };
 
         compileDirective();        
-      });
 
-      it('should find and update delete operation', function() {
-        expect($scope.listOperations.operations[0].actionCall).to.be.a('function');
-      });
+        $scope.listObject.getSelectedAction.should.have.been.calledWith('actionCall', 'Operation');
 
-      it('should get delete action', function() {
-        $scope.listObject.getSelectedAction.should.have.been.calledWith('actionCall', true);
+        expect($scope.listOperations.operations[0].actionCall).to.equal('selectedAction');
       });
+      
+      describe('Delete:', function() {
+        var deleteAction;
 
-      it('should open confirmation modal', function() {
-        $scope.listOperations.operations[0].actionCall();
+        beforeEach(function() {
+          deleteAction = sinon.stub();
+
+          $rootScope.listObject.getSelectedAction.returns(deleteAction);
+          $rootScope.listOperations = {
+            name: 'Items',
+            operations: [{
+              name: 'Delete',
+              actionCall: 'actionCall'
+            }]
+          };
+
+          compileDirective();        
+        });
+
+        it('should find and update delete operation', function() {
+          expect($scope.listOperations.operations[0].actionCall).to.be.a('function');
+        });
+
+        it('should get delete action', function() {
+          $scope.listObject.getSelectedAction.should.have.been.calledWith('actionCall', 'Delete', true);
+        });
+
+        it('should open confirmation modal', function() {
+          $scope.listOperations.operations[0].actionCall();
+
+          $modal.open.should.have.been.calledWithMatch({
+            templateUrl: 'partials/common/bulk-delete-confirmation-modal.html',
+            controller: 'BulkDeleteModalCtrl',
+            windowClass: 'madero-style centered-modal',
+            size: 'sm'
+          });        
+
+          var params = $modal.open.getCall(0).args[0];
+          expect(params.resolve.selectedItems()).to.equal('selectedItems');
+          expect(params.resolve.itemName()).to.equal('Items');
+
+        });
+
+        it('should perform operation if user confirms', function(done) {
+          $scope.listOperations.operations[0].actionCall();
+
+          setTimeout(function() {
+            deleteAction.should.have.been.called;
+
+            done();
+          }, 10);
+        });
+
+      });
+    });
+
+  });
+
+  describe('detect navigation:', function() {
+    beforeEach(function() {
+      $rootScope.listOperations = 'listOperations';
+      $rootScope.listObject = {
+        operations: {
+          activeOperation: '',
+          cancel: sinon.spy()
+        }
+      };
+
+      compileDirective();
+    });
+
+    describe('$stateChangeStart:', function() {
+      it('should notify when changing URL if an operation is active',function() {
+        $scope.listObject.operations.activeOperation = 'Operation';
+
+        $rootScope.$broadcast('$stateChangeStart',{name:'newState'});
+        $scope.$apply();
 
         $modal.open.should.have.been.calledWithMatch({
-          templateUrl: 'partials/common/bulk-delete-confirmation-modal.html',
-          controller: 'BulkDeleteModalCtrl',
+          templateUrl: 'partials/components/confirm-modal/madero-confirm-modal.html',
+          controller: 'confirmModalController',
           windowClass: 'madero-style centered-modal',
-          size: 'sm'
+          size: 'sm',
         });        
 
         var params = $modal.open.getCall(0).args[0];
-        expect(params.resolve.selectedItems()).to.equal('selectedItems');
-        expect(params.resolve.itemName()).to.equal('Items');
-
+        expect(params.resolve.confirmationTitle()).to.contain('operation');
+        expect(params.resolve.confirmationMessage()).to.contain('operation');
+        expect(params.resolve.confirmationButton()).to.be.ok;
+        expect(params.resolve.cancelButton()).to.be.ok;
       });
 
-      it('should perform operation if user confirms', function(done) {
-        $scope.listOperations.operations[0].actionCall();
+      it('should not notify when changing URL if is no active operation',function(){
+        $rootScope.$broadcast('$stateChangeStart',{name:'newState'});
+        $scope.$apply();
+
+        $modal.open.should.not.have.been.called;
+      });
+
+      it('should cancel operation and redirect if user accepts',function(done){
+        var state = {name:'newState'};
+        $scope.listObject.operations.activeOperation = 'Operation';
+
+        $rootScope.$broadcast('$stateChangeStart', state);
+        $scope.$apply();
+
+        $modal.open.should.have.been.called;
 
         setTimeout(function() {
-          deleteAction.should.have.been.called;
+          $scope.listObject.operations.cancel.should.have.been.called;
+
+          $state.go.should.have.been.calledWith({name:'newState'}, undefined);
+
+          $modal.open.should.have.been.calledOnce;
 
           done();
-        });
+        }, 10);
+      });
+
+      it('should bypass check on navigation confirm',function(done){
+        var state = {name:'newState'};
+        $scope.listObject.operations.activeOperation = 'Operation';
+
+        $rootScope.$broadcast('$stateChangeStart', state);
+        $scope.$apply();
+
+        $modal.open.should.have.been.called;
+
+        setTimeout(function() {
+          $scope.listObject.operations.cancel.should.have.been.called;
+
+          $state.go.should.have.been.calledWith({name:'newState'}, undefined);
+
+          $modal.open.should.have.been.calledOnce;
+
+          $rootScope.$broadcast('$stateChangeStart', state);
+          $scope.$apply();
+
+          $modal.open.should.have.been.calledOnce;
+
+          setTimeout(function() {
+            $scope.listObject.operations.cancel.should.have.been.calledOnce;
+
+            $state.go.should.have.been.calledOnce;
+
+            $modal.open.should.have.been.calledOnce;
+
+            done();
+          }, 10);
+        }, 10);
+      });
+
+      it('should proceed with the operation if the users cancels',function(done){
+        $modal.open.returns({result: Q.reject()});
+        var state = {name:'newState'};
+        $scope.listObject.operations.activeOperation = 'Operation';
+
+        $rootScope.$broadcast('$stateChangeStart', state);
+        $scope.$apply();
+
+        $modal.open.should.have.been.called;
+
+        setTimeout(function() {
+          $scope.listObject.operations.cancel.should.not.have.been.called;
+
+          $state.go.should.not.have.been.called;
+
+          $modal.open.should.have.been.calledOnce;
+
+          done();
+        }, 10);
       });
 
     });
 
+    describe('onbeforeunload:', function() {
+      it('should notify unsaved changes when closing window',function(){
+        $scope.listObject.operations.activeOperation = 'Operation';
+        $scope.$apply();
+
+        var result = $window.onbeforeunload();
+        expect(result).to.equal('Cancel bulk action?');
+      });
+
+      it('should not notify unsaved changes when closing window if there are no changes',function(){    
+        var result = $window.onbeforeunload();
+        expect(result).to.be.undefined;
+      });
+
+      it('should stop listening for window close on $destroy',function(){
+        expect($window.onbeforeunload).to.be.a('function');
+        $rootScope.$broadcast('$destroy');
+        $scope.$apply();
+        expect($window.onbeforeunload).to.be.null;
+      });
+
+    });
+    
   });
 
 });

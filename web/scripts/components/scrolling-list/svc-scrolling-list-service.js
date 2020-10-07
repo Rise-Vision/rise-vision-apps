@@ -125,7 +125,7 @@ angular.module('risevision.common.components.scrolling-list')
           });
         };
 
-        factory.getSelectedAction = function(actionCall, removeFromList) {
+        factory.getSelectedAction = function(actionCall, name, removeFromList) {
           return function() {
             var selected = factory.getSelected();
             var listError = false;
@@ -152,17 +152,17 @@ angular.module('risevision.common.components.scrolling-list')
                 });
             };
 
-            return factory.operations.batch(selected, execute)
+            return factory.operations.batch(selected, execute, name)
               .finally(function() {  
                 if (removeFromList) {
                   // reload list
-                  factory.doSearch();                  
+                  factory.doSearch();
                 }
 
                 if (listError) {
                   factory.errorMessage = 'Something went wrong.';
-                  factory.apiError = 'We weren’t able to delete one or more of the selected ' + 
-                    factory.search.name.toLowerCase() + '. Please try again.';                  
+                  factory.apiError = 'We weren’t able to ' + name.toLowerCase() + ' one or more of the selected ' + 
+                    factory.search.name.toLowerCase() + 's. Please try again.';                  
                 }
               });
           };
