@@ -3,10 +3,10 @@ angular.module('risevision.editor.controllers')
   .value('PRESENTATION_SEARCH', {
     filter: ''
   })
-  .controller('PresentationListController', ['$scope',
+  .controller('PresentationListController', ['$q', '$scope',
     'ScrollingListService', 'presentation', 'editorFactory', 'templateEditorFactory', '$loading',
     '$filter', 'presentationUtils', 'PRESENTATION_SEARCH',
-    function ($scope, ScrollingListService, presentation, editorFactory, templateEditorFactory,
+    function ($q, $scope, ScrollingListService, presentation, editorFactory, templateEditorFactory,
       $loading, $filter, presentationUtils, PRESENTATION_SEARCH) {
       $scope.search = {
         sortBy: 'changeDate',
@@ -17,6 +17,15 @@ angular.module('risevision.editor.controllers')
       };
 
       $scope.presentations = new ScrollingListService(presentation.list, $scope.search);
+      $scope.listOperations = {
+        name: 'Presentation',
+        operations: [{
+          name: 'Delete',
+          actionCall: editorFactory.deletePresentationByObject,
+          requireRole: 'cp'
+        }]
+      };
+
       $scope.editorFactory = editorFactory;
       $scope.templateEditorFactory = templateEditorFactory;
       $scope.isHtmlPresentation = presentationUtils.isHtmlPresentation;

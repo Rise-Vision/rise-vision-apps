@@ -19,6 +19,7 @@ describe('controller: Presentation List', function() {
     });
     $provide.service('editorFactory', function() {
       return {
+        deletePresentationByObject: 'deletePresentationByObject'
       };
     });
     $provide.service('templateEditorFactory', function() {
@@ -76,6 +77,15 @@ describe('controller: Presentation List', function() {
     expect($scope.search).to.have.property('reverse');
     expect($scope.search).to.have.property('filter');
     expect($scope.search.count).to.equal(5);
+  });
+
+  it('listOperations:', function() {
+    expect($scope.listOperations).to.be.ok;
+    expect($scope.listOperations.name).to.equal('Presentation');
+    expect($scope.listOperations.operations).to.have.length(1);
+    expect($scope.listOperations.operations[0].name).to.equal('Delete');
+    expect($scope.listOperations.operations[0].actionCall).to.equal('deletePresentationByObject');
+    expect($scope.listOperations.operations[0].requireRole).to.equal('cp');
   });
 
   describe('$loading: ', function() {
