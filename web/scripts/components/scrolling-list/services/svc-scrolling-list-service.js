@@ -154,8 +154,17 @@ angular.module('risevision.common.components.scrolling-list')
                 });
             };
 
-            return factory.operations.batch(selected, execute, operation.name)
-              .then(function() {
+            var batchAction;
+            if (operation.beforeBatchAction) {
+              batchAction = operation.beforeBatchAction(selected)
+                .then(function() {
+                  return factory.operations.batch(selected, execute, operation.name);
+                });
+            } else {
+              batchAction = factory.operations.batch(selected, execute, operation.name);
+            }
+
+            return batchAction.then(function() {
                 if (!listError && operation.isDelete) {
                   // reload list
                   factory.doSearch();

@@ -12,14 +12,9 @@ angular.module('risevision.displays.services')
           return;
         }
 
-        service.controlsError = '';
-
-        display.restart(displayId)
+        return display.restart(displayId)
           .then(function (resp) {
             displayTracker('Display Restarted', displayId, displayName);
-          })
-          .then(null, function (e) {
-            service.controlsError = processErrorCode(e);
           });
       };
 
@@ -28,16 +23,19 @@ angular.module('risevision.displays.services')
           return;
         }
 
-        service.controlsError = '';
-
-        display.reboot(displayId)
+        return display.reboot(displayId)
           .then(function (resp) {
             displayTracker('Display Rebooted', displayId, displayName);
-          })
-          .then(null, function (e) {
-            service.controlsError = processErrorCode(e);
           });
       };
+
+      service.restartByObject = function(display) {
+        return _restart(display.id, display.name);
+      }
+
+      service.rebootByObject = function(display) {
+        return _reboot(display.id, display.name);
+      }
 
       service.confirm = function (displayId, displayName, mode) {
         if (displayFactory.showLicenseRequired()) {
@@ -54,10 +52,16 @@ angular.module('risevision.displays.services')
           'sm'
         ).then(function () {
           // do what you need if user presses ok
+          service.controlsError = '';
+
           if (mode === 'reboot') {
-            _reboot(displayId, displayName);
+            _reboot(displayId, displayName).catch(function (e) {
+              service.controlsError = processErrorCode(e);
+            });
           } else if (mode === 'restart') {
-            _restart(displayId, displayName);
+            _restart(displayId, displayName).catch(function (e) {
+              service.controlsError = processErrorCode(e);
+            });
           }
         }, function () {
           // do what you need to do if user cancels
