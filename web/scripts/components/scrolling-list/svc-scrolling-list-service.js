@@ -153,16 +153,16 @@ angular.module('risevision.common.components.scrolling-list')
             };
 
             return factory.operations.batch(selected, execute, name)
-              .finally(function() {  
-                if (removeFromList) {
+              .then(function() {
+                if (!listError && removeFromList) {
                   // reload list
                   factory.doSearch();
                 }
 
-                if (listError) {
+                if (listError && !factory.errorMessage) {
                   factory.errorMessage = 'Something went wrong.';
                   factory.apiError = 'We weren’t able to ' + name.toLowerCase() + ' one or more of the selected ' + 
-                    factory.search.name.toLowerCase() + 's. Please try again.';                  
+                    factory.search.name.toLowerCase() + '. Please try again.';                  
                 }
               });
           };

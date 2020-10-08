@@ -3,10 +3,10 @@ angular.module('risevision.editor.controllers')
   .value('PRESENTATION_SEARCH', {
     filter: ''
   })
-  .controller('PresentationListController', ['$q', '$scope',
+  .controller('PresentationListController', ['$scope',
     'ScrollingListService', 'presentation', 'editorFactory', 'templateEditorFactory', '$loading',
     '$filter', 'presentationUtils', 'PRESENTATION_SEARCH',
-    function ($q, $scope, ScrollingListService, presentation, editorFactory, templateEditorFactory,
+    function ($scope, ScrollingListService, presentation, editorFactory, templateEditorFactory,
       $loading, $filter, presentationUtils, PRESENTATION_SEARCH) {
       $scope.search = {
         sortBy: 'changeDate',
@@ -21,7 +21,17 @@ angular.module('risevision.editor.controllers')
         name: 'Presentation',
         operations: [{
           name: 'Delete',
-          actionCall: editorFactory.deletePresentationByObject,
+          actionCall: function(presentation) {
+            return editorFactory.deletePresentationByObject(presentation)
+              .catch(function(e) {
+                if (e.status === 409) {
+                  $scope.presentations.errorMessage = 'Some presentations could not be deleted.';
+                  $scope.presentations.apiError = 'These presentations are used in one or more schedules. To delete them, please remove them from the schedules they are being used in, and try again.'; 
+                }
+
+                throw e;
+              });
+          },
           requireRole: 'cp'
         }]
       };
