@@ -1,6 +1,6 @@
 'use strict';
 describe('controller: bulk delete modal', function() {
-  beforeEach(module('risevision.apps.controllers'));
+  beforeEach(module('risevision.common.components.scrolling-list'));
   beforeEach(module(function ($provide) {
     $provide.service('$modalInstance',function() {
       return {

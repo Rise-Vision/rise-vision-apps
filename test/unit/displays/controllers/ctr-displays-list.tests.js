@@ -56,6 +56,13 @@ describe('controller: displays list', function() {
         loadSummary: sandbox.stub()
       };
     });
+    $provide.service('DisplayListOperations', function() {
+      return function() {
+        return {
+          operations: 'operations'
+        };
+      };
+    });
   }));
   var $scope, $loading, $filter, $window, displaySummaryFactory;
   beforeEach(function(){
@@ -91,15 +98,9 @@ describe('controller: displays list', function() {
     expect($scope.displayFactory).to.be.ok;
     expect($scope.playerLicenseFactory).to.be.ok;
     expect($scope.displaySummaryFactory).to.be.ok;
-  });
-
-  it('listOperations:', function() {
-    expect($scope.listOperations).to.be.ok;
-    expect($scope.listOperations.name).to.equal('Display');
-    expect($scope.listOperations.operations).to.have.length(1);
-    expect($scope.listOperations.operations[0].name).to.equal('Delete');
-    expect($scope.listOperations.operations[0].actionCall).to.equal('deleteDisplayByObject');
-    expect($scope.listOperations.operations[0].requireRole).to.equal('da');
+    expect($scope.listOperations).to.deep.equal({
+      operations: 'operations'
+    });
   });
 
   it('should init the scope objects',function(){

@@ -1,5 +1,5 @@
 'use strict';
-angular.module('risevision.apps.controllers')
+angular.module('risevision.common.components.scrolling-list')
   .controller('BulkDeleteModalCtrl', ['$scope', '$modalInstance', 'userState', 'selectedItems', 'itemName',
     function ($scope, $modalInstance, userState, selectedItems, itemName) {
       $scope.itemName = itemName;
