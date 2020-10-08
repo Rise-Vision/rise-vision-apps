@@ -18,16 +18,16 @@ describe('controller: displays list', function() {
       }
     });
     $provide.service('ScrollingListService', function() {
-      return function() {
-        return {
-          search: {},
-          loadingItems: false,
-          doSearch: function() {}
-        };
-      };
+      return sinon.stub().returns({
+        search: {},
+        loadingItems: false,
+        doSearch: function() {}
+      });
     });
     $provide.service('display', function() {
-      return {};
+      return {
+        list: 'listService'
+      };
     });
 
     $provide.service('$loading',function(){
@@ -64,7 +64,7 @@ describe('controller: displays list', function() {
       };
     });
   }));
-  var $scope, $loading, $filter, $window, displaySummaryFactory;
+  var $scope, $loading, $filter, $window, displaySummaryFactory, ScrollingListService;
   beforeEach(function(){
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
@@ -72,6 +72,7 @@ describe('controller: displays list', function() {
       $filter = $injector.get('$filter');
       $loading = $injector.get('$loading');
       displaySummaryFactory = $injector.get('displaySummaryFactory');
+      ScrollingListService = $injector.get('ScrollingListService');
       $window = $injector.get('$window');
       $controller('displaysList', {
         $scope : $scope,
@@ -101,6 +102,10 @@ describe('controller: displays list', function() {
     expect($scope.listOperations).to.deep.equal({
       operations: 'operations'
     });
+  });
+
+  it('should init list service', function() {
+    ScrollingListService.should.have.been.calledWith('listService', $scope.search, $scope.listOperations);
   });
 
   it('should init the scope objects',function(){

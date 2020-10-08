@@ -6,18 +6,16 @@ describe('controller: schedules list', function() {
   beforeEach(module(function ($provide) {
     $provide.service('schedule',function(){
       return {
-        list: function() {}
+        list: 'listService'
       }
     });
 
     $provide.service('ScrollingListService', function() {
-      return function() {
-        return {
-          search: {},
-          loadingItems: false,
-          doSearch: function() {}
-        };
-      };
+      return sinon.stub().returns({
+        search: {},
+        loadingItems: false,
+        doSearch: function() {}
+      });
     });
 
     $provide.service('scheduleFactory', function() {
@@ -39,13 +37,14 @@ describe('controller: schedules list', function() {
       };
     });
   }));
-  var $scope, $loading,$loadingStartSpy, $loadingStopSpy;
+  var $scope, $loading,$loadingStartSpy, $loadingStopSpy, ScrollingListService;
   beforeEach(function(){
 
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
       $scope.listLimit = 5;
       $loading = $injector.get('$loading');
+      ScrollingListService = $injector.get('ScrollingListService');
       $controller('schedulesList', {
         $scope : $scope,
         schedule:$injector.get('schedule'),
@@ -77,6 +76,10 @@ describe('controller: schedules list', function() {
     expect($scope.listOperations.operations[0].name).to.equal('Delete');
     expect($scope.listOperations.operations[0].actionCall).to.equal('deleteScheduleByObject');
     expect($scope.listOperations.operations[0].requireRole).to.equal('cp');
+  });
+
+  it('should init list service', function() {
+    ScrollingListService.should.have.been.calledWith('listService', $scope.search, $scope.listOperations);
   });
 
   describe('$loading: ', function() {

@@ -21,11 +21,10 @@ angular.module('risevision.common.components.scrolling-list')
             });            
           };
 
-          var _updateListActions = function() {
+          var _updateDeleteAction = function() {
             _.each($scope.listOperations.operations, function(operation) {
-
-              if (operation.name === 'Delete') {
-                var deleteAction = $scope.listObject.getSelectedAction(operation.actionCall, operation.name, true);
+              if (operation.isDelete) {
+                var deleteAction = operation.actionCall;
 
                 operation.actionCall = function() {
                   $modal.open({
@@ -41,8 +40,6 @@ angular.module('risevision.common.components.scrolling-list')
                     }
                   }).result.then(deleteAction);
                 };
-              } else {
-                operation.actionCall = $scope.listObject.getSelectedAction(operation.actionCall, operation.name);
               }
             });
 
@@ -50,7 +47,7 @@ angular.module('risevision.common.components.scrolling-list')
 
           if ($scope.listOperations && $scope.listOperations.operations && $scope.listObject) {
             _filterByRole();
-            _updateListActions();
+            _updateDeleteAction();
           }
 
           var _bypass = false;

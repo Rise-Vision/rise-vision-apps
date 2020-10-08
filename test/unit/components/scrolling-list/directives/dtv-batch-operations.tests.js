@@ -37,8 +37,7 @@ describe('directive: batch-operations', function() {
     $templateCache.put('partials/common/batch-operations.html', '<p>mock</p>');
 
     $rootScope.listObject = {
-      getSelected: sinon.stub().returns('selectedItems'),
-      getSelectedAction: sinon.stub().returns('selectedAction')
+      getSelected: sinon.stub().returns('selectedItems')
     };
 
   }));
@@ -102,8 +101,8 @@ describe('directive: batch-operations', function() {
 
     });
 
-    describe('_updateListActions:', function() {
-      it('should update regular actions', function() {
+    describe('_updateDeleteAction:', function() {
+      it('should not update regular actions', function() {
         $rootScope.listOperations = {
           name: 'Items',
           operations: [{
@@ -114,23 +113,20 @@ describe('directive: batch-operations', function() {
 
         compileDirective();        
 
-        $scope.listObject.getSelectedAction.should.have.been.calledWith('actionCall', 'Operation');
-
-        expect($scope.listOperations.operations[0].actionCall).to.equal('selectedAction');
+        expect($scope.listOperations.operations[0].actionCall).to.equal('actionCall');
       });
       
       describe('Delete:', function() {
         var deleteAction;
 
         beforeEach(function() {
-          deleteAction = sinon.stub();
-
-          $rootScope.listObject.getSelectedAction.returns(deleteAction);
+          deleteAction = sinon.spy();
           $rootScope.listOperations = {
             name: 'Items',
             operations: [{
               name: 'Delete',
-              actionCall: 'actionCall'
+              actionCall: deleteAction,
+              isDelete: true
             }]
           };
 
@@ -139,10 +135,6 @@ describe('directive: batch-operations', function() {
 
         it('should find and update delete operation', function() {
           expect($scope.listOperations.operations[0].actionCall).to.be.a('function');
-        });
-
-        it('should get delete action', function() {
-          $scope.listObject.getSelectedAction.should.have.been.calledWith('actionCall', 'Delete', true);
         });
 
         it('should open confirmation modal', function() {
