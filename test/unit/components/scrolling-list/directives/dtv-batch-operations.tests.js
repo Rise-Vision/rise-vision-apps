@@ -134,11 +134,11 @@ describe('directive: batch-operations', function() {
         });
 
         it('should find and update delete operation', function() {
-          expect($scope.listOperations.operations[0].actionCall).to.be.a('function');
+          expect($scope.listOperations.operations[0].beforeBatchAction).to.be.a('function');
         });
 
         it('should open confirmation modal', function() {
-          $scope.listOperations.operations[0].actionCall();
+          $scope.listOperations.operations[0].beforeBatchAction();
 
           $modal.open.should.have.been.calledWithMatch({
             templateUrl: 'partials/common/bulk-delete-confirmation-modal.html',
@@ -150,17 +150,13 @@ describe('directive: batch-operations', function() {
           var params = $modal.open.getCall(0).args[0];
           expect(params.resolve.selectedItems()).to.equal('selectedItems');
           expect(params.resolve.itemName()).to.equal('Items');
-
         });
 
         it('should perform operation if user confirms', function(done) {
-          $scope.listOperations.operations[0].actionCall();
-
-          setTimeout(function() {
-            deleteAction.should.have.been.called;
-
-            done();
-          }, 10);
+          $scope.listOperations.operations[0].beforeBatchAction()
+            .then(function() {
+              done();              
+            });
         });
 
       });

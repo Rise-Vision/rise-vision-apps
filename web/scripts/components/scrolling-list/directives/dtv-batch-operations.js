@@ -24,10 +24,8 @@ angular.module('risevision.common.components.scrolling-list')
           var _updateDeleteAction = function() {
             _.each($scope.listOperations.operations, function(operation) {
               if (operation.isDelete) {
-                var deleteAction = operation.actionCall;
-
-                operation.actionCall = function() {
-                  $modal.open({
+                operation.beforeBatchAction = function() {
+                  return $modal.open({
                     templateUrl: 'partials/common/bulk-delete-confirmation-modal.html',
                     controller: 'BulkDeleteModalCtrl',
                     windowClass: 'madero-style centered-modal',
@@ -38,7 +36,7 @@ angular.module('risevision.common.components.scrolling-list')
                         return $scope.listOperations.name;
                       }
                     }
-                  }).result.then(deleteAction);
+                  }).result;
                 };
               }
             });
