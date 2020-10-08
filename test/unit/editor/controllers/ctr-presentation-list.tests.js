@@ -19,7 +19,7 @@ describe('controller: Presentation List', function() {
     });
     $provide.service('editorFactory', function() {
       return {
-        deletePresentationByObject: 'deletePresentationByObject'
+        deletePresentationByObject: sinon.stub().returns(Q.resolve())
       };
     });
     $provide.service('templateEditorFactory', function() {
@@ -45,17 +45,17 @@ describe('controller: Presentation List', function() {
       filter: 'search filter'
     });
   }));
-  var $scope, $loading;
+  var $scope, $loading, editorFactory;
   beforeEach(function(){
 
     inject(function($injector,$rootScope, $controller){
       $scope = $rootScope.$new();
       $scope.listLimit = 5;
       $loading = $injector.get('$loading');
+      editorFactory = $injector.get('editorFactory');
       $controller('PresentationListController', {
         $scope : $scope,
         ScrollingListService: $injector.get('ScrollingListService'),
-
         $loading: $loading
       });
       $scope.$digest();
@@ -79,13 +79,67 @@ describe('controller: Presentation List', function() {
     expect($scope.search.count).to.equal(5);
   });
 
-  it('listOperations:', function() {
-    expect($scope.listOperations).to.be.ok;
-    expect($scope.listOperations.name).to.equal('Presentation');
-    expect($scope.listOperations.operations).to.have.length(1);
-    expect($scope.listOperations.operations[0].name).to.equal('Delete');
-    expect($scope.listOperations.operations[0].actionCall).to.equal('deletePresentationByObject');
-    expect($scope.listOperations.operations[0].requireRole).to.equal('cp');
+  describe('listOperations:', function() {
+    it('should initialize', function() {
+      expect($scope.listOperations).to.be.ok;
+      expect($scope.listOperations.name).to.equal('Presentation');
+      expect($scope.listOperations.operations).to.have.length(1);
+      expect($scope.listOperations.operations[0].name).to.equal('Delete');
+      expect($scope.listOperations.operations[0].actionCall).to.be.a('function');
+      expect($scope.listOperations.operations[0].requireRole).to.equal('cp');
+    });
+
+    describe('delete:', function(done) {
+      it('should delete presentation on actionCall', function() {
+        $scope.listOperations.operations[0].actionCall('presentationObject')
+          .then(function() {
+            editorFactory.deletePresentationByObject.should.have.been.calledWith('presentationObject');
+
+            done();
+          })
+          .catch(function() {
+            done('error');
+          });
+      });
+
+      it('should handle deletion errors', function(done) {
+        editorFactory.deletePresentationByObject.returns(Q.reject('error'));
+
+        $scope.listOperations.operations[0].actionCall('presentationObject')
+          .then(function() {
+            done('error');
+          })
+          .catch(function(e) {
+            expect($scope.presentations.errorMessage).to.not.be.ok;
+            expect($scope.presentations.apiError).to.not.be.ok;
+
+            expect(e).to.equal('error');
+
+            done();
+          });
+      });   
+
+      it('should handle conflict 409 errors', function(done) {
+        var error = {
+          status: 409
+        }
+        editorFactory.deletePresentationByObject.returns(Q.reject(error));
+
+        $scope.listOperations.operations[0].actionCall('presentationObject')
+          .then(function() {
+            done('error');
+          })
+          .catch(function(e) {
+            expect($scope.presentations.errorMessage).to.be.ok;
+            expect($scope.presentations.apiError).to.be.ok;
+
+            expect(e).to.equal(error);
+
+            done();
+          });
+      });   
+    });
+
   });
 
   describe('$loading: ', function() {
