@@ -14,8 +14,8 @@ angular.module('risevision.displays.controllers')
         name: 'Displays'
       };
 
-      $scope.displays = new ScrollingListService(display.list, $scope.search);
       $scope.listOperations = new DisplayListOperations();
+      $scope.displays = new ScrollingListService(display.list, $scope.search, $scope.listOperations);
 
       $scope.selectedCompayId = userState.getSelectedCompanyId();
       $scope.displayFactory = displayFactory;

@@ -7,15 +7,15 @@ describe('controller: Presentation List', function() {
   beforeEach(module(mockTranslate()));
   beforeEach(module(function ($provide) {
     $provide.service('ScrollingListService', function() {
-      return function() {
-        return {
-          search: {},
-          loadingItems: false
-        };
-      };
+      return sinon.stub().returns({
+        search: {},
+        loadingItems: false
+      });
     });
     $provide.service('presentation', function() {
-      return {};
+      return {
+        list: 'listService'
+      };
     });
     $provide.service('editorFactory', function() {
       return {
@@ -45,7 +45,7 @@ describe('controller: Presentation List', function() {
       filter: 'search filter'
     });
   }));
-  var $scope, $loading, editorFactory;
+  var $scope, $loading, editorFactory, ScrollingListService;
   beforeEach(function(){
 
     inject(function($injector,$rootScope, $controller){
@@ -53,6 +53,7 @@ describe('controller: Presentation List', function() {
       $scope.listLimit = 5;
       $loading = $injector.get('$loading');
       editorFactory = $injector.get('editorFactory');
+      ScrollingListService = $injector.get('ScrollingListService');
       $controller('PresentationListController', {
         $scope : $scope,
         ScrollingListService: $injector.get('ScrollingListService'),
@@ -140,6 +141,10 @@ describe('controller: Presentation List', function() {
       });   
     });
 
+  });
+
+  it('should init list service', function() {
+    ScrollingListService.should.have.been.calledWith('listService', $scope.search, $scope.listOperations);
   });
 
   describe('$loading: ', function() {

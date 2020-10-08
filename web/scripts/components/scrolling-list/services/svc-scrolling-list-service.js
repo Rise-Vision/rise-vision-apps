@@ -3,7 +3,7 @@
 angular.module('risevision.common.components.scrolling-list')
   .service('ScrollingListService', ['$log', 'BaseList', 'BatchOperations', 'processErrorCode',
     function ($log, BaseList, BatchOperations, processErrorCode) {
-      return function (listService, search) {
+      return function (listService, search, listOperations) {
         var DB_MAX_COUNT = 40; //number of records to load at a time
         var factory = {};
 
@@ -125,8 +125,10 @@ angular.module('risevision.common.components.scrolling-list')
           });
         };
 
-        factory.getSelectedAction = function(actionCall, name, removeFromList) {
-          return function() {
+        var _updateSelectedAction = function(operation) {
+          var originalAction = operation.actionCall;
+
+          operation.actionCall = function() {
             var selected = factory.getSelected();
             var listError = false;
 
@@ -137,9 +139,9 @@ angular.module('risevision.common.components.scrolling-list')
             _clearMessages();
 
             var execute = function (item) {
-              return actionCall(item)
+              return originalAction(item)
                 .then(function() {
-                  if (removeFromList) {
+                  if (operation.isDelete) {
                     _.remove(factory.items.list, function(listItem) {
                       return listItem === item;
                     });
@@ -152,21 +154,35 @@ angular.module('risevision.common.components.scrolling-list')
                 });
             };
 
-            return factory.operations.batch(selected, execute, name)
+            return factory.operations.batch(selected, execute, operation.name)
               .then(function() {
-                if (!listError && removeFromList) {
+                if (!listError && operation.isDelete) {
                   // reload list
                   factory.doSearch();
                 }
 
                 if (listError && !factory.errorMessage) {
                   factory.errorMessage = 'Something went wrong.';
-                  factory.apiError = 'We weren’t able to ' + name.toLowerCase() + ' one or more of the selected ' + 
+                  factory.apiError = 'We weren’t able to ' + operation.name.toLowerCase() + ' one or more of the selected ' + 
                     factory.search.name.toLowerCase() + '. Please try again.';                  
                 }
               });
           };
         };
+
+        var _updateActions = function() {
+          if (!listOperations || !listOperations.operations) {
+            return;
+          }
+
+          _.each(listOperations.operations, function(operation) {
+            operation.isDelete = operation.name === 'Delete';
+            
+            _updateSelectedAction(operation);
+          });
+        };
+
+        _updateActions();
 
         return factory;
       };

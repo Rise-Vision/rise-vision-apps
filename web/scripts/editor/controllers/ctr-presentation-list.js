@@ -16,7 +16,6 @@ angular.module('risevision.editor.controllers')
         filter: PRESENTATION_SEARCH.filter
       };
 
-      $scope.presentations = new ScrollingListService(presentation.list, $scope.search);
       $scope.listOperations = {
         name: 'Presentation',
         operations: [{
@@ -35,6 +34,7 @@ angular.module('risevision.editor.controllers')
           requireRole: 'cp'
         }]
       };
+      $scope.presentations = new ScrollingListService(presentation.list, $scope.search, $scope.listOperations);
 
       $scope.editorFactory = editorFactory;
       $scope.templateEditorFactory = templateEditorFactory;

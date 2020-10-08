@@ -11,7 +11,6 @@ angular.module('risevision.schedules.controllers')
         name: 'Schedules'
       };
 
-      $scope.schedules = new ScrollingListService(schedule.list, $scope.search);
       $scope.listOperations = {
         name: 'Schedule',
         operations: [{
@@ -20,6 +19,7 @@ angular.module('risevision.schedules.controllers')
           requireRole: 'cp'
         }]
       };
+      $scope.schedules = new ScrollingListService(schedule.list, $scope.search, $scope.listOperations);
 
       $scope.filterConfig = {
         placeholder: $filter('translate')(
