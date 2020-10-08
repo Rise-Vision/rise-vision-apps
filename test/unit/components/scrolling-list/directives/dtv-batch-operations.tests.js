@@ -5,7 +5,7 @@ describe('directive: batch-operations', function() {
       $scope,
       element;
   var $window, $modal, $state, userState;
-  beforeEach(module('risevision.apps.directives'));
+  beforeEach(module('risevision.common.components.scrolling-list'));
   beforeEach(module(function ($provide) {
     $provide.service('$modal', function() {
       return {

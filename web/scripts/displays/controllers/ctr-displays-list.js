@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('risevision.displays.controllers')
-  .controller('displaysList', ['$scope', '$rootScope', 'userState', 'display',
+  .controller('displaysList', ['$scope', '$rootScope', '$q', 'userState', 'display',
     'ScrollingListService', '$loading', '$filter', 'displayFactory', 'playerLicenseFactory',
-    'displayStatusFactory', '$modal', 'displaySummaryFactory',
-    function ($scope, $rootScope, userState, display, ScrollingListService, $loading,
-      $filter, displayFactory, playerLicenseFactory, displayStatusFactory, $modal, displaySummaryFactory) {
+    'displayStatusFactory', '$modal', 'displaySummaryFactory', 'DisplayListOperations',
+    function ($scope, $rootScope, $q, userState, display, ScrollingListService, $loading,
+      $filter, displayFactory, playerLicenseFactory, displayStatusFactory, $modal, displaySummaryFactory,
+      DisplayListOperations) {
       $scope.search = {
         sortBy: 'name',
         count: $scope.listLimit,
@@ -14,14 +15,7 @@ angular.module('risevision.displays.controllers')
       };
 
       $scope.displays = new ScrollingListService(display.list, $scope.search);
-      $scope.listOperations = {
-        name: 'Display',
-        operations: [{
-          name: 'Delete',
-          actionCall: displayFactory.deleteDisplayByObject,
-          requireRole: 'da'
-        }]
-      };
+      $scope.listOperations = new DisplayListOperations();
 
       $scope.selectedCompayId = userState.getSelectedCompanyId();
       $scope.displayFactory = displayFactory;

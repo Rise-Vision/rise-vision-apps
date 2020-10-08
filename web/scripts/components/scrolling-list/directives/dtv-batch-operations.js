@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('risevision.apps.directives')
+angular.module('risevision.common.components.scrolling-list')
   .directive('batchOperations', ['$window', '$modal', '$state', 'userState',
     function ($window, $modal, $state, userState) {
       return {
