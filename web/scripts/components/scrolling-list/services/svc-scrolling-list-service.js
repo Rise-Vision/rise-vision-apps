@@ -125,34 +125,41 @@ angular.module('risevision.common.components.scrolling-list')
           });
         };
 
-        var _updateSelectedAction = function(operation) {
+        var _getExecuteAction = function(operation) {
           var originalAction = operation.actionCall;
+
+          return function (item) {
+            return originalAction(item)
+              .then(function() {
+                if (operation.isDelete) {
+                  _.remove(factory.items.list, function(listItem) {
+                    return listItem === item;
+                  });
+                }
+              })
+              .catch(function(e) {
+                $log.error(processErrorCode(e), e);
+          
+                if (!factory.errorMessage) {
+                  factory.errorMessage = 'Something went wrong.';
+                  factory.apiError = 'We weren’t able to ' + operation.name.toLowerCase() + ' one or more of the selected ' + 
+                    factory.search.name.toLowerCase() + '. Please try again.';                  
+                }
+              });
+          };
+        };
+
+        var _updateSelectedAction = function(operation) {
+          var execute = _getExecuteAction(operation);
 
           operation.actionCall = function() {
             var selected = factory.getSelected();
-            var listError = false;
 
             if (!selected.length) {
               return;
             }
 
             _clearMessages();
-
-            var execute = function (item) {
-              return originalAction(item)
-                .then(function() {
-                  if (operation.isDelete) {
-                    _.remove(factory.items.list, function(listItem) {
-                      return listItem === item;
-                    });
-                  }
-                })
-                .catch(function(e) {
-                  $log.error(processErrorCode(e), e);
-            
-                  listError = true;
-                });
-            };
 
             var batchAction;
             if (operation.beforeBatchAction) {
@@ -165,17 +172,11 @@ angular.module('risevision.common.components.scrolling-list')
             }
 
             return batchAction.then(function() {
-                if (!listError && operation.isDelete) {
-                  // reload list
-                  factory.doSearch();
-                }
-
-                if (listError && !factory.errorMessage) {
-                  factory.errorMessage = 'Something went wrong.';
-                  factory.apiError = 'We weren’t able to ' + operation.name.toLowerCase() + ' one or more of the selected ' + 
-                    factory.search.name.toLowerCase() + '. Please try again.';                  
-                }
-              });
+              if (!factory.errorMessage && operation.isDelete) {
+                // reload list
+                factory.doSearch();
+              }
+            });
           };
         };
 
