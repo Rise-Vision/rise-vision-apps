@@ -31,11 +31,11 @@ angular.module('risevision.displays.services')
 
       service.restartByObject = function(display) {
         return _restart(display.id, display.name);
-      }
+      };
 
       service.rebootByObject = function(display) {
         return _reboot(display.id, display.name);
-      }
+      };
 
       service.confirm = function (displayId, displayName, mode) {
         if (displayFactory.showLicenseRequired()) {
