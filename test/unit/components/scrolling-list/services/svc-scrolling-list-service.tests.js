@@ -495,11 +495,58 @@ describe("service: ScrollingListService:", function() {
       }, 10);
     });
 
-    describe('errors:', function() {
-      it('should clear error messages', function() {
+    describe('beforeBatchAction:', function() {
+      beforeEach(function() {
         scrollingListService.select(scrollingListService.items.list[0]);
         scrollingListService.select(scrollingListService.items.list[5]);
+      });
 
+      it('should call action if present', function() {
+        listOperations.operations[0].beforeBatchAction = sinon.stub().returns(Q.resolve());
+
+        listOperations.operations[0].actionCall();
+
+        listOperations.operations[0].beforeBatchAction.should.have.been.calledWith([
+          scrollingListService.items.list[0], 
+          scrollingListService.items.list[5]
+        ]);
+      });
+
+      it('should perform batch if action resolves', function(done) {
+        listOperations.operations[0].beforeBatchAction = sinon.stub().returns(Q.resolve());
+
+        listOperations.operations[0].actionCall();
+
+        setTimeout(function() {
+          scrollingListService.operations.batch.should.have.been.called;
+
+          done();
+        }, 10);
+      });
+
+      it('should not perform batch if action rejects', function(done) {
+        listOperations.operations[0].beforeBatchAction = sinon.stub().returns(Q.reject());
+
+        listOperations.operations[0].actionCall()
+          .then(function() {
+            done('error');
+          })
+          .catch(function() {
+            scrollingListService.operations.batch.should.not.have.been.called;
+
+            done();
+          }, 10);
+      });
+
+    });
+
+    describe('errors:', function() {
+      beforeEach(function() {
+        scrollingListService.select(scrollingListService.items.list[0]);
+        scrollingListService.select(scrollingListService.items.list[5]);
+      });
+
+      it('should clear error messages', function() {
         scrollingListService.errorMessage = "errorMessage";
         scrollingListService.apiError = "apiError";
 
@@ -512,9 +559,6 @@ describe("service: ScrollingListService:", function() {
       it('should not populate error fields if calls were successful', function(done) {
         var deferred = Q.defer();
         scrollingListService.operations.batch.returns(deferred.promise);
-
-        scrollingListService.select(scrollingListService.items.list[0]);
-        scrollingListService.select(scrollingListService.items.list[5]);
 
         listOperations.operations[1].actionCall();
 
@@ -539,9 +583,6 @@ describe("service: ScrollingListService:", function() {
         var deferred = Q.defer();
         scrollingListService.operations.batch.returns(deferred.promise);
 
-        scrollingListService.select(scrollingListService.items.list[0]);
-        scrollingListService.select(scrollingListService.items.list[5]);
-
         actionCall2.returns(Q.reject());
         listOperations.operations[1].actionCall();
 
@@ -565,9 +606,6 @@ describe("service: ScrollingListService:", function() {
       it('should not overwrite existing error messages', function(done) {
         var deferred = Q.defer();
         scrollingListService.operations.batch.returns(deferred.promise);
-
-        scrollingListService.select(scrollingListService.items.list[0]);
-        scrollingListService.select(scrollingListService.items.list[5]);
 
         actionCall2.returns(Q.reject());
         listOperations.operations[1].actionCall();
