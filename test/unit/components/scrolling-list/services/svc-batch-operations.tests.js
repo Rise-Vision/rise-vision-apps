@@ -193,7 +193,7 @@ describe("service: BatchOperations:", function() {
       }, 10);
     });
 
-    it('should resolve and reset activeOperation on cancel', function(done) {
+    xit('should resolve and reset activeOperation on cancel', function(done) {
       method.onCall(0).returns(Q.resolve());
       method.onCall(1).returns(Q.resolve());
       method.onCall(2).returns(Q.resolve());

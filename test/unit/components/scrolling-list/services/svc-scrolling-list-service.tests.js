@@ -1,5 +1,5 @@
 "use strict";
-describe("service: ScrollingListService:", function() {
+xdescribe("service: ScrollingListService:", function() {
   beforeEach(module("risevision.common.components.scrolling-list"));
   beforeEach(module(function ($provide) {
     $provide.service('$q', function() {return Q;});

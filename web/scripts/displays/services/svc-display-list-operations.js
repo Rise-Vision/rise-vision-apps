@@ -36,7 +36,8 @@ angular.module('risevision.displays.services')
                 baseMessage + '. Do you want to assign '+notAuthorized.length+ (notAuthorized.length > 1 ? ' to these displays?' : ' to this display?'),
                 'Yes', 'No', 'madero-style centered-modal',
                 'partials/components/confirm-modal/madero-confirm-modal.html','sm').then(function() {
-                  // TODO: bulk assign
+                  var licenseOperation = _.find(listOperations.operations, function(o) { return o.name === 'License'; });
+                  return licenseOperation.onClick(true);
                 });
             } else {
               return confirmModal('Almost there!', 
