@@ -181,9 +181,9 @@
           }
         };
 
-        _factory.confirmAndPurchase = function () {
-          confirmModal('Almost there!',
-              'There aren\'t available licenses to assign. Subscribe to additional licenses?',
+        _factory.confirmAndPurchase = function (additionalWording) {
+          return confirmModal('Almost there!',
+              'There aren\'t available licenses to assign' + (additionalWording || '') + '. Subscribe to additional licenses?',
               'Yes', 'No', 'madero-style centered-modal',
               'partials/components/confirm-modal/madero-confirm-modal.html', 'sm')
             .then(function () {
