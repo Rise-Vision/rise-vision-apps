@@ -169,7 +169,9 @@ describe('directive: batch-operations', function() {
       $rootScope.listOperations = 'listOperations';
       $rootScope.listObject = {
         operations: {
-          activeOperation: '',
+          activeOperation: {
+            name: 'Operation'
+          },
           cancel: sinon.spy()
         }
       };
@@ -179,8 +181,6 @@ describe('directive: batch-operations', function() {
 
     describe('$stateChangeStart:', function() {
       it('should notify when changing URL if an operation is active',function() {
-        $scope.listObject.operations.activeOperation = 'Operation';
-
         $rootScope.$broadcast('$stateChangeStart',{name:'newState'});
         $scope.$apply();
 
@@ -199,6 +199,8 @@ describe('directive: batch-operations', function() {
       });
 
       it('should not notify when changing URL if is no active operation',function(){
+        $scope.listObject.operations.activeOperation = null;
+
         $rootScope.$broadcast('$stateChangeStart',{name:'newState'});
         $scope.$apply();
 
@@ -207,7 +209,6 @@ describe('directive: batch-operations', function() {
 
       it('should cancel operation and redirect if user accepts',function(done){
         var state = {name:'newState'};
-        $scope.listObject.operations.activeOperation = 'Operation';
 
         $rootScope.$broadcast('$stateChangeStart', state);
         $scope.$apply();
@@ -227,7 +228,6 @@ describe('directive: batch-operations', function() {
 
       it('should bypass check on navigation confirm',function(done){
         var state = {name:'newState'};
-        $scope.listObject.operations.activeOperation = 'Operation';
 
         $rootScope.$broadcast('$stateChangeStart', state);
         $scope.$apply();
@@ -261,7 +261,6 @@ describe('directive: batch-operations', function() {
       it('should proceed with the operation if the users cancels',function(done){
         $modal.open.returns({result: Q.reject()});
         var state = {name:'newState'};
-        $scope.listObject.operations.activeOperation = 'Operation';
 
         $rootScope.$broadcast('$stateChangeStart', state);
         $scope.$apply();
@@ -283,14 +282,15 @@ describe('directive: batch-operations', function() {
 
     describe('onbeforeunload:', function() {
       it('should notify unsaved changes when closing window',function(){
-        $scope.listObject.operations.activeOperation = 'Operation';
         $scope.$apply();
 
         var result = $window.onbeforeunload();
         expect(result).to.equal('Cancel bulk action?');
       });
 
-      it('should not notify unsaved changes when closing window if there are no changes',function(){    
+      it('should not notify unsaved changes when closing window if there is no active operation',function(){    
+        $scope.listObject.operations.activeOperation = null;
+
         var result = $window.onbeforeunload();
         expect(result).to.be.undefined;
       });

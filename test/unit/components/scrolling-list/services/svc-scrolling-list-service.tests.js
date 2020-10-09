@@ -452,7 +452,7 @@ describe("service: ScrollingListService:", function() {
       scrollingListService.operations.batch.should.have.been.calledWith([
         scrollingListService.items.list[0],
         scrollingListService.items.list[5]
-      ], sinon.match.func, 'Delete');
+      ], sinon.match.func, listOperations.operations[0]);
     });
 
     it('should remove items if operation is delete', function(done) {
@@ -493,6 +493,60 @@ describe("service: ScrollingListService:", function() {
 
         done();
       }, 10);
+    });
+
+    describe('filter:', function() {
+      beforeEach(function() {
+        for (var i = 0; i < 5; i++) {
+          scrollingListService.select(scrollingListService.items.list[i]);
+        }
+      });
+
+      it('should filter results', function() {
+        listOperations.operations[1].filter = {
+          filtered: true
+        };
+        scrollingListService.items.list[2].filtered = true;
+        scrollingListService.items.list[4].filtered = true;
+
+        listOperations.operations[1].actionCall();
+
+        expect(scrollingListService.operations.batch.getCall(0).args[0]).to.deep.equal([
+          scrollingListService.items.list[2],
+          scrollingListService.items.list[4]
+        ]);
+      });
+
+    });
+
+    describe('groupBy:', function() {
+      beforeEach(function() {
+        for (var i = 0; i < 5; i++) {
+          scrollingListService.select(scrollingListService.items.list[i]);
+          scrollingListService.items.list[i].group = i % 2;
+        }
+      });
+
+      it('should group results', function() {
+        listOperations.operations[1].groupBy = 'group';
+
+        listOperations.operations[1].actionCall();
+
+        expect(scrollingListService.operations.batch.getCall(0).args[0]).to.have.length(2);
+        expect(scrollingListService.operations.batch.getCall(0).args[0][0].group).to.equal('0');
+        expect(scrollingListService.operations.batch.getCall(0).args[0][1].group).to.equal('1');
+
+        expect(scrollingListService.operations.batch.getCall(0).args[0][0].items).to.deep.equal([
+          scrollingListService.items.list[0],
+          scrollingListService.items.list[2],
+          scrollingListService.items.list[4]
+        ]);
+        expect(scrollingListService.operations.batch.getCall(0).args[0][1].items).to.deep.equal([
+          scrollingListService.items.list[1],
+          scrollingListService.items.list[3]
+        ]);
+      });
+
     });
 
     describe('beforeBatchAction:', function() {

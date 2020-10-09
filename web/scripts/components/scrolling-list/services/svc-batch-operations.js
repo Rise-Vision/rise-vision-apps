@@ -12,7 +12,7 @@ angular.module('risevision.common.components.scrolling-list')
         var _reset = function() {
           queue = [];
 
-          svc.activeOperation = '';
+          svc.activeOperation = null;
           svc.progress = 0;
           svc.totalItemCount = 0;
           svc.completedItemCount = 0;
@@ -20,7 +20,7 @@ angular.module('risevision.common.components.scrolling-list')
 
         _reset();
 
-        svc.batch = function (items, method, name) {
+        svc.batch = function (items, method, operation) {
           if (!items || !items.length || !method) {
             return $q.resolve();
           }
@@ -28,7 +28,7 @@ angular.module('risevision.common.components.scrolling-list')
           var cancelled = false;
           var deferred = $q.defer();
           var currItem = 0;
-          svc.activeOperation = name;
+          svc.activeOperation = operation;
           svc.totalItemCount += items.length;
 
           var _pushItem = function() {
