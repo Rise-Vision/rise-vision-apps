@@ -2,9 +2,9 @@
 
 angular.module('risevision.displays.services')
   .service('DisplayListOperations', ['$q', 'displayFactory', 'enableCompanyProduct', 'playerLicenseFactory',
-    'plansFactory', 'confirmModal', 'messageBox', 'PLAYER_PRO_PRODUCT_CODE',
+    'plansFactory', 'confirmModal', 'messageBox',
     function ($q, displayFactory, enableCompanyProduct, playerLicenseFactory, plansFactory,
-      confirmModal, messageBox, PLAYER_PRO_PRODUCT_CODE) {
+      confirmModal, messageBox) {
       return function () {
         var _licenseDisplays = function(companyId, displays) {
           var displayIds = _.map(displays, 'id');

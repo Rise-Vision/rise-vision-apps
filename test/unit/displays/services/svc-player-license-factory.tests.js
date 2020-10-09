@@ -77,6 +77,7 @@ describe('Services: playerLicenseFactory', function() {
     expect(playerLicenseFactory.getProAvailableLicenseCount).to.be.a('function');
     expect(playerLicenseFactory.toggleDisplayLicenseLocal).to.be.a('function');
     expect(playerLicenseFactory.areAllProLicensesUsed).to.be.a('function');
+    expect(playerLicenseFactory.licenseDisplaysByCompanyId).to.be.a('function');
   });
 
   describe('getUsedLicenseString:', function() {

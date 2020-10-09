@@ -55,6 +55,8 @@ angular.module('risevision.common.components.scrolling-list')
               return;
             }
             if ($scope.listObject.operations.activeOperation) {
+              var operationName = $scope.listObject.operations.activeOperation.name.toLowerCase();
+
               event.preventDefault();
               var modalInstance = $modal.open({
                 templateUrl: 'partials/components/confirm-modal/madero-confirm-modal.html',
@@ -63,10 +65,10 @@ angular.module('risevision.common.components.scrolling-list')
                 size: 'sm',
                 resolve: {
                   confirmationTitle: function () {
-                    return 'Cancel bulk ' + $scope.listObject.operations.activeOperation.toLowerCase() + '?';
+                    return 'Cancel bulk ' + operationName + '?';
                   },
                   confirmationMessage: function () {
-                    return 'A bulk ' + $scope.listObject.operations.activeOperation.toLowerCase() +
+                    return 'A bulk ' + operationName +
                       ' is in progress. Navigating away from this page will cancel this action. Are you sure you want to cancel?';
                   },
                   confirmationButton: function () {
