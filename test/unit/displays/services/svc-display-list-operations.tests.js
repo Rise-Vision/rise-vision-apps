@@ -23,7 +23,7 @@ describe('service: DisplayListOperations:', function() {
   it('should exist',function(){
     expect(displayListOperations).to.be.ok;
     expect(displayListOperations.name).to.equal('Display');
-    expect(displayListOperations.operations).to.have.length(3);
+    expect(displayListOperations.operations).to.have.length(4);
     expect(displayListOperations.operations[2].name).to.equal('Delete');
     expect(displayListOperations.operations[2].actionCall).to.equal('deleteDisplayByObject');
     expect(displayListOperations.operations[2].requireRole).to.equal('da');

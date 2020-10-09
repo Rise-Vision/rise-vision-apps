@@ -48,6 +48,10 @@
       <div class="progress-bar" role="progressbar" aria-valuenow="{{listObject.operations.progress}}.0"
       aria-valuemin="0" aria-valuemax="100" ng-style="{ 'width': listObject.operations.progress + '%' }"></div>
     </div>
-    <p class="mb-0">{{listObject.operations.completedItemCount}} out of {{listObject.operations.totalItemCount}} {{listOperations.name | lowercase}}<span ng-show="listObject.operations.totalItemCount > 1">s</span> deleted.</p>
+    <p class="mb-0">
+      {{listObject.operations.completedItemCount}} out of {{listObject.operations.totalItemCount}} {{listOperations.name | lowercase}}
+      <span ng-show="listObject.operations.totalItemCount > 1">s</span>
+      {{listObject.operations.activeOperation | lowercase}}d.
+    </p>
   </div>
 </div>
