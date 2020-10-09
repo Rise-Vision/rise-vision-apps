@@ -43,25 +43,22 @@ describe('directive: batch-operations', function() {
   }));
 
   function compileDirective() {
-    element = $compile('<batch-operations list-object="listObject" list-operations="listOperations"></batch-operations>')($rootScope.$new());
+    element = $compile('<batch-operations list-object="listObject"></batch-operations>')($rootScope.$new());
     $rootScope.$digest();
     $scope = element.isolateScope();   
   }
 
   describe('batch-operations:', function () {
     beforeEach(function() {
-      $rootScope.listOperations = 'listOperations';
-
       compileDirective();
     });
 
     it('should compile', function() {
-      expect(element[0].outerHTML).to.equal('<batch-operations list-object="listObject" list-operations="listOperations" class="ng-scope ng-isolate-scope"><p>mock</p></batch-operations>');
+      expect(element[0].outerHTML).to.equal('<batch-operations list-object="listObject" class="ng-scope ng-isolate-scope"><p>mock</p></batch-operations>');
     });
 
     it('should initialize scope', function() {
       expect($scope.listObject).to.equal($rootScope.listObject);
-      expect($scope.listOperations).to.equal('listOperations');
     });
 
   });
@@ -70,7 +67,7 @@ describe('directive: batch-operations', function() {
     
     describe('requireRole:', function() {
       it('should filter out operations the user doesnt have access to', function() {
-        $rootScope.listOperations = {
+        $rootScope.listObject.batchOperations = {
           name: 'Items',
           operations: [{
             name: 'Operation1',
@@ -94,16 +91,16 @@ describe('directive: batch-operations', function() {
 
         userState.hasRole.should.have.been.calledTwice;
 
-        expect($scope.listOperations.operations).to.have.length(2);
-        expect($scope.listOperations.operations[0].name).to.equal('Operation1');
-        expect($scope.listOperations.operations[1].name).to.equal('Operation3');
+        expect($scope.listObject.batchOperations.operations).to.have.length(2);
+        expect($scope.listObject.batchOperations.operations[0].name).to.equal('Operation1');
+        expect($scope.listObject.batchOperations.operations[1].name).to.equal('Operation3');
       });
 
     });
 
     describe('_updateDeleteAction:', function() {
       it('should not update regular actions', function() {
-        $rootScope.listOperations = {
+        $rootScope.listObject.batchOperations = {
           name: 'Items',
           operations: [{
             name: 'Operation',
@@ -113,7 +110,7 @@ describe('directive: batch-operations', function() {
 
         compileDirective();        
 
-        expect($scope.listOperations.operations[0].actionCall).to.equal('actionCall');
+        expect($scope.listObject.batchOperations.operations[0].actionCall).to.equal('actionCall');
       });
       
       describe('Delete:', function() {
@@ -121,7 +118,7 @@ describe('directive: batch-operations', function() {
 
         beforeEach(function() {
           deleteAction = sinon.spy();
-          $rootScope.listOperations = {
+          $rootScope.listObject.batchOperations = {
             name: 'Items',
             operations: [{
               name: 'Delete',
@@ -134,11 +131,11 @@ describe('directive: batch-operations', function() {
         });
 
         it('should find and update delete operation', function() {
-          expect($scope.listOperations.operations[0].beforeBatchAction).to.be.a('function');
+          expect($scope.listObject.batchOperations.operations[0].beforeBatchAction).to.be.a('function');
         });
 
         it('should open confirmation modal', function() {
-          $scope.listOperations.operations[0].beforeBatchAction();
+          $scope.listObject.batchOperations.operations[0].beforeBatchAction();
 
           $modal.open.should.have.been.calledWithMatch({
             templateUrl: 'partials/common/bulk-delete-confirmation-modal.html',
@@ -153,7 +150,7 @@ describe('directive: batch-operations', function() {
         });
 
         it('should perform operation if user confirms', function(done) {
-          $scope.listOperations.operations[0].beforeBatchAction()
+          $scope.listObject.batchOperations.operations[0].beforeBatchAction()
             .then(function() {
               done();              
             });
@@ -166,14 +163,11 @@ describe('directive: batch-operations', function() {
 
   describe('detect navigation:', function() {
     beforeEach(function() {
-      $rootScope.listOperations = 'listOperations';
-      $rootScope.listObject = {
-        operations: {
-          activeOperation: {
-            name: 'Operation'
-          },
-          cancel: sinon.spy()
-        }
+      $rootScope.listObject.batchOperations = {
+        activeOperation: {
+          name: 'Operation'
+        },
+        cancel: sinon.spy()
       };
 
       compileDirective();
@@ -199,7 +193,7 @@ describe('directive: batch-operations', function() {
       });
 
       it('should not notify when changing URL if is no active operation',function(){
-        $scope.listObject.operations.activeOperation = null;
+        $scope.listObject.batchOperations.activeOperation = null;
 
         $rootScope.$broadcast('$stateChangeStart',{name:'newState'});
         $scope.$apply();
@@ -216,7 +210,7 @@ describe('directive: batch-operations', function() {
         $modal.open.should.have.been.called;
 
         setTimeout(function() {
-          $scope.listObject.operations.cancel.should.have.been.called;
+          $scope.listObject.batchOperations.cancel.should.have.been.called;
 
           $state.go.should.have.been.calledWith({name:'newState'}, undefined);
 
@@ -235,7 +229,7 @@ describe('directive: batch-operations', function() {
         $modal.open.should.have.been.called;
 
         setTimeout(function() {
-          $scope.listObject.operations.cancel.should.have.been.called;
+          $scope.listObject.batchOperations.cancel.should.have.been.called;
 
           $state.go.should.have.been.calledWith({name:'newState'}, undefined);
 
@@ -247,7 +241,7 @@ describe('directive: batch-operations', function() {
           $modal.open.should.have.been.calledOnce;
 
           setTimeout(function() {
-            $scope.listObject.operations.cancel.should.have.been.calledOnce;
+            $scope.listObject.batchOperations.cancel.should.have.been.calledOnce;
 
             $state.go.should.have.been.calledOnce;
 
@@ -268,7 +262,7 @@ describe('directive: batch-operations', function() {
         $modal.open.should.have.been.called;
 
         setTimeout(function() {
-          $scope.listObject.operations.cancel.should.not.have.been.called;
+          $scope.listObject.batchOperations.cancel.should.not.have.been.called;
 
           $state.go.should.not.have.been.called;
 
@@ -289,7 +283,7 @@ describe('directive: batch-operations', function() {
       });
 
       it('should not notify unsaved changes when closing window if there is no active operation',function(){    
-        $scope.listObject.operations.activeOperation = null;
+        $scope.listObject.batchOperations.activeOperation = null;
 
         var result = $window.onbeforeunload();
         expect(result).to.be.undefined;
