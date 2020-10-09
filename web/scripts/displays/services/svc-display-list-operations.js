@@ -36,10 +36,11 @@ angular.module('risevision.displays.services')
                   'Please select some unlicensed displays to license.',
                   null, 
                   'madero-style centered-modal', 
-                  'partials/template-editor/message-box.html');
+                  'partials/template-editor/message-box.html',
+                  'sm');
                 return $q.reject();
               } else if (playerLicenseFactory.getProAvailableLicenseCount() < selected.length) {
-                plansFactory.confirmAndPurchase(' to the selected displays');
+                plansFactory.confirmAndPurchase();
                 return $q.reject();
               } else {
                 return confirmModal(
