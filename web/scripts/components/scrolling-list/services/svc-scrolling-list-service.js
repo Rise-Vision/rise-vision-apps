@@ -173,18 +173,17 @@ angular.module('risevision.common.components.scrolling-list')
           operation.actionCall = function() {
             var selected = factory.getSelected();
 
+            if (!selected.length) {
+              return;
+            }
+
             if (operation.filter) {
               selected = _filterSelected(selected, operation.filter);
             }
 
-
             var batchSelected = selected;
             if (operation.groupBy) {
               batchSelected = _groupBySelected(selected, operation.groupBy);
-            }
-
-            if (!selected.length) {
-              return;
             }
 
             _clearMessages();
