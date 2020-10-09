@@ -56,7 +56,8 @@ angular.module('risevision.displays.services')
             groupBy: 'companyId',
             filter: {
               playerProAuthorized: false
-            }
+            },
+            requireRole: 'da'
           }]
         };
 
