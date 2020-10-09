@@ -11,6 +11,7 @@ angular.module('risevision.common.components.scrolling-list')
 
         var _reset = function() {
           queue = [];
+          svc.hasErrors = false;
 
           svc.activeOperation = '';
           svc.progress = 0;
@@ -41,6 +42,9 @@ angular.module('risevision.common.components.scrolling-list')
 
           var _executeOperation = function (item) {
             method(item)
+              .catch(function(e) {
+                svc.hasErrors = true;
+              })
               .finally(function() {
                 _.remove(queue, function(listItem) {
                   return listItem === item;
@@ -52,7 +56,11 @@ angular.module('risevision.common.components.scrolling-list')
                 if (cancelled) {
                   return;
                 } else if (svc.totalItemCount === svc.completedItemCount) {
-                  deferred.resolve();
+                  if (svc.hasErrors) {
+                    deferred.reject();
+                  } else {
+                    deferred.resolve();
+                  }
 
                   $timeout(_reset, 2000);
                 } else if (queue.length < svc.queueLimit && currItem < items.length) {
@@ -72,7 +80,7 @@ angular.module('risevision.common.components.scrolling-list')
 
             _reset();
 
-            deferred.resolve();
+            deferred.reject('cancelled');
           };
 
           _loadBatch();
