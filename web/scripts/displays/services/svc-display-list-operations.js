@@ -1,25 +1,18 @@
 'use strict';
 
 angular.module('risevision.displays.services')
-  .service('DisplayListOperations', ['displayFactory', 'enableCompanyProduct', 'playerLicenseFactory',
-    'PLAYER_PRO_PRODUCT_CODE',
-    function (displayFactory, enableCompanyProduct, playerLicenseFactory, PLAYER_PRO_PRODUCT_CODE) {
+  .service('DisplayListOperations', ['$q', 'displayFactory', 'enableCompanyProduct', 'playerLicenseFactory',
+    'plansFactory', 'confirmModal', 'messageBox', 'PLAYER_PRO_PRODUCT_CODE',
+    function ($q, displayFactory, enableCompanyProduct, playerLicenseFactory, plansFactory,
+      confirmModal, messageBox, PLAYER_PRO_PRODUCT_CODE) {
       return function () {
         var _licenseDisplays = function(companyId, displays) {
-          var apiParams = {};
+          var displayIds = _.map(displays, 'id');
 
-          _.each(displays, function(display) {
-            var playerProAuthorized = display.playerProAuthorized;
-
-            apiParams[display.id] = !playerProAuthorized;                
-          });
-
-          return enableCompanyProduct(companyId, PLAYER_PRO_PRODUCT_CODE, apiParams)
-            .then(function () {
+          return playerLicenseFactory.licenseDisplaysByCompanyId(companyId, displayIds)
+            .then(function() {
               _.each(displays, function(display) {
-                display.playerProAuthorized = !display.playerProAuthorized;
-
-                playerLicenseFactory.toggleDisplayLicenseLocal(display.playerProAuthorized);
+                display.playerProAuthorized = true;
               });
             });
         };
@@ -34,18 +27,31 @@ angular.module('risevision.displays.services')
           {
             name: 'License',
             actionCall: function(selected) {
-              _licenseDisplays(selected.companyId, selected.items);
+              return _licenseDisplays(selected.companyId, selected.items);
             },
-            // TODO: Check selected Displays and show appropriate modals:
-            // beforeBatchAction: function(selected) {
-            //   if (!selected.length) {
-            //     You did not select any unlicensed displays
-            //   } else if (not enough licenses) {
-            //     You do not have sufficient licenses; purchase more
-            //   } else {
-            //     You are licensing displays; please confirm
-            //   }
-            // },
+            beforeBatchAction: function(selected) {
+              if (!selected.length) {
+                messageBox(
+                  'Already licensed!',
+                  'Please select some unlicensed displays to license.',
+                  null, 
+                  'madero-style centered-modal', 
+                  'partials/template-editor/message-box.html');
+                return $q.reject();
+              } else if (playerLicenseFactory.getProAvailableLicenseCount() < selected.length) {
+                plansFactory.confirmAndPurchase(' to the selected displays');
+                return $q.reject();
+              } else {
+                return confirmModal(
+                  'Assign license?',
+                  'Do you want to assign licenses to the selected displays?',
+                  'Yes',
+                  'No',
+                  'madero-style centered-modal',
+                  'partials/components/confirm-modal/madero-confirm-modal.html',
+                  'sm');
+              }
+            },
             groupBy: 'companyId',
             filter: {
               playerProAuthorized: false

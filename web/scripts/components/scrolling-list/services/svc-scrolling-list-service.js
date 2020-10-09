@@ -175,10 +175,12 @@ angular.module('risevision.common.components.scrolling-list')
 
             if (operation.filter) {
               selected = _filterSelected(selected, operation.filter);
-            }            
+            }
 
+
+            var batchSelected = selected;
             if (operation.groupBy) {
-              selected = _groupBySelected(selected, operation.groupBy);
+              batchSelected = _groupBySelected(selected, operation.groupBy);
             }
 
             if (!selected.length) {
@@ -191,10 +193,10 @@ angular.module('risevision.common.components.scrolling-list')
             if (operation.beforeBatchAction) {
               batchAction = operation.beforeBatchAction(selected)
                 .then(function() {
-                  return factory.operations.batch(selected, execute, operation.name);
+                  return factory.operations.batch(batchSelected, execute, operation.name);
                 });
             } else {
-              batchAction = factory.operations.batch(selected, execute, operation.name);
+              batchAction = factory.operations.batch(batchSelected, execute, operation.name);
             }
 
             return batchAction.then(function() {
