@@ -83,6 +83,24 @@ angular.module('risevision.common.components.scrolling-list')
           });
         };
 
+        var _filterSelected = function (selected, filter) {
+          return _.filter(selected, filter);
+        };
+
+        var _groupBySelected = function (selected, groupBy) {
+          return _.chain(selected)
+            .groupBy(groupBy)
+            .map(function(value, key) {
+              var result = {};
+
+              result[groupBy] = key;
+              result.items = value;
+
+              return result;
+            })
+            .value();
+        };
+
         var _allSelected = function () {
           var deselectedIndex = _.findIndex(factory.items.list, function (item) {
             return !item.selected;
@@ -142,7 +160,7 @@ angular.module('risevision.common.components.scrolling-list')
           
                 if (!factory.errorMessage) {
                   factory.errorMessage = 'Something went wrong.';
-                  factory.apiError = 'We weren’t able to ' + operation.name.toLowerCase() + ' one or more of the selected ' + 
+                  factory.apiError = 'We weren\'t able to ' + operation.name.toLowerCase() + ' one or more of the selected ' + 
                     factory.search.name.toLowerCase() + '. Please try again.';                  
                 }
               });
@@ -154,6 +172,14 @@ angular.module('risevision.common.components.scrolling-list')
 
           operation.actionCall = function() {
             var selected = factory.getSelected();
+
+            if (operation.filter) {
+              selected = _filterSelected(selected, operation.filter);
+            }            
+
+            if (operation.groupBy) {
+              selected = _groupBySelected(selected, operation.groupBy);
+            }
 
             if (!selected.length) {
               return;
