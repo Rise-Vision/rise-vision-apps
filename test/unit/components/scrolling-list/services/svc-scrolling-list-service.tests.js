@@ -63,7 +63,7 @@ xdescribe("service: ScrollingListService:", function() {
     expect(scrollingListService.selectAll).to.be.a("function");
     expect(scrollingListService.deselectAll).to.be.a("function");
 
-    expect(scrollingListService.operations).to.be.ok;
+    expect(scrollingListService.batchOperations).to.be.ok;
   });
 
   it("should init the service objects",function(){
@@ -440,7 +440,7 @@ xdescribe("service: ScrollingListService:", function() {
     it('should not call batch if no items are selected', function() {
       listOperations.operations[0].actionCall();
 
-      scrollingListService.operations.batch.should.not.have.been.called;
+      scrollingListService.batchOperations.batch.should.not.have.been.called;
     });
 
     it('should call batch if items are selected', function() {
@@ -449,15 +449,15 @@ xdescribe("service: ScrollingListService:", function() {
 
       listOperations.operations[0].actionCall();
 
-      scrollingListService.operations.batch.should.have.been.calledWith([
+      scrollingListService.batchOperations.batch.should.have.been.calledWith([
         scrollingListService.items.list[0],
         scrollingListService.items.list[5]
-      ], sinon.match.func, 'Delete');
+      ], sinon.match.func, listOperations.operations[0]);
     });
 
     it('should remove items if operation is delete', function(done) {
       var deferred = Q.defer();
-      scrollingListService.operations.batch.returns(deferred.promise);
+      scrollingListService.batchOperations.batch.returns(deferred.promise);
 
       scrollingListService.select(scrollingListService.items.list[0]);
       scrollingListService.select(scrollingListService.items.list[5]);
@@ -465,8 +465,8 @@ xdescribe("service: ScrollingListService:", function() {
       listOperations.operations[0].actionCall();
 
       // Resolve the batch execute function for both items
-      scrollingListService.operations.batch.getCall(0).args[1](scrollingListService.items.list[5]);
-      scrollingListService.operations.batch.getCall(0).args[1](scrollingListService.items.list[0]);
+      scrollingListService.batchOperations.batch.getCall(0).args[1](scrollingListService.items.list[5]);
+      scrollingListService.batchOperations.batch.getCall(0).args[1](scrollingListService.items.list[0]);
 
       setTimeout(function() {
         expect(scrollingListService.items.list).to.have.length(38);
@@ -477,7 +477,7 @@ xdescribe("service: ScrollingListService:", function() {
 
     it('should not remove for other operations', function(done) {
       var deferred = Q.defer();
-      scrollingListService.operations.batch.returns(deferred.promise);
+      scrollingListService.batchOperations.batch.returns(deferred.promise);
 
       scrollingListService.select(scrollingListService.items.list[0]);
       scrollingListService.select(scrollingListService.items.list[5]);
@@ -485,14 +485,68 @@ xdescribe("service: ScrollingListService:", function() {
       listOperations.operations[1].actionCall();
 
       // Resolve the batch execute function for both items
-      scrollingListService.operations.batch.getCall(0).args[1](scrollingListService.items.list[5]);
-      scrollingListService.operations.batch.getCall(0).args[1](scrollingListService.items.list[0]);
+      scrollingListService.batchOperations.batch.getCall(0).args[1](scrollingListService.items.list[5]);
+      scrollingListService.batchOperations.batch.getCall(0).args[1](scrollingListService.items.list[0]);
 
       setTimeout(function() {
         expect(scrollingListService.items.list).to.have.length(40);
 
         done();
       }, 10);
+    });
+
+    describe('filter:', function() {
+      beforeEach(function() {
+        for (var i = 0; i < 5; i++) {
+          scrollingListService.select(scrollingListService.items.list[i]);
+        }
+      });
+
+      it('should filter results', function() {
+        listOperations.operations[1].filter = {
+          filtered: true
+        };
+        scrollingListService.items.list[2].filtered = true;
+        scrollingListService.items.list[4].filtered = true;
+
+        listOperations.operations[1].actionCall();
+
+        expect(scrollingListService.batchOperations.batch.getCall(0).args[0]).to.deep.equal([
+          scrollingListService.items.list[2],
+          scrollingListService.items.list[4]
+        ]);
+      });
+
+    });
+
+    describe('groupBy:', function() {
+      beforeEach(function() {
+        for (var i = 0; i < 5; i++) {
+          scrollingListService.select(scrollingListService.items.list[i]);
+          scrollingListService.items.list[i].group = i % 2;
+        }
+      });
+
+      it('should group results', function() {
+        listOperations.operations[1].groupBy = 'group';
+
+        listOperations.operations[1].actionCall();
+
+        expect(scrollingListService.batchOperations.batch.getCall(0).args[0]).to.have.length(2);
+        expect(scrollingListService.batchOperations.batch.getCall(0).args[0][0].group).to.equal('0');
+        expect(scrollingListService.batchOperations.batch.getCall(0).args[0][1].group).to.equal('1');
+
+        expect(scrollingListService.batchOperations.batch.getCall(0).args[0][0].items).to.deep.equal([
+          scrollingListService.items.list[0],
+          scrollingListService.items.list[2],
+          scrollingListService.items.list[4]
+        ]);
+        expect(scrollingListService.batchOperations.batch.getCall(0).args[0][1].items).to.deep.equal([
+          scrollingListService.items.list[1],
+          scrollingListService.items.list[3]
+        ]);
+      });
+
     });
 
     describe('beforeBatchAction:', function() {
@@ -518,7 +572,7 @@ xdescribe("service: ScrollingListService:", function() {
         listOperations.operations[0].actionCall();
 
         setTimeout(function() {
-          scrollingListService.operations.batch.should.have.been.called;
+          scrollingListService.batchOperations.batch.should.have.been.called;
 
           done();
         }, 10);
@@ -532,7 +586,7 @@ xdescribe("service: ScrollingListService:", function() {
             done('error');
           })
           .catch(function() {
-            scrollingListService.operations.batch.should.not.have.been.called;
+            scrollingListService.batchOperations.batch.should.not.have.been.called;
 
             done();
           }, 10);
@@ -558,12 +612,12 @@ xdescribe("service: ScrollingListService:", function() {
 
       it('should not populate error fields if calls were successful', function(done) {
         var deferred = Q.defer();
-        scrollingListService.operations.batch.returns(deferred.promise);
+        scrollingListService.batchOperations.batch.returns(deferred.promise);
 
         listOperations.operations[1].actionCall();
 
         // Resolve the batch execute function
-        scrollingListService.operations.batch.getCall(0).args[1](scrollingListService.items.list[0]);
+        scrollingListService.batchOperations.batch.getCall(0).args[1](scrollingListService.items.list[0]);
 
         setTimeout(function() {
           // resolve the batch promise
@@ -581,13 +635,13 @@ xdescribe("service: ScrollingListService:", function() {
 
       it('should handle api errors', function(done) {
         var deferred = Q.defer();
-        scrollingListService.operations.batch.returns(deferred.promise);
+        scrollingListService.batchOperations.batch.returns(deferred.promise);
 
         actionCall2.returns(Q.reject());
         listOperations.operations[1].actionCall();
 
         // Resolve the batch execute function
-        scrollingListService.operations.batch.getCall(0).args[1](scrollingListService.items.list[0]);
+        scrollingListService.batchOperations.batch.getCall(0).args[1](scrollingListService.items.list[0]);
 
         setTimeout(function() {
           // resolve the batch promise
@@ -605,7 +659,7 @@ xdescribe("service: ScrollingListService:", function() {
 
       it('should not overwrite existing error messages', function(done) {
         var deferred = Q.defer();
-        scrollingListService.operations.batch.returns(deferred.promise);
+        scrollingListService.batchOperations.batch.returns(deferred.promise);
 
         actionCall2.returns(Q.reject());
         listOperations.operations[1].actionCall();
@@ -614,7 +668,7 @@ xdescribe("service: ScrollingListService:", function() {
         scrollingListService.apiError = 'existingError';
 
         // Resolve the batch execute function
-        scrollingListService.operations.batch.getCall(0).args[1](scrollingListService.items.list[0]);
+        scrollingListService.batchOperations.batch.getCall(0).args[1](scrollingListService.items.list[0]);
 
         setTimeout(function() {
           // resolve the batch promise
@@ -662,13 +716,13 @@ xdescribe("service: ScrollingListService:", function() {
 
       it('should not refresh the list on error', function(done) {
         var deferred = Q.defer();
-        scrollingListService.operations.batch.returns(deferred.promise);
+        scrollingListService.batchOperations.batch.returns(deferred.promise);
 
         actionCall1.returns(Q.reject());
         listOperations.operations[0].actionCall();
 
         // Resolve the batch execute function
-        scrollingListService.operations.batch.getCall(0).args[1](scrollingListService.items.list[0]);
+        scrollingListService.batchOperations.batch.getCall(0).args[1](scrollingListService.items.list[0]);
 
         setTimeout(function() {
           // resolve the batch promise

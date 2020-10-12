@@ -8,7 +8,7 @@ angular.module('risevision.common.components.scrolling-list')
         var factory = {};
 
         factory.items = new BaseList(DB_MAX_COUNT);
-        factory.operations = new BatchOperations();
+        factory.batchOperations = new BatchOperations(listOperations);
 
         factory.search = search ? search : {};
         _.defaults(factory.search, {
@@ -193,10 +193,10 @@ angular.module('risevision.common.components.scrolling-list')
             if (operation.beforeBatchAction && !skipBeforeBatchAction) {
               batchAction = operation.beforeBatchAction(selected)
                 .then(function() {
-                  return factory.operations.batch(batchSelected, execute, operation.name);
+                  return factory.batchOperations.batch(batchSelected, execute, operation);
                 });
             } else {
-              batchAction = factory.operations.batch(batchSelected, execute, operation.name);
+              batchAction = factory.batchOperations.batch(batchSelected, execute, operation);
             }
 
             return batchAction.then(function() {
