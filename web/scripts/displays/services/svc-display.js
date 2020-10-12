@@ -82,39 +82,21 @@
             coreAPILoader().then(function (coreApi) {
                 return coreApi.display.list(obj);
               })
-              .then(onGetListSuccess)
+              .then(function(resp) {
+                var result = resp.result;
+
+                //backwards compatibility with lastConnectionTime field
+                angular.forEach(result.items, function (item) {
+                  item.lastConnectionTime = item.onlineStatus === true ? Date.now() : item.lastActivityDate ? new Date(item.lastActivityDate) : '';
+                });
+
+                $rootScope.$broadcast('displaysLoaded', result.items);
+                displayActivationTracker(result.items);
+                deferred.resolve(result);
+              })
               .catch(onFailure);
 
             return deferred.promise;
-
-            function onGetListSuccess(resp) {
-              var result = resp.result;
-
-              //eager digest
-              deferred.resolve(result);
-
-              if (result.items) {
-                var displayIds = result.items.map(function (item) {
-                  return item.id;
-                });
-
-                service.statusLoading = true;
-
-                displayStatusFactory.getDisplayStatus(displayIds).then(function (statuses) {
-                    _mergeConnectionStatuses(result.items, statuses);
-
-                    $rootScope.$broadcast('displaysLoaded', result.items);
-                  })
-                  .catch(function (e) {
-                    console.error('Failed to load status of displays.', e);
-                  })
-                  .finally(function () {
-                    displayActivationTracker(result.items);
-
-                    service.statusLoading = false;
-                  });
-              }
-            }
 
             function onFailure(e) {
               console.error('Failed to get list of displays.', e);
