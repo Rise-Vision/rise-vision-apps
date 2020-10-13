@@ -429,16 +429,16 @@ describe("service: ScrollingListService:", function() {
       setTimeout(done, 10);
     });
 
-    it('should call update actions', function() {
-      expect(listOperations.operations[0].actionCall).to.be.a('function');
-      expect(listOperations.operations[1].actionCall).to.be.a('function');
+    it('should call create onClick actions', function() {
+      expect(listOperations.operations[0].onClick).to.be.a('function');
+      expect(listOperations.operations[1].onClick).to.be.a('function');
 
-      expect(listOperations.operations[0].actionCall).to.not.equal(actionCall1);
-      expect(listOperations.operations[1].actionCall).to.not.equal(actionCall2);
+      expect(listOperations.operations[0].onClick).to.not.equal(actionCall1);
+      expect(listOperations.operations[1].onClick).to.not.equal(actionCall2);
     });
 
     it('should not call batch if no items are selected', function() {
-      listOperations.operations[0].actionCall();
+      listOperations.operations[0].onClick();
 
       scrollingListService.batchOperations.batch.should.not.have.been.called;
     });
@@ -447,7 +447,7 @@ describe("service: ScrollingListService:", function() {
       scrollingListService.select(scrollingListService.items.list[0]);
       scrollingListService.select(scrollingListService.items.list[5]);
 
-      listOperations.operations[0].actionCall();
+      listOperations.operations[0].onClick();
 
       scrollingListService.batchOperations.batch.should.have.been.calledWith([
         scrollingListService.items.list[0],
@@ -462,7 +462,7 @@ describe("service: ScrollingListService:", function() {
       scrollingListService.select(scrollingListService.items.list[0]);
       scrollingListService.select(scrollingListService.items.list[5]);
 
-      listOperations.operations[0].actionCall();
+      listOperations.operations[0].onClick();
 
       // Resolve the batch execute function for both items
       scrollingListService.batchOperations.batch.getCall(0).args[1](scrollingListService.items.list[5]);
@@ -482,7 +482,7 @@ describe("service: ScrollingListService:", function() {
       scrollingListService.select(scrollingListService.items.list[0]);
       scrollingListService.select(scrollingListService.items.list[5]);
 
-      listOperations.operations[1].actionCall();
+      listOperations.operations[1].onClick();
 
       // Resolve the batch execute function for both items
       scrollingListService.batchOperations.batch.getCall(0).args[1](scrollingListService.items.list[5]);
@@ -509,7 +509,7 @@ describe("service: ScrollingListService:", function() {
         scrollingListService.items.list[2].filtered = true;
         scrollingListService.items.list[4].filtered = true;
 
-        listOperations.operations[1].actionCall();
+        listOperations.operations[1].onClick();
 
         expect(scrollingListService.batchOperations.batch.getCall(0).args[0]).to.deep.equal([
           scrollingListService.items.list[2],
@@ -530,7 +530,7 @@ describe("service: ScrollingListService:", function() {
       it('should group results', function() {
         listOperations.operations[1].groupBy = 'group';
 
-        listOperations.operations[1].actionCall();
+        listOperations.operations[1].onClick();
 
         expect(scrollingListService.batchOperations.batch.getCall(0).args[0]).to.have.length(2);
         expect(scrollingListService.batchOperations.batch.getCall(0).args[0][0].group).to.equal('0');
@@ -558,7 +558,7 @@ describe("service: ScrollingListService:", function() {
       it('should call action if present', function() {
         listOperations.operations[0].beforeBatchAction = sinon.stub().returns(Q.resolve());
 
-        listOperations.operations[0].actionCall();
+        listOperations.operations[0].onClick();
 
         listOperations.operations[0].beforeBatchAction.should.have.been.calledWith([
           scrollingListService.items.list[0], 
@@ -569,7 +569,7 @@ describe("service: ScrollingListService:", function() {
       it('should perform batch if action resolves', function(done) {
         listOperations.operations[0].beforeBatchAction = sinon.stub().returns(Q.resolve());
 
-        listOperations.operations[0].actionCall();
+        listOperations.operations[0].onClick();
 
         setTimeout(function() {
           scrollingListService.batchOperations.batch.should.have.been.called;
@@ -581,7 +581,7 @@ describe("service: ScrollingListService:", function() {
       it('should not perform batch if action rejects', function(done) {
         listOperations.operations[0].beforeBatchAction = sinon.stub().returns(Q.reject());
 
-        listOperations.operations[0].actionCall()
+        listOperations.operations[0].onClick()
           .then(function() {
             done('error');
           })
@@ -590,6 +590,14 @@ describe("service: ScrollingListService:", function() {
 
             done();
           }, 10);
+      });
+
+      it('should skip beforeBatchAction if ski flag is true', function() {
+        listOperations.operations[0].beforeBatchAction = sinon.stub().returns(Q.resolve());
+
+        listOperations.operations[0].onClick(true);
+
+        listOperations.operations[0].beforeBatchAction.should.not.have.been.called;
       });
 
     });
@@ -604,7 +612,7 @@ describe("service: ScrollingListService:", function() {
         scrollingListService.errorMessage = "errorMessage";
         scrollingListService.apiError = "apiError";
 
-        listOperations.operations[1].actionCall();
+        listOperations.operations[1].onClick();
         
         expect(scrollingListService.errorMessage).to.not.be.ok;
         expect(scrollingListService.apiError).to.not.be.ok;
@@ -614,7 +622,7 @@ describe("service: ScrollingListService:", function() {
         var deferred = Q.defer();
         scrollingListService.batchOperations.batch.returns(deferred.promise);
 
-        listOperations.operations[1].actionCall();
+        listOperations.operations[1].onClick();
 
         // Resolve the batch execute function
         scrollingListService.batchOperations.batch.getCall(0).args[1](scrollingListService.items.list[0]);
@@ -638,7 +646,7 @@ describe("service: ScrollingListService:", function() {
         scrollingListService.batchOperations.batch.returns(deferred.promise);
 
         actionCall2.returns(Q.reject());
-        listOperations.operations[1].actionCall();
+        listOperations.operations[1].onClick();
 
         // Resolve the batch execute function
         scrollingListService.batchOperations.batch.getCall(0).args[1](scrollingListService.items.list[0]);
@@ -662,7 +670,7 @@ describe("service: ScrollingListService:", function() {
         scrollingListService.batchOperations.batch.returns(deferred.promise);
 
         actionCall2.returns(Q.reject());
-        listOperations.operations[1].actionCall();
+        listOperations.operations[1].onClick();
 
         scrollingListService.errorMessage = 'existingMessage';
         scrollingListService.apiError = 'existingError';
@@ -695,7 +703,7 @@ describe("service: ScrollingListService:", function() {
       });
 
       it('should not refresh items for regular operations', function(done) {
-        listOperations.operations[1].actionCall();
+        listOperations.operations[1].onClick();
 
         setTimeout(function() {
           scrollingListService.doSearch.should.not.have.been.called;
@@ -705,7 +713,7 @@ describe("service: ScrollingListService:", function() {
       });
 
       it('should refresh items if Delete flag is set', function(done) {
-        listOperations.operations[0].actionCall();
+        listOperations.operations[0].onClick();
 
         setTimeout(function() {
           scrollingListService.doSearch.should.have.been.called;
@@ -719,7 +727,7 @@ describe("service: ScrollingListService:", function() {
         scrollingListService.batchOperations.batch.returns(deferred.promise);
 
         actionCall1.returns(Q.reject());
-        listOperations.operations[0].actionCall();
+        listOperations.operations[0].onClick();
 
         // Resolve the batch execute function
         scrollingListService.batchOperations.batch.getCall(0).args[1](scrollingListService.items.list[0]);

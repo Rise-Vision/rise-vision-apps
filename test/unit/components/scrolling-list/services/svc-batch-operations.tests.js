@@ -139,6 +139,7 @@ describe("service: BatchOperations:", function() {
         expect(batchOperations.progress).to.equal(100);
         expect(batchOperations.totalItemCount).to.equal(8);
         expect(batchOperations.completedItemCount).to.equal(8);
+        expect(batchOperations.hasErrors).to.be.false;
 
         done();
       });
@@ -181,6 +182,19 @@ describe("service: BatchOperations:", function() {
       }, 10);
     });
 
+    it('should reject if an operation fails', function(done) {
+      method.returns(Q.resolve());
+      method.onCall(1).returns(Q.reject());
+
+      batchOperations.batch(items, method, 'operationName').catch(function() {
+        expect(batchOperations.hasErrors).to.be.true;
+        expect(batchOperations.progress).to.equal(100);
+        expect(batchOperations.totalItemCount).to.equal(8);
+        expect(batchOperations.completedItemCount).to.equal(8);
+        done();
+      });
+    });
+
   });
 
   describe('cancel:', function() {
@@ -199,12 +213,13 @@ describe("service: BatchOperations:", function() {
       }, 10);
     });
 
-    it('should resolve and reset activeOperation on cancel', function(done) {
+    it('should reject and reset activeOperation on cancel', function(done) {
       method.onCall(0).returns(Q.resolve());
       method.onCall(1).returns(Q.resolve());
       method.onCall(2).returns(Q.resolve());
 
-      batchOperations.batch(items, method, 'operationName').then(function() {
+      batchOperations.batch(items, method, 'operationName').catch(function(reason) {
+        expect(reason).to.equal('cancelled');
         expect(method.callCount).to.equal(3);
 
         $timeout.verifyNoPendingTasks();

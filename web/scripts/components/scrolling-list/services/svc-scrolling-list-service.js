@@ -163,6 +163,7 @@ angular.module('risevision.common.components.scrolling-list')
                   factory.apiError = 'We weren\'t able to ' + operation.name.toLowerCase() + ' one or more of the selected ' + 
                     factory.search.name.toLowerCase() + '. Please try again.';                  
                 }
+                throw e;
               });
           };
         };
@@ -170,7 +171,7 @@ angular.module('risevision.common.components.scrolling-list')
         var _updateSelectedAction = function(operation) {
           var execute = _getExecuteAction(operation);
 
-          operation.actionCall = function() {
+          operation.onClick = function(skipBeforeBatchAction) {
             var selected = factory.getSelected();
 
             if (!selected.length) {
@@ -189,7 +190,7 @@ angular.module('risevision.common.components.scrolling-list')
             _clearMessages();
 
             var batchAction;
-            if (operation.beforeBatchAction) {
+            if (operation.beforeBatchAction && !skipBeforeBatchAction) {
               batchAction = operation.beforeBatchAction(selected)
                 .then(function() {
                   return factory.batchOperations.batch(batchSelected, execute, operation);

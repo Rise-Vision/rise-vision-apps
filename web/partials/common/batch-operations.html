@@ -25,7 +25,7 @@
                 </div>
               </li>
               <li ng-repeat="operation in listObject.batchOperations.operations">
-                <button type="button" class="btn-dropdown u_clickable" ng-click="operation.actionCall()">
+                <button type="button" class="btn-dropdown u_clickable" ng-click="operation.onClick()">
                   <span>{{operation.name}}</span>
                 </button>
               </li>
