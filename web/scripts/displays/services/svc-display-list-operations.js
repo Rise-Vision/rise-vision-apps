@@ -93,6 +93,14 @@ angular.module('risevision.displays.services')
           return _confirmDisplayUpdate(selectedItems, 'Set Address', 
             'partials/displays/edit-address.html', {
               useCompanyAddress: false,
+              addressDescription: '',
+              street: '',
+              unit: '',
+              city: '',
+              country: '',
+              province: '',
+              postalCode: '',
+              timeZoneOffset: null
           });
         };
 
