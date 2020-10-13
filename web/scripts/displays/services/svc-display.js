@@ -87,21 +87,19 @@
 
                 //backwards compatibility with lastConnectionTime field
                 angular.forEach(result.items, function (item) {
-                  item.lastConnectionTime = item.onlineStatus === true ? Date.now() : item.lastActivityDate ? new Date(item.lastActivityDate) : '';
+                  item.lastConnectionTime = item.onlineStatus === true ? Date.now() : (item.lastActivityDate ? new Date(item.lastActivityDate) : '');
                 });
 
                 $rootScope.$broadcast('displaysLoaded', result.items);
                 displayActivationTracker(result.items);
                 deferred.resolve(result);
               })
-              .catch(onFailure);
+              .catch(function(e) {
+                console.error('Failed to get list of displays.', e);
+                deferred.reject(e);
+              });
 
             return deferred.promise;
-
-            function onFailure(e) {
-              console.error('Failed to get list of displays.', e);
-              deferred.reject(e);
-            }
           },
           get: function (displayId) {
             var deferred = $q.defer();
