@@ -16,8 +16,8 @@ var DisplayManagePage = function() {
   var displayRebootCheckbox = element(by.id('restartEnabled'));
   var viewScheduleLink = element(by.id('viewSchedule'));
 
-  var displayCountrySelect = element(by.model('factory.display.country'));  
-  var displayTimeZoneSelect = element(by.model('factory.display.timeZoneOffset'));  
+  var displayCountrySelect = element(by.model('display.country'));  
+  var displayTimeZoneSelect = element(by.model('display.timeZoneOffset'));  
 
   var saveButton = element(by.id('saveButton'));
   var cancelButton = element(by.id('cancelButton'));
