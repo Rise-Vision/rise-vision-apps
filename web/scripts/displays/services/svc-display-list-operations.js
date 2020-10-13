@@ -29,7 +29,7 @@ angular.module('risevision.displays.services')
             var baseMessage = notAuthorized.length > 1 ? 
               notAuthorized.length + ' of your selected displays are not licensed and to perform this action they need to be.' :
               '1 of your selected displays is not licensed and to perform this action it needs to be.';
-            baseMessage += ' You have '+ availableLicenses +' available license' + (availableLicenses > 1 ? 's' : '');
+            baseMessage += ' You have '+ availableLicenses +' available license' + (availableLicenses !== 1 ? 's' : '');
 
             if (availableLicenses >= notAuthorized.length) {
               return confirmModal('Almost there!', 

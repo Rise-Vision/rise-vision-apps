@@ -46,8 +46,9 @@ describe('service: playerActionsFactory:', function() {
 
   }));
   var playerActionsFactory, confirmModal, updateDisplay, functionCalled,
-  trackerCalled, processErrorCode, displayFactory;
+  trackerCalled, processErrorCode, displayFactory, display;
   beforeEach(function(){
+    display = {id: '1234', name: 'Display 1'};
     updateDisplay = true;
     functionCalled = undefined;
     trackerCalled = undefined;
@@ -176,6 +177,54 @@ describe('service: playerActionsFactory:', function() {
         expect(playerActionsFactory.controlsError).to.not.be.ok;
         done();
       }, 10);
+    });
+  });
+
+  describe('restartByObject:',function(){
+    it('should restart the display',function(done){
+      updateDisplay = true;
+      
+      playerActionsFactory.restartByObject(display).then(function(){
+        expect(functionCalled).to.equal('restart');
+        expect(trackerCalled).to.equal('Display Restarted');
+
+        done();
+      });
+    });
+    
+    it('should reject on failure',function(done){
+      updateDisplay = false;
+      
+      playerActionsFactory.restartByObject(display).catch(function(){
+        expect(functionCalled).to.equal('restart');
+        expect(trackerCalled).to.not.be.ok;
+
+        done();
+      });
+    });
+  });
+
+  describe('rebootByObject:',function(){
+    it('should reboot the display',function(done){
+      updateDisplay = true;
+      
+      playerActionsFactory.rebootByObject(display).then(function(){
+        expect(functionCalled).to.equal('reboot');
+        expect(trackerCalled).to.equal('Display Rebooted');
+
+        done();
+      });
+    });
+    
+    it('should reject on failure',function(done){
+      updateDisplay = false;
+      
+      playerActionsFactory.rebootByObject(display).catch(function(){
+        expect(functionCalled).to.equal('reboot');
+        expect(trackerCalled).to.not.be.ok;
+
+        done();
+      });
     });
   });
 
