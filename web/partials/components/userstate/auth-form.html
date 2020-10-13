@@ -66,8 +66,8 @@
   <div class="u_margin-sm-top">
 
     <div class="form-group" ng-class="{'has-error': (forms.loginForm.$submitted && forms.loginForm.username.$invalid)}" show-errors>
-      <label class="control-label">Work Email</label>
-      <input type="email" class="form-control" placeholder="Enter Your Work Email Address" id="username" name="username" ng-model="credentials.username" required focus-me="true" autocomplete="email">
+      <label class="control-label">Work Email:</label>
+      <input type="email" class="form-control" placeholder="example@email.com" id="username" name="username" ng-model="credentials.username" required focus-me="true" autocomplete="email">
       <p class="text-danger" ng-show="forms.loginForm.$submitted && forms.loginForm.username.$invalid">
         Please enter an Email
       </p>
@@ -76,7 +76,7 @@
     <password-input 
       name="password"
       ng-model="credentials.password" 
-      label="{{isSignUp ? 'Create Password' : 'Password'}}"
+      label="Password:"
       show-password-meter="isSignUp" minlength="{{ isSignUp ? 8 : 0}}" required>
     </password-input>
 

@@ -249,7 +249,7 @@
           width: 10px;
 
           svg {
-            fill: rgb(153, 153, 153);
+            fill: $madero-gray;
           }
         }
 
@@ -326,7 +326,7 @@
         width: 15px;
 
         svg {
-          fill: rgb(153, 153, 153);
+          fill: $madero-gray;
           height: 15px;
           width: 15px;
         }
@@ -337,7 +337,7 @@
   &.tooltip-share-options {
     .sideways-panels {
       .panel {
-        border-color: rgb(153, 153, 153);
+        border-color: $madero-gray;
         background-color: transparent;
 
         @extend .mr-2;

@@ -10,7 +10,7 @@ var SignUpPage = function() {
   var signInPage = new SignInPage();
   var url = homepage.getUrl() + 'signup';
 
-  var signUpPageContainer = element(by.css('.app-launcher-login'));
+  var signUpPageContainer = element(by.css('.app-login'));
   var signUpCTA = element(by.cssContainingText('h1', 'Get Started For Free'));
   var signInLink = element(by.id('sign-in-link'));
   var signUpGoogleLink = element(by.id('sign-up-google-link'));

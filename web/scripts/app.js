@@ -168,16 +168,12 @@ angular.module('risevision.apps', [
       });
 
       $rootScope.$on('$stateChangeSuccess', function (event, toState) {
-        if (toState.name === 'apps.editor.list' ||
-          toState.name === 'apps.schedules.list' ||
-          toState.name === 'apps.schedules.details' ||
-          toState.name === 'apps.schedules.add' ||
-          toState.name === 'apps.displays.list' ||
-          toState.name === 'apps.displays.details' ||
-          toState.name === 'apps.displays.add') {
-          $rootScope.showWhiteBackground = true;
-        } else {
+        if (toState.name === 'apps.displays.alerts' ||
+          toState.name.indexOf('apps.storage') !== -1 ||
+          toState.name.indexOf('apps.billing') !== -1) {
           $rootScope.showWhiteBackground = false;
+        } else {
+          $rootScope.showWhiteBackground = true;
         }
       });
 
