@@ -61,7 +61,7 @@ describe('service: DisplayListOperations:', function() {
   it('should exist',function(){
     expect(displayListOperations).to.be.ok;
     expect(displayListOperations.name).to.equal('Display');
-    expect(displayListOperations.operations).to.have.length(4);
+    expect(displayListOperations.operations).to.have.length(5);
   });
 
   it('Delete:', function() {

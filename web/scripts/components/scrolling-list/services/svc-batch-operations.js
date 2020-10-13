@@ -23,7 +23,7 @@ angular.module('risevision.common.components.scrolling-list')
 
         _reset();
 
-        operations.batch = function (items, method, operation) {
+        operations.batch = function (items, method, operation, args) {
           if (!items || !items.length || !method) {
             return $q.resolve();
           }
@@ -39,11 +39,11 @@ angular.module('risevision.common.components.scrolling-list')
 
             queue.push(item);
 
-            _executeOperation(item);
+            _executeOperation(item, args);
           };
 
-          var _executeOperation = function (item) {
-            method(item)
+          var _executeOperation = function (item, args) {
+            method(item, args)
               .catch(function(e) {
                 operations.hasErrors = true;
               })

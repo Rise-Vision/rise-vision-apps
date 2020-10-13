@@ -2,9 +2,9 @@
 
 angular.module('risevision.displays.services')
   .service('DisplayListOperations', ['$q', 'displayFactory', 'enableCompanyProduct', 'playerLicenseFactory',
-    'plansFactory', 'confirmModal', 'messageBox', 'playerActionsFactory',
+    'plansFactory', 'confirmModal', 'messageBox', 'playerActionsFactory', '$modal',
     function ($q, displayFactory, enableCompanyProduct, playerLicenseFactory, plansFactory,
-      confirmModal, messageBox, playerActionsFactory) {
+      confirmModal, messageBox, playerActionsFactory, $modal) {
       return function () {
         var _licenseDisplays = function(companyId, displays) {
           var displayIds = _.map(displays, 'id');
@@ -72,6 +72,31 @@ angular.module('risevision.displays.services')
           return _confirmPlayerAction(selectedItems, false);
         };
 
+        var _confirmSetRebootTime = function(selectedItems) {
+          return _checkLicenses(selectedItems).then(function() {
+            return $modal.open({
+              templateUrl: 'partials/common/bulk-edit-modal.html',
+              controller: 'BulkEditModalCtrl',
+              windowClass: 'madero-style centered-modal',
+              size: 'md',
+              resolve: {
+                baseModel: function() {
+                  return {
+                    restartEnabled: true,
+                    restartTime: '02:00',
+                  };
+                },
+                title: function() {
+                  return 'Set Reboot Time';
+                },
+                partial: function() {
+                  return 'partials/displays/edit-reboot-time.html';
+                }
+              }
+            }).result;
+          });
+        };
+
         var listOperations = {
           name: 'Display',
           operations: [{
@@ -79,14 +104,11 @@ angular.module('risevision.displays.services')
             beforeBatchAction: _confirmRestart,
             actionCall: playerActionsFactory.restartByObject,
             requireRole: 'da'
-          },{
+          },
+          {
             name: 'Reboot Media Player',
             beforeBatchAction: _confirmReboot,
             actionCall: playerActionsFactory.rebootByObject,
-            requireRole: 'da'
-          },{
-            name: 'Delete',
-            actionCall: displayFactory.deleteDisplayByObject,
             requireRole: 'da'
           },
           {
@@ -122,6 +144,17 @@ angular.module('risevision.displays.services')
             filter: {
               playerProAuthorized: false
             },
+            requireRole: 'da'
+          },
+          {
+            name: 'Delete',
+            actionCall: displayFactory.deleteDisplayByObject,
+            requireRole: 'da'
+          },
+          {
+            name: 'Set Reboot Time',
+            beforeBatchAction: _confirmSetRebootTime,
+            actionCall: displayFactory.applyFields,
             requireRole: 'da'
           }]
         };
