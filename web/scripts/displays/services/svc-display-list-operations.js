@@ -89,6 +89,13 @@ angular.module('risevision.displays.services')
           });
         };
 
+        var _confirmSetAddress = function(selectedItems) {
+          return _confirmDisplayUpdate(selectedItems, 'Set Address', 
+            'partials/displays/edit-address.html', {
+              useCompanyAddress: false,
+          });
+        };
+
         var _confirmDisplayUpdate = function(selectedItems, title, partial, baseModel) {
           return _checkLicenses(selectedItems).then(function() {
             return $modal.open({
@@ -169,6 +176,12 @@ angular.module('risevision.displays.services')
           {
             name: 'Set Reboot Time',
             beforeBatchAction: _confirmSetRebootTime,
+            actionCall: displayFactory.applyFields,
+            requireRole: 'da'
+          },
+          {
+            name: 'Set Address',
+            beforeBatchAction: _confirmSetAddress,
             actionCall: displayFactory.applyFields,
             requireRole: 'da'
           },
