@@ -106,13 +106,13 @@
 
       it('should show minimum length error', function() {
         signUpPage.getUsernameTextBox().sendKeys('test@test.com');
-        signUpPage.getPasswordTextBox().sendKeys('pa');
+        signUpPage.getPasswordTextBox().sendKeys('pass');
 
         expect(signUpPage.getPasswordMinLengthError().isDisplayed()).to.eventually.be.true;
       });
 
-      it('should dismiss minimum length error after 4 characters', function() {
-        signUpPage.getPasswordTextBox().sendKeys('ss');
+      it('should dismiss minimum length error after 8 characters', function() {
+        signUpPage.getPasswordTextBox().sendKeys('word');
 
         expect(signUpPage.getPasswordMinLengthError().isPresent()).to.eventually.be.false;
       });
@@ -121,7 +121,7 @@
         helper.wait(signUpPage.getPasswordMeter(), 'Password Meter Strength');
 
         expect(signUpPage.getPasswordStrengthText().getText()).to.eventually.equal('Weak');
-        expect(signUpPage.getPasswordFeedbackText().getText()).to.eventually.equal('This is a top-100 common password');
+        expect(signUpPage.getPasswordFeedbackText().getText()).to.eventually.equal('This is a top-10 common password');
         expect(signUpPage.getPasswordMeter().isDisplayed()).to.eventually.be.true;
       });
 
