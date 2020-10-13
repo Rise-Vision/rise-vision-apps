@@ -1199,6 +1199,19 @@ $short-phone-height: 570px;
     .modal-footer {
       padding: 0px 20px 20px;
     }
+
+    .bulk-edit-modal {
+
+      .modal-body {
+        p {
+          font-size: 14px;
+        }
+
+        .timeline-label {
+          width: 160px;
+        }
+      }
+    }
   }
 
   &.primary-btn-danger .modal-footer {

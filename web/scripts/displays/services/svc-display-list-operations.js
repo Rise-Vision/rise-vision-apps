@@ -72,7 +72,24 @@ angular.module('risevision.displays.services')
           return _confirmPlayerAction(selectedItems, false);
         };
 
+        var _confirmSetMonitoring = function(selectedItems) {
+          return _confirmDisplayUpdate(selectedItems, 'Set Monitoring', 
+            'partials/displays/edit-monitoring.html', {
+              monitoringEnabled: true,
+              monitoringEmails: null,
+              monitoringSchedule: null
+          });
+        };
+
         var _confirmSetRebootTime = function(selectedItems) {
+          return _confirmDisplayUpdate(selectedItems, 'Set Reboot Time', 
+            'partials/displays/edit-reboot-time.html', {
+              restartEnabled: true,
+              restartTime: '02:00',
+          });
+        };
+
+        var _confirmDisplayUpdate = function(selectedItems, title, partial, baseModel) {
           return _checkLicenses(selectedItems).then(function() {
             return $modal.open({
               templateUrl: 'partials/common/bulk-edit-modal.html',
@@ -81,16 +98,13 @@ angular.module('risevision.displays.services')
               size: 'md',
               resolve: {
                 baseModel: function() {
-                  return {
-                    restartEnabled: true,
-                    restartTime: '02:00',
-                  };
+                  return baseModel;
                 },
                 title: function() {
-                  return 'Set Reboot Time';
+                  return title;
                 },
                 partial: function() {
-                  return 'partials/displays/edit-reboot-time.html';
+                  return partial;
                 }
               }
             }).result;
@@ -147,14 +161,20 @@ angular.module('risevision.displays.services')
             requireRole: 'da'
           },
           {
-            name: 'Delete',
-            actionCall: displayFactory.deleteDisplayByObject,
+            name: 'Set Monitoring',
+            beforeBatchAction: _confirmSetMonitoring,
+            actionCall: displayFactory.applyFields,
             requireRole: 'da'
           },
           {
             name: 'Set Reboot Time',
             beforeBatchAction: _confirmSetRebootTime,
             actionCall: displayFactory.applyFields,
+            requireRole: 'da'
+          },
+          {
+            name: 'Delete',
+            actionCall: displayFactory.deleteDisplayByObject,
             requireRole: 'da'
           }]
         };
