@@ -6,13 +6,12 @@ angular.module('risevision.common.components.scrolling-list')
       return {
         restrict: 'E',
         scope: {
-          listObject: '=',
-          listOperations: '=',
+          listObject: '='
         },
         templateUrl: 'partials/common/batch-operations.html',
         link: function ($scope) {
           var _filterByRole = function() {
-            _.remove($scope.listOperations.operations, function(operation) {
+            _.remove($scope.listObject.batchOperations.operations, function(operation) {
               if (!operation.requireRole) {
                 return false;
               }
@@ -22,7 +21,7 @@ angular.module('risevision.common.components.scrolling-list')
           };
 
           var _updateDeleteAction = function() {
-            _.each($scope.listOperations.operations, function(operation) {
+            _.each($scope.listObject.batchOperations.operations, function(operation) {
               if (operation.isDelete) {
                 operation.beforeBatchAction = function() {
                   return $modal.open({
@@ -33,7 +32,7 @@ angular.module('risevision.common.components.scrolling-list')
                     resolve: {
                       selectedItems: $scope.listObject.getSelected,
                       itemName: function() {
-                        return $scope.listOperations.name;
+                        return $scope.listObject.batchOperations.name;
                       }
                     }
                   }).result;
@@ -43,7 +42,7 @@ angular.module('risevision.common.components.scrolling-list')
 
           };
 
-          if ($scope.listOperations && $scope.listOperations.operations && $scope.listObject) {
+          if ($scope.listObject.batchOperations && $scope.listObject.batchOperations.operations && $scope.listObject) {
             _filterByRole();
             _updateDeleteAction();
           }
@@ -54,7 +53,9 @@ angular.module('risevision.common.components.scrolling-list')
               _bypass = false;
               return;
             }
-            if ($scope.listObject.operations.activeOperation) {
+            if ($scope.listObject.batchOperations.activeOperation) {
+              var operationName = $scope.listObject.batchOperations.activeOperation.name.toLowerCase();
+
               event.preventDefault();
               var modalInstance = $modal.open({
                 templateUrl: 'partials/components/confirm-modal/madero-confirm-modal.html',
@@ -63,10 +64,10 @@ angular.module('risevision.common.components.scrolling-list')
                 size: 'sm',
                 resolve: {
                   confirmationTitle: function () {
-                    return 'Cancel bulk ' + $scope.listObject.operations.activeOperation.toLowerCase() + '?';
+                    return 'Cancel bulk ' + operationName + '?';
                   },
                   confirmationMessage: function () {
-                    return 'A bulk ' + $scope.listObject.operations.activeOperation.toLowerCase() +
+                    return 'A bulk ' + operationName +
                       ' is in progress. Navigating away from this page will cancel this action. Are you sure you want to cancel?';
                   },
                   confirmationButton: function () {
@@ -78,7 +79,7 @@ angular.module('risevision.common.components.scrolling-list')
                 }
               });
               modalInstance.result.then(function () {
-                $scope.listObject.operations.cancel();
+                $scope.listObject.batchOperations.cancel();
 
                 _bypass = true;
                 $state.go(toState, toParams);
@@ -87,7 +88,7 @@ angular.module('risevision.common.components.scrolling-list')
           });
 
           $window.onbeforeunload = function () {
-            if ($scope.listObject.operations.activeOperation) {
+            if ($scope.listObject.batchOperations.activeOperation) {
               return 'Cancel bulk action?';
             }
           };

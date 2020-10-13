@@ -20,10 +20,16 @@ describe("service: BatchOperations:", function() {
     inject(function($injector){
       BatchOperations = $injector.get("BatchOperations");
       $timeout = $injector.get('$timeout');
-      batchOperations = new BatchOperations();
+      batchOperations = new BatchOperations({});
 
       batchOperations.queueLimit = 3;
     });
+  });
+
+  it("should return blank object if nothing is passed",function(){
+    batchOperations = new BatchOperations();
+    
+    expect(batchOperations).to.deep.equal({});
   });
 
   it("should exist",function(){

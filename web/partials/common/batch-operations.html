@@ -1,9 +1,9 @@
-<div class="flex-row multi-actions-panel u_padding-20 u_margin-md-top" ng-show="listObject.getSelected().length > 0 && !listObject.operations.activeOperation">
+<div class="flex-row multi-actions-panel u_padding-20 u_margin-md-top" ng-show="listObject.getSelected().length > 0 && !listObject.batchOperations.activeOperation">
   <div class="flex-row button-toolbar-md-folded w-100">
     <div class="col-sm-5 pl-0">
       <strong>{{listObject.getSelected().length}}</strong>
       <span class="text-gray">
-        {{listOperations.name}}<span ng-show="listObject.getSelected().length > 1">s</span> selected. 
+        {{listObject.batchOperations.name}}<span ng-show="listObject.getSelected().length > 1">s</span> selected. 
         <span ng-hide="listObject.search.selectAll"><a class="madero-link u_clickable" ng-click="listObject.selectAll()"> Select all</a>.</span>
       </span>
     </div>
@@ -19,12 +19,12 @@
           </button>
           <div class="dropdown-menu playlist-menu" role="menu">
             <ul>
-              <li ng-if="!listOperations.operations.length">
+              <li ng-if="!listObject.batchOperations.operations.length">
                 <div class="btn-dropdown">
                   <span class="text-gray">None</span>
                 </div>
               </li>
-              <li ng-repeat="operation in listOperations.operations">
+              <li ng-repeat="operation in listObject.batchOperations.operations">
                 <button type="button" class="btn-dropdown u_clickable" ng-click="operation.actionCall()">
                   <span>{{operation.name}}</span>
                 </button>
@@ -40,14 +40,21 @@
   </button>
 </div>
 
-<div class="border-container text-center u_padding-20 u_margin-md-top" ng-show="listObject.operations.activeOperation">
+<div class="border-container text-center u_padding-20 u_margin-md-top" ng-show="listObject.batchOperations.activeOperation">
   <div class="multi-actions-progress-panel">
-    <p class="mb-0"><strong>Bulk {{listObject.operations.activeOperation | lowercase}} in progress.</strong> <a class="madero-link u_clickable" ng-click="listObject.operations.cancel()">Cancel</a></p>
+    <p class="mb-0"><strong>Bulk {{listObject.batchOperations.activeOperation.name | lowercase}} in progress.</strong> <a class="madero-link u_clickable" ng-click="listObject.batchOperations.cancel()">Cancel</a></p>
     <p>Please don’t navigate away from this page.</p>
     <div class="progress my-4">
-      <div class="progress-bar" role="progressbar" aria-valuenow="{{listObject.operations.progress}}.0"
-      aria-valuemin="0" aria-valuemax="100" ng-style="{ 'width': listObject.operations.progress + '%' }"></div>
+      <div class="progress-bar" role="progressbar" aria-valuenow="{{listObject.batchOperations.progress}}.0"
+      aria-valuemin="0" aria-valuemax="100" ng-style="{ 'width': listObject.batchOperations.progress + '%' }"></div>
     </div>
-    <p class="mb-0">{{listObject.operations.completedItemCount}} out of {{listObject.operations.totalItemCount}} {{listOperations.name | lowercase}}<span ng-show="listObject.operations.totalItemCount > 1">s</span> deleted.</p>
+    <p class="mb-0">
+      {{listObject.batchOperations.completedItemCount}} out of {{listObject.batchOperations.totalItemCount}} 
+      operations completed.
+      <!-- 
+      {{listObject.batchOperations.name | lowercase}}<span ng-show="listObject.batchOperations.totalItemCount > 1">s</span>
+      {{listObject.batchOperations.activeOperation.name | lowercase}}d.
+      -->
+    </p>
   </div>
 </div>

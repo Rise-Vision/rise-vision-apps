@@ -8,7 +8,7 @@ angular.module('risevision.common.components.scrolling-list')
         var factory = {};
 
         factory.items = new BaseList(DB_MAX_COUNT);
-        factory.operations = new BatchOperations();
+        factory.batchOperations = new BatchOperations(listOperations);
 
         factory.search = search ? search : {};
         _.defaults(factory.search, {
@@ -83,6 +83,24 @@ angular.module('risevision.common.components.scrolling-list')
           });
         };
 
+        var _filterSelected = function (selected, filter) {
+          return _.filter(selected, filter);
+        };
+
+        var _groupBySelected = function (selected, groupBy) {
+          return _.chain(selected)
+            .groupBy(groupBy)
+            .map(function(value, key) {
+              var result = {};
+
+              result[groupBy] = key;
+              result.items = value;
+
+              return result;
+            })
+            .value();
+        };
+
         var _allSelected = function () {
           var deselectedIndex = _.findIndex(factory.items.list, function (item) {
             return !item.selected;
@@ -142,7 +160,7 @@ angular.module('risevision.common.components.scrolling-list')
           
                 if (!factory.errorMessage) {
                   factory.errorMessage = 'Something went wrong.';
-                  factory.apiError = 'We weren’t able to ' + operation.name.toLowerCase() + ' one or more of the selected ' + 
+                  factory.apiError = 'We weren\'t able to ' + operation.name.toLowerCase() + ' one or more of the selected ' + 
                     factory.search.name.toLowerCase() + '. Please try again.';                  
                 }
               });
@@ -159,16 +177,25 @@ angular.module('risevision.common.components.scrolling-list')
               return;
             }
 
+            if (operation.filter) {
+              selected = _filterSelected(selected, operation.filter);
+            }
+
+            var batchSelected = selected;
+            if (operation.groupBy) {
+              batchSelected = _groupBySelected(selected, operation.groupBy);
+            }
+
             _clearMessages();
 
             var batchAction;
             if (operation.beforeBatchAction) {
               batchAction = operation.beforeBatchAction(selected)
                 .then(function() {
-                  return factory.operations.batch(selected, execute, operation.name);
+                  return factory.batchOperations.batch(batchSelected, execute, operation);
                 });
             } else {
-              batchAction = factory.operations.batch(selected, execute, operation.name);
+              batchAction = factory.batchOperations.batch(batchSelected, execute, operation);
             }
 
             return batchAction.then(function() {
