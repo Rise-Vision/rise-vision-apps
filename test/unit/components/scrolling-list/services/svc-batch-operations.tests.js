@@ -88,12 +88,13 @@ describe("service: BatchOperations:", function() {
     });
 
     it('should call the action for the first batch of items', function() {
-      batchOperations.batch(items, method, 'operationName');
+      var operationArgs  = 'args';
+      batchOperations.batch(items, method, 'operationName', operationArgs);
 
       method.should.have.been.calledThrice;
-      method.should.have.been.calledWith(items[0]);
-      method.should.have.been.calledWith(items[1]);
-      method.should.have.been.calledWith(items[2]);
+      method.should.have.been.calledWith(items[0], operationArgs);
+      method.should.have.been.calledWith(items[1], operationArgs);
+      method.should.have.been.calledWith(items[2], operationArgs);
     });
 
     it('should update the variables once the actions are performed', function(done) {

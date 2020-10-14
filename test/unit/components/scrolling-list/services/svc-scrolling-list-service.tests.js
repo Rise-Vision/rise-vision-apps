@@ -566,13 +566,16 @@ describe("service: ScrollingListService:", function() {
         ]);
       });
 
-      it('should perform batch if action resolves', function(done) {
-        listOperations.operations[0].beforeBatchAction = sinon.stub().returns(Q.resolve());
+      it('should perform batch if action resolves and pass arguments', function(done) {
+        listOperations.operations[0].beforeBatchAction = sinon.stub().returns(Q.resolve('args'));
 
         listOperations.operations[0].onClick();
 
         setTimeout(function() {
-          scrollingListService.batchOperations.batch.should.have.been.called;
+          scrollingListService.batchOperations.batch.should.have.been.calledWith([
+            scrollingListService.items.list[0], 
+            scrollingListService.items.list[5]
+          ], sinon.match.func, listOperations.operations[0], 'args');
 
           done();
         }, 10);
