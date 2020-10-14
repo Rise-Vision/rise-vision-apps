@@ -450,6 +450,35 @@ describe('service: displayFactory:', function() {
     });
 
   });
+
+  describe('applyFields:',function(){
+    var display, updatedFields;
+
+    beforeEach(function(){
+      display = {id: '123'};
+      updatedFields = {name: 'New Name'};
+    });
+
+    it('should update the display and populate new fields',function(done){
+      updateDisplay = true;
+
+      displayFactory.applyFields(display, updatedFields).then(function() {
+        expect(trackerCalled).to.equal('Display Updated');
+        expect(display.name).to.equal('New Name');
+        done();
+      });
+    });
+
+    it('should reject and not populate new fields on failure',function(done){
+      updateDisplay = false;
+
+      displayFactory.applyFields(display, updatedFields).catch(function() {
+        expect(display.name).not.be.ok;
+        expect(trackerCalled).to.not.equal('Display Updated');
+        done();
+      });
+    });
+  });
   
   describe('deleteDisplayByObject: ',function(){
     it('should delete the display and unassign its license',function(done){

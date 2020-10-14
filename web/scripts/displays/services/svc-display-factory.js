@@ -130,11 +130,8 @@ angular.module('risevision.displays.services')
         factory.loadingDisplay = true;
         factory.savingDisplay = true;
 
-        display.update(factory.display.id, factory.display)
+        _update(factory.display.id, factory.display)
           .then(function (displayId) {
-            displayTracker('Display Updated', factory.display.id,
-              factory.display.name);
-
             return scheduleFactory.addToDistribution(factory.display, selectedSchedule)
               .then(function () {
                 deferred.resolve();
@@ -153,6 +150,20 @@ angular.module('risevision.displays.services')
           });
 
         return deferred.promise;
+      };
+
+      var _update = function(displayId, fields) {
+        return display.update(displayId, fields).then(function(result) {
+          displayTracker('Display Updated', displayId, fields && fields.name);
+          return result;
+        });
+      };
+
+      factory.applyFields = function (display, fields) {  
+        return _update(display.id, fields).then(function(result) {
+          angular.extend(display, fields);
+          return result;
+        });
       };
 
       factory.deleteDisplayByObject = function (displayObject) {

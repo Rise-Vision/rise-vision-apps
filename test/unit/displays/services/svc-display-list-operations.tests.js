@@ -6,7 +6,8 @@ describe('service: DisplayListOperations:', function() {
 
     $provide.service('displayFactory', function() {
       return {
-        deleteDisplayByObject: 'deleteDisplayByObject'
+        deleteDisplayByObject: 'deleteDisplayByObject',
+        applyFields: 'applyFields'
       };
     });
 
@@ -28,6 +29,12 @@ describe('service: DisplayListOperations:', function() {
       return sinon.stub().returns(Q.resolve());
     });
 
+    $provide.service('$modal', function() {
+      return {
+        open: sinon.stub().returns({result: Q.resolve()})
+      }
+    });
+
     $provide.service('messageBox', function() {
       return sinon.stub().returns(Q.resolve());
     });
@@ -41,7 +48,7 @@ describe('service: DisplayListOperations:', function() {
 
   }));
   var displayListOperations, displayFactory, playerLicenseFactory, plansFactory,
-    confirmModal, messageBox;
+    confirmModal, messageBox, $modal;
   beforeEach(function(){
     inject(function($injector){
       var DisplayListOperations = $injector.get('DisplayListOperations');
@@ -50,6 +57,7 @@ describe('service: DisplayListOperations:', function() {
       plansFactory = $injector.get('plansFactory');
       confirmModal = $injector.get('confirmModal');
       messageBox = $injector.get('messageBox');
+      $modal = $injector.get('$modal');
       displayListOperations = new DisplayListOperations();
     });
   });
@@ -61,7 +69,7 @@ describe('service: DisplayListOperations:', function() {
   it('should exist',function(){
     expect(displayListOperations).to.be.ok;
     expect(displayListOperations.name).to.equal('Display');
-    expect(displayListOperations.operations).to.have.length(4);
+    expect(displayListOperations.operations).to.have.length(7);
   });
 
   it('Delete:', function() {
@@ -359,6 +367,277 @@ describe('Reboot Media Player:', function() {
           licenseOperation.onClick.should.have.been.calledWith(true);
 
           expect(confirmModal.getCall(1).args[0]).to.equal('Reboot media players?');
+          done();
+        },10);
+      });
+    });
+  });
+
+  describe('Set Monitoring:', function() {
+    var operation;
+
+    beforeEach(function() {
+      operation = _getOperationByName('Set Monitoring');
+    })
+
+    it('should exist:', function() {
+      expect(operation.name).to.equal('Set Monitoring');
+      expect(operation.actionCall).to.equal('applyFields');
+      expect(operation.beforeBatchAction).to.be.a('function');
+      expect(operation.requireRole).to.equal('da');
+    });
+
+    describe('beforeBatchAction:', function() {
+      var selected;
+
+      beforeEach(function() {
+        selected = [
+          { id: 'display1', playerProAuthorized: true },
+          { id: 'display2', playerProAuthorized: true }
+        ];
+      });
+
+      it('should prompt for monitoring details', function(done) {
+        operation.beforeBatchAction(selected).then(function() {
+          $modal.open.should.have.been.calledWithMatch({
+            templateUrl: 'partials/common/bulk-edit-modal.html',
+            controller: 'BulkEditModalCtrl',
+            windowClass: 'madero-style centered-modal',
+            size: 'md',
+            resolve: {
+              baseModel: sinon.match.func,
+              title: sinon.match.func,
+              partial: sinon.match.func
+            }
+          });
+          done();
+        });
+      });
+
+      it('should provide object with fields to be updated', function(done) {
+        operation.beforeBatchAction(selected).then(function(result) {
+          $modal.open.should.have.been.called;
+
+          expect($modal.open.getCall(0).args[0].resolve.baseModel()).to.deep.equal({
+            monitoringEnabled: true,
+            monitoringEmails: null,
+            monitoringSchedule: null
+          });
+
+          done();
+        });
+      });
+
+      it('should prompt to license unlicensed displays and continue on acceptance', function(done) {
+        var licenseOperation = _getOperationByName('License');
+        licenseOperation.onClick = sinon.stub().returns(Q.resolve());        
+        selected = [
+          { id: 'display1', playerProAuthorized: true },
+          { id: 'display2', playerProAuthorized: false },
+          { id: 'display3', playerProAuthorized: false }
+        ];
+
+        operation.beforeBatchAction(selected);
+
+        setTimeout(function() {
+          confirmModal.should.have.been.calledWith('Almost there!');
+          licenseOperation.onClick.should.have.been.calledWith(true);
+
+          $modal.open.should.have.been.calledWithMatch({
+            templateUrl: 'partials/common/bulk-edit-modal.html',
+            controller: 'BulkEditModalCtrl'
+          });
+
+          expect($modal.open.getCall(0).args[0].resolve.baseModel()).to.deep.equal({
+            monitoringEnabled: true,
+            monitoringEmails: null,
+            monitoringSchedule: null
+          });
+
+          done();
+        },10);
+      });
+    });
+  });
+
+  describe('Set Reboot Time:', function() {
+    var operation;
+
+    beforeEach(function() {
+      operation = _getOperationByName('Set Reboot Time');
+    })
+
+    it('should exist:', function() {
+      expect(operation.name).to.equal('Set Reboot Time');
+      expect(operation.actionCall).to.equal('applyFields');
+      expect(operation.beforeBatchAction).to.be.a('function');
+      expect(operation.requireRole).to.equal('da');
+    });
+
+    describe('beforeBatchAction:', function() {
+      var selected;
+
+      beforeEach(function() {
+        selected = [
+          { id: 'display1', playerProAuthorized: true },
+          { id: 'display2', playerProAuthorized: true }
+        ];
+      });
+
+      it('should prompt for reboot time details', function(done) {
+        operation.beforeBatchAction(selected).then(function() {
+          $modal.open.should.have.been.calledWithMatch({
+            templateUrl: 'partials/common/bulk-edit-modal.html',
+            controller: 'BulkEditModalCtrl',
+            windowClass: 'madero-style centered-modal',
+            size: 'md',
+            resolve: {
+              baseModel: sinon.match.func,
+              title: sinon.match.func,
+              partial: sinon.match.func
+            }
+          });
+          done();
+        });
+      });
+
+      it('should provide object with fields to be updated', function(done) {
+        operation.beforeBatchAction(selected).then(function(result) {
+          $modal.open.should.have.been.called;
+
+          expect($modal.open.getCall(0).args[0].resolve.baseModel()).to.deep.equal({
+            restartEnabled: true,
+            restartTime: '02:00',
+          });
+
+          done();
+        });
+      });
+
+      it('should prompt to license unlicensed displays and continue on acceptance', function(done) {
+        var licenseOperation = _getOperationByName('License');
+        licenseOperation.onClick = sinon.stub().returns(Q.resolve());        
+        selected = [
+          { id: 'display1', playerProAuthorized: true },
+          { id: 'display2', playerProAuthorized: false },
+          { id: 'display3', playerProAuthorized: false }
+        ];
+
+        operation.beforeBatchAction(selected);
+
+        setTimeout(function() {
+          confirmModal.should.have.been.calledWith('Almost there!');
+          licenseOperation.onClick.should.have.been.calledWith(true);
+
+          $modal.open.should.have.been.calledWithMatch({
+            templateUrl: 'partials/common/bulk-edit-modal.html',
+            controller: 'BulkEditModalCtrl'
+          });
+
+          expect($modal.open.getCall(0).args[0].resolve.baseModel()).to.deep.equal({
+            restartEnabled: true,
+            restartTime: '02:00',
+          });
+
+          done();
+        },10);
+      });
+    });
+  });
+
+  describe('Set Address:', function() {
+    var operation;
+
+    beforeEach(function() {
+      operation = _getOperationByName('Set Address');
+    })
+
+    it('should exist:', function() {
+      expect(operation.name).to.equal('Set Address');
+      expect(operation.actionCall).to.equal('applyFields');
+      expect(operation.beforeBatchAction).to.be.a('function');
+      expect(operation.requireRole).to.equal('da');
+    });
+
+    describe('beforeBatchAction:', function() {
+      var selected;
+
+      beforeEach(function() {
+        selected = [
+          { id: 'display1', playerProAuthorized: true },
+          { id: 'display2', playerProAuthorized: true }
+        ];
+      });
+
+      it('should prompt for address details', function(done) {
+        operation.beforeBatchAction(selected).then(function() {
+          $modal.open.should.have.been.calledWithMatch({
+            templateUrl: 'partials/common/bulk-edit-modal.html',
+            controller: 'BulkEditModalCtrl',
+            windowClass: 'madero-style centered-modal',
+            size: 'md',
+            resolve: {
+              baseModel: sinon.match.func,
+              title: sinon.match.func,
+              partial: sinon.match.func
+            }
+          });
+          done();
+        });
+      });
+
+      it('should provide object with fields to be updated', function(done) {
+        operation.beforeBatchAction(selected).then(function(result) {
+          $modal.open.should.have.been.called;
+
+          expect($modal.open.getCall(0).args[0].resolve.baseModel()).to.deep.equal({
+            useCompanyAddress: false,
+            addressDescription: '',
+            street: '',
+            unit: '',
+            city: '',
+            country: '',
+            province: '',
+            postalCode: '',
+            timeZoneOffset: null
+          });
+
+          done();
+        });
+      });
+
+      it('should prompt to license unlicensed displays and continue on acceptance', function(done) {
+        var licenseOperation = _getOperationByName('License');
+        licenseOperation.onClick = sinon.stub().returns(Q.resolve());        
+        selected = [
+          { id: 'display1', playerProAuthorized: true },
+          { id: 'display2', playerProAuthorized: false },
+          { id: 'display3', playerProAuthorized: false }
+        ];
+
+        operation.beforeBatchAction(selected);
+
+        setTimeout(function() {
+          confirmModal.should.have.been.calledWith('Almost there!');
+          licenseOperation.onClick.should.have.been.calledWith(true);
+
+          $modal.open.should.have.been.calledWithMatch({
+            templateUrl: 'partials/common/bulk-edit-modal.html',
+            controller: 'BulkEditModalCtrl'
+          });
+
+          expect($modal.open.getCall(0).args[0].resolve.baseModel()).to.deep.equal({
+            useCompanyAddress: false,
+            addressDescription: '',
+            street: '',
+            unit: '',
+            city: '',
+            country: '',
+            province: '',
+            postalCode: '',
+            timeZoneOffset: null
+          });
+
           done();
         },10);
       });

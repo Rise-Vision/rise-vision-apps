@@ -1,0 +1,12 @@
+<label>Monitoring Email Recipients:</label>
+
+<p class="mt-1 text-normal">Separate multiple recipients by a comma.</p>
+
+<div class="mt-3 mb-4" ng-class="{ 'has-error': !bulkEditForm.monitoringEmails.$valid }">
+  <emails-field name="monitoringEmails" ng-model="baseModel.monitoringEmails"></emails-field>
+  <p class="help-block text-danger" ng-show="!bulkEditForm.monitoringEmails.$valid" translate>
+    displays-app.fields.player.rpp.invalid-email
+  </p>
+</div>
+
+<timeline-basic-textbox timeline-string="baseModel.monitoringSchedule"/>

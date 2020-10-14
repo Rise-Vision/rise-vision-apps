@@ -146,8 +146,8 @@ angular.module('risevision.common.components.scrolling-list')
         var _getExecuteAction = function(operation) {
           var originalAction = operation.actionCall;
 
-          return function (item) {
-            return originalAction(item)
+          return function (item, args) {
+            return originalAction(item, args)
               .then(function() {
                 if (operation.isDelete) {
                   _.remove(factory.items.list, function(listItem) {
@@ -192,11 +192,11 @@ angular.module('risevision.common.components.scrolling-list')
             var batchAction;
             if (operation.beforeBatchAction && !skipBeforeBatchAction) {
               batchAction = operation.beforeBatchAction(selected)
-                .then(function() {
-                  return factory.batchOperations.batch(batchSelected, execute, operation);
+                .then(function(args) {
+                  return factory.batchOperations.batch(batchSelected, execute, operation, args);
                 });
             } else {
-              batchAction = factory.batchOperations.batch(batchSelected, execute, operation);
+              batchAction = factory.batchOperations.batch(batchSelected, execute, operation, null);
             }
 
             return batchAction.then(function() {

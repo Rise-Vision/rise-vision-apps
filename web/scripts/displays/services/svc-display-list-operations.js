@@ -2,9 +2,9 @@
 
 angular.module('risevision.displays.services')
   .service('DisplayListOperations', ['$q', 'displayFactory', 'enableCompanyProduct', 'playerLicenseFactory',
-    'plansFactory', 'confirmModal', 'messageBox', 'playerActionsFactory',
+    'plansFactory', 'confirmModal', 'messageBox', 'playerActionsFactory', '$modal',
     function ($q, displayFactory, enableCompanyProduct, playerLicenseFactory, plansFactory,
-      confirmModal, messageBox, playerActionsFactory) {
+      confirmModal, messageBox, playerActionsFactory, $modal) {
       return function () {
         var _licenseDisplays = function(companyId, displays) {
           var displayIds = _.map(displays, 'id');
@@ -72,6 +72,60 @@ angular.module('risevision.displays.services')
           return _confirmPlayerAction(selectedItems, false);
         };
 
+        var _confirmSetMonitoring = function(selectedItems) {
+          return _confirmDisplayUpdate(selectedItems, 'Set Monitoring', 
+            'partials/displays/edit-monitoring.html', {
+              monitoringEnabled: true,
+              monitoringEmails: null,
+              monitoringSchedule: null
+          });
+        };
+
+        var _confirmSetRebootTime = function(selectedItems) {
+          return _confirmDisplayUpdate(selectedItems, 'Set Reboot Time', 
+            'partials/displays/edit-reboot-time.html', {
+              restartEnabled: true,
+              restartTime: '02:00',
+          });
+        };
+
+        var _confirmSetAddress = function(selectedItems) {
+          return _confirmDisplayUpdate(selectedItems, 'Set Address', 
+            'partials/displays/edit-address.html', {
+              useCompanyAddress: false,
+              addressDescription: '',
+              street: '',
+              unit: '',
+              city: '',
+              country: '',
+              province: '',
+              postalCode: '',
+              timeZoneOffset: null
+          });
+        };
+
+        var _confirmDisplayUpdate = function(selectedItems, title, partial, baseModel) {
+          return _checkLicenses(selectedItems).then(function() {
+            return $modal.open({
+              templateUrl: 'partials/common/bulk-edit-modal.html',
+              controller: 'BulkEditModalCtrl',
+              windowClass: 'madero-style centered-modal',
+              size: 'md',
+              resolve: {
+                baseModel: function() {
+                  return baseModel;
+                },
+                title: function() {
+                  return title;
+                },
+                partial: function() {
+                  return partial;
+                }
+              }
+            }).result;
+          });
+        };
+
         var listOperations = {
           name: 'Display',
           operations: [{
@@ -79,14 +133,11 @@ angular.module('risevision.displays.services')
             beforeBatchAction: _confirmRestart,
             actionCall: playerActionsFactory.restartByObject,
             requireRole: 'da'
-          },{
+          },
+          {
             name: 'Reboot Media Player',
             beforeBatchAction: _confirmReboot,
             actionCall: playerActionsFactory.rebootByObject,
-            requireRole: 'da'
-          },{
-            name: 'Delete',
-            actionCall: displayFactory.deleteDisplayByObject,
             requireRole: 'da'
           },
           {
@@ -122,6 +173,29 @@ angular.module('risevision.displays.services')
             filter: {
               playerProAuthorized: false
             },
+            requireRole: 'da'
+          },
+          {
+            name: 'Set Monitoring',
+            beforeBatchAction: _confirmSetMonitoring,
+            actionCall: displayFactory.applyFields,
+            requireRole: 'da'
+          },
+          {
+            name: 'Set Reboot Time',
+            beforeBatchAction: _confirmSetRebootTime,
+            actionCall: displayFactory.applyFields,
+            requireRole: 'da'
+          },
+          {
+            name: 'Set Address',
+            beforeBatchAction: _confirmSetAddress,
+            actionCall: displayFactory.applyFields,
+            requireRole: 'da'
+          },
+          {
+            name: 'Delete',
+            actionCall: displayFactory.deleteDisplayByObject,
             requireRole: 'da'
           }]
         };
