@@ -1210,6 +1210,16 @@ $short-phone-height: 570px;
         .timeline-label {
           width: 160px;
         }
+
+        .address-fields {
+          padding: 0px;
+          margin-bottom: 10px;
+          border-bottom: none;
+
+          .form-group {
+            margin-bottom: 10px;
+          }
+        }
       }
     }
   }
