@@ -381,6 +381,27 @@
               });
 
             return deferred.promise;
+          },
+          export: function() {
+            var companyId = userState.getSelectedCompanyId();
+            var deferred = $q.defer();
+
+            $log.debug('export called with', companyId);
+            coreAPILoader().then(function (coreApi) {
+                return coreApi.display.export({
+                  'companyId': companyId
+                });
+              })
+              .then(function (resp) {
+                $log.debug('export resp', resp);
+                deferred.resolve(resp.result);
+              })
+              .catch(function (e) {
+                console.error('Failed to export displays.', e);
+                deferred.reject(e);
+              });
+
+            return deferred.promise;
           }
         };
 

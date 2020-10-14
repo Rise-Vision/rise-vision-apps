@@ -2,9 +2,9 @@
 
 angular.module('risevision.displays.services')
   .service('DisplayListOperations', ['$q', 'displayFactory', 'enableCompanyProduct', 'playerLicenseFactory',
-    'plansFactory', 'confirmModal', 'messageBox', 'playerActionsFactory', '$modal',
+    'plansFactory', 'confirmModal', 'messageBox', 'playerActionsFactory', '$modal', 'userState', 'display', 'currentPlanFactory',
     function ($q, displayFactory, enableCompanyProduct, playerLicenseFactory, plansFactory,
-      confirmModal, messageBox, playerActionsFactory, $modal) {
+      confirmModal, messageBox, playerActionsFactory, $modal, userState, display, currentPlanFactory) {
       return function () {
         var _licenseDisplays = function(companyId, displays) {
           var displayIds = _.map(displays, 'id');
@@ -126,6 +126,16 @@ angular.module('risevision.displays.services')
           });
         };
 
+        var _confirmExport = function(selectedItems) {
+          if (!currentPlanFactory.isPlanActive()) {
+            return plansFactory.showUnlockThisFeatureModal();
+          }
+          return confirmModal('Export displays?',
+            'An export file will be prepared and emailed to you at <b>'+  userState.getUserEmail() +'</b> once ready.<br/> Please ensure your email is configured to accept emails from <b>no-reply@risevision.com</b>.',
+            'Export', 'Cancel', 'madero-style centered-modal',
+            'partials/components/confirm-modal/madero-confirm-modal.html','sm');
+        };
+
         var listOperations = {
           name: 'Display',
           operations: [{
@@ -192,6 +202,12 @@ angular.module('risevision.displays.services')
             beforeBatchAction: _confirmSetAddress,
             actionCall: displayFactory.applyFields,
             requireRole: 'da'
+          },
+          {
+            name: 'Export',
+            beforeBatchAction: _confirmExport,
+            actionCall: display.export,
+            groupBy: true //group all
           },
           {
             name: 'Delete',
