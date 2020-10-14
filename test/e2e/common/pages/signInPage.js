@@ -14,7 +14,7 @@ var SignInPage = function() {
   var url = homepage.getUrl() + 'signin';
 
   var signInPageContainer = element(by.css('.app-login'));
-  var signInCTA = element(by.cssContainingText('h1', 'Sign In'));
+  var signInCTA = element(by.cssContainingText('h4', 'Sign In To Rise Vision'));
   var signInLink = element(by.id('sign-in-link'));
   var signInGoogleLink = element(by.id('sign-in-google-link'));
   var usernameTextBox = element(by.id('username'));
