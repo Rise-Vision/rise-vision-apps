@@ -97,15 +97,17 @@
 	}
 
   .feature-sideways-panels {
+    @extend .mx-auto;
+
+    max-width:736px;
     margin-left: 0px;
     margin-right: 0px;
     display: flex;
     flex-flow: column;
 
-    &:first-child {
+    >:first-child {
       @extend .mx-auto;
 
-      width: 271px;
       max-width: 271px;
     }
 
@@ -113,8 +115,11 @@
       display: flex;
       flex-flow: row;
 
-      &:first-child {
+      >:first-child {
         @extend .mx-lg-0;
+        @extend .mr-lg-5;
+
+        width: 271px;
       }
     }
   }
@@ -122,13 +127,23 @@
   .border-container {
     max-width: 465px;
 
+    @media (min-width: $screen-md) {
+      width: 465px;
+    }
+
     & > .panel-body {
       padding: 30px;
     }
   }
 
   ul.features-checklist > li {
-    margin-bottom: 5px;
+    @extend .flex-row;
+
+    @extend .u_margin-sm-bottom;
+
+    >:first-child {
+      @extend .mb-auto;
+    }
 
     svg {
       fill: $madero-green;
