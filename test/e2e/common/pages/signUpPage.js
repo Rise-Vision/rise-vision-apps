@@ -10,8 +10,8 @@ var SignUpPage = function() {
   var signInPage = new SignInPage();
   var url = homepage.getUrl() + 'signup';
 
-  var signUpPageContainer = element(by.css('.app-launcher-login'));
-  var signUpCTA = element(by.cssContainingText('h1', 'Get Started For Free'));
+  var signUpPageContainer = element(by.css('.app-login'));
+  var signUpCTA = element(by.cssContainingText('h4', 'Start your FREE 14-day trial'));
   var signInLink = element(by.id('sign-in-link'));
   var signUpGoogleLink = element(by.id('sign-up-google-link'));
   var usernameTextBox = element(by.id('username'));

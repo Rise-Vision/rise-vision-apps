@@ -1,42 +1,61 @@
-<div ng-if="!joinAccount">
-  <h1 class="u_remove-top" >Get Started For Free</h1>					
-  <p class="lead text-muted" >No credit card or commitment required.</p>
-</div>
+<h1 ng-if="!joinAccount">Ready to join 9,000 organizations and start communicating better?</h1>
+<h1 ng-if="joinAccount">Ready to<span ng-show="companyName"> join {{companyName}} and</span> start communicating better?</h1>
 
-<div ng-if="joinAccount">
-  <h1 class="u_remove-top" >Join Your Company</h1>					
-  <p class="lead text-muted" >Complete your account <span ng-if="!companyName">registration</span><span ng-if="companyName">with {{companyName}}</span>.</p>
-</div>
+<!-- <div class="feature-sideways-panels">
+  <div class="mb-5">
+    <strong class="mt-5">Top Organizations Trust Rise Vision</strong>
+    <div class="flex-row w-100 mt-4 mb-5">
+      <img class="" src="../images/sign-up/marriott-logo.png" alt="Marriott Hotels" height="42">
+      <img class=" mx-4" src="../images/sign-up/cps-logo.png" alt="Chicago Public Schools" height="42">
+      <img class="" src="../images/sign-up/eagles-logo.png" alt="Philadelphia Eagles" height="42">
+    </div>
+    <ul class="features-checklist">
+      <li><streamline-icon name="checkmark"></streamline-icon>Fraction of the cost of competitors.</li>
+      <li><streamline-icon name="checkmark"></streamline-icon>Hundreds of professionally-designed templates.</li>
+      <li><streamline-icon name="checkmark"></streamline-icon>No contract, cancel anytime.</li>
+      <li><streamline-icon name="checkmark"></streamline-icon>Unlimited, premium support.</li>
+    </ul>
+  </div>
+  <div class=""> -->
+    <div class="border-container mx-auto">
+      <div class="panel-body">
 
-<!-- GOOGLE API -->
-<div class="col-xs-12 col-md-8">
-  <button class="btn btn-google-auth btn-hg" id="sign-up-google-link" ng-click="googleLogin('registrationComplete')">
-    <span>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg">
-      Sign up with Google
-    </span>
-  </button>
-</div>
+        <div ng-if="!joinAccount">
+          <h4>Start your FREE 14-day trial.</h4>					
+        </div>
 
-<div class="section-divider col-xs-12 col-md-8 u_margin-md-top" ng-if="!FORCE_GOOGLE_AUTH">
-  <div></div>
-    <span>OR</span>
-    <div></div>
-</div>
+        <div ng-if="joinAccount">
+          <h4 ng-if="companyName">Join {{companyName}}</h4>
+          <h4 ng-if="!companyName">Complete your account registration</h4>
+        </div>
 
-<!-- CUSTOM LOGIN -->
-<div class="col-md-8 col-xs-12" ng-if="!FORCE_GOOGLE_AUTH">
-	<div ng-include="'partials/components/userstate/auth-form.html'"></div>
+        <!-- GOOGLE API -->
+        <button class="btn btn-google-auth btn-hg btn-block" id="sign-up-google-link" ng-click="googleLogin('registrationComplete')">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg">
+          <div class="mx-auto">Use My Google Account</div>
+        </button>
 
-	<div class="form-group">
-		<button id="sign-up-button" class="btn btn-primary btn-hg" type="submit" form="forms.loginForm" ng-click="createAccount('registrationComplete')">
-			<span translate="Sign Up"></span>
-		</button>
-	</div>
-</div>
+        <div class="u_margin-md-top flex-row" ng-if="!FORCE_GOOGLE_AUTH">				
+          <div class="border-bottom w-50"></div>
+          <span class="u_nowrap px-2">Or, use my email address:</span>
+          <div class="border-bottom w-50"></div>
+        </div>
 
-<br>
+        <!-- CUSTOM LOGIN -->
+        <div ng-if="!FORCE_GOOGLE_AUTH">
+        	<div ng-include="'partials/components/userstate/auth-form.html'"></div>
 
-<div class="col-xs-12 u_margin-lg-top">
-	<p class="text-muted">Already have an account? <a id="sign-in-link" ui-sref="common.auth.unauthorized">Sign in</a></p>
-</div>
+      		<button id="sign-up-button" class="btn btn-primary btn-hg btn-block" type="submit" form="forms.loginForm" ng-click="createAccount('registrationComplete')">
+      			<span ng-if="!joinAccount">Start My Free 14-Day Trial</span>
+      		</button>
+        </div>
+
+      </div>
+    </div><!--panel-->	
+
+    <div class="align-center u_margin-md-top">
+      <p>Already have an account? <a class="madero-link" id="sign-in-link" ui-sref="common.auth.unauthorized">Sign in</a>.</p>
+    </div>
+
+  <!-- </div> -->
+<!-- </div><!--feature-sideways-panels-->
