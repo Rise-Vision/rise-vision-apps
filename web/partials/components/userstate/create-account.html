@@ -1,11 +1,22 @@
 <h1 ng-if="!joinAccount">Ready to join 9,000 organizations and start communicating better?</h1>
 <h1 ng-if="joinAccount">Ready to<span ng-show="companyName"> join {{companyName}} and</span> start communicating better?</h1>
 
-<!-- <div class="row">
-  <div class="col-sm-6 col-xs-12">
-    Top Organizations Trust Rise Vision
+<!-- <div class="feature-sideways-panels">
+  <div class="mb-5">
+    <strong class="mt-5">Top Organizations Trust Rise Vision</strong>
+    <div class="flex-row w-100 mt-4 mb-5">
+      <img class="" src="../images/sign-up/marriott-logo.png" alt="Marriott Hotels" height="42">
+      <img class=" mx-4" src="../images/sign-up/cps-logo.png" alt="Chicago Public Schools" height="42">
+      <img class="" src="../images/sign-up/eagles-logo.png" alt="Philadelphia Eagles" height="42">
+    </div>
+    <ul class="features-checklist">
+      <li><streamline-icon name="checkmark"></streamline-icon>Fraction of the cost of competitors.</li>
+      <li><streamline-icon name="checkmark"></streamline-icon>Hundreds of professionally-designed templates.</li>
+      <li><streamline-icon name="checkmark"></streamline-icon>No contract, cancel anytime.</li>
+      <li><streamline-icon name="checkmark"></streamline-icon>Unlimited, premium support.</li>
+    </ul>
   </div>
-  <div class="col-sm-6 col-xs-12"> -->
+  <div class=""> -->
     <div class="border-container mx-auto">
       <div class="panel-body">
 
@@ -24,10 +35,10 @@
           <div class="mx-auto">Use My Google Account</div>
         </button>
 
-        <div class="u_margin-md-top" ng-if="!FORCE_GOOGLE_AUTH">				
-          <div></div>
-          <span>Or, use my email address:</span>
-          <div></div>
+        <div class="u_margin-md-top flex-row" ng-if="!FORCE_GOOGLE_AUTH">				
+          <div class="border-bottom w-50"></div>
+          <span class="u_nowrap px-2">Or, use my email address:</span>
+          <div class="border-bottom w-50"></div>
         </div>
 
         <!-- CUSTOM LOGIN -->
@@ -46,5 +57,5 @@
       <p>Already have an account? <a class="madero-link" id="sign-in-link" ui-sref="common.auth.unauthorized">Sign in</a>.</p>
     </div>
 
-  <!-- </div><!--col-->
-<!-- </div><!--row-->
+  <!-- </div> -->
+<!-- </div><!--feature-sideways-panels-->
