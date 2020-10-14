@@ -169,6 +169,7 @@ angular.module('risevision.apps', [
 
       $rootScope.$on('$stateChangeSuccess', function (event, toState) {
         if (toState.name === 'apps.displays.alerts' ||
+          toState.name.indexOf('apps.editor.workspace') !== -1 ||
           toState.name.indexOf('apps.storage') !== -1 ||
           toState.name.indexOf('apps.billing') !== -1) {
           $rootScope.showWhiteBackground = false;

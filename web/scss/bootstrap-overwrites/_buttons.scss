@@ -28,6 +28,7 @@
     padding-top: 3px;
     padding-bottom: 3px;
     padding-left: 3px;
+    border: 0;
 
     @include button-variant($white, #4285F4, $btn-default-bg, $btn-default-border-disabled, darken($google-red, 10%), lighten($google-red, 5%));
     & img {

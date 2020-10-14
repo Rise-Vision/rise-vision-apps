@@ -73,6 +73,9 @@
 
   h1, h4 {
     @extend .align-center;
+  }
+
+  h1 {
     @extend .mb-5;
   }
 
@@ -81,12 +84,8 @@
     @extend .u_margin-md-bottom;
 	}
 
-	.border-container {
-    max-width: 465px;
-
-    .panel-body {
-  		padding: 30px;
-  	}
+  .has-error .control-label {
+    color: $state-danger-text;
   }
 
 	.rise-logo {
@@ -96,6 +95,48 @@
 			width: 150px;
 		}
 	}
+
+  .feature-sideways-panels {
+    margin-left: 0px;
+    margin-right: 0px;
+    display: flex;
+    flex-flow: column;
+
+    &:first-child {
+      @extend .mx-auto;
+
+      width: 271px;
+      max-width: 271px;
+    }
+
+    @media (min-width: $screen-md) {
+      display: flex;
+      flex-flow: row;
+
+      &:first-child {
+        @extend .mx-lg-0;
+      }
+    }
+  }
+
+  .border-container {
+    max-width: 465px;
+
+    & > .panel-body {
+      padding: 30px;
+    }
+  }
+
+  ul.features-checklist > li {
+    margin-bottom: 5px;
+
+    svg {
+      fill: $madero-green;
+      height: 15px;
+      width: 18px;
+      margin-right: 15px;
+    }
+  }
 }
 
 // Weekly templates
