@@ -80,7 +80,7 @@ angular.module('risevision.displays.services')
           });
       };
 
-      factory.licenseDisplaysByCompanyId = function(companyId, displayIds) {
+      factory.licenseDisplaysByCompanyId = function (companyId, displayIds) {
         var apiParams = {};
         for (var i = 0; i < displayIds.length; i++) {
           var displayId = displayIds[i];
