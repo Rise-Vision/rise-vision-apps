@@ -290,6 +290,20 @@ angular.module('risevision.schedules.services')
         }
       };
 
+      factory.addAllToDistribution = function(displays, scheduleToUpdate) {
+        angular.forEach(displays, function(display) {
+          _addToDistributionList(display.id, scheduleToUpdate);
+        });
+        return schedule.update(scheduleToUpdate.id, scheduleToUpdate, true)
+          .then(function () {
+            scheduleTracker('Schedule Updated', scheduleToUpdate.id, scheduleToUpdate.name);
+            angular.forEach(displays, function(display) {
+              display.scheduleId = scheduleToUpdate.id;
+              display.scheduleName = scheduleToUpdate.name;
+            });
+          });
+      };
+
       factory.requiresLicense = function (schedule) {
         schedule = schedule || factory.schedule;
 
