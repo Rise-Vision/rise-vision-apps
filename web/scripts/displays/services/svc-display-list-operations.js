@@ -174,7 +174,8 @@ angular.module('risevision.displays.services')
 
         var _confirmExport = function(selectedItems) {
           if (!currentPlanFactory.isPlanActive()) {
-            return plansFactory.showUnlockThisFeatureModal();
+            plansFactory.showUnlockThisFeatureModal();
+            return $q.reject();
           }
           return confirmModal('Export displays?',
             'An export file will be prepared and emailed to you at <b>'+  userState.getUserEmail() +'</b> once ready.<br/> Please ensure your email is configured to accept emails from <b>no-reply@risevision.com</b>.',
