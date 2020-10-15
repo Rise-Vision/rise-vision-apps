@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('risevision.schedules.controllers')
-  .controller('schedulesList', ['$scope', '$loading', '$filter', 'schedule', 
+  .controller('schedulesList', ['$scope', '$loading', '$filter', 'schedule',
     'scheduleFactory', 'ScrollingListService',
     function ($scope, $loading, $filter, schedule, scheduleFactory, ScrollingListService) {
       $scope.search = {

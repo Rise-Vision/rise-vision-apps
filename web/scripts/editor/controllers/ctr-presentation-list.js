@@ -20,12 +20,13 @@ angular.module('risevision.editor.controllers')
         name: 'Presentation',
         operations: [{
           name: 'Delete',
-          actionCall: function(presentation) {
+          actionCall: function (presentation) {
             return editorFactory.deletePresentationByObject(presentation)
-              .catch(function(e) {
+              .catch(function (e) {
                 if (e.status === 409) {
                   $scope.presentations.errorMessage = 'Some presentations could not be deleted.';
-                  $scope.presentations.apiError = 'These presentations are used in one or more schedules. To delete them, please remove them from the schedules they are being used in, and try again.'; 
+                  $scope.presentations.apiError =
+                    'These presentations are used in one or more schedules. To delete them, please remove them from the schedules they are being used in, and try again.';
                 }
 
                 throw e;

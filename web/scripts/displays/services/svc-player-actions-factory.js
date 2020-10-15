@@ -29,11 +29,11 @@ angular.module('risevision.displays.services')
           });
       };
 
-      service.restartByObject = function(display) {
+      service.restartByObject = function (display) {
         return _restart(display.id, display.name);
       };
 
-      service.rebootByObject = function(display) {
+      service.rebootByObject = function (display) {
         return _reboot(display.id, display.name);
       };
 

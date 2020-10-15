@@ -283,18 +283,18 @@ angular.module('risevision.schedules.services')
         }
       };
 
-      factory.addAllToDistribution = function(displays, scheduleToUpdate) {
+      factory.addAllToDistribution = function (displays, scheduleToUpdate) {
         if (!scheduleToUpdate || !scheduleToUpdate.id || scheduleToUpdate.distributeToAll) {
           return $q.resolve();
         }
-        $log.info('Adding to Distribution: ', displays, scheduleToUpdate.id); 
+        $log.info('Adding to Distribution: ', displays, scheduleToUpdate.id);
 
-        angular.forEach(displays, function(display) {
+        angular.forEach(displays, function (display) {
           _addToDistributionList(display.id, scheduleToUpdate);
         });
         return factory.forceUpdateSchedule(scheduleToUpdate)
           .then(function () {
-            angular.forEach(displays, function(display) {
+            angular.forEach(displays, function (display) {
               display.scheduleId = scheduleToUpdate.id;
               display.scheduleName = scheduleToUpdate.name;
             });

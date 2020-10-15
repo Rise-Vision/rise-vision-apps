@@ -10,7 +10,7 @@ angular.module('risevision.widget.common.url-field.response-header-analyzer', []
         var deferred = $q.defer();
 
         _requestHead(url)
-          .then(function(response) {
+          .then(function (response) {
             if (response && response.headers()) {
               $log.debug('URL headers:', response.headers());
 
@@ -30,7 +30,7 @@ angular.module('risevision.widget.common.url-field.response-header-analyzer', []
               }
             }
             deferred.resolve(true);
-          }).catch(function(response) {
+          }).catch(function (response) {
             $log.debug('Webpage request failed with status code ' + response.status + ': ' + response.statusText);
             deferred.reject('not-reachable');
           });
@@ -44,7 +44,7 @@ angular.module('risevision.widget.common.url-field.response-header-analyzer', []
         });
       };
 
-      var _extractOptionsFrom = function(response) {
+      var _extractOptionsFrom = function (response) {
         var header;
         var options = [];
         header = response.headers('X-Frame-Options');
@@ -58,7 +58,7 @@ angular.module('risevision.widget.common.url-field.response-header-analyzer', []
         return options;
       };
 
-      var _isAcceptedContentType = function(contentType) {
+      var _isAcceptedContentType = function (contentType) {
         return contentType && contentType.match('(image\/|video\/|text\/|audio\/).*');
       };
 

@@ -360,7 +360,7 @@
 
             return deferred.promise;
           },
-          summary: function(companyId) {
+          summary: function (companyId) {
             companyId = companyId || userState.getSelectedCompanyId();
             var deferred = $q.defer();
 
@@ -382,7 +382,7 @@
 
             return deferred.promise;
           },
-          export: function() {
+          export: function () {
             var companyId = userState.getSelectedCompanyId();
             var deferred = $q.defer();
 

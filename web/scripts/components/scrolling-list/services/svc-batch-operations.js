@@ -12,7 +12,7 @@ angular.module('risevision.common.components.scrolling-list')
 
         var queue;
 
-        var _reset = function() {
+        var _reset = function () {
           queue = [];
           operations.hasErrors = false;
           operations.activeOperation = null;
@@ -34,7 +34,7 @@ angular.module('risevision.common.components.scrolling-list')
           operations.activeOperation = operation;
           operations.totalItemCount += items.length;
 
-          var _pushItem = function() {
+          var _pushItem = function () {
             var item = items[currItem++];
 
             queue.push(item);
@@ -44,16 +44,17 @@ angular.module('risevision.common.components.scrolling-list')
 
           var _executeOperation = function (item, args) {
             method(item, args)
-              .catch(function(e) {
+              .catch(function (e) {
                 operations.hasErrors = true;
               })
-              .finally(function() {
-                _.remove(queue, function(listItem) {
+              .finally(function () {
+                _.remove(queue, function (listItem) {
                   return listItem === item;
                 });
 
                 operations.completedItemCount++;
-                operations.progress = Math.round(operations.completedItemCount / operations.totalItemCount * 100);
+                operations.progress = Math.round(operations.completedItemCount / operations.totalItemCount *
+                  100);
 
                 if (cancelled) {
                   return;

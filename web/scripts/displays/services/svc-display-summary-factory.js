@@ -19,7 +19,7 @@ angular.module('risevision.displays.services')
             factory.apiError = processErrorCode(err);
             console.log('Error requesting display summary', err);
           })
-          .finally(function(){
+          .finally(function () {
             factory.summaryLoading = false;
           });
       };
