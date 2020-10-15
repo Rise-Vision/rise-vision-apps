@@ -18,7 +18,7 @@ angular.module('risevision.widget.common.url-field.response-header-validator', [
               return $q.resolve();
             }
             return responseHeaderAnalyzer.validate(value)
-              .catch(function(err){
+              .catch(function (err) {
                 ngModelCtrl.responseHeaderValidatorError = err;
                 return $q.reject(err);
               });

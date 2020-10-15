@@ -15,6 +15,6 @@ angular.module('risevision.apps.controllers')
       };
       $scope.dismiss = function () {
         $modalInstance.dismiss();
-      };  
+      };
     }
   ]);

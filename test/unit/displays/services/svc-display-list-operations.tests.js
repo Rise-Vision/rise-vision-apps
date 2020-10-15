@@ -21,7 +21,8 @@ describe('service: DisplayListOperations:', function() {
     $provide.service('plansFactory', function() {
       return {
         confirmAndPurchase: sinon.spy(),
-        showPurchaseOptions: sinon.stub()
+        showPurchaseOptions: sinon.stub(),
+        showUnlockThisFeatureModal: sinon.stub()
       };
     });
 
@@ -46,14 +47,45 @@ describe('service: DisplayListOperations:', function() {
       };
     });
 
+    $provide.service('display', function() {
+      return {
+        export: 'export'
+      };
+    });
+
     $provide.service('scheduleFactory', function() {
       return {
+        addAllToDistribution: sinon.stub().returns(Q.resolve())
       };
+    });
+
+    $provide.service('currentPlanFactory', function() {
+      return {
+        isPlanActive: sinon.stub().returns(true)
+      };
+    });
+
+    $provide.service('userState',function(){
+      return {
+        getSelectedCompanyId : function(){
+          return 'TEST_COMP_ID';
+        },
+        getUserEmail: function(){
+          return 'user@email.ca';
+        },
+        getCopyOfSelectedCompany : function(){
+          return {
+            name : 'TEST_COMP',
+            id : 'TEST_COMP_ID'
+          }
+        },
+        _restoreState:function(){}
+      }
     });
 
   }));
   var displayListOperations, displayFactory, playerLicenseFactory, plansFactory,
-    confirmModal, messageBox, $modal;
+    confirmModal, messageBox, $modal, scheduleFactory, currentPlanFactory;
   beforeEach(function(){
     inject(function($injector){
       var DisplayListOperations = $injector.get('DisplayListOperations');
@@ -63,6 +95,8 @@ describe('service: DisplayListOperations:', function() {
       confirmModal = $injector.get('confirmModal');
       messageBox = $injector.get('messageBox');
       $modal = $injector.get('$modal');
+      scheduleFactory = $injector.get('scheduleFactory');
+      currentPlanFactory = $injector.get('currentPlanFactory');
       displayListOperations = new DisplayListOperations();
     });
   });
@@ -645,6 +679,112 @@ describe('Reboot Media Player:', function() {
 
           done();
         },10);
+      });
+    });
+  });
+
+  describe('Assign Schedule:', function() {
+    var operation;
+
+    beforeEach(function() {
+      operation = _getOperationByName('Assign Schedule');
+    })
+
+    it('should exist:', function() {
+      expect(operation.name).to.equal('Assign Schedule');
+      expect(operation.actionCall).to.be.a('function');
+      expect(operation.beforeBatchAction).to.be.a('function');
+      expect(operation.groupBy).to.equal(true);
+      expect(operation.requireRole).to.equal('cp');
+    });
+
+    describe('actionCall:', function() {
+      it('should pass items and schedule to scheduleFactory.addAllToDistribution', function(done) {
+        var schedule = {id: 'scheduleId'};
+        var selected = {items: [{id: 'displayId'}]};
+        operation.actionCall(selected, schedule).then(function(){
+          scheduleFactory.addAllToDistribution.should.have.been.calledWith(selected.items, schedule);
+          done();
+        });
+      })
+    });
+
+    describe('beforeBatchAction:', function() {
+      var selected;
+
+      beforeEach(function() {
+        selected = [
+          { id: 'display1', companyId: 'TEST_COMP_ID' },
+          { id: 'display2', companyId: 'TEST_COMP_ID' }
+        ];
+      });
+
+      it('should open schedule picker modal', function(done) {
+        operation.beforeBatchAction(selected).then(function() {
+          $modal.open.should.have.been.calledWith({
+            templateUrl: 'partials/schedules/schedule-picker-modal.html',
+            controller: 'SchedulePickerModalController',
+            windowClass: 'madero-style centered-modal',
+            size: 'sm'
+          });
+          done();
+        });
+      });
+
+      it('should show a warning if subcompany displays are selected', function(done) {
+        selected[0].companyId = 'subCompanyId';
+
+        operation.beforeBatchAction(selected).catch(function() {
+          messageBox.should.have.been.calledWith(
+              'Schedule could not be assigned!',
+              'Your schedule cannot be assigned to displays that belong to your sub-companies. <br/>Please select displays from your company only.',
+              null, 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm');
+          done();
+        });
+      });
+    });
+  });
+
+  describe('Export:', function() {
+    var operation;
+
+    beforeEach(function() {
+      operation = _getOperationByName('Export');
+    })
+
+    it('should exist:', function() {
+      expect(operation.name).to.equal('Export');
+      expect(operation.actionCall).to.equal('export');
+      expect(operation.beforeBatchAction).to.be.a('function');
+      expect(operation.groupBy).to.equal(true);
+    });
+
+    describe('beforeBatchAction:', function() {
+      var selected;
+
+      beforeEach(function() {
+        selected = [
+          { id: 'display1', companyId: 'TEST_COMP_ID' },
+          { id: 'display2', companyId: 'TEST_COMP_ID' }
+        ];
+      });
+
+      it('should show confirmation informing email where the file will be sent to', function(done) {
+        operation.beforeBatchAction(selected).then(function() {
+          confirmModal.should.have.been.calledWith('Export displays?',
+            'An export file will be prepared and emailed to you at <b>user@email.ca</b> once ready.<br/> Please ensure your email is configured to accept emails from <b>no-reply@risevision.com</b>.',
+            'Export', 'Cancel', 'madero-style centered-modal',
+            'partials/components/confirm-modal/madero-confirm-modal.html','sm');
+          done();
+        });
+      });
+
+      it('should show unlock this feature modal if plan is not active', function(done) {
+        currentPlanFactory.isPlanActive.returns(false);
+        operation.beforeBatchAction(selected).catch(function() {
+          plansFactory.showUnlockThisFeatureModal.should.have.been.called;
+          done();
+        });
       });
     });
   });

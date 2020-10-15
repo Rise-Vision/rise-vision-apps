@@ -26,7 +26,7 @@ angular.module('risevision.common.components.scrolling-list')
           factory.apiError = '';
         };
 
-        var _clearList = function() {
+        var _clearList = function () {
           factory.items.clear();
           factory.search.selectAll = false;
         };
@@ -90,7 +90,7 @@ angular.module('risevision.common.components.scrolling-list')
         var _groupBySelected = function (selected, groupBy) {
           return _.chain(selected)
             .groupBy(groupBy)
-            .map(function(value, key) {
+            .map(function (value, key) {
               var result = {};
 
               result[groupBy] = key;
@@ -126,7 +126,7 @@ angular.module('risevision.common.components.scrolling-list')
 
           factory.search.selectAll = !factory.search.selectAll;
 
-          factory.items.list.forEach(function(item) {
+          factory.items.list.forEach(function (item) {
             item.selected = factory.search.selectAll;
           });
         };
@@ -138,40 +138,41 @@ angular.module('risevision.common.components.scrolling-list')
 
           factory.search.selectAll = false;
 
-          factory.items.list.forEach(function(item) {
+          factory.items.list.forEach(function (item) {
             item.selected = false;
           });
         };
 
-        var _getExecuteAction = function(operation) {
+        var _getExecuteAction = function (operation) {
           var originalAction = operation.actionCall;
 
           return function (item, args) {
             return originalAction(item, args)
-              .then(function() {
+              .then(function () {
                 if (operation.isDelete) {
-                  _.remove(factory.items.list, function(listItem) {
+                  _.remove(factory.items.list, function (listItem) {
                     return listItem === item;
                   });
                 }
               })
-              .catch(function(e) {
+              .catch(function (e) {
                 $log.error(processErrorCode(e), e);
-          
+
                 if (!factory.errorMessage) {
                   factory.errorMessage = 'Something went wrong.';
-                  factory.apiError = 'We weren\'t able to ' + operation.name.toLowerCase() + ' one or more of the selected ' + 
-                    factory.search.name.toLowerCase() + '. Please try again.';                  
+                  factory.apiError = 'We weren\'t able to ' + operation.name.toLowerCase() +
+                    ' one or more of the selected ' +
+                    factory.search.name.toLowerCase() + '. Please try again.';
                 }
                 throw e;
               });
           };
         };
 
-        var _updateSelectedAction = function(operation) {
+        var _updateSelectedAction = function (operation) {
           var execute = _getExecuteAction(operation);
 
-          operation.onClick = function(skipBeforeBatchAction) {
+          operation.onClick = function (skipBeforeBatchAction) {
             var selected = factory.getSelected();
 
             if (!selected.length) {
@@ -192,14 +193,14 @@ angular.module('risevision.common.components.scrolling-list')
             var batchAction;
             if (operation.beforeBatchAction && !skipBeforeBatchAction) {
               batchAction = operation.beforeBatchAction(selected)
-                .then(function(args) {
+                .then(function (args) {
                   return factory.batchOperations.batch(batchSelected, execute, operation, args);
                 });
             } else {
               batchAction = factory.batchOperations.batch(batchSelected, execute, operation, null);
             }
 
-            return batchAction.then(function() {
+            return batchAction.then(function () {
               if (!factory.errorMessage && operation.isDelete) {
                 // reload list
                 factory.doSearch();
@@ -208,14 +209,14 @@ angular.module('risevision.common.components.scrolling-list')
           };
         };
 
-        var _updateActions = function() {
+        var _updateActions = function () {
           if (!listOperations || !listOperations.operations) {
             return;
           }
 
-          _.each(listOperations.operations, function(operation) {
+          _.each(listOperations.operations, function (operation) {
             operation.isDelete = operation.name === 'Delete';
-            
+
             _updateSelectedAction(operation);
           });
         };

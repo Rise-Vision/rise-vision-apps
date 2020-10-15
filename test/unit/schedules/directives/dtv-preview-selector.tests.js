@@ -45,7 +45,7 @@ describe('directive: preview-selector', function() {
     };
     $rootScope.selectedCallback = sinon.stub();
 
-    element = $compile('<preview-selector ng-model="mySchedule" on-select="selectedCallback()"></preview-selector>')($rootScope.$new());
+    element = $compile('<preview-selector ng-model="mySchedule" on-select="selectedCallback()" additional-tooltip-class="aClass"></preview-selector>')($rootScope.$new());
 
     $rootScope.$digest();
     $scope = element.isolateScope();
@@ -60,13 +60,14 @@ describe('directive: preview-selector', function() {
     expect($scope).to.be.ok;
     expect($scope.toggleTooltip).to.be.a('function');
     expect($scope.select).to.be.a('function');
+    expect($scope.additionalTooltipClass).to.equal('aClass');
 
     expect($scope.showTooltip).to.be.false;
   });
 
 
   it('should compile', function() {
-    expect(element[0].outerHTML).to.equal('<preview-selector ng-model="mySchedule" on-select="selectedCallback()" class="ng-pristine ng-untouched ng-valid ng-scope ng-isolate-scope ng-not-empty"><div id="preview-selector-tooltip"></div></preview-selector>');
+    expect(element[0].outerHTML).to.equal('<preview-selector ng-model="mySchedule" on-select="selectedCallback()" additional-tooltip-class="aClass" class="ng-pristine ng-untouched ng-valid ng-scope ng-isolate-scope ng-not-empty"><div id="preview-selector-tooltip"></div></preview-selector>');
   });
   
   it('should initialize', function() {
