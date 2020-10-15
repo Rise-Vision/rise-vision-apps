@@ -272,15 +272,8 @@ angular.module('risevision.schedules.services')
       factory.addToDistribution = function (display, schedule) {
         if (!schedule || !schedule.id || schedule.id === display.scheduleId || schedule.distributeToAll) {
           return $q.resolve();
-        } else {
-          $log.info('Adding to Distribution: ', display.id, schedule.id);
-
-          _addToDistributionList(display.id, schedule);
-          return factory.forceUpdateSchedule(schedule).then(function () {
-            display.scheduleId = schedule.id;
-            display.scheduleName = schedule.name;
-          });
         }
+        return factory.addAllToDistribution([display], schedule);
       };
 
       var _addToDistributionList = function (displayId, schedule) {
@@ -291,12 +284,16 @@ angular.module('risevision.schedules.services')
       };
 
       factory.addAllToDistribution = function(displays, scheduleToUpdate) {
+        if (!scheduleToUpdate || !scheduleToUpdate.id || scheduleToUpdate.distributeToAll) {
+          return $q.resolve();
+        }
+        $log.info('Adding to Distribution: ', displays, scheduleToUpdate.id); 
+
         angular.forEach(displays, function(display) {
           _addToDistributionList(display.id, scheduleToUpdate);
         });
-        return schedule.update(scheduleToUpdate.id, scheduleToUpdate, true)
+        return factory.forceUpdateSchedule(scheduleToUpdate)
           .then(function () {
-            scheduleTracker('Schedule Updated', scheduleToUpdate.id, scheduleToUpdate.name);
             angular.forEach(displays, function(display) {
               display.scheduleId = scheduleToUpdate.id;
               display.scheduleName = scheduleToUpdate.name;
