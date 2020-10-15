@@ -46,6 +46,11 @@ describe('service: DisplayListOperations:', function() {
       };
     });
 
+    $provide.service('scheduleFactory', function() {
+      return {
+      };
+    });
+
   }));
   var displayListOperations, displayFactory, playerLicenseFactory, plansFactory,
     confirmModal, messageBox, $modal;
@@ -69,7 +74,7 @@ describe('service: DisplayListOperations:', function() {
   it('should exist',function(){
     expect(displayListOperations).to.be.ok;
     expect(displayListOperations.name).to.equal('Display');
-    expect(displayListOperations.operations).to.have.length(8);
+    expect(displayListOperations.operations).to.have.length(9);
   });
 
   it('Delete:', function() {

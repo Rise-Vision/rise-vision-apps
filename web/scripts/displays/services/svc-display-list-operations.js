@@ -3,8 +3,9 @@
 angular.module('risevision.displays.services')
   .service('DisplayListOperations', ['$q', 'displayFactory', 'enableCompanyProduct', 'playerLicenseFactory',
     'plansFactory', 'confirmModal', 'messageBox', 'playerActionsFactory', '$modal', 'userState', 'display', 'currentPlanFactory',
+    'scheduleFactory',
     function ($q, displayFactory, enableCompanyProduct, playerLicenseFactory, plansFactory,
-      confirmModal, messageBox, playerActionsFactory, $modal, userState, display, currentPlanFactory) {
+      confirmModal, messageBox, playerActionsFactory, $modal, userState, display, currentPlanFactory, scheduleFactory) {
       return function () {
         var _confirmLicense = function(selected) {
           if (!selected.length) {
@@ -75,6 +76,26 @@ angular.module('risevision.displays.services')
             }
           }
           return $q.resolve();
+        };
+
+        var _confirmAssignSchedule = function(selectedItems) {
+          if (_hasSubcompanyDisplays(selectedItems)) {
+            messageBox(
+              'Schedule could not be assigned!',
+              'Your schedule cannot be assigned to displays that belong to your sub-companies. <br/>Please select displays from your company only.',
+              null, 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm');
+            return $q.reject();
+          }
+          return $modal.open({
+            templateUrl: 'partials/schedules/schedule-picker-modal.html',
+            controller: 'SchedulePickerModalController',
+            windowClass: 'madero-style centered-modal',
+            size: 'sm'
+          }).result;
+        };
+
+        var _hasSubcompanyDisplays = function(selectedItems) {
+          return _.find(selectedItems, function(d) { return d.companyId !== userState.getSelectedCompanyId(); });
         };
 
         var _confirmPlayerAction = function(selectedItems, isRestart) {         
@@ -186,6 +207,15 @@ angular.module('risevision.displays.services')
               playerProAuthorized: false
             },
             requireRole: 'da'
+          },
+          {
+            name: 'Assign Schedule',
+            beforeBatchAction: _confirmAssignSchedule,
+            actionCall: function(selected, schedule) {
+              return scheduleFactory.addAllToDistribution(selected.items, schedule);
+            },
+            groupBy: true,
+            requireRole: 'cp'
           },
           {
             name: 'Set Monitoring',
