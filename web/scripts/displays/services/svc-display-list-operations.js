@@ -6,6 +6,31 @@ angular.module('risevision.displays.services')
     function ($q, displayFactory, enableCompanyProduct, playerLicenseFactory, plansFactory,
       confirmModal, messageBox, playerActionsFactory, $modal, userState, display, currentPlanFactory) {
       return function () {
+        var _confirmLicense = function(selected) {
+          if (!selected.length) {
+            messageBox(
+              'Already licensed!',
+              'Please select some unlicensed displays to license.',
+              null, 
+              'madero-style centered-modal', 
+              'partials/template-editor/message-box.html',
+              'sm');
+            return $q.reject();
+          } else if (playerLicenseFactory.getProAvailableLicenseCount() < selected.length) {
+            plansFactory.confirmAndPurchase();
+            return $q.reject();
+          } else {
+            return confirmModal(
+              'Assign license?',
+              'Do you want to assign licenses to the selected displays?',
+              'Yes',
+              'No',
+              'madero-style centered-modal',
+              'partials/components/confirm-modal/madero-confirm-modal.html',
+              'sm');
+          }
+        };
+
         var _licenseDisplays = function(companyId, displays) {
           var displayIds = _.map(displays, 'id');
 
@@ -155,30 +180,7 @@ angular.module('risevision.displays.services')
             actionCall: function(selected) {
               return _licenseDisplays(selected.companyId, selected.items);
             },
-            beforeBatchAction: function(selected) {
-              if (!selected.length) {
-                messageBox(
-                  'Already licensed!',
-                  'Please select some unlicensed displays to license.',
-                  null, 
-                  'madero-style centered-modal', 
-                  'partials/template-editor/message-box.html',
-                  'sm');
-                return $q.reject();
-              } else if (playerLicenseFactory.getProAvailableLicenseCount() < selected.length) {
-                plansFactory.confirmAndPurchase();
-                return $q.reject();
-              } else {
-                return confirmModal(
-                  'Assign license?',
-                  'Do you want to assign licenses to the selected displays?',
-                  'Yes',
-                  'No',
-                  'madero-style centered-modal',
-                  'partials/components/confirm-modal/madero-confirm-modal.html',
-                  'sm');
-              }
-            },
+            beforeBatchAction: _confirmLicense,
             groupBy: 'companyId',
             filter: {
               playerProAuthorized: false
