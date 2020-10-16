@@ -94,7 +94,7 @@ describe('controller: Presentation List', function() {
       it('should delete presentation on actionCall', function() {
         $scope.listOperations.operations[0].actionCall('presentationObject')
           .then(function() {
-            editorFactory.deletePresentationByObject.should.have.been.calledWith('presentationObject');
+            editorFactory.deletePresentationByObject.should.have.been.calledWith('presentationObject', true);
 
             done();
           })

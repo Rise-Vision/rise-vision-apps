@@ -21,7 +21,7 @@ angular.module('risevision.editor.controllers')
         operations: [{
           name: 'Delete',
           actionCall: function(presentation) {
-            return editorFactory.deletePresentationByObject(presentation)
+            return editorFactory.deletePresentationByObject(presentation, true)
               .catch(function(e) {
                 if (e.status === 409) {
                   $scope.presentations.errorMessage = 'Some presentations could not be deleted.';
