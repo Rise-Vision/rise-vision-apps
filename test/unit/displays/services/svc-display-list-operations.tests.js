@@ -65,6 +65,11 @@ describe('service: DisplayListOperations:', function() {
       };
     });
 
+    $provide.service('displayControlFactory', function() {
+      return {
+      };
+    });
+
     $provide.service('userState',function(){
       return {
         getSelectedCompanyId : function(){
@@ -108,7 +113,7 @@ describe('service: DisplayListOperations:', function() {
   it('should exist',function(){
     expect(displayListOperations).to.be.ok;
     expect(displayListOperations.name).to.equal('Display');
-    expect(displayListOperations.operations).to.have.length(9);
+    expect(displayListOperations.operations).to.have.length(10);
   });
 
   it('Delete:', function() {

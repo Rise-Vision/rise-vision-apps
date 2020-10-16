@@ -3,11 +3,10 @@
 angular.module('risevision.displays.services')
   .service('DisplayListOperations', ['$q', 'displayFactory', 'enableCompanyProduct', 'playerLicenseFactory',
     'plansFactory', 'confirmModal', 'messageBox', 'playerActionsFactory', '$modal', 'userState', 'display',
-    'currentPlanFactory',
-    'scheduleFactory',
+    'currentPlanFactory', 'scheduleFactory', 'displayControlFactory',
     function ($q, displayFactory, enableCompanyProduct, playerLicenseFactory, plansFactory,
-      confirmModal, messageBox, playerActionsFactory, $modal, userState, display, currentPlanFactory, scheduleFactory
-      ) {
+      confirmModal, messageBox, playerActionsFactory, $modal, userState, display, currentPlanFactory,
+      scheduleFactory, displayControlFactory) {
       return function () {
         var _confirmLicense = function (selected) {
           if (!selected.length) {
@@ -184,6 +183,14 @@ angular.module('risevision.displays.services')
           });
         };
 
+        var _confirmDefineDisplayControl = function (selectedItems) {
+          return $modal.open({
+            templateUrl: 'partials/displays/display-control-modal.html',
+            controller: 'BulkDisplayControlModalCtrl',
+            size: 'lg'
+          }).result;
+        };
+
         var _confirmExport = function (selectedItems) {
           if (!currentPlanFactory.isPlanActive()) {
             plansFactory.showUnlockThisFeatureModal();
@@ -247,6 +254,12 @@ angular.module('risevision.displays.services')
               name: 'Set Address',
               beforeBatchAction: _confirmSetAddress,
               actionCall: displayFactory.applyFields,
+              requireRole: 'da'
+            },
+            {
+              name: 'Define Display Control',
+              beforeBatchAction: _confirmDefineDisplayControl,
+              actionCall: displayControlFactory.updateConfigurationByObject,
               requireRole: 'da'
             },
             {
