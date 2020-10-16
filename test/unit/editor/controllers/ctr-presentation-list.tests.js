@@ -19,7 +19,7 @@ describe('controller: Presentation List', function() {
     });
     $provide.service('editorFactory', function() {
       return {
-        deletePresentationByObject: sinon.stub().returns(Q.resolve())
+        deletePresentationByObject: sinon.stub().returns('delete')
       };
     });
     $provide.service('templateEditorFactory', function() {
@@ -92,53 +92,10 @@ describe('controller: Presentation List', function() {
 
     describe('delete:', function(done) {
       it('should delete presentation on actionCall', function() {
-        $scope.listOperations.operations[0].actionCall('presentationObject')
-          .then(function() {
-            editorFactory.deletePresentationByObject.should.have.been.calledWith('presentationObject', true);
+        expect($scope.listOperations.operations[0].actionCall('presentationObject')).to.equal('delete');
 
-            done();
-          })
-          .catch(function() {
-            done('error');
-          });
+        editorFactory.deletePresentationByObject.should.have.been.calledWith('presentationObject', true);
       });
-
-      it('should handle deletion errors', function(done) {
-        editorFactory.deletePresentationByObject.returns(Q.reject('error'));
-
-        $scope.listOperations.operations[0].actionCall('presentationObject')
-          .then(function() {
-            done('error');
-          })
-          .catch(function(e) {
-            expect($scope.presentations.errorMessage).to.not.be.ok;
-            expect($scope.presentations.apiError).to.not.be.ok;
-
-            expect(e).to.equal('error');
-
-            done();
-          });
-      });   
-
-      it('should handle conflict 409 errors', function(done) {
-        var error = {
-          status: 409
-        }
-        editorFactory.deletePresentationByObject.returns(Q.reject(error));
-
-        $scope.listOperations.operations[0].actionCall('presentationObject')
-          .then(function() {
-            done('error');
-          })
-          .catch(function(e) {
-            expect($scope.presentations.errorMessage).to.be.ok;
-            expect($scope.presentations.apiError).to.be.ok;
-
-            expect(e).to.equal(error);
-
-            done();
-          });
-      });   
     });
 
   });
