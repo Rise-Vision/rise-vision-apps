@@ -184,11 +184,13 @@ angular.module('risevision.displays.services')
         };
 
         var _confirmDefineDisplayControl = function (selectedItems) {
-          return $modal.open({
-            templateUrl: 'partials/displays/display-control-modal.html',
-            controller: 'BulkDisplayControlModalCtrl',
-            size: 'lg'
-          }).result;
+          return _checkLicenses(selectedItems).then(function () {
+            return $modal.open({
+              templateUrl: 'partials/displays/display-control-modal.html',
+              controller: 'BulkDisplayControlModalCtrl',
+              size: 'lg'
+            }).result;
+          });
         };
 
         var _confirmExport = function (selectedItems) {
