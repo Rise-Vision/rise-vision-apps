@@ -259,8 +259,8 @@ angular.module('risevision.editor.services')
         }
       };
 
-      factory.deletePresentationByObject = function (presentationObject) {
-        return presentation.delete(presentationObject.id)
+      factory.deletePresentationByObject = function (presentationObject, forceDelete) {
+        return presentation.delete(presentationObject.id, forceDelete)
           .then(function () {
             presentationTracker('Presentation Deleted', presentationObject.id, presentationObject.name);
           });
