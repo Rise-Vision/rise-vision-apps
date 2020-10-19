@@ -65,6 +65,12 @@ describe('service: DisplayListOperations:', function() {
       };
     });
 
+    $provide.service('displayControlFactory', function() {
+      return {
+        updateConfigurationByObject: 'updateConfigurationByObject'
+      };
+    });
+
     $provide.service('userState',function(){
       return {
         getSelectedCompanyId : function(){
@@ -108,7 +114,7 @@ describe('service: DisplayListOperations:', function() {
   it('should exist',function(){
     expect(displayListOperations).to.be.ok;
     expect(displayListOperations.name).to.equal('Display');
-    expect(displayListOperations.operations).to.have.length(9);
+    expect(displayListOperations.operations).to.have.length(10);
   });
 
   it('Delete:', function() {
@@ -789,4 +795,66 @@ describe('Reboot Media Player:', function() {
     });
   });
 
+
+  describe('Define Display Control:', function() {
+    var operation;
+
+    beforeEach(function() {
+      operation = _getOperationByName('Define Display Control');
+    })
+
+    it('should exist:', function() {
+      expect(operation.name).to.equal('Define Display Control');
+      expect(operation.actionCall).to.equal('updateConfigurationByObject');
+      expect(operation.beforeBatchAction).to.be.a('function');
+      expect(operation.requireRole).to.equal('da');
+    });
+
+    describe('beforeBatchAction:', function() {
+      var selected;
+
+      beforeEach(function() {
+        selected = [
+          { id: 'display1', playerProAuthorized: true },
+          { id: 'display2', playerProAuthorized: true }
+        ];
+      });
+
+      it('should prompt Display Control configuration', function(done) {
+        operation.beforeBatchAction(selected).then(function() {
+          $modal.open.should.have.been.calledWith({
+            templateUrl: 'partials/displays/display-control-modal.html',
+            controller: 'BulkDisplayControlModalCtrl',
+            size: 'lg'
+          });
+          done();
+        });
+      });
+
+      it('should prompt to license unlicensed displays and continue on acceptance', function(done) {
+        var licenseOperation = _getOperationByName('License');
+        licenseOperation.onClick = sinon.stub().returns(Q.resolve());        
+        selected = [
+          { id: 'display1', playerProAuthorized: true },
+          { id: 'display2', playerProAuthorized: false },
+          { id: 'display3', playerProAuthorized: false }
+        ];
+
+        operation.beforeBatchAction(selected);
+
+        setTimeout(function() {
+          confirmModal.should.have.been.calledWith('Almost there!');
+          licenseOperation.onClick.should.have.been.calledWith(true);
+
+          $modal.open.should.have.been.calledWith({
+            templateUrl: 'partials/displays/display-control-modal.html',
+            controller: 'BulkDisplayControlModalCtrl',
+            size: 'lg'
+          });
+
+          done();
+        },10);
+      });
+    });
+  });
 });
