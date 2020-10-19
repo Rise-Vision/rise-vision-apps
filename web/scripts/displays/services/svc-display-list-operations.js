@@ -7,7 +7,7 @@ angular.module('risevision.displays.services')
     'scheduleFactory',
     function ($q, displayFactory, enableCompanyProduct, playerLicenseFactory, plansFactory,
       confirmModal, messageBox, playerActionsFactory, $modal, userState, display, currentPlanFactory, scheduleFactory
-      ) {
+    ) {
       return function () {
         var _confirmLicense = function (selected) {
           if (!selected.length) {

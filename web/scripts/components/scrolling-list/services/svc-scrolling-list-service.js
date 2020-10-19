@@ -160,8 +160,8 @@ angular.module('risevision.common.components.scrolling-list')
 
                 if (!factory.errorMessage) {
                   factory.errorMessage = 'Something went wrong.';
-                  factory.apiError = 'We weren\'t able to ' + operation.name.toLowerCase() +
-                    ' one or more of the selected ' +
+                  factory.apiError = 'We weren\'t able to perform \'' + operation.name.toLowerCase() +
+                    '\' in one or more of the selected ' +
                     factory.search.name.toLowerCase() + '. Please try again.';
                 }
                 throw e;
