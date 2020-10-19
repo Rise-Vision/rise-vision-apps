@@ -65,7 +65,7 @@
                 <a class="madero-link u_ellipsis-lg" ui-sref="apps.editor.templates.edit({presentationId: presentation.id})" ng-if="isHtmlPresentation(presentation)"><strong>{{presentation.name}}</strong></a>
               </div>
             </td>
-            <td class="table-body__cell">{{!presentation.scheduleIdsSize ? 'No Schedules' : (presentation.scheduleIdsSize + (presentation.scheduleIdsSize === 1 ? ' Schedule' : ' Schedules'))}}</td>
+            <td class="table-body__cell">{{!presentation.scheduleCount ? 'No Schedules' : (presentation.scheduleCount + (presentation.scheduleCount === 1 ? ' Schedule' : ' Schedules'))}}</td>
             <td class="table-body__cell"><span ng-class="{'text-danger': presentation.revisionStatusName==='Revised'}">{{presentation.revisionStatusName | presentationStatus}}</span></td>
             <td class="table-body__cell">{{presentation.changeDate | date:'d-MMM-yyyy h:mm a'}} by {{presentation.changedBy | username}}</td>
           </tr>
