@@ -38,7 +38,7 @@
     "error": "Failed to load presentation. Please try again later.",
     "filter": {
       "filters": "Filters",
-      "placeholder": "Search for Presentations"
+      "placeholder": "Search Presentations"
     },
     "heading": {
       "changeDate": "Last Modified",
