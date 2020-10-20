@@ -44,6 +44,10 @@
     color: $mid-gray;
   }
 
+  .bg-ligher-gray {
+    background-color: $lighter-gray;
+  }
+
   last-modified .text-muted {
     @extend .text-gray;
   }

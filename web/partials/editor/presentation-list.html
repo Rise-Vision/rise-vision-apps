@@ -7,8 +7,9 @@
     <h1 class="app-header-title" id="title" translate>editor-app.list.title</h1>
   </div>
 
-  <div id="errorBox" ng-show="presentations.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
-    <strong>{{presentations.errorMessage}}</strong> {{presentations.apiError}}
+  <div id="errorBox" ng-show="presentations.apiError" class="madero-style alert alert-danger text-center u_margin-md-top" role="alert">
+    <p><strong>{{presentations.errorMessage}}</strong></p>
+    {{presentations.apiError}}
   </div> 
 
   <div ng-if="!(!presentations.loadingItems && presentations.items.list.length === 0 && search.query === undefined)">
