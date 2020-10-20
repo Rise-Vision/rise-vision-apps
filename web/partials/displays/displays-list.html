@@ -12,13 +12,13 @@
     </div>
   </div>
 
-  <div ng-show="displays.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
-    <strong>{{displays.errorMessage}}</strong>
+  <div ng-show="displays.apiError" class="madero-style alert alert-danger text-center u_margin-md-top" role="alert">
+    <p><strong>{{displays.errorMessage}}</strong></p>
     {{displays.apiError}}
   </div> 
 
-  <div id="errorBox" ng-show="displayStatusFactory.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
-    <strong>{{displayStatusFactory.errorMessage}}</strong>
+  <div id="errorBox" ng-show="displayStatusFactory.apiError" class="madero-style alert alert-danger text-center u_margin-md-top" role="alert">
+    <p><strong>{{displayStatusFactory.errorMessage}}</strong></p>
     {{displayStatusFactory.apiError}}
   </div> 
 
@@ -32,8 +32,10 @@
       </div>
     </div>
 
-    <div class="madero-style alert alert-warning u_margin-md-top" ng-show="search.query">
-      <strong translate>displays-app.list.searchNotification</strong>
+    <div class="border-container text-center u_margin-md-top" ng-show="search.query">
+      <div class="panel-body">
+        <span translate>displays-app.list.searchNotification</span>
+      </div>
     </div>
 
     <batch-operations list-object="displays"></batch-operations>
@@ -71,7 +73,7 @@
           </tr>
         </thead>
         <tbody class="table-body">
-          <tr class="table-body__row" ng-class="{ 'bg-warning' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list">
+          <tr class="table-body__row" ng-class="{ 'bg-lighter-gray' : selectedCompayId !== display.companyId }" ng-repeat="display in displays.items.list">
             <td class="table-body__cell">
               <div class="flex-row">
                 <madero-checkbox ng-click="displays.select(display)" ng-value="display.selected"></madero-checkbox>
