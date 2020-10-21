@@ -6,23 +6,14 @@
   </div>
   <div class="modal-body" stop-event="touchend">
     <h4>Almost there!</h4>
-    <p class="text-left mb-3 mt-3">Do you want to select or add a new schedule for this presentation, or publish without one?</p>
+    <p class="text-left mb-3 mt-3">Do you want to select or add a new schedule for this presentation?</p>
 
     <schedule-selector additional-tooltip-class="tooltip-sm"></schedule-selector>
 
   </div>
   <div class="modal-footer">
-    <div class="row">
-      <div class="col-xs-6">
-        <button class="btn btn-default w-100" ng-click="dismiss()">
-          <span>Cancel</span>
-        </button>
-      </div>
-      <div class="col-xs-6">
-        <button id="confirm-primary" class="btn btn-primary w-100" ng-click="ok()">
-          <span>Publish</span>
-        </button>
-      </div>
-    </div>
+    <button id="confirm-primary" class="btn btn-primary btn-block" ng-click="ok()">
+      <span>Add</span>
+    </button>
   </div>
 </form>

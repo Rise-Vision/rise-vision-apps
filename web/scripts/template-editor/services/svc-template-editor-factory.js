@@ -229,7 +229,7 @@ angular.module('risevision.template-editor.services')
       };
 
       factory.publish = function () {
-        return scheduleSelectorFactory.checkAssignedToSchedules().then(_publish);
+        return _publish().then(scheduleSelectorFactory.checkAssignedToSchedules);
       };
 
       var _publish = function () {

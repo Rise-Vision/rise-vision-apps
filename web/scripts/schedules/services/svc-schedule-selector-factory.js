@@ -171,8 +171,6 @@ angular.module('risevision.schedules.services')
           } else {
             return $q.resolve();
           }
-        }).catch(function () {
-          return $q.reject();
         });
       };
 

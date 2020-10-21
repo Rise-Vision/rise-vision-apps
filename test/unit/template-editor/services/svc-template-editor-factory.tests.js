@@ -765,38 +765,67 @@ describe('service: templateEditorFactory:', function() {
           });
       });
 
-      it('should create first Schedule when publishing first presentation and show modal', function(done) {
-        templateEditorFactory.publish()
-          .then(function() {
-            setTimeout(function() {
-              createFirstSchedule.should.have.been.calledWith(templateEditorFactory.presentation);
+      describe('createFirstSchedule:', function() {
+        it('should create first Schedule when publishing first presentation and show modal', function(done) {
+          templateEditorFactory.publish()
+            .then(function() {
+              setTimeout(function() {
+                createFirstSchedule.should.have.been.calledWith(templateEditorFactory.presentation);
 
-              done();
-            });
-          })
-          .then(null, function(err) {
-            done(err);
-          })
-          .then(null, done);
+                done();
+              });
+            })
+            .then(null, function(err) {
+              done(err);
+            })
+            .then(null, done);
+        });
+
+        it('should create first Schedule and show modal even if not revised', function(done) {
+          sandbox.stub(templateEditorFactory, 'isRevised').returns(false);
+
+          templateEditorFactory.publish()
+            .then(function() {
+              setTimeout(function() {
+                createFirstSchedule.should.have.been.calledWith(templateEditorFactory.presentation);
+
+                done();
+              });
+            })
+            .then(null, function(err) {
+              done(err);
+            })
+            .then(null, done);
+        });        
       });
 
-      it('should create first Schedule and show modal even if not revised', function(done) {
-        sandbox.stub(templateEditorFactory, 'isRevised').returns(false);
-
-        templateEditorFactory.publish()
-          .then(function() {
-            setTimeout(function() {
-              createFirstSchedule.should.have.been.calledWith(templateEditorFactory.presentation);
+      describe('checkAssignedToSchedules:', function() {
+        it('should check schedule assignment on successful publish', function(done) {
+          templateEditorFactory.publish()
+            .then(function() {
+              scheduleSelectorFactory.checkAssignedToSchedules.should.have.been.called;
 
               done();
-            });
-          })
-          .then(null, function(err) {
-            done(err);
-          })
-          .then(null, done);
+            })
+            .then(null, function(err) {
+              done(err);
+            })
+            .then(null, done);
+        });
       });
 
+      it('should not check schedule assignment on publish errors', function(done) {
+        presentation.publish.returns(Q.reject());
+
+        templateEditorFactory.publish()
+          .then(null, function(e) {
+            setTimeout(function() {
+              scheduleSelectorFactory.checkAssignedToSchedules.should.not.have.been.called;
+
+              done();
+            }, 10);
+          });
+      });
     });
 
     describe('publishBranding: ', function() {
