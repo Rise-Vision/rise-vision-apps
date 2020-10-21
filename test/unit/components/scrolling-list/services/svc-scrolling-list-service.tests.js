@@ -595,7 +595,7 @@ describe("service: ScrollingListService:", function() {
           }, 10);
       });
 
-      it('should skip beforeBatchAction if ski flag is true', function() {
+      it('should skip beforeBatchAction if skip flag is true', function() {
         listOperations.operations[0].beforeBatchAction = sinon.stub().returns(Q.resolve());
 
         listOperations.operations[0].onClick(true);

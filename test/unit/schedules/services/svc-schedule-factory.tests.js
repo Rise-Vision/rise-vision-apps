@@ -693,11 +693,11 @@ describe('service: scheduleFactory:', function() {
 
   describe('addToDistribution:', function() {
     beforeEach(function() {
-      sinon.spy(scheduleFactory,'forceUpdateSchedule');
+      sinon.spy(scheduleFactory,'addAllToDistribution');
     });
 
     afterEach(function() {
-      scheduleFactory.forceUpdateSchedule.restore();
+      scheduleFactory.addAllToDistribution.restore();
     })
 
     it('should handle null schedule', function(done) {
@@ -705,7 +705,7 @@ describe('service: scheduleFactory:', function() {
 
       scheduleFactory.addToDistribution(display, null);
       setTimeout(function() {
-        scheduleFactory.forceUpdateSchedule.should.not.have.been.called;
+        scheduleFactory.addAllToDistribution.should.not.have.been.called;
         done();
       },10);
     });
@@ -716,7 +716,7 @@ describe('service: scheduleFactory:', function() {
 
       scheduleFactory.addToDistribution(display, schedule);
       setTimeout(function() {
-        scheduleFactory.forceUpdateSchedule.should.not.have.been.called;
+        scheduleFactory.addAllToDistribution.should.not.have.been.called;
         done();
       },10);
     });
@@ -730,7 +730,7 @@ describe('service: scheduleFactory:', function() {
 
       scheduleFactory.addToDistribution(display, schedule);
       setTimeout(function() {
-        scheduleFactory.forceUpdateSchedule.should.not.have.been.called;
+        scheduleFactory.addAllToDistribution.should.not.have.been.called;
         done();
       },10);
     });
@@ -746,7 +746,7 @@ describe('service: scheduleFactory:', function() {
         expect(display.scheduleId).to.equal('scheduleId');
         expect(display.scheduleName).to.equal('scheduleName');
 
-        scheduleFactory.forceUpdateSchedule.should.have.been.calledWith(schedule);
+        scheduleFactory.addAllToDistribution.should.have.been.calledWith([display],schedule);
         done();
       },10);
     });
@@ -757,7 +757,7 @@ describe('service: scheduleFactory:', function() {
 
       scheduleFactory.addToDistribution(display, schedule)
       setTimeout(function() {
-        scheduleFactory.forceUpdateSchedule.should.not.have.been.called;
+        scheduleFactory.addAllToDistribution.should.not.have.been.called;
         done();
       },10);
     });
@@ -776,6 +776,93 @@ describe('service: scheduleFactory:', function() {
 
         expect(display.scheduleId).to.equal('scheduleId');
         expect(display.scheduleName).to.equal('scheduleName');
+
+        scheduleFactory.addAllToDistribution.should.have.been.calledWith([display],schedule);
+        done();
+      },10);
+    });
+  });
+
+  describe('addAllToDistribution:', function() {
+    beforeEach(function() {
+      sinon.spy(scheduleFactory,'forceUpdateSchedule');
+    });
+
+    afterEach(function() {
+      scheduleFactory.forceUpdateSchedule.restore();
+    })
+
+    it('should handle null schedule', function(done) {
+      var displays = [{ id: 'displayId' }];
+
+      scheduleFactory.addAllToDistribution(displays, null);
+      setTimeout(function() {
+        scheduleFactory.forceUpdateSchedule.should.not.have.been.called;
+        done();
+      },10);
+    });
+
+    it('should handle missing schedule id', function(done) {
+      var schedule = {};
+      var displays = [{ id: 'displayId' }];
+
+      scheduleFactory.addAllToDistribution(displays, schedule);
+      setTimeout(function() {
+        scheduleFactory.forceUpdateSchedule.should.not.have.been.called;
+        done();
+      },10);
+    });
+
+    it('should handle all displays schedule', function(done) {
+      var schedule = {
+        id: 'scheduleId',
+        distributeToAll: true
+      };
+      var displays = [{ id: 'displayId' }];
+
+      scheduleFactory.addAllToDistribution(displays, schedule);
+      setTimeout(function() {
+        scheduleFactory.forceUpdateSchedule.should.not.have.been.called;
+        done();
+      },10);
+    });
+
+    it('should add displays to distribution and force update schedule', function(done) {
+      var displays = [
+        { id: 'displayId1' },
+        { id: 'displayId2' }
+      ];
+      var schedule = { id: 'scheduleId', name: 'scheduleName' };
+
+      scheduleFactory.addAllToDistribution(displays, schedule)
+      setTimeout(function() {
+        expect(schedule.distribution).to.deep.equal(['displayId1', 'displayId2']);
+
+        expect(displays[0].scheduleId).to.equal('scheduleId');
+        expect(displays[0].scheduleName).to.equal('scheduleName');
+        expect(displays[1].scheduleId).to.equal('scheduleId');
+        expect(displays[1].scheduleName).to.equal('scheduleName');
+
+
+        scheduleFactory.forceUpdateSchedule.should.have.been.calledWith(schedule);
+        done();
+      },10);
+    });
+
+    it('should not add the display to distribution twice', function(done) {
+      var displays = [{ id: 'displayId' }];
+      var schedule = {
+        id: 'scheduleId', 
+        name: 'scheduleName',
+        distribution: ['displayId']
+      };
+
+      scheduleFactory.addAllToDistribution(displays, schedule)
+      setTimeout(function() {
+        expect(schedule.distribution).to.deep.equal(['displayId']);
+
+        expect(displays[0].scheduleId).to.equal('scheduleId');
+        expect(displays[0].scheduleName).to.equal('scheduleName');
 
         scheduleFactory.forceUpdateSchedule.should.have.been.calledWith(schedule);
         done();

@@ -29,7 +29,7 @@
     "error": "Failed to load schedules.",
     "filter": {
       "filters": "Filters",
-      "placeholder": "Search for Schedules"
+      "placeholder": "Search Schedules"
     },
     "heading": {
       "changeDate": "Last Modified",

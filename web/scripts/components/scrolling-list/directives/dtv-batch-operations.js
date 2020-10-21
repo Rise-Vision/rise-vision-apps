@@ -10,20 +10,20 @@ angular.module('risevision.common.components.scrolling-list')
         },
         templateUrl: 'partials/common/batch-operations.html',
         link: function ($scope) {
-          var _filterByRole = function() {
-            _.remove($scope.listObject.batchOperations.operations, function(operation) {
+          var _filterByRole = function () {
+            _.remove($scope.listObject.batchOperations.operations, function (operation) {
               if (!operation.requireRole) {
                 return false;
               }
 
               return !userState.hasRole(operation.requireRole);
-            });            
+            });
           };
 
-          var _updateDeleteAction = function() {
-            _.each($scope.listObject.batchOperations.operations, function(operation) {
+          var _updateDeleteAction = function () {
+            _.each($scope.listObject.batchOperations.operations, function (operation) {
               if (operation.isDelete) {
-                operation.beforeBatchAction = function() {
+                operation.beforeBatchAction = function () {
                   return $modal.open({
                     templateUrl: 'partials/common/bulk-delete-confirmation-modal.html',
                     controller: 'BulkDeleteModalCtrl',
@@ -31,7 +31,7 @@ angular.module('risevision.common.components.scrolling-list')
                     size: 'sm',
                     resolve: {
                       selectedItems: $scope.listObject.getSelected,
-                      itemName: function() {
+                      itemName: function () {
                         return $scope.listObject.batchOperations.name;
                       }
                     }
@@ -42,7 +42,8 @@ angular.module('risevision.common.components.scrolling-list')
 
           };
 
-          if ($scope.listObject.batchOperations && $scope.listObject.batchOperations.operations && $scope.listObject) {
+          if ($scope.listObject.batchOperations && $scope.listObject.batchOperations.operations && $scope
+            .listObject) {
             _filterByRole();
             _updateDeleteAction();
           }

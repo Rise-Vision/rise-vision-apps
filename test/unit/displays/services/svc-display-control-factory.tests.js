@@ -94,6 +94,31 @@ describe('service: displayControlFactory:', function() {
     });
   });
 
+  describe('updateConfigurationByObject: ', function() {
+    it('should update remote configuration', function() {
+      sandbox.stub(displayService, 'uploadControlFile').returns(Q.resolve({}));
+      
+      var display = {id: 'displayId'};
+
+      return displayControlFactory.updateConfigurationByObject(display,'contents')
+      .then(function() {
+        expect(displayService.uploadControlFile.getCall(0).args[0]).to.equal('displayId');
+        expect(displayService.uploadControlFile.getCall(0).args[1]).to.equal('contents');
+      });
+    });
+
+    it('should fail to load remote configuration', function() {
+      sandbox.stub(displayService, 'uploadControlFile').returns(Q.reject({ code: 'Failed' }));
+
+      var display = {id: 'displayId'};
+      
+      return displayControlFactory.updateConfigurationByObject(display, 'contents')
+      .catch(function(err) {
+        expect(err.code).to.equal('Failed');
+      });
+    });
+  });
+
   describe('getDefaultConfiguration: ', function() {
     it('should return default configuration', function() {
       expect(displayControlFactory.getDefaultConfiguration()).to.have.string('interface');

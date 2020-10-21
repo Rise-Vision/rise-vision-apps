@@ -15,7 +15,7 @@ angular.module('risevision.apps.directives')
         templateUrl: 'partials/common/madero-checkbox.html',
         link: function ($scope, element, attrs) {
           if (attrs.ngModel) {
-            $scope.onClick = function() {
+            $scope.onClick = function () {
               $scope.ngModel = !$scope.ngModel;
             };
           }

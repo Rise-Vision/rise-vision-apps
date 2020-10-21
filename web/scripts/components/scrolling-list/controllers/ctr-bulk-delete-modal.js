@@ -8,7 +8,7 @@ angular.module('risevision.common.components.scrolling-list')
       $scope.inputText = null;
       $scope.expectedText = selectedItems.length.toString();
 
-      angular.forEach(selectedItems, function(display) {
+      angular.forEach(selectedItems, function (display) {
         if (display.companyId === userState.getSelectedCompanyId()) {
           $scope.companyItems++;
         } else {

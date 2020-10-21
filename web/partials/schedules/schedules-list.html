@@ -4,8 +4,9 @@
     <h1 class="app-header-title" id="title" translate>schedules-app.title</h1>
   </div>
 
-  <div id="errorBox" ng-show="schedules.apiError" class="madero-style alert alert-danger u_margin-md-top" role="alert">
-    <strong>{{schedules.errorMessage}}</strong> {{schedules.apiError}}
+  <div id="errorBox" ng-show="schedules.apiError" class="madero-style alert alert-danger text-center u_margin-md-top" role="alert">
+    <p><strong>{{schedules.errorMessage}}</strong></p>
+    {{schedules.apiError}}
   </div> 
 
   <div ng-if="!(!schedules.loadingItems && schedules.items.list.length === 0 && search.query === undefined)">
