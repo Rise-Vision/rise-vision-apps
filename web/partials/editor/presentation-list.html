@@ -34,14 +34,18 @@
       <table id="presentationListTable" class="table">
         <thead class="table-header">
           <tr class="table-header__row u_clickable">
-            <th class="table-header__cell col-sm-8">
+            <th class="table-header__cell col-sm-6">
               <div class="flex-row">
                 <madero-checkbox ng-click="presentations.selectAll()" ng-value="search.selectAll"></madero-checkbox>
-                <div class="u_clickable" id="tableHeaderName" ng-click="presentations.sortBy('name')">
+                <div class="u_clickable u_ellipsis-lg" id="tableHeaderName" ng-click="presentations.sortBy('name')">
                   {{ 'editor-app.list.heading.name' | translate }}
                   <i ng-if="search.sortBy === 'name'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
                 </div>
               </div>
+            </th>
+            <th id="tableHeaderSchedules" class="table-header__cell col-sm-2"  ng-click="presentations.sortBy('scheduleIds')">
+              Schedules
+              <i ng-if="search.sortBy === 'scheduleIds'" class="fa" ng-class="{false: 'fa-caret-up', true: 'fa-caret-down'}[search.reverse]"></i>
             </th>
             <th id="tableHeaderStatus" class="table-header__cell col-sm-2"  ng-click="presentations.sortBy('revisionStatusName')">
               {{'editor-app.list.heading.status'  | translate}}
@@ -62,6 +66,7 @@
                 <a class="madero-link u_ellipsis-lg" ui-sref="apps.editor.templates.edit({presentationId: presentation.id})" ng-if="isHtmlPresentation(presentation)"><strong>{{presentation.name}}</strong></a>
               </div>
             </td>
+            <td class="table-body__cell">{{!presentation.scheduleCount ? 'No Schedules' : (presentation.scheduleCount + (presentation.scheduleCount === 1 ? ' Schedule' : ' Schedules'))}}</td>
             <td class="table-body__cell"><span ng-class="{'text-danger': presentation.revisionStatusName==='Revised'}">{{presentation.revisionStatusName | presentationStatus}}</span></td>
             <td class="table-body__cell">{{presentation.changeDate | date:'d-MMM-yyyy h:mm a'}} by {{presentation.changedBy | username}}</td>
           </tr>
