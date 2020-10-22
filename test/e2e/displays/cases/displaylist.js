@@ -75,6 +75,42 @@ var DisplayListScenarios = function() {
         helper.wait(displaysListPage.getFirstRowStatus(), 'Install Player Button');
         expect(displaysListPage.getFirstRowStatus().getText()).to.eventually.equal('Not Activated');
       });
+
+      describe('bulk actions:', function() {
+        it('should allow selecting displays', function() {
+          expect(displaysListPage.getFirstRowCheckbox().isDisplayed()).to.eventually.be.true;
+        });
+
+        it('should show bulk actions bar when display is selected', function() {
+          expect(displaysListPage.getBulkActionsDropdown().isDisplayed()).to.eventually.be.false;
+          helper.clickWhenClickable(displaysListPage.getFirstRowCheckbox());
+          expect(displaysListPage.getBulkActionsDropdown().isDisplayed()).to.eventually.be.true;
+        });
+
+        it('should perform bulk action', function() {
+          helper.clickWhenClickable(displaysListPage.getBulkActionsDropdown());
+          browser.sleep(500);
+
+          expect(displaysListPage.getRestartPlayerBulkAction().isDisplayed()).to.eventually.be.true;
+
+          helper.clickWhenClickable(displaysListPage.getRestartPlayerBulkAction());
+
+          helper.wait(displaysListPage.getRestartPlayerConfirmButton(),'Restart Player Confirm Button');
+          expect(displaysListPage.getRestartPlayerConfirmButton().isDisplayed()).to.eventually.be.true;
+        });
+
+        it('should show bulk actions progress bar', function() {
+          helper.clickWhenClickable(displaysListPage.getRestartPlayerConfirmButton());
+
+          helper.wait(displaysListPage.getBulkActionsProgressBar(),'Bulk Actions Progress Bar');
+          expect(displaysListPage.getBulkActionsProgressBar().isDisplayed()).to.eventually.be.true;
+        });
+
+        it('should hide bulk actions progress bar when finished', function() {
+          helper.waitDisappear(displaysListPage.getBulkActionsProgressBar(),'Bulk Actions Progress Bar');
+          expect(displaysListPage.getBulkActionsProgressBar().isDisplayed()).to.eventually.be.false;
+        });
+      });
     });
   });
 };
