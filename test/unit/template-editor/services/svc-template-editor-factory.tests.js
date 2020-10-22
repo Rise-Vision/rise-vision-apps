@@ -77,7 +77,8 @@ describe('service: templateEditorFactory:', function() {
 
     $provide.factory('scheduleSelectorFactory', function() {
       return {
-        checkAssignedToSchedules: sandbox.stub().returns(Q.resolve())
+        checkAssignedToSchedules: sandbox.stub().returns(Q.resolve()),
+        loadSelectedSchedules: sandbox.stub().returns(Q.resolve())
       };
     });
 
@@ -772,6 +773,8 @@ describe('service: templateEditorFactory:', function() {
               setTimeout(function() {
                 createFirstSchedule.should.have.been.calledWith(templateEditorFactory.presentation);
 
+                scheduleSelectorFactory.loadSelectedSchedules.should.have.been.called;
+
                 done();
               });
             })
@@ -789,6 +792,8 @@ describe('service: templateEditorFactory:', function() {
               setTimeout(function() {
                 createFirstSchedule.should.have.been.calledWith(templateEditorFactory.presentation);
 
+                scheduleSelectorFactory.loadSelectedSchedules.should.have.been.called;
+
                 done();
               });
             })
@@ -797,6 +802,43 @@ describe('service: templateEditorFactory:', function() {
             })
             .then(null, done);
         });        
+
+        it('should handle case when a first schedule exists', function(done) {
+          sandbox.stub(templateEditorFactory, 'isRevised').returns(false);
+          createFirstSchedule.returns(Q.reject('Already have Schedules'));
+
+          templateEditorFactory.publish()
+            .then(function() {
+              setTimeout(function() {
+                createFirstSchedule.should.have.been.calledWith(templateEditorFactory.presentation);
+
+                scheduleSelectorFactory.loadSelectedSchedules.should.not.have.been.called;
+
+                done();
+              });
+            })
+            .then(null, function(err) {
+              done(err);
+            })
+            .then(null, done);
+        }); 
+
+        it('should handle failure to create first schedule', function(done) {
+          sandbox.stub(templateEditorFactory, 'isRevised').returns(false);
+          createFirstSchedule.returns(Q.reject());
+
+          templateEditorFactory.publish()
+            .then(function() {
+              done('error')
+            })
+            .then(null, function(err) {
+              createFirstSchedule.should.have.been.calledWith(templateEditorFactory.presentation);
+
+              scheduleSelectorFactory.loadSelectedSchedules.should.not.have.been.called;
+
+              done();
+            });
+        }); 
       });
 
       describe('checkAssignedToSchedules:', function() {

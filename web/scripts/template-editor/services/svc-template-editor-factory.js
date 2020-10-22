@@ -335,6 +335,7 @@ angular.module('risevision.template-editor.services')
 
       var _createFirstSchedule = function () {
         return createFirstSchedule(factory.presentation)
+          .then(scheduleSelectorFactory.loadSelectedSchedules)
           .catch(function (err) {
             return err === 'Already have Schedules' ? $q.resolve() : $q.reject(err);
           });
