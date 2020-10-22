@@ -77,7 +77,8 @@ describe('service: templateEditorFactory:', function() {
 
     $provide.factory('scheduleSelectorFactory', function() {
       return {
-        checkAssignedToSchedules: sandbox.stub().returns(Q.resolve())
+        checkAssignedToSchedules: sandbox.stub().returns(Q.resolve()),
+        loadSelectedSchedules: sandbox.stub().returns(Q.resolve())
       };
     });
 
@@ -765,38 +766,108 @@ describe('service: templateEditorFactory:', function() {
           });
       });
 
-      it('should create first Schedule when publishing first presentation and show modal', function(done) {
-        templateEditorFactory.publish()
-          .then(function() {
-            setTimeout(function() {
+      describe('createFirstSchedule:', function() {
+        it('should create first Schedule when publishing first presentation and show modal', function(done) {
+          templateEditorFactory.publish()
+            .then(function() {
+              setTimeout(function() {
+                createFirstSchedule.should.have.been.calledWith(templateEditorFactory.presentation);
+
+                scheduleSelectorFactory.loadSelectedSchedules.should.have.been.called;
+
+                done();
+              });
+            })
+            .then(null, function(err) {
+              done(err);
+            })
+            .then(null, done);
+        });
+
+        it('should create first Schedule and show modal even if not revised', function(done) {
+          sandbox.stub(templateEditorFactory, 'isRevised').returns(false);
+
+          templateEditorFactory.publish()
+            .then(function() {
+              setTimeout(function() {
+                createFirstSchedule.should.have.been.calledWith(templateEditorFactory.presentation);
+
+                scheduleSelectorFactory.loadSelectedSchedules.should.have.been.called;
+
+                done();
+              });
+            })
+            .then(null, function(err) {
+              done(err);
+            })
+            .then(null, done);
+        });        
+
+        it('should handle case when a first schedule exists', function(done) {
+          sandbox.stub(templateEditorFactory, 'isRevised').returns(false);
+          createFirstSchedule.returns(Q.reject('Already have Schedules'));
+
+          templateEditorFactory.publish()
+            .then(function() {
+              setTimeout(function() {
+                createFirstSchedule.should.have.been.calledWith(templateEditorFactory.presentation);
+
+                scheduleSelectorFactory.loadSelectedSchedules.should.not.have.been.called;
+
+                done();
+              });
+            })
+            .then(null, function(err) {
+              done(err);
+            })
+            .then(null, done);
+        }); 
+
+        it('should handle failure to create first schedule', function(done) {
+          sandbox.stub(templateEditorFactory, 'isRevised').returns(false);
+          createFirstSchedule.returns(Q.reject());
+
+          templateEditorFactory.publish()
+            .then(function() {
+              done('error')
+            })
+            .then(null, function(err) {
               createFirstSchedule.should.have.been.calledWith(templateEditorFactory.presentation);
+
+              scheduleSelectorFactory.loadSelectedSchedules.should.not.have.been.called;
 
               done();
             });
-          })
-          .then(null, function(err) {
-            done(err);
-          })
-          .then(null, done);
+        }); 
       });
 
-      it('should create first Schedule and show modal even if not revised', function(done) {
-        sandbox.stub(templateEditorFactory, 'isRevised').returns(false);
-
-        templateEditorFactory.publish()
-          .then(function() {
-            setTimeout(function() {
-              createFirstSchedule.should.have.been.calledWith(templateEditorFactory.presentation);
+      describe('checkAssignedToSchedules:', function() {
+        it('should check schedule assignment on successful publish', function(done) {
+          templateEditorFactory.publish()
+            .then(function() {
+              scheduleSelectorFactory.checkAssignedToSchedules.should.have.been.called;
 
               done();
-            });
-          })
-          .then(null, function(err) {
-            done(err);
-          })
-          .then(null, done);
+            })
+            .then(null, function(err) {
+              done(err);
+            })
+            .then(null, done);
+        });
       });
 
+      it('should not check schedule assignment on publish errors', function(done) {
+        presentation.publish.returns(Q.reject());
+
+        templateEditorFactory.publish()
+          .then(null, function(e) {
+            setTimeout(function() {
+              scheduleSelectorFactory.checkAssignedToSchedules.should.not.have.been.called;
+
+              done();
+            }, 10);
+          });
+      });
     });
 
     describe('publishBranding: ', function() {
