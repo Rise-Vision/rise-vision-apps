@@ -79,36 +79,12 @@ describe("Services: plans factory", function() {
     expect(plansFactory.initVolumePlanTrial).to.be.a('function');
   });
 
-  describe("showPlansModal: ", function() {
-    it("should show plans modal", function() {
-      plansFactory.showPlansModal();
+  it("showPlansModal: ", function() {
+    plansFactory.showPlansModal();
 
-      expect($modal.open).to.have.been.called;
-    });
-
-    it("should not show plans modal more than once", function() {
-      plansFactory.showPlansModal();
-      plansFactory.showPlansModal();
-
-      expect($modal.open).to.have.been.calledOnce;
-    });
-
-    it("should show plans modal again if closed", function(done) {
-      $modal.open.returns({result: Q.resolve()});
-
-      plansFactory.showPlansModal();
-      
-      setTimeout(function() {
-        plansFactory.showPlansModal();
-
-        expect($modal.open).to.have.been.calledTwice;
-
-        done();
-      }, 10);
-    });
-    
+    $state.go.should.have.been.calledWith('apps.plans.home');
   });
-  
+
   describe("showPurchaseOptions: ", function() {
     it('should go to billing page/edit subscription if company has a plan and manages it', function(done) {
       plansFactory.showPurchaseOptions();
@@ -161,8 +137,7 @@ describe("Services: plans factory", function() {
       plansFactory.showPurchaseOptions();
 
       setTimeout(function(){
-        expect($modal.open).to.have.been.called;
-        expect($modal.open).to.have.been.calledWithMatch({controller: 'PlansModalCtrl'});
+        $state.go.should.have.been.calledWith('apps.plans.home');
 
         done();
       },10);
@@ -259,9 +234,8 @@ describe("Services: plans factory", function() {
       plansFactory.showUnlockThisFeatureModal();
 
       setTimeout(function(){
-        expect($modal.open).to.have.been.calledTwice;
-        expect($modal.open).to.have.been.calledWithMatch({controller: "confirmModalController"});
-        expect($modal.open).to.have.been.calledWithMatch({controller: 'PlansModalCtrl'});
+        $state.go.should.have.been.calledWith('apps.plans.home');
+
         done();
       },10);
     });
@@ -273,7 +247,8 @@ describe("Services: plans factory", function() {
 
       expect($modal.open).to.have.been.calledOnce;
       expect($modal.open).to.have.been.calledWithMatch({controller: "confirmModalController"});
-      expect($modal.open).to.not.have.been.calledWithMatch({controller: 'PlansModalCtrl'});
+
+      $state.go.should.not.have.been.called;
     });
   });
 

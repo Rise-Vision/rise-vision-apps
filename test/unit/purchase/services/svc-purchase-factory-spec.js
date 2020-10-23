@@ -12,6 +12,11 @@ describe("Services: purchase factory", function() {
         })
       };
     });
+    $provide.service("$state", function() {
+      return {
+        go: sinon.spy()
+      };
+    });
     $provide.service("userState", function() {
       return userState = {
         getCopyOfUserCompany: sinon.stub().returns({
@@ -87,13 +92,14 @@ describe("Services: purchase factory", function() {
 
   }));
 
-  var $rootScope, $modal, $timeout, clock, purchaseFactory, userState, stripeService, storeService, purchaseFlowTracker, validate, RPP_ADDON_ID;
+  var $rootScope, $modal, $state, $timeout, clock, purchaseFactory, userState, stripeService, storeService, purchaseFlowTracker, validate, RPP_ADDON_ID;
 
   beforeEach(function() {
     inject(function($injector) {
       RPP_ADDON_ID = $injector.get("RPP_ADDON_ID");
       $rootScope = $injector.get("$rootScope");
       $modal = $injector.get("$modal");
+      $state = $injector.get("$state");
       $timeout = $injector.get("$timeout");
       purchaseFactory = $injector.get("purchaseFactory");
     });
@@ -124,18 +130,8 @@ describe("Services: purchase factory", function() {
     it("should show purchase modal", function() {
       purchaseFactory.showPurchaseModal({});
 
-      expect($modal.open).to.have.been.called;
-      expect($modal.open).to.have.been.calledWith({
-        template: sinon.match.any,
-        controller: "PurchaseCtrl",
-        size: "md",
-        backdrop: "static"
-      });
+      expect($state.go).to.have.been.calledWith('apps.purchase.home');
       expect(purchaseFlowTracker.trackProductAdded).to.have.been.called;
-    });
-
-    it("should return modal result", function() {
-      expect(purchaseFactory.showPurchaseModal({})).to.be.an("object");
     });
 
     it("should initialize selected plan, attach addresses and clean contact info", function() {

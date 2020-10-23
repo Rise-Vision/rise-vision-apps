@@ -67,9 +67,8 @@ describe("controller: plans modal", function() {
         statusCode: "subscribed"
       }];
 
-      $controller("PlansModalCtrl", {
+      $controller("PlansCtrl", {
         $scope: $scope,
-        $modalInstance: $modalInstance,
         userState: userState
       });
 
@@ -88,8 +87,6 @@ describe("controller: plans modal", function() {
     expect($scope.isFree).to.be.a("function");
     expect($scope.isStarter).to.be.a("function");
     expect($scope.showSavings).to.be.a("function");
-
-    expect($scope.dismiss).to.be.a("function");
   });
 
 });

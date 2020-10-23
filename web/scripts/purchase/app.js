@@ -19,14 +19,9 @@ angular.module('risevision.apps')
           }],
           controller: 'PurchaseCtrl',
           resolve: {
-            canAccessApps: ['canAccessApps', '$stateParams', 'ChargebeeFactory', 'userState',
-              function (canAccessApps, $stateParams, ChargebeeFactory, userState) {
-                return canAccessApps().then(function () {
-                  if ($stateParams.edit) {
-                    new ChargebeeFactory().openEditSubscription(userState.getSelectedCompanyId(), $stateParams
-                      .edit);
-                  }
-                });
+            canAccessApps: ['canAccessApps',
+              function (canAccessApps) {
+                return canAccessApps();
               }
             ]
           }

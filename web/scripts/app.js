@@ -193,7 +193,7 @@ angular.module('risevision.apps', [
         var showProduct = $location.search().show_product;
         // jshint camelcase:true
 
-        if (toState.name === 'apps.plans' || (toState.name === 'common.auth.signup' && showProduct)) {
+        if (toState.name === 'common.auth.signup' && showProduct) {
           canAccessApps(toState.name === 'common.auth.signup').then(function () {
             plansFactory.showPurchaseOptions();
           });
