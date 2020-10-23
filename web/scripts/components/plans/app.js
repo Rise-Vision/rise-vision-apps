@@ -18,7 +18,6 @@
     'risevision.common.components.confirm-modal',
     'risevision.common.components.message-box',
     'risevision.common.components.plans.services',
-    'risevision.common.components.purchase-flow',
     'risevision.common.components.scrolling-list',
     'risevision.common.components.loading',
     'ui.bootstrap'
