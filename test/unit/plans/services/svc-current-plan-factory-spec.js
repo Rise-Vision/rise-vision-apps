@@ -3,7 +3,7 @@
 
 describe("Services: current plan factory", function() {
 
-  beforeEach(module("risevision.common.components.plans"));
+  beforeEach(module("risevision.apps.plans"));
   beforeEach(module(function ($provide) {
     $provide.service("userState", function () {
       return {

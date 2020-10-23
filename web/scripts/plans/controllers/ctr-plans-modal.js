@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('risevision.common.components.plans')
+angular.module('risevision.apps.plans')
   .controller('PlansModalCtrl', [
     '$scope', '$modalInstance', 'currentPlanFactory', 'userState', 'purchaseFactory',
     'PLANS_LIST', 'CHARGEBEE_PLANS_USE_PROD',

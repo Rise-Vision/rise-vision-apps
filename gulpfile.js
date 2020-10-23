@@ -77,6 +77,7 @@ var unitTestFiles = [
   "web/scripts/common-header/**/*.js",
   "web/scripts/storage-selector-app.js",
   "web/scripts/app.js",
+  "web/scripts/plans/**/*.js",
   "web/scripts/purchase/**/*.js",
   "web/scripts/billing/**/*.js",
   "web/scripts/common/**/*.js",
