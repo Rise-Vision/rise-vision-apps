@@ -1,0 +1,14 @@
+<div class="container u_margin-md-top">
+
+  <h2 id="pricingComponentTitle" class="u_margin-md-bottom" translate>common-header.plans.pricing-component-title</h2>
+
+  <div id="pricingComponentContainer">
+    <pricing-component
+      ng-attr-apply-discount="{{pricingComponentDiscount ? '' : undefined}}"
+      ng-attr-prod-env="{{useProductionChargebeeData ? '' : undefined}}"
+      rv-on="display-count-changed:refreshButton">
+    </pricing-component>
+
+    <button type="button" ng-disabled="!pricingAtLeastOneDisplay" ng-click="showPurchaseModal()" id="subscribeButton">I Want To Subscribe</button>
+  </div>
+</div>

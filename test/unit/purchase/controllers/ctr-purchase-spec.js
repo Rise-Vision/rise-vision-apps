@@ -88,7 +88,7 @@ describe("controller: purchase modal", function() {
       $modalInstance = $injector.get("$modalInstance");
       $loading = $injector.get("$loading");
 
-      $controller("PurchaseModalCtrl", {
+      $controller("PurchaseCtrl", {
         $scope: $scope,
         $modalInstance: $modalInstance,
         $loading: $loading,

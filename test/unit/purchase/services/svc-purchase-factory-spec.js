@@ -127,7 +127,7 @@ describe("Services: purchase factory", function() {
       expect($modal.open).to.have.been.called;
       expect($modal.open).to.have.been.calledWith({
         template: sinon.match.any,
-        controller: "PurchaseModalCtrl",
+        controller: "PurchaseCtrl",
         size: "md",
         backdrop: "static"
       });

@@ -159,26 +159,14 @@
       productCode: 'd521f5bfbc1eef109481eebb79831e11c7804ad8',
       proLicenseCount: 0
     }])
-    .factory('plansFactory', ['$modal', '$templateCache', 'userState', 'PLANS_LIST', 'analyticsFactory',
+    .factory('plansFactory', ['$modal', 'userState', 'PLANS_LIST', 'analyticsFactory',
       'currentPlanFactory', '$state', 'confirmModal', 'messageBox',
-      function ($modal, $templateCache, userState, PLANS_LIST, analyticsFactory, currentPlanFactory, $state,
+      function ($modal, userState, PLANS_LIST, analyticsFactory, currentPlanFactory, $state,
         confirmModal, messageBox) {
         var _factory = {};
 
         _factory.showPlansModal = function () {
-          if (!_factory.isPlansModalOpen) {
-            _factory.isPlansModalOpen = true;
-
-            var $modalInstance = $modal.open({
-              template: $templateCache.get('partials/plans/plans-modal.html'),
-              controller: 'PlansModalCtrl',
-              windowClass: 'pricing-component-modal',
-            });
-
-            $modalInstance.result.finally(function () {
-              _factory.isPlansModalOpen = false;
-            });
-          }
+          $state.go('apps.plans.home');
         };
 
         _factory.confirmAndPurchase = function () {

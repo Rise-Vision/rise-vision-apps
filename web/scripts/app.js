@@ -80,15 +80,6 @@ angular.module('risevision.apps', [
           ]
         })
 
-        .state('apps.plans', {
-          url: '/plans?cid',
-          controller: ['$location', '$state',
-            function ($location, $state) {
-              $location.replace();
-              $state.go('apps.home');
-            }
-          ]
-        })
         .state('apps.users', {
           abstract: true,
           url: '?cid',

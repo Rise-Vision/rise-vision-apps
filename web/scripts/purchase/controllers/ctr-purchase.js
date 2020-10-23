@@ -19,9 +19,9 @@ angular.module('risevision.apps.purchase')
     index: 3
   }])
 
-  .controller('PurchaseModalCtrl', [
-    '$scope', '$modalInstance', '$loading', 'purchaseFactory', 'addressFactory', 'plansFactory', 'PURCHASE_STEPS',
-    function ($scope, $modalInstance, $loading, purchaseFactory, addressFactory, plansFactory, PURCHASE_STEPS) {
+  .controller('PurchaseCtrl', ['$scope', '$state', '$loading', 'purchaseFactory', 'addressFactory', 
+  'plansFactory', 'PURCHASE_STEPS',
+    function ($scope, $state, $loading, purchaseFactory, addressFactory, plansFactory, PURCHASE_STEPS) {
 
       $scope.form = {};
       $scope.factory = purchaseFactory;
@@ -115,7 +115,6 @@ angular.module('risevision.apps.purchase')
         if ($scope.currentStep > 0) {
           $scope.currentStep--;
         } else {
-          $modalInstance.close();
           plansFactory.showPlansModal();
         }
       };
@@ -124,7 +123,6 @@ angular.module('risevision.apps.purchase')
         purchaseFactory.purchase.checkoutError = null;
 
         if (index === -1) {
-          $modalInstance.close();
           plansFactory.showPlansModal();
         }
 
@@ -133,7 +131,7 @@ angular.module('risevision.apps.purchase')
 
       $scope.close = function () {
         if (!purchaseFactory.purchase.reloadingCompany) {
-          $modalInstance.close('success');
+          $state.go('apps.home');
         } else {
           purchaseFactory.loading = true;
 
@@ -141,14 +139,14 @@ angular.module('risevision.apps.purchase')
             if (!loading) {
               purchaseFactory.loading = false;
 
-              $modalInstance.close('success');
+              $state.go('apps.home');
             }
           });
         }
       };
 
       $scope.dismiss = function () {
-        $modalInstance.dismiss('cancel');
+        $state.go('apps.home');
       };
 
     }

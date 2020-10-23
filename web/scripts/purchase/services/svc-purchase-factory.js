@@ -6,10 +6,10 @@
 
   angular.module('risevision.apps.purchase')
     .constant('RPP_ADDON_ID', 'c4b368be86245bf9501baaa6e0b00df9719869fd')
-    .factory('purchaseFactory', ['$rootScope', '$q', '$log', '$modal', '$templateCache', '$timeout',
+    .factory('purchaseFactory', ['$rootScope', '$q', '$log', '$state', '$modal', '$templateCache', '$timeout',
       'userState', 'storeService', 'stripeService', 'addressService', 'contactService', 'purchaseFlowTracker',
       'RPP_ADDON_ID',
-      function ($rootScope, $q, $log, $modal, $templateCache, $timeout, userState,
+      function ($rootScope, $q, $log, $state, $modal, $templateCache, $timeout, userState,
         storeService, stripeService, addressService, contactService, purchaseFlowTracker, RPP_ADDON_ID) {
         var factory = {};
 
@@ -54,14 +54,7 @@
         factory.showPurchaseModal = function (plan, isMonthly) {
           _init(plan, isMonthly);
 
-          var modalInstance = $modal.open({
-            template: $templateCache.get('partials/purchase/purchase-modal.html'),
-            controller: 'PurchaseModalCtrl',
-            size: 'md',
-            backdrop: 'static'
-          });
-
-          return modalInstance.result;
+          $state.go('apps.purchase.home');
         };
 
         factory.showTaxExemptionModal = function () {
