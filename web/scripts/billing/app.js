@@ -39,5 +39,5 @@ angular.module('risevision.apps.billing.controllers', [
   'risevision.apps.billing.services'
 ]);
 angular.module('risevision.apps.billing.services', [
-  'risevision.common.components.plans'
+  'risevision.apps.plans'
 ]);

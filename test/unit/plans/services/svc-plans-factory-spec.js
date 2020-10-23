@@ -3,7 +3,7 @@
 
 describe("Services: plans factory", function() {
 
-  beforeEach(module("risevision.common.components.plans"));
+  beforeEach(module("risevision.apps.plans"));
   beforeEach(module(function ($provide) {
     $provide.service("$modal", function() {
       return {
@@ -236,7 +236,7 @@ describe("Services: plans factory", function() {
 
       expect($modal.open).to.have.been.calledOnce;
       expect($modal.open).to.have.been.calledWith({
-        templateUrl: 'partials/components/plans/unlock-this-feature-modal.html',
+        templateUrl: 'partials/plans/unlock-this-feature-modal.html',
         controller: "confirmModalController",
         resolve: {
           cancelButton: null,

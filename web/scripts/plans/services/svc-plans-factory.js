@@ -1,7 +1,7 @@
 (function (angular) {
 
   'use strict';
-  angular.module('risevision.common.components.plans')
+  angular.module('risevision.apps.plans')
     .value('PLANS_LIST', [{
       name: 'Free',
       type: 'free',
@@ -170,7 +170,7 @@
             _factory.isPlansModalOpen = true;
 
             var $modalInstance = $modal.open({
-              template: $templateCache.get('partials/components/plans/plans-modal.html'),
+              template: $templateCache.get('partials/plans/plans-modal.html'),
               controller: 'PlansModalCtrl',
               windowClass: 'pricing-component-modal',
             });
@@ -217,7 +217,7 @@
             source: 'share schedule button'
           });
           $modal.open({
-            templateUrl: 'partials/components/plans/unlock-this-feature-modal.html',
+            templateUrl: 'partials/plans/unlock-this-feature-modal.html',
             controller: 'confirmModalController',
             windowClass: 'madero-style centered-modal unlock-this-feature-modal',
             size: 'sm',

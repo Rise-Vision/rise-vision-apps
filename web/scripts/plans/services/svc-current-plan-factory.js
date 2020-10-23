@@ -1,7 +1,7 @@
 (function (angular) {
 
   'use strict';
-  angular.module('risevision.common.components.plans')
+  angular.module('risevision.apps.plans')
     .factory('currentPlanFactory', ['$log', '$rootScope', '$timeout', 'userState', 'PLANS_LIST',
       function ($log, $rootScope, $timeout, userState, PLANS_LIST) {
         var _factory = {};
