@@ -160,13 +160,16 @@
       proLicenseCount: 0
     }])
     .factory('plansFactory', ['$modal', 'userState', 'PLANS_LIST', 'analyticsFactory',
-      'currentPlanFactory', '$state', 'confirmModal', 'messageBox',
-      function ($modal, userState, PLANS_LIST, analyticsFactory, currentPlanFactory, $state,
-        confirmModal, messageBox) {
+      '$state', 'confirmModal',
+      function ($modal, userState, PLANS_LIST, analyticsFactory, $state, confirmModal) {
         var _factory = {};
 
         _factory.showPlansModal = function () {
           $state.go('apps.plans.home');
+        };
+
+        _factory.showPurchaseOptions = function () {
+          _factory.showPlansModal();
         };
 
         _factory.confirmAndPurchase = function () {
@@ -177,27 +180,6 @@
             .then(function () {
               _factory.showPurchaseOptions();
             });
-        };
-
-        _factory.showPurchaseOptions = function () {
-          if (currentPlanFactory.isSubscribed()) {
-            if (currentPlanFactory.currentPlan.isPurchasedByParent) {
-              var contactInfo = currentPlanFactory.currentPlan.parentPlanContactEmail ? ' at ' +
-                currentPlanFactory.currentPlan.parentPlanContactEmail : '';
-              messageBox(
-                'You can\'t edit your current plan.',
-                'Your plan is managed by your parent company. Please contact your account administrator' +
-                contactInfo + ' for additional licenses.',
-                'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
-              );
-            } else {
-              $state.go('apps.billing.home', {
-                edit: currentPlanFactory.currentPlan.subscriptionId
-              });
-            }
-          } else {
-            _factory.showPlansModal();
-          }
         };
 
         _factory.showUnlockThisFeatureModal = function () {

@@ -19,9 +19,15 @@ angular.module('risevision.apps')
           }],
           controller: 'PurchaseCtrl',
           resolve: {
-            canAccessApps: ['canAccessApps',
-              function (canAccessApps) {
-                return canAccessApps();
+            canAccessApps: ['$state', 'canAccessApps', 'purchaseFactory',
+              function ($state, canAccessApps, purchaseFactory) {
+                return canAccessApps()
+                  .then(function() {
+                    // Purchase has not been initialized
+                    if (!purchaseFactory.purchase) {
+                      $state.go('apps.plans.home');
+                    }
+                  });
               }
             ]
           }

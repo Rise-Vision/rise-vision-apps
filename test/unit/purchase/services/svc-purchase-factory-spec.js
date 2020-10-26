@@ -107,7 +107,7 @@ describe("Services: purchase factory", function() {
 
   it("should exist", function() {
     expect(purchaseFactory).to.be.ok;
-    expect(purchaseFactory.showPurchaseModal).to.be.a("function");
+    expect(purchaseFactory.purchasePlan).to.be.a("function");
     expect(purchaseFactory.showTaxExemptionModal).to.be.a("function");
     expect(purchaseFactory.validatePaymentMethod).to.be.a("function");
     expect(purchaseFactory.getEstimate).to.be.a("function");
@@ -118,7 +118,7 @@ describe("Services: purchase factory", function() {
     expect(purchaseFactory.loading).to.be.false;
   });
 
-  describe("showPurchaseModal: ", function() {
+  describe("purchasePlan: ", function() {
     beforeEach(function() {
       clock = sinon.useFakeTimers();
     });
@@ -128,7 +128,7 @@ describe("Services: purchase factory", function() {
     });
 
     it("should show purchase modal", function() {
-      purchaseFactory.showPurchaseModal({});
+      purchaseFactory.purchasePlan({});
 
       expect($state.go).to.have.been.calledWith('apps.purchase.home');
       expect(purchaseFlowTracker.trackProductAdded).to.have.been.called;
@@ -136,7 +136,7 @@ describe("Services: purchase factory", function() {
 
     it("should initialize selected plan, attach addresses and clean contact info", function() {
       var plan = { name: "PlanA"};
-      purchaseFactory.showPurchaseModal(plan, true);
+      purchaseFactory.purchasePlan(plan, true);
       
       expect(purchaseFactory.purchase).to.be.ok;
 
@@ -172,7 +172,7 @@ describe("Services: purchase factory", function() {
 
     it("should initialize payment methods", function() {
       var plan = { name: "PlanA"};
-      purchaseFactory.showPurchaseModal(plan, true);
+      purchaseFactory.purchasePlan(plan, true);
       
       expect(purchaseFactory.purchase).to.be.ok;
       expect(purchaseFactory.purchase.paymentMethods).to.be.ok;
@@ -194,7 +194,7 @@ describe("Services: purchase factory", function() {
     it("should initialize invoice due date 30 days from now", function() {
       var newDate = new Date();
       var plan = { name: "PlanA"};
-      purchaseFactory.showPurchaseModal(plan, true);
+      purchaseFactory.purchasePlan(plan, true);
 
       expect(purchaseFactory.purchase.paymentMethods.invoiceDate).to.be.ok;
       expect(purchaseFactory.purchase.paymentMethods.invoiceDate).to.be.a("date");

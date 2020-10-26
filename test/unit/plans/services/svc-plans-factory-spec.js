@@ -27,14 +27,6 @@ describe("Services: plans factory", function() {
         updateCompanySettings: sinon.stub()
       };
     });
-    $provide.service("currentPlanFactory", function() {
-      return {
-        currentPlan: {
-          subscriptionId: 'subscriptionId'
-        },
-        isSubscribed: sinon.stub().returns(true)
-      };
-    });
     $provide.service("$state", function() {
       return {
         go: sinon.stub()
@@ -43,13 +35,10 @@ describe("Services: plans factory", function() {
     $provide.factory('confirmModal', function() {
        return confirmModalStub = sinon.stub().returns(Q.resolve());
     });
-    $provide.factory('messageBox', function() {
-       return messageBoxStub = sinon.stub();
-    });
   }));
 
-  var sandbox, $modal, userState, plansFactory, analyticsFactory, currentPlanFactory, $state,
-    confirmModalStub, messageBoxStub, VOLUME_PLAN;
+  var sandbox, $modal, userState, plansFactory, analyticsFactory, $state,
+    confirmModalStub, VOLUME_PLAN;
 
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
@@ -59,7 +48,6 @@ describe("Services: plans factory", function() {
       userState =  $injector.get("userState");
       plansFactory = $injector.get("plansFactory");
       analyticsFactory = $injector.get("analyticsFactory");
-      currentPlanFactory  = $injector.get("currentPlanFactory");
       $state = $injector.get("$state");
 
       var plansByType = _.keyBy($injector.get("PLANS_LIST"), "type");
@@ -85,63 +73,10 @@ describe("Services: plans factory", function() {
     $state.go.should.have.been.calledWith('apps.plans.home');
   });
 
-  describe("showPurchaseOptions: ", function() {
-    it('should go to billing page/edit subscription if company has a plan and manages it', function(done) {
-      plansFactory.showPurchaseOptions();
+  it("showPurchaseOptions: ", function() {
+    plansFactory.showPurchaseOptions();
 
-      setTimeout(function(){
-        expect($state.go).to.have.been.calledWith('apps.billing.home', {edit: 'subscriptionId'});
-
-        expect(messageBoxStub).to.not.have.been.called;
-        done();
-      },10);
-    });
-
-    it('should show a message if company has a plan but it is managed by a parent company', function(done) {
-      currentPlanFactory.currentPlan.isPurchasedByParent = true
-      plansFactory.showPurchaseOptions();
-
-      setTimeout(function(){
-        expect(messageBoxStub).to.have.been.calledWith(
-          'You can\'t edit your current plan.',
-          'Your plan is managed by your parent company. Please contact your account administrator for additional licenses.',
-          'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
-        );
-
-        expect($state.go).to.not.have.been.called;
-        done();
-      },10);
-    });
-
-    it('should show plan admin email if available', function(done) {
-      currentPlanFactory.currentPlan.isPurchasedByParent = true      
-      currentPlanFactory.currentPlan.parentPlanContactEmail = 'test@email.com';
-
-      plansFactory.showPurchaseOptions();
-
-      setTimeout(function(){
-        expect(messageBoxStub).to.have.been.calledWith(
-          'You can\'t edit your current plan.',
-          'Your plan is managed by your parent company. Please contact your account administrator at test@email.com for additional licenses.',
-          'Ok', 'madero-style centered-modal', 'partials/template-editor/message-box.html', 'sm'
-        );
-
-        expect($state.go).to.not.have.been.called;
-        done();
-      },10);
-    });
-
-    it('should open Plans Modal if company is not subscribed to a plan', function(done) {
-      currentPlanFactory.isSubscribed.returns(false);
-
-      plansFactory.showPurchaseOptions();
-
-      setTimeout(function(){
-        $state.go.should.have.been.calledWith('apps.plans.home');
-
-        done();
-      },10);
-    });
+    $state.go.should.have.been.calledWith('apps.plans.home');
   });
 
   describe("confirmAndPurchase:", function(){

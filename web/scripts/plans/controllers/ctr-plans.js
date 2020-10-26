@@ -47,7 +47,7 @@ angular.module('risevision.apps.plans')
           component.displayCount > 0;
       };
 
-      $scope.showPurchaseModal = function () {
+      $scope.purchasePlan = function () {
         var component = document.querySelector('pricing-component');
 
         var displays = component.displayCount;
@@ -60,7 +60,7 @@ angular.module('risevision.apps.plans')
           return;
         }
 
-        purchaseFactory.showPurchaseModal({
+        purchaseFactory.purchasePlan({
           name: plan,
           productId: volumePlan.productId,
           productCode: volumePlan.productCode,
